@@ -2,11 +2,11 @@ package com.n4systems.reporting;
 
 import java.io.File;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 import com.n4systems.reporting.mapbuilders.ReportField;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.ReportMap;
@@ -14,10 +14,10 @@ import com.n4systems.util.ReportMap;
 public class ProductReportMapProducer extends ReportMapProducer {
 
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
-	private final Product product;
-	public ProductReportMapProducer(Product product, DateTimeDefinition dateTimeDefinition) {
+	private final Asset asset;
+	public ProductReportMapProducer(Asset product, DateTimeDefinition dateTimeDefinition) {
 		super(dateTimeDefinition);
-		this.product = product;
+		this.asset = product;
 	}
 
 	
@@ -29,58 +29,58 @@ public class ProductReportMapProducer extends ReportMapProducer {
 	}
 
 	private void addProductParams() {
-		add("productDesc", product.getDescription());
-		add("rfidNumber", product.getRfidNumber());
-		add("serialNumber", product.getSerialNumber());
-		add("reelId", product.getSerialNumber());
-		add("poNumber", product.getPurchaseOrder());
-		add("customerRefNumber", product.getCustomerRefNumber());
-		add("dateOfIssue", formatDate(product.getCreated(), false));
-		add("productComment", product.getComments());
-		add("productLocation", product.getAdvancedLocation().getFreeformLocation());
-		add("predefinedLocationFullName", product.getAdvancedLocation().getFullName());
-		add("productIdentified", formatDate(product.getIdentified(),false));
+		add("productDesc", asset.getDescription());
+		add("rfidNumber", asset.getRfidNumber());
+		add("serialNumber", asset.getSerialNumber());
+		add("reelId", asset.getSerialNumber());
+		add("poNumber", asset.getPurchaseOrder());
+		add("customerRefNumber", asset.getCustomerRefNumber());
+		add("dateOfIssue", formatDate(asset.getCreated(), false));
+		add("productComment", asset.getComments());
+		add("productLocation", asset.getAdvancedLocation().getFreeformLocation());
+		add("predefinedLocationFullName", asset.getAdvancedLocation().getFullName());
+		add("productIdentified", formatDate(asset.getIdentified(),false));
 		add("currentProductStatus", productStatusName());
 		add("infoOptionMap", produceInfoOptionMap());
-		add("lastInspectionDate", formatDate(product.getLastInspectionDate(), true));
-		add("infoOptionBeanList", product.getOrderedInfoOptionList());
-		add("infoOptionDataSource", new JRBeanCollectionDataSource(product.getOrderedInfoOptionList()));
+		add("lastInspectionDate", formatDate(asset.getLastInspectionDate(), true));
+		add("infoOptionBeanList", asset.getOrderedInfoOptionList());
+		add("infoOptionDataSource", new JRBeanCollectionDataSource(asset.getOrderedInfoOptionList()));
 		add(ReportField.ASSIGNED_USER.getParamKey(), assignedUserName());
 		
 	}
 
 	
 	private String assignedUserName() {
-		return product.isAssigned() ? product.getAssignedUser().getUserLabel() : UNASSIGNED_USER_NAME;
+		return asset.isAssigned() ? asset.getAssignedUser().getUserLabel() : UNASSIGNED_USER_NAME;
 	}
 
 	
 	private void addProductTypeParams() {
-		ProductType productType = product.getType();
+		AssetType assetType = asset.getType();
 		
-		add("typeName", productType.getName());
-		add("warning", productType.getWarnings());
-		add("productWarning", productType.getWarnings());
-		add("certificateText", productType.getManufactureCertificateText());
-		add("productInstructions", productType.getInstructions());
+		add("typeName", assetType.getName());
+		add("warning", assetType.getWarnings());
+		add("productWarning", assetType.getWarnings());
+		add("certificateText", assetType.getManufactureCertificateText());
+		add("productInstructions", assetType.getInstructions());
 		
-		add("productImage", imagePath(productType));
+		add("productImage", imagePath(assetType));
 	}
 
-	private File imagePath(ProductType productType) {
-		return (productType.hasImage()) ? new File(PathHandler.getProductTypeImageFile(productType), productType.getImageName()) : null;
+	private File imagePath(AssetType assetType) {
+		return (assetType.hasImage()) ? new File(PathHandler.getProductTypeImageFile(assetType), assetType.getImageName()) : null;
 	}
 	
 	private ReportMap<String> produceInfoOptionMap() {
-		ReportMap<String> infoOptions = new ReportMap<String>(product.getOrderedInfoOptionList().size());
-		for (InfoOptionBean option : product.getOrderedInfoOptionList()) {
+		ReportMap<String> infoOptions = new ReportMap<String>(asset.getOrderedInfoOptionList().size());
+		for (InfoOptionBean option : asset.getOrderedInfoOptionList()) {
 			infoOptions.put(normalizeString(option.getInfoField().getName()), option.getName());
 		}
 		return infoOptions;
 	}
 
 	private String productStatusName() {
-		return (product.getProductStatus() != null) ? product.getProductStatus().getName() : null;
+		return (asset.getAssetStatus() != null) ? asset.getAssetStatus().getName() : null;
 	}
 
 

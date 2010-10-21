@@ -10,9 +10,9 @@ import javax.persistence.Query;
 
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.handlers.remover.summary.InspectionArchiveSummary;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
@@ -52,19 +52,19 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 	private void updateProductsLastInspectionDate(EntityManager em, List<Long> ids) {
 		
 		List<Long> productsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter())
-				.setSimpleSelect("product.id", true)
-				.addSimpleWhere("product.state", EntityState.ACTIVE),
+				.setSimpleSelect("asset.id", true)
+				.addSimpleWhere("asset.state", EntityState.ACTIVE),
 		  ids,
 		  em).getResultList();
 		
 		for (Long productId : new HashSet<Long>(productsToUpdateInspectionDate)) {
-			Product product = em.find(Product.class, productId);
+			Asset asset = em.find(Asset.class, productId);
 			
 			
 			QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, new OpenSecurityFilter(), "i");
 			qBuilder.setMaxSelect("date");
 			qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
-			qBuilder.addSimpleWhere("product", product);
+			qBuilder.addSimpleWhere("asset", asset);
 
 
 			Date lastInspectionDate = null;
@@ -74,9 +74,9 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 				throw new ProcessFailureException("could not archive the inspections", e);
 			}
 
-			product.setLastInspectionDate(lastInspectionDate);
+			asset.setLastInspectionDate(lastInspectionDate);
 			
-			em.merge(product);
+			em.merge(asset);
 		}
 	}
 

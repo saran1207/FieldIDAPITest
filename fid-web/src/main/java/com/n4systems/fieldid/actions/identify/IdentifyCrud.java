@@ -137,7 +137,7 @@ public class IdentifyCrud extends AbstractCrud {
 		return tagOptions;
 	}
 	
-	public int getIdentifiedProductCount(LineItem lineItem) { 
+	public int getIdentifiedAssetCount(LineItem lineItem) {
 		return orderManager.countProductsTagged(lineItem);
 	}
 	

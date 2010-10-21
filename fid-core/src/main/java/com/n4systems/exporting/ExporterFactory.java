@@ -2,7 +2,7 @@ package com.n4systems.exporting;
 
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -20,7 +20,7 @@ public class ExporterFactory {
 		return new AutoAttributeExporter(autoAttribLoader);
 	}
 	
-	public ProductExporter createProductExporter(ListLoader<Product> productLoader) {
+	public ProductExporter createProductExporter(ListLoader<Asset> productLoader) {
 		return new ProductExporter(productLoader);
 	}
 	

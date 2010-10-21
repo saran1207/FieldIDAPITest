@@ -16,8 +16,8 @@
 	</div>
 
 	<div class="infoSet">
-		<label for="productTypeId" class="label"><@s.text name="label.producttype"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-		<@s.select id="productType" name="productTypeId" onchange="updateProductType(this);showSuggestedAttributes();">
+		<label for="assetTypeId" class="label"><@s.text name="label.producttype"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+		<@s.select id="assetType" name="assetTypeId" onchange="updateProductType(this);showSuggestedAttributes();">
 			<#include "/templates/html/common/_productTypeOptions.ftl"/>
 		</@s.select>
 		<span class="fieldHolder updating" id="productTypeIndicator">
@@ -27,13 +27,13 @@
 		
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
-		<#if !parentProduct?exists >
+		<#if !parentAsset?exists >
 			<div class="fieldHolder">
-				<@n4.location name="asset.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(asset.location)}"  theme="simple"/>
+				<@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="simple"/>
 			</div>
 		<#else>
-			<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(asset.location))?html}</span>
+			<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(assetWebModel.location))?html}</span>
 		</#if>
 	</div>
-	<@s.hidden name="linkedProductId" value="${linkedProduct.id}"/>
+	<@s.hidden name="linkedAssetId" value="${linkedAsset.id}"/>
 </div>

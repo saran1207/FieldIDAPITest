@@ -19,12 +19,12 @@ import com.thoughtworks.selenium.Wait;
 public class ManageProductTypesDriver {
 	FieldIdSelenium selenium;
 	MiscDriver misc;
-	private String manageProductTypesPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Product Types')]";
+	private String manageProductTypesPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Asset Types')]";
 	private String productTypeTableXpath = "//DIV[@id='pageContent']/TABLE[@class='list']";
 	private String productTypeTableLocator = "xpath=" + productTypeTableXpath;
 	private String productTypesXpath = productTypeTableXpath + "/TBODY/TR/TD[1]/A";
 	private String addProductTypeLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI[contains(@class,'add')]/A[contains(text(),'Add')]";
-	private String productInformationHeaderLocator = "xpath=//FORM[@id='productTypeUpdate']/H2[contains(text(),'Product Information')]";
+	private String productInformationHeaderLocator = "xpath=//FORM[@id='productTypeUpdate']/H2[contains(text(),'Asset Information')]";
 	private String groupSelectListLocator = "xpath=//SELECT[@id='productTypeUpdate_group']";
 	private String nameTextFieldLocator = "xpath=//INPUT[@id='productTypeUpdate_name']";
 	private String warningsTextFieldLocator = "xpath=//TEXTAREA[@id='productTypeUpdate_warnings']";
@@ -56,17 +56,17 @@ public class ManageProductTypesDriver {
 
 	/**
 	 * Checks for error messages on the page and that the
-	 * Manage Product Types header exists.
+	 * Manage Asset Types header exists.
 	 */
 	public void verifyManageProductTypesPage() {
 		misc.checkForErrorMessages("verifyManageProductTypesPage");
 		if(!selenium.isElementPresent(manageProductTypesPageHeaderLocator)) {
-			fail("Could not find the header for 'Manage Product Types'.");
+			fail("Could not find the header for 'Manage Asset Types'.");
 		}
 	}
 	
 	/**
-	 * Assumes you are on the Manage Product Types page. Currently
+	 * Assumes you are on the Manage Asset Types page. Currently
 	 * this page is not paginated. So this just grabs everything from
 	 * the current page. If this becomes paginated, we will need to
 	 * update this accordingly.
@@ -88,8 +88,8 @@ public class ManageProductTypesDriver {
 	}
 	
 	/**
-	 * Clicks on the Add link on the Manage Product Types page.
-	 * Also verifies the Add Product Type page appeared successfully.
+	 * Clicks on the Add link on the Manage Asset Types page.
+	 * Also verifies the Add Asset Type page appeared successfully.
 	 */
 	public void gotoAddProductType() {
 		if(selenium.isElementPresent(addProductTypeLinkLocator)) {
@@ -97,7 +97,7 @@ public class ManageProductTypesDriver {
 			misc.waitForPageToLoadAndCheckForOopsPage();
 			verifyManageProductTypeAddPage();
 		} else {
-			fail("Could not find the link to add a product type");
+			fail("Could not find the link to add a asset type");
 		}
 	}
 
@@ -125,7 +125,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Click the Save button on the Add Product Type page.
+	 * Click the Save button on the Add Asset Type page.
 	 */
 	public void gotoSaveProductType() {
 		if(selenium.isElementPresent(saveButtonLocator)) {
@@ -137,7 +137,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Click the Cancel button on the Add Product Type page.
+	 * Click the Cancel button on the Add Asset Type page.
 	 */
 	public void gotoCancelProductType() {
 		if(selenium.isElementPresent(cancelButtonLocator)) {
@@ -149,14 +149,14 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * This fills on the add product type page. It will check
+	 * This fills on the add asset type page. It will check
 	 * for null input and that all the usual fields are visible
-	 * on the page. If any field in the ProductType object is
+	 * on the page. If any field in the AssetType object is
 	 * set to null, it will skip it and use whatever the default
 	 * values are.
 	 * 
 	 * Upload Image and Attach File do not currently work. Defining
-	 * them in the ProductType will cause the test case to fail.
+	 * them in the AssetType will cause the test case to fail.
 	 *  
 	 * @param p
 	 */
@@ -205,7 +205,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Set the product type attributes. Call by setProductType.
+	 * Set the asset type attributes. Call by setAssetType.
 	 * 
 	 * @param attributes
 	 */
@@ -428,7 +428,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Get the number of attributes added to the product type.
+	 * Get the number of attributes added to the asset type.
 	 * This number will include the attributes which were added
 	 * then deleted.
 	 * 
@@ -446,8 +446,8 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Go to the View All tab on Manage Product Type. It assumes you
-	 * are not already on the Manage Product Types page but are in
+	 * Go to the View All tab on Manage Asset Type. It assumes you
+	 * are not already on the Manage Asset Types page but are in
 	 * one of the other tabs.
 	 */
 	public void gotoViewAllProductType() {
@@ -458,7 +458,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Go to the View tab on Manage Product Type. It assumes you
+	 * Go to the View tab on Manage Asset Type. It assumes you
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoViewProductType() {
@@ -469,7 +469,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Go to the Edit tab on Manage Product Type. It assumes you
+	 * Go to the Edit tab on Manage Asset Type. It assumes you
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoEditProductType() {
@@ -480,7 +480,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Go to the Inspection Types tab on Manage Product Type. It assumes you
+	 * Go to the Inspection Types tab on Manage Asset Type. It assumes you
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoInspectionTypesProductType() {
@@ -491,7 +491,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Go to the Inspection Frequencies tab on Manage Product Type. It assumes you
+	 * Go to the Inspection Frequencies tab on Manage Asset Type. It assumes you
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoInspectionFrequenciesProductType() {
@@ -502,7 +502,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Go to the Sub-Components tab on Manage Product Type. It assumes you
+	 * Go to the Sub-Components tab on Manage Asset Type. It assumes you
 	 * are not already on this page but are in one of the other tabs.
 	 */
 	public void gotoSubComponentsProductType() {
@@ -513,8 +513,8 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Deletes the give list of product type attributes.
-	 * Assumes you are  on the edit page for the product type.
+	 * Deletes the give list of asset type attributes.
+	 * Assumes you are  on the edit page for the asset type.
 	 * Assumes all the attributes exist. The first attribute
 	 * which does not exist will cause the method to fail the
 	 * test case.
@@ -527,7 +527,7 @@ public class ManageProductTypesDriver {
 	}
 	
 	/**
-	 * Will delete or retire product type attributes. If the delete
+	 * Will delete or retire asset type attributes. If the delete
 	 * parameter is true, it assumes you want to Delete the attributes.
 	 * Otherwise, it will attempt to Retire the attributes.
 	 * 
@@ -574,7 +574,7 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * When you link on Delete for a product type attribute it takes
+	 * When you link on Delete for a asset type attribute it takes
 	 * a short period of time for the javascript to delete the element
 	 * from the DOM. This method waits for the javascript to finish.
 	 * Essentially, the moment the input field is invisible, this 
@@ -602,8 +602,8 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Go to View a product type. Assumes you are on the View All
-	 * page of Manage Product Types.
+	 * Go to View a asset type. Assumes you are on the View All
+	 * page of Manage Asset Types.
 	 * 
 	 * @param name
 	 */
@@ -623,11 +623,11 @@ public class ManageProductTypesDriver {
 	}
 
 	/**
-	 * Go to Edit product type. This uses the Edit link
+	 * Go to Edit asset type. This uses the Edit link
 	 * on the View All page. This does not use the Edit
-	 * tab on the Manage Product Type page.
+	 * tab on the Manage Asset Type page.
 	 * 
-	 * @param name the name of the product type.
+	 * @param name the name of the asset type.
 	 */
 	public void gotoEditProductType(String name) {
 		String editProductTypeLinkLocator = getProductTypeLinkLocator(name) + "/../../TD[2]/A[contains(text(),'Edit')]";

@@ -15,7 +15,7 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -42,7 +42,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductType findDefaultProductType(Long tenantId) {
+	public AssetType findDefaultProductType(Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -58,7 +58,7 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
 
-	public ProductType findProductTypeForProduct(Long productId) throws InvalidQueryException {
+	public AssetType findProductTypeForProduct(Long productId) throws InvalidQueryException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -89,7 +89,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<ProductType> getProductTypesForTenant(Long tenantId) {
+	public List<AssetType> getProductTypesForTenant(Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -124,11 +124,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public ProductType updateProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage) throws FileAttachmentException, ImageAttachmentException {
+	public AssetType updateProductType(AssetType assetType, List<FileAttachment> uploadedFiles, File productImage) throws FileAttachmentException, ImageAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateProductType(productTypeBean, uploadedFiles, productImage);
+			return createManager(transaction.getEntityManager()).updateProductType(assetType, uploadedFiles, productImage);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -139,11 +139,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductType updateProductType(ProductType productTypeBean) throws FileAttachmentException, ImageAttachmentException {
+	public AssetType updateProductType(AssetType assetType) throws FileAttachmentException, ImageAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateProductType(productTypeBean);
+			return createManager(transaction.getEntityManager()).updateProductType(assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

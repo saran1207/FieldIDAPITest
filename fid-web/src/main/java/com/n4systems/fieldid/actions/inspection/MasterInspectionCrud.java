@@ -3,6 +3,8 @@ package com.n4systems.fieldid.actions.inspection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -28,8 +30,6 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.security.Permissions;
@@ -48,7 +48,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 
 	private Inspection inspection;
 	private InspectionGroup inspectionGroup;
-	private Product product;
+	private Asset asset;
 	private List<SubProductHelper> subProducts;
 
 	private MasterInspection masterInspection;
@@ -86,7 +86,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 		masterInspection = new MasterInspection();
 		masterInspection.setInspection(new Inspection());
 		token = masterInspection.getToken();
-		masterInspection.getInspection().setProduct(product);
+		masterInspection.getInspection().setAsset(asset);
 		getSession().put("masterInspection", masterInspection);
 	}
 
@@ -99,7 +99,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 			masterInspection = new MasterInspection(inspection);
 			if (inspection != null) {
 				for (SubInspection i : inspection.getSubInspections()) {
-					persistenceManager.reattchAndFetch(i, "product.id", "results", "infoOptionMap", "type", "attachments");
+					persistenceManager.reattchAndFetch(i, "asset.id", "results", "infoOptionMap", "type", "attachments");
 				}
 			}
 		}
@@ -107,7 +107,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 		if (masterInspection != null) {
 			inspection = masterInspection.getInspection();
 			token = masterInspection.getToken();
-			setProductId(masterInspection.getInspection().getProduct().getId());
+			setAssetId(masterInspection.getInspection().getAsset().getId());
 			getSession().put("masterInspection", masterInspection);
 		}
 	}
@@ -121,12 +121,12 @@ public class MasterInspectionCrud extends AbstractCrud {
 			return MISSING;
 		}
 
-		if (product == null) {
-			if (masterInspection.getInspection().getProduct() == null) {
+		if (asset == null) {
+			if (masterInspection.getInspection().getAsset() == null) {
 				addActionError(getText("error.noproduct"));
 				return MISSING;
 			} else {
-				product = masterInspection.getInspection().getProduct();
+				asset = masterInspection.getInspection().getAsset();
 			}
 		}
 
@@ -167,12 +167,12 @@ public class MasterInspectionCrud extends AbstractCrud {
 			return MISSING;
 		}
 
-		if (product == null) {
-			if (masterInspection.getInspection().getProduct() == null) {
+		if (asset == null) {
+			if (masterInspection.getInspection().getAsset() == null) {
 				addActionError(getText("error.noproduct"));
 				return MISSING;
 			} else {
-				product = masterInspection.getInspection().getProduct();
+				asset = masterInspection.getInspection().getAsset();
 			}
 		}
 
@@ -209,7 +209,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 		try {
 			if (uniqueID == null) {
 				if (cleanToInspectionsToMatchConfiguration) {
-					masterInspection.cleanSubInspectionsForNonValidSubProducts(product);
+					masterInspection.cleanSubInspectionsForNonValidSubProducts(asset);
 				}
 				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
 				
@@ -243,7 +243,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 
 				} catch (Exception e) {
 					addFlashError(getText("error.subinspectionfileupload", subInspection.getName()));
-					logger.error("failed to attach uploaded files to sub product", e);
+					logger.error("failed to attach uploaded files to sub asset", e);
 				}
 			}
 
@@ -264,7 +264,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 			return INPUT;
 		} catch (Exception e) {
 			addActionError(getText("error.inspectionsavefailed"));
-			logger.error("inspection save failed serial number " + product.getSerialNumber(), e);
+			logger.error("inspection save failed serial number " + asset.getSerialNumber(), e);
 			return ERROR;
 		}
 	}
@@ -278,7 +278,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 		WebInspectionScheduleToInspectionScheduleBundleConverter converter = createWebInspectionScheduleToInspectionScheduleBundleConverter();
 		
 		for (WebInspectionSchedule nextSchedule : nextSchedules) {
-			InspectionScheduleBundle bundle = converter.convert(nextSchedule, product);
+			InspectionScheduleBundle bundle = converter.convert(nextSchedule, asset);
 			scheduleBundles.add(bundle );
 		}
 	
@@ -312,27 +312,27 @@ public class MasterInspectionCrud extends AbstractCrud {
 		}
 	}
 
-	public Long getProductId() {
-		return (product != null) ? product.getId() : null;
+	public Long getAssetId() {
+		return (asset != null) ? asset.getId() : null;
 	}
 
-	public void setProductId(Long productId) {		
-		if (productId == null) {
-			product = null;
+	public void setAssetId(Long assetId) {
+		if (assetId == null) {
+			asset = null;
 
-		} else if (product == null || !product.getId().equals(productId)) {
-			product = persistenceManager.find(Product.class, productId, getSecurityFilter(), "type.subTypes");
-			product = new FindSubProducts(persistenceManager, product).fillInSubProducts();
-			if (product != null) {
-				for (com.n4systems.model.SubProduct subProduct : product.getSubProducts()) {
-					persistenceManager.reattchAndFetch(subProduct.getProduct().getType(), "inspectionTypes");
+		} else if (asset == null || !asset.getId().equals(assetId)) {
+			asset = persistenceManager.find(Asset.class, assetId, getSecurityFilter(), "type.subTypes");
+			asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
+			if (asset != null) {
+				for (com.n4systems.model.SubProduct subProduct : asset.getSubProducts()) {
+					persistenceManager.reattchAndFetch(subProduct.getAsset().getType(), "inspectionTypes");
 				}
 			}
 
 		}
 		
 		if (masterInspection != null) {
-			masterInspection.setMasterProduct(product);
+			masterInspection.setMasterAsset(asset);
 		}
 	}
 
@@ -372,12 +372,12 @@ public class MasterInspectionCrud extends AbstractCrud {
 		return masterInspection;
 	}
 
-	public List<SubInspection> getInspectionsFor(Product product) {
-		return masterInspection.getSubInspectionFor(product);
+	public List<SubInspection> getInspectionsFor(Asset asset) {
+		return masterInspection.getSubInspectionFor(asset);
 	}
 	
-	public String getNameFor(Product product) {
-		List<SubInspection> subInspections = getInspectionsFor(product);
+	public String getNameFor(Asset asset) {
+		List<SubInspection> subInspections = getInspectionsFor(asset);
 		String result = null;
 		if (!subInspections.isEmpty()) {
 			result = subInspections.iterator().next().getName();
@@ -421,18 +421,18 @@ public class MasterInspectionCrud extends AbstractCrud {
 		return inspectionManager.isMasterInspection(id);
 	}
 
-	public List<Product> getAvailableSubProducts() {
-		List<Product> availableSubProducts = new ArrayList<Product>(); 
+	public List<Asset> getAvailableSubProducts() {
+		List<Asset> availableSubAssets = new ArrayList<Asset>();
 		for (SubInspection subInspection : inspection.getSubInspections()) {
-			if (!availableSubProducts.contains(subInspection.getProduct())) {
-				availableSubProducts.add(subInspection.getProduct());
+			if (!availableSubAssets.contains(subInspection.getAsset())) {
+				availableSubAssets.add(subInspection.getAsset());
 			}
 		}
-		return availableSubProducts;
+		return availableSubAssets;
 	}
 
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
 	public void setSubProducts(List<SubProductHelper> subProducts) {
@@ -446,8 +446,8 @@ public class MasterInspectionCrud extends AbstractCrud {
 		return subProducts;
 	}
 
-	public List<ProductType> getSubTypes() {
-		return new ArrayList<ProductType>(product.getType().getSubTypes());
+	public List<AssetType> getSubTypes() {
+		return new ArrayList<AssetType>(asset.getType().getSubTypes());
 	}
 
 	public void setScheduleId(Long scheduleId) {

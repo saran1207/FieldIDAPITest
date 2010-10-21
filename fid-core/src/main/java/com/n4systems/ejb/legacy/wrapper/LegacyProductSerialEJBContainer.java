@@ -6,9 +6,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
 import rfid.ejb.entity.AddProductHistoryBean;
-import rfid.ejb.entity.ProductSerialExtensionBean;
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
@@ -16,7 +17,6 @@ import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
@@ -30,11 +30,11 @@ public class LegacyProductSerialEJBContainer extends EJBTransactionEmulator<Lega
 		return new LegacyProductSerialManager(em);
 	}
 
-	public Long countAllInspections(Product product, SecurityFilter securityFilter) {
+	public Long countAllInspections(Asset asset, SecurityFilter securityFilter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).countAllInspections(product, securityFilter);
+			return createManager(transaction.getEntityManager()).countAllInspections(asset, securityFilter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -46,11 +46,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long countAllLocalInspections(Product product, SecurityFilter securityFilter) {
+	public Long countAllLocalInspections(Asset asset, SecurityFilter securityFilter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).countAllLocalInspections(product, securityFilter);
+			return createManager(transaction.getEntityManager()).countAllLocalInspections(asset, securityFilter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -64,11 +64,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 
 
-	public Product create(Product product, User modifiedBy) throws SubProductUniquenessException {
+	public Asset create(Asset asset, User modifiedBy) throws SubProductUniquenessException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).create(product, modifiedBy);
+			return createManager(transaction.getEntityManager()).create(asset, modifiedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -82,11 +82,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Product createProductWithServiceTransaction(String transactionGUID, Product product, User modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
+	public Asset createProductWithServiceTransaction(String transactionGUID, Asset asset, User modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).createProductWithServiceTransaction(transactionGUID, product, modifiedBy);
+			return createManager(transaction.getEntityManager()).createProductWithServiceTransaction(transactionGUID, asset, modifiedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -98,11 +98,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Product createWithHistory(Product product, User modifiedBy) throws SubProductUniquenessException {
+	public Asset createWithHistory(Asset asset, User modifiedBy) throws SubProductUniquenessException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).createWithHistory(product, modifiedBy);
+			return createManager(transaction.getEntityManager()).createWithHistory(asset, modifiedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -132,11 +132,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Inspection findLastInspections(Product product, SecurityFilter securityFilter) {
+	public Inspection findLastInspections(Asset asset, SecurityFilter securityFilter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findLastInspections(product, securityFilter);
+			return createManager(transaction.getEntityManager()).findLastInspections(asset, securityFilter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -150,7 +150,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public List<ProductStatusBean> findProductStatus(Long tenantId, Date beginDate) {
+	public List<AssetStatus> findProductStatus(Long tenantId, Date beginDate) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -166,7 +166,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductStatusBean findProductStatus(Long uniqueID, Long tenantId) {
+	public AssetStatus findProductStatus(Long uniqueID, Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -203,7 +203,7 @@ Transaction transaction = transactionManager.startTransaction();
 	
 
 	@SuppressWarnings("deprecation")
-	public Collection<ProductSerialExtensionBean> getProductSerialExtensions(Long tenantId) {
+	public Collection<AssetSerialExtension> getProductSerialExtensions(Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -253,11 +253,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Product update(Product productSerial, User modifiedBy) throws SubProductUniquenessException {
+	public Asset update(Asset assetSerial, User modifiedBy) throws SubProductUniquenessException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).update(productSerial, modifiedBy);
+			return createManager(transaction.getEntityManager()).update(assetSerial, modifiedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

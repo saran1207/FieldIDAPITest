@@ -5,7 +5,7 @@
 
 	<#assign componentTypes>
 		<ul>
-			<#list productType.subTypes as type > 
+			<#list assetType.subTypes as type >
 				<li>
 					${type.name}
 				</li>

@@ -2,8 +2,8 @@ package com.n4systems.api.validation.validators;
 
 import com.n4systems.api.model.InspectionView;
 import com.n4systems.api.validation.ValidationResult;
+import com.n4systems.model.Asset;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypeExistsLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.security.SecurityFilter;
@@ -25,7 +25,7 @@ public class AssociatedInspectionTypeValidator extends InspectionViewValidator {
 		SmartSearchLoader productLoader = createSmartSearchLoader(filter).setSearchText(identifier);
 		
 		// the ProductIdentifierValidator ensures the following is safe
-		Product product = productLoader.load().get(0);
+		Asset product = productLoader.load().get(0);
 		
 		AssociatedInspectionTypeExistsLoader assocLoader = createAssociatedInspectionTypeExistsLoader(filter);
 		assocLoader.setInspectionType(inspectionType);

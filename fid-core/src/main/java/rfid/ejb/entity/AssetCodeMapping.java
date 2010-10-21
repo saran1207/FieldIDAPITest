@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -12,21 +13,22 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 
 @Entity
 @Table (name = "productcodemapping")
-public class ProductCodeMappingBean extends LegacyBeanTenant {
+public class AssetCodeMapping extends LegacyBeanTenant {
 	private static final long serialVersionUID = 1L;
-	
-	private String productCode;
+
+    @Column(name="productcode")
+	private String assetCode;
 
 	private String customerRefNumber;
 	
 	@ManyToOne
 	@JoinColumn (name="r_productinfo")
-	private ProductType productInfo;
+	private AssetType assetInfo;
 	
 	@ManyToMany (targetEntity = InfoOptionBean.class, cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
 	@JoinTable (name = "productcodemapping_infooption",
@@ -35,20 +37,20 @@ public class ProductCodeMappingBean extends LegacyBeanTenant {
 	private List<InfoOptionBean> infoOptions = new ArrayList<InfoOptionBean>();	
 	
 	
-	public String getProductCode() {
-		return productCode;
+	public String getAssetCode() {
+		return assetCode;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
 	}
 
-	public ProductType getProductInfo() {
-		return productInfo;
+	public AssetType getAssetInfo() {
+		return assetInfo;
 	}
 
-	public void setProductInfo(ProductType productInfo) {
-		this.productInfo = productInfo;
+	public void setAssetInfo(AssetType assetInfo) {
+		this.assetInfo = assetInfo;
 	}
 
 	public List<InfoOptionBean> getInfoOptions() {

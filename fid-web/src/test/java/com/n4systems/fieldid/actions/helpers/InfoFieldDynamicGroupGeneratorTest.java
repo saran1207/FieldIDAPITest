@@ -31,7 +31,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 			this.commonInfoFields = commonInfoFields;
 		}
 
-		public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds) {
+		public SortedSet<String> findAllCommonInfoFieldNames(List<Long> assetTypeIds) {
 			return commonInfoFields;
 		}
 	}

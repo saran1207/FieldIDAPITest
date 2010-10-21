@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -26,8 +26,8 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 	private AutoAttributeCriteria criteria;
 	private AutoAttributeCriteria importCriteria;
 	private Map<InfoFieldBean,InfoFieldBean> infoFieldToInfoFieldMapping;
-	private ProductType originalType;
-	private ProductType importedProductType;
+	private AssetType originalType;
+	private AssetType importedAssetType;
 	
 	public CatalogAutoAttributesImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		super(persistenceManager, tenant, importCatalog);
@@ -54,7 +54,7 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 		copyInfoFieldList(criteria.getOutputs(), importCriteria.getOutputs());
 		
 		importCriteria.setTenant(tenant);
-		importCriteria.setProductType(importedProductType);
+		importCriteria.setAssetType(importedAssetType);
 		persistenceManager.save(importCriteria);
 		
 		importDefinitions();
@@ -115,7 +115,7 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 	private void mapOriginalInfoFieldsToNew() {
 		infoFieldToInfoFieldMapping = new HashMap<InfoFieldBean, InfoFieldBean>();
 		for (InfoFieldBean originalInfoField : originalType.getInfoFields()) {
-			for (InfoFieldBean importedInfoField : importedProductType.getInfoFields()) {
+			for (InfoFieldBean importedInfoField : importedAssetType.getInfoFields()) {
 				if(originalInfoField.getName().equals(importedInfoField.getName())) {
 					infoFieldToInfoFieldMapping.put(originalInfoField, importedInfoField);
 					break;
@@ -125,14 +125,14 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 	}
 
 
-	public CatalogAutoAttributesImportHandler setOriginalType(ProductType originalType) {
+	public CatalogAutoAttributesImportHandler setOriginalType(AssetType originalType) {
 		this.originalType = originalType;
 		return this;
 	}
 
 
-	public CatalogAutoAttributesImportHandler setImportedProductType(ProductType importedProductType) {
-		this.importedProductType = importedProductType;
+	public CatalogAutoAttributesImportHandler setImportedProductType(AssetType importedAssetType) {
+		this.importedAssetType = importedAssetType;
 		return this;
 	}
 	

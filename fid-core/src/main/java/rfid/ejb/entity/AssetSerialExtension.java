@@ -7,7 +7,7 @@ import com.n4systems.model.parents.legacy.LegacyBeanTenantId;
 
 @Entity
 @Table(name = "productserialextension")
-public class ProductSerialExtensionBean extends LegacyBeanTenantId {
+public class AssetSerialExtension extends LegacyBeanTenantId {
 	private static final long serialVersionUID = 1L;
 
 	private String extensionKey;
@@ -28,6 +28,5 @@ public class ProductSerialExtensionBean extends LegacyBeanTenantId {
 	public void setExtensionLabel(String extensionLabel) {
 		this.extensionLabel = extensionLabel;
 	}
-
 
 }

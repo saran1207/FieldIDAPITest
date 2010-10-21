@@ -21,7 +21,7 @@ public class ManageProductCodeMappings {
 	MiscDriver misc;
 	IdentifyPageDriver identify;
 	
-	private String manageProductCodeMappingsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Product Code Mappings')]";
+	private String manageProductCodeMappingsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Asset Code Mappings')]";
 	private String addProductCodeMappingLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI[contains(@class,'add')]/A[contains(text(),'Add')]";
 	private String productCodeTextFieldLocator = "xpath=//INPUT[@id='productCodeMappingEdit_productCode']";
 	private String referenceNumberTextFieldLocator = "xpath=//INPUT[@id='productCodeMappingEdit_customerRefNumber']";
@@ -38,7 +38,7 @@ public class ManageProductCodeMappings {
 	public void verifyManageProductCodeMappingsPage() {
 		misc.checkForErrorMessages("verifyManageProductCodeMappingsPage");
 		if(!selenium.isElementPresent(manageProductCodeMappingsPageHeaderLocator)) {
-			fail("Could not find the header for 'Manage Product Code Mappings'.");
+			fail("Could not find the header for 'Manage Asset Code Mappings'.");
 		}
 	}
 
@@ -48,7 +48,7 @@ public class ManageProductCodeMappings {
 			misc.waitForPageToLoadAndCheckForOopsPage();
 			verifyAddProductCodeMapping();
 		} else {
-			fail("Could not find the Add link to add a product code mapping");
+			fail("Could not find the Add link to add a asset code mapping");
 		}
 	}
 
@@ -151,10 +151,10 @@ public class ManageProductCodeMappings {
 				selenium.select(productTypeSelectListLocator, name);
 				selenium.waitForAjax();
 			} else {
-				fail("Could not find '" + name + "' in the list of product types");
+				fail("Could not find '" + name + "' in the list of asset types");
 			}
 		} else {
-			fail("Could not find the Product Type select list");
+			fail("Could not find the Asset Type select list");
 		}
 	}
 

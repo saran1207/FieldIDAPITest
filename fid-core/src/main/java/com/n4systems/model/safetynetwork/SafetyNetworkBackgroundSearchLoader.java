@@ -2,7 +2,7 @@ package com.n4systems.model.safetynetwork;
 
 import java.util.List;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
 
 public class SafetyNetworkBackgroundSearchLoader {
@@ -16,55 +16,55 @@ public class SafetyNetworkBackgroundSearchLoader {
 		networkSmartSearchLoader = new SafetyNetworkSmartSearchLoader(filter);
 	}
 	
-	public Product load() {
-		Product product = searchByRfidNumber();
+	public Asset load() {
+		Asset asset = searchByRfidNumber();
 		
-		if (product == null) {
-			product = searchBySerialNumber();
+		if (asset == null) {
+			asset = searchBySerialNumber();
 		}
 		
-		if (product == null) {
-			product = searchByRefNumber();
+		if (asset == null) {
+			asset = searchByRefNumber();
 		}
 		
-		return product;
+		return asset;
 	}
 	
-	private Product searchByRfidNumber() {
-		Product product = null;
+	private Asset searchByRfidNumber() {
+		Asset asset = null;
 		if (rfidNumber != null && rfidNumber.length() > 0) {
-			List<Product> products = networkSmartSearchLoader.useOnlyRfidNumber().setSearchText(rfidNumber).load();
-			product = pullProductFromList(products);
+			List<Asset> assets = networkSmartSearchLoader.useOnlyRfidNumber().setSearchText(rfidNumber).load();
+			asset = pullProductFromList(assets);
 		}
-		return product;
+		return asset;
 	}
 	
-	private Product searchBySerialNumber() {
-		Product product = null;
+	private Asset searchBySerialNumber() {
+		Asset asset = null;
 		if (serialNumber != null && serialNumber.length() > 0) {
-			List<Product> products = networkSmartSearchLoader.useOnlySerialNumber().setSearchText(serialNumber).load();
-			product = pullProductFromList(products);
+			List<Asset> assets = networkSmartSearchLoader.useOnlySerialNumber().setSearchText(serialNumber).load();
+			asset = pullProductFromList(assets);
 		}
-		return product;
+		return asset;
 	}
 	
-	private Product searchByRefNumber() {
-		Product product = null;
+	private Asset searchByRefNumber() {
+		Asset asset = null;
 		if (refNumber != null && refNumber.length() > 0) {
-			List<Product> products = networkSmartSearchLoader.useOnlyRefNumber().setSearchText(refNumber).load();
-			product = pullProductFromList(products);
+			List<Asset> assets = networkSmartSearchLoader.useOnlyRefNumber().setSearchText(refNumber).load();
+			asset = pullProductFromList(assets);
 		}
-		return product;
+		return asset;
 	}
 	
-	private Product pullProductFromList(List<Product> products) {
-		Product product = null;
+	private Asset pullProductFromList(List<Asset> assets) {
+		Asset asset = null;
 		
-		if (products.size() > 0) {
-			product = products.get(0);
+		if (assets.size() > 0) {
+			asset = assets.get(0);
 		}
 		
-		return product;		
+		return asset;
 	}
 	
 	public SafetyNetworkBackgroundSearchLoader setVendorOrgId(Long vendorOrgId) {

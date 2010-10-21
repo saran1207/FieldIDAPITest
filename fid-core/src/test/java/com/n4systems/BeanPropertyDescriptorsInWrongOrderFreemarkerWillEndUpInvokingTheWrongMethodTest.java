@@ -8,6 +8,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
+import com.n4systems.model.builders.AssetBuilder;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -15,8 +16,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.n4systems.model.Product;
-import com.n4systems.model.builders.ProductBuilder;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
@@ -89,8 +89,8 @@ public class BeanPropertyDescriptorsInWrongOrderFreemarkerWillEndUpInvokingTheWr
 	@Test
 	@Ignore
     public void should_work_with_enhanced_product() throws Exception {
-		Product asset = ProductBuilder.aProduct().build();
-		Product enhancedAsset = asset.enhance(SecurityLevel.SAFETY_NETWORK);
+		Asset asset = AssetBuilder.anAsset().build();
+		Asset enhancedAsset = asset.enhance(SecurityLevel.SAFETY_NETWORK);
         
 		BeanModel beanModel = new BeanModel(enhancedAsset, new BeansWrapper());
         assertThat(beanModel.get("id"), is(notNullValue()));

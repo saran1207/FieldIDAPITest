@@ -2,7 +2,7 @@ package com.n4systems.model.producttype;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -17,7 +17,7 @@ public class ProductTypeByNameExistsLoader extends SecurityFilteredLoader<Boolea
 
 	@Override
 	protected Boolean load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<ProductType> builder = new QueryBuilder<ProductType>(ProductType.class, filter);
+		QueryBuilder<AssetType> builder = new QueryBuilder<AssetType>(AssetType.class, filter);
 		builder.addWhere(WhereClauseFactory.create("name", name));
 		
 		Boolean exists = builder.entityExists(em);

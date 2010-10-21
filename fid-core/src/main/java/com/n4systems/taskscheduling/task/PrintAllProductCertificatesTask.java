@@ -9,7 +9,7 @@ import javax.mail.MessagingException;
 
 import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.mail.MailManager;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManager;
@@ -20,18 +20,18 @@ import com.n4systems.reporting.ProductCertificateReportGenerator;
 
 public class PrintAllProductCertificatesTask extends DownloadTask {
 	private final ProductCertificateReportGenerator certGen;
-	private final FilteredIdLoader<Product> productLoader;
+	private final FilteredIdLoader<Asset> productLoader;
 	
 	private List<Long> productIdList;
 	
-	public PrintAllProductCertificatesTask(DownloadLink downloadLink, String downloadUrl, ProductCertificateReportGenerator certGen, FilteredIdLoader<Product> productLoader) {
+	public PrintAllProductCertificatesTask(DownloadLink downloadLink, String downloadUrl, ProductCertificateReportGenerator certGen, FilteredIdLoader<Asset> productLoader) {
 		super(downloadLink, downloadUrl, "printAllProductCerts");
 		this.certGen = certGen;
 		this.productLoader = productLoader;
 	}
 	
 	public PrintAllProductCertificatesTask(DownloadLink downloadLink, String downloadUrl) {
-		this(downloadLink, downloadUrl, new ProductCertificateReportGenerator(), new FilteredIdLoader<Product>(downloadLink.getUser().getSecurityFilter(), Product.class));
+		this(downloadLink, downloadUrl, new ProductCertificateReportGenerator(), new FilteredIdLoader<Asset>(downloadLink.getUser().getSecurityFilter(), Asset.class));
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class PrintAllProductCertificatesTask extends DownloadTask {
 		try {
 			transaction = PersistenceManager.startTransaction();
 						
-			List<Product> products = loadProducts(user, transaction);
+			List<Asset> products = loadProducts(user, transaction);
 			certGen.setUser(user);
 			certGen.generate(products, new FileOutputStream(downloadFile), downloadName, transaction);
 				
@@ -59,8 +59,8 @@ public class PrintAllProductCertificatesTask extends DownloadTask {
 		}
 	}
 	
-	private List<Product> loadProducts(User user, Transaction transaction) {
-		return new LazyLoadingList<Product>(productIdList, productLoader, transaction);
+	private List<Asset> loadProducts(User user, Transaction transaction) {
+		return new LazyLoadingList<Asset>(productIdList, productLoader, transaction);
 	}
 
 	public void setProductIdList(List<Long> productIdList) {

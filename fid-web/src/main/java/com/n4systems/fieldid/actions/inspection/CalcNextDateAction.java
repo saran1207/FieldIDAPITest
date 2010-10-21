@@ -4,9 +4,9 @@ import java.util.Date;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
@@ -15,7 +15,7 @@ public class CalcNextDateAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 
 	private Long ownerId;
-	private Long productTypeId;
+	private Long assetTypeId;
 	private Long inspectionTypeId;
 	private Date startDate;
 	private Date nextDate;
@@ -25,13 +25,13 @@ public class CalcNextDateAction extends AbstractAction {
 	}
 
 	public String doCalculate() {
-		ProductType productType = getLoaderFactory().createProductTypeLoader().setId(productTypeId).load();
+		AssetType assetType = getLoaderFactory().createProductTypeLoader().setId(assetTypeId).load();
 		
 		InspectionType inspectionType = getLoaderFactory().createFilteredIdLoader(InspectionType.class).setId(inspectionTypeId).load();
 		
 		BaseOrg owner = getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(ownerId).load();
 		
-		ProductTypeSchedule schedule = productType.getSchedule(inspectionType, owner);
+		AssetTypeSchedule schedule = assetType.getSchedule(inspectionType, owner);
 		
 		if (schedule != null) {
 			if (startDate == null) {
@@ -48,8 +48,8 @@ public class CalcNextDateAction extends AbstractAction {
 		this.ownerId = ownerId;
 	}
 	
-	public void setProductTypeId(Long productTypeId) {
-		this.productTypeId = productTypeId;
+	public void setAssetTypeId(Long assetTypeId) {
+		this.assetTypeId = assetTypeId;
 	}
 
 	public void setInspectionTypeId(Long inspectionTypeId) {

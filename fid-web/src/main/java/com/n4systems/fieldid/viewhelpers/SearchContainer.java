@@ -57,8 +57,8 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	abstract protected String defaultSortColumn();
 	abstract protected SortTerm.Direction defaultSortDirection();
 	
-	abstract public Long getProductType();
-	abstract public Long getProductTypeGroup();
+	abstract public Long getAssetType();
+	abstract public Long getAssetTypeGroup();
 	
 	public Class<?> getSearchClass() {
 		return searchClass;

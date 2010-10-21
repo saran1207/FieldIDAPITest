@@ -46,13 +46,13 @@ public class AutoAttributeWizard {
 			selenium.click(productTypeLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
-			fail("Could not find the link to product type '" + productType + "'");
+			fail("Could not find the link to asset type '" + productType + "'");
 		}
 	}
 	
 	public void verifyEditProductTypeAutoAttributeWizardPage(String productType) {
 		String editProductTypeHeaderLocator = "//FORM[@id='autoAttributeCriteriaEdit']/H2[contains(text(),'" + productType + "')]";
-		assertTrue("Could not find the header for product type '" + productType + "'", selenium.isElementPresent(editProductTypeHeaderLocator));
+		assertTrue("Could not find the header for asset type '" + productType + "'", selenium.isElementPresent(editProductTypeHeaderLocator));
 	}
 	
 	

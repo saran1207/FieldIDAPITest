@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -21,8 +22,7 @@ import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
@@ -37,39 +37,39 @@ public class ProductCertificateGenerator {
 	
 	public ProductCertificateGenerator() {}
 	
-	public JasperPrint generate(Product product, User user) throws ReportException, NonPrintableManufacturerCert {
+	public JasperPrint generate(Asset asset, User user) throws ReportException, NonPrintableManufacturerCert {
 
-		if (!product.getType().isHasManufactureCertificate()) {
-			throw new NonPrintableManufacturerCert("no cert for product.");
+		if (!asset.getType().isHasManufactureCertificate()) {
+			throw new NonPrintableManufacturerCert("no cert for asset.");
 		}
 
-		File jasperFile = PathHandler.getReportFile(product);
+		File jasperFile = PathHandler.getReportFile(asset);
 
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
-			throw new ReportException("No Product report file for tenant [" + product.getTenant().getName() + "]");
+			throw new ReportException("No Asset report file for tenant [" + asset.getTenant().getName() + "]");
 		}
 
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 
-		addImageStreams(reportMap, product.getOwner().getInternalOrg());
+		addImageStreams(reportMap, asset.getOwner().getInternalOrg());
 
 
-		addUserParams(reportMap, product.getIdentifiedBy());
+		addUserParams(reportMap, asset.getIdentifiedBy());
 
-		reportMap.putAll(new ProductReportMapProducer(product, new DateTimeDefiner(user)).produceMap());
-		addProductTypeParams(reportMap, product.getType());
-		addOrderParams(reportMap, product.getShopOrder());
-		addOrganizationParams(reportMap, product.getOwner().getInternalOrg());
+		reportMap.putAll(new ProductReportMapProducer(asset, new DateTimeDefiner(user)).produceMap());
+		addProductTypeParams(reportMap, asset.getType());
+		addOrderParams(reportMap, asset.getShopOrder());
+		addOrganizationParams(reportMap, asset.getOwner().getInternalOrg());
 		
-		addTenantParams(reportMap, product.getOwner().getPrimaryOrg());
-		addCustomerParams(reportMap, product.getOwner().getCustomerOrg());
-		addDivisionParams(reportMap, product.getOwner().getDivisionOrg());
+		addTenantParams(reportMap, asset.getOwner().getPrimaryOrg());
+		addCustomerParams(reportMap, asset.getOwner().getCustomerOrg());
+		addDivisionParams(reportMap, asset.getOwner().getDivisionOrg());
 
-		List<Product> reportCollection = new ArrayList<Product>();
-		reportCollection.add(product);
+		List<Asset> reportCollection = new ArrayList<Asset>();
+		reportCollection.add(asset);
 
 		JasperPrint jasperPrint = null;
 		try {
@@ -146,11 +146,11 @@ public class ProductCertificateGenerator {
 		}
 	}
 	
-	private void addProductTypeParams(ReportMap<Object> params, ProductType productType) {
-		params.put("productType", productType.getName());
-		params.put("itemNumber", productType.getName());
-		params.put("productWarning", productType.getWarnings());
-		params.put("certificateText", productType.getManufactureCertificateText());
+	private void addProductTypeParams(ReportMap<Object> params, AssetType assetType) {
+		params.put("assetType", assetType.getName());
+		params.put("itemNumber", assetType.getName());
+		params.put("productWarning", assetType.getWarnings());
+		params.put("certificateText", assetType.getManufactureCertificateText());
 	}
 	
 	private void addOrderParams(ReportMap<Object> params, LineItem lineItem) {
@@ -159,7 +159,7 @@ public class ProductCertificateGenerator {
 		if (lineItem != null) {
 			params.put("orderNumber", lineItem.getOrder().getOrderNumber());
 			params.put("customerPartDescription", lineItem.getDescription());
-			params.put("productName", lineItem.getProductCode());
+			params.put("productName", lineItem.getAssetCode());
 		}
 	}
 	

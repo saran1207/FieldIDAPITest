@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -15,8 +17,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.utils.CleanProductTypeFactory;
 import com.n4systems.reporting.PathHandler;
@@ -32,10 +32,10 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 	private final LegacyProductType productTypeManager;
 
 	private File copiedProductImage;
-	private ProductType originalType;
-	private ProductType importedProductType;
+	private AssetType originalType;
+	private AssetType importedAssetType;
 	private ProductTypeImportSummary summary;
-	private Map<Long, ProductTypeGroup> productGroupMapping;
+	private Map<Long, AssetTypeGroup> productGroupMapping;
 	private Set<Long> importProductTypeIds;
 
 	
@@ -66,7 +66,7 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 			try {
 				List<Long> subProducts = importCatalog.getAllPublishedSubTypesFor(productTypeId);
 				if (!subProducts.isEmpty()) {
-					ProductType importedType = summary.getImportMapping().get(productTypeId);
+					AssetType importedType = summary.getImportMapping().get(productTypeId);
 					for (Long subProductId : subProducts) {
 						if (summary.getImportMapping().get(subProductId) != null) {
 							importedType.getSubTypes().add(summary.getImportMapping().get(subProductId));
@@ -83,10 +83,10 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 
 	private void importProductType(Long productTypeId) throws ImportFailureException {
 		originalType = importCatalog.getPublishedProductType(productTypeId, "infoFields");
-		importedProductType = importCatalog.getPublishedProductType(productTypeId, "infoFields");
+		importedAssetType = importCatalog.getPublishedProductType(productTypeId, "infoFields");
 
 		prepareProductImageForImport();
-		copyProductType(importedProductType);
+		copyProductType(importedAssetType);
 		setUniqueName();
 		applyGroup();
 		setImage();
@@ -106,42 +106,42 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private void processAutoattributes() throws ImportFailureException {
-		new CatalogAutoAttributesImportHandler(persistenceManager, tenant, importCatalog).setOriginalType(originalType).setImportedProductType(importedProductType).importCatalog();
+		new CatalogAutoAttributesImportHandler(persistenceManager, tenant, importCatalog).setOriginalType(originalType).setImportedProductType(importedAssetType).importCatalog();
 	}
 
 	private void saveProduct() throws FileAttachmentException, ImageAttachmentException {
-		importedProductType = productTypeManager.updateProductType(importedProductType, null, copiedProductImage);
-		summary.getImportMapping().put(originalType.getId(), importedProductType);
+		importedAssetType = productTypeManager.updateProductType(importedAssetType, null, copiedProductImage);
+		summary.getImportMapping().put(originalType.getId(), importedAssetType);
 	}
 
 	private void setImage() {
 		if (copiedProductImage != null) {
-			importedProductType.setImageName(copiedProductImage.getName());
+			importedAssetType.setImageName(copiedProductImage.getName());
 		}
 	}
 
 	private void applyGroup() {
 		if (originalType.getGroup() != null) {
-			importedProductType.setGroup(productGroupMapping.get(originalType.getGroup().getId()));
+			importedAssetType.setGroup(productGroupMapping.get(originalType.getGroup().getId()));
 		}
 	}
 
 	private void setUniqueName() {
-		importedProductType.setName(createUniqueProductTypeName(importedProductType.getName()));
+		importedAssetType.setName(createUniqueProductTypeName(importedAssetType.getName()));
 	}
 
-	private ProductType copyProductType(ProductType originalType) {
+	private AssetType copyProductType(AssetType originalType) {
 		return new CleanProductTypeFactory(originalType, tenant).clean();
 	}
 
 	private void prepareProductImageForImport() {
 		try {
-			if (importedProductType.hasImage()) {
-				File productTypeDirectory = PathHandler.getProductTypeImageFile(importedProductType);
-				File imageFile = new File(productTypeDirectory.getAbsolutePath() + '/' + importedProductType.getImageName());
+			if (importedAssetType.hasImage()) {
+				File productTypeDirectory = PathHandler.getProductTypeImageFile(importedAssetType);
+				File imageFile = new File(productTypeDirectory.getAbsolutePath() + '/' + importedAssetType.getImageName());
 
 				File tmpDirectory = PathHandler.getTempRoot();
-				copiedProductImage = new File(tmpDirectory.getAbsolutePath() + '/' + UUID.randomUUID().toString() + "/" + importedProductType.getImageName());
+				copiedProductImage = new File(tmpDirectory.getAbsolutePath() + '/' + UUID.randomUUID().toString() + "/" + importedAssetType.getImageName());
 				FileUtils.copyFile(imageFile, copiedProductImage);
 
 			} else {
@@ -154,11 +154,11 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private String createUniqueProductTypeName(String productTypeName) {
-		if (!persistenceManager.uniqueNameAvailable(ProductType.class, productTypeName, null, tenant.getId())) {
+		if (!persistenceManager.uniqueNameAvailable(AssetType.class, productTypeName, null, tenant.getId())) {
 			int namePostFix = 1;
 			productTypeName += " (" + importCatalog.getTenant().getName() + ")";
 			String tmpProductTypeName = productTypeName; 
-			while (!persistenceManager.uniqueNameAvailable(ProductType.class, tmpProductTypeName, null, tenant.getId())) {
+			while (!persistenceManager.uniqueNameAvailable(AssetType.class, tmpProductTypeName, null, tenant.getId())) {
 				tmpProductTypeName = productTypeName + "(" + namePostFix + ")";
 				namePostFix++;
 			}
@@ -191,7 +191,7 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 		List<ListingPair> productTypes = importCatalog.getPublishedProductTypesLP();
 		for (ListingPair productType : productTypes) {
 			if (productTypeIds.contains(productType.getId())) {
-				summary.getImportMapping().put(productType.getId(), new ProductType(createUniqueProductTypeName(productType.getName())));
+				summary.getImportMapping().put(productType.getId(), new AssetType(createUniqueProductTypeName(productType.getName())));
 			}
 		}
 	}
@@ -202,12 +202,12 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 		}
 	}
 
-	public ProductType getOriginalType() {
+	public AssetType getOriginalType() {
 		return originalType;
 	}
 
-	public ProductType getImportedProductType() {
-		return importedProductType;
+	public AssetType getImportedProductType() {
+		return importedAssetType;
 	}
 
 	private Set<Long> findMasterProductRequirements(Set<Long> productTypeIds) {
@@ -219,7 +219,7 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 		return additionalProductTypes;
 	}
 
-	public Map<Long, ProductType> getImportedMap() {
+	public Map<Long, AssetType> getImportedMap() {
 		return summary.getImportMapping();
 	}
 
@@ -229,28 +229,28 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private void rollbackProductType() {
-		for (ProductType productTypeToDelete : summary.getImportMapping().values()) {
+		for (AssetType assetTypeToDelete : summary.getImportMapping().values()) {
 			try {
-				new CatalogAutoAttributesImportHandler(persistenceManager, tenant, importCatalog).setImportedProductType(productTypeToDelete).rollback();
-				persistenceManager.delete(productTypeToDelete);
+				new CatalogAutoAttributesImportHandler(persistenceManager, tenant, importCatalog).setImportedProductType(assetTypeToDelete).rollback();
+				persistenceManager.delete(assetTypeToDelete);
 			} catch (Exception e) {
-				logger.error("failed to delete product durning rollback");
+				logger.error("failed to delete asset durning rollback");
 			}
 		}
 	}
 
 	private void rollbackMasterProductConfiguration() {
-		for (ProductType productTypeToClearSubProducts : summary.getImportMapping().values()) {
+		for (AssetType assetTypeToClearSubProducts : summary.getImportMapping().values()) {
 			try { 
-				productTypeToClearSubProducts.getSubTypes().clear();
-				persistenceManager.update(productTypeToClearSubProducts);
+				assetTypeToClearSubProducts.getSubTypes().clear();
+				persistenceManager.update(assetTypeToClearSubProducts);
 			} catch (Exception e) {
-				logger.error("failed to clean product durning rollback", e);
+				logger.error("failed to clean asset durning rollback", e);
 			}
 		}
 	}
 
-	public CatalogProductTypeImportHandler setProductGroupMapping(Map<Long, ProductTypeGroup> productGroupMapping) {
+	public CatalogProductTypeImportHandler setProductGroupMapping(Map<Long, AssetTypeGroup> productGroupMapping) {
 		this.productGroupMapping = productGroupMapping;
 		return this;
 	}

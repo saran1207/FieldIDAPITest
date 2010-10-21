@@ -10,7 +10,7 @@ import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 @Entity
 @Table(name = "productserial_infooption")
-public class ProductSerialInfoOptionBean extends LegacyBaseEntity {
+public class AssetSerialInfoOption extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	private Long r_productserial;

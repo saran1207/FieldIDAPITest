@@ -8,11 +8,11 @@ import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.ProofTestHandler;
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.Option;
 import com.n4systems.ejb.legacy.PopulatorLog;
-import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.UserManager;
@@ -71,7 +71,7 @@ public class ServiceLocator {
 		return new PersistenceManagerEJBContainer();
 	}
 
-	public static final ProductCodeMapping getProductCodeMapping() {
+	public static final AssetCodeMappingService getProductCodeMapping() {
 		return new ProductCodeMappingEJBContainer();
 	}
 

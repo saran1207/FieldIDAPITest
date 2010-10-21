@@ -3,14 +3,14 @@ package com.n4systems.api.conversion.product;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.model.ProductView;
+import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Product;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 
 
-public class ProductToViewConverter implements ModelToViewConverter<Product, ProductView> {
+public class ProductToViewConverter implements ModelToViewConverter<Asset, ProductView> {
 	private final InfoOptionMapConverter optionConverter;
 	
 	public ProductToViewConverter() {
@@ -22,7 +22,7 @@ public class ProductToViewConverter implements ModelToViewConverter<Product, Pro
 	}
 	
 	@Override
-	public ProductView toView(Product model) throws ConversionException {
+	public ProductView toView(Asset model) throws ConversionException {
 		ProductView view = new ProductView();
 		
 		PrimaryOrg primaryOrg = model.getOwner().getPrimaryOrg();
@@ -37,8 +37,8 @@ public class ProductToViewConverter implements ModelToViewConverter<Product, Pro
 		
 		convertOwnerFields(model.getOwner(), view);
 		
-		if (model.getProductStatus() != null) {
-			view.setStatus(model.getProductStatus().getName());
+		if (model.getAssetStatus() != null) {
+			view.setStatus(model.getAssetStatus().getName());
 		}
 		
 		// integration customers cannot use the 'Order Number' field as it would be impossible

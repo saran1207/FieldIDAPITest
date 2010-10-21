@@ -1,10 +1,10 @@
 var product = new Object();
 
-product.id = ${product.id};
-product.serialNumber = "${product.serialNumber?default("")?js_string}";
-product.rfidNumber = "${product.rfidNumber?default("")?js_string}";
-product.owner = "${product.owner.internalOrg.displayName?default("")?js_string}";
-product.type = "${product.type.displayName?default("")?js_string}";
-product.referenceNumber = "${product.customerRefNumber?default('')?js_string}";
+product.id = ${asset.id};
+product.serialNumber = "${asset.serialNumber?default("")?js_string}";
+product.rfidNumber = "${asset.rfidNumber?default("")?js_string}";
+product.owner = "${asset.owner.internalOrg.displayName?default("")?js_string}";
+product.type = "${asset.type.displayName?default("")?js_string}";
+product.referenceNumber = "${asset.customerRefNumber?default('')?js_string}";
 
 updateLinkedProductInfo(product);

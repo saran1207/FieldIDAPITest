@@ -17,7 +17,7 @@ public class ProductStatusMenuTest extends LoggedInTestCase {
 		selenium.click("link=View All");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
-		assertEquals("Manage Product Statuses", selenium.getText("css=#contentTitle h1"));
+		assertEquals("Manage Asset Statuses", selenium.getText("css=#contentTitle h1"));
 	}
 
 }

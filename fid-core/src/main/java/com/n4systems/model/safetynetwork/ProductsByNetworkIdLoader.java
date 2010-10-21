@@ -1,6 +1,6 @@
 package com.n4systems.model.safetynetwork;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-public class ProductsByNetworkIdLoader extends ListLoader<Product> {
+public class ProductsByNetworkIdLoader extends ListLoader<Asset> {
 
 	private Long networkId;
 	private Long excludeProductId;
@@ -27,15 +27,15 @@ public class ProductsByNetworkIdLoader extends ListLoader<Product> {
 	}
 	
 	@Override
-	public List<Product> load(EntityManager em, SecurityFilter filter) {
+	public List<Asset> load(EntityManager em, SecurityFilter filter) {
         QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, filter);
 		connectedTenantsQuery.setSimpleSelect("connectedOrg.tenant", true);
 
         SubSelectInClause insideSafetyNetworkSubClause = new SubSelectInClause("owner.tenant", connectedTenantsQuery);
 
-		QueryBuilder<Product> builder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
+		QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("networkId", networkId));
-		builder.addPostFetchPaths(Product.POST_FETCH_ALL_PATHS);
+		builder.addPostFetchPaths(Asset.POST_FETCH_ALL_PATHS);
         builder.addWhere(insideSafetyNetworkSubClause);
 		
 		if (excludeProductId != null) {
@@ -44,7 +44,7 @@ public class ProductsByNetworkIdLoader extends ListLoader<Product> {
 
 		builder.addPostFetchPaths("infoOptions");
 		
-		List<Product> unsecuredProducts = builder.getResultList(em);
+		List<Asset> unsecuredProducts = builder.getResultList(em);
 		
 		if (bypassSecurityEnhancement) {
 			return unsecuredProducts;
@@ -52,9 +52,9 @@ public class ProductsByNetworkIdLoader extends ListLoader<Product> {
 		
 		PersistenceManager.setSessionReadOnly(em);
 		
-		List<Product> enhancedProducts = EntitySecurityEnhancer.enhanceList(unsecuredProducts, filter);
+		List<Asset> enhancedAssets = EntitySecurityEnhancer.enhanceList(unsecuredProducts, filter);
 		
-		return enhancedProducts;
+		return enhancedAssets;
 	}
 
 	public ProductsByNetworkIdLoader setNetworkId(Long networkId) {

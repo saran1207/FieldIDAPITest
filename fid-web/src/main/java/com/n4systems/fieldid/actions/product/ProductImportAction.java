@@ -7,11 +7,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.Importer;
@@ -21,8 +22,7 @@ import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.utils.StreamUtils;
@@ -38,7 +38,7 @@ import com.n4systems.util.ArrayUtils;
 public class ProductImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(ProductImportAction.class);
 	
-	private ProductType type;
+	private AssetType type;
 	private InputStream exampleExportFileStream;
 	private String exampleExportFileSize;
 	
@@ -84,8 +84,8 @@ public class ProductImportAction extends AbstractImportAction {
 		return SUCCESS;
 	}
 	
-	private Product createExampleProduct() {
-		Product example = new Product();
+	private Asset createExampleProduct() {
+		Asset example = new Asset();
 		
 		example.setSerialNumber(getText("example.product.serialNumber"));
 		example.setRfidNumber(getText("example.product.rfidNumber"));
@@ -96,9 +96,9 @@ public class ProductImportAction extends AbstractImportAction {
 		example.setComments(getText("example.product.comments"));
 		example.setIdentified(new Date());
 		
-		ProductStatusBean exampleStatus = getExampleProductStatus();
+		AssetStatus exampleStatus = getExampleProductStatus();
 		if (exampleStatus != null) {
-			example.setProductStatus(exampleStatus);
+			example.setAssetStatus(exampleStatus);
 		}
 		
 		InfoOptionBean exampleOption;
@@ -114,21 +114,21 @@ public class ProductImportAction extends AbstractImportAction {
 		return example;
 	}
 	
-	private ProductStatusBean getExampleProductStatus() {
-		List<ProductStatusBean> statuses = getLoaderFactory().createProductStatusListLoader().load();
+	private AssetStatus getExampleProductStatus() {
+		List<AssetStatus> statuses = getLoaderFactory().createProductStatusListLoader().load();
 		
 		return (statuses.isEmpty()) ? null : statuses.get(0);
 	}
 	
-	public ProductType getProductType() {
+	public AssetType getAssetType() {
 		return type;
 	}
 
-	public Long getProductTypeId() {
+	public Long getAssetTypeId() {
 		return (type != null) ? type.getId() : null;
 	}
 
-	public void setProductTypeId(Long id) {
+	public void setAssetTypeId(Long id) {
 		if (type == null || !type.getId().equals(id)) {
 			type = getLoaderFactory().createProductTypeLoader().setStandardPostFetches().setId(id).load();
 		}

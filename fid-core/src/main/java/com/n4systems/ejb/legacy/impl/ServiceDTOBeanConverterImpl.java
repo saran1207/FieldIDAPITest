@@ -13,11 +13,13 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetTypeSchedule;
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -40,10 +42,8 @@ import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Observation;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
-import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.State;
@@ -197,7 +197,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 
 		inspectionDTO.setInspectionTypeId(inspection.getType().getId());
-		inspectionDTO.setProductId(inspection.getProduct().getId());
+		inspectionDTO.setProductId(inspection.getAsset().getId());
 		for (CriteriaResult criteriaResult : inspection.getResults()) {
 			inspectionDTO.getResults().add(convert(criteriaResult));
 		}
@@ -253,7 +253,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return inspectionDTOs;
 	}
 
-	public ProductServiceDTO convert(Product product) {
+	public ProductServiceDTO convert(Asset product) {
 
 		ProductServiceDTO productDTO = new ProductServiceDTO();
 
@@ -266,7 +266,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setIdentified(AbstractBaseServiceDTO.dateToString(product.getIdentified()));
 		productDTO.setLastInspectionDate(AbstractBaseServiceDTO.dateToString(product.getLastInspectionDate()));
 		productDTO.setMobileGuid(product.getMobileGUID());
-		productDTO.setProductStatusId(product.getProductStatus() != null ? product.getProductStatus().getUniqueID() : 0);
+		productDTO.setProductStatusId(product.getAssetStatus() != null ? product.getAssetStatus().getUniqueID() : 0);
 		productDTO.setProductTypeId(product.getType().getId());
 		productDTO.setPurchaseOrder(product.getPurchaseOrder());
 		productDTO.setRfidNumber(product.getRfidNumber() == null ? null : product.getRfidNumber().toUpperCase());
@@ -294,7 +294,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			for (SubProduct subProduct : product.getSubProducts()) {
 				subProductMap = new SubProductMapServiceDTO();
 				subProductMap.setName(subProduct.getLabel());
-				subProductMap.setSubProductId(subProduct.getProduct().getId());
+				subProductMap.setSubProductId(subProduct.getAsset().getId());
 				subProductMap.setProductId(product.getId());
 				productDTO.getSubProducts().add(subProductMap);
 			}
@@ -328,14 +328,14 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * @deprecated Use the ProductServiceDTOConverter
 	 */
 	@Deprecated
-	public Product convert(ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId) {
+	public Asset convert(ProductServiceDTO productServiceDTO, Asset targetProduct, long tenantId) {
 
 		Tenant tenantOrganization = TenantCache.getInstance().findTenant(tenantId);
 		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenantOrganization.getId());
 
 		targetProduct.setComments(productServiceDTO.getComments());
 		targetProduct.setCustomerRefNumber(productServiceDTO.getCustomerRefNumber());
-		targetProduct.setType(em.find(ProductType.class, productServiceDTO.getProductTypeId()));
+		targetProduct.setType(em.find(AssetType.class, productServiceDTO.getProductTypeId()));
 		targetProduct.setPurchaseOrder(productServiceDTO.getPurchaseOrder());
 		targetProduct.setRfidNumber(productServiceDTO.getRfidNumber());
 		targetProduct.setTenant(tenantOrganization);
@@ -348,7 +348,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		targetProduct.setOwner(em.find(BaseOrg.class, productServiceDTO.getOwnerId()));
 
-		targetProduct.setProductStatus(convertField(ProductStatusBean.class, productServiceDTO.getProductStatusId(), targetProduct.getProductStatus()));
+		targetProduct.setAssetStatus(convertField(AssetStatus.class, productServiceDTO.getProductStatusId(), targetProduct.getAssetStatus()));
 
 		if (productServiceDTO.identifiedByExists()) {
 			User user = em.find(User.class, productServiceDTO.getIdentifiedById());
@@ -426,7 +426,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		// Required object lookups
 		inspection.setTenant(tenant);
 		inspection.setType(persistenceManager.find(InspectionType.class, inspectionServiceDTO.getInspectionTypeId(), new TenantOnlySecurityFilter(tenant.getId())));
-		inspection.setProduct((Product) em.find(Product.class, inspectionServiceDTO.getProductId()));
+		inspection.setAsset((Asset) em.find(Asset.class, inspectionServiceDTO.getProductId()));
 
 		// Optional object lookups
 		if (inspectionServiceDTO.getResults() != null) {
@@ -511,7 +511,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			}
 		}
 
-		inspection.setProductStatus(convertProductStatus(inspectionServiceDTO));
+		inspection.setAssetStatus(convertProductStatus(inspectionServiceDTO));
 		inspection.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));
 
 		return inspection;
@@ -639,58 +639,58 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return Observation.State.COMMENT;
 	}
 
-	public ProductStatusServiceDTO convert(ProductStatusBean productStatus) {
+	public ProductStatusServiceDTO convert(AssetStatus assetStatus) {
 
 		ProductStatusServiceDTO productStatusServiceDTO = new ProductStatusServiceDTO();
-		productStatusServiceDTO.setId(productStatus.getUniqueID());
-		productStatusServiceDTO.setName(productStatus.getName());
-		productStatusServiceDTO.setTenantId(productStatus.getTenant().getId());
-		productStatusServiceDTO.setCreated(productStatus.getDateCreated().toString());
-		productStatusServiceDTO.setModified(productStatus.getDateModified().toString());
-		productStatusServiceDTO.setModifiedBy(productStatus.getModifiedBy());
+		productStatusServiceDTO.setId(assetStatus.getUniqueID());
+		productStatusServiceDTO.setName(assetStatus.getName());
+		productStatusServiceDTO.setTenantId(assetStatus.getTenant().getId());
+		productStatusServiceDTO.setCreated(assetStatus.getDateCreated().toString());
+		productStatusServiceDTO.setModified(assetStatus.getDateModified().toString());
+		productStatusServiceDTO.setModifiedBy(assetStatus.getModifiedBy());
 
 		return productStatusServiceDTO;
 	}
 
-	private ProductTypeScheduleServiceDTO convert(ProductTypeSchedule productTypeSchedule) {
+	private ProductTypeScheduleServiceDTO convert(AssetTypeSchedule assetTypeSchedule) {
 		ProductTypeScheduleServiceDTO productTypeScheduleServiceDTO = new ProductTypeScheduleServiceDTO();
 		productTypeScheduleServiceDTO.setDtoVersion(ProductTypeScheduleServiceDTO.CURRENT_DTO_VERSION);
-		productTypeScheduleServiceDTO.setInspectionTypeId(productTypeSchedule.getInspectionType().getId());
-		productTypeScheduleServiceDTO.setFrequency(productTypeSchedule.getFrequency());
-		productTypeScheduleServiceDTO.setId(productTypeSchedule.getId());
-		productTypeScheduleServiceDTO.setProductTypeId(productTypeSchedule.getProductType().getId());
-		populateOwners(productTypeSchedule.getOwner(), productTypeScheduleServiceDTO);
+		productTypeScheduleServiceDTO.setInspectionTypeId(assetTypeSchedule.getInspectionType().getId());
+		productTypeScheduleServiceDTO.setFrequency(assetTypeSchedule.getFrequency());
+		productTypeScheduleServiceDTO.setId(assetTypeSchedule.getId());
+		productTypeScheduleServiceDTO.setProductTypeId(assetTypeSchedule.getAssetType().getId());
+		populateOwners(assetTypeSchedule.getOwner(), productTypeScheduleServiceDTO);
 		return productTypeScheduleServiceDTO;
 	}
 
 	@SuppressWarnings("deprecation")
-	public ProductTypeServiceDTO convert_new(ProductType productType) {
+	public ProductTypeServiceDTO convert_new(AssetType assetType) {
 
 		ProductTypeServiceDTO productTypeDTO = new ProductTypeServiceDTO();
 		productTypeDTO.setDtoVersion(ProductTypeServiceDTO.CURRENT_DTO_VERSION);
-		productTypeDTO.setId(productType.getId());
-		productTypeDTO.setName(productType.getName());
+		productTypeDTO.setId(assetType.getId());
+		productTypeDTO.setName(assetType.getName());
 
-		for (InfoFieldBean infoField : productType.getInfoFields()) {
+		for (InfoFieldBean infoField : assetType.getInfoFields()) {
 			if (!infoField.isRetired()) {
-				productTypeDTO.getInfoFields().add(convert_new(infoField, productType.getId()));
+				productTypeDTO.getInfoFields().add(convert_new(infoField, assetType.getId()));
 			}
 		}
 
-		for (InspectionType inspectionType : productType.getInspectionTypes()) {
+		for (InspectionType inspectionType : assetType.getInspectionTypes()) {
 			productTypeDTO.getInspectionTypeIds().add(inspectionType.getId());
 		}
 
-		for (ProductTypeSchedule schedule : productType.getSchedules()) {
+		for (AssetTypeSchedule schedule : assetType.getSchedules()) {
 			productTypeDTO.getSchedules().add(convert(schedule));
 		}
 
-		for (ProductType subType : productType.getSubTypes()) {
+		for (AssetType subType : assetType.getSubTypes()) {
 			productTypeDTO.getSubTypes().add(subType.getId());
 		}
 
-		productTypeDTO.setGroupId(productType.getGroup() != null ? productType.getGroup().getId() : NULL_ID);
-		productTypeDTO.setMaster(productType.isMaster());
+		productTypeDTO.setGroupId(assetType.getGroup() != null ? assetType.getGroup().getId() : NULL_ID);
+		productTypeDTO.setMaster(assetType.isMaster());
 
 		return productTypeDTO;
 	}
@@ -896,7 +896,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 
 		// Put together the list of only static info options; dynamic ones are
-		// sent with their product
+		// sent with their asset
 		List<com.n4systems.webservice.dto.InfoOptionServiceDTO> infoOptions = new ArrayList<com.n4systems.webservice.dto.InfoOptionServiceDTO>();
 		for (InfoOptionBean infoOption : infoField.getInfoOptions()) {
 			infoOptions.add(convert(infoOption, infoField.getUniqueID()));
@@ -921,7 +921,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO serviceCriteria = new com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO();
 
 		serviceCriteria.setId(criteria.getId());
-		serviceCriteria.setProductTypeId(criteria.getProductType().getId());
+		serviceCriteria.setProductTypeId(criteria.getAssetType().getId());
 
 		for (InfoFieldBean field : criteria.getInputs()) {
 			serviceCriteria.getInputInfoFields().add(field.getUniqueID());
@@ -1006,12 +1006,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return user;
 	}
 
-	public ProductTypeGroupServiceDTO convert(ProductTypeGroup productTypeGroup) {
+	public ProductTypeGroupServiceDTO convert(AssetTypeGroup assetTypeGroup) {
 
 		ProductTypeGroupServiceDTO groupServiceDTO = new ProductTypeGroupServiceDTO();
-		groupServiceDTO.setId(productTypeGroup.getId());
-		groupServiceDTO.setName(productTypeGroup.getName());
-		groupServiceDTO.setOrderIdx(productTypeGroup.getOrderIdx());
+		groupServiceDTO.setId(assetTypeGroup.getId());
+		groupServiceDTO.setName(assetTypeGroup.getName());
+		groupServiceDTO.setOrderIdx(assetTypeGroup.getOrderIdx());
 
 		return groupServiceDTO;
 	}
@@ -1020,12 +1020,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return new PrimaryOrgToServiceDTOConverter().convert(primaryOrg);
 	}
 
-	private ProductStatusBean convertProductStatus(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO) {
+	private AssetStatus convertProductStatus(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO) {
 		if (inspectionServiceDTO.getProductStatusId() == -1L) {
 			return null;
 		}
 
-		return (ProductStatusBean) em.find(ProductStatusBean.class, inspectionServiceDTO.getProductStatusId());
+		return (AssetStatus) em.find(AssetStatus.class, inspectionServiceDTO.getProductStatusId());
 	}
 
 	public JobServiceDTO convert(Project job) {
@@ -1049,7 +1049,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		scheduleService.setId(inspectionSchedule.getId());
 		scheduleService.setNextDate(AbstractBaseServiceDTO.dateToString(inspectionSchedule.getNextDate()));
-		scheduleService.setProductId(inspectionSchedule.getProduct().getId());
+		scheduleService.setProductId(inspectionSchedule.getAsset().getId());
 		scheduleService.setInspectionTypeId(inspectionSchedule.getInspectionType().getId());
 		scheduleService.setJobId(inspectionSchedule.getProject() != null ? inspectionSchedule.getProject().getId() : NULL_ID);
 		scheduleService.setCompleted(inspectionSchedule.getStatus() == InspectionSchedule.ScheduleStatus.COMPLETED);

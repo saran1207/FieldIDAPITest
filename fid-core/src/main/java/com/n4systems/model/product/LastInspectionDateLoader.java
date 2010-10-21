@@ -4,7 +4,7 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.ProductNetworkFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.MaxSelect;
@@ -22,7 +22,7 @@ public class LastInspectionDateLoader extends Loader<Date> {
 			throw new SecurityException("networkId must be set");
 		}
 		
-		QueryBuilder<Date> loader = new QueryBuilder<Date>(Product.class, new ProductNetworkFilter(networkId));
+		QueryBuilder<Date> loader = new QueryBuilder<Date>(Asset.class, new ProductNetworkFilter(networkId));
 		loader.setSelectArgument(new MaxSelect("lastInspectionDate"));
 
 		Date lastDate = loader.getSingleResult(em);

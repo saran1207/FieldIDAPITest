@@ -1,6 +1,6 @@
 package com.n4systems.model.security;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -13,7 +13,7 @@ public class ProductNetworkFilter implements QueryFilter {
 		this.networkId = networkId;
 	}
 	
-	public ProductNetworkFilter(Product product) {
+	public ProductNetworkFilter(Asset product) {
 		this(product.getNetworkId());
 	}
 	

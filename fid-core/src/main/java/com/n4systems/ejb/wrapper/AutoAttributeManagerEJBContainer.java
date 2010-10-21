@@ -4,13 +4,13 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.impl.AutoAttributeManagerImpl;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -23,11 +23,11 @@ public class AutoAttributeManagerEJBContainer extends EJBTransactionEmulator<Aut
 		return new AutoAttributeManagerImpl(em);
 	}
 
-	public void clearRetiredInfoFields(ProductType productType) {
+	public void clearRetiredInfoFields(AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).clearRetiredInfoFields(productType);
+			createManager(transaction.getEntityManager()).clearRetiredInfoFields(assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -83,11 +83,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public AutoAttributeDefinition findTemplateToApply(ProductType productType, Collection<InfoOptionBean> selectedInfoOptions) {
+	public AutoAttributeDefinition findTemplateToApply(AssetType assetType, Collection<InfoOptionBean> selectedInfoOptions) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findTemplateToApply(productType, selectedInfoOptions);
+			return createManager(transaction.getEntityManager()).findTemplateToApply(assetType, selectedInfoOptions);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

@@ -9,6 +9,8 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.InfoFieldBean;
@@ -32,8 +34,6 @@ import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -146,34 +146,34 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		} 
 		Date datePerformed = fileData.getDatePerformed();
 
-		Product product;
+		Asset asset;
 		List<Inspection> inspections;
 		Inspection inspection;
 		// since proof tests may have multiple serial numbers, we'll need to do this process for each
 		for (String serialNumber : fileData.getSerialNumbers()) {
 			inspection = null;
 			try {
-				// find a product for this tenant, serial and customer
-				product = findOrCreateProduct(primaryOrg, performedBy, serialNumber, customer, fileData);
+				// find a asset for this tenant, serial and customer
+				asset = findOrCreateProduct(primaryOrg, performedBy, serialNumber, customer, fileData);
 			} catch (NonUniqueProductException e) {
-				writeLogMessage(tenant, "There are multiple Product with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
+				writeLogMessage(tenant, "There are multiple Asset with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
 				inspectionMap.put(serialNumber, null);
 				continue;
 			}
 			
-			// if the product is null, log it and move on to the next serial
-			if (product == null) {
-				writeLogMessage(tenant, "Could not find/create Product [" + serialNumber + "] referenced in file [" + fileData.getFileName() + "]", false, null);
+			// if the asset is null, log it and move on to the next serial
+			if (asset == null) {
+				writeLogMessage(tenant, "Could not find/create Asset [" + serialNumber + "] referenced in file [" + fileData.getFileName() + "]", false, null);
 				inspectionMap.put(serialNumber, null);
 				continue;
 			}
 			
 			/*
-			 *  If the product identifiedBy is set to override the performedBy (databridge upload uses this)
-			 *  and the two are different, then set the performedBy to be the identifiedBy from the product
+			 *  If the asset identifiedBy is set to override the performedBy (databridge upload uses this)
+			 *  and the two are different, then set the performedBy to be the identifiedBy from the asset
 			 */
 			if (productOverridesPerformedBy) {
-				performedBy = product.getIdentifiedBy();
+				performedBy = asset.getIdentifiedBy();
 			}
 			
 			// convert date to utc using the performed By time.
@@ -181,8 +181,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			Date datePerformedRangeStartInUTC = DateHelper.convertToUTC(DateHelper.getBeginingOfDay(datePerformed), performedBy.getTimeZone());
 			Date datePerformedRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(datePerformed), performedBy.getTimeZone());
 
-			// if we find a product then it's time to try and find an inspection inside the same day as given.
-			inspections = inspectionManager.findInspectionsByDateAndProduct(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, product, performedBy.getSecurityFilter());
+			// if we find a asset then it's time to try and find an inspection inside the same day as given.
+			inspections = inspectionManager.findInspectionsByDateAndProduct(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, asset, performedBy.getSecurityFilter());
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
 			for (Inspection insp: inspections) {
@@ -195,15 +195,15 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
 			if (inspection == null) {
-				inspection = createInspection(tenant, performedBy, customer, product, book, datePerformedInUTC, fileData);
+				inspection = createInspection(tenant, performedBy, customer, asset, book, datePerformedInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
 					inspectionManager.updateInspection(inspection, performedBy.getId(), fileData, null);
-					writeLogMessage(tenant, "Updated Inspection for Product with serial [" + serialNumber + "] and date performed [" + inspection.getDate() + "]");
+					writeLogMessage(tenant, "Updated Inspection for Asset with serial [" + serialNumber + "] and date performed [" + inspection.getDate() + "]");
 				} catch(Exception e) {
 					// we don't want a failure in one inspection to cause the others to fail, so we will simply log these expections and move on
-					writeLogMessage(tenant, "Failed to update Inspection for Product with serial [" + serialNumber + "] and date performed [" + inspection.getDate() + "]", false, e);
+					writeLogMessage(tenant, "Failed to update Inspection for Asset with serial [" + serialNumber + "] and date performed [" + inspection.getDate() + "]", false, e);
 					inspectionMap.put(serialNumber, null);
 					continue;
 				}
@@ -255,7 +255,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return customerName.trim();
 	}
 	
-	private Product findOrCreateProduct(PrimaryOrg primaryOrg, User user, String serial, BaseOrg customer, FileDataContainer fileData) throws NonUniqueProductException {
+	private Asset findOrCreateProduct(PrimaryOrg primaryOrg, User user, String serial, BaseOrg customer, FileDataContainer fileData) throws NonUniqueProductException {
 		Long customerId = (customer != null) ?  customer.getId() : null;
 		
 		// we must have a valid serial number
@@ -263,45 +263,45 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			return null;
 		}
 		
-		// find a product for this tenant, serial and customer
-		Product product = productManager.findProductBySerialNumber(serial, primaryOrg.getTenant().getId(), customerId);
+		// find a asset for this tenant, serial and customer
+		Asset asset = productManager.findProductBySerialNumber(serial, primaryOrg.getTenant().getId(), customerId);
 		
-		if(product == null) {
+		if(asset == null) {
 			if(!fileData.isCreateProduct()) {
 				// if we're not supported to create new products and we could not find one, return null
 				return null;
 			} else {
-				// create product is set, lets create a default
-				product = createProduct(primaryOrg, user, customer, serial, fileData.getExtraInfo());
+				// create asset is set, lets create a default
+				asset = createProduct(primaryOrg, user, customer, serial, fileData.getExtraInfo());
 			}
 		}
 		
-		return product;
+		return asset;
 	}
 
-	private Product createProduct(PrimaryOrg primaryOrg, User user, BaseOrg owner, String serialNumber, Map<String, String> productOptions) {
-		Product product = new Product();
+	private Asset createProduct(PrimaryOrg primaryOrg, User user, BaseOrg owner, String serialNumber, Map<String, String> productOptions) {
+		Asset asset = new Asset();
 		
-		product.setTenant(primaryOrg.getTenant());
-		product.setSerialNumber(serialNumber);
+		asset.setTenant(primaryOrg.getTenant());
+		asset.setSerialNumber(serialNumber);
 		
-		ProductType productType = productTypeManager.findDefaultProductType(primaryOrg.getTenant().getId());
-		product.setType(productType);
+		AssetType assetType = productTypeManager.findDefaultProductType(primaryOrg.getTenant().getId());
+		asset.setType(assetType);
 		
-		product.setIdentifiedBy(user);
-		product.setModifiedBy(user);
+		asset.setIdentifiedBy(user);
+		asset.setModifiedBy(user);
 		
 		if (owner != null) {
-			product.setOwner(owner);
+			asset.setOwner(owner);
 		} else {
 			// if the owner was null, it goes against the primary
-			product.setOwner(primaryOrg);
+			asset.setOwner(primaryOrg);
 		}
 		
 		Date now = new Date();
-		product.setIdentified(now);
-		product.setCreated(now);
-		product.setModified(now);
+		asset.setIdentified(now);
+		asset.setCreated(now);
+		asset.setModified(now);
 		
 		try {
 			// now lets's try and resolve the infofield names from our productoptions
@@ -313,7 +313,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				infoOptionName = optEntry.getValue();
 	
 				// we'll use the fuzzy resolver to try and find the info field we're looking for
-				infoField = FuzzyResolver.resolve(infoFieldName, product.getType().getInfoFields(), "name", false);
+				infoField = FuzzyResolver.resolve(infoFieldName, asset.getType().getInfoFields(), "name", false);
 				
 				if(infoField == null) {
 					// if we didn't find one, move on
@@ -331,16 +331,16 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				infoOption = new InfoOptionBean();
 				infoOption.setInfoField(infoField);
 				infoOption.setStaticData(false);
-				infoOption.setWeight(product.getNextInfoOptionWeight());
+				infoOption.setWeight(asset.getNextInfoOptionWeight());
 				infoOption.setName(infoOptionName);
 				
-				// make sure the product has an infoOption set ready to go
-				if(product.getInfoOptions() == null) {
-					product.setInfoOptions(new TreeSet<InfoOptionBean>());
+				// make sure the asset has an infoOption set ready to go
+				if(asset.getInfoOptions() == null) {
+					asset.setInfoOptions(new TreeSet<InfoOptionBean>());
 				}
 				
-				// now we can set it on the product
-				product.getInfoOptions().add(infoOption);
+				// now we can set it on the asset
+				asset.getInfoOptions().add(infoOption);
 			}
 			
 		} catch(Exception e) {
@@ -348,58 +348,58 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			logger.error("Unable to resolve info fields", e);
 			
 			// we should also null our info option list since we don't know what state it's in
-			product.setInfoOptions(null);
+			asset.setInfoOptions(null);
 		}
 		
 		try {
-			product =  legacyProductManager.create(product, user);
+			asset =  legacyProductManager.create(asset, user);
 		} catch( SubProductUniquenessException e ) {
 			logger.error( "received a subproduct uniquness error this should not be possible form this type of update.", e );
 			throw new RuntimeException( e );
 		}
 
-		String message = "Created Product [" + product.toString() + "] Owner [" + product.getOwner().getName() + "]";
+		String message = "Created Asset [" + asset.toString() + "] Owner [" + asset.getOwner().getName() + "]";
 		writeLogMessage(primaryOrg.getTenant(), message);
 		
-		return product;
+		return asset;
 	}
 	
-	private Inspection createInspection(Tenant tenant, User performedBy, BaseOrg owner, Product product, InspectionBook book, Date datePerformed, FileDataContainer fileData) {
+	private Inspection createInspection(Tenant tenant, User performedBy, BaseOrg owner, Asset asset, InspectionBook book, Date datePerformed, FileDataContainer fileData) {
 		Inspection inspection = new Inspection();
 		inspection.setTenant(tenant);
 		
 		if (owner != null) {
 			/*
 			 * if the products owner is a division, we need to see if the resolved owner is the parent
-			 * of the products owner.  If that is the case, we preserve the division from the product on the inspection.
+			 * of the products owner.  If that is the case, we preserve the division from the asset on the inspection.
 			 * In all other cases we will use the resolved owner directly.
 			 */
-			if (product.getOwner().isDivision() && product.getOwner().getParent().equals(owner)) {
-				inspection.setOwner(product.getOwner());
+			if (asset.getOwner().isDivision() && asset.getOwner().getParent().equals(owner)) {
+				inspection.setOwner(asset.getOwner());
 			} else {
 				inspection.setOwner(owner);
 			}
 			
 		} else {
-			// if the passed in owner is null, use the one from the product
-			// this can happen if the proof test had no customer set, meaning this product is from the primary
-			inspection.setOwner(product.getOwner());
+			// if the passed in owner is null, use the one from the asset
+			// this can happen if the proof test had no customer set, meaning this asset is from the primary
+			inspection.setOwner(asset.getOwner());
 		}
 		
-		inspection.setProduct(product);
-		inspection.setProductStatus(product.getProductStatus());
+		inspection.setAsset(asset);
+		inspection.setAssetStatus(asset.getAssetStatus());
 		inspection.setDate(datePerformed);
 		inspection.setPerformedBy(performedBy);
 		inspection.setBook(book);
 		inspection.setComments(fileData.getComments());
-		inspection.setAdvancedLocation(product.getAdvancedLocation());
+		inspection.setAdvancedLocation(asset.getAdvancedLocation());
 		
-		// find the first inspection that for this product that supports our file type
-		InspectionType inspType = findSupportedInspectionTypeForProduct(fileData.getFileType(), product);
+		// find the first inspection that for this asset that supports our file type
+		InspectionType inspType = findSupportedInspectionTypeForProduct(fileData.getFileType(), asset);
 		
 		// if we were unable to find an inspection type, we cannot continue.
 		if(inspType == null) {
-			writeLogMessage(tenant, "Unable to find InspectionType for ProductType: [" + product.getType().getId() + "], Proof Test Type: [" + fileData.getFileType().name() + "]", false, null);
+			writeLogMessage(tenant, "Unable to find InspectionType for AssetType: [" + asset.getType().getId() + "], Proof Test Type: [" + fileData.getFileType().name() + "]", false, null);
 			return null;
 		}
 		
@@ -430,20 +430,20 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 					new CreateInspectionParameterBuilder(inspection,performedBy.getId())
 					.withProofTestFile(fileData).build());
 			
-			writeLogMessage(tenant, "Created Inspection for Product with serial [" + product.getSerialNumber() + "] and date performed [" + inspection.getDate() + "]");
+			writeLogMessage(tenant, "Created Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + inspection.getDate() + "]");
 		} catch(Exception e) {
 			// we failed to create an inspection, log the failure
-			writeLogMessage(tenant, "Failed to create Inspection for Product with serial [" + product.getSerialNumber() + "] and date performed [" + inspection.getDate() + "]", false, e);
+			writeLogMessage(tenant, "Failed to create Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + inspection.getDate() + "]", false, e);
 			return null;
 		}
 		
 		return inspection;
 	}
 	
-	private InspectionType findSupportedInspectionTypeForProduct(ProofTestType proofTestType, Product product) {
+	private InspectionType findSupportedInspectionTypeForProduct(ProofTestType proofTestType, Asset product) {
 		InspectionType type = null;
 		
-		// here we simply find the first inspection type that supports this product type and proof test type
+		// here we simply find the first inspection type that supports this asset type and proof test type
 		for(InspectionType inspType: product.getType().getInspectionTypes()) {
 			if(inspType.supports(proofTestType)) {
 				type = inspType;

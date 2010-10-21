@@ -17,7 +17,7 @@
 					<td class="linePcode" >${lineItem.productCode}</td>
 					<td>${lineItem.description!}</td>
 					<td class="lineQty" >${lineItem.quantity}</td>
-					<td class="lineIdent" >${action.getIdentifiedProductCount(lineItem)}</td>
+					<td class="lineIdent" >${action.getIdentifiedAssetCount(lineItem)}</td>
 				</tr>
 			</#list>
 		</table>

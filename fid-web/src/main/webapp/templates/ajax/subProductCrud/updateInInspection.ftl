@@ -1,13 +1,13 @@
 <#assign html>
-	<#assign productId=product.id />
+	<#assign assetId=asset.id />
 	<#assign inInspection=true />
 	<#assign updateSubProductAction="updateSubProductInInspection"/>
 	<#include "/templates/html/subProductCrud/_header.ftl"/>
 </#assign>
 
 <#escape x as x?js_string>
-	$('subProductHeader_${subProduct.product.id}').update('${html}');	
+	$('subProductHeader_${subProduct.asset.id}').update('${html}');
 		
-	$('subProductHeader_${subProduct.product.id}').highlight();
+	$('subProductHeader_${subProduct.asset.id}').highlight();
 	
 </#escape>

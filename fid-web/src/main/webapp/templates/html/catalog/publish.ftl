@@ -20,10 +20,10 @@
 						<div class="customSelection">
 							<h3><@s.text name="label.asset_types"/></h3>
 					
-							<#list productTypes as productType>
+							<#list assetTypes as assetType>
 								<div class="customSelectionType">
-									<@s.checkbox name="publishedProductTypeIds['${productType.id}']" />
-									<label>${productType.name?html}</label>
+									<@s.checkbox name="publishedAssetTypeIds['${assetType.id}']" />
+									<label>${assetType.name?html}</label>
 								</div>
 							</#list>
 								

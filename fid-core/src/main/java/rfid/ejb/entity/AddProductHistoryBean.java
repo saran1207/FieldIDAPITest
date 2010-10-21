@@ -11,7 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.location.Location;
@@ -21,7 +21,7 @@ import com.n4systems.model.user.User;
 
 /**
  * This stores, for each system user, the last options they used when creating a
- * new product
+ * new asset
  * 
  * @see InfoOptionHistoryBean
  * @author Jesse Miller
@@ -43,11 +43,11 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "r_producttype")
-	private ProductType productType;
+	private AssetType assetType;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "r_productstatus")
-	private ProductStatusBean productStatus;
+	private AssetStatus assetStatus;
 	
 	private String purchaseOrder;
 	
@@ -78,20 +78,20 @@ public class AddProductHistoryBean extends LegacyBeanTenant implements HasUser, 
 		this.owner = owner;
 	}
 	
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getProductType() {
+		return assetType;
 	}
 
-	public void setProductType(ProductType productType) {
-		this.productType = productType;
+	public void setProductType(AssetType assetType) {
+		this.assetType = assetType;
 	}
 
-	public ProductStatusBean getProductStatus() {
-		return productStatus;
+	public AssetStatus getProductStatus() {
+		return assetStatus;
 	}
 
-	public void setProductStatus(ProductStatusBean productStatus) {
-		this.productStatus = productStatus;
+	public void setProductStatus(AssetStatus assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 
 	public String getPurchaseOrder() {

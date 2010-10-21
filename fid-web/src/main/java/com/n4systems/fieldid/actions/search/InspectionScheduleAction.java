@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -58,7 +58,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
 		super(implementingClass, sessionKey, "Inspection Schedule Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_schedule_search", "product"));
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_schedule_search", "asset"));
 		
 		this.inspectionManager = inspectionManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
@@ -121,10 +121,10 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		getContainer().setToDate(convertToEndOfDay(toDate));
 	}
 	
-	public List<ListingPair> getProductStatuses() {
+	public List<ListingPair> getAssetStatuses() {
 		List<ListingPair> psList = new ArrayList<ListingPair>();
-		for(ProductStatusBean psBean: getLoaderFactory().createProductStatusListLoader().load()) {
-			psList.add(new ListingPair(psBean.getUniqueID(), psBean.getName()));
+		for(AssetStatus assetStatus : getLoaderFactory().createProductStatusListLoader().load()) {
+			psList.add(new ListingPair(assetStatus.getUniqueID(), assetStatus.getName()));
 		}
 		return psList;
 	}

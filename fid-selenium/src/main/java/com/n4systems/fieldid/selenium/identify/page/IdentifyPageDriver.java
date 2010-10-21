@@ -116,13 +116,13 @@ public class IdentifyPageDriver {
 		assertTrue("Could not find the link for generate on Assets Add", selenium.isElementPresent(identifyAddGenerateLinkLocator));
 		assertTrue("Could not find the text field for RFID Number on Assets Add", selenium.isElementPresent(identifyAddRFIDNumberTextFieldLocator));
 		assertTrue("Could not find the text field for Reference Number on Assets Add", selenium.isElementPresent(identifyAddReferenceNumberTextFieldLocator));
-		assertTrue("Could not find the select list to Register Product on the Safety Network", selenium.isElementPresent(identifyAddPublishOverSafetyNetworkSelectListLocator));
+		assertTrue("Could not find the select list to Register Asset on the Safety Network", selenium.isElementPresent(identifyAddPublishOverSafetyNetworkSelectListLocator));
 		assertTrue("Could not find the text field for Owner on Assets Add", selenium.isElementPresent(identifyAddOwnerTextFieldLocator));
 		assertTrue("Could not find the link for Choose Owner on Assets Add", selenium.isElementPresent(identifyAddChooseLinkLocator));
-		assertTrue("Could not find the select list for Product Status on Assets Add", selenium.isElementPresent(identifyAddProductStatusSelectListLocator));
+		assertTrue("Could not find the select list for Asset Status on Assets Add", selenium.isElementPresent(identifyAddProductStatusSelectListLocator));
 		assertTrue("Could not find the text field for Purchase Order on Assets Add", selenium.isElementPresent(identifyAddPurchaseOrderTextFieldLocator));
 		assertTrue("Could not find the text field for Identified on Assets Add", selenium.isElementPresent(identifyAddIdentifiedTextFieldLocator));
-		assertTrue("Could not find the text field for Product Type on Assets Add", selenium.isElementPresent(identifyAddProductTypeTextFieldLocator));
+		assertTrue("Could not find the text field for Asset Type on Assets Add", selenium.isElementPresent(identifyAddProductTypeTextFieldLocator));
 		assertTrue("Could not find the text area for Comments", selenium.isElementPresent(identifyAddCommentsTextFieldLocator));
 		assertTrue("Could not find the button for Attach A File on Assets Add", selenium.isElementPresent(identifyAddAttachAFileButtonLocator));
 		assertTrue("Could not find the button for Save on Assets Add", selenium.isElementPresent(identifyAddSaveButtonLocator));
@@ -176,9 +176,9 @@ public class IdentifyPageDriver {
 
 	/**
 	 * Will fill in the Add Assets page (single asset creation)
-	 * with the fields of the Product p. Currently, the implementation
-	 * of Product does not include product type attributes. So for any
-	 * required product type attributes, this will fill them in with
+	 * with the fields of the Asset p. Currently, the implementation
+	 * of Asset does not include asset type attributes. So for any
+	 * required asset type attributes, this will fill them in with
 	 * random values.
 	 * 
 	 *  If any other required fields are blank, this will not attempt
@@ -186,18 +186,18 @@ public class IdentifyPageDriver {
 	 *  
 	 *  If the generate parameter is true, this will use the generate
 	 *  link to create a new serial number and save that serial number
-	 *  in the provided Product. If there is a serial number and the
+	 *  in the provided Asset. If there is a serial number and the
 	 *  generate parameter is true, a new serial number will be generated
 	 *  then the input serial number will replace with the generated
 	 *  serial number, i.e. click generate then type the provided
 	 *  serial number over top of the generated serial number.
 	 *  
-	 *  Typically, if you want to create a product with no inputs from
-	 *  the Product, you should be able to pass in a:
+	 *  Typically, if you want to create a asset with no inputs from
+	 *  the Asset, you should be able to pass in a:
 	 *  
-	 *   	setAddAssetForm(new Product(), true);
+	 *   	setAddAssetForm(new Asset(), true);
 	 *   
-	 *  and it will return the filled in product information. 
+	 *  and it will return the filled in asset information.
 	 *  
 	 * @param p
 	 * @param generate
@@ -536,7 +536,7 @@ public class IdentifyPageDriver {
 				}
 			}
 		} else {
-			fail("Could not find the Product Status select list on step 1 of Multi Add");
+			fail("Could not find the Asset Status select list on step 1 of Multi Add");
 		}
 		return results;
 	}

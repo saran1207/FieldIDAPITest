@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.ProductSerialExtensionBean;
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -15,12 +15,12 @@ import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.MultiAddProductCrudHelper;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
-import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.orgs.BaseOrg;
@@ -43,10 +43,10 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	
 	// drop down lists
 	private List<Listable<Long>> employees;
-	private List<ProductStatusBean> productStatuses;
+	private List<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
-	private List<ProductSerialExtensionBean> extentions;
-	private ProductTypeLister productTypeLister;
+	private List<AssetSerialExtension> extentions;
+	private AssetTypeLister assetTypeLister;
 	private AutoAttributeCriteria autoAttributeCriteria;
 	
 	// form inputs
@@ -56,10 +56,10 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	
 	private OwnerPicker ownerPicker;
 	private String saveAndInspect;
-	private Integer maxProducts;
+	private Integer maxAssets;
 	private List<Long> listOfIds = new ArrayList<Long>();
 	
-	private AssetWebModel asset = new AssetWebModel(this);
+	private AssetWebModel assetWebModel = new AssetWebModel(this);
 	
 	public MultiAddProductCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyProductSerial legacyProductManager) {
 		super(persistenceManager);
@@ -84,7 +84,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	}
 
 	public String doForm() {
-		if (getMaxProducts() == 0) {
+		if (getMaxAssets() == 0) {
 			addActionMessageText("error.you_can_not_add_anymore_products");
 			return ERROR;
 		}
@@ -94,25 +94,25 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 	public String doCreate() {
 		ProductCleaner cleaner = new ProductCleaner();
 		
-		logger.info("Product Multi-Add saving " + identifiers.size() + " products");
+		logger.info("Asset Multi-Add saving " + identifiers.size() + " products");
 		
-		logger.info("Resolving fields on base product");
+		logger.info("Resolving fields on base asset");
 		ProductViewModeConverter converter = new ProductViewModeConverter(getLoaderFactory(), orderManager, getUser());
 		
 		try {
 			ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
 			int i = 1;
 			for (ProductIdentifierView productIdent: identifiers) {
-				logger.info("Saving product " + i + " of " + identifiers.size());
+				logger.info("Saving asset " + i + " of " + identifiers.size());
 				
-				Product product = converter.viewToModel(productView);
-				asset.fillInAsset(product);
+				Asset asset = converter.viewToModel(productView);
+				this.assetWebModel.fillInAsset(asset);
 				
-				product.setSerialNumber(productIdent.getSerialNumber());
-				product.setCustomerRefNumber(productIdent.getReferenceNumber());
-				product.setRfidNumber(productIdent.getRfidNumber());
+				asset.setSerialNumber(productIdent.getSerialNumber());
+				asset.setCustomerRefNumber(productIdent.getReferenceNumber());
+				asset.setRfidNumber(productIdent.getRfidNumber());
 				
-				saver.setProduct(product);
+				saver.setProduct(asset);
 				saver.setUploadedAttachments(copyUploadedFiles());
 				
 				listOfIds.add(saver.create().getId());
@@ -120,7 +120,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 				saver.clear();
 			
 				// make sure all persistence fields have been wiped
-				cleaner.clean(product);
+				cleaner.clean(asset);
 				
 				i++;
 			}
@@ -128,7 +128,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 			addFlashMessage(getText("message.productscreated", new String[] {String.valueOf(identifiers.size())}));
 			
 		} catch (Exception e) {
-			logger.error("Failed to create product.", e);
+			logger.error("Failed to create asset.", e);
 			addActionErrorText("error.productsave");
 			return ERROR;
 		}
@@ -137,7 +137,7 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 			return "saveinspect";
 		}
 		
-		logger.info("Product Multi-Add Complete");
+		logger.info("Asset Multi-Add Complete");
 		return SUCCESS;
 	}
 	
@@ -160,11 +160,11 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		return employees;
 	}
 
-	public List<ProductStatusBean> getProductStatuses() {
-		if (productStatuses == null) {
-			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
+	public List<AssetStatus> getAssetStatuses() {
+		if (assetStatuses == null) {
+			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
-		return productStatuses;
+		return assetStatuses;
 	}
 
 	public List<Listable<Long>> getCommentTemplates() {
@@ -174,26 +174,26 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		return commentTemplates;
 	}
 
-	public List<ProductSerialExtensionBean> getExtentions() {
+	public List<AssetSerialExtension> getExtentions() {
 		if (extentions == null) {
 			extentions = getLoaderFactory().createProductSerialExtensionListLoader().load();
 		}
 		return extentions;
 	}
 	
-	public ProductTypeLister getProductTypes() {
-		if (productTypeLister == null) {
-			productTypeLister = new ProductTypeLister(persistenceManager, getSecurityFilter());
+	public AssetTypeLister getAssetTypes() {
+		if (assetTypeLister == null) {
+			assetTypeLister = new AssetTypeLister(persistenceManager, getSecurityFilter());
 		}
 
-		return productTypeLister;
+		return assetTypeLister;
 	}
 	
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
-		if (autoAttributeCriteria == null && productView.getProductTypeId() != null) {
+		if (autoAttributeCriteria == null && productView.getAssetTypeId() != null) {
 			AutoAttributeCriteriaByProductTypeIdLoader loader = getLoaderFactory().createAutoAttributeCriteriaByProductTypeIdLoader();
 			
-			loader.setProductTypeId(productView.getProductTypeId());
+			loader.setAssetTypeId(productView.getAssetTypeId());
 			
 			autoAttributeCriteria = loader.load();
 		}
@@ -204,19 +204,19 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		return convertDate(new Date());
 	}
 	
-	public Integer getMaxProducts() {
-		if (maxProducts == null) {
+	public Integer getMaxAssets() {
+		if (maxAssets == null) {
 			if (getLimits().isAssetsMaxed()) {
-				maxProducts = 0;
+				maxAssets = 0;
 			} else {
 				Integer configMax = getConfigContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
 				Integer limitMax = getLimits().getAssetsMax().intValue() - getLimits().getAssetsUsed().intValue();
 
-				maxProducts = (getLimits().isAssetsUnlimited() || configMax < limitMax) ? configMax : limitMax;
+				maxAssets = (getLimits().isAssetsUnlimited() || configMax < limitMax) ? configMax : limitMax;
 			}
 		}
 
-		return maxProducts;
+		return maxAssets;
 	}
 	
 	/*************** Form input get/set's go below here **********************/
@@ -227,12 +227,12 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		
 	}
 	
-	public void setProductStatus(Long statusId) {
-		productView.setProductStatus(statusId);
+	public void setAssetStatus(Long statusId) {
+		productView.setAssetStatus(statusId);
 	}
 	
-	public void setProductTypeId(Long typeId) {
-		productView.setProductTypeId(typeId);
+	public void setAssetTypeId(Long typeId) {
+		productView.setAssetTypeId(typeId);
 	}
 	
 	
@@ -298,8 +298,8 @@ public class MultiAddProductCrud extends UploadAttachmentSupport {
 		return listOfIds;
 	}
 
-	public AssetWebModel getAsset() {
-		return asset;
+	public AssetWebModel getAssetWebModel() {
+		return assetWebModel;
 	}
 	
 }

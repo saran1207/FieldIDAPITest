@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.n4systems.model.AssetType;
+import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductSerialExtensionBean;
-import rfid.ejb.entity.ProductSerialExtensionValueBean;
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetSerialExtensionValue;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.user.User;
@@ -38,8 +38,8 @@ public class ProductViewModeConverter {
 		this.identifier = identifier;
 	}
 
-	public Product viewToModel(ProductView view) {
-		Product model = new Product();
+	public Asset viewToModel(ProductView view) {
+		Asset model = new Asset();
 
 		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(identifier.getTenant().getId());
 		
@@ -49,9 +49,9 @@ public class ProductViewModeConverter {
 			model.setTenant(identifier.getTenant());
 			model.setIdentifiedBy(identifier);	
 			model.setOwner(view.getOwner());
-			model.setType(resolveProductType(view.getProductTypeId()));
+			model.setType(resolveAssetType(view.getAssetTypeId()));
 			model.setAssignedUser(resolveUser(view.getAssignedUser()));
-			model.setProductStatus(resolveProductStatus(view.getProductStatus()));
+			model.setAssetStatus(resolveAssetStatus(view.getAssetStatus()));
 			model.setShopOrder(createNonIntegrationOrder(view.getNonIntegrationOrderNumber(), primaryOrg));
 			model.setIdentified(view.getIdentified());
 			model.setPurchaseOrder(view.getPurchaseOrder());
@@ -80,13 +80,13 @@ public class ProductViewModeConverter {
 	}
 	
 		
-	private ProductType resolveProductType(Long productTypeId) {
-		ProductType productType = null;
-		if (productTypeId != null) {
-			FilteredIdLoader<ProductType> loader = loaderFactory.createFilteredIdLoader(ProductType.class).setId(productTypeId);
-			productType = loader.load(transaction);
+	private AssetType resolveAssetType(Long assetTypeId) {
+		AssetType assetType = null;
+		if (assetTypeId != null) {
+			FilteredIdLoader<AssetType> loader = loaderFactory.createFilteredIdLoader(AssetType.class).setId(assetTypeId);
+			assetType = loader.load(transaction);
 		}
-		return productType;
+		return assetType;
 	}
 	
 	private User resolveUser(Long userId) {
@@ -98,8 +98,8 @@ public class ProductViewModeConverter {
 		return user;
 	}
 	
-	private ProductStatusBean resolveProductStatus(Long statusId) {
-		ProductStatusBean status = null;
+	private AssetStatus resolveAssetStatus(Long statusId) {
+		AssetStatus status = null;
 		if (statusId != null) {
 			ProductStatusFilteredLoader loader = loaderFactory.createProductStatusFilteredLoader().setId(statusId);
 			status = loader.load(transaction);
@@ -107,16 +107,16 @@ public class ProductViewModeConverter {
 		return status;
 	}
 	
-	private void resolveExtensionValues(List<ProductExtensionValueInput> productExtentionValues, Product product) {		
+	private void resolveExtensionValues(List<ProductExtensionValueInput> productExtentionValues, Asset asset) {
 		if (productExtentionValues != null) {
-			List<ProductSerialExtensionBean> extensions = loaderFactory.createProductSerialExtensionListLoader().load(transaction);
+			List<AssetSerialExtension> extensions = loaderFactory.createProductSerialExtensionListLoader().load(transaction);
 			
-			Set<ProductSerialExtensionValueBean> newExtensionValues = new TreeSet<ProductSerialExtensionValueBean>();
+			Set<AssetSerialExtensionValue> newExtensionValues = new TreeSet<AssetSerialExtensionValue>();
 			for (ProductExtensionValueInput input : productExtentionValues) {
 				if (input != null) { // some of the inputs can be null due to the retired info fields.
-					for (ProductSerialExtensionBean extension : extensions) {
+					for (AssetSerialExtension extension : extensions) {
 						if (extension.getUniqueID().equals(input.getExtensionId())) {
-							ProductSerialExtensionValueBean extensionValue = input.convertToExtensionValueBean(extension, product);
+							AssetSerialExtensionValue extensionValue = input.convertToExtensionValueBean(extension, asset);
 							if (extensionValue != null) {
 								newExtensionValues.add(extensionValue);
 							}
@@ -125,7 +125,7 @@ public class ProductViewModeConverter {
 				}
 			}
 			
-			product.setProductSerialExtensionValues(newExtensionValues);
+			asset.setAssetSerialExtensionValues(newExtensionValues);
 		}
 	}
 }

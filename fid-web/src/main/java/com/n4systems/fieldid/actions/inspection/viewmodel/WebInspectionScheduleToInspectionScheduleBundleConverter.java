@@ -6,7 +6,7 @@ import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.actions.inspection.WebInspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
@@ -20,7 +20,7 @@ public class WebInspectionScheduleToInspectionScheduleBundleConverter {
 		this.dateConverter = createUserDateConverter;
 	}
 
-	public InspectionScheduleBundle convert(WebInspectionSchedule nextSchedule, Product product) {
+	public InspectionScheduleBundle convert(WebInspectionSchedule nextSchedule, Asset asset) {
 		Date scheduleDate;
 		InspectionType scheduleType;
 		Project scheduleJob;
@@ -34,7 +34,7 @@ public class WebInspectionScheduleToInspectionScheduleBundleConverter {
 			scheduleJob = null;
 		}
 		
-		return new InspectionScheduleBundle(product, scheduleType, scheduleJob, scheduleDate);
+		return new InspectionScheduleBundle(asset, scheduleType, scheduleJob, scheduleDate);
 		
 	}
 

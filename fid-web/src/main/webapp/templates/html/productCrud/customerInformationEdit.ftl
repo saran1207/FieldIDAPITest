@@ -22,7 +22,7 @@ ${action.setPageType('product', 'customer_edit')!}
 		<div class="infoSet">
 			<label><@s.text name="label.location"/></label>
 			<div class="fieldHolder">
-				<@n4.location name="asset.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(asset.location)}"  theme="fieldidSimple"/>
+				<@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="fieldidSimple"/>
 			</div>
 	
 		</div>

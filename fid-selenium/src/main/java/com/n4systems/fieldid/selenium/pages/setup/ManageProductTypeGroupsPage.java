@@ -55,7 +55,7 @@ public class ManageProductTypeGroupsPage extends FieldIDPage {
 	}
 	
 	public int getWarningNumberOfAttachedProductTypes() {
-		return Integer.parseInt(selenium.getText("//span[contains(., 'Product Types being detached')]/../label").trim());
+		return Integer.parseInt(selenium.getText("//span[contains(., 'Asset Types being detached')]/../label").trim());
 	}
 	
 }

@@ -55,7 +55,7 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	}
 
 	private void verifyEditProductTypeHasDeleteAttribute(ProductType pt) throws InterruptedException {
-		// we assume create product type left us on the View tab of that product
+		// we assume create asset type left us on the View tab of that asset
 		// type
 		mpts.gotoEditProductType();
 		mpts.deleteProductTypeAttributes(pt.getAttributes());

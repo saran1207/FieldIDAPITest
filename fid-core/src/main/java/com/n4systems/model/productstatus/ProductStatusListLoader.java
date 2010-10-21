@@ -4,25 +4,25 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class ProductStatusListLoader extends ListLoader<ProductStatusBean> {
+public class ProductStatusListLoader extends ListLoader<AssetStatus> {
 
 	public ProductStatusListLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
 	@Override
-	protected List<ProductStatusBean> load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<ProductStatusBean> builder = new QueryBuilder<ProductStatusBean>(ProductStatusBean.class, filter);
+	protected List<AssetStatus> load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<AssetStatus> builder = new QueryBuilder<AssetStatus>(AssetStatus.class, filter);
 		builder.addOrder("name");
 		
-		List<ProductStatusBean> productStati = builder.getResultList(em);
-		return productStati;
+		List<AssetStatus> assetStatuses = builder.getResultList(em);
+		return assetStatuses;
 	}
 
 }

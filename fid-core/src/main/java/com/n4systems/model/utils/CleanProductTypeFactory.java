@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.Tenant;
 
 public class CleanProductTypeFactory {
 
-	private ProductType originalType;
+	private AssetType originalType;
 	private Tenant targetTenant;
 
-	public CleanProductTypeFactory(ProductType originalType , Tenant targetTenant) {
+	public CleanProductTypeFactory(AssetType originalType , Tenant targetTenant) {
 		super();
 		this.originalType = originalType;
 		this.targetTenant = targetTenant;
 	}
 	
-	public ProductType clean() {
+	public AssetType clean() {
 		cleanProductType();
 		cleanInfoFields();
 		setNewTenant();
@@ -35,7 +35,7 @@ public class CleanProductTypeFactory {
 	}
 
 	private void cleanProductType() {
-		// clear the product name and all ids
+		// clear the asset name and all ids
 		originalType.setId(null);
 		originalType.setCreated(null);
 		originalType.setModified(null);
@@ -43,9 +43,9 @@ public class CleanProductTypeFactory {
 		originalType.setImageName(null);
 		originalType.setGroup(null);
 		originalType.setAttachments(new ArrayList<FileAttachment>());
-		originalType.setSchedules(new HashSet<ProductTypeSchedule>());
-		originalType.setSubTypes(new HashSet<ProductType>());
-		originalType.setSchedules(new HashSet<ProductTypeSchedule>());
+		originalType.setSchedules(new HashSet<AssetTypeSchedule>());
+		originalType.setSubTypes(new HashSet<AssetType>());
+		originalType.setSchedules(new HashSet<AssetTypeSchedule>());
 		originalType.setAutoAttributeCriteria(null);
 	}
 

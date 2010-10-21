@@ -6,12 +6,12 @@ ${action.setPageType('product_code_mapping','list')!}
 		<th></th>
 	<tr>
 	
-	<#list productCodeMappings as productCodeMapping >
+	<#list productCodeMappings as assetCodeMapping >
 		<tr >
-			<td>${productCodeMapping.productCode}</td>
+			<td>${assetCodeMapping.productCode}</td>
 			<td>
-				<a href="<@s.url value="productCodeMappingEdit.action" uniqueID="${productCodeMapping.uniqueID}" />" ><@s.text name="label.edit" /></a>&nbsp;&nbsp;
-				<a href="<@s.url value="productCodeMappingRemove.action" uniqueID="${productCodeMapping.uniqueID}" />" onclick="return confirm('<@s.text name="label.areyousure" />');" ><@s.text name="label.remove" /></a>
+				<a href="<@s.url value="productCodeMappingEdit.action" uniqueID="${assetCodeMapping.uniqueID}" />" ><@s.text name="label.edit" /></a>&nbsp;&nbsp;
+				<a href="<@s.url value="productCodeMappingRemove.action" uniqueID="${assetCodeMapping.uniqueID}" />" onclick="return confirm('<@s.text name="label.areyousure" />');" ><@s.text name="label.remove" /></a>
 			</td>
 		</tr>
 	</#list>

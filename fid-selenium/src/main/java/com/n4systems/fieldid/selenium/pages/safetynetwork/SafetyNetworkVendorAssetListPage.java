@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.thoughtworks.selenium.Selenium;
 
 public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
@@ -32,15 +32,15 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 		return selenium.isElementPresent("//table[@id='productTable']");
 	}
 	
-	public List<Product> getAssetList() {
-		List<Product> results = new ArrayList<Product>();
+	public List<Asset> getAssetList() {
+		List<Asset> results = new ArrayList<Asset>();
 		
 		List<String> serialNumbers = collectTableValuesUnderCellForCurrentPage(2, 1, "a");
 		
 		for(String serialNumber: serialNumbers) {
-			Product product = new Product();
-			product.setSerialNumber(serialNumber);
-			results.add(product);
+			Asset asset = new Asset();
+			asset.setSerialNumber(serialNumber);
+			results.add(asset);
 		}
 		
 		return results;

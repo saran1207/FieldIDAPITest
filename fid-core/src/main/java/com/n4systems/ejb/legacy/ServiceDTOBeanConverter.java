@@ -3,7 +3,9 @@ package com.n4systems.ejb.legacy;
 import java.io.IOException;
 import java.util.List;
 
-import rfid.ejb.entity.ProductStatusBean;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
@@ -14,9 +16,7 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.orgs.BaseOrg;
@@ -48,18 +48,18 @@ public interface ServiceDTOBeanConverter {
 
 	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Inspection inspection);
 	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert(InspectionGroup inspectionGroup);
-	public Product convert( ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId );
-	public ProductServiceDTO convert(Product product);
+	public Asset convert( ProductServiceDTO productServiceDTO, Asset targetProduct, long tenantId );
+	public ProductServiceDTO convert(Asset product);
 	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
 	public StateSetServiceDTO convert( StateSet stateSet );
 	public com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO convert( AutoAttributeCriteria criteria );
 	public com.n4systems.webservice.dto.AutoAttributeDefinitionServiceDTO convert( AutoAttributeDefinition definition );
-	public ProductStatusServiceDTO convert( ProductStatusBean productStatus );
-	public ProductTypeServiceDTO convert_new( ProductType productType );
+	public ProductStatusServiceDTO convert( AssetStatus assetStatus);
+	public ProductTypeServiceDTO convert_new( AssetType assetType);
 	public TenantServiceDTO convert(PrimaryOrg tenant);
 	public com.n4systems.webservice.dto.UserServiceDTO convert(User user);
 	public InspectionBookServiceDTO convert(InspectionBook inspectionBook);
-	public ProductTypeGroupServiceDTO convert(ProductTypeGroup productTypeGroup);
+	public ProductTypeGroupServiceDTO convert(AssetTypeGroup assetTypeGroup);
 	public JobServiceDTO convert(Project job);
 	public SetupDataLastModDatesServiceDTO convert(SetupDataLastModDates setupModDates);
 	public CustomerOrgServiceDTO convert(CustomerOrg customerOrg);

@@ -3,6 +3,8 @@ package com.n4systems.fieldid.actions.product;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -21,8 +23,6 @@ import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.utils.FindSubProducts;
@@ -34,7 +34,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(SubProductCrud.class);
 
-	protected Product product;
+	protected Asset asset;
 	private Long subProductIndex;
 	protected List<SubProductHelper> subProducts;
 	protected SubProductHelper subProduct;
@@ -55,21 +55,17 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 	@Override
 	protected void initMemberFields() {
-
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		product = persistenceManager.find(Product.class, uniqueId, getSecurityFilter(), "infoOptions", "type.subTypes");
-		product = new FindSubProducts(persistenceManager, product).fillInSubProducts();
+		asset = persistenceManager.find(Asset.class, uniqueId, getSecurityFilter(), "infoOptions", "type.subTypes");
+		asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
 	}
-
-	
-	
 
 	@SkipValidation
 	public String doCreate() {
-		if (product == null || product.isNew()) {
+		if (asset == null || asset.isNew()) {
 			addActionErrorText("error.noproduct");
 			return MISSING;
 		}
@@ -79,19 +75,19 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 			return ERROR;
 		}
 
-		subProducts = SubProductHelper.convert(product.getSubProducts());
+		subProducts = SubProductHelper.convert(asset.getSubProducts());
 		
-		Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter(), "type.inspectionTypes");
-		if (foundSubProduct == null) {
+		Asset foundSubAsset = persistenceManager.find(Asset.class, subProduct.getAsset().getId(), getSecurityFilter(), "type.inspectionTypes");
+		if (foundSubAsset == null) {
 			addActionErrorText("error.nosubproduct");
 			return ERROR;
 		} 
-		subProduct.setProduct(foundSubProduct);
+		subProduct.setAsset(foundSubAsset);
 		subProducts.add(subProduct);
 
 		try {	
 			processSubProducts();
-			product = productManager.update(product, getUser());
+			asset = productManager.update(asset, getUser());
 			addFlashMessageText("message.productupdated");
 
 			return "saved";
@@ -99,10 +95,10 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 			addActionErrorText("error.samesubproduct");
 		} catch (MissingEntityException e) {
 			addActionErrorText("error.missingattachedproduct");
-			logger.error("failed to save Product, sub product does not exist or security filter does not allow access", e);
+			logger.error("failed to save Asset, sub asset does not exist or security filter does not allow access", e);
 		} catch (Exception e) {
 			addActionErrorText("error.productsave");
-			logger.error("failed to save Product", e);
+			logger.error("failed to save Asset", e);
 		}
 
 		return INPUT;
@@ -110,17 +106,17 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 	@SkipValidation
 	public String doShow() {
-		if (product == null || product.isNew()) {
+		if (asset == null || asset.isNew()) {
 			addActionErrorText("error.noproduct");
 			return MISSING;
 		}
-		subProducts = SubProductHelper.convert(product.getSubProducts());
+		subProducts = SubProductHelper.convert(asset.getSubProducts());
 		return SUCCESS;
 	}
 
 	
 	public String doUpdate() {
-		if (product == null || product.isNew()) {
+		if (asset == null || asset.isNew()) {
 			addActionErrorText("error.noproduct");
 			return MISSING;
 		}
@@ -129,33 +125,33 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 			return ERROR;
 		}
 		
-		// this is to get the inspection types for this product loaded correctly  gah!
-		Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter(), "type.inspectionTypes");
-		if (foundSubProduct == null) {
+		// this is to get the inspection types for this asset loaded correctly  gah!
+		Asset foundSubAsset = persistenceManager.find(Asset.class, subProduct.getAsset().getId(), getSecurityFilter(), "type.inspectionTypes");
+		if (foundSubAsset == null) {
 			addActionErrorText("error.nosubproduct");
 			return ERROR;
 		}
-		subProduct.setProduct(foundSubProduct);
+		subProduct.setAsset(foundSubAsset);
 		
-		SubProduct targetSubProduct = product.getSubProducts().get(product.getSubProducts().indexOf(new SubProduct(subProduct.getProduct(), product)));
+		SubProduct targetSubProduct = asset.getSubProducts().get(asset.getSubProducts().indexOf(new SubProduct(subProduct.getAsset(), asset)));
 		
 		if (targetSubProduct == null) {
 			addActionErrorText("error.nosubproduct");
 			return ERROR;
 		}
 		try {	
-			SubProduct target = product.getSubProducts().get(product.getSubProducts().indexOf(new SubProduct(subProduct.getProduct(), product)));
+			SubProduct target = asset.getSubProducts().get(asset.getSubProducts().indexOf(new SubProduct(subProduct.getAsset(), asset)));
 			target.setLabel(subProduct.getLabel());
-			product = productManager.update(product, getUser());
+			asset = productManager.update(asset, getUser());
 			addFlashMessageText("message.productupdated");
 
 			return "saved";
 		} catch (MissingEntityException e) {
 			addActionErrorText("error.missingattachedproduct");
-			logger.error("failed to save Product, sub product does not exist or security filter does not allow access", e);
+			logger.error("failed to save Asset, sub asset does not exist or security filter does not allow access", e);
 		} catch (Exception e) {
 			addActionErrorText("error.productsave");
-			logger.error("failed to save Product", e);
+			logger.error("failed to save Asset", e);
 		}
 
 		return INPUT;
@@ -168,20 +164,20 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		List<SubProduct> reorderedList = new ArrayList<SubProduct>();
 		for (int i = 0; i < indexes.size(); i++) {
 			Long id = indexes.get(i);
-			for (SubProduct subProduct : product.getSubProducts()) {
-				if (subProduct.getProduct().getId().equals(id)) {
+			for (SubProduct subProduct : asset.getSubProducts()) {
+				if (subProduct.getAsset().getId().equals(id)) {
 					reorderedList.add(subProduct);
-					product.getSubProducts().remove(subProduct);
+					asset.getSubProducts().remove(subProduct);
 					break;
 				}
 			}
 		}
-		reorderedList.addAll(product.getSubProducts());
+		reorderedList.addAll(asset.getSubProducts());
 		
 		
-		product.setSubProducts(reorderedList);
+		asset.setSubProducts(reorderedList);
 		try {
-			product = productManager.update(product, getUser());
+			asset = productManager.update(asset, getUser());
 		} catch (SubProductUniquenessException e) {
 			return null;
 		} catch (Exception e) {
@@ -193,7 +189,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 	@SkipValidation
 	public String doRemove() {
-		if (product == null || product.isNew()) {
+		if (asset == null || asset.isNew()) {
 			addActionErrorText("error.noproduct");
 			return MISSING;
 		}
@@ -204,8 +200,8 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		}
 		SubProduct subProductToRemove = null;
 		
-		for (SubProduct subProduct : product.getSubProducts()) {
-			if (subProduct.getProduct().getId().equals(subProductId)) {
+		for (SubProduct subProduct : asset.getSubProducts()) {
+			if (subProduct.getAsset().getId().equals(subProductId)) {
 				subProductToRemove = subProduct;
 			}
 		}
@@ -216,18 +212,18 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		}
 
 		try {
-			product.getSubProducts().remove(subProductToRemove);
-			productManager.update(product, getUser());
+			asset.getSubProducts().remove(subProductToRemove);
+			productManager.update(asset, getUser());
 
 			MasterInspection masterInspection = (MasterInspection) getSession().get("masterInspection");
 			if (MasterInspection.matchingMasterInspection(masterInspection, token)) {
-				masterInspection.removeInspectionsForProduct(subProduct.getProduct());
+				masterInspection.removeInspectionsForProduct(subProduct.getAsset());
 			}
 
 			addActionMessageText("message.productupdated");
 			return SUCCESS;
 		} catch (Exception e) {
-			logger.error("couldn't save the product ", e);
+			logger.error("couldn't save the asset ", e);
 			addActionErrorText("error.productupdate");
 			return ERROR;
 		}
@@ -235,19 +231,19 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 	}
 
 	private void processSubProducts() throws MissingEntityException {
-		product.getSubProducts().clear();
+		asset.getSubProducts().clear();
 		StrutsListHelper.clearNulls(subProducts);
 
 		if (subProducts != null && !subProducts.isEmpty()) {
 			for (SubProductHelper subProduct : subProducts) {
-				Product foundSubProduct = persistenceManager.find(Product.class, subProduct.getProduct().getId(), getSecurityFilter(), "type.inspectionTypes");
+				Asset foundSubAsset = persistenceManager.find(Asset.class, subProduct.getAsset().getId(), getSecurityFilter(), "type.inspectionTypes");
 
-				if (foundSubProduct == null) {
-					throw new MissingEntityException("product id " + subProduct.getProduct().getId().toString() + " missing");
+				if (foundSubAsset == null) {
+					throw new MissingEntityException("asset id " + subProduct.getAsset().getId().toString() + " missing");
 				}
 
-				product.getSubProducts().add(new SubProduct(subProduct.getLabel(), foundSubProduct, product));
-				subProduct.setProduct(foundSubProduct);
+				asset.getSubProducts().add(new SubProduct(subProduct.getLabel(), foundSubAsset, asset));
+				subProduct.setAsset(foundSubAsset);
 			}
 		}
 	}
@@ -260,8 +256,8 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		this.subProductIndex = subProductIndex;
 	}
 
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
 	public SubProductHelper getSubProduct() {
@@ -280,15 +276,12 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 	}
 
 	public void setSubProducts(List<SubProductHelper> subProducts) {
-
 		this.subProducts = subProducts;
 	}
 
-	public List<ProductType> getSubTypes() {
-		return new ArrayList<ProductType>(product.getType().getSubTypes());
+	public List<AssetType> getSubTypes() {
+		return new ArrayList<AssetType>(asset.getType().getSubTypes());
 	}
-
-	
 
 	public Long getSubProductId() {
 		return subProductId;
@@ -300,7 +293,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 
 	public List<InspectionType> getInspectionTypes() {		
 		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
-		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(subProduct.getProduct().getType()).load();
+		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(subProduct.getAsset().getType()).load();
 		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
 			inspectionTypes.add(associatedInspectionType.getInspectionType());
 		}
@@ -326,7 +319,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 		return false;
 	}
 
-	public List<SubInspection> getInspectionsFor(Product product) {
+	public List<SubInspection> getInspectionsFor(Asset product) {
 		return new ArrayList<SubInspection>();
 	}
 
@@ -348,7 +341,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 	
 	public AllInspectionHelper getAllInspectionHelper() {
 		if (allInspectionHelper == null)
-			allInspectionHelper = new AllInspectionHelper(productManager, product, getSecurityFilter());
+			allInspectionHelper = new AllInspectionHelper(productManager, asset, getSecurityFilter());
 		return allInspectionHelper;
 	}
 	
@@ -358,7 +351,7 @@ public class SubProductCrud extends AbstractCrud implements HasDuplicateValueVal
 	}
 
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
+		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
 	
 }

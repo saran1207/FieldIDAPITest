@@ -92,8 +92,8 @@ public class Search {
 	/**
 	 * This method will get a list of the attributes from the Select Display Columns
 	 * section. For example, if you are on the Schedules page and you select a
-	 * specific Product Type, the Product Attributes section of Select Display
-	 * Columns will update to the product attributes for the product type you
+	 * specific Asset Type, the Asset Attributes section of Select Display
+	 * Columns will update to the asset attributes for the asset type you
 	 * selected.
 	 * 
 	 * @param dynamicColumnLocator

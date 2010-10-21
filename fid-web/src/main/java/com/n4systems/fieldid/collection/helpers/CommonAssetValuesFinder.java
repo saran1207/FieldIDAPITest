@@ -4,13 +4,13 @@ import static com.n4systems.fieldid.collection.helpers.CommonAssetValues.*;
 
 import java.util.List;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 
 public class CommonAssetValuesFinder {
 
-	private final List<Product> assets;
+	private final List<Asset> assets;
 
-	public CommonAssetValuesFinder(List<Product> assets) {
+	public CommonAssetValuesFinder(List<Asset> assets) {
 		this.assets = assets;
 		
 	}
@@ -21,7 +21,7 @@ public class CommonAssetValuesFinder {
 			return CommonAssetValues.NO_COMMON_VALUES;
 		
 		CommonAssetValues commonValues = null;
-		for (Product asset : assets) {
+		for (Asset asset : assets) {
 			if (commonValues == null)
 				commonValues = CommonAssetValues.createFrom(asset);
 			else

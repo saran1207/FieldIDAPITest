@@ -1,18 +1,18 @@
 package com.n4systems.util;
 
-import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.AssetTypeGroup;
 
 public class ProductTypeGroupRemovalSummary {
-	private ProductTypeGroup group;
+	private AssetTypeGroup group;
 
 	private Long productTypesConnected = 0L;
 
-	public ProductTypeGroupRemovalSummary(ProductTypeGroup group) {
+	public ProductTypeGroupRemovalSummary(AssetTypeGroup group) {
 		super();
 		this.group = group;
 	}
 
-	public ProductTypeGroup getGroup() {
+	public AssetTypeGroup getGroup() {
 		return group;
 	}
 

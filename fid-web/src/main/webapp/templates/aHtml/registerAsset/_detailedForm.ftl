@@ -8,11 +8,11 @@
 	</div>
 	
 	<div class="infoSet">
-		<label for="productStatus" class="label"><@s.text name="label.productstatus"/></label>
-			<#if !parentProduct?exists >
-				<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
+		<label for="assetStatus" class="label"><@s.text name="label.productstatus"/></label>
+			<#if !parentAsset?exists >
+				<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
 			<#else>
-				<span class="fieldHolder" id="productStatus">${(product.productStatus.name?html)!}</span>
+				<span class="fieldHolder" id="assetStatus">${(asset.assetStatus.name?html)!}</span>
 			</#if>		
 	</div>
 	
@@ -21,19 +21,19 @@
 	</div>
 	<div class="infoSet">
 		<label for="owner" class="label"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-		<#if !parentProduct?exists >
+		<#if !parentAsset?exists >
 			<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
 		<#else>
-			<span class="fieldHolder" id="owner">${(product.owner.name?html)!}</span>
+			<span class="fieldHolder" id="owner">${(asset.owner.name?html)!}</span>
 		</#if>
 	</div>
 	<#if securityGuard.assignedToEnabled >
 		<div class="infoSet">
 			<label for="assignedUser" class="label"><@s.text name="label.assignedto"/></label>
-			<#if !parentProduct?exists >
+			<#if !parentAsset?exists >
 				<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.unassigned')}" />
 			<#else>
-				<span class="fieldHolder" id="assignedUser">${(product.assignedUser.userLabel)!}</span>
+				<span class="fieldHolder" id="assignedUser">${(asset.assignedUser.userLabel)!}</span>
 			</#if>
 		</div>
 	</#if>
@@ -55,15 +55,15 @@
 	</div>
 	<#include "_infoOptions.ftl">
 
-	<#if !linkedProduct.orderedInfoOptionList.isEmpty()>
+	<#if !linkedAsset.orderedInfoOptionList.isEmpty()>
 		<#if autoAttributeCriteria?exists>
 		<div id="suggestedAttributes">
 		<#else>
 		<div id="suggestedAttributes" style="display:none">
 		</#if>
-		   <h3> ${linkedProduct.tenant.name} <@s.text name="label.attributes"/></h3>
+		   <h3> ${linkedAsset.tenant.name} <@s.text name="label.attributes"/></h3>
 		   <p class="gray"><@s.text name="label.registerasset.linkedattributes"/></p>
-			<#list linkedProduct.orderedInfoOptionList as infoOption >
+			<#list linkedAsset.orderedInfoOptionList as infoOption >
 				<div class="infoSet">
 					<label class="label">${infoOption.infoField.name} <#if infoOption.infoField.retired >(<@s.text name="label.retired"/>)</#if> </label>
 					<span class="fieldHolder" infoFieldName="${infoOption.infoField.name?j_string}">

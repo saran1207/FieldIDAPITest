@@ -3,7 +3,7 @@
 ---
 InspectionTests:
     Test1:
-        Comments: Created new standard product and performed inspection (With forms, inspection attrs, picture)
+        Comments: Created new standard asset and performed inspection (With forms, inspection attrs, picture)
         Bugs: If two inspection attributes are given the same name, one value is lost on submit. 
         SerialNumber: rp30
         ProductType: Standard Type 2
@@ -19,7 +19,7 @@ InspectionTests:
         DeficiencyState1: REPAIREDONSITE
         NumberOfPictures: 1
     Test2:
-        Comments: Created new master product and perform inspection. Change product status during inspection (With forms, with observations, with inspection attrs, 1 picture) 
+        Comments: Created new master asset and perform inspection. Change asset status during inspection (With forms, with observations, with inspection attrs, 1 picture)
         ProductType: Master Type 2
         SerialNumber: rp31
         ProductStatus: In Service
@@ -67,7 +67,7 @@ InspectionTests:
         DeficiencyState2:
         NumberOfPictures:
     Test5:
-        Comments: Attach product with previous inspection to master product. (Photo) 
+        Comments: Attach asset with previous inspection to master asset. (Photo)
         ProductType: Standard
         InspectionType: Master Inspection 1
         SerialNumber: rp30

@@ -7,15 +7,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
@@ -28,11 +27,11 @@ public class CatalogCrud extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(CatalogCrud.class);
 	
-	private Map<String,Boolean> publishedProductTypeIds = new HashMap<String, Boolean>();
+	private Map<String,Boolean> publishedAssetTypeIds = new HashMap<String, Boolean>();
 	private Map<String,Boolean> publishedInspectionTypeIds = new HashMap<String, Boolean>();
 	private CatalogService catalogService;
 	
-	private List<ListingPair> productTypes;
+	private List<ListingPair> assetTypes;
 	private List<ListingPair> inspectionTypes;
 
 	public CatalogCrud(PersistenceManager persistenceManager) {
@@ -58,7 +57,7 @@ public class CatalogCrud extends SafetyNetwork {
 	public String doEdit() {
 		catalogService = new CatalogServiceImpl(persistenceManager,getTenant());
 		for (Long id : catalogService.getProductTypeIdsPublished()) {
-			publishedProductTypeIds.put(id.toString(),true);
+			publishedAssetTypeIds.put(id.toString(),true);
 		}
 		
 		for (Long id : catalogService.getInspectionTypeIdsPublished()) {
@@ -70,10 +69,10 @@ public class CatalogCrud extends SafetyNetwork {
 	public String doUpdate() {
 		catalogService = new CatalogServiceImpl(persistenceManager,getTenant());
 		try {
-			Set<Long> publishProductTypeIds = new HashSet<Long>();
-			for (Entry<String,Boolean> entry : publishedProductTypeIds.entrySet()) {
+			Set<Long> publishAssetTypeIds = new HashSet<Long>();
+			for (Entry<String,Boolean> entry : publishedAssetTypeIds.entrySet()) {
 				if (entry.getValue()) {
-					publishProductTypeIds.add(Long.parseLong(entry.getKey()));
+					publishAssetTypeIds.add(Long.parseLong(entry.getKey()));
 				}
 			}
 			
@@ -84,11 +83,11 @@ public class CatalogCrud extends SafetyNetwork {
 				}
 			}
 			
-			HashSet<ProductType> publishedProductTypes = new HashSet<ProductType>();
-			if (!publishProductTypeIds.isEmpty()) {
-				publishedProductTypes.addAll(persistenceManager.findAll(ProductType.class, publishProductTypeIds, getTenant()));
+			HashSet<AssetType> publishedAssetTypes = new HashSet<AssetType>();
+			if (!publishAssetTypeIds.isEmpty()) {
+				publishedAssetTypes.addAll(persistenceManager.findAll(AssetType.class, publishAssetTypeIds, getTenant()));
 			}
-			catalogService.publishProductTypes(publishedProductTypes);
+			catalogService.publishProductTypes(publishedAssetTypes);
 			
 			
 			HashSet<InspectionType> publishedInspectionTypes = new HashSet<InspectionType>();
@@ -107,16 +106,16 @@ public class CatalogCrud extends SafetyNetwork {
 		return ERROR;
 	}
 
-	public Map<String,Boolean> getPublishedProductTypeIds() {
-		return publishedProductTypeIds;
+	public Map<String,Boolean> getPublishedAssetTypeIds() {
+		return publishedAssetTypeIds;
 	}
 
-	public List<ListingPair> getProductTypes() {
-		if (productTypes == null) {
-			productTypes = new ProductTypeLister(persistenceManager,getSecurityFilter()).getProductTypes();
+	public List<ListingPair> getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = new AssetTypeLister(persistenceManager,getSecurityFilter()).getAssetTypes();
 		}
 
-		return productTypes;
+		return assetTypes;
 	}
 	
 	public Map<String,Boolean> getPublishedInspectionTypeIds() {

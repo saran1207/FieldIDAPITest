@@ -1,9 +1,9 @@
 package com.n4systems.reporting.mapbuilders;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.persistence.Transaction;
 
-public class ProductTypeMapBuilder extends AbstractMapBuilder<ProductType> {
+public class ProductTypeMapBuilder extends AbstractMapBuilder<AssetType> {
 
 	public ProductTypeMapBuilder() {
 		super(
@@ -15,7 +15,7 @@ public class ProductTypeMapBuilder extends AbstractMapBuilder<ProductType> {
 	}
 	
 	@Override
-	protected void setAllFields(ProductType entity, Transaction transaction) {
+	protected void setAllFields(AssetType entity, Transaction transaction) {
 		setField(ReportField.PRODUCT_TYPE_NAME,			entity.getName());
 		setField(ReportField.PRODUCT_TYPE_NAME_LEGACY,	entity.getName());
 		setField(ReportField.PRODUCT_TYPE_WARNING,		entity.getWarnings());

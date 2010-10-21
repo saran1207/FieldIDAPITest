@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -40,7 +40,7 @@ public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 			findGroupsToImport(productTypeIds);
 		}
 		
-		for (ProductTypeGroup originalGroup : summary.getImportedProductTypeGroupNames()) {
+		for (AssetTypeGroup originalGroup : summary.getImportedProductTypeGroupNames()) {
 			try {
 				importGroup(originalGroup);
 			} catch (Exception e) {
@@ -52,8 +52,8 @@ public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 	}
 
 
-	private void importGroup(ProductTypeGroup originalGroup) {
-		ProductTypeGroup importedGroup = new ProductTypeGroup();
+	private void importGroup(AssetTypeGroup originalGroup) {
+		AssetTypeGroup importedGroup = new AssetTypeGroup();
 		importedGroup.setName(originalGroup.getName());
 		importedGroup.setTenant(tenant);
 		importedGroup.setOrderIdx(getNextAvailableIndex());
@@ -65,7 +65,7 @@ public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 	}
 	
 	private Long getNextAvailableIndex() {
-		QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, new TenantOnlySecurityFilter(tenant.getId()));
+		QueryBuilder<AssetTypeGroup> query = new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, new TenantOnlySecurityFilter(tenant.getId()));
 		return persistenceManager.findCount(query);
 	}
 	
@@ -84,27 +84,27 @@ public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 	
 	
 	private void findGroupsToImport(Set<Long> productTypeIds) {
-		for (ProductTypeGroup existingProductTypeGroup : getOriginialGroups(productTypeIds)) {
-			if (persistenceManager.uniqueNameAvailable(ProductTypeGroup.class, existingProductTypeGroup.getName(), null, tenant.getId())) {
-				summary.getImportedProductTypeGroupNames().add(existingProductTypeGroup);
+		for (AssetTypeGroup existingAssetTypeGroup : getOriginialGroups(productTypeIds)) {
+			if (persistenceManager.uniqueNameAvailable(AssetTypeGroup.class, existingAssetTypeGroup.getName(), null, tenant.getId())) {
+				summary.getImportedProductTypeGroupNames().add(existingAssetTypeGroup);
 			} else {
-				summary.getImportMapping().put(existingProductTypeGroup.getId(), persistenceManager.findByName(ProductTypeGroup.class, tenant.getId(), existingProductTypeGroup.getName()));
+				summary.getImportMapping().put(existingAssetTypeGroup.getId(), persistenceManager.findByName(AssetTypeGroup.class, tenant.getId(), existingAssetTypeGroup.getName()));
 			}
 		}
 	}
 	
 	
-	private List<ProductTypeGroup> getOriginialGroups(Set<Long> productTypeIds) {
-		return new ArrayList<ProductTypeGroup>(importCatalog.getProductTypeGroupsFor(productTypeIds));
+	private List<AssetTypeGroup> getOriginialGroups(Set<Long> productTypeIds) {
+		return new ArrayList<AssetTypeGroup>(importCatalog.getProductTypeGroupsFor(productTypeIds));
 	}
 
 
-	public Map<Long, ProductTypeGroup> getImportMapping() {
+	public Map<Long, AssetTypeGroup> getImportMapping() {
 		return summary.getImportMapping();
 	}
 	
 	public void rollback() {
-		for (ProductTypeGroup groupToDelete : summary.getCreatedGroups()) {
+		for (AssetTypeGroup groupToDelete : summary.getCreatedGroups()) {
 			persistenceManager.delete(groupToDelete);
 		}
 	}

@@ -15,11 +15,11 @@ ${action.setPageType('inspection', 'edit')!}
 	<#include "/templates/html/common/_formErrors.ftl" />
 	
 	<div class="masterProduct done">
-		<div class="definition"><div class="identifier"><span>${product.type.name!}</span></div></div>
+		<div class="definition"><div class="identifier"><span>${asset.type.name!}</span></div></div>
 		<div class="performedInspection">
 			<span>${(inspectionType.name)!}</span> 
 			<span>
-				<a class="exitLink" href="<@s.url action="subInspectionEdit"  uniqueID="0" productId="${product.id}" type="${type}" parentProductId="${product.id}" token="${token}"/>">
+				<a class="exitLink" href="<@s.url action="subInspectionEdit"  uniqueID="0" assetId="${asset.id}" type="${type}" parentAssetId="${asset.id}" token="${token}"/>">
 					<@s.text name="label.edit_this_event"/>
 				</a>
 			</span>
@@ -28,7 +28,7 @@ ${action.setPageType('inspection', 'edit')!}
 	
 	
 	<div id="productComponents">
-		<#list availableSubProducts as subProduct>
+		<#list availableSubAssets as subProduct>
 			<#include "_subInspection.ftl" />
 		</#list>
 	</div>
@@ -38,11 +38,11 @@ ${action.setPageType('inspection', 'edit')!}
 		<@s.hidden name="token"/>
 		<@s.hidden name="type"/>
 		<@s.hidden name="inspectionGroupId"/>
-		<@s.hidden name="productId" id="productId"/>
+		<@s.hidden name="assetId" id="assetId"/>
 		<div class="formAction">
-			<@s.url id="cancelUrl" action="inspectionGroups" uniqueID="${product.id}"/>
+			<@s.url id="cancelUrl" action="inspectionGroups" uniqueID="${asset.id}"/>
 			<@s.submit key="label.cancel" onclick="return redirect( '${cancelUrl}' );"/>
-			<button onclick="return redirect('<@s.url action="masterInspectionDelete" uniqueID="${uniqueID}" productId="${productId}" /> ');"><@s.text name="label.delete"/></button>
+			<button onclick="return redirect('<@s.url action="masterInspectionDelete" uniqueID="${uniqueID}" assetId="${assetId}" /> ');"><@s.text name="label.delete"/></button>
 			<@s.submit key="label.save" />
 		</div>
 	</@s.form>

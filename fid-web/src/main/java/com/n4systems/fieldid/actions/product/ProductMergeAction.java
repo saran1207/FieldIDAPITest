@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.product;
 
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
@@ -14,7 +15,6 @@ import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
 import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.ProductMergeTask;
@@ -29,8 +29,8 @@ public class ProductMergeAction extends AbstractCrud {
 	
 	private AllInspectionHelper allInspectionHelper;
 	
-	private Product losingProduct;
-	private Product winningProduct;
+	private Asset losingAsset;
+	private Asset winningAsset;
 	
 
 	public ProductMergeAction(PersistenceManager persistenceManager, ProductManager productManager, LegacyProductSerial legacyProductSerialManager) {
@@ -42,16 +42,16 @@ public class ProductMergeAction extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		losingProduct = new Product();
+		losingAsset = new Asset();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		losingProduct = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+		losingAsset = productManager.findProductAllFields(uniqueId, getSecurityFilter());
 	}
 	
 	private void testRequiredEntities() {
-		if (losingProduct == null || losingProduct.isNew()) {
+		if (losingAsset == null || losingAsset.isNew()) {
 			addActionErrorText("error.noproduct");
 			throw new MissingEntityException();
 		}
@@ -73,46 +73,46 @@ public class ProductMergeAction extends AbstractCrud {
 	
 	public String doCreate() {
 		testRequiredEntities();
-		if (winningProduct == null) {
+		if (winningAsset == null) {
 			addActionErrorText("error.you_must_choose_a_valid_product_to_merge_into");
 			return INPUT;
 		}
 		
-		ProductMergeTask task = new ProductMergeTask(winningProduct, losingProduct, fetchCurrentUser());
+		ProductMergeTask task = new ProductMergeTask(winningAsset, losingAsset, fetchCurrentUser());
 		TaskExecutor.getInstance().execute(task);
 		
 		return SUCCESS;
 	}
 
 
-	public Product getLosingProduct() {
-		return losingProduct;
+	public Asset getLosingAsset() {
+		return losingAsset;
 	}
 	
-	public Product getProduct() {
-		return losingProduct;
+	public Asset getAsset() {
+		return losingAsset;
 	}
 
 
-	public Product getWinningProduct() {
-		return winningProduct;
+	public Asset getWinningAsset() {
+		return winningAsset;
 	}
 	
-	public Long getWinngingProductId() {
-		return (winningProduct != null) ? winningProduct.getId() : null;
+	public Long getWinngingAssetId() {
+		return (winningAsset != null) ? winningAsset.getId() : null;
 	}
 		
-	public void setWinningProductId(Long productId) {
+	public void setWinningAssetId(Long productId) {
 		if (productId == null) {
-			winningProduct = null;
-		} else if (winningProduct == null || !productId.equals(winningProduct.getId())){ 
-			winningProduct = productManager.findProductAllFields(productId, getSecurityFilter());
+			winningAsset = null;
+		} else if (winningAsset == null || !productId.equals(winningAsset.getId())){
+			winningAsset = productManager.findProductAllFields(productId, getSecurityFilter());
 		}
 	}
 
 	public AllInspectionHelper getAllInspectionHelper() {
 		if (allInspectionHelper == null)
-			allInspectionHelper = new AllInspectionHelper(legacyProductManager, losingProduct, getSecurityFilter());
+			allInspectionHelper = new AllInspectionHelper(legacyProductManager, losingAsset, getSecurityFilter());
 		return allInspectionHelper;
 	}
 	
@@ -138,6 +138,6 @@ public class ProductMergeAction extends AbstractCrud {
 	}
 	
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(losingProduct, getLoaderFactory());
+		return ProductLinkedHelper.isLinked(losingAsset, getLoaderFactory());
 	}
 }

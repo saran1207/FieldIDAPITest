@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.CommentTempBean;
-import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.model.UnitOfMeasure;
@@ -28,14 +28,14 @@ public class UserServiceImpl implements IUserService {
 	
 	public List<ProductStatusServiceDTO> findProductStatus( long versionNumber, Long tenantId, Date beginDate )	{
 		
-		List<ProductStatusBean> productStatusList = ServiceLocator.getProductSerialManager().findProductStatus(tenantId, beginDate);
+		List<AssetStatus> assetStatusList = ServiceLocator.getProductSerialManager().findProductStatus(tenantId, beginDate);
 		
 		ServiceDTOBeanConverter serviceDTOBeanConverter = ServiceLocator.getServiceDTOBeanConverter();
 		
 		List<ProductStatusServiceDTO> productStatusServiceDTOs = new ArrayList<ProductStatusServiceDTO>();
-		if (productStatusList != null) {
-			for (ProductStatusBean productStatus : productStatusList) {
-				productStatusServiceDTOs.add( serviceDTOBeanConverter.convert(productStatus) );
+		if (assetStatusList != null) {
+			for (AssetStatus assetStatus : assetStatusList) {
+				productStatusServiceDTOs.add( serviceDTOBeanConverter.convert(assetStatus) );
 			}
 		}
 		

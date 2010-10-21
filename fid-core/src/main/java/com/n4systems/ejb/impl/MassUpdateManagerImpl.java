@@ -22,9 +22,9 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.InspectionSchedule.ScheduleStatusGrouping;
@@ -137,7 +137,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			return 0L;
 		}
 		
-		// we'll modify the products first as we won't be able to find the product ids
+		// we'll modify the products first as we won't be able to find the asset ids
 		// after we delete.
 		modifyProductsForSchedules(incompleteSchedules);
 		
@@ -165,7 +165,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 	private void modifyProductsForSchedules(Set<Long> scheduleIds) {
 		QueryBuilder<Long> productIdQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
-		productIdQuery.setSimpleSelect("product.id", true);
+		productIdQuery.setSimpleSelect("asset.id", true);
 		productIdQuery.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
 		
 		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
@@ -179,19 +179,19 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			return 0L;
 		}
 		
-		String updateQueryString = "UPDATE " + Product.class.getName() + " SET modified = :now WHERE id IN (:ids)";
+		String updateQueryString = "UPDATE " + Asset.class.getName() + " SET modified = :now WHERE id IN (:ids)";
 		return new Long(em.createQuery(updateQueryString).setParameter("now", new Date()).setParameter("ids", ids).executeUpdate());
 	}
 
-	public Long updateProducts(List<Long> ids, Product productModificationData, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long updateProducts(List<Long> ids, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
 		try {
 			for (Long id : ids) {
-				Product product = productManager.findProductAllFields(id, new OpenSecurityFilter());
+				Asset asset = productManager.findProductAllFields(id, new OpenSecurityFilter());
 				
-				updateProduct(product, productModificationData, values);
+				updateProduct(asset, assetModificationData, values);
 				
-				legacyProductManager.update(product, modifiedBy);
+				legacyProductManager.update(asset, modifiedBy);
 				
 				result++;
 			}
@@ -206,34 +206,34 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
-	private void updateProduct(Product product, Product productModificationData, Map<String, Boolean> values) {
+	private void updateProduct(Asset asset, Asset assetModificationData, Map<String, Boolean> values) {
 		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
 			if (entry.getValue() == true) {
 				if (entry.getKey().equals("owner")) {
-					product.setOwner(productModificationData.getOwner());
+					asset.setOwner(assetModificationData.getOwner());
 				}
 				if (entry.getKey().equals("location")) {
-					product.setAdvancedLocation(productModificationData.getAdvancedLocation());
+					asset.setAdvancedLocation(assetModificationData.getAdvancedLocation());
 				}
 
 				if (entry.getKey().equals("assignedUser")) {
-					product.setAssignedUser(productModificationData.getAssignedUser());
+					asset.setAssignedUser(assetModificationData.getAssignedUser());
 				}
 
 				if (entry.getKey().equals("productStatus")) {
-					product.setProductStatus(productModificationData.getProductStatus());
+					asset.setAssetStatus(assetModificationData.getAssetStatus());
 				}
 
 				if (entry.getKey().equals("purchaseOrder")) {
-					product.setPurchaseOrder(productModificationData.getPurchaseOrder());
+					asset.setPurchaseOrder(assetModificationData.getPurchaseOrder());
 				}
 
 				if (entry.getKey().equals("identified")) {
-					product.setIdentified(productModificationData.getIdentified());
+					asset.setIdentified(assetModificationData.getIdentified());
 				}
 
 				if (entry.getKey().equals("published")) {
-					product.setPublished(productModificationData.isPublished());
+					asset.setPublished(assetModificationData.isPublished());
 				}
 			}
 		}
@@ -273,7 +273,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				}
 				
 				if (updateKey.equals("productStatus")) {
-					changeTarget.setProductStatus(inspectionChanges.getProductStatus());
+					changeTarget.setAssetStatus(inspectionChanges.getAssetStatus());
 				}
 			}
 			

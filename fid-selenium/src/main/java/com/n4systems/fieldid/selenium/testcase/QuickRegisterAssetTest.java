@@ -53,7 +53,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		selenium.click("copyAsset");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
-		assertTrue("linked product registration should be visible", selenium.isVisible("linkedProductContainer"));
+		assertTrue("linked asset registration should be visible", selenium.isVisible("linkedProductContainer"));
 		assertEquals("alex-share-2", selenium.getText("linkedProductSerial"));
 	}
 	
@@ -65,7 +65,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		selenium.click("copyAsset");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
-		assertTrue("linked product registration should be visible", selenium.isVisible("linkedProductContainer"));
+		assertTrue("linked asset registration should be visible", selenium.isVisible("linkedProductContainer"));
 		assertEquals("alex-share-2", selenium.getValue("serialNumberText"));
 	}
 	

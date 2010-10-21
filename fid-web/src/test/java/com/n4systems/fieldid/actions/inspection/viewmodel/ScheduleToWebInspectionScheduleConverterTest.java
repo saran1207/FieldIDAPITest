@@ -5,12 +5,12 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
+import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.builders.AssetTypeScheduleBuilder;
 import org.junit.Test;
 
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.fieldid.actions.inspection.WebInspectionSchedule;
-import com.n4systems.model.ProductTypeSchedule;
-import com.n4systems.model.builders.ProductTypeScheduleBuilder;
 
 public class ScheduleToWebInspectionScheduleConverterTest {
 
@@ -52,7 +52,7 @@ public class ScheduleToWebInspectionScheduleConverterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_have_the_right_inspection_type_name_and_id() throws Exception {
-		ProductTypeSchedule schedule = ProductTypeScheduleBuilder.aProductTypeSchedule().build();
+		AssetTypeSchedule schedule = AssetTypeScheduleBuilder.anAssetTypeSchedule().build();
 
 		ScheduleToWebInspectionScheduleConverter sut = new ScheduleToWebInspectionScheduleConverter(new NullUserDateConverter());
 
@@ -64,7 +64,7 @@ public class ScheduleToWebInspectionScheduleConverterTest {
 
 	@Test
 	public void should_convert_the_date_from_schedule_the_string_representation() throws Exception {
-		ProductTypeSchedule schedule = ProductTypeScheduleBuilder.aProductTypeSchedule().build();
+		AssetTypeSchedule schedule = AssetTypeScheduleBuilder.anAssetTypeSchedule().build();
 
 		ScheduleToWebInspectionScheduleConverter sut = new ScheduleToWebInspectionScheduleConverter(new NullUserDateConverter() {
 			@Override

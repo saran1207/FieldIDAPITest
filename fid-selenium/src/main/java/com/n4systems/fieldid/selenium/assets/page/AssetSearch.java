@@ -69,7 +69,7 @@ public class AssetSearch {
 	public void assertAssetsPage() {
 		misc.checkForErrorMessages("verifyAssetsPage");
 		if(!selenium.isElementPresent(productSearchPageHeaderLocator)) {
-			fail("Could not find the header for 'Product Search'.");
+			fail("Could not find the header for 'Asset Search'.");
 		}
 	}
 	
@@ -167,7 +167,7 @@ public class AssetSearch {
 			if(misc.isOptionPresent(productStatusSelectListLocator, asc.getProductStatus())) {
 				selenium.select(productStatusSelectListLocator, asc.getProductStatus());
 			} else {
-				fail("Could not find the product status '" + asc.getProductStatus() + "'");
+				fail("Could not find the asset status '" + asc.getProductStatus() + "'");
 			}
 		}
 		
@@ -176,7 +176,7 @@ public class AssetSearch {
 				selenium.select(productTypeGroupSelectListLocator, asc.getProductTypeGroup());
 				search.waitForDisplayColumnsToUpdate(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
-				fail("Could not find the product type group '" + asc.getProductTypeGroup() + "'");
+				fail("Could not find the asset type group '" + asc.getProductTypeGroup() + "'");
 			}
 		}
 		
@@ -185,7 +185,7 @@ public class AssetSearch {
 				selenium.select(productTypeSelectListLocator, asc.getProductType());
 				search.waitForDisplayColumnsToUpdate(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
-				fail("Could not find the product type  '" + asc.getProductType() + "'");
+				fail("Could not find the asset type  '" + asc.getProductType() + "'");
 			}
 		}
 		
@@ -251,7 +251,7 @@ public class AssetSearch {
 			selenium.click(runButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
-			fail("Could not find the Run button for Product Search");
+			fail("Could not find the Run button for Asset Search");
 		}
 	}
 

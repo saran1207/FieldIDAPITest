@@ -6,13 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.builders.ProductBuilder;
+import com.n4systems.model.builders.AssetBuilder;
 public class ProductTest {
 
-	Product product;
+	Asset asset;
 	@Before
 	public void setUp() throws Exception {
-		product = new Product();
+		asset = new Asset();
 	}
 
 	@After
@@ -22,90 +22,90 @@ public class ProductTest {
 	@Test
 	public void testArchiveSerialNumber() {
 		String serialNumber = "my-good-serial-number";
-		product.setSerialNumber( serialNumber );
+		asset.setSerialNumber( serialNumber );
 		
-		product.archiveSerialNumber();
+		asset.archiveSerialNumber();
 		
-		assertEquals( serialNumber, product.getArchivedSerialNumber() );
-		assertNotSame( serialNumber, product.getSerialNumber() );
-		assertNotNull( product.getSerialNumber() );	
+		assertEquals( serialNumber, asset.getArchivedSerialNumber() );
+		assertNotSame( serialNumber, asset.getSerialNumber() );
+		assertNotNull( asset.getSerialNumber() );
 	}
 	
 	@Test
 	public void network_id_set_from_linked_product_on_create() {
-		product.setLinkedProduct(ProductBuilder.aProduct().build());
-		product.onCreate();
+		asset.setLinkedAsset(AssetBuilder.anAsset().build());
+		asset.onCreate();
 		
-		assertEquals(product.getLinkedProduct().getNetworkId(), product.getNetworkId());		
+		assertEquals(asset.getLinkedAsset().getNetworkId(), asset.getNetworkId());
 	}
 	
 	@Test
 	public void network_id_set_from_linked_product_on_update() {
-		product.setLinkedProduct(ProductBuilder.aProduct().build());
-		product.onUpdate();
+		asset.setLinkedAsset(AssetBuilder.anAsset().build());
+		asset.onUpdate();
 		
-		assertEquals(product.getLinkedProduct().getNetworkId(), product.getNetworkId());		
+		assertEquals(asset.getLinkedAsset().getNetworkId(), asset.getNetworkId());
 	}
 	
 	@Test
 	public void network_id_set_to_own_id_on_create_when_no_linked_product() {
-		product.setId(1L);
-		product.onCreate();
+		asset.setId(1L);
+		asset.onCreate();
 		
-		assertEquals(product.getId(), product.getNetworkId());		
+		assertEquals(asset.getId(), asset.getNetworkId());
 	}
 	
 	@Test
 	public void network_id_set_to_own_id_on_update_when_no_linked_product() {
-		product.setId(1L);
-		product.onUpdate();
+		asset.setId(1L);
+		asset.onUpdate();
 		
-		assertEquals(product.getId(), product.getNetworkId());		
+		assertEquals(asset.getId(), asset.getNetworkId());
 	}
 	
 	@Test
 	public void last_linked_id_synchronizes_on_load() {
-		product.setLinkedProduct(ProductBuilder.aProduct().build());
+		asset.setLinkedAsset(AssetBuilder.anAsset().build());
 		
-		assertTrue(product.linkedProductHasChanged());
+		assertTrue(asset.linkedAssetHasChanged());
 		
-		product.onLoad();
+		asset.onLoad();
 		
-		assertFalse(product.linkedProductHasChanged());
+		assertFalse(asset.linkedAssetHasChanged());
 	}
 	
 	@Test
 	public void last_linked_id_synchronizes_on_create() {
-		product.setLinkedProduct(ProductBuilder.aProduct().build());
+		asset.setLinkedAsset(AssetBuilder.anAsset().build());
 		
-		assertTrue(product.linkedProductHasChanged());
+		assertTrue(asset.linkedAssetHasChanged());
 		
-		product.onCreate();
+		asset.onCreate();
 		
-		assertFalse(product.linkedProductHasChanged());
+		assertFalse(asset.linkedAssetHasChanged());
 	}
 	
 	@Test
 	public void last_linked_id_synchronizes_on_update() {
-		product.setLinkedProduct(ProductBuilder.aProduct().build());
+		asset.setLinkedAsset(AssetBuilder.anAsset().build());
 		
-		assertTrue(product.linkedProductHasChanged());
+		assertTrue(asset.linkedAssetHasChanged());
 		
-		product.onUpdate();
+		asset.onUpdate();
 		
-		assertFalse(product.linkedProductHasChanged());
+		assertFalse(asset.linkedAssetHasChanged());
 	}
 	
 	@Test
 	public void linked_id_can_get_nulled() {
-		product.setLinkedProduct(ProductBuilder.aProduct().build());
-		product.onLoad();
+		asset.setLinkedAsset(AssetBuilder.anAsset().build());
+		asset.onLoad();
 		
-		assertFalse(product.linkedProductHasChanged());
+		assertFalse(asset.linkedAssetHasChanged());
 		
-		product.setLinkedProduct(null);
+		asset.setLinkedAsset(null);
 		
-		assertTrue(product.linkedProductHasChanged());
+		assertTrue(asset.linkedAssetHasChanged());
 	}
 	
 	

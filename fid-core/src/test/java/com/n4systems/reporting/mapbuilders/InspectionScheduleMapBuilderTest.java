@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.builders.InspectionTypeBuilder;
-import com.n4systems.model.builders.ProductBuilder;
+import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.inspectionschedule.NextInspectionScheduleLoader;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.testutils.DummyTransaction;
@@ -26,7 +26,7 @@ public class InspectionScheduleMapBuilderTest {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 		
 		Inspection inspection = new Inspection();
-		inspection.setProduct(ProductBuilder.aProduct().build());
+		inspection.setAsset(AssetBuilder.anAsset().build());
 		inspection.setType(InspectionTypeBuilder.anInspectionType().build());
 		
 		final InspectionSchedule schedule = new InspectionSchedule();

@@ -1,8 +1,8 @@
 <#if !namespace?exists><#assign namespace="/"/></#if>
 <div id="results">
 
-<#if products?exists >
-	<#if !products.isEmpty() >
+<#if assets?exists >
+	<#if !assets.isEmpty() >
 		<h2 class="clean"><@s.text name="label.found_multiple_assets"/></h2>
 		<div id="resultsTable">
 			<table class="list">
@@ -15,15 +15,15 @@
 					<th><@s.text name="label.identified"/></th>
 					<th><@s.text name="label.reference_number"/></th>
 				</tr>
-				<#list products as product >
+				<#list assets as asset >
 					<tr>
-						<td class="selectAction"><button class="productLink" productId="${product.id}"><@s.text name="label.select"/></button></td>
-						<td>${product.serialNumber?html}</td>
-						<td>${(product.rfidNumber?html)!}</td>
-						<td>${(product.owner.name?html)!}</td>
-						<td>${product.type.name?html}</td>
-						<td>${action.formatDate(product.identified, false)}</td>
-						<td>${(product.customerRefNumber?html)!}</td>	
+						<td class="selectAction"><button class="productLink" assetId="${asset.id}"><@s.text name="label.select"/></button></td>
+						<td>${asset.serialNumber?html}</td>
+						<td>${(asset.rfidNumber?html)!}</td>
+						<td>${(asset.owner.name?html)!}</td>
+						<td>${asset.type.name?html}</td>
+						<td>${action.formatDate(asset.identified, false)}</td>
+						<td>${(asset.customerRefNumber?html)!}</td>
 					</tr>
 					
 				</#list>
@@ -40,13 +40,13 @@
 </#if>
 
 </div>
-<#if products?exists >
-	<#list products as product >
+<#if assets?exists >
+	<#list assets as asset >
 		<@n4.includeScript>
 			var asset = null;
-			<#assign asset=product/>
+			<#assign asset=asset/>
 			<#include "/templates/html/productCrud/_js_product.ftl"/>
-			$$("[productId='${product.id}']").first().asset = asset;
+			$$("[assetId='${asset.id}']").first().asset = asset;
 		</@n4.includeScript>
 	</#list>
 </#if>

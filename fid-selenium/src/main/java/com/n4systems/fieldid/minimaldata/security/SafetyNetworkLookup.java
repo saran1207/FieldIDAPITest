@@ -154,7 +154,7 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 	}
 
 	private void assertProductFound(String serialNumber) {
-		assertTrue("Product could not be found, Serial Number is not in the title", selenium.isElementPresent("css=h1:contains('"+ serialNumber + "')"));
+		assertTrue("Asset could not be found, Serial Number is not in the title", selenium.isElementPresent("css=h1:contains('"+ serialNumber + "')"));
 	}
 	
 }

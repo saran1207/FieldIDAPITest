@@ -1,6 +1,6 @@
 <#-- /templates/ahtml/registerAsset also contains a version of this template -->
 <#if !fieldPrefix?exists>
-	<#assign fieldPrefix= 'product' />
+	<#assign fieldPrefix= 'asset' />
 </#if>
 <#if !useAutoAttributes?exists>
 	<#assign useAutoAttributes=true />
@@ -9,7 +9,7 @@
 	<#assign autoAttributeInputFields=autoAttributeCriteria.inputs />
 </#if>
 <#if !prefix?exists>
-	<#assign prefix= 'product' />
+	<#assign prefix= 'asset' />
 </#if>
 <#if !requires?exists>
 	<#assign requires=true>

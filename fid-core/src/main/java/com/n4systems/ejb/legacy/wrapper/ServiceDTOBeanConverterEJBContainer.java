@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.ProductStatusBean;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetTypeGroup;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
@@ -19,9 +21,7 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.orgs.BaseOrg;
@@ -63,11 +63,11 @@ public class ServiceDTOBeanConverterEJBContainer extends EJBTransactionEmulator<
 		return new ServiceDTOBeanConverterImpl(em);
 	}
 
-	public ProductTypeServiceDTO convert_new(ProductType productType) {
+	public ProductTypeServiceDTO convert_new(AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert_new(productType);
+			return createManager(transaction.getEntityManager()).convert_new(assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -303,11 +303,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductServiceDTO convert(Product product) {
+	public ProductServiceDTO convert(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(product);
+			return createManager(transaction.getEntityManager()).convert(asset);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -318,7 +318,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Product convert(ProductServiceDTO productServiceDTO, Product targetProduct, long tenantId) {
+	public Asset convert(ProductServiceDTO productServiceDTO, Asset targetProduct, long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -333,11 +333,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductStatusServiceDTO convert(ProductStatusBean productStatus) {
+	public ProductStatusServiceDTO convert(AssetStatus assetStatus) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(productStatus);
+			return createManager(transaction.getEntityManager()).convert(assetStatus);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -348,11 +348,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductTypeGroupServiceDTO convert(ProductTypeGroup productTypeGroup) {
+	public ProductTypeGroupServiceDTO convert(AssetTypeGroup assetTypeGroup) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(productTypeGroup);
+			return createManager(transaction.getEntityManager()).convert(assetTypeGroup);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

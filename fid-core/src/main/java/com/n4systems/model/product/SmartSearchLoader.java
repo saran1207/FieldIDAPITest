@@ -4,12 +4,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class SmartSearchLoader extends ListLoader<Product> {
+public class SmartSearchLoader extends ListLoader<Asset> {
 
 	private String searchText;
 	private boolean useSerialNumber = true;
@@ -20,8 +20,8 @@ public class SmartSearchLoader extends ListLoader<Product> {
 		super(filter);
 	}
 
-	protected QueryBuilder<Product> createQuery(SecurityFilter filter) {
-		QueryBuilder<Product> builder = new QueryBuilder<Product>(Product.class, filter);
+	protected QueryBuilder<Asset> createQuery(SecurityFilter filter) {
+		QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, filter);
 		builder.addWhere(new SmartSearchWhereClause(searchText, useSerialNumber, useRfidNumber, useRefNumber));
 		builder.addOrder("created");
 		
@@ -41,9 +41,9 @@ public class SmartSearchLoader extends ListLoader<Product> {
 	}
 
 	@Override
-	public List<Product> load(EntityManager em, SecurityFilter filter) {
-		List<Product> products = createQuery(filter).getResultList(em);
-		return products;
+	public List<Asset> load(EntityManager em, SecurityFilter filter) {
+		List<Asset> assets = createQuery(filter).getResultList(em);
+		return assets;
 	}
 
 	public SmartSearchLoader setSearchText(String searchText) {

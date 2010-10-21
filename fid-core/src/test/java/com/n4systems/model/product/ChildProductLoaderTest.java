@@ -1,6 +1,6 @@
 package com.n4systems.model.product;
 
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -8,10 +8,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.Product;
 import com.n4systems.testutils.DummyEntityManager;
 
 public class ChildProductLoaderTest {
@@ -70,43 +70,43 @@ public class ChildProductLoaderTest {
 		}
 	}
 	
-	private Tree<Product> tree;
+	private Tree<Asset> tree;
 	
 	@Before
 	public void createProductTree() {
-		tree = new Tree<Product>(aProduct().build());
+		tree = new Tree<Asset>(anAsset().build());
 		
-		tree.add(new Tree<Product>(aProduct().withSerialNumber("0").build()));
-		tree.add(new Tree<Product>(aProduct().withSerialNumber("1").build()));
-		tree.add(new Tree<Product>(aProduct().withSerialNumber("2").build()));
+		tree.add(new Tree<Asset>(anAsset().withSerialNumber("0").build()));
+		tree.add(new Tree<Asset>(anAsset().withSerialNumber("1").build()));
+		tree.add(new Tree<Asset>(anAsset().withSerialNumber("2").build()));
 		
-		tree.get(0).add(new Tree<Product>(aProduct().withSerialNumber("3").build()));
-		tree.get(0).add(new Tree<Product>(aProduct().withSerialNumber("4").build()));
-		tree.get(0).add(new Tree<Product>(aProduct().withSerialNumber("5").build()));
+		tree.get(0).add(new Tree<Asset>(anAsset().withSerialNumber("3").build()));
+		tree.get(0).add(new Tree<Asset>(anAsset().withSerialNumber("4").build()));
+		tree.get(0).add(new Tree<Asset>(anAsset().withSerialNumber("5").build()));
 		
-		tree.get(1).add(new Tree<Product>(aProduct().withSerialNumber("6").build()));
+		tree.get(1).add(new Tree<Asset>(anAsset().withSerialNumber("6").build()));
 		
-		tree.get(1).get(0).add(new Tree<Product>(aProduct().withSerialNumber("7").build()));
+		tree.get(1).get(0).add(new Tree<Asset>(anAsset().withSerialNumber("7").build()));
 		
-		tree.get(2).add(new Tree<Product>(aProduct().withSerialNumber("8").build()));
-		tree.get(2).add(new Tree<Product>(aProduct().withSerialNumber("9").build()));
+		tree.get(2).add(new Tree<Asset>(anAsset().withSerialNumber("8").build()));
+		tree.get(2).add(new Tree<Asset>(anAsset().withSerialNumber("9").build()));
 	}
 	
 	@Test
 	public void load_child_tree_loads_all_children() {
 		LinkedChildProductLoader childProdLoader = new LinkedChildProductLoader() {
-			protected List<Product> load(EntityManager em) {
-				Tree<Product> products = tree.find(product);
-				return products.values();
+			protected List<Asset> load(EntityManager em) {
+				Tree<Asset> assets = tree.find(asset);
+				return assets.values();
 			}
 		};
 		
 		RecursiveLinkedChildProductLoader loader = new RecursiveLinkedChildProductLoader(childProdLoader);
 		
-		List<Product> products = loader.setProduct(tree.getValue()).load(new DummyEntityManager());
+		List<Asset> assets = loader.setProduct(tree.getValue()).load(new DummyEntityManager());
 		
 		for (int i = 0; i < 10; i++) {
-			assertEquals(String.valueOf(i), products.get(i).getSerialNumber());
+			assertEquals(String.valueOf(i), assets.get(i).getSerialNumber());
 		}
 	}
 	

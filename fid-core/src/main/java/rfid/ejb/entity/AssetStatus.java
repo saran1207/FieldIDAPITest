@@ -8,7 +8,7 @@ import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 
 @Entity
 @Table(name = "ProductStatus")
-public class ProductStatusBean extends LegacyBeanTenantWithCreateModifyDate implements Saveable {
+public class AssetStatus extends LegacyBeanTenantWithCreateModifyDate implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;

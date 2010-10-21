@@ -7,25 +7,25 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductCodeMappingBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
-import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
 
 
-public class ProductCodeMappingManager implements ProductCodeMapping {
-	private Logger logger = Logger.getLogger(ProductCodeMapping.class);
+public class ProductCodeMappingManager implements AssetCodeMappingService {
+	private Logger logger = Logger.getLogger(AssetCodeMappingService.class);
 	
 	
 	private EntityManager em;
@@ -40,55 +40,55 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 
 	
 	@SuppressWarnings("unchecked")
-	public List<ProductCodeMappingBean> getAllProductCodesByTenant( Long r_manufacturer ) {
-		Query q = em.createQuery("from ProductCodeMappingBean as pcm where pcm.tenant.id = :manufacturer ORDER BY productCode ");
+	public List<AssetCodeMapping> getAllProductCodesByTenant( Long r_manufacturer ) {
+		Query q = em.createQuery("from "+AssetCodeMapping.class.getName()+" as pcm where pcm.tenant.id = :manufacturer ORDER BY assetCode ");
 		q.setParameter( "manufacturer", r_manufacturer );
 		return q.getResultList();
 	}
 	
-	public ProductCodeMappingBean getProductCodeByProductCodeAndTenant(String productCode, Long tenantId ) {
-		Query q = em.createQuery("SELECT DISTINCT pcm from ProductCodeMappingBean as pcm left join fetch pcm.productInfo as pi left join fetch pi.infoFields where pcm.tenant.id = :manufacturer AND pcm.productCode = :productCode ");
-		q.setParameter( "productCode", productCode );
+	public AssetCodeMapping getProductCodeByProductCodeAndTenant(String assetCode, Long tenantId ) {
+		Query q = em.createQuery("SELECT DISTINCT pcm from "+AssetCodeMapping.class.getName()+" as pcm left join fetch pcm.assetInfo as pi left join fetch pi.infoFields where pcm.tenant.id = :manufacturer AND pcm.assetCode = :assetCode ");
+		q.setParameter( "assetCode", assetCode);
 		q.setParameter( "manufacturer", tenantId );
 		
-		QueryBuilder<ProductCodeMappingBean> builder = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class, new OpenSecurityFilter());
-		builder.addSimpleWhere("productCode", productCode);
+		QueryBuilder<AssetCodeMapping> builder = new QueryBuilder<AssetCodeMapping>(AssetCodeMapping.class, new OpenSecurityFilter());
+		builder.addSimpleWhere("assetCode", assetCode);
 		builder.addSimpleWhere("tenant.id", tenantId);
 		
-		ProductCodeMappingBean productMapping = null;
+		AssetCodeMapping assetMapping = null;
 		try {
-			productMapping = persistenceManager.find(builder);
+			assetMapping = persistenceManager.find(builder);
 		} catch(InvalidQueryException e) {
-			logger.error("Failed loading ProductCodeMappingBean", e);
+			logger.error("Failed loading AssetCodeMapping", e);
 		}
 		
-		// if we were unable to find a product code mapping, return the default
-		if(productMapping == null) {
-			productMapping = getDefaultMapping(tenantId);
+		// if we were unable to find a asset code mapping, return the default
+		if(assetMapping == null) {
+			assetMapping = getDefaultMapping(tenantId);
 		}
 		
-		return productMapping;
+		return assetMapping;
 	}
 	
-	private ProductCodeMappingBean getDefaultMapping(Long tenantId) {
-		ProductCodeMappingBean defaultMapping = new ProductCodeMappingBean();
-		defaultMapping.setProductInfo(defaultProductType(tenantId));
+	private AssetCodeMapping getDefaultMapping(Long tenantId) {
+		AssetCodeMapping defaultMapping = new AssetCodeMapping();
+		defaultMapping.setAssetInfo(defaultProductType(tenantId));
 		return defaultMapping;
 	}
 	
-	private ProductType defaultProductType( Long tenantId ) {
-		// find the default product type name for this tenant
+	private AssetType defaultProductType( Long tenantId ) {
+		// find the default asset type name for this tenant
 		String defaultTypeName = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, tenantId);
 		
-		QueryBuilder<ProductType> builder = new QueryBuilder<ProductType>(ProductType.class, new OpenSecurityFilter());
+		QueryBuilder<AssetType> builder = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("tenant.id", tenantId);
 		builder.addSimpleWhere("name", defaultTypeName);
 		
-		ProductType type = null;
+		AssetType type = null;
 		try {
 			type = persistenceManager.find(builder);
 		} catch(InvalidQueryException e) {
-			logger.error("Failed finding default ProductType", e);
+			logger.error("Failed finding default AssetType", e);
 		}
 		
 		return type;
@@ -96,13 +96,13 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 
 
 	
-	public ProductCodeMappingBean getProductCodeByUniqueIdAndTenant( Long id, Long manufacturer ) {
-		Query q = em.createQuery("SELECT DISTINCT pcm from ProductCodeMappingBean as pcm left join fetch pcm.productInfo as pi left join fetch pi.infoFields where pcm.tenant.id = :manufacturer AND pcm.uniqueID = :uniqueID ");
+	public AssetCodeMapping getProductCodeByUniqueIdAndTenant( Long id, Long manufacturer ) {
+		Query q = em.createQuery("SELECT DISTINCT pcm from "+AssetCodeMapping.class.getName()+" as pcm left join fetch pcm.assetInfo as pi left join fetch pi.infoFields where pcm.tenant.id = :manufacturer AND pcm.uniqueID = :uniqueID ");
 		q.setParameter( "uniqueID", id );
 		q.setParameter( "manufacturer", manufacturer );
-		ProductCodeMappingBean bean = null;
+		AssetCodeMapping bean = null;
 		try {
-			bean = (ProductCodeMappingBean)q.getSingleResult();
+			bean = (AssetCodeMapping)q.getSingleResult();
 			
 		} catch( NoResultException e ) {
 			// productCode doesn't exist for this tenant return null
@@ -111,17 +111,17 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 		
 	}
 	
-	public void update(ProductCodeMappingBean productCodeMapping) {
-		em.merge( productCodeMapping );
+	public void update(AssetCodeMapping assetCodeMapping) {
+		em.merge(assetCodeMapping);
 	}
 
 	
 	public void deleteByIdAndTenant(Long uniqueID, Long r_manufacturer ) {
-		Query q = em.createQuery("from ProductCodeMappingBean as pcm where pcm.tenant.id = :manufacturer AND pcm.uniqueID = :uniqueID ");
+		Query q = em.createQuery("from "+AssetCodeMapping.class.getName()+" as pcm where pcm.tenant.id = :manufacturer AND pcm.uniqueID = :uniqueID ");
 		q.setParameter( "uniqueID", uniqueID );
 		q.setParameter( "manufacturer", r_manufacturer );
 		try { 
-			ProductCodeMappingBean bean = (ProductCodeMappingBean)q.getSingleResult();
+			AssetCodeMapping bean = (AssetCodeMapping)q.getSingleResult();
 			em.remove( bean );
 		} catch( NoResultException e ) {
 			// do nothing if the bean isn't found technically it isn't in the database.
@@ -131,30 +131,30 @@ public class ProductCodeMappingManager implements ProductCodeMapping {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void clearRetiredInfoFields( ProductType productType ) {
+	public void clearRetiredInfoFields( AssetType assetType) {
 		List<Long> retiredFields = new ArrayList<Long>();
 		
-		for (InfoFieldBean infoField : productType.getInfoFields() ) {
+		for (InfoFieldBean infoField : assetType.getInfoFields() ) {
 			if( infoField.isRetired() ) {
 				retiredFields.add( infoField.getUniqueID() );
 			}
 		}
 		
 		if( ! retiredFields.isEmpty() ) {
-			Query q = em.createQuery("from ProductCodeMappingBean as pcm where pcm.productInfo.id = :productTypeId ");
-			q.setParameter( "productTypeId", productType.getId() );
+			Query q = em.createQuery("from "+AssetCodeMapping.class.getName()+" as pcm where pcm.assetInfo.id = :assetTypeId ");
+			q.setParameter( "assetTypeId", assetType.getId() );
 			
-			List<ProductCodeMappingBean> beans = (List<ProductCodeMappingBean>)q.getResultList();
+			List<AssetCodeMapping> beans = (List<AssetCodeMapping>)q.getResultList();
 
-			for (ProductCodeMappingBean productCodeMappingBean : beans) {
+			for (AssetCodeMapping assetCodeMapping : beans) {
 				List<InfoOptionBean> removedInfoOption = new ArrayList<InfoOptionBean>();
-				for (InfoOptionBean infoOption : productCodeMappingBean.getInfoOptions() ) {
+				for (InfoOptionBean infoOption : assetCodeMapping.getInfoOptions() ) {
 					if( retiredFields.contains( infoOption.getInfoField().getUniqueID() ) ) {
 						removedInfoOption.add( infoOption );
 					}
 				}
-				productCodeMappingBean.getInfoOptions().removeAll( removedInfoOption );
-				update( productCodeMappingBean );
+				assetCodeMapping.getInfoOptions().removeAll( removedInfoOption );
+				update(assetCodeMapping);
 			}
 		}
 	}

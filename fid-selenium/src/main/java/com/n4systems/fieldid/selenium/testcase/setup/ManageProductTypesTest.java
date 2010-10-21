@@ -31,7 +31,7 @@ public class ManageProductTypesTest extends ManageProductTypesTestCase {
 		page.saveProductType();
 		List<String> errors = page.getFormErrorMessages();
 		assertEquals(1, errors.size());
-		assertEquals("Product Type name is required.", errors.get(0));
+		assertEquals("Asset Type name is required.", errors.get(0));
 	}
 	
 	@Test
@@ -39,7 +39,7 @@ public class ManageProductTypesTest extends ManageProductTypesTestCase {
 		addTestProductType();
 		page.clickCopyProductType(TEST_PRODUCT_TYPE_NAME);
 		
-		assertEquals("Copied product name should be blank in form", "", page.getEditName());
+		assertEquals("Copied asset name should be blank in form", "", page.getEditName());
 		assertEquals(TEST_PRODUCT_TYPE_WARNINGS, page.getEditWarnings());
 		assertEquals(TEST_PRODUCT_TYPE_INSTRUCTIONS, page.getEditInstructions());
 		assertEquals(TEST_PRODUCT_TYPE_CAUTIONS_URL, page.getEditCautionsUrl());

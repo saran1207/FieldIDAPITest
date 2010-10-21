@@ -5,11 +5,13 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.n4systems.model.AssetType;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -21,7 +23,8 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	private static final long serialVersionUID = 1L;
 
 	@OneToMany(fetch=FetchType.LAZY)
-	private Set<ProductType> publishedProductTypes = new HashSet<ProductType>();
+    @JoinTable(name="catalogs_producttypes", joinColumns = @JoinColumn(name="catalogs_id"), inverseJoinColumns = @JoinColumn(name="publishedproducttypes_id"))
+	private Set<AssetType> publishedAssetTypes = new HashSet<AssetType>();
 	
 	@OneToMany(fetch=FetchType.LAZY)
 	private Set<InspectionType> publishedInspectionTypes = new HashSet<InspectionType>();
@@ -34,12 +37,12 @@ public class Catalog extends EntityWithTenant implements Saveable{
 		super(tenant);
 	}
 
-	public Set<ProductType> getPublishedProductTypes() {
-		return publishedProductTypes;
+	public Set<AssetType> getPublishedProductTypes() {
+		return publishedAssetTypes;
 	}
 
-	public void setPublishedProductTypes(Set<ProductType> publishedProductTypes) {
-		this.publishedProductTypes = publishedProductTypes;
+	public void setPublishedProductTypes(Set<AssetType> publishedAssetTypes) {
+		this.publishedAssetTypes = publishedAssetTypes;
 	}
 
 	public Set<InspectionType> getPublishedInspectionTypes() {
@@ -51,6 +54,6 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	}
 
 	public boolean hasTypesPublished() {
-		return (!publishedInspectionTypes.isEmpty() || !publishedProductTypes.isEmpty());
+		return (!publishedInspectionTypes.isEmpty() || !publishedAssetTypes.isEmpty());
 	}
 }

@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -16,7 +17,6 @@ import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Page;
@@ -53,9 +53,9 @@ public class AutoAttributeManagerImpl implements AutoAttributeManager {
 
 	}
 
-	public AutoAttributeDefinition findTemplateToApply(ProductType productType, Collection<InfoOptionBean> selectedInfoOptions) {
-		// make sure the product type is attached.
-		ProductType pt = em.find(ProductType.class, productType.getId());
+	public AutoAttributeDefinition findTemplateToApply(AssetType assetType, Collection<InfoOptionBean> selectedInfoOptions) {
+		// make sure the asset type is attached.
+		AssetType pt = em.find(AssetType.class, assetType.getId());
 		return findTemplateToApply(pt.getAutoAttributeCriteria(), selectedInfoOptions);
 	}
 
@@ -126,17 +126,17 @@ public class AutoAttributeManagerImpl implements AutoAttributeManager {
 		em.merge(criteria);
 	}
 
-	public void clearRetiredInfoFields(ProductType productType) {
+	public void clearRetiredInfoFields(AssetType assetType) {
 		List<InfoFieldBean> retiredFields = new ArrayList<InfoFieldBean>();
 
-		for (InfoFieldBean infoField : productType.getInfoFields()) {
+		for (InfoFieldBean infoField : assetType.getInfoFields()) {
 			if (infoField.isRetired()) {
 				retiredFields.add(infoField);
 			}
 		}
 
 		for (InfoFieldBean field : retiredFields) {
-			AutoAttributeCriteria criteria = criteriaUses(productType, field);
+			AutoAttributeCriteria criteria = criteriaUses(assetType, field);
 			if (criteria != null) {
 				em.remove(criteria);
 				return;
@@ -146,9 +146,9 @@ public class AutoAttributeManagerImpl implements AutoAttributeManager {
 
 	}
 
-	private AutoAttributeCriteria criteriaUses(ProductType productType, InfoFieldBean field) {
-		if (productType.getAutoAttributeCriteria() != null) {
-			AutoAttributeCriteria criteria = em.find(AutoAttributeCriteria.class, productType.getAutoAttributeCriteria().getId());
+	private AutoAttributeCriteria criteriaUses(AssetType assetType, InfoFieldBean field) {
+		if (assetType.getAutoAttributeCriteria() != null) {
+			AutoAttributeCriteria criteria = em.find(AutoAttributeCriteria.class, assetType.getAutoAttributeCriteria().getId());
 			if (criteria.getInputs().contains(field) || criteria.getOutputs().contains(field)) {
 				return criteria;
 			}

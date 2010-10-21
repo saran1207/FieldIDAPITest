@@ -46,7 +46,7 @@
 	autoSuggestUrl = '<@s.url action="autoSuggestSchedule" namespace="/ajax" />';
 	dateErrorText = '<@s.text name="error.mustbeadate"/>';
 	inspectionTypeId = '${type!0}';
-	productId = '${productId!0}';
+	assetId = '${assetId!0}';
 	
 	onDocumentLoad(scheduleListUpdated);
 </@n4.includeScript>

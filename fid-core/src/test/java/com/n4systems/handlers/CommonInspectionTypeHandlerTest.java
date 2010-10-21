@@ -9,14 +9,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.AssetType;
+import com.n4systems.model.builders.AssetTypeBuilder;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.builders.InspectionTypeBuilder;
-import com.n4systems.model.builders.ProductTypeBuilder;
 import com.n4systems.model.inspectiontype.CommonProductTypeLoader;
 import com.n4systems.persistence.Transaction;
 
@@ -25,24 +25,24 @@ public class CommonInspectionTypeHandlerTest {
 	private static final Set<InspectionType> EMPTY_INSPECTION_TYPE_SET = new HashSet<InspectionType>();
 
 	private class CommonProductTypeIdLoaderTestDouble implements CommonProductTypeLoader {
-		List<ProductType> productTypes;
+		List<AssetType> assetTypes;
 		
 		public CommonProductTypeIdLoaderTestDouble() {
-			this(new ArrayList<ProductType>());
+			this(new ArrayList<AssetType>());
 		}
-		public CommonProductTypeIdLoaderTestDouble(List<ProductType> productTypes) {
+		public CommonProductTypeIdLoaderTestDouble(List<AssetType> assetTypes) {
 			super();
-			this.productTypes = productTypes;
+			this.assetTypes = assetTypes;
 		}
 
 		@Override
-		public List<ProductType> load(Transaction transaction) {
-			return productTypes;
+		public List<AssetType> load(Transaction transaction) {
+			return assetTypes;
 		}
 
 		@Override
-		public List<ProductType> load() {
-			return productTypes;
+		public List<AssetType> load() {
+			return assetTypes;
 		}
 
 		@Override
@@ -57,7 +57,7 @@ public class CommonInspectionTypeHandlerTest {
 
 		CommonProductTypeLoader productTypeIdLoader = createMock(CommonProductTypeLoader.class);
 		expect(productTypeIdLoader.forAssets(assetIds)).andReturn(productTypeIdLoader);
-		expect(productTypeIdLoader.load()).andReturn(new ArrayList<ProductType>());
+		expect(productTypeIdLoader.load()).andReturn(new ArrayList<AssetType>());
 		replay(productTypeIdLoader);
 
 		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(productTypeIdLoader);
@@ -88,9 +88,9 @@ public class CommonInspectionTypeHandlerTest {
 	@Test
 	public void should_return_an_empty_list_of_inspection_types_when_there_is_one_product_type_with_no_associated_inspection_types() throws Exception {
 
-		ProductType productType = ProductTypeBuilder.aProductType().build();
+		AssetType assetType = AssetTypeBuilder.anAssetType().build();
 
-		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(ImmutableList.of(productType)));
+		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(ImmutableList.of(assetType)));
 		
 		Set<InspectionType> returnSet = sut.findCommonInspectionTypesFor(ImmutableList.of(1L));
 
@@ -103,9 +103,9 @@ public class CommonInspectionTypeHandlerTest {
 
 		InspectionType inspectionType = InspectionTypeBuilder.anInspectionType().build();
 		InspectionType inspectionType2 = InspectionTypeBuilder.anInspectionType().build();
-		ProductType productType = ProductTypeBuilder.aProductType().withInspectionTypes(inspectionType, inspectionType2).build();
+		AssetType assetType = AssetTypeBuilder.anAssetType().withInspectionTypes(inspectionType, inspectionType2).build();
 
-		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(ImmutableList.of(productType)));
+		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(ImmutableList.of(assetType)));
 		Set<InspectionType> returnSet = sut.findCommonInspectionTypesFor(ImmutableList.of(1L));
 
 		Set<InspectionType> expectedInspectionList = ImmutableSet.of(inspectionType, inspectionType2);
@@ -118,10 +118,10 @@ public class CommonInspectionTypeHandlerTest {
 
 		InspectionType inspectionType = InspectionTypeBuilder.anInspectionType().build();
 		InspectionType inspectionType2 = InspectionTypeBuilder.anInspectionType().build();
-		ProductType productType = ProductTypeBuilder.aProductType().withInspectionTypes(inspectionType, inspectionType2).build();
-		ProductType productType2 = ProductTypeBuilder.aProductType().withInspectionTypes(inspectionType).build();
+		AssetType assetType = AssetTypeBuilder.anAssetType().withInspectionTypes(inspectionType, inspectionType2).build();
+		AssetType assetType2 = AssetTypeBuilder.anAssetType().withInspectionTypes(inspectionType).build();
 
-		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(ImmutableList.of(productType, productType2)));
+		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(ImmutableList.of(assetType, assetType2)));
 		Set<InspectionType> returnSet = sut.findCommonInspectionTypesFor(ImmutableList.of(1L));
 
 		Set<InspectionType> expectedInspectionList = ImmutableSet.of(inspectionType);
@@ -134,10 +134,10 @@ public class CommonInspectionTypeHandlerTest {
 
 		InspectionType inspectionType = InspectionTypeBuilder.anInspectionType().build();
 		InspectionType inspectionType2 = InspectionTypeBuilder.anInspectionType().build();
-		ProductType productType = ProductTypeBuilder.aProductType().withInspectionTypes(inspectionType).build();
-		ProductType productType2 = ProductTypeBuilder.aProductType().withInspectionTypes(inspectionType2).build();
+		AssetType assetType = AssetTypeBuilder.anAssetType().withInspectionTypes(inspectionType).build();
+		AssetType assetType2 = AssetTypeBuilder.anAssetType().withInspectionTypes(inspectionType2).build();
 
-		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(ImmutableList.of(productType, productType2)));
+		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(ImmutableList.of(assetType, assetType2)));
 		Set<InspectionType> returnSet = sut.findCommonInspectionTypesFor(ImmutableList.of(1L));
 
 		assertThat(returnSet, equalTo(EMPTY_INSPECTION_TYPE_SET));
@@ -146,7 +146,7 @@ public class CommonInspectionTypeHandlerTest {
 
 	@Test
 	public void should_return_empty_set_given_no_product_types() {
-		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(new ArrayList<ProductType>()));
+		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(new ArrayList<AssetType>()));
 		
 		Set<InspectionType> returnSet = sut.findCommonInspectionTypesFor(ImmutableList.of(1L));
 

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
@@ -23,7 +23,7 @@ import com.n4systems.handlers.CommonInspectionTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonInspectionTypeHandler;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.inspectiontype.CommonProductTypeDatabaseLoader;
 import com.n4systems.model.orgs.BaseOrg;
@@ -47,12 +47,12 @@ public class MultiInspectAction extends AbstractCrud {
 	private Inspection inspection;
 	
 	private final InspectionFormHelper inspectionFormHelper;
-	private List<Product> assets;
+	private List<Asset> assets;
 
 	private UserManager userManager;
 	private List<ListingPair> examiners;
 	private List<Listable<Long>> commentTemplates;
-	private List<ProductStatusBean> productStatuses;
+	private List<AssetStatus> assetStatuses;
 	private CommonInspectionTypeHandler commonInspectionTypeHandler;
 	private CommonAssetValues commonAssetValues;
 	private InspectionWebModel modifiableInspection;
@@ -151,12 +151,12 @@ public class MultiInspectAction extends AbstractCrud {
 		return inspectionType;
 	}
 
-	public List<Product> getAssets() {
+	public List<Asset> getAssets() {
 		if (assets == null) {
 			if (!assetIds.isEmpty()) {
-				assets = persistenceManager.findAll(new QueryBuilder<Product>(Product.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds));
+				assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds));
 			} else {
-				assets = new ArrayList<Product>();
+				assets = new ArrayList<Asset>();
 			}
 		}
 				
@@ -193,11 +193,11 @@ public class MultiInspectAction extends AbstractCrud {
 		return commentTemplates;
 	}
 
-	public List<ProductStatusBean> getProductStatuses() {
-		if (productStatuses == null) {
-			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
+	public List<AssetStatus> getAssetStatuses() {
+		if (assetStatuses == null) {
+			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
-		return productStatuses;
+		return assetStatuses;
 	}
 	
 	public Long getAssignedToId() {
@@ -208,8 +208,8 @@ public class MultiInspectAction extends AbstractCrud {
 		return KEEP_THE_SAME_OPTION;
 	}
 	
-	public Long getProductStatus() {
-		return commonAssetValues.productStatus != null ? commonAssetValues.productStatus.getUniqueID() : null;
+	public Long getAssetStatus() {
+		return commonAssetValues.assetStatus != null ? commonAssetValues.assetStatus.getUniqueID() : null;
 	}
 	
 	@VisitorFieldValidator(message="")

@@ -4,28 +4,28 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.reporting.PathHandler;
 
 public class DownloadProductTypeImage extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
 	
 	protected Long uniqueID;
-	private ProductType productType;
+	private AssetType assetType;
 	
 	public DownloadProductTypeImage(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 	
-	protected ProductType loadProductType() {
+	protected AssetType loadAssetType() {
 		return getLoaderFactory().createProductTypeLoader().setId(uniqueID).load();
 	}
 	
 	@Override
 	protected boolean initializeDownload() {
-		productType = loadProductType();
+		assetType = loadAssetType();
 		
-		if(productType == null || !productType.hasImage()) {
+		if(assetType == null || !assetType.hasImage()) {
 			addActionError(getText("error.noproducttype"));
 			setFailActionResult(MISSING);
 			return false;
@@ -42,12 +42,12 @@ public class DownloadProductTypeImage extends AbstractDownloadAction {
 
 	@Override
 	public File getFile() {
-		return new File(PathHandler.getProductTypeImageFile(productType), productType.getImageName());
+		return new File(PathHandler.getProductTypeImageFile(assetType), assetType.getImageName());
 	}
 
 	@Override
 	public String getFileName() {
-		return productType.getImageName();
+		return assetType.getImageName();
 	}
 
 	public void setUniqueID(Long uniqueID) {

@@ -10,7 +10,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.tools.FileDataContainer;
@@ -33,7 +33,7 @@ public interface InspectionManager {
 
 	public Date findLastInspectionDate(Long scheduleId);
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Product product, SecurityFilter filter);
+	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter);
 
 	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	

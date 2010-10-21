@@ -30,7 +30,7 @@ public class OrderUtilAction extends AbstractAction {
 	private Option optionManager;
 	private OrderManager orderManager;
 	
-	private Long product;
+	private Long asset;
 	private String orderNumber;
 	private List<LineItem> lineItems;
 	
@@ -85,12 +85,12 @@ public class OrderUtilAction extends AbstractAction {
 		return lineItems;
 	}
 
-	public Long getProduct() {
-		return product;
+	public Long getAsset() {
+		return asset;
 	}
 
-	public void setProduct( Long product ) {
-		this.product = product;
+	public void setAsset( Long asset) {
+		this.asset = asset;
 	}
 	
 	public int getIdentifiedProductCount(LineItem lineItem) { 

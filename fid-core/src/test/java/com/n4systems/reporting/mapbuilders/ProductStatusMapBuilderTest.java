@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.util.ReportMap;
 
@@ -14,8 +14,8 @@ public class ProductStatusMapBuilderTest {
 	public void testSetAllFields() {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 		
-		ProductStatusBean pStatus = new ProductStatusBean();
-		pStatus.setName("Product Status Name");
+		AssetStatus pStatus = new AssetStatus();
+		pStatus.setName("Asset Status Name");
 		
 		ProductStatusMapBuilder builder = new ProductStatusMapBuilder();
 		builder.addParams(reportMap, pStatus, null);

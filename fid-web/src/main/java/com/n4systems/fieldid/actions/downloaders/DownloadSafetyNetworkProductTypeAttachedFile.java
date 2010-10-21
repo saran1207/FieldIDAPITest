@@ -6,7 +6,7 @@ import com.n4systems.model.FileAttachment;
 public class DownloadSafetyNetworkProductTypeAttachedFile extends DownloadProductTypeAttachedFile {
 	private static final long serialVersionUID = 1L;
 	
-	private Long productNetworkId;
+	private Long assetNetworkId;
 	
 	public DownloadSafetyNetworkProductTypeAttachedFile(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -14,18 +14,18 @@ public class DownloadSafetyNetworkProductTypeAttachedFile extends DownloadProduc
 
 	@Override
 	protected FileAttachment loadFileAttachment() {
-		return getLoaderFactory().createSafetyNetworkAttachmentLoader().setId(attachmentID).setProductNetworkId(productNetworkId).load();
+		return getLoaderFactory().createSafetyNetworkAttachmentLoader().setId(attachmentID).setProductNetworkId(assetNetworkId).load();
 	}
 	
-	protected Long loadProductTypeId() {
+	protected Long loadAssetTypeId() {
 		return getLoaderFactory().createProductTypeByAttachmentLoader().setAttachmentId(attachmentID).load();
 	}
 	
 	@Override
 	protected boolean initializeDownload() {
-		productTypeId = loadProductTypeId();
+		assetTypeId = loadAssetTypeId();
 		
-		if(productTypeId == null) {
+		if(assetTypeId == null) {
 			addActionError(getText("error.noproducttypeattachedfile"));
 			setFailActionResult(MISSING);
 			return false;
@@ -36,7 +36,7 @@ public class DownloadSafetyNetworkProductTypeAttachedFile extends DownloadProduc
 
 	@Override
 	public void setUniqueID(Long uniqueID) {
-		productNetworkId = uniqueID;
+		assetNetworkId = uniqueID;
 	}
 
 }

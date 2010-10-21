@@ -1,7 +1,7 @@
 package com.n4systems.model;
 
 import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static org.junit.Assert.*;
 
 import java.util.Date;
@@ -20,10 +20,10 @@ public class InspectionScheduleTest {
 	private Inspection inspection;
 
 	@Before public void setUp() throws Exception {
-		Product product = aProduct().build();
+		Asset product = anAsset().build();
 		inspection = new Inspection();
 		inspection.setId(1L);
-		inspection.setProduct(product);
+		inspection.setAsset(product);
 		
 		schedule = aScheduledInspectionSchedule().product(product).build(); 
 	}

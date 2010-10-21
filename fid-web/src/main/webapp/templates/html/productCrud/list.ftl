@@ -15,9 +15,9 @@ $$('.productLink').each(function(element) {
 	});
 function goToAssetListener(event) {
 	<#if !inVendorContext>
-		var url = '<@s.url action="product" />' + "?uniqueID=" + Event.element( event ).getAttribute( 'productId' );
+		var url = '<@s.url action="product" />' + "?uniqueID=" + Event.element( event ).getAttribute( 'assetId' );
 	<#else>
-		var url = '<@s.url action="productTraceability" useContext="true"/>' + "&uniqueID=" + Event.element( event ).getAttribute( 'productId' );
+		var url = '<@s.url action="productTraceability" useContext="true"/>' + "&uniqueID=" + Event.element( event ).getAttribute( 'assetId' );
 	</#if>
 	
 	

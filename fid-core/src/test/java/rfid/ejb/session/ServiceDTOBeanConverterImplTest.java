@@ -15,20 +15,20 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductSerialExtensionValueBean;
+import rfid.ejb.entity.AssetSerialExtensionValue;
 
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.CustomerOrgBuilder;
@@ -69,11 +69,11 @@ public class ServiceDTOBeanConverterImplTest {
 	@Test
 	public void test_convert_productServiceDTO_to_new_product_confirm_non_optional_fields() {
 		ProductServiceDTO productServiceDTO = new ProductServiceDTO(); 
-		Product product = new Product();
+		Asset asset = new Asset();
 		
 		populateServiceDTO(productServiceDTO);
-		test_product_non_optional_fields(product, productServiceDTO);
-		assertValuesForANewProductAreAssigned(productServiceDTO, product);
+		test_product_non_optional_fields(asset, productServiceDTO);
+		assertValuesForANewProductAreAssigned(productServiceDTO, asset);
 	}
 	
 	
@@ -85,23 +85,23 @@ public class ServiceDTOBeanConverterImplTest {
 		//cal.set(2008, 2, 18);  // 02/18/08
 		Date identifiedDate = new PlainDate(cal.getTime());
 		
-		Product product = new Product();
+		Asset asset = new Asset();
 		
-		product.setId(1L);
-		product.setMobileGUID( "0000-000-00000-0000123" );
-		product.setIdentified(identifiedDate);
-		product.setPurchaseOrder( "0987654321" );
-		product.setRfidNumber( "rfid" );
-		product.setSerialNumber( "someserialnumber" );
+		asset.setId(1L);
+		asset.setMobileGUID( "0000-000-00000-0000123" );
+		asset.setIdentified(identifiedDate);
+		asset.setPurchaseOrder( "0987654321" );
+		asset.setRfidNumber( "rfid" );
+		asset.setSerialNumber( "someserialnumber" );
 		
 		ProductServiceDTO serviceDTO = new ProductServiceDTO();
 		populateServiceDTO(serviceDTO);
 		serviceDTO.setMobileGuid("1111-111-11111-1111111");
 		serviceDTO.setIdentified(dateFormat.format(identifiedDate));
 		
-		test_product_non_optional_fields(product, serviceDTO);
-		assertEquals("0000-000-00000-0000123", product.getMobileGUID());
-		assertEquals(identifiedDate, product.getIdentified());
+		test_product_non_optional_fields(asset, serviceDTO);
+		assertEquals("0000-000-00000-0000123", asset.getMobileGUID());
+		assertEquals(identifiedDate, asset.getIdentified());
 	}
 	
 	@Test
@@ -120,8 +120,8 @@ public class ServiceDTOBeanConverterImplTest {
 		Order customerOrder = new Order();
 		customerOrder.setId( 2L );
 				
-		Set<ProductSerialExtensionValueBean> extensions = new HashSet<ProductSerialExtensionValueBean>();
-		extensions.add( new ProductSerialExtensionValueBean() );
+		Set<AssetSerialExtensionValue> extensions = new HashSet<AssetSerialExtensionValue>();
+		extensions.add( new AssetSerialExtensionValue() );
 		
 		Set<InspectionSchedule> schedules = new HashSet<InspectionSchedule>();
 		schedules.add( new InspectionSchedule() );
@@ -130,52 +130,52 @@ public class ServiceDTOBeanConverterImplTest {
 		User modifiedBy = new User();
 		modifiedBy.setId(4L);
 		
-		Product product = new Product();
-		product.setId( 1L );
-		product.setCreated(createDate);
-		product.setModified(modifyDate);
-		product.setLastInspectionDate( lastInspectionDate );
-		product.setShopOrder( shopOrder );
-		product.setCustomerOrder( customerOrder );
-		product.setProductSerialExtensionValues( extensions );
+		Asset asset = new Asset();
+		asset.setId( 1L );
+		asset.setCreated(createDate);
+		asset.setModified(modifyDate);
+		asset.setLastInspectionDate( lastInspectionDate );
+		asset.setShopOrder( shopOrder );
+		asset.setCustomerOrder( customerOrder );
+		asset.setAssetSerialExtensionValues( extensions );
 		
-		product.setModifiedBy( modifiedBy );
+		asset.setModifiedBy( modifiedBy );
 		
 		
-		product.getSubProducts().add(new SubProduct("product1", new Product(), product));
-		product.getSubProducts().add(new SubProduct("product2", new Product(), product));
+		asset.getSubProducts().add(new SubProduct("product1", new Asset(), asset));
+		asset.getSubProducts().add(new SubProduct("product2", new Asset(), asset));
 
 		
 		
-		test_product_non_optional_fields( product, productServiceDTO );
+		test_product_non_optional_fields(asset, productServiceDTO );
 		
-		assertEquals( new Long( 1L ) ,product.getId() );
-		assertEquals( createDate ,product.getCreated());
-		assertEquals( modifyDate,product.getModified());
-		assertEquals( lastInspectionDate,product.getLastInspectionDate() );
-		assertEquals( shopOrder, product.getShopOrder() );
-		assertEquals( customerOrder,product.getCustomerOrder() );
-		assertEquals( 1, product.getProductSerialExtensionValues().size() );
-		assertEquals( 2, product.getSubProducts().size() );
-		assertEquals( modifiedBy, product.getModifiedBy() );
+		assertEquals( new Long( 1L ) , asset.getId() );
+		assertEquals( createDate , asset.getCreated());
+		assertEquals( modifyDate, asset.getModified());
+		assertEquals( lastInspectionDate, asset.getLastInspectionDate() );
+		assertEquals( shopOrder, asset.getShopOrder() );
+		assertEquals( customerOrder, asset.getCustomerOrder() );
+		assertEquals( 1, asset.getAssetSerialExtensionValues().size() );
+		assertEquals( 2, asset.getSubProducts().size() );
+		assertEquals( modifiedBy, asset.getModifiedBy() );
 		
 		
 	}
 	
 	@SuppressWarnings("deprecation")
-	private void test_product_non_optional_fields( Product product, ProductServiceDTO productServiceDTO  ) {
-		ProductType foundProductType = new ProductType();
-		foundProductType.setId( 5L );
+	private void test_product_non_optional_fields( Asset asset, ProductServiceDTO productServiceDTO  ) {
+		AssetType foundAssetType = new AssetType();
+		foundAssetType.setId( 5L );
 		
 		User foundUser = new User();
 		foundUser.setId(productServiceDTO.getIdentifiedById());
 		
 		Tenant foundTenant = aTenant().build();
-		productServiceDTO.setProductTypeId( foundProductType.getId() );
+		productServiceDTO.setProductTypeId( foundAssetType.getId() );
 		
 		EntityManager mockEntityManager = createMock( EntityManager.class );
 		
-		expect( mockEntityManager.find( ProductType.class, foundProductType.getId() ) ).andReturn( foundProductType );
+		expect( mockEntityManager.find( AssetType.class, foundAssetType.getId() ) ).andReturn(foundAssetType);
 		if (productServiceDTO.identifiedByExists()) {
 			expect(mockEntityManager.find(User.class, foundUser.getId())).andReturn(foundUser);
 		} 
@@ -193,9 +193,9 @@ public class ServiceDTOBeanConverterImplTest {
 		replay(mockCache);
 		TenantCache.setInstance(mockCache);
 		
-		product = converter.convert( productServiceDTO, product, foundTenant.getId() );
+		asset = converter.convert( productServiceDTO, asset, foundTenant.getId() );
 		
-		assertAssignedValuesWereCopiedToProduct( productServiceDTO, product, foundProductType, foundTenant, primaryOrg );
+		assertAssignedValuesWereCopiedToProduct( productServiceDTO, asset, foundAssetType, foundTenant, primaryOrg );
 		
 		verify( mockEntityManager );
 	}
@@ -274,7 +274,7 @@ public class ServiceDTOBeanConverterImplTest {
 		verify( mockEntityManager );
 	}
 	
-	private void assertValuesForANewProductAreAssigned(ProductServiceDTO productServiceDTO, Product product) {
+	private void assertValuesForANewProductAreAssigned(ProductServiceDTO productServiceDTO, Asset asset) {
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy hh:mm:ss a" );
 		Date identifiedDate = null;		
 		try {
@@ -282,48 +282,48 @@ public class ServiceDTOBeanConverterImplTest {
 		} catch (ParseException e) {
 			fail( "parse Error" );
 		}
-		assertEquals( identifiedDate, product.getIdentified() );
-		assertEquals( productServiceDTO.getMobileGuid(), product.getMobileGUID() );
+		assertEquals( identifiedDate, asset.getIdentified() );
+		assertEquals( productServiceDTO.getMobileGuid(), asset.getMobileGUID() );
 	}
 	
-	private void assertAssignedValuesWereCopiedToProduct( ProductServiceDTO productServiceDTO, Product product, ProductType foundProductType,
+	private void assertAssignedValuesWereCopiedToProduct( ProductServiceDTO productServiceDTO, Asset asset, AssetType foundAssetType,
 			Tenant foundTenant, PrimaryOrg primaryOrg ) {
-		assertEquals( foundTenant, product.getTenant() );
-		assertEquals( foundProductType, product.getType() );
-		assertEquals( productServiceDTO.getComments(), product.getComments() );
-		assertEquals( productServiceDTO.getCustomerRefNumber(), product.getCustomerRefNumber() );
-		assertEquals( productServiceDTO.getPurchaseOrder(), product.getPurchaseOrder() );
-		assertEquals( productServiceDTO.getRfidNumber(), product.getRfidNumber() );
-		assertEquals( productServiceDTO.getSerialNumber(), product.getSerialNumber() );
+		assertEquals( foundTenant, asset.getTenant() );
+		assertEquals(foundAssetType, asset.getType() );
+		assertEquals( productServiceDTO.getComments(), asset.getComments() );
+		assertEquals( productServiceDTO.getCustomerRefNumber(), asset.getCustomerRefNumber() );
+		assertEquals( productServiceDTO.getPurchaseOrder(), asset.getPurchaseOrder() );
+		assertEquals( productServiceDTO.getRfidNumber(), asset.getRfidNumber() );
+		assertEquals( productServiceDTO.getSerialNumber(), asset.getSerialNumber() );
 		
 		if( productServiceDTO.customerExists() && !productServiceDTO.divisionExists()) {
-			assertEquals( new Long( productServiceDTO.getCustomerId() ), product.getOwner().getId() );
+			assertEquals( new Long( productServiceDTO.getCustomerId() ), asset.getOwner().getId() );
 		} 
 		
 		if( productServiceDTO.customerExists() && productServiceDTO.divisionExists() ) {
-			assertEquals( new Long( productServiceDTO.getDivisionId() ), product.getOwner().getId() );
+			assertEquals( new Long( productServiceDTO.getDivisionId() ), asset.getOwner().getId() );
 		} 
 		
 		if( productServiceDTO.jobSiteExists() ) {
-			assertEquals( new Long( productServiceDTO.getJobSiteId() ), product.getOwner().getId() );
+			assertEquals( new Long( productServiceDTO.getJobSiteId() ), asset.getOwner().getId() );
 		} 
 		
 		if (!productServiceDTO.customerExists() && !productServiceDTO.divisionExists() && !productServiceDTO.jobSiteExists()) {
-			assertEquals(product.getOwner(), primaryOrg);
+			assertEquals(asset.getOwner(), primaryOrg);
 		}
 		
 		if( productServiceDTO.identifiedByExists() ) {
-			assertEquals( new Long( productServiceDTO.getIdentifiedById() ), product.getIdentifiedBy().getId() );
-			assertEquals( new Long( product.getIdentifiedBy().getOwner().getId() ), product.getOwner().getId() );
+			assertEquals( new Long( productServiceDTO.getIdentifiedById() ), asset.getIdentifiedBy().getId() );
+			assertEquals( new Long( asset.getIdentifiedBy().getOwner().getId() ), asset.getOwner().getId() );
 		} else {
-			assertNull( product.getIdentifiedBy() );
+			assertNull( asset.getIdentifiedBy() );
 		}
 		
 		if (productServiceDTO.getProductStatusId() > 0) {
-			assertEquals(new Long(productServiceDTO.getProductStatusId()), product.getProductStatus().getUniqueID());
+			assertEquals(new Long(productServiceDTO.getProductStatusId()), asset.getAssetStatus().getUniqueID());
 		} else {
 			if (productServiceDTO.getProductStatusId() == ServiceDTOBeanConverterImpl.NULL_ID) {
-				assertNull(product.getProductStatus());
+				assertNull(asset.getAssetStatus());
 			} else {
 				// need to test value has not changed
 			}

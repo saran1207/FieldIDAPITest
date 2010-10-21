@@ -6,9 +6,9 @@ import java.util.Set;
 
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
 
@@ -22,7 +22,7 @@ public interface MassUpdateManager {
 	 * @param values
 	 * @return
 	 */
-	public Long updateProducts(List<Long> ids, Product product, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
+	public Long updateProducts(List<Long> ids, Asset product, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
 
 	public Long updateInspections(List<Long> ids, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
 

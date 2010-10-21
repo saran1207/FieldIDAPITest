@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.persistence.SimplePager;
@@ -20,7 +20,7 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 public class SafetyNetworkVendor extends SafetyNetwork {
 
 	private PrimaryOrg vendor;
-	private Pager<Product> page;
+	private Pager<Asset> page;
 	private String searchText;
 	private int pageSize = 10;
 	private Long assetID;
@@ -58,10 +58,10 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 		return false;
 	}
 
-	private Pager<Product> getPagedSearchResults() {
+	private Pager<Asset> getPagedSearchResults() {
 		SafetyNetworkSmartSearchLoader smartSearchLoader = setupLoader();
-		List<Product> list = smartSearchLoader.load();
-		return new SimplePager<Product>(1, pageSize, list.size(), list);
+		List<Asset> list = smartSearchLoader.load();
+		return new SimplePager<Asset>(1, pageSize, list.size(), list);
 	}
 
 	@SkipValidation
@@ -69,7 +69,7 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 		return SUCCESS;
 	}
 
-	public Pager<Product> getPage() {
+	public Pager<Asset> getPage() {
 		return page;
 	}
 

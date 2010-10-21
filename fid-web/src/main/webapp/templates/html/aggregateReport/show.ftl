@@ -22,7 +22,7 @@
 		
 		<p>
 			<label><@s.text name="label.numberofproducttypes"/></label>
-			<span>${report.productTypes?size}</span>
+			<span>${report.assetTypes?size}</span>
 		</p>
 		
 		<p>
@@ -38,7 +38,7 @@
 			<th><@s.text name="label.totalproducts"/></th>
 		</tr>
 		
-		<#list report.productTypes as key >
+		<#list report.assetTypes as key >
 			
 			
 			<tr>

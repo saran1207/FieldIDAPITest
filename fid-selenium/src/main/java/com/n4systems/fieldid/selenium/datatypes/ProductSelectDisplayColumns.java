@@ -26,7 +26,7 @@ public class ProductSelectDisplayColumns {
 	public String toString() {
 		StringBuffer s = new StringBuffer();
 		
-		s.append("Product Information\n");
+		s.append("Asset Information\n");
 		s.append("-------------------\n");
 		s.append("               Serial Number: ").append(serialNumber).append("\n");
 		s.append("                 RFID Number: ").append(rfidNumber).append("\n");
@@ -34,9 +34,9 @@ public class ProductSelectDisplayColumns {
 		s.append("                    Division: ").append(division).append("\n");
 		s.append("                Organization: ").append(organization).append("\n");
 		s.append("            Reference Number: ").append(referenceNumber).append("\n");
-		s.append("          Product Type Group: ").append(productTypeGroup).append("\n");
-		s.append("                Product Type: ").append(productType).append("\n");
-		s.append("              Product Status: ").append(productStatus).append("\n");
+		s.append("          Asset Type Group: ").append(productTypeGroup).append("\n");
+		s.append("                Asset Type: ").append(productType).append("\n");
+		s.append("              Asset Status: ").append(productStatus).append("\n");
 		s.append("        Last Inspection Date: ").append(lastInspectionDate).append("\n");
 		s.append("Network Last Inspection Date: ").append(networkLastInspectionDate).append("\n");
 		s.append("             Date Identified: ").append(dateIdentified).append("\n");

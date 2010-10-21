@@ -3,13 +3,13 @@ package com.n4systems.ejb;
 import java.util.List;
 import java.util.SortedSet;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.exceptions.NonUniqueProductException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
@@ -20,44 +20,44 @@ import com.n4systems.util.ProductTypeRemovalSummary;
 
 public interface ProductManager {
 
-	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue);
+	public List<Asset> findProductByIdentifiers(SecurityFilter filter, String searchValue);
 
-	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue, ProductType productType);
+	public List<Asset> findProductByIdentifiers(SecurityFilter filter, String searchValue, AssetType assetType);
 
-	public Product findProductAllFields(Long id, SecurityFilter filter);
+	public Asset findProductAllFields(Long id, SecurityFilter filter);
 
 
-	public Product findProduct(Long id, SecurityFilter filter);
+	public Asset findProduct(Long id, SecurityFilter filter);
 
-	public Product findProduct(Long id, SecurityFilter filter, String... postFetchFields);
+	public Asset findProduct(Long id, SecurityFilter filter, String... postFetchFields);
 
-	public Product findProductByGUID(String mobileGUID, SecurityFilter filter);
+	public Asset findProductByGUID(String mobileGUID, SecurityFilter filter);
 
-	public Product findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueProductException;
+	public Asset findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueProductException;
 
-	public List<Product> findProductsByRfidNumber(String rfidNumber, SecurityFilter filter, String... postFetchFields);
+	public List<Asset> findProductsByRfidNumber(String rfidNumber, SecurityFilter filter, String... postFetchFields);
 
-	public Product parentProduct(Product product);
+	public Asset parentProduct(Asset asset);
 
-	public List<ListingPair> getAllowedSubTypes(SecurityFilter filter, ProductType type);
+	public List<ListingPair> getAllowedSubTypes(SecurityFilter filter, AssetType type);
 
 	public boolean partOfAMasterProduct(Long typeId);
 
-	public Product archive(Product product, User archivedBy) throws UsedOnMasterInspectionException;
+	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterInspectionException;
 	
-	public ProductRemovalSummary testArchive(Product product);
+	public ProductRemovalSummary testArchive(Asset asset);
 
-	public ProductType archive(ProductType productType, Long archivedBy, String deletingPrefix);
+	public AssetType archive(AssetType assetType, Long archivedBy, String deletingPrefix);
 	
-	public void removeAsASubProductType(ProductType productType, Long archivedBy);
+	public void removeAsASubProductType(AssetType assetType, Long archivedBy);
 	
-	public void removeProductCodeMappingsThatUse(ProductType productType);
+	public void removeProductCodeMappingsThatUse(AssetType assetType);
 
-	public ProductTypeRemovalSummary testArchive(ProductType productType);
+	public ProductTypeRemovalSummary testArchive(AssetType assetType);
 	
 	
 	/**
-	 * Computes a set of {@link InfoFieldBean} names which are common to all the provided {@link ProductType}s.  Name
+	 * Computes a set of {@link InfoFieldBean} names which are common to all the provided {@link com.n4systems.model.AssetType}s.  Name
 	 * matches are exact (case sensitive and non-word char sensitive).  The list will be returned sorted ascending 
 	 * alpha-numerically.
 	 * @param productTypeIds 
@@ -65,17 +65,17 @@ public interface ProductManager {
 	 */
 	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds);
 	
-	public void deleteProductTypeGroup(ProductTypeGroup group);
+	public void deleteProductTypeGroup(AssetTypeGroup group);
 	
-	public ProductTypeGroupRemovalSummary testDelete(ProductTypeGroup group);
+	public ProductTypeGroupRemovalSummary testDelete(AssetTypeGroup group);
 	
-	public Product fillInSubProductsOnProduct(Product product);
-	public List<SubProduct> findSubProductsForProduct(Product product);
+	public Asset fillInSubProductsOnProduct(Asset asset);
+	public List<SubProduct> findSubProductsForProduct(Asset asset);
 	
 	
 	// methods are just here to allow for a single transaction
 	
-	public Product mergeProducts(Product winningProduct, Product losingProduct, User user);
+	public Asset mergeProducts(Asset winningAsset, Asset losingAsset, User user);
 	 
 
 

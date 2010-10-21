@@ -4,24 +4,24 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.ProductSerialExtensionBean;
+import rfid.ejb.entity.AssetSerialExtension;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class ProductSerialExtensionListLoader extends ListLoader<ProductSerialExtensionBean> {
+public class ProductSerialExtensionListLoader extends ListLoader<AssetSerialExtension> {
 
 	public ProductSerialExtensionListLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
 	@Override
-	protected List<ProductSerialExtensionBean> load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<ProductSerialExtensionBean> builder = new QueryBuilder<ProductSerialExtensionBean>(ProductSerialExtensionBean.class, filter);
+	protected List<AssetSerialExtension> load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<AssetSerialExtension> builder = new QueryBuilder<AssetSerialExtension>(AssetSerialExtension.class, filter);
 		builder.setOrder("extensionLabel");
 		
-		List<ProductSerialExtensionBean> extensions = builder.getResultList(em);
+		List<AssetSerialExtension> extensions = builder.getResultList(em);
 		return extensions;
 	}
 

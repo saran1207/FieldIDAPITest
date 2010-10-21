@@ -13,15 +13,15 @@ public class InspectionScheduleServiceImpl implements InspectionScheduleService 
 	
 	public Long createSchedule(InspectionSchedule schedule) {
 		Long id = persistenceManager.save(schedule);
-		schedule.getProduct().touch();
-		persistenceManager.update(schedule.getProduct());
+		schedule.getAsset().touch();
+		persistenceManager.update(schedule.getAsset());
 		return id;
 	}
 	
 	public InspectionSchedule updateSchedule(InspectionSchedule schedule) {
 		InspectionSchedule updatedSchedule = persistenceManager.update(schedule);
-		updatedSchedule.getProduct().touch();
-		persistenceManager.update(updatedSchedule.getProduct());
+		updatedSchedule.getAsset().touch();
+		persistenceManager.update(updatedSchedule.getAsset());
 		return updatedSchedule;
 	}
 	

@@ -2,7 +2,7 @@
 <div id="inspection" >
 	<div id="productSummary">
 		<h2>
-			<span>${product.type.name!""?html} <@s.text name="label.summary"/></span>
+			<span>${asset.type.name!""?html} <@s.text name="label.summary"/></span>
 			
 			
 			<@s.url id="inspectionCertUrl" action="downloadInspectionCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
@@ -29,20 +29,20 @@
 		<p>
 			<label><@s.text name="${Session.sessionUser.serialNumberLabel}"/></label>
 			<span>
-				${product.serialNumber?html}
+				${asset.serialNumber?html}
 			</span>
 		</p>
 		<p>
 			<label><@s.text name="label.rfidnumber"/></label>
 			<span>
-				${product.rfidNumber!""?html}
+				${asset.rfidNumber!""?html}
 			</span>
 		</p>
 		
 		<p>
 			<label><@s.text name="label.desc"/></label>
 			<span>
-				${product.description?html}
+				${asset.description?html}
 			</span>
 		</p>
 	</div>
@@ -178,7 +178,7 @@
 	<p>
 		<label><@s.text name="label.productstatus"/></label>
 		<span>
-			${(inspection.productStatus.name)!}
+			${(inspection.assetStatus.name)!}
 		</span>
 	</p>
 	

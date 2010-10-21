@@ -9,12 +9,12 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.impl.InspectionManagerImpl;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
@@ -85,11 +85,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 
 	
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Product product, SecurityFilter filter) {
+	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findInspectionsByDateAndProduct(datePerformedRangeStart, datePerformedRangeEnd, product, filter);
+			return createManager(transaction.getEntityManager()).findInspectionsByDateAndProduct(datePerformedRangeStart, datePerformedRangeEnd, asset, filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

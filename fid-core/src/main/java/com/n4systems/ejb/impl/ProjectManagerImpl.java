@@ -10,9 +10,9 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityDefiner;
@@ -39,21 +39,21 @@ public class ProjectManagerImpl implements ProjectManager {
 		this.noteManager = new NoteManagerImpl(em);
 	}
 
-	public int attachAsset(Product asset, Project project, Long modifiedBy) throws AssetAlreadyAttachedException {
+	public int attachAsset(Asset asset, Project project, Long modifiedBy) throws AssetAlreadyAttachedException {
 		persistenceManager.reattach(project);
-		if (project.getProducts().contains(asset)) {
+		if (project.getAssets().contains(asset)) {
 			throw new AssetAlreadyAttachedException();
 		}
-		project.getProducts().add(0, asset);
+		project.getAssets().add(0, asset);
 		project = persistenceManager.update(project, modifiedBy);
-		return project.getProducts().size();
+		return project.getAssets().size();
 	}
 
-	public int detachAsset(Product asset, Project project, Long modifiedBy) {
+	public int detachAsset(Asset asset, Project project, Long modifiedBy) {
 		persistenceManager.reattach(project);
-		project.getProducts().remove(asset);
+		project.getAssets().remove(asset);
 		project = persistenceManager.update(project, modifiedBy);
-		return project.getProducts().size();
+		return project.getAssets().size();
 	}
 
 	public FileAttachment attachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
@@ -64,11 +64,11 @@ public class ProjectManagerImpl implements ProjectManager {
 		return noteManager.detachNote(note, project, modifiedBy);
 	}
 
-	public Pager<Product> getAssetsPaged(Project project, SecurityFilter userFilter, int page, int pageSize) {
+	public Pager<Asset> getAssetsPaged(Project project, SecurityFilter userFilter, int page, int pageSize) {
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
 		filter.setTargets("p.tenant.id", "asset.owner", null, null);
-		String queryStr = "SELECT asset FROM " + Project.class.getName() + " p , IN( p.products ) asset where p = :project AND " + filter.produceWhereClause();
-		String countQueryStr = "SELECT count( asset ) FROM " + Project.class.getName() + " p , IN( p.products ) asset where p = :project and " + filter.produceWhereClause();
+		String queryStr = "SELECT asset FROM " + Project.class.getName() + " p , IN( p.assets ) asset where p = :project AND " + filter.produceWhereClause();
+		String countQueryStr = "SELECT count( asset ) FROM " + Project.class.getName() + " p , IN( p.assets ) asset where p = :project and " + filter.produceWhereClause();
 
 		Query selectQuery = em.createQuery(queryStr).setParameter("project", project);
 		filter.applyParameters(selectQuery);
@@ -76,7 +76,7 @@ public class ProjectManagerImpl implements ProjectManager {
 		Query countQuery = em.createQuery(countQueryStr).setParameter("project", project);
 		filter.applyParameters(countQuery);
 
-		return new Page<Product>(selectQuery, countQuery, page, pageSize);
+		return new Page<Asset>(selectQuery, countQuery, page, pageSize);
 	}
 	
 	public Pager<InspectionSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<InspectionSchedule.ScheduleStatus> statuses ) {
@@ -147,8 +147,8 @@ public class ProjectManagerImpl implements ProjectManager {
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<Project> getProjectsForAsset(Product asset, SecurityFilter filter) {
-		String queryStr = "SELECT p FROM " + Project.class.getName() + " p , IN( p.products ) asset where asset = :asset AND p.retired = false AND " + filter.produceWhereClause(Project.class, "p") ;
+	public List<Project> getProjectsForAsset(Asset asset, SecurityFilter filter) {
+		String queryStr = "SELECT p FROM " + Project.class.getName() + " p , IN( p.assets ) asset where asset = :asset AND p.retired = false AND " + filter.produceWhereClause(Project.class, "p") ;
 		Query selectQuery = em.createQuery(queryStr);
 		selectQuery.setParameter("asset", asset);
 		filter.applyParameters(selectQuery, Project.class);

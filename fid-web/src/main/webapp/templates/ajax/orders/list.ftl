@@ -12,13 +12,13 @@
 					<th><@s.text name="label.customer_reference"/></th>
 					
 				</tr>
-				<#list products as product >
+				<#list assets as asset >
 					<tr>
-						<td><a class="productLink" productId="${product.id}" href="<@s.url action="${actionTarget}" namespace="${namespace}" uniqueID="${product.id}" />" >${product.serialNumber}</a></td>
-						<td>${product.rfidNumber!}</td>
-						<td>${(product.owner.name)!}</td>
-						<td>${product.type.name}</td>	
-						<td>${(product.customerRefNumber?html)!}</td>	
+						<td><a class="productLink" assetId="${asset.id}" href="<@s.url action="${actionTarget}" namespace="${namespace}" uniqueID="${asset.id}" />" >${asset.serialNumber}</a></td>
+						<td>${asset.rfidNumber!}</td>
+						<td>${(asset.owner.name)!}</td>
+						<td>${asset.type.name}</td>
+						<td>${(asset.customerRefNumber?html)!}</td>
 					</tr>
 				</#list>
 			</table>

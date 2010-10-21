@@ -10,28 +10,28 @@
 ${action.setPageType('product_type', 'configuration')!}
 <#if partOfMasterProduct >
 	<div class="formErrors error" >
-		 <@s.text name="instruction.typealreadyusedbyparent"><@s.param >${productType.name}</@s.param></@s.text> 
+		 <@s.text name="instruction.typealreadyusedbyparent"><@s.param >${assetType.name}</@s.param></@s.text>
 	</div>
 		
 <#else>
 	<div class="instruction">
-		<h3><span class="instructionTitle"><@s.text name="label.tellushowtoconfigure"/>&nbsp;</span><span>${productType.name}</span></h3>
+		<h3><span class="instructionTitle"><@s.text name="label.tellushowtoconfigure"/>&nbsp;</span><span>${assetType.name}</span></h3>
 		<p >
 			<@s.text name="instruction.productconfiguration">
-				<@s.param>${productType.name}</@s.param>
+				<@s.param>${assetType.name}</@s.param>
 			</@s.text>
 		</p>
 	</div>
 	<@s.form action="productTypeConfigurationUpdate" theme="fieldidSimple" cssClass="crudForm">
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<@s.hidden name="uniqueID" />
-		<h3><@s.text name="label.A"/> ${productType.name} <@s.text name="label.has" />: </h3>
+		<h3><@s.text name="label.A"/> ${assetType.name} <@s.text name="label.has" />: </h3>
 		<ul id="subProducts">
 			<#list subProducts as subProduct >
 				<li id="subProduct_${subProduct.id}">
 					<@s.hidden name="subProductIds[${subProduct_index}]" value="${subProduct.id}" />
 					<span id="productName_${subProduct.id}">${subProduct.name}</span>  
-					<a id="removeProductLink_${subProduct.id}" href="removeSubProduct" productTypeId="${subProduct.id}"  ><@s.text name="label.remove"/></a>
+					<a id="removeProductLink_${subProduct.id}" href="removeSubProduct" assetTypeId="${subProduct.id}"  ><@s.text name="label.remove"/></a>
 					<script type="text/javascript" >
 						$('removeProductLink_${subProduct.id}').observe('click', removeProductEvent);
 					</script>
@@ -39,7 +39,7 @@ ${action.setPageType('product_type', 'configuration')!}
 			</#list>
 		</ul>
 		<div id="addSubProductContainer">
-			<span> <@s.select id="addSubProduct" name="addSubProduct" list="productTypes" listKey="id" listValue="name"  /></span>  
+			<span> <@s.select id="addSubProduct" name="addSubProduct" list="assetTypes" listKey="id" listValue="name"  /></span>
 			<@s.submit id="addSubProductButton" key="label.add" type="button" />
 		</div>
 		

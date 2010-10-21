@@ -40,7 +40,7 @@ public class InspectionTypeUniqueNameLoader extends SecurityFilteredLoader<Strin
 		while (conflicting) {
 			if (i > MAX_ITERATIONS) {
 				// since nameFormatString is configurable, and our stopping condition depends on it, a little infinite loop protection is probably a good idea
-				throw new RuntimeException(String.format("Unique product type name not found in %d itterations.  Original Name [%s], Tenant [%d]", MAX_ITERATIONS, name, filter.getTenantId()));
+				throw new RuntimeException(String.format("Unique asset type name not found in %d itterations.  Original Name [%s], Tenant [%d]", MAX_ITERATIONS, name, filter.getTenantId()));
 			}
 			
 			newName = String.format(nameFormatString, name, i);

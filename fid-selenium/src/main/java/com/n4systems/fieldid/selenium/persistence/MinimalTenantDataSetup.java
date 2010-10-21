@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.selenium.persistence;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeSaver;
@@ -69,8 +69,8 @@ public class MinimalTenantDataSetup {
         }
     }
     
-    private ProductType createSimpleProductType(EntityManager em, String name) {
-        ProductType type = new ProductType();
+    private AssetType createSimpleProductType(EntityManager em, String name) {
+        AssetType type = new AssetType();
         type.setTenant(tenant);
         type.setName(name);
         new ProductTypeSaver().save(trans, type);

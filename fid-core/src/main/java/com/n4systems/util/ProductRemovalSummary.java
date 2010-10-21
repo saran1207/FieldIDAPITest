@@ -1,9 +1,9 @@
 package com.n4systems.util;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 
 public class ProductRemovalSummary {
-	private Product product;
+	private Asset asset;
 	
 	private Long inspectionsToDelete = 0L;
 	private boolean detatachFromMaster = false;
@@ -13,8 +13,8 @@ public class ProductRemovalSummary {
 	private Long projectToDetachFrom = 0L;
 	
 
-	public ProductRemovalSummary( Product product ) {
-		this.product = product;
+	public ProductRemovalSummary( Asset asset) {
+		this.asset = asset;
 	}
 	
 	public boolean validToDelete() {
@@ -69,8 +69,8 @@ public class ProductRemovalSummary {
 		this.projectToDetachFrom = projectToDetachFrom;
 	}
 
-	public Product getProduct() {
-		return product;
+	public Asset getProduct() {
+		return asset;
 	}
 
 }

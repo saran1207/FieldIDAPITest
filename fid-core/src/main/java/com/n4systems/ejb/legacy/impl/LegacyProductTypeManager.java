@@ -14,12 +14,16 @@ import javax.persistence.NoResultException;
 
 import javax.persistence.Query;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.AddProductHistoryBean;
+import rfid.ejb.entity.AssetSerialInfoOption;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductCodeMappingBean;
+import rfid.ejb.entity.AssetCodeMapping;
 
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -29,14 +33,12 @@ import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
-import com.n4systems.ejb.legacy.ProductCodeMapping;
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -56,7 +58,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	protected EntityManager em;
 
 	 protected PersistenceManager persistenceManager;
-	 protected ProductCodeMapping productCodeMappingManager;
+	 protected AssetCodeMappingService assetCodeMappingServiceManager;
 	 protected AutoAttributeManager autoAttributeManager;	
 	 protected LegacyProductSerial productSerialManager;
 	 protected InspectionScheduleManager inspectionScheduleManager;
@@ -69,74 +71,74 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		this.em = em;
 		
 		this.persistenceManager = new PersistenceManagerImpl(em);
-		this.productCodeMappingManager = new ProductCodeMappingManager(em);
+		this.assetCodeMappingServiceManager = new ProductCodeMappingManager(em);
 		this.autoAttributeManager = new AutoAttributeManagerImpl(em);	
 		this.productSerialManager = new LegacyProductSerialManager(em);
 		this.inspectionScheduleManager = new InspectionScheduleManagerImpl(em);
 	}
 
-	//TODO remove this only used by product crud to determine if the product type has changed.
-	public ProductType findProductTypeForProduct(Long productId) throws InvalidQueryException {
-		ProductType productTypeBean = null;
+	//TODO remove this only used by asset crud to determine if the asset type has changed.
+	public AssetType findProductTypeForProduct(Long productId) throws InvalidQueryException {
+		AssetType assetType = null;
 		try {
 			
-			QueryBuilder<ProductType> qbuilder = new QueryBuilder<ProductType>(Product.class, new OpenSecurityFilter(), "p");
+			QueryBuilder<AssetType> qbuilder = new QueryBuilder<AssetType>(Asset.class, new OpenSecurityFilter(), "p");
 			qbuilder.setSimpleSelect("type");
 			qbuilder.addSimpleWhere("id", productId);
 			
-			productTypeBean = (ProductType)qbuilder.createQuery(em).getSingleResult();
+			assetType = (AssetType)qbuilder.createQuery(em).getSingleResult();
 			
 		} catch(NoResultException e) {}
 		
-		return productTypeBean;
+		return assetType;
 	}
 	
-	public ProductType findDefaultProductType(Long tenantId) {
-		QueryBuilder<ProductType> query = new QueryBuilder<ProductType>(ProductType.class, new TenantOnlySecurityFilter(tenantId));
-		query.addWhere(Comparator.EQ, "name", "name", ProductType.DEFAULT_ITEM_NUMBER, WhereParameter.IGNORE_CASE);
+	public AssetType findDefaultProductType(Long tenantId) {
+		QueryBuilder<AssetType> query = new QueryBuilder<AssetType>(AssetType.class, new TenantOnlySecurityFilter(tenantId));
+		query.addWhere(Comparator.EQ, "name", "name", AssetType.DEFAULT_ITEM_NUMBER, WhereParameter.IGNORE_CASE);
 		
 		return query.getSingleResult(em);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ProductType> getProductTypesForTenant(Long tenantId) {
-		Query query = em.createQuery("from " + ProductType.class.getName() + " pi where pi.tenant.id = :tenantId AND " +
+	public List<AssetType> getProductTypesForTenant(Long tenantId) {
+		Query query = em.createQuery("from " + AssetType.class.getName() + " pi where pi.tenant.id = :tenantId AND " +
 				"pi.state = :activeState");
 		query.setParameter("tenantId", tenantId).setParameter("activeState", EntityState.ACTIVE);
 		
 
-		List<ProductType> productTypes = (List<ProductType>)query.getResultList();
+		List<AssetType> assetTypes = (List<AssetType>)query.getResultList();
 		
-		return (List<ProductType>) persistenceManager.postFetchFields(productTypes, "infoFields", "inspectionTypes", "subTypes");
+		return (List<AssetType>) persistenceManager.postFetchFields(assetTypes, "infoFields", "inspectionTypes", "subTypes");
 	}
 	
-	public ProductType updateProductType(ProductType productTypeBean, List<FileAttachment> uploadedFiles, File productImage ) throws FileAttachmentException, ImageAttachmentException {
-			ProductType oldPI = null;
-			if( productTypeBean.getId() != null ) {
-				oldPI = (ProductType)em.find( ProductType.class, productTypeBean.getId() );
+	public AssetType updateProductType(AssetType assetType, List<FileAttachment> uploadedFiles, File productImage ) throws FileAttachmentException, ImageAttachmentException {
+			AssetType oldPI = null;
+			if( assetType.getId() != null ) {
+				oldPI = (AssetType)em.find( AssetType.class, assetType.getId() );
 			}
 			if( oldPI != null ) {
-				cleanInfoFields( productTypeBean, oldPI );
+				cleanInfoFields(assetType, oldPI );
 			}
 			
-			productTypeBean.touch();
-			productTypeBean = em.merge( productTypeBean );
-			processUploadedFiles( productTypeBean, uploadedFiles );
- 			processProductImage( productTypeBean, productImage );
-			return productTypeBean;
+			assetType.touch();
+			assetType = em.merge(assetType);
+			processUploadedFiles(assetType, uploadedFiles );
+ 			processProductImage(assetType, productImage );
+			return assetType;
 		
 	}
 
 	
 	
-	private void cleanInfoFields( ProductType productTypeBean, ProductType oldPI ) {
-		productCodeMappingManager.clearRetiredInfoFields( productTypeBean );
-		autoAttributeManager.clearRetiredInfoFields( productTypeBean );
+	private void cleanInfoFields( AssetType assetType, AssetType oldPI ) {
+		assetCodeMappingServiceManager.clearRetiredInfoFields(assetType);
+		autoAttributeManager.clearRetiredInfoFields(assetType);
 		
 		// the removal of old infofields needs to be done after the clearing of retired fields otherwise
 		// they will get a persit with deleted entity exception.
 		for( InfoFieldBean field : oldPI.getInfoFields() ) {
-		    if (!productTypeBean.getInfoFields().contains( field )) {
+		    if (!assetType.getInfoFields().contains( field )) {
 		    	for (InfoOptionBean infoOpiton : field.getUnfilteredInfoOptions() ) {
 		    		em.remove(infoOpiton);
 				}
@@ -146,10 +148,10 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	}
 	
 	
-	private void processProductImage( ProductType productType, File productImage ) throws ImageAttachmentException{
-		File imageDirectory = PathHandler.getProductTypeImageFile( productType );
+	private void processProductImage( AssetType assetType, File productImage ) throws ImageAttachmentException{
+		File imageDirectory = PathHandler.getProductTypeImageFile(assetType);
 		// clear the old file if we have a new one uploaded or the image has been removed.
-		if( productType.getImageName() == null || productImage != null ) {
+		if( assetType.getImageName() == null || productImage != null ) {
 			if( imageDirectory.exists() && imageDirectory.isDirectory() ) {
 				try {
 					FileUtils.cleanDirectory( imageDirectory );
@@ -161,7 +163,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		
 		if( productImage != null ) {
 			try {
-				File imageFile = new File( imageDirectory, productType.getImageName() );
+				File imageFile = new File( imageDirectory, assetType.getImageName() );
 				FileUtils.copyFile( productImage, imageFile );
 				productImage.delete();
 			} catch (Exception e) {
@@ -176,7 +178,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getProductTypeListForTenant(Long tenantId) {
-		Query query = em.createQuery("select new " + ListingPair.class.getName() + "( pi.id, pi.name ) from " + ProductType.class.getName() + " pi where pi.tenant.id = :tenantId AND state=:activeState order by pi.name ");
+		Query query = em.createQuery("select new " + ListingPair.class.getName() + "( pi.id, pi.name ) from " + AssetType.class.getName() + " pi where pi.tenant.id = :tenantId AND state=:activeState order by pi.name ");
 		query.setParameter("tenantId", tenantId).setParameter("activeState", EntityState.ACTIVE);
 		
 		List<ListingPair> piList = (List<ListingPair>)query.getResultList();
@@ -208,31 +210,31 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		}
 
 		if( infoFields != null && cleanedInfoFields.size() > 0 ) {
-			Query query = em.createQuery("select DISTINCT ifb.uniqueID  from " + Product.class.getName() + " ps inner join  ps.infoOptions as io inner join io.infoField as ifb where ps.type.id = :productInfo and ifb in( :infoFieldIds )" );
+			Query query = em.createQuery("select DISTINCT ifb.uniqueID  from " + Asset.class.getName() + " ps inner join  ps.infoOptions as io inner join io.infoField as ifb where ps.type.id = :assetInfo and ifb in( :infoFieldIds )" );
 			
-			query.setParameter("productInfo", infoFields.iterator().next().getProductInfo().getId() );
+			query.setParameter("assetInfo", infoFields.iterator().next().getAssetInfo().getId() );
 			query.setParameter("infoFieldIds", infoFields );
 			
 			infoFieldsCurrentlyInUse.addAll( query.getResultList() );
 			
 						
-			query = em.createQuery("select DISTINCT ifb.uniqueID from " + ProductCodeMappingBean.class.getName() + " as pcm inner join pcm.infoOptions as io inner join io.infoField as ifb where pcm.productInfo.id = :productInfo and ifb in( :infoFieldIds )" );
+			query = em.createQuery("select DISTINCT ifb.uniqueID from " + AssetCodeMapping.class.getName() + " as pcm inner join pcm.infoOptions as io inner join io.infoField as ifb where pcm.assetInfo.id = :assetInfo and ifb in( :infoFieldIds )" );
 			
-			query.setParameter("productInfo", infoFields.iterator().next().getProductInfo().getId() );
+			query.setParameter("assetInfo", infoFields.iterator().next().getAssetInfo().getId() );
 			query.setParameter("infoFieldIds", infoFields );
 			
 			infoFieldsCurrentlyInUse.addAll( query.getResultList() );
 			
 			
-			query = em.createQuery("select DISTINCT ifb.uniqueID from " + AutoAttributeCriteria.class.getName() + " as aac inner join aac.inputs as ifb where aac.productType.id = :productInfo and ifb in( :infoFieldIds )" );
+			query = em.createQuery("select DISTINCT ifb.uniqueID from " + AutoAttributeCriteria.class.getName() + " as aac inner join aac.inputs as ifb where aac.assetType.id = :assetInfo and ifb in( :infoFieldIds )" );
 			
-			query.setParameter("productInfo", infoFields.iterator().next().getProductInfo().getId() );
+			query.setParameter("assetInfo", infoFields.iterator().next().getAssetInfo().getId() );
 			query.setParameter("infoFieldIds", infoFields );
 			
 			
-			query = em.createQuery("select DISTINCT ifb.uniqueID from " + AutoAttributeCriteria.class.getName() + " as aac inner join aac.outputs as ifb where aac.productType.id = :productInfo and ifb in( :infoFieldIds )" );
+			query = em.createQuery("select DISTINCT ifb.uniqueID from " + AutoAttributeCriteria.class.getName() + " as aac inner join aac.outputs as ifb where aac.assetType.id = :assetInfo and ifb in( :infoFieldIds )" );
 			
-			query.setParameter("productInfo", infoFields.iterator().next().getProductInfo().getId() );
+			query.setParameter("assetInfo", infoFields.iterator().next().getAssetInfo().getId() );
 			query.setParameter("infoFieldIds", infoFields );
 			infoFieldsCurrentlyInUse.addAll( query.getResultList() );
 		}
@@ -256,7 +258,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 	
 	
 	/**
-	 * removes all orphaned info options and updates the modify time of the product type.
+	 * removes all orphaned info options and updates the modify time of the asset type.
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean cleanInfoOptions( int pageNumber, int pageSize ) {
@@ -264,34 +266,34 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		
 		Pager<Long> infoOptionsToScan = findInfoOptions(pageNumber, pageSize);
 		
-		// look for info options that don't have a connection to a product serial.
-		Query query = em.createQuery( "select DISTINCT io.uniqueID  from ProductSerialInfoOptionBean as psio right join psio.infoOption as io where io.uniqueID IN (:infoOptions) AND psio.uniqueID IS NULL " );
+		// look for info options that don't have a connection to a asset serial.
+		Query query = em.createQuery( "select DISTINCT io.uniqueID  from "+ AssetSerialInfoOption.class.getName()+" as psio right join psio.infoOption as io where io.uniqueID IN (:infoOptions) AND psio.uniqueID IS NULL " );
 		query.setParameter( "infoOptions", infoOptionsToScan.getList() );
 		orphanInfoOptionIds = (Collection<Long>)query.getResultList();
 		if( orphanInfoOptionIds.size() > 0 ) {
-			// look for info options that are not on product info histories.
-			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select io.uniqueID from AddProductHistoryBean as aph left join aph.infoOptions as io where io.uniqueID IN (:infoOptions)  )  " );
+			// look for info options that are not on asset info histories.
+			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select io.uniqueID from "+ AddProductHistoryBean.class.getName()+" as aph left join aph.infoOptions as io where io.uniqueID IN (:infoOptions)  )  " );
 			query.setParameter( "infoOptions", orphanInfoOptionIds );
 			orphanInfoOptionIds = (Collection<Long>)query.getResultList();
 		}
 	
 		
 		if( orphanInfoOptionIds.size() > 0 ) {
-			// look for info options that are not used on a ps template and where not used by any product serial.
-			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select pcmio.uniqueID from ProductCodeMappingBean as pcm inner join pcm.infoOptions as pcmio )  " );
+			// look for info options that are not used on a ps template and where not used by any asset serial.
+			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select pcmio.uniqueID from "+AssetCodeMapping.class.getName()+" as pcm inner join pcm.infoOptions as pcmio )  " );
 			query.setParameter( "infoOptions", orphanInfoOptionIds );
 			orphanInfoOptionIds = query.getResultList();
 		}
 		
 		if( orphanInfoOptionIds.size() > 0 ) {
-			// look for info options that are not used on a ps template and where not used by any product serial.
+			// look for info options that are not used on a ps template and where not used by any asset serial.
 			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select aadio.uniqueID from AutoAttributeDefinition as aad inner join aad.inputs as aadio )  " );
 			query.setParameter( "infoOptions", orphanInfoOptionIds );
 			orphanInfoOptionIds = query.getResultList();
 		}
 		
 		if( orphanInfoOptionIds.size() > 0 ) {
-			// look for info options that are not used on a ps template and where not used by any product serial.
+			// look for info options that are not used on a ps template and where not used by any asset serial.
 			query = em.createQuery( "select DISTINCT io.uniqueID from InfoOptionBean as io where io.uniqueID IN (:infoOptions) AND io.uniqueID NOT IN ( select aadio.uniqueID from AutoAttributeDefinition as aad inner join aad.outputs as aadio )  " );
 			query.setParameter( "infoOptions", orphanInfoOptionIds );
 			orphanInfoOptionIds = query.getResultList();
@@ -306,8 +308,8 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		return infoOptionsToScan.isHasNextPage();
 	}
 
-	private void processUploadedFiles( ProductType productType, List<FileAttachment> uploadedFiles ) throws FileAttachmentException {
-		File attachmentDirectory = PathHandler.getProductTypeAttachmentFile(productType);
+	private void processUploadedFiles( AssetType assetType, List<FileAttachment> uploadedFiles ) throws FileAttachmentException {
+		File attachmentDirectory = PathHandler.getProductTypeAttachmentFile(assetType);
 		File tmpDirectory = PathHandler.getTempRoot();
 		
 		if( uploadedFiles != null ) {
@@ -325,11 +327,11 @@ public class LegacyProductTypeManager implements LegacyProductType {
 					
 					// now we need to set the correct file name for the attachment and set the modifiedBy
 					uploadedFile.setFileName(tmpFile.getName());
-					uploadedFile.setTenant(productType.getTenant());
-					uploadedFile.setModifiedBy(productType.getModifiedBy());
+					uploadedFile.setTenant(assetType.getTenant());
+					uploadedFile.setModifiedBy(assetType.getModifiedBy());
 					
 					// attach the attachment
-					productType.getAttachments().add(uploadedFile);
+					assetType.getAttachments().add(uploadedFile);
 				} catch (IOException e) {
 					logger.error("failed to copy uploaded file ", e);
 					throw new FileAttachmentException(e);
@@ -337,7 +339,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 				
 			}
 			
-			persistenceManager.update(productType);
+			persistenceManager.update(assetType);
 		}
 		
 		// Now we need to cleanup any files that are no longer attached to the producttype
@@ -348,7 +350,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 			 * a directory filter
 			 */
 			final List<String> attachedFiles = new ArrayList<String>();
-			for(FileAttachment file: productType.getAttachments()) {
+			for(FileAttachment file: assetType.getAttachments()) {
 				attachedFiles.add(file.getFileName());
 			}
 		
@@ -374,8 +376,8 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		
 	}
 	
-	public ProductType updateProductType(ProductType productTypeBean ) throws FileAttachmentException, ImageAttachmentException {
-		return updateProductType(productTypeBean, (List<FileAttachment>)null, null );
+	public AssetType updateProductType(AssetType assetType) throws FileAttachmentException, ImageAttachmentException {
+		return updateProductType(assetType, (List<FileAttachment>)null, null );
 	}
 	
 }

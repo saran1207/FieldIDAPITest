@@ -14,7 +14,7 @@ public abstract class ManageProductTypesTestCase extends PageNavigatingTestCase<
 	protected static final String TEST_PRODUCT_TYPE_INSTRUCTIONS = "Test Instructions";
 	protected static final String TEST_PRODUCT_TYPE_CAUTIONS_URL = "http://cautions.url.com/";
 	protected static final String TEST_PRODUCT_TYPE_MANUFACTURER_CERTIFICATE_TEXT = "Test Manufacturer Certificate Text";
-	protected static final String TEST_PRODUCT_TYPE_PRODUCT_DESCRIPTION_TEMPLATE = "Test Product Description Template";
+	protected static final String TEST_PRODUCT_TYPE_PRODUCT_DESCRIPTION_TEMPLATE = "Test Asset Description Template";
 
 	@Override
 	protected ManageProductTypesPage navigateToPage() {

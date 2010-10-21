@@ -122,7 +122,7 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	
 	private List<String> getDefaultColumnHeaders() {
 		return Arrays.asList("Serial Number", "Inspection Type", "Job Site Name", "Result", 
-				"Product Type", "Product Status", "Links");
+				"Asset Type", "Asset Status", "Links");
 	}
 
 }

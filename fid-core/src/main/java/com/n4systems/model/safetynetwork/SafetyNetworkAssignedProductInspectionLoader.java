@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
 
@@ -26,16 +26,16 @@ public class SafetyNetworkAssignedProductInspectionLoader extends SafetyNetworkI
 	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Inspection inspection) {
 		SafetyNetworkProductSecurityManager securityManager = new SafetyNetworkProductSecurityManager(filter.getOwner());
 		
-		List<Product> linkedProducts = getLinkedProducts(em, filter, inspection.getProduct());
+		List<Asset> linkedAssets = getLinkedProducts(em, filter, inspection.getAsset());
 		
-		boolean hasAssignedProduct = securityManager.listContainsAnAssignedProduct(linkedProducts);
-		boolean productIsPubliclyAvailable = securityManager.listContainsAnAssetPubliclyPublished(linkedProducts);
+		boolean hasAssignedProduct = securityManager.listContainsAnAssignedProduct(linkedAssets);
+		boolean productIsPubliclyAvailable = securityManager.listContainsAnAssetPubliclyPublished(linkedAssets);
 		
 		return hasAssignedProduct || productIsPubliclyAvailable;
 	}
 
-	private List<Product> getLinkedProducts(EntityManager em, SecurityFilter filter, Product product) {
-		productsByNetworkIdLoader.setNetworkId(product.getNetworkId());
+	private List<Asset> getLinkedProducts(EntityManager em, SecurityFilter filter, Asset asset) {
+		productsByNetworkIdLoader.setNetworkId(asset.getNetworkId());
 		
 		// there's no need for these to be enhanced since they're just used for a security check
 		productsByNetworkIdLoader.bypassSecurityEnhancement();

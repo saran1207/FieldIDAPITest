@@ -1,33 +1,33 @@
 package com.n4systems.model.builders;
 
 import static com.n4systems.model.builders.InspectionTypeBuilder.anInspectionType;
-import static com.n4systems.model.builders.ProductBuilder.aProduct;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.SubInspection;
 
 public class SubInspectionBuilder extends BaseBuilder<SubInspection> {
 
 	private final String name;
 	private final InspectionType inspectionType;
-	private final Product product;
+	private final Asset asset;
 	
 	public static SubInspectionBuilder aSubInspection(String name) {
-		return new SubInspectionBuilder(name, anInspectionType().build(), aProduct().build());
+		return new SubInspectionBuilder(name, anInspectionType().build(), anAsset().build());
 	}
 
-	public SubInspectionBuilder(String name, InspectionType inspectionType, Product product) {
+	public SubInspectionBuilder(String name, InspectionType inspectionType, Asset asset) {
 		this.name = name;
 		this.inspectionType = inspectionType;
-		this.product = product;
+		this.asset = asset;
 	}
 	
 	public SubInspectionBuilder withType(InspectionType inspectionType) {
-		return new SubInspectionBuilder(name, inspectionType, product);
+		return new SubInspectionBuilder(name, inspectionType, asset);
 	}
 	
-	public SubInspectionBuilder withProduct(Product product) {
-		return new SubInspectionBuilder(name, inspectionType, product);
+	public SubInspectionBuilder withProduct(Asset asset) {
+		return new SubInspectionBuilder(name, inspectionType, asset);
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class SubInspectionBuilder extends BaseBuilder<SubInspection> {
 		subInspection.setId(id);
 		subInspection.setName(name);
 		subInspection.setType(inspectionType);
-		subInspection.setProduct(product);
+		subInspection.setAsset(asset);
 		return subInspection;
 	}
 

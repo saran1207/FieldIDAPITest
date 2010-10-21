@@ -7,10 +7,10 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ReportException;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 
-public class ProductCertificateReportGenerator extends CertificateReportGenerator<Product> {
+public class ProductCertificateReportGenerator extends CertificateReportGenerator<Asset> {
 	private Logger logger = Logger.getLogger(ProductCertificateReportGenerator.class);
 	
 	private final ProductCertificateGenerator certGenerator;
@@ -39,18 +39,18 @@ public class ProductCertificateReportGenerator extends CertificateReportGenerato
 
 
 	@Override
-	protected JasperPrint singleCert(Product product) throws ReportException {
-		return certGenerator.generate(product, user);
+	protected JasperPrint singleCert(Asset asset) throws ReportException {
+		return certGenerator.generate(asset, user);
 	}
 
 	@Override
-	protected void logCertError(Product product, Exception e) {
-		logger.warn("Failed to manufacturer certificate for Product [" + product.getId() + "].  Moving on to next Product.", e);
+	protected void logCertError(Asset asset, Exception e) {
+		logger.warn("Failed to manufacturer certificate for Asset [" + asset.getId() + "].  Moving on to next Asset.", e);
 	}
 
 
 	@Override
-	protected boolean isPrintable(Product certObject) {
+	protected boolean isPrintable(Asset certObject) {
 		return certObject.getType().isHasManufactureCertificate();
 	}
 	

@@ -16,7 +16,7 @@ import com.n4systems.model.security.SecurityLevel;
 @Table(name = "lineitems")
 public class LineItem extends EntityWithTenant implements Listable<Long>, SecurityEnhanced<LineItem> {
 	private static final long serialVersionUID = 1L;
-	public static final String DEFAULT_PRODUCT_CODE = "DEFAULT";
+	public static final String DEFAULT_ASSET_CODE = "DEFAULT";
 	
 	@Column(nullable=false)
 	private int idx = -1;		// we initialize with -1 to show that the index has not been set
@@ -24,8 +24,8 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 	@Column(nullable=false)
 	private long quantity = 0L;
 	
-	@Column(nullable=false)
-	private String productCode = DEFAULT_PRODUCT_CODE;
+	@Column(nullable=false, name="productcode")
+	private String assetCode = DEFAULT_ASSET_CODE;
 	private String lineId;
 	private String description;
 	
@@ -71,12 +71,12 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 	}
 
 	@AllowSafetyNetworkAccess
-	public String getProductCode() {
-		return productCode;
+	public String getAssetCode() {
+		return assetCode;
 	}
 
-	public void setProductCode(String productIdent) {
-		this.productCode = productIdent;
+	public void setAssetCode(String productIdent) {
+		this.assetCode = productIdent;
 	}
 	
 	@AllowSafetyNetworkAccess
@@ -99,7 +99,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 
 	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
-		return getProductCode();
+		return getAssetCode();
 	}
 
 	@AllowSafetyNetworkAccess

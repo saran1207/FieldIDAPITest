@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -11,7 +12,6 @@ import com.n4systems.exceptions.InfoFieldNotFoundException;
 import com.n4systems.exceptions.InfoOptionNotFoundException;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.user.User;
 import com.n4systems.util.FuzzyResolver;
 
@@ -20,8 +20,8 @@ public class AutoAttributeParser {
 	
 	/** Raw auto-attribute data */
 	private List<String[]> attributeData = new ArrayList<String[]>();
-	/** ProductType for these attributes, set once in the constructor */
-	private ProductType productType;
+	/** AssetType for these attributes, set once in the constructor */
+	private AssetType assetType;
 	/** A User to set as the modifiedBy user on the generated objects */
 	private User modifiedBy;
 	/** 
@@ -58,44 +58,44 @@ public class AutoAttributeParser {
 	}
 	
 	/**
-	 * Constructs the AutoAttributeParser, setting the raw Auto-Attribute data and the ProductType<br />
+	 * Constructs the AutoAttributeParser, setting the raw Auto-Attribute data and the AssetType<br />
 	 * The first (index 0) <code>attributeData</code> <u>MUST</u> be a header line listing the Input/Output InfoFieldBean names. (eg I:Bleh, O:Asdf)<br />
 	 * All elements after the first represent a static or dynamic info field.
-	 * @see #AutoAttributeParser(List, ProductType, User)
+	 * @see #AutoAttributeParser(List, com.n4systems.model.AssetType , User)
 	 * @param attributeData		Raw auto-atribute data
-	 * @param productType		ProductType for this AutoAttributeCriteria
+	 * @param assetType		AssetType for this AutoAttributeCriteria
 	 */
-	public AutoAttributeParser(List<String[]> attributeData, ProductType productType) {
-		this(attributeData, productType, null);
+	public AutoAttributeParser(List<String[]> attributeData, AssetType assetType) {
+		this(attributeData, assetType, null);
 	}
 	
 	/**
-	 * Constructs the AutoAttributeParser, setting the raw Auto-Attribute data and the ProductType<br />
+	 * Constructs the AutoAttributeParser, setting the raw Auto-Attribute data and the AssetType<br />
 	 * The first (index 0) <code>attributeData</code> <u>MUST</u> be a header line listing the Input/Output InfoFieldBean names. (eg I:Bleh, O:Asdf)<br />
 	 * All elements after the first represent a static or dynamic info field.
 	 * @param attributeData		Raw auto-atribute data
-	 * @param productType		ProductType for this AutoAttributeCriteria
+	 * @param assetType		AssetType for this AutoAttributeCriteria
 	 * @param modifiedBy		A user to set as the modifiedBy User on the AutoAttributeCriteria and AutoAttributeDefinitions
 	 */
-	public AutoAttributeParser(List<String[]> attributeData, ProductType productType, User modifiedBy) {
+	public AutoAttributeParser(List<String[]> attributeData, AssetType assetType, User modifiedBy) {
 		this.attributeData = attributeData;
-		this.productType = productType;
+		this.assetType = assetType;
 		this.modifiedBy = modifiedBy;
 	}
 	
 	/**
-	 * @return The raw Auto-Attribute data set in {@link #AutoAttributeParser(List, ProductType)}
+	 * @return The raw Auto-Attribute data set in {@link #AutoAttributeParser(List, com.n4systems.model.AssetType)}
 	 */
 	public List<String[]> getAttributeData() {
 		return attributeData;
 	}
 	
 	/**
-	 * @see ProductType
-	 * @return The ProductType set by {@link #AutoAttributeParser(List, ProductType)}
+	 * @see com.n4systems.model.AssetType
+	 * @return The AssetType set by {@link #AutoAttributeParser(List, com.n4systems.model.AssetType)}
 	 */
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getProductType() {
+		return assetType;
 	}
 	
 	/**
@@ -111,8 +111,8 @@ public class AutoAttributeParser {
 		
 		// construct the criteria and set defaults
 		AutoAttributeCriteria criteria = new AutoAttributeCriteria();
-		criteria.setTenant(productType.getTenant());
-		criteria.setProductType(productType);
+		criteria.setTenant(assetType.getTenant());
+		criteria.setAssetType(assetType);
 		criteria.setModifiedBy(modifiedBy);
 		criteria.setInputs(new ArrayList<InfoFieldBean>());
 		criteria.setOutputs(new ArrayList<InfoFieldBean>());
@@ -127,13 +127,13 @@ public class AutoAttributeParser {
 	
 	/**
 	 * Parses a String header column and adds it to the proper {@link AutoAttributeCritiera} list (ie input/output).  Header lines <u>MUST</u> begin with <code>INPUT_PREFIX</code> or <code>OUTPUT_PREFIX</code>
-	 * and <u>MUST</u> resolve the name of an {@link InfoFieldBean} on <code>productType</code>.  All matches are case and whitespace insensitive.
+	 * and <u>MUST</u> resolve the name of an {@link InfoFieldBean} on <code>assetType</code>.  All matches are case and whitespace insensitive.
 	 * Also adds the field to the <code>columns</code> list for resolution in {@link #getDefinitions(AutoAttributeCriteria)}.
 	 * @see #getCriteria()
 	 * @param header						A single String header.
 	 * @param criteria						An AutoAttributeCriteria
 	 * @throws ParseException				If the header data is not properly formatted.
-	 * @throws InfoFieldNotFoundException	If the header does not resolve to an <code>infoField</code> on the <code>productType</code>
+	 * @throws InfoFieldNotFoundException	If the header does not resolve to an <code>infoField</code> on the <code>assetType</code>
 	 */
 	private void parseHeaderColumn(String header, AutoAttributeCriteria criteria) throws ParseException, InfoFieldNotFoundException {
 		String upperHeader = header.trim().toUpperCase();
@@ -158,15 +158,15 @@ public class AutoAttributeParser {
 		InfoFieldBean infoField = null;
 		try {
 			// try and resolve using simple fuzzy rules
-			infoField = FuzzyResolver.resolve(fieldName, productType.getAvailableInfoFields(), "name");
+			infoField = FuzzyResolver.resolve(fieldName, assetType.getAvailableInfoFields(), "name");
 			
 			if(infoField == null) {
-				throw new InfoFieldNotFoundException(fieldName, productType);
+				throw new InfoFieldNotFoundException(fieldName, assetType);
 			}
 		} catch (InfoFieldNotFoundException i) {
 			throw i;
 		} catch (Exception e) {
-			throw new InfoFieldNotFoundException(fieldName, productType, e);
+			throw new InfoFieldNotFoundException(fieldName, assetType, e);
 		}
 		
 		// now we need to add it to either the input or output list
@@ -206,7 +206,7 @@ public class AutoAttributeParser {
 		for(int i = HEADER_LINE + 1; i < attributeData.size(); i++) {
 			// initialize a new Definition and set the defaults
 			attrib = new AutoAttributeDefinition();
-			attrib.setTenant(productType.getTenant());
+			attrib.setTenant(assetType.getTenant());
 			attrib.setModifiedBy(modifiedBy);
 			attrib.setCriteria(criteria);
 			attrib.setInputs(new ArrayList<InfoOptionBean>());

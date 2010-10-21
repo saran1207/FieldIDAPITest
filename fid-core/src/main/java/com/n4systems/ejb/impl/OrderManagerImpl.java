@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.OrderMappingBean;
@@ -20,7 +21,6 @@ import com.n4systems.exceptions.OrderProcessingException;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderKey;
-import com.n4systems.model.Product;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.Order.OrderType;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -123,7 +123,7 @@ public class OrderManagerImpl implements OrderManager {
 	}
 	
 	public int countProductsTagged(LineItem lineItem) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(Product.class, new OpenSecurityFilter());
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(Asset.class, new OpenSecurityFilter());
 		builder.setCountSelect();
 		builder.addSimpleWhere("shopOrder", lineItem);
 		
@@ -326,12 +326,12 @@ public class OrderManagerImpl implements OrderManager {
 		String productCode = lineItemData.get(OrderKey.LINE_PRODUCT_CODE);
 		
 		if (productCode != null) {
-			logger.info("Processing Line Item with Product Code [" + productCode + "] for Order [" + order.getOrderNumber() + "]");
+			logger.info("Processing Line Item with Asset Code [" + productCode + "] for Order [" + order.getOrderNumber() + "]");
 			
-			lineItem.setProductCode(productCode);
+			lineItem.setAssetCode(productCode);
 		} else {
-			logger.warn("Line Item for Order [" + order.getOrderNumber() + "] had empty Product Code.  Using default ...");
-			lineItem.setProductCode(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, order.getTenant().getId()));
+			logger.warn("Line Item for Order [" + order.getOrderNumber() + "] had empty Asset Code.  Using default ...");
+			lineItem.setAssetCode(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, order.getTenant().getId()));
 		}
 		
 		String value;
@@ -368,11 +368,11 @@ public class OrderManagerImpl implements OrderManager {
 		
 		// now we can save it
 		if(lineItem.isNew()) {
-			logger.info("Creating new line item [" + lineItem.getProductCode() + "] Order [" + order.getOrderNumber() + "]");
+			logger.info("Creating new line item [" + lineItem.getAssetCode() + "] Order [" + order.getOrderNumber() + "]");
 			
 			persistenceManager.save(lineItem);
 		} else {
-			logger.info("Updating line item [" + lineItem.getProductCode() + "] Order [" + order.getOrderNumber() + "]");
+			logger.info("Updating line item [" + lineItem.getAssetCode() + "] Order [" + order.getOrderNumber() + "]");
 			
 			lineItem = persistenceManager.update(lineItem);
 		}
@@ -537,7 +537,7 @@ public class OrderManagerImpl implements OrderManager {
 			lineItem.setIndex(countLineItems(shopOrder));
 		}
 		
-		lineItem.setProductCode(orderTransfer.getProductCode());
+		lineItem.setAssetCode(orderTransfer.getProductCode());
 		lineItem.setLineId(orderTransfer.getLineItemId());
 		lineItem.setQuantity(orderTransfer.getOrderQuantity());
 		lineItem.setDescription(orderTransfer.getLineItemDescription());

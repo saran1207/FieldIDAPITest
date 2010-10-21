@@ -8,15 +8,15 @@ function getToken() {
 	return token.getValue();
 }
 
-function attachProduct( event, productId ) {
+function attachProduct( event, assetId ) {
 	if( event ) {
 		event.stop();
 		element = Event.element( event );
-		productId = element.getAttribute( 'productId' );
+		assetId = element.getAttribute( 'assetId' );
 	}
 	Lightview.hide();
 	
-	var url = addSubProductUrl + "?uniqueID=" + $('uniqueID').value + "&subProduct.product.iD=" + productId + "&subProductIndex=" + subProductIndex + "&token=" + getToken();
+	var url = addSubProductUrl + "?uniqueID=" + $('uniqueID').value + "&subProduct.asset.iD=" + assetId + "&subProductIndex=" + subProductIndex + "&token=" + getToken();
 	subProductIndex++;
 	getResponse( url, "get" );
 }
@@ -37,9 +37,9 @@ function submitCreateForm( event, form ) {
 
 
 var addProductUrl = "";
-function addSubProduct(productType, ownerId) {
+function addSubProduct(assetType, ownerId) {
 	var params = new Object();
-	params.productTypeId = productType;
+	params.assetTypeId = assetType;
 	params.token = getToken();
 	params.ownerId = ownerId;
 	
@@ -81,7 +81,7 @@ function submitSearchForm(event) {
 }
 
 var removeSubProductUrl = "";
-var productIdentifer = 'productId';
+var productIdentifer = 'assetId';
 function removeSubProduct( subProductId ) {
 	var params = new Object();
 	params.subProductId =  subProductId;

@@ -5,38 +5,38 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 @Entity
 @Table(name = "productserialextensionvalue")
-public class ProductSerialExtensionValueBean extends LegacyBaseEntity {
+public class AssetSerialExtensionValue extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	private String extensionValue;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "r_productserial")
-	private Product productSerial;
+	private Asset assetSerial;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "r_productserialextension")
-	private ProductSerialExtensionBean productSerialExtension;
+	private AssetSerialExtension assetSerialExtension;
 
-	public Product getProductSerial() {
-		return productSerial;
+	public Asset getProductSerial() {
+		return assetSerial;
 	}
 
-	public void setProductSerial(Product productSerial) {
-		this.productSerial = productSerial;
+	public void setProductSerial(Asset assetSerial) {
+		this.assetSerial = assetSerial;
 	}
 
-	public ProductSerialExtensionBean getProductSerialExtension() {
-		return productSerialExtension;
+	public AssetSerialExtension getAssetSerialExtension() {
+		return assetSerialExtension;
 	}
 
-	public void setProductSerialExtension(ProductSerialExtensionBean productSerialExtension) {
-		this.productSerialExtension = productSerialExtension;
+	public void setAssetSerialExtension(AssetSerialExtension assetSerialExtension) {
+		this.assetSerialExtension = assetSerialExtension;
 	}
 
 	public String getExtensionValue() {

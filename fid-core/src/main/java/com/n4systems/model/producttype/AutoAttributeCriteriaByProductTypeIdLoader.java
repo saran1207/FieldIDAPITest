@@ -8,7 +8,7 @@ import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class AutoAttributeCriteriaByProductTypeIdLoader extends SecurityFilteredLoader<AutoAttributeCriteria> {
-	private Long productTypeId;
+	private Long assetTypeId;
 
 	public AutoAttributeCriteriaByProductTypeIdLoader(SecurityFilter filter) {
 		super(filter);
@@ -17,14 +17,14 @@ public class AutoAttributeCriteriaByProductTypeIdLoader extends SecurityFiltered
 	@Override
 	protected AutoAttributeCriteria load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<AutoAttributeCriteria> builder = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, filter);
-		builder.addSimpleWhere("productType.id", productTypeId);
+		builder.addSimpleWhere("assetType.id", assetTypeId);
 		builder.addFetch("inputs");
 		
 		AutoAttributeCriteria aaCriteria = builder.getSingleResult(em);
 		return aaCriteria;
 	}
 
-	public void setProductTypeId(Long productTypeId) {
-		this.productTypeId = productTypeId;
+	public void setAssetTypeId(Long assetTypeId) {
+		this.assetTypeId = assetTypeId;
 	}
 }

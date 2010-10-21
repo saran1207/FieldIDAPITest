@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -26,7 +26,7 @@ import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
@@ -56,7 +56,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	private List<ListingPair> inspectionBooks;
 	private List<ListingPair> examiners;
 	private List<ListingPair> inspectionTypes;
-	private List<ProductStatusBean> statuses;
+	private List<AssetStatus> statuses;
 	private List<ListingPair> eventJobs;
 	
 	public InspectionReportAction(
@@ -65,7 +65,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			final ProductManager productManager) {
 		//TODO refactor search action so that we don't have to pass in the session key but a way of getting the current criteria.
 		super(InspectionReportAction.class, WebSession.REPORT_CRITERIA, "Inspection Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_search", "product"));
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_search", "asset"));
 
 		this.userManager = userManager;
 		
@@ -194,15 +194,13 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		getContainer().setToDate(DateHelper.convertToUTC(convertToEndOfDay(toDate), getSessionUser().getTimeZone()));
 	}
 	
-	public List<ProductStatusBean> getProductStatus() {
+	public List<AssetStatus> getAssetStatuses() {
 		if (statuses == null) {
-			
 			statuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
 		
 		return statuses;
 	}
-	
 	
 	public List<ListingPair> getExaminers() {
 		if (examiners == null) {
@@ -296,7 +294,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public Long getAssetId(int rowId){
 		Inspection inspection = (Inspection)getEntityForRow(rowId);
-		return inspection.getProduct().getId();
+		return inspection.getAsset().getId();
 	}
 	
 	public List<Status> getStatuses() {

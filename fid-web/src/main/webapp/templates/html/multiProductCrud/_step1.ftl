@@ -13,5 +13,5 @@
 </div>
 
 <script type="text/javascript">
-	updateProductType($('productType'));
+	updateProductType($('assetType'));
 </script>

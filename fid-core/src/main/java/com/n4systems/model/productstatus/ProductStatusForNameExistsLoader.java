@@ -2,7 +2,7 @@ package com.n4systems.model.productstatus;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
@@ -18,7 +18,7 @@ public class ProductStatusForNameExistsLoader extends SecurityFilteredLoader<Boo
 
 	@Override
 	protected Boolean load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<ProductStatusBean> builder = new QueryBuilder<ProductStatusBean>(ProductStatusBean.class, filter);
+		QueryBuilder<AssetStatus> builder = new QueryBuilder<AssetStatus>(AssetStatus.class, filter);
 		builder.addWhere(WhereClauseFactory.create("name", name));
 		
 		Boolean exists = builder.entityExists(em);

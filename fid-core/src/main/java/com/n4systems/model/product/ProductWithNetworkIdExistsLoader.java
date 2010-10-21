@@ -2,7 +2,7 @@ package com.n4systems.model.product;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -18,7 +18,7 @@ public class ProductWithNetworkIdExistsLoader extends SecurityFilteredLoader<Boo
 
 	@Override
 	public Boolean load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<Boolean> builder = new QueryBuilder<Boolean>(Product.class, filter);
+		QueryBuilder<Boolean> builder = new QueryBuilder<Boolean>(Asset.class, filter);
 		builder.addWhere(WhereClauseFactory.create("networkId", networkId));
 		
 		Boolean exists = builder.entityExists(em);

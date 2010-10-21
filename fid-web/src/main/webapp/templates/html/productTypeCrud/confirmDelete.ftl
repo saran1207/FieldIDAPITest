@@ -1,16 +1,16 @@
-<title><@s.text name="title.confirmproducttypedelete" /> - ${productType.name?html}</title>
+<title><@s.text name="title.confirmproducttypedelete" /> - ${assetType.name?html}</title>
 ${action.setPageType('product_type', 'edit')!}
 <#if !removalSummary.validToDelete() >
 	<div class="formErrors error" >
 		<@s.text name="error.productsusedonamasterinspection">
-			<@s.param>${productType.name?html}</@s.param>
+			<@s.param>${assetType.name?html}</@s.param>
 			<@s.param>${removalSummary.productsUsedInMasterInpsection}</@s.param>
 		</@s.text>
 	</div>
 </#if>
 
 <div class="instructions">
-	<@s.text name="instruction.deleteproducttype"><@s.param >${productType.name?html}</@s.param></@s.text>
+	<@s.text name="instruction.deleteproducttype"><@s.param >${assetType.name?html}</@s.param></@s.text>
 </div>
 
 <div class="crudForm largeForm bigForm pageSection">

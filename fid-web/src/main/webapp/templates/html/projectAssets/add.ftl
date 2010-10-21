@@ -16,7 +16,7 @@
 		
 		function attachAssetListener( event ) {
 			event.stop();
-			redirect( attachAssetToProjectUrl + "?projectId=" + ${project.id} + "&uniqueID=" + Event.element( event ).getAttribute( 'productId' ) );
+			redirect( attachAssetToProjectUrl + "?projectId=" + ${project.id} + "&uniqueID=" + Event.element( event ).getAttribute( 'assetId' ) );
 		}
 		
 		function oneResultAsset( assetId, results ) {

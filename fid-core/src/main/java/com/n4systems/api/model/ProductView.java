@@ -32,7 +32,7 @@ public class ProductView extends ExternalModelView {
 	@ExportField(title = "Location", order = 600)
 	private String location;
 
-	@ExportField(title = "Product Status", order = 700, validators = { ProductStatusExistsValidator.class })
+	@ExportField(title = "Asset Status", order = 700, validators = { ProductStatusExistsValidator.class })
 	private String status;
 
 	@ExportField(title = "Purchase Order", order = 800)

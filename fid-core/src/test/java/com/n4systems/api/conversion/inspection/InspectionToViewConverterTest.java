@@ -6,9 +6,10 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
+import com.n4systems.model.builders.AssetBuilder;
 import org.junit.Test;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.InspectionView;
@@ -16,7 +17,6 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.Status;
 import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.ProductBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
 import com.n4systems.model.location.Location;
@@ -86,11 +86,11 @@ public class InspectionToViewConverterTest {
 		};
 		
 		Inspection model = new Inspection();
-		model.setProduct(ProductBuilder.aProduct().withSerialNumber("serial").build());
+		model.setAsset(AssetBuilder.anAsset().withSerialNumber("serial").build());
 		
 		InspectionView view = converter.toView(model);
 		
-		assertEquals(model.getProduct().getSerialNumber(), view.getIdentifier());
+		assertEquals(model.getAsset().getSerialNumber(), view.getIdentifier());
 	}
 	
 	@Test
@@ -196,15 +196,15 @@ public class InspectionToViewConverterTest {
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
-		ProductStatusBean pse = new ProductStatusBean();
-		pse.setName("product status");
+		AssetStatus pse = new AssetStatus();
+		pse.setName("asset status");
 		
 		Inspection model = new Inspection();
-		model.setProductStatus(pse);
+		model.setAssetStatus(pse);
 		
 		InspectionView view = converter.toView(model);
 		
-		assertEquals(model.getProductStatus().getName(), view.getProductStatus());
+		assertEquals(model.getAssetStatus().getName(), view.getProductStatus());
 	}
 	
 	@Test

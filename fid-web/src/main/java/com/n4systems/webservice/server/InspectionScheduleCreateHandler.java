@@ -1,8 +1,8 @@
 package com.n4systems.webservice.server;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.product.ProductByMobileGuidLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -11,13 +11,13 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 public class InspectionScheduleCreateHandler {
 
 	private final ProductByMobileGuidLoader productByMobileGuidLoader;
-	private final FilteredIdLoader<Product> filteredProductLoader;
+	private final FilteredIdLoader<Asset> filteredProductLoader;
 	private final FilteredIdLoader<InspectionType> inspectionTypeLoader;
 	private final InspectionScheduleSaver saver;
 
 	public InspectionScheduleCreateHandler(
 			ProductByMobileGuidLoader productByMobileGuidLoader,
-			FilteredIdLoader<Product> filteredProductLoader,
+			FilteredIdLoader<Asset> filteredProductLoader,
 			FilteredIdLoader<InspectionType> inspectionTypeLoader,
 			InspectionScheduleSaver saver) {
 		super();
@@ -28,24 +28,24 @@ public class InspectionScheduleCreateHandler {
 	}
 
 	public void createNewInspectionSchedule(InspectionSchedule inspectionSchedule, InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
-		inspectionSchedule.setProduct(loadProduct(inspectionSchedule, inspectionScheduleServiceDTO));
+		inspectionSchedule.setAsset(loadProduct(inspectionSchedule, inspectionScheduleServiceDTO));
 		
 		inspectionSchedule.setInspectionType(loadInspectionType(inspectionSchedule, inspectionScheduleServiceDTO));
 		
 		saver.saveOrUpdate(inspectionSchedule);
 	}
 
-	private Product loadProduct(InspectionSchedule inspectionSchedule,
+	private Asset loadProduct(InspectionSchedule inspectionSchedule,
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		
-		Product product;
+		Asset asset;
 		if ( inspectionScheduleServiceDTO.isProductCreatedOnMobile()) {
-			product = productByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getProductMobileGuid()).load();
+			asset = productByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getProductMobileGuid()).load();
 		} else {
-			product = filteredProductLoader.setId(inspectionScheduleServiceDTO.getProductId()).load();
+			asset = filteredProductLoader.setId(inspectionScheduleServiceDTO.getProductId()).load();
 		}
 		
-		return product;
+		return asset;
 	}
 	
 	private InspectionType loadInspectionType(InspectionSchedule inspectionSchedule,

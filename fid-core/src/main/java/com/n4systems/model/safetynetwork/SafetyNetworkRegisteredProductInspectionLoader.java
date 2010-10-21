@@ -22,8 +22,8 @@ public class SafetyNetworkRegisteredProductInspectionLoader extends SafetyNetwor
 
 	@Override
 	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Inspection inspection) {
-		// Access is allowed to this inspection if we have a product that is linked to its product
-		productExistsLoader.setNetworkId(inspection.getProduct().getNetworkId());
+		// Access is allowed to this inspection if we have a asset that is linked to its asset
+		productExistsLoader.setNetworkId(inspection.getAsset().getNetworkId());
 		
 		boolean accessAllowed = productExistsLoader.load(em, filter); 
 		return accessAllowed;

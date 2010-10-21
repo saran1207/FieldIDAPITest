@@ -3,19 +3,19 @@ var cancelScheduleUrl = '';
 var removeScheduleUrl = '';
 var removeWarning = '';
 
-function editSchedule( inspectionTypeId, productTypeId, uniqueId, ownerId ) {
-	getResponse(editScheduleUrl,"get", makeInspectionFrequencyParams(inspectionTypeId, productTypeId, uniqueId, ownerId)); 
+function editSchedule( inspectionTypeId, assetTypeId, uniqueId, ownerId ) {
+	getResponse(editScheduleUrl,"get", makeInspectionFrequencyParams(inspectionTypeId, assetTypeId, uniqueId, ownerId)); 
 }
 
 function saveSchedule( inspectionTypeId ) {
 	$( 'schedule_' + inspectionTypeId ).request(getStandardCallbacks());
 }
 
-function cancelSchedule( inspectionTypeId, productTypeId, uniqueId ) {
-	getResponse(cancelScheduleUrl, "get", makeInspectionFrequencyParams(inspectionTypeId, productTypeId, uniqueId));  
+function cancelSchedule( inspectionTypeId, assetTypeId, uniqueId ) {
+	getResponse(cancelScheduleUrl, "get", makeInspectionFrequencyParams(inspectionTypeId, assetTypeId, uniqueId));  
 }
 
-function removeSchedule( inspectionTypeId, productTypeId, uniqueId, tryConfirm ) {
+function removeSchedule( inspectionTypeId, assetTypeId, uniqueId, tryConfirm ) {
 	var doRemove = true;
 	
 	if( tryConfirm && ( $('eventFrequencyOverrides_' + inspectionTypeId + '_container' ).getElementsByClassName( 'customerOverride' ).length != 0 )) {
@@ -23,14 +23,14 @@ function removeSchedule( inspectionTypeId, productTypeId, uniqueId, tryConfirm )
 	}
 	 
 	if (doRemove) {
-		getResponse(removeScheduleUrl, "get", makeInspectionFrequencyParams(inspectionTypeId, productTypeId, uniqueId));  
+		getResponse(removeScheduleUrl, "get", makeInspectionFrequencyParams(inspectionTypeId, assetTypeId, uniqueId));  
 	}	
 }
 
-function makeInspectionFrequencyParams( inspectionTypeId, productTypeId, uniqueId, ownerId ) {
+function makeInspectionFrequencyParams( inspectionTypeId, assetTypeId, uniqueId, ownerId ) {
 	var params = new Object();
 	params.inspectionTypeId= inspectionTypeId;
-	params.productTypeId= productTypeId;
+	params.assetTypeId= assetTypeId;
 	if (uniqueId != null) { 
 	 	params.uniqueID= uniqueId;
 	}

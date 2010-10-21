@@ -82,12 +82,12 @@ public class CatalogImportTask implements Runnable {
 		body += "<p>";
 		CatalogImportSummary summary = importCatalogService.getSummary();
 		if (summary.getProductTypeGroupImportSummary().failed()) {
-			body += "Product Type Group " + summary.getProductTypeGroupImportSummary().getFailedImporting() + " could not be correctly imported.";
+			body += "Asset Type Group " + summary.getProductTypeGroupImportSummary().getFailedImporting() + " could not be correctly imported.";
 		} else if (summary.getProductTypeImportSummary().failed()) {
 			if (summary.getProductTypeImportSummary().getFailureType() == FailureType.COULD_NOT_CREATE) {
-				body += "Product Type  " + summary.getProductTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
+				body += "Asset Type  " + summary.getProductTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
 			} else {
-				body += "Auto attributes for product type  " + summary.getProductTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
+				body += "Auto attributes for asset type  " + summary.getProductTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
 			}
 		} else if (summary.getInspectionTypeImportSummary().failed()) {
 			body += "Inspection Type  " + summary.getInspectionTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
@@ -96,7 +96,7 @@ public class CatalogImportTask implements Runnable {
 		} else if (summary.getStateSetImportSummary().failed()) {
 			body += "Button Group " + summary.getStateSetImportSummary().getFailedImporting() + " could not be correctly imported.";
 		} else if (summary.getProductTypeRelationshipsImportSummary().failed()) {
-			body += "Could not set up the relationships to inspection types for product type " + summary.getProductTypeRelationshipsImportSummary().getFailedImporting();
+			body += "Could not set up the relationships to inspection types for asset type " + summary.getProductTypeRelationshipsImportSummary().getFailedImporting();
 		}
 		 
 		return body + "</p><p>The rest of import has been undone.  You can attempt the import again, if the problem persists contact FieldID support by sending an email to support@fieldid.com</p>";
@@ -106,7 +106,7 @@ public class CatalogImportTask implements Runnable {
 		String body = "<h4>Your Catalog Import has completed.</h4>";
 		body += "<table>" +
 					"<tr><td>" + importCatalogService.getSummary().getProductTypeImportSummary().getImportMapping().size() + "</td>" +
-					"<td>Product Type(s) have been imported.</td></tr>" +
+					"<td>Asset Type(s) have been imported.</td></tr>" +
 					"<tr><td>" + importCatalogService.getSummary().getInspectionTypeImportSummary().numberImported() + "</td>" +
 					"<td>Inspection Type(s) have been imported.</td></tr>" +
 				"</table>";

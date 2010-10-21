@@ -32,7 +32,7 @@
 ${action.setPageType('product_type', 'select_inspection_types')!}
 <#if ! inspectionTypes.isEmpty() >
 	<@s.form action="productTypeEventTypesSave" theme="simple">
-		<@s.hidden name="productTypeId" />
+		<@s.hidden name="assetTypeId" />
 		<table class="list" >
 			<tr>
 				<th class="checkboxRow"><@s.text name="label.selected"/></th>
@@ -42,13 +42,13 @@ ${action.setPageType('product_type', 'select_inspection_types')!}
 			</tr>
 			
 			<#list inspectionTypes as inspectionType>
-				<tr  <#if productTypeInspectionTypes[inspectionType_index] > class="selectedEvent"</#if> id="event_selectType_${inspectionType.id}">
-					<td><@s.checkbox name="productTypeInspectionTypes[${inspectionType_index}]" onclick="changeSelection(this)" id="selectType_${inspectionType.id}" /></td>
+				<tr  <#if assetTypeInspectionTypes[inspectionType_index] > class="selectedEvent"</#if> id="event_selectType_${inspectionType.id}">
+					<td><@s.checkbox name="assetTypeInspectionTypes[${inspectionType_index}]" onclick="changeSelection(this)" id="selectType_${inspectionType.id}" /></td>
 					<td class="name">${inspectionType.name}
 						<#if inspectionType.screenBean?exists > - ${(inspectionType.screenBean.name)!}</#if>
 					</td>
 					
-					<#if productTypeInspectionTypes[inspectionType_index] >
+					<#if assetTypeInspectionTypes[inspectionType_index] >
 						<script type="text/javascript">
 							selectedEvents.push( 'selectType_${inspectionType.id}' );
 						</script>
@@ -57,7 +57,7 @@ ${action.setPageType('product_type', 'select_inspection_types')!}
 			</#list>
 		</table>
 		<div class="formAction">
-			<button  onclick=" window.location = '<@s.url action="productType" includeParams="none" uniqueID="${productTypeId}" />'; return false;" ><@s.text name="hbutton.cancel" /></button>
+			<button  onclick=" window.location = '<@s.url action="productType" includeParams="none" uniqueID="${assetTypeId}" />'; return false;" ><@s.text name="hbutton.cancel" /></button>
 			<@s.submit key="hbutton.save" onclick="return formSubmit();" />
 		</div>
 	</@s.form>

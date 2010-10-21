@@ -15,16 +15,16 @@ public class Admin {
 	private String manageUsersLinkLocator = "xpath=//A[contains(text(),'Manage Users')]";
 	private String manageUserRegistrationsLinkLocator = "xpath=//A[contains(text(),'Manage User Registrations')]";
 	private String manageSystemSettingsLinkLocator = "xpath=//A[contains(text(),'Manage System Settings')]";
-	private String manageProductTypesLinkLocator = "xpath=//A[contains(text(),'Manage Product Types')]";
-	private String manageProductTypeGroupsLinkLocator = "xpath=//A[contains(text(),'Manage Product Type Groups')]";
-	private String manageProductStatusesLinkLocator = "xpath=//A[contains(text(),'Manage Product Statuses')]";
+	private String manageProductTypesLinkLocator = "xpath=//A[contains(text(),'Manage Asset Types')]";
+	private String manageProductTypeGroupsLinkLocator = "xpath=//A[contains(text(),'Manage Asset Type Groups')]";
+	private String manageProductStatusesLinkLocator = "xpath=//A[contains(text(),'Manage Asset Statuses')]";
 	private String manageInspectionTypesLinkLocator = "xpath=//A[contains(text(),'Manage Inspection Types')]";
 	private String manageEventTypeGroupsLinkLocator = "xpath=//A[contains(text(),'Manage Event Type Groups')]";
 	private String manageInspectionBooksLinkLocator = "xpath=//A[contains(text(),'Manage Inspection Books')]";
 	private String autoAttributeWizardLinkLocator = "xpath=//A[contains(text(),'Auto Attribute Wizard')]";
 	private String manageCommentTemplatesLinkLocator = "xpath=//A[contains(text(),'Manage Comment Templates')]";
 	private String dataLogLinkLocator = "xpath=//A[contains(text(),'Data Log')]";
-	private String manageProductCodeMappingsLinkLocator = "xpath=//A[contains(text(),'Manage Product Code Mappings')]";
+	private String manageProductCodeMappingsLinkLocator = "xpath=//A[contains(text(),'Manage Asset Code Mappings')]";
 
 	public Admin(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
@@ -107,9 +107,9 @@ public class Admin {
 	}
 	
 	/**
-	 * Click the Manage Product Types link. Assumes you are already on the
+	 * Click the Manage Asset Types link. Assumes you are already on the
 	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Product Types page. In the ManageProductTypes
+	 * you arrived at the Manage Asset Types page. In the ManageProductTypes
 	 * class is a method to verify you arrived there successfully.
 	 */
 	public void gotoManageProductTypes() {
@@ -117,14 +117,14 @@ public class Admin {
 			selenium.click(manageProductTypesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
-			fail("Could not find the link to Manage Product Types");
+			fail("Could not find the link to Manage Asset Types");
 		}
 	}
 	
 	/**
-	 * Click the Manage Product Type Groups link. Assumes you are already on the
+	 * Click the Manage Asset Type Groups link. Assumes you are already on the
 	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Product Type Groups page. In the
+	 * you arrived at the Manage Asset Type Groups page. In the
 	 * ManageProductTypeGroups class is a method to verify you arrived there
 	 * successfully.
 	 */
@@ -133,14 +133,14 @@ public class Admin {
 			selenium.click(manageProductTypeGroupsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
-			fail("Could not find the link to Manage Product Type Groups");
+			fail("Could not find the link to Manage Asset Type Groups");
 		}
 	}
 	
 	/**
-	 * Click the Manage Product Statuses link. Assumes you are already on the
+	 * Click the Manage Asset Statuses link. Assumes you are already on the
 	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Product Statuses page. In the
+	 * you arrived at the Manage Asset Statuses page. In the
 	 * ManageProductStatuses class is a method to verify you arrived there
 	 * successfully.
 	 */
@@ -149,7 +149,7 @@ public class Admin {
 			selenium.click(manageProductStatusesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
-			fail("Could not find the link to Manage Product Statuses");
+			fail("Could not find the link to Manage Asset Statuses");
 		}
 	}
 	
@@ -400,7 +400,7 @@ public class Admin {
 	}
 
 	/**
-	 * Clicks the link to Manage Product Code Mappings. Need to call verify from
+	 * Clicks the link to Manage Asset Code Mappings. Need to call verify from
 	 * ManageProductCodeMappings class to confirm we arrived properly.
 	 */
 	public void gotoManageProductCodeMappings() {
@@ -408,7 +408,7 @@ public class Admin {
 			selenium.click(manageProductCodeMappingsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
-			fail("Could not find the link to Manage Product Code Mappings");
+			fail("Could not find the link to Manage Asset Code Mappings");
 		}
 	}
 }

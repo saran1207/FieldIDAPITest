@@ -5,7 +5,7 @@ import java.util.concurrent.Executor;
 
 
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
@@ -93,7 +93,7 @@ public class DownloadCoordinator {
 		executor.execute(task);
 	}
 	
-	public void generateProductExport(String name, String downloadUrl, ListLoader<Product> productLoader) {
+	public void generateProductExport(String name, String downloadUrl, ListLoader<Asset> productLoader) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
 		ProductExportTask task = taskFactory.createProductExportTask(link, downloadUrl, productLoader);
 		

@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.persistence.loaders.NonSecuredListLoader;
 
-public class RecursiveLinkedChildProductLoader extends NonSecuredListLoader<Product> {
+public class RecursiveLinkedChildProductLoader extends NonSecuredListLoader<Asset> {
 	private final LinkedChildProductLoader linkedProductLoader;
-	private Product product;
+	private Asset asset;
 	
 	public RecursiveLinkedChildProductLoader(LinkedChildProductLoader linkedProductLoader) {
 		this.linkedProductLoader = linkedProductLoader;
@@ -21,30 +21,30 @@ public class RecursiveLinkedChildProductLoader extends NonSecuredListLoader<Prod
 	}
 	
 	@Override
-	protected List<Product> load(EntityManager em) {
-		if (product == null) {
-			throw new SecurityException("product must be set");
+	protected List<Asset> load(EntityManager em) {
+		if (asset == null) {
+			throw new SecurityException("asset must be set");
 		}
 		
-		List<Product> allLinkedChildProducts = new ArrayList<Product>();
+		List<Asset> allLinkedChildAssets = new ArrayList<Asset>();
 		
-		loadChildTree(em, product, allLinkedChildProducts);
+		loadChildTree(em, asset, allLinkedChildAssets);
 				
-		return allLinkedChildProducts;
+		return allLinkedChildAssets;
 	}
 	
-	protected void loadChildTree(EntityManager em, Product product, List<Product> allLinkedChildProducts) {
-		List<Product> linkedChildren = linkedProductLoader.setProduct(product).load(em);
+	protected void loadChildTree(EntityManager em, Asset asset, List<Asset> allLinkedChildAssets) {
+		List<Asset> linkedChildren = linkedProductLoader.setProduct(asset).load(em);
 		
-		allLinkedChildProducts.addAll(linkedChildren);
+		allLinkedChildAssets.addAll(linkedChildren);
 		
-		for (Product linkedChild: linkedChildren) {
-			loadChildTree(em, linkedChild, allLinkedChildProducts);
+		for (Asset linkedChild: linkedChildren) {
+			loadChildTree(em, linkedChild, allLinkedChildAssets);
 		}
 	}
 
-	public RecursiveLinkedChildProductLoader setProduct(Product product) {
-		this.product = product;
+	public RecursiveLinkedChildProductLoader setProduct(Asset asset) {
+		this.asset = asset;
 		return this;
 	}
 	

@@ -73,7 +73,7 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 	}
 
 	private String getExportFileName() {
-		String exportName = autoAttributeCriteria.getProductType().getName();
+		String exportName = autoAttributeCriteria.getAssetType().getName();
 		return getText("label.export_file.autoattrib", ArrayUtils.newArray(exportName));
 	}
 	
@@ -138,7 +138,7 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 
 	public void setCriteriaId(Long criteriaId) {
 		if (autoAttributeCriteria == null || !autoAttributeCriteria.getId().equals(criteriaId)) {
-			autoAttributeCriteria = getLoaderFactory().createFilteredIdLoader(AutoAttributeCriteria.class).setId(criteriaId).setPostFetchFields("inputs", "outputs", "productType.name", "definitions.outputs").load();
+			autoAttributeCriteria = getLoaderFactory().createFilteredIdLoader(AutoAttributeCriteria.class).setId(criteriaId).setPostFetchFields("inputs", "outputs", "assetType.name", "definitions.outputs").load();
 		}
 	}
 

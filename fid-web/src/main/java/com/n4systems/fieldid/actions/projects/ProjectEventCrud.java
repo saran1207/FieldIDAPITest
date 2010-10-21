@@ -99,7 +99,7 @@ public class ProjectEventCrud extends AbstractCrud {
 		if (projectId == null) {
 			project = null;
 		} else if (project == null || !projectId.equals(project.getId())) {
-			project = persistenceManager.find(Project.class, projectId, getSecurityFilter(), "products");
+			project = persistenceManager.find(Project.class, projectId, getSecurityFilter(), "assets");
 		}
 	}
 

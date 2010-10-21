@@ -62,7 +62,7 @@
 			
 			<div class="infoSet">
 				<label for="criteria.productStatus"><@s.text name="label.productstatus"/></label>
-				<@s.select  name="criteria.productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true" />
+				<@s.select  name="criteria.assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true" />
 			</div>
 
 			<#include "../customizableSearch/_productTypeSelect.ftl"/>

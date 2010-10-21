@@ -11,13 +11,13 @@ ${action.setPageType('product', 'edit')!}
 		<@s.submit id="saveAndInspButton" name="saveAndInspect" key="hbutton.saveandinspect"  cssClass="saveButton save"/>
 		
 		<@s.text name="label.or"/>
-		<a href="<@s.url action="product"  uniqueID="${product.id}"/>"><@s.text name="label.cancel"/></a>
+		<a href="<@s.url action="product"  uniqueID="${asset.id}"/>"><@s.text name="label.cancel"/></a>
 		
 		 | 
-		<a href="<@s.url action="productMergeAdd" uniqueID="${product.id}"/>"><@s.text name="label.merge"/></a>
+		<a href="<@s.url action="productMergeAdd" uniqueID="${asset.id}"/>"><@s.text name="label.merge"/></a>
 		
 		 | 
-		<a href="<@s.url  action="productConfirmDelete" uniqueID="${product.id}"/>"><@s.text name="label.delete"/></a>
+		<a href="<@s.url  action="productConfirmDelete" uniqueID="${asset.id}"/>"><@s.text name="label.delete"/></a>
 	</div>
 	
 </@s.form >

@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.n4systems.exporting.ExporterFactory;
 import com.n4systems.mail.MailManager;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Product;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -76,7 +76,7 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public ProductExportTask createProductExportTask(DownloadLink link, String downloadUrl, ListLoader<Product> productLoader) {
+	public ProductExportTask createProductExportTask(DownloadLink link, String downloadUrl, ListLoader<Asset> productLoader) {
 		ProductExportTask task = new ProductExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createProductExporter(productLoader));
 		return task;
 	}

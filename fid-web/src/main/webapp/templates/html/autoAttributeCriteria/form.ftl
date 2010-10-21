@@ -3,14 +3,14 @@ ${action.setPageType('auto_attribute', 'edit')!}
 <@s.form action="autoAttributeCriteriaEdit!save" cssClass="inputForm" theme="css_xhtml" >
 	<@s.hidden name="uniqueID" id="uniqueId"/>
 	
-	<h2> <@s.text name="label.producttype" /> : <@s.text name="${productType.name?html!}" /> </h2>
+	<h2> <@s.text name="label.producttype" /> : <@s.text name="${assetType.name?html!}" /> </h2>
 	
 	<div class="dropBoxHolder" >
 		
 		<div  class="dropBox" >
 			<div class="dropBoxPadding" id="availablelist">
 			<h3 ><@s.text name="label.availablefields" /></h3>
-			<@s.iterator value="productType.infoFields" id="infoField" status="stat" >
+			<@s.iterator value="assetType.infoFields" id="infoField" status="stat" >
 				<#if infoField?exists && available.contains( infoField.uniqueID ) >
 					<div class="dynamicOption dragOption <#if infoField.hasStaticInfoOption() > staticOption </#if>" id="field_${infoField.uniqueID}">
 						<@s.hidden name="available[]" value="%{${infoField.uniqueID}}" />
@@ -43,7 +43,7 @@ ${action.setPageType('auto_attribute', 'edit')!}
 		<div  class="dropBox">
 			<div class="dropBoxPadding" id="inputlist">
 			<h3 ><@s.text name="label.inputfields" /></h3>
-			<@s.iterator value="productType.infoFields" id="infoField" status="stat" >
+			<@s.iterator value="assetType.infoFields" id="infoField" status="stat" >
 				<#if infoField?exists && inputs.contains( infoField.uniqueID ) >
 					<div class="dynamicOption dragOption <#if infoField.hasStaticInfoOption() > staticOption </#if>" id="field_${infoField.uniqueID}" >
 						<@s.hidden name="inputs[]" value="%{${infoField.uniqueID}}" />
@@ -79,7 +79,7 @@ ${action.setPageType('auto_attribute', 'edit')!}
 		<div class="dropBox" >
 			<div class="dropBoxPadding"  id="outputlist">
 			<h3 ><@s.text name="label.outputfields" /></h3>
-			<@s.iterator value="productType.infoFields" id="infoField" status="stat" >
+			<@s.iterator value="assetType.infoFields" id="infoField" status="stat" >
 				<#if infoField?exists && outputs.contains( infoField.uniqueID ) >
 					<div class="dynamicOption dragOption <#if infoField.hasStaticInfoOption() > staticOption </#if>" id="field_${infoField.uniqueID}" >
 						<@s.hidden name="outputs[]" value="%{${infoField.uniqueID}}" />

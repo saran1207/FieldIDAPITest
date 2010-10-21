@@ -44,7 +44,7 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 	}
 
 	protected void convertProductIdentifier(Inspection model, InspectionView view) {
-		view.setIdentifier(model.getProduct().getSerialNumber());
+		view.setIdentifier(model.getAsset().getSerialNumber());
 	}
 
 	protected void converterPerformedBy(Inspection model, InspectionView view) {
@@ -63,8 +63,8 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 	}
 
 	protected void convertProductStatus(Inspection model, InspectionView view) {
-		if (model.getProductStatus() != null) {
-			view.setProductStatus(model.getProductStatus().getName());
+		if (model.getAssetStatus() != null) {
+			view.setProductStatus(model.getAssetStatus().getName());
 		}
 	}
 

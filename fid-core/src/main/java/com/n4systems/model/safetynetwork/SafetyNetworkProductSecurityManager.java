@@ -3,7 +3,7 @@ package com.n4systems.model.safetynetwork;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.model.orgs.InternalOrg;
@@ -19,13 +19,13 @@ public class SafetyNetworkProductSecurityManager {
 	}
 	
 	/**
-	 * Tests if a Product is linked to myOrg
+	 * Tests if a Asset is linked to myOrg
 	 * @see BaseOrg#canAccess(BaseOrg)
-	 * @param product	A product
-	 * @return			true if the Product is linked and its owner is linked to an Org that is visible to myOrg, false otherwise.
+	 * @param asset	A asset
+	 * @return			true if the Asset is linked and its owner is linked to an Org that is visible to myOrg, false otherwise.
 	 */
-	public boolean isAssigned(Product product) {
-		BaseOrg productOwner = product.getOwner();
+	public boolean isAssigned(Asset asset) {
+		BaseOrg productOwner = asset.getOwner();
 		
 		// if the products owner is not linked, it couldn't be assigned
 		if (!productOwner.isLinked()) {
@@ -34,19 +34,19 @@ public class SafetyNetworkProductSecurityManager {
 		
 		InternalOrg productLinkedOrg = ((ExternalOrg)productOwner).getLinkedOrg();
 		
-		// now test if the owner that the product is linked to is one I can see
+		// now test if the owner that the asset is linked to is one I can see
 		return myOrg.canAccess(productLinkedOrg);
 	}
 	
 	/**
-	 * Tests if at least one Product in the list is assigned to myOrg
-	 * @see SafetyNetworkProductSecurityManager#isAssigned(BaseOrg, Product)
+	 * Tests if at least one Asset in the list is assigned to myOrg
+	 * @see SafetyNetworkProductSecurityManager#isAssigned(BaseOrg, com.n4systems.model.Asset)
 	 * @param product	A list of Products
-	 * @return			true if at least one Product in the list is assigned to myOrg, false otherwise.
+	 * @return			true if at least one Asset in the list is assigned to myOrg, false otherwise.
 	 */
-	public boolean listContainsAnAssignedProduct(List<Product> products) {
-		for (Product product: products) {
-			if (isAssigned(product)) {
+	public boolean listContainsAnAssignedProduct(List<Asset> assets) {
+		for (Asset asset : assets) {
+			if (isAssigned(asset)) {
 				return true;
 			}
 		}
@@ -55,14 +55,14 @@ public class SafetyNetworkProductSecurityManager {
 	
 	/**
 	 * Removes Products whose owner is an ExternalOrg and is not assigned to myOrg.  Products for InternalOrgs are NOT filtered.
-	 * @see SafetyNetworkProductSecurityManager#isAssigned(BaseOrg, Product)
+	 * @see SafetyNetworkProductSecurityManager#isAssigned(BaseOrg, com.n4systems.model.Asset)
 	 * @param product	A list of Products
 	 * @return			A list of Products whose owners are either InteralOrgs or are linked to myOrg
 	 */
-	public List<Product> filterOutExternalNotAssignedProducts(List<Product> unsecuredProducts) {
-		List<Product> securedProducts = new ArrayList<Product>();
+	public List<Asset> filterOutExternalNotAssignedProducts(List<Asset> unsecuredProducts) {
+		List<Asset> securedProducts = new ArrayList<Asset>();
 
-		for (Product unsecureProduct: unsecuredProducts) {
+		for (Asset unsecureProduct: unsecuredProducts) {
 			
 			if (unsecureProduct.getOwner().isInternal()) {
 				// InternalOrg are always allowed
@@ -77,9 +77,9 @@ public class SafetyNetworkProductSecurityManager {
 		return securedProducts;
 	}
 
-	public boolean listContainsAnAssetPubliclyPublished(List<Product> products) {
-		for (Product product: products) {
-			if (product.getOwner().isInternal()) {
+	public boolean listContainsAnAssetPubliclyPublished(List<Asset> assets) {
+		for (Asset asset : assets) {
+			if (asset.getOwner().isInternal()) {
 				return true;
 			}
 		}

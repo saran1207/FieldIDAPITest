@@ -14,16 +14,16 @@ public class InspectionScheduleProductLinkHandler extends WebOutputHandler {
 	public InspectionScheduleProductLinkHandler(AbstractAction action) {
 		super(action);
 		persistenceManager = ServiceLocator.getPersistenceManager();
-		builder.setSimpleSelect("product.id");
+		builder.setSimpleSelect("asset.id");
 	}
 	
 	public String handleWeb(Long entityId, Object value) {
-		// look up the id of the product for this inspection, so that we can create the link		
-		return "<a href=\"product.action?uniqueID=" + getProductId(entityId) + "\" >" + (String)value + "</a>";
+		// look up the id of the asset for this inspection, so that we can create the link
+		return "<a href=\"product.action?uniqueID=" + getAssetId(entityId) + "\" >" + (String)value + "</a>";
 		
 	}
 	
-	private Long getProductId(Long inspectionId) {
+	private Long getAssetId(Long inspectionId) {
 		// we need to clean out the previous param before running this query
 		builder.getWhereParameters().clear();
 		return persistenceManager.find(builder.addSimpleWhere("id", inspectionId));

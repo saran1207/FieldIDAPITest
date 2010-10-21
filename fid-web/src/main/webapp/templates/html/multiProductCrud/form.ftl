@@ -16,7 +16,7 @@
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"  />'; 
 	    productTypeChangeWarning = '<@s.text name="warning.producttypechange"/>';
-	    originalProductType = ${productTypeId!0};
+	    originalProductType = ${assetTypeId!0};
 	    updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax" />';
 	    
 	    function moveToStep4() {

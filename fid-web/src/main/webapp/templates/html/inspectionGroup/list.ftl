@@ -16,6 +16,6 @@ ${action.setPageType('inspection', 'select_product')!}
 		var url = '<@s.url action="inspectionGroups"/>';
 		
 		event.stop();
-		redirect( url + "?uniqueID=" + Event.element( event ).getAttribute( 'productId' ) );
+		redirect( url + "?uniqueID=" + Event.element( event ).getAttribute( 'assetId' ) );
 	}
 </script>

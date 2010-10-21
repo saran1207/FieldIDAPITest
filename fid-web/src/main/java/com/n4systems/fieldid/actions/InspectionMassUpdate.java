@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -53,7 +53,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private void applyCriteriaDefaults() {
 		setOwnerId(criteria.getOwnerId());
 		setInspectionBook(criteria.getInspectionBook());
-		setProductStatus(criteria.getProductStatus());
+		setAssetStatus(criteria.getAssetStatus());
 	}
 
 	private boolean findCriteria() {
@@ -141,19 +141,19 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		ownerPicker.setOwnerId(id);
 	}
 
-	public List<ProductStatusBean> getProductStatuses() {
+	public List<AssetStatus> getAssetStatuses() {
 		return getLoaderFactory().createProductStatusListLoader().load();
 	}
 
-	public Long getProductStatus() {
-		return (inspection.getProductStatus() == null) ? null : inspection.getProductStatus().getUniqueID();
+	public Long getAssetStatus() {
+		return (inspection.getAssetStatus() == null) ? null : inspection.getAssetStatus().getUniqueID();
 	}
 
-	public void setProductStatus(Long productStatus) {
-		if (productStatus == null) {
-			inspection.setProductStatus(null);
-		} else if (inspection.getProductStatus() == null || !productStatus.equals(inspection.getProductStatus().getUniqueID())) {
-			inspection.setProductStatus(productSerialManager.findProductStatus(productStatus, getTenantId()));
+	public void setAssetStatus(Long assetStatus) {
+		if (assetStatus == null) {
+			inspection.setAssetStatus(null);
+		} else if (inspection.getAssetStatus() == null || !assetStatus.equals(inspection.getAssetStatus().getUniqueID())) {
+			inspection.setAssetStatus(productSerialManager.findProductStatus(assetStatus, getTenantId()));
 		}
 	}
 

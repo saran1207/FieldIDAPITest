@@ -13,12 +13,12 @@ ${action.setPageType('product_type_group', 'show')!}
 	<h2><@s.text name="label.producttypes"/></h2>
 	<div class="crudForm bigForm sectionContent">
 		
-		<#list productTypes as productType>
+		<#list assetTypes as assetType>
 			<div class="infoSet">
-				<label class="line" ><a href="<@s.url action="productType" uniqueID="${productType.id}"/>">${(productType.name?html) !}</a></label>
+				<label class="line" ><a href="<@s.url action="productType" uniqueID="${assetType.id}"/>">${(assetType.name?html) !}</a></label>
 			</div>
 		</#list>
-		<#if productTypes.empty >
+		<#if assetTypes.empty >
 			<div class="infoSet">
 				<label class="line"><@s.text name="label.noproducttypesundergroup"/></label>
 			</div>

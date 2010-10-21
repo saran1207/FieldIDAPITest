@@ -45,7 +45,7 @@ public abstract class NotificationSettingInspectionScheduleCountListLoader exten
 		// the aggregate queries are grouped: next_inspection_date, (customer, division) or (jobsite),  product_type, inspection_type
 		builder.addGroupBy("nextDate");
 		builder.addGroupBy("owner");
-		builder.addGroupBy("product.type.name", "inspectionType.name");
+		builder.addGroupBy("asset.type.name", "inspectionType.name");
 	}
 
 	protected void applyNotificationFilters(QueryBuilder<InspectionScheduleCount> builder) {
@@ -54,7 +54,7 @@ public abstract class NotificationSettingInspectionScheduleCountListLoader exten
 		 * we will use it directly (rather then an in-list)
 		 */
 		if (!notification.getProductTypes().isEmpty()) {
-			builder.addSimpleWhere("product.type.id", notification.getProductTypes().get(0));
+			builder.addSimpleWhere("asset.type.id", notification.getProductTypes().get(0));
 		}
 		
 		if (!notification.getInspectionTypes().isEmpty()) {
@@ -67,7 +67,7 @@ public abstract class NotificationSettingInspectionScheduleCountListLoader exten
 	protected void prepareSelect(QueryBuilder<InspectionScheduleCount> builder) {
 		// we have to set the alias here and prefix our select clause arguments, otherwise hibernate generates a bad query
 		builder.setTableAlias("isc");
-		builder.setSelectArgument(new NewObjectSelect(InspectionScheduleCount.class, "isc.nextDate", "isc.owner", "isc.product.type.name", "isc.inspectionType.name", "count(*)"));
+		builder.setSelectArgument(new NewObjectSelect(InspectionScheduleCount.class, "isc.nextDate", "isc.owner", "isc.asset.type.name", "isc.inspectionType.name", "count(*)"));
 	}
 
 	protected QueryBuilder<InspectionScheduleCount> getQueryBuilder(SecurityFilter filter) {

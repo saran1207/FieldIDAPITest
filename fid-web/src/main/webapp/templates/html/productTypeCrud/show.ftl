@@ -5,39 +5,39 @@ ${action.setPageType('product_type', 'show')!}
 	<h2><@s.text name="label.productinformation"/></h2>
 	<p>
 		<label><@s.text name="label.group"/></label>
-		<span class="fieldValue"><#if productType.group?exists><a href="<@s.url action="productTypeGroup" uniqueID="${productType.group.id}"/>"></#if>${(productType.group.name)!}<#if productType.group?exists></a></#if></span>
+		<span class="fieldValue"><#if assetType.group?exists><a href="<@s.url action="productTypeGroup" uniqueID="${assetType.group.id}"/>"></#if>${(assetType.group.name)!}<#if assetType.group?exists></a></#if></span>
 	</p>
 	<p>
 		<label><@s.text name="label.name"/></label>
-		<span class="fieldValue">${productType.name!}</span>
+		<span class="fieldValue">${assetType.name!}</span>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.warnings"/></label>
-		<span class="fieldValue">${productType.warnings!}</span>
+		<span class="fieldValue">${assetType.warnings!}</span>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.instructions"/></label>
-		<span class="fieldValue">${productType.instructions!}</span>
+		<span class="fieldValue">${assetType.instructions!}</span>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.hasmanufacturercertificate"/></label>
-		<span class="fieldValue">${productType.hasManufactureCertificate?string( action.getText("value.yes"), action.getText("value.no") )}</span>
+		<span class="fieldValue">${assetType.hasManufactureCertificate?string( action.getText("value.yes"), action.getText("value.no") )}</span>
 	</p>
 	<p>
 		<label><@s.text name="label.manufacturercertificatetext"/></label>
-		<span class="fieldValue">${productType.manufactureCertificateText!}</span>
+		<span class="fieldValue">${assetType.manufactureCertificateText!}</span>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.productdescription"/></label>
-		<span class="fieldValue">${productType.descriptionTemplate!}</span>
+		<span class="fieldValue">${assetType.descriptionTemplate!}</span>
 	</p>
 </div>
 
-<#if !productType.infoFields.isEmpty() >
+<#if !assetType.infoFields.isEmpty() >
 	<div class="viewSection setViewSection" id="productAttributes">
 		<h2>
 			<span><@s.text name="label.attributes"/></span>
@@ -47,7 +47,7 @@ ${action.setPageType('product_type', 'show')!}
 			
 		</h2>
 		
-		<#list productType.infoFields as infoField >
+		<#list assetType.infoFields as infoField >
 			<p>
 				<span>${infoField.name} ${infoField.retired?string( "( "+ action.getText("label.retired") + " )", "" ) }</span>
 				<label>
@@ -92,21 +92,21 @@ ${action.setPageType('product_type', 'show')!}
 </#if>
 <div class="viewSection setViewSection">
 	<#assign downloadAction="downloadProductTypeAttachedFile"/>
-	<#assign attachments=productType.attachments/>
+	<#assign attachments=assetType.attachments/>
 	<#include "/templates/html/common/_attachedFilesShow.ftl"/>
 </div>
-<#if productType.imageName?exists >
+<#if assetType.imageName?exists >
 	
 	<div class="viewSection smallViewSection" >
 		<h2><@s.text name="label.productimage" /></h2>
 		<p>
-			<img src="<@s.url action="downloadProductTypeImage" namespace="/file" uniqueID="${productType.uniqueID}" includeParams="none" />" alt="<@s.text name="label.productimage"/>" width="300"/>
+			<img src="<@s.url action="downloadProductTypeImage" namespace="/file" uniqueID="${assetType.uniqueID}" includeParams="none" />" alt="<@s.text name="label.productimage"/>" width="300"/>
 		</p>
 	</div>
 
 </#if>
 
-<#if !productType.subTypes.isEmpty() >
+<#if !assetType.subTypes.isEmpty() >
 	
 	<div class="viewSection smallViewSection" >
 		<h2><@s.text name="label.componenttypes" /></h2>

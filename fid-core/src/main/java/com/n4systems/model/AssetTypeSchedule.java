@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -17,11 +18,12 @@ import com.n4systems.util.DateHelper;
 
 @Entity
 @Table(name = "producttypeschedules")
-public class ProductTypeSchedule extends EntityWithOwner implements Saveable, SecurityEnhanced<ProductTypeSchedule> {
+public class AssetTypeSchedule extends EntityWithOwner implements Saveable, SecurityEnhanced<AssetTypeSchedule> {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(optional=false)
-	private ProductType productType;
+    @JoinColumn(name = "producttype_id")
+	private AssetType assetType;
 	
 	@ManyToOne(optional=false)
 	private InspectionType inspectionType;
@@ -31,15 +33,15 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable, Se
 	private Long frequencyInDays;
 	private boolean autoSchedule = true;
 	
-	public ProductTypeSchedule() {}
+	public AssetTypeSchedule() {}
 	
 	@AllowSafetyNetworkAccess
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getAssetType() {
+		return assetType;
 	}
 
-	public void setProductType(ProductType productType) {
-		this.productType = productType;
+	public void setAssetType(AssetType assetType) {
+		this.assetType = assetType;
 	}
 	
 	@AllowSafetyNetworkAccess
@@ -75,9 +77,9 @@ public class ProductTypeSchedule extends EntityWithOwner implements Saveable, Se
 		return !getOwner().isPrimary();
 	}
 
-	public ProductTypeSchedule enhance(SecurityLevel level) {
-		ProductTypeSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
-		enhanced.setProductType(enhance(productType, level));
+	public AssetTypeSchedule enhance(SecurityLevel level) {
+		AssetTypeSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+		enhanced.setAssetType(enhance(assetType, level));
 		enhanced.setInspectionType(enhance(inspectionType, level));
 		return enhanced;
 	}

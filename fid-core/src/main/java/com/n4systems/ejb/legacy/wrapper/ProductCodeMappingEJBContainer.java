@@ -4,27 +4,27 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import rfid.ejb.entity.ProductCodeMappingBean;
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
+import rfid.ejb.entity.AssetCodeMapping;
 
-import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.ejb.legacy.impl.ProductCodeMappingManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 
-public class ProductCodeMappingEJBContainer extends EJBTransactionEmulator<ProductCodeMapping> implements ProductCodeMapping {
+public class ProductCodeMappingEJBContainer extends EJBTransactionEmulator<AssetCodeMappingService> implements AssetCodeMappingService {
 
-	protected ProductCodeMapping createManager(EntityManager em) {
+	protected AssetCodeMappingService createManager(EntityManager em) {
 		return new ProductCodeMappingManager(em);
 	}
 
-	public void clearRetiredInfoFields(ProductType productType) {
+	public void clearRetiredInfoFields(AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).clearRetiredInfoFields(productType);
+			createManager(transaction.getEntityManager()).clearRetiredInfoFields(assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -53,7 +53,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public List<ProductCodeMappingBean> getAllProductCodesByTenant(Long manufacturer) {
+	public List<AssetCodeMapping> getAllProductCodesByTenant(Long manufacturer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -68,7 +68,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductCodeMappingBean getProductCodeByProductCodeAndTenant(String productCode, Long manufacturer) {
+	public AssetCodeMapping getProductCodeByProductCodeAndTenant(String productCode, Long manufacturer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -84,7 +84,7 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
 	
-	public ProductCodeMappingBean getProductCodeByUniqueIdAndTenant(Long id, Long manufacturer) {
+	public AssetCodeMapping getProductCodeByUniqueIdAndTenant(Long id, Long manufacturer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -99,11 +99,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public void update(ProductCodeMappingBean productCodeMapping) {
+	public void update(AssetCodeMapping assetCodeMapping) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).update(productCodeMapping);
+			createManager(transaction.getEntityManager()).update(assetCodeMapping);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

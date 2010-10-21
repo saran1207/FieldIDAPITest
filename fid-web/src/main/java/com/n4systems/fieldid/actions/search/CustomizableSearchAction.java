@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PageHolder;
@@ -19,7 +20,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
-import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.reporting.helpers.AvailableReportColumns;
 import com.n4systems.fieldid.reporting.helpers.DynamicColumnProvider;
 import com.n4systems.fieldid.reporting.helpers.SharedColumnFactory;
@@ -67,7 +67,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private SortedSet<ColumnMappingGroup> mappingGroups;
 	private Map<String, WebOutputHandler> cellHandlers = new HashMap<String, WebOutputHandler>();
 	private TableView resultsTable;
-	private ProductTypeLister productTypes;
+	private AssetTypeLister assetTypes;
 	protected final InfoFieldDynamicGroupGenerator infoGroupGen;
 	
 	public CustomizableSearchAction(
@@ -85,7 +85,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 
 	public List<ColumnMappingGroup> getDynamicGroups() {
-		return infoGroupGen.getDynamicGroups(getContainer().getProductType(), convertToIdList(getProductTypes().getGroupedProductTypesById(getContainer().getProductTypeGroup())));
+		return infoGroupGen.getDynamicGroups(getContainer().getAssetType(), convertToIdList(getAssetTypes().getGroupedAssetTypesById(getContainer().getAssetTypeGroup())));
 	}
 
 	abstract protected T createSearchContainer();
@@ -420,12 +420,12 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return cellValue;
 	}
 	
-	public ProductTypeLister getProductTypes() {
-		if (productTypes == null) {
-			productTypes = new ProductTypeLister(persistenceManager, getSecurityFilter());
+	public AssetTypeLister getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = new AssetTypeLister(persistenceManager, getSecurityFilter());
 		}
 
-		return productTypes;
+		return assetTypes;
 	}
 	
 	

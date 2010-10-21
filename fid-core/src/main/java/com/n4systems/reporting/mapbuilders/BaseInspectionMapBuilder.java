@@ -1,6 +1,6 @@
 package com.n4systems.reporting.mapbuilders;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
@@ -16,10 +16,10 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 	private final MapBuilder<InternalOrg> orgMapBuilder;
 	private final MapBuilder<BaseOrg> ownerMapBuilder;
 	private final MapBuilder<Inspection> scheduleMapBuilder;
-	private final MapBuilder<ProductStatusBean> productStatusMapBuilder;
+	private final MapBuilder<AssetStatus> productStatusMapBuilder;
 	private final JobCertificateDataProducer jobCertificateDataProducer;
 	
-	public BaseInspectionMapBuilder(MapBuilder<User> performedByMapBuilder, MapBuilder<InspectionTypeGroup> typeGroupMapBuilder, MapBuilder<InternalOrg> orgMapBuilder, MapBuilder<BaseOrg> ownerMapBuilder, MapBuilder<Inspection> scheduleMapBuilder, MapBuilder<ProductStatusBean> productStatusMapBuilder
+	public BaseInspectionMapBuilder(MapBuilder<User> performedByMapBuilder, MapBuilder<InspectionTypeGroup> typeGroupMapBuilder, MapBuilder<InternalOrg> orgMapBuilder, MapBuilder<BaseOrg> ownerMapBuilder, MapBuilder<Inspection> scheduleMapBuilder, MapBuilder<AssetStatus> productStatusMapBuilder
 			, JobCertificateDataProducer jobCertificateDataProducer) {
 		this.performedByMapBuilder = performedByMapBuilder;
 		this.typeGroupMapBuilder = typeGroupMapBuilder;
@@ -48,7 +48,7 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 		setAllFields(typeGroupMapBuilder, entity.getType().getGroup(), transaction);
 		setAllFields(orgMapBuilder, entity.getPerformedBy().getOwner().getInternalOrg(), transaction);
 		setAllFields(ownerMapBuilder, entity.getOwner(), transaction);
-		setAllFields(productStatusMapBuilder, entity.getProductStatus(), transaction);
+		setAllFields(productStatusMapBuilder, entity.getAssetStatus(), transaction);
 		setAllFields(scheduleMapBuilder, entity, transaction);
 		
 		

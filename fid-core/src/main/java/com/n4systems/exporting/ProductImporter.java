@@ -7,7 +7,7 @@ import com.n4systems.api.model.ProductView;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.validators.ProductViewValidator;
 import com.n4systems.exporting.io.MapReader;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.services.product.ProductSaveService;
 
@@ -25,7 +25,7 @@ public class ProductImporter extends AbstractImporter<ProductView> {
 
 	@Override
 	protected void importView(Transaction transaction, ProductView view) throws ConversionException {
-		Product product = converter.toModel(view, transaction);
+		Asset product = converter.toModel(view, transaction);
 		saver.setProduct(product);
 		saver.createWithoutHistory();
 	}

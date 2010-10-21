@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 
 import javax.naming.NamingException;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
 import rfid.util.PopulatorLogger;
@@ -46,9 +48,7 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.SubInspection;
@@ -63,7 +63,6 @@ import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
@@ -338,10 +337,10 @@ public class DataServiceImpl implements DataService {
 			LegacyProductType productTypeManager = ServiceLocator.getProductType();
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
-			List<ProductType> productTypes = productTypeManager.getProductTypesForTenant( paginatedRequestInformation.getTenantId() );
+			List<AssetType> assetTypes = productTypeManager.getProductTypesForTenant( paginatedRequestInformation.getTenantId() );
 			
-			for (ProductType productType : productTypes) {
-				response.getProductTypes().add( converter.convert_new(productType) );
+			for (AssetType assetType : assetTypes) {
+				response.getProductTypes().add( converter.convert_new(assetType) );
 			}
 			
 			response.setCurrentPage(1);
@@ -351,7 +350,7 @@ public class DataServiceImpl implements DataService {
 			
 			return response;
 		} catch( Exception e ) {
-			logger.error( "exception occured while lookup the list of product types.", e );
+			logger.error( "exception occured while lookup the list of asset types.", e );
 			throw new ServiceException();
 		}
 	}
@@ -364,13 +363,13 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
-			QueryBuilder<ProductTypeGroup> queryBuilder = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, securityFilter);
+			QueryBuilder<AssetTypeGroup> queryBuilder = new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 			
-			List<ProductTypeGroup> productTypeGroups = persistenceManager.findAll(queryBuilder);
+			List<AssetTypeGroup> assetTypeGroups = persistenceManager.findAll(queryBuilder);
 			
-			for (ProductTypeGroup productTypeGroup : productTypeGroups) {
-				response.getProductTypeGroups().add(converter.convert(productTypeGroup));
+			for (AssetTypeGroup assetTypeGroup : assetTypeGroups) {
+				response.getProductTypeGroups().add(converter.convert(assetTypeGroup));
 			}
 			
 			response.setCurrentPage(1);
@@ -381,7 +380,7 @@ public class DataServiceImpl implements DataService {
 			return response;
 			
 		} catch (Exception e) {
-			logger.error("exception occured while looking up product type groups", e);
+			logger.error("exception occured while looking up asset type groups", e);
 			throw new ServiceException();
 		}
 	}
@@ -478,8 +477,8 @@ public class DataServiceImpl implements DataService {
 
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<AutoAttributeCriteria> queryBuilder = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, securityFilter);
-			queryBuilder.addPostFetchPaths("productType", "inputs", "outputs");
-			queryBuilder.addSimpleWhere("productType.state", EntityState.ACTIVE);
+			queryBuilder.addPostFetchPaths("assetType", "inputs", "outputs");
+			queryBuilder.addSimpleWhere("assetType.state", EntityState.ACTIVE);
 			// this is so postgres can paginate correctly.
 			queryBuilder.addOrder("id");
 			
@@ -663,7 +662,7 @@ public class DataServiceImpl implements DataService {
 		try {
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 			
-			Product product = lookupProduct(lookupInformation, request.getTenantId());
+			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
 			
 			User user = null;
 			if (request.modifiedByIdExists()) {
@@ -671,13 +670,13 @@ public class DataServiceImpl implements DataService {
 			} 
 			
 			LocationConverter locationConverter = new LocationServiceToContainerConverter(createLoaderFactory(request));
-			locationConverter.convert(request, product);
+			locationConverter.convert(request, asset);
 			
 			ProductSaveService saver = new ProductSaveService(ServiceLocator.getProductSerialManager(), user);
-			saver.setProduct(product).update();
+			saver.setProduct(asset).update();
 			
 		} catch (Exception e) {
-			logger.error("Exception occured while doing a limited product update");
+			logger.error("Exception occured while doing a limited asset update");
 			throw new ServiceException();
 		}
 		
@@ -689,11 +688,11 @@ public class DataServiceImpl implements DataService {
 		try {
 			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 			
-			Product product = lookupProduct(lookupInformation, request.getTenantId());
+			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-			product.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
+			asset.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
 			
 			User user = null;
 			
@@ -701,16 +700,16 @@ public class DataServiceImpl implements DataService {
 				user = persistenceManager.find(User.class, request.getModifiedById());
 			} 
 			
-			product.setAdvancedLocation(Location.onlyFreeformLocation(request.getLocation()));
-			product.setCustomerRefNumber(request.getCustomerRefNumber());
-			product.setPurchaseOrder(request.getPurchaseOrder());
+			asset.setAdvancedLocation(Location.onlyFreeformLocation(request.getLocation()));
+			asset.setCustomerRefNumber(request.getCustomerRefNumber());
+			asset.setPurchaseOrder(request.getPurchaseOrder());
 			
 			ProductSaveService saver = new ProductSaveService(ServiceLocator.getProductSerialManager(), user);
-			saver.setProduct(product).update();
+			saver.setProduct(asset).update();
 			
 			
 		} catch (Exception e) {
-			logger.error("Exception occured while doing product update by customer");
+			logger.error("Exception occured while doing asset update by customer");
 			throw new ServiceException();
 		}
 		
@@ -725,7 +724,7 @@ public class DataServiceImpl implements DataService {
 			InspectionSchedule inspectionSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
 
 			new InspectionScheduleCreateHandler(new ProductByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())), 
-					new FilteredIdLoader<Product>(new TenantOnlySecurityFilter(request.getTenantId()), Product.class),
+					new FilteredIdLoader<Asset>(new TenantOnlySecurityFilter(request.getTenantId()), Asset.class),
 					new FilteredIdLoader<InspectionType>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionType.class),
 					new InspectionScheduleSaver()).createNewInspectionSchedule(inspectionSchedule, request.getScheduleService());
 
@@ -772,20 +771,20 @@ public class DataServiceImpl implements DataService {
 	
 	
 	
-	private Product lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
+	private Asset lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
 		ProductManager productManager = ServiceLocator.getProductManager();
 
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
-		Product product = null;
+		Asset asset = null;
 		
 		if (productLookupableDto.isCreatedOnMobile()) {
-			product = productManager.findProductByGUID(productLookupableDto.getMobileGuid(), filter);
+			asset = productManager.findProductByGUID(productLookupableDto.getMobileGuid(), filter);
 		} else {
-			product = productManager.findProductAllFields(productLookupableDto.getId(), filter);
+			asset = productManager.findProductAllFields(productLookupableDto.getId(), filter);
 		}
 		
-		return product;
+		return asset;
 	}
 	
 	public RequestResponse updateProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException {
@@ -796,10 +795,10 @@ public class DataServiceImpl implements DataService {
 			OrderManager orderManager = ServiceLocator.getOrderManager();
 
 			long tenantId = requestInformation.getTenantId();
-			Product existingProduct = lookupProduct(productDTO, tenantId);
+			Asset existingAsset = lookupProduct(productDTO, tenantId);
 			
-			if( existingProduct == null ) {
-				logger.error( "can not load product to edit" );
+			if( existingAsset == null ) {
+				logger.error( "can not load asset to edit" );
 				throw new ServiceException();
 			}
 			
@@ -808,17 +807,17 @@ public class DataServiceImpl implements DataService {
 		
 			ProductServiceDTOConverter converter = createProductServiceDTOConverter(tenantId);
 			
-			Product product = converter.convert(productDTO, existingProduct);
+			Asset asset = converter.convert(productDTO, existingAsset);
 
-			updateShopOrderOnProduct(product, productDTO, orderManager, tenantId);
+			updateShopOrderOnProduct(asset, productDTO, orderManager, tenantId);
 			
 			// on edit, the identified by user is populated with the modified user
-			ServiceLocator.getProductSerialManager().update(product, product.getModifiedBy());
+			ServiceLocator.getProductSerialManager().update(asset, asset.getModifiedBy());
 			
 			return response;
 		} catch (Exception e) {
-			logger.error( "failed while processing product", e );
-			throw new ServiceException("Problem updating product");
+			logger.error( "failed while processing asset", e );
+			throw new ServiceException("Problem updating asset");
 		}
 	}
 
@@ -827,21 +826,21 @@ public class DataServiceImpl implements DataService {
 		return systemSecurityGuard;
 	}
 
-	private void updateShopOrderOnProduct(Product product, ProductServiceDTO productDTO, OrderManager orderManager, Long tenantId) {
+	private void updateShopOrderOnProduct(Asset asset, ProductServiceDTO productDTO, OrderManager orderManager, Long tenantId) {
 		PrimaryOrg primaryOrg = getTenantCache().findPrimaryOrg(tenantId);
 		
 		// Update the shop order only if the tenant does not have Integration and the order number has changed
 		// Integration tenants cannot add/update order information from mobile
 		if (!primaryOrg.hasExtendedFeature(ExtendedFeature.Integration) && StringUtils.isNotEmpty(productDTO.getOrderNumber())) {
-			LineItem currentProductOrder = product.getShopOrder();
+			LineItem currentProductOrder = asset.getShopOrder();
 			if (currentProductOrder == null || !currentProductOrder.getOrder().getOrderNumber().equalsIgnoreCase(productDTO.getOrderNumber().trim())) {
-				product.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), tenantId));
+				asset.setShopOrder(orderManager.createNonIntegrationShopOrder(productDTO.getOrderNumber(), tenantId));
 			}
 		}
 	}
 	
 	public RequestResponse createProduct( RequestInformation requestInformation, ProductServiceDTO productDTO ) throws ServiceException {
-		Product product = null;
+		Asset asset = null;
 		RequestResponse response = new RequestResponse();
 		response.setStatus(ResponseStatus.OK);
 		
@@ -857,43 +856,43 @@ public class DataServiceImpl implements DataService {
 			
 			
 			// convert from the service dto
-			product = convertNewProduct( requestInformation.getTenantId(), productDTO );
+			asset = convertNewProduct( requestInformation.getTenantId(), productDTO );
 			
-			// Check if we need to try and register this product on the safety network
+			// Check if we need to try and register this asset on the safety network
 			if (productDTO.vendorIdExists()) {
-				LoaderFactory loaderFactory = new LoaderFactory(new OrgOnlySecurityFilter(product.getOwner().getInternalOrg()));
+				LoaderFactory loaderFactory = new LoaderFactory(new OrgOnlySecurityFilter(asset.getOwner().getInternalOrg()));
 				SafetyNetworkBackgroundSearchLoader networkLoader = loaderFactory.createSafetyNetworkBackgroundSearchLoader();				
-				Product linkedProduct = networkLoader.setSerialNumber(productDTO.getSerialNumber())
+				Asset linkedAsset = networkLoader.setSerialNumber(productDTO.getSerialNumber())
 													 .setRfidNumber(productDTO.getRfidNumber())
 													 .setRefNumber(productDTO.getCustomerRefNumber())
 													 .setVendorOrgId(productDTO.getVendorId())
 													 .load();
-				product.setLinkedProduct(linkedProduct);
+				asset.setLinkedAsset(linkedAsset);
 			}
 				
-			// create the product with attached sub product transactionally
-			product = productManager.createProductWithServiceTransaction( requestInformation.getMobileGuid(), product, product.getModifiedBy() );
+			// create the asset with attached sub asset transactionally
+			asset = productManager.createProductWithServiceTransaction( requestInformation.getMobileGuid(), asset, asset.getModifiedBy() );
 
 			// create any new subproducts (this is not currently used by mobile (sub products come up attached to inspections))
 			if (productDTO.getSubProducts() != null && productDTO.getSubProducts().size() > 0) {
-				List<SubProduct> subProducts = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), product, requestInformation.getVersionNumber());			
+				List<SubProduct> subProducts = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), asset, requestInformation.getVersionNumber());
 				if (subProducts.size() > 0) {
 					/*
-					 * Note: the list of SubProducts on Product is marked as @Transient however productManager.update 
+					 * Note: the list of SubProducts on Asset is marked as @Transient however productManager.update
 					 * has special handling code to persist it anyway.  and yes it does suck ...  
 					 */
-					product.getSubProducts().addAll(subProducts);
-					productManager.update(product, product.getModifiedBy());
+					asset.getSubProducts().addAll(subProducts);
+					productManager.update(asset, asset.getModifiedBy());
 				}
 			}
 			
-			logSuccessfulProductCreate( requestInformation.getTenantId(), populatorLogger, product );
+			logSuccessfulProductCreate( requestInformation.getTenantId(), populatorLogger, asset);
 		} catch ( TransactionAlreadyProcessedException e ) {
-			logger.info( "transaction already processed for product  " + product.getSerialNumber() );
+			logger.info( "transaction already processed for asset  " + asset.getSerialNumber() );
 			return response;
 		} catch (Exception e) {
-			logger.error( "failed while processing product", e );
-			throw new ServiceException("Problem creating product");
+			logger.error( "failed while processing asset", e );
+			throw new ServiceException("Problem creating asset");
 		}
 		return response;
 	}
@@ -983,23 +982,23 @@ public class DataServiceImpl implements DataService {
 
 	private void testTransactionId( RequestInformation requestInformation ) throws ServiceException {
 		if( !requestInformation.hasValidTransactionId() ) {
-			logger.error( "transaction Id is invalid for create product " );
+			logger.error( "transaction Id is invalid for create asset " );
 			throw new ServiceException("Invalid transaction Id");
 		}
 	}
 
-	private Product convertNewProduct( Long tenantId, ProductServiceDTO productDTO ) throws Exception {
+	private Asset convertNewProduct( Long tenantId, ProductServiceDTO productDTO ) throws Exception {
 		productDTO = fixModifyByFromOldVersionsOfMobile(productDTO);
 		
-		Product product = new Product();
+		Asset asset = new Asset();
 		OrderManager orderManager = ServiceLocator.getOrderManager();
 		
 		ProductServiceDTOConverter converter = createProductServiceDTOConverter(tenantId);
-		product = converter.convert(productDTO, product);
+		asset = converter.convert(productDTO, asset);
 		
-		updateShopOrderOnProduct(product, productDTO, orderManager, tenantId);
+		updateShopOrderOnProduct(asset, productDTO, orderManager, tenantId);
 		
-		return product;
+		return asset;
 	}
 
 	private ProductServiceDTOConverter createProductServiceDTOConverter(Long tenantId) {
@@ -1020,23 +1019,23 @@ public class DataServiceImpl implements DataService {
 		return productDTO;
 	}
 	
-	private Product createProduct(ProductServiceDTO productDTO, Long tenantId) throws Exception {
+	private Asset createProduct(ProductServiceDTO productDTO, Long tenantId) throws Exception {
 		PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
 		LegacyProductSerial productManager = ServiceLocator.getProductSerialManager();
 		
-		Product product = convertNewProduct( tenantId, productDTO );
+		Asset asset = convertNewProduct( tenantId, productDTO );
 		
 	
-		product = productManager.create(product, product.getIdentifiedBy());
+		asset = productManager.create(asset, asset.getIdentifiedBy());
 	
 
-		logSuccessfulProductCreate( tenantId, populatorLogger, product );
+		logSuccessfulProductCreate( tenantId, populatorLogger, asset);
 		
-		return product;
+		return asset;
 	}
 
-	private void logSuccessfulProductCreate( Long tenantId, PopulatorLogger populatorLogger, Product product ) {
-		populatorLogger.logMessage(tenantId, "Successfully created product with serial number "+product.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
+	private void logSuccessfulProductCreate( Long tenantId, PopulatorLogger populatorLogger, Asset asset) {
+		populatorLogger.logMessage(tenantId, "Successfully created asset with serial number "+ asset.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
 	}
 
 	
@@ -1064,23 +1063,23 @@ public class DataServiceImpl implements DataService {
 			InspectionScheduleManager scheduleManager = ServiceLocator.getInspectionScheduleManager();
 			
 			List<Inspection> inspections = new ArrayList<Inspection>();
-//			Map<Inspection, ProductStatusBean> productStatus = new HashMap<Inspection, ProductStatusBean>();
+//			Map<Inspection, AssetStatus> assetStatus = new HashMap<Inspection, AssetStatus>();
 			Map<Inspection, Date> nextInspectionDates = new HashMap<Inspection, Date>();
 			Map<Inspection, InspectionSchedule> inspectionSchedules = new HashMap<Inspection, InspectionSchedule>();
-			Product product = null;
+			Asset asset = null;
 			InspectionScheduleByGuidOrIdLoader scheduleLoader = new InspectionScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
 			for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
-				product = findOrTagProduct( tenantId, inspectionServiceDTO );				
-				inspectionServiceDTO.setProductId( product.getId() );
+				asset = findOrTagProduct( tenantId, inspectionServiceDTO );
+				inspectionServiceDTO.setProductId( asset.getId() );
 				
-				// lets look up or create all newly attached sub products and attach to product
-				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), product, requestInformation.getVersionNumber());
-				updateSubProducts(productManager, tenantId, product, inspectionServiceDTO, subProducts);
+				// lets look up or create all newly attached sub products and attach to asset
+				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset, requestInformation.getVersionNumber());
+				updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subProducts);
 				
 				
-				// we also need to get the product for any sub-inspections
+				// we also need to get the asset for any sub-inspections
 				if (inspectionServiceDTO.getSubInspections() != null) {
-					Product subProduct = null;
+					Asset subProduct = null;
 					for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
 						subProduct = findOrTagProduct( tenantId, subInspection );
 						subInspection.setProductId( subProduct.getId() );
@@ -1102,11 +1101,11 @@ public class DataServiceImpl implements DataService {
 				InspectionsInAGroupCreator inspectionsInAGroupCreator = inspectionPersistenceFactory.createInspectionsInAGroupCreator();
 				
 				savedInspections = inspectionsInAGroupCreator.create( requestInformation.getMobileGuid(), inspections, nextInspectionDates);
-				logger.info( "save inspections on product " + product.getSerialNumber() );
-				populatorLogger.logMessage(tenantId, "Created inspection for product with serial number "+product.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
+				logger.info( "save inspections on asset " + asset.getSerialNumber() );
+				populatorLogger.logMessage(tenantId, "Created inspection for asset with serial number "+ asset.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
 			} catch ( TransactionAlreadyProcessedException e) {
 				// if the transaction is already complete just return success.
-				logger.info( "transaction already processed for inspections on product  " + product.getSerialNumber() );
+				logger.info( "transaction already processed for inspections on asset  " + asset.getSerialNumber() );
 			} catch ( Exception e ) {
 				logger.error( "failed to save inspections", e );
 				throw new InspectionException("Failed to save inspections");
@@ -1124,10 +1123,10 @@ public class DataServiceImpl implements DataService {
 								}
 							} catch (InvalidScheduleStateException e) {
 								logger.warn("the state of the schedule is not valid to be completed.");
-								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on product with serial number "+savedInspection.getProduct().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "+savedInspection.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
 							} catch (Exception e) {
 								logger.error("failed to attach schedule to inspection", e);
-								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on product with serial number "+savedInspection.getProduct().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "+savedInspection.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
 								// We allow the inspection to still go through even if this happens
 							}
 							
@@ -1142,7 +1141,7 @@ public class DataServiceImpl implements DataService {
 		} catch( InspectionException e ) {
 			throw e;
 		} catch( FindProductFailure e ) {
-			throw new ProductException("Could not find product");
+			throw new ProductException("Could not find asset");
 		} catch (Exception e) {
 			logger.error( "failed while processing inspections", e );
 			throw new ServiceException("Problem processing inspections");
@@ -1156,11 +1155,11 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private void updateSubProducts(LegacyProductSerial productManager,
-			Long tenantId, Product product,
+			Long tenantId, Asset asset,
 			InspectionServiceDTO inspectionServiceDTO,
 			List<SubProduct> subProducts) throws SubProductUniquenessException {
 		
-		new UpdateSubProducts(productManager, tenantId, product, inspectionServiceDTO, subProducts, ServiceLocator.getProductManager()).run();
+		new UpdateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subProducts, ServiceLocator.getProductManager()).run();
 		
 	}
 	
@@ -1215,7 +1214,7 @@ public class DataServiceImpl implements DataService {
 	
 	
 	
-	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Product masterProduct, long apiVersion) throws Exception {
+	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Asset masterAsset, long apiVersion) throws Exception {
 		
 		List<SubProduct> subProducts = new ArrayList<SubProduct>();
 		
@@ -1227,20 +1226,20 @@ public class DataServiceImpl implements DataService {
 		for (SubProductMapServiceDTO subProductMap : subProductMaps) {
 			ProductServiceDTO subProductDTO = subProductMap.getNewProduct();
 			
-			Product product = productManager.findProductByGUID(subProductDTO.getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
+			Asset asset = productManager.findProductByGUID(subProductDTO.getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			
 			// Try by id
-			if (product == null && subProductDTO.getId() != null && subProductDTO.getId() > 0) {
-				product = persistenceManager.find(Product.class, subProductDTO.getId());
+			if (asset == null && subProductDTO.getId() != null && subProductDTO.getId() > 0) {
+				asset = persistenceManager.find(Asset.class, subProductDTO.getId());
 			}				
 			
-			product = legacyCreationOfSubProductsForPre19VersionOfMobile(tenantId, subProductDTO, product, apiVersion);
+			asset = legacyCreationOfSubProductsForPre19VersionOfMobile(tenantId, subProductDTO, asset, apiVersion);
 			
-			if (product != null) {
+			if (asset != null) {
 				SubProduct subProduct = new SubProduct();
 				subProduct.setLabel(subProductMap.getName());
-				subProduct.setProduct(product);
-				subProduct.setMasterProduct(masterProduct);
+				subProduct.setAsset(asset);
+				subProduct.setMasterProduct(masterAsset);
 				
 				subProducts.add(subProduct);
 			}
@@ -1249,14 +1248,14 @@ public class DataServiceImpl implements DataService {
 		return subProducts;
 	}
 
-	private Product legacyCreationOfSubProductsForPre19VersionOfMobile(Long tenantId, ProductServiceDTO subProductDTO, Product product, long apiVersion)
+	private Asset legacyCreationOfSubProductsForPre19VersionOfMobile(Long tenantId, ProductServiceDTO subProductDTO, Asset asset, long apiVersion)
 			throws Exception {
 		if (olderThanVersion19(apiVersion)) {
-			if (product == null) {
-				product = createProduct(subProductDTO, tenantId);
+			if (asset == null) {
+				asset = createProduct(subProductDTO, tenantId);
 			}
 		}
-		return product;
+		return asset;
 	}
 	
 	private boolean olderThanVersion19(long dtoVersion) {
@@ -1264,45 +1263,45 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
-	 * The logic here is:  if the product serial guid is not set, lookup by products unique id, if not found throw error.  
-	 * If it is set, try looking up by guid, if not found then tag (create) this product.  
+	 * The logic here is:  if the asset serial guid is not set, lookup by products unique id, if not found throw error.
+	 * If it is set, try looking up by guid, if not found then tag (create) this asset.
 	 */
-	private Product findOrTagProduct( Long tenantId, AbstractInspectionServiceDTO inspectionServiceDTO ) throws FindProductFailure {
+	private Asset findOrTagProduct( Long tenantId, AbstractInspectionServiceDTO inspectionServiceDTO ) throws FindProductFailure {
 		
-		Product product = null;
+		Asset asset = null;
 		if( inspectionServiceDTO.productIdExists() ) {
 			try {
-				product = ServiceLocator.getProductManager().findProduct( inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter( tenantId ) );
-				product = ServiceLocator.getProductManager().fillInSubProductsOnProduct(product);
+				asset = ServiceLocator.getProductManager().findProduct( inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter( tenantId ) );
+				asset = ServiceLocator.getProductManager().fillInSubProductsOnProduct(asset);
 			} catch( Exception e ) {
-				logger.error( "looking up product with product id " + inspectionServiceDTO.getProductId(), e );
+				logger.error( "looking up asset with asset id " + inspectionServiceDTO.getProductId(), e );
 			}
 			
 		} else if( inspectionServiceDTO.productMobileGuidExists() ) {
 			// Try looking up by GUID
 			try {
-				product = ServiceLocator.getProductManager().findProductByGUID( inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
+				asset = ServiceLocator.getProductManager().findProductByGUID( inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			} catch (Exception e) {
-				logger.error("Looking up product serial by GUID = "+inspectionServiceDTO.getProductMobileGuid(), e);
+				logger.error("Looking up asset serial by GUID = "+inspectionServiceDTO.getProductMobileGuid(), e);
 			}
 			
 			// If still null, lets tag it
-			if( product == null && inspectionServiceDTO.getProduct() != null ) {
-				logger.info( "using tag product from inside create inspection" );
+			if( asset == null && inspectionServiceDTO.getProduct() != null ) {
+				logger.info( "using tag asset from inside create inspection" );
 				try {
-					product = createProduct(inspectionServiceDTO.getProduct(), tenantId);
+					asset = createProduct(inspectionServiceDTO.getProduct(), tenantId);
 				} catch (Exception e) {
-					logger.error("Tagging product",e);
+					logger.error("Tagging asset",e);
 				}
 				
 			}
 		}
 		
-		if( product == null ) {
-			throw new FindProductFailure( "Could not find product." );
+		if( asset == null ) {
+			throw new FindProductFailure( "Could not find asset." );
 		}
 		
-		return product;
+		return asset;
 	}
 	
 	public InspectionListResponse getInspections(PaginatedRequestInformation requestInformation, WSSearchCritiera searchCriteria) throws ServiceException {
@@ -1353,20 +1352,20 @@ public class DataServiceImpl implements DataService {
 			ProductSubProductsLoader subProductLoader = new ProductSubProductsLoader(securityFilter);
 			RealTimeProductLookupHandler realTimeProductLookupHandler = new RealTimeProductLookupHandler(smartSearchLoader, subProductLoader);
 			
-			List<Product> products = realTimeProductLookupHandler
+			List<Asset> assets = realTimeProductLookupHandler
 										.setSearchText(requestInformation.getSearchText())
 										.setModified(requestInformation.getModified())
 										.lookup();
 			
 			FindProductResponse response = new FindProductResponse();
 			
-			for (Product product : products) {
-				response.getProducts().add( converter.convert(product));
+			for (Asset asset : assets) {
+				response.getProducts().add( converter.convert(asset));
 			}
 			
 			return response;			
 		} catch (Exception e) {
-			logger.error("failed while finding product for handheld", e);
+			logger.error("failed while finding asset for handheld", e);
 			throw new ServiceException();
 		}
 	}
@@ -1390,7 +1389,7 @@ public class DataServiceImpl implements DataService {
 						
 			return response;
 		} catch (Exception e) {
-			logger.error("failed while finding inspection for a given product id", e);
+			logger.error("failed while finding inspection for a given asset id", e);
 			throw new ServiceException();
 		}
 	}
@@ -1408,7 +1407,7 @@ public class DataServiceImpl implements DataService {
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
 			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
-			QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, securityFilter);
+			QueryBuilder<Asset> queryBuilder = new QueryBuilder<Asset>(Asset.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 			
 			WhereParameterGroup customerDivisionWhere = new WhereParameterGroup("customerDivision");
@@ -1431,12 +1430,12 @@ public class DataServiceImpl implements DataService {
 			// This is for postgres to ensure paging works
 			queryBuilder.addOrder("id");
 						
-			Pager<Product> productPage = null;
+			Pager<Asset> productPage = null;
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
 				productPage = persistenceManager.findAllPaged(queryBuilder, CURRENT_PAGE, PRODUCTS_PER_PAGE);
 				
-				for(Product product : productPage.getList()) {
-					response.getProducts().add( converter.convert(product) );
+				for(Asset asset : productPage.getList()) {
+					response.getProducts().add( converter.convert(asset) );
 				}
 			} else {
 				productPage = persistenceManager.findAllPaged(queryBuilder, OLD_FIRST_PAGE, PRODUCTS_PER_PAGE);
@@ -1496,11 +1495,11 @@ public class DataServiceImpl implements DataService {
 				
 				for(InspectionSchedule schedule : schedulePage.getList()) {
 					
-					response.getProducts().add( converter.convert(schedule.getProduct()) );
+					response.getProducts().add( converter.convert(schedule.getAsset()) );
 					
-					if (schedule.getProduct().getSubProducts() != null) {
-						for (SubProduct subProduct : schedule.getProduct().getSubProducts()) {
-							response.getProducts().add( converter.convert(subProduct.getProduct()) );
+					if (schedule.getAsset().getSubProducts() != null) {
+						for (SubProduct subProduct : schedule.getAsset().getSubProducts()) {
+							response.getProducts().add( converter.convert(subProduct.getAsset()) );
 						}							
 					}
 				}

@@ -1,17 +1,18 @@
 package com.n4systems.api.product;
 
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static com.n4systems.model.location.Location.*;
 import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.util.Date;
 
+import com.n4systems.model.Asset;
 import org.junit.Test;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.product.ProductToViewConverter;
@@ -19,18 +20,17 @@ import com.n4systems.api.model.ProductView;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
-import com.n4systems.model.Product;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.ProductTypeBuilder;
+import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.test.helpers.Asserts;
 
 public class ProductToViewConverterTest {
 	private ProductToViewConverter converter = new ProductToViewConverter();
 	
-	private Product createProduct() {
-		Product model = aProduct().ofType(ProductTypeBuilder.aProductType().build())
+	private Asset createProduct() {
+		Asset model = anAsset().ofType(AssetTypeBuilder.anAssetType().build())
 			.withOwner(OrgBuilder.aCustomerOrg().build()).withSerialNumber("12345")
 			.withAdvancedLocation(onlyFreeformLocation("loc123")).build();
 		model.setRfidNumber("rf1234");
@@ -39,9 +39,9 @@ public class ProductToViewConverterTest {
 		model.setComments("comments 12312");
 		model.setIdentified(new Date());
 		
-		ProductStatusBean ps = new ProductStatusBean();
+		AssetStatus ps = new AssetStatus();
 		ps.setName("In Service");
-		model.setProductStatus(ps);
+		model.setAssetStatus(ps);
 		
 		Order order = new Order();
 		order.setOrderNumber("ON12312312");
@@ -63,7 +63,7 @@ public class ProductToViewConverterTest {
 	
 	@Test
 	public void test_to_view_copies_all_properties() throws ConversionException, ParseException {
-		Product model = createProduct();
+		Asset model = createProduct();
 		
 		model.getOwner().getPrimaryOrg().setDateFormat("yyyy-MM-dd");
 		
@@ -71,7 +71,7 @@ public class ProductToViewConverterTest {
 		
 		Asserts.assertMethodReturnValuesEqual(model, view, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
 
-		assertEquals(model.getProductStatus().getName(), view.getStatus());
+		assertEquals(model.getAssetStatus().getName(), view.getStatus());
 		assertEquals(model.getShopOrder().getOrder().getOrderNumber(), view.getShopOrder());
 		assertEquals(model.getInfoOptions().size(), view.getAttributes().size());
 		
@@ -85,8 +85,8 @@ public class ProductToViewConverterTest {
 
 	@Test
 	public void test_to_view_handles_null_product_status() throws ConversionException {
-		Product model = createProduct();
-		model.setProductStatus(null);
+		Asset model = createProduct();
+		model.setAssetStatus(null);
 			
 		ProductView view = converter.toView(model);
 		
@@ -95,7 +95,7 @@ public class ProductToViewConverterTest {
 	
 	@Test
 	public void test_to_view_handles_null_shop_order() throws ConversionException {
-		Product model = createProduct();
+		Asset model = createProduct();
 		model.setShopOrder(null);
 			
 		ProductView view = converter.toView(model);
@@ -105,7 +105,7 @@ public class ProductToViewConverterTest {
 	
 	@Test
 	public void test_order_number_field_ignored_for_integration_customers()  throws ConversionException {
-		Product model = createProduct();
+		Asset model = createProduct();
 		model.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.Integration);
 			
 		ProductView view = converter.toView(model);

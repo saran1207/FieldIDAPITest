@@ -3,11 +3,11 @@ package com.n4systems.model.producttype;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.persistence.loaders.Loader;
 
 /**
- *  Returns the ProductType id (or null if one was not found) for a FileAttachment.
+ *  Returns the AssetType id (or null if one was not found) for a FileAttachment.
  */
 public class ProductTypeByAttachmentLoader extends Loader<Long> {
 
@@ -15,7 +15,7 @@ public class ProductTypeByAttachmentLoader extends Loader<Long> {
 	
 	@Override
 	protected Long load(EntityManager em) {
-		StringBuilder jpql = new StringBuilder("SELECT DISTINCT pt.id FROM ").append(ProductType.class.getName()).append(" pt, IN (pt.attachments) a WHERE a.id = :attachmentId");
+		StringBuilder jpql = new StringBuilder("SELECT DISTINCT pt.id FROM ").append(AssetType.class.getName()).append(" pt, IN (pt.attachments) a WHERE a.id = :attachmentId");
 		
 		Query query = em.createQuery(jpql.toString());
 		query.setParameter("attachmentId", attachmentId);

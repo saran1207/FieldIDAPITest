@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.selenium.persistence;
 
 import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectionBuilder;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.InspectionBookBuilder;
-import com.n4systems.model.builders.ProductBuilder;
 import com.n4systems.model.inspectionbook.InspectionBookSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -41,7 +41,7 @@ public class Scenario {
         return new PrimaryOrgByTenantLoader().setTenantId(tenant.getId()).load(trans);
     }
 
-    public ProductType productType(String tenantName, String productTypeName) {
+    public AssetType productType(String tenantName, String productTypeName) {
         ProductTypeByNameLoader byNameLoader = new ProductTypeByNameLoader(new TenantOnlySecurityFilter(tenant(tenantName)));
         return byNameLoader.setName(productTypeName).load(trans);
     }
@@ -69,8 +69,8 @@ public class Scenario {
         return builder;
     }
 
-    public ProductBuilder aProduct() {
-        ProductBuilder builder = ProductBuilder.aProduct();
+    public AssetBuilder aProduct() {
+        AssetBuilder builder = AssetBuilder.anAsset();
         builder.setSaver(new ProductSaver()).setTransaction(trans);
         return builder;
     }

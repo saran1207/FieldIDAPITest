@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.fieldid.actions.inspection.WebInspectionSchedule;
-import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.AssetTypeSchedule;
 
 public class ScheduleToWebInspectionScheduleConverter {
 	
@@ -16,7 +16,7 @@ public class ScheduleToWebInspectionScheduleConverter {
 		
 	}
 
-	public WebInspectionSchedule convert(ProductTypeSchedule schedule, Date currentDatePerformed) {
+	public WebInspectionSchedule convert(AssetTypeSchedule schedule, Date currentDatePerformed) {
 		if (schedule == null) { return null; }
 		
 		

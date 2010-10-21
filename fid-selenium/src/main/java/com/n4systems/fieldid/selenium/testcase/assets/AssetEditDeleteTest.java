@@ -41,7 +41,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 		assetPage = page.search(masterSerial);
 		assetPage.clickEditTab().clickDelete();
 
-		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(., 'The product has been deleted.')]"));
+		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(., 'The asset has been deleted.')]"));
 	}
 
 	@Test

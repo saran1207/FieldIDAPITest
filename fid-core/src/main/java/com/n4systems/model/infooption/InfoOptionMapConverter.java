@@ -12,7 +12,7 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.util.StringUtils;
 
 public class InfoOptionMapConverter {
@@ -40,7 +40,7 @@ public class InfoOptionMapConverter {
 		}
 	}
 	
-	public List<InfoOptionBean> convertProductAttributes(Map<String, String> optionMap, ProductType type) throws MissingInfoOptionException, StaticOptionResolutionException {
+	public List<InfoOptionBean> convertProductAttributes(Map<String, String> optionMap, AssetType type) throws MissingInfoOptionException, StaticOptionResolutionException {
 		return toList(optionMap, type.getInfoFields(), true, true, true);
 	}
 	

@@ -116,12 +116,12 @@ public class Reflector {
 		
 		/*
 		 *  XXX - I don't like this syntax anymore since it precludes you from being able to run methods
-		 *  on the list itself.  An example would be "product.infoOptions.size()" will attempt to run the 
+		 *  on the list itself.  An example would be "asset.infoOptions.size()" will attempt to run the
 		 *  size() method on each element of infoOptions.  A better syntax would be to make you explicitly 
-		 *  specify that you want to itterate.  eg "product.infoOptions.foreach.infoOption" 
+		 *  specify that you want to itterate.  eg "asset.infoOptions.foreach.infoOption"
 		 */
 		// if the object is a collection of some type, we need to iterate the collection and return
-		// the value paths for each element   (eg product.infoOptions.infoField will return a list of infoFields)
+		// the value paths for each element   (eg asset.infoOptions.infoField will return a list of infoFields)
 		if (isIterable(object)) {
 			// create list of reflected array elements, note that we do not pop off the pathStack at this point
 			pathValue = new ArrayList<Object>();

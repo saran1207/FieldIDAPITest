@@ -17,7 +17,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.security.Permissions;
@@ -39,7 +39,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	
 	private InspectionType inspectionType;
 	private List<ListingPair> jobs;
-	private Product product;
+	private Asset asset;
 	private String nextDate;
 
 	private List<InspectionSchedule> inspectionSchedules;
@@ -73,7 +73,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 			throw new MissingEntityException();
 		}
 		
-		if (product == null) {
+		if (asset == null) {
 			addActionErrorText("error.noproduct");
 			throw new MissingEntityException();
 		}
@@ -101,7 +101,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		testRequiredEntities(false);
 		try {
 			Project tmpProject = inspectionSchedule.getProject();
-			inspectionSchedule = new InspectionSchedule(product, inspectionType);
+			inspectionSchedule = new InspectionSchedule(asset, inspectionType);
 			inspectionSchedule.setNextDate(convertDate(nextDate));
 			inspectionSchedule.setProject(tmpProject);
 			
@@ -179,21 +179,21 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	public Long getProductId() {
-		return (product != null) ? product.getId() : null;
+	public Long getAssetId() {
+		return (asset != null) ? asset.getId() : null;
 	}
 
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public void setProductId(Long id) {
-		if (product == null || !product.getId().equals(id)) {
+	public void setAssetId(Long id) {
+		if (asset == null || !asset.getId().equals(id)) {
 			if (!isInVendorContext()) {
-				product = persistenceManager.find(Product.class, id, getSecurityFilter(), "type.subTypes", "type.inspectionTypes");
-				product = new FindSubProducts(persistenceManager, product).fillInSubProducts();
+				asset = persistenceManager.find(Asset.class, id, getSecurityFilter(), "type.subTypes", "type.inspectionTypes");
+				asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
 			} else {
-				product = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(id).load();
+				asset = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(id).load();
 			}
 		}
 	}
@@ -220,7 +220,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	public List<InspectionType> getInspectionTypes() {
 		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
-		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(product.getType()).load();
+		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(asset.getType()).load();
 		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
 			inspectionTypes.add(associatedInspectionType.getInspectionType());
 		}
@@ -244,13 +244,13 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	public List<InspectionSchedule> getInspectionSchedules() {
 		if (inspectionSchedules == null) {
-			inspectionSchedules = inspectionScheduleManager.getAvailableSchedulesFor(product);
+			inspectionSchedules = inspectionScheduleManager.getAvailableSchedulesFor(asset);
 		}
 		return inspectionSchedules;
 	}
 
 	public Long getInspectionCount() {
-		return legacyProductManager.countAllInspections(product, getSecurityFilter());
+		return legacyProductManager.countAllInspections(asset, getSecurityFilter());
 	}
 
 	public InspectionSchedule getInspectionSchedule() {
@@ -274,12 +274,12 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	public void setProject(Long project) {
 		if (project == null) {
 			inspectionSchedule.setProject(null);
-		} else if (inspectionSchedule.getProject() == null || !project.equals(inspectionSchedule.getProduct().getId())) {
+		} else if (inspectionSchedule.getProject() == null || !project.equals(inspectionSchedule.getAsset().getId())) {
 			inspectionSchedule.setProject(persistenceManager.find(Project.class, project, getTenantId()));
 		}
 	}
 
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
+		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
 }

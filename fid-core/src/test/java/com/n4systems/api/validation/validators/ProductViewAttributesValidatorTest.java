@@ -6,9 +6,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.n4systems.model.AssetType;
 import org.junit.Test;
 
-import com.n4systems.model.ProductType;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 
@@ -73,8 +73,8 @@ public class ProductViewAttributesValidatorTest {
 		assertTrue(validator.validate(attribs, null, "", null, createProductType()).isPassed());
 	}
 	
-	private ProductType createProductType() {
-		ProductType type = new ProductType();
+	private AssetType createProductType() {
+		AssetType type = new AssetType();
 		type.setInfoFields(Arrays.asList(
 				
 				InfoFieldBeanBuilder.aComboBox().setRequired(true).named("combo").withOptions(

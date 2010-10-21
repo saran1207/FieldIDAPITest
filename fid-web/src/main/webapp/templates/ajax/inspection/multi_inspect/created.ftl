@@ -1,5 +1,4 @@
 ${action.clearFlashScope()}
-<#assign asset=product/>
 var asset = null;
 <#include "/templates/html/productCrud/_js_product.ftl"/>
 var valueSubsitutedHtml = resultRow.replace(/%%SERIAL_NUMBER%%/g, asset.serialNumber)

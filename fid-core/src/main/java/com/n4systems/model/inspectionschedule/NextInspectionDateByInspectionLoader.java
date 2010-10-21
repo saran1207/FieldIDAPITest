@@ -25,7 +25,7 @@ public class NextInspectionDateByInspectionLoader extends SecurityFilteredLoader
 	protected Date load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Date> builder = new QueryBuilder<Date>(InspectionSchedule.class, filter);
 		builder.setSelectArgument(new MinSelect("nextDate"));
-		builder.addWhere(WhereClauseFactory.create("product.id", inspection.getProduct().getId()));
+		builder.addWhere(WhereClauseFactory.create("asset.id", inspection.getAsset().getId()));
 		builder.addWhere(WhereClauseFactory.create("inspectionType.id", inspection.getType().getId()));
 		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "status", ScheduleStatus.COMPLETED));
 

@@ -3,16 +3,16 @@ package com.n4systems.api.conversion.product;
 import java.util.Date;
 import java.util.TreeSet;
 
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.ProductView;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
@@ -25,13 +25,13 @@ import com.n4systems.model.productstatus.ProductStatusByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 
-public class ProductToModelConverter implements ViewToModelConverter<Product, ProductView> {
+public class ProductToModelConverter implements ViewToModelConverter<Asset, ProductView> {
 	private final OrgByNameLoader orgLoader;
 	private final NonIntegrationOrderManager nonIntegrationOrderManager;
 	private final ProductStatusByNameLoader productStatusLoader;
 	private final InfoOptionMapConverter optionConverter;
 	
-	private ProductType type;
+	private AssetType type;
 	private User identifiedBy;
 	
 	public ProductToModelConverter(OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager, ProductStatusByNameLoader productStatusLoader, InfoOptionMapConverter optionConverter) {
@@ -42,8 +42,8 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 	}
 	
 	@Override
-	public Product toModel(ProductView view, Transaction transaction) throws ConversionException {
-		Product model = new Product();
+	public Asset toModel(ProductView view, Transaction transaction) throws ConversionException {
+		Asset model = new Asset();
 		
 		PrimaryOrg primaryOrg = identifiedBy.getOwner().getPrimaryOrg();
 		
@@ -67,7 +67,7 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 		model.setAdvancedLocation(Location.onlyFreeformLocation(view.getLocation()));
 		model.setPurchaseOrder(view.getPurchaseOrder());
 		model.setComments(view.getComments());		
-		model.setProductStatus(resolveProductStatus(view.getStatus(), transaction));
+		model.setAssetStatus(resolveProductStatus(view.getStatus(), transaction));
 		model.setInfoOptions(new TreeSet<InfoOptionBean>());
 		model.setPublished(primaryOrg.isAutoPublish());
 		
@@ -89,16 +89,16 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 
 	private LineItem createShopOrder(String orderNumber, Tenant tenant, Transaction transaction) {
 		/*
-		 * TODO: refactor to use the existing transaction once the legacy product manager gets off ejb  and the product saver in the importer is using the same transaction as the converter to do the work.
+		 * TODO: refactor to use the existing transaction once the legacy asset manager gets off ejb  and the asset saver in the importer is using the same transaction as the converter to do the work.
 		 * 
 		 * The problem here is that the ProductSaveService is running inside it's own transaction so if we use the 
-		 * existing transaction here, the non integration order will not have been committed by time the product
+		 * existing transaction here, the non integration order will not have been committed by time the asset
 		 * save service tries to look it up by id.
 		 */
 		return (orderNumber != null) ? nonIntegrationOrderManager.createAndSave(orderNumber, tenant) : null;
 	}
 	
-	private ProductStatusBean resolveProductStatus(String productStatus, Transaction transaction) {
+	private AssetStatus resolveProductStatus(String productStatus, Transaction transaction) {
 		return (productStatus != null) ? productStatusLoader.setName(productStatus).load(transaction) : null;
 	}
 
@@ -110,11 +110,11 @@ public class ProductToModelConverter implements ViewToModelConverter<Product, Pr
 		return orgLoader.load(transaction);
 	}
 	
-	public void setType(ProductType type) {
+	public void setType(AssetType type) {
 		this.type = type;
 	}
 
-	public ProductType getType() {
+	public AssetType getType() {
 		return type;
 	}
 	

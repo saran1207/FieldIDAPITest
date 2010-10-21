@@ -11,7 +11,7 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -29,8 +29,8 @@ public class EntityManagerLastInspectionDateFinder implements LastInspectionDate
 		this.em = em;
 	}
 
-	public Date findLastInspectionDate(Product product) {
-		return findLastInspectionDate(product, null);
+	public Date findLastInspectionDate(Asset asset) {
+		return findLastInspectionDate(asset, null);
 	}
 
 	public Date findLastInspectionDate(Long scheduleId) {
@@ -38,15 +38,15 @@ public class EntityManagerLastInspectionDateFinder implements LastInspectionDate
 	}
 
 	public Date findLastInspectionDate(InspectionSchedule schedule) {
-		return findLastInspectionDate(schedule.getProduct(), schedule.getInspectionType());
+		return findLastInspectionDate(schedule.getAsset(), schedule.getInspectionType());
 	}
 
-	public Date findLastInspectionDate(Product product, InspectionType inspectionType) {
+	public Date findLastInspectionDate(Asset asset, InspectionType inspectionType) {
 
 		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, new OpenSecurityFilter(), "i");
 
 		qBuilder.setMaxSelect("date");
-		qBuilder.addSimpleWhere("product.id", product.getId());
+		qBuilder.addSimpleWhere("asset.id", asset.getId());
 		qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 
 		if (inspectionType != null) {

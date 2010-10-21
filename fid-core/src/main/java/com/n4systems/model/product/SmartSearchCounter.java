@@ -2,7 +2,7 @@ package com.n4systems.model.product;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -19,7 +19,7 @@ public class SmartSearchCounter extends SecurityFilteredLoader<Long> {
 
 	@Override
 	protected Long load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(Product.class, filter);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(Asset.class, filter);
 		builder.addWhere(new SmartSearchWhereClause(searchText, useSerialNumber, useRfidNumber, useRefNumber));
 		
 		Long count = builder.getCount(em);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.InfoFieldBean;
@@ -16,7 +17,6 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.ProductType;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
@@ -29,9 +29,9 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	private LegacyProductType productTypeManager;
 	private AutoAttributeManager attributeManager;
 
-	private Collection<ListingPair> productTypes;
+	private Collection<ListingPair> assetTypes;
 	private AutoAttributeCriteria autoAttributeCriteria;
-	private ProductType productType;
+	private AssetType assetType;
 
 	private List<Long> inputs;
 	private List<Long> outputs;
@@ -53,11 +53,11 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		productType = getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
+		assetType = getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
 		
-		if (productType != null && productType.hasCriteria()) {
+		if (assetType != null && assetType.hasCriteria()) {
 			String[] fetchList = { "inputs", "outputs" };
-			autoAttributeCriteria = persistenceManager.find(AutoAttributeCriteria.class, productType
+			autoAttributeCriteria = persistenceManager.find(AutoAttributeCriteria.class, assetType
 					.getAutoAttributeCriteria().getId(), getTenant(), fetchList);
 		} else {
 			autoAttributeCriteria = new AutoAttributeCriteria();
@@ -76,9 +76,9 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 		}
 
 		
-		List<InfoOptionBean> infoOptionValues = prepareInputOptions(productType.getInfoFields());
+		List<InfoOptionBean> infoOptionValues = prepareInputOptions(assetType.getInfoFields());
 		
-		AutoAttributeDefinition definition = attributeManager.findTemplateToApply(productType, infoOptionValues);
+		AutoAttributeDefinition definition = attributeManager.findTemplateToApply(assetType, infoOptionValues);
 
 		if (isDefinitionFound(definition)) {
 			prepareDefinitionOutputs(definition);
@@ -141,18 +141,18 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 
 	@SkipValidation
 	public String doEdit() {
-		if (productType == null) {
+		if (assetType == null) {
 			addFlashMessageText("error.noproducttype");
 			return ERROR;
 		}
 
-		if (!productHasEnoughFields()) {
-			addFlashError("The product needs at least 2 attributes to use a template.");
+		if (!assetHasEnoughFields()) {
+			addFlashError("The asset needs at least 2 attributes to use a template.");
 			return ERROR;
 		}
 
-		if (!productHasStaticFields()) {
-			addFlashError("The product needs at least 1 attributes that is a select or combo boxs to use a template.");
+		if (!assetHasStaticFields()) {
+			addFlashError("The asset needs at least 1 attributes that is a select or combo boxs to use a template.");
 			return ERROR;
 		}
 
@@ -161,14 +161,14 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 
 	public String doSave() {
 
-		if (productType == null) {
+		if (assetType == null) {
 			addFlashMessageText("error.noproducttype");
 			return ERROR;
 		}
 
 		List<InfoFieldBean> inputFields = new ArrayList<InfoFieldBean>();
 		List<InfoFieldBean> outputFields = new ArrayList<InfoFieldBean>();
-		for (InfoFieldBean infoFieldBean : productType.getInfoFields()) {
+		for (InfoFieldBean infoFieldBean : assetType.getInfoFields()) {
 			if (inputs != null) {
 				for (Long inputId : inputs) {
 					if (infoFieldBean.getUniqueID().equals(inputId)) {
@@ -188,7 +188,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 		autoAttributeCriteria.setInputs(inputFields);
 		autoAttributeCriteria.setOutputs(outputFields);
 		autoAttributeCriteria.setTenant(getTenant());
-		autoAttributeCriteria.setProductType(productType);
+		autoAttributeCriteria.setAssetType(assetType);
 		autoAttributeCriteria.setDefinitions(new ArrayList<AutoAttributeDefinition>());
 
 		if (autoAttributeCriteria.getId() != null) {
@@ -204,12 +204,12 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 
 	@SkipValidation
 	public String doOpen() {
-		if (productType == null) {
+		if (assetType == null) {
 			addFlashMessageText("error.noproducttype");
 			return ERROR;
 		}
 
-		if (productType.hasCriteria()) {
+		if (assetType.hasCriteria()) {
 			return "found";
 		}
 
@@ -219,7 +219,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	@SkipValidation
 	public String doRemove() {
 
-		if (productType == null) {
+		if (assetType == null) {
 			addFlashMessageText("error.noproducttype");
 			return ERROR;
 		}
@@ -234,11 +234,11 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	public Collection<ListingPair> getProductTypes() {
-		if (productTypes == null) {
-			productTypes = productTypeManager.getProductTypeListForTenant(getTenantId());
+	public Collection<ListingPair> getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = productTypeManager.getProductTypeListForTenant(getTenantId());
 		}
-		return productTypes;
+		return assetTypes;
 	}
 
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
@@ -249,8 +249,8 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 		this.autoAttributeCriteria = autoAttributeCriteria;
 	}
 
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getAssetType() {
+		return assetType;
 	}
 
 	public List<Long> getInputs() {
@@ -293,7 +293,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	public List<Long> getAvailable() {
 		if (available == null) {
 			available = new ArrayList<Long>();
-			Collection<InfoFieldBean> infoFields = productType.getAvailableInfoFields();
+			Collection<InfoFieldBean> infoFields = assetType.getAvailableInfoFields();
 			if (infoFields != null) {
 				for (InfoFieldBean infoFieldBean : infoFields) {
 					available.add(infoFieldBean.getUniqueID());
@@ -311,8 +311,8 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 		return available;
 	}
 
-	public boolean productHasStaticFields() {
-		for (InfoFieldBean infoField : productType.getAvailableInfoFields()) {
+	private boolean assetHasStaticFields() {
+		for (InfoFieldBean infoField : assetType.getAvailableInfoFields()) {
 			if (infoField.hasStaticInfoOption()) {
 				return true;
 			}
@@ -321,20 +321,16 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	}
 
 	/**
-	 * a productType requires at least 2 fields to have a template.
+	 * a assetType requires at least 2 fields to have a template.
 	 * 
 	 */
-	public boolean productHasEnoughFields() {
-		if (productType.getAvailableInfoFields().size() >= 2) {
-			return true;
-		}
-		return false;
+	private boolean assetHasEnoughFields() {
+		return assetType.getAvailableInfoFields().size() >= 2;
 	}
 
 	public List<ListingPair> getLookUpInputs() {
 		return lookUpInputs;
 	}
-
 
 	public List<StringListingPair> getLookUpOutputs() {
 		return lookUpOutputs;

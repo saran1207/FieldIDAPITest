@@ -2,7 +2,7 @@ package com.n4systems.model.safetynetwork;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
@@ -21,7 +21,7 @@ public class HasLinkedProductsLoader extends SecurityFilteredLoader<Boolean> {
 	
 	@Override
 	protected Boolean load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<Product> builder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
+		QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("networkId", networkId));
 		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", productId));
 

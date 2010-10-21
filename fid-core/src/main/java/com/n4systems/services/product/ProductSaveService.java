@@ -2,6 +2,7 @@ package com.n4systems.services.product;
 
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 
@@ -10,7 +11,6 @@ import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubProductUniquenessException;
-import com.n4systems.model.Product;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductAttachmentSaver;
@@ -23,7 +23,7 @@ public class ProductSaveService {
 	private final LegacyProductSerial productManager;
 	private final User user;
 	private SecurityFilter filter;
-	private Product product;
+	private Asset asset;
 	private List<ProductAttachment> existingAttachments;
 	private List<ProductAttachment> uploadedAttachments;
 
@@ -35,37 +35,37 @@ public class ProductSaveService {
 		
 	}
 
-	public Product create() {
+	public Asset create() {
 		return create(true);
 	}
 	
-	public Product createWithoutHistory() {
+	public Asset createWithoutHistory() {
 		return create(false);
 	}
 	
-	private Product create(boolean withHistory) {
+	private Asset create(boolean withHistory) {
 		try {
 			createProduct(withHistory);
 			saveUploadedAttachments();
-			return product;
+			return asset;
 		} catch (SubProductUniquenessException e) {
-			throw new ProcessFailureException("could not save product", e);
+			throw new ProcessFailureException("could not save asset", e);
 		}
 	}
 
-	public Product update() {
+	public Asset update() {
 		try {
 			updateProduct();
 			updateExistingAttachments();
 			saveUploadedAttachments();
-			return product;
+			return asset;
 		} catch (SubProductUniquenessException e) {
-			throw new ProcessFailureException("could not save product", e);
+			throw new ProcessFailureException("could not save asset", e);
 		}
 	}
 	
 	public void clear() {
-		product = null;
+		asset = null;
 		existingAttachments = null;
 		uploadedAttachments = null;
 	}
@@ -74,26 +74,26 @@ public class ProductSaveService {
 		saveRequirements();
 		
 		if (withHistory) {
-			product = productManager.createWithHistory(product, user);
+			asset = productManager.createWithHistory(asset, user);
 		} else {
-			product = productManager.create(product, user);
+			asset = productManager.create(asset, user);
 		}
 	}
 
 	private void updateProduct() throws SubProductUniquenessException {
 		saveRequirements();
-		product = productManager.update(product, user);
+		asset = productManager.update(asset, user);
 	}
 
 	private void saveRequirements() {
-		if (product == null) {
-			throw new InvalidArgumentException("product must defined.");
+		if (asset == null) {
+			throw new InvalidArgumentException("asset must defined.");
 		}
 	}
 
 	private void saveUploadedAttachments() {
 		if (uploadedAttachments != null) {
-			ProductAttachmentSaver saver = new ProductAttachmentSaver(user, product);
+			ProductAttachmentSaver saver = new ProductAttachmentSaver(user, asset);
 			for (ProductAttachment attachment : uploadedAttachments) {
 				saver.save(attachment);
 			}
@@ -110,7 +110,7 @@ public class ProductSaveService {
 	}
 
 	private void reattachAttachments() {
-		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(filter).setProduct(product).load();
+		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(filter).setProduct(asset).load();
 		for (ProductAttachment loadedAttachment : loadedAttachments) {
 			if (existingAttachments.contains(loadedAttachment)) {
 				ProductAttachment existingAttachment = existingAttachments.get(existingAttachments.indexOf(loadedAttachment));
@@ -119,15 +119,15 @@ public class ProductSaveService {
 		}
 	}
 	private void updateAttachments() {
-		ProductAttachmentSaver saver = new ProductAttachmentSaver(user, product);
+		ProductAttachmentSaver saver = new ProductAttachmentSaver(user, asset);
 		for (ProductAttachment attachment : existingAttachments) {
 			saver.update(attachment);
 		}
 	}
 	
 	private void removeAttachments() {
-		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(filter).setProduct(product).load();
-		ProductAttachmentSaver deleter = new ProductAttachmentSaver(product);
+		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(filter).setProduct(asset).load();
+		ProductAttachmentSaver deleter = new ProductAttachmentSaver(asset);
 		for (ProductAttachment loadedAttachment : loadedAttachments) {
 			if (!existingAttachments.contains(loadedAttachment)) {
 				try {
@@ -139,12 +139,12 @@ public class ProductSaveService {
 		}
 	}
 	
-	public Product getProduct() {
-		return product;
+	public Asset getProduct() {
+		return asset;
 	}
 
-	public ProductSaveService setProduct(Product product) {
-		this.product = product;
+	public ProductSaveService setProduct(Asset product) {
+		this.asset = product;
 		return this;
 	}
 

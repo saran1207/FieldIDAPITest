@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.projects;
 
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -19,7 +20,6 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -55,7 +55,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	private String estimatedCompletion;
 	private String started;
 	private Pager<FileAttachment> notesPaged;
-	private Pager<Product> assetsPaged;
+	private Pager<Asset> assetsPaged;
 	private Pager<InspectionSchedule> schedulesPaged;
 
 	private String searchID;
@@ -325,9 +325,9 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		return page;
 	}
 
-	public boolean duplicateValueExists(String productId) {
+	public boolean duplicateValueExists(String assetId) {
 		QueryBuilder<Project> query = new QueryBuilder<Project>(Project.class, new OpenSecurityFilter());
-		query.setCountSelect().addWhere(Comparator.EQ, "projectID", "projectID", productId, WhereParameter.IGNORE_CASE);
+		query.setCountSelect().addWhere(Comparator.EQ, "projectID", "projectID", assetId, WhereParameter.IGNORE_CASE);
 		query.addSimpleWhere("tenant", getTenant());
 		if (uniqueID != null) {
 			query.addWhere(Comparator.NE, "id", "id", project.getId());
@@ -350,7 +350,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		return notesPaged.getList();
 	}
 
-	public List<Product> getAssets() {
+	public List<Asset> getAssets() {
 		if (assetsPaged == null) {
 			assetsPaged = projectManager.getAssetsPaged(project, getSecurityFilter(), 1, Constants.SUMMARY_SIZE);
 		}

@@ -57,8 +57,8 @@ public class DiskUsageTask extends ScheduledTask {
 	private String createCsvContent(List<TenantDiskUsageCalculator> summaries) {
 		String csv = "Tenant, tenant file size, tenant file count, Inspection Attachment file size,	Inspection Attachment file count," +
 						"Inspection Chart Image file size, Inspection Chart Image file count, Inspection Prooftest File file size, Inspection Prooftest File file count," + 
-						"Product Attachment file size, Product Attachment file count, Product Type Image file size,	Product Type Image file count," +
-						"Product Type Attachment file size, Product Type Attachment file count, Job Note file size, Job Note file count, User file size," +
+						"Asset Attachment file size, Asset Attachment file count, Asset Type Image file size,	Asset Type Image file count," +
+						"Asset Type Attachment file size, Asset Type Attachment file count, Job Note file size, Job Note file count, User file size," +
 						"User file count\n";
 		for (TenantDiskUsageCalculator summary : summaries) {
 			csv += summary.getTenant().getName() + ",";

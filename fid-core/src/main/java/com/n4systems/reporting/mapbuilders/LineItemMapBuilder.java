@@ -20,7 +20,7 @@ public class LineItemMapBuilder extends AbstractMapBuilder<LineItem> {
 	@Override
 	protected void setAllFields(LineItem entity, Transaction transaction) {
 		setField(ReportField.LINE_ITEM_DESC, 			entity.getDescription());
-		setField(ReportField.LINE_ITEM_PRODUCT_CODE,	entity.getProductCode());
+		setField(ReportField.LINE_ITEM_PRODUCT_CODE,	entity.getAssetCode());
 		
 		setAllFields(orderMapBuilder, entity.getOrder(), transaction);
 	}

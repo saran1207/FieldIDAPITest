@@ -8,16 +8,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AddProductHistoryBean;
+import rfid.ejb.entity.AssetCodeMapping;
+import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetSerialExtensionValue;
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductCodeMappingBean;
-import rfid.ejb.entity.ProductSerialExtensionBean;
-import rfid.ejb.entity.ProductSerialExtensionValueBean;
-import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
@@ -26,14 +29,13 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
-import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
-import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
@@ -44,8 +46,6 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -71,13 +71,13 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private static Logger logger = Logger.getLogger(ProductCrud.class);
 
 	// drop down lists
-	private Collection<ProductStatusBean> productStatuses;
+	private Collection<AssetStatus> productStatuses;
 	private List<Listable<Long>> commentTemplates;
-	private ProductType productType;
-	private Collection<ProductSerialExtensionBean> extentions;
+	private AssetType assetType;
+	private Collection<AssetSerialExtension> extentions;
 	private AutoAttributeCriteria autoAttributeCriteria;
 
-	private List<Product> products;
+	private List<Asset> assets;
 	private List<Listable<Long>> employees;
 
 	protected List<ProductAttachment> productAttachments;
@@ -85,7 +85,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	// form inputs
 	private List<InfoOptionInput> productInfoOptions;
 	private List<ProductExtensionValueInput> productExtentionValues;
-	protected Product product;
+	protected Asset asset;
 	private AddProductHistoryBean addProductHistory;
 	private String search;
 	private String identified;
@@ -110,7 +110,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private AllInspectionHelper allInspectionHelper;
 	private List<Project> projects;
 
-	private Product parentProduct;
+	private Asset parentAsset;
 	private boolean lookedUpParent = false;
 
 	// save buttons.z
@@ -125,28 +125,28 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private LegacyProductType productTypeManager;
 	private LegacyProductSerial legacyProductSerialManager;
 
-	private ProductCodeMapping productCodeMappingManager;
+	private AssetCodeMappingService assetCodeMappingServiceManager;
 	protected InspectionScheduleManager inspectionScheduleManager;
 	private ProductManager productManager;
 	private OrderManager orderManager;
 	private ProjectManager projectManager;
-	private ProductTypeLister productTypes;
+	private AssetTypeLister assetTypes;
 	private ProductSaveService productSaverService;
 	private Long excludeId;
 	
-	protected List<Product> linkedProducts;
+	protected List<Asset> linkedAssets;
 	protected Map<Long, List<ProductAttachment>> linkedProductAttachments;
 	
-	protected AssetWebModel asset = new AssetWebModel(this);
+	protected AssetWebModel assetWebModel = new AssetWebModel(this);
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public ProductCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
-			ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager,
+			AssetCodeMappingService assetCodeMappingServiceManager, ProductManager productManager, OrderManager orderManager,
 			ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
 		this.legacyProductSerialManager = legacyProductSerialManager;
-		this.productCodeMappingManager = productCodeMappingManager;
+		this.assetCodeMappingServiceManager = assetCodeMappingServiceManager;
 		this.productManager = productManager;
 		this.orderManager = orderManager;
 		this.projectManager = projectManager;
@@ -156,30 +156,30 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	@Override
 	protected void initMemberFields() {
-		product = new Product();
-		product.setPublished(getPrimaryOrg().isAutoPublish());
+		asset = new Asset();
+		asset.setPublished(getPrimaryOrg().isAutoPublish());
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		try {
 			if (!isInVendorContext()) {
-				product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+				asset = productManager.findProductAllFields(uniqueId, getSecurityFilter());
 			} else {
-				product = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
+				asset = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
 			}
 			
 		} catch(Exception e) {
-			logger.error("Unable to load product", e);
+			logger.error("Unable to load asset", e);
 		}
-		asset.match(product);
+		assetWebModel.match(asset);
 		
 	}
 	
 	@Override
 	protected void postInit() {
 		super.postInit();
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), asset);
 		overrideHelper(new ProductCrudHelper(getLoaderFactory()));
 	}
 	
@@ -192,7 +192,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private void applyDefaults() {
 		refreshRegirstation = true;
 		
-		product.setIdentified(DateHelper.getToday());
+		asset.setIdentified(DateHelper.getToday());
 
 		loadAddProductHistory();
 		if (addProductHistory != null) {
@@ -200,44 +200,44 @@ public class ProductCrud extends UploadAttachmentSupport {
 			setOwnerId(addProductHistory.getOwner() != null ? addProductHistory.getOwner().getId() : null);
 
 			// we need to make sure we load the producttype with its info fields
-			setProductTypeId(addProductHistory.getProductType().getId());
+			setAssetTypeId(addProductHistory.getProductType().getId());
 
-			product.setProductStatus(addProductHistory.getProductStatus());
-			product.setPurchaseOrder(addProductHistory.getPurchaseOrder());
-			product.setAdvancedLocation(addProductHistory.getLocation());
-			product.setInfoOptions(new TreeSet<InfoOptionBean>(addProductHistory.getInfoOptions()));
+			asset.setAssetStatus(addProductHistory.getProductStatus());
+			asset.setPurchaseOrder(addProductHistory.getPurchaseOrder());
+			asset.setAdvancedLocation(addProductHistory.getLocation());
+			asset.setInfoOptions(new TreeSet<InfoOptionBean>(addProductHistory.getInfoOptions()));
 
 		} else {
-			// set the default product id.
-			getProductTypes();
-			Long productId = productTypes.getProductTypes().iterator().next().getId();
-			setProductTypeId(productId);
+			// set the default asset id.
+			getAssetTypes();
+			Long productId = assetTypes.getAssetTypes().iterator().next().getId();
+			setAssetTypeId(productId);
 			setOwnerId(getSessionUser().getOwner().getId());
 		}
 		
-		asset.match(product);
+		assetWebModel.match(asset);
 
 		
 	}
 
 	private void convertInputsToInfoOptions() {
 
-		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(productInfoOptions, product.getType().getInfoFields());
+		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(productInfoOptions, asset.getType().getInfoFields());
 
-		product.setInfoOptions(new TreeSet<InfoOptionBean>(options));
+		asset.setInfoOptions(new TreeSet<InfoOptionBean>(options));
 	}
 
 	// XXX - This logic has been duplicated in ProductViewModeConverter.
 	// ProductCrud should be refactored to use that.
 	private void convertInputsToExtensionValues() {
 		if (productExtentionValues != null) {
-			Set<ProductSerialExtensionValueBean> newExtensionValues = new TreeSet<ProductSerialExtensionValueBean>();
+			Set<AssetSerialExtensionValue> newExtensionValues = new TreeSet<AssetSerialExtensionValue>();
 			for (ProductExtensionValueInput input : productExtentionValues) {
 				if (input != null) { // some of the inputs can be null due to
 					// the retired info fields.
-					for (ProductSerialExtensionBean extension : getExtentions()) {
+					for (AssetSerialExtension extension : getExtentions()) {
 						if (extension.getUniqueID().equals(input.getExtensionId())) {
-							ProductSerialExtensionValueBean extensionValue = input.convertToExtensionValueBean(extension, product);
+							AssetSerialExtensionValue extensionValue = input.convertToExtensionValueBean(extension, asset);
 							if (extensionValue != null) {
 								newExtensionValues.add(extensionValue);
 							}
@@ -245,7 +245,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 					}
 				}
 			}
-			product.setProductSerialExtensionValues(newExtensionValues);
+			asset.setAssetSerialExtensionValues(newExtensionValues);
 		}
 	}
 
@@ -257,25 +257,25 @@ public class ProductCrud extends UploadAttachmentSupport {
 			try {
 				
 				if (!isInVendorContext()) {
-					products = productManager.findProductByIdentifiers(getSecurityFilter(), search, productType);
+					assets = productManager.findProductByIdentifiers(getSecurityFilter(), search, assetType);
 					
-					// remove the product given. ( this is for product merging, you
-					// don't want to merge the product with itself.)
+					// remove the asset given. ( this is for asset merging, you
+					// don't want to merge the asset with itself.)
 					if (excludeId != null) {
-						Product excludeProduct = new Product();
-						excludeProduct.setId(excludeId);
-						products.remove(excludeProduct);
+						Asset excludeAsset = new Asset();
+						excludeAsset.setId(excludeId);
+						assets.remove(excludeAsset);
 					}
 					
 				} else {
-					products = getLoaderFactory().createSafetyNetworkSmartSearchLoader().setVendorOrgId(getVendorContext()).setSearchText(search).load();
+					assets = getLoaderFactory().createSafetyNetworkSmartSearchLoader().setVendorOrgId(getVendorContext()).setSearchText(search).load();
 				}
 
 				// if there is only one forward. directly to the group view
 				// screen.
-				if (products.size() == 1) {
-					product = products.get(0);
-					uniqueID = product.getId();
+				if (assets.size() == 1) {
+					asset = assets.get(0);
+					uniqueID = asset.getId();
 					
 					// if we're in a vendor context we go to the tracebility tab instead
 					return (isInVendorContext()) ? "oneFoundVendorContext" : "oneFound";
@@ -293,7 +293,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doAddNoHistory() {
-		product.setIdentified(DateHelper.getToday());
+		asset.setIdentified(DateHelper.getToday());
 		return SUCCESS;
 	}
 
@@ -313,63 +313,63 @@ public class ProductCrud extends UploadAttachmentSupport {
 			return MISSING;
 		}
 
-		// find the product code mapping by product code. This will return the
-		// default product code if one could not be found.
-		ProductCodeMappingBean productCodeMapping = productCodeMappingManager.getProductCodeByProductCodeAndTenant(lineItem.getProductCode(), getTenantId());
+		// find the asset code mapping by asset code. This will return the
+		// default asset code if one could not be found.
+		AssetCodeMapping assetCodeMapping = assetCodeMappingServiceManager.getProductCodeByProductCodeAndTenant(lineItem.getAssetCode(), getTenantId());
 
-		if (productCodeMapping.getProductInfo() != null) {
-			setProductTypeId(productCodeMapping.getProductInfo().getId());
+		if (assetCodeMapping.getAssetInfo() != null) {
+			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
 		}
-		if (product.getType() == null) {
+		if (asset.getType() == null) {
 			applyDefaults();
 		}
 
-		if (productCodeMapping.getInfoOptions() != null) {
-			product.setInfoOptions(new TreeSet<InfoOptionBean>(productCodeMapping.getInfoOptions()));
+		if (assetCodeMapping.getInfoOptions() != null) {
+			asset.setInfoOptions(new TreeSet<InfoOptionBean>(assetCodeMapping.getInfoOptions()));
 		}
 
-		product.setCustomerRefNumber(productCodeMapping.getCustomerRefNumber());
-		product.setShopOrder(lineItem);
-		product.setOwner(lineItem.getOrder().getOwner());
-		product.setPurchaseOrder(lineItem.getOrder().getPoNumber());
+		asset.setCustomerRefNumber(assetCodeMapping.getCustomerRefNumber());
+		asset.setShopOrder(lineItem);
+		asset.setOwner(lineItem.getOrder().getOwner());
+		asset.setPurchaseOrder(lineItem.getOrder().getPoNumber());
 
 		return SUCCESS;
 	}
 
 	@SkipValidation
 	public String doShow() {
-		testExistingProduct();
+		testExistingAsset();
 
 		loadAttachments();
 		return SUCCESS;
 	}
 
-	// TODO this shouldn't be in this class this is not really about the product
+	// TODO this shouldn't be in this class this is not really about the asset
 	// - AA
 	@SkipValidation
 	public String doInspections() {
 		setPageType("product", "inspections");
-		testExistingProduct();
+		testExistingAsset();
 
 		return SUCCESS;
 	}
 
 	private void loadAttachments() {
-		setAttachments(getLoaderFactory().createProductAttachmentListLoader().setProduct(product).load());
+		setAttachments(getLoaderFactory().createProductAttachmentListLoader().setProduct(asset).load());
 	}
 
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doEdit() {
 		makeEmployeesIncludeCurrentAssignedUser();
-		testExistingProduct();
-		setProductTypeId(product.getType().getId());
+		testExistingAsset();
+		setAssetTypeId(asset.getType().getId());
 		loadAttachments();
 		return SUCCESS;
 	}
 
 	private void makeEmployeesIncludeCurrentAssignedUser() {
-		Listable<Long> assignedUserListable = product.getAssignedUser() != null ? new SimpleListable<Long>(product.getAssignedUser()) : null;
+		Listable<Long> assignedUserListable = asset.getAssignedUser() != null ? new SimpleListable<Long>(asset.getAssignedUser()) : null;
 		
 		OptionLists.includeInList(getEmployees(), assignedUserListable);
 	}
@@ -378,30 +378,30 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doCreate() {
-		testProduct();
+		testAsset();
 
 		
 
 		try {
 			
-			prepareProductToBeSaved();
+			prepareAssetToBeSaved();
 			
 			
 			// we only set identified by on save
-			product.setIdentifiedBy(fetchCurrentUser());
+			asset.setIdentifiedBy(fetchCurrentUser());
 			
 			ProductSaveService saver = getProductSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
-			saver.setProduct(product);
+			saver.setProduct(asset);
 
-			product = saver.create();
+			asset = saver.create();
 
-			uniqueID = product.getId();
+			uniqueID = asset.getId();
 			addFlashMessageText("message.productcreated");
 
 		} catch (Exception e) {
 			addActionErrorText("error.productsave");
-			logger.error("failed to save Product", e);
+			logger.error("failed to save Asset", e);
 			return INPUT;
 		}
 
@@ -411,9 +411,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 
 		if (saveAndPrint != null) {
-			// only forward to the print call if the product type has save and
+			// only forward to the print call if the asset type has save and
 			// print.
-			if (product.getType().isHasManufactureCertificate()) {
+			if (asset.getType().isHasManufactureCertificate()) {
 				return "saveprint";
 			} else {
 				addFlashMessageText("message.nomanufacturercert");
@@ -431,47 +431,47 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return "saved";
 	}
 
-	private void prepareProductToBeSaved() {
-		product.setTenant(getTenant());
-		product.setIdentified(convertDate(identified));
+	private void prepareAssetToBeSaved() {
+		asset.setTenant(getTenant());
+		asset.setIdentified(convertDate(identified));
 		
 		convertInputsToInfoOptions();
 		convertInputsToExtensionValues();
 		processOrderMasters();
 		
-		asset.fillInAsset(product);
+		assetWebModel.fillInAsset(asset);
 	}
 	
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doUpdate() {
-		testProduct();
+		testAsset();
 		makeEmployeesIncludeCurrentAssignedUser();
 		
 		try {
-			prepareProductToBeSaved();
+			prepareAssetToBeSaved();
 			
 		
-			// on edit, we need to know if the product type has changed
-			ProductType oldType = productTypeManager.findProductTypeForProduct(product.getId());
+			// on edit, we need to know if the asset type has changed
+			AssetType oldType = productTypeManager.findProductTypeForProduct(asset.getId());
 
-			// if the new product type is not equal to the old then the type
+			// if the new asset type is not equal to the old then the type
 			// has changed
-			if (!product.getType().equals(oldType)) {
-				inspectionScheduleManager.removeAllSchedulesFor(product);
+			if (!asset.getType().equals(oldType)) {
+				inspectionScheduleManager.removeAllSchedulesFor(asset);
 			}
 
 			ProductSaveService saver = getProductSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setExistingAttachments(getAttachments());
-			saver.setProduct(product);
+			saver.setProduct(asset);
 
-			product = saver.update();
+			asset = saver.update();
 
 			addFlashMessageText("message.productupdated");
 
 		} catch (Exception e) {
 			addActionErrorText("error.productsave");
-			logger.error("failed to save Product", e);
+			logger.error("failed to save Asset", e);
 			return INPUT;
 		}
 
@@ -486,7 +486,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doConnectToShopOrder() {
-		testExistingProduct();
+		testExistingAsset();
 
 		if (lineItem == null || lineItem.getId() == null) {
 			addActionErrorText("error.noorder");
@@ -495,13 +495,13 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 		processOrderMasters();
 
-		// update the product
+		// update the asset
 		try {
 			ProductSaveService saver = getProductSaveService();
-			saver.setProduct(product).update();
+			saver.setProduct(asset).update();
 			addFlashMessageText("message.productupdated");
 		} catch (Exception e) {
-			logger.error("Failed connecting shop order to product", e);
+			logger.error("Failed connecting shop order to asset", e);
 			addActionErrorText("error.productsave");
 			return ERROR;
 		}
@@ -509,16 +509,16 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return SUCCESS;
 	}
 
-	protected void testProduct() {
-		if (product == null) {
+	protected void testAsset() {
+		if (asset == null) {
 			addActionErrorText("error.noproduct");
 			throw new MissingEntityException();
 		}
 	}
 
-	protected void testExistingProduct() {
-		testProduct();
-		if (product.isNew()) {
+	protected void testExistingAsset() {
+		testAsset();
+		if (asset.isNew()) {
 			addActionErrorText("error.noproduct");
 			throw new MissingEntityException();
 		}
@@ -527,27 +527,27 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doConnectToCustomerOrder() {
-		testExistingProduct();
+		testExistingAsset();
 
 		if (customerOrder == null || customerOrder.getId() == null) {
 			addActionErrorText("error.noorder");
 			throw new MissingEntityException();
 		}
 
-		product.setCustomerOrder(customerOrder);
-		product.setPurchaseOrder(customerOrder.getPoNumber());
-		product.setOwner(customerOrder.getOwner());
+		asset.setCustomerOrder(customerOrder);
+		asset.setPurchaseOrder(customerOrder.getPoNumber());
+		asset.setOwner(customerOrder.getOwner());
 
 		processOrderMasters();
 
-		// update the product
+		// update the asset
 		try {
-			getProductSaveService().setProduct(product).update();
-			String updateMessage = getText("message.productupdated.customer", Arrays.asList(product.getSerialNumber(), product.getOwner().getName()));
+			getProductSaveService().setProduct(asset).update();
+			String updateMessage = getText("message.productupdated.customer", Arrays.asList(asset.getSerialNumber(), asset.getOwner().getName()));
 			addFlashMessage(updateMessage);
 
 		} catch (Exception e) {
-			logger.error("Failed connecting customer order to product", e);
+			logger.error("Failed connecting customer order to asset", e);
 			addActionErrorText("error.productsave");
 			return ERROR;
 		}
@@ -558,9 +558,9 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doConfirmDelete() {
-		testExistingProduct();
+		testExistingAsset();
 		try {
-			removalSummary = productManager.testArchive(product);
+			removalSummary = productManager.testArchive(asset);
 		} catch (Exception e) {
 			return ERROR;
 		}
@@ -570,15 +570,15 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 	public String doDelete() {
-		testExistingProduct();
+		testExistingAsset();
 		try {
-			productManager.archive(product, fetchCurrentUser());
+			productManager.archive(asset, fetchCurrentUser());
 			addFlashMessageText("message.productdeleted");
 			return SUCCESS;
 		} catch (UsedOnMasterInspectionException e) {
 			addFlashErrorText("error.deleteusedonmasterinspection");
 		} catch (Exception e) {
-			logger.error("failed to archive a product", e);
+			logger.error("failed to archive a asset", e);
 			addFlashErrorText("error.deleteproduct");
 		}
 
@@ -604,10 +604,10 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public List<InfoOptionInput> getProductInfoOptions() {
 		if (productInfoOptions == null) {
 			productInfoOptions = new ArrayList<InfoOptionInput>();
-			if (product.getType() != null) {
+			if (asset.getType() != null) {
 				List<InfoOptionBean> tmpOptions = new ArrayList<InfoOptionBean>();
-				if (product.getInfoOptions() != null) {
-					tmpOptions.addAll(product.getInfoOptions());
+				if (asset.getInfoOptions() != null) {
+					tmpOptions.addAll(asset.getInfoOptions());
 				}
 				productInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getProductInfoFields());
 			}
@@ -617,11 +617,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	private void processOrderMasters() {
 		if (lineItem != null) {
-			product.setShopOrder(lineItem);
+			asset.setShopOrder(lineItem);
 		}
 
 		if (customerOrder != null) {
-			product.setCustomerOrder(customerOrder);
+			asset.setCustomerOrder(customerOrder);
 		}
 	}
 
@@ -629,33 +629,33 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.productInfoOptions = productInfoOptions;
 	}
 
-	public Collection<ProductStatusBean> getProductStatuses() {
+	public Collection<AssetStatus> getAssetStatuses() {
 		if (productStatuses == null) {
 			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
 		return productStatuses;
 	}
 
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
 	public String getSerialNumber() {
-		return product.getSerialNumber();
+		return asset.getSerialNumber();
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.serialnumberrequired")
 	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.serial_number_length", maxLength = "50")
 	public void setSerialNumber(String serialNumber) {
-		product.setSerialNumber(serialNumber);
+		asset.setSerialNumber(serialNumber);
 	}
 
 	public String getRfidNumber() {
-		return product.getRfidNumber();
+		return asset.getRfidNumber();
 	}
 
 	public void setRfidNumber(String rfidNumber) {
-		product.setRfidNumber(rfidNumber);
+		asset.setRfidNumber(rfidNumber);
 	}
 
 	@RequiredStringValidator(message = "", key = "error.identifiedrequired")
@@ -666,86 +666,86 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	public String getIdentified() {
 		if (identified == null) {
-			return convertDate(product.getIdentified());
+			return convertDate(asset.getIdentified());
 		}
 
 		return identified;
 	}
 
 	public String getPurchaseOrder() {
-		return product.getPurchaseOrder();
+		return asset.getPurchaseOrder();
 	}
 
 	public void setPurchaseOrder(String purchaseOrder) {
-		product.setPurchaseOrder(purchaseOrder);
+		asset.setPurchaseOrder(purchaseOrder);
 	}
 
 	public String getComments() {
-		return product.getComments();
+		return asset.getComments();
 	}
 
 	public void setComments(String comments) {
-		product.setComments(comments);
+		asset.setComments(comments);
 	}
 
 	public String getCustomerRefNumber() {
-		return product.getCustomerRefNumber();
+		return asset.getCustomerRefNumber();
 	}
 
 	public void setCustomerRefNumber(String customerRefNumber) {
-		product.setCustomerRefNumber(customerRefNumber);
+		asset.setCustomerRefNumber(customerRefNumber);
 	}
 
 	
 
-	public Long getProductStatus() {
-		return (product.getProductStatus() != null) ? product.getProductStatus().getUniqueID() : null;
+	public Long getAssetStatus() {
+		return (asset.getAssetStatus() != null) ? asset.getAssetStatus().getUniqueID() : null;
 	}
 
-	public void setProductStatus(Long productStatusId) {
-		ProductStatusBean productStatus = null;
-		if (productStatusId != null) {
-			productStatus = legacyProductSerialManager.findProductStatus(productStatusId, getTenantId());
+	public void setAssetStatus(Long assetStatusId) {
+		AssetStatus assetStatus = null;
+		if (assetStatusId != null) {
+			assetStatus = legacyProductSerialManager.findProductStatus(assetStatusId, getTenantId());
 		}
-		this.product.setProductStatus(productStatus);
+		this.asset.setAssetStatus(assetStatus);
 	}
 
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
 		if (autoAttributeCriteria == null) {
-			if (productType != null && productType.getAutoAttributeCriteria() != null) {
+			if (assetType != null && assetType.getAutoAttributeCriteria() != null) {
 				String[] fetches = { "inputs" };
-				autoAttributeCriteria = persistenceManager.find(AutoAttributeCriteria.class, productType.getAutoAttributeCriteria().getId(), getTenant(), fetches);
+				autoAttributeCriteria = persistenceManager.find(AutoAttributeCriteria.class, assetType.getAutoAttributeCriteria().getId(), getTenant(), fetches);
 			}
 		}
 		return autoAttributeCriteria;
 	}
 
 	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
-	public Long getProductTypeId() {
-		return (product.getType() != null) ? product.getType().getId() : null;
+	public Long getAssetTypeId() {
+		return (asset.getType() != null) ? asset.getType().getId() : null;
 	}
 
-	public ProductType getProductType() {
-		return product.getType();
+	public AssetType getAssetType() {
+		return asset.getType();
 	}
 
-	public void setProductTypeId(Long productTypeId) {
-		productType = null;
-		if (productTypeId != null) {
-			QueryBuilder<ProductType> query = new QueryBuilder<ProductType>(ProductType.class, new OpenSecurityFilter());
-			query.addSimpleWhere("tenant", getTenant()).addSimpleWhere("id", productTypeId).addSimpleWhere("state", EntityState.ACTIVE);
+	public void setAssetTypeId(Long assetTypeId) {
+		assetType = null;
+		if (assetTypeId != null) {
+			QueryBuilder<AssetType> query = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
+			query.addSimpleWhere("tenant", getTenant()).addSimpleWhere("id", assetTypeId).addSimpleWhere("state", EntityState.ACTIVE);
 			query.addPostFetchPaths("infoFields", "inspectionTypes", "attachments", "subTypes");
-			productType = persistenceManager.find(query);
+			assetType = persistenceManager.find(query);
 		}
-		this.product.setType(productType);
+		this.asset.setType(assetType);
 	}
 
 	public Collection<InfoFieldBean> getProductInfoFields() {
-		if (getProductTypeId() != null) {
-			if (product.getId() == null) {
-				return productType.getAvailableInfoFields();
+		if (getAssetTypeId() != null) {
+			if (asset.getId() == null) {
+				return assetType.getAvailableInfoFields();
 			} else {
-				return productType.getInfoFields();
+				return assetType.getInfoFields();
 			}
 		}
 		return null;
@@ -777,11 +777,11 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public List<ProductExtensionValueInput> getProductExtentionValues() {
 		if (productExtentionValues == null) {
 			productExtentionValues = new ArrayList<ProductExtensionValueInput>();
-			for (ProductSerialExtensionBean extention : getExtentions()) {
+			for (AssetSerialExtension extention : getExtentions()) {
 				ProductExtensionValueInput input = null;
-				if (product.getProductSerialExtensionValues() != null) {
-					for (ProductSerialExtensionValueBean value : product.getProductSerialExtensionValues()) {
-						if (extention.getUniqueID().equals(value.getProductSerialExtension().getUniqueID())) {
+				if (asset.getAssetSerialExtensionValues() != null) {
+					for (AssetSerialExtensionValue value : asset.getAssetSerialExtensionValues()) {
+						if (extention.getUniqueID().equals(value.getAssetSerialExtension().getUniqueID())) {
 							input = new ProductExtensionValueInput(value);
 						}
 					}
@@ -801,7 +801,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	@SuppressWarnings("deprecation")
-	public Collection<ProductSerialExtensionBean> getExtentions() {
+	public Collection<AssetSerialExtension> getExtentions() {
 		if (extentions == null) {
 			extentions = legacyProductSerialManager.getProductSerialExtensions(getTenantId());
 		}
@@ -827,8 +827,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.search = search;
 	}
 
-	public List<Product> getProducts() {
-		return products;
+	public List<Asset> getAssets() {
+		return assets;
 	}
 
 	public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field, InfoOptionInput inputOption) {
@@ -844,13 +844,13 @@ public class ProductCrud extends UploadAttachmentSupport {
 		this.tagOptionId = tagOptionId;
 	}
 
-	public Product getParentProduct() {
-		if (!lookedUpParent && !product.isNew()) {
-			parentProduct = productManager.parentProduct(product);
+	public Asset getParentAsset() {
+		if (!lookedUpParent && !asset.isNew()) {
+			parentAsset = productManager.parentProduct(asset);
 			lookedUpParent = true;
 		}
 
-		return parentProduct;
+		return parentAsset;
 	}
 
 	public List<Listable<Long>> getEmployees() {
@@ -862,14 +862,14 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	public Long getAssignedUser() {
-		return (product.getAssignedUser() != null) ? product.getAssignedUser().getId() : null;
+		return (asset.getAssignedUser() != null) ? asset.getAssignedUser().getId() : null;
 	}
 
 	public void setAssignedUser(Long user) {
 		if (user == null) {
-			product.setAssignedUser(null);
-		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getId())) {
-			product.setAssignedUser(persistenceManager.find(User.class, user, getTenantId()));
+			asset.setAssignedUser(null);
+		} else if (asset.getAssignedUser() == null || !user.equals(asset.getAssignedUser().getId())) {
+			asset.setAssignedUser(persistenceManager.find(User.class, user, getTenantId()));
 		}
 	}
 
@@ -915,8 +915,8 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	public String getNonIntegrationOrderNumber() {
 		if (!getSecurityGuard().isIntegrationEnabled()) {
-			if (product.getShopOrder() != null) {
-				return product.getShopOrder().getOrder().getOrderNumber();
+			if (asset.getShopOrder() != null) {
+				return asset.getShopOrder().getOrder().getOrderNumber();
 			}
 		}
 
@@ -928,13 +928,13 @@ public class ProductCrud extends UploadAttachmentSupport {
 			String orderNumber = nonIntegrationOrderNumber.trim();
 			// only do this for customers without integration
 			if (!getSecurityGuard().isIntegrationEnabled()) {
-				// if the product doesn't have a shop order, we need to create
+				// if the asset doesn't have a shop order, we need to create
 				// one
-				if (product.getShopOrder() == null) {
-					product.setShopOrder(orderManager.createNonIntegrationShopOrder(orderNumber, getTenantId()));
+				if (asset.getShopOrder() == null) {
+					asset.setShopOrder(orderManager.createNonIntegrationShopOrder(orderNumber, getTenantId()));
 				} else {
 					// otherwise we'll just change the order number
-					Order order = product.getShopOrder().getOrder();
+					Order order = asset.getShopOrder().getOrder();
 					order.setOrderNumber(orderNumber);
 					persistenceManager.update(order);
 				}
@@ -948,22 +948,22 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	public List<Project> getProjects() {
 		if (projects == null) {
-			projects = projectManager.getProjectsForAsset(product, getSecurityFilter());
+			projects = projectManager.getProjectsForAsset(asset, getSecurityFilter());
 		}
 		return projects;
 	}
 
-	public ProductTypeLister getProductTypes() {
-		if (productTypes == null) {
-			productTypes = new ProductTypeLister(persistenceManager, getSecurityFilter());
+	public AssetTypeLister getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = new AssetTypeLister(persistenceManager, getSecurityFilter());
 		}
 
-		return productTypes;
+		return assetTypes;
 	}
 
 	public AllInspectionHelper getAllInspectionHelper() {
 		if (allInspectionHelper == null)
-			allInspectionHelper = new AllInspectionHelper(legacyProductSerialManager, product, getSecurityFilter());
+			allInspectionHelper = new AllInspectionHelper(legacyProductSerialManager, asset, getSecurityFilter());
 		return allInspectionHelper;
 	}
 
@@ -1000,7 +1000,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	
 	public List<ProductAttachment> getProductAttachments() {
 		if (productAttachments == null) {
-			productAttachments = getLoaderFactory().createProductAttachmentListLoader().setProduct(product).load();
+			productAttachments = getLoaderFactory().createProductAttachmentListLoader().setProduct(asset).load();
 		}
 		return productAttachments;
 	}
@@ -1019,37 +1019,37 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 	public String getPublishedState() {
-		return PublishedState.resolvePublishedState(product.isPublished()).name();
+		return PublishedState.resolvePublishedState(asset.isPublished()).name();
 	}
 	
 	public void setPublishedState(String stateName) {
-		product.setPublished(PublishedState.valueOf(stateName).isPublished());
+		asset.setPublished(PublishedState.valueOf(stateName).isPublished());
 	}
 	
 	public String getPublishedStateLabel() {
-		return PublishedState.resolvePublishedState(product.isPublished()).getPastTenseLabel();
+		return PublishedState.resolvePublishedState(asset.isPublished()).getPastTenseLabel();
 	}
 
-	public Long getLinkedProduct() {
-		return (product.getLinkedProduct() != null) ? product.getLinkedProduct().getId() : null;
+	public Long getLinkedAsset() {
+		return (asset.getLinkedAsset() != null) ? asset.getLinkedAsset().getId() : null;
 	}
 
-	public void setLinkedProduct(Long id) {
+	public void setLinkedAsset(Long id) {
 		if (id == null) {
-			product.setLinkedProduct(null);
-		} else if (product.getLinkedProduct() == null || !product.getLinkedProduct().getId().equals(id)) {
-			product.setLinkedProduct(getLoaderFactory().createSafetyNetworkProductLoader().setProductId(id).load());
+			asset.setLinkedAsset(null);
+		} else if (asset.getLinkedAsset() == null || !asset.getLinkedAsset().getId().equals(id)) {
+			asset.setLinkedAsset(getLoaderFactory().createSafetyNetworkProductLoader().setProductId(id).load());
 		}
 	}
 	
 	
 	
-	public List<Product> getLinkedProducts() {
-		return linkedProducts;
+	public List<Asset> getLinkedAssets() {
+		return linkedAssets;
 	}
 	
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
+		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
 
 	public boolean isRefreshRegistration() {
@@ -1057,12 +1057,12 @@ public class ProductCrud extends UploadAttachmentSupport {
 	}
 
 
-	public void setAsset(AssetWebModel asset) {
-		this.asset = asset;
+	public void setAssetWebModel(AssetWebModel assetWebModel) {
+		this.assetWebModel = assetWebModel;
 	}
 
-	public AssetWebModel getAsset() {
-		return asset;
+	public AssetWebModel getAssetWebModel() {
+		return assetWebModel;
 	}
 	
 	

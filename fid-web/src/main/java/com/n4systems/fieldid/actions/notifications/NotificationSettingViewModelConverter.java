@@ -42,8 +42,8 @@ public class NotificationSettingViewModelConverter {
 		}
 		
 		if (!model.getProductTypes().isEmpty()) {
-			// we only support a single product type right now
-			view.setProductTypeId(model.getProductTypes().get(0));
+			// we only support a single asset type right now
+			view.setAssetTypeId(model.getProductTypes().get(0));
 		}
 		
 		if (!model.getInspectionTypes().isEmpty()) {
@@ -75,8 +75,8 @@ public class NotificationSettingViewModelConverter {
 			model.setCreated(new Date(view.getCreatedTimeStamp()));
 		}
 		
-		if (view.getProductTypeId() != null) {
-			model.getProductTypes().add(view.getProductTypeId());
+		if (view.getAssetTypeId() != null) {
+			model.getProductTypes().add(view.getAssetTypeId());
 		}
 		
 		if (view.getInspectionTypeId() != null) {

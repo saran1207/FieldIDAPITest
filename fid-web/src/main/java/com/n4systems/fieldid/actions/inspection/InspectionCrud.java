@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
@@ -51,8 +52,7 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
@@ -89,7 +89,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	protected final InspectionFormHelper inspectionFormHelper; 
 	
 	private InspectionGroup inspectionGroup;
-	protected Product product;
+	protected Asset asset;
 	protected Inspection inspection;
 	
 	protected List<CriteriaResult> criteriaResults;
@@ -107,7 +107,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private boolean allowNetworkResults = false;
 	private List<SubInspection> subInspections;
 	private List<ListingPair> examiners;
-	private List<ProductStatusBean> productStatuses;
+	private List<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> inspectionBooks;
@@ -186,7 +186,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			throw new MissingEntityException();
 		}
 		
-		if (product == null) {
+		if (asset == null) {
 			addActionError(getText("error.noproduct"));
 			throw new MissingEntityException();
 		}
@@ -201,7 +201,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doQuickInspect() {
 
-		if (product == null) {
+		if (asset == null) {
 			addActionError(getText("error.noproduct"));
 			return MISSING;
 		}
@@ -223,7 +223,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	private List<AssociatedInspectionType> getInspectionTypes() {
-		return getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(product.getType()).load();
+		return getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(asset.getType()).load();
 	}
 	
 	@SkipValidation
@@ -235,10 +235,10 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 		
 		if (!inspection.isNew()) {
-			setProductId(inspection.getProduct().getId());
+			setAssetId(inspection.getAsset().getId());
 		}
 		
-		if (product == null) {
+		if (asset == null) {
 			addActionError(getText("error.noproduct"));
 			return MISSING;
 		}
@@ -258,14 +258,14 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		testDependencies();
 
 		// set defaults.
-		inspection.setProductStatus(product.getProductStatus());
-		inspection.setOwner(product.getOwner());
-		inspection.setAdvancedLocation(product.getAdvancedLocation());
+		inspection.setAssetStatus(asset.getAssetStatus());
+		inspection.setOwner(asset.getOwner());
+		inspection.setAdvancedLocation(asset.getAdvancedLocation());
 		inspection.setDate(DateHelper.getTodayWithTime());
 		setPerformedBy(getSessionUser().getUniqueID());
 		inspection.setPrintable(inspection.getType().isPrintable());
 		setUpSupportedProofTestTypes();
-		assignedTo = product.getAssignedUser();
+		assignedTo = asset.getAssignedUser();
 		
 		if (inspectionSchedule != null) {	
 			inspectionSchedule.inProgress();
@@ -288,7 +288,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	private void autoSchedule() {
-		ProductTypeSchedule schedule = product.getType().getSchedule(inspection.getType(), product.getOwner());
+		AssetTypeSchedule schedule = asset.getType().getSchedule(inspection.getType(), asset.getOwner());
 		if (schedule != null) {
 			ScheduleToWebInspectionScheduleConverter converter = new ScheduleToWebInspectionScheduleConverter(getSessionUser().createUserDateConverter());
 			WebInspectionSchedule nextSchedule = converter.convert(schedule, inspection.getDate());
@@ -308,7 +308,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@SkipValidation
 	@NetworkAwareAction
 	public String doShow() {
-		product = inspection != null ? inspection.getProduct() : null;
+		asset = inspection != null ? inspection.getAsset() : null;
 		testDependencies();
 
 		inspectionGroup = inspection.getGroup();
@@ -319,7 +319,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doEdit() {
 		try {
-			setProductId(inspection.getProduct().getId());
+			setAssetId(inspection.getAsset().getId());
 			testDependencies();
 		} catch (NullPointerException e) {
 			return MISSING;
@@ -383,7 +383,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 			inspection.setGroup(inspectionGroup);
 			inspection.setTenant(getTenant());
-			inspection.setProduct(product);
+			inspection.setAsset(asset);
 			
 			if (assignToSomeone) {
 				AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(assignedTo);
@@ -431,7 +431,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			return INPUT;
 		} catch (Exception e) {
 			addActionErrorText("error.inspectionsavefailed");
-			logger.error("inspection save failed serial number " + product.getSerialNumber(), e);
+			logger.error("inspection save failed serial number " + asset.getSerialNumber(), e);
 			return ERROR;
 		}
 
@@ -446,7 +446,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		WebInspectionScheduleToInspectionScheduleBundleConverter converter = createWebInspectionScheduleToInspectionScheduleBundleConverter();
 		
 		for (WebInspectionSchedule nextSchedule : nextSchedules) {
-			InspectionScheduleBundle bundle = converter.convert(nextSchedule, product);
+			InspectionScheduleBundle bundle = converter.convert(nextSchedule, asset);
 			scheduleBundles.add(bundle );
 		}
 	
@@ -554,7 +554,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			inspectionManager.retireInspection(inspection, getSessionUser().getUniqueID());
 		} catch (Exception e) {
 			addFlashErrorText("error.inspectiondeleting");
-			logger.error("inspection retire " + product.getSerialNumber(), e);
+			logger.error("inspection retire " + asset.getSerialNumber(), e);
 			return ERROR;
 		}
 
@@ -603,21 +603,21 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 	}
 
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public Long getProductId() {
-		return (product != null) ? product.getId() : null;
+	public Long getAssetId() {
+		return (asset != null) ? asset.getId() : null;
 	}
 
 	@RequiredFieldValidator(message="", key="error.noproduct")
-	public void setProductId(Long productId) {
-		if (productId == null) {
-			product = null;
-		} else if (product == null || !productId.equals(product.getId())) {
-			product = productManager.findProduct(productId, getSecurityFilter(), "type.inspectionTypes", "infoOptions", "projects");
-			product = productManager.fillInSubProductsOnProduct(product);
+	public void setAssetId(Long assetId) {
+		if (assetId == null) {
+			asset = null;
+		} else if (asset == null || !assetId.equals(asset.getId())) {
+			asset = productManager.findProduct(assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions", "projects");
+			asset = productManager.fillInSubProductsOnProduct(asset);
 		}
 	}
 
@@ -636,11 +636,11 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	
 
-	public List<ProductStatusBean> getProductStatuses() {
-		if (productStatuses == null) {
-			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
+	public List<AssetStatus> getAssetStatuses() {
+		if (assetStatuses == null) {
+			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
-		return productStatuses;
+		return assetStatuses;
 	}
 
 	public List<Listable<Long>> getCommentTemplates() {
@@ -658,15 +658,15 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		inspection.setComments(comments);
 	}
 
-	public Long getProductStatus() {
-		return (inspection.getProductStatus() != null) ? inspection.getProductStatus().getUniqueID() : null;
+	public Long getAssetStatus() {
+		return (inspection.getAssetStatus() != null) ? inspection.getAssetStatus().getUniqueID() : null;
 	}
 
-	public void setProductStatus(Long productStatus) {
-		if (productStatus == null) {
-			inspection.setProductStatus(null);
-		} else if (inspection.getProductStatus() == null || !productStatus.equals(inspection.getProductStatus().getUniqueID())) {
-			inspection.setProductStatus(legacyProductManager.findProductStatus(productStatus, getTenantId()));
+	public void setAssetStatus(Long assetStatus) {
+		if (assetStatus == null) {
+			inspection.setAssetStatus(null);
+		} else if (inspection.getAssetStatus() == null || !assetStatus.equals(inspection.getAssetStatus().getUniqueID())) {
+			inspection.setAssetStatus(legacyProductManager.findProductStatus(assetStatus, getTenantId()));
 		}
 	}
 
@@ -820,7 +820,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		this.newFile = newFile;
 	}
 
-	public boolean isParentProduct() {
+	public boolean isParentAsset() {
 		return true;
 	}
 
@@ -831,7 +831,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				for (SubInspection subInspection : inspection.getSubInspections()) {
 					ids.add(subInspection.getId());
 				}
-				subInspections = persistenceManager.findAll(SubInspection.class, ids, getTenant(), "product", "type.sections", "results", "attachments", "infoOptionMap");
+				subInspections = persistenceManager.findAll(SubInspection.class, ids, getTenant(), "asset", "type.sections", "results", "attachments", "infoOptionMap");
 			}
 		}
 		return subInspections;
@@ -898,7 +898,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			inspectionSchedule = null; 
 		} else if ((!inspectionScheduleId.equals(InspectionScheduleSuggestion.NEW_SCHEDULE) && !inspectionScheduleId.equals(InspectionScheduleSuggestion.NO_SCHEDULE)) && 
 				(this.inspectionScheduleId == null || !inspectionScheduleId.equals(this.inspectionScheduleId))) {
-			// XXX should this lock to just the correct product and inspection type?
+			// XXX should this lock to just the correct asset and inspection type?
 			inspectionSchedule = persistenceManager.find(InspectionSchedule.class, inspectionScheduleId, getTenantId());
 		}
 		this.inspectionScheduleId = inspectionScheduleId;
@@ -907,7 +907,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	public List<InspectionSchedule> getAvailableSchedules() {
 		if (availableSchedules == null) {
 			availableSchedules = getLoaderFactory().createIncompleteInspectionSchedulesListLoader()
-					.setProduct(product)
+					.setProduct(asset)
 					.setInspectionType(inspection.getType())
 					.load();
 			if (inspectionSchedule != null && !availableSchedules.contains(inspectionSchedule)) {
@@ -987,7 +987,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	@SuppressWarnings("deprecation")
 	public List<InspectionType> getEventTypes() {
-		return new ArrayList<InspectionType>(product.getType().getInspectionTypes());
+		return new ArrayList<InspectionType>(asset.getType().getInspectionTypes());
 	}
 
 	public List<WebInspectionSchedule> getNextSchedules() {

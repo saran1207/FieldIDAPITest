@@ -15,8 +15,8 @@ public class ProductView implements Serializable, HasOwner {
 
 	private BaseOrg owner;
 	private Long assignedUser;
-	private Long productStatus;
-	private Long productTypeId;
+	private Long assetStatus;
+	private Long assetTypeId;
 	private String purchaseOrder;
 	private String nonIntegrationOrderNumber;
 	private String comments;
@@ -42,20 +42,20 @@ public class ProductView implements Serializable, HasOwner {
 		this.assignedUser = assignedUser;
 	}
 
-	public Long getProductStatus() {
-		return productStatus;
+	public Long getAssetStatus() {
+		return assetStatus;
 	}
 
-	public void setProductStatus(Long productStatus) {
-		this.productStatus = productStatus;
+	public void setAssetStatus(Long assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 
-	public Long getProductTypeId() {
-		return productTypeId;
+	public Long getAssetTypeId() {
+		return assetTypeId;
 	}
 
-	public void setProductTypeId(Long productTypeId) {
-		this.productTypeId = productTypeId;
+	public void setAssetTypeId(Long assetTypeId) {
+		this.assetTypeId = assetTypeId;
 	}
 
 

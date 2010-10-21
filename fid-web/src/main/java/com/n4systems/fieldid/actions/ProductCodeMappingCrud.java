@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.model.AssetType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
+import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductCodeMappingBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.ProductCodeMapping;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.ProductType;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -34,41 +34,39 @@ public class ProductCodeMappingCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;
 
-	private ProductCodeMapping productCodeMappingManager;
+	private AssetCodeMappingService assetCodeMappingServiceManager;
 	
-	private List<ProductCodeMappingBean> productCodeMappings;
-	private ProductCodeMappingBean productCodeMapping;
+	private List<AssetCodeMapping> assetCodeMappings;
+	private AssetCodeMapping assetCodeMapping;
 	
-	private ProductTypeLister productTypes;
+	private AssetTypeLister assetTypes;
 	
-	private List<InfoOptionInput> productInfoOptions;
+	private List<InfoOptionInput> assetInfoOptions;
 	
-	private ProductType productType;
+	private AssetType assetType;
 	
-	private boolean productTypeUpdate = false;
+	private boolean assetTypeUpdate = false;
 	
-	public ProductCodeMappingCrud(ProductCodeMapping productCodeMappingManager, PersistenceManager persistenceManager) {
+	public ProductCodeMappingCrud(AssetCodeMappingService assetCodeMappingServiceManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.productCodeMappingManager = productCodeMappingManager;
-		
+		this.assetCodeMappingServiceManager = assetCodeMappingServiceManager;
 	}
-	
 	
 	@Override
 	protected void initMemberFields() {
-		productCodeMapping = new ProductCodeMappingBean();
+		assetCodeMapping = new AssetCodeMapping();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		productCodeMapping = productCodeMappingManager.getProductCodeByUniqueIdAndTenant( uniqueId, getTenantId() );
+		assetCodeMapping = assetCodeMappingServiceManager.getProductCodeByUniqueIdAndTenant( uniqueId, getTenantId() );
 	}
 
 
 	@SkipValidation
 	public String doEdit() {
-		if( productCodeMapping == null ) {
-			addActionError("Product Code Mapping not found.");
+		if( assetCodeMapping == null ) {
+			addActionError("Asset Code Mapping not found.");
 			return ERROR;
 		}
 		return INPUT;
@@ -76,21 +74,21 @@ public class ProductCodeMappingCrud extends AbstractCrud {
 	
 	
 	public String doSave() {
-		if (productCodeMapping == null) {
-			addActionError("Product Code Mapping not found.");
+		if (assetCodeMapping == null) {
+			addActionError("Asset Code Mapping not found.");
 			return ERROR;
 		}
 
-		if( productTypeUpdate ) {
-			productInfoOptions = null;
+		if(assetTypeUpdate) {
+			assetInfoOptions = null;
 			return INPUT;
 		}
 		
-		productCodeMapping.setTenant(getTenant());
+		assetCodeMapping.setTenant(getTenant());
 		
 		convertInputsToInfoOptions();
 		try {
-			productCodeMappingManager.update( productCodeMapping );
+			assetCodeMappingServiceManager.update(assetCodeMapping);
 			addActionMessage("Data has been updated.");
 			return SUCCESS;
 		} catch (Exception e) {
@@ -101,8 +99,8 @@ public class ProductCodeMappingCrud extends AbstractCrud {
 	}
 	
 	private void convertInputsToInfoOptions() {
-		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions( productInfoOptions, productCodeMapping.getProductInfo().getInfoFields() );
-		productCodeMapping.setInfoOptions( options );
+		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, assetCodeMapping.getAssetInfo().getInfoFields() );
+		assetCodeMapping.setInfoOptions( options );
 	}
 	
 	
@@ -113,124 +111,111 @@ public class ProductCodeMappingCrud extends AbstractCrud {
 	
 	@SkipValidation
 	public String doRemove() {
-		if ( productCodeMapping == null) {
-			addActionError("Product Code Mapping not found");
+		if ( assetCodeMapping == null) {
+			addActionError("Asset Code Mapping not found");
 			return ERROR;
 		}
 		try {
-			productCodeMappingManager.deleteByIdAndTenant( uniqueID, getTenantId() );
+			assetCodeMappingServiceManager.deleteByIdAndTenant( uniqueID, getTenantId() );
 		} catch ( Exception e ) {
-			addActionError("Product Code Mapping can not be removed");
+			addActionError("Asset Code Mapping can not be removed");
 			return ERROR;
 		}
-		addActionMessage("Product Code Mapping has be removed");
+		addActionMessage("Asset Code Mapping has be removed");
 		return SUCCESS;
 	}
 	
-	
-	public List<ProductCodeMappingBean> getProductCodeMappings() {
-		if( productCodeMappings == null ) {
-			productCodeMappings = productCodeMappingManager.getAllProductCodesByTenant( getTenantId() );
+	public List<AssetCodeMapping> getAssetCodeMappings() {
+		if( assetCodeMappings == null ) {
+			assetCodeMappings = assetCodeMappingServiceManager.getAllProductCodesByTenant( getTenantId() );
 		}
-		return productCodeMappings;
+		return assetCodeMappings;
 	}
 
-
-	public ProductCodeMappingBean getProductCodeMapping() {
-		return productCodeMapping;
+	public AssetCodeMapping getAssetCodeMapping() {
+		return assetCodeMapping;
 	}
-	
-	
-	public ProductTypeLister getProductTypes() {
-		if (productTypes == null) {
-			productTypes = new ProductTypeLister(persistenceManager, getSecurityFilter());
+
+	public AssetTypeLister getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = new AssetTypeLister(persistenceManager, getSecurityFilter());
 		}
 
-		return productTypes;
+		return assetTypes;
 	}
 
-
-	public void setProductCodeMapping(ProductCodeMappingBean productCodeMapping) {
-		this.productCodeMapping = productCodeMapping;
+	public void setAssetCodeMapping(AssetCodeMapping assetCodeMapping) {
+		this.assetCodeMapping = assetCodeMapping;
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.productcoderequired")
-	public String getProductCode() {
-		return productCodeMapping.getProductCode();
+	public String getAssetCode() {
+		return assetCodeMapping.getAssetCode();
 	}
 
-
-	public void setProductCode(String productCode) {
-		this.productCodeMapping.setProductCode( productCode ); 
+	public void setAssetCode(String assetCode) {
+		this.assetCodeMapping.setAssetCode( assetCode );
 	}
 	
 	public String getCustomerRefNumber() {
-		return productCodeMapping.getCustomerRefNumber();
+		return assetCodeMapping.getCustomerRefNumber();
 	}
 
 	public void setCustomerRefNumber(String customerRefNumber) {
-		productCodeMapping.setCustomerRefNumber(customerRefNumber);
+		assetCodeMapping.setCustomerRefNumber(customerRefNumber);
 	}
 	
-	public ProductType getProductTypeBean() {
-		if( productType == null && productCodeMapping.getProductInfo() != null ) {
-			productType = productCodeMapping.getProductInfo();
+	public AssetType getAssetTypeBean() {
+		if( assetType == null && assetCodeMapping.getAssetInfo() != null ) {
+			assetType = assetCodeMapping.getAssetInfo();
 		}
-		return productType;
+		return assetType;
 	}
 	
 	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
-	public Long getProductType() {
-		return (productCodeMapping.getProductInfo() != null ) ? productCodeMapping.getProductInfo().getId() : null ;
+	public Long getAssetType() {
+		return (assetCodeMapping.getAssetInfo() != null ) ? assetCodeMapping.getAssetInfo().getId() : null ;
 	}
 	
-	public Collection<InfoFieldBean> getProductInfoFields() {
-		if( productCodeMapping.getProductInfo() != null ) {
-			return productCodeMapping.getProductInfo().getInfoFields();
+	public Collection<InfoFieldBean> getAssetInfoFields() {
+		if( assetCodeMapping.getAssetInfo() != null ) {
+			return assetCodeMapping.getAssetInfo().getInfoFields();
 		}
 		return new ArrayList<InfoFieldBean>(); 
 	}
 
-	
-	public void setProductType(Long productTypeId ) {
-		ProductType productType = null ;
-		if( productTypeId != null ) {
-			productType =  getLoaderFactory().createProductTypeLoader().setId(productTypeId).setStandardPostFetches().load();
+	public void setAssetType(Long assetTypeId ) {
+		AssetType assetType = null ;
+		if( assetTypeId != null ) {
+			assetType =  getLoaderFactory().createProductTypeLoader().setId(assetTypeId).setStandardPostFetches().load();
 		}
-		this.productCodeMapping.setProductInfo( productType );
+		this.assetCodeMapping.setAssetInfo(assetType);
 	}
 
-
-	public List<InfoOptionInput> getProductInfoOptions() {
-		if( productInfoOptions == null ) {
-			productInfoOptions = new ArrayList<InfoOptionInput>();
-			if( productCodeMapping.getProductInfo() != null ) {
-				productInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( productCodeMapping.getInfoOptions(), productCodeMapping.getProductInfo().getInfoFields() ); 
+	public List<InfoOptionInput> getAssetInfoOptions() {
+		if( assetInfoOptions == null ) {
+			assetInfoOptions = new ArrayList<InfoOptionInput>();
+			if( assetCodeMapping.getAssetInfo() != null ) {
+				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields() );
 			}
 		}
-		return productInfoOptions;
+		return assetInfoOptions;
 	}
-
 	
-	
-	public void setProductInfoOptions(List<InfoOptionInput> infoOptions) {
-		this.productInfoOptions = infoOptions;
+	public void setAssetInfoOptions(List<InfoOptionInput> infoOptions) {
+		this.assetInfoOptions = infoOptions;
 	}
 
-
-	public boolean isProductTypeUpdate() {
-		return productTypeUpdate;
+	public boolean isAssetTypeUpdate() {
+		return assetTypeUpdate;
 	}
 
-
-	public void setProductTypeUpdate(boolean productTypeUpdate) {
-		this.productTypeUpdate = productTypeUpdate;
+	public void setAssetTypeUpdate(boolean assetTypeUpdate) {
+		this.assetTypeUpdate = assetTypeUpdate;
 	}
 
-	public List<StringListingPair> getComboBoxInfoOptions( InfoFieldBean field , InfoOptionInput inputOption ) {
+	public List<StringListingPair> getComboBoxInfoOptions( InfoFieldBean field, InfoOptionInput inputOption ) {
 		return InfoFieldInput.getComboBoxInfoOptions( field, inputOption  );
 	}
-
-		
 	
 }

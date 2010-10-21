@@ -5,12 +5,12 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.builders.AssetBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.Product;
 import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.ProductBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
@@ -31,7 +31,7 @@ public class SafetyNetworkProductSecurityManagerTest {
 	@Test
 	public void is_assigned_returns_false_on_non_linked_owners() {
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(primary);
-		assertFalse(productSecurityManager.isAssigned(ProductBuilder.aProduct().build()));
+		assertFalse(productSecurityManager.isAssigned(AssetBuilder.anAsset().build()));
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ public class SafetyNetworkProductSecurityManagerTest {
 		
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(primary);
 		
-		assertFalse(productSecurityManager.isAssigned(ProductBuilder.aProduct().withOwner(otherOrg).build()));
+		assertFalse(productSecurityManager.isAssigned(AssetBuilder.anAsset().withOwner(otherOrg).build()));
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class SafetyNetworkProductSecurityManagerTest {
 		
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(primary);
 		
-		assertTrue(productSecurityManager.isAssigned(ProductBuilder.aProduct().withOwner(otherOrg).build()));
+		assertTrue(productSecurityManager.isAssigned(AssetBuilder.anAsset().withOwner(otherOrg).build()));
 	}
 	
 	@Test
@@ -61,7 +61,7 @@ public class SafetyNetworkProductSecurityManagerTest {
 		
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(primary);
 		
-		assertTrue(productSecurityManager.isAssigned(ProductBuilder.aProduct().withOwner(otherOrg).build()));
+		assertTrue(productSecurityManager.isAssigned(AssetBuilder.anAsset().withOwner(otherOrg).build()));
 	}
 	
 	@Test
@@ -71,7 +71,7 @@ public class SafetyNetworkProductSecurityManagerTest {
 		
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(secondary);
 		
-		assertTrue(productSecurityManager.isAssigned(ProductBuilder.aProduct().withOwner(otherOrg).build()));
+		assertTrue(productSecurityManager.isAssigned(AssetBuilder.anAsset().withOwner(otherOrg).build()));
 	}
 	
 	@Test
@@ -81,11 +81,11 @@ public class SafetyNetworkProductSecurityManagerTest {
 		
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(secondary);
 		
-		List<Product> products = Arrays.asList(
-				ProductBuilder.aProduct().build(),
-				ProductBuilder.aProduct().withOwner(otherOrg).build(),
-				ProductBuilder.aProduct().build(),
-				ProductBuilder.aProduct().build());
+		List<Asset> products = Arrays.asList(
+				AssetBuilder.anAsset().build(),
+				AssetBuilder.anAsset().withOwner(otherOrg).build(),
+				AssetBuilder.anAsset().build(),
+				AssetBuilder.anAsset().build());
 		
 		
 		assertTrue(productSecurityManager.listContainsAnAssignedProduct(products));
@@ -101,12 +101,12 @@ public class SafetyNetworkProductSecurityManagerTest {
 		
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(secondary);
 		
-		List<Product> products = Arrays.asList(
-				ProductBuilder.aProduct().build(),
-				ProductBuilder.aProduct().withOwner(otherOrg1).build(),
-				ProductBuilder.aProduct().withOwner(otherOrg2).build(),
-				ProductBuilder.aProduct().build(),
-				ProductBuilder.aProduct().build());
+		List<Asset> products = Arrays.asList(
+				AssetBuilder.anAsset().build(),
+				AssetBuilder.anAsset().withOwner(otherOrg1).build(),
+				AssetBuilder.anAsset().withOwner(otherOrg2).build(),
+				AssetBuilder.anAsset().build(),
+				AssetBuilder.anAsset().build());
 		
 		
 		assertTrue(productSecurityManager.listContainsAnAssignedProduct(products));
@@ -116,10 +116,10 @@ public class SafetyNetworkProductSecurityManagerTest {
 	public void list_contains_an_assigned_product_returns_false_with_no_assigned_product() {		
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(secondary);
 		
-		List<Product> products = Arrays.asList(
-				ProductBuilder.aProduct().build(),
-				ProductBuilder.aProduct().build(),
-				ProductBuilder.aProduct().build());
+		List<Asset> products = Arrays.asList(
+				AssetBuilder.anAsset().build(),
+				AssetBuilder.anAsset().build(),
+				AssetBuilder.anAsset().build());
 		
 		
 		assertFalse(productSecurityManager.listContainsAnAssignedProduct(products));
@@ -132,14 +132,14 @@ public class SafetyNetworkProductSecurityManagerTest {
 		
 		SafetyNetworkProductSecurityManager productSecurityManager = new SafetyNetworkProductSecurityManager(secondary);
 		
-		List<Product> products = Arrays.asList(
-				ProductBuilder.aProduct().withOwner(OrgBuilder.aCustomerOrg().build()).build(),
-				ProductBuilder.aProduct().withOwner(secondary).build(),
-				ProductBuilder.aProduct().withOwner(linkedOrg).build(),
-				ProductBuilder.aProduct().withOwner(OrgBuilder.aCustomerOrg().build()).build(),
-				ProductBuilder.aProduct().withOwner(OrgBuilder.aDivisionOrg().build()).build());
+		List<Asset> products = Arrays.asList(
+				AssetBuilder.anAsset().withOwner(OrgBuilder.aCustomerOrg().build()).build(),
+				AssetBuilder.anAsset().withOwner(secondary).build(),
+				AssetBuilder.anAsset().withOwner(linkedOrg).build(),
+				AssetBuilder.anAsset().withOwner(OrgBuilder.aCustomerOrg().build()).build(),
+				AssetBuilder.anAsset().withOwner(OrgBuilder.aDivisionOrg().build()).build());
 		
-		List<Product> filtered = productSecurityManager.filterOutExternalNotAssignedProducts(products);
+		List<Asset> filtered = productSecurityManager.filterOutExternalNotAssignedProducts(products);
 		assertEquals(2, filtered.size());
 		
 		assertEquals(secondary, filtered.get(0).getOwner());

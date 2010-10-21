@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.remover.summary.InspectionFrequencyDeleteSummary;
+import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
 import com.n4systems.persistence.Transaction;
@@ -31,12 +31,12 @@ public class InspectionFrequenciesDeleteHandlerImpl implements InspectionFrequen
 
 	public void remove(Transaction transaction) {
 		this.transaction = transaction;
-		List<ProductTypeSchedule> frequencies = getInspectionFrequencies();
+		List<AssetTypeSchedule> frequencies = getInspectionFrequencies();
 		deleteFrequencies(frequencies);
 	}
 
 
-	private List<ProductTypeSchedule> getInspectionFrequencies() {
+	private List<AssetTypeSchedule> getInspectionFrequencies() {
 		
 		if (inspectionType != null) {
 			return  getFrequenciesForInspectionType();
@@ -48,19 +48,19 @@ public class InspectionFrequenciesDeleteHandlerImpl implements InspectionFrequen
 	}
 
 	
-	private List<ProductTypeSchedule> getFrequenciesForInspectionType() {
+	private List<AssetTypeSchedule> getFrequenciesForInspectionType() {
 		return listLoader.setInspectionTypeId(inspectionType.getId()).load(transaction);
 	}
 
 	
-	private List<ProductTypeSchedule> getFrequenciesForAssociatedInspectionType(AssociatedInspectionType entity) {
-		return listLoader.setInspectionTypeId(entity.getInspectionType().getId()).setProductTypeId(entity.getProductType().getId()).load(transaction);
+	private List<AssetTypeSchedule> getFrequenciesForAssociatedInspectionType(AssociatedInspectionType entity) {
+		return listLoader.setInspectionTypeId(entity.getInspectionType().getId()).setProductTypeId(entity.getAssetType().getId()).load(transaction);
 	}
 	
 	
-	private int deleteFrequencies(List<ProductTypeSchedule> frequencies ) {
-		for (ProductTypeSchedule productTypeSchedule : frequencies) {
-			saver.remove(transaction, productTypeSchedule);
+	private int deleteFrequencies(List<AssetTypeSchedule> frequencies ) {
+		for (AssetTypeSchedule assetTypeSchedule : frequencies) {
+			saver.remove(transaction, assetTypeSchedule);
 		}
 		return frequencies.size();
 	}

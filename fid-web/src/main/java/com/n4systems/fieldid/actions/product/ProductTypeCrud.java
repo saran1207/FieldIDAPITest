@@ -12,6 +12,8 @@ import java.util.Map;
 
 import javax.activation.FileTypeMap;
 
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -32,8 +34,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldid.validators.HasProductDescriptionTemplateValidator;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.utils.CleanProductTypeFactory;
 import com.n4systems.reporting.PathHandler;
@@ -60,7 +60,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 	private ProductManager productManager;
 	private ConnectedEntityLoader entityLoader;
 
-	private ProductType productType;
+	private AssetType assetType;
 	private ProductTypeRemovalSummary removalSummary;
 		
 
@@ -70,7 +70,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 	private Collection<Long> undeletableInfoFields;
 	private List<Long> retiredInfoFields;
 	private List<UnitOfMeasure> unitOfMeasures;
-	private List<ProductTypeGroup> productTypeGroups;
+	private List<AssetTypeGroup> assetTypeGroups;
 
 	private File productImage;
 
@@ -88,12 +88,12 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		productType = getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
+		assetType = getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
 	}
 
 	@Override
 	protected void initMemberFields() {
-		productType = new ProductType();
+		assetType = new AssetType();
 	}
 
 	public void perpare() throws Exception {
@@ -107,34 +107,34 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 
 	@SkipValidation
 	public String doLoadCopy() {
-		testForProductType();
-		new CleanProductTypeFactory(productType, getTenant()).clean();
+		testForAssetType();
+		new CleanProductTypeFactory(assetType, getTenant()).clean();
 		setUniqueID(null);
-		productType.setName(null);
+		assetType.setName(null);
 		return INPUT;
 	}
 
 	@SkipValidation
 	public String doLoadEdit() {
-		testForProductType();
-		productImageDirectory = productType.getImageName();
-		setAttachments(productType.getAttachments());
+		testForAssetType();
+		productImageDirectory = assetType.getImageName();
+		setAttachments(assetType.getAttachments());
 		return INPUT;
 	}
 
 	@SkipValidation
 	public String doShow() {
-		testForProductType();
+		testForAssetType();
 		return SUCCESS;
 	}
 
 	public String doSave() {
-		testForProductType();
+		testForAssetType();
 
-		if (productType.getInfoFields() == null) {
-			productType.setInfoFields(new ArrayList<InfoFieldBean>());
+		if (assetType.getInfoFields() == null) {
+			assetType.setInfoFields(new ArrayList<InfoFieldBean>());
 		}
-		productType.setTenant(getTenant());
+		assetType.setTenant(getTenant());
 
 		processInfoFields();
 		processInfoOptions();
@@ -152,11 +152,11 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 		processUploadedImage();
 
 		try {
-			updateAttachmentList(productType, fetchCurrentUser());
-			productType = productTypeManager.updateProductType(productType, getUploadedFiles(), productImage);
+			updateAttachmentList(assetType, fetchCurrentUser());
+			assetType = productTypeManager.updateProductType(assetType, getUploadedFiles(), productImage);
 			addFlashMessage("Data has been updated.");
 
-			uniqueID = productType.getId();
+			uniqueID = assetType.getId();
 
 			infoFields = null;
 			editInfoOptions = null;
@@ -164,19 +164,19 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 			return SUCCESS;
 		} catch (FileAttachmentException e) {
 			addActionError(getText("error.attachingfile"));
-			logger.error("Failed to attach file to Product Type", e);
+			logger.error("Failed to attach file to Asset Type", e);
 		} catch (ImageAttachmentException e) {
 			addActionError(getText("error.attachingimage"));
-			logger.error("Failed to attach image to Product Type", e);
+			logger.error("Failed to attach image to Asset Type", e);
 		} catch (Exception e) {
 			addActionError(getText("error.failedtosave"));
-			logger.error("Failed to update Product Type", e);
+			logger.error("Failed to update Asset Type", e);
 		}
 		return INPUT;
 	}
 
-	private void testForProductType() {
-		if (productType == null) {
+	private void testForAssetType() {
+		if (assetType == null) {
 			addActionErrorText("error.noproducttype");
 			throw new MissingEntityException();
 		}
@@ -184,13 +184,13 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 
 	private void processUploadedImage() {
 		if (removeImage == true) {
-			productType.setImageName(null);
+			assetType.setImageName(null);
 		}
 
 		if (newImage == true && productImageDirectory != null && productImageDirectory.length() != 0) {
 			File tmpDirectory = PathHandler.getTempRoot();
 			productImage = new File(tmpDirectory.getAbsolutePath() + '/' + productImageDirectory);
-			productType.setImageName(productImage.getName());
+			assetType.setImageName(productImage.getName());
 		}
 	}
 
@@ -209,8 +209,8 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 					input.setInfoFieldFieldType(addedInfoField);
 					addedInfoField.setUnfilteredInfoOptions(new HashSet<InfoOptionBean>());
 					addedInfoField.setRetired(input.isRetired());
-					productType.getInfoFields().add(addedInfoField);
-					productType.associateFields();
+					assetType.getInfoFields().add(addedInfoField);
+					assetType.associateFields();
 
 					if (input.getDefaultUnitOfMeasure() != null) {
 						addedInfoField.setUnitOfMeasure(persistenceManager.find(UnitOfMeasure.class, input
@@ -222,7 +222,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 					input.setInfoField(addedInfoField);
 				}
 			} else {
-				for (InfoFieldBean infoField : productType.getInfoFields()) {
+				for (InfoFieldBean infoField : assetType.getInfoFields()) {
 					if (infoField.getUniqueID().equals(input.getUniqueID())) {
 						if (input.isDeleted()) {
 							deleted.add(infoField);
@@ -249,7 +249,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 			}
 		}
 
-		productType.getInfoFields().removeAll(deleted);
+		assetType.getInfoFields().removeAll(deleted);
 	}
 
 	// TODO: refactor to use the input info option to convert  -- AA
@@ -297,9 +297,9 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 
 	@SkipValidation
 	public String doConfirmDelete() {
-		testForProductType();
+		testForAssetType();
 		try {
-			removalSummary = productManager.testArchive(productType);
+			removalSummary = productManager.testArchive(assetType);
 		} catch (Exception e) {
 			return ERROR;
 		}
@@ -308,9 +308,9 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 
 	@SkipValidation
 	public String doDelete() {
-		testForProductType();
+		testForAssetType();
 		try {
-			productManager.archive(productType, getSessionUser().getUniqueID(), getText("label.beingdeleted"));
+			productManager.archive(assetType, getSessionUser().getUniqueID(), getText("label.beingdeleted"));
 			addFlashMessageText("message.producttypedeleted");
 			return SUCCESS;
 		} catch (Exception e) {
@@ -330,78 +330,78 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 	}
 
 	public String getName() {
-		return productType.getName();
+		return assetType.getName();
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.producttypenamerequired")
 	@CustomValidator(type = "uniqueValue", message = "", key = "error.producttypenameduplicate")
 	public void setName(String name) {
-		productType.setName(name);
+		assetType.setName(name);
 	}
 
 	public String getWarnings() {
-		return productType.getWarnings();
+		return assetType.getWarnings();
 	}
 
 	public void setWarnings(String warnings) {
-		productType.setWarnings(warnings);
+		assetType.setWarnings(warnings);
 	}
 
 	public String getCautions() {
-		return productType.getCautionUrl();
+		return assetType.getCautionUrl();
 	}
 
 	public void setCautions(String cautions) {
-		productType.setCautionUrl(cautions);
+		assetType.setCautionUrl(cautions);
 	}
 
 	public String getCautionsUrl() {
-		return productType.getCautionUrl();
+		return assetType.getCautionUrl();
 	}
 
 	@UrlValidator(message = "", key = "error.cautionsurl")
 	public void setCautionsUrl(String cautionsUrl) {
-		productType.setCautionUrl(cautionsUrl);
+		assetType.setCautionUrl(cautionsUrl);
 	}
 
 	public String getInstructions() {
-		return productType.getInstructions();
+		return assetType.getInstructions();
 	}
 
 	public void setInstructions(String instructions) {
-		productType.setInstructions(instructions);
+		assetType.setInstructions(instructions);
 	}
 
 	public boolean isHasManufacturerCertificate() {
-		return productType.isHasManufactureCertificate();
+		return assetType.isHasManufactureCertificate();
 	}
 
 	public void setHasManufacturerCertificate(boolean hasManufacturerCertificate) {
-		productType.setHasManufactureCertificate(hasManufacturerCertificate);
+		assetType.setHasManufactureCertificate(hasManufacturerCertificate);
 	}
 
 	public String getManufacturerCertificateText() {
-		return productType.getManufactureCertificateText();
+		return assetType.getManufactureCertificateText();
 	}
 
 	@StringLengthFieldValidator(maxLength="2000", key="errors.maxmancerttextlength", message="")
 	public void setManufacturerCertificateText(String manufacturerCertificateText) {
-		productType.setManufactureCertificateText(manufacturerCertificateText);
+		assetType.setManufactureCertificateText(manufacturerCertificateText);
 	}
 
 	public String getDescriptionTemplate() {
-		return productType.getDescriptionTemplate();
+		return assetType.getDescriptionTemplate();
 	}
 
 	@CustomValidator(type = "productDescriptionTemplate", message = "", key = "errors.infofieldnamenotblank")
 	public void setDescriptionTemplate(String descriptionTemplate) {
-		productType.setDescriptionTemplate(descriptionTemplate);
+		assetType.setDescriptionTemplate(descriptionTemplate);
 	}
 
 	public List<InfoFieldInput> getInfoFields() {
 		if (infoFields == null) {
 			infoFields = new ArrayList<InfoFieldInput>();
-			Iterator<InfoFieldBean> iter = productType.getInfoFields().iterator();
+			Iterator<InfoFieldBean> iter = assetType.getInfoFields().iterator();
 			while (iter.hasNext()) {
 				InfoFieldBean infoField = iter.next();
 				infoFields.add(new InfoFieldInput(infoField));
@@ -419,7 +419,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 		this.infoFields = infoFields;
 	}
 
-	public Collection<ListingPair> getProductTypes() {
+	public Collection<ListingPair> getAssetTypes() {
 		return productTypeManager.getProductTypeListForTenant(getTenantId());
 	}
 
@@ -429,8 +429,8 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 
 	public Collection<Long> getUndeletableInfoFields() {
 		if (undeletableInfoFields == null) {
-			if (productType != null) {
-				undeletableInfoFields = productTypeManager.infoFieldsInUse(productType.getInfoFields());
+			if (assetType != null) {
+				undeletableInfoFields = productTypeManager.infoFieldsInUse(assetType.getInfoFields());
 			}
 			if (undeletableInfoFields == null) {
 				undeletableInfoFields = new ArrayList<Long>();
@@ -444,7 +444,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 		if (editInfoOptions == null) {
 			editInfoOptions = new ArrayList<InfoOptionInput>();
 
-			List<InfoFieldBean> infoFieldList = new ArrayList<InfoFieldBean>(productType.getInfoFields());
+			List<InfoFieldBean> infoFieldList = new ArrayList<InfoFieldBean>(assetType.getInfoFields());
 			for (int index = 0; index < infoFieldList.size(); index++) {
 				for (InfoOptionBean infoOption : infoFieldList.get(index).getInfoOptions()) {
 					InfoOptionInput infoOptionInput = new InfoOptionInput(infoOption);
@@ -479,11 +479,11 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 	}
 
 	public boolean duplicateValueExists(String formValue) {
-		return !persistenceManager.uniqueNameAvailable(ProductType.class, formValue, uniqueID, getTenantId());
+		return !persistenceManager.uniqueNameAvailable(AssetType.class, formValue, uniqueID, getTenantId());
 	}
 
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getAssetType() {
+		return assetType;
 	}
 
 	public boolean isRemoveImage() {
@@ -506,8 +506,8 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 		this.newImage = newImage;
 	}
 
-	public List<ProductType> getSubTypes() {
-		return new ArrayList<ProductType>(productType.getSubTypes());
+	public List<AssetType> getSubTypes() {
+		return new ArrayList<AssetType>(assetType.getSubTypes());
 	}
 
 	public String getProductImageDirectory() {
@@ -532,18 +532,18 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 	}
 
 	public Long getGroup() {
-		return (productType.getGroup() != null) ? productType.getGroup().getId() : null;
+		return (assetType.getGroup() != null) ? assetType.getGroup().getId() : null;
 	}
 
 	public void setGroup(Long group) {
-		productType.setGroup(entityLoader.getEntity(ProductTypeGroup.class, group, productType.getGroup(), getSecurityFilter()));
+		assetType.setGroup(entityLoader.getEntity(AssetTypeGroup.class, group, assetType.getGroup(), getSecurityFilter()));
 	}
 
-	public List<ProductTypeGroup> getProductTypeGroups() {
-		if (productTypeGroups == null) {
-			productTypeGroups = persistenceManager.findAll(new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter()).addOrder("orderIdx"));
+	public List<AssetTypeGroup> getAssetTypeGroups() {
+		if (assetTypeGroups == null) {
+			assetTypeGroups = persistenceManager.findAll(new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, getSecurityFilter()).addOrder("orderIdx"));
 		}
-		return productTypeGroups;
+		return assetTypeGroups;
 	}
 	
 	

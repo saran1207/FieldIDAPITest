@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -34,7 +34,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	private List<Long> searchIds;
 
 	public ProductSearchAction(final PersistenceManager persistenceManager, final ProductManager productManager) {
-		super(ProductSearchAction.class, SEARCH_CRITERIA, "Product Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "product_search"));
+		super(ProductSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "product_search"));
 	}
 
 	public void prepare() throws Exception {
@@ -69,9 +69,9 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		String reportName = String.format("Manufacturer Certificate Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
-			List<Long> productIds = getSearchIds();
+			List<Long> assetIds = getSearchIds();
 
-			getDownloadCoordinator().generateAllProductCertificates(reportName, getDownloadLinkUrl(), productIds);
+			getDownloadCoordinator().generateAllProductCertificates(reportName, getDownloadLinkUrl(), assetIds);
 		} catch (Exception e) {
 			logger.error("Failed to print all manufacturer certs", e);
 			addFlashErrorText("error.reportgeneration");
@@ -110,7 +110,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 		getContainer().setToDate(convertToEndOfDay(toDate));
 	}
 
-	public List<ProductStatusBean> getProductStatuses() {
+	public List<AssetStatus> getAssetStatuses() {
 		return getLoaderFactory().createProductStatusListLoader().load();
 	}
 

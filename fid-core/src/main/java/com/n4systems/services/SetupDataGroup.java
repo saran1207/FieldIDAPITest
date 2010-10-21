@@ -2,17 +2,17 @@ package com.n4systems.services;
 
 import java.util.Date;
 
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.CommentTempBean;
-import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
-import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.State;
 import com.n4systems.model.UnitOfMeasure;
@@ -35,7 +35,7 @@ public enum SetupDataGroup {
 	 * or CrossTenantEntity, SetupDataUpdateEventListener will throw an
 	 * exception!
 	 */
-	PRODUCT_TYPE(ProductType.class, ProductStatusBean.class, ProductTypeGroup.class, AssociatedInspectionType.class, ProductTypeSchedule.class) {
+	PRODUCT_TYPE(AssetType.class, AssetStatus.class, AssetTypeGroup.class, AssociatedInspectionType.class, AssetTypeSchedule.class) {
 		@Override
 		public Date getLastModDate(SetupDataLastModDates lastModeDates) {
 			return lastModeDates.getProductTypes();

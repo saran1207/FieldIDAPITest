@@ -1,10 +1,10 @@
 package com.n4systems.util;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 
 public class ProductTypeRemovalSummary {
 
-	private ProductType productType;
+	private AssetType assetType;
 
 	private Long productsToDelete = 0L;
 	private Long inspectionsToDelete = 0L;
@@ -16,8 +16,8 @@ public class ProductTypeRemovalSummary {
 	private Long productCodeMappingsToDelete = 0L;
 	private Long masterProductsToDettach = 0L;
 
-	public ProductTypeRemovalSummary(ProductType productType) {
-		this.productType = productType;
+	public ProductTypeRemovalSummary(AssetType assetType) {
+		this.assetType = assetType;
 	}
 
 	public boolean validToDelete() {
@@ -56,8 +56,8 @@ public class ProductTypeRemovalSummary {
 		this.productsUsedInMasterInpsection = productsUsedInMasterInpsection;
 	}
 
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getProductType() {
+		return assetType;
 	}
 
 	public Long getSubProductsToDettach() {

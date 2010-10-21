@@ -5,38 +5,38 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class ProductSubProductsLoader extends ListLoader<Product> {
+public class ProductSubProductsLoader extends ListLoader<Asset> {
 
-	private List<Product> products;
+	private List<Asset> products;
 	
 	public ProductSubProductsLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
 	@Override
-	protected List<Product> load(EntityManager em, SecurityFilter filter) {
-		List<Product> productsWithSubProducts = new ArrayList<Product>();
+	protected List<Asset> load(EntityManager em, SecurityFilter filter) {
+		List<Asset> productsWithSubProducts = new ArrayList<Asset>();
 		
 		QueryBuilder<SubProduct> subProductQuery = null;
 		
-		for (Product product : products) {
+		for (Asset asset : products) {
 			subProductQuery = new QueryBuilder<SubProduct>(SubProduct.class);
-			subProductQuery.addSimpleWhere("masterProduct", product);
-			product.setSubProducts(subProductQuery.getResultList(em));
-			productsWithSubProducts.add(product);
+			subProductQuery.addSimpleWhere("masterAsset", asset);
+			asset.setSubProducts(subProductQuery.getResultList(em));
+			productsWithSubProducts.add(asset);
 		}
 		
 		return productsWithSubProducts;
 	}
 
-	public ProductSubProductsLoader setProducts(List<Product> products) {
-		this.products = products;
+	public ProductSubProductsLoader setProducts(List<Asset> assets) {
+		this.products = assets;
 		return this;
 	}
 }

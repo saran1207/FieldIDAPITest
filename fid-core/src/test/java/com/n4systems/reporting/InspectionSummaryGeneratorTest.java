@@ -79,7 +79,7 @@ public class InspectionSummaryGeneratorTest {
 		expect(reportDefiner.getPurchaseOrder()).andReturn("");
 		expect(reportDefiner.getToDate()).andReturn(new Date());
 		expect(reportDefiner.getFromDate()).andReturn(new Date());
-		expect(reportDefiner.getProductType()).andReturn(null);
+		expect(reportDefiner.getAssetType()).andReturn(null);
 		expect(reportDefiner.getInspectionBook()).andReturn(null);
 		expect(reportDefiner.getInspectionTypeGroup()).andReturn(null);
 		expect(reportDefiner.getPerformedBy()).andReturn(null);

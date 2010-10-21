@@ -81,7 +81,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		page.setDisplayColumns(displayColumns);
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());		
-		List<String> expectedColumns = Arrays.asList("Product Type", "Assigned To", "Safety Network", "Links");
+		List<String> expectedColumns = Arrays.asList("Asset Type", "Assigned To", "Safety Network", "Links");
 		assertEquals(expectedColumns, page.getResultColumnHeaders());
 	}
 	
@@ -94,8 +94,8 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());		
 		List<String> expectedColumns = Arrays.asList("Order Description", "Serial Number", "Reference Number", 
-				"RFID Number", "Job Site Name", "Division", "Location", "Organization", "Product Type Group", 
-				"Product Type", "Product Status", "Date Identified", "Last Inspection Date", "Network Last Inspection Date", 
+				"RFID Number", "Job Site Name", "Division", "Location", "Organization", "Asset Type Group",
+				"Asset Type", "Asset Status", "Date Identified", "Last Inspection Date", "Network Last Inspection Date",
 				"Assigned To", "Identified By", "Modified By", "Comments", "Description", "Safety Network", "Order Number", 
 				"Purchase Order", "Links");
 		assertEquals(expectedColumns, page.getResultColumnHeaders());
@@ -139,6 +139,6 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	
 	private List<String> getDefaultColumnHeaders() {
 		return Arrays.asList("Serial Number", "Reference Number", "Job Site Name", "Location", 
-				"Product Type", "Product Status", "Date Identified", "Last Inspection Date", "Links");
+				"Asset Type", "Asset Status", "Date Identified", "Last Inspection Date", "Links");
 	}
 }

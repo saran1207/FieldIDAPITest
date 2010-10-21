@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 
 import com.n4systems.ejb.ProductManager;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
@@ -12,8 +12,8 @@ import com.n4systems.util.mail.MailMessage;
 public class ProductMergeTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(ProductMergeTask.class);
 	
-	private final Product winningProduct;
-	private final Product losingProduct;
+	private final Asset winningAsset;
+	private final Asset losingAsset;
 	private final User user;
 	
 	private final String serialNumberOfLoser;
@@ -22,10 +22,10 @@ public class ProductMergeTask implements Runnable {
 	private ProductManager productManager;
 	private boolean error = false;
 	
-	public ProductMergeTask(Product winningProduct, Product losingProduct, User user) {
+	public ProductMergeTask(Asset winningProduct, Asset losingProduct, User user) {
 		super();
-		this.winningProduct = winningProduct;
-		this.losingProduct = losingProduct;
+		this.winningAsset = winningProduct;
+		this.losingAsset = losingProduct;
 		this.user = user;
 		
 		serialNumberOfLoser = losingProduct.getSerialNumber();
@@ -45,7 +45,7 @@ public class ProductMergeTask implements Runnable {
 	
 	private void executeMerge() {
 		try {
-			productManager.mergeProducts(winningProduct, losingProduct, user);
+			productManager.mergeProducts(winningAsset, losingAsset, user);
 		} catch (Exception e) {
 			logger.error("could not merge products", e);
 			error = true;
@@ -53,14 +53,14 @@ public class ProductMergeTask implements Runnable {
 	}
 	
 	private void sendEmailResponse() {
-		String subject = "Product Merge Completed";
-		String body = "<h2>Product merge</h2>";
+		String subject = "Asset Merge Completed";
+		String body = "<h2>Asset merge</h2>";
 		if (error) {
 			
 			body += "<p>An error occured while merging the products " + serialNumberOfLoser + " and " + serialNumberOfWinner +
 				 " please contact support and we will be able to help get this problem resolved.</p>";
 		} else {
-			body += "<p>All inspections from product " + serialNumberOfLoser + " have been moved to product " + serialNumberOfWinner + "</p>";
+			body += "<p>All inspections from asset " + serialNumberOfLoser + " have been moved to asset " + serialNumberOfWinner + "</p>";
 		}
 		
 		logger.info("Sending email [" + user.getEmailAddress() + "]");

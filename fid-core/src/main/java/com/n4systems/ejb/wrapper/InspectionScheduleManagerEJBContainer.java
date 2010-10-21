@@ -8,7 +8,7 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -19,11 +19,11 @@ public class InspectionScheduleManagerEJBContainer extends EJBTransactionEmulato
 		return new InspectionScheduleManagerImpl(em);
 	}
 
-	public List<InspectionSchedule> autoSchedule(Product product) {
+	public List<InspectionSchedule> autoSchedule(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).autoSchedule(product);
+			return createManager(transaction.getEntityManager()).autoSchedule(asset);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -34,11 +34,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<InspectionSchedule> getAvailableSchedulesFor(Product product) {
+	public List<InspectionSchedule> getAvailableSchedulesFor(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getAvailableSchedulesFor(product);
+			return createManager(transaction.getEntityManager()).getAvailableSchedulesFor(asset);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -101,11 +101,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public void removeAllSchedulesFor(Product product) {
+	public void removeAllSchedulesFor(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).removeAllSchedulesFor(product);
+			createManager(transaction.getEntityManager()).removeAllSchedulesFor(asset);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

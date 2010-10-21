@@ -9,7 +9,7 @@
 	
 </div>
 
-<#if action.isParentProduct() >
+<#if action.isParentAsset() >
 	<div  class="infoSet">
 		<label class="label"><@s.text name="label.printable"/></label>
 		<span class="fieldHolder">
@@ -19,7 +19,7 @@
 	
 	<div  class="infoSet">
 		<label class="label"><@s.text name="label.productstatus"/></label>
-		<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
+		<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
 	</div>
 	
 	<#if inspection.new >

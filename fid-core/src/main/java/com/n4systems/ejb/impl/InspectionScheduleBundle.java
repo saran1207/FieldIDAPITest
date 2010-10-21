@@ -2,23 +2,23 @@ package com.n4systems.ejb.impl;
 
 import java.util.Date;
 
+import com.n4systems.model.Asset;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 
 public class InspectionScheduleBundle {	
-	private final Product product;
+	private final Asset asset;
 	private final InspectionType type;
 	private final Project job;
 	private final Date scheduledDate;
 	
-	public InspectionScheduleBundle(Product product, InspectionType type, Project job, Date scheduledDate) {
+	public InspectionScheduleBundle(Asset asset, InspectionType type, Project job, Date scheduledDate) {
 		super();
-		this.product = product;
+		this.asset = asset;
 		this.type = type;
 		this.job = job;
 		this.scheduledDate = scheduledDate;
@@ -27,8 +27,8 @@ public class InspectionScheduleBundle {
 	}
 
 	private void guard() {
-		if (product == null) {
-			throw new NullPointerException("product");
+		if (asset == null) {
+			throw new NullPointerException("asset");
 		}
 		
 		if (type == null) {
@@ -40,8 +40,8 @@ public class InspectionScheduleBundle {
 		}
 	}
 	
-	public Product getProduct() {
-		return product;
+	public Asset getProduct() {
+		return asset;
 	}
 
 	public InspectionType getType() {

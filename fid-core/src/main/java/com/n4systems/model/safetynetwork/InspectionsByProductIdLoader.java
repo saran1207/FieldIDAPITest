@@ -20,11 +20,11 @@ public class InspectionsByProductIdLoader extends ListLoader<Inspection> {
 
     @Override
     protected List<Inspection> load(EntityManager em, SecurityFilter filter) {
-        // Throw an exception if we can't load this product over safety network
+        // Throw an exception if we can't load this asset over safety network
         new SafetyNetworkProductLoader(filter).setProductId(productId).load();
 
         QueryBuilder<Inspection> builder = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
-        builder.addWhere(WhereClauseFactory.create("product.id", productId));
+        builder.addWhere(WhereClauseFactory.create("asset.id", productId));
 
         return builder.getResultList(em);
     }

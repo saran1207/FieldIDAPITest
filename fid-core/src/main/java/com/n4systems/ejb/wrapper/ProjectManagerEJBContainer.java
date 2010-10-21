@@ -8,9 +8,9 @@ import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.impl.ProjectManagerImpl;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.security.SecurityFilter;
@@ -25,7 +25,7 @@ public class ProjectManagerEJBContainer extends EJBTransactionEmulator<ProjectMa
 		return new ProjectManagerImpl(em);
 	}
 
-	public int attachAsset(Product asset, Project project, Long modifiedBy) throws AssetAlreadyAttachedException {
+	public int attachAsset(Asset asset, Project project, Long modifiedBy) throws AssetAlreadyAttachedException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -57,7 +57,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public int detachAsset(Product asset, Project project, Long modifiedBy) {
+	public int detachAsset(Asset asset, Project project, Long modifiedBy) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -89,7 +89,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Pager<Product> getAssetsPaged(Project project, SecurityFilter filter, int page, int pageSize) {
+	public Pager<Asset> getAssetsPaged(Project project, SecurityFilter filter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -153,7 +153,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public List<Project> getProjectsForAsset(Product asset, SecurityFilter filter) {
+	public List<Project> getProjectsForAsset(Asset asset, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

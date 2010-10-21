@@ -13,7 +13,7 @@ public interface ReportDefiner extends BaseSearchDefiner {
 	public String getPurchaseOrder();
 	public Date getToDate();
 	public Date getFromDate();
-	public Long getProductType();
+	public Long getAssetType();
 	public Long getInspectionBook();
 	public Long getInspectionTypeGroup();
 	public Long getPerformedBy();

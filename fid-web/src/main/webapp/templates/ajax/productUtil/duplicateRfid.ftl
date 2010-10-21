@@ -12,11 +12,11 @@
 					<th><@s.text name="label.customername"/></th>
 					<th><@s.text name="label.description"/></th>
 				</tr>
-				<#list products as product >
+				<#list assets as asset >
 					<tr>
-						<td>${product.serialNumber}</td>
-						<td>${(product.owner.name)!}</td>
-						<td>${product.description}</td>
+						<td>${asset.serialNumber}</td>
+						<td>${(asset.owner.name)!}</td>
+						<td>${asset.description}</td>
 					</tr>
 				</#list>
 			</table>

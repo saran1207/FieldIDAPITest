@@ -1,59 +1,59 @@
 package com.n4systems.fieldid.collection.helpers;
 
+import com.n4systems.model.Asset;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
-import com.n4systems.model.Product;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 
 public class CommonAssetValues {
 	public static final Location NO_COMMON_LOCATION = null;
 	public static final BaseOrg NO_COMMON_OWNER = null;
-	public static final ProductStatusBean NO_COMMON_PRODUCT_STATUS = null;
+	public static final AssetStatus NO_COMMON_ASSET_STATUS = null;
 	public static final Assignment NO_COMMON_ASSIGNMENT = null;
 	
 	
-	public static final CommonAssetValues NO_COMMON_VALUES = new CommonAssetValues(NO_COMMON_LOCATION, NO_COMMON_OWNER, NO_COMMON_PRODUCT_STATUS, NO_COMMON_ASSIGNMENT);
+	public static final CommonAssetValues NO_COMMON_VALUES = new CommonAssetValues(NO_COMMON_LOCATION, NO_COMMON_OWNER, NO_COMMON_ASSET_STATUS, NO_COMMON_ASSIGNMENT);
 	
-	public static CommonAssetValues createFrom(Product asset) {
-		return new CommonAssetValues(asset.getAdvancedLocation(), asset.getOwner(), asset.getProductStatus(), new Assignment(asset.getAssignedUser()));
+	public static CommonAssetValues createFrom(Asset asset) {
+		return new CommonAssetValues(asset.getAdvancedLocation(), asset.getOwner(), asset.getAssetStatus(), new Assignment(asset.getAssignedUser()));
 
 	}
 	
 	public final Location location;
 	public final BaseOrg owner;
-	public final ProductStatusBean productStatus;
+	public final AssetStatus assetStatus;
 	public final Assignment assignment;
 	
 
-	public CommonAssetValues(Location location, BaseOrg owner, ProductStatusBean productStatus, Assignment assignment) {
+	public CommonAssetValues(Location location, BaseOrg owner, AssetStatus assetStatus, Assignment assignment) {
 		super();
 		this.location = location;
 		this.owner = owner;
-		this.productStatus = productStatus;
+		this.assetStatus = assetStatus;
 		this.assignment = assignment;
 	}
 
-	public CommonAssetValues findCommon(Product asset) {
+	public CommonAssetValues findCommon(Asset asset) {
 		CommonAssetValues otherAssetCommonValues = createFrom(asset);
 		Location commonLocation = commonLocation(otherAssetCommonValues);
 		BaseOrg commonOwner = commonOwner(otherAssetCommonValues);
-		ProductStatusBean commonProductStatus = commonProductStatus(otherAssetCommonValues);
+		AssetStatus commonAssetStatus = commonProductStatus(otherAssetCommonValues);
 		Assignment commonAssignment = commonAssignment(otherAssetCommonValues);
 		
-		return new CommonAssetValues(commonLocation, commonOwner, commonProductStatus, commonAssignment);
+		return new CommonAssetValues(commonLocation, commonOwner, commonAssetStatus, commonAssignment);
 	}
 
 	private Assignment commonAssignment(CommonAssetValues otherAssetCommonValues) {
 		return hasCommonAssignment() && assignment.equals(otherAssetCommonValues.assignment) ? assignment : NO_COMMON_ASSIGNMENT;
 	}
 
-	private ProductStatusBean commonProductStatus(CommonAssetValues otherAssetCommonValues) {
-		return productStatus != null && productStatus.equals(otherAssetCommonValues.productStatus) ? productStatus : NO_COMMON_PRODUCT_STATUS;
+	private AssetStatus commonProductStatus(CommonAssetValues otherAssetCommonValues) {
+		return assetStatus != null && assetStatus.equals(otherAssetCommonValues.assetStatus) ? assetStatus : NO_COMMON_ASSET_STATUS;
 	}
 
 	private BaseOrg commonOwner(CommonAssetValues otherAssetCommonValues) {

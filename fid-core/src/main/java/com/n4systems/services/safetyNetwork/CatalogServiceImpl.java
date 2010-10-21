@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
@@ -47,7 +47,7 @@ public class CatalogServiceImpl implements CatalogService {
 
 		Catalog catalog = getCatalog();
 		if (catalog != null) {
-			for (ProductType publishedType : catalog.getPublishedProductTypes()) {
+			for (AssetType publishedType : catalog.getPublishedProductTypes()) {
 				productTypeIds.add(publishedType.getId());
 			}
 		}
@@ -60,7 +60,7 @@ public class CatalogServiceImpl implements CatalogService {
 			return new ArrayList<ListingPair>();
 		}
 		
-		QueryBuilder<ListingPair> productTypesQuery = new QueryBuilder<ListingPair>(ProductType.class, filter);
+		QueryBuilder<ListingPair> productTypesQuery = new QueryBuilder<ListingPair>(AssetType.class, filter);
 		
 		productTypesQuery.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name")).addWhere(Comparator.IN, "ids", "id", productTypeIdsPublished);
 		productTypesQuery.addOrder("name");
@@ -68,20 +68,20 @@ public class CatalogServiceImpl implements CatalogService {
 		return persistenceManager.findAll(productTypesQuery);
 	}
 
-	public Catalog publishProductTypes(Set<ProductType> productTypes) {
+	public Catalog publishProductTypes(Set<AssetType> assetTypes) {
 		Catalog catalog = getCatalog();
-		productTypes.addAll(getAdditionalSubTypes(productTypes));
-		catalog.setPublishedProductTypes(productTypes);
+		assetTypes.addAll(getAdditionalSubTypes(assetTypes));
+		catalog.setPublishedProductTypes(assetTypes);
 		return persistenceManager.update(catalog);
 	}
 
-	private Set<ProductType> getAdditionalSubTypes(Set<ProductType> productTypes) {
-		Set<ProductType> additionalSubTypesRequiredForPublishing = new HashSet<ProductType>();
-		for (ProductType productType : productTypes) {
-			persistenceManager.reattchAndFetch(productType, "subTypes");
-			if (!productType.getSubTypes().isEmpty()) {
-				for (ProductType subType : productType.getSubTypes()) {
-					if (!productTypes.contains(subType)) {
+	private Set<AssetType> getAdditionalSubTypes(Set<AssetType> assetTypes) {
+		Set<AssetType> additionalSubTypesRequiredForPublishing = new HashSet<AssetType>();
+		for (AssetType assetType : assetTypes) {
+			persistenceManager.reattchAndFetch(assetType, "subTypes");
+			if (!assetType.getSubTypes().isEmpty()) {
+				for (AssetType subType : assetType.getSubTypes()) {
+					if (!assetTypes.contains(subType)) {
 						additionalSubTypesRequiredForPublishing.add(subType);
 					}
 				}
@@ -135,19 +135,19 @@ public class CatalogServiceImpl implements CatalogService {
 		return tenant;
 	}
 
-	public Set<ProductTypeGroup> getProductTypeGroupsFor(Set<Long> productTypeIds) {
-		QueryBuilder<ProductTypeGroup> importingProductTypeGroups = new QueryBuilder<ProductTypeGroup>(ProductType.class, filter);
+	public Set<AssetTypeGroup> getProductTypeGroupsFor(Set<Long> productTypeIds) {
+		QueryBuilder<AssetTypeGroup> importingProductTypeGroups = new QueryBuilder<AssetTypeGroup>(AssetType.class, filter);
 		applyPublishedProductTypeFilter(importingProductTypeGroups);
 		importingProductTypeGroups.setSelectArgument(new SimpleSelect("group"));
 		importingProductTypeGroups.addWhere(Comparator.IN, "ids", "id", productTypeIds);
 		importingProductTypeGroups.addOrder("group.name");
 
-		return new HashSet<ProductTypeGroup>(persistenceManager.findAll(importingProductTypeGroups));
+		return new HashSet<AssetTypeGroup>(persistenceManager.findAll(importingProductTypeGroups));
 	}
 
-	public ProductType getPublishedProductType(Long productTypeId, String...postfetchField) {
+	public AssetType getPublishedProductType(Long productTypeId, String...postfetchField) {
 		isProductTypePublished(productTypeId);
-		return persistenceManager.find(ProductType.class, productTypeId, getTenant(), postfetchField);
+		return persistenceManager.find(AssetType.class, productTypeId, getTenant(), postfetchField);
 	}
 
 	public List<Long> getAllPublishedSubTypesFor(Long productTypeId) {
@@ -157,7 +157,7 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	public List<Long> getAllPublishedSubTypesFor(Set<Long> productTypeIds) {
-		QueryBuilder<Long> subProductIds = new QueryBuilder<Long>(ProductType.class, filter);
+		QueryBuilder<Long> subProductIds = new QueryBuilder<Long>(AssetType.class, filter);
 		SimpleSelect selectSubProductId = new SimpleSelect("subType.id", true);
 		applyPublishedProductTypeFilter(subProductIds);
 		selectSubProductId.setDistinct(true);

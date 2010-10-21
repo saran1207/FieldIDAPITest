@@ -6,12 +6,12 @@ import static org.easymock.EasyMock.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
@@ -46,7 +46,7 @@ public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactio
 		replay(mockTagSaver);
 		
 		ProductTypeSaver mockProductTypeSaver = createMock(ProductTypeSaver.class);
-		mockProductTypeSaver.save(same(mockTransaction), isA(ProductType.class));
+		mockProductTypeSaver.save(same(mockTransaction), isA(AssetType.class));
 		replay(mockProductTypeSaver);
 
 		InspectionTypeGroupSaver mockInspectionTypeGroupSaver = createMock(InspectionTypeGroupSaver.class);
@@ -59,7 +59,7 @@ public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactio
 		replay(mockStateSetSaver);
 		
 		ProductStatusSaver mockStatusSaver = createMock(ProductStatusSaver.class);
-		mockStatusSaver.save(same(mockTransaction), isA(ProductStatusBean.class));
+		mockStatusSaver.save(same(mockTransaction), isA(AssetStatus.class));
 		expectLastCall().times(5);
 		replay(mockStatusSaver);
 		

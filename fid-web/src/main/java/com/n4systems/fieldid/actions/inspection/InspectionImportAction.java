@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.Importer;
@@ -22,7 +22,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Status;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
@@ -107,10 +107,10 @@ public class InspectionImportAction extends AbstractImportAction {
 		example.setBook(new InspectionBook());
 		example.getBook().setName(getText("example.inspection.book"));
 		
-		example.setProduct(new Product());
-		example.getProduct().setSerialNumber(getText("example.inspection.serialnumber"));
+		example.setAsset(new Asset());
+		example.getAsset().setSerialNumber(getText("example.inspection.serialnumber"));
 		
-		example.setProductStatus(getExampleProductStatus());
+		example.setAssetStatus(getExampleAssetStatus());
 		
 		return example;
 	}
@@ -119,8 +119,8 @@ public class InspectionImportAction extends AbstractImportAction {
 		return DateHelper.addDaysToDate(new Date(), 365L);
 	}
 	
-	private ProductStatusBean getExampleProductStatus() {
-		List<ProductStatusBean> statuses = getLoaderFactory().createProductStatusListLoader().load();
+	private AssetStatus getExampleAssetStatus() {
+		List<AssetStatus> statuses = getLoaderFactory().createProductStatusListLoader().load();
 		
 		return (statuses.isEmpty()) ? null : statuses.get(0);
 	}

@@ -9,15 +9,15 @@ function attachSubProductSubmit( event ) {
 	
 }
 
-function attachProduct( event, productId ) {
+function attachProduct( event, assetId ) {
 	if( event ) {
 		event.stop();
 		element = Event.element( event );
-		productId = element.getAttribute( 'productId' );
+		assetId = element.getAttribute( 'assetId' );
 	}
 	Lightview.hide();
 	
-	var url = addSubProductUrl + "?uniqueID=" + $('productId').value + "&subProduct.product.iD=" + productId + "&subProductIndex=" + subProductIndex + "&token=" + getToken();
+	var url = addSubProductUrl + "?uniqueID=" + $('assetId').value + "&subProduct.asset.iD=" + assetId + "&subProductIndex=" + subProductIndex + "&token=" + getToken();
 	subProductIndex++;
 	getResponse( url, "get" );
 }

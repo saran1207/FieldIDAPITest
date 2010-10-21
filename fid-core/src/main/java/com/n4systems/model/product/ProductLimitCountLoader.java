@@ -2,7 +2,7 @@ package com.n4systems.model.product;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -21,7 +21,7 @@ public class ProductLimitCountLoader extends Loader<Long> implements LimitLoader
 	@Override
 	protected Long load(EntityManager em) {
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(Product.class, filter);
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(Asset.class, filter);
 		builder.addWhere(WhereClauseFactory.create("countsTowardsLimit", true));
 		
 		Long productCount = builder.getCount(em);

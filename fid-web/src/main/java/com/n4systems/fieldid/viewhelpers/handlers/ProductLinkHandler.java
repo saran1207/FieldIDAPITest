@@ -10,7 +10,7 @@ public class ProductLinkHandler extends WebOutputHandler {
 	}
 
 	public String handleWeb(Long entityId, Object value) {
-		// create a link to the product
+		// create a link to the asset
 		return "<a href=\"product.action?uniqueID=" + entityId + "\" >" + (String)value + "</a>";
 	}
 

@@ -1,7 +1,7 @@
 
 <div class="safetyNetworkSmartSearch" id="${parameters.id?html}_container">
 	<#if !parameters.vendorList.empty>
-		<@s.hidden id="linkedProductId" name="${parameters.name?default()?html}"/>
+		<@s.hidden id="linkedAssetId" name="${parameters.name?default()?html}"/>
 		
 		<div id="registerOverNetworkLinkContainer" >
 			<a href="#" id="showSmartSearchLink"><@s.text name="label.registeroversafetynetwork" /></a>
@@ -48,7 +48,7 @@
 		</div>
 	</#assign>
 	snSmartSearch = '${snSmartSearch?js_string}';
-	<#-- if were on edit and there's already a linked product, we need to go directly to show linked product info -->
+	<#-- if were on edit and there's already a linked asset, we need to go directly to show linked asset info -->
 	<#if parameters.linkedProduct_editMode >
 		document.observe("dom:loaded", function() {
 				var product = new Object();

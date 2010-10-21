@@ -1,6 +1,6 @@
 package com.n4systems.api.conversion.inspection;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
@@ -8,7 +8,7 @@ import com.n4systems.api.model.InspectionView;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Status;
 import com.n4systems.model.inspectionbook.InspectionBookFindOrCreateLoader;
 import com.n4systems.model.location.Location;
@@ -80,9 +80,9 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 	}
 
 	protected void resolveProduct(InspectionView view, Inspection model, Transaction transaction) {
-		// the validator will ensure this returns exactly 1 product
-		Product product = productLoader.setSearchText(view.getIdentifier()).load(transaction).get(0);
-		model.setProduct(product);
+		// the validator will ensure this returns exactly 1 asset
+		Asset asset = productLoader.setSearchText(view.getIdentifier()).load(transaction).get(0);
+		model.setAsset(asset);
 	}
 
 	protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {
@@ -110,8 +110,8 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 
 	protected void resolveProductStatus(InspectionView view, Inspection model, Transaction transaction) {
 		if (view.getProductStatus() != null) {
-			ProductStatusBean status = productStatusLoader.setName(view.getProductStatus()).load(transaction);
-			model.setProductStatus(status);
+			AssetStatus status = productStatusLoader.setName(view.getProductStatus()).load(transaction);
+			model.setAssetStatus(status);
 		}
 	}
 

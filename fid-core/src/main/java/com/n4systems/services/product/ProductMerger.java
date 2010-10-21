@@ -13,9 +13,9 @@ import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.exceptions.product.DuplicateProductException;
 import com.n4systems.exceptions.product.ProductTypeMissMatchException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -46,66 +46,66 @@ public class ProductMerger {
 		this.scheduleService = inspectionScheduleService;
 	}
 
-	public Product merge(Product winningProduct, Product losingProduct) {
-		guard(winningProduct, losingProduct);
+	public Asset merge(Asset winningAsset, Asset losingAsset) {
+		guard(winningAsset, losingAsset);
 
-		moveInspections(winningProduct, losingProduct);
-		moveSubInspections(winningProduct, losingProduct);
-		archiveLosingProduct(losingProduct);
+		moveInspections(winningAsset, losingAsset);
+		moveSubInspections(winningAsset, losingAsset);
+		archiveLosingProduct(losingAsset);
 
-		return winningProduct;
+		return winningAsset;
 	}
 
-	private void guard(Product winningProduct, Product losingProduct) {
-		if (!losingProduct.getType().equals(winningProduct.getType())) {
-			throw new ProductTypeMissMatchException("product types must match");
+	private void guard(Asset winningAsset, Asset losingAsset) {
+		if (!losingAsset.getType().equals(winningAsset.getType())) {
+			throw new ProductTypeMissMatchException("asset types must match");
 		}
 		
-		if (losingProduct.equals(winningProduct)) {
-			throw new DuplicateProductException("you can't merge a product into itself.");
+		if (losingAsset.equals(winningAsset)) {
+			throw new DuplicateProductException("you can't merge a asset into itself.");
 		}
 
-		if (!losingProduct.getTenant().equals(winningProduct.getTenant())) {
+		if (!losingAsset.getTenant().equals(winningAsset.getTenant())) {
 			throw new TenantNotValidForActionException("tenants must match");
 		}
 	}
 
-	private void archiveLosingProduct(Product losingProduct) {
+	private void archiveLosingProduct(Asset losingAsset) {
 		try {
-			productManager.archive(losingProduct, user);
+			productManager.archive(losingAsset, user);
 		} catch (UsedOnMasterInspectionException e) {
-			throw new ProcessFailureException("could not archive the product. still on a master", e);
+			throw new ProcessFailureException("could not archive the asset. still on a master", e);
 		}
 	}
 
-	private void moveInspections(Product winningProduct, Product losingProduct) {
-		QueryBuilder<Inspection> inspections = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("product", losingProduct);
+	private void moveInspections(Asset winningAsset, Asset losingAsset) {
+		QueryBuilder<Inspection> inspections = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("asset", losingAsset);
 		List<Inspection> inspectionsToMove = persistenceManager.findAll(inspections);
 
 		for (Inspection inspectionToMove : inspectionsToMove) {
-			inspectionToMove.setProduct(winningProduct);
+			inspectionToMove.setAsset(winningAsset);
 			updateInspection(inspectionToMove);
-			updateSchedule(winningProduct, inspectionToMove.getSchedule());
+			updateSchedule(winningAsset, inspectionToMove.getSchedule());
 		}
 	}
 
-	private void updateSchedule(Product winningProduct, InspectionSchedule schedule) {
+	private void updateSchedule(Asset winningAsset, InspectionSchedule schedule) {
 		if (schedule != null) {
-			schedule.setProduct(winningProduct);
+			schedule.setAsset(winningAsset);
 			scheduleService.updateSchedule(schedule);
 		}
 	}
 
-	private void moveSubInspections(Product winningProduct, Product losingProduct) {
+	private void moveSubInspections(Asset winningAsset, Asset losingAsset) {
 		String query = "SELECT DISTINCT master from " + Inspection.class.getName() + " master, IN (master.subInspections) subInspection "
-				+ "where subInspection.product = :losingProduct AND master.state = :activeState";
+				+ "where subInspection.asset = :losingAsset AND master.state = :activeState";
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("losingProduct", losingProduct);
+		parameters.put("losingAsset", losingAsset);
 		parameters.put("activeState", EntityState.ACTIVE);
 		List<Inspection> masterInspectionsWithSubInspectionToMove = persistenceManager.passThroughFindAll(query, parameters);
 
 		for (Inspection masterInspection : masterInspectionsWithSubInspectionToMove) {
-			updateSubInspectionProducts(winningProduct, losingProduct, masterInspection);
+			updateSubInspectionProducts(winningAsset, losingAsset, masterInspection);
 			updateInspection(masterInspection);
 		}
 	}
@@ -114,14 +114,14 @@ public class ProductMerger {
 		try {
 			inspectionManager.updateInspection(inspection, user.getId(), null, null);
 		} catch (Exception e) {
-			throw new ProcessFailureException("could not update inspections to new product", e);
+			throw new ProcessFailureException("could not update inspections to new asset", e);
 		}
 	}
 
-	private void updateSubInspectionProducts(Product winningProduct, Product losingProduct, Inspection masterInspection) {
+	private void updateSubInspectionProducts(Asset winningAsset, Asset losingAsset, Inspection masterInspection) {
 		for (SubInspection subInspection : masterInspection.getSubInspections()) {
-			if (subInspection.getProduct().equals(losingProduct)) {
-				subInspection.setProduct(winningProduct);
+			if (subInspection.getAsset().equals(losingAsset)) {
+				subInspection.setAsset(winningAsset);
 			}
 		}
 	}

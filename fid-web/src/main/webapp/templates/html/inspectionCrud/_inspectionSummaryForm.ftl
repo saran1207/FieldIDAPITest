@@ -3,32 +3,32 @@
 	<#include "/templates/html/common/_columnView.ftl"/>
 </head>
 <@s.hidden name="uniqueID" id="uniqueID"/>
-<@s.hidden name="productId"/>
+<@s.hidden name="assetId"/>
 <@s.hidden name="inspectionGroupId"/>
 <@s.hidden id="inspectionTypeId" name="type"/>
 <div id="productSummary">
-	<h2>${product.type.name!?html} <@s.text name="label.summary"/></h2>
+	<h2>${asset.type.name!?html} <@s.text name="label.summary"/></h2>
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="${Session.sessionUser.serialNumberLabel}"/></label>
 		<span class="fieldHolder">
-			${product.serialNumber?html}
+			${asset.serialNumber?html}
 		</span>
 	</div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.rfidnumber"/></label>
 		<span class="fieldHolder">
-			${product.rfidNumber!?html}
+			${asset.rfidNumber!?html}
 		</span>
 	</div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.desc"/></label>
 		<span class="fieldHolder">
-			${product.description?html}
+			${asset.description?html}
 		</span>
 	</div>
 </div>
-<#if action.isParentProduct() >
+<#if action.isParentAsset() >
 	<h2><@s.text name="label.customerinformation"/></h2>
 	
 	<div class="infoSet">
@@ -47,7 +47,7 @@
 
 <h2>${inspection.type.name?html} <@s.text name="label.details"/></h2>
 
-<#if action.isParentProduct() >
+<#if action.isParentAsset() >
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.performed_by"/></label>
 		<@s.select name="performedBy" list="examiners" listKey="id" listValue="name"  />

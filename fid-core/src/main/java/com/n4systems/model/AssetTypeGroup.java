@@ -10,7 +10,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name="producttypegroups")
-public class ProductTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long> {
+public class AssetTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false, length=40)

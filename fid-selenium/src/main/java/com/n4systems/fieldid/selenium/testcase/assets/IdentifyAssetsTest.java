@@ -120,7 +120,7 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		Product product = new Product();
 		product.setLocation("here");
 		List<String> productStatuses = identifyPage.getProductStatusesFromMultiAddForm();
-		assertTrue("There were no product status options available", productStatuses.size() > 0);
+		assertTrue("There were no asset status options available", productStatuses.size() > 0);
 		product.setProductStatus(productStatuses.get(0));
 		product.setProductType(productType);
 		product.setPurchaseOrder("PO #888");

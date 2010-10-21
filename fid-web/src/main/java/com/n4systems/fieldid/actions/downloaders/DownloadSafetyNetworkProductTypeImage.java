@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 
 public class DownloadSafetyNetworkProductTypeImage extends DownloadProductTypeImage {
 	private static final long serialVersionUID = 1L;
@@ -13,7 +13,7 @@ public class DownloadSafetyNetworkProductTypeImage extends DownloadProductTypeIm
 	}
 	
 	@Override
-	protected ProductType loadProductType() {
+	protected AssetType loadAssetType() {
 		return getLoaderFactory().createSafetyNetworkProductTypeLoader().setProductTypeId(uniqueID).setProductNetworkid(networkId).load();
 	}
 

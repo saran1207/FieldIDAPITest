@@ -1,7 +1,8 @@
 package com.n4systems.model.safetynetwork;
 
 import java.util.List;
-import com.n4systems.model.Product;
+
+import com.n4systems.model.Asset;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.product.SmartSearchWhereClause;
@@ -18,7 +19,7 @@ public class UnregisteredAssetQueryHelper {
 
 	private PrimaryOrg customer;
 	private PrimaryOrg vendor;
-	private QueryBuilder<Product> builder;
+	private QueryBuilder<Asset> builder;
 	private boolean preAssignedAssetsOnly = true;
 
 	public UnregisteredAssetQueryHelper(PrimaryOrg vendor, PrimaryOrg customer, boolean preAssignedAssetsOnly) {
@@ -30,8 +31,8 @@ public class UnregisteredAssetQueryHelper {
 
 	public void initializeQuery() {
 
-		builder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
-		builder.setTableAlias("outerProduct");
+		builder = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
+		builder.setTableAlias("outerAsset");
 
 		if (preAssignedAssetsOnly) {
 			builder.addSimpleWhere("owner.customerOrg.linkedOrg", customer);
@@ -40,8 +41,8 @@ public class UnregisteredAssetQueryHelper {
 		builder.addSimpleWhere("published", true);
 		builder.addSimpleWhere("tenant", vendor.getTenant());
 
-		QueryBuilder<Product> subSelect = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
-		WhereParameter<String> whereClause = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerProduct", "linkedProduct", "IGNORED");
+		QueryBuilder<Asset> subSelect = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
+		WhereParameter<String> whereClause = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerAsset", "linkedAsset", "IGNORED");
 		whereClause.setLiteralParameter(true);
 
 		subSelect.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "tenant.id", customer.getTenant().getId()));
@@ -50,16 +51,16 @@ public class UnregisteredAssetQueryHelper {
 		SubSelectNotExistsClause subClause = new SubSelectNotExistsClause("linkedProductSubClause", subSelect);
 		builder.addWhere(subClause);
 
-		QueryBuilder<Product> subSelect1 = new QueryBuilder<Product>(SubProduct.class, new OpenSecurityFilter());
-		WhereParameter<String> whereClause1 = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerProduct", "product", "IGNORED");
+		QueryBuilder<Asset> subSelect1 = new QueryBuilder<Asset>(SubProduct.class, new OpenSecurityFilter());
+		WhereParameter<String> whereClause1 = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerAsset", "asset", "IGNORED");
 		whereClause1.setKey("noProductWhereParameter");
 		whereClause1.setLiteralParameter(true);
 		subSelect1.addWhere(whereClause1);
 		SubSelectNotExistsClause subClause1 = new SubSelectNotExistsClause("subProductSubClause", subSelect1);
 		builder.addWhere(subClause1);
 
-		QueryBuilder<Product> subSelect2 = new QueryBuilder<Product>(SubProduct.class, new OpenSecurityFilter());
-		WhereParameter<String> whereClause2 = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerProduct", "masterProduct", "IGNORED");
+		QueryBuilder<Asset> subSelect2 = new QueryBuilder<Asset>(SubProduct.class, new OpenSecurityFilter());
+		WhereParameter<String> whereClause2 = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerAsset", "masterAsset", "IGNORED");
 		whereClause2.setKey("noMasterProductWhereParameter");
 		whereClause2.setLiteralParameter(true);
 		subSelect2.addWhere(whereClause2);
@@ -67,11 +68,11 @@ public class UnregisteredAssetQueryHelper {
 		builder.addWhere(subClause2);
 	}
 
-	public List<Product> getList(EntityManager em) {
+	public List<Asset> getList(EntityManager em) {
 		return builder.getResultList(em);
 	}
 
-	public Pager<Product> getPager(EntityManager em, Integer first, Integer pageSize, String[] postFetchPaths) {
+	public Pager<Asset> getPager(EntityManager em, Integer first, Integer pageSize, String[] postFetchPaths) {
 		builder.addPostFetchPaths(postFetchPaths);
 		return builder.getPaginatedResults(em, first, pageSize);
 	}

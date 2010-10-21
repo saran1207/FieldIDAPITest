@@ -3,11 +3,11 @@ package com.n4systems.services.safetyNetwork;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
@@ -28,13 +28,13 @@ public interface CatalogService {
 
 	public List<ListingPair> getPublishedInspectionTypesLP();
 
-	public Catalog publishProductTypes(Set<ProductType> productTypes);
+	public Catalog publishProductTypes(Set<AssetType> assetTypes);
 	
 	public Catalog publishInspectionTypes(Set<InspectionType> inspectionTypes);
 
-	public ProductType getPublishedProductType(Long productTypeId, String...postFetchFields);
+	public AssetType getPublishedProductType(Long productTypeId, String...postFetchFields);
 	
-	public Set<ProductTypeGroup> getProductTypeGroupsFor(Set<Long> productTypeIds);
+	public Set<AssetTypeGroup> getProductTypeGroupsFor(Set<Long> productTypeIds);
 	
 	public List<Long> getAllPublishedSubTypesFor(Long productTypeIds);
 	

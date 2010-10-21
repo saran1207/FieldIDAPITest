@@ -2,12 +2,12 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Product;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.security.Permissions;
 
@@ -18,8 +18,8 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 	
 	private Long vendorId;
 	private String searchText;
-	private Product product;
-	private List<Product> products;
+	private Asset asset;
+	private List<Asset> assets;
 	
 	public SafetyNetworkSmartSearchAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -34,9 +34,9 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 		
 		try {
 			loadProducts(smartSearchLoader);
-			if (!products.isEmpty()) {
-				if (products.size() == 1) {
-					product = products.get(0);
+			if (!assets.isEmpty()) {
+				if (assets.size() == 1) {
+					asset = assets.get(0);
 					return "foundone";
 				} else {
 					return "foundMany";
@@ -46,13 +46,13 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 			
 		} catch(Exception e) {
 			addActionErrorText("error.could_not_access_the_safety_network");
-			logger.error("Failed loading linked product", e);
+			logger.error("Failed loading linked asset", e);
 			return ERROR;
 		}
 	}
 
 	private void loadProducts(SafetyNetworkSmartSearchLoader smartSearchLoader) {
-		products = smartSearchLoader.load();
+		assets = smartSearchLoader.load();
 	}
 
 	private SafetyNetworkSmartSearchLoader setupLoader() {
@@ -78,11 +78,11 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 		this.searchText = searchText;
 	}
 	
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public List<Product> getProducts() {
-		return products;
+	public List<Asset> getAssets() {
+		return assets;
 	}
 }

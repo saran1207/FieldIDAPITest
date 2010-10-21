@@ -2,6 +2,7 @@ package com.n4systems.taskscheduling.task;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.model.Asset;
 import org.junit.Test;
 
 import com.n4systems.exporting.AutoAttributeExporter;
@@ -9,7 +10,6 @@ import com.n4systems.exporting.CustomerExporter;
 import com.n4systems.exporting.ExporterFactory;
 import com.n4systems.exporting.ProductExporter;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Product;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -81,7 +81,7 @@ public class DownloadTaskFactoryTest extends ConfigContextRequiredTestCase {
 		Saver<DownloadLink> linkSaver = createMock(Saver.class);
 		ExporterFactory exporterFactory = createMock(ExporterFactory.class);
 		ProductExporter exporter = createMock(ProductExporter.class);
-		ListLoader<Product> loader = createMock(ListLoader.class);
+		ListLoader<Asset> loader = createMock(ListLoader.class);
 		
 		DownloadLink link = new DownloadLink();
 		

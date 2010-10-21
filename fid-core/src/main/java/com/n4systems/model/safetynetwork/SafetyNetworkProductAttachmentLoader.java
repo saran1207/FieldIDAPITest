@@ -19,12 +19,12 @@ public class SafetyNetworkProductAttachmentLoader extends SecurityFilteredLoader
 
     @Override
     protected ProductAttachment load(EntityManager em, SecurityFilter filter) {
-        // This will throw an exception if we're not allowed to see this product
+        // This will throw an exception if we're not allowed to see this asset
         new SafetyNetworkProductLoader(filter).setProductId(productNetworkId).load();
 
         QueryBuilder<ProductAttachment> builder = new QueryBuilder<ProductAttachment>(ProductAttachment.class, new OpenSecurityFilter());
         builder.addWhere(WhereClauseFactory.create("id", attachmentId));
-        builder.addWhere(WhereClauseFactory.create("product.networkId", productNetworkId));
+        builder.addWhere(WhereClauseFactory.create("asset.networkId", productNetworkId));
 
         ProductAttachment attachment = builder.getSingleResult(em);
         return attachment;

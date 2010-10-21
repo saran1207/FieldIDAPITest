@@ -14,7 +14,7 @@ public enum OrderKey implements Listable<String> {
 	ORDER_DIVISION_NAME	( false,	false,	"Order Division Name"		),
 	ORDER_DESCRIPTION	( false,	false,	"Order Description"			),
 	ORDER_PO_NUMBER		( false,	false,	"Order PO Number"			),
-	LINE_PRODUCT_CODE	( true,		true,	"Line Item Product Code"	),
+	LINE_PRODUCT_CODE	( true,		true,	"Line Item Asset Code"	),
 	LINE_INDEX			( true,		false,	"Line Item Order Index"		),
 	LINE_QUANTITY		( true,		false,	"Line Item Quantity"		),
 	LINE_ID				( true,		false,	"Line Item ID"				),

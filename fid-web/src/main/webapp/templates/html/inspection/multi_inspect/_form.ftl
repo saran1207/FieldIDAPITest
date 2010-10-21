@@ -5,7 +5,7 @@
 	<@s.hidden name="type"/>
 	<@s.hidden name="scheduleId" value="0"/>
 
-	<@s.hidden name="productId" id="productId"/>
+	<@s.hidden name="assetId" id="assetId"/>
 	
 	
 	
@@ -67,7 +67,7 @@
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.productstatus"/></label>
-			<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
+			<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
 	</div>
 	
 	<#if inspectionType.assignedToAvailable>

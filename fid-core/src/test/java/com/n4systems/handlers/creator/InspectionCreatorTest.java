@@ -183,8 +183,8 @@ public class InspectionCreatorTest {
 	public void should_save_the_set_inspection_schedules_given() throws Exception {
 		Inspection inspection = anInspection().build();
 		CreateInspectionParameter parameter = new CreateInspectionParameterBuilder(inspection, 1L)
-			.addSchedule(new InspectionScheduleBundle(inspection.getProduct(), InspectionTypeBuilder.anInspectionType().build(), null, new Date()))
-			.addSchedule(new InspectionScheduleBundle(inspection.getProduct(), InspectionTypeBuilder.anInspectionType().build(), null, new Date(2000)))
+			.addSchedule(new InspectionScheduleBundle(inspection.getAsset(), InspectionTypeBuilder.anInspectionType().build(), null, new Date()))
+			.addSchedule(new InspectionScheduleBundle(inspection.getAsset(), InspectionTypeBuilder.anInspectionType().build(), null, new Date(2000)))
 			.build();
 		
 		NextInspectionScheduleSerivce nextScheduleService = createMock(NextInspectionScheduleSerivce.class);

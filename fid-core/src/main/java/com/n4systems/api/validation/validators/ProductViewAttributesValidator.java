@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.n4systems.api.model.ProductView;
 import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.infooption.MissingInfoOptionException;
 import com.n4systems.model.infooption.StaticOptionResolutionException;
@@ -23,7 +23,7 @@ public class ProductViewAttributesValidator extends ProductViewValidator {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public ValidationResult validate(Object fieldValue, ProductView view, String fieldName, SecurityFilter filter, ProductType type) {
+	public ValidationResult validate(Object fieldValue, ProductView view, String fieldName, SecurityFilter filter, AssetType type) {
 		Map<String, String> infoOptionMap = (Map<String, String>)fieldValue;
 
 		try {

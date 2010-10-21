@@ -6,10 +6,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.n4systems.model.Asset;
 import org.apache.struts2.components.UIBean;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.Product;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.VendorOrgConnectionsListLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -63,16 +63,16 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 		
 		boolean editMode = false;
 		if (linkedProductId != null) {
-			Product linkedProduct = loadLinkedProduct(linkedProductId);
+			Asset linkedAsset = loadLinkedProduct(linkedProductId);
 			
-			if (linkedProduct != null) {
+			if (linkedAsset != null) {
 				editMode = true;
-				addParameter("linkedProduct_Id", linkedProduct.getId());
-				addParameter("linkedProduct_SerialNumber", linkedProduct.getSerialNumber());
-				addParameter("linkedProduct_RfidNumber", linkedProduct.getRfidNumber());
-				addParameter("linkedProduct_OwnerName", linkedProduct.getOwner().getDisplayName());
-				addParameter("linkedProduct_TypeName", linkedProduct.getType().getDisplayName());
-				addParameter("linkedProduct_ReferenceNumber", linkedProduct.getCustomerRefNumber());
+				addParameter("linkedProduct_Id", linkedAsset.getId());
+				addParameter("linkedProduct_SerialNumber", linkedAsset.getSerialNumber());
+				addParameter("linkedProduct_RfidNumber", linkedAsset.getRfidNumber());
+				addParameter("linkedProduct_OwnerName", linkedAsset.getOwner().getDisplayName());
+				addParameter("linkedProduct_TypeName", linkedAsset.getType().getDisplayName());
+				addParameter("linkedProduct_ReferenceNumber", linkedAsset.getCustomerRefNumber());
 			}
 		}
 		
@@ -94,7 +94,7 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 		return vendors;
 	}
 	
-	public Product loadLinkedProduct(Long linkedProductId) {
+	public Asset loadLinkedProduct(Long linkedProductId) {
 		return getLoaderFactory().createSafetyNetworkProductLoader().setProductId(linkedProductId).load();
 	}
 

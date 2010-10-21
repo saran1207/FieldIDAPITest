@@ -55,7 +55,7 @@ var attachAssetToProjectUrl = "";
 
 function attachAssetListener( event ) {
 	event.stop();
-	attachAsset( Event.element( event ).getAttribute( 'productId' ) );
+	attachAsset( Event.element( event ).getAttribute( 'assetId' ) );
 }
 
 function oneResultAsset( assetId, results ) {

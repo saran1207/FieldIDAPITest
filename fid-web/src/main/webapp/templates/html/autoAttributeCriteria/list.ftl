@@ -1,16 +1,16 @@
 
 ${action.setPageType('auto_attribute', 'list')!}
 
-<#if productTypes.size() != 0 >
+<#if assetTypes.size() != 0 >
 	<table class="list">
 	<tr>
 		<th><@s.text name="label.producttype" /></th>
 	
 	<tr>
-	<#list productTypes as productType >
+	<#list assetTypes as assetType >
 	<tr >
 		<td>
-			<a href="<@s.url action="autoAttributeCriteriaOpen" uniqueID="${(productType.id)!}" />" > ${productType.name! } </a>
+			<a href="<@s.url action="autoAttributeCriteriaOpen" uniqueID="${(assetType.id)!}" />" > ${assetType.name! } </a>
 		</td>
 	</tr>
 	</#list>

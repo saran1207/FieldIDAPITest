@@ -14,7 +14,7 @@ function includeSubProduct( event ) {
 	item.insert( new Element( 'input', { type: "hidden", name: "subProductIds["+ numberOfSubTypes +"]", value: subProduct.getValue() } ) );
 	subProductId= subProduct.getValue();
 	numberOfSubTypes++;
-	var productLink = new Element( 'a', { id: "removeProductLink_" + subProduct.getValue(), href: "removeSubProduct" , productTypeId: subProductId } ).update(removeString) ;
+	var productLink = new Element( 'a', { id: "removeProductLink_" + subProduct.getValue(), href: "removeSubProduct" , assetTypeId: subProductId } ).update(removeString) ;
 	productLink.observe('click', removeProductEvent );
 	productLink.productId = subProduct.getValue();
 	item.insert( productNameSpan );
@@ -29,7 +29,7 @@ function removeSubProduct( subProductId, event ) {
 	if( event ) {
 		event.stop();
 		var element = Event.element( event );
-		subProductId = element.readAttribute( "productTypeId" );
+		subProductId = element.readAttribute( "assetTypeId" );
 	}
 	var subProduct = $( 'subProduct_' + subProductId );
 	

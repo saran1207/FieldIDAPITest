@@ -18,7 +18,7 @@ public interface FieldValidator {
 	public static final String NotNullValidatorFail = "%s must not be blank";
 	public static final String ProductViewStringLengthValidatorFail = "%s cannot exceed %d characters";
 	public static final String NamedFieldNotFoundValidatorFail = "Could not find an %s named '%s'";
-	public static final String ProductTypeExistsValidatorFail = "Could not find a Product Type named '%s'";
+	public static final String ProductTypeExistsValidatorFail = "Could not find a Asset Type named '%s'";
 	public static final String InputInfoFieldNotFoundValidatorFail = "The input field '%1$s' could not be found.  Please add the column 'I:%1$s'.";
 	public static final String StaticOptionNotFoundValidatorFail = "The option '%s' could not be found for the field '%s'.";
 	public static final String BlankInputOptionValidatorFail = "The input field '%s' must not be blank.";
@@ -32,7 +32,7 @@ public interface FieldValidator {
 	public static final String MultipleUserFoundValidationFail = "Multiple users have been found matching the name '%s'.  The matching users are: '%s'.";
 	public static final String NoProductFoundValidationFail = "Could not find an asset matching the identifier '%s' for the field '%s'.";
 	public static final String MultipleProductFoundValidationFail = "Multiple assets have been found matching the identifier '%s' for the field '%s'.";
-	public static final String AssociatedInspectionTypeValidationFail = "The inspection type '%s' is not allowed for the product type '%s'.";
+	public static final String AssociatedInspectionTypeValidationFail = "The inspection type '%s' is not allowed for the asset type '%s'.";
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, Map<String, Object> validationContext);
 }

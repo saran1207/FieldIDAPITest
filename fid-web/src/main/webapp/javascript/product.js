@@ -1,10 +1,10 @@
 var updateProductTypeUrl = '';
 		
-function updateProductType( productTypeSelect ) {
-	if( productTypeSelect.options[ productTypeSelect.selectedIndex ].value != "" ) {
+function updateProductType( assetTypeSelect ) {
+	if( assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value != "" ) {
 		updatingProduct();
-		var productTypeSelectId = productTypeSelect.options[ productTypeSelect.selectedIndex ].value;
-		var url = updateProductTypeUrl + '?productTypeId='+ productTypeSelectId;
+		var productTypeSelectId = assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value;
+		var url = updateProductTypeUrl + '?assetTypeId='+ productTypeSelectId;
 		getResponse( url, "get" );
 	} else {
 		replacedProductType( null, null );

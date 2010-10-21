@@ -2,13 +2,13 @@
 <#assign current_action="inspectionEdit"/>
 
 <#assign formAction="subInspectionUpdate"/>
-<#if action.isParentProduct() >
+<#if action.isParentAsset() >
 	<#assign formAction="baseInspectionUpdate"/>
 </#if>
 ${action.setPageType('inspection', 'edit')!}
 
 <@s.form action="${formAction}" theme="simple" cssClass="crudForm largeForm" method="post" onsubmit="return checkForUploads();" >
-	<@s.hidden name="parentProductId" />
+	<@s.hidden name="parentAssetId" />
 	<@s.hidden name="token" />
 	<#include "/templates/html/inspectionCrud/_form.ftl"/>
 

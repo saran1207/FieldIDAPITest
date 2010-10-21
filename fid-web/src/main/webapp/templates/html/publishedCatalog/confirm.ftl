@@ -1,8 +1,8 @@
 <@s.form action="importCatalog" namespace="/ajax" id="step3Form" theme="fieldid">
 	<@s.hidden name="uniqueID"/>
 	<@s.hidden name="usingPackage"/>
-	<#list publishedProductTypes as productType>
-		<@s.hidden name="importProductTypeIds['${productType.id}']" />
+	<#list publishedAssetTypes as assetType>
+		<@s.hidden name="importAssetTypeIds['${assetType.id}']" />
 	</#list>
 	<#list publishedInspectionTypes as inspectionType>
 		<@s.hidden name="importInspectionTypeIds['${inspectionType.id}']" />
@@ -19,12 +19,12 @@
 		<table id="renamedElements" style="display:none">
 			<#if summary.productTypeImportSummary.anyRenamed >
 				<tr><th colspan="3"><@s.text name="label.asset_types"/></td></th>
-				<#list publishedProductTypes as productType>
-					<#if summary.productTypeImportSummary.importMapping.get(productType.id)?exists && summary.productTypeImportSummary.isRenamed(productType.id, productType.name)>
+				<#list publishedAssetTypes as assetType>
+					<#if summary.productTypeImportSummary.importMapping.get(assetType.id)?exists && summary.productTypeImportSummary.isRenamed(assetType.id, assetType.name)>
 						<tr>
-							<td>${productType.name?html}</td>
+							<td>${assetType.name?html}</td>
 							<td><@s.text name="label.will_be_named"/></td>
-							<td>${summary.productTypeImportSummary.importMapping.get(productType.id).name?html}</td>
+							<td>${summary.productTypeImportSummary.importMapping.get(assetType.id).name?html}</td>
 						</tr>
 					</#if> 
 				</#list>

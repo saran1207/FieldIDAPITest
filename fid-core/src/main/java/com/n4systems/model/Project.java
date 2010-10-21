@@ -11,6 +11,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -68,8 +70,10 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     private String duration; 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinTable(name="projects_products",joinColumns = @JoinColumn(name="products_id"))
+    @JoinTable(name = "projects_products", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name="products_id"))
     @IndexColumn(name="orderidx")
-    private List<Product> products = new ArrayList<Product>();
+    private List<Asset> assets = new ArrayList<Asset>();
     
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     private List<FileAttachment> notes = new ArrayList<FileAttachment>();
@@ -174,12 +178,12 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 		return name;
 	}
 
-	public List<Product> getProducts() {
-		return products;
+	public List<Asset> getAssets() {
+		return assets;
 	}
 
-	public void setProducts( List<Product> products ) {
-		this.products = products;
+	public void setAssets( List<Asset> products ) {
+		this.assets = products;
 	}
 
 	public List<FileAttachment> getNotes() {

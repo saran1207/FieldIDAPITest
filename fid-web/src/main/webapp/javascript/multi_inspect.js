@@ -5,7 +5,7 @@ function sendRequests() {
 }
 
 function sendRequest(asset, inspectionCreator) {
-	$('productId').value= asset.id;
+	$('assetId').value= asset.id;
 	$('inspectionCreate').request({
 		onSuccess: contentCallback,
 		onComplete: function(){	

@@ -8,7 +8,7 @@ ${action.setPageType('product', 'edit')!}
 </#if>
 
 <div class="instructions">
-	<@s.text name="instruction.deleteproduct"><@s.param >${product.serialNumber?html}</@s.param></@s.text>
+	<@s.text name="instruction.deleteproduct"><@s.param >${asset.serialNumber?html}</@s.param></@s.text>
 </div>
 
 <div class="crudForm largeForm bigForm pageSection">

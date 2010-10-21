@@ -1,6 +1,6 @@
 package com.n4systems.model.safetynetwork;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
@@ -15,8 +15,8 @@ public class SafetyNetworkRegisteredAssetCountLoader extends Loader<Long> {
 
     @Override
     protected Long load(EntityManager em) {
-		QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, new OrgOnlySecurityFilter(customer));
-		queryBuilder.addSimpleWhere("linkedProduct.owner.tenant", vendor.getTenant());
+		QueryBuilder<Asset> queryBuilder = new QueryBuilder<Asset>(Asset.class, new OrgOnlySecurityFilter(customer));
+		queryBuilder.addSimpleWhere("linkedAsset.owner.tenant", vendor.getTenant());
         return queryBuilder.getCount(em);
     }
 

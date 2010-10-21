@@ -7,18 +7,18 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.InspectionView;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Status;
 import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.ProductBuilder;
+import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.inspectionbook.InspectionBookFindOrCreateLoader;
@@ -156,11 +156,11 @@ public class InspectionToModelConverterTest {
 		InspectionView view = new InspectionView();
 		view.setIdentifier("serial number");
 		
-		Product product = ProductBuilder.aProduct().build();
+		Asset asset = AssetBuilder.anAsset().build();
 		
 		SmartSearchLoader smartSearchLoader = createMock(SmartSearchLoader.class);
 		expect(smartSearchLoader.setSearchText(view.getIdentifier())).andReturn(smartSearchLoader);
-		expect(smartSearchLoader.load(transaction)).andReturn(Arrays.asList(product));
+		expect(smartSearchLoader.load(transaction)).andReturn(Arrays.asList(asset));
 		replay(smartSearchLoader);
 		
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, smartSearchLoader, null, null, null) {
@@ -173,7 +173,7 @@ public class InspectionToModelConverterTest {
 			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
 		};
 		
-		assertEquals(product, converter.toModel(view, transaction).getProduct());
+		assertEquals(asset, converter.toModel(view, transaction).getAsset());
 		verify(smartSearchLoader);
 	}
 	
@@ -268,9 +268,9 @@ public class InspectionToModelConverterTest {
 	@Test
 	public void to_model_resolves_product_status() throws ConversionException {
 		InspectionView view = new InspectionView();
-		view.setProductStatus("product status");
+		view.setProductStatus("asset status");
 		
-		ProductStatusBean ps = new ProductStatusBean();
+		AssetStatus ps = new AssetStatus();
 		
 		ProductStatusByNameLoader psLoader = createMock(ProductStatusByNameLoader.class);
 		expect(psLoader.setName(view.getProductStatus())).andReturn(psLoader);
@@ -287,7 +287,7 @@ public class InspectionToModelConverterTest {
 			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
 		};
 		
-		assertSame(ps, converter.toModel(view, transaction).getProductStatus());
+		assertSame(ps, converter.toModel(view, transaction).getAssetStatus());
 		verify(psLoader);
 	}
 	
@@ -306,7 +306,7 @@ public class InspectionToModelConverterTest {
 			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
 		};
 		
-		assertNull(converter.toModel(new InspectionView(), transaction).getProductStatus());
+		assertNull(converter.toModel(new InspectionView(), transaction).getAssetStatus());
 		verify(psLoader);
 	}
 }

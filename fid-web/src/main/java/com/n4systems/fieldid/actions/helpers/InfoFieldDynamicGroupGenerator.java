@@ -34,32 +34,32 @@ public class InfoFieldDynamicGroupGenerator {
 
 	public List<ColumnMappingGroup> getDynamicGroups(Long productTypeId, List<Long> productTypeIds) {
 		if (dynamigGroups == null) {
-			List<Long> consolidateProductTypeIds = consolidateProductTypeIds(productTypeId, productTypeIds);
-			createDynamicGroups(consolidateProductTypeIds);
+			List<Long> consolidateAssetTypeIds = consolidateAssetTypeIds(productTypeId, productTypeIds);
+			createDynamicGroups(consolidateAssetTypeIds);
 		}
 		return dynamigGroups;
 	}
 
 	
-	private void createDynamicGroups(List<Long> productTypeIds) {
+	private void createDynamicGroups(List<Long> assetTypeIds) {
 		dynamigGroups = new ArrayList<ColumnMappingGroup>();
 		
-		SortedSet<String> infoFieldNames = getCommonInfoFields(productTypeIds);
+		SortedSet<String> infoFieldNames = getCommonInfoFields(assetTypeIds);
 		ColumnMappingGroup infoFieldGroup = convertInfoFiledsToColumnMappings(infoFieldNames);
 		
 		dynamigGroups.add(infoFieldGroup);
 	}
 	
 
-	private List<Long> consolidateProductTypeIds(Long productTypeId, List<Long> productTypeIds) {
-		List<Long> commonAttributeProductTypeIds = new ArrayList<Long>();
+	private List<Long> consolidateAssetTypeIds(Long assetTypeId, List<Long> assetTypeIds) {
+		List<Long> commonAttributeassetTypeIds = new ArrayList<Long>();
 		
-		if (productTypeId != null) {
-			commonAttributeProductTypeIds.add(productTypeId) ;
+		if (assetTypeId != null) {
+			commonAttributeassetTypeIds.add(assetTypeId) ;
 		} else {
-			commonAttributeProductTypeIds.addAll(productTypeIds);
+			commonAttributeassetTypeIds.addAll(assetTypeIds);
 		}
-		return commonAttributeProductTypeIds;
+		return commonAttributeassetTypeIds;
 	}
 
 	
@@ -83,11 +83,11 @@ public class InfoFieldDynamicGroupGenerator {
 	}
 	
 
-	private SortedSet<String> getCommonInfoFields(List<Long> productTypeIds) {
-		if (productTypeIds.isEmpty()) {
+	private SortedSet<String> getCommonInfoFields(List<Long> assetTypeIds) {
+		if (assetTypeIds.isEmpty()) {
 			return new TreeSet<String>();
 		}
-		return commonAttributeFinder.findAllCommonInfoFieldNames(productTypeIds);
+		return commonAttributeFinder.findAllCommonInfoFieldNames(assetTypeIds);
 	}
 
 	

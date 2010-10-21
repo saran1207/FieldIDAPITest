@@ -4,7 +4,7 @@
 	<#assign formId="${inspectionType.id}"/>
 </#if>
 <@s.form id="schedule_${formId}" action="productTypeScheduleSave" namespace="/ajax" theme="fieldidSimple" >
-	<@s.hidden name="productTypeId" />
+	<@s.hidden name="assetTypeId" />
 	<@s.hidden name="inspectionTypeId" value="${inspectionType.id}" />
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="customerForm" />
@@ -26,12 +26,12 @@
 	<br/>
 	<span class="autoSchedule">
 			<br/>
-			<@s.checkbox name="autoSchedule" /> <@s.text name="label.automatically_schedule_checkbox_1"/> <b>${productType.name}</b>   	
+			<@s.checkbox name="autoSchedule" /> <@s.text name="label.automatically_schedule_checkbox_1"/> <b>${assetType.name}</b>
 			<@s.text name="label.automatically_schedule_checkbox_2"/> <b>${inspectionType.name}</b>		
 	</span>
 	<span class="actions">
 		<a href="javascript:void(0);" onclick="saveSchedule( ${formId} ); return false;" ><@s.text name="label.save" /></a> | 
-		<a href="javascript:void(0);" onclick="cancelSchedule( ${formId}, ${productType.uniqueID}, ${uniqueID!"null"} ); return false;" ><@s.text name="label.cancel" /></a>
+		<a href="javascript:void(0);" onclick="cancelSchedule( ${formId}, ${assetType.uniqueID}, ${uniqueID!"null"} ); return false;" ><@s.text name="label.cancel" /></a>
 	</span>
 </@s.form>
 

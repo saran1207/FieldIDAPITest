@@ -25,7 +25,7 @@ public class NextInspectionScheduleLoader extends Loader<InspectionSchedule> {
 		InspectionSchedule schedule = null;
 		
 		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
-		query.addSimpleWhere("product.id", productId).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED).addSimpleWhere("inspectionType.id", typeId);
+		query.addSimpleWhere("asset.id", productId).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED).addSimpleWhere("inspectionType.id", typeId);
 		query.addOrder("nextDate");
 		
 		List<InspectionSchedule> schedules = query.getResultList(em, 0, 1);
@@ -48,7 +48,7 @@ public class NextInspectionScheduleLoader extends Loader<InspectionSchedule> {
 	}
 
 	public NextInspectionScheduleLoader setFieldsFromInspection(Inspection inspection) {
-		setProductId(inspection.getProduct().getId());
+		setProductId(inspection.getAsset().getId());
 		setTypeId(inspection.getType().getId());
 		return this;
 	}

@@ -54,7 +54,7 @@ function updateLinkedProductFromMultipleResults(event) {
 	var result = Event.element(event);
 	var product = new Object();
 	
-	product.id = result.getAttribute("productId");
+	product.id = result.getAttribute("assetId");
 	product.serialNumber = result.getAttribute("serialNumber");
 	product.rfidNumber = result.getAttribute("rfidNumber");
 	product.owner = result.getAttribute("owner");

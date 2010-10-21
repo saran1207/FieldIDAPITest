@@ -69,7 +69,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 	
 	<div class="infoSet fullInfoSet">
 		<label for="view.productTypeId"><@s.text name="label.product_types"/></label>
-		<@s.select name="view.productTypeId" list="productTypeList" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_product_types')}" />
+		<@s.select name="view.assetTypeId" list="assetTypeList" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_product_types')}" />
 	</div>
 	
 	<div class="infoSet fullInfoSet">

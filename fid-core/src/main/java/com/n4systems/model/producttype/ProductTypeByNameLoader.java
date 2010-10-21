@@ -2,13 +2,13 @@ package com.n4systems.model.producttype;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
-public class ProductTypeByNameLoader extends SecurityFilteredLoader<ProductType> {
+public class ProductTypeByNameLoader extends SecurityFilteredLoader<AssetType> {
 	private String name;
 	
 	public ProductTypeByNameLoader(SecurityFilter filter) {
@@ -16,11 +16,11 @@ public class ProductTypeByNameLoader extends SecurityFilteredLoader<ProductType>
 	}
 
 	@Override
-	protected ProductType load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<ProductType> builder = new QueryBuilder<ProductType>(ProductType.class, filter);
+	protected AssetType load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<AssetType> builder = new QueryBuilder<AssetType>(AssetType.class, filter);
 		builder.addWhere(WhereClauseFactory.create("name", name));
 		
-		ProductType type = builder.getSingleResult(em);
+		AssetType type = builder.getSingleResult(em);
 		return type;
 	}
 

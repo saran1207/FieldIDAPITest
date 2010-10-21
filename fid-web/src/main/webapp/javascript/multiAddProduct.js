@@ -25,10 +25,10 @@ function convertAndAppendInputsToForm(form, inputs) {
 	
 }
 
-var maxProducts;
+var maxAssets;
 function quantityIsValid() {
 	var quantity = $('quantity').getValue();
-	if (quantity == null || isNaN(parseInt(quantity))  || quantity < 1 || quantity > maxProducts) {
+	if (quantity == null || isNaN(parseInt(quantity))  || quantity < 1 || quantity > maxAssets) {
 		$('quantityInvalid').show();
 		$('step2next').disable();
 		return false;

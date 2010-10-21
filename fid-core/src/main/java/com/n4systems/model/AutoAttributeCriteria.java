@@ -18,8 +18,8 @@ import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.model.parents.EntityWithTenant;
 /**
- * This defines the set of input info fields and output info fields for a product type.
- * These fields are used to help fill in values when tagging a product in all user interfaces.
+ * This defines the set of input info fields and output info fields for a asset type.
+ * These fields are used to help fill in values when tagging a asset in all user interfaces.
  * @author aaitken
  *
  */
@@ -47,7 +47,7 @@ public class AutoAttributeCriteria extends EntityWithTenant {
 	
 	@OneToOne(optional = true, fetch = FetchType.LAZY )
 	@JoinColumn(name = "r_producttype")
-	private ProductType productType;
+	private AssetType assetType;
 	
 	public List<InfoFieldBean> getInputs() {
 		return inputs;
@@ -73,12 +73,12 @@ public class AutoAttributeCriteria extends EntityWithTenant {
 		this.definitions = definitions;
 	}
 	
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getAssetType() {
+		return assetType;
 	}
 	
-	public void setProductType(ProductType productType) {
-		this.productType = productType;
+	public void setAssetType(AssetType assetType) {
+		this.assetType = assetType;
 	}
 	
 }

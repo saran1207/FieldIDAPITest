@@ -24,7 +24,7 @@ public class ObservationView implements Serializable {
 			
 			if(insp instanceof Inspection) {
 				// master inspections just use their type as the part name
-				part = insp.getProduct().getType().getName();
+				part = insp.getAsset().getType().getName();
 			} else if(insp instanceof SubInspection) {
 				// sub inspection need to use their specific part name
 				part = ((SubInspection)insp).getName();

@@ -88,7 +88,7 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 	/*
 	 * the inspection map allows for multiple serials to have been processed out of one dataContainer (aka one proof test).
 	 * This functionality really only exists for CG's use and is not a standard of any proof test type.
-	 * For simplicity, we're going to assume there was only one product serial in the file and thus only have a single entry in our inspectionMap
+	 * For simplicity, we're going to assume there was only one asset serial in the file and thus only have a single entry in our inspectionMap
 	 */
 	protected void applyProcessingResults(List<ProofTestStatusBundle> statusListCollector, Map<String, Inspection> inspectionMap, ProofTestBundle bundle) throws NoSerialNumbersException {
 		String serial;

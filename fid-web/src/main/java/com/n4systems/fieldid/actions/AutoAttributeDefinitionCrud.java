@@ -17,7 +17,7 @@ import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.StringListingPair;
@@ -34,7 +34,7 @@ private static final long serialVersionUID = 1L;
 	private Collection<AutoAttributeDefinition> autoAttributeDefinitions;
 	private AutoAttributeCriteria autoAttributeCriteria;
 	private AutoAttributeDefinition autoAttributeDefinition;
-	private ProductType productType;
+	private AssetType assetType;
 	private Long criteriaId;
 	
 	private List<InfoOptionInput> outputInfoOptions;
@@ -63,7 +63,7 @@ private static final long serialVersionUID = 1L;
 
 	public void prepare() throws Exception {
 		super.prepare();
-		String[] fetches = { "inputs", "outputs", "productType.name" };
+		String[] fetches = { "inputs", "outputs", "assetType.name" };
 		autoAttributeCriteria = persistenceManager.find( AutoAttributeCriteria.class, getCriteriaId(), getTenant(), fetches );
 	}
 
@@ -190,8 +190,8 @@ private static final long serialVersionUID = 1L;
 		return autoAttributeCriteria;
 	}
 	
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getAssetType() {
+		return assetType;
 	}
 	
 	public Long getCriteriaId() {

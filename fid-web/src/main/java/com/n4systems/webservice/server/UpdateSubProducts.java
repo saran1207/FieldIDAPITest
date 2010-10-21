@@ -7,7 +7,7 @@ import java.util.List;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.SubProductUniquenessException;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -17,18 +17,18 @@ public class UpdateSubProducts {
 
 	private final LegacyProductSerial legacyProductSerial;
 	private final Long tenantId;
-	private final Product product;
+	private final Asset asset;
 	private final InspectionServiceDTO inspectionServiceDTO;
 	private final List<SubProduct> subProducts;
 	private final ProductManager productManager;
 
 	public UpdateSubProducts(LegacyProductSerial legacyProductSerial, Long tenantId,
-			Product product, InspectionServiceDTO inspectionServiceDTO,
+			Asset asset, InspectionServiceDTO inspectionServiceDTO,
 			List<SubProduct> subProducts,
 			ProductManager productManager) {
 				this.legacyProductSerial = legacyProductSerial;
 				this.tenantId = tenantId;
-				this.product = product;
+				this.asset = asset;
 				this.inspectionServiceDTO = inspectionServiceDTO;
 				this.subProducts = subProducts;
 				this.productManager = productManager;
@@ -38,26 +38,26 @@ public class UpdateSubProducts {
 	public void run() throws SubProductUniquenessException {
 		if (subProducts.size() > 0) {
 			/*
-			 * Note: the list of SubProducts on Product is marked as @Transient however productManager.update 
+			 * Note: the list of SubProducts on Asset is marked as @Transient however productManager.update
 			 * has special handling code to persist it anyway.  and yes it does suck ...  
 			 */
-			product.getSubProducts().addAll(subProductNotAlreadyAdded(product, subProducts));
+			asset.getSubProducts().addAll(subProductNotAlreadyAdded(asset, subProducts));
 		}
 		if (inspectionServiceDTO.getDetachSubProducts().size() > 0)
-			product.getSubProducts().removeAll(detachExistingSubProduct(tenantId, inspectionServiceDTO.getDetachSubProducts(), product) );
+			asset.getSubProducts().removeAll(detachExistingSubProduct(tenantId, inspectionServiceDTO.getDetachSubProducts(), asset) );
 		
 		if (subProducts.size() > 0 ||
 			inspectionServiceDTO.getDetachSubProducts().size() > 0) {
-			legacyProductSerial.update(product, product.getModifiedBy());
+			legacyProductSerial.update(asset, asset.getModifiedBy());
 		}
 	}
 
 	
-	private List<SubProduct> subProductNotAlreadyAdded(Product masterProduct, List<SubProduct> subProducts) {
+	private List<SubProduct> subProductNotAlreadyAdded(Asset masterAsset, List<SubProduct> subProducts) {
 		List<SubProduct> notAddedSubProducts = new ArrayList<SubProduct>();
 		
 		for (SubProduct subProduct : subProducts) {
-			if (!masterProduct.getSubProducts().contains(subProduct)) {
+			if (!masterAsset.getSubProducts().contains(subProduct)) {
 				notAddedSubProducts.add(subProduct);
 			}
 		}
@@ -65,21 +65,21 @@ public class UpdateSubProducts {
 		return notAddedSubProducts;
 	}
 	
-	private List<SubProduct> detachExistingSubProduct(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Product masterProduct) {
+	private List<SubProduct> detachExistingSubProduct(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Asset masterAsset) {
 		
 		List<SubProduct> detachingSubProducts = new ArrayList<SubProduct>();
 		
 		for (SubProductMapServiceDTO subProductDTO : subProductMaps) {
-			Product product = productManager.findProduct(subProductDTO.getSubProductId(), new TenantOnlySecurityFilter( tenantId ) );
+			Asset asset = productManager.findProduct(subProductDTO.getSubProductId(), new TenantOnlySecurityFilter( tenantId ) );
 			
-			// Try by mobileGuid in case the product is created locally in the mobile
-			if (product == null) {
-				product = productManager.findProductByGUID(subProductDTO.getNewProduct().getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
+			// Try by mobileGuid in case the asset is created locally in the mobile
+			if (asset == null) {
+				asset = productManager.findProductByGUID(subProductDTO.getNewProduct().getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			}				
 			
 			SubProduct subProduct = new SubProduct();
-			subProduct.setProduct(product);
-			subProduct.setMasterProduct(masterProduct);
+			subProduct.setAsset(asset);
+			subProduct.setMasterProduct(masterAsset);
 			
 			detachingSubProducts.add(subProduct);
 		}

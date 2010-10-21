@@ -4,16 +4,16 @@ import java.util.Date;
 
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 
 public interface LastInspectionDateFinder {
 
-	public Date findLastInspectionDate(Product product);
+	public Date findLastInspectionDate(Asset asset);
 
 	public Date findLastInspectionDate(Long scheduleId);
 
 	public Date findLastInspectionDate(InspectionSchedule schedule);
 
-	public Date findLastInspectionDate(Product product, InspectionType inspectionType);
+	public Date findLastInspectionDate(Asset asset, InspectionType inspectionType);
 
 }

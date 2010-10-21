@@ -22,9 +22,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import rfid.ejb.entity.AssetSerialExtensionValue;
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductSerialExtensionValueBean;
-import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
@@ -41,7 +41,7 @@ import com.n4systems.model.utils.PlainDate;
 
 @Entity
 @Table(name = "products")
-public class Product extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Product>, Exportable, LocationContainer {
+public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
 	
@@ -79,17 +79,18 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	private Order customerOrder;
 
 	@ManyToOne(optional = true)
-	private ProductType type;
+	private AssetType type;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "productserial_infooption", joinColumns = @JoinColumn(name = "r_productserial", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
 	private Set<InfoOptionBean> infoOptions = new HashSet<InfoOptionBean>();
 
 	@ManyToOne(optional = true)
-	private ProductStatusBean productStatus;
+    @JoinColumn(name="productstatus_uniqueid")
+	private AssetStatus assetStatus;
 
-	@OneToMany(mappedBy = "productSerial", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
-	private Set<ProductSerialExtensionValueBean> productSerialExtensionValues = new HashSet<ProductSerialExtensionValueBean>();
+	@OneToMany(mappedBy = "assetSerial", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+	private Set<AssetSerialExtensionValue> assetSerialExtensionValues = new HashSet<AssetSerialExtensionValue>();
 
 	@ManyToOne(optional = true)
 	private User identifiedBy;
@@ -102,7 +103,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
     private List<SubProduct> subProducts = new ArrayList<SubProduct>();
     
     @ManyToMany( fetch= FetchType.LAZY )
-    @JoinTable(name = "projects_products" )
+    @JoinTable(name = "projects_products", joinColumns = @JoinColumn(name="products_id"), inverseJoinColumns = @JoinColumn(name="projects_id"))
     private List<Project> projects = new ArrayList<Project>();
     
     @Column(name="published", nullable=false)
@@ -110,7 +111,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
     
     @JoinColumn(name = "linked_id", nullable = true)
     @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    private Product linkedProduct;
+    private Asset linkedAsset;
 
     @Column(insertable=false, updatable=false)
     private Long linked_id;
@@ -123,7 +124,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
     @Transient
     private Long last_linked_id;
     
-	public Product() {
+	public Asset() {
 		this.identified = new PlainDate();
 	}
 	
@@ -136,16 +137,16 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	@Override
 	protected void onCreate() {
 		super.onCreate();
-		adjustProductForSave();
+		adjustAssetForSave();
 	}
 	
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
-		adjustProductForSave();
+		adjustAssetForSave();
 	}
 
-	private void adjustProductForSave() {
+	private void adjustAssetForSave() {
 		trimSerialNumber();
 		trimRfidNumber();
 		removeBlankInfoOptions();
@@ -153,8 +154,8 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 	
 	private void synchronizeNetworkId() {
-		if (linkedProduct != null) {
-			networkId = linkedProduct.getNetworkId();
+		if (linkedAsset != null) {
+			networkId = linkedAsset.getNetworkId();
 		} else {
 			networkId = id;
 		}
@@ -224,29 +225,29 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 
 	@AllowSafetyNetworkAccess
-	public ProductType getType() {
+	public AssetType getType() {
 		return type;
 	}
 
-	public void setType(ProductType type) {
+	public void setType(AssetType type) {
 		this.type = type;
 	}
 	
 	@Deprecated
 	@AllowSafetyNetworkAccess
-	public ProductType getProductType() {
+	public AssetType getAssetType() {
 		return getType();
 	}
 
 	@Deprecated
 	@AllowSafetyNetworkAccess
-	public ProductType getProductInfo() {
+	public AssetType getAssetInfo() {
 		return getType();
 	}
 
 	@Deprecated
-	public void setProductType(ProductType productType) {
-		setType( productType );
+	public void setAssetType(AssetType assetType) {
+		setType(assetType);
 	}
 	
 	public void setInfoOptions(Set<InfoOptionBean> infoOptions) {
@@ -276,12 +277,12 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 
 	@AllowSafetyNetworkAccess
-	public ProductStatusBean getProductStatus() {
-		return productStatus;
+	public AssetStatus getAssetStatus() {
+		return assetStatus;
 	}
 
-	public void setProductStatus(ProductStatusBean productStatusBean) {
-		this.productStatus = productStatusBean;
+	public void setAssetStatus(AssetStatus assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -293,13 +294,13 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.mobileGUID = mobileGUID;
 	}
 
-	public Set<ProductSerialExtensionValueBean> getProductSerialExtensionValues() {
-		return productSerialExtensionValues;
+	public Set<AssetSerialExtensionValue> getAssetSerialExtensionValues() {
+		return assetSerialExtensionValues;
 	}
 
-	public void setProductSerialExtensionValues(
-			Set<ProductSerialExtensionValueBean> productSerialExtensionValues) {
-		this.productSerialExtensionValues = productSerialExtensionValues;
+	public void setAssetSerialExtensionValues(
+			Set<AssetSerialExtensionValue> assetSerialExtensionValues) {
+		this.assetSerialExtensionValues = assetSerialExtensionValues;
 	}
 
 	public String getCustomerRefNumber() {
@@ -353,11 +354,11 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		this.purchaseOrder = purchaseOrder;
 	}
 	
-	public String getProductExtensionValue( String name ) {
-		if ( productSerialExtensionValues != null) {
-			for (ProductSerialExtensionValueBean productSerialExtensionValue : productSerialExtensionValues ) {
-				if (productSerialExtensionValue.getProductSerialExtension().getExtensionKey().equals(name)) {
-					return productSerialExtensionValue.getExtensionValue();
+	public String getAssetExtensionValue( String name ) {
+		if ( assetSerialExtensionValues != null) {
+			for (AssetSerialExtensionValue assetSerialExtensionValue : assetSerialExtensionValues) {
+				if (assetSerialExtensionValue.getAssetSerialExtension().getExtensionKey().equals(name)) {
+					return assetSerialExtensionValue.getExtensionValue();
 				}
 			}
 		}
@@ -455,18 +456,18 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 	}
 
 	@AllowSafetyNetworkAccess
-	public Product getLinkedProduct() {
-		return linkedProduct;
+	public Asset getLinkedAsset() {
+		return linkedAsset;
 	}
 
-	public void setLinkedProduct(Product linkedProduct) {
-		this.linkedProduct = linkedProduct;
-		this.linked_id = (linkedProduct != null) ? linkedProduct.getId() : null;
+	public void setLinkedAsset(Asset linkedAsset) {
+		this.linkedAsset = linkedAsset;
+		this.linked_id = (linkedAsset != null) ? linkedAsset.getId() : null;
 	}
 	
 	@AllowSafetyNetworkAccess
 	public boolean isLinked() {
-		return (linkedProduct != null);
+		return (linkedAsset != null);
 	}
 
 	public boolean isCountsTowardsLimit() {
@@ -482,7 +483,7 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		return networkId;
 	}
 	
-	public boolean linkedProductHasChanged() {
+	public boolean linkedAssetHasChanged() {
 		return (last_linked_id != linked_id);
 	}
 	
@@ -491,8 +492,8 @@ public class Product extends ArchivableEntityWithOwner implements Listable<Long>
 		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
-	public Product enhance(SecurityLevel level) {
-		Product enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+	public Asset enhance(SecurityLevel level) {
+		Asset enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setType(enhance(type, level));
 		enhanced.setAssignedUser(enhance(assignedUser, level));
 		enhanced.setIdentifiedBy(enhance(identifiedBy, level));

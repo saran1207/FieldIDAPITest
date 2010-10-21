@@ -40,7 +40,7 @@
                 <@s.text name="${sessionUser.serialNumberLabel}"/>
             </td>
             <td class="value">
-                ${product.serialNumber}
+                ${asset.serialNumber}
             </td>
         </tr>
         <tr>
@@ -48,7 +48,7 @@
                 <@s.text name="label.rfidnumber"/>
             </td>
             <td class="value">
-                ${product.rfidNumber!}
+                ${asset.rfidNumber!}
             </td>
         </tr>
         <tr>
@@ -56,7 +56,7 @@
                 <@s.text name="label.producttype"/>
             </td>
             <td class="value">
-                ${product.type.name}
+                ${asset.type.name}
             </td>
         </tr>
         <tr>
@@ -64,7 +64,7 @@
                 <@s.text name="label.productstatus"/>
             </td>
             <td class="value">
-                ${(product.productStatus.name)!}
+                ${(asset.assetStatus.name)!}
             </td>
         </tr>
         <tr>
@@ -72,17 +72,17 @@
                 <@s.text name="label.identified"/>
             </td>
             <td class="value">
-                ${action.formatDate(product.identified, false)}
+                ${action.formatDate(asset.identified, false)}
             </td>
         </tr>
-        <#if product.type.hasManufactureCertificate >
+        <#if asset.type.hasManufactureCertificate >
         <tr>
             <td>
                 <@s.text name="label.manufacturecertificate"/>
             </td>
             <td class="value">
                 <img src="<@s.url value="/images/pdf_small.gif"/>"/>
-                <a href="<@s.url action="downloadSafetyNetworkManufacturerCert" namespace="/file" uniqueID="${product.uniqueID}" />" target="_blank" >
+                <a href="<@s.url action="downloadSafetyNetworkManufacturerCert" namespace="/file" uniqueID="${asset.uniqueID}" />" target="_blank" >
                     <@s.text name="label.downloadnow"/>
                 </a>
             </td>
@@ -90,14 +90,14 @@
         </#if>
     </table>
 
-	<#if !product.orderedInfoOptionList.isEmpty() >
+	<#if !asset.orderedInfoOptionList.isEmpty() >
 
         <div class="productInformationSection">
-            ${product.type.name} <@s.text name="label.attributes"/>
+            ${asset.type.name} <@s.text name="label.attributes"/>
         </div>
 
         <table class="productInformation">
-            <#list product.orderedInfoOptionList as infoOption >
+            <#list asset.orderedInfoOptionList as infoOption >
 				<tr>
 					<td>${infoOption.infoField.name} <#if infoOption.infoField.retired >(<@s.text name="label.retired"/>)</#if> </td>
 					<td class="value">${infoOption.name}</td>
@@ -106,42 +106,42 @@
         </table>
     </#if>
     </div>
-    <#if product.type.imageName?exists >
+    <#if asset.type.imageName?exists >
         <div class="rightProduct">
-            <img src="<@s.url action="downloadProductTypeImageSafetyNetwork" namespace="/file" uniqueID="${product.type.uniqueID}" networkId="${product.id}" />" width="300"/>
+            <img src="<@s.url action="downloadProductTypeImageSafetyNetwork" namespace="/file" uniqueID="${asset.type.uniqueID}" networkId="${asset.id}" />" width="300"/>
         </div>
     </#if>
 
     <div style="clear: both;"></div>
 
-    <#if product.type.instructions?exists && product.type.instructions?length gt 0 >
+    <#if asset.type.instructions?exists && asset.type.instructions?length gt 0 >
         <div class="productInformationSection">
             <@s.text name="label.warnings"/>
         </div>
         <div class="productInfoText">
-            ${product.type.warnings!}
+            ${asset.type.warnings!}
         </div>
     </#if>
 
-    <#if product.type.instructions?exists && product.type.instructions?length gt 0 >
+    <#if asset.type.instructions?exists && asset.type.instructions?length gt 0 >
         <div class="productInformationSection">
             <@s.text name="label.instructions"/>
         </div>
         <div class="productInfoText">
-            ${product.type.instructions!}
+            ${asset.type.instructions!}
         </div>
     </#if>
 
-	<#if (product.type.cautions?exists && product.type.cautions?length gt 0)
-			|| (!product.type.attachments.isEmpty()) || (!productAttachments.isEmpty()) >
+	<#if (asset.type.cautions?exists && asset.type.cautions?length gt 0)
+			|| (!asset.type.attachments.isEmpty()) || (!productAttachments.isEmpty()) >
 
         <div class="productInformationSection">
             <@s.text name="label.additionalinformation"/>
 
             <div class="moreFromTheWeb">
-                <#if product.type.cautions?exists && product.type.cautions?length gt 0 >
+                <#if asset.type.cautions?exists && asset.type.cautions?length gt 0 >
                     <p>
-                        <a href="${product.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/> &#187;</a>
+                        <a href="${asset.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/> &#187;</a>
                     </p>
                 </#if>
             </div>
@@ -151,14 +151,14 @@
         <#if !productAttachments.isEmpty() >
             <#assign downloadAction="downloadProductAttachedFileSafetyNetwork"/>
             <#assign attachments=productAttachments />
-            <#assign attachmentID=product.uniqueID/>
+            <#assign attachmentID=asset.uniqueID/>
             <#include "_attachedFilesDisplay.ftl"/>
         </#if>
     
-        <#if !product.type.attachments.isEmpty() >
+        <#if !asset.type.attachments.isEmpty() >
             <#assign downloadAction="downloadProductTypeAttachedFileSafetyNetwork"/>
-            <#assign attachments=product.type.attachments />
-            <#assign attachmentID=product.type.uniqueID/>
+            <#assign attachments=asset.type.attachments />
+            <#assign attachmentID=asset.type.uniqueID/>
             <#include "_attachedFilesDisplay.ftl"/>
         </#if>
 

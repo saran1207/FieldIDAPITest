@@ -6,27 +6,27 @@ import javax.persistence.EntityManager;
 
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.ModifiedBySaver;
 import com.n4systems.reporting.PathHandler;
 
 public class ProductAttachmentSaver extends ModifiedBySaver<ProductAttachment> {
-	private final Product product;
+	private final Asset asset;
 	
-	public ProductAttachmentSaver(Product product) {
+	public ProductAttachmentSaver(Asset asset) {
 		super();
-		this.product = product;
+		this.asset = asset;
 	}
 	
-	public ProductAttachmentSaver(Long modifiedBy, Product product) {
+	public ProductAttachmentSaver(Long modifiedBy, Asset asset) {
 		super(modifiedBy);
-		this.product = product;
+		this.asset = asset;
 	}
 
-	public ProductAttachmentSaver(User modifiedBy, Product product) {
+	public ProductAttachmentSaver(User modifiedBy, Asset asset) {
 		super(modifiedBy);
-		this.product = product;
+		this.asset = asset;
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class ProductAttachmentSaver extends ModifiedBySaver<ProductAttachment> {
 	}
 
 	private void fillInConnectionFields(ProductAttachment entity) {
-		entity.setProduct(product);
-		entity.setTenant(product.getTenant());
+		entity.setAsset(asset);
+		entity.setTenant(asset.getTenant());
 	}
 	
 	//TODO move to a file Deleter.

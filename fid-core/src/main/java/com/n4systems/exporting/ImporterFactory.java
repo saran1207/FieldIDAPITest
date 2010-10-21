@@ -11,9 +11,9 @@ import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -56,7 +56,7 @@ public class ImporterFactory {
 		return new AutoAttributeToModelConverter(criteria);
 	}
 
-	protected ProductToModelConverter createProductToModelConverter(User identifiedBy, ProductType type) {
+	protected ProductToModelConverter createProductToModelConverter(User identifiedBy, AssetType type) {
 		ProductToModelConverter converter = new ProductToModelConverter(loaderFactory.createOrgByNameLoader(), createNonIntegrationOrderManager(), loaderFactory.createProductStatusByNameLoader(), new InfoOptionMapConverter());
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
@@ -99,7 +99,7 @@ public class ImporterFactory {
 		return new AutoAttributeImporter(reader, createViewValidator(), saverFactory.createAutoAttributeDefinitionSaver(), createAutoAttributeToModelConverter(criteria));
 	}
 
-	public ProductImporter createProductImporter(MapReader reader, User identifiedBy, ProductType type) {
+	public ProductImporter createProductImporter(MapReader reader, User identifiedBy, AssetType type) {
 		return new ProductImporter(reader, createViewValidator(), createProductSaveService(identifiedBy), createProductToModelConverter(identifiedBy, type));
 	}
 

@@ -141,7 +141,7 @@ public class ManageProductTypesPage extends FieldIDPage {
 	}
 	
 	public String getViewProductDescriptionTemplate() {
-		return selenium.getText("//div[@class='viewSection']//label[.='Product Description Template']/../span");
+		return selenium.getText("//div[@class='viewSection']//label[.='Asset Description Template']/../span");
 	}
 	
 	public String getEditName() {

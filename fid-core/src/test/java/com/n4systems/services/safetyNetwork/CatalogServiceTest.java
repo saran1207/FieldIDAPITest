@@ -2,7 +2,7 @@ package com.n4systems.services.safetyNetwork;
 
 
 import static com.n4systems.model.builders.CatalogBuilder.*;
-import static com.n4systems.model.builders.ProductTypeBuilder.*;
+import static com.n4systems.model.builders.AssetTypeBuilder.*;
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -12,11 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.AssetType;
 import org.easymock.Capture;
 import org.junit.Test;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.test.helpers.BasicAnswer;
@@ -34,8 +34,8 @@ public class CatalogServiceTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_find_catalog_product_type_ids() {
-		ProductType productType = aProductType().build();
-		Catalog catalog = aCatalog().belongingTo(n4).with(productType).build();
+		AssetType assetType = anAssetType().build();
+		Catalog catalog = aCatalog().belongingTo(n4).with(assetType).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.find((QueryBuilder<Catalog>)anyObject())).andReturn(catalog);
@@ -43,7 +43,7 @@ public class CatalogServiceTest {
 		replay(mockPersistenceManager);
 		
 		Set<Long> expectedIds = new HashSet<Long>();
-		expectedIds.add(productType.getId());
+		expectedIds.add(assetType.getId());
 		
 		CatalogService sut = new CatalogServiceImpl(mockPersistenceManager, n4);
 		Set<Long> publishedIds = sut.getProductTypeIdsPublished();
@@ -74,23 +74,23 @@ public class CatalogServiceTest {
 	@Test
 	public void should_add_create_catalog_and_publish_product_types() {
 		Capture<Catalog> captureCatalog = new Capture<Catalog>();
-		Capture<ProductType> captureProductType = new Capture<ProductType>();
+		Capture<AssetType> captureProductType = new Capture<AssetType>();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.find((QueryBuilder<Catalog>)anyObject())).andReturn(null);
 		expectLastCall().once();
 		expect(mockPersistenceManager.update(capture(captureCatalog))).andAnswer(new BasicAnswer<Catalog>(captureCatalog));
-		expect(mockPersistenceManager.reattchAndFetch(capture(captureProductType), (String)anyObject())).andAnswer(new BasicAnswer<ProductType>(captureProductType));
+		expect(mockPersistenceManager.reattchAndFetch(capture(captureProductType), (String)anyObject())).andAnswer(new BasicAnswer<AssetType>(captureProductType));
 		expectLastCall().once();
 		replay(mockPersistenceManager);
 		
-		Set<ProductType> productTypes = new HashSet<ProductType>();
-		productTypes.add(aProductType().build());
+		Set<AssetType> assetTypes = new HashSet<AssetType>();
+		assetTypes.add(anAssetType().build());
 		
 		CatalogService sut = new CatalogServiceImpl(mockPersistenceManager, n4);
-		Catalog createdCatalog = sut.publishProductTypes(productTypes);
+		Catalog createdCatalog = sut.publishProductTypes(assetTypes);
 		
-		assertEquals(productTypes, createdCatalog.getPublishedProductTypes());
+		assertEquals(assetTypes, createdCatalog.getPublishedProductTypes());
 		verify(mockPersistenceManager);
 	}
 	
@@ -99,28 +99,28 @@ public class CatalogServiceTest {
 	@Test
 	public void should_add_create_catalog_and_publish_product_types_with_master_product() {
 		Capture<Catalog> captureCatalog = new Capture<Catalog>();
-		Capture<ProductType> captureProductType = new Capture<ProductType>();
+		Capture<AssetType> captureProductType = new Capture<AssetType>();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.find((QueryBuilder<Catalog>)anyObject())).andReturn(null);
 		expectLastCall().once();
 		expect(mockPersistenceManager.update(capture(captureCatalog))).andAnswer(new BasicAnswer<Catalog>(captureCatalog));
-		expect(mockPersistenceManager.reattchAndFetch(capture(captureProductType), (String)anyObject())).andAnswer(new BasicAnswer<ProductType>(captureProductType));
+		expect(mockPersistenceManager.reattchAndFetch(capture(captureProductType), (String)anyObject())).andAnswer(new BasicAnswer<AssetType>(captureProductType));
 		expectLastCall().once();
 		replay(mockPersistenceManager);
 		
-		ProductType subType = aProductType().named("subType").build();
+		AssetType subType = anAssetType().named("subType").build();
 		
-		Set<ProductType> productTypes = new HashSet<ProductType>();
-		productTypes.add(aProductType().withSubTypes(subType).build());
+		Set<AssetType> assetTypes = new HashSet<AssetType>();
+		assetTypes.add(anAssetType().withSubTypes(subType).build());
 		
-		Set<ProductType> expectedProductTypes = new HashSet<ProductType>(productTypes);
-		expectedProductTypes.add(subType);
+		Set<AssetType> expectedAssetTypes = new HashSet<AssetType>(assetTypes);
+		expectedAssetTypes.add(subType);
 		
 		CatalogService sut = new CatalogServiceImpl(mockPersistenceManager, n4);
-		Catalog createdCatalog = sut.publishProductTypes(productTypes);
+		Catalog createdCatalog = sut.publishProductTypes(assetTypes);
 		
-		assertEquals(expectedProductTypes, createdCatalog.getPublishedProductTypes());
+		assertEquals(expectedAssetTypes, createdCatalog.getPublishedProductTypes());
 		verify(mockPersistenceManager);
 	}
 	
@@ -128,11 +128,11 @@ public class CatalogServiceTest {
 	@Test
 	public void should_return_listing_pair_of_published_types() {
 		Capture<QueryBuilder<ListingPair>> capturedQuery = new Capture<QueryBuilder<ListingPair>>();
-		ProductType productType = aProductType().named("Chain").build();
-		Catalog catalog = aCatalog().belongingTo(n4).with(productType).build();
+		AssetType assetType = anAssetType().named("Chain").build();
+		Catalog catalog = aCatalog().belongingTo(n4).with(assetType).build();
 		
 		List<ListingPair> expectedTypes = new ArrayList<ListingPair>();
-		expectedTypes.add(new ListingPair(productType.getId(), productType.getName()));
+		expectedTypes.add(new ListingPair(assetType.getId(), assetType.getName()));
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.find((QueryBuilder<Catalog>)anyObject())).andReturn(catalog);

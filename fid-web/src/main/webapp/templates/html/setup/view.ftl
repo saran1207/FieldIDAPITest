@@ -56,16 +56,16 @@
 		
 			<p>
 				<label><a href="<@s.url action="productTypeGroups"/>" ><@s.text name="title.manage_product_type_groups.plural" /></a></label>
-				<span>Manage all of your product type groups.</span>
+				<span>Manage all of your asset type groups.</span>
 			</p>
 			<p>
 				<label><a href="<@s.url action="productTypes"/>" ><@s.text name="title.manage_product_types.plural" /></a></label>
-				<span>Manage all of your products and their attributes.</span>
+				<span>Manage all of your assets and their attributes.</span>
 			</p>
 				
 			<p>
 				<label><a href="<@s.url action="productStatusList"/>" ><@s.text name="title.manage_product_statuses.plural" /></a></label>
-				<span>Create product statuses that let you identify the state of a product.</span>
+				<span>Create asset statuses that let you identify the state of a product.</span>
 			</p>
 			
 			<p>
@@ -87,7 +87,7 @@
 			<h2 id="notificationAndTemplates"><@s.text name="label.autocomplete_templates" /></h2>
 			<p>
 				<label><a href="<@s.url action="autoAttributeCriteriaList"/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></label>
-				<span>Easily map variables to pre-defined values for products.</span>
+				<span>Easily map variables to pre-defined values for assets.</span>
 			</p>
 			<p>
 				<label><a href="<@s.url action="commentTemplateList"/>" ><@s.text name="title.manage_comment_templates.plural" /></a></label>

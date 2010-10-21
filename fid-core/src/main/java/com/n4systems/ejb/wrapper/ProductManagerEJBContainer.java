@@ -10,9 +10,9 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.impl.ProductManagerImpl;
 import com.n4systems.exceptions.NonUniqueProductException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
@@ -30,11 +30,11 @@ public class ProductManagerEJBContainer extends EJBTransactionEmulator<ProductMa
 		return new ProductManagerImpl(em);
 	}
 
-	public Product archive(Product product, User archivedBy) throws UsedOnMasterInspectionException {
+	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterInspectionException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).archive(product, archivedBy);
+			return createManager(transaction.getEntityManager()).archive(asset, archivedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -46,11 +46,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public ProductType archive(ProductType productType, Long archivedBy, String deletingPrefix) {
+	public AssetType archive(AssetType assetType, Long archivedBy, String deletingPrefix) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).archive(productType, archivedBy, deletingPrefix);
+			return createManager(transaction.getEntityManager()).archive(assetType, archivedBy, deletingPrefix);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -62,7 +62,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public void deleteProductTypeGroup(ProductTypeGroup group) {
+	public void deleteProductTypeGroup(AssetTypeGroup group) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -78,11 +78,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Product fillInSubProductsOnProduct(Product product) {
+	public Asset fillInSubProductsOnProduct(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).fillInSubProductsOnProduct(product);
+			return createManager(transaction.getEntityManager()).fillInSubProductsOnProduct(asset);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -112,7 +112,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Product findProduct(Long id, SecurityFilter filter, String... postFetchFields) {
+	public Asset findProduct(Long id, SecurityFilter filter, String... postFetchFields) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -128,7 +128,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Product findProduct(Long id, SecurityFilter filter) {
+	public Asset findProduct(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -146,7 +146,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 
 
-	public Product findProductAllFields(Long id, SecurityFilter filter) {
+	public Asset findProductAllFields(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -162,7 +162,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Product findProductByGUID(String mobileGUID, SecurityFilter filter) {
+	public Asset findProductByGUID(String mobileGUID, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -178,11 +178,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue, ProductType productType) {
+	public List<Asset> findProductByIdentifiers(SecurityFilter filter, String searchValue, AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findProductByIdentifiers(filter, searchValue, productType);
+			return createManager(transaction.getEntityManager()).findProductByIdentifiers(filter, searchValue, assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -194,7 +194,7 @@ Transaction transaction = transactionManager.startTransaction();
 		
 	}
 
-	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue) {
+	public List<Asset> findProductByIdentifiers(SecurityFilter filter, String searchValue) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -210,7 +210,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Product findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueProductException {
+	public Asset findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueProductException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -226,7 +226,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public List<Product> findProductsByRfidNumber(String rfidNumber, SecurityFilter filter, String... postFetchFields) {
+	public List<Asset> findProductsByRfidNumber(String rfidNumber, SecurityFilter filter, String... postFetchFields) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -242,11 +242,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public List<SubProduct> findSubProductsForProduct(Product product) {
+	public List<SubProduct> findSubProductsForProduct(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findSubProductsForProduct(product);
+			return createManager(transaction.getEntityManager()).findSubProductsForProduct(asset);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -258,7 +258,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public List<ListingPair> getAllowedSubTypes(SecurityFilter filter, ProductType type) {
+	public List<ListingPair> getAllowedSubTypes(SecurityFilter filter, AssetType type) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -274,11 +274,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Product mergeProducts(Product winningProduct, Product losingProduct, User user) {
+	public Asset mergeProducts(Asset winningAsset, Asset losingAsset, User user) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).mergeProducts(winningProduct, losingProduct, user);
+			return createManager(transaction.getEntityManager()).mergeProducts(winningAsset, losingAsset, user);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -290,11 +290,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Product parentProduct(Product product) {
+	public Asset parentProduct(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).parentProduct(product);
+			return createManager(transaction.getEntityManager()).parentProduct(asset);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -322,11 +322,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public void removeAsASubProductType(ProductType productType, Long archivedBy) {
+	public void removeAsASubProductType(AssetType assetType, Long archivedBy) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).removeAsASubProductType(productType, archivedBy);
+			createManager(transaction.getEntityManager()).removeAsASubProductType(assetType, archivedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -338,11 +338,11 @@ Transaction transaction = transactionManager.startTransaction();
 		
 	}
 
-	public void removeProductCodeMappingsThatUse(ProductType productType) {
+	public void removeProductCodeMappingsThatUse(AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).removeProductCodeMappingsThatUse(productType);
+			createManager(transaction.getEntityManager()).removeProductCodeMappingsThatUse(assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -354,11 +354,11 @@ Transaction transaction = transactionManager.startTransaction();
 		
 	}
 
-	public ProductRemovalSummary testArchive(Product product) {
+	public ProductRemovalSummary testArchive(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).testArchive(product);
+			return createManager(transaction.getEntityManager()).testArchive(asset);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -370,11 +370,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public ProductTypeRemovalSummary testArchive(ProductType productType) {
+	public ProductTypeRemovalSummary testArchive(AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).testArchive(productType);
+			return createManager(transaction.getEntityManager()).testArchive(assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -386,7 +386,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public ProductTypeGroupRemovalSummary testDelete(ProductTypeGroup group) {
+	public ProductTypeGroupRemovalSummary testDelete(AssetTypeGroup group) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

@@ -4,34 +4,34 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.ProductNetworkFilter;
 import com.n4systems.persistence.loaders.NonSecuredListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
-public class LinkedChildProductLoader extends NonSecuredListLoader<Product> {
+public class LinkedChildProductLoader extends NonSecuredListLoader<Asset> {
 
-	protected Product product;
+	protected Asset asset;
 
 	public LinkedChildProductLoader() {}
 	
 	@Override
-	protected List<Product> load(EntityManager em) {
-		if (product == null) {
-			throw new SecurityException("product must be set");
+	protected List<Asset> load(EntityManager em) {
+		if (asset == null) {
+			throw new SecurityException("asset must be set");
 		}
 		
-		QueryBuilder<Product> loader = new QueryBuilder<Product>(Product.class, new ProductNetworkFilter(product));
-		loader.addWhere(WhereClauseFactory.create("linkedProduct.id", product.getId()));
+		QueryBuilder<Asset> loader = new QueryBuilder<Asset>(Asset.class, new ProductNetworkFilter(asset));
+		loader.addWhere(WhereClauseFactory.create("linkedProduct.id", asset.getId()));
 
-		List<Product> linkedChildren = loader.getResultList(em);
+		List<Asset> linkedChildren = loader.getResultList(em);
 		return linkedChildren;
 	}
 
 	
-	public LinkedChildProductLoader setProduct(Product product) {
-		this.product = product;
+	public LinkedChildProductLoader setProduct(Asset asset) {
+		this.asset = asset;
 		return this;
 	}
 }

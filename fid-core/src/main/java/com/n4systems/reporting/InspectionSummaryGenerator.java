@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -27,7 +28,6 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.orgs.InternalOrg;
@@ -87,10 +87,10 @@ public class InspectionSummaryGenerator {
 
 				ReportMap<Object> inspectionMap = new ReportMap<Object>();
 				inspectionMap.put("date", inspection.getDate());
-				inspectionMap.put("referenceNumber", inspection.getProduct().getCustomerRefNumber());
-				inspectionMap.put("productType", inspection.getProduct().getType().getName());
-				inspectionMap.put("serialNumber", inspection.getProduct().getSerialNumber());
-				inspectionMap.put("description", inspection.getProduct().getDescription());
+				inspectionMap.put("referenceNumber", inspection.getAsset().getCustomerRefNumber());
+				inspectionMap.put("productType", inspection.getAsset().getType().getName());
+				inspectionMap.put("serialNumber", inspection.getAsset().getSerialNumber());
+				inspectionMap.put("description", inspection.getAsset().getDescription());
 				inspectionMap.put("organization", inspection.getOwner().getInternalOrg().getName());
 				inspectionMap.put("inspectionType", inspection.getType().getName());
 				inspectionMap.put("dateFormat", new DateTimeDefiner(user).getDateFormat());
@@ -105,15 +105,15 @@ public class InspectionSummaryGenerator {
 				inspectionMap.put("tenantAddress", tenant.getAddressInfo() !=null? tenant.getAddressInfo().getDisplay() : "");
 				inspectionMap.put("tenantLogo", resolveCertificateMainLogo(tenant));
 				
-				inspectionMap.put("productTypeGroup", inspection.getProduct().getType().getGroup() != null ? inspection.getProduct().getType().getGroup().getName() : "");
-				inspectionMap.put("assetComments", inspection.getProduct().getComments());
+				inspectionMap.put("productTypeGroup", inspection.getAsset().getType().getGroup() != null ? inspection.getAsset().getType().getGroup().getName() : "");
+				inspectionMap.put("assetComments", inspection.getAsset().getComments());
 				inspectionMap.put("customer", inspection.getOwner().getCustomerOrg() != null?inspection.getOwner().getCustomerOrg().getName() :"");
 				
-				LineItem shopOrder = inspection.getProduct().getShopOrder();
+				LineItem shopOrder = inspection.getAsset().getShopOrder();
 				inspectionMap.put("orderNumber", shopOrder !=null ? shopOrder.getOrder().getOrderNumber() : "");
-				inspectionMap.put("PONumber", inspection.getProduct().getPurchaseOrder());
-				inspectionMap.put("attributes", produceInfoOptionLP(inspection.getProduct().getOrderedInfoOptionList()));
-				inspectionMap.put("productStatus", inspection.getProduct().getProductStatus()!=null ? inspection.getProduct().getProductStatus().getName() : "");
+				inspectionMap.put("PONumber", inspection.getAsset().getPurchaseOrder());
+				inspectionMap.put("attributes", produceInfoOptionLP(inspection.getAsset().getOrderedInfoOptionList()));
+				inspectionMap.put("productStatus", inspection.getAsset().getAssetStatus()!=null ? inspection.getAsset().getAssetStatus().getName() : "");
 				
 				inspectionMap.put("eventTypeGroup", inspection.getType().getGroup() !=null ? inspection.getType().getGroup().getName() : "");
 				inspectionMap.put("location", inspection.getAdvancedLocation() != null ? inspection.getAdvancedLocation().getFullName() : "");
@@ -195,9 +195,9 @@ public class InspectionSummaryGenerator {
 		reportMap.put("fromDate", reportDefiner.getFromDate());
 		reportMap.put("hasIntegration", primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
 
-		if (reportDefiner.getProductType() != null) {
-			ProductType productType = new ProductTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getProductType()).load();
-			reportMap.put("productType", productType.getName());
+		if (reportDefiner.getAssetType() != null) {
+			AssetType assetType = new ProductTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getAssetType()).load();
+			reportMap.put("assetType", assetType.getName());
 		}
 
 		if (reportDefiner.getInspectionBook() != null) { 

@@ -21,7 +21,7 @@ import javax.persistence.Table;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import org.hibernate.annotations.CollectionOfElements;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -40,11 +40,12 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	private InspectionType type;
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional = false)
-	private Product product;
+    @JoinColumn(name="product_id")
+	private Asset asset;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(name="productstatus_id")
-	private ProductStatusBean productStatus;
+	private AssetStatus assetStatus;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy = "inspection", cascade=CascadeType.ALL)
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
@@ -85,7 +86,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	    		"\nTenant: " + getTenant() + 
 	    		"\nType: " + getType() +
 	    		"\nForm Ver: " + getFormVersion() +
-	    		"\nProduct: " + getProduct() + 
+	    		"\nAsset: " + getAsset() +
 	    		"\nResults: " + StringUtils.indent(resultString, 1);
     }
 
@@ -104,21 +105,21 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	}
 
 	@AllowSafetyNetworkAccess
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setAsset(Asset product) {
+		this.asset = product;
 	}
 
 	@AllowSafetyNetworkAccess
-	public ProductStatusBean getProductStatus() {
-		return productStatus;
+	public AssetStatus getAssetStatus() {
+		return assetStatus;
 	}
 
-	public void setProductStatus(ProductStatusBean productStatus) {
-		this.productStatus = productStatus;
+	public void setAssetStatus(AssetStatus assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 
 	@AllowSafetyNetworkAccess

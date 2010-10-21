@@ -2,16 +2,16 @@ package com.n4systems.webservice.server;
 
 import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
 import static com.n4systems.model.builders.InspectionTypeBuilder.*;
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.model.Asset;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.product.ProductByMobileGuidLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -20,18 +20,18 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 public class InspectionScheduleCreateHandlerTest {
 	
-	private Product product;
+	private Asset asset;
 	private InspectionType inspectionType;
 	private InspectionSchedule inspectionSchedule;
 	private InspectionScheduleSaver saver;
 	private ProductByMobileGuidLoader productByMobileGuidLoader;
-	private FilteredIdLoader<Product> filteredProductLoader;
+	private FilteredIdLoader<Asset> filteredProductLoader;
 	private FilteredIdLoader<InspectionType> filteredInspectionTypeLoader;
 	
 	
 	@Before
 	public void setup() {
-		product = aProduct().build();
+		asset = anAsset().build();
 		inspectionType = anInspectionType().build();
 		inspectionSchedule = aScheduledInspectionSchedule().build();
 	}
@@ -41,7 +41,7 @@ public class InspectionScheduleCreateHandlerTest {
 
 		InspectionScheduleServiceDTO inspectionScheduleServiceDTO = new InspectionScheduleServiceDTO();
 		inspectionScheduleServiceDTO.setProductMobileGuid("productMobileGuid");
-		inspectionScheduleServiceDTO.setProductId(product.getId());
+		inspectionScheduleServiceDTO.setProductId(asset.getId());
 		inspectionScheduleServiceDTO.setInspectionTypeId(inspectionType.getId());
 		
 		createMocks();
@@ -51,7 +51,7 @@ public class InspectionScheduleCreateHandlerTest {
 		
 		sut.createNewInspectionSchedule(inspectionSchedule, inspectionScheduleServiceDTO);
 		
-		assertEquals(product, inspectionSchedule.getProduct());
+		assertEquals(asset, inspectionSchedule.getAsset());
 		assertEquals(inspectionType, inspectionSchedule.getInspectionType());
 		
 	}
@@ -75,7 +75,7 @@ public class InspectionScheduleCreateHandlerTest {
 	@Test
 	public void create_new_inspection_schedule_event_with_existing_product() throws Exception {
 
-		InspectionScheduleServiceDTO inspectionScheduleServiceDTO = createInspectionScheduleServiceDTO(product.getId());
+		InspectionScheduleServiceDTO inspectionScheduleServiceDTO = createInspectionScheduleServiceDTO(asset.getId());
 		
 		createMocks();
 		
@@ -98,12 +98,12 @@ public class InspectionScheduleCreateHandlerTest {
 
 		productByMobileGuidLoader = createMock(ProductByMobileGuidLoader.class);
 		expect(productByMobileGuidLoader.setMobileGuid("productMobileGuid")).andReturn(productByMobileGuidLoader);
-		expect(productByMobileGuidLoader.load()).andReturn(product);
+		expect(productByMobileGuidLoader.load()).andReturn(asset);
 		replay(productByMobileGuidLoader);
 
 		filteredProductLoader = createMock(FilteredIdLoader.class);
-		expect(filteredProductLoader.setId(product.getId())).andReturn(filteredProductLoader);
-		expect(filteredProductLoader.load()).andReturn(product);
+		expect(filteredProductLoader.setId(asset.getId())).andReturn(filteredProductLoader);
+		expect(filteredProductLoader.load()).andReturn(asset);
 		replay(filteredProductLoader);
 
 		filteredInspectionTypeLoader =  createMock(FilteredIdLoader.class);

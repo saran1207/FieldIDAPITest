@@ -1,17 +1,17 @@
 
 
 
-<#list publishedProductTypes as productType>
+<#list publishedAssetTypes as assetType>
 	<ul class="catalogPackage">
 		<li>
-			<@s.checkbox name="importProductTypeIds['${productType.id}']" /> <span class="catalogItem">${productType.name?html}</span> 
-			<a href="#openDetails;" onclick="$('details_${productType.id}').toggle(); $('detail_${productType.id}').toggle(); $('closeDetail_${productType.id}').toggle(); return false;"><span id="detail_${productType.id}"><@s.text name="label.details"/></span><span id="closeDetail_${productType.id}" style="display:none"><@s.text name="label.close_details"/></span></a>
-			<div id="details_${productType.id}" style="display:none" class="main">
-				<#if !action.getSubTypesFor(productType.id).empty>
+			<@s.checkbox name="importAssetTypeIds['${assetType.id}']" /> <span class="catalogItem">${assetType.name?html}</span>
+			<a href="#openDetails;" onclick="$('details_${assetType.id}').toggle(); $('detail_${assetType.id}').toggle(); $('closeDetail_${assetType.id}').toggle(); return false;"><span id="detail_${assetType.id}"><@s.text name="label.details"/></span><span id="closeDetail_${assetType.id}" style="display:none"><@s.text name="label.close_details"/></span></a>
+			<div id="details_${assetType.id}" style="display:none" class="main">
+				<#if !action.getSubTypesFor(assetType.id).empty>
 					<ul>	
 						<li  class="listTitle">|- <@s.text name="label.sub_types"/>
 						<ul >
-						<#list action.getSubTypesFor(productType.id) as subType>
+						<#list action.getSubTypesFor(assetType.id) as subType>
 							<li  class="listValues">${subType.name?html}
 								<#assign current_type=subType/>
 								<#include "_inspectionTypes.ftl"/>
@@ -21,7 +21,7 @@
 					</li>
 					</ul>
 				</#if>
-				<#assign current_type=productType/>
+				<#assign current_type=assetType/>
 				<#include "_inspectionTypes.ftl"/>
 			</div>
 		</li>

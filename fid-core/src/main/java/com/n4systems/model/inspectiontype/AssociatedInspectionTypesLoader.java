@@ -5,9 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -15,7 +15,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class AssociatedInspectionTypesLoader extends ListLoader<AssociatedInspectionType> {
 
-	private ProductType productType;
+	private AssetType assetType;
 	private InspectionType inspectionType;
 	
 	public AssociatedInspectionTypesLoader(SecurityFilter filter) {
@@ -24,8 +24,8 @@ public class AssociatedInspectionTypesLoader extends ListLoader<AssociatedInspec
 
 	@Override
 	protected List<AssociatedInspectionType> load(EntityManager em, SecurityFilter filter) {
-		if (inspectionType == null && productType == null) {
-			throw new InvalidArgumentException("You must look up by product type of inspection type.");
+		if (inspectionType == null && assetType == null) {
+			throw new InvalidArgumentException("You must look up by asset type of inspection type.");
 		}
  		
 		QueryBuilder<AssociatedInspectionType> query = prepareQuery();
@@ -35,8 +35,8 @@ public class AssociatedInspectionTypesLoader extends ListLoader<AssociatedInspec
 
 	private QueryBuilder<AssociatedInspectionType> prepareQuery() {
 		QueryBuilder<AssociatedInspectionType> query = new QueryBuilder<AssociatedInspectionType>(AssociatedInspectionType.class, new OpenSecurityFilter());
-		if (productType != null) {
-			query.addSimpleWhere("productType", productType);
+		if (assetType != null) {
+			query.addSimpleWhere("assetType", assetType);
 		}
 		
 		if (inspectionType != null) {
@@ -47,8 +47,8 @@ public class AssociatedInspectionTypesLoader extends ListLoader<AssociatedInspec
 		return query;
 	}
 
-	public AssociatedInspectionTypesLoader setProductType(ProductType productType) {
-		this.productType = productType;
+	public AssociatedInspectionTypesLoader setProductType(AssetType assetType) {
+		this.assetType = assetType;
 		return this;
 	}
 

@@ -45,9 +45,9 @@ public class InspectionScheduleSearchContainerTest extends SearchContainerTestCa
 	public void single_search_term_no_asterisk_should_be_eq_comparator() throws Exception {
 		inspectionScheduleSearchContainer.setSerialNumber("12345");
 		
-		WhereParameter<?> whereClause = getWhereClauseNamed(inspectionScheduleSearchContainer, "product_serialNumber");
+		WhereParameter<?> whereClause = getWhereClauseNamed(inspectionScheduleSearchContainer, "asset_serialNumber");
 
-		assertEquals("product_serialNumber", whereClause.getName());
+		assertEquals("asset_serialNumber", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.EQ);

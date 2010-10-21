@@ -2,9 +2,9 @@ package com.n4systems.webservice.assetdownload;
 
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.Product;
 import com.n4systems.persistence.loaders.FilteredInListLoader;
 import com.n4systems.webservice.RequestHandler;
 import com.n4systems.webservice.exceptions.ServiceException;
@@ -14,10 +14,10 @@ public class GetAssetsRequestHandler implements RequestHandler<AssetRequest, Ass
 	private Logger logger = Logger.getLogger(GetAssetsRequestHandler.class);
 	private static final int MAX_ASSET_REQUEST_SIZE = 2000;
 	
-	private final FilteredInListLoader<Product> productLoader;
+	private final FilteredInListLoader<Asset> productLoader;
 	private final ProductToServiceConverter converter;
 	
-	public GetAssetsRequestHandler(FilteredInListLoader<Product> productLoader, ProductToServiceConverter converter) {
+	public GetAssetsRequestHandler(FilteredInListLoader<Asset> productLoader, ProductToServiceConverter converter) {
 		this.productLoader = productLoader;
 		this.converter = converter;
 	}
@@ -35,8 +35,8 @@ public class GetAssetsRequestHandler implements RequestHandler<AssetRequest, Ass
 			
 			AssetListResponse response = new AssetListResponse();
 
-			List<Product> products = productLoader.setIds(request.getAssetIds()).load();
-			for(Product product: products) {
+			List<Asset> assets = productLoader.setIds(request.getAssetIds()).load();
+			for(Asset product: assets) {
 				response.getAssets().add(converter.toServiceDTO(product));
 			}
 			

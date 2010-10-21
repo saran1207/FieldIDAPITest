@@ -8,7 +8,7 @@ import org.junit.Test;
 
 
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -170,7 +170,7 @@ public class DownloadCoordinatorTest {
 		DownloadLinkFactory linkFactory = createMock(DownloadLinkFactory.class);
 		DownloadTaskFactory taskFactory = createMock(DownloadTaskFactory.class);
 		ProductExportTask task = createMock(ProductExportTask.class);
-		ListLoader<Product> loader = createMock(ListLoader.class);
+		ListLoader<Asset> loader = createMock(ListLoader.class);
 		
 		DownloadCoordinator dc = new DownloadCoordinator(new User(), createMock(Saver.class), executor, linkFactory, taskFactory);
 		

@@ -11,10 +11,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.ProductCodeMappingBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
@@ -24,9 +27,6 @@ import com.n4systems.exceptions.NonUniqueProductException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -73,30 +73,30 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 
-	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue) {
+	public List<Asset> findProductByIdentifiers(SecurityFilter filter, String searchValue) {
 		return findProductByIdentifiers(filter, searchValue, null);
 	}
 
 	/**
-	 * this will locate a set of product serial that have the exact serial
+	 * this will locate a set of asset serial that have the exact serial
 	 * number of rfid number given in the search value variable. this will
 	 * filter on tenant, owner and division.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Product> findProductByIdentifiers(SecurityFilter filter, String searchValue, ProductType productType) {
-		String queryString = "FROM Product p WHERE ( UPPER( p.serialNumber ) = :searchValue OR UPPER( p.rfidNumber ) = :searchValue OR UPPER(p.customerRefNumber) = :searchValue ) AND " + filter.produceWhereClause(Product.class, "p");
+	public List<Asset> findProductByIdentifiers(SecurityFilter filter, String searchValue, AssetType assetType) {
+		String queryString = "FROM Asset p WHERE ( UPPER( p.serialNumber ) = :searchValue OR UPPER( p.rfidNumber ) = :searchValue OR UPPER(p.customerRefNumber) = :searchValue ) AND " + filter.produceWhereClause(Asset.class, "p");
 
-		if (productType != null) {
-			queryString += " AND p.type = :productType ";
+		if (assetType != null) {
+			queryString += " AND p.type = :assetType ";
 		}
 
 		queryString += " ORDER BY p.created ";
 
 		Query query = em.createQuery(queryString);
-		filter.applyParameters(query, Product.class);
+		filter.applyParameters(query, Asset.class);
 		query.setParameter("searchValue", searchValue.toUpperCase());
-		if (productType != null) {
-			query.setParameter("productType", productType);
+		if (assetType != null) {
+			query.setParameter("assetType", assetType);
 		}
 		return query.getResultList();
 
@@ -104,34 +104,34 @@ public class ProductManagerImpl implements ProductManager {
 
 	
 
-	public Product findProductAllFields(Long id, SecurityFilter filter) {
-		Product product =  findProduct(id, filter, "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
-		product = fillInSubProductsOnProduct(product);
+	public Asset findProductAllFields(Long id, SecurityFilter filter) {
+		Asset asset =  findProduct(id, filter, "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
+		asset = fillInSubProductsOnProduct(asset);
 		
 		// load linked products all the way up the chain
-		Product linkedProduct = product.getLinkedProduct(); 
-		while (linkedProduct != null) {
-			linkedProduct = linkedProduct.getLinkedProduct();
+		Asset linkedAsset = asset.getLinkedAsset();
+		while (linkedAsset != null) {
+			linkedAsset = linkedAsset.getLinkedAsset();
 		}
 		
-		return product;
+		return asset;
 	}
 
-	public Product findProduct(Long id, SecurityFilter filter) {
+	public Asset findProduct(Long id, SecurityFilter filter) {
 		return findProduct(id, filter, (String[]) null);
 	}
 
-	public Product findProduct(Long id, SecurityFilter filter, String... postFetchFields) {
+	public Asset findProduct(Long id, SecurityFilter filter, String... postFetchFields) {
 
-		QueryBuilder<Product> qBuilder = basicProductQuery(filter);
+		QueryBuilder<Asset> qBuilder = basicProductQuery(filter);
 		qBuilder.addSimpleWhere("id", id);
 
-		Product product = null;
+		Asset asset = null;
 		try {
-			product = qBuilder.getSingleResult(em);
+			asset = qBuilder.getSingleResult(em);
 
 			if (postFetchFields != null && postFetchFields.length > 0) {
-				persistenceManager.postFetchFields(product, postFetchFields);
+				persistenceManager.postFetchFields(asset, postFetchFields);
 			}
 
 		} catch (NoResultException e) {
@@ -140,20 +140,20 @@ public class ProductManagerImpl implements ProductManager {
 			logger.error("Unable to load ProductSerial", e);
 		}
 
-		return product;
+		return asset;
 	}
 
 	/**
-	 * Returns a single product by its serial number and owner customer id
+	 * Returns a single asset by its serial number and owner customer id
 	 * Notice that the customer id passed in is not the "security filter"
 	 * customer id
 	 */
-	public Product findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueProductException {
-		Product product = null;
+	public Asset findProductBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueProductException {
+		Asset asset = null;
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
 		try {
-			QueryBuilder<Product> qBuilder = basicProductQuery(filter);
+			QueryBuilder<Asset> qBuilder = basicProductQuery(filter);
 			qBuilder.addWhere(Comparator.EQ, "serialNumber", "serialNumber", rawSerialNumber.trim(), WhereParameter.IGNORE_CASE);
 			
 			if (customerId == null) {
@@ -165,16 +165,16 @@ public class ProductManagerImpl implements ProductManager {
 			
 			int firstPage = 0;
 			int pageSizeToFindIfThisIsANonUniqueSerialNumber = 2;
-			List<Product> products = persistenceManager.findAll(qBuilder, firstPage, pageSizeToFindIfThisIsANonUniqueSerialNumber);
-			switch (products.size()) {
+			List<Asset> assets = persistenceManager.findAll(qBuilder, firstPage, pageSizeToFindIfThisIsANonUniqueSerialNumber);
+			switch (assets.size()) {
 				case 0: 
-					product = null;
+					asset = null;
 					break;
 				case 1:
-					product = products.get(0);
+					asset = assets.get(0);
 					break;
 				default:
-					throw new NonUniqueProductException("there is more than one product with the same customer and serial number [" + rawSerialNumber + "]");
+					throw new NonUniqueProductException("there is more than one asset with the same customer and serial number [" + rawSerialNumber + "]");
 			} 
 		} catch (InvalidQueryException e) {
 			logger.error("query was wrong", e);
@@ -184,43 +184,43 @@ public class ProductManagerImpl implements ProductManager {
 			throw new NonUniqueProductException(e);
 		}
 
-		return product;
+		return asset;
 	}
 
 	// TODO resolve this so it can only ever find 1 value for the mobile guid.
-	public Product findProductByGUID(String mobileGUID, SecurityFilter filter) {
-		Product product = null;
+	public Asset findProductByGUID(String mobileGUID, SecurityFilter filter) {
+		Asset asset = null;
 		if (GUIDHelper.isNullGUID(mobileGUID)) {
 			return null;
 		}
 
-		QueryBuilder<Product> qBuilder = basicProductQuery(filter);
+		QueryBuilder<Asset> qBuilder = basicProductQuery(filter);
 		qBuilder.addSimpleWhere("mobileGUID", mobileGUID.trim()).addPostFetchPaths("subProducts");
 
 		try {
-			product = persistenceManager.find(qBuilder);
-			product = fillInSubProductsOnProduct(product);
+			asset = persistenceManager.find(qBuilder);
+			asset = fillInSubProductsOnProduct(asset);
 		} catch (NonUniqueResultException e) {
-			logger.error("found more than one product with the GUID " + mobileGUID, e);
+			logger.error("found more than one asset with the GUID " + mobileGUID, e);
 		} catch (InvalidQueryException e) {
 			logger.error("query is incorrect", e);
 		}
 
-		return product;
+		return asset;
 	}
 
-	public List<Product> findProductsByRfidNumber(String rfidNumber, SecurityFilter filter, String... postFetchFields) {
+	public List<Asset> findProductsByRfidNumber(String rfidNumber, SecurityFilter filter, String... postFetchFields) {
 		if (rfidNumber == null) {
 			return null;
 		}
 
-		QueryBuilder<Product> qBuilder = basicProductQuery(filter);
+		QueryBuilder<Asset> qBuilder = basicProductQuery(filter);
 		qBuilder.addSimpleWhere("rfidNumber", rfidNumber.trim());
 
 		try {
-			List<Product> products = persistenceManager.findAll(qBuilder);
+			List<Asset> assets = persistenceManager.findAll(qBuilder);
 
-			return persistenceManager.postFetchFields(products, postFetchFields);
+			return persistenceManager.postFetchFields(assets, postFetchFields);
 		} catch (InvalidQueryException e) {
 			logger.error("query incorrect", e);
 		}
@@ -228,14 +228,14 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	/**
-	 * ensures the filter is set up correctly and the state of the product is
+	 * ensures the filter is set up correctly and the state of the asset is
 	 * active.
 	 * 
 	 * @param filter
 	 * @return
 	 */
-	private QueryBuilder<Product> basicProductQuery(SecurityFilter filter) {
-		QueryBuilder<Product> qBuilder = new QueryBuilder<Product>(Product.class, filter);
+	private QueryBuilder<Asset> basicProductQuery(SecurityFilter filter) {
+		QueryBuilder<Asset> qBuilder = new QueryBuilder<Asset>(Asset.class, filter);
 
 		qBuilder.setSimpleSelect();
 		qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
@@ -243,41 +243,41 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	/**
-	 * returns the Parent Product of the given product or null if there is no
-	 * parent product.
+	 * returns the Parent Asset of the given asset or null if there is no
+	 * parent asset.
 	 */
-	public Product parentProduct(Product product) {
-		QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("product", product);
+	public Asset parentProduct(Asset asset) {
+		QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("asset", asset);
 		try {
 			SubProduct p = (SubProduct)persistenceManager.find(query);
 			if (p != null) {
-				Product master = p.getMasterProduct();
+				Asset master = p.getMasterProduct();
 				return fillInSubProductsOnProduct(master);
 			}
 			return null;
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
-			logger.error("Could not check if sub product", e);
+			logger.error("Could not check if sub asset", e);
 			return null;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ListingPair> getAllowedSubTypes(SecurityFilter filter, ProductType type) {
-		String jpql = "SELECT new com.n4systems.util.ListingPair(id, name ) FROM ProductType pt";
-		jpql += " WHERE " + filter.produceWhereClause(ProductType.class, "pt") + " AND pt.subTypes IS EMPTY AND pt.id != :productTypeId AND state = :activeState ORDER BY pt.name";
+	public List<ListingPair> getAllowedSubTypes(SecurityFilter filter, AssetType type) {
+		String jpql = "SELECT new com.n4systems.util.ListingPair(id, name ) FROM "+AssetType.class.getName()+" at";
+		jpql += " WHERE " + filter.produceWhereClause(AssetType.class, "at") + " AND at.subTypes IS EMPTY AND at.id != :assetTypeId AND state = :activeState ORDER BY at.name";
 
 		Query query = em.createQuery(jpql);
-		filter.applyParameters(query, ProductType.class);
-		query.setParameter("productTypeId", type.getId());
+		filter.applyParameters(query, AssetType.class);
+		query.setParameter("assetTypeId", type.getId());
 		query.setParameter("activeState", EntityState.ACTIVE);
 
 		return (List<ListingPair>) query.getResultList();
 	}
 
 	public boolean partOfAMasterProduct(Long typeId) {
-		String str = "select count(p) From ProductType p, IN( p.subTypes ) s WHERE s.id = :typeId ";
+		String str = "select count(a) From "+AssetType.class.getName()+" a, IN( a.subTypes ) s WHERE s.id = :typeId ";
 		Query query = em.createQuery(str);
 		query.setParameter("typeId", typeId);
 
@@ -288,153 +288,153 @@ public class ProductManagerImpl implements ProductManager {
 		} catch (NoResultException e) {
 			return false;
 		} catch (Exception e) {
-			logger.error("Could not check if sub product", e);
+			logger.error("Could not check if sub asset", e);
 			return false;
 		}
 	}
 
-	public Product archive(Product product, User archivedBy) throws UsedOnMasterInspectionException {
-		product = persistenceManager.reattach(product);
-		product = fillInSubProductsOnProduct(product);
-		if (!testArchive(product).validToDelete()) {
+	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterInspectionException {
+		asset = persistenceManager.reattach(asset);
+		asset = fillInSubProductsOnProduct(asset);
+		if (!testArchive(asset).validToDelete()) {
 			throw new UsedOnMasterInspectionException();
 		}
 
-		if (product.isMasterProduct()) {
-			for (SubProduct subProduct : product.getSubProducts()) {
+		if (asset.isMasterProduct()) {
+			for (SubProduct subProduct : asset.getSubProducts()) {
 				persistenceManager.delete(subProduct);
 			}
-			product.getSubProducts().clear();
+			asset.getSubProducts().clear();
 		}
 
-		Product parentProduct = parentProduct(product);
+		Asset parentProduct = parentProduct(asset);
 		if (parentProduct != null) {
-			SubProduct subProductToRemove = parentProduct.getSubProducts().get(parentProduct.getSubProducts().indexOf(new SubProduct(product, parentProduct)));
+			SubProduct subProductToRemove = parentProduct.getSubProducts().get(parentProduct.getSubProducts().indexOf(new SubProduct(asset, parentProduct)));
 			persistenceManager.delete(subProductToRemove);
 			parentProduct.getSubProducts().remove(subProductToRemove);
 			save(parentProduct, archivedBy);
 		}
 
-		product.archiveEntity();
-		product.archiveSerialNumber();
+		asset.archiveEntity();
+		asset.archiveSerialNumber();
 
-		archiveInspections(product, archivedBy);
-		archiveSchedules(product, archivedBy);
-		detatachFromProjects(product, archivedBy);
+		archiveInspections(asset, archivedBy);
+		archiveSchedules(asset, archivedBy);
+		detatachFromProjects(asset, archivedBy);
 
-		return save(product, archivedBy);
+		return save(asset, archivedBy);
 	}
 
-	private void detatachFromProjects(Product product, User archivedBy) {
-		for (Project project : product.getProjects()) {
-			projectManager.detachAsset(product, project, archivedBy.getId());
+	private void detatachFromProjects(Asset asset, User archivedBy) {
+		for (Project project : asset.getProjects()) {
+			projectManager.detachAsset(asset, project, archivedBy.getId());
 		}
 	}
 
-	private void archiveInspections(Product product, User archivedBy) {
-		InspectionListArchiver archiver = new InspectionListArchiver(getInspectionIdsForProduct(product));
+	private void archiveInspections(Asset asset, User archivedBy) {
+		InspectionListArchiver archiver = new InspectionListArchiver(getInspectionIdsForProduct(asset));
 		archiver.archive(em);	
 	}
 	
-	private Set<Long> getInspectionIdsForProduct(Product product) {
+	private Set<Long> getInspectionIdsForProduct(Asset asset) {
 		QueryBuilder<Long> idBuilder = new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter());
 		idBuilder.setSimpleSelect("id");
-		idBuilder.addWhere(WhereClauseFactory.create("product.id", product.getId()));
+		idBuilder.addWhere(WhereClauseFactory.create("asset.id", asset.getId()));
 		
 		return new TreeSet<Long>(persistenceManager.findAll(idBuilder));
 	}
 
-	private void archiveSchedules(Product product, User archivedBy) {
+	private void archiveSchedules(Asset asset, User archivedBy) {
 		String updateQuery = "UPDATE " + InspectionSchedule.class.getName() + " SET state = :archiveState,  modifiedBy = :archivingUser , modified = :now "
-				+ " WHERE product = :product AND state = :activeState ";
+				+ " WHERE asset = :asset AND state = :activeState ";
 
 		Query update = em.createQuery(updateQuery);
 		update.setParameter("archiveState", EntityState.ARCHIVED);
 		update.setParameter("archivingUser", archivedBy);
 		update.setParameter("now", new Date());
 
-		update.setParameter("product", product);
+		update.setParameter("asset", asset);
 		update.setParameter("activeState", EntityState.ACTIVE);
 
 		update.executeUpdate();
-		logger.info("archived schedules for product " + product);
+		logger.info("archived schedules for asset " + asset);
 	}
 
-	protected Product save(Product product, User modifiedBy) {
+	protected Asset save(Asset asset, User modifiedBy) {
 		ProductSaver productSaver = new ProductSaver();
 		productSaver.setModifiedBy(modifiedBy);
 		
-		product = productSaver.update(em, product);
+		asset = productSaver.update(em, asset);
 		
-		return product;
+		return asset;
 	}
 
-	public ProductType archive(ProductType productType, Long archivedBy, String deletingPrefix) {
-		if (testArchive(productType).validToDelete()) {
+	public AssetType archive(AssetType assetType, Long archivedBy, String deletingPrefix) {
+		if (testArchive(assetType).validToDelete()) {
 
-			productType.archiveEntity();
-			productType.archivedName(deletingPrefix);
+			assetType.archiveEntity();
+			assetType.archivedName(deletingPrefix);
 
-			productType.getSubTypes().clear();
-			ProductType type = persistenceManager.update(productType, archivedBy);
+			assetType.getSubTypes().clear();
+			AssetType type = persistenceManager.update(assetType, archivedBy);
 			
 			ArchiveProductTypeTask archiveTask = new ArchiveProductTypeTask();
 			
 			archiveTask.setArchivedById(archivedBy);
-			archiveTask.setProductTypeId(productType.getId());
-			archiveTask.setProductTypeName(productType.getArchivedName());
+			archiveTask.setProductTypeId(assetType.getId());
+			archiveTask.setProductTypeName(assetType.getArchivedName());
 
 			TaskExecutor.getInstance().execute(archiveTask);
 			
 			return type;
 		} else {
-			throw new RuntimeException("product type can not be validated.");
+			throw new RuntimeException("asset type can not be validated.");
 		}
 
 	}
 
-	public ProductTypeRemovalSummary testArchive(ProductType productType) {
-		ProductTypeRemovalSummary summary = new ProductTypeRemovalSummary(productType);
+	public ProductTypeRemovalSummary testArchive(AssetType assetType) {
+		ProductTypeRemovalSummary summary = new ProductTypeRemovalSummary(assetType);
 		try {
-			QueryBuilder<Product> productCount = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
-			productCount.setCountSelect().addSimpleWhere("type", productType).addSimpleWhere("state", EntityState.ACTIVE);
+			QueryBuilder<Asset> productCount = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
+			productCount.setCountSelect().addSimpleWhere("type", assetType).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setProductsToDelete(persistenceManager.findCount(productCount));
 
 			QueryBuilder<Inspection> inspectionCount = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
-			inspectionCount.setCountSelect().addSimpleWhere("product.type", productType).addSimpleWhere("state", EntityState.ACTIVE);
+			inspectionCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setInspectionsToDelete(persistenceManager.findCount(inspectionCount));
 
 			QueryBuilder<InspectionSchedule> scheduleCount = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("product.type", productType);
+			scheduleCount.setCountSelect().addSimpleWhere("asset.type", assetType);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
-			String subInspectionQuery = "select count(i) From " + Inspection.class.getName() + " i, IN( i.subInspections ) si WHERE si.product.type = :productType AND i.state = :activeState ";
+			String subInspectionQuery = "select count(i) From " + Inspection.class.getName() + " i, IN( i.subInspections ) si WHERE si.asset.type = :assetType AND i.state = :activeState ";
 			Query subInspectionCount = em.createQuery(subInspectionQuery);
-			subInspectionCount.setParameter("productType", productType).setParameter("activeState", EntityState.ACTIVE);
+			subInspectionCount.setParameter("assetType", assetType).setParameter("activeState", EntityState.ACTIVE);
 			summary.setProductsUsedInMasterInpsection((Long) subInspectionCount.getSingleResult());
 
-			String subProductQuery = "select count(DISTINCT s.masterProduct) From SubProduct s WHERE s.product.type = :productType ";
+			String subProductQuery = "select count(DISTINCT s.masterProduct) From SubProduct s WHERE s.product.type = :assetType ";
 			Query subProductCount = em.createQuery(subProductQuery);
-			subProductCount.setParameter("productType", productType);
+			subProductCount.setParameter("assetType", assetType);
 			summary.setSubProductsToDettach((Long) subProductCount.getSingleResult());
 
-			String subMasterProductQuery = "select count(s) From SubProduct s WHERE s.masterProduct.type = :productType ";
+			String subMasterProductQuery = "select count(s) From SubProduct s WHERE s.masterAsset.type = :assetType ";
 			Query subMasterProductCount = em.createQuery(subMasterProductQuery);
-			subMasterProductCount.setParameter("productType", productType);
+			subMasterProductCount.setParameter("assetType", assetType);
 			summary.setMasterProductsToDettach((Long) subMasterProductCount.getSingleResult());
 
-			String partOfProjectQuery = "select count(p) From Project p, IN( p.products ) s WHERE s.type = :productType";
+			String partOfProjectQuery = "select count(p) From Project p, IN( p.assets ) s WHERE s.type = :assetType";
 			Query partOfProjectCount = em.createQuery(partOfProjectQuery);
-			partOfProjectCount.setParameter("productType", productType);
+			partOfProjectCount.setParameter("assetType", assetType);
 			summary.setAssetsToDettachFromProjects((Long) partOfProjectCount.getSingleResult());
 
-			String subProductTypeQuery = "select count(p) From ProductType p, IN( p.subTypes ) s WHERE s = :productType ";
+			String subProductTypeQuery = "select count(a) From "+AssetType.class.getName()+" a, IN( a.subTypes ) s WHERE s = :assetType ";
 			Query subProductTypeCount = em.createQuery(subProductTypeQuery);
-			subProductTypeCount.setParameter("productType", productType);
+			subProductTypeCount.setParameter("assetType", assetType);
 			summary.setProductTypesToDettachFrom((Long) subProductTypeCount.getSingleResult());
 
-			QueryBuilder<ProductCodeMappingBean> productCodeMappingCount = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class, new OpenSecurityFilter());
-			productCodeMappingCount.setCountSelect().addSimpleWhere("productInfo", productType);
+			QueryBuilder<AssetCodeMapping> productCodeMappingCount = new QueryBuilder<AssetCodeMapping>(AssetCodeMapping.class, new OpenSecurityFilter());
+			productCodeMappingCount.setCountSelect().addSimpleWhere("assetInfo", assetType);
 			summary.setProductCodeMappingsToDelete(persistenceManager.findCount(productCodeMappingCount));
 
 		} catch (InvalidQueryException e) {
@@ -445,61 +445,61 @@ public class ProductManagerImpl implements ProductManager {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void removeAsASubProductType(ProductType productType, Long archivedBy) {
-		Query masterTypeQuery = em.createQuery("select p From ProductType p, IN( p.subTypes ) st WHERE st = :productType ");
-		masterTypeQuery.setParameter("productType", productType);
+	public void removeAsASubProductType(AssetType assetType, Long archivedBy) {
+		Query masterTypeQuery = em.createQuery("select p From "+AssetType.class.getName()+" p, IN( p.subTypes ) st WHERE st = :assetType ");
+		masterTypeQuery.setParameter("assetType", assetType);
 
-		List<ProductType> masterTypes = (List<ProductType>) masterTypeQuery.getResultList();
-		for (ProductType masterType : masterTypes) {
-			ProductType productTypeToRemoveFromSet = null;
-			for (ProductType subType : masterType.getSubTypes()) {
-				if (subType.equals(productType)) {
-					productTypeToRemoveFromSet = subType;
+		List<AssetType> masterTypes = (List<AssetType>) masterTypeQuery.getResultList();
+		for (AssetType masterType : masterTypes) {
+			AssetType assetTypeToRemoveFromSet = null;
+			for (AssetType subType : masterType.getSubTypes()) {
+				if (subType.equals(assetType)) {
+					assetTypeToRemoveFromSet = subType;
 					break;
 				}
 			}
-			if (productTypeToRemoveFromSet != null) {
-				masterType.getSubTypes().remove(productTypeToRemoveFromSet);
+			if (assetTypeToRemoveFromSet != null) {
+				masterType.getSubTypes().remove(assetTypeToRemoveFromSet);
 			}
 			persistenceManager.update(masterType, archivedBy);
 		}
 	}
 
-	public void removeProductCodeMappingsThatUse(ProductType productType) {
-		QueryBuilder<ProductCodeMappingBean> productCodeMappingQuery = new QueryBuilder<ProductCodeMappingBean>(ProductCodeMappingBean.class, new OpenSecurityFilter());
-		productCodeMappingQuery.setSimpleSelect().addSimpleWhere("productInfo", productType);
+	public void removeProductCodeMappingsThatUse(AssetType assetType) {
+		QueryBuilder<AssetCodeMapping> productCodeMappingQuery = new QueryBuilder<AssetCodeMapping>(AssetCodeMapping.class, new OpenSecurityFilter());
+		productCodeMappingQuery.setSimpleSelect().addSimpleWhere("assetInfo", assetType);
 		try {
-			for (ProductCodeMappingBean mapping : persistenceManager.findAll(productCodeMappingQuery)) {
+			for (AssetCodeMapping mapping : persistenceManager.findAll(productCodeMappingQuery)) {
 				em.remove(mapping);
 			}
 		} catch (InvalidQueryException e) {
-			logger.error("bad query for product code mappings", e);
+			logger.error("bad query for asset code mappings", e);
 		}
 	}
 
-	public ProductRemovalSummary testArchive(Product product) {
-		ProductRemovalSummary summary = new ProductRemovalSummary(product);
+	public ProductRemovalSummary testArchive(Asset asset) {
+		ProductRemovalSummary summary = new ProductRemovalSummary(asset);
 		try {
 			QueryBuilder<Inspection> inspectionCount = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
-			inspectionCount.setCountSelect().addSimpleWhere("product", product).addSimpleWhere("state", EntityState.ACTIVE);
+			inspectionCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setInspectionsToDelete(persistenceManager.findCount(inspectionCount));
 
 			QueryBuilder<InspectionSchedule> scheduleCount = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
-			scheduleCount.setCountSelect().addSimpleWhere("product", product);
+			scheduleCount.setCountSelect().addSimpleWhere("asset", asset);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
-			String subInspectionQuery = "select count(i) From " + Inspection.class.getName() + " i, IN( i.subInspections ) si WHERE si.product = :product AND i.state = :activeState ";
+			String subInspectionQuery = "select count(i) From " + Inspection.class.getName() + " i, IN( i.subInspections ) si WHERE si.asset = :asset AND i.state = :activeState ";
 			Query subInspectionCount = em.createQuery(subInspectionQuery);
-			subInspectionCount.setParameter("product", product).setParameter("activeState", EntityState.ACTIVE);
+			subInspectionCount.setParameter("asset", asset).setParameter("activeState", EntityState.ACTIVE);
 			summary.setProductUsedInMasterInpsection((Long) subInspectionCount.getSingleResult());
-			product = fillInSubProductsOnProduct(product);
-			summary.setSubProductsToDettach((long) product.getSubProducts().size());
+			asset = fillInSubProductsOnProduct(asset);
+			summary.setSubProductsToDettach((long) asset.getSubProducts().size());
 
-			summary.setDetatachFromMaster(parentProduct(product) != null);
+			summary.setDetatachFromMaster(parentProduct(asset) != null);
 
-			String partOfProjectQuery = "select count(p) From Project p, IN( p.products ) s WHERE s = :product";
+			String partOfProjectQuery = "select count(p) From Project p, IN( p.products ) s WHERE s = :asset";
 			Query partOfProjectCount = em.createQuery(partOfProjectQuery);
-			partOfProjectCount.setParameter("product", product);
+			partOfProjectCount.setParameter("asset", asset);
 			summary.setProjectToDetachFrom((Long) partOfProjectCount.getSingleResult());
 
 		} catch (InvalidQueryException e) {
@@ -512,53 +512,53 @@ public class ProductManagerImpl implements ProductManager {
 		
 
 	@SuppressWarnings("unchecked")
-	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds) {
+	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> assetTypeIds) {
 		/*
 		 * This algorithm works by initializing our name set with all the
-		 * InfoField names from the first product type returned. We then iterate
-		 * the rest of the product types removing entries from our common name
-		 * set that do not match up to an infofield on the iterated product
+		 * InfoField names from the first asset type returned. We then iterate
+		 * the rest of the asset types removing entries from our common name
+		 * set that do not match up to an infofield on the iterated asset
 		 * type. This way, the resulting set will contain only entries appearing
-		 * in all product types.
+		 * in all asset types.
 		 */
-		Long countOfProductTypes = new Long(productTypeIds.size());
-		String query = "SELECT TRIM(name) FROM " + InfoFieldBean.class.getName() + " WHERE productInfo.id IN(:productTypes) ";
-		query += "GROUP BY TRIM(name) HAVING COUNT(id) = :numberOfProductTypes";
+		Long countOfProductTypes = new Long(assetTypeIds.size());
+		String query = "SELECT TRIM(name) FROM " + InfoFieldBean.class.getName() + " WHERE assetInfo.id IN(:assetTypes) ";
+		query += "GROUP BY TRIM(name) HAVING COUNT(id) = :numberOfAssetTypes";
 
-		Query commonNamesQuery = em.createQuery(query).setParameter("productTypes", productTypeIds).setParameter("numberOfProductTypes", countOfProductTypes);
+		Query commonNamesQuery = em.createQuery(query).setParameter("assetTypes", assetTypeIds).setParameter("numberOfAssetTypes", countOfProductTypes);
 		return new TreeSet<String>((List<String>) commonNamesQuery.getResultList());
 	}
 
-	public void deleteProductTypeGroup(ProductTypeGroup group) {
-		ProductTypeGroup groupToDelete = persistenceManager.find(ProductTypeGroup.class, group.getId());
+	public void deleteProductTypeGroup(AssetTypeGroup group) {
+		AssetTypeGroup groupToDelete = persistenceManager.find(AssetTypeGroup.class, group.getId());
 
-		Query query = em.createQuery("UPDATE " + ProductType.class.getName() + " productType SET productType.group = null WHERE productType.group = :group");
+		Query query = em.createQuery("UPDATE " + AssetType.class.getName() + " assetType SET assetType.group = null WHERE assetType.group = :group");
 		query.setParameter("group", groupToDelete);
 		query.executeUpdate();
 		persistenceManager.delete(groupToDelete);
 	}
 
-	public ProductTypeGroupRemovalSummary testDelete(ProductTypeGroup group) {
+	public ProductTypeGroupRemovalSummary testDelete(AssetTypeGroup group) {
 		ProductTypeGroupRemovalSummary summary = new ProductTypeGroupRemovalSummary(group);
-		QueryBuilder<ProductType> countQuery = new QueryBuilder<ProductType>(ProductType.class, new OpenSecurityFilter());
+		QueryBuilder<AssetType> countQuery = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
 		countQuery.addSimpleWhere("group", group);
 		summary.setProductTypesConnected(persistenceManager.findCount(countQuery));
 		return summary;
 	}
 
-	public Product fillInSubProductsOnProduct(Product product) {
-		return new FindSubProducts(persistenceManager, product).fillInSubProducts();
+	public Asset fillInSubProductsOnProduct(Asset asset) {
+		return new FindSubProducts(persistenceManager, asset).fillInSubProducts();
 	}
 	
-	public List<SubProduct> findSubProductsForProduct(Product product) {
-		return new FindSubProducts(persistenceManager, product).findSubProducts();
+	public List<SubProduct> findSubProductsForProduct(Asset asset) {
+		return new FindSubProducts(persistenceManager, asset).findSubProducts();
 	}
 
-	public Product mergeProducts(Product winningProduct, Product losingProduct, User user) {
+	public Asset mergeProducts(Asset winningAsset, Asset losingAsset, User user) {
 		ProductMerger merger = new ProductMerger(persistenceManager, this, new InspectionManagerImpl(em), user);
 		// reload the winning and losing products so they are fully under managed scope.
-		Product reloadedWinner = persistenceManager.find(Product.class, winningProduct.getId());
-		Product reloadedLoser = persistenceManager.find(Product.class, losingProduct.getId());
+		Asset reloadedWinner = persistenceManager.find(Asset.class, winningAsset.getId());
+		Asset reloadedLoser = persistenceManager.find(Asset.class, losingAsset.getId());
 		
 		return merger.merge(reloadedWinner, reloadedLoser);
 	}

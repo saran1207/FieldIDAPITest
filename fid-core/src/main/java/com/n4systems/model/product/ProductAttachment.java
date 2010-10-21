@@ -1,11 +1,12 @@
 package com.n4systems.model.product;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.Attachment;
-import com.n4systems.model.Product;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -17,28 +18,27 @@ public class ProductAttachment extends EntityWithTenant implements Saveable, Att
 	private static final long serialVersionUID = 1L;
 
 	public static SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner(SecurityDefiner.DEFAULT_TENANT_PATH, "product." + SecurityDefiner.DEFAULT_OWNER_PATH, null, null);
+		return new SecurityDefiner(SecurityDefiner.DEFAULT_TENANT_PATH, "asset." + SecurityDefiner.DEFAULT_OWNER_PATH, null, null);
 	}
 	
 	@ManyToOne
-	private Product product;
+    @JoinColumn(name="product_id")
+	private Asset asset;
 	private Note note = new Note();
 	
 	public ProductAttachment() {
-		super();
 	}
 	
 	public ProductAttachment(Note note) {
-		super();
 		this.note = note;
 	}
 
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setAsset(Asset asset) {
+		this.asset = asset;
 	}
 
 	public Note getNote() {

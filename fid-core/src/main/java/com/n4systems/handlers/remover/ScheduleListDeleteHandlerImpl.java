@@ -10,7 +10,7 @@ import com.n4systems.handlers.remover.summary.ScheduleListRemovalSummary;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.InspectionSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -24,7 +24,7 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 	
 	
 	private InspectionType inspectionType;
-	private ProductType productType;
+	private AssetType assetType;
 	private ScheduleStatusGrouping target = ScheduleStatusGrouping.NON_COMPLETE;
 	
 	private Transaction transaction;
@@ -56,8 +56,8 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 		schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("inspectionType", inspectionType);
 		schedulesToDelete.addWhere(Comparator.IN, "status", "status", Arrays.asList(target.getMembers()));
 				
-		if (productType != null) {
-			schedulesToDelete.addSimpleWhere("product.type", productType);
+		if (assetType != null) {
+			schedulesToDelete.addSimpleWhere("asset.type", assetType);
 		}
 		
 		List<Long> ids = schedulesToDelete.getResultList(transaction.getEntityManager());
@@ -78,7 +78,7 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 
 	
 	public ScheduleListDeleteHandler setAssociatedInspectionType(AssociatedInspectionType associatedInspectionType) {
-		this.productType = associatedInspectionType.getProductType();
+		this.assetType = associatedInspectionType.getAssetType();
 		this.inspectionType = associatedInspectionType.getInspectionType();
 		return this;
 	}

@@ -36,7 +36,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	private List<Listable<String>> periodStartList;
 	private List<Listable<String>> periodEndList;
-	private List<Listable<Long>> productTypeList;
+	private List<Listable<Long>> assetTypeList;
 	private List<Listable<Long>> inspectionTypeList;
 	private List<FrequencyGroupView> frequencyGroups;
 	
@@ -219,12 +219,12 @@ public class NotificationSettingsCrud extends AbstractCrud {
     	return inspectionTypeList;
     }
 
-	public List<Listable<Long>> getProductTypeList() {
-		if (productTypeList == null) {
+	public List<Listable<Long>> getAssetTypeList() {
+		if (assetTypeList == null) {
 			ProductTypeListableLoader loader = getLoaderFactory().createProductTypeListableLoader();
-			productTypeList = loader.load();
+			assetTypeList = loader.load();
 		}
-    	return productTypeList;
+    	return assetTypeList;
     }
 	
 	

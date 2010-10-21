@@ -29,16 +29,16 @@
 	<div id="formHeader">
 		
 		<div id="imageHolder">
-		<#if linkedProduct.type.imageName?exists >	
-			<img src="<@s.url action="downloadProductTypeImageSafetyNetwork" namespace="/file" uniqueID="${linkedProduct.type.uniqueID}" networkId="${linkedProduct.networkId}"/>" 
+		<#if linkedAsset.type.imageName?exists >
+			<img src="<@s.url action="downloadProductTypeImageSafetyNetwork" namespace="/file" uniqueID="${linkedAsset.type.uniqueID}" networkId="${linkedAsset.networkId}"/>"
 			alt="<@s.text name="label.productimage"/>"/>
 		<#else> 
 			<img src="<@s.url value="/images/icon-default.png"/>" alt="<@s.text name="label.productimage"/>" />
 		</#if>
 		</div>
 		<span>
-			<h1><@s.text name="label.registerasset"/> - ${linkedProduct.type.name}</h1>
-			<p>${linkedProduct.description}</p>
+			<h1><@s.text name="label.registerasset"/> - ${linkedAsset.type.name}</h1>
+			<p>${linkedAsset.description}</p>
 		</span>
 	</div>
 

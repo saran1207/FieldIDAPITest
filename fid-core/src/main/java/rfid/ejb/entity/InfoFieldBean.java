@@ -17,9 +17,9 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.n4systems.model.AssetType;
 import org.hibernate.annotations.Where;
 
-import com.n4systems.model.ProductType;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
@@ -64,7 +64,7 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "r_productinfo")
-	private ProductType productInfo;
+	private AssetType assetInfo;
 
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "r_unitofmeasure")
@@ -117,12 +117,12 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 		this.required = required;
 	}
 
-	public ProductType getProductInfo() {
-		return productInfo;
+	public AssetType getAssetInfo() {
+		return assetInfo;
 	}
 
-	public void setProductInfo(ProductType productInfo) {
-		this.productInfo = productInfo;
+	public void setAssetInfo(AssetType assetInfo) {
+		this.assetInfo = assetInfo;
 	}
 
 	public Set<InfoOptionBean> getUnfilteredInfoOptions() {

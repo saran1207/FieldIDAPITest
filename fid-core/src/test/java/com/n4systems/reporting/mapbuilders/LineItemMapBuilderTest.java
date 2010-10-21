@@ -23,7 +23,7 @@ public class LineItemMapBuilderTest {
 		
 		LineItem lineItem = new LineItem();
 		lineItem.setDescription(TestHelper.randomString());
-		lineItem.setProductCode(TestHelper.randomString());
+		lineItem.setAssetCode(TestHelper.randomString());
 		lineItem.setOrder(new Order());
 		
 		MapBuilder<Order> orderBuilder = EasyMock.createMock(MapBuilder.class);
@@ -34,7 +34,7 @@ public class LineItemMapBuilderTest {
 		builder.addParams(reportMap, lineItem, transaction);
 		
 		assertEquals(lineItem.getDescription(), reportMap.get(ReportField.LINE_ITEM_DESC.getParamKey()));
-		assertEquals(lineItem.getProductCode(), reportMap.get(ReportField.LINE_ITEM_PRODUCT_CODE.getParamKey()));
+		assertEquals(lineItem.getAssetCode(), reportMap.get(ReportField.LINE_ITEM_PRODUCT_CODE.getParamKey()));
 		
 	}
 }

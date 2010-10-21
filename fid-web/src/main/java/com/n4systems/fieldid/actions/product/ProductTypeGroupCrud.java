@@ -3,6 +3,8 @@ package com.n4systems.fieldid.actions.product;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -12,8 +14,6 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.ProductTypeGroup;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ProductTypeGroupRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -28,10 +28,10 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 
 	private ProductManager productManager;
 	
-	private List<ProductTypeGroup> groups;
-	private ProductTypeGroup group;
+	private List<AssetTypeGroup> groups;
+	private AssetTypeGroup group;
 	private ProductTypeGroupRemovalSummary removalSummary;
-	private List<ProductType> productTypes;
+	private List<AssetType> assetTypes;
 	
 	private List<Long> indexes = new ArrayList<Long>();
 	
@@ -43,12 +43,12 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 	
 	@Override
 	protected void initMemberFields() {
-		group = new ProductTypeGroup();
+		group = new AssetTypeGroup();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		group = persistenceManager.find(ProductTypeGroup.class, uniqueId, getTenantId());
+		group = persistenceManager.find(AssetTypeGroup.class, uniqueId, getTenantId());
 	}
 	
 	private void testRequiredEntities(boolean existing) {
@@ -83,10 +83,10 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 		try {
 			uniqueID = persistenceManager.save(group, getSessionUser().getId());
 			addFlashMessageText("message.producttypegroupsaved");
-			logger.info(getLogLinePrefix() + "saved product type group " + group.getName());
+			logger.info(getLogLinePrefix() + "saved asset type group " + group.getName());
 		} catch (Exception e) {
 			addActionErrorText("error.savingproducttypegroup");
-			logger.error(getLogLinePrefix() + "could not save product type group", e);
+			logger.error(getLogLinePrefix() + "could not save asset type group", e);
 			return ERROR;
 		}
 		
@@ -94,7 +94,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 	}
 	
 	private Long getNextAvailableIndex() {
-		QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter());
+		QueryBuilder<AssetTypeGroup> query = new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, getSecurityFilter());
 		return persistenceManager.findCount(query);
 	}
 
@@ -110,10 +110,10 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 		try {
 			group = persistenceManager.update(group, getSessionUser().getId());
 			addFlashMessageText("message.producttypegroupsaved");
-			logger.info(getLogLinePrefix() + "updated product type group " + group.getName());
+			logger.info(getLogLinePrefix() + "updated asset type group " + group.getName());
 		} catch (Exception e) {
 			addActionErrorText("error.savingproducttypegroup");
-			logger.error(getLogLinePrefix() + "could not update product type group", e);
+			logger.error(getLogLinePrefix() + "could not update asset type group", e);
 			return ERROR;
 		}
 		return SUCCESS;
@@ -122,10 +122,10 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 	
 	@SkipValidation
 	public String doUpdateOrder() {
-		List<ProductTypeGroup> reorderedList = new ArrayList<ProductTypeGroup>();
+		List<AssetTypeGroup> reorderedList = new ArrayList<AssetTypeGroup>();
 		for (int i = 0; i < indexes.size(); i++) {
 			Long id = indexes.get(i);
-			for (ProductTypeGroup group : getGroups()) {
+			for (AssetTypeGroup group : getGroups()) {
 				if (group.getId().equals(id)) {
 					reorderedList.add(group);
 					getGroups().remove(group);
@@ -137,7 +137,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 		reorderedList.addAll(getGroups());
 		
 		for (int i = 0; i < reorderedList.size(); i++) {
-			ProductTypeGroup group = reorderedList.get(i);
+			AssetTypeGroup group = reorderedList.get(i);
 			group.setOrderIdx(new Long(i));
 		}
 		
@@ -150,7 +150,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 		testRequiredEntities(true);
 		
 		removalSummary = productManager.testDelete(group);
-		logger.info(getLogLinePrefix() + " confirming delete product type group " + group.getName());
+		logger.info(getLogLinePrefix() + " confirming delete asset type group " + group.getName());
 		return SUCCESS;
 	}
 	
@@ -162,7 +162,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 			productManager.deleteProductTypeGroup(group);
 			addFlashMessageText("message.producttypegroupdeleted");
 		} catch (Exception e) {
-			logger.error(getLogLinePrefix() + " could not delete product type group",e);
+			logger.error(getLogLinePrefix() + " could not delete asset type group",e);
 			addActionErrorText("error.deletingproducttypegroup");
 			return ERROR;
 		}
@@ -170,15 +170,15 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 		return SUCCESS;
 	}
 
-	public List<ProductTypeGroup> getGroups() {
+	public List<AssetTypeGroup> getGroups() {
 		if (groups == null) {
-			QueryBuilder<ProductTypeGroup> query = new QueryBuilder<ProductTypeGroup>(ProductTypeGroup.class, getSecurityFilter()).addOrder("orderIdx");
+			QueryBuilder<AssetTypeGroup> query = new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, getSecurityFilter()).addOrder("orderIdx");
 			groups = persistenceManager.findAll(query);
 		}
 		return groups;
 	}
 
-	public ProductTypeGroup getGroup() {
+	public AssetTypeGroup getGroup() {
 		return group;
 	}
 
@@ -193,7 +193,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 	}
 
 	public boolean duplicateValueExists(String formValue) {
-		return !persistenceManager.uniqueNameAvailable(ProductTypeGroup.class, formValue.trim(), uniqueID, getTenantId());
+		return !persistenceManager.uniqueNameAvailable(AssetTypeGroup.class, formValue.trim(), uniqueID, getTenantId());
 	}
 
 	public ProductTypeGroupRemovalSummary getRemovalSummary() {
@@ -203,11 +203,11 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 		return removalSummary;
 	}
 
-	public List<ProductType> getProductTypes() {
-		if (productTypes == null) {
-			productTypes = persistenceManager.findAll(new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter()).addSimpleWhere("group", group).addOrder("name"));
+	public List<AssetType> getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = persistenceManager.findAll(new QueryBuilder<AssetType>(AssetType.class, getSecurityFilter()).addSimpleWhere("group", group).addOrder("name"));
 		}
-		return productTypes;
+		return assetTypes;
 	}
 
 	public List<Long> getIndexes() {

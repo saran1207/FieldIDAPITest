@@ -58,7 +58,7 @@
 	<p>
 		<label><@s.text name="label.group"/></label>
 		<span>
-			<@s.select name="group" list="productTypeGroups" listKey="id" listValue="name" emptyOption="true"/>
+			<@s.select name="group" list="assetTypeGroups" listKey="id" listValue="name" emptyOption="true"/>
 		</span>
 	</p>
 	<p>

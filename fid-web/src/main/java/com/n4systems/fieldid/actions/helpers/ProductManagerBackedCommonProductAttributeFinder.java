@@ -12,8 +12,8 @@ public class ProductManagerBackedCommonProductAttributeFinder implements CommonP
 		this.productManager = productManager;
 	}
 
-	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> productTypeIds) {
-		return productManager.findAllCommonInfoFieldNames(productTypeIds);
+	public SortedSet<String> findAllCommonInfoFieldNames(List<Long> assetTypeIds) {
+		return productManager.findAllCommonInfoFieldNames(assetTypeIds);
 	}
 	
 

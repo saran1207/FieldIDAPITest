@@ -1,7 +1,7 @@
 package com.n4systems.handlers.remover;
 
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.catalog.CatalogLoader;
@@ -13,7 +13,7 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 	private final CatalogSaver catalogSaver;
 
 	private InspectionType inspectionType;
-	private ProductType productType;
+	private AssetType assetType;
 	
 	
 	public CatalogElementRemovalHandlerImpl(CatalogLoader catalogLoader, CatalogSaver catalogSaver) {
@@ -34,8 +34,8 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 		if (inspectionType != null) {
 			catalog.getPublishedInspectionTypes().remove(inspectionType);
 		}
-		if (productType != null) {
-			catalog.getPublishedProductTypes().remove(productType);
+		if (assetType != null) {
+			catalog.getPublishedProductTypes().remove(assetType);
 		}
 	}
 	
@@ -43,8 +43,8 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 		if (inspectionType != null) {
 			return inspectionType.getTenant();
 		}
-		if (productType != null) {
-			return productType.getTenant();
+		if (assetType != null) {
+			return assetType.getTenant();
 		}
 		return null;
 	}
@@ -54,8 +54,8 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 		return this;
 	}
 
-	public CatalogElementRemovalHandler setProductType(ProductType productType) {
-		this.productType = productType;
+	public CatalogElementRemovalHandler setProductType(AssetType assetType) {
+		this.assetType = assetType;
 		return this;
 	}
 }

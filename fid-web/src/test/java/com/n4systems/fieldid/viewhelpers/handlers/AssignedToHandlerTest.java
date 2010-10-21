@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.model.Asset;
 import org.junit.Test;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.Product;
 import com.n4systems.util.views.ExcelOutputHandler;
 
 
@@ -34,7 +34,7 @@ public class AssignedToHandlerTest {
 
 	@Test
 	public void should_render_name_of_user_when_a_user_is_assigned_for_web() throws Exception {
-		Product product = aProduct().assignedTo(anEmployee().build()).build();
+		Asset product = anAsset().assignedTo(anEmployee().build()).build();
 		
 		WebOutputHandler sut = new AssignedToHandler(UNUSED_ABSTRACT_ACTION);
 		
@@ -43,7 +43,7 @@ public class AssignedToHandlerTest {
 	
 	@Test
 	public void should_render_unassigned_when_a_null_is_given_for_user_for_web() throws Exception {
-		Product product = aProduct().assignedTo(anEmployee().build()).build();
+		Asset product = anAsset().assignedTo(anEmployee().build()).build();
 		
 		WebOutputHandler sut = new AssignedToHandler(new ReturningLabelAbstractAction());
 		
@@ -54,7 +54,7 @@ public class AssignedToHandlerTest {
 	
 	@Test
 	public void should_render_the_unassigned_label_for_a_product_that_is_unassigned_for_web() throws Exception {
-		Product product = aProduct().unassigned().build();
+		Asset product = anAsset().unassigned().build();
 		
 		WebOutputHandler sut = new AssignedToHandler(new ReturningLabelAbstractAction());
 		
@@ -63,7 +63,7 @@ public class AssignedToHandlerTest {
 	
 	@Test
 	public void should_resolve_the_unassigned_label_for_unassigned_throught_the_text_provider_for_web() throws Exception {
-		Product product = aProduct().unassigned().build();
+		Asset product = anAsset().unassigned().build();
 		
 		AbstractAction textProvider = createMock(AbstractAction.class);
 		expect(textProvider.getText(UNASSIGNED_LABEL)).andReturn("rendered label");
@@ -79,7 +79,7 @@ public class AssignedToHandlerTest {
 	
 	@Test
 	public void should_render_name_of_user_when_a_user_is_assigned_for_excel() throws Exception {
-		Product product = aProduct().assignedTo(anEmployee().build()).build();
+		Asset product = anAsset().assignedTo(anEmployee().build()).build();
 		
 		ExcelOutputHandler sut = new AssignedToHandler(UNUSED_ABSTRACT_ACTION);
 		
@@ -90,7 +90,7 @@ public class AssignedToHandlerTest {
 	
 	@Test
 	public void should_render_the_unassigned_label_for_a_product_that_is_unassigned_for_excel() throws Exception {
-		Product product = aProduct().unassigned().build();
+		Asset product = anAsset().unassigned().build();
 		
 		ExcelOutputHandler sut = new AssignedToHandler(new ReturningLabelAbstractAction());
 		
@@ -99,7 +99,7 @@ public class AssignedToHandlerTest {
 	
 	@Test
 	public void should_resolve_the_unassigned_label_for_unassigned_throught_the_text_provider_for_excel() throws Exception {
-		Product product = aProduct().unassigned().build();
+		Asset product = anAsset().unassigned().build();
 		
 		AbstractAction textProvider = createMock(AbstractAction.class);
 		expect(textProvider.getText(UNASSIGNED_LABEL)).andReturn("rendered label");

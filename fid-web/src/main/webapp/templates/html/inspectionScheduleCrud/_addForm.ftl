@@ -2,7 +2,7 @@
 	<#include "../common/_formErrors.ftl"/>				
 	<h2><@s.text name="label.addschedule"/></h2>
 	<div class="contentSection">
-		<@s.hidden name="productId"  />
+		<@s.hidden name="assetId"  />
 		<div class="infoSet">
 			<label for="type"><@s.text name="label.scheduledate"/></label>
 			<@s.datetimepicker name="nextDate" />

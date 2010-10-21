@@ -442,11 +442,11 @@
 			</result>
 			<result name="saveinspect" type="redirectAction">
 				<param name="actionName">quickInspect</param>
-				<param name="productId">${uniqueID}</param>
+				<param name="assetId">${uniqueID}</param>
 			</result>
 			<result name="saveschedule" type="redirectAction">
 				<param name="actionName">inspectionScheduleAdd</param>
-				<param name="productId">${uniqueID}</param>
+				<param name="assetId">${uniqueID}</param>
 			</result>
 			<result name="savedWithOrder" type="redirectAction">
 				<param name="actionName">searchOrder</param>
@@ -885,12 +885,12 @@
 			<result name="success" type="freemarker">/templates/html/inspectionCrud/quickInspect.ftl</result>
 			<result name="oneFound" type="redirectAction">
 				<param name="actionName">inspectionAdd</param>
-				<param name="productId">${productId}</param>
+				<param name="assetId">${assetId}</param>
 				<param name="type">${type}</param>
 			</result>
 			<result name="oneFoundMaster" type="redirectAction">
 				<param name="actionName">masterInspectionAdd</param>
-				<param name="productId">${productId}</param>
+				<param name="assetId">${assetId}</param>
 				<param name="type">${type}</param>
 			</result>
 		</action>
@@ -898,14 +898,14 @@
 		<action name="selectInspectionAdd" method="select" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
 			<result name="regular" type="redirectAction">
 				<param name="actionName">inspectionAdd</param>
-				<param name="productId">${productId}</param>
+				<param name="assetId">${assetId}</param>
 				<param name="type">${type}</param>
 				<param name="inspectionGroupId">${inspectionGroupId}</param>
 				<param name="scheduleId">${scheduleId}</param>
 			</result>
 			<result name="master" type="redirectAction">
 				<param name="actionName">masterInspectionAdd</param>
-				<param name="productId">${productId}</param>
+				<param name="assetId">${assetId}</param>
 				<param name="type">${type}</param>
 				<param name="inspectionGroupId">${inspectionGroupId}</param>
 				<param name="scheduleId">${scheduleId}</param>
@@ -961,7 +961,7 @@
 			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">inspectionGroups</param>
-				<param name="uniqueID">${productId}</param>
+				<param name="uniqueID">${assetId}</param>
 			</result>
 		</action>
 
@@ -1005,7 +1005,7 @@
 			<result name="error" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">masterInspectionAdd</param>
-				<param name="productId">${parentProductId}</param>
+				<param name="assetId">${parentProductId}</param>
 				<param name="token">${token}</param>
 			</result>
 		</action>
@@ -1015,7 +1015,7 @@
 			<result name="error" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">masterInspectionAdd</param>
-				<param name="productId">${parentProductId}</param>
+				<param name="assetId">${parentProductId}</param>
 				<param name="token">${token}</param>
 			</result>
 		</action>
@@ -1051,7 +1051,7 @@
 			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">inspectionGroups</param>
-				<param name="uniqueID">${productId}</param>
+				<param name="uniqueID">${assetId}</param>
 			</result>
 		</action>
 

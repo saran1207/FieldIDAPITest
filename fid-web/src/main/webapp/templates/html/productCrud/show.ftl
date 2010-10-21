@@ -21,11 +21,11 @@ ${action.setPageType('product', 'show')!}
 		<h2><@s.text name="label.productsummary"/></h2>
 		<p>
 			<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
-			<span class="fieldValue serialNumber">${product.serialNumber}</span>
+			<span class="fieldValue serialNumber">${asset.serialNumber}</span>
 		</p>
 		<p>
 			<label><@s.text name="label.rfidnumber"/></label>
-			<span class="fieldValue">${product.rfidNumber!}</span>
+			<span class="fieldValue">${asset.rfidNumber!}</span>
 		</p>
 		<p>
 			<label><@s.text name="label.publishedoversafetynetwork"/></label>
@@ -33,43 +33,43 @@ ${action.setPageType('product', 'show')!}
 		</p>
 		<p>
 			<label><@s.text name="label.producttype"/></label>
-			<span class="fieldValue">${product.type.name}</span>
+			<span class="fieldValue">${asset.type.name}</span>
 		</p>
 		<p>
 			<label><@s.text name="label.productstatus"/></label>
-			<span class="fieldValue">${(product.productStatus.name)!}</span>
+			<span class="fieldValue">${(asset.assetStatus.name)!}</span>
 		</p>
 		<p>
 			<label><@s.text name="label.identified"/></label>
-			<span class="fieldValue">${action.formatDate(product.identified, false)}</span>
+			<span class="fieldValue">${action.formatDate(asset.identified, false)}</span>
 		</p>
 		<p>
 			<label><@s.text name="label.identifiedby"/></label>
-			<span class="fieldValue">${(product.identifiedBy.displayName)!}</span>
+			<span class="fieldValue">${(asset.identifiedBy.displayName)!}</span>
 		</p>
 		<p>
 			<label><@s.text name="label.modifiedby"/></label>
-			<span class="fieldValue">${(product.modifiedBy.displayName)!}</span>
+			<span class="fieldValue">${(asset.modifiedBy.displayName)!}</span>
 		</p>
 		<#if !securityGuard.integrationEnabled >
 		<p>
 			<label><@s.text name="label.ordernumber"/></label>
-			<span class="fieldValue">${(product.shopOrder.order.orderNumber)!}</span>
+			<span class="fieldValue">${(asset.shopOrder.order.orderNumber)!}</span>
 		</p>
 		</#if>
-		<#list product.productSerialExtensionValues as extension >
+		<#list asset.assetSerialExtensionValues as extension >
 			<p>
-				<label><@s.text name="${extension.productSerialExtension.extensionLabel}"/></label>
+				<label><@s.text name="${extension.assetSerialExtension.extensionLabel}"/></label>
 				<span class="fieldValue">${(extension.extensionValue)!}</span>
 			</p>
 		</#list>
 		
-		<#if product.type.hasManufactureCertificate >
+		<#if asset.type.hasManufactureCertificate >
 			<p>
 				<label><@s.text name="label.manufacturecertificate"/></label>
 				<span class="fieldValue">
 					<img src="<@s.url value="/images/pdf_small.gif"/>"/>
-					<a href="<@s.url action="downloadManufacturerCert" namespace="/file" uniqueID="${product.uniqueID}" />" target="_blank" >
+					<a href="<@s.url action="downloadManufacturerCert" namespace="/file" uniqueID="${asset.uniqueID}" />" target="_blank" >
 						<@s.text name="label.downloadnow"/>
 					</a>
 				</span>
@@ -79,10 +79,10 @@ ${action.setPageType('product', 'show')!}
 	
 	<#include "_customerInformation.ftl"/>
 	
-	<#if !product.orderedInfoOptionList.isEmpty() >
+	<#if !asset.orderedInfoOptionList.isEmpty() >
 		<div class="viewSection smallViewSection" id="attributes" >
-			<h2>${product.type.name} <@s.text name="label.attributes"/></h2>
-			<#list product.orderedInfoOptionList as infoOption >
+			<h2>${asset.type.name} <@s.text name="label.attributes"/></h2>
+			<#list asset.orderedInfoOptionList as infoOption >
 				<p>
 					<label>${infoOption.infoField.name} <#if infoOption.infoField.retired >(<@s.text name="label.retired"/>)</#if> </label>
 					<span class="fieldValue" infoFieldName="${infoOption.infoField.name?j_string}">${infoOption.name}</span>
@@ -97,33 +97,33 @@ ${action.setPageType('product', 'show')!}
 			<p>
 				<label><@s.text name="label.onumber"/></label>
 				<span class="fieldValue" id="marriedOrderDiv">
-					<#if !product.shopOrder?exists >
-						<a href="<@s.url action="orders" namespace="/aHtml" product="${uniqueID}"  />" class="lightview" title="<@s.text name="label.connectorder" /> :: :: scrolling:true, autosize: true, ajax: { onComplete: ajaxForm } "  rel='ajax'><@s.text name="label.connectorder" /></a>
+					<#if !asset.shopOrder?exists >
+						<a href="<@s.url action="orders" namespace="/aHtml" asset="${uniqueID}"  />" class="lightview" title="<@s.text name="label.connectorder" /> :: :: scrolling:true, autosize: true, ajax: { onComplete: ajaxForm } "  rel='ajax'><@s.text name="label.connectorder" /></a>
 					<#else>
-						${(product.shopOrder.order.orderNumber)!}
+						${(asset.shopOrder.order.orderNumber)!}
 					</#if>
 				</span>
 			</p>
 			
-			<#if product.shopOrder?exists >
+			<#if asset.shopOrder?exists >
 				<p>
 					<label><@s.text name="label.productcode"/></label>
-					<span class="fieldValue">${(product.shopOrder.productCode)!}</span>
+					<span class="fieldValue">${(asset.shopOrder.productCode)!}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.quantity"/></label>
-					<span class="fieldValue">${(product.shopOrder.quantity)!}</span>
+					<span class="fieldValue">${(asset.shopOrder.quantity)!}</span>
 				</p>
-				<#if product.shopOrder.order.orderDate?exists >
+				<#if asset.shopOrder.order.orderDate?exists >
 				<p>
 					<label><@s.text name="label.orderdate"/></label>
-					<span class="fieldValue">${(product.shopOrder.order.orderDate)!}</span>
+					<span class="fieldValue">${(asset.shopOrder.order.orderDate)!}</span>
 				</p>
 				</#if>
-				<#if product.shopOrder.description?exists >
+				<#if asset.shopOrder.description?exists >
 				<p>
 					<label><@s.text name="label.description"/></label>
-					<span class="fieldValue">${(product.shopOrder.description)!}</span>
+					<span class="fieldValue">${(asset.shopOrder.description)!}</span>
 				</p>
 				</#if>
 			</#if>	
@@ -163,20 +163,20 @@ ${action.setPageType('product', 'show')!}
 </div>
 
 <div class="columnRight">
-	<#if product.type.warnings?exists && product.type.warnings?length gt 0 >
+	<#if asset.type.warnings?exists && asset.type.warnings?length gt 0 >
 		<div class="viewSection smallViewSection" >
 			<h2><@s.text name="label.warnings"/></h2>
 			<p class="fieldValue">
-				${product.type.warnings!}
+				${asset.type.warnings!}
 			</p>
 		</div>
 	</#if>
 	
-	<#if product.type.instructions?exists && product.type.instructions?length gt 0 >
+	<#if asset.type.instructions?exists && asset.type.instructions?length gt 0 >
 		<div class="viewSection smallViewSection" >
 			<h2><@s.text name="label.instructions"/></h2>
 			<p class="fieldValue">
-				${product.type.instructions!}
+				${asset.type.instructions!}
 			</p>
 		</div>
 	</#if>
@@ -192,12 +192,12 @@ ${action.setPageType('product', 'show')!}
 		</div>
 	</#if>
 	
-	<#if product.subProducts?exists && !product.subProducts.isEmpty() >
+	<#if asset.subProducts?exists && !asset.subProducts.isEmpty() >
 		<div id="productComponents" class="viewSection smallViewSection" >
 			<h2><@s.text name="label.subproducts"/></h2>
-			<#list product.subProducts as subProduct >
+			<#list asset.subProducts as subProduct >
 				<p>
-					<label><a href="<@s.url action="product"  uniqueID="${subProduct.product.id}"/>">${subProduct.product.type.name!}</a></label> 
+					<label><a href="<@s.url action="product"  uniqueID="${subProduct.asset.id}"/>">${subProduct.asset.type.name!}</a></label>
 					<span>
 						${subProduct.label!}
 					</span>  
@@ -206,29 +206,29 @@ ${action.setPageType('product', 'show')!}
 			</#list>
 		</div>
 	
-	<#elseif parentProduct?exists>
+	<#elseif parentAsset?exists>
 		<div id="productComponents" class="viewSection smallViewSection" >
 			<h2><@s.text name="label.partof"/></h2>
 			<p>
-				<label>${parentProduct.type.name!}</label> 
+				<label>${parentAsset.type.name!}</label> 
 				<span>
-					<a href="<@s.url action="product"  uniqueID="${parentProduct.id}"/>">${parentProduct.serialNumber}</a>
+					<a href="<@s.url action="product"  uniqueID="${parentAsset.id}"/>">${parentAsset.serialNumber}</a>
 				</span>  
 			</p>
 		</div>
 	</#if>
 			
 	
-	<#if product.comments?exists && product.comments?length gt 0 >
+	<#if asset.comments?exists && asset.comments?length gt 0 >
 		<div class="viewSection smallViewSection" >
 			<h2><@s.text name="label.comments"/></h2>
 			<p class="fieldValue">
-				${product.comments!}
+				${asset.comments!}
 			</p>
 		</div>
 	</#if>
 	
-	<#if linkedProducts?exists && !linkedProducts.empty >
+	<#if linkedAssets?exists && !linkedAssets.empty >
 		<div class="viewSection smallViewSection" >
 			<h2><@s.text name="label.fieldidsafetynetwork"/></h2>
 			<p >
@@ -238,17 +238,17 @@ ${action.setPageType('product', 'show')!}
 				</span>
 			</p>
 			
-			<#list linkedProducts as linkedProduct >
+			<#list linkedAssets as linkedAsset >
 				<p >
-					<label><#assign tenant=linkedProduct.tenant/>
+					<label><#assign tenant=linkedAsset.tenant/>
 							<#include "../common/_displayTenantLogo.ftl"/>
 					</label>
 					<span class="fieldValue">
-						${linkedProduct.serialNumber}
+						${linkedAsset.serialNumber}
 						&nbsp;
-						<#if linkedProduct.type.hasManufactureCertificate >
+						<#if linkedAsset.type.hasManufactureCertificate >
 							<img src="<@s.url value="/images/pdf_small.gif"/>"/>
-							<a href="<@s.url action="downloadLinkedManufacturerCert" namespace="/file" uniqueID="${product.uniqueID}" linkedProductId="${linkedProduct.id}" />" target="_blank" >
+							<a href="<@s.url action="downloadLinkedManufacturerCert" namespace="/file" uniqueID="${asset.uniqueID}" linkedAssetId="${linkedAsset.id}" />" target="_blank" >
 								<@s.text name="label.downloadnow"/>
 							</a>
 						</#if>	
@@ -258,14 +258,14 @@ ${action.setPageType('product', 'show')!}
 		</div>
 	</#if>
 	
-	<#if (product.type.cautions?exists && product.type.cautions?length gt 0) || 
-			(product.type.imageName?exists) || (!product.type.attachments.isEmpty()) ||
+	<#if (asset.type.cautions?exists && asset.type.cautions?length gt 0) ||
+			(asset.type.imageName?exists) || (!asset.type.attachments.isEmpty()) ||
 			(!productAttachments.isEmpty())>
 		<div class="viewSection smallViewSection" >
 			<h2><@s.text name="label.additionalinformation"/></h2> 
-			<#if product.type.cautions?exists && product.type.cautions?length gt 0 >
+			<#if asset.type.cautions?exists && asset.type.cautions?length gt 0 >
 				<p>
-					<a href="${product.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/></a>
+					<a href="${asset.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/></a>
 				
 				</p>
 			</#if>
@@ -273,20 +273,20 @@ ${action.setPageType('product', 'show')!}
 			<#if !productAttachments.isEmpty() >
 				<#assign downloadAction="downloadProductAttachedFile"/>
 				<#assign attachments=productAttachments />
-				<#assign attachmentID=product.uniqueID/>
+				<#assign attachmentID=asset.uniqueID/>
 				<#include "/templates/html/common/_attachedFilesList.ftl"/>
 			</#if>
 			
-			<#if !product.type.attachments.isEmpty() >
+			<#if !asset.type.attachments.isEmpty() >
 				<#assign downloadAction="downloadProductTypeAttachedFile"/>
-				<#assign attachments=product.type.attachments />
-				<#assign attachmentID=product.type.uniqueID/>
+				<#assign attachments=asset.type.attachments />
+				<#assign attachmentID=asset.type.uniqueID/>
 				<#include "/templates/html/common/_attachedFilesList.ftl"/>
 			</#if>
 			
-			<#if product.type.imageName?exists >	
+			<#if asset.type.imageName?exists >
 				<p>
-					<img src="<@s.url action="downloadProductTypeImage" namespace="/file" uniqueID="${product.type.uniqueID}"  />" alt="<@s.text name="label.productimage"/>" width="300"/>
+					<img src="<@s.url action="downloadProductTypeImage" namespace="/file" uniqueID="${asset.type.uniqueID}"  />" alt="<@s.text name="label.productimage"/>" width="300"/>
 				</p>
 			</#if>
 			

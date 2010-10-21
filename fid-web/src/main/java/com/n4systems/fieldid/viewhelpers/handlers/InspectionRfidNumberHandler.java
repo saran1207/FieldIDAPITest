@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityLevel;
 
 public class InspectionRfidNumberHandler extends WebOutputHandler {
@@ -11,28 +11,28 @@ public class InspectionRfidNumberHandler extends WebOutputHandler {
 	}
 	
 	public String handleWeb(Long entityId, Object value) {
-		Product product = (Product)value;
+		Asset asset = (Asset)value;
 		
-		if (product.getRfidNumber() == null) {
+		if (asset.getRfidNumber() == null) {
 			// if the rfid is null, there's no point doing any more work
 			return "";
 		}
 		
-		SecurityLevel level = product.getSecurityLevel(action.getSecurityFilter().getOwner());
+		SecurityLevel level = asset.getSecurityLevel(action.getSecurityFilter().getOwner());
 		
-		// build the product info link for local products, just show the serial for network products
+		// build the asset info link for local products, just show the serial for network products
 		String rfidNumber;
 		if (level.isLocal()) { 
-			rfidNumber = String.format("<a href='product.action?uniqueID=%d'>%s</a>", product.getId(), product.getRfidNumber());
+			rfidNumber = String.format("<a href='product.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getRfidNumber());
 		} else {
-			rfidNumber = product.getRfidNumber();
+			rfidNumber = asset.getRfidNumber();
 		}
 		
 		return rfidNumber;
 	}
 
 	public Object handleExcel(Long entityId, Object value) {
-		Product product = (Product)value;
+		Asset product = (Asset)value;
 		
 		return (product.getRfidNumber() != null) ? product.getRfidNumber() : "";
 	}

@@ -1,6 +1,6 @@
 package com.n4systems.webservice;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.webservice.assetdownload.AssetIdListResponse;
@@ -33,6 +33,6 @@ public class RequestHandlerFactory {
 	}
 	
 	public RequestHandler<AssetRequest, AssetListResponse> createGetAssetRequestHandler() {
-		return new GetAssetsRequestHandler(loaderFactory.createFilteredInListLoader(Product.class), converterFactory.createProductToServiceConverter());
+		return new GetAssetsRequestHandler(loaderFactory.createFilteredInListLoader(Asset.class), converterFactory.createProductToServiceConverter());
 	}
 }

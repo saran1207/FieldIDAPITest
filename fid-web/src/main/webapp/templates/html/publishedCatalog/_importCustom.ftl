@@ -1,9 +1,9 @@
 <div class="customSelection">
 	<h3><@s.text name="label.asset_types"/></h3>
-	<#list publishedProductTypes as productType>
+	<#list publishedAssetTypes as assetType>
 		<div  class="customSelectionType">
-			<@s.checkbox name="importProductTypeIds['${productType.id}']" />
-			<label>${productType.name?html}</label>
+			<@s.checkbox name="importAssetTypeIds['${assetType.id}']" />
+			<label>${assetType.name?html}</label>
 		</div>
 	</#list>
 </div>

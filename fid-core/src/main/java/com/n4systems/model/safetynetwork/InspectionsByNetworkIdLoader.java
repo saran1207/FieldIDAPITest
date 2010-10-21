@@ -31,14 +31,14 @@ public class InspectionsByNetworkIdLoader extends ListLoader<Inspection> {
         QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, filter);
 		connectedTenantsQuery.setSimpleSelect("connectedOrg.tenant", true);
 
-        SubSelectInClause insideSafetyNetworkSubClause = new SubSelectInClause("product.owner.tenant", connectedTenantsQuery);
+        SubSelectInClause insideSafetyNetworkSubClause = new SubSelectInClause("asset.owner.tenant", connectedTenantsQuery);
 
         WhereParameterGroup wpg = new WhereParameterGroup();
         wpg.addClause(insideSafetyNetworkSubClause);
-        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "product.owner.tenant.id", filter.getTenantId(), WhereClause.ChainOp.OR));
+        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.owner.tenant.id", filter.getTenantId(), WhereClause.ChainOp.OR));
         
 		QueryBuilder<Inspection> builder = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
-		builder.addWhere(WhereClauseFactory.create("product.networkId", networkId));
+		builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));
         builder.addWhere(wpg);
 
 		List<Inspection> unsecuredInspections = builder.getResultList(em);

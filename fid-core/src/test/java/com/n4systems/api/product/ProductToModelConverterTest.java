@@ -9,25 +9,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.builders.AssetTypeBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.product.ProductToModelConverter;
 import com.n4systems.api.model.ProductView;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.model.builders.OrgBuilder;
-import com.n4systems.model.builders.ProductTypeBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
@@ -58,14 +58,14 @@ public class ProductToModelConverterTest {
 	private InfoOptionMapConverter dummyOptionConverter = new InfoOptionMapConverter() {
 
 		@Override
-		public List<InfoOptionBean> convertProductAttributes(Map<String, String> optionMap, ProductType type) throws MissingInfoOptionException, StaticOptionResolutionException {
+		public List<InfoOptionBean> convertProductAttributes(Map<String, String> optionMap, AssetType type) throws MissingInfoOptionException, StaticOptionResolutionException {
 			return new ArrayList<InfoOptionBean>();
 		}
 	};
 	
 	private Transaction transaction = new TestingTransaction();
 	
-	ProductType type;
+	AssetType type;
 	
 	@Before
 	public void setup_product_type() {
@@ -85,7 +85,7 @@ public class ProductToModelConverterTest {
 				InfoOptionBeanBuilder.aStaticInfoOption().withName("sl-2").forField(fields[1]).build()		
 		)));
 		
-		type = ProductTypeBuilder.aProductType().named("my type").withFields(fields).build();
+		type = AssetTypeBuilder.anAssetType().named("my type").withFields(fields).build();
 	}
 	
 	@Test
@@ -97,7 +97,7 @@ public class ProductToModelConverterTest {
 		ProductView view = createView(null, null);
 		view.setIdentified(null);
 		
-		Product model =  converter.toModel(view, null);
+		Asset model =  converter.toModel(view, null);
 		
 		assertEquals(new PlainDate(), model.getIdentified());
 	}
@@ -119,7 +119,7 @@ public class ProductToModelConverterTest {
 		expect(orgLoader.load(trans)).andReturn(resolvedOrg);
 		replay(orgLoader);
 		
-		Product product = converter.toModel(view, trans);
+		Asset product = converter.toModel(view, trans);
 		verify(orgLoader);
 		
 		assertSame(resolvedOrg, product.getOwner());
@@ -140,7 +140,7 @@ public class ProductToModelConverterTest {
 		expect(orgLoader.createAndSave(view.getShopOrder(), tenant)).andReturn(line);
 		replay(orgLoader);
 		
-		Product product = converter.toModel(view, transaction);
+		Asset product = converter.toModel(view, transaction);
 		verify(orgLoader);
 		assertSame(line, product.getShopOrder());
 	}
@@ -155,7 +155,7 @@ public class ProductToModelConverterTest {
 		converter.setType(type);
 		
 		ProductView view = createView("12345", null);
-		Product model =  converter.toModel(view, null);
+		Asset model =  converter.toModel(view, null);
 		
 		assertNull(model.getShopOrder());
 	}
@@ -163,7 +163,7 @@ public class ProductToModelConverterTest {
 	@Test
 	public void to_model_product_status_when_not_null() throws ConversionException {
 		ProductView view = createView(null, "in service");
-		ProductStatusBean status = new ProductStatusBean();
+		AssetStatus status = new AssetStatus();
 		
 		Transaction trans = new DummyTransaction();
 		ProductStatusByNameLoader psLoader = createMock(ProductStatusByNameLoader.class);
@@ -175,9 +175,9 @@ public class ProductToModelConverterTest {
 		expect(psLoader.load(trans)).andReturn(status);
 		replay(psLoader);
 		
-		Product product = converter.toModel(view, trans);
+		Asset product = converter.toModel(view, trans);
 		verify(psLoader);
-		assertSame(status, product.getProductStatus());
+		assertSame(status, product.getAssetStatus());
 	}
 	
 	@Test
@@ -188,7 +188,7 @@ public class ProductToModelConverterTest {
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
-		Product product = converter.toModel(createView(null, null), null);
+		Asset product = converter.toModel(createView(null, null), null);
 
 		assertSame(identifiedBy, product.getIdentifiedBy());
 		assertSame(type, product.getType());	
@@ -203,7 +203,7 @@ public class ProductToModelConverterTest {
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
-		Product product = converter.toModel(createView(null, null), null);
+		Asset product = converter.toModel(createView(null, null), null);
 
 		assertTrue(product.isPublished());
 	}
@@ -217,7 +217,7 @@ public class ProductToModelConverterTest {
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
-		Product product = converter.toModel(createView(null, null), null);
+		Asset product = converter.toModel(createView(null, null), null);
 
 		assertFalse(product.isPublished());
 	}
@@ -229,7 +229,7 @@ public class ProductToModelConverterTest {
 		converter.setType(type);
 		
 		ProductView view = createView(null, null);
-		Product model =  converter.toModel(view, null);
+		Asset model =  converter.toModel(view, null);
 		
 		Asserts.assertMethodReturnValuesEqual(view, model, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
 	}
@@ -248,7 +248,7 @@ public class ProductToModelConverterTest {
 		expect(mapConverter.convertProductAttributes(view.getAttributes(), type)).andReturn(options);
 		replay(mapConverter);
 		
-		Product model =  converter.toModel(view, null);
+		Asset model =  converter.toModel(view, null);
 		verify(mapConverter);
 		
 		assertEquals(options.size(), model.getInfoOptions().size());

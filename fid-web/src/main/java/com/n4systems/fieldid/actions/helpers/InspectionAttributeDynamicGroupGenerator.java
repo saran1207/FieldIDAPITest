@@ -31,18 +31,18 @@ public class InspectionAttributeDynamicGroupGenerator {
 			
 			int order = 1024;
 			if (inspectionTypeId != null) {
-				// when a product type has been selected, we will use all the infofields from the product type
-				InspectionType productType = persistenceManager.find(InspectionType.class, inspectionTypeId, filter, "infoFieldNames");
+				// when a asset type has been selected, we will use all the infofields from the asset type
+				InspectionType inspectionType = persistenceManager.find(InspectionType.class, inspectionTypeId, filter, "infoFieldNames");
 				
 				// construct and add our field mappings
-				for (String fieldName: productType.getInfoFieldNames()) {
+				for (String fieldName: inspectionType.getInfoFieldNames()) {
 					attributeGroup.getMappings().add(createAttributeMapping(fieldName, idPrefix, pathPrefix, order));
 					order++;
 				}
 			} else {
 				CommonInspectionAttributeNameListLoader loader = new CommonInspectionAttributeNameListLoader(filter);
 				
-				// if no product type was selected we need to compute all the common infofields
+				// if no asset type was selected we need to compute all the common infofields
 				for (String fieldName: loader.load()) {
 					attributeGroup.getMappings().add(createAttributeMapping(fieldName, idPrefix, pathPrefix, order));
 					order++;

@@ -3,10 +3,11 @@ package com.n4systems.fieldid.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -20,7 +21,6 @@ import com.n4systems.fieldid.actions.search.ProductSearchAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.ProductSearchContainer;
-import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.UserListableLoader;
@@ -38,13 +38,13 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	private LegacyProductSerial productSerialManager;
 	private ProductSearchContainer criteria;
 
-	private Product product = new Product();
+	private Asset asset = new Asset();
 	private List<Listable<Long>> employees;
 	
 	private String identified;
 	private OwnerPicker ownerPicker;
 	
-	private AssetWebModel asset = new AssetWebModel(this);
+	private AssetWebModel assetWebModel = new AssetWebModel(this);
 	
 	public ProductMassUpdate(MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager) {
 		super(massUpdateManager, persistenceManager);
@@ -52,17 +52,15 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public void prepare() throws Exception {
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), asset);
 		overrideHelper(new MassUpdateProductHelper(getLoaderFactory()));
 	}
-	
-	
 	
 	private void applyCriteriaDefaults() {
 	
 		setOwnerId(criteria.getOwnerId());
 		
-		setProductStatus(criteria.getProductStatus());
+		setAssetStatus(criteria.getAssetStatus());
 		setPurchaseOrder(criteria.getPurchaseOrder());
 		setAssignedUser(criteria.getAssignedUser());
 	}
@@ -74,11 +72,11 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 			return ERROR;
 		}
 		
-		identified = convertDate(product.getIdentified());
+		identified = convertDate(asset.getIdentified());
 
 		applyCriteriaDefaults();
 		
-		asset.match(product);
+		assetWebModel.match(asset);
 		return SUCCESS;
 	}
 
@@ -97,11 +95,11 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 
 		try {
 			
-			product.setIdentified(convertDate(identified));
-			asset.fillInAsset(product);
+			asset.setIdentified(convertDate(identified));
+			assetWebModel.fillInAsset(asset);
 			List<Long> ids = getSearchIds(criteria, criteria.getSecurityFilter());
 			
-			Long results = massUpdateManager.updateProducts(ids, product, select, fetchCurrentUser());
+			Long results = massUpdateManager.updateProducts(ids, asset, select, fetchCurrentUser());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
 			addFlashMessage(getText("message.productmassupdatesuccessful", messageArgs));
@@ -135,45 +133,40 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		return true;
 	}
 
-	
-	
-
-	public Long getProductStatus() {
-		return (product.getProductStatus() == null) ? null : product.getProductStatus().getUniqueID();
+	public Long getAssetStatus() {
+		return (asset.getAssetStatus() == null) ? null : asset.getAssetStatus().getUniqueID();
 	}
 
-	public void setProductStatus(Long productStatus) {
-		if (productStatus == null) {
-			product.setProductStatus(null);
-		} else if (product.getProductStatus() == null || !productStatus.equals(product.getProductStatus().getUniqueID())) {
-			ProductStatusBean productStatusBean = productSerialManager.findProductStatus(productStatus, getTenantId());
-			product.setProductStatus(productStatusBean);
+	public void setAssetStatus(Long statusId) {
+		if (statusId == null) {
+			asset.setAssetStatus(null);
+		} else if (asset.getAssetStatus() == null || !statusId.equals(asset.getAssetStatus().getUniqueID())) {
+			AssetStatus assetStatus = productSerialManager.findProductStatus(statusId, getTenantId());
+			asset.setAssetStatus(assetStatus);
 		}
 	}
 
-
 	public String getPurchaseOrder() {
-		return product.getPurchaseOrder();
+		return asset.getPurchaseOrder();
 	}
 
 	public void setPurchaseOrder(String purcahseOrder) {
-		product.setPurchaseOrder(purcahseOrder);
+		asset.setPurchaseOrder(purcahseOrder);
 	}
 
-	public List<ProductStatusBean> getProductStatuses() {
+	public List<AssetStatus> getAssetStatuses() {
 		return getLoaderFactory().createProductStatusListLoader().load();
 	}
 	
-	
 	public Long getAssignedUser() {
-		return ( product.getAssignedUser() != null ) ? product.getAssignedUser().getId() : null;
+		return ( asset.getAssignedUser() != null ) ? asset.getAssignedUser().getId() : null;
 	}
 	
 	public void setAssignedUser(Long user) {
 		if(user == null) {
-			product.setAssignedUser(null);
-		} else if (product.getAssignedUser() == null || !user.equals(product.getAssignedUser().getId())) {
-			product.setAssignedUser(getLoaderFactory().createUserFilteredLoader().setId(user).load());
+			asset.setAssignedUser(null);
+		} else if (asset.getAssignedUser() == null || !user.equals(asset.getAssignedUser().getId())) {
+			asset.setAssignedUser(getLoaderFactory().createUserFilteredLoader().setId(user).load());
 		}
 	}
 	
@@ -207,18 +200,18 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public void setPublished(String stateName) {
-		product.setPublished(PublishedState.valueOf(stateName).isPublished());
+		asset.setPublished(PublishedState.valueOf(stateName).isPublished());
 	}
 	
 	public String getPublished() {
-		return PublishedState.resolvePublishedState(product.isPublished()).name();
+		return PublishedState.resolvePublishedState(asset.isPublished()).name();
 	}
 	
 	public List<StringListingPair> getPublishedStates() {
 		return PublishedState.getPublishedStates(this);
 	}
 
-	public AssetWebModel getAsset() {
-		return asset;
+	public AssetWebModel getAssetWebModel() {
+		return assetWebModel;
 	}
 }

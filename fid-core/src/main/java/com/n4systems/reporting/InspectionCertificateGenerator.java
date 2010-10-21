@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -17,7 +18,6 @@ import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.PrintOut;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.utils.DateTimeDefiner;
@@ -30,13 +30,13 @@ import com.n4systems.reporting.mapbuilders.ProofTestMapBuilder;
 import com.n4systems.util.ReportMap;
 
 public class InspectionCertificateGenerator {
-	private final MapBuilder<ProductType> productTypeMapBuilder; 
+	private final MapBuilder<AssetType> productTypeMapBuilder;
 	private final MapBuilder<LineItem> orderMapBuilder;
 	private final MapBuilder<ProofTestInfo> proofTestMapBuilder;
 	private final MapBuilder<Inspection> baseInspectionMapBuilder;
 	private final DateTimeDefiner dateDefiner;
 	
-	public InspectionCertificateGenerator(DateTimeDefiner dateDefiner, MapBuilder<Inspection> baseInspectionMapBuilder, MapBuilder<ProductType> productTypeMapBuilder, MapBuilder<ProofTestInfo> proofTestMapBuilder, MapBuilder<LineItem> orderMapBuilder) {
+	public InspectionCertificateGenerator(DateTimeDefiner dateDefiner, MapBuilder<Inspection> baseInspectionMapBuilder, MapBuilder<AssetType> productTypeMapBuilder, MapBuilder<ProofTestInfo> proofTestMapBuilder, MapBuilder<LineItem> orderMapBuilder) {
 		this.dateDefiner = dateDefiner;
 		this.baseInspectionMapBuilder = baseInspectionMapBuilder;
 		this.productTypeMapBuilder = productTypeMapBuilder;
@@ -91,7 +91,7 @@ public class InspectionCertificateGenerator {
 			
 			ReportMap<Object> inspectionReportMap = new InspectionReportMapProducer(inspection, dateDefiner).produceMap();
 			reportMap.put("mainInspection", inspectionReportMap);
-			reportMap.put("product", inspectionReportMap.get("product"));
+			reportMap.put("asset", inspectionReportMap.get("asset"));
 			
 			List<ReportMap<Object>> inspectionResultMaps = new ArrayList<ReportMap<Object>>();
 			inspectionResultMaps.add(inspectionReportMap);
@@ -126,10 +126,10 @@ public class InspectionCertificateGenerator {
 			reportMap.put("chartPath", PathHandler.getChartImageFile(inspection).getAbsolutePath());
 	
 			proofTestMapBuilder.addParams(reportMap, inspection.getProofTestInfo(), transaction);
-			productTypeMapBuilder.addParams(reportMap, inspection.getProduct().getType(), transaction);
-			orderMapBuilder.addParams(reportMap, inspection.getProduct().getShopOrder(), transaction);
+			productTypeMapBuilder.addParams(reportMap, inspection.getAsset().getType(), transaction);
+			orderMapBuilder.addParams(reportMap, inspection.getAsset().getShopOrder(), transaction);
 	
-			reportMap.putAll(new ProductReportMapProducer(inspection.getProduct(), dateDefiner).produceMap());
+			reportMap.putAll(new ProductReportMapProducer(inspection.getAsset(), dateDefiner).produceMap());
 			
 			ReportMap<Object> inspectionMap = new InspectionReportMapProducer(inspection, dateDefiner).produceMap();
 			reportMap.putAll(inspectionMap);

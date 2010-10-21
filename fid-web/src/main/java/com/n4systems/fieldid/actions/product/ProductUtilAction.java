@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.product;
 
 import java.util.Collection;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 
@@ -11,7 +12,6 @@ import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Product;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 
@@ -31,7 +31,7 @@ public class ProductUtilAction extends AbstractAction {
 	private String rfidString;
 	private Long uniqueId;
 	
-	private Collection<Product> products;
+	private Collection<Asset> assets;
 	
 	public ProductUtilAction(SerialNumberCounter serialNumberCounter, LegacyProductSerial productSerialManager, ProductManager productManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
@@ -100,11 +100,11 @@ public class ProductUtilAction extends AbstractAction {
 	}
 
 
-	public Collection<Product> getProducts() {
-		if( products == null ) {
-			products =  productManager.findProductsByRfidNumber( rfidString, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
+	public Collection<Asset> getAssets() {
+		if( assets == null ) {
+			assets =  productManager.findProductsByRfidNumber( rfidString, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
 		}
-		return products;
+		return assets;
 	}
 
 

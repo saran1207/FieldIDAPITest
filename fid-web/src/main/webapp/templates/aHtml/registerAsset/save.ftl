@@ -19,10 +19,10 @@
 	<div class="confirmBody">
 	<p><img src="<@s.url value="/images/register-checkmark.png"/>" /></p>
 	<h1>Asset Registered</h1>
-	<p><@s.text name="label.registerconfirm"/> - ${linkedProduct.type.name}</p>
+	<p><@s.text name="label.registerconfirm"/> - ${linkedAsset.type.name}</p>
 	<div id="links">
-		<@s.url action="inspectionGroups" uniqueID="${newProduct.id}" namespace="/" id="performFirstEventUrl"/>
-		<@s.url action="product" uniqueID="${newProduct.id}" namespace="/" id="viewAssetUrl"/>
+		<@s.url action="inspectionGroups" uniqueID="${newAsset.id}" namespace="/" id="performFirstEventUrl"/>
+		<@s.url action="product" uniqueID="${newAsset.id}" namespace="/" id="viewAssetUrl"/>
 		<p><@s.text name="label.whatsnext"/></p>
 		<p><a id="performFirstEvent" href="#" onclick="redirect('${performFirstEventUrl}');return false;" ><@s.text name="label.performfirstevent"/></a></p>
 		<p><a id="viewAsset" href="#" onclick="redirect('${viewAssetUrl}');return false;"> <@s.text name="label.viewassetinfo"/></a></p>

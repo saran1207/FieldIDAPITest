@@ -3,7 +3,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.fieldid.actions.product.LocationWebModel;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -18,21 +18,21 @@ public class ProductSearchContainer extends SearchContainer {
 	private String orderNumber;
 	private String referenceNumber;
 	private String purchaseOrder;
-	private Long productTypeId;
-	private Long productTypeGroupId;
-	private Long productStatusId;
+	private Long assetTypeId;
+	private Long assetTypeGroupId;
+	private Long assetStatusId;
 	private Long assignedUserId;
 	private BaseOrg owner;
 	private Date fromDate;
 	private Date toDate;
 	
 	public ProductSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory) {
-		super(Product.class, "id", filter, loaderFactory);
+		super(Asset.class, "id", filter, loaderFactory);
 	}
 
 	@Override
 	protected void evalJoinTerms() {
-		addLeftJoinTerms("shopOrder.order", "productStatus", "identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "type.group");
+		addLeftJoinTerms("shopOrder.order", "assetStatus", "identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "type.group");
 		addPredefinedLocationJoin();
 	}
 	
@@ -44,9 +44,9 @@ public class ProductSearchContainer extends SearchContainer {
 		addWildcardOrStringTerm("shopOrder.order.orderNumber", orderNumber);
 		addWildcardOrStringTerm("customerRefNumber", referenceNumber);
 		addWildcardOrStringTerm("purchaseOrder", purchaseOrder);
-		addSimpleTerm("type.id", productTypeId);
-		addSimpleTerm("type.group.id", productTypeGroupId);
-		addSimpleTerm("productStatus.uniqueID", productStatusId);
+		addSimpleTerm("type.id", assetTypeId);
+		addSimpleTerm("type.group.id", assetTypeGroupId);
+		addSimpleTerm("assetStatus.uniqueID", assetStatusId);
 		addDateRangeTerm("identified", fromDate, toDate);
 		
 		addPredefinedLocationTerm();
@@ -117,20 +117,20 @@ public class ProductSearchContainer extends SearchContainer {
 		this.orderNumber = orderNumber;
 	}
 
-	public Long getProductType() {
-		return productTypeId;
+	public Long getAssetType() {
+		return assetTypeId;
 	}
 
-	public void setProductType(Long productTypeId) {
-		this.productTypeId = productTypeId;
+	public void setAssetType(Long assetTypeId) {
+		this.assetTypeId = assetTypeId;
 	}
 
-	public Long getProductStatus() {
-		return productStatusId;
+	public Long getAssetStatus() {
+		return assetStatusId;
 	}
 
-	public void setProductStatus(Long productStatusId) {
-		this.productStatusId = productStatusId;
+	public void setAssetStatus(Long assetStatusId) {
+		this.assetStatusId = assetStatusId;
 	}
 
 	public Date getFromDate() {
@@ -185,11 +185,11 @@ public class ProductSearchContainer extends SearchContainer {
 		this.owner = owner;
 	}
 
-	public Long getProductTypeGroup() {
-		return productTypeGroupId;
+	public Long getAssetTypeGroup() {
+		return assetTypeGroupId;
 	}
 
-	public void setProductTypeGroup(Long productTypeGroupId) {
-		this.productTypeGroupId = productTypeGroupId;
+	public void setAssetTypeGroup(Long assetTypeGroupId) {
+		this.assetTypeGroupId = assetTypeGroupId;
 	}
 }

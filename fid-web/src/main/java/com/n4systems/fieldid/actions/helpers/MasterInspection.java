@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import rfid.ejb.entity.ProductStatusBean;
+import com.n4systems.model.Asset;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.fieldid.actions.inspection.WebInspectionSchedule;
 import com.n4systems.fieldid.utils.StrutsListHelper;
@@ -14,7 +15,6 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.inspection.AssignedToUpdate;
@@ -24,13 +24,13 @@ import com.n4systems.tools.FileDataContainer;
 public class MasterInspection {
 	private String token;
 
-	private Product masterProduct;
+	private Asset masterAsset;
 
 	private Inspection inspection;
 
 	private FileDataContainer proofTestFile;
 
-	private ProductStatusBean productStatus;
+	private AssetStatus assetStatus;
 
 	private List<SubInspection> subInspections = new ArrayList<SubInspection>();
 
@@ -63,7 +63,7 @@ public class MasterInspection {
 
 		currentId = inspection.getId();
 		inspectionGroupId = inspection.getGroup().getId();
-		masterProduct = inspection.getProduct();
+		masterAsset = inspection.getAsset();
 		subInspections = new ArrayList<SubInspection>(inspection.getSubInspections());
 		this.inspection = inspection;
 	}
@@ -76,12 +76,12 @@ public class MasterInspection {
 		this.token = token;
 	}
 
-	public Product getMasterProduct() {
-		return masterProduct;
+	public Asset getMasterAsset() {
+		return masterAsset;
 	}
 
-	public void setMasterProduct(Product masterProduct) {
-		this.masterProduct = masterProduct;
+	public void setMasterAsset(Asset masterAsset) {
+		this.masterAsset = masterAsset;
 	}
 
 	public Inspection getInspection() {
@@ -100,12 +100,12 @@ public class MasterInspection {
 		this.proofTestFile = proofTestFile;
 	}
 
-	public ProductStatusBean getProductStatus() {
-		return productStatus;
+	public AssetStatus getAssetStatus() {
+		return assetStatus;
 	}
 
-	public void setProductStatus(ProductStatusBean productStatus) {
-		this.productStatus = productStatus;
+	public void setAssetStatus(AssetStatus assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 
 	public boolean matchingToken(String token) {
@@ -143,7 +143,7 @@ public class MasterInspection {
 
 		inspection.setFormVersion(subInspection.getFormVersion());
 		inspection.setId(subInspection.getId());
-		inspection.setProduct(subInspection.getProduct());
+		inspection.setAsset(subInspection.getAsset());
 		inspection.setTenant(subInspection.getTenant());
 		inspection.setType(subInspection.getType());
 		inspection.setComments(subInspection.getComments());
@@ -162,7 +162,7 @@ public class MasterInspection {
 
 		subInspection.setFormVersion(inspection.getFormVersion());
 		subInspection.setId(inspection.getId());
-		subInspection.setProduct(inspection.getProduct());
+		subInspection.setAsset(inspection.getAsset());
 		subInspection.setName(findLabelOfSubProduct(inspection));
 		subInspection.setTenant(inspection.getTenant());
 		subInspection.setType(inspection.getType());
@@ -177,14 +177,14 @@ public class MasterInspection {
 	}
 
 	private String findLabelOfSubProduct(Inspection inspection) {
-		Product product = inspection.getProduct();
-		if (product == null) {
+		Asset asset = inspection.getAsset();
+		if (asset == null) {
 			return null;
 		}
 		if (this.inspection.isNew()) {
 
-			for (SubProduct subProduct : this.masterProduct.getSubProducts()) {
-				if (subProduct.getProduct().equals(product)) {
+			for (SubProduct subProduct : this.masterAsset.getSubProducts()) {
+				if (subProduct.getAsset().equals(asset)) {
 					return subProduct.getLabel();
 				}
 			}
@@ -246,34 +246,34 @@ public class MasterInspection {
 		this.inspectionGroupId = inspectionGroupId;
 	}
 
-	public List<SubInspection> getSubInspectionFor(Product product) {
+	public List<SubInspection> getSubInspectionFor(Asset asset) {
 		List<SubInspection> inspectionTypes = new ArrayList<SubInspection>();
 		for (SubInspection subInspection : subInspections) {
-			if (subInspection.getProduct().getId().equals(product.getId())) {
+			if (subInspection.getAsset().getId().equals(asset.getId())) {
 				inspectionTypes.add(subInspection);
 			}
 		}
 		return inspectionTypes;
 	}
 
-	public void removeInspectionsForProduct(Product subProduct) {
+	public void removeInspectionsForProduct(Asset subProduct) {
 		for (int i = 0; i < subInspections.size(); i++) {
-			if (subInspections.get(i).getProduct().equals(subProduct)) {
+			if (subInspections.get(i).getAsset().equals(subProduct)) {
 				subInspections.set(i, null);
 			}
 		}
 	}
 
-	public void cleanSubInspectionsForNonValidSubProducts(Product upToDateProduct) {
+	public void cleanSubInspectionsForNonValidSubProducts(Asset upToDateProduct) {
 		List<SubInspection> subInspectionsToKeep = new ArrayList<SubInspection>();
 		
 		/*
-		 * this checks that each sub inspection is for a product that is still
-		 * attached to our updated master product.   
+		 * this checks that each sub inspection is for a asset that is still
+		 * attached to our updated master asset.
 		 */
 		for (SubInspection subInspection : subInspections) {
 			for (SubProduct subProduct: upToDateProduct.getSubProducts()) {
-				if (subProduct.getProduct().equals(subInspection.getProduct())) {
+				if (subProduct.getAsset().equals(subInspection.getAsset())) {
 					subInspectionsToKeep.add(subInspection);
 					break;
 				}

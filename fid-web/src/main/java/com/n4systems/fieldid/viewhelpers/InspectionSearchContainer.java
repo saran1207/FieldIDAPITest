@@ -28,9 +28,9 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private String referenceNumber;
 	private LocationWebModel location = new LocationWebModel(this);
 	private BaseOrg owner;
-	private Long productTypeId;
-	private Long productTypeGroupId;
-	private Long productStatusId;
+	private Long assetTypeId;
+	private Long assetTypeGroupId;
+	private Long assetStatusId;
 	private Long assignedUserId;
 	private Long inspectionTypeGroupId;
 	private Long inspectionBookId;
@@ -48,21 +48,21 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	
 	@Override
 	protected void evalJoinTerms() {
-		addLeftJoinTerms("book", "product.shopOrder.order", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "product.type.group", "productStatus");
+		addLeftJoinTerms("book", "asset.shopOrder.order", "asset.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "asset.type.group", "assetStatus");
 		addPredefinedLocationJoin();
 	}
 	
 	@Override
 	protected void evalSearchTerms() {
-		addWildcardOrStringTerm("product.rfidNumber", rfidNumber);
-		addWildcardOrStringTerm("product.serialNumber", serialNumber);
-		addWildcardOrStringTerm("product.shopOrder.order.orderNumber", orderNumber);
-		addWildcardOrStringTerm("product.purchaseOrder", purchaseOrder);
-		addWildcardOrStringTerm("product.customerRefNumber", referenceNumber);
+		addWildcardOrStringTerm("asset.rfidNumber", rfidNumber);
+		addWildcardOrStringTerm("asset.serialNumber", serialNumber);
+		addWildcardOrStringTerm("asset.shopOrder.order.orderNumber", orderNumber);
+		addWildcardOrStringTerm("asset.purchaseOrder", purchaseOrder);
+		addWildcardOrStringTerm("asset.customerRefNumber", referenceNumber);
 		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
-		addSimpleTerm("product.type.id", productTypeId);
-		addSimpleTerm("product.type.group.id", productTypeGroupId);
-		addSimpleTerm("productStatus.uniqueID", productStatusId);
+		addSimpleTerm("asset.type.id", assetTypeId);
+		addSimpleTerm("asset.type.group.id", assetTypeGroupId);
+		addSimpleTerm("assetStatus.uniqueID", assetStatusId);
 		addSimpleTerm("type.group.id", inspectionTypeGroupId);
 		addSimpleTerm("performedBy.id", performedBy);
 		addSimpleTerm("schedule.project.id", jobId);
@@ -111,7 +111,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	public SecurityFilter getSecurityFilter() {
 		// This is not ideal but if we're including network results,
 		// we need to wrap our security filter in a NetworkIdSecurityFilter
-		return (includeNetworkResults) ? new NetworkIdSecurityFilter(super.getSecurityFilter(), "product.networkId") : super.getSecurityFilter();
+		return (includeNetworkResults) ? new NetworkIdSecurityFilter(super.getSecurityFilter(), "asset.networkId") : super.getSecurityFilter();
 	}
 
 	@Override
@@ -153,28 +153,28 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 		this.orderNumber = orderNumber;
 	}
 
-	public Long getProductType() {
-		return productTypeId;
+	public Long getAssetType() {
+		return assetTypeId;
 	}
 
-	public void setProductType(Long productTypeId) {
-		this.productTypeId = productTypeId;
+	public void setAssetType(Long assetTypeId) {
+		this.assetTypeId = assetTypeId;
 	}
 	
-	public Long getProductTypeGroup() {
-		return productTypeGroupId;
+	public Long getAssetTypeGroup() {
+		return assetTypeGroupId;
 	}
 
-	public void setProductTypeGroup(Long productTypeGroupId) {
-		this.productTypeGroupId = productTypeGroupId;
+	public void setAssetTypeGroup(Long assetTypeGroupId) {
+		this.assetTypeGroupId = assetTypeGroupId;
 	}
 	
-	public Long getProductStatus() {
-		return productStatusId;
+	public Long getAssetStatus() {
+		return assetStatusId;
 	}
 	
-	public void setProductStatus(Long productStatusId) {
-		this.productStatusId = productStatusId;
+	public void setAssetStatus(Long assetStatusId) {
+		this.assetStatusId = assetStatusId;
 	}
 
 	public Long getInspectionTypeGroup() {

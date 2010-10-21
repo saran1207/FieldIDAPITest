@@ -4,7 +4,7 @@ import static com.n4systems.util.ServiceLocator.*;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.webservice.dto.ProductServiceDTO;
@@ -37,7 +37,7 @@ public class ProductServiceDTOConverter {
 		return new LocationServiceToContainerConverter(loaderFactory);
 	}
 	
-	public Product convert(ProductServiceDTO productServiceDTO, Product targetProduct) {
+	public Asset convert(ProductServiceDTO productServiceDTO, Asset targetProduct) {
 		serviceDTOBeanconverter.convert(productServiceDTO, targetProduct, systemSecurityGuard.getTenantId());
 		assignedUserConverter.convert(productServiceDTO, targetProduct);
 		locationConverter.convert(productServiceDTO, targetProduct);

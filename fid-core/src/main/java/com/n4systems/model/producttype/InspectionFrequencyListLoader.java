@@ -5,12 +5,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class InspectionFrequencyListLoader extends ListLoader<ProductTypeSchedule> {
+public class InspectionFrequencyListLoader extends ListLoader<AssetTypeSchedule> {
 	
 	private Long productTypeId;
 	private Long inspectionTypeId;
@@ -21,16 +21,16 @@ public class InspectionFrequencyListLoader extends ListLoader<ProductTypeSchedul
 	}
 	
 	@Override
-	protected List<ProductTypeSchedule> load(EntityManager em, SecurityFilter filter) {
+	protected List<AssetTypeSchedule> load(EntityManager em, SecurityFilter filter) {
 		if (inspectionTypeId == null && productTypeId == null) {
-			throw new InvalidArgumentException("you must choose a product type or an inspection type or both.  You didn't select either");
+			throw new InvalidArgumentException("you must choose a asset type or an inspection type or both.  You didn't select either");
 		}
 		
 		return createQuery(em, filter);
 	}
 
-	private List<ProductTypeSchedule> createQuery(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<ProductTypeSchedule> builder = new QueryBuilder<ProductTypeSchedule>(ProductTypeSchedule.class, filter);
+	private List<AssetTypeSchedule> createQuery(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<AssetTypeSchedule> builder = new QueryBuilder<AssetTypeSchedule>(AssetTypeSchedule.class, filter);
 		
 		if (inspectionTypeId != null) { 
 			builder.addSimpleWhere("inspectionType.id", inspectionTypeId); 

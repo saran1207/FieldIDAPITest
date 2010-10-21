@@ -11,14 +11,14 @@ import static com.n4systems.test.helpers.Asserts.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.builders.AssetBuilder;
 import org.junit.Test;
 
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.builders.PredefinedLocationBuilder;
-import com.n4systems.model.builders.ProductBuilder;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.user.User;
@@ -47,7 +47,7 @@ public class InspectionReportMapProducerTest {
 	@Test
 	public void test_inspetion_map_creation() {
 		InspectionType inspectionType = anInspectionType().named("test").build();
-		Product targetProduct = ProductBuilder.aProduct().build();
+		Asset targetProduct = AssetBuilder.anAsset().build();
 		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
 
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
@@ -63,7 +63,7 @@ public class InspectionReportMapProducerTest {
 	public void test_inspection_map_with_null_predefinedLocation_creation() {
 
 		InspectionType inspectionType = anInspectionType().named("test").build();
-		Product targetProduct = ProductBuilder.aProduct().build();
+		Asset targetProduct = AssetBuilder.anAsset().build();
 		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
 
 		Location advancedLocation = new Location(null, FREEFORM_LOCATION);
@@ -84,7 +84,7 @@ public class InspectionReportMapProducerTest {
 	@Test
 	public void test_inspection_map_with_one_predefinedLocation_creation() {
 		InspectionType inspectionType = anInspectionType().named("test").build();
-		Product targetProduct = ProductBuilder.aProduct().build();
+		Asset targetProduct = AssetBuilder.anAsset().build();
 		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
 
 		Location advancedLocation = new Location(PredefinedLocationBuilder.aPredefinedLocation().build(), FREEFORM_LOCATION);
@@ -105,7 +105,7 @@ public class InspectionReportMapProducerTest {
 	@Test
 	public void test_inspection_map_with_two_predefinedLocations_creation() {
 		InspectionType inspectionType = anInspectionType().named("test").build();
-		Product targetProduct = ProductBuilder.aProduct().build();
+		Asset targetProduct = AssetBuilder.anAsset().build();
 		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
 
 		PredefinedLocation parent = PredefinedLocationBuilder.aPredefinedLocation().build();

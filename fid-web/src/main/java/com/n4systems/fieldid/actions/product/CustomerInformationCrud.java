@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.product;
 
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -15,7 +16,6 @@ import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -27,7 +27,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(CustomerInformationCrud.class);
 	
-	private Product product;
+	private Asset asset;
 	private ProductManager productManager;
 	private LegacyProductSerial legacyProductManager;
 	
@@ -35,7 +35,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 	
 	private List<Listable<Long>> divisions;
 	
-	private AssetWebModel asset = new AssetWebModel(this);
+	private AssetWebModel assetWebModel = new AssetWebModel(this);
 
 	public CustomerInformationCrud(PersistenceManager persistenceManager, ProductManager productManager, LegacyProductSerial legacyProductSerial) {
 		super(persistenceManager);
@@ -48,21 +48,21 @@ public class CustomerInformationCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		product = productManager.findProductAllFields(uniqueId, getSecurityFilter());
-		asset.match(product);
+		asset = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+		assetWebModel.match(asset);
 	}
 	
 	@Override
 	protected void postInit() {
 		super.postInit();
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), product);
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), asset);
 		overrideHelper(new CustomerInformationCrudHelper(getLoaderFactory()));
 	}
 
 	private void testRequiredEntities() {
-		if (product == null) {
+		if (asset == null) {
 			addActionErrorText("error.noproduct");
-			throw new MissingEntityException("you must have a product.");
+			throw new MissingEntityException("you must have a asset.");
 		}
 	}
 
@@ -76,44 +76,44 @@ public class CustomerInformationCrud extends AbstractCrud {
 		testRequiredEntities();
 		
 		try {	
-			asset.fillInAsset(product);
+			assetWebModel.fillInAsset(asset);
 			
-			legacyProductManager.update(product, getUser());
+			legacyProductManager.update(asset, getUser());
 			addFlashMessageText("message.productupdated");
 			
 		} catch (Exception e) {
 			addActionErrorText("error.productsave");
-			logger.error("failed to save Product", e);
+			logger.error("failed to save Asset", e);
 			return INPUT;
 		}
 		return SUCCESS;
 	}
 
 	public boolean isSubProduct() {
-		return (productManager.parentProduct(product) != null);
+		return (productManager.parentProduct(asset) != null);
 	}
 	
 	public String getCustomerRefNumber() {
-		return product.getCustomerRefNumber();
+		return asset.getCustomerRefNumber();
 	}
 
 
 	public String getPurchaseOrder() {
-		return product.getPurchaseOrder();
+		return asset.getPurchaseOrder();
 	}
 
 	public void setCustomerRefNumber(String customerRefNumber) {
-		product.setCustomerRefNumber(customerRefNumber);
+		asset.setCustomerRefNumber(customerRefNumber);
 	}
 
 	
 	public void setPurchaseOrder(String purchaseOrder) {
-		product.setPurchaseOrder(purchaseOrder);
+		asset.setPurchaseOrder(purchaseOrder);
 	}
 
 		
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
 	public List<Listable<Long>> getDivisions() {
@@ -131,8 +131,8 @@ public class CustomerInformationCrud extends AbstractCrud {
 		ownerPicker.setOwnerId(id);
 	}
 	
-	public AssetWebModel getAsset() {
-		return asset;
+	public AssetWebModel getAssetWebModel() {
+		return assetWebModel;
 	}
 	
 	@RequiredFieldValidator(message="", key="error.owner_required")
@@ -142,7 +142,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 
 	
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(product, getLoaderFactory());
+		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
 	
 	

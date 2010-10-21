@@ -10,7 +10,7 @@ public class ProductSaveRoutineTest {
 	
 	@Test
 	public void should_null_blank_string_serial_number() {
-		Product sut = new Product();
+		Asset sut = new Asset();
 		sut.setSerialNumber(" ");
 		
 		sut.onCreate();
@@ -20,7 +20,7 @@ public class ProductSaveRoutineTest {
 	
 	@Test
 	public void should_handle_null_serial_number() {
-		Product sut = new Product();
+		Asset sut = new Asset();
 		sut.setSerialNumber(null);
 		
 		sut.onCreate();
@@ -30,7 +30,7 @@ public class ProductSaveRoutineTest {
 	
 	@Test
 	public void should_trim_serial_number() {
-		Product sut = new Product();
+		Asset sut = new Asset();
 		sut.setSerialNumber(" some serial number  ");
 		
 		sut.onCreate();
@@ -40,7 +40,7 @@ public class ProductSaveRoutineTest {
 	
 	@Test
 	public void should_leave_serial_number_as_is() {
-		Product sut = new Product();
+		Asset sut = new Asset();
 		sut.setSerialNumber("some serial number");
 		
 		sut.onCreate();
@@ -50,7 +50,7 @@ public class ProductSaveRoutineTest {
 	
 	@Test
 	public void should_null_blank_string_rfid_number() {
-		Product sut = new Product();
+		Asset sut = new Asset();
 		sut.setRfidNumber(" ");
 		
 		sut.onCreate();
@@ -60,7 +60,7 @@ public class ProductSaveRoutineTest {
 	
 	@Test
 	public void should_handle_null_rfid_number() {
-		Product sut = new Product();
+		Asset sut = new Asset();
 		sut.setRfidNumber(null);
 		
 		sut.onCreate();
@@ -70,7 +70,7 @@ public class ProductSaveRoutineTest {
 	
 	@Test
 	public void should_trim_rfid_number() {
-		Product sut = new Product();
+		Asset sut = new Asset();
 		sut.setRfidNumber(" 43332ABD33122131  ");
 		
 		sut.onCreate();
@@ -80,7 +80,7 @@ public class ProductSaveRoutineTest {
 	
 	@Test
 	public void should_leave_rfid_number_as_is() {
-		Product sut = new Product();
+		Asset sut = new Asset();
 		sut.setRfidNumber("43332ABD33122131");
 		
 		sut.onCreate();

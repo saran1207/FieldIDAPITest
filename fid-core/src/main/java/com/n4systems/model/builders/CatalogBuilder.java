@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
 
@@ -14,24 +14,24 @@ public class CatalogBuilder extends BaseBuilder<Catalog> {
 		return new CatalogBuilder();
 	}
 	
-	private final Set<ProductType> publishedProductTypes;
+	private final Set<AssetType> publishedAssetTypes;
 	private final Tenant tenant;
 	
 	public CatalogBuilder() {
-		this(TenantBuilder.aTenant().build(), new HashSet<ProductType>());
+		this(TenantBuilder.aTenant().build(), new HashSet<AssetType>());
 	}
 	
-	public CatalogBuilder(Tenant tenant, Set<ProductType> publishedProductTypes) {
-		this.publishedProductTypes = publishedProductTypes;
+	public CatalogBuilder(Tenant tenant, Set<AssetType> publishedAssetTypes) {
+		this.publishedAssetTypes = publishedAssetTypes;
 		this.tenant = tenant;
 	}
 	
 	public CatalogBuilder belongingTo(Tenant tenant) {
-		return new CatalogBuilder(tenant, this.publishedProductTypes);
+		return new CatalogBuilder(tenant, this.publishedAssetTypes);
 	}
 	
-	public CatalogBuilder with(ProductType...publishedProductTypes) {
-		Set<ProductType> publishedTypes = new HashSet<ProductType>(Arrays.asList(publishedProductTypes));
+	public CatalogBuilder with(AssetType... publishedAssetTypes) {
+		Set<AssetType> publishedTypes = new HashSet<AssetType>(Arrays.asList(publishedAssetTypes));
 		return new CatalogBuilder(this.tenant, publishedTypes);
 	}
 
@@ -39,7 +39,7 @@ public class CatalogBuilder extends BaseBuilder<Catalog> {
 	public Catalog createObject() {
 		Catalog catalog = new Catalog();
 		catalog.setId(id);
-		catalog.setPublishedProductTypes(publishedProductTypes);
+		catalog.setPublishedProductTypes(publishedAssetTypes);
 		catalog.setTenant(tenant);
 		return catalog;
 	}

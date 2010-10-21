@@ -5,13 +5,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class ProductAttachmentListLoader extends ListLoader<ProductAttachment> {
-	private Product product;
+	private Asset asset;
 
 	public ProductAttachmentListLoader(SecurityFilter filter) {
 		super(filter);
@@ -19,18 +19,18 @@ public class ProductAttachmentListLoader extends ListLoader<ProductAttachment> {
 	
 	@Override
 	protected List<ProductAttachment> load(EntityManager em, SecurityFilter filter) {
-		if (product == null) {
-			throw new InvalidArgumentException("you must have a product to load product attachments");
+		if (asset == null) {
+			throw new InvalidArgumentException("you must have a asset to load asset attachments");
 		}
 		QueryBuilder<ProductAttachment> builder = new QueryBuilder<ProductAttachment>(ProductAttachment.class, filter);
-		builder.addSimpleWhere("product", product).addOrder("id");
+		builder.addSimpleWhere("asset", asset).addOrder("id");
 		
 		return builder.getResultList(em);
 		
 	}
 
-	public ProductAttachmentListLoader setProduct(Product product) {
-		this.product = product;
+	public ProductAttachmentListLoader setProduct(Asset asset) {
+		this.asset = asset;
 		return this;
 	}
 }

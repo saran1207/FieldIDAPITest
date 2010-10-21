@@ -1,7 +1,7 @@
 package com.n4systems.servicedto.converts;
 
 import static com.n4systems.model.builders.InspectionBuilder.*;
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static com.n4systems.servicedto.builders.InspectionServiceDTOBuilder.*;
 import static com.n4systems.servicedto.builders.ProductServiceDTOBuilder.*;
@@ -9,11 +9,11 @@ import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.model.Asset;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
 import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -28,7 +28,7 @@ public class PopulateAssignedUserConverterTest {
 	private static final LoaderFactory UNUSED_LOADER_FACTORY = null;
 	private static final Long INVALID_SERVER_ID = 0L;
 	private static final User MISSING_USER = null;
-	private final Product product = aProduct().build();
+	private final Asset asset = anAsset().build();
 	private final User assignedUser = aUser().withId(5L).build();
 	
 	
@@ -40,9 +40,9 @@ public class PopulateAssignedUserConverterTest {
 		
 		PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(loaderFactory);
 		
-		sut.convert(productServiceDTO, product);
+		sut.convert(productServiceDTO, asset);
 		
-		assertEquals(product.getAssignedUser(), assignedUser);
+		assertEquals(asset.getAssignedUser(), assignedUser);
 		
 	}
 
@@ -55,9 +55,9 @@ public class PopulateAssignedUserConverterTest {
 		
 		PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(loaderFactory);
 		
-		sut.convert(productServiceDTO, product);
+		sut.convert(productServiceDTO, asset);
 		
-		assertNull(product.getAssignedUser());
+		assertNull(asset.getAssignedUser());
 	}
 	
 	

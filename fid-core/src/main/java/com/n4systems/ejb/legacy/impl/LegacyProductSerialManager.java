@@ -11,12 +11,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddProductHistoryBean;
+import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.ProductSerialExtensionBean;
-import rfid.ejb.entity.ProductStatusBean;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -30,7 +31,6 @@ import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
@@ -74,13 +74,13 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	
 
 
-	public ProductStatusBean findProductStatus(Long uniqueID, Long tenantId) {
-		Query query = em.createQuery("FROM ProductStatusBean ps WHERE ps.uniqueID = :uniqueID AND ps.tenant.id = :tenantId");
+	public AssetStatus findProductStatus(Long uniqueID, Long tenantId) {
+		Query query = em.createQuery("FROM AssetStatus st WHERE st.uniqueID = :uniqueID AND st.tenant.id = :tenantId");
 		query.setParameter("uniqueID", uniqueID);
 		query.setParameter("tenantId", tenantId);
-		ProductStatusBean obj = null;
+		AssetStatus obj = null;
 		try {
-			obj = (ProductStatusBean) query.getSingleResult();
+			obj = (AssetStatus) query.getSingleResult();
 		} catch (NoResultException e) {
 			obj = null;
 		}
@@ -88,8 +88,8 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ProductStatusBean> findProductStatus(Long tenantId, Date beginDate) {
-		Query query = em.createQuery("from ProductStatusBean ps where ps.tenant.id = :tenantId and ps.dateCreated >= :beginDate");
+	public List<AssetStatus> findProductStatus(Long tenantId, Date beginDate) {
+		Query query = em.createQuery("from AssetStatus st where st.tenant.id = :tenantId and st.dateCreated >= :beginDate");
 		query.setParameter("tenantId", tenantId);
 		query.setParameter("beginDate", beginDate);
 
@@ -113,7 +113,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			uniqueIDClause = " and p.id <> :id";
 		}
 
-		Query query = em.createQuery("select count(p) from Product p where p.state = :activeState AND UPPER( p.rfidNumber ) = :rfidNumber" + uniqueIDClause
+		Query query = em.createQuery("select count(p) from "+Asset.class.getName()+" p where p.state = :activeState AND UPPER( p.rfidNumber ) = :rfidNumber" + uniqueIDClause
 				+ " and p.tenant.id = :tenantId group by p.rfidNumber");
 
 		query.setParameter("rfidNumber", rfidNumber.toUpperCase());
@@ -135,7 +135,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	
 	
-	public Product create(Product product, User modifiedBy) throws SubProductUniquenessException {
+	public Asset create(Asset product, User modifiedBy) throws SubProductUniquenessException {
 		runProductSavePreRecs(product, modifiedBy);
 		
 		ProductSaver saver = new ProductSaver();
@@ -150,35 +150,35 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		
 	}
 
-	private void saveSubProducts(Product product) {
+	private void saveSubProducts(Asset product) {
 		for (SubProduct subProduct : product.getSubProducts()) {
 			persistenceManager.update(subProduct);
 		}
 		
 	}
 	
-	private void setCountsTowardsLimitFlagOnLinkedProducts(Product product) {
+	private void setCountsTowardsLimitFlagOnLinkedProducts(Asset product) {
 		if (product.isLinked()) {
-			// if the linked product's primary org has the unlimited feature, it will not count
-			PrimaryOrg linkedPrimary = product.getLinkedProduct().getOwner().getPrimaryOrg();
+			// if the linked asset's primary org has the unlimited feature, it will not count
+			PrimaryOrg linkedPrimary = product.getLinkedAsset().getOwner().getPrimaryOrg();
 			boolean hasUnlimitedFeature = linkedPrimary.hasExtendedFeature(ExtendedFeature.UnlimitedLinkedAssets);
 			product.setCountsTowardsLimit(!hasUnlimitedFeature);
 		}
 	}
 
-	private void runProductSavePreRecs(Product product, User modifiedBy) throws SubProductUniquenessException {
+	private void runProductSavePreRecs(Asset product, User modifiedBy) throws SubProductUniquenessException {
 		moveRfidFromProductSerials(product, modifiedBy);
 		setCountsTowardsLimitFlagOnLinkedProducts(product);
 		processSubProducts(product, modifiedBy);
 	}
 
-	public Product update(Product product, User modifiedBy) throws SubProductUniquenessException {
+	public Asset update(Asset product, User modifiedBy) throws SubProductUniquenessException {
 		product.touch();
 		runProductSavePreRecs(product, modifiedBy);
 		
 		/*
 		 * TODO: The saving of sub products should NOT be here!!!  The list of sub products is marked as @Transient,
-		 * meaning that we do not want it persisted with the Product, the following logic essentially overrides this.
+		 * meaning that we do not want it persisted with the Asset, the following logic essentially overrides this.
 		 */
 		saveSubProducts(product);
 		
@@ -190,18 +190,18 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return product;
 	}
 
-	private void updateSchedulesOwnership(Product product) {
+	private void updateSchedulesOwnership(Asset asset) {
 		
 		QueryBuilder<Long> schedules = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter())
 					.setSimpleSelect("id")
-					.addSimpleWhere("product", product)
+					.addSimpleWhere("asset", asset)
 					.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
 			
 		for (Long id : schedules.getResultList(em)) {
 			InspectionSchedule schedule = persistenceManager.find(InspectionSchedule.class, id);
 			
-			schedule.setOwner(product.getOwner());
-			schedule.setAdvancedLocation(product.getAdvancedLocation());
+			schedule.setOwner(asset.getOwner());
+			schedule.setAdvancedLocation(asset.getAdvancedLocation());
 			
 			persistenceManager.save(schedule);
 		}
@@ -210,36 +210,36 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		
 	}
 
-	private void processSubProducts(Product product, User modifiedBy) throws SubProductUniquenessException {
+	private void processSubProducts(Asset asset, User modifiedBy) throws SubProductUniquenessException {
 
-		checkForUniqueSubProducts(product);
-		clearOldSubProducts(product);
+		checkForUniqueSubProducts(asset);
+		clearOldSubProducts(asset);
 		
 		long weight = 0;
-		for (SubProduct subProduct : product.getSubProducts()) {
+		for (SubProduct subProduct : asset.getSubProducts()) {
 
-			detachFromPreviousParent(product, subProduct, modifiedBy);
+			detachFromPreviousParent(asset, subProduct, modifiedBy);
 
-			subProduct.getProduct().setOwner(product.getOwner());
-			subProduct.getProduct().setAdvancedLocation(product.getAdvancedLocation());
-			subProduct.getProduct().setAssignedUser(product.getAssignedUser());
-			subProduct.getProduct().setProductStatus(product.getProductStatus());
+			subProduct.getAsset().setOwner(asset.getOwner());
+			subProduct.getAsset().setAdvancedLocation(asset.getAdvancedLocation());
+			subProduct.getAsset().setAssignedUser(asset.getAssignedUser());
+			subProduct.getAsset().setAssetStatus(asset.getAssetStatus());
 			subProduct.setWeight(weight);
 
 			ProductSaver saver = new ProductSaver();
 			saver.setModifiedBy(modifiedBy);
-			saver.update(em, subProduct.getProduct());
+			saver.update(em, subProduct.getAsset());
 			
 			weight++;
 		}
 	}
 
-	private void clearOldSubProducts(Product product) {
-		if (!product.isNew()) {
-			List<SubProduct> existingSubProducts = persistenceManager.findAll(new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("masterProduct", product));
+	private void clearOldSubProducts(Asset asset) {
+		if (!asset.isNew()) {
+			List<SubProduct> existingSubProducts = persistenceManager.findAll(new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("masterAsset", asset));
 			for (SubProduct subProduct : existingSubProducts) {
-				if (product.getSubProducts().contains(subProduct)) {
-					SubProduct subProductToUpdate = product.getSubProducts().get(product.getSubProducts().indexOf(subProduct));
+				if (asset.getSubProducts().contains(subProduct)) {
+					SubProduct subProductToUpdate = asset.getSubProducts().get(asset.getSubProducts().indexOf(subProduct));
 					subProductToUpdate.setCreated(subProduct.getCreated());
 					subProductToUpdate.setId(subProduct.getId());
 				} else {
@@ -249,38 +249,38 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		}
 	}
 
-	private void detachFromPreviousParent(Product product, SubProduct subProduct, User modifiedBy) {
-		Product parentProduct = productManager.parentProduct(subProduct.getProduct());
+	private void detachFromPreviousParent(Asset asset, SubProduct subProduct, User modifiedBy) {
+		Asset parentProduct = productManager.parentProduct(subProduct.getAsset());
 
-		if (parentProduct != null && !parentProduct.equals(product)) {
+		if (parentProduct != null && !parentProduct.equals(asset)) {
 			try {
-				QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("product", subProduct.getProduct());
+				QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("asset", subProduct.getAsset());
 				SubProduct subProductToRemove = persistenceManager.find(query);
 				parentProduct.getSubProducts().remove(subProductToRemove);
 				persistenceManager.delete(subProductToRemove);
 				update(parentProduct, modifiedBy);
 			} catch (SubProductUniquenessException e) {
-				logger.error("parnet product is in an invalid state in the database", e);
-				throw new RuntimeException("parnet product is in an invalid state in the database", e);
+				logger.error("parnet asset is in an invalid state in the database", e);
+				throw new RuntimeException("parnet asset is in an invalid state in the database", e);
 			}
 		}
 	}
 
 	
 
-	public void checkForUniqueSubProducts(Product product) throws SubProductUniquenessException {
-		Set<SubProduct> uniqueSubProducts = new HashSet<SubProduct>(product.getSubProducts());
-		if (product.getSubProducts().size() != uniqueSubProducts.size()) {
+	public void checkForUniqueSubProducts(Asset asset) throws SubProductUniquenessException {
+		Set<SubProduct> uniqueSubProducts = new HashSet<SubProduct>(asset.getSubProducts());
+		if (asset.getSubProducts().size() != uniqueSubProducts.size()) {
 			throw new SubProductUniquenessException();
 		}
 	}
 
 	/**
-	 * creates the product serial and updates the given users add
+	 * creates the asset serial and updates the given users add
 	 * productHistory.
 	 */
-	public Product createWithHistory(Product product, User modifiedBy) throws SubProductUniquenessException {
-		product = create(product, modifiedBy);
+	public Asset createWithHistory(Asset asset, User modifiedBy) throws SubProductUniquenessException {
+		asset = create(asset, modifiedBy);
 
 		AddProductHistoryBean addProductHistory = getAddProductHistory(modifiedBy.getId());
 
@@ -289,33 +289,33 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			addProductHistory.setUser(modifiedBy);
 		}
 
-		addProductHistory.setOwner(product.getOwner());
-		addProductHistory.setProductType(product.getType());
-		addProductHistory.setProductStatus(product.getProductStatus());
-		addProductHistory.setPurchaseOrder(product.getPurchaseOrder());
-		addProductHistory.setLocation(product.getAdvancedLocation());
-		addProductHistory.setInfoOptions(new ArrayList<InfoOptionBean>(product.getInfoOptions()));
-		addProductHistory.setAssignedUser(product.getAssignedUser());
+		addProductHistory.setOwner(asset.getOwner());
+		addProductHistory.setProductType(asset.getType());
+		addProductHistory.setProductStatus(asset.getAssetStatus());
+		addProductHistory.setPurchaseOrder(asset.getPurchaseOrder());
+		addProductHistory.setLocation(asset.getAdvancedLocation());
+		addProductHistory.setInfoOptions(new ArrayList<InfoOptionBean>(asset.getInfoOptions()));
+		addProductHistory.setAssignedUser(asset.getAssignedUser());
 
 		em.merge(addProductHistory);
 
-		return product;
+		return asset;
 	}
 
-	private void moveRfidFromProductSerials(Product product, User modifiedBy) {
+	private void moveRfidFromProductSerials(Asset asset, User modifiedBy) {
 		ProductSaver saver = new ProductSaver();
 		saver.setModifiedBy(modifiedBy);
 		
-		if (rfidExists(product.getRfidNumber(), product.getTenant().getId())) {
-			Collection<Product> duplicateRfidProducts = productManager.findProductsByRfidNumber(product.getRfidNumber(), new TenantOnlySecurityFilter(product.getTenant().getId()));
-			for (Product duplicateRfidProduct : duplicateRfidProducts) {
-				if (!duplicateRfidProduct.getId().equals(product.getId())) {
-					duplicateRfidProduct.setRfidNumber(null);
+		if (rfidExists(asset.getRfidNumber(), asset.getTenant().getId())) {
+			Collection<Asset> duplicateRfidAssets = productManager.findProductsByRfidNumber(asset.getRfidNumber(), new TenantOnlySecurityFilter(asset.getTenant().getId()));
+			for (Asset duplicateRfidAsset : duplicateRfidAssets) {
+				if (!duplicateRfidAsset.getId().equals(asset.getId())) {
+					duplicateRfidAsset.setRfidNumber(null);
 					
-					saver.update(em, duplicateRfidProduct);
+					saver.update(em, duplicateRfidAsset);
 
-					String auditMessage = "Moving RFID [" + product.getRfidNumber() + "] from ProductSerial [" + duplicateRfidProduct.getId() + ":" + duplicateRfidProduct.getSerialNumber() + "] to [" + product.getId() + ":"
-							+ product.getSerialNumber() + "]";
+					String auditMessage = "Moving RFID [" + asset.getRfidNumber() + "] from ProductSerial [" + duplicateRfidAsset.getId() + ":" + duplicateRfidAsset.getSerialNumber() + "] to [" + asset.getId() + ":"
+							+ asset.getSerialNumber() + "]";
 					auditLogger.info(auditMessage);
 				}
 			}
@@ -325,7 +325,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	@SuppressWarnings("unchecked")
 	public AddProductHistoryBean getAddProductHistory(Long rFieldidUser) {
-		Query query = em.createQuery("from AddProductHistoryBean aph where aph.user.id = :rFieldidUser");
+		Query query = em.createQuery("from "+AddProductHistoryBean.class.getName()+" aph where aph.user.id = :rFieldidUser");
 		query.setParameter("rFieldidUser", rFieldidUser);
 
 		List<AddProductHistoryBean> addProductHistoryList = (List<AddProductHistoryBean>) query.getResultList();
@@ -340,20 +340,20 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<ProductSerialExtensionBean> getProductSerialExtensions(Long tenantId) {
-		Query query = em.createQuery("from ProductSerialExtensionBean pse where pse.tenantId = :tenantId");
+	public Collection<AssetSerialExtension> getProductSerialExtensions(Long tenantId) {
+		Query query = em.createQuery("from "+AssetSerialExtension.class.getName()+" ase where ase.tenantId = :tenantId");
 		query.setParameter("tenantId", tenantId);
 
-		return (Collection<ProductSerialExtensionBean>) query.getResultList();
+		return (Collection<AssetSerialExtension>) query.getResultList();
 	}
 
 	
 
 	public boolean duplicateSerialNumber(String serialNumber, Long uniqueID, Tenant tenant) {
-		String queryString = "select count(p.id) from Product p where p.tenant = :tenant " + " and lower(p.serialNumber) = :serialNumber";
+		String queryString = "select count(a.id) from Asset a where a.tenant = :tenant " + " and lower(a.serialNumber) = :serialNumber";
 		
 		if (uniqueID != null) {
-			queryString += " AND p.id != :uniqueId ";
+			queryString += " AND a.id <> :uniqueId ";
 		}
 
 		Query query = em.createQuery(queryString).setParameter("tenant", tenant).setParameter("serialNumber", serialNumber.trim().toLowerCase());
@@ -367,8 +367,8 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return value != 0L;
 	}
 
-	public Inspection findLastInspections(Product product, SecurityFilter securityFilter) {
-		Query inspectionQuery = createAllInspectionQuery(product, securityFilter, false, true);
+	public Inspection findLastInspections(Asset asset, SecurityFilter securityFilter) {
+		Query inspectionQuery = createAllInspectionQuery(asset, securityFilter, false, true);
 		Inspection inspection = null;
 		try {
 			inspection = (Inspection) inspectionQuery.getSingleResult();
@@ -377,26 +377,26 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return inspection;
 	}
 
-	public Long countAllInspections(Product product, SecurityFilter securityFilter) {
-		Long count = countAllLocalInspections(product, securityFilter);
+	public Long countAllInspections(Asset asset, SecurityFilter securityFilter) {
+		Long count = countAllLocalInspections(asset, securityFilter);
 		return count;
 	}
 	
-	public Long countAllLocalInspections(Product product, SecurityFilter securityFilter) {
-		Query inspectionQuery = createAllInspectionQuery(product, securityFilter, true);
+	public Long countAllLocalInspections(Asset asset, SecurityFilter securityFilter) {
+		Query inspectionQuery = createAllInspectionQuery(asset, securityFilter, true);
 		return (Long)inspectionQuery.getSingleResult();
 		
 	}
 
 	
 
-	private Query createAllInspectionQuery(Product product, SecurityFilter securityFilter, boolean count) {
-		return createAllInspectionQuery(product, securityFilter, count, false);
+	private Query createAllInspectionQuery(Asset asset, SecurityFilter securityFilter, boolean count) {
+		return createAllInspectionQuery(asset, securityFilter, count, false);
 	}
 
-	private Query createAllInspectionQuery(Product product, SecurityFilter securityFilter, boolean count, boolean lastInspection) {
-		String query = "from Inspection inspection  left join inspection.product " + "WHERE  " + securityFilter.produceWhereClause(Inspection.class, "inspection")
-				+ " AND inspection.product = :product AND inspection.state= :activeState";
+	private Query createAllInspectionQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastInspection) {
+		String query = "from Inspection inspection  left join inspection.asset " + "WHERE  " + securityFilter.produceWhereClause(Inspection.class, "inspection")
+				+ " AND inspection.asset = :asset AND inspection.state= :activeState";
 		if (count) {
 			query = "SELECT count(inspection.id) " + query;
 		} else {
@@ -412,20 +412,20 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 			inspectionQuery.setMaxResults(1);
 		}
 
-		inspectionQuery.setParameter("product", product);
+		inspectionQuery.setParameter("asset", asset);
 		securityFilter.applyParameters(inspectionQuery, Inspection.class);
 		inspectionQuery.setParameter("activeState", EntityState.ACTIVE);
 
 		return inspectionQuery;
 	}
 
-	public Product createProductWithServiceTransaction(String transactionGUID, Product product, User modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
+	public Asset createProductWithServiceTransaction(String transactionGUID, Asset asset, User modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
 
-		product = create(product, modifiedBy);
+		asset = create(asset, modifiedBy);
 
 		TransactionSupervisor transaction = new TransactionSupervisor(persistenceManager);
-		transaction.completeProductTransaction(transactionGUID, product.getTenant());
+		transaction.completeProductTransaction(transactionGUID, asset.getTenant());
 
-		return product;
+		return asset;
 	}
 }

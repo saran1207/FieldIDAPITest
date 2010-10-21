@@ -12,23 +12,23 @@
 			<th></th>
 		</tr>
 		
-		<#list page.list as product>
+		<#list page.list as asset>
 		<tr>
 			<td>
-				<a href='<@s.url value="showNetworkProduct.action" uniqueID="${product.id}"/>' >${product.serialNumber}</a>
+				<a href='<@s.url value="showNetworkProduct.action" uniqueID="${asset.id}"/>' >${asset.serialNumber}</a>
 			</td>
-			<#if product.rfidNumber??>
-				<td>${product.rfidNumber}</td>
+			<#if asset.rfidNumber??>
+				<td>${asset.rfidNumber}</td>
 			<#else>
 				<td></td>
 			</#if>			
-			<td>${product.type.name}</td>				
-			<td>${product.description}</td>	
+			<td>${asset.type.name}</td>
+			<td>${asset.description}</td>
 			<td>
-			    <#if action.isProductAlreadyRegistered(product)>
+			    <#if action.isAssetAlreadyRegistered(asset)>
                     <@s.text name="label.already_registered"/>
                 <#else>
-                    <a href='<@s.url action="regNetworkProduct.action" namespace="/aHtml/iframe" uniqueID="${product.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
+                    <a href='<@s.url action="regNetworkProduct.action" namespace="/aHtml/iframe" uniqueID="${asset.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
                 </#if>
 
 				

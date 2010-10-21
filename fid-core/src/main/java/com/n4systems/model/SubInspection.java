@@ -16,7 +16,7 @@ import com.n4systems.util.StringUtils;
 @PrimaryKeyJoinColumn(name="inspection_id")
 public class SubInspection extends AbstractInspection implements SecurityEnhanced<SubInspection> {
 	private static final long serialVersionUID = 1L;
-	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions", "infoOptionMap"};
+	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap"};
 	
 	@Column( length = 255 )
 	private String name;
@@ -44,7 +44,7 @@ public class SubInspection extends AbstractInspection implements SecurityEnhance
 	public SubInspection enhance(SecurityLevel level) {
 		SubInspection enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setType(enhance(getType(), level));
-		enhanced.setProduct(enhance(getProduct(), level));
+		enhanced.setAsset(enhance(getAsset(), level));
 		return enhanced;
 	}
 	

@@ -2,24 +2,24 @@ package com.n4systems.ejb;
 
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 
 public interface InspectionScheduleManager {
 	
-	public List<InspectionSchedule> autoSchedule(Product product);
+	public List<InspectionSchedule> autoSchedule(Asset asset);
 	
 	public InspectionSchedule update(InspectionSchedule schedule);
 	public void restoreScheduleForInspection(Inspection inspection);
 	
 
 	
-	public void removeAllSchedulesFor(Product product);
+	public void removeAllSchedulesFor(Asset asset);
 	
 	
 	
-	public List<InspectionSchedule> getAvailableSchedulesFor(Product product);
+	public List<InspectionSchedule> getAvailableSchedulesFor(Asset asset);
 	
 	public boolean schedulePastDue(Long scheduleId);
 	public Long getProductIdForSchedule(Long scheduleId);

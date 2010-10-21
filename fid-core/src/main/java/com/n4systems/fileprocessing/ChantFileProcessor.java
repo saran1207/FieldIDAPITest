@@ -22,8 +22,8 @@ import com.n4systems.tools.FileDataContainer;
 
 /*
  * This is a pulltest processor for Chant files, implementing the FileProcessor interface.  Chant files
- * are xml based and contain a large amount of data, including product and customer information.
- * There is actually enough information to add a product although we do not currently support this.
+ * are xml based and contain a large amount of data, including asset and customer information.
+ * There is actually enough information to add a asset although we do not currently support this.
  */
 public class ChantFileProcessor extends FileProcessor {
 	private final Logger logger = Logger.getLogger(ChantFileProcessor.class);

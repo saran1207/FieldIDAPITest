@@ -16,12 +16,13 @@ public class SubProduct extends AbstractEntity implements UnsecuredEntity {
 
 	private static final long serialVersionUID = 1L;
 	
-	@OneToOne()
+	@OneToOne
 	@JoinColumn(name="product_id")
-	private Product product;
+	private Asset asset;
 	
-	@ManyToOne()
-	private Product masterProduct;
+	@ManyToOne
+    @JoinColumn(name="masterproduct_id")
+	private Asset masterAsset;
 	
 	@Column(length=255)
 	private String label;
@@ -33,24 +34,24 @@ public class SubProduct extends AbstractEntity implements UnsecuredEntity {
 		this(null, null, null);
 	}
 	
-	public SubProduct(Product product, Product master) {
-		this(null, product, master);
+	public SubProduct(Asset asset, Asset master) {
+		this(null, asset, master);
 	}
 	
-	public SubProduct(String label, Product product, Product master) {
+	public SubProduct(String label, Asset asset, Asset master) {
 		super();
 		this.label = label;
-		this.product = product;
-		this.masterProduct = master;
+		this.asset = asset;
+		this.masterAsset = master;
 	}
 
 
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setAsset(Asset asset) {
+		this.asset = asset;
 	}
 
 	public String getLabel() {
@@ -87,7 +88,7 @@ public class SubProduct extends AbstractEntity implements UnsecuredEntity {
 	public boolean equals(Object obj) {
 		if (obj instanceof SubProduct && obj != null) {
 			SubProduct subProduct = (SubProduct) obj;
-			return getProduct().equals(subProduct.getProduct());
+			return getAsset().equals(subProduct.getAsset());
 		}
 		
 		return super.equals(obj);
@@ -95,15 +96,15 @@ public class SubProduct extends AbstractEntity implements UnsecuredEntity {
 	
 	@Override
 	public int hashCode() {
-		return getProduct().hashCode();
+		return getAsset().hashCode();
 	}
 
-	public Product getMasterProduct() {
-		return masterProduct;
+	public Asset getMasterProduct() {
+		return masterAsset;
 	}
 
-	public void setMasterProduct(Product masterProduct) {
-		this.masterProduct = masterProduct;
+	public void setMasterProduct(Asset masterProduct) {
+		this.masterAsset = masterProduct;
 	}
 
 	public Long getWeight() {

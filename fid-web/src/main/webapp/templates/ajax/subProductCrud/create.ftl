@@ -4,10 +4,10 @@
 </#assign>
 
 <#escape x as x?js_string>
-	if( $('subProduct_${subProduct.product.id}') == null ) {
+	if( $('subProduct_${subProduct.asset.id}') == null ) {
 		$('productComponentList').insert( '${html}' );
-		if( $( 'subProductCreateForm_${subProduct.product.type.id}' ) != null ) { 
-			Effect.BlindUp( 'subProductCreateForm_${subProduct.product.type.id}' );
+		if( $( 'subProductCreateForm_${subProduct.asset.type.id}' ) != null ) {
+			Effect.BlindUp( 'subProductCreateForm_${subProduct.asset.type.id}' );
 		}
 		
 	} else {

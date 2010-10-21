@@ -41,7 +41,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	private CatalogService linkedCatalogAccess;
 	private LegacyProductType productTypeManager;
 	
-	private Map<String,Boolean> importProductTypeIds = new HashMap<String, Boolean>();
+	private Map<String,Boolean> importAssetTypeIds = new HashMap<String, Boolean>();
 	private Map<String,Boolean> importInspectionTypeIds = new HashMap<String, Boolean>();
 	private boolean usingPackage = false;
 	
@@ -93,7 +93,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 
 	public String doConfirm() {
 		doShow();
-		Set<Long> importTheseProductTypeIds = covertSelectedIdsToSet(importProductTypeIds);
+		Set<Long> importTheseProductTypeIds = covertSelectedIdsToSet(importAssetTypeIds);
 		Set<Long> importTheseInspectionTypeIds = covertSelectedIdsToSet(importInspectionTypeIds);
 		
 		try {
@@ -137,7 +137,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 			CatalogImportTask importTask = new CatalogImportTask();
 			
 			importTask.setImportInspectionTypeIds(covertSelectedIdsToSet(importInspectionTypeIds));
-			importTask.setImportProductTypeIds(covertSelectedIdsToSet(importProductTypeIds));
+			importTask.setImportProductTypeIds(covertSelectedIdsToSet(importAssetTypeIds));
 			importTask.setPrimaryOrg(getPrimaryOrg());
 			importTask.setLinkedTenant(getLinkedTenant());
 			importTask.setUsingPackages(usingPackage);
@@ -145,10 +145,10 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 
 			TaskExecutor.getInstance().execute(importTask);
 
-			logger.info(getLogLinePrefix() + "secheduled imported product types from " + linkedTenant.getName() + " catalog");
+			logger.info(getLogLinePrefix() + "secheduled imported asset types from " + linkedTenant.getName() + " catalog");
 			
 		} catch (Exception e) {
-			logger.error(getLogLinePrefix() + " could not import product types from " + linkedTenant.getName() + " catalog", e);
+			logger.error(getLogLinePrefix() + " could not import asset types from " + linkedTenant.getName() + " catalog", e);
 			addActionErrorText("error.importing_catalog");
 			return ERROR;
 		}
@@ -160,9 +160,8 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		return linkedTenant;
 	}
 	
-	public List<ListingPair> getPublishedProductTypes() {
+	public List<ListingPair> getPublishedAssetTypes() {
 		return linkedCatalogAccess.getPublishedProductTypesLP();
-		
 	}
 
 	public Map<String, Boolean> getImportInspectionTypeIds() {
@@ -174,15 +173,15 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		
 	}
 
-	public Map<String, Boolean> getImportProductTypeIds() {
-		return importProductTypeIds;
+	public Map<String, Boolean> getImportAssetTypeIds() {
+		return importAssetTypeIds;
 	}
 
 
-	public List<ListingPair> getInspectionTypesFor(Long productTypeId) {
-		if (!cacheInpsectionTypes.containsKey(productTypeId)) {
+	public List<ListingPair> getInspectionTypesFor(Long assetTypeId) {
+		if (!cacheInpsectionTypes.containsKey(assetTypeId)) {
 			Set<Long> ids = new HashSet<Long>();
-			ids.add(productTypeId);
+			ids.add(assetTypeId);
 			Set<Long> inspectionTypeIds = linkedCatalogAccess.getPublishedInspectionTypeIdsConnectedTo(ids);
 			List<ListingPair> inspectionTypes = new ArrayList<ListingPair>();
 			for (ListingPair inspectionType : getPublishedInspectionTypes()) {
@@ -190,23 +189,23 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 					inspectionTypes.add(inspectionType);
 				}
 			}
-			cacheInpsectionTypes.put(productTypeId, inspectionTypes);
+			cacheInpsectionTypes.put(assetTypeId, inspectionTypes);
 		}
-		return cacheInpsectionTypes.get(productTypeId);
+		return cacheInpsectionTypes.get(assetTypeId);
 	}
 	
-	public List<ListingPair> getSubTypesFor(Long productTypeId) {
-		if (!cacheSubTypes.containsKey(productTypeId)) {
-			List<Long> subTypeIds = linkedCatalogAccess.getAllPublishedSubTypesFor(productTypeId);
+	public List<ListingPair> getSubTypesFor(Long assetTypeId) {
+		if (!cacheSubTypes.containsKey(assetTypeId)) {
+			List<Long> subTypeIds = linkedCatalogAccess.getAllPublishedSubTypesFor(assetTypeId);
 			List<ListingPair> subTypes = new ArrayList<ListingPair>();
-			for (ListingPair productType : getPublishedProductTypes()) {
+			for (ListingPair productType : getPublishedAssetTypes()) {
 				if (subTypeIds.contains(productType.getId())) {
 					subTypes.add(productType);
 				}
 			}
-			cacheSubTypes.put(productTypeId, subTypes);
+			cacheSubTypes.put(assetTypeId, subTypes);
 		}
-		return cacheSubTypes.get(productTypeId);
+		return cacheSubTypes.get(assetTypeId);
 	}
 	
 	public CatalogImportSummary getSummary() {

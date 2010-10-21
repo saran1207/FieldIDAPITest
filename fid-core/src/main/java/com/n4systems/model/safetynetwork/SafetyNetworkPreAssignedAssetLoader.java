@@ -1,17 +1,13 @@
 package com.n4systems.model.safetynetwork;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.loaders.Loader;
-import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.Arrays;
-import java.util.List;
 
-public class SafetyNetworkPreAssignedAssetLoader extends Loader<Pager<Product>> {
+public class SafetyNetworkPreAssignedAssetLoader extends Loader<Pager<Asset>> {
 
 	private PrimaryOrg vendor;
 	private PrimaryOrg customer;
@@ -30,7 +26,7 @@ public class SafetyNetworkPreAssignedAssetLoader extends Loader<Pager<Product>> 
 	}
 
     @Override
-    protected Pager<Product> load(EntityManager em) {
+    protected Pager<Asset> load(EntityManager em) {
         UnregisteredAssetQueryHelper helper = new UnregisteredAssetQueryHelper(vendor, customer, true);
 
         return helper.getPager(em, page, pageSize, new String[] { "infoOptions" });

@@ -78,8 +78,8 @@ ${action.setPageType('product', 'productconfiguration')!}
 			<div class="definition">
 				<div class="identifier">${type.name}</div> 
 				<div class="createOptions">
-					<a href="<@s.url action="productAdd" namespace="/ajax"  productTypeId="${type.id}"/>" id="addSubProduct_${type.id}" onclick="addSubProduct(${type.id}, ${(product.owner.id)}); return false"><@s.text name="label.add_new" /></a> | 
-					<a href='<@s.url action="products" namespace="/aHtml"  productTypeId="${type.id}"/>' id="lookUpSubProduct_${type.id}"  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubProduct }' ><@s.text name="label.find_existing" /></a>
+					<a href="<@s.url action="productAdd" namespace="/ajax"  assetTypeId="${type.id}"/>" id="addSubProduct_${type.id}" onclick="addSubProduct(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
+					<a href='<@s.url action="products" namespace="/aHtml"  assetTypeId="${type.id}"/>' id="lookUpSubProduct_${type.id}"  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubProduct }' ><@s.text name="label.find_existing" /></a>
 		  		</div> 
 			</div>
 		</div>

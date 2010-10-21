@@ -1,6 +1,7 @@
 package com.n4systems.model;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -12,32 +13,28 @@ import com.n4systems.model.parents.EntityWithTenant;
 public class AssociatedInspectionType extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 
-	
 	@ManyToOne
 	private InspectionType inspectionType;
 	
-	
 	@ManyToOne
-	private ProductType productType;
-	
+    @JoinColumn(name="producttype_id")
+	private AssetType assetType;
 	
 	public AssociatedInspectionType() {
-		super();
 	}
 	
-	public AssociatedInspectionType(InspectionType inspectionType, ProductType productType) {
+	public AssociatedInspectionType(InspectionType inspectionType, AssetType assetType) {
 		super(inspectionType.getTenant());
 		this.inspectionType = inspectionType;
-		this.productType = productType;
-	}
-	
-
-	public ProductType getProductType() {
-		return productType;
+		this.assetType = assetType;
 	}
 
-	public void setProductType(ProductType productType) {
-		this.productType = productType;
+	public AssetType getAssetType() {
+		return assetType;
+	}
+
+	public void setAssetType(AssetType assetType) {
+		this.assetType = assetType;
 	}
 
 	public InspectionType getInspectionType() {

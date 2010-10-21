@@ -3,7 +3,7 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.safetynetwork.ProductAlreadyRegisteredLoader;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
@@ -111,8 +111,8 @@ public class SafetyNetwork extends AbstractCrud {
 		}
 	}
 
-    public boolean isProductAlreadyRegistered(Product product) {
+    public boolean isAssetAlreadyRegistered(Asset asset) {
         ProductAlreadyRegisteredLoader loader = getLoaderFactory().createProductAlreadyRegisteredLoader();
-        return loader.setNetworkId(product.getNetworkId()).load();
+        return loader.setNetworkId(asset.getNetworkId()).load();
     }
 }

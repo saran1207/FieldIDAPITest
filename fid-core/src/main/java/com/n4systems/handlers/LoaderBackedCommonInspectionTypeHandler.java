@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.AssetType;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.inspectiontype.CommonProductTypeLoader;
 
 public class LoaderBackedCommonInspectionTypeHandler implements CommonInspectionTypeHandler {
@@ -20,15 +20,15 @@ public class LoaderBackedCommonInspectionTypeHandler implements CommonInspection
 	public Set<InspectionType> findCommonInspectionTypesFor(List<Long> assetIds) {
 	
 
-		List<ProductType> resultSet = getProductTypes(assetIds);
+		List<AssetType> resultSet = getProductTypes(assetIds);
 
 		Set<InspectionType> filterCommonInspectionTypes = filterCommonInspectionTypes(resultSet);
 		return filterCommonInspectionTypes == null ? new HashSet<InspectionType>() : filterCommonInspectionTypes;
 	}
 
-	private List<ProductType> getProductTypes(List<Long> assetIds) {
+	private List<AssetType> getProductTypes(List<Long> assetIds) {
 		if (assetIds.isEmpty()) {
-			return new ArrayList<ProductType>();
+			return new ArrayList<AssetType>();
 		}
 		
 		return productTypeIdLoader.forAssets(assetIds).load();
@@ -36,10 +36,10 @@ public class LoaderBackedCommonInspectionTypeHandler implements CommonInspection
 
 	@SuppressWarnings("deprecation")
 	private Set<InspectionType> filterCommonInspectionTypes(
-			List<ProductType> resultSet) {
+			List<AssetType> resultSet) {
 		Set<InspectionType> commonInspectionTypes = null;
-		for (ProductType productType : resultSet) {
-			Set<InspectionType> currentInspectionTypes = productType.getInspectionTypes();
+		for (AssetType assetType : resultSet) {
+			Set<InspectionType> currentInspectionTypes = assetType.getInspectionTypes();
 			if (commonInspectionTypes == null) {
 				commonInspectionTypes = currentInspectionTypes;
 			} else {

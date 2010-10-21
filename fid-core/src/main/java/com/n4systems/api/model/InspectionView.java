@@ -38,7 +38,7 @@ public class InspectionView extends ExternalModelView {
 	@ExportField(title = "Printable (Y/N)", order = 700, validators = { YNValidator.class })
 	private String printable;
 
-	@ExportField(title = "Product Status", order = 800, validators = { ProductStatusExistsValidator.class })
+	@ExportField(title = "Asset Status", order = 800, validators = { ProductStatusExistsValidator.class })
 	private String productStatus;
 
 	@ExportField(title = "Next Inspection Date", order = 900, validators = { DateValidator.class })

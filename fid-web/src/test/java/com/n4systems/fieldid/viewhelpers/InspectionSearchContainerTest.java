@@ -30,7 +30,7 @@ public class InspectionSearchContainerTest extends SearchContainerTestCase {
 
 		WhereParameter<?> whereClause = getSingleWhereClause(inspectionSearchContainer);
 
-		assertEquals("product_serialNumber", whereClause.getName());
+		assertEquals("asset_serialNumber", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.EQ);
@@ -45,7 +45,7 @@ public class InspectionSearchContainerTest extends SearchContainerTestCase {
 
 		WhereParameter<?> whereClause = getSingleWhereClause(inspectionSearchContainer);
 
-		assertEquals("product_serialNumber", whereClause.getName());
+		assertEquals("asset_serialNumber", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.LIKE);
@@ -60,7 +60,7 @@ public class InspectionSearchContainerTest extends SearchContainerTestCase {
 
 		WhereParameter<?> whereClause = getSingleWhereClause(inspectionSearchContainer);
 
-		assertEquals("product_serialNumber", whereClause.getName());
+		assertEquals("asset_serialNumber", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.LIKE);

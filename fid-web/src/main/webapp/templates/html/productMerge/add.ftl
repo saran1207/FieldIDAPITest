@@ -13,12 +13,12 @@ ${action.setPageType('product', 'edit')!}
 			event.stop();
 			var element = Event.element(event);
 			
-			$('winningProductId').value = element.getAttribute('productId');
+			$('winningAssetId').value = element.getAttribute('assetId');
 			var winningProductDescription = findFirstParentTag('TR', element);
 			
 			//copy row to confirm screen.
-			$('winningProduct').update(winningProductDescription.innerHTML);
-			$$('#winningProduct .selectAction').each( function(element) {element.update('<@s.text name="label.winner"/>');});
+			$('winningAsset').update(winningProductDescription.innerHTML);
+			$$('#winningAsset .selectAction').each( function(element) {element.update('<@s.text name="label.winner"/>');});
 			
 			$$('#results tr').each(function(element) {
 					element.removeClassName("selected");
@@ -75,11 +75,11 @@ ${action.setPageType('product', 'edit')!}
 					<th><@s.text name="label.identifieddate"/></th>
 				</tr>
 				<tr>
-					<td>${losingProduct.serialNumber?html}</td>
-					<td>${(losingProduct.rfidNumber?html)!}</td>
-					<td>${(losingProduct.owner.name?html)!}</td>
-					<td>${losingProduct.type.name?html}</td>
-					<td>${action.formatDate(losingProduct.identified, false)}</td>
+					<td>${losingAsset.serialNumber?html}</td>
+					<td>${(losingAsset.rfidNumber?html)!}</td>
+					<td>${(losingAsset.owner.name?html)!}</td>
+					<td>${losingAsset.type.name?html}</td>
+					<td>${action.formatDate(losingAsset.identified, false)}</td>
 				</tr>
 			</table>
 			<div class="stepAction">
@@ -99,7 +99,7 @@ ${action.setPageType('product', 'edit')!}
 				<#assign namespace="/ajax"/>
 				<#assign productSearchAction="mergeFindProduct"/>
 				<#assign productFormId="mergeSmartSearch"/>
-				<#assign overRideProductType=losingProduct.type.id/>
+				<#assign overRideProductType=losingAsset.type.id/>
 				<#assign useOverRides=true/>
 				<#include "../inspectionGroup/_searchForm.ftl"/>
 				<div id="results" class="hidden">
@@ -138,23 +138,23 @@ ${action.setPageType('product', 'edit')!}
 				</tr>
 				<tr>
 					<td><@s.text name="label.loser"/></td>
-					<td>${losingProduct.serialNumber?html}</td>
-					<td>${(losingProduct.rfidNumber?html)!}</td>
-					<td>${(losingProduct.owner.name?html)!}</td>
-					<td>${losingProduct.type.name?html}</td>
-					<td>${action.formatDate(losingProduct.identified, false)}</td>
+					<td>${losingAsset.serialNumber?html}</td>
+					<td>${(losingAsset.rfidNumber?html)!}</td>
+					<td>${(losingAsset.owner.name?html)!}</td>
+					<td>${losingAsset.type.name?html}</td>
+					<td>${action.formatDate(losingAsset.identified, false)}</td>
 				</tr>
-				<tr id="winningProduct">
+				<tr id="winningAsset">
 				</tr>
 			</table>
 			
 
 			<@s.form action="productMergeCreate" id="productMergeCreate" theme="fieldidSimple">
 				<@s.hidden name="uniqueID"/>
-				<@s.hidden id="winningProductId" name="winningProductId"/>
+				<@s.hidden id="winningAssetId" name="winningAssetId"/>
 				<div class="stepAction">
 					<@s.submit key="label.merge" id="merge"/>
-					<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="$('winningProductId').value=''; backToStep(2);"><@s.text name="label.back_to_step"/> 2</a>
+					<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="$('winningAssetId').value=''; backToStep(2);"><@s.text name="label.back_to_step"/> 2</a>
 				</div>
 			</@s.form>				
 		</div>

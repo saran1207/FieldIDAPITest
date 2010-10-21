@@ -1,10 +1,11 @@
 package com.n4systems.services.product;
 
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.model.Asset;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +14,6 @@ import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubProductUniquenessException;
-import com.n4systems.model.Product;
 import com.n4systems.model.user.User;
 
 
@@ -44,98 +44,98 @@ public class ProductSaveServiceTest {
 	
 	@Test
 	public void should_create_product_with_history_no_files() {
-		Product product = aProduct().generate();
-		Product expectedProduct = aProduct().build();
+		Asset asset = anAsset().generate();
+		Asset expectedAsset = anAsset().build();
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.createWithHistory(product, user)).andReturn(expectedProduct);
+			expect(mockProductManager.createWithHistory(asset, user)).andReturn(expectedAsset);
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockProductManager);
 		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
-		sut.setProduct(product);
+		sut.setProduct(asset);
 		
-		Product actualProduct = sut.create();
+		Asset actualAsset = sut.create();
 		
-		assertEquals(expectedProduct, actualProduct);
+		assertEquals(expectedAsset, actualAsset);
 		verify(mockProductManager);
 	}
 	
 	@Test(expected=ProcessFailureException.class)
 	public void should_handle_unique_sub_product_exception_durning_create_product_with_history_no_files() {
-		Product product = aProduct().generate();
-		Product expectedProduct = aProduct().build();
+		Asset asset = anAsset().generate();
+		Asset expectedAsset = anAsset().build();
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.createWithHistory(product, user)).andThrow(new SubProductUniquenessException());
+			expect(mockProductManager.createWithHistory(asset, user)).andThrow(new SubProductUniquenessException());
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockProductManager);
 		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
-		sut.setProduct(product);
+		sut.setProduct(asset);
 		
-		Product actualProduct = sut.create();
+		Asset actualAsset = sut.create();
 		
-		assertEquals(expectedProduct, actualProduct);
+		assertEquals(expectedAsset, actualAsset);
 		verify(mockProductManager);
 	}
 	
 	
 	@Test
 	public void should_update_product_no_files() {
-		Product product = aProduct().build();
+		Asset asset = anAsset().build();
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.update(product, user)).andReturn(product);
+			expect(mockProductManager.update(asset, user)).andReturn(asset);
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockProductManager);
 		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
-		sut.setProduct(product);
+		sut.setProduct(asset);
 		
-		Product actualProduct = sut.update();
+		Asset actualAsset = sut.update();
 		
-		assertEquals(product, actualProduct);
+		assertEquals(asset, actualAsset);
 		verify(mockProductManager);
 	}
 	
 	@Test(expected=ProcessFailureException.class)
 	public void should_handle_unique_sub_product_exception_durning_update_product_no_files() {
-		Product product = aProduct().build();
+		Asset asset = anAsset().build();
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.update(product, user)).andThrow(new SubProductUniquenessException());
+			expect(mockProductManager.update(asset, user)).andThrow(new SubProductUniquenessException());
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
 		replay(mockProductManager);
 		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
-		sut.setProduct(product);
+		sut.setProduct(asset);
 		
-		Product actualProduct = sut.update();
+		Asset actualAsset = sut.update();
 		
-		assertEquals(product, actualProduct);
+		assertEquals(asset, actualAsset);
 		verify(mockProductManager);
 	}
 	
 	@Test
 	public void save_without_history_does_not_create_history() throws SubProductUniquenessException {
-		Product product = aProduct().build();
+		Asset asset = anAsset().build();
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		
-		expect(mockProductManager.create(product, user)).andReturn(product);
+		expect(mockProductManager.create(asset, user)).andReturn(asset);
 		replay(mockProductManager);
 		
 		ProductSaveService sut = new ProductSaveService(mockProductManager, user);
-		sut.setProduct(product);
+		sut.setProduct(asset);
 		
 		sut.createWithoutHistory();
 		

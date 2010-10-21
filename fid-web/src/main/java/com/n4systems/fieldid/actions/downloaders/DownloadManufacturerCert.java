@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.downloaders;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.safetynetwork.ProductsByNetworkIdLoader;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -11,7 +12,6 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.model.Product;
 import com.n4systems.reporting.CertificatePrinter;
 import com.n4systems.reporting.ProductCertificateGenerator;
 
@@ -22,7 +22,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 
 	private ProductManager productManager;
-	private Product product;
+	private Asset asset;
 	private ProductCertificateGenerator certGen;
 
 	private long linkedProductId;
@@ -35,7 +35,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	public String doDownloadLinked() {
 
-		Product ownedProduct = productManager.findProduct(uniqueID, getSecurityFilter());
+		Asset ownedProduct = productManager.findProduct(uniqueID, getSecurityFilter());
 
 		if (ownedProduct == null) {
 			addActionError(getText("error.noproduct"));
@@ -45,11 +45,11 @@ public class DownloadManufacturerCert extends DownloadAction {
 		ProductsByNetworkIdLoader loader = new ProductsByNetworkIdLoader(getSecurityFilter());
 		loader.setNetworkId(ownedProduct.getNetworkId());
 		
-		List<Product> linkedProducts = loader.load();
+		List<Asset> linkedAssets = loader.load();
 		
-		for (Product linkedProduct : linkedProducts) {
-			if (linkedProduct.getId().equals(linkedProductId)) {
-				product = linkedProduct;
+		for (Asset linkedAsset : linkedAssets) {
+			if (linkedAsset.getId().equals(linkedProductId)) {
+				asset = linkedAsset;
 			}
 		}
 
@@ -57,9 +57,9 @@ public class DownloadManufacturerCert extends DownloadAction {
 	}
 
     public String doDownloadSafetyNetwork() {
-        product = getLoaderFactory().createSafetyNetworkProductLoader().setProductId(uniqueID).withAllFields().load();
+        asset = getLoaderFactory().createSafetyNetworkProductLoader().setProductId(uniqueID).withAllFields().load();
 
-		if (product == null) {
+		if (asset == null) {
 			addActionError(getText("error.noproduct"));
 			return MISSING;
 		}
@@ -69,9 +69,9 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	@Override
 	public String doDownload() {
-		product = productManager.findProductAllFields(uniqueID, getSecurityFilter());
+		asset = productManager.findProductAllFields(uniqueID, getSecurityFilter());
 
-		if (product == null) {
+		if (asset == null) {
 			addActionError(getText("error.noproduct"));
 			return MISSING;
 		}
@@ -82,10 +82,10 @@ public class DownloadManufacturerCert extends DownloadAction {
 	private String generateCertificate() {
 		try {
 			
-			JasperPrint p = certGen.generate(product, fetchCurrentUser());
+			JasperPrint p = certGen.generate(asset, fetchCurrentUser());
 			byte[] pdf = new CertificatePrinter().printToPDF(p);
 			
-			fileName = "certificate-" + product.getSerialNumber() + ".pdf";
+			fileName = "certificate-" + asset.getSerialNumber() + ".pdf";
 			sendFile(new ByteArrayInputStream(pdf));
 			
 		} catch (NonPrintableEventType npe) {

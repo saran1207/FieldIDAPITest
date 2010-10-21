@@ -1,4 +1,4 @@
-<#if usingPackage && publishedProductTypes.isEmpty()>
+<#if usingPackage && publishedAssetTypes.isEmpty()>
 	<p class="stepAction">
 		<@s.text name="label.no_asset_types_in_catalog"/> <button onclick="$('usingPackage').value = 'false'; $('step1').hide(); $('step2').hide(); $('step2Loading').show(); $('step1Form').request(getStandardCallbacks()); return false;" ><@s.text name="label.import_event_types"/></button>
 	</p>

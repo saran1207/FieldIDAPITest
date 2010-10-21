@@ -37,25 +37,25 @@ public class AggregateReportManagerImpl implements AggregateReportManager {
 		
 		AggregateReport report = new AggregateReport();
 		
-		String groupByQuery = "select new " + AggregateReportRecord.class.getName() + "( count(inspection.id), inspection.product.type.name, " +
-				"inspection.type.group.name, inspection.type.group.id ) from " + Inspection.class.getName() + " as inspection LEFT JOIN inspection.product LEFT JOIN inspection.product.type " +
+		String groupByQuery = "select new " + AggregateReportRecord.class.getName() + "( count(inspection.id), inspection.asset.type.name, " +
+				"inspection.type.group.name, inspection.type.group.id ) from " + Inspection.class.getName() + " as inspection LEFT JOIN inspection.asset LEFT JOIN inspection.asset.type " +
 				"LEFT JOIN inspection.type.group where inspection.id IN ( :inspections ) " +
-				"GROUP BY inspection.product.type.name, " +
+				"GROUP BY inspection.asset.type.name, " +
 				"inspection.type.group.name, inspection.type.group.id " +
-				"ORDER BY UPPER(inspection.product.type.name), UPPER(inspection.type.group.name) ";
+				"ORDER BY UPPER(inspection.asset.type.name), UPPER(inspection.type.group.name) ";
 		Query query = em.createQuery( groupByQuery );
 		query.setParameter( "inspections", inspectionIds );
 		
 		report.setInspectionTypeGroupsByProductTypes( query.getResultList() );
 		
 		
-		String distinctProducts = "select new " + AggregateReportRecord.class.getName() + "( count( DISTINCT product.id), product.type.name ) " +
-			" from " + Inspection.class.getName() + " as inspection LEFT JOIN inspection.product as product LEFT JOIN product.type" +
+		String distinctAssets = "select new " + AggregateReportRecord.class.getName() + "( count( DISTINCT asset.id), asset.type.name ) " +
+			" from " + Inspection.class.getName() + " as inspection LEFT JOIN inspection.asset as asset LEFT JOIN asset.type" +
 			" WHERE inspection.id IN ( :inspections ) " +
-			" GROUP BY product.type.name  ";
-		Query distinctProductQuery = em.createQuery( distinctProducts );
-		distinctProductQuery.setParameter( "inspections", inspectionIds );
-		report.setDistinctProductsByProductType( distinctProductQuery.getResultList() );
+			" GROUP BY asset.type.name  ";
+		Query distinctAssetQuery = em.createQuery( distinctAssets );
+		distinctAssetQuery.setParameter( "inspections", inspectionIds );
+		report.setDistinctProductsByProductType( distinctAssetQuery.getResultList() );
 		
 		return report;
 	}

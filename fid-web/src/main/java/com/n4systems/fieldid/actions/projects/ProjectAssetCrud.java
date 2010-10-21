@@ -12,7 +12,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
@@ -25,11 +25,11 @@ public class ProjectAssetCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	private ProjectManager projectManager;
-	private Product asset;
+	private Asset asset;
 
 	private Project project;
 
-	private Pager<Product> page;
+	private Pager<Asset> page;
 
 
 	public ProjectAssetCrud(ProjectManager projectManager, PersistenceManager persistenceManager) {
@@ -43,7 +43,7 @@ public class ProjectAssetCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		asset = persistenceManager.find(Product.class, uniqueId, getSecurityFilter());
+		asset = persistenceManager.find(Asset.class, uniqueId, getSecurityFilter());
 		
 	}
 
@@ -134,11 +134,11 @@ public class ProjectAssetCrud extends AbstractCrud {
 		if (projectId == null) {
 			project = null;
 		} else if (project == null || !projectId.equals(project.getId())) {
-			project = persistenceManager.find(Project.class, projectId, getSecurityFilter(), "products");
+			project = persistenceManager.find(Project.class, projectId, getSecurityFilter(), "assets");
 		}
 	}
 
-	public Pager<Product> getPage() {
+	public Pager<Asset> getPage() {
 		if (page == null) {
 			page = projectManager.getAssetsPaged(project, getSecurityFilter(), getCurrentPage(), Constants.PAGE_SIZE);
 		}
@@ -146,7 +146,7 @@ public class ProjectAssetCrud extends AbstractCrud {
 		return page;
 	}
 
-	public Product getAsset() {
+	public Asset getAsset() {
 		return asset;
 	}
 

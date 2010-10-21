@@ -1,10 +1,10 @@
 package com.n4systems.handlers.creator.signup;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
@@ -60,7 +60,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 	}
 	
 	public void createProductStatus(Transaction transaction, String name) {
-		ProductStatusBean pStatus = new ProductStatusBean();
+		AssetStatus pStatus = new AssetStatus();
 		pStatus.setTenant(tenant);
 		pStatus.setName(name);
 		
@@ -76,10 +76,10 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 	}
 
 	private void createDefaultProductType(Transaction transaction) {
-		ProductType productType = new ProductType();
-		productType.setTenant(tenant);
-		productType.setName("*");
-		productTypeSaver.save(transaction, productType);
+		AssetType assetType = new AssetType();
+		assetType.setTenant(tenant);
+		assetType.setName("*");
+		productTypeSaver.save(transaction, assetType);
 	}
 
 	private void createDefaultInspectionTypeGroups(Transaction transaction) {

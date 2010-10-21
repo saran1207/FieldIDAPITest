@@ -2,9 +2,9 @@ package com.n4systems.servicedto.converts;
 
 import static junit.framework.Assert.*;
 
+import com.n4systems.model.Asset;
 import org.junit.Test;
 
-import com.n4systems.model.Product;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.webservice.dto.LocationServiceDTO;
 
@@ -23,11 +23,11 @@ public class ProductLocationConverterTest {
 			public void setPredefinedLocationId(Long predefinedLocationId) {}
 		};
 		
-		Product product = new Product();
-		converter.convert(location, product);
+		Asset asset = new Asset();
+		converter.convert(location, asset);
 		
-		assertEquals(freeForm, product.getAdvancedLocation().getFreeformLocation());
-		assertNull(product.getAdvancedLocation().getPredefinedLocation());
+		assertEquals(freeForm, asset.getAdvancedLocation().getFreeformLocation());
+		assertNull(asset.getAdvancedLocation().getPredefinedLocation());
 	}
 	
 	@Test
@@ -51,10 +51,10 @@ public class ProductLocationConverterTest {
 			public void setPredefinedLocationId(Long predefinedLocationId) {}
 		};
 		
-		Product product = new Product();
-		converter.convert(location, product);
+		Asset asset = new Asset();
+		converter.convert(location, asset);
 		
-		assertEquals(freeForm, product.getAdvancedLocation().getFreeformLocation());
-		assertEquals(predefinedLocation, product.getAdvancedLocation().getPredefinedLocation());
+		assertEquals(freeForm, asset.getAdvancedLocation().getFreeformLocation());
+		assertEquals(predefinedLocation, asset.getAdvancedLocation().getPredefinedLocation());
 	}
 }

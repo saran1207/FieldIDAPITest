@@ -3,7 +3,7 @@ package com.n4systems.services;
 import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
 import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import org.junit.Test;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -13,11 +13,11 @@ public class InspectionScheduleServiceTest {
 
 
 	@Test public void should_save_schedule_and_update_product() {
-		InspectionSchedule schedule = aScheduledInspectionSchedule().product(aProduct().build()).build(); 
+		InspectionSchedule schedule = aScheduledInspectionSchedule().product(anAsset().build()).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.save(schedule)).andReturn(3L);
-		expect(mockPersistenceManager.update(schedule.getProduct())).andReturn(schedule.getProduct());
+		expect(mockPersistenceManager.update(schedule.getAsset())).andReturn(schedule.getAsset());
 		replay(mockPersistenceManager);
 		
 		InspectionScheduleService sut = new InspectionScheduleServiceImpl(mockPersistenceManager);
@@ -28,11 +28,11 @@ public class InspectionScheduleServiceTest {
 	
 	
 	@Test public void should_update_schedule_and_update_product() {
-		InspectionSchedule schedule = aScheduledInspectionSchedule().product(aProduct().build()).build(); 
+		InspectionSchedule schedule = aScheduledInspectionSchedule().product(anAsset().build()).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.update((InspectionSchedule)anyObject())).andReturn(schedule);
-		expect(mockPersistenceManager.update(schedule.getProduct())).andReturn(schedule.getProduct());
+		expect(mockPersistenceManager.update(schedule.getAsset())).andReturn(schedule.getAsset());
 		replay(mockPersistenceManager);
 		
 		InspectionScheduleService sut = new InspectionScheduleServiceImpl(mockPersistenceManager);

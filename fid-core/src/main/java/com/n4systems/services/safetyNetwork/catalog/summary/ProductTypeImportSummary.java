@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 
 public class ProductTypeImportSummary extends BaseImportSummary {
 
-	private Map<Long, ProductType> importMapping = new HashMap<Long, ProductType>();
+	private Map<Long, AssetType> importMapping = new HashMap<Long, AssetType>();
 	private Map<Long, Long> autoAttributesToImport = new HashMap<Long, Long>();
 	private boolean renamed = false;
 	private int numberRenamed = 0;
@@ -25,7 +25,7 @@ public class ProductTypeImportSummary extends BaseImportSummary {
 		autoAttributesToImport.put(productTypeId, autoAttributeCount);
 	}
 
-	public Map<Long, ProductType> getImportMapping() {
+	public Map<Long, AssetType> getImportMapping() {
 		return importMapping;
 	}
 	

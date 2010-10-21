@@ -87,7 +87,7 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public String getProductStatus() {
-		return selenium.getText("//label[.='Product Status']/../span");
+		return selenium.getText("//label[.='Asset Status']/../span");
 	}
 
 	public String getSerialNumber() {
@@ -188,7 +188,7 @@ public class AssetPage extends FieldIDPage {
 			if (misc.isOptionPresent(editAssetProductStatusSelectListLocator, p.getProductStatus())) {
 				selenium.select(this.editAssetProductStatusSelectListLocator, p.getProductStatus());
 			} else {
-				fail("Could not find the product status '" + p.getProductStatus() + "'");
+				fail("Could not find the asset status '" + p.getProductStatus() + "'");
 			}
 		}
 		if (p.getPurchaseOrder() != null) {

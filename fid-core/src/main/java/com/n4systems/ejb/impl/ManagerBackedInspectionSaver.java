@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -24,7 +25,6 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
@@ -94,8 +94,8 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		updateDeficiencies(inspection.getResults());
 		inspection = persistenceManager.update(inspection, userId);
 		
-		updateProductInspectionDate(inspection.getProduct());
-		inspection.setProduct(persistenceManager.update(inspection.getProduct()));
+		updateProductInspectionDate(inspection.getAsset());
+		inspection.setAsset(persistenceManager.update(inspection.getAsset()));
 		saveProofTestFiles(inspection, fileData);
 		processUploadedFiles(inspection, uploadedFiles);
 		
@@ -119,22 +119,22 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 	}
 	
 	private void confirmSubInspectionsAreAgainstAttachedSubProducts(Inspection inspection) throws UnknownSubProduct {
-		Product product = persistenceManager.find(Product.class, inspection.getProduct().getId());
-		product = new FindSubProducts(persistenceManager, product).fillInSubProducts();
+		Asset asset = persistenceManager.find(Asset.class, inspection.getAsset().getId());
+		asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
 		for (SubInspection subInspection : inspection.getSubInspections()) {
-			if (!product.getSubProducts().contains(new SubProduct(subInspection.getProduct(), null))) {
-				throw new UnknownSubProduct("product id " + subInspection.getProduct().getId() + " is not attached to product " + product.getId());
+			if (!asset.getSubProducts().contains(new SubProduct(subInspection.getAsset(), null))) {
+				throw new UnknownSubProduct("asset id " + subInspection.getAsset().getId() + " is not attached to asset " + asset.getId());
 			}
 		}
 	}
 	
 	private void setOrderForSubInspections(Inspection inspection) {
-		Product product = persistenceManager.find(Product.class, inspection.getProduct().getId());
-		product = new FindSubProducts(persistenceManager, product).fillInSubProducts();
+		Asset asset = persistenceManager.find(Asset.class, inspection.getAsset().getId());
+		asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
 		List<SubInspection> reorderedSubInspections = new ArrayList<SubInspection>();
-		for (SubProduct subProduct : product.getSubProducts()) {
+		for (SubProduct subProduct : asset.getSubProducts()) {
 			for (SubInspection subInspection : inspection.getSubInspections()) {
-				if (subInspection.getProduct().equals(subProduct.getProduct())) {
+				if (subInspection.getAsset().equals(subProduct.getAsset())) {
 					reorderedSubInspections.add(subInspection);
 				}
 			}
@@ -160,19 +160,19 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 	
 	private void updateProduct(Inspection inspection, Long modifiedById) {
 		User modifiedBy = em.find(User.class, modifiedById);
-		Product product = em.find(Product.class, inspection.getProduct().getId());
+		Asset asset = em.find(Asset.class, inspection.getAsset().getId());
 
-		updateProductInspectionDate(product);
+		updateProductInspectionDate(asset);
 
-		// pushes the location and the ownership to the product based on the
+		// pushes the location and the ownership to the asset based on the
 		// inspections data.
-		ownershipUpdates(inspection, product);
-		statusUpdates(inspection, product);
-		assignedToUpdates(inspection, product);
+		ownershipUpdates(inspection, asset);
+		statusUpdates(inspection, asset);
+		assignedToUpdates(inspection, asset);
 		
 		
 		try {
-			legacyProductManager.update(product, modifiedBy);
+			legacyProductManager.update(asset, modifiedBy);
 		} catch (SubProductUniquenessException e) {
 			logger.error("received a subproduct uniquness error this should not be possible form this type of update.", e);
 			throw new RuntimeException(e);
@@ -180,20 +180,20 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 	}
 
-	private void assignedToUpdates(Inspection inspection, Product product) {
+	private void assignedToUpdates(Inspection inspection, Asset asset) {
 		if (inspection.hasAssignToUpdate()) {
-			product.setAssignedUser(inspection.getAssignedTo().getAssignedUser());
+			asset.setAssignedUser(inspection.getAssignedTo().getAssignedUser());
 		}
 		
 	}
 
-	private void statusUpdates(Inspection inspection, Product product) {
-		product.setProductStatus(inspection.getProductStatus());
+	private void statusUpdates(Inspection inspection, Asset asset) {
+		asset.setAssetStatus(inspection.getAssetStatus());
 	}
 
-	private void ownershipUpdates(Inspection inspection, Product product) {
-		product.setOwner(inspection.getOwner());
-		product.setAdvancedLocation(inspection.getAdvancedLocation());
+	private void ownershipUpdates(Inspection inspection, Asset asset) {
+		asset.setOwner(inspection.getOwner());
+		asset.setAdvancedLocation(inspection.getAdvancedLocation());
 	}
 	
 	
@@ -350,9 +350,9 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 	}
 
-	public Product updateProductInspectionDate(Product product) {
-		product.setLastInspectionDate(lastInspectionDateFinder.findLastInspectionDate(product));
-		return product;
+	public Asset updateProductInspectionDate(Asset asset) {
+		asset.setLastInspectionDate(lastInspectionDateFinder.findLastInspectionDate(asset));
+		return asset;
 	}
 
 	private Status findInspectionResult(AbstractInspection inspection) {

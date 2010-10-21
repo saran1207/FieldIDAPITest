@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.inspection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.InspectionManager;
@@ -12,7 +13,6 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
 
 public class InspectionGroupCrud extends AbstractCrud {
 
@@ -21,9 +21,9 @@ public class InspectionGroupCrud extends AbstractCrud {
 	private static Logger logger = Logger.getLogger(InspectionGroupCrud.class);
 
 	private InspectionGroup inspectionGroup;
-	private Product product;
+	private Asset asset;
 
-	private List<Product> products;
+	private List<Asset> assets;
 
 	private List<InspectionGroup> inspectionGroups;
 
@@ -47,19 +47,19 @@ public class InspectionGroupCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		product = productManager.findProduct(uniqueId, getSecurityFilter());
+		asset = productManager.findProduct(uniqueId, getSecurityFilter());
 	}
 
 	public String doList() {
 		// if no search param came just show the form.
 		if (search != null && search.length() > 0) {
 			try {
-				products = productManager.findProductByIdentifiers(getSecurityFilter(), search);
+				assets = productManager.findProductByIdentifiers(getSecurityFilter(), search);
 				// if there is only one forward. directly to the group view
 				// screen.
-				if (products.size() == 1) {
-					product = products.get(0);
-					uniqueID = product.getId();
+				if (assets.size() == 1) {
+					asset = assets.get(0);
+					uniqueID = asset.getId();
 					return "oneFound";
 				}
 			} catch (Exception e) {
@@ -74,7 +74,7 @@ public class InspectionGroupCrud extends AbstractCrud {
 	}
 
 	public String doShow() {
-		if (product == null) {
+		if (asset == null) {
 			addActionError(getText("error.noproduct"));
 			return MISSING;
 		}
@@ -87,12 +87,12 @@ public class InspectionGroupCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setAsset(Asset asset) {
+		this.asset = asset;
 	}
 
 	public String getSearch() {
@@ -110,8 +110,8 @@ public class InspectionGroupCrud extends AbstractCrud {
 		return inspectionGroup;
 	}
 
-	public List<Product> getProducts() {
-		return products;
+	public List<Asset> getAssets() {
+		return assets;
 	}
 
 	public List<InspectionGroup> getInspectionGroups() {
@@ -121,7 +121,7 @@ public class InspectionGroupCrud extends AbstractCrud {
 	public List<InspectionType> getInspectionTypes() {
 		if (inspectionTypes == null) {
 			inspectionTypes = new ArrayList<InspectionType>();
-			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getProduct().getType()).load();
+			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getAsset().getType()).load();
 			for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
 				inspectionTypes.add(associatedInspectionType.getInspectionType());
 			}

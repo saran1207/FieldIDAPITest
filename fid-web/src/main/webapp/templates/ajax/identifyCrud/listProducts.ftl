@@ -1,7 +1,7 @@
 <#assign html >
 	<div id="productResults">
-	<#if products?exists >
-		<#if !products.isEmpty() >
+	<#if assets?exists >
+		<#if !assets.isEmpty() >
 			<div id="resultsTable">
 				<table class="list">
 					<tr>
@@ -12,19 +12,19 @@
 						<th><@s.text name="label.producttype"/></th>
 						<th><@s.text name="label.customer_reference"/></th>
 					</tr>
-					<#list products as product >
+					<#list assets as asset >
 						<tr>
 							<td>
-								<@s.url id="baseActionUrl" action="marryCustomerOrder" namespace="/ajax" uniqueID="${product.id}" />
+								<@s.url id="baseActionUrl" action="marryCustomerOrder" namespace="/ajax" uniqueID="${asset.id}" />
 								<a class="productLink" href="" onclick="marryCustomerOrder('${baseActionUrl}'); return false;" >
 									<@s.text name="label.connectorder" />
 								</a>
 							</td>
-							<td>${product.serialNumber?html}</td>
-							<td>${(product.rfidNumber?html)!}</td>
-							<td>${(product.owner.name?html)!}</td>
-							<td>${product.type.name?html}</td>
-							<td>${(product.customerRefNumber?html)!}</td>	
+							<td>${asset.serialNumber?html}</td>
+							<td>${(asset.rfidNumber?html)!}</td>
+							<td>${(asset.owner.name?html)!}</td>
+							<td>${asset.type.name?html}</td>
+							<td>${(asset.customerRefNumber?html)!}</td>
 						</tr>
 					</#list>
 				</table>

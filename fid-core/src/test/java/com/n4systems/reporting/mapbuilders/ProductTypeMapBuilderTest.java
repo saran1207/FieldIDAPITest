@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.n4systems.model.ProductType;
-import com.n4systems.model.builders.ProductTypeBuilder;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.util.ReportMap;
 
 public class ProductTypeMapBuilderTest {
@@ -14,7 +14,7 @@ public class ProductTypeMapBuilderTest {
 	public void testSetAllFields() {
 		ReportMap<Object> params = new ReportMap<Object>();
 		
-		ProductType type = ProductTypeBuilder.aProductType().build();
+		AssetType type = AssetTypeBuilder.anAssetType().build();
 		
 		ProductTypeMapBuilder builder = new ProductTypeMapBuilder();
 		builder.addParams(params, type, null);

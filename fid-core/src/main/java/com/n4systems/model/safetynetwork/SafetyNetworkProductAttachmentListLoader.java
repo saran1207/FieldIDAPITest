@@ -16,8 +16,8 @@ public class SafetyNetworkProductAttachmentListLoader extends Loader<List<Produc
 	@Override
 	protected List<ProductAttachment> load(EntityManager em) {
 		QueryBuilder<ProductAttachment> builder = new QueryBuilder<ProductAttachment>(ProductAttachment.class, new OpenSecurityFilter());
-		builder.addSimpleWhere("product.id", productId);
-		builder.addSimpleWhere("product.networkId", networkId);
+		builder.addSimpleWhere("asset.id", productId);
+		builder.addSimpleWhere("asset.networkId", networkId);
 		
 		List<ProductAttachment> attachments = builder.getResultList(em);
 		return attachments;

@@ -21,9 +21,9 @@ import com.n4systems.api.validation.Validator;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapReader;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
-import com.n4systems.model.builders.ProductTypeBuilder;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.testutils.DummyTransaction;
 
@@ -39,7 +39,7 @@ public class ProductImporterTest {
 		ProductToModelConverter converter = createMock(ProductToModelConverter.class);
 
 		expect(validator.getValidationContext()).andReturn(new HashMap<String, Object>());
-		expect(converter.getType()).andReturn(new ProductType());
+		expect(converter.getType()).andReturn(new AssetType());
 		
 		replay(validator);
 		replay(converter);
@@ -60,7 +60,7 @@ public class ProductImporterTest {
 		final ExportMapUnmarshaler<ProductView> mapUnmarshaler = createMock(ExportMapUnmarshaler.class);
 		
 		Map<String, Object> validationContext = new HashMap<String, Object>();
-		ProductType type = ProductTypeBuilder.aProductType().named("test_type").build();
+		AssetType type = AssetTypeBuilder.anAssetType().named("test_type").build();
 		Map<String, Object> row = new HashMap<String, Object>();		
 		ProductView view = new ProductView();
 		List<ValidationResult> expectedResults = new ArrayList<ValidationResult>();
@@ -103,11 +103,11 @@ public class ProductImporterTest {
 		final ExportMapUnmarshaler<ProductView> mapUnmarshaler = createMock(ExportMapUnmarshaler.class);
 		
 		Map<String, Object> validationContext = new HashMap<String, Object>();
-		ProductType type = ProductTypeBuilder.aProductType().named("test_type").build();
+		AssetType type = AssetTypeBuilder.anAssetType().named("test_type").build();
 		Map<String, Object> row = new HashMap<String, Object>();		
 		ProductView view = new ProductView();
 		DummyTransaction transaction = new DummyTransaction();
-		Product product = new Product();
+		Asset asset = new Asset();
 		
 		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(converter.getType()).andReturn(type);
@@ -116,9 +116,9 @@ public class ProductImporterTest {
 		expect(reader.readMap()).andReturn(null);
 		expect(validator.validate(view, 2)).andReturn(new ArrayList<ValidationResult>());
 		reader.close();
-		expect(converter.toModel(view, transaction)).andReturn(product);
-		expect(saver.setProduct(product)).andReturn(saver);
-		expect(saver.createWithoutHistory()).andReturn(product);
+		expect(converter.toModel(view, transaction)).andReturn(asset);
+		expect(saver.setProduct(asset)).andReturn(saver);
+		expect(saver.createWithoutHistory()).andReturn(asset);
 		
 		replay(reader);
 		replay(validator);

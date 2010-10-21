@@ -7,14 +7,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.TenantFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class ProductTypeLoader extends TenantFilteredLoader<ProductType> {
+public class ProductTypeLoader extends TenantFilteredLoader<AssetType> {
 
 	private Long id;
 
@@ -37,12 +37,12 @@ public class ProductTypeLoader extends TenantFilteredLoader<ProductType> {
 	}
 
 	@Override
-	protected ProductType load(EntityManager em, TenantOnlySecurityFilter filter) {
+	protected AssetType load(EntityManager em, TenantOnlySecurityFilter filter) {
 		if (id == null) {
 			throw new InvalidArgumentException("you must give an id");
 		}
 		
-		QueryBuilder<ProductType> query = getQueryBuilder(filter);
+		QueryBuilder<AssetType> query = getQueryBuilder(filter);
 		query.addSimpleWhere("id", id);
 		query.getPostFetchPaths().addAll(postFetchFields);
 		
@@ -50,8 +50,8 @@ public class ProductTypeLoader extends TenantFilteredLoader<ProductType> {
 		return query.getSingleResult(em);
 	}
 
-	private QueryBuilder<ProductType> getQueryBuilder(TenantOnlySecurityFilter filter) {
-		return new QueryBuilder<ProductType>(ProductType.class, filter);
+	private QueryBuilder<AssetType> getQueryBuilder(TenantOnlySecurityFilter filter) {
+		return new QueryBuilder<AssetType>(AssetType.class, filter);
 	}
 	
 	public ProductTypeLoader setId(Long id) {

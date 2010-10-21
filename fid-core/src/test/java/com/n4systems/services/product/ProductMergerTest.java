@@ -1,5 +1,5 @@
 package com.n4systems.services.product;
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.Asset;
+import com.n4systems.model.builders.AssetTypeBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,11 +23,9 @@ import com.n4systems.exceptions.product.ProductTypeMissMatchException;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.builders.InspectionBuilder;
 import com.n4systems.model.builders.InspectionScheduleBuilder;
-import com.n4systems.model.builders.ProductTypeBuilder;
 import com.n4systems.model.builders.SubInspectionBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
@@ -38,8 +38,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class ProductMergerTest {
 
 	private User user = UserBuilder.aUser().build();
-	private Product winningProduct;
-	private Product losingProduct;
+	private Asset winningAsset;
+	private Asset losingAsset;
 	private PersistenceManager mockPersistenceManager;
 	private InspectionManager mockInspectionManager;
 	private ProductManager mockProductManager; 
@@ -49,8 +49,8 @@ public class ProductMergerTest {
 	@Before
 	public void setUp() {
 		// default products to merge same tenant and same type, no inspections.
-		winningProduct = aProduct().forTenant(TenantBuilder.n4()).build();
-		losingProduct = aProduct().forTenant(TenantBuilder.n4()).ofType(winningProduct.getType()).build();
+		winningAsset = anAsset().forTenant(TenantBuilder.n4()).build();
+		losingAsset = anAsset().forTenant(TenantBuilder.n4()).ofType(winningAsset.getType()).build();
 		
 		
 		// managers mocks  each test is required to put them into reply mode.
@@ -69,9 +69,9 @@ public class ProductMergerTest {
 		
 		
 		ProductMerger sut = createSystemUnderTest();
-		Product mergedProduct = sut.merge(winningProduct, losingProduct);
+		Asset mergedAsset = sut.merge(winningAsset, losingAsset);
 		
-		assertEquals(winningProduct, mergedProduct);
+		assertEquals(winningAsset, mergedAsset);
 		verifyMocks();
 	}
 
@@ -80,11 +80,11 @@ public class ProductMergerTest {
 	
 	@Test(expected=ProductTypeMissMatchException.class) 
 	public void should_fail_to_merge_products_of_different_types() {
-		Product losingProduct = aProduct().ofType(ProductTypeBuilder.aProductType().named("type 2").build()).build();
+		Asset losingAsset = anAsset().ofType(AssetTypeBuilder.anAssetType().named("type 2").build()).build();
 		replayMocks();
 		
 		ProductMerger sut = createSystemUnderTest();
-		sut.merge(winningProduct, losingProduct);
+		sut.merge(winningAsset, losingAsset);
 		
 		verifyMocks();
 	}
@@ -92,12 +92,12 @@ public class ProductMergerTest {
 	
 	@Test(expected=TenantNotValidForActionException.class)
 	public void should_fail_to_merge_products_for_different_tenants() {
-		losingProduct.setTenant(TenantBuilder.aTenant().build());
+		losingAsset.setTenant(TenantBuilder.aTenant().build());
 		
 		replayMocks();
 		
 		ProductMerger sut = createSystemUnderTest();
-		sut.merge(winningProduct, losingProduct);
+		sut.merge(winningAsset, losingAsset);
 		
 		verifyMocks();
 	}
@@ -106,7 +106,7 @@ public class ProductMergerTest {
 	@Test
 	public void should_merge_products_together_with_inspections() {
 		List<Inspection> inspectionsOnLosingProduct = new ArrayList<Inspection>(); 
-		inspectionsOnLosingProduct.add(InspectionBuilder.anInspection().on(losingProduct).build());
+		inspectionsOnLosingProduct.add(InspectionBuilder.anInspection().on(losingAsset).build());
 		
 		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Inspection>());
 		
@@ -122,10 +122,10 @@ public class ProductMergerTest {
 		replayMocks();
 		
 		ProductMerger sut = createSystemUnderTest();
-		Product mergedProduct = sut.merge(winningProduct, losingProduct);
+		Asset mergedAsset = sut.merge(winningAsset, losingAsset);
 		
-		assertEquals(winningProduct, mergedProduct);
-		assertEquals(winningProduct, inspectionsOnLosingProduct.get(0).getProduct());
+		assertEquals(winningAsset, mergedAsset);
+		assertEquals(winningAsset, inspectionsOnLosingProduct.get(0).getAsset());
 		verifyMocks();
 		
 	}
@@ -135,10 +135,10 @@ public class ProductMergerTest {
 	@Test
 	public void should_merge_products_together_with_inspections_that_have_a_schedule_on_it() {
 		List<Inspection> inspectionsOnLosingProduct = new ArrayList<Inspection>(); 
-		inspectionsOnLosingProduct.add(InspectionBuilder.anInspection().on(losingProduct).build());
+		inspectionsOnLosingProduct.add(InspectionBuilder.anInspection().on(losingAsset).build());
 		
 		// puts the schedule onto the inspection.
-		InspectionScheduleBuilder.aCompletedInspectionSchedule().completedDoing(inspectionsOnLosingProduct.get(0)).product(inspectionsOnLosingProduct.get(0).getProduct()).build();
+		InspectionScheduleBuilder.aCompletedInspectionSchedule().completedDoing(inspectionsOnLosingProduct.get(0)).product(inspectionsOnLosingProduct.get(0).getAsset()).build();
 		
 		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Inspection>());
 				
@@ -153,10 +153,10 @@ public class ProductMergerTest {
 		replayMocks();
 		
 		ProductMerger sut = createSystemUnderTest();
-		Product mergedProduct = sut.merge(winningProduct, losingProduct);
+		Asset mergedAsset = sut.merge(winningAsset, losingAsset);
 		
-		assertEquals(winningProduct, mergedProduct);
-		assertEquals(winningProduct, inspectionsOnLosingProduct.get(0).getProduct());
+		assertEquals(winningAsset, mergedAsset);
+		assertEquals(winningAsset, inspectionsOnLosingProduct.get(0).getAsset());
 		verifyMocks();
 		
 	}
@@ -166,7 +166,7 @@ public class ProductMergerTest {
 	@SuppressWarnings("unchecked")
 	@Test 
 	public void should_merge_subproduct_together() {
-		SubInspection sub = SubInspectionBuilder.aSubInspection("tom").withProduct(losingProduct).build();
+		SubInspection sub = SubInspectionBuilder.aSubInspection("tom").withProduct(losingAsset).build();
 		List<SubInspection> subInspections = new ArrayList<SubInspection>();
 		subInspections.add(sub);
 		
@@ -186,10 +186,10 @@ public class ProductMergerTest {
 		replayMocks();
 		
 		ProductMerger sut = createSystemUnderTest();
-		Product mergedProduct = sut.merge(winningProduct, losingProduct);
+		Asset mergedAsset = sut.merge(winningAsset, losingAsset);
 		
-		assertEquals(winningProduct, mergedProduct);
-		assertEquals(winningProduct, sub.getProduct());
+		assertEquals(winningAsset, mergedAsset);
+		assertEquals(winningAsset, sub.getAsset());
 		verifyMocks();
 	}
 
@@ -200,7 +200,7 @@ public class ProductMergerTest {
 		replayMocks();
 		
 		ProductMerger sut = createSystemUnderTest();
-		sut.merge(winningProduct, winningProduct);
+		sut.merge(winningAsset, winningAsset);
 		
 		verifyMocks();
 	}
@@ -229,7 +229,7 @@ public class ProductMergerTest {
 	
 	private void mockArchiveOfLosingProduct() {
 		try {
-			expect(mockProductManager.archive((Product)eq(losingProduct), (User)anyObject())).andReturn(losingProduct);
+			expect(mockProductManager.archive((Asset)eq(losingAsset), (User)anyObject())).andReturn(losingAsset);
 		} catch (UsedOnMasterInspectionException e) {
 			fail("mock should not throw exception");
 		}

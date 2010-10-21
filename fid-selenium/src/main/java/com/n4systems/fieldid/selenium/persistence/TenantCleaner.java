@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.selenium.persistence;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
@@ -9,8 +10,7 @@ import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.catalog.Catalog;
@@ -37,21 +37,21 @@ import javax.persistence.Query;
 public class TenantCleaner {
 
     public void cleanTenant(EntityManager em, long tenantId) {
-        Query assetsQuery = em.createQuery("from " + Product.class.getName() + " where tenant.id = " + tenantId);
-        Query networkRegisteredProductsQuery = em.createQuery("select p1 from " + Product.class.getName() + " p1, " + Product.class.getName() + " p2 where p1.linkedProduct.id = p2.id and p2.tenant.id = " + tenantId);
-        List<Product> products = assetsQuery.getResultList();
+        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id = " + tenantId);
+        Query networkRegisteredProductsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id = " + tenantId);
+        List<Asset> products = assetsQuery.getResultList();
 
         removeAllForTenant(em, Catalog.class, tenantId);
         removeAllForTenant(em, Inspection.class, tenantId);
         removeAllForTenant(em, AssociatedInspectionType.class, tenantId);
         removeAllForTenant(em, InspectionType.class, tenantId);
 
-        List<Product> networkRegisteredProducts = networkRegisteredProductsQuery.getResultList();
-        for (Product p : networkRegisteredProducts) {
+        List<Asset> networkRegisteredAssets = networkRegisteredProductsQuery.getResultList();
+        for (Asset p : networkRegisteredAssets) {
             safeRemoveProduct(em, p);
         }
 
-        for (Product p : products) {
+        for (Asset p : products) {
             safeRemoveProduct(em, p);
         }
 
@@ -71,7 +71,7 @@ public class TenantCleaner {
         removeAllForTenant(em, InspectionBook.class, tenantId);
         removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
         removeAllForTenant(em, AutoAttributeDefinition.class, tenantId);
-        removeAllForTenant(em, ProductType.class, tenantId);
+        removeAllForTenant(em, AssetType.class, tenantId);
         removeAllForTenant(em, FileAttachment.class, tenantId);
         removeAllForTenant(em, UserRequest.class, tenantId);
         removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
@@ -101,9 +101,9 @@ public class TenantCleaner {
             cleanOwnedEntities(em, Inspection.class, org);
             cleanOwnedEntities(em, InspectionSchedule.class, org);
             cleanOwnedEntities(em, AddProductHistoryBean.class, org);
-            Query productQuery = em.createQuery("from " + Product.class.getName() + " where owner.id = " + org.getId());
-            List<Product> products = productQuery.getResultList();
-            for (Product prod : products) {
+            Query productQuery = em.createQuery("from " + Asset.class.getName() + " where owner.id = " + org.getId());
+            List<Asset> products = productQuery.getResultList();
+            for (Asset prod : products) {
                 safeRemoveProduct(em, prod);
             }
         }
@@ -156,7 +156,7 @@ public class TenantCleaner {
         removeAllFromQuery(em, query);
     }
 
-    private void safeRemoveProduct(EntityManager em, Product p) {
+    private void safeRemoveProduct(EntityManager em, Asset p) {
         Query scheduleQuery =  em.createQuery("from " + InspectionSchedule.class.getName() + " where product.id = " + p.getId());
         Query attachmentQuery = em.createQuery("from " + ProductAttachment.class.getName() + " where product.id = " + p.getId());
         Query inspQuery = em.createQuery("from " + Inspection.class.getName() + " where product.id = " + p.getId());

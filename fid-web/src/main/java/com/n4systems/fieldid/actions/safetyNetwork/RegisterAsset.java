@@ -3,10 +3,12 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import java.util.Collection;
 import java.util.List;
 
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -15,7 +17,6 @@ import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
-import com.n4systems.fieldid.actions.helpers.ProductTypeLister;
 import com.n4systems.fieldid.actions.product.AssetWebModel;
 import com.n4systems.fieldid.actions.product.ProductIdentifierView;
 import com.n4systems.fieldid.actions.product.ProductView;
@@ -23,7 +24,6 @@ import com.n4systems.fieldid.actions.product.ProductViewModeConverter;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ProductCrudHelper;
 import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.Product;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
@@ -39,19 +39,19 @@ public class RegisterAsset extends AbstractCrud{
 	
 	Logger logger = Logger.getLogger(RegisterAsset.class);
 
-	private Product linkedProduct;
-	private Long linkedProductId;
-	private Product parentProduct;
-	private Product newProduct;
+	private Asset linkedAsset;
+	private Long linkedAssetId;
+	private Asset parentAsset;
+	private Asset newAsset;
 	
 	private ProductManager productManager;
 	private LegacyProductSerial legacyProductManager;
 	private OrderManager orderManager;
 	
 	//Drop down lists
-	private ProductTypeLister productTypeLister;
+	private AssetTypeLister assetTypeLister;
 	private List<Listable<Long>> employees;
-	private List<ProductStatusBean> productStatuses;
+	private List<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private OwnerPicker ownerPicker;
 	private AutoAttributeCriteria autoAttributeCriteria;
@@ -59,7 +59,7 @@ public class RegisterAsset extends AbstractCrud{
     //Form Inputs
 	private ProductIdentifierView identifiers;
 	private ProductView productView;
-	private AssetWebModel asset = new AssetWebModel(this);
+	private AssetWebModel assetWebModel = new AssetWebModel(this);
 
 	public RegisterAsset(PersistenceManager persistenceManager, ProductManager productManager,
 			OrderManager orderManager, LegacyProductSerial legacyProductManager) {
@@ -73,28 +73,28 @@ public class RegisterAsset extends AbstractCrud{
 	protected void initMemberFields() {
 		productView = new ProductView();
 		identifiers = new ProductIdentifierView();
-		linkedProduct = lookUpLinkedProduct(linkedProductId);
+		linkedAsset = lookUpLinkedProduct(linkedAssetId);
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		productView = new ProductView();
 		identifiers = new ProductIdentifierView();
-		linkedProduct = lookUpLinkedProduct(uniqueId);
+		linkedAsset = lookUpLinkedProduct(uniqueId);
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), productView);
-		if(linkedProduct != null) {
-			identifiers.setSerialNumber(linkedProduct.getSerialNumber());
-			identifiers.setRfidNumber(linkedProduct.getRfidNumber());
-			// set the default product id.
-			getProductTypes();
-			Long productId = productTypeLister.getProductTypes().iterator().next().getId();
-			setProductTypeId(productId);
+		if(linkedAsset != null) {
+			identifiers.setSerialNumber(linkedAsset.getSerialNumber());
+			identifiers.setRfidNumber(linkedAsset.getRfidNumber());
+			// set the default asset id.
+			getAssetTypes();
+			Long productId = assetTypeLister.getAssetTypes().iterator().next().getId();
+			setAssetTypeId(productId);
 			setOwnerId(getSessionUser().getOwner().getId());
 			productView.setIdentified(DateHelper.getToday());
 		}
 	}
 	
-	private Product lookUpLinkedProduct(Long uniqueId) {
+	private Asset lookUpLinkedProduct(Long uniqueId) {
 		return getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
 	}
 
@@ -114,49 +114,49 @@ public class RegisterAsset extends AbstractCrud{
 		
 		ProductViewModeConverter converter = new ProductViewModeConverter(getLoaderFactory(), orderManager, getUser());
 		
-		Product product = converter.viewToModel(productView);
-		product.setSerialNumber(identifiers.getSerialNumber());
-		product.setCustomerRefNumber(identifiers.getReferenceNumber());
-		product.setRfidNumber(identifiers.getRfidNumber());
-		product.setLinkedProduct(linkedProduct);
-		asset.fillInAsset(product);
+		Asset assetToSave = converter.viewToModel(productView);
+		assetToSave.setSerialNumber(identifiers.getSerialNumber());
+		assetToSave.setCustomerRefNumber(identifiers.getReferenceNumber());
+		assetToSave.setRfidNumber(identifiers.getRfidNumber());
+		assetToSave.setLinkedAsset(linkedAsset);
+		assetWebModel.fillInAsset(assetToSave);
 		
 		ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
-		saver.setProduct(product);
-		newProduct = saver.create();
+		saver.setProduct(assetToSave);
+		newAsset = saver.create();
 			
-		logger.info("Registered : " + newProduct);
+		logger.info("Registered : " + newAsset);
 		return SUCCESS;
 	}
 
-	public Product getLinkedProduct() {
-		return linkedProduct;
+	public Asset getLinkedAsset() {
+		return linkedAsset;
 	}
 	
-	public Product getNewProduct() {
-		return newProduct;
+	public Asset getNewAsset() {
+		return newAsset;
 	}
 	
-	public ProductTypeLister getProductTypes() {
-		if (productTypeLister == null) {
-			productTypeLister = new ProductTypeLister(persistenceManager, getSecurityFilter());
+	public AssetTypeLister getAssetTypes() {
+		if (assetTypeLister == null) {
+			assetTypeLister = new AssetTypeLister(persistenceManager, getSecurityFilter());
 		}
 
-		return productTypeLister;
+		return assetTypeLister;
 	}
 	
-	public Collection<ProductStatusBean> getProductStatuses() {
-		if (productStatuses == null) {
-			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
+	public Collection<AssetStatus> getAssetStatuses() {
+		if (assetStatuses == null) {
+			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
-		return productStatuses;
+		return assetStatuses;
 	}
 
-	public Product getParentProduct() {
-		if (parentProduct == null) {
-			parentProduct = productManager.parentProduct(linkedProduct);
+	public Asset getParentAsset() {
+		if (parentAsset == null) {
+			parentAsset = productManager.parentProduct(linkedAsset);
 		}
-		return parentProduct;
+		return parentAsset;
 	}
 	
 	public List<Listable<Long>> getEmployees() {
@@ -168,10 +168,10 @@ public class RegisterAsset extends AbstractCrud{
 	}
 			
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
-		if (autoAttributeCriteria == null && productView.getProductTypeId() != null) {
+		if (autoAttributeCriteria == null && productView.getAssetTypeId() != null) {
 			AutoAttributeCriteriaByProductTypeIdLoader loader = getLoaderFactory().createAutoAttributeCriteriaByProductTypeIdLoader();
 			
-			loader.setProductTypeId(productView.getProductTypeId());
+			loader.setAssetTypeId(productView.getAssetTypeId());
 			
 			autoAttributeCriteria = loader.load();
 		}
@@ -196,17 +196,17 @@ public class RegisterAsset extends AbstractCrud{
 		
 	}
 	
-	public void setProductStatus(Long statusId) {
-		productView.setProductStatus(statusId);
+	public void setAssetStatus(Long statusId) {
+		productView.setAssetStatus(statusId);
 	}
 	
-	public void setProductTypeId(Long typeId) {
-		productView.setProductTypeId(typeId);
+	public void setAssetTypeId(Long typeId) {
+		productView.setAssetTypeId(typeId);
 	}
 	
 	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
-	public Long getProductTypeId() {
-		return productView.getProductTypeId();
+	public Long getAssetTypeId() {
+		return productView.getAssetTypeId();
 	}
 	
 	public void setPurchaseOrder(String purchaseOrder) {
@@ -287,11 +287,11 @@ public class RegisterAsset extends AbstractCrud{
 		return identifiers.getReferenceNumber();
 	}
 	
-	public AssetWebModel getAsset() {
-		return asset;
+	public AssetWebModel getAssetWebModel() {
+		return assetWebModel;
 	}	
 	
-	public void setLinkedProductId(Long linkedProductId) {
-		this.linkedProductId = linkedProductId;
+	public void setLinkedAssetId(Long linkedAssetId) {
+		this.linkedAssetId = linkedAssetId;
 	}
 }

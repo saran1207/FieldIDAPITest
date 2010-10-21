@@ -55,7 +55,7 @@ public class ManageProductStatusDriver {
 	}
 
 	private void assertStatusIsInList(ProductStatus status) {
-		assertTrue("product status " + status.name + " does not appear in the list", selenium.isTextPresent(status.name));
+		assertTrue("asset status " + status.name + " does not appear in the list", selenium.isTextPresent(status.name));
 	}
 
 	public void assertStatusWasCreated(ProductStatus status) {

@@ -2,13 +2,13 @@ package com.n4systems.handlers.removers;
 import static com.n4systems.model.builders.InspectionTypeBuilder.*;
 import static org.easymock.EasyMock.*;
 
+import com.n4systems.model.AssetTypeSchedule;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandler;
 import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandlerImpl;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductTypeSchedule;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
 import com.n4systems.persistence.FieldIdTransaction;
@@ -36,11 +36,11 @@ public class InspectionFrequenciesDeleteHandlerImplTest {
 	public void should_remove_all_inspection_frequencies_for_inspection_type() {
 		
 		InspectionType inspectionTypeToBeRemoved = anInspectionType().build();
-		ProductTypeSchedule scheduleToBeRemoved = new ProductTypeSchedule();
+		AssetTypeSchedule scheduleToBeRemoved = new AssetTypeSchedule();
 		
 		InspectionFrequencyListLoader mockListLoader = createMock(InspectionFrequencyListLoader.class);
 		expect(mockListLoader.setInspectionTypeId(inspectionTypeToBeRemoved.getId())).andReturn(mockListLoader);
-		expect(mockListLoader.load(mockTransaction)).andReturn(new FluentArrayList<ProductTypeSchedule>().stickOn(scheduleToBeRemoved));
+		expect(mockListLoader.load(mockTransaction)).andReturn(new FluentArrayList<AssetTypeSchedule>().stickOn(scheduleToBeRemoved));
 		replay(mockListLoader);
 		
 		InspectionFrequencySaver mockSaver = createMock(InspectionFrequencySaver.class);

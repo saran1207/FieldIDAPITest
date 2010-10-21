@@ -6,7 +6,7 @@
 <#escape x as x?js_string>
 	
 	 
-	oneResultAsset( ${products[0].id}, '${html}' );
+	oneResultAsset( ${assets[0].id}, '${html}' );
 	
 	
 </#escape>

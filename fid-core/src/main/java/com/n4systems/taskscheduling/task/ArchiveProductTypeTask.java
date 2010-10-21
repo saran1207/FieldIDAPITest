@@ -9,14 +9,14 @@ import java.util.Map.Entry;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 
+import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
@@ -39,9 +39,9 @@ public class ArchiveProductTypeTask implements Runnable {
 	private boolean productCodeMappingFailed = false;
 	private boolean subProductTypeDetachFailed = false;
 	private boolean autoAttributeDeleteFailed = false;
-	private Map<Product, Exception> failedProducts = new HashMap<Product, Exception>();
+	private Map<Asset, Exception> failedProducts = new HashMap<Asset, Exception>();
 	private User archivedBy;
-	private ProductType type;
+	private AssetType type;
 	private ProductManager productManager;
 	private PersistenceManager persistenceManager;
 
@@ -52,39 +52,39 @@ public class ArchiveProductTypeTask implements Runnable {
 
 	public void run() {
 		archivedBy = persistenceManager.find(User.class, archivedById);
-		type = persistenceManager.find(ProductType.class, productTypeId);
+		type = persistenceManager.find(AssetType.class, productTypeId);
 		if (type == null) {
-			logger.error("product type was not correctly given. It can not be deleted.");
+			logger.error("asset type was not correctly given. It can not be deleted.");
 			return;
 		}
 
-		logger.info("beginning deletion of product type " + getProductTypeName());
+		logger.info("beginning deletion of asset type " + getProductTypeName());
 
 		deleteAutoAttributes();
 		logger.debug("completed delete auto attribute " + (autoAttributeDeleteFailed ? " failed" : "passed"));
 		detachFromMasterProductTypes();
 		logger.debug("completed detach " + (subProductTypeDetachFailed ? " failed" : "passed"));
 		deleteProducts();
-		logger.debug("completed product deletion # of errors " + failedProducts.size());
+		logger.debug("completed asset deletion # of errors " + failedProducts.size());
 		deleteRelatedProductCodeMappings();
-		logger.debug("completed product code mappings " + (subProductTypeDetachFailed ? " failed" : "passed"));
+		logger.debug("completed asset code mappings " + (subProductTypeDetachFailed ? " failed" : "passed"));
 
-		logger.info("packing up results for deletion of product type " + getProductTypeName());
+		logger.info("packing up results for deletion of asset type " + getProductTypeName());
 		try {
 			sendResultNotifications();
 		} catch (Exception e) {
-			logger.error("Unable to send notification for Archive Product Type Task", e);
+			logger.error("Unable to send notification for Archive Asset Type Task", e);
 		}
 
-		logger.info("completed deletion of product type " + getProductTypeName());
+		logger.info("completed deletion of asset type " + getProductTypeName());
 	}
 
 	private void sendResultNotifications() throws NoSuchProviderException, MessagingException {
-		String subject = "Product Type Deleted [" + getProductTypeName() + "]";
+		String subject = "Asset Type Deleted [" + getProductTypeName() + "]";
 		String body;
 		if (deleteFailed()) {
 			subject += " with errors";
-			body = "<p>All related parts of the product type  "
+			body = "<p>All related parts of the asset type  "
 					+ getProductTypeName()
 					+ " could not be removed.  "
 					+ "Please contact FieldId Support by sending an email to <a href=\"mailto:support@fieldid.com\">support@fieldid.com</a> or calling (416)-599-6466.</p>"
@@ -93,21 +93,21 @@ public class ArchiveProductTypeTask implements Runnable {
 				body += "<li>Auto Attributes could not be correctly removed.</li>";
 			}
 			if (productCodeMappingFailed) {
-				body += "<li>Product Code Mappings could not be correctly removed.</li>";
+				body += "<li>Asset Code Mappings could not be correctly removed.</li>";
 			}
 			if (subProductTypeDetachFailed) {
-				body += "<li>Product Type could not be detached from Master Product Types.</li>";
+				body += "<li>Asset Type could not be detached from Master Asset Types.</li>";
 			}
 
-			for (Entry<Product, Exception> failure : failedProducts.entrySet()) {
-				body += "<li>Product " + failure.getKey().getArchivedSerialNumber() + " failed to delete</li>";
+			for (Entry<Asset, Exception> failure : failedProducts.entrySet()) {
+				body += "<li>Asset " + failure.getKey().getArchivedSerialNumber() + " failed to delete</li>";
 			}
 			body += "</ul>";
 		} else {
-			body = "<p>All related parts of the product type " + getProductTypeName() + " have been removed.</p>";
+			body = "<p>All related parts of the asset type " + getProductTypeName() + " have been removed.</p>";
 		}
 
-		logger.info("Sending product type deletion notification email [" + archivedBy.getEmailAddress() + "]");
+		logger.info("Sending asset type deletion notification email [" + archivedBy.getEmailAddress() + "]");
 		MailMessage message = new MailMessage(subject, body, archivedBy.getEmailAddress());
 
 		if (deleteFailed()) {
@@ -137,7 +137,7 @@ public class ArchiveProductTypeTask implements Runnable {
 			productManager.removeAsASubProductType(type, archivedById);
 		} catch (Exception e) {
 			subProductTypeDetachFailed = true;
-			logger.error("failed to detach sub product type " + getProductTypeName() + " from masters", e);
+			logger.error("failed to detach sub asset type " + getProductTypeName() + " from masters", e);
 		}
 	}
 
@@ -146,24 +146,24 @@ public class ArchiveProductTypeTask implements Runnable {
 			productManager.removeProductCodeMappingsThatUse(type);
 		} catch (Exception e) {
 			productCodeMappingFailed = true;
-			logger.error("failed to remove product code mappings using product type " + getProductTypeName() + " from masters", e);
+			logger.error("failed to remove asset code mappings using asset type " + getProductTypeName() + " from masters", e);
 		}
 	}
 
 	private void deleteProducts() throws InvalidQueryException {
 		List<Long> failedIds = new ArrayList<Long>();
-		Map<Product, Exception> failedProducts = new HashMap<Product, Exception>();
-		Pager<Product> products;
+		Map<Asset, Exception> failedProducts = new HashMap<Asset, Exception>();
+		Pager<Asset> products;
 
-		QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, new OpenSecurityFilter());
+		QueryBuilder<Asset> queryBuilder = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
 		queryBuilder.setSimpleSelect().addSimpleWhere("type", type).addSimpleWhere("state", EntityState.ACTIVE);
 
 		while ((products = persistenceManager.findAllPaged(queryBuilder, 1, PAGE_SIZE)).getTotalResults() > 0L) {
-			for (Product product : products.getList()) {
+			for (Asset product : products.getList()) {
 				try {
 					productManager.archive(product, archivedBy);
 				} catch (Exception e) {
-					logger.error("could not delete the product " + product.getId() + " for product type " + getProductTypeName(), e);
+					logger.error("could not delete the asset " + product.getId() + " for asset type " + getProductTypeName(), e);
 					failedIds.add(product.getId());
 					failedProducts.put(product, e);
 					queryBuilder.addWhere(Comparator.NOTIN, "id", "id", failedIds);

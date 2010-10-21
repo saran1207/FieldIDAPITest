@@ -3,6 +3,8 @@ package com.n4systems.fieldid.actions.product;
 import java.util.HashMap;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
+import com.n4systems.model.Asset;
 import com.n4systems.model.safetynetwork.ProductsByNetworkIdLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -13,8 +15,6 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.LegacyProductType;
-import com.n4systems.ejb.legacy.ProductCodeMapping;
-import com.n4systems.model.Product;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
 
@@ -23,8 +23,8 @@ public class TraceabilityCrud extends ProductCrud {
 	private boolean networkProduct;
 
 	public TraceabilityCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager, 
-			ProductCodeMapping productCodeMappingManager, ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
-		super(productTypeManager, legacyProductSerialManager, persistenceManager, productCodeMappingManager, productManager, orderManager, projectManager, inspectionScheduleManager);
+			AssetCodeMappingService assetCodeMappingServiceManager, ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
+		super(productTypeManager, legacyProductSerialManager, persistenceManager, assetCodeMappingServiceManager, productManager, orderManager, projectManager, inspectionScheduleManager);
 	}
 	
 		
@@ -32,24 +32,24 @@ public class TraceabilityCrud extends ProductCrud {
 	public String doTraceability() {
 		setPageType();
 		
-		testExistingProduct();
+		testExistingAsset();
 		
 		ProductsByNetworkIdLoader loader = getLoaderFactory().createProductsByNetworkIdLoader();
-		loader.setNetworkId(product.getNetworkId());
+		loader.setNetworkId(asset.getNetworkId());
 		
 		if (!isInVendorContext()) {
-			// in a vendor context, we show the product since they don't get the "show" tab right now
-			loader.setExcludeProductId(product.getId());
+			// in a vendor context, we show the asset since they don't get the "show" tab right now
+			loader.setExcludeProductId(asset.getId());
 		}
 		
-		linkedProducts = loader.load();
+		linkedAssets = loader.load();
 		
-		// let's populate our product attachment map
+		// let's populate our asset attachment map
 		SafetyNetworkProductAttachmentListLoader attachmentLoader = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader();
-		attachmentLoader.setNetworkId(product.getNetworkId());
+		attachmentLoader.setNetworkId(asset.getNetworkId());
 		
 		linkedProductAttachments = new HashMap<Long, List<ProductAttachment>>();
-		for (Product linkedProd: linkedProducts) {
+		for (Asset linkedProd: linkedAssets) {
 			attachmentLoader.setProductId(linkedProd.getId());
 			linkedProductAttachments.put(linkedProd.getId(), attachmentLoader.load());
 		}
@@ -68,8 +68,8 @@ public class TraceabilityCrud extends ProductCrud {
 	
 	
 	public boolean isHasRegisteredProduct() {
-		for (Product linkedProduct : getLinkedProducts()) {
-			if (linkedProduct.getTenant().equals(getTenant())) {
+		for (Asset linkedAsset : getLinkedAssets()) {
+			if (linkedAsset.getTenant().equals(getTenant())) {
 				return true;
 			}
 		}
@@ -78,7 +78,7 @@ public class TraceabilityCrud extends ProductCrud {
 
 	
 	public Long getContextProductId() {
-		return isInVendorContext() ? product.getId() : null;
+		return isInVendorContext() ? asset.getId() : null;
 	}
 
 

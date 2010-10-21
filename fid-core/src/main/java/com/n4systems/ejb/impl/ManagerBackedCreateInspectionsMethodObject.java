@@ -12,10 +12,10 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubProduct;
+import com.n4systems.model.Asset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
-import com.n4systems.model.Product;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.TransactionSupervisor;
@@ -39,14 +39,14 @@ public class ManagerBackedCreateInspectionsMethodObject implements CreateInspect
 		List<Inspection> savedInspections = new ArrayList<Inspection>();
 		
 		/*
-		 *  XXX - Here we pull the Product off the first inspection.  We then re-attach the product back into persistence managed scope.
-		 *  This is done so that the infoOptions can be indexed after the Product is updated (otherwise you get a lazy load on infoOptions).
-		 *  Since all inspections passed in here are for the same product, we cannot re-attach in the loop since only one entity type with the same id
+		 *  XXX - Here we pull the Asset off the first inspection.  We then re-attach the asset back into persistence managed scope.
+		 *  This is done so that the infoOptions can be indexed after the Asset is updated (otherwise you get a lazy load on infoOptions).
+		 *  Since all inspections passed in here are for the same asset, we cannot re-attach in the loop since only one entity type with the same id
 		 *  can exist in managed scope.  In loop we then set the now managed entity back onto the inspection so they all point to the same
 		 *  instance.  This is not optimal and a refactor is in order to avoid this strange case. 
 		 */
-		Product managedProduct = inspections.iterator().next().getProduct();
-		persistenceManager.reattach(managedProduct);
+		Asset managedAsset = inspections.iterator().next().getAsset();
+		persistenceManager.reattach(managedAsset);
 		
 		InspectionGroup createdInspectionGroup = null;
 		Tenant tenant = null;
@@ -59,8 +59,8 @@ public class ManagerBackedCreateInspectionsMethodObject implements CreateInspect
 				inspection.setGroup(createdInspectionGroup);
 			}
 
-			// set the managed product back onto the inspection.  See note above.
-			inspection.setProduct(managedProduct);
+			// set the managed asset back onto the inspection.  See note above.
+			inspection.setAsset(managedAsset);
 			
 			// Pull the attachments off the inspection and send them in seperately so that they get processed properly
 			List<FileAttachment> fileAttachments = new ArrayList<FileAttachment>();
@@ -68,9 +68,9 @@ public class ManagerBackedCreateInspectionsMethodObject implements CreateInspect
 			inspection.setAttachments(new ArrayList<FileAttachment>());
 			
 			// Pull off the sub inspection attachments and put them in a map for later use
-			Map<Product, List<FileAttachment>> subInspectionAttachments = new HashMap<Product, List<FileAttachment>>();
+			Map<Asset, List<FileAttachment>> subInspectionAttachments = new HashMap<Asset, List<FileAttachment>>();
 			for (SubInspection subInspection : inspection.getSubInspections()) {
-				subInspectionAttachments.put(subInspection.getProduct(), subInspection.getAttachments());
+				subInspectionAttachments.put(subInspection.getAsset(), subInspection.getAttachments());
 				subInspection.setAttachments(new ArrayList<FileAttachment>());
 			}
 			
@@ -81,7 +81,7 @@ public class ManagerBackedCreateInspectionsMethodObject implements CreateInspect
 			SubInspection subInspection = null;
 			for (int i =0; i < inspection.getSubInspections().size(); i++) {
 				subInspection = inspection.getSubInspections().get(i);
-				savedInspection = inspectionSaver.attachFilesToSubInspection(savedInspection, subInspection, new ArrayList<FileAttachment>(subInspectionAttachments.get(subInspection.getProduct())));
+				savedInspection = inspectionSaver.attachFilesToSubInspection(savedInspection, subInspection, new ArrayList<FileAttachment>(subInspectionAttachments.get(subInspection.getAsset())));
 			}			
 
 			// If the inspection didn't have an inspection group before saving,

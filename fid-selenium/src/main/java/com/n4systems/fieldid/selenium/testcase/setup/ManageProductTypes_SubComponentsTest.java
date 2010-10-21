@@ -15,7 +15,7 @@ public class ManageProductTypes_SubComponentsTest extends ManageProductTypesTest
 		page.clickSubComponentsTab();
 		
 		List<String> subComponents = page.getSubComponents();
-		assertEquals("New product type should have no subcomponents", 0, subComponents.size());
+		assertEquals("New asset type should have no subcomponents", 0, subComponents.size());
 		
 		page.addSubComponent("Mobile Crane");
 		page.addSubComponent("Shackle");

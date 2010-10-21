@@ -6,11 +6,11 @@ import javax.persistence.EntityManager;
 
 
 import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.Saver;
 
-public class ProductSaver extends Saver<Product> {
+public class ProductSaver extends Saver<Asset> {
 	private final RecursiveLinkedChildProductLoader linkedProductLoader; 
 	private User modifiedBy;
 	
@@ -23,57 +23,57 @@ public class ProductSaver extends Saver<Product> {
 	}
 	
 	@Override
-	public void save(EntityManager em, Product product) {
-		// Due to the way Product is setup right now, we can call persist on it 
+	public void save(EntityManager em, Asset asset) {
+		// Due to the way Asset is setup right now, we can call persist on it
 		// or we'll get lazy loads, until this is fixed, we'll just always call update 
-		update(em, product);
+		update(em, asset);
 	}
 
 	@Override
-	public Product update(EntityManager em, Product product) {
+	public Asset update(EntityManager em, Asset asset) {
 		// we need to capture this now, as it will be lost after merge
-		boolean linkedProductChanged = product.linkedProductHasChanged();
+		boolean linkedProductChanged = asset.linkedAssetHasChanged();
 
-		setModifiedByOnProduct(product);
-		Product managedProduct = super.update(em, product);
+		setModifiedByOnProduct(asset);
+		Asset managedAsset = super.update(em, asset);
 		
-		managedProduct = resave(em, managedProduct);
+		managedAsset = resave(em, managedAsset);
 		
-		if (linkedProductChanged && !product.isNew()) {
-			forceNetworkIdRecalc(em, product);
+		if (linkedProductChanged && !asset.isNew()) {
+			forceNetworkIdRecalc(em, asset);
 		}
 		
-		return managedProduct;
+		return managedAsset;
 	}
 	
 
-	private Product resave(EntityManager em, Product product) {
+	private Asset resave(EntityManager em, Asset asset) {
 		// if the networkid is null, we need to update which will force the network Id to get setup
 		// the one case where this doesn't need to happen is if it was connected on create
-		if (product.getNetworkId() == null) {
-			product.touch();
-			product = super.update(em, product);
+		if (asset.getNetworkId() == null) {
+			asset.touch();
+			asset = super.update(em, asset);
 		}
-		return product;
+		return asset;
 	}
 	
-	private void forceNetworkIdRecalc(EntityManager em, Product product) {
-		List<Product> linkedProducts = linkedProductLoader.setProduct(product).load(em);
+	private void forceNetworkIdRecalc(EntityManager em, Asset asset) {
+		List<Asset> linkedAssets = linkedProductLoader.setProduct(asset).load(em);
 		
-		for (Product linkedProduct: linkedProducts) {
-			linkedProduct.touch();
-			super.update(em, linkedProduct);
+		for (Asset linkedAsset : linkedAssets) {
+			linkedAsset.touch();
+			super.update(em, linkedAsset);
 		}
 	}
 	
-	private void setModifiedByOnProduct(Product product) {
+	private void setModifiedByOnProduct(Asset asset) {
 		if (modifiedBy != null) {
-			product.setModifiedBy(modifiedBy);
+			asset.setModifiedBy(modifiedBy);
 		}
 	}
 
 	@Override
-	protected void remove(EntityManager em, Product product) {
+	protected void remove(EntityManager em, Asset asset) {
 		throw new NotImplementedException();
 	}
 	

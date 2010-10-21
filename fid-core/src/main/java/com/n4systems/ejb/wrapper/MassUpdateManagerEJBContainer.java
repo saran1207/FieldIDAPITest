@@ -10,9 +10,9 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.impl.MassUpdateManagerImpl;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
@@ -117,11 +117,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateProducts(List<Long> ids, Product product, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long updateProducts(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateProducts(ids, product, values, modifiedBy);
+			return createManager(transaction.getEntityManager()).updateProducts(ids, asset, values, modifiedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

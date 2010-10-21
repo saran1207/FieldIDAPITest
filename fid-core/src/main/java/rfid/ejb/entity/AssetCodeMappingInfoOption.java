@@ -10,23 +10,23 @@ import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 @Entity
 @Table (name = "productcodemapping_infooption")
-public class ProductCodeMappingInfoOption extends LegacyBaseEntity {
+public class AssetCodeMappingInfoOption extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne 
 	@JoinColumn (name="r_productCodeMapping")
-	private ProductCodeMappingBean productCodeMapping;
+	private AssetCodeMapping assetCodeMapping;
 	
 	@ManyToOne
 	@JoinColumn (name="r_infoOption")
 	private InfoOptionBean infoOption;
 
-	public ProductCodeMappingBean getProductCodeMapping() {
-		return productCodeMapping;
+	public AssetCodeMapping getProductCodeMapping() {
+		return assetCodeMapping;
 	}
 
-	public void setProductCodeMapping(ProductCodeMappingBean productCodeMapping) {
-		this.productCodeMapping = productCodeMapping;
+	public void setProductCodeMapping(AssetCodeMapping assetCodeMapping) {
+		this.assetCodeMapping = assetCodeMapping;
 	}
 
 	public InfoOptionBean getInfoOption() {

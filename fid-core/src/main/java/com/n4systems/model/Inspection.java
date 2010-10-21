@@ -44,10 +44,10 @@ import com.n4systems.util.StringUtils;
 @PrimaryKeyJoinColumn(name="inspection_id")
 public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable, NetworkEntity<Inspection>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
-	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions", "infoOptionMap", "subInspections" };
+	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subInspections" };
 	
 	public static final SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner("tenant.id", "product.owner", null, "state");
+		return new SecurityDefiner("tenant.id", "asset.owner", null, "state");
 	}
 	
 	private Location advancedLocation = new Location();
@@ -302,7 +302,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		enhanced.setPerformedBy(enhance(performedBy, level));
 		enhanced.setGroup(enhance(group, level));
 		enhanced.setType(enhance(getType(), level));
-		enhanced.setProduct(enhance(getProduct(), level));
+		enhanced.setAsset(enhance(getAsset(), level));
 		enhanced.setOwner(enhance(getOwner(), level));
 		
 		List<SubInspection> enhancedSubInspections = new ArrayList<SubInspection>();

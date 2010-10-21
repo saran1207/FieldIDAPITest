@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.product;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -12,7 +13,6 @@ import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandler;
 import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandlerImpl;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.ProductType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypeSaver;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
@@ -26,9 +26,9 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	private static Logger logger = Logger.getLogger(AssociatedInspectionTypeCrud.class);
 	private static final long serialVersionUID = 1L;
 
-	private ProductType productType;
+	private AssetType assetType;
 	private List<InspectionType> inspectionTypes;
-	private List<Boolean> productTypeInspections;
+	private List<Boolean> assetTypeInspections;
 
 	public AssociatedInspectionTypeCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -50,7 +50,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 		
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		List<InspectionType> selectedInspectionTypes = findInspectionsTypesSet();
-		List<AssociatedInspectionType> types = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(productType).load(transaction);
+		List<AssociatedInspectionType> types = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(assetType).load(transaction);
 		
 		try {
 			
@@ -94,7 +94,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 				}
 			}
 			if (!found) {
-				toBeAdded.add(new AssociatedInspectionType(selectedInspectionType, productType));
+				toBeAdded.add(new AssociatedInspectionType(selectedInspectionType, assetType));
 			}
 		}
 		return toBeAdded;
@@ -122,7 +122,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 		List<InspectionType> selectedInspectionTypes = new ArrayList<InspectionType>();
 
 		for (InspectionType inspectionType : getInspectionTypes()) {
-			if (productTypeInspections.get(getInspectionTypes().indexOf(inspectionType))) {
+			if (assetTypeInspections.get(getInspectionTypes().indexOf(inspectionType))) {
 				selectedInspectionTypes.add(inspectionType);
 			}
 		}
@@ -133,61 +133,61 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	/**
 	 * @return the productType
 	 */
-	public Long getProductTypeId() {
-		return (productType != null) ? productType.getId() : null;
+	public Long getAssetTypeId() {
+		return (assetType != null) ? assetType.getId() : null;
 	}
 
 	/**
-	 * @param productType
+	 * @param assetType
 	 *            the productType to set
 	 */
-	public void setProductTypeId(Long productType) {
-		if (productType == null) {
-			this.productType = null;
-		} else if (this.productType == null || productType.equals(this.productType.getId())) {
-			this.productType = persistenceManager.find(new QueryBuilder<ProductType>(ProductType.class, getSecurityFilter())
-														.addSimpleWhere("id", productType));
+	public void setAssetTypeId(Long assetType) {
+		if (assetType == null) {
+			this.assetType = null;
+		} else if (this.assetType == null || assetType.equals(this.assetType.getId())) {
+			this.assetType = persistenceManager.find(new QueryBuilder<AssetType>(AssetType.class, getSecurityFilter())
+														.addSimpleWhere("id", assetType));
 		}
 		
 	}
 
-	public ProductType getProductType() {
-		return productType;
+	public AssetType getAssetType() {
+		return assetType;
 	}
 
 	/**
 	 * @return the productTypeEvents
 	 */
-	public List<Boolean> getProductTypeInspectionTypes() {
-		if (productTypeInspections == null) {
-			productTypeInspections = new ArrayList<Boolean>();
+	public List<Boolean> getAssetTypeInspectionTypes() {
+		if (assetTypeInspections == null) {
+			assetTypeInspections = new ArrayList<Boolean>();
 			for (InspectionType inspectionType : getInspectionTypes()) {
 				boolean found = false;
 				for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes()) {
 					if (inspectionType.equals(associatedInspectionType.getInspectionType())) {
-						productTypeInspections.add(true);
+						assetTypeInspections.add(true);
 						found = true;
 						break;
 					}
 				}
 				if (!found) {
-					productTypeInspections.add(false);
+					assetTypeInspections.add(false);
 				}
 			}
 		}
-		return productTypeInspections;
+		return assetTypeInspections;
 	}
 
 	private List<AssociatedInspectionType> associatedInspectionTypes() {
-		return getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(productType).load();
+		return getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(assetType).load();
 	}
 
 	/**
 	 * @param productTypeEvents
 	 *            the productTypeEvents to set
 	 */
-	public void setProductTypeInspectionTypes(List<Boolean> productTypeInspections) {
-		this.productTypeInspections = productTypeInspections;
+	public void setAssetTypeInspectionTypes(List<Boolean> assetTypeInspections) {
+		this.assetTypeInspections = assetTypeInspections;
 	}
 
 	/**

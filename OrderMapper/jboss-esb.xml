@@ -1,5 +1,5 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
-<jbossesb xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.0.1.xsd" parameterReloadSecs="5">
+<jbossesb xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/asset/etc/schemas/xml/jbossesb-1.0.1.xsd" parameterReloadSecs="5">
 
     <providers>
           <jms-provider name="JBossMQ" connection-factory="ConnectionFactory"

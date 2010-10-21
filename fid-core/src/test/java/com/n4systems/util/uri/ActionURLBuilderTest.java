@@ -1,13 +1,13 @@
 package com.n4systems.util.uri;
 
-import static com.n4systems.model.builders.ProductBuilder.*;
+import static com.n4systems.model.builders.AssetBuilder.*;
 import static org.junit.Assert.*;
 
 import java.net.URI;
 
+import com.n4systems.model.Asset;
 import org.junit.Test;
 
-import com.n4systems.model.Product;
 import com.n4systems.util.NonDataSourceBackedConfigContext;
 
 
@@ -26,19 +26,19 @@ public class ActionURLBuilderTest {
 	public void should_add_unique_id_query_variable_on_when_entity_is_given() throws Exception {
 		ActionURLBuilder sut = new ActionURLBuilder(URI.create("https://alex/"), new NonDataSourceBackedConfigContext());
 		sut.setAction("productEdit");
-		Product product = aProduct().build();
-		sut.setEntity(product);
+		Asset asset = anAsset().build();
+		sut.setEntity(asset);
 	
-		assertEquals("https://alex/productEdit.action?uniqueID=" + product.getId() , sut.build());
+		assertEquals("https://alex/productEdit.action?uniqueID=" + asset.getId() , sut.build());
 	}
 	
 	@Test
 	public void should_not_addunique_id_query_variable_on_when_entity_is_given_but_still_new() throws Exception {
 		ActionURLBuilder sut = new ActionURLBuilder(URI.create("https://alex/"), new NonDataSourceBackedConfigContext());
 		sut.setAction("productEdit");
-		Product product = aProduct().build();
-		product.setId(null);
-		sut.setEntity(product);
+		Asset asset = anAsset().build();
+		asset.setId(null);
+		sut.setEntity(asset);
 		assertEquals("https://alex/productEdit.action", sut.build());
 	}
 	

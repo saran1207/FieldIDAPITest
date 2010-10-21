@@ -50,7 +50,7 @@ public abstract class AbsractInspectionReportMapProducer extends ReportMapProduc
 		add("eventTypeDescription", getInspection().getType().getName());
 		add("eventInfoOptionMap", eventInfoOptions());
 		
-		add("product", new ProductReportMapProducer(getInspection().getProduct(), dateTimeDefinition).produceMap());
+		add("asset", new ProductReportMapProducer(getInspection().getAsset(), dateTimeDefinition).produceMap());
 		
 		List<CriteriaStateView> createCriteriaViews = createCriteriaViews();
 		add("resultsBeanList", createCriteriaViews);

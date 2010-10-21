@@ -6,7 +6,7 @@ import com.n4systems.model.product.ProductAttachment;
 public class DownloadSafetyNetworkProductAttachmentFile extends DownloadProductAttachmentFile {
 	private static final long serialVersionUID = 1L;
 	
-	private Long productNetworkId;
+	private Long assetNetworkId;
 	
 	public DownloadSafetyNetworkProductAttachmentFile(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -14,12 +14,12 @@ public class DownloadSafetyNetworkProductAttachmentFile extends DownloadProductA
 	
 	@Override
 	protected ProductAttachment loadProductAttachment() {
-		return getLoaderFactory().createSafetyNetworkProductAttachmentLoader().setAttachmentId(attachmentID).setProductNetworkId(productNetworkId).load();
+		return getLoaderFactory().createSafetyNetworkProductAttachmentLoader().setAttachmentId(attachmentID).setProductNetworkId(assetNetworkId).load();
 	}
 	
 	@Override
 	public void setUniqueID(Long uniqueID) {
-		this.productNetworkId = uniqueID;
+		this.assetNetworkId = uniqueID;
 	}
 
 }

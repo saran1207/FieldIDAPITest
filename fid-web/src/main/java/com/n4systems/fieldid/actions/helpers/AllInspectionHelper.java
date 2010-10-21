@@ -4,15 +4,15 @@ import java.util.Collections;
 import java.util.List;
 
 import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
 import com.n4systems.model.safetynetwork.InspectionsByNetworkIdLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 public class AllInspectionHelper {
 	
 	private final LegacyProductSerial legacyProductSerialManager;
-	private final Product product;
+	private final Asset asset;
 	private final SecurityFilter filter;
 	
 	private Long inspectionCount;
@@ -20,15 +20,15 @@ public class AllInspectionHelper {
 	private List<Inspection> inspections;
 	private Inspection lastInspection; 
 	
-	public AllInspectionHelper(LegacyProductSerial legacyProductSerialManager, Product product, SecurityFilter filter) {
+	public AllInspectionHelper(LegacyProductSerial legacyProductSerialManager, Asset asset, SecurityFilter filter) {
 		this.legacyProductSerialManager = legacyProductSerialManager;
-		this.product = product;
+		this.asset = asset;
 		this.filter = filter;
 	}
 	
 	public Long getInspectionCount() {
 		if (inspectionCount == null) {
-			inspectionCount = legacyProductSerialManager.countAllInspections(product, filter);
+			inspectionCount = legacyProductSerialManager.countAllInspections(asset, filter);
 		}
 		return inspectionCount;
 	}
@@ -36,7 +36,7 @@ public class AllInspectionHelper {
 	public List<Inspection> getInspections() {
 		if (inspections == null) {
 			InspectionsByNetworkIdLoader loader = new InspectionsByNetworkIdLoader(filter);
-			inspections = loader.setNetworkId(product.getNetworkId()).load();
+			inspections = loader.setNetworkId(asset.getNetworkId()).load();
 			Collections.sort(inspections);
 		}
 		return inspections;
@@ -44,14 +44,14 @@ public class AllInspectionHelper {
 
 	public Inspection getLastInspection() {
 		if (lastInspection == null) {
-			lastInspection = legacyProductSerialManager.findLastInspections(product, filter);
+			lastInspection = legacyProductSerialManager.findLastInspections(asset, filter);
 		}
 		return lastInspection;
 	}
 
 	public Long getLocalInspectionCount() {
 		if (localInspectionCount == null) {
-			localInspectionCount = legacyProductSerialManager.countAllLocalInspections(product, filter);
+			localInspectionCount = legacyProductSerialManager.countAllLocalInspections(asset, filter);
 		}
 		return localInspectionCount;
 	}

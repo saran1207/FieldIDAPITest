@@ -40,7 +40,7 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "producttypes")
-public class ProductType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<ProductType> {
+public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType> {
 	private static final long serialVersionUID = 1L;
 	private static final String descVariableDefault = "";
 	private static final String descVariableStart = "{";
@@ -65,37 +65,37 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	private String manufactureCertificateText;	
 	private boolean hasManufactureCertificate;
 
-	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "productType")
-	private Set<ProductTypeSchedule> schedules = new HashSet<ProductTypeSchedule>();
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "assetType")
+	private Set<AssetTypeSchedule> schedules = new HashSet<AssetTypeSchedule>();
 
-	@OneToMany(mappedBy = "productInfo", targetEntity = InfoFieldBean.class, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "assetInfo", targetEntity = InfoFieldBean.class, cascade = CascadeType.ALL)
 	@OrderBy("weight, name ASC")
 	private Collection<InfoFieldBean> infoFields = new ArrayList<InfoFieldBean>();
 	
-	@OneToOne( mappedBy="productType", targetEntity = AutoAttributeCriteria.class, fetch = FetchType.LAZY)
+	@OneToOne( mappedBy="assetType", targetEntity = AutoAttributeCriteria.class, fetch = FetchType.LAZY)
 	private AutoAttributeCriteria autoAttributeCriteria;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<ProductType> subTypes = new HashSet<ProductType>();
+	private Set<AssetType> subTypes = new HashSet<AssetType>();
 	
 	private String archivedName;
 	
-	@OneToMany(mappedBy="productType")
+	@OneToMany(mappedBy="assetType")
 	private Set<AssociatedInspectionType> inspectionTypes;
 	
 	
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	private ProductTypeGroup group;
+	private AssetTypeGroup group;
 		
-	public ProductType() {
+	public AssetType() {
 		this(null);
 	}
 	
-	public ProductType(String name) {
+	public AssetType(String name) {
 		super();
 		this.name = name;
 	}
@@ -140,12 +140,12 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	
 	@Deprecated
 	@AllowSafetyNetworkAccess
-	public String getProductType() {
+	public String getAssetType() {
 		return getName();
 	}
 	
 	@Deprecated
-	public void setProductType(String name) {
+	public void setAssetType(String name) {
 		setName(name);
 	}
 
@@ -209,7 +209,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	public void associateFields() {
 		if(infoFields != null) {
 			for (InfoFieldBean infoFieldBean : infoFields) {
-				infoFieldBean.setProductInfo(this);
+				infoFieldBean.setAssetInfo(this);
 			}
 		}
 	}
@@ -257,8 +257,8 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 	
 	/*
-	 * prepareDescription is used to create a product description based of the 
-	 * ProductType descriptionTemplate and the Product's info options.
+	 * prepareDescription is used to create a asset description based of the
+	 * AssetType descriptionTemplate and the Asset's info options.
 	 * 
 	 * This method is complex because it has been highly optimized.  Please ensure any
 	 * refactors conform to the same standard of performance as it is used heavily by reporting
@@ -344,16 +344,16 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 
 	@AllowSafetyNetworkAccess
-	public Set<ProductTypeSchedule> getSchedules() {
+	public Set<AssetTypeSchedule> getSchedules() {
 		return schedules;
 	}
 
-	public void setSchedules(Set<ProductTypeSchedule> schedules) {
+	public void setSchedules(Set<AssetTypeSchedule> schedules) {
 		this.schedules = schedules;
 	}
 	
 	/**
-	 * Finds the ProductTypeSchedule for the given inspection type and owner, looking for schedules 
+	 * Finds the AssetTypeSchedule for the given inspection type and owner, looking for schedules
 	 * up the owners {@link BaseOrg#getParent() parent} chain until it finds one or reaches the 
 	 * PrimaryOrg.
 	 * @param type	Inspection type
@@ -361,15 +361,15 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	 * @return		ProductTypeSchedule or null if no schedule was found
 	 */
 	@AllowSafetyNetworkAccess
-	public ProductTypeSchedule getSchedule(InspectionType type, BaseOrg owner) {
-		ProductTypeSchedule scheduleForOrg = null;
+	public AssetTypeSchedule getSchedule(InspectionType type, BaseOrg owner) {
+		AssetTypeSchedule scheduleForOrg = null;
 		
 		if(type == null || owner == null) {
 			// the null owner check is important here since it is a stopping case for the recursion
 			return null;
 		}
 		
-		for (ProductTypeSchedule schedule: schedules) {
+		for (AssetTypeSchedule schedule: schedules) {
 			if (schedule.getInspectionType().equals(type) && schedule.getOwner().equals(owner)) {
 				scheduleForOrg = schedule;
 				break;
@@ -384,8 +384,8 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 		return scheduleForOrg;
 	}
 	
-	public ProductTypeSchedule getDefaultSchedule(InspectionType type) {
-		for (ProductTypeSchedule schedule: schedules) {
+	public AssetTypeSchedule getDefaultSchedule(InspectionType type) {
+		for (AssetTypeSchedule schedule: schedules) {
 			if (schedule.getInspectionType().equals(type) && schedule.getOwner().isPrimary()) {
 				return  schedule;
 			}				
@@ -397,7 +397,7 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	public Date getSuggestedNextInspectionDate(Date fromDate, InspectionType type, BaseOrg owner) {
 		Date returnDate = fromDate;
 		
-		ProductTypeSchedule schedule = getSchedule(type, owner);
+		AssetTypeSchedule schedule = getSchedule(type, owner);
 		if(schedule != null) {
 			returnDate = schedule.getNextDate(fromDate);
 		}
@@ -429,11 +429,11 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 	
 	@AllowSafetyNetworkAccess
-	public Set<ProductType> getSubTypes() {
+	public Set<AssetType> getSubTypes() {
 		return subTypes;
 	}
 
-	public void setSubTypes(Set<ProductType> subTypes) {
+	public void setSubTypes(Set<AssetType> subTypes) {
 		this.subTypes = subTypes;
 	}
 	
@@ -461,15 +461,15 @@ public class ProductType extends ArchivableEntityWithTenant implements NamedEnti
 	}
 
 	@AllowSafetyNetworkAccess
-	public ProductTypeGroup getGroup() {
+	public AssetTypeGroup getGroup() {
 		return group;
 	}
 
-	public void setGroup(ProductTypeGroup group) {
+	public void setGroup(AssetTypeGroup group) {
 		this.group = group;
 	}
 
-	public ProductType enhance(SecurityLevel level) {
+	public AssetType enhance(SecurityLevel level) {
 		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
 

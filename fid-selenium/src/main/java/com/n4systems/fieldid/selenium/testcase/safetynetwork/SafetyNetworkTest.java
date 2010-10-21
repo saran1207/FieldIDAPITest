@@ -11,7 +11,6 @@ import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogIm
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogPage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkInvitePage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkSettingsPage;
-import com.n4systems.fieldid.selenium.pages.safetynetwork.VendorConnectionProfilePage;
 
 public class SafetyNetworkTest extends FieldIDTestCase {
 
@@ -24,7 +23,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	private String safetyNetworkVideoLocator = "//a[@id='video_link']";
 	private String connectionProfileName = "//p[.='Sea-Fit']";
 
-	// Product Types
+	// Asset Types
 	private static final String PRODUCT_TYPE_CHECKBOX_NAME_1 = "Gravity Harness";
 
 	// Connection names
@@ -94,7 +93,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 		safetyNetworkCatalogPage.checkProductTypeCheckBox(PRODUCT_TYPE_CHECKBOX_NAME_1);
 
 		safetyNetworkCatalogPage.submitForm();
-		assertTrue("Could not toggle Product Type", safetyNetworkCatalogPage.isChecked(PRODUCT_TYPE_CHECKBOX_NAME_1));
+		assertTrue("Could not toggle Asset Type", safetyNetworkCatalogPage.isChecked(PRODUCT_TYPE_CHECKBOX_NAME_1));
 
 		// Uncheck for retesting...
 		safetyNetworkCatalogPage.unCheckProductTypeCheckBox(PRODUCT_TYPE_CHECKBOX_NAME_1);

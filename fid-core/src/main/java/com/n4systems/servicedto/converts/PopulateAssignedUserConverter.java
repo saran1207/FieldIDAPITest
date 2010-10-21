@@ -1,8 +1,8 @@
 package com.n4systems.servicedto.converts;
 
 import com.n4systems.api.conversion.ConversionException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
 import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;
@@ -18,7 +18,7 @@ public class PopulateAssignedUserConverter implements AssignedUserConverter {
 		this.loaderFactory = loaderFactory;
 	}
 	
-	public Product convert(ProductServiceDTO productServiceDTO, Product product) {
+	public Asset convert(ProductServiceDTO productServiceDTO, Asset product) {
 
 		User user = null;
 		if (productServiceDTO.assignedUserIdExists()) {

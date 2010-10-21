@@ -24,7 +24,7 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.ManualSecurityFilter;
@@ -68,17 +68,17 @@ public class InspectionManagerImpl implements InspectionManager {
 	 * finds all the groups that you can view with the defined security filter.
 	 */
 	@SuppressWarnings("unchecked")
-	private List<InspectionGroup> findAllInspectionGroups(SecurityFilter userFilter, Long productId) {
+	private List<InspectionGroup> findAllInspectionGroups(SecurityFilter userFilter, Long assetId) {
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
 		filter.setTargets("ig.tenant.id", "inspection.owner", null, null);
 
-		String queryString = "Select DISTINCT ig FROM InspectionGroup as ig INNER JOIN ig.inspections as inspection LEFT JOIN inspection.product as product"
-				+ " WHERE product.id = :id AND inspection.state = :activeState  AND " + filter.produceWhereClause() + " ORDER BY ig.created ";
+		String queryString = "Select DISTINCT ig FROM InspectionGroup as ig INNER JOIN ig.inspections as inspection LEFT JOIN inspection.asset as asset"
+				+ " WHERE asset.id = :id AND inspection.state = :activeState  AND " + filter.produceWhereClause() + " ORDER BY ig.created ";
 
 		Query query = em.createQuery(queryString);
 
 		filter.applyParameters(query);
-		query.setParameter("id", productId);
+		query.setParameter("id", assetId);
 		query.setParameter("activeState", EntityState.ACTIVE);
 
 		return query.getResultList();
@@ -87,8 +87,8 @@ public class InspectionManagerImpl implements InspectionManager {
 	/**
 	 * finds all the groups that you can view with the defined security filter.
 	 */
-	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long productId, String... postFetchFields) {
-		return (List<InspectionGroup>) persistenceManager.postFetchFields(findAllInspectionGroups(filter, productId), postFetchFields);
+	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
+		return (List<InspectionGroup>) persistenceManager.postFetchFields(findAllInspectionGroups(filter, assetId), postFetchFields);
 	}
 
 	
@@ -131,7 +131,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
 		queryBuilder.setSimpleSelect().addSimpleWhere("id", id).addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addOrder("created");
-		queryBuilder.addPostFetchPaths("modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "product", "product.infoOptions",
+		queryBuilder.addPostFetchPaths("modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions",
 				"infoOptionMap", "subInspections");
 
 		try {
@@ -150,21 +150,21 @@ public class InspectionManagerImpl implements InspectionManager {
 		return inspection;
 	}
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Product product, SecurityFilter filter) {
+	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		
 
 		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
 		queryBuilder.setSimpleSelect();
 		queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addWhere(Comparator.GE, "beginingDate", "date", datePerformedRangeStart).addWhere(Comparator.LE, "endingDate", "date", datePerformedRangeEnd); 
-		queryBuilder.addSimpleWhere("product", product);
+		queryBuilder.addSimpleWhere("asset", asset);
 
 		List<Inspection> inspections;
 		try {
 			inspections = persistenceManager.findAll(queryBuilder);
 		} catch (InvalidQueryException e) {
 			inspections = new ArrayList<Inspection>();
-			logger.error("Unable to load Inspections by Date and Product", e);
+			logger.error("Unable to load Inspections by Date and Asset", e);
 		}
 
 		return inspections;
@@ -183,8 +183,8 @@ public class InspectionManagerImpl implements InspectionManager {
 	public Inspection retireInspection(Inspection inspection, Long userId) {
 		inspection.retireEntity();
 		inspection = persistenceManager.update(inspection, userId);
-		inspectionSaver.updateProductInspectionDate(inspection.getProduct());
-		inspection.setProduct(persistenceManager.update(inspection.getProduct()));
+		inspectionSaver.updateProductInspectionDate(inspection.getAsset());
+		inspection.setAsset(persistenceManager.update(inspection.getAsset()));
 		inspectionScheduleManager.restoreScheduleForInspection(inspection);
 		return inspection;
 	}
@@ -240,7 +240,7 @@ public class InspectionManagerImpl implements InspectionManager {
 
 		String whereClause = "where ( ";
 		if (setCustomerInfo) {
-			whereClause += "i.product.owner.customerOrg.id in (:customerIds) ";
+			whereClause += "i.asset.owner.customerOrg.id in (:customerIds) ";
 
 			if (setDivisionInfo) {
 				whereClause += "or ";
@@ -248,10 +248,10 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 
 		if (setDivisionInfo) {
-			whereClause += "i.product.owner.divisionOrg.id in (:divisionIds)";
+			whereClause += "i.asset.owner.divisionOrg.id in (:divisionIds)";
 		}
 
-		whereClause += ") AND i.product.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(Inspection.class, "i") + ")";
+		whereClause += ") AND i.asset.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(Inspection.class, "i") + ")";
 
 		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
 		if (setCustomerInfo)
@@ -278,9 +278,9 @@ public class InspectionManagerImpl implements InspectionManager {
 
 		String whereClause = "where ( ";
 		
-		whereClause += "i.product.id in (select sch.product.id from Project p, IN (p.schedules) sch where p.id in (:jobIds))";
+		whereClause += "i.asset.id in (select sch.asset.id from Project p, IN (p.schedules) sch where p.id in (:jobIds))";
 
-		whereClause += ") AND i.product.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(InspectionGroup.class, "i") + ")";
+		whereClause += ") AND i.asset.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(InspectionGroup.class, "i") + ")";
 
 		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
 		query.setParameter("jobIds", jobIds);

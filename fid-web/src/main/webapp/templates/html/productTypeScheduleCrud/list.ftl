@@ -72,7 +72,7 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
 			<@s.text name="label.emptyinspectiontypesselected" />
-			<a href="<@s.url action="selectInspectionTypes" includeParams="none" productTypeId="${productTypeId}" />"><@s.text name="label.clickheretoselectinspectiontypes"/></a>
+			<a href="<@s.url action="selectInspectionTypes" includeParams="none" assetTypeId="${assetTypeId}" />"><@s.text name="label.clickheretoselectinspectiontypes"/></a>
 		</p>
 	</div>
 </#if>
@@ -80,7 +80,7 @@ ${action.setPageType('product_type', 'schedule_frequencies')!}
 <div id="orgPickerForm" style="display:none">	
 	<div id="orgFormContainer">
 	<@s.form id="orgForm" name="orgPickerForm" action="inspectionFrequencyOverrideCreate" theme="fieldidSimple" >
-		<@s.hidden name="productTypeId" />
+		<@s.hidden name="assetTypeId" />
 		<@s.hidden name="uniqueID" />
 		<@s.hidden id="inspectionTypeIdToUpdate" name="inspectionTypeId"/>
 		<h3><@s.text name="label.overrides_title"/></h3>

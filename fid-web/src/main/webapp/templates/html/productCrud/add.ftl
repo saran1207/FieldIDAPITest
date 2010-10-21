@@ -10,7 +10,7 @@
 	<#if lineItem?exists > 
 		- <@s.text name="label.ordernumber"/> ${lineItem.order.orderNumber?html}
 		( <@s.text name="label.orderqty"/>:  ${lineItem.quantity},
-		 <@s.text name="label.identifiedproducts"/>: ${action.getIdentifiedProductCount(lineItem)} )
+		 <@s.text name="label.identifiedproducts"/>: ${action.getIdentifiedAssetCount(lineItem)} )
 	</#if>
 </title>
 

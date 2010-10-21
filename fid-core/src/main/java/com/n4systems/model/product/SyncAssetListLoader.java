@@ -7,8 +7,8 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.Product;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -68,8 +68,8 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 		}
 		
 		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(SubProduct.class);
-		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "product.id", "product.modified"));
-		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "masterProduct.id", productIds));
+		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "asset.id", "asset.modified"));
+		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "masterAsset.id", productIds));
 		
 		List<SyncAsset> subProductIds = builder.getResultList(em);
 		return subProductIds;
@@ -77,7 +77,7 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 	
 	private List<SyncAsset> findMasterProductIdsByJob(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(InspectionSchedule.class, filter);
-		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "product.id", "product.modified"));
+		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "asset.id", "asset.modified"));
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "project.id", jobIds));
 		
 		List<SyncAsset> masterProductIds = builder.getResultList(em);
@@ -89,7 +89,7 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 			return new ArrayList<SyncAsset>();
 		}
 		
-		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(Product.class, filter, "p");
+		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(Asset.class, filter, "p");
 		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "p.id", "p.modified"));
 
 		WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
@@ -98,7 +98,7 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 			
 			if (!org.isPrimary()) {
 				// Primary orgs don't need any filtering
-				filterGroup.addClause(new SecondaryOrExternalOrgFilterClause("org_" + ownerId, Product.OWNER_PATH, org, ChainOp.OR));
+				filterGroup.addClause(new SecondaryOrExternalOrgFilterClause("org_" + ownerId, Asset.OWNER_PATH, org, ChainOp.OR));
 			}
 		}
 		

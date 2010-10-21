@@ -4,10 +4,10 @@
 		<label class="label"><@s.text name="label.smartsearch"/></label>
 		<span><@s.textfield name="search" /></span>
 		<#if useOverRides?exists && useOverRides >
-			<@s.hidden name="productTypeId">
+			<@s.hidden name="assetTypeId">
 				<#if overRideProductType?exists>
 				 	<@s.param name="value">${overRideProductType}</@s.param>
-				<#elseif product?exists && !product.new >
+				<#elseif asset?exists && !asset.new >
 					<@s.param name="value"></@s.param>
 				</#if>
 			</@s.hidden>

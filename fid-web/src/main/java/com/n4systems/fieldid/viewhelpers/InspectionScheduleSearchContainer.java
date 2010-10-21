@@ -21,9 +21,9 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	private String purchaseOrder;
 	private LocationWebModel location = new LocationWebModel(this);
 	private String referenceNumber;
-	private Long productStatusId;
-	private Long productTypeId;
-	private Long productTypeGroupId;
+	private Long assetStatusId;
+	private Long assetTypeId;
+	private Long assetTypeGroupId;
 	private Long assignedUserId;
 	private Long inspectionTypeId;
 	private Long jobId;
@@ -39,21 +39,21 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 
 	@Override
 	protected void evalJoinTerms() {
-		addLeftJoinTerms("product.shopOrder.order", "product.productStatus", "product.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "product.type.group");
+		addLeftJoinTerms("asset.shopOrder.order", "asset.assetStatus", "asset.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "asset.type.group");
 		addPredefinedLocationJoin();
 	}
 	
 	@Override
 	protected void evalSearchTerms() {
-		addWildcardOrStringTerm("product.rfidNumber", rfidNumber);
-		addWildcardOrStringTerm("product.serialNumber", serialNumber);
-		addWildcardOrStringTerm("product.shopOrder.order.orderNumber", orderNumber);
+		addWildcardOrStringTerm("asset.rfidNumber", rfidNumber);
+		addWildcardOrStringTerm("asset.serialNumber", serialNumber);
+		addWildcardOrStringTerm("asset.shopOrder.order.orderNumber", orderNumber);
 		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
-		addWildcardOrStringTerm("product.purchaseOrder", purchaseOrder);
-		addWildcardOrStringTerm("product.customerRefNumber", referenceNumber);
-		addSimpleTerm("product.productStatus.uniqueID", productStatusId);
-		addSimpleTerm("product.type.id", productTypeId);
-		addSimpleTerm("product.type.group.id", productTypeGroupId);
+		addWildcardOrStringTerm("asset.purchaseOrder", purchaseOrder);
+		addWildcardOrStringTerm("asset.customerRefNumber", referenceNumber);
+		addSimpleTerm("asset.assetStatus.uniqueID", assetStatusId);
+		addSimpleTerm("asset.type.id", assetTypeId);
+		addSimpleTerm("asset.type.group.id", assetTypeGroupId);
 		addSimpleTerm("inspectionType.group.id", inspectionTypeId);
 		addSimpleTerm("project.id", jobId);
 		addSimpleTermOrNull("project.id", jobAndNullId);
@@ -78,9 +78,9 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 
 	private void addAssigUserTerm() {
 		if(assignedUserId != null && assignedUserId == 0) {
-			addNullTerm("product.assignedUser.id");
+			addNullTerm("asset.assignedUser.id");
 		} else {
-			addSimpleTerm("product.assignedUser.id", assignedUserId);
+			addSimpleTerm("asset.assignedUser.id", assignedUserId);
 		}
 	}
 	
@@ -139,20 +139,20 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		this.referenceNumber = referenceNumber;
 	}
 	
-	public Long getProductStatus() {
-		return productStatusId;
+	public Long getAssetStatus() {
+		return assetStatusId;
 	}
 
-	public void setProductStatus(Long productStatus) {
-		this.productStatusId = productStatus;
+	public void setAssetStatus(Long assetStatus) {
+		this.assetStatusId = assetStatus;
 	}
 
-	public Long getProductType() {
-		return productTypeId;
+	public Long getAssetType() {
+		return assetTypeId;
 	}
 
-	public void setProductType(Long productType) {
-		this.productTypeId = productType;
+	public void setAssetType(Long assetType) {
+		this.assetTypeId = assetType;
 	}
 
 	public Long getInspectionType() {
@@ -231,11 +231,11 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 		return (owner != null) ? owner.getId() : null;
 	}
 
-	public Long getProductTypeGroup() {
-		return productTypeGroupId;
+	public Long getAssetTypeGroup() {
+		return assetTypeGroupId;
 	}
 
-	public void setProductTypeGroup(Long productTypeGroupId) {
-		this.productTypeGroupId = productTypeGroupId;
+	public void setAssetTypeGroup(Long assetTypeGroupId) {
+		this.assetTypeGroupId = assetTypeGroupId;
 	}
 }

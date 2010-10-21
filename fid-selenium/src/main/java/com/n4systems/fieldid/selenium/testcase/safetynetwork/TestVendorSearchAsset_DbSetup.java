@@ -5,7 +5,7 @@ import com.n4systems.fieldid.selenium.pages.safetynetwork.AssetPage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkVendorAssetListPage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.VendorConnectionProfilePage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.builders.ProductBuilder;
+import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class TestVendorSearchAsset_DbSetup extends PageNavigatingTestCase<Vendor
                 .type(TypedOrgConnection.ConnectionType.VENDOR)
                 .build();
 
-        ProductBuilder builder = scenario.aProduct()
+        AssetBuilder builder = scenario.aProduct()
                 .forTenant(scenario.tenant("iti"))
                 .ofType(scenario.productType("iti", TEST_PRODUCT_TYPE_1));
 

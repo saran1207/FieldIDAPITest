@@ -20,7 +20,7 @@ public class Order {
 		s.append("\nPurchase Order: " + purchaseOrder);
 		s.append("\n      Customer: " + customer);
 		s.append("\n      Division: " + division);
-		s.append(String.format("\n\n%1$-12s  %2$-100s  %3$-8s  %4$-10s", "Product Code", "Description", "Quantity", "Identified"));
+		s.append(String.format("\n\n%1$-12s  %2$-100s  %3$-8s  %4$-10s", "Asset Code", "Description", "Quantity", "Identified"));
 		for(LineItem lineItem : lineItems) {
 			String tmp = String.format("\n%1$-12s  %2$-100s  %3$-8s  %4$-10s", lineItem.getProductCode(), lineItem.getDescription(), lineItem.getQuantity(), lineItem.getIdentifiedProducts());
 			s.append(tmp);

@@ -3,7 +3,7 @@ package com.n4systems.model.security;
 import javax.persistence.Query;
 
 import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -24,7 +24,7 @@ public class NetworkIdSecurityFilter extends AbstractSecurityFilter {
 			addFilterParameter(builder, definer.getStatePath(), EntityState.ACTIVE);
 		}
 		
-		QueryBuilder<Long> networkIdQuery = new QueryBuilder<Long>(Product.class, standardFilter);
+		QueryBuilder<Long> networkIdQuery = new QueryBuilder<Long>(Asset.class, standardFilter);
 		networkIdQuery.setSimpleSelect("networkId", true);
 		
 		SubSelectInClause subCaluse = new SubSelectInClause(networkIdPath, networkIdQuery);

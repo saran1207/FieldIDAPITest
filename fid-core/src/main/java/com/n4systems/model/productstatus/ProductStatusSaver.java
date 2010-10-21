@@ -1,9 +1,9 @@
 package com.n4systems.model.productstatus;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.persistence.savers.Saver;
 
-public class ProductStatusSaver extends Saver<ProductStatusBean>{
+public class ProductStatusSaver extends Saver<AssetStatus>{
 
 }

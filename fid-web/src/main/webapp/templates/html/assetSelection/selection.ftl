@@ -74,7 +74,7 @@
 		function selectAsset(event) {
 			event.stop();
 			var element = Event.element(event);
-			assetFound('serial', element.readAttribute('productId'), element.asset);
+			assetFound('serial', element.readAttribute('assetId'), element.asset);
 		}
 	
 		var selectionIndex = 0;

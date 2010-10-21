@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -32,7 +33,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	private static final long serialVersionUID = 1L;
 
 	public static SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner("tenant.id", "product.owner", null, "state");
+		return new SecurityDefiner("tenant.id", "asset.owner", null, "state");
 	}
 
 	public enum ScheduleStatus implements DisplayEnum {
@@ -69,7 +70,8 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	private Product product;
+    @JoinColumn(name="product_id")
+	private Asset asset;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private InspectionType inspectionType;
@@ -97,42 +99,42 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	public InspectionSchedule() {
 	}
 
-	public InspectionSchedule(Product product, InspectionType inspectionType) {
+	public InspectionSchedule(Asset product, InspectionType inspectionType) {
 		this(product, inspectionType, null);
 	}
 
-	public InspectionSchedule(Product product, InspectionType inspectionType, Date scheduledDate) {
+	public InspectionSchedule(Asset product, InspectionType inspectionType, Date scheduledDate) {
 		this.setTenant(product.getTenant());
-		this.setProduct(product);
+		this.setAsset(product);
 		this.inspectionType = inspectionType;
 		this.nextDate = scheduledDate;
 	}
 
 	public InspectionSchedule(Inspection inspection) {
-		this(inspection.getProduct(), inspection.getType());
+		this(inspection.getAsset(), inspection.getType());
 		nextDate = inspection.getDate();
 		this.completed(inspection);
 	}
 
-	public InspectionSchedule(Product product, ProductTypeSchedule typeSchedule) {
+	public InspectionSchedule(Asset product, AssetTypeSchedule typeSchedule) {
 		this(product, typeSchedule.getInspectionType());
 	}
 
 	@AllowSafetyNetworkAccess
-	public Product getProduct() {
-		return product;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setAsset(Asset product) {
+		this.asset = product;
 		if (status != ScheduleStatus.COMPLETED) {
 			updateOwnershipToProduct();
 		}
 	}
 
 	private void updateOwnershipToProduct() {
-		setAdvancedLocation(product.getAdvancedLocation());
-		setOwner(product.getOwner());
+		setAdvancedLocation(asset.getAdvancedLocation());
+		setOwner(asset.getOwner());
 	}
 
 	@AllowSafetyNetworkAccess
@@ -211,7 +213,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		if (schedule == null)
 			return false;
 		if (getId() == null) {
-			return false; //product.equals(schedule.product) && inspectionType.equals(schedule.inspectionType) && nextDate.equals(schedule.nextDate);
+			return false; //asset.equals(schedule.asset) && inspectionType.equals(schedule.inspectionType) && nextDate.equals(schedule.nextDate);
 		}
 			
 
@@ -282,7 +284,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	
 	public InspectionSchedule enhance(SecurityLevel level) {
 		InspectionSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
-		enhanced.setProduct(enhance(product, level));
+		enhanced.setAsset(enhance(asset, level));
 		enhanced.setInspectionType(enhance(inspectionType, level));
 		enhanced.inspection = enhance(inspection, level);
 		return enhanced;

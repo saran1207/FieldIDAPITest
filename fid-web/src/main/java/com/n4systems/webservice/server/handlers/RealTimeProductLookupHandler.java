@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.SubProduct;
 import com.n4systems.model.product.ProductSubProductsLoader;
 import com.n4systems.model.product.SmartSearchLoader;
@@ -21,18 +21,18 @@ public class RealTimeProductLookupHandler {
 		this.subProductLoader = subProductLoader;
 	}
 	
-	public List<Product> lookup() {
-		List<Product> products = smartSearchLoader.setSearchText(searchText).load(); 
+	public List<Asset> lookup() {
+		List<Asset> assets = smartSearchLoader.setSearchText(searchText).load();
 		
-		if (products.size() == 1 && modified != null) {
-			if (!products.get(0).getModified().after(modified)) {
-				products = new ArrayList<Product>();
+		if (assets.size() == 1 && modified != null) {
+			if (!assets.get(0).getModified().after(modified)) {
+				assets = new ArrayList<Asset>();
 			}
 		}
 		
-		products = addAnyNeededSubProducts(products);
+		assets = addAnyNeededSubProducts(assets);
 		
-		return products;
+		return assets;
 	}
 	
 	public RealTimeProductLookupHandler setSearchText(String searchText) {
@@ -45,20 +45,20 @@ public class RealTimeProductLookupHandler {
 		return this;
 	}
 	
-	private List<Product> addAnyNeededSubProducts(List<Product> products) {
+	private List<Asset> addAnyNeededSubProducts(List<Asset> assets) {
 		
-		List<Product> productsWithSubProducts = subProductLoader.setProducts(products).load(); 
+		List<Asset> productsWithSubProducts = subProductLoader.setProducts(assets).load();
 		
-		List<Product> newSubProducts = new ArrayList<Product>();
+		List<Asset> newSubProducts = new ArrayList<Asset>();
 		
-		for (Product product : productsWithSubProducts) {
-			for (SubProduct subProduct : product.getSubProducts()) {
-				newSubProducts.add(subProduct.getProduct());
+		for (Asset asset : productsWithSubProducts) {
+			for (SubProduct subProduct : asset.getSubProducts()) {
+				newSubProducts.add(subProduct.getAsset());
 			}
 		}
 		
-		products.addAll(newSubProducts);
+		assets.addAll(newSubProducts);
 		
-		return products;
+		return assets;
 	}
 }	

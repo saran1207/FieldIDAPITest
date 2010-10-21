@@ -47,11 +47,11 @@ ${action.setPageType('inspection', 'add')!}
 	</div>
 	
 	<div class="masterProduct <#if masterInspection.mainInspectionStored >done</#if>">
-		<div class="definition"><div class="identifier"><span>${product.type.name!}</span></div></div>
+		<div class="definition"><div class="identifier"><span>${asset.type.name!}</span></div></div>
 		<div class="performedInspection">
 			<span>${(inspectionType.name)!}</span> 
 			<span>
-				<a class="exitLink" href="<@s.url action="subInspectionAdd" uniqueID="0" productId="${product.id}" type="${type}" parentProductId="${product.id}" token="${token}" scheduleId="${scheduleId!}" />">
+				<a class="exitLink" href="<@s.url action="subInspectionAdd" uniqueID="0" assetId="${asset.id}" type="${type}" parentAssetId="${asset.id}" token="${token}" scheduleId="${scheduleId!}" />">
 					<#if !masterInspection.mainInspectionStored >
 						<@s.text name="label.you_must_perform_this_event"/>
 					<#else>
@@ -63,7 +63,7 @@ ${action.setPageType('inspection', 'add')!}
 	</div>
 
 	<div id="productComponents">
-		<#list product.subProducts as subProduct >
+		<#list asset.subProducts as subProduct >
 			<#include "_subProductInspection.ftl" />
 		</#list>
 	</div>
@@ -73,10 +73,10 @@ ${action.setPageType('inspection', 'add')!}
 		<@s.hidden name="token" id="searchToken"/>
 		<@s.hidden name="type"/>
 		<@s.hidden name="inspectionGroupId"/>
-		<@s.hidden name="productId" id="productId"/>
+		<@s.hidden name="assetId" id="assetId"/>
 		<@s.hidden name="cleanToInspectionsToMatchConfiguration" />
 		<div class="formAction">
-			<@s.url id="cancelUrl" action="inspectionGroups" uniqueID="${product.id}"/>
+			<@s.url id="cancelUrl" action="inspectionGroups" uniqueID="${asset.id}"/>
 			<@s.submit key="label.cancel" onclick="return redirect( '${cancelUrl}' );"/>
 			<@s.submit key="label.save" />
 		</div>
@@ -101,8 +101,8 @@ ${action.setPageType('inspection', 'add')!}
 				<div class="definition">
 					<div class="identifier">${type.name}</div> 
 					<div class="createOptions">
-						<a href="<@s.url action="productAdd" namespace="/ajax"  productTypeId="${type.id}" token="${token}"/>" onclick="addSubProduct(${type.id}, ${(product.owner.id)}); return false"><@s.text name="label.add_new" /></a> | 
-						<a href='<@s.url action="products" namespace="/aHtml"  productTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubProduct }' >
+						<a href="<@s.url action="productAdd" namespace="/ajax"  assetTypeId="${type.id}" token="${token}"/>" onclick="addSubProduct(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
+						<a href='<@s.url action="products" namespace="/aHtml"  assetTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubProduct }' >
 				  			<@s.text name="label.find_existing" />
 				  		</a>
 				  	</div>

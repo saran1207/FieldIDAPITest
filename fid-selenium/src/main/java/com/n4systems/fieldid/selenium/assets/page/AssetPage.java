@@ -13,12 +13,12 @@ public class AssetPage {
 	private String assetHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset - ')]";
 	private String assetEditTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI[not(contains(@class,'selected'))]/A[contains(text(),'Edit')]";
 	private String assetTraceablityLinkLocator = "xpath=//A[contains(text(),'Traceability')]";
-	private String productSummaryHeaderLocator = "xpath=//H2[contains(text(),'Product Summary')]";
+	private String productSummaryHeaderLocator = "xpath=//H2[contains(text(),'Asset Summary')]";
 	private String serialNumberLabelLocator = "xpath=//LABEL[contains(text(),'Serial Number')]";
 	private String rfidNumberLabelLocator = "xpath=//LABEL[contains(text(),'RFID Number')]";
 	private String publishedLabelLocator = "xpath=//LABEL[contains(text(),'Published Over Safety Network')]";
-	private String productTypeLabelLocator = "xpath=//LABEL[contains(text(),'Product Type')]";
-	private String productStatusLabelLocator = "xpath=//LABEL[contains(text(),'Product Status')]";
+	private String productTypeLabelLocator = "xpath=//LABEL[contains(text(),'Asset Type')]";
+	private String productStatusLabelLocator = "xpath=//LABEL[contains(text(),'Asset Status')]";
 	private String identifiedLabelLocator = "xpath=//LABEL[contains(text(),'Identified')]";
 	private String identifiedByLabelLocator = "xpath=//LABEL[contains(text(),'Identified By')]";
 	private String modifiedByLabelLocator = "xpath=//LABEL[contains(text(),'Modified By')]";
@@ -70,7 +70,7 @@ public class AssetPage {
 		verifyAssetViewPageStaticContents();
 		String serialNumberSpanLocator = "xpath=//SPAN[contains(text(),'" + serialNumber + "')]";
 		if (!selenium.isElementPresent(serialNumberSpanLocator)) {
-			fail("Could not find the serial number '" + serialNumber + "' in the Product Summary");
+			fail("Could not find the serial number '" + serialNumber + "' in the Asset Summary");
 		}
 	}
 
@@ -86,8 +86,8 @@ public class AssetPage {
 	}
 
 	/**
-	 * Compares the given Product information to the text on the Asset View
-	 * page. If any field in the Product object is null or the string is empty
+	 * Compares the given Asset information to the text on the Asset View
+	 * page. If any field in the Asset object is null or the string is empty
 	 * it will not be checked.
 	 * 
 	 * @param p
@@ -255,7 +255,7 @@ public class AssetPage {
 			if (misc.isOptionPresent(editAssetProductStatusSelectListLocator, p.getProductStatus())) {
 				selenium.select(this.editAssetProductStatusSelectListLocator, p.getProductStatus());
 			} else {
-				fail("Could not find the product status '" + p.getProductStatus() + "'");
+				fail("Could not find the asset status '" + p.getProductStatus() + "'");
 			}
 		}
 		if (p.getPurchaseOrder() != null) {

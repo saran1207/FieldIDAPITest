@@ -1,6 +1,6 @@
 package com.n4systems.model.safetynetwork;
 
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -17,7 +17,7 @@ public class ProductAlreadyRegisteredLoader extends SecurityFilteredLoader<Boole
 
     @Override
     protected Boolean load(EntityManager em, SecurityFilter filter) {
-        QueryBuilder<Product> queryBuilder = new QueryBuilder<Product>(Product.class, filter);
+        QueryBuilder<Asset> queryBuilder = new QueryBuilder<Asset>(Asset.class, filter);
 
         queryBuilder.addSimpleWhere("networkId", networkId);
 

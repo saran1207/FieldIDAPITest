@@ -47,11 +47,11 @@
 		</tr>
 		
 		<tr>
-			<td><@s.checkbox name="select['productStatus']" id="check_productStatus" /></td>
+			<td><@s.checkbox name="select['assetStatus']" id="check_productStatus" /></td>
 			<td>
 				<div class="infoSet">
 					<label class="label" ><@s.text name="label.productstatus"/>:</label> 
-					<span class="field"><@s.select  name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('productStatus');" /></span>
+					<span class="field"><@s.select  name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('assetStatus');" /></span>
 				</div>
 			</td>
 		</tr>

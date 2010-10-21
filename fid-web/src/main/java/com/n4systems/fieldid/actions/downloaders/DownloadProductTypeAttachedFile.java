@@ -10,7 +10,7 @@ import com.n4systems.reporting.PathHandler;
 public class DownloadProductTypeAttachedFile extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
 	
-	protected Long productTypeId;
+	protected Long assetTypeId;
 	protected Long attachmentID;
 	private FileAttachment attachment;
 	
@@ -43,7 +43,7 @@ public class DownloadProductTypeAttachedFile extends AbstractDownloadAction {
 	
 	@Override
 	public File getFile() {
-		return PathHandler.getProductTypeAttachmentFile(attachment, productTypeId);
+		return PathHandler.getProductTypeAttachmentFile(attachment, assetTypeId);
 	}
 	
 	@Override
@@ -56,7 +56,7 @@ public class DownloadProductTypeAttachedFile extends AbstractDownloadAction {
 	}
 	
 	public void setUniqueID(Long uniqueID) {
-		productTypeId = uniqueID;
+		assetTypeId = uniqueID;
 	}
 	
 	// Required by the common/_attachedFilesList.ftl but not needed here

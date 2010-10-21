@@ -6,7 +6,7 @@ import java.util.List;
 
 
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.AssetType;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
 
@@ -41,6 +41,6 @@ public class ProductDescriptionTemplateValidator extends FieldValidatorSupport {
 		for(InfoFieldInput infoInput: infoInputs) {
 			fieldNames.add(infoInput.getName());
 		}
-		return ProductType.getInvalidDescriptionTemplateVariables(descriptionTemplate, fieldNames);
+		return AssetType.getInvalidDescriptionTemplateVariables(descriptionTemplate, fieldNames);
 	}
 }

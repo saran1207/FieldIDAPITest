@@ -39,7 +39,7 @@ public class CreateInspectionParameterBuilder {
 		this.nextInspectionDate = nextInspectionDate;
 		
 		if (nextInspectionDate != null) {
-			addSchedule(new InspectionScheduleBundle(inspection.getProduct(), inspection.getType(), null, nextInspectionDate));
+			addSchedule(new InspectionScheduleBundle(inspection.getAsset(), inspection.getType(), null, nextInspectionDate));
 		}
 		return this;
 	}

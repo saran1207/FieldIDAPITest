@@ -12,7 +12,7 @@
 		<@s.textfield key="label.name" name="name" size="30" labelposition="left"/>
 	</div>
 	<div class="formAction">
-		<@s.submit key="hbutton.cancel" name="redirect-action:productStatusList" />
+		<@s.submit key="hbutton.cancel" name="redirect-action:assetStatusList" />
 		<@s.submit key="hbutton.save" />
 	</div>
 </@s.form>  

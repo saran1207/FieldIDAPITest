@@ -2,13 +2,13 @@ package com.n4systems.fieldid.actions.inspection;
 
 import java.util.Date;
 
+import com.n4systems.model.AssetTypeSchedule;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductTypeSchedule;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -17,14 +17,13 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private InspectionType inspectionType;
-	private Product product;
+	private Asset asset;
 	private Project job;
 	private String date;
 	private Long index;
 	private String datePerformed;
 	
 	private WebInspectionSchedule nextSchedule = new WebInspectionSchedule();
-	
 	
 	public AddInspectionScheduleAjaxAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -42,14 +41,12 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 			startDate = DateHelper.getToday();
 		}
 		
-		ProductTypeSchedule schedule = product.getType().getSchedule(inspectionType, product.getOwner());
+		AssetTypeSchedule schedule = asset.getType().getSchedule(inspectionType, asset.getOwner());
 		if (schedule != null) {
 			Date nextDate = schedule.getNextDate(startDate);
 			setDate(convertDate(nextDate));
 			nextSchedule.setAutoScheduled(true);
 		}
-		
-		
 		
 		return SUCCESS;
 	}
@@ -68,12 +65,12 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 		nextSchedule.setTypeName(inspectionType.getName());
 	}
 
-	public Long getProduct() {
-		return (product != null) ? product.getId(): null;
+	public Long getAsset() {
+		return (asset != null) ? asset.getId(): null;
 	}
 
-	public void setProduct(Long id) {
-		product = getLoaderFactory().createFilteredIdLoader(Product.class).setId(id).setPostFetchFields("type.inspectionTypes").load();
+	public void setAsset(Long id) {
+		asset = getLoaderFactory().createFilteredIdLoader(Asset.class).setId(id).setPostFetchFields("type.inspectionTypes").load();
 	}
 
 	public Project getJob() {
@@ -101,10 +98,8 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	public void setDate(String date) {
 		this.date = date;
 		nextSchedule.setDate(date);
-		
 	}
 
-	
 	public Long getIndex() {
 		return index;
 	}

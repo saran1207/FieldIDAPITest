@@ -8,6 +8,6 @@ ${action.setPageType('inspection', 'add')!}
 		
 		<@s.submit key="hbutton.save" />
 		<@s.text name="label.or"/>
-		<a href="<@s.url action="inspectionGroups" uniqueID="${productId}"/>"><@s.text name="label.cancel"/></a>
+		<a href="<@s.url action="inspectionGroups" uniqueID="${assetId}"/>"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>

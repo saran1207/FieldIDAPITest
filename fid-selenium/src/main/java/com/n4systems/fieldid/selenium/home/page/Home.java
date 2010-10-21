@@ -22,8 +22,8 @@ public class Home {
 	private String gotoSectionHeaderLocator = quickLinksLocator + "/h3[contains(text(),'Go To:')]";
 	private String quickLinksListLocator = "xpath=//div[@id='quickLinks']/UL[@id='quickLinkList']";
 	private String viewUpcomingInspectionsLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View upcoming Inspections')]";
-	private String viewInspectionHistoryForProductLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View the Inspection History for a Product')]";
-	private String findAProductLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Find a Product')]";
+	private String viewInspectionHistoryForProductLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View the Inspection History for a Asset')]";
+	private String findAProductLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Find a Asset')]";
 	private String helpVideosLocator = "//div[@id='helpVideos']";
 	private String instructionalVideosHeaderLocator = helpVideosLocator + "/h3[contains(text(),'Instructional Videos')]";
 	private String instructionalVideosMoreLinkLocator = instructionalVideosHeaderLocator + "/span/a[contains(text(),'more')]";
@@ -90,8 +90,8 @@ public class Home {
 	public void assertGoToSection() {
 		assertTrue("Could not find the header for the 'Go To:' section", selenium.isElementPresent(gotoSectionHeaderLocator));
 		assertTrue("Could not find a link to 'View upcoming Inspections'", selenium.isElementPresent(viewUpcomingInspectionsLinkLocator));
-		assertTrue("Could not find a link to 'View the Inspection History for a Product'", selenium.isElementPresent(viewInspectionHistoryForProductLinkLocator));
-		assertTrue("Could not find a link to 'Find a Product'", selenium.isElementPresent(findAProductLinkLocator));
+		assertTrue("Could not find a link to 'View the Inspection History for a Asset'", selenium.isElementPresent(viewInspectionHistoryForProductLinkLocator));
+		assertTrue("Could not find a link to 'Find a Asset'", selenium.isElementPresent(findAProductLinkLocator));
 		// if there is no company website set up, there will be no link to company web site
 		// if we are not the admin, there will be no quick setup wizard link
 	}

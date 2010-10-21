@@ -2,14 +2,15 @@ package com.n4systems.model.safetynetwork;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import com.n4systems.model.Product;
+
+import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.product.SmartSearchWhereClause;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.utils.PostFetcher;
 
-public class SafetyNetworkSmartSearchLoader extends ListLoader<Product> {
+public class SafetyNetworkSmartSearchLoader extends ListLoader<Asset> {
 	private final VendorLinkedOrgLoader linkedOrgLoader;
 	private String searchText;
 	private boolean useSerialNumber = true;
@@ -29,16 +30,16 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Product> {
 	}
 
 	@Override
-	protected List<Product> load(EntityManager em, SecurityFilter filter) {
+	protected List<Asset> load(EntityManager em, SecurityFilter filter) {
 
 		createUnregisteredAssetLoader();
-		List<Product> unsecuredProducts = unregisteredAssetQueryHelper.getList(em);
+		List<Asset> unsecuredProducts = unregisteredAssetQueryHelper.getList(em);
 		
 		PostFetcher.postFetchFields(unsecuredProducts, "infoOptions");
 		
-		// our product list may contain products which are set to a customer who is not me.
+		// our asset list may contain products which are set to a customer who is not me.
 		SafetyNetworkProductSecurityManager securityManager = new SafetyNetworkProductSecurityManager(filter.getOwner());
-		List<Product> securedProducts = securityManager.filterOutExternalNotAssignedProducts(unsecuredProducts);
+		List<Asset> securedProducts = securityManager.filterOutExternalNotAssignedProducts(unsecuredProducts);
 
 		return securedProducts;
 	}

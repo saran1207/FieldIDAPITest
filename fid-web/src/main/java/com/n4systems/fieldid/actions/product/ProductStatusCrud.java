@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.ProductStatusBean;
+import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
@@ -20,9 +20,9 @@ public class ProductStatusCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	
 	private LegacyProductSerial productSerialManager;
-	private ProductStatusBean productStatus;
+	private AssetStatus assetStatus;
 	
-	private List<ProductStatusBean> productStatuses;
+	private List<AssetStatus> assetStatuses;
 	
 	public ProductStatusCrud(LegacyProductSerial productSerialManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -31,12 +31,12 @@ public class ProductStatusCrud extends AbstractCrud {
 	
 	@Override
 	protected void initMemberFields() {
-		productStatus = new ProductStatusBean();
+		assetStatus = new AssetStatus();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		productStatus = productSerialManager.findProductStatus( uniqueID, getTenantId() );
+		assetStatus = productSerialManager.findProductStatus( uniqueID, getTenantId() );
 	}
 	
 	
@@ -47,8 +47,8 @@ public class ProductStatusCrud extends AbstractCrud {
 
 	@SkipValidation
 	public String doLoadEdit() {
-		if ( productStatus == null ) {
-			addActionError("Product Status not found");
+		if ( assetStatus == null ) {
+			addActionError("Asset Status not found");
 			return ERROR;
 		}
 		
@@ -56,13 +56,13 @@ public class ProductStatusCrud extends AbstractCrud {
 	}
 		
 	public String doSave() {
-		productStatus.setModifiedBy( getSessionUser().getName() );
-		if ( productStatus.getUniqueID() == null ) {
-			productStatus.setTenant(getTenant());
+		assetStatus.setModifiedBy( getSessionUser().getName() );
+		if ( assetStatus.getUniqueID() == null ) {
+			assetStatus.setTenant(getTenant());
 			
-			persistenceManager.saveAny(productStatus);
+			persistenceManager.saveAny(assetStatus);
 		} else {
-			persistenceManager.updateAny(productStatus );
+			persistenceManager.updateAny(assetStatus);
 		}
 		
 		addActionMessage("Data has been updated.");
@@ -72,39 +72,39 @@ public class ProductStatusCrud extends AbstractCrud {
 	
 	@SkipValidation
 	public String doRemove() {
-		if (productStatus == null) {
-			addActionError("Product Status not found");
+		if (assetStatus == null) {
+			addActionError("Asset Status not found");
 			return ERROR;
 		}
 		try {
-			persistenceManager.deleteAny(productStatus);
+			persistenceManager.deleteAny(assetStatus);
 		} catch ( Exception e ) {
-			addActionError("Product Status can not be removed");
+			addActionError("Asset Status can not be removed");
 			return ERROR;
 		}
-		addActionMessage("Product Status has be removed");
+		addActionMessage("Asset Status has be removed");
 		return SUCCESS;
 	}
 	
-	public List<ProductStatusBean> getProductStatuses() {
-		if( productStatuses == null ) {
-			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
+	public List<AssetStatus> getAssetStatuses() {
+		if( assetStatuses == null ) {
+			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
 		}
-		return productStatuses;
+		return assetStatuses;
 	}
 
-	public ProductStatusBean getProductStatus() {
-		return productStatus;
+	public AssetStatus getAssetStatus() {
+		return assetStatus;
 	}
 	
 	
 	@RequiredStringValidator(type=ValidatorType.FIELD, message = "", key="error.required")
 	public void setName(String name) {
-		productStatus.setName(name);
+		assetStatus.setName(name);
 	}
 	
 	public String getName() {
-		return productStatus.getName();
+		return assetStatus.getName();
 	}
 
 }

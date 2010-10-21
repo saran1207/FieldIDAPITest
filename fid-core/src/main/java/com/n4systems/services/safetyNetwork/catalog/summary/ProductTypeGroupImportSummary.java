@@ -5,32 +5,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.model.ProductTypeGroup;
+import com.n4systems.model.AssetTypeGroup;
 
 public class ProductTypeGroupImportSummary extends BaseImportSummary {
 
-	private List<ProductTypeGroup> importedProductTypeGroupNames = new ArrayList<ProductTypeGroup>();
-	private Map<Long, ProductTypeGroup> importMapping = new HashMap<Long, ProductTypeGroup>();
+	private List<AssetTypeGroup> importedAssetTypeGroupNames = new ArrayList<AssetTypeGroup>();
+	private Map<Long, AssetTypeGroup> importMapping = new HashMap<Long, AssetTypeGroup>();
 	
-	private List<ProductTypeGroup> createdGroups = new ArrayList<ProductTypeGroup>();
+	private List<AssetTypeGroup> createdGroups = new ArrayList<AssetTypeGroup>();
 
 	public int getNumberOfGroupsToBeImported() {
-		return importedProductTypeGroupNames.size();
+		return importedAssetTypeGroupNames.size();
 	}
 
-	public List<ProductTypeGroup> getImportedProductTypeGroupNames() {
-		return importedProductTypeGroupNames;
+	public List<AssetTypeGroup> getImportedProductTypeGroupNames() {
+		return importedAssetTypeGroupNames;
 	}
 
-	public Map<Long, ProductTypeGroup> getImportMapping() {
+	public Map<Long, AssetTypeGroup> getImportMapping() {
 		return importMapping;
 	}
 
-	public List<ProductTypeGroup> getCreatedGroups() {
+	public List<AssetTypeGroup> getCreatedGroups() {
 		return createdGroups;
 	}
 	
-	public void createdGroup(ProductTypeGroup group) {
+	public void createdGroup(AssetTypeGroup group) {
 		createdGroups.add(group);
 	}
 }

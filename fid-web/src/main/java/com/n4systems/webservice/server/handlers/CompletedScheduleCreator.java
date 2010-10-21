@@ -29,7 +29,7 @@ public class CompletedScheduleCreator {
 		Inspection inspection = findInspection(inspectionMobileGuid); 
 		schedule.completed(inspection);
 		schedule.setInspectionType(inspection.getType());
-		schedule.setProduct(inspection.getProduct());
+		schedule.setAsset(inspection.getAsset());
 		schedule.setTenant(inspection.getTenant());
 		inspectionScheduleSaver.save(schedule);
 	}

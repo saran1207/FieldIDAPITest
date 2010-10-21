@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.n4systems.exceptions.IdListTooBigException;
-import com.n4systems.model.Product;
-import com.n4systems.model.ProductType;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
@@ -29,7 +29,7 @@ public class CommonProductTypeLoaderTest {
 	
 	
 	private final class CommonProductTypeLoaderExtension extends CommonProductTypeDatabaseLoader {
-		private TestingQueryBuilder<ProductType> queryBuilder;
+		private TestingQueryBuilder<AssetType> queryBuilder;
 
 		
 		private CommonProductTypeLoaderExtension(SecurityFilter filter, ConfigContext configContext) {
@@ -37,9 +37,9 @@ public class CommonProductTypeLoaderTest {
 		}
 
 		@Override
-		protected QueryBuilder<ProductType> getProductTypeQueryBuilder(SecurityFilter filter) {
-			queryBuilder  = new TestingQueryBuilder<ProductType>(Product.class);
-			queryBuilder.setListResults(new ArrayList<ProductType>());
+		protected QueryBuilder<AssetType> getProductTypeQueryBuilder(SecurityFilter filter) {
+			queryBuilder  = new TestingQueryBuilder<AssetType>(Asset.class);
+			queryBuilder.setListResults(new ArrayList<AssetType>());
 			return queryBuilder;
 		}
 	}

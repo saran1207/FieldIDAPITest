@@ -26,7 +26,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
-import com.n4systems.model.Product;
+import com.n4systems.model.Asset;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.user.User;
@@ -36,7 +36,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	private static final long serialVersionUID = 1L;
 
 	private String token;
-	private Product parentProduct;
+	private Asset parentAsset;
 	private MasterInspection masterInspectionHelper;
 	private boolean currentInspectionNew = true;
 
@@ -69,13 +69,13 @@ public class SubInspectionCrud extends InspectionCrud {
 				}
 			}
 			if (currentInspectionNew) {
-				inspection.setProduct(null);
+				inspection.setAsset(null);
 				inspection.setType(null);
 			} else {
-				parentProduct = masterInspectionHelper.getInspection().getProduct();
+				parentAsset = masterInspectionHelper.getInspection().getAsset();
 
 				setType(inspection.getType().getId());
-				setProductId(inspection.getProduct().getId());
+				setAssetId(inspection.getAsset().getId());
 			}
 		} else {
 			masterInspectionHelper = null;
@@ -101,9 +101,9 @@ public class SubInspectionCrud extends InspectionCrud {
 			return MISSING;
 		}
 
-		Product masterProduct = persistenceManager.find(Product.class, masterInspectionHelper.getMasterProduct().getId(), getSecurityFilter(), "type.subTypes");
-		masterProduct = productManager.fillInSubProductsOnProduct(masterProduct);
-		masterInspectionHelper.setMasterProduct(masterProduct);
+		Asset masterAsset = persistenceManager.find(Asset.class, masterInspectionHelper.getMasterAsset().getId(), getSecurityFilter(), "type.subTypes");
+		masterAsset = productManager.fillInSubProductsOnProduct(masterAsset);
+		masterInspectionHelper.setMasterAsset(masterAsset);
 
 		if (currentInspectionNew) {
 			return super.doAdd();
@@ -112,7 +112,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		setUpSupportedProofTestTypes();
 		encodeInfoOptionMapForUseInForm();
 		setUpAssignTo();
-		inspection.setProductStatus(masterInspectionHelper.getProductStatus());
+		inspection.setAssetStatus(masterInspectionHelper.getAssetStatus());
 		
 		setScheduleId(masterInspectionHelper.getScheduleId());
 		reattachUploadedFiles();
@@ -201,7 +201,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		}
 
 		inspection.setTenant(getTenant());
-		inspection.setProduct(product);
+		inspection.setAsset(asset);
 		getModifiableInspection().pushValuesTo(inspection);
 
 		User modifiedBy = fetchCurrentUser();
@@ -266,10 +266,10 @@ public class SubInspectionCrud extends InspectionCrud {
 
 			if (masterInspectionHelper.getInspection().isNew()) {
 				inspection.setTenant(getTenant());
-				inspection.setProduct(product);
+				inspection.setAsset(asset);
 				inspection.syncFormVersionWithType();
 
-				masterInspectionHelper.setProductStatus(inspection.getProductStatus());
+				masterInspectionHelper.setAssetStatus(inspection.getAssetStatus());
 
 				if (inspection.isEditable()) {
 					inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);
@@ -305,8 +305,8 @@ public class SubInspectionCrud extends InspectionCrud {
 		return SUCCESS;
 	}
 
-	public Long getParentProductId() {
-		return (parentProduct != null) ? parentProduct.getId() : null;
+	public Long getParentAssetId() {
+		return (parentAsset != null) ? parentAsset.getId() : null;
 	}
 
 	protected void processProofTestFile() throws ProcessingProofTestException {
@@ -322,25 +322,25 @@ public class SubInspectionCrud extends InspectionCrud {
 
 	}
 
-	public void setParentProductId(Long productId) {
-		if (productId == null) {
-			parentProduct = null;
-		} else if (parentProduct == null || !productId.equals(parentProduct.getId())) {
-			parentProduct = persistenceManager.find(Product.class, productId, getSecurityFilter(), "type.inspectionTypes", "infoOptions");
-			parentProduct = productManager.fillInSubProductsOnProduct(parentProduct);
+	public void setParentAssetId(Long assetId) {
+		if (assetId == null) {
+			parentAsset = null;
+		} else if (parentAsset == null || !assetId.equals(parentAsset.getId())) {
+			parentAsset = persistenceManager.find(Asset.class, assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions");
+			parentAsset = productManager.fillInSubProductsOnProduct(parentAsset);
 		}
 	}
 
-	public Product getParentProduct() {
-		return parentProduct;
+	public Asset getParentAsset() {
+		return parentAsset;
 	}
 
-	public boolean isParentProduct() {
-		return (parentProduct.getId().equals(product.getId()));
+	public boolean isParentAsset() {
+		return (parentAsset.getId().equals(asset.getId()));
 	}
 
 	public boolean isSubProduct() {
-		return !isParentProduct();
+		return !isParentAsset();
 	}
 
 	public String getToken() {

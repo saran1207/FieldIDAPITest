@@ -60,12 +60,12 @@ public class SetupPage extends FieldIDPage {
 	}
 	
 	public ManageProductTypeGroupsPage clickManageProductTypeGroups() {
-		selenium.click("//a[.='Manage Product Type Groups']");
+		selenium.click("//a[.='Manage Asset Type Groups']");
 		return new ManageProductTypeGroupsPage(selenium);
 	}
 	
 	public ManageProductTypesPage clickManageProductTypes() {
-		selenium.click("//a[.='Manage Product Types']");
+		selenium.click("//a[.='Manage Asset Types']");
 		return new ManageProductTypesPage(selenium);
 	}
 	

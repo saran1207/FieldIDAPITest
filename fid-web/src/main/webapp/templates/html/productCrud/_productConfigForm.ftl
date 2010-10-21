@@ -8,40 +8,40 @@
 <#if securityGuard.assignedToEnabled >
 	<div class="infoSet">
 		<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
-		<#if !parentProduct?exists >
+		<#if !parentAsset?exists >
 			<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.unassigned')}" />
 		<#else>
-			<span class="fieldHolder" id="assignedUser">${(product.assignedUser.userLabel)!}</span>
+			<span class="fieldHolder" id="assignedUser">${(asset.assignedUser.userLabel)!}</span>
 		</#if>
 	</div>
 </#if>
 <div class="infoSet">
 	<label class="label" for="owner"><@s.text name="label.owner"/></label>
-	<#if !parentProduct?exists >
+	<#if !parentAsset?exists >
 		<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
 	<#else>
-		<span class="fieldHolder" id="owner">${(product.owner.name?html)!}</span>
+		<span class="fieldHolder" id="owner">${(asset.owner.name?html)!}</span>
 	</#if>
 </div>
 
 
 <div class="infoSet">
 	<label class="label" for="asset.location"><@s.text name="label.location"/></label>
-	<#if !parentProduct?exists >
+	<#if !parentAsset?exists >
 		<div class="fieldHolder">
-			<@n4.location name="asset.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(asset.location)}"  theme="simple"/>
+			<@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="simple"/>
 		</div>
 	<#else>
-		<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(asset.location))?html}</span>
+		<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(assetWebModel.location))?html}</span>
 	</#if>
 </div>
 
 <div class="infoSet">
-	<label for="productStatus" class="label"><@s.text name="label.productstatus"/></label>
-	<#if !parentProduct?exists >
-		<@s.select name="productStatus" list="productStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
+	<label for="assetStatus" class="label"><@s.text name="label.productstatus"/></label>
+	<#if !parentAsset?exists >
+		<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
 	<#else>
-		<span class="fieldHolder" id="productStatus">${(product.productStatus.name?html)!}</span>
+		<span class="fieldHolder" id="assetStatus">${(asset.assetStatus.name?html)!}</span>
 	</#if>		
 </div>
 
@@ -73,8 +73,8 @@
 	</div>
 </@s.iterator>
 <div class="infoSet">
-	<label for="productTypeId" class="label"><@s.text name="label.producttype"/></label>
-	<@s.select id="productType" name="productTypeId" onchange="updateProductType(this)">
+	<label for="assetTypeId" class="label"><@s.text name="label.producttype"/></label>
+	<@s.select id="assetType" name="assetTypeId" onchange="updateProductType(this)">
 		<#include "/templates/html/common/_productTypeOptions.ftl"/>
 	</@s.select>
 	<span class="fieldHolder updating" id="productTypeIndicator">
