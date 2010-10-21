@@ -23,27 +23,29 @@
 			<li>
 				<a href='<@s.url action="inspection" namespace="/aHtml/iframe" uniqueID="${entityId}"/>'  ${inspectionLightViewOptions} ><@s.text name="link.view" /></a>
 			</li>
+			<#if sessionUser.hasAccess("editinspection") && localInspection >
 			<li>
-				<#if sessionUser.hasAccess("editinspection") && localInspection>
-					<a href='<@s.url action="selectInspectionEdit" namespace="/" uniqueID="${entityId}"/>'><@s.text name="label.edit" /></a>
-				</#if>
+				<a href='<@s.url action="selectInspectionEdit" namespace="/" uniqueID="${entityId}"/>'><@s.text name="label.edit" /></a>
 			</li>
+			</#if>
 			<li>
 				<a href='${printReport}' class='lightview summaryReport' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.print_report" /></a>
 			</li>
-			<#if sessionUser.hasAccess('createinspection') >
+			<#if sessionUser.hasAccess('createinspection') && localInspection >
 				<li id="floatingDropdownStartEventLink">
 					<a href='<@s.url action="quickInspect" productId="${assetId}" />' >
 						<@s.text name="label.startevent"/>
 					</a>
 				</li>
 			</#if>
-			<li>
-				<a href="<@s.url action="product" uniqueID="${assetId}" />" >
-					<@s.text name="label.view_asset"/>
-				</a>
-			</li>
-			<#if sessionUser.hasAccess('tag') >
+			<#if localInspection>
+				<li>
+					<a href="<@s.url action="product" uniqueID="${assetId}" />" >
+						<@s.text name="label.view_asset"/>
+					</a>
+				</li>
+			</#if>
+			<#if sessionUser.hasAccess('tag') && localInspection>
 				<li>
 					<a href='<@s.url action="productEdit" uniqueID="${assetId}" />' >
 						<@s.text name="label.edit_asset"/>

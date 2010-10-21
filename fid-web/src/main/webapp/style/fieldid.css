@@ -1702,5 +1702,5 @@ input.description {
 }
 
 #reducedLineHeightLabel{
-	line-height: inherit;
+	line-height: normal;
 }
