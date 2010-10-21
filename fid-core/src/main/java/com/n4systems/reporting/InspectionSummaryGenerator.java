@@ -75,7 +75,6 @@ public class InspectionSummaryGenerator {
 		addImageStreams(reportMap, user.getOwner().getInternalOrg());
 
 		try {
-			LoaderFactory loaderFactory = new LoaderFactory(user.getSecurityFilter());
 			Integer totalNumEvents = 0;
 			Integer totalPassedEvents = 0;
 			Integer totalFailedEvents = 0;
@@ -101,12 +100,12 @@ public class InspectionSummaryGenerator {
 				
 				Long tenantId = inspection.getTenant().getId();
 				
-				PrimaryOrg org = loaderFactory.createPrimaryOrgByTenantLoader().setTenantId(tenantId).load();
+				PrimaryOrg tenant = getTenant(user, tenantId);
 				
-				inspectionMap.put("tenantAddress", org.getAddressInfo() !=null? org.getAddressInfo().getDisplay() : "");
-				inspectionMap.put("tenantLogo", resolveCertificateMainLogo(org));
+				inspectionMap.put("tenantAddress", tenant.getAddressInfo() !=null? tenant.getAddressInfo().getDisplay() : "");
+				inspectionMap.put("tenantLogo", resolveCertificateMainLogo(tenant));
 				
-				inspectionMap.put("productTypeGroup", inspection.getProduct().getType().getGroup().getName());
+				inspectionMap.put("productTypeGroup", inspection.getProduct().getType().getGroup() != null ? inspection.getProduct().getType().getGroup().getName() : "");
 				inspectionMap.put("assetComments", inspection.getProduct().getComments());
 				inspectionMap.put("customer", inspection.getOwner().getCustomerOrg() != null?inspection.getOwner().getCustomerOrg().getName() :"");
 				
@@ -173,6 +172,10 @@ public class InspectionSummaryGenerator {
 		}
 
 		return jasperPrint;
+	}
+
+	protected PrimaryOrg getTenant(User user, Long tenantId) {
+		return new LoaderFactory(user.getSecurityFilter()).createPrimaryOrgByTenantLoader().setTenantId(tenantId).load();
 	}
 
 	protected List<Long> getSearchIds(ReportDefiner reportDefiner, User user) {
