@@ -98,6 +98,19 @@
 			<result name="error" type="freemarker">/templates/html/inspectionScheduleCrud/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/inspectionScheduleCrud/add.ftl</result>
 		</action>
+		
+		<action name="inspectionScheduleDelete" method="delete" class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+				<result name="error" type="redirectAction">
+				<param name="actionName">scheduleResults</param>
+				<param name="searchId">${searchId}</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">scheduleResults</param>
+				<param name="searchId">${searchId}</param>
+				<param name="currentPage">${currentPage}</param>
+			</result>
+		</action>
 
 		<action name="commentTemplateList" method="list" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
 			<result name="success" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateList.ftl</result>

@@ -42,6 +42,8 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	private Asset asset;
 	private String nextDate;
 
+	protected String searchId;
+
 	private List<InspectionSchedule> inspectionSchedules;
 
 	public InspectionScheduleCrud(LegacyProductSerial legacyProductManager, PersistenceManager persistenceManager, InspectionScheduleManager inspectionScheduleManager) {
@@ -159,7 +161,6 @@ public class InspectionScheduleCrud extends AbstractCrud {
 			addActionErrorText("error.deletinginspectionschedule");
 			return ERROR;
 		}
-
 		return SUCCESS;
 	}
 	
@@ -281,5 +282,14 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	public boolean isLinked() {
 		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
+	}
+	
+	
+	public String getSearchId() {
+		return searchId;
+	}
+
+	public void setSearchId(String searchId) {
+		this.searchId = searchId;
 	}
 }

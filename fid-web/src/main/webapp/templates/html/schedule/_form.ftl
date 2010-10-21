@@ -33,7 +33,12 @@
 					<label for="criteria.rfidNumber"><@s.text name="label.schedulestatus"/></label> 
 					<@s.select name="criteria.status" list="scheduleStatuses" listKey="name" listValue="%{getText(label)}"/>
 				</div>
+				
+				<div class="infoSet">
+					<label>&nbsp;</label>
+				</div>
 			</div>
+				
 			<div class="infoSet">
 				<label for="criteria.rfidNumber"><@s.text name="label.rfidnumber"/></label> 
 				<@s.textfield name="criteria.rfidNumber"/>
@@ -89,7 +94,13 @@
 					<@s.select name="criteria.job" list="eventJobs" listKey="id" listValue="name" emptyOption="true" />
 				</div>
 			</#if>
+			
 			<#include "_ownershipFilters.ftl"/>
+			
+			<div class="infoSet">
+				<label>&nbsp;</label>
+			</div>
+			
 			<#include "_dateRange.ftl"/>
 		</div>
 		<#include "../customizableSearch/_selectColumns.ftl"/>
