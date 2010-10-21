@@ -26,6 +26,7 @@ import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.Product;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
@@ -99,7 +100,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 		clearContainer();
 		return INPUT;
 	}
-
+	
 	@Override
 	protected void clearContainer() {
 		super.clearContainer();
@@ -291,6 +292,11 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public boolean isLocalInspection(int rowId) {
 		Inspection inspection = (Inspection)getEntityForRow(rowId);
 		return inspection.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
+	}
+	
+	public Long getAssetId(int rowId){
+		Inspection inspection = (Inspection)getEntityForRow(rowId);
+		return inspection.getProduct().getId();
 	}
 	
 	public List<Status> getStatuses() {

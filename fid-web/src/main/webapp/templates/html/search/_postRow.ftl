@@ -1,6 +1,6 @@
 <td>
 	<span class="floatingDropdown floatingDropdownRelative">
-		<a href="javascript:void(0);" class="dropDownLink" id="moreActions" onmouseover="positionDropdown(this, ${entityId} );">
+		<a href="javascript:void(0);" class="dropDownLink" id="moreActions" onmouseover="positionDropdown(this, ${entityId}, 12, -76);">
 			<span><@s.text name="label.actions"/></span>
 			<img src="images/dropdown_arrow.png"/>
 		</a>

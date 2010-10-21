@@ -571,3 +571,8 @@ onDocumentLoad(function() {
 		element.observe('mouseout', turnOffHighlightButton);
 	});
 });
+
+function positionDropdown( a , entityId, offsetY, offsetX) {
+	var list = $(a.id + "_list_" + entityId );
+	translate(list, a, offsetY, offsetX);
+} 

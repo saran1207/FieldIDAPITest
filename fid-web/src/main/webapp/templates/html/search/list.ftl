@@ -1,12 +1,3 @@
-<head>
-	<script type="text/javascript">
-		function positionDropdown( a , entityId) {
-			var list = $(a.id + "_list_" + entityId );
-			translate(list, a, 12, -76);
-		} 
-	</script>
-</head>
-
 <title><@s.text name="title.assetsearch"/> <@s.text name="title.results"/></title>
 <#assign listPage=true/>
 <#include '_form.ftl' >

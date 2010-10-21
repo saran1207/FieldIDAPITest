@@ -38,6 +38,7 @@
 		<#if postRowHeaderTemplate?exists ><#include "${postRowHeaderTemplate}" /></#if>
 	</tr>
 	<#list 0..resultsTable.rowSize -1 as rowIdx>
+	
 		<#assign entityId="${resultsTable.getId(rowIdx)}" />
 		<#assign rowClass="${action.getRowClass(rowIdx)!}" />
 		
@@ -50,7 +51,6 @@
 			
 			<#if postRowTemplate?exists ><#include "${postRowTemplate}" /></#if>
 		</tr>
-	
 	</#list>
 </table>
 <#include '../common/_newpagination.ftl' />

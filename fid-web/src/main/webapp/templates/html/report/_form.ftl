@@ -99,7 +99,7 @@
 			
 			<#if sessionUser.employeeUser>
 			<div class="infoSet">
-				<label for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
+				<label id="reducedLineHeightLabel" for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
 				<@s.checkbox name="criteria.includeNetworkResults" fieldValue="true"/>
 			</div>
 			</#if>
@@ -107,7 +107,9 @@
 				<label for="criteria.status"><@s.text name="label.result"/></label>
 				<@s.select name="criteria.status" emptyOption="true" list="statuses" listKey="id" listValue="%{getText(label)}"/>
 			</div>
-			
+			<div class="infoSet">
+				<label>&nbsp;</label>
+			</div>
 			<div class="container">
 				<div class="infoSet">
 					<label for="fromDate"><@s.text name="label.fdate"/></label>

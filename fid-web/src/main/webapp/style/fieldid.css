@@ -1701,6 +1701,6 @@ input.description {
 	right: -2px;
 }
 
-.reducedLineHeight .infoSet label{
-	line-height: 0;
+#reducedLineHeightLabel{
+	line-height: inherit;
 }
