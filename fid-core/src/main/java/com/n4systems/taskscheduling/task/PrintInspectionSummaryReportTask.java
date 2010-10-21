@@ -5,6 +5,7 @@ import java.io.File;
 
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.reporting.CertificatePrinter;
 import com.n4systems.reporting.InspectionSummaryGenerator;
 import com.n4systems.reporting.ReportDefiner;
@@ -20,7 +21,7 @@ public class PrintInspectionSummaryReportTask extends DownloadTask {
 	}
 	
 	public PrintInspectionSummaryReportTask(DownloadLink downloadLink, String downloadUrl) {
-		this(downloadLink, downloadUrl, new InspectionSummaryGenerator());
+		this(downloadLink, downloadUrl, new InspectionSummaryGenerator(new DateTimeDefiner(downloadLink.getUser())));
 	}
 
 	@Override

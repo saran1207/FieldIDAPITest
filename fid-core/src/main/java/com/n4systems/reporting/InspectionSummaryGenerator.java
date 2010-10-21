@@ -16,6 +16,8 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.InfoOptionBean;
+
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
@@ -24,14 +26,19 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.LineItem;
 import com.n4systems.model.ProductType;
+import com.n4systems.model.Status;
+import com.n4systems.model.SubInspection;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ReportMap;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 
 public class InspectionSummaryGenerator {
@@ -40,14 +47,16 @@ public class InspectionSummaryGenerator {
 	
 	private final PersistenceManager persistenceManager;
 	private final InspectionManager inspectionManager;
+	private final DateTimeDefiner dateDefiner;
 	
-	public InspectionSummaryGenerator(PersistenceManager persistenceManager, InspectionManager inspectionManager) {
+	public InspectionSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, InspectionManager inspectionManager) {
+		this.dateDefiner = dateDefiner;
 		this.persistenceManager = persistenceManager;
 		this.inspectionManager = inspectionManager;
 	}
 	
-	public InspectionSummaryGenerator() {
-		this(ServiceLocator.getPersistenceManager(), ServiceLocator.getInspectionManager());
+	public InspectionSummaryGenerator(DateTimeDefiner dateDefiner) {
+		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getInspectionManager());
 	}
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, User user) throws ReportException {
@@ -66,8 +75,15 @@ public class InspectionSummaryGenerator {
 		addImageStreams(reportMap, user.getOwner().getInternalOrg());
 
 		try {
+			LoaderFactory loaderFactory = new LoaderFactory(user.getSecurityFilter());
+			Integer totalNumEvents = 0;
+			Integer totalPassedEvents = 0;
+			Integer totalFailedEvents = 0;
+			Integer totalNAEvents = 0;
+			
 			Inspection inspection;
 			for (Long inspectionId : inspectionIds) {
+				
 				inspection = inspectionManager.findAllFields(inspectionId, user.getSecurityFilter());
 
 				ReportMap<Object> inspectionMap = new ReportMap<Object>();
@@ -83,12 +99,65 @@ public class InspectionSummaryGenerator {
 				inspectionMap.put("result", inspection.getStatus().getDisplayName());
 				inspectionMap.put("division", (inspection.getOwner().isDivision()) ? inspection.getOwner().getName() : null);
 				
+				Long tenantId = inspection.getTenant().getId();
+				
+				PrimaryOrg org = loaderFactory.createPrimaryOrgByTenantLoader().setTenantId(tenantId).load();
+				
+				inspectionMap.put("tenantAddress", org.getAddressInfo() !=null? org.getAddressInfo().getDisplay() : "");
+				inspectionMap.put("tenantLogo", resolveCertificateMainLogo(org));
+				
+				inspectionMap.put("productTypeGroup", inspection.getProduct().getType().getGroup().getName());
+				inspectionMap.put("assetComments", inspection.getProduct().getComments());
+				inspectionMap.put("customer", inspection.getOwner().getCustomerOrg() != null?inspection.getOwner().getCustomerOrg().getName() :"");
+				
+				LineItem shopOrder = inspection.getProduct().getShopOrder();
+				inspectionMap.put("orderNumber", shopOrder !=null ? shopOrder.getOrder().getOrderNumber() : "");
+				inspectionMap.put("PONumber", inspection.getProduct().getPurchaseOrder());
+				inspectionMap.put("attributes", produceInfoOptionLP(inspection.getProduct().getOrderedInfoOptionList()));
+				inspectionMap.put("productStatus", inspection.getProduct().getProductStatus()!=null ? inspection.getProduct().getProductStatus().getName() : "");
+				
+				inspectionMap.put("eventTypeGroup", inspection.getType().getGroup() !=null ? inspection.getType().getGroup().getName() : "");
+				inspectionMap.put("location", inspection.getAdvancedLocation() != null ? inspection.getAdvancedLocation().getFullName() : "");
+				inspectionMap.put("eventComments", inspection.getComments());
+				inspectionMap.put("assignedTo", inspection.getAssignedTo() != null? inspection.getAssignedTo().getAssignedUser().getDisplayName() : "");
+
+				
+				ReportMap<Object> inspectionReportMap = new InspectionReportMapProducer(inspection, dateDefiner).produceMap();
+				inspectionMap.put("mainInspection", inspectionReportMap);
+				inspectionMap.put("product", inspectionReportMap.get("product"));
+				
+				List<ReportMap<Object>> inspectionResultMaps = new ArrayList<ReportMap<Object>>();
+				inspectionResultMaps.add(inspectionReportMap);
+				
+				for (SubInspection subInspection : inspection.getSubInspections()) {
+					inspectionResultMaps.add(new SubInspectionReportMapProducer(subInspection, inspection, dateDefiner).produceMap());
+				}
+
+				inspectionMap.put("allInspections", inspectionResultMaps);
+				
 				if (inspection.getProofTestInfo() != null) {
 					inspectionMap.put("peakLoad", inspection.getProofTestInfo().getPeakLoad());
 				}
 
 				collection.add(inspectionMap);
+				
+				totalNumEvents++;
+				if (inspection.getStatus().equals(Status.PASS)) {
+					totalPassedEvents++;
+				}
+				if (inspection.getStatus().equals(Status.FAIL)) {
+					totalFailedEvents++;
+				}
+				if (inspection.getStatus().equals(Status.NA)) {
+					totalNAEvents++;
+				}
 			}
+			
+			reportMap.put("totalNumEvents", totalNumEvents);
+			reportMap.put("totalPassedEvents", totalPassedEvents);
+			reportMap.put("totalFailedEvents", totalFailedEvents);
+			reportMap.put("totalNAEvents", totalNAEvents);
+			
 		} catch (Exception e) {
 			throw new ReportException("Failed to load the criteria", e);
 		}
@@ -106,7 +175,7 @@ public class InspectionSummaryGenerator {
 		return jasperPrint;
 	}
 
-	private List<Long> getSearchIds(ReportDefiner reportDefiner, User user) {
+	protected List<Long> getSearchIds(ReportDefiner reportDefiner, User user) {
 		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(reportDefiner), user.getSecurityFilter());
 	}
 
@@ -206,5 +275,13 @@ public class InspectionSummaryGenerator {
 		}
 
 		return logoStream;
+	}
+	
+	private List<StringListingPair> produceInfoOptionLP(List<InfoOptionBean> infoOptionList) {
+		List<StringListingPair> infoOptions = new ArrayList<StringListingPair>(infoOptionList.size());
+		for (InfoOptionBean option : infoOptionList) {
+			infoOptions.add(new StringListingPair(option.getInfoField().getName().toLowerCase().replaceAll("\\s", ""), option.getName()));
+		}
+		return infoOptions;
 	}
 }
