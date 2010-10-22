@@ -33,7 +33,7 @@
 			</li>
 			<#if sessionUser.hasAccess('createinspection') && localInspection >
 				<li id="floatingDropdownStartEventLink">
-					<a href='<@s.url action="quickInspect" productId="${assetId}" />' >
+					<a href='<@s.url action="quickInspect" assetId="${assetId}" />' >
 						<@s.text name="label.startevent"/>
 					</a>
 				</li>
