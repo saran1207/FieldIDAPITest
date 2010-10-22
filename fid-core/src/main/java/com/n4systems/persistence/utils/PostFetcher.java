@@ -43,41 +43,36 @@ public class PostFetcher {
 		if (postFetchFields == null || postFetchFields.isEmpty()) {
 			return entity;
 		}
-
-		Object value;
+		
 		for (String path : postFetchFields) {
 			try {
-
-				value = Reflector.getPathValue(entity, path);
-				if (value != null) {
-					// need to get at least one value if it is a collection
-					if (value instanceof Iterable<?>) {
-						for (Object o : (Iterable<?>) value) {
-							// do anything
-							if (o != null) {
-								o.getClass();
-								break;
-							}
-						}
-					} else if (value instanceof Map<?, ?>) {
-						for (Object o : ((Map<?, ?>) value).keySet()) {
-							if (o != null) {
-								// do anything
-								o.getClass();
-								break;
-							}
-						}
-					} else {
-						value.getClass();
-					}
-				}
-
+				forceFetch(Reflector.getPathValue(entity, path));
 			} catch (ReflectionException e) {
 				logger.warn(String.format("Unable to post-fetch [%s] from [%s]", path, entity.getClass().getName()), e);
 			}
 		}
 
 		return entity;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static void forceFetch(Object obj) {
+		if (obj == null) {
+			return;
+		}
+		
+		if (obj instanceof Iterable) {
+			for (Object entry: (Iterable)obj) {
+				// we need to recurse into each entry as this could be a collection of collections (or more) 
+				forceFetch(entry);
+			}
+		} else if (obj instanceof Map) {
+			// use the map values so they get treating like an Iterable on the next pass
+			forceFetch(((Map)obj).values());
+		} else {
+			// doing a getClass is enough to force hibernate to load the entity
+			obj.getClass();
+		}
 	}
 
 }
