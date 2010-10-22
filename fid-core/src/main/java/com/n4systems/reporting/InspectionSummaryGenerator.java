@@ -118,7 +118,8 @@ public class InspectionSummaryGenerator {
 				inspectionMap.put("eventTypeGroup", inspection.getType().getGroup() !=null ? inspection.getType().getGroup().getName() : "");
 				inspectionMap.put("location", inspection.getAdvancedLocation() != null ? inspection.getAdvancedLocation().getFullName() : "");
 				inspectionMap.put("eventComments", inspection.getComments());
-				inspectionMap.put("assignedTo", inspection.getAssignedTo() != null? inspection.getAssignedTo().getAssignedUser().getDisplayName() : "");
+				inspectionMap.put("assignedTo", inspection.getAssignedTo() != null && inspection.getAssignedTo().getAssignedUser() != null
+						? inspection.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 				
 				ReportMap<Object> inspectionReportMap = new InspectionReportMapProducer(inspection, dateDefiner).produceMap();

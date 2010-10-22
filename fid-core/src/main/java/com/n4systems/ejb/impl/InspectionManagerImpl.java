@@ -131,8 +131,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
 		queryBuilder.setSimpleSelect().addSimpleWhere("id", id).addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addOrder("created");
-		queryBuilder.addPostFetchPaths("modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions",
-				"infoOptionMap", "subInspections");
+		queryBuilder.addPostFetchPaths(Inspection.ALL_FIELD_PATHS_WITH_SUBINSPECTIONS);
 
 		try {
 			inspection = persistenceManager.find(queryBuilder);

@@ -45,6 +45,7 @@ import com.n4systems.util.StringUtils;
 public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable, NetworkEntity<Inspection>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subInspections" };
+	public static final String[] ALL_FIELD_PATHS_WITH_SUBINSPECTIONS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subInspections",  "subInspections.modifiedBy.userID", "subInspections.type.sections", "subInspections.type.supportedProofTests", "subInspections.type.infoFieldNames", "subInspections.attachments", "subInspections.results", "subInspections.asset", "subInspections.asset.infoOptions", "subInspections.infoOptionMap.class"};
 	
 	public static final SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "asset.owner", null, "state");
