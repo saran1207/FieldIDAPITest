@@ -75,6 +75,27 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		assertEquals("Edit", inpectPage.getCurrentTab());
 	}
 	
+	//Lightbox issues.
+	public void search_results_print_report() {
+		page.clickRunSearchButton();
+		assertTrue(page.hasSearchResults());
+		
+		page.clickPrintReport();
+		assertTrue(selenium.isElementPresent("//p[contains(.,'Your download is being generated.')]"));
+	}
+	
+	@Test
+	public void search_results_start_event(){
+		page.clickRunSearchButton();
+		assertTrue(page.hasSearchResults());
+		String serialNumberToVerify = selenium.getText("//tr[2]/td/a");
+		
+		page.clickStartEventLink();
+		
+		assertEquals("Inspect - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+	}
+	
+	
 	@Test
 	public void saved_report_create_and_cancel() throws Exception {
 		page.clickRunSearchButton();
@@ -121,8 +142,9 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	}
 	
 	private List<String> getDefaultColumnHeaders() {
+		//Empty string for the empty last table column.
 		return Arrays.asList("Serial Number", "Inspection Type", "Job Site Name", "Result", 
-				"Asset Type", "Asset Status", "Links");
+				"Asset Type", "Asset Status", "");
 	}
 
 }

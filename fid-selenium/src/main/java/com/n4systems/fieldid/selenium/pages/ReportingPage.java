@@ -70,22 +70,22 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 	}
 	
 	public void clickViewInspection(String serialNumber){
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'View')]");	
+		selenium.click("//table[@class='list']//a[.='" +serialNumber+"']/../..//a[contains(., 'View')]");	
 		waitForElementToBePresent("//iframe[@id='lightviewContent']");
 	}
 	
 	public InspectPage clickEditInspection(String serialNumber) {
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'Edit')]");		
+		selenium.click("//table[@class='list']//a[.='" +serialNumber+"']/../..//a[contains(., 'Edit')]");		
 		return new InspectPage(selenium);
 	}
 	
 	public SaveReportForm clickSaveReport() {
-		selenium.click("//a[text()='Save Report']");
+		selenium.click("//a[.='Save Report']");
 		return new SaveReportForm(selenium);
 	}
 	
 	public void clickStartNewReport() {
-		selenium.click("//a[text()='Start New Report']");
+		selenium.click("//a[.='Start New Report']");
 		waitForPageToLoad();
 	}
 	
@@ -98,9 +98,20 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		selenium.click("//table[@id='savedReportList']/tbody/tr[" + i + "]/td[1]/a");
 		waitForPageToLoad();
 	}
+	
+	public InspectPage clickStartEventLink(){
+    	selenium.click("//a[@id='moreActions'][1]");
+    	selenium.click("//li/a[contains(.,'Start Event')][1]");
+    	return new InspectPage(selenium);
+	}
 
 	public MyAccountPage clickSaveReportsMore() {
-		selenium.click("//a[text()='more']");
+		selenium.click("//a[.='more']");
 		return new MyAccountPage(selenium);
+	}
+	
+	public void clickPrintReport() {
+	   	selenium.click("//a[@id='moreActions'][1]");
+    	selenium.click("//li/a[contains(.,'Print Report')][1]");
 	}
 }
