@@ -5,13 +5,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.util.reflection.ReflectionException;
 import com.n4systems.util.reflection.Reflector;
 
 public class PostFetcher {
-	private static final Logger logger = Logger.getLogger(PostFetcher.class);
 	
 	public static <E extends Collection<T>, T> E postFetchFields(E entities, String... postFetchFields) {
 		return postFetchFields(entities, Arrays.asList(postFetchFields));
@@ -48,7 +45,7 @@ public class PostFetcher {
 			try {
 				forceFetch(Reflector.getPathValue(entity, path));
 			} catch (ReflectionException e) {
-				logger.warn(String.format("Unable to post-fetch [%s] from [%s]", path, entity.getClass().getName()), e);
+				throw new PostFetchException(path, entity.getClass(), e);
 			}
 		}
 
@@ -69,9 +66,6 @@ public class PostFetcher {
 		} else if (obj instanceof Map) {
 			// use the map values so they get treating like an Iterable on the next pass
 			forceFetch(((Map)obj).values());
-		} else {
-			// doing a getClass is enough to force hibernate to load the entity
-			obj.getClass();
 		}
 	}
 
