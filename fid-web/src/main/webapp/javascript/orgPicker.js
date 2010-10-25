@@ -113,10 +113,13 @@ function setOwner(containerId, ownerId, ownerName) {
 	orgInputs.first().fire('owner:change');
 	
 	var clearOrg = $$(containerId + " .clearSearchOwner");
+	var searchOrg = $$(containerId + " .searchOwner");
 	
 	if (clearOrg.size() >= 1) {
 		clearOrg.first().show();
+		searchOrg.first().hide();
 	}
+	
 }
 
 function clearOrgSearch(event) {
@@ -125,6 +128,8 @@ function clearOrgSearch(event) {
 	element.up(".orgPicker").down(".orgSelected").value = "";
 	element.up(".orgPicker").down(".orgSelected").next('input').value = "";
 	element.hide();
+	
+	showSelect();
 }
 
 function selectOrg(event) {
@@ -193,6 +198,10 @@ function searchForOrgs(event) {
 	ajaxFormEvent(event);
 }
 
+function showSelect(){
+	var searchOrg = $$(".searchOwner");
+	searchOrg.first().show();
+}
 
 function attachOrgEvents(containerCssRule) {
 	$$(containerCssRule + " .searchOwner").each(function(element) {
@@ -203,8 +212,6 @@ function attachOrgEvents(containerCssRule) {
 		element.observe('click', clearOrgSearch);
 	});
 }
-	
-
 
 document.observe("dom:loaded", function() {
 	attachOrgEvents("body");
