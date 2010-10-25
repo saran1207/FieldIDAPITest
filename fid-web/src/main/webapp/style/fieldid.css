@@ -263,6 +263,7 @@ h2 a {
 }
 
 .list th,.list td {
+	min-width: 55px;
 	padding: 9px 5px 9px 10px;
 	empty-cells: show;
 }

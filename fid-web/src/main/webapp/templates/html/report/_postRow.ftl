@@ -15,7 +15,7 @@
 	<@s.url id="printReport" action="printReport.action" namespace="/aHtml" searchId="${searchId}"/>
 	
 	<span class="floatingDropdown floatingDropdownRelative">
-		<a href="javascript:void(0);" class="dropDownLink" id="moreActions" onmouseover="positionDropdown(this, ${entityId}, 12, -50 );">
+		<a href="javascript:void(0);" class="dropDownLink" id="moreActions" onmouseover="positionDropdown(this, ${entityId}, 12, -36 );">
 			<span><@s.text name="label.actions"/></span>
 			<img src="images/dropdown_arrow.png"/>
 		</a>
