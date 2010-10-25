@@ -1,145 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
-
-<!-- ===================================================================== -->
-<!--                                                                       -->
-<!--  Log4j Configuration                                                  -->
-<!--                                                                       -->
-<!-- ===================================================================== -->
-
-<!-- $Id: jboss-log4j.xml 65459 2007-09-19 00:25:51Z dimitris@jboss.org $ -->
-
-<!--
-   | For more configuration infromation and examples see the Jakarta Log4j
-   | owebsite: http://jakarta.apache.org/log4j
- -->
-
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
-
-   <!-- ================================= -->
-   <!-- Preserve messages in a local file -->
-   <!-- ================================= -->
-
-   <!-- ============================== -->
-   <!-- Append messages to the console -->
-   <!-- ============================== -->
-
-   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
-      <param name="Target" value="System.out"/>
-      <param name="Threshold" value="INFO"/>
-
-      <layout class="org.apache.log4j.PatternLayout">
-         <!-- The default pattern: Date Priority [Category] Message\n -->
-         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
-      </layout>
-   </appender>
-
-   <!-- ================ -->
-   <!-- Limit categories -->
-   <!-- ================ -->
-
-   <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
-   <category name="org.apache">
-      <priority value="INFO"/>
-   </category>
-
-   <!-- Limit the jacorb category to WARN as its INFO is verbose -->
-   <category name="jacorb">
-      <priority value="WARN"/>
-   </category>
-
-   <!-- Limit the org.jgroups category to WARN as its INFO is verbose -->
-   <category name="org.jgroups">
-      <priority value="WARN"/>
-   </category>
-
-   <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
-   <category name="org.quartz">
-      <priority value="INFO"/>
-   </category>
-
-   <category name="org.hibernate">
-      <priority value="WARN" />
-   </category>
-
-   <category name="org.hibernate.engine.loading.CollectionLoadContext">
-      <priority value="ERROR" />
-   </category>
-
-   <category name="org.hibernate.jdbc.AbstractBatcher">
-      <priority value="ERROR" />
-   </category>
-
-   <category name="net.sf.jasperreports">
-	<priority value="INFO"/>
-   </category>
-
-   <!-- ======================= -->
-   <!-- Setup the Root category -->
-   <!-- ======================= -->
-
-        <root>
-            <priority value="info" />
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FIELDID_LOG"/>
-        </root>
-
-        <appender name="AUDIT_LOG" class="org.apache.log4j.RollingFileAppender">
-                <param name="File" value="/var/fieldid/logs/fieldid-audit.log"/>
-                <param name="Append" value="true"/>
-                <param name="MaxFileSize" value="500MB"/>
-                <param name="MaxBackupIndex" value="10"/>
-                <layout class="org.apache.log4j.PatternLayout">
-                        <param name="ConversionPattern" value="%d: %c: %m%n"/>
-                </layout>
-        </appender>
-
-        <appender name="FIELDID_LOG" class="org.apache.log4j.RollingFileAppender">
-                <param name="File" value="/var/fieldid/logs/fieldid.log"/>
-                <param name="Append" value="true"/>
-                <param name="MaxFileSize" value="500MB"/>
-                <param name="MaxBackupIndex" value="10"/>
-                <layout class="org.apache.log4j.PatternLayout">
-                        <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
-                </layout>
-        </appender>
-
-        <appender name="FIELDID_TASK" class="org.apache.log4j.RollingFileAppender">
-                <param name="File" value="/var/fieldid/logs/fieldid-task.log"/>
-                <param name="Append" value="true"/>
-                <param name="MaxFileSize" value="500MB"/>
-                <param name="MaxBackupIndex" value="10"/>
-                <layout class="org.apache.log4j.PatternLayout">
-                        <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
-                </layout>
-        </appender>
-
-	    <appender name="FIELDID_ORDER" class="org.apache.log4j.DailyRollingFileAppender">
-                <param name="File" value="/var/fieldid/logs/order.log"/>
-                <param name="Append" value="true"/>
-                <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-                <layout class="org.apache.log4j.PatternLayout">
-                        <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
-                </layout>
-        </appender>
-
-        <category name="com.n4systems.ejb.OrderManagerImpl" additivity="false">
-                <priority value="TRACE" />
-                <appender-ref ref="FIELDID_ORDER"/>
-        </category>
-
-        <category name="AuditLog" additivity="false">
-                <priority value="INFO" />
-                <appender-ref ref="AUDIT_LOG"/>
-        </category>
-
-        <category name="com.n4systems.ejb.interceptor.TimingInterceptor" additivity="false">
-                <priority value="DEBUG" />
-        </category>
-
-        <category name="com.n4systems.taskscheduling" additivity="false">
-                <priority value="DEBUG" />
-                <appender-ref ref="FIELDID_TASK"/>
-        </category>
-
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<param name="Threshold" value="INFO" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- The default pattern: Date Priority [Category] Message\n -->
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
+		</layout>
+	</appender>
+	<appender name="AUDIT_LOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/fieldid-audit.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d: %c: %m%n" />
+		</layout>
+	</appender>
+	<appender name="FIELDID_LOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/fieldid.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="FIELDID_TASK" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/fieldid-task.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="FIELDID_ORDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/order.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<category name="org.apache">
+		<priority value="INFO" />
+	</category>
+	<category name="jacorb">
+		<priority value="WARN" />
+	</category>
+	<category name="org.jgroups">
+		<priority value="WARN" />
+	</category>
+	<category name="org.quartz">
+		<priority value="INFO" />
+	</category>
+	<category name="org.hibernate">
+		<priority value="WARN" />
+	</category>
+	<category name="org.hibernate.engine.loading.CollectionLoadContext">
+		<priority value="ERROR" />
+	</category>
+	<category name="org.hibernate.jdbc.AbstractBatcher">
+		<priority value="ERROR" />
+	</category>
+	<category name="net.sf.jasperreports">
+		<priority value="INFO" />
+	</category>
+	<category name="com.n4systems.ejb.OrderManagerImpl" additivity="false">
+		<priority value="TRACE" />
+		<appender-ref ref="FIELDID_ORDER" />
+	</category>
+	<category name="AuditLog" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="AUDIT_LOG" />
+	</category>
+	<category name="com.n4systems.ejb.interceptor.TimingInterceptor" additivity="false">
+		<priority value="DEBUG" />
+	</category>
+	<category name="com.n4systems.taskscheduling" additivity="false">
+		<priority value="DEBUG" />
+		<appender-ref ref="FIELDID_TASK" />
+	</category>
+	<root>
+		<priority value="info" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FIELDID_LOG" />
+	</root>
 </log4j:configuration>
