@@ -1,5 +1,5 @@
 ${action.setPageType('product', 'add')!}
-<#include "_list.ftl"/>
+<#include "list.ftl"/>
 
 <div class="formAction">
 	<@s.url action="productAdd" id="addAssetUrl"/>
