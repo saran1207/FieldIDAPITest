@@ -2,6 +2,7 @@ package com.n4systems.services.product;
 
 import java.util.List;
 
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
@@ -10,7 +11,6 @@ import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
-import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.model.product.ProductAttachment;
 import com.n4systems.model.product.ProductAttachmentListLoader;
 import com.n4systems.model.product.ProductAttachmentSaver;
@@ -48,7 +48,7 @@ public class ProductSaveService {
 			createProduct(withHistory);
 			saveUploadedAttachments();
 			return asset;
-		} catch (SubProductUniquenessException e) {
+		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
 		}
 	}
@@ -59,7 +59,7 @@ public class ProductSaveService {
 			updateExistingAttachments();
 			saveUploadedAttachments();
 			return asset;
-		} catch (SubProductUniquenessException e) {
+		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
 		}
 	}
@@ -70,7 +70,7 @@ public class ProductSaveService {
 		uploadedAttachments = null;
 	}
 
-	private void createProduct(boolean withHistory) throws SubProductUniquenessException {
+	private void createProduct(boolean withHistory) throws SubAssetUniquenessException {
 		saveRequirements();
 		
 		if (withHistory) {
@@ -80,7 +80,7 @@ public class ProductSaveService {
 		}
 	}
 
-	private void updateProduct() throws SubProductUniquenessException {
+	private void updateProduct() throws SubAssetUniquenessException {
 		saveRequirements();
 		asset = productManager.update(asset, user);
 	}

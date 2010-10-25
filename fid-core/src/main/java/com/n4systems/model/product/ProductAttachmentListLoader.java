@@ -20,7 +20,7 @@ public class ProductAttachmentListLoader extends ListLoader<ProductAttachment> {
 	@Override
 	protected List<ProductAttachment> load(EntityManager em, SecurityFilter filter) {
 		if (asset == null) {
-			throw new InvalidArgumentException("you must have a asset to load asset attachments");
+			throw new InvalidArgumentException("you must have an asset to load asset attachments");
 		}
 		QueryBuilder<ProductAttachment> builder = new QueryBuilder<ProductAttachment>(ProductAttachment.class, filter);
 		builder.addSimpleWhere("asset", asset).addOrder("id");

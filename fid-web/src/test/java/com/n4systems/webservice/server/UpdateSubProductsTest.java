@@ -1,7 +1,7 @@
 package com.n4systems.webservice.server;
 
 import static com.n4systems.model.builders.AssetBuilder.*;
-import static com.n4systems.model.builders.SubProductBuilder.*;
+import static com.n4systems.model.builders.SubAssetBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.builders.SubAssetBuilder;
 import org.junit.Test;
 
 
 import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.exceptions.SubProductUniquenessException;
-import com.n4systems.model.SubProduct;
-import com.n4systems.model.builders.SubProductBuilder;
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -32,7 +32,7 @@ public class UpdateSubProductsTest {
 		
 		ProductManager productManager2 = createProductMangerMock();
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), anAsset().build(), new InspectionServiceDTO(), new ArrayList<SubProduct>(), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), anAsset().build(), new InspectionServiceDTO(), new ArrayList<SubAsset>(), productManager2);
 		
 		sut.run();
 		
@@ -43,7 +43,7 @@ public class UpdateSubProductsTest {
 		Asset asset = anAsset().build();
 		
 		ProductManager productManager2 = createMock(ProductManager.class);
-		expect(productManager2.findProduct(asset.getId(), null)).andReturn(asset);
+		expect(productManager2.findAsset(asset.getId(), null)).andReturn(asset);
 		replay(productManager2);
 		return productManager2;
 	}
@@ -55,16 +55,16 @@ public class UpdateSubProductsTest {
 		
 		LegacyProductSerial productManager = successfulProductManager(masterAsset);
 		
-		SubProduct subProduct = SubProductBuilder.aSubProduct().build();
+		SubAsset subAsset = SubAssetBuilder.aSubAsset().build();
 		
 		ProductManager productManager2 = createProductMangerMock();
 		
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubProduct>(subProduct), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), productManager2);
 		
 		sut.run();
 		
-		assertEquals(new FluentArrayList<SubProduct>(subProduct), masterAsset.getSubProducts());
+		assertEquals(new FluentArrayList<SubAsset>(subAsset), masterAsset.getSubAssets());
 	}
 	
 	@Test
@@ -73,11 +73,11 @@ public class UpdateSubProductsTest {
 		//1. create masterAsset with two sub products in it
 		Asset masterAsset = anAsset().build();
 		
-		SubProduct subProductToRemove = aSubProduct().build();
-		subProductToRemove.getAsset().setId(1L);
+		SubAsset subAssetToRemove = aSubAsset().build();
+		subAssetToRemove.getAsset().setId(1L);
 
-		List<SubProduct> subProducts = new FluentArrayList<SubProduct>(subProductToRemove, aSubProduct().build());
-		masterAsset.setSubProducts(subProducts);
+		List<SubAsset> subAssets = new FluentArrayList<SubAsset>(subAssetToRemove, aSubAsset().build());
+		masterAsset.setSubAssets(subAssets);
 		
 		//2. creating InspectionServiceDTO with detaching sub products information
 		SubProductMapServiceDTO subProductMapServiceDTO = new SubProductMapServiceDTO();
@@ -86,18 +86,18 @@ public class UpdateSubProductsTest {
 		InspectionServiceDTO inspectionServiceDTO = new InspectionServiceDTO();
 		inspectionServiceDTO.getDetachSubProducts().add(subProductMapServiceDTO);
 		
-		UpdateSubProducts sut = new UpdateSubProducts(successfulProductManager(masterAsset), new Long(1L), masterAsset, inspectionServiceDTO, new FluentArrayList<SubProduct>(), lookUpProductById(subProductToRemove));
+		UpdateSubProducts sut = new UpdateSubProducts(successfulProductManager(masterAsset), new Long(1L), masterAsset, inspectionServiceDTO, new FluentArrayList<SubAsset>(), lookUpProductById(subAssetToRemove));
 		
 		sut.run();
 		
-		assertEquals(1, masterAsset.getSubProducts().size());
+		assertEquals(1, masterAsset.getSubAssets().size());
 		
 	}
 
 
-	private ProductManager lookUpProductById(SubProduct subProductToRemove) {
+	private ProductManager lookUpProductById(SubAsset subAssetToRemove) {
 		ProductManager productManager = createMock(ProductManager.class);
-		expect(productManager.findProduct(same(subProductToRemove.getAsset().getId()), (SecurityFilter)anyObject())).andReturn(subProductToRemove.getAsset());
+		expect(productManager.findAsset(same(subAssetToRemove.getAsset().getId()), (SecurityFilter)anyObject())).andReturn(subAssetToRemove.getAsset());
 		replay(productManager);
 		return productManager;
 	}
@@ -112,16 +112,16 @@ public class UpdateSubProductsTest {
 		
 		ProductManager productManager2 = createProductMangerMock();
 		
-		SubProduct subProduct = aSubProduct().build();
+		SubAsset subAsset = aSubAsset().build();
 		
-		SubProduct alreadyAttachedSubProduct = aSubProduct().containingProduct(subProduct.getAsset()).withMasterProduct(masterAsset).build();
-		masterAsset.getSubProducts().add(alreadyAttachedSubProduct);
+		SubAsset alreadyAttachedSubAsset = aSubAsset().containingProduct(subAsset.getAsset()).withMasterProduct(masterAsset).build();
+		masterAsset.getSubAssets().add(alreadyAttachedSubAsset);
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubProduct>(subProduct), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), productManager2);
 		
 		sut.run();
 		
-		assertEquals(new FluentArrayList<SubProduct>(alreadyAttachedSubProduct), masterAsset.getSubProducts());
+		assertEquals(new FluentArrayList<SubAsset>(alreadyAttachedSubAsset), masterAsset.getSubAssets());
 	}
 	
 	
@@ -136,9 +136,9 @@ public class UpdateSubProductsTest {
 		
 		ProductManager productManager2 = createProductMangerMock();
 		
-		SubProduct subProduct = SubProductBuilder.aSubProduct().build();
+		SubAsset subAsset = SubAssetBuilder.aSubAsset().build();
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubProduct>(subProduct), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), productManager2);
 		
 		sut.run();
 		
@@ -156,16 +156,16 @@ public class UpdateSubProductsTest {
 		
 		ProductManager productManager2 = createProductMangerMock();
 		
-		SubProduct subProduct = SubProductBuilder.aSubProduct().build();
+		SubAsset subAsset = SubAssetBuilder.aSubAsset().build();
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubProduct>(subProduct), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), productManager2);
 		
 		sut.run();
 		
 		verify(productManager);
 	}
 	
-	private LegacyProductSerial successfulProductManager(Asset masterAsset) throws SubProductUniquenessException {
+	private LegacyProductSerial successfulProductManager(Asset masterAsset) throws SubAssetUniquenessException {
 		LegacyProductSerial productManager = createMock(LegacyProductSerial.class);
 		expect(productManager.update(masterAsset, masterAsset.getModifiedBy())).andReturn(masterAsset);
 		replay(productManager);

@@ -10,7 +10,7 @@
 </#assign>
 
 
-<#assign productSearchAction="products"/>
+<#assign assetSearchAction="products"/>
 <#assign namespace="/ajax"/>
 <#include "../inspectionGroup/_searchForm.ftl"/>
 <div id="resultBlock">
@@ -121,7 +121,7 @@
 			updateResults('${assetAddedHtml?js_string}');
 			
 			if (assetListCount() >= ${listLimitSize}) {
-				$('productSearchForm').disable();
+				$('assetSearchForm').disable();
 				$('searchLimit').show();
 			}
 		}
@@ -155,9 +155,9 @@
 		}
 		
 		onDocumentLoad(function() {
-			$('productSearchForm').observe('submit', function(event) {
+			$('assetSearchForm').observe('submit', function(event) {
 				event.stop();
-				$('productSearchForm').request(getStandardCallbacks());
+				$('assetSearchForm').request(getStandardCallbacks());
 			});
 		});
 		

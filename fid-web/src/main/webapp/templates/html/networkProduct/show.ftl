@@ -133,7 +133,7 @@
     </#if>
 
 	<#if (asset.type.cautions?exists && asset.type.cautions?length gt 0)
-			|| (!asset.type.attachments.isEmpty()) || (!productAttachments.isEmpty()) >
+			|| (!asset.type.attachments.isEmpty()) || (!assetAttachments.isEmpty()) >
 
         <div class="productInformationSection">
             <@s.text name="label.additionalinformation"/>
@@ -148,9 +148,9 @@
         </div>
 
 
-        <#if !productAttachments.isEmpty() >
+        <#if !assetAttachments.isEmpty() >
             <#assign downloadAction="downloadProductAttachedFileSafetyNetwork"/>
-            <#assign attachments=productAttachments />
+            <#assign attachments=assetAttachments />
             <#assign attachmentID=asset.uniqueID/>
             <#include "_attachedFilesDisplay.ftl"/>
         </#if>

@@ -95,7 +95,7 @@ public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 	
 	
 	private List<AssetTypeGroup> getOriginialGroups(Set<Long> productTypeIds) {
-		return new ArrayList<AssetTypeGroup>(importCatalog.getProductTypeGroupsFor(productTypeIds));
+		return new ArrayList<AssetTypeGroup>(importCatalog.getAssetTypeGroupsFor(productTypeIds));
 	}
 
 

@@ -50,7 +50,7 @@ import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.SubProduct;
+import com.n4systems.model.SubAsset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
 import com.n4systems.model.location.Location;
@@ -65,7 +65,7 @@ import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.user.User;
-import com.n4systems.model.utils.FindSubProducts;
+import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
@@ -288,13 +288,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			productDTO.getInfoOptions().add(convert(infoOption, infoOption.getInfoField().getUniqueID()));
 		}
 
-		new FindSubProducts(persistenceManager, product).fillInSubProducts();
-		if (product.getSubProducts() != null) {
+		new FindSubAssets(persistenceManager, product).fillInSubAssets();
+		if (product.getSubAssets() != null) {
 			SubProductMapServiceDTO subProductMap = null;
-			for (SubProduct subProduct : product.getSubProducts()) {
+			for (SubAsset subAsset : product.getSubAssets()) {
 				subProductMap = new SubProductMapServiceDTO();
-				subProductMap.setName(subProduct.getLabel());
-				subProductMap.setSubProductId(subProduct.getAsset().getId());
+				subProductMap.setName(subAsset.getLabel());
+				subProductMap.setSubProductId(subAsset.getAsset().getId());
 				subProductMap.setProductId(product.getId());
 				productDTO.getSubProducts().add(subProductMap);
 			}

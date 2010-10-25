@@ -102,7 +102,7 @@ public class ProductUtilAction extends AbstractAction {
 
 	public Collection<Asset> getAssets() {
 		if( assets == null ) {
-			assets =  productManager.findProductsByRfidNumber( rfidString, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
+			assets =  productManager.findAssetsByRfidNumber( rfidString, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
 		}
 		return assets;
 	}

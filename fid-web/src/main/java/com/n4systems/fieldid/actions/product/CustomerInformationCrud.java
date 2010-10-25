@@ -48,7 +48,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		asset = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+		asset = productManager.findAssetAllFields(uniqueId, getSecurityFilter());
 		assetWebModel.match(asset);
 	}
 	
@@ -62,7 +62,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 	private void testRequiredEntities() {
 		if (asset == null) {
 			addActionErrorText("error.noproduct");
-			throw new MissingEntityException("you must have a asset.");
+			throw new MissingEntityException("you must have an asset.");
 		}
 	}
 
@@ -89,8 +89,8 @@ public class CustomerInformationCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	public boolean isSubProduct() {
-		return (productManager.parentProduct(asset) != null);
+	public boolean isSubAsset() {
+		return (productManager.parentAsset(asset) != null);
 	}
 	
 	public String getCustomerRefNumber() {

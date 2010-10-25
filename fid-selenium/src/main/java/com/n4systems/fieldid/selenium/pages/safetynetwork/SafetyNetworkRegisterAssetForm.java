@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.selenium.pages.safetynetwork;
 
 import com.n4systems.fieldid.selenium.components.OrgPicker;
-import com.n4systems.fieldid.selenium.datatypes.Product;
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.pages.InspectPage;
@@ -50,34 +50,34 @@ public class SafetyNetworkRegisterAssetForm extends FieldIDPage{
 		waitForElementToBePresent("//div[@id='extraDetails']");
 	}
 
-	public void setProduct(Product product) {
-		if (product.getRFIDNumber() != null) {
-			selenium.type("//input[contains(@id, 'rfidNumber')]", product.getRFIDNumber());
+	public void setAsset(Asset asset) {
+		if (asset.getRFIDNumber() != null) {
+			selenium.type("//input[contains(@id, 'rfidNumber')]", asset.getRFIDNumber());
 		}
-		if (product.getRFIDNumber() != null) {
-			selenium.type("//input[contains(@id, 'customerRefNumber')]", product.getReferenceNumber());
+		if (asset.getRFIDNumber() != null) {
+			selenium.type("//input[contains(@id, 'customerRefNumber')]", asset.getReferenceNumber());
 		} 
-		if (product.getLocation() != null) {
-			selenium.type("//input[contains(@id, 'freeformLocation')]", product.getLocation());
+		if (asset.getLocation() != null) {
+			selenium.type("//input[contains(@id, 'freeformLocation')]", asset.getLocation());
 		}
 		openDetailedForm();
-		if (product.getProductStatus() != null) {
-			selenium.select("//select[@name='productStatus']", product.getProductStatus());
+		if (asset.getAssetStatus() != null) {
+			selenium.select("//select[@name='assetStatus']", asset.getAssetStatus());
 		}
-		if (product.getOwner() != null) {
+		if (asset.getOwner() != null) {
 			OrgPicker orgPicker = getOrgPicker();
 			orgPicker.clickChooseOwner();
-			orgPicker.setOwner(product.getOwner());
+			orgPicker.setOwner(asset.getOwner());
 			orgPicker.clickSelectOwner();
 		}
-		if (product.getPurchaseOrder() != null) {
-			selenium.type("//input[contains(@id, 'purchaseOrder')]", product.getPurchaseOrder());
+		if (asset.getPurchaseOrder() != null) {
+			selenium.type("//input[contains(@id, 'purchaseOrder')]", asset.getPurchaseOrder());
 		}
-		if (product.getNonIntegrationOrderNumber() != null) {
-			selenium.type("//input[contains(@id, 'nonIntegrationOrderNumber')]", product.getNonIntegrationOrderNumber());
+		if (asset.getNonIntegrationOrderNumber() != null) {
+			selenium.type("//input[contains(@id, 'nonIntegrationOrderNumber')]", asset.getNonIntegrationOrderNumber());
 		}
-		if (product.getComments() != null) {
-			selenium.select("//select[@id='commentTemplateSelection']", product.getComments());
+		if (asset.getComments() != null) {
+			selenium.select("//select[@id='commentTemplateSelection']", asset.getComments());
 		}
 	}
 }

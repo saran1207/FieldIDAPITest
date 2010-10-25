@@ -74,7 +74,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	@Test
 	public void search_with_custom_display_columns_selected() throws Exception {
 		SearchDisplayColumns displayColumns = new SearchDisplayColumns();
-		displayColumns.setProductType(true);
+		displayColumns.setAssetType(true);
 		displayColumns.setAssignedTo(true);
 		displayColumns.setSafetyNetwork(true);
 		

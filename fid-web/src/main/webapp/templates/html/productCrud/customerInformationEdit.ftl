@@ -14,7 +14,7 @@ ${action.setPageType('product', 'customer_edit')!}
 		</#if>
 	</h2>
 	
-	<#if !subProduct>
+	<#if !subAsset>
 		<div class="infoSet">
 			<label><@s.text name="label.owner"/></label>
 			<@n4.orgPicker name="owner" required="true"/>

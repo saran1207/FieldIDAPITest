@@ -18,8 +18,8 @@ public class AutoAttributeWizardPage extends FieldIDPage {
 		super(selenium);
 	}
 
-	public void clickProductType(String productType) {
-		selenium.click("//div[@id='pageContent']//a[.=' "+productType+" ']");
+	public void clickAssetType(String assetType) {
+		selenium.click("//div[@id='pageContent']//a[.=' "+assetType+" ']");
 		waitForPageToLoad();
 	}
 	

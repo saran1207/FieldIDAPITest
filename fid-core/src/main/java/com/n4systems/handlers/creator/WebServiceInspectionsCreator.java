@@ -9,7 +9,7 @@ import com.n4systems.ejb.impl.CreateInspectionsMethodObject;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.exceptions.UnknownSubProduct;
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.persistence.Transaction;
@@ -33,7 +33,7 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	}
 
 	public List<Inspection> create(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, 
-			ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
+			ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 		this.transactionGUID = transactionGUID;
 		this.inspections = inspections;
 		this.nextInspectionDates = nextInspectionDates;

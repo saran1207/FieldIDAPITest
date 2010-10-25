@@ -153,7 +153,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		if (assetStatus == null) {
 			inspection.setAssetStatus(null);
 		} else if (inspection.getAssetStatus() == null || !assetStatus.equals(inspection.getAssetStatus().getUniqueID())) {
-			inspection.setAssetStatus(productSerialManager.findProductStatus(assetStatus, getTenantId()));
+			inspection.setAssetStatus(productSerialManager.findAssetStatus(assetStatus, getTenantId()));
 		}
 	}
 

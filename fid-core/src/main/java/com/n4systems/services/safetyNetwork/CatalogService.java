@@ -20,27 +20,27 @@ public interface CatalogService {
 	
 	public boolean hasCatalog();
 	
-	public Set<Long> getProductTypeIdsPublished();
+	public Set<Long> getAssetTypeIdsPublished();
 
-	public List<ListingPair> getPublishedProductTypesLP();
+	public List<ListingPair> getPublishedAssetTypesLP();
 	
 	public Set<Long> getInspectionTypeIdsPublished();
 
 	public List<ListingPair> getPublishedInspectionTypesLP();
 
-	public Catalog publishProductTypes(Set<AssetType> assetTypes);
+	public Catalog publishAssetTypes(Set<AssetType> assetTypes);
 	
 	public Catalog publishInspectionTypes(Set<InspectionType> inspectionTypes);
 
-	public AssetType getPublishedProductType(Long productTypeId, String...postFetchFields);
+	public AssetType getPublishedAssetType(Long assetTypeId, String...postFetchFields);
 	
-	public Set<AssetTypeGroup> getProductTypeGroupsFor(Set<Long> productTypeIds);
+	public Set<AssetTypeGroup> getAssetTypeGroupsFor(Set<Long> assetTypeIds);
 	
-	public List<Long> getAllPublishedSubTypesFor(Long productTypeIds);
+	public List<Long> getAllPublishedSubTypesFor(Long assetTypeIds);
 	
-	public List<Long> getAllPublishedSubTypesFor(Set<Long> productTypeIds);
+	public List<Long> getAllPublishedSubTypesFor(Set<Long> assetTypeIds);
 	
-	public Long getAutoAttributeCountFor(Long productTypeId);
+	public Long getAutoAttributeCountFor(Long assetTypeId);
 
 	public Set<ListingPair> getInspectionTypeGroupsFor(Set<Long> inspectionTypeIds);
 	
@@ -48,9 +48,9 @@ public interface CatalogService {
 	
 	public List<StateSet> getStateSetsUsedIn(Set<Long> inspectionTypeIds);
 	
-	public AutoAttributeCriteria getCriteriaFor(Long productTypeId);
+	public AutoAttributeCriteria getCriteriaFor(Long assetTypeId);
 	
-	public Pager<AutoAttributeDefinition> getDefinitionPageFor(Long productTypeId, int pageNumber, int pageSize);
+	public Pager<AutoAttributeDefinition> getDefinitionPageFor(Long assetTypeId, int pageNumber, int pageSize);
 	
-	public Set<Long> getPublishedInspectionTypeIdsConnectedTo(Set<Long> productTypeIds);
+	public Set<Long> getPublishedInspectionTypeIdsConnectedTo(Set<Long> assetTypeIds);
 }

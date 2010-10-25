@@ -5,7 +5,7 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
-import com.n4systems.fieldid.selenium.datatypes.ProductSelectDisplayColumns;
+import com.n4systems.fieldid.selenium.datatypes.AssetSelectDisplayColumns;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.misc.Search;
@@ -16,45 +16,45 @@ public class AssetSearch {
 	Search search;
 	
 	// Locators
-	private String productSearchPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset Search')]";
+	private String assetSearchPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset Search')]";
 	private String rfidNumberTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_rfidNumber']";
 	private String serialNumberTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_serialNumber']";
 	private String orderNumberTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_orderNumber']";
 	private String purchaseOrderTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_purchaseOrder']";
 	private String referenceNumberTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_referenceNumber']";
-	private String productStatusSelectListLocator = "xpath=//SELECT[@id='reportForm_criteria_productStatus']";
-	private String productTypeGroupSelectListLocator = "xpath=//SELECT[@id='productTypeGroup']";
-	private String productTypeSelectListLocator = "xpath=//SELECT[@id='productType']";
+	private String assetStatusSelectListLocator = "xpath=//SELECT[@id='reportForm_criteria_assetStatus']";
+	private String assetTypeGroupSelectListLocator = "xpath=//SELECT[@id='assetTypeGroup']";
+	private String assetTypeSelectListLocator = "xpath=//SELECT[@id='assetType']";
 	private String locationTextFieldLocator = "xpath=//INPUT[@id='reportForm_criteria_location']";
 	private String ownerTextFieldLocator = "xpath=//INPUT[@id='reportForm_owner_orgName']";
 	private String chooseOwnerLinkLocator = "xpath=//A[contains(text(),'Choose')]";
 	private String fromDateTextFieldLocator = "xpath=//INPUT[@id='reportForm_fromDate']";
 	private String toDateTextFieldLocator = "xpath=//INPUT[@id='reportForm_toDate']";
-	private String serialNumberDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_serialnumber']";
-	private String rfidNumberDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_rfidnumber']";
-	private String customerNameDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_customer']";
-	private String divisionDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_division']";
-	private String organizationDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_organization']";
-	private String referenceNumberDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_referencenumber']";
-	private String productTypeGroupDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_producttypegroup']";
-	private String productTypeDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_producttype']";
-	private String productStatusDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_productstatus']";
-	private String lastInspectionDateDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_lastinspdate']";
-	private String networkLastInspectionDateDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_network_lastinspdate']";
-	private String dateIdentifiedDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_identified']";
-	private String identifiedByDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_identifiedby']";
-	private String modifiedByDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_modifiedby']";
-	private String commentsDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_comments']";
-	private String descriptionDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_description']";
-	private String locationDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_location']";
-	private String safetyNetworkDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_published']";
-	private String orderDescriptionDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_order_description']";
-	private String orderNumberDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_order_number']";
-	private String purchaseOrderDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_product_search_purchaseorder']";
-	private String productAttributesDynamicColumnLocator = "xpath=//DIV[@id='product_search_product_info_options']";
-	private String productAttributesDynamicCheckBoxXpath = "//INPUT[@type='checkbox' and contains(@id,'chk_product_search_infooption_')]";
+	private String serialNumberDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_serialnumber']";
+	private String rfidNumberDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_rfidnumber']";
+	private String customerNameDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_customer']";
+	private String divisionDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_division']";
+	private String organizationDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_organization']";
+	private String referenceNumberDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_referencenumber']";
+	private String assetTypeGroupDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_assettypegroup']";
+	private String assetTypeDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_assettype']";
+	private String assetStatusDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_assetstatus']";
+	private String lastInspectionDateDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_lastinspdate']";
+	private String networkLastInspectionDateDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_network_lastinspdate']";
+	private String dateIdentifiedDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_identified']";
+	private String identifiedByDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_identifiedby']";
+	private String modifiedByDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_modifiedby']";
+	private String commentsDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_comments']";
+	private String descriptionDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_description']";
+	private String locationDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_location']";
+	private String safetyNetworkDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_published']";
+	private String orderDescriptionDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_order_description']";
+	private String orderNumberDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_order_number']";
+	private String purchaseOrderDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_purchaseorder']";
+	private String assetAttributesDynamicColumnLocator = "xpath=//DIV[@id='asset_search_asset_info_options']";
+	private String assetAttributesDynamicCheckBoxXpath = "//INPUT[@type='checkbox' and contains(@id,'chk_asset_search_infooption_')]";
 	private String runButtonLocator = "xpath=//INPUT[@id='reportForm_label_Run']";
-	private String productSearchResultTable = "xpath=//TABLE[@id='resultsTable']";
+	private String assetSearchResultTable = "xpath=//TABLE[@id='resultsTable']";
 
 	public AssetSearch(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
@@ -68,7 +68,7 @@ public class AssetSearch {
 	 */
 	public void assertAssetsPage() {
 		misc.checkForErrorMessages("verifyAssetsPage");
-		if(!selenium.isElementPresent(productSearchPageHeaderLocator)) {
+		if(!selenium.isElementPresent(assetSearchPageHeaderLocator)) {
 			fail("Could not find the header for 'Asset Search'.");
 		}
 	}
@@ -79,9 +79,9 @@ public class AssetSearch {
 		assertTrue(selenium.isElementPresent(orderNumberTextFieldLocator));
 		assertTrue(selenium.isElementPresent(purchaseOrderTextFieldLocator));
 		assertTrue(selenium.isElementPresent(referenceNumberTextFieldLocator));
-		assertTrue(selenium.isElementPresent(productStatusSelectListLocator));
-		assertTrue(selenium.isElementPresent(productTypeGroupSelectListLocator));
-		assertTrue(selenium.isElementPresent(productTypeSelectListLocator));
+		assertTrue(selenium.isElementPresent(assetStatusSelectListLocator));
+		assertTrue(selenium.isElementPresent(assetTypeGroupSelectListLocator));
+		assertTrue(selenium.isElementPresent(assetTypeSelectListLocator));
 		assertTrue(selenium.isElementPresent(locationTextFieldLocator));
 		assertTrue(selenium.isElementPresent(ownerTextFieldLocator));
 		assertTrue(selenium.isElementPresent(chooseOwnerLinkLocator));
@@ -89,8 +89,8 @@ public class AssetSearch {
 		assertTrue(selenium.isElementPresent(toDateTextFieldLocator));
 	}
 	
-	public ProductSelectDisplayColumns getDisplayColumns() {
-		ProductSelectDisplayColumns result = new ProductSelectDisplayColumns();
+	public AssetSelectDisplayColumns getDisplayColumns() {
+		AssetSelectDisplayColumns result = new AssetSelectDisplayColumns();
 
 		result.setSerialNumber(misc.getCheckBoxValue(serialNumberDisplayColumnCheckBoxLocator));
 		result.setrfidNumber(misc.getCheckBoxValue(rfidNumberDisplayColumnCheckBoxLocator));
@@ -98,9 +98,9 @@ public class AssetSearch {
 		result.setDivision(misc.getCheckBoxValue(divisionDisplayColumnCheckBoxLocator));
 		result.setOrganization(misc.getCheckBoxValue(organizationDisplayColumnCheckBoxLocator));
 		result.setReferenceNumber(misc.getCheckBoxValue(referenceNumberDisplayColumnCheckBoxLocator));
-		result.setProductTypeGroup(misc.getCheckBoxValue(productTypeGroupDisplayColumnCheckBoxLocator));
-		result.setProductType(misc.getCheckBoxValue(productTypeDisplayColumnCheckBoxLocator));
-		result.setProductStatus(misc.getCheckBoxValue(productStatusDisplayColumnCheckBoxLocator));
+		result.setAssetTypeGroup(misc.getCheckBoxValue(assetTypeGroupDisplayColumnCheckBoxLocator));
+		result.setAssetType(misc.getCheckBoxValue(assetTypeDisplayColumnCheckBoxLocator));
+		result.setAssetStatus(misc.getCheckBoxValue(assetStatusDisplayColumnCheckBoxLocator));
 		result.setLastInspectionDate(misc.getCheckBoxValue(lastInspectionDateDisplayColumnCheckBoxLocator));
 		result.setNetworkLastInspectionDate(misc.getCheckBoxValue(networkLastInspectionDateDisplayColumnCheckBoxLocator));
 		result.setDateIdentified(misc.getCheckBoxValue(dateIdentifiedDisplayColumnCheckBoxLocator));
@@ -117,16 +117,16 @@ public class AssetSearch {
 		return result;
 	}
 	
-	public void setDisplayColumns(ProductSelectDisplayColumns sdc) {
+	public void setDisplayColumns(AssetSelectDisplayColumns sdc) {
 		misc.setCheckBoxValue(serialNumberDisplayColumnCheckBoxLocator, sdc.getSerialNumber());
 		misc.setCheckBoxValue(rfidNumberDisplayColumnCheckBoxLocator, sdc.getrfidNumber());
 		misc.setCheckBoxValue(customerNameDisplayColumnCheckBoxLocator, sdc.getCustomerName());
 		misc.setCheckBoxValue(divisionDisplayColumnCheckBoxLocator, sdc.getDivision());
 		misc.setCheckBoxValue(organizationDisplayColumnCheckBoxLocator, sdc.getOrganization());
 		misc.setCheckBoxValue(referenceNumberDisplayColumnCheckBoxLocator, sdc.getReferenceNumber());
-		misc.setCheckBoxValue(productTypeGroupDisplayColumnCheckBoxLocator, sdc.getProductTypeGroup());
-		misc.setCheckBoxValue(productTypeDisplayColumnCheckBoxLocator, sdc.getProductType());
-		misc.setCheckBoxValue(productStatusDisplayColumnCheckBoxLocator, sdc.getProductStatus());
+		misc.setCheckBoxValue(assetTypeGroupDisplayColumnCheckBoxLocator, sdc.getAssetTypeGroup());
+		misc.setCheckBoxValue(assetTypeDisplayColumnCheckBoxLocator, sdc.getAssetType());
+		misc.setCheckBoxValue(assetStatusDisplayColumnCheckBoxLocator, sdc.getAssetStatus());
 		misc.setCheckBoxValue(lastInspectionDateDisplayColumnCheckBoxLocator, sdc.getLastInspectionDate());
 		misc.setCheckBoxValue(networkLastInspectionDateDisplayColumnCheckBoxLocator, sdc.getNetworkLastInspectionDate());
 		misc.setCheckBoxValue(dateIdentifiedDisplayColumnCheckBoxLocator, sdc.getDateIdentified());
@@ -163,29 +163,29 @@ public class AssetSearch {
 			selenium.type(referenceNumberTextFieldLocator, asc.getReferenceNumber());
 		}
 		
-		if(asc.getProductStatus() != null) {
-			if(misc.isOptionPresent(productStatusSelectListLocator, asc.getProductStatus())) {
-				selenium.select(productStatusSelectListLocator, asc.getProductStatus());
+		if(asc.getAssetStatus() != null) {
+			if(misc.isOptionPresent(assetStatusSelectListLocator, asc.getAssetStatus())) {
+				selenium.select(assetStatusSelectListLocator, asc.getAssetStatus());
 			} else {
-				fail("Could not find the asset status '" + asc.getProductStatus() + "'");
+				fail("Could not find the asset status '" + asc.getAssetStatus() + "'");
 			}
 		}
 		
-		if(asc.getProductTypeGroup() != null) {
-			if(misc.isOptionPresent(productTypeGroupSelectListLocator, asc.getProductTypeGroup())) {
-				selenium.select(productTypeGroupSelectListLocator, asc.getProductTypeGroup());
+		if(asc.getAssetTypeGroup() != null) {
+			if(misc.isOptionPresent(assetTypeGroupSelectListLocator, asc.getAssetTypeGroup())) {
+				selenium.select(assetTypeGroupSelectListLocator, asc.getAssetTypeGroup());
 				search.waitForDisplayColumnsToUpdate(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
-				fail("Could not find the asset type group '" + asc.getProductTypeGroup() + "'");
+				fail("Could not find the asset type group '" + asc.getAssetTypeGroup() + "'");
 			}
 		}
 		
-		if(asc.getProductType() != null) {
-			if(misc.isOptionPresent(productTypeSelectListLocator, asc.getProductType())) {
-				selenium.select(productTypeSelectListLocator, asc.getProductType());
+		if(asc.getAssetType() != null) {
+			if(misc.isOptionPresent(assetTypeSelectListLocator, asc.getAssetType())) {
+				selenium.select(assetTypeSelectListLocator, asc.getAssetType());
 				search.waitForDisplayColumnsToUpdate(MiscDriver.DEFAULT_TIMEOUT);
 			} else {
-				fail("Could not find the asset type  '" + asc.getProductType() + "'");
+				fail("Could not find the asset type  '" + asc.getAssetType() + "'");
 			}
 		}
 		
@@ -208,10 +208,10 @@ public class AssetSearch {
 		}
 	}
 	
-	public List<String> getProductStatuses() {
+	public List<String> getAssetStatuses() {
 		List<String> result = new ArrayList<String>();
-		if(selenium.isElementPresent(productStatusSelectListLocator)) {
-			String tmp[] = selenium.getSelectOptions(productStatusSelectListLocator);
+		if(selenium.isElementPresent(assetStatusSelectListLocator)) {
+			String tmp[] = selenium.getSelectOptions(assetStatusSelectListLocator);
 			for(int i = 0; i < tmp.length; i++) {
 				result.add(tmp[i]);
 			}
@@ -219,10 +219,10 @@ public class AssetSearch {
 		return result;
 	}
 	
-	public List<String> getProductTypeGroups() {
+	public List<String> getAssetTypeGroups() {
 		List<String> result = new ArrayList<String>();
-		if(selenium.isElementPresent(productTypeGroupSelectListLocator)) {
-			String tmp[] = selenium.getSelectOptions(productTypeGroupSelectListLocator);
+		if(selenium.isElementPresent(assetTypeGroupSelectListLocator)) {
+			String tmp[] = selenium.getSelectOptions(assetTypeGroupSelectListLocator);
 			for(int i = 0; i < tmp.length; i++) {
 				result.add(tmp[i]);
 			}
@@ -230,10 +230,10 @@ public class AssetSearch {
 		return result;
 	}
 	
-	public List<String> getProductTypes() {
+	public List<String> getAssetTypes() {
 		List<String> result = new ArrayList<String>();
-		if(selenium.isElementPresent(productTypeSelectListLocator)) {
-			String tmp[] = selenium.getSelectOptions(productTypeSelectListLocator);
+		if(selenium.isElementPresent(assetTypeSelectListLocator)) {
+			String tmp[] = selenium.getSelectOptions(assetTypeSelectListLocator);
 			for(int i = 0; i < tmp.length; i++) {
 				result.add(tmp[i]);
 			}
@@ -241,8 +241,8 @@ public class AssetSearch {
 		return result;
 	}
 
-	public List<String> getDynamicProductAttributeDisplayColumns() {
-		List<String> result = search.getAttributesDisplayColumns(productAttributesDynamicColumnLocator, productAttributesDynamicCheckBoxXpath);
+	public List<String> getDynamicAssetAttributeDisplayColumns() {
+		List<String> result = search.getAttributesDisplayColumns(assetAttributesDynamicColumnLocator, assetAttributesDynamicCheckBoxXpath);
 		return result;
 	}
 
@@ -266,7 +266,7 @@ public class AssetSearch {
 	 * @param index
 	 */
 	public void gotoAsset(int index) {
-		String locator = productSearchResultTable + "/tbody/tr[" + ((index+1) * 2) + "]/td/a[contains(text(),'Info')]";
+		String locator = assetSearchResultTable + "/tbody/tr[" + ((index+1) * 2) + "]/td/a[contains(text(),'Info')]";
 		selenium.click(locator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
@@ -275,11 +275,11 @@ public class AssetSearch {
 		String serialNumber = null;
 		String serialNumberText = "Serial Number";
 		assert(row > -1);
-		String locator = productSearchResultTable + "/tbody/tr[1]/th/A[contains(text(),'" + serialNumberText + "')]";
+		String locator = assetSearchResultTable + "/tbody/tr[1]/th/A[contains(text(),'" + serialNumberText + "')]";
 		if(selenium.isElementPresent(locator)) {
 			Number n = selenium.getElementIndex(locator);
 			int col = n.intValue();
-			String serialNumberLocator = productSearchResultTable + "." + ((row * 2) + 1) + "." + col;
+			String serialNumberLocator = assetSearchResultTable + "." + ((row * 2) + 1) + "." + col;
 			serialNumber = selenium.getTable(serialNumberLocator);
 		} else {
 			fail("Could not locate a column with the header '" + serialNumberText + "'");

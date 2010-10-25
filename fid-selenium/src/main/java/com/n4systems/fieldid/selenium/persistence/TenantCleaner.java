@@ -38,21 +38,21 @@ public class TenantCleaner {
 
     public void cleanTenant(EntityManager em, long tenantId) {
         Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id = " + tenantId);
-        Query networkRegisteredProductsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id = " + tenantId);
-        List<Asset> products = assetsQuery.getResultList();
+        Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id = " + tenantId);
+        List<Asset> assets = assetsQuery.getResultList();
 
         removeAllForTenant(em, Catalog.class, tenantId);
         removeAllForTenant(em, Inspection.class, tenantId);
         removeAllForTenant(em, AssociatedInspectionType.class, tenantId);
         removeAllForTenant(em, InspectionType.class, tenantId);
 
-        List<Asset> networkRegisteredAssets = networkRegisteredProductsQuery.getResultList();
-        for (Asset p : networkRegisteredAssets) {
-            safeRemoveProduct(em, p);
+        List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
+        for (Asset asset : networkRegisteredAssets) {
+            safeRemoveAsset(em, asset);
         }
 
-        for (Asset p : products) {
-            safeRemoveProduct(em, p);
+        for (Asset asset : assets) {
+            safeRemoveAsset(em, asset);
         }
 
         removeAllForTenant(em, AddProductHistoryBean.class, tenantId, new Callback<AddProductHistoryBean>(){
@@ -101,10 +101,10 @@ public class TenantCleaner {
             cleanOwnedEntities(em, Inspection.class, org);
             cleanOwnedEntities(em, InspectionSchedule.class, org);
             cleanOwnedEntities(em, AddProductHistoryBean.class, org);
-            Query productQuery = em.createQuery("from " + Asset.class.getName() + " where owner.id = " + org.getId());
-            List<Asset> products = productQuery.getResultList();
-            for (Asset prod : products) {
-                safeRemoveProduct(em, prod);
+            Query assetQuery = em.createQuery("from " + Asset.class.getName() + " where owner.id = " + org.getId());
+            List<Asset> assets = assetQuery.getResultList();
+            for (Asset asset : assets) {
+                safeRemoveAsset(em, asset);
             }
         }
 
@@ -156,18 +156,18 @@ public class TenantCleaner {
         removeAllFromQuery(em, query);
     }
 
-    private void safeRemoveProduct(EntityManager em, Asset p) {
-        Query scheduleQuery =  em.createQuery("from " + InspectionSchedule.class.getName() + " where product.id = " + p.getId());
-        Query attachmentQuery = em.createQuery("from " + ProductAttachment.class.getName() + " where product.id = " + p.getId());
-        Query inspQuery = em.createQuery("from " + Inspection.class.getName() + " where product.id = " + p.getId());
+    private void safeRemoveAsset(EntityManager em, Asset asset) {
+        Query scheduleQuery =  em.createQuery("from " + InspectionSchedule.class.getName() + " where asset.id = " + asset.getId());
+        Query attachmentQuery = em.createQuery("from " + ProductAttachment.class.getName() + " where asset.id = " + asset.getId());
+        Query inspQuery = em.createQuery("from " + Inspection.class.getName() + " where asset.id = " + asset.getId());
 
         removeAllFromQuery(em, scheduleQuery);
         removeAllFromQuery(em, attachmentQuery);
         removeAllFromQuery(em, inspQuery);
 
-        p.getInfoOptions().clear();
-        em.merge(p);
-        em.remove(p);
+        asset.getInfoOptions().clear();
+        em.merge(asset);
+        em.remove(asset);
     }
 
     private static interface Callback<T> {

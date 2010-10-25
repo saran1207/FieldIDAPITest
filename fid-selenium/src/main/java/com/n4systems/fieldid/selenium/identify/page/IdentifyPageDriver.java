@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Identifier;
 import com.n4systems.fieldid.selenium.datatypes.LineItem;
 import com.n4systems.fieldid.selenium.datatypes.Order;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.datatypes.SafetyNetworkRegistration;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
@@ -30,11 +30,11 @@ public class IdentifyPageDriver {
 	private String identifyAddRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
 	private String identifyAddReferenceNumberTextFieldLocator = "xpath=//INPUT[@id='customerRefNumber']";
 	private String identifyAddLocationTextFieldLocator = "xpath=//INPUT[@id='location_freeformLocation']";
-	private String identifyAddProductStatusSelectListLocator = "xpath=//SELECT[@id='productCreate_productStatus']";
-	private String identifyAddPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='productCreate_purchaseOrder']";
+	private String identifyAddAssetStatusSelectListLocator = "xpath=//SELECT[@id='assetCreate_assetStatus']";
+	private String identifyAddPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='assetCreate_purchaseOrder']";
 	private String identifyAddIdentifiedTextFieldLocator = "xpath=//INPUT[@id='identified']";
-	private String identifyAddProductTypeTextFieldLocator = "xpath=//SELECT[@id='productType']";
-	private String identifyAddOwnerTextFieldLocator = "xpath=//INPUT[@id='productCreate_owner_orgName']";
+	private String identifyAddAssetTypeTextFieldLocator = "xpath=//SELECT[@id='assetType']";
+	private String identifyAddOwnerTextFieldLocator = "xpath=//INPUT[@id='assetCreate_owner_orgName']";
 	private String identifyAddChooseLinkLocator = "xpath=//A[contains(text(),'Choose')]";
 	private String identifyAddAttachAFileButtonLocator = "xpath=//BUTTON[contains(text(),'Attach A File')]";
 	private String identifyAddSaveButtonLocator = "xpath=//INPUT[@id='saveButton']";
@@ -46,9 +46,9 @@ public class IdentifyPageDriver {
 	private String addSelectedLocator = "xpath=//UL[contains(@class,'options')]/LI[contains(@class,'add') and contains(@class,'selected') and contains(text(),'Add') and not(contains(text(),'Multi')) and not(contains(text(),'with Order'))]";
 	private String addLinkLocator = "xpath=//UL[contains(@class,'options')]/LI[contains(@class,'add')]/A[contains(text(),'Add') and not(contains(text(),'Multi')) and not(contains(text(),'with Order'))]";
 	private String multiAddLinkLocator = "xpath=//UL[contains(@class,'options')]/LI[contains(@class,'add')]/A[contains(text(),'Multi Add')]";
-	private String identifyAddPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='productCreate_publishedState']";
+	private String identifyAddPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='assetCreate_publishedState']";
 	private String identifyAddCommentsTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
-	private String productTypeAttributesUpdatingLocator = "xpath=//SPAN[id='productTypeIndicator' and not(contains(@style,'visibility: hidden'))]";
+	private String assetTypeAttributesUpdatingLocator = "xpath=//SPAN[id='assetTypeIndicator' and not(contains(@style,'visibility: hidden'))]";
 	private String classStringIdentifyingRequiredFields = "requiredField";
 	private String classStringIdentifyingUnitOfMeasureFields = "unitOfMeasure";
 	private String registerThisAssetOverTheSafetyNetworkLinkLocator = "xpath=//A[@id='showSmartSearchLink']";
@@ -69,11 +69,11 @@ public class IdentifyPageDriver {
 	private String orderDetailsDivisionLocator = "xpath=//LABEL[contains(text(),'Division')]/../span";
 	private String orderDetailsLineItemsTableXpath = "//div[@id='resultsTable']/table";
 	private String orderDetailsLineItemsXpathCount = orderDetailsLineItemsTableXpath + "/tbody/tr/td[1]/..";
-	private String multiAddProductStatusSelectLocator = "xpath=//select[@id='step1form_productStatus']";
+	private String multiAddAssetStatusSelectLocator = "xpath=//select[@id='step1form_assetStatus']";
 	private String multiAddLocationTextFieldLocator = "xpath=//input[@id='location_freeformLocation']";
 	private String multiAddPurchaseOrderTextFieldLocator = "xpath=//input[@id='step1form_purchaseOrder']";
 	private String multiAddIdentifiedTextFieldLocator = "xpath=//input[@id='identified']";
-	private String multiAddProductTypeSelectListLocator = "xpath=//select[@id='productType']";
+	private String multiAddAssetTypeSelectListLocator = "xpath=//select[@id='assetType']";
 	private String multiAddCommentTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
 	private String multiAddAttachAFileButtonLocator = "xpath=//button[contains(text(),'Attach A File')]";
 	private String multiAddStep1ContinueButtonLocator = "xpath=//input[@id='step1form_label_continue']";
@@ -119,10 +119,10 @@ public class IdentifyPageDriver {
 		assertTrue("Could not find the select list to Register Asset on the Safety Network", selenium.isElementPresent(identifyAddPublishOverSafetyNetworkSelectListLocator));
 		assertTrue("Could not find the text field for Owner on Assets Add", selenium.isElementPresent(identifyAddOwnerTextFieldLocator));
 		assertTrue("Could not find the link for Choose Owner on Assets Add", selenium.isElementPresent(identifyAddChooseLinkLocator));
-		assertTrue("Could not find the select list for Asset Status on Assets Add", selenium.isElementPresent(identifyAddProductStatusSelectListLocator));
+		assertTrue("Could not find the select list for Asset Status on Assets Add", selenium.isElementPresent(identifyAddAssetStatusSelectListLocator));
 		assertTrue("Could not find the text field for Purchase Order on Assets Add", selenium.isElementPresent(identifyAddPurchaseOrderTextFieldLocator));
 		assertTrue("Could not find the text field for Identified on Assets Add", selenium.isElementPresent(identifyAddIdentifiedTextFieldLocator));
-		assertTrue("Could not find the text field for Asset Type on Assets Add", selenium.isElementPresent(identifyAddProductTypeTextFieldLocator));
+		assertTrue("Could not find the text field for Asset Type on Assets Add", selenium.isElementPresent(identifyAddAssetTypeTextFieldLocator));
 		assertTrue("Could not find the text area for Comments", selenium.isElementPresent(identifyAddCommentsTextFieldLocator));
 		assertTrue("Could not find the button for Attach A File on Assets Add", selenium.isElementPresent(identifyAddAttachAFileButtonLocator));
 		assertTrue("Could not find the button for Save on Assets Add", selenium.isElementPresent(identifyAddSaveButtonLocator));
@@ -192,7 +192,7 @@ public class IdentifyPageDriver {
 	 *  serial number, i.e. click generate then type the provided
 	 *  serial number over top of the generated serial number.
 	 *  
-	 *  Typically, if you want to create a asset with no inputs from
+	 *  Typically, if you want to create an asset with no inputs from
 	 *  the Asset, you should be able to pass in a:
 	 *  
 	 *   	setAddAssetForm(new Asset(), true);
@@ -204,7 +204,7 @@ public class IdentifyPageDriver {
 	 * @return
 	 * @throws InterruptedException 
 	 */
-	public Product setAddAssetForm(Product p, boolean generate) throws InterruptedException {
+	public Asset setAddAssetForm(Asset p, boolean generate) throws InterruptedException {
 		assertNotNull(p);
 		verifyIdentifyAddPage();
 		if(generate) {
@@ -235,8 +235,8 @@ public class IdentifyPageDriver {
 		if(p.getLocation() != null) {
 			selenium.type(identifyAddLocationTextFieldLocator, p.getLocation());
 		}
-		if(p.getProductStatus() != null) {
-			selenium.select(identifyAddProductStatusSelectListLocator, p.getProductStatus());
+		if(p.getAssetStatus() != null) {
+			selenium.select(identifyAddAssetStatusSelectListLocator, p.getAssetStatus());
 		}
 		if(p.getPurchaseOrder() != null) {
 			selenium.type(identifyAddPurchaseOrderTextFieldLocator, p.getPurchaseOrder());
@@ -244,11 +244,11 @@ public class IdentifyPageDriver {
 		if(p.getIdentified() != null) {
 			selenium.type(identifyAddIdentifiedTextFieldLocator, p.getIdentified());
 		}
-		if(p.getProductType() != null) {
-			selenium.select(identifyAddProductTypeTextFieldLocator, p.getProductType());
-			waitForProductTypeAttributesToChange(MiscDriver.DEFAULT_TIMEOUT);
+		if(p.getAssetType() != null) {
+			selenium.select(identifyAddAssetTypeTextFieldLocator, p.getAssetType());
+			waitForAssetTypeAttributesToChange(MiscDriver.DEFAULT_TIMEOUT);
 		}
-		setRequiredProductAttributes();
+		setRequiredAssetAttributes();
 		
 		if(p.getComments() != null) {
 			selenium.type(identifyAddCommentsTextFieldLocator, p.getComments());
@@ -261,19 +261,19 @@ public class IdentifyPageDriver {
 		return p;
 	}
 
-	private void waitForProductTypeAttributesToChange(String defaultTimeout) {
+	private void waitForAssetTypeAttributesToChange(String defaultTimeout) {
 		int maxSeconds = Integer.parseInt(defaultTimeout);
 		boolean updating = true;
 		int secondsLeft = maxSeconds;
 		do {
-			updating = selenium.isElementPresent(productTypeAttributesUpdatingLocator);
+			updating = selenium.isElementPresent(assetTypeAttributesUpdatingLocator);
 			misc.sleep(1000);
 			secondsLeft--;
 		} while(updating && secondsLeft > 0);
 		misc.sleep(3000);
 	}
 
-	public void setRequiredProductAttributes() {
+	public void setRequiredAssetAttributes() {
 		String source = selenium.getHtmlSource();
 		List<String> requiredSelectListsIDs = getRequiredSelectListIDs(source);
 		setRequiredSelectLists(requiredSelectListsIDs);
@@ -394,8 +394,8 @@ public class IdentifyPageDriver {
 		}
 	}
 
-	public Product getAddAssetForm() {
-		Product p = new Product();
+	public Asset getAddAssetForm() {
+		Asset p = new Asset();
 		p.setSerialNumber(selenium.getValue(identifyAddSerialNumberTextFieldLocator));
 		p.setRFIDNumber(selenium.getValue(identifyAddRFIDNumberTextFieldLocator));
 		p.setReferenceNumber(selenium.getValue(identifyAddReferenceNumberTextFieldLocator));
@@ -409,10 +409,10 @@ public class IdentifyPageDriver {
 		if (selenium.isElementPresent(identifyAddLocationTextFieldLocator)) {
 			p.setLocation(selenium.getValue(identifyAddLocationTextFieldLocator));
 		}
-		p.setProductStatus(selenium.getSelectedLabel(identifyAddProductStatusSelectListLocator));
+		p.setAssetStatus(selenium.getSelectedLabel(identifyAddAssetStatusSelectListLocator));
 		p.setPurchaseOrder(selenium.getValue(identifyAddPurchaseOrderTextFieldLocator));
 		p.setIdentified(selenium.getValue(identifyAddIdentifiedTextFieldLocator));
-		p.setProductType(selenium.getSelectedLabel(identifyAddProductTypeTextFieldLocator));
+		p.setAssetType(selenium.getSelectedLabel(identifyAddAssetTypeTextFieldLocator));
 		p.setComments(selenium.getValue(identifyAddCommentsTextFieldLocator));
 		return p;
 	}
@@ -475,8 +475,8 @@ public class IdentifyPageDriver {
 		List<LineItem> lineItems = new ArrayList<LineItem>();
 		int numRows = getNumberOfLineItemsInOrder();
 		int currentRow = 1;
-		String productCodeColumn = "1";
-		String productCodeLocator = "xpath=" + orderDetailsLineItemsTableXpath + "." + currentRow + "." + productCodeColumn;
+		String assetCodeColumn = "1";
+		String assetCodeLocator = "xpath=" + orderDetailsLineItemsTableXpath + "." + currentRow + "." + assetCodeColumn;
 		String descriptionColumn = "2";
 		String descriptionLocator = "xpath=" + orderDetailsLineItemsTableXpath + "." + currentRow + "." + descriptionColumn;
 		String quantityColumn = "3";
@@ -484,13 +484,13 @@ public class IdentifyPageDriver {
 		String identifiedColumn = "4";
 		String identifiedLocator = "xpath=" + orderDetailsLineItemsTableXpath + "." + currentRow + "." + identifiedColumn;
 		for(int i = 0; i < numRows; i++, currentRow++) {
-			String productCode = selenium.getTable(productCodeLocator);
+			String assetCode = selenium.getTable(assetCodeLocator);
 			String description = selenium.getTable(descriptionLocator);
 			String quantity = selenium.getTable(quantityLocator);
 			String identified = selenium.getTable(identifiedLocator);
-			LineItem li = new LineItem(productCode, description, quantity, identified);
+			LineItem li = new LineItem(assetCode, description, quantity, identified);
 			lineItems.add(li);
-			productCodeLocator = productCodeLocator.replaceFirst("\\." + currentRow, "." + (currentRow+1));
+			assetCodeLocator = assetCodeLocator.replaceFirst("\\." + currentRow, "." + (currentRow+1));
 			descriptionLocator = descriptionLocator.replaceFirst("\\." + currentRow, "." + (currentRow+1));
 			quantityLocator = quantityLocator.replaceFirst("\\." + currentRow, "." + (currentRow+1));
 			identifiedLocator = identifiedLocator.replaceFirst("\\." + currentRow, "." + (currentRow+1));
@@ -526,10 +526,10 @@ public class IdentifyPageDriver {
 		}
 	}
 
-	public List<String> getProductStatusesFromMultiAddForm() {
+	public List<String> getAssetStatusesFromMultiAddForm() {
 		List<String> results = new ArrayList<String>();
-		if(selenium.isElementPresent(multiAddProductStatusSelectLocator)) {
-			String s[] = selenium.getSelectOptions(multiAddProductStatusSelectLocator);
+		if(selenium.isElementPresent(multiAddAssetStatusSelectLocator)) {
+			String s[] = selenium.getSelectOptions(multiAddAssetStatusSelectLocator);
 			for(String status : s) {
 				if(!status.equals("")) {
 					results.add(status);
@@ -541,7 +541,7 @@ public class IdentifyPageDriver {
 		return results;
 	}
 
-	public void setMultiAddStep1Form(Product p) {
+	public void setMultiAddStep1Form(Asset p) {
 		assertMultiAddStep1Form();
 		if(p.getOwner() != null) {
 			misc.gotoChooseOwner();
@@ -551,8 +551,8 @@ public class IdentifyPageDriver {
 		if(p.getLocation() != null) {
 			selenium.type(multiAddLocationTextFieldLocator, p.getLocation());
 		}
-		if(p.getProductStatus() != null) {
-			selenium.select(multiAddProductStatusSelectLocator, p.getProductStatus());
+		if(p.getAssetStatus() != null) {
+			selenium.select(multiAddAssetStatusSelectLocator, p.getAssetStatus());
 		}
 		if(p.getPurchaseOrder() != null) {
 			selenium.type(multiAddPurchaseOrderTextFieldLocator, p.getPurchaseOrder());
@@ -560,11 +560,11 @@ public class IdentifyPageDriver {
 		if(p.getIdentified() != null) {
 			selenium.type(multiAddIdentifiedTextFieldLocator, p.getIdentified());
 		}
-		if(p.getProductType() != null) {
-			selenium.select(multiAddProductTypeSelectListLocator, p.getProductType());
-			waitForProductTypeAttributesToChange(MiscDriver.DEFAULT_TIMEOUT);
+		if(p.getAssetType() != null) {
+			selenium.select(multiAddAssetTypeSelectListLocator, p.getAssetType());
+			waitForAssetTypeAttributesToChange(MiscDriver.DEFAULT_TIMEOUT);
 		}
-		setRequiredProductAttributes();
+		setRequiredAssetAttributes();
 		if(p.getComments() != null) {
 			selenium.type(multiAddCommentTextFieldLocator, p.getComments());
 		}
@@ -573,10 +573,10 @@ public class IdentifyPageDriver {
 
 	private void assertMultiAddStep1Form() {
 		assertTrue(selenium.isElementPresent(multiAddLocationTextFieldLocator));
-		assertTrue(selenium.isElementPresent(multiAddProductStatusSelectLocator));
+		assertTrue(selenium.isElementPresent(multiAddAssetStatusSelectLocator));
 		assertTrue(selenium.isElementPresent(multiAddPurchaseOrderTextFieldLocator));
 		assertTrue(selenium.isElementPresent(multiAddIdentifiedTextFieldLocator));
-		assertTrue(selenium.isElementPresent(multiAddProductTypeSelectListLocator));
+		assertTrue(selenium.isElementPresent(multiAddAssetTypeSelectListLocator));
 		assertTrue(selenium.isElementPresent(multiAddCommentTextFieldLocator));
 		assertTrue(selenium.isElementPresent(multiAddAttachAFileButtonLocator));
 		assertTrue(selenium.isElementPresent(multiAddStep1ContinueButtonLocator));

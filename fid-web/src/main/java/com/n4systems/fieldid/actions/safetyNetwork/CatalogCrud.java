@@ -56,7 +56,7 @@ public class CatalogCrud extends SafetyNetwork {
 	@SkipValidation
 	public String doEdit() {
 		catalogService = new CatalogServiceImpl(persistenceManager,getTenant());
-		for (Long id : catalogService.getProductTypeIdsPublished()) {
+		for (Long id : catalogService.getAssetTypeIdsPublished()) {
 			publishedAssetTypeIds.put(id.toString(),true);
 		}
 		
@@ -87,7 +87,7 @@ public class CatalogCrud extends SafetyNetwork {
 			if (!publishAssetTypeIds.isEmpty()) {
 				publishedAssetTypes.addAll(persistenceManager.findAll(AssetType.class, publishAssetTypeIds, getTenant()));
 			}
-			catalogService.publishProductTypes(publishedAssetTypes);
+			catalogService.publishAssetTypes(publishedAssetTypes);
 			
 			
 			HashSet<InspectionType> publishedInspectionTypes = new HashSet<InspectionType>();

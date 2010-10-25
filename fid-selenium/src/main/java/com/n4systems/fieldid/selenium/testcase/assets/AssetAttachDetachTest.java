@@ -2,12 +2,12 @@ package com.n4systems.fieldid.selenium.testcase.assets;
 
 import static org.junit.Assert.*;
 
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.HomePage;
@@ -38,7 +38,7 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void attach_a_newly_created_subproduct() {
+	public void attach_a_newly_created_subasset() {
 		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
 
 		AssetPage masterAssetPage = page.search(masterSerial);
@@ -52,7 +52,7 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void detach_a_subproduct() {
+	public void detach_a_subasset() {
 		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
 		
 		AssetPage masterAssetPage = page.search(masterSerial);
@@ -63,11 +63,11 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 		masterAssetPage.clickRemoveSubComponent();
 		masterAssetPage.clickViewTab();
 		
-		assertFalse("Subcomponent wasn't successfully detached", selenium.isElementPresent("//h2[contains(., 'Sub-Products')]"));
+		assertFalse("Subcomponent wasn't successfully detached", selenium.isElementPresent("//h2[contains(., 'Sub-Assets')]"));
 	}
 
 	@Test
-	public void attach_an_existing_subproduct() {
+	public void attach_an_existing_subasset() {
 		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
 		identifyAssetWithSerialNumber(subSerial, "Bridge", "PO 3", "OMG PLS");
 
@@ -79,13 +79,13 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 		assertTrue("Sub component wasn't successfully found and attached", selenium.isElementPresent("//div[@class='subComponent']"));
 	}
 
-	private void identifyAssetWithSerialNumber(String serial, String productType, String purchaseOrder, String status) {
+	private void identifyAssetWithSerialNumber(String serial, String assetType, String purchaseOrder, String status) {
 		IdentifyPage identifyPage = page.clickIdentifyLink();
-		Product asset = new Product();
+		Asset asset = new Asset();
 		asset.setSerialNumber(serial);
-		asset.setProductType(productType);
+		asset.setAssetType(assetType);
 		asset.setPurchaseOrder(purchaseOrder);
-		asset.setProductStatus(status);
+		asset.setAssetStatus(status);
 
 		identifyPage.setAddAssetForm(asset, false);
 		identifyPage.saveNewAsset();

@@ -35,7 +35,7 @@ public class InspectPage extends FieldIDPage {
 	}
 
 	public void clickSave() {
-		selenium.click("//input[@id='subProductForm_label_save']");
+		selenium.click("//input[@id='subAssetForm_label_save']");
 		waitForPageToLoad();
 	}
 

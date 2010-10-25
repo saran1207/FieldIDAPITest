@@ -1,22 +1,18 @@
 var autoAttributeUrl = "";
 function updateAttributes(attribute) {
 	
-	
 	var theForm = Element.extend(attribute).up("form");
 	
-	
-	var selectedProductId;
+	var selectedAssetId;
 	var elements = theForm.elements
 	for( var i = 0; i < elements.length; i++ ) {
-		if( elements[i].id == "productType" ) {
-			selectedProductId = Element.extend( elements[i] ).getValue(); 
+		if( elements[i].id == "assetType" ) {
+			selectedAssetId = Element.extend( elements[i] ).getValue();
 		}
 	}
-	
 
-   	var url = autoAttributeUrl + "?uniqueID=" + selectedProductId;
+   	var url = autoAttributeUrl + "?uniqueID=" + selectedAssetId;
    		
-
 	// iterate through the rest of the dynamic info fields and add them to the url
 	var lookUpIndex = 0;
 	for (i=0; i < theForm.elements.length; i++) {		

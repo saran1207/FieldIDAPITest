@@ -10,7 +10,7 @@ ${action.setPageType('product', 'list')!}
 
 
 <script type="text/javascript">
-$$('.productLink').each(function(element) {
+$$('.assetLink').each(function(element) {
 		element.observe('click', goToAssetListener);
 	});
 function goToAssetListener(event) {

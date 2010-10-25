@@ -19,7 +19,7 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 	}
 
 	private boolean checkOnAssetListPage() {
-		return (selenium.isElementPresent("//table[@id='productTable']") ||
+		return (selenium.isElementPresent("//table[@id='assetTable']") ||
 				selenium.isElementPresent("//div[@class='emptyList']"));
 	}
 
@@ -29,7 +29,7 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 	}
 	
 	public boolean hasAssetList() {
-		return selenium.isElementPresent("//table[@id='productTable']");
+		return selenium.isElementPresent("//table[@id='assetTable']");
 	}
 	
 	public List<Asset> getAssetList() {

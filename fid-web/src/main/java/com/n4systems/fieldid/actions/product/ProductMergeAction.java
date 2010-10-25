@@ -47,7 +47,7 @@ public class ProductMergeAction extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		losingAsset = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+		losingAsset = productManager.findAssetAllFields(uniqueId, getSecurityFilter());
 	}
 	
 	private void testRequiredEntities() {
@@ -106,7 +106,7 @@ public class ProductMergeAction extends AbstractCrud {
 		if (productId == null) {
 			winningAsset = null;
 		} else if (winningAsset == null || !productId.equals(winningAsset.getId())){
-			winningAsset = productManager.findProductAllFields(productId, getSecurityFilter());
+			winningAsset = productManager.findAssetAllFields(productId, getSecurityFilter());
 		}
 	}
 

@@ -121,7 +121,7 @@ public class ProductTypeScheduleCrud extends AbstractCrud implements HasDuplicat
 		List<AssetTypeSchedule> schedulesToRemove = new ArrayList<AssetTypeSchedule>();
 
 		if (!schedule.getOwner().isExternal()) {
-			schedulesToRemove.addAll(getLoaderFactory().createInspectionFrequenciesListLoader().setInspectionTypeId(inspectionTypeId).setProductTypeId(assetTypeId).load(transaction));
+			schedulesToRemove.addAll(getLoaderFactory().createInspectionFrequenciesListLoader().setInspectionTypeId(inspectionTypeId).setAssetTypeId(assetTypeId).load(transaction));
 		} else {
 			schedulesToRemove.add(new QueryBuilder<AssetTypeSchedule>(AssetTypeSchedule.class, new OpenSecurityFilter()).addSimpleWhere("id", schedule.getId()).getSingleResult(
 					transaction.getEntityManager()));

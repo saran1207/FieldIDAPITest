@@ -10,14 +10,14 @@ public class SafetyNetworkCatalogPage extends FieldIDPage {
 		super(selenium);
 	}
 
-	public void checkProductTypeCheckBox(String labelText) {
+	public void checkAssetTypeCheckBox(String labelText) {
 		if (!selenium.isElementPresent("//label[text()='" + labelText + "']/..//input[@type='checkbox']")) {
 			fail("Could not find the label text '" + labelText + "' in the catalog page");
 		}
 		selenium.check("//label[text()='" + labelText + "']/..//input[@type='checkbox']");
 	}
 
-	public void unCheckProductTypeCheckBox(String labelText) {
+	public void unCheckAssetTypeCheckBox(String labelText) {
 		selenium.uncheck("//label[text()='" + labelText + "']/..//input[@type='checkbox']");
 	}
 

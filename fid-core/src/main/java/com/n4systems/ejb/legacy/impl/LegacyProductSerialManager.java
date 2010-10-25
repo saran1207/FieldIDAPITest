@@ -11,7 +11,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.product.AssetSaver;
+import com.n4systems.model.utils.FindSubAssets;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddProductHistoryBean;
@@ -26,22 +30,18 @@ import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.impl.ProductManagerImpl;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.InspectionSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.product.ProductSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -58,23 +58,14 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	
 	private Logger auditLogger = Logger.getLogger("AuditLog");
 
-	
-	
-	
-	
-	
 	public LegacyProductSerialManager(EntityManager em) {
-		super();
 		this.em = em;
 		persistenceManager = new PersistenceManagerImpl(em);
 		inspectionScheduleManager =  new InspectionScheduleManagerImpl(em);
 		productManager =  new ProductManagerImpl(em);
 	}
 
-	
-
-
-	public AssetStatus findProductStatus(Long uniqueID, Long tenantId) {
+	public AssetStatus findAssetStatus(Long uniqueID, Long tenantId) {
 		Query query = em.createQuery("FROM AssetStatus st WHERE st.uniqueID = :uniqueID AND st.tenant.id = :tenantId");
 		query.setParameter("uniqueID", uniqueID);
 		query.setParameter("tenantId", tenantId);
@@ -88,7 +79,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AssetStatus> findProductStatus(Long tenantId, Date beginDate) {
+	public List<AssetStatus> findAssetStatus(Long tenantId, Date beginDate) {
 		Query query = em.createQuery("from AssetStatus st where st.tenant.id = :tenantId and st.dateCreated >= :beginDate");
 		query.setParameter("tenantId", tenantId);
 		query.setParameter("beginDate", beginDate);
@@ -135,59 +126,59 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 
 	
 	
-	public Asset create(Asset product, User modifiedBy) throws SubProductUniquenessException {
-		runProductSavePreRecs(product, modifiedBy);
+	public Asset create(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
+		runAssetSavePreRecs(asset, modifiedBy);
 		
-		ProductSaver saver = new ProductSaver();
+		AssetSaver saver = new AssetSaver();
 		saver.setModifiedBy(modifiedBy);
 		
-		product = saver.update(em, product);
+		asset = saver.update(em, asset);
 
-		saveSubProducts(product);
+		saveSubAssets(asset);
 		// XXX not sure if this should be here.
-		inspectionScheduleManager.autoSchedule(product);
-		return new FindSubProducts(persistenceManager, product).fillInSubProducts();
+		inspectionScheduleManager.autoSchedule(asset);
+		return new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		
 	}
 
-	private void saveSubProducts(Asset product) {
-		for (SubProduct subProduct : product.getSubProducts()) {
-			persistenceManager.update(subProduct);
+	private void saveSubAssets(Asset asset) {
+		for (SubAsset subAsset : asset.getSubAssets()) {
+			persistenceManager.update(subAsset);
 		}
 		
 	}
 	
-	private void setCountsTowardsLimitFlagOnLinkedProducts(Asset product) {
-		if (product.isLinked()) {
+	private void setCountsTowardsLimitFlagOnLinkedAssets(Asset asset) {
+		if (asset.isLinked()) {
 			// if the linked asset's primary org has the unlimited feature, it will not count
-			PrimaryOrg linkedPrimary = product.getLinkedAsset().getOwner().getPrimaryOrg();
+			PrimaryOrg linkedPrimary = asset.getLinkedAsset().getOwner().getPrimaryOrg();
 			boolean hasUnlimitedFeature = linkedPrimary.hasExtendedFeature(ExtendedFeature.UnlimitedLinkedAssets);
-			product.setCountsTowardsLimit(!hasUnlimitedFeature);
+			asset.setCountsTowardsLimit(!hasUnlimitedFeature);
 		}
 	}
 
-	private void runProductSavePreRecs(Asset product, User modifiedBy) throws SubProductUniquenessException {
-		moveRfidFromProductSerials(product, modifiedBy);
-		setCountsTowardsLimitFlagOnLinkedProducts(product);
-		processSubProducts(product, modifiedBy);
+	private void runAssetSavePreRecs(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
+		moveRfidFromAssetSerials(asset, modifiedBy);
+		setCountsTowardsLimitFlagOnLinkedAssets(asset);
+		processSubAssets(asset, modifiedBy);
 	}
 
-	public Asset update(Asset product, User modifiedBy) throws SubProductUniquenessException {
-		product.touch();
-		runProductSavePreRecs(product, modifiedBy);
+	public Asset update(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
+		asset.touch();
+		runAssetSavePreRecs(asset, modifiedBy);
 		
 		/*
-		 * TODO: The saving of sub products should NOT be here!!!  The list of sub products is marked as @Transient,
+		 * TODO: The saving of sub assets should NOT be here!!!  The list of sub assets is marked as @Transient,
 		 * meaning that we do not want it persisted with the Asset, the following logic essentially overrides this.
 		 */
-		saveSubProducts(product);
+		saveSubAssets(asset);
 		
-		ProductSaver saver = new ProductSaver();
+		AssetSaver saver = new AssetSaver();
 		saver.setModifiedBy(modifiedBy);
-		product = saver.update(em, product);
+		asset = saver.update(em, asset);
 		
-		updateSchedulesOwnership(product);
-		return product;
+		updateSchedulesOwnership(asset);
+		return asset;
 	}
 
 	private void updateSchedulesOwnership(Asset asset) {
@@ -210,68 +201,68 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		
 	}
 
-	private void processSubProducts(Asset asset, User modifiedBy) throws SubProductUniquenessException {
+	private void processSubAssets(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 
-		checkForUniqueSubProducts(asset);
-		clearOldSubProducts(asset);
+		checkForUniqueSubAssets(asset);
+		clearOldSubAssets(asset);
 		
 		long weight = 0;
-		for (SubProduct subProduct : asset.getSubProducts()) {
+		for (SubAsset subAsset : asset.getSubAssets()) {
 
-			detachFromPreviousParent(asset, subProduct, modifiedBy);
+			detachFromPreviousParent(asset, subAsset, modifiedBy);
 
-			subProduct.getAsset().setOwner(asset.getOwner());
-			subProduct.getAsset().setAdvancedLocation(asset.getAdvancedLocation());
-			subProduct.getAsset().setAssignedUser(asset.getAssignedUser());
-			subProduct.getAsset().setAssetStatus(asset.getAssetStatus());
-			subProduct.setWeight(weight);
+			subAsset.getAsset().setOwner(asset.getOwner());
+			subAsset.getAsset().setAdvancedLocation(asset.getAdvancedLocation());
+			subAsset.getAsset().setAssignedUser(asset.getAssignedUser());
+			subAsset.getAsset().setAssetStatus(asset.getAssetStatus());
+			subAsset.setWeight(weight);
 
-			ProductSaver saver = new ProductSaver();
+			AssetSaver saver = new AssetSaver();
 			saver.setModifiedBy(modifiedBy);
-			saver.update(em, subProduct.getAsset());
+			saver.update(em, subAsset.getAsset());
 			
 			weight++;
 		}
 	}
 
-	private void clearOldSubProducts(Asset asset) {
+	private void clearOldSubAssets(Asset asset) {
 		if (!asset.isNew()) {
-			List<SubProduct> existingSubProducts = persistenceManager.findAll(new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("masterAsset", asset));
-			for (SubProduct subProduct : existingSubProducts) {
-				if (asset.getSubProducts().contains(subProduct)) {
-					SubProduct subProductToUpdate = asset.getSubProducts().get(asset.getSubProducts().indexOf(subProduct));
-					subProductToUpdate.setCreated(subProduct.getCreated());
-					subProductToUpdate.setId(subProduct.getId());
+			List<SubAsset> existingSubAssets = persistenceManager.findAll(new QueryBuilder<SubAsset>(SubAsset.class, new OpenSecurityFilter()).addSimpleWhere("masterAsset", asset));
+			for (SubAsset subAsset : existingSubAssets) {
+				if (asset.getSubAssets().contains(subAsset)) {
+					SubAsset subAssetToUpdate = asset.getSubAssets().get(asset.getSubAssets().indexOf(subAsset));
+					subAssetToUpdate.setCreated(subAsset.getCreated());
+					subAssetToUpdate.setId(subAsset.getId());
 				} else {
-					persistenceManager.delete(subProduct);
+					persistenceManager.delete(subAsset);
 				}
 			}
 		}
 	}
 
-	private void detachFromPreviousParent(Asset asset, SubProduct subProduct, User modifiedBy) {
-		Asset parentProduct = productManager.parentProduct(subProduct.getAsset());
+	private void detachFromPreviousParent(Asset asset, SubAsset subAsset, User modifiedBy) {
+		Asset parentAsset = productManager.parentAsset(subAsset.getAsset());
 
-		if (parentProduct != null && !parentProduct.equals(asset)) {
+		if (parentAsset != null && !parentAsset.equals(asset)) {
 			try {
-				QueryBuilder<SubProduct> query = new QueryBuilder<SubProduct>(SubProduct.class, new OpenSecurityFilter()).addSimpleWhere("asset", subProduct.getAsset());
-				SubProduct subProductToRemove = persistenceManager.find(query);
-				parentProduct.getSubProducts().remove(subProductToRemove);
-				persistenceManager.delete(subProductToRemove);
-				update(parentProduct, modifiedBy);
-			} catch (SubProductUniquenessException e) {
-				logger.error("parnet asset is in an invalid state in the database", e);
-				throw new RuntimeException("parnet asset is in an invalid state in the database", e);
+				QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class, new OpenSecurityFilter()).addSimpleWhere("asset", subAsset.getAsset());
+				SubAsset subAssetToRemove = persistenceManager.find(query);
+				parentAsset.getSubAssets().remove(subAssetToRemove);
+				persistenceManager.delete(subAssetToRemove);
+				update(parentAsset, modifiedBy);
+			} catch (SubAssetUniquenessException e) {
+				logger.error("parent asset is in an invalid state in the database", e);
+				throw new RuntimeException("parent asset is in an invalid state in the database", e);
 			}
 		}
 	}
 
 	
 
-	public void checkForUniqueSubProducts(Asset asset) throws SubProductUniquenessException {
-		Set<SubProduct> uniqueSubProducts = new HashSet<SubProduct>(asset.getSubProducts());
-		if (asset.getSubProducts().size() != uniqueSubProducts.size()) {
-			throw new SubProductUniquenessException();
+	public void checkForUniqueSubAssets(Asset asset) throws SubAssetUniquenessException {
+		Set<SubAsset> uniqueSubAssets = new HashSet<SubAsset>(asset.getSubAssets());
+		if (asset.getSubAssets().size() != uniqueSubAssets.size()) {
+			throw new SubAssetUniquenessException();
 		}
 	}
 
@@ -279,7 +270,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	 * creates the asset serial and updates the given users add
 	 * productHistory.
 	 */
-	public Asset createWithHistory(Asset asset, User modifiedBy) throws SubProductUniquenessException {
+	public Asset createWithHistory(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		asset = create(asset, modifiedBy);
 
 		AddProductHistoryBean addProductHistory = getAddProductHistory(modifiedBy.getId());
@@ -302,12 +293,12 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return asset;
 	}
 
-	private void moveRfidFromProductSerials(Asset asset, User modifiedBy) {
-		ProductSaver saver = new ProductSaver();
+	private void moveRfidFromAssetSerials(Asset asset, User modifiedBy) {
+		AssetSaver saver = new AssetSaver();
 		saver.setModifiedBy(modifiedBy);
 		
 		if (rfidExists(asset.getRfidNumber(), asset.getTenant().getId())) {
-			Collection<Asset> duplicateRfidAssets = productManager.findProductsByRfidNumber(asset.getRfidNumber(), new TenantOnlySecurityFilter(asset.getTenant().getId()));
+			Collection<Asset> duplicateRfidAssets = productManager.findAssetsByRfidNumber(asset.getRfidNumber(), new TenantOnlySecurityFilter(asset.getTenant().getId()));
 			for (Asset duplicateRfidAsset : duplicateRfidAssets) {
 				if (!duplicateRfidAsset.getId().equals(asset.getId())) {
 					duplicateRfidAsset.setRfidNumber(null);
@@ -340,7 +331,7 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<AssetSerialExtension> getProductSerialExtensions(Long tenantId) {
+	public Collection<AssetSerialExtension> getAssetSerialExtensions(Long tenantId) {
 		Query query = em.createQuery("from "+AssetSerialExtension.class.getName()+" ase where ase.tenantId = :tenantId");
 		query.setParameter("tenantId", tenantId);
 
@@ -419,12 +410,12 @@ public class LegacyProductSerialManager implements LegacyProductSerial {
 		return inspectionQuery;
 	}
 
-	public Asset createProductWithServiceTransaction(String transactionGUID, Asset asset, User modifiedBy) throws TransactionAlreadyProcessedException, SubProductUniquenessException {
+	public Asset createAssetWithServiceTransaction(String transactionGUID, Asset asset, User modifiedBy) throws TransactionAlreadyProcessedException, SubAssetUniquenessException {
 
 		asset = create(asset, modifiedBy);
 
 		TransactionSupervisor transaction = new TransactionSupervisor(persistenceManager);
-		transaction.completeProductTransaction(transactionGUID, asset.getTenant());
+		transaction.completeAssetTransaction(transactionGUID, asset.getTenant());
 
 		return asset;
 	}

@@ -35,7 +35,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	public String doDownloadLinked() {
 
-		Asset ownedProduct = productManager.findProduct(uniqueID, getSecurityFilter());
+		Asset ownedProduct = productManager.findAsset(uniqueID, getSecurityFilter());
 
 		if (ownedProduct == null) {
 			addActionError(getText("error.noproduct"));
@@ -69,7 +69,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	@Override
 	public String doDownload() {
-		asset = productManager.findProductAllFields(uniqueID, getSecurityFilter());
+		asset = productManager.findAssetAllFields(uniqueID, getSecurityFilter());
 
 		if (asset == null) {
 			addActionError(getText("error.noproduct"));

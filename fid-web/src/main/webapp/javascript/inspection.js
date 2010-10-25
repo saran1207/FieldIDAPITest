@@ -380,7 +380,7 @@ var addScheduleUrl;
 var autoSuggestUrl;
 var dateErrorText;
 var inspectionTypeId;
-var productId;
+var assetId;
 
 function addSchedule() {
 	var types = $('nextInspectionTypeSelection');
@@ -416,7 +416,7 @@ function autoSuggest() {
 	var params = new Object();
 	params.inspectionTypeId = inspectionTypeId;
 	params.datePerformed = $('datePerformed').getValue();
-	params.product = productId;
+	params.asset = assetId;
 	params.index = index;
 	
 	getResponse(autoSuggestUrl, "post", params);

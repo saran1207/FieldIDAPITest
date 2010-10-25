@@ -22,7 +22,7 @@ public class Order {
 		s.append("\n      Division: " + division);
 		s.append(String.format("\n\n%1$-12s  %2$-100s  %3$-8s  %4$-10s", "Asset Code", "Description", "Quantity", "Identified"));
 		for(LineItem lineItem : lineItems) {
-			String tmp = String.format("\n%1$-12s  %2$-100s  %3$-8s  %4$-10s", lineItem.getProductCode(), lineItem.getDescription(), lineItem.getQuantity(), lineItem.getIdentifiedProducts());
+			String tmp = String.format("\n%1$-12s  %2$-100s  %3$-8s  %4$-10s", lineItem.getAssetCode(), lineItem.getDescription(), lineItem.getQuantity(), lineItem.getIdentifiedAssets());
 			s.append(tmp);
 		}
 		return s.toString();

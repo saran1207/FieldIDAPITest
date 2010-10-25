@@ -39,7 +39,7 @@ public class CatalogBuilder extends BaseBuilder<Catalog> {
 	public Catalog createObject() {
 		Catalog catalog = new Catalog();
 		catalog.setId(id);
-		catalog.setPublishedProductTypes(publishedAssetTypes);
+		catalog.setPublishedAssetTypes(publishedAssetTypes);
 		catalog.setTenant(tenant);
 		return catalog;
 	}

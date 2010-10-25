@@ -11,7 +11,7 @@
 	<#list assets as asset>
 		<tr>
 			<td>
-				<button class="selectProduct" name="select_${asset.id}" assetId="${asset.id}"
+				<button class="selectAsset" name="select_${asset.id}" assetId="${asset.id}"
 					serialNumber="${asset.serialNumber?default('')?html}"
 					rfidNumber="${asset.rfidNumber?default('')?html}"
 					owner="${asset.owner.internalOrg.name?html}"
@@ -30,4 +30,4 @@
 </#assign>
 
 $('snSmartSearchResults').update('${html?js_string}');
-$$(".selectProduct").each(function (element) { element.observe("click", updateLinkedProductFromMultipleResults); } );
+$$(".selectAsset").each(function (element) { element.observe("click", updateLinkedAssetFromMultipleResults); } );

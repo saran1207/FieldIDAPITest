@@ -79,14 +79,14 @@ public class SafetyNetworkProduct extends TraceabilityCrud{
 	}
 
     @Override
-	public List<ProductAttachment> getProductAttachments() {
-		if (productAttachments == null) {
-			productAttachments = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader()
+	public List<ProductAttachment> getAssetAttachments() {
+		if (assetAttachments == null) {
+			assetAttachments = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader()
                     .setProductId(asset.getId())
                     .setNetworkId(asset.getNetworkId())
                     .load();
 		}
-		return productAttachments;
+		return assetAttachments;
 	}
 
     public List<InspectionSchedule> getInspectionSchedules() {

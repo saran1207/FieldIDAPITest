@@ -16,7 +16,7 @@
 				<span class="weak"><@s.text name="instruction.registering_this_asset_will_allow_you_to_do"/></span>
 			</div>
 			<div id="registerThisAction">
-				<@s.url id="registerUrl" action="productAdd" linkedAsset="${contextProductId}"/>
+				<@s.url id="registerUrl" action="productAdd" linkedAsset="${contextAssetId}"/>
 				<@s.submit key="label.copy_and_register_now" id="copyAsset" onclick="return redirect('${registerUrl}');" theme="simple"/>
 			</div>
 		</#if>
@@ -107,7 +107,7 @@
 			
 			<#if (linkedAsset.type.cautions?exists && linkedAsset.type.cautions?length gt 0) ||
 				(linkedAsset.type.imageName?exists) || (!linkedAsset.type.attachments.isEmpty()) ||
-				(!productAttachments.isEmpty())>
+				(!assetAttachments.isEmpty())>
 				<div class="viewSection smallViewSection" >
 					<h2><@s.text name="label.additionalinformation"/></h2> 
 					<#if linkedAsset.type.cautions?exists && linkedAsset.type.cautions?length gt 0 >
@@ -117,7 +117,7 @@
 						</p>
 					</#if>
 					
-					<#assign attachments=action.getLinkedProductAttachments(linkedAsset.ID) />
+					<#assign attachments=action.getLinkedAssetAttachments(linkedAsset.ID) />
 					<#if !attachments.isEmpty() >
 						<#assign downloadAction="downloadProductAttachedFileSafetyNetwork"/>
 						<#assign attachmentID=linkedAsset.networkId/>

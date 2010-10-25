@@ -1,45 +1,44 @@
-function removeProductEvent( event ) {
-	removeSubProduct( Event.element(event).productId, event );
+function removeAssetEvent( event ) {
+	removeSubAsset( Event.element(event).assetId, event );
 } 
 var removeString = "";
-function includeSubProduct( event ) {
+function includeSubAsset( event ) {
 	if( event ) {
 		event.stop();
 	}
-	var subProduct = $('addSubProduct');
-	var productName = subProduct.options[subProduct.selectedIndex].text;
-	var item = new Element( 'li', { id: "subProduct_" + subProduct.getValue() } );
-	var productNameSpan = new Element( 'span', {id: "productName_" + subProduct.getValue() } ).update(productName);
+	var subAsset = $('addSubAsset');
+	var assetName = subAsset.options[subAsset.selectedIndex].text;
+	var item = new Element( 'li', { id: "subAsset_" + subAsset.getValue() } );
+	var assetNameSpan = new Element( 'span', {id: "assetName_" + subAsset.getValue() } ).update(assetName);
 	
-	item.insert( new Element( 'input', { type: "hidden", name: "subProductIds["+ numberOfSubTypes +"]", value: subProduct.getValue() } ) );
-	subProductId= subProduct.getValue();
+	item.insert( new Element( 'input', { type: "hidden", name: "subAssetIds["+ numberOfSubTypes +"]", value: subAsset.getValue() } ) );
+	var subAssetId = subAsset.getValue();
 	numberOfSubTypes++;
-	var productLink = new Element( 'a', { id: "removeProductLink_" + subProduct.getValue(), href: "removeSubProduct" , assetTypeId: subProductId } ).update(removeString) ;
-	productLink.observe('click', removeProductEvent );
-	productLink.productId = subProduct.getValue();
-	item.insert( productNameSpan );
-	item.insert( productLink );
-	$( 'subProducts' ).insert( item );
-	subProduct.remove( subProduct.selectedIndex );
+	var assetLink = new Element( 'a', { id: "removeAssetLink_" + subAsset.getValue(), href: "removeSubProduct" , assetTypeId: subAssetId } ).update(removeString) ;
+	assetLink.observe('click', removeAssetEvent );
+	assetLink.assetId = subAsset.getValue();
+	item.insert( assetNameSpan );
+	item.insert( assetLink );
+	$( 'subAssets' ).insert( item );
+	subAsset.remove( subAsset.selectedIndex );
 	
 }
 
 var numberOfSubTypes = 0;
-function removeSubProduct( subProductId, event ) {
+function removeSubAsset( subAssetId, event ) {
 	if( event ) {
 		event.stop();
 		var element = Event.element( event );
-		subProductId = element.readAttribute( "assetTypeId" );
+		subAssetId = element.readAttribute( "assetTypeId" );
 	}
-	var subProduct = $( 'subProduct_' + subProductId );
+	var subAsset = $( 'subAsset_' + subAssetId );
 	
-	var subProductList = $( 'addSubProduct' );
+	var subAssetList = $( 'addSubAsset' );
 	var newOption = new Element( 'option' );
 
-	newOption.text= $( 'productName_' + subProductId ).innerHTML;
-	newOption.value= subProductId;
-	subProductList.options.add( newOption );
-	sortList( subProductList.id );
-	subProduct.remove();
-	
+	newOption.text= $( 'assetName_' + subAssetId ).innerHTML;
+	newOption.value= subAssetId;
+	subAssetList.options.add( newOption );
+	sortList( subAssetList.id );
+	subAsset.remove();
 }

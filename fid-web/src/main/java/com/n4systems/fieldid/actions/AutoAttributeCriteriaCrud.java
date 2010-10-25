@@ -321,7 +321,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	}
 
 	/**
-	 * a assetType requires at least 2 fields to have a template.
+	 * an assetType requires at least 2 fields to have a template.
 	 * 
 	 */
 	private boolean assetHasEnoughFields() {

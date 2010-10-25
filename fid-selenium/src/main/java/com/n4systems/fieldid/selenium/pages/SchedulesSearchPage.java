@@ -27,9 +27,9 @@ public class SchedulesSearchPage extends EntitySearchPage<SchedulesSearchResults
 		setCheckBoxValue("//input[@id='chk_inspection_schedule_serialnumber']", displayColumns.isSerialNumber());
 		setCheckBoxValue("//input[@id='chk_inspection_schedule_rfidnumber']", displayColumns.isRfidNumber());
 		setCheckBoxValue("//input[@id='chk_inspection_schedule_referencenumber']", displayColumns.isReferenceNumber());
-		setCheckBoxValue("//input[@id='chk_inspection_schedule_producttypegroup']", displayColumns.isProductTypeGroup());
-		setCheckBoxValue("//input[@id='chk_inspection_schedule_producttype']", displayColumns.isProductType());
-		setCheckBoxValue("//input[@id='chk_inspection_schedule_productstatus']", displayColumns.isProductStatus());
+		setCheckBoxValue("//input[@id='chk_inspection_schedule_assettypegroup']", displayColumns.isAssetTypeGroup());
+		setCheckBoxValue("//input[@id='chk_inspection_schedule_assettype']", displayColumns.isAssetType());
+		setCheckBoxValue("//input[@id='chk_inspection_schedule_assetstatus']", displayColumns.isAssetStatus());
 		setCheckBoxValue("//input[@id='chk_inspection_schedule_assignedto']", displayColumns.isAssignedTo());
 		setCheckBoxValue("//input[@id='chk_inspection_schedule_identified']", displayColumns.isDateIdentified());
 		setCheckBoxValue("//input[@id='chk_inspection_schedule_identifiedby']", displayColumns.isIdentifiedBy());

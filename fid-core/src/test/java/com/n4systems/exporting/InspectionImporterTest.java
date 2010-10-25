@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.n4systems.exceptions.UnknownSubAsset;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
@@ -24,7 +25,6 @@ import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.UnknownSubProduct;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.handlers.creator.NullObjectDefaultedInspectionPersistenceFactory;
@@ -52,7 +52,7 @@ public class InspectionImporterTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void test_import() throws ImportException, IOException, ParseException, MarshalingException, ConversionException, FileAttachmentException, ProcessingProofTestException, UnknownSubProduct {
+	public void test_import() throws ImportException, IOException, ParseException, MarshalingException, ConversionException, FileAttachmentException, ProcessingProofTestException, UnknownSubAsset {
 		Transaction transaction = new DummyTransaction();
 		
 		Long modifiedBy = 12345L;

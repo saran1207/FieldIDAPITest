@@ -3,8 +3,12 @@ package com.n4systems.fieldid.actions.inspection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.exceptions.UnknownSubAsset;
+import com.n4systems.fieldid.actions.helpers.SubAssetHelper;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.utils.FindSubAssets;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -15,11 +19,9 @@ import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.UnknownSubProduct;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InspectionScheduleSuggestion;
 import com.n4systems.fieldid.actions.helpers.MasterInspection;
-import com.n4systems.fieldid.actions.helpers.SubProductHelper;
 import com.n4systems.fieldid.actions.inspection.viewmodel.WebInspectionScheduleToInspectionScheduleBundleConverter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.CopyInspectionFactory;
@@ -31,7 +33,6 @@ import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
@@ -49,7 +50,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 	private Inspection inspection;
 	private InspectionGroup inspectionGroup;
 	private Asset asset;
-	private List<SubProductHelper> subProducts;
+	private List<SubAssetHelper> subAssets;
 
 	private MasterInspection masterInspection;
 	private String token;
@@ -209,7 +210,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 		try {
 			if (uniqueID == null) {
 				if (cleanToInspectionsToMatchConfiguration) {
-					masterInspection.cleanSubInspectionsForNonValidSubProducts(asset);
+					masterInspection.cleanSubInspectionsForNonValidSubAssets(asset);
 				}
 				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
 				
@@ -255,7 +256,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 			addActionError(getText("error.processingprooftest"));
 
 			return INPUT;
-		} catch (UnknownSubProduct e) {
+		} catch (UnknownSubAsset e) {
 			cleanToInspectionsToMatchConfiguration = true;
 			addActionError(getText("error.productconfigurationchanged"));
 			return INPUT;
@@ -322,10 +323,10 @@ public class MasterInspectionCrud extends AbstractCrud {
 
 		} else if (asset == null || !asset.getId().equals(assetId)) {
 			asset = persistenceManager.find(Asset.class, assetId, getSecurityFilter(), "type.subTypes");
-			asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
+			asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 			if (asset != null) {
-				for (com.n4systems.model.SubProduct subProduct : asset.getSubProducts()) {
-					persistenceManager.reattchAndFetch(subProduct.getAsset().getType(), "inspectionTypes");
+				for (SubAsset subAsset : asset.getSubAssets()) {
+					persistenceManager.reattchAndFetch(subAsset.getAsset().getType(), "inspectionTypes");
 				}
 			}
 
@@ -435,15 +436,15 @@ public class MasterInspectionCrud extends AbstractCrud {
 		return asset;
 	}
 
-	public void setSubProducts(List<SubProductHelper> subProducts) {
-		this.subProducts = subProducts;
+	public void setSubAssets(List<SubAssetHelper> subAssets) {
+		this.subAssets = subAssets;
 	}
 
-	public List<SubProductHelper> getSubProducts() {
-		if (subProducts == null) {
-			subProducts = new ArrayList<SubProductHelper>();
+	public List<SubAssetHelper> getSubAssets() {
+		if (subAssets == null) {
+			subAssets = new ArrayList<SubAssetHelper>();
 		}
-		return subProducts;
+		return subAssets;
 	}
 
 	public List<AssetType> getSubTypes() {

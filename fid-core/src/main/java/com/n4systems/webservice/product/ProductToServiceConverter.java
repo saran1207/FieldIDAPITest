@@ -35,7 +35,7 @@ public class ProductToServiceConverter implements ModelToServiceConverter<Asset,
 	}
 	
 	private List<InspectionServiceDTO> convertLastInspections(Long productId) {
-		List<Inspection> inspections = lastInspectionLoader.setProductId(productId).load();
+		List<Inspection> inspections = lastInspectionLoader.setAssetId(productId).load();
 		
 		List<InspectionServiceDTO> dtos = new ArrayList<InspectionServiceDTO>();
 		for (Inspection insp: inspections) {

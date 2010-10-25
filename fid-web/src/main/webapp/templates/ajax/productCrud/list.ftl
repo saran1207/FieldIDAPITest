@@ -8,4 +8,4 @@ $$('input[name="search"]')[1].clear();
 $$('input[name="search"]')[1].focus();
 
 updateResults('${html?js_string}');
-$$('#searchResults .productLink').each(function(element) { element.observe('click', selectAsset) });
+$$('#searchResults .assetLink').each(function(element) { element.observe('click', selectAsset) });

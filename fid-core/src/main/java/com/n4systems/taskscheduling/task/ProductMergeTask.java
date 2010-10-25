@@ -45,7 +45,7 @@ public class ProductMergeTask implements Runnable {
 	
 	private void executeMerge() {
 		try {
-			productManager.mergeProducts(winningAsset, losingAsset, user);
+			productManager.mergeAssets(winningAsset, losingAsset, user);
 		} catch (Exception e) {
 			logger.error("could not merge products", e);
 			error = true;

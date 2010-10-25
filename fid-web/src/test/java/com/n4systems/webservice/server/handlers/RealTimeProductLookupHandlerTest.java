@@ -12,8 +12,8 @@ import com.n4systems.model.Asset;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.SubProduct;
-import com.n4systems.model.product.ProductSubProductsLoader;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.product.AssetSubAssetsLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.test.helpers.DateHelper;
@@ -43,10 +43,10 @@ public class RealTimeProductLookupHandlerTest {
 		
 		
 		listWithSingleProductWithOneSubAsset = new FluentArrayList<Asset> (
-			anAsset().withModifiedDate(moreRecentDate).withOneSubProduct().build());
+			anAsset().withModifiedDate(moreRecentDate).withOneSubAsset().build());
 		
 		listOfMultipleProductsWithVariedSubAssets = new FluentArrayList<Asset>(
-				anAsset().withTwoSubProducts().build(), anAsset().withOneSubProduct().build());
+				anAsset().withTwoSubAssets().build(), anAsset().withOneSubAsset().build());
 	}
 
 	@Test
@@ -118,8 +118,8 @@ public class RealTimeProductLookupHandlerTest {
 	private List<Asset> getExpectedProductsReturned(List<Asset> assets) {
 		List<Asset> expectedProductsReturned = new ArrayList<Asset>();
 		for (Asset asset : assets) {
-			for (SubProduct subProduct : asset.getSubProducts()) {
-				expectedProductsReturned.add(subProduct.getAsset());
+			for (SubAsset subAsset : asset.getSubAssets()) {
+				expectedProductsReturned.add(subAsset.getAsset());
 			}
 			
 			expectedProductsReturned.add(asset);
@@ -129,12 +129,12 @@ public class RealTimeProductLookupHandlerTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private ProductSubProductsLoader getSubProductLoaderMock(List<Asset> productsToReturn) {
-		ProductSubProductsLoader subProductsLoaderMock = createMock(ProductSubProductsLoader.class);
-		expect(subProductsLoaderMock.setProducts((List<Asset>)anyObject())).andReturn(subProductsLoaderMock);
-		expect(subProductsLoaderMock.load()).andReturn(productsToReturn);
-		replay(subProductsLoaderMock);
-		return subProductsLoaderMock;
+	private AssetSubAssetsLoader getSubProductLoaderMock(List<Asset> productsToReturn) {
+		AssetSubAssetsLoader subAssetsLoaderMock = createMock(AssetSubAssetsLoader.class);
+		expect(subAssetsLoaderMock.setAssets((List<Asset>)anyObject())).andReturn(subAssetsLoaderMock);
+		expect(subAssetsLoaderMock.load()).andReturn(productsToReturn);
+		replay(subAssetsLoaderMock);
+		return subAssetsLoaderMock;
 	}
 	
 	private SmartSearchLoader getSmartSearchLoaderThatReturnsMultipleProductWithVariedSubProducts() {

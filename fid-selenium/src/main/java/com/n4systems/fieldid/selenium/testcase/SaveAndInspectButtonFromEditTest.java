@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.assets.page.AssetPage;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.inspect.page.InspectPage;
 import com.n4systems.fieldid.selenium.login.page.Login;
@@ -37,7 +37,7 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 
         startAsCompany(companyID);
         login.signInWithSystemAccount();
-        Product p = gotoEditAnAsset();
+        Asset p = gotoEditAnAsset();
         verifyEditAnAssetHasASaveAndInspectButtonWhichWorks(p.getSerialNumber());
 	}
 	
@@ -46,12 +46,12 @@ public class SaveAndInspectButtonFromEditTest extends FieldIDTestCase {
 		inspect.verifyInspectPage(serialNumber);
 	}
 
-	private Product gotoEditAnAsset() throws InterruptedException {
+	private Asset gotoEditAnAsset() throws InterruptedException {
 		misc.gotoIdentify();
 		if(!identify.isAdd()) {
 			identify.gotoAdd();
 		}
-		Product p = new Product();
+		Asset p = new Asset();
 		p = identify.setAddAssetForm(p, true);
 		identify.saveNewAsset();
 		String serialNumber = p.getSerialNumber();

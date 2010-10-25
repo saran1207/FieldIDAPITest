@@ -18,7 +18,7 @@ import com.n4systems.ejb.impl.CreateInspectionsMethodObject;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.exceptions.UnknownSubProduct;
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.persistence.Transaction;
@@ -31,13 +31,13 @@ public class WebServiceInspectionsCreatorTest {
 	private final class CreateInspectionsMethodObjectSabatour implements CreateInspectionsMethodObject {
 		@Override
 		public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
-				FileAttachmentException, UnknownSubProduct {
+				FileAttachmentException, UnknownSubAsset {
 					return createInspections(transactionGUID, inspections);
 				}
 
 		@Override
 		public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
-				FileAttachmentException, UnknownSubProduct {
+				FileAttachmentException, UnknownSubAsset {
 			throw new TransactionAlreadyProcessedException();
 		}
 	}

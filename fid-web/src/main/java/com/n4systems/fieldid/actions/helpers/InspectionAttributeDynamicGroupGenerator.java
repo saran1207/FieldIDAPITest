@@ -31,7 +31,7 @@ public class InspectionAttributeDynamicGroupGenerator {
 			
 			int order = 1024;
 			if (inspectionTypeId != null) {
-				// when a asset type has been selected, we will use all the infofields from the asset type
+				// when an asset type has been selected, we will use all the infofields from the asset type
 				InspectionType inspectionType = persistenceManager.find(InspectionType.class, inspectionTypeId, filter, "infoFieldNames");
 				
 				// construct and add our field mappings

@@ -1,6 +1,6 @@
 <#assign namespace="/aHtml"/>
-<#assign productSearchAction="products"/>
-<#assign productFormId="subProductSearchForm">
+<#assign assetSearchAction="products"/>
+<#assign assetFormId="subAssetSearchForm">
 <#assign useOverRides=true/>
 <#include "/templates/html/inspectionGroup/_searchForm.ftl"/>
 

@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.UnknownSubProduct;
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.SubInspection;
 
 public interface InspectionSaver {
 
-	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct;
+	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;
 
 	/**
 	 * This must be called AFTER the inspection and subinspection have been persisted

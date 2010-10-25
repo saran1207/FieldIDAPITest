@@ -192,14 +192,14 @@ ${action.setPageType('product', 'show')!}
 		</div>
 	</#if>
 	
-	<#if asset.subProducts?exists && !asset.subProducts.isEmpty() >
-		<div id="productComponents" class="viewSection smallViewSection" >
+	<#if asset.subAssets?exists && !asset.subAssets.isEmpty() >
+		<div id="assetComponents" class="viewSection smallViewSection" >
 			<h2><@s.text name="label.subproducts"/></h2>
-			<#list asset.subProducts as subProduct >
+			<#list asset.subAssets as subAsset >
 				<p>
-					<label><a href="<@s.url action="product"  uniqueID="${subProduct.asset.id}"/>">${subProduct.asset.type.name!}</a></label>
+					<label><a href="<@s.url action="product"  uniqueID="${subAsset.asset.id}"/>">${subAsset.asset.type.name!}</a></label>
 					<span>
-						${subProduct.label!}
+						${subAsset.label!}
 					</span>  
 				</p>
 			
@@ -207,7 +207,7 @@ ${action.setPageType('product', 'show')!}
 		</div>
 	
 	<#elseif parentAsset?exists>
-		<div id="productComponents" class="viewSection smallViewSection" >
+		<div id="assetComponents" class="viewSection smallViewSection" >
 			<h2><@s.text name="label.partof"/></h2>
 			<p>
 				<label>${parentAsset.type.name!}</label> 
@@ -260,7 +260,7 @@ ${action.setPageType('product', 'show')!}
 	
 	<#if (asset.type.cautions?exists && asset.type.cautions?length gt 0) ||
 			(asset.type.imageName?exists) || (!asset.type.attachments.isEmpty()) ||
-			(!productAttachments.isEmpty())>
+			(!assetAttachments.isEmpty())>
 		<div class="viewSection smallViewSection" >
 			<h2><@s.text name="label.additionalinformation"/></h2> 
 			<#if asset.type.cautions?exists && asset.type.cautions?length gt 0 >
@@ -270,9 +270,9 @@ ${action.setPageType('product', 'show')!}
 				</p>
 			</#if>
 			
-			<#if !productAttachments.isEmpty() >
+			<#if !assetAttachments.isEmpty() >
 				<#assign downloadAction="downloadProductAttachedFile"/>
-				<#assign attachments=productAttachments />
+				<#assign attachments=assetAttachments />
 				<#assign attachmentID=asset.uniqueID/>
 				<#include "/templates/html/common/_attachedFilesList.ftl"/>
 			</#if>

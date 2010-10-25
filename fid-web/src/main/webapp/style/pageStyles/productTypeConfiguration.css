@@ -13,38 +13,38 @@ h3 .instructionTitle {
 	color: #333399;
 }
 
-#subProducts, #addSubProductContainer {
+#subAssets, #addSubAssetContainer {
 	padding-left: 10px;
 	width:340px;
 	
 }
 
-#addSubProductContainer, #subProducts li {
+#addSubAssetContainer, #subAssets li {
 	overflow: auto;
 	margin: 10px 0px;
 }
 
-#subProducts li {
+#subAssets li {
 	list-style-image: url(/fieldid/images/listItem.gif);
 	list-style-position: inside;
 	margin-left: 5px;
 }
 
 
-#subProducts li span, #addSubProductContainer span {
+#subAssets li span, #addSubAssetContainer span {
 	display:block;
 	width: 250px;
 	float: left;
 	
 }
-#subProducts li span {
+#subAssets li span {
 	padding-left: 15px;
 }
 
-#addSubProductContainer span {
+#addSubAssetContainer span {
 	float:left;
 }
-#subProducts li a, #addSubProductContainer button{
+#subAssets li a, #addSubAssetContainer button{
 	display:block;
 	float: right;
 }

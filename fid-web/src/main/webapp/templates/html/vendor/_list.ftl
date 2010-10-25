@@ -3,7 +3,7 @@
 	<#include '../common/_pagination.ftl' />
     <#include "../common/_lightView.ftl" />
     <#include '_lightViewBoxOptions.ftl'>
-	<table class="list" id="productTable">
+	<table class="list" id="assetTable">
 		<tr>
 			<th><@s.text name="label.serialnumber" /></th>
 			<th><@s.text name="label.rfidnumber" /></th>

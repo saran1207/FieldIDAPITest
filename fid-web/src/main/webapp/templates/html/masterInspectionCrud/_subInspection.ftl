@@ -1,14 +1,14 @@
-<div id="subProduct_${subProduct.id}" class="subComponent done">
+<div id="subAsset_${subAsset.id}" class="subComponent done">
 	<div class="definition">
 		<div class="identifier">
-			<span>${subProduct.type.name!}</span> | <label>${action.getNameFor(subProduct)!action.getText("label.not_labeled")}</label>
+			<span>${subAsset.type.name!}</span> | <label>${action.getNameFor(subAsset)!action.getText("label.not_labeled")}</label>
 		</div>
 	</div>
 	
-	<div class="performedInspection" id="inspectionPreformed_${subProduct.id}" >
+	<div class="performedInspection" id="inspectionPreformed_${subAsset.id}" >
 		<ul>
 			<#if masterInspection?exists >
-				<#list action.getInspectionsFor(subProduct) as subInspection >
+				<#list action.getInspectionsFor(subAsset) as subInspection >
 					<li>${subInspection.type.name!} - <a href="<@s.url action="subInspectionEdit" uniqueID="${subInspection.id}" token="${token}"/>"><@s.text name="label.edit_this_event"/></a></li>
 				</#list>
 			</#if>

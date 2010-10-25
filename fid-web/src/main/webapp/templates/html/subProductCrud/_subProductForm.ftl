@@ -1,7 +1,7 @@
 
-<div id="subProduct_${subProduct.asset.id}" class="subComponent" assetId="${subProduct.asset.id}">
+<div id="subAsset_${subAsset.asset.id}" class="subComponent" assetId="${subAsset.asset.id}">
 	
-	<div id="subProductHeader_${subProduct.asset.id}">
+	<div id="subAssetHeader_${subAsset.asset.id}">
 		<#include "_header.ftl"/>
 	</div>
 		

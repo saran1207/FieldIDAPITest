@@ -36,7 +36,7 @@ h3 {
 
 .done { background-color: #eeffed; }
 
-.masterProduct, .subComponent, .component {
+.masterAsset, .subComponent, .component {
 	border: 1px solid #dddddd;
 	margin: 10px 0;
 }
@@ -48,16 +48,16 @@ h3 {
 .definition, .labelForm {
 	border-bottom: 1px solid #dddddd;
 }
-.masterProduct .subProductActions, .subComponent .subProductActions {
+.masterAsset .subAssetActions, .subComponent .subAssetActions {
 	float:right;
 	width:120px;
 }
-.masterProduct .identifier, .component .identifier, .subComponent .identifier {
+.masterAsset .identifier, .component .identifier, .subComponent .identifier {
 	float:left;
 	width: 280px;
 	
 }
-div.subProductAction {
+div.subAssetAction {
 	float:left;
 	padding-left: 10px;
 }
@@ -82,7 +82,7 @@ div.subProductAction {
 	padding: 5px 0;
 }
 
-div.removeSubProduct {
+div.removeSubAsset {
 	float:right;
 	margin-right:5px;
 }

@@ -64,14 +64,14 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
 		if (criteria.getReferenceNumber() != null) {
 			selenium.type("//input[@id='reportForm_criteria_referenceNumber']", criteria.getReferenceNumber());
 		}
-		if (criteria.getProductStatus() != null) {
-			selenium.select("//select[@id='reportForm_criteria_productStatus']", criteria.getProductStatus());
+		if (criteria.getAssetStatus() != null) {
+			selenium.select("//select[@id='reportForm_criteria_assetStatus']", criteria.getAssetStatus());
 		}
-		if (criteria.getProductTypeGroup() != null) {
-			selenium.select("//select[@id='productTypeGroup']", criteria.getProductTypeGroup());
+		if (criteria.getAssetTypeGroup() != null) {
+			selenium.select("//select[@id='assetTypeGroup']", criteria.getAssetTypeGroup());
 		}
-		if (criteria.getProductType() != null) {
-			selenium.select("//select[@id='productType']", criteria.getProductType());
+		if (criteria.getAssetType() != null) {
+			selenium.select("//select[@id='assettType']", criteria.getAssetType());
 		}
 		if (criteria.getLocation() != null) {
 			LocationPicker locPicker = getLocationPicker();

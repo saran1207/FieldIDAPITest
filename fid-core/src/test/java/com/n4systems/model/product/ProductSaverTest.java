@@ -21,12 +21,12 @@ public class ProductSaverTest {
 
 	@Test(expected=NotImplementedException.class)
 	public void remove_throws_exception() {
-		(new ProductSaver()).remove((EntityManager)null, null);
+		(new AssetSaver()).remove((EntityManager)null, null);
 	}
 	
 	@Test
 	public void save_calls_update() {
-		class TestProductSaver extends ProductSaver {
+		class TestAssetSaver extends AssetSaver {
 			public boolean update_called = false;
 			@Override
 			public Asset update(EntityManager em, Asset product) {
@@ -35,7 +35,7 @@ public class ProductSaverTest {
 			}
 		};
 		
-		TestProductSaver saver = new TestProductSaver();
+		TestAssetSaver saver = new TestAssetSaver();
 		saver.save((EntityManager)null, null);
 		
 		assertTrue(saver.update_called);
@@ -51,7 +51,7 @@ public class ProductSaverTest {
 		expect(em.merge(product)).andReturn(product);
 		replay(em);
 		
-		ProductSaver saver = new ProductSaver();
+		AssetSaver saver = new AssetSaver();
 		saver.setModifiedBy(modifiedBy);
 		saver.save(em, product);
 		
@@ -75,7 +75,7 @@ public class ProductSaverTest {
 		expect(em.merge(product)).andReturn(product);
 		replay(em);
 		
-		ProductSaver saver = new ProductSaver();
+		AssetSaver saver = new AssetSaver();
 		saver.save(em, product);
 	}
 	
@@ -106,7 +106,7 @@ public class ProductSaverTest {
 		replay(em);
 
 
-		ProductSaver saver = new ProductSaver(loader);		
+		AssetSaver saver = new AssetSaver(loader);
 		saver.save(em, product);
 		
 	}

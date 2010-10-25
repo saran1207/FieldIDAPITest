@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.testcase.safetynetwork;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
 import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
@@ -47,7 +47,7 @@ public class SafetyNetworkRegisteredAssetsCountTest extends PageNavigatingTestCa
 
     private IdentifyPage identifyAsset(FieldIDPage profilePage, boolean published, String serialNumber) {
         IdentifyPage identifyPage = profilePage.clickIdentifyLink();
-        Product p = new Product();
+        Asset p = new Asset();
         p.setPublished(published);
         p.setSerialNumber(serialNumber);
         p.setOwner(new Owner("All American Crane Maintenance", "MSA"));

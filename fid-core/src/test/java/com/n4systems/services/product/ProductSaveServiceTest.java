@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
-import com.n4systems.exceptions.SubProductUniquenessException;
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.user.User;
 
 
@@ -70,7 +70,7 @@ public class ProductSaveServiceTest {
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.createWithHistory(asset, user)).andThrow(new SubProductUniquenessException());
+			expect(mockProductManager.createWithHistory(asset, user)).andThrow(new SubAssetUniquenessException());
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -111,7 +111,7 @@ public class ProductSaveServiceTest {
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);
 		try {
-			expect(mockProductManager.update(asset, user)).andThrow(new SubProductUniquenessException());
+			expect(mockProductManager.update(asset, user)).andThrow(new SubAssetUniquenessException());
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -126,7 +126,7 @@ public class ProductSaveServiceTest {
 	}
 	
 	@Test
-	public void save_without_history_does_not_create_history() throws SubProductUniquenessException {
+	public void save_without_history_does_not_create_history() throws SubAssetUniquenessException {
 		Asset asset = anAsset().build();
 		
 		LegacyProductSerial mockProductManager = createMock(LegacyProductSerial.class);

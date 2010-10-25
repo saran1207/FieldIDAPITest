@@ -62,7 +62,7 @@ public class ProductCodeMappingManager implements AssetCodeMappingService {
 			logger.error("Failed loading AssetCodeMapping", e);
 		}
 		
-		// if we were unable to find a asset code mapping, return the default
+		// if we were unable to find an asset code mapping, return the default
 		if(assetMapping == null) {
 			assetMapping = getDefaultMapping(tenantId);
 		}

@@ -9,7 +9,10 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Asset;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.utils.FindSubAssets;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -17,8 +20,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.SubProductUniquenessException;
-import com.n4systems.exceptions.UnknownSubProduct;
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.FileAttachment;
@@ -28,9 +30,7 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.SubProduct;
 import com.n4systems.model.user.User;
-import com.n4systems.model.utils.FindSubProducts;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.tools.FileDataContainer;
@@ -55,7 +55,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		this.lastInspectionDateFinder = lastInspectionDateFinder;
 	}
 
-	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
+	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 		// if the inspection has no group, lets create a new one now
 		if (parameterObject.inspection.getGroup() == null) {
 			parameterObject.inspection.setGroup(new InspectionGroup());
@@ -70,7 +70,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		
 		setProofTestData(parameterObject.inspection, parameterObject.fileData);
 	
-		confirmSubInspectionsAreAgainstAttachedSubProducts(parameterObject.inspection);
+		confirmSubInspectionsAreAgainstAttachedSubAssets(parameterObject.inspection);
 	
 		setOrderForSubInspections(parameterObject.inspection);
 		
@@ -118,23 +118,23 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		inspection.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
 	}
 	
-	private void confirmSubInspectionsAreAgainstAttachedSubProducts(Inspection inspection) throws UnknownSubProduct {
+	private void confirmSubInspectionsAreAgainstAttachedSubAssets(Inspection inspection) throws UnknownSubAsset {
 		Asset asset = persistenceManager.find(Asset.class, inspection.getAsset().getId());
-		asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
+		asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		for (SubInspection subInspection : inspection.getSubInspections()) {
-			if (!asset.getSubProducts().contains(new SubProduct(subInspection.getAsset(), null))) {
-				throw new UnknownSubProduct("asset id " + subInspection.getAsset().getId() + " is not attached to asset " + asset.getId());
+			if (!asset.getSubAssets().contains(new SubAsset(subInspection.getAsset(), null))) {
+				throw new UnknownSubAsset("asset id " + subInspection.getAsset().getId() + " is not attached to asset " + asset.getId());
 			}
 		}
 	}
 	
 	private void setOrderForSubInspections(Inspection inspection) {
 		Asset asset = persistenceManager.find(Asset.class, inspection.getAsset().getId());
-		asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
+		asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		List<SubInspection> reorderedSubInspections = new ArrayList<SubInspection>();
-		for (SubProduct subProduct : asset.getSubProducts()) {
+		for (SubAsset subAsset : asset.getSubAssets()) {
 			for (SubInspection subInspection : inspection.getSubInspections()) {
-				if (subInspection.getAsset().equals(subProduct.getAsset())) {
+				if (subInspection.getAsset().equals(subAsset.getAsset())) {
 					reorderedSubInspections.add(subInspection);
 				}
 			}
@@ -173,8 +173,8 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		
 		try {
 			legacyProductManager.update(asset, modifiedBy);
-		} catch (SubProductUniquenessException e) {
-			logger.error("received a subproduct uniquness error this should not be possible form this type of update.", e);
+		} catch (SubAssetUniquenessException e) {
+			logger.error("received a subasset uniquness error this should not be possible form this type of update.", e);
 			throw new RuntimeException(e);
 		}
 

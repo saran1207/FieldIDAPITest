@@ -154,7 +154,7 @@ public class RegisterAsset extends AbstractCrud{
 
 	public Asset getParentAsset() {
 		if (parentAsset == null) {
-			parentAsset = productManager.parentProduct(linkedAsset);
+			parentAsset = productManager.parentAsset(linkedAsset);
 		}
 		return parentAsset;
 	}

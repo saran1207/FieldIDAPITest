@@ -34,7 +34,7 @@ public class ProductSearchAction extends CustomizableSearchAction<ProductSearchC
 	private List<Long> searchIds;
 
 	public ProductSearchAction(final PersistenceManager persistenceManager, final ProductManager productManager) {
-		super(ProductSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "product_search"));
+		super(ProductSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "asset_search"));
 	}
 
 	public void prepare() throws Exception {

@@ -4,17 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.fieldid.selenium.administration.page.ManageAssetTypesDriver;
+import com.n4systems.fieldid.selenium.datatypes.AssetCodeMapping;
+import com.n4systems.fieldid.selenium.datatypes.AssetType;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
-import com.n4systems.fieldid.selenium.administration.page.ManageProductCodeMappings;
-import com.n4systems.fieldid.selenium.administration.page.ManageProductTypesDriver;
+import com.n4systems.fieldid.selenium.administration.page.ManageAssetCodeMappings;
 import com.n4systems.fieldid.selenium.datatypes.Attribute;
 import com.n4systems.fieldid.selenium.datatypes.ComboBoxAttribute;
-import com.n4systems.fieldid.selenium.datatypes.ProductCodeMapping;
-import com.n4systems.fieldid.selenium.datatypes.ProductType;
 import com.n4systems.fieldid.selenium.datatypes.SelectBoxAttribute;
 import com.n4systems.fieldid.selenium.datatypes.TextFieldAttribute;
 import com.n4systems.fieldid.selenium.datatypes.UnitOfMeasureAttribute;
@@ -33,8 +33,8 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 	Login login;
 	IdentifyPageDriver identify;
 	Admin admin;
-	ManageProductTypesDriver mpts;
-	ManageProductCodeMappings mpcms;
+	ManageAssetTypesDriver mpts;
+	ManageAssetCodeMappings mpcms;
 	private String companyWithIntegration = "unirope";
 
 	@Before
@@ -42,35 +42,35 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		login = new Login(selenium, misc);
 		identify = new IdentifyPageDriver(selenium, misc);
 		admin = new Admin(selenium, misc);
-		mpts = new ManageProductTypesDriver(selenium, misc);
-		mpcms = new ManageProductCodeMappings(selenium, misc);
+		mpts = new ManageAssetTypesDriver(selenium, misc);
+		mpcms = new ManageAssetCodeMappings(selenium, misc);
 	}
 
 	@Test
-	public void attributesCanBeDeletedFromUnusedProductType() throws Exception {
+	public void attributesCanBeDeletedFromUnusedAssetType() throws Exception {
 		startAsCompany(companyWithIntegration);
 		login.signInWithSystemAccount();
-		ProductType productType = createAProductTypeWithAttributes();
-		verifyEditProductTypeHasDeleteAttribute(productType);
+		AssetType assetType = createAnAssetTypeWithAttributes();
+		verifyEditAssetTypeHasDeleteAttribute(assetType);
 	}
 
-	private void verifyEditProductTypeHasDeleteAttribute(ProductType pt) throws InterruptedException {
+	private void verifyEditAssetTypeHasDeleteAttribute(AssetType pt) throws InterruptedException {
 		// we assume create asset type left us on the View tab of that asset
 		// type
-		mpts.gotoEditProductType();
-		mpts.deleteProductTypeAttributes(pt.getAttributes());
+		mpts.gotoEditAssetType();
+		mpts.deleteAssetTypeAttributes(pt.getAttributes());
 	}
 
-	private ProductType createAProductTypeWithAttributes() {
-		String productType = MiscDriver.getRandomString(10);
+	private AssetType createAnAssetTypeWithAttributes() {
+		String assetType = MiscDriver.getRandomString(10);
 		String textFieldAttributeName = MiscDriver.getRandomString(10);
 		String unitOfMeasureAttributeName = MiscDriver.getRandomString(10);
 		String selectBoxAttributeName = MiscDriver.getRandomString(10);
 		String comboBoxAttributeName = MiscDriver.getRandomString(10);
 		misc.gotoAdministration();
-		admin.gotoManageProductTypes();
-		mpts.gotoAddProductType();
-		ProductType pt = new ProductType(productType);
+		admin.gotoManageAssetTypes();
+		mpts.gotoAddAssetType();
+		AssetType pt = new AssetType(assetType);
 		TextFieldAttribute tfa = new TextFieldAttribute(textFieldAttributeName, true);
 		pt.addAttributes(tfa);
 		UnitOfMeasureAttribute uoma = new UnitOfMeasureAttribute(unitOfMeasureAttributeName, true);
@@ -82,46 +82,46 @@ public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends Fie
 		ComboBoxAttribute cba = new ComboBoxAttribute(comboBoxAttributeName, true);
 		cba.addDropDown("two");
 		pt.addAttributes(cba);
-		mpts.setProductType(pt);
-		mpts.gotoSaveProductType();
+		mpts.setAssetType(pt);
+		mpts.gotoSaveAssetType();
 		return pt;
 	}
 
 	@Test
-	public void attributesCanOnlyBeRetiredIfUsedInProductCodeMapping() throws Exception {
+	public void attributesCanOnlyBeRetiredIfUsedInAssetCodeMapping() throws Exception {
 		startAsCompany(companyWithIntegration);
 		login.signInWithSystemAccount();
-		ProductType productType = createAProductTypeWithAttributes();
-		useProductTypeInProductCodeMapping(productType);
-		verifyEditProductTypeHasRetireAttribute(productType);
+		AssetType assetType = createAnAssetTypeWithAttributes();
+		useAssetTypeInAssetCodeMapping(assetType);
+		verifyEditAssetTypeHasRetireAttribute(assetType);
 	}
 
-	private void verifyEditProductTypeHasRetireAttribute(ProductType pt) throws InterruptedException {
+	private void verifyEditAssetTypeHasRetireAttribute(AssetType at) throws InterruptedException {
 		misc.gotoAdministration();
-		admin.gotoManageProductTypes();
-		mpts.gotoEditProductType(pt.getName());
-		mpts.retireProductTypeAttributes(pt.getAttributes());
+		admin.gotoManageAssetTypes();
+		mpts.gotoEditAssetType(at.getName());
+		mpts.retireAssetTypeAttributes(at.getAttributes());
 	}
 
-	private void useProductTypeInProductCodeMapping(ProductType productType) {
+	private void useAssetTypeInAssetCodeMapping(AssetType assetType) {
 		misc.gotoAdministration();
-		admin.gotoManageProductCodeMappings();
-		mpcms.gotoAddProductCodeMapping();
-		mpcms.setProductTypeInProductCodeMapping(productType.getName());
-		String productCode = MiscDriver.getRandomString(3);
-		Map<Attribute, String> productAttributes = createRandomProductCodeMappings(productType.getAttributes());
-		ProductCodeMapping pcm = new ProductCodeMapping(productCode, productType.getName(), productAttributes);
-		mpcms.setProductCodeMapping(pcm);
-		mpcms.gotoSaveProductCodeMapping();
+		admin.gotoManageAssetCodeMappings();
+		mpcms.gotoAddAssetCodeMapping();
+		mpcms.setAssetTypeInAssetCodeMapping(assetType.getName());
+		String assetCode = MiscDriver.getRandomString(3);
+		Map<Attribute, String> assetAttributes = createRandomAssetCodeMappings(assetType.getAttributes());
+		AssetCodeMapping pcm = new AssetCodeMapping(assetCode, assetType.getName(), assetAttributes);
+		mpcms.setAssetCodeMapping(pcm);
+		mpcms.gotoSaveAssetCodeMapping();
 	}
 
-	private <T extends Attribute> Map<T, String> createRandomProductCodeMappings(List<T> attributes) {
+	private <T extends Attribute> Map<T, String> createRandomAssetCodeMappings(List<T> attributes) {
 		Map<T, String> result = new HashMap<T, String>();
 
 		for (T a : attributes) {
 			String value = null;
 			if (a instanceof SelectBoxAttribute || a instanceof ComboBoxAttribute) {
-				String id = mpcms.getInputIDForProductTypeSelectComboBoxAttributes(a.getName());
+				String id = mpcms.getInputIDForAssetTypeSelectComboBoxAttributes(a.getName());
 				String locator = "xpath=//SELECT[@id='" + id + "']";
 				String[] options = selenium.getSelectOptions(locator);
 				value = options[1];

@@ -31,8 +31,8 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 	private AssetType assetType;
 	
 	private List<ListingPair> assetTypes;
-	private List<ListingPair> subProducts;
-	private List<Long> subProductIds = new ArrayList<Long>();
+	private List<ListingPair> subAssets;
+	private List<Long> subAssetIds = new ArrayList<Long>();
 	public ProductTypeConfigurationCrud( LegacyProductType productTypeManager, PersistenceManager persistenceManager, ProductManager productManager ) {
 		super(persistenceManager);
 		this.productTypeManager = productTypeManager;
@@ -55,9 +55,9 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 			return MISSING;
 		}
 		
-		subProductIds = new ArrayList<Long>();
+		subAssetIds = new ArrayList<Long>();
 		for( AssetType subAssetType : assetType.getSubTypes() ) {
-			subProductIds.add( subAssetType.getId() );
+			subAssetIds.add( subAssetType.getId() );
 		}
 		
 		return SUCCESS;
@@ -69,17 +69,17 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 			addActionError( getText( "error.noproducttype" ) );
 			return MISSING;
 		}
-		if( isPartOfMasterProduct() ) {
+		if( isPartOfMasterAsset() ) {
 			addActionError( getText( "error.alreadyasubproducttype" ) );
 			return ERROR;
 		}
 		
 		try {
 			assetType.getSubTypes().clear();
-			if( !subProductIds.isEmpty() ) {
-				StrutsListHelper.clearNulls( subProductIds );
+			if( !subAssetIds.isEmpty() ) {
+				StrutsListHelper.clearNulls(subAssetIds);
 				QueryBuilder<AssetType> subTypeQuery = new QueryBuilder<AssetType>(AssetType.class, getSecurityFilter());
-				subTypeQuery.addWhere( Comparator.IN, "productIds", "id", subProductIds );
+				subTypeQuery.addWhere( Comparator.IN, "productIds", "id", subAssetIds);
 				subTypeQuery.setSimpleSelect();
 				subTypeQuery.setOrder( "name" );
 				assetType.getSubTypes().addAll( persistenceManager.findAll( subTypeQuery ) );
@@ -108,7 +108,7 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 			assetTypes = productManager.getAllowedSubTypes( getSecurityFilter(), assetType);
 			List<ListingPair> typesToBeRemoved = new ArrayList<ListingPair>();
 			for( ListingPair type : assetTypes) {
-				for( Long id : subProductIds ) {
+				for( Long id : subAssetIds) {
 					if( id != null && id.equals( type.getId() ) ) {
 						typesToBeRemoved.add( type );
 					}
@@ -120,29 +120,29 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 		return assetTypes;
 	}
 
-	public List<ListingPair> getSubProducts() {
-		if( subProducts == null ) {
-			subProducts = new ArrayList<ListingPair>();
+	public List<ListingPair> getSubAssets() {
+		if( subAssets == null ) {
+			subAssets = new ArrayList<ListingPair>();
 			for( ListingPair type : productManager.getAllowedSubTypes( getSecurityFilter(), assetType) ) {
-				for( Long id : subProductIds ) {
+				for( Long id : subAssetIds) {
 					if( id != null && id.equals( type.getId() ) ) {
-						subProducts.add( type );
+						subAssets.add( type );
 					}
 				}
 			}
 		}
-		return subProducts;
+		return subAssets;
 	}
 
 	
-	@CustomValidator( type="subProductValidator", message="", key="error.parentproduct" )
-	public List<Long> getSubProductIds() {
-		return subProductIds;
+	@CustomValidator( type="subAssetValidator", message="", key="error.parentproduct" )
+	public List<Long> getSubAssetIds() {
+		return subAssetIds;
 	}
 
 	
-	public void setSubProductIds( List<Long> subProductIds ) {
-		this.subProductIds = subProductIds;
+	public void setSubAssetIds( List<Long> subAssetIds) {
+		this.subAssetIds = subAssetIds;
 	}
 	
 	public boolean isParentType( Long typeId ) {
@@ -151,7 +151,7 @@ public class ProductTypeConfigurationCrud extends AbstractCrud {
 		
 	}
 	
-	public boolean isPartOfMasterProduct() {
-		return productManager.partOfAMasterProduct( uniqueID );
+	public boolean isPartOfMasterAsset() {
+		return productManager.partOfAMasterAsset( uniqueID );
 	}
 }

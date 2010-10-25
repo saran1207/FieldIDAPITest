@@ -16,7 +16,7 @@
 						<tr>
 							<td>
 								<@s.url id="baseActionUrl" action="marryCustomerOrder" namespace="/ajax" uniqueID="${asset.id}" />
-								<a class="productLink" href="" onclick="marryCustomerOrder('${baseActionUrl}'); return false;" >
+								<a class="assetLink" href="" onclick="marryCustomerOrder('${baseActionUrl}'); return false;" >
 									<@s.text name="label.connectorder" />
 								</a>
 							</td>

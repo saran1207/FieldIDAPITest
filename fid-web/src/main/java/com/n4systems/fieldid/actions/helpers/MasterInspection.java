@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.SubAsset;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.fieldid.actions.inspection.WebInspectionSchedule;
@@ -16,7 +17,6 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.SubProduct;
 import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
@@ -163,7 +163,7 @@ public class MasterInspection {
 		subInspection.setFormVersion(inspection.getFormVersion());
 		subInspection.setId(inspection.getId());
 		subInspection.setAsset(inspection.getAsset());
-		subInspection.setName(findLabelOfSubProduct(inspection));
+		subInspection.setName(findLabelOfSubAsset(inspection));
 		subInspection.setTenant(inspection.getTenant());
 		subInspection.setType(inspection.getType());
 		subInspection.setComments(inspection.getComments());
@@ -176,16 +176,16 @@ public class MasterInspection {
 		return subInspection;
 	}
 
-	private String findLabelOfSubProduct(Inspection inspection) {
+	private String findLabelOfSubAsset(Inspection inspection) {
 		Asset asset = inspection.getAsset();
 		if (asset == null) {
 			return null;
 		}
 		if (this.inspection.isNew()) {
 
-			for (SubProduct subProduct : this.masterAsset.getSubProducts()) {
-				if (subProduct.getAsset().equals(asset)) {
-					return subProduct.getLabel();
+			for (SubAsset subAsset : this.masterAsset.getSubAssets()) {
+				if (subAsset.getAsset().equals(asset)) {
+					return subAsset.getLabel();
 				}
 			}
 		} else {
@@ -256,24 +256,24 @@ public class MasterInspection {
 		return inspectionTypes;
 	}
 
-	public void removeInspectionsForProduct(Asset subProduct) {
+	public void removeInspectionsForAsset(Asset subAsset) {
 		for (int i = 0; i < subInspections.size(); i++) {
-			if (subInspections.get(i).getAsset().equals(subProduct)) {
+			if (subInspections.get(i).getAsset().equals(subAsset)) {
 				subInspections.set(i, null);
 			}
 		}
 	}
 
-	public void cleanSubInspectionsForNonValidSubProducts(Asset upToDateProduct) {
+	public void cleanSubInspectionsForNonValidSubAssets(Asset upToDateProduct) {
 		List<SubInspection> subInspectionsToKeep = new ArrayList<SubInspection>();
 		
 		/*
-		 * this checks that each sub inspection is for a asset that is still
+		 * this checks that each sub inspection is for an asset that is still
 		 * attached to our updated master asset.
 		 */
 		for (SubInspection subInspection : subInspections) {
-			for (SubProduct subProduct: upToDateProduct.getSubProducts()) {
-				if (subProduct.getAsset().equals(subInspection.getAsset())) {
+			for (SubAsset subAsset : upToDateProduct.getSubAssets()) {
+				if (subAsset.getAsset().equals(subInspection.getAsset())) {
 					subInspectionsToKeep.add(subInspection);
 					break;
 				}

@@ -13,6 +13,8 @@ import javax.naming.NamingException;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.product.AssetSubAssetsLoader;
 import org.apache.log4j.Logger;
 
 import rfid.util.PopulatorLogger;
@@ -31,7 +33,7 @@ import com.n4systems.exceptions.FindProductFailure;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
-import com.n4systems.exceptions.SubProductUniquenessException;
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
@@ -52,7 +54,6 @@ import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.SubInspection;
-import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.inspection.InspectionAttachmentSaver;
@@ -74,7 +75,6 @@ import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.product.ProductByMobileGuidLoader;
-import com.n4systems.model.product.ProductSubProductsLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
@@ -779,9 +779,9 @@ public class DataServiceImpl implements DataService {
 		Asset asset = null;
 		
 		if (productLookupableDto.isCreatedOnMobile()) {
-			asset = productManager.findProductByGUID(productLookupableDto.getMobileGuid(), filter);
+			asset = productManager.findAssetByGUID(productLookupableDto.getMobileGuid(), filter);
 		} else {
-			asset = productManager.findProductAllFields(productLookupableDto.getId(), filter);
+			asset = productManager.findAssetAllFields(productLookupableDto.getId(), filter);
 		}
 		
 		return asset;
@@ -871,17 +871,17 @@ public class DataServiceImpl implements DataService {
 			}
 				
 			// create the asset with attached sub asset transactionally
-			asset = productManager.createProductWithServiceTransaction( requestInformation.getMobileGuid(), asset, asset.getModifiedBy() );
+			asset = productManager.createAssetWithServiceTransaction( requestInformation.getMobileGuid(), asset, asset.getModifiedBy() );
 
 			// create any new subproducts (this is not currently used by mobile (sub products come up attached to inspections))
 			if (productDTO.getSubProducts() != null && productDTO.getSubProducts().size() > 0) {
-				List<SubProduct> subProducts = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), asset, requestInformation.getVersionNumber());
-				if (subProducts.size() > 0) {
+				List<SubAsset> subAssets = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), asset, requestInformation.getVersionNumber());
+				if (subAssets.size() > 0) {
 					/*
 					 * Note: the list of SubProducts on Asset is marked as @Transient however productManager.update
 					 * has special handling code to persist it anyway.  and yes it does suck ...  
 					 */
-					asset.getSubProducts().addAll(subProducts);
+					asset.getSubAssets().addAll(subAssets);
 					productManager.update(asset, asset.getModifiedBy());
 				}
 			}
@@ -1073,8 +1073,8 @@ public class DataServiceImpl implements DataService {
 				inspectionServiceDTO.setProductId( asset.getId() );
 				
 				// lets look up or create all newly attached sub products and attach to asset
-				List<SubProduct> subProducts = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset, requestInformation.getVersionNumber());
-				updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subProducts);
+				List<SubAsset> subAssets = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset, requestInformation.getVersionNumber());
+				updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets);
 				
 				
 				// we also need to get the asset for any sub-inspections
@@ -1157,9 +1157,9 @@ public class DataServiceImpl implements DataService {
 	private void updateSubProducts(LegacyProductSerial productManager,
 			Long tenantId, Asset asset,
 			InspectionServiceDTO inspectionServiceDTO,
-			List<SubProduct> subProducts) throws SubProductUniquenessException {
+			List<SubAsset> subAssets) throws SubAssetUniquenessException {
 		
-		new UpdateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subProducts, ServiceLocator.getProductManager()).run();
+		new UpdateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets, ServiceLocator.getProductManager()).run();
 		
 	}
 	
@@ -1214,11 +1214,11 @@ public class DataServiceImpl implements DataService {
 	
 	
 	
-	private List<SubProduct> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Asset masterAsset, long apiVersion) throws Exception {
+	private List<SubAsset> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Asset masterAsset, long apiVersion) throws Exception {
 		
-		List<SubProduct> subProducts = new ArrayList<SubProduct>();
+		List<SubAsset> subAssets = new ArrayList<SubAsset>();
 		
-		if (subProductMaps == null) return subProducts;
+		if (subProductMaps == null) return subAssets;
 		
 		ProductManager productManager = ServiceLocator.getProductManager();
 		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
@@ -1226,7 +1226,7 @@ public class DataServiceImpl implements DataService {
 		for (SubProductMapServiceDTO subProductMap : subProductMaps) {
 			ProductServiceDTO subProductDTO = subProductMap.getNewProduct();
 			
-			Asset asset = productManager.findProductByGUID(subProductDTO.getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
+			Asset asset = productManager.findAssetByGUID(subProductDTO.getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			
 			// Try by id
 			if (asset == null && subProductDTO.getId() != null && subProductDTO.getId() > 0) {
@@ -1236,16 +1236,16 @@ public class DataServiceImpl implements DataService {
 			asset = legacyCreationOfSubProductsForPre19VersionOfMobile(tenantId, subProductDTO, asset, apiVersion);
 			
 			if (asset != null) {
-				SubProduct subProduct = new SubProduct();
-				subProduct.setLabel(subProductMap.getName());
-				subProduct.setAsset(asset);
-				subProduct.setMasterProduct(masterAsset);
+				SubAsset subAsset = new SubAsset();
+				subAsset.setLabel(subProductMap.getName());
+				subAsset.setAsset(asset);
+				subAsset.setMasterAsset(masterAsset);
 				
-				subProducts.add(subProduct);
+				subAssets.add(subAsset);
 			}
 		}
 		
-		return subProducts;
+		return subAssets;
 	}
 
 	private Asset legacyCreationOfSubProductsForPre19VersionOfMobile(Long tenantId, ProductServiceDTO subProductDTO, Asset asset, long apiVersion)
@@ -1271,8 +1271,8 @@ public class DataServiceImpl implements DataService {
 		Asset asset = null;
 		if( inspectionServiceDTO.productIdExists() ) {
 			try {
-				asset = ServiceLocator.getProductManager().findProduct( inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter( tenantId ) );
-				asset = ServiceLocator.getProductManager().fillInSubProductsOnProduct(asset);
+				asset = ServiceLocator.getProductManager().findAsset( inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter( tenantId ) );
+				asset = ServiceLocator.getProductManager().fillInSubAssetsOnAsset(asset);
 			} catch( Exception e ) {
 				logger.error( "looking up asset with asset id " + inspectionServiceDTO.getProductId(), e );
 			}
@@ -1280,7 +1280,7 @@ public class DataServiceImpl implements DataService {
 		} else if( inspectionServiceDTO.productMobileGuidExists() ) {
 			// Try looking up by GUID
 			try {
-				asset = ServiceLocator.getProductManager().findProductByGUID( inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
+				asset = ServiceLocator.getProductManager().findAssetByGUID( inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			} catch (Exception e) {
 				logger.error("Looking up asset serial by GUID = "+inspectionServiceDTO.getProductMobileGuid(), e);
 			}
@@ -1349,8 +1349,8 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
 			SmartSearchLoader smartSearchLoader = new SmartSearchLoader(securityFilter);
-			ProductSubProductsLoader subProductLoader = new ProductSubProductsLoader(securityFilter);
-			RealTimeProductLookupHandler realTimeProductLookupHandler = new RealTimeProductLookupHandler(smartSearchLoader, subProductLoader);
+			AssetSubAssetsLoader subAssetLoader = new AssetSubAssetsLoader(securityFilter);
+			RealTimeProductLookupHandler realTimeProductLookupHandler = new RealTimeProductLookupHandler(smartSearchLoader, subAssetLoader);
 			
 			List<Asset> assets = realTimeProductLookupHandler
 										.setSearchText(requestInformation.getSearchText())
@@ -1497,9 +1497,9 @@ public class DataServiceImpl implements DataService {
 					
 					response.getProducts().add( converter.convert(schedule.getAsset()) );
 					
-					if (schedule.getAsset().getSubProducts() != null) {
-						for (SubProduct subProduct : schedule.getAsset().getSubProducts()) {
-							response.getProducts().add( converter.convert(subProduct.getAsset()) );
+					if (schedule.getAsset().getSubAssets() != null) {
+						for (SubAsset subAsset : schedule.getAsset().getSubAssets()) {
+							response.getProducts().add( converter.convert(subAsset.getAsset()) );
 						}							
 					}
 				}

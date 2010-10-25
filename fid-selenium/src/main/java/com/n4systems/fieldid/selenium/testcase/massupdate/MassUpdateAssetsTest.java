@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.Product;
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
@@ -24,22 +24,22 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
     }
 
     @Test
-    public void test_mass_update_product() throws Exception {
+    public void test_mass_update_asset() throws Exception {
         // TODO: Replace identification at the beginning with data setup.
-        String productSerialNumber = MiscDriver.getRandomString(10);
+        String assetSerialNumber = MiscDriver.getRandomString(10);
 
-        identifyAssetWithSerialNumber(productSerialNumber, "Workman Harness", "PO 3", "In Service");
-        identifyAssetWithSerialNumber(productSerialNumber, "Workman Harness", "PO 4", "In Service");
+        identifyAssetWithSerialNumber(assetSerialNumber, "Workman Harness", "PO 3", "In Service");
+        identifyAssetWithSerialNumber(assetSerialNumber, "Workman Harness", "PO 4", "In Service");
 
         AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
-        assetsSearchPage.enterSerialNumber(productSerialNumber);
+        assetsSearchPage.enterSerialNumber(assetSerialNumber);
         AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
 
         assertEquals(2, resultsPage.getTotalResultsCount());
 
         AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
-        massUpdatePage.setProductStatus("Out of Service");
+        massUpdatePage.setAssetStatus("Out of Service");
         massUpdatePage.setPurchaseOrder("PO 5");
 
         resultsPage = massUpdatePage.clickSaveButtonAndConfirm();
@@ -47,23 +47,23 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
         AssetPage assetPage = resultsPage.clickAssetLinkForResult(1);
 
         assertEquals("PO 5", assetPage.getPurchaseOrder());
-        assertEquals("Out of Service", assetPage.getProductStatus());
+        assertEquals("Out of Service", assetPage.getAssetStatus());
 
         assetPage.goBack();
 
         resultsPage.clickAssetLinkForResult(2);
 
         assertEquals("PO 5", assetPage.getPurchaseOrder());
-        assertEquals("Out of Service", assetPage.getProductStatus());
+        assertEquals("Out of Service", assetPage.getAssetStatus());
     }
 
-    private void identifyAssetWithSerialNumber(String serial, String productType, String purchaseOrder, String status) {
+    private void identifyAssetWithSerialNumber(String serial, String assetType, String purchaseOrder, String status) {
         IdentifyPage identifyPage = page.clickIdentifyLink();
-        Product asset = new Product();
+        Asset asset = new Asset();
         asset.setSerialNumber(serial);
-        asset.setProductType(productType);
+        asset.setAssetType(assetType);
         asset.setPurchaseOrder(purchaseOrder);
-        asset.setProductStatus(status);
+        asset.setAssetStatus(status);
 
         identifyPage.setAddAssetForm(asset, false);
         identifyPage.saveNewAsset();

@@ -31,12 +31,12 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 	}
 
 	@Test
-	public void should_find_and_view_inspection_for_a_product_available_when_published_against_the_primary_org() throws Exception {
+	public void should_find_and_view_inspection_for_an_asset_available_when_published_against_the_primary_org() throws Exception {
 		String serialNumber = "Vendor-00001-published";
-		findProductThroughSafetyNetworkSmartSearch(serialNumber);
-		assertProductFound(serialNumber);
+		findAssetThroughSafetyNetworkSmartSearch(serialNumber);
+		assertAssetFound(serialNumber);
 		
-		goToTheInspectionListForProduct();
+		goToTheInspectionListForAsset();
 		
 		openViewOfInspection();
 		
@@ -46,13 +46,13 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 	}
 
 	@Test
-	public void should_find_and_view_inspection_for_a_product_available_when_published_and_assigned_to_the_linked_customer() throws Exception {
+	public void should_find_and_view_inspection_for_an_asset_available_when_published_and_assigned_to_the_linked_customer() throws Exception {
 		String serialNumber = "Vendor-00003-published";
 		
-		findProductThroughSafetyNetworkSmartSearch(serialNumber);
-		assertProductFound(serialNumber);
+		findAssetThroughSafetyNetworkSmartSearch(serialNumber);
+		assertAssetFound(serialNumber);
 		
-		goToTheInspectionListForProduct();
+		goToTheInspectionListForAsset();
 		
 		openViewOfInspection();
 		
@@ -62,13 +62,13 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 	}
 	
 	@Test
-	public void should_find_and_view_inspection_for_a_product_available_when_published_against_the_secondary_org() throws Exception {
+	public void should_find_and_view_inspection_for_an_asset_available_when_published_against_the_secondary_org() throws Exception {
 		String serialNumber = "Vendor-00008-published";
 		
-		findProductThroughSafetyNetworkSmartSearch(serialNumber);
-		assertProductFound(serialNumber);
+		findAssetThroughSafetyNetworkSmartSearch(serialNumber);
+		assertAssetFound(serialNumber);
 		
-		goToTheInspectionListForProduct();
+		goToTheInspectionListForAsset();
 		
 		openViewOfInspection();
 		
@@ -78,13 +78,13 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 	}
 	
 	@Test
-	public void should_find_and_view_inspection_for_a_product_published_against_the_primary_vendor_and_registerd_to_the_primary_distributor() throws Exception {
+	public void should_find_and_view_inspection_for_an_asset_published_against_the_primary_vendor_and_registerd_to_the_primary_distributor() throws Exception {
 		String serialNumber = "Vendor-00009-registerd";
 		
-		findProductThroughSafetyNetworkSmartSearch(serialNumber);
-		assertProductFound(serialNumber);
+		findAssetThroughSafetyNetworkSmartSearch(serialNumber);
+		assertAssetFound(serialNumber);
 		
-		goToTheInspectionListForProduct();
+		goToTheInspectionListForAsset();
 		
 		openViewOfInspection();
 		
@@ -94,13 +94,13 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 	}
 	
 	@Test
-	public void should_find_and_view_inspection_for_a_product_available_when_published_and_assigned_to_the_linked_customer_and_registered() throws Exception {
+	public void should_find_and_view_inspection_for_an_asset_available_when_published_and_assigned_to_the_linked_customer_and_registered() throws Exception {
 		String serialNumber = "Vendor-00010-registerd-assigned";
 		
-		findProductThroughSafetyNetworkSmartSearch(serialNumber);
-		assertProductFound(serialNumber);
+		findAssetThroughSafetyNetworkSmartSearch(serialNumber);
+		assertAssetFound(serialNumber);
 		
-		goToTheInspectionListForProduct();
+		goToTheInspectionListForAsset();
 		
 		openViewOfInspection();
 		
@@ -110,13 +110,13 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 	}
 	
 	@Test
-	public void should_find_and_view_inspection_for_a_product_available_when_published_against_the_secondary_org_and_registered_against_the_primary_distributor() throws Exception {
+	public void should_find_and_view_inspection_for_an_asset_available_when_published_against_the_secondary_org_and_registered_against_the_primary_distributor() throws Exception {
 		String serialNumber = "Vendor-00011-registerd-secondary";
 		
-		findProductThroughSafetyNetworkSmartSearch(serialNumber);
-		assertProductFound(serialNumber);
+		findAssetThroughSafetyNetworkSmartSearch(serialNumber);
+		assertAssetFound(serialNumber);
 		
-		goToTheInspectionListForProduct();
+		goToTheInspectionListForAsset();
 		
 		openViewOfInspection();
 		
@@ -142,18 +142,18 @@ public class SafetyNetworkLookup extends LoggedInTestCase {
 		selenium.waitForElementToBePresent("css=#inspection");
 	}
 
-	private void goToTheInspectionListForProduct() {
+	private void goToTheInspectionListForAsset() {
 		selenium.clickAndWaitForPageLoad("link=Inspections");
 		assertTrue(selenium.isTextPresent("Chain Visual"));
 	}
 
-	private void findProductThroughSafetyNetworkSmartSearch(String serialNumber) {
+	private void findAssetThroughSafetyNetworkSmartSearch(String serialNumber) {
 		misc.setVendorContext("Test Vendor");
 		misc.setSmartSearch(serialNumber);
 		misc.submitSmartSearch();
 	}
 
-	private void assertProductFound(String serialNumber) {
+	private void assertAssetFound(String serialNumber) {
 		assertTrue("Asset could not be found, Serial Number is not in the title", selenium.isElementPresent("css=h1:contains('"+ serialNumber + "')"));
 	}
 	

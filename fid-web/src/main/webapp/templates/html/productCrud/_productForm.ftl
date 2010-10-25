@@ -1,6 +1,6 @@
 <head>
 	<@n4.includeScript src="commentTemplates.js" />
-	<@n4.includeScript src="product.js" />
+	<@n4.includeScript src="asset.js" />
 	<@n4.includeScript src="updateAttributes.js"/>
 	<@n4.includeScript src="productRfidHandler.js"/>
 	<@n4.includeScript src="generateSerialNumber.js"/>
@@ -15,7 +15,7 @@
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
 	    productTypeChangeWarning = '<@s.text name="warning.producttypechange"/>';
 	    originalProductType = ${assetTypeId!0};
-	    updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax"/>';
+	    updateAssetTypeUrl = '<@s.url action="productTypeChange" namespace="/ajax"/>';
 	    checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax"/>';
 	</script>
 	<#include "/templates/html/common/_calendar.ftl"/>	

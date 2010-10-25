@@ -46,13 +46,13 @@ function changeFieldType( select ) {
 
 
 function showDefaultUnitOfMeasure( target ) {
-	var unitOfMeasure = $( "productTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__defaultUnitOfMeasure" )
+	var unitOfMeasure = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__defaultUnitOfMeasure" )
 	if( unitOfMeasure != null ) 
 		unitOfMeasure.show();
 }
 
 function hideDefaultUnitOfMeasure( target ) {
-	var unitOfMeasure = $( "productTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__defaultUnitOfMeasure" )
+	var unitOfMeasure = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__defaultUnitOfMeasure" )
 	if( unitOfMeasure != null ) 
 		unitOfMeasure.hide();
 }
@@ -93,9 +93,9 @@ function createField() {
 	newDiv.id=fieldName;
 	
 	var element_name_prefix = "infoFields[" + arrayIndex + "].";
-	var element_id_prefix = "productTypeUpdate_infoFields_" + arrayIndex + "__" ;
+	var element_id_prefix = "assetTypeUpdate_infoFields_" + arrayIndex + "__" ;
 		
-	renameElements( newDiv , "productTypeUpdate_info", "info", element_id_prefix, element_name_prefix );
+	renameElements( newDiv , "assetTypeUpdate_info", "info", element_id_prefix, element_name_prefix );
 	
 	$('infoFields').appendChild(newDiv);
 	
@@ -159,7 +159,7 @@ function destroyField( target ) {
 	var handle = target.parentNode.parentNode;
 	Effect.BlindUp(handle.id, { duration: 0.5}); 
 	removed.push( handle );
-	$('productTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__deleted').value=true;
+	$('assetTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__deleted').value=true;
 }
 
 
@@ -171,9 +171,9 @@ function createOption( optionContainer, infoFieldContainer ) {
 	newDiv.id=optionName;
 	
 	var element_name_prefix = "editInfoOptions[" + arrayIndexOptions + "].";
-	var element_id_prefix = "productTypeUpdate_editInfoOptions_" + arrayIndexOptions + "__" ;
+	var element_id_prefix = "assetTypeUpdate_editInfoOptions_" + arrayIndexOptions + "__" ;
 		
-	renameElementsOptions( newDiv , "productTypeUpdate_infoOp_", "infoOp.", element_id_prefix, element_name_prefix);
+	renameElementsOptions( newDiv , "assetTypeUpdate_infoOp_", "infoOp.", element_id_prefix, element_name_prefix);
 	
 	container.appendChild(newDiv);
 	$( element_id_prefix + 'infoFieldIndex' ).value = findFieldIndex( infoFieldContainer );
@@ -186,7 +186,7 @@ function createOption( optionContainer, infoFieldContainer ) {
 function destroyOption( target ) {
 	var handle = target.parentNode;
 	Effect.BlindUp(handle.id, { duration: 0.5});
-	$('productTypeUpdate_editInfoOptions_'+ findOptionIndex( handle.id ) + '__deleted').value=true;
+	$('assetTypeUpdate_editInfoOptions_'+ findOptionIndex( handle.id ) + '__deleted').value=true;
 	
 	var id = handle.parentNode.parentNode.parentNode.id;
 	if( typeof(removedOptions[findFieldIndex( id )]) == 'undefined' ) {
@@ -274,7 +274,7 @@ function setWeights(){
 function undoDeletes() {
 	
 	for( var index = 0; index < removed.length; index++ ) {
-		$('productTypeUpdate_infoFields_'+ findFieldIndex( removed[index].id ) + '__deleted').value = 'false';  
+		$('assetTypeUpdate_infoFields_'+ findFieldIndex( removed[index].id ) + '__deleted').value = 'false';  
 		Effect.BlindDown(removed[index].id, { duration: 0.5});
 	}
 	removed = new Array();
@@ -290,7 +290,7 @@ function undoOptionDeletes( target ) {
 	}
 	
 	for( var index = 0; index < removedOptions[findFieldIndex( handle )].length; index++ ) {
-		$('productTypeUpdate_editInfoOptions_'+ findOptionIndex( removedOptions[findFieldIndex( handle )][index].id ) + '__deleted').value = 'false';  
+		$('assetTypeUpdate_editInfoOptions_'+ findOptionIndex( removedOptions[findFieldIndex( handle )][index].id ) + '__deleted').value = 'false';  
 		Effect.BlindDown(removedOptions[findFieldIndex( handle )][index].id, { duration: 0.5});
 	}
 	
@@ -301,7 +301,7 @@ function undoOptionDeletes( target ) {
 function retire( target ) {
 	var handle = target.parentNode.parentNode;
 	
-	if( $('productTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__retired').value == "true" ) {
+	if( $('assetTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__retired').value == "true" ) {
 		unRetire( handle, target );
 	} else {
 		applyRetire( handle, target );
@@ -313,7 +313,7 @@ function retire( target ) {
 function applyRetire( handle, target ) {
 	handle.addClassName( "retired" );
 	target.innerHTML = unretireLabel;  
-	$('productTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__retired').value="true";
+	$('assetTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__retired').value="true";
 	changeDisabledOn( handle, true );
 }
 
@@ -321,7 +321,7 @@ function unRetire( handle, target ) {
 
 	handle.removeClassName( "retired" );
 	target.innerHTML = retireLabel;  
-	$('productTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__retired').value= "false";
+	$('assetTypeUpdate_infoFields_'+ findFieldIndex( handle.id ) + '__retired').value= "false";
 	changeDisabledOn( handle, false );
 }
 
@@ -362,7 +362,7 @@ function setupRemoved(){
 	var infoFields = infoFieldContainer.getElementsByClassName('handle');
 	for ( var index = 0; index <  infoFields.length; index++ ) {
 		node = infoFields[index];
-		if( $('productTypeUpdate_infoFields_'+ findFieldIndex( node.id ) + '__deleted').value == 'true' ) {
+		if( $('assetTypeUpdate_infoFields_'+ findFieldIndex( node.id ) + '__deleted').value == 'true' ) {
 			removed.push( node );
 		}
 	}
@@ -372,7 +372,7 @@ function setupRemoved(){
 		var infoOptions = infoOptionContainers[i].getElementsByClassName('infoOpitonHandle');
 		for ( var j = 0; j < infoOptions .length; j++ ) {
 			node = infoOptions[j];
-			if( $('productTypeUpdate_editInfoOptions_'+ findOptionIndex( node.id ) + '__deleted').value == 'true' ) {
+			if( $('assetTypeUpdate_editInfoOptions_'+ findOptionIndex( node.id ) + '__deleted').value == 'true' ) {
 				
 				
 				
@@ -397,7 +397,7 @@ function correctSorting() {
 	var infoFields = infoFieldContainer.getElementsByClassName('handle');
 	for ( var index = 0; index <  infoFields.length; index++ ) {
 		node = infoFields[index];
-		var weight = $('productTypeUpdate_infoFields_'+ findFieldIndex( node.id ) + '__weight').value
+		var weight = $('assetTypeUpdate_infoFields_'+ findFieldIndex( node.id ) + '__weight').value
 		 
 		newOrder.push( new Array( node, parseInt(weight ) ) );
 		newOrder.sort( function(a,b) { return a[1] - b[1] } );

@@ -19,7 +19,7 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
-import com.n4systems.model.utils.FindSubProducts;
+import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.util.ListingPair;
@@ -192,7 +192,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		if (asset == null || !asset.getId().equals(id)) {
 			if (!isInVendorContext()) {
 				asset = persistenceManager.find(Asset.class, id, getSecurityFilter(), "type.subTypes", "type.inspectionTypes");
-				asset = new FindSubProducts(persistenceManager, asset).fillInSubProducts();
+				asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 			} else {
 				asset = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(id).load();
 			}

@@ -63,13 +63,13 @@ public class MinimalTenantDataSetup {
         return org;
     }
 
-    public void createTestProductTypes(String[] testProductTypes) {
-        for (String typeName : testProductTypes) {
-            createSimpleProductType(em, typeName);
+    public void createTestAssetTypes(String[] testAssetTypes) {
+        for (String typeName : testAssetTypes) {
+            createSimpleAssetType(em, typeName);
         }
     }
     
-    private AssetType createSimpleProductType(EntityManager em, String name) {
+    private AssetType createSimpleAssetType(EntityManager em, String name) {
         AssetType type = new AssetType();
         type.setTenant(tenant);
         type.setName(name);

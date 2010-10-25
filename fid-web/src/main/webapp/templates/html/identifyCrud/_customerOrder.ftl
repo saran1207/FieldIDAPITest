@@ -3,8 +3,8 @@
 	<div >
 		<div id="assetLookup">
 			<#assign namespace="/ajax"/>
-			<#assign productSearchAction="customerOrderFindAsset"/>
-			<#assign productFormId="assetSearch"/>
+			<#assign assetSearchAction="customerOrderFindAsset"/>
+			<#assign assetFormId="assetSearch"/>
 			<#include "../inspectionGroup/_searchForm.ftl"/>
 			<div id="productResults"></div>
 		</div>

@@ -102,7 +102,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		}
 
 		Asset masterAsset = persistenceManager.find(Asset.class, masterInspectionHelper.getMasterAsset().getId(), getSecurityFilter(), "type.subTypes");
-		masterAsset = productManager.fillInSubProductsOnProduct(masterAsset);
+		masterAsset = productManager.fillInSubAssetsOnAsset(masterAsset);
 		masterInspectionHelper.setMasterAsset(masterAsset);
 
 		if (currentInspectionNew) {
@@ -327,7 +327,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			parentAsset = null;
 		} else if (parentAsset == null || !assetId.equals(parentAsset.getId())) {
 			parentAsset = persistenceManager.find(Asset.class, assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions");
-			parentAsset = productManager.fillInSubProductsOnProduct(parentAsset);
+			parentAsset = productManager.fillInSubAssetsOnAsset(parentAsset);
 		}
 	}
 
@@ -339,7 +339,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		return (parentAsset.getId().equals(asset.getId()));
 	}
 
-	public boolean isSubProduct() {
+	public boolean isSubAsset() {
 		return !isParentAsset();
 	}
 

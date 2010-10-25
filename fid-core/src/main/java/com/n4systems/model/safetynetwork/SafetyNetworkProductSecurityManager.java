@@ -19,7 +19,7 @@ public class SafetyNetworkProductSecurityManager {
 	}
 	
 	/**
-	 * Tests if a Asset is linked to myOrg
+	 * Tests if an Asset is linked to myOrg
 	 * @see BaseOrg#canAccess(BaseOrg)
 	 * @param asset	A asset
 	 * @return			true if the Asset is linked and its owner is linked to an Org that is visible to myOrg, false otherwise.

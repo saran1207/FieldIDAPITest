@@ -18,8 +18,8 @@ import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.model.parents.EntityWithTenant;
 /**
- * This defines the set of input info fields and output info fields for a asset type.
- * These fields are used to help fill in values when tagging a asset in all user interfaces.
+ * This defines the set of input info fields and output info fields for an asset type.
+ * These fields are used to help fill in values when tagging an asset in all user interfaces.
  * @author aaitken
  *
  */

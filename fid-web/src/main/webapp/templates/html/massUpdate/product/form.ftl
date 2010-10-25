@@ -12,7 +12,7 @@
 	
 </div>
 
-<@s.form action="massUpdateProductsSave" theme="fieldidSimple" cssClass="listForm">
+<@s.form action="massUpdateProductsSave" id="massUpdateAssetsSave" theme="fieldidSimple" cssClass="listForm">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="searchId" />
 	<@s.hidden name="currentPage" />

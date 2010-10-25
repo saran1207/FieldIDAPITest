@@ -2,14 +2,14 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.administration.page.Admin;
 import com.n4systems.fieldid.selenium.administration.page.ManageInspectionTypes;
-import com.n4systems.fieldid.selenium.administration.page.ManageProductTypesDriver;
-import com.n4systems.fieldid.selenium.datatypes.Product;
+import com.n4systems.fieldid.selenium.administration.page.ManageAssetTypesDriver;
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
@@ -18,7 +18,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 	private Login login;
 	private Admin admin;
 	private ManageInspectionTypes mits;
-	private ManageProductTypesDriver mpts;
+	private ManageAssetTypesDriver mpts;
 	private IdentifyPageDriver identify;
 	
 	@Before
@@ -26,7 +26,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		login = new Login(selenium, misc);
 		admin = new Admin(selenium, misc);
 		mits = new ManageInspectionTypes(selenium, misc);
-		mpts = new ManageProductTypesDriver(selenium, misc);
+		mpts = new ManageAssetTypesDriver(selenium, misc);
 		identify = new IdentifyPageDriver(selenium, misc);
 		String company = getStringProperty("company");
 		String username = getStringProperty("username");
@@ -38,21 +38,21 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 	@Test
 	public void updated_inspection_attributes_on_new_sub_component_should_be_saved() throws Exception {
 		String masterInspectionType = getMasterInspectionType();
-		String masterProductType = getMasterProductType(masterInspectionType);
+		String masterAssetType = getMasterAssetType(masterInspectionType);
 		addInspectionAttributeIfNecessary(masterInspectionType);
-		identifyAMasterProductToInspection(masterProductType);
+		identifyAMasterAssetToInspection(masterAssetType);
 		// save and inspect
 	}
 	
-	private String identifyAMasterProductToInspection(String productType) throws InterruptedException {
+	private String identifyAMasterAssetToInspection(String assetType) throws InterruptedException {
 		misc.gotoIdentify();
 		identify.isAdd();
 		identify.gotoAdd();
-		Product product = new Product();
-		product.setProductType(productType);
-		product = identify.setAddAssetForm(product, true);
+		Asset asset = new Asset();
+		asset.setAssetType(assetType);
+		asset = identify.setAddAssetForm(asset, true);
 		identify.saveNewAsset();
-		return product.getSerialNumber();
+		return asset.getSerialNumber();
 	}
 
 	private void addInspectionAttributeIfNecessary(String masterInspectionType) throws InterruptedException {
@@ -77,18 +77,18 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 		return null;
 	}
 
-	private String getMasterProductType(String masterInspectionType) {
+	private String getMasterAssetType(String masterInspectionType) {
 		misc.gotoAdministration();
-		admin.gotoManageProductTypes();
-		List<String> masterProductTypes = mpts.getProductTypes();
-		for(String productType : masterProductTypes) {
-			mpts.gotoViewProductType(productType);
-			mpts.gotoInspectionTypesProductType();
-			List<String> inspectionTypesOnProductType = mpts.getInspectionTypes();
-			if(inspectionTypesOnProductType.contains(masterInspectionType)) {
-				return productType;
+		admin.gotoManageAssetTypes();
+		List<String> masterAssetTypes = mpts.getAssetTypes();
+		for(String assetType : masterAssetTypes) {
+			mpts.gotoViewAssetType(assetType);
+			mpts.gotoInspectionTypesAssetType();
+			List<String> inspectionTypesOnAssetType = mpts.getInspectionTypes();
+			if(inspectionTypesOnAssetType.contains(masterInspectionType)) {
+				return assetType;
 			}
-			mpts.gotoViewAllProductType();
+			mpts.gotoViewAllAssetType();
 		}
 		return null;
 	}

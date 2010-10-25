@@ -3,7 +3,7 @@ package com.n4systems.model.safetynetwork;
 import java.util.List;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.SubProduct;
+import com.n4systems.model.SubAsset;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.product.SmartSearchWhereClause;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -51,7 +51,7 @@ public class UnregisteredAssetQueryHelper {
 		SubSelectNotExistsClause subClause = new SubSelectNotExistsClause("linkedProductSubClause", subSelect);
 		builder.addWhere(subClause);
 
-		QueryBuilder<Asset> subSelect1 = new QueryBuilder<Asset>(SubProduct.class, new OpenSecurityFilter());
+		QueryBuilder<Asset> subSelect1 = new QueryBuilder<Asset>(SubAsset.class, new OpenSecurityFilter());
 		WhereParameter<String> whereClause1 = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerAsset", "asset", "IGNORED");
 		whereClause1.setKey("noProductWhereParameter");
 		whereClause1.setLiteralParameter(true);
@@ -59,7 +59,7 @@ public class UnregisteredAssetQueryHelper {
 		SubSelectNotExistsClause subClause1 = new SubSelectNotExistsClause("subProductSubClause", subSelect1);
 		builder.addWhere(subClause1);
 
-		QueryBuilder<Asset> subSelect2 = new QueryBuilder<Asset>(SubProduct.class, new OpenSecurityFilter());
+		QueryBuilder<Asset> subSelect2 = new QueryBuilder<Asset>(SubAsset.class, new OpenSecurityFilter());
 		WhereParameter<String> whereClause2 = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerAsset", "masterAsset", "IGNORED");
 		whereClause2.setKey("noMasterProductWhereParameter");
 		whereClause2.setLiteralParameter(true);

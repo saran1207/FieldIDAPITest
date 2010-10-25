@@ -54,7 +54,7 @@ public class InspectionFrequenciesDeleteHandlerImpl implements InspectionFrequen
 
 	
 	private List<AssetTypeSchedule> getFrequenciesForAssociatedInspectionType(AssociatedInspectionType entity) {
-		return listLoader.setInspectionTypeId(entity.getInspectionType().getId()).setProductTypeId(entity.getAssetType().getId()).load(transaction);
+		return listLoader.setInspectionTypeId(entity.getInspectionType().getId()).setAssetTypeId(entity.getAssetType().getId()).load(transaction);
 	}
 	
 	

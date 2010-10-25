@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.util.AssetRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -56,7 +57,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.DateHelper;
-import com.n4systems.util.ProductRemovalSummary;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleListable;
@@ -80,7 +80,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private List<Asset> assets;
 	private List<Listable<Long>> employees;
 
-	protected List<ProductAttachment> productAttachments;
+	protected List<ProductAttachment> assetAttachments;
 
 	// form inputs
 	private List<InfoOptionInput> productInfoOptions;
@@ -119,7 +119,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private String saveAndPrint;
 	private String saveAndSchedule;
 
-	private ProductRemovalSummary removalSummary;
+	private AssetRemovalSummary removalSummary;
 
 	// managers
 	private LegacyProductType productTypeManager;
@@ -135,7 +135,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	private Long excludeId;
 	
 	protected List<Asset> linkedAssets;
-	protected Map<Long, List<ProductAttachment>> linkedProductAttachments;
+	protected Map<Long, List<ProductAttachment>> linkedAssetAttachments;
 	
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
 	
@@ -164,7 +164,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	protected void loadMemberFields(Long uniqueId) {
 		try {
 			if (!isInVendorContext()) {
-				asset = productManager.findProductAllFields(uniqueId, getSecurityFilter());
+				asset = productManager.findAssetAllFields(uniqueId, getSecurityFilter());
 			} else {
 				asset = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
 			}
@@ -578,7 +578,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		} catch (UsedOnMasterInspectionException e) {
 			addFlashErrorText("error.deleteusedonmasterinspection");
 		} catch (Exception e) {
-			logger.error("failed to archive a asset", e);
+			logger.error("failed to archive an asset", e);
 			addFlashErrorText("error.deleteproduct");
 		}
 
@@ -705,7 +705,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	public void setAssetStatus(Long assetStatusId) {
 		AssetStatus assetStatus = null;
 		if (assetStatusId != null) {
-			assetStatus = legacyProductSerialManager.findProductStatus(assetStatusId, getTenantId());
+			assetStatus = legacyProductSerialManager.findAssetStatus(assetStatusId, getTenantId());
 		}
 		this.asset.setAssetStatus(assetStatus);
 	}
@@ -803,7 +803,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 	@SuppressWarnings("deprecation")
 	public Collection<AssetSerialExtension> getExtentions() {
 		if (extentions == null) {
-			extentions = legacyProductSerialManager.getProductSerialExtensions(getTenantId());
+			extentions = legacyProductSerialManager.getAssetSerialExtensions(getTenantId());
 		}
 		return extentions;
 	}
@@ -846,7 +846,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 
 	public Asset getParentAsset() {
 		if (!lookedUpParent && !asset.isNew()) {
-			parentAsset = productManager.parentProduct(asset);
+			parentAsset = productManager.parentAsset(asset);
 			lookedUpParent = true;
 		}
 
@@ -942,7 +942,7 @@ public class ProductCrud extends UploadAttachmentSupport {
 		}
 	}
 
-	public ProductRemovalSummary getRemovalSummary() {
+	public AssetRemovalSummary getRemovalSummary() {
 		return removalSummary;
 	}
 
@@ -994,15 +994,15 @@ public class ProductCrud extends UploadAttachmentSupport {
 		return productSaverService;
 	}
 
-	public List<ProductAttachment> getLinkedProductAttachments(Long linkedProductId) {
-		return linkedProductAttachments.get(linkedProductId);
+	public List<ProductAttachment> getLinkedAssetAttachments(Long linkedAssetId) {
+		return linkedAssetAttachments.get(linkedAssetId);
 	}
 	
-	public List<ProductAttachment> getProductAttachments() {
-		if (productAttachments == null) {
-			productAttachments = getLoaderFactory().createProductAttachmentListLoader().setProduct(asset).load();
+	public List<ProductAttachment> getAssetAttachments() {
+		if (assetAttachments == null) {
+			assetAttachments = getLoaderFactory().createProductAttachmentListLoader().setProduct(asset).load();
 		}
-		return productAttachments;
+		return assetAttachments;
 	}
 
 	public Long getOwnerId() {

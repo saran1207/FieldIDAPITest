@@ -7,11 +7,11 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.Identifier;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
@@ -58,7 +58,7 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		LoginPage loginPage = startAsCompany(company);		
 		homePage = loginPage.login(username, password);
 		IdentifyPage identifyPage = homePage.clickIdentifyLink();
-		String serialNumber = identifyProduct(identifyPage);
+		String serialNumber = identifyAsset(identifyPage);
 		checkAssetIdentified(identifyPage, serialNumber);
 	}
 	
@@ -109,7 +109,7 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		}
 	}
 
-	private List<Identifier> identifyMultipleAssetsRange(IdentifyPage identifyPage, int quantity, String productType) {
+	private List<Identifier> identifyMultipleAssetsRange(IdentifyPage identifyPage, int quantity, String assetType) {
 		Calendar now = new GregorianCalendar();
 		String prefix = String.format("%1$04d%2$02d%3$02d-", now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
 		String start = "1";	// start must be a number
@@ -117,15 +117,15 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		
 		identifyPage.clickMultiAdd();
 		
-		Product product = new Product();
-		product.setLocation("here");
-		List<String> productStatuses = identifyPage.getProductStatusesFromMultiAddForm();
-		assertTrue("There were no asset status options available", productStatuses.size() > 0);
-		product.setProductStatus(productStatuses.get(0));
-		product.setProductType(productType);
-		product.setPurchaseOrder("PO #888");
-		product.setComments("This asset created via Multi Add test automation.");
-		identifyPage.setMultiAddStep1Form(product);
+		Asset asset = new Asset();
+		asset.setLocation("here");
+		List<String> assetStatuses = identifyPage.getAssetStatusesFromMultiAddForm();
+		assertTrue("There were no asset status options available", assetStatuses.size() > 0);
+		asset.setAssetStatus(assetStatuses.get(0));
+		asset.setAssetType(assetType);
+		asset.setPurchaseOrder("PO #888");
+		asset.setComments("This asset created via Multi Add test automation.");
+		identifyPage.setMultiAddStep1Form(asset);
 		identifyPage.clickContinueButtonMultiAddStep1();
 		identifyPage.setMultiAddStep2Form(quantity);
 		identifyPage.clickContinueButtonMultiAddStep2();
@@ -140,17 +140,17 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		return identifiers;
 	}
 
-	private String identifyProduct(IdentifyPage identifyPage) throws Exception {
-		Product product = new Product();
-		product = identifyPage.setAddAssetForm(product, true);
+	private String identifyAsset(IdentifyPage identifyPage) throws Exception {
+		Asset asset = new Asset();
+		asset = identifyPage.setAddAssetForm(asset, true);
 		identifyPage.saveNewAsset();
 
-		return product.getSerialNumber();
+		return asset.getSerialNumber();
 	}
 
 	private String identifySingleAssetIntegrationTenant(IdentifyPage identifyPage) throws Exception {
 		identifyPage.clickAdd();
-		return identifyProduct(identifyPage);
+		return identifyAsset(identifyPage);
 	}
 
 	private void checkAssetIdentified(IdentifyPage identifyPage, String serialNumber) {
@@ -164,7 +164,7 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		int index = identifyPage.getNumberOfLineItemsInOrder();
 		identifyPage.clickIdentifyForOrderLineItem(index);
 		identifyPage.checkIdentifyWithOrderNumberPage(orderNumber);
-		return identifyProduct(identifyPage);
+		return identifyAsset(identifyPage);
 	}
 
 }

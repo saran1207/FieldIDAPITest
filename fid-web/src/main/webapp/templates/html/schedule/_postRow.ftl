@@ -1,4 +1,4 @@
-<#assign assetId="${action.getProductIdForInspectionScheduleId(entityId)}" />
+<#assign assetId="${action.getAssetIdForInspectionScheduleId(entityId)}" />
 <#assign inspectionTypeId="${action.getInspectionTypeIdForInspectionScheduleId(entityId)}" />
 <#assign inspectionId="${action.getInspectionIdForInspectionScheduleId(entityId)!0}" />
 

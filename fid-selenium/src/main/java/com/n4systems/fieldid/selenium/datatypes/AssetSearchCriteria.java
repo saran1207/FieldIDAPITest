@@ -7,9 +7,9 @@ public class AssetSearchCriteria {
 	private String purchaseOrder;
 	private String assignedTo;
 	private String referenceNumber;
-	private String productStatus;
-	private String productTypeGroup;
-	private String productType;
+	private String assetStatus;
+	private String assetTypeGroup;
+	private String assetType;
 	private String location;
 	private Owner owner;
 	private String fromDate;
@@ -38,16 +38,16 @@ public class AssetSearchCriteria {
 		return this.referenceNumber;
 	}
 	
-	public String getProductStatus() {
-		return this.productStatus;
+	public String getAssetStatus() {
+		return this.assetStatus;
 	}
 	
-	public String getProductTypeGroup() {
-		return this.productTypeGroup;
+	public String getAssetTypeGroup() {
+		return this.assetTypeGroup;
 	}
 	
-	public String getProductType() {
-		return this.productType;
+	public String getAssetType() {
+		return this.assetType;
 	}
 	
 	public String getLocation() {
@@ -86,16 +86,16 @@ public class AssetSearchCriteria {
 		this.referenceNumber = s;
 	}
 	
-	public void setProductStatus(String s) {
-		this.productStatus = s;
+	public void setAssetStatus(String s) {
+		this.assetStatus = s;
 	}
 	
-	public void setProductTypeGroup(String s) {
-		this.productTypeGroup = s;
+	public void setAssetTypeGroup(String s) {
+		this.assetTypeGroup = s;
 	}
 	
-	public void setProductType(String s) {
-		this.productType = s;
+	public void setAssetType(String s) {
+		this.assetType = s;
 	}
 	
 	public void setLocation(String s) {

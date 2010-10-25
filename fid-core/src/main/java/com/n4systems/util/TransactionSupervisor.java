@@ -27,7 +27,7 @@ public class TransactionSupervisor {
 	
 	
 	
-	public void completeProductTransaction( String transactionGUID, Tenant tenant ) throws TransactionAlreadyProcessedException {
+	public void completeAssetTransaction( String transactionGUID, Tenant tenant ) throws TransactionAlreadyProcessedException {
 		completeTransaction( transactionGUID, tenant, "create asset" );
 	}
 	

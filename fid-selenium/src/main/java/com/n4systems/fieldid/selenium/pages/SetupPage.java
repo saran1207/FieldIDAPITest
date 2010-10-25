@@ -3,13 +3,13 @@ package com.n4systems.fieldid.selenium.pages;
 import static org.junit.Assert.fail;
 
 import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageInspectionBooksPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageInspectionTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageProductTypeGroupsPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageProductTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.pages.setup.MangageEventTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.SystemSettingsPage;
@@ -59,14 +59,14 @@ public class SetupPage extends FieldIDPage {
 		return new ManageCommentTemplatesPage(selenium);
 	}
 	
-	public ManageProductTypeGroupsPage clickManageProductTypeGroups() {
+	public ManageAssetTypeGroupsPage clickManageAssetTypeGroups() {
 		selenium.click("//a[.='Manage Asset Type Groups']");
-		return new ManageProductTypeGroupsPage(selenium);
+		return new ManageAssetTypeGroupsPage(selenium);
 	}
 	
-	public ManageProductTypesPage clickManageProductTypes() {
+	public ManageAssetTypesPage clickManageAssetTypes() {
 		selenium.click("//a[.='Manage Asset Types']");
-		return new ManageProductTypesPage(selenium);
+		return new ManageAssetTypesPage(selenium);
 	}
 	
 	public ManageInspectionTypesPage clickManageInspectionTypes() {

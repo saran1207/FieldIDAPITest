@@ -24,7 +24,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	private String connectionProfileName = "//p[.='Sea-Fit']";
 
 	// Asset Types
-	private static final String PRODUCT_TYPE_CHECKBOX_NAME_1 = "Gravity Harness";
+	private static final String ASSET_TYPE_CHECKBOX_NAME_1 = "Gravity Harness";
 
 	// Connection names
 	private static final String CONNECTION_NAME_1 = "Sea-Fit";
@@ -76,7 +76,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 		
 		safetyNetworkCatalogImportPage.clickSelectItemsToImportButton();
 		
-		safetyNetworkCatalogImportPage.clickFirstProductTypeCheckBox();
+		safetyNetworkCatalogImportPage.clickFirstAssetTypeCheckBox();
 		
 		safetyNetworkCatalogImportPage.clickContinue();
 		
@@ -90,13 +90,13 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	public void test_publish_catalog() {
 		SafetyNetworkCatalogPage safetyNetworkCatalogPage = startAsCompany("msa").login().clickSafetyNetworkLink().goToCatalog();
 
-		safetyNetworkCatalogPage.checkProductTypeCheckBox(PRODUCT_TYPE_CHECKBOX_NAME_1);
+		safetyNetworkCatalogPage.checkAssetTypeCheckBox(ASSET_TYPE_CHECKBOX_NAME_1);
 
 		safetyNetworkCatalogPage.submitForm();
-		assertTrue("Could not toggle Asset Type", safetyNetworkCatalogPage.isChecked(PRODUCT_TYPE_CHECKBOX_NAME_1));
+		assertTrue("Could not toggle Asset Type", safetyNetworkCatalogPage.isChecked(ASSET_TYPE_CHECKBOX_NAME_1));
 
 		// Uncheck for retesting...
-		safetyNetworkCatalogPage.unCheckProductTypeCheckBox(PRODUCT_TYPE_CHECKBOX_NAME_1);
+		safetyNetworkCatalogPage.unCheckAssetTypeCheckBox(ASSET_TYPE_CHECKBOX_NAME_1);
 		safetyNetworkCatalogPage.submitForm();
 	}
 

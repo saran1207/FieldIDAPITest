@@ -51,7 +51,7 @@
 		
 	</script>
 </head>
-<@s.form action="productTypeUpdate" theme="fieldidSimple" cssClass="crudForm largeForm" method="post" onsubmit="return checkForUploads();" >
+<@s.form action="productTypeUpdate" id="assetTypeUpdate" theme="fieldidSimple" cssClass="crudForm largeForm" method="post" onsubmit="return checkForUploads();" >
 	<@s.hidden name="uniqueID" />
 	<#include "/templates/html/common/_formErrors.ftl" />
 	<h2><@s.text name="label.productinformation"/></h2>

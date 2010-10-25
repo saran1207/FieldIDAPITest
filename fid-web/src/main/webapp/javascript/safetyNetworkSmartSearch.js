@@ -7,22 +7,22 @@ function showNetworkSmartSearch(event) {
 	translate( $('networkSmartSearchContainer'),$('registerOverNetworkLinkContainer'), 0, 0);
 	
 	$('registerOverNetworkLinkContainer').hide();
-	$('linkedProductContainer').hide();
+	$('linkedAssetContainer').hide();
 	
 }
 
 function cancelNetworkSmartSearch(event) {
 	event.stop();
 	$('snSmartSearchResults').update('');
-	$('linkedProductId').value = null;
+	$('linkedAssetId').value = null;
 	$('registerOverNetworkLinkContainer').show();
-	$('linkedProductContainer').hide();
+	$('linkedAssetContainer').hide();
 	$('networkSmartSearchContainer').hide();
 }
 
-function showLinkedProductInfo() {
+function showLinkedAssetInfo() {
 	$('registerOverNetworkLinkContainer').hide();
-	$('linkedProductContainer').show();
+	$('linkedAssetContainer').show();
 	$$('#networkSmartSearchContainer').invoke("hide");
 }
 
@@ -35,32 +35,32 @@ function submitSearch(event) {
 	$('snSmartSearch').request(getStandardCallbacks());
 }
 
-function updateLinkedProductInfo(product) {
-	populateLinkedProductInfo(product);
+function updateLinkedAssetInfo(product) {
+	populateLinkedAssetInfo(product);
 	pushRegisteredProductInformationToLocalProduct(product);
 }
 	
-function populateLinkedProductInfo(product) {
-	$('linkedProductId').setValue(product.id);
-	$('linkedProductSerial').update(product.serialNumber);
-	$('linkedProductRfid').update(product.rfidNumber);
-	$('linkedProductOwner').update(product.owner);
-	$('linkedProductType').update(product.type);
+function populateLinkedAssetInfo(product) {
+	$('linkedAssetId').setValue(product.id);
+	$('linkedAssetSerial').update(product.serialNumber);
+	$('linkedAssetRfid').update(product.rfidNumber);
+	$('linkedAssetOwner').update(product.owner);
+	$('linkedAssetType').update(product.type);
 	
-	showLinkedProductInfo();
+	showLinkedAssetInfo();
 }
 
-function updateLinkedProductFromMultipleResults(event) {
+function updateLinkedAssetFromMultipleResults(event) {
 	var result = Event.element(event);
-	var product = new Object();
+	var asset = new Object();
 	
-	product.id = result.getAttribute("assetId");
-	product.serialNumber = result.getAttribute("serialNumber");
-	product.rfidNumber = result.getAttribute("rfidNumber");
-	product.owner = result.getAttribute("owner");
-	product.type = result.getAttribute("productType");
-	product.referenceNumber = result.getAttribute('referenceNumber');
-	updateLinkedProductInfo(product);
+	asset.id = result.getAttribute("assetId");
+	asset.serialNumber = result.getAttribute("serialNumber");
+	asset.rfidNumber = result.getAttribute("rfidNumber");
+	asset.owner = result.getAttribute("owner");
+	asset.type = result.getAttribute("assetType");
+	asset.referenceNumber = result.getAttribute('referenceNumber');
+	updateLinkedAssetInfo(asset);
 }
 
 

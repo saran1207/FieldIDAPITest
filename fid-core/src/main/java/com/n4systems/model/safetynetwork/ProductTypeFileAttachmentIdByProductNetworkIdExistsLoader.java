@@ -7,7 +7,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.persistence.loaders.Loader;
 
 /**
- * A loader to test that a AssetType attachment can be loaded from a given networkId.  The
+ * A loader to test that an AssetType attachment can be loaded from a given networkId.  The
  * attachment is considered loadable iff it is attached to one or more of the ProductTypes
  * of the Products with a given networkId. 
  */

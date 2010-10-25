@@ -266,7 +266,7 @@ public class LegacyProductTypeManager implements LegacyProductType {
 		
 		Pager<Long> infoOptionsToScan = findInfoOptions(pageNumber, pageSize);
 		
-		// look for info options that don't have a connection to a asset serial.
+		// look for info options that don't have a connection to an asset serial.
 		Query query = em.createQuery( "select DISTINCT io.uniqueID  from "+ AssetSerialInfoOption.class.getName()+" as psio right join psio.infoOption as io where io.uniqueID IN (:infoOptions) AND psio.uniqueID IS NULL " );
 		query.setParameter( "infoOptions", infoOptionsToScan.getList() );
 		orphanInfoOptionIds = (Collection<Long>)query.getResultList();

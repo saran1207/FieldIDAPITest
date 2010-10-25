@@ -4,7 +4,7 @@ ${action.setPageType('product', 'edit')!}
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
 	<script type="text/javascript">
 		function findAssets() {
-			$$('.productLink').each( function(element) { 
+			$$('.assetLink').each( function(element) { 
 					element.observe( 'click', selectWinner );
 				});
 		}
@@ -97,8 +97,8 @@ ${action.setPageType('product', 'edit')!}
 			</p>
 			<div id="assetLookup">
 				<#assign namespace="/ajax"/>
-				<#assign productSearchAction="mergeFindProduct"/>
-				<#assign productFormId="mergeSmartSearch"/>
+				<#assign assetSearchAction="mergeFindProduct"/>
+				<#assign assetFormId="mergeSmartSearch"/>
 				<#assign overRideProductType=losingAsset.type.id/>
 				<#assign useOverRides=true/>
 				<#include "../inspectionGroup/_searchForm.ftl"/>

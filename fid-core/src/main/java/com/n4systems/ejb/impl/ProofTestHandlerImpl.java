@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
@@ -29,7 +30,6 @@ import com.n4systems.ejb.legacy.impl.PopulatorLogManager;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueProductException;
-import com.n4systems.exceptions.SubProductUniquenessException;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
@@ -153,7 +153,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		for (String serialNumber : fileData.getSerialNumbers()) {
 			inspection = null;
 			try {
-				// find a asset for this tenant, serial and customer
+				// find an asset for this tenant, serial and customer
 				asset = findOrCreateProduct(primaryOrg, performedBy, serialNumber, customer, fileData);
 			} catch (NonUniqueProductException e) {
 				writeLogMessage(tenant, "There are multiple Asset with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
@@ -181,7 +181,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			Date datePerformedRangeStartInUTC = DateHelper.convertToUTC(DateHelper.getBeginingOfDay(datePerformed), performedBy.getTimeZone());
 			Date datePerformedRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(datePerformed), performedBy.getTimeZone());
 
-			// if we find a asset then it's time to try and find an inspection inside the same day as given.
+			// if we find an asset then it's time to try and find an inspection inside the same day as given.
 			inspections = inspectionManager.findInspectionsByDateAndProduct(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, asset, performedBy.getSecurityFilter());
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
@@ -263,8 +263,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			return null;
 		}
 		
-		// find a asset for this tenant, serial and customer
-		Asset asset = productManager.findProductBySerialNumber(serial, primaryOrg.getTenant().getId(), customerId);
+		// find an asset for this tenant, serial and customer
+		Asset asset = productManager.findAssetBySerialNumber(serial, primaryOrg.getTenant().getId(), customerId);
 		
 		if(asset == null) {
 			if(!fileData.isCreateProduct()) {
@@ -353,8 +353,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		try {
 			asset =  legacyProductManager.create(asset, user);
-		} catch( SubProductUniquenessException e ) {
-			logger.error( "received a subproduct uniquness error this should not be possible form this type of update.", e );
+		} catch( SubAssetUniquenessException e ) {
+			logger.error( "received a subasset uniquness error this should not be possible form this type of update.", e );
 			throw new RuntimeException( e );
 		}
 

@@ -161,7 +161,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	}
 	
 	public List<ListingPair> getPublishedAssetTypes() {
-		return linkedCatalogAccess.getPublishedProductTypesLP();
+		return linkedCatalogAccess.getPublishedAssetTypesLP();
 	}
 
 	public Map<String, Boolean> getImportInspectionTypeIds() {

@@ -9,14 +9,14 @@ import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.impl.InspectionSaver;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.UnknownSubProduct;
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.SubInspection;
 
 public class NullInspectionSaver implements InspectionSaver {
 	@Override
-	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
+	public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 		return parameterObject.inspection;
 	}
 

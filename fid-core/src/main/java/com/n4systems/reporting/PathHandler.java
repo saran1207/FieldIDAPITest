@@ -244,7 +244,7 @@ public class PathHandler {
 	}
 	
 	/**
-	 * Finds a report file for a Asset.  Defaults to the all Tenant report directory if the Tenant specific report does not exist.
+	 * Finds a report file for an Asset.  Defaults to the all Tenant report directory if the Tenant specific report does not exist.
 	 * @see 	#getReportPath(com.n4systems.model.Asset)
 	 * @param	getAppRoot()	A base directory to resolve the file from
 	 * @param 	product			A Asset

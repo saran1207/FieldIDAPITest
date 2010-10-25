@@ -4,8 +4,8 @@
 </#assign>
 
 <#escape x as x?js_string>
-	$('subProduct_${subProduct.asset.id}').replace('${html}');
+	$('subAsset_${subAsset.asset.id}').replace('${html}');
 		
-	$('subProduct_${subProduct.asset.id}').highlight();
+	$('subAsset_${subAsset.asset.id}').highlight();
 	
 </#escape>

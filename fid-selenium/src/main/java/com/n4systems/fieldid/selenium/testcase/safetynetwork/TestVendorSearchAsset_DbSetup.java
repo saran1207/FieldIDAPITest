@@ -27,9 +27,9 @@ public class TestVendorSearchAsset_DbSetup extends PageNavigatingTestCase<Vendor
                 .type(TypedOrgConnection.ConnectionType.VENDOR)
                 .build();
 
-        AssetBuilder builder = scenario.aProduct()
+        AssetBuilder builder = scenario.anAsset()
                 .forTenant(scenario.tenant("iti"))
-                .ofType(scenario.productType("iti", TEST_PRODUCT_TYPE_1));
+                .ofType(scenario.assetType("iti", TEST_ASSET_TYPE_1));
 
         builder.published(true)
                 .withOwner(scenario.customerOrg("iti", "seafit"))

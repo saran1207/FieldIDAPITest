@@ -14,6 +14,7 @@ import javax.activation.FileTypeMap;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.util.AssetTypeRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -39,7 +40,6 @@ import com.n4systems.model.utils.CleanProductTypeFactory;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.ProductTypeRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -61,7 +61,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 	private ConnectedEntityLoader entityLoader;
 
 	private AssetType assetType;
-	private ProductTypeRemovalSummary removalSummary;
+	private AssetTypeRemovalSummary removalSummary;
 		
 
 	private Collection<InfoFieldBean.InfoFieldType> infoFieldTypes;
@@ -527,7 +527,7 @@ public class ProductTypeCrud extends UploadFileSupport implements HasDuplicateVa
 		return unitOfMeasures;
 	}
 
-	public ProductTypeRemovalSummary getRemovalSummary() {
+	public AssetTypeRemovalSummary getRemovalSummary() {
 		return removalSummary;
 	}
 

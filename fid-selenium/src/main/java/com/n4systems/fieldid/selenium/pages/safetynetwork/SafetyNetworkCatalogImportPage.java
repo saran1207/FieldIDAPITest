@@ -24,7 +24,7 @@ public class SafetyNetworkCatalogImportPage extends FieldIDPage {
 		waitForAjax();
 	}
 	
-	public void clickFirstProductTypeCheckBox(){
+	public void clickFirstAssetTypeCheckBox(){
 		selenium.check("//ul[1]/li/span/input[1]");
 		assertTrue("Checkbox wasn't successfully toggled", selenium.isChecked("//ul[1]/li/span/input[1]"));
 	}

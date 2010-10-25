@@ -4,10 +4,10 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/projects.js"/>"></script>
 	<script type="text/javascript">
 		function findAssets() {
-			var productLinks = $$( '.productLink' );
-			if( productLinks != null ) {
-				for( var i = 0; i < productLinks.length; i++ ) {
-					productLinks[i].observe( 'click', attachAssetListener );
+			var assetLinks = $$( '.assetLink' );
+			if( assetLinks != null ) {
+				for( var i = 0; i < assetLinks.length; i++ ) {
+					assetLinks[i].observe( 'click', attachAssetListener );
 				}
 			}
 		}
@@ -46,8 +46,8 @@ ${action.setPageType('job','assets')!}
 <div id="assetLookup" >
 	<@s.hidden name="projectId"/>
 	<#assign namespace="/ajax"/>
-	<#assign productSearchAction="jobFindAsset"/>
-	<#assign productFormId="projectAssetSearch"/>
+	<#assign assetSearchAction="jobFindAsset"/>
+	<#assign assetFormId="projectAssetSearch"/>
 	<#include "../inspectionGroup/_searchForm.ftl"/>
 	<div id="results" class="hidden">
 		

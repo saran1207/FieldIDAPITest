@@ -18,7 +18,7 @@ import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.UnknownSubProduct;
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.handlers.creator.inspections.InspectionCreator;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
@@ -39,7 +39,7 @@ public class InspectionCreatorTest {
 	private final class InspectionSaverSabatour implements InspectionSaver {
 		
 		
-		@Override public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubProduct {
+		@Override public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 			throw new ProcessingProofTestException();
 		}
 
@@ -161,7 +161,7 @@ public class InspectionCreatorTest {
 		final Inspection savedInspection = anInspection().build();
 		
 		inspectionPersistenceFactory.inspectionSaver = new InspectionSaver() {
-			public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException ,FileAttachmentException ,UnknownSubProduct {
+			public Inspection createInspection(CreateInspectionParameter parameterObject) throws ProcessingProofTestException ,FileAttachmentException , UnknownSubAsset {
 				return savedInspection;
 			}
 

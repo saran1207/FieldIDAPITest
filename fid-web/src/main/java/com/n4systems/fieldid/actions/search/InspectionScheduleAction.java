@@ -146,7 +146,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		return inspectionManager.findLastInspectionDate(schedule);
 	}
 	
-	public Long getProductIdForInspectionScheduleId(String inspectionScheduleId) {
+	public Long getAssetIdForInspectionScheduleId(String inspectionScheduleId) {
 		return inspectionScheduleManager.getProductIdForSchedule(Long.valueOf(inspectionScheduleId));
 	}
 	

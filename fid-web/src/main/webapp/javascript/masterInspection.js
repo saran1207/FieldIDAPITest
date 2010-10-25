@@ -1,15 +1,5 @@
 
-function clearSubProduct( subProductId ) {
-	$( "subProduct_" + subProductId ).remove();
-}
-
-
-function attachSubProductSubmit( event ) {
-	
-	
-}
-
-function attachProduct( event, assetId ) {
+function attachAsset( event, assetId ) {
 	if( event ) {
 		event.stop();
 		element = Event.element( event );
@@ -17,13 +7,10 @@ function attachProduct( event, assetId ) {
 	}
 	Lightview.hide();
 	
-	var url = addSubProductUrl + "?uniqueID=" + $('assetId').value + "&subProduct.asset.iD=" + assetId + "&subProductIndex=" + subProductIndex + "&token=" + getToken();
-	subProductIndex++;
+	var url = addSubAssetUrl + "?uniqueID=" + $('assetId').value + "&subAsset.asset.iD=" + assetId + "&subAssetIndex=" + subAssetIndex + "&token=" + getToken();
+	subAssetIndex++;
 	getResponse( url, "get" );
 }
-
-
-
 
 function submitForm() {
 	var inputElement = new Element("input");

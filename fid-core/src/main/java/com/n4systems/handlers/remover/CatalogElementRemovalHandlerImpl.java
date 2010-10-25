@@ -35,7 +35,7 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 			catalog.getPublishedInspectionTypes().remove(inspectionType);
 		}
 		if (assetType != null) {
-			catalog.getPublishedProductTypes().remove(assetType);
+			catalog.getPublishedAssetTypes().remove(assetType);
 		}
 	}
 	

@@ -7,4 +7,4 @@ product.owner = "${asset.owner.internalOrg.displayName?default("")?js_string}";
 product.type = "${asset.type.displayName?default("")?js_string}";
 product.referenceNumber = "${asset.customerRefNumber?default('')?js_string}";
 
-updateLinkedProductInfo(product);
+updateLinkedAssetInfo(product);

@@ -1,5 +1,5 @@
-var subProductIndex = 0;
-var addSubProductUrl = "";
+var subAssetIndex = 0;
+var addSubAssetUrl = "";
 function getToken() {
 	var token = $( 'searchToken' );
 	
@@ -8,7 +8,7 @@ function getToken() {
 	return token.getValue();
 }
 
-function attachProduct( event, assetId ) {
+function attachAsset( event, assetId ) {
 	if( event ) {
 		event.stop();
 		element = Event.element( event );
@@ -16,14 +16,14 @@ function attachProduct( event, assetId ) {
 	}
 	Lightview.hide();
 	
-	var url = addSubProductUrl + "?uniqueID=" + $('uniqueID').value + "&subProduct.asset.iD=" + assetId + "&subProductIndex=" + subProductIndex + "&token=" + getToken();
-	subProductIndex++;
+	var url = addSubAssetUrl + "?uniqueID=" + $('uniqueID').value + "&subAsset.asset.iD=" + assetId + "&subAssetIndex=" + subAssetIndex + "&token=" + getToken();
+	subAssetIndex++;
 	getResponse( url, "get" );
 }
 
 
 
-var createProductUrl = "";	
+var createAssetUrl = "";	
 
 function submitCreateForm( event, form ) {
 	// block default form submit
@@ -36,57 +36,57 @@ function submitCreateForm( event, form ) {
 }
 
 
-var addProductUrl = "";
-function addSubProduct(assetType, ownerId) {
+var addAssetUrl = "";
+function addSubAsset(assetType, ownerId) {
 	var params = new Object();
 	params.assetTypeId = assetType;
 	params.token = getToken();
 	params.ownerId = ownerId;
 	
-	getResponse(addProductUrl , "get", params);
+	getResponse(addAssetUrl , "get", params);
 }
 
 
-function findSubProduct(productType) {
-	$('subProductSearchForm').observe('submit', submitSearchForm);
-	var productLinks = $$('.productLink');
-	if (productLinks != null) {
-		for (var i = 0; i < productLinks.length; i++) {
-			productLinks[i].observe('click', attachProduct);
+function findSubAsset(assetType) {
+	$('subAssetSearchForm').observe('submit', submitSearchForm);
+	var assetLinks = $$('.assetLink');
+	if (assetLinks != null) {
+		for (var i = 0; i < assetLinks.length; i++) {
+			assetLinks[i].observe('click', attachAsset);
 		}
 	}		
 }
 
-var lookupProductUrl = "";	
-var productLookupTitle = "";
+var lookupAssetUrl = "";
+var assetLookupTitle = "";
 
 function submitSearchForm(event) {
 	// block default form submit
  	event.stop();
   
 	Lightview.show({
-		href: lookupProductUrl,
+		href: lookupAssetUrl,
 		rel: 'ajax',
-		title: productLookupTitle,
+		title: assetLookupTitle,
 		options: {
 			scrolling:true, 
 			width: 700, 
 			height: 420,
 			ajax: {
-				parameters: Form.serialize('subProductSearchForm'),
-				onComplete: findSubProduct
+				parameters: Form.serialize('subAssetSearchForm'),
+				onComplete: findSubAsset
 			}
 		}
 	});
 }
 
-var removeSubProductUrl = "";
-var productIdentifer = 'assetId';
-function removeSubProduct( subProductId ) {
+var removeSubAssetUrl = "";
+var assetIdentifier = 'assetId';
+function removeSubAsset( subAssetId ) {
 	var params = new Object();
-	params.subProductId =  subProductId;
-	params.uniqueID = $(productIdentifer).getValue();
-	getResponse( removeSubProductUrl, "post", params );
+	params.subAssetId =  subAssetId;
+	params.uniqueID = $(assetIdentifier).getValue();
+	getResponse( removeSubAssetUrl, "post", params );
 }
 
 
@@ -100,16 +100,16 @@ function submitForm() {
 	submitCreateForm( null, mainForm  );
 }
 
-var reorderProductsUrl = '';
+var reorderAssetsUrl = '';
 function onDrop() {
-	var rows = Sortable.sequence("productComponentList");
+	var rows = Sortable.sequence("assetComponentList");
 	var params = new Object();
 	for (var i = 0; i < rows.size(); i++) {
 		params['indexes[' + i + ']'] = rows[i];
 	}
 	params['uniqueID'] = $('uniqueID').getValue();
 	
-	getResponse(reorderProductsUrl, 'post', params);
+	getResponse(reorderAssetsUrl, 'post', params);
 }
 
 var labelFormWarning = '';
@@ -123,7 +123,7 @@ function startOrdering() {
 	}
 	$$('.notAllowedDuringOrdering').each( function(element) { element.hide() } );
 	$$('.drag').each( function(element) { element.show() } );
-	Sortable.create("productComponentList", {handle: 'drag', tag: 'div', onUpdate: onDrop});
+	Sortable.create("assetComponentList", {handle: 'drag', tag: 'div', onUpdate: onDrop});
 	$('startOrdering').hide();
 	$('stopOrdering').show();
 }
@@ -131,7 +131,7 @@ function startOrdering() {
 function stopOrdering() {
 	$$('.notAllowedDuringOrdering').each( function(element) { element.show() } );
 	$$('.drag').each( function(element) { element.hide() } );
-	Sortable.destroy("productComponentList");
+	Sortable.destroy("assetComponentList");
 	$('startOrdering').show();
 	$('stopOrdering').hide();
 }

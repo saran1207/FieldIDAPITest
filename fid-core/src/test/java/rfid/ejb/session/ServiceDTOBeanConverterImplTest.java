@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.SubAsset;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,6 @@ import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
@@ -142,8 +142,8 @@ public class ServiceDTOBeanConverterImplTest {
 		asset.setModifiedBy( modifiedBy );
 		
 		
-		asset.getSubProducts().add(new SubProduct("product1", new Asset(), asset));
-		asset.getSubProducts().add(new SubProduct("product2", new Asset(), asset));
+		asset.getSubAssets().add(new SubAsset("product1", new Asset(), asset));
+		asset.getSubAssets().add(new SubAsset("product2", new Asset(), asset));
 
 		
 		
@@ -156,7 +156,7 @@ public class ServiceDTOBeanConverterImplTest {
 		assertEquals( shopOrder, asset.getShopOrder() );
 		assertEquals( customerOrder, asset.getCustomerOrder() );
 		assertEquals( 1, asset.getAssetSerialExtensionValues().size() );
-		assertEquals( 2, asset.getSubProducts().size() );
+		assertEquals( 2, asset.getSubAssets().size() );
 		assertEquals( modifiedBy, asset.getModifiedBy() );
 		
 		

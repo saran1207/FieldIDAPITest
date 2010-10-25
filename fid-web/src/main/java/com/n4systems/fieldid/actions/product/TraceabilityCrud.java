@@ -48,10 +48,10 @@ public class TraceabilityCrud extends ProductCrud {
 		SafetyNetworkProductAttachmentListLoader attachmentLoader = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader();
 		attachmentLoader.setNetworkId(asset.getNetworkId());
 		
-		linkedProductAttachments = new HashMap<Long, List<ProductAttachment>>();
+		linkedAssetAttachments = new HashMap<Long, List<ProductAttachment>>();
 		for (Asset linkedProd: linkedAssets) {
 			attachmentLoader.setProductId(linkedProd.getId());
-			linkedProductAttachments.put(linkedProd.getId(), attachmentLoader.load());
+			linkedAssetAttachments.put(linkedProd.getId(), attachmentLoader.load());
 		}
 		
 		return SUCCESS;
@@ -77,7 +77,7 @@ public class TraceabilityCrud extends ProductCrud {
 	}
 
 	
-	public Long getContextProductId() {
+	public Long getContextAssetId() {
 		return isInVendorContext() ? asset.getId() : null;
 	}
 

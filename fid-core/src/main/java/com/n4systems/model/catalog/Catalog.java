@@ -37,11 +37,11 @@ public class Catalog extends EntityWithTenant implements Saveable{
 		super(tenant);
 	}
 
-	public Set<AssetType> getPublishedProductTypes() {
+	public Set<AssetType> getPublishedAssetTypes() {
 		return publishedAssetTypes;
 	}
 
-	public void setPublishedProductTypes(Set<AssetType> publishedAssetTypes) {
+	public void setPublishedAssetTypes(Set<AssetType> publishedAssetTypes) {
 		this.publishedAssetTypes = publishedAssetTypes;
 	}
 

@@ -1,6 +1,6 @@
 <#if !namespace?exists><#assign namespace="/"/></#if>
 <div id="${productSearchDiagram!'productSearch'}">
-	<@s.form method="get" id="${productFormId!'productSearchForm'}" cssClass="simpleInputForm" action="${productSearchAction}" namespace="${namespace}" theme="simple">
+	<@s.form method="get" id="${assetFormId!'assetSearchForm'}" cssClass="simpleInputForm" action="${assetSearchAction}" namespace="${namespace}" theme="simple">
 		<label class="label"><@s.text name="label.smartsearch"/></label>
 		<span><@s.textfield name="search" /></span>
 		<#if useOverRides?exists && useOverRides >

@@ -141,7 +141,7 @@ public class ProductMassUpdate extends MassUpdate implements Preparable {
 		if (statusId == null) {
 			asset.setAssetStatus(null);
 		} else if (asset.getAssetStatus() == null || !statusId.equals(asset.getAssetStatus().getUniqueID())) {
-			AssetStatus assetStatus = productSerialManager.findProductStatus(statusId, getTenantId());
+			AssetStatus assetStatus = productSerialManager.findAssetStatus(statusId, getTenantId());
 			asset.setAssetStatus(assetStatus);
 		}
 	}

@@ -15,7 +15,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 	private static final String VENDOR_CONTEXT_SELECTOR = "css=#vendorContextNameLink a";
 	
 	@Test
-	public void should_have_the_copy_and_register_asset_available_when_the_product_is_found_in_a_vendor_context_and_has_not_been_registered() throws Exception {
+	public void should_have_the_copy_and_register_asset_available_when_the_asset_is_found_in_a_vendor_context_and_has_not_been_registered() throws Exception {
 		String contextToSwitchTo = "Unirope Ltd. Edmonton";
 		switchToVendorContext(contextToSwitchTo);
 		
@@ -25,7 +25,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 	}
 	
 	@Test
-	public void should_have_the_message_that_the_asset_is_already_registered_when_the_product_is_found_in_a_vendor_context_and_has_been_registered() throws Exception {
+	public void should_have_the_message_that_the_asset_is_already_registered_when_the_asset_is_found_in_a_vendor_context_and_has_been_registered() throws Exception {
 		String contextToSwitchTo = "Unirope Ltd. Edmonton";
 		switchToVendorContext(contextToSwitchTo);
 		
@@ -46,15 +46,15 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 	}
 	
 	@Test
-	public void should_have_product_registration_information_on_the_screen_when_following_the_copy_and_register_asset() throws Exception {
+	public void should_have_asset_registration_information_on_the_screen_when_following_the_copy_and_register_asset() throws Exception {
 		String contextToSwitchTo = "Unirope Ltd. Edmonton";
 		searchForSerialNumberInVendorContext("alex-share-2", contextToSwitchTo);
 		
 		selenium.click("copyAsset");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
-		assertTrue("linked asset registration should be visible", selenium.isVisible("linkedProductContainer"));
-		assertEquals("alex-share-2", selenium.getText("linkedProductSerial"));
+		assertTrue("linked asset registration should be visible", selenium.isVisible("linkedAssetContainer"));
+		assertEquals("alex-share-2", selenium.getText("linkedAssetSerial"));
 	}
 	
 	@Test
@@ -65,7 +65,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		selenium.click("copyAsset");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		
-		assertTrue("linked asset registration should be visible", selenium.isVisible("linkedProductContainer"));
+		assertTrue("linked asset registration should be visible", selenium.isVisible("linkedAssetContainer"));
 		assertEquals("alex-share-2", selenium.getValue("serialNumberText"));
 	}
 	

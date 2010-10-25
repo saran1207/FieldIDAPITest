@@ -1,7 +1,8 @@
 package com.n4systems.fieldid.selenium.assets.page;
 
 import static org.junit.Assert.*;
-import com.n4systems.fieldid.selenium.datatypes.Product;
+
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
@@ -13,12 +14,12 @@ public class AssetPage {
 	private String assetHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset - ')]";
 	private String assetEditTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI[not(contains(@class,'selected'))]/A[contains(text(),'Edit')]";
 	private String assetTraceablityLinkLocator = "xpath=//A[contains(text(),'Traceability')]";
-	private String productSummaryHeaderLocator = "xpath=//H2[contains(text(),'Asset Summary')]";
+	private String assetSummaryHeaderLocator = "xpath=//H2[contains(text(),'Asset Summary')]";
 	private String serialNumberLabelLocator = "xpath=//LABEL[contains(text(),'Serial Number')]";
 	private String rfidNumberLabelLocator = "xpath=//LABEL[contains(text(),'RFID Number')]";
 	private String publishedLabelLocator = "xpath=//LABEL[contains(text(),'Published Over Safety Network')]";
-	private String productTypeLabelLocator = "xpath=//LABEL[contains(text(),'Asset Type')]";
-	private String productStatusLabelLocator = "xpath=//LABEL[contains(text(),'Asset Status')]";
+	private String assetTypeLabelLocator = "xpath=//LABEL[contains(text(),'Asset Type')]";
+	private String assetStatusLabelLocator = "xpath=//LABEL[contains(text(),'Asset Status')]";
 	private String identifiedLabelLocator = "xpath=//LABEL[contains(text(),'Identified')]";
 	private String identifiedByLabelLocator = "xpath=//LABEL[contains(text(),'Identified By')]";
 	private String modifiedByLabelLocator = "xpath=//LABEL[contains(text(),'Modified By')]";
@@ -36,11 +37,11 @@ public class AssetPage {
 	private String editAssetRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
 	private String editAssetReferenceNumberTextFieldLocator = "xpath=//INPUT[@id='customerRefNumber']";
 	private String editAssetLocationTextFieldLocator = "xpath=//INPUT[@id='location_freeformLocation']";
-	private String editAssetProductStatusSelectListLocator = "xpath=//SELECT[@id='productUpdate_productStatus']";
-	private String editAssetPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='productUpdate_purchaseOrder']";
+	private String editAssetAssetStatusSelectListLocator = "xpath=//SELECT[@id='assetUpdate_assetStatus']";
+	private String editAssetPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='assetUpdate_purchaseOrder']";
 	private String editAssetIdentifiedTextFieldLocator = "xpath=//INPUT[@id='identified']";
-	private String editAssetProductTypeTextFieldLocator = "xpath=//SELECT[@id='productType']";
-	private String editAssetOwnerTextFieldLocator = "xpath=//INPUT[@id='productUpdate_owner_orgName']";
+	private String editAssetAssetTypeTextFieldLocator = "xpath=//SELECT[@id='assetType']";
+	private String editAssetOwnerTextFieldLocator = "xpath=//INPUT[@id='assetUpdate_owner_orgName']";
 	private String editAssetChooseLinkLocator = "xpath=//A[contains(text(),'Choose')]";
 	private String editAssetAttachAFileButtonLocator = "xpath=//BUTTON[contains(text(),'Attach A File')]";
 	private String editAssetSaveButtonLocator = "xpath=//INPUT[@id='saveButton']";
@@ -48,7 +49,7 @@ public class AssetPage {
 	private String editAssetCancelLinkLocator = "xpath=//A[text()='Cancel']";
 	private String editAssetMergeLinkLocator = "xpath=//A[text()='Merge']";
 	private String editAssetDeleteLinkLocator = "xpath=//A[text()='Delete']";
-	private String editAssetPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='productUpdate_publishedState']";
+	private String editAssetPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='assetUpdate_publishedState']";
 	private String editAssetCommentTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
 
 	public AssetPage(FieldIdSelenium selenium, MiscDriver misc) {
@@ -92,7 +93,7 @@ public class AssetPage {
 	 * 
 	 * @param p
 	 */
-	public void verifyAssetViewPageDynamicContents(Product p) {
+	public void verifyAssetViewPageDynamicContents(Asset p) {
 		if (p.getSerialNumber() != null && !p.getSerialNumber().equals("")) {
 			String locator = serialNumberLabelLocator + "/../SPAN[contains(text(),'" + p.getSerialNumber() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
@@ -108,12 +109,12 @@ public class AssetPage {
 			String locator = publishedLabelLocator + "/../SPAN[contains(text(),'Not Published')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if (p.getProductType() != null && !p.getProductType().equals("")) {
-			String locator = productTypeLabelLocator + "/../SPAN[contains(text(),'" + p.getProductType() + "')]";
+		if (p.getAssetType() != null && !p.getAssetType().equals("")) {
+			String locator = assetTypeLabelLocator + "/../SPAN[contains(text(),'" + p.getAssetType() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
-		if (p.getProductStatus() != null && !p.getProductStatus().equals("")) {
-			String locator = productStatusLabelLocator + "/../SPAN[contains(text(),'" + p.getProductStatus() + "')]";
+		if (p.getAssetStatus() != null && !p.getAssetStatus().equals("")) {
+			String locator = assetStatusLabelLocator + "/../SPAN[contains(text(),'" + p.getAssetStatus() + "')]";
 			assertTrue(selenium.isElementPresent(locator));
 		}
 		if (p.getIdentified() != null && !p.getIdentified().equals("")) {
@@ -152,12 +153,12 @@ public class AssetPage {
 	}
 
 	private void verifyAssetViewPageStaticContents() {
-		assertTrue(selenium.isElementPresent(productSummaryHeaderLocator));
+		assertTrue(selenium.isElementPresent(assetSummaryHeaderLocator));
 		assertTrue(selenium.isElementPresent(serialNumberLabelLocator));
 		assertTrue(selenium.isElementPresent(rfidNumberLabelLocator));
 		assertTrue(selenium.isElementPresent(publishedLabelLocator));
-		assertTrue(selenium.isElementPresent(productTypeLabelLocator));
-		assertTrue(selenium.isElementPresent(productStatusLabelLocator));
+		assertTrue(selenium.isElementPresent(assetTypeLabelLocator));
+		assertTrue(selenium.isElementPresent(assetStatusLabelLocator));
 		assertTrue(selenium.isElementPresent(identifiedLabelLocator));
 		assertTrue(selenium.isElementPresent(identifiedByLabelLocator));
 		assertTrue(selenium.isElementPresent(modifiedByLabelLocator));
@@ -203,10 +204,10 @@ public class AssetPage {
 		assertTrue(selenium.isElementPresent(editAssetRFIDNumberTextFieldLocator));
 		assertTrue(selenium.isElementPresent(editAssetReferenceNumberTextFieldLocator));
 		assertTrue(selenium.isElementPresent(editAssetLocationTextFieldLocator));
-		assertTrue(selenium.isElementPresent(editAssetProductStatusSelectListLocator));
+		assertTrue(selenium.isElementPresent(editAssetAssetStatusSelectListLocator));
 		assertTrue(selenium.isElementPresent(editAssetPurchaseOrderTextFieldLocator));
 		assertTrue(selenium.isElementPresent(editAssetIdentifiedTextFieldLocator));
-		assertTrue(selenium.isElementPresent(editAssetProductTypeTextFieldLocator));
+		assertTrue(selenium.isElementPresent(editAssetAssetTypeTextFieldLocator));
 		assertTrue(selenium.isElementPresent(editAssetOwnerTextFieldLocator));
 		assertTrue(selenium.isElementPresent(editAssetChooseLinkLocator));
 		assertTrue(selenium.isElementPresent(editAssetAttachAFileButtonLocator));
@@ -226,7 +227,7 @@ public class AssetPage {
 		}
 	}
 
-	public void setAssetForm(Product p) {
+	public void setAssetForm(Asset p) {
 		verifyAssetEditPageContents();
 
 		if (p.getPublished() == true) {
@@ -251,11 +252,11 @@ public class AssetPage {
 		if (p.getLocation() != null) {
 			selenium.type(this.editAssetLocationTextFieldLocator, p.getLocation());
 		}
-		if (p.getProductStatus() != null) {
-			if (misc.isOptionPresent(editAssetProductStatusSelectListLocator, p.getProductStatus())) {
-				selenium.select(this.editAssetProductStatusSelectListLocator, p.getProductStatus());
+		if (p.getAssetStatus() != null) {
+			if (misc.isOptionPresent(editAssetAssetStatusSelectListLocator, p.getAssetStatus())) {
+				selenium.select(this.editAssetAssetStatusSelectListLocator, p.getAssetStatus());
 			} else {
-				fail("Could not find the asset status '" + p.getProductStatus() + "'");
+				fail("Could not find the asset status '" + p.getAssetStatus() + "'");
 			}
 		}
 		if (p.getPurchaseOrder() != null) {
@@ -264,8 +265,8 @@ public class AssetPage {
 		if (p.getIdentified() != null) {
 			selenium.type(this.editAssetIdentifiedTextFieldLocator, p.getIdentified());
 		}
-		if (p.getProductType() != null) {
-			selenium.type(this.editAssetProductTypeTextFieldLocator, p.getProductType());
+		if (p.getAssetType() != null) {
+			selenium.type(this.editAssetAssetTypeTextFieldLocator, p.getAssetType());
 		}
 		if (p.getComments() != null) {
 			selenium.type(editAssetCommentTextFieldLocator, p.getComments());

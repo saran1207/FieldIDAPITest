@@ -257,7 +257,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	}
 	
 	/*
-	 * prepareDescription is used to create a asset description based of the
+	 * prepareDescription is used to create an asset description based of the
 	 * AssetType descriptionTemplate and the Asset's info options.
 	 * 
 	 * This method is complex because it has been highly optimized.  Please ensure any

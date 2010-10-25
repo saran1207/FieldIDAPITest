@@ -62,7 +62,7 @@ public class ProductMerger {
 		}
 		
 		if (losingAsset.equals(winningAsset)) {
-			throw new DuplicateProductException("you can't merge a asset into itself.");
+			throw new DuplicateProductException("you can't merge an asset into itself.");
 		}
 
 		if (!losingAsset.getTenant().equals(winningAsset.getTenant())) {

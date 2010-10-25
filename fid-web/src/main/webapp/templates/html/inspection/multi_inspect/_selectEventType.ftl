@@ -1,7 +1,7 @@
 	
 		
 <#if multiInspectGroupSorter.groups.empty>
-	<@s.text name="error.no_common_event_types"/>  <a href="<@s.url action="assetSelection" namespace="/"/>"><@s.text name="label.select_a_new_set_of_assets"/></a>
+	<@s.text name="error.no_common_event_types"/>  <a href="<@s.url action="productSelection" namespace="/"/>"><@s.text name="label.select_a_new_set_of_assets"/></a>
 <#else>
 
 	<ul id="eventTypes" class="groupInspectionTypeList">

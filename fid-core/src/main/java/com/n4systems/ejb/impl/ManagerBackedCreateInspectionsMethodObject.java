@@ -11,7 +11,7 @@ import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.exceptions.UnknownSubProduct;
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
@@ -31,11 +31,11 @@ public class ManagerBackedCreateInspectionsMethodObject implements CreateInspect
 		this.inspectionSaver = inspectionSaver;
 	}
 
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
+	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
 		return createInspections(transactionGUID, inspections);
 	}
 
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubProduct {
+	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
 		List<Inspection> savedInspections = new ArrayList<Inspection>();
 		
 		/*

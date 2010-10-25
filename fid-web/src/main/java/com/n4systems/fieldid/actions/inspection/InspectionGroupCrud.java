@@ -47,7 +47,7 @@ public class InspectionGroupCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		asset = productManager.findProduct(uniqueId, getSecurityFilter());
+		asset = productManager.findAsset(uniqueId, getSecurityFilter());
 	}
 
 	public String doList() {

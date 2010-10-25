@@ -105,10 +105,10 @@ public class Search {
 		if(selenium.isElementPresent(dynamicColumnLocator)) {
 			Number n = selenium.getXpathCount(dynamicCheckBoxXpath);
 			int num = n.intValue();
-			String productStatusDisplayColumnLabelLocator = dynamicColumnLocator + "/DIV[0]/LABEL";
+			String assetStatusDisplayColumnLabelLocator = dynamicColumnLocator + "/DIV[0]/LABEL";
 			for(int i = 0; i < num; i++) {
-				productStatusDisplayColumnLabelLocator = productStatusDisplayColumnLabelLocator.replaceFirst("\\[" + i + "\\]/LABEL", "\\[" + (i+1) + "\\]/LABEL");
-				String s = selenium.getText(productStatusDisplayColumnLabelLocator);
+				assetStatusDisplayColumnLabelLocator = assetStatusDisplayColumnLabelLocator.replaceFirst("\\[" + i + "\\]/LABEL", "\\[" + (i+1) + "\\]/LABEL");
+				String s = selenium.getText(assetStatusDisplayColumnLabelLocator);
 				result.add(s);
 			}
 		}

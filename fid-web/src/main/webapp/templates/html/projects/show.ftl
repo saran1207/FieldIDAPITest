@@ -129,8 +129,8 @@ ${action.setPageType('job', 'show')!}
 		<div class="sectionContent">
 			<div id="assetLookup" style="display:none">
 				<#assign namespace="/ajax"/>
-				<#assign productSearchAction="jobFindAsset"/>
-				<#assign productFormId="projectAssetSearch"/>
+				<#assign assetSearchAction="jobFindAsset"/>
+				<#assign assetFormId="projectAssetSearch"/>
 				<#include "../inspectionGroup/_searchForm.ftl"/>
 				<div id="results" class="hidden">
 				</div>

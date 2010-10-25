@@ -1,5 +1,5 @@
-Effect.Fade( "subProduct_" + ${subProductId}, { 
+Effect.Fade( "subAsset_" + ${subAssetId}, {
 	afterFinish: function() { 
-		$( "subProduct_" + ${subProductId} ).remove(); 
+		$( "subAsset_" + ${subAssetId} ).remove(); 
 	} 
 } );

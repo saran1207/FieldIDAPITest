@@ -11,7 +11,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
-import com.n4systems.model.product.ProductSaver;
+import com.n4systems.model.product.AssetSaver;
 import com.n4systems.model.producttype.ProductTypeByNameLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -41,9 +41,9 @@ public class Scenario {
         return new PrimaryOrgByTenantLoader().setTenantId(tenant.getId()).load(trans);
     }
 
-    public AssetType productType(String tenantName, String productTypeName) {
+    public AssetType assetType(String tenantName, String assetTypeName) {
         ProductTypeByNameLoader byNameLoader = new ProductTypeByNameLoader(new TenantOnlySecurityFilter(tenant(tenantName)));
-        return byNameLoader.setName(productTypeName).load(trans);
+        return byNameLoader.setName(assetTypeName).load(trans);
     }
 
     public BaseOrg customerOrg(String tenantName, String customer) {
@@ -69,9 +69,9 @@ public class Scenario {
         return builder;
     }
 
-    public AssetBuilder aProduct() {
+    public AssetBuilder anAsset() {
         AssetBuilder builder = AssetBuilder.anAsset();
-        builder.setSaver(new ProductSaver()).setTransaction(trans);
+        builder.setSaver(new AssetSaver()).setTransaction(trans);
         return builder;
     }
 

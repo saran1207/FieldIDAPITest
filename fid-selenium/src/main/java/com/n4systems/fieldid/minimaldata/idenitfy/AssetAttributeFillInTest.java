@@ -2,11 +2,11 @@ package com.n4systems.fieldid.minimaldata.idenitfy;
 
 import java.util.Date;
 
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.assets.page.AssetPage;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 
@@ -28,9 +28,9 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 	
 	@Test
 	public void should_store_a_value_in_a_text_field_during_asset_identify() throws Exception {
-		Product asset = new Product();
+		Asset asset = new Asset();
 		asset.setSerialNumber("TEST-" + new Date().getTime());
-		asset.setProductType("Simple Multi Attribute Asset");
+		asset.setAssetType("Simple Multi Attribute Asset");
 		
 		identifyPage.setAddAssetForm(asset, false);
 		
@@ -46,9 +46,9 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 	
 	@Test
 	public void should_store_a_value_in_a_select_field_during_asset_identify() throws Exception {
-		Product asset = new Product();
+		Asset asset = new Asset();
 		asset.setSerialNumber("TEST-" + new Date().getTime());
-		asset.setProductType("Simple Multi Attribute Asset");
+		asset.setAssetType("Simple Multi Attribute Asset");
 		
 		identifyPage.setAddAssetForm(asset, false);
 		
@@ -65,9 +65,9 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 	
 	@Test
 	public void should_store_a_value_in_a_combo_field_with_a_static_value_during_asset_identify() throws Exception {
-		Product asset = new Product();
+		Asset asset = new Asset();
 		asset.setSerialNumber("TEST-" + new Date().getTime());
-		asset.setProductType("Simple Multi Attribute Asset");
+		asset.setAssetType("Simple Multi Attribute Asset");
 		
 		identifyPage.setAddAssetForm(asset, false);
 		
@@ -82,7 +82,7 @@ public class AssetAttributeFillInTest extends LoggedInTestCase {
 		assetPage.verifyAttribute("select field", "option 1");
 	}
 
-	private void goToAsset(Product asset) {
+	private void goToAsset(Asset asset) {
 		misc.setSmartSearch(asset.getSerialNumber());
 		misc.submitSmartSearch();
 	}

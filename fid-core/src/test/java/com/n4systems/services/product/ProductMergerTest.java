@@ -165,7 +165,7 @@ public class ProductMergerTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test 
-	public void should_merge_subproduct_together() {
+	public void should_merge_subasset_together() {
 		SubInspection sub = SubInspectionBuilder.aSubInspection("tom").withProduct(losingAsset).build();
 		List<SubInspection> subInspections = new ArrayList<SubInspection>();
 		subInspections.add(sub);

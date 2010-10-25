@@ -5,20 +5,20 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.SubProduct;
-import com.n4systems.model.product.ProductSubProductsLoader;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.product.AssetSubAssetsLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 
 public class RealTimeProductLookupHandler {
 
 	private final SmartSearchLoader smartSearchLoader; 
-	private final ProductSubProductsLoader subProductLoader;
+	private final AssetSubAssetsLoader subAssetLoader;
 	private String searchText;
 	private Date modified;
 	
-	public RealTimeProductLookupHandler(SmartSearchLoader smartSearchLoader, ProductSubProductsLoader subProductLoader) {
+	public RealTimeProductLookupHandler(SmartSearchLoader smartSearchLoader, AssetSubAssetsLoader subAssetLoader) {
 		this.smartSearchLoader = smartSearchLoader;
-		this.subProductLoader = subProductLoader;
+		this.subAssetLoader = subAssetLoader;
 	}
 	
 	public List<Asset> lookup() {
@@ -47,13 +47,13 @@ public class RealTimeProductLookupHandler {
 	
 	private List<Asset> addAnyNeededSubProducts(List<Asset> assets) {
 		
-		List<Asset> productsWithSubProducts = subProductLoader.setProducts(assets).load();
+		List<Asset> productsWithSubProducts = subAssetLoader.setAssets(assets).load();
 		
 		List<Asset> newSubProducts = new ArrayList<Asset>();
 		
 		for (Asset asset : productsWithSubProducts) {
-			for (SubProduct subProduct : asset.getSubProducts()) {
-				newSubProducts.add(subProduct.getAsset());
+			for (SubAsset subAsset : asset.getSubAssets()) {
+				newSubProducts.add(subAsset.getAsset());
 			}
 		}
 		

@@ -1,10 +1,10 @@
-var updateProductTypeUrl = '';
+var updateAssetTypeUrl = '';
 		
 function updateProductType( assetTypeSelect ) {
 	if( assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value != "" ) {
 		updatingProduct();
 		var productTypeSelectId = assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value;
-		var url = updateProductTypeUrl + '?assetTypeId='+ productTypeSelectId;
+		var url = updateAssetTypeUrl + '?assetTypeId='+ productTypeSelectId;
 		getResponse( url, "get" );
 	} else {
 		replacedProductType( null, null );
@@ -35,7 +35,7 @@ function replacedProductType( infoOptions, subTypes ) {
 var originalProductType = 0;
 var productTypeChangeWarning = "";
 function checkProductTypeChange() {
-	var currentProductType = $( 'productType' ).getValue();
+	var currentProductType = $( 'assetType' ).getValue();
 	
 	if( currentProductType !=  originalProductType ) {
 		return confirm( productTypeChangeWarning );

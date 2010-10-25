@@ -1,2 +1,2 @@
-<#assign productSearchAction="inspect"/>
+<#assign assetSearchAction="inspect"/>
 <#include "_searchForm.ftl"/>

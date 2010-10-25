@@ -17,7 +17,7 @@
 				</tr>
 				<#list assets as asset >
 					<tr>
-						<td class="selectAction"><button class="productLink" assetId="${asset.id}"><@s.text name="label.select"/></button></td>
+						<td class="selectAction"><button class="assetLink" assetId="${asset.id}"><@s.text name="label.select"/></button></td>
 						<td>${asset.serialNumber?html}</td>
 						<td>${(asset.rfidNumber?html)!}</td>
 						<td>${(asset.owner.name?html)!}</td>

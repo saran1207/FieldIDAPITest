@@ -7,17 +7,17 @@
 			<a href="#" id="showSmartSearchLink"><@s.text name="label.registeroversafetynetwork" /></a>
 		</div>
 		
-		<div id="linkedProductContainer"  style="display: none;">
-			<h4 class="productInfoTitle">
-				<@s.text name="label.registered_against"/> <span id="linkedProductType"></span> <@s.text name="label.from"/> <span id="linkedProductOwner"></span>
+		<div id="linkedAssetContainer"  style="display: none;">
+			<h4 class="assetInfoTitle">
+				<@s.text name="label.registered_against"/> <span id="linkedAssetType"></span> <@s.text name="label.from"/> <span id="linkedAssetOwner"></span>
 			</h4>
 			<div  >
-				<label for="linkedProductSerial"><@s.text name="label.serialnumber"/>: </label>
-				<span id="linkedProductSerial"></span>
+				<label for="linkedAssetSerial"><@s.text name="label.serialnumber"/>: </label>
+				<span id="linkedAssetSerial"></span>
 			</div>
 			<div  >
-				<label  for="linkedProductRfid"><@s.text name="label.rfidnumber"/>: </label>
-				<span id="linkedProductRfid"></span>
+				<label  for="linkedAssetRfid"><@s.text name="label.rfidnumber"/>: </label>
+				<span id="linkedAssetRfid"></span>
 			</div>
 		
 			<a href="#" id="unregisterSubmit"><@s.text name="label.unregister" /></a>
@@ -60,9 +60,9 @@
 				product.type = "${(parameters.linkedProduct_TypeName)?default("")?js_string}";
 				product.referenceNumber = "${(parameters.linkedProduct_ReferenceNumber)?default("")?js_string}";
 				<#if parameters.refreshRegistration>
-					updateLinkedProductInfo(product);
+					updateLinkedAssetInfo(product);
 				<#else>
-					populateLinkedProductInfo(product);
+					populateLinkedAssetInfo(product);
 				</#if>
 				
 			});

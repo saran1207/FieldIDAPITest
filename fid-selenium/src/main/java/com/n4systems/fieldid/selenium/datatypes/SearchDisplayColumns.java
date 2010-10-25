@@ -16,11 +16,11 @@ public class SearchDisplayColumns {
 	
 	private boolean organization;
 	
-	private boolean productTypeGroup;
+	private boolean assetTypeGroup;
 	
-	private boolean productType;
+	private boolean assetType;
 	
-	private boolean productStatus;
+	private boolean assetStatus;
 	
 	private boolean dateIdentified;
 	
@@ -126,28 +126,28 @@ public class SearchDisplayColumns {
 		this.organization = organization;
 	}
 
-	public boolean isProductTypeGroup() {
-		return productTypeGroup;
+	public boolean isAssetTypeGroup() {
+		return assetTypeGroup;
 	}
 
-	public void setProductTypeGroup(boolean productTypeGroup) {
-		this.productTypeGroup = productTypeGroup;
+	public void setAssetTypeGroup(boolean assetTypeGroup) {
+		this.assetTypeGroup = assetTypeGroup;
 	}
 
-	public boolean isProductType() {
-		return productType;
+	public boolean isAssetType() {
+		return assetType;
 	}
 
-	public void setProductType(boolean productType) {
-		this.productType = productType;
+	public void setAssetType(boolean assetType) {
+		this.assetType = assetType;
 	}
 
-	public boolean isProductStatus() {
-		return productStatus;
+	public boolean isAssetStatus() {
+		return assetStatus;
 	}
 
-	public void setProductStatus(boolean productStatus) {
-		this.productStatus = productStatus;
+	public void setAssetStatus(boolean assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 
 	public boolean isDateIdentified() {
@@ -326,9 +326,9 @@ public class SearchDisplayColumns {
 		division = true;	
 		location = true;	
 		organization = true;	
-		productTypeGroup = true;	
-		productType = true;	
-		productStatus = true;	
+		assetTypeGroup = true;
+		assetType = true;
+		assetStatus = true;
 		dateIdentified = true;	
 		lastInspectionDate = true;	
 		networkLastInspectionDate = true;	

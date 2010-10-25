@@ -18,7 +18,7 @@ ${action.setPageType('product_type', 'edit')!}
 	<div class="sectionContent">
 		
 		<div class="infoSet">
-			<label for="">${removalSummary.productsToDelete}</label>
+			<label for="">${removalSummary.assetsToDelete}</label>
 			<span><@s.text name="label.productsbeingdeleted"/></span>
 		</div>
 		
@@ -33,23 +33,23 @@ ${action.setPageType('product_type', 'edit')!}
 		</div>
 		<#if securityGuard.integrationEnabled>
 			<div class="infoSet">
-				<label for="">${removalSummary.productCodeMappingsToDelete}</label>
+				<label for="">${removalSummary.assetCodeMappingsToDelete}</label>
 				<span><@s.text name="label.productcodemappingsbeingdeleted"/></span>
 			</div>
 		</#if>
 	
 		<div class="infoSet">
-			<label for="">${removalSummary.productTypesToDettachFrom}</label>
+			<label for="">${removalSummary.assetTypesToDetachFrom}</label>
 			<span><@s.text name="label.detachedfromproducttypes"/></span>
 		</div>
 		
 		<div class="infoSet">
-			<label for="">${removalSummary.masterProductsToDettach}</label>
+			<label for="">${removalSummary.masterAssetsToDetach}</label>
 			<span><@s.text name="label.assetsbeingdetachedfrommaster"/></span>
 		</div>
 		
 		<div class="infoSet">
-			<label for="">${removalSummary.subProductsToDettach}</label>
+			<label for="">${removalSummary.subAssetsToDetach}</label>
 			<span><@s.text name="label.subassetsbeingdetached"/></span>
 		</div>
 		
@@ -57,7 +57,7 @@ ${action.setPageType('product_type', 'edit')!}
 		
 		<#if securityGuard.projectsEnabled>
 			<div class="infoSet">
-				<label for="">${removalSummary.assetsToDettachFromProjects}</label>
+				<label for="">${removalSummary.assetsToDetachFromProjects}</label>
 				<span><@s.text name="label.productsbeingdetachedfromproject"/></span>
 			</div>
 		</#if>

@@ -616,8 +616,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (assetId == null) {
 			asset = null;
 		} else if (asset == null || !assetId.equals(asset.getId())) {
-			asset = productManager.findProduct(assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions", "projects");
-			asset = productManager.fillInSubProductsOnProduct(asset);
+			asset = productManager.findAsset(assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions", "projects");
+			asset = productManager.fillInSubAssetsOnAsset(asset);
 		}
 	}
 
@@ -666,7 +666,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (assetStatus == null) {
 			inspection.setAssetStatus(null);
 		} else if (inspection.getAssetStatus() == null || !assetStatus.equals(inspection.getAssetStatus().getUniqueID())) {
-			inspection.setAssetStatus(legacyProductManager.findProductStatus(assetStatus, getTenantId()));
+			inspection.setAssetStatus(legacyProductManager.findAssetStatus(assetStatus, getTenantId()));
 		}
 	}
 

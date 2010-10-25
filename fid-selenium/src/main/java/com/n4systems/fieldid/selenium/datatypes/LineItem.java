@@ -1,24 +1,24 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
 public class LineItem {
-	String productCode;
+	String assetCode;
 	String description;
 	String quantity;
-	String identifiedProducts;
+	String identifiedAssets;
 	
-	public LineItem(String productCode, String description, String quantity, String identifiedProducts) {
-		this.productCode = productCode;
+	public LineItem(String assetCode, String description, String quantity, String identifiedAssets) {
+		this.assetCode = assetCode;
 		this.description = description;
 		this.quantity = quantity;
-		this.identifiedProducts = identifiedProducts;
+		this.identifiedAssets = identifiedAssets;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getAssetCode() {
+		return assetCode;
 	}
 	
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
 	}
 	public String getDescription() {
 		return description;
@@ -32,10 +32,10 @@ public class LineItem {
 	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
-	public String getIdentifiedProducts() {
-		return identifiedProducts;
+	public String getIdentifiedAssets() {
+		return identifiedAssets;
 	}
-	public void setIdentifiedProducts(String identifiedProducts) {
-		this.identifiedProducts = identifiedProducts;
+	public void setIdentifiedAssets(String identifiedAssets) {
+		this.identifiedAssets = identifiedAssets;
 	}
 }

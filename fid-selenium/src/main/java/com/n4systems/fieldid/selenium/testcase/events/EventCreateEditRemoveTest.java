@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.selenium.testcase.events;
 
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
@@ -75,13 +75,13 @@ public class EventCreateEditRemoveTest extends FieldIDTestCase {
 
 	}
 
-	private void identifyAssetWithSerialNumber(String serial, String productType, String purchaseOrder, String status) {
+	private void identifyAssetWithSerialNumber(String serial, String assetType, String purchaseOrder, String status) {
 		IdentifyPage identifyPage = page.clickIdentifyLink();
-		Product asset = new Product();
+		Asset asset = new Asset();
 		asset.setSerialNumber(serial);
-		asset.setProductType(productType);
+		asset.setAssetType(assetType);
 		asset.setPurchaseOrder(purchaseOrder);
-		asset.setProductStatus(status);
+		asset.setAssetStatus(status);
 
 		identifyPage.setAddAssetForm(asset, false);
 		identifyPage.saveNewAsset();

@@ -19,7 +19,7 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.exceptions.SubProductUniquenessException;
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
@@ -187,7 +187,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		Long result = 0L;
 		try {
 			for (Long id : ids) {
-				Asset asset = productManager.findProductAllFields(id, new OpenSecurityFilter());
+				Asset asset = productManager.findAssetAllFields(id, new OpenSecurityFilter());
 				
 				updateProduct(asset, assetModificationData, values);
 				
@@ -196,7 +196,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				result++;
 			}
 
-		} catch (SubProductUniquenessException e) {
+		} catch (SubAssetUniquenessException e) {
 			throw new UpdateFailureException(e);
 		} catch (EntityExistsException cve) {
 			throw new UpdateConatraintViolationException(cve);

@@ -10,9 +10,9 @@ import java.util.Random;
 
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.components.UnitOfMeasurePicker;
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Identifier;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.datatypes.SafetyNetworkRegistration;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.util.ConditionWaiter;
@@ -33,9 +33,9 @@ public class IdentifyPage extends FieldIDPage {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Identify')]");
 	}
 	
-	public void selectProductType(String productType) {
-		selenium.select("//select[@id='productType']", productType);
-		selenium.fireEvent("//select[@id='productType']", "change");
+	public void selectAssetType(String assetType) {
+		selenium.select("//select[@id='assetType']", assetType);
+		selenium.fireEvent("//select[@id='assetType']", "change");
 		waitForAjax();
 	}
 	
@@ -81,7 +81,7 @@ public class IdentifyPage extends FieldIDPage {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Identify')][contains(text(),'Order Number " + orderNumber + "')]");
 	}
 	
-	public Product setAddAssetForm(Product p, boolean generate) {
+	public Asset setAddAssetForm(Asset p, boolean generate) {
 		if(generate) {
 			selenium.click("//a[contains(text(),'generate')]");
 		}
@@ -98,9 +98,9 @@ public class IdentifyPage extends FieldIDPage {
 			setRegisterThisAssetOverTheSafetyNetwork(p.getSafetyNetworkRegistration());
 		}
 		if(p.getPublished()) {
-			selenium.select("//select[@id='productCreate_publishedState']", "Publish");
+			selenium.select("//select[@id='assetCreate_publishedState']", "Publish");
 		} else {
-			selenium.select("//select[@id='productCreate_publishedState']", "Do Not Publish");
+			selenium.select("//select[@id='assetCreate_publishedState']", "Do Not Publish");
 		}
 		if(p.getOwner() != null) {
 			OrgPicker orgPicker = getOrgPicker();
@@ -111,21 +111,21 @@ public class IdentifyPage extends FieldIDPage {
 		if(p.getLocation() != null) {
 			selenium.type("//input[@id='location_freeformLocation']", p.getLocation());
 		}
-		if(p.getProductStatus() != null) {
-			selenium.select("//select[@id='productCreate_productStatus']", p.getProductStatus());
+		if(p.getAssetStatus() != null) {
+			selenium.select("//select[@id='assetCreate_assetStatus']", p.getAssetStatus());
 		}
 		if(p.getPurchaseOrder() != null) {
-			selenium.type("//input[@id='productCreate_purchaseOrder']", p.getPurchaseOrder());
+			selenium.type("//input[@id='assetCreate_purchaseOrder']", p.getPurchaseOrder());
 		}
 		if(p.getIdentified() != null) {
 			selenium.type("//input[@id='identified']", p.getIdentified());
 		}
-		if(p.getProductType() != null) {
-			selenium.select("//select[@id='productType']", p.getProductType());
-			selenium.fireEvent("//select[@id='productType']", "change");
+		if(p.getAssetType() != null) {
+			selenium.select("//select[@id='assetType']", p.getAssetType());
+			selenium.fireEvent("//select[@id='assetType']", "change");
 			waitForAjax();
 		}
-		setRequiredProductAttributes();
+		setRequiredAssetAttributes();
 		
 		if(p.getComments() != null) {
 			selenium.type("//textarea[@id='comments']", p.getComments());
@@ -157,7 +157,7 @@ public class IdentifyPage extends FieldIDPage {
 		}
 	}
 	
-	public void setRequiredProductAttributes() {
+	public void setRequiredAssetAttributes() {
 		List<String> requiredSelectListsIDs = getRequiredSelectListIDs();
 		setRequiredSelectLists(requiredSelectListsIDs);
 		List<String> requiredTextFieldIDs = getRequiredTextFieldIDs();
@@ -204,13 +204,13 @@ public class IdentifyPage extends FieldIDPage {
 		return result;
 	}
 	
-	public Product getAddAssetForm() {
-		Product p = new Product();
+	public Asset getAddAssetForm() {
+		Asset p = new Asset();
 		p.setSerialNumber(selenium.getValue("//input[@id='serialNumberText']"));
 		p.setRFIDNumber(selenium.getValue("//input[@id='rfidNumber']"));
 		p.setReferenceNumber(selenium.getValue("//input[@id='customerRefNumber']"));
 		p.setSafetyNetworkRegistration(null);
-		boolean publish = selenium.getSelectedLabel("//select[@id='productCreate_publishedState']").equals("Publish");
+		boolean publish = selenium.getSelectedLabel("//select[@id='assetCreate_publishedState']").equals("Publish");
 		p.setPublished(publish);
 		
 		OrgPicker orgPicker = getOrgPicker();
@@ -222,10 +222,10 @@ public class IdentifyPage extends FieldIDPage {
 		if (selenium.isElementPresent("//input[@id='location_freeformLocation']")) {
 			p.setLocation(selenium.getValue("//input[@id='location_freeformLocation']"));
 		}
-		p.setProductStatus(selenium.getSelectedLabel("//select[@id='productCreate_productStatus']"));
-		p.setPurchaseOrder(selenium.getValue("//input[@id='productCreate_purchaseOrder']"));
+		p.setAssetStatus(selenium.getSelectedLabel("//select[@id='assetCreate_assetStatus']"));
+		p.setPurchaseOrder(selenium.getValue("//input[@id='assetCreate_purchaseOrder']"));
 		p.setIdentified(selenium.getValue("//input[@id='identified']"));
-		p.setProductType(selenium.getSelectedLabel("//select[@id='productType']"));
+		p.setAssetType(selenium.getSelectedLabel("//select[@id='assetType']"));
 		p.setComments(selenium.getValue("//textarea[@id='comments']"));
 		return p;
 	}
@@ -253,9 +253,9 @@ public class IdentifyPage extends FieldIDPage {
 		clickNavOption("Multi Add", "60000");
 	}
 	
-	public List<String> getProductStatusesFromMultiAddForm() {
+	public List<String> getAssetStatusesFromMultiAddForm() {
 		List<String> results = new ArrayList<String>();
-		String s[] = selenium.getSelectOptions("//select[@id='step1form_productStatus']");
+		String s[] = selenium.getSelectOptions("//select[@id='step1form_assetStatus']");
 		for (String status : s) {
 			if (!status.equals("")) {
 				results.add(status);
@@ -264,7 +264,7 @@ public class IdentifyPage extends FieldIDPage {
 		return results;
 	}
 	
-	public void setMultiAddStep1Form(Product p) {
+	public void setMultiAddStep1Form(Asset p) {
 		if(p.getOwner() != null) {
 			OrgPicker orgPicker = getOrgPicker();
 			orgPicker.clickChooseOwner();
@@ -274,8 +274,8 @@ public class IdentifyPage extends FieldIDPage {
 		if(p.getLocation() != null) {
 			selenium.type("//input[@id='location_freeformLocation']", p.getLocation());
 		}
-		if(p.getProductStatus() != null) {
-			selenium.select("//select[@id='step1form_productStatus']", p.getProductStatus());
+		if(p.getAssetStatus() != null) {
+			selenium.select("//select[@id='step1form_assetStatus']", p.getAssetStatus());
 		}
 		if(p.getPurchaseOrder() != null) {
 			selenium.type("//input[@id='step1form_purchaseOrder']", p.getPurchaseOrder());
@@ -283,13 +283,13 @@ public class IdentifyPage extends FieldIDPage {
 		if(p.getIdentified() != null) {
 			selenium.type("//input[@id='identified']", p.getIdentified());
 		}
-		if(p.getProductType() != null) {
-			selenium.select("//select[@id='productType']", p.getProductType());
-			selenium.fireEvent("//select[@id='productType']", "change");
+		if(p.getAssetType() != null) {
+			selenium.select("//select[@id='assetType']", p.getAssetType());
+			selenium.fireEvent("//select[@id='assetType']", "change");
 			waitForAjax();
 		}
 		
-		setRequiredProductAttributes();
+		setRequiredAssetAttributes();
 		if(p.getComments() != null) {
 			selenium.type("//textarea[@id='comments']", p.getComments());
 		}

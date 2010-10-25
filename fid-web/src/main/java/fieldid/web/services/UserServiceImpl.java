@@ -28,7 +28,7 @@ public class UserServiceImpl implements IUserService {
 	
 	public List<ProductStatusServiceDTO> findProductStatus( long versionNumber, Long tenantId, Date beginDate )	{
 		
-		List<AssetStatus> assetStatusList = ServiceLocator.getProductSerialManager().findProductStatus(tenantId, beginDate);
+		List<AssetStatus> assetStatusList = ServiceLocator.getProductSerialManager().findAssetStatus(tenantId, beginDate);
 		
 		ServiceDTOBeanConverter serviceDTOBeanConverter = ServiceLocator.getServiceDTOBeanConverter();
 		

@@ -46,7 +46,7 @@ public class CatalogServiceTest {
 		expectedIds.add(assetType.getId());
 		
 		CatalogService sut = new CatalogServiceImpl(mockPersistenceManager, n4);
-		Set<Long> publishedIds = sut.getProductTypeIdsPublished();
+		Set<Long> publishedIds = sut.getAssetTypeIdsPublished();
 		
 		assertEquals(expectedIds, publishedIds);
 		verify(mockPersistenceManager);
@@ -64,7 +64,7 @@ public class CatalogServiceTest {
 		Set<Long> expectedIds = new HashSet<Long>();
 		
 		CatalogService sut = new CatalogServiceImpl(mockPersistenceManager, n4);
-		Set<Long> publishedIds = sut.getProductTypeIdsPublished();
+		Set<Long> publishedIds = sut.getAssetTypeIdsPublished();
 		
 		assertEquals(expectedIds, publishedIds);
 		verify(mockPersistenceManager);
@@ -88,9 +88,9 @@ public class CatalogServiceTest {
 		assetTypes.add(anAssetType().build());
 		
 		CatalogService sut = new CatalogServiceImpl(mockPersistenceManager, n4);
-		Catalog createdCatalog = sut.publishProductTypes(assetTypes);
+		Catalog createdCatalog = sut.publishAssetTypes(assetTypes);
 		
-		assertEquals(assetTypes, createdCatalog.getPublishedProductTypes());
+		assertEquals(assetTypes, createdCatalog.getPublishedAssetTypes());
 		verify(mockPersistenceManager);
 	}
 	
@@ -118,9 +118,9 @@ public class CatalogServiceTest {
 		expectedAssetTypes.add(subType);
 		
 		CatalogService sut = new CatalogServiceImpl(mockPersistenceManager, n4);
-		Catalog createdCatalog = sut.publishProductTypes(assetTypes);
+		Catalog createdCatalog = sut.publishAssetTypes(assetTypes);
 		
-		assertEquals(expectedAssetTypes, createdCatalog.getPublishedProductTypes());
+		assertEquals(expectedAssetTypes, createdCatalog.getPublishedAssetTypes());
 		verify(mockPersistenceManager);
 	}
 	
@@ -143,9 +143,9 @@ public class CatalogServiceTest {
 		
 		CatalogService sut = new CatalogServiceImpl(mockPersistenceManager, n4);
 		
-		assertEquals(expectedTypes, sut.getPublishedProductTypesLP());
+		assertEquals(expectedTypes, sut.getPublishedAssetTypesLP());
 		assertNotNull(capturedQuery.getValue());
-		assertEquals(sut.getProductTypeIdsPublished(), capturedQuery.getValue().getWhereParameter("ids").getValue());
+		assertEquals(sut.getAssetTypeIdsPublished(), capturedQuery.getValue().getWhereParameter("ids").getValue());
 		assertEquals("name", capturedQuery.getValue().getOrderArguments().iterator().next().getParam());
 		verify(mockPersistenceManager);
 	}

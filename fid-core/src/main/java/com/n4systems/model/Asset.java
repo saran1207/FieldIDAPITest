@@ -100,7 +100,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     private User assignedUser;
     
     @Transient
-    private List<SubProduct> subProducts = new ArrayList<SubProduct>();
+    private List<SubAsset> subAssets = new ArrayList<SubAsset>();
     
     @ManyToMany( fetch= FetchType.LAZY )
     @JoinTable(name = "projects_products", joinColumns = @JoinColumn(name="products_id"), inverseJoinColumns = @JoinColumn(name="projects_id"))
@@ -395,7 +395,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
 	@AllowSafetyNetworkAccess
 	public boolean isMasterProduct( ) {
-		return !subProducts.isEmpty();
+		return !subAssets.isEmpty();
 	}
 	
 	@AllowSafetyNetworkAccess
@@ -439,12 +439,12 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     }
 
 	@AllowSafetyNetworkAccess
-	public List<SubProduct> getSubProducts() {
-		return subProducts;
+	public List<SubAsset> getSubAssets() {
+		return subAssets;
 	}
 
-	public void setSubProducts(List<SubProduct> subProducts) {
-		this.subProducts = subProducts;
+	public void setSubAssets(List<SubAsset> subAssets) {
+		this.subAssets = subAssets;
 	}
 
 	public boolean isPublished() {

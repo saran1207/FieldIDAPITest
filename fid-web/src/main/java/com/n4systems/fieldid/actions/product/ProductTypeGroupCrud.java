@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -15,7 +16,6 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ProductTypeGroupRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
@@ -30,7 +30,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 	
 	private List<AssetTypeGroup> groups;
 	private AssetTypeGroup group;
-	private ProductTypeGroupRemovalSummary removalSummary;
+	private AssetTypeGroupRemovalSummary removalSummary;
 	private List<AssetType> assetTypes;
 	
 	private List<Long> indexes = new ArrayList<Long>();
@@ -159,7 +159,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 		testRequiredEntities(true);
 		
 		try {
-			productManager.deleteProductTypeGroup(group);
+			productManager.deleteAssetTypeGroup(group);
 			addFlashMessageText("message.producttypegroupdeleted");
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + " could not delete asset type group",e);
@@ -196,7 +196,7 @@ public class ProductTypeGroupCrud extends AbstractCrud implements HasDuplicateVa
 		return !persistenceManager.uniqueNameAvailable(AssetTypeGroup.class, formValue.trim(), uniqueID, getTenantId());
 	}
 
-	public ProductTypeGroupRemovalSummary getRemovalSummary() {
+	public AssetTypeGroupRemovalSummary getRemovalSummary() {
 		if (removalSummary == null) {
 			removalSummary = productManager.testDelete(group);
 		}

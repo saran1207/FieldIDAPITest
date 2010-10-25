@@ -9,14 +9,14 @@ public class AssetsMassUpdatePage extends MassUpdatePage<AssetsSearchResultsPage
         super(selenium, AssetsSearchResultsPage.class);
     }
 
-    public void setProductStatus(String newStatus) {
-        selenium.select("//select[@id='massUpdateProductsSave_productStatus']", newStatus);
-        selenium.fireEvent("//select[@id='massUpdateProductsSave_productStatus']", "change");
+    public void setAssetStatus(String newStatus) {
+        selenium.select("//select[@id='massUpdateAssetsSave_assetStatus']", newStatus);
+        selenium.fireEvent("//select[@id='massUpdateAssetsSave_assetStatus']", "change");
     }
 
     public void setPurchaseOrder(String newPurchaseOrder) {
-        selenium.type("//input[@id='massUpdateProductsSave_purchaseOrder']", newPurchaseOrder);
-        selenium.fireEvent("//input[@id='massUpdateProductsSave_purchaseOrder']", "change");
+        selenium.type("//input[@id='massUpdateAssetsSave_purchaseOrder']", newPurchaseOrder);
+        selenium.fireEvent("//input[@id='massUpdateAssetsSave_purchaseOrder']", "change");
     }
 
 }

@@ -1,6 +1,6 @@
 <head>
 	<@n4.includeStyle href="regNetworkAsset" type="page"/>
-	<@n4.includeScript src="product.js" />
+	<@n4.includeScript src="asset.js" />
 	<@n4.includeScript src="commentTemplates.js" />
 	<@n4.includeScript src="updateAttributes.js"/>
 	
@@ -9,7 +9,7 @@
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<script type="text/javascript">
-	    updateProductTypeUrl = '<@s.url action="regProductTypeChange" namespace="/ajax"/>';
+	    updateAssetTypeUrl = '<@s.url action="regProductTypeChange" namespace="/ajax"/>';
 	    changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
 	    autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 	    

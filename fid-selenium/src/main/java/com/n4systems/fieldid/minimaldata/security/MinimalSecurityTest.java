@@ -32,7 +32,7 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 	private Login login;
 	private String user;
 	private String password;
-	private int numberOfProductsVisible;
+	private int numberOfAssetsVisible;
 	private int numberOfInspectionsVisible;
 	private int numberOfIncompleteSchedulesVisible;
 	private int numberOfCompleteSchedulesVisible;
@@ -68,13 +68,13 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 		return data;
 	}
 
-	public MinimalSecurityTest(String user, String password, Integer numberOfProductsVisible, Collection<String> serialNumberThatCanBeViewed) {
+	public MinimalSecurityTest(String user, String password, Integer numberOfAssetsVisible, Collection<String> serialNumberThatCanBeViewed) {
 		this.user = user;
 		this.password = password;
-		this.numberOfProductsVisible = numberOfProductsVisible;
-		this.numberOfInspectionsVisible = numberOfProductsVisible;
-		this.numberOfIncompleteSchedulesVisible = numberOfProductsVisible;
-		this.numberOfCompleteSchedulesVisible = numberOfProductsVisible;
+		this.numberOfAssetsVisible = numberOfAssetsVisible;
+		this.numberOfInspectionsVisible = numberOfAssetsVisible;
+		this.numberOfIncompleteSchedulesVisible = numberOfAssetsVisible;
+		this.numberOfCompleteSchedulesVisible = numberOfAssetsVisible;
 		
 		this.serailNumberThatCanBeViewed = new ArrayList<String>(serialNumberThatCanBeViewed);
 		this.serailNumberThatCanNotBeViewed = new ArrayList<String>();
@@ -85,7 +85,7 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 			}
 		}
 		
-		assertThat(numberOfProductsVisible, equalTo(serialNumberThatCanBeViewed.size()));
+		assertThat(numberOfAssetsVisible, equalTo(serialNumberThatCanBeViewed.size()));
 		assertThat(serialNumberList.size(), equalTo(this.serailNumberThatCanBeViewed.size() + this.serailNumberThatCanNotBeViewed.size()));
 	}
 
@@ -102,12 +102,12 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void should_find_the_correct_number_of_products_visible() throws Exception {
+	public void should_find_the_correct_number_of_assets_visible() throws Exception {
 		AssetSearch search = new AssetSearch(selenium, misc);
 		AssetSearchResults searchResults = new AssetSearchResults(selenium, misc);
 		misc.gotoAssets();
 		search.runSearch();
-		Assert.assertEquals(numberOfProductsVisible, searchResults.totalResults());
+		Assert.assertEquals(numberOfAssetsVisible, searchResults.totalResults());
 	}
 
 	@Test
@@ -157,7 +157,7 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 	public void should_not_be_able_to_load_each_asset_in_the_not_visible_list() throws Exception {
 		for (String serialNumber : serailNumberThatCanNotBeViewed) {
 			loadAsset(serialNumber);
-			assertEquals("There are no products with the given serial, RFID or customer reference number.", selenium.getText("css=.emptyList p"));
+			assertEquals("There are no assets with the given serial, RFID or customer reference number.", selenium.getText("css=.emptyList p"));
 		}
 	}
 

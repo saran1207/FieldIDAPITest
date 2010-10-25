@@ -57,7 +57,7 @@ public class ImportCatalogService {
 
 	private void importCatalog() throws ImportFailureException {
 		importProductTypeGroup.setProductTypeIds(importProductTypeIds).importCatalog();
-		importProductType.setProductGroupMapping(importProductTypeGroup.getImportMapping()).setImportProductTypeIds(importProductTypeIds).importCatalog();
+		importProductType.setAssetGroupMapping(importProductTypeGroup.getImportMapping()).setImportAssetTypeIds(importProductTypeIds).importCatalog();
 		importInspectionTypeGroup.setInspectionTypeIds(importInspectionTypeIds).importCatalog();
 		importStateSets.setInspectionTypeIds(importInspectionTypeIds).importCatalog();
 		importInspectionType.setOriginalInspectionTypeIds(importInspectionTypeIds).setImportedGroupMapping(importInspectionTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).importCatalog();
@@ -88,7 +88,7 @@ public class ImportCatalogService {
 
 
 	private void adjustWhatToImport() {
-		importProductTypeIds.addAll(importProductType.getAdditionalProductTypes(importProductTypeIds));
+		importProductTypeIds.addAll(importProductType.getAdditionalAssetTypes(importProductTypeIds));
 		if (importAllRelations) {
 			importInspectionTypeIds.addAll(importProductTypeInspectionTypeRelations.getAdditionalInspectionTypesForRelationships(importProductTypeIds, importInspectionTypeIds));
 		}

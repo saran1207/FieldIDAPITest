@@ -5,20 +5,20 @@
 </#assign>
 
 <#escape x as x?js_string>
-	if( $( 'attachSubProduct_${subProduct.asset.id}' ) != null ||  $('subProduct_${subProduct.asset.id}') == null  ) {
+	if( $( 'attachSubAsset_${subAsset.asset.id}' ) != null ||  $('subAsset_${subAsset.asset.id}') == null  ) {
 		var html = '${html}'; 
 		
-			$('productComponents').insert( html );
+			$('assetComponents').insert( html );
 		
 		
 	} else {
 		alert( "<@s.text name="error.subproductattached"/>" );
 	}
 	
-	if( $( 'subProductCreateForm_${subProduct.asset.type.id}' ) != null ) {
-		Effect.BlindUp( 'subProductCreateForm_${subProduct.asset.type.id}' );
+	if( $( 'subAssetCreateForm_${subAsset.asset.type.id}' ) != null ) {
+		Effect.BlindUp( 'subAssetCreateForm_${subAsset.asset.type.id}' );
 	}
 	
-	$('subProduct_${subProduct.asset.id}').highlight();
+	$('subAsset_${subAsset.asset.id}').highlight();
 	
 </#escape>

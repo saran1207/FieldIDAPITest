@@ -1,13 +1,13 @@
-<#assign subProduct_index=subProductIndex/>
+<#assign subAsset_index=subAssetIndex/>
 <#assign html>
 	<#include "/templates/html/subProductCrud/_subProductForm.ftl"/>
 </#assign>
 
 <#escape x as x?js_string>
-	if( $('subProduct_${subProduct.asset.id}') == null ) {
-		$('productComponentList').insert( '${html}' );
-		if( $( 'subProductCreateForm_${subProduct.asset.type.id}' ) != null ) {
-			Effect.BlindUp( 'subProductCreateForm_${subProduct.asset.type.id}' );
+	if( $('subAsset_${subAsset.asset.id}') == null ) {
+		$('assetComponentList').insert( '${html}' );
+		if( $( 'subAssetCreateForm_${subAsset.asset.type.id}' ) != null ) {
+			Effect.BlindUp( 'subAssetCreateForm_${subAsset.asset.type.id}' );
 		}
 		
 	} else {

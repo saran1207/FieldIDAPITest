@@ -17,12 +17,12 @@ public class AutoAttributeTest extends FieldIDTestCase {
 		SetupPage setupPage = startAsCompany("msa").login().clickSetupLink();
 		AutoAttributeWizardPage attrWizard = setupPage.clickAutoAttributeWizard();
 		
-		String productType = "Anchorage Connector";
+		String assetType = "Anchorage Connector";
 		
-		attrWizard.clickProductType(productType);
+		attrWizard.clickAssetType(assetType);
 		
 		//TODO: Remove when data setup is working.
-		deleteCriteriaIfExisting(attrWizard, productType);
+		deleteCriteriaIfExisting(attrWizard, assetType);
 		
 		assertEquals(3, attrWizard.getAvailableFields().size());
 		assertEquals(0, attrWizard.getInputFields().size());
@@ -47,7 +47,7 @@ public class AutoAttributeTest extends FieldIDTestCase {
 		attrWizard.clickSave();
 		
 		IdentifyPage idPage = attrWizard.clickIdentifyLink();
-		idPage.selectProductType(productType);
+		idPage.selectAssetType(assetType);
 		idPage.selectAttributeValue("Type", "Boom Belt");
 		assertEquals("KABOOM BABY", idPage.getAttributeValue("Description"));
 	}
@@ -57,12 +57,12 @@ public class AutoAttributeTest extends FieldIDTestCase {
 		SetupPage setupPage = startAsCompany("msa").login().clickSetupLink();
 		AutoAttributeWizardPage attrWizard = setupPage.clickAutoAttributeWizard();
 		
-		String productType = "ArcSafe Harness";
+		String assetType = "ArcSafe Harness";
 		
-		attrWizard.clickProductType(productType);
+		attrWizard.clickAssetType(assetType);
 		
 		//TODO: Remove when data setup is working.
-		deleteCriteriaIfExisting(attrWizard, productType);
+		deleteCriteriaIfExisting(attrWizard, assetType);
 		
 		attrWizard.dragAvailableFieldToInputFields("Belt Loops");
 		attrWizard.dragAvailableFieldToOutputFields("Hardware Covers");
@@ -75,16 +75,16 @@ public class AutoAttributeTest extends FieldIDTestCase {
 		attrWizard.clickSave();
 		
 		IdentifyPage idPage = attrWizard.clickIdentifyLink();
-		idPage.selectProductType(productType);
+		idPage.selectAssetType(assetType);
 		idPage.selectAttributeValue("Belt Loops", "No");
 		assertEquals("No", idPage.getAttributeSelectValue("Hardware Covers"));
 	}
 	
-	private void deleteCriteriaIfExisting(AutoAttributeWizardPage attrWizard, String productType) {
+	private void deleteCriteriaIfExisting(AutoAttributeWizardPage attrWizard, String assetType) {
 		if (attrWizard.isOnDefinitionsTab()) {
 			attrWizard.clickEditTab();
 			attrWizard.clickDeleteButtonAndConfirm();
-			attrWizard.clickProductType(productType);
+			attrWizard.clickAssetType(assetType);
 		}
 	}
 

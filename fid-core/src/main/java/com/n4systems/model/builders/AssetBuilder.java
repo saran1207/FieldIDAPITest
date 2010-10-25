@@ -1,7 +1,7 @@
 package com.n4systems.model.builders;
 
 import static com.n4systems.model.builders.AssetTypeBuilder.*;
-import static com.n4systems.model.builders.SubProductBuilder.*;
+import static com.n4systems.model.builders.SubAssetBuilder.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,9 +9,9 @@ import java.util.Date;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.SubAsset;
 import rfid.ejb.entity.AssetStatus;
 
-import com.n4systems.model.SubProduct;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
@@ -27,7 +27,7 @@ public class AssetBuilder extends BaseBuilder<Asset> {
 	private String serialNumber;
 	private Date modified;
 	
-	private SubProduct[] subProducts;
+	private SubAsset[] subAssets;
 	private Location location;
 	private AssetStatus assetStatus;
 	private User assignedTo;
@@ -39,7 +39,7 @@ public class AssetBuilder extends BaseBuilder<Asset> {
 
     public AssetBuilder(){}
 
-	private AssetBuilder(Tenant tenant, BaseOrg owner, AssetType type, String serialNumber, Date modified, Location location, AssetStatus assetStatus, User assignedTo, boolean published, SubProduct... subProducts) {
+	private AssetBuilder(Tenant tenant, BaseOrg owner, AssetType type, String serialNumber, Date modified, Location location, AssetStatus assetStatus, User assignedTo, boolean published, SubAsset... subAssets) {
 		this.tenant = tenant;
 		this.owner = owner;
 		this.type = type;
@@ -48,36 +48,36 @@ public class AssetBuilder extends BaseBuilder<Asset> {
 		this.location = location;
 		this.assetStatus = assetStatus;
 		this.assignedTo = assignedTo;
-		this.subProducts = subProducts;
+		this.subAssets = subAssets;
         this.published = published;
 	}
 
 	public AssetBuilder ofType(AssetType type) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subAssets));
 	}
 	
 	public AssetBuilder forTenant(Tenant tenant) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subAssets));
 	}
 	
 	public AssetBuilder withOwner(BaseOrg owner) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subAssets));
 	}
 	
 	public AssetBuilder withSerialNumber(String serialNumber) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subAssets));
 	}
 	
 	public AssetBuilder withModifiedDate(Date modified) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subAssets));
 	}
 	
-	public AssetBuilder withOneSubProduct() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, aSubProduct().build()));
+	public AssetBuilder withOneSubAsset() {
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, aSubAsset().build()));
 	}
 	
-	public AssetBuilder withTwoSubProducts() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, aSubProduct().build(), aSubProduct().build()));
+	public AssetBuilder withTwoSubAssets() {
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, aSubAsset().build(), aSubAsset().build()));
 	}
 	
 	public AssetBuilder inFreeformLocation(String location) {
@@ -85,31 +85,31 @@ public class AssetBuilder extends BaseBuilder<Asset> {
 	}
 	
 	public AssetBuilder withAdvancedLocation(Location location) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subAssets));
 	}
 	
 	public AssetBuilder havingStatus(AssetStatus assetStatus) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, subAssets));
 	}
 	
 	public AssetBuilder assignedTo(User employee) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, employee, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, employee, published, subAssets));
 	}
 	
 	public AssetBuilder unassigned() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, subAssets));
 	}
 
     public AssetBuilder published(boolean published) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, subProducts));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, subAssets));
 	}
 	
 	@Override
 	public Asset createObject() {
 		Asset asset = generate();
 		asset.setId(id);
-		populateMasterProductInSubProducts(asset);
-		asset.setSubProducts(new ArrayList<SubProduct>(Arrays.asList(subProducts)));
+		populateMasterAssetInSubAssets(asset);
+		asset.setSubAssets(new ArrayList<SubAsset>(Arrays.asList(subAssets)));
 		return asset;
 	}
 	
@@ -128,10 +128,10 @@ public class AssetBuilder extends BaseBuilder<Asset> {
 		return asset;
 	}
 	
-	private void populateMasterProductInSubProducts(Asset asset) {
-		if (subProducts != null) {
-			for (SubProduct subProduct : subProducts) {
-				subProduct.setMasterProduct(asset);
+	private void populateMasterAssetInSubAssets(Asset asset) {
+		if (subAssets != null) {
+			for (SubAsset subAsset : subAssets) {
+				subAsset.setMasterAsset(asset);
 			}
 		}
 	}

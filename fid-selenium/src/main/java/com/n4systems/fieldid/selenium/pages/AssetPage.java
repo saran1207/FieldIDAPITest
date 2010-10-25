@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.pages;
 
 import static org.junit.Assert.fail;
 
-import com.n4systems.fieldid.selenium.datatypes.Product;
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
@@ -16,11 +16,11 @@ public class AssetPage extends FieldIDPage {
 	private String editAssetRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
 	private String editAssetReferenceNumberTextFieldLocator = "xpath=//INPUT[@id='customerRefNumber']";
 	private String editAssetLocationTextFieldLocator = "xpath=//INPUT[@id='location_freeformLocation']";
-	private String editAssetProductStatusSelectListLocator = "xpath=//SELECT[@id='productUpdate_productStatus']";
-	private String editAssetPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='productUpdate_purchaseOrder']";
+	private String editAssetAssetStatusSelectListLocator = "xpath=//SELECT[@id='assetUpdate_assetStatus']";
+	private String editAssetPurchaseOrderTextFieldLocator = "xpath=//INPUT[@id='assetUpdate_purchaseOrder']";
 	private String editAssetIdentifiedTextFieldLocator = "xpath=//INPUT[@id='identified']";
-	private String editAssetProductTypeTextFieldLocator = "xpath=//SELECT[@id='productType']";
-	private String editAssetPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='productUpdate_publishedState']";
+	private String editAssetAssetTypeTextFieldLocator = "xpath=//SELECT[@id='assetType']";
+	private String editAssetPublishOverSafetyNetworkSelectListLocator = "xpath=//SELECT[@id='assetUpdate_publishedState']";
 	private String editAssetCommentTextFieldLocator = "xpath=//TEXTAREA[@id='comments']";
 
 	public AssetPage(Selenium selenium) {
@@ -86,7 +86,7 @@ public class AssetPage extends FieldIDPage {
 		waitForAjax();
 	}
 
-	public String getProductStatus() {
+	public String getAssetStatus() {
 		return selenium.getText("//label[.='Asset Status']/../span");
 	}
 
@@ -141,17 +141,17 @@ public class AssetPage extends FieldIDPage {
 
 	public void attachExistingSubcomponent(String serialNumber) {
 		selenium.click("//a[contains(.,'Find Existing')]");
-		waitForElementToBePresent("//form[@id='subProductSearchForm']");
-		selenium.type("//input[@id='subProductSearchForm_search']", serialNumber);
-		selenium.click("//input[@id='subProductSearchForm_load']");
+		waitForElementToBePresent("//form[@id='subAssetSearchForm']");
+		selenium.type("//input[@id='subAssetSearchForm_search']", serialNumber);
+		selenium.click("//input[@id='subAssetSearchForm_load']");
 		waitForElementToBePresent("//div[@id='resultsTable']");
-		selenium.click("//button[@class='productLink']");
+		selenium.click("//button[@class='assetLink']");
 		waitForAjax();
 
 	}
 
 	public void clickRemoveSubComponent() {
-		selenium.click("//div[@class='subProductAction removeSubProduct']/a");
+		selenium.click("//div[@class='subAssetAction removeSubAsset']/a");
 		waitForAjax();
 	}
 
@@ -160,7 +160,7 @@ public class AssetPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	public void setAssetForm(Product p) {
+	public void setAssetForm(Asset p) {
 
 		if (p.getPublished() == true) {
 			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Publish");
@@ -184,11 +184,11 @@ public class AssetPage extends FieldIDPage {
 		if (p.getLocation() != null) {
 			selenium.type(this.editAssetLocationTextFieldLocator, p.getLocation());
 		}
-		if (p.getProductStatus() != null) {
-			if (misc.isOptionPresent(editAssetProductStatusSelectListLocator, p.getProductStatus())) {
-				selenium.select(this.editAssetProductStatusSelectListLocator, p.getProductStatus());
+		if (p.getAssetStatus() != null) {
+			if (misc.isOptionPresent(editAssetAssetStatusSelectListLocator, p.getAssetStatus())) {
+				selenium.select(this.editAssetAssetStatusSelectListLocator, p.getAssetStatus());
 			} else {
-				fail("Could not find the asset status '" + p.getProductStatus() + "'");
+				fail("Could not find the asset status '" + p.getAssetStatus() + "'");
 			}
 		}
 		if (p.getPurchaseOrder() != null) {
@@ -197,8 +197,8 @@ public class AssetPage extends FieldIDPage {
 		if (p.getIdentified() != null) {
 			selenium.type(this.editAssetIdentifiedTextFieldLocator, p.getIdentified());
 		}
-		if (p.getProductType() != null) {
-			selenium.type(this.editAssetProductTypeTextFieldLocator, p.getProductType());
+		if (p.getAssetType() != null) {
+			selenium.type(this.editAssetAssetTypeTextFieldLocator, p.getAssetType());
 		}
 		if (p.getComments() != null) {
 			selenium.type(editAssetCommentTextFieldLocator, p.getComments());
@@ -224,7 +224,7 @@ public class AssetPage extends FieldIDPage {
 		selenium.type("//input[@id='mergeSmartSearch_search']", serialNumber);
 		selenium.click("//input[@id='mergeSmartSearch_load']");
 		waitForAjax();
-		selenium.click("//button[@class='productLink']");
+		selenium.click("//button[@class='assetLink']");
 		selenium.click("//input[@id='merge']");
 		waitForPageToLoad();
 	}

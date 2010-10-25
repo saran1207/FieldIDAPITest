@@ -31,7 +31,7 @@
 
 ${action.setPageType('product_type', 'select_inspection_types')!}
 <#if ! inspectionTypes.isEmpty() >
-	<@s.form action="productTypeEventTypesSave" theme="simple">
+	<@s.form action="productTypeEventTypesSave" id="assetTypeEventTypesSave" theme="simple">
 		<@s.hidden name="assetTypeId" />
 		<table class="list" >
 			<tr>

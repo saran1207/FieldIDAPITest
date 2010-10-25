@@ -32,7 +32,7 @@ ${action.setPageType('product', 'edit')!}
 			</div>
 		</#if>
 		<div class="infoSet">
-			<label for="">${removalSummary.subProductsToDettach}</label>
+			<label for="">${removalSummary.subAssetsToDettach}</label>
 			<span><@s.text name="label.detachsubproducts"/></span>
 		</div>
 		

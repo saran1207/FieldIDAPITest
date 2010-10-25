@@ -34,9 +34,9 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		setCheckBoxValue("//input[@id='chk_inspection_search_serialnumber']", displayColumns.isSerialNumber());
 		setCheckBoxValue("//input[@id='chk_inspection_search_rfidnumber']", displayColumns.isRfidNumber());
 		setCheckBoxValue("//input[@id='chk_inspection_search_referencenumber']", displayColumns.isReferenceNumber());
-		setCheckBoxValue("//input[@id='chk_inspection_search_producttypegroup']", displayColumns.isProductTypeGroup());
-		setCheckBoxValue("//input[@id='chk_inspection_search_producttype']", displayColumns.isProductType());
-		setCheckBoxValue("//input[@id='chk_inspection_search_productstatus']", displayColumns.isProductStatus());
+		setCheckBoxValue("//input[@id='chk_inspection_search_assettypegroup']", displayColumns.isAssetTypeGroup());
+		setCheckBoxValue("//input[@id='chk_inspection_search_assettype']", displayColumns.isAssetType());
+		setCheckBoxValue("//input[@id='chk_inspection_search_assetstatus']", displayColumns.isAssetStatus());
 		setCheckBoxValue("//input[@id='chk_inspection_search_identified']", displayColumns.isDateIdentified());
 		setCheckBoxValue("//input[@id='chk_inspection_search_identifiedby']", displayColumns.isIdentifiedBy());
 		setCheckBoxValue("//input[@id='chk_inspection_search_description']", displayColumns.isDescription());

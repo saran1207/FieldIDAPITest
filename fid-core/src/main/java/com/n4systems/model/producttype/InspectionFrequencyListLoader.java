@@ -12,7 +12,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class InspectionFrequencyListLoader extends ListLoader<AssetTypeSchedule> {
 	
-	private Long productTypeId;
+	private Long assetTypeId;
 	private Long inspectionTypeId;
 	
 	
@@ -22,8 +22,8 @@ public class InspectionFrequencyListLoader extends ListLoader<AssetTypeSchedule>
 	
 	@Override
 	protected List<AssetTypeSchedule> load(EntityManager em, SecurityFilter filter) {
-		if (inspectionTypeId == null && productTypeId == null) {
-			throw new InvalidArgumentException("you must choose a asset type or an inspection type or both.  You didn't select either");
+		if (inspectionTypeId == null && assetTypeId == null) {
+			throw new InvalidArgumentException("you must choose an asset type or an inspection type or both.  You didn't select either");
 		}
 		
 		return createQuery(em, filter);
@@ -36,19 +36,19 @@ public class InspectionFrequencyListLoader extends ListLoader<AssetTypeSchedule>
 			builder.addSimpleWhere("inspectionType.id", inspectionTypeId); 
 		}
 		
-		if (productTypeId != null) {
-			builder.addSimpleWhere("productType.id", productTypeId);
+		if (assetTypeId != null) {
+			builder.addSimpleWhere("assetType.id", assetTypeId);
 		}
 		
 		return builder.getResultList(em);
 	}
 
-	public Long getProductTypeId() {
-		return productTypeId;
+	public Long getAssetTypeId() {
+		return assetTypeId;
 	}
 
-	public InspectionFrequencyListLoader setProductTypeId(Long productTypeId) {
-		this.productTypeId = productTypeId;
+	public InspectionFrequencyListLoader setAssetTypeId(Long assetTypeId) {
+		this.assetTypeId = assetTypeId;
 		return this;
 	}
 

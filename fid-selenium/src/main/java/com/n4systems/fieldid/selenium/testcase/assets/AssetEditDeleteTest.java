@@ -2,11 +2,11 @@ package com.n4systems.fieldid.selenium.testcase.assets;
 
 import static org.junit.Assert.assertTrue;
 
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.Product;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
@@ -17,12 +17,12 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 	private HomePage page;
 	private String masterSerial;
 	private String masterSerialToMergeInto;
-	private Product asset;
+	private Asset asset;
 	private AssetPage assetPage;
 	private static String NEW_SERIAL = "newSerial";
 	private static String NEW_PURCHASE_ORDER = "newPurchaseOrder";
 	private static String NEW_STATUS = "Out of Service";
-	private static String NEW_PRODUCT_TYPE = "Bridge";
+	private static String NEW_ASSET_TYPE = "Bridge";
 	private static String NEW_MAKEMODEL = "newAttribute1";
 	private static String NEW_TYPE = "Single Girder";
 	private static String NEW_DRIVETYPE = "Push";
@@ -89,7 +89,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 		assetPage.loadAssetToMergeIntoAndSubmit(masterSerialToMergeInto);
 
-		assertTrue("Merge was not successful.", selenium.isElementPresent("//h1[contains(.,'Merge Products - " + masterSerial + " into " + masterSerialToMergeInto + "')]"));
+		assertTrue("Merge was not successful.", selenium.isElementPresent("//h1[contains(.,'Merge Assets - " + masterSerial + " into " + masterSerialToMergeInto + "')]"));
 
 		AssetPage masterAssetPage = page.search(masterSerialToMergeInto);
 		masterAssetPage.clickEditTab().clickDelete();
@@ -100,24 +100,24 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	}
 
-	private void identifyAssetWithSerialNumber(String serial, String productType, String purchaseOrder, String status) {
+	private void identifyAssetWithSerialNumber(String serial, String assetType, String purchaseOrder, String status) {
 		IdentifyPage identifyPage = page.clickIdentifyLink();
-		asset = new Product();
+		asset = new Asset();
 		asset.setSerialNumber(serial);
-		asset.setProductType(productType);
+		asset.setAssetType(assetType);
 		asset.setPurchaseOrder(purchaseOrder);
-		asset.setProductStatus(status);
+		asset.setAssetStatus(status);
 
 		identifyPage.setAddAssetForm(asset, false);
 		identifyPage.saveNewAsset();
 	}
 
 	private void prepareNewAssetFields() {
-		asset = new Product();
+		asset = new Asset();
 		asset.setSerialNumber(NEW_SERIAL);
-		asset.setProductType(NEW_PRODUCT_TYPE);
+		asset.setAssetType(NEW_ASSET_TYPE);
 		asset.setPurchaseOrder(NEW_PURCHASE_ORDER);
-		asset.setProductStatus(NEW_STATUS);
+		asset.setAssetStatus(NEW_STATUS);
 		assetPage.setAssetForm(asset);
 	}
 

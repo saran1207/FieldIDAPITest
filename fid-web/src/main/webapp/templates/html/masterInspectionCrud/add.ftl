@@ -1,5 +1,5 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/product.js"/>" ></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/asset.js"/>" ></script>
 	<script type='text/javascript' src='<@s.url value="/javascript/productRfidHandler.js"/>'></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
@@ -8,28 +8,28 @@
 	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/subProduct.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/inspection.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/masterInspection.js"/>"></script>
 	<@n4.includeStyle type="page" href="product" />
-	<@n4.includeStyle type="page" href="subProduct" />
+	<@n4.includeStyle type="page" href="subAsset" />
 	<@n4.includeStyle type="page" href="inspection" />
 	<@n4.includeStyle type="page" href="masterInspection" />
 	
 	<#include "/templates/html/common/_calendar.ftl"/>
 	
 	<script type="text/javascript">
-		lookupProductUrl = "<@s.url action="products" namespace="/aHtml"/>";
-		productLookupTitle = "<@s.text name="title.productlookup"/>";
-		subProductIndex = ${subProducts?size};
-		updateProductTypeUrl = '<@s.url action="productTypeChange" namespace="ajax"  />';
-		addSubProductUrl = '<@s.url action="createSubProductInInspection" namespace="/ajax" />';
-		addProductUrl = '<@s.url action="productAdd" namespace="/ajax"/>';
-		createProductUrl = "<@s.url action="productCreate" namespace="/ajax" />";	
+		lookupAssetUrl = "<@s.url action="products" namespace="/aHtml"/>";
+		assetLookupTitle = "<@s.text name="title.productlookup"/>";
+		subAssetIndex = ${subAssets?size};
+		updateAssetTypeUrl = '<@s.url action="productTypeChange" namespace="ajax"  />';
+		addSubAssetUrl = '<@s.url action="createSubProductInInspection" namespace="/ajax" />';
+		addAssetUrl = '<@s.url action="productAdd" namespace="/ajax"/>';
+		createAssetUrl = "<@s.url action="productCreate" namespace="/ajax" />";	
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
 		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/aHtml"  />';
 		checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"  />';
-		removeSubProductUrl = "<@s.url action="removeSubProduct" namespace="/ajax"/>";
+		removeSubAssetUrl = "<@s.url action="removeSubProduct" namespace="/ajax"/>";
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';
 		checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax" />';
 		
@@ -46,7 +46,7 @@ ${action.setPageType('inspection', 'add')!}
 		</p>
 	</div>
 	
-	<div class="masterProduct <#if masterInspection.mainInspectionStored >done</#if>">
+	<div class="masterAsset <#if masterInspection.mainInspectionStored >done</#if>">
 		<div class="definition"><div class="identifier"><span>${asset.type.name!}</span></div></div>
 		<div class="performedInspection">
 			<span>${(inspectionType.name)!}</span> 
@@ -62,13 +62,13 @@ ${action.setPageType('inspection', 'add')!}
 		</div>
 	</div>
 
-	<div id="productComponents">
-		<#list asset.subProducts as subProduct >
+	<div id="assetComponents">
+		<#list asset.subAssets as subAsset >
 			<#include "_subProductInspection.ftl" />
 		</#list>
 	</div>
 	
-	<@s.form action="masterInspectionCreate" id="subProductForm" cssClass="crudForm" theme="fieldid">
+	<@s.form action="masterInspectionCreate" id="subAssetForm" cssClass="crudForm" theme="fieldid">
 		<@s.hidden name="uniqueID" id="uniqueID"/>
 		<@s.hidden name="token" id="searchToken"/>
 		<@s.hidden name="type"/>
@@ -97,12 +97,12 @@ ${action.setPageType('inspection', 'add')!}
 		</div>
 		
 		<#list subTypes?sort_by('name') as type >
-			<div id="subProductType_${type.id}" class="component"> 
+			<div id="subAssetType_${type.id}" class="component"> 
 				<div class="definition">
 					<div class="identifier">${type.name}</div> 
 					<div class="createOptions">
-						<a href="<@s.url action="productAdd" namespace="/ajax"  assetTypeId="${type.id}" token="${token}"/>" onclick="addSubProduct(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
-						<a href='<@s.url action="products" namespace="/aHtml"  assetTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubProduct }' >
+						<a href="<@s.url action="productAdd" namespace="/ajax"  assetTypeId="${type.id}" token="${token}"/>" onclick="addSubAsset(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
+						<a href='<@s.url action="products" namespace="/aHtml"  assetTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubAsset }' >
 				  			<@s.text name="label.find_existing" />
 				  		</a>
 				  	</div>

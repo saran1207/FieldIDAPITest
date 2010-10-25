@@ -9,7 +9,7 @@ ${action.setPageType('inspection', 'select_product')!}
 <#assign actionTarget="inspectionGroups"/>
 <#include "_productList.ftl"/>
 <script type="text/javascript">
-	$$('.productLink').each(function(element) {
+	$$('.assetLink').each(function(element) {
 			element.observe('click', goToAssetListener);
 		});
 	function goToAssetListener(event) {

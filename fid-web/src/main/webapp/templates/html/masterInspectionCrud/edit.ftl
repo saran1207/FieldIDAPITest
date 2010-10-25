@@ -14,7 +14,7 @@ ${action.setPageType('inspection', 'edit')!}
 <div id="masterInspection" >
 	<#include "/templates/html/common/_formErrors.ftl" />
 	
-	<div class="masterProduct done">
+	<div class="masterAsset done">
 		<div class="definition"><div class="identifier"><span>${asset.type.name!}</span></div></div>
 		<div class="performedInspection">
 			<span>${(inspectionType.name)!}</span> 
@@ -27,13 +27,13 @@ ${action.setPageType('inspection', 'edit')!}
 	</div>
 	
 	
-	<div id="productComponents">
-		<#list availableSubAssets as subProduct>
+	<div id="assetComponents">
+		<#list availableSubAssets as subAsset>
 			<#include "_subInspection.ftl" />
 		</#list>
 	</div>
 	
-	<@s.form action="masterInspectionUpdate" id="subProductForm" cssClass="crudForm" theme="fieldid">
+	<@s.form action="masterInspectionUpdate" id="subAssetForm" cssClass="crudForm" theme="fieldid">
 		<@s.hidden name="uniqueID" id="uniqueID"/>
 		<@s.hidden name="token"/>
 		<@s.hidden name="type"/>

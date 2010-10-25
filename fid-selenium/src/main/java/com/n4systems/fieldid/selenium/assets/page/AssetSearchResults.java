@@ -9,7 +9,7 @@ public class AssetSearchResults {
 	MiscDriver misc;
 	
 	// Locators
-	private String productSearchResultsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset Search Results')]";
+	private String assetSearchResultsPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Asset Search Results')]";
 
 	public AssetSearchResults(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
@@ -20,15 +20,15 @@ public class AssetSearchResults {
 	 * Checks to see if there are any error messages on the page and checks
 	 * for the header "Asset Search Results" on the page.
 	 */
-	public void verifyProductSearchResultsPage() {
+	public void verifyAssetSearchResultsPage() {
 		misc.checkForErrorMessages("verifyAssetsPage");
-		if(!selenium.isElementPresent(productSearchResultsPageHeaderLocator)) {
+		if(!selenium.isElementPresent(assetSearchResultsPageHeaderLocator)) {
 			fail("Could not find the header for 'Asset Search'.");
 		}
 	}
 
 	public int totalResults() {
 		String reportTotal = selenium.getText("css=.total");
-		return Integer.valueOf(reportTotal.trim().replace("Total Products", "").trim());
+		return Integer.valueOf(reportTotal.trim().replace("Total Assets", "").trim());
 	}
 }

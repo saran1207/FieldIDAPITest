@@ -36,7 +36,7 @@ public class ProductStatusCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		assetStatus = productSerialManager.findProductStatus( uniqueID, getTenantId() );
+		assetStatus = productSerialManager.findAssetStatus( uniqueID, getTenantId() );
 	}
 	
 	

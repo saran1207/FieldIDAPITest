@@ -39,7 +39,7 @@ public class CatalogProductTypeRelationshipsImportHandler extends CatalogImportH
 	
 	public void importCatalog() throws ImportFailureException {
 		for (Long productTypeId : importedProductTypeMapping.keySet()) {
-			importProductTypeRelationships(importCatalog.getPublishedProductType(productTypeId, "inspectionTypes" , "schedules"));
+			importProductTypeRelationships(importCatalog.getPublishedAssetType(productTypeId, "inspectionTypes" , "schedules"));
 		}
 	}
 	@SuppressWarnings("deprecation")

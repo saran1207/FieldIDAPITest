@@ -1,1 +1,1 @@
-attachProduct( null, ${asset.id} );
+attachAsset( null, ${asset.id} );

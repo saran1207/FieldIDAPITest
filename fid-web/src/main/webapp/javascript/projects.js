@@ -38,14 +38,14 @@ function closeAssetSearch() {
 
 function findAssets() {
 	
-	var productLinks = $$( '.productLink' );
-	if( productLinks != null ) {
-		if( productLinks.size() == 1 ) {
+	var assetLinks = $$( '.assetLink' );
+	if( assetLinks != null ) {
+		if( assetLinks.size() == 1 ) {
 			
-			attachAsset(productLinks[0]);
+			attachAsset(assetLinks[0]);
 		} else {
-			for (var i = 0; i < productLinks.length; i++ ) {
-				productLinks[i].observe('click', attachAssetListener);
+			for (var i = 0; i < assetLinks.length; i++ ) {
+				assetLinks[i].observe('click', attachAssetListener);
 			}
 		}
 	}

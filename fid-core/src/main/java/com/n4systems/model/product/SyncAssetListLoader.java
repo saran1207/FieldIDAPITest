@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.SubProduct;
+import com.n4systems.model.SubAsset;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -34,57 +34,57 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 
 	@Override
 	protected List<SyncAsset> load(EntityManager em, SecurityFilter filter) {
-		List<SyncAsset> orgAndLocationProducts = findProductIdsByOrgAndLocation(em, filter);
-		List<SyncAsset> jobProducts = findProductIdsByJob(em, filter);
+		List<SyncAsset> orgAndLocationAssets = findAssetIdsByOrgAndLocation(em, filter);
+		List<SyncAsset> jobAssets = findAssetIdsByJob(em, filter);
 		
 		// use a set to remove duplicates
-		Set<SyncAsset> productIds = new HashSet<SyncAsset>();
-		productIds.addAll(orgAndLocationProducts);
-		productIds.addAll(jobProducts);
+		Set<SyncAsset> assetIds = new HashSet<SyncAsset>();
+		assetIds.addAll(orgAndLocationAssets);
+		assetIds.addAll(jobAssets);
 		
-		return new ArrayList<SyncAsset>(productIds);
+		return new ArrayList<SyncAsset>(assetIds);
 	}
 
-	private List<SyncAsset> findProductIdsByJob(EntityManager em, SecurityFilter filter) {
+	private List<SyncAsset> findAssetIdsByJob(EntityManager em, SecurityFilter filter) {
 		if (jobIds.isEmpty()) {
 			return new ArrayList<SyncAsset>();
 		}
 		
-		List<SyncAsset> productIds = findMasterProductIdsByJob(em, filter);
-		List<SyncAsset> subProductIds = findSubProductIdsForMasters(em, productIds);
+		List<SyncAsset> assetIds = findMasterAssetIdsByJob(em, filter);
+		List<SyncAsset> subAssetIds = findSubAssetIdsForMasters(em, assetIds);
 		
-		productIds.addAll(subProductIds);
-		return productIds;
+		assetIds.addAll(subAssetIds);
+		return assetIds;
 	}
 
-	private List<SyncAsset> findSubProductIdsForMasters(EntityManager em, List<SyncAsset> masterSyncAssets) {
+	private List<SyncAsset> findSubAssetIdsForMasters(EntityManager em, List<SyncAsset> masterSyncAssets) {
 		if (masterSyncAssets.isEmpty()) {
 			return new ArrayList<SyncAsset>();
 		}
 		
-		List<Long> productIds = new ArrayList<Long>();
+		List<Long> assetIds = new ArrayList<Long>();
 		for (SyncAsset asset: masterSyncAssets) {
-			productIds.add(asset.getId());
+			assetIds.add(asset.getId());
 		}
 		
-		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(SubProduct.class);
+		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(SubAsset.class);
 		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "asset.id", "asset.modified"));
-		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "masterAsset.id", productIds));
+		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "masterAsset.id", assetIds));
 		
-		List<SyncAsset> subProductIds = builder.getResultList(em);
-		return subProductIds;
+		List<SyncAsset> subAssetIds = builder.getResultList(em);
+		return subAssetIds;
 	}
 	
-	private List<SyncAsset> findMasterProductIdsByJob(EntityManager em, SecurityFilter filter) {
+	private List<SyncAsset> findMasterAssetIdsByJob(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(InspectionSchedule.class, filter);
 		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "asset.id", "asset.modified"));
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "project.id", jobIds));
 		
-		List<SyncAsset> masterProductIds = builder.getResultList(em);
-		return masterProductIds;
+		List<SyncAsset> masterAssetIds = builder.getResultList(em);
+		return masterAssetIds;
 	}
 	
-	private List<SyncAsset> findProductIdsByOrgAndLocation(EntityManager em, SecurityFilter filter) {
+	private List<SyncAsset> findAssetIdsByOrgAndLocation(EntityManager em, SecurityFilter filter) {
 		if (ownerIds.isEmpty() && locationIds.isEmpty()) {
 			return new ArrayList<SyncAsset>();
 		}
@@ -111,8 +111,8 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 			builder.addWhere(filterGroup);
 		}
 		
-		List<SyncAsset> productIds = builder.getResultList(em);
-		return productIds;
+		List<SyncAsset> assetIds = builder.getResultList(em);
+		return assetIds;
 	}
 
 	public List<Long> getOwnerIds() {

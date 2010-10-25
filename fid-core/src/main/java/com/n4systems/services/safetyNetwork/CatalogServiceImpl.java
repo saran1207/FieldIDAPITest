@@ -36,42 +36,41 @@ public class CatalogServiceImpl implements CatalogService {
 	private final SecurityFilter filter;
 
 	public CatalogServiceImpl(PersistenceManager persistenceManager, Tenant tenant) {
-		super();
 		this.persistenceManager = persistenceManager;
 		this.tenant = tenant;
 		filter = new TenantOnlySecurityFilter(tenant.getId());
 	}
 
-	public Set<Long> getProductTypeIdsPublished() {
-		Set<Long> productTypeIds = new HashSet<Long>();
+	public Set<Long> getAssetTypeIdsPublished() {
+		Set<Long> assetTypeIds = new HashSet<Long>();
 
 		Catalog catalog = getCatalog();
 		if (catalog != null) {
-			for (AssetType publishedType : catalog.getPublishedProductTypes()) {
-				productTypeIds.add(publishedType.getId());
+			for (AssetType publishedType : catalog.getPublishedAssetTypes()) {
+				assetTypeIds.add(publishedType.getId());
 			}
 		}
-		return productTypeIds;
+		return assetTypeIds;
 	}
 
-	public List<ListingPair> getPublishedProductTypesLP() {
-		Set<Long> productTypeIdsPublished = getProductTypeIdsPublished();
-		if (productTypeIdsPublished.isEmpty()) {
+	public List<ListingPair> getPublishedAssetTypesLP() {
+		Set<Long> assetTypeIdsPublished = getAssetTypeIdsPublished();
+		if (assetTypeIdsPublished.isEmpty()) {
 			return new ArrayList<ListingPair>();
 		}
 		
-		QueryBuilder<ListingPair> productTypesQuery = new QueryBuilder<ListingPair>(AssetType.class, filter);
+		QueryBuilder<ListingPair> assetTypesQuery = new QueryBuilder<ListingPair>(AssetType.class, filter);
 		
-		productTypesQuery.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name")).addWhere(Comparator.IN, "ids", "id", productTypeIdsPublished);
-		productTypesQuery.addOrder("name");
+		assetTypesQuery.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name")).addWhere(Comparator.IN, "ids", "id", assetTypeIdsPublished);
+		assetTypesQuery.addOrder("name");
 
-		return persistenceManager.findAll(productTypesQuery);
+		return persistenceManager.findAll(assetTypesQuery);
 	}
 
-	public Catalog publishProductTypes(Set<AssetType> assetTypes) {
+	public Catalog publishAssetTypes(Set<AssetType> assetTypes) {
 		Catalog catalog = getCatalog();
 		assetTypes.addAll(getAdditionalSubTypes(assetTypes));
-		catalog.setPublishedProductTypes(assetTypes);
+		catalog.setPublishedAssetTypes(assetTypes);
 		return persistenceManager.update(catalog);
 	}
 
@@ -122,7 +121,7 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	private Catalog getCatalog() {
-		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class, new OpenSecurityFilter()).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedProductTypes", "publishedInspectionTypes");
+		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class, new OpenSecurityFilter()).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedAssetTypes", "publishedInspectionTypes");
 		Catalog catalog = persistenceManager.find(query);
 		if (catalog == null) {
 			catalog = new Catalog();
@@ -135,47 +134,47 @@ public class CatalogServiceImpl implements CatalogService {
 		return tenant;
 	}
 
-	public Set<AssetTypeGroup> getProductTypeGroupsFor(Set<Long> productTypeIds) {
-		QueryBuilder<AssetTypeGroup> importingProductTypeGroups = new QueryBuilder<AssetTypeGroup>(AssetType.class, filter);
-		applyPublishedProductTypeFilter(importingProductTypeGroups);
-		importingProductTypeGroups.setSelectArgument(new SimpleSelect("group"));
-		importingProductTypeGroups.addWhere(Comparator.IN, "ids", "id", productTypeIds);
-		importingProductTypeGroups.addOrder("group.name");
+	public Set<AssetTypeGroup> getAssetTypeGroupsFor(Set<Long> assetTypeIds) {
+		QueryBuilder<AssetTypeGroup> importingAssetTypeGroups = new QueryBuilder<AssetTypeGroup>(AssetType.class, filter);
+		applyPublishedAssetTypeFilter(importingAssetTypeGroups);
+		importingAssetTypeGroups.setSelectArgument(new SimpleSelect("group"));
+		importingAssetTypeGroups.addWhere(Comparator.IN, "ids", "id", assetTypeIds);
+		importingAssetTypeGroups.addOrder("group.name");
 
-		return new HashSet<AssetTypeGroup>(persistenceManager.findAll(importingProductTypeGroups));
+		return new HashSet<AssetTypeGroup>(persistenceManager.findAll(importingAssetTypeGroups));
 	}
 
-	public AssetType getPublishedProductType(Long productTypeId, String...postfetchField) {
-		isProductTypePublished(productTypeId);
-		return persistenceManager.find(AssetType.class, productTypeId, getTenant(), postfetchField);
+	public AssetType getPublishedAssetType(Long assetTypeId, String...postfetchField) {
+		isAssetTypePublished(assetTypeId);
+		return persistenceManager.find(AssetType.class, assetTypeId, getTenant(), postfetchField);
 	}
 
-	public List<Long> getAllPublishedSubTypesFor(Long productTypeId) {
-		Set<Long> productTypeIds = new HashSet<Long>();
-		productTypeIds.add(productTypeId);
-		return getAllPublishedSubTypesFor(productTypeIds);
+	public List<Long> getAllPublishedSubTypesFor(Long assetTypeId) {
+		Set<Long> assetTypeIds = new HashSet<Long>();
+		assetTypeIds.add(assetTypeId);
+		return getAllPublishedSubTypesFor(assetTypeIds);
 	}
 
-	public List<Long> getAllPublishedSubTypesFor(Set<Long> productTypeIds) {
-		QueryBuilder<Long> subProductIds = new QueryBuilder<Long>(AssetType.class, filter);
-		SimpleSelect selectSubProductId = new SimpleSelect("subType.id", true);
-		applyPublishedProductTypeFilter(subProductIds);
-		selectSubProductId.setDistinct(true);
-		subProductIds.setSelectArgument(selectSubProductId);
-		subProductIds.addLeftJoin("subTypes", "subType").addWhere(Comparator.IN, "ids", "id", productTypeIds);
-		subProductIds.addWhere(new WhereParameter<Set<Long>>(Comparator.IN, "subTypePublishedIds", "subType.id", getProductTypeIdsPublished(), null, true));
-		return persistenceManager.findAll(subProductIds);
+	public List<Long> getAllPublishedSubTypesFor(Set<Long> assetTypeIds) {
+		QueryBuilder<Long> subAssetIds = new QueryBuilder<Long>(AssetType.class, filter);
+		SimpleSelect selectSubAssetId = new SimpleSelect("subType.id", true);
+		applyPublishedAssetTypeFilter(subAssetIds);
+		selectSubAssetId.setDistinct(true);
+		subAssetIds.setSelectArgument(selectSubAssetId);
+		subAssetIds.addLeftJoin("subTypes", "subType").addWhere(Comparator.IN, "ids", "id", assetTypeIds);
+		subAssetIds.addWhere(new WhereParameter<Set<Long>>(Comparator.IN, "subTypePublishedIds", "subType.id", getAssetTypeIdsPublished(), null, true));
+		return persistenceManager.findAll(subAssetIds);
 	}
 
-	private void applyPublishedProductTypeFilter(QueryBuilder<?> query) {
-		query.addWhere(Comparator.IN, "publishedIds", "id", getProductTypeIdsPublished());
+	private void applyPublishedAssetTypeFilter(QueryBuilder<?> query) {
+		query.addWhere(Comparator.IN, "publishedIds", "id", getAssetTypeIdsPublished());
 	}
 
-	public Long getAutoAttributeCountFor(Long productTypeId) {
-		isProductTypePublished(productTypeId);
+	public Long getAutoAttributeCountFor(Long assetTypeId) {
+		isAssetTypePublished(assetTypeId);
 		
 		QueryBuilder<AutoAttributeDefinition> definisionCountQuery = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, filter);
-		definisionCountQuery.addWhere(Comparator.EQ, "productTypeId", "criteria.productType.id", productTypeId);
+		definisionCountQuery.addWhere(Comparator.EQ, "assetTypeId", "criteria.assetType.id", assetTypeId);
 		return persistenceManager.findCount(definisionCountQuery);
 	}
 
@@ -215,33 +214,33 @@ public class CatalogServiceImpl implements CatalogService {
 		return originalStateSets;
 	}
 
-	public AutoAttributeCriteria getCriteriaFor(Long productTypeId) {
-		isProductTypePublished(productTypeId);
+	public AutoAttributeCriteria getCriteriaFor(Long assetTypeId) {
+		isAssetTypePublished(assetTypeId);
 		
 		QueryBuilder<AutoAttributeCriteria> query = new QueryBuilder<AutoAttributeCriteria>(AutoAttributeCriteria.class, filter);
-		query.addSimpleWhere("productType.id", productTypeId);
+		query.addSimpleWhere("assetType.id", assetTypeId);
 		query.addPostFetchPaths("inputs", "outputs");
 		return persistenceManager.find(query);
 	}
 
 	
-	private void isProductTypePublished(Long productTypeId) {
-		if (!getProductTypeIdsPublished().contains(productTypeId)) {
+	private void isAssetTypePublished(Long assetTypeId) {
+		if (!getAssetTypeIdsPublished().contains(assetTypeId)) {
 			throw new NotPublishedException("not published.");
 		}
 	}
 
-	public Pager<AutoAttributeDefinition> getDefinitionPageFor(Long productTypeId, int pageNumber, int pageSize) {
-		isProductTypePublished(productTypeId);
+	public Pager<AutoAttributeDefinition> getDefinitionPageFor(Long assetTypeId, int pageNumber, int pageSize) {
+		isAssetTypePublished(assetTypeId);
 		
 		QueryBuilder<AutoAttributeDefinition> query = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, filter);
-		query.addSimpleWhere("criteria.productType.id", productTypeId).addOrder("id").addPostFetchPaths("outputs");
+		query.addSimpleWhere("criteria.assetType.id", assetTypeId).addOrder("id").addPostFetchPaths("outputs");
 		return persistenceManager.findAllPaged(query, pageNumber, pageSize);
 	}
 
-	public Set<Long> getPublishedInspectionTypeIdsConnectedTo(Set<Long> productTypeIds) {
+	public Set<Long> getPublishedInspectionTypeIdsConnectedTo(Set<Long> assetTypeIds) {
 		Set<Long> inspectionTypeIdsPublished = getInspectionTypeIdsPublished();
-		if (inspectionTypeIdsPublished.isEmpty() || productTypeIds.isEmpty()) {
+		if (inspectionTypeIdsPublished.isEmpty() || assetTypeIds.isEmpty()) {
 			return new HashSet<Long>();
 		}
 		
@@ -250,7 +249,7 @@ public class CatalogServiceImpl implements CatalogService {
 		
 		QueryBuilder<Long> additionalInspectionTypeIdQuery = new QueryBuilder<Long>(AssociatedInspectionType.class, filter);
 		additionalInspectionTypeIdQuery.setSelectArgument(inspectionTypeId);
-		additionalInspectionTypeIdQuery.addWhere(Comparator.IN, "ptIds", "productType.id", productTypeIds);
+		additionalInspectionTypeIdQuery.addWhere(Comparator.IN, "ptIds", "assetType.id", assetTypeIds);
 		
 		additionalInspectionTypeIdQuery.addWhere(new WhereParameter<Collection<Long>>(Comparator.IN, "inspectionTypeIds", "inspectionType.id", inspectionTypeIdsPublished, null, true));
 		
