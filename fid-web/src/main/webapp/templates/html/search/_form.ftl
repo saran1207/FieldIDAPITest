@@ -76,11 +76,11 @@
 				<label for="owner"><@s.text name="label.owner" /></label>
 				<@n4.orgPicker name="owner"/>
 			</div>
-			
-			<div class="infoSet">
-				<label>&nbsp;</label>
-			</div>
-			
+			<#if securityGuard.assignedToEnabled >
+				<div class="infoSet">
+					<label>&nbsp;</label>
+				</div>
+			</#if>
 			<div class="container">
 				<div class="infoSet">
 					<label for="fromDate"><@s.text name="label.fdate"/></label>
