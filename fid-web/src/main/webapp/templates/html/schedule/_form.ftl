@@ -33,7 +33,6 @@
 					<label for="criteria.rfidNumber"><@s.text name="label.schedulestatus"/></label> 
 					<@s.select name="criteria.status" list="scheduleStatuses" listKey="name" listValue="%{getText(label)}"/>
 				</div>
-				
 				<div class="infoSet">
 					<label>&nbsp;</label>
 				</div>
@@ -97,9 +96,11 @@
 			
 			<#include "_ownershipFilters.ftl"/>
 			
-			<div class="infoSet">
-				<label>&nbsp;</label>
-			</div>
+			<#if securityGuard.assignedToEnabled >
+				<div class="infoSet">
+					<label>&nbsp;</label>
+				</div>
+			</#if>
 			
 			<#include "_dateRange.ftl"/>
 		</div>
