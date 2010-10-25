@@ -66,7 +66,13 @@ public class PostFetcher {
 		} else if (obj instanceof Map) {
 			// use the map values so they get treating like an Iterable on the next pass
 			forceFetch(((Map)obj).values());
-		}
+		} else {
+            // Force loading of single proxy objects by calling hashCode()
+            try {
+                obj.hashCode();
+            } catch (Exception e) {
+            }
+        }
 	}
 
 }
