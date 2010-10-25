@@ -107,9 +107,11 @@
 				<label for="criteria.status"><@s.text name="label.result"/></label>
 				<@s.select name="criteria.status" emptyOption="true" list="statuses" listKey="id" listValue="%{getText(label)}"/>
 			</div>
-			<div class="infoSet">
-				<label>&nbsp;</label>
-			</div>
+			<#if securityGuard.assignedToEnabled >
+				<div class="infoSet">
+					<label>&nbsp;</label>
+				</div>
+			</#if>
 			<div class="container">
 				<div class="infoSet">
 					<label for="fromDate"><@s.text name="label.fdate"/></label>
