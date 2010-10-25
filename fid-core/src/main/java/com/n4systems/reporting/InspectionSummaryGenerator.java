@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.model.AssetType;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -23,6 +22,7 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.exceptions.ReportException;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
@@ -103,7 +103,6 @@ public class InspectionSummaryGenerator {
 				PrimaryOrg tenant = getTenant(user, tenantId);
 				
 				inspectionMap.put("tenantAddress", tenant.getAddressInfo() !=null? tenant.getAddressInfo().getDisplay() : "");
-				inspectionMap.put("tenantLogo", resolveCertificateMainLogo(tenant));
 				
 				inspectionMap.put("productTypeGroup", inspection.getAsset().getType().getGroup() != null ? inspection.getAsset().getType().getGroup().getName() : "");
 				inspectionMap.put("assetComments", inspection.getAsset().getComments());
