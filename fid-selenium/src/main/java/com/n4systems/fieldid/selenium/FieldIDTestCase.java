@@ -269,34 +269,34 @@ public abstract class FieldIDTestCase {
     @Before
     public void doDatabaseSetup() throws Exception {
         //TODO: Uncomment when persistence.xml / autodetection / classpath stuff is figured out
-        new PersistenceTemplate(new PersistenceCallback() {
-            @Override
-            public void doInTransaction(Transaction transaction) throws Exception {
-                for (long tenantId : TEST_TENANT_IDS) {
-                    TenantCleaner cleaner = new TenantCleaner();
-                    cleaner.cleanTenant(transaction.getEntityManager(), tenantId);
-                }
-            }
-        }).execute();
-
-        new PersistenceTemplate(new PersistenceCallback() {
-            @Override
-            public void doInTransaction(Transaction transaction) throws Exception {
-                for (long tenantId : TEST_TENANT_IDS) {
-                    MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantId);
-                    dataSetup.setupMinimalData();
-                    dataSetup.createTestAssetTypes(TEST_ASSET_TYPES);
-
-                }
-            }
-        }).execute();
-
-        new PersistenceTemplate(new PersistenceCallback() {
-            @Override
-            public void doInTransaction(Transaction transaction) throws Exception {
-                setupScenario(new Scenario(transaction));
-            }
-        }).execute();
+//        new PersistenceTemplate(new PersistenceCallback() {
+//            @Override
+//            public void doInTransaction(Transaction transaction) throws Exception {
+//                for (long tenantId : TEST_TENANT_IDS) {
+//                    TenantCleaner cleaner = new TenantCleaner();
+//                    cleaner.cleanTenant(transaction.getEntityManager(), tenantId);
+//                }
+//            }
+//        }).execute();
+//
+//        new PersistenceTemplate(new PersistenceCallback() {
+//            @Override
+//            public void doInTransaction(Transaction transaction) throws Exception {
+//                for (long tenantId : TEST_TENANT_IDS) {
+//                    MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantId);
+//                    dataSetup.setupMinimalData();
+//                    dataSetup.createTestAssetTypes(TEST_ASSET_TYPES);
+//
+//                }
+//            }
+//        }).execute();
+//
+//        new PersistenceTemplate(new PersistenceCallback() {
+//            @Override
+//            public void doInTransaction(Transaction transaction) throws Exception {
+//                setupScenario(new Scenario(transaction));
+//            }
+//        }).execute();
     }
 
     public void setupScenario(Scenario scenario) {}
