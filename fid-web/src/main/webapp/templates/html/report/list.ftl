@@ -64,8 +64,6 @@ ${reportActions}
 			<#if Session.sessionUser.hasAccess('editinspection') && !criteria.includeNetworkResults>
 				| <a href="<@s.url action="massUpdateInspections"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
-	   		|
-			<a id="warning_summaryReport_button" href="<@s.url action="summaryReport" searchId="${searchId}" currentPage="${currentPage!}"/>" class="summaryReport"><@s.text name="label.summaryreport" /></a>
 			<#if securityGuard.projectsEnabled && sessionUser.hasAccess('createinspection') && !criteria.includeNetworkResults>
 				| <a href="<@s.url action="selectJobToAssignInspectionsTo"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="assignInspectionsToJob"><@s.text name="label.assigntojob" /></a>
 			</#if>
