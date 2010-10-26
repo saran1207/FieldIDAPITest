@@ -18,7 +18,7 @@
 			<a href="javascript:void(0);" id="collapseSection_reportForm" onclick="closeSection('reportForm', 'collapseSection_reportForm', 'expandSection_reportForm');return false" style="display:none;"><img src="<@s.url value="/images/collapseLarge.gif" />" /></a>
 		</#if>
 		<span class="headerText">
-			<@s.text name="label.searchcriteria"/>
+			<img src="<@s.url value="/images/tip-icon.png" />"/>&nbsp;<@s.text name="label.searchcriteria"/>
 		</span>
 		<br>
 		<span class="footnoteText">
