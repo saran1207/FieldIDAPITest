@@ -10,12 +10,12 @@
 		</#if>
 	</td>
 </#if>
-<td>
+<td id="actionsContainer_${entityId}">
 	<#include "../inspectionCrud/_inspectionViewLightBoxOptions.ftl"/>
 	<@s.url id="printReport" action="printReport.action" namespace="/aHtml" searchId="${searchId}"/>
 	
 	<span class="floatingDropdown floatingDropdownRelative">
-		<a href="javascript:void(0);" class="dropDownLink" id="moreActions" onmouseover="positionDropdown(this, ${entityId}, 12, -36 );">
+		<a href="javascript:void(0);" class="dropDownLink" id="moreActions" onmouseover="positionDropDown(this, ${entityId});">
 			<span><@s.text name="label.actions"/></span>
 			<img src="images/dropdown_arrow.png"/>
 		</a>

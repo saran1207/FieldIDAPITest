@@ -572,7 +572,14 @@ onDocumentLoad(function() {
 	});
 });
 
-function positionDropdown( a , entityId, offsetY, offsetX) {
+
+function positionDropDown(a, entityId){
 	var list = $(a.id + "_list_" + entityId );
-	translate(list, a, offsetY, offsetX);
-} 
+	var actionsContainer = $("actionsContainer_"+entityId);
+	var coordinates = findPos(actionsContainer);
+	
+	if(navigator.appName=="Microsoft Internet Explorer"){
+		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - actionsContainer.offsetHeight - 5)+ "px"});
+	}
+	list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
+}
