@@ -29,16 +29,19 @@
 }
 
 .pageSection {
-	width: 812px;
+	overflow:hidden;
+	width: 100%;
 }
 .contentSection {
 	overflow:auto;
 	zoom:1;
 }
 .infoSet {
-	width:405px;
+	width:100%;
 	overflow:hidden;
+	clear:right;
 	}
+
 	
 #pageContent {
 	overflow: visible;
@@ -47,3 +50,30 @@
 	clear:both;
 }
 
+.fieldGroup .infoSet{
+		border-top: none;
+	border-bottom:none;
+	}
+
+.fieldGroup{
+	display:block;
+	float:left;
+	overflow: hidden;
+	width:500px;
+}
+
+.fieldGroup h2{
+	margin-right:10px;
+	}
+
+.clearLeft{
+	clear:left;
+	}
+
+.searchForm{
+	width:100%;
+}
+
+.fieldHolder input, .fieldHolder select{
+	padding: 3px;
+	}
