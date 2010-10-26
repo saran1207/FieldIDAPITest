@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.schedule.page;
+package com.n4systems.fieldid.selenium.pages.schedules;
 
 import static org.junit.Assert.assertTrue;
 

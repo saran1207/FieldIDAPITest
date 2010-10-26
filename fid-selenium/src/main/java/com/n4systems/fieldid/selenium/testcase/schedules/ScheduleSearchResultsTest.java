@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.schedules.SchedulesSearchResultsPage;
 
 public class ScheduleSearchResultsTest extends FieldIDTestCase {

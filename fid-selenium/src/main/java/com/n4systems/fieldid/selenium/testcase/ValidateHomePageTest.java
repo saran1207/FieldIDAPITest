@@ -8,8 +8,8 @@ import com.n4systems.fieldid.selenium.assets.page.AssetSearch;
 import com.n4systems.fieldid.selenium.home.page.Home;
 import com.n4systems.fieldid.selenium.home.page.InstructionalVideos;
 import com.n4systems.fieldid.selenium.login.page.Login;
+import com.n4systems.fieldid.selenium.pages.schedules.Schedules;
 import com.n4systems.fieldid.selenium.reporting.page.Reporting;
-import com.n4systems.fieldid.selenium.schedule.page.Schedules;
 
 public class ValidateHomePageTest extends FieldIDTestCase {
 

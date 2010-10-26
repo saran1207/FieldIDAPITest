@@ -20,8 +20,8 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.assets.page.AssetSearch;
 import com.n4systems.fieldid.selenium.assets.page.AssetSearchResults;
 import com.n4systems.fieldid.selenium.login.page.Login;
+import com.n4systems.fieldid.selenium.pages.schedules.Schedules;
 import com.n4systems.fieldid.selenium.reporting.page.Reporting;
-import com.n4systems.fieldid.selenium.schedule.page.Schedules;
 
 @RunWith(Parameterized.class)
 public class MinimalSecurityTest extends FieldIDTestCase { 
