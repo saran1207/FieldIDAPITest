@@ -187,7 +187,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 		
 		if (asset == null) {
-			addActionError(getText("error.noproduct"));
+			addActionError(getText("error.noasset"));
 			throw new MissingEntityException();
 		}
 
@@ -202,7 +202,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	public String doQuickInspect() {
 
 		if (asset == null) {
-			addActionError(getText("error.noproduct"));
+			addActionError(getText("error.noasset"));
 			return MISSING;
 		}
 
@@ -239,7 +239,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 		
 		if (asset == null) {
-			addActionError(getText("error.noproduct"));
+			addActionError(getText("error.noasset"));
 			return MISSING;
 		}
 
@@ -611,7 +611,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return (asset != null) ? asset.getId() : null;
 	}
 
-	@RequiredFieldValidator(message="", key="error.noproduct")
+	@RequiredFieldValidator(message="", key="error.noasset")
 	public void setAssetId(Long assetId) {
 		if (assetId == null) {
 			asset = null;

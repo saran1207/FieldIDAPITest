@@ -102,13 +102,13 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 			Long results = massUpdateManager.updateProducts(ids, asset, select, fetchCurrentUser());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
-			addFlashMessage(getText("message.productmassupdatesuccessful", messageArgs));
+			addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
 
 			return SUCCESS;
 		} catch (UpdateFailureException ufe) {
 			logger.error("failed to run a mass update on products", ufe);
 		} catch (UpdateConatraintViolationException ucve) {
-			addActionError(getText("error.massupdateproductconstriantviolation"));
+			addActionError(getText("error.massupdateassetconstriantviolation"));
 			return INPUT;
 		} catch (Exception e) {
 			logger.error("failed to run a mass update on products", e);

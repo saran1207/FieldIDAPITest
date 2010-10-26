@@ -397,10 +397,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 			asset = saver.create();
 
 			uniqueID = asset.getId();
-			addFlashMessageText("message.productcreated");
+			addFlashMessageText("message.assetcreated");
 
 		} catch (Exception e) {
-			addActionErrorText("error.productsave");
+			addActionErrorText("error.assetsave");
 			logger.error("failed to save Asset", e);
 			return INPUT;
 		}
@@ -467,10 +467,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 			asset = saver.update();
 
-			addFlashMessageText("message.productupdated");
+			addFlashMessageText("message.assetupdated");
 
 		} catch (Exception e) {
-			addActionErrorText("error.productsave");
+			addActionErrorText("error.assetsave");
 			logger.error("failed to save Asset", e);
 			return INPUT;
 		}
@@ -499,10 +499,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 		try {
 			ProductSaveService saver = getProductSaveService();
 			saver.setProduct(asset).update();
-			addFlashMessageText("message.productupdated");
+			addFlashMessageText("message.assetupdated");
 		} catch (Exception e) {
 			logger.error("Failed connecting shop order to asset", e);
-			addActionErrorText("error.productsave");
+			addActionErrorText("error.assetsave");
 			return ERROR;
 		}
 
@@ -511,7 +511,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	protected void testAsset() {
 		if (asset == null) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			throw new MissingEntityException();
 		}
 	}
@@ -519,7 +519,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	protected void testExistingAsset() {
 		testAsset();
 		if (asset.isNew()) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			throw new MissingEntityException();
 		}
 	}
@@ -543,12 +543,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 		// update the asset
 		try {
 			getProductSaveService().setProduct(asset).update();
-			String updateMessage = getText("message.productupdated.customer", Arrays.asList(asset.getSerialNumber(), asset.getOwner().getName()));
+			String updateMessage = getText("message.assetupdated.customer", Arrays.asList(asset.getSerialNumber(), asset.getOwner().getName()));
 			addFlashMessage(updateMessage);
 
 		} catch (Exception e) {
 			logger.error("Failed connecting customer order to asset", e);
-			addActionErrorText("error.productsave");
+			addActionErrorText("error.assetsave");
 			return ERROR;
 		}
 
@@ -573,13 +573,13 @@ public class AssetCrud extends UploadAttachmentSupport {
 		testExistingAsset();
 		try {
 			productManager.archive(asset, fetchCurrentUser());
-			addFlashMessageText("message.productdeleted");
+			addFlashMessageText("message.assetdeleted");
 			return SUCCESS;
 		} catch (UsedOnMasterInspectionException e) {
 			addFlashErrorText("error.deleteusedonmasterinspection");
 		} catch (Exception e) {
 			logger.error("failed to archive an asset", e);
-			addFlashErrorText("error.deleteproduct");
+			addFlashErrorText("error.deleteasset");
 		}
 
 		return INPUT;
@@ -720,7 +720,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return autoAttributeCriteria;
 	}
 
-	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
+	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.assettyperequired")
 	public Long getAssetTypeId() {
 		return (asset.getType() != null) ? asset.getType().getId() : null;
 	}

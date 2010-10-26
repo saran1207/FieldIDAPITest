@@ -148,7 +148,7 @@ public class AssetCodeMappingCrud extends AbstractCrud {
 		this.assetCodeMapping = assetCodeMapping;
 	}
 
-	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.productcoderequired")
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.assetcoderequired")
 	public String getAssetCode() {
 		return assetCodeMapping.getAssetCode();
 	}
@@ -172,7 +172,7 @@ public class AssetCodeMappingCrud extends AbstractCrud {
 		return assetType;
 	}
 	
-	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
+	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.assettyperequired")
 	public Long getAssetType() {
 		return (assetCodeMapping.getAssetInfo() != null ) ? assetCodeMapping.getAssetInfo().getId() : null ;
 	}

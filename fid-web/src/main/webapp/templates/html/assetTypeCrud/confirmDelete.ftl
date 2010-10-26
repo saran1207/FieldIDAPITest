@@ -1,8 +1,8 @@
-<title><@s.text name="title.confirmproducttypedelete" /> - ${assetType.name?html}</title>
+<title><@s.text name="title.confirmassettypedelete" /> - ${assetType.name?html}</title>
 ${action.setPageType('asset_type', 'edit')!}
 <#if !removalSummary.validToDelete() >
 	<div class="formErrors error" >
-		<@s.text name="error.productsusedonamasterinspection">
+		<@s.text name="error.assetsusedonamasterinspection">
 			<@s.param>${assetType.name?html}</@s.param>
 			<@s.param>${removalSummary.assetsUsedInMasterInpsection}</@s.param>
 		</@s.text>
@@ -10,7 +10,7 @@ ${action.setPageType('asset_type', 'edit')!}
 </#if>
 
 <div class="instructions">
-	<@s.text name="instruction.deleteproducttype"><@s.param >${assetType.name?html}</@s.param></@s.text>
+	<@s.text name="instruction.deleteassettype"><@s.param >${assetType.name?html}</@s.param></@s.text>
 </div>
 
 <div class="crudForm largeForm bigForm pageSection">
@@ -19,7 +19,7 @@ ${action.setPageType('asset_type', 'edit')!}
 		
 		<div class="infoSet">
 			<label for="">${removalSummary.assetsToDelete}</label>
-			<span><@s.text name="label.productsbeingdeleted"/></span>
+			<span><@s.text name="label.assetsbeingdeleted"/></span>
 		</div>
 		
 		<div class="infoSet">
@@ -34,13 +34,13 @@ ${action.setPageType('asset_type', 'edit')!}
 		<#if securityGuard.integrationEnabled>
 			<div class="infoSet">
 				<label for="">${removalSummary.assetCodeMappingsToDelete}</label>
-				<span><@s.text name="label.productcodemappingsbeingdeleted"/></span>
+				<span><@s.text name="label.assetcodemappingsbeingdeleted"/></span>
 			</div>
 		</#if>
 	
 		<div class="infoSet">
 			<label for="">${removalSummary.assetTypesToDetachFrom}</label>
-			<span><@s.text name="label.detachedfromproducttypes"/></span>
+			<span><@s.text name="label.detachedfromassettypes"/></span>
 		</div>
 		
 		<div class="infoSet">
@@ -58,7 +58,7 @@ ${action.setPageType('asset_type', 'edit')!}
 		<#if securityGuard.projectsEnabled>
 			<div class="infoSet">
 				<label for="">${removalSummary.assetsToDetachFromProjects}</label>
-				<span><@s.text name="label.productsbeingdetachedfromproject"/></span>
+				<span><@s.text name="label.assetsbeingdetachedfromproject"/></span>
 			</div>
 		</#if>
 		

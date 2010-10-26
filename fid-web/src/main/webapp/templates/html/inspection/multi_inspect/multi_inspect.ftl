@@ -97,7 +97,7 @@
 						<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
 						<th><@s.text name="label.rfidnumber"/></th>
 						<th><@s.text name="label.owner"/></th>
-						<th><@s.text name="label.producttype"/></th>
+						<th><@s.text name="label.assettype"/></th>
 						<th><@s.text name="label.identified"/></th>
 						<th><@s.text name="label.reference_number"/></th>
 						<th><@s.text name="label.create_status"/></th>
@@ -114,7 +114,7 @@
 					<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
 					<th><@s.text name="label.rfidnumber"/></th>
 					<th><@s.text name="label.owner"/></th>
-					<th><@s.text name="label.producttype"/></th>
+					<th><@s.text name="label.assettype"/></th>
 					<th><@s.text name="label.identified"/></th>
 					<th><@s.text name="label.reference_number"/></th>
 					<th><@s.text name="label.create_status"/></th>

@@ -52,8 +52,8 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public PrintAllProductCertificatesTask createPrintAllProductCertificatesTask(DownloadLink link, String downloadUrl, List<Long> productIds) {
-		PrintAllProductCertificatesTask task = new PrintAllProductCertificatesTask(link, downloadUrl);
+	public PrintAllAssetCertificatesTask createPrintAllAssetCertificatesTask(DownloadLink link, String downloadUrl, List<Long> productIds) {
+		PrintAllAssetCertificatesTask task = new PrintAllAssetCertificatesTask(link, downloadUrl);
 		task.setProductIdList(productIds);
 		
 		return task;
@@ -76,8 +76,8 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public ProductExportTask createProductExportTask(DownloadLink link, String downloadUrl, ListLoader<Asset> productLoader) {
-		ProductExportTask task = new ProductExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createProductExporter(productLoader));
+	public AssetExportTask createProductExportTask(DownloadLink link, String downloadUrl, ListLoader<Asset> productLoader) {
+		AssetExportTask task = new AssetExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createProductExporter(productLoader));
 		return task;
 	}
 }

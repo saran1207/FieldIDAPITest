@@ -76,7 +76,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		}
 		
 		if (asset == null) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			throw new MissingEntityException();
 		}
 		

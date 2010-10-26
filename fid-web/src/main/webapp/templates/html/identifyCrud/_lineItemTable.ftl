@@ -4,10 +4,10 @@
 		<table class="list">
 			<tr>
 				<th class="lineAddLink" ></th>
-				<th class="linePcode" ><@s.text name="label.productcode"/></th>
+				<th class="linePcode" ><@s.text name="label.assetcode"/></th>
 				<th><@s.text name="label.description"/></th>
 				<th class="lineQty" ><@s.text name="label.quantity"/></th>
-				<th class="lineIdent" ><@s.text name="label.identifiedproducts"/></th>
+				<th class="lineIdent" ><@s.text name="label.identifiedassets"/></th>
 			</tr>
 			<#list lineItems as lineItem >
 				<tr>

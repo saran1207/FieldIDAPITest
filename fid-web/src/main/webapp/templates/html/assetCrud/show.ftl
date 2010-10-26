@@ -15,7 +15,7 @@
 ${action.setPageType('asset', 'show')!}
 <div class="columnLeft">
 	<div class="viewSection smallViewSection" >
-		<h2><@s.text name="label.productsummary"/></h2>
+		<h2><@s.text name="label.assetsummary"/></h2>
 		<p>
 			<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
 			<span class="fieldValue serialNumber">${asset.serialNumber}</span>
@@ -29,11 +29,11 @@ ${action.setPageType('asset', 'show')!}
 			<span class="fieldValue"><@s.text name="${publishedStateLabel}"/></span>
 		</p>
 		<p>
-			<label><@s.text name="label.producttype"/></label>
+			<label><@s.text name="label.assettype"/></label>
 			<span class="fieldValue">${asset.type.name}</span>
 		</p>
 		<p>
-			<label><@s.text name="label.productstatus"/></label>
+			<label><@s.text name="label.assetstatus"/></label>
 			<span class="fieldValue">${(asset.assetStatus.name)!}</span>
 		</p>
 		<p>
@@ -104,7 +104,7 @@ ${action.setPageType('asset', 'show')!}
 			
 			<#if asset.shopOrder?exists >
 				<p>
-					<label><@s.text name="label.productcode"/></label>
+					<label><@s.text name="label.assetcode"/></label>
 					<span class="fieldValue">${(asset.shopOrder.assetCode)!}</span>
 				</p>
 				<p>
@@ -191,7 +191,7 @@ ${action.setPageType('asset', 'show')!}
 	
 	<#if asset.subAssets?exists && !asset.subAssets.isEmpty() >
 		<div id="assetComponents" class="viewSection smallViewSection" >
-			<h2><@s.text name="label.subproducts"/></h2>
+			<h2><@s.text name="label.subassets"/></h2>
 			<#list asset.subAssets as subAsset >
 				<p>
 					<label><a href="<@s.url action="asset"  uniqueID="${subAsset.asset.id}"/>">${subAsset.asset.type.name!}</a></label>
@@ -283,7 +283,7 @@ ${action.setPageType('asset', 'show')!}
 			
 			<#if asset.type.imageName?exists >
 				<p>
-					<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${asset.type.uniqueID}"  />" alt="<@s.text name="label.productimage"/>" width="300"/>
+					<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${asset.type.uniqueID}"  />" alt="<@s.text name="label.assetimage"/>" width="300"/>
 				</p>
 			</#if>
 			

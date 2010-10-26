@@ -3,7 +3,7 @@ ${action.setPageType('auto_attribute', 'edit')!}
 <@s.form action="autoAttributeCriteriaEdit!save" cssClass="inputForm" theme="css_xhtml" >
 	<@s.hidden name="uniqueID" id="uniqueId"/>
 	
-	<h2> <@s.text name="label.producttype" /> : <@s.text name="${assetType.name?html!}" /> </h2>
+	<h2> <@s.text name="label.assettype" /> : <@s.text name="${assetType.name?html!}" /> </h2>
 	
 	<div class="dropBoxHolder" >
 		

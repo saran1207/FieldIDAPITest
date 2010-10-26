@@ -17,7 +17,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Inspection;
 import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
-import com.n4systems.taskscheduling.task.ProductMergeTask;
+import com.n4systems.taskscheduling.task.AssetMergeTask;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class AssetMergeAction extends AbstractCrud {
@@ -52,7 +52,7 @@ public class AssetMergeAction extends AbstractCrud {
 	
 	private void testRequiredEntities() {
 		if (losingAsset == null || losingAsset.isNew()) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			throw new MissingEntityException();
 		}
 	}
@@ -74,11 +74,11 @@ public class AssetMergeAction extends AbstractCrud {
 	public String doCreate() {
 		testRequiredEntities();
 		if (winningAsset == null) {
-			addActionErrorText("error.you_must_choose_a_valid_product_to_merge_into");
+			addActionErrorText("error.you_must_choose_a_valid_asset_to_merge_into");
 			return INPUT;
 		}
 		
-		ProductMergeTask task = new ProductMergeTask(winningAsset, losingAsset, fetchCurrentUser());
+		AssetMergeTask task = new AssetMergeTask(winningAsset, losingAsset, fetchCurrentUser());
 		TaskExecutor.getInstance().execute(task);
 		
 		return SUCCESS;

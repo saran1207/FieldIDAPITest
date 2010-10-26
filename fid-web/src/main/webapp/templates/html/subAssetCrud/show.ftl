@@ -1,6 +1,6 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="/javascript/asset.js"/>" ></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/productRfidHandler.js"/>'></script>
+	<script type='text/javascript' src='<@s.url value="/javascript/assetRfidHandler.js"/>'></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"></script>
@@ -8,14 +8,14 @@
 	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/subProduct.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/asset.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/subProduct.css"/>" />
+	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/subAsset.css"/>" />
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/masterInspection.css"/>" />
 	
 	<script type="text/javascript">
 		lookupAssetUrl = "<@s.url action="assets" namespace="/aHtml"/>";
-		assetLookupTitle = "<@s.text name="title.productlookup"/>";
+		assetLookupTitle = "<@s.text name="title.assetlookup"/>";
 		subAssetIndex = ${subAssets?size};
 		updateAssetTypeUrl = '<@s.url action="assetTypeChange" namespace="ajax"  />';
 		addSubAssetUrl = '<@s.url action="createSubAsset" namespace="/ajax" />';
@@ -39,9 +39,9 @@ ${action.setPageType('asset', 'assetconfiguration')!}
 <@s.hidden name="uniqueID" id="uniqueID"/>
 <div id="assetComponents">
 	<div class="inspectionHeader">
-		<h3><@s.text name="label.orangize_sub_products"/></h3>
+		<h3><@s.text name="label.orangize_sub_assets"/></h3>
 		<p class="instructions smallInstructions">
-			<@s.text name="instructions.organize_sub_products"/>
+			<@s.text name="instructions.organize_sub_assets"/>
 		</p>
 		<div>
 			<a href="show.ftl#reorder" id="startOrdering" onclick="startOrdering(); return false;"><@s.text name="label.reorder"/></a>
@@ -79,7 +79,7 @@ ${action.setPageType('asset', 'assetconfiguration')!}
 				<div class="identifier">${type.name}</div> 
 				<div class="createOptions">
 					<a href="<@s.url action="assetAdd" namespace="/ajax"  assetTypeId="${type.id}"/>" id="addSubAsset_${type.id}" onclick="addSubAsset(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
-					<a href='<@s.url action="assets" namespace="/aHtml"  assetTypeId="${type.id}"/>' id="lookUpSubAsset_${type.id}"  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubAsset }' ><@s.text name="label.find_existing" /></a>
+					<a href='<@s.url action="assets" namespace="/aHtml"  assetTypeId="${type.id}"/>' id="lookUpSubAsset_${type.id}"  class='lightview' rel='ajax' title='<@s.text name="title.assetlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubAsset }' ><@s.text name="label.find_existing" /></a>
 		  		</div> 
 			</div>
 		</div>

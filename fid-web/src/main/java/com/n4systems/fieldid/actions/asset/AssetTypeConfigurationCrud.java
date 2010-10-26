@@ -70,7 +70,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 			return MISSING;
 		}
 		if( isPartOfMasterAsset() ) {
-			addActionError( getText( "error.alreadyasubproducttype" ) );
+			addActionError( getText( "error.alreadyasubassettype" ) );
 			return ERROR;
 		}
 		
@@ -86,10 +86,10 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 			}
 			
 			assetType = productTypeManager.updateProductType(assetType);
-			addFlashMessage( getText( "message.productconfigurationsaved" ) );
+			addFlashMessage( getText( "message.assetconfigurationsaved" ) );
 		} catch ( Exception e ) {
 			logger.error( "could not update the asset configuration", e );
-			addActionError( getText( "error.productconfiguration" ) );
+			addActionError( getText( "error.assetconfiguration" ) );
 		}
 		
 		return SUCCESS;
@@ -135,7 +135,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 	}
 
 	
-	@CustomValidator( type="subAssetValidator", message="", key="error.parentproduct" )
+	@CustomValidator( type="subAssetValidator", message="", key="error.parentasset" )
 	public List<Long> getSubAssetIds() {
 		return subAssetIds;
 	}

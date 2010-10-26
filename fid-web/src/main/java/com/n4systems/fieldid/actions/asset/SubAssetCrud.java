@@ -66,12 +66,12 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	@SkipValidation
 	public String doCreate() {
 		if (asset == null || asset.isNew()) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			return MISSING;
 		}
 
 		if (subAsset == null) {
-			addActionErrorText("error.nosubproduct");
+			addActionErrorText("error.nosubasset");
 			return ERROR;
 		}
 
@@ -79,7 +79,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		
 		Asset foundSubAsset = persistenceManager.find(Asset.class, subAsset.getAsset().getId(), getSecurityFilter(), "type.inspectionTypes");
 		if (foundSubAsset == null) {
-			addActionErrorText("error.nosubproduct");
+			addActionErrorText("error.nosubasset");
 			return ERROR;
 		} 
 		subAsset.setAsset(foundSubAsset);
@@ -88,16 +88,16 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		try {	
 			processSubProducts();
 			asset = productManager.update(asset, getUser());
-			addFlashMessageText("message.productupdated");
+			addFlashMessageText("message.assetupdated");
 
 			return "saved";
 		} catch (SubAssetUniquenessException e) {
-			addActionErrorText("error.samesubproduct");
+			addActionErrorText("error.samesubasset");
 		} catch (MissingEntityException e) {
-			addActionErrorText("error.missingattachedproduct");
+			addActionErrorText("error.missingattachedasset");
 			logger.error("failed to save Asset, sub asset does not exist or security filter does not allow access", e);
 		} catch (Exception e) {
-			addActionErrorText("error.productsave");
+			addActionErrorText("error.assetsave");
 			logger.error("failed to save Asset", e);
 		}
 
@@ -107,7 +107,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	@SkipValidation
 	public String doShow() {
 		if (asset == null || asset.isNew()) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			return MISSING;
 		}
 		subAssets = SubAssetHelper.convert(asset.getSubAssets());
@@ -117,7 +117,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	
 	public String doUpdate() {
 		if (asset == null || asset.isNew()) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			return MISSING;
 		}
 		if (subAsset == null) {
@@ -143,14 +143,14 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 			SubAsset target = asset.getSubAssets().get(asset.getSubAssets().indexOf(new SubAsset(subAsset.getAsset(), asset)));
 			target.setLabel(subAsset.getLabel());
 			asset = productManager.update(asset, getUser());
-			addFlashMessageText("message.productupdated");
+			addFlashMessageText("message.assetupdated");
 
 			return "saved";
 		} catch (MissingEntityException e) {
-			addActionErrorText("error.missingattachedproduct");
+			addActionErrorText("error.missingattachedasset");
 			logger.error("failed to save Asset, sub asset does not exist or security filter does not allow access", e);
 		} catch (Exception e) {
-			addActionErrorText("error.productsave");
+			addActionErrorText("error.assetsave");
 			logger.error("failed to save Asset", e);
 		}
 
@@ -190,12 +190,12 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	@SkipValidation
 	public String doRemove() {
 		if (asset == null || asset.isNew()) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			return MISSING;
 		}
 
 		if (subAssetId == null) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			return MISSING;
 		}
 		SubAsset subAssetToRemove = null;
@@ -207,7 +207,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		}
 
 		if (subAssetToRemove == null) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			return MISSING;
 		}
 
@@ -220,11 +220,11 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 				masterInspection.removeInspectionsForAsset(subAsset.getAsset());
 			}
 
-			addActionMessageText("message.productupdated");
+			addActionMessageText("message.assetupdated");
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error("couldn't save the asset ", e);
-			addActionErrorText("error.productupdate");
+			addActionErrorText("error.assetupdate");
 			return ERROR;
 		}
 

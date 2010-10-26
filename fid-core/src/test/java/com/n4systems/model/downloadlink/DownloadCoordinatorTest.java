@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.*;
 
 import java.util.concurrent.Executor;
 
+import com.n4systems.taskscheduling.task.AssetExportTask;
 import org.junit.Test;
 
 
@@ -19,7 +20,6 @@ import com.n4systems.persistence.savers.Saver;
 import com.n4systems.taskscheduling.task.AutoAttributeExportTask;
 import com.n4systems.taskscheduling.task.CustomerExportTask;
 import com.n4systems.taskscheduling.task.DownloadTaskFactory;
-import com.n4systems.taskscheduling.task.ProductExportTask;
 
 public class DownloadCoordinatorTest {
 
@@ -169,7 +169,7 @@ public class DownloadCoordinatorTest {
 		Executor executor =  createMock(Executor.class);
 		DownloadLinkFactory linkFactory = createMock(DownloadLinkFactory.class);
 		DownloadTaskFactory taskFactory = createMock(DownloadTaskFactory.class);
-		ProductExportTask task = createMock(ProductExportTask.class);
+		AssetExportTask task = createMock(AssetExportTask.class);
 		ListLoader<Asset> loader = createMock(ListLoader.class);
 		
 		DownloadCoordinator dc = new DownloadCoordinator(new User(), createMock(Saver.class), executor, linkFactory, taskFactory);

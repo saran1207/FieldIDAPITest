@@ -1,7 +1,7 @@
-<title><@s.text name="title.confirmproducttypegroupdelete" /> - ${group.name?html}</title>
+<title><@s.text name="title.confirmassettypegroupdelete" /> - ${group.name?html}</title>
 ${action.setPageType('asset_type_group', 'edit')!}
 <div class="instructions">
-	<@s.text name="instruction.deleteproducttypegroup"><@s.param >${group.name?html}</@s.param></@s.text>
+	<@s.text name="instruction.deleteassettypegroup"><@s.param >${group.name?html}</@s.param></@s.text>
 </div>
 
 <div class="crudForm largeForm bigForm pageSection">
@@ -9,7 +9,7 @@ ${action.setPageType('asset_type_group', 'edit')!}
 	<div class="sectionContent">
 		<div class="infoSet">
 			<label for="">${removalSummary.assetTypesConnected}</label>
-			<span><@s.text name="label.producttypesbeingdetached"/></span>
+			<span><@s.text name="label.assettypesbeingdetached"/></span>
 		</div>
 	</div>
 	<div class="formAction">

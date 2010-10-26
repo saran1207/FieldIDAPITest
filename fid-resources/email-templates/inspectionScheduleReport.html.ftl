@@ -43,7 +43,7 @@ table.overdue td {
 					<th>Organization</th>
 					<th>Customer</th>
 					<th>Division</th>
-					<th>Product Type</th>
+					<th>Asset Type</th>
 					<th>Event Type</th>
 					<th>Inspections Due</th>
 				</tr>
@@ -54,7 +54,7 @@ table.overdue td {
 						<td>${isCount.organizationName}</td>
 						<td>${isCount.customerName}</td>
 						<td>${isCount.divisionName}</td>
-						<td>${isCount.productTypeName}</td>
+						<td>${isCount.assetTypeName}</td>
 						<td>${isCount.inspectionTypeName}</td>
 						<td>${isCount.inspectionCount}</td>
 					</tr>				
@@ -76,7 +76,7 @@ table.overdue td {
 					<th>Organization</th>
 					<th>Customer</th>
 					<th>Division</th>
-					<th>Product Type</th>
+					<th>Asset Type</th>
 					<th>Event Type</th>
 					<th>Inspections Due</th>
 				</tr>
@@ -87,7 +87,7 @@ table.overdue td {
 						<td>${isCount.organizationName}</td>
 						<td>${isCount.customerName}</td>
 						<td>${isCount.divisionName}</td>
-						<td>${isCount.productTypeName}</td>
+						<td>${isCount.assetTypeName}</td>
 						<td>${isCount.inspectionTypeName}</td>
 						<td>${isCount.inspectionCount}</td>
 					</tr>				

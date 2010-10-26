@@ -1,14 +1,14 @@
 ${action.setPageType('asset', 'edit')!}
 <#if !removalSummary.validToDelete() >
 	<div class="formErrors error" >
-		<@s.text name="error.productusedonamasterinspection">
+		<@s.text name="error.assetusedonamasterinspection">
 			<@s.param>${removalSummary.assetUsedInMasterInpsection}</@s.param>
 		</@s.text>
 	</div>
 </#if>
 
 <div class="instructions">
-	<@s.text name="instruction.deleteproduct"><@s.param >${asset.serialNumber?html}</@s.param></@s.text>
+	<@s.text name="instruction.deleteasset"><@s.param >${asset.serialNumber?html}</@s.param></@s.text>
 </div>
 
 <div class="crudForm largeForm bigForm pageSection">
@@ -33,14 +33,14 @@ ${action.setPageType('asset', 'edit')!}
 		</#if>
 		<div class="infoSet">
 			<label for="">${removalSummary.subAssetsToDettach}</label>
-			<span><@s.text name="label.detachsubproducts"/></span>
+			<span><@s.text name="label.detachsubassets"/></span>
 		</div>
 		
 		
 		<#if securityGuard.projectsEnabled>
 			<div class="infoSet">
 				<label for="">${removalSummary.projectToDetachFrom}</label>
-				<span><@s.text name="label.productsbeingdetachedfromproject"/></span>
+				<span><@s.text name="label.assetsbeingdetachedfromproject"/></span>
 			</div>
 		</#if>
 		

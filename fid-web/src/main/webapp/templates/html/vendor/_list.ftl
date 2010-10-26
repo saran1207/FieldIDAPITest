@@ -7,7 +7,7 @@
 		<tr>
 			<th><@s.text name="label.serialnumber" /></th>
 			<th><@s.text name="label.rfidnumber" /></th>
-			<th><@s.text name="label.producttype" /></th>
+			<th><@s.text name="label.assettype" /></th>
 			<th><@s.text name="label.desc" /></th>
 			<th></th>
 		</tr>

@@ -3,7 +3,7 @@ ${action.setPageType('asset_type', 'list')!}
 <#if !assetTypes.isEmpty() >
 	<table class="list">
 		<tr>
-			<th><@s.text name="label.producttype" /></th>
+			<th><@s.text name="label.assettype" /></th>
 			<th></th>
 		</tr>
 		

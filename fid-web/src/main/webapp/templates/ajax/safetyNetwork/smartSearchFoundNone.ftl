@@ -1,1 +1,1 @@
-$('snSmartSearchResults').update('<@s.text name="error.nolinkedproductsfound"/>');
+$('snSmartSearchResults').update('<@s.text name="error.nolinkedassetsfound"/>');

@@ -14,7 +14,7 @@
 	<@s.hidden name="uniqueID"/>
 	<div class="fluidSets">
 		<div class="infoSet">
-			<label class="label" for="assetCode"><@s.text name="label.productcode"/></label>
+			<label class="label" for="assetCode"><@s.text name="label.assetcode"/></label>
 			<@s.textfield  name="assetCode"/>
 		</div>
 		<div class="infoSet">
@@ -23,7 +23,7 @@
 		</div>
 		<div class="infoSet">
 			<input type="hidden" name="assetTypeUpdate" value="false" id="assetTypeUpdate" />
-			<label class="label" for="assetType"><@s.text name="label.producttype"/></label>
+			<label class="label" for="assetType"><@s.text name="label.assettype"/></label>
 			<@s.select id="assetType" name="assetType" emptyOption="true" onchange="updateAssetType(this)">
 				<#include "/templates/html/common/_assetTypeOptions.ftl"/>
 			</@s.select>

@@ -1,4 +1,4 @@
-<title><@s.text name="title.massupdateproducts" /></title>
+<title><@s.text name="title.massupdateassets" /></title>
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
@@ -48,7 +48,7 @@
 			<td><@s.checkbox name="select['assetStatus']" id="check_assetStatus"/></td>
 			<td>
 				<div class="infoSet">
-					<label class="label" ><@s.text name="label.productstatus"/>:</label> 
+					<label class="label" ><@s.text name="label.assetstatus"/>:</label> 
 					<span class="field"><@s.select  name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('assetStatus');" /></span>
 				</div>
 			</td>

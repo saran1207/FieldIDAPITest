@@ -5,7 +5,7 @@
 	</div>
 	
 	<#include "/templates/html/common/_formErrors.ftl"/>
-	<#include "/templates/html/assetCrud/_productConfigForm.ftl"/>
+	<#include "/templates/html/assetCrud/_assetConfigForm.ftl"/>
 	
 	<div class="stepAction">
 		<@s.submit theme="fieldidSimple" key="label.continue" onclick="validateForm1(); return false;"/>

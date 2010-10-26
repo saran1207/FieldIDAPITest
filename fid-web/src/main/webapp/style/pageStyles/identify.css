@@ -15,14 +15,14 @@
 	width:350px;
 }
 
-#addProductButton {
+#addAssetButton {
 	float: right;
 	padding-right:15px;
 	position:relative;
 	top:-2.4em;
 }
 
-#addProductButton button {
+#addAssetButton button {
 	padding-left: 5px;
 	padding-right: 5px;
 }

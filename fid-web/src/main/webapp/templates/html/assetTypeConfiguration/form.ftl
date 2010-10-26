@@ -1,6 +1,6 @@
 <head>
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/productTypeConfiguration.css"/>" />
-	<script type="text/javascript" src="<@s.url value="/javascript/products/productTypeConfiguration.js" />" ></script>
+	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/assetTypeConfiguration.css"/>" />
+	<script type="text/javascript" src="<@s.url value="/javascript/assets/assetTypeConfiguration.js" />" ></script>
 	<script type="text/javascript">
 		numberOfSubTypes = ${subAssetIds?size};
 		removeString = '<@s.text name="label.remove"/>';
@@ -17,7 +17,7 @@ ${action.setPageType('asset_type', 'configuration')!}
 	<div class="instruction">
 		<h3><span class="instructionTitle"><@s.text name="label.tellushowtoconfigure"/>&nbsp;</span><span>${assetType.name}</span></h3>
 		<p >
-			<@s.text name="instruction.productconfiguration">
+			<@s.text name="instruction.assetconfiguration">
 				<@s.param>${assetType.name}</@s.param>
 			</@s.text>
 		</p>

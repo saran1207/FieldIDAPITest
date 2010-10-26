@@ -1,5 +1,5 @@
 <head>
-	<script language="javascript" src="javascript/productTypeSchedule.js"> </script>
+	<script language="javascript" src="javascript/assetTypeSchedule.js"> </script>
 		<style>
 			.actions {
 				margin:0;

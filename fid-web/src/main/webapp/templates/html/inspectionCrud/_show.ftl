@@ -176,7 +176,7 @@
 		</span>
 	</p>
 	<p>
-		<label><@s.text name="label.productstatus"/></label>
+		<label><@s.text name="label.assetstatus"/></label>
 		<span>
 			${(inspection.assetStatus.name)!}
 		</span>
@@ -199,7 +199,7 @@
 			</h2>
 			<div id="subInspection_${subInspection.id}" style="display:none">
 				<#if !subInspection.infoOptionMap.keySet().isEmpty() >
-					<h2><@s.text name="label.productsummary"/></h2>
+					<h2><@s.text name="label.assetsummary"/></h2>
 					<#list subInspection.infoOptionMap.keySet() as key >
 						<p>	
 							<label>${key?html}:</label>

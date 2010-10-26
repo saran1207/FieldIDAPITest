@@ -10,7 +10,7 @@ ${action.setPageType('asset_type_group', 'show')!}
 </div>
 
 <div class="pageSection">
-	<h2><@s.text name="label.producttypes"/></h2>
+	<h2><@s.text name="label.assettypes"/></h2>
 	<div class="crudForm bigForm sectionContent">
 		
 		<#list assetTypes as assetType>
@@ -20,11 +20,11 @@ ${action.setPageType('asset_type_group', 'show')!}
 		</#list>
 		<#if assetTypes.empty >
 			<div class="infoSet">
-				<label class="line"><@s.text name="label.noproducttypesundergroup"/></label>
+				<label class="line"><@s.text name="label.noassettypesundergroup"/></label>
 			</div>
 		</#if>	
 		<div class="infoSet">
-			<label class="line"><a href="<@s.url action="assetTypeEdit" group="${group.id}"/>"><@s.text name="label.addnewproducttype"/></a></label>
+			<label class="line"><a href="<@s.url action="assetTypeEdit" group="${group.id}"/>"><@s.text name="label.addnewassettype"/></a></label>
 		</div>
 		 
 	</div>

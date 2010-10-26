@@ -9,7 +9,7 @@
 						<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
 						<th><@s.text name="label.rfidnumber"/></th>
 						<th><@s.text name="label.customer"/></th>
-						<th><@s.text name="label.producttype"/></th>
+						<th><@s.text name="label.assettype"/></th>
 						<th><@s.text name="label.customer_reference"/></th>
 					</tr>
 					<#list assets as asset >
@@ -33,7 +33,7 @@
 			<div class="emptyList" >
 				<h2><@s.text name="label.noresults"/></h2>
 				<p>
-					<@s.text name="message.emptyproductlist" />
+					<@s.text name="message.emptyassetlist" />
 				</p>
 			</div>
 		</#if>

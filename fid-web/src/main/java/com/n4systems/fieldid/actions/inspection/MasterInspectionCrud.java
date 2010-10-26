@@ -124,7 +124,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 
 		if (asset == null) {
 			if (masterInspection.getInspection().getAsset() == null) {
-				addActionError(getText("error.noproduct"));
+				addActionError(getText("error.noasset"));
 				return MISSING;
 			} else {
 				asset = masterInspection.getInspection().getAsset();
@@ -170,7 +170,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 
 		if (asset == null) {
 			if (masterInspection.getInspection().getAsset() == null) {
-				addActionError(getText("error.noproduct"));
+				addActionError(getText("error.noasset"));
 				return MISSING;
 			} else {
 				asset = masterInspection.getInspection().getAsset();
@@ -258,7 +258,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 			return INPUT;
 		} catch (UnknownSubAsset e) {
 			cleanToInspectionsToMatchConfiguration = true;
-			addActionError(getText("error.productconfigurationchanged"));
+			addActionError(getText("error.assetconfigurationchanged"));
 			return INPUT;
 		} catch (FileAttachmentException e) {
 			addActionError(getText("error.attachingfile"));

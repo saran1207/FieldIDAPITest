@@ -38,7 +38,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 		Asset ownedProduct = productManager.findAsset(uniqueID, getSecurityFilter());
 
 		if (ownedProduct == null) {
-			addActionError(getText("error.noproduct"));
+			addActionError(getText("error.noasset"));
 			return MISSING;
 		}
 
@@ -60,7 +60,7 @@ public class DownloadManufacturerCert extends DownloadAction {
         asset = getLoaderFactory().createSafetyNetworkProductLoader().setProductId(uniqueID).withAllFields().load();
 
 		if (asset == null) {
-			addActionError(getText("error.noproduct"));
+			addActionError(getText("error.noasset"));
 			return MISSING;
 		}
 
@@ -72,7 +72,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 		asset = productManager.findAssetAllFields(uniqueID, getSecurityFilter());
 
 		if (asset == null) {
-			addActionError(getText("error.noproduct"));
+			addActionError(getText("error.noasset"));
 			return MISSING;
 		}
 

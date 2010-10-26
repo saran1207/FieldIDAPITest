@@ -10,7 +10,7 @@
 	<#if lineItem?exists > 
 		- <@s.text name="label.ordernumber"/> ${lineItem.order.orderNumber?html}
 		( <@s.text name="label.orderqty"/>:  ${lineItem.quantity},
-		 <@s.text name="label.identifiedproducts"/>: ${action.getIdentifiedAssetCount(lineItem)} )
+		 <@s.text name="label.identifiedassets"/>: ${action.getIdentifiedAssetCount(lineItem)} )
 	</#if>
 </title>
 
@@ -24,7 +24,7 @@
 	<@s.form action="assetCreate" cssClass="fullForm fluidSets" theme="fieldid" id="assetCreate" >
 		<@s.hidden name="lineItemId" />
 		<@s.hidden name="tagOptionId" />
-		<#include "_productForm.ftl" />
+		<#include "_assetForm.ftl" />
 		
 		<div class="actions">
 			<@s.submit id="saveButton" name="save" cssClass="save" key="hbutton.save" />

@@ -27,7 +27,7 @@ public class DownloadAssetTypeAttachedFile extends AbstractDownloadAction {
 		attachment = loadFileAttachment();
 
 		if(attachment == null) {
-			addActionError(getText("error.noproducttypeattachedfile"));
+			addActionError(getText("error.noassettypeattachedfile"));
 			setFailActionResult(MISSING);
 			return false;
 		}
@@ -37,7 +37,7 @@ public class DownloadAssetTypeAttachedFile extends AbstractDownloadAction {
 
 	@Override
 	protected String onFileNotFoundException(FileNotFoundException e) {
-		addActionError(getText("error.noproducttypeattachedfile"));
+		addActionError(getText("error.noassettypeattachedfile"));
 		return MISSING;
 	}
 	

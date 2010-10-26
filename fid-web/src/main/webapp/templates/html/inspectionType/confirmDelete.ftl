@@ -18,7 +18,7 @@ ${action.setPageType('inspection_type', 'edit')!}
 	<div class="multiColumn">
 		<div class="infoBlock">
 			<div class="infoSet">
-				<label class="label"><@s.text name="label.remove_from_product_types"/></label>
+				<label class="label"><@s.text name="label.remove_from_asset_types"/></label>
 				<span class="fieldHolder">${archiveSummary.removeFromAssetTypes}</span>
 			</div>
 			<div class="infoSet">

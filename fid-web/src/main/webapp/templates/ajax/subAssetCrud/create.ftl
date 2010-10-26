@@ -11,7 +11,7 @@
 		}
 		
 	} else {
-		alert( "<@s.text name="error.subproductattached"/>" );
+		alert( "<@s.text name="error.subassetattached"/>" );
 	}
 	
 </#escape>

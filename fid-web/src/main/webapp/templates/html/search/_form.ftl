@@ -61,11 +61,11 @@
 			</div>
 			
 			<div class="infoSet">
-				<label for="criteria.productStatus"><@s.text name="label.productstatus"/></label>
+				<label for="criteria.assetStatus"><@s.text name="label.assetstatus"/></label>
 				<@s.select  name="criteria.assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true" />
 			</div>
 
-			<#include "../customizableSearch/_productTypeSelect.ftl"/>
+			<#include "../customizableSearch/_assetTypeSelect.ftl"/>
 			
 			<div class="infoSet">
 				<label for="criteria.location"><@s.text name="label.location"/></label>

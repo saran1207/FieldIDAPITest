@@ -9,7 +9,7 @@
 		<#include '../customizableSearch/table.ftl'>
 		
 		<div class="adminLink">	
-			<span class="total"><@s.text name="label.totalproducts"/> ${totalResults}</span>
+			<span class="total"><@s.text name="label.totalassets"/> ${totalResults}</span>
 		</div>
 		<div class="adminLink alternateActions">
 			<a href="<@s.url action="searchPrintAllCerts" namespace="/aHtml" searchId="${searchId}"/>" class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.printallmanufacturercertificate"/></a>

@@ -61,7 +61,7 @@ div.subAssetAction {
 	float:left;
 	padding-left: 10px;
 }
-.identifier div.productType {
+.identifier div.assetType {
 	font-size: 1.1em;
 	font-weight:bold;
 	border-right:1px solid #333;

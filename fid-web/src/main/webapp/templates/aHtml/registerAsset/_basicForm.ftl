@@ -16,7 +16,7 @@
 	</div>
 
 	<div class="infoSet">
-		<label for="assetTypeId" class="label"><@s.text name="label.producttype"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+		<label for="assetTypeId" class="label"><@s.text name="label.assettype"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 		<@s.select id="assetType" name="assetTypeId" onchange="updateAssetType(this);showSuggestedAttributes();">
 			<#include "/templates/html/common/_assetTypeOptions.ftl"/>
 		</@s.select>

@@ -8,7 +8,7 @@
 		<#if hasRegisteredAsset>
 			<div id="alreadyRegisteredMessage">
 				<h2 class="clean"><@s.text name="label.you_have_already_registered_this_asset"/></h2>
-				<span class="weak"><@s.text name="instruction.you_can_locate_this_product_in_default_context_by_searching"/></span>
+				<span class="weak"><@s.text name="instruction.you_can_locate_this_asset_in_default_context_by_searching"/></span>
 			</div>
 		<#elseif sessionUser.hasAccess('tag') >
 			<div id="registerThisAssetMessage">
@@ -38,7 +38,7 @@
 	
 		<div class="columnLeft">
 			<div class="viewSection smallViewSection">
-				<h2><@s.text name="label.productsummary"/></h2>
+				<h2><@s.text name="label.assetsummary"/></h2>
 				<p>
 					
 					<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
@@ -49,11 +49,11 @@
 					<span class="fieldValue">${linkedAsset.rfidNumber!?html}</span>
 				</p>
 				<p>
-					<label><@s.text name="label.producttype"/></label>
+					<label><@s.text name="label.assettype"/></label>
 					<span class="fieldValue">${linkedAsset.type.name?html}</span>
 				</p>
 				<p>
-					<label><@s.text name="label.productstatus"/></label>
+					<label><@s.text name="label.assetstatus"/></label>
 					<span class="fieldValue">${(linkedAsset.assetStatus.name)!?html}</span>
 				</p>
 				<p>
@@ -133,7 +133,7 @@
 					
 					<#if linkedAsset.type.imageName?exists >
 						<p>
-							<img src="<@s.url action="downloadAssetTypeImageSafetyNetwork" namespace="/file" uniqueID="${linkedAsset.type.uniqueID}" networkId="${linkedAsset.networkId}"/>" alt="<@s.text name="label.productimage"/>" width="300"/>
+							<img src="<@s.url action="downloadAssetTypeImageSafetyNetwork" namespace="/file" uniqueID="${linkedAsset.type.uniqueID}" networkId="${linkedAsset.networkId}"/>" alt="<@s.text name="label.assetimage"/>" width="300"/>
 						</p>
 					</#if>
 					

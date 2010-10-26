@@ -43,7 +43,7 @@
 	
 	<#if sessionUser.hasAccess("managesystemconfig") == true >
 		<div class="viewSection setup">
-			<h2 id="yourProductSetup"><@s.text name="label.yourproductsetup" /></h2>
+			<h2 id="yourAssetSetup"><@s.text name="label.yourassetsetup" /></h2>
 			<p>
 				<label><a href="<@s.url action="eventTypeGroups"/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></label>
 				<span >Create and manage event type groups to allow you to group inspection types and pick the certificate for those inspection types.</span>
@@ -55,17 +55,17 @@
 			</p>
 		
 			<p>
-				<label><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.manage_product_type_groups.plural" /></a></label>
+				<label><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.manage_asset_type_groups.plural" /></a></label>
 				<span>Manage all of your asset type groups.</span>
 			</p>
 			<p>
-				<label><a href="<@s.url action="assetTypes"/>" ><@s.text name="title.manage_product_types.plural" /></a></label>
+				<label><a href="<@s.url action="assetTypes"/>" ><@s.text name="title.manage_asset_types.plural" /></a></label>
 				<span>Manage all of your assets and their attributes.</span>
 			</p>
 				
 			<p>
-				<label><a href="<@s.url action="assetStatusList"/>" ><@s.text name="title.manage_product_statuses.plural" /></a></label>
-				<span>Create asset statuses that let you identify the state of a product.</span>
+				<label><a href="<@s.url action="assetStatusList"/>" ><@s.text name="title.manage_asset_statuses.plural" /></a></label>
+				<span>Create asset statuses that let you identify the state of an asset.</span>
 			</p>
 			
 			<p>
@@ -95,8 +95,8 @@
 			</p>
 			<#if securityGuard.integrationEnabled>
 				<p>
-					<label><a href="<@s.url action="assetCodeMappingList"/>" ><@s.text name="title.manage_product_code_mappings.plural" /></a></label>
-					<span>Manage and map product information from your accounting or ERP system into Field ID.</span>
+					<label><a href="<@s.url action="assetCodeMappingList"/>" ><@s.text name="title.manage_asset_code_mappings.plural" /></a></label>
+					<span>Manage and map asset information from your accounting or ERP system into Field ID.</span>
 				</p>
 			</#if>
 		</div>

@@ -33,7 +33,7 @@ ${action.setPageType('asset_type_group', 'list')!}
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
-			<@s.text name="label.emptyproducttypegrouplist" /> <a href="<@s.url action="productTypeGroupAdd"/>"><@s.text name="label.addfirstproducttypegroup" /></a>
+			<@s.text name="label.emptyassettypegrouplist" /> <a href="<@s.url action="assetTypeGroupAdd"/>"><@s.text name="label.addfirstassettypegroup" /></a>
 		</p>
 	</div>
 </#if>	

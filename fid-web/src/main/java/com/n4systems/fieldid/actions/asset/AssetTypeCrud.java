@@ -311,10 +311,10 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 		testForAssetType();
 		try {
 			productManager.archive(assetType, getSessionUser().getUniqueID(), getText("label.beingdeleted"));
-			addFlashMessageText("message.producttypedeleted");
+			addFlashMessageText("message.assettypedeleted");
 			return SUCCESS;
 		} catch (Exception e) {
-			addFlashErrorText("error.deleteproducttype");
+			addFlashErrorText("error.deleteassettype");
 			return ERROR;
 		}
 		
@@ -333,8 +333,8 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 		return assetType.getName();
 	}
 
-	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.producttypenamerequired")
-	@CustomValidator(type = "uniqueValue", message = "", key = "error.producttypenameduplicate")
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.assettypenamerequired")
+	@CustomValidator(type = "uniqueValue", message = "", key = "error.assettypenameduplicate")
 	public void setName(String name) {
 		assetType.setName(name);
 	}

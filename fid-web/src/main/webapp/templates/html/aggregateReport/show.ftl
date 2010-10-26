@@ -11,7 +11,7 @@
 	<div class=" multiRow">
 		<h2><@s.text name="label.summary"/></h2>
 		<p>
-			<label><@s.text name="label.totalproducts"/></label>
+			<label><@s.text name="label.totalassets"/></label>
 			<span>${report.totalAssets}</span>
 		</p>
 		
@@ -21,7 +21,7 @@
 		</p>
 		
 		<p>
-			<label><@s.text name="label.numberofproducttypes"/></label>
+			<label><@s.text name="label.numberofassettypes"/></label>
 			<span>${report.assetTypes?size}</span>
 		</p>
 		
@@ -33,9 +33,9 @@
 	<h2><@s.text name="label.details"/></h2>
 	<table class="list">
 		<tr>
-			<th><@s.text name="label.producttype"/></th>
+			<th><@s.text name="label.assettype"/></th>
 			<th><@s.text name="label.totalinspections"/></th>
-			<th><@s.text name="label.totalproducts"/></th>
+			<th><@s.text name="label.totalassets"/></th>
 		</tr>
 		
 		<#list report.assetTypes as key >

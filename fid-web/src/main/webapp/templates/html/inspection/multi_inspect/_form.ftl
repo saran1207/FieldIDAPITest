@@ -66,7 +66,7 @@
 	</div>
 	
 	<div class="infoSet">
-		<label class="label"><@s.text name="label.productstatus"/></label>
+		<label class="label"><@s.text name="label.assetstatus"/></label>
 			<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
 	</div>
 	

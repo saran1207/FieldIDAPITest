@@ -12,7 +12,7 @@
 		
 		
 	} else {
-		alert( "<@s.text name="error.subproductattached"/>" );
+		alert( "<@s.text name="error.subassetattached"/>" );
 	}
 	
 	if( $( 'subAssetCreateForm_${subAsset.asset.type.id}' ) != null ) {

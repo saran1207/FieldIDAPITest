@@ -26,7 +26,7 @@ public class DownloadAssetTypeImage extends AbstractDownloadAction {
 		assetType = loadAssetType();
 		
 		if(assetType == null || !assetType.hasImage()) {
-			addActionError(getText("error.noproducttype"));
+			addActionError(getText("error.noassettype"));
 			setFailActionResult(MISSING);
 			return false;
 		}
@@ -36,7 +36,7 @@ public class DownloadAssetTypeImage extends AbstractDownloadAction {
 
 	@Override
 	protected String onFileNotFoundException(FileNotFoundException e) {
-		addActionError(getText("error.noproductimage"));
+		addActionError(getText("error.noassetimage"));
 		return MISSING;
 	}
 

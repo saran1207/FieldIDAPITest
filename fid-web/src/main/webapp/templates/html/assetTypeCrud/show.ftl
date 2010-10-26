@@ -2,7 +2,7 @@
 ${action.setPageType('asset_type', 'show')!}
 		
 <div class="viewSection" >
-	<h2><@s.text name="label.productinformation"/></h2>
+	<h2><@s.text name="label.assetinformation"/></h2>
 	<p>
 		<label><@s.text name="label.group"/></label>
 		<span class="fieldValue"><#if assetType.group?exists><a href="<@s.url action="assetTypeGroup" uniqueID="${assetType.group.id}"/>"></#if>${(assetType.group.name)!}<#if assetType.group?exists></a></#if></span>
@@ -32,7 +32,7 @@ ${action.setPageType('asset_type', 'show')!}
 	</p>
 	
 	<p>
-		<label><@s.text name="label.productdescription"/></label>
+		<label><@s.text name="label.assetdescription"/></label>
 		<span class="fieldValue">${assetType.descriptionTemplate!}</span>
 	</p>
 </div>
@@ -98,9 +98,9 @@ ${action.setPageType('asset_type', 'show')!}
 <#if assetType.imageName?exists >
 	
 	<div class="viewSection smallViewSection" >
-		<h2><@s.text name="label.productimage" /></h2>
+		<h2><@s.text name="label.assetimage" /></h2>
 		<p>
-			<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${assetType.uniqueID}" includeParams="none" />" alt="<@s.text name="label.productimage"/>" width="300"/>
+			<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${assetType.uniqueID}" includeParams="none" />" alt="<@s.text name="label.assetimage"/>" width="300"/>
 		</p>
 	</div>
 

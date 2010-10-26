@@ -6,7 +6,7 @@
 		<th><@s.text name="label.rfidnumber"/></th>
 		<th><@s.text name="label.reference_number"/></th>
 		<th><@s.text name="label.vendor"/></th>
-		<th><@s.text name="label.producttype"/></th>
+		<th><@s.text name="label.assettype"/></th>
 	</tr>
 	<#list assets as asset>
 		<tr>

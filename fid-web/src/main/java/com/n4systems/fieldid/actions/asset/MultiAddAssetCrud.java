@@ -85,7 +85,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
 	public String doForm() {
 		if (getMaxAssets() == 0) {
-			addActionMessageText("error.you_can_not_add_anymore_products");
+			addActionMessageText("error.you_can_not_add_anymore_assets");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -125,11 +125,11 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 				i++;
 			}
 			
-			addFlashMessage(getText("message.productscreated", new String[] {String.valueOf(identifiers.size())}));
+			addFlashMessage(getText("message.assetscreated", new String[] {String.valueOf(identifiers.size())}));
 			
 		} catch (Exception e) {
 			logger.error("Failed to create asset.", e);
-			addActionErrorText("error.productsave");
+			addActionErrorText("error.assetsave");
 			return ERROR;
 		}
 	

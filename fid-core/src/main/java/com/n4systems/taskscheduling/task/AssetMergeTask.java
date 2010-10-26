@@ -9,8 +9,8 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 
-public class ProductMergeTask implements Runnable {
-	private static final Logger logger = Logger.getLogger(ProductMergeTask.class);
+public class AssetMergeTask implements Runnable {
+	private static final Logger logger = Logger.getLogger(AssetMergeTask.class);
 	
 	private final Asset winningAsset;
 	private final Asset losingAsset;
@@ -22,7 +22,7 @@ public class ProductMergeTask implements Runnable {
 	private ProductManager productManager;
 	private boolean error = false;
 	
-	public ProductMergeTask(Asset winningProduct, Asset losingProduct, User user) {
+	public AssetMergeTask(Asset winningProduct, Asset losingProduct, User user) {
 		super();
 		this.winningAsset = winningProduct;
 		this.losingAsset = losingProduct;

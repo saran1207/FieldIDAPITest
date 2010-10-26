@@ -1,6 +1,6 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="/javascript/asset.js"/>" ></script>
-	<script type='text/javascript' src='<@s.url value="/javascript/productRfidHandler.js"/>'></script>
+	<script type='text/javascript' src='<@s.url value="/javascript/assetRfidHandler.js"/>'></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"></script>
@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/inspection.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/masterInspection.js"/>"></script>
-	<@n4.includeStyle type="page" href="product" />
+	<@n4.includeStyle type="page" href="asset" />
 	<@n4.includeStyle type="page" href="subAsset" />
 	<@n4.includeStyle type="page" href="inspection" />
 	<@n4.includeStyle type="page" href="masterInspection" />
@@ -20,7 +20,7 @@
 	
 	<script type="text/javascript">
 		lookupAssetUrl = "<@s.url action="assets" namespace="/aHtml"/>";
-		assetLookupTitle = "<@s.text name="title.productlookup"/>";
+		assetLookupTitle = "<@s.text name="title.assetlookup"/>";
 		subAssetIndex = ${subAssets?size};
 		updateAssetTypeUrl = '<@s.url action="assetTypeChange" namespace="ajax"  />';
 		addSubAssetUrl = '<@s.url action="createSubAssetInInspection" namespace="/ajax" />';
@@ -102,7 +102,7 @@ ${action.setPageType('inspection', 'add')!}
 					<div class="identifier">${type.name}</div> 
 					<div class="createOptions">
 						<a href="<@s.url action="assetAdd" namespace="/ajax"  assetTypeId="${type.id}" token="${token}"/>" onclick="addSubAsset(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
-						<a href='<@s.url action="assets" namespace="/aHtml"  assetTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubAsset }' >
+						<a href='<@s.url action="assets" namespace="/aHtml"  assetTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.assetlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubAsset }' >
 				  			<@s.text name="label.find_existing" />
 				  		</a>
 				  	</div>

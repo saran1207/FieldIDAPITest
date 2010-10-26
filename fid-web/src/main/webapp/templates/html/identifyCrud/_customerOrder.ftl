@@ -1,5 +1,5 @@
 <div id="assets" >
-	<h2 class="orderTitle" ><@s.text name="label.attachproducttoorder"/></h2>
+	<h2 class="orderTitle" ><@s.text name="label.attachassettoorder"/></h2>
 	<div >
 		<div id="assetLookup">
 			<#assign namespace="/ajax"/>

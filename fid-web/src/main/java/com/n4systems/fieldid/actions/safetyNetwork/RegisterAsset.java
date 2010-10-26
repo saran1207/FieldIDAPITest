@@ -204,7 +204,7 @@ public class RegisterAsset extends AbstractCrud{
 		assetView.setAssetTypeId(typeId);
 	}
 	
-	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
+	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.assettyperequired")
 	public Long getAssetTypeId() {
 		return assetView.getAssetTypeId();
 	}

@@ -26,7 +26,7 @@ public class DownloadSafetyNetworkAssetTypeAttachedFile extends DownloadAssetTyp
 		assetTypeId = loadAssetTypeId();
 		
 		if(assetTypeId == null) {
-			addActionError(getText("error.noproducttypeattachedfile"));
+			addActionError(getText("error.noassettypeattachedfile"));
 			setFailActionResult(MISSING);
 			return false;
 		}

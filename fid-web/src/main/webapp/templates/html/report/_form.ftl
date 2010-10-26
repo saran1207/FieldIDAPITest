@@ -75,10 +75,10 @@
 				<@s.textfield name="criteria.referenceNumber"/>
 			</div>
 			
-			<#include "../customizableSearch/_productTypeSelect.ftl"/>
+			<#include "../customizableSearch/_assetTypeSelect.ftl"/>
 			
 			<div class="infoSet">
-				<label for="criteria.assetStatus"><@s.text name="label.productstatus"/></label>
+				<label for="criteria.assetStatus"><@s.text name="label.assetstatus"/></label>
 				<@s.select  name="criteria.assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true" />
 			</div>
 		

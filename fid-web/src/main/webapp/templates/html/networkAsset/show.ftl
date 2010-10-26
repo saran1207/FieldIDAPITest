@@ -31,7 +31,7 @@
     <div class="leftAsset">
 
     <div class="assetInformationSection">
-        <@s.text name="label.productsummary"/>
+        <@s.text name="label.assetsummary"/>
     </div>
 
     <table class="assetInformation">
@@ -53,7 +53,7 @@
         </tr>
         <tr>
             <td>
-                <@s.text name="label.producttype"/>
+                <@s.text name="label.assettype"/>
             </td>
             <td class="value">
                 ${asset.type.name}
@@ -61,7 +61,7 @@
         </tr>
         <tr>
             <td>
-                <@s.text name="label.productstatus"/>
+                <@s.text name="label.assetstatus"/>
             </td>
             <td class="value">
                 ${(asset.assetStatus.name)!}

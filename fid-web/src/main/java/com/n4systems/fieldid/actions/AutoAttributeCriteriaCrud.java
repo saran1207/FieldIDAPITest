@@ -142,7 +142,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	@SkipValidation
 	public String doEdit() {
 		if (assetType == null) {
-			addFlashMessageText("error.noproducttype");
+			addFlashMessageText("error.noassettype");
 			return ERROR;
 		}
 
@@ -162,7 +162,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	public String doSave() {
 
 		if (assetType == null) {
-			addFlashMessageText("error.noproducttype");
+			addFlashMessageText("error.noassettype");
 			return ERROR;
 		}
 
@@ -205,7 +205,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	@SkipValidation
 	public String doOpen() {
 		if (assetType == null) {
-			addFlashMessageText("error.noproducttype");
+			addFlashMessageText("error.noassettype");
 			return ERROR;
 		}
 
@@ -220,7 +220,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	public String doRemove() {
 
 		if (assetType == null) {
-			addFlashMessageText("error.noproducttype");
+			addFlashMessageText("error.noassettype");
 			return ERROR;
 		}
 		try {

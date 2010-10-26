@@ -2,7 +2,7 @@ ${action.setPageType('asset_code_mapping','list')!}
 <#if assetCodeMappings.size() != 0 >
 	<table class="list">
 	<tr>
-		<th><@s.text name="label.productcode" /></th>
+		<th><@s.text name="label.assetcode" /></th>
 		<th></th>
 	<tr>
 	
@@ -20,7 +20,7 @@ ${action.setPageType('asset_code_mapping','list')!}
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
-			<@s.text name="label.emptylistproductcodemappings" />
+			<@s.text name="label.emptylistassetcodemappings" />
 		</p>
 	</div>
 </#if>

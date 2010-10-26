@@ -31,9 +31,9 @@
 		<div id="imageHolder">
 		<#if linkedAsset.type.imageName?exists >
 			<img src="<@s.url action="downloadAssetTypeImageSafetyNetwork" namespace="/file" uniqueID="${linkedAsset.type.uniqueID}" networkId="${linkedAsset.networkId}"/>"
-			alt="<@s.text name="label.productimage"/>"/>
+			alt="<@s.text name="label.assetimage"/>"/>
 		<#else> 
-			<img src="<@s.url value="/images/icon-default.png"/>" alt="<@s.text name="label.productimage"/>" />
+			<img src="<@s.url value="/images/icon-default.png"/>" alt="<@s.text name="label.assetimage"/>" />
 		</#if>
 		</div>
 		<span>

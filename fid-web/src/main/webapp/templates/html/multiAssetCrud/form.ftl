@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/asset.js" />" ></script>
 	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/multiAddProduct.js" />"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/multiAddAsset.js" />"></script>
 	<@n4.includeStyle type="page" href="asset"/>
 	<@n4.includeStyle type="page" href="multiadd"/>
 	<script type="text/javascript">
@@ -15,7 +15,7 @@
 
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"  />'; 
-	    assetTypeChangeWarning = '<@s.text name="warning.producttypechange"/>';
+	    assetTypeChangeWarning = '<@s.text name="warning.assettypechange"/>';
 	    originalAssetType = ${assetTypeId!0};
 	    updateAssetTypeUrl = '<@s.url action="assetTypeChange" namespace="/ajax" />';
 	    

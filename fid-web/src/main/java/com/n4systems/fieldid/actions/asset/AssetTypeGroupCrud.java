@@ -53,7 +53,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 	
 	private void testRequiredEntities(boolean existing) {
 		if (group == null || (existing && group.isNew())) {
-			addActionErrorText("error.noproducttypegroup");
+			addActionErrorText("error.noassettypegroup");
 			throw new MissingEntityException();
 		} 
 	}
@@ -82,10 +82,10 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 		
 		try {
 			uniqueID = persistenceManager.save(group, getSessionUser().getId());
-			addFlashMessageText("message.producttypegroupsaved");
+			addFlashMessageText("message.assettypegroupsaved");
 			logger.info(getLogLinePrefix() + "saved asset type group " + group.getName());
 		} catch (Exception e) {
-			addActionErrorText("error.savingproducttypegroup");
+			addActionErrorText("error.savingassettypegroup");
 			logger.error(getLogLinePrefix() + "could not save asset type group", e);
 			return ERROR;
 		}
@@ -109,10 +109,10 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 		
 		try {
 			group = persistenceManager.update(group, getSessionUser().getId());
-			addFlashMessageText("message.producttypegroupsaved");
+			addFlashMessageText("message.assettypegroupsaved");
 			logger.info(getLogLinePrefix() + "updated asset type group " + group.getName());
 		} catch (Exception e) {
-			addActionErrorText("error.savingproducttypegroup");
+			addActionErrorText("error.savingassettypegroup");
 			logger.error(getLogLinePrefix() + "could not update asset type group", e);
 			return ERROR;
 		}
@@ -160,10 +160,10 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 		
 		try {
 			productManager.deleteAssetTypeGroup(group);
-			addFlashMessageText("message.producttypegroupdeleted");
+			addFlashMessageText("message.assettypegroupdeleted");
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + " could not delete asset type group",e);
-			addActionErrorText("error.deletingproducttypegroup");
+			addActionErrorText("error.deletingassettypegroup");
 			return ERROR;
 		}
 		
@@ -187,7 +187,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 	}
 
 	@RequiredStringValidator(message="", key="error.namerequired")
-	@StringLengthFieldValidator(message="", key="error.producttypegroup.name.length", trim=true, maxLength="40")
+	@StringLengthFieldValidator(message="", key="error.assettypegroup.name.length", trim=true, maxLength="40")
 	public void setName(String name) {
 		group.setName(name);
 	}

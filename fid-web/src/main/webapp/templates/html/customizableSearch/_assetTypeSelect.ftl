@@ -9,11 +9,11 @@
 	</@n4.includeScript>
 </head>
 <div class="infoSet">
-	<label for="criteria.assetTypeGroup"><@s.text name="label.product_type_group"/></label>
+	<label for="criteria.assetTypeGroup"><@s.text name="label.asset_type_group"/></label>
 	<@s.select id="assetTypeGroup" name="criteria.assetTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="assetTypeGroupChanged(this)" list="assetTypes.assetTypeGroups" listKey="id" listValue="name"/>
 </div>
 
 <div class="infoSet">
-	<label for="criteria.assetType"><@s.text name="label.producttype"/></label>
+	<label for="criteria.assetType"><@s.text name="label.assettype"/></label>
 	<@s.select id="assetType" name="criteria.assetType" emptyOption="true" onchange="assetTypeChanged(this)" list="%{assetTypes.getGroupedAssetTypesById(${criteria.assetTypeGroup?default(-1)})}" listKey="id" listValue="name"/>
 </div>

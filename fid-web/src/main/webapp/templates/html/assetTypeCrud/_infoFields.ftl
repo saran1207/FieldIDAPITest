@@ -1,5 +1,5 @@
 <head>
-	<script language="javascript" src="javascript/productTypeCrud.js"> </script>
+	<script language="javascript" src="javascript/assetTypeCrud.js"> </script>
 </head>
 
 <div id="infoFieldEditing">

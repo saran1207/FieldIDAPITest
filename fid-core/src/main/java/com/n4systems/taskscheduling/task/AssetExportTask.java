@@ -5,10 +5,10 @@ import com.n4systems.mail.MailManager;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.persistence.savers.Saver;
 
-public class ProductExportTask extends AbstractExportTask {
-	private static final String TEMPLATE_NAME = "productExport";
+public class AssetExportTask extends AbstractExportTask {
+	private static final String TEMPLATE_NAME = "assetExport";
 
-	public ProductExportTask(DownloadLink downloadLink, String downloadUrl, Saver<DownloadLink> linkSaver, MailManager mailManager, Exporter exporter) {
+	public AssetExportTask(DownloadLink downloadLink, String downloadUrl, Saver<DownloadLink> linkSaver, MailManager mailManager, Exporter exporter) {
 		super(downloadLink, downloadUrl, TEMPLATE_NAME, linkSaver, mailManager, exporter);
 	}
 

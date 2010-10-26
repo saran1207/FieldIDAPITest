@@ -54,7 +54,7 @@
 <@s.form action="assetTypeUpdate" id="assetTypeUpdate" theme="fieldidSimple" cssClass="crudForm largeForm" method="post" onsubmit="return checkForUploads();" >
 	<@s.hidden name="uniqueID" />
 	<#include "/templates/html/common/_formErrors.ftl" />
-	<h2><@s.text name="label.productinformation"/></h2>
+	<h2><@s.text name="label.assetinformation"/></h2>
 	<p>
 		<label><@s.text name="label.group"/></label>
 		<span>
@@ -103,7 +103,7 @@
 		</span>
 	</p>
 	<p>
-		<label><@s.text name="label.productdescription" /></label>
+		<label><@s.text name="label.assetdescription" /></label>
 		<span>
 			<@s.textfield name="descriptionTemplate" />
 		</span>
@@ -115,7 +115,7 @@
 			<#if !assetImageDirectory?exists || assetImageDirectory.length() == 0  || removeImage >
 				<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" typeOfUpload="assetTypeImage"/>" scrolling="no" scrollbar="no" scrolling="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
 			</#if>
-			<span id="imageUploaded" <#if (action.fieldErrors['uploadedImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !productImageDirectory?exists || productImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
+			<span id="imageUploaded" <#if (action.fieldErrors['uploadedImageContentType'])?exists>class="inputError" title="${action.fieldErrors['uploadedImageContentType']}"</#if> <#if  !assetImageDirectory?exists || assetImageDirectory.length()  == 0  || removeImage >style="display:none;"</#if> >
 				<@s.url id="previewImage" uniqueID="${uniqueID!}" namespace="/file" action="downloadAssetTypeImage" />
 				<a href="${previewImage}" <#if newImage > style="display:none"</#if> id="previewImage" target="_blank" onclick="window.open('${previewImage}', '_blank', 'width=500,height=300'); return false;" ><@s.text name="label.viewimage" /></a>  
 				<@s.hidden name="removeImage" id="removeImage"/> <a href="removeImage" id="removeImageLink" onclick="removeUploadImage(); return false;"><@s.text name="label.remove"/></a>
@@ -125,7 +125,7 @@
 		</span>
 		<div id="bestImage">
 			
-			<@s.text name="label.productimageslookbest"/>
+			<@s.text name="label.assetimageslookbest"/>
 		</div>
 	</p>
 	

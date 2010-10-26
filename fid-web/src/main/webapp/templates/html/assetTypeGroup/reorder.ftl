@@ -33,12 +33,12 @@
 	</style>
 </head>
 ${action.setPageType('asset_type_group', 'list')!}
-<title><@s.text name="title.reorderproducttypegroups"/></title>
+<title><@s.text name="title.reorderassettypegroups"/></title>
 <div class="formAction">
 	<button onclick="redirect('<@s.url action="assetTypeGroups"/>');"><@s.text name="label.donereordering"/></button>
 </div>
 <div class="pageSection">
-	<h2><@s.text name="label.producttypegroups"/></h2>
+	<h2><@s.text name="label.assettypegroups"/></h2>
 	<ul id="groupList" class="contentSection">
 		<#list groups as group > 
 			<li id="sort_group_${group.id}" groupId="${group.id}" >

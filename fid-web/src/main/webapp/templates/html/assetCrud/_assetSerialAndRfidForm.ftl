@@ -7,7 +7,7 @@
 		
 		
 		<span class="fieldHolder">
-			<a href="_productSerialAndRfidForm.ftl#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''});return false;"><@s.text name="label.generate" /></a>
+			<a href="_assetSerialAndRfidForm.ftl#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''});return false;"><@s.text name="label.generate" /></a>
 		</span>
 		<span class="fieldHolder serialNumberStatus"></span>
 		

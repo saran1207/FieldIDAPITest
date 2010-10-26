@@ -71,7 +71,7 @@ ${action.setPageType('asset', 'edit')!}
 					<th><@s.text name="${sessionUser.serialNumberLabel}"/></th>
 					<th><@s.text name="label.rfidnumber"/></th>
 					<th><@s.text name="label.customername"/></th>
-					<th><@s.text name="label.producttype"/></th>
+					<th><@s.text name="label.assettype"/></th>
 					<th><@s.text name="label.identifieddate"/></th>
 				</tr>
 				<tr>
@@ -133,7 +133,7 @@ ${action.setPageType('asset', 'edit')!}
 					<th><@s.text name="${sessionUser.serialNumberLabel}"/></th>
 					<th><@s.text name="label.rfidnumber"/></th>
 					<th><@s.text name="label.customername"/></th>
-					<th><@s.text name="label.producttype"/></th>
+					<th><@s.text name="label.assettype"/></th>
 					<th><@s.text name="label.identifieddate"/></th>
 				</tr>
 				<tr>

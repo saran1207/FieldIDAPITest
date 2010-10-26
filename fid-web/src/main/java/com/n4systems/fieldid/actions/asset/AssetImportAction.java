@@ -28,8 +28,8 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
 import com.n4systems.notifiers.notifications.ImportSuccessNotification;
-import com.n4systems.notifiers.notifications.ProductImportFailureNotification;
-import com.n4systems.notifiers.notifications.ProductImportSuccessNotification;
+import com.n4systems.notifiers.notifications.AssetImportFailureNotification;
+import com.n4systems.notifiers.notifications.AssetImportSuccessNotification;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
 
@@ -53,12 +53,12 @@ public class AssetImportAction extends AbstractImportAction {
 	
 	@Override
 	protected ImportSuccessNotification createSuccessNotification() {
-		return new ProductImportSuccessNotification(getUser());
+		return new AssetImportSuccessNotification(getUser());
 	}
 	
 	@Override
 	protected ImportFailureNotification createFailureNotification() {
-		return new ProductImportFailureNotification(getUser());
+		return new AssetImportFailureNotification(getUser());
 	}
 	
 	public String doDownloadExample() {

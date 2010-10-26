@@ -14,14 +14,14 @@ import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.AssetExportTask;
 import com.n4systems.taskscheduling.task.AutoAttributeExportTask;
 import com.n4systems.taskscheduling.task.CustomerExportTask;
 import com.n4systems.taskscheduling.task.DownloadTaskFactory;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
 import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
-import com.n4systems.taskscheduling.task.PrintAllProductCertificatesTask;
+import com.n4systems.taskscheduling.task.PrintAllAssetCertificatesTask;
 import com.n4systems.taskscheduling.task.PrintInspectionSummaryReportTask;
-import com.n4systems.taskscheduling.task.ProductExportTask;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
@@ -67,7 +67,7 @@ public class DownloadCoordinator {
 	
 	public void generateAllProductCertificates(String name, String downloadUrl, List<Long> productIds) {
 		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
-		PrintAllProductCertificatesTask task = taskFactory.createPrintAllProductCertificatesTask(link, downloadUrl, productIds);
+		PrintAllAssetCertificatesTask task = taskFactory.createPrintAllAssetCertificatesTask(link, downloadUrl, productIds);
 		
 		executor.execute(task);
 	}
@@ -95,7 +95,7 @@ public class DownloadCoordinator {
 	
 	public void generateProductExport(String name, String downloadUrl, ListLoader<Asset> productLoader) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
-		ProductExportTask task = taskFactory.createProductExportTask(link, downloadUrl, productLoader);
+		AssetExportTask task = taskFactory.createProductExportTask(link, downloadUrl, productLoader);
 		
 		executor.execute(task);
 	}

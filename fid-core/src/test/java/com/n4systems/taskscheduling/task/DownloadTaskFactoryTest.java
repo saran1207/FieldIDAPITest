@@ -91,7 +91,7 @@ public class DownloadTaskFactoryTest extends ConfigContextRequiredTestCase {
 		
 		replay(exporterFactory);
 		
-		ProductExportTask task = dtf.createProductExportTask(link, "url", loader);
+		AssetExportTask task = dtf.createProductExportTask(link, "url", loader);
 		
 		verify(exporterFactory);
 		

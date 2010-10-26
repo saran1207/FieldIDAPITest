@@ -4,7 +4,7 @@ ${action.setPageType('auto_attribute', 'list')!}
 <#if assetTypes.size() != 0 >
 	<table class="list">
 	<tr>
-		<th><@s.text name="label.producttype" /></th>
+		<th><@s.text name="label.assettype" /></th>
 	
 	<tr>
 	<#list assetTypes as assetType >

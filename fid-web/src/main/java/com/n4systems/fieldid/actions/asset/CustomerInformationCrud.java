@@ -61,7 +61,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 
 	private void testRequiredEntities() {
 		if (asset == null) {
-			addActionErrorText("error.noproduct");
+			addActionErrorText("error.noasset");
 			throw new MissingEntityException("you must have an asset.");
 		}
 	}
@@ -79,10 +79,10 @@ public class CustomerInformationCrud extends AbstractCrud {
 			assetWebModel.fillInAsset(asset);
 			
 			legacyProductManager.update(asset, getUser());
-			addFlashMessageText("message.productupdated");
+			addFlashMessageText("message.assetupdated");
 			
 		} catch (Exception e) {
-			addActionErrorText("error.productsave");
+			addActionErrorText("error.assetsave");
 			logger.error("failed to save Asset", e);
 			return INPUT;
 		}

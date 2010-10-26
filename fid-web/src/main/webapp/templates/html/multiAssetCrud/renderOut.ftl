@@ -21,6 +21,6 @@ ${action.setPageType('asset', 'multi_add')!}
 </div>
 <div class="loadingText">
 	<h1>
-		<@s.text name="label.creating_multi_inspect_products" />
+		<@s.text name="label.creating_multi_inspect_assets" />
 	</h1>
 </div>

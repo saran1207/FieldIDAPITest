@@ -75,7 +75,7 @@ public class InspectionGroupCrud extends AbstractCrud {
 
 	public String doShow() {
 		if (asset == null) {
-			addActionError(getText("error.noproduct"));
+			addActionError(getText("error.noasset"));
 			return MISSING;
 		}
 

@@ -37,7 +37,7 @@
 </div>
 
 <div class="infoSet">
-	<label for="assetStatus" class="label"><@s.text name="label.productstatus"/></label>
+	<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
 	<#if !parentAsset?exists >
 		<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
 	<#else>
@@ -73,7 +73,7 @@
 	</div>
 </@s.iterator>
 <div class="infoSet">
-	<label for="assetTypeId" class="label"><@s.text name="label.producttype"/></label>
+	<label for="assetTypeId" class="label"><@s.text name="label.assettype"/></label>
 	<@s.select id="assetType" name="assetTypeId" onchange="updateAssetType(this)">
 		<#include "/templates/html/common/_assetTypeOptions.ftl"/>
 	</@s.select>
