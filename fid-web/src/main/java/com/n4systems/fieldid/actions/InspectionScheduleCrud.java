@@ -145,7 +145,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	@SkipValidation
 	@UserPermissionFilter(open=true)
 	public String doList() {
-		setPageType("product", "inspection_schedules");
+		setPageType("asset", "inspection_schedules");
 		testRequiredEntities(false, false);
 		return SUCCESS;
 	}

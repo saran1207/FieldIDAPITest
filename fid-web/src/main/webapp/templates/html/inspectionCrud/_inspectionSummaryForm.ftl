@@ -6,7 +6,7 @@
 <@s.hidden name="assetId"/>
 <@s.hidden name="inspectionGroupId"/>
 <@s.hidden id="inspectionTypeId" name="type"/>
-<div id="productSummary">
+<div id="assetSummary">
 	<h2>${asset.type.name!?html} <@s.text name="label.summary"/></h2>
 	
 	<div class="infoSet">

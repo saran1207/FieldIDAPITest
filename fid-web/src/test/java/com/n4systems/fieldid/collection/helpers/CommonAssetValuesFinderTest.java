@@ -68,7 +68,7 @@ public class CommonAssetValuesFinderTest {
 	}
 
 	@Test
-	public void should_find_only_the_product_status_field_is_common_value_when_multiple_assets_only_have_the_product_status_in_common() throws Exception {
+	public void should_find_only_the_asset_status_field_is_common_value_when_multiple_assets_only_have_the_asset_status_in_common() throws Exception {
 		
 		AssetBuilder builder = AssetBuilder.anAsset().havingStatus(assetStatus);
 		Asset asset1 = builder.withOwner(aPrimaryOrg().build()).inFreeformLocation("location1").build();

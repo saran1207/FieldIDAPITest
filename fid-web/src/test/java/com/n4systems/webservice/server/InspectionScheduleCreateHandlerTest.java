@@ -7,13 +7,13 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.product.AssetByMobileGuidLoader;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
-import com.n4systems.model.product.ProductByMobileGuidLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
@@ -24,7 +24,7 @@ public class InspectionScheduleCreateHandlerTest {
 	private InspectionType inspectionType;
 	private InspectionSchedule inspectionSchedule;
 	private InspectionScheduleSaver saver;
-	private ProductByMobileGuidLoader productByMobileGuidLoader;
+	private AssetByMobileGuidLoader assetByMobileGuidLoader;
 	private FilteredIdLoader<Asset> filteredProductLoader;
 	private FilteredIdLoader<InspectionType> filteredInspectionTypeLoader;
 	
@@ -46,7 +46,7 @@ public class InspectionScheduleCreateHandlerTest {
 		
 		createMocks();
 
-		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(productByMobileGuidLoader,
+		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(assetByMobileGuidLoader,
 														filteredProductLoader, filteredInspectionTypeLoader, saver);
 		
 		sut.createNewInspectionSchedule(inspectionSchedule, inspectionScheduleServiceDTO);
@@ -63,11 +63,11 @@ public class InspectionScheduleCreateHandlerTest {
 		
 		createMocks();
 
-		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(productByMobileGuidLoader,
+		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(assetByMobileGuidLoader,
 														filteredProductLoader, filteredInspectionTypeLoader, saver);
 		
 		sut.createNewInspectionSchedule(inspectionSchedule, inspectionScheduleServiceDTO);
-		verify(productByMobileGuidLoader);
+		verify(assetByMobileGuidLoader);
 		verify(saver);
 		
 	}
@@ -79,7 +79,7 @@ public class InspectionScheduleCreateHandlerTest {
 		
 		createMocks();
 		
-		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(productByMobileGuidLoader,
+		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(assetByMobileGuidLoader,
 														filteredProductLoader, filteredInspectionTypeLoader, saver);
 		
 		sut.createNewInspectionSchedule(inspectionSchedule, inspectionScheduleServiceDTO);
@@ -96,10 +96,10 @@ public class InspectionScheduleCreateHandlerTest {
 		expect(saver.saveOrUpdate(inspectionSchedule)).andReturn(inspectionSchedule);
 		replay(saver);
 
-		productByMobileGuidLoader = createMock(ProductByMobileGuidLoader.class);
-		expect(productByMobileGuidLoader.setMobileGuid("productMobileGuid")).andReturn(productByMobileGuidLoader);
-		expect(productByMobileGuidLoader.load()).andReturn(asset);
-		replay(productByMobileGuidLoader);
+		assetByMobileGuidLoader = createMock(AssetByMobileGuidLoader.class);
+		expect(assetByMobileGuidLoader.setMobileGuid("productMobileGuid")).andReturn(assetByMobileGuidLoader);
+		expect(assetByMobileGuidLoader.load()).andReturn(asset);
+		replay(assetByMobileGuidLoader);
 
 		filteredProductLoader = createMock(FilteredIdLoader.class);
 		expect(filteredProductLoader.setId(asset.getId())).andReturn(filteredProductLoader);

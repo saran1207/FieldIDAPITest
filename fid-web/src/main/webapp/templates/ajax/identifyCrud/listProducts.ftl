@@ -1,5 +1,5 @@
 <#assign html >
-	<div id="productResults">
+	<div id="assetResults">
 	<#if assets?exists >
 		<#if !assets.isEmpty() >
 			<div id="resultsTable">
@@ -42,6 +42,6 @@
 </#assign>
 
 <#escape x as x?js_string>
-	$('productResults').replace( '${html}' );
-	$('productResults').highlight();
+	$('assetResults').replace( '${html}' );
+	$('assetResults').highlight();
 </#escape>

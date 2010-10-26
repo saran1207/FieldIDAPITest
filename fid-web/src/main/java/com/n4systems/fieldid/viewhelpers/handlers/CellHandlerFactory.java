@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
+import com.n4systems.fieldid.actions.search.AssetSearchAction;
 import org.apache.log4j.Logger;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.actions.search.ProductSearchAction;
 
 /**
  * Factory for creating cell OutputHandlers.
  */
 public class CellHandlerFactory {
-	private Logger logger = Logger.getLogger(ProductSearchAction.class);
+	private Logger logger = Logger.getLogger(AssetSearchAction.class);
 
 	private final AbstractAction action;
 	private final WebOutputHandler defaultHandler;

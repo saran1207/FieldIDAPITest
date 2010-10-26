@@ -10,7 +10,7 @@ import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.FindProductOptionManufactureBean;
+import rfid.ejb.entity.FindAssetOptionManufacture;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
@@ -39,27 +39,27 @@ public class OptionManager implements Option {
 	
 	
 	@SuppressWarnings("unchecked")
-	public Collection<FindProductOptionManufactureBean>	getFindProductOptionsForTenant(Long tenantId) {
-		Query query = em.createQuery("from FindProductOptionManufactureBean fom where fom.tenant.id = :tenantId");
+	public Collection<FindAssetOptionManufacture> getFindAssetOptionsForTenant(Long tenantId) {
+		Query query = em.createQuery("from "+ FindAssetOptionManufacture.class.getName()+" fom where fom.tenant.id = :tenantId");
 		query.setParameter("tenantId", tenantId);
 		
-		return (Collection<FindProductOptionManufactureBean>)query.getResultList();
+		return (Collection<FindAssetOptionManufacture>)query.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<FindProductOptionManufactureBean>	getAllFindProductOptionManufacture() {
-		Query query = em.createQuery("from FindProductOptionManufactureBean fpomb");
+	public Collection<FindAssetOptionManufacture> getAllFindAssetOptionManufacture() {
+		Query query = em.createQuery("from "+ FindAssetOptionManufacture.class.getName()+" fom");
 		return query.getResultList();		
 	}
 	
-	public FindProductOptionManufactureBean getFindProductOptionManufacture(Long uniqueID){
-		FindProductOptionManufactureBean obj = em.find(FindProductOptionManufactureBean.class, uniqueID);
+	public FindAssetOptionManufacture getFindAssetOptionManufacture(Long uniqueID){
+		FindAssetOptionManufacture obj = em.find(FindAssetOptionManufacture.class, uniqueID);
 		return obj;
 	}
 	
-	public void updateFindProductOptionManufacture(FindProductOptionManufactureBean findProductOptionManufacturer) {
-		findProductOptionManufacturer.setDateModified(new Date());
-		em.merge(findProductOptionManufacturer);
+	public void updateFindAssetOptionManufacture(FindAssetOptionManufacture findAssetOptionManufacturer) {
+		findAssetOptionManufacturer.setDateModified(new Date());
+		em.merge(findAssetOptionManufacturer);
 	}
 
 	

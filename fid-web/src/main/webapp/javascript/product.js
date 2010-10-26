@@ -1,28 +1,28 @@
 var updateAssetTypeUrl = '';
 		
-function updateProductType( assetTypeSelect ) {
+function updateAssetType( assetTypeSelect ) {
 	if( assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value != "" ) {
-		updatingProduct();
-		var productTypeSelectId = assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value;
-		var url = updateAssetTypeUrl + '?assetTypeId='+ productTypeSelectId;
+		updatingAsset();
+		var assetTypeSelectId = assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value;
+		var url = updateAssetTypeUrl + '?assetTypeId='+ assetTypeSelectId;
 		getResponse( url, "get" );
 	} else {
-		replacedProductType( null, null );
+		replacedAssetType( null, null );
 	}
 }
 
-function updatingProduct() {
-	var productTypeIndicator = $('productTypeIndicator');
-	productTypeIndicator.style.visibility = "visible";
+function updatingAsset() {
+	var assetTypeIndicator = $('assetTypeIndicator');
+	assetTypeIndicator.style.visibility = "visible";
 }
 
-function updatingProductComplete() {
-	var productTypeIndicator = $('productTypeIndicator');
-	productTypeIndicator.style.visibility = "hidden";
+function updatingAssetComplete() {
+	var assetTypeIndicator = $('assetTypeIndicator');
+	assetTypeIndicator.style.visibility = "hidden";
 }
 
 
-function replacedProductType( infoOptions, subTypes ) {
+function replacedAssetType( infoOptions, subTypes ) {
 	var infoOptionSet = $('infoOptions');
 	if( infoOptions == null || infoOptions == "" ) {
 		infoOptionSet.update();
@@ -32,20 +32,20 @@ function replacedProductType( infoOptions, subTypes ) {
 }
 
 
-var originalProductType = 0;
-var productTypeChangeWarning = "";
-function checkProductTypeChange() {
-	var currentProductType = $( 'assetType' ).getValue();
+var originalAssetType = 0;
+var assetTypeChangeWarning = "";
+function checkAssetTypeChange() {
+	var currentAssetType = $( 'assetType' ).getValue();
 	
-	if( currentProductType !=  originalProductType ) {
-		return confirm( productTypeChangeWarning );
+	if( currentAssetType !=  originalAssetType ) {
+		return confirm( assetTypeChangeWarning );
 	}
 	
 	return true;
 }
 
-function saveProduct( button ) {
-	if( checkProductTypeChange() ) {
+function saveAsset( button ) {
+	if( checkAssetTypeChange() ) {
 		checkDuplicateRfids('rfidNumber', button, $( 'uniqueID' ).getValue() );
 	} 
 }

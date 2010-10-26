@@ -34,9 +34,9 @@ public class SavedReportSearchCriteriaConverter {
 		container.setInspectionTypeGroup(savedReport.getLongCriteria(SavedReport.INSPECTION_TYPE_GROUP));
 		container.setPerformedBy(savedReport.getLongCriteria(SavedReport.PERFORMED_BY));
 		container.setAssignedUser(savedReport.getLongCriteria(SavedReport.ASSIGNED_USER));
-		container.setAssetStatus(savedReport.getLongCriteria(SavedReport.PRODUCT_STATUS));
-		container.setAssetType(savedReport.getLongCriteria(SavedReport.PRODUCT_TYPE));
-		container.setAssetTypeGroup(savedReport.getLongCriteria(SavedReport.PRODUCT_TYPE_GROUP));
+		container.setAssetStatus(savedReport.getLongCriteria(SavedReport.ASSET_STATUS));
+		container.setAssetType(savedReport.getLongCriteria(SavedReport.ASSET_TYPE));
+		container.setAssetTypeGroup(savedReport.getLongCriteria(SavedReport.ASSET_TYPE_GROUP));
 		container.setJob(savedReport.getLongCriteria(SavedReport.JOB_ID));
 		
 		container.setFromDate(DateHelper.string2Date(SavedReport.DATE_FORMAT, savedReport.getCriteria().get(SavedReport.FROM_DATE)));
@@ -70,9 +70,9 @@ public class SavedReportSearchCriteriaConverter {
 		report.setInCriteria(SavedReport.INSPECTION_BOOK, container.getInspectionBook());
 		report.setInCriteria(SavedReport.INSPECTION_TYPE_GROUP, container.getInspectionTypeGroup());
 		report.setInCriteria(SavedReport.PERFORMED_BY, container.getPerformedBy());
-		report.setInCriteria(SavedReport.PRODUCT_STATUS, container.getAssetStatus());
-		report.setInCriteria(SavedReport.PRODUCT_TYPE, container.getAssetType());
-		report.setInCriteria(SavedReport.PRODUCT_TYPE_GROUP, container.getAssetTypeGroup());
+		report.setInCriteria(SavedReport.ASSET_STATUS, container.getAssetStatus());
+		report.setInCriteria(SavedReport.ASSET_TYPE, container.getAssetType());
+		report.setInCriteria(SavedReport.ASSET_TYPE_GROUP, container.getAssetTypeGroup());
 		report.setInCriteria(SavedReport.ASSIGNED_USER, container.getAssignedUser());
 		report.setInCriteria(SavedReport.JOB_ID, container.getJob());
 		report.setInCriteria(SavedReport.LOCATION, container.getLocation().getFreeformLocation());

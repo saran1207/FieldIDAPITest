@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.n4systems.model.product.AssetLimitCountLoader;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgCountLoader;
-import com.n4systems.model.product.ProductLimitCountLoader;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.EmployeeUserCountLoader;
 import com.n4systems.persistence.PersistenceManager;
@@ -31,13 +31,13 @@ public class TenantLimitService implements Serializable {
 	private final Map<Long, ResourceLimit> assets = new ResourceLimitConcurrentHashMap();
 	private final Map<Long, ResourceLimit> secondaryOrgs = new ResourceLimitConcurrentHashMap();
 	
-	private final ProductLimitCountLoader productCountLoader = new ProductLimitCountLoader();
+	private final AssetLimitCountLoader assetCountLoader = new AssetLimitCountLoader();
 	private final EmployeeUserCountLoader employeeCountLoader = new EmployeeUserCountLoader();
 	private final SecondaryOrgCountLoader secondaryOrgCountLoader = new SecondaryOrgCountLoader();
 	
 	private final LimitUpdater[] limitUpdaters = {
 			new LimitUpdater(new TenantDiskUsageCalculator(), diskSpace),
-			new LimitUpdater(productCountLoader, assets),
+			new LimitUpdater(assetCountLoader, assets),
 			new LimitUpdater(employeeCountLoader, employeeUsers),
 			new LimitUpdater(secondaryOrgCountLoader, secondaryOrgs),
 	};
@@ -131,9 +131,9 @@ public class TenantLimitService implements Serializable {
 	 * Updates the asset count but does not reload the tenant limit.
 	 */
 	private void refreshAssetCount(Long tenantId) {
-		productCountLoader.setTenantId(tenantId);
+		assetCountLoader.setTenantId(tenantId);
 		
-		assets.get(tenantId).setUsed(productCountLoader.load());
+		assets.get(tenantId).setUsed(assetCountLoader.load());
 	}
 	
 	/**

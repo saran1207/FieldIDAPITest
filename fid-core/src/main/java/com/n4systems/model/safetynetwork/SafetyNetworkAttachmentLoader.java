@@ -6,15 +6,15 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.persistence.loaders.Loader;
 
 public class SafetyNetworkAttachmentLoader extends Loader<FileAttachment> {
-	private final ProductTypeFileAttachmentIdByProductNetworkIdExistsLoader canLoadAttachmentLoader;
+	private final AssetTypeFileAttachmentIdByProductNetworkIdExistsLoader canLoadAttachmentLoader;
 	private Long id;
 	private Long productNetworkId;
 	
 	public SafetyNetworkAttachmentLoader() {
-		this(new ProductTypeFileAttachmentIdByProductNetworkIdExistsLoader());
+		this(new AssetTypeFileAttachmentIdByProductNetworkIdExistsLoader());
 	}
 	
-	public SafetyNetworkAttachmentLoader(ProductTypeFileAttachmentIdByProductNetworkIdExistsLoader canLoadAttachmentLoader) {
+	public SafetyNetworkAttachmentLoader(AssetTypeFileAttachmentIdByProductNetworkIdExistsLoader canLoadAttachmentLoader) {
 		this.canLoadAttachmentLoader = canLoadAttachmentLoader;
 	}
 

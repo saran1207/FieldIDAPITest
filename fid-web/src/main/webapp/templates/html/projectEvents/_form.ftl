@@ -3,7 +3,7 @@
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/search.css"/>" />
 	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
 	<script type="text/javascript">
-		function productTypeChanged(productType) {
+		function assetTypeChanged(productType) {
 			return null;
 		}
 	</script>
@@ -41,7 +41,7 @@
 			<#include "../customizableSearch/_productTypeSelect.ftl"/>
 				
 			<div class="infoSet">
-				<label for="criteria.productStatus"><@s.text name="label.productstatus"/></label>
+				<label for="criteria.assetStatus"><@s.text name="label.productstatus"/></label>
 				<@s.select  name="criteria.assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true" />
 			</div>
 			

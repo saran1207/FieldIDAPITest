@@ -11,7 +11,7 @@ import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.producttype.ProductTypeScheduleSaver;
+import com.n4systems.model.producttype.AssetTypeScheduleSaver;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.ProductTypeRelationshipsImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
@@ -22,17 +22,17 @@ public class CatalogProductTypeRelationshipsImportHandler extends CatalogImportH
 	private Map<Long, AssetType> importedProductTypeMapping = new HashMap<Long, AssetType>();
 	private Map<Long, InspectionType> importedInspectionTypeMapping = new HashMap<Long, InspectionType>();
 	private ProductTypeRelationshipsImportSummary summary;
-	private ProductTypeScheduleSaver productTypeScheduleSaver;
+	private AssetTypeScheduleSaver assetTypeScheduleSaver;
 	private PrimaryOrg primaryOrg;
 	
-	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, ProductTypeScheduleSaver productTypeScheduleSaver) {
-		this(persistenceManager, primaryOrg, importCatalog, productTypeScheduleSaver, new ProductTypeRelationshipsImportSummary());
+	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, AssetTypeScheduleSaver assetTypeScheduleSaver) {
+		this(persistenceManager, primaryOrg, importCatalog, assetTypeScheduleSaver, new ProductTypeRelationshipsImportSummary());
 	}
 	
-	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, ProductTypeScheduleSaver productTypeScheduleSaver, ProductTypeRelationshipsImportSummary summary) {
+	public CatalogProductTypeRelationshipsImportHandler(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, AssetTypeScheduleSaver assetTypeScheduleSaver, ProductTypeRelationshipsImportSummary summary) {
 		super(persistenceManager, primaryOrg.getTenant(), importCatalog);
 		this.summary = summary;
-		this.productTypeScheduleSaver = productTypeScheduleSaver;
+		this.assetTypeScheduleSaver = assetTypeScheduleSaver;
 		this.primaryOrg = primaryOrg;
 	}
 	
@@ -71,7 +71,7 @@ public class CatalogProductTypeRelationshipsImportHandler extends CatalogImportH
 			
 			AssetTypeSchedule importedSchedule = copyProductTypeSchedule(connectedInspectionType, originalSchedule);
 			
-			productTypeScheduleSaver.save(importedSchedule);
+			assetTypeScheduleSaver.save(importedSchedule);
 		}
 	}
 

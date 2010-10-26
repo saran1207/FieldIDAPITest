@@ -1,6 +1,6 @@
 <@s.bean id="moneyUtil" name="com.n4systems.tools.MoneyUtils"/>
 <div id="inspection" >
-	<div id="productSummary">
+	<div id="assetSummary">
 		<h2>
 			<span>${asset.type.name!""?html} <@s.text name="label.summary"/></span>
 			

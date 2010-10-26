@@ -47,7 +47,7 @@
 		</tr>
 		
 		<tr>
-			<td><@s.checkbox name="select['assetStatus']" id="check_productStatus" /></td>
+			<td><@s.checkbox name="select['assetStatus']" id="check_assetStatus" /></td>
 			<td>
 				<div class="infoSet">
 					<label class="label" ><@s.text name="label.productstatus"/>:</label> 

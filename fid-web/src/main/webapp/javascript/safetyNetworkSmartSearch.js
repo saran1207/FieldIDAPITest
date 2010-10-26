@@ -35,17 +35,17 @@ function submitSearch(event) {
 	$('snSmartSearch').request(getStandardCallbacks());
 }
 
-function updateLinkedAssetInfo(product) {
-	populateLinkedAssetInfo(product);
-	pushRegisteredProductInformationToLocalProduct(product);
+function updateLinkedAssetInfo(asset) {
+	populateLinkedAssetInfo(asset);
+	pushRegisteredAssetInformationToLocalAsset(asset);
 }
 	
-function populateLinkedAssetInfo(product) {
-	$('linkedAssetId').setValue(product.id);
-	$('linkedAssetSerial').update(product.serialNumber);
-	$('linkedAssetRfid').update(product.rfidNumber);
-	$('linkedAssetOwner').update(product.owner);
-	$('linkedAssetType').update(product.type);
+function populateLinkedAssetInfo(asset) {
+	$('linkedAssetId').setValue(asset.id);
+	$('linkedAssetSerial').update(asset.serialNumber);
+	$('linkedAssetRfid').update(asset.rfidNumber);
+	$('linkedAssetOwner').update(asset.owner);
+	$('linkedAssetType').update(asset.type);
 	
 	showLinkedAssetInfo();
 }
@@ -64,11 +64,11 @@ function updateLinkedAssetFromMultipleResults(event) {
 }
 
 
-function pushRegisteredProductInformationToLocalProduct(product) {
+function pushRegisteredAssetInformationToLocalAsset(asset) {
 	if ($('uniqueID') != null && $('uniqueID').getValue() == "") {
-		$("serialNumberText").value = product.serialNumber;
-		$("rfidNumber").value = product.rfidNumber;
-		$("customerRefNumber").value = product.referenceNumber;
+		$("serialNumberText").value = asset.serialNumber;
+		$("rfidNumber").value = asset.rfidNumber;
+		$("customerRefNumber").value = asset.referenceNumber;
 	}
 }
 

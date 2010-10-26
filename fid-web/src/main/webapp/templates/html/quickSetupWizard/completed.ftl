@@ -18,7 +18,7 @@
 					<@s.url namespace="/"  id="identifyUrl" action="identify"/>
 					
 				<#else>
-					<@s.url namespace="/"  id="identifyUrl" action="productAdd" />
+					<@s.url namespace="/"  id="identifyUrl" action="assetAdd" />
 				</#if>
 				
 				<a href="${identifyUrl}"><@s.text name="label.identify_your_first_asset"/></a><br/>

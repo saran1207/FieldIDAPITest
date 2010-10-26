@@ -40,13 +40,13 @@ public class ProductCodeMappingManager implements AssetCodeMappingService {
 
 	
 	@SuppressWarnings("unchecked")
-	public List<AssetCodeMapping> getAllProductCodesByTenant( Long r_manufacturer ) {
+	public List<AssetCodeMapping> getAllAssetCodesByTenant( Long r_manufacturer ) {
 		Query q = em.createQuery("from "+AssetCodeMapping.class.getName()+" as pcm where pcm.tenant.id = :manufacturer ORDER BY assetCode ");
 		q.setParameter( "manufacturer", r_manufacturer );
 		return q.getResultList();
 	}
 	
-	public AssetCodeMapping getProductCodeByProductCodeAndTenant(String assetCode, Long tenantId ) {
+	public AssetCodeMapping getAssetCodeByProductCodeAndTenant(String assetCode, Long tenantId ) {
 		Query q = em.createQuery("SELECT DISTINCT pcm from "+AssetCodeMapping.class.getName()+" as pcm left join fetch pcm.assetInfo as pi left join fetch pi.infoFields where pcm.tenant.id = :manufacturer AND pcm.assetCode = :assetCode ");
 		q.setParameter( "assetCode", assetCode);
 		q.setParameter( "manufacturer", tenantId );
@@ -96,7 +96,7 @@ public class ProductCodeMappingManager implements AssetCodeMappingService {
 
 
 	
-	public AssetCodeMapping getProductCodeByUniqueIdAndTenant( Long id, Long manufacturer ) {
+	public AssetCodeMapping getAssetCodeByUniqueIdAndTenant( Long id, Long manufacturer ) {
 		Query q = em.createQuery("SELECT DISTINCT pcm from "+AssetCodeMapping.class.getName()+" as pcm left join fetch pcm.assetInfo as pi left join fetch pi.infoFields where pcm.tenant.id = :manufacturer AND pcm.uniqueID = :uniqueID ");
 		q.setParameter( "uniqueID", id );
 		q.setParameter( "manufacturer", manufacturer );

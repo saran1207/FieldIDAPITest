@@ -1,4 +1,4 @@
-${action.setPageType('product', 'add_with_order')!}
+${action.setPageType('asset', 'add_with_order')!}
 <head>
 	<@n4.includeStyle type="page" href="identify" />
 </head>

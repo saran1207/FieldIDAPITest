@@ -71,10 +71,6 @@ public class ServiceLocator {
 		return new PersistenceManagerEJBContainer();
 	}
 
-	public static final AssetCodeMappingService getProductCodeMapping() {
-		return new ProductCodeMappingEJBContainer();
-	}
-
 	public static final ProofTestHandler getProofTestHandler() {
 		return new ProofTestHandlerEJBContainer();
 	}

@@ -54,7 +54,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	
 	
 	@Test
-	public void should_call_the_attribute_finder_with_list_of_product_type_ids_passed_in_when_the_selected_product_type_id_is_null() throws Exception {
+	public void should_call_the_attribute_finder_with_list_of_asset_type_ids_passed_in_when_the_selected_asset_type_id_is_null() throws Exception {
 		List<Long> productTypeIds = new FluentArrayList<Long>(1L);
 
 		CommonProductAttributeFinder commonAttributeFinder = createMock(CommonProductAttributeFinder.class);
@@ -70,7 +70,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	
 	
 	@Test
-	public void should_call_the_attribute_finder_with_list_of_only_the_selected_product_type_id_selected_product_type_id_is_not_null() throws Exception {
+	public void should_call_the_attribute_finder_with_list_of_only_the_selected_asset_type_id_selected_asset_type_id_is_not_null() throws Exception {
 		List<Long> productTypeIds = new FluentArrayList<Long>(10L, 4L, 1L, 5040L);
 
 		CommonProductAttributeFinder commonAttributeFinder = createMock(CommonProductAttributeFinder.class);
@@ -85,13 +85,13 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	}
 	
 	@Test
-	public void should_not_call_find_common_info_field_finder_if_there_are_no_product_types_in_the_list() {
+	public void should_not_call_find_common_info_field_finder_if_there_are_no_asset_types_in_the_list() {
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(NOT_TO_BE_USED_FINDER , "pre");
 		sut.getDynamicGroups(null, new ArrayList<Long>());
 	}
 	
 	@Test
-	public void should_return_an_empty_set_of_column_mappings_when_there_are_no_product_types_to_select() {
+	public void should_return_an_empty_set_of_column_mappings_when_there_are_no_asset_types_to_select() {
 		
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(NOT_TO_BE_USED_FINDER , "pre");
 		

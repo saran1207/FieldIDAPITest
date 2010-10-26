@@ -40,14 +40,14 @@
 			</#if>
 			<#if localInspection>
 				<li>
-					<a href="<@s.url action="product" uniqueID="${assetId}" />" >
+					<a href="<@s.url action="asset" uniqueID="${assetId}" />" >
 						<@s.text name="label.view_asset"/>
 					</a>
 				</li>
 			</#if>
 			<#if sessionUser.hasAccess('tag') && localInspection>
 				<li>
-					<a href='<@s.url action="productEdit" uniqueID="${assetId}" />' >
+					<a href='<@s.url action="assetEdit" uniqueID="${assetId}" />' >
 						<@s.text name="label.edit_asset"/>
 					</a>
 				</li>

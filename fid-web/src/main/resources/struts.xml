@@ -170,19 +170,19 @@
 		<action name="downloadProofTestChart" method="downloadChart" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedInspectionFile" />
 		<action name="downloadJobNoteFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProjectNoteFile" />
 		<action name="downloadInspectionCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadInspectionCert" />
-		<action name="downloadProductTypeAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeAttachedFile" />
-		<action name="downloadProductTypeAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductTypeAttachedFile" />
-		<action name="downloadProductTypeImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductTypeImage" />
+		<action name="downloadAssetTypeAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeAttachedFile" />
+		<action name="downloadAssetTypeAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeAttachedFile" />
+		<action name="downloadAssetTypeImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeImage" />
 		
-		<action name="downloadProductTypeImageSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductTypeImage" />
+		<action name="downloadAssetTypeImageSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeImage" />
 		<action name="downloadCertLogo" method="downloadCertLogo" class="com.n4systems.fieldid.actions.downloaders.DownloadOrganizationImages" />
 		<action name="downloadPrintOutPreview" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadPrintOutThumb" method="downloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
-		<action name="downloadProductAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProductAttachmentFile" />
-		<action name="downloadProductAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkProductAttachmentFile" />
+		<action name="downloadAssetAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetAttachmentFile" />
+		<action name="downloadAssetAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetAttachmentFile" />
 		<action name="downloadExampleCustomerExport" method="download" class="com.n4systems.fieldid.actions.customers.ExampleCustomerExportAction" />
 		<action name="downloadExampleAutoAttributeExport" method="downloadExample" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction" />
-		<action name="downloadExampleProductExport" method="downloadExample" class="com.n4systems.fieldid.actions.product.ProductImportAction" />
+		<action name="downloadExampleAssetExport" method="downloadExample" class="com.n4systems.fieldid.actions.asset.AssetImportAction" />
 		<action name="downloadExampleInspectionExport" method="downloadExample" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction" />
 		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
 		

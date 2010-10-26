@@ -56,27 +56,27 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 	public void evaluateParams() {
 		super.evaluateParams();
 
-		Long linkedProductId  = null;
+		Long linkedAssetId  = null;
 		try {
-			linkedProductId = Long.valueOf((String)getParameters().get("nameValue"));
+			linkedAssetId = Long.valueOf((String)getParameters().get("nameValue"));
 		} catch(NumberFormatException e) {}
 		
 		boolean editMode = false;
-		if (linkedProductId != null) {
-			Asset linkedAsset = loadLinkedProduct(linkedProductId);
+		if (linkedAssetId != null) {
+			Asset linkedAsset = loadLinkedProduct(linkedAssetId);
 			
 			if (linkedAsset != null) {
 				editMode = true;
-				addParameter("linkedProduct_Id", linkedAsset.getId());
-				addParameter("linkedProduct_SerialNumber", linkedAsset.getSerialNumber());
-				addParameter("linkedProduct_RfidNumber", linkedAsset.getRfidNumber());
-				addParameter("linkedProduct_OwnerName", linkedAsset.getOwner().getDisplayName());
-				addParameter("linkedProduct_TypeName", linkedAsset.getType().getDisplayName());
-				addParameter("linkedProduct_ReferenceNumber", linkedAsset.getCustomerRefNumber());
+				addParameter("linkedAsset_Id", linkedAsset.getId());
+				addParameter("linkedAsset_SerialNumber", linkedAsset.getSerialNumber());
+				addParameter("linkedAsset_RfidNumber", linkedAsset.getRfidNumber());
+				addParameter("linkedAsset_OwnerName", linkedAsset.getOwner().getDisplayName());
+				addParameter("linkedAsset_TypeName", linkedAsset.getType().getDisplayName());
+				addParameter("linkedAsset_ReferenceNumber", linkedAsset.getCustomerRefNumber());
 			}
 		}
 		
-		addParameter("linkedProduct_editMode", editMode);
+		addParameter("linkedAsset_editMode", editMode);
 		addParameter("vendorList", getVendorList());
 		
 		addParameter("refreshRegistration", refreshRegistration);

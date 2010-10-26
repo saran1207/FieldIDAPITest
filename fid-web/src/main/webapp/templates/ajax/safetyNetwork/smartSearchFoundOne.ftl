@@ -1,10 +1,10 @@
-var product = new Object();
+var asset = new Object();
 
-product.id = ${asset.id};
-product.serialNumber = "${asset.serialNumber?default("")?js_string}";
-product.rfidNumber = "${asset.rfidNumber?default("")?js_string}";
-product.owner = "${asset.owner.internalOrg.displayName?default("")?js_string}";
-product.type = "${asset.type.displayName?default("")?js_string}";
-product.referenceNumber = "${asset.customerRefNumber?default('')?js_string}";
+asset.id = ${asset.id};
+asset.serialNumber = "${asset.serialNumber?default("")?js_string}";
+asset.rfidNumber = "${asset.rfidNumber?default("")?js_string}";
+asset.owner = "${asset.owner.internalOrg.displayName?default("")?js_string}";
+asset.type = "${asset.type.displayName?default("")?js_string}";
+asset.referenceNumber = "${asset.customerRefNumber?default('')?js_string}";
 
-updateLinkedAssetInfo(product);
+updateLinkedAssetInfo(asset);

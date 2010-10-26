@@ -2,7 +2,7 @@ package com.n4systems.fieldid.validators;
 
 import java.util.List;
 
-import com.n4systems.fieldid.actions.product.ProductTypeConfigurationCrud;
+import com.n4systems.fieldid.actions.asset.AssetTypeConfigurationCrud;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
 
@@ -13,7 +13,7 @@ public class SubAssetTypeValidator extends FieldValidatorSupport {
 		
 		String fieldName = getFieldName();
 		List<Long> values = (List<Long>)this.getFieldValue(fieldName, object);
-		ProductTypeConfigurationCrud action = (ProductTypeConfigurationCrud) object;
+		AssetTypeConfigurationCrud action = (AssetTypeConfigurationCrud) object;
 		
 		for( Long typeId : values ) {
 			

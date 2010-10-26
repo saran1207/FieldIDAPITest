@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.product.AssetAttachmentListLoader;
+import com.n4systems.model.product.AssetAttachmentSaver;
 import org.apache.log4j.Logger;
 
 
@@ -11,9 +14,6 @@ import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ProcessFailureException;
-import com.n4systems.model.product.ProductAttachment;
-import com.n4systems.model.product.ProductAttachmentListLoader;
-import com.n4systems.model.product.ProductAttachmentSaver;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
@@ -24,8 +24,8 @@ public class ProductSaveService {
 	private final User user;
 	private SecurityFilter filter;
 	private Asset asset;
-	private List<ProductAttachment> existingAttachments;
-	private List<ProductAttachment> uploadedAttachments;
+	private List<AssetAttachment> existingAttachments;
+	private List<AssetAttachment> uploadedAttachments;
 
 	public ProductSaveService(LegacyProductSerial productManager, User user) {
 		super();
@@ -93,8 +93,8 @@ public class ProductSaveService {
 
 	private void saveUploadedAttachments() {
 		if (uploadedAttachments != null) {
-			ProductAttachmentSaver saver = new ProductAttachmentSaver(user, asset);
-			for (ProductAttachment attachment : uploadedAttachments) {
+			AssetAttachmentSaver saver = new AssetAttachmentSaver(user, asset);
+			for (AssetAttachment attachment : uploadedAttachments) {
 				saver.save(attachment);
 			}
 		}
@@ -110,25 +110,25 @@ public class ProductSaveService {
 	}
 
 	private void reattachAttachments() {
-		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(filter).setProduct(asset).load();
-		for (ProductAttachment loadedAttachment : loadedAttachments) {
+		List<AssetAttachment> loadedAttachments = new AssetAttachmentListLoader(filter).setProduct(asset).load();
+		for (AssetAttachment loadedAttachment : loadedAttachments) {
 			if (existingAttachments.contains(loadedAttachment)) {
-				ProductAttachment existingAttachment = existingAttachments.get(existingAttachments.indexOf(loadedAttachment));
+				AssetAttachment existingAttachment = existingAttachments.get(existingAttachments.indexOf(loadedAttachment));
 				existingAttachment.setCreated(loadedAttachment.getCreated());
 			}
 		}
 	}
 	private void updateAttachments() {
-		ProductAttachmentSaver saver = new ProductAttachmentSaver(user, asset);
-		for (ProductAttachment attachment : existingAttachments) {
+		AssetAttachmentSaver saver = new AssetAttachmentSaver(user, asset);
+		for (AssetAttachment attachment : existingAttachments) {
 			saver.update(attachment);
 		}
 	}
 	
 	private void removeAttachments() {
-		List<ProductAttachment> loadedAttachments = new ProductAttachmentListLoader(filter).setProduct(asset).load();
-		ProductAttachmentSaver deleter = new ProductAttachmentSaver(asset);
-		for (ProductAttachment loadedAttachment : loadedAttachments) {
+		List<AssetAttachment> loadedAttachments = new AssetAttachmentListLoader(filter).setProduct(asset).load();
+		AssetAttachmentSaver deleter = new AssetAttachmentSaver(asset);
+		for (AssetAttachment loadedAttachment : loadedAttachments) {
 			if (!existingAttachments.contains(loadedAttachment)) {
 				try {
 					deleter.remove(loadedAttachment);
@@ -148,20 +148,20 @@ public class ProductSaveService {
 		return this;
 	}
 
-	public List<ProductAttachment> getExistingAttachments() {
+	public List<AssetAttachment> getExistingAttachments() {
 		return existingAttachments;
 	}
 
-	public ProductSaveService setExistingAttachments(List<ProductAttachment> existingAttachments) {
+	public ProductSaveService setExistingAttachments(List<AssetAttachment> existingAttachments) {
 		this.existingAttachments = existingAttachments;
 		return this;
 	}
 
-	public List<ProductAttachment> getUploadedAttachments() {
+	public List<AssetAttachment> getUploadedAttachments() {
 		return uploadedAttachments;
 	}
 
-	public ProductSaveService setUploadedAttachments(List<ProductAttachment> uploadedAttachments) {
+	public ProductSaveService setUploadedAttachments(List<AssetAttachment> uploadedAttachments) {
 		this.uploadedAttachments = uploadedAttachments;
 		return this;
 	}

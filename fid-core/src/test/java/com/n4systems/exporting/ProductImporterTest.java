@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.api.conversion.product.AssetToModelConverter;
+import com.n4systems.api.model.AssetView;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.product.ProductToModelConverter;
 import com.n4systems.api.model.ExternalModelView;
-import com.n4systems.api.model.ProductView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
@@ -36,7 +36,7 @@ public class ProductImporterTest {
 	@Test(expected=IllegalStateException.class)
 	public void test_import_throws_exception_when_run_import_called_before_validate() throws ImportException {
 		Validator<ExternalModelView> validator = createMock(Validator.class);
-		ProductToModelConverter converter = createMock(ProductToModelConverter.class);
+		AssetToModelConverter converter = createMock(AssetToModelConverter.class);
 
 		expect(validator.getValidationContext()).andReturn(new HashMap<String, Object>());
 		expect(converter.getType()).andReturn(new AssetType());
@@ -56,13 +56,13 @@ public class ProductImporterTest {
 	public void test_read_and_validate_reads_map_converts_and_validates() throws IOException, ParseException, MarshalingException {
 		MapReader reader = createMock(MapReader.class);
 		Validator<ExternalModelView> validator = createMock(Validator.class);
-		ProductToModelConverter converter = createMock(ProductToModelConverter.class);
-		final ExportMapUnmarshaler<ProductView> mapUnmarshaler = createMock(ExportMapUnmarshaler.class);
+		AssetToModelConverter converter = createMock(AssetToModelConverter.class);
+		final ExportMapUnmarshaler<AssetView> mapUnmarshaler = createMock(ExportMapUnmarshaler.class);
 		
 		Map<String, Object> validationContext = new HashMap<String, Object>();
 		AssetType type = AssetTypeBuilder.anAssetType().named("test_type").build();
 		Map<String, Object> row = new HashMap<String, Object>();		
-		ProductView view = new ProductView();
+		AssetView view = new AssetView();
 		List<ValidationResult> expectedResults = new ArrayList<ValidationResult>();
 		
 		expect(validator.getValidationContext()).andReturn(validationContext);
@@ -78,7 +78,7 @@ public class ProductImporterTest {
 		replay(mapUnmarshaler);
 		
 		ProductImporter importer = new ProductImporter(reader, validator, createMock(ProductSaveService.class), converter) {
-			protected ExportMapUnmarshaler<ProductView> createMapUnmarshaler() throws IOException, ParseException {
+			protected ExportMapUnmarshaler<AssetView> createMapUnmarshaler() throws IOException, ParseException {
 				return mapUnmarshaler;
 			}
 		};
@@ -98,14 +98,14 @@ public class ProductImporterTest {
 	public void test_import() throws ImportException, IOException, ParseException, MarshalingException, ConversionException {
 		MapReader reader = createMock(MapReader.class);
 		Validator<ExternalModelView> validator = createMock(Validator.class);
-		ProductToModelConverter converter = createMock(ProductToModelConverter.class);
+		AssetToModelConverter converter = createMock(AssetToModelConverter.class);
 		ProductSaveService saver = createMock(ProductSaveService.class);
-		final ExportMapUnmarshaler<ProductView> mapUnmarshaler = createMock(ExportMapUnmarshaler.class);
+		final ExportMapUnmarshaler<AssetView> mapUnmarshaler = createMock(ExportMapUnmarshaler.class);
 		
 		Map<String, Object> validationContext = new HashMap<String, Object>();
 		AssetType type = AssetTypeBuilder.anAssetType().named("test_type").build();
 		Map<String, Object> row = new HashMap<String, Object>();		
-		ProductView view = new ProductView();
+		AssetView view = new AssetView();
 		DummyTransaction transaction = new DummyTransaction();
 		Asset asset = new Asset();
 		
@@ -127,7 +127,7 @@ public class ProductImporterTest {
 		replay(mapUnmarshaler);
 		
 		ProductImporter importer = new ProductImporter(reader, validator, saver, converter) {
-			protected ExportMapUnmarshaler<ProductView> createMapUnmarshaler() throws IOException, ParseException {
+			protected ExportMapUnmarshaler<AssetView> createMapUnmarshaler() throws IOException, ParseException {
 				return mapUnmarshaler;
 			}
 		};

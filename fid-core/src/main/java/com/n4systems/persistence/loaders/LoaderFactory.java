@@ -43,19 +43,19 @@ import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.product.ProductAttachmentListLoader;
+import com.n4systems.model.product.AssetAttachmentListLoader;
 import com.n4systems.model.product.SyncAssetListLoader;
-import com.n4systems.model.product.ProductSerialExtensionListLoader;
+import com.n4systems.model.product.AssetSerialExtensionListLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.productstatus.ProductStatusByNameLoader;
 import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
 import com.n4systems.model.productstatus.ProductStatusForNameExistsLoader;
 import com.n4systems.model.productstatus.ProductStatusListLoader;
+import com.n4systems.model.producttype.AssetTypeByAttachmentLoader;
+import com.n4systems.model.producttype.AssetTypeListableLoader;
+import com.n4systems.model.producttype.AssetTypeLoader;
 import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
 import com.n4systems.model.producttype.InspectionFrequencyListLoader;
-import com.n4systems.model.producttype.ProductTypeByAttachmentLoader;
-import com.n4systems.model.producttype.ProductTypeListableLoader;
-import com.n4systems.model.producttype.ProductTypeLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
@@ -315,8 +315,8 @@ public class LoaderFactory implements Serializable {
 		return new PrimaryOrgByTenantLoader();
 	}
 
-	public ProductAttachmentListLoader createProductAttachmentListLoader() {
-		return new ProductAttachmentListLoader(filter);
+	public AssetAttachmentListLoader createProductAttachmentListLoader() {
+		return new AssetAttachmentListLoader(filter);
 	}
 
 	public SyncAssetListLoader createProductIdSearchListLoader() {
@@ -327,8 +327,8 @@ public class LoaderFactory implements Serializable {
 		return new ProductsByNetworkIdLoader(filter);
 	}
 
-	public ProductSerialExtensionListLoader createProductSerialExtensionListLoader() {
-		return new ProductSerialExtensionListLoader(filter);
+	public AssetSerialExtensionListLoader createProductSerialExtensionListLoader() {
+		return new AssetSerialExtensionListLoader(filter);
 	}
 
 	public ProductStatusByNameLoader createProductStatusByNameLoader() {
@@ -347,16 +347,16 @@ public class LoaderFactory implements Serializable {
 		return new ProductStatusListLoader(filter);
 	}
 
-	public ProductTypeByAttachmentLoader createProductTypeByAttachmentLoader() {
-		return new ProductTypeByAttachmentLoader();
+	public AssetTypeByAttachmentLoader createProductTypeByAttachmentLoader() {
+		return new AssetTypeByAttachmentLoader();
 	}
 
-	public ProductTypeListableLoader createProductTypeListableLoader() {
-		return new ProductTypeListableLoader(filter);
+	public AssetTypeListableLoader createProductTypeListableLoader() {
+		return new AssetTypeListableLoader(filter);
 	}
 
-	public ProductTypeLoader createProductTypeLoader() {
-		return new ProductTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
+	public AssetTypeLoader createProductTypeLoader() {
+		return new AssetTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
 	}
 
 	public SafetyNetworkInspectionLoader createSafetyNetworkAssignedProductInspectionLoader() {

@@ -17,7 +17,7 @@ import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.productstatus.ProductStatusSaver;
-import com.n4systems.model.producttype.ProductTypeSaver;
+import com.n4systems.model.producttype.AssetTypeSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 
@@ -38,16 +38,16 @@ public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactio
 	}
 	
 	@Test
-	public void should_create_default_product_type_and_itgs_and_tag_option_and_state_sets() {
+	public void should_create_default_asset_type_and_itgs_and_tag_option_and_state_sets() {
 		Tenant tenant = aTenant().build();
 		
 		TagOptionSaver mockTagSaver = createMock(TagOptionSaver.class);
 		mockTagSaver.save(same(mockTransaction), isA(TagOption.class));
 		replay(mockTagSaver);
 		
-		ProductTypeSaver mockProductTypeSaver = createMock(ProductTypeSaver.class);
-		mockProductTypeSaver.save(same(mockTransaction), isA(AssetType.class));
-		replay(mockProductTypeSaver);
+		AssetTypeSaver mockAssetTypeSaver = createMock(AssetTypeSaver.class);
+		mockAssetTypeSaver.save(same(mockTransaction), isA(AssetType.class));
+		replay(mockAssetTypeSaver);
 
 		InspectionTypeGroupSaver mockInspectionTypeGroupSaver = createMock(InspectionTypeGroupSaver.class);
 		mockInspectionTypeGroupSaver.save(same(mockTransaction), isA(InspectionTypeGroup.class));
@@ -63,11 +63,11 @@ public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactio
 		expectLastCall().times(5);
 		replay(mockStatusSaver);
 		
-		BaseSystemSetupDataCreateHandler sut = new BaseSystemSetupDataCreateHandlerImpl(mockTagSaver, mockProductTypeSaver, mockInspectionTypeGroupSaver, mockStateSetSaver, mockStatusSaver);
+		BaseSystemSetupDataCreateHandler sut = new BaseSystemSetupDataCreateHandlerImpl(mockTagSaver, mockAssetTypeSaver, mockInspectionTypeGroupSaver, mockStateSetSaver, mockStatusSaver);
 		sut.forTenant(tenant).create(mockTransaction);
 		
 		verify(mockTagSaver);
-		verify(mockProductTypeSaver);
+		verify(mockAssetTypeSaver);
 		verify(mockInspectionTypeGroupSaver);
 		verify(mockStateSetSaver);
 		verify(mockStatusSaver);

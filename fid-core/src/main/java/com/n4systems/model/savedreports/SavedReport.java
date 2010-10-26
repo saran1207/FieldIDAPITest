@@ -30,8 +30,8 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	public static final String FROM_DATE = "fromDate";
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String JOB_SITE = "jobSite";
-	public static final String PRODUCT_TYPE = "productType";
-	public static final String PRODUCT_STATUS = "productStatus";
+	public static final String ASSET_TYPE = "productType";
+	public static final String ASSET_STATUS = "productStatus";
 	public static final String ASSIGNED_USER = "assignedUser";
 	public static final String PERFORMED_BY = "performedBy";
 	public static final String INSPECTION_TYPE_GROUP = "inspectionTypeGroup";
@@ -45,7 +45,7 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	public static final String LOCATION = "location";
 	public static final String PREDEFINED_LOCATION_ID = "predefinedLocationId";
 	public static final String OWNER_ID = "ownerId";
-	public static final String PRODUCT_TYPE_GROUP = "productTypeGroup";
+	public static final String ASSET_TYPE_GROUP = "productTypeGroup";
 	
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(SavedReport.class);

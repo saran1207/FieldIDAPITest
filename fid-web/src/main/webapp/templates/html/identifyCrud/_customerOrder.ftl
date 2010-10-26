@@ -1,4 +1,4 @@
-<div id="products" >
+<div id="assets" >
 	<h2 class="orderTitle" ><@s.text name="label.attachproducttoorder"/></h2>
 	<div >
 		<div id="assetLookup">
@@ -6,7 +6,7 @@
 			<#assign assetSearchAction="customerOrderFindAsset"/>
 			<#assign assetFormId="assetSearch"/>
 			<#include "../inspectionGroup/_searchForm.ftl"/>
-			<div id="productResults"></div>
+			<div id="assetResults"></div>
 		</div>
 	</div>
 </div>

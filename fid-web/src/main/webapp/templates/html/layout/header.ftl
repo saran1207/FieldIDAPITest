@@ -50,7 +50,7 @@
 					<@s.url id="identifyUrl" action="identify"  namespace="/"/>
 					
 				<#else>
-					<@s.url id="identifyUrl" action="productAdd" namespace="/" />
+					<@s.url id="identifyUrl" action="assetAdd" namespace="/" />
 				</#if>
 				<li>
 					<a href="${identifyUrl}" class="speedLink" id="menuIdentify"><@s.text name="speed.identify"/></a>

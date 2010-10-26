@@ -19,7 +19,7 @@
 		
 	</#list>
 	<div class="formAction">
-		<a href="<@s.url action="productAdd" />"><@s.text name="label.returntoaddproduct"/></a>
+		<a href="<@s.url action="assetAdd" />"><@s.text name="label.returntoaddproduct"/></a>
 		
 	</div>
 

@@ -5,7 +5,7 @@ import java.util.Date;
 import com.n4systems.fieldid.actions.api.LoaderFactoryProvider;
 import com.n4systems.fieldid.actions.api.UserDateFormatValidator;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
-import com.n4systems.fieldid.actions.product.LocationWebModel;
+import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.orgs.BaseOrg;

@@ -10,7 +10,7 @@
 </#assign>
 
 
-<#assign assetSearchAction="products"/>
+<#assign assetSearchAction="assets"/>
 <#assign namespace="/ajax"/>
 <#include "../inspectionGroup/_searchForm.ftl"/>
 <div id="resultBlock">

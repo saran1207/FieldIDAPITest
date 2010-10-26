@@ -2,7 +2,7 @@ package com.n4systems.fieldid.actions.helpers;
 
 import java.util.List;
 
-import com.n4systems.fieldid.actions.product.LocationWebModel;
+import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.LocationHelper;
 import com.n4systems.model.location.Location;

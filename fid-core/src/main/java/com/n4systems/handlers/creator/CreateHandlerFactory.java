@@ -21,7 +21,7 @@ import com.n4systems.handlers.creator.signup.SignupReferralHandlerImpl;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.productstatus.ProductStatusSaver;
-import com.n4systems.model.producttype.ProductTypeSaver;
+import com.n4systems.model.producttype.AssetTypeSaver;
 import com.n4systems.model.promocode.PromoCodeByCodeLoader;
 import com.n4systems.model.safetynetwork.CatalogOnlyConnectionSaver;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
@@ -62,7 +62,7 @@ public class CreateHandlerFactory {
 
 	private BaseSystemStructureCreateHandler getBaseSystemStructureCreateHandler() {
 		return new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(),
-				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new ProductTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver(), new ProductStatusSaver()));
+				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new AssetTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver(), new ProductStatusSaver()));
 	}
 	
 	private AccountPlaceHolderCreateHandler getAccountPlaceHolderCreateHandler() {

@@ -19,7 +19,7 @@ ${action.setPageType('inspection_type', 'edit')!}
 		<div class="infoBlock">
 			<div class="infoSet">
 				<label class="label"><@s.text name="label.remove_from_product_types"/></label>
-				<span class="fieldHolder">${archiveSummary.removeFromProductTypes}</span>
+				<span class="fieldHolder">${archiveSummary.removeFromAssetTypes}</span>
 			</div>
 			<div class="infoSet">
 				<label class="label"><@s.text name="label.delete_inspection_frequencies"/></label>

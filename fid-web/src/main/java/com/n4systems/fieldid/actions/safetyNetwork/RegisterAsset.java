@@ -3,6 +3,10 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import java.util.Collection;
 import java.util.List;
 
+import com.n4systems.fieldid.actions.asset.AssetView;
+import com.n4systems.fieldid.actions.asset.AssetViewModeConverter;
+import com.n4systems.fieldid.actions.asset.AssetWebModel;
+import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
@@ -16,13 +20,9 @@ import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.helpers.ProductExtensionValueInput;
-import com.n4systems.fieldid.actions.product.AssetWebModel;
-import com.n4systems.fieldid.actions.product.ProductIdentifierView;
-import com.n4systems.fieldid.actions.product.ProductView;
-import com.n4systems.fieldid.actions.product.ProductViewModeConverter;
+import com.n4systems.fieldid.actions.asset.AssetIdentifierView;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.viewhelpers.ProductCrudHelper;
+import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
@@ -57,8 +57,8 @@ public class RegisterAsset extends AbstractCrud{
 	private AutoAttributeCriteria autoAttributeCriteria;
 
     //Form Inputs
-	private ProductIdentifierView identifiers;
-	private ProductView productView;
+	private AssetIdentifierView identifiers;
+	private AssetView assetView;
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 
 	public RegisterAsset(PersistenceManager persistenceManager, ProductManager productManager,
@@ -71,17 +71,17 @@ public class RegisterAsset extends AbstractCrud{
 
 	@Override
 	protected void initMemberFields() {
-		productView = new ProductView();
-		identifiers = new ProductIdentifierView();
+		assetView = new AssetView();
+		identifiers = new AssetIdentifierView();
 		linkedAsset = lookUpLinkedProduct(linkedAssetId);
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		productView = new ProductView();
-		identifiers = new ProductIdentifierView();
+		assetView = new AssetView();
+		identifiers = new AssetIdentifierView();
 		linkedAsset = lookUpLinkedProduct(uniqueId);
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), productView);
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), assetView);
 		if(linkedAsset != null) {
 			identifiers.setSerialNumber(linkedAsset.getSerialNumber());
 			identifiers.setRfidNumber(linkedAsset.getRfidNumber());
@@ -90,7 +90,7 @@ public class RegisterAsset extends AbstractCrud{
 			Long productId = assetTypeLister.getAssetTypes().iterator().next().getId();
 			setAssetTypeId(productId);
 			setOwnerId(getSessionUser().getOwner().getId());
-			productView.setIdentified(DateHelper.getToday());
+			assetView.setIdentified(DateHelper.getToday());
 		}
 	}
 	
@@ -101,8 +101,8 @@ public class RegisterAsset extends AbstractCrud{
 	@Override
 	protected void postInit() {
 		super.postInit();
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), productView);
-		overrideHelper(new ProductCrudHelper(getLoaderFactory()));
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), assetView);
+		overrideHelper(new AssetCrudHelper(getLoaderFactory()));
 	}
 	
 	@SkipValidation
@@ -112,9 +112,9 @@ public class RegisterAsset extends AbstractCrud{
 
 	public String doSave(){
 		
-		ProductViewModeConverter converter = new ProductViewModeConverter(getLoaderFactory(), orderManager, getUser());
+		AssetViewModeConverter converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getUser());
 		
-		Asset assetToSave = converter.viewToModel(productView);
+		Asset assetToSave = converter.viewToModel(assetView);
 		assetToSave.setSerialNumber(identifiers.getSerialNumber());
 		assetToSave.setCustomerRefNumber(identifiers.getReferenceNumber());
 		assetToSave.setRfidNumber(identifiers.getRfidNumber());
@@ -168,10 +168,10 @@ public class RegisterAsset extends AbstractCrud{
 	}
 			
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
-		if (autoAttributeCriteria == null && productView.getAssetTypeId() != null) {
+		if (autoAttributeCriteria == null && assetView.getAssetTypeId() != null) {
 			AutoAttributeCriteriaByProductTypeIdLoader loader = getLoaderFactory().createAutoAttributeCriteriaByProductTypeIdLoader();
 			
-			loader.setAssetTypeId(productView.getAssetTypeId());
+			loader.setAssetTypeId(assetView.getAssetTypeId());
 			
 			autoAttributeCriteria = loader.load();
 		}
@@ -192,59 +192,59 @@ public class RegisterAsset extends AbstractCrud{
 	/* Form setters and getters */
 	
 	public void setAssignedUser(Long userId) {
-		productView.setAssignedUser(userId);
+		assetView.setAssignedUser(userId);
 		
 	}
 	
 	public void setAssetStatus(Long statusId) {
-		productView.setAssetStatus(statusId);
+		assetView.setAssetStatus(statusId);
 	}
 	
 	public void setAssetTypeId(Long typeId) {
-		productView.setAssetTypeId(typeId);
+		assetView.setAssetTypeId(typeId);
 	}
 	
 	@RequiredFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.producttyperequired")
 	public Long getAssetTypeId() {
-		return productView.getAssetTypeId();
+		return assetView.getAssetTypeId();
 	}
 	
 	public void setPurchaseOrder(String purchaseOrder) {
-		productView.setPurchaseOrder(purchaseOrder);
+		assetView.setPurchaseOrder(purchaseOrder);
 	}
 	
 	public void setIdentified(String identified) {
-		productView.setIdentified(convertDate(identified));
+		assetView.setIdentified(convertDate(identified));
 	}
 	
 	@RequiredStringValidator(message = "", key = "error.dateidentifiedrequired")
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public String getIdentified() {
-		return convertDate(productView.getIdentified());
+		return convertDate(assetView.getIdentified());
 	}
 	
 	public void setNonIntegrationOrderNumber(String orderNumber) {
-		productView.setNonIntegrationOrderNumber(orderNumber);
+		assetView.setNonIntegrationOrderNumber(orderNumber);
 	}
 	
 	public void setComments(String comments) {
-		productView.setComments(comments);
+		assetView.setComments(comments);
 	}
 	
-	public List<ProductExtensionValueInput> getProductExtentionValues() {
-		return productView.getProductExtentionValues();
+	public List<AssetExtensionValueInput> getAssetExtentionValues() {
+		return assetView.getAssetExtentionValues();
 	}
 	
 	@CustomValidator(type = "requiredInfoFields", message = "", key = "error.attributesrequired")
-	public List<InfoOptionInput> getProductInfoOptions() {
-		return productView.getProductInfoOptions();
+	public List<InfoOptionInput> getAssetInfoOptions() {
+		return assetView.getAssetInfoOptions();
 	}
 	
-	public void setProductInfoOptions(List<InfoOptionInput> infoOptions) {
-		productView.setProductInfoOptions(infoOptions);
+	public void setAssetInfoOptions(List<InfoOptionInput> infoOptions) {
+		assetView.setAssetInfoOptions(infoOptions);
 	}
 	
-	public ProductIdentifierView getIdentifiers() {
+	public AssetIdentifierView getIdentifiers() {
 		return identifiers;
 	}
 

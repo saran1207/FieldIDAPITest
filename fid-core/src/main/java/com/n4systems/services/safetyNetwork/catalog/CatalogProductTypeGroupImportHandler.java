@@ -10,7 +10,7 @@ import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
-import com.n4systems.services.safetyNetwork.catalog.summary.ProductTypeGroupImportSummary;
+import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeGroupImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -18,14 +18,14 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 
 	
-	private ProductTypeGroupImportSummary summary;
+	private AssetTypeGroupImportSummary summary;
 	private Set<Long> productTypeIds;
 	
 	public CatalogProductTypeGroupImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
-		this(persistenceManager, tenant, importCatalog, new ProductTypeGroupImportSummary());;
+		this(persistenceManager, tenant, importCatalog, new AssetTypeGroupImportSummary());;
 	}
 	
-	public CatalogProductTypeGroupImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, ProductTypeGroupImportSummary summary) {
+	public CatalogProductTypeGroupImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, AssetTypeGroupImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.summary = summary; 
 	}
@@ -70,7 +70,7 @@ public class CatalogProductTypeGroupImportHandler extends CatalogImportHandler {
 	}
 	
 	
-	public ProductTypeGroupImportSummary getSummaryForImport(Set<Long> productTypeIds) {
+	public AssetTypeGroupImportSummary getSummaryForImport(Set<Long> productTypeIds) {
 		if (productTypeIds == null) { 
 			throw new RuntimeException();
 		}

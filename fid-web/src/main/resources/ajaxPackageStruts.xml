@@ -21,32 +21,32 @@
 
 	
 
-		<action name="productTypeImageRemove" method="removeImage"
-			class="com.n4systems.fieldid.actions.product.ProductTypeCrud">
-			<result name="success" type="freemarker">/templates/ajax/productTypeCrud/remove.ftl</result>
-			<result name="error" type="freemarker">/templates/ajax/productTypeCrud/removeError.ftl</result>
+		<action name="assetTypeImageRemove" method="removeImage"
+			class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
+			<result name="success" type="freemarker">/templates/ajax/assetTypeCrud/remove.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/assetTypeCrud/removeError.ftl</result>
 		</action>
 
 
-		<action name="productTypeChange" method="productTypeChange"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="success" type="freemarker">/templates/ajax/productCrud/changeProductType.ftl</result>
+		<action name="assetTypeChange" method="assetTypeChange"
+			class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="success" type="freemarker">/templates/ajax/assetCrud/changeAssetType.ftl</result>
 		</action>
 		
-				<action name="regProductTypeChange" method="productTypeChange"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="success" type="freemarker">/templates/ajax/registerAsset/changeProductType.ftl</result>
+				<action name="regAssetTypeChange" method="assetTypeChange"
+			class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="success" type="freemarker">/templates/ajax/registerAsset/changeAssetType.ftl</result>
 		</action>
 
-		<action name="productAdd" method="addNoHistory"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="success" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
+		<action name="assetAdd" method="addNoHistory"
+			class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="success" type="freemarker">/templates/ajax/assetCrud/add.ftl</result>
 		</action>
 
-		<action name="productCreate" method="create" class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="input" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
-			<result name="error" type="freemarker">/templates/ajax/productCrud/add.ftl</result>
-			<result name="saved" type="freemarker">/templates/ajax/productCrud/created.ftl</result>
+		<action name="assetCreate" method="create" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="input" type="freemarker">/templates/ajax/assetCrud/add.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/assetCrud/add.ftl</result>
+			<result name="saved" type="freemarker">/templates/ajax/assetCrud/created.ftl</result>
 		</action>
 
 		<action name="commentTemplateShow" method="show"
@@ -65,25 +65,25 @@
 			<result name="error" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
 		</action>
 
-		<action name="productTypeScheduleEdit" method="edit"
-			class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-			<result name="input" type="freemarker">/templates/ajax/productTypeScheduleCrud/edit.ftl</result>
+		<action name="assetTypeScheduleEdit" method="edit"
+			class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
+			<result name="input" type="freemarker">/templates/ajax/assetTypeScheduleCrud/edit.ftl</result>
 		</action>
 
-		<action name="productTypeScheduleShow" method="show"
-			class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/show.ftl</result>
+		<action name="assetTypeScheduleShow" method="show"
+			class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
+			<result name="success" type="freemarker">/templates/ajax/assetTypeScheduleCrud/show.ftl</result>
 		</action>
 
-		<action name="productTypeScheduleSave" method="save"
-			class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-			<result name="input" type="freemarker">/templates/ajax/productTypeScheduleCrud/edit.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/show.ftl</result>
+		<action name="assetTypeScheduleSave" method="save"
+			class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
+			<result name="input" type="freemarker">/templates/ajax/assetTypeScheduleCrud/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/assetTypeScheduleCrud/show.ftl</result>
 		</action>
 
 
-		<action name="productTypeScheduleDelete" method="delete" class="com.n4systems.fieldid.actions.product.ProductTypeScheduleCrud">
-			<result name="success" type="freemarker">/templates/ajax/productTypeScheduleCrud/delete.ftl</result>
+		<action name="assetTypeScheduleDelete" method="delete" class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
+			<result name="success" type="freemarker">/templates/ajax/assetTypeScheduleCrud/delete.ftl</result>
 		</action>
 
 		<action name="inspectionScheduleEdit" method="edit"
@@ -188,38 +188,38 @@
 			<result name="success" type="freemarker">/templates/ajax/inspectionBook/list.ftl</result>
 		</action>
 
-		<action name="createSubProduct" method="create" class="com.n4systems.fieldid.actions.product.SubProductCrud">
-			<result name="saved" type="freemarker">/templates/ajax/subProductCrud/create.ftl</result>
+		<action name="createSubAsset" method="create" class="com.n4systems.fieldid.actions.asset.SubAssetCrud">
+			<result name="saved" type="freemarker">/templates/ajax/subAssetCrud/create.ftl</result>
 		</action>
 
-		<action name="createSubProductInInspection" method="create" class="com.n4systems.fieldid.actions.product.SubProductCrud">
-			<result name="saved" type="freemarker">/templates/ajax/subProductCrud/createInInspection.ftl</result>
+		<action name="createSubAssetInInspection" method="create" class="com.n4systems.fieldid.actions.asset.SubAssetCrud">
+			<result name="saved" type="freemarker">/templates/ajax/subAssetCrud/createInInspection.ftl</result>
 		</action>
 		
-		<action name="updateSubProductInInspection" method="update" class="com.n4systems.fieldid.actions.product.SubProductCrud">
-			<result name="saved" type="freemarker">/templates/ajax/subProductCrud/updateInInspection.ftl</result>
+		<action name="updateSubAssetInInspection" method="update" class="com.n4systems.fieldid.actions.asset.SubAssetCrud">
+			<result name="saved" type="freemarker">/templates/ajax/subAssetCrud/updateInInspection.ftl</result>
 		</action>
 		
-		<action name="updateSubProduct" method="update" class="com.n4systems.fieldid.actions.product.SubProductCrud">
-			<result name="saved" type="freemarker">/templates/ajax/subProductCrud/update.ftl</result>
+		<action name="updateSubAsset" method="update" class="com.n4systems.fieldid.actions.asset.SubAssetCrud">
+			<result name="saved" type="freemarker">/templates/ajax/subAssetCrud/update.ftl</result>
 		</action>
 
-		<action name="removeSubProduct" method="remove"
-			class="com.n4systems.fieldid.actions.product.SubProductCrud">
-			<result name="success" type="freemarker">/templates/ajax/subProductCrud/remove.ftl</result>
+		<action name="removeSubAsset" method="remove"
+			class="com.n4systems.fieldid.actions.asset.SubAssetCrud">
+			<result name="success" type="freemarker">/templates/ajax/subAssetCrud/remove.ftl</result>
 		</action>
 
-		<action name="productConfigurationUpdateOrder" method="updateOrder" class="com.n4systems.fieldid.actions.product.SubProductCrud">
+		<action name="assetConfigurationUpdateOrder" method="updateOrder" class="com.n4systems.fieldid.actions.asset.SubAssetCrud">
 		</action>
 		
 		<action name="marryOrder" method="connectToShopOrder"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="success" type="freemarker">/templates/ajax/productCrud/marryOrder.ftl</result>
-			<result name="error" type="freemarker">/templates/ajax/productCrud/marryOrder.ftl</result>
+			class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="success" type="freemarker">/templates/ajax/assetCrud/marryOrder.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/assetCrud/marryOrder.ftl</result>
 		</action>
 
 		<action name="marryCustomerOrder" method="connectToCustomerOrder"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
+			class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="success" type="freemarker">/templates/ajax/identifyCrud/marryCustomerOrder.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/identifyCrud/marryCustomerOrder.ftl</result>
 		</action>
@@ -227,23 +227,23 @@
 	
 		
 		<action name="jobFindAsset" method="list"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="error" type="freemarker">/templates/ajax/projectAttachProduct/list.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/projectAttachProduct/list.ftl</result>
-			<result name="oneFound" type="freemarker">/templates/ajax/projectAttachProduct/oneFound.ftl</result>
+			class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="error" type="freemarker">/templates/ajax/projectAttachAsset/list.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/projectAttachAsset/list.ftl</result>
+			<result name="oneFound" type="freemarker">/templates/ajax/projectAttachAsset/oneFound.ftl</result>
 		</action>
 
 		
 		
-		<action name="checkSerialNumber" method="checkSerialNumber" class="com.n4systems.fieldid.actions.product.ProductUtilAction">
-			<result name="available" type="freemarker">/templates/ajax/productUtil/serialNumberAvailable.ftl</result>
-			<result name="used" type="freemarker">/templates/ajax/productUtil/serialNumberUsed.ftl</result>
+		<action name="checkSerialNumber" method="checkSerialNumber" class="com.n4systems.fieldid.actions.asset.AssetUtilAction">
+			<result name="available" type="freemarker">/templates/ajax/assetUtil/serialNumberAvailable.ftl</result>
+			<result name="used" type="freemarker">/templates/ajax/assetUtil/serialNumberUsed.ftl</result>
 		</action>
 
 		<action name="checkRFID" method="checkDuplicateRfid"
-			class="com.n4systems.fieldid.actions.product.ProductUtilAction">
-			<result name="success" type="freemarker">/templates/ajax/productUtil/cleanRfid.ftl</result>
-			<result name="duplicate" type="freemarker">/templates/ajax/productUtil/duplicateRfid.ftl</result>
+			class="com.n4systems.fieldid.actions.asset.AssetUtilAction">
+			<result name="success" type="freemarker">/templates/ajax/assetUtil/cleanRfid.ftl</result>
+			<result name="duplicate" type="freemarker">/templates/ajax/assetUtil/duplicateRfid.ftl</result>
 		</action>
 
 		<action name="autoAttributeCriteria" method="show"
@@ -279,14 +279,14 @@
 
 		<action name="jobAssetCreate" method="create"
 			class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
-			<result name="error" type="freemarker">/templates/ajax/projectAttachProduct/attachError.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/projectAttachProduct/attach.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/projectAttachAsset/attachError.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/projectAttachAsset/attach.ftl</result>
 		</action>
 		
 		<action name="jobAssetDelete" method="delete"
 			class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
-			<result name="error" type="freemarker">/templates/ajax/projectAttachProduct/detachError.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/projectAttachProduct/detach.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/projectAttachAsset/detachError.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/projectAttachAsset/detach.ftl</result>
 		</action>
 		
 		
@@ -305,23 +305,23 @@
 		</action>
 
 		<action name="customerOrderFindAsset" method="list"
-			class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="error" type="freemarker">/templates/ajax/identifyCrud/listProducts.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/identifyCrud/listProducts.ftl</result>
-			<result name="oneFound" type="freemarker">/templates/ajax/identifyCrud/listProducts.ftl</result>
+			class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="error" type="freemarker">/templates/ajax/identifyCrud/listAssets.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/identifyCrud/listAssets.ftl</result>
+			<result name="oneFound" type="freemarker">/templates/ajax/identifyCrud/listAssets.ftl</result>
 		</action>
 
 		<action name="reportDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
 			<result name="success" type="freemarker">/templates/ajax/report/dynamicColumns.ftl</result>
 		</action>
-		<action name="searchDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.ProductSearchAction">
+		<action name="searchDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.AssetSearchAction">
 			<result name="success" type="freemarker">/templates/ajax/search/dynamicColumns.ftl</result>
 		</action>
 		<action name="scheduleDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.InspectionScheduleAction">
 			<result name="success" type="freemarker">/templates/ajax/schedule/dynamicColumns.ftl</result>
 		</action>
 			
-		<action name="productTypeGroupsUpdateOrder" method="updateOrder" class="com.n4systems.fieldid.actions.product.ProductTypeGroupCrud">
+		<action name="assetTypeGroupsUpdateOrder" method="updateOrder" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 		</action>
 		
 		<action name="assignToJob" method="save" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
@@ -354,15 +354,15 @@
 			<result name="success" type="freemarker">/templates/ajax/publishedCatalog/importStarted.ftl</result>
 		</action>
 			
-		<action name="mergeFindProduct" method="list" class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="error" type="freemarker">/templates/ajax/produtMerge/list.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/produtMerge/list.ftl</result>
-			<result name="oneFound" type="freemarker">/templates/ajax/produtMerge/list.ftl</result>
+		<action name="mergeFindAsset" method="list" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="error" type="freemarker">/templates/ajax/assetMerge/list.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/assetMerge/list.ftl</result>
+			<result name="oneFound" type="freemarker">/templates/ajax/assetMerge/list.ftl</result>
 		</action>
 		
-		<action name="generateSerials" method="generate" class="com.n4systems.fieldid.actions.product.MultiAddProductSerialNumberGenAction">
-			<result name="error" type="freemarker">/templates/ajax/multiProductCrud/otherIdentifiersForm.ftl</result>
-			<result name="success" type="freemarker">/templates/ajax/multiProductCrud/otherIdentifiersForm.ftl</result>
+		<action name="generateSerials" method="generate" class="com.n4systems.fieldid.actions.asset.MultiAddAssetSerialNumberGenAction">
+			<result name="error" type="freemarker">/templates/ajax/multiAssetCrud/otherIdentifiersForm.ftl</result>
+			<result name="success" type="freemarker">/templates/ajax/multiAssetCrud/otherIdentifiersForm.ftl</result>
 		</action>
 		
 	
@@ -409,7 +409,7 @@
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
 		
-		<action name="productImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.product.ProductImportAction">
+		<action name="assetImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.asset.AssetImportAction">
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
 				
@@ -434,9 +434,9 @@
 			<result name="success" type="freemarker">/templates/ajax/inspectionCrud/inspectionSchedule.ftl</result>
 		</action>
 		
-		<action name="products" method="list" class="com.n4systems.fieldid.actions.product.ProductCrud">
-			<result name="success" type="freemarker">/templates/ajax/productCrud/list.ftl</result>
-			<result name="oneFound" type="freemarker">/templates/ajax/productCrud/oneFound.ftl</result>
+		<action name="assets" method="list" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+			<result name="success" type="freemarker">/templates/ajax/assetCrud/list.ftl</result>
+			<result name="oneFound" type="freemarker">/templates/ajax/assetCrud/oneFound.ftl</result>
 		</action>
 	</package>
 </struts>

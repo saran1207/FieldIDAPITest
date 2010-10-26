@@ -12,9 +12,9 @@
 			<#list lineItems as lineItem >
 				<tr>
 					<td class="lineAddLink" >
-						<a href="<@s.url action="productAddWithOrder" lineItemId="${lineItem.id}" tagOptionId="${tagOptionId}" />"><@s.text name="label.identify" /></a>
+						<a href="<@s.url action="assetAddWithOrder" lineItemId="${lineItem.id}" tagOptionId="${tagOptionId}" />"><@s.text name="label.identify" /></a>
 					</td>
-					<td class="linePcode" >${lineItem.productCode}</td>
+					<td class="linePcode" >${lineItem.assetCode}</td>
 					<td>${lineItem.description!}</td>
 					<td class="lineQty" >${lineItem.quantity}</td>
 					<td class="lineIdent" >${action.getIdentifiedAssetCount(lineItem)}</td>

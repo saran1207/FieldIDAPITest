@@ -523,7 +523,7 @@ public class OrderManagerImpl implements OrderManager {
 		Order shopOrder = processAbstractPluginOrder(orderTransfer, OrderType.SHOP, tenant);
 		
 		// LineItems need a ProductCode
-		if(orderTransfer.getProductCode() == null || orderTransfer.getProductCode().trim().length() == 0) {
+		if(orderTransfer.getAssetCode() == null || orderTransfer.getAssetCode().trim().length() == 0) {
 			throw new OrderProcessingException("Plugin returned blank ProductCode");
 		}
 		
@@ -537,7 +537,7 @@ public class OrderManagerImpl implements OrderManager {
 			lineItem.setIndex(countLineItems(shopOrder));
 		}
 		
-		lineItem.setAssetCode(orderTransfer.getProductCode());
+		lineItem.setAssetCode(orderTransfer.getAssetCode());
 		lineItem.setLineId(orderTransfer.getLineItemId());
 		lineItem.setQuantity(orderTransfer.getOrderQuantity());
 		lineItem.setDescription(orderTransfer.getLineItemDescription());

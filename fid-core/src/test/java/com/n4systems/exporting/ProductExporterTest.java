@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.api.model.AssetView;
 import com.n4systems.model.Asset;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
-import com.n4systems.api.model.ProductView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapWriter;
@@ -25,12 +25,12 @@ public class ProductExporterTest {
 	@Test
 	public void test_export() throws ExportException, ConversionException, MarshalingException, IOException {
 		ListLoader<Asset> productLoader = createMock(ListLoader.class);
-		ExportMapMarshaler<ProductView> marshaler = createMock(ExportMapMarshaler.class);
-		ModelToViewConverter<Asset, ProductView> converter = createMock(ModelToViewConverter.class);
+		ExportMapMarshaler<AssetView> marshaler = createMock(ExportMapMarshaler.class);
+		ModelToViewConverter<Asset, AssetView> converter = createMock(ModelToViewConverter.class);
 		MapWriter writer = createMock(MapWriter.class);
 		
 		List<Asset> products =  Arrays.asList(new Asset());
-		ProductView view = new ProductView();
+		AssetView view = new AssetView();
 		Map<String, Object> beanMap = new HashMap<String, Object>();
 		
 		ProductExporter exporter = new ProductExporter(productLoader, marshaler, converter);

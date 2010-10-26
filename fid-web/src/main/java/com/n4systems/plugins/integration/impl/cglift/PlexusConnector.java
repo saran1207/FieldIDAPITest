@@ -52,7 +52,7 @@ public class PlexusConnector implements OrderResolver {
 		order.setLineItemDescription(jobData.getPartDescription());
 		
 		// cg uses both the part group and part type for their asset codes
-		order.setProductCode((jobData.getPartGroup() + " " + jobData.getPartType()).trim());
+		order.setAssetCode((jobData.getPartGroup() + " " + jobData.getPartType()).trim());
 		
 		// the plexus line items don't have a quantity field ... strange ...
 		order.setOrderQuantity(1L);
@@ -101,7 +101,7 @@ public class PlexusConnector implements OrderResolver {
 		order.setLineItemDescription(jobData.getPartDescription());
 		
 		// cg uses both the part group and part type for their asset codes
-		order.setProductCode((jobData.getPartGroup() + " " + jobData.getPartType()).trim());
+		order.setAssetCode((jobData.getPartGroup() + " " + jobData.getPartType()).trim());
 		
 		// the plexus line items don't have a quantity field ... strange ...
 		order.setOrderQuantity(1L);

@@ -184,7 +184,7 @@ public class InspectionToViewConverterTest {
 	}
 	
 	@Test
-	public void to_view_copies_product_status_name() throws ConversionException {
+	public void to_view_copies_asset_status_name() throws ConversionException {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
@@ -204,11 +204,11 @@ public class InspectionToViewConverterTest {
 		
 		InspectionView view = converter.toView(model);
 		
-		assertEquals(model.getAssetStatus().getName(), view.getProductStatus());
+		assertEquals(model.getAssetStatus().getName(), view.getAssetStatus());
 	}
 	
 	@Test
-	public void to_view_allows_null_product_status() throws ConversionException {
+	public void to_view_allows_null_asset_status() throws ConversionException {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
@@ -222,7 +222,7 @@ public class InspectionToViewConverterTest {
 		
 		InspectionView view = converter.toView(new Inspection());
 		
-		assertNull(view.getProductStatus());
+		assertNull(view.getAssetStatus());
 	}
 	
 	@Test

@@ -55,16 +55,16 @@
 			</p>
 		
 			<p>
-				<label><a href="<@s.url action="productTypeGroups"/>" ><@s.text name="title.manage_product_type_groups.plural" /></a></label>
+				<label><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.manage_product_type_groups.plural" /></a></label>
 				<span>Manage all of your asset type groups.</span>
 			</p>
 			<p>
-				<label><a href="<@s.url action="productTypes"/>" ><@s.text name="title.manage_product_types.plural" /></a></label>
+				<label><a href="<@s.url action="assetTypes"/>" ><@s.text name="title.manage_product_types.plural" /></a></label>
 				<span>Manage all of your assets and their attributes.</span>
 			</p>
 				
 			<p>
-				<label><a href="<@s.url action="productStatusList"/>" ><@s.text name="title.manage_product_statuses.plural" /></a></label>
+				<label><a href="<@s.url action="assetStatusList"/>" ><@s.text name="title.manage_product_statuses.plural" /></a></label>
 				<span>Create asset statuses that let you identify the state of a product.</span>
 			</p>
 			
@@ -95,7 +95,7 @@
 			</p>
 			<#if securityGuard.integrationEnabled>
 				<p>
-					<label><a href="<@s.url action="productCodeMappingList"/>" ><@s.text name="title.manage_product_code_mappings.plural" /></a></label>
+					<label><a href="<@s.url action="assetCodeMappingList"/>" ><@s.text name="title.manage_product_code_mappings.plural" /></a></label>
 					<span>Manage and map product information from your accounting or ERP system into Field ID.</span>
 				</p>
 			</#if>

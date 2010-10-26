@@ -81,13 +81,13 @@ public class CatalogImportTask implements Runnable {
 		String body = "<h4>Your Catalog Import could not be completed sucessfully. sorry</h4>";
 		body += "<p>";
 		CatalogImportSummary summary = importCatalogService.getSummary();
-		if (summary.getProductTypeGroupImportSummary().failed()) {
-			body += "Asset Type Group " + summary.getProductTypeGroupImportSummary().getFailedImporting() + " could not be correctly imported.";
-		} else if (summary.getProductTypeImportSummary().failed()) {
-			if (summary.getProductTypeImportSummary().getFailureType() == FailureType.COULD_NOT_CREATE) {
-				body += "Asset Type  " + summary.getProductTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
+		if (summary.getAssetTypeGroupImportSummary().failed()) {
+			body += "Asset Type Group " + summary.getAssetTypeGroupImportSummary().getFailedImporting() + " could not be correctly imported.";
+		} else if (summary.getAssetTypeImportSummary().failed()) {
+			if (summary.getAssetTypeImportSummary().getFailureType() == FailureType.COULD_NOT_CREATE) {
+				body += "Asset Type  " + summary.getAssetTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
 			} else {
-				body += "Auto attributes for asset type  " + summary.getProductTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
+				body += "Auto attributes for asset type  " + summary.getAssetTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
 			}
 		} else if (summary.getInspectionTypeImportSummary().failed()) {
 			body += "Inspection Type  " + summary.getInspectionTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
@@ -105,7 +105,7 @@ public class CatalogImportTask implements Runnable {
 	private String successBody() {
 		String body = "<h4>Your Catalog Import has completed.</h4>";
 		body += "<table>" +
-					"<tr><td>" + importCatalogService.getSummary().getProductTypeImportSummary().getImportMapping().size() + "</td>" +
+					"<tr><td>" + importCatalogService.getSummary().getAssetTypeImportSummary().getImportMapping().size() + "</td>" +
 					"<td>Asset Type(s) have been imported.</td></tr>" +
 					"<tr><td>" + importCatalogService.getSummary().getInspectionTypeImportSummary().numberImported() + "</td>" +
 					"<td>Inspection Type(s) have been imported.</td></tr>" +

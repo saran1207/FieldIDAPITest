@@ -9,7 +9,7 @@
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<script type="text/javascript">
-	    updateAssetTypeUrl = '<@s.url action="regProductTypeChange" namespace="/ajax"/>';
+	    updateAssetTypeUrl = '<@s.url action="regAssetTypeChange" namespace="/ajax"/>';
 	    changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
 	    autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 	    
@@ -30,7 +30,7 @@
 		
 		<div id="imageHolder">
 		<#if linkedAsset.type.imageName?exists >
-			<img src="<@s.url action="downloadProductTypeImageSafetyNetwork" namespace="/file" uniqueID="${linkedAsset.type.uniqueID}" networkId="${linkedAsset.networkId}"/>"
+			<img src="<@s.url action="downloadAssetTypeImageSafetyNetwork" namespace="/file" uniqueID="${linkedAsset.type.uniqueID}" networkId="${linkedAsset.networkId}"/>"
 			alt="<@s.text name="label.productimage"/>"/>
 		<#else> 
 			<img src="<@s.url value="/images/icon-default.png"/>" alt="<@s.text name="label.productimage"/>" />

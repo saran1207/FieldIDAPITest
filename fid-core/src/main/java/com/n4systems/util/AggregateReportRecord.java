@@ -3,20 +3,19 @@ package com.n4systems.util;
 public class AggregateReportRecord {
 	private Long count;
 	
-	private String productTypeName;
+	private String assetTypeName;
 	
 	private String inspectionTypeGroupName;
 	private Long inspectionTypeGroupId;
 
 	
-	public AggregateReportRecord(Long count, String productTypeName ) {
-		this( count, productTypeName, null, null );
+	public AggregateReportRecord(Long count, String assetTypeName) {
+		this( count, assetTypeName, null, null );
 	}
 	
-	public AggregateReportRecord(Long count, String productTypeName, String inspectionTypeGroupName, Long inspectionTypeGroupId) {
-		super();
+	public AggregateReportRecord(Long count, String assetTypeName, String inspectionTypeGroupName, Long inspectionTypeGroupId) {
 		this.count = count;
-		this.productTypeName = productTypeName;
+		this.assetTypeName = assetTypeName;
 		this.inspectionTypeGroupName = inspectionTypeGroupName;
 		this.inspectionTypeGroupId = inspectionTypeGroupId;
 	}
@@ -29,12 +28,12 @@ public class AggregateReportRecord {
 		this.count = count;
 	}
 	
-	public String getProductTypeName() {
-		return productTypeName;
+	public String getAssetTypeName() {
+		return assetTypeName;
 	}
 	
-	public void setProductTypeName( String productTypeName ) {
-		this.productTypeName = productTypeName;
+	public void setAssetTypeName( String assetTypeName) {
+		this.assetTypeName = assetTypeName;
 	}
 	
 	public String getInspectionTypeGroupName() {

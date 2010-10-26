@@ -2,7 +2,7 @@ package com.n4systems.handlers.remover.summary;
 
 public class AssociatedInspectionTypeDeleteSummary extends RemovalSummary {
 	
-	private Long removeFromProductTypes;
+	private Long removeFromAssetTypes;
 	private Long deleteInspectionFrequencies;
 	private Long deleteNonCompletedInspection;
 
@@ -10,8 +10,8 @@ public class AssociatedInspectionTypeDeleteSummary extends RemovalSummary {
 		this(0L, 0L, 0L);
 	}
 	
-	public AssociatedInspectionTypeDeleteSummary(Long removeFromProductTypes, Long deleteInspectionFrequencies, Long deleteNonCompletedInspection) {
-		this.removeFromProductTypes = removeFromProductTypes;
+	public AssociatedInspectionTypeDeleteSummary(Long removeFromAssetTypes, Long deleteInspectionFrequencies, Long deleteNonCompletedInspection) {
+		this.removeFromAssetTypes = removeFromAssetTypes;
 		this.deleteInspectionFrequencies = deleteInspectionFrequencies;
 		this.deleteNonCompletedInspection = deleteNonCompletedInspection;
 	}
@@ -22,12 +22,12 @@ public class AssociatedInspectionTypeDeleteSummary extends RemovalSummary {
 		return true;
 	}
 	
-	public Long getRemoveFromProductTypes() {
-		return removeFromProductTypes;
+	public Long getRemoveFromAssetTypes() {
+		return removeFromAssetTypes;
 	}
 
-	public void setRemoveFromProductTypes(Long removeFromProductTypes) {
-		this.removeFromProductTypes = removeFromProductTypes;
+	public void setRemoveFromAssetTypes(Long removeFromAssetTypes) {
+		this.removeFromAssetTypes = removeFromAssetTypes;
 	}
 
 	public Long getDeleteInspectionFrequencies() {

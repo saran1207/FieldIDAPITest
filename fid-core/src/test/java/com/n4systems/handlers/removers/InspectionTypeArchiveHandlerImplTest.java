@@ -110,7 +110,7 @@ public class InspectionTypeArchiveHandlerImplTest extends TestUsesTransactionBas
 
 	
 	@Test
-	public void should_be_able_to_archive_inspection_type_tied_to_1_product_type() {
+	public void should_be_able_to_archive_inspection_type_tied_to_1_asset_type() {
 		InspectionType inspectionTypeToDelete = anInspectionType().build(); 
 		
 		InspectionListArchiveHandlerImp mockInspectionListDeleter = createMock(InspectionListArchiveHandlerImp.class);
@@ -145,7 +145,7 @@ public class InspectionTypeArchiveHandlerImplTest extends TestUsesTransactionBas
 	}
 	
 	@Test
-	public void should_be_to_archive_inspection_type_tied_to_1_product_type() {
+	public void should_be_to_archive_inspection_type_tied_to_1_asset_type() {
 		InspectionType inspectionTypeToDelete = anInspectionType().build(); 
 		
 		

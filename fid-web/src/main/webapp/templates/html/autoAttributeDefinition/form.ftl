@@ -20,7 +20,7 @@ ${action.setPageType('auto_attribute', 'definitions')!}
 		<#assign fieldPrefix='input' />
 		<#assign prefix='input'/>
 		<#assign useAutoAttributes=false/>
-		<#include "/templates/html/productCrud/_attributes.ftl" />
+		<#include "/templates/html/assetCrud/_attributes.ftl" />
 				
 	</div>
 	<div style="margin:20px;" >
@@ -33,7 +33,7 @@ ${action.setPageType('auto_attribute', 'definitions')!}
 		<#assign fieldPrefix= 'output' />
 		<#assign prefix= 'output' />
 		<#assign useAutoAttributes=false/>
-		<#include "/templates/html/productCrud/_attributes.ftl" />
+		<#include "/templates/html/assetCrud/_attributes.ftl" />
 	</div>
 	
 	<div class="actions">

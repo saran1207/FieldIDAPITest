@@ -2,20 +2,20 @@ package com.n4systems.services.safetyNetwork.catalog.summary;
 
 public class CatalogImportSummary {
 
-	private ProductTypeGroupImportSummary productTypeGroupImportSummary = new ProductTypeGroupImportSummary();
-	private ProductTypeImportSummary productTypeImportSummary = new ProductTypeImportSummary();
+	private AssetTypeGroupImportSummary assetTypeGroupImportSummary = new AssetTypeGroupImportSummary();
+	private AssetTypeImportSummary assetTypeImportSummary = new AssetTypeImportSummary();
 	private InspectionTypeImportSummary inspectionTypeImportSummary = new InspectionTypeImportSummary();
 	private InspectionTypeGroupImportSummary inspectionTypeGroupImportSummary = new InspectionTypeGroupImportSummary();
 	private StateSetImportSummary stateSetImportSummary = new StateSetImportSummary();
 	private ProductTypeRelationshipsImportSummary productTypeRelationshipsImportSummary = new ProductTypeRelationshipsImportSummary();
 	
 		
-	public ProductTypeImportSummary getProductTypeImportSummary() {
-		return productTypeImportSummary;
+	public AssetTypeImportSummary getAssetTypeImportSummary() {
+		return assetTypeImportSummary;
 	}
 	
-	public void setProductTypeImportSummary(ProductTypeImportSummary productTypeImportSummary) {
-		this.productTypeImportSummary = productTypeImportSummary;
+	public void setAssetTypeImportSummary(AssetTypeImportSummary assetTypeImportSummary) {
+		this.assetTypeImportSummary = assetTypeImportSummary;
 	}
 
 	public InspectionTypeImportSummary getInspectionTypeImportSummary() {
@@ -42,12 +42,12 @@ public class CatalogImportSummary {
 		this.stateSetImportSummary = stateSetImportSummary;
 	}
 
-	public ProductTypeGroupImportSummary getProductTypeGroupImportSummary() {
-		return productTypeGroupImportSummary;
+	public AssetTypeGroupImportSummary getAssetTypeGroupImportSummary() {
+		return assetTypeGroupImportSummary;
 	}
 
-	public void setProductTypeGroupImportSummary(ProductTypeGroupImportSummary productTypeGroupImportSummary) {
-		this.productTypeGroupImportSummary = productTypeGroupImportSummary;
+	public void setAssetTypeGroupImportSummary(AssetTypeGroupImportSummary assetTypeGroupImportSummary) {
+		this.assetTypeGroupImportSummary = assetTypeGroupImportSummary;
 	}
 
 	public ProductTypeRelationshipsImportSummary getProductTypeRelationshipsImportSummary() {

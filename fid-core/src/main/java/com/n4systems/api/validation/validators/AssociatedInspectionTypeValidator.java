@@ -10,7 +10,7 @@ import com.n4systems.model.security.SecurityFilter;
 
 
 /*
- * NOTE: this validation should ALWAYS come after a NotNullValidator and ProductIdentifierValidator
+ * NOTE: this validation should ALWAYS come after a NotNullValidator and AssetIdentifierValidator
  */
 public class AssociatedInspectionTypeValidator extends InspectionViewValidator {
 
@@ -24,7 +24,7 @@ public class AssociatedInspectionTypeValidator extends InspectionViewValidator {
 		
 		SmartSearchLoader productLoader = createSmartSearchLoader(filter).setSearchText(identifier);
 		
-		// the ProductIdentifierValidator ensures the following is safe
+		// the AssetIdentifierValidator ensures the following is safe
 		Asset product = productLoader.load().get(0);
 		
 		AssociatedInspectionTypeExistsLoader assocLoader = createAssociatedInspectionTypeExistsLoader(filter);

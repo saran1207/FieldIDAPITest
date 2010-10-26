@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.util.Date;
 
+import com.n4systems.api.conversion.product.AssetToViewConverter;
+import com.n4systems.api.model.AssetView;
 import com.n4systems.model.Asset;
 import org.junit.Test;
 
@@ -15,8 +17,6 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.product.ProductToViewConverter;
-import com.n4systems.api.model.ProductView;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
@@ -27,7 +27,7 @@ import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.test.helpers.Asserts;
 
 public class ProductToViewConverterTest {
-	private ProductToViewConverter converter = new ProductToViewConverter();
+	private AssetToViewConverter converter = new AssetToViewConverter();
 	
 	private Asset createProduct() {
 		Asset model = anAsset().ofType(AssetTypeBuilder.anAssetType().build())
@@ -67,7 +67,7 @@ public class ProductToViewConverterTest {
 		
 		model.getOwner().getPrimaryOrg().setDateFormat("yyyy-MM-dd");
 		
-		ProductView view = converter.toView(model);
+		AssetView view = converter.toView(model);
 		
 		Asserts.assertMethodReturnValuesEqual(model, view, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
 
@@ -84,11 +84,11 @@ public class ProductToViewConverterTest {
 	}
 
 	@Test
-	public void test_to_view_handles_null_product_status() throws ConversionException {
+	public void test_to_view_handles_null_asset_status() throws ConversionException {
 		Asset model = createProduct();
 		model.setAssetStatus(null);
 			
-		ProductView view = converter.toView(model);
+		AssetView view = converter.toView(model);
 		
 		assertNull(view.getStatus());
 	}
@@ -98,7 +98,7 @@ public class ProductToViewConverterTest {
 		Asset model = createProduct();
 		model.setShopOrder(null);
 			
-		ProductView view = converter.toView(model);
+		AssetView view = converter.toView(model);
 		
 		assertNull(view.getShopOrder());
 	}
@@ -108,7 +108,7 @@ public class ProductToViewConverterTest {
 		Asset model = createProduct();
 		model.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.Integration);
 			
-		ProductView view = converter.toView(model);
+		AssetView view = converter.toView(model);
 		
 		assertNull(view.getShopOrder());
 	}

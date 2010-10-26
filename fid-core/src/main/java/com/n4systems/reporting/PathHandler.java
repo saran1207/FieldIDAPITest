@@ -16,7 +16,7 @@ import com.n4systems.model.State;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.product.AssetAttachment;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 
@@ -362,7 +362,7 @@ public class PathHandler {
 		return note.getId().toString();
 	}
 	
-	private static String getProductAttachmentPath(ProductAttachment pAttachment) {
+	private static String getProductAttachmentPath(AssetAttachment pAttachment) {
 		return pAttachment.getId().toString();
 	}
 
@@ -398,11 +398,11 @@ public class PathHandler {
 		return absolutize(getJobAttachmentBasePath(tenant));
 	}
 	
-	public static File getProductAttachmentDir(ProductAttachment attachment) {
+	public static File getProductAttachmentDir(AssetAttachment attachment) {
 		return absolutize(mergePaths(getProductAttachmentBasePath(attachment.getTenant()), getProductPath(attachment.getAsset()), getProductAttachmentPath(attachment)));
 	}
 	
-	public static File getProductAttachmentFile(ProductAttachment attachment) {
+	public static File getProductAttachmentFile(AssetAttachment attachment) {
 		return new File(getProductAttachmentDir(attachment), attachment.getFileName());
 	}
 	

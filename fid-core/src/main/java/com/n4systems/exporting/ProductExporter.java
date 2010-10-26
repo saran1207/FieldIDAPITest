@@ -1,31 +1,31 @@
 package com.n4systems.exporting;
 
 import com.n4systems.api.conversion.ModelToViewConverter;
-import com.n4systems.api.conversion.product.ProductToViewConverter;
-import com.n4systems.api.model.ProductView;
+import com.n4systems.api.conversion.product.AssetToViewConverter;
+import com.n4systems.api.model.AssetView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.model.Asset;
 import com.n4systems.persistence.loaders.ListLoader;
 
 public class ProductExporter implements Exporter {
-	private final ExportMapMarshaler<ProductView> marshaler;
+	private final ExportMapMarshaler<AssetView> marshaler;
 	private final ListLoader<Asset> productLoader;
-	private final ModelToViewConverter<Asset, ProductView> converter;
+	private final ModelToViewConverter<Asset, AssetView> converter;
 
-	public ProductExporter(ListLoader<Asset> productLoader, ExportMapMarshaler<ProductView> marshaler, ModelToViewConverter<Asset, ProductView> converter) {
+	public ProductExporter(ListLoader<Asset> productLoader, ExportMapMarshaler<AssetView> marshaler, ModelToViewConverter<Asset, AssetView> converter) {
 		this.productLoader = productLoader;
 		this.marshaler = marshaler;
 		this.converter = converter;
 	}
 	
 	public ProductExporter(ListLoader<Asset> productLoader) {
-		this(productLoader, new ExportMapMarshaler<ProductView>(ProductView.class), new ProductToViewConverter());
+		this(productLoader, new ExportMapMarshaler<AssetView>(AssetView.class), new AssetToViewConverter());
 	}
 
 	@Override
 	public void export(MapWriter mapWriter) throws ExportException {
-		ProductView view;
+		AssetView view;
 		
 		for (Asset product: productLoader.load()) {
 			try {

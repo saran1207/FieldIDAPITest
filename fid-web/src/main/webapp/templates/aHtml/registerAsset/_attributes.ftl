@@ -1,4 +1,4 @@
-<#-- /templates/html/productCrud also contains a version of this template -->
+<#-- /templates/html/assetCrud also contains a version of this template -->
 <#if !useAutoAttributes?exists>
 	<#assign useAutoAttributes=true />
 </#if>
@@ -8,7 +8,7 @@
 <#if !requires?exists>
 	<#assign requires=true>
 </#if>
-<#if productInfoFields?exists >
+<#if assetInfoFields?exists >
 	<#if useAutoAttributes?exists && useAutoAttributes == true >
 		<#assign changeFunction="updateAttributes(this);" />
 	
@@ -16,14 +16,14 @@
 		<#assign changeFunction="" />
 	</#if>
 	
-	<@s.iterator value="productInfoFields" id="infoField" status="stat" >
+	<@s.iterator value="assetInfoFields" id="infoField" status="stat" >
 		<#if requires && infoField.required  >
 			<#assign requiredClass='requiredField'/>
 		<#else>
 			<#assign requiredClass=''/>
 		</#if>
 		
-		<@s.if test="productInfoOptions[${stat.index}].name == null" >
+		<@s.if test="assetInfoOptions[${stat.index}].name == null" >
 			<#assign infoOptionIsNull=true>
 		</@s.if>
 		<@s.else>
@@ -32,19 +32,19 @@
 		
 		<#if !infoField.retired || infoOptionIsNull == false>
 			<div class="infoSet" infoFieldName="${infoField.name?j_string}">		
-				<@s.hidden name="productInfoOptions[${stat.index}].infoFieldId"  value="${infoField.uniqueID}"/>
+				<@s.hidden name="assetInfoOptions[${stat.index}].infoFieldId"  value="${infoField.uniqueID}"/>
 				
 				<#if infoField.retired >
 					<label class="label">${infoField.name?html} (<@s.text name="label.retired"/>)</label>
 					<span id="${infoField.uniqueID}" class="attribute fieldHolder" >
-						<@s.label id="${infoField.uniqueID}" cssClass="attribute ${requiredClass}" name="productInfoOptions[${stat.index}].name" />
-						<@s.hidden name="productInfoOptions[${stat.index}].name" />
-						<@s.hidden name="productInfoOptions[${stat.index}].uniqueIDString" /> 
+						<@s.label id="${infoField.uniqueID}" cssClass="attribute ${requiredClass}" name="assetInfoOptions[${stat.index}].name" />
+						<@s.hidden name="assetInfoOptions[${stat.index}].name" />
+						<@s.hidden name="assetInfoOptions[${stat.index}].uniqueIDString" /> 
 					</span>
 				<#else>
 					<label class="label">${infoField.name?html} <#if  requires == true && infoField.required ><#include "/templates/html/common/_requiredMarker.ftl"/></#if> </label>	
 					<#if infoField.fieldType == "selectbox" || infoField.fieldType == "combobox" >
-						<@s.select cssClass="attribute ${requiredClass}"  list="%{ getComboBoxInfoOptions( productInfoFields[${stat.index}], productInfoOptions[${stat.index}] ) }" listKey="id" listValue="name" name="productInfoOptions[${stat.index}].uniqueIDString" id="${infoField.uniqueID}" theme="fieldid" >
+						<@s.select cssClass="attribute ${requiredClass}"  list="%{ getComboBoxInfoOptions( assetInfoFields[${stat.index}], assetInfoOptions[${stat.index}] ) }" listKey="id" listValue="name" name="assetInfoOptions[${stat.index}].uniqueIDString" id="${infoField.uniqueID}" theme="fieldid" >
 							<#if autoAttributeInputFields?exists && autoAttributeInputFields.contains( infoField ) >
 							 	<@s.param name="onchange">${changeFunction}</@s.param>
 							</#if>  
@@ -59,18 +59,18 @@
 						<#if infoField.fieldType == "combobox" && ( !noComboBox?exists || noComboBox == false ) >
 								
 					        <script type="text/javascript">
-					         	new toCombo('productInfoOptions[${stat.index}].uniqueIDString');
+					         	new toCombo('assetInfoOptions[${stat.index}].uniqueIDString');
 					        </script>
 				       	</#if>
 				      
 					</#if>
 					<#if infoField.fieldType == "textfield" >
 					  	<#if !infoField.usingUnitOfMeasure >
-						  	<@s.textfield id="${infoField.uniqueID}" cssClass="attribute  ${requiredClass}"  name="productInfoOptions[${stat.index}].name"   theme="fieldid"/>
+						  	<@s.textfield id="${infoField.uniqueID}" cssClass="attribute  ${requiredClass}"  name="assetInfoOptions[${stat.index}].name"   theme="fieldid"/>
 						<#else>
 							<div class="fieldHolder">
 						  		<span class="unitOfMeasure">
-						  			<@s.textfield id="${infoField.uniqueID}" name="productInfoOptions[${stat.index}].name" theme="fieldidSimple" cssClass="dataEntry attribute unitOfMeasure  ${requiredClass}" readonly="true" />
+						  			<@s.textfield id="${infoField.uniqueID}" name="assetInfoOptions[${stat.index}].name" theme="fieldidSimple" cssClass="dataEntry attribute unitOfMeasure  ${requiredClass}" readonly="true" />
 						  		</span>
 						  		<span class="action">
 							  		<a href="javascript: void(0);" id="unitOfMeasureSelector_${infoField.uniqueID}" class="editLink" onclick="$('unitSelectorDiv_${infoField.uniqueID}').toggle('normal'); if( $('unitSelectorDiv_${infoField.uniqueID}').visible() ) { loadUnitOfMeasure('${infoField.uniqueID}', ${ (infoField.unitOfMeasure.id)!"null" } ); }">

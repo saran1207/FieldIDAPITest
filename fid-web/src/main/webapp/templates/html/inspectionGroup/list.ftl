@@ -1,13 +1,13 @@
 <head>
 	<@n4.includeStyle type="page" href="inspection" />
 </head>
-${action.setPageType('inspection', 'select_product')!}
+${action.setPageType('inspection', 'select_asset')!}
 
 <#include "_inspectionSearchForm.ftl"/>
 
 
 <#assign actionTarget="inspectionGroups"/>
-<#include "_productList.ftl"/>
+<#include "_assetList.ftl"/>
 <script type="text/javascript">
 	$$('.assetLink').each(function(element) {
 			element.observe('click', goToAssetListener);

@@ -37,7 +37,7 @@ public interface LegacyProductSerial {
 	
 	
 	/**
-	 * @deprecated use ProductSerialExtensionListLoader
+	 * @deprecated use AssetSerialExtensionListLoader
 	 */
 	public Collection<AssetSerialExtension> getAssetSerialExtensions(Long tenantId);
 		

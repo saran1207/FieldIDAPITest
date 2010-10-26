@@ -42,7 +42,7 @@ public abstract class NotificationSettingInspectionScheduleCountListLoader exten
 	}
 
 	protected void applyGroupings(QueryBuilder<InspectionScheduleCount> builder) {
-		// the aggregate queries are grouped: next_inspection_date, (customer, division) or (jobsite),  product_type, inspection_type
+		// the aggregate queries are grouped: next_inspection_date, (customer, division) or (jobsite),  asset_type, inspection_type
 		builder.addGroupBy("nextDate");
 		builder.addGroupBy("owner");
 		builder.addGroupBy("asset.type.name", "inspectionType.name");

@@ -39,7 +39,7 @@
 		
 		var asset = null;
 		<#list assets as asset>
-			<#include "/templates/html/productCrud/_js_product.ftl"/>
+			<#include "/templates/html/assetCrud/_js_asset.ftl"/>
 			assets.push(asset);
 		</#list>
 	</@n4.includeScript>

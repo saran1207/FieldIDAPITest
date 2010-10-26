@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.product.AssetAttachment;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
@@ -38,7 +38,7 @@ private ConfigContext oldContext;
 		Asset asset = anAsset().build();
 		asset.setCreated(DateHelper.string2Date("yyyy-MM-dd h:mm a", "2009-06-01 12:01 pm"));
 		asset.setId(2L);
-		ProductAttachment attachment = new ProductAttachment();
+		AssetAttachment attachment = new AssetAttachment();
 		attachment.setId(1L);
 		attachment.setAsset(asset);
 		attachment.setTenant(asset.getTenant());

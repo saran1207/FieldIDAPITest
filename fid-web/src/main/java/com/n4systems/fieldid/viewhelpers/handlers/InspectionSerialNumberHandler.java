@@ -18,7 +18,7 @@ public class InspectionSerialNumberHandler extends WebOutputHandler {
 		// build the asset info link for local products, just show the serial for network products
 		String serialNumber;
 		if (level.isLocal()) { 
-			serialNumber = String.format("<a href='product.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getSerialNumber());
+			serialNumber = String.format("<a href='asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getSerialNumber());
 		} else {
 			serialNumber = asset.getSerialNumber();
 		}

@@ -9,12 +9,12 @@ import com.n4systems.model.AssetType;
 public interface AssetCodeMappingService {
 	
 	
-	public List<AssetCodeMapping> getAllProductCodesByTenant( Long manufacturer );
+	public List<AssetCodeMapping> getAllAssetCodesByTenant( Long manufacturer );
 
 	
-	public AssetCodeMapping getProductCodeByUniqueIdAndTenant(Long id, Long manufacturer );
+	public AssetCodeMapping getAssetCodeByUniqueIdAndTenant(Long id, Long manufacturer );
 	
-	public AssetCodeMapping getProductCodeByProductCodeAndTenant(String productCode, Long manufacturer );
+	public AssetCodeMapping getAssetCodeByProductCodeAndTenant(String productCode, Long manufacturer );
 
 	public void update(AssetCodeMapping assetCodeMapping);
 	

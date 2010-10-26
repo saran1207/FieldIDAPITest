@@ -49,7 +49,7 @@ public class CommonAssetValuesTest {
 	}
 	
 	@Test
-	public void should_create_a_common_values_with_the_product_status_on_the_asset() throws Exception {
+	public void should_create_a_common_values_with_the_asset_status_on_the_asset() throws Exception {
 		AssetStatus assetStatus = new AssetStatus();
 		assetStatus.setUniqueID(1L);
 		Asset asset = anAsset().havingStatus(assetStatus).build();

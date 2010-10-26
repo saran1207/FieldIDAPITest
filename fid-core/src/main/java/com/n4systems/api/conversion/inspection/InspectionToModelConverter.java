@@ -109,8 +109,8 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 	}
 
 	protected void resolveProductStatus(InspectionView view, Inspection model, Transaction transaction) {
-		if (view.getProductStatus() != null) {
-			AssetStatus status = productStatusLoader.setName(view.getProductStatus()).load(transaction);
+		if (view.getAssetStatus() != null) {
+			AssetStatus status = productStatusLoader.setName(view.getAssetStatus()).load(transaction);
 			model.setAssetStatus(status);
 		}
 	}

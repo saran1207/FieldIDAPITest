@@ -9,22 +9,22 @@
 	</#list>
 	
 	<p>
-		<@s.text name="label.import_summary"><@s.param>${summary.productTypeImportSummary.importMapping.size()}</@s.param><@s.param>${summary.inspectionTypeImportSummary.importMapping.size()}</@s.param></@s.text>
+		<@s.text name="label.import_summary"><@s.param>${summary.assetTypeImportSummary.importMapping.size()}</@s.param><@s.param>${summary.inspectionTypeImportSummary.importMapping.size()}</@s.param></@s.text>
 	</p>
-	<#if summary.productTypeImportSummary.anyRenamed || summary.inspectionTypeImportSummary.anyRenamed>
+	<#if summary.assetTypeImportSummary.anyRenamed || summary.inspectionTypeImportSummary.anyRenamed>
 		<p>
-			<span class="attention"><@s.text name="label.important_warning"/>:</span> <@s.text name="warning.import_renaming"><@s.param>${summary.productTypeImportSummary.numberRenamed}</@s.param><@s.param>${summary.inspectionTypeImportSummary.numberRenamed}</@s.param></@s.text>
+			<span class="attention"><@s.text name="label.important_warning"/>:</span> <@s.text name="warning.import_renaming"><@s.param>${summary.assetTypeImportSummary.numberRenamed}</@s.param><@s.param>${summary.inspectionTypeImportSummary.numberRenamed}</@s.param></@s.text>
 			<a href="javascript:void(0);" onclick="$('renamedElements').toggle()" ><@s.text name="label.view_details"/></a>
 		</p>
 		<table id="renamedElements" style="display:none">
-			<#if summary.productTypeImportSummary.anyRenamed >
+			<#if summary.assetTypeImportSummary.anyRenamed >
 				<tr><th colspan="3"><@s.text name="label.asset_types"/></td></th>
 				<#list publishedAssetTypes as assetType>
-					<#if summary.productTypeImportSummary.importMapping.get(assetType.id)?exists && summary.productTypeImportSummary.isRenamed(assetType.id, assetType.name)>
+					<#if summary.assetTypeImportSummary.importMapping.get(assetType.id)?exists && summary.assetTypeImportSummary.isRenamed(assetType.id, assetType.name)>
 						<tr>
 							<td>${assetType.name?html}</td>
 							<td><@s.text name="label.will_be_named"/></td>
-							<td>${summary.productTypeImportSummary.importMapping.get(assetType.id).name?html}</td>
+							<td>${summary.assetTypeImportSummary.importMapping.get(assetType.id).name?html}</td>
 						</tr>
 					</#if> 
 				</#list>

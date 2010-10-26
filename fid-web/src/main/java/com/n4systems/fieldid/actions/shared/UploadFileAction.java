@@ -109,9 +109,9 @@ public class UploadFileAction extends AbstractAction {
 	public Long fileSizeLimitInKB() {
 		ConfigEntry fileSizeLimit = ConfigEntry.UPLOAD_FILE_SIZE_LIMIT_DEFAULT_IN_KB;
 		if (typeOfUpload != null) {
-			if ("productAttachment".equals(typeOfUpload)) {
+			if ("assetAttachment".equals(typeOfUpload)) {
 				fileSizeLimit = ConfigEntry.UPLOAD_FILE_SIZE_LIMIT_PRODUCT_ATTACHMENT_IN_KB;
-			} else if ("productTypeImage".equals(typeOfUpload)) {
+			} else if ("assetTypeImage".equals(typeOfUpload)) {
 				fileSizeLimit = ConfigEntry.UPLOAD_FILE_SIZE_LIMIT_PRODUCT_TYPE_IMAGE_IN_KB;
 			} 
 		}

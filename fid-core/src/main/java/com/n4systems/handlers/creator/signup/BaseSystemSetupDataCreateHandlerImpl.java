@@ -1,5 +1,6 @@
 package com.n4systems.handlers.creator.signup;
 
+import com.n4systems.model.producttype.AssetTypeSaver;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;
@@ -12,26 +13,24 @@ import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.productstatus.ProductStatusSaver;
-import com.n4systems.model.producttype.ProductTypeSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 import com.n4systems.persistence.Transaction;
 
 public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupDataCreateHandler {
-	private static final String[] DEFAULT_PRODUCT_STATUS_NAMES = {"In Service", "Out of Service", "In for Repair", "In need of Repair", "Destroyed"};
+	private static final String[] DEFAULT_ASSET_STATUS_NAMES = {"In Service", "Out of Service", "In for Repair", "In need of Repair", "Destroyed"};
 	
 	private final TagOptionSaver tagSaver;
-	private final ProductTypeSaver productTypeSaver;
+	private final AssetTypeSaver assetTypeSaver;
 	private final InspectionTypeGroupSaver inspectionTypeGroupSaver;
 	private final StateSetSaver stateSetSaver;
 	private final ProductStatusSaver productStatusSaver;
 	
 	private Tenant tenant;
 
-	public BaseSystemSetupDataCreateHandlerImpl(TagOptionSaver tagSaver, ProductTypeSaver productTypeSaver, InspectionTypeGroupSaver inspectionTypeGroupSaver, StateSetSaver stateSetSaver, ProductStatusSaver productStatusSaver) {
-		super();
+	public BaseSystemSetupDataCreateHandlerImpl(TagOptionSaver tagSaver, AssetTypeSaver assetTypeSaver, InspectionTypeGroupSaver inspectionTypeGroupSaver, StateSetSaver stateSetSaver, ProductStatusSaver productStatusSaver) {
 		this.tagSaver = tagSaver;
-		this.productTypeSaver = productTypeSaver;
+		this.assetTypeSaver = assetTypeSaver;
 		this.inspectionTypeGroupSaver = inspectionTypeGroupSaver;
 		this.stateSetSaver = stateSetSaver;
 		this.productStatusSaver = productStatusSaver;
@@ -54,7 +53,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 	}
 	
 	private void createDefaultProductStatuses(Transaction transaction) {
-		for (String psName: DEFAULT_PRODUCT_STATUS_NAMES) {
+		for (String psName: DEFAULT_ASSET_STATUS_NAMES) {
 			createProductStatus(transaction, psName);
 		}
 	}
@@ -79,7 +78,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		AssetType assetType = new AssetType();
 		assetType.setTenant(tenant);
 		assetType.setName("*");
-		productTypeSaver.save(transaction, assetType);
+		assetTypeSaver.save(transaction, assetType);
 	}
 
 	private void createDefaultInspectionTypeGroups(Transaction transaction) {

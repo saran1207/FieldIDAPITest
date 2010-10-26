@@ -23,7 +23,7 @@ public class InspectionRfidNumberHandler extends WebOutputHandler {
 		// build the asset info link for local products, just show the serial for network products
 		String rfidNumber;
 		if (level.isLocal()) { 
-			rfidNumber = String.format("<a href='product.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getRfidNumber());
+			rfidNumber = String.format("<a href='asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getRfidNumber());
 		} else {
 			rfidNumber = asset.getRfidNumber();
 		}

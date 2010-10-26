@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -14,7 +15,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.helpers.MassUpdateInspectionHelper;
-import com.n4systems.fieldid.actions.product.LocationWebModel;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
@@ -37,7 +37,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 
 	private OwnerPicker ownerPicker;
 	
-	private final LocationWebModel location = new LocationWebModel(this); 
+	private final LocationWebModel location = new LocationWebModel(this);
 
 	
 	public InspectionMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager, LegacyProductSerial productSerialManager) {

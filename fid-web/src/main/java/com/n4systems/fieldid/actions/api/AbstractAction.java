@@ -7,16 +7,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import rfid.ejb.entity.FindProductOptionManufactureBean;
+import rfid.ejb.entity.FindAssetOptionManufacture;
 import rfid.web.helper.SessionUser;
 
 import com.google.gson.Gson;
-import com.n4systems.caching.Cache;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.ExtendedTextProviderAction;
 import com.n4systems.fieldid.actions.downloaders.DownloadLinkAction;
@@ -50,7 +48,6 @@ import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.FieldidDateFormatter;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.time.SystemClock;
@@ -69,7 +66,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	
 	private Collection<String> flashMessages = new ArrayList<String>();
 	private Collection<String> flashErrors = new ArrayList<String>();
-	private Collection<FindProductOptionManufactureBean> searchOptions;
+	private Collection<FindAssetOptionManufacture> searchOptions;
 	private LoaderFactory loaderFactory;
 	private SaverFactory saverFactory;
 	private Gson json;
@@ -256,10 +253,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return new FieldidDateFormatter(date, getSessionUser(), convertTimeZone, showTime).format();
 	}
 	
-	public Collection<FindProductOptionManufactureBean> getSearchOptions() {
+	public Collection<FindAssetOptionManufacture> getSearchOptions() {
 		if( searchOptions == null ) {
 			try {
-				searchOptions = ServiceLocator.getOption().getFindProductOptionsForTenant( getTenantId() );
+				searchOptions = ServiceLocator.getOption().getFindAssetOptionsForTenant( getTenantId() );
 			} catch (Exception e) {
 				// eat the exception.
 			}

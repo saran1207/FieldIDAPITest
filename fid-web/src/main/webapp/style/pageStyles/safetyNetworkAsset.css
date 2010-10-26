@@ -1,0 +1,112 @@
+div.registerThisNow {
+    background:  url("../../images/blue-arrow-sn.png") no-repeat scroll 1em 1em #EDEDED;
+    padding: 0.5em 0 1em 2.8em;
+    width: 100%;
+}
+
+.registerThisNow a {
+    font-size: 1.2em;
+    color: #556DA5;
+}
+
+.registerThisNow p {
+    padding: 0 15px;
+    font-size: 11px;
+}
+
+table.assetInformation {
+	width: 100%;
+	border-spacing: 2px 2px;
+    border-collapse: collapse;
+}
+
+table.assetInformation td {
+    padding: 5px 5px 5px 2px;
+    empty-cells: show;
+	border-bottom: 1px solid #CCCCCC;
+    width: 50%;
+}
+
+.assetInformation th a,.assetInformation th a:visited,.assetInformation th a:hover {
+	color: #333333
+}
+
+table.assetInformation td.value {
+    color: #0000CC;
+}
+
+div.assetInformationSection {
+    font-size: 1.1em;
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid #CCCCCC;
+    margin: 20px 0 0 2px;
+    padding-bottom: 5px;
+}
+
+div.leftAsset {
+    display: block;
+    float: left;
+    width: 450px;
+}
+
+div.rightAsset {
+    display: block;
+    float: left;
+}
+
+img.additionalInfoImage {
+    display:block;
+    margin: auto;
+    padding-top: 7px;
+}
+
+div.attachmentThumb {
+    border: 1px solid #DDDDDD;
+    display: block;
+    float: left;
+    height: 80px;
+    line-height: 20px;
+    width: 80px;
+}
+
+div.attachmentText {
+    display: block;
+    float: left;
+    padding: 10px;
+    font-size: 1.1em;
+    color: #888888;
+}
+
+div.fileUploadShow {
+    display: block;
+    float: left;
+    width: 100%;
+    padding-top: 10px;
+}
+
+div.attachmentText a {
+    color: #5fa3d9;
+}
+
+div.assetInfoText {
+    padding-top: 5px;
+    color: #888888;
+    font-size: 1.1em;
+}
+
+a.backToResults {
+    text-decoration: none;
+}
+
+div.moreFromTheWeb {
+    display: block;
+    float: right;
+}
+
+div.moreFromTheWeb a {
+    color: #5fa3d9;
+    font-size: 1em;
+    font-weight:normal;
+}

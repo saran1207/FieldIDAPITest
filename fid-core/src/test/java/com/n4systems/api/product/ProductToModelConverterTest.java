@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import com.n4systems.api.conversion.product.AssetToModelConverter;
+import com.n4systems.api.model.AssetView;
 import com.n4systems.model.Asset;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import org.junit.Before;
@@ -19,8 +21,6 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.product.ProductToModelConverter;
-import com.n4systems.api.model.ProductView;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.AssetType;
@@ -68,7 +68,7 @@ public class ProductToModelConverterTest {
 	AssetType type;
 	
 	@Before
-	public void setup_product_type() {
+	public void setup_asset_type() {
 		InfoFieldBean[] fields = {
 				InfoFieldBeanBuilder.aComboBox().named("combo").build(),
 				InfoFieldBeanBuilder.aComboBox().named("select").build(),
@@ -90,11 +90,11 @@ public class ProductToModelConverterTest {
 	
 	@Test
 	public void to_model_uses_now_when_date_is_null() throws ConversionException {
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
-		ProductView view = createView(null, null);
+		AssetView view = createView(null, null);
 		view.setIdentified(null);
 		
 		Asset model =  converter.toModel(view, null);
@@ -106,10 +106,10 @@ public class ProductToModelConverterTest {
 	public void to_model_resolves_owner_and_uses_tenant() throws ConversionException {
 		Transaction trans = new DummyTransaction();
 		CustomerOrg resolvedOrg = OrgBuilder.aCustomerOrg().buildCustomer();
-		ProductView view = createView(null, null);
+		AssetView view = createView(null, null);
 		
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
-		ProductToModelConverter converter = new ProductToModelConverter(orgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(orgLoader, null, null, dummyOptionConverter);
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -128,12 +128,12 @@ public class ProductToModelConverterTest {
 	
 	@Test
 	public void to_model_creates_order_when_not_null() throws ConversionException {
-		ProductView view = createView("on1234", null);
+		AssetView view = createView("on1234", null);
 		LineItem line = new LineItem();
 		Tenant tenant = dummyOrgLoader.load(null).getTenant();
 
 		NonIntegrationOrderManager orgLoader = createMock(NonIntegrationOrderManager.class);
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, orgLoader, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, orgLoader, null, dummyOptionConverter);
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -150,24 +150,24 @@ public class ProductToModelConverterTest {
 		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().getExtendedFeatures().add(ExtendedFeature.Integration);
 		
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
-		ProductView view = createView("12345", null);
+		AssetView view = createView("12345", null);
 		Asset model =  converter.toModel(view, null);
 		
 		assertNull(model.getShopOrder());
 	}
 	
 	@Test
-	public void to_model_product_status_when_not_null() throws ConversionException {
-		ProductView view = createView(null, "in service");
+	public void to_model_asset_status_when_not_null() throws ConversionException {
+		AssetView view = createView(null, "in service");
 		AssetStatus status = new AssetStatus();
 		
 		Transaction trans = new DummyTransaction();
 		ProductStatusByNameLoader psLoader = createMock(ProductStatusByNameLoader.class);
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, psLoader, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, psLoader, dummyOptionConverter);
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -184,7 +184,7 @@ public class ProductToModelConverterTest {
 	public void to_model_sets_identified_by_and_type() throws ConversionException {
 		User identifiedBy = createIdentifiedBy();
 		
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
@@ -199,7 +199,7 @@ public class ProductToModelConverterTest {
 		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(true);
 		
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
@@ -213,7 +213,7 @@ public class ProductToModelConverterTest {
 		User identifiedBy = createIdentifiedBy();
 		identifiedBy.getOwner().getPrimaryOrg().setAutoPublish(false);
 		
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		
@@ -224,11 +224,11 @@ public class ProductToModelConverterTest {
 	
 	@Test
 	public void to_model_copies_non_resolved_properties() throws ConversionException {
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		converter.setType(type);
 		
-		ProductView view = createView(null, null);
+		AssetView view = createView(null, null);
 		Asset model =  converter.toModel(view, null);
 		
 		Asserts.assertMethodReturnValuesEqual(view, model, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
@@ -237,11 +237,11 @@ public class ProductToModelConverterTest {
 	@Test
 	public void test_converts_info_options() throws ConversionException, InfoOptionConversionException {
 		InfoOptionMapConverter mapConverter = createMock(InfoOptionMapConverter.class);
-		ProductView view = createView(null, null);
+		AssetView view = createView(null, null);
 		
 		List<InfoOptionBean> options = Arrays.asList(InfoOptionBeanBuilder.aDynamicInfoOption().withName("test").build());
 		
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, mapConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, mapConverter);
 		converter.setType(type);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		
@@ -257,11 +257,11 @@ public class ProductToModelConverterTest {
 	
 	@Test(expected=ConversionException.class)
 	public void to_model_throws_exception_when_identified_is_not_a_date() throws ConversionException {
-		ProductToModelConverter converter = new ProductToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
+		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, null, null, dummyOptionConverter);
 		converter.setIdentifiedBy(createIdentifiedBy());
 		converter.setType(type);
 		
-		ProductView view = createView(null, null);
+		AssetView view = createView(null, null);
 		view.setIdentified("bad date");
 		
 		converter.toModel(view, null);
@@ -275,8 +275,8 @@ public class ProductToModelConverterTest {
 		return user;
 	}
 	
-	private ProductView createView(String shopOrder, String status) {
-		ProductView view = new ProductView(); 
+	private AssetView createView(String shopOrder, String status) {
+		AssetView view = new AssetView();
 		view.setOrganization("My Org");
 		view.setCustomer("My Customer");
 		view.setDivision("My Division");

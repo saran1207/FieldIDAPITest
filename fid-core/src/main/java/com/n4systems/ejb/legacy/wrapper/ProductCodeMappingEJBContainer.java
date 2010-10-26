@@ -53,11 +53,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public List<AssetCodeMapping> getAllProductCodesByTenant(Long manufacturer) {
+	public List<AssetCodeMapping> getAllAssetCodesByTenant(Long manufacturer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getAllProductCodesByTenant(manufacturer);
+			return createManager(transaction.getEntityManager()).getAllAssetCodesByTenant(manufacturer);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -68,11 +68,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public AssetCodeMapping getProductCodeByProductCodeAndTenant(String productCode, Long manufacturer) {
+	public AssetCodeMapping getAssetCodeByProductCodeAndTenant(String productCode, Long manufacturer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getProductCodeByProductCodeAndTenant(productCode, manufacturer);
+			return createManager(transaction.getEntityManager()).getAssetCodeByProductCodeAndTenant(productCode, manufacturer);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -84,11 +84,11 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
 	
-	public AssetCodeMapping getProductCodeByUniqueIdAndTenant(Long id, Long manufacturer) {
+	public AssetCodeMapping getAssetCodeByUniqueIdAndTenant(Long id, Long manufacturer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getProductCodeByUniqueIdAndTenant(id, manufacturer);
+			return createManager(transaction.getEntityManager()).getAssetCodeByUniqueIdAndTenant(id, manufacturer);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

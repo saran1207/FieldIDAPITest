@@ -21,7 +21,7 @@ public class SafetyNetworkInspectionSchedule extends InspectionScheduleCrud{
 	@SkipValidation
 	@UserPermissionFilter(open=true)
 	public String doList() {
-		setPageType("network_product", "inspection_schedules");
+		setPageType("network_asset", "inspection_schedules");
 		testRequiredEntities(false, false);
 		return SUCCESS;
 	}

@@ -52,7 +52,7 @@ public class CommonInspectionTypeHandlerTest {
 	}
 
 	@Test
-	public void should_load_product_types_from_the_product_type_id_looder() throws Exception {
+	public void should_load_asset_types_from_the_asset_type_id_looder() throws Exception {
 		ImmutableList<Long> assetIds = ImmutableList.of(1L);
 
 		CommonProductTypeLoader productTypeIdLoader = createMock(CommonProductTypeLoader.class);
@@ -86,7 +86,7 @@ public class CommonInspectionTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_an_empty_list_of_inspection_types_when_there_is_one_product_type_with_no_associated_inspection_types() throws Exception {
+	public void should_return_an_empty_list_of_inspection_types_when_there_is_one_asset_type_with_no_associated_inspection_types() throws Exception {
 
 		AssetType assetType = AssetTypeBuilder.anAssetType().build();
 
@@ -99,7 +99,7 @@ public class CommonInspectionTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_entire_inspection_type_list_given_one_product_type_with_many_inspection_types() {
+	public void should_return_entire_inspection_type_list_given_one_asset_type_with_many_inspection_types() {
 
 		InspectionType inspectionType = InspectionTypeBuilder.anInspectionType().build();
 		InspectionType inspectionType2 = InspectionTypeBuilder.anInspectionType().build();
@@ -114,7 +114,7 @@ public class CommonInspectionTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_common_inspection_types_of_two_or_more_product_types() {
+	public void should_return_common_inspection_types_of_two_or_more_asset_types() {
 
 		InspectionType inspectionType = InspectionTypeBuilder.anInspectionType().build();
 		InspectionType inspectionType2 = InspectionTypeBuilder.anInspectionType().build();
@@ -130,7 +130,7 @@ public class CommonInspectionTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_empty_set_from_multiple_product_types_with_no_common_inspections() {
+	public void should_return_empty_set_from_multiple_asset_types_with_no_common_inspections() {
 
 		InspectionType inspectionType = InspectionTypeBuilder.anInspectionType().build();
 		InspectionType inspectionType2 = InspectionTypeBuilder.anInspectionType().build();
@@ -145,7 +145,7 @@ public class CommonInspectionTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_empty_set_given_no_product_types() {
+	public void should_return_empty_set_given_no_asset_types() {
 		CommonInspectionTypeHandler sut = new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeIdLoaderTestDouble(new ArrayList<AssetType>()));
 		
 		Set<InspectionType> returnSet = sut.findCommonInspectionTypesFor(ImmutableList.of(1L));

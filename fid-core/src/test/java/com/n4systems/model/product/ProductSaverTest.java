@@ -90,7 +90,7 @@ public class ProductSaverTest {
 		
 		final List<Asset> linkedAssets = Arrays.asList(AssetBuilder.anAsset().build(), AssetBuilder.anAsset().build(), AssetBuilder.anAsset().build());
 		
-		RecursiveLinkedChildProductLoader loader = new RecursiveLinkedChildProductLoader() {
+		RecursiveLinkedChildAssetLoader loader = new RecursiveLinkedChildAssetLoader() {
 			@Override
 			protected List<Asset> load(EntityManager em) {
 				return linkedAssets;

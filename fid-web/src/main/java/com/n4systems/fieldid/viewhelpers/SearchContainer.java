@@ -25,7 +25,7 @@ import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.SimpleTermOrNull;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
 
-abstract public class SearchContainer implements BaseSearchDefiner, Serializable, ProductTypeFilteredSearchContainer, LoaderFactoryProvider {
+abstract public class SearchContainer implements BaseSearchDefiner, Serializable, AssetTypeFilteredSearchContainer, LoaderFactoryProvider {
 	private static final String STRUTS_VALUE_WHEN_YOU_SELECT_NO_VALUES_FROM_CHECKBOXES = "false";
 
 	private static final long serialVersionUID = 1L;

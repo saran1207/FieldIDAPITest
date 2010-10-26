@@ -74,7 +74,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
-import com.n4systems.model.product.ProductByMobileGuidLoader;
+import com.n4systems.model.product.AssetByMobileGuidLoader;
 import com.n4systems.model.product.SmartSearchLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
@@ -723,7 +723,7 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			InspectionSchedule inspectionSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
 
-			new InspectionScheduleCreateHandler(new ProductByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())), 
+			new InspectionScheduleCreateHandler(new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())),
 					new FilteredIdLoader<Asset>(new TenantOnlySecurityFilter(request.getTenantId()), Asset.class),
 					new FilteredIdLoader<InspectionType>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionType.class),
 					new InspectionScheduleSaver()).createNewInspectionSchedule(inspectionSchedule, request.getScheduleService());

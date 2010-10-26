@@ -48,23 +48,23 @@ public class UnregisteredAssetQueryHelper {
 		subSelect.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "tenant.id", customer.getTenant().getId()));
 		subSelect.addWhere(whereClause);
 
-		SubSelectNotExistsClause subClause = new SubSelectNotExistsClause("linkedProductSubClause", subSelect);
+		SubSelectNotExistsClause subClause = new SubSelectNotExistsClause("linkedAssetSubClause", subSelect);
 		builder.addWhere(subClause);
 
 		QueryBuilder<Asset> subSelect1 = new QueryBuilder<Asset>(SubAsset.class, new OpenSecurityFilter());
 		WhereParameter<String> whereClause1 = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerAsset", "asset", "IGNORED");
-		whereClause1.setKey("noProductWhereParameter");
+		whereClause1.setKey("noAssetWhereParameter");
 		whereClause1.setLiteralParameter(true);
 		subSelect1.addWhere(whereClause1);
-		SubSelectNotExistsClause subClause1 = new SubSelectNotExistsClause("subProductSubClause", subSelect1);
+		SubSelectNotExistsClause subClause1 = new SubSelectNotExistsClause("subAssetSubClause", subSelect1);
 		builder.addWhere(subClause1);
 
 		QueryBuilder<Asset> subSelect2 = new QueryBuilder<Asset>(SubAsset.class, new OpenSecurityFilter());
 		WhereParameter<String> whereClause2 = new WhereParameter<String>(WhereParameter.Comparator.EQ, "outerAsset", "masterAsset", "IGNORED");
-		whereClause2.setKey("noMasterProductWhereParameter");
+		whereClause2.setKey("noMasterAssetWhereParameter");
 		whereClause2.setLiteralParameter(true);
 		subSelect2.addWhere(whereClause2);
-		SubSelectNotExistsClause subClause2 = new SubSelectNotExistsClause("subProductSubClause2", subSelect2);
+		SubSelectNotExistsClause subClause2 = new SubSelectNotExistsClause("subAssetSubClause2", subSelect2);
 		builder.addWhere(subClause2);
 	}
 

@@ -14,8 +14,6 @@ abstract public class OrderTransfer implements Serializable {
 	private String orderDescription;
 	private Date orderDate;
 	
-	public OrderTransfer() {}
-
 	public String getOrderNumber() {
 		return orderNumber;
 	}

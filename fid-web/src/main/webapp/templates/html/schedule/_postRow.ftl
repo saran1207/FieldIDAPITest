@@ -45,13 +45,13 @@
 				</li>
 			</#if>
 			<li>
-				<a href="product.action?uniqueID=${assetId}" >
+				<a href="asset.action?uniqueID=${assetId}" >
 					<@s.text name="label.view_asset"/>
 				</a>
 			</li>
 			<#if sessionUser.hasAccess('tag') >
 				<li>
-					<a href='<@s.url action="productEdit" uniqueID="${assetId}" />' >
+					<a href='<@s.url action="assetEdit" uniqueID="${assetId}" />' >
 						<@s.text name="label.edit_asset"/>
 					</a>
 				</li>

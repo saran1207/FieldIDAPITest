@@ -64,7 +64,7 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 
 	protected void convertProductStatus(Inspection model, InspectionView view) {
 		if (model.getAssetStatus() != null) {
-			view.setProductStatus(model.getAssetStatus().getName());
+			view.setAssetStatus(model.getAssetStatus().getName());
 		}
 	}
 

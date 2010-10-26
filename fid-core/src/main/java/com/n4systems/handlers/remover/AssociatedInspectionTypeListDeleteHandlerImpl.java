@@ -35,7 +35,7 @@ public class AssociatedInspectionTypeListDeleteHandlerImpl  implements Associate
 
 	public AssociatedInspectionTypeDeleteSummary summary(Transaction transaction) {
 		AssociatedInspectionTypeDeleteSummary summary = new AssociatedInspectionTypeDeleteSummary();
-		summary.setRemoveFromProductTypes(new Long(associatedInspectionTypeLoader.setInspectionType(inspectionType).load(transaction).size()));
+		summary.setRemoveFromAssetTypes(new Long(associatedInspectionTypeLoader.setInspectionType(inspectionType).load(transaction).size()));
 		
 		List<AssociatedInspectionType> associations = getAssociatedInspections(transaction);
 		for (AssociatedInspectionType associatedInspectionType : associations) {

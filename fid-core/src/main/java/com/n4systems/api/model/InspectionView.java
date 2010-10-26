@@ -2,14 +2,14 @@ package com.n4systems.api.model;
 
 import java.util.Date;
 
+import com.n4systems.api.validation.validators.AssetIdentifierValidator;
+import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
 import com.n4systems.api.validation.validators.AssociatedInspectionTypeValidator;
 import com.n4systems.api.validation.validators.DateValidator;
 import com.n4systems.api.validation.validators.FullNameUserValidator;
 import com.n4systems.api.validation.validators.InspectionStatusValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OwnerExistsValidator;
-import com.n4systems.api.validation.validators.ProductIdentifierValidator;
-import com.n4systems.api.validation.validators.ProductStatusExistsValidator;
 import com.n4systems.api.validation.validators.YNValidator;
 import com.n4systems.exporting.beanutils.ExportField;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
@@ -17,7 +17,7 @@ import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 public class InspectionView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
 
-	@ExportField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, ProductIdentifierValidator.class, AssociatedInspectionTypeValidator.class })
+	@ExportField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, AssetIdentifierValidator.class, AssociatedInspectionTypeValidator.class })
 	private String identifier;
 
 	@ExportField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
@@ -38,8 +38,8 @@ public class InspectionView extends ExternalModelView {
 	@ExportField(title = "Printable (Y/N)", order = 700, validators = { YNValidator.class })
 	private String printable;
 
-	@ExportField(title = "Asset Status", order = 800, validators = { ProductStatusExistsValidator.class })
-	private String productStatus;
+	@ExportField(title = "Asset Status", order = 800, validators = { AssetStatusExistsValidator.class })
+	private String assetStatus;
 
 	@ExportField(title = "Next Inspection Date", order = 900, validators = { DateValidator.class })
 	private Object nextInspectionDate;
@@ -121,12 +121,12 @@ public class InspectionView extends ExternalModelView {
 		return (printable.equalsIgnoreCase("Y"));
 	}
 	
-	public String getProductStatus() {
-		return productStatus;
+	public String getAssetStatus() {
+		return assetStatus;
 	}
 
-	public void setProductStatus(String productStatus) {
-		this.productStatus = productStatus;
+	public void setAssetStatus(String assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 
 	public Object getNextInspectionDate() {

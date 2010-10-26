@@ -5,7 +5,7 @@ import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
 import com.n4systems.api.conversion.inspection.InspectionToModelConverter;
 import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
-import com.n4systems.api.conversion.product.ProductToModelConverter;
+import com.n4systems.api.conversion.product.AssetToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exporting.io.MapReader;
@@ -56,8 +56,8 @@ public class ImporterFactory {
 		return new AutoAttributeToModelConverter(criteria);
 	}
 
-	protected ProductToModelConverter createProductToModelConverter(User identifiedBy, AssetType type) {
-		ProductToModelConverter converter = new ProductToModelConverter(loaderFactory.createOrgByNameLoader(), createNonIntegrationOrderManager(), loaderFactory.createProductStatusByNameLoader(), new InfoOptionMapConverter());
+	protected AssetToModelConverter createProductToModelConverter(User identifiedBy, AssetType type) {
+		AssetToModelConverter converter = new AssetToModelConverter(loaderFactory.createOrgByNameLoader(), createNonIntegrationOrderManager(), loaderFactory.createProductStatusByNameLoader(), new InfoOptionMapConverter());
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		return converter;

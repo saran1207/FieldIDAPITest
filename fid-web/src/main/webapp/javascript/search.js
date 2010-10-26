@@ -18,7 +18,7 @@ function cancelReportChanges(form) {
 
 var updatingColumnText = ""; 
 var dynamicColumnUrl = "";
-function productTypeChanged(productType) {
+function assetTypeChanged(assetType) {
 	var dynamicSections = $$('.dynamic div');
 	for (var i = 0; i < dynamicSections.length; i++) {
 		dynamicSections[i].remove();
@@ -26,14 +26,14 @@ function productTypeChanged(productType) {
 	var area = $('selectColumnNotificationArea');
 	area.update(updatingColumnText);
 	area.show();
-	getResponse(dynamicColumnUrl, "GET", { "criteria.productType": Element.extend(productType).getValue(), "criteria.productTypeGroup" : $('productTypeGroup').getValue() } );
+	getResponse(dynamicColumnUrl, "GET", { "criteria.assetType": Element.extend(assetType).getValue(), "criteria.assetTypeGroup" : $('assetTypeGroup').getValue() } );
 }
 
-var groupToProductType = new Object();
-function productTypeGroupChanged() {
-	var productTypeGroup = $('productTypeGroup');
-	var selectedProductTypeGroupName = productTypeGroup.options[productTypeGroup.selectedIndex].text;
-	var newSelectList = new Array().concat({id:"",name:""}).concat(groupToProductType[selectedProductTypeGroupName])
-	updateDropDown($('productType'), newSelectList, $('productType').getValue());
-	$('productType').onchange();
+var groupToAssetType = new Object();
+function assetTypeGroupChanged() {
+	var assetTypeGroup = $('assetTypeGroup');
+	var selectedAssetTypeGroupName = assetTypeGroup.options[assetTypeGroup.selectedIndex].text;
+	var newSelectList = new Array().concat({id:"",name:""}).concat(groupToAssetType[selectedAssetTypeGroupName])
+	updateDropDown($('assetType'), newSelectList, $('assetType').getValue());
+	$('assetType').onchange();
 }

@@ -266,14 +266,14 @@ public class InspectionToModelConverterTest {
 	}
 	
 	@Test
-	public void to_model_resolves_product_status() throws ConversionException {
+	public void to_model_resolves_asset_status() throws ConversionException {
 		InspectionView view = new InspectionView();
-		view.setProductStatus("asset status");
+		view.setAssetStatus("asset status");
 		
 		AssetStatus ps = new AssetStatus();
 		
 		ProductStatusByNameLoader psLoader = createMock(ProductStatusByNameLoader.class);
-		expect(psLoader.setName(view.getProductStatus())).andReturn(psLoader);
+		expect(psLoader.setName(view.getAssetStatus())).andReturn(psLoader);
 		expect(psLoader.load(transaction)).andReturn(ps);
 		replay(psLoader);
 		
@@ -292,7 +292,7 @@ public class InspectionToModelConverterTest {
 	}
 	
 	@Test
-	public void to_model_ignores_product_status_when_null() throws ConversionException {
+	public void to_model_ignores_asset_status_when_null() throws ConversionException {
 		ProductStatusByNameLoader psLoader = createMock(ProductStatusByNameLoader.class);
 		replay(psLoader);
 		

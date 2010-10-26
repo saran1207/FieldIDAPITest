@@ -12,7 +12,7 @@
 		<h2><@s.text name="label.summary"/></h2>
 		<p>
 			<label><@s.text name="label.totalproducts"/></label>
-			<span>${report.totalProducts}</span>
+			<span>${report.totalAssets}</span>
 		</p>
 		
 		<p>
@@ -43,19 +43,19 @@
 			
 			<tr>
 				<td class="nameRow">
-					<a id="detailRowProductOpen_${key}" href="javascript:void(0);" onclick="return openSection( 'detailRowProduct_${key}', 'detailRowProductOpen_${key}','detailRowProductClose_${key}');"><img src="<@s.url value="/images/expandLarge.gif"/>" alt"+"></a>  
-					<a id="detailRowProductClose_${key}" style="display:none" href="javascript:void(0);" onclick="return closeSection( 'detailRowProduct_${key}', 'detailRowProductClose_${key}','detailRowProductOpen_${key}');"><img src="<@s.url value="/images/collapseLarge.gif"/>" alt="-"></a> 
+					<a id="detailRowAssetOpen_${key}" href="javascript:void(0);" onclick="return openSection( 'detailRowAsset_${key}', 'detailRowPAssetOpen_${key}','detailRowAssetClose_${key}');"><img src="<@s.url value="/images/expandLarge.gif"/>" alt"+"></a>
+					<a id="detailRowAssetClose_${key}" style="display:none" href="javascript:void(0);" onclick="return closeSection( 'detailRowAsset_${key}', 'detailRowAssetClose_${key}','detailRowAssetOpen_${key}');"><img src="<@s.url value="/images/collapseLarge.gif"/>" alt="-"></a>
 					${key?html}
-					<div id="detailRowProduct_${key}" style="display:none" class="subList">
-						<#list report.countsByProductType[ key ] as record >
+					<div id="detailRowAsset_${key}" style="display:none" class="subList">
+						<#list report.countsByAssetType[ key ] as record >
 							<div class="count">
 								${record.count!0} ${record.inspectionTypeGroupName?html}
 							</div> 
 						</#list>
 					</div>
 				</td>
-				<td>${report.getInspectionsForProductType( key ) }</td>
-				<td>${report.getDisinctProductsForProductType( key ) }</td>
+				<td>${report.getInspectionsForAssetType( key ) }</td>
+				<td>${report.getDisinctAssetsForAssetType( key ) }</td>
 			</tr>
 			
 			
@@ -77,7 +77,7 @@
 					<div id="detailRowInspection_${key}" style="display:none" class="subList">
 						<#list report.countsByInspectionTypeGroup[ key ] as record >
 							<div class="count">
-								${record.count!0} ${record.productTypeName?html}
+								${record.count!0} ${record.assetTypeName?html}
 							</div> 
 						</#list>
 					</div>

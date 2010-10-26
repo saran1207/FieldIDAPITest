@@ -4,24 +4,24 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
-import com.n4systems.model.product.ProductByMobileGuidLoader;
+import com.n4systems.model.product.AssetByMobileGuidLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
 public class InspectionScheduleCreateHandler {
 
-	private final ProductByMobileGuidLoader productByMobileGuidLoader;
+	private final AssetByMobileGuidLoader assetByMobileGuidLoader;
 	private final FilteredIdLoader<Asset> filteredProductLoader;
 	private final FilteredIdLoader<InspectionType> inspectionTypeLoader;
 	private final InspectionScheduleSaver saver;
 
 	public InspectionScheduleCreateHandler(
-			ProductByMobileGuidLoader productByMobileGuidLoader,
+			AssetByMobileGuidLoader assetByMobileGuidLoader,
 			FilteredIdLoader<Asset> filteredProductLoader,
 			FilteredIdLoader<InspectionType> inspectionTypeLoader,
 			InspectionScheduleSaver saver) {
 		super();
-		this.productByMobileGuidLoader = productByMobileGuidLoader;
+		this.assetByMobileGuidLoader = assetByMobileGuidLoader;
 		this.filteredProductLoader = filteredProductLoader;
 		this.inspectionTypeLoader = inspectionTypeLoader;
 		this.saver = saver;
@@ -40,7 +40,7 @@ public class InspectionScheduleCreateHandler {
 		
 		Asset asset;
 		if ( inspectionScheduleServiceDTO.isProductCreatedOnMobile()) {
-			asset = productByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getProductMobileGuid()).load();
+			asset = assetByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getProductMobileGuid()).load();
 		} else {
 			asset = filteredProductLoader.setId(inspectionScheduleServiceDTO.getProductId()).load();
 		}

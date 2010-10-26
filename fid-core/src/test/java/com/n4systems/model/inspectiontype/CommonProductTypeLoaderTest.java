@@ -46,7 +46,7 @@ public class CommonProductTypeLoaderTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_find_all_product_types_for_the_given_list_of_assets() throws Exception {
+	public void should_find_all_asset_types_for_the_given_list_of_assets() throws Exception {
 		CommonProductTypeLoaderExtension sut = new CommonProductTypeLoaderExtension(null,  new ConfigContextOverridableTestDouble());
 		sut.forAssets(ImmutableList.of(1L));
 		sut.load(new TestingTransaction());
@@ -59,7 +59,7 @@ public class CommonProductTypeLoaderTest {
 	
 	
 	@Test
-	public void should_select_a_distinct_product_type_list_from_the_product() throws Exception {
+	public void should_select_a_distinct_asset_type_list_from_the_product() throws Exception {
 		CommonProductTypeLoaderExtension sut = new CommonProductTypeLoaderExtension(null,  new ConfigContextOverridableTestDouble());
 		sut.forAssets(ImmutableList.of(1L));
 		sut.load(new TestingTransaction());

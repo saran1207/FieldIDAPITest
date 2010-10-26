@@ -14,7 +14,7 @@ function includeSubAsset( event ) {
 	item.insert( new Element( 'input', { type: "hidden", name: "subAssetIds["+ numberOfSubTypes +"]", value: subAsset.getValue() } ) );
 	var subAssetId = subAsset.getValue();
 	numberOfSubTypes++;
-	var assetLink = new Element( 'a', { id: "removeAssetLink_" + subAsset.getValue(), href: "removeSubProduct" , assetTypeId: subAssetId } ).update(removeString) ;
+	var assetLink = new Element( 'a', { id: "removeAssetLink_" + subAsset.getValue(), href: "removeSubAsset" , assetTypeId: subAssetId } ).update(removeString) ;
 	assetLink.observe('click', removeAssetEvent );
 	assetLink.assetId = subAsset.getValue();
 	item.insert( assetNameSpan );

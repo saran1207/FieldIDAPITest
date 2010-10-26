@@ -934,7 +934,7 @@ table.legend td,table.legend th {
 	width: 160px;
 }
 
-#productAttributes {
+#assetAttributes {
 	clear: both;
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -1031,20 +1031,20 @@ li.buttonGroupLabels {
 	width: 60px;
 }
 
-#productSearch {
+#assetSearch {
 	border-bottom: 1px solid #D0DAFD;
 	padding: 5px 15px;
 }
 
-#productSearch input {
+#assetSearch input {
 	margin: 0px 5px;
 }
 
-#productSearch label {
+#assetSearch label {
 	margin-right: 10px;
 }
 
-#productSearch input[type="text"],#productSearch input.textfield {
+#assetSearch input[type="text"],#assetSearch input.textfield {
 	width: 350px;
 }
 

@@ -21,11 +21,11 @@ public class AssetCodeMappingInfoOption extends LegacyBaseEntity {
 	@JoinColumn (name="r_infoOption")
 	private InfoOptionBean infoOption;
 
-	public AssetCodeMapping getProductCodeMapping() {
+	public AssetCodeMapping getAssetCodeMapping() {
 		return assetCodeMapping;
 	}
 
-	public void setProductCodeMapping(AssetCodeMapping assetCodeMapping) {
+	public void setAssetCodeMapping(AssetCodeMapping assetCodeMapping) {
 		this.assetCodeMapping = assetCodeMapping;
 	}
 

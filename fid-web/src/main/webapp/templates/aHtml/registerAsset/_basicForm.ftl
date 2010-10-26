@@ -17,10 +17,10 @@
 
 	<div class="infoSet">
 		<label for="assetTypeId" class="label"><@s.text name="label.producttype"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-		<@s.select id="assetType" name="assetTypeId" onchange="updateProductType(this);showSuggestedAttributes();">
-			<#include "/templates/html/common/_productTypeOptions.ftl"/>
+		<@s.select id="assetType" name="assetTypeId" onchange="updateAssetType(this);showSuggestedAttributes();">
+			<#include "/templates/html/common/_assetTypeOptions.ftl"/>
 		</@s.select>
-		<span class="fieldHolder updating" id="productTypeIndicator">
+		<span class="fieldHolder updating" id="assetTypeIndicator">
 			<img src="<@s.url value="/images/indicator_mozilla_blu.gif" />" alt="<@s.text name="updating"/>" />
 		</span>	
 	</div>

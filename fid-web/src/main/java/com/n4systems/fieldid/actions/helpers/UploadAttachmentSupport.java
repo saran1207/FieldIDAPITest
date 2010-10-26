@@ -14,7 +14,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.api.HasFileAttachments;
-import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.product.AssetAttachment;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -26,14 +26,14 @@ abstract public class UploadAttachmentSupport extends AbstractCrud {
 
 	protected ConfigManager configManager;
 	
-	private List<ProductAttachment> uploadedFiles = new ArrayList<ProductAttachment>();
-	private List<ProductAttachment> attachments = new ArrayList<ProductAttachment>();
+	private List<AssetAttachment> uploadedFiles = new ArrayList<AssetAttachment>();
+	private List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
 
 	public UploadAttachmentSupport(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 	
-	public List<ProductAttachment> getUploadedFiles() {
+	public List<AssetAttachment> getUploadedFiles() {
 		return uploadedFiles;
 	}
 
@@ -44,19 +44,19 @@ abstract public class UploadAttachmentSupport extends AbstractCrud {
 			@CustomValidator( type="uploadAttachmentLimitValidator", message="", key="error.filelimit" )
 		}
 	)
-	public void setUploadedFiles( List<ProductAttachment> uploadedFiles ) {
+	public void setUploadedFiles( List<AssetAttachment> uploadedFiles ) {
 		this.uploadedFiles = uploadedFiles;
 	}
 	
-	public List<ProductAttachment> getAttachments() {
+	public List<AssetAttachment> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(List<ProductAttachment> attachments) {
+	public void setAttachments(List<AssetAttachment> attachments) {
 		this.attachments = attachments;
 	}
 	
-	public void setAttachments(Set<ProductAttachment> attachments) {
+	public void setAttachments(Set<AssetAttachment> attachments) {
 		this.attachments.clear();
 		this.attachments.addAll(attachments);
 	}
@@ -87,7 +87,7 @@ abstract public class UploadAttachmentSupport extends AbstractCrud {
 		// can update the comments
 		String comment = null;
 		Map<Long, String> updatedAttachments = new HashMap<Long, String>();
-		for(ProductAttachment attachment: attachments) {
+		for(AssetAttachment attachment: attachments) {
 			// null out empty comments
 			comment = (attachment.getNote().getComments() != null && attachment.getNote().getComments().trim().length() > 0) ? attachment.getNote().getComments().trim() : null;
 			updatedAttachments.put(attachment.getId(), comment);

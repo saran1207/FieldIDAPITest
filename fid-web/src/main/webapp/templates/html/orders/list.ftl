@@ -28,7 +28,7 @@
 			   	</tr>
 				<#list lineItems as lineItem>
 					<tr>
-						<td class="linePcode" >${lineItem.productCode}</td>
+						<td class="linePcode" >${lineItem.assetCode}</td>
 						<td>${lineItem.description!}</td>
 						<td class="lineQty" >${lineItem.quantity}</td>
 						<td class="lineIdent" >${action.getIdentifiedAssetCount(lineItem)}</td>

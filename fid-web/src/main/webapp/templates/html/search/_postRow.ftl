@@ -7,12 +7,12 @@
 			
 		<ul id="moreActions_list_${entityId}">
 			<li>
-				<a href="product.action?uniqueID=${entityId}" >
+				<a href="asset.action?uniqueID=${entityId}" >
 					<@s.text name="label.view_asset"/>
 				</a>
 			</li>
 			<li>
-				<a href='<@s.url action="productInspections" uniqueID="${entityId}" />' >
+				<a href='<@s.url action="assetInspections" uniqueID="${entityId}" />' >
 					<@s.text name="label.view_events"/>
 				</a>
 			</li>
@@ -30,12 +30,12 @@
 			</#if>
 			<#if sessionUser.hasAccess('tag') >
 				<li>
-					<a href='<@s.url action="productEdit" uniqueID="${entityId}" />' >
+					<a href='<@s.url action="assetEdit" uniqueID="${entityId}" />' >
 						<@s.text name="label.edit_asset"/>
 					</a>
 				</li>
 				<li>
-					<a href='<@s.url action="productMergeAdd" uniqueID="${entityId}" />' >
+					<a href='<@s.url action="assetMergeAdd" uniqueID="${entityId}" />' >
 						<@s.text name="label.merge"/>
 					</a>
 				</li>

@@ -2,7 +2,7 @@ package com.n4systems.fieldid.viewhelpers;
 
 import java.util.Date;
 
-import com.n4systems.fieldid.actions.product.LocationWebModel;
+import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;

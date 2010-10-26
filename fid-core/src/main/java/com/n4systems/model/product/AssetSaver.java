@@ -11,15 +11,15 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.Saver;
 
 public class AssetSaver extends Saver<Asset> {
-	private final RecursiveLinkedChildProductLoader linkedProductLoader; 
+	private final RecursiveLinkedChildAssetLoader linkedAssetLoader;
 	private User modifiedBy;
 	
-	public AssetSaver(RecursiveLinkedChildProductLoader linkedProductLoader) {
-		this.linkedProductLoader = linkedProductLoader;
+	public AssetSaver(RecursiveLinkedChildAssetLoader linkedAssetLoader) {
+		this.linkedAssetLoader = linkedAssetLoader;
 	}
 	
 	public AssetSaver() {
-		this(new RecursiveLinkedChildProductLoader());
+		this(new RecursiveLinkedChildAssetLoader());
 	}
 	
 	@Override
@@ -58,7 +58,7 @@ public class AssetSaver extends Saver<Asset> {
 	}
 	
 	private void forceNetworkIdRecalc(EntityManager em, Asset asset) {
-		List<Asset> linkedAssets = linkedProductLoader.setProduct(asset).load(em);
+		List<Asset> linkedAssets = linkedAssetLoader.setProduct(asset).load(em);
 		
 		for (Asset linkedAsset : linkedAssets) {
 			linkedAsset.touch();

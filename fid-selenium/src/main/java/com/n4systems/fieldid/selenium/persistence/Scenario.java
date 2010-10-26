@@ -12,7 +12,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.product.AssetSaver;
-import com.n4systems.model.producttype.ProductTypeByNameLoader;
+import com.n4systems.model.producttype.AssetTypeByNameLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantByNameLoader;
@@ -42,7 +42,7 @@ public class Scenario {
     }
 
     public AssetType assetType(String tenantName, String assetTypeName) {
-        ProductTypeByNameLoader byNameLoader = new ProductTypeByNameLoader(new TenantOnlySecurityFilter(tenant(tenantName)));
+        AssetTypeByNameLoader byNameLoader = new AssetTypeByNameLoader(new TenantOnlySecurityFilter(tenant(tenantName)));
         return byNameLoader.setName(assetTypeName).load(trans);
     }
 

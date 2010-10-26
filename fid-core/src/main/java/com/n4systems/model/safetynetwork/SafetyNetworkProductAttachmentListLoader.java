@@ -4,22 +4,22 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.product.AssetAttachment;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class SafetyNetworkProductAttachmentListLoader extends Loader<List<ProductAttachment>> {
+public class SafetyNetworkProductAttachmentListLoader extends Loader<List<AssetAttachment>> {
 	private Long productId;
 	private Long networkId;
 	
 	@Override
-	protected List<ProductAttachment> load(EntityManager em) {
-		QueryBuilder<ProductAttachment> builder = new QueryBuilder<ProductAttachment>(ProductAttachment.class, new OpenSecurityFilter());
+	protected List<AssetAttachment> load(EntityManager em) {
+		QueryBuilder<AssetAttachment> builder = new QueryBuilder<AssetAttachment>(AssetAttachment.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("asset.id", productId);
 		builder.addSimpleWhere("asset.networkId", networkId);
 		
-		List<ProductAttachment> attachments = builder.getResultList(em);
+		List<AssetAttachment> attachments = builder.getResultList(em);
 		return attachments;
 	}
 

@@ -119,7 +119,7 @@ ${action.setPageType('job', 'show')!}
 	</div>
 </div>
 <#if !project.eventJob>
-	<div id="products" class="pageSection" style="" >
+	<div id="assets" class="pageSection" style="" >
 		<h2><@s.text name="label.assetsonproject"/>
 			<#if sessionUser.hasAccess( "managejobs" )> 
 				<a id="addNewAsset" href="<@s.url action="jobAssetAdd" uniqueID="${project.id}"/>"><@s.text name="label.addasset"/></a>

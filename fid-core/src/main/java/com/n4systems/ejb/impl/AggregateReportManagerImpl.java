@@ -46,7 +46,7 @@ public class AggregateReportManagerImpl implements AggregateReportManager {
 		Query query = em.createQuery( groupByQuery );
 		query.setParameter( "inspections", inspectionIds );
 		
-		report.setInspectionTypeGroupsByProductTypes( query.getResultList() );
+		report.setInspectionTypeGroupsByAssetTypes( query.getResultList() );
 		
 		
 		String distinctAssets = "select new " + AggregateReportRecord.class.getName() + "( count( DISTINCT asset.id), asset.type.name ) " +
@@ -55,7 +55,7 @@ public class AggregateReportManagerImpl implements AggregateReportManager {
 			" GROUP BY asset.type.name  ";
 		Query distinctAssetQuery = em.createQuery( distinctAssets );
 		distinctAssetQuery.setParameter( "inspections", inspectionIds );
-		report.setDistinctProductsByProductType( distinctAssetQuery.getResultList() );
+		report.setDistinctAssetsByAssetType( distinctAssetQuery.getResultList() );
 		
 		return report;
 	}

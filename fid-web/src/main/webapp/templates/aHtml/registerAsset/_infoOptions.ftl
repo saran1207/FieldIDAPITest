@@ -1,4 +1,4 @@
-<#-- /templates/html/productCrud also contains a version of this template -->
+<#-- /templates/html/assetCrud also contains a version of this template -->
 
 <head>
 	<script language="javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"> </script>
@@ -9,7 +9,7 @@
 </head>
 <div id="infoOptions">
 	<@s.fielderror>
-		<@s.param>productInfoOptions</@s.param>				
+		<@s.param>assetInfoOptions</@s.param>				
 	</@s.fielderror>
 	
 	<#include "_attributes.ftl"/>

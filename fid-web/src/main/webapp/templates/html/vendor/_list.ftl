@@ -15,7 +15,7 @@
 		<#list page.list as asset>
 		<tr>
 			<td>
-				<a href='<@s.url value="showNetworkProduct.action" uniqueID="${asset.id}"/>' >${asset.serialNumber}</a>
+				<a href='<@s.url value="showNetworkAsset.action" uniqueID="${asset.id}"/>' >${asset.serialNumber}</a>
 			</td>
 			<#if asset.rfidNumber??>
 				<td>${asset.rfidNumber}</td>
@@ -28,7 +28,7 @@
 			    <#if action.isAssetAlreadyRegistered(asset)>
                     <@s.text name="label.already_registered"/>
                 <#else>
-                    <a href='<@s.url action="regNetworkProduct.action" namespace="/aHtml/iframe" uniqueID="${asset.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
+                    <a href='<@s.url action="regNetworkAsset.action" namespace="/aHtml/iframe" uniqueID="${asset.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
                 </#if>
 
 				
@@ -51,7 +51,7 @@
 	</div>
 <#else>
 	<#if isSearch>
-		<@s.url value="searchNetworkProduct.action" uniqueID="${uniqueID}" id="url"/>				
+		<@s.url value="searchNetworkAsset.action" uniqueID="${uniqueID}" id="url"/>				
 	<#else>
 		<@s.url value="preAssignedAssets.action" uniqueID="${uniqueID}" id="url"/>				
 	</#if>

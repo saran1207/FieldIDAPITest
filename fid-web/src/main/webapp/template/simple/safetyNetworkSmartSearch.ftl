@@ -49,20 +49,20 @@
 	</#assign>
 	snSmartSearch = '${snSmartSearch?js_string}';
 	<#-- if were on edit and there's already a linked asset, we need to go directly to show linked asset info -->
-	<#if parameters.linkedProduct_editMode >
+	<#if parameters.linkedAsset_editMode >
 		document.observe("dom:loaded", function() {
-				var product = new Object();
+				var asset = new Object();
 			
-				product.id = ${parameters.linkedProduct_Id};
-				product.serialNumber = "${(parameters.linkedProduct_SerialNumber)?default("")?js_string}";
-				product.rfidNumber = "${(parameters.linkedProduct_RfidNumber)?default("")?js_string}";
-				product.owner = "${(parameters.linkedProduct_OwnerName)?default("")?js_string}";
-				product.type = "${(parameters.linkedProduct_TypeName)?default("")?js_string}";
-				product.referenceNumber = "${(parameters.linkedProduct_ReferenceNumber)?default("")?js_string}";
+				asset.id = ${parameters.linkedAsset_Id};
+				asset.serialNumber = "${(parameters.linkedAsset_SerialNumber)?default("")?js_string}";
+				asset.rfidNumber = "${(parameters.linkedAsset_RfidNumber)?default("")?js_string}";
+				asset.owner = "${(parameters.linkedAsset_OwnerName)?default("")?js_string}";
+				asset.type = "${(parameters.linkedAsset_TypeName)?default("")?js_string}";
+				asset.referenceNumber = "${(parameters.linkedAsset_ReferenceNumber)?default("")?js_string}";
 				<#if parameters.refreshRegistration>
-					updateLinkedAssetInfo(product);
+					updateLinkedAssetInfo(asset);
 				<#else>
-					populateLinkedAssetInfo(product);
+					populateLinkedAssetInfo(asset);
 				</#if>
 				
 			});

@@ -2,7 +2,7 @@ package com.n4systems.fieldid.viewhelpers;
 
 import java.util.List;
 
-import com.n4systems.fieldid.actions.product.LocationWebModel;
+import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocationLevels;
 import com.n4systems.model.location.PredefinedLocationTree;

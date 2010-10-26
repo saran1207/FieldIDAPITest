@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
-import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.product.AssetAttachment;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
 
@@ -13,7 +13,7 @@ public class UploadAttachmentValidator extends FieldValidatorSupport {
 	public void validate(Object object) throws ValidationException {
 		UploadAttachmentSupport uploadAttachmentAction = (UploadAttachmentSupport) object;
 
-		for (ProductAttachment uploadedFile : uploadAttachmentAction.getUploadedFiles()) {
+		for (AssetAttachment uploadedFile : uploadAttachmentAction.getUploadedFiles()) {
 			if (uploadedFile != null) {
 				if (!testFileNameAvailability((new File(uploadedFile.getNote().getFileName())), uploadAttachmentAction.getAttachments(), uploadAttachmentAction.getUploadedFiles())) {
 					addFieldError(getFieldName(), object);
@@ -23,15 +23,15 @@ public class UploadAttachmentValidator extends FieldValidatorSupport {
 		}
 	}
 
-	public boolean testFileNameAvailability(File file, List<ProductAttachment> attachments, List<ProductAttachment> uploadedFiles) {
+	public boolean testFileNameAvailability(File file, List<AssetAttachment> attachments, List<AssetAttachment> uploadedFiles) {
 		int nameFound = 0;
-		for (ProductAttachment attachment : attachments) {
+		for (AssetAttachment attachment : attachments) {
 			if (attachment.getNote().getFileName().equals(file.getName())) {
 				nameFound++;
 			}
 		}
 
-		for (ProductAttachment attachment : uploadedFiles) {
+		for (AssetAttachment attachment : uploadedFiles) {
 			if (attachment != null) {
 				if (file.getName().equals(new File(attachment.getNote().getFileName()).getName())) {
 					nameFound++;

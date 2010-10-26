@@ -5,14 +5,10 @@ public class ShopOrderTransfer extends OrderTransfer {
 	private static final long serialVersionUID = -6769840845159752381L;
 	
 	private long orderQuantity = 0L;
-	private String productCode;
+	private String assetCode;
 	private String lineItemId;
 	private String lineItemDescription;
 	
-	public ShopOrderTransfer() {
-		super();
-	}
-
 	public long getOrderQuantity() {
 		return orderQuantity;
 	}
@@ -21,12 +17,12 @@ public class ShopOrderTransfer extends OrderTransfer {
 		this.orderQuantity = orderQuantity;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getAssetCode() {
+		return assetCode;
 	}
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setAssetCode(String productCode) {
+		this.assetCode = productCode;
 	}
 
 	public String getLineItemId() {

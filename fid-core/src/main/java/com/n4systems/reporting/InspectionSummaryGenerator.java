@@ -32,7 +32,7 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.producttype.ProductTypeLoader;
+import com.n4systems.model.producttype.AssetTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -196,7 +196,7 @@ public class InspectionSummaryGenerator {
 		reportMap.put("hasIntegration", primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
 
 		if (reportDefiner.getAssetType() != null) {
-			AssetType assetType = new ProductTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getAssetType()).load();
+			AssetType assetType = new AssetTypeLoader(primaryOrg.getTenant()).setId(reportDefiner.getAssetType()).load();
 			reportMap.put("assetType", assetType.getName());
 		}
 

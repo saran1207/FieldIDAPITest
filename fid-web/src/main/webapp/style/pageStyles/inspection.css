@@ -130,17 +130,17 @@
 }
 
 
-#productSummary h2 {
+#assetSummary h2 {
 	overflow:hidden;
 	
 }
-#productSummary h2 span {
+#assetSummary h2 span {
 	display: block;
 	float:left;
 	
 }
 
-#productSummary h2 span#certLink {
+#assetSummary h2 span#certLink {
 	display: block;
 	float:right;
 	border:none;

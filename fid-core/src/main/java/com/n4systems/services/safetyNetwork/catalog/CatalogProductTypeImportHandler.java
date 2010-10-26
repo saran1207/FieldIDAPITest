@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeImportSummary;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -21,7 +22,6 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.utils.CleanProductTypeFactory;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.safetyNetwork.CatalogService;
-import com.n4systems.services.safetyNetwork.catalog.summary.ProductTypeImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.ListingPair;
@@ -34,16 +34,16 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 	private File copiedAssetImage;
 	private AssetType originalType;
 	private AssetType importedAssetType;
-	private ProductTypeImportSummary summary;
+	private AssetTypeImportSummary summary;
 	private Map<Long, AssetTypeGroup> assetGroupMapping;
 	private Set<Long> importAssetTypeIds;
 
 	
 	public CatalogProductTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyProductType productTypeManager) {
-		this(persistenceManager, tenant, importCatalog, productTypeManager, new ProductTypeImportSummary());
+		this(persistenceManager, tenant, importCatalog, productTypeManager, new AssetTypeImportSummary());
 	}
 	 
-	public CatalogProductTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyProductType productTypeManager, ProductTypeImportSummary summary) {
+	public CatalogProductTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyProductType productTypeManager, AssetTypeImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.productTypeManager = productTypeManager;
 		this.summary = summary;
@@ -172,7 +172,7 @@ public class CatalogProductTypeImportHandler extends CatalogImportHandler {
 		return findMasterAssetRequirements(assetTypeIds);
 	}
 
-	public ProductTypeImportSummary getSummaryForImport(Set<Long> assetTypeIds) {
+	public AssetTypeImportSummary getSummaryForImport(Set<Long> assetTypeIds) {
 		if (assetTypeIds == null) {
 			throw new RuntimeException();
 		}

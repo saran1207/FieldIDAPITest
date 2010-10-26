@@ -20,7 +20,7 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.product.ProductAttachment;
+import com.n4systems.model.product.AssetAttachment;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
@@ -158,7 +158,7 @@ public class TenantCleaner {
 
     private void safeRemoveAsset(EntityManager em, Asset asset) {
         Query scheduleQuery =  em.createQuery("from " + InspectionSchedule.class.getName() + " where asset.id = " + asset.getId());
-        Query attachmentQuery = em.createQuery("from " + ProductAttachment.class.getName() + " where asset.id = " + asset.getId());
+        Query attachmentQuery = em.createQuery("from " + AssetAttachment.class.getName() + " where asset.id = " + asset.getId());
         Query inspQuery = em.createQuery("from " + Inspection.class.getName() + " where asset.id = " + asset.getId());
 
         removeAllFromQuery(em, scheduleQuery);

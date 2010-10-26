@@ -1,7 +1,7 @@
 ${action.clearFlashScope()}
 
 var asset = null;
-<#include "/templates/html/productCrud/_js_product.ftl"/>
+<#include "/templates/html/assetCrud/_js_asset.ftl"/>
 var valueSubsitutedHtml = resultRow.replace(/%%SERIAL_NUMBER%%/g, asset.serialNumber)
 							.replace(/%%RFID%%/g, asset.rfidNumber)
 							.replace(/%%OWNER%%/g, asset.owner)

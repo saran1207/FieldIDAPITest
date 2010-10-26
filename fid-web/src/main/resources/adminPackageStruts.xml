@@ -93,19 +93,19 @@
 			</result>
 		</action>
 
-		<action name="findProductOptionList" method="list"
-			class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
-			<result name="success" type="freemarker">/admin/templates/html/findproductoption/list.ftl
-			</result>
+		<action name="findAssetOptionList" method="list"
+			class="com.n4systems.fieldidadmin.actions.FindAssetOptionAction">
+			<result name="success" type="freemarker">/admin/templates/html/findassetoption/list.ftl
+            </result>
 		</action>
 
-		<action name="findProductOptionCrud" method="formInput"
-			class="com.n4systems.fieldidadmin.actions.FindProductOptionAction">
-			<result name="input" type="freemarker">/admin/templates/html/findproductoption/findProductOptionForm.ftl
-			</result>
+		<action name="findAssetOptionCrud" method="formInput"
+			class="com.n4systems.fieldidadmin.actions.FindAssetOptionAction">
+			<result name="input" type="freemarker">/admin/templates/html/findassetoption/findAssetOptionForm.ftl
+            </result>
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
-				<param name="actionName">findProductOptionList</param>
+				<param name="actionName">findAssetOptionList</param>
 			</result>
 		</action>
 

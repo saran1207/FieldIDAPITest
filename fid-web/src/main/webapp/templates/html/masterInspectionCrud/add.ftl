@@ -19,17 +19,17 @@
 	<#include "/templates/html/common/_calendar.ftl"/>
 	
 	<script type="text/javascript">
-		lookupAssetUrl = "<@s.url action="products" namespace="/aHtml"/>";
+		lookupAssetUrl = "<@s.url action="assets" namespace="/aHtml"/>";
 		assetLookupTitle = "<@s.text name="title.productlookup"/>";
 		subAssetIndex = ${subAssets?size};
-		updateAssetTypeUrl = '<@s.url action="productTypeChange" namespace="ajax"  />';
-		addSubAssetUrl = '<@s.url action="createSubProductInInspection" namespace="/ajax" />';
-		addAssetUrl = '<@s.url action="productAdd" namespace="/ajax"/>';
-		createAssetUrl = "<@s.url action="productCreate" namespace="/ajax" />";	
+		updateAssetTypeUrl = '<@s.url action="assetTypeChange" namespace="ajax"  />';
+		addSubAssetUrl = '<@s.url action="createSubAssetInInspection" namespace="/ajax" />';
+		addAssetUrl = '<@s.url action="assetAdd" namespace="/ajax"/>';
+		createAssetUrl = "<@s.url action="assetCreate" namespace="/ajax" />";	
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
 		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/aHtml"  />';
 		checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"  />';
-		removeSubAssetUrl = "<@s.url action="removeSubProduct" namespace="/ajax"/>";
+		removeSubAssetUrl = "<@s.url action="removeSubAsset" namespace="/ajax"/>";
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';
 		checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax" />';
 		
@@ -64,7 +64,7 @@ ${action.setPageType('inspection', 'add')!}
 
 	<div id="assetComponents">
 		<#list asset.subAssets as subAsset >
-			<#include "_subProductInspection.ftl" />
+			<#include "_subAssetInspection.ftl" />
 		</#list>
 	</div>
 	
@@ -101,8 +101,8 @@ ${action.setPageType('inspection', 'add')!}
 				<div class="definition">
 					<div class="identifier">${type.name}</div> 
 					<div class="createOptions">
-						<a href="<@s.url action="productAdd" namespace="/ajax"  assetTypeId="${type.id}" token="${token}"/>" onclick="addSubAsset(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
-						<a href='<@s.url action="products" namespace="/aHtml"  assetTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubAsset }' >
+						<a href="<@s.url action="assetAdd" namespace="/ajax"  assetTypeId="${type.id}" token="${token}"/>" onclick="addSubAsset(${type.id}, ${(asset.owner.id)}); return false"><@s.text name="label.add_new" /></a> |
+						<a href='<@s.url action="assets" namespace="/aHtml"  assetTypeId="${type.id}"/>'  class='lightview' rel='ajax' title='<@s.text name="title.productlookup"/> :: :: scrolling:true, width: 700, height: 420, ajax: { onComplete: findSubAsset }' >
 				  			<@s.text name="label.find_existing" />
 				  		</a>
 				  	</div>

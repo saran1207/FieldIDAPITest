@@ -3,7 +3,7 @@ package com.n4systems.fieldid.selenium.persistence;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.producttype.ProductTypeSaver;
+import com.n4systems.model.producttype.AssetTypeSaver;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
@@ -73,7 +73,7 @@ public class MinimalTenantDataSetup {
         AssetType type = new AssetType();
         type.setTenant(tenant);
         type.setName(name);
-        new ProductTypeSaver().save(trans, type);
+        new AssetTypeSaver().save(trans, type);
 
         return type;
     }
