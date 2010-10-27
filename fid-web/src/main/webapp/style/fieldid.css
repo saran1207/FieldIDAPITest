@@ -1610,7 +1610,7 @@ input.description {
 }
 
 .headerWithFootnote .footnoteText {
-	font-size: 10px;
+	font-size: 11px;
 }
 
 #listContainer {
@@ -1703,4 +1703,16 @@ input.description {
 
 #reducedLineHeightLabel{
 	line-height: normal;
+}
+
+.initialMessage{
+	background-image: url(../images/reporting-bs-icon.png);
+	background-repeat: no-repeat;
+	background-position:140px center;
+	background-color:#EEEEEE;
+	padding: 30px;
+}
+
+.textContainer{
+	margin-left: 200px;
 }

@@ -81,6 +81,10 @@
 	padding: 3px;
 }
 
+.pageSection .formAction{
+	border-top:1px solid #D0DAFD;
+	}
+
 div.formAction {
 		text-align: center;
 }

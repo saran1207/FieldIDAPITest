@@ -2,7 +2,19 @@ ${action.setPageType('saved_reports', 'saved_reports')!}
 <#assign secondaryNavAction="list"/>
 <#include "_secondaryNav.ftl"/>
 
-<#if  page.hasResults() && page.validPage() >
+
+<#if page.hasResults() && page.validPage() >
+	
+	<div class="headerWithFootnote">
+		<span class="footnoteText">
+			<img src="<@s.url value="/images/tip-icon.png" />"/>
+			<@s.text name="label.saved_report_explanation"/>
+			<a href="<@s.url action="userList" namespace="/" />">
+				<@s.text name="label.add_new_user"/>
+			</a>
+		</span>
+	</div>
+
 	<#assign currentAction="savedReports.action" />
 	<#include '../common/_pagination.ftl' />
 	<table class="list">
@@ -27,9 +39,14 @@ ${action.setPageType('saved_reports', 'saved_reports')!}
 	
 	<#include '../common/_pagination.ftl' />
 <#elseif !page.hasResults() >
-	<div class="emptyList" >
-		<h2><@s.text name="label.noresults" /></h2>
-		<p><@s.text name="label.emptysavedreportslist" /> <a href="<@s.url action="report" />"><@s.text name="label.click_here_to_go_to_reporting"/></a></p>
+	<@s.url id="reportUrl" action="report"/>
+
+	<div class="initialMessage">
+		<div class="textContainer">
+			<h1><@s.text name="label.create_first_report" /></h1>
+			<p><@s.text name="label.create_first_report_description" /></p>
+			<input type="submit" value="<@s.text name="label.run_a_new_report"/>"onclick="return redirect('${reportUrl}');"/>
+		</div>
 	</div>
 <#else>
 	<div class="emptyList" >
