@@ -9,7 +9,7 @@
 	</script>	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
-
+${action.setPageType('report', 'show')!}
 <div class="pageSection searchPageSection" id="criteriaForm">
 	<div class="headerWithFootnote">
 		<#if listPage?exists>

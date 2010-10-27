@@ -1,4 +1,4 @@
-${action.setPageType('my_account', 'saved_reports')!}
+${action.setPageType('saved_reports', 'saved_reports')!}
 <#assign secondaryNavAction="list"/>
 <#include "_secondaryNav.ftl"/>
 
