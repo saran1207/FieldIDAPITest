@@ -514,7 +514,7 @@ public class DataServiceImpl implements DataService {
 			QueryBuilder<AutoAttributeDefinition> queryBuilder = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, securityFilter);
 			queryBuilder.addFetch("criteria");
 			queryBuilder.addPostFetchPaths("outputs");
-			queryBuilder.addSimpleWhere("criteria.productType.state", EntityState.ACTIVE);
+			queryBuilder.addSimpleWhere("criteria.assetType.state", EntityState.ACTIVE);
 			// for postgres to paginate correctly.
 			queryBuilder.addOrder("id");
 			
