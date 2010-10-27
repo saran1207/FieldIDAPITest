@@ -10,7 +10,7 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
@@ -203,11 +203,11 @@ Transaction transaction = transactionManager.startTransaction();
 	
 
 	@SuppressWarnings("deprecation")
-	public Collection<AssetSerialExtension> getAssetSerialExtensions(Long tenantId) {
+	public Collection<AssetExtension> getAssetExtensions(Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getAssetSerialExtensions(tenantId);
+			return createManager(transaction.getEntityManager()).getAssetExtensions(tenantId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -253,11 +253,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Asset update(Asset assetSerial, User modifiedBy) throws SubAssetUniquenessException {
+	public Asset update(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).update(assetSerial, modifiedBy);
+			return createManager(transaction.getEntityManager()).update(asset, modifiedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

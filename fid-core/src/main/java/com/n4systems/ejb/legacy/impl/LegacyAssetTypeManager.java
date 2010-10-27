@@ -20,7 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetSerialInfoOption;
+import rfid.ejb.entity.AssetInfoOption;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.AssetCodeMapping;
@@ -267,7 +267,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 		Pager<Long> infoOptionsToScan = findInfoOptions(pageNumber, pageSize);
 		
 		// look for info options that don't have a connection to an asset serial.
-		Query query = em.createQuery( "select DISTINCT io.uniqueID  from "+ AssetSerialInfoOption.class.getName()+" as psio right join psio.infoOption as io where io.uniqueID IN (:infoOptions) AND psio.uniqueID IS NULL " );
+		Query query = em.createQuery( "select DISTINCT io.uniqueID  from "+ AssetInfoOption.class.getName()+" as psio right join psio.infoOption as io where io.uniqueID IN (:infoOptions) AND psio.uniqueID IS NULL " );
 		query.setParameter( "infoOptions", infoOptionsToScan.getList() );
 		orphanInfoOptionIds = (Collection<Long>)query.getResultList();
 		if( orphanInfoOptionIds.size() > 0 ) {

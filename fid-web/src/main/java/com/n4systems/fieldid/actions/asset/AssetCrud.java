@@ -21,8 +21,8 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetCodeMapping;
-import rfid.ejb.entity.AssetSerialExtension;
-import rfid.ejb.entity.AssetSerialExtensionValue;
+import rfid.ejb.entity.AssetExtension;
+import rfid.ejb.entity.AssetExtensionValue;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
@@ -74,7 +74,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private Collection<AssetStatus> productStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private AssetType assetType;
-	private Collection<AssetSerialExtension> extentions;
+	private Collection<AssetExtension> extentions;
 	private AutoAttributeCriteria autoAttributeCriteria;
 
 	private List<Asset> assets;
@@ -231,13 +231,13 @@ public class AssetCrud extends UploadAttachmentSupport {
 	// AssetCrud should be refactored to use that.
 	private void convertInputsToExtensionValues() {
 		if (assetExtentionValues != null) {
-			Set<AssetSerialExtensionValue> newExtensionValues = new TreeSet<AssetSerialExtensionValue>();
+			Set<AssetExtensionValue> newExtensionValues = new TreeSet<AssetExtensionValue>();
 			for (AssetExtensionValueInput input : assetExtentionValues) {
 				if (input != null) { // some of the inputs can be null due to
 					// the retired info fields.
-					for (AssetSerialExtension extension : getExtentions()) {
+					for (AssetExtension extension : getExtentions()) {
 						if (extension.getUniqueID().equals(input.getExtensionId())) {
-							AssetSerialExtensionValue extensionValue = input.convertToExtensionValueBean(extension, asset);
+							AssetExtensionValue extensionValue = input.convertToExtensionValueBean(extension, asset);
 							if (extensionValue != null) {
 								newExtensionValues.add(extensionValue);
 							}
@@ -245,7 +245,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 					}
 				}
 			}
-			asset.setAssetSerialExtensionValues(newExtensionValues);
+			asset.setAssetExtensionValues(newExtensionValues);
 		}
 	}
 
@@ -777,11 +777,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public List<AssetExtensionValueInput> getAssetExtentionValues() {
 		if (assetExtentionValues == null) {
 			assetExtentionValues = new ArrayList<AssetExtensionValueInput>();
-			for (AssetSerialExtension extention : getExtentions()) {
+			for (AssetExtension extention : getExtentions()) {
 				AssetExtensionValueInput input = null;
-				if (asset.getAssetSerialExtensionValues() != null) {
-					for (AssetSerialExtensionValue value : asset.getAssetSerialExtensionValues()) {
-						if (extention.getUniqueID().equals(value.getAssetSerialExtension().getUniqueID())) {
+				if (asset.getAssetExtensionValues() != null) {
+					for (AssetExtensionValue value : asset.getAssetExtensionValues()) {
+						if (extention.getUniqueID().equals(value.getAssetExtension().getUniqueID())) {
 							input = new AssetExtensionValueInput(value);
 						}
 					}
@@ -801,9 +801,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SuppressWarnings("deprecation")
-	public Collection<AssetSerialExtension> getExtentions() {
+	public Collection<AssetExtension> getExtentions() {
 		if (extentions == null) {
-			extentions = legacyAssetManager.getAssetSerialExtensions(getTenantId());
+			extentions = legacyAssetManager.getAssetExtensions(getTenantId());
 		}
 		return extentions;
 	}

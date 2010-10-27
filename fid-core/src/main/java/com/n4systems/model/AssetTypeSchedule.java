@@ -17,7 +17,7 @@ import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.DateHelper;
 
 @Entity
-@Table(name = "producttypeschedules")
+@Table(name = "assettypeschedules")
 public class AssetTypeSchedule extends EntityWithOwner implements Saveable, SecurityEnhanced<AssetTypeSchedule> {
 	private static final long serialVersionUID = 1L;
 	

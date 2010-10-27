@@ -9,34 +9,34 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 @Entity
-@Table(name = "productserialextensionvalue")
-public class AssetSerialExtensionValue extends LegacyBaseEntity {
+@Table(name = "assetextensionvalue")
+public class AssetExtensionValue extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	private String extensionValue;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "r_productserial")
-	private Asset assetSerial;
+	private Asset asset;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "r_productserialextension")
-	private AssetSerialExtension assetSerialExtension;
+	private AssetExtension assetExtension;
 
-	public Asset getProductSerial() {
-		return assetSerial;
+	public Asset getAsset() {
+		return asset;
 	}
 
-	public void setProductSerial(Asset assetSerial) {
-		this.assetSerial = assetSerial;
+	public void setAsset(Asset asset) {
+		this.asset = asset;
 	}
 
-	public AssetSerialExtension getAssetSerialExtension() {
-		return assetSerialExtension;
+	public AssetExtension getAssetExtension() {
+		return assetExtension;
 	}
 
-	public void setAssetSerialExtension(AssetSerialExtension assetSerialExtension) {
-		this.assetSerialExtension = assetSerialExtension;
+	public void setAssetExtension(AssetExtension assetExtension) {
+		this.assetExtension = assetExtension;
 	}
 
 	public String getExtensionValue() {

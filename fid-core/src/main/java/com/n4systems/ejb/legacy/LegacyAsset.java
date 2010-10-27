@@ -7,7 +7,7 @@ import java.util.List;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -39,7 +39,7 @@ public interface LegacyAsset {
 	/**
 	 * @deprecated use AssetSerialExtensionListLoader
 	 */
-	public Collection<AssetSerialExtension> getAssetSerialExtensions(Long tenantId);
+	public Collection<AssetExtension> getAssetExtensions(Long tenantId);
 		
 	public AddAssetHistory getAddAssetHistory(Long rFieldidUser);
 	
@@ -51,7 +51,7 @@ public interface LegacyAsset {
 	 * updating asset
 	 #########################################################*/
 	
-	public Asset update(Asset assetSerial, User modifiedBy) throws SubAssetUniquenessException;
+	public Asset update(Asset asset, User modifiedBy) throws SubAssetUniquenessException;
 	
 	
 	public Asset createAssetWithServiceTransaction( String transactionGUID, Asset asset, User modifiedBy ) throws TransactionAlreadyProcessedException, SubAssetUniquenessException;

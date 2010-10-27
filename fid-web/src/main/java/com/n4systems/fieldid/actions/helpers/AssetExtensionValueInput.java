@@ -2,8 +2,8 @@ package com.n4systems.fieldid.actions.helpers;
 
 import com.n4systems.model.Asset;
 
-import rfid.ejb.entity.AssetSerialExtension;
-import rfid.ejb.entity.AssetSerialExtensionValue;
+import rfid.ejb.entity.AssetExtensionValue;
+import rfid.ejb.entity.AssetExtension;
 
 public class AssetExtensionValueInput {
 	
@@ -14,8 +14,8 @@ public class AssetExtensionValueInput {
 	public AssetExtensionValueInput() {
 	}
 	
-	public AssetExtensionValueInput( AssetSerialExtensionValue value ) {
-		this.extensionId = value.getAssetSerialExtension().getUniqueID();
+	public AssetExtensionValueInput( AssetExtensionValue value ) {
+		this.extensionId = value.getAssetExtension().getUniqueID();
 		this.value = value.getExtensionValue();
 		this.uniqueID = value.getUniqueID();
 	}
@@ -48,16 +48,16 @@ public class AssetExtensionValueInput {
 		return ( ( value == null || value.length() == 0 ) && uniqueID == null );
 	}
 	
-	public AssetSerialExtensionValue convertToExtensionValueBean( AssetSerialExtension extention, Asset asset) {
+	public AssetExtensionValue convertToExtensionValueBean( AssetExtension extention, Asset asset) {
 		if( isBlank() ) {
 			return null;
 		}
 		
-		AssetSerialExtensionValue newExtensionValue = new AssetSerialExtensionValue();
+		AssetExtensionValue newExtensionValue = new AssetExtensionValue();
 		newExtensionValue.setUniqueID( uniqueID );
 		newExtensionValue.setExtensionValue( value );
-		newExtensionValue.setAssetSerialExtension( extention );
-		newExtensionValue.setProductSerial(asset);
+		newExtensionValue.setAssetExtension( extention );
+		newExtensionValue.setAsset(asset);
 		return newExtensionValue;
 		
 	}

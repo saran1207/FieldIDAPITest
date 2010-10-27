@@ -22,7 +22,7 @@ import com.n4systems.model.utils.FindSubAssets;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -158,7 +158,7 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 	private void runAssetSavePreRecs(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
-		moveRfidFromAssetSerials(asset, modifiedBy);
+		moveRfidFromAssets(asset, modifiedBy);
 		setCountsTowardsLimitFlagOnLinkedAssets(asset);
 		processSubAssets(asset, modifiedBy);
 	}
@@ -293,7 +293,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		return asset;
 	}
 
-	private void moveRfidFromAssetSerials(Asset asset, User modifiedBy) {
+	private void moveRfidFromAssets(Asset asset, User modifiedBy) {
 		AssetSaver saver = new AssetSaver();
 		saver.setModifiedBy(modifiedBy);
 		
@@ -331,11 +331,11 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<AssetSerialExtension> getAssetSerialExtensions(Long tenantId) {
-		Query query = em.createQuery("from "+AssetSerialExtension.class.getName()+" ase where ase.tenantId = :tenantId");
+	public Collection<AssetExtension> getAssetExtensions(Long tenantId) {
+		Query query = em.createQuery("from "+ AssetExtension.class.getName()+" ase where ase.tenantId = :tenantId");
 		query.setParameter("tenantId", tenantId);
 
-		return (Collection<AssetSerialExtension>) query.getResultList();
+		return (Collection<AssetExtension>) query.getResultList();
 	}
 
 	

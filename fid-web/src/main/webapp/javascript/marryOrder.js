@@ -2,9 +2,9 @@ var ordersUrl = "";
 var marryOrderUrl = "";	
 var marryOrderTitle = "";
 	
-function selectOrder(assetSerialId, lineItemId) {
+function selectOrder(assetId, lineItemId) {
 
-	var url = marryOrderUrl + "?uniqueID="+assetSerialId+"&lineItemId="+lineItemId;
+	var url = marryOrderUrl + "?uniqueID="+assetId+"&lineItemId="+lineItemId;
 	getResponse( url );
 }
 	

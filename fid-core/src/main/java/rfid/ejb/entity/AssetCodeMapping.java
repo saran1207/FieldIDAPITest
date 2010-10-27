@@ -17,7 +17,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 
 @Entity
-@Table (name = "productcodemapping")
+@Table (name = "assetcodemapping")
 public class AssetCodeMapping extends LegacyBeanTenant {
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class AssetCodeMapping extends LegacyBeanTenant {
 	private AssetType assetInfo;
 	
 	@ManyToMany (targetEntity = InfoOptionBean.class, cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-	@JoinTable (name = "productcodemapping_infooption",
+	@JoinTable (name = "assetcodemapping_infooption",
 					joinColumns = @JoinColumn(name = "r_productcodemapping", referencedColumnName = "uniqueid"),
 					inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid") )
 	private List<InfoOptionBean> infoOptions = new ArrayList<InfoOptionBean>();	

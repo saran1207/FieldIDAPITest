@@ -1,7 +1,7 @@
 package com.n4systems.model.asset;
 
 import com.n4systems.model.Asset;
-import rfid.ejb.entity.AssetSerialExtensionValue;
+import rfid.ejb.entity.AssetExtensionValue;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.AbstractEntityCleaner;
@@ -11,15 +11,15 @@ import com.n4systems.model.infooption.InfoOptionCleaner;
 public class AssetCleaner extends AbstractEntityCleaner<Asset> {
 	
 	private final Cleaner<InfoOptionBean> infoOptionCleaner;
-	private final Cleaner<AssetSerialExtensionValue> assetSerialExtensionValueCleaner;
+	private final Cleaner<AssetExtensionValue> assetExtensionValueCleaner;
 	
 	public AssetCleaner() {
-		this(new InfoOptionCleaner(), new AssetSerialExtensionValueCleaner());
+		this(new InfoOptionCleaner(), new AssetExtensionValueCleaner());
 	}
 	
-	public AssetCleaner(Cleaner<InfoOptionBean> infoOptionCleaner, Cleaner<AssetSerialExtensionValue> assetSerialExtensionValueCleaner) {
+	public AssetCleaner(Cleaner<InfoOptionBean> infoOptionCleaner, Cleaner<AssetExtensionValue> assetExtensionValueCleaner) {
 		this.infoOptionCleaner = infoOptionCleaner;
-		this.assetSerialExtensionValueCleaner = assetSerialExtensionValueCleaner;
+		this.assetExtensionValueCleaner = assetExtensionValueCleaner;
 	}
 	
 	@Override
@@ -33,8 +33,8 @@ public class AssetCleaner extends AbstractEntityCleaner<Asset> {
 			}
 		}
 		
-		for (AssetSerialExtensionValue extension: asset.getAssetSerialExtensionValues()) {
-			assetSerialExtensionValueCleaner.clean(extension);
+		for (AssetExtensionValue extension: asset.getAssetExtensionValues()) {
+			assetExtensionValueCleaner.clean(extension);
 		}
 	}
 

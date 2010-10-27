@@ -13,7 +13,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 
 @Entity
-@Table(name = "productattachments")
+@Table(name = "assetattachments")
 public class AssetAttachment extends EntityWithTenant implements Saveable, Attachment {
 	private static final long serialVersionUID = 1L;
 

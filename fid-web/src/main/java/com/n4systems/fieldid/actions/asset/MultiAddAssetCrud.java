@@ -10,7 +10,7 @@ import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.services.asset.AssetSaveService;
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.OrderManager;
@@ -45,7 +45,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private List<Listable<Long>> employees;
 	private List<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
-	private List<AssetSerialExtension> extentions;
+	private List<AssetExtension> extentions;
 	private AssetTypeLister assetTypeLister;
 	private AutoAttributeCriteria autoAttributeCriteria;
 	
@@ -174,9 +174,9 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		return commentTemplates;
 	}
 
-	public List<AssetSerialExtension> getExtentions() {
+	public List<AssetExtension> getExtentions() {
 		if (extentions == null) {
-			extentions = getLoaderFactory().createAssetSerialExtensionListLoader().load();
+			extentions = getLoaderFactory().createAssetExtensionListLoader().load();
 		}
 		return extentions;
 	}

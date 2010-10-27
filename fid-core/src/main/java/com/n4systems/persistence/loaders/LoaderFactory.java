@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.asset.AssetExtensionListLoader;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.assetstatus.AssetStatusFilteredLoader;
 import com.n4systems.model.assetstatus.AssetStatusForNameExistsLoader;
@@ -50,7 +51,6 @@ import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.asset.AssetAttachmentListLoader;
 import com.n4systems.model.asset.SyncAssetListLoader;
-import com.n4systems.model.asset.AssetSerialExtensionListLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.assettype.AssetTypeByAttachmentLoader;
 import com.n4systems.model.assettype.AssetTypeListableLoader;
@@ -327,8 +327,8 @@ public class LoaderFactory implements Serializable {
 		return new AssetsByNetworkIdLoader(filter);
 	}
 
-	public AssetSerialExtensionListLoader createAssetSerialExtensionListLoader() {
-		return new AssetSerialExtensionListLoader(filter);
+	public AssetExtensionListLoader createAssetExtensionListLoader() {
+		return new AssetExtensionListLoader(filter);
 	}
 
 	public AssetStatusByNameLoader createAssetStatusByNameLoader() {

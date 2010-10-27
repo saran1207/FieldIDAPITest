@@ -6,10 +6,10 @@ import java.util.TreeSet;
 
 import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.model.AssetType;
-import rfid.ejb.entity.AssetSerialExtension;
+import rfid.ejb.entity.AssetExtension;
+import rfid.ejb.entity.AssetExtensionValue;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.AssetSerialExtensionValue;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
@@ -109,14 +109,14 @@ public class AssetViewModeConverter {
 	
 	private void resolveExtensionValues(List<AssetExtensionValueInput> assetExtentionValues, Asset asset) {
 		if (assetExtentionValues != null) {
-			List<AssetSerialExtension> extensions = loaderFactory.createAssetSerialExtensionListLoader().load(transaction);
+			List<AssetExtension> extensions = loaderFactory.createAssetExtensionListLoader().load(transaction);
 			
-			Set<AssetSerialExtensionValue> newExtensionValues = new TreeSet<AssetSerialExtensionValue>();
+			Set<AssetExtensionValue> newExtensionValues = new TreeSet<AssetExtensionValue>();
 			for (AssetExtensionValueInput input : assetExtentionValues) {
 				if (input != null) { // some of the inputs can be null due to the retired info fields.
-					for (AssetSerialExtension extension : extensions) {
+					for (AssetExtension extension : extensions) {
 						if (extension.getUniqueID().equals(input.getExtensionId())) {
-							AssetSerialExtensionValue extensionValue = input.convertToExtensionValueBean(extension, asset);
+							AssetExtensionValue extensionValue = input.convertToExtensionValueBean(extension, asset);
 							if (extensionValue != null) {
 								newExtensionValues.add(extensionValue);
 							}
@@ -125,7 +125,7 @@ public class AssetViewModeConverter {
 				}
 			}
 			
-			asset.setAssetSerialExtensionValues(newExtensionValues);
+			asset.setAssetExtensionValues(newExtensionValues);
 		}
 	}
 }

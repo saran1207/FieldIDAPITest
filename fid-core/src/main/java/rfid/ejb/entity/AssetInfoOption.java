@@ -9,8 +9,8 @@ import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 
 @Entity
-@Table(name = "productserial_infooption")
-public class AssetSerialInfoOption extends LegacyBaseEntity {
+@Table(name = "asset_infooption")
+public class AssetInfoOption extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	private Long r_productserial;

@@ -11,7 +11,7 @@ import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
 
 @Entity
-@Table(name="subproducts")
+@Table(name="subassets")
 public class SubAsset extends AbstractEntity implements UnsecuredEntity {
 
 	private static final long serialVersionUID = 1L;

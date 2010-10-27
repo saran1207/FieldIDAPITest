@@ -70,8 +70,7 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     private String duration; 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinTable(name="projects_products",joinColumns = @JoinColumn(name="products_id"))
-    @JoinTable(name = "projects_products", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name="products_id"))
+    @JoinTable(name = "projects_assets", joinColumns = @JoinColumn(name="projects_id"), inverseJoinColumns = @JoinColumn(name="products_id"))
     @IndexColumn(name="orderidx")
     private List<Asset> assets = new ArrayList<Asset>();
     

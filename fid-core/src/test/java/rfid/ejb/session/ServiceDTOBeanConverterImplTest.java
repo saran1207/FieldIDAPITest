@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.AssetSerialExtensionValue;
+import rfid.ejb.entity.AssetExtensionValue;
 
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.model.InspectionSchedule;
@@ -120,8 +120,8 @@ public class ServiceDTOBeanConverterImplTest {
 		Order customerOrder = new Order();
 		customerOrder.setId( 2L );
 				
-		Set<AssetSerialExtensionValue> extensions = new HashSet<AssetSerialExtensionValue>();
-		extensions.add( new AssetSerialExtensionValue() );
+		Set<AssetExtensionValue> extensions = new HashSet<AssetExtensionValue>();
+		extensions.add( new AssetExtensionValue() );
 		
 		Set<InspectionSchedule> schedules = new HashSet<InspectionSchedule>();
 		schedules.add( new InspectionSchedule() );
@@ -137,7 +137,7 @@ public class ServiceDTOBeanConverterImplTest {
 		asset.setLastInspectionDate( lastInspectionDate );
 		asset.setShopOrder( shopOrder );
 		asset.setCustomerOrder( customerOrder );
-		asset.setAssetSerialExtensionValues( extensions );
+		asset.setAssetExtensionValues( extensions );
 		
 		asset.setModifiedBy( modifiedBy );
 		
@@ -155,7 +155,7 @@ public class ServiceDTOBeanConverterImplTest {
 		assertEquals( lastInspectionDate, asset.getLastInspectionDate() );
 		assertEquals( shopOrder, asset.getShopOrder() );
 		assertEquals( customerOrder, asset.getCustomerOrder() );
-		assertEquals( 1, asset.getAssetSerialExtensionValues().size() );
+		assertEquals( 1, asset.getAssetExtensionValues().size() );
 		assertEquals( 2, asset.getSubAssets().size() );
 		assertEquals( modifiedBy, asset.getModifiedBy() );
 		

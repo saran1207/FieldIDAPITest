@@ -9,7 +9,7 @@ import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 
 @Entity
-@Table (name = "productcodemapping_infooption")
+@Table (name = "assetcodemapping_infooption")
 public class AssetCodeMappingInfoOption extends LegacyBaseEntity {
 	private static final long serialVersionUID = 1L;
 

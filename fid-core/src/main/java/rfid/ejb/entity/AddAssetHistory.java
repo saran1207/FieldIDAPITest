@@ -28,7 +28,7 @@ import com.n4systems.model.user.User;
  * 
  */
 @Entity
-@Table(name = "addproducthistory")
+@Table(name = "addassethistory")
 public class AddAssetHistory extends LegacyBeanTenant implements HasUser, HasOwner {
 	private static final long serialVersionUID = 1L;
 	
@@ -59,7 +59,7 @@ public class AddAssetHistory extends LegacyBeanTenant implements HasUser, HasOwn
     private User assignedUser;
 	
 	@ManyToMany(targetEntity = InfoOptionBean.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "addproducthistory_infooption", joinColumns = @JoinColumn(name = "r_addproducthistory", referencedColumnName = "uniqueid"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
+	@JoinTable(name = "addassethistory_infooption", joinColumns = @JoinColumn(name = "r_addproducthistory", referencedColumnName = "uniqueid"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
 	private List<InfoOptionBean> infoOptions;
 
 	public User getUser() {

@@ -22,7 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import rfid.ejb.entity.AssetSerialExtensionValue;
+import rfid.ejb.entity.AssetExtensionValue;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -40,7 +40,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 
 @Entity
-@Table(name = "products")
+@Table(name = "assets")
 public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
@@ -82,15 +82,15 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	private AssetType type;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "productserial_infooption", joinColumns = @JoinColumn(name = "r_productserial", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
+	@JoinTable(name = "asset_infooption", joinColumns = @JoinColumn(name = "r_productserial", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
 	private Set<InfoOptionBean> infoOptions = new HashSet<InfoOptionBean>();
 
 	@ManyToOne(optional = true)
     @JoinColumn(name="productstatus_uniqueid")
 	private AssetStatus assetStatus;
 
-	@OneToMany(mappedBy = "assetSerial", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
-	private Set<AssetSerialExtensionValue> assetSerialExtensionValues = new HashSet<AssetSerialExtensionValue>();
+	@OneToMany(mappedBy = "asset", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
+	private Set<AssetExtensionValue> assetExtensionValues = new HashSet<AssetExtensionValue>();
 
 	@ManyToOne(optional = true)
 	private User identifiedBy;
@@ -103,7 +103,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     private List<SubAsset> subAssets = new ArrayList<SubAsset>();
     
     @ManyToMany( fetch= FetchType.LAZY )
-    @JoinTable(name = "projects_products", joinColumns = @JoinColumn(name="products_id"), inverseJoinColumns = @JoinColumn(name="projects_id"))
+    @JoinTable(name = "projects_assets", joinColumns = @JoinColumn(name="products_id"), inverseJoinColumns = @JoinColumn(name="projects_id"))
     private List<Project> projects = new ArrayList<Project>();
     
     @Column(name="published", nullable=false)
@@ -294,13 +294,13 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		this.mobileGUID = mobileGUID;
 	}
 
-	public Set<AssetSerialExtensionValue> getAssetSerialExtensionValues() {
-		return assetSerialExtensionValues;
+	public Set<AssetExtensionValue> getAssetExtensionValues() {
+		return assetExtensionValues;
 	}
 
-	public void setAssetSerialExtensionValues(
-			Set<AssetSerialExtensionValue> assetSerialExtensionValues) {
-		this.assetSerialExtensionValues = assetSerialExtensionValues;
+	public void setAssetExtensionValues(
+			Set<AssetExtensionValue> assetExtensionValues) {
+		this.assetExtensionValues = assetExtensionValues;
 	}
 
 	public String getCustomerRefNumber() {
@@ -355,10 +355,10 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	}
 	
 	public String getAssetExtensionValue( String name ) {
-		if ( assetSerialExtensionValues != null) {
-			for (AssetSerialExtensionValue assetSerialExtensionValue : assetSerialExtensionValues) {
-				if (assetSerialExtensionValue.getAssetSerialExtension().getExtensionKey().equals(name)) {
-					return assetSerialExtensionValue.getExtensionValue();
+		if ( assetExtensionValues != null) {
+			for (AssetExtensionValue assetExtensionValue : assetExtensionValues) {
+				if (assetExtensionValue.getAssetExtension().getExtensionKey().equals(name)) {
+					return assetExtensionValue.getExtensionValue();
 				}
 			}
 		}

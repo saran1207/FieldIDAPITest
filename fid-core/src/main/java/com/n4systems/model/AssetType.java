@@ -16,6 +16,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -39,7 +41,7 @@ import com.n4systems.model.security.SecurityLevel;
 
 
 @Entity
-@Table(name = "producttypes")
+@Table(name = "assettypes")
 public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType> {
 	private static final long serialVersionUID = 1L;
 	private static final String descVariableDefault = "";
@@ -76,9 +78,11 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private AutoAttributeCriteria autoAttributeCriteria;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinTable(name="assettypes_fileattachments", joinColumns = @JoinColumn(name="producttypes_id"), inverseJoinColumns = @JoinColumn(name="attachments_id"))
 	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="assettypes_assettypes", joinColumns = @JoinColumn(name="producttypes_id"), inverseJoinColumns = @JoinColumn(name="subtypes_id"))
 	private Set<AssetType> subTypes = new HashSet<AssetType>();
 	
 	private String archivedName;
@@ -358,7 +362,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	 * PrimaryOrg.
 	 * @param type	Inspection type
 	 * @param owner	Owner
-	 * @return		ProductTypeSchedule or null if no schedule was found
+	 * @return		AssetTypeSchedule or null if no schedule was found
 	 */
 	@AllowSafetyNetworkAccess
 	public AssetTypeSchedule getSchedule(InspectionType type, BaseOrg owner) {

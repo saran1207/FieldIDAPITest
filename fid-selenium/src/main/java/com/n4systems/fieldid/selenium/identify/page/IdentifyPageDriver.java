@@ -53,7 +53,7 @@ public class IdentifyPageDriver {
 	private String classStringIdentifyingUnitOfMeasureFields = "unitOfMeasure";
 	private String registerThisAssetOverTheSafetyNetworkLinkLocator = "xpath=//A[@id='showSmartSearchLink']";
 	private String registerAssetVendorSelectListLocator = "xpath=//select[@id='snSmartSearchVendors']";
-	private String registerAssetSerialRFIDReferenceNumberTextFieldLocator = "xpath=//input[@id='snSmartSearchText']";
+	private String registerAssetRFIDReferenceNumberTextFieldLocator = "xpath=//input[@id='snSmartSearchText']";
 	private String registerAssetLoadButtonLocator = "xpath=//input[@id='snSmartSearchSubmit']";
 	private String couldNotFindAnyPublishedAssetTextLocator = "xpath=//div[@id='snSmartSearchResults']";
 	private String identifySelectedTabLocator = "xpath=//ul[contains(@class,'options')]/li[contains(@class,'selected')]";
@@ -385,7 +385,7 @@ public class IdentifyPageDriver {
 				fail("Could not find the vendor '" + vendor + "' on the list of vendors");
 			}
 			String asset = registration.getAssetNumber();
-			selenium.type(registerAssetSerialRFIDReferenceNumberTextFieldLocator, asset);
+			selenium.type(registerAssetRFIDReferenceNumberTextFieldLocator, asset);
 			selenium.click(registerAssetLoadButtonLocator);
 			selenium.waitForAjax(MiscDriver.DEFAULT_TIMEOUT);
 			assertFalse("Could not find vendor '" + vendor + "', asset '" + asset + "'", selenium.isElementPresent(couldNotFindAnyPublishedAssetTextLocator));

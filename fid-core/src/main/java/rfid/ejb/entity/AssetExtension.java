@@ -6,8 +6,8 @@ import javax.persistence.Table;
 import com.n4systems.model.parents.legacy.LegacyBeanTenantId;
 
 @Entity
-@Table(name = "productserialextension")
-public class AssetSerialExtension extends LegacyBeanTenantId {
+@Table(name = "assetextension")
+public class AssetExtension extends LegacyBeanTenantId {
 	private static final long serialVersionUID = 1L;
 
 	private String extensionKey;
