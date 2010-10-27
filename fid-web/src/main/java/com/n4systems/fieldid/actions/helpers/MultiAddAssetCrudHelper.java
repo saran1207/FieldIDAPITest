@@ -13,14 +13,14 @@ import com.n4systems.persistence.PersistenceManagerTransactor;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.uitags.views.HierarchicalNode;
 
-public class MassUpdateProductHelper extends BaseActionHelper {
+public class MultiAddAssetCrudHelper extends BaseActionHelper {
 	private final LocationHelper locationHelper;
 	
-	
-	public MassUpdateProductHelper(LoaderFactory loaderFactory) {
-		locationHelper = new LocationHelper(loaderFactory, new PersistenceManagerTransactor());
+	public MultiAddAssetCrudHelper(LoaderFactory loaderFactory) {
+		 locationHelper = new LocationHelper(loaderFactory, new PersistenceManagerTransactor());
 	}
 
+	
 
 	public String getFullNameOfLocation(Location location) {
 		return locationHelper.getFullNameOfLocation(location);

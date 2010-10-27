@@ -9,14 +9,14 @@ import com.n4systems.model.SubAsset;
 import com.n4systems.model.asset.AssetSubAssetsLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
 
-public class RealTimeProductLookupHandler {
+public class RealTimeAssetLookupHandler {
 
 	private final SmartSearchLoader smartSearchLoader; 
 	private final AssetSubAssetsLoader subAssetLoader;
 	private String searchText;
 	private Date modified;
 	
-	public RealTimeProductLookupHandler(SmartSearchLoader smartSearchLoader, AssetSubAssetsLoader subAssetLoader) {
+	public RealTimeAssetLookupHandler(SmartSearchLoader smartSearchLoader, AssetSubAssetsLoader subAssetLoader) {
 		this.smartSearchLoader = smartSearchLoader;
 		this.subAssetLoader = subAssetLoader;
 	}
@@ -35,12 +35,12 @@ public class RealTimeProductLookupHandler {
 		return assets;
 	}
 	
-	public RealTimeProductLookupHandler setSearchText(String searchText) {
+	public RealTimeAssetLookupHandler setSearchText(String searchText) {
 		this.searchText = searchText;
 		return this;
 	}
 	
-	public RealTimeProductLookupHandler setModified(Date modified) {
+	public RealTimeAssetLookupHandler setModified(Date modified) {
 		this.modified = modified;
 		return this;
 	}

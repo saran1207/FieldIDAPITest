@@ -253,59 +253,59 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return inspectionDTOs;
 	}
 
-	public ProductServiceDTO convert(Asset product) {
+	public ProductServiceDTO convert(Asset asset) {
 
 		ProductServiceDTO productDTO = new ProductServiceDTO();
 
-		persistenceManager.reattach(product, false);
+		persistenceManager.reattach(asset, false);
 
-		populateOwners(product.getOwner(), productDTO);
+		populateOwners(asset.getOwner(), productDTO);
 
-		productDTO.setId(product.getId());
-		productDTO.setCustomerRefNumber(product.getCustomerRefNumber());
-		productDTO.setIdentified(AbstractBaseServiceDTO.dateToString(product.getIdentified()));
-		productDTO.setLastInspectionDate(AbstractBaseServiceDTO.dateToString(product.getLastInspectionDate()));
-		productDTO.setMobileGuid(product.getMobileGUID());
-		productDTO.setProductStatusId(product.getAssetStatus() != null ? product.getAssetStatus().getUniqueID() : 0);
-		productDTO.setProductTypeId(product.getType().getId());
-		productDTO.setPurchaseOrder(product.getPurchaseOrder());
-		productDTO.setRfidNumber(product.getRfidNumber() == null ? null : product.getRfidNumber().toUpperCase());
-		productDTO.setSerialNumber(product.getSerialNumber());
-		productDTO.setComments(product.getComments());
-		productDTO.setIdentifiedById(product.getIdentifiedBy() != null ? product.getIdentifiedBy().getId() : 0);
-		productDTO.setModifiedById(product.getModifiedBy() != null ? product.getModifiedBy().getId() : 0);
-		productDTO.setOrderNumber(product.getShopOrder() != null ? product.getShopOrder().getOrder().getOrderNumber() : "");
-		productDTO.setModified(product.getModified());
-		productDTO.setAssignedUserId(product.getAssignedUser() != null ? product.getAssignedUser().getId() : 0);
+		productDTO.setId(asset.getId());
+		productDTO.setCustomerRefNumber(asset.getCustomerRefNumber());
+		productDTO.setIdentified(AbstractBaseServiceDTO.dateToString(asset.getIdentified()));
+		productDTO.setLastInspectionDate(AbstractBaseServiceDTO.dateToString(asset.getLastInspectionDate()));
+		productDTO.setMobileGuid(asset.getMobileGUID());
+		productDTO.setProductStatusId(asset.getAssetStatus() != null ? asset.getAssetStatus().getUniqueID() : 0);
+		productDTO.setProductTypeId(asset.getType().getId());
+		productDTO.setPurchaseOrder(asset.getPurchaseOrder());
+		productDTO.setRfidNumber(asset.getRfidNumber() == null ? null : asset.getRfidNumber().toUpperCase());
+		productDTO.setSerialNumber(asset.getSerialNumber());
+		productDTO.setComments(asset.getComments());
+		productDTO.setIdentifiedById(asset.getIdentifiedBy() != null ? asset.getIdentifiedBy().getId() : 0);
+		productDTO.setModifiedById(asset.getModifiedBy() != null ? asset.getModifiedBy().getId() : 0);
+		productDTO.setOrderNumber(asset.getShopOrder() != null ? asset.getShopOrder().getOrder().getOrderNumber() : "");
+		productDTO.setModified(asset.getModified());
+		productDTO.setAssignedUserId(asset.getAssignedUser() != null ? asset.getAssignedUser().getId() : 0);
 
-		if (product.getDescription() != null && product.getDescription().length() >= 255) {
-			productDTO.setDescription(product.getDescription().substring(0, 255));
+		if (asset.getDescription() != null && asset.getDescription().length() >= 255) {
+			productDTO.setDescription(asset.getDescription().substring(0, 255));
 		} else {
-			productDTO.setDescription(product.getDescription());
+			productDTO.setDescription(asset.getDescription());
 		}
 
-		for (InfoOptionBean infoOption : product.getInfoOptions()) {
+		for (InfoOptionBean infoOption : asset.getInfoOptions()) {
 			productDTO.getInfoOptions().add(convert(infoOption, infoOption.getInfoField().getUniqueID()));
 		}
 
-		new FindSubAssets(persistenceManager, product).fillInSubAssets();
-		if (product.getSubAssets() != null) {
+		new FindSubAssets(persistenceManager, asset).fillInSubAssets();
+		if (asset.getSubAssets() != null) {
 			SubProductMapServiceDTO subProductMap = null;
-			for (SubAsset subAsset : product.getSubAssets()) {
+			for (SubAsset subAsset : asset.getSubAssets()) {
 				subProductMap = new SubProductMapServiceDTO();
 				subProductMap.setName(subAsset.getLabel());
 				subProductMap.setSubProductId(subAsset.getAsset().getId());
-				subProductMap.setProductId(product.getId());
+				subProductMap.setProductId(asset.getId());
 				productDTO.getSubProducts().add(subProductMap);
 			}
 		}
 
-		List<InspectionSchedule> schedules = inspectionScheduleManager.getAvailableSchedulesFor(product);
+		List<InspectionSchedule> schedules = inspectionScheduleManager.getAvailableSchedulesFor(asset);
 		for (InspectionSchedule schedule : schedules) {
 			productDTO.getSchedules().add(convert(schedule));
 		}
 
-		convertLocationToDTO(productDTO, product);
+		convertLocationToDTO(productDTO, asset);
 
 		return productDTO;
 	}
@@ -328,51 +328,51 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * @deprecated Use the ProductServiceDTOConverter
 	 */
 	@Deprecated
-	public Asset convert(ProductServiceDTO productServiceDTO, Asset targetProduct, long tenantId) {
+	public Asset convert(ProductServiceDTO productServiceDTO, Asset targetAsset, long tenantId) {
 
 		Tenant tenantOrganization = TenantCache.getInstance().findTenant(tenantId);
 		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenantOrganization.getId());
 
-		targetProduct.setComments(productServiceDTO.getComments());
-		targetProduct.setCustomerRefNumber(productServiceDTO.getCustomerRefNumber());
-		targetProduct.setType(em.find(AssetType.class, productServiceDTO.getProductTypeId()));
-		targetProduct.setPurchaseOrder(productServiceDTO.getPurchaseOrder());
-		targetProduct.setRfidNumber(productServiceDTO.getRfidNumber());
-		targetProduct.setTenant(tenantOrganization);
+		targetAsset.setComments(productServiceDTO.getComments());
+		targetAsset.setCustomerRefNumber(productServiceDTO.getCustomerRefNumber());
+		targetAsset.setType(em.find(AssetType.class, productServiceDTO.getProductTypeId()));
+		targetAsset.setPurchaseOrder(productServiceDTO.getPurchaseOrder());
+		targetAsset.setRfidNumber(productServiceDTO.getRfidNumber());
+		targetAsset.setTenant(tenantOrganization);
 
 		if (productServiceDTO.getSerialNumber().equals(GENERATE_SERIAL_NUMBER)) {
-			targetProduct.setSerialNumber(serialNumberCounter.generateSerialNumber(primaryOrg));
+			targetAsset.setSerialNumber(serialNumberCounter.generateSerialNumber(primaryOrg));
 		} else {
-			targetProduct.setSerialNumber(productServiceDTO.getSerialNumber());
+			targetAsset.setSerialNumber(productServiceDTO.getSerialNumber());
 		}
 		
-		targetProduct.setOwner(em.find(BaseOrg.class, productServiceDTO.getOwnerId()));
+		targetAsset.setOwner(em.find(BaseOrg.class, productServiceDTO.getOwnerId()));
 
-		targetProduct.setAssetStatus(convertField(AssetStatus.class, productServiceDTO.getProductStatusId(), targetProduct.getAssetStatus()));
+		targetAsset.setAssetStatus(convertField(AssetStatus.class, productServiceDTO.getProductStatusId(), targetAsset.getAssetStatus()));
 
 		if (productServiceDTO.identifiedByExists()) {
 			User user = em.find(User.class, productServiceDTO.getIdentifiedById());
-			targetProduct.setIdentifiedBy(user);
+			targetAsset.setIdentifiedBy(user);
 		}
 
 		if (productServiceDTO.modifiedByIdExists()) {
 			User modifiedBy = em.find(User.class, productServiceDTO.getModifiedById());
-			targetProduct.setModifiedBy(modifiedBy);
+			targetAsset.setModifiedBy(modifiedBy);
 		}
 
 		if (productServiceDTO.getInfoOptions() != null) {
-			targetProduct.setInfoOptions(convertInfoOptions(productServiceDTO));
+			targetAsset.setInfoOptions(convertInfoOptions(productServiceDTO));
 		}
 
 		if (DtoDateConverter.convertStringToDate(productServiceDTO.getIdentified()) != null) {
-			targetProduct.setIdentified(DtoDateConverter.convertStringToDate(productServiceDTO.getIdentified()));
+			targetAsset.setIdentified(DtoDateConverter.convertStringToDate(productServiceDTO.getIdentified()));
 		}
 
-		if (targetProduct.isNew()) {
-			targetProduct.setMobileGUID(productServiceDTO.getMobileGuid());
+		if (targetAsset.isNew()) {
+			targetAsset.setMobileGUID(productServiceDTO.getMobileGuid());
 		}
 		
-		return targetProduct;
+		return targetAsset;
 	}
 
 	public Set<InfoOptionBean> convertInfoOptions(ProductServiceDTO productServiceDTO) {
@@ -881,7 +881,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return stateServiceDTO;
 	}
 
-	private InfoFieldServiceDTO convert_new(InfoFieldBean infoField, Long productTypeId) {
+	private InfoFieldServiceDTO convert_new(InfoFieldBean infoField, Long assetTypeId) {
 		InfoFieldServiceDTO infoFieldDTO = new InfoFieldServiceDTO();
 		infoFieldDTO.setDtoVersion(InfoFieldServiceDTO.CURRENT_DTO_VERSION);
 		infoFieldDTO.setId(infoField.getUniqueID());
@@ -890,7 +890,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		infoFieldDTO.setRequired(infoField.isRequired());
 		infoFieldDTO.setUsingUnitOfMeasure(infoField.isUsingUnitOfMeasure());
 		infoFieldDTO.setWeight(infoField.getWeight());
-		infoFieldDTO.setProductTypeId(productTypeId);
+		infoFieldDTO.setProductTypeId(assetTypeId);
 		if (infoField.getUnitOfMeasure() != null) {
 			infoFieldDTO.setDefaultUnitOfMeasureId(infoField.getUnitOfMeasure().getId());
 		}

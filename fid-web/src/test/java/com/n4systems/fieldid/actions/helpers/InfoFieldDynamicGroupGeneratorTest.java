@@ -20,13 +20,13 @@ import com.n4systems.test.helpers.FluentArrayList;
 
 public class InfoFieldDynamicGroupGeneratorTest {
 
-	private static final CommonProductAttributeFinder NOT_TO_BE_USED_FINDER = null;
+	private static final CommonAssetAttributeFinder NOT_TO_BE_USED_FINDER = null;
 	
 	
-	private final class CommonProductAttributeFinderReturning implements CommonProductAttributeFinder {
+	private final class CommonAssetAttributeFinderReturning implements CommonAssetAttributeFinder {
 		SortedSet<String> commonInfoFields;
 
-		public CommonProductAttributeFinderReturning(SortedSet<String> commonInfoFields) {
+		public CommonAssetAttributeFinderReturning(SortedSet<String> commonInfoFields) {
 			super();
 			this.commonInfoFields = commonInfoFields;
 		}
@@ -39,7 +39,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 
 	@Test
 	public void should_call_the_attribute_finder_once_only_once_for_info_fields_when_called_multiple_times() throws Exception {
-		CommonProductAttributeFinder commonAttributeFinder = createMock(CommonProductAttributeFinder.class);
+		CommonAssetAttributeFinder commonAttributeFinder = createMock(CommonAssetAttributeFinder.class);
 		expect(commonAttributeFinder.findAllCommonInfoFieldNames(new FluentArrayList<Long>(1L))).andReturn(new TreeSet<String>());
 		replay(commonAttributeFinder);
 		
@@ -57,7 +57,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	public void should_call_the_attribute_finder_with_list_of_asset_type_ids_passed_in_when_the_selected_asset_type_id_is_null() throws Exception {
 		List<Long> productTypeIds = new FluentArrayList<Long>(1L);
 
-		CommonProductAttributeFinder commonAttributeFinder = createMock(CommonProductAttributeFinder.class);
+		CommonAssetAttributeFinder commonAttributeFinder = createMock(CommonAssetAttributeFinder.class);
 		expect(commonAttributeFinder.findAllCommonInfoFieldNames(productTypeIds)).andReturn(new TreeSet<String>());
 		replay(commonAttributeFinder);
 		
@@ -73,7 +73,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	public void should_call_the_attribute_finder_with_list_of_only_the_selected_asset_type_id_selected_asset_type_id_is_not_null() throws Exception {
 		List<Long> productTypeIds = new FluentArrayList<Long>(10L, 4L, 1L, 5040L);
 
-		CommonProductAttributeFinder commonAttributeFinder = createMock(CommonProductAttributeFinder.class);
+		CommonAssetAttributeFinder commonAttributeFinder = createMock(CommonAssetAttributeFinder.class);
 		expect(commonAttributeFinder.findAllCommonInfoFieldNames(new FluentArrayList<Long>(1L))).andReturn(new TreeSet<String>());
 		replay(commonAttributeFinder);
 		
@@ -108,7 +108,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	@Test
 	public void should_create_generate_on_column_mapping_per_info_field_found() throws Exception {
 		ImmutableSortedSet<String> commonInfoFields = ImmutableSortedSet.of("field1", "field3", "field4");
-		CommonProductAttributeFinder commonAttributeFinder = new CommonProductAttributeFinderReturning(commonInfoFields);
+		CommonAssetAttributeFinder commonAttributeFinder = new CommonAssetAttributeFinderReturning(commonInfoFields);
 		
 		
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(commonAttributeFinder, "pre");
@@ -126,7 +126,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	
 	@Test
 	public void should_create_generate() throws Exception {
-		CommonProductAttributeFinder commonAttributeFinder = new CommonProductAttributeFinderReturning(ImmutableSortedSet.of("field1", "field3", "field4"));
+		CommonAssetAttributeFinder commonAttributeFinder = new CommonAssetAttributeFinderReturning(ImmutableSortedSet.of("field1", "field3", "field4"));
 		
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(commonAttributeFinder, "pre");
 		

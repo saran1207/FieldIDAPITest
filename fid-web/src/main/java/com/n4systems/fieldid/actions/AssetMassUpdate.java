@@ -18,7 +18,7 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
-import com.n4systems.fieldid.actions.helpers.MassUpdateProductHelper;
+import com.n4systems.fieldid.actions.helpers.MassUpdateAssetHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.api.Listable;
@@ -53,7 +53,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 
 	public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), asset);
-		overrideHelper(new MassUpdateProductHelper(getLoaderFactory()));
+		overrideHelper(new MassUpdateAssetHelper(getLoaderFactory()));
 	}
 	
 	private void applyCriteriaDefaults() {

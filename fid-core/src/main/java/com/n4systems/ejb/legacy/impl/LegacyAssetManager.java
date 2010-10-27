@@ -268,7 +268,7 @@ public class LegacyAssetManager implements LegacyAsset {
 
 	/**
 	 * creates the asset serial and updates the given users add
-	 * productHistory.
+	 * assetHistory.
 	 */
 	public Asset createWithHistory(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		asset = create(asset, modifiedBy);

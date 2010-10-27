@@ -1,4 +1,4 @@
-package com.n4systems.webservice.product;
+package com.n4systems.webservice.asset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +11,13 @@ import com.n4systems.webservice.ModelToServiceConverter;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 
-public class ProductToServiceConverter implements ModelToServiceConverter<Asset, ProductServiceDTO> {
+public class AssetToServiceConverter implements ModelToServiceConverter<Asset, ProductServiceDTO> {
 	private final ServiceDTOBeanConverter serviceConverter;
 	private final LastInspectionLoader lastInspectionLoader;
 	private final ModelToServiceConverter<Inspection, InspectionServiceDTO> inspectionConverter;
 	private boolean withPreviosInspections;
 	
-	public ProductToServiceConverter(ServiceDTOBeanConverter serviceConverter, LastInspectionLoader lastInspectionLoader, ModelToServiceConverter<Inspection, InspectionServiceDTO> inspectionConverter) {
+	public AssetToServiceConverter(ServiceDTOBeanConverter serviceConverter, LastInspectionLoader lastInspectionLoader, ModelToServiceConverter<Inspection, InspectionServiceDTO> inspectionConverter) {
 		this.serviceConverter = serviceConverter;
 		this.lastInspectionLoader = lastInspectionLoader;
 		this.inspectionConverter = inspectionConverter;

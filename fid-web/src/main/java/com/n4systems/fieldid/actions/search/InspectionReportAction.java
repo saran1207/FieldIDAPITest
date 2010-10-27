@@ -16,7 +16,7 @@ import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.InspectionAttributeDynamicGroupGenerator;
-import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
+import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.WebSession;
@@ -64,7 +64,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 			final AssetManager assetManager) {
 		//TODO refactor search action so that we don't have to pass in the session key but a way of getting the current criteria.
 		super(InspectionReportAction.class, WebSession.REPORT_CRITERIA, "Inspection Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(assetManager), "inspection_search", "asset"));
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "inspection_search", "asset"));
 
 		this.userManager = userManager;
 		

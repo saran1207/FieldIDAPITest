@@ -8,7 +8,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.util.ReportMap;
 
-public class ProductTypeMapBuilderTest {
+public class AssetTypeMapBuilderTest {
 
 	@Test
 	public void testSetAllFields() {

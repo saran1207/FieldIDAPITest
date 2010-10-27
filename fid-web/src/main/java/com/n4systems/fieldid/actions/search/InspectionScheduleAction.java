@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonAssetAttributeFinder;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -14,7 +15,6 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
-import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
@@ -58,7 +58,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
 		super(implementingClass, sessionKey, "Inspection Schedule Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(assetManager), "inspection_schedule_search", "asset"));
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "inspection_schedule_search", "asset"));
 		
 		this.inspectionManager = inspectionManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;

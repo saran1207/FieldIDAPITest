@@ -18,6 +18,7 @@ import com.n4systems.model.SubAsset;
 import com.n4systems.model.asset.AssetSubAssetsLoader;
 import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
 import com.n4systems.services.asset.AssetSaveService;
+import com.n4systems.webservice.server.handlers.RealTimeAssetLookupHandler;
 import org.apache.log4j.Logger;
 
 import rfid.util.PopulatorLogger;
@@ -172,7 +173,6 @@ import com.n4systems.webservice.predefinedlocation.PredefinedLocationListRespons
 import com.n4systems.webservice.server.handlers.CompletedScheduleCreator;
 import com.n4systems.webservice.server.handlers.HelloHandler;
 import com.n4systems.webservice.server.handlers.RealTimeInspectionLookupHandler;
-import com.n4systems.webservice.server.handlers.RealTimeProductLookupHandler;
 
 @SuppressWarnings("deprecation")
 public class DataServiceImpl implements DataService {
@@ -1350,9 +1350,9 @@ public class DataServiceImpl implements DataService {
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
 			SmartSearchLoader smartSearchLoader = new SmartSearchLoader(securityFilter);
 			AssetSubAssetsLoader subAssetLoader = new AssetSubAssetsLoader(securityFilter);
-			RealTimeProductLookupHandler realTimeProductLookupHandler = new RealTimeProductLookupHandler(smartSearchLoader, subAssetLoader);
+			RealTimeAssetLookupHandler realTimeAssetLookupHandler = new RealTimeAssetLookupHandler(smartSearchLoader, subAssetLoader);
 			
-			List<Asset> assets = realTimeProductLookupHandler
+			List<Asset> assets = realTimeAssetLookupHandler
 										.setSearchText(requestInformation.getSearchText())
 										.setModified(requestInformation.getModified())
 										.lookup();

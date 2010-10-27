@@ -76,7 +76,7 @@ public class DownloadCoordinatorTest {
 //	
 	@Test
 	@SuppressWarnings("unchecked")
-	public void generate_product_export_creates_and_saves_download_link() {
+	public void generate_asset_export_creates_and_saves_download_link() {
 		User user = UserBuilder.anEmployee().build();
 		
 		Saver<DownloadLink> linkSaver = createMock(Saver.class);
@@ -165,7 +165,7 @@ public class DownloadCoordinatorTest {
 	
 	@Test
 	@SuppressWarnings("unchecked")
-	public void generate_product_export_creates_and_executes_download_task() {
+	public void generate_asset_export_creates_and_executes_download_task() {
 		Executor executor =  createMock(Executor.class);
 		DownloadLinkFactory linkFactory = createMock(DownloadLinkFactory.class);
 		DownloadTaskFactory taskFactory = createMock(DownloadTaskFactory.class);

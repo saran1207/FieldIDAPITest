@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonAssetAttributeFinder;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -13,7 +14,6 @@ import rfid.ejb.entity.AssetStatus;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
-import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
@@ -34,7 +34,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	private List<Long> searchIds;
 
 	public AssetSearchAction(final PersistenceManager persistenceManager, final AssetManager assetManager) {
-		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(assetManager), "asset_search"));
+		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search"));
 	}
 
 	public void prepare() throws Exception {

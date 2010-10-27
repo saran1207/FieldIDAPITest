@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.fieldid.actions.helpers.MultiAddAssetCrudHelper;
 import com.n4systems.model.asset.AssetCleaner;
 import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.services.asset.AssetSaveService;
@@ -16,7 +17,6 @@ import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.helpers.MultiAddProductCrudHelper;
 import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
@@ -80,7 +80,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		super.postInit();
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), assetView);
 		setOwnerId(getSessionUserOwner().getId());
-		overrideHelper(new MultiAddProductCrudHelper(getLoaderFactory()));
+		overrideHelper(new MultiAddAssetCrudHelper(getLoaderFactory()));
 	}
 
 	public String doForm() {

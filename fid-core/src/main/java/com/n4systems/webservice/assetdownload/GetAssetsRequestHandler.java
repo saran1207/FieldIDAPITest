@@ -3,21 +3,21 @@ package com.n4systems.webservice.assetdownload;
 import java.util.List;
 
 import com.n4systems.model.Asset;
+import com.n4systems.webservice.asset.AssetToServiceConverter;
 import org.apache.log4j.Logger;
 
 import com.n4systems.persistence.loaders.FilteredInListLoader;
 import com.n4systems.webservice.RequestHandler;
 import com.n4systems.webservice.exceptions.ServiceException;
-import com.n4systems.webservice.product.ProductToServiceConverter;
 
 public class GetAssetsRequestHandler implements RequestHandler<AssetRequest, AssetListResponse>{
 	private Logger logger = Logger.getLogger(GetAssetsRequestHandler.class);
 	private static final int MAX_ASSET_REQUEST_SIZE = 2000;
 	
 	private final FilteredInListLoader<Asset> productLoader;
-	private final ProductToServiceConverter converter;
+	private final AssetToServiceConverter converter;
 	
-	public GetAssetsRequestHandler(FilteredInListLoader<Asset> productLoader, ProductToServiceConverter converter) {
+	public GetAssetsRequestHandler(FilteredInListLoader<Asset> productLoader, AssetToServiceConverter converter) {
 		this.productLoader = productLoader;
 		this.converter = converter;
 	}

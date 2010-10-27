@@ -13,21 +13,21 @@ public class InfoFieldDynamicGroupGenerator {
 	private static final int LARGE_ORDER_NUMBER_TO_PLACE_GROUP_AT_THE_END_OF_COLUMN_SELECTION = 2048;
 	private static final int STARTING_ORDER_INDEX_FOR_INFO_FIELDS = 1024;
 	
-	private final CommonProductAttributeFinder commonAttributeFinder;
+	private final CommonAssetAttributeFinder commonAttributeFinder;
 	private final String idPrefix;
 	
 	private List<ColumnMappingGroup> dynamigGroups;
 	private final String pathPrefix;
 	
 	
-	public InfoFieldDynamicGroupGenerator(CommonProductAttributeFinder commonAttributeFinder, String idPrefix, String pathPrefix) {
+	public InfoFieldDynamicGroupGenerator(CommonAssetAttributeFinder commonAttributeFinder, String idPrefix, String pathPrefix) {
 		this.commonAttributeFinder = commonAttributeFinder;
 		this.idPrefix = idPrefix;
 		this.pathPrefix = pathPrefix;
 	}
 	
 	
-	public InfoFieldDynamicGroupGenerator(CommonProductAttributeFinder commonAttributeFinder, String idPrefix) {
+	public InfoFieldDynamicGroupGenerator(CommonAssetAttributeFinder commonAttributeFinder, String idPrefix) {
 		this(commonAttributeFinder, idPrefix, null);
 	}
 

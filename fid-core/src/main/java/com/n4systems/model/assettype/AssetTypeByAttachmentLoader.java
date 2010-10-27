@@ -20,12 +20,12 @@ public class AssetTypeByAttachmentLoader extends Loader<Long> {
 		Query query = em.createQuery(jpql.toString());
 		query.setParameter("attachmentId", attachmentId);
 		
-		Long productTypeId = null;
+		Long assetTypeId = null;
 		try {
-			productTypeId = (Long)query.getSingleResult();
+			assetTypeId = (Long)query.getSingleResult();
 		} catch(RuntimeException re) {}
 		
-		return productTypeId;
+		return assetTypeId;
 	}
 
 	public AssetTypeByAttachmentLoader setAttachmentId(Long attachmentId) {

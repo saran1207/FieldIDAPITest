@@ -51,43 +51,43 @@ public class RealTimeProductLookupHandlerTest {
 
 	@Test
 	public void test_multiple_products_found_and_no_modified_date_return_all_products() {
-		RealTimeProductLookupHandler handler = new RealTimeProductLookupHandler(getSmartSearchLoaderThatReturnsMultipleProducts(), getSubProductLoaderMock(listOfMultipleAssets));
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleProducts(), getSubProductLoaderMock(listOfMultipleAssets));
 		assertEquals(listOfMultipleAssets, handler.setSearchText("some text").setModified(null).lookup());
 	}
 	
 	@Test
 	public void test_multiple_products_found_and_send_modified_date_return_all_products() {
-		RealTimeProductLookupHandler handler = new RealTimeProductLookupHandler(getSmartSearchLoaderThatReturnsMultipleProducts(), getSubProductLoaderMock(listOfMultipleAssets));
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleProducts(), getSubProductLoaderMock(listOfMultipleAssets));
 		assertEquals(listOfMultipleAssets, handler.setSearchText("some text").setModified(olderDate).lookup());
 	}
 	
 	@Test
 	public void test_single_product_found_modified_date_not_sent_return_product() {
-		RealTimeProductLookupHandler handler = new RealTimeProductLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
 		assertEquals(listWithSingleAsset, handler.setSearchText("some text").setModified(null).lookup());
 	}
 	
 	@Test
 	public void test_single_product_found_modified_date_older_than_products_return_product() {
-		RealTimeProductLookupHandler handler = new RealTimeProductLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
 		assertEquals(listWithSingleAsset, handler.setSearchText("some text").setModified(olderDate).lookup());
 	}
 	
 	@Test
 	public void test_single_product_found_modified_date_equals_products_return_empty_list() {
-		RealTimeProductLookupHandler handler = new RealTimeProductLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
 		assertEquals(0, handler.setSearchText("some text").setModified(moreRecentDate).lookup().size());						
 	}
 
 	@Test
 	public void test_single_product_found_modified_date_more_recent_than_products_return_empty_list() {
-		RealTimeProductLookupHandler handler = new RealTimeProductLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
 		assertEquals(0, handler.setSearchText("some text").setModified(mostRecentDate).lookup().size());								
 	}
 	
 	@Test
 	public void test_single_product_found_with_one_sub_product_modified_date_not_sent_return_product_and_sub_product() {
-		RealTimeProductLookupHandler handler = new RealTimeProductLookupHandler(getSmartSearchLoaderThatReturnsSingleProductWithOneSubProduct(), getSubProductLoaderMock(listWithSingleProductWithOneSubAsset));
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsSingleProductWithOneSubProduct(), getSubProductLoaderMock(listWithSingleProductWithOneSubAsset));
 		
 		List<Asset> expectedProductsReturned = getExpectedProductsReturned(listWithSingleProductWithOneSubAsset);
 		
@@ -102,7 +102,7 @@ public class RealTimeProductLookupHandlerTest {
 	
 	@Test
 	public void test_multiple_products_found_with_varied_sub_products_returns_products_and_all_sub_products() {
-		RealTimeProductLookupHandler handler = new RealTimeProductLookupHandler(getSmartSearchLoaderThatReturnsMultipleProductWithVariedSubProducts(), getSubProductLoaderMock(listOfMultipleProductsWithVariedSubAssets));
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleProductWithVariedSubProducts(), getSubProductLoaderMock(listOfMultipleProductsWithVariedSubAssets));
 		
 		List<Asset> expectedProductsReturned = getExpectedProductsReturned(listOfMultipleProductsWithVariedSubAssets);
 		
