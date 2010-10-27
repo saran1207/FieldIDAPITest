@@ -7,7 +7,6 @@
 		updatingColumnText = '<@s.text name="label.availablecolumnsupdating"/>'; 
 		dynamicColumnUrl = '<@s.url action="searchDynamicColumns" namespace="/ajax" />';
 	</script>
-	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
 

@@ -84,3 +84,8 @@
 div.formAction {
 		text-align: center;
 }
+
+.formAction input{
+	margin-left: 3px;
+	margin-right: 2.5px;
+}
