@@ -16,14 +16,15 @@
 		<#if listPage?exists>
 			<a href="javascript:void(0);" id="expandSection_reportForm" onclick="openSection('reportForm', 'expandSection_reportForm', 'collapseSection_reportForm');return false" ><img src="<@s.url value="/images/expandLarge.gif" />" /></a>
 			<a href="javascript:void(0);" id="collapseSection_reportForm" onclick="closeSection('reportForm', 'collapseSection_reportForm', 'expandSection_reportForm');return false" style="display:none;"><img src="<@s.url value="/images/collapseLarge.gif" />" /></a>
+			<span class="headerText">
+				<@s.text name="label.searchcriteria"/>
+			</span>
+		<#else>
+			<span class="footnoteText">
+				<img src="<@s.url value="/images/tip-icon.png" />"/>
+				<@s.text name="label.wildcard_explanation"/>
+			</span>
 		</#if>
-		<span class="headerText">
-			<img src="<@s.url value="/images/tip-icon.png" />"/>&nbsp;<@s.text name="label.searchcriteria"/>
-		</span>
-		<br>
-		<span class="footnoteText">
-			<@s.text name="label.wildcard_explanation"/>
-		</span>
 	</div>
 	
 	<@s.form action="search!createSearch" id="reportForm" cssClass="crudForm searchForm" theme="fieldid" cssStyle="${listPage?exists?string('display:none;','')}" >
@@ -99,8 +100,11 @@
 		<#include "../customizableSearch/_selectColumns.ftl"/>
 		
 		<div class="formAction">
-			<@s.reset key="label.clearform" onclick="clearForm(this.form); return false;"/>
-			<@s.submit key="label.Run"/>
+			<div class="centerContents">
+				<@s.submit key="label.Run"/>
+				<@s.text name="label.or"/>
+				<a href="javascript:void(0);" onclick="clearForm($('reportForm')); return false;"><@s.text name="label.clearform"/></a>
+			</div>
 		</div>
 	</@s.form >
 </div>

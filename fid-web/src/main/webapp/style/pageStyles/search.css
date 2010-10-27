@@ -12,40 +12,43 @@
 	padding-top: 5px;
 	padding-bottom: 5px;
 	font-weight: bold;
-	border-bottom: 3px solid #D0DAFD;
+	border-bottom: 1px solid #D0DAFD;
 }
 
 .columnGroup div {
 	margin-top: 10px;
-	border-bottom: 2px solid #D0DAFD;
 }
-
 
 #selectColumnNotificationArea {
 	font-weight:normal;
 	margin-left: 200px;
 	line-height: 1.2em;
-	padding:5px;
+	padding: 5px;
 }
 
 .pageSection {
-	overflow:hidden;
+	overflow: hidden;
 	width: 100%;
 }
 .contentSection {
-	overflow:auto;
-	zoom:1;
+	overflow: auto;
+	zoom: 1;
 }
-.infoSet {
-	width:100%;
-	overflow:hidden;
-	clear:right;
-	}
 
+.infoSet {
+	width: 100%;
+	overflow: hidden;
+	clear: right;
+}
+
+.pageSection .infoSet label{
+	width: 120px;
+	}
 	
 #pageContent {
 	overflow: visible;
 }
+
 #pageFooter {
 	clear:both;
 }
@@ -76,4 +79,8 @@
 
 .fieldHolder input, .fieldHolder select{
 	padding: 3px;
-	}
+}
+
+div.formAction {
+		text-align: center;
+}
