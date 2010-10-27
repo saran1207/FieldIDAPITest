@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachment;
 
 public class DownloadSafetyNetworkAssetAttachmentFile extends DownloadAssetAttachmentFile {
 	private static final long serialVersionUID = 1L;
@@ -14,7 +14,7 @@ public class DownloadSafetyNetworkAssetAttachmentFile extends DownloadAssetAttac
 	
 	@Override
 	protected AssetAttachment loadProductAttachment() {
-		return getLoaderFactory().createSafetyNetworkProductAttachmentLoader().setAttachmentId(attachmentID).setProductNetworkId(assetNetworkId).load();
+		return getLoaderFactory().createSafetyNetworkAssetAttachmentLoader().setAttachmentId(attachmentID).setAssetNetworkId(assetNetworkId).load();
 	}
 	
 	@Override

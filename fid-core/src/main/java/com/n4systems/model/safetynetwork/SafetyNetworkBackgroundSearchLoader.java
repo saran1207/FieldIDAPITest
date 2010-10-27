@@ -34,7 +34,7 @@ public class SafetyNetworkBackgroundSearchLoader {
 		Asset asset = null;
 		if (rfidNumber != null && rfidNumber.length() > 0) {
 			List<Asset> assets = networkSmartSearchLoader.useOnlyRfidNumber().setSearchText(rfidNumber).load();
-			asset = pullProductFromList(assets);
+			asset = pullAssetFromList(assets);
 		}
 		return asset;
 	}
@@ -43,7 +43,7 @@ public class SafetyNetworkBackgroundSearchLoader {
 		Asset asset = null;
 		if (serialNumber != null && serialNumber.length() > 0) {
 			List<Asset> assets = networkSmartSearchLoader.useOnlySerialNumber().setSearchText(serialNumber).load();
-			asset = pullProductFromList(assets);
+			asset = pullAssetFromList(assets);
 		}
 		return asset;
 	}
@@ -52,12 +52,12 @@ public class SafetyNetworkBackgroundSearchLoader {
 		Asset asset = null;
 		if (refNumber != null && refNumber.length() > 0) {
 			List<Asset> assets = networkSmartSearchLoader.useOnlyRefNumber().setSearchText(refNumber).load();
-			asset = pullProductFromList(assets);
+			asset = pullAssetFromList(assets);
 		}
 		return asset;
 	}
 	
-	private Asset pullProductFromList(List<Asset> assets) {
+	private Asset pullAssetFromList(List<Asset> assets) {
 		Asset asset = null;
 		
 		if (assets.size() > 0) {

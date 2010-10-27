@@ -7,7 +7,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;
@@ -19,14 +19,14 @@ public class AssetStatusCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;
 	
-	private LegacyProductSerial productSerialManager;
+	private LegacyAsset assetManager;
 	private AssetStatus assetStatus;
 	
 	private List<AssetStatus> assetStatuses;
 	
-	public AssetStatusCrud(LegacyProductSerial productSerialManager, PersistenceManager persistenceManager) {
+	public AssetStatusCrud(LegacyAsset assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.productSerialManager = productSerialManager; 
+		this.assetManager = assetManager;
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class AssetStatusCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		assetStatus = productSerialManager.findAssetStatus( uniqueID, getTenantId() );
+		assetStatus = assetManager.findAssetStatus( uniqueID, getTenantId() );
 	}
 	
 	
@@ -88,7 +88,7 @@ public class AssetStatusCrud extends AbstractCrud {
 	
 	public List<AssetStatus> getAssetStatuses() {
 		if( assetStatuses == null ) {
-			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
+			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
 		}
 		return assetStatuses;
 	}

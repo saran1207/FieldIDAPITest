@@ -20,12 +20,12 @@ import com.n4systems.util.Directory;
 public class TenantDiskUsageCalculator implements LimitLoader {
 	
 	private enum TenantDirType {
-		INSPECTION_ATTACH, INSPECTION_CHART, INSPECTION_PROOFTEST, PRODUCT_ATTACH, PRODUCT_TYPE_IMAGE, PRODUCT_TYPE_ATTACH, JOB_NOTE, USER;
+		INSPECTION_ATTACH, INSPECTION_CHART, INSPECTION_PROOFTEST, ASSET_ATTACH, ASSET_TYPE_IMAGE, ASSET_TYPE_ATTACH, JOB_NOTE, USER;
 	}
 	
 	/** The TenantDirTypes to use in Tenant disk limit calculations */
 	private static final TenantDirType[] LIMITING_DIR_TYPES = {
-		TenantDirType.INSPECTION_ATTACH, TenantDirType.PRODUCT_ATTACH, TenantDirType.PRODUCT_TYPE_ATTACH, TenantDirType.JOB_NOTE
+		TenantDirType.INSPECTION_ATTACH, TenantDirType.ASSET_ATTACH, TenantDirType.ASSET_TYPE_ATTACH, TenantDirType.JOB_NOTE
 	};
 	
 	private Tenant tenant;
@@ -42,9 +42,9 @@ public class TenantDiskUsageCalculator implements LimitLoader {
 		dirs.put(TenantDirType.INSPECTION_ATTACH, 		new Directory(getInspectionAttachmentBaseFile(tenant)));
 		dirs.put(TenantDirType.INSPECTION_CHART, 		new Directory(getInspectionChartImageBaseFile(tenant)));
 		dirs.put(TenantDirType.INSPECTION_PROOFTEST,	new Directory(getInspectionProoftestBaseFile(tenant)));
-		dirs.put(TenantDirType.PRODUCT_ATTACH,  		new Directory(getProductAttachmentBaseFile(tenant)));
-		dirs.put(TenantDirType.PRODUCT_TYPE_IMAGE,  	new Directory(getProductTypeImageBaseFile(tenant)));
-		dirs.put(TenantDirType.PRODUCT_TYPE_ATTACH, 	new Directory(getProductTypeAttachmentBaseFile(tenant)));
+		dirs.put(TenantDirType.ASSET_ATTACH,  		new Directory(getAssetAttachmentBaseFile(tenant)));
+		dirs.put(TenantDirType.ASSET_TYPE_IMAGE,  	new Directory(getAssetTypeImageBaseFile(tenant)));
+		dirs.put(TenantDirType.ASSET_TYPE_ATTACH, 	new Directory(getAssetTypeAttachmentBaseFile(tenant)));
 		dirs.put(TenantDirType.JOB_NOTE,  				new Directory(getJobAttachmentFileBaseFile(tenant)));
 		dirs.put(TenantDirType.USER,  					new Directory(getTenantUserBaseFile(tenant)));
 	}
@@ -71,15 +71,15 @@ public class TenantDiskUsageCalculator implements LimitLoader {
 	}
 
 	public Directory getProductAttachmentUsage() {
-		return dirs.get(TenantDirType.PRODUCT_ATTACH);
+		return dirs.get(TenantDirType.ASSET_ATTACH);
 	}
 
 	public Directory getProductTypeImageUsage() {
-		return dirs.get(TenantDirType.PRODUCT_TYPE_IMAGE);
+		return dirs.get(TenantDirType.ASSET_TYPE_IMAGE);
 	}
 
 	public Directory getProductTypeAttachmentUsage() {
-		return dirs.get(TenantDirType.PRODUCT_TYPE_ATTACH);
+		return dirs.get(TenantDirType.ASSET_TYPE_ATTACH);
 	}
 
 	public Directory getJobNoteUsage() {

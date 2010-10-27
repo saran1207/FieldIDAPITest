@@ -28,7 +28,6 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 	private InspectionType inspectionType;
 
 	public InspectionListArchiveHandlerImp(ScheduleListDeleteHandler scheduleListDeleter) {
-		super();
 		this.scheduleListDeleter = scheduleListDeleter;
 	}
 	
@@ -41,7 +40,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 		List<Long> ids = getInspectionIds(em);
 		
 		archiveInspections(em, ids);
-		updateProductsLastInspectionDate(em, ids);
+		updateAssetsLastInspectionDate(em, ids);
 	}
 
 	private void archiveInspections(EntityManager em, List<Long> ids) {
@@ -49,16 +48,16 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 		archiver.archive(em);
 	}
 
-	private void updateProductsLastInspectionDate(EntityManager em, List<Long> ids) {
+	private void updateAssetsLastInspectionDate(EntityManager em, List<Long> ids) {
 		
-		List<Long> productsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter())
+		List<Long> assetsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter())
 				.setSimpleSelect("asset.id", true)
 				.addSimpleWhere("asset.state", EntityState.ACTIVE),
 		  ids,
 		  em).getResultList();
 		
-		for (Long productId : new HashSet<Long>(productsToUpdateInspectionDate)) {
-			Asset asset = em.find(Asset.class, productId);
+		for (Long assetId : new HashSet<Long>(assetsToUpdateInspectionDate)) {
+			Asset asset = em.find(Asset.class, assetId);
 			
 			
 			QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, new OpenSecurityFilter(), "i");

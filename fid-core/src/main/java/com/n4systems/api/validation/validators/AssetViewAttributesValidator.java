@@ -27,9 +27,9 @@ public class AssetViewAttributesValidator extends AssetViewValidator {
 		Map<String, String> infoOptionMap = (Map<String, String>)fieldValue;
 
 		try {
-			converter.convertProductAttributes(infoOptionMap, type);
+			converter.convertAssetAttributes(infoOptionMap, type);
 		} catch (MissingInfoOptionException e) {
-			return ValidationResult.fail(MissingRequiredProductAttributeValidatorFail, e.getInfoField().getName());
+			return ValidationResult.fail(MissingRequiredAssetAttributeValidatorFail, e.getInfoField().getName());
 		} catch (StaticOptionResolutionException e) {
 			return ValidationResult.fail(StaticOptionNotFoundValidatorFail, e.getInfoOptionName(), e.getInfoField().getName());
 		}

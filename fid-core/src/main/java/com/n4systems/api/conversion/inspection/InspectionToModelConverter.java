@@ -1,5 +1,6 @@
 package com.n4systems.api.conversion.inspection;
 
+import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
@@ -14,26 +15,24 @@ import com.n4systems.model.inspectionbook.InspectionBookFindOrCreateLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
-import com.n4systems.model.product.SmartSearchLoader;
-import com.n4systems.model.productstatus.ProductStatusByNameLoader;
+import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 
 public class InspectionToModelConverter implements ViewToModelConverter<Inspection, InspectionView> {
 	private final OrgByNameLoader orgLoader;
-	private final SmartSearchLoader productLoader;
-	private final ProductStatusByNameLoader productStatusLoader;
+	private final SmartSearchLoader assetLoader;
+	private final AssetStatusByNameLoader assetStatusLoader;
 	private final InspectionBookFindOrCreateLoader inspectionBookLoader;
 	private final UserByFullNameLoader userLoader;
 	
 	private InspectionType type;
 	
-	public InspectionToModelConverter(OrgByNameLoader orgLoader, SmartSearchLoader productLoader, ProductStatusByNameLoader productStatusLoader, InspectionBookFindOrCreateLoader inspectionBookLoader, UserByFullNameLoader userLoader) {
-		super();
+	public InspectionToModelConverter(OrgByNameLoader orgLoader, SmartSearchLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, InspectionBookFindOrCreateLoader inspectionBookLoader, UserByFullNameLoader userLoader) {
 		this.orgLoader = orgLoader;
-		this.productLoader = productLoader;
-		this.productStatusLoader = productStatusLoader;
+		this.assetLoader = assetLoader;
+		this.assetStatusLoader = assetStatusLoader;
 		this.inspectionBookLoader = inspectionBookLoader;
 		this.userLoader = userLoader;
 	}
@@ -50,12 +49,12 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		model.setComments(view.getComments());
 		
 		resolveStatus(view.getStatus(), model);
-		resolveProduct(view, model, transaction);
+		resolveAsset(view, model, transaction);
 		resolvePrintable(view, model);
 		resolvePerformedBy(view, model, transaction);
 		resolveInspectionBook(view, model, transaction);
 		
-		resolveProductStatus(view, model, transaction);
+		resolveAssetStatus(view, model, transaction);
 		
 		return model;
 	}
@@ -79,9 +78,9 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		model.setStatus(status);
 	}
 
-	protected void resolveProduct(InspectionView view, Inspection model, Transaction transaction) {
+	protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {
 		// the validator will ensure this returns exactly 1 asset
-		Asset asset = productLoader.setSearchText(view.getIdentifier()).load(transaction).get(0);
+		Asset asset = assetLoader.setSearchText(view.getIdentifier()).load(transaction).get(0);
 		model.setAsset(asset);
 	}
 
@@ -108,9 +107,9 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		}
 	}
 
-	protected void resolveProductStatus(InspectionView view, Inspection model, Transaction transaction) {
+	protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {
 		if (view.getAssetStatus() != null) {
-			AssetStatus status = productStatusLoader.setName(view.getAssetStatus()).load(transaction);
+			AssetStatus status = assetStatusLoader.setName(view.getAssetStatus()).load(transaction);
 			model.setAssetStatus(status);
 		}
 	}

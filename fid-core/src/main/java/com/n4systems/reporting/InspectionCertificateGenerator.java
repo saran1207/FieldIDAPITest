@@ -25,7 +25,7 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.mapbuilders.BaseInspectionMapBuilder;
 import com.n4systems.reporting.mapbuilders.LineItemMapBuilder;
 import com.n4systems.reporting.mapbuilders.MapBuilder;
-import com.n4systems.reporting.mapbuilders.ProductTypeMapBuilder;
+import com.n4systems.reporting.mapbuilders.AssetTypeMapBuilder;
 import com.n4systems.reporting.mapbuilders.ProofTestMapBuilder;
 import com.n4systems.util.ReportMap;
 
@@ -45,7 +45,7 @@ public class InspectionCertificateGenerator {
 	}
 	
 	public InspectionCertificateGenerator(DateTimeDefiner dateDefiner) {
-		this(dateDefiner, new BaseInspectionMapBuilder(dateDefiner), new ProductTypeMapBuilder(), new ProofTestMapBuilder(), new LineItemMapBuilder());
+		this(dateDefiner, new BaseInspectionMapBuilder(dateDefiner), new AssetTypeMapBuilder(), new ProofTestMapBuilder(), new LineItemMapBuilder());
 	}
 	
 	public JasperPrint generate(InspectionReportType type, Inspection inspection, Transaction transaction) throws NonPrintableEventType, ReportException {
@@ -129,7 +129,7 @@ public class InspectionCertificateGenerator {
 			productTypeMapBuilder.addParams(reportMap, inspection.getAsset().getType(), transaction);
 			orderMapBuilder.addParams(reportMap, inspection.getAsset().getShopOrder(), transaction);
 	
-			reportMap.putAll(new ProductReportMapProducer(inspection.getAsset(), dateDefiner).produceMap());
+			reportMap.putAll(new AssetReportMapProducer(inspection.getAsset(), dateDefiner).produceMap());
 			
 			ReportMap<Object> inspectionMap = new InspectionReportMapProducer(inspection, dateDefiner).produceMap();
 			reportMap.putAll(inspectionMap);

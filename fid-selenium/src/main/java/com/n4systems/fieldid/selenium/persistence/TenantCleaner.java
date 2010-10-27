@@ -20,12 +20,12 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.user.User;
-import rfid.ejb.entity.AddProductHistoryBean;
+import rfid.ejb.entity.AddAssetHistory;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -55,14 +55,14 @@ public class TenantCleaner {
             safeRemoveAsset(em, asset);
         }
 
-        removeAllForTenant(em, AddProductHistoryBean.class, tenantId, new Callback<AddProductHistoryBean>(){
+        removeAllForTenant(em, AddAssetHistory.class, tenantId, new Callback<AddAssetHistory>(){
             @Override
-            public void callback(AddProductHistoryBean entity) {
+            public void callback(AddAssetHistory entity) {
                 entity.getInfoOptions().clear();
             }
         });
 
-        cleanNullTenantEntities(em, AddProductHistoryBean.class);
+        cleanNullTenantEntities(em, AddAssetHistory.class);
 
         removeAll(em, ActiveSession.class);
         cleanUpOrgConnections(em, tenantId);
@@ -100,7 +100,7 @@ public class TenantCleaner {
         for (ExternalOrg org : orgs) {
             cleanOwnedEntities(em, Inspection.class, org);
             cleanOwnedEntities(em, InspectionSchedule.class, org);
-            cleanOwnedEntities(em, AddProductHistoryBean.class, org);
+            cleanOwnedEntities(em, AddAssetHistory.class, org);
             Query assetQuery = em.createQuery("from " + Asset.class.getName() + " where owner.id = " + org.getId());
             List<Asset> assets = assetQuery.getResultList();
             for (Asset asset : assets) {

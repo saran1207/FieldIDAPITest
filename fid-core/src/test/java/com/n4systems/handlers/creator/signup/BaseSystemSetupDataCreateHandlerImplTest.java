@@ -3,6 +3,7 @@ package com.n4systems.handlers.creator.signup;
 import static com.n4systems.model.builders.TenantBuilder.*;
 import static org.easymock.EasyMock.*;
 
+import com.n4systems.model.assetstatus.AssetStatusSaver;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,8 +17,7 @@ import com.n4systems.model.StateSet;
 import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
-import com.n4systems.model.productstatus.ProductStatusSaver;
-import com.n4systems.model.producttype.AssetTypeSaver;
+import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 
@@ -58,7 +58,7 @@ public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactio
 		expectLastCall().times(2);
 		replay(mockStateSetSaver);
 		
-		ProductStatusSaver mockStatusSaver = createMock(ProductStatusSaver.class);
+		AssetStatusSaver mockStatusSaver = createMock(AssetStatusSaver.class);
 		mockStatusSaver.save(same(mockTransaction), isA(AssetStatus.class));
 		expectLastCall().times(5);
 		replay(mockStatusSaver);

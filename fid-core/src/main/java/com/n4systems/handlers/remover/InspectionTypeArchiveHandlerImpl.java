@@ -30,7 +30,7 @@ public class InspectionTypeArchiveHandlerImpl implements InspectionTypeArchiveHa
 	public void remove(Transaction transaction) {
 		this.transaction = transaction;
 		
-		breakConnectionsToProductType();
+		breakConnectionsToAssetType();
 		archiveInspectionsOfType();
 		removeInspectionTypeFromCatalog();
 		deleteNotificationSettingsUsing();
@@ -40,7 +40,7 @@ public class InspectionTypeArchiveHandlerImpl implements InspectionTypeArchiveHa
 	}
 
 
-	private void breakConnectionsToProductType() {
+	private void breakConnectionsToAssetType() {
 		associatedInspectionTypesDeleteHandler.setInspectionType(inspectionType).remove(transaction);
 	}
 	

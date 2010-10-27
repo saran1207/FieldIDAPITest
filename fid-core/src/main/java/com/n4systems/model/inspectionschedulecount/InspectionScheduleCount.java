@@ -7,14 +7,14 @@ import com.n4systems.model.orgs.BaseOrg;
 public class InspectionScheduleCount implements Comparable<InspectionScheduleCount> {
 	private Date nextInspectionDate;
 	private BaseOrg owner;
-	private String productTypeName;
+	private String assetTypeName;
 	private String inspectionTypeName;
 	private long inspectionCount;
 	
-	public InspectionScheduleCount(Date nextInspectionDate, BaseOrg owner, String productTypeName, String inspectionTypeName, long inspectionCount) {
+	public InspectionScheduleCount(Date nextInspectionDate, BaseOrg owner, String assetTypeName, String inspectionTypeName, long inspectionCount) {
 		this.nextInspectionDate = nextInspectionDate;
 		this.owner = owner;
-		this.productTypeName = productTypeName;
+		this.assetTypeName = assetTypeName;
 		this.inspectionTypeName = inspectionTypeName;
 		this.inspectionCount = inspectionCount;
 	}
@@ -35,8 +35,8 @@ public class InspectionScheduleCount implements Comparable<InspectionScheduleCou
 		return (owner != null && owner.getDivisionOrg() != null) ? owner.getDivisionOrg().getName() : "";
     }
 
-	public String getProductTypeName() {
-    	return productTypeName;
+	public String getAssetTypeName() {
+    	return assetTypeName;
     }
 
 	public String getInspectionTypeName() {
@@ -60,7 +60,7 @@ public class InspectionScheduleCount implements Comparable<InspectionScheduleCou
 			comp = getDivisionName().compareTo(other.getDivisionName());
 		}
 		if (comp == 0) {
-			comp = getProductTypeName().compareTo(other.getProductTypeName());
+			comp = getAssetTypeName().compareTo(other.getAssetTypeName());
 		}
 		if (comp == 0) {
 			comp = getInspectionTypeName().compareTo(other.getInspectionTypeName());

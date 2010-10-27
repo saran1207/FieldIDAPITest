@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.SubAsset;
-import com.n4systems.model.product.AssetSubAssetsLoader;
-import com.n4systems.model.product.SmartSearchLoader;
+import com.n4systems.model.asset.AssetSubAssetsLoader;
+import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.test.helpers.DateHelper;
 import com.n4systems.test.helpers.FluentArrayList;

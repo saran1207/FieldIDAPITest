@@ -12,9 +12,9 @@ public class FindSubAssets {
 	private final PersistenceManager persistenceManager;
 	private final Asset asset;
 	
-	public FindSubAssets(PersistenceManager persistenceManager, Asset product) {
+	public FindSubAssets(PersistenceManager persistenceManager, Asset asset) {
 		this.persistenceManager = persistenceManager;
-		this.asset = product;
+		this.asset = asset;
 	}
 	
 	public Asset fillInSubAssets() {

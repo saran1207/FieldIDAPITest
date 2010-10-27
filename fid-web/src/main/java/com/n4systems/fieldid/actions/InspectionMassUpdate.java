@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -12,7 +13,6 @@ import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.helpers.MassUpdateInspectionHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
@@ -31,7 +31,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(InspectionMassUpdate.class);
 
-	private LegacyProductSerial productSerialManager;
+	private LegacyAsset assetManager;
 	private InspectionSearchContainer criteria;
 	private Inspection inspection = new Inspection();
 
@@ -40,9 +40,9 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private final LocationWebModel location = new LocationWebModel(this);
 
 	
-	public InspectionMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager, LegacyProductSerial productSerialManager) {
+	public InspectionMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager, LegacyAsset assetManager) {
 		super(massUpdateManager, persistenceManager);
-		this.productSerialManager = productSerialManager;
+		this.assetManager = assetManager;
 	}
 
 	public void prepare() throws Exception {
@@ -142,7 +142,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public List<AssetStatus> getAssetStatuses() {
-		return getLoaderFactory().createProductStatusListLoader().load();
+		return getLoaderFactory().createAssetStatusListLoader().load();
 	}
 
 	public Long getAssetStatus() {
@@ -153,7 +153,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		if (assetStatus == null) {
 			inspection.setAssetStatus(null);
 		} else if (inspection.getAssetStatus() == null || !assetStatus.equals(inspection.getAssetStatus().getUniqueID())) {
-			inspection.setAssetStatus(productSerialManager.findAssetStatus(assetStatus, getTenantId()));
+			inspection.setAssetStatus(assetManager.findAssetStatus(assetStatus, getTenantId()));
 		}
 	}
 

@@ -14,7 +14,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.api.HasFileAttachments;
-import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;

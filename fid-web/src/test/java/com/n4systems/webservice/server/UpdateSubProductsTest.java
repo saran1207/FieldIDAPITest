@@ -8,14 +8,14 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.builders.SubAssetBuilder;
 import org.junit.Test;
 
 
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.test.helpers.FluentArrayList;
@@ -28,24 +28,24 @@ public class UpdateSubProductsTest {
 	
 	@Test
 	public void should_not_call_product_manager_when_the_both_lists_of_sub_products_are_empty() throws Exception {
-		LegacyProductSerial productManager = null;
+		LegacyAsset productManager = null;
 		
-		ProductManager productManager2 = createProductMangerMock();
+		AssetManager assetManager2 = createProductMangerMock();
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), anAsset().build(), new InspectionServiceDTO(), new ArrayList<SubAsset>(), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), anAsset().build(), new InspectionServiceDTO(), new ArrayList<SubAsset>(), assetManager2);
 		
 		sut.run();
 		
 	}
 
 
-	private ProductManager createProductMangerMock() {
+	private AssetManager createProductMangerMock() {
 		Asset asset = anAsset().build();
 		
-		ProductManager productManager2 = createMock(ProductManager.class);
-		expect(productManager2.findAsset(asset.getId(), null)).andReturn(asset);
-		replay(productManager2);
-		return productManager2;
+		AssetManager assetManager2 = createMock(AssetManager.class);
+		expect(assetManager2.findAsset(asset.getId(), null)).andReturn(asset);
+		replay(assetManager2);
+		return assetManager2;
 	}
 
 	
@@ -53,14 +53,14 @@ public class UpdateSubProductsTest {
 	public void should_add_the_single_new_subproduct_to_an_empty_master_product() throws Exception {
 		Asset masterAsset = anAsset().build();
 		
-		LegacyProductSerial productManager = successfulProductManager(masterAsset);
+		LegacyAsset productManager = successfulProductManager(masterAsset);
 		
 		SubAsset subAsset = SubAssetBuilder.aSubAsset().build();
 		
-		ProductManager productManager2 = createProductMangerMock();
+		AssetManager assetManager2 = createProductMangerMock();
 		
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), assetManager2);
 		
 		sut.run();
 		
@@ -95,11 +95,11 @@ public class UpdateSubProductsTest {
 	}
 
 
-	private ProductManager lookUpProductById(SubAsset subAssetToRemove) {
-		ProductManager productManager = createMock(ProductManager.class);
-		expect(productManager.findAsset(same(subAssetToRemove.getAsset().getId()), (SecurityFilter)anyObject())).andReturn(subAssetToRemove.getAsset());
-		replay(productManager);
-		return productManager;
+	private AssetManager lookUpProductById(SubAsset subAssetToRemove) {
+		AssetManager assetManager = createMock(AssetManager.class);
+		expect(assetManager.findAsset(same(subAssetToRemove.getAsset().getId()), (SecurityFilter)anyObject())).andReturn(subAssetToRemove.getAsset());
+		replay(assetManager);
+		return assetManager;
 	}
 	
 	
@@ -108,16 +108,16 @@ public class UpdateSubProductsTest {
 	public void should_not_add_subproduct_that_is_already_attached() throws Exception {
 		Asset masterAsset = anAsset().build();
 		
-		LegacyProductSerial productManager = successfulProductManager(masterAsset);
+		LegacyAsset productManager = successfulProductManager(masterAsset);
 		
-		ProductManager productManager2 = createProductMangerMock();
+		AssetManager assetManager2 = createProductMangerMock();
 		
 		SubAsset subAsset = aSubAsset().build();
 		
-		SubAsset alreadyAttachedSubAsset = aSubAsset().containingProduct(subAsset.getAsset()).withMasterProduct(masterAsset).build();
+		SubAsset alreadyAttachedSubAsset = aSubAsset().containingAsset(subAsset.getAsset()).withMasterAsset(masterAsset).build();
 		masterAsset.getSubAssets().add(alreadyAttachedSubAsset);
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), assetManager2);
 		
 		sut.run();
 		
@@ -130,15 +130,15 @@ public class UpdateSubProductsTest {
 	public void should_persist_changes_to_the_master_product_when_new_sub_products_are_added() throws Exception {
 		Asset masterAsset = anAsset().build();
 		
-		LegacyProductSerial productManager = createMock(LegacyProductSerial.class);
+		LegacyAsset productManager = createMock(LegacyAsset.class);
 		expect(productManager.update(masterAsset, masterAsset.getModifiedBy())).andReturn(masterAsset);
 		replay(productManager);
 		
-		ProductManager productManager2 = createProductMangerMock();
+		AssetManager assetManager2 = createProductMangerMock();
 		
 		SubAsset subAsset = SubAssetBuilder.aSubAsset().build();
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), assetManager2);
 		
 		sut.run();
 		
@@ -150,23 +150,23 @@ public class UpdateSubProductsTest {
 	public void remove_existing_sub_product() throws Exception {
 		Asset masterAsset = anAsset().build();
 		
-		LegacyProductSerial productManager = createMock(LegacyProductSerial.class);
+		LegacyAsset productManager = createMock(LegacyAsset.class);
 		expect(productManager.update(masterAsset, masterAsset.getModifiedBy())).andReturn(masterAsset);
 		replay(productManager);
 		
-		ProductManager productManager2 = createProductMangerMock();
+		AssetManager assetManager2 = createProductMangerMock();
 		
 		SubAsset subAsset = SubAssetBuilder.aSubAsset().build();
 		
-		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), productManager2);
+		UpdateSubProducts sut = new UpdateSubProducts(productManager, new Long(1L), masterAsset, new InspectionServiceDTO(), new FluentArrayList<SubAsset>(subAsset), assetManager2);
 		
 		sut.run();
 		
 		verify(productManager);
 	}
 	
-	private LegacyProductSerial successfulProductManager(Asset masterAsset) throws SubAssetUniquenessException {
-		LegacyProductSerial productManager = createMock(LegacyProductSerial.class);
+	private LegacyAsset successfulProductManager(Asset masterAsset) throws SubAssetUniquenessException {
+		LegacyAsset productManager = createMock(LegacyAsset.class);
 		expect(productManager.update(masterAsset, masterAsset.getModifiedBy())).andReturn(masterAsset);
 		replay(productManager);
 		return productManager;

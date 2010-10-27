@@ -41,9 +41,9 @@ public class NotificationSettingViewModelConverter {
 			view.setCreatedTimeStamp(model.getCreated().getTime());
 		}
 		
-		if (!model.getProductTypes().isEmpty()) {
+		if (!model.getAssetTypes().isEmpty()) {
 			// we only support a single asset type right now
-			view.setAssetTypeId(model.getProductTypes().get(0));
+			view.setAssetTypeId(model.getAssetTypes().get(0));
 		}
 		
 		if (!model.getInspectionTypes().isEmpty()) {
@@ -76,7 +76,7 @@ public class NotificationSettingViewModelConverter {
 		}
 		
 		if (view.getAssetTypeId() != null) {
-			model.getProductTypes().add(view.getAssetTypeId());
+			model.getAssetTypes().add(view.getAssetTypeId());
 		}
 		
 		if (view.getInspectionTypeId() != null) {

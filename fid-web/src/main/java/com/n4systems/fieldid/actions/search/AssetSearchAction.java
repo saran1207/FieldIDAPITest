@@ -5,12 +5,12 @@ import static com.n4systems.fieldid.viewhelpers.InspectionSearchContainer.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
@@ -33,8 +33,8 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	private List<Listable<Long>> employees;
 	private List<Long> searchIds;
 
-	public AssetSearchAction(final PersistenceManager persistenceManager, final ProductManager productManager) {
-		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "asset_search"));
+	public AssetSearchAction(final PersistenceManager persistenceManager, final AssetManager assetManager) {
+		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(assetManager), "asset_search"));
 	}
 
 	public void prepare() throws Exception {
@@ -71,7 +71,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 		try {
 			List<Long> assetIds = getSearchIds();
 
-			getDownloadCoordinator().generateAllProductCertificates(reportName, getDownloadLinkUrl(), assetIds);
+			getDownloadCoordinator().generateAllAssetCertificates(reportName, getDownloadLinkUrl(), assetIds);
 		} catch (Exception e) {
 			logger.error("Failed to print all manufacturer certs", e);
 			addFlashErrorText("error.reportgeneration");
@@ -111,7 +111,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	}
 
 	public List<AssetStatus> getAssetStatuses() {
-		return getLoaderFactory().createProductStatusListLoader().load();
+		return getLoaderFactory().createAssetStatusListLoader().load();
 	}
 
 	public List<Listable<Long>> getEmployees() {

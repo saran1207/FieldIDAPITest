@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.model.product.SmartSearchCounter;
+import com.n4systems.model.asset.SmartSearchCounter;
 import com.n4systems.model.security.SecurityFilter;
 
 public class AssetIdentifierValidator implements FieldValidator {
@@ -17,15 +17,15 @@ public class AssetIdentifierValidator implements FieldValidator {
 		
 		String identifier = (String)fieldValue;
 		
-		SmartSearchCounter productLoader = createSmartSearchCounter(filter).setSearchText(identifier);
+		SmartSearchCounter assetLoader = createSmartSearchCounter(filter).setSearchText(identifier);
 		
-		Long products = productLoader.load();
-		if (products == 1) {
+		Long assetCount = assetLoader.load();
+		if (assetCount == 1) {
 			return ValidationResult.pass();
-		} else if (products == 0) {
-			return ValidationResult.fail(NoProductFoundValidationFail, identifier, fieldName);
+		} else if (assetCount == 0) {
+			return ValidationResult.fail(NoAssetFoundValidationFail, identifier, fieldName);
 		} else {
-			return ValidationResult.fail(MultipleProductFoundValidationFail, identifier, fieldName);
+			return ValidationResult.fail(MultipleAssetFoundValidationFail, identifier, fieldName);
 		}
 	}
 

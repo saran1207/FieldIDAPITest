@@ -6,11 +6,11 @@ import static com.n4systems.model.builders.InspectionBuilder.*;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.Inspection;
-import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.test.helpers.DateHelper;
 import com.n4systems.test.helpers.FluentArrayList;
@@ -60,8 +60,8 @@ public class RealTimeInspectionLookupHandlerTest {
 		assertEquals(0, lookupHandler.setProductId(anyProductId).setLastInspectionDate(mostRecentDate).lookup().size());						
 	}
 	
-	private NewestInspectionsForProductIdLoader getInspectionsLoaderThatReturnsMultipleInspections() {
-		NewestInspectionsForProductIdLoader loader = new NewestInspectionsForProductIdLoader(new TenantOnlySecurityFilter(anyTenantId)) {
+	private NewestInspectionsForAssetIdLoader getInspectionsLoaderThatReturnsMultipleInspections() {
+		NewestInspectionsForAssetIdLoader loader = new NewestInspectionsForAssetIdLoader(new TenantOnlySecurityFilter(anyTenantId)) {
 			@Override
 			public List<Inspection> load() {
 				return multipleInspections;

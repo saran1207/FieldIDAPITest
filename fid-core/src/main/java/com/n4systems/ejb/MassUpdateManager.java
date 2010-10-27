@@ -15,14 +15,14 @@ import com.n4systems.model.user.User;
 public interface MassUpdateManager {
 
 	/**
-	 * Will do an update to all products that the search criteria finds in the
-	 * system. the number of products updated will be returned.
+	 * Will do an update to all assets that the search criteria finds in the
+	 * system. the number of assets updated will be returned.
 	 * 
 	 * @param searchCriteria
 	 * @param values
 	 * @return
 	 */
-	public Long updateProducts(List<Long> ids, Asset product, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
+	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
 
 	public Long updateInspections(List<Long> ids, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
 
@@ -30,7 +30,7 @@ public interface MassUpdateManager {
 
 	public Long deleteInspectionSchedules(Set<Long> scheduleIds) throws UpdateFailureException;
 	
-	public Long updateProductModifiedDate(List<Long> ids);
+	public Long updateAssetModifiedDate(List<Long> ids);
 	
 	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
 

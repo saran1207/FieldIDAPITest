@@ -5,7 +5,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.safetynetwork.ProductAlreadyRegisteredLoader;
+import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -112,7 +112,7 @@ public class SafetyNetwork extends AbstractCrud {
 	}
 
     public boolean isAssetAlreadyRegistered(Asset asset) {
-        ProductAlreadyRegisteredLoader loader = getLoaderFactory().createProductAlreadyRegisteredLoader();
+        AssetAlreadyRegisteredLoader loader = getLoaderFactory().createAssetAlreadyRegisteredLoader();
         return loader.setNetworkId(asset.getNetworkId()).load();
     }
 }

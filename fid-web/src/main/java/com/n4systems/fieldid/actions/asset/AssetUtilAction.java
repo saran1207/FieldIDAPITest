@@ -2,13 +2,13 @@ package com.n4systems.fieldid.actions.asset;
 
 import java.util.Collection;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -23,8 +23,8 @@ public class AssetUtilAction extends AbstractAction {
 	private static final Logger logger = Logger.getLogger( AssetUtilAction.class );
 	
 	private SerialNumberCounter serialNumberCounter;
-	private LegacyProductSerial productSerialManager;
-	private ProductManager productManager;
+	private LegacyAsset legacyAssetManager;
+	private AssetManager assetManager;
 	
 	private String serialNumber;
 	
@@ -33,17 +33,17 @@ public class AssetUtilAction extends AbstractAction {
 	
 	private Collection<Asset> assets;
 	
-	public AssetUtilAction(SerialNumberCounter serialNumberCounter, LegacyProductSerial productSerialManager, ProductManager productManager, PersistenceManager persistenceManager ) {
+	public AssetUtilAction(SerialNumberCounter serialNumberCounter, LegacyAsset legacyAssetManager, AssetManager assetManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
 		this.serialNumberCounter = serialNumberCounter;
-		this.productSerialManager = productSerialManager;
-		this.productManager = productManager;
+		this.legacyAssetManager = legacyAssetManager;
+		this.assetManager = assetManager;
 	}
 
 
 	public String doCheckDuplicateRfid( ) {
 		try {
-			if( productSerialManager.rfidExists( rfidString, getTenantId(), uniqueId ) ) {
+			if( legacyAssetManager.rfidExists( rfidString, getTenantId(), uniqueId ) ) {
 				return "duplicate";
 			}
 			return SUCCESS;
@@ -56,7 +56,7 @@ public class AssetUtilAction extends AbstractAction {
 	
 	
 	public String doCheckSerialNumber() {
-		if (productSerialManager.duplicateSerialNumber(serialNumber, uniqueId, getTenant())) {
+		if (legacyAssetManager.duplicateSerialNumber(serialNumber, uniqueId, getTenant())) {
 			return "used";
 		} else {
 			return "available";
@@ -102,7 +102,7 @@ public class AssetUtilAction extends AbstractAction {
 
 	public Collection<Asset> getAssets() {
 		if( assets == null ) {
-			assets =  productManager.findAssetsByRfidNumber( rfidString, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
+			assets =  assetManager.findAssetsByRfidNumber( rfidString, new TenantOnlySecurityFilter( getTenantId() ), "infoOptions", "type.name" );
 		}
 		return assets;
 	}

@@ -21,8 +21,8 @@ public class ShopOrderTransfer extends OrderTransfer {
 		return assetCode;
 	}
 
-	public void setAssetCode(String productCode) {
-		this.assetCode = productCode;
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
 	}
 
 	public String getLineItemId() {

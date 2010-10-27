@@ -47,8 +47,8 @@ public class InspectionReportMapProducerTest {
 	@Test
 	public void test_inspetion_map_creation() {
 		InspectionType inspectionType = anInspectionType().named("test").build();
-		Asset targetProduct = AssetBuilder.anAsset().build();
-		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
+		Asset targetAsset = AssetBuilder.anAsset().build();
+		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetAsset).build();
 
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
 		expectedReportMap.put("productLabel", null);
@@ -63,8 +63,8 @@ public class InspectionReportMapProducerTest {
 	public void test_inspection_map_with_null_predefinedLocation_creation() {
 
 		InspectionType inspectionType = anInspectionType().named("test").build();
-		Asset targetProduct = AssetBuilder.anAsset().build();
-		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
+		Asset targetAsset = AssetBuilder.anAsset().build();
+		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetAsset).build();
 
 		Location advancedLocation = new Location(null, FREEFORM_LOCATION);
 
@@ -84,8 +84,8 @@ public class InspectionReportMapProducerTest {
 	@Test
 	public void test_inspection_map_with_one_predefinedLocation_creation() {
 		InspectionType inspectionType = anInspectionType().named("test").build();
-		Asset targetProduct = AssetBuilder.anAsset().build();
-		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
+		Asset targetAsset = AssetBuilder.anAsset().build();
+		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetAsset).build();
 
 		Location advancedLocation = new Location(PredefinedLocationBuilder.aPredefinedLocation().build(), FREEFORM_LOCATION);
 
@@ -105,8 +105,8 @@ public class InspectionReportMapProducerTest {
 	@Test
 	public void test_inspection_map_with_two_predefinedLocations_creation() {
 		InspectionType inspectionType = anInspectionType().named("test").build();
-		Asset targetProduct = AssetBuilder.anAsset().build();
-		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetProduct).build();
+		Asset targetAsset = AssetBuilder.anAsset().build();
+		Inspection targetInspection = anInspection().ofType(inspectionType).on(targetAsset).build();
 
 		PredefinedLocation parent = PredefinedLocationBuilder.aPredefinedLocation().build();
 		PredefinedLocation child = PredefinedLocationBuilder.aPredefinedLocation().build();

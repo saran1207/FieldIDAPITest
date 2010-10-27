@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.model.product.AssetCleaner;
+import com.n4systems.model.asset.AssetCleaner;
+import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
+import com.n4systems.services.asset.AssetSaveService;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AssetSerialExtension;
@@ -12,7 +14,7 @@ import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.MultiAddProductCrudHelper;
 import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
@@ -25,10 +27,8 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.product.AssetAttachment;
-import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -38,7 +38,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiAddAssetCrud.class);
 	
-	private final LegacyProductSerial legacyProductManager;
+	private final LegacyAsset legacyProductManager;
 	private final OrderManager orderManager;
 	
 	// drop down lists
@@ -61,7 +61,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 	
-	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyProductSerial legacyProductManager) {
+	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyAsset legacyProductManager) {
 		super(persistenceManager);
 		this.orderManager = orderManager;
 		this.legacyProductManager = legacyProductManager;
@@ -100,7 +100,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		AssetViewModeConverter converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getUser());
 		
 		try {
-			ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
+			AssetSaveService saver = new AssetSaveService(legacyProductManager, fetchCurrentUser());
 			int i = 1;
 			for (AssetIdentifierView assetIdent : identifiers) {
 				logger.info("Saving asset " + i + " of " + identifiers.size());
@@ -112,7 +112,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 				asset.setCustomerRefNumber(assetIdent.getReferenceNumber());
 				asset.setRfidNumber(assetIdent.getRfidNumber());
 				
-				saver.setProduct(asset);
+				saver.setAsset(asset);
 				saver.setUploadedAttachments(copyUploadedFiles());
 				
 				listOfIds.add(saver.create().getId());
@@ -162,7 +162,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
 	public List<AssetStatus> getAssetStatuses() {
 		if (assetStatuses == null) {
-			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
+			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
 		}
 		return assetStatuses;
 	}
@@ -176,7 +176,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
 	public List<AssetSerialExtension> getExtentions() {
 		if (extentions == null) {
-			extentions = getLoaderFactory().createProductSerialExtensionListLoader().load();
+			extentions = getLoaderFactory().createAssetSerialExtensionListLoader().load();
 		}
 		return extentions;
 	}
@@ -191,7 +191,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
 		if (autoAttributeCriteria == null && assetView.getAssetTypeId() != null) {
-			AutoAttributeCriteriaByProductTypeIdLoader loader = getLoaderFactory().createAutoAttributeCriteriaByProductTypeIdLoader();
+			AutoAttributeCriteriaByAssetTypeIdLoader loader = getLoaderFactory().createAutoAttributeCriteriaByAssetTypeIdLoader();
 			
 			loader.setAssetTypeId(assetView.getAssetTypeId());
 			

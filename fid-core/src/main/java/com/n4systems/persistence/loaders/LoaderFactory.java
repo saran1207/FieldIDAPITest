@@ -5,6 +5,11 @@ import java.util.List;
 
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
+import com.n4systems.model.assetstatus.AssetStatusFilteredLoader;
+import com.n4systems.model.assetstatus.AssetStatusForNameExistsLoader;
+import com.n4systems.model.assetstatus.AssetStatusListLoader;
+import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.model.autoattribute.AutoAttributeDefinitionListLoader;
 import com.n4systems.model.catalog.CatalogLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
@@ -43,40 +48,35 @@ import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.product.AssetAttachmentListLoader;
-import com.n4systems.model.product.SyncAssetListLoader;
-import com.n4systems.model.product.AssetSerialExtensionListLoader;
-import com.n4systems.model.product.SmartSearchLoader;
-import com.n4systems.model.productstatus.ProductStatusByNameLoader;
-import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
-import com.n4systems.model.productstatus.ProductStatusForNameExistsLoader;
-import com.n4systems.model.productstatus.ProductStatusListLoader;
-import com.n4systems.model.producttype.AssetTypeByAttachmentLoader;
-import com.n4systems.model.producttype.AssetTypeListableLoader;
-import com.n4systems.model.producttype.AssetTypeLoader;
-import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
-import com.n4systems.model.producttype.InspectionFrequencyListLoader;
+import com.n4systems.model.asset.AssetAttachmentListLoader;
+import com.n4systems.model.asset.SyncAssetListLoader;
+import com.n4systems.model.asset.AssetSerialExtensionListLoader;
+import com.n4systems.model.asset.SmartSearchLoader;
+import com.n4systems.model.assettype.AssetTypeByAttachmentLoader;
+import com.n4systems.model.assettype.AssetTypeListableLoader;
+import com.n4systems.model.assettype.AssetTypeLoader;
+import com.n4systems.model.assettype.InspectionFrequencyListLoader;
+import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
+import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
-import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
-import com.n4systems.model.safetynetwork.InspectionsByProductIdLoader;
+import com.n4systems.model.safetynetwork.HasLinkedAssetsLoader;
+import com.n4systems.model.safetynetwork.InspectionsByAssetIdLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
-import com.n4systems.model.safetynetwork.ProductAlreadyRegisteredLoader;
-import com.n4systems.model.safetynetwork.ProductsByNetworkIdLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkAssignedProductInspectionLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssignedAssetInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkPreAssignedAssetLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkProductLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkProductTypeLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentListLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetTypeLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetCountLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredOrAssignedInspectionLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredProductInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkUnregisteredAssetCountLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -127,8 +127,8 @@ public class LoaderFactory implements Serializable {
 		return new AssociatedInspectionTypesLoader(filter);
 	}
 	
-	public AutoAttributeCriteriaByProductTypeIdLoader createAutoAttributeCriteriaByProductTypeIdLoader() {
-		return new AutoAttributeCriteriaByProductTypeIdLoader(filter);
+	public AutoAttributeCriteriaByAssetTypeIdLoader createAutoAttributeCriteriaByAssetTypeIdLoader() {
+		return new AutoAttributeCriteriaByAssetTypeIdLoader(filter);
 	}
 
 	public AutoAttributeDefinitionListLoader createAutoAttributeDefinitionListLoader() {
@@ -223,8 +223,8 @@ public class LoaderFactory implements Serializable {
 		return new GlobalIdLoader<T>(filter, clazz);
 	}
 
-	public HasLinkedProductsLoader createHasLinkedProductsLoader() {
-		return new HasLinkedProductsLoader(filter);
+	public HasLinkedAssetsLoader createHasLinkedAssetsLoader() {
+		return new HasLinkedAssetsLoader(filter);
 	}
 
 	public UserListableLoader createHistoricalEmployeesListableLoader() {
@@ -315,52 +315,52 @@ public class LoaderFactory implements Serializable {
 		return new PrimaryOrgByTenantLoader();
 	}
 
-	public AssetAttachmentListLoader createProductAttachmentListLoader() {
+	public AssetAttachmentListLoader createAssetAttachmentListLoader() {
 		return new AssetAttachmentListLoader(filter);
 	}
 
-	public SyncAssetListLoader createProductIdSearchListLoader() {
+	public SyncAssetListLoader createAssetIdSearchListLoader() {
 		return new SyncAssetListLoader(filter);
 	}
 
-	public ProductsByNetworkIdLoader createProductsByNetworkIdLoader() {
-		return new ProductsByNetworkIdLoader(filter);
+	public AssetsByNetworkIdLoader createAssetsByNetworkIdLoader() {
+		return new AssetsByNetworkIdLoader(filter);
 	}
 
-	public AssetSerialExtensionListLoader createProductSerialExtensionListLoader() {
+	public AssetSerialExtensionListLoader createAssetSerialExtensionListLoader() {
 		return new AssetSerialExtensionListLoader(filter);
 	}
 
-	public ProductStatusByNameLoader createProductStatusByNameLoader() {
-		return new ProductStatusByNameLoader(filter);
+	public AssetStatusByNameLoader createAssetStatusByNameLoader() {
+		return new AssetStatusByNameLoader(filter);
 	}
 
-	public ProductStatusFilteredLoader createProductStatusFilteredLoader() {
-		return new ProductStatusFilteredLoader(filter);
+	public AssetStatusFilteredLoader createAssetStatusFilteredLoader() {
+		return new AssetStatusFilteredLoader(filter);
 	}
 
-	public ProductStatusForNameExistsLoader createProductStatusForNameExistsLoader() {
-		return new ProductStatusForNameExistsLoader(filter);
+	public AssetStatusForNameExistsLoader createAssetStatusForNameExistsLoader() {
+		return new AssetStatusForNameExistsLoader(filter);
 	}
 
-	public ProductStatusListLoader createProductStatusListLoader() {
-		return new ProductStatusListLoader(filter);
+	public AssetStatusListLoader createAssetStatusListLoader() {
+		return new AssetStatusListLoader(filter);
 	}
 
-	public AssetTypeByAttachmentLoader createProductTypeByAttachmentLoader() {
+	public AssetTypeByAttachmentLoader createAssetTypeByAttachmentLoader() {
 		return new AssetTypeByAttachmentLoader();
 	}
 
-	public AssetTypeListableLoader createProductTypeListableLoader() {
+	public AssetTypeListableLoader createAssetTypeListableLoader() {
 		return new AssetTypeListableLoader(filter);
 	}
 
-	public AssetTypeLoader createProductTypeLoader() {
+	public AssetTypeLoader createAssetTypeLoader() {
 		return new AssetTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
 	}
 
-	public SafetyNetworkInspectionLoader createSafetyNetworkAssignedProductInspectionLoader() {
-		return new SafetyNetworkAssignedProductInspectionLoader(filter);
+	public SafetyNetworkInspectionLoader createSafetyNetworkAssignedAssetInspectionLoader() {
+		return new SafetyNetworkAssignedAssetInspectionLoader(filter);
 	}
 
 	public SafetyNetworkAttachmentLoader createSafetyNetworkAttachmentLoader() {
@@ -371,32 +371,32 @@ public class LoaderFactory implements Serializable {
 		return new SafetyNetworkBackgroundSearchLoader(filter);
 	}
 
-	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader(boolean forAssignedProduct) {
-		return (forAssignedProduct) ? createSafetyNetworkAssignedProductInspectionLoader() : createSafetyNetworkRegisteredProductInspectionLoader();
+	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader(boolean forAssignedAsset) {
+		return (forAssignedAsset) ? createSafetyNetworkAssignedAssetInspectionLoader() : createSafetyNetworkRegisteredAssetInspectionLoader();
 	}
 
 	public SafetyNetworkRegisteredOrAssignedInspectionLoader createSafetyNetworkInspectionLoaderAssignedOrRegistered() {
 		return new SafetyNetworkRegisteredOrAssignedInspectionLoader(filter);
 	}
 
-	public SafetyNetworkProductAttachmentListLoader createSafetyNetworkProductAttachmentListLoader() {
-		return new SafetyNetworkProductAttachmentListLoader();
+	public SafetyNetworkAssetAttachmentListLoader createSafetyNetworkAssetAttachmentListLoader() {
+		return new SafetyNetworkAssetAttachmentListLoader();
 	}
 
-	public SafetyNetworkProductAttachmentLoader createSafetyNetworkProductAttachmentLoader() {
-		return new SafetyNetworkProductAttachmentLoader(filter);
+	public SafetyNetworkAssetAttachmentLoader createSafetyNetworkAssetAttachmentLoader() {
+		return new SafetyNetworkAssetAttachmentLoader(filter);
 	}
 
-	public SafetyNetworkProductLoader createSafetyNetworkProductLoader() {
-		return new SafetyNetworkProductLoader(filter);
+	public SafetyNetworkAssetLoader createSafetyNetworkAssetLoader() {
+		return new SafetyNetworkAssetLoader(filter);
 	}
 
-	public SafetyNetworkProductTypeLoader createSafetyNetworkProductTypeLoader() {
-		return new SafetyNetworkProductTypeLoader();
+	public SafetyNetworkAssetTypeLoader createSafetyNetworkAssetTypeLoader() {
+		return new SafetyNetworkAssetTypeLoader();
 	}
 
-	public SafetyNetworkInspectionLoader createSafetyNetworkRegisteredProductInspectionLoader() {
-		return new SafetyNetworkRegisteredProductInspectionLoader(filter);
+	public SafetyNetworkInspectionLoader createSafetyNetworkRegisteredAssetInspectionLoader() {
+		return new SafetyNetworkRegisteredAssetInspectionLoader(filter);
 	}
 
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
@@ -487,12 +487,12 @@ public class LoaderFactory implements Serializable {
         return new SafetyNetworkRegisteredAssetCountLoader();
     }
 
-    public InspectionsByProductIdLoader createInspectionsByProductIdLoader() {
-        return new InspectionsByProductIdLoader(filter);
+    public InspectionsByAssetIdLoader createInspectionsByAssetIdLoader() {
+        return new InspectionsByAssetIdLoader(filter);
     }
 
-    public ProductAlreadyRegisteredLoader createProductAlreadyRegisteredLoader() {
-        return new ProductAlreadyRegisteredLoader(filter);
+    public AssetAlreadyRegisteredLoader createAssetAlreadyRegisteredLoader() {
+        return new AssetAlreadyRegisteredLoader(filter);
     }
 
 }

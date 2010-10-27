@@ -16,7 +16,7 @@ import com.n4systems.model.State;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 
@@ -29,7 +29,7 @@ public class PathHandler {
 	private static final String PROPERTIES_FILE_EXT = ".properties";
 	private static final String PACKAGE_PROPERTIES_FILE = "package.properties";
 	private static final String SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + REPORT_FILE_EXT;
-	private static final String PRODUCT_REPORT_FILE_NAME = "asset" + REPORT_FILE_EXT;
+	private static final String ASSET_REPORT_FILE_NAME = "asset" + REPORT_FILE_EXT;
 	private static final String CHART_FILE_NAME = "proof_test_chart.png";
 	private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
 	private static final String LOGO_IMAGE_FILE_NAME = "logo.gif";
@@ -38,15 +38,15 @@ public class PathHandler {
 	private static final String ORGANIZATION_PATH_PART =  "orgs";
 	private static final String TENANT_IMAGE_PATH_BASE = PRIVATE_PATH_BASE + "/images";
 	private static final String INSPECTION_PATH_BASE = PRIVATE_PATH_BASE + "/inspections";
-	private static final String PRODUCT_PATH_BASE = PRIVATE_PATH_BASE + "/products";
-	private static final String PRODUCT_TYPE_PATH_BASE = PRIVATE_PATH_BASE + "/productTypes";
+	private static final String ASSET_PATH_BASE = PRIVATE_PATH_BASE + "/products";
+	private static final String ASSET_TYPE_PATH_BASE = PRIVATE_PATH_BASE + "/productTypes";
 	private static final String PROJECT_PATH_BASE = PRIVATE_PATH_BASE + "/projects";
 	private static final String CONF_PATH_BASE = PRIVATE_PATH_BASE + "/conf";
 	private static final String USERS_PATH_BASE = PRIVATE_PATH_BASE + "/users";
-	private static final String PRODUCT_TYPE_ATTACHMENT_PATH_BASE = PRODUCT_TYPE_PATH_BASE + "/attachments";
-	private static final String PRODUCT_TYPE_IMAGE_PATH_BASE = PRODUCT_TYPE_PATH_BASE + "/images";
+	private static final String ASSET_TYPE_ATTACHMENT_PATH_BASE = ASSET_TYPE_PATH_BASE + "/attachments";
+	private static final String ASSET_TYPE_IMAGE_PATH_BASE = ASSET_TYPE_PATH_BASE + "/images";
 	private static final String PROJECT_ATTACHMENT_PATH_BASE = PROJECT_PATH_BASE + "/attachments";
-	private static final String PRODUCT_ATTACHMENT_PATH_BASE = PRODUCT_PATH_BASE + "/attachments";
+	private static final String ASSET_ATTACHMENT_PATH_BASE = ASSET_PATH_BASE + "/attachments";
 	private static final String ATTACHMENT_PATH_BASE = INSPECTION_PATH_BASE + "/attachments";
 	private static final String PROOF_TEST_PATH_BASE = INSPECTION_PATH_BASE + "/prooftests";
 	private static final String CHART_IMAGE_PATH_BASE = INSPECTION_PATH_BASE + "/chartimages";
@@ -236,23 +236,23 @@ public class PathHandler {
 	 * Finds the relative Tenant specific path to Asset report.  Uses the Tenant from the Asset to resolve the Teanant path part
 	 * @see 	#getTenantPathPart(Tenant)
 	 * @see 	#getReportPath(com.n4systems.model.Asset)
-	 * @param 	product	A Asset
+	 * @param 	asset	A Asset
 	 * @return	A string path relative to the application root
 	 */
-	private static String getReportPath(Asset product) {
-		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(product.getTenant()), PRODUCT_REPORT_FILE_NAME);
+	private static String getReportPath(Asset asset) {
+		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), ASSET_REPORT_FILE_NAME);
 	}
 	
 	/**
 	 * Finds a report file for an Asset.  Defaults to the all Tenant report directory if the Tenant specific report does not exist.
 	 * @see 	#getReportPath(com.n4systems.model.Asset)
 	 * @param	getAppRoot()	A base directory to resolve the file from
-	 * @param 	product			A Asset
+	 * @param 	asset			A Asset
 	 * @return					A File object for the resolved report
 	 */
-	public static File getReportFile(Asset product) {
-		File tenantReport = absolutize(getReportPath(product));
-		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(PRODUCT_REPORT_FILE_NAME);
+	public static File getReportFile(Asset asset) {
+		File tenantReport = absolutize(getReportPath(asset));
+		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(ASSET_REPORT_FILE_NAME);
 	}
 	
 	/**
@@ -337,21 +337,21 @@ public class PathHandler {
 		return mergePaths(PROJECT_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
-	private static String getProductPath(Asset product) {
-		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(product.getCreated());
-		return mergePaths(dateCreatedPath, product.getId().toString());
+	private static String getAssetPath(Asset asset) {
+		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(asset.getCreated());
+		return mergePaths(dateCreatedPath, asset.getId().toString());
 	}
 	
 	private static String getSubInspectionPath(SubInspection subInspection) {
 		return subInspection.getId().toString();
 	}
 	
-	private static String getProductTypePath(Long productTypeId) {
-		return productTypeId.toString();
+	private static String getAssetTypePath(Long assetTypeId) {
+		return assetTypeId.toString();
 	}
 	
-	private static String getProductTypePath(AssetType assetType) {
-		return getProductTypePath(assetType.getId());
+	private static String getAssetTypePath(AssetType assetType) {
+		return getAssetTypePath(assetType.getId());
 	}
 	
 	private static String getAttachmentPath(Inspection inspection) {
@@ -362,7 +362,7 @@ public class PathHandler {
 		return note.getId().toString();
 	}
 	
-	private static String getProductAttachmentPath(AssetAttachment pAttachment) {
+	private static String getAssetAttachmentPath(AssetAttachment pAttachment) {
 		return pAttachment.getId().toString();
 	}
 
@@ -398,20 +398,20 @@ public class PathHandler {
 		return absolutize(getJobAttachmentBasePath(tenant));
 	}
 	
-	public static File getProductAttachmentDir(AssetAttachment attachment) {
-		return absolutize(mergePaths(getProductAttachmentBasePath(attachment.getTenant()), getProductPath(attachment.getAsset()), getProductAttachmentPath(attachment)));
+	public static File getAssetAttachmentDir(AssetAttachment attachment) {
+		return absolutize(mergePaths(getAssetAttachmentBasePath(attachment.getTenant()), getAssetPath(attachment.getAsset()), getAssetAttachmentPath(attachment)));
 	}
 	
-	public static File getProductAttachmentFile(AssetAttachment attachment) {
-		return new File(getProductAttachmentDir(attachment), attachment.getFileName());
+	public static File getAssetAttachmentFile(AssetAttachment attachment) {
+		return new File(getAssetAttachmentDir(attachment), attachment.getFileName());
 	}
 	
-	public static File getProductAttachmentBaseFile(Tenant tenant) {
-		return absolutize(getProductAttachmentBasePath(tenant));
+	public static File getAssetAttachmentBaseFile(Tenant tenant) {
+		return absolutize(getAssetAttachmentBasePath(tenant));
 	}
 	
-	private static String getProductAttachmentBasePath(Tenant tenant) {
-		return mergePaths(PRODUCT_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
+	private static String getAssetAttachmentBasePath(Tenant tenant) {
+		return mergePaths(ASSET_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
 	public static File getChartImageFile(Inspection inspection) {
@@ -458,32 +458,32 @@ public class PathHandler {
 		return absolutize(COMMON_CONFIG_BASE);
 	}
 	
-	public static File getProductTypeAttachmentFile(FileAttachment attachment, Long productTypeId) {
-		return absolutize(mergePaths(getProductTypeAttachmentBasePath(attachment.getTenant()), getProductTypePath(productTypeId), attachment.getFileName()));
+	public static File getAssetTypeAttachmentFile(FileAttachment attachment, Long assetTypeId) {
+		return absolutize(mergePaths(getAssetTypeAttachmentBasePath(attachment.getTenant()), getAssetTypePath(assetTypeId), attachment.getFileName()));
 	}
 	
-	public static File getProductTypeAttachmentFile(AssetType assetType) {
-		return absolutize(mergePaths(getProductTypeAttachmentBasePath(assetType.getTenant()), getProductTypePath(assetType)));
+	public static File getAssetTypeAttachmentFile(AssetType assetType) {
+		return absolutize(mergePaths(getAssetTypeAttachmentBasePath(assetType.getTenant()), getAssetTypePath(assetType)));
 	}
 	
-	private static String getProductTypeAttachmentBasePath(Tenant tenant) {
-		return mergePaths(PRODUCT_TYPE_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
+	private static String getAssetTypeAttachmentBasePath(Tenant tenant) {
+		return mergePaths(ASSET_TYPE_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
-	public static File getProductTypeAttachmentBaseFile(Tenant tenant) {
-		return absolutize(getProductTypeAttachmentBasePath(tenant));
+	public static File getAssetTypeAttachmentBaseFile(Tenant tenant) {
+		return absolutize(getAssetTypeAttachmentBasePath(tenant));
 	}
 	
-	public static File getProductTypeImageFile(AssetType assetType) {
-		return absolutize(mergePaths(getProductTypeImageBasePath(assetType.getTenant()), getProductTypePath(assetType)));
+	public static File getAssetTypeImageFile(AssetType assetType) {
+		return absolutize(mergePaths(getAssetTypeImageBasePath(assetType.getTenant()), getAssetTypePath(assetType)));
 	}
 	
-	public static File getProductTypeImageBaseFile(Tenant tenant) {
-		return absolutize(getProductTypeImageBasePath(tenant));
+	public static File getAssetTypeImageBaseFile(Tenant tenant) {
+		return absolutize(getAssetTypeImageBasePath(tenant));
 	}
 	
-	public static String getProductTypeImageBasePath(Tenant tenant) {
-		return mergePaths(PRODUCT_TYPE_IMAGE_PATH_BASE, getTenantPathPart(tenant));
+	public static String getAssetTypeImageBasePath(Tenant tenant) {
+		return mergePaths(ASSET_TYPE_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
 
 	/** @return The Tenant specific configuration directory for a tenant */

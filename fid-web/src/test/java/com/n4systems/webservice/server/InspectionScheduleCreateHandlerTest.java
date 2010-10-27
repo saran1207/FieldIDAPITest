@@ -7,7 +7,7 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.product.AssetByMobileGuidLoader;
+import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import org.junit.Before;
 import org.junit.Test;
 

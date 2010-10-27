@@ -7,31 +7,31 @@ import java.util.Set;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.inspectiontype.CommonProductTypeLoader;
+import com.n4systems.model.inspectiontype.CommonAssetTypeLoader;
 
 public class LoaderBackedCommonInspectionTypeHandler implements CommonInspectionTypeHandler {
 
-	private final CommonProductTypeLoader productTypeIdLoader;
+	private final CommonAssetTypeLoader assetTypeIdLoader;
 
-	public LoaderBackedCommonInspectionTypeHandler(CommonProductTypeLoader productTypeIdLoader) {
-		this.productTypeIdLoader = productTypeIdLoader;
+	public LoaderBackedCommonInspectionTypeHandler(CommonAssetTypeLoader assetTypeIdLoader) {
+		this.assetTypeIdLoader = assetTypeIdLoader;
 	}
 
 	public Set<InspectionType> findCommonInspectionTypesFor(List<Long> assetIds) {
 	
 
-		List<AssetType> resultSet = getProductTypes(assetIds);
+		List<AssetType> resultSet = getAssetTypes(assetIds);
 
 		Set<InspectionType> filterCommonInspectionTypes = filterCommonInspectionTypes(resultSet);
 		return filterCommonInspectionTypes == null ? new HashSet<InspectionType>() : filterCommonInspectionTypes;
 	}
 
-	private List<AssetType> getProductTypes(List<Long> assetIds) {
+	private List<AssetType> getAssetTypes(List<Long> assetIds) {
 		if (assetIds.isEmpty()) {
 			return new ArrayList<AssetType>();
 		}
 		
-		return productTypeIdLoader.forAssets(assetIds).load();
+		return assetTypeIdLoader.forAssets(assetIds).load();
 	}
 
 	@SuppressWarnings("deprecation")

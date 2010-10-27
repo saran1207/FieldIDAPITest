@@ -20,8 +20,8 @@ public class ExporterFactory {
 		return new AutoAttributeExporter(autoAttribLoader);
 	}
 	
-	public ProductExporter createProductExporter(ListLoader<Asset> productLoader) {
-		return new ProductExporter(productLoader);
+	public AssetExporter createAssetExporter(ListLoader<Asset> assetLoader) {
+		return new AssetExporter(assetLoader);
 	}
 	
 	public InspectionExporter createInspectionExporter(ListLoader<Inspection> inspectionLoader, NextInspectionDateByInspectionLoader nextDateLoader) {

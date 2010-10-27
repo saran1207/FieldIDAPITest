@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
@@ -26,7 +26,6 @@ import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
@@ -62,10 +61,10 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	public InspectionReportAction(
 			final PersistenceManager persistenceManager,
 			final UserManager userManager, 
-			final ProductManager productManager) {
+			final AssetManager assetManager) {
 		//TODO refactor search action so that we don't have to pass in the session key but a way of getting the current criteria.
 		super(InspectionReportAction.class, WebSession.REPORT_CRITERIA, "Inspection Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_search", "asset"));
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(assetManager), "inspection_search", "asset"));
 
 		this.userManager = userManager;
 		
@@ -196,7 +195,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public List<AssetStatus> getAssetStatuses() {
 		if (statuses == null) {
-			statuses = getLoaderFactory().createProductStatusListLoader().load();
+			statuses = getLoaderFactory().createAssetStatusListLoader().load();
 		}
 		
 		return statuses;

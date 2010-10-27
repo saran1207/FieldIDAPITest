@@ -12,7 +12,7 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
@@ -26,7 +26,7 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
-	private LegacyProductType productTypeManager;
+	private LegacyAssetType assetTypeManager;
 	private AutoAttributeManager attributeManager;
 
 	private Collection<ListingPair> assetTypes;
@@ -40,10 +40,10 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 	private List<ListingPair> lookUpInputs = new ArrayList<ListingPair>();
 	private List<StringListingPair> lookUpOutputs = new ArrayList<StringListingPair>();
 
-	public AutoAttributeCriteriaCrud(LegacyProductType productTypeManager, PersistenceManager persistenceManager,
+	public AutoAttributeCriteriaCrud(LegacyAssetType assetTypeManager, PersistenceManager persistenceManager,
 			AutoAttributeManager attributeManager) {
 		super(persistenceManager);
-		this.productTypeManager = productTypeManager;
+		this.assetTypeManager = assetTypeManager;
 		this.attributeManager = attributeManager;
 	}
 
@@ -53,7 +53,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		assetType = getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
+		assetType = getLoaderFactory().createAssetTypeLoader().setId(uniqueId).setStandardPostFetches().load();
 		
 		if (assetType != null && assetType.hasCriteria()) {
 			String[] fetchList = { "inputs", "outputs" };
@@ -236,7 +236,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 
 	public Collection<ListingPair> getAssetTypes() {
 		if (assetTypes == null) {
-			assetTypes = productTypeManager.getProductTypeListForTenant(getTenantId());
+			assetTypes = assetTypeManager.getAssetTypeListForTenant(getTenantId());
 		}
 		return assetTypes;
 	}

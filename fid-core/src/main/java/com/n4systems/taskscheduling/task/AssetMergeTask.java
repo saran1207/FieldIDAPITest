@@ -1,9 +1,9 @@
 package com.n4systems.taskscheduling.task;
 
+import com.n4systems.ejb.AssetManager;
 import org.apache.log4j.Logger;
 
 
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
@@ -19,7 +19,7 @@ public class AssetMergeTask implements Runnable {
 	private final String serialNumberOfLoser;
 	private final String serialNumberOfWinner;
 	
-	private ProductManager productManager;
+	private AssetManager assetManager;
 	private boolean error = false;
 	
 	public AssetMergeTask(Asset winningProduct, Asset losingProduct, User user) {
@@ -40,12 +40,12 @@ public class AssetMergeTask implements Runnable {
 	}
 	
 	private void setUp() {
-		productManager = ServiceLocator.getProductManager();
+		assetManager = ServiceLocator.getProductManager();
 	}
 	
 	private void executeMerge() {
 		try {
-			productManager.mergeAssets(winningAsset, losingAsset, user);
+			assetManager.mergeAssets(winningAsset, losingAsset, user);
 		} catch (Exception e) {
 			logger.error("could not merge products", e);
 			error = true;

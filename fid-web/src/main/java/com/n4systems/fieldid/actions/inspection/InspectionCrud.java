@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -19,9 +20,8 @@ import rfid.ejb.entity.AssetStatus;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.impl.InspectionScheduleBundle;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -80,9 +80,9 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private static Logger logger = Logger.getLogger(InspectionCrud.class);
 
 	private final InspectionManager inspectionManager;
-	private final LegacyProductSerial legacyProductManager;
+	private final LegacyAsset legacyProductManager;
 	private final UserManager userManager;
-	protected final ProductManager productManager;
+	protected final AssetManager assetManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	protected final ProductionInspectionPersistenceFactory inspectionPersistenceFactory;
 	protected final InspectionHelper inspectionHelper;
@@ -128,13 +128,13 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private User assignedTo;
 	private boolean assignToSomeone = false;
 	
-	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyProductSerial legacyProductManager,
-			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
+	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyAsset legacyProductManager,
+			AssetManager assetManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
 		this.legacyProductManager = legacyProductManager;
 		this.userManager = userManager;
-		this.productManager = productManager;
+		this.assetManager = assetManager;
 		this.inspectionHelper = new InspectionHelper(persistenceManager);
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
@@ -223,7 +223,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	private List<AssociatedInspectionType> getInspectionTypes() {
-		return getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(asset.getType()).load();
+		return getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(asset.getType()).load();
 	}
 	
 	@SkipValidation
@@ -616,8 +616,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (assetId == null) {
 			asset = null;
 		} else if (asset == null || !assetId.equals(asset.getId())) {
-			asset = productManager.findAsset(assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions", "projects");
-			asset = productManager.fillInSubAssetsOnAsset(asset);
+			asset = assetManager.findAsset(assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions", "projects");
+			asset = assetManager.fillInSubAssetsOnAsset(asset);
 		}
 	}
 
@@ -638,7 +638,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public List<AssetStatus> getAssetStatuses() {
 		if (assetStatuses == null) {
-			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
+			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
 		}
 		return assetStatuses;
 	}
@@ -907,7 +907,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	public List<InspectionSchedule> getAvailableSchedules() {
 		if (availableSchedules == null) {
 			availableSchedules = getLoaderFactory().createIncompleteInspectionSchedulesListLoader()
-					.setProduct(asset)
+					.setAsset(asset)
 					.setInspectionType(inspection.getType())
 					.load();
 			if (inspectionSchedule != null && !availableSchedules.contains(inspectionSchedule)) {

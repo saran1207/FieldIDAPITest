@@ -65,9 +65,9 @@ public class DownloadCoordinator {
 		executor.execute(task);
 	}
 	
-	public void generateAllProductCertificates(String name, String downloadUrl, List<Long> productIds) {
+	public void generateAllAssetCertificates(String name, String downloadUrl, List<Long> assetIds) {
 		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
-		PrintAllAssetCertificatesTask task = taskFactory.createPrintAllAssetCertificatesTask(link, downloadUrl, productIds);
+		PrintAllAssetCertificatesTask task = taskFactory.createPrintAllAssetCertificatesTask(link, downloadUrl, assetIds);
 		
 		executor.execute(task);
 	}
@@ -93,9 +93,9 @@ public class DownloadCoordinator {
 		executor.execute(task);
 	}
 	
-	public void generateProductExport(String name, String downloadUrl, ListLoader<Asset> productLoader) {
+	public void generateAssetExport(String name, String downloadUrl, ListLoader<Asset> assetLoader) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
-		AssetExportTask task = taskFactory.createProductExportTask(link, downloadUrl, productLoader);
+		AssetExportTask task = taskFactory.createAssetExportTask(link, downloadUrl, assetLoader);
 		
 		executor.execute(task);
 	}

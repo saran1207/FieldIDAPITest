@@ -38,12 +38,12 @@ public enum SetupDataGroup {
 	PRODUCT_TYPE(AssetType.class, AssetStatus.class, AssetTypeGroup.class, AssociatedInspectionType.class, AssetTypeSchedule.class) {
 		@Override
 		public Date getLastModDate(SetupDataLastModDates lastModeDates) {
-			return lastModeDates.getProductTypes();
+			return lastModeDates.getAssetTypes();
 		}
 
 		@Override
 		public void setLastModDate(Date newDate, SetupDataLastModDates lastModeDates) {
-			lastModeDates.setProductTypes(newDate);
+			lastModeDates.setAssetTypes(newDate);
 		}
 	},
 	INSPECTION_TYPE(InspectionType.class, State.class, InspectionBook.class, CommentTempBean.class, UnitOfMeasure.class) {

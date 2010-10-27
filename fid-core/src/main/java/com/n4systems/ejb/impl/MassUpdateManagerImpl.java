@@ -13,11 +13,11 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
@@ -47,16 +47,16 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	
 	private PersistenceManager persistenceManager;
 	
-	private LegacyProductSerial legacyProductManager;
+	private LegacyAsset legacyAssetManager;
 
 
-	private ProductManager productManager;
+	private AssetManager assetManager;
 
 	public MassUpdateManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
-		this.legacyProductManager = new LegacyProductSerialManager(em);
-		this.productManager = new ProductManagerImpl(em);
+		this.legacyAssetManager = new LegacyAssetManager(em);
+		this.assetManager = new AssetManagerImpl(em);
 	}
 
 	public Long updateInspectionSchedules(Set<Long> scheduleIds, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException {
@@ -116,8 +116,8 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			// execute the update
 			result = new Long(updateStmt.executeUpdate());
 			
-			//update products as well.
-			modifyProductsForSchedules(scheduleIds);
+			//update assets as well.
+			modifyAssetsForSchedules(scheduleIds);
 			
 		} catch (Exception e) {
 			throw new UpdateFailureException(e);
@@ -137,9 +137,9 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			return 0L;
 		}
 		
-		// we'll modify the products first as we won't be able to find the asset ids
+		// we'll modify the assets first as we won't be able to find the asset ids
 		// after we delete.
-		modifyProductsForSchedules(incompleteSchedules);
+		modifyAssetsForSchedules(incompleteSchedules);
 		
 		String deleteStmt = String.format("DELETE from %s WHERE id IN (:ids)", InspectionSchedule.class.getName());
 		
@@ -163,18 +163,18 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return ListHelper.toSet(incompleteSchedules);
 	}
 
-	private void modifyProductsForSchedules(Set<Long> scheduleIds) {
-		QueryBuilder<Long> productIdQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
-		productIdQuery.setSimpleSelect("asset.id", true);
-		productIdQuery.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
+	private void modifyAssetsForSchedules(Set<Long> scheduleIds) {
+		QueryBuilder<Long> assetIdQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		assetIdQuery.setSimpleSelect("asset.id", true);
+		assetIdQuery.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
 		
 		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
-		List<Long> productIds = queryExecutor.getResultList(em, productIdQuery, ListHelper.toList(scheduleIds));
+		List<Long> assetIds = queryExecutor.getResultList(em, assetIdQuery, ListHelper.toList(scheduleIds));
 
-		updateProductModifiedDate(productIds);
+		updateAssetModifiedDate(assetIds);
 	}
 	
-	public Long updateProductModifiedDate(List<Long> ids) {
+	public Long updateAssetModifiedDate(List<Long> ids) {
 		if (ids == null || ids.size() == 0) {
 			return 0L;
 		}
@@ -183,15 +183,15 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return new Long(em.createQuery(updateQueryString).setParameter("now", new Date()).setParameter("ids", ids).executeUpdate());
 	}
 
-	public Long updateProducts(List<Long> ids, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long updateAssets(List<Long> ids, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
 		try {
 			for (Long id : ids) {
-				Asset asset = productManager.findAssetAllFields(id, new OpenSecurityFilter());
+				Asset asset = assetManager.findAssetAllFields(id, new OpenSecurityFilter());
 				
-				updateProduct(asset, assetModificationData, values);
+				updateAsset(asset, assetModificationData, values);
 				
-				legacyProductManager.update(asset, modifiedBy);
+				legacyAssetManager.update(asset, modifiedBy);
 				
 				result++;
 			}
@@ -206,7 +206,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
-	private void updateProduct(Asset asset, Asset assetModificationData, Map<String, Boolean> values) {
+	private void updateAsset(Asset asset, Asset assetModificationData, Map<String, Boolean> values) {
 		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
 			if (entry.getValue() == true) {
 				if (entry.getKey().equals("owner")) {
@@ -220,7 +220,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					asset.setAssignedUser(assetModificationData.getAssignedUser());
 				}
 
-				if (entry.getKey().equals("productStatus")) {
+				if (entry.getKey().equals("assetStatus")) {
 					asset.setAssetStatus(assetModificationData.getAssetStatus());
 				}
 
@@ -272,7 +272,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					changeTarget.setPrintable(inspectionChanges.isPrintable());
 				}
 				
-				if (updateKey.equals("productStatus")) {
+				if (updateKey.equals("assetStatus")) {
 					changeTarget.setAssetStatus(inspectionChanges.getAssetStatus());
 				}
 			}

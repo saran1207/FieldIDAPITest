@@ -54,7 +54,7 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 		return this;
 	}
 
-	public CatalogElementRemovalHandler setProductType(AssetType assetType) {
+	public CatalogElementRemovalHandler setAssetType(AssetType assetType) {
 		this.assetType = assetType;
 		return this;
 	}

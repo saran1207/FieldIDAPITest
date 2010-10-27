@@ -18,16 +18,16 @@ public class PopulateAssignedUserConverter implements AssignedUserConverter {
 		this.loaderFactory = loaderFactory;
 	}
 	
-	public Asset convert(ProductServiceDTO productServiceDTO, Asset product) {
+	public Asset convert(ProductServiceDTO productServiceDTO, Asset asset) {
 
 		User user = null;
 		if (productServiceDTO.assignedUserIdExists()) {
 			UserFilteredLoader loader = loaderFactory.createUserFilteredLoader().setId(productServiceDTO.getAssignedUserId());
 			user = loader.load();
 		}
-		product.setAssignedUser(user);
+		asset.setAssignedUser(user);
 		
-		return product;
+		return asset;
 	}
 
 	@Override

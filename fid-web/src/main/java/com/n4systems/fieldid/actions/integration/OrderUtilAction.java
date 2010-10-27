@@ -94,6 +94,6 @@ public class OrderUtilAction extends AbstractAction {
 	}
 	
 	public int getIdentifiedProductCount(LineItem lineItem) { 
-		return orderManager.countProductsTagged(lineItem);
+		return orderManager.countAssetsTagged(lineItem);
 	}
 }

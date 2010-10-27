@@ -10,7 +10,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -43,13 +43,13 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 	private Map<String, AssetTypeSchedule> schedules;
 	private Map<String, List<AssetTypeSchedule>> overrideSchedules;
 
-	private LegacyProductType productTypeManager;
+	private LegacyAssetType assetTypeManager;
 	
 	private OwnerPicker ownerPicker;
 
-	public AssetTypeScheduleCrud(LegacyProductType productTypeManager, PersistenceManager persistenceManager) {
+	public AssetTypeScheduleCrud(LegacyAssetType assetTypeManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.productTypeManager = productTypeManager;
+		this.assetTypeManager = assetTypeManager;
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 				schedule = persistenceManager.update(schedule);
 			}
 
-			assetType = productTypeManager.updateProductType(assetType);
+			assetType = assetTypeManager.updateAssetType(assetType);
 			schedule = assetType.getSchedule(schedule.getInspectionType(), schedule.getOwner());
 		} catch (Exception e) {
 			addActionError(getText("error.failedtosave"));
@@ -166,7 +166,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 
 	public AssetType getAssetType() {
 		if (assetType == null) {
-			assetType = getLoaderFactory().createProductTypeLoader().setId(assetTypeId).setStandardPostFetches().load();
+			assetType = getLoaderFactory().createAssetTypeLoader().setId(assetTypeId).setStandardPostFetches().load();
 		}
 		return assetType;
 	}
@@ -181,7 +181,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 	public List<InspectionType> getInspectionTypes() {
 		if (inspectionTypes == null) {
 			inspectionTypes = new ArrayList<InspectionType>();
-			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getAssetType()).load();
+			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(getAssetType()).load();
 			for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
 				inspectionTypes.add(associatedInspectionType.getInspectionType());
 			}

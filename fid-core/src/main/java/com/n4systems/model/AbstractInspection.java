@@ -109,8 +109,8 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		return asset;
 	}
 
-	public void setAsset(Asset product) {
-		this.asset = product;
+	public void setAsset(Asset asset) {
+		this.asset = asset;
 	}
 
 	@AllowSafetyNetworkAccess

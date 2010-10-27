@@ -182,8 +182,8 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
 		return assets;
 	}
 
-	public void setAssets( List<Asset> products ) {
-		this.assets = products;
+	public void setAssets( List<Asset> assets ) {
+		this.assets = assets;
 	}
 
 	public List<FileAttachment> getNotes() {

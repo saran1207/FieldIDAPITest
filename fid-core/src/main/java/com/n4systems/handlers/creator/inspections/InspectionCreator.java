@@ -68,7 +68,7 @@ public class InspectionCreator extends BasicTransactionManagement {
 
 	private void createSchedules(Transaction transaction) {
 		for (InspectionScheduleBundle inspectionScheduleBundle : parameter.schedules) {
-			InspectionSchedule inspectionSchedule = new InspectionSchedule(inspectionScheduleBundle.getProduct(), inspectionScheduleBundle.getType(), inspectionScheduleBundle.getScheduledDate());
+			InspectionSchedule inspectionSchedule = new InspectionSchedule(inspectionScheduleBundle.getAsset(), inspectionScheduleBundle.getType(), inspectionScheduleBundle.getScheduledDate());
 			inspectionSchedule.setProject(inspectionScheduleBundle.getJob());
 			nextScheduleSerivce.createNextSchedule(inspectionSchedule);
 		}

@@ -94,7 +94,7 @@ public class DownloadCoordinatorTest {
 		replay(linkFactory);
 		replay(linkSaver);
 		
-		dc.generateProductExport(downloadName, null, null);
+		dc.generateAssetExport(downloadName, null, null);
 		
 		verify(linkFactory);
 		verify(linkSaver);
@@ -180,7 +180,7 @@ public class DownloadCoordinatorTest {
 		
 		expect(linkFactory.createDownloadLink((User)anyObject(), (String)anyObject(), (ContentType)anyObject())).andReturn(link);
 		
-		expect(taskFactory.createProductExportTask(link, url, loader)).andReturn(task);
+		expect(taskFactory.createAssetExportTask(link, url, loader)).andReturn(task);
 		
 		executor.execute(task);
 		
@@ -188,7 +188,7 @@ public class DownloadCoordinatorTest {
 		replay(taskFactory);
 		replay(executor);
 		
-		dc.generateProductExport(null, url, loader);
+		dc.generateAssetExport(null, url, loader);
 		
 		verify(taskFactory);
 		verify(executor);

@@ -1077,7 +1077,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		dto.setAutoAttributes(setupModDates.getAutoAttributes());
 		dto.setInspectionTypes(setupModDates.getInspectionTypes());
 		dto.setOwners(setupModDates.getOwners());
-		dto.setProductTypes(setupModDates.getProductTypes());
+		dto.setProductTypes(setupModDates.getAssetTypes());
 		dto.setJobs(setupModDates.getJobs());
 		dto.setEmployees(setupModDates.getEmployees());
 		dto.setLocations(setupModDates.getLocations());

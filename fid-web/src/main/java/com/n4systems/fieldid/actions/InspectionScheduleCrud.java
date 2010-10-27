@@ -3,13 +3,13 @@ package com.n4systems.fieldid.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.LegacyAsset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
@@ -33,7 +33,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(InspectionScheduleCrud.class);
 
-	private LegacyProductSerial legacyProductManager;
+	private LegacyAsset legacyProductManager;
 	private InspectionScheduleManager inspectionScheduleManager;
 	protected InspectionSchedule inspectionSchedule;
 	
@@ -46,7 +46,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	private List<InspectionSchedule> inspectionSchedules;
 
-	public InspectionScheduleCrud(LegacyProductSerial legacyProductManager, PersistenceManager persistenceManager, InspectionScheduleManager inspectionScheduleManager) {
+	public InspectionScheduleCrud(LegacyAsset legacyProductManager, PersistenceManager persistenceManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
 		this.legacyProductManager = legacyProductManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
@@ -194,7 +194,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 				asset = persistenceManager.find(Asset.class, id, getSecurityFilter(), "type.subTypes", "type.inspectionTypes");
 				asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 			} else {
-				asset = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(id).load();
+				asset = getLoaderFactory().createSafetyNetworkAssetLoader().withAllFields().setAssetId(id).load();
 			}
 		}
 	}
@@ -221,7 +221,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	public List<InspectionType> getInspectionTypes() {
 		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
-		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(asset.getType()).load();
+		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(asset.getType()).load();
 		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
 			inspectionTypes.add(associatedInspectionType.getInspectionType());
 		}

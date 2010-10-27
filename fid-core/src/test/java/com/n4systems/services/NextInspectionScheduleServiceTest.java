@@ -33,7 +33,7 @@ public class NextInspectionScheduleServiceTest {
 		Asset asset = anAsset().build();
 		InspectionType inspectionType = anInspectionType().build();
 		Date nextDate = DateHelper.oneYearFromToday();
-		InspectionSchedule schedule = aScheduledInspectionSchedule().product(asset).inspectionType(inspectionType).nextDate(nextDate).build();
+		InspectionSchedule schedule = aScheduledInspectionSchedule().asset(asset).inspectionType(inspectionType).nextDate(nextDate).build();
 		List<InspectionSchedule> existingSchedules = new ArrayList<InspectionSchedule>();
 		
 		expect(mockInspectionScheduleManager.getAvailableSchedulesFor(asset)).andReturn(existingSchedules);
@@ -53,7 +53,7 @@ public class NextInspectionScheduleServiceTest {
 		InspectionType inspectionType = anInspectionType().build();
 		Date nextDate = DateHelper.oneYearFromToday();
 		Date nextDateDifferentTime = new Date(nextDate.getTime() + 1);
-		InspectionSchedule schedule = aScheduledInspectionSchedule().product(asset).inspectionType(inspectionType).nextDate(nextDate).build();
+		InspectionSchedule schedule = aScheduledInspectionSchedule().asset(asset).inspectionType(inspectionType).nextDate(nextDate).build();
 		List<InspectionSchedule> existingSchedules = new ArrayList<InspectionSchedule>();
 		existingSchedules.add(schedule);
 				

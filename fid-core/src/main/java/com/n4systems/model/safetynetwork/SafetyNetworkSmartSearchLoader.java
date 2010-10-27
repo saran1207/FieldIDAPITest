@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.product.SmartSearchWhereClause;
+import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.utils.PostFetcher;
@@ -33,15 +33,15 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Asset> {
 	protected List<Asset> load(EntityManager em, SecurityFilter filter) {
 
 		createUnregisteredAssetLoader();
-		List<Asset> unsecuredProducts = unregisteredAssetQueryHelper.getList(em);
+		List<Asset> unsecuredAssets = unregisteredAssetQueryHelper.getList(em);
 		
-		PostFetcher.postFetchFields(unsecuredProducts, "infoOptions");
+		PostFetcher.postFetchFields(unsecuredAssets, "infoOptions");
 		
-		// our asset list may contain products which are set to a customer who is not me.
-		SafetyNetworkProductSecurityManager securityManager = new SafetyNetworkProductSecurityManager(filter.getOwner());
-		List<Asset> securedProducts = securityManager.filterOutExternalNotAssignedProducts(unsecuredProducts);
+		// our asset list may contain assets which are set to a customer who is not me.
+		SafetyNetworkAssetSecurityManager securityManager = new SafetyNetworkAssetSecurityManager(filter.getOwner());
+		List<Asset> securedAssets = securityManager.filterOutExternalNotAssignedAssets(unsecuredAssets);
 
-		return securedProducts;
+		return securedAssets;
 	}
 
 	private void createUnregisteredAssetLoader() {

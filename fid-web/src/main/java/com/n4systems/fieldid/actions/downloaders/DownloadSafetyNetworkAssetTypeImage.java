@@ -14,7 +14,7 @@ public class DownloadSafetyNetworkAssetTypeImage extends DownloadAssetTypeImage 
 	
 	@Override
 	protected AssetType loadAssetType() {
-		return getLoaderFactory().createSafetyNetworkProductTypeLoader().setProductTypeId(uniqueID).setProductNetworkid(networkId).load();
+		return getLoaderFactory().createSafetyNetworkAssetTypeLoader().setAssetTypeId(uniqueID).setAssetNetworkId(networkId).load();
 	}
 
 	public void setNetworkId(Long networkId) {

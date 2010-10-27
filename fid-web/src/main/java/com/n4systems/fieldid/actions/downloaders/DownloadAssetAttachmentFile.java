@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 
 public class DownloadAssetAttachmentFile extends AbstractDownloadAction {
@@ -42,7 +42,7 @@ public class DownloadAssetAttachmentFile extends AbstractDownloadAction {
 
 	@Override
 	public File getFile() {
-		return PathHandler.getProductAttachmentFile(attachment);
+		return PathHandler.getAssetAttachmentFile(attachment);
 	}
 
 	@Override

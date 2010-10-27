@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.InspectionSchedule;
@@ -21,8 +21,8 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	
 	private Project job;
 	
-	public InspectionScheduleJobAssignment(PersistenceManager persistenceManager, InspectionManager inspectionManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
-		super(SCHEDULE_CRITERIA, InspectionScheduleJobAssignment.class, persistenceManager, inspectionManager, productManager, inspectionScheduleManager);
+	public InspectionScheduleJobAssignment(PersistenceManager persistenceManager, InspectionManager inspectionManager, AssetManager assetManager, InspectionScheduleManager inspectionScheduleManager) {
+		super(SCHEDULE_CRITERIA, InspectionScheduleJobAssignment.class, persistenceManager, inspectionManager, assetManager, inspectionScheduleManager);
 	}
 
 	private void testRequiredEntities() {

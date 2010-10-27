@@ -33,7 +33,7 @@ public class IncompleteInspectionSchedulesListLoader extends ListLoader<Inspecti
 		return query.getResultList(em);
 	}
 
-	public IncompleteInspectionSchedulesListLoader setProduct(Asset asset) {
+	public IncompleteInspectionSchedulesListLoader setAsset(Asset asset) {
 		this.asset = asset;
 		return this;
 	}

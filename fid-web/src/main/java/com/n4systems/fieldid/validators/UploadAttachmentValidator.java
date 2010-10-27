@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
-import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachment;
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
 

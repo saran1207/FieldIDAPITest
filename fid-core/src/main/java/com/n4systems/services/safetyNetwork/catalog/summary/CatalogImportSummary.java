@@ -7,7 +7,7 @@ public class CatalogImportSummary {
 	private InspectionTypeImportSummary inspectionTypeImportSummary = new InspectionTypeImportSummary();
 	private InspectionTypeGroupImportSummary inspectionTypeGroupImportSummary = new InspectionTypeGroupImportSummary();
 	private StateSetImportSummary stateSetImportSummary = new StateSetImportSummary();
-	private ProductTypeRelationshipsImportSummary productTypeRelationshipsImportSummary = new ProductTypeRelationshipsImportSummary();
+	private AssetTypeRelationshipsImportSummary assetTypeRelationshipsImportSummary = new AssetTypeRelationshipsImportSummary();
 	
 		
 	public AssetTypeImportSummary getAssetTypeImportSummary() {
@@ -50,8 +50,8 @@ public class CatalogImportSummary {
 		this.assetTypeGroupImportSummary = assetTypeGroupImportSummary;
 	}
 
-	public ProductTypeRelationshipsImportSummary getProductTypeRelationshipsImportSummary() {
-		return productTypeRelationshipsImportSummary;
+	public AssetTypeRelationshipsImportSummary getAssetTypeRelationshipsImportSummary() {
+		return assetTypeRelationshipsImportSummary;
 	}
 
 	

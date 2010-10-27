@@ -43,7 +43,7 @@ public class DownloadAssetTypeAttachedFile extends AbstractDownloadAction {
 	
 	@Override
 	public File getFile() {
-		return PathHandler.getProductTypeAttachmentFile(attachment, assetTypeId);
+		return PathHandler.getAssetTypeAttachmentFile(attachment, assetTypeId);
 	}
 	
 	@Override

@@ -70,11 +70,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateProductModifiedDate(List<Long> ids) {
+	public Long updateAssetModifiedDate(List<Long> ids) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateProductModifiedDate(ids);
+			return createManager(transaction.getEntityManager()).updateAssetModifiedDate(ids);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -117,11 +117,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateProducts(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateProducts(ids, asset, values, modifiedBy);
+			return createManager(transaction.getEntityManager()).updateAssets(ids, asset, values, modifiedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

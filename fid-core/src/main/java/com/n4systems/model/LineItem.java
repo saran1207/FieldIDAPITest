@@ -75,8 +75,8 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 		return assetCode;
 	}
 
-	public void setAssetCode(String productIdent) {
-		this.assetCode = productIdent;
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
 	}
 	
 	@AllowSafetyNetworkAccess

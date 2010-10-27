@@ -6,22 +6,22 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.persistence.loaders.Loader;
 
 public class SafetyNetworkAttachmentLoader extends Loader<FileAttachment> {
-	private final AssetTypeFileAttachmentIdByProductNetworkIdExistsLoader canLoadAttachmentLoader;
+	private final AssetTypeFileAttachmentIdByAssetNetworkIdExistsLoader canLoadAttachmentLoader;
 	private Long id;
-	private Long productNetworkId;
+	private Long assetNetworkId;
 	
 	public SafetyNetworkAttachmentLoader() {
-		this(new AssetTypeFileAttachmentIdByProductNetworkIdExistsLoader());
+		this(new AssetTypeFileAttachmentIdByAssetNetworkIdExistsLoader());
 	}
 	
-	public SafetyNetworkAttachmentLoader(AssetTypeFileAttachmentIdByProductNetworkIdExistsLoader canLoadAttachmentLoader) {
+	public SafetyNetworkAttachmentLoader(AssetTypeFileAttachmentIdByAssetNetworkIdExistsLoader canLoadAttachmentLoader) {
 		this.canLoadAttachmentLoader = canLoadAttachmentLoader;
 	}
 
 	@Override
 	protected FileAttachment load(EntityManager em) {
 		canLoadAttachmentLoader.setAttachmentId(id);
-		canLoadAttachmentLoader.setNetworkId(productNetworkId);
+		canLoadAttachmentLoader.setNetworkId(assetNetworkId);
 		
 		if (!canLoadAttachmentLoader.load(em)) {
 			return null;
@@ -36,8 +36,8 @@ public class SafetyNetworkAttachmentLoader extends Loader<FileAttachment> {
 		return this;
 	}
 	
-	public SafetyNetworkAttachmentLoader setProductNetworkId(Long productNetworkId) {
-		this.productNetworkId = productNetworkId;
+	public SafetyNetworkAttachmentLoader setAssetNetworkId(Long assetNetworkId) {
+		this.assetNetworkId = assetNetworkId;
 		return this;
 	}
 }

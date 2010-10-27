@@ -30,7 +30,7 @@ public class InspectionScheduleBundleTest {
 	}
 	
 	@Test(expected=NullPointerException.class)
-	public void should_not_allow_null_for_product() throws Exception {
+	public void should_not_allow_null_for_asset() throws Exception {
 		
 		new InspectionScheduleBundle(null, inspectionType, job, scheduleDate);
 		

@@ -7,8 +7,8 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.product.AssetAttachment;
-import com.n4systems.model.safetynetwork.ProductAlreadyRegisteredLoader;
+import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
 import com.n4systems.services.TenantCache;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
@@ -17,25 +17,25 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.ProjectManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.actions.asset.TraceabilityCrud;
 
 import java.util.List;
 
 public class SafetyNetworkAsset extends TraceabilityCrud{
 
-	public SafetyNetworkAsset(LegacyProductType productTypeManager,
-			LegacyProductSerial legacyProductSerialManager,
+	public SafetyNetworkAsset(LegacyAssetType assetTypeManager,
+			LegacyAsset legacyAssetManager,
 			PersistenceManager persistenceManager,
 			AssetCodeMappingService assetCodeMappingServiceManager,
-			ProductManager productManager, OrderManager orderManager,
+			AssetManager assetManager, OrderManager orderManager,
 			ProjectManager projectManager,
 			InspectionScheduleManager inspectionScheduleManager) {
-		super(productTypeManager, legacyProductSerialManager, persistenceManager,
-                assetCodeMappingServiceManager, productManager, orderManager,
+		super(assetTypeManager, legacyAssetManager, persistenceManager,
+                assetCodeMappingServiceManager, assetManager, orderManager,
 				projectManager, inspectionScheduleManager);
 	}
 	
@@ -50,7 +50,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		asset = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
+		asset = getLoaderFactory().createSafetyNetworkAssetLoader().withAllFields().setAssetId(uniqueId).load();
 		assetWebModel.match(asset);
 	}
 	
@@ -81,8 +81,8 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
     @Override
 	public List<AssetAttachment> getAssetAttachments() {
 		if (assetAttachments == null) {
-			assetAttachments = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader()
-                    .setProductId(asset.getId())
+			assetAttachments = getLoaderFactory().createSafetyNetworkAssetAttachmentListLoader()
+                    .setAssetId(asset.getId())
                     .setNetworkId(asset.getNetworkId())
                     .load();
 		}
@@ -97,7 +97,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
     }
 
     public List<Inspection> getInspections() {
-        return getLoaderFactory().createInspectionsByProductIdLoader().setProductId(asset.getId()).load();
+        return getLoaderFactory().createInspectionsByAssetIdLoader().setAssetId(asset.getId()).load();
     }
 
 	public boolean isPublishedCatalog(Tenant tenant) {
@@ -110,7 +110,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 	}
 
     public boolean isAssetAlreadyRegistered(Asset asset) {
-        ProductAlreadyRegisteredLoader loader = getLoaderFactory().createProductAlreadyRegisteredLoader();
+        AssetAlreadyRegisteredLoader loader = getLoaderFactory().createAssetAlreadyRegisteredLoader();
         return loader.setNetworkId(asset.getNetworkId()).load();
     }
 

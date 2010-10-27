@@ -4,14 +4,14 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.InspectionScheduleCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 
 public class SafetyNetworkInspectionSchedule extends InspectionScheduleCrud{
 
 	public SafetyNetworkInspectionSchedule(
-			LegacyProductSerial legacyProductManager,
+			LegacyAsset legacyProductManager,
 			PersistenceManager persistenceManager,
 			InspectionScheduleManager inspectionScheduleManager) {
 		super(legacyProductManager, persistenceManager, inspectionScheduleManager);

@@ -5,14 +5,14 @@ import static com.n4systems.fieldid.utils.CopyInspectionFactory.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.LegacyAsset;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
@@ -40,10 +40,10 @@ public class SubInspectionCrud extends InspectionCrud {
 	private MasterInspection masterInspectionHelper;
 	private boolean currentInspectionNew = true;
 
-	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyProductSerial legacyProductManager, 
-			ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
+	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyAsset legacyProductManager,
+			AssetManager assetManager, InspectionScheduleManager inspectionScheduleManager) {
 
-		super(persistenceManager, inspectionManager, userManager, legacyProductManager, productManager, inspectionScheduleManager);
+		super(persistenceManager, inspectionManager, userManager, legacyProductManager, assetManager, inspectionScheduleManager);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		}
 
 		Asset masterAsset = persistenceManager.find(Asset.class, masterInspectionHelper.getMasterAsset().getId(), getSecurityFilter(), "type.subTypes");
-		masterAsset = productManager.fillInSubAssetsOnAsset(masterAsset);
+		masterAsset = assetManager.fillInSubAssetsOnAsset(masterAsset);
 		masterInspectionHelper.setMasterAsset(masterAsset);
 
 		if (currentInspectionNew) {
@@ -327,7 +327,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			parentAsset = null;
 		} else if (parentAsset == null || !assetId.equals(parentAsset.getId())) {
 			parentAsset = persistenceManager.find(Asset.class, assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions");
-			parentAsset = productManager.fillInSubAssetsOnAsset(parentAsset);
+			parentAsset = assetManager.fillInSubAssetsOnAsset(parentAsset);
 		}
 	}
 

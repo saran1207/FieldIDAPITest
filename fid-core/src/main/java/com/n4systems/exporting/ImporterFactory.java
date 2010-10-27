@@ -5,9 +5,9 @@ import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
 import com.n4systems.api.conversion.inspection.InspectionToModelConverter;
 import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
-import com.n4systems.api.conversion.product.AssetToModelConverter;
+import com.n4systems.api.conversion.asset.AssetToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
@@ -22,7 +22,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
-import com.n4systems.services.product.ProductSaveService;
+import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ServiceLocator;
 
 public class ImporterFactory {
@@ -56,8 +56,8 @@ public class ImporterFactory {
 		return new AutoAttributeToModelConverter(criteria);
 	}
 
-	protected AssetToModelConverter createProductToModelConverter(User identifiedBy, AssetType type) {
-		AssetToModelConverter converter = new AssetToModelConverter(loaderFactory.createOrgByNameLoader(), createNonIntegrationOrderManager(), loaderFactory.createProductStatusByNameLoader(), new InfoOptionMapConverter());
+	protected AssetToModelConverter createAssetToModelConverter(User identifiedBy, AssetType type) {
+		AssetToModelConverter converter = new AssetToModelConverter(loaderFactory.createOrgByNameLoader(), createNonIntegrationOrderManager(), loaderFactory.createAssetStatusByNameLoader(), new InfoOptionMapConverter());
 		converter.setIdentifiedBy(identifiedBy);
 		converter.setType(type);
 		return converter;
@@ -67,12 +67,12 @@ public class ImporterFactory {
 		return new NonIntegrationOrderManager(saverFactory.createNonIntegrationLineItemSaver());
 	}
 
-	protected ProductSaveService createProductSaveService(User user) {
-		return new ProductSaveService(createLegacyProductSerial(), user);
+	protected AssetSaveService createAssetSaveService(User user) {
+		return new AssetSaveService(createLegacyAsset(), user);
 	}
 
-	protected LegacyProductSerial createLegacyProductSerial() {
-		return ServiceLocator.getProductSerialManager();
+	protected LegacyAsset createLegacyAsset() {
+		return ServiceLocator.getAssetManager();
 	}
 
 	protected InspectionPersistenceFactory createInspectionPersistenceFactory() {
@@ -83,7 +83,7 @@ public class ImporterFactory {
 		InspectionToModelConverter converter = new InspectionToModelConverter(
 				loaderFactory.createOrgByNameLoader(), 
 				loaderFactory.createSmartSearchListLoader(), 
-				loaderFactory.createProductStatusByNameLoader(), 
+				loaderFactory.createAssetStatusByNameLoader(), 
 				loaderFactory.createInspectionBookFindOrCreateLoader(), 
 				loaderFactory.createUserByFullNameLoader());
 		
@@ -99,8 +99,8 @@ public class ImporterFactory {
 		return new AutoAttributeImporter(reader, createViewValidator(), saverFactory.createAutoAttributeDefinitionSaver(), createAutoAttributeToModelConverter(criteria));
 	}
 
-	public ProductImporter createProductImporter(MapReader reader, User identifiedBy, AssetType type) {
-		return new ProductImporter(reader, createViewValidator(), createProductSaveService(identifiedBy), createProductToModelConverter(identifiedBy, type));
+	public AssetImporter createProductImporter(MapReader reader, User identifiedBy, AssetType type) {
+		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
 	}
 
 	public InspectionImporter createInspectionImporter(MapReader reader, Long modifiedBy, InspectionType type) {

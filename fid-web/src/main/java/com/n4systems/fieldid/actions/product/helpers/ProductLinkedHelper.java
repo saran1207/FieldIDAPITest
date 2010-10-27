@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.actions.product.helpers;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.safetynetwork.HasLinkedProductsLoader;
+import com.n4systems.model.safetynetwork.HasLinkedAssetsLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
 public class ProductLinkedHelper {
@@ -13,9 +13,9 @@ public class ProductLinkedHelper {
 		}
 		
 		// this checks if there are any products linked to this asset
-		HasLinkedProductsLoader hasLinkedLoader = loaderFactory.createHasLinkedProductsLoader();
+		HasLinkedAssetsLoader hasLinkedLoader = loaderFactory.createHasLinkedAssetsLoader();
 		hasLinkedLoader.setNetworkId(asset.getNetworkId());
-		hasLinkedLoader.setProductId(asset.getId());
+		hasLinkedLoader.setAssetId(asset.getId());
 		
 		boolean hasLinked = hasLinkedLoader.load();
 		return hasLinked;		

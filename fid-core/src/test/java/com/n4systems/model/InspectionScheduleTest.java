@@ -20,12 +20,12 @@ public class InspectionScheduleTest {
 	private Inspection inspection;
 
 	@Before public void setUp() throws Exception {
-		Asset product = anAsset().build();
+		Asset asset = anAsset().build();
 		inspection = new Inspection();
 		inspection.setId(1L);
-		inspection.setAsset(product);
+		inspection.setAsset(asset);
 		
-		schedule = aScheduledInspectionSchedule().product(product).build(); 
+		schedule = aScheduledInspectionSchedule().asset(asset).build();
 	}
 
 	@After public void tearDown() throws Exception {

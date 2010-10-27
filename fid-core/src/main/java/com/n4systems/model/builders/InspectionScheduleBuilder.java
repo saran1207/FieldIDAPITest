@@ -40,7 +40,7 @@ public class InspectionScheduleBuilder extends BaseBuilder<InspectionSchedule> {
 		this.job = job;
 	}
 	
-	public InspectionScheduleBuilder product(Asset asset) {
+	public InspectionScheduleBuilder asset(Asset asset) {
 		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, inspection, job);
 	}
 	

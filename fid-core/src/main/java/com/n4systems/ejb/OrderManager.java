@@ -119,11 +119,11 @@ public interface OrderManager {
 	public int countLineItems(Order order);
 	
 	/**
-	 * Counts the number of Products tagged on a LineItem
+	 * Counts the number of Assets tagged on a LineItem
 	 * @param lineItem	A LineItem
-	 * @return			The number of Products tagged against this lineItem
+	 * @return			The number of Assets tagged against this lineItem
 	 */
-	public int countProductsTagged(LineItem lineItem);
+	public int countAssetsTagged(LineItem lineItem);
 	
 	public LineItem createNonIntegrationShopOrder(String orderNumber, Long tenantId);
 	

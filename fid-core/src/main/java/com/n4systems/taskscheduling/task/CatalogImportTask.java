@@ -5,11 +5,11 @@ import java.util.Set;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import org.apache.log4j.Logger;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -35,7 +35,7 @@ public class CatalogImportTask implements Runnable {
 	private boolean failed;
 	
 	private PersistenceManager persistenceManager;
-	private LegacyProductType productTypeManager;
+	private LegacyAssetType assetTypeManager;
 	private CatalogService linkedCatalogAccess;
 	private ImportCatalogService importCatalogService;
 
@@ -52,9 +52,9 @@ public class CatalogImportTask implements Runnable {
 	private void doImport() {
 		failed = false;
 		try {
-			importCatalogService = new ImportCatalogService(persistenceManager, primaryOrg, linkedCatalogAccess, productTypeManager);
+			importCatalogService = new ImportCatalogService(persistenceManager, primaryOrg, linkedCatalogAccess, assetTypeManager);
 			importCatalogService.setImportAllRelations(true);
-			importCatalogService.setImportProductTypeIds(importProductTypeIds);
+			importCatalogService.setImportAssetTypeIds(importProductTypeIds);
 			importCatalogService.setImportInspectionTypeIds(importInspectionTypeIds);
 			importCatalogService.setImportAllRelations(usingPackages);
 			failed = !importCatalogService.importSelection();
@@ -95,8 +95,8 @@ public class CatalogImportTask implements Runnable {
 			body += "Event Type Group " + summary.getInspectionTypeGroupImportSummary().getFailedImporting() + " could not be correctly imported.";
 		} else if (summary.getStateSetImportSummary().failed()) {
 			body += "Button Group " + summary.getStateSetImportSummary().getFailedImporting() + " could not be correctly imported.";
-		} else if (summary.getProductTypeRelationshipsImportSummary().failed()) {
-			body += "Could not set up the relationships to inspection types for asset type " + summary.getProductTypeRelationshipsImportSummary().getFailedImporting();
+		} else if (summary.getAssetTypeRelationshipsImportSummary().failed()) {
+			body += "Could not set up the relationships to inspection types for asset type " + summary.getAssetTypeRelationshipsImportSummary().getFailedImporting();
 		}
 		 
 		return body + "</p><p>The rest of import has been undone.  You can attempt the import again, if the problem persists contact FieldID support by sending an email to support@fieldid.com</p>";
@@ -115,7 +115,7 @@ public class CatalogImportTask implements Runnable {
 
 	private void init() {
 		persistenceManager = ServiceLocator.getPersistenceManager();
-		productTypeManager = ServiceLocator.getProductType();
+		assetTypeManager = ServiceLocator.getProductType();
 		
 		linkedCatalogAccess = null;
 		

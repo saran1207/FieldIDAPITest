@@ -2,13 +2,13 @@ package com.n4systems.fieldid.actions.asset;
 
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
@@ -24,8 +24,8 @@ public class AssetMergeAction extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final ProductManager productManager;
-	private final LegacyProductSerial legacyProductManager;
+	private final AssetManager assetManager;
+	private final LegacyAsset legacyProductManager;
 	
 	private AllInspectionHelper allInspectionHelper;
 	
@@ -33,10 +33,10 @@ public class AssetMergeAction extends AbstractCrud {
 	private Asset winningAsset;
 	
 
-	public AssetMergeAction(PersistenceManager persistenceManager, ProductManager productManager, LegacyProductSerial legacyProductSerialManager) {
+	public AssetMergeAction(PersistenceManager persistenceManager, AssetManager assetManager, LegacyAsset legacyAssetManager) {
 		super(persistenceManager);
-		this.productManager = productManager;
-		this.legacyProductManager = legacyProductSerialManager;
+		this.assetManager = assetManager;
+		this.legacyProductManager = legacyAssetManager;
 	}
 
 
@@ -47,7 +47,7 @@ public class AssetMergeAction extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		losingAsset = productManager.findAssetAllFields(uniqueId, getSecurityFilter());
+		losingAsset = assetManager.findAssetAllFields(uniqueId, getSecurityFilter());
 	}
 	
 	private void testRequiredEntities() {
@@ -106,7 +106,7 @@ public class AssetMergeAction extends AbstractCrud {
 		if (productId == null) {
 			winningAsset = null;
 		} else if (winningAsset == null || !productId.equals(winningAsset.getId())){
-			winningAsset = productManager.findAssetAllFields(productId, getSecurityFilter());
+			winningAsset = assetManager.findAssetAllFields(productId, getSecurityFilter());
 		}
 	}
 

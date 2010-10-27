@@ -3,7 +3,7 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 import java.util.Date;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.product.LastInspectionDateLoader;
+import com.n4systems.model.asset.LastInspectionDateLoader;
 
 public class NetworkLastInspectionDateHandler extends DateTimeHandler {
 

@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.validators;
 
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
-import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachment;
 import com.opensymphony.xwork2.validator.ValidationException;
 
 public class UploadAttachmentSecurityValidator extends FileSecurityValidator {

@@ -51,7 +51,7 @@ public abstract class AssetViewStringFieldLengthValidator implements FieldValida
 		if (fieldValue == null ||	((String) fieldValue).length() <= maxLength) {
 			return ValidationResult.pass();
 		} else {
-			return ValidationResult.fail(ProductViewStringLengthValidatorFail, fieldName, maxLength);
+			return ValidationResult.fail(AssetViewStringLengthValidatorFail, fieldName, maxLength);
 		}
 	}
 

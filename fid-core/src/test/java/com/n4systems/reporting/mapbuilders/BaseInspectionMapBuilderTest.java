@@ -27,7 +27,7 @@ public class BaseInspectionMapBuilderTest {
 		MapBuilder<InternalOrg> orgMapBuilder = EasyMock.createMock(MapBuilder.class);
 		MapBuilder<BaseOrg> ownerMapBuilder = EasyMock.createMock(MapBuilder.class);
 		MapBuilder<Inspection> scheduleMapBuilder = EasyMock.createMock(MapBuilder.class);
-		MapBuilder<AssetStatus> productStatusMapBuilder = EasyMock.createMock(MapBuilder.class);
+		MapBuilder<AssetStatus> assetStatusMapBuilder = EasyMock.createMock(MapBuilder.class);
 		
 		Transaction transaction = EasyMock.createMock(Transaction.class);
 		
@@ -39,20 +39,20 @@ public class BaseInspectionMapBuilderTest {
 		inspection.setPerformedBy(UserBuilder.anEmployee().build());
 		inspection.setAssetStatus(new AssetStatus());
 		
-		BaseInspectionMapBuilder builder = new BaseInspectionMapBuilder(performedByMapBuilder, typeGroupMapBuilder, orgMapBuilder, ownerMapBuilder, scheduleMapBuilder, productStatusMapBuilder, new JobCertificateDataProducer());
+		BaseInspectionMapBuilder builder = new BaseInspectionMapBuilder(performedByMapBuilder, typeGroupMapBuilder, orgMapBuilder, ownerMapBuilder, scheduleMapBuilder, assetStatusMapBuilder, new JobCertificateDataProducer());
 		performedByMapBuilder.addParams(reportMap, inspection.getPerformedBy(), transaction);
 		typeGroupMapBuilder.addParams(reportMap, inspection.getType().getGroup(), transaction);
 		orgMapBuilder.addParams(reportMap, inspection.getPerformedBy().getOwner().getInternalOrg(), transaction);
 		ownerMapBuilder.addParams(reportMap, inspection.getOwner(), transaction);
 		scheduleMapBuilder.addParams(reportMap, inspection, transaction);
-		productStatusMapBuilder.addParams(reportMap, inspection.getAssetStatus(), transaction);
+		assetStatusMapBuilder.addParams(reportMap, inspection.getAssetStatus(), transaction);
 		
 		EasyMock.replay(performedByMapBuilder);
 		EasyMock.replay(typeGroupMapBuilder);
 		EasyMock.replay(orgMapBuilder);
 		EasyMock.replay(ownerMapBuilder);
 		EasyMock.replay(scheduleMapBuilder);
-		EasyMock.replay(productStatusMapBuilder);
+		EasyMock.replay(assetStatusMapBuilder);
 		
 		builder.addParams(reportMap, inspection, transaction);
 		
@@ -61,7 +61,7 @@ public class BaseInspectionMapBuilderTest {
 		EasyMock.verify(orgMapBuilder);
 		EasyMock.verify(ownerMapBuilder);
 		EasyMock.verify(scheduleMapBuilder);
-		EasyMock.verify(productStatusMapBuilder);
+		EasyMock.verify(assetStatusMapBuilder);
 		
 	}
 

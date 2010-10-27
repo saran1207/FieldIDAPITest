@@ -394,7 +394,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	}
 
 	@AllowSafetyNetworkAccess
-	public boolean isMasterProduct( ) {
+	public boolean isMasterAsset( ) {
 		return !subAssets.isEmpty();
 	}
 	

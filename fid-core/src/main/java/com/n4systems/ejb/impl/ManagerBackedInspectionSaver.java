@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
@@ -17,7 +18,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
@@ -38,7 +38,7 @@ import com.n4systems.tools.FileDataContainer;
 public class ManagerBackedInspectionSaver implements InspectionSaver {
 	private final Logger logger = Logger.getLogger(ManagerBackedInspectionSaver.class);
 	
-	public final LegacyProductSerial legacyProductManager;
+	public final LegacyAsset legacyAssetManager;
 	
 	public final PersistenceManager persistenceManager;
 	public final EntityManager em;
@@ -46,10 +46,10 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 	
 
-	public ManagerBackedInspectionSaver(LegacyProductSerial legacyProductManager, PersistenceManager persistenceManager, 
+	public ManagerBackedInspectionSaver(LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
 			EntityManager em, LastInspectionDateFinder lastInspectionDateFinder) {
 		super();
-		this.legacyProductManager = legacyProductManager;
+		this.legacyAssetManager = legacyAssetManager;
 		this.persistenceManager = persistenceManager;
 		this.em = em;
 		this.lastInspectionDateFinder = lastInspectionDateFinder;
@@ -76,7 +76,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		
 		persistenceManager.save(parameterObject.inspection, parameterObject.userId);
 	
-		updateProduct(parameterObject.inspection, parameterObject.userId);
+		updateAsset(parameterObject.inspection, parameterObject.userId);
 	
 	
 		saveProofTestFiles(parameterObject.inspection, parameterObject.fileData);
@@ -94,7 +94,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		updateDeficiencies(inspection.getResults());
 		inspection = persistenceManager.update(inspection, userId);
 		
-		updateProductInspectionDate(inspection.getAsset());
+		updateAssetInspectionDate(inspection.getAsset());
 		inspection.setAsset(persistenceManager.update(inspection.getAsset()));
 		saveProofTestFiles(inspection, fileData);
 		processUploadedFiles(inspection, uploadedFiles);
@@ -158,11 +158,11 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 	}
 	
 	
-	private void updateProduct(Inspection inspection, Long modifiedById) {
+	private void updateAsset(Inspection inspection, Long modifiedById) {
 		User modifiedBy = em.find(User.class, modifiedById);
 		Asset asset = em.find(Asset.class, inspection.getAsset().getId());
 
-		updateProductInspectionDate(asset);
+		updateAssetInspectionDate(asset);
 
 		// pushes the location and the ownership to the asset based on the
 		// inspections data.
@@ -172,7 +172,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 		
 		
 		try {
-			legacyProductManager.update(asset, modifiedBy);
+			legacyAssetManager.update(asset, modifiedBy);
 		} catch (SubAssetUniquenessException e) {
 			logger.error("received a subasset uniquness error this should not be possible form this type of update.", e);
 			throw new RuntimeException(e);
@@ -350,7 +350,7 @@ public class ManagerBackedInspectionSaver implements InspectionSaver {
 
 	}
 
-	public Asset updateProductInspectionDate(Asset asset) {
+	public Asset updateAssetInspectionDate(Asset asset) {
 		asset.setLastInspectionDate(lastInspectionDateFinder.findLastInspectionDate(asset));
 		return asset;
 	}

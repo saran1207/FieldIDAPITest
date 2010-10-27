@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -42,12 +42,12 @@ public class ArchiveAssetTypeTask implements Runnable {
 	private Map<Asset, Exception> failedAssets = new HashMap<Asset, Exception>();
 	private User archivedBy;
 	private AssetType type;
-	private ProductManager productManager;
+	private AssetManager assetManager;
 	private PersistenceManager persistenceManager;
 
 	public ArchiveAssetTypeTask() {
 		persistenceManager = ServiceLocator.getPersistenceManager();
-		productManager = ServiceLocator.getProductManager();
+		assetManager = ServiceLocator.getProductManager();
 	}
 
 	public void run() {
@@ -134,7 +134,7 @@ public class ArchiveAssetTypeTask implements Runnable {
 
 	private void detachFromMasterAssetTypes() {
 		try {
-			productManager.removeAsASubAssetType(type, archivedById);
+			assetManager.removeAsASubAssetType(type, archivedById);
 		} catch (Exception e) {
 			subAssetTypeDetachFailed = true;
 			logger.error("failed to detach sub asset type " + getAssetTypeName() + " from masters", e);
@@ -143,7 +143,7 @@ public class ArchiveAssetTypeTask implements Runnable {
 
 	private void deleteRelatedAssetCodeMappings() {
 		try {
-			productManager.removeAssetCodeMappingsThatUse(type);
+			assetManager.removeAssetCodeMappingsThatUse(type);
 		} catch (Exception e) {
 			productCodeMappingFailed = true;
 			logger.error("failed to remove asset code mappings using asset type " + getAssetTypeName() + " from masters", e);
@@ -161,7 +161,7 @@ public class ArchiveAssetTypeTask implements Runnable {
 		while ((assets = persistenceManager.findAllPaged(queryBuilder, 1, PAGE_SIZE)).getTotalResults() > 0L) {
 			for (Asset asset : assets.getList()) {
 				try {
-					productManager.archive(asset, archivedBy);
+					assetManager.archive(asset, archivedBy);
 				} catch (Exception e) {
 					logger.error("could not delete the asset " + asset.getId() + " for asset type " + getAssetTypeName(), e);
 					failedIds.add(asset.getId());

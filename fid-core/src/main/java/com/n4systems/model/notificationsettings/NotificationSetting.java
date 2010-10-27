@@ -51,7 +51,7 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@Column(name="producttype_id", nullable=false)
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	@IndexColumn(name="orderidx")
-	private List<Long> productTypes = new ArrayList<Long>();
+	private List<Long> assetTypes = new ArrayList<Long>();
 	
 	@Column(name="inspectiontype_id", nullable=false)
 	@CollectionOfElements(fetch=FetchType.EAGER)
@@ -110,12 +110,12 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     	this.addresses = addresses;
     }
     
-	public List<Long> getProductTypes() {
-    	return productTypes;
+	public List<Long> getAssetTypes() {
+    	return assetTypes;
     }
 
-	public void setProductTypes(List<Long> productTypes) {
-    	this.productTypes = productTypes;
+	public void setAssetTypes(List<Long> assetTypes) {
+    	this.assetTypes = assetTypes;
     }
 
 	public List<Long> getInspectionTypes() {

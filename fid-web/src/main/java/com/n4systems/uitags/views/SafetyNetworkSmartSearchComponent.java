@@ -95,7 +95,7 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 	}
 	
 	public Asset loadLinkedProduct(Long linkedProductId) {
-		return getLoaderFactory().createSafetyNetworkProductLoader().setProductId(linkedProductId).load();
+		return getLoaderFactory().createSafetyNetworkAssetLoader().setAssetId(linkedProductId).load();
 	}
 
 	public Boolean getRefreshRegistration() {

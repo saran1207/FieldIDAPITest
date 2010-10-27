@@ -82,7 +82,7 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 		// calls coming in from the web service should always be set to resolve a customer
 		dataContainer.setResolveCustomer(true);
 		dataContainer.setCreateCustomer(bundle.isCreateCustomer());
-		dataContainer.setCreateProduct(bundle.isCreateProduct());
+		dataContainer.setCreateAsset(bundle.isCreateProduct());
 	}
 
 	/*

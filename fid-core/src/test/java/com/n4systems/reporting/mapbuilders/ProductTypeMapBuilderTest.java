@@ -16,7 +16,7 @@ public class ProductTypeMapBuilderTest {
 		
 		AssetType type = AssetTypeBuilder.anAssetType().build();
 		
-		ProductTypeMapBuilder builder = new ProductTypeMapBuilder();
+		AssetTypeMapBuilder builder = new AssetTypeMapBuilder();
 		builder.addParams(params, type, null);
 		
 		assertEquals(type.getName(), params.get(ReportField.PRODUCT_TYPE_NAME.getParamKey()));

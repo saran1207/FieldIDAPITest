@@ -34,7 +34,7 @@ public class AssociatedInspectionTypeExistsLoader extends SecurityFilteredLoader
 		return this;
 	}
 
-	public AssociatedInspectionTypeExistsLoader setProductType(AssetType assetType) {
+	public AssociatedInspectionTypeExistsLoader setAssetType(AssetType assetType) {
 		this.assetType = assetType;
 		return this;
 	}

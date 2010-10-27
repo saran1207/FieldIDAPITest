@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.model.productstatus.ProductStatusForNameExistsLoader;
+import com.n4systems.model.assetstatus.AssetStatusForNameExistsLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 public class AssetStatusExistsValidator implements FieldValidator {
@@ -16,7 +16,7 @@ public class AssetStatusExistsValidator implements FieldValidator {
 		}
 		
 		String name = (String)fieldValue;
-		ProductStatusForNameExistsLoader statusExistsLoader = createProductStatusExistsLoader(filter).setName(name);
+		AssetStatusForNameExistsLoader statusExistsLoader = createAssetStatusExistsLoader(filter).setName(name);
 		
 		if (statusExistsLoader.load()) {
 			return ValidationResult.pass();
@@ -25,7 +25,7 @@ public class AssetStatusExistsValidator implements FieldValidator {
 		}
 	}
 
-	protected ProductStatusForNameExistsLoader createProductStatusExistsLoader(SecurityFilter filter) {
-		return new ProductStatusForNameExistsLoader(filter);
+	protected AssetStatusForNameExistsLoader createAssetStatusExistsLoader(SecurityFilter filter) {
+		return new AssetStatusForNameExistsLoader(filter);
 	}
 }

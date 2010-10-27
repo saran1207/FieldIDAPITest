@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.exporting.AssetExporter;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,6 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.Importer;
-import com.n4systems.exporting.ProductExporter;
 import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
@@ -62,7 +62,7 @@ public class AssetImportAction extends AbstractImportAction {
 	}
 	
 	public String doDownloadExample() {
-		ProductExporter exporter = new ProductExporter(getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleProduct())));
+		AssetExporter exporter = new AssetExporter(getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleProduct())));
 		
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -115,7 +115,7 @@ public class AssetImportAction extends AbstractImportAction {
 	}
 	
 	private AssetStatus getExampleProductStatus() {
-		List<AssetStatus> statuses = getLoaderFactory().createProductStatusListLoader().load();
+		List<AssetStatus> statuses = getLoaderFactory().createAssetStatusListLoader().load();
 		
 		return (statuses.isEmpty()) ? null : statuses.get(0);
 	}
@@ -130,7 +130,7 @@ public class AssetImportAction extends AbstractImportAction {
 
 	public void setAssetTypeId(Long id) {
 		if (type == null || !type.getId().equals(id)) {
-			type = getLoaderFactory().createProductTypeLoader().setStandardPostFetches().setId(id).load();
+			type = getLoaderFactory().createAssetTypeLoader().setStandardPostFetches().setId(id).load();
 		}
 	}
 	

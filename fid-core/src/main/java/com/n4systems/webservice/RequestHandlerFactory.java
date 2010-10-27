@@ -29,7 +29,7 @@ public class RequestHandlerFactory {
 	}
 	
 	public RequestHandler<AssetSearchRequest, AssetIdListResponse> createAssetIdSearchRequestHandler() {
-		return new AssetIdSearchRequestHandler(loaderFactory.createProductIdSearchListLoader());
+		return new AssetIdSearchRequestHandler(loaderFactory.createAssetIdSearchListLoader());
 	}
 	
 	public RequestHandler<AssetRequest, AssetListResponse> createGetAssetRequestHandler() {

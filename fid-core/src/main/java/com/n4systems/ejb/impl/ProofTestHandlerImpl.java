@@ -9,6 +9,10 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.legacy.LegacyAssetType;
+import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -20,16 +24,12 @@ import rfid.ejb.entity.PopulatorLogBean;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.ProofTestHandler;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.ejb.legacy.PopulatorLog;
-import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
 import com.n4systems.ejb.legacy.impl.PopulatorLogManager;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
-import com.n4systems.exceptions.NonUniqueProductException;
+import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionBook;
@@ -51,9 +51,9 @@ import com.n4systems.util.StringUtils;
 public class ProofTestHandlerImpl implements ProofTestHandler {
 	private Logger logger = Logger.getLogger(ProofTestHandler.class);
 	
-	 private LegacyProductSerial legacyProductManager;
-	 private ProductManager productManager;
-	 private LegacyProductType productTypeManager;
+	 private LegacyAsset legacyAssetManager;
+	 private AssetManager assetManager;
+	 private LegacyAssetType assetTypeManager;
 	 private PersistenceManager persistenceManager;
 	 private InspectionManager inspectionManager;
 	 private PopulatorLog populatorLogManager;
@@ -61,13 +61,13 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	private InspectionSaver inspectionSaver;
 	
 	public ProofTestHandlerImpl(EntityManager em) {
-		this.legacyProductManager = new LegacyProductSerialManager(em);
-		this.productManager = new ProductManagerImpl(em);
-		this.legacyProductManager = new LegacyProductSerialManager(em);
+		this.legacyAssetManager = new LegacyAssetManager(em);
+		this.assetManager = new AssetManagerImpl(em);
+		this.legacyAssetManager = new LegacyAssetManager(em);
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.inspectionManager = new InspectionManagerImpl(em);
 		this.populatorLogManager = new PopulatorLogManager(em);
-		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), 
+		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyAssetManager(em),
 				persistenceManager, em, new EntityManagerLastInspectionDateFinder(persistenceManager, em));
 		
 	}
@@ -115,7 +115,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	/*
 	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
 	 */
-	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, User performedBy, BaseOrg customer, InspectionBook book, boolean productOverridesPerformedBy) throws FileProcessingException {
+	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, User performedBy, BaseOrg customer, InspectionBook book, boolean assetOverridesPerformedBy) throws FileProcessingException {
 		Map<String, Inspection> inspectionMap = new HashMap<String, Inspection>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
@@ -126,7 +126,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		
 		
-		// sending a null customer will lookup products with no customer (rather then products for any customer)
+		// sending a null customer will lookup assets with no customer (rather then assets for any customer)
 		Long customerId = (customer != null) ? customer.getId() : null;
 		
 		//if our customer is null, then let's see if we're supposed to resolve a customer by name from the FileDataContainer
@@ -154,8 +154,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			inspection = null;
 			try {
 				// find an asset for this tenant, serial and customer
-				asset = findOrCreateProduct(primaryOrg, performedBy, serialNumber, customer, fileData);
-			} catch (NonUniqueProductException e) {
+				asset = findOrCreateAsset(primaryOrg, performedBy, serialNumber, customer, fileData);
+			} catch (NonUniqueAssetException e) {
 				writeLogMessage(tenant, "There are multiple Asset with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
 				inspectionMap.put(serialNumber, null);
 				continue;
@@ -172,7 +172,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			 *  If the asset identifiedBy is set to override the performedBy (databridge upload uses this)
 			 *  and the two are different, then set the performedBy to be the identifiedBy from the asset
 			 */
-			if (productOverridesPerformedBy) {
+			if (assetOverridesPerformedBy) {
 				performedBy = asset.getIdentifiedBy();
 			}
 			
@@ -182,7 +182,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			Date datePerformedRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(datePerformed), performedBy.getTimeZone());
 
 			// if we find an asset then it's time to try and find an inspection inside the same day as given.
-			inspections = inspectionManager.findInspectionsByDateAndProduct(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, asset, performedBy.getSecurityFilter());
+			inspections = inspectionManager.findInspectionsByDateAndAsset(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, asset, performedBy.getSecurityFilter());
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
 			for (Inspection insp: inspections) {
@@ -255,7 +255,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return customerName.trim();
 	}
 	
-	private Asset findOrCreateProduct(PrimaryOrg primaryOrg, User user, String serial, BaseOrg customer, FileDataContainer fileData) throws NonUniqueProductException {
+	private Asset findOrCreateAsset(PrimaryOrg primaryOrg, User user, String serial, BaseOrg customer, FileDataContainer fileData) throws NonUniqueAssetException {
 		Long customerId = (customer != null) ?  customer.getId() : null;
 		
 		// we must have a valid serial number
@@ -264,28 +264,28 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		// find an asset for this tenant, serial and customer
-		Asset asset = productManager.findAssetBySerialNumber(serial, primaryOrg.getTenant().getId(), customerId);
+		Asset asset = assetManager.findAssetBySerialNumber(serial, primaryOrg.getTenant().getId(), customerId);
 		
 		if(asset == null) {
-			if(!fileData.isCreateProduct()) {
-				// if we're not supported to create new products and we could not find one, return null
+			if(!fileData.isCreateAsset()) {
+				// if we're not supported to create new assets and we could not find one, return null
 				return null;
 			} else {
 				// create asset is set, lets create a default
-				asset = createProduct(primaryOrg, user, customer, serial, fileData.getExtraInfo());
+				asset = createAsset(primaryOrg, user, customer, serial, fileData.getExtraInfo());
 			}
 		}
 		
 		return asset;
 	}
 
-	private Asset createProduct(PrimaryOrg primaryOrg, User user, BaseOrg owner, String serialNumber, Map<String, String> productOptions) {
+	private Asset createAsset(PrimaryOrg primaryOrg, User user, BaseOrg owner, String serialNumber, Map<String, String> assetOptions) {
 		Asset asset = new Asset();
 		
 		asset.setTenant(primaryOrg.getTenant());
 		asset.setSerialNumber(serialNumber);
 		
-		AssetType assetType = productTypeManager.findDefaultProductType(primaryOrg.getTenant().getId());
+		AssetType assetType = assetTypeManager.findDefaultAssetType(primaryOrg.getTenant().getId());
 		asset.setType(assetType);
 		
 		asset.setIdentifiedBy(user);
@@ -304,11 +304,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		asset.setModified(now);
 		
 		try {
-			// now lets's try and resolve the infofield names from our productoptions
+			// now lets's try and resolve the infofield names from our assetoptions
 			String infoFieldName, infoOptionName;
 			InfoFieldBean infoField;
 			InfoOptionBean infoOption;
-			for(Map.Entry<String, String> optEntry: productOptions.entrySet()) {
+			for(Map.Entry<String, String> optEntry: assetOptions.entrySet()) {
 				infoFieldName = optEntry.getKey();
 				infoOptionName = optEntry.getValue();
 	
@@ -352,7 +352,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		try {
-			asset =  legacyProductManager.create(asset, user);
+			asset =  legacyAssetManager.create(asset, user);
 		} catch( SubAssetUniquenessException e ) {
 			logger.error( "received a subasset uniquness error this should not be possible form this type of update.", e );
 			throw new RuntimeException( e );
@@ -370,8 +370,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		if (owner != null) {
 			/*
-			 * if the products owner is a division, we need to see if the resolved owner is the parent
-			 * of the products owner.  If that is the case, we preserve the division from the asset on the inspection.
+			 * if the assets owner is a division, we need to see if the resolved owner is the parent
+			 * of the assets owner.  If that is the case, we preserve the division from the asset on the inspection.
 			 * In all other cases we will use the resolved owner directly.
 			 */
 			if (asset.getOwner().isDivision() && asset.getOwner().getParent().equals(owner)) {
@@ -395,7 +395,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		inspection.setAdvancedLocation(asset.getAdvancedLocation());
 		
 		// find the first inspection that for this asset that supports our file type
-		InspectionType inspType = findSupportedInspectionTypeForProduct(fileData.getFileType(), asset);
+		InspectionType inspType = findSupportedInspectionTypeForAsset(fileData.getFileType(), asset);
 		
 		// if we were unable to find an inspection type, we cannot continue.
 		if(inspType == null) {
@@ -440,11 +440,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return inspection;
 	}
 	
-	private InspectionType findSupportedInspectionTypeForProduct(ProofTestType proofTestType, Asset product) {
+	private InspectionType findSupportedInspectionTypeForAsset(ProofTestType proofTestType, Asset asset) {
 		InspectionType type = null;
 		
 		// here we simply find the first inspection type that supports this asset type and proof test type
-		for(InspectionType inspType: product.getType().getInspectionTypes()) {
+		for(InspectionType inspType: asset.getType().getInspectionTypes()) {
 			if(inspType.supports(proofTestType)) {
 				type = inspType;
 				break;

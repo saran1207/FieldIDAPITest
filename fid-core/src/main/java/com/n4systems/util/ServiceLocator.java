@@ -1,36 +1,34 @@
 package com.n4systems.util;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.ConfigManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.ejb.ProofTestHandler;
-import com.n4systems.ejb.legacy.AssetCodeMappingService;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.Option;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.UserManager;
-import com.n4systems.ejb.legacy.wrapper.LegacyProductSerialEJBContainer;
-import com.n4systems.ejb.legacy.wrapper.LegacyProductTypeEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.LegacyAssetEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.LegacyAssetTypeEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.OptionEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
-import com.n4systems.ejb.legacy.wrapper.ProductCodeMappingEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.SerialNumberCounterEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.ServiceDTOBeanConverterEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.UserEJBContainer;
+import com.n4systems.ejb.wrapper.AssetManagerEJBContainer;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
 import com.n4systems.ejb.wrapper.InspectionManagerEJBContainer;
 import com.n4systems.ejb.wrapper.InspectionScheduleManagerEJBContainer;
 import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer;
-import com.n4systems.ejb.wrapper.ProductManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
@@ -59,8 +57,8 @@ public class ServiceLocator {
 		return new UserEJBContainer();
 	}
 
-	public static final LegacyProductType getProductType() {
-		return new LegacyProductTypeEJBContainer();
+	public static final LegacyAssetType getProductType() {
+		return new LegacyAssetTypeEJBContainer();
 	}
 
 	public static final Option getOption() {
@@ -75,8 +73,8 @@ public class ServiceLocator {
 		return new ProofTestHandlerEJBContainer();
 	}
 
-	public static final LegacyProductSerial getProductSerialManager() {
-		return new LegacyProductSerialEJBContainer();
+	public static final LegacyAsset getAssetManager() {
+		return new LegacyAssetEJBContainer();
 	}
 
 	public static final ServiceDTOBeanConverter getServiceDTOBeanConverter() {
@@ -95,8 +93,8 @@ public class ServiceLocator {
 		return new InspectionManagerEJBContainer();
 	}
 
-	public static final ProductManager getProductManager() {
-		return new ProductManagerEJBContainer();
+	public static final AssetManager getProductManager() {
+		return new AssetManagerEJBContainer();
 	}
 
 	public static final OrderManager getOrderManager() {

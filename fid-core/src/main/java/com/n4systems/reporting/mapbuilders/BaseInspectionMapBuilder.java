@@ -16,17 +16,17 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 	private final MapBuilder<InternalOrg> orgMapBuilder;
 	private final MapBuilder<BaseOrg> ownerMapBuilder;
 	private final MapBuilder<Inspection> scheduleMapBuilder;
-	private final MapBuilder<AssetStatus> productStatusMapBuilder;
+	private final MapBuilder<AssetStatus> assetStatusMapBuilder;
 	private final JobCertificateDataProducer jobCertificateDataProducer;
 	
-	public BaseInspectionMapBuilder(MapBuilder<User> performedByMapBuilder, MapBuilder<InspectionTypeGroup> typeGroupMapBuilder, MapBuilder<InternalOrg> orgMapBuilder, MapBuilder<BaseOrg> ownerMapBuilder, MapBuilder<Inspection> scheduleMapBuilder, MapBuilder<AssetStatus> productStatusMapBuilder
+	public BaseInspectionMapBuilder(MapBuilder<User> performedByMapBuilder, MapBuilder<InspectionTypeGroup> typeGroupMapBuilder, MapBuilder<InternalOrg> orgMapBuilder, MapBuilder<BaseOrg> ownerMapBuilder, MapBuilder<Inspection> scheduleMapBuilder, MapBuilder<AssetStatus> assetStatusMapBuilder
 			, JobCertificateDataProducer jobCertificateDataProducer) {
 		this.performedByMapBuilder = performedByMapBuilder;
 		this.typeGroupMapBuilder = typeGroupMapBuilder;
 		this.orgMapBuilder = orgMapBuilder;
 		this.ownerMapBuilder = ownerMapBuilder;
 		this.scheduleMapBuilder = scheduleMapBuilder;
-		this.productStatusMapBuilder = productStatusMapBuilder;
+		this.assetStatusMapBuilder = assetStatusMapBuilder;
 		this.jobCertificateDataProducer = jobCertificateDataProducer;
 	}
 	
@@ -37,7 +37,7 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 			new OrganizationMapBuilder(),
 			new OwnerMapBuilder(),
 			new InspectionScheduleMapBuilder(dateDefiner),
-			new ProductStatusMapBuilder(),
+			new AssetStatusMapBuilder(),
 			new JobCertificateDataProducer()
 		);
 	}
@@ -48,7 +48,7 @@ public class BaseInspectionMapBuilder extends AbstractMapBuilder<Inspection> {
 		setAllFields(typeGroupMapBuilder, entity.getType().getGroup(), transaction);
 		setAllFields(orgMapBuilder, entity.getPerformedBy().getOwner().getInternalOrg(), transaction);
 		setAllFields(ownerMapBuilder, entity.getOwner(), transaction);
-		setAllFields(productStatusMapBuilder, entity.getAssetStatus(), transaction);
+		setAllFields(assetStatusMapBuilder, entity.getAssetStatus(), transaction);
 		setAllFields(scheduleMapBuilder, entity, transaction);
 		
 		

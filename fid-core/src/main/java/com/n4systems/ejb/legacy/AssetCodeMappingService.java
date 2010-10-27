@@ -14,7 +14,7 @@ public interface AssetCodeMappingService {
 	
 	public AssetCodeMapping getAssetCodeByUniqueIdAndTenant(Long id, Long manufacturer );
 	
-	public AssetCodeMapping getAssetCodeByProductCodeAndTenant(String productCode, Long manufacturer );
+	public AssetCodeMapping getAssetCodeByAssetCodeAndTenant(String assetCode, Long manufacturer );
 
 	public void update(AssetCodeMapping assetCodeMapping);
 	

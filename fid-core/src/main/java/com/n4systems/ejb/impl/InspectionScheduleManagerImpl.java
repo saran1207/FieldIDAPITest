@@ -116,7 +116,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 		return (nextDate != null) && DateHelper.getToday().after(nextDate);
 	}
 	
-	public Long getProductIdForSchedule(Long scheduleId) {
+	public Long getAssetIdForSchedule(Long scheduleId) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("asset.id");
 		builder.addSimpleWhere("id", scheduleId);

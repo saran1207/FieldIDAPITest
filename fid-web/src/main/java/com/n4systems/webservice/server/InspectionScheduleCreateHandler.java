@@ -4,7 +4,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
-import com.n4systems.model.product.AssetByMobileGuidLoader;
+import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 

@@ -9,13 +9,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.services.TenantCache;
 import org.apache.log4j.Logger;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -39,7 +39,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	
 	private Tenant linkedTenant;
 	private CatalogService linkedCatalogAccess;
-	private LegacyProductType productTypeManager;
+	private LegacyAssetType assetTypeManager;
 	
 	private Map<String,Boolean> importAssetTypeIds = new HashMap<String, Boolean>();
 	private Map<String,Boolean> importInspectionTypeIds = new HashMap<String, Boolean>();
@@ -50,9 +50,9 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	private Map<Long,List<ListingPair>> cacheInpsectionTypes = new HashMap<Long, List<ListingPair>>();
 	
 	
-	public PublishedCatalogCrud(PersistenceManager persistenceManager, LegacyProductType productTypeManager) {
+	public PublishedCatalogCrud(PersistenceManager persistenceManager, LegacyAssetType assetTypeManager) {
 		super(persistenceManager);
-		this.productTypeManager = productTypeManager;
+		this.assetTypeManager = assetTypeManager;
 		
 	}
 
@@ -97,8 +97,8 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		Set<Long> importTheseInspectionTypeIds = covertSelectedIdsToSet(importInspectionTypeIds);
 		
 		try {
-			ImportCatalogService importCatalogService = new ImportCatalogService(persistenceManager, getPrimaryOrg(), linkedCatalogAccess, productTypeManager);
-			importCatalogService.setImportProductTypeIds(importTheseProductTypeIds);
+			ImportCatalogService importCatalogService = new ImportCatalogService(persistenceManager, getPrimaryOrg(), linkedCatalogAccess, assetTypeManager);
+			importCatalogService.setImportAssetTypeIds(importTheseProductTypeIds);
 			importCatalogService.setImportInspectionTypeIds(importTheseInspectionTypeIds);
 			importCatalogService.setImportAllRelations(usingPackage);
 			summary = importCatalogService.importSelectionSummary();

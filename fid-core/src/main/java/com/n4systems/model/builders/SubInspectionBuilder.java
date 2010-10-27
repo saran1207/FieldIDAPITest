@@ -26,7 +26,7 @@ public class SubInspectionBuilder extends BaseBuilder<SubInspection> {
 		return new SubInspectionBuilder(name, inspectionType, asset);
 	}
 	
-	public SubInspectionBuilder withProduct(Asset asset) {
+	public SubInspectionBuilder withAsset(Asset asset) {
 		return new SubInspectionBuilder(name, inspectionType, asset);
 	}
 	

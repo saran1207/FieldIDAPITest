@@ -22,11 +22,11 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 		
 		convertDirectFields(model, view);
 		converterPerformedBy(model, view);
-		convertProductIdentifier(model, view);
+		convertAssetIdentifier(model, view);
 		convertInspectionStatus(model, view);
 		convertOwnerFields(model.getOwner(), view);
 		convertBook(model, view);
-		convertProductStatus(model, view);
+		convertAssetStatus(model, view);
 		convertNextDate(model, view);
 		
 		return view;
@@ -43,7 +43,7 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 		view.setStatus(model.getStatus().getDisplayName());
 	}
 
-	protected void convertProductIdentifier(Inspection model, InspectionView view) {
+	protected void convertAssetIdentifier(Inspection model, InspectionView view) {
 		view.setIdentifier(model.getAsset().getSerialNumber());
 	}
 
@@ -62,7 +62,7 @@ public class InspectionToViewConverter implements ModelToViewConverter<Inspectio
 		}
 	}
 
-	protected void convertProductStatus(Inspection model, InspectionView view) {
+	protected void convertAssetStatus(Inspection model, InspectionView view) {
 		if (model.getAssetStatus() != null) {
 			view.setAssetStatus(model.getAssetStatus().getName());
 		}

@@ -18,7 +18,7 @@ public class AssetTypeGroupImportSummary extends BaseImportSummary {
 		return importedAssetTypeGroupNames.size();
 	}
 
-	public List<AssetTypeGroup> getImportedProductTypeGroupNames() {
+	public List<AssetTypeGroup> getImportedAssetTypeGroupNames() {
 		return importedAssetTypeGroupNames;
 	}
 

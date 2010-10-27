@@ -99,13 +99,13 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	public InspectionSchedule() {
 	}
 
-	public InspectionSchedule(Asset product, InspectionType inspectionType) {
-		this(product, inspectionType, null);
+	public InspectionSchedule(Asset asset, InspectionType inspectionType) {
+		this(asset, inspectionType, null);
 	}
 
-	public InspectionSchedule(Asset product, InspectionType inspectionType, Date scheduledDate) {
-		this.setTenant(product.getTenant());
-		this.setAsset(product);
+	public InspectionSchedule(Asset asset, InspectionType inspectionType, Date scheduledDate) {
+		this.setTenant(asset.getTenant());
+		this.setAsset(asset);
 		this.inspectionType = inspectionType;
 		this.nextDate = scheduledDate;
 	}
@@ -116,8 +116,8 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		this.completed(inspection);
 	}
 
-	public InspectionSchedule(Asset product, AssetTypeSchedule typeSchedule) {
-		this(product, typeSchedule.getInspectionType());
+	public InspectionSchedule(Asset asset, AssetTypeSchedule typeSchedule) {
+		this(asset, typeSchedule.getInspectionType());
 	}
 
 	@AllowSafetyNetworkAccess
@@ -125,14 +125,14 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		return asset;
 	}
 
-	public void setAsset(Asset product) {
-		this.asset = product;
+	public void setAsset(Asset asset) {
+		this.asset = asset;
 		if (status != ScheduleStatus.COMPLETED) {
-			updateOwnershipToProduct();
+			updateOwnershipToAsset();
 		}
 	}
 
-	private void updateOwnershipToProduct() {
+	private void updateOwnershipToAsset() {
 		setAdvancedLocation(asset.getAdvancedLocation());
 		setOwner(asset.getOwner());
 	}
@@ -265,7 +265,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		status = ScheduleStatus.SCHEDULED;
 		inspection = null;
 		completedDate = null;
-		updateOwnershipToProduct();
+		updateOwnershipToAsset();
 	}
 
 	@AllowSafetyNetworkAccess

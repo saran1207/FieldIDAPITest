@@ -27,7 +27,7 @@ public class FileDataContainer {
 	// XXX - The extraInfo has only been implemented for the RobertsFileProcessor.  It has not been implemented for Chant, NA and Wirop at this time (17/10/08)
 	private Map<String, String> extraInfo = new HashMap<String, String>();
 	
-	private boolean createProduct = false;
+	private boolean createAsset = false;
 	private boolean createCustomer = false;
 	private boolean resolveCustomer = false;
 	private String customerName;
@@ -132,12 +132,12 @@ public class FileDataContainer {
 		this.customerName = customerName;
 	}
 
-	public boolean isCreateProduct() {
-		return createProduct;
+	public boolean isCreateAsset() {
+		return createAsset;
 	}
 
-	public void setCreateProduct(boolean createProduct) {
-		this.createProduct = createProduct;
+	public void setCreateAsset(boolean createAsset) {
+		this.createAsset = createAsset;
 	}
 
 	public boolean isCreateCustomer() {
@@ -176,8 +176,8 @@ public class FileDataContainer {
 		return extraInfo;
 	}
 
-	public void setExtraInfo(Map<String, String> productOptions) {
-		this.extraInfo = productOptions;
+	public void setExtraInfo(Map<String, String> assetOptions) {
+		this.extraInfo = assetOptions;
 	}
 
 	public String getPeakLoadDuration() {

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.n4systems.model.product.SmartSearchCounter;
+import com.n4systems.model.asset.SmartSearchCounter;
 import com.n4systems.model.security.SecurityFilter;
 
 public class AssetIdentifierValidatorTest {

@@ -22,7 +22,7 @@ public class AssetViewAttributesValidatorTest {
 		attribs.put("select", "s-2");
 		attribs.put("text", "dynamic");
 		
-		assertTrue(validator.validate(attribs, null, "", null, createProductType()).isPassed());
+		assertTrue(validator.validate(attribs, null, "", null, createAssetType()).isPassed());
 	}
 	
 	@Test
@@ -31,7 +31,7 @@ public class AssetViewAttributesValidatorTest {
 		attribs.put("combo", "c-1");
 		attribs.put("text", "dynamic");
 		
-		assertTrue(validator.validate(attribs, null, "", null, createProductType()).isPassed());
+		assertTrue(validator.validate(attribs, null, "", null, createAssetType()).isPassed());
 	}
 	
 	@Test
@@ -40,7 +40,7 @@ public class AssetViewAttributesValidatorTest {
 		attribs.put("combo", "c-1");
 		attribs.put("select", "s-2");
 		
-		assertTrue(validator.validate(attribs, null, "", null, createProductType()).isFailed());
+		assertTrue(validator.validate(attribs, null, "", null, createAssetType()).isFailed());
 	}
 	
 	@Test
@@ -50,7 +50,7 @@ public class AssetViewAttributesValidatorTest {
 		attribs.put("select", "unresolvalbe");
 		attribs.put("text", "dynamic");
 		
-		assertTrue(validator.validate(attribs, null, "", null, createProductType()).isFailed());
+		assertTrue(validator.validate(attribs, null, "", null, createAssetType()).isFailed());
 	}
 	
 	@Test
@@ -60,7 +60,7 @@ public class AssetViewAttributesValidatorTest {
 		attribs.put("select", "s-1");
 		attribs.put("text", "dynamic");
 		
-		assertTrue(validator.validate(attribs, null, "", null, createProductType()).isPassed());
+		assertTrue(validator.validate(attribs, null, "", null, createAssetType()).isPassed());
 	}
 	
 	@Test
@@ -70,10 +70,10 @@ public class AssetViewAttributesValidatorTest {
 		attribs.put("select", "");
 		attribs.put("text", "dynamic");
 		
-		assertTrue(validator.validate(attribs, null, "", null, createProductType()).isPassed());
+		assertTrue(validator.validate(attribs, null, "", null, createAssetType()).isPassed());
 	}
 	
-	private AssetType createProductType() {
+	private AssetType createAssetType() {
 		AssetType type = new AssetType();
 		type.setInfoFields(Arrays.asList(
 				

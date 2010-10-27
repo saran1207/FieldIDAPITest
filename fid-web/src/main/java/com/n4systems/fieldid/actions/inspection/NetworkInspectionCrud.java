@@ -1,16 +1,16 @@
 package com.n4systems.fieldid.actions.inspection;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.UserManager;
 
 public class NetworkInspectionCrud extends InspectionCrud {
 
-    public NetworkInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyProductSerial legacyProductManager, ProductManager productManager, InspectionScheduleManager inspectionScheduleManager) {
-        super(persistenceManager, inspectionManager, userManager, legacyProductManager, productManager, inspectionScheduleManager);
+    public NetworkInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyAsset legacyProductManager, AssetManager assetManager, InspectionScheduleManager inspectionScheduleManager) {
+        super(persistenceManager, inspectionManager, userManager, legacyProductManager, assetManager, inspectionScheduleManager);
     }
 
     @Override

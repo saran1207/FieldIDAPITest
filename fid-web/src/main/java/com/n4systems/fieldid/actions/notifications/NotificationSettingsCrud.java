@@ -21,7 +21,7 @@ import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingSaver;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.producttype.AssetTypeListableLoader;
+import com.n4systems.model.assettype.AssetTypeListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
@@ -221,7 +221,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	public List<Listable<Long>> getAssetTypeList() {
 		if (assetTypeList == null) {
-			AssetTypeListableLoader loader = getLoaderFactory().createProductTypeListableLoader();
+			AssetTypeListableLoader loader = getLoaderFactory().createAssetTypeListableLoader();
 			assetTypeList = loader.load();
 		}
     	return assetTypeList;

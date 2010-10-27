@@ -3,7 +3,7 @@ package com.n4systems.fieldid.actions.helpers;
 import java.util.Collections;
 import java.util.List;
 
-import com.n4systems.ejb.legacy.LegacyProductSerial;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.safetynetwork.InspectionsByNetworkIdLoader;
@@ -11,7 +11,7 @@ import com.n4systems.model.security.SecurityFilter;
 
 public class AllInspectionHelper {
 	
-	private final LegacyProductSerial legacyProductSerialManager;
+	private final LegacyAsset legacyAssetManager;
 	private final Asset asset;
 	private final SecurityFilter filter;
 	
@@ -20,15 +20,15 @@ public class AllInspectionHelper {
 	private List<Inspection> inspections;
 	private Inspection lastInspection; 
 	
-	public AllInspectionHelper(LegacyProductSerial legacyProductSerialManager, Asset asset, SecurityFilter filter) {
-		this.legacyProductSerialManager = legacyProductSerialManager;
+	public AllInspectionHelper(LegacyAsset legacyAssetManager, Asset asset, SecurityFilter filter) {
+		this.legacyAssetManager = legacyAssetManager;
 		this.asset = asset;
 		this.filter = filter;
 	}
 	
 	public Long getInspectionCount() {
 		if (inspectionCount == null) {
-			inspectionCount = legacyProductSerialManager.countAllInspections(asset, filter);
+			inspectionCount = legacyAssetManager.countAllInspections(asset, filter);
 		}
 		return inspectionCount;
 	}
@@ -44,14 +44,14 @@ public class AllInspectionHelper {
 
 	public Inspection getLastInspection() {
 		if (lastInspection == null) {
-			lastInspection = legacyProductSerialManager.findLastInspections(asset, filter);
+			lastInspection = legacyAssetManager.findLastInspections(asset, filter);
 		}
 		return lastInspection;
 	}
 
 	public Long getLocalInspectionCount() {
 		if (localInspectionCount == null) {
-			localInspectionCount = legacyProductSerialManager.countAllLocalInspections(asset, filter);
+			localInspectionCount = legacyAssetManager.countAllLocalInspections(asset, filter);
 		}
 		return localInspectionCount;
 	}

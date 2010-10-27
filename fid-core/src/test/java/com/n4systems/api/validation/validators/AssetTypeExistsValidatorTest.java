@@ -3,7 +3,7 @@ package com.n4systems.api.validation.validators;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
-import com.n4systems.model.producttype.AssetTypeByNameExistsLoader;
+import com.n4systems.model.assettype.AssetTypeByNameExistsLoader;
 import org.junit.Test;
 
 import com.n4systems.model.security.SecurityFilter;

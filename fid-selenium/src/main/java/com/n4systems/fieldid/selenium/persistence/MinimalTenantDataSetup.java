@@ -3,7 +3,7 @@ package com.n4systems.fieldid.selenium.persistence;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.producttype.AssetTypeSaver;
+import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.n4systems.model.product.AssetLimitCountLoader;
+import com.n4systems.model.asset.AssetLimitCountLoader;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.orgs.PrimaryOrg;

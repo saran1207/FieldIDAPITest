@@ -18,7 +18,7 @@ public class DownloadAssetTypeImage extends AbstractDownloadAction {
 	}
 	
 	protected AssetType loadAssetType() {
-		return getLoaderFactory().createProductTypeLoader().setId(uniqueID).load();
+		return getLoaderFactory().createAssetTypeLoader().setId(uniqueID).load();
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class DownloadAssetTypeImage extends AbstractDownloadAction {
 
 	@Override
 	public File getFile() {
-		return new File(PathHandler.getProductTypeImageFile(assetType), assetType.getImageName());
+		return new File(PathHandler.getAssetTypeImageFile(assetType), assetType.getImageName());
 	}
 
 	@Override

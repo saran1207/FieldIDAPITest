@@ -50,7 +50,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 		
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
 		List<InspectionType> selectedInspectionTypes = findInspectionsTypesSet();
-		List<AssociatedInspectionType> types = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(assetType).load(transaction);
+		List<AssociatedInspectionType> types = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(assetType).load(transaction);
 		
 		try {
 			
@@ -179,7 +179,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	}
 
 	private List<AssociatedInspectionType> associatedInspectionTypes() {
-		return getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(assetType).load();
+		return getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(assetType).load();
 	}
 
 	/**

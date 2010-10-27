@@ -2,14 +2,14 @@ package com.n4systems.fieldid.actions.asset;
 
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
@@ -28,8 +28,8 @@ public class CustomerInformationCrud extends AbstractCrud {
 	private static final Logger logger = Logger.getLogger(CustomerInformationCrud.class);
 	
 	private Asset asset;
-	private ProductManager productManager;
-	private LegacyProductSerial legacyProductManager;
+	private AssetManager assetManager;
+	private LegacyAsset legacyProductManager;
 	
 	private OwnerPicker ownerPicker;
 	
@@ -37,10 +37,10 @@ public class CustomerInformationCrud extends AbstractCrud {
 	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 
-	public CustomerInformationCrud(PersistenceManager persistenceManager, ProductManager productManager, LegacyProductSerial legacyProductSerial) {
+	public CustomerInformationCrud(PersistenceManager persistenceManager, AssetManager assetManager, LegacyAsset legacyAsset) {
 		super(persistenceManager);
-		this.productManager = productManager;
-		this.legacyProductManager = legacyProductSerial;
+		this.assetManager = assetManager;
+		this.legacyProductManager = legacyAsset;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		asset = productManager.findAssetAllFields(uniqueId, getSecurityFilter());
+		asset = assetManager.findAssetAllFields(uniqueId, getSecurityFilter());
 		assetWebModel.match(asset);
 	}
 	
@@ -90,7 +90,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 	}
 
 	public boolean isSubAsset() {
-		return (productManager.parentAsset(asset) != null);
+		return (assetManager.parentAsset(asset) != null);
 	}
 	
 	public String getCustomerRefNumber() {

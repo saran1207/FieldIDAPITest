@@ -8,7 +8,7 @@ import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
-import com.n4systems.model.producttype.InspectionFrequencyListLoader;
+import com.n4systems.model.assettype.InspectionFrequencyListLoader;
 import com.n4systems.persistence.Transaction;
 
 public class InspectionFrequenciesDeleteHandlerImpl implements InspectionFrequenciesDeleteHandler {

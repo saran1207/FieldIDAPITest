@@ -7,8 +7,8 @@ import com.n4systems.webservice.dto.ProductServiceDTO;
 
 public class NullAssignedUserConverter implements AssignedUserConverter {
 
-	public Asset convert(ProductServiceDTO productServiceDTO, Asset product) {
-		return product;
+	public Asset convert(ProductServiceDTO productServiceDTO, Asset asset) {
+		return asset;
 	}
 
 	@Override

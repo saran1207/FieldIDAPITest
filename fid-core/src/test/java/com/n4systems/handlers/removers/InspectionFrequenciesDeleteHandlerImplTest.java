@@ -10,7 +10,7 @@ import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandler;
 import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandlerImpl;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
-import com.n4systems.model.producttype.InspectionFrequencyListLoader;
+import com.n4systems.model.assettype.InspectionFrequencyListLoader;
 import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.FluentArrayList;

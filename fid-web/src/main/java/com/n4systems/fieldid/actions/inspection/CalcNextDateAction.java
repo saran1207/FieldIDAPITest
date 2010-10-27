@@ -25,7 +25,7 @@ public class CalcNextDateAction extends AbstractAction {
 	}
 
 	public String doCalculate() {
-		AssetType assetType = getLoaderFactory().createProductTypeLoader().setId(assetTypeId).load();
+		AssetType assetType = getLoaderFactory().createAssetTypeLoader().setId(assetTypeId).load();
 		
 		InspectionType inspectionType = getLoaderFactory().createFilteredIdLoader(InspectionType.class).setId(inspectionTypeId).load();
 		

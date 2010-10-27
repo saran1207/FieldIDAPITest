@@ -12,8 +12,11 @@ import java.util.Map;
 
 import javax.activation.FileTypeMap;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.utils.CleanAssetTypeFactory;
 import com.n4systems.util.AssetTypeRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -22,8 +25,6 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.MissingEntityException;
@@ -36,7 +37,6 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldid.validators.HasProductDescriptionTemplateValidator;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.UnitOfMeasure;
-import com.n4systems.model.utils.CleanProductTypeFactory;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
@@ -56,8 +56,8 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AssetTypeCrud.class);
 
-	private LegacyProductType productTypeManager;
-	private ProductManager productManager;
+	private LegacyAssetType assetTypeManager;
+	private AssetManager assetManager;
 	private ConnectedEntityLoader entityLoader;
 
 	private AssetType assetType;
@@ -78,17 +78,17 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	private boolean removeImage = false;
 	private boolean newImage = false;
 
-	public AssetTypeCrud(PersistenceManager persistenceManager, LegacyProductType productTypeManager, ProductManager productManager) {
+	public AssetTypeCrud(PersistenceManager persistenceManager, LegacyAssetType assetTypeManager, AssetManager assetManager) {
 		super(persistenceManager);
-		this.productTypeManager = productTypeManager;
-		this.productManager = productManager;
+		this.assetTypeManager = assetTypeManager;
+		this.assetManager = assetManager;
 		entityLoader = new ConnectedEntityLoader(persistenceManager);
 		infoFieldTypes = Arrays.asList(InfoFieldBean.InfoFieldType.values());
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		assetType = getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
+		assetType = getLoaderFactory().createAssetTypeLoader().setId(uniqueId).setStandardPostFetches().load();
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	@SkipValidation
 	public String doLoadCopy() {
 		testForAssetType();
-		new CleanProductTypeFactory(assetType, getTenant()).clean();
+		new CleanAssetTypeFactory(assetType, getTenant()).clean();
 		setUniqueID(null);
 		assetType.setName(null);
 		return INPUT;
@@ -153,7 +153,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 
 		try {
 			updateAttachmentList(assetType, fetchCurrentUser());
-			assetType = productTypeManager.updateProductType(assetType, getUploadedFiles(), assetImage);
+			assetType = assetTypeManager.updateAssetType(assetType, getUploadedFiles(), assetImage);
 			addFlashMessage("Data has been updated.");
 
 			uniqueID = assetType.getId();
@@ -299,7 +299,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	public String doConfirmDelete() {
 		testForAssetType();
 		try {
-			removalSummary = productManager.testArchive(assetType);
+			removalSummary = assetManager.testArchive(assetType);
 		} catch (Exception e) {
 			return ERROR;
 		}
@@ -310,7 +310,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	public String doDelete() {
 		testForAssetType();
 		try {
-			productManager.archive(assetType, getSessionUser().getUniqueID(), getText("label.beingdeleted"));
+			assetManager.archive(assetType, getSessionUser().getUniqueID(), getText("label.beingdeleted"));
 			addFlashMessageText("message.assettypedeleted");
 			return SUCCESS;
 		} catch (Exception e) {
@@ -420,7 +420,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	}
 
 	public Collection<ListingPair> getAssetTypes() {
-		return productTypeManager.getProductTypeListForTenant(getTenantId());
+		return assetTypeManager.getAssetTypeListForTenant(getTenantId());
 	}
 
 	public Collection<InfoFieldBean.InfoFieldType> getInfoFieldTypes() {
@@ -430,7 +430,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	public Collection<Long> getUndeletableInfoFields() {
 		if (undeletableInfoFields == null) {
 			if (assetType != null) {
-				undeletableInfoFields = productTypeManager.infoFieldsInUse(assetType.getInfoFields());
+				undeletableInfoFields = assetTypeManager.infoFieldsInUse(assetType.getInfoFields());
 			}
 			if (undeletableInfoFields == null) {
 				undeletableInfoFields = new ArrayList<Long>();

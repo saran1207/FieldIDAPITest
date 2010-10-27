@@ -94,7 +94,7 @@ public class AutoAttributeParser {
 	 * @see com.n4systems.model.AssetType
 	 * @return The AssetType set by {@link #AutoAttributeParser(List, com.n4systems.model.AssetType)}
 	 */
-	public AssetType getProductType() {
+	public AssetType getAssetType() {
 		return assetType;
 	}
 	

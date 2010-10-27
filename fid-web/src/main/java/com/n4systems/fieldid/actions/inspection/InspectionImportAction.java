@@ -120,7 +120,7 @@ public class InspectionImportAction extends AbstractImportAction {
 	}
 	
 	private AssetStatus getExampleAssetStatus() {
-		List<AssetStatus> statuses = getLoaderFactory().createProductStatusListLoader().load();
+		List<AssetStatus> statuses = getLoaderFactory().createAssetStatusListLoader().load();
 		
 		return (statuses.isEmpty()) ? null : statuses.get(0);
 	}

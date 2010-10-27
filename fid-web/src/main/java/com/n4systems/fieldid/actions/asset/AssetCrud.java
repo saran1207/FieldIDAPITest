@@ -9,15 +9,17 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.product.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.AssetRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AddProductHistoryBean;
+import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.AssetSerialExtension;
 import rfid.ejb.entity.AssetSerialExtensionValue;
@@ -28,10 +30,9 @@ import rfid.ejb.entity.InfoOptionBean;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.ProjectManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
@@ -55,7 +56,6 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -86,7 +86,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private List<InfoOptionInput> assetInfoOptions;
 	private List<AssetExtensionValueInput> assetExtentionValues;
 	protected Asset asset;
-	private AddProductHistoryBean addProductHistory;
+	private AddAssetHistory addAssetHistory;
 	private String search;
 	private String identified;
 	private LineItem lineItem;
@@ -122,16 +122,16 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private AssetRemovalSummary removalSummary;
 
 	// managers
-	private LegacyProductType productTypeManager;
-	private LegacyProductSerial legacyProductSerialManager;
+	private LegacyAssetType assetTypeManager;
+	private LegacyAsset legacyAssetManager;
 
 	private AssetCodeMappingService assetCodeMappingServiceManager;
 	protected InspectionScheduleManager inspectionScheduleManager;
-	private ProductManager productManager;
+	private AssetManager assetManager;
 	private OrderManager orderManager;
 	private ProjectManager projectManager;
 	private AssetTypeLister assetTypes;
-	private ProductSaveService productSaverService;
+	private AssetSaveService assetSaverService;
 	private Long excludeId;
 	
 	protected List<Asset> linkedAssets;
@@ -140,14 +140,14 @@ public class AssetCrud extends UploadAttachmentSupport {
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
-	public AssetCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager,
-			AssetCodeMappingService assetCodeMappingServiceManager, ProductManager productManager, OrderManager orderManager,
+	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
+			AssetCodeMappingService assetCodeMappingServiceManager, AssetManager assetManager, OrderManager orderManager,
 			ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
-		this.productTypeManager = productTypeManager;
-		this.legacyProductSerialManager = legacyProductSerialManager;
+		this.assetTypeManager = assetTypeManager;
+		this.legacyAssetManager = legacyAssetManager;
 		this.assetCodeMappingServiceManager = assetCodeMappingServiceManager;
-		this.productManager = productManager;
+		this.assetManager = assetManager;
 		this.orderManager = orderManager;
 		this.projectManager = projectManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
@@ -164,9 +164,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 	protected void loadMemberFields(Long uniqueId) {
 		try {
 			if (!isInVendorContext()) {
-				asset = productManager.findAssetAllFields(uniqueId, getSecurityFilter());
+				asset = assetManager.findAssetAllFields(uniqueId, getSecurityFilter());
 			} else {
-				asset = getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
+				asset = getLoaderFactory().createSafetyNetworkAssetLoader().withAllFields().setAssetId(uniqueId).load();
 			}
 			
 		} catch(Exception e) {
@@ -185,7 +185,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	
 
 	private void loadAddProductHistory() {
-		addProductHistory = legacyProductSerialManager.getAddProductHistory(getSessionUser().getUniqueID());
+		addAssetHistory = legacyAssetManager.getAddAssetHistory(getSessionUser().getUniqueID());
 
 	}
 
@@ -195,17 +195,17 @@ public class AssetCrud extends UploadAttachmentSupport {
 		asset.setIdentified(DateHelper.getToday());
 
 		loadAddProductHistory();
-		if (addProductHistory != null) {
+		if (addAssetHistory != null) {
 			
-			setOwnerId(addProductHistory.getOwner() != null ? addProductHistory.getOwner().getId() : null);
+			setOwnerId(addAssetHistory.getOwner() != null ? addAssetHistory.getOwner().getId() : null);
 
 			// we need to make sure we load the producttype with its info fields
-			setAssetTypeId(addProductHistory.getProductType().getId());
+			setAssetTypeId(addAssetHistory.getAssetType().getId());
 
-			asset.setAssetStatus(addProductHistory.getProductStatus());
-			asset.setPurchaseOrder(addProductHistory.getPurchaseOrder());
-			asset.setAdvancedLocation(addProductHistory.getLocation());
-			asset.setInfoOptions(new TreeSet<InfoOptionBean>(addProductHistory.getInfoOptions()));
+			asset.setAssetStatus(addAssetHistory.getAssetStatus());
+			asset.setPurchaseOrder(addAssetHistory.getPurchaseOrder());
+			asset.setAdvancedLocation(addAssetHistory.getLocation());
+			asset.setInfoOptions(new TreeSet<InfoOptionBean>(addAssetHistory.getInfoOptions()));
 
 		} else {
 			// set the default asset id.
@@ -257,7 +257,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			try {
 				
 				if (!isInVendorContext()) {
-					assets = productManager.findProductByIdentifiers(getSecurityFilter(), search, assetType);
+					assets = assetManager.findAssetByIdentifiers(getSecurityFilter(), search, assetType);
 					
 					// remove the asset given. ( this is for asset merging, you
 					// don't want to merge the asset with itself.)
@@ -315,7 +315,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 		// find the asset code mapping by asset code. This will return the
 		// default asset code if one could not be found.
-		AssetCodeMapping assetCodeMapping = assetCodeMappingServiceManager.getAssetCodeByProductCodeAndTenant(lineItem.getAssetCode(), getTenantId());
+		AssetCodeMapping assetCodeMapping = assetCodeMappingServiceManager.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode(), getTenantId());
 
 		if (assetCodeMapping.getAssetInfo() != null) {
 			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
@@ -355,7 +355,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	private void loadAttachments() {
-		setAttachments(getLoaderFactory().createProductAttachmentListLoader().setProduct(asset).load());
+		setAttachments(getLoaderFactory().createAssetAttachmentListLoader().setAsset(asset).load());
 	}
 
 	@SkipValidation
@@ -390,9 +390,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 			// we only set identified by on save
 			asset.setIdentifiedBy(fetchCurrentUser());
 			
-			ProductSaveService saver = getProductSaveService();
+			AssetSaveService saver = getProductSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
-			saver.setProduct(asset);
+			saver.setAsset(asset);
 
 			asset = saver.create();
 
@@ -452,7 +452,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			
 		
 			// on edit, we need to know if the asset type has changed
-			AssetType oldType = productTypeManager.findProductTypeForProduct(asset.getId());
+			AssetType oldType = assetTypeManager.findAssetTypeForAsset(asset.getId());
 
 			// if the new asset type is not equal to the old then the type
 			// has changed
@@ -460,10 +460,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 				inspectionScheduleManager.removeAllSchedulesFor(asset);
 			}
 
-			ProductSaveService saver = getProductSaveService();
+			AssetSaveService saver = getProductSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setExistingAttachments(getAttachments());
-			saver.setProduct(asset);
+			saver.setAsset(asset);
 
 			asset = saver.update();
 
@@ -497,8 +497,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 		// update the asset
 		try {
-			ProductSaveService saver = getProductSaveService();
-			saver.setProduct(asset).update();
+			AssetSaveService saver = getProductSaveService();
+			saver.setAsset(asset).update();
 			addFlashMessageText("message.assetupdated");
 		} catch (Exception e) {
 			logger.error("Failed connecting shop order to asset", e);
@@ -542,7 +542,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 		// update the asset
 		try {
-			getProductSaveService().setProduct(asset).update();
+			getProductSaveService().setAsset(asset).update();
 			String updateMessage = getText("message.assetupdated.customer", Arrays.asList(asset.getSerialNumber(), asset.getOwner().getName()));
 			addFlashMessage(updateMessage);
 
@@ -560,7 +560,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doConfirmDelete() {
 		testExistingAsset();
 		try {
-			removalSummary = productManager.testArchive(asset);
+			removalSummary = assetManager.testArchive(asset);
 		} catch (Exception e) {
 			return ERROR;
 		}
@@ -572,7 +572,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doDelete() {
 		testExistingAsset();
 		try {
-			productManager.archive(asset, fetchCurrentUser());
+			assetManager.archive(asset, fetchCurrentUser());
 			addFlashMessageText("message.assetdeleted");
 			return SUCCESS;
 		} catch (UsedOnMasterInspectionException e) {
@@ -631,7 +631,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public Collection<AssetStatus> getAssetStatuses() {
 		if (productStatuses == null) {
-			productStatuses = getLoaderFactory().createProductStatusListLoader().load();
+			productStatuses = getLoaderFactory().createAssetStatusListLoader().load();
 		}
 		return productStatuses;
 	}
@@ -705,7 +705,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public void setAssetStatus(Long assetStatusId) {
 		AssetStatus assetStatus = null;
 		if (assetStatusId != null) {
-			assetStatus = legacyProductSerialManager.findAssetStatus(assetStatusId, getTenantId());
+			assetStatus = legacyAssetManager.findAssetStatus(assetStatusId, getTenantId());
 		}
 		this.asset.setAssetStatus(assetStatus);
 	}
@@ -803,7 +803,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	@SuppressWarnings("deprecation")
 	public Collection<AssetSerialExtension> getExtentions() {
 		if (extentions == null) {
-			extentions = legacyProductSerialManager.getAssetSerialExtensions(getTenantId());
+			extentions = legacyAssetManager.getAssetSerialExtensions(getTenantId());
 		}
 		return extentions;
 	}
@@ -846,7 +846,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public Asset getParentAsset() {
 		if (!lookedUpParent && !asset.isNew()) {
-			parentAsset = productManager.parentAsset(asset);
+			parentAsset = assetManager.parentAsset(asset);
 			lookedUpParent = true;
 		}
 
@@ -892,7 +892,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	public int getIdentifiedProductCount(LineItem lineItem) {
-		return orderManager.countProductsTagged(lineItem);
+		return orderManager.countAssetsTagged(lineItem);
 	}
 
 	public Order getCustomerOrder() {
@@ -963,7 +963,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public AllInspectionHelper getAllInspectionHelper() {
 		if (allInspectionHelper == null)
-			allInspectionHelper = new AllInspectionHelper(legacyProductSerialManager, asset, getSecurityFilter());
+			allInspectionHelper = new AllInspectionHelper(legacyAssetManager, asset, getSecurityFilter());
 		return allInspectionHelper;
 	}
 
@@ -987,11 +987,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.excludeId = excludeId;
 	}
 
-	public ProductSaveService getProductSaveService() {
-		if (productSaverService == null) {
-			productSaverService = new ProductSaveService(legacyProductSerialManager, fetchCurrentUser());
+	public AssetSaveService getProductSaveService() {
+		if (assetSaverService == null) {
+			assetSaverService = new AssetSaveService(legacyAssetManager, fetchCurrentUser());
 		}
-		return productSaverService;
+		return assetSaverService;
 	}
 
 	public List<AssetAttachment> getLinkedAssetAttachments(Long linkedAssetId) {
@@ -1000,7 +1000,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	
 	public List<AssetAttachment> getAssetAttachments() {
 		if (assetAttachments == null) {
-			assetAttachments = getLoaderFactory().createProductAttachmentListLoader().setProduct(asset).load();
+			assetAttachments = getLoaderFactory().createAssetAttachmentListLoader().setAsset(asset).load();
 		}
 		return assetAttachments;
 	}
@@ -1038,7 +1038,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		if (id == null) {
 			asset.setLinkedAsset(null);
 		} else if (asset.getLinkedAsset() == null || !asset.getLinkedAsset().getId().equals(id)) {
-			asset.setLinkedAsset(getLoaderFactory().createSafetyNetworkProductLoader().setProductId(id).load());
+			asset.setLinkedAsset(getLoaderFactory().createSafetyNetworkAssetLoader().setAssetId(id).load());
 		}
 	}
 	

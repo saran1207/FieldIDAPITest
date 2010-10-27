@@ -3,6 +3,8 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import java.util.Collection;
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.AssetView;
 import com.n4systems.fieldid.actions.asset.AssetViewModeConverter;
 import com.n4systems.fieldid.actions.asset.AssetWebModel;
@@ -16,8 +18,6 @@ import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.asset.AssetIdentifierView;
@@ -26,8 +26,8 @@ import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.producttype.AutoAttributeCriteriaByProductTypeIdLoader;
-import com.n4systems.services.product.ProductSaveService;
+import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
+import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -44,8 +44,8 @@ public class RegisterAsset extends AbstractCrud{
 	private Asset parentAsset;
 	private Asset newAsset;
 	
-	private ProductManager productManager;
-	private LegacyProductSerial legacyProductManager;
+	private AssetManager assetManager;
+	private LegacyAsset legacyProductManager;
 	private OrderManager orderManager;
 	
 	//Drop down lists
@@ -61,10 +61,10 @@ public class RegisterAsset extends AbstractCrud{
 	private AssetView assetView;
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 
-	public RegisterAsset(PersistenceManager persistenceManager, ProductManager productManager,
-			OrderManager orderManager, LegacyProductSerial legacyProductManager) {
+	public RegisterAsset(PersistenceManager persistenceManager, AssetManager assetManager,
+			OrderManager orderManager, LegacyAsset legacyProductManager) {
 		super(persistenceManager);
-		this.productManager = productManager;
+		this.assetManager = assetManager;
 		this.orderManager = orderManager;
 		this.legacyProductManager = legacyProductManager;
 	}
@@ -95,7 +95,7 @@ public class RegisterAsset extends AbstractCrud{
 	}
 	
 	private Asset lookUpLinkedProduct(Long uniqueId) {
-		return getLoaderFactory().createSafetyNetworkProductLoader().withAllFields().setProductId(uniqueId).load();
+		return getLoaderFactory().createSafetyNetworkAssetLoader().withAllFields().setAssetId(uniqueId).load();
 	}
 
 	@Override
@@ -121,8 +121,8 @@ public class RegisterAsset extends AbstractCrud{
 		assetToSave.setLinkedAsset(linkedAsset);
 		assetWebModel.fillInAsset(assetToSave);
 		
-		ProductSaveService saver = new ProductSaveService(legacyProductManager, fetchCurrentUser());
-		saver.setProduct(assetToSave);
+		AssetSaveService saver = new AssetSaveService(legacyProductManager, fetchCurrentUser());
+		saver.setAsset(assetToSave);
 		newAsset = saver.create();
 			
 		logger.info("Registered : " + newAsset);
@@ -147,14 +147,14 @@ public class RegisterAsset extends AbstractCrud{
 	
 	public Collection<AssetStatus> getAssetStatuses() {
 		if (assetStatuses == null) {
-			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
+			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
 		}
 		return assetStatuses;
 	}
 
 	public Asset getParentAsset() {
 		if (parentAsset == null) {
-			parentAsset = productManager.parentAsset(linkedAsset);
+			parentAsset = assetManager.parentAsset(linkedAsset);
 		}
 		return parentAsset;
 	}
@@ -169,7 +169,7 @@ public class RegisterAsset extends AbstractCrud{
 			
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
 		if (autoAttributeCriteria == null && assetView.getAssetTypeId() != null) {
-			AutoAttributeCriteriaByProductTypeIdLoader loader = getLoaderFactory().createAutoAttributeCriteriaByProductTypeIdLoader();
+			AutoAttributeCriteriaByAssetTypeIdLoader loader = getLoaderFactory().createAutoAttributeCriteriaByAssetTypeIdLoader();
 			
 			loader.setAssetTypeId(assetView.getAssetTypeId());
 			

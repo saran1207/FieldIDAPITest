@@ -2,13 +2,13 @@ package com.n4systems.taskscheduling.task;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.exporting.AssetExporter;
 import com.n4systems.model.Asset;
 import org.junit.Test;
 
 import com.n4systems.exporting.AutoAttributeExporter;
 import com.n4systems.exporting.CustomerExporter;
 import com.n4systems.exporting.ExporterFactory;
-import com.n4systems.exporting.ProductExporter;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -80,18 +80,18 @@ public class DownloadTaskFactoryTest extends ConfigContextRequiredTestCase {
 	public void test_create_product_export_task() {
 		Saver<DownloadLink> linkSaver = createMock(Saver.class);
 		ExporterFactory exporterFactory = createMock(ExporterFactory.class);
-		ProductExporter exporter = createMock(ProductExporter.class);
+		AssetExporter exporter = createMock(AssetExporter.class);
 		ListLoader<Asset> loader = createMock(ListLoader.class);
 		
 		DownloadLink link = new DownloadLink();
 		
 		DownloadTaskFactory dtf = new DownloadTaskFactory(linkSaver, exporterFactory);
 		
-		expect(exporterFactory.createProductExporter(loader)).andReturn(exporter);
+		expect(exporterFactory.createAssetExporter(loader)).andReturn(exporter);
 		
 		replay(exporterFactory);
 		
-		AssetExportTask task = dtf.createProductExportTask(link, "url", loader);
+		AssetExportTask task = dtf.createAssetExportTask(link, "url", loader);
 		
 		verify(exporterFactory);
 		

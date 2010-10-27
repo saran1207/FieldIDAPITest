@@ -20,7 +20,7 @@ public class AutoAttributeDefinitionListLoader extends ListLoader<AutoAttributeD
 	@Override
 	protected List<AutoAttributeDefinition> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<AutoAttributeDefinition> builder = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, filter);
-		builder.addWhere(WhereClauseFactory.create("criteria.productType.id", criteriaId));
+		builder.addWhere(WhereClauseFactory.create("criteria.assetType.id", criteriaId));
 		builder.addPostFetchPaths("outputs");
 		
 		List<AutoAttributeDefinition> autoAttribs = builder.getResultList(em);

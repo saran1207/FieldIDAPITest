@@ -3,7 +3,7 @@ package com.n4systems.persistence.loaders;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.downloadlink.AllDownloadLinksByDateLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
-import com.n4systems.model.product.LastInspectionDateLoader;
+import com.n4systems.model.asset.LastInspectionDateLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.model.signuppackage.ContractPricingByExternalIdLoader;
 import com.n4systems.model.signuppackage.SignUpPackageListLoader;

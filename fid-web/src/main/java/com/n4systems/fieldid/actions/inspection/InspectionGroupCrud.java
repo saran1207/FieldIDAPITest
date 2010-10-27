@@ -3,12 +3,12 @@ package com.n4systems.fieldid.actions.inspection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionGroup;
@@ -30,14 +30,14 @@ public class InspectionGroupCrud extends AbstractCrud {
 	private String search;
 
 	private InspectionManager inspectionManager;
-	private ProductManager productManager;
+	private AssetManager assetManager;
 
 	private List<InspectionType> inspectionTypes;
 
-	public InspectionGroupCrud(InspectionManager inspectionManager, ProductManager productManager, PersistenceManager persistenceManager) {
+	public InspectionGroupCrud(InspectionManager inspectionManager, AssetManager assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.inspectionManager = inspectionManager;
-		this.productManager = productManager;
+		this.assetManager = assetManager;
 	}
 
 	@Override
@@ -47,14 +47,14 @@ public class InspectionGroupCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		asset = productManager.findAsset(uniqueId, getSecurityFilter());
+		asset = assetManager.findAsset(uniqueId, getSecurityFilter());
 	}
 
 	public String doList() {
 		// if no search param came just show the form.
 		if (search != null && search.length() > 0) {
 			try {
-				assets = productManager.findProductByIdentifiers(getSecurityFilter(), search);
+				assets = assetManager.findAssetByIdentifiers(getSecurityFilter(), search);
 				// if there is only one forward. directly to the group view
 				// screen.
 				if (assets.size() == 1) {
@@ -121,7 +121,7 @@ public class InspectionGroupCrud extends AbstractCrud {
 	public List<InspectionType> getInspectionTypes() {
 		if (inspectionTypes == null) {
 			inspectionTypes = new ArrayList<InspectionType>();
-			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(getAsset().getType()).load();
+			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(getAsset().getType()).load();
 			for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
 				inspectionTypes.add(associatedInspectionType.getInspectionType());
 			}

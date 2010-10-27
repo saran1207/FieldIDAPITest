@@ -5,7 +5,7 @@ import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.model.Asset;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectiontype.AssociatedInspectionTypeExistsLoader;
-import com.n4systems.model.product.SmartSearchLoader;
+import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 
@@ -22,20 +22,20 @@ public class AssociatedInspectionTypeValidator extends InspectionViewValidator {
 		
 		String identifier = (String)fieldValue;
 		
-		SmartSearchLoader productLoader = createSmartSearchLoader(filter).setSearchText(identifier);
+		SmartSearchLoader assetLoader = createSmartSearchLoader(filter).setSearchText(identifier);
 		
 		// the AssetIdentifierValidator ensures the following is safe
-		Asset product = productLoader.load().get(0);
+		Asset asset = assetLoader.load().get(0);
 		
 		AssociatedInspectionTypeExistsLoader assocLoader = createAssociatedInspectionTypeExistsLoader(filter);
 		assocLoader.setInspectionType(inspectionType);
-		assocLoader.setProductType(product.getType());
+		assocLoader.setAssetType(asset.getType());
 		
 		boolean exists = assocLoader.load();
 		if (exists) {
 			return ValidationResult.pass();
 		} else {
-			return ValidationResult.fail(AssociatedInspectionTypeValidationFail, inspectionType.getName(), product.getType().getName());
+			return ValidationResult.fail(AssociatedInspectionTypeValidationFail, inspectionType.getName(), asset.getType().getName());
 		}
 	}
 

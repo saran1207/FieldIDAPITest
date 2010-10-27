@@ -122,7 +122,7 @@ public class OrderManagerImpl implements OrderManager {
 		return (lineItems != null) ? lineItems.intValue() : 0;
 	}
 	
-	public int countProductsTagged(LineItem lineItem) {
+	public int countAssetsTagged(LineItem lineItem) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Asset.class, new OpenSecurityFilter());
 		builder.setCountSelect();
 		builder.addSimpleWhere("shopOrder", lineItem);
@@ -323,12 +323,12 @@ public class OrderManagerImpl implements OrderManager {
 			lineItem = new LineItem(order);
 		}
 		
-		String productCode = lineItemData.get(OrderKey.LINE_PRODUCT_CODE);
+		String assetCode = lineItemData.get(OrderKey.LINE_PRODUCT_CODE);
 		
-		if (productCode != null) {
-			logger.info("Processing Line Item with Asset Code [" + productCode + "] for Order [" + order.getOrderNumber() + "]");
+		if (assetCode != null) {
+			logger.info("Processing Line Item with Asset Code [" + assetCode + "] for Order [" + order.getOrderNumber() + "]");
 			
-			lineItem.setAssetCode(productCode);
+			lineItem.setAssetCode(assetCode);
 		} else {
 			logger.warn("Line Item for Order [" + order.getOrderNumber() + "] had empty Asset Code.  Using default ...");
 			lineItem.setAssetCode(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, order.getTenant().getId()));
@@ -524,7 +524,7 @@ public class OrderManagerImpl implements OrderManager {
 		
 		// LineItems need a ProductCode
 		if(orderTransfer.getAssetCode() == null || orderTransfer.getAssetCode().trim().length() == 0) {
-			throw new OrderProcessingException("Plugin returned blank ProductCode");
+			throw new OrderProcessingException("Plugin returned blank AssetCode");
 		}
 		
 		LineItem lineItem = findLineItem(shopOrder, orderTransfer.getLineItemId());

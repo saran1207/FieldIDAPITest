@@ -33,7 +33,7 @@ public class CatalogServiceTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_find_catalog_product_type_ids() {
+	public void should_find_catalog_asset_type_ids() {
 		AssetType assetType = anAssetType().build();
 		Catalog catalog = aCatalog().belongingTo(n4).with(assetType).build();
 		
@@ -72,15 +72,15 @@ public class CatalogServiceTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_add_create_catalog_and_publish_product_types() {
+	public void should_add_create_catalog_and_publish_asset_types() {
 		Capture<Catalog> captureCatalog = new Capture<Catalog>();
-		Capture<AssetType> captureProductType = new Capture<AssetType>();
+		Capture<AssetType> captureAssetType = new Capture<AssetType>();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.find((QueryBuilder<Catalog>)anyObject())).andReturn(null);
 		expectLastCall().once();
 		expect(mockPersistenceManager.update(capture(captureCatalog))).andAnswer(new BasicAnswer<Catalog>(captureCatalog));
-		expect(mockPersistenceManager.reattchAndFetch(capture(captureProductType), (String)anyObject())).andAnswer(new BasicAnswer<AssetType>(captureProductType));
+		expect(mockPersistenceManager.reattchAndFetch(capture(captureAssetType), (String)anyObject())).andAnswer(new BasicAnswer<AssetType>(captureAssetType));
 		expectLastCall().once();
 		replay(mockPersistenceManager);
 		
@@ -97,15 +97,15 @@ public class CatalogServiceTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_add_create_catalog_and_publish_product_types_with_master_product() {
+	public void should_add_create_catalog_and_publish_asset_types_with_master_asset() {
 		Capture<Catalog> captureCatalog = new Capture<Catalog>();
-		Capture<AssetType> captureProductType = new Capture<AssetType>();
+		Capture<AssetType> captureAssetType = new Capture<AssetType>();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.find((QueryBuilder<Catalog>)anyObject())).andReturn(null);
 		expectLastCall().once();
 		expect(mockPersistenceManager.update(capture(captureCatalog))).andAnswer(new BasicAnswer<Catalog>(captureCatalog));
-		expect(mockPersistenceManager.reattchAndFetch(capture(captureProductType), (String)anyObject())).andAnswer(new BasicAnswer<AssetType>(captureProductType));
+		expect(mockPersistenceManager.reattchAndFetch(capture(captureAssetType), (String)anyObject())).andAnswer(new BasicAnswer<AssetType>(captureAssetType));
 		expectLastCall().once();
 		replay(mockPersistenceManager);
 		

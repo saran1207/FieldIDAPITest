@@ -131,7 +131,7 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 	}
 
 
-	public CatalogAutoAttributesImportHandler setImportedProductType(AssetType importedAssetType) {
+	public CatalogAutoAttributesImportHandler setImportedAssetType(AssetType importedAssetType) {
 		this.importedAssetType = importedAssetType;
 		return this;
 	}

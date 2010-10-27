@@ -42,7 +42,7 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 
 	@Column(name="producttypes", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date productTypes = new Date();
+	private Date assetTypes = new Date();
 
 	@Column(name="inspectiontypes", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -109,12 +109,12 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 		this.tenantId = tenant.getId();
 	}
 
-	public Date getProductTypes() {
-		return productTypes;
+	public Date getAssetTypes() {
+		return assetTypes;
 	}
 
-	public void setProductTypes(Date productTypes) {
-		this.productTypes = productTypes;
+	public void setAssetTypes(Date assetTypes) {
+		this.assetTypes = assetTypes;
 	}
 
 	public Date getInspectionTypes() {

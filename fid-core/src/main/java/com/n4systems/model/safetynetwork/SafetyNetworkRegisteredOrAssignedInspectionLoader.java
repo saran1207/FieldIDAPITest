@@ -8,13 +8,13 @@ import javax.persistence.EntityManager;
 
 public class SafetyNetworkRegisteredOrAssignedInspectionLoader extends SecurityFilteredLoader<Inspection> {
 
-    private SafetyNetworkRegisteredProductInspectionLoader registeredLoader;
-    private SafetyNetworkAssignedProductInspectionLoader assignedLoader;
+    private SafetyNetworkRegisteredAssetInspectionLoader registeredLoader;
+    private SafetyNetworkAssignedAssetInspectionLoader assignedLoader;
 
     public SafetyNetworkRegisteredOrAssignedInspectionLoader(SecurityFilter filter) {
         super(filter);
-        registeredLoader = new SafetyNetworkRegisteredProductInspectionLoader(filter);
-        assignedLoader = new SafetyNetworkAssignedProductInspectionLoader(filter);
+        registeredLoader = new SafetyNetworkRegisteredAssetInspectionLoader(filter);
+        assignedLoader = new SafetyNetworkAssignedAssetInspectionLoader(filter);
     }
 
     @Override

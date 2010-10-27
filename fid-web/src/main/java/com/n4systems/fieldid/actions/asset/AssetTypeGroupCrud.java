@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.asset;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
@@ -10,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -26,7 +26,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(AssetTypeGroupCrud.class);
 
-	private ProductManager productManager;
+	private AssetManager assetManager;
 	
 	private List<AssetTypeGroup> groups;
 	private AssetTypeGroup group;
@@ -36,9 +36,9 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 	private List<Long> indexes = new ArrayList<Long>();
 	
 
-	public AssetTypeGroupCrud(PersistenceManager persistenceManager, ProductManager productManager) {
+	public AssetTypeGroupCrud(PersistenceManager persistenceManager, AssetManager assetManager) {
 		super(persistenceManager);
-		this.productManager = productManager;
+		this.assetManager = assetManager;
 	}
 	
 	@Override
@@ -149,7 +149,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 	public String doDeleteConfirm() {
 		testRequiredEntities(true);
 		
-		removalSummary = productManager.testDelete(group);
+		removalSummary = assetManager.testDelete(group);
 		logger.info(getLogLinePrefix() + " confirming delete asset type group " + group.getName());
 		return SUCCESS;
 	}
@@ -159,7 +159,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 		testRequiredEntities(true);
 		
 		try {
-			productManager.deleteAssetTypeGroup(group);
+			assetManager.deleteAssetTypeGroup(group);
 			addFlashMessageText("message.assettypegroupdeleted");
 		} catch (Exception e) {
 			logger.error(getLogLinePrefix() + " could not delete asset type group",e);
@@ -198,7 +198,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 
 	public AssetTypeGroupRemovalSummary getRemovalSummary() {
 		if (removalSummary == null) {
-			removalSummary = productManager.testDelete(group);
+			removalSummary = assetManager.testDelete(group);
 		}
 		return removalSummary;
 	}

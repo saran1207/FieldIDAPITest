@@ -8,7 +8,7 @@ import com.n4systems.webservice.dto.ProductServiceDTO;
 
 public interface AssignedUserConverter {
 	
-	public Asset convert(ProductServiceDTO productServiceDTO, Asset product);
+	public Asset convert(ProductServiceDTO productServiceDTO, Asset asset);
 	public Inspection convert(InspectionServiceDTO inspectionServiceDTO, Inspection inspection) throws ConversionException;
 	
 

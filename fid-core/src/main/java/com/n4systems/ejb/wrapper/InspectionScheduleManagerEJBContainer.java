@@ -82,11 +82,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long getProductIdForSchedule(Long scheduleId) {
+	public Long getAssetIdForSchedule(Long scheduleId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getProductIdForSchedule(scheduleId);
+			return createManager(transaction.getEntityManager()).getAssetIdForSchedule(scheduleId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

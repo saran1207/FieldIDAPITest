@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.product.SyncAssetListLoader;
+import com.n4systems.model.asset.SyncAssetListLoader;
 import com.n4systems.webservice.RequestHandler;
 import com.n4systems.webservice.assetdownload.AssetIdListResponse;
 import com.n4systems.webservice.assetdownload.AssetSearchRequest;

@@ -42,7 +42,7 @@ public class InspectionTypeArchiveSummary extends RemovalSummary {
 	}
 
 	
-	public Long getRemoveFromProductTypes() {
+	public Long getRemoveFromAssetTypes() {
 		return associatedInspectionTypeDeleteSummary.getRemoveFromAssetTypes();
 	}
 

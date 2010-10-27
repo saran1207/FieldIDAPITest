@@ -68,11 +68,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long productId, String... postFetchFields) {
+	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findAllInspectionGroups(filter, productId, postFetchFields);
+			return createManager(transaction.getEntityManager()).findAllInspectionGroups(filter, assetId, postFetchFields);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -85,11 +85,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 
 	
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
+	public List<Inspection> findInspectionsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findInspectionsByDateAndProduct(datePerformedRangeStart, datePerformedRangeEnd, asset, filter);
+			return createManager(transaction.getEntityManager()).findInspectionsByDateAndAsset(datePerformedRangeStart, datePerformedRangeEnd, asset, filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

@@ -11,10 +11,13 @@ import java.util.Map.Entry;
 
 import javax.naming.NamingException;
 
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.SubAsset;
-import com.n4systems.model.product.AssetSubAssetsLoader;
+import com.n4systems.model.asset.AssetSubAssetsLoader;
+import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
+import com.n4systems.services.asset.AssetSaveService;
 import org.apache.log4j.Logger;
 
 import rfid.util.PopulatorLogger;
@@ -23,13 +26,12 @@ import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.UserManager;
-import com.n4systems.exceptions.FindProductFailure;
+import com.n4systems.exceptions.FindAssetFailure;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
@@ -59,7 +61,6 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.inspection.InspectionAttachmentSaver;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
-import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.location.Location;
@@ -74,8 +75,8 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
-import com.n4systems.model.product.AssetByMobileGuidLoader;
-import com.n4systems.model.product.SmartSearchLoader;
+import com.n4systems.model.asset.AssetByMobileGuidLoader;
+import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -96,7 +97,6 @@ import com.n4systems.servicedto.converts.ProductServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantCache;
-import com.n4systems.services.product.ProductSaveService;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -334,10 +334,10 @@ public class DataServiceImpl implements DataService {
 		try {
 			ProductTypeListResponse response = new ProductTypeListResponse();
 	
-			LegacyProductType productTypeManager = ServiceLocator.getProductType();
+			LegacyAssetType assetTypeManager = ServiceLocator.getProductType();
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
-			List<AssetType> assetTypes = productTypeManager.getProductTypesForTenant( paginatedRequestInformation.getTenantId() );
+			List<AssetType> assetTypes = assetTypeManager.getAssetTypesForTenant( paginatedRequestInformation.getTenantId() );
 			
 			for (AssetType assetType : assetTypes) {
 				response.getProductTypes().add( converter.convert_new(assetType) );
@@ -672,8 +672,8 @@ public class DataServiceImpl implements DataService {
 			LocationConverter locationConverter = new LocationServiceToContainerConverter(createLoaderFactory(request));
 			locationConverter.convert(request, asset);
 			
-			ProductSaveService saver = new ProductSaveService(ServiceLocator.getProductSerialManager(), user);
-			saver.setProduct(asset).update();
+			AssetSaveService saver = new AssetSaveService(ServiceLocator.getAssetManager(), user);
+			saver.setAsset(asset).update();
 			
 		} catch (Exception e) {
 			logger.error("Exception occured while doing a limited asset update");
@@ -704,8 +704,8 @@ public class DataServiceImpl implements DataService {
 			asset.setCustomerRefNumber(request.getCustomerRefNumber());
 			asset.setPurchaseOrder(request.getPurchaseOrder());
 			
-			ProductSaveService saver = new ProductSaveService(ServiceLocator.getProductSerialManager(), user);
-			saver.setProduct(asset).update();
+			AssetSaveService saver = new AssetSaveService(ServiceLocator.getAssetManager(), user);
+			saver.setAsset(asset).update();
 			
 			
 		} catch (Exception e) {
@@ -772,16 +772,16 @@ public class DataServiceImpl implements DataService {
 	
 	
 	private Asset lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
-		ProductManager productManager = ServiceLocator.getProductManager();
+		AssetManager assetManager = ServiceLocator.getProductManager();
 
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
 		Asset asset = null;
 		
 		if (productLookupableDto.isCreatedOnMobile()) {
-			asset = productManager.findAssetByGUID(productLookupableDto.getMobileGuid(), filter);
+			asset = assetManager.findAssetByGUID(productLookupableDto.getMobileGuid(), filter);
 		} else {
-			asset = productManager.findAssetAllFields(productLookupableDto.getId(), filter);
+			asset = assetManager.findAssetAllFields(productLookupableDto.getId(), filter);
 		}
 		
 		return asset;
@@ -812,7 +812,7 @@ public class DataServiceImpl implements DataService {
 			updateShopOrderOnProduct(asset, productDTO, orderManager, tenantId);
 			
 			// on edit, the identified by user is populated with the modified user
-			ServiceLocator.getProductSerialManager().update(asset, asset.getModifiedBy());
+			ServiceLocator.getAssetManager().update(asset, asset.getModifiedBy());
 			
 			return response;
 		} catch (Exception e) {
@@ -848,7 +848,7 @@ public class DataServiceImpl implements DataService {
 		
 		try {
 			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-			LegacyProductSerial productManager = ServiceLocator.getProductSerialManager();
+			LegacyAsset productManager = ServiceLocator.getAssetManager();
 			
 			if( isTransactionCompleted( requestInformation ) ) { 
 				return response; 
@@ -1021,7 +1021,7 @@ public class DataServiceImpl implements DataService {
 	
 	private Asset createProduct(ProductServiceDTO productDTO, Long tenantId) throws Exception {
 		PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-		LegacyProductSerial productManager = ServiceLocator.getProductSerialManager();
+		LegacyAsset productManager = ServiceLocator.getAssetManager();
 		
 		Asset asset = convertNewProduct( tenantId, productDTO );
 		
@@ -1059,7 +1059,7 @@ public class DataServiceImpl implements DataService {
 			
 			InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
 			
-			LegacyProductSerial productManager = ServiceLocator.getProductSerialManager();
+			LegacyAsset productManager = ServiceLocator.getAssetManager();
 			InspectionScheduleManager scheduleManager = ServiceLocator.getInspectionScheduleManager();
 			
 			List<Inspection> inspections = new ArrayList<Inspection>();
@@ -1140,7 +1140,7 @@ public class DataServiceImpl implements DataService {
 		
 		} catch( InspectionException e ) {
 			throw e;
-		} catch( FindProductFailure e ) {
+		} catch( FindAssetFailure e ) {
 			throw new ProductException("Could not find asset");
 		} catch (Exception e) {
 			logger.error( "failed while processing inspections", e );
@@ -1154,7 +1154,7 @@ public class DataServiceImpl implements DataService {
 		return scheduleLoader.setId(inspectionServiceDTO.getInspectionScheduleId()).setMobileGuid(inspectionServiceDTO.getInspectionScheduleMobileGuid()).load();
 	}
 
-	private void updateSubProducts(LegacyProductSerial productManager,
+	private void updateSubProducts(LegacyAsset productManager,
 			Long tenantId, Asset asset,
 			InspectionServiceDTO inspectionServiceDTO,
 			List<SubAsset> subAssets) throws SubAssetUniquenessException {
@@ -1220,13 +1220,13 @@ public class DataServiceImpl implements DataService {
 		
 		if (subProductMaps == null) return subAssets;
 		
-		ProductManager productManager = ServiceLocator.getProductManager();
+		AssetManager assetManager = ServiceLocator.getProductManager();
 		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 		
 		for (SubProductMapServiceDTO subProductMap : subProductMaps) {
 			ProductServiceDTO subProductDTO = subProductMap.getNewProduct();
 			
-			Asset asset = productManager.findAssetByGUID(subProductDTO.getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
+			Asset asset = assetManager.findAssetByGUID(subProductDTO.getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			
 			// Try by id
 			if (asset == null && subProductDTO.getId() != null && subProductDTO.getId() > 0) {
@@ -1266,7 +1266,7 @@ public class DataServiceImpl implements DataService {
 	 * The logic here is:  if the asset serial guid is not set, lookup by products unique id, if not found throw error.
 	 * If it is set, try looking up by guid, if not found then tag (create) this asset.
 	 */
-	private Asset findOrTagProduct( Long tenantId, AbstractInspectionServiceDTO inspectionServiceDTO ) throws FindProductFailure {
+	private Asset findOrTagProduct( Long tenantId, AbstractInspectionServiceDTO inspectionServiceDTO ) throws FindAssetFailure {
 		
 		Asset asset = null;
 		if( inspectionServiceDTO.productIdExists() ) {
@@ -1298,7 +1298,7 @@ public class DataServiceImpl implements DataService {
 		}
 		
 		if( asset == null ) {
-			throw new FindProductFailure( "Could not find asset." );
+			throw new FindAssetFailure( "Could not find asset." );
 		}
 		
 		return asset;
@@ -1374,7 +1374,7 @@ public class DataServiceImpl implements DataService {
 		try {	
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(requestInformation.getTenantId());			
-			NewestInspectionsForProductIdLoader loader = new NewestInspectionsForProductIdLoader(filter);
+			NewestInspectionsForAssetIdLoader loader = new NewestInspectionsForAssetIdLoader(filter);
 			RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(loader);
 			
 			List<Inspection> inspections = lookupHandler

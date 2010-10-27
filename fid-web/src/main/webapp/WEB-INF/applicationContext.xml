@@ -10,9 +10,9 @@
      
 	<!-- EJB EJBContainerS -->
 
-    <bean id="productTypeEJBContainer" class="com.n4systems.ejb.legacy.wrapper.LegacyProductTypeEJBContainer"   />
+    <bean id="productTypeEJBContainer" class="com.n4systems.ejb.legacy.wrapper.LegacyAssetTypeEJBContainer"   />
     
-    <bean id="productSerialEJBContainer" 	class="com.n4systems.ejb.legacy.wrapper.LegacyProductSerialEJBContainer"   />
+    <bean id="productSerialEJBContainer" 	class="com.n4systems.ejb.legacy.wrapper.LegacyAssetEJBContainer"   />
 
 	<bean id="optionEJBContainer"  class="com.n4systems.ejb.legacy.wrapper.OptionEJBContainer" />
     
@@ -24,7 +24,7 @@
     
     <bean id="serialNumberCounterEJBContainer"     	class="com.n4systems.ejb.legacy.wrapper.SerialNumberCounterEJBContainer"    />
     
-    <bean id="productCodeMappingEJBContainer"     	class="com.n4systems.ejb.legacy.wrapper.ProductCodeMappingEJBContainer"/>
+    <bean id="productCodeMappingEJBContainer"     	class="com.n4systems.ejb.legacy.wrapper.AssetCodeMappingEJBContainer"/>
     
     <bean id="persistenceEJBContainer" 		class="com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer"	/>
 	
@@ -44,7 +44,7 @@
     
     <bean id="orderEJBContainer"    	class="com.n4systems.ejb.wrapper.OrderManagerEJBContainer"    />
     
-    <bean id="productEJBContainer"     	class="com.n4systems.ejb.wrapper.ProductManagerEJBContainer"    />
+    <bean id="productEJBContainer"     	class="com.n4systems.ejb.wrapper.AssetManagerEJBContainer"    />
     
     <bean id="projectEJBContainer"     	class="com.n4systems.ejb.wrapper.ProjectManagerEJBContainer"    />
     
@@ -57,13 +57,13 @@
 	
 	<!-- bean id="configManager" class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer" />
 	<bean id="persistenceManager" class="com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer" />
-	<bean id="productTypeManager" class="com.n4systems.ejb.legacy.wrapper.LegacyProductTypeEJBContainer" />
-	<bean id="productSerialManager" class="com.n4systems.ejb.legacy.wrapper.LegacyProductSerialEJBContainer" />
+	<bean id="assetTypeManager" class="com.n4systems.ejb.legacy.wrapper.LegacyAssetTypeEJBContainer" />
+	<bean id="assetManager" class="com.n4systems.ejb.legacy.wrapper.LegacyAssetEJBContainer" />
 	<bean id="optionManager" class="com.n4systems.ejb.legacy.wrapper.OptionEJBContainer" />
 	<bean id="userManager" class="com.n4systems.ejb.legacy.wrapper.UserEJBContainer" />
 	<bean id="orderMappingManager" class="com.n4systems.ejb.legacy.wrapper.OrderMappingEJBContainer" />
 	<bean id="serialNumberCounterManager" class="com.n4systems.ejb.legacy.wrapper.SerialNumberCounterEJBContainer" />
-	<bean id="productCodeMappingMnager" class="com.n4systems.ejb.legacy.wrapper.ProductCodeMappingEJBContainer" />
+	<bean id="productCodeMappingMnager" class="com.n4systems.ejb.legacy.wrapper.AssetCodeMappingEJBContainer" />
 	<bean id="importManager" class="com.n4systems.importing.ImportManagerEJBContainer"/-->
     
 </beans>

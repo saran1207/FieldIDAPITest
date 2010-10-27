@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.AssetWebModel;
 import com.n4systems.fieldid.actions.asset.PublishedState;
 import com.n4systems.fieldid.actions.search.AssetSearchAction;
@@ -15,7 +16,6 @@ import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.helpers.MassUpdateProductHelper;
@@ -35,7 +35,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AssetMassUpdate.class);
 	
-	private LegacyProductSerial productSerialManager;
+	private LegacyAsset assetManager;
 	private AssetSearchContainer criteria;
 
 	private Asset asset = new Asset();
@@ -46,9 +46,9 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 	
-	public AssetMassUpdate(MassUpdateManager massUpdateManager, LegacyProductSerial productSerialManager, PersistenceManager persistenceManager) {
+	public AssetMassUpdate(MassUpdateManager massUpdateManager, LegacyAsset assetManager, PersistenceManager persistenceManager) {
 		super(massUpdateManager, persistenceManager);
-		this.productSerialManager = productSerialManager;
+		this.assetManager = assetManager;
 	}
 
 	public void prepare() throws Exception {
@@ -99,7 +99,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 			assetWebModel.fillInAsset(asset);
 			List<Long> ids = getSearchIds(criteria, criteria.getSecurityFilter());
 			
-			Long results = massUpdateManager.updateProducts(ids, asset, select, fetchCurrentUser());
+			Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
 			addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
@@ -141,7 +141,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 		if (statusId == null) {
 			asset.setAssetStatus(null);
 		} else if (asset.getAssetStatus() == null || !statusId.equals(asset.getAssetStatus().getUniqueID())) {
-			AssetStatus assetStatus = productSerialManager.findAssetStatus(statusId, getTenantId());
+			AssetStatus assetStatus = assetManager.findAssetStatus(statusId, getTenantId());
 			asset.setAssetStatus(assetStatus);
 		}
 	}
@@ -155,7 +155,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public List<AssetStatus> getAssetStatuses() {
-		return getLoaderFactory().createProductStatusListLoader().load();
+		return getLoaderFactory().createAssetStatusListLoader().load();
 	}
 	
 	public Long getAssignedUser() {

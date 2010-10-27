@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.asset;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -11,7 +12,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
@@ -38,7 +38,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	private Long subAssetIndex;
 	protected List<SubAssetHelper> subAssets;
 	protected SubAssetHelper subAsset;
-	protected LegacyProductSerial productManager;
+	protected LegacyAsset productManager;
 
 	private AllInspectionHelper allInspectionHelper;
 	
@@ -48,7 +48,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	
 	private List<Long> indexes = new ArrayList<Long>();
 
-	public SubAssetCrud(PersistenceManager persistenceManager, LegacyProductSerial productManager) {
+	public SubAssetCrud(PersistenceManager persistenceManager, LegacyAsset productManager) {
 		super(persistenceManager);
 		this.productManager = productManager;
 	}
@@ -293,7 +293,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 
 	public List<InspectionType> getInspectionTypes() {		
 		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
-		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setProductType(subAsset.getAsset().getType()).load();
+		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(subAsset.getAsset().getType()).load();
 		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
 			inspectionTypes.add(associatedInspectionType.getInspectionType());
 		}

@@ -17,7 +17,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.productstatus.ProductStatusFilteredLoader;
+import com.n4systems.model.assetstatus.AssetStatusFilteredLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.PersistenceManager;
@@ -101,7 +101,7 @@ public class AssetViewModeConverter {
 	private AssetStatus resolveAssetStatus(Long statusId) {
 		AssetStatus status = null;
 		if (statusId != null) {
-			ProductStatusFilteredLoader loader = loaderFactory.createProductStatusFilteredLoader().setId(statusId);
+			AssetStatusFilteredLoader loader = loaderFactory.createAssetStatusFilteredLoader().setId(statusId);
 			status = loader.load(transaction);
 		}
 		return status;
@@ -109,7 +109,7 @@ public class AssetViewModeConverter {
 	
 	private void resolveExtensionValues(List<AssetExtensionValueInput> assetExtentionValues, Asset asset) {
 		if (assetExtentionValues != null) {
-			List<AssetSerialExtension> extensions = loaderFactory.createProductSerialExtensionListLoader().load(transaction);
+			List<AssetSerialExtension> extensions = loaderFactory.createAssetSerialExtensionListLoader().load(transaction);
 			
 			Set<AssetSerialExtensionValue> newExtensionValues = new TreeSet<AssetSerialExtensionValue>();
 			for (AssetExtensionValueInput input : assetExtentionValues) {

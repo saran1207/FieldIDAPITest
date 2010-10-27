@@ -3,14 +3,14 @@ package com.n4systems.fieldid.actions.asset;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
-import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
@@ -26,17 +26,17 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger( AssetTypeConfigurationCrud.class );
 	
-	private LegacyProductType productTypeManager;
-	private ProductManager productManager;
+	private LegacyAssetType assetTypeManager;
+	private AssetManager assetManager;
 	private AssetType assetType;
 	
 	private List<ListingPair> assetTypes;
 	private List<ListingPair> subAssets;
 	private List<Long> subAssetIds = new ArrayList<Long>();
-	public AssetTypeConfigurationCrud( LegacyProductType productTypeManager, PersistenceManager persistenceManager, ProductManager productManager ) {
+	public AssetTypeConfigurationCrud( LegacyAssetType assetTypeManager, PersistenceManager persistenceManager, AssetManager assetManager) {
 		super(persistenceManager);
-		this.productTypeManager = productTypeManager;
-		this.productManager = productManager;
+		this.assetTypeManager = assetTypeManager;
+		this.assetManager = assetManager;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields( Long uniqueId ) {
-		assetType =  getLoaderFactory().createProductTypeLoader().setId(uniqueId).setStandardPostFetches().load();
+		assetType =  getLoaderFactory().createAssetTypeLoader().setId(uniqueId).setStandardPostFetches().load();
 	}
 
 	@SkipValidation
@@ -85,7 +85,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 				assetType.getSubTypes().addAll( persistenceManager.findAll( subTypeQuery ) );
 			}
 			
-			assetType = productTypeManager.updateProductType(assetType);
+			assetType = assetTypeManager.updateAssetType(assetType);
 			addFlashMessage( getText( "message.assetconfigurationsaved" ) );
 		} catch ( Exception e ) {
 			logger.error( "could not update the asset configuration", e );
@@ -105,7 +105,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 
 	public List<ListingPair> getAssetTypes() {
 		if( assetTypes == null ) {
-			assetTypes = productManager.getAllowedSubTypes( getSecurityFilter(), assetType);
+			assetTypes = assetManager.getAllowedSubTypes( getSecurityFilter(), assetType);
 			List<ListingPair> typesToBeRemoved = new ArrayList<ListingPair>();
 			for( ListingPair type : assetTypes) {
 				for( Long id : subAssetIds) {
@@ -123,7 +123,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 	public List<ListingPair> getSubAssets() {
 		if( subAssets == null ) {
 			subAssets = new ArrayList<ListingPair>();
-			for( ListingPair type : productManager.getAllowedSubTypes( getSecurityFilter(), assetType) ) {
+			for( ListingPair type : assetManager.getAllowedSubTypes( getSecurityFilter(), assetType) ) {
 				for( Long id : subAssetIds) {
 					if( id != null && id.equals( type.getId() ) ) {
 						subAssets.add( type );
@@ -147,11 +147,11 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 	
 	public boolean isParentType( Long typeId ) {
 		
-		return  !productManager.getAllowedSubTypes( getSecurityFilter(), assetType).contains( new ListingPair( typeId, "placeholder" ) ) ;
+		return  !assetManager.getAllowedSubTypes( getSecurityFilter(), assetType).contains( new ListingPair( typeId, "placeholder" ) ) ;
 		
 	}
 	
 	public boolean isPartOfMasterAsset() {
-		return productManager.partOfAMasterAsset( uniqueID );
+		return assetManager.partOfAMasterAsset( uniqueID );
 	}
 }

@@ -53,8 +53,8 @@ public abstract class NotificationSettingInspectionScheduleCountListLoader exten
 		 * NOTE: only a single producttype and inspectiontype are allowed via the interface.  If we have one
 		 * we will use it directly (rather then an in-list)
 		 */
-		if (!notification.getProductTypes().isEmpty()) {
-			builder.addSimpleWhere("asset.type.id", notification.getProductTypes().get(0));
+		if (!notification.getAssetTypes().isEmpty()) {
+			builder.addSimpleWhere("asset.type.id", notification.getAssetTypes().get(0));
 		}
 		
 		if (!notification.getInspectionTypes().isEmpty()) {

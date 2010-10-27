@@ -60,7 +60,7 @@ public class InspectionTypeArchiveHandlerImplTest extends TestUsesTransactionBas
 		InspectionTypeArchiveSummary summary = sut.forInspectionType(inspectionTypeToDelete).summary(mockTransaction);
 		
 		assertTrue(summary.canBeRemoved());
-		assertEquals(new Long(0), summary.getRemoveFromProductTypes());
+		assertEquals(new Long(0), summary.getRemoveFromAssetTypes());
 		verify(mockListDeleter);
 		verify(mockAssociatedInspectionTypeListDeleteHandler);
 		verify(mockCatalogElementRemovalHandler);
@@ -136,7 +136,7 @@ public class InspectionTypeArchiveHandlerImplTest extends TestUsesTransactionBas
 		InspectionTypeArchiveSummary summary = sut.forInspectionType(inspectionTypeToDelete).summary(mockTransaction);
 		
 		assertTrue(summary.canBeRemoved());
-		assertEquals(new Long(1), summary.getRemoveFromProductTypes());
+		assertEquals(new Long(1), summary.getRemoveFromAssetTypes());
 		assertEquals(new Long(0), summary.getInspectionArchiveSummary().getDeleteInspections());
 		verify(mockInspectionListDeleter);
 		verify(mockAssociatedInspectionTypeListDeleteHandler);

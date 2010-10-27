@@ -4,14 +4,14 @@ import java.util.Set;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyProductType;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.producttype.AssetTypeScheduleSaver;
+import com.n4systems.model.assettype.AssetTypeScheduleSaver;
+import com.n4systems.services.safetyNetwork.catalog.CatalogAssetTypeGroupImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogInspectionTypeGroupHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogInspectionTypeImportHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogProductTypeGroupImportHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogProductTypeImportHandler;
-import com.n4systems.services.safetyNetwork.catalog.CatalogProductTypeRelationshipsImportHandler;
+import com.n4systems.services.safetyNetwork.catalog.CatalogAssetTypeImportHandler;
+import com.n4systems.services.safetyNetwork.catalog.CatalogAssetTypeRelationshipsImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.CatalogStateSetsImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
@@ -19,26 +19,25 @@ import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 
 public class ImportCatalogService {
 
-	private final CatalogProductTypeRelationshipsImportHandler importProductTypeInspectionTypeRelations;
-	private final CatalogProductTypeGroupImportHandler importProductTypeGroup;
-	private final CatalogProductTypeImportHandler importProductType;
+	private final CatalogAssetTypeRelationshipsImportHandler importAssetTypeInspectionTypeRelations;
+	private final CatalogAssetTypeGroupImportHandler importAssetTypeGroup;
+	private final CatalogAssetTypeImportHandler importAssetType;
 	private final CatalogInspectionTypeImportHandler importInspectionType;
 	private final CatalogInspectionTypeGroupHandler importInspectionTypeGroup;
 	private final CatalogStateSetsImportHandler importStateSets;
-	private Set<Long> importProductTypeIds;
+	private Set<Long> importAssetTypeIds;
 	private Set<Long> importInspectionTypeIds;
 	private boolean importAllRelations = false;
 	private CatalogImportSummary summary = new CatalogImportSummary();
 	
 	
-	public ImportCatalogService(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, LegacyProductType legacyProductTypeManager) {
-		super();
-		importProductType = new CatalogProductTypeImportHandler(persistenceManager, primaryOrg.getTenant(), importCatalog, legacyProductTypeManager, summary.getAssetTypeImportSummary());
+	public ImportCatalogService(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, LegacyAssetType legacyAssetTypeManager) {
+		importAssetType = new CatalogAssetTypeImportHandler(persistenceManager, primaryOrg.getTenant(), importCatalog, legacyAssetTypeManager, summary.getAssetTypeImportSummary());
 		importInspectionType = new CatalogInspectionTypeImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getInspectionTypeImportSummary());
 		importInspectionTypeGroup = new CatalogInspectionTypeGroupHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getInspectionTypeGroupImportSummary());
 		importStateSets = new CatalogStateSetsImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getStateSetImportSummary());
-		importProductTypeGroup = new CatalogProductTypeGroupImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getAssetTypeGroupImportSummary());
-		importProductTypeInspectionTypeRelations = new CatalogProductTypeRelationshipsImportHandler(persistenceManager, primaryOrg, importCatalog, new AssetTypeScheduleSaver(), summary.getProductTypeRelationshipsImportSummary());
+		importAssetTypeGroup = new CatalogAssetTypeGroupImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getAssetTypeGroupImportSummary());
+		importAssetTypeInspectionTypeRelations = new CatalogAssetTypeRelationshipsImportHandler(persistenceManager, primaryOrg, importCatalog, new AssetTypeScheduleSaver(), summary.getAssetTypeRelationshipsImportSummary());
 	}
 	
 	
@@ -56,30 +55,30 @@ public class ImportCatalogService {
 
 
 	private void importCatalog() throws ImportFailureException {
-		importProductTypeGroup.setProductTypeIds(importProductTypeIds).importCatalog();
-		importProductType.setAssetGroupMapping(importProductTypeGroup.getImportMapping()).setImportAssetTypeIds(importProductTypeIds).importCatalog();
+		importAssetTypeGroup.setAssetTypeIds(importAssetTypeIds).importCatalog();
+		importAssetType.setAssetGroupMapping(importAssetTypeGroup.getImportMapping()).setImportAssetTypeIds(importAssetTypeIds).importCatalog();
 		importInspectionTypeGroup.setInspectionTypeIds(importInspectionTypeIds).importCatalog();
 		importStateSets.setInspectionTypeIds(importInspectionTypeIds).importCatalog();
 		importInspectionType.setOriginalInspectionTypeIds(importInspectionTypeIds).setImportedGroupMapping(importInspectionTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).importCatalog();
 
 		if (importAllRelations) {
-			importProductTypeInspectionTypeRelations.setImportedProductTypeMapping(importProductType.getImportedMap()).setImportedInspectionTypeMapping(importInspectionType.getImportMapping()).importCatalog();
+			importAssetTypeInspectionTypeRelations.setImportedAssetTypeMapping(importAssetType.getImportedMap()).setImportedInspectionTypeMapping(importInspectionType.getImportMapping()).importCatalog();
 		}
 	}
 
 
 	private void rollback() {
-		importProductType.rollback();
+		importAssetType.rollback();
 		importInspectionType.rollback();
 		importInspectionTypeGroup.rollback();
 		importStateSets.rollback();
-		importProductTypeGroup.rollback();
+		importAssetTypeGroup.rollback();
 	}
 	
 	public CatalogImportSummary importSelectionSummary() {
 		adjustWhatToImport();
-		importProductTypeGroup.getSummaryForImport(importProductTypeIds);
-		importProductType.getSummaryForImport(importProductTypeIds);
+		importAssetTypeGroup.getSummaryForImport(importAssetTypeIds);
+		importAssetType.getSummaryForImport(importAssetTypeIds);
 		importInspectionType.getSummaryForImport(importInspectionTypeIds);
 		importInspectionTypeGroup.getSummaryForImport(importInspectionTypeIds);
 		importStateSets.getSummaryForImport(importInspectionTypeIds);
@@ -88,19 +87,19 @@ public class ImportCatalogService {
 
 
 	private void adjustWhatToImport() {
-		importProductTypeIds.addAll(importProductType.getAdditionalAssetTypes(importProductTypeIds));
+		importAssetTypeIds.addAll(importAssetType.getAdditionalAssetTypes(importAssetTypeIds));
 		if (importAllRelations) {
-			importInspectionTypeIds.addAll(importProductTypeInspectionTypeRelations.getAdditionalInspectionTypesForRelationships(importProductTypeIds, importInspectionTypeIds));
+			importInspectionTypeIds.addAll(importAssetTypeInspectionTypeRelations.getAdditionalInspectionTypesForRelationships(importAssetTypeIds, importInspectionTypeIds));
 		}
 	}
 	
 	
-	public Set<Long> getImportProductTypeIds() {
-		return importProductTypeIds;
+	public Set<Long> getImportAssetTypeIds() {
+		return importAssetTypeIds;
 	}
 
-	public void setImportProductTypeIds(Set<Long> importProductTypeIds) {
-		this.importProductTypeIds = importProductTypeIds;
+	public void setImportAssetTypeIds(Set<Long> importAssetTypeIds) {
+		this.importAssetTypeIds = importAssetTypeIds;
 	}
 
 	public Set<Long> getImportInspectionTypeIds() {

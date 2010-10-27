@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -12,7 +13,6 @@ import rfid.ejb.entity.AssetStatus;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonProductAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
@@ -44,21 +44,21 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	public InspectionScheduleAction(
 			final PersistenceManager persistenceManager, 
 			final InspectionManager inspectionManager, 
-			final ProductManager productManager,
+			final AssetManager assetManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
-		this(SCHEDULE_CRITERIA, InspectionScheduleAction.class, persistenceManager, inspectionManager, productManager, inspectionScheduleManager);
+		this(SCHEDULE_CRITERIA, InspectionScheduleAction.class, persistenceManager, inspectionManager, assetManager, inspectionScheduleManager);
 	}
 	
 	
 	public <T extends CustomizableSearchAction<InspectionScheduleSearchContainer>>InspectionScheduleAction(String sessionKey, Class<T> implementingClass,
 			final PersistenceManager persistenceManager, 
 			final InspectionManager inspectionManager, 
-			final ProductManager productManager,
+			final AssetManager assetManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
 		super(implementingClass, sessionKey, "Inspection Schedule Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(productManager), "inspection_schedule_search", "asset"));
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonProductAttributeFinder(assetManager), "inspection_schedule_search", "asset"));
 		
 		this.inspectionManager = inspectionManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
@@ -123,7 +123,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	
 	public List<ListingPair> getAssetStatuses() {
 		List<ListingPair> psList = new ArrayList<ListingPair>();
-		for(AssetStatus assetStatus : getLoaderFactory().createProductStatusListLoader().load()) {
+		for(AssetStatus assetStatus : getLoaderFactory().createAssetStatusListLoader().load()) {
 			psList.add(new ListingPair(assetStatus.getUniqueID(), assetStatus.getName()));
 		}
 		return psList;
@@ -147,7 +147,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	}
 	
 	public Long getAssetIdForInspectionScheduleId(String inspectionScheduleId) {
-		return inspectionScheduleManager.getProductIdForSchedule(Long.valueOf(inspectionScheduleId));
+		return inspectionScheduleManager.getAssetIdForSchedule(Long.valueOf(inspectionScheduleId));
 	}
 	
 	public Long getInspectionTypeIdForInspectionScheduleId(String inspectionScheduleId) {

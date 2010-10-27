@@ -5,26 +5,26 @@ import java.util.List;
 
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.model.Asset;
-import com.n4systems.model.product.AssetAttachment;
-import com.n4systems.model.safetynetwork.ProductsByNetworkIdLoader;
+import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentListLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.ProjectManager;
-import com.n4systems.ejb.legacy.LegacyProductSerial;
-import com.n4systems.ejb.legacy.LegacyProductType;
-import com.n4systems.model.safetynetwork.SafetyNetworkProductAttachmentListLoader;
+import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 
 public class TraceabilityCrud extends AssetCrud {
 
 	private boolean networkProduct;
 
-	public TraceabilityCrud(LegacyProductType productTypeManager, LegacyProductSerial legacyProductSerialManager, PersistenceManager persistenceManager, 
-			AssetCodeMappingService assetCodeMappingServiceManager, ProductManager productManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
-		super(productTypeManager, legacyProductSerialManager, persistenceManager, assetCodeMappingServiceManager, productManager, orderManager, projectManager, inspectionScheduleManager);
+	public TraceabilityCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
+			AssetCodeMappingService assetCodeMappingServiceManager, AssetManager assetManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
+		super(assetTypeManager, legacyAssetManager, persistenceManager, assetCodeMappingServiceManager, assetManager, orderManager, projectManager, inspectionScheduleManager);
 	}
 	
 		
@@ -34,23 +34,23 @@ public class TraceabilityCrud extends AssetCrud {
 		
 		testExistingAsset();
 		
-		ProductsByNetworkIdLoader loader = getLoaderFactory().createProductsByNetworkIdLoader();
+		AssetsByNetworkIdLoader loader = getLoaderFactory().createAssetsByNetworkIdLoader();
 		loader.setNetworkId(asset.getNetworkId());
 		
 		if (!isInVendorContext()) {
 			// in a vendor context, we show the asset since they don't get the "show" tab right now
-			loader.setExcludeProductId(asset.getId());
+			loader.setExcludeAssetId(asset.getId());
 		}
 		
 		linkedAssets = loader.load();
 		
 		// let's populate our asset attachment map
-		SafetyNetworkProductAttachmentListLoader attachmentLoader = getLoaderFactory().createSafetyNetworkProductAttachmentListLoader();
+		SafetyNetworkAssetAttachmentListLoader attachmentLoader = getLoaderFactory().createSafetyNetworkAssetAttachmentListLoader();
 		attachmentLoader.setNetworkId(asset.getNetworkId());
 		
 		linkedAssetAttachments = new HashMap<Long, List<AssetAttachment>>();
 		for (Asset linkedProd: linkedAssets) {
-			attachmentLoader.setProductId(linkedProd.getId());
+			attachmentLoader.setAssetId(linkedProd.getId());
 			linkedAssetAttachments.put(linkedProd.getId(), attachmentLoader.load());
 		}
 		

@@ -14,11 +14,11 @@ public class DownloadSafetyNetworkAssetTypeAttachedFile extends DownloadAssetTyp
 
 	@Override
 	protected FileAttachment loadFileAttachment() {
-		return getLoaderFactory().createSafetyNetworkAttachmentLoader().setId(attachmentID).setProductNetworkId(assetNetworkId).load();
+		return getLoaderFactory().createSafetyNetworkAttachmentLoader().setId(attachmentID).setAssetNetworkId(assetNetworkId).load();
 	}
 	
 	protected Long loadAssetTypeId() {
-		return getLoaderFactory().createProductTypeByAttachmentLoader().setAttachmentId(attachmentID).load();
+		return getLoaderFactory().createAssetTypeByAttachmentLoader().setAttachmentId(attachmentID).load();
 	}
 	
 	@Override

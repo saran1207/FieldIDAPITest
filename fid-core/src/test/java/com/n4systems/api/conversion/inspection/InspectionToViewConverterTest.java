@@ -29,11 +29,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 //			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
-			protected void convertProductStatus(Inspection model, InspectionView view) {}
+			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -56,11 +56,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 //			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
-			protected void convertProductStatus(Inspection model, InspectionView view) {}
+			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -77,11 +77,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-//			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+//			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
-			protected void convertProductStatus(Inspection model, InspectionView view) {}
+			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -98,10 +98,10 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
-			protected void convertProductStatus(Inspection model, InspectionView view) {}
+			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -126,11 +126,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(loader) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 //			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
-			protected void convertProductStatus(Inspection model, InspectionView view) {}
+			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -146,11 +146,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 //			protected void convertBook(Inspection model, InspectionView view) {}
-			protected void convertProductStatus(Inspection model, InspectionView view) {}
+			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -170,11 +170,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 //			protected void convertBook(Inspection model, InspectionView view) {}
-			protected void convertProductStatus(Inspection model, InspectionView view) {}
+			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -188,11 +188,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
-//			protected void convertProductStatus(Inspection model, InspectionView view) {}
+//			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -212,11 +212,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
-//			protected void convertProductStatus(Inspection model, InspectionView view) {}
+//			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
@@ -230,11 +230,11 @@ public class InspectionToViewConverterTest {
 		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
 			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
-			protected void convertProductIdentifier(Inspection model, InspectionView view) {}
+			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
 			protected void converterPerformedBy(Inspection model, InspectionView view) {}
 			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Inspection model, InspectionView view) {}
-			protected void convertProductStatus(Inspection model, InspectionView view) {}
+			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 //			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		

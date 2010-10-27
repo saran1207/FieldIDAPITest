@@ -32,7 +32,7 @@ import com.n4systems.model.Status;
 import com.n4systems.model.SubInspection;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.producttype.AssetTypeLoader;
+import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.loaders.LoaderFactory;

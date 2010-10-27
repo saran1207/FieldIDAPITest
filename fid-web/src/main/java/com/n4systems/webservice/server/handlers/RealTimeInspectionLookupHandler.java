@@ -5,22 +5,22 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.model.Inspection;
-import com.n4systems.model.inspection.NewestInspectionsForProductIdLoader;
+import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
 
 public class RealTimeInspectionLookupHandler {
 
-	private final NewestInspectionsForProductIdLoader loader;
+	private final NewestInspectionsForAssetIdLoader loader;
 	
 	private long productId;
 	private Date lastInspectionDate;
 	private List<Inspection> inspections;
 	
-	public RealTimeInspectionLookupHandler(NewestInspectionsForProductIdLoader loader) {
+	public RealTimeInspectionLookupHandler(NewestInspectionsForAssetIdLoader loader) {
 		this.loader = loader;
 	}
 	
 	public List<Inspection> lookup() {
-		inspections = loader.setProductId(productId).load();
+		inspections = loader.setAssetId(productId).load();
 		clearListIfInspectionNotNewer();
 		return inspections;
 	}

@@ -47,7 +47,7 @@ public class AssociatedInspectionTypesLoader extends ListLoader<AssociatedInspec
 		return query;
 	}
 
-	public AssociatedInspectionTypesLoader setProductType(AssetType assetType) {
+	public AssociatedInspectionTypesLoader setAssetType(AssetType assetType) {
 		this.assetType = assetType;
 		return this;
 	}

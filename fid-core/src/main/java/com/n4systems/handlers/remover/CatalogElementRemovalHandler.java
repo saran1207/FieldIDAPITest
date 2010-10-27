@@ -10,6 +10,6 @@ public interface CatalogElementRemovalHandler {
 
 	public abstract CatalogElementRemovalHandler setInspectionType(InspectionType inspectionType);
 
-	public abstract CatalogElementRemovalHandler setProductType(AssetType assetType);
+	public abstract CatalogElementRemovalHandler setAssetType(AssetType assetType);
 
 }

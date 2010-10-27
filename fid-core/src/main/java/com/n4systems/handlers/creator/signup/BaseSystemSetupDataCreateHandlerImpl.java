@@ -1,6 +1,7 @@
 package com.n4systems.handlers.creator.signup;
 
-import com.n4systems.model.producttype.AssetTypeSaver;
+import com.n4systems.model.assetstatus.AssetStatusSaver;
+import com.n4systems.model.assettype.AssetTypeSaver;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;
@@ -12,7 +13,6 @@ import com.n4systems.model.Status;
 import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
-import com.n4systems.model.productstatus.ProductStatusSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 import com.n4systems.persistence.Transaction;
@@ -24,16 +24,16 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 	private final AssetTypeSaver assetTypeSaver;
 	private final InspectionTypeGroupSaver inspectionTypeGroupSaver;
 	private final StateSetSaver stateSetSaver;
-	private final ProductStatusSaver productStatusSaver;
+	private final AssetStatusSaver assetStatusSaver;
 	
 	private Tenant tenant;
 
-	public BaseSystemSetupDataCreateHandlerImpl(TagOptionSaver tagSaver, AssetTypeSaver assetTypeSaver, InspectionTypeGroupSaver inspectionTypeGroupSaver, StateSetSaver stateSetSaver, ProductStatusSaver productStatusSaver) {
+	public BaseSystemSetupDataCreateHandlerImpl(TagOptionSaver tagSaver, AssetTypeSaver assetTypeSaver, InspectionTypeGroupSaver inspectionTypeGroupSaver, StateSetSaver stateSetSaver, AssetStatusSaver assetStatusSaver) {
 		this.tagSaver = tagSaver;
 		this.assetTypeSaver = assetTypeSaver;
 		this.inspectionTypeGroupSaver = inspectionTypeGroupSaver;
 		this.stateSetSaver = stateSetSaver;
-		this.productStatusSaver = productStatusSaver;
+		this.assetStatusSaver = assetStatusSaver;
 	}
 	
 	public void create(Transaction transaction) {
@@ -42,28 +42,28 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		}
 
 		createDefaultTagOptions(transaction);
-		createDefaultProductType(transaction);
+		createDefaultAssetType(transaction);
 		createDefaultInspectionTypeGroups(transaction);
 		createDefaultStateSets(transaction);
-		createDefaultProductStatuses(transaction);
+		createDefaultAssetStatuses(transaction);
 	}
 
 	private boolean invalidTenant() {
 		return tenant == null || tenant.isNew();
 	}
 	
-	private void createDefaultProductStatuses(Transaction transaction) {
+	private void createDefaultAssetStatuses(Transaction transaction) {
 		for (String psName: DEFAULT_ASSET_STATUS_NAMES) {
-			createProductStatus(transaction, psName);
+			createAssetStatus(transaction, psName);
 		}
 	}
 	
-	public void createProductStatus(Transaction transaction, String name) {
+	public void createAssetStatus(Transaction transaction, String name) {
 		AssetStatus pStatus = new AssetStatus();
 		pStatus.setTenant(tenant);
 		pStatus.setName(name);
 		
-		productStatusSaver.save(transaction, pStatus);
+		assetStatusSaver.save(transaction, pStatus);
 	}
 	
 	private void createDefaultTagOptions(Transaction transaction) {
@@ -74,7 +74,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		tagSaver.save(transaction, tagOption);
 	}
 
-	private void createDefaultProductType(Transaction transaction) {
+	private void createDefaultAssetType(Transaction transaction) {
 		AssetType assetType = new AssetType();
 		assetType.setTenant(tenant);
 		assetType.setName("*");

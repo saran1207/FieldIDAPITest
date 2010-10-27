@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.impl.LegacyProductSerialManager;
+import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.ProcessingProofTestException;
@@ -60,7 +60,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.lastInspectionFinder = new EntityManagerLastInspectionDateFinder(persistenceManager, em);
 		this.inspectionScheduleManager = new InspectionScheduleManagerImpl(em);
-		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyProductSerialManager(em), 
+		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyAssetManager(em),
 				persistenceManager, em, lastInspectionFinder);
 	}
 
@@ -149,7 +149,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		return inspection;
 	}
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
+	public List<Inspection> findInspectionsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		
 
 		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
@@ -182,7 +182,7 @@ public class InspectionManagerImpl implements InspectionManager {
 	public Inspection retireInspection(Inspection inspection, Long userId) {
 		inspection.retireEntity();
 		inspection = persistenceManager.update(inspection, userId);
-		inspectionSaver.updateProductInspectionDate(inspection.getAsset());
+		inspectionSaver.updateAssetInspectionDate(inspection.getAsset());
 		inspection.setAsset(persistenceManager.update(inspection.getAsset()));
 		inspectionScheduleManager.restoreScheduleForInspection(inspection);
 		return inspection;

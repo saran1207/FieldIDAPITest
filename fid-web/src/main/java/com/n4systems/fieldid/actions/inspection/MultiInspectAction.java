@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.inspectiontype.CommonAssetTypeDatabaseLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -25,7 +26,6 @@ import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.inspectiontype.CommonProductTypeDatabaseLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
@@ -99,7 +99,7 @@ public class MultiInspectAction extends AbstractCrud {
 	}
 
 	private CommonInspectionTypeHandler createCommonInspectionTypeHandler() {
-		return new LoaderBackedCommonInspectionTypeHandler(new CommonProductTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()));
+		return new LoaderBackedCommonInspectionTypeHandler(new CommonAssetTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()));
 	}
 
 	@SkipValidation
@@ -195,7 +195,7 @@ public class MultiInspectAction extends AbstractCrud {
 
 	public List<AssetStatus> getAssetStatuses() {
 		if (assetStatuses == null) {
-			assetStatuses = getLoaderFactory().createProductStatusListLoader().load();
+			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
 		}
 		return assetStatuses;
 	}

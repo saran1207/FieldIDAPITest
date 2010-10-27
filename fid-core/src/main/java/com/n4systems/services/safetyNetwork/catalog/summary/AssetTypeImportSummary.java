@@ -21,8 +21,8 @@ public class AssetTypeImportSummary extends BaseImportSummary {
 		return sum;
 	}
 
-	public void setAutoAttributeCountFor(Long productTypeId, Long autoAttributeCount) {
-		autoAttributesToImport.put(productTypeId, autoAttributeCount);
+	public void setAutoAttributeCountFor(Long assetTypeId, Long autoAttributeCount) {
+		autoAttributesToImport.put(assetTypeId, autoAttributeCount);
 	}
 
 	public Map<Long, AssetType> getImportMapping() {

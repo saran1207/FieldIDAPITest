@@ -40,11 +40,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public int countProductsTagged(LineItem lineItem) {
+	public int countAssetsTagged(LineItem lineItem) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).countProductsTagged(lineItem);
+			return createManager(transaction.getEntityManager()).countAssetsTagged(lineItem);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

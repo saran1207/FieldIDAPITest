@@ -2,9 +2,9 @@ package com.n4systems.taskscheduling.task;
 
 import java.util.concurrent.TimeUnit;
 
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.legacy.LegacyProductType;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 
@@ -18,11 +18,11 @@ public class InfoOptionCleanerTask extends ScheduledTask {
 
 	@Override
     protected void runTask() throws Exception {
-		LegacyProductType productTypeManager = ServiceLocator.getProductType();
+		LegacyAssetType assetTypeManager = ServiceLocator.getProductType();
 
 		int page = 1 ;
 		int pageSize = 100;
-		while( productTypeManager.cleanInfoOptions( page , pageSize ) ) {
+		while( assetTypeManager.cleanInfoOptions( page , pageSize ) ) {
 			page++;
 		}
     }

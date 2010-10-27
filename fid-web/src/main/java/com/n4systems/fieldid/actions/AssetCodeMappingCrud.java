@@ -187,7 +187,7 @@ public class AssetCodeMappingCrud extends AbstractCrud {
 	public void setAssetType(Long assetTypeId ) {
 		AssetType assetType = null ;
 		if( assetTypeId != null ) {
-			assetType =  getLoaderFactory().createProductTypeLoader().setId(assetTypeId).setStandardPostFetches().load();
+			assetType =  getLoaderFactory().createAssetTypeLoader().setId(assetTypeId).setStandardPostFetches().load();
 		}
 		this.assetCodeMapping.setAssetInfo(assetType);
 	}

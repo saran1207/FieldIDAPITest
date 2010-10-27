@@ -5,7 +5,7 @@ import java.util.List;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.product.SmartSearchWhereClause;
+import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;

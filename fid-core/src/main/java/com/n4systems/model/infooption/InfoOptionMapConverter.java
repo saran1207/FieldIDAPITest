@@ -40,7 +40,7 @@ public class InfoOptionMapConverter {
 		}
 	}
 	
-	public List<InfoOptionBean> convertProductAttributes(Map<String, String> optionMap, AssetType type) throws MissingInfoOptionException, StaticOptionResolutionException {
+	public List<InfoOptionBean> convertAssetAttributes(Map<String, String> optionMap, AssetType type) throws MissingInfoOptionException, StaticOptionResolutionException {
 		return toList(optionMap, type.getInfoFields(), true, true, true);
 	}
 	

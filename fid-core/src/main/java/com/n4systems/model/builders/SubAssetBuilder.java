@@ -14,17 +14,17 @@ public class SubAssetBuilder extends BaseBuilder<SubAsset> {
 		return new SubAssetBuilder(anAsset().build(), anAsset().build());
 	}
 	
-	public SubAssetBuilder(Asset product, Asset masterAsset) {
-		this.asset = product;
+	public SubAssetBuilder(Asset asset, Asset masterAsset) {
+		this.asset = asset;
 		this.masterAsset = masterAsset;
 	}
 	
-	public SubAssetBuilder withMasterProduct(Asset masterAsset) {
+	public SubAssetBuilder withMasterAsset(Asset masterAsset) {
 		return new SubAssetBuilder(asset, masterAsset);
 	}
 	
-	public SubAssetBuilder containingProduct(Asset product) {
-		return new SubAssetBuilder(product, masterAsset);
+	public SubAssetBuilder containingAsset(Asset asset) {
+		return new SubAssetBuilder(asset, masterAsset);
 	}
 	
 	@Override

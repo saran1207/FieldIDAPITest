@@ -3,17 +3,17 @@ package com.n4systems.fieldid.actions.downloaders;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.model.Asset;
-import com.n4systems.model.safetynetwork.ProductsByNetworkIdLoader;
+import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
+import com.n4systems.reporting.AssetCertificateGenerator;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.ProductManager;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.reporting.CertificatePrinter;
-import com.n4systems.reporting.ProductCertificateGenerator;
 
 public class DownloadManufacturerCert extends DownloadAction {
 
@@ -21,28 +21,28 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	private static final long serialVersionUID = 1L;
 
-	private ProductManager productManager;
+	private AssetManager assetManager;
 	private Asset asset;
-	private ProductCertificateGenerator certGen;
+	private AssetCertificateGenerator certGen;
 
 	private long linkedProductId;
 
-	public DownloadManufacturerCert(ProductManager productManager, PersistenceManager persistenceManager) {
+	public DownloadManufacturerCert(AssetManager assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.productManager = productManager;
-		this.certGen = new ProductCertificateGenerator();
+		this.assetManager = assetManager;
+		this.certGen = new AssetCertificateGenerator();
 	}
 
 	public String doDownloadLinked() {
 
-		Asset ownedProduct = productManager.findAsset(uniqueID, getSecurityFilter());
+		Asset ownedProduct = assetManager.findAsset(uniqueID, getSecurityFilter());
 
 		if (ownedProduct == null) {
 			addActionError(getText("error.noasset"));
 			return MISSING;
 		}
 
-		ProductsByNetworkIdLoader loader = new ProductsByNetworkIdLoader(getSecurityFilter());
+		AssetsByNetworkIdLoader loader = new AssetsByNetworkIdLoader(getSecurityFilter());
 		loader.setNetworkId(ownedProduct.getNetworkId());
 		
 		List<Asset> linkedAssets = loader.load();
@@ -57,7 +57,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 	}
 
     public String doDownloadSafetyNetwork() {
-        asset = getLoaderFactory().createSafetyNetworkProductLoader().setProductId(uniqueID).withAllFields().load();
+        asset = getLoaderFactory().createSafetyNetworkAssetLoader().setAssetId(uniqueID).withAllFields().load();
 
 		if (asset == null) {
 			addActionError(getText("error.noasset"));
@@ -69,7 +69,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	@Override
 	public String doDownload() {
-		asset = productManager.findAssetAllFields(uniqueID, getSecurityFilter());
+		asset = assetManager.findAssetAllFields(uniqueID, getSecurityFilter());
 
 		if (asset == null) {
 			addActionError(getText("error.noasset"));

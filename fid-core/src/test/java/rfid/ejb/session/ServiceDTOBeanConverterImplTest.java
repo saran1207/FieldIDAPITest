@@ -392,7 +392,7 @@ public class ServiceDTOBeanConverterImplTest {
 		model.setAutoAttributes	(new Date(1245703228000L));
 		model.setInspectionTypes(new Date(1245603228000L));
 		model.setOwners			(new Date(1245503228000L));
-		model.setProductTypes	(new Date(1245403228000L));
+		model.setAssetTypes(new Date(1245403228000L));
 		model.setLocations		(new Date(1245403228000L));
 		
 		SetupDataLastModDatesServiceDTO dto = converter.convert(model);
@@ -400,7 +400,7 @@ public class ServiceDTOBeanConverterImplTest {
 		assertEquals(model.getAutoAttributes(), dto.getAutoAttributes());
 		assertEquals(model.getInspectionTypes(), dto.getInspectionTypes());
 		assertEquals(model.getOwners(), dto.getOwners());
-		assertEquals(model.getProductTypes(), dto.getProductTypes());
+		assertEquals(model.getAssetTypes(), dto.getProductTypes());
 		assertEquals(model.getLocations(), dto.getLocations());
 	}
 }

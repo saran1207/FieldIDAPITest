@@ -16,22 +16,22 @@ import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.utils.LazyLoadingList;
-import com.n4systems.reporting.ProductCertificateReportGenerator;
+import com.n4systems.reporting.AssetCertificateReportGenerator;
 
 public class PrintAllAssetCertificatesTask extends DownloadTask {
-	private final ProductCertificateReportGenerator certGen;
+	private final AssetCertificateReportGenerator certGen;
 	private final FilteredIdLoader<Asset> productLoader;
 	
 	private List<Long> productIdList;
 	
-	public PrintAllAssetCertificatesTask(DownloadLink downloadLink, String downloadUrl, ProductCertificateReportGenerator certGen, FilteredIdLoader<Asset> productLoader) {
+	public PrintAllAssetCertificatesTask(DownloadLink downloadLink, String downloadUrl, AssetCertificateReportGenerator certGen, FilteredIdLoader<Asset> productLoader) {
 		super(downloadLink, downloadUrl, "printAllAssetCerts");
 		this.certGen = certGen;
 		this.productLoader = productLoader;
 	}
 	
 	public PrintAllAssetCertificatesTask(DownloadLink downloadLink, String downloadUrl) {
-		this(downloadLink, downloadUrl, new ProductCertificateReportGenerator(), new FilteredIdLoader<Asset>(downloadLink.getUser().getSecurityFilter(), Asset.class));
+		this(downloadLink, downloadUrl, new AssetCertificateReportGenerator(), new FilteredIdLoader<Asset>(downloadLink.getUser().getSecurityFilter(), Asset.class));
 	}
 	
 	@Override

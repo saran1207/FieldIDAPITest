@@ -21,7 +21,7 @@ import com.n4systems.webservice.dto.WSSearchCritiera;
 public interface InspectionManager {
 
 
-	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long productId, String... postFetchFields);
+	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields);
 
 	public SubInspection findSubInspection(Long subInspectionId, SecurityFilter filter);
 
@@ -33,7 +33,7 @@ public interface InspectionManager {
 
 	public Date findLastInspectionDate(Long scheduleId);
 
-	public List<Inspection> findInspectionsByDateAndProduct(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter);
+	public List<Inspection> findInspectionsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter);
 
 	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize);
 	

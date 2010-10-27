@@ -16,7 +16,7 @@ import com.n4systems.mail.MailManager;
 import com.n4systems.model.Inspection;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredProductInspectionLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetInspectionLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.PersistenceManager;
@@ -40,7 +40,7 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 	}
 	
 	public PrintAllInspectionCertificatesTask(DownloadLink downloadLink, String downloadUrl) {
-		this(downloadLink, downloadUrl, new DateTimeDefiner(downloadLink.getUser()), new SafetyNetworkRegisteredProductInspectionLoader(downloadLink.getUser().getSecurityFilter()));
+		this(downloadLink, downloadUrl, new DateTimeDefiner(downloadLink.getUser()), new SafetyNetworkRegisteredAssetInspectionLoader(downloadLink.getUser().getSecurityFilter()));
 	}
 	
 	@Override

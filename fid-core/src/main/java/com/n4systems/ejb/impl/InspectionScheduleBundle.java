@@ -17,7 +17,6 @@ public class InspectionScheduleBundle {
 	private final Date scheduledDate;
 	
 	public InspectionScheduleBundle(Asset asset, InspectionType type, Project job, Date scheduledDate) {
-		super();
 		this.asset = asset;
 		this.type = type;
 		this.job = job;
@@ -40,7 +39,7 @@ public class InspectionScheduleBundle {
 		}
 	}
 	
-	public Asset getProduct() {
+	public Asset getAsset() {
 		return asset;
 	}
 

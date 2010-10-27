@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
-import com.n4systems.model.product.AssetSubAssetsLoader;
-import com.n4systems.model.product.SmartSearchLoader;
+import com.n4systems.model.asset.AssetSubAssetsLoader;
+import com.n4systems.model.asset.SmartSearchLoader;
 
 public class RealTimeProductLookupHandler {
 

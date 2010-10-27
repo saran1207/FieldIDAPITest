@@ -12,8 +12,8 @@ import com.n4systems.model.InspectionSchedule;
 public class InspectionScheduleServiceTest {
 
 
-	@Test public void should_save_schedule_and_update_product() {
-		InspectionSchedule schedule = aScheduledInspectionSchedule().product(anAsset().build()).build();
+	@Test public void should_save_schedule_and_update_asset() {
+		InspectionSchedule schedule = aScheduledInspectionSchedule().asset(anAsset().build()).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.save(schedule)).andReturn(3L);
@@ -27,8 +27,8 @@ public class InspectionScheduleServiceTest {
 	}
 	
 	
-	@Test public void should_update_schedule_and_update_product() {
-		InspectionSchedule schedule = aScheduledInspectionSchedule().product(anAsset().build()).build();
+	@Test public void should_update_schedule_and_update_asset() {
+		InspectionSchedule schedule = aScheduledInspectionSchedule().asset(anAsset().build()).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.update((InspectionSchedule)anyObject())).andReturn(schedule);

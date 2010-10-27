@@ -17,7 +17,7 @@ public class ProductStatusMapBuilderTest {
 		AssetStatus pStatus = new AssetStatus();
 		pStatus.setName("Asset Status Name");
 		
-		ProductStatusMapBuilder builder = new ProductStatusMapBuilder();
+		AssetStatusMapBuilder builder = new AssetStatusMapBuilder();
 		builder.addParams(reportMap, pStatus, null);
 		
 		assertEquals(pStatus.getName(), reportMap.get(ReportField.PRODUCT_STATUS.getParamKey()));
