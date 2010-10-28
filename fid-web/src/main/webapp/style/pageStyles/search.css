@@ -54,8 +54,8 @@
 }
 
 .fieldGroup .infoSet{
-		border-top: none;
-	border-bottom:none;
+	border-top: none;
+	border-bottom: none;
 	}
 
 .fieldGroup{
@@ -71,7 +71,10 @@
 
 .clearLeft{
 	clear:left;
-	}
+}
+.ieFix{
+	margin-bottom:5px;
+}
 
 .searchForm{
 	width:100%;

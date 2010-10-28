@@ -55,58 +55,6 @@ ${action.setPageType('report', 'show')!}
 			<#include "../customizableSearch/_assetTypeSelect.ftl"/>
 		</div>
 		
-			
-		<div class="fieldGroup">
-			<h2><@s.text name="label.event_details"/></h2>
-			<div class="infoSet">
-				<label for="criteria.inspectionTypeGroup"><@s.text name="label.eventtypegroup"/></label>
-				<@s.select name="criteria.inspectionTypeGroup" list="inspectionTypes" listKey="id" listValue="name" emptyOption="true" />
-			</div>
-			<div class="infoSet">
-				<label for="criteria.performedBy"><@s.text name="label.performed_by"/></label>
-				<@s.select name="criteria.performedBy" list="examiners" listKey="id" listValue="name" emptyOption="true" />
-			</div>
-			<div class="infoSet">
-				<label for="criteria.inspectionBook"><@s.text name="label.inspectionbook"/></label>
-				<@s.select key="label.inspectionbook" name="criteria.inspectionBook" list="inspectionBooks" listKey="id" listValue="name" emptyOption="true" />
-			</div>
-			<#if securityGuard.projectsEnabled>
-				<div class="infoSet">
-					<label for="criteria.job"><@s.text name="label.job"/></label>
-					<@s.select name="criteria.job" list="eventJobs" listKey="id" listValue="name" emptyOption="true" />
-				</div>
-			</#if>
-			<div class="infoSet">
-				<label for="criteria.status"><@s.text name="label.result"/></label>
-				<@s.select name="criteria.status" emptyOption="true" list="statuses" listKey="id" listValue="%{getText(label)}"/>
-			</div>
-			<#if sessionUser.employeeUser>
-				<div class="infoSet">
-					<label id="reducedLineHeightLabel" for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
-					<@s.checkbox name="criteria.includeNetworkResults" fieldValue="true"/>
-				</div>
-			</#if>
-		</div>
-		
-
-		
-		<div class="fieldGroup">
-			<h2><@s.text name="label.orderdetails"/></h2>
-			<div class="infoSet">
-				<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
-				<@s.textfield name="criteria.orderNumber" />
-			</div>
-			<div class="infoSet">
-				<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
-				<@s.textfield name="criteria.purchaseOrder" />
-			</div>	
-			<div class="infoSet">
-				<label>&nbsp;</label>
-				<input class="hidden" />
-			</div>	
-		</div>
-	
-			
 		<div class="fieldGroup">
 			<h2><@s.text name="label.ownership"/></h2>
 			<#if securityGuard.assignedToEnabled >
@@ -124,10 +72,56 @@ ${action.setPageType('report', 'show')!}
 				<@n4.orgPicker name="owner"/>
 			</div>
 		</div>
-	
-	
 		
-		<div class="fieldGroup">
+		<div class="fieldGroup ieFix">
+			<h2><@s.text name="label.orderdetails"/></h2>
+			<div class="infoSet">
+				<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
+				<@s.textfield name="criteria.orderNumber" />
+			</div>
+			<div class="infoSet">
+				<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
+				<@s.textfield name="criteria.purchaseOrder" />
+			</div>	
+			<div class="infoSet">
+				<label>&nbsp;</label>
+			</div>
+		</div>
+		
+		<div class="fieldGroup clearLeft">
+			<h2><@s.text name="label.event_details"/></h2>
+			<div class="infoSet">
+				<label for="criteria.inspectionTypeGroup"><@s.text name="label.eventtypegroup"/></label>
+				<@s.select name="criteria.inspectionTypeGroup" list="inspectionTypes" listKey="id" listValue="name" emptyOption="true" />
+			</div>
+			<div class="infoSet">
+				<label for="criteria.performedBy"><@s.text name="label.performed_by"/></label>
+				<@s.select name="criteria.performedBy" list="examiners" listKey="id" listValue="name" emptyOption="true" />
+			</div>
+			<div class="infoSet">
+				<label for="criteria.inspectionBook"><@s.text name="label.inspectionbook"/></label>
+				<@s.select key="label.inspectionbook" name="criteria.inspectionBook" list="inspectionBooks" listKey="id" listValue="name" emptyOption="true" />
+			</div>
+			
+			<#if securityGuard.projectsEnabled>
+				<div class="infoSet">
+					<label for="criteria.job"><@s.text name="label.job"/></label>
+					<@s.select name="criteria.job" list="eventJobs" listKey="id" listValue="name" emptyOption="true" />
+				</div>
+			</#if>
+			<div class="infoSet">
+				<label for="criteria.status"><@s.text name="label.result"/></label>
+				<@s.select name="criteria.status" emptyOption="true" list="statuses" listKey="id" listValue="%{getText(label)}"/>
+			</div>
+			<#if sessionUser.employeeUser>
+				<div class="infoSet">
+					<label id="reducedLineHeightLabel" for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
+					<@s.checkbox name="criteria.includeNetworkResults" fieldValue="true"/>
+				</div>
+			</#if>
+		</div>
+
+		<div class="fieldGroup inline">
 			<h2><@s.text name="label.inspdate"/></h2>
 			<div class="container">
 				<div class="infoSet">
@@ -140,7 +134,6 @@ ${action.setPageType('report', 'show')!}
 				</div>
 			</div>
 		</div>
-	
 
 		<#include "../customizableSearch/_selectColumns.ftl"/>
 		
