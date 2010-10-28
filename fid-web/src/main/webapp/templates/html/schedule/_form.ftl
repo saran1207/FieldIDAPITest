@@ -30,11 +30,34 @@
 		<#include "../common/_formErrors.ftl"/>
 		
 			<div class="fieldGroup">
-				<h2><@s.text name="label.identifiers"/></h2>
+				<h2><@s.text name="label.schedule_details"/></h2>
 				<div class="infoSet">
 					<label for="criteria.rfidNumber"><@s.text name="label.schedulestatus"/></label> 
 					<@s.select name="criteria.status" list="scheduleStatuses" listKey="name" listValue="%{getText(label)}"/>
 				</div>
+				<div class="infoSet">
+					<label for="criteria.inspectionType"><@s.text name="label.eventtypegroup"/></label>
+					<@s.select name="criteria.inspectionType" list="inspectionTypes" listKey="id" listValue="name" emptyOption="true"/>
+				</div>
+				<#if securityGuard.projectsEnabled>
+					<div class="infoSet">
+						<label for="criteria.job"><@s.text name="label.job"/></label>
+						<@s.select name="criteria.job" list="eventJobs" listKey="id" listValue="name" emptyOption="true" />
+					</div>
+				</#if>
+			</div>
+			
+			<div class="fieldGroup">
+				<h2><@s.text name="label.scheduleddate"/></h2>
+				<#include "_dateRange.ftl"/>
+				<div class="infoSet">
+					<label></label> 
+				</div>
+			</div>
+		
+			<div class="fieldGroup clearLeft">
+				<h2><@s.text name="label.identifiers"/></h2>
+			
 				<div class="infoSet">
 					<label for="criteria.rfidNumber"><@s.text name="label.rfidnumber"/></label> 
 					<@s.textfield name="criteria.rfidNumber"/>
@@ -48,30 +71,7 @@
 					<@s.textfield name="criteria.referenceNumber"/>
 				</div>
 			</div>
-			
-			<div class="fieldGroup">
-				<h2><@s.text name="label.asset_details"/></h2>
 					
-				<div class="infoSet">
-					<label for="criteria.inspectionType"><@s.text name="label.eventtypegroup"/></label>
-					<@s.select name="criteria.inspectionType" list="inspectionTypes" listKey="id" listValue="name" emptyOption="true"/>
-				</div>
-			
-				<#include "../customizableSearch/_assetTypeSelect.ftl"/>
-					
-				<div class="infoSet">
-					<label for="criteria.assetStatus"><@s.text name="label.assetstatus"/></label>
-					<@s.select  name="criteria.assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true" />
-				</div>
-				
-				<#if securityGuard.projectsEnabled>
-					<div class="infoSet">
-						<label for="criteria.job"><@s.text name="label.job"/></label>
-						<@s.select name="criteria.job" list="eventJobs" listKey="id" listValue="name" emptyOption="true" />
-					</div>
-				</#if>
-			</div>
-			
 			<div class="fieldGroup">	
 				<h2><@s.text name="label.ownership"/></h2>
 				<#if securityGuard.assignedToEnabled>
@@ -86,9 +86,13 @@
 				</div>	
 				
 				<#include "_ownershipFilters.ftl"/>
+				
+				<div class="infoSet">
+					<label></label>
+				</div>	
 			</div>
 			
-			<div class="fieldGroup">	
+			<div class="fieldGroup clearLeft">	
 				<h2><@s.text name="label.orderdetails"/></h2>
 				<div class="infoSet">
 					<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
@@ -101,9 +105,15 @@
 			</div>
 			
 			<div class="fieldGroup">
-				<h2><@s.text name="label.identifieddate"/></h2>
-				<#include "_dateRange.ftl"/>
+				<h2><@s.text name="label.asset_details"/></h2>
+				<#include "../customizableSearch/_assetTypeSelect.ftl"/>
+				
+				<div class="infoSet">
+					<label for="criteria.assetStatus"><@s.text name="label.assetstatus"/></label>
+					<@s.select  name="criteria.assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true" />
+				</div>
 			</div>
+	
 			
 			<#include "../customizableSearch/_selectColumns.ftl"/>
 		
