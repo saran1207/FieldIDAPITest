@@ -110,7 +110,7 @@ public class InspectionScheduleCountGenerator {
 		String messageSubject = createSubject(setting, start, end);
 		
 		// no we need to build the message body with the html inspection report table
-		TemplateMailMessage message = new TemplateMailMessage(messageSubject, "inspectionScheduleReport");
+		TemplateMailMessage message = new TemplateMailMessage(messageSubject, "eventScheduleReport");
 		
 		message.getTemplateMap().put("dateFormatter", dateFormatter);
 		message.getTemplateMap().put("setting", setting);

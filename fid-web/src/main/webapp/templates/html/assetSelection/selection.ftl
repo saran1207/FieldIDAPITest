@@ -12,7 +12,7 @@
 
 <#assign assetSearchAction="assets"/>
 <#assign namespace="/ajax"/>
-<#include "../inspectionGroup/_searchForm.ftl"/>
+<#include "../eventGroup/_searchForm.ftl"/>
 <div id="resultBlock">
 	<div id="searchResults">
 		<div id="introduction">	

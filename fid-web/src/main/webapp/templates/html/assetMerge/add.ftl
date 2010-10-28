@@ -101,7 +101,7 @@ ${action.setPageType('asset', 'edit')!}
 				<#assign assetFormId="mergeSmartSearch"/>
 				<#assign overRideAssetType=losingAsset.type.id/>
 				<#assign useOverRides=true/>
-				<#include "../inspectionGroup/_searchForm.ftl"/>
+				<#include "../eventGroup/_searchForm.ftl"/>
 				<div id="results" class="hidden">
 				</div>
 			</div>

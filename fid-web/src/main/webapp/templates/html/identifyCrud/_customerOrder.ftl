@@ -5,7 +5,7 @@
 			<#assign namespace="/ajax"/>
 			<#assign assetSearchAction="customerOrderFindAsset"/>
 			<#assign assetFormId="assetSearch"/>
-			<#include "../inspectionGroup/_searchForm.ftl"/>
+			<#include "../eventGroup/_searchForm.ftl"/>
 			<div id="assetResults"></div>
 		</div>
 	</div>

@@ -6,7 +6,7 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.persistence.savers.Saver;
 
 public class InspectionExportTask extends AbstractExportTask {
-	private static final String TEMPLATE_NAME = "inspectionExport";
+	private static final String TEMPLATE_NAME = "eventExport";
 
 	public InspectionExportTask(DownloadLink downloadLink, String downloadUrl, Saver<DownloadLink> linkSaver, MailManager mailManager, Exporter exporter) {
 		super(downloadLink, downloadUrl, TEMPLATE_NAME, linkSaver, mailManager, exporter);

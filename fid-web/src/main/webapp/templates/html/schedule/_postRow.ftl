@@ -38,7 +38,7 @@
 			</#if>
 			<#if inspectionId != "0">
 				<li>
-					<#include "../inspectionCrud/_inspectionViewLightBoxOptions.ftl"/>
+					<#include "../eventCrud/_eventViewLightBoxOptions.ftl"/>
 					<a href='<@s.url action="event" namespace="/aHtml/iframe" uniqueID="${inspectionId}" assetId="${assetId}"/>'  ${inspectionLightViewOptions} >
 						<@s.text name="label.view_inspection"/>
 					</a>

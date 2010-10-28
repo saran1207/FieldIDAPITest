@@ -34,7 +34,7 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 	private InspectionReportType reportType;
 	
 	public PrintAllInspectionCertificatesTask(DownloadLink downloadLink, String downloadUrl, DateTimeDefiner dateDefiner, SafetyNetworkInspectionLoader inspectionLoader) {
-		super(downloadLink, downloadUrl, "printAllInspectionCerts");
+		super(downloadLink, downloadUrl, "printAllEventCerts");
 		this.reportGen = new InspectionCertificateReportGenerator(dateDefiner);
 		this.inspectionLoader = inspectionLoader;
 	}

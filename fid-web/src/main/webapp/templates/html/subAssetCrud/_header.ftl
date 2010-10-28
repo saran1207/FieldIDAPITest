@@ -12,7 +12,7 @@
 				<ul id="subInspection_${subAsset.asset.id}_list" >
 					<#assign inspectionTypes=subAsset.asset.type.inspectionTypes  />
 					<#assign subInspection=true/>
-					<#include "/templates/html/inspectionGroup/_inspectionSelect.ftl" />
+					<#include "/templates/html/eventGroup/_eventSelect.ftl" />
 				</ul>
 			</div>
 		</#if>

@@ -11,7 +11,7 @@
 	</td>
 </#if>
 <td id="actionsContainer_${entityId}">
-	<#include "../inspectionCrud/_inspectionViewLightBoxOptions.ftl"/>
+	<#include "../eventCrud/_eventViewLightBoxOptions.ftl"/>
 	<@s.url id="printReport" action="printReport.action" namespace="/aHtml" searchId="${searchId}"/>
 	
 	<span class="floatingDropdown floatingDropdownRelative">

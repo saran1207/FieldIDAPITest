@@ -91,12 +91,12 @@
 
 		<action name="eventScheduleList" method="list" class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/inspectionScheduleCrud/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventScheduleCrud/list.ftl</result>
 		</action>
 
 		<action name="eventScheduleAdd" method="list" class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
-			<result name="error" type="freemarker">/templates/html/inspectionScheduleCrud/add.ftl</result>
-			<result name="success" type="freemarker">/templates/html/inspectionScheduleCrud/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventScheduleCrud/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventScheduleCrud/add.ftl</result>
 		</action>
 		
 		<action name="eventScheduleDelete" method="delete" class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
@@ -418,7 +418,7 @@
 
 		<action name="assetEvents" method="inspections" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/assetCrud/inspections.ftl</result>
+			<result name="success" type="freemarker">/templates/html/assetCrud/events.ftl</result>
 		</action>
 
 		<action name="asset" method="show" class="com.n4systems.fieldid.actions.asset.AssetCrud">
@@ -709,13 +709,13 @@
 
 		<action name="selectEventTypes" method="list"
 			class="com.n4systems.fieldid.actions.asset.AssociatedInspectionTypeCrud">
-			<result name="error" type="freemarker">/templates/html/assetTypeInspectionTypeCrud/list.ftl</result>
-			<result name="success" type="freemarker">/templates/html/assetTypeInspectionTypeCrud/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
 		</action>
 		<action name="assetTypeEventTypesSave" method="save"
 			class="com.n4systems.fieldid.actions.asset.AssociatedInspectionTypeCrud">
-			<result name="error" type="freemarker">/templates/html/assetTypeInspectionTypeCrud/list.ftl</result>
-			<result name="input" type="freemarker">/templates/html/assetTypeInspectionTypeCrud/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">selectEventTypes</param>
 				<param name="assetTypeId">${assetTypeId}</param>
@@ -738,12 +738,12 @@
 
 		<action name="massUpdateEvents" method="edit" class="com.n4systems.fieldid.actions.InspectionMassUpdate">
 			<result name="error" type="redirectAction">report</result>
-			<result name="success" type="freemarker">/templates/html/massUpdate/inspection/form.ftl</result>
+			<result name="success" type="freemarker">/templates/html/massUpdate/event/form.ftl</result>
 		</action>
 
 		<action name="massUpdateEventsSave" method="save" class="com.n4systems.fieldid.actions.InspectionMassUpdate">
 			<result name="error" type="redirectAction">search</result>
-			<result name="input" type="freemarker">/templates/html/massUpdate/inspection/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/massUpdate/event/form.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">reportResults</param>
 				<param name="searchId">${searchId}</param>
@@ -752,13 +752,13 @@
 
 		<action name="massUpdateEventSchedule" method="edit" class="com.n4systems.fieldid.actions.InspectionScheduleMassUpdate">
 			<result name="error" type="redirectAction">schedule</result>
-			<result name="success" type="freemarker">/templates/html/massUpdate/inspectionSchedule/form.ftl</result>
+			<result name="success" type="freemarker">/templates/html/massUpdate/eventSchedule/form.ftl</result>
 		</action>
 
 		<action name="massUpdateEventScheduleSave" method="save"
 			class="com.n4systems.fieldid.actions.InspectionScheduleMassUpdate">
 			<result name="error" type="redirectAction">schedule</result>
-			<result name="input" type="freemarker">/templates/html/massUpdate/inspectionSchedule/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/massUpdate/eventSchedule/form.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">scheduleResults</param>
 				<param name="searchId">${searchId}</param>
@@ -781,12 +781,12 @@
 		<action name="selectJobToAssignEventsTo" method="editInspections"
 			class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
 			<result name="error" type="redirectAction">report</result>
-			<result name="success" type="freemarker">/templates/html/assignToJob/formInspections.ftl</result>
+			<result name="success" type="freemarker">/templates/html/assignToJob/formEvents.ftl</result>
 		</action>
 
 		<action name="assignEventsToJob" method="saveInspections" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
 			<result name="error" type="redirectAction">report</result>
-			<result name="input" type="freemarker">/templates/html/assignToJob/formInspections.ftl</result>
+			<result name="input" type="freemarker">/templates/html/assignToJob/formEvents.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">reportResults</param>
 				<param name="searchId">${searchId}</param>
@@ -795,15 +795,15 @@
 
 
 		<action name="eventTypes" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionType/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventType/list.ftl</result>
 		</action>
 
 		<action name="eventType" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionType/show.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventType/show.ftl</result>
 		</action>
 
 		<action name="eventTypeAdd" method="add" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionType/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventType/add.ftl</result>
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 		</action>
 
@@ -815,7 +815,7 @@
 
 		<action name="eventTypeCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
 
-			<result name="input" type="freemarker">/templates/html/inspectionType/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventType/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventType</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -825,25 +825,25 @@
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 
-			<result name="error" type="freemarker">/templates/html/inspectionType/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventType/add.ftl</result>
 		</action>
 
 		<action name="eventTypeEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/inspectionType/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventType/edit.ftl</result>
 		</action>
 		<action name="eventTypeUpdate" method="update" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
-			<result name="input" type="freemarker">/templates/html/inspectionType/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventType/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventType</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="error" type="freemarker">/templates/html/inspectionType/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventType/edit.ftl</result>
 		</action>
 		<action name="eventTypeDeleteConfirm" method="deleteConfirm" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
-			<result name="input" type="freemarker">/templates/html/inspectionType/confirmDelete.ftl</result>
-			<result name="error" type="freemarker">/templates/html/inspectionType/confirmDelete.ftl</result>
-			<result name="success" type="freemarker">/templates/html/inspectionType/confirmDelete.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventType/confirmDelete.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventType/confirmDelete.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventType/confirmDelete.ftl</result>
 		</action>
 		<action name="eventTypeDelete" method="delete" class="com.n4systems.fieldid.actions.inspection.InspectionTypeCrud">
 			<result name="error" type="redirectAction">
@@ -863,12 +863,12 @@
 
 		<action name="eventTypeForm" method="edit" class="com.n4systems.fieldid.actions.inspection.InspectionFormCrud">
 			<result name="missing" type="freemarker">templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/inspectionFormCrud/form.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventFormCrud/form.ftl</result>
 		</action>
 		<action name="eventTypeFormSave" method="save" class="com.n4systems.fieldid.actions.inspection.InspectionFormCrud">
 			<result name="missing" type="freemarker">templates/html/common/error.ftl</result>
-			<result name="error" type="freemarker">/templates/html/inspectionFormCrud/form.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionFormCrud/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventFormCrud/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventFormCrud/form.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventTypeForm</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -881,8 +881,8 @@
 		</action>
 	
 		<action name="selectEventAsset" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionGroupCrud">
-			<result name="error" type="freemarker">/templates/html/inspectionGroup/list.ftl</result>
-			<result name="success" type="freemarker">/templates/html/inspectionGroup/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventGroup/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventGroup/list.ftl</result>
 			<result name="oneFound" type="redirectAction">
 				<param name="actionName">eventGroups</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -891,11 +891,11 @@
 
 		<action name="eventGroups" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionGroupCrud">
 
-			<result name="success" type="freemarker">/templates/html/inspectionGroup/show.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventGroup/show.ftl</result>
 		</action>
 
 		<action name="quickEvent" method="quickInspect" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionCrud/quickInspect.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventCrud/quickEvent.ftl</result>
 			<result name="oneFound" type="redirectAction">
 				<param name="actionName">eventAdd</param>
 				<param name="assetId">${assetId}</param>
@@ -938,12 +938,12 @@
 
 
 		<action name="eventAdd" method="add" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventCrud/add.ftl</result>
 		</action>
 
 		<action name="eventCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="error" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionCrud/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">event</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -951,16 +951,16 @@
 		</action>
 
 		<action name="event" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionCrud/show.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventCrud/show.ftl</result>
 		</action>
 		<action name="eventEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionCrud/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventCrud/edit.ftl</result>
 
 		</action>
 
 		<action name="eventUpdate" method="update" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
-			<result name="error" type="freemarker">/templates/html/inspectionCrud/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionCrud/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventCrud/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">event</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -982,12 +982,12 @@
 
 
 		<action name="masterEventAdd" method="add" class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
-			<result name="success" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>
 		</action>
 
 		<action name="masterEventCreate" method="create" class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
-			<result name="error" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/masterInspectionCrud/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">event</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -995,12 +995,12 @@
 		</action>
 
 		<action name="masterEventEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
-			<result name="success" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/masterEventCrud/edit.ftl</result>
 		</action>
 
 		<action name="masterEventUpdate" method="update" class="com.n4systems.fieldid.actions.inspection.MasterInspectionCrud">
-			<result name="error" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/masterInspectionCrud/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/masterEventCrud/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/masterEventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">event</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1009,13 +1009,13 @@
 
 
 		<action name="subEventAdd" method="add" class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
-			<result name="success" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 		</action>
 
 
 		<action name="baseEventCreate" method="storeNewMasterInspection" class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
-			<result name="input" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">masterEventAdd</param>
 				<param name="assetId">${parentAssetId}</param>
@@ -1024,8 +1024,8 @@
 		</action>
 
 		<action name="subEventCreate" method="storeNewSubEvent" class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
-			<result name="input" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/subInspectionCrud/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">masterEventAdd</param>
 				<param name="assetId">${parentAssetId}</param>
@@ -1034,12 +1034,12 @@
 		</action>
 
 		<action name="subEventEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
-			<result name="success" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 		</action>
 
 		<action name="baseEventUpdate" method="storeNewMasterEvent" class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
-			<result name="input" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
-			<result name="error" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">masterEventEdit</param>
 				<param name="uniqueID">${masterInspection.inspection.id}</param>
@@ -1048,8 +1048,8 @@
 		</action>
 
 		<action name="subEventUpdate" method="storeExistingSubEvent" class="com.n4systems.fieldid.actions.inspection.SubInspectionCrud">
-			<result name="input" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
-			<result name="error" type="freemarker">/templates/html/subInspectionCrud/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">masterEventEdit</param>
 				<param name="uniqueID">${masterInspection.inspection.id}</param>
@@ -1069,16 +1069,16 @@
 		</action>
 
 		<action name="eventBooks" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionBook/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventBook/list.ftl</result>
 		</action>
 
 		<action name="eventBookAdd" method="add" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionBook/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventBook/add.ftl</result>
 		</action>
 
 		<action name="eventBookCreate" method="save" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
-			<result name="error" type="freemarker">/templates/html/inspectionBook/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionBook/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventBook/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventBook/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventBooks</param>
 				<param name="currentPage">${currentPage}</param>
@@ -1086,13 +1086,13 @@
 		</action>
 
 		<action name="eventBookEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionBook/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventBook/edit.ftl</result>
 
 		</action>
 
 		<action name="eventBookUpdate" method="save" class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
-			<result name="error" type="freemarker">/templates/html/inspectionBook/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionBook/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventBook/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventBook/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventBooks</param>
 				<param name="currentPage">${currentPage}</param>
@@ -1412,24 +1412,24 @@
 
 
 		<action name="eventTypeGroups" method="list" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionTypeGroup/list.ftl</result>
-			<result name="error" type="freemarker">/templates/html/inspectionTypeGroup/list.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventTypeGroup/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventTypeGroup/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventTypeGroup/list.ftl</result>
 		</action>
 
 		<action name="eventTypeGroup" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionTypeGroup/show.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/show.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventTypeGroup/show.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventTypeGroup/show.ftl</result>
 		</action>
 
 		<action name="eventTypeGroupAdd" method="add" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionTypeGroup/add.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/add.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventTypeGroup/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventTypeGroup/add.ftl</result>
 		</action>
 
 		<action name="eventTypeGroupCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
-			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/add.ftl</result>
-			<result name="error" type="freemarker">/templates/html/inspectionTypeGroup/add.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventTypeGroup/add.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventTypeGroup/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventTypeGroup</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1437,13 +1437,13 @@
 		</action>
 
 		<action name="eventTypeGroupEdit" method="edit" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
-			<result name="success" type="freemarker">/templates/html/inspectionTypeGroup/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventTypeGroup/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventTypeGroup/edit.ftl</result>
 		</action>
 
 		<action name="eventTypeGroupUpdate" method="update" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
-			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/edit.ftl</result>
-			<result name="error" type="freemarker">/templates/html/inspectionTypeGroup/edit.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventTypeGroup/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventTypeGroup/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventTypeGroups</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1451,8 +1451,8 @@
 		</action>
 
 		<action name="eventTypeGroupDelete" method="delete" class="com.n4systems.fieldid.actions.inspection.InspectionTypeGroupCrud">
-			<result name="input" type="freemarker">/templates/html/inspectionTypeGroup/delete.ftl</result>
-			<result name="error" type="freemarker">/templates/html/inspectionTypeGroup/delete.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventTypeGroup/delete.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventTypeGroup/delete.ftl</result>
 			<result name="success" type="redirectAction">eventTypeGroups</result>
 		</action>
 
@@ -2000,18 +2000,18 @@
 		</action>
 		
 		<action name="eventImportExport" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction">
-			<result name="success" type="freemarker">/templates/html/inspectionImport/importExport.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventImport/importExport.ftl</result>
 		</action>
 		
 		<action name="showImportEvents" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction">
-			<result name="success" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventImport/import.ftl</result>
 		</action>
 
 		<action name="importEvents" method="import" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction">
-			<result name="input" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
-			<result name="missing" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
-			<result name="error" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
-			<result name="success" type="freemarker">/templates/html/inspectionImport/import.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventImport/import.ftl</result>
+			<result name="missing" type="freemarker">/templates/html/eventImport/import.ftl</result>
+			<result name="error" type="freemarker">/templates/html/eventImport/import.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventImport/import.ftl</result>
 		</action>
 		
 		
@@ -2050,7 +2050,7 @@
 		
 		<action name="networkAssetEvents" method="inspections" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
-			<result name="success" type="freemarker">/templates/html/networkAsset/inspections.ftl</result>
+			<result name="success" type="freemarker">/templates/html/networkAsset/events.ftl</result>
 		</action>
 
 		<action name="networkEventScheduleList" method="schedules" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">

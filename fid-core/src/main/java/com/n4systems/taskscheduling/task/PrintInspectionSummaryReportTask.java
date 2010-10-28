@@ -16,7 +16,7 @@ public class PrintInspectionSummaryReportTask extends DownloadTask {
 	private ReportDefiner reportDefiner;
 
 	public PrintInspectionSummaryReportTask(DownloadLink downloadLink, String downloadUrl, InspectionSummaryGenerator reportGen) {
-		super(downloadLink, downloadUrl, "inspectionSummaryCert");
+		super(downloadLink, downloadUrl, "eventSummaryCert");
 		this.reportGen = reportGen;
 	}
 	

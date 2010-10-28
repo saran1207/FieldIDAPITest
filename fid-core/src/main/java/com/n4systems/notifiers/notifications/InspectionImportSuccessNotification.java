@@ -10,7 +10,7 @@ public class InspectionImportSuccessNotification extends ImportSuccessNotificati
 
 	@Override
 	public String notificationName() {
-		return "inspectionImportSuccess";
+		return "eventImportSuccess";
 	}
 
 }

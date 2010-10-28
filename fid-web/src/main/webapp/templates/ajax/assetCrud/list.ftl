@@ -1,7 +1,7 @@
 <#assign html>
 	<#assign useOverRides=true/>
 	<#assign actionTarget="asset"/>
-	<#include "/templates/html/inspectionGroup/_assetList.ftl"/>
+	<#include "/templates/html/eventGroup/_assetList.ftl"/>
 </#assign>
 
 $$('input[name="search"]')[1].clear();

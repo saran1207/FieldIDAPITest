@@ -1,6 +1,6 @@
 <#assign html >
 	<#assign actionTarget="asset"/>
-	<#include "/templates/html/inspectionGroup/_assetList.ftl"/>
+	<#include "/templates/html/eventGroup/_assetList.ftl"/>
 </#assign>
 
 <#escape x as x?js_string>	

@@ -4,7 +4,7 @@ ${action.setPageType('asset', 'multi_add')!}
 	<@n4.includeStyle href="loadingPage" type="page"/>
 </head>
 
-	<@s.form id="performMultiInspect" action="selectEventType" namespace="/multiInspect">
+	<@s.form id="performMultiInspect" action="selectEventType" namespace="/multiEvent">
 	<#list listOfIds as assetId>
 			<@s.hidden name="assetIds[${assetId_index}]" value="${assetId}"/> 
 	</#list>

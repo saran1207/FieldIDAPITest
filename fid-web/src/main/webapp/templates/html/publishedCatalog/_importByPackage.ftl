@@ -14,7 +14,7 @@
 						<#list action.getSubTypesFor(assetType.id) as subType>
 							<li  class="listValues">${subType.name?html}
 								<#assign current_type=subType/>
-								<#include "_inspectionTypes.ftl"/>
+								<#include "_eventTypes.ftl"/>
 							</li>
 						</#list>
 						</ul>
@@ -22,7 +22,7 @@
 					</ul>
 				</#if>
 				<#assign current_type=assetType/>
-				<#include "_inspectionTypes.ftl"/>
+				<#include "_eventTypes.ftl"/>
 			</div>
 		</li>
 	</ul>

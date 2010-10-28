@@ -125,7 +125,7 @@
 	<include file="ajaxPackageStruts.xml"/>
 	<include file="aHtmlPackageStruts.xml"/>
 	<include file="quickSetupWizardPackage.xml"/>
-	<include file="multiInspectPackageStruts.xml"/>
+	<include file="multiEventPackageStruts.xml"/>
 	<include file="adminPackageStruts.xml"/>
 	
 	<package name="external" extends="default" namespace="/external/ajax">

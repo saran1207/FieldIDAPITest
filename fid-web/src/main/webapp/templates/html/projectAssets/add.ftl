@@ -48,7 +48,7 @@ ${action.setPageType('job','assets')!}
 	<#assign namespace="/ajax"/>
 	<#assign assetSearchAction="jobFindAsset"/>
 	<#assign assetFormId="projectAssetSearch"/>
-	<#include "../inspectionGroup/_searchForm.ftl"/>
+	<#include "../eventGroup/_searchForm.ftl"/>
 	<div id="results" class="hidden">
 		
 	</div>

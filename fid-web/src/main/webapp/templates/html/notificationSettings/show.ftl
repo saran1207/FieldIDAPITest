@@ -32,7 +32,7 @@
 			<h2><@s.text name="label.inspectionattributes"/></h2>
 			<div id="infoFields">
 				<#list inspectionType.infoFieldNames as infoField >
-					<#include "_inspectionAttribute.ftl"/>
+					<#include "_eventAttribute.ftl"/>
 				</#list>
 			</div>
 			

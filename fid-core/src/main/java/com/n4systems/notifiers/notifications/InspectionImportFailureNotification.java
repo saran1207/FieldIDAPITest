@@ -10,7 +10,7 @@ public class InspectionImportFailureNotification extends ImportFailureNotificati
 
 	@Override
 	public String notificationName() {
-		return "inspectionImportFailed";
+		return "eventImportFailed";
 	}
 
 }

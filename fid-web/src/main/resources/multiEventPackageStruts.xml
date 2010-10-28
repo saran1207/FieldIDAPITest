@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts><!-- Configuration for the default package. -->
+
+	<package name="multiEvent" extends="default" namespace="/multiEvent">
+		
+		<global-results>
+			<result name="login" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">login</param>
+			</result>
+			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
+		</global-results>
+		
+	 	<action name="selectEventType" method="inspectionTypes" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+			<result name="success" type="freemarker">/templates/html/event/multi_event/multi_event.ftl</result>
+		</action>
+	
+	</package>
+	
+	<package name="multiEvent/ajax" extends="default" namespace="/multiEvent/ajax">
+		
+		<global-results>
+			<result name="login" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">login</param>
+			</result>
+			
+		</global-results>
+		<action name="retrieveEventDetails" method="performEvent" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+			<result name="success" type="freemarker">/templates/ajax/event/multi_event/retrieveEventDetails.ftl</result>
+		</action>
+		
+		<action name="eventCheck" method="inspectionCheck" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+			<result name="success" type="freemarker">/templates/ajax/event/multi_event/valid.ftl</result>
+			<result name="input" type="freemarker">/templates/ajax/event/multi_event/invalid.ftl</result>
+		</action>
+		
+	 	<action name="eventCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+			<result name="success" type="freemarker">/templates/ajax/event/multi_event/created.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/event/multi_event/failure.ftl</result>
+			<result name="input" type="freemarker">/templates/ajax/event/multi_event/failure.ftl</result>
+		</action>
+	</package>
+</struts>

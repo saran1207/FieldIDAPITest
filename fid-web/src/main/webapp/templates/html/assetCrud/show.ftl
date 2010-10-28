@@ -148,7 +148,7 @@ ${action.setPageType('asset', 'show')!}
 				<label><@s.text name="label.details"/></label>
 				<span class="fieldValue">
 					<#assign inspection=lastInspection/>
-					<#include "../inspectionCrud/_viewInspectionLink.ftl"/>
+					<#include "../eventCrud/_viewEventLink.ftl"/>
 				</span>
 			</p>				
 		<#else>	
