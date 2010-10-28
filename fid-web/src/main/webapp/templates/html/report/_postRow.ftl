@@ -21,11 +21,11 @@
 		</a>
 		<ul id="moreActions_list_${entityId}">
 			<li>
-				<a href='<@s.url action="inspection" namespace="/aHtml/iframe" uniqueID="${entityId}"/>'  ${inspectionLightViewOptions} ><@s.text name="link.view" /></a>
+				<a href='<@s.url action="event" namespace="/aHtml/iframe" uniqueID="${entityId}"/>'  ${inspectionLightViewOptions} ><@s.text name="link.view" /></a>
 			</li>
 			<#if sessionUser.hasAccess("editinspection") && localInspection >
 			<li>
-				<a href='<@s.url action="selectInspectionEdit" namespace="/" uniqueID="${entityId}"/>'><@s.text name="label.edit" /></a>
+				<a href='<@s.url action="selectEventEdit" namespace="/" uniqueID="${entityId}"/>'><@s.text name="label.edit" /></a>
 			</li>
 			</#if>
 			<li>
@@ -33,7 +33,7 @@
 			</li>
 			<#if sessionUser.hasAccess('createinspection') && localInspection >
 				<li id="floatingDropdownStartEventLink">
-					<a href='<@s.url action="quickInspect" assetId="${assetId}" />' >
+					<a href='<@s.url action="quickEvent" assetId="${assetId}" />' >
 						<@s.text name="label.startevent"/>
 					</a>
 				</li>

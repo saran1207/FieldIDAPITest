@@ -129,7 +129,7 @@ ${action.setPageType('asset', 'show')!}
 	
 	<div class="viewSection smallViewSection" >
 		<h2><@s.text name="label.lastinspection"/> 
-			<a href="<@s.url action="inspectionGroups" uniqueID="${uniqueID}" />" id="manageInspections"><@s.text name="label.manageinspections"/></a>
+			<a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageInspections"><@s.text name="label.manageinspections"/></a>
 		</h2>
 		<#if inspectionCount gt 0 >
 			<p>

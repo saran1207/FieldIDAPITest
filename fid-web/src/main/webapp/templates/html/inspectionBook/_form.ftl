@@ -27,6 +27,6 @@
 	</span>
 </p>
 <div class="formAction">
-	<button onclick="return redirect( '<@s.url action="inspectionBooks" currentPage="${currentPage}" />' );" ><@s.text name="label.cancel"/></button>
+	<button onclick="return redirect( '<@s.url action="eventBooks" currentPage="${currentPage}" />' );" ><@s.text name="label.cancel"/></button>
 	<@s.submit key="hbutton.save" />
 </div>

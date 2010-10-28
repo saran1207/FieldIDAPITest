@@ -6,7 +6,7 @@
 <div id="pageContent">
 	<div class="crudForm">
 		<#assign form_action="SHOW" /> 
-		<#assign current_action="inspectionInformation"/>
+		<#assign current_action="eventInformation"/>
 		<#include "/templates/html/inspectionCrud/_show.ftl" >
 	</div>
 </div>

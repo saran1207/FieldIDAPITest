@@ -1,7 +1,7 @@
 <#assign html>
 	<#assign assetId=asset.id />
 	<#assign inInspection=true />
-	<#assign updateSubAssetAction="updateSubAssetInInspection"/>
+	<#assign updateSubAssetAction="updateSubAssetInEvent"/>
 	<#include "/templates/html/subAssetCrud/_header.ftl"/>
 </#assign>
 

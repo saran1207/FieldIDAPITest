@@ -21,7 +21,7 @@
 	<h1>Asset Registered</h1>
 	<p><@s.text name="label.registerconfirm"/> - ${linkedAsset.type.name}</p>
 	<div id="links">
-		<@s.url action="inspectionGroups" uniqueID="${newAsset.id}" namespace="/" id="performFirstEventUrl"/>
+		<@s.url action="eventGroups" uniqueID="${newAsset.id}" namespace="/" id="performFirstEventUrl"/>
 		<@s.url action="asset" uniqueID="${newAsset.id}" namespace="/" id="viewAssetUrl"/>
 		<p><@s.text name="label.whatsnext"/></p>
 		<p><a id="performFirstEvent" href="#" onclick="redirect('${performFirstEventUrl}');return false;" ><@s.text name="label.performfirstevent"/></a></p>

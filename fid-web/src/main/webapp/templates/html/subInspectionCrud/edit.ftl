@@ -1,9 +1,9 @@
 <#assign form_action="EDIT" /> 
-<#assign current_action="inspectionEdit"/>
+<#assign current_action="eventEdit"/>
 
-<#assign formAction="subInspectionUpdate"/>
+<#assign formAction="subEventUpdate"/>
 <#if action.isParentAsset() >
-	<#assign formAction="baseInspectionUpdate"/>
+	<#assign formAction="baseEventUpdate"/>
 </#if>
 ${action.setPageType('inspection', 'edit')!}
 
@@ -13,7 +13,7 @@ ${action.setPageType('inspection', 'edit')!}
 	<#include "/templates/html/inspectionCrud/_form.ftl"/>
 
 	<div class="formAction">
-		<button onclick="return redirect('<@s.url action="masterInspectionEdit" uniqueID="${masterInspection.inspection.id}" token="${token}"/>' );"><@s.text name="label.cancel"/></button>
+		<button onclick="return redirect('<@s.url action="masterEventEdit" uniqueID="${masterInspection.inspection.id}" token="${token}"/>' );"><@s.text name="label.cancel"/></button>
 		<@s.submit key="hbutton.store" />
 	</div>
 	

@@ -4,7 +4,7 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<@n4.includeScript src="inspectionBook" />
 	<script type="text/javascript" >
-		updateInspectionBooksUrl = '<@s.url action="inspectionBooks" namespace="ajax"  includeParams="none" />';
+		updateInspectionBooksUrl = '<@s.url action="eventBooks" namespace="ajax"  includeParams="none" />';
 		function multiProofSubmit( form )
 		{
 			var Flash;

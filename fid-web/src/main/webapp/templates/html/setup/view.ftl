@@ -50,7 +50,7 @@
 			</p>
 			
 			<p>
-				<label><a href="<@s.url action="inspectionTypes"/>" ><@s.text name="title.manage_inspection_types.plural" /></a></label>
+				<label><a href="<@s.url action="eventTypes"/>" ><@s.text name="title.manage_inspection_types.plural" /></a></label>
 				<span>Create inspection types to allow you to do different types of inspections.</span>
 			</p>
 		
@@ -69,7 +69,7 @@
 			</p>
 			
 			<p>
-				<label><a href="<@s.url action="inspectionBooks"/>" ><@s.text name="title.manage_inspection_books.plural" /></a></label>
+				<label><a href="<@s.url action="eventBooks"/>" ><@s.text name="title.manage_inspection_books.plural" /></a></label>
 				<span>Create inspection books to organize your inspections.</span>
 			</p>
 			<#if locationHeirarchyFeatureEnabled>

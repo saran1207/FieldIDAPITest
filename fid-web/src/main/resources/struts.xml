@@ -169,7 +169,7 @@
 		<action name="downloadSubAttachedFile" method="downloadSubInspection" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedInspectionFile" />
 		<action name="downloadProofTestChart" method="downloadChart" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedInspectionFile" />
 		<action name="downloadJobNoteFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProjectNoteFile" />
-		<action name="downloadInspectionCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadInspectionCert" />
+		<action name="downloadEventCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadInspectionCert" />
 		<action name="downloadAssetTypeAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeAttachedFile" />
 		<action name="downloadAssetTypeAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeAttachedFile" />
 		<action name="downloadAssetTypeImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeImage" />
@@ -183,7 +183,7 @@
 		<action name="downloadExampleCustomerExport" method="download" class="com.n4systems.fieldid.actions.customers.ExampleCustomerExportAction" />
 		<action name="downloadExampleAutoAttributeExport" method="downloadExample" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction" />
 		<action name="downloadExampleAssetExport" method="downloadExample" class="com.n4systems.fieldid.actions.asset.AssetImportAction" />
-		<action name="downloadExampleInspectionExport" method="downloadExample" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction" />
+		<action name="downloadExampleEventExport" method="downloadExample" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction" />
 		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
 		
 		<action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >

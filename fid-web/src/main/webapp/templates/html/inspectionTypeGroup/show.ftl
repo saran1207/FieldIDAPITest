@@ -29,7 +29,7 @@ ${action.setPageType('event_type_group', 'show')!}
 		
 		<#list inspectionTypes as inspectionType>
 			<div class="infoSet">
-				<label class="line" ><a href="<@s.url action="inspectionType" uniqueID="${inspectionType.id}"/>">${(inspectionType.name?html) !}</a></label>
+				<label class="line" ><a href="<@s.url action="eventType" uniqueID="${inspectionType.id}"/>">${(inspectionType.name?html) !}</a></label>
 			</div>
 		</#list>
 		<#if inspectionTypes.empty >
@@ -38,7 +38,7 @@ ${action.setPageType('event_type_group', 'show')!}
 			</div>
 		</#if>	
 		<div class="infoSet">
-			<label class="line"><a href="<@s.url action="inspectionTypeAdd" group="${group.id}"/>"><@s.text name="label.addnewinspectiontype"/></a></label>
+			<label class="line"><a href="<@s.url action="eventTypeAdd" group="${group.id}"/>"><@s.text name="label.addnewinspectiontype"/></a></label>
 		</div>
 		 
 	</div>

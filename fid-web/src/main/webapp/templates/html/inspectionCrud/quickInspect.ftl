@@ -14,7 +14,7 @@
 
 	<#list 	asset.type.inspectionTypes as type >
 		<p>
-			<span><a href="<@s.url action="selectInspectionAdd" assetId="${assetId}" type="${type.id}"/>">${type.name}</a></span>
+			<span><a href="<@s.url action="selectEventAdd" assetId="${assetId}" type="${type.id}"/>">${type.name}</a></span>
 		</p>
 		
 	</#list>

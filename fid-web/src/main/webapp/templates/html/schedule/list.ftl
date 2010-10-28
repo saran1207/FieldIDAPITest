@@ -16,7 +16,7 @@
 		<div class="adminLink alternateActions">
 			<a href='<@s.url action="scheduleResults.action" namespace="/aHtml" searchId="${searchId}"/>'  class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a>  
 			<#if sessionUser.hasAccess('createinspection') >
-				| <a href="<@s.url action="massUpdateInspectionSchedule"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
+				| <a href="<@s.url action="massUpdateEventSchedule"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
 			<#if securityGuard.projectsEnabled && sessionUser.hasAccess('createinspection') >
 				| <a href="<@s.url action="selectJobToAssignTo"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.assigntojob" /></a>

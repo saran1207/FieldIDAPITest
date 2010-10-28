@@ -33,16 +33,16 @@
 			</result>
 			
 		</global-results>
-		<action name="retrieveInspectionDetails" method="performEvent" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+		<action name="retrieveEventDetails" method="performEvent" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
 			<result name="success" type="freemarker">/templates/ajax/inspection/multi_inspect/retrieveInspectionDetails.ftl</result>
 		</action>
 		
-		<action name="inspectionCheck" method="inspectionCheck" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+		<action name="eventCheck" method="inspectionCheck" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
 			<result name="success" type="freemarker">/templates/ajax/inspection/multi_inspect/valid.ftl</result>
 			<result name="input" type="freemarker">/templates/ajax/inspection/multi_inspect/invalid.ftl</result>
 		</action>
 		
-	 	<action name="inspectionCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+	 	<action name="eventCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
 			<result name="success" type="freemarker">/templates/ajax/inspection/multi_inspect/created.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/inspection/multi_inspect/failure.ftl</result>
 			<result name="input" type="freemarker">/templates/ajax/inspection/multi_inspect/failure.ftl</result>

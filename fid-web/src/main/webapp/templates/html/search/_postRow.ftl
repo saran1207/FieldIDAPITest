@@ -13,18 +13,18 @@
 				</a>
 			</li>
 			<li>
-				<a href='<@s.url action="assetInspections" uniqueID="${entityId}" />' >
+				<a href='<@s.url action="assetEvents" uniqueID="${entityId}" />' >
 					<@s.text name="label.view_events"/>
 				</a>
 			</li>
 			<li>
-				<a href='<@s.url action="inspectionScheduleList" assetId="${entityId}" />' >
+				<a href='<@s.url action="eventScheduleList" assetId="${entityId}" />' >
 					<@s.text name="label.view_schedules"/>
 				</a>
 			</li>
 			<#if sessionUser.hasAccess('createinspection') >
 				<li id="floatingDropdownStartEventLink">
-					<a href='<@s.url action="quickInspect" assetId="${entityId}" />' >
+					<a href='<@s.url action="quickEvent" assetId="${entityId}" />' >
 						<@s.text name="label.startevent"/>
 					</a>
 				</li>

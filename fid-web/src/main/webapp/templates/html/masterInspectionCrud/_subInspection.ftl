@@ -9,7 +9,7 @@
 		<ul>
 			<#if masterInspection?exists >
 				<#list action.getInspectionsFor(subAsset) as subInspection >
-					<li>${subInspection.type.name!} - <a href="<@s.url action="subInspectionEdit" uniqueID="${subInspection.id}" token="${token}"/>"><@s.text name="label.edit_this_event"/></a></li>
+					<li>${subInspection.type.name!} - <a href="<@s.url action="subEventEdit" uniqueID="${subInspection.id}" token="${token}"/>"><@s.text name="label.edit_this_event"/></a></li>
 				</#list>
 			</#if>
 		</ul>		

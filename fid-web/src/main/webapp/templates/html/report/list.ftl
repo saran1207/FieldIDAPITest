@@ -62,10 +62,10 @@ ${reportActions}
 			<a href='<@s.url action="reportResults" namespace="/aHtml" searchId="${searchId}" />' class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a>
 			
 			<#if Session.sessionUser.hasAccess('editinspection') && !criteria.includeNetworkResults>
-				| <a href="<@s.url action="massUpdateInspections"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
+				| <a href="<@s.url action="massUpdateEvents"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
 			<#if securityGuard.projectsEnabled && sessionUser.hasAccess('createinspection') && !criteria.includeNetworkResults>
-				| <a href="<@s.url action="selectJobToAssignInspectionsTo"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="assignInspectionsToJob"><@s.text name="label.assigntojob" /></a>
+				| <a href="<@s.url action="selectJobToAssignEventsTo"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="assignInspectionsToJob"><@s.text name="label.assigntojob" /></a>
 			</#if>
 			
 		</div>

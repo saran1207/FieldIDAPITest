@@ -72,14 +72,14 @@ ${action.setPageType('asset_type', 'schedule_frequencies')!}
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
 			<@s.text name="label.emptyinspectiontypesselected" />
-			<a href="<@s.url action="selectInspectionTypes" includeParams="none" assetTypeId="${assetTypeId}" />"><@s.text name="label.clickheretoselectinspectiontypes"/></a>
+			<a href="<@s.url action="selectEventTypes" includeParams="none" assetTypeId="${assetTypeId}" />"><@s.text name="label.clickheretoselectinspectiontypes"/></a>
 		</p>
 	</div>
 </#if>
 
 <div id="orgPickerForm" style="display:none">	
 	<div id="orgFormContainer">
-	<@s.form id="orgForm" name="orgPickerForm" action="inspectionFrequencyOverrideCreate" theme="fieldidSimple" >
+	<@s.form id="orgForm" name="orgPickerForm" action="eventFrequencyOverrideCreate" theme="fieldidSimple" >
 		<@s.hidden name="assetTypeId" />
 		<@s.hidden name="uniqueID" />
 		<@s.hidden id="inspectionTypeIdToUpdate" name="inspectionTypeId"/>

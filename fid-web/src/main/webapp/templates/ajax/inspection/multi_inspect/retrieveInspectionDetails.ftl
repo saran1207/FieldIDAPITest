@@ -14,7 +14,7 @@ $('continueButton').observe("click", function(){
 		var options = getStandardCallbacks();
 		options.parameters = $('inspectionCreate').serialize();
 		options.method =  "post";
-		new Ajax.Request('<@s.url action="inspectionCheck" namespace="ajax"/>', options);
+		new Ajax.Request('<@s.url action="eventCheck" namespace="ajax"/>', options);
 });
 						 
 attachOrgEvents("#step2");

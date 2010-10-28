@@ -20,7 +20,7 @@
             <@s.text name="nav.inspections"/>
         </li>
         <li>
-            <a href="<@s.url action="networkInspectionScheduleList" namespace="/" uniqueID="${uniqueID}"/>">
+            <a href="<@s.url action="networkEventScheduleList" namespace="/" uniqueID="${uniqueID}"/>">
                 <@s.text name="nav.schedules"/>
             </a>
         </li>

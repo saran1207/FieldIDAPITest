@@ -44,7 +44,7 @@ ${action.setPageType('inspection', 'list')!}
 						<#list inspectionGroup.availableInspections?sort_by( 'date' )?reverse as inspection >
 							<div class="inspections" >	
 								<span class="inspectionType">						
-									<a id="showInspection_${inspection.id}" href="<@s.url action="inspection" uniqueID="${inspection.id}" />">
+									<a id="showInspection_${inspection.id}" href="<@s.url action="event" uniqueID="${inspection.id}" />">
 										${ ( inspection.type.name )!}
 									</a>
 								</span>
@@ -56,7 +56,7 @@ ${action.setPageType('inspection', 'list')!}
 								</span>
 								<span class="editInspection">
 									<#if sessionUser.hasAccess("editinspection") >
-										<a id="editInspection_${inspection.id}" href="<@s.url action="selectInspectionEdit" uniqueID="${inspection.id}" />">
+										<a id="editInspection_${inspection.id}" href="<@s.url action="selectEventEdit" uniqueID="${inspection.id}" />">
 											<@s.text name="label.edit"/>
 										</a>
 									</#if>

@@ -36,6 +36,6 @@
 
 <#if !inVendorContext >
 	<div class="formAction">
-		<button onclick="window.location = '<@s.url action="inspectionGroups" uniqueID="${uniqueID}"/>'; return false;" ><@s.text name="label.manageinspections"/> </button>
+		<button onclick="window.location = '<@s.url action="eventGroups" uniqueID="${uniqueID}"/>'; return false;" ><@s.text name="label.manageinspections"/> </button>
 	</div>
 </#if>

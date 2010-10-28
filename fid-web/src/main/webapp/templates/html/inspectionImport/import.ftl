@@ -1,9 +1,9 @@
 ${action.setPageType('inspection_type', 'import_export')!}
 
 <#assign labelTarget='inspection' >
-<#assign importAction='importInspections' >
-<@s.url id="updateUrl" namespace="/ajax" action="inspectionImportStatus" />
-<@s.url id="backToUrl" action="inspectionImportExport" uniqueID="${uniqueID}"/>
+<#assign importAction='importEvents' >
+<@s.url id="updateUrl" namespace="/ajax" action="eventImportStatus" />
+<@s.url id="backToUrl" action="eventImportExport" uniqueID="${uniqueID}"/>
 
 <#macro hiddenFields>
 	<@s.hidden name="uniqueID" />

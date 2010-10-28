@@ -2,7 +2,7 @@ ${action.setPageType('inspection_type', 'edit')!}
 
 
 
-<@s.form action="inspectionTypeDelete" id="mainContent" cssClass="fullForm fluidSets" theme="fieldid">
+<@s.form action="eventTypeDelete" id="mainContent" cssClass="fullForm fluidSets" theme="fieldid">
 	<h2 class="clean"><@s.text name="label.delete_summary"/></h2>
 	<#if archiveSummary.canBeRemoved()>
 		<div class="pageInstructions">
@@ -51,6 +51,6 @@ ${action.setPageType('inspection_type', 'edit')!}
 		<#if archiveSummary.canBeRemoved()>
 			<@s.submit key="label.delete"/> <@s.text name="label.or"/> 
 		</#if>
-		<a href="<@s.url action="inspectionTypeEdit" uniqueID="${uniqueID}"/>" ><@s.text name="label.cancel"/></a>
+		<a href="<@s.url action="eventTypeEdit" uniqueID="${uniqueID}"/>" ><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>

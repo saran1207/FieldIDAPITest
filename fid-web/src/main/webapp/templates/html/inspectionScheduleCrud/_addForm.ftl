@@ -1,4 +1,4 @@
-<@s.form id="newSchedule" action="inspectionScheduleCreate" cssClass="crudForm pageSection" namespace="/ajax" theme="fieldid" >
+<@s.form id="newSchedule" action="eventScheduleCreate" cssClass="crudForm pageSection" namespace="/ajax" theme="fieldid" >
 	<#include "../common/_formErrors.ftl"/>				
 	<h2><@s.text name="label.addschedule"/></h2>
 	<div class="contentSection">

@@ -4,8 +4,8 @@
 </head>
 <ul class="subSystemList separated">
 	<li id="singleEvent">
-		<h2 class="clean"><a href="<@s.url action="inspect"/>"><@s.text name="label.inspect_single_asset"/></a></h2>
-		<p><a href="<@s.url action="inspect"/>"><@s.text name="label.inspect_single_asset.full"/></a></p>
+		<h2 class="clean"><a href="<@s.url action="selectEventAsset"/>"><@s.text name="label.inspect_single_asset"/></a></h2>
+		<p><a href="<@s.url action="selectEventAsset"/>"><@s.text name="label.inspect_single_asset.full"/></a></p>
 	</li>
 	<#if sessionUser.hasAccess("createinspection") == true >
 		<li id="multipleEvents">

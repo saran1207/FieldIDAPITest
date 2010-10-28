@@ -62,12 +62,12 @@
 			<result name="success" type="freemarker">/templates/aHtml/assetUtil/generateSerialNumber.ftl</result>
 		</action>
 		
-		<action name="inspection" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+		<action name="event" method="show" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
 			<result name="success" type="freemarker">/templates/aHtml/inspectionCrud/show.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
 		</action>
 
-		<action name="networkInspection" method="show" class="com.n4systems.fieldid.actions.inspection.NetworkInspectionCrud">
+		<action name="networkEvent" method="show" class="com.n4systems.fieldid.actions.inspection.NetworkInspectionCrud">
 			<result name="success" type="freemarker">/templates/aHtml/inspectionCrud/show.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
 		</action>

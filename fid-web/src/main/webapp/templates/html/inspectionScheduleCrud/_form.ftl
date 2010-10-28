@@ -1,5 +1,5 @@
 <span >
-	<@s.form id="schedule_${uniqueID}" action="inspectionScheduleSave" namespace="/ajax" theme="fieldidSimple" >				
+	<@s.form id="schedule_${uniqueID}" action="eventScheduleSave" namespace="/ajax" theme="fieldidSimple" >				
 		<@s.hidden name="type"  />
 		<@s.hidden name="assetId"  />
 		<@s.hidden name="uniqueID" />

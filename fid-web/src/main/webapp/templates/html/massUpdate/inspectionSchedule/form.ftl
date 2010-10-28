@@ -9,7 +9,7 @@
 	</p>
 </div>
 
-<@s.form action="massUpdateInspectionScheduleSave" theme="simple" cssClass="listForm">
+<@s.form action="massUpdateEventScheduleSave" theme="simple" cssClass="listForm">
 	<@s.hidden name="searchId" />
 	<@s.hidden name="currentPage" />
 	<table class="list">

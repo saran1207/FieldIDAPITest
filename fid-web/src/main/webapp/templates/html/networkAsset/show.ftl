@@ -15,12 +15,12 @@
             <@s.text name="nav.traceability"/>
         </li>
         <li>
-            <a href="<@s.url action="networkAssetInspections" namespace="/" uniqueID="${uniqueID}"/>">
+            <a href="<@s.url action="networkAssetEvents" namespace="/" uniqueID="${uniqueID}"/>">
                 <@s.text name="nav.inspections"/>
             </a>
         </li>
         <li>
-            <a href="<@s.url action="networkInspectionScheduleList" namespace="/" uniqueID="${uniqueID}"/>">
+            <a href="<@s.url action="networkEventScheduleList" namespace="/" uniqueID="${uniqueID}"/>">
                 <@s.text name="nav.schedules"/>
             </a>
         </li>

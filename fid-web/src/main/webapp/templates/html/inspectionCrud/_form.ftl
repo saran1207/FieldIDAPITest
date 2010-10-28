@@ -4,7 +4,7 @@
 		<script type="text/javascript" src="<@s.url value="/javascript/inspectionBook.js"/>" ></script>
 		<script type="text/javascript">
 			changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="ajax"   />';
-			updateInspectionBooksUrl = '<@s.url action="inspectionBooks" namespace="ajax"   />';
+			updateInspectionBooksUrl = '<@s.url action="eventBooks" namespace="ajax"   />';
 			assetTypeId = ${asset.type.id}
 			var proofTestTypes = ${json.toJson( proofTestTypesUpload )}
 		</script>

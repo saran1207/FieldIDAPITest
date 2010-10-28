@@ -22,8 +22,8 @@
 
 <#if !inVendorContext>
 	<script type="text/javascript" >
-		editScheduleUrl =  '<@s.url action="inspectionScheduleEdit" namespace="/ajax" />';
-		cancelScheduleUrl = '<@s.url action="inspectionScheduleShow" namespace="/ajax"/>';
-		removeScheduleUrl = '<@s.url action="inspectionScheduleDelete" namespace="/ajax"/>';
+		editScheduleUrl =  '<@s.url action="eventScheduleEdit" namespace="/ajax" />';
+		cancelScheduleUrl = '<@s.url action="eventScheduleShow" namespace="/ajax"/>';
+		removeScheduleUrl = '<@s.url action="eventScheduleDelete" namespace="/ajax"/>';
 	</script>
 </#if>

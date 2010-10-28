@@ -5,8 +5,8 @@
 			<span>${asset.type.name!""?html} <@s.text name="label.summary"/></span>
 			
 			
-			<@s.url id="inspectionCertUrl" action="downloadInspectionCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
-			<@s.url id="observationCertUrl" action="downloadInspectionCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
+			<@s.url id="inspectionCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
+			<@s.url id="observationCertUrl" action="downloadEventCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
 				
 			<#if inspection.anyCertPrintable>
 				<div id="cert_links" class="print" onmouseover="repositionCertLinks('cert_list', 'cert_links');" >

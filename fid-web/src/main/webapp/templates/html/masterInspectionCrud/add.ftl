@@ -23,7 +23,7 @@
 		assetLookupTitle = "<@s.text name="title.assetlookup"/>";
 		subAssetIndex = ${subAssets?size};
 		updateAssetTypeUrl = '<@s.url action="assetTypeChange" namespace="ajax"  />';
-		addSubAssetUrl = '<@s.url action="createSubAssetInInspection" namespace="/ajax" />';
+		addSubAssetUrl = '<@s.url action="createSubAssetInEvent" namespace="/ajax" />';
 		addAssetUrl = '<@s.url action="assetAdd" namespace="/ajax"/>';
 		createAssetUrl = "<@s.url action="assetCreate" namespace="/ajax" />";	
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
@@ -51,7 +51,7 @@ ${action.setPageType('inspection', 'add')!}
 		<div class="performedInspection">
 			<span>${(inspectionType.name)!}</span> 
 			<span>
-				<a class="exitLink" href="<@s.url action="subInspectionAdd" uniqueID="0" assetId="${asset.id}" type="${type}" parentAssetId="${asset.id}" token="${token}" scheduleId="${scheduleId!}" />">
+				<a class="exitLink" href="<@s.url action="subEventAdd" uniqueID="0" assetId="${asset.id}" type="${type}" parentAssetId="${asset.id}" token="${token}" scheduleId="${scheduleId!}" />">
 					<#if !masterInspection.mainInspectionStored >
 						<@s.text name="label.you_must_perform_this_event"/>
 					<#else>
@@ -68,7 +68,7 @@ ${action.setPageType('inspection', 'add')!}
 		</#list>
 	</div>
 	
-	<@s.form action="masterInspectionCreate" id="subAssetForm" cssClass="crudForm" theme="fieldid">
+	<@s.form action="masterEventCreate" id="subAssetForm" cssClass="crudForm" theme="fieldid">
 		<@s.hidden name="uniqueID" id="uniqueID"/>
 		<@s.hidden name="token" id="searchToken"/>
 		<@s.hidden name="type"/>
@@ -76,7 +76,7 @@ ${action.setPageType('inspection', 'add')!}
 		<@s.hidden name="assetId" id="assetId"/>
 		<@s.hidden name="cleanToInspectionsToMatchConfiguration" />
 		<div class="formAction">
-			<@s.url id="cancelUrl" action="inspectionGroups" uniqueID="${asset.id}"/>
+			<@s.url id="cancelUrl" action="eventGroups" uniqueID="${asset.id}"/>
 			<@s.submit key="label.cancel" onclick="return redirect( '${cancelUrl}' );"/>
 			<@s.submit key="label.save" />
 		</div>

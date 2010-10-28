@@ -32,7 +32,7 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 <#include "/templates/html/common/_formErrors.ftl"/>
 <div id="inspectionTypeForm">
 	
-	<@s.form name="inspectionTypeForm" action="inspectionTypeFormSave" theme="simple" >
+	<@s.form name="inspectionTypeForm" action="eventTypeFormSave" theme="simple" >
 		<@s.hidden name="uniqueID" />
 		<div id="sectionContainer">
 			<#list criteriaSections as section >
@@ -55,7 +55,7 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 		</div>
 		
 		<div class="formAction">
-			<@s.url id="cancelUrl" action="inspectionType" uniqueID="${uniqueID}"/>
+			<@s.url id="cancelUrl" action="eventType" uniqueID="${uniqueID}"/>
 			<@s.reset key="hbutton.cancel" onclick="return redirect('${cancelUrl}');" />
 			
 			<#if newForm>

@@ -1,7 +1,7 @@
 ${action.setPageType('inspection_book', 'list')!}
 
 <#if  page.hasResults() && page.validPage() >
-	<#assign currentAction="inspectionBooks.action" />
+	<#assign currentAction="eventBooks.action" />
 	<#include '../common/_pagination.ftl' />
 	<table class="list">
 		<tr>
@@ -13,7 +13,7 @@ ${action.setPageType('inspection_book', 'list')!}
 		</tr>
 		<#list page.getList() as book > 
 			<tr id="book_${book.id}" >
-				<td><a href="<@s.url action="inspectionBookEdit" uniqueID="${book.id}"/>" bookid="${book.id}">${book.name?html}</a></td>
+				<td><a href="<@s.url action="eventBookEdit" uniqueID="${book.id}"/>" bookid="${book.id}">${book.name?html}</a></td>
 				<td>${(book.owner.name?html)!}</td>
 				<td>${action.formatDateTime(book.created)}</td>
 				<td><span id="bookStatus_${book.id}">${book.open?string( action.getText( "label.open" ), action.getText( "label.closed" ) ) }</td>
@@ -23,7 +23,7 @@ ${action.setPageType('inspection_book', 'list')!}
 						<#else>
 							<#include "_openLink.ftl" />
 						</#if>
-					</span> | <a href="javascript:void(0);" onclick="return getResponse( '<@s.url action="inspectionBookDelete" namespace="/ajax" uniqueID="${book.id}"/>' );"><@s.text name="label.delete"/></a>
+					</span> | <a href="javascript:void(0);" onclick="return getResponse( '<@s.url action="eventBookDelete" namespace="/ajax" uniqueID="${book.id}"/>' );"><@s.text name="label.delete"/></a>
 				</td>
 			</tr>	
 		</#list>
@@ -42,7 +42,7 @@ ${action.setPageType('inspection_book', 'list')!}
 		<h2><@s.text name="label.invalidpage" /></h2>
 		<p>
 			<@s.text name="message.invalidpage" />
-			<a href="<@s.url  action="inspectionBooks" currentPage="1" includeParams="get"/>" ><@s.text name="message.backtopageone"/></a>
+			<a href="<@s.url  action="eventBooks" currentPage="1" includeParams="get"/>" ><@s.text name="message.backtopageone"/></a>
 		</p>
 	</div>
 </#if>

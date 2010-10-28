@@ -27,7 +27,7 @@
 	
 </div>
 
-<@s.form action="massUpdateInspectionsSave" theme="fieldidSimple" cssClass="listForm">
+<@s.form action="massUpdateEventsSave" theme="fieldidSimple" cssClass="listForm">
 	<@s.hidden name="searchId" />
 	<@s.hidden name="currentPage" />
 	<table class="list">

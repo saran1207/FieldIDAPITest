@@ -2,7 +2,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/inspectionType.js"/>"></script>
 	<script type="text/javascript">
 		inspectionAttributeIndex = ${(infoFields?size)!0};
-		addInspectionAttributeUrl = '<@s.url action="inspectionAttributeAdd" namespace="/ajax"/>';
+		addInspectionAttributeUrl = '<@s.url action="eventAttributeAdd" namespace="/ajax"/>';
 	</script>
 	
 </head>
@@ -86,7 +86,7 @@
 	<#if !uniqueID?exists >
 		<@s.submit key="hbutton.saveandaddinspectionform" name="saveAndAdd"/> 
 	<#else >
-		<@s.url id="deleteConfirmUrl" action="inspectionTypeDeleteConfirm" uniqueID="${uniqueID}"/>
+		<@s.url id="deleteConfirmUrl" action="eventTypeDeleteConfirm" uniqueID="${uniqueID}"/>
 		<@s.submit key="label.delete" name="delete" cssClass="delete" onclick="return redirect('${deleteConfirmUrl}');"/> 
 	</#if>
 	<@s.text name="label.or"/> <a href="${cancelUrl}"><@s.text name="label.cancel"/></a>

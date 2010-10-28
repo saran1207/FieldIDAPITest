@@ -11,14 +11,14 @@ ${action.setPageType('inspection_type', 'list')!}
 		
 		<#list inspectionTypes as inspectionType>
 			<tr>
-				<td><a href="<@s.url action="inspectionType" uniqueID="${inspectionType.id}" />">${inspectionType.name}</a></td>
+				<td><a href="<@s.url action="eventType" uniqueID="${inspectionType.id}" />">${inspectionType.name}</a></td>
 				<td>
 					<#if inspectionType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
 				</td>
 				<td>${inspectionType.group.name}</td>
 				<td>
-					<a href="<@s.url action="inspectionTypeEdit" uniqueID="${inspectionType.id}" />"><@s.text name="label.edit" /></a>&nbsp;
-					<a href="<@s.url action="inspectionTypeCopy" uniqueID="${inspectionType.id}" />"><@s.text name="label.copy" /></a>
+					<a href="<@s.url action="eventTypeEdit" uniqueID="${inspectionType.id}" />"><@s.text name="label.edit" /></a>&nbsp;
+					<a href="<@s.url action="eventTypeCopy" uniqueID="${inspectionType.id}" />"><@s.text name="label.copy" /></a>
 				</td>
 			</tr>
 		</#list>

@@ -1,6 +1,6 @@
 
 
-<@s.form action="inspectionCreate" namespace="/multiInspect/ajax" id="inspectionCreate" cssClass="fullForm fluidSets" theme="fieldid">
+<@s.form action="eventCreate" namespace="/multiInspect/ajax" id="inspectionCreate" cssClass="fullForm fluidSets" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="type"/>
 	<@s.hidden name="scheduleId" value="0"/>

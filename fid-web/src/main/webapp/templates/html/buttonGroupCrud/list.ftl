@@ -23,7 +23,7 @@
 <#assign actions>
 	<div>
 		<button onclick="addButtonGroup()" ><@s.text name="label.addbuttongroup"/></button>
-		<button onclick="if( confirmNoChanges() == true ) { redirect( '<@s.url action="inspectionTypeForm" uniqueID="${inspectionTypeId!}"/>' ); }" ><@s.text name="label.imdone"/></button>
+		<button onclick="if( confirmNoChanges() == true ) { redirect( '<@s.url action="eventTypeForm" uniqueID="${inspectionTypeId!}"/>' ); }" ><@s.text name="label.imdone"/></button>
 	</div>
 </#assign>
 ${actions}
