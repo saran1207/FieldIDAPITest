@@ -1706,9 +1706,7 @@ input.description {
 }
 
 .initialMessage{
-	background-image: url(../images/reporting-bs-icon.png);
-	background-repeat: no-repeat;
-	background-position: 140px center;
+
 	background-color: #EEEEEE;
 	padding: 30px;
 }
@@ -1717,11 +1715,15 @@ input.description {
 	margin-top: 4px;
 	padding: 4px;
 	font-size: 14px;
-	margin-left: 200px;
+	margin-left: 183px;
 }
 
 .textContainer{
-	margin-left: 200px;
+	background-image: url(../images/reporting-bs-icon.png);
+	background-repeat: no-repeat;
+	background-position: left 11.5px;
+	margin-left: 90px;
+	padding-left: 90px;
 }
 
 .textContainer p{
