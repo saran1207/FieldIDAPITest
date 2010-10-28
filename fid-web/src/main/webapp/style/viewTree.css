@@ -1,16 +1,24 @@
-.viewTreeContainer {
-}
-
 .viewTreeNode {
 	padding-left: 15px;
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.viewTreeNodeTitle {
+#selectShareUsers h2{
+	font-size: 14px;
+}
+
+h2.viewTreeNodeTitle {
+	font-size: 14px;
 	font-weight: bold;
 	padding-top: 5px;
 	padding-bottom: 5px;
+	background-color: transparent;
+	border-bottom:1px solid #D0DAFD;
 }
 
 .viewTreeNodeItem {
-	padding-left: 20px;
+	font-size: 12px;
+	padding: 4px 4px 4px 30px;
 }

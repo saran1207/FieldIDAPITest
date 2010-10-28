@@ -1,3 +1,4 @@
+<@n4.includeStyle href="viewTree" />
 <#macro drawTreeNode node firstNode foundNonEmptyNode>
 	<ul class="viewTreeNode">
 		<#assign nodeId=node.nodeId />
@@ -19,14 +20,14 @@
 		</#if>
 		
 		<#if !firstNode>
-			<h4 class="viewTreeNodeTitle">
+			<h2 class="viewTreeNodeTitle">
 				<a href="javascript:void(0);" id="exp_${nodeId}" onclick="openSection( 'node_${nodeId}', 'exp_${nodeId}', 'col_${nodeId}');return false" style="${openStyle}"><img src="<@s.url value="/images/expand.gif" includeParams="none"/>" /></a>
 				<a href="javascript:void(0);" id="col_${nodeId}" onclick="closeSection('node_${nodeId}', 'col_${nodeId}', 'exp_${nodeId}');return false" style="${closeStyle}"><img src="<@s.url value="/images/collapse.gif" includeParams="none"/>" /></a>
 				${node.nodeName}
-			</h4>
+			</h2>
 			<div id="node_${nodeId}" style="${closeStyle}">
 		<#else>
-			<h4 class="viewTreeNodeTitle">${node.nodeName}</h4>
+			<h2 class="viewTreeNodeTitle">${node.nodeName}</h2>
 			<div id="node_${nodeId}">
 		</#if>
 			<#list node.elements as element> 

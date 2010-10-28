@@ -1706,7 +1706,7 @@ input.description {
 }
 
 .initialMessage{
-
+	border:1px solid #CCCCCC;
 	background-color: #EEEEEE;
 	padding: 30px;
 }

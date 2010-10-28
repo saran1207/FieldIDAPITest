@@ -1,7 +1,8 @@
-${action.setPageType('my_account', 'saved_reports')!}
+${action.setPageType('saved_reports', 'saved_reports')!}
 <#include "_secondaryNav.ftl"/>
 <#if shareUserList?exists && !shareUserList.empty>
 	<@s.form method="post" id="selectShareUsers" action="savedReportShareCreate" theme="fieldid" cssClass="crudForm bigForm pageSection">
+		
 		<h2><@s.text name="label.share_report"/></h2>
 		<@s.hidden name="uniqueID"/>
 		
