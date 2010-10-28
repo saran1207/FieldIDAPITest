@@ -86,7 +86,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	private Set<InfoOptionBean> infoOptions = new HashSet<InfoOptionBean>();
 
 	@ManyToOne(optional = true)
-    @JoinColumn(name="productstatus_uniqueid")
+    @JoinColumn(name="assetstatus_id")
 	private AssetStatus assetStatus;
 
 	@OneToMany(mappedBy = "asset", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
@@ -103,7 +103,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     private List<SubAsset> subAssets = new ArrayList<SubAsset>();
     
     @ManyToMany( fetch= FetchType.LAZY )
-    @JoinTable(name = "projects_assets", joinColumns = @JoinColumn(name="products_id"), inverseJoinColumns = @JoinColumn(name="projects_id"))
+    @JoinTable(name = "projects_assets", joinColumns = @JoinColumn(name="asset_id"), inverseJoinColumns = @JoinColumn(name="projects_id"))
     private List<Project> projects = new ArrayList<Project>();
     
     @Column(name="published", nullable=false)

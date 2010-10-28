@@ -70,7 +70,7 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="product_id")
+    @JoinColumn(name="asset_id")
 	private Asset asset;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)

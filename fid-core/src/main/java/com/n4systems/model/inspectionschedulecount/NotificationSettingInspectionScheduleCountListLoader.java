@@ -50,7 +50,7 @@ public abstract class NotificationSettingInspectionScheduleCountListLoader exten
 
 	protected void applyNotificationFilters(QueryBuilder<InspectionScheduleCount> builder) {
 		/*
-		 * NOTE: only a single producttype and inspectiontype are allowed via the interface.  If we have one
+		 * NOTE: only a single assettype and inspectiontype are allowed via the interface.  If we have one
 		 * we will use it directly (rather then an in-list)
 		 */
 		if (!notification.getAssetTypes().isEmpty()) {

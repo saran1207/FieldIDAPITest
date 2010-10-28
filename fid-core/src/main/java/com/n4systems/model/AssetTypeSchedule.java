@@ -22,7 +22,7 @@ public class AssetTypeSchedule extends EntityWithOwner implements Saveable, Secu
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(optional=false)
-    @JoinColumn(name = "producttype_id")
+    @JoinColumn(name = "assettype_id")
 	private AssetType assetType;
 	
 	@ManyToOne(optional=false)

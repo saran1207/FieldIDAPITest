@@ -22,7 +22,7 @@ public class AssetAttachment extends EntityWithTenant implements Saveable, Attac
 	}
 	
 	@ManyToOne
-    @JoinColumn(name="product_id")
+    @JoinColumn(name="asset_id")
 	private Asset asset;
 	private Note note = new Note();
 	

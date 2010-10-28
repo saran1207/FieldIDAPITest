@@ -40,7 +40,7 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	@OneToOne(optional = false, fetch = FetchType.EAGER)
 	private Tenant tenant;
 
-	@Column(name="producttypes", nullable=false)
+	@Column(name="assettypes", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date assetTypes = new Date();
 

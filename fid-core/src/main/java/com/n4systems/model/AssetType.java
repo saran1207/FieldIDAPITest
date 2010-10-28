@@ -78,11 +78,11 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private AutoAttributeCriteria autoAttributeCriteria;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinTable(name="assettypes_fileattachments", joinColumns = @JoinColumn(name="producttypes_id"), inverseJoinColumns = @JoinColumn(name="attachments_id"))
+    @JoinTable(name="assettypes_fileattachments", joinColumns = @JoinColumn(name="assettype_id"), inverseJoinColumns = @JoinColumn(name="attachments_id"))
 	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
 	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="assettypes_assettypes", joinColumns = @JoinColumn(name="producttypes_id"), inverseJoinColumns = @JoinColumn(name="subtypes_id"))
+    @JoinTable(name="assettypes_assettypes", joinColumns = @JoinColumn(name="assettype_id"), inverseJoinColumns = @JoinColumn(name="subtypes_id"))
 	private Set<AssetType> subTypes = new HashSet<AssetType>();
 	
 	private String archivedName;

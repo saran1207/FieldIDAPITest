@@ -24,7 +24,7 @@ public class LineItem extends EntityWithTenant implements Listable<Long>, Securi
 	@Column(nullable=false)
 	private long quantity = 0L;
 	
-	@Column(nullable=false, name="productcode")
+	@Column(nullable=false, name="assetcode")
 	private String assetCode = DEFAULT_ASSET_CODE;
 	private String lineId;
 	private String description;

@@ -40,11 +40,11 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	private InspectionType type;
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional = false)
-    @JoinColumn(name="product_id")
+    @JoinColumn(name="asset_id")
 	private Asset asset;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(name="productstatus_id")
+	@JoinColumn(name="assetstatus_id")
 	private AssetStatus assetStatus;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy = "inspection", cascade=CascadeType.ALL)

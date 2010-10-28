@@ -48,7 +48,7 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@IndexColumn(name="orderidx")
     private List<String> addresses = new ArrayList<String>();
 
-	@Column(name="producttype_id", nullable=false)
+	@Column(name="assettype_id", nullable=false)
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	@IndexColumn(name="orderidx")
 	private List<Long> assetTypes = new ArrayList<Long>();

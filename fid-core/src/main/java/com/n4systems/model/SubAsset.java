@@ -17,11 +17,11 @@ public class SubAsset extends AbstractEntity implements UnsecuredEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@OneToOne
-	@JoinColumn(name="product_id")
+	@JoinColumn(name="asset_id")
 	private Asset asset;
 	
 	@ManyToOne
-    @JoinColumn(name="masterproduct_id")
+    @JoinColumn(name="masterasset_id")
 	private Asset masterAsset;
 	
 	@Column(length=255)
@@ -39,12 +39,10 @@ public class SubAsset extends AbstractEntity implements UnsecuredEntity {
 	}
 	
 	public SubAsset(String label, Asset asset, Asset master) {
-		super();
 		this.label = label;
 		this.asset = asset;
 		this.masterAsset = master;
 	}
-
 
 	public Asset getAsset() {
 		return asset;

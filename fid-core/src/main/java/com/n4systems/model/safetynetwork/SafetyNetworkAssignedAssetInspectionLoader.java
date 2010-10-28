@@ -26,7 +26,7 @@ public class SafetyNetworkAssignedAssetInspectionLoader extends SafetyNetworkIns
 	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Inspection inspection) {
 		SafetyNetworkAssetSecurityManager securityManager = new SafetyNetworkAssetSecurityManager(filter.getOwner());
 		
-		List<Asset> linkedAssets = getLinkedProducts(em, filter, inspection.getAsset());
+		List<Asset> linkedAssets = getLinkedAssets(em, filter, inspection.getAsset());
 		
 		boolean hasAssignedAsset = securityManager.listContainsAnAssignedAsset(linkedAssets);
 		boolean assetIsPubliclyAvailable = securityManager.listContainsAnAssetPubliclyPublished(linkedAssets);
@@ -34,7 +34,7 @@ public class SafetyNetworkAssignedAssetInspectionLoader extends SafetyNetworkIns
 		return hasAssignedAsset || assetIsPubliclyAvailable;
 	}
 
-	private List<Asset> getLinkedProducts(EntityManager em, SecurityFilter filter, Asset asset) {
+	private List<Asset> getLinkedAssets(EntityManager em, SecurityFilter filter, Asset asset) {
 		assetsByNetworkIdLoader.setNetworkId(asset.getNetworkId());
 		
 		// there's no need for these to be enhanced since they're just used for a security check
