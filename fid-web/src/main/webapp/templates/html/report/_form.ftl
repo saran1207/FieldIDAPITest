@@ -44,36 +44,7 @@ ${action.setPageType('report', 'show')!}
 				<@s.textfield name="criteria.referenceNumber"/>
 			</div>
 		</div>
-		<div class="fieldGroup">
-			<h2><@s.text name="label.ownership"/></h2>
-			<#if securityGuard.assignedToEnabled >
-				<div class="infoSet">
-					<label for="criteria.assignedUser"><@s.text name="label.assignedto"/></label>
-					<@s.select name="criteria.assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
-				</div>
-			</#if>
-			<div class="infoSet">
-				<label for="criteria.location"><@s.text name="label.location"/></label>
-				<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
-			</div>	
-			<div class="infoSet">
-				<label for="owner"><@s.text name="label.owner"/></label>
-				<@n4.orgPicker name="owner"/>
-			</div>
-		</div>
-		<div class="fieldGroup">
-			<h2><@s.text name="label.inspdate"/></h2>
-			<div class="container">
-				<div class="infoSet">
-					<label for="fromDate"><@s.text name="label.fdate"/></label>
-					<@s.datetimepicker  name="fromDate" />
-				</div>
-				<div class="infoSet">
-					<label for="toDate"><@s.text name="label.tdate"/></label>
-					<@s.datetimepicker  name="toDate" />
-				</div>
-			</div>
-		</div>
+		
 		<div class="fieldGroup">
 			<h2><@s.text name="label.asset_details"/></h2>
 			<div class="infoSet">
@@ -83,6 +54,8 @@ ${action.setPageType('report', 'show')!}
 					
 			<#include "../customizableSearch/_assetTypeSelect.ftl"/>
 		</div>
+		
+			
 		<div class="fieldGroup">
 			<h2><@s.text name="label.event_details"/></h2>
 			<div class="infoSet">
@@ -114,6 +87,9 @@ ${action.setPageType('report', 'show')!}
 				</div>
 			</#if>
 		</div>
+		
+
+		
 		<div class="fieldGroup">
 			<h2><@s.text name="label.orderdetails"/></h2>
 			<div class="infoSet">
@@ -124,7 +100,47 @@ ${action.setPageType('report', 'show')!}
 				<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
 				<@s.textfield name="criteria.purchaseOrder" />
 			</div>	
+			<div class="infoSet">
+				<label>&nbsp;</label>
+				<input class="hidden" />
+			</div>	
 		</div>
+	
+			
+		<div class="fieldGroup">
+			<h2><@s.text name="label.ownership"/></h2>
+			<#if securityGuard.assignedToEnabled >
+				<div class="infoSet">
+					<label for="criteria.assignedUser"><@s.text name="label.assignedto"/></label>
+					<@s.select name="criteria.assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
+				</div>
+			</#if>
+			<div class="infoSet">
+				<label for="criteria.location"><@s.text name="label.location"/></label>
+				<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
+			</div>	
+			<div class="infoSet">
+				<label for="owner"><@s.text name="label.owner"/></label>
+				<@n4.orgPicker name="owner"/>
+			</div>
+		</div>
+	
+	
+		
+		<div class="fieldGroup">
+			<h2><@s.text name="label.inspdate"/></h2>
+			<div class="container">
+				<div class="infoSet">
+					<label for="fromDate"><@s.text name="label.fdate"/></label>
+					<@s.datetimepicker  name="fromDate" />
+				</div>
+				<div class="infoSet">
+					<label for="toDate"><@s.text name="label.tdate"/></label>
+					<@s.datetimepicker  name="toDate" />
+				</div>
+			</div>
+		</div>
+	
 
 		<#include "../customizableSearch/_selectColumns.ftl"/>
 		

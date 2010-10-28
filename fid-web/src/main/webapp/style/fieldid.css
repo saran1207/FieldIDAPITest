@@ -1708,11 +1708,31 @@ input.description {
 .initialMessage{
 	background-image: url(../images/reporting-bs-icon.png);
 	background-repeat: no-repeat;
-	background-position:140px center;
-	background-color:#EEEEEE;
+	background-position: 140px center;
+	background-color: #EEEEEE;
 	padding: 30px;
+}
+
+.initialMessage input{
+	margin-top: 4px;
+	padding: 4px;
+	font-size: 14px;
+	margin-left: 200px;
 }
 
 .textContainer{
 	margin-left: 200px;
+}
+
+.textContainer p{
+	font-size: 14px;	
+	line-height: 20px;
+}
+
+.textContainer h1, .textContainer p{
+	padding: 5px;
+}
+
+#savedReportCreate_name{
+	padding:3px;
 }
