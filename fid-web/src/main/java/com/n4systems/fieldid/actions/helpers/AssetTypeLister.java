@@ -95,6 +95,19 @@ public class AssetTypeLister {
 		return assetTypes;
 	}
 	
+	public List<ListingPair> getUngroupedAssetTypes() {
+		List<ListingPair> allAssetTypes = getAssetTypes();
+		
+		for(String group : getGroups()){
+			for(ListingPair groupedAsset : getGroupedAssetTypes(group)){
+				if(allAssetTypes.contains(groupedAsset)){
+					allAssetTypes.remove(groupedAsset);
+				}
+			}
+		}
+		return allAssetTypes; 
+	}
+	
 	private void assignGroupToList(String groupName, List<ListingPair> types) {
 		if (!types.isEmpty()) {
 			Collections.sort(types);

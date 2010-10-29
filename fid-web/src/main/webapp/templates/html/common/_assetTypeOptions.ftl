@@ -3,4 +3,4 @@
 		<@s.optgroup label="${group?html}" list="%{assetTypes.getGroupedAssetTypes('${group?js_string}')}" listKey="id" listValue="name" />
 	</#if>
 </#list>
-<@s.optgroup label="${action.getText('label.all')}" list="assetTypes.assetTypes" listKey="id" listValue="name" />
+<@s.optgroup label="${action.getText('label.ungrouped')}" list="assetTypes.ungroupedAssetTypes" listKey="id" listValue="name" />
