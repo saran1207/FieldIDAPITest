@@ -23,6 +23,5 @@
 
 <#include "../common/_formErrors.ftl"/>
 <@s.hidden name="uniqueID" id="uniqueID"/>
-<#include "_assetSerialAndRfidForm.ftl"/>
 <#include "_assetConfigForm.ftl"/>
 

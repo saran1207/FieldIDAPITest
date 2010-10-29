@@ -12,7 +12,7 @@
 	margin-bottom:5px;
 }
 
-h2 {
+h2{
 	background-color:#DADFFA;
 }
 
@@ -20,5 +20,29 @@ h2 {
 	padding: 5px;
 }
 
+.assetFormGroup .infoSet{
+	padding-left: 50px;
+	border: none;
+}
 
+.assetFormGroup .infoSet input{
+	padding: 4px;
+	}
 
+.fluidSets .assetFormGroup .infoSet label{
+	width: 110px;
+}
+.assetFormGroup h2{
+	border: 1px solid #D0DAFD;
+	background-image: url(../../images/identify-bg.png);
+	background-position: center;
+}
+
+.assetFormGroup .enlarged{
+	font-size: 16px;
+
+}
+
+.enlarged select{
+	padding: 3px;
+}
