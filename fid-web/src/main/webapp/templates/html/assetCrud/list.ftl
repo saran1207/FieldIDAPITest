@@ -6,7 +6,7 @@ ${action.setPageType('asset', 'list')!}
 	<#assign actionTarget="assetTraceability"/>
 </#if>
 
-<#include "../inspectionGroup/_assetList.ftl"/>
+<#include "../eventGroup/_assetList.ftl"/>
 
 
 <script type="text/javascript">
