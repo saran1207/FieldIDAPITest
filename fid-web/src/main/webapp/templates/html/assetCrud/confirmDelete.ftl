@@ -25,14 +25,14 @@ ${action.setPageType('asset', 'edit')!}
 			<span><@s.text name="label.schedulesbeingdeleted"/></span>
 		</div>
 		
-		<#if removalSummary.detatachFromMaster >
+		<#if removalSummary.detachFromMaster >
 			<div class="infoSet">
 				<label for=""></label>
 				<span><@s.text name="label.detachfrommaster"/></span>
 			</div>
 		</#if>
 		<div class="infoSet">
-			<label for="">${removalSummary.subAssetsToDettach}</label>
+			<label for="">${removalSummary.subAssetsToDetach}</label>
 			<span><@s.text name="label.detachsubassets"/></span>
 		</div>
 		
