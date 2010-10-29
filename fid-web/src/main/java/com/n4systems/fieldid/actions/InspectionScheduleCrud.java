@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -12,7 +13,6 @@ import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionSchedule;
@@ -281,7 +281,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	}
 
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
+		return AssetLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
 	
 	

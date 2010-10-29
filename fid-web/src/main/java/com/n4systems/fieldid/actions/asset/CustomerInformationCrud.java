@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -12,7 +13,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.model.ExtendedFeature;
@@ -142,7 +142,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 
 	
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
+		return AssetLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
 	
 	

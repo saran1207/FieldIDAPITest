@@ -10,6 +10,7 @@ import java.util.TreeSet;
 
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAssetType;
+import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -40,7 +41,6 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
-import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.ui.OptionLists;
@@ -1049,7 +1049,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 	
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
+		return AssetLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
 
 	public boolean isRefreshRegistration() {

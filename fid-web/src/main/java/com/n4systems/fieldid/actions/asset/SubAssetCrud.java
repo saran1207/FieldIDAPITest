@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
+import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
@@ -17,7 +18,6 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.SubAssetHelper;
-import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
@@ -351,7 +351,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	}
 
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(asset, getLoaderFactory());
+		return AssetLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.model.Asset;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -12,7 +13,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
-import com.n4systems.fieldid.actions.product.helpers.ProductLinkedHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Inspection;
 import com.n4systems.security.Permissions;
@@ -138,6 +138,6 @@ public class AssetMergeAction extends AbstractCrud {
 	}
 	
 	public boolean isLinked() {
-		return ProductLinkedHelper.isLinked(losingAsset, getLoaderFactory());
+		return AssetLinkedHelper.isLinked(losingAsset, getLoaderFactory());
 	}
 }
