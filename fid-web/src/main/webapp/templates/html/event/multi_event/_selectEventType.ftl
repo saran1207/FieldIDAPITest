@@ -19,7 +19,7 @@
 	</ul>
 </#if>	
 	
-<@s.form action="retrieveEventDetails" namespace="/multiInspect/ajax" id="retrieveInspectionDetails">
+<@s.form action="retrieveEventDetails" namespace="/multiEvent/ajax" id="retrieveInspectionDetails">
 	<@s.hidden name="type" id="eventTypeId"/>
 	
 	<#list assetIds as assetId>
