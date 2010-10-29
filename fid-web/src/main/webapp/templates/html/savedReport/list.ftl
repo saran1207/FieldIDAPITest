@@ -30,8 +30,9 @@ ${action.setPageType('saved_reports', 'saved_reports')!}
 				<td>${report.sharedByName!}</td>
 				<td>${action.formatDateTime(report.modified)}</td>
 				<td>
-					<a id="shareReport_${report.id}" class="savedReportShareLink" href="<@s.url action="savedReportShare" uniqueID="${report.id}" />"><@s.text name="label.share"/></a>
-					<a id="deleteReport_${report.id}" class="savedReportDeleteLink" href="<@s.url action="savedReportDelete" uniqueID="${report.id}" />"><@s.text name="label.delete"/></a>
+		     		<a href="<@s.url action="savedReportLoad" uniqueID="${report.id}" namespace="/" />"><@s.text name="label.Run"/></a> |
+					<a id="shareReport_${report.id}" class="savedReportShareLink" href="<@s.url action="savedReportShare" uniqueID="${report.id}" />"><@s.text name="label.share"/></a> |
+					<a id="deleteReport_${report.id}" class="savedReportDeleteLink" href="<@s.url action="savedReportDelete" uniqueID="${report.id}" />"><@s.text name="label.delete"/></a> 
 				</td>
 			</tr>	
 		</#list>
