@@ -71,7 +71,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private static Logger logger = Logger.getLogger(AssetCrud.class);
 
 	// drop down lists
-	private Collection<AssetStatus> productStatuses;
+	private Collection<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private AssetType assetType;
 	private Collection<AssetExtension> extentions;
@@ -609,7 +609,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 				if (asset.getInfoOptions() != null) {
 					tmpOptions.addAll(asset.getInfoOptions());
 				}
-				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getProductInfoFields());
+				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getAssetInfoFields());
 			}
 		}
 		return assetInfoOptions;
@@ -630,10 +630,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	public Collection<AssetStatus> getAssetStatuses() {
-		if (productStatuses == null) {
-			productStatuses = getLoaderFactory().createAssetStatusListLoader().load();
+		if (assetStatuses == null) {
+			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
 		}
-		return productStatuses;
+		return assetStatuses;
 	}
 
 	public Asset getAsset() {
@@ -740,7 +740,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.asset.setType(assetType);
 	}
 
-	public Collection<InfoFieldBean> getProductInfoFields() {
+	public Collection<InfoFieldBean> getAssetInfoFields() {
 		if (getAssetTypeId() != null) {
 			if (asset.getId() == null) {
 				return assetType.getAvailableInfoFields();
