@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
-import com.n4systems.fieldid.selenium.pages.InspectPage;
+import com.n4systems.fieldid.selenium.pages.EventPage;
 
 public class AddScheduleTest extends PageNavigatingTestCase<AssetPage>{
 	
@@ -75,8 +75,8 @@ public class AddScheduleTest extends PageNavigatingTestCase<AssetPage>{
 		page.setSchedule(testDate, testInspectionType, testJob);
 		page.clickSaveSchedule();
 		assertTrue(page.checkScheduleExists(testDate, testInspectionType, testJob));
-		InspectPage inspectPage = page.clickInpectNow(testDate, testInspectionType, testJob);
-		inspectPage.clickAssetInformationTab();
+		EventPage eventPage = page.clickInpectNow(testDate, testInspectionType, testJob);
+		eventPage.clickAssetInformationTab();
 		page.clickSchedulesTab();
 		page.clickStopProgress(testDate, testInspectionType, testJob);
 		

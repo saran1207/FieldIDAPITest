@@ -98,10 +98,10 @@ public class AssetPage extends FieldIDPage {
 		return selenium.getText("//label[.='Purchase Order']/../span");
 	}
 
-	public InspectPage clickInpectNow(String date, String inspectionType, String job) {
+	public EventPage clickInpectNow(String date, String inspectionType, String job) {
 		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
 				+ "']/..//a[text()='inspect now']");
-		return new InspectPage(selenium);
+		return new EventPage(selenium);
 	}
 
 	public void clickStopProgress(String date, String inspectionType, String job) {
@@ -109,9 +109,9 @@ public class AssetPage extends FieldIDPage {
 				+ "']/..//a[text()='Stop Progress']");
 	}
 
-	public InspectionsPerformedPage clickInspectionsTab() {
-		selenium.click("//a[contains(.,'Inspections')]");
-		return new InspectionsPerformedPage(selenium);
+	public EventsPerformedPage clickEventsTab() {
+		selenium.click("//a[contains(.,'Events')]");
+		return new EventsPerformedPage(selenium);
 	}
 
 	public AssetPage clickEditTab() {

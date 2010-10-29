@@ -10,7 +10,7 @@
 	
 	<div class="stepAction">
 		<@s.submit id="step2next" key="label.continue" onclick="validateForm2(); return false;"/>
-		<@s.text name="label.or"/> <a href="_step2.ftl#step1" onclick="backToStep1(); return false;"><@s.text name="label.back_to_step"/> 1</a>
+		<@s.text name="label.or"/> <a href="#step1" onclick="backToStep1(); return false;"><@s.text name="label.back_to_step"/> 1</a>
 		
 	</div>
 </div>

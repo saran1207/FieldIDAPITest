@@ -74,9 +74,9 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		waitForElementToBePresent("//iframe[@id='lightviewContent']");
 	}
 	
-	public InspectPage clickEditInspection(String serialNumber) {
+	public EventPage clickEditInspection(String serialNumber) {
 		selenium.click("//table[@class='list']//a[.='" +serialNumber+"']/../..//a[contains(., 'Edit')]");		
-		return new InspectPage(selenium);
+		return new EventPage(selenium);
 	}
 	
 	public SaveReportForm clickSaveReport() {
@@ -99,10 +99,10 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		waitForPageToLoad();
 	}
 	
-	public InspectPage clickStartEventLink(){
+	public EventPage clickStartEventLink(){
     	selenium.click("//a[@id='moreActions'][1]");
     	selenium.click("//li/a[contains(.,'Start Event')][1]");
-    	return new InspectPage(selenium);
+    	return new EventPage(selenium);
 	}
 
 	public MyAccountPage clickSaveReportsMore() {
@@ -113,5 +113,10 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 	public void clickPrintReport() {
 	   	selenium.click("//a[@id='moreActions'][1]");
     	selenium.click("//li/a[contains(.,'Print Report')][1]");
+	}
+    
+    @Override
+	public List<String> getResultSerialNumbers() {
+		return collectTableValuesUnderCellForCurrentPage(2, 3, "a");
 	}
 }

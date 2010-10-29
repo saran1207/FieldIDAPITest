@@ -81,7 +81,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		page.setDisplayColumns(displayColumns);
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());		
-		List<String> expectedColumns = Arrays.asList("Asset Type", "Assigned To", "Safety Network", "Links");
+		List<String> expectedColumns = Arrays.asList("Assigned To", "Asset Type", "Safety Network", "");
 		assertEquals(expectedColumns, page.getResultColumnHeaders());
 	}
 	
@@ -93,11 +93,10 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		page.setDisplayColumns(displayColumns);
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());		
-		List<String> expectedColumns = Arrays.asList("Order Description", "Serial Number", "Reference Number", 
-				"RFID Number", "Job Site Name", "Division", "Location", "Organization", "Asset Type Group",
-				"Asset Type", "Asset Status", "Date Identified", "Last Inspection Date", "Network Last Inspection Date",
-				"Assigned To", "Identified By", "Modified By", "Comments", "Description", "Safety Network", "Order Number", 
-				"Purchase Order", "Links");
+		List<String> expectedColumns = Arrays.asList("Serial Number", "RFID Number", "Reference Number", 
+				"Assigned To", "Job Site Name", "Division", "Location", "Organization", "Order Description", "Order Number", "Purchase Order", "Asset Type Group",
+				"Asset Type", "Asset Status", "Last Event Date", "Network Last Event Date", "Identified By", "Modified By", "Comments",
+				"Description", "Safety Network","Date Identified", "");
 		assertEquals(expectedColumns, page.getResultColumnHeaders());
 	}
 	
@@ -126,19 +125,19 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	}
 	
 	@Test
-	public void search_results_inspections_link() throws Exception {
+	public void search_results_start_event_link() throws Exception {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
 		String serialNumber = page.getResultSerialNumbers().get(0);
 		
-		page.clickResultInspection(serialNumber);
+		page.clickResultStartEvent(serialNumber);
 	}
 	
 	
 	private List<String> getDefaultColumnHeaders() {
 		return Arrays.asList("Serial Number", "Reference Number", "Job Site Name", "Location", 
-				"Asset Type", "Asset Status", "Date Identified", "Last Inspection Date", "Links");
+				"Asset Type", "Asset Status", "Last Event Date", "Date Identified", "");
 	}
 }

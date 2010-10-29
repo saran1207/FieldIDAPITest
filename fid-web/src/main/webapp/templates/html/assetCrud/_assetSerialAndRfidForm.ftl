@@ -7,7 +7,7 @@
 			<@s.textfield id="serialNumberText"  name="serialNumber" onchange="checkSerialNumber('serialNumberText', '${uniqueID?default('')}');"/>
 			
 			<span class="fieldHolder">
-				<a href="_assetSerialAndRfidForm.ftl#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''});return false;"><@s.text name="label.generate" /></a>
+				<a href="#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''});return false;"><@s.text name="label.generate" /></a>
 			</span>
 			<span class="fieldHolder serialNumberStatus"></span>
 			

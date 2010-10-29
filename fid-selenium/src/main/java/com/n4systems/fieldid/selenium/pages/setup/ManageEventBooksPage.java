@@ -11,20 +11,20 @@ import com.n4systems.fieldid.selenium.datatypes.InspectionBook;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class ManageInspectionBooksPage extends FieldIDPage {
+public class ManageEventBooksPage extends FieldIDPage {
 
 	private static final String FIRST_LIST_ITEM = "//table[@class='list']//tr[2]//td[1]//a";
 
-	public ManageInspectionBooksPage(Selenium selenium) {
+	public ManageEventBooksPage(Selenium selenium) {
 		super(selenium);
 		if(!checkOnManageInspectionBooksPage()){
-			fail("Expected to be on Manage Inspection Books page!");
+			fail("Expected to be on Manage Event Books page!");
 		}
 	}
 	
 	public boolean checkOnManageInspectionBooksPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Inspection Books')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Event Books')]");
 	}
 	
 	public void clickViewAllTab() {
@@ -63,7 +63,7 @@ public class ManageInspectionBooksPage extends FieldIDPage {
 	public void verifyInspectionBookSaved() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
-		assertEquals("Inspection Book saved.", actionMessages.get(0).trim());		
+		assertEquals("Event Book saved.", actionMessages.get(0).trim());		
 	}
 
 	public void clickSave() {
@@ -94,7 +94,7 @@ public class ManageInspectionBooksPage extends FieldIDPage {
 	public void verifyInspectionBookDeleted() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
-		assertEquals("Inspection Book deleted.", actionMessages.get(0).trim());		
+		assertEquals("Event Book deleted.", actionMessages.get(0).trim());		
 	}
 	
 	public boolean listItemExists(String book) {

@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
-import com.n4systems.fieldid.selenium.pages.InspectPage;
+import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.MyAccountPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.testcase.SaveReportForm;
@@ -72,7 +72,7 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		
 		String serialNumber = page.getResultSerialNumbers().get(0);
 
-		InspectPage inpectPage = page.clickEditInspection(serialNumber);
+		EventPage inpectPage = page.clickEditInspection(serialNumber);
 		assertEquals("Edit", inpectPage.getCurrentTab());
 	}
 	
@@ -144,8 +144,9 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	
 	private List<String> getDefaultColumnHeaders() {
 		//Empty string for the empty last table column.
-		return Arrays.asList("Serial Number", "Inspection Type", "Job Site Name", "Result", 
-				"Asset Type", "Asset Status", "");
+        return Arrays.asList("Event Type", "Result", "Serial Number", "Job Site Name",
+                "Asset Type", "Asset Status", "");
+
 	}
 
 }

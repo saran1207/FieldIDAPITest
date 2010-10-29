@@ -12,7 +12,7 @@ public class AssetTypeValidationTest extends LoggedInTestCase {
 
 	@Test
 	public void should_not_validate_an_info_option_after_the_field_is_changed_to_one_that_does_not_have_static_options() throws Exception {
-		selenium.open("/fieldid/productTypeEdit.action");
+		selenium.open("/fieldid/assetTypeEdit.action");
 		selenium.waitForPageToLoad();
 		selenium.click("addInfoField");
 		selenium.waitForElementToBePresent("css=#field_0", MiscDriver.JS_TIMEOUT);
@@ -31,7 +31,7 @@ public class AssetTypeValidationTest extends LoggedInTestCase {
 	
 	@Test
 	public void should_find_an_info_option_with_a_blank_name_added_to_an_select_box_to_be_invalid() throws Exception {
-		selenium.open("/fieldid/productTypeEdit.action");
+		selenium.open("/fieldid/assetTypeEdit.action");
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		selenium.click("addInfoField");
 		selenium.waitForElementToBePresent("css=#field_0", MiscDriver.JS_TIMEOUT);

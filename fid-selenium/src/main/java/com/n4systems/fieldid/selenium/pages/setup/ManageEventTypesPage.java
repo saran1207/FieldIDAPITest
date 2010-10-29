@@ -12,20 +12,20 @@ import com.n4systems.fieldid.selenium.datatypes.InspectionType;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class ManageInspectionTypesPage extends FieldIDPage {
+public class ManageEventTypesPage extends FieldIDPage {
 
 	final static String FIRST_LIST_ITEM = "//table[@class='list']//tr[3]/td[1]/a";
 	
-	public ManageInspectionTypesPage(Selenium selenium) {
+	public ManageEventTypesPage(Selenium selenium) {
 		super(selenium);
-		if(!checkOnManageInspectionTypesPage()){
-			fail("Expected to be on Manage Inspection Types page!");
+		if(!checkOnManageEventTypesPage()){
+			fail("Expected to be on Manage Event Types page!");
 		}
 	}
 	
-	public boolean checkOnManageInspectionTypesPage() {
+	public boolean checkOnManageEventTypesPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Inspection Types')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Event Types')]");
 	}
 	
 	public void clickViewAllTab() {
@@ -40,8 +40,8 @@ public class ManageInspectionTypesPage extends FieldIDPage {
 		clickNavOption("Add");
 	}
 
-	public void clickInspectionFormTab() {
-		clickNavOption("Inspection Form");
+	public void clickEventFormTab() {
+		clickNavOption("Event Form");
 	}
 
 	public void clickImportTab() {
@@ -93,8 +93,8 @@ public class ManageInspectionTypesPage extends FieldIDPage {
 		return eventName;
 	}
 	
-	public boolean checkPageHeaderText(String inspectionName) {
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + inspectionName + "')]");
+	public boolean checkPageHeaderText(String eventName) {
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + eventName + "')]");
 	}
 
 	public void setFormFields(InspectionType inspectionType) {

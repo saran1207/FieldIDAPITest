@@ -40,7 +40,7 @@
 		<div class="actions">
 			<@s.submit key="label.save" onclick="checkDuplicateRfids('subAssetRfidNumber_${assetTypeId}', this); return false;" />
 			<@s.text name="label.or"/>
-			<a href="add.ftl#" onclick="Effect.BlindUp( 'subAssetCreateForm_${assetTypeId}', { afterFinish: function() { $('subAssetCreateForm_${assetTypeId}').remove(); } } ); return false;" ><@s.text name="label.cancel"/></a>
+			<a href="#" onclick="Effect.BlindUp( 'subAssetCreateForm_${assetTypeId}', { afterFinish: function() { $('subAssetCreateForm_${assetTypeId}').remove(); } } ); return false;" ><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 </#assign>

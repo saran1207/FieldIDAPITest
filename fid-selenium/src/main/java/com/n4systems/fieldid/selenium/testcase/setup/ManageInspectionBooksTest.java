@@ -8,85 +8,85 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.InspectionBook;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
-import com.n4systems.fieldid.selenium.pages.setup.ManageInspectionBooksPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageEventBooksPage;
 
 public class ManageInspectionBooksTest extends FieldIDTestCase {
 	
-	ManageInspectionBooksPage manageInspBooksPage;
+	ManageEventBooksPage manageEventBooksPage;
 	
 	@Before
 	public void setup() {
-		manageInspBooksPage = start().systemLogin().clickSetupLink().clickManageInspectionBooks();
+		manageEventBooksPage = start().systemLogin().clickSetupLink().clickManageEventBooks();
 	}
 	
 	@Test
 	public void test_view_all_inpection_books() throws Exception {
-		assertEquals("View All", manageInspBooksPage.getCurrentTab());
+		assertEquals("View All", manageEventBooksPage.getCurrentTab());
 	}
 
 	@Test
 	public void test_open_and_close_book() throws Exception {
-		String status1 = manageInspBooksPage.getFirstListItemStatus();
+		String status1 = manageEventBooksPage.getFirstListItemStatus();
 		String status2, status3;
 		
 		if(status1.equals("Open")) {
-			manageInspBooksPage.clickFirstListItemClose();
-			status2 = manageInspBooksPage.getFirstListItemStatus();
-			manageInspBooksPage.verifyInspectionBookSaved();
-			manageInspBooksPage.clickFirstListItemOpen();
-			status3 = manageInspBooksPage.getFirstListItemStatus();
+			manageEventBooksPage.clickFirstListItemClose();
+			status2 = manageEventBooksPage.getFirstListItemStatus();
+			manageEventBooksPage.verifyInspectionBookSaved();
+			manageEventBooksPage.clickFirstListItemOpen();
+			status3 = manageEventBooksPage.getFirstListItemStatus();
 		}else {
-			manageInspBooksPage.clickFirstListItemOpen();
-			status2 = manageInspBooksPage.getFirstListItemStatus();
-			manageInspBooksPage.verifyInspectionBookSaved();
-			manageInspBooksPage.clickFirstListItemClose();
-			status3 = manageInspBooksPage.getFirstListItemStatus();
+			manageEventBooksPage.clickFirstListItemOpen();
+			status2 = manageEventBooksPage.getFirstListItemStatus();
+			manageEventBooksPage.verifyInspectionBookSaved();
+			manageEventBooksPage.clickFirstListItemClose();
+			status3 = manageEventBooksPage.getFirstListItemStatus();
 		}
 		
-		manageInspBooksPage.verifyInspectionBookSaved();
+		manageEventBooksPage.verifyInspectionBookSaved();
 		assertFalse(status1.equals(status2));
 		assertEquals(status1, status3);
 	}
 	
 	@Test
 	public void test_add_with_error() throws Exception {
-		manageInspBooksPage.clickAddTab();
-		assertEquals("Add", manageInspBooksPage.getCurrentTab());
-		manageInspBooksPage.clickSave();
-		assertEquals(2, manageInspBooksPage.getFormErrorMessages().size());
+		manageEventBooksPage.clickAddTab();
+		assertEquals("Add", manageEventBooksPage.getCurrentTab());
+		manageEventBooksPage.clickSave();
+		assertEquals(2, manageEventBooksPage.getFormErrorMessages().size());
 	}
 	
 	@Test
 	public void test_add_and_delete_book() throws Exception {
 		deleteIfExists("Test Selenium");
 		
-		manageInspBooksPage.clickAddTab();
-		assertEquals("Add", manageInspBooksPage.getCurrentTab());
+		manageEventBooksPage.clickAddTab();
+		assertEquals("Add", manageEventBooksPage.getCurrentTab());
 		InspectionBook book = getTestInspectionBook();
-		manageInspBooksPage.setInspectionBookFormFields(book);
-		manageInspBooksPage.clickSave();
-		manageInspBooksPage.verifyInspectionBookSaved();		
-		assertEquals("View All", manageInspBooksPage.getCurrentTab());
+		manageEventBooksPage.setInspectionBookFormFields(book);
+		manageEventBooksPage.clickSave();
+		manageEventBooksPage.verifyInspectionBookSaved();
+		assertEquals("View All", manageEventBooksPage.getCurrentTab());
 		
 		deleteIfExists("Test Selenium");
 	}
 
 	private void deleteIfExists(String bookName) {
-		if(manageInspBooksPage.listItemExists(bookName)) {
-			manageInspBooksPage.clickDelete(bookName);
-			manageInspBooksPage.verifyInspectionBookDeleted();
+		if(manageEventBooksPage.listItemExists(bookName)) {
+			manageEventBooksPage.clickDelete(bookName);
+			manageEventBooksPage.verifyInspectionBookDeleted();
 		}
 	}
 	
 	@Test
 	public void test_delete_book_in_use() throws Exception {
-		String bookName = manageInspBooksPage.getFirstListItemName();
-		manageInspBooksPage.clickDelete(bookName);
-		assertEquals("Inspection Book can not be deleted. It is still in use.", manageInspBooksPage.getAlert().trim());
+		String bookName = manageEventBooksPage.getFirstListItemName();
+		manageEventBooksPage.clickDelete(bookName);
+		assertEquals("Event Book can not be deleted. It is still in use.", manageEventBooksPage.getAlert().trim());
 	}
 
 	private InspectionBook getTestInspectionBook() {
-		return new InspectionBook("Test Selenium", new Owner("CM", "CP"), true);
+		return new InspectionBook("Test Selenium", new Owner("N4 Systems", "CP"), true);
 	}
 
 }

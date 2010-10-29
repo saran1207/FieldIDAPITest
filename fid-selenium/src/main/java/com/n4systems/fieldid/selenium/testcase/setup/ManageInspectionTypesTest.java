@@ -13,100 +13,100 @@ import com.n4systems.fieldid.selenium.datatypes.InspectionFormCriteria;
 import com.n4systems.fieldid.selenium.datatypes.InspectionFormObservations;
 import com.n4systems.fieldid.selenium.datatypes.InspectionFormSection;
 import com.n4systems.fieldid.selenium.datatypes.InspectionType;
-import com.n4systems.fieldid.selenium.pages.setup.ManageInspectionTypesPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
 
 public class ManageInspectionTypesTest extends FieldIDTestCase {
 	
 	private static final String TEST_INSPECTION_NAME = "Selenium Test";
 	
-	ManageInspectionTypesPage manageInspectionTypesPage;
+	ManageEventTypesPage manageEventTypesPage;
 	
 	@Before
 	public void setUp() {
-		manageInspectionTypesPage = start().systemLogin().clickSetupLink().clickManageInspectionTypes();
+		manageEventTypesPage = start().systemLogin().clickSetupLink().clickManageEventTypes();
 	}
 	
 	@Test
 	public void test_view_all_inspection_types() throws Exception {
-		assertEquals("View All", manageInspectionTypesPage.getCurrentTab());
+		assertEquals("View All", manageEventTypesPage.getCurrentTab());
 	}
 	
 	@Test
 	public void test_view_inspection_type() throws Exception {
-		String inspectionName = manageInspectionTypesPage.clickFirstListItem();
-		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
-		assertTrue(manageInspectionTypesPage.checkPageHeaderText(inspectionName));
+		String inspectionName = manageEventTypesPage.clickFirstListItem();
+		assertEquals("View", manageEventTypesPage.getCurrentTab());
+		assertTrue(manageEventTypesPage.checkPageHeaderText(inspectionName));
 	}
 	
 	@Test
 	public void test_edit_inspection_type_from_list() throws Exception {
-		String inspectionName = manageInspectionTypesPage.clickFirstListItemEdit();
-		assertEquals("Edit", manageInspectionTypesPage.getCurrentTab());
-		assertTrue(manageInspectionTypesPage.checkPageHeaderText(inspectionName));		
+		String inspectionName = manageEventTypesPage.clickFirstListItemEdit();
+		assertEquals("Edit", manageEventTypesPage.getCurrentTab());
+		assertTrue(manageEventTypesPage.checkPageHeaderText(inspectionName));
 	}
 
 	@Test
 	public void test_edit_inspection_type_from_tab() throws Exception {
-		String inspectionName = manageInspectionTypesPage.clickFirstListItem();
-		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.clickEditTab();
-		assertEquals("Edit", manageInspectionTypesPage.getCurrentTab());
-		assertTrue(manageInspectionTypesPage.checkPageHeaderText(inspectionName));		
+		String inspectionName = manageEventTypesPage.clickFirstListItem();
+		assertEquals("View", manageEventTypesPage.getCurrentTab());
+		manageEventTypesPage.clickEditTab();
+		assertEquals("Edit", manageEventTypesPage.getCurrentTab());
+		assertTrue(manageEventTypesPage.checkPageHeaderText(inspectionName));
 	}
 	
 	@Test
 	public void test_view_inspection_form() throws Exception {
-		String inspectionName = manageInspectionTypesPage.clickFirstListItem();
-		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.clickInspectionFormTab();
-		assertEquals("Inspection Form", manageInspectionTypesPage.getCurrentTab());
-		assertTrue(manageInspectionTypesPage.checkPageHeaderText(inspectionName));				
+		String inspectionName = manageEventTypesPage.clickFirstListItem();
+		assertEquals("View", manageEventTypesPage.getCurrentTab());
+		manageEventTypesPage.clickEventFormTab();
+		assertEquals("Inspection Form", manageEventTypesPage.getCurrentTab());
+		assertTrue(manageEventTypesPage.checkPageHeaderText(inspectionName));
 	}
 
 	@Test
 	public void test_import_inspection_type() throws Exception {
-		String inspectionName = manageInspectionTypesPage.clickFirstListItem();
-		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.clickImportTab();
-		assertEquals("Import", manageInspectionTypesPage.getCurrentTab());
-		assertTrue(manageInspectionTypesPage.checkPageHeaderText(inspectionName));				
+		String inspectionName = manageEventTypesPage.clickFirstListItem();
+		assertEquals("View", manageEventTypesPage.getCurrentTab());
+		manageEventTypesPage.clickImportTab();
+		assertEquals("Import", manageEventTypesPage.getCurrentTab());
+		assertTrue(manageEventTypesPage.checkPageHeaderText(inspectionName));
 	}
 	
 	@Test
 	public void test_add_inspection_type_save_with_error() throws Exception {
-		manageInspectionTypesPage.clickAddTab();
-		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.clickSave();
-		assertEquals(1, manageInspectionTypesPage.getFormErrorMessages().size());
+		manageEventTypesPage.clickAddTab();
+		assertEquals("Add", manageEventTypesPage.getCurrentTab());
+		manageEventTypesPage.clickSave();
+		assertEquals(1, manageEventTypesPage.getFormErrorMessages().size());
 	}
 	
 	@Test
 	public void test_add_inspection_type_save_and_add_with_error() throws Exception {
-		manageInspectionTypesPage.clickAddTab();
-		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.clickSaveAndAdd();
-		assertEquals(1, manageInspectionTypesPage.getFormErrorMessages().size());
+		manageEventTypesPage.clickAddTab();
+		assertEquals("Add", manageEventTypesPage.getCurrentTab());
+		manageEventTypesPage.clickSaveAndAdd();
+		assertEquals(1, manageEventTypesPage.getFormErrorMessages().size());
 	}
 	
 	@Test
 	public void test_add_inspection_type_cancel() throws Exception {
-		manageInspectionTypesPage.clickAddTab();
-		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.clickCancel();
-		assertEquals("View All", manageInspectionTypesPage.getCurrentTab());
+		manageEventTypesPage.clickAddTab();
+		assertEquals("Add", manageEventTypesPage.getCurrentTab());
+		manageEventTypesPage.clickCancel();
+		assertEquals("View All", manageEventTypesPage.getCurrentTab());
 	}
 
 	@Test
 	public void test_add_and_delete_inspection_type() throws Exception {
 		deleteTestInspection(TEST_INSPECTION_NAME);
 		
-		manageInspectionTypesPage.clickAddTab();
-		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
+		manageEventTypesPage.clickAddTab();
+		assertEquals("Add", manageEventTypesPage.getCurrentTab());
 		InspectionType inspectionType = getInspectionType();
-		manageInspectionTypesPage.setFormFields(inspectionType);
-		manageInspectionTypesPage.clickSave();
-		manageInspectionTypesPage.verifyInspectionTypeSaved();		
-		assertEquals("View", manageInspectionTypesPage.getCurrentTab());
+		manageEventTypesPage.setFormFields(inspectionType);
+		manageEventTypesPage.clickSave();
+		manageEventTypesPage.verifyInspectionTypeSaved();
+		assertEquals("View", manageEventTypesPage.getCurrentTab());
 		
 		deleteTestInspection(TEST_INSPECTION_NAME);
 	}
@@ -115,17 +115,17 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	public void test_add_inspection_type_and_inspection_form() throws Exception {
 		deleteTestInspection(TEST_INSPECTION_NAME);
 
-		manageInspectionTypesPage.clickAddTab();
-		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
+		manageEventTypesPage.clickAddTab();
+		assertEquals("Add", manageEventTypesPage.getCurrentTab());
 		InspectionType inspectionType = getInspectionType();
-		manageInspectionTypesPage.setFormFields(inspectionType);
-		manageInspectionTypesPage.clickSaveAndAdd();
-		manageInspectionTypesPage.verifyInspectionTypeSaved();
+		manageEventTypesPage.setFormFields(inspectionType);
+		manageEventTypesPage.clickSaveAndAdd();
+		manageEventTypesPage.verifyInspectionTypeSaved();
 
-		assertEquals("Inspection Form", manageInspectionTypesPage.getCurrentTab());
-		manageInspectionTypesPage.setInpectionFormFields(getInspectionForm());
-		manageInspectionTypesPage.clickSaveInspectionForm();
-		manageInspectionTypesPage.verifyInspectionFormSaved();
+		assertEquals("Inspection Form", manageEventTypesPage.getCurrentTab());
+		manageEventTypesPage.setInpectionFormFields(getInspectionForm());
+		manageEventTypesPage.clickSaveInspectionForm();
+		manageEventTypesPage.verifyInspectionFormSaved();
 		
 		deleteTestInspection(TEST_INSPECTION_NAME);
 	}
@@ -134,40 +134,40 @@ public class ManageInspectionTypesTest extends FieldIDTestCase {
 	public void test_add_inspection_form_with_errors() throws Exception {
 		deleteTestInspection(TEST_INSPECTION_NAME);
 
-		manageInspectionTypesPage.clickAddTab();
-		assertEquals("Add", manageInspectionTypesPage.getCurrentTab());
+		manageEventTypesPage.clickAddTab();
+		assertEquals("Add", manageEventTypesPage.getCurrentTab());
 		InspectionType inspectionType = getInspectionType();
-		manageInspectionTypesPage.setFormFields(inspectionType);
-		manageInspectionTypesPage.clickSaveAndAdd();
-		manageInspectionTypesPage.verifyInspectionTypeSaved();
+		manageEventTypesPage.setFormFields(inspectionType);
+		manageEventTypesPage.clickSaveAndAdd();
+		manageEventTypesPage.verifyInspectionTypeSaved();
 
-		assertEquals("Inspection Form", manageInspectionTypesPage.getCurrentTab());
+		assertEquals("Inspection Form", manageEventTypesPage.getCurrentTab());
 		InspectionForm badForm = new InspectionForm();
 		badForm.addSection(0, new InspectionFormSection(""));
-		manageInspectionTypesPage.setInpectionFormFields(badForm);
-		manageInspectionTypesPage.clickSaveInspectionForm();
-		assertEquals(3, manageInspectionTypesPage.getFormErrorMessages().size());
+		manageEventTypesPage.setInpectionFormFields(badForm);
+		manageEventTypesPage.clickSaveInspectionForm();
+		assertEquals(3, manageEventTypesPage.getFormErrorMessages().size());
 		
 		deleteTestInspection(TEST_INSPECTION_NAME);
 	}
 	
 	@Test
 	public void test_copy_existing_inpection_type() throws Exception {
-		String inspectionName = manageInspectionTypesPage.clickFirstListItemCopy() + " - 1";
-		manageInspectionTypesPage.validateCopiedInspection(inspectionName);
+		String inspectionName = manageEventTypesPage.clickFirstListItemCopy() + " - 1";
+		manageEventTypesPage.validateCopiedInspection(inspectionName);
 		
 		deleteTestInspection(inspectionName);
 	}
 	
 	private void deleteTestInspection(String name) {
-		if(manageInspectionTypesPage.listItemExists(name)) {
-			manageInspectionTypesPage.clickListItem(name);
-			manageInspectionTypesPage.clickEditTab();
-			assertEquals("Edit", manageInspectionTypesPage.getCurrentTab());
-			manageInspectionTypesPage.clickDelete();
-			manageInspectionTypesPage.clickConfirmDelete();		
-			assertEquals("View All", manageInspectionTypesPage.getCurrentTab());
-			manageInspectionTypesPage.verifyInspectionFormDeleted();		
+		if(manageEventTypesPage.listItemExists(name)) {
+			manageEventTypesPage.clickListItem(name);
+			manageEventTypesPage.clickEditTab();
+			assertEquals("Edit", manageEventTypesPage.getCurrentTab());
+			manageEventTypesPage.clickDelete();
+			manageEventTypesPage.clickConfirmDelete();
+			assertEquals("View All", manageEventTypesPage.getCurrentTab());
+			manageEventTypesPage.verifyInspectionFormDeleted();
 		}
 
 	}

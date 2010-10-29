@@ -36,6 +36,7 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 		assetToRemove = page.search(subSerial);
 		assetToRemove.clickEditTab().clickDelete();
 	}
+    
 
 	@Test
 	public void attach_a_newly_created_subasset() {

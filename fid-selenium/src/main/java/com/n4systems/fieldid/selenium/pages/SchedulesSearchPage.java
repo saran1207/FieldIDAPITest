@@ -5,6 +5,8 @@ import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.schedules.SchedulesSearchResultsPage;
 import com.thoughtworks.selenium.Selenium;
 
+import java.util.List;
+
 public class SchedulesSearchPage extends EntitySearchPage<SchedulesSearchResultsPage> {
 
     public SchedulesSearchPage(Selenium selenium) {
@@ -52,6 +54,11 @@ public class SchedulesSearchPage extends EntitySearchPage<SchedulesSearchResults
 		if (criteria.getJob() != null) {
 			selenium.select("//input[@id='reportForm_criteria_job']", criteria.getJob());
 		}
+	}
+
+    @Override
+	public List<String> getResultSerialNumbers() {
+		return collectTableValuesUnderCellForCurrentPage(2, 1, "a");
 	}
 
 }

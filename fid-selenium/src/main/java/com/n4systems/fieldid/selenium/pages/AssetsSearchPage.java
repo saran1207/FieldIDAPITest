@@ -4,6 +4,8 @@ import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.thoughtworks.selenium.Selenium;
 
+import java.util.List;
+
 public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> {
 	
 	public AssetsSearchPage(Selenium selenium) {
@@ -37,13 +39,18 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 	}
 
 	public AssetPage clickResultInfo(String serialNumber) {
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'Info')]");		
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'View Asset')]");		
 		return new AssetPage(selenium);
 	}
 
-	public InspectPage clickResultInspection(String serialNumber) {
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'inspections')]");	
-		return new InspectPage(selenium);
+	public QuickEventPage clickResultStartEvent(String serialNumber) {
+		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'Start Event')]");
+		return new QuickEventPage(selenium);
+	}
+
+    @Override
+	public List<String> getResultSerialNumbers() {
+		return collectTableValuesUnderCellForCurrentPage(2, 1, "a");
 	}
 
 }

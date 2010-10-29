@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.events;
 
 import com.n4systems.fieldid.selenium.datatypes.Asset;
+import com.n4systems.fieldid.selenium.pages.EventPage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,13 +11,12 @@ import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
-import com.n4systems.fieldid.selenium.pages.InspectPage;
 
 public class EventCreateEditRemoveTest extends FieldIDTestCase {
 
 	private HomePage page;
 	private AssetPage assetPage;
-	private InspectPage inspectPage;
+	private EventPage eventPage;
 	private String masterSerial;
 	private String subSerial;
 
@@ -40,11 +40,11 @@ public class EventCreateEditRemoveTest extends FieldIDTestCase {
 
 	@Test
 	public void create_master_event_no_sub_inspections() {
-		inspectPage = assetPage.clickInspectionsTab().clickManageInspections().clickStartNewInspection(masterEventType);
+		eventPage = assetPage.clickEventsTab().clickManageEvents().clickStartNewEvent(masterEventType);
 		
-		performMandatoryInspection();
+		performMandatoryEvent();
 
-		inspectPage.clickSave();
+		eventPage.clickSave();
 
 		selenium.isElementPresent("//span[contains(.,'Master Inspection Saved.')]");
 	}
@@ -54,25 +54,17 @@ public class EventCreateEditRemoveTest extends FieldIDTestCase {
 		assetPage.clickSubComponentsTab();
 		assetPage.addNewSubcomponent(subSerial);
 		
-		inspectPage = assetPage.clickInspectionsTab().clickManageInspections().clickStartNewInspection(masterEventType);
+		eventPage = assetPage.clickEventsTab().clickManageEvents().clickStartNewEvent(masterEventType);
 
-		performMandatoryInspection();
-		performSubInspection();
+		performMandatoryEvent();
+		performSubEvent();
 
-		inspectPage.clickSave();
+		eventPage.clickSave();
 
 		selenium.isElementPresent("//span[contains(.,'Master Inspection Saved.')]");
 
 		assetPage = page.search(subSerial);
 		assetPage.clickEditTab().clickDelete();
-	}
-
-	public void edit_event() {
-
-	}
-
-	public void remove_event() {
-
 	}
 
 	private void identifyAssetWithSerialNumber(String serial, String assetType, String purchaseOrder, String status) {
@@ -87,16 +79,14 @@ public class EventCreateEditRemoveTest extends FieldIDTestCase {
 		identifyPage.saveNewAsset();
 	}
 
-	private void performMandatoryInspection() {
-
-		inspectPage.clickMandatoryEventToPerformLink();
-		inspectPage.clickStore();
+	private void performMandatoryEvent() {
+		eventPage.clickMandatoryEventToPerformLink();
+		eventPage.clickStore();
 	}
 
-	private void performSubInspection() {
-
-		inspectPage.clickSubStartEventLink();
-		inspectPage.clickStore();
+	private void performSubEvent() {
+		eventPage.clickSubStartEventLink();
+		eventPage.clickStore();
 	}
 
 }

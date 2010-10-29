@@ -44,7 +44,7 @@
 	<#if Session.sessionUser.hasAccess("createinspection") >
 		<@s.submit id="saveAndInspButton" cssClass="save" name="saveAndInspect" key="hbutton.saveandinspect" onclick="return mergeAndSubmit('step1form', 'step4form', 'masterForm');"/>
 	</#if>
-	<@s.text name="label.or"/> <a href="_otherIdentifiersForm.ftl#step3" onclick="backToStep3(); return false;"><@s.text name="label.back_to_step"/> 3</a>
+	<@s.text name="label.or"/> <a href="#step3" onclick="backToStep3(); return false;"><@s.text name="label.back_to_step"/> 3</a>
 </@s.form>
 
 </div>

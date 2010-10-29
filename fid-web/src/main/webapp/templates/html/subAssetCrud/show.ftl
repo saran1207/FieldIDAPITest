@@ -44,8 +44,8 @@ ${action.setPageType('asset', 'assetconfiguration')!}
 			<@s.text name="instructions.organize_sub_assets"/>
 		</p>
 		<div>
-			<a href="show.ftl#reorder" id="startOrdering" onclick="startOrdering(); return false;"><@s.text name="label.reorder"/></a>
-			<a href="show.ftl#stopOrdering" style="display:none" id="stopOrdering" onclick="stopOrdering(); return false;"><@s.text name="label.done_reordering"/></a>
+			<a href="#reorder" id="startOrdering" onclick="startOrdering(); return false;"><@s.text name="label.reorder"/></a>
+			<a href="#stopOrdering" style="display:none" id="stopOrdering" onclick="stopOrdering(); return false;"><@s.text name="label.done_reordering"/></a>
 		</div>
 	</div>
 	<div id="assetComponentList">

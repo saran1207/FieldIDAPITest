@@ -3,8 +3,8 @@ package com.n4systems.fieldid.selenium.pages.safetynetwork;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
+import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.n4systems.fieldid.selenium.pages.InspectPage;
 import com.thoughtworks.selenium.Selenium;
 
 public class SafetyNetworkRegisterAssetForm extends FieldIDPage{
@@ -27,9 +27,9 @@ public class SafetyNetworkRegisterAssetForm extends FieldIDPage{
 		return new SafetyNetworkVendorAssetListPage(selenium);
 	}
 	
-	public InspectPage clickPerformFirstEvent() {
+	public EventPage clickPerformFirstEvent() {
 		selenium.click("//a[@id='performFirstEvent']");
-		return new InspectPage(selenium);
+		return new EventPage(selenium);
 	}
 	
 	public AssetPage clickViewAsset() {

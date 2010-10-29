@@ -3,7 +3,7 @@ package com.n4systems.fieldid.selenium.testcase.setup;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.InspectionBook;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
-import com.n4systems.fieldid.selenium.pages.setup.ManageInspectionBooksPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageEventBooksPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -14,11 +14,11 @@ import static org.junit.Assert.assertFalse;
 
 public class ManageInspectionBooksTest_DbSetup extends FieldIDTestCase {
 
-    ManageInspectionBooksPage manageInspBooksPage;
+    ManageEventBooksPage manageInspBooksPage;
 
     @Before
     public void setup() {
-        manageInspBooksPage = startAsCompany("seafit").systemLogin().clickSetupLink().clickManageInspectionBooks();
+        manageInspBooksPage = startAsCompany("seafit").systemLogin().clickSetupLink().clickManageEventBooks();
     }
 
     @Override

@@ -4,20 +4,20 @@ import static org.junit.Assert.fail;
 
 import com.thoughtworks.selenium.Selenium;
 
-public class InspectPage extends FieldIDPage {
+public class EventPage extends FieldIDPage {
 
-	public InspectPage(Selenium selenium) {
+	public EventPage(Selenium selenium) {
 		super(selenium);
-		if (!checkOnInspectPage()) {
-			fail("Expected to be on inpect page!");
+		if (!checkOnEventPage()) {
+			fail("Expected to be on event page!");
 		}
 	}
 
-	public boolean checkOnInspectPage() {
+	public boolean checkOnEventPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Inspect')]") 
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event -')]") 
 			|| selenium.isElementPresent("//form[@id='inspectionCreate']") 
-			|| selenium.isElementPresent("//form[@id='inspectionUpdate']");
+			|| selenium.isElementPresent("//form[@id='eventUpdate']");
 	}
 
 	public void clickAssetInformationTab() {

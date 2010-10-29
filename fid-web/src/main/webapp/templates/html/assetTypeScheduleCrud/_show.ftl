@@ -11,8 +11,8 @@
 	</#if> 
 </span>
 <span class="actions">
-	<a href="_show.ftl#edit_schedule" onclick="editSchedule(${inspectionType.id}, ${assetType.uniqueID}, ${(schedule.id)!"null"}, ${(schedule.owner.id)!"null"} ); return false;" ><@s.text name="label.edit" /></a>
+	<a href="#edit_schedule" onclick="editSchedule(${inspectionType.id}, ${assetType.uniqueID}, ${(schedule.id)!"null"}, ${(schedule.owner.id)!"null"} ); return false;" ><@s.text name="label.edit" /></a>
 	<#if (schedule.id)?exists > 
-		| <a href="_show.ftl#remove_schedule" onclick="removeSchedule( ${inspectionType.id}, ${assetType.uniqueID}, ${(schedule.id)!"null"}, ${(!(schedule.customer)?exists)?string} ); " ><@s.text name="label.remove" /></a>
+		| <a href="#remove_schedule" onclick="removeSchedule( ${inspectionType.id}, ${assetType.uniqueID}, ${(schedule.id)!"null"}, ${(!(schedule.customer)?exists)?string} ); " ><@s.text name="label.remove" /></a>
 	</#if>	
 </span>

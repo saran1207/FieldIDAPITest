@@ -97,9 +97,7 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
 		return collectTableHeaders();
 	}
 	
-	public List<String> getResultSerialNumbers() {
-		return collectTableValuesUnderCellForCurrentPage(2, 1, "a");
-	}
+	public abstract List<String> getResultSerialNumbers();
 
 	public AssetPage clickResultSerialNumber(String serialNumber) {
 		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/..//a");

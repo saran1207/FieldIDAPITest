@@ -49,6 +49,6 @@
 	</div>
 	<div class="stepAction">
 		<@s.submit key="label.continue" onclick="validateForm3(); return false;" theme="fieldidSimple"/>
-		<@s.text name="label.or"/> <a href="_step3.ftl#step2" onclick="backToStep2(); return false;"><@s.text name="label.back_to_step"/> 2</a>
+		<@s.text name="label.or"/> <a href="#step2" onclick="backToStep2(); return false;"><@s.text name="label.back_to_step"/> 2</a>
 	</div>
 </div>

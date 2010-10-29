@@ -7,8 +7,8 @@ import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageInspectionBooksPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageInspectionTypesPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageEventBooksPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.pages.setup.MangageEventTypeGroupsPage;
@@ -69,14 +69,14 @@ public class SetupPage extends FieldIDPage {
 		return new ManageAssetTypesPage(selenium);
 	}
 	
-	public ManageInspectionTypesPage clickManageInspectionTypes() {
-		selenium.click("//a[.='Manage Inspection Types']");
-		return new ManageInspectionTypesPage(selenium);
+	public ManageEventTypesPage clickManageEventTypes() {
+		selenium.click("//a[.='Manage Event Types']");
+		return new ManageEventTypesPage(selenium);
 	}
 
-	public ManageInspectionBooksPage clickManageInspectionBooks() {
-		selenium.click("//a[.='Manage Inspection Books']");
-		return new ManageInspectionBooksPage(selenium);
+	public ManageEventBooksPage clickManageEventBooks() {
+		selenium.click("//a[.='Manage Event Books']");
+		return new ManageEventBooksPage(selenium);
 	}
 	
 }

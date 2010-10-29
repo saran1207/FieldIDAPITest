@@ -708,7 +708,7 @@ public class MiscDriver {
 	 * @param domain
 	 */
 	public void forceSessionTimeout(String domain) {
-		selenium.deleteCookie("JSESSIONID", "path=/,domain=" + domain + ",recurse=true");
+        selenium.deleteAllVisibleCookies();
 		selenium.runScript("testSession();");
 		int timeSlice = 5;	// seconds
 		int maxSeconds = 720;

@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.selenium.pages.schedules;
 
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.n4systems.fieldid.selenium.pages.InspectPage;
+import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.thoughtworks.selenium.Selenium;
 
 public class SchedulesSearchResultsPage extends FieldIDPage {
@@ -26,10 +25,10 @@ public class SchedulesSearchResultsPage extends FieldIDPage {
         return selenium.getText("//table[@id='resultsTable']//tr["+rowNumber+"]/td[contains(@id, 'nextdate')]");
     }
     
-    public InspectPage clickStartEventLink(){
+    public EventPage clickStartEventLink(){
     	selenium.click("//a[@id='moreActions'][1]");
     	selenium.click("//li/a[contains(.,'Start Event')][1]");
-    	return new InspectPage(selenium);
+    	return new EventPage(selenium);
     }
     
     public AssetPage clickViewSchedulesLink(){

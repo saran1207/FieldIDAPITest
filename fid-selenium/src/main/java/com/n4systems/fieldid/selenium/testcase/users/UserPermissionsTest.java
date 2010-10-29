@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.testcase.users;
 
 import static org.junit.Assert.*;
 
+import com.n4systems.fieldid.selenium.pages.ManageEventsPage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,8 +11,6 @@ import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.JobsListPage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
-import com.n4systems.fieldid.selenium.pages.ManageInspectionsPage;
-import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.reporting.page.ReportingSearchResultsPage;
 
@@ -91,11 +90,11 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 		assertFalse("Shouldn't be able to see edit link next to view", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
-		ManageInspectionsPage manageInspectionsPage = reportingSearchResultsPage.clickReportLinkForResult(1).clickInspectionsTab().clickManageInspections();
+		ManageEventsPage manageEventsPage = reportingSearchResultsPage.clickReportLinkForResult(1).clickEventsTab().clickManageEvents();
 
 		assertFalse("Shouldn't be able to see edit link", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
-		manageInspectionsPage.clickFirstInspectionLink();
+		manageEventsPage.clickFirstEventLink();
 
 		assertFalse("Shouldn't be able to see edit tab", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 

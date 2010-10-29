@@ -31,12 +31,12 @@
 				
 				
 				<div class="infoFieldCol linkCol">
-					<#if ! undeletableInfoFields.contains( infoFields[stat.index].uniqueID ) ><a href="_infoFields.ftl#" onclick="destroyField(this); return false;" ><@s.text name="hbutton.delete" /></a>
+					<#if ! undeletableInfoFields.contains( infoFields[stat.index].uniqueID ) ><a href="#" onclick="destroyField(this); return false;" ><@s.text name="hbutton.delete" /></a>
 					<#else>
-						<a href="_infoFields.ftl#" onclick="retire( this ); return false;"><#if infoField.retired ><@s.text name="label.unretire" /><#else><@s.text name="label.retire" /></#if></a>
+						<a href="#" onclick="retire( this ); return false;"><#if infoField.retired ><@s.text name="label.unretire" /><#else><@s.text name="label.retire" /></#if></a>
 					</#if>
 					
-					<a href="_infoFields.ftl#" onclick="openCloseOptions( 'infoOptionContainer_${stat.index}'); return false;" class="editInfoOptions" ><@s.text name="label.editinfooptions" /></a>
+					<a href="#" onclick="openCloseOptions( 'infoOptionContainer_${stat.index}'); return false;" class="editInfoOptions" ><@s.text name="label.editinfooptions" /></a>
 					
 				</div>
 				
@@ -53,7 +53,7 @@
 								<@s.textfield name="editInfoOptions[${infoOptionStat.index}].name"  size="30"/>
 								<@s.hidden name="editInfoOptions[${infoOptionStat.index}].infoFieldIndex" />
 								<@s.hidden name="editInfoOptions[${infoOptionStat.index}].deleted" />
-								<a href="_infoFields.ftl#" onclick="destroyOption(this); return false;" ><@s.text name="hbutton.delete" /></a>
+								<a href="#" onclick="destroyOption(this); return false;" ><@s.text name="hbutton.delete" /></a>
 							</div>
 						</#if>
 					</@s.iterator>
@@ -84,8 +84,8 @@
 		
 		
 		<div class="infoFieldCol linkCol">
-			<a href="_infoFields.ftl#" onclick="destroyField(this); return false;" ><@s.text name="hbutton.delete" /></a>
-			<a href="_infoFields.ftl#" onclick="openCloseOptions( 'infoOptionContainer_' + findFieldIndex( this.parentNode.parentNode.id ) ); return false;" class="editInfoOptions"><@s.text name="label.editinfooptions" /></a>
+			<a href="#" onclick="destroyField(this); return false;" ><@s.text name="hbutton.delete" /></a>
+			<a href="#" onclick="openCloseOptions( 'infoOptionContainer_' + findFieldIndex( this.parentNode.parentNode.id ) ); return false;" class="editInfoOptions"><@s.text name="label.editinfooptions" /></a>
 		</div>
 		
 		<div style="clear:both; display:none" class="infoOptionContainer" id="infoOptionContainer_" >
@@ -105,7 +105,7 @@
 		<@s.textfield name="infoOp.name" value="" size="30"/>
 		<@s.hidden name="infoOp.infoFieldIndex" value=""/>
 		<@s.hidden name="infoOp.deleted" value="false" />
-		<a href="_infoFields.ftl#" onclick="destroyOption(this); return false;" ><@s.text name="hbutton.delete" /></a>
+		<a href="#" onclick="destroyOption(this); return false;" ><@s.text name="hbutton.delete" /></a>
 	</div>
 </div>
 

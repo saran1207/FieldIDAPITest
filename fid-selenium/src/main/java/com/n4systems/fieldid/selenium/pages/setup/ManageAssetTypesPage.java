@@ -42,13 +42,13 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		return this;
 	}
 
-	public ManageAssetTypesPage clickInspectionTypesTab() {
-		clickNavOption("Inspection Types");
+	public ManageAssetTypesPage clickEventTypesTab() {
+		clickNavOption("Event Types");
 		return this;
 	}
 	
-	public ManageAssetTypesPage clickInspectionFrequenciesTab() {
-		clickNavOption("Inspection Frequencies");
+	public ManageAssetTypesPage clickEventFrequenciesTab() {
+		clickNavOption("Event Frequencies");
 		return this;
 	}
 	
@@ -176,8 +176,8 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		return getColumnFromTableStartingAtRow("//form[@id='assetTypeEventTypesSave']//table[@class='list']", 2, 2);
 	}
 
-	public void selectInspectionType(String inspectionType) {
-		selenium.check("//form[@id='assetTypeEventTypesSave']//table[@class='list']//td[position() = 2 and contains(.,'"+inspectionType+"')]//parent::tr/td[1]/input[@type='checkbox']");
+	public void selectInspectionType(String eventType) {
+		selenium.check("//form[@id='assetTypeEventTypesSave']//table[@class='list']//td[position() = 2 and contains(.,'"+eventType+"')]//parent::tr/td[1]/input[@type='checkbox']");
 	}
 
 	public void saveInspectionTypes() {
@@ -194,9 +194,14 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		waitForAjax();
 	}
 	
-	public void removeInspectionFrequencyForType(String inspectionType) {
-		selenium.click("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]//a[.='Remove']");
-		waitForAjax();
+	public void removeEventFrequencyForType(String eventType) {
+		selenium.click("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//a[.='Remove']");
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        waitForAjax();
 	}
 	
 	public boolean isInspectionFrequencyScheduledForType(String inspectionType) {
