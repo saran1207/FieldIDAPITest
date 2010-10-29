@@ -184,9 +184,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 	
 
-	private void loadAddProductHistory() {
+	private void loadAddAssetHistory() {
 		addAssetHistory = legacyAssetManager.getAddAssetHistory(getSessionUser().getUniqueID());
-
 	}
 
 	private void applyDefaults() {
@@ -194,12 +193,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 		
 		asset.setIdentified(DateHelper.getToday());
 
-		loadAddProductHistory();
+		loadAddAssetHistory();
 		if (addAssetHistory != null) {
 			
 			setOwnerId(addAssetHistory.getOwner() != null ? addAssetHistory.getOwner().getId() : null);
 
-			// we need to make sure we load the producttype with its info fields
+			// we need to make sure we load the assettype with its info fields
 			setAssetTypeId(addAssetHistory.getAssetType().getId());
 
 			asset.setAssetStatus(addAssetHistory.getAssetStatus());
@@ -210,8 +209,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 		} else {
 			// set the default asset id.
 			getAssetTypes();
-			Long productId = assetTypes.getAssetTypes().iterator().next().getId();
-			setAssetTypeId(productId);
+			Long assetTypeId = assetTypes.getAssetTypes().iterator().next().getId();
+			setAssetTypeId(assetTypeId);
 			setOwnerId(getSessionUser().getOwner().getId());
 		}
 		
@@ -221,7 +220,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	private void convertInputsToInfoOptions() {
-
 		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, asset.getType().getInfoFields());
 
 		asset.setInfoOptions(new TreeSet<InfoOptionBean>(options));
@@ -281,7 +279,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 					return (isInVendorContext()) ? "oneFoundVendorContext" : "oneFound";
 				}
 			} catch (Exception e) {
-				logger.error("Failed to look up Products", e);
+				logger.error("Failed to look up Assets", e);
 				addActionErrorText("error.failedtoload");
 				return ERROR;
 			}
@@ -390,7 +388,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			// we only set identified by on save
 			asset.setIdentifiedBy(fetchCurrentUser());
 			
-			AssetSaveService saver = getProductSaveService();
+			AssetSaveService saver = getAssetSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setAsset(asset);
 
@@ -406,7 +404,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 		}
 
 		if (saveAndInspect != null) {
-			getSession().put("productSerialId", uniqueID);
 			return "saveinspect";
 		}
 
@@ -460,7 +457,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 				inspectionScheduleManager.removeAllSchedulesFor(asset);
 			}
 
-			AssetSaveService saver = getProductSaveService();
+			AssetSaveService saver = getAssetSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setExistingAttachments(getAttachments());
 			saver.setAsset(asset);
@@ -476,7 +473,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 		}
 
 		if (saveAndInspect != null) {
-			getSession().put("productSerialId", uniqueID);
 			return "saveinspect";
 		}
 
@@ -497,7 +493,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 		// update the asset
 		try {
-			AssetSaveService saver = getProductSaveService();
+			AssetSaveService saver = getAssetSaveService();
 			saver.setAsset(asset).update();
 			addFlashMessageText("message.assetupdated");
 		} catch (Exception e) {
@@ -542,7 +538,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 		// update the asset
 		try {
-			getProductSaveService().setAsset(asset).update();
+			getAssetSaveService().setAsset(asset).update();
 			String updateMessage = getText("message.assetupdated.customer", Arrays.asList(asset.getSerialNumber(), asset.getOwner().getName()));
 			addFlashMessage(updateMessage);
 
@@ -891,7 +887,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return lineItem;
 	}
 
-	public int getIdentifiedProductCount(LineItem lineItem) {
+	public int getIdentifiedAssetCount(LineItem lineItem) {
 		return orderManager.countAssetsTagged(lineItem);
 	}
 
@@ -987,7 +983,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.excludeId = excludeId;
 	}
 
-	public AssetSaveService getProductSaveService() {
+	public AssetSaveService getAssetSaveService() {
 		if (assetSaverService == null) {
 			assetSaverService = new AssetSaveService(legacyAssetManager, fetchCurrentUser());
 		}
