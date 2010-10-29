@@ -23,7 +23,7 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	private static final long serialVersionUID = 1L;
 
 	@OneToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="catalogs_assettypes", joinColumns = @JoinColumn(name="catalogs_id"), inverseJoinColumns = @JoinColumn(name="publishedproducttypes_id"))
+    @JoinTable(name="catalogs_assettypes", joinColumns = @JoinColumn(name="catalogs_id"), inverseJoinColumns = @JoinColumn(name="publishedassettypes_id"))
 	private Set<AssetType> publishedAssetTypes = new HashSet<AssetType>();
 	
 	@OneToMany(fetch=FetchType.LAZY)
