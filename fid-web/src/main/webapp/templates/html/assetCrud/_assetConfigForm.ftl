@@ -75,15 +75,6 @@
 	</div>
 </div>
 
-<div class="infoSet">
-	<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
-	<#if !parentAsset?exists >
-		<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
-	<#else>
-		<span class="fieldHolder" id="assetStatus">${(asset.assetStatus.name?html)!}</span>
-	</#if>		
-</div>
-
 <@s.iterator value="extentions" id="extention" status="stat" >
 	<div class="infoSet">
 		<@s.hidden name="assetExtentionValues[${stat.index}].extensionId" />
@@ -92,8 +83,6 @@
 		<@s.textfield key="${extentions[stat.index].extensionLabel}" name="assetExtentionValues[${stat.index}].value" />
 	</div>
 </@s.iterator>
-
-	
 
 <#include "_infoOptions.ftl">
 
