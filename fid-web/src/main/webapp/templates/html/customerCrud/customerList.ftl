@@ -1,3 +1,6 @@
+<head>
+	<@n4.includeStyle href="customerList" type="page"/>
+</head>
 
 <div class="listFilter quickForm" >
 	<@s.form action="${filterAction}" method="get">
@@ -48,11 +51,14 @@
 	</table>
 	<#include '../common/_pagination.ftl' />
 <#elseif !page.hasResults() >
-	<div class="emptyList" >
-		<h2><@s.text name="label.noresults"/></h2>
-		<p>
-			<@s.text name="label.emptylistcustomers" />
-		</p>
+	<@s.url id="addCustomerUrl" action="customerEdit"/>
+	
+	<div class="initialMessage">
+		<div class="textContainer" >
+			<h1><@s.text name="label.create_owner"/></h1>
+			<p><@s.text name="label.create_owner_message" /></p>
+		</div>
+			<input type="submit" value="<@s.text name="label.create_owner_now"/>"onclick="return redirect('${addCustomerUrl}');"/>
 	</div>
 <#else>
 	<div class="emptyList" >
