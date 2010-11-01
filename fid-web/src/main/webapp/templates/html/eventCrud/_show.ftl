@@ -101,7 +101,7 @@
 	</p>
 	
 	<p>
-		<label><@s.text name="label.inspectionbook"/></label>
+		<label><@s.text name="label.eventbook"/></label>
 		<span>${(inspection.book.name)!?html}</span>
 	</p>
 	

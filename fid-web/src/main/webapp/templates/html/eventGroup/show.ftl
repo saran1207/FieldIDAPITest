@@ -9,7 +9,7 @@ ${action.setPageType('inspection', 'list')!}
 
 <div class="formAction container" style="text-align:right;">
 	<#if Session.sessionUser.hasAccess("createinspection") >
-		<span class="inspectionTypes inspectionTypesRelative" ><a href="javascript:void(0);" id="startNewInspection" onmouseover="positionDropdown(this);"><@s.text name="label.newinspection"/></a>
+		<span class="inspectionTypes inspectionTypesRelative" ><a href="javascript:void(0);" id="startNewInspection" onmouseover="positionDropdown(this);"><@s.text name="label.newevent"/></a>
 			<ul id="startNewInspection_list">
 				<#include "_eventSelect.ftl" />
 			</ul>
@@ -68,7 +68,7 @@ ${action.setPageType('inspection', 'list')!}
 					</td>
 					<td>
 						<#if Session.sessionUser.hasAccess("createinspection") && !inVendorContext>
-							<div class="inspectionTypes"><a href="javascript:void(0);" id="${inspectionGroup.id}" onmouseover="positionDropdown(this);"><@s.text name="label.addinspection"/></a><br/>
+							<div class="inspectionTypes"><a href="javascript:void(0);" id="${inspectionGroup.id}" onmouseover="positionDropdown(this);"><@s.text name="label.addevent"/></a><br/>
 								<ul id="${inspectionGroup.id}_list">
 									<#include "_eventSelect.ftl" />
 								</ul>
@@ -84,7 +84,7 @@ ${action.setPageType('inspection', 'list')!}
 		<div class="emptyList" >
 			<h2><@s.text name="label.noresults"/></h2>
 			<p>
-				<@s.text name="message.emptyinspectionlist" />
+				<@s.text name="message.emptyeventlist" />
 			</p>
 		</div>
 	</#if>

@@ -78,7 +78,7 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 	</p>
 	
 	<p>
-		<label><@s.text name="label.inspectionbook"/></label>
+		<label><@s.text name="label.eventbook"/></label>
 		<span>
 			<@s.select id="inspectionBooks" name="inspection.book.iD" list="inspectionBooks" listKey="id" listValue="name" headerKey="" headerValue=""/>
 		</span>

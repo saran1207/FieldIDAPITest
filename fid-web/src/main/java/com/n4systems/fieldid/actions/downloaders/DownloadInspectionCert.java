@@ -40,7 +40,7 @@ public class DownloadInspectionCert extends DownloadAction {
 
 	private String printCert(Inspection inspection) {
 		if(inspection == null) {
-			addActionError( getText( "error.noinspection" ) );
+			addActionError( getText( "error.noevent" ) );
 			return MISSING;
 		} 
 

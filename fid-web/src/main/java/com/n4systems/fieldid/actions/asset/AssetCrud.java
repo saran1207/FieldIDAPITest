@@ -572,7 +572,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			addFlashMessageText("message.assetdeleted");
 			return SUCCESS;
 		} catch (UsedOnMasterInspectionException e) {
-			addFlashErrorText("error.deleteusedonmasterinspection");
+			addFlashErrorText("error.deleteusedonmasterevent");
 		} catch (Exception e) {
 			logger.error("failed to archive an asset", e);
 			addFlashErrorText("error.deleteasset");

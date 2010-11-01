@@ -60,10 +60,10 @@ public class Permissions {
 				label = "label.managecustomers_permission";;
 				break;
 			case CreateInspection:
-				label = "label.createinspection_permission";;
+				label = "label.createevent_permission";;
 				break;
 			case EditInspection:
-				label = "label.editinspection_permission";;
+				label = "label.editevent_permission";;
 				break;
 			case ManageJobs:
 				label = "label.managejobs_permission";;

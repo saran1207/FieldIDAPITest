@@ -72,9 +72,9 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 			
 			transaction.commit();
 			
-			addFlashMessageText("message.inspectiontypesselected");
+			addFlashMessageText("message.eventtypesselected");
 		} catch (Exception e) {
-			addActionErrorText("error.failedtosaveinspectiontypeselection");
+			addActionErrorText("error.failedtosaveeventtypeselection");
 			logger.error("failed to change the inspection type selection", e);
 			transaction.rollback();
 			

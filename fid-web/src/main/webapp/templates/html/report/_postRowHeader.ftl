@@ -1,4 +1,4 @@
 <#if criteria.includeNetworkResults>
-	<th><@s.text name="label.networkinspection"/></th>
+	<th><@s.text name="label.networkevent"/></th>
 </#if>
 <th></th>

@@ -73,8 +73,8 @@ ${action.setPageType('my_account', 'notification_settings')!}
 	</div>
 	
 	<div class="infoSet fullInfoSet">
-		<label for="view.inspectionTypeId"><@s.text name="label.inspection_types"/></label>
-		<@s.select name="view.inspectionTypeId" list="inspectionTypeList" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_inspection_types')}" />
+		<label for="view.inspectionTypeId"><@s.text name="label.event_types"/></label>
+		<@s.select name="view.inspectionTypeId" list="inspectionTypeList" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_event_types')}" />
 	</div>
 	
 	

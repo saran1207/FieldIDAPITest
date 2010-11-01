@@ -21,7 +21,7 @@ ${action.setPageType('asset_type', 'list')!}
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults"/></h2>
 		<p>
-			<@s.text name="label.emptyinspectiontypelist" />
+			<@s.text name="label.emptyeventtypelist" />
 		</p>
 	</div>
 

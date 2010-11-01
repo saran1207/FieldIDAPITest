@@ -64,9 +64,9 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
 			if (job != null) {
-				addFlashMessage(getText("message.inspectionscheduleassignedtojobsuccessfully", messageArgs));
+				addFlashMessage(getText("message.eventscheduleassignedtojobsuccessfully", messageArgs));
 			} else {
-				addFlashMessage(getText("message.inspectionscheduleremovedfromjobsuccessfully", messageArgs));
+				addFlashMessage(getText("message.eventscheduleassignedtojobsuccessfully", messageArgs));
 			}
 			return SUCCESS;
 		} catch (Exception e) {

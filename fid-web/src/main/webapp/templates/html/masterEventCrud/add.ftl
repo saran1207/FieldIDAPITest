@@ -42,7 +42,7 @@ ${action.setPageType('inspection', 'add')!}
 	<div class="inspectionHeader">
 		<h3><@s.text name="label.perform_event"/></h3>
 		<p class="instructions smallInstructions">
-			<@s.text name="instructions.master_inspection"/>
+			<@s.text name="instructions.master_event"/>
 		</p>
 	</div>
 	

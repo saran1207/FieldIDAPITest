@@ -75,7 +75,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 			page = persistenceManager.findAllPaged(queryBuilder, getCurrentPage(), Constants.PAGE_SIZE);
 			return SUCCESS;
 		} catch (InvalidQueryException iqe) {
-			addActionErrorText("error.failedtoloadinspectionbooks");
+			addActionErrorText("error.failedtoloadeventbooks");
 			logger.error("couldn't load the list of inspection docs", iqe);
 			return ERROR;
 		}
@@ -91,7 +91,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 			books = loader.loadListingPair();
 			return SUCCESS;
 		} catch (Exception e) {
-			addActionErrorText("error.failedtoloadinspectionbooks");
+			addActionErrorText("error.failedtoloadeventbooks");
 			logger.error("couldn't load the list of inspection docs", e);
 			return ERROR;
 		}
@@ -99,7 +99,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 	private void testDependencies() throws MissingEntityException {
 		if (book == null) {
-			addActionErrorText("error.noinspectionbook");
+			addActionErrorText("error.noeventbook");
 			throw new MissingEntityException();
 		}
 	}
@@ -138,10 +138,10 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 			} else {
 				book = persistenceManager.update(book, getSessionUser().getUniqueID());
 			}
-			addFlashMessageText("message.inspectionbooksaved");
+			addFlashMessageText("message.eventbooksaved");
 		} catch (Exception e) {
 			logger.error("failed to save inspection book", e);
-			addActionErrorText("error.inspectionbooksavefailed");
+			addActionErrorText("error.eventbooksavefailed");
 			return ERROR;
 		}
 
@@ -160,10 +160,10 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 		try {
 			book = persistenceManager.update(book, getSessionUser().getUniqueID());
-			addFlashMessage(getText("message.inspectionbooksaved"));
+			addFlashMessage(getText("message.eventbooksaved"));
 		} catch (Exception e) {
 			logger.error("failed to save inspection book", e);
-			addActionError(getText("error.inspectionbooksavefailed"));
+			addActionError(getText("error.eventbooksavefailed"));
 			return ERROR;
 		}
 		return SUCCESS;
@@ -181,10 +181,10 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 		try {
 			book = persistenceManager.update(book, getSessionUser().getUniqueID());
-			addFlashMessageText("message.inspectionbooksaved");
+			addFlashMessageText("message.eventbooksaved");
 		} catch (Exception e) {
 			logger.error("failed to save inspection book", e);
-			addActionErrorText("error.inspectionbooksavefailed");
+			addActionErrorText("error.eventbooksavefailed");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -204,15 +204,15 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 		builder.addSimpleWhere("book", book);
 		try {
 			if (persistenceManager.findCount(builder) > 0) {
-				addActionErrorText("error.inspectionbookinuse");
+				addActionErrorText("error.eventbookinuse");
 				return ERROR;
 			}
 
 			persistenceManager.delete(book);
-			addFlashMessageText("message.inspectionbookdeleted");
+			addFlashMessageText("message.eventbookdeleted");
 		} catch (Exception e) {
 			logger.error("failed to save inspection book", e);
-			addActionErrorText("error.inspectionbookdeletefailed");
+			addActionErrorText("error.eventbookdeletefailed");
 			return ERROR;
 		}
 		return SUCCESS;

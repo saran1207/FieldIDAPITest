@@ -1,4 +1,4 @@
-<title><@s.text name="title.massupdateinspectionschedules" /></title>
+<title><@s.text name="title.massupdateeventschedules" /></title>
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
 </head>
@@ -20,7 +20,7 @@
 		<tr>
 			<td><@s.checkbox name="select['nextDate']" id="check_nextDate"/></td>
 			<td>
-				<label class="label"><@s.text name="label.nextinspectiondate"/>:</label>
+				<label class="label"><@s.text name="label.nexteventdate"/>:</label>
 				<span class="field">
 					<@s.textfield id="input_nextDate" key="label.tdate" name="nextDate" size="10" labelposition="left" onchange="selectField('nextDate');" title="${Session.sessionUser.displayDateFormat}" />
 					<img src="images/icons/FieldID_CALENDAR-CHECK-normal.png" border="0" id="nextDateTrigger">

@@ -1,6 +1,6 @@
 ${action.setPageType('inspection_type', 'import_export')!}
 
-<#assign labelTarget='inspection' >
+<#assign labelTarget='event' >
 <@s.url id="exportExample" action="downloadExampleEventExport" namespace="/file" uniqueID="${uniqueID}" />
 <@s.url id="importUrl" action="showImportEvents" uniqueID="${uniqueID}" />
 

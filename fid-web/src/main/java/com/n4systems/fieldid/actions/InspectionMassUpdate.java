@@ -88,7 +88,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 			Long results = massUpdateManager.updateInspections(inspectionIds, inspection, select, getSessionUser().getUniqueID());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
-			addFlashMessage(getText("message.inspectionmassupdatesuccessful", messageArgs));
+			addFlashMessage(getText("message.eventmassupdatesuccessful", messageArgs));
 
 			return SUCCESS;
 		} catch (UpdateFailureException ufe) {

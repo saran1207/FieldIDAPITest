@@ -17,7 +17,7 @@
             </a>
         </li>
         <li class="selected">
-            <@s.text name="nav.inspections"/>
+            <@s.text name="nav.events"/>
         </li>
         <li>
             <a href="<@s.url action="networkEventScheduleList" namespace="/" uniqueID="${uniqueID}"/>">
@@ -32,7 +32,7 @@
         <table class="list">
             <tr>
                 <th><@s.text name="label.date_performed"/></th>
-                <th><@s.text name="label.inspectiontype"/></th>
+                <th><@s.text name="label.eventtype"/></th>
                 <th><@s.text name="label.result"/></th>
                 <th><@s.text name="label.performed_by"/></th>
                 <th><@s.text name="label.details"/></th>
@@ -56,7 +56,7 @@
         <div class="emptyList">
             <h2><@s.text name="label.noresults"/></h2>
             <p>
-                <@s.text name="message.emptyinspectionlist" />
+                <@s.text name="message.emptyeventlist" />
             </p>
         </div>
     </#if>

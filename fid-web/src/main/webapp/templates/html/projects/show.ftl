@@ -152,7 +152,7 @@ ${action.setPageType('job', 'show')!}
 	</div>
 <#else>
 	<div id="events" class="pageSection" style="" >
-		<h2><@s.text name="label.eventsonproject"/>	<#if sessionUser.hasAccess("createinspection")><a href="<@s.url action="startAssignSchedulesToJob" jobId="${uniqueID}"/>"><@s.text name="label.addevent"/></a></#if></h2>
+		<h2><@s.text name="label.eventsonproject"/>	<#if sessionUser.hasAccess("createinspection")><a href="<@s.url action="startAssignSchedulesToJob" jobId="${uniqueID}"/>"><@s.text name="label.addanevent"/></a></#if></h2>
 		<div class="sectionContent" id="emptyEventList" <#if !schedules.isEmpty()> style="display:none" </#if>>
 			<div id="noLinkedEvents"  >
 				<div class="emptyEvents">

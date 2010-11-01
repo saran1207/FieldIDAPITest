@@ -10,7 +10,7 @@
 
 <table class="list" id="scheduleList" <#if inspectionSchedules?exists && inspectionSchedules.isEmpty() >style="display:none"</#if>>
 	<tr>
-		<th class="rowName"><@s.text name="label.inspectiontype"/></th>
+		<th class="rowName"><@s.text name="label.eventtype"/></th>
 		<th><@s.text name="label.nextscheduleddate"/></th>
 	</tr>
 	<tbody id="schedules">

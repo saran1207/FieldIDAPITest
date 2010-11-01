@@ -42,7 +42,7 @@ public class InspectionFormCrud extends AbstractCrud {
 	@SkipValidation
 	public String doEdit() {
 		if( inspectionType == null ) {
-			addActionError( getText( "error.noinspectiontype" ) );
+			addActionError( getText( "error.noeventtype" ) );
 			return MISSING;
 		}
 		
@@ -53,7 +53,7 @@ public class InspectionFormCrud extends AbstractCrud {
 	
 	public String doSave() {
 		if( inspectionType == null ) {
-			addActionError( getText( "error.noinspectiontype" ) );
+			addActionError( getText( "error.noeventtype" ) );
 			return MISSING;
 		}
 		
@@ -62,7 +62,7 @@ public class InspectionFormCrud extends AbstractCrud {
 		try{
 			inspectionType.setSections( criteriaSections );
 			inspectionManager.updateInspectionForm( inspectionType, getSessionUser().getUniqueID() );
-			addFlashMessage( getText( "message.inspectionformsaved" ) );
+			addFlashMessage( getText( "message.eventformsaved" ) );
 		} catch (Exception e) {
 			addActionError( getText( "error.couldnotsave" ) );
 			return ERROR;

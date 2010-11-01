@@ -2,7 +2,7 @@
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.date_performed"/></th>
-			<th><@s.text name="label.inspectiontype"/></th>
+			<th><@s.text name="label.eventtype"/></th>
 			<th><@s.text name="label.result"/></th>
 			<th><@s.text name="label.performed_by"/></th>
 			<th><@s.text name="label.details"/></th>
@@ -29,13 +29,13 @@
 	<div class="emptyList">
 		<h2><@s.text name="label.noresults"/></h2>
 		<p>
-			<@s.text name="label.emptyinspectionlist" />
+			<@s.text name="label.emptyeventlist" />
 		</p>
 	</div>
 </#if>
 
 <#if !inVendorContext >
 	<div class="formAction">
-		<button onclick="window.location = '<@s.url action="eventGroups" uniqueID="${uniqueID}"/>'; return false;" ><@s.text name="label.manageinspections"/> </button>
+		<button onclick="window.location = '<@s.url action="eventGroups" uniqueID="${uniqueID}"/>'; return false;" ><@s.text name="label.manageevents"/> </button>
 	</div>
 </#if>

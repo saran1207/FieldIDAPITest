@@ -99,7 +99,7 @@ ${action.setPageType('report', 'show')!}
 				<@s.select name="criteria.performedBy" list="examiners" listKey="id" listValue="name" emptyOption="true" />
 			</div>
 			<div class="infoSet">
-				<label for="criteria.inspectionBook"><@s.text name="label.inspectionbook"/></label>
+				<label for="criteria.inspectionBook"><@s.text name="label.eventbook"/></label>
 				<@s.select key="label.inspectionbook" name="criteria.inspectionBook" list="inspectionBooks" listKey="id" listValue="name" emptyOption="true" />
 			</div>
 			
@@ -122,7 +122,7 @@ ${action.setPageType('report', 'show')!}
 		</div>
 
 		<div class="fieldGroup inline">
-			<h2><@s.text name="label.inspdate"/></h2>
+			<h2><@s.text name="label.eventdate"/></h2>
 			<div class="container">
 				<div class="infoSet">
 					<label for="fromDate"><@s.text name="label.fdate"/></label>

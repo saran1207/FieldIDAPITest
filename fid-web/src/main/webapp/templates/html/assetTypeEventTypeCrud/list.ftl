@@ -19,7 +19,7 @@
 		}
 		
 		if( doConfirm ) {
-			return confirm( '${action.getText('warning.changinginspectiontypeselection')}' ); 
+			return confirm( '${action.getText('warning.changingeventtypeselection')}' ); 
 		}
 		return true;
 	}
@@ -36,7 +36,7 @@ ${action.setPageType('asset_type', 'select_inspection_types')!}
 		<table class="list" >
 			<tr>
 				<th class="checkboxRow"><@s.text name="label.selected"/></th>
-				<th ><@s.text name="label.inspectiontype"/></th>
+				<th ><@s.text name="label.eventtype"/></th>
 				
 				
 			</tr>
@@ -64,7 +64,7 @@ ${action.setPageType('asset_type', 'select_inspection_types')!}
 <#else>
 	<div class="emptyList" >
 		<p>
-			<@s.text name="label.emptyinspectiontypes" />
+			<@s.text name="label.emptyeventtypes" />
 		</p>
 	</div>
 	

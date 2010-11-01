@@ -128,16 +128,16 @@ ${action.setPageType('asset', 'show')!}
 	</#if>
 	
 	<div class="viewSection smallViewSection" >
-		<h2><@s.text name="label.lastinspection"/> 
-			<a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageInspections"><@s.text name="label.manageinspections"/></a>
+		<h2><@s.text name="label.lastevent"/> 
+			<a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageInspections"><@s.text name="label.manageevents"/></a>
 		</h2>
 		<#if inspectionCount gt 0 >
 			<p>
-				<label><@s.text name="label.lastinspectiondate"/></label>
+				<label><@s.text name="label.lasteventdate"/></label>
 				<span class="fieldValue">${action.formatDateTime(lastInspection.date)}</span>
 			</p>
 			<p>
-				<label><@s.text name="label.inspectiontype"/></label>
+				<label><@s.text name="label.eventtype"/></label>
 				<span class="fieldValue">${ lastInspection.type.name! }</span>
 			</p>
 			<p>
@@ -153,7 +153,7 @@ ${action.setPageType('asset', 'show')!}
 			</p>				
 		<#else>	
 			<p class="fieldValue">
-				<@s.text name="label.noinspections"/>
+				<@s.text name="label.noevents"/>
 			</p>	
 		</#if>
 	</div>

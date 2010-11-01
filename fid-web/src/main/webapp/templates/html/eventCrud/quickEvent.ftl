@@ -1,4 +1,4 @@
-<title><@s.text name="title.quickinspect" /></title>
+<title><@s.text name="title.quickevent" /></title>
 <head>
 	<style>
 		.crudForm p span {
@@ -8,7 +8,7 @@
 </head>
 <div class="crudForm">
 	
-	<span><@s.text name="label.chooseinspectiontype"/></span>
+	<span><@s.text name="label.chooseeventtype"/></span>
 		
 		
 

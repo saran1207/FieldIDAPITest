@@ -26,7 +26,7 @@ public class InspectionAttributeDynamicGroupGenerator {
 	public List<ColumnMappingGroup> getDynamicGroups(Long inspectionTypeId, String idPrefix, String pathPrefix, final SecurityFilter filter) {
 		if (dynamigGroups == null) {
 			dynamigGroups = new ArrayList<ColumnMappingGroup>();
-			ColumnMappingGroup attributeGroup = new ColumnMappingGroup(idPrefix + "_inspection_attributes", "label.inspectionattributes", 1024);
+			ColumnMappingGroup attributeGroup = new ColumnMappingGroup(idPrefix + "_inspection_attributes", "label.eventattributes", 1024);
 			attributeGroup.setDynamic(true);
 			
 			int order = 1024;

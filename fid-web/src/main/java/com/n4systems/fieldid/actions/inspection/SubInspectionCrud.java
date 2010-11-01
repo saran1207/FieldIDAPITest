@@ -86,7 +86,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
 	public String doAdd() {
 		if (masterInspectionHelper == null) {
-			addActionErrorText("error.nomasterinspection");
+			addActionErrorText("error.nomasterevent");
 			return MISSING;
 		}
 		reattachUploadedFiles();
@@ -172,7 +172,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doEdit() {
 		if (masterInspectionHelper == null) {
-			addActionErrorText("error.nomasterinspection");
+			addActionErrorText("error.nomasterevent");
 			return MISSING;
 		}
 		reattachUploadedFiles();
@@ -196,7 +196,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	
 	public String storeSubInspection() {
 		if (masterInspectionHelper == null) {
-			addActionErrorText("error.nomasterinspection");
+			addActionErrorText("error.nomasterevent");
 			return MISSING;
 		}
 
@@ -233,7 +233,7 @@ public class SubInspectionCrud extends InspectionCrud {
 
 		masterInspectionHelper.getSubInspectionUploadedFiles().put(subInspection, getUploadedFiles());
 
-		addFlashMessageText("message.inspectionstored");
+		addFlashMessageText("message.eventstored");
 
 		return SUCCESS;
 	}
@@ -250,7 +250,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	
 	public String storeMasterInspection() {
 		if (masterInspectionHelper == null) {
-			addActionErrorText("error.nomasterinspection");
+			addActionErrorText("error.nomasterevent");
 			return MISSING;
 		}
 		
@@ -300,7 +300,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			return ERROR;
 		}
 
-		addFlashMessageText("message.inspectionstored");
+		addFlashMessageText("message.eventstoreds");
 
 		return SUCCESS;
 	}

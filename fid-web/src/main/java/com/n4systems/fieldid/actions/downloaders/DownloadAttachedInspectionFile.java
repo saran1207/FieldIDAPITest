@@ -29,7 +29,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		inspection =  inspectionManager.findAllFields( uniqueID, getSecurityFilter() );
 		
 		if( inspection == null ) {
-			addActionError( getText( "error.noinspection" ) );
+			addActionError( getText( "error.noevent" ) );
 			return MISSING;
 		} 
 		
@@ -45,7 +45,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		
 		// we did not find the attachment
 		if(attachment == null) {
-			addActionError( getText( "error.noinspectionattachedfile", fileName ) );
+			addActionError( getText( "error.noeventattachedfile", fileName ) );
 			return MISSING;
 		}
 		
@@ -55,7 +55,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		
 		// make sure the file actually exists
 		if( !attachedFile.exists() ) {
-			addActionError( getText( "error.noinspectionattachedfile", fileName ) );
+			addActionError( getText( "error.noeventattachedfile", fileName ) );
 			return MISSING;
 		}
 		
@@ -82,7 +82,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		SubInspection subInspection = inspectionManager.findSubInspection( uniqueID, getSecurityFilter() );
 		
 		if( subInspection == null ) {
-			addActionError( getText( "error.noinspection" ) );
+			addActionError( getText( "error.noevent" ) );
 			return MISSING;
 		} 
 		
@@ -98,7 +98,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		
 		// we did not find the attachment
 		if(attachment == null) {
-			addActionError( getText( "error.noinspectionattachedfile", fileName ) );
+			addActionError( getText( "error.noeventattachedfile", fileName ) );
 			return MISSING;
 		}
 		
@@ -108,7 +108,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		
 		// make sure the file actually exists
 		if( !attachedFile.exists() ) {
-			addActionError( getText( "error.noinspectionattachedfile", fileName ) );
+			addActionError( getText( "error.noeventattachedfile", fileName ) );
 			return MISSING;
 		}
 		
@@ -131,7 +131,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 	public String doDownloadChart() {
 		inspection =  inspectionManager.findAllFields( uniqueID, getSecurityFilter() );
 		if( inspection == null ) {
-			addActionError( getText( "error.noinspection" ) );
+			addActionError( getText( "error.noevent" ) );
 			return MISSING;
 		} 
 		

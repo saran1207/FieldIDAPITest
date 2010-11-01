@@ -24,7 +24,7 @@ ${action.setPageType('event_type_group', 'show')!}
 </div>
 
 <div class="pageSection">
-	<h2><@s.text name="label.inspectiontypes"/></h2>
+	<h2><@s.text name="label.eventtypes"/></h2>
 	<div class="crudForm bigForm sectionContent">
 		
 		<#list inspectionTypes as inspectionType>
@@ -34,11 +34,11 @@ ${action.setPageType('event_type_group', 'show')!}
 		</#list>
 		<#if inspectionTypes.empty >
 			<div class="infoSet">
-				<label class="line"><@s.text name="label.noinspectiontypesundergroup"/></label>
+				<label class="line"><@s.text name="label.noeventtypesundergroup"/></label>
 			</div>
 		</#if>	
 		<div class="infoSet">
-			<label class="line"><a href="<@s.url action="eventTypeAdd" group="${group.id}"/>"><@s.text name="label.addnewinspectiontype"/></a></label>
+			<label class="line"><a href="<@s.url action="eventTypeAdd" group="${group.id}"/>"><@s.text name="label.addneweventtype"/></a></label>
 		</div>
 		 
 	</div>

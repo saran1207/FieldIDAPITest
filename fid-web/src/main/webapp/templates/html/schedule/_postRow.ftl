@@ -40,7 +40,7 @@
 				<li>
 					<#include "../eventCrud/_eventViewLightBoxOptions.ftl"/>
 					<a href='<@s.url action="event" namespace="/aHtml/iframe" uniqueID="${inspectionId}" assetId="${assetId}"/>'  ${inspectionLightViewOptions} >
-						<@s.text name="label.view_inspection"/>
+						<@s.text name="label.view_event"/>
 					</a>
 				</li>
 			</#if>

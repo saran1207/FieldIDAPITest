@@ -34,7 +34,7 @@ ${action.setPageType('inspection_book', 'list')!}
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
-			<@s.text name="label.emptyinspectionbooklist" />
+			<@s.text name="label.emptyeventbooklist" />
 		</p>
 	</div>
 <#else>

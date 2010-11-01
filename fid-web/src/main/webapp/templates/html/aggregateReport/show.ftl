@@ -16,7 +16,7 @@
 		</p>
 		
 		<p>
-			<label><@s.text name="label.totalinspections"/></label>
+			<label><@s.text name="label.totalevents"/></label>
 			<span>${report.totalInspections}</span>
 		</p>
 		
@@ -34,7 +34,7 @@
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.assettype"/></th>
-			<th><@s.text name="label.totalinspections"/></th>
+			<th><@s.text name="label.totalevents"/></th>
 			<th><@s.text name="label.totalassets"/></th>
 		</tr>
 		
@@ -65,7 +65,7 @@
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.eventtypegroup"/></th>
-			<th><@s.text name="label.totalinspections"/></th>
+			<th><@s.text name="label.totalevents"/></th>
 		</tr>
 		
 		<#list report.inspectionTypeGroups as key >

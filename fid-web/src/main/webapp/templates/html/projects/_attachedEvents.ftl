@@ -9,7 +9,7 @@
 			
 			<@s.url id="inspectUrl" action="selectEventAdd" namespace="/" assetId="${event.asset.id}" type="${event.inspectionType.id}" scheduleId="${event.id}" />
 			
-			<span id="inspectNow_${event.id}" <#if event.status.getName() == "IN_PROGRESS">style="display:none"</#if>><@s.text name="label.scheduled"/> <#if sessionUser.hasAccess("createinspection")>| <a href='${inspectUrl}' ><@s.text name="label.inspect"/></a></#if></span>
+			<span id="inspectNow_${event.id}" <#if event.status.getName() == "IN_PROGRESS">style="display:none"</#if>><@s.text name="label.scheduled"/> <#if sessionUser.hasAccess("createinspection")>| <a href='${inspectUrl}' ><@s.text name="label.starteventnow"/></a></#if></span>
 			<span id="stopProgress_${event.id}" <#if event.status.getName() == "SCHEDULED">style="display:none"</#if> ><@s.text name="label.in_progress"/><#if sessionUser.hasAccess("createinspection")> | <a href='javascript:void(0);' onclick="getResponse('<@s.url action="eventScheduleStopProgress" namespace="/ajax" assetId="${event.asset.id}" uniqueID="${event.id}" />'); return false"  ><@s.text name="label.stop"/></a></#if></span>
 
 		</#if>

@@ -6,9 +6,9 @@ ${action.setPageType('event_type_group', 'edit')!}
 			
 			<label class="line">
 				<#if action.canBeDeleted(group)>
-					<@s.text name="label.has_archived_inspection_types_contact_support"/>
+					<@s.text name="label.has_archived_event_types_contact_support"/>
 				<#else>
-					<@s.text name="label.cannothaveanyinspectiontypes"/>
+					<@s.text name="label.cannothaveanyeventtypes"/>
 				</#if>
 			</label>
 		</div>

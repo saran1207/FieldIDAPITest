@@ -182,7 +182,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	
 	protected void testDependencies() throws MissingEntityException {
 		if (inspection == null) {
-			addActionError(getText("error.noinspection"));
+			addActionError(getText("error.noevent"));
 			throw new MissingEntityException();
 		}
 		
@@ -192,7 +192,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 
 		if (inspection.getType() == null) {
-			addActionError(getText("error.inspectiontype"));
+			addActionError(getText("error.eventtype"));
 			throw new MissingEntityException();
 		}
 	}
@@ -207,7 +207,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 
 		if (inspection == null) {
-			addActionError(getText("error.noinspection"));
+			addActionError(getText("error.noevent"));
 			return MISSING;
 		}
 		
@@ -230,7 +230,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
 	public String doSelect() {
 		if (inspection == null) {
-			addActionError(getText("error.noinspection"));
+			addActionError(getText("error.noevent"));
 			return MISSING;
 		}
 		
@@ -430,12 +430,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		} catch (ValidationException e) {
 			return INPUT;
 		} catch (Exception e) {
-			addActionErrorText("error.inspectionsavefailed");
-			logger.error("inspection save failed serial number " + asset.getSerialNumber(), e);
+			addActionErrorText("error.eventsavefailed");
+			logger.error("event save failed serial number " + asset.getSerialNumber(), e);
 			return ERROR;
 		}
 
-		addFlashMessageText("message.inspectionsaved");
+		addFlashMessageText("message.eventsaved");
 		return SUCCESS;
 	}
 
@@ -462,7 +462,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	protected void findInspectionBook() throws ValidationException, PersistenceException {
 		if (newInspectionBookTitle != null) {
 			if (newInspectionBookTitle.trim().length() == 0) {
-				addFieldError("newInspectionBookTitle", getText("error.inspection_book_title_required"));
+				addFieldError("newInspectionBookTitle", getText("error.event_book_title_required"));
 				throw new ValidationException("not validated.");
 			}
 
@@ -553,12 +553,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		try {
 			inspectionManager.retireInspection(inspection, getSessionUser().getUniqueID());
 		} catch (Exception e) {
-			addFlashErrorText("error.inspectiondeleting");
-			logger.error("inspection retire " + asset.getSerialNumber(), e);
+			addFlashErrorText("error.eventdeleting");
+			logger.error("event retire " + asset.getSerialNumber(), e);
 			return ERROR;
 		}
 
-		addFlashMessage(getText("message.inspectiondeleted"));
+		addFlashMessage(getText("message.eventdeleted"));
 		return SUCCESS;
 	}
 	
@@ -582,7 +582,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		inspection.setPrintable(printable);
 	}
 
-	@RequiredFieldValidator(message="", key="error.noinspectiontype")
+	@RequiredFieldValidator(message="", key="error.noeventtype")
 	public void setType(Long type) {
 		if (type == null) {
 			inspection.setType(null);

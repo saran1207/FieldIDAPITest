@@ -41,7 +41,7 @@ ${reportActions}
 		<#include '../customizableSearch/table.ftl'>
 	
 		<div class="adminLink">	
-			<span class="total"><@s.text name="label.totalinspections"/> ${totalResults}</span>
+			<span class="total"><@s.text name="label.totalevents"/> ${totalResults}</span>
 		</div>
 		<div class="adminLink alternateActions">
 			<#-- The following displays the drop down menu for the print report, all inspections and all observations link -->

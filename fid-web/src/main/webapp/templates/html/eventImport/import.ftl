@@ -1,6 +1,6 @@
 ${action.setPageType('inspection_type', 'import_export')!}
 
-<#assign labelTarget='inspection' >
+<#assign labelTarget='event' >
 <#assign importAction='importEvents' >
 <@s.url id="updateUrl" namespace="/ajax" action="eventImportStatus" />
 <@s.url id="backToUrl" action="eventImportExport" uniqueID="${uniqueID}"/>

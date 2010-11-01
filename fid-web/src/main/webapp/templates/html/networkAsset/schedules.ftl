@@ -18,7 +18,7 @@
         </li>
         <li>
             <a href="<@s.url action="networkAssetEvents" namespace="/" uniqueID="${uniqueID}"/>">
-                <@s.text name="nav.inspections"/>
+                <@s.text name="nav.events"/>
             </a>
         </li>
         <li class="selected">
@@ -31,7 +31,7 @@
     <#if inspectionSchedules?exists && !inspectionSchedules.isEmpty()>
         <table class="list" id="scheduleList">
             <tr>
-                <th class="rowName"><@s.text name="label.inspectiontype"/></th>
+                <th class="rowName"><@s.text name="label.eventtype"/></th>
                 <th><@s.text name="label.nextscheduleddate"/></th>
             </tr>
             <tbody id="schedules">

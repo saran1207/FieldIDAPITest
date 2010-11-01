@@ -20,7 +20,7 @@ ${action.setPageType('asset_type', 'schedule_frequencies')!}
 <#if !inspectionTypes.isEmpty() >
 	<table id="inspectionListTable" class="list" >
 		<tr>
-			<th class="rowName"><@s.text name="label.inspectiontype"/></th>
+			<th class="rowName"><@s.text name="label.eventtype"/></th>
 			
 			<th><@s.text name="label.schedulefrequency"/></th>
 		</tr>
@@ -71,8 +71,8 @@ ${action.setPageType('asset_type', 'schedule_frequencies')!}
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
-			<@s.text name="label.emptyinspectiontypesselected" />
-			<a href="<@s.url action="selectEventTypes" includeParams="none" assetTypeId="${assetTypeId}" />"><@s.text name="label.clickheretoselectinspectiontypes"/></a>
+			<@s.text name="label.emptyeventtypesselected" />
+			<a href="<@s.url action="selectEventTypes" includeParams="none" assetTypeId="${assetTypeId}" />"><@s.text name="label.clickheretoselecteventtypes"/></a>
 		</p>
 	</div>
 </#if>

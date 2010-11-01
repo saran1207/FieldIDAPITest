@@ -6,11 +6,11 @@ ${action.setPageType('inspection_type', 'edit')!}
 	<h2 class="clean"><@s.text name="label.delete_summary"/></h2>
 	<#if archiveSummary.canBeRemoved()>
 		<div class="pageInstructions">
-			<@s.text name="instruction.delete_inspection_type"/>
+			<@s.text name="instruction.delete_event_type"/>
 		</div>
 	<#else>
 		<div class="errors">
-			<@s.text name="error.can_not_delete_inspection_type.part_of_master"><@s.param>${archiveSummary.inspectionsPartOfMaster}</@s.param></@s.text>
+			<@s.text name="error.can_not_delete_event_type.part_of_master"><@s.param>${archiveSummary.inspectionsPartOfMaster}</@s.param></@s.text>
 		</div>
 	</#if>
 		
@@ -22,7 +22,7 @@ ${action.setPageType('inspection_type', 'edit')!}
 				<span class="fieldHolder">${archiveSummary.removeFromAssetTypes}</span>
 			</div>
 			<div class="infoSet">
-				<label class="label"><@s.text name="label.delete_inspection_frequencies"/></label>
+				<label class="label"><@s.text name="label.delete_event_frequencies"/></label>
 				<span class="fieldHolder">${archiveSummary.deleteInspectionFrequencies}</span>
 			</div>
 			<div class="infoSet">
@@ -32,11 +32,11 @@ ${action.setPageType('inspection_type', 'edit')!}
 		</div>
 		<div class="infoBlock">
 			<div class="infoSet <#if !archiveSummary.canBeRemoved()>error</#if>">
-				<label class="label"><@s.text name="label.delete_part_of_master_inspections"/></label>
+				<label class="label"><@s.text name="label.delete_part_of_master_events"/></label>
 				<span class="fieldHolder">${archiveSummary.inspectionsPartOfMaster}</span>
 			</div>
 			<div class="infoSet ">
-				<label class="label"><@s.text name="label.delete_inspections"/></label>
+				<label class="label"><@s.text name="label.delete_events"/></label>
 				<span class="fieldHolder">${archiveSummary.deleteInspections}</span>
 			</div>
 			

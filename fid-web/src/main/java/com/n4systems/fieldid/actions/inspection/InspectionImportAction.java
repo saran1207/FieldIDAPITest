@@ -101,14 +101,14 @@ public class InspectionImportAction extends AbstractImportAction {
 		example.setPerformedBy(getUser());
 		example.setStatus(Status.PASS);
 
-		example.setComments(getText("example.inspection.comments"));
-		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.inspection.location")));
+		example.setComments(getText("example.event.comments"));
+		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.event.location")));
 		
 		example.setBook(new InspectionBook());
-		example.getBook().setName(getText("example.inspection.book"));
+		example.getBook().setName(getText("example.event.book"));
 		
 		example.setAsset(new Asset());
-		example.getAsset().setSerialNumber(getText("example.inspection.serialnumber"));
+		example.getAsset().setSerialNumber(getText("example.event.serialnumber"));
 		
 		example.setAssetStatus(getExampleAssetStatus());
 		
@@ -144,7 +144,7 @@ public class InspectionImportAction extends AbstractImportAction {
 	 */
 	private String getExportFileName() {
 		String exportName = type.getName();
-		return getText("label.export_file.inspection", ArrayUtils.newArray(exportName));
+		return getText("label.export_file.event", ArrayUtils.newArray(exportName));
 	}
 	
 	public String getFileName() {

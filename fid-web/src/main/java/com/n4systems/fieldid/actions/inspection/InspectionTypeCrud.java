@@ -73,7 +73,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	private void testRequiredEntities(boolean existing) {
 		if (inspectionType == null || (existing && inspectionType.isNew())) {
-			addActionErrorText("error.noinspectiontype");
+			addActionErrorText("error.noeventtype");
 			throw new MissingEntityException("no inspection type could be found.");
 		}
 	}
@@ -134,7 +134,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 				inspectionType = persistenceManager.update(inspectionType);
 			}
 
-			addFlashMessageText("message.savedinspectiontype");
+			addFlashMessageText("message.savedeventtype");
 			if (saveAndAdd != null) {
 				return "createInspectionForm";
 			}
@@ -167,7 +167,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 			transaction.commit();
 		} catch (Exception e) {
 			transaction.rollback();
-			addActionErrorText("error.confirming_inspection_type_delete");
+			addActionErrorText("error.confirming_event_type_delete");
 			return ERROR;
 		}
 
@@ -190,15 +190,15 @@ public class InspectionTypeCrud extends AbstractCrud {
 				
 				startBackgroundTask();
 				
-				addFlashMessageText("message.deleted_inspection_type");
+				addFlashMessageText("message.deleted_event_type");
 			} else {
-				addFlashErrorText("error.can_not_delete_inspection_type");
+				addFlashErrorText("error.can_not_delete_event_type");
 				return ERROR;
 			}
 		} catch (Exception e) {
 			transaction.rollback();
 			logger.error(getLogLinePrefix() + "could not archive inspection type", e);
-			addFlashErrorText("error.delete_inspection_type");
+			addFlashErrorText("error.delete_event_type");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -209,10 +209,10 @@ public class InspectionTypeCrud extends AbstractCrud {
 			InspectionTypeCopier typeCopier = createInspectionTypeCopier();
 			InspectionType newType = typeCopier.copy(getUniqueID());
 			
-			addFlashMessageText(getText("message.inspection_type_copied", new String[] {newType.getName()}));
+			addFlashMessageText(getText("message.event_type_copied", new String[] {newType.getName()}));
 		} catch(Exception e) {
 			logger.error(getLogLinePrefix() + "failed coping inspection type", e);
-			addFlashErrorText("error.unable_to_copy_inspection_type");
+			addFlashErrorText("error.unable_to_copy_event_type");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -357,7 +357,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 	}
 
 	@Validations(customValidators = {
-			@CustomValidator(type = "requiredStringSet", message = "", key = "error.inspectionattributeblank"),
+			@CustomValidator(type = "requiredStringSet", message = "", key = "error.eventattributeblank"),
 			@CustomValidator(type = "uniqueInfoFieldValidator", message = "", key = "error.duplicateinfofieldname") })
 	public void setInfoFields(List<TrimmedString> infoFields) {
 		infoFieldNames = infoFields;

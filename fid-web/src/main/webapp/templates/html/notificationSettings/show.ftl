@@ -29,7 +29,7 @@
 
 	<#if inspectionType.infoFieldNames?exists && !inspectionType.infoFieldNames.isEmpty()>
 		<div >
-			<h2><@s.text name="label.inspectionattributes"/></h2>
+			<h2><@s.text name="label.eventattributes"/></h2>
 			<div id="infoFields">
 				<#list inspectionType.infoFieldNames as infoField >
 					<#include "_eventAttribute.ftl"/>
@@ -40,7 +40,7 @@
 	</#if>
 
 	
-	<h2><@s.text name="label.inspectionform"/></h2>
+	<h2><@s.text name="label.eventform"/></h2>
 	<#if !inspectionType.sections.isEmpty()  >
 		
 		<div id="inspectionForm">
@@ -71,6 +71,6 @@
 			</#list>
 		</div>
 	<#else>
-		<p class="fieldValue"><@s.text name="label.noinspectionform"/></p>
+		<p class="fieldValue"><@s.text name="label.noeventform"/></p>
 	</#if>		
 </div>

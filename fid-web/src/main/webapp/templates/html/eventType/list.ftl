@@ -28,12 +28,12 @@ ${action.setPageType('inspection_type', 'list')!}
 		<h2><@s.text name="label.noresults"/></h2>
 		<#if inspectionTypeGroups.empty>
 			<p>
-				<@s.text name="label.emptyinspectiontypelist" />
+				<@s.text name="label.emptyeventtypelist" />
 				<a href="<@s.url action="eventTypeGroupAdd"/>"><@s.text name="label.addthefirsteventtypegroup"/></a>
 			</p>
 		<#else>
 			<p>
-				<@s.text name="label.emptyinspectiontypelist" />
+				<@s.text name="label.emptyeventtypelist" />
 			</p>
 		</#if>
 		

@@ -29,7 +29,7 @@
 		<div class="actions">
 			<@s.submit id="saveButton" name="save" cssClass="save" key="hbutton.save" />
 			<#if Session.sessionUser.hasAccess("createinspection") >
-				| <@s.submit id="saveAndInspButton" cssClass="save"  name="saveAndInspect" key="hbutton.saveandinspect" />
+				| <@s.submit id="saveAndInspButton" cssClass="save"  name="saveAndInspect" key="hbutton.saveandstartevent" />
 			</#if>
 			| <@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
 			<#if Session.sessionUser.hasAccess("createinspection") >
@@ -42,7 +42,7 @@
 <script type="text/javascript" >
 	var buttons = new Array( 'saveButton', 'saveAndInspButton', 'saveAndPrintButton','saveAndScheduleButton');
 	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />' );
-	var buttonMessages = new Array( '<@s.text name="hbutton.save" />', '<@s.text name="hbutton.saveandinspect" />', '<@s.text name="hbutton.saveandprint" />', '<@s.text name="hbutton.saveandschedule" />' );
+	var buttonMessages = new Array( '<@s.text name="hbutton.save" />', '<@s.text name="hbutton.saveandstartevent" />', '<@s.text name="hbutton.saveandprint" />', '<@s.text name="hbutton.saveandschedule" />' );
 	
 	$$('#assetCreate .save').each(function(element) {
 			element.observe('click', function(event) {

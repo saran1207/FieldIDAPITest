@@ -118,7 +118,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 	public String doAdd() {
 
 		if (masterInspection == null) {
-			addActionError(getText("error.nomasterinspection"));
+			addActionError(getText("error.nomasterevent"));
 			return MISSING;
 		}
 
@@ -132,7 +132,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 		}
 
 		if (masterInspection.getInspection() == null) {
-			addActionError(getText("error.noinspection"));
+			addActionError(getText("error.noevent"));
 			return ERROR;
 		}
 		if (masterInspection.getInspection().getType() == null) {
@@ -164,7 +164,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 	public String doEdit() {
 
 		if (masterInspection == null) {
-			addActionError(getText("error.nomasterinspection"));
+			addActionError(getText("error.nomasterevent"));
 			return MISSING;
 		}
 
@@ -178,7 +178,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 		}
 
 		if (masterInspection.getInspection() == null) {
-			addActionError(getText("error.noinspection"));
+			addActionError(getText("error.noevent"));
 			return MISSING;
 		}
 
@@ -197,7 +197,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 	}
 	
 	
-	@Validations(requiredFields = { @RequiredFieldValidator(message = "", key = "error.masterinspectionnotcomplete", fieldName = "inspectionComplete") })
+	@Validations(requiredFields = { @RequiredFieldValidator(message = "", key = "error.mastereventnotcomplete", fieldName = "inspectionComplete") })
 	private String save() {
 
 		if (masterInspection == null) {
@@ -243,13 +243,13 @@ public class MasterInspectionCrud extends AbstractCrud {
 					inspection = inspectionManager.attachFilesToSubInspection(inspection, subInspection, masterInspection.getSubInspectionUploadedFiles().get(uploadedFileKey));
 
 				} catch (Exception e) {
-					addFlashError(getText("error.subinspectionfileupload", subInspection.getName()));
+					addFlashError(getText("error.subeventfileupload", subInspection.getName()));
 					logger.error("failed to attach uploaded files to sub asset", e);
 				}
 			}
 
 			getSession().remove(SESSION_KEY);
-			addFlashMessageText("message.masterinspectionsaved");
+			addFlashMessageText("message.mastereventsaved");
 			return SUCCESS;
 
 		} catch (ProcessingProofTestException e) {
@@ -264,8 +264,8 @@ public class MasterInspectionCrud extends AbstractCrud {
 			addActionError(getText("error.attachingfile"));
 			return INPUT;
 		} catch (Exception e) {
-			addActionError(getText("error.inspectionsavefailed"));
-			logger.error("inspection save failed serial number " + asset.getSerialNumber(), e);
+			addActionError(getText("error.eventsavefailed"));
+			logger.error("event save failed serial number " + asset.getSerialNumber(), e);
 			return ERROR;
 		}
 	}

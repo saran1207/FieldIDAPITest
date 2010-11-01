@@ -103,7 +103,7 @@
 	</#if>
 		
 	<div class="infoSet">
-		<label class="label"><@s.text name="label.inspectionbook"/></label>
+		<label class="label"><@s.text name="label.eventbook"/></label>
 		<div class="fieldHolder">
 			<span id="inspectionBookSelect" <#if newInspectionBookTitle?exists>style="display:none"</#if>>
 				<@s.select name="book" id="inspectionBooks" list="inspectionBooks" listKey="id" listValue="name" theme="fieldidSimple">
@@ -115,7 +115,7 @@
 						<@s.param name="disabled" value="true"/>
 					</#if> 
 				</@s.select>
-				<a href="javascript:void(0);" onclick="changeToNewInspectionBook();"><@s.text name="label.new_inspection_book"/></a>
+				<a href="javascript:void(0);" onclick="changeToNewInspectionBook();"><@s.text name="label.new_event_book"/></a>
 			</span>
 			<span id="inspectionBookTitle" <#if !newInspectionBookTitle?exists>style="display:none;"</#if>>
 				<@s.textfield name="newInspectionBookTitle" id="newInspectionBook" theme="fieldidSimple">

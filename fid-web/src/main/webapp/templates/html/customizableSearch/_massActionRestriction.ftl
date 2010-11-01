@@ -42,7 +42,7 @@
 </#if>
 
 <#if maxSizeForAssigningInspectionsToJobs lt totalResults>
-	<div id="warning_assignInspectionsToJob" class="hidden" ><@s.text name="warning.max_size_for_assigning_inspectiosn_to_job"><@s.param>${maxSizeForAssigningInspectionsToJobs}</@s.param></@s.text></div>
+	<div id="warning_assignInspectionsToJob" class="hidden" ><@s.text name="warning.max_size_for_assigning_events_to_job"><@s.param>${maxSizeForAssigningInspectionsToJobs}</@s.param></@s.text></div>
 	<script type="text/javascript">
 		var assignToJob = $$(".assignInspectionsToJob");
 		assignToJob.each(function(element, index) { element.addClassName("disabled"); element.removeClassName("lightview"); element.writeAttribute('title'); element.observe('click', function(event) { Event.stop(event); showQuickView('warning_assignInspectionsToJob', event); } ); } );

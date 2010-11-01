@@ -1,4 +1,4 @@
-<title><@s.text name="title.massupdateinspections" /></title>
+<title><@s.text name="title.massupdateevents" /></title>
 <head>
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<script type="text/javascript">
@@ -60,7 +60,7 @@
 			<td><@s.checkbox name="select['inspectionBook']" id="check_inspectionBook"/></td>
 			<td>
 				<div class="infoSet">
-					<label class="label" ><@s.text name="label.inspectionbook"/>:</label> 
+					<label class="label" ><@s.text name="label.eventbook"/>:</label> 
 					<span class="field"><@s.select  name="inspectionBook" list="inspectionBooks" listKey="id" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('inspectionBook');" /></span>
 				</div>
 			</td>

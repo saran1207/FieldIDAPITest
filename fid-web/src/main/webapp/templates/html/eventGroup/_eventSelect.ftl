@@ -11,6 +11,6 @@
 </#list>
 <#if inspectionTypes.isEmpty() >
 	<li>
-		<@s.text name="label.noinspectiontypes"/>
+		<@s.text name="label.noeventtypes"/>
 	</li>
 </#if>

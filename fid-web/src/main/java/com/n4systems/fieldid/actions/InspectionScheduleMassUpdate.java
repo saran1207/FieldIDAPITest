@@ -54,11 +54,11 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 			Long results;
 			String messageKey;
 			if (select.get("removeIncomplete") == true) {
-				messageKey = "message.inspectionschedulemassremovesuccessful";
+				messageKey = "message.eventschedulemassremovesuccessful";
 				
 				results = massUpdateManager.deleteInspectionSchedules(scheduleIds);
 			} else {
-				messageKey = "message.inspectionschedulemassupdatesuccessful";
+				messageKey = "message.eventschedulemassupdatesuccessful";
 				
 				schedule.setNextDate(convertDate(nextDate));
 				results = massUpdateManager.updateInspectionSchedules(scheduleIds, schedule, select);	

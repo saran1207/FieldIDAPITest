@@ -54,7 +54,7 @@
 		
 		<div class="stepContent" id="step1">
 			<div class="multiInspectInstructions">
-				<p><@s.text name="label.multi_inspect_instructions"/></p>	
+				<p><@s.text name="label.multi_event_instructions"/></p>	
 			</div>
 			<#include "_selectEventType.ftl" />
 		</div>
@@ -67,7 +67,7 @@
 		<div class="stepContent loader hide" id="step2Loading" >
 			${loaderDiv}
 			<p>
-				<@s.text name="label.retrieving_inspection_info" />
+				<@s.text name="label.retrieving_event_info" />
 			</p>
 		</div>
 	</div>

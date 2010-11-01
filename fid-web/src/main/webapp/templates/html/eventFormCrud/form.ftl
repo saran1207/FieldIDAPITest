@@ -9,7 +9,7 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 		addSectionUrl = '<@s.url action="sectionAdd" namespace="/ajax" uniqueID="${uniqueID}"/>';
 		addObservationUrl = '<@s.url action="observationAdd" namespace="/ajax" uniqueID="${uniqueID}"/>';
 		
-		inspectionFormChangedMessage = '${action.getText("warning.inspectionformnotsaved")?js_string}';
+		inspectionFormChangedMessage = '${action.getText("warning.eventformnotsaved")?js_string}';
 		<#list criteriaSections as section >
 			<#if section?exists >
 				sectionIndexes[${section_index}] = new Array();
@@ -44,10 +44,10 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 		</div>
 		
 		<div id="formChangewarning" class="formChangewarning" style="display: none;">
-			<h2><@s.text name="warning.inspectionformchangewarning_one"/>${name}?</h2>
-			<p><@s.text name="warning.inspectionformchangewarning_two"/></p>
+			<h2><@s.text name="warning.eventformchangewarning_one"/>${name}?</h2>
+			<p><@s.text name="warning.eventformchangewarning_two"/></p>
 			<br/>
-			<p><@s.text name="warning.inspectionformchangewarning_three"/></p>
+			<p><@s.text name="warning.eventformchangewarning_three"/></p>
 			<div class="formAction" style="margin-left:auto; margin-right:auto;">
 				<button onclick="Lightview.hide(); return false;" ><@s.text name="label.cancel"/></button>
 				<button onclick="document.inspectionTypeForm.submit();" ><@s.text name="label.ok"/></button>

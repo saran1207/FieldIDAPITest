@@ -81,7 +81,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		}
 		
 		if (inspectionTypeRequired && inspectionType == null) {
-			addActionErrorText("error.noinspectiontype");
+			addActionErrorText("error.noeventtype");
 			throw new MissingEntityException();
 		} 
 	}
@@ -108,10 +108,10 @@ public class InspectionScheduleCrud extends AbstractCrud {
 			inspectionSchedule.setProject(tmpProject);
 			
 			uniqueID = new InspectionScheduleServiceImpl(persistenceManager).createSchedule(inspectionSchedule);
-			addActionMessageText("message.inspectionschedulesaved");
+			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
 			logger.error("could not save schedule", e);
-			addActionErrorText("error.savinginspectionschedule");
+			addActionErrorText("error.savingeventschedule");
 			return ERROR;
 			
 		}
@@ -132,10 +132,10 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		try {
 			inspectionSchedule.setNextDate(convertDate(nextDate));
 			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(inspectionSchedule);
-			addActionMessageText("message.inspectionschedulesaved");
+			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
 			logger.error("could not save schedule", e);
-			addActionErrorText("error.savinginspectionschedule");
+			addActionErrorText("error.savingeventschedule");
 			return ERROR;
 			
 		}
@@ -155,10 +155,10 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		testRequiredEntities(true);
 		try {
 			persistenceManager.delete(inspectionSchedule);
-			addActionMessageText("message.inspectionscheduledeleted");
+			addActionMessageText("message.eventscheduledeleted");
 		} catch (Exception e) {
 			logger.error("could not delete schedule", e);
-			addActionErrorText("error.deletinginspectionschedule");
+			addActionErrorText("error.deletingeventschedule");
 			return ERROR;
 		}
 		return SUCCESS;
@@ -170,10 +170,10 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		try {
 			inspectionSchedule.stopProgress();
 			persistenceManager.update(inspectionSchedule, getSessionUser().getId());
-			addActionMessageText("message.inspectionscheduleprogressstoped");
+			addActionMessageText("message.eventscheduleprogressstoped");
 		} catch (Exception e) {
 			logger.error("could not stop progress on the schedule", e);
-			addActionErrorText("error.stopingprogressinspectionschedule");
+			addActionErrorText("error.stopingprogresseventschedule");
 			return ERROR;
 		}
 

@@ -6,7 +6,7 @@
 	<div id="quickLinks" class="dashboardSection">
 		<h3><@s.text name="label.goto"/>:</h3>
 		<ul id="quickLinkList">
-			<li><a href="<@s.url action="schedule!createSearch"/>?criteria.status=INCOMPLETE"><@s.text name="label.viewupcominginspections"/></a></li>
+			<li><a href="<@s.url action="schedule!createSearch"/>?criteria.status=INCOMPLETE"><@s.text name="label.viewupcomingevents"/></a></li>
  			<li><a href="<@s.url action="report"/>"><@s.text name="label.viewinspectionhistory"/></a></li>
 			<li><a href="<@s.url action="search"/>"><@s.text name="label.findanasset"/></a></li>
 			<li><a href="http://www.n4systems.com/extras"><@s.text name="label.staticdownloads"/></a></li>

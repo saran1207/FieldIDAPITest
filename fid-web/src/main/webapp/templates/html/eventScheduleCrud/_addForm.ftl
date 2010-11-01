@@ -9,7 +9,7 @@
 		</div>	
 		
 		<div class="infoSet"> 
-			<label for="type"><@s.text name="label.inspectiontype"/></label>
+			<label for="type"><@s.text name="label.eventtype"/></label>
 			<@s.select name="type" list="inspectionTypes" listKey="id" listValue="name"/>
 		</div>
 		<#if securityGuard.projectsEnabled>

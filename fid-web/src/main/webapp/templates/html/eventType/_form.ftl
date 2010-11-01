@@ -37,7 +37,7 @@
 	</span>
 </p>
 <p>
-	<@s.label value="${action.getText('label.masterinspection')}:" />
+	<@s.label value="${action.getText('label.masterevent')}:" />
 	<span>
 		<@s.checkbox name="master"/>
 	</span>
@@ -67,7 +67,7 @@
 </table>
 
 <div >
-	<h2><@s.text name="label.inspectionattributes"/></h2>
+	<h2><@s.text name="label.eventattributes"/></h2>
 	<div id="infoFields">
 		<#list infoFields as infoField >
 			<#if infoField?exists>
@@ -84,7 +84,7 @@
 <div class="formAction actions">
 	<@s.submit key="hbutton.save" name="save"/> 
 	<#if !uniqueID?exists >
-		<@s.submit key="hbutton.saveandaddinspectionform" name="saveAndAdd"/> 
+		<@s.submit key="hbutton.saveandaddeventform" name="saveAndAdd"/> 
 	<#else >
 		<@s.url id="deleteConfirmUrl" action="eventTypeDeleteConfirm" uniqueID="${uniqueID}"/>
 		<@s.submit key="label.delete" name="delete" cssClass="delete" onclick="return redirect('${deleteConfirmUrl}');"/> 

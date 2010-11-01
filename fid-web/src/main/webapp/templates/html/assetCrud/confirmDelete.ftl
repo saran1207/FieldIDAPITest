@@ -1,7 +1,7 @@
 ${action.setPageType('asset', 'edit')!}
 <#if !removalSummary.validToDelete() >
 	<div class="formErrors error" >
-		<@s.text name="error.assetusedonamasterinspection">
+		<@s.text name="error.assetusedonamasterevent">
 			<@s.param>${removalSummary.assetUsedInMasterInpsection}</@s.param>
 		</@s.text>
 	</div>
@@ -17,7 +17,7 @@ ${action.setPageType('asset', 'edit')!}
 		
 		<div class="infoSet">
 			<label for="">${removalSummary.inspectionsToDelete}</label>
-			<span><@s.text name="label.inspectionsbeingdeleted"/></span>
+			<span><@s.text name="label.eventsbeingdeleted"/></span>
 		</div>
 		
 		<div class="infoSet">

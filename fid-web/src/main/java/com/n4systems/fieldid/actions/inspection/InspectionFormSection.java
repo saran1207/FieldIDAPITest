@@ -85,7 +85,7 @@ public class InspectionFormSection extends InspectionFormCrud {
 	@SkipValidation
 	public String doAdd() {
 		if( inspectionType == null ) {
-			addActionError( getText( "error.noinspectiontype" ) );
+			addActionError( getText( "error.noeventtype" ) );
 			return MISSING;
 		}
 		
