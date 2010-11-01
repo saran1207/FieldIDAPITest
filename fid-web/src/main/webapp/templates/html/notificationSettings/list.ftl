@@ -1,8 +1,12 @@
 ${action.setPageType('my_account', 'notification_settings')!}
-<#assign secondaryNavAction="list"/>
-<#include "_secondaryNav.ftl"/>
+
+<head>
+	<@n4.includeStyle href="notifications" type="page"/>
+</head>
 
 <#if !settingsList.isEmpty() >
+	<#assign secondaryNavAction="list"/>
+	<#include "_secondaryNav.ftl"/>
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.name" /></th>
@@ -27,10 +31,14 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		</#list>
 	</table>
 <#else>
-	<div class="emptyList" >
-		<h2><@s.text name="label.noresults" /></h2>
-		<p><@s.text name="label.emptynotificationsettinglist" /></p>
-		<a href="<@s.url value="notificationSettingAdd.action"/>" ><@s.text name="label.addnotificationsetting" /></a>
+	<@s.url id="addNotificationSettingUrl" action="notificationSettingAdd"/>
+	
+	<div class="initialMessage">
+		<div class="textContainer" >
+			<h1><@s.text name="label.create_email_notification"/></h1>
+			<p><@s.text name="label.create_email_notification_message" /></p>
+		</div>
+			<input type="submit" value="<@s.text name="label.create_email_notification_now"/>"onclick="return redirect('${addNotificationSettingUrl}');"/>
 	</div>
 </#if>
 

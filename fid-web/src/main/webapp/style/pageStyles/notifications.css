@@ -44,3 +44,7 @@ form.largeForm {
 	margin-left:20px;
 	overflow:hidden;
 }
+
+.textContainer{
+	background-image: url(../../images/notification-bs-icon.png);
+}
