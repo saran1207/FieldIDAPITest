@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.model.AssetType;
 import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.AssetExtensionValue;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -62,7 +60,6 @@ public class AssetViewModeConverter {
 			List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getAssetInfoOptions(), model.getType().getInfoFields());
 			model.setInfoOptions(new TreeSet<InfoOptionBean>(infoOptions));
 			
-			resolveExtensionValues(view.getAssetExtentionValues(), model);
 		} finally {
 			transaction.commit();
 		}
@@ -105,27 +102,5 @@ public class AssetViewModeConverter {
 			status = loader.load(transaction);
 		}
 		return status;
-	}
-	
-	private void resolveExtensionValues(List<AssetExtensionValueInput> assetExtentionValues, Asset asset) {
-		if (assetExtentionValues != null) {
-			List<AssetExtension> extensions = loaderFactory.createAssetExtensionListLoader().load(transaction);
-			
-			Set<AssetExtensionValue> newExtensionValues = new TreeSet<AssetExtensionValue>();
-			for (AssetExtensionValueInput input : assetExtentionValues) {
-				if (input != null) { // some of the inputs can be null due to the retired info fields.
-					for (AssetExtension extension : extensions) {
-						if (extension.getUniqueID().equals(input.getExtensionId())) {
-							AssetExtensionValue extensionValue = input.convertToExtensionValueBean(extension, asset);
-							if (extensionValue != null) {
-								newExtensionValues.add(extensionValue);
-							}
-						}
-					}
-				}
-			}
-			
-			asset.setAssetExtensionValues(newExtensionValues);
-		}
 	}
 }

@@ -22,7 +22,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import rfid.ejb.entity.AssetExtensionValue;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -89,8 +88,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @JoinColumn(name="assetstatus_id")
 	private AssetStatus assetStatus;
 
-	@OneToMany(mappedBy = "asset", fetch = FetchType.EAGER, cascade = CascadeType.ALL )
-	private Set<AssetExtensionValue> assetExtensionValues = new HashSet<AssetExtensionValue>();
 
 	@ManyToOne(optional = true)
 	private User identifiedBy;
@@ -294,15 +291,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		this.mobileGUID = mobileGUID;
 	}
 
-	public Set<AssetExtensionValue> getAssetExtensionValues() {
-		return assetExtensionValues;
-	}
-
-	public void setAssetExtensionValues(
-			Set<AssetExtensionValue> assetExtensionValues) {
-		this.assetExtensionValues = assetExtensionValues;
-	}
-
 	public String getCustomerRefNumber() {
 		return customerRefNumber;
 	}
@@ -354,17 +342,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		this.purchaseOrder = purchaseOrder;
 	}
 	
-	public String getAssetExtensionValue( String name ) {
-		if ( assetExtensionValues != null) {
-			for (AssetExtensionValue assetExtensionValue : assetExtensionValues) {
-				if (assetExtensionValue.getAssetExtension().getExtensionKey().equals(name)) {
-					return assetExtensionValue.getExtensionValue();
-				}
-			}
-		}
-		return null;
-	}
-
 	@AllowSafetyNetworkAccess
 	public PlainDate getIdentified() {
 		return (identified != null) ? new PlainDate(identified) : null;

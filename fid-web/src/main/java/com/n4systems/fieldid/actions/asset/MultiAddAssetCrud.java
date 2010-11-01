@@ -17,7 +17,6 @@ import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
@@ -250,10 +249,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	public void setComments(String comments) {
 		assetView.setComments(comments);
-	}
-	
-	public List<AssetExtensionValueInput> getAssetExtentionValues() {
-		return assetView.getAssetExtentionValues();
 	}
 	
 	public List<InfoOptionInput> getAssetInfoOptions() {

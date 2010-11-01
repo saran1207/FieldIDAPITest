@@ -54,12 +54,6 @@ ${action.setPageType('asset', 'show')!}
 			<span class="fieldValue">${(asset.shopOrder.order.orderNumber)!}</span>
 		</p>
 		</#if>
-		<#list asset.assetExtensionValues as extension >
-			<p>
-				<label><@s.text name="${extension.assetExtension.extensionLabel}"/></label>
-				<span class="fieldValue">${(extension.extensionValue)!}</span>
-			</p>
-		</#list>
 		
 		<#if asset.type.hasManufactureCertificate >
 			<p>

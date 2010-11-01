@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.orgs.BaseOrg;
@@ -21,7 +20,6 @@ public class AssetView implements Serializable, HasOwner {
 	private String nonIntegrationOrderNumber;
 	private String comments;
 	private Date identified;
-	private List<AssetExtensionValueInput> assetExtentionValues;
 	private List<InfoOptionInput> assetInfoOptions;
 	
 	public AssetView() {}
@@ -89,14 +87,6 @@ public class AssetView implements Serializable, HasOwner {
 
 	public void setComments(String comments) {
 		this.comments = comments;
-	}
-
-	public List<AssetExtensionValueInput> getAssetExtentionValues() {
-		return assetExtentionValues;
-	}
-
-	public void setAssetExtentionValues(List<AssetExtensionValueInput> assetExtentionValues) {
-		this.assetExtentionValues = assetExtentionValues;
 	}
 
 	public List<InfoOptionInput> getAssetInfoOptions() {

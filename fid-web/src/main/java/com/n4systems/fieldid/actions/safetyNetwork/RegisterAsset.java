@@ -8,7 +8,6 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.AssetView;
 import com.n4systems.fieldid.actions.asset.AssetViewModeConverter;
 import com.n4systems.fieldid.actions.asset.AssetWebModel;
-import com.n4systems.fieldid.actions.helpers.AssetExtensionValueInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
@@ -229,10 +228,6 @@ public class RegisterAsset extends AbstractCrud{
 	
 	public void setComments(String comments) {
 		assetView.setComments(comments);
-	}
-	
-	public List<AssetExtensionValueInput> getAssetExtentionValues() {
-		return assetView.getAssetExtentionValues();
 	}
 	
 	@CustomValidator(type = "requiredInfoFields", message = "", key = "error.attributesrequired")

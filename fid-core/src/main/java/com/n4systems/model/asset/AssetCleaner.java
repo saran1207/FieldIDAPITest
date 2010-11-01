@@ -1,7 +1,6 @@
 package com.n4systems.model.asset;
 
 import com.n4systems.model.Asset;
-import rfid.ejb.entity.AssetExtensionValue;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.AbstractEntityCleaner;
@@ -11,15 +10,13 @@ import com.n4systems.model.infooption.InfoOptionCleaner;
 public class AssetCleaner extends AbstractEntityCleaner<Asset> {
 	
 	private final Cleaner<InfoOptionBean> infoOptionCleaner;
-	private final Cleaner<AssetExtensionValue> assetExtensionValueCleaner;
 	
 	public AssetCleaner() {
-		this(new InfoOptionCleaner(), new AssetExtensionValueCleaner());
+		this(new InfoOptionCleaner());
 	}
 	
-	public AssetCleaner(Cleaner<InfoOptionBean> infoOptionCleaner, Cleaner<AssetExtensionValue> assetExtensionValueCleaner) {
+	public AssetCleaner(Cleaner<InfoOptionBean> infoOptionCleaner) {
 		this.infoOptionCleaner = infoOptionCleaner;
-		this.assetExtensionValueCleaner = assetExtensionValueCleaner;
 	}
 	
 	@Override
@@ -32,10 +29,5 @@ public class AssetCleaner extends AbstractEntityCleaner<Asset> {
 				infoOptionCleaner.clean(option);
 			}
 		}
-		
-		for (AssetExtensionValue extension: asset.getAssetExtensionValues()) {
-			assetExtensionValueCleaner.clean(extension);
-		}
 	}
-
 }
