@@ -321,7 +321,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	// - AA
 	@SkipValidation
 	public String doInspections() {
-		setPageType("asset", "inspections");
+		setPageType("asset", "events");
 		testExistingAsset();
 
 		return SUCCESS;
