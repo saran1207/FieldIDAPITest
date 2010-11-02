@@ -9,6 +9,7 @@
 
 
 <div class="assetFormGroup">
+	<h2><@s.text name="label.asset_details"/></h2>
 	<div class="infoSet">
 		<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
 		<#if !parentAsset?exists >
@@ -19,11 +20,19 @@
 	</div>
 
 	<div id="infoOptions">
-		<h2><@s.text name="label.asset_details"/></h2>
+	
 		<@s.fielderror>
 			<@s.param>assetInfoOptions</@s.param>				
 		</@s.fielderror>
 		
 		<#include "_attributes.ftl"/>
+	</div>
+	
+	<div class="infoSet">
+		<label for="comments" class="label"><@s.text name="label.comments"/></label>
+		<span class="fieldHolder">
+			<@s.select id="commentTemplateSelection" name="commentTemplate" list="commentTemplates" listKey="id" listValue="displayName" emptyOption="true" onchange="changeComments(this)" theme="fieldidSimple"/><br/>
+			<@s.textarea id="comments"  name="comments" theme="fieldidSimple"/>
+		</span>
 	</div>
 </div>

@@ -75,24 +75,7 @@
 	</div>
 </div>
 
-<@s.iterator value="extentions" id="extention" status="stat" >
-	<div class="infoSet">
-		<@s.hidden name="assetExtentionValues[${stat.index}].extensionId" />
-		<@s.hidden name="assetExtentionValues[${stat.index}].uniqueID" />
-		<label for="assetExtentionValues[${stat.index}].value" class="label">${extentions[stat.index].extensionLabel?html}</label>
-		<@s.textfield key="${extentions[stat.index].extensionLabel}" name="assetExtentionValues[${stat.index}].value" />
-	</div>
-</@s.iterator>
-
 <#include "_infoOptions.ftl">
-
-<div class="infoSet">
-	<label for="comments" class="label"><@s.text name="label.comments"/></label>
-	<span class="fieldHolder">
-		<@s.select id="commentTemplateSelection" name="commentTemplate" list="commentTemplates" listKey="id" listValue="displayName" emptyOption="true" onchange="changeComments(this)" theme="fieldidSimple"/><br/>
-		<@s.textarea id="comments"  name="comments" theme="fieldidSimple"/>
-	</span>
-</div>
 
 <#include "_fileAttachment.ftl"/>
 

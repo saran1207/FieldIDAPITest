@@ -22,27 +22,33 @@ h2{
 
 .assetFormGroup .infoSet{
 	padding-left: 50px;
+	padding-top: 10px;
 	border: none;
 }
 
-.assetFormGroup .infoSet input{
+.assetFormGroup .infoSet label{
+	text-align:right;
+	padding: 5px;
+}
+
+.assetFormGroup .infoSet input, .assetFormGroup .infoSet select, .assetFormGroup .infoSet textarea, .fieldHolder textarea{
 	padding: 4px;
-	}
+	border: 1px solid #9C9C9C;
+}
 
 .fluidSets .assetFormGroup .infoSet label{
 	width: 110px;
 }
 .assetFormGroup h2{
-	border: 1px solid #D0DAFD;
+	border: 1px solid #d7d7d7;
 	background-image: url(../../images/identify-bg.png);
 	background-position: center;
 }
 
 .assetFormGroup .enlarged{
 	font-size: 16px;
-
 }
 
-.enlarged select{
+.enlarged .fieldHolder select{
 	padding: 3px;
 }
