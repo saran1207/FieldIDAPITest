@@ -30,8 +30,8 @@ public class SavedReportSearchCriteriaConverter {
 		container.setReferenceNumber(savedReport.getStringCriteria(SavedReport.REFERENCE_NUMBER));
 		container.getLocation().setFreeformLocation(savedReport.getStringCriteria(SavedReport.LOCATION));
 		container.getLocation().setPredefinedLocationId(savedReport.getLongCriteria(SavedReport.PREDEFINED_LOCATION_ID));
-		container.setInspectionBook(savedReport.getLongCriteria(SavedReport.INSPECTION_BOOK));
-		container.setInspectionTypeGroup(savedReport.getLongCriteria(SavedReport.INSPECTION_TYPE_GROUP));
+		container.setInspectionBook(savedReport.getLongCriteria(SavedReport.EVENT_BOOK));
+		container.setInspectionTypeGroup(savedReport.getLongCriteria(SavedReport.EVENT_TYPE_GROUP));
 		container.setPerformedBy(savedReport.getLongCriteria(SavedReport.PERFORMED_BY));
 		container.setAssignedUser(savedReport.getLongCriteria(SavedReport.ASSIGNED_USER));
 		container.setAssetStatus(savedReport.getLongCriteria(SavedReport.ASSET_STATUS));
@@ -67,8 +67,8 @@ public class SavedReportSearchCriteriaConverter {
 		report.setInCriteria(SavedReport.SERIAL_NUMBER, container.getSerialNumber());
 		report.setInCriteria(SavedReport.OWNER_ID, container.getOwnerId());
 		report.setInCriteria(SavedReport.REFERENCE_NUMBER, container.getReferenceNumber());
-		report.setInCriteria(SavedReport.INSPECTION_BOOK, container.getInspectionBook());
-		report.setInCriteria(SavedReport.INSPECTION_TYPE_GROUP, container.getInspectionTypeGroup());
+		report.setInCriteria(SavedReport.EVENT_BOOK, container.getInspectionBook());
+		report.setInCriteria(SavedReport.EVENT_TYPE_GROUP, container.getInspectionTypeGroup());
 		report.setInCriteria(SavedReport.PERFORMED_BY, container.getPerformedBy());
 		report.setInCriteria(SavedReport.ASSET_STATUS, container.getAssetStatus());
 		report.setInCriteria(SavedReport.ASSET_TYPE, container.getAssetType());

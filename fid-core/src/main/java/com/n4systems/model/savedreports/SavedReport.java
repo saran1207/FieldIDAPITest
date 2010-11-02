@@ -34,8 +34,8 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	public static final String ASSET_STATUS = "assetStatus";
 	public static final String ASSIGNED_USER = "assignedUser";
 	public static final String PERFORMED_BY = "performedBy";
-	public static final String INSPECTION_TYPE_GROUP = "inspectionTypeGroup";
-	public static final String INSPECTION_BOOK = "inspectionBook";
+	public static final String EVENT_TYPE_GROUP = "eventTypeGroup";
+	public static final String EVENT_BOOK = "eventBook";
 	public static final String SERIAL_NUMBER = "serialNumber";
 	public static final String RFID_NUMBER = "rfidNumber";
 	public static final String ORDER_NUMBER = "orderNumber";
