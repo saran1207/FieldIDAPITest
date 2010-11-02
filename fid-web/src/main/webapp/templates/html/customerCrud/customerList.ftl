@@ -2,17 +2,16 @@
 	<@n4.includeStyle href="customerList" type="page"/>
 </head>
 
-<div class="listFilter quickForm" >
-	<@s.form action="${filterAction}" method="get">
-		<@s.textfield key="label.filtername" name="listFilter" id="listFilter" labelposition="left" />
-		<div class="formAction">
-			<@s.submit key="hbutton.filter" />
-		</div>
-	</@s.form>
-</div>
-
-
 <#if page.hasResults() && page.validPage() >
+
+	<div class="listFilter quickForm" >
+		<@s.form action="${filterAction}" method="get">
+			<@s.textfield key="label.filtername" name="listFilter" id="listFilter" labelposition="left" />
+			<div class="formAction">
+				<@s.submit key="hbutton.filter" />
+			</div>
+		</@s.form>
+	</div>
 	
 	<#assign currentAction="customerList.action" />
 	<#include '../common/_pagination.ftl' />
