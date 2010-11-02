@@ -1,7 +1,7 @@
 package com.n4systems.webservice;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.webservice.asset.AssetToServiceConverter;
@@ -27,7 +27,7 @@ public class ModelToServiceConverterFactory {
 		return new AssetToServiceConverter(legacyConverter, loaderFactory.createLastInspectionLoader(), createInspectionToServiceConverter());
 	}
 	
-	public ModelToServiceConverter<Inspection, InspectionServiceDTO> createInspectionToServiceConverter() {
+	public ModelToServiceConverter<Event, InspectionServiceDTO> createInspectionToServiceConverter() {
 		return new InspectionToServiceConverter(legacyConverter);
 	}
 }

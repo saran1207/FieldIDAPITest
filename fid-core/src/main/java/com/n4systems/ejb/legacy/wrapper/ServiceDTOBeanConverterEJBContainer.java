@@ -7,19 +7,19 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
-import com.n4systems.model.InspectionGroup;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Project;
@@ -78,11 +78,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public FileAttachment convert(AbstractInspection inspection, InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException {
+	public FileAttachment convert(AbstractEvent event, InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(inspection, inspectionImageServiceDTO, performedBy);
+			return createManager(transaction.getEntityManager()).convert(event, inspectionImageServiceDTO, performedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -153,11 +153,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public InspectionServiceDTO convert(Inspection inspection) {
+	public InspectionServiceDTO convert(Event event) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(inspection);
+			return createManager(transaction.getEntityManager()).convert(event);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -168,11 +168,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public InspectionBookServiceDTO convert(InspectionBook inspectionBook) {
+	public InspectionBookServiceDTO convert(EventBook eventBook) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(inspectionBook);
+			return createManager(transaction.getEntityManager()).convert(eventBook);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -183,11 +183,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<InspectionServiceDTO> convert(InspectionGroup inspectionGroup) {
+	public List<InspectionServiceDTO> convert(EventGroup eventGroup) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(inspectionGroup);
+			return createManager(transaction.getEntityManager()).convert(eventGroup);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -198,7 +198,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
+	public EventSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -213,7 +213,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Inspection convert(InspectionServiceDTO inspectionServiceDTO, Long tenantId) throws IOException {
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, Long tenantId) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

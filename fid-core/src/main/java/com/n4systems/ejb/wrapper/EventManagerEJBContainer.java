@@ -5,17 +5,17 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.ejb.InspectionManager;
-import com.n4systems.ejb.impl.InspectionManagerImpl;
+import com.n4systems.ejb.EventManager;
+import com.n4systems.ejb.impl.EventManagerImpl;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionGroup;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -27,17 +27,17 @@ import com.n4systems.tools.Pager;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
-public class InspectionManagerEJBContainer extends EJBTransactionEmulator<InspectionManager> implements InspectionManager {
+public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManager> implements EventManager {
 
-	protected InspectionManager createManager(EntityManager em) {
-		return new InspectionManagerImpl(em);
+	protected EventManager createManager(EntityManager em) {
+		return new EventManagerImpl(em);
 	}
 
-	public Inspection attachFilesToSubInspection(Inspection inspection, SubInspection subInspection, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).attachFilesToSubInspection(inspection, subInspection, uploadedFiles);
+			return createManager(transaction.getEntityManager()).attachFilesToSubEvent(event, subEvent, uploadedFiles);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -53,7 +53,7 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 
 	
 
-	public Inspection findAllFields(Long id, SecurityFilter filter) {
+	public Event findAllFields(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -68,7 +68,7 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
+	public List<EventGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -85,11 +85,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 
 	
 
-	public List<Inspection> findInspectionsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
+	public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findInspectionsByDateAndAsset(datePerformedRangeStart, datePerformedRangeEnd, asset, filter);
+			return createManager(transaction.getEntityManager()).findEventsByDateAndAsset(datePerformedRangeStart, datePerformedRangeEnd, asset, filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -100,11 +100,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public Inspection findInspectionThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
+	public Event findEventThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findInspectionThroughSubInspection(subInspectionId, filter);
+			return createManager(transaction.getEntityManager()).findEventThroughSubInspection(subInspectionId, filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -116,11 +116,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 	}
 
 
-	public Date findLastInspectionDate(InspectionSchedule schedule) {
+	public Date findLastEventDate(EventSchedule schedule) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findLastInspectionDate(schedule);
+			return createManager(transaction.getEntityManager()).findLastEventDate(schedule);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -131,11 +131,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public Date findLastInspectionDate(Long scheduleId) {
+	public Date findLastEventDate(Long scheduleId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findLastInspectionDate(scheduleId);
+			return createManager(transaction.getEntityManager()).findLastEventDate(scheduleId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -149,11 +149,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 	
 	
 
-	public Pager<Inspection> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+	public Pager<Event> findNewestEvents(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findNewestInspections(searchCriteria, securityFilter, page, pageSize);
+			return createManager(transaction.getEntityManager()).findNewestEvents(searchCriteria, securityFilter, page, pageSize);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -164,11 +164,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findNewestInspections(searchCriteria, securityFilter, page, pageSize);
+			return createManager(transaction.getEntityManager()).findNewestEvents(searchCriteria, securityFilter, page, pageSize);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -179,11 +179,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public SubInspection findSubInspection(Long subInspectionId, SecurityFilter filter) {
+	public SubEvent findSubEvent(Long subInspectionId, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findSubInspection(subInspectionId, filter);
+			return createManager(transaction.getEntityManager()).findSubEvent(subInspectionId, filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -194,11 +194,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public boolean isMasterInspection(Long id) {
+	public boolean isMasterEvent(Long id) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).isMasterInspection(id);
+			return createManager(transaction.getEntityManager()).isMasterEvent(id);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -209,11 +209,11 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public Inspection retireInspection(Inspection inspection, Long userId) {
+	public Event retireEvent(Event event, Long userId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).retireInspection(inspection, userId);
+			return createManager(transaction.getEntityManager()).retireEvent(event, userId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -224,14 +224,14 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 		}
 	}
 
-	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		Log4JAuditLogger auditLogger = new Log4JAuditLogger(new UpdateInspectionAuditHandler());
 
 		Throwable t = null;
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateInspection(inspection, userId, fileData, uploadedFiles);
+			return createManager(transaction.getEntityManager()).updateEvent(event, userId, fileData, uploadedFiles);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -239,16 +239,16 @@ public class InspectionManagerEJBContainer extends EJBTransactionEmulator<Inspec
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
-			auditLogger.audit("updateInspection", inspection, t);
+			auditLogger.audit("updateEvent", event, t);
 		}
 	}
 
 
-	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId) {
+	public InspectionType updateEventForm(InspectionType inspectionType, Long modifyingUserId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateInspectionForm(inspectionType, modifyingUserId);
+			return createManager(transaction.getEntityManager()).updateEventForm(inspectionType, modifyingUserId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

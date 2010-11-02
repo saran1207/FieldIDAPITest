@@ -2,7 +2,7 @@ package com.n4systems.model.inspectionschedulecount;
 
 import java.util.Date;
 
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;

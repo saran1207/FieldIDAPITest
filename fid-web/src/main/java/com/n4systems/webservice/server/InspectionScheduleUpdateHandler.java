@@ -1,10 +1,10 @@
 package com.n4systems.webservice.server;
 
+import com.n4systems.model.EventSchedule;
 import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
-import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
@@ -29,54 +29,54 @@ public class InspectionScheduleUpdateHandler {
 	
 	public void updateInspectionSchedule(InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		
-		InspectionSchedule inspectionSchedule = loadExistingInspectionSchedule(inspectionScheduleServiceDTO);
+		EventSchedule eventSchedule = loadExistingInspectionSchedule(inspectionScheduleServiceDTO);
 		
 		//somehow it is deleted, then we don't bother to update
-		if (inspectionSchedule != null)
-			updateInspectionSchedule(inspectionScheduleServiceDTO, inspectionSchedule);
+		if (eventSchedule != null)
+			updateInspectionSchedule(inspectionScheduleServiceDTO, eventSchedule);
 	
 	}
 
 	public void removeInspectionSchedule(InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		
-		InspectionSchedule inspectionSchedule = loadExistingInspectionSchedule(inspectionScheduleServiceDTO);
+		EventSchedule eventSchedule = loadExistingInspectionSchedule(inspectionScheduleServiceDTO);
 		
-		if (inspectionSchedule != null)
-			removeInspectionSchedule(inspectionScheduleServiceDTO, inspectionSchedule);
+		if (eventSchedule != null)
+			removeInspectionSchedule(inspectionScheduleServiceDTO, eventSchedule);
 	
 	}
 
 	
-	private InspectionSchedule loadExistingInspectionSchedule(
+	private EventSchedule loadExistingInspectionSchedule(
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		
 		//load inspection schedule either using id or mobileGuid
-		InspectionSchedule inspectionSchedule = inspectionScheduleByMobileGuidLoader.
+		EventSchedule eventSchedule = inspectionScheduleByMobileGuidLoader.
 														setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid()).
 														setId(inspectionScheduleServiceDTO.getId()).
 														load();
 		
-		return inspectionSchedule;
+		return eventSchedule;
 		
 	}
 	
 	private void updateInspectionSchedule(InspectionScheduleServiceDTO inspectionScheduleServiceDTO,
-			InspectionSchedule inspectionSchedule) {
+			EventSchedule eventSchedule) {
 		
 		//update only when it is not completed
-		if (inspectionSchedule.getStatus() != ScheduleStatus.COMPLETED) {
-			inspectionSchedule.setNextDate( AbstractBaseServiceDTO.stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
-			saver.saveOrUpdate(inspectionSchedule);
+		if (eventSchedule.getStatus() != ScheduleStatus.COMPLETED) {
+			eventSchedule.setNextDate( AbstractBaseServiceDTO.stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
+			saver.saveOrUpdate(eventSchedule);
 		}
 	}
 
 	private void removeInspectionSchedule(InspectionScheduleServiceDTO inspectionScheduleServiceDTO,
-			InspectionSchedule inspectionSchedule) {
+			EventSchedule eventSchedule) {
 		
 		try {
 			//remove only when it is not completed
-			if (inspectionSchedule.getStatus() != ScheduleStatus.COMPLETED) {
-				saver.remove(inspectionSchedule);
+			if (eventSchedule.getStatus() != ScheduleStatus.COMPLETED) {
+				saver.remove(eventSchedule);
 			}
 		} catch (EntityStillReferencedException e) {
 			logger.error("Could not delete inspection schedule", e);

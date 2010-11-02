@@ -4,16 +4,17 @@ import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
 import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
 import static com.n4systems.model.builders.AssetBuilder.*;
+
+import com.n4systems.model.EventSchedule;
 import org.junit.Test;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.InspectionSchedule;
 
 public class InspectionScheduleServiceTest {
 
 
 	@Test public void should_save_schedule_and_update_asset() {
-		InspectionSchedule schedule = aScheduledInspectionSchedule().asset(anAsset().build()).build();
+		EventSchedule schedule = aScheduledInspectionSchedule().asset(anAsset().build()).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.save(schedule)).andReturn(3L);
@@ -28,10 +29,10 @@ public class InspectionScheduleServiceTest {
 	
 	
 	@Test public void should_update_schedule_and_update_asset() {
-		InspectionSchedule schedule = aScheduledInspectionSchedule().asset(anAsset().build()).build();
+		EventSchedule schedule = aScheduledInspectionSchedule().asset(anAsset().build()).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
-		expect(mockPersistenceManager.update((InspectionSchedule)anyObject())).andReturn(schedule);
+		expect(mockPersistenceManager.update((EventSchedule)anyObject())).andReturn(schedule);
 		expect(mockPersistenceManager.update(schedule.getAsset())).andReturn(schedule.getAsset());
 		replay(mockPersistenceManager);
 		

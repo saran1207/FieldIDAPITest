@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -76,7 +76,7 @@ public class SyncAssetListLoader extends ListLoader<SyncAsset> {
 	}
 	
 	private List<SyncAsset> findMasterAssetIdsByJob(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(InspectionSchedule.class, filter);
+		QueryBuilder<SyncAsset> builder = new QueryBuilder<SyncAsset>(EventSchedule.class, filter);
 		builder.setSelectArgument(new NewObjectSelect(SyncAsset.class, "asset.id", "asset.modified"));
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "project.id", jobIds));
 		

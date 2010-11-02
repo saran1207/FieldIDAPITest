@@ -12,7 +12,6 @@ import com.n4systems.ejb.ConfigManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
@@ -69,7 +68,7 @@ abstract public class UploadFileSupport extends AbstractCrud {
 
 	/**
 	 * Used to prepare the attachment lists from beans implementing {@link HasFileAttachments} (namely 
-	 * {@link Inspection} and {@link com.n4systems.model.AssetType}), post file upload and prior to update<p />
+	 * {@link com.n4systems.model.Event} and {@link com.n4systems.model.AssetType}), post file upload and prior to update<p />
 	 * Preparation consists of 2 parts:<ol>
 	 * <li>Any attachment <b>not</b> found in the {@link #getAttachments() attachments} list 
 	 * will be removed from <tt>hasAttachments</tt> {@link HasFileAttachments#getAttachments() attachments} list.

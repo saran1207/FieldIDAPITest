@@ -20,24 +20,24 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "inspectiongroups")
-public class InspectionGroup extends EntityWithTenant implements SecurityEnhanced<InspectionGroup> {
+public class EventGroup extends EntityWithTenant implements SecurityEnhanced<EventGroup> {
 	private static final long serialVersionUID = 1L;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "group")
-	private Set<Inspection> inspections = new TreeSet<Inspection>();
+	private Set<Event> events = new TreeSet<Event>();
 
 	private String mobileGuid;
 
-	public InspectionGroup() {
+	public EventGroup() {
 	}
 
-	public void setInspections(Set<Inspection> inspections) {
-		this.inspections = inspections;
+	public void setEvents(Set<Event> events) {
+		this.events = events;
 	}
 
 	@AllowSafetyNetworkAccess
-	public Set<Inspection> getInspections() {
-		return inspections;
+	public Set<Event> getEvents() {
+		return events;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -52,11 +52,11 @@ public class InspectionGroup extends EntityWithTenant implements SecurityEnhance
 	@AllowSafetyNetworkAccess
 	public Date getFirstDate() {
 		Date minDate = null;
-		for (Inspection inspection : getAvailableInspections()) {
+		for (Event event : getAvailableInspections()) {
 			if (minDate == null) {
-				minDate = inspection.getDate();
-			} else if (inspection.getDate().before(minDate)) {
-				minDate = inspection.getDate();
+				minDate = event.getDate();
+			} else if (event.getDate().before(minDate)) {
+				minDate = event.getDate();
 			}
 		}
 
@@ -66,11 +66,11 @@ public class InspectionGroup extends EntityWithTenant implements SecurityEnhance
 	@AllowSafetyNetworkAccess
 	public Date getLastDate() {
 		Date maxDate = null;
-		for (Inspection inspection : getAvailableInspections()) {
+		for (Event event : getAvailableInspections()) {
 			if (maxDate == null) {
-				maxDate = inspection.getDate();
-			} else if (inspection.getDate().after(maxDate)) {
-				maxDate = inspection.getDate();
+				maxDate = event.getDate();
+			} else if (event.getDate().after(maxDate)) {
+				maxDate = event.getDate();
 			}
 		}
 
@@ -78,19 +78,19 @@ public class InspectionGroup extends EntityWithTenant implements SecurityEnhance
 	}
 
 	@AllowSafetyNetworkAccess
-	public List<Inspection> getAvailableInspections() {
-		List<Inspection> availableInspections = new ArrayList<Inspection>();
+	public List<Event> getAvailableInspections() {
+		List<Event> availableEvents = new ArrayList<Event>();
 
-		for (Inspection inspection : inspections) {
-			if (inspection.isActive()) {
-				availableInspections.add(inspection);
+		for (Event event : events) {
+			if (event.isActive()) {
+				availableEvents.add(event);
 			}
 
 		}
-		return availableInspections;
+		return availableEvents;
 	}
 
-	public InspectionGroup enhance(SecurityLevel level) {
+	public EventGroup enhance(SecurityLevel level) {
 		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
 }

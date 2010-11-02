@@ -2,9 +2,9 @@ package com.n4systems.fieldid.actions.inspection;
 
 import java.util.List;
 
+import com.n4systems.ejb.EventManager;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Criteria;
@@ -24,8 +24,8 @@ public class InspectionFormSection extends InspectionFormCrud {
 	private Long observationIndex;
 	private Observation.Type observationType;
 
-	public InspectionFormSection(PersistenceManager persistenceManager, InspectionManager inspectionManager ) {
-		super(persistenceManager, inspectionManager);
+	public InspectionFormSection(PersistenceManager persistenceManager, EventManager eventManager) {
+		super(persistenceManager, eventManager);
 	}
 
 	public Long getSectionIndex() {

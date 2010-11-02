@@ -11,7 +11,7 @@ import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -22,7 +22,7 @@ public class InspectionScheduleCreateHandlerTest {
 	
 	private Asset asset;
 	private InspectionType inspectionType;
-	private InspectionSchedule inspectionSchedule;
+	private EventSchedule eventSchedule;
 	private InspectionScheduleSaver saver;
 	private AssetByMobileGuidLoader assetByMobileGuidLoader;
 	private FilteredIdLoader<Asset> filteredProductLoader;
@@ -33,7 +33,7 @@ public class InspectionScheduleCreateHandlerTest {
 	public void setup() {
 		asset = anAsset().build();
 		inspectionType = anInspectionType().build();
-		inspectionSchedule = aScheduledInspectionSchedule().build();
+		eventSchedule = aScheduledInspectionSchedule().build();
 	}
 	
 	@Test
@@ -49,10 +49,10 @@ public class InspectionScheduleCreateHandlerTest {
 		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(assetByMobileGuidLoader,
 														filteredProductLoader, filteredInspectionTypeLoader, saver);
 		
-		sut.createNewInspectionSchedule(inspectionSchedule, inspectionScheduleServiceDTO);
+		sut.createNewInspectionSchedule(eventSchedule, inspectionScheduleServiceDTO);
 		
-		assertEquals(asset, inspectionSchedule.getAsset());
-		assertEquals(inspectionType, inspectionSchedule.getInspectionType());
+		assertEquals(asset, eventSchedule.getAsset());
+		assertEquals(inspectionType, eventSchedule.getInspectionType());
 		
 	}
 
@@ -66,7 +66,7 @@ public class InspectionScheduleCreateHandlerTest {
 		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(assetByMobileGuidLoader,
 														filteredProductLoader, filteredInspectionTypeLoader, saver);
 		
-		sut.createNewInspectionSchedule(inspectionSchedule, inspectionScheduleServiceDTO);
+		sut.createNewInspectionSchedule(eventSchedule, inspectionScheduleServiceDTO);
 		verify(assetByMobileGuidLoader);
 		verify(saver);
 		
@@ -82,7 +82,7 @@ public class InspectionScheduleCreateHandlerTest {
 		InspectionScheduleCreateHandler sut = new InspectionScheduleCreateHandler(assetByMobileGuidLoader,
 														filteredProductLoader, filteredInspectionTypeLoader, saver);
 		
-		sut.createNewInspectionSchedule(inspectionSchedule, inspectionScheduleServiceDTO);
+		sut.createNewInspectionSchedule(eventSchedule, inspectionScheduleServiceDTO);
 		
 		verify(filteredProductLoader);
 		verify(saver);
@@ -93,7 +93,7 @@ public class InspectionScheduleCreateHandlerTest {
 	@SuppressWarnings("unchecked")
 	private void createMocks() {
 		saver = createMock(InspectionScheduleSaver.class);
-		expect(saver.saveOrUpdate(inspectionSchedule)).andReturn(inspectionSchedule);
+		expect(saver.saveOrUpdate(eventSchedule)).andReturn(eventSchedule);
 		replay(saver);
 
 		assetByMobileGuidLoader = createMock(AssetByMobileGuidLoader.class);

@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import com.n4systems.model.InspectionBook;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -21,7 +21,7 @@ import com.n4systems.util.persistence.QueryBuilder;
  * Each owner level is allowed to see itself and all the way up the parent chain but not down the chain.  Eg, 
  * CustomerOrgs will see their Customer, the parent SecondaryOrg and the PrimaryOrg.
  */
-public class InspectionBookListLoader extends ListLoader<InspectionBook> {
+public class InspectionBookListLoader extends ListLoader<EventBook> {
 
 	private BaseOrg owner;
 	private boolean openBooksOnly;
@@ -31,18 +31,18 @@ public class InspectionBookListLoader extends ListLoader<InspectionBook> {
 	}
 
 	public List<ListingPair> loadListingPair() {
-		List<InspectionBook> inspectionBooks = load();
-		return ListHelper.longListableToListingPair(inspectionBooks);
+		List<EventBook> eventBooks = load();
+		return ListHelper.longListableToListingPair(eventBooks);
 	}
 	
 	@Override
-	protected List<InspectionBook> load(EntityManager em, SecurityFilter filter) {
+	protected List<EventBook> load(EntityManager em, SecurityFilter filter) {
 		/*
 		 * This query should be moved to the QueryBuilder when it is capable of understanding 
 		 * grouping.
 		 */
-		List<InspectionBook> downwardTreeList = new ArrayList<InspectionBook>();
-		List<InspectionBook> upwardTreeList = new ArrayList<InspectionBook>();
+		List<EventBook> downwardTreeList = new ArrayList<EventBook>();
+		List<EventBook> upwardTreeList = new ArrayList<EventBook>();
 		
 		if (owner == null) {
 			downwardTreeList = getDownwardTreeList(em, filter);
@@ -51,16 +51,16 @@ public class InspectionBookListLoader extends ListLoader<InspectionBook> {
 			upwardTreeList = getUpwardTreeList(owner, em, filter);
 		}
 		
-		Set<InspectionBook> combinedSet = new TreeSet<InspectionBook>();
+		Set<EventBook> combinedSet = new TreeSet<EventBook>();
 		combinedSet.addAll(downwardTreeList);
 		combinedSet.addAll(upwardTreeList);
 		
-		return new ArrayList<InspectionBook>(combinedSet);
+		return new ArrayList<EventBook>(combinedSet);
 	}
 	
 	private StringBuilder getStartOfQuery() {
 		StringBuilder queryString = new StringBuilder("SELECT i FROM ");
-		queryString.append(InspectionBook.class.getName());
+		queryString.append(EventBook.class.getName());
 		queryString.append(" i WHERE ");
 		queryString.append("i.tenant.id = :security_tenant_id");
 		
@@ -77,8 +77,8 @@ public class InspectionBookListLoader extends ListLoader<InspectionBook> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<InspectionBook> getDownwardTreeList(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<InspectionBook> queryBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
+	private List<EventBook> getDownwardTreeList(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<EventBook> queryBuilder = new QueryBuilder<EventBook>(EventBook.class, filter);
 		if (openBooksOnly) {
 			queryBuilder.addSimpleWhere("open", true);
 		}
@@ -88,7 +88,7 @@ public class InspectionBookListLoader extends ListLoader<InspectionBook> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<InspectionBook> getUpwardTreeList(BaseOrg owner, EntityManager em, SecurityFilter filter) {
+	private List<EventBook> getUpwardTreeList(BaseOrg owner, EntityManager em, SecurityFilter filter) {
 		StringBuilder inspectionBookQuery = getStartOfQuery();
 		inspectionBookQuery.append(" AND ");
 		

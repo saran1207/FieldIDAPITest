@@ -4,29 +4,29 @@ import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.model.Event;
 import org.apache.log4j.Logger;
 import org.easymock.Capture;
 import org.junit.Test;
 
-import com.n4systems.model.Inspection;
-import com.n4systems.model.builders.InspectionBuilder;
+import com.n4systems.model.builders.EventBuilder;
 
 
 public class AuditLoggerTest {
 
 	
-	private Inspection inspection = InspectionBuilder.anInspection().build();
+	private Event event = EventBuilder.anEvent().build();
 
 
 	@Test
 	public void should_call_handler_for_message() throws Exception {
 		AuditHandler auditHandler = createMock(AuditHandler.class);
-		expect(auditHandler.getMessage(inspection)).andReturn("log Message");
+		expect(auditHandler.getMessage(event)).andReturn("log Message");
 		replay(auditHandler);
 		
 		Log4JAuditLogger sut = new Log4JAuditLogger(auditHandler);
 		
-		sut.audit("method", inspection, null);
+		sut.audit("method", event, null);
 		
 		verify(auditHandler);
 	}
@@ -42,7 +42,7 @@ public class AuditLoggerTest {
 		
 		Log4JAuditLogger sut = new Log4JAuditLogger(new NullAuditHandler(), auditLog);
 		
-		sut.audit("methodName", inspection, null);
+		sut.audit("methodName", event, null);
 		assertThat(logMessage.getValue(), containsString("methodName"));
 	}
 	
@@ -56,7 +56,7 @@ public class AuditLoggerTest {
 		
 		Log4JAuditLogger sut = new Log4JAuditLogger(new NullAuditHandler(), auditLog);
 		
-		sut.audit("methodName", inspection, null);
+		sut.audit("methodName", event, null);
 		assertThat(logMessage.getValue(), containsString("Success"));
 	}
 	
@@ -70,7 +70,7 @@ public class AuditLoggerTest {
 		
 		Log4JAuditLogger sut = new Log4JAuditLogger(new NullAuditHandler(), auditLog);
 		
-		sut.audit("methodName", inspection, new Exception());
+		sut.audit("methodName", event, new Exception());
 		assertThat(logMessage.getValue(), containsString("Failed"));
 	}
 	
@@ -85,7 +85,7 @@ public class AuditLoggerTest {
 		AuditHandler auditHandler = new AuditHandler() {
 			
 			@Override
-			public String getMessage(Inspection inspection) {
+			public String getMessage(Event inspection) {
 				return "Audit Handler Message ----____----";
 			}
 		};
@@ -93,7 +93,7 @@ public class AuditLoggerTest {
 		
 		Log4JAuditLogger sut = new Log4JAuditLogger(auditHandler, auditLog);
 		
-		sut.audit("methodName", inspection, new Exception());
+		sut.audit("methodName", event, new Exception());
 		assertThat(logMessage.getValue(), containsString("Audit Handler Message ----____----"));
 	}
 	
@@ -107,7 +107,7 @@ public class AuditLoggerTest {
 		
 		AuditHandler auditHandler = new AuditHandler() {
 			@Override
-			public String getMessage(Inspection inspection)  {
+			public String getMessage(Event inspection)  {
 				throw new RuntimeException();
 			}
 		};
@@ -115,7 +115,7 @@ public class AuditLoggerTest {
 		
 		Log4JAuditLogger sut = new Log4JAuditLogger(auditHandler, auditLog);
 		
-		sut.audit("methodName", inspection, new Exception());
+		sut.audit("methodName", event, new Exception());
 		
 		verify(auditLog);
 	}

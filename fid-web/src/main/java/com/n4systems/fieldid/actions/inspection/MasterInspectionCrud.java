@@ -3,16 +3,20 @@ package com.n4systems.fieldid.actions.inspection;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.EventManager;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.actions.helpers.SubAssetHelper;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.utils.FindSubAssets;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.InspectionScheduleBundle;
@@ -28,11 +32,7 @@ import com.n4systems.fieldid.utils.CopyInspectionFactory;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionGroup;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.SubInspection;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
@@ -43,12 +43,12 @@ public class MasterInspectionCrud extends AbstractCrud {
 	private static Logger logger = Logger.getLogger(MasterInspectionCrud.class);
 	private static final long serialVersionUID = 1L;
 
-	private InspectionManager inspectionManager;
+	private EventManager eventManager;
 	private InspectionScheduleManager inspectionScheduleManager;
 	private final InspectionPersistenceFactory inspectionPersistenceFactory;
 
-	private Inspection inspection;
-	private InspectionGroup inspectionGroup;
+	private Event event;
+	private EventGroup eventGroup;
 	private Asset asset;
 	private List<SubAssetHelper> subAssets;
 
@@ -59,9 +59,9 @@ public class MasterInspectionCrud extends AbstractCrud {
 	private boolean cleanToInspectionsToMatchConfiguration = false;
 	
 
-	public MasterInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, InspectionScheduleManager inspectionScheduleManager) {
+	public MasterInspectionCrud(PersistenceManager persistenceManager, EventManager eventManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
-		this.inspectionManager = inspectionManager;
+		this.eventManager = eventManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
 	}
@@ -77,15 +77,15 @@ public class MasterInspectionCrud extends AbstractCrud {
 			return;
 		}
 
-		if (inspectionGroup == null) {
+		if (eventGroup == null) {
 			setInspectionGroupId(masterInspection.getInspectionGroupId());
 		}
-		inspection = masterInspection.getInspection();
+		event = masterInspection.getInspection();
 	}
 
 	private void createNewMasterInspection() {
 		masterInspection = new MasterInspection();
-		masterInspection.setInspection(new Inspection());
+		masterInspection.setInspection(new Event());
 		token = masterInspection.getToken();
 		masterInspection.getInspection().setAsset(asset);
 		getSession().put("masterInspection", masterInspection);
@@ -96,17 +96,17 @@ public class MasterInspectionCrud extends AbstractCrud {
 		masterInspection = (MasterInspection) getSession().get(SESSION_KEY);
 
 		if (masterInspection == null || token == null || !MasterInspection.matchingMasterInspection(masterInspection, token)) {
-			Inspection inspection = inspectionManager.findAllFields(uniqueId, getSecurityFilter());
-			masterInspection = new MasterInspection(inspection);
-			if (inspection != null) {
-				for (SubInspection i : inspection.getSubInspections()) {
+			Event event = eventManager.findAllFields(uniqueId, getSecurityFilter());
+			masterInspection = new MasterInspection(event);
+			if (event != null) {
+				for (SubEvent i : event.getSubEvents()) {
 					persistenceManager.reattchAndFetch(i, "asset.id", "results", "infoOptionMap", "type", "attachments");
 				}
 			}
 		}
 
 		if (masterInspection != null) {
-			inspection = masterInspection.getInspection();
+			event = masterInspection.getInspection();
 			token = masterInspection.getToken();
 			setAssetId(masterInspection.getInspection().getAsset().getId());
 			getSession().put("masterInspection", masterInspection);
@@ -140,10 +140,10 @@ public class MasterInspectionCrud extends AbstractCrud {
 			return MISSING;
 		}
 
-		inspection = masterInspection.getInspection();
+		event = masterInspection.getInspection();
 
-		if (inspectionGroup != null) {
-			masterInspection.setInspectionGroupId(inspectionGroup.getId());
+		if (eventGroup != null) {
+			masterInspection.setInspectionGroupId(eventGroup.getId());
 		}
 
 		if (masterInspection.getSchedule() != null) {
@@ -205,14 +205,14 @@ public class MasterInspectionCrud extends AbstractCrud {
 		}
 
 		setInspectionGroupId(masterInspection.getInspectionGroupId());
-		inspection.setGroup(inspectionGroup);
+		event.setGroup(eventGroup);
 
 		try {
 			if (uniqueID == null) {
 				if (cleanToInspectionsToMatchConfiguration) {
 					masterInspection.cleanSubInspectionsForNonValidSubAssets(asset);
 				}
-				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
+				Event master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
 				
 				
 				CreateInspectionParameterBuilder createInspecitonBuiler = new CreateInspectionParameterBuilder(master, getSessionUserId())
@@ -223,27 +223,27 @@ public class MasterInspectionCrud extends AbstractCrud {
 				
 				createInspecitonBuiler.addSchedules(createInspectionScheduleBundles(masterInspection.getNextSchedules()));
 				
-				inspection = inspectionPersistenceFactory.createInspectionCreator().create(
+				event = inspectionPersistenceFactory.createInspectionCreator().create(
 						createInspecitonBuiler.build());
-				uniqueID = inspection.getId();
+				uniqueID = event.getId();
 			} else {
-				Inspection master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
-				inspection = inspectionManager.updateInspection(master, getSessionUser().getUniqueID(), masterInspection.getProofTestFile(), masterInspection.getUploadedFiles());
+				Event master = CopyInspectionFactory.copyInspection(masterInspection.getCompletedInspection());
+				event = eventManager.updateEvent(master, getSessionUser().getUniqueID(), masterInspection.getProofTestFile(), masterInspection.getUploadedFiles());
 			}
 
 			completeSchedule(masterInspection.getScheduleId(), masterInspection.getSchedule());
 
 			for (int i = 0; i < masterInspection.getSubInspections().size(); i++) {
-				SubInspection subInspection = new SubInspection();
-				subInspection.setName("unknown");
-				SubInspection uploadedFileKey = masterInspection.getSubInspections().get(i);
+				SubEvent subEvent = new SubEvent();
+				subEvent.setName("unknown");
+				SubEvent uploadedFileKey = masterInspection.getSubInspections().get(i);
 				try {
-					subInspection = inspection.getSubInspections().get(i);
+					subEvent = event.getSubEvents().get(i);
 
-					inspection = inspectionManager.attachFilesToSubInspection(inspection, subInspection, masterInspection.getSubInspectionUploadedFiles().get(uploadedFileKey));
+					event = eventManager.attachFilesToSubEvent(event, subEvent, masterInspection.getSubInspectionUploadedFiles().get(uploadedFileKey));
 
 				} catch (Exception e) {
-					addFlashError(getText("error.subeventfileupload", subInspection.getName()));
+					addFlashError(getText("error.subeventfileupload", subEvent.getName()));
 					logger.error("failed to attach uploaded files to sub asset", e);
 				}
 			}
@@ -293,17 +293,17 @@ public class MasterInspectionCrud extends AbstractCrud {
 	}
 	
 	
-	private void completeSchedule(Long inspectionScheduleId, InspectionSchedule inspectionSchedule) {
+	private void completeSchedule(Long inspectionScheduleId, EventSchedule eventSchedule) {
 		if (inspectionScheduleId != null) {
 
 			if (inspectionScheduleId.equals(InspectionScheduleSuggestion.NEW_SCHEDULE)) {
-				inspectionSchedule = new InspectionSchedule(inspection);
-			} else if (inspectionSchedule != null) {
-				inspectionSchedule.completed(inspection);
+				eventSchedule = new EventSchedule(event);
+			} else if (eventSchedule != null) {
+				eventSchedule.completed(event);
 			}
-			if (inspectionSchedule != null) {
+			if (eventSchedule != null) {
 				try {
-					inspectionScheduleManager.update(inspectionSchedule);
+					inspectionScheduleManager.update(eventSchedule);
 					addFlashMessageText("message.schedulecompleted");
 				} catch (Exception e) {
 					logger.error("could not complete the schedule", e);
@@ -338,34 +338,34 @@ public class MasterInspectionCrud extends AbstractCrud {
 	}
 
 	public Long getInspectionGroupId() {
-		return (inspectionGroup != null) ? inspectionGroup.getId() : null;
+		return (eventGroup != null) ? eventGroup.getId() : null;
 	}
 
 	public void setInspectionGroupId(Long inspectionGroupId) {
 		if (inspectionGroupId == null) {
-			inspectionGroup = null;
-		} else if (inspectionGroup == null || inspectionGroupId.equals(inspectionGroup.getId())) {
-			inspectionGroup = persistenceManager.find(InspectionGroup.class, inspectionGroupId, getTenantId());
+			eventGroup = null;
+		} else if (eventGroup == null || inspectionGroupId.equals(eventGroup.getId())) {
+			eventGroup = persistenceManager.find(EventGroup.class, inspectionGroupId, getTenantId());
 		}
 	}
 
 	public Long getType() {
-		return (inspection != null && inspection.getType() != null) ? inspection.getType().getId() : null;
+		return (event != null && event.getType() != null) ? event.getType().getId() : null;
 	}
 
 	public void setType(Long type) {
 		if (dirtySession) {
-			inspection.setType(null);
+			event.setType(null);
 		}
 		if (type == null) {
-			inspection.setType(null);
-		} else if (inspection.getType() == null || !type.equals(inspection.getType())) {
-			inspection.setType(persistenceManager.find(InspectionType.class, type, getTenantId()));
+			event.setType(null);
+		} else if (event.getType() == null || !type.equals(event.getType())) {
+			event.setType(persistenceManager.find(InspectionType.class, type, getTenantId()));
 		}
 	}
 
 	public InspectionType getInspectionType() {
-		return inspection.getType();
+		return event.getType();
 	}
 
 	// validate this to be sure we have
@@ -373,22 +373,22 @@ public class MasterInspectionCrud extends AbstractCrud {
 		return masterInspection;
 	}
 
-	public List<SubInspection> getInspectionsFor(Asset asset) {
+	public List<SubEvent> getInspectionsFor(Asset asset) {
 		return masterInspection.getSubInspectionFor(asset);
 	}
 	
 	public String getNameFor(Asset asset) {
-		List<SubInspection> subInspections = getInspectionsFor(asset);
+		List<SubEvent> subEvents = getInspectionsFor(asset);
 		String result = null;
-		if (!subInspections.isEmpty()) {
-			result = subInspections.iterator().next().getName();
+		if (!subEvents.isEmpty()) {
+			result = subEvents.iterator().next().getName();
 		}
 		
 		return result;
 	}
 
-	public Inspection getInspection() {
-		return inspection;
+	public Event getInspection() {
+		return event;
 	}
 
 	public String getToken() {
@@ -419,14 +419,14 @@ public class MasterInspectionCrud extends AbstractCrud {
 	}
 
 	public boolean isMasterInspection(Long id) {
-		return inspectionManager.isMasterInspection(id);
+		return eventManager.isMasterEvent(id);
 	}
 
 	public List<Asset> getAvailableSubProducts() {
 		List<Asset> availableSubAssets = new ArrayList<Asset>();
-		for (SubInspection subInspection : inspection.getSubInspections()) {
-			if (!availableSubAssets.contains(subInspection.getAsset())) {
-				availableSubAssets.add(subInspection.getAsset());
+		for (SubEvent subEvent : event.getSubEvents()) {
+			if (!availableSubAssets.contains(subEvent.getAsset())) {
+				availableSubAssets.add(subEvent.getAsset());
 			}
 		}
 		return availableSubAssets;

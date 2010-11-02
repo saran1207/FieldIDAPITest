@@ -1,16 +1,11 @@
 package com.n4systems.reporting;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.reporting.mapbuilders.ReportField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
@@ -18,42 +13,42 @@ import com.n4systems.util.DateTimeDefinition;
 public class InspectionReportMapProducer extends AbsractInspectionReportMapProducer {
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
 
-	private final Inspection inspection;
+	private final Event event;
 
-	public InspectionReportMapProducer(Inspection inspection, DateTimeDefinition dateTimeDefinition) {
+	public InspectionReportMapProducer(Event event, DateTimeDefinition dateTimeDefinition) {
 		super(dateTimeDefinition);
-		this.inspection = inspection;
+		this.event = event;
 	}
 
 	@Override
 	protected void inspectionParameter() {
-		Inspection inspection = (Inspection) this.getInspection();
+		Event event = (Event) this.getInspection();
 		add("productLabel", null);
-		add("location", inspection.getAdvancedLocation().getFreeformLocation());
-		add("predefinedLocationFullName", inspection.getAdvancedLocation().getFullName());
-		add("inspectionBook", (inspection.getBook() != null) ? inspection.getBook().getName() : null);
-		add("inspectionResult", inspection.getStatus().getDisplayName());
-		add("proofTestInfo", addProofTestInfoParams(inspection));
+		add("location", event.getAdvancedLocation().getFreeformLocation());
+		add("predefinedLocationFullName", event.getAdvancedLocation().getFullName());
+		add("inspectionBook", (event.getBook() != null) ? event.getBook().getName() : null);
+		add("inspectionResult", event.getStatus().getDisplayName());
+		add("proofTestInfo", addProofTestInfoParams(event));
 
 		add(ReportField.ASSIGNED_USER.getParamKey(), assignedUserName());
 
-		fillInDate(inspection);
+		fillInDate(event);
 	}
 
 	private String assignedUserName() {
-		if (!inspection.hasAssignToUpdate()) {
+		if (!event.hasAssignToUpdate()) {
 			return null;
-		} else if (inspection.getAssignedTo().isUnassigned()) {
+		} else if (event.getAssignedTo().isUnassigned()) {
 			return UNASSIGNED_USER_NAME;
 		} else {
-			return inspection.getAssignedTo().getAssignedUser().getUserLabel();
+			return event.getAssignedTo().getAssignedUser().getUserLabel();
 		}
 
 	}
 
-	private void fillInDate(Inspection inspection) {
-		String performedDateAsString = formatDate(inspection.getDate(), true);
-		Date performedDateTimeZoneShifted = DateHelper.convertToUserTimeZone(inspection.getDate(), dateTimeDefinition.getTimeZone());
+	private void fillInDate(Event event) {
+		String performedDateAsString = formatDate(event.getDate(), true);
+		Date performedDateTimeZoneShifted = DateHelper.convertToUserTimeZone(event.getDate(), dateTimeDefinition.getTimeZone());
 
 		add("inspectionDate", performedDateAsString);
 		add("datePerformed", performedDateAsString);
@@ -64,11 +59,11 @@ public class InspectionReportMapProducer extends AbsractInspectionReportMapProdu
 
 	@Override
 	protected File imagePath(FileAttachment imageAttachment) {
-		return PathHandler.getInspectionAttachmentFile((Inspection) getInspection(), imageAttachment);
+		return PathHandler.getInspectionAttachmentFile((Event) getInspection(), imageAttachment);
 	}
 
 	@Override
-	protected AbstractInspection getInspection() {
-		return inspection;
+	protected AbstractEvent getInspection() {
+		return event;
 	}
 }

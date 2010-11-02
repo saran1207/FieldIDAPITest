@@ -1,7 +1,7 @@
 package com.n4systems.services;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 
 public class InspectionScheduleServiceImpl implements InspectionScheduleService {
 
@@ -11,15 +11,15 @@ public class InspectionScheduleServiceImpl implements InspectionScheduleService 
 		this.persistenceManager = persistenceManager;
 	}
 	
-	public Long createSchedule(InspectionSchedule schedule) {
+	public Long createSchedule(EventSchedule schedule) {
 		Long id = persistenceManager.save(schedule);
 		schedule.getAsset().touch();
 		persistenceManager.update(schedule.getAsset());
 		return id;
 	}
 	
-	public InspectionSchedule updateSchedule(InspectionSchedule schedule) {
-		InspectionSchedule updatedSchedule = persistenceManager.update(schedule);
+	public EventSchedule updateSchedule(EventSchedule schedule) {
+		EventSchedule updatedSchedule = persistenceManager.update(schedule);
 		updatedSchedule.getAsset().touch();
 		persistenceManager.update(updatedSchedule.getAsset());
 		return updatedSchedule;

@@ -4,7 +4,7 @@ import static com.n4systems.util.ServiceLocator.*;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -36,20 +36,20 @@ public class InspectionServiceDTOConverter {
 		return new LocationServiceToContainerConverter(loaderFactory);
 	}
 	
-	public Inspection convert(InspectionServiceDTO inspectionServiceDTO) throws Exception {
+	public Event convert(InspectionServiceDTO inspectionServiceDTO) throws Exception {
 		
-		Inspection inspection = null;
+		Event event = null;
 		try {
 			
-			inspection = serviceDTOBeanconverter.convert(inspectionServiceDTO, systemSecurityGuard.getTenantId());
-			inspection = assignedUserConverter.convert(inspectionServiceDTO, inspection);
-			locationConverter.convert(inspectionServiceDTO, inspection);
+			event = serviceDTOBeanconverter.convert(inspectionServiceDTO, systemSecurityGuard.getTenantId());
+			event = assignedUserConverter.convert(inspectionServiceDTO, event);
+			locationConverter.convert(inspectionServiceDTO, event);
 			
 		} catch (Exception e) {
 			throw e;
 		}
 		
-		return inspection;
+		return event;
 	}
 	
 

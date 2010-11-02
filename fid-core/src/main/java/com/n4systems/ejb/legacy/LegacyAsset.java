@@ -11,7 +11,7 @@ import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
@@ -28,7 +28,7 @@ public interface LegacyAsset {
 	
 	public boolean duplicateSerialNumber( String serialNumber, Long uniqueID, Tenant tenant );
 	
-	public Inspection findLastInspections( Asset asset, SecurityFilter securityFilter );
+	public Event findLastInspections( Asset asset, SecurityFilter securityFilter );
 	
 	
 	

@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.testutils.TestDoubleLoaderFactory;

@@ -6,13 +6,13 @@ import java.util.List;
 
 import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.impl.InspectionScheduleBundle;
+import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
 import com.n4systems.tools.FileDataContainer;
 
 public class CreateInspectionParameterBuilder {
 
-	private final Inspection inspection;
+	private final Event event;
 	private final long userId;
 	private boolean calculateInspectionResult = true;
 	private Date nextInspectionDate = null;
@@ -21,13 +21,13 @@ public class CreateInspectionParameterBuilder {
 	private ArrayList<InspectionScheduleBundle> schedules = new ArrayList<InspectionScheduleBundle>();
 	
 
-	public CreateInspectionParameterBuilder(Inspection inspection, long userId) {
-		this.inspection = inspection;
+	public CreateInspectionParameterBuilder(Event event, long userId) {
+		this.event = event;
 		this.userId = userId;
 	}
 
 	public CreateInspectionParameter build() {
-		return new CreateInspectionParameter(inspection, nextInspectionDate, userId, proofTestData, uploadedImages, calculateInspectionResult, schedules);
+		return new CreateInspectionParameter(event, nextInspectionDate, userId, proofTestData, uploadedImages, calculateInspectionResult, schedules);
 	}
 	
 	public CreateInspectionParameterBuilder doNotCalculateInspectionResult() {
@@ -39,7 +39,7 @@ public class CreateInspectionParameterBuilder {
 		this.nextInspectionDate = nextInspectionDate;
 		
 		if (nextInspectionDate != null) {
-			addSchedule(new InspectionScheduleBundle(inspection.getAsset(), inspection.getType(), null, nextInspectionDate));
+			addSchedule(new InspectionScheduleBundle(event.getAsset(), event.getType(), null, nextInspectionDate));
 		}
 		return this;
 	}

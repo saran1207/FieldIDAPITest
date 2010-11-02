@@ -13,6 +13,7 @@ import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.AssetRemovalSummary;
@@ -44,7 +45,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
 import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
@@ -915,11 +915,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return getAllInspectionHelper().getInspectionCount();
 	}
 
-	public List<Inspection> getInspections() {
+	public List<Event> getInspections() {
 		return getAllInspectionHelper().getInspections();
 	}
 
-	public Inspection getLastInspection() {
+	public Event getLastInspection() {
 		return getAllInspectionHelper().getLastInspection();
 	}
 

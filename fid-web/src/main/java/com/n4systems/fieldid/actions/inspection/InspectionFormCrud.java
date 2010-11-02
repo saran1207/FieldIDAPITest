@@ -2,9 +2,9 @@ package com.n4systems.fieldid.actions.inspection;
 
 import java.util.List;
 
+import com.n4systems.ejb.EventManager;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -20,15 +20,15 @@ import com.opensymphony.xwork2.validator.annotations.Validations;
 public class InspectionFormCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
-	protected InspectionManager inspectionManager;
+	protected EventManager eventManager;
 	
 	private List<StateSet> stateSets;	
 	protected List<CriteriaSection> criteriaSections;
 	protected InspectionType inspectionType;
 	
-	public InspectionFormCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager) {
+	public InspectionFormCrud(PersistenceManager persistenceManager, EventManager eventManager) {
 		super(persistenceManager);
-		this.inspectionManager = inspectionManager;
+		this.eventManager = eventManager;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class InspectionFormCrud extends AbstractCrud {
 		
 		try{
 			inspectionType.setSections( criteriaSections );
-			inspectionManager.updateInspectionForm( inspectionType, getSessionUser().getUniqueID() );
+			eventManager.updateEventForm( inspectionType, getSessionUser().getUniqueID() );
 			addFlashMessage( getText( "message.eventformsaved" ) );
 		} catch (Exception e) {
 			addActionError( getText( "error.couldnotsave" ) );

@@ -16,6 +16,8 @@ import com.n4systems.ejb.impl.AssetManagerImpl;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.utils.FindSubAssets;
@@ -32,10 +34,8 @@ import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -66,7 +66,7 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 	public AssetStatus findAssetStatus(Long uniqueID, Long tenantId) {
-		Query query = em.createQuery("FROM AssetStatus st WHERE st.uniqueID = :uniqueID AND st.tenant.id = :tenantId");
+		Query query = em.createQuery("FROM "+AssetStatus.class.getName()+" st WHERE st.uniqueID = :uniqueID AND st.tenant.id = :tenantId");
 		query.setParameter("uniqueID", uniqueID);
 		query.setParameter("tenantId", tenantId);
 		AssetStatus obj = null;
@@ -80,7 +80,7 @@ public class LegacyAssetManager implements LegacyAsset {
 
 	@SuppressWarnings("unchecked")
 	public List<AssetStatus> findAssetStatus(Long tenantId, Date beginDate) {
-		Query query = em.createQuery("from AssetStatus st where st.tenant.id = :tenantId and st.dateCreated >= :beginDate");
+		Query query = em.createQuery("from "+AssetStatus.class.getName()+" st where st.tenant.id = :tenantId and st.dateCreated >= :beginDate");
 		query.setParameter("tenantId", tenantId);
 		query.setParameter("beginDate", beginDate);
 
@@ -183,13 +183,13 @@ public class LegacyAssetManager implements LegacyAsset {
 
 	private void updateSchedulesOwnership(Asset asset) {
 		
-		QueryBuilder<Long> schedules = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter())
+		QueryBuilder<Long> schedules = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter())
 					.setSimpleSelect("id")
 					.addSimpleWhere("asset", asset)
 					.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
 			
 		for (Long id : schedules.getResultList(em)) {
-			InspectionSchedule schedule = persistenceManager.find(InspectionSchedule.class, id);
+			EventSchedule schedule = persistenceManager.find(EventSchedule.class, id);
 			
 			schedule.setOwner(asset.getOwner());
 			schedule.setAdvancedLocation(asset.getAdvancedLocation());
@@ -358,14 +358,14 @@ public class LegacyAssetManager implements LegacyAsset {
 		return value != 0L;
 	}
 
-	public Inspection findLastInspections(Asset asset, SecurityFilter securityFilter) {
+	public Event findLastInspections(Asset asset, SecurityFilter securityFilter) {
 		Query inspectionQuery = createAllInspectionQuery(asset, securityFilter, false, true);
-		Inspection inspection = null;
+		Event event = null;
 		try {
-			inspection = (Inspection) inspectionQuery.getSingleResult();
+			event = (Event) inspectionQuery.getSingleResult();
 		} catch (NoResultException e) {
 		}
-		return inspection;
+		return event;
 	}
 
 	public Long countAllInspections(Asset asset, SecurityFilter securityFilter) {
@@ -386,16 +386,16 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 	private Query createAllInspectionQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastInspection) {
-		String query = "from Inspection inspection  left join inspection.asset " + "WHERE  " + securityFilter.produceWhereClause(Inspection.class, "inspection")
-				+ " AND inspection.asset = :asset AND inspection.state= :activeState";
+		String query = "from "+Event.class.getName()+" event  left join event.asset " + "WHERE  " + securityFilter.produceWhereClause(Event.class, "event")
+				+ " AND event.asset = :asset AND event.state= :activeState";
 		if (count) {
-			query = "SELECT count(inspection.id) " + query;
+			query = "SELECT count(event.id) " + query;
 		} else {
-			query = "SELECT inspection " + query;
+			query = "SELECT event " + query;
 		}
 
 		if (!count)
-			query += " ORDER BY inspection.date DESC, inspection.created ASC";
+			query += " ORDER BY event.date DESC, event.created ASC";
 
 		Query inspectionQuery = em.createQuery(query);
 
@@ -404,7 +404,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		}
 
 		inspectionQuery.setParameter("asset", asset);
-		securityFilter.applyParameters(inspectionQuery, Inspection.class);
+		securityFilter.applyParameters(inspectionQuery, Event.class);
 		inspectionQuery.setParameter("activeState", EntityState.ACTIVE);
 
 		return inspectionQuery;

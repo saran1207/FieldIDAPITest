@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -15,11 +16,10 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.ReportException;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.ProofTestInfo;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.mapbuilders.BaseInspectionMapBuilder;
@@ -33,10 +33,10 @@ public class InspectionCertificateGenerator {
 	private final MapBuilder<AssetType> productTypeMapBuilder;
 	private final MapBuilder<LineItem> orderMapBuilder;
 	private final MapBuilder<ProofTestInfo> proofTestMapBuilder;
-	private final MapBuilder<Inspection> baseInspectionMapBuilder;
+	private final MapBuilder<Event> baseInspectionMapBuilder;
 	private final DateTimeDefiner dateDefiner;
 	
-	public InspectionCertificateGenerator(DateTimeDefiner dateDefiner, MapBuilder<Inspection> baseInspectionMapBuilder, MapBuilder<AssetType> productTypeMapBuilder, MapBuilder<ProofTestInfo> proofTestMapBuilder, MapBuilder<LineItem> orderMapBuilder) {
+	public InspectionCertificateGenerator(DateTimeDefiner dateDefiner, MapBuilder<Event> baseInspectionMapBuilder, MapBuilder<AssetType> productTypeMapBuilder, MapBuilder<ProofTestInfo> proofTestMapBuilder, MapBuilder<LineItem> orderMapBuilder) {
 		this.dateDefiner = dateDefiner;
 		this.baseInspectionMapBuilder = baseInspectionMapBuilder;
 		this.productTypeMapBuilder = productTypeMapBuilder;
@@ -48,56 +48,56 @@ public class InspectionCertificateGenerator {
 		this(dateDefiner, new BaseInspectionMapBuilder(dateDefiner), new AssetTypeMapBuilder(), new ProofTestMapBuilder(), new LineItemMapBuilder());
 	}
 	
-	public JasperPrint generate(InspectionReportType type, Inspection inspection, Transaction transaction) throws NonPrintableEventType, ReportException {
+	public JasperPrint generate(InspectionReportType type, Event event, Transaction transaction) throws NonPrintableEventType, ReportException {
 		JasperPrint jPrint = null;
 		
-		guard(type, inspection);
+		guard(type, event);
 		
-		PrintOut printOutToPrint = inspection.getType().getGroup().getPrintOutForReportType(type);
+		PrintOut printOutToPrint = event.getType().getGroup().getPrintOutForReportType(type);
 		
 		if (printOutToPrint.isWithSubInspections()) {
-			jPrint = generateFull(inspection, transaction, printOutToPrint);
+			jPrint = generateFull(event, transaction, printOutToPrint);
 		} else {
-			jPrint = generate(inspection, transaction, printOutToPrint);
+			jPrint = generate(event, transaction, printOutToPrint);
 		}
 	
 		return jPrint;
 	}
 
-	private void guard(InspectionReportType type, Inspection inspection) throws NonPrintableEventType {
-		if (!inspection.isPrintableForReportType(type)) {
-			throw new NonPrintableEventType(String.format("Inspection [%s] was not printable or did not have a PrintOut for InspectionReportType [%s]", inspection.getId(), type.getDisplayName()));
+	private void guard(InspectionReportType type, Event event) throws NonPrintableEventType {
+		if (!event.isPrintableForReportType(type)) {
+			throw new NonPrintableEventType(String.format("Inspection [%s] was not printable or did not have a PrintOut for InspectionReportType [%s]", event.getId(), type.getDisplayName()));
 		}
 	}
 	
-	private ReportMap<Object> createMainReportMap(Inspection inspection, File jasperFile, Transaction transaction) {
+	private ReportMap<Object> createMainReportMap(Event event, File jasperFile, Transaction transaction) {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 		
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 		
-		baseInspectionMapBuilder.addParams(reportMap, inspection, transaction);
+		baseInspectionMapBuilder.addParams(reportMap, event, transaction);
 		
 		return reportMap;
 	}
 
-	private JasperPrint generateFull(Inspection inspection, Transaction transaction, PrintOut printOut) throws NonPrintableEventType, ReportException {
-		File jasperFile = resolveJasperFile(inspection, printOut);
+	private JasperPrint generateFull(Event event, Transaction transaction, PrintOut printOut) throws NonPrintableEventType, ReportException {
+		File jasperFile = resolveJasperFile(event, printOut);
 
 		JasperPrint jasperPrint = null;
 		try {
 			JasperReport jasperReport = loadJasperReport(jasperFile);
 			
-			ReportMap<Object> reportMap = createMainReportMap(inspection, jasperFile, transaction);
+			ReportMap<Object> reportMap = createMainReportMap(event, jasperFile, transaction);
 			
-			ReportMap<Object> inspectionReportMap = new InspectionReportMapProducer(inspection, dateDefiner).produceMap();
+			ReportMap<Object> inspectionReportMap = new InspectionReportMapProducer(event, dateDefiner).produceMap();
 			reportMap.put("mainInspection", inspectionReportMap);
 			reportMap.put("asset", inspectionReportMap.get("asset"));
 			
 			List<ReportMap<Object>> inspectionResultMaps = new ArrayList<ReportMap<Object>>();
 			inspectionResultMaps.add(inspectionReportMap);
 			
-			for (SubInspection subInspection : inspection.getSubInspections()) {
-				inspectionResultMaps.add(new SubInspectionReportMapProducer(subInspection, inspection, dateDefiner).produceMap());
+			for (SubEvent subEvent : event.getSubEvents()) {
+				inspectionResultMaps.add(new SubInspectionReportMapProducer(subEvent, event, dateDefiner).produceMap());
 			}
 
 			JRDataSource jrDataSource = new JRMapCollectionDataSource(inspectionResultMaps);
@@ -114,24 +114,24 @@ public class InspectionCertificateGenerator {
 		return jasperPrint;
 	}
 
-	private JasperPrint generate(Inspection inspection, Transaction transaction, PrintOut printOut) throws NonPrintableEventType, ReportException {
-		File jasperFile = resolveJasperFile(inspection, printOut);
+	private JasperPrint generate(Event event, Transaction transaction, PrintOut printOut) throws NonPrintableEventType, ReportException {
+		File jasperFile = resolveJasperFile(event, printOut);
 
 		JasperPrint jasperPrint = null;
 		try {
 			JasperReport jasperReport = loadJasperReport(jasperFile);
 			
-			ReportMap<Object> reportMap = createMainReportMap(inspection, jasperFile, transaction);
+			ReportMap<Object> reportMap = createMainReportMap(event, jasperFile, transaction);
 	
-			reportMap.put("chartPath", PathHandler.getChartImageFile(inspection).getAbsolutePath());
+			reportMap.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
 	
-			proofTestMapBuilder.addParams(reportMap, inspection.getProofTestInfo(), transaction);
-			productTypeMapBuilder.addParams(reportMap, inspection.getAsset().getType(), transaction);
-			orderMapBuilder.addParams(reportMap, inspection.getAsset().getShopOrder(), transaction);
+			proofTestMapBuilder.addParams(reportMap, event.getProofTestInfo(), transaction);
+			productTypeMapBuilder.addParams(reportMap, event.getAsset().getType(), transaction);
+			orderMapBuilder.addParams(reportMap, event.getAsset().getShopOrder(), transaction);
 	
-			reportMap.putAll(new AssetReportMapProducer(inspection.getAsset(), dateDefiner).produceMap());
+			reportMap.putAll(new AssetReportMapProducer(event.getAsset(), dateDefiner).produceMap());
 			
-			ReportMap<Object> inspectionMap = new InspectionReportMapProducer(inspection, dateDefiner).produceMap();
+			ReportMap<Object> inspectionMap = new InspectionReportMapProducer(event, dateDefiner).produceMap();
 			reportMap.putAll(inspectionMap);
 			
 			
@@ -148,12 +148,12 @@ public class InspectionCertificateGenerator {
 		return (JasperReport)JRLoader.loadObject(jasperFile);
 	}
 
-	private File resolveJasperFile(Inspection inspection, PrintOut printOut) throws NonPrintableEventType, ReportException {
+	private File resolveJasperFile(Event event, PrintOut printOut) throws NonPrintableEventType, ReportException {
 		File jasperFile = PathHandler.getPrintOutFile(printOut);
 
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
-			throw new ReportException(String.format("Report file [%s] missing for tenant [%s] and Inspection Type Group [%s]", jasperFile.getAbsolutePath(), inspection.getTenant().getName(), inspection.getType().getGroup().getName()));
+			throw new ReportException(String.format("Report file [%s] missing for tenant [%s] and Inspection Type Group [%s]", jasperFile.getAbsolutePath(), event.getTenant().getName(), event.getType().getGroup().getName()));
 		}
 		
 		return jasperFile;

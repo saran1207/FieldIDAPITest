@@ -8,21 +8,21 @@ import java.io.OutputStream;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.SubEvent;
 import org.apache.commons.io.IOUtils;
 
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.NotImplementedException;
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.Event;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.PathHandler;
 
 public class InspectionAttachmentSaver extends Saver<FileAttachment> {
 
-	private Inspection inspection;
-	private SubInspection subInspection;
+	private Event event;
+	private SubEvent subEvent;
 	private byte[] data;
 	
 	public InspectionAttachmentSaver() {}
@@ -33,10 +33,10 @@ public class InspectionAttachmentSaver extends Saver<FileAttachment> {
 		
 		super.save(em, attachment);
 	
-		AbstractInspection targetInspection = (subInspection == null) ? inspection : subInspection;
-		targetInspection.getAttachments().add(attachment);
+		AbstractEvent targetEvent = (subEvent == null) ? event : subEvent;
+		targetEvent.getAttachments().add(attachment);
 		
-		em.merge(targetInspection);
+		em.merge(targetEvent);
 	}
 	
 	private void writeFileToDisk(FileAttachment attachment) {
@@ -60,10 +60,10 @@ public class InspectionAttachmentSaver extends Saver<FileAttachment> {
 	
 	private File resolveAttachmentPath(FileAttachment attachment) {
 		File attachmentFile;
-		if (subInspection == null) {
-			attachmentFile = PathHandler.getInspectionAttachmentFile(inspection, attachment);
+		if (subEvent == null) {
+			attachmentFile = PathHandler.getInspectionAttachmentFile(event, attachment);
 		} else {
-			attachmentFile = PathHandler.getInspectionAttachmentFile(inspection, subInspection, attachment);
+			attachmentFile = PathHandler.getInspectionAttachmentFile(event, subEvent, attachment);
 		}
 		return attachmentFile;
 	}
@@ -78,12 +78,12 @@ public class InspectionAttachmentSaver extends Saver<FileAttachment> {
 		throw new NotImplementedException();
 	}
 
-	public void setInspection(Inspection inspection) {
-		this.inspection = inspection;
+	public void setInspection(Event event) {
+		this.event = event;
 	}
 
-	public void setSubInspection(SubInspection subInspection) {
-		this.subInspection = subInspection;
+	public void setSubInspection(SubEvent subEvent) {
+		this.subEvent = subEvent;
 	}
 
 	public void setData(byte[] data) {

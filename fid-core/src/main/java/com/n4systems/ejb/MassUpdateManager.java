@@ -7,8 +7,8 @@ import java.util.Set;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
 
@@ -24,9 +24,9 @@ public interface MassUpdateManager {
 	 */
 	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
 
-	public Long updateInspections(List<Long> ids, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
+	public Long updateInspections(List<Long> ids, Event event, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
 
-	public Long updateInspectionSchedules(Set<Long> ids, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException;
+	public Long updateInspectionSchedules(Set<Long> ids, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException;
 
 	public Long deleteInspectionSchedules(Set<Long> scheduleIds) throws UpdateFailureException;
 	

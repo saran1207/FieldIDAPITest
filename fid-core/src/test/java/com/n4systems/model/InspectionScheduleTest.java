@@ -10,20 +10,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import static com.n4systems.test.helpers.Asserts.*;
 
 public class InspectionScheduleTest {
 
 	
-	private InspectionSchedule schedule;
-	private Inspection inspection;
+	private EventSchedule schedule;
+	private Event event;
 
 	@Before public void setUp() throws Exception {
 		Asset asset = anAsset().build();
-		inspection = new Inspection();
-		inspection.setId(1L);
-		inspection.setAsset(asset);
+		event = new Event();
+		event.setId(1L);
+		event.setAsset(asset);
 		
 		schedule = aScheduledInspectionSchedule().asset(asset).build();
 	}
@@ -33,8 +33,8 @@ public class InspectionScheduleTest {
 
 	
 	@Test public void test_completed_inspection() {
-		schedule.completed(inspection);
-		assertEquals(inspection, schedule.getInspection());
+		schedule.completed(event);
+		assertEquals(event, schedule.getEvent());
 		assertInRange(new Date(), schedule.getCompletedDate(), 1000L);
 	}
 
@@ -43,7 +43,7 @@ public class InspectionScheduleTest {
 		
 		schedule.removeInspection();
 		assertNull(schedule.getCompletedDate());
-		assertNull(schedule.getInspection());
+		assertNull(schedule.getEvent());
 		assertEquals(ScheduleStatus.SCHEDULED, schedule.getStatus());
 		
 	}

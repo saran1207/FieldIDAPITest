@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 
 import com.n4systems.fileprocessing.FileProcessorFactory;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.ServiceLocator;
@@ -62,7 +62,7 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 			configureDataContainerForWebServiceProcessing(dataContainer, bundle);
 			
 			// proocess the file data container
-			Map<String, Inspection> inspectionMap = ServiceLocator.getProofTestHandler().inspectionServiceUpload(dataContainer, user);
+			Map<String, Event> inspectionMap = ServiceLocator.getProofTestHandler().inspectionServiceUpload(dataContainer, user);
 			
 			
 			
@@ -90,7 +90,7 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 	 * This functionality really only exists for CG's use and is not a standard of any proof test type.
 	 * For simplicity, we're going to assume there was only one asset serial in the file and thus only have a single entry in our inspectionMap
 	 */
-	protected void applyProcessingResults(List<ProofTestStatusBundle> statusListCollector, Map<String, Inspection> inspectionMap, ProofTestBundle bundle) throws NoSerialNumbersException {
+	protected void applyProcessingResults(List<ProofTestStatusBundle> statusListCollector, Map<String, Event> inspectionMap, ProofTestBundle bundle) throws NoSerialNumbersException {
 		String serial;
 		String message;
 		WebServiceStatus status;
@@ -112,7 +112,7 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 		statusListCollector.add(new ProofTestStatusBundle(bundle.getFileName(), status, message));
 	}
 
-	private String getSerialNumber(Map<String, Inspection> inspectionMap) {
+	private String getSerialNumber(Map<String, Event> inspectionMap) {
 		return inspectionMap.keySet().iterator().next();
 	}
 

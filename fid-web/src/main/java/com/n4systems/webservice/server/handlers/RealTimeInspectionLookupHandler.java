@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
 
 public class RealTimeInspectionLookupHandler {
@@ -13,23 +13,23 @@ public class RealTimeInspectionLookupHandler {
 	
 	private long productId;
 	private Date lastInspectionDate;
-	private List<Inspection> inspections;
+	private List<Event> events;
 	
 	public RealTimeInspectionLookupHandler(NewestInspectionsForAssetIdLoader loader) {
 		this.loader = loader;
 	}
 	
-	public List<Inspection> lookup() {
-		inspections = loader.setAssetId(productId).load();
+	public List<Event> lookup() {
+		events = loader.setAssetId(productId).load();
 		clearListIfInspectionNotNewer();
-		return inspections;
+		return events;
 	}
 	
 	private void clearListIfInspectionNotNewer() {
-		if (lastInspectionDate != null && inspections.size() > 0) {
-			Inspection compareInspection = inspections.get(0);
-			if (!compareInspection.getDate().after(lastInspectionDate)) {
-				inspections = new ArrayList<Inspection>();
+		if (lastInspectionDate != null && events.size() > 0) {
+			Event compareEvent = events.get(0);
+			if (!compareEvent.getDate().after(lastInspectionDate)) {
+				events = new ArrayList<Event>();
 			}
 		}
 	}

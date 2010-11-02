@@ -8,6 +8,7 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.SubEvent;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -23,7 +24,6 @@ import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.SubInspection;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.security.Permissions;
@@ -319,8 +319,8 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		return false;
 	}
 
-	public List<SubInspection> getInspectionsFor(Asset product) {
-		return new ArrayList<SubInspection>();
+	public List<SubEvent> getInspectionsFor(Asset product) {
+		return new ArrayList<SubEvent>();
 	}
 
 	public void setToken(String token) {

@@ -11,6 +11,9 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.SubEvent;
+import com.n4systems.model.builders.EventBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
@@ -20,10 +23,7 @@ import org.junit.Test;
 
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.SubInspection;
 import com.n4systems.model.builders.FileAttachmentBuilder;
-import com.n4systems.model.builders.InspectionBuilder;
 import com.n4systems.model.builders.SubInspectionBuilder;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.testutils.DummyEntityManager;
@@ -35,8 +35,8 @@ import com.n4systems.util.ConfigEntry;
 public class InspectionAttachmentSaverTest {
 	private File appRoot;
 	private InspectionAttachmentSaver saver;
-	private Inspection inspection;
-	private SubInspection subInspection;
+	private Event event;
+	private SubEvent subEvent;
 	private FileAttachment attachment;
 	private byte[] attachmentData;
 	
@@ -54,17 +54,17 @@ public class InspectionAttachmentSaverTest {
 		attachment = FileAttachmentBuilder.aFileAttachment().build();
 		attachmentData = TestHelper.randomString().getBytes();
 		
-		subInspection = SubInspectionBuilder.aSubInspection("bleh").build();
-		subInspection.setCreated(new Date());
-		subInspection.setTenant(attachment.getTenant());
+		subEvent = SubInspectionBuilder.aSubInspection("bleh").build();
+		subEvent.setCreated(new Date());
+		subEvent.setTenant(attachment.getTenant());
 		
-		inspection = InspectionBuilder.anInspection().withSubInspections(Arrays.asList(subInspection)).build();
-		inspection.setCreated(subInspection.getCreated());
-		inspection.setTenant(attachment.getTenant());
+		event = EventBuilder.anEvent().withSubInspections(Arrays.asList(subEvent)).build();
+		event.setCreated(subEvent.getCreated());
+		event.setTenant(attachment.getTenant());
 		
 		saver = new InspectionAttachmentSaver();
 		saver.setData(attachmentData);
-		saver.setInspection(inspection);
+		saver.setInspection(event);
 	}
 	
 	@After
@@ -79,32 +79,32 @@ public class InspectionAttachmentSaverTest {
 	public void test_saves_against_regular_inspection() throws IOException {		
 		EntityManager em = EasyMock.createMock(EntityManager.class);
 		em.persist(attachment);
-		EasyMock.expect(em.merge(inspection)).andReturn(inspection);
+		EasyMock.expect(em.merge(event)).andReturn(event);
 		EasyMock.replay(em);
 		
 		saver.save(em, attachment);
 		EasyMock.verify(em);
 		
-		assertTrue(inspection.getAttachments().contains(attachment));
+		assertTrue(event.getAttachments().contains(attachment));
 		
-		verifyData(PathHandler.getInspectionAttachmentFile(inspection, attachment));
+		verifyData(PathHandler.getInspectionAttachmentFile(event, attachment));
 	}
 	
 	@Test
 	public void test_saves_against_sub_inspection() throws IOException {
-		saver.setSubInspection(subInspection);
+		saver.setSubInspection(subEvent);
 		
 		EntityManager em = EasyMock.createMock(EntityManager.class);
 		em.persist(attachment);
-		EasyMock.expect(em.merge(subInspection)).andReturn(subInspection);
+		EasyMock.expect(em.merge(subEvent)).andReturn(subEvent);
 		EasyMock.replay(em);
 		
 		saver.save(em, attachment);
 		EasyMock.verify(em);
 		
-		assertTrue(subInspection.getAttachments().contains(attachment));
+		assertTrue(subEvent.getAttachments().contains(attachment));
 		
-		verifyData(PathHandler.getInspectionAttachmentFile(inspection, subInspection, attachment));
+		verifyData(PathHandler.getInspectionAttachmentFile(event, subEvent, attachment));
 	}
 	
 	@Test(expected=NotImplementedException.class)

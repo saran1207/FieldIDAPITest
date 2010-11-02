@@ -10,19 +10,20 @@ import java.util.TreeSet;
 import javax.persistence.EntityManager;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.PopulatorLogBean;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.legacy.PopulatorLog;
@@ -31,8 +32,7 @@ import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
@@ -55,19 +55,19 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	 private AssetManager assetManager;
 	 private LegacyAssetType assetTypeManager;
 	 private PersistenceManager persistenceManager;
-	 private InspectionManager inspectionManager;
+	 private EventManager eventManager;
 	 private PopulatorLog populatorLogManager;
 
-	private InspectionSaver inspectionSaver;
+	private EventSaver eventSaver;
 	
 	public ProofTestHandlerImpl(EntityManager em) {
 		this.legacyAssetManager = new LegacyAssetManager(em);
 		this.assetManager = new AssetManagerImpl(em);
 		this.legacyAssetManager = new LegacyAssetManager(em);
 		this.persistenceManager = new PersistenceManagerImpl(em);
-		this.inspectionManager = new InspectionManagerImpl(em);
+		this.eventManager = new EventManagerImpl(em);
 		this.populatorLogManager = new PopulatorLogManager(em);
-		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyAssetManager(em),
+		this.eventSaver = new ManagerBackedEventSaver(new LegacyAssetManager(em),
 				persistenceManager, em, new EntityManagerLastInspectionDateFinder(persistenceManager, em));
 		
 	}
@@ -87,7 +87,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	 * Basically what I'm saying is that constantly having to handle a proof test with multiple serials creates a lot of complexity for
 	 * something that only one customer uses and is really just a hack in the first place. =;<
 	 */
-	public Map<String, Inspection> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long inspectionBookId) throws FileProcessingException {
+	public Map<String, Event> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long inspectionBookId) throws FileProcessingException {
 		FileDataContainer fileData = null;
 		
 		// first we need to process this proof test
@@ -103,20 +103,20 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		// now lets look up our beans
 		User user = persistenceManager.find(User.class, userId, tenantId);
 		BaseOrg customer = persistenceManager.find(BaseOrg.class, ownerId, tenantId);
-		InspectionBook book = persistenceManager.find(InspectionBook.class, inspectionBookId, tenantId);
+		EventBook book = persistenceManager.find(EventBook.class, inspectionBookId, tenantId);
 		
 		return createOrUpdateProofTest(fileData, user, customer, book, false);
 	}
 	
-	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException  {
+	public Map<String, Event> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException  {
 		return createOrUpdateProofTest(fileData, performedBy, null, null, true);
 	}
 	
 	/*
 	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
 	 */
-	private Map<String, Inspection> createOrUpdateProofTest(FileDataContainer fileData, User performedBy, BaseOrg customer, InspectionBook book, boolean assetOverridesPerformedBy) throws FileProcessingException {
-		Map<String, Inspection> inspectionMap = new HashMap<String, Inspection>();
+	private Map<String, Event> createOrUpdateProofTest(FileDataContainer fileData, User performedBy, BaseOrg customer, EventBook book, boolean assetOverridesPerformedBy) throws FileProcessingException {
+		Map<String, Event> inspectionMap = new HashMap<String, Event>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
 		
@@ -147,11 +147,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		Date datePerformed = fileData.getDatePerformed();
 
 		Asset asset;
-		List<Inspection> inspections;
-		Inspection inspection;
+		List<Event> events;
+		Event event;
 		// since proof tests may have multiple serial numbers, we'll need to do this process for each
 		for (String serialNumber : fileData.getSerialNumbers()) {
-			inspection = null;
+			event = null;
 			try {
 				// find an asset for this tenant, serial and customer
 				asset = findOrCreateAsset(primaryOrg, performedBy, serialNumber, customer, fileData);
@@ -182,35 +182,35 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			Date datePerformedRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(datePerformed), performedBy.getTimeZone());
 
 			// if we find an asset then it's time to try and find an inspection inside the same day as given.
-			inspections = inspectionManager.findInspectionsByDateAndAsset(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, asset, performedBy.getSecurityFilter());
+			events = eventManager.findEventsByDateAndAsset(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, asset, performedBy.getSecurityFilter());
 			
 			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
-			for (Inspection insp: inspections) {
+			for (Event insp: events) {
 				if(insp.getType().supports(fileData.getFileType()) && !chartImageExists(insp)) {
 					// we have found our inspection, move on
-					inspection = insp;
+					event = insp;
 					break;
 				}
 			}
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
-			if (inspection == null) {
-				inspection = createInspection(tenant, performedBy, customer, asset, book, datePerformedInUTC, fileData);
+			if (event == null) {
+				event = createInspection(tenant, performedBy, customer, asset, book, datePerformedInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
-					inspectionManager.updateInspection(inspection, performedBy.getId(), fileData, null);
-					writeLogMessage(tenant, "Updated Inspection for Asset with serial [" + serialNumber + "] and date performed [" + inspection.getDate() + "]");
+					eventManager.updateEvent(event, performedBy.getId(), fileData, null);
+					writeLogMessage(tenant, "Updated Inspection for Asset with serial [" + serialNumber + "] and date performed [" + event.getDate() + "]");
 				} catch(Exception e) {
 					// we don't want a failure in one inspection to cause the others to fail, so we will simply log these expections and move on
-					writeLogMessage(tenant, "Failed to update Inspection for Asset with serial [" + serialNumber + "] and date performed [" + inspection.getDate() + "]", false, e);
+					writeLogMessage(tenant, "Failed to update Inspection for Asset with serial [" + serialNumber + "] and date performed [" + event.getDate() + "]", false, e);
 					inspectionMap.put(serialNumber, null);
 					continue;
 				}
 			}
 
 			// update our map with the serial and inspection
-			inspectionMap.put(serialNumber, inspection);
+			inspectionMap.put(serialNumber, event);
 		}
 		
 		logger.info("Completed processing of file [" + fileData.getFileName() + "]");
@@ -364,9 +364,9 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return asset;
 	}
 	
-	private Inspection createInspection(Tenant tenant, User performedBy, BaseOrg owner, Asset asset, InspectionBook book, Date datePerformed, FileDataContainer fileData) {
-		Inspection inspection = new Inspection();
-		inspection.setTenant(tenant);
+	private Event createInspection(Tenant tenant, User performedBy, BaseOrg owner, Asset asset, EventBook book, Date datePerformed, FileDataContainer fileData) {
+		Event event = new Event();
+		event.setTenant(tenant);
 		
 		if (owner != null) {
 			/*
@@ -375,24 +375,24 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			 * In all other cases we will use the resolved owner directly.
 			 */
 			if (asset.getOwner().isDivision() && asset.getOwner().getParent().equals(owner)) {
-				inspection.setOwner(asset.getOwner());
+				event.setOwner(asset.getOwner());
 			} else {
-				inspection.setOwner(owner);
+				event.setOwner(owner);
 			}
 			
 		} else {
 			// if the passed in owner is null, use the one from the asset
 			// this can happen if the proof test had no customer set, meaning this asset is from the primary
-			inspection.setOwner(asset.getOwner());
+			event.setOwner(asset.getOwner());
 		}
 		
-		inspection.setAsset(asset);
-		inspection.setAssetStatus(asset.getAssetStatus());
-		inspection.setDate(datePerformed);
-		inspection.setPerformedBy(performedBy);
-		inspection.setBook(book);
-		inspection.setComments(fileData.getComments());
-		inspection.setAdvancedLocation(asset.getAdvancedLocation());
+		event.setAsset(asset);
+		event.setAssetStatus(asset.getAssetStatus());
+		event.setDate(datePerformed);
+		event.setPerformedBy(performedBy);
+		event.setBook(book);
+		event.setComments(fileData.getComments());
+		event.setAdvancedLocation(asset.getAdvancedLocation());
 		
 		// find the first inspection that for this asset that supports our file type
 		InspectionType inspType = findSupportedInspectionTypeForAsset(fileData.getFileType(), asset);
@@ -403,8 +403,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			return null;
 		}
 		
-		inspection.setType(inspType);
-		inspection.setPrintable(inspType.isPrintable());
+		event.setType(inspType);
+		event.setPrintable(inspType.isPrintable());
 		
 		
 		
@@ -415,29 +415,29 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			infoOptionName = optEntry.getValue();
 			
 			// see if our inspection type supports this info field
-			resolvedInfoField = FuzzyResolver.resolveString(infoFieldName, inspection.getType().getInfoFieldNames(), false);
+			resolvedInfoField = FuzzyResolver.resolveString(infoFieldName, event.getType().getInfoFieldNames(), false);
 			
 			// if we've found one, let's update the inspection
 			if(resolvedInfoField != null) {
-				inspection.getInfoOptionMap().put(resolvedInfoField, infoOptionName);
+				event.getInfoOptionMap().put(resolvedInfoField, infoOptionName);
 			}
 		}
 		
 		try {
 			
 			
-			inspectionSaver.createInspection(
-					new CreateInspectionParameterBuilder(inspection,performedBy.getId())
+			eventSaver.createEvent(
+					new CreateInspectionParameterBuilder(event,performedBy.getId())
 					.withProofTestFile(fileData).build());
 			
-			writeLogMessage(tenant, "Created Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + inspection.getDate() + "]");
+			writeLogMessage(tenant, "Created Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]");
 		} catch(Exception e) {
 			// we failed to create an inspection, log the failure
-			writeLogMessage(tenant, "Failed to create Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + inspection.getDate() + "]", false, e);
+			writeLogMessage(tenant, "Failed to create Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]", false, e);
 			return null;
 		}
 		
-		return inspection;
+		return event;
 	}
 	
 	private InspectionType findSupportedInspectionTypeForAsset(ProofTestType proofTestType, Asset asset) {
@@ -454,8 +454,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return type;
 	}
 	
-	private boolean chartImageExists(Inspection inspection) {
-		return PathHandler.getChartImageFile(inspection).exists();
+	private boolean chartImageExists(Event event) {
+		return PathHandler.getChartImageFile(event).exists();
 	}
 	
 	private void writeLogMessage(Tenant tenant, String message) {

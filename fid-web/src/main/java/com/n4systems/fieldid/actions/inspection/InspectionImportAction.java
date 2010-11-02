@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AssetStatus;
@@ -19,8 +21,6 @@ import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Status;
@@ -67,7 +67,7 @@ public class InspectionImportAction extends AbstractImportAction {
 	}
 	
 	public String doDownloadExample() {
-		ListLoader<Inspection> inspectionLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleInspection()));
+		ListLoader<Event> inspectionLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleInspection()));
 		NextInspectionDateByInspectionLoader nextDateLoader = new NextInspectionDateByInspectionPassthruLoader(createExampleNextDate());
 
 		InspectionExporter exporter = new InspectionExporter(inspectionLoader, nextDateLoader);
@@ -92,8 +92,8 @@ public class InspectionImportAction extends AbstractImportAction {
 		return SUCCESS;
 	}
 	
-	private Inspection createExampleInspection() {
-		Inspection example = new Inspection();
+	private Event createExampleInspection() {
+		Event example = new Event();
 		
 		example.setDate(new Date());
 		example.setOwner(getSessionUserOwner());
@@ -104,7 +104,7 @@ public class InspectionImportAction extends AbstractImportAction {
 		example.setComments(getText("example.event.comments"));
 		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.event.location")));
 		
-		example.setBook(new InspectionBook());
+		example.setBook(new EventBook());
 		example.getBook().setName(getText("example.event.book"));
 		
 		example.setAsset(new Asset());

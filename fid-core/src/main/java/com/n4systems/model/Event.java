@@ -12,6 +12,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -42,10 +43,10 @@ import com.n4systems.util.StringUtils;
 @Entity
 @Table(name = "inspectionsmaster")
 @PrimaryKeyJoinColumn(name="inspection_id")
-public class Inspection extends AbstractInspection implements Comparable<Inspection>, HasOwner, Archivable, NetworkEntity<Inspection>, Exportable, LocationContainer {
+public class Event extends AbstractEvent implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<Event>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
-	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subInspections" };
-	public static final String[] ALL_FIELD_PATHS_WITH_SUBINSPECTIONS = { "modifiedBy", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subInspections.modifiedBy", "subInspections.type.sections", "subInspections.type.supportedProofTests", "subInspections.type.infoFieldNames", "subInspections.attachments", "subInspections.results", "subInspections.asset.infoOptions", "subInspections.infoOptionMap"};
+	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
+	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.modifiedBy", "subEvents.type.sections", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap"};
 	
 	public static final SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "asset.owner", null, "state");
@@ -64,10 +65,10 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	private User performedBy;
 
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
-	private InspectionGroup group;
+	private EventGroup group;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
-	private InspectionBook book;
+	private EventBook book;
 	
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
 	@JoinColumn(name="owner_id", nullable = false)
@@ -77,7 +78,8 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@IndexColumn(name="orderidx")
-	private List<SubInspection> subInspections = new ArrayList<SubInspection>();
+    @JoinTable(name = "inspectionsmaster_inspectionssub", joinColumns = @JoinColumn(name="inspectionsmaster_inspection_id"), inverseJoinColumns = @JoinColumn(name="subinspections_inspection_id"))
+	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
@@ -86,20 +88,17 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	@Enumerated(EnumType.STRING)
 	private EntityState state = EntityState.ACTIVE;
 	
-	@OneToOne(mappedBy="inspection")
-	private InspectionSchedule schedule;
+	@OneToOne(mappedBy="event")
+	private EventSchedule schedule;
 	
 	private AssignedToUpdate assignedTo;
 	
-	public Inspection() {
-		super();
+	public Event() {
 	}
 	
-	public Inspection(Tenant tenant) {
+	public Event(Tenant tenant) {
 		super(tenant);
 	}
-
-
 
 	@AllowSafetyNetworkAccess
 	public Date getDate() {
@@ -135,20 +134,20 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	}
 
 	@AllowSafetyNetworkAccess
-	public InspectionGroup getGroup() {
+	public EventGroup getGroup() {
 		return group;
 	}
 	
 
-	public void setGroup(InspectionGroup group) {
+	public void setGroup(EventGroup group) {
 		this.group = group;
 	}
 
-	public InspectionBook getBook() {
+	public EventBook getBook() {
 		return book;
 	}
 
-	public void setBook(InspectionBook book) {
+	public void setBook(EventBook book) {
 		this.book = book;
 	}
 
@@ -179,22 +178,22 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		this.status = status;
 	}
 	
-	public int compareTo( Inspection inspection ) {
-		if( inspection == null ) { 
+	public int compareTo( Event event) {
+		if( event == null ) {
 			return -1;
 		}
-		int compare = date.compareTo( inspection.getDate() );
+		int compare = date.compareTo( event.getDate() );
 		
-		return ( compare == 0 ) ? getCreated().compareTo( inspection.getCreated() ) : compare;
+		return ( compare == 0 ) ? getCreated().compareTo( event.getCreated() ) : compare;
 	}
 
 	@AllowSafetyNetworkAccess
-	public List<SubInspection> getSubInspections() {
-		return subInspections;
+	public List<SubEvent> getSubEvents() {
+		return subEvents;
 	}
 
-	public void setSubInspections(List<SubInspection> subInspections) {
-		this.subInspections = subInspections;
+	public void setSubEvents(List<SubEvent> subEvents) {
+		this.subEvents = subEvents;
 	}
 
 	public void activateEntity() {
@@ -272,8 +271,8 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 	@Override
     public String toString() {
 		String subInspectionString = new String();
-		for (SubInspection subInspection: getSubInspections()) {
-			subInspectionString += "\n" + subInspection;
+		for (SubEvent subEvent : getSubEvents()) {
+			subInspectionString += "\n" + subEvent;
 		}
 		
 	    return	super.toString() +
@@ -288,7 +287,7 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
     }
 
 	@AllowSafetyNetworkAccess
-	public InspectionSchedule getSchedule() {
+	public EventSchedule getSchedule() {
 		return schedule;
 	}
 	
@@ -297,8 +296,8 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
-	public Inspection enhance(SecurityLevel level) {
-		Inspection enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+	public Event enhance(SecurityLevel level) {
+		Event enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setBook(enhance(book, level));
 		enhanced.setPerformedBy(enhance(performedBy, level));
 		enhanced.setGroup(enhance(group, level));
@@ -306,11 +305,11 @@ public class Inspection extends AbstractInspection implements Comparable<Inspect
 		enhanced.setAsset(enhance(getAsset(), level));
 		enhanced.setOwner(enhance(getOwner(), level));
 		
-		List<SubInspection> enhancedSubInspections = new ArrayList<SubInspection>();
-		for (SubInspection subInspection: getSubInspections()) {
-			enhancedSubInspections.add(subInspection.enhance(level));
+		List<SubEvent> enhancedSubEvents = new ArrayList<SubEvent>();
+		for (SubEvent subEvent : getSubEvents()) {
+			enhancedSubEvents.add(subEvent.enhance(level));
 		}
-		enhanced.setSubInspections(enhancedSubInspections);
+		enhanced.setSubEvents(enhancedSubEvents);
 		
 		return enhanced;
 	}

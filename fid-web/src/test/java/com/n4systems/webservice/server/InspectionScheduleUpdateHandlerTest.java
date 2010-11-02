@@ -1,6 +1,6 @@
 package com.n4systems.webservice.server;
 
-import static com.n4systems.model.builders.InspectionBuilder.anInspection;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
 import static com.n4systems.model.builders.InspectionScheduleBuilder.aScheduledInspectionSchedule;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
@@ -12,8 +12,8 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.utils.PlainDate;
@@ -25,16 +25,16 @@ public class InspectionScheduleUpdateHandlerTest {
 
 	private InspectionScheduleSaver saver;
 	private InspectionScheduleByGuidOrIdLoader inspectionScheduleByMobileGuidLoader;
-	private InspectionSchedule inspectionSchedule;
+	private EventSchedule eventSchedule;
 	private InspectionScheduleServiceDTO inspectionScheduleServiceDTO;
-	private Inspection inspection;
+	private Event event;
 	
 	@Before
 	public void setup() {
 		
-		inspectionSchedule = aScheduledInspectionSchedule().build();
+		eventSchedule = aScheduledInspectionSchedule().build();
 		
-		inspection = anInspection().build();
+		event = anEvent().build();
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		
 		verify(saver);
 		
-		assertEquals(new PlainDate(c1.getTime()), inspectionSchedule.getNextDate());
+		assertEquals(new PlainDate(c1.getTime()), eventSchedule.getNextDate());
 		
 	}
 	
@@ -121,7 +121,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void do_not_update_when_schedule_is_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		inspectionSchedule.completed(inspection);
+		eventSchedule.completed(event);
 		
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
@@ -150,7 +150,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	public void do_not_remove_when_schedule_is_completed() throws Exception {
 	
 		buildInspectionScheduleServiceDTO(1L, new Date());
-		inspectionSchedule.completed(inspection);
+		eventSchedule.completed(event);
 
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
@@ -164,7 +164,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		inspectionScheduleByMobileGuidLoader = createMock(InspectionScheduleByGuidOrIdLoader.class);
 		expect(inspectionScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid())).andReturn(inspectionScheduleByMobileGuidLoader);
 		expect(inspectionScheduleByMobileGuidLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(inspectionScheduleByMobileGuidLoader);
-		expect(inspectionScheduleByMobileGuidLoader.load()).andReturn(inspectionSchedule);
+		expect(inspectionScheduleByMobileGuidLoader.load()).andReturn(eventSchedule);
 		replay(inspectionScheduleByMobileGuidLoader);
 	}
 
@@ -178,13 +178,13 @@ public class InspectionScheduleUpdateHandlerTest {
 	
 	private void createSaverMock() {
 		saver = createMock(InspectionScheduleSaver.class);
-		expect(saver.saveOrUpdate(inspectionSchedule)).andReturn(inspectionSchedule);
+		expect(saver.saveOrUpdate(eventSchedule)).andReturn(eventSchedule);
 		replay(saver);
 	}
 
 	private void createSaverRemoveMock() throws Exception {
 		saver = createMock(InspectionScheduleSaver.class);
-		saver.remove(inspectionSchedule);
+		saver.remove(eventSchedule);
 		replay(saver);
 	}
 

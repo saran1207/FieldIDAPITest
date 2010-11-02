@@ -13,7 +13,7 @@
 	<span><@s.textarea name="printOut.description" cols="70" rows="10"/></span>
 </p>
 <p>
-	<label>Prints with Sub Inspections</label>
+	<label>Prints with Sub Events</label>
 	<span><@s.checkbox name="printOut.withSubInspections" /></span>
 </p>
 <p>

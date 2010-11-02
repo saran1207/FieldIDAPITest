@@ -12,16 +12,16 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 
 final class NullCreateInspectionsMethodObject implements CreateInspectionsMethodObject {
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws ProcessingProofTestException,
+	public List<Event> createInspections(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws ProcessingProofTestException,
 	FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
-		return createInspections(transactionGUID, inspections);
+		return createInspections(transactionGUID, events);
 	}
 
-	public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections) throws ProcessingProofTestException,
+	public List<Event> createInspections(String transactionGUID, List<Event> events) throws ProcessingProofTestException,
 			FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
-		return inspections;
+		return events;
 	}
 }

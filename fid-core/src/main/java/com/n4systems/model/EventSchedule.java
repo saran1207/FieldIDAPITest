@@ -29,7 +29,7 @@ import com.n4systems.util.DateHelper;
 
 @Entity
 @Table(name = "inspectionschedules")
-public class InspectionSchedule extends ArchivableEntityWithOwner implements NetworkEntity<InspectionSchedule> {
+public class EventSchedule extends ArchivableEntityWithOwner implements NetworkEntity<EventSchedule> {
 	private static final long serialVersionUID = 1L;
 
 	public static SecurityDefiner createSecurityDefiner() {
@@ -87,7 +87,8 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	private ScheduleStatus status = ScheduleStatus.SCHEDULED;
 
 	@OneToOne
-	private Inspection inspection;
+    @JoinColumn(name="inspection_inspection_id")
+	private Event event;
 
 	private Location advancedLocation = new Location();
 
@@ -96,27 +97,27 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	
 	private String mobileGUID;
 
-	public InspectionSchedule() {
+	public EventSchedule() {
 	}
 
-	public InspectionSchedule(Asset asset, InspectionType inspectionType) {
+	public EventSchedule(Asset asset, InspectionType inspectionType) {
 		this(asset, inspectionType, null);
 	}
 
-	public InspectionSchedule(Asset asset, InspectionType inspectionType, Date scheduledDate) {
+	public EventSchedule(Asset asset, InspectionType inspectionType, Date scheduledDate) {
 		this.setTenant(asset.getTenant());
 		this.setAsset(asset);
 		this.inspectionType = inspectionType;
 		this.nextDate = scheduledDate;
 	}
 
-	public InspectionSchedule(Inspection inspection) {
-		this(inspection.getAsset(), inspection.getType());
-		nextDate = inspection.getDate();
-		this.completed(inspection);
+	public EventSchedule(Event event) {
+		this(event.getAsset(), event.getType());
+		nextDate = event.getDate();
+		this.completed(event);
 	}
 
-	public InspectionSchedule(Asset asset, AssetTypeSchedule typeSchedule) {
+	public EventSchedule(Asset asset, AssetTypeSchedule typeSchedule) {
 		this(asset, typeSchedule.getInspectionType());
 	}
 
@@ -200,15 +201,15 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		if (obj == null) {
 			return false;
 		}
-		if (obj instanceof InspectionSchedule) {
-			return this.equals((InspectionSchedule) obj);
+		if (obj instanceof EventSchedule) {
+			return this.equals((EventSchedule) obj);
 		} else {
 			return super.equals(obj);
 		}
 
 	}
 
-	public boolean equals(InspectionSchedule schedule) {
+	public boolean equals(EventSchedule schedule) {
 
 		if (schedule == null)
 			return false;
@@ -231,15 +232,15 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		return status;
 	}
 
-	public void completed(Inspection inspection) throws InvalidScheduleStateException {
+	public void completed(Event event) throws InvalidScheduleStateException {
 		if (status == ScheduleStatus.COMPLETED) {
 			throw new InvalidScheduleStateException();
 		}
-		this.inspection = inspection;
+		this.event = event;
 		completedDate = new Date();
 		status = ScheduleStatus.COMPLETED;
-		advancedLocation = inspection.getAdvancedLocation();
-		setOwner(inspection.getOwner());
+		advancedLocation = event.getAdvancedLocation();
+		setOwner(event.getOwner());
 	}
 
 	public void inProgress() {
@@ -257,13 +258,13 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 	}
 
 	@AllowSafetyNetworkAccess
-	public Inspection getInspection() {
-		return inspection;
+	public Event getEvent() {
+		return event;
 	}
 
 	public void removeInspection() {
 		status = ScheduleStatus.SCHEDULED;
-		inspection = null;
+		event = null;
 		completedDate = null;
 		updateOwnershipToAsset();
 	}
@@ -282,11 +283,11 @@ public class InspectionSchedule extends ArchivableEntityWithOwner implements Net
 		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
-	public InspectionSchedule enhance(SecurityLevel level) {
-		InspectionSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
+	public EventSchedule enhance(SecurityLevel level) {
+		EventSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setAsset(enhance(asset, level));
 		enhanced.setInspectionType(enhance(inspectionType, level));
-		enhanced.inspection = enhance(inspection, level);
+		enhanced.event = enhance(event, level);
 		return enhanced;
 	}
 	

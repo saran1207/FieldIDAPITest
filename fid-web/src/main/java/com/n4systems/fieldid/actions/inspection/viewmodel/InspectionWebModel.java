@@ -7,7 +7,7 @@ import com.n4systems.fieldid.actions.api.UserDateFormatValidator;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -47,16 +47,16 @@ public class InspectionWebModel implements UserDateFormatValidator {
 		return location;
 	}
 	
-	public void updateValuesToMatch(Inspection inspection) {
-		location = location.matchLocation(inspection.getAdvancedLocation());
-		ownerPicker.updateOwner(inspection.getOwner());
-		utcDatePerformed = inspection.getDate();
+	public void updateValuesToMatch(Event event) {
+		location = location.matchLocation(event.getAdvancedLocation());
+		ownerPicker.updateOwner(event.getOwner());
+		utcDatePerformed = event.getDate();
 	}
 	
-	public void pushValuesTo(Inspection inspection) {
-		inspection.setAdvancedLocation(location.createLocation());
-		inspection.setOwner(ownerPicker.getOwner());
-		inspection.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
+	public void pushValuesTo(Event event) {
+		event.setAdvancedLocation(location.createLocation());
+		event.setOwner(ownerPicker.getOwner());
+		event.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
 	}
 	
 	public String getDatePerformed() {

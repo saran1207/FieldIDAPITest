@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.n4systems.ejb.AggregateReportManager;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.util.AggregateReport;
 import com.n4systems.util.AggregateReportRecord;
 
@@ -38,7 +38,7 @@ public class AggregateReportManagerImpl implements AggregateReportManager {
 		AggregateReport report = new AggregateReport();
 		
 		String groupByQuery = "select new " + AggregateReportRecord.class.getName() + "( count(inspection.id), inspection.asset.type.name, " +
-				"inspection.type.group.name, inspection.type.group.id ) from " + Inspection.class.getName() + " as inspection LEFT JOIN inspection.asset LEFT JOIN inspection.asset.type " +
+				"inspection.type.group.name, inspection.type.group.id ) from " + Event.class.getName() + " as inspection LEFT JOIN inspection.asset LEFT JOIN inspection.asset.type " +
 				"LEFT JOIN inspection.type.group where inspection.id IN ( :inspections ) " +
 				"GROUP BY inspection.asset.type.name, " +
 				"inspection.type.group.name, inspection.type.group.id " +
@@ -50,7 +50,7 @@ public class AggregateReportManagerImpl implements AggregateReportManager {
 		
 		
 		String distinctAssets = "select new " + AggregateReportRecord.class.getName() + "( count( DISTINCT asset.id), asset.type.name ) " +
-			" from " + Inspection.class.getName() + " as inspection LEFT JOIN inspection.asset as asset LEFT JOIN asset.type" +
+			" from " + Event.class.getName() + " as inspection LEFT JOIN inspection.asset as asset LEFT JOIN asset.type" +
 			" WHERE inspection.id IN ( :inspections ) " +
 			" GROUP BY asset.type.name  ";
 		Query distinctAssetQuery = em.createQuery( distinctAssets );

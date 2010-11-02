@@ -11,7 +11,7 @@ import javax.persistence.Query;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.handlers.remover.summary.InspectionArchiveSummary;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -50,7 +50,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 
 	private void updateAssetsLastInspectionDate(EntityManager em, List<Long> ids) {
 		
-		List<Long> assetsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter())
+		List<Long> assetsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Event.class, new OpenSecurityFilter())
 				.setSimpleSelect("asset.id", true)
 				.addSimpleWhere("asset.state", EntityState.ACTIVE),
 		  ids,
@@ -60,7 +60,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 			Asset asset = em.find(Asset.class, assetId);
 			
 			
-			QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, new OpenSecurityFilter(), "i");
+			QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter(), "i");
 			qBuilder.setMaxSelect("date");
 			qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 			qBuilder.addSimpleWhere("asset", asset);
@@ -80,7 +80,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 	}
 
 	private List<Long> getInspectionIds(EntityManager em) {
-		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter())
+		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter())
 				.setSelectArgument(new SimpleSelect("id"))
 				.addSimpleWhere("type", inspectionType);
 		return queryBuilder.getResultList(em);
@@ -96,7 +96,7 @@ public class InspectionListArchiveHandlerImp implements InspectionTypeListArchiv
 	}
 
 	private Long inspectionToBeDeleted(Transaction transaction) {
-		String archiveQuery = "SELECT COUNT(id) FROM " + Inspection.class.getName() + " i WHERE i.type = :inspectionType AND i.state = :active";
+		String archiveQuery = "SELECT COUNT(id) FROM " + Event.class.getName() + " i WHERE i.type = :inspectionType AND i.state = :active";
 		Query query = transaction.getEntityManager().createQuery(archiveQuery);
 		query.setParameter("inspectionType", inspectionType);
 		query.setParameter("active", EntityState.ACTIVE);

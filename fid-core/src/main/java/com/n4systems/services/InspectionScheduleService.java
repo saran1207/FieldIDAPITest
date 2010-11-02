@@ -1,11 +1,11 @@
 package com.n4systems.services;
 
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 
 public interface InspectionScheduleService {
 
-	public abstract Long createSchedule(InspectionSchedule schedule);
+	public abstract Long createSchedule(EventSchedule schedule);
 
-	public abstract InspectionSchedule updateSchedule(InspectionSchedule schedule);
+	public abstract EventSchedule updateSchedule(EventSchedule schedule);
 
 }

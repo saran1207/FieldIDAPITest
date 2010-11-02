@@ -1,8 +1,7 @@
 package com.n4systems.security;
 
+import com.n4systems.model.Event;
 import org.apache.log4j.Logger;
-
-import com.n4systems.model.Inspection;
 
 /**
  * A Log wrapper for writing audit logs 
@@ -32,11 +31,11 @@ public class Log4JAuditLogger implements AuditLogger {
 	
 	
 	
-	public void audit(String methodName, Inspection inspection, Throwable t) {
+	public void audit(String methodName, Event event, Throwable t) {
 		String message = "";
 		
 		try {
-			message = handler.getMessage(inspection);
+			message = handler.getMessage(event);
 		} catch(Throwable throwable) {
 			// we don't want any problems within the audit handler to affect the actual running of the method
 			logger.warn("Failed while generating custom AuditHandler message", throwable);

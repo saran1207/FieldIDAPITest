@@ -9,14 +9,14 @@ import javax.persistence.EntityManager;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.EventSchedule;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.InspectionScheduleService;
 import com.n4systems.services.InspectionScheduleServiceImpl;
@@ -26,7 +26,6 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
  
 public class InspectionScheduleManagerImpl implements InspectionScheduleManager {
-	
 
 	private static Logger logger = Logger.getLogger( InspectionScheduleManagerImpl.class );
 	
@@ -41,18 +40,18 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	}
 
 	@SuppressWarnings("deprecation")
-	public List<InspectionSchedule> autoSchedule(Asset asset) {
-		List<InspectionSchedule> schedules = new ArrayList<InspectionSchedule>();  
+	public List<EventSchedule> autoSchedule(Asset asset) {
+		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		
 		AssetType assetType = persistenceManager.find(AssetType.class, asset.getType().getId());
 		if (assetType != null) {
 			for (InspectionType type : assetType.getInspectionTypes()) {
 				AssetTypeSchedule schedule = assetType.getSchedule(type, asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
-					InspectionSchedule inspectionSchedule = new InspectionSchedule(asset, type);
-					inspectionSchedule.setNextDate(assetType.getSuggestedNextInspectionDate(new Date(), type, asset.getOwner()));
-					schedules.add(inspectionSchedule);
-					new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(inspectionSchedule);
+					EventSchedule eventSchedule = new EventSchedule(asset, type);
+					eventSchedule.setNextDate(assetType.getSuggestedNextInspectionDate(new Date(), type, asset.getOwner()));
+					schedules.add(eventSchedule);
+					new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
 				}
 			}
 		}
@@ -60,13 +59,13 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 		return schedules;
 	}
 	
-	public InspectionSchedule update(InspectionSchedule schedule) {
+	public EventSchedule update(EventSchedule schedule) {
 		InspectionScheduleService service = new InspectionScheduleServiceImpl(persistenceManager);
 		return service.updateSchedule(schedule);
 	}
 	
-	public void restoreScheduleForInspection(Inspection inspection) {
-		InspectionSchedule schedule = inspection.getSchedule();
+	public void restoreScheduleForInspection(Event event) {
+		EventSchedule schedule = event.getSchedule();
 		if (schedule != null) {
 			schedule.removeInspection();
 			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
@@ -75,28 +74,17 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	}
 	
 	public void removeAllSchedulesFor(Asset asset) {
-		for (InspectionSchedule schedule : getAvailableSchedulesFor(asset)) {
+		for (EventSchedule schedule : getAvailableSchedulesFor(asset)) {
 			persistenceManager.delete(schedule);
 		}
 	}
-	
-	
-	
-	
-	
-	public void create(AssetTypeSchedule schedule) {
+
+    public void create(AssetTypeSchedule schedule) {
 		persistenceManager.save(schedule);
 	}
 	
-	
-	
-	
-	
-
-
-	
-	public List<InspectionSchedule> getAvailableSchedulesFor(Asset asset) {
-		QueryBuilder<InspectionSchedule> query = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
+	public List<EventSchedule> getAvailableSchedulesFor(Asset asset) {
+		QueryBuilder<EventSchedule> query = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
 		query.addSimpleWhere("asset", asset).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
 		query.addOrder("nextDate");
 		
@@ -105,7 +93,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	
 	public boolean schedulePastDue(Long scheduleId) {
 		// here we'll select the next date off the schedule and see if it's after today
-		QueryBuilder<Date> builder = new QueryBuilder<Date>(InspectionSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Date> builder = new QueryBuilder<Date>(EventSchedule.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("nextDate");
 		builder.addSimpleWhere("id", scheduleId);
 		builder.addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
@@ -117,7 +105,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	}
 	
 	public Long getAssetIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("asset.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
@@ -125,22 +113,19 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 	}
 	
 	public Long getInspectionTypeIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("inspectionType.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
 		return persistenceManager.find(builder);
 	}
-	
-	
-	
+
 	public Long getInspectionIdForSchedule(Long scheduleId) {
-		QueryBuilder<Long> builder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
-		builder.setSimpleSelect("inspection.id");
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
+		builder.setSimpleSelect("event.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
 		return persistenceManager.find(builder);
 	}
-	
 	
 }

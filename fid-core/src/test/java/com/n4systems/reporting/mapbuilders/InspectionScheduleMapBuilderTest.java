@@ -7,10 +7,10 @@ import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import org.junit.Test;
 
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.inspectionschedule.NextInspectionScheduleLoader;
@@ -25,23 +25,23 @@ public class InspectionScheduleMapBuilderTest {
 	public void testSetAllFields() {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 		
-		Inspection inspection = new Inspection();
-		inspection.setAsset(AssetBuilder.anAsset().build());
-		inspection.setType(InspectionTypeBuilder.anInspectionType().build());
+		Event event = new Event();
+		event.setAsset(AssetBuilder.anAsset().build());
+		event.setType(InspectionTypeBuilder.anInspectionType().build());
 		
-		final InspectionSchedule schedule = new InspectionSchedule();
+		final EventSchedule schedule = new EventSchedule();
 		schedule.setNextDate(new Date());
 		
 		DateTimeDefiner dateDefiner = new DateTimeDefiner("dd-MM-yyyy", TimeZone.getDefault());
 		
 		NextInspectionScheduleLoader loader = new NextInspectionScheduleLoader() {
-			protected InspectionSchedule load(EntityManager em) {
+			protected EventSchedule load(EntityManager em) {
 				return schedule;
 			}
 		};
 		
 		InspectionScheduleMapBuilder builder = new InspectionScheduleMapBuilder(dateDefiner, loader);
-		builder.addParams(reportMap, inspection, new DummyTransaction());
+		builder.addParams(reportMap, event, new DummyTransaction());
 		
 		assertEquals(schedule.getNextDate(), reportMap.get(ReportField.NEXT_DATE.getParamKey()));
 		assertEquals(DateHelper.format(schedule.getNextDate(), dateDefiner), reportMap.get(ReportField.NEXT_DATE_STRING.getParamKey()));

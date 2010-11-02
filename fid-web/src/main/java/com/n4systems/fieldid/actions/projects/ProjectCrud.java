@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.projects;
 import java.util.List;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventSchedule;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -19,7 +20,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -56,7 +56,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 	private String started;
 	private Pager<FileAttachment> notesPaged;
 	private Pager<Asset> assetsPaged;
-	private Pager<InspectionSchedule> schedulesPaged;
+	private Pager<EventSchedule> schedulesPaged;
 
 	private String searchID;
 
@@ -357,7 +357,7 @@ public class ProjectCrud extends AbstractCrud implements HasDuplicateValueValida
 		return assetsPaged.getList();
 	}
 
-	public List<InspectionSchedule> getSchedules() {
+	public List<EventSchedule> getSchedules() {
 		if (schedulesPaged == null) {
 			schedulesPaged = projectManager.getSchedulesPaged(project, getSecurityFilter(), 1, Constants.SUMMARY_SIZE, CompressedScheduleStatus.ALL.getScheduleStatuses());
 		}

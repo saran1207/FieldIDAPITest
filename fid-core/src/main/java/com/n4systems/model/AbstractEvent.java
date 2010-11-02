@@ -30,7 +30,7 @@ import com.n4systems.util.StringUtils;
 @Entity
 @Table(name = "inspections")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class AbstractInspection extends EntityWithTenant implements HasFileAttachments {
+public abstract class AbstractEvent extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;
 
 	@Column( length=2500 )
@@ -47,7 +47,7 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 	@JoinColumn(name="assetstatus_id")
 	private AssetStatus assetStatus;
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "inspection", cascade=CascadeType.ALL)
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "event", cascade=CascadeType.ALL)
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
@@ -69,9 +69,9 @@ public abstract class AbstractInspection extends EntityWithTenant implements Has
 		this.mobileGUID = mobileGUID;
 	}
 
-	public AbstractInspection() {}
+	public AbstractEvent() {}
 
-	public AbstractInspection(Tenant tenant) {
+	public AbstractEvent(Tenant tenant) {
 		super(tenant);
 	}
 	

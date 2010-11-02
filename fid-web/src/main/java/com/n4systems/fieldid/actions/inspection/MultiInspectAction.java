@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.inspectiontype.CommonAssetTypeDatabaseLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -22,7 +23,6 @@ import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.CommonInspectionTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonInspectionTypeHandler;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
@@ -44,7 +44,7 @@ public class MultiInspectAction extends AbstractCrud {
 	private Set<InspectionType> eventTypes;
 
 	private InspectionType inspectionType;
-	private Inspection inspection;
+	private Event event;
 	
 	private final InspectionFormHelper inspectionFormHelper;
 	private List<Asset> assets;
@@ -67,9 +67,9 @@ public class MultiInspectAction extends AbstractCrud {
 	
 	@Override
 	protected void initMemberFields() {
-		inspection = new Inspection();
-		inspection.setType(inspectionType);
-		inspection.setDate(new Date());
+		event = new Event();
+		event.setType(inspectionType);
+		event.setDate(new Date());
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class MultiInspectAction extends AbstractCrud {
 	protected void postInit() {
 		super.postInit();
 		commonInspectionTypeHandler = createCommonInspectionTypeHandler();
-		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter(), this);
+		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), event), getSessionUser().createUserDateConverter(), this);
 		overrideHelper(new MultiInspectActionHelper(getLoaderFactory()));
 	}
 	
@@ -107,11 +107,11 @@ public class MultiInspectAction extends AbstractCrud {
 		testDependencies();
 		
 		commonAssetValues = new CommonAssetValuesFinder(getAssets()).findCommonValues();
-		inspection.setOwner(commonAssetValues.owner);
+		event.setOwner(commonAssetValues.owner);
 		if (commonAssetValues.hasCommonLocation()) {
-			inspection.setAdvancedLocation(commonAssetValues.location);
+			event.setAdvancedLocation(commonAssetValues.location);
 		}
-		modifiableInspection.updateValuesToMatch(inspection);
+		modifiableInspection.updateValuesToMatch(event);
 		
 		return SUCCESS;
 	}
@@ -174,12 +174,12 @@ public class MultiInspectAction extends AbstractCrud {
 		return examiners;
 	}
 
-	public Inspection getInspection() {
-		return inspection;
+	public Event getInspection() {
+		return event;
 	}
 
-	public void setInspection(Inspection inspection) {
-		this.inspection = inspection;
+	public void setInspection(Event event) {
+		this.event = event;
 	}
 
 	public InspectionFormHelper getInspectionFormHelper() {

@@ -10,8 +10,8 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
@@ -20,10 +20,10 @@ import com.n4systems.services.NextInspectionScheduleSerivce;
 public class WebServiceInspectionsCreator extends BasicTransactionManagement implements InspectionsInAGroupCreator {
 
 	private final InspectionPersistenceFactory inspectionPersistenceFactory;
-	private Map<Inspection, Date> nextInspectionDates;
-	private List<Inspection> inspections;
+	private Map<Event, Date> nextInspectionDates;
+	private List<Event> events;
 	private String transactionGUID;
-	private List<Inspection> results = null;
+	private List<Event> results = null;
 	private NextInspectionScheduleSerivce createNextInspectionScheduleService;
 	private CreateInspectionsMethodObject createInspectionsMethod;
 
@@ -32,10 +32,10 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 		this.inspectionPersistenceFactory = inspectionPersistenceFactory;
 	}
 
-	public List<Inspection> create(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, 
+	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws TransactionAlreadyProcessedException,
 			ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 		this.transactionGUID = transactionGUID;
-		this.inspections = inspections;
+		this.events = events;
 		this.nextInspectionDates = nextInspectionDates;
 		
 		run();
@@ -52,7 +52,7 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	}
 
 	protected void failure(Exception e) {
-		logFailure(inspections, e);
+		logFailure(events, e);
 	}
 
 	protected void doProcess(Transaction transaction) {
@@ -68,34 +68,34 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	}
 
 	private void createInspections(Transaction transaction) {
-		results = createInspectionsMethod.createInspections(transactionGUID, inspections);
+		results = createInspectionsMethod.createInspections(transactionGUID, events);
 	}
 
 	private void createSchedules(Transaction transaction) {
-		for (Entry<Inspection, Date> nextInspectionDate : nextInspectionDates.entrySet()) {
-			Inspection inspectionCreatingSchedule = nextInspectionDate.getKey();
+		for (Entry<Event, Date> nextInspectionDate : nextInspectionDates.entrySet()) {
+			Event eventCreatingSchedule = nextInspectionDate.getKey();
 			
 			if (nextInspectionDate.getValue() != null) {
-				InspectionSchedule schedule = new InspectionSchedule(inspectionCreatingSchedule.getAsset(), inspectionCreatingSchedule.getType(), nextInspectionDate.getValue());
+				EventSchedule schedule = new EventSchedule(eventCreatingSchedule.getAsset(), eventCreatingSchedule.getType(), nextInspectionDate.getValue());
 				createNextInspectionScheduleService.createNextSchedule(schedule);
 			}
 		}
 	}
 
 
-	private void logFailure(List<Inspection> inspections, Exception e) {
-		auditLogInspection(inspections, e);
+	private void logFailure(List<Event> events, Exception e) {
+		auditLogInspection(events, e);
 	}
 
-	private void auditLogInspection(List<Inspection> inspections, Exception e) {
+	private void auditLogInspection(List<Event> events, Exception e) {
 		AuditLogger auditLogger = inspectionPersistenceFactory.createCreateInspectionAuditLogger();
-		for (Inspection inspection : inspections) {
-			auditLogger.audit("Create Inspections", inspection, e);
+		for (Event event : events) {
+			auditLogger.audit("Create Inspections", event, e);
 		}
 	}
 
-	private void logSuccess(List<Inspection> inspections) {
-		auditLogInspection(inspections, null);
+	private void logSuccess(List<Event> events) {
+		auditLogInspection(events, null);
 	}
 
 	

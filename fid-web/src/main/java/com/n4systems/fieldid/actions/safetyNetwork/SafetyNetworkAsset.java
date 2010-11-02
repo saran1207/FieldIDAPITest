@@ -3,8 +3,8 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.fieldid.actions.asset.AssetWebModel;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.asset.AssetAttachment;
@@ -40,7 +40,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 	}
 	
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
-    protected List<InspectionSchedule> inspectionSchedules;
+    protected List<EventSchedule> eventSchedules;
 	
 	@Override
 	protected void postInit() {
@@ -89,14 +89,14 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 		return assetAttachments;
 	}
 
-    public List<InspectionSchedule> getInspectionSchedules() {
-        if (inspectionSchedules == null) {
-            inspectionSchedules = inspectionScheduleManager.getAvailableSchedulesFor(asset);
+    public List<EventSchedule> getInspectionSchedules() {
+        if (eventSchedules == null) {
+            eventSchedules = inspectionScheduleManager.getAvailableSchedulesFor(asset);
         }
-        return inspectionSchedules;
+        return eventSchedules;
     }
 
-    public List<Inspection> getInspections() {
+    public List<Event> getInspections() {
         return getLoaderFactory().createInspectionsByAssetIdLoader().setAssetId(asset.getId()).load();
     }
 

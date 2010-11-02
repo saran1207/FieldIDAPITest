@@ -1,14 +1,14 @@
 package com.n4systems.fieldid.actions.search;
 
+import com.n4systems.ejb.EventManager;
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -21,8 +21,8 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	
 	private Project job;
 	
-	public InspectionScheduleJobAssignment(PersistenceManager persistenceManager, InspectionManager inspectionManager, AssetManager assetManager, InspectionScheduleManager inspectionScheduleManager) {
-		super(SCHEDULE_CRITERIA, InspectionScheduleJobAssignment.class, persistenceManager, inspectionManager, assetManager, inspectionScheduleManager);
+	public InspectionScheduleJobAssignment(PersistenceManager persistenceManager, EventManager eventManager, AssetManager assetManager, InspectionScheduleManager inspectionScheduleManager) {
+		super(SCHEDULE_CRITERIA, InspectionScheduleJobAssignment.class, persistenceManager, eventManager, assetManager, inspectionScheduleManager);
 	}
 
 	private void testRequiredEntities() {
@@ -80,7 +80,7 @@ public class InspectionScheduleJobAssignment extends InspectionScheduleAction {
 	}
 	
 	public Long getJobForSchedule(String scheduleId) {
-		QueryBuilder<Long> jobId = new QueryBuilder<Long>(InspectionSchedule.class, getSecurityFilter());
+		QueryBuilder<Long> jobId = new QueryBuilder<Long>(EventSchedule.class, getSecurityFilter());
 		jobId.setSimpleSelect("project.id").addLeftJoin("project", "project").addSimpleWhere("id", Long.valueOf(scheduleId));
 		return persistenceManager.find(jobId);
 	}

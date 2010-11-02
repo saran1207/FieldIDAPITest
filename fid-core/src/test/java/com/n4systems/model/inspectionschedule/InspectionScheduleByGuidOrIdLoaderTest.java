@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.EventSchedule;
 import org.junit.Test;
 
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -39,7 +39,7 @@ public class InspectionScheduleByGuidOrIdLoaderTest {
 
 	private class TestableInspectionScheduleByGuidOrIdLoader extends InspectionScheduleByGuidOrIdLoader {
 
-		private TestingQueryBuilder<InspectionSchedule> queryBuilder;
+		private TestingQueryBuilder<EventSchedule> queryBuilder;
 		private boolean findByIdCalled = false;
 		
 		public TestableInspectionScheduleByGuidOrIdLoader(SecurityFilter filter) {
@@ -47,16 +47,16 @@ public class InspectionScheduleByGuidOrIdLoaderTest {
 		}
 
 		@Override
-		protected QueryBuilder<InspectionSchedule> getQueryBuilder(SecurityFilter filter) {	
-			queryBuilder = new TestingQueryBuilder<InspectionSchedule>(InspectionSchedule.class);
-			queryBuilder.setSingleResult(new InspectionSchedule());
+		protected QueryBuilder<EventSchedule> getQueryBuilder(SecurityFilter filter) {
+			queryBuilder = new TestingQueryBuilder<EventSchedule>(EventSchedule.class);
+			queryBuilder.setSingleResult(new EventSchedule());
 			return queryBuilder;
 		}
 
 		@Override
-		protected InspectionSchedule findByIdUsingEntityManager(EntityManager em) {
+		protected EventSchedule findByIdUsingEntityManager(EntityManager em) {
 			findByIdCalled = true;
-			return new InspectionSchedule();
+			return new EventSchedule();
 		}
 	}
 }

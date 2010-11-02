@@ -1,13 +1,13 @@
 package com.n4systems.reporting.mapbuilders;
 
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.inspectionschedule.NextInspectionScheduleLoader;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.DateHelper;
 
-public class InspectionScheduleMapBuilder extends AbstractMapBuilder<Inspection> {
+public class InspectionScheduleMapBuilder extends AbstractMapBuilder<Event> {
 	private final DateTimeDefiner dateDefiner;
 	private final NextInspectionScheduleLoader nextInspectionScheduleLoader;
 	
@@ -23,8 +23,8 @@ public class InspectionScheduleMapBuilder extends AbstractMapBuilder<Inspection>
 	}
 	
 	@Override
-	protected void setAllFields(Inspection entity, Transaction transaction) {
-		InspectionSchedule is = loadNextInspectionSchedule(entity, transaction);
+	protected void setAllFields(Event entity, Transaction transaction) {
+		EventSchedule is = loadNextInspectionSchedule(entity, transaction);
 		
 		if (is != null) {
 			setField(ReportField.NEXT_DATE,			is.getNextDate());
@@ -32,8 +32,8 @@ public class InspectionScheduleMapBuilder extends AbstractMapBuilder<Inspection>
 		}
 	}
 	
-	private InspectionSchedule loadNextInspectionSchedule(Inspection inspection, Transaction transaction) {
-		InspectionSchedule nextInspectionSchedule = nextInspectionScheduleLoader.setFieldsFromInspection(inspection).load(transaction);
-		return nextInspectionSchedule;
+	private EventSchedule loadNextInspectionSchedule(Event event, Transaction transaction) {
+		EventSchedule nextEventSchedule = nextInspectionScheduleLoader.setFieldsFromInspection(event).load(transaction);
+		return nextEventSchedule;
 	}
 }

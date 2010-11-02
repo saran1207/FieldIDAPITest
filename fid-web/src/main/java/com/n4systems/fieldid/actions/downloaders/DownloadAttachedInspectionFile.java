@@ -5,30 +5,30 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 import com.n4systems.reporting.PathHandler;
 
 public class DownloadAttachedInspectionFile extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 
-	private Inspection inspection;
-	private InspectionManager inspectionManager;
+	private Event event;
+	private EventManager eventManager;
 	
-	public DownloadAttachedInspectionFile(InspectionManager inspectionManager, PersistenceManager persistenceManager) {
+	public DownloadAttachedInspectionFile(EventManager eventManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.inspectionManager = inspectionManager;
+		this.eventManager = eventManager;
 	}
 
 	public String doDownload() {
 		
 		// load the inspection
-		inspection =  inspectionManager.findAllFields( uniqueID, getSecurityFilter() );
+		event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
 		
-		if( inspection == null ) {
+		if( event == null ) {
 			addActionError( getText( "error.noevent" ) );
 			return MISSING;
 		} 
@@ -36,7 +36,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		FileAttachment attachment = null;
 		
 		// make sure our attachment is actually attached to this inspection
-		for(FileAttachment attach: inspection.getAttachments()) {
+		for(FileAttachment attach: event.getAttachments()) {
 			if(attach.getId().equals(attachmentID)) {
 				attachment = attach;
 				break;
@@ -50,7 +50,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		}
 		
 		// construct a file path to our attachment
-		File inspectionDirectory = PathHandler.getAttachmentFile( inspection );
+		File inspectionDirectory = PathHandler.getAttachmentFile(event);
 		File attachedFile = new File( inspectionDirectory.getAbsolutePath(), attachment.getFileName() );
 		
 		// make sure the file actually exists
@@ -77,11 +77,11 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 	public String doDownloadSubInspection()  {
 		
 		// load the inspection
-		inspection = inspectionManager.findInspectionThroughSubInspection( uniqueID, getSecurityFilter() );
+		event = eventManager.findEventThroughSubInspection( uniqueID, getSecurityFilter() );
 		
-		SubInspection subInspection = inspectionManager.findSubInspection( uniqueID, getSecurityFilter() );
+		SubEvent subEvent = eventManager.findSubEvent( uniqueID, getSecurityFilter() );
 		
-		if( subInspection == null ) {
+		if( subEvent == null ) {
 			addActionError( getText( "error.noevent" ) );
 			return MISSING;
 		} 
@@ -89,7 +89,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		FileAttachment attachment = null;
 		
 		// make sure our attachment is actually attached to this inspection
-		for(FileAttachment attach: subInspection.getAttachments()) {
+		for(FileAttachment attach: subEvent.getAttachments()) {
 			if(attach.getId().equals(attachmentID)) {
 				attachment = attach;
 				break;
@@ -103,7 +103,7 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 		}
 		
 		// construct a file path to our attachment
-		File inspectionDirectory = PathHandler.getAttachmentFile( inspection, subInspection );
+		File inspectionDirectory = PathHandler.getAttachmentFile(event, subEvent);
 		File attachedFile = new File( inspectionDirectory.getAbsolutePath(), attachment.getFileName() );
 		
 		// make sure the file actually exists
@@ -129,18 +129,18 @@ public class DownloadAttachedInspectionFile extends DownloadAction {
 	
 	
 	public String doDownloadChart() {
-		inspection =  inspectionManager.findAllFields( uniqueID, getSecurityFilter() );
-		if( inspection == null ) {
+		event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
+		if( event == null ) {
 			addActionError( getText( "error.noevent" ) );
 			return MISSING;
 		} 
 		
-		if( inspection.getProofTestInfo() == null ) {
+		if( event.getProofTestInfo() == null ) {
 			addActionError( getText( "error.nochart", fileName ) );
 			return MISSING;
 		}
 		
-		File chartFile = PathHandler.getChartImageFile( inspection );
+		File chartFile = PathHandler.getChartImageFile(event);
 		fileName = chartFile.getName();
 		if( !chartFile.exists() ) {
 			addActionError( getText( "error.nochart", chartFile.getName() ) );

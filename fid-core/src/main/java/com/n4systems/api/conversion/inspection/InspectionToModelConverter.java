@@ -1,13 +1,13 @@
 package com.n4systems.api.conversion.inspection;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.InspectionView;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Status;
@@ -20,7 +20,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 
-public class InspectionToModelConverter implements ViewToModelConverter<Inspection, InspectionView> {
+public class InspectionToModelConverter implements ViewToModelConverter<Event, InspectionView> {
 	private final OrgByNameLoader orgLoader;
 	private final SmartSearchLoader assetLoader;
 	private final AssetStatusByNameLoader assetStatusLoader;
@@ -38,8 +38,8 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 	}
 
 	@Override
-	public Inspection toModel(InspectionView view, Transaction transaction) throws ConversionException {
-		Inspection model = new Inspection();
+	public Event toModel(InspectionView view, Transaction transaction) throws ConversionException {
+		Event model = new Event();
 		
 		resolveType(model);
 		resolveOwner(view, model, transaction);
@@ -59,13 +59,13 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		return model;
 	}
 
-	protected void resolveType(Inspection model) {
+	protected void resolveType(Event model) {
 		model.setType(type);
 		model.setFormVersion(type.getFormVersion());
 		model.setTenant(type.getTenant());
 	}
 	
-	protected void resolveStatus(String statusName, Inspection model) {
+	protected void resolveStatus(String statusName, Event model) {
 		String cleanStatus = statusName.toUpperCase();
 		
 		Status status = Status.NA;
@@ -78,19 +78,19 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		model.setStatus(status);
 	}
 
-	protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {
+	protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {
 		// the validator will ensure this returns exactly 1 asset
 		Asset asset = assetLoader.setSearchText(view.getIdentifier()).load(transaction).get(0);
 		model.setAsset(asset);
 	}
 
-	protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {
+	protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {
 		// the validator will ensure this returns exactly 1 user
 		User performedBy = userLoader.setFullName(view.getPerformedBy()).load(transaction).get(0);
 		model.setPerformedBy(performedBy);
 	}
 
-	protected void resolvePrintable(InspectionView view, Inspection model) {
+	protected void resolvePrintable(InspectionView view, Event model) {
 		if (view.isPrintable() != null) {
 			model.setPrintable(view.isPrintable());
 		} else {
@@ -98,23 +98,23 @@ public class InspectionToModelConverter implements ViewToModelConverter<Inspecti
 		}
 	}
 
-	protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {
+	protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {
 		if (view.getInspectionBook() != null) {
 			inspectionBookLoader.setName(view.getInspectionBook());
 			inspectionBookLoader.setOwner(model.getOwner());
-			InspectionBook book = inspectionBookLoader.load(transaction);
+			EventBook book = inspectionBookLoader.load(transaction);
 			model.setBook(book);
 		}
 	}
 
-	protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {
+	protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {
 		if (view.getAssetStatus() != null) {
 			AssetStatus status = assetStatusLoader.setName(view.getAssetStatus()).load(transaction);
 			model.setAssetStatus(status);
 		}
 	}
 
-	protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {
+	protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {
 		orgLoader.setOrganizationName(view.getOrganization());
 		orgLoader.setCustomerName(view.getCustomer());
 		orgLoader.setDivision(view.getDivision());

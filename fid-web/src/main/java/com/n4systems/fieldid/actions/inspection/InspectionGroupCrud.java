@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventGroup;
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.InspectionGroup;
 import com.n4systems.model.InspectionType;
 
 public class InspectionGroupCrud extends AbstractCrud {
@@ -20,23 +20,23 @@ public class InspectionGroupCrud extends AbstractCrud {
 
 	private static Logger logger = Logger.getLogger(InspectionGroupCrud.class);
 
-	private InspectionGroup inspectionGroup;
+	private EventGroup eventGroup;
 	private Asset asset;
 
 	private List<Asset> assets;
 
-	private List<InspectionGroup> inspectionGroups;
+	private List<EventGroup> eventGroups;
 
 	private String search;
 
-	private InspectionManager inspectionManager;
+	private EventManager eventManager;
 	private AssetManager assetManager;
 
 	private List<InspectionType> inspectionTypes;
 
-	public InspectionGroupCrud(InspectionManager inspectionManager, AssetManager assetManager, PersistenceManager persistenceManager) {
+	public InspectionGroupCrud(EventManager eventManager, AssetManager assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.inspectionManager = inspectionManager;
+		this.eventManager = eventManager;
 		this.assetManager = assetManager;
 	}
 
@@ -79,7 +79,7 @@ public class InspectionGroupCrud extends AbstractCrud {
 			return MISSING;
 		}
 
-		inspectionGroups = inspectionManager.findAllInspectionGroups(getSecurityFilter(), uniqueID, "inspections");
+		eventGroups = eventManager.findAllInspectionGroups(getSecurityFilter(), uniqueID, "inspections");
 		return SUCCESS;
 	}
 
@@ -106,16 +106,16 @@ public class InspectionGroupCrud extends AbstractCrud {
 		this.search = search;
 	}
 
-	public InspectionGroup getInspectionGroup() {
-		return inspectionGroup;
+	public EventGroup getInspectionGroup() {
+		return eventGroup;
 	}
 
 	public List<Asset> getAssets() {
 		return assets;
 	}
 
-	public List<InspectionGroup> getInspectionGroups() {
-		return inspectionGroups;
+	public List<EventGroup> getInspectionGroups() {
+		return eventGroups;
 	}
 
 	public List<InspectionType> getInspectionTypes() {
@@ -131,7 +131,7 @@ public class InspectionGroupCrud extends AbstractCrud {
 	}
 
 	public boolean isMasterInspection(Long id) {
-		return inspectionManager.isMasterInspection(id);
+		return eventManager.isMasterEvent(id);
 	}
 
 }

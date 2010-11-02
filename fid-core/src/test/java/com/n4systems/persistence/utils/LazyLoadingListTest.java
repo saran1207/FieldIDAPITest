@@ -1,6 +1,6 @@
 package com.n4systems.persistence.utils;
 
-import static com.n4systems.model.builders.InspectionBuilder.*;
+import static com.n4systems.model.builders.EventBuilder.*;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -8,15 +8,14 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.Event;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.n4systems.handlers.TestUsesTransactionBase;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.Loader;
-import com.n4systems.persistence.utils.LazyLoadingList;
 import com.n4systems.test.helpers.FluentArrayList;
 
 public class LazyLoadingListTest extends TestUsesTransactionBase {
@@ -25,12 +24,12 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 	
 	@Test
 	public void should_find_size_of_list_to_match_id_list() throws Exception {
-		assertEquals(3, new LazyLoadingList<Inspection>(new FluentArrayList<Long>(1L, 2L, 3L), null, null).size());
-		assertEquals(2, new LazyLoadingList<Inspection>(new FluentArrayList<Long>(1L, 2L), null, null).size());
-		assertEquals(1, new LazyLoadingList<Inspection>(new FluentArrayList<Long>(1L), null, null).size());
-		assertEquals(0, new LazyLoadingList<Inspection>(new FluentArrayList<Long>(), null, null).size());
+		assertEquals(3, new LazyLoadingList<Event>(new FluentArrayList<Long>(1L, 2L, 3L), null, null).size());
+		assertEquals(2, new LazyLoadingList<Event>(new FluentArrayList<Long>(1L, 2L), null, null).size());
+		assertEquals(1, new LazyLoadingList<Event>(new FluentArrayList<Long>(1L), null, null).size());
+		assertEquals(0, new LazyLoadingList<Event>(new FluentArrayList<Long>(), null, null).size());
 		
-		assertTrue(new LazyLoadingList<Inspection>(new FluentArrayList<Long>(), null, null).isEmpty());
+		assertTrue(new LazyLoadingList<Event>(new FluentArrayList<Long>(), null, null).isEmpty());
 	}
 	
 	
@@ -38,7 +37,7 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 	@Test
 	public void should_take_the_id_list_by_value_not_reference() throws Exception {
 		List<Long> inspectionIds = new FluentArrayList<Long>(1L, 2L, 3L);
-		List<Inspection> sut = new LazyLoadingList<Inspection>(inspectionIds, null, null);
+		List<Event> sut = new LazyLoadingList<Event>(inspectionIds, null, null);
 		
 		inspectionIds.clear();
 		assertEquals(3, sut.size());
@@ -49,7 +48,7 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 		IdLoaderFake loader = new IdLoaderFake();
 		mockTransaction();
 		List<Long> inspectionIds = new FluentArrayList<Long>(1L, 2L, 3L);
-		List<Inspection> sut = new LazyLoadingList<Inspection>(inspectionIds, loader, mockTransaction);
+		List<Event> sut = new LazyLoadingList<Event>(inspectionIds, loader, mockTransaction);
 		sut.get(0);
 		
 		Assert.assertEquals(new FluentArrayList<Long>(1L), loader.loadedIds);
@@ -61,9 +60,9 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 		IdLoaderFake loader = new IdLoaderFake();
 		mockTransaction();
 		List<Long> inspectionIds = new FluentArrayList<Long>(1L, 2L, 3L);
-		List<Inspection> sut = new LazyLoadingList<Inspection>(inspectionIds, loader, mockTransaction);
-		for (Inspection inspection : sut) {
-			assertNotNull(inspection);
+		List<Event> sut = new LazyLoadingList<Event>(inspectionIds, loader, mockTransaction);
+		for (Event event : sut) {
+			assertNotNull(event);
 		}
 		
 		Assert.assertEquals(inspectionIds, loader.loadedIds);
@@ -74,7 +73,7 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 		IdLoaderFake loader = new IdLoaderFake();
 		mockTransaction();
 		List<Long> inspectionIds = new FluentArrayList<Long>(1L, 2L, 3L);
-		List<Inspection> sut = new LazyLoadingList<Inspection>(inspectionIds, loader, mockTransaction);
+		List<Event> sut = new LazyLoadingList<Event>(inspectionIds, loader, mockTransaction);
 	
 		sut.get(0);
 		sut.get(0);
@@ -82,7 +81,7 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 		Assert.assertEquals(new FluentArrayList<Long>(1L, 1L), loader.loadedIds);
 	}
 
-	private final class IdLoaderFake extends Loader<Inspection> implements IdLoader<IdLoaderFake>{
+	private final class IdLoaderFake extends Loader<Event> implements IdLoader<IdLoaderFake>{
 		private Long id;
 		
 		List<Long> loadedIds = new ArrayList<Long>();
@@ -96,16 +95,16 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 		}
 
 		@Override
-		protected Inspection load(EntityManager em) {
+		protected Event load(EntityManager em) {
 			return null;
 		}
 
 		@Override
-		public Inspection load(Transaction transaction) {
+		public Event load(Transaction transaction) {
 			loadedIds.add(id);
-			Inspection inspection = anInspection().build();
-			inspection.setId(id);
-			return inspection;
+			Event event = anEvent().build();
+			event.setId(id);
+			return event;
 		}
 	}
 }

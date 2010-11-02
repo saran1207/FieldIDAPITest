@@ -5,14 +5,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
 
 public class SafetyNetworkAssignedAssetInspectionLoader extends SafetyNetworkInspectionLoader {
 	private final AssetsByNetworkIdLoader assetsByNetworkIdLoader;
 
-	public SafetyNetworkAssignedAssetInspectionLoader(SecurityFilter filter, NonSecureIdLoader<Inspection> inspectionLoader, AssetsByNetworkIdLoader assetsByNetworkIdLoader) {
+	public SafetyNetworkAssignedAssetInspectionLoader(SecurityFilter filter, NonSecureIdLoader<Event> inspectionLoader, AssetsByNetworkIdLoader assetsByNetworkIdLoader) {
 		super(filter, inspectionLoader);
 		this.assetsByNetworkIdLoader = assetsByNetworkIdLoader;
 	}
@@ -23,10 +23,10 @@ public class SafetyNetworkAssignedAssetInspectionLoader extends SafetyNetworkIns
 	}
 	
 	@Override
-	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Inspection inspection) {
+	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Event event) {
 		SafetyNetworkAssetSecurityManager securityManager = new SafetyNetworkAssetSecurityManager(filter.getOwner());
 		
-		List<Asset> linkedAssets = getLinkedAssets(em, filter, inspection.getAsset());
+		List<Asset> linkedAssets = getLinkedAssets(em, filter, event.getAsset());
 		
 		boolean hasAssignedAsset = securityManager.listContainsAnAssignedAsset(linkedAssets);
 		boolean assetIsPubliclyAvailable = securityManager.listContainsAnAssetPubliclyPublished(linkedAssets);

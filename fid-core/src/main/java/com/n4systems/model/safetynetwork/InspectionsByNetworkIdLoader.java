@@ -1,6 +1,6 @@
 package com.n4systems.model.safetynetwork;
 
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-public class InspectionsByNetworkIdLoader extends ListLoader<Inspection> {
+public class InspectionsByNetworkIdLoader extends ListLoader<Event> {
 
 	private Long networkId;
 	
@@ -27,7 +27,7 @@ public class InspectionsByNetworkIdLoader extends ListLoader<Inspection> {
 	}
 
 	@Override
-	protected List<Inspection> load(EntityManager em, SecurityFilter filter) {
+	protected List<Event> load(EntityManager em, SecurityFilter filter) {
         QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, filter);
 		connectedTenantsQuery.setSimpleSelect("connectedOrg.tenant", true);
 
@@ -37,17 +37,17 @@ public class InspectionsByNetworkIdLoader extends ListLoader<Inspection> {
         wpg.addClause(insideSafetyNetworkSubClause);
         wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.owner.tenant.id", filter.getTenantId(), WhereClause.ChainOp.OR));
         
-		QueryBuilder<Inspection> builder = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
+		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));
         builder.addWhere(wpg);
 
-		List<Inspection> unsecuredInspections = builder.getResultList(em);
+		List<Event> unsecuredEvents = builder.getResultList(em);
 		
 		PersistenceManager.setSessionReadOnly(em);
 		
-		List<Inspection> enhancedInspections = EntitySecurityEnhancer.enhanceList(unsecuredInspections, filter);
+		List<Event> enhancedEvents = EntitySecurityEnhancer.enhanceList(unsecuredEvents, filter);
 		
-		return enhancedInspections;
+		return enhancedEvents;
 	}
 
 	public InspectionsByNetworkIdLoader setNetworkId(Long networkId) {

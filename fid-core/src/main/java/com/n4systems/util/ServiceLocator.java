@@ -3,7 +3,7 @@ package com.n4systems.util;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.ConfigManager;
-import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -25,7 +25,7 @@ import com.n4systems.ejb.legacy.wrapper.UserEJBContainer;
 import com.n4systems.ejb.wrapper.AssetManagerEJBContainer;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
-import com.n4systems.ejb.wrapper.InspectionManagerEJBContainer;
+import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
 import com.n4systems.ejb.wrapper.InspectionScheduleManagerEJBContainer;
 import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer;
@@ -89,8 +89,8 @@ public class ServiceLocator {
 		return new InspectionScheduleManagerEJBContainer();
 	}
 
-	public static final InspectionManager getInspectionManager() {
-		return new InspectionManagerEJBContainer();
+	public static final EventManager getInspectionManager() {
+		return new EventManagerEJBContainer();
 	}
 
 	public static final AssetManager getProductManager() {

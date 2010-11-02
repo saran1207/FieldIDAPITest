@@ -18,18 +18,18 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Status;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.assettype.AssetTypeLoader;
@@ -46,13 +46,13 @@ public class InspectionSummaryGenerator {
 	private Logger logger = Logger.getLogger(InspectionSummaryGenerator.class);
 	
 	private final PersistenceManager persistenceManager;
-	private final InspectionManager inspectionManager;
+	private final EventManager eventManager;
 	private final DateTimeDefiner dateDefiner;
 	
-	public InspectionSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, InspectionManager inspectionManager) {
+	public InspectionSummaryGenerator(DateTimeDefiner dateDefiner, PersistenceManager persistenceManager, EventManager eventManager) {
 		this.dateDefiner = dateDefiner;
 		this.persistenceManager = persistenceManager;
-		this.inspectionManager = inspectionManager;
+		this.eventManager = eventManager;
 	}
 	
 	public InspectionSummaryGenerator(DateTimeDefiner dateDefiner) {
@@ -80,74 +80,74 @@ public class InspectionSummaryGenerator {
 			Integer totalFailedEvents = 0;
 			Integer totalNAEvents = 0;
 			
-			Inspection inspection;
+			Event event;
 			for (Long inspectionId : inspectionIds) {
 				
-				inspection = inspectionManager.findAllFields(inspectionId, user.getSecurityFilter());
+				event = eventManager.findAllFields(inspectionId, user.getSecurityFilter());
 
 				ReportMap<Object> inspectionMap = new ReportMap<Object>();
-				inspectionMap.put("date", inspection.getDate());
-				inspectionMap.put("referenceNumber", inspection.getAsset().getCustomerRefNumber());
-				inspectionMap.put("productType", inspection.getAsset().getType().getName());
-				inspectionMap.put("serialNumber", inspection.getAsset().getSerialNumber());
-				inspectionMap.put("description", inspection.getAsset().getDescription());
-				inspectionMap.put("organization", inspection.getOwner().getInternalOrg().getName());
-				inspectionMap.put("inspectionType", inspection.getType().getName());
+				inspectionMap.put("date", event.getDate());
+				inspectionMap.put("referenceNumber", event.getAsset().getCustomerRefNumber());
+				inspectionMap.put("productType", event.getAsset().getType().getName());
+				inspectionMap.put("serialNumber", event.getAsset().getSerialNumber());
+				inspectionMap.put("description", event.getAsset().getDescription());
+				inspectionMap.put("organization", event.getOwner().getInternalOrg().getName());
+				inspectionMap.put("inspectionType", event.getType().getName());
 				inspectionMap.put("dateFormat", new DateTimeDefiner(user).getDateFormat());
-				inspectionMap.put("performedBy", inspection.getPerformedBy().getUserLabel());
-				inspectionMap.put("result", inspection.getStatus().getDisplayName());
-				inspectionMap.put("division", (inspection.getOwner().isDivision()) ? inspection.getOwner().getName() : null);
+				inspectionMap.put("performedBy", event.getPerformedBy().getUserLabel());
+				inspectionMap.put("result", event.getStatus().getDisplayName());
+				inspectionMap.put("division", (event.getOwner().isDivision()) ? event.getOwner().getName() : null);
 				
-				Long tenantId = inspection.getTenant().getId();
+				Long tenantId = event.getTenant().getId();
 				
 				PrimaryOrg tenant = getTenant(user, tenantId);
 				
 				inspectionMap.put("tenantAddress", tenant.getAddressInfo() !=null? tenant.getAddressInfo().getDisplay() : "");
 				
-				inspectionMap.put("productTypeGroup", inspection.getAsset().getType().getGroup() != null ? inspection.getAsset().getType().getGroup().getName() : "");
-				inspectionMap.put("assetComments", inspection.getAsset().getComments());
-				inspectionMap.put("customer", inspection.getOwner().getCustomerOrg() != null?inspection.getOwner().getCustomerOrg().getName() :"");
+				inspectionMap.put("productTypeGroup", event.getAsset().getType().getGroup() != null ? event.getAsset().getType().getGroup().getName() : "");
+				inspectionMap.put("assetComments", event.getAsset().getComments());
+				inspectionMap.put("customer", event.getOwner().getCustomerOrg() != null? event.getOwner().getCustomerOrg().getName() :"");
 				
-				LineItem shopOrder = inspection.getAsset().getShopOrder();
+				LineItem shopOrder = event.getAsset().getShopOrder();
 				inspectionMap.put("orderNumber", shopOrder !=null ? shopOrder.getOrder().getOrderNumber() : "");
-				inspectionMap.put("PONumber", inspection.getAsset().getPurchaseOrder());
-				inspectionMap.put("attributes", produceInfoOptionLP(inspection.getAsset().getOrderedInfoOptionList()));
-				inspectionMap.put("productStatus", inspection.getAsset().getAssetStatus()!=null ? inspection.getAsset().getAssetStatus().getName() : "");
+				inspectionMap.put("PONumber", event.getAsset().getPurchaseOrder());
+				inspectionMap.put("attributes", produceInfoOptionLP(event.getAsset().getOrderedInfoOptionList()));
+				inspectionMap.put("productStatus", event.getAsset().getAssetStatus()!=null ? event.getAsset().getAssetStatus().getName() : "");
 				
-				inspectionMap.put("eventTypeGroup", inspection.getType().getGroup() !=null ? inspection.getType().getGroup().getName() : "");
-				inspectionMap.put("location", inspection.getAdvancedLocation() != null ? inspection.getAdvancedLocation().getFullName() : "");
-				inspectionMap.put("eventComments", inspection.getComments());
-				inspectionMap.put("assignedTo", inspection.getAssignedTo() != null && inspection.getAssignedTo().getAssignedUser() != null
-						? inspection.getAssignedTo().getAssignedUser().getDisplayName() : "");
+				inspectionMap.put("eventTypeGroup", event.getType().getGroup() !=null ? event.getType().getGroup().getName() : "");
+				inspectionMap.put("location", event.getAdvancedLocation() != null ? event.getAdvancedLocation().getFullName() : "");
+				inspectionMap.put("eventComments", event.getComments());
+				inspectionMap.put("assignedTo", event.getAssignedTo() != null && event.getAssignedTo().getAssignedUser() != null
+						? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 				
-				ReportMap<Object> inspectionReportMap = new InspectionReportMapProducer(inspection, dateDefiner).produceMap();
+				ReportMap<Object> inspectionReportMap = new InspectionReportMapProducer(event, dateDefiner).produceMap();
 				inspectionMap.put("mainInspection", inspectionReportMap);
 				inspectionMap.put("product", inspectionReportMap.get("product"));
 				
 				List<ReportMap<Object>> inspectionResultMaps = new ArrayList<ReportMap<Object>>();
 				inspectionResultMaps.add(inspectionReportMap);
 				
-				for (SubInspection subInspection : inspection.getSubInspections()) {
-					inspectionResultMaps.add(new SubInspectionReportMapProducer(subInspection, inspection, dateDefiner).produceMap());
+				for (SubEvent subEvent : event.getSubEvents()) {
+					inspectionResultMaps.add(new SubInspectionReportMapProducer(subEvent, event, dateDefiner).produceMap());
 				}
 
 				inspectionMap.put("allInspections", inspectionResultMaps);
 				
-				if (inspection.getProofTestInfo() != null) {
-					inspectionMap.put("peakLoad", inspection.getProofTestInfo().getPeakLoad());
+				if (event.getProofTestInfo() != null) {
+					inspectionMap.put("peakLoad", event.getProofTestInfo().getPeakLoad());
 				}
 
 				collection.add(inspectionMap);
 				
 				totalNumEvents++;
-				if (inspection.getStatus().equals(Status.PASS)) {
+				if (event.getStatus().equals(Status.PASS)) {
 					totalPassedEvents++;
 				}
-				if (inspection.getStatus().equals(Status.FAIL)) {
+				if (event.getStatus().equals(Status.FAIL)) {
 					totalFailedEvents++;
 				}
-				if (inspection.getStatus().equals(Status.NA)) {
+				if (event.getStatus().equals(Status.NA)) {
 					totalNAEvents++;
 				}
 			}
@@ -202,7 +202,7 @@ public class InspectionSummaryGenerator {
 
 		if (reportDefiner.getInspectionBook() != null) { 
 			if (reportDefiner.getInspectionBook() != 0L) {
-			reportMap.put("inspectionBook", persistenceManager.find(InspectionBook.class, reportDefiner.getInspectionBook()).getName());
+			reportMap.put("inspectionBook", persistenceManager.find(EventBook.class, reportDefiner.getInspectionBook()).getName());
 			} else {
 				reportMap.put("inspectionBook", "no inspection book");
 			}

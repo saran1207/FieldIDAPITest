@@ -10,7 +10,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.search.InspectionScheduleAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -22,7 +22,7 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 	public static final String NEXT_DATE = "nextDate";
 	
 	private InspectionScheduleSearchContainer criteria;
-	private InspectionSchedule schedule = new InspectionSchedule();
+	private EventSchedule schedule = new EventSchedule();
 	private String nextDate;
 	private boolean removeIncomplete = false;
 

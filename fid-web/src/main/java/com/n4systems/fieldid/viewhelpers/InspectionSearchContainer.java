@@ -3,7 +3,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
@@ -43,7 +43,7 @@ public class InspectionSearchContainer extends SearchContainer implements Report
 	private Status status;
 	
 	public InspectionSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory) {
-		super(Inspection.class, "id", filter, loaderFactory);
+		super(Event.class, "id", filter, loaderFactory);
 	}
 	
 	@Override

@@ -3,18 +3,18 @@ package com.n4systems.ejb.legacy;
 import java.io.IOException;
 import java.util.List;
 
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
 import rfid.ejb.entity.AssetStatus;
 
-import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
-import com.n4systems.model.InspectionGroup;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
@@ -46,8 +46,8 @@ import fieldid.web.services.dto.ProductStatusServiceDTO;
 
 public interface ServiceDTOBeanConverter {
 
-	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Inspection inspection);
-	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert(InspectionGroup inspectionGroup);
+	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Event event);
+	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert(EventGroup eventGroup);
 	public Asset convert( ProductServiceDTO productServiceDTO, Asset targetProduct, long tenantId );
 	public ProductServiceDTO convert(Asset product);
 	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
@@ -58,7 +58,7 @@ public interface ServiceDTOBeanConverter {
 	public ProductTypeServiceDTO convert_new( AssetType assetType);
 	public TenantServiceDTO convert(PrimaryOrg tenant);
 	public com.n4systems.webservice.dto.UserServiceDTO convert(User user);
-	public InspectionBookServiceDTO convert(InspectionBook inspectionBook);
+	public InspectionBookServiceDTO convert(EventBook eventBook);
 	public ProductTypeGroupServiceDTO convert(AssetTypeGroup assetTypeGroup);
 	public JobServiceDTO convert(Project job);
 	public SetupDataLastModDatesServiceDTO convert(SetupDataLastModDates setupModDates);
@@ -71,9 +71,9 @@ public interface ServiceDTOBeanConverter {
 	public BaseOrg convert(long ownerId, long tenantId);
 	
 	
-	public InspectionSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId);
-	public FileAttachment convert( AbstractInspection inspection, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException;
-	public Inspection convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException;
+	public EventSchedule convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId);
+	public FileAttachment convert( AbstractEvent event, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException;
+	public Event convert( com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId ) throws IOException;
 	public User convert(com.n4systems.webservice.dto.UserServiceDTO user);
 	
 }

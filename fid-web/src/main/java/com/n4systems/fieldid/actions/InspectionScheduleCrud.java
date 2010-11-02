@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
+import com.n4systems.model.EventSchedule;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -15,7 +16,6 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
@@ -35,7 +35,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	private LegacyAsset legacyProductManager;
 	private InspectionScheduleManager inspectionScheduleManager;
-	protected InspectionSchedule inspectionSchedule;
+	protected EventSchedule eventSchedule;
 	
 	private InspectionType inspectionType;
 	private List<ListingPair> jobs;
@@ -44,7 +44,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	protected String searchId;
 
-	private List<InspectionSchedule> inspectionSchedules;
+	private List<EventSchedule> eventSchedules;
 
 	public InspectionScheduleCrud(LegacyAsset legacyProductManager, PersistenceManager persistenceManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
@@ -54,12 +54,12 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		inspectionSchedule = new InspectionSchedule();
+		eventSchedule = new EventSchedule();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		inspectionSchedule = persistenceManager.find(InspectionSchedule.class, uniqueId, getTenantId());
+		eventSchedule = persistenceManager.find(EventSchedule.class, uniqueId, getTenantId());
 	}
 
 	private void testRequiredEntities(boolean existing) {
@@ -67,10 +67,10 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	}
 	
 	protected void testRequiredEntities(boolean existing, boolean inspectionTypeRequired) {
-		if (inspectionSchedule == null) {
+		if (eventSchedule == null) {
 			addActionErrorText("error.noschedule");
 			throw new MissingEntityException();
-		} else if (existing && inspectionSchedule.isNew()) {
+		} else if (existing && eventSchedule.isNew()) {
 			addActionErrorText("error.noschedule");
 			throw new MissingEntityException();
 		}
@@ -102,12 +102,12 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	public String doCreate() {
 		testRequiredEntities(false);
 		try {
-			Project tmpProject = inspectionSchedule.getProject();
-			inspectionSchedule = new InspectionSchedule(asset, inspectionType);
-			inspectionSchedule.setNextDate(convertDate(nextDate));
-			inspectionSchedule.setProject(tmpProject);
+			Project tmpProject = eventSchedule.getProject();
+			eventSchedule = new EventSchedule(asset, inspectionType);
+			eventSchedule.setNextDate(convertDate(nextDate));
+			eventSchedule.setProject(tmpProject);
 			
-			uniqueID = new InspectionScheduleServiceImpl(persistenceManager).createSchedule(inspectionSchedule);
+			uniqueID = new InspectionScheduleServiceImpl(persistenceManager).createSchedule(eventSchedule);
 			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
 			logger.error("could not save schedule", e);
@@ -130,8 +130,8 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	public String doSave() {
 		testRequiredEntities(true);
 		try {
-			inspectionSchedule.setNextDate(convertDate(nextDate));
-			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(inspectionSchedule);
+			eventSchedule.setNextDate(convertDate(nextDate));
+			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
 			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
 			logger.error("could not save schedule", e);
@@ -154,7 +154,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	public String doDelete() {
 		testRequiredEntities(true);
 		try {
-			persistenceManager.delete(inspectionSchedule);
+			persistenceManager.delete(eventSchedule);
 			addActionMessageText("message.eventscheduledeleted");
 		} catch (Exception e) {
 			logger.error("could not delete schedule", e);
@@ -168,8 +168,8 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	public String doStopProgress() {
 		testRequiredEntities(true, false);
 		try {
-			inspectionSchedule.stopProgress();
-			persistenceManager.update(inspectionSchedule, getSessionUser().getId());
+			eventSchedule.stopProgress();
+			persistenceManager.update(eventSchedule, getSessionUser().getId());
 			addActionMessageText("message.eventscheduleprogressstoped");
 		} catch (Exception e) {
 			logger.error("could not stop progress on the schedule", e);
@@ -231,7 +231,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 
 	public String getNextDate() {
 		if (nextDate == null) {
-			nextDate = convertDate(inspectionSchedule.getNextDate());
+			nextDate = convertDate(eventSchedule.getNextDate());
 		}
 		return nextDate;
 	}
@@ -243,19 +243,19 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		this.nextDate = nextDate;
 	}
 
-	public List<InspectionSchedule> getInspectionSchedules() {
-		if (inspectionSchedules == null) {
-			inspectionSchedules = inspectionScheduleManager.getAvailableSchedulesFor(asset);
+	public List<EventSchedule> getInspectionSchedules() {
+		if (eventSchedules == null) {
+			eventSchedules = inspectionScheduleManager.getAvailableSchedulesFor(asset);
 		}
-		return inspectionSchedules;
+		return eventSchedules;
 	}
 
 	public Long getInspectionCount() {
 		return legacyProductManager.countAllInspections(asset, getSecurityFilter());
 	}
 
-	public InspectionSchedule getInspectionSchedule() {
-		return inspectionSchedule;
+	public EventSchedule getInspectionSchedule() {
+		return eventSchedule;
 	}
 
 	public List<ListingPair> getJobs() {
@@ -269,14 +269,14 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	}
 
 	public Long getProject() {
-		return (inspectionSchedule.getProject() != null) ? inspectionSchedule.getProject().getId() : null;
+		return (eventSchedule.getProject() != null) ? eventSchedule.getProject().getId() : null;
 	}
 
 	public void setProject(Long project) {
 		if (project == null) {
-			inspectionSchedule.setProject(null);
-		} else if (inspectionSchedule.getProject() == null || !project.equals(inspectionSchedule.getAsset().getId())) {
-			inspectionSchedule.setProject(persistenceManager.find(Project.class, project, getTenantId()));
+			eventSchedule.setProject(null);
+		} else if (eventSchedule.getProject() == null || !project.equals(eventSchedule.getAsset().getId())) {
+			eventSchedule.setProject(persistenceManager.find(Project.class, project, getTenantId()));
 		}
 	}
 

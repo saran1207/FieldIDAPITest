@@ -2,13 +2,13 @@ package com.n4systems.model.inspectionbook;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.InspectionBook;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class InspectionBookByNameLoader extends SecurityFilteredLoader<InspectionBook> {
+public class InspectionBookByNameLoader extends SecurityFilteredLoader<EventBook> {
 	public BaseOrg owner;
 	public String name;
 	
@@ -17,8 +17,8 @@ public class InspectionBookByNameLoader extends SecurityFilteredLoader<Inspectio
 	}
 	
 	@Override
-	public InspectionBook load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<InspectionBook> builder = new QueryBuilder<InspectionBook>(InspectionBook.class, filter);
+	public EventBook load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<EventBook> builder = new QueryBuilder<EventBook>(EventBook.class, filter);
 		builder.addSimpleWhere("owner", owner);
 		builder.addSimpleWhere("name", name);
 		

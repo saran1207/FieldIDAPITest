@@ -1,15 +1,15 @@
 package com.n4systems.reporting;
 
-import static com.n4systems.model.builders.InspectionBuilder.anInspection;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
 import static org.easymock.EasyMock.*;
 
+import com.n4systems.model.Event;
 import org.apache.commons.io.output.NullOutputStream;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
@@ -38,27 +38,27 @@ public class InspectionCertificateReportGeneratorTest {
 	
 	@Test
 	public void should_send_a_printable_inspection_to_the_cert_generateor() throws Exception {
-		Inspection printableInspection = createPrintableInspection();
+		Event printableEvent = createPrintableInspection();
 		
 		InspectionCertificateGenerator certGenerator = createMock(InspectionCertificateGenerator.class);
-		expect(certGenerator.generate(InspectionReportType.INSPECTION_CERT, printableInspection, null)).andReturn(null);
+		expect(certGenerator.generate(InspectionReportType.INSPECTION_CERT, printableEvent, null)).andReturn(null);
 		replay(certGenerator);
 		
 		InspectionCertificateReportGenerator sut = new InspectionCertificateReportGenerator(certGenerator);
 		
 		sut.setType(InspectionReportType.INSPECTION_CERT);
 		Transaction transaction = null;
-		sut.generate(new FluentArrayList<Inspection>(printableInspection), new NullOutputStream(), "packageName", transaction);
+		sut.generate(new FluentArrayList<Event>(printableEvent), new NullOutputStream(), "packageName", transaction);
 		
 		verify(certGenerator);
 	}
 
-	private Inspection createPrintableInspection() {
+	private Event createPrintableInspection() {
 		InspectionTypeGroup inspectionTypeGroup = createPrintableInspectionTypeGroup();
 		
 		InspectionType printableInspectionType = InspectionTypeBuilder.anInspectionType().withGroup(inspectionTypeGroup).build();
-		Inspection inspection = anInspection().ofType(printableInspectionType).build();
-		return inspection;
+		Event event = anEvent().ofType(printableInspectionType).build();
+		return event;
 	}
 
 	private InspectionTypeGroup createPrintableInspectionTypeGroup() {

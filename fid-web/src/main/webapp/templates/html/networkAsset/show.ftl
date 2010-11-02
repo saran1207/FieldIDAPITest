@@ -16,7 +16,7 @@
         </li>
         <li>
             <a href="<@s.url action="networkAssetEvents" namespace="/" uniqueID="${uniqueID}"/>">
-                <@s.text name="nav.inspections"/>
+                <@s.text name="nav.events"/>
             </a>
         </li>
         <li>

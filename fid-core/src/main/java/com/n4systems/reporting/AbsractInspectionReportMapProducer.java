@@ -9,13 +9,13 @@ import java.util.Map;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.n4systems.fieldid.certificate.model.InspectionImage;
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.State;
@@ -40,7 +40,7 @@ public abstract class AbsractInspectionReportMapProducer extends ReportMapProduc
 
 	protected abstract File imagePath(FileAttachment imageAttachment);
 		
-	protected abstract AbstractInspection getInspection();
+	protected abstract AbstractEvent getInspection();
 
 	
 	private void abstractInspectionParameters() {
@@ -217,14 +217,14 @@ public abstract class AbsractInspectionReportMapProducer extends ReportMapProduc
 		
 	}
 
-	protected ReportMap<Object> addProofTestInfoParams(Inspection inspection) {
+	protected ReportMap<Object> addProofTestInfoParams(Event event) {
 		ReportMap<Object> proofTestInfo = new ReportMap<Object>();
 		proofTestInfo.putEmpty("proofTest", "peakLoad", "testDuration", "peakLoadDuration");
-		if (inspection.getProofTestInfo() != null) {
-			proofTestInfo.put("peakLoad", inspection.getProofTestInfo().getPeakLoad());
-			proofTestInfo.put("testDuration", inspection.getProofTestInfo().getDuration());
-			proofTestInfo.put("chartPath", PathHandler.getChartImageFile(inspection).getAbsolutePath());
-			proofTestInfo.put("peakLoadDuration", inspection.getProofTestInfo().getPeakLoadDuration());
+		if (event.getProofTestInfo() != null) {
+			proofTestInfo.put("peakLoad", event.getProofTestInfo().getPeakLoad());
+			proofTestInfo.put("testDuration", event.getProofTestInfo().getDuration());
+			proofTestInfo.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
+			proofTestInfo.put("peakLoadDuration", event.getProofTestInfo().getPeakLoadDuration());
 		}
 		return proofTestInfo;
 	}

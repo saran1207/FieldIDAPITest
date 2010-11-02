@@ -14,7 +14,7 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.AssetMergeTask;
@@ -125,11 +125,11 @@ public class AssetMergeAction extends AbstractCrud {
 		return getAllInspectionHelper().getInspectionCount();
 	}
 
-	public List<Inspection> getInspections() {
+	public List<Event> getInspections() {
 		return getAllInspectionHelper().getInspections();
 	}
 
-	public Inspection getLastInspection() {
+	public Event getLastInspection() {
 		return getAllInspectionHelper().getLastInspection();
 	}
 	

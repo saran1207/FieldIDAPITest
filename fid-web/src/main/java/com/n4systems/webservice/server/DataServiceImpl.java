@@ -12,9 +12,14 @@ import java.util.Map.Entry;
 import javax.naming.NamingException;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.asset.AssetSubAssetsLoader;
 import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
 import com.n4systems.services.asset.AssetSaveService;
@@ -23,7 +28,7 @@ import org.apache.log4j.Logger;
 
 import rfid.util.PopulatorLogger;
 
-import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -43,20 +48,15 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.InspectionsInAGroupCreator;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
-import com.n4systems.model.AbstractInspection;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.SubInspection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.inspection.InspectionAttachmentSaver;
@@ -307,14 +307,14 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
-			QueryBuilder<InspectionBook> queryBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, securityFilter);
+			QueryBuilder<EventBook> queryBuilder = new QueryBuilder<EventBook>(EventBook.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 	
-			List<InspectionBook> inspectionBooks = null;
-			inspectionBooks = persistenceManager.findAll( queryBuilder );
+			List<EventBook> eventBooks = null;
+			eventBooks = persistenceManager.findAll( queryBuilder );
 			
-			for (InspectionBook inspectionBook : inspectionBooks) {
-				response.getInspectionBooks().add( converter.convert(inspectionBook) );
+			for (EventBook eventBook : eventBooks) {
+				response.getInspectionBooks().add( converter.convert(eventBook) );
 			}
 			
 			response.setCurrentPage(1);
@@ -721,12 +721,12 @@ public class DataServiceImpl implements DataService {
 		try {
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			InspectionSchedule inspectionSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
+			EventSchedule eventSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
 
 			new InspectionScheduleCreateHandler(new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())),
 					new FilteredIdLoader<Asset>(new TenantOnlySecurityFilter(request.getTenantId()), Asset.class),
 					new FilteredIdLoader<InspectionType>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionType.class),
-					new InspectionScheduleSaver()).createNewInspectionSchedule(inspectionSchedule, request.getScheduleService());
+					new InspectionScheduleSaver()).createNewInspectionSchedule(eventSchedule, request.getScheduleService());
 
 				
 		} catch (Exception e) {
@@ -1062,10 +1062,10 @@ public class DataServiceImpl implements DataService {
 			LegacyAsset productManager = ServiceLocator.getAssetManager();
 			InspectionScheduleManager scheduleManager = ServiceLocator.getInspectionScheduleManager();
 			
-			List<Inspection> inspections = new ArrayList<Inspection>();
+			List<Event> events = new ArrayList<Event>();
 //			Map<Inspection, AssetStatus> assetStatus = new HashMap<Inspection, AssetStatus>();
-			Map<Inspection, Date> nextInspectionDates = new HashMap<Inspection, Date>();
-			Map<Inspection, InspectionSchedule> inspectionSchedules = new HashMap<Inspection, InspectionSchedule>();
+			Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
+			Map<Event, EventSchedule> inspectionSchedules = new HashMap<Event, EventSchedule>();
 			Asset asset = null;
 			InspectionScheduleByGuidOrIdLoader scheduleLoader = new InspectionScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
 			for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
@@ -1086,21 +1086,21 @@ public class DataServiceImpl implements DataService {
 					}
 				}
 				
-				Inspection inspection = converter.convert(inspectionServiceDTO);
-				inspections.add( inspection );
-				nextInspectionDates.put(inspection, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
-				inspectionSchedules.put(inspection, loadScheduleFromInspectionDto(scheduleLoader,
+				Event event = converter.convert(inspectionServiceDTO);
+				events.add(event);
+				nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
+				inspectionSchedules.put(event, loadScheduleFromInspectionDto(scheduleLoader,
 						inspectionServiceDTO));				
 			}	
 		
-			List<Inspection> savedInspections = null;
+			List<Event> savedEvents = null;
 			
 			try {
 				InspectionPersistenceFactory inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
 				
 				InspectionsInAGroupCreator inspectionsInAGroupCreator = inspectionPersistenceFactory.createInspectionsInAGroupCreator();
 				
-				savedInspections = inspectionsInAGroupCreator.create( requestInformation.getMobileGuid(), inspections, nextInspectionDates);
+				savedEvents = inspectionsInAGroupCreator.create( requestInformation.getMobileGuid(), events, nextInspectionDates);
 				logger.info( "save inspections on asset " + asset.getSerialNumber() );
 				populatorLogger.logMessage(tenantId, "Created inspection for asset with serial number "+ asset.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
 			} catch ( TransactionAlreadyProcessedException e) {
@@ -1111,11 +1111,11 @@ public class DataServiceImpl implements DataService {
 				throw new InspectionException("Failed to save inspections");
 			}
 			
-			if (savedInspections != null) {
-				for (Inspection savedInspection : savedInspections) {
-					for (Entry<Inspection, InspectionSchedule> scheduleEntry : inspectionSchedules.entrySet()) {
-						if (savedInspection.equals(scheduleEntry.getKey())) {
-							InspectionSchedule schedule = scheduleEntry.getValue();
+			if (savedEvents != null) {
+				for (Event savedEvent : savedEvents) {
+					for (Entry<Event, EventSchedule> scheduleEntry : inspectionSchedules.entrySet()) {
+						if (savedEvent.equals(scheduleEntry.getKey())) {
+							EventSchedule schedule = scheduleEntry.getValue();
 							try {
 								if (schedule != null) {
 									schedule.completed(scheduleEntry.getKey());
@@ -1123,10 +1123,10 @@ public class DataServiceImpl implements DataService {
 								}
 							} catch (InvalidScheduleStateException e) {
 								logger.warn("the state of the schedule is not valid to be completed.");
-								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "+savedInspection.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "+ savedEvent.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
 							} catch (Exception e) {
 								logger.error("failed to attach schedule to inspection", e);
-								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "+savedInspection.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "+ savedEvent.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
 								// We allow the inspection to still go through even if this happens
 							}
 							
@@ -1148,7 +1148,7 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 
-	private InspectionSchedule loadScheduleFromInspectionDto(
+	private EventSchedule loadScheduleFromInspectionDto(
 			InspectionScheduleByGuidOrIdLoader scheduleLoader,
 			InspectionServiceDTO inspectionServiceDTO) {
 		return scheduleLoader.setId(inspectionServiceDTO.getInspectionScheduleId()).setMobileGuid(inspectionServiceDTO.getInspectionScheduleMobileGuid()).load();
@@ -1179,29 +1179,29 @@ public class DataServiceImpl implements DataService {
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());
 			
 			//1. find out inspection using inspection Mobile Guid
-			AbstractInspection targetInspection;
+			AbstractEvent targetEvent;
 			if (inspectionImageServiceDTO.isFromSubInspection()) {
-				InspectionByMobileGuidLoader<SubInspection> loader = new InspectionByMobileGuidLoader<SubInspection>(new TenantOnlySecurityFilter(tenantId), SubInspection.class);
-				SubInspection subInspection = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
+				InspectionByMobileGuidLoader<SubEvent> loader = new InspectionByMobileGuidLoader<SubEvent>(new TenantOnlySecurityFilter(tenantId), SubEvent.class);
+				SubEvent subEvent = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
 				
 				InspectionBySubInspectionLoader masterInspectionLoader = new InspectionBySubInspectionLoader();
-				masterInspectionLoader.setSubInspection(subInspection);
-				Inspection masterInspection = masterInspectionLoader.load();
+				masterInspectionLoader.setSubInspection(subEvent);
+				Event masterEvent = masterInspectionLoader.load();
 				
-				attachmentSaver.setInspection(masterInspection);
-				attachmentSaver.setSubInspection(subInspection);
+				attachmentSaver.setInspection(masterEvent);
+				attachmentSaver.setSubInspection(subEvent);
 
-				targetInspection = subInspection;
+				targetEvent = subEvent;
 			} else {
-				InspectionByMobileGuidLoader<Inspection> loader = new InspectionByMobileGuidLoader<Inspection>(new TenantOnlySecurityFilter(tenantId), Inspection.class);
-				Inspection inspection = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
+				InspectionByMobileGuidLoader<Event> loader = new InspectionByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(tenantId), Event.class);
+				Event event = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
 				
-				attachmentSaver.setInspection(inspection);
+				attachmentSaver.setInspection(event);
 				
-				targetInspection = inspection;
+				targetEvent = event;
 			}
 			
-			FileAttachment newFileAttachment = converter.convert(targetInspection, inspectionImageServiceDTO, performedBy);
+			FileAttachment newFileAttachment = converter.convert(targetEvent, inspectionImageServiceDTO, performedBy);
 			attachmentSaver.save(newFileAttachment);
 				
 		} catch (Exception e) {
@@ -1311,19 +1311,19 @@ public class DataServiceImpl implements DataService {
 			InspectionListResponse response = new InspectionListResponse();
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			InspectionManager inspectionManager = ServiceLocator.getInspectionManager();
+			EventManager eventManager = ServiceLocator.getInspectionManager();
 			
 			int INSPECTIONS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_INSPECTIONS);
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
 	
-			Pager<Inspection> inspections = null;			
+			Pager<Event> inspections = null;
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
-				inspections = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
-				for( Inspection inspection : inspections.getList() ) {
-					response.getInspections().add(converter.convert(inspection));
+				inspections = eventManager.findNewestEvents( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
+				for( Event event : inspections.getList() ) {
+					response.getInspections().add(converter.convert(event));
 				}
 			} else {
-				inspections = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), OLD_FIRST_PAGE, INSPECTIONS_PER_PAGE );
+				inspections = eventManager.findNewestEvents( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), OLD_FIRST_PAGE, INSPECTIONS_PER_PAGE );
 			}
 			
 			response.setCurrentPage(CURRENT_PAGE);
@@ -1377,14 +1377,14 @@ public class DataServiceImpl implements DataService {
 			NewestInspectionsForAssetIdLoader loader = new NewestInspectionsForAssetIdLoader(filter);
 			RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(loader);
 			
-			List<Inspection> inspections = lookupHandler
+			List<Event> events = lookupHandler
 											.setProductId(requestInformation.getProductId())
 											.setLastInspectionDate(requestInformation.getLastInspectionDate())
 											.lookup();
 			
 			FindInspectionResponse response = new FindInspectionResponse();
-			for (Inspection inspection : inspections) {
-				response.getInspections().add(converter.convert(inspection));
+			for (Event event : events) {
+				response.getInspections().add(converter.convert(event));
 			}
 						
 			return response;
@@ -1473,7 +1473,7 @@ public class DataServiceImpl implements DataService {
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
 			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
-			QueryBuilder<InspectionSchedule> queryBuilder = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, securityFilter);
+			QueryBuilder<EventSchedule> queryBuilder = new QueryBuilder<EventSchedule>(EventSchedule.class, securityFilter);
 					
 			if (searchCriteria.getJobIds() != null && searchCriteria.getJobIds().size() > 0) {
 				queryBuilder.addWhere(WhereParameter.Comparator.IN, "project_id", "project.id", searchCriteria.getJobIds());
@@ -1489,11 +1489,11 @@ public class DataServiceImpl implements DataService {
 			
 			
 			
-			Pager<InspectionSchedule> schedulePage = null;
+			Pager<EventSchedule> schedulePage = null;
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
 				schedulePage = persistenceManager.findAllPaged(queryBuilder, CURRENT_PAGE, PRODUCTS_PER_PAGE);
 				
-				for(InspectionSchedule schedule : schedulePage.getList()) {
+				for(EventSchedule schedule : schedulePage.getList()) {
 					
 					response.getProducts().add( converter.convert(schedule.getAsset()) );
 					
@@ -1533,19 +1533,19 @@ public class DataServiceImpl implements DataService {
 			InspectionListResponse response = new InspectionListResponse();
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			InspectionManager inspectionManager = ServiceLocator.getInspectionManager();
+			EventManager eventManager = ServiceLocator.getInspectionManager();
 			
 			int INSPECTIONS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_INSPECTIONS);
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
 	
-			Pager<Inspection> inspections = null;			
+			Pager<Event> inspections = null;
 			if (CURRENT_PAGE != PaginatedRequestInformation.INFORMATION_PAGE) {
-				inspections = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
-				for( Inspection inspection : inspections.getList() ) {
-					response.getInspections().add(converter.convert(inspection));
+				inspections = eventManager.findNewestEvents( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), CURRENT_PAGE, INSPECTIONS_PER_PAGE );
+				for( Event event : inspections.getList() ) {
+					response.getInspections().add(converter.convert(event));
 				}
 			} else {
-				inspections = inspectionManager.findNewestInspections( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), OLD_FIRST_PAGE, INSPECTIONS_PER_PAGE );
+				inspections = eventManager.findNewestEvents( searchCriteria, new TenantOnlySecurityFilter(requestInformation.getTenantId()), OLD_FIRST_PAGE, INSPECTIONS_PER_PAGE );
 			}
 			
 			response.setCurrentPage(CURRENT_PAGE);
@@ -1605,7 +1605,7 @@ public class DataServiceImpl implements DataService {
 			Date convertedNextDate = DtoDateConverter.convertStringToDate(request.getNextDate());
 			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(request.getTenantId());
 			
-			CompletedScheduleCreator scheduleCreator = new CompletedScheduleCreator(new InspectionByMobileGuidLoader<Inspection>(filter, Inspection.class), 
+			CompletedScheduleCreator scheduleCreator = new CompletedScheduleCreator(new InspectionByMobileGuidLoader<Event>(filter, Event.class),
 															new InspectionScheduleSaver(), new FilteredIdLoader<Project>(filter, Project.class));
 			scheduleCreator.create(request.getInspectionMobileGuid(), convertedNextDate, request.getJobId());
 		} catch (InspectionNotFoundException e) {

@@ -1,12 +1,12 @@
 package com.n4systems.model.safetynetwork;
 
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 
 import javax.persistence.EntityManager;
 
-public class SafetyNetworkRegisteredOrAssignedInspectionLoader extends SecurityFilteredLoader<Inspection> {
+public class SafetyNetworkRegisteredOrAssignedInspectionLoader extends SecurityFilteredLoader<Event> {
 
     private SafetyNetworkRegisteredAssetInspectionLoader registeredLoader;
     private SafetyNetworkAssignedAssetInspectionLoader assignedLoader;
@@ -18,7 +18,7 @@ public class SafetyNetworkRegisteredOrAssignedInspectionLoader extends SecurityF
     }
 
     @Override
-    protected Inspection load(EntityManager em, SecurityFilter filter) {
+    protected Event load(EntityManager em, SecurityFilter filter) {
         try {
             return registeredLoader.load();
         } catch (SecurityException e) { }

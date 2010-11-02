@@ -3,7 +3,7 @@ package com.n4systems.services;
 import java.util.List;
 
 import com.n4systems.ejb.InspectionScheduleManager;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.util.DateHelper;
 
 public class ManagerBackedNextInspectionScheduleService implements NextInspectionScheduleSerivce {
@@ -23,22 +23,22 @@ public class ManagerBackedNextInspectionScheduleService implements NextInspectio
 	 * for the contained asset and inspection type it will simply return that one.
 	 * @return The newly created schedule, or the already existing one.
 	 */
-	public InspectionSchedule createNextSchedule(InspectionSchedule schedule) {
+	public EventSchedule createNextSchedule(EventSchedule schedule) {
 		
-		InspectionSchedule inspectionSchedule = findExistingSchedule(schedule);
+		EventSchedule eventSchedule = findExistingSchedule(schedule);
 		
-		if (inspectionSchedule == null) {
-			inspectionSchedule = inspectionScheduleManager.update(schedule);
+		if (eventSchedule == null) {
+			eventSchedule = inspectionScheduleManager.update(schedule);
 		}
 		
-		return inspectionSchedule;
+		return eventSchedule;
 	}
 
 
-	private InspectionSchedule findExistingSchedule(InspectionSchedule newSchedule) {
-		List<InspectionSchedule> upcomingSchedules = inspectionScheduleManager.getAvailableSchedulesFor(newSchedule.getAsset());
+	private EventSchedule findExistingSchedule(EventSchedule newSchedule) {
+		List<EventSchedule> upcomingSchedules = inspectionScheduleManager.getAvailableSchedulesFor(newSchedule.getAsset());
 		
-		for (InspectionSchedule upcomingSchedule : upcomingSchedules) {
+		for (EventSchedule upcomingSchedule : upcomingSchedules) {
 			if (DateHelper.isEqualIgnoringTime(upcomingSchedule.getNextDate(), newSchedule.getNextDate()) 
 					&& upcomingSchedule.getInspectionType().equals(newSchedule.getInspectionType())) {
 				return upcomingSchedule;

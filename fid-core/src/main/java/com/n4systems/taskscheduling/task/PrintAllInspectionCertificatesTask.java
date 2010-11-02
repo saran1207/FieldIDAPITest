@@ -13,7 +13,7 @@ import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.mail.MailManager;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetInspectionLoader;
@@ -67,16 +67,16 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
 	}
 
 	private void generateReport(User user, File downloadFile, String downloadName, Transaction transaction) throws IOException, UnsupportedEncodingException, NonPrintableEventType, ReportException {
-		List<Inspection> inspections = loadInspections(user, transaction);
+		List<Event> events = loadInspections(user, transaction);
 		reportGen.setType(reportType);
 		
-		reportGen.generate(inspections, new FileOutputStream(downloadFile), downloadName, transaction);
+		reportGen.generate(events, new FileOutputStream(downloadFile), downloadName, transaction);
 	}
 
 	
 
-	private List<Inspection> loadInspections(User user, Transaction transaction) {
-		return new LazyLoadingList<Inspection>(inspectionIds, inspectionLoader, transaction);
+	private List<Event> loadInspections(User user, Transaction transaction) {
+		return new LazyLoadingList<Event>(inspectionIds, inspectionLoader, transaction);
 	}
 
 	public void setInspectionIds(List<Long> inspectionIds) {

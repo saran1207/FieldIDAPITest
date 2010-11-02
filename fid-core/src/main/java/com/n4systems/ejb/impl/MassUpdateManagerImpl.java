@@ -23,11 +23,11 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
-import com.n4systems.model.InspectionSchedule.ScheduleStatusGrouping;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
@@ -59,7 +59,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		this.assetManager = new AssetManagerImpl(em);
 	}
 
-	public Long updateInspectionSchedules(Set<Long> scheduleIds, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException {
+	public Long updateInspectionSchedules(Set<Long> scheduleIds, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
 		if (scheduleIds.size() == 0) {
 			return 0L;
 		}
@@ -71,7 +71,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			// this date will be used to updated the modified time of our
 			// entities
 			Date modDate = new Date();
-			updateJpql = "UPDATE " + InspectionSchedule.class.getName() + " SET modified = :modDate";
+			updateJpql = "UPDATE " + EventSchedule.class.getName() + " SET modified = :modDate";
 
 			Map<String, Object> bindParams = new HashMap<String, Object>();
 
@@ -85,19 +85,19 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 				if (paramKey.equals("nextDate")) {
 					updateJpql += ", nextDate = :" + paramKey;
-					bindParams.put(paramKey, inspectionSchedule.getNextDate());
+					bindParams.put(paramKey, eventSchedule.getNextDate());
 				}
 
 				if (paramKey.equals("location")) {
 					updateJpql += ", advancedLocation.freeformLocation = :" + paramKey + "_freeform";
 					updateJpql += ", advancedLocation.predefinedLocation = :" + paramKey + "_predefined";
-					bindParams.put(paramKey + "_freeform", inspectionSchedule.getAdvancedLocation().getFreeformLocation());
-					bindParams.put(paramKey + "_predefined", inspectionSchedule.getAdvancedLocation().getPredefinedLocation());
+					bindParams.put(paramKey + "_freeform", eventSchedule.getAdvancedLocation().getFreeformLocation());
+					bindParams.put(paramKey + "_predefined", eventSchedule.getAdvancedLocation().getPredefinedLocation());
 				}
 				
 				if (paramKey.equals("owner")) {
 					updateJpql += ", owner = :owner ";
-					bindParams.put("owner", inspectionSchedule.getOwner());
+					bindParams.put("owner", eventSchedule.getOwner());
 				}
 
 			}
@@ -141,7 +141,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		// after we delete.
 		modifyAssetsForSchedules(incompleteSchedules);
 		
-		String deleteStmt = String.format("DELETE from %s WHERE id IN (:ids)", InspectionSchedule.class.getName());
+		String deleteStmt = String.format("DELETE from %s WHERE id IN (:ids)", EventSchedule.class.getName());
 		
 		LargeInListQueryExecutor deleteRunner = new LargeInListQueryExecutor();
 		int removeCount = deleteRunner.executeUpdate(em.createQuery(deleteStmt), ListHelper.toList(incompleteSchedules));
@@ -150,7 +150,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	}
 
 	private Set<Long> getIncompleteSchedules(Set<Long> scheduleIds) {
-		QueryBuilder<Long> incompleteScheduleBuilder = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Long> incompleteScheduleBuilder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		incompleteScheduleBuilder.setSimpleSelect("id", true);
 		incompleteScheduleBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "status", Arrays.asList(ScheduleStatusGrouping.NON_COMPLETE.getMembers())));
 		
@@ -164,7 +164,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	}
 
 	private void modifyAssetsForSchedules(Set<Long> scheduleIds) {
-		QueryBuilder<Long> assetIdQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Long> assetIdQuery = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		assetIdQuery.setSimpleSelect("asset.id", true);
 		assetIdQuery.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
 		
@@ -239,7 +239,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 	}
 
-	public Long updateInspections(List<Long> ids, Inspection inspectionChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {
+	public Long updateInspections(List<Long> ids, Event eventChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {
 		if (ids.isEmpty()) {
 			return 0L;
 		}
@@ -249,31 +249,31 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		Set<String> updateKeys = getEnabledKeys(fieldMap);
 		
 		boolean ownershipChanged = false;
-		Inspection changeTarget;
+		Event changeTarget;
 		for (Long id: ids) {
-			changeTarget = persistenceManager.find(Inspection.class, id);
+			changeTarget = persistenceManager.find(Event.class, id);
 			
 			for (String updateKey: updateKeys) {
 				if (updateKey.equals("owner")) {
 					ownershipChanged = true;
-					changeTarget.setOwner(inspectionChanges.getOwner());
+					changeTarget.setOwner(eventChanges.getOwner());
 				}
 				
 				if (updateKey.equals("inspectionBook")) {
-					changeTarget.setBook(inspectionChanges.getBook());
+					changeTarget.setBook(eventChanges.getBook());
 				}
 
 				if (updateKey.equals("location")) {
 					ownershipChanged = true;
-					changeTarget.setAdvancedLocation(inspectionChanges.getAdvancedLocation());
+					changeTarget.setAdvancedLocation(eventChanges.getAdvancedLocation());
 				}
 
 				if (updateKey.equals("printable")) {
-					changeTarget.setPrintable(inspectionChanges.isPrintable());
+					changeTarget.setPrintable(eventChanges.isPrintable());
 				}
 				
 				if (updateKey.equals("assetStatus")) {
-					changeTarget.setAssetStatus(inspectionChanges.getAssetStatus());
+					changeTarget.setAssetStatus(eventChanges.getAssetStatus());
 				}
 			}
 			
@@ -281,20 +281,20 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 			
 		if (ownershipChanged) {
-			updateCompletedInspectionOwnership(ids, inspectionChanges, fieldMap);
+			updateCompletedInspectionOwnership(ids, eventChanges, fieldMap);
 		}
 
 		return new Long(ids.size());
 	}
 
-	private void updateCompletedInspectionOwnership(List<Long> ids, Inspection inspection, Map<String, Boolean> fieldMap) throws UpdateFailureException {
-		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "inspections", "inspection.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
+	private void updateCompletedInspectionOwnership(List<Long> ids, Event event, Map<String, Boolean> fieldMap) throws UpdateFailureException {
+		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "inspections", "inspection.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
 		
 		Map<String, Boolean> selectedAttributes = getOwnershipSelectedAttributes(fieldMap);
 		
-		InspectionSchedule schedule = new InspectionSchedule();
+		EventSchedule schedule = new EventSchedule();
 		
-		schedule.completed(inspection);
+		schedule.completed(event);
 		
 		updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
 	}
@@ -325,7 +325,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 		
 		try {
-			String updateQueryString = "UPDATE " + InspectionSchedule.class.getName() + " SET modified = :now ";
+			String updateQueryString = "UPDATE " + EventSchedule.class.getName() + " SET modified = :now ";
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("now", new Date());
 			if (project == null) {
@@ -359,25 +359,25 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	}
 
 	public List<Long> createSchedulesForInspections(List<Long> inspectionIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
-		QueryBuilder<Inspection> query = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
+		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 		query.addWhere(Comparator.IN, "ids", "id", inspectionIds).addLeftJoin("schedule", "schedule").addWhere(Comparator.NULL, "scheduleId", "schedule.id", "true").addOrder("id");
 		int page = 1;
 		int pageSize = 100;
 
-		Pager<Inspection> inspections = null;
+		Pager<Event> inspections = null;
 
 		do {
 			inspections = persistenceManager.findAllPaged(query, page, pageSize);
-			for (Inspection inspection : inspections.getList()) {
-				InspectionSchedule schedule = new InspectionSchedule(inspection);
+			for (Event event : inspections.getList()) {
+				EventSchedule schedule = new EventSchedule(event);
 				new InspectionScheduleServiceImpl(persistenceManager).createSchedule(schedule);
 			}
 			page++;
 		} while (inspections.isHasNextPage());
 
-		QueryBuilder<Long> scheduleQuery = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Long> scheduleQuery = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		scheduleQuery.setSimpleSelect("id");
-		scheduleQuery.addWhere(Comparator.IN, "ids", "inspection.id", inspectionIds).addOrder("id");
+		scheduleQuery.addWhere(Comparator.IN, "ids", "event.id", inspectionIds).addOrder("id");
 		try {
 			return persistenceManager.findAll(scheduleQuery);
 		} catch (InvalidQueryException e) {

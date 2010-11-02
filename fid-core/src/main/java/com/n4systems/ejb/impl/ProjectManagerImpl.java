@@ -11,8 +11,8 @@ import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityDefiner;
@@ -79,13 +79,13 @@ public class ProjectManagerImpl implements ProjectManager {
 		return new Page<Asset>(selectQuery, countQuery, page, pageSize);
 	}
 	
-	public Pager<InspectionSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<InspectionSchedule.ScheduleStatus> statuses ) {
+	public Pager<EventSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<EventSchedule.ScheduleStatus> statuses ) {
 		Query countQuery = scheduleCountQuery(project, filter, statuses);
 		Query selectQuery = scheduleSelectQuery(project, filter, statuses);
-		return new Page<InspectionSchedule>(selectQuery, countQuery, page, pageSize);
+		return new Page<EventSchedule>(selectQuery, countQuery, page, pageSize);
 	}
 	
-	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<InspectionSchedule.ScheduleStatus> statuses) {
+	private Query scheduleCountQuery(Project project, SecurityFilter userFilter, List<EventSchedule.ScheduleStatus> statuses) {
 		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "schedule");
 		String countQueryStr = "SELECT count( schedule ) FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project and " + filter.produceWhereClause();
 		
@@ -103,13 +103,13 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	private ManualSecurityFilter createManualSecurityFilter(SecurityFilter userFilter, String scheduleTablePrefix) {
-		SecurityDefiner securityDefiner = InspectionSchedule.createSecurityDefiner();
+		SecurityDefiner securityDefiner = EventSchedule.createSecurityDefiner();
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
 		filter.setTargets(scheduleTablePrefix + "." + securityDefiner.getTenantPath(), scheduleTablePrefix + "." + securityDefiner.getOwnerPath(), null, scheduleTablePrefix + "." + securityDefiner.getStatePath());
 		return filter;
 	}
 	
-	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<InspectionSchedule.ScheduleStatus> statuses) {
+	private Query scheduleSelectQuery(Project project, SecurityFilter userFilter, List<EventSchedule.ScheduleStatus> statuses) {
 		ManualSecurityFilter filter = createManualSecurityFilter(userFilter, "schedule");
 		String queryStr = "SELECT schedule FROM " + Project.class.getName() + " p , IN( p.schedules ) schedule where p = :project AND " + filter.produceWhereClause();
 		if (statuses != null && !statuses.isEmpty()) {

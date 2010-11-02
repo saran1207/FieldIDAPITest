@@ -1,7 +1,7 @@
 package com.n4systems.webservice.server;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
@@ -27,15 +27,15 @@ public class InspectionScheduleCreateHandler {
 		this.saver = saver;
 	}
 
-	public void createNewInspectionSchedule(InspectionSchedule inspectionSchedule, InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
-		inspectionSchedule.setAsset(loadProduct(inspectionSchedule, inspectionScheduleServiceDTO));
+	public void createNewInspectionSchedule(EventSchedule eventSchedule, InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
+		eventSchedule.setAsset(loadProduct(eventSchedule, inspectionScheduleServiceDTO));
 		
-		inspectionSchedule.setInspectionType(loadInspectionType(inspectionSchedule, inspectionScheduleServiceDTO));
+		eventSchedule.setInspectionType(loadInspectionType(eventSchedule, inspectionScheduleServiceDTO));
 		
-		saver.saveOrUpdate(inspectionSchedule);
+		saver.saveOrUpdate(eventSchedule);
 	}
 
-	private Asset loadProduct(InspectionSchedule inspectionSchedule,
+	private Asset loadProduct(EventSchedule eventSchedule,
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		
 		Asset asset;
@@ -48,7 +48,7 @@ public class InspectionScheduleCreateHandler {
 		return asset;
 	}
 	
-	private InspectionType loadInspectionType(InspectionSchedule inspectionSchedule,
+	private InspectionType loadInspectionType(EventSchedule eventSchedule,
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		return inspectionTypeLoader.setId(inspectionScheduleServiceDTO.getInspectionTypeId()).load();
 		

@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +26,6 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.AssetType;
@@ -119,8 +119,8 @@ public class ServiceDTOBeanConverterImplTest {
 		Order customerOrder = new Order();
 		customerOrder.setId( 2L );
 				
-		Set<InspectionSchedule> schedules = new HashSet<InspectionSchedule>();
-		schedules.add( new InspectionSchedule() );
+		Set<EventSchedule> schedules = new HashSet<EventSchedule>();
+		schedules.add( new EventSchedule() );
 		
 				
 		User modifiedBy = new User();

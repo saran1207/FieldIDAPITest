@@ -11,7 +11,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
 
-import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
@@ -19,7 +19,7 @@ import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
@@ -34,7 +34,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
 	private static final long serialVersionUID = 1L;
 	
-	private final InspectionManager inspectionManager;
+	private final EventManager eventManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	
 	private OwnerPicker ownerPicker;
@@ -43,24 +43,24 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	
 	public InspectionScheduleAction(
 			final PersistenceManager persistenceManager, 
-			final InspectionManager inspectionManager, 
+			final EventManager eventManager,
 			final AssetManager assetManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
-		this(SCHEDULE_CRITERIA, InspectionScheduleAction.class, persistenceManager, inspectionManager, assetManager, inspectionScheduleManager);
+		this(SCHEDULE_CRITERIA, InspectionScheduleAction.class, persistenceManager, eventManager, assetManager, inspectionScheduleManager);
 	}
 	
 	
 	public <T extends CustomizableSearchAction<InspectionScheduleSearchContainer>>InspectionScheduleAction(String sessionKey, Class<T> implementingClass,
 			final PersistenceManager persistenceManager, 
-			final InspectionManager inspectionManager, 
+			final EventManager eventManager,
 			final AssetManager assetManager,
 			final InspectionScheduleManager inspectionScheduleManager) {
 		
 		super(implementingClass, sessionKey, "Inspection Schedule Report", persistenceManager, 
 				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "inspection_schedule_search", "asset"));
 		
-		this.inspectionManager = inspectionManager;
+		this.eventManager = eventManager;
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		
 	}
@@ -142,8 +142,8 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 		return employees;
 	}
 	
-	public Date getLastInspectionDate(InspectionSchedule schedule) {
-		return inspectionManager.findLastInspectionDate(schedule);
+	public Date getLastInspectionDate(EventSchedule schedule) {
+		return eventManager.findLastEventDate(schedule);
 	}
 	
 	public Long getAssetIdForInspectionScheduleId(String inspectionScheduleId) {

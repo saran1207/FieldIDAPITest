@@ -1,6 +1,6 @@
 package com.n4systems.reporting;
 
-import static com.n4systems.model.builders.InspectionBuilder.*;
+import static com.n4systems.model.builders.EventBuilder.*;
 import static com.n4systems.model.builders.OrgBuilder.*;
 
 import static org.junit.Assert.*;
@@ -11,15 +11,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import com.n4systems.ejb.EventManager;
+import com.n4systems.model.Event;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
@@ -36,28 +36,28 @@ public class InspectionSummaryGeneratorTest {
 	private DateTimeDefiner dateDefiner = new DateTimeDefiner("yyyy-MM-dd", TimeZone.getDefault());
 	private ReportDefiner reportDefiner;
 	private PersistenceManager persistenceManager;
-	private InspectionManager inspectionManager;
+	private EventManager eventManager;
 	private User user;
 	
 	@Before
 	public void setUp() {
 		reportDefiner = createMock(ReportDefiner.class);
 		persistenceManager = createMock(PersistenceManager.class);
-		inspectionManager = createMock(InspectionManager.class);
+		eventManager = createMock(EventManager.class);
 		user = UserBuilder.aUser().createObject();
 	}
 	
 	@Test
 	public void generate_inspection_summary() throws Exception {
-		final Inspection printableInspection = createPrintableInspection();
+		final Event printableEvent = createPrintableInspection();
 		
-		setReportDefinerExpectations(printableInspection);
+		setReportDefinerExpectations(printableEvent);
 		
-		InspectionSummaryGenerator generator = new InspectionSummaryGenerator(dateDefiner, persistenceManager, inspectionManager) {
+		InspectionSummaryGenerator generator = new InspectionSummaryGenerator(dateDefiner, persistenceManager, eventManager) {
 			@Override
 			protected List<Long> getSearchIds(ReportDefiner reportDefiner,
 					User user) {
-				return Arrays.asList(printableInspection.getId());
+				return Arrays.asList(printableEvent.getId());
 			}
 
 			@Override
@@ -69,10 +69,10 @@ public class InspectionSummaryGeneratorTest {
 		JasperPrint jp = generator.generate(reportDefiner, user);
 		assertNotNull(jp);
 		verify(reportDefiner);
-		verify(inspectionManager);
+		verify(eventManager);
 	}
 
-	private void setReportDefinerExpectations(Inspection inspection) {
+	private void setReportDefinerExpectations(Event event) {
 		expect(reportDefiner.getSerialNumber()).andReturn("");
 		expect(reportDefiner.getRfidNumber()).andReturn("");
 		expect(reportDefiner.getOrderNumber()).andReturn("");
@@ -86,16 +86,16 @@ public class InspectionSummaryGeneratorTest {
 		expect(reportDefiner.getOwner()).andReturn(null);
 		replay(reportDefiner);
 		
-		expect(inspectionManager.findAllFields(eq(inspection.getId()), isA(SecurityFilter.class))).andReturn(inspection);
-		replay(inspectionManager);
+		expect(eventManager.findAllFields(eq(event.getId()), isA(SecurityFilter.class))).andReturn(event);
+		replay(eventManager);
 	}
 
-	private Inspection createPrintableInspection() {
+	private Event createPrintableInspection() {
 		InspectionTypeGroup inspectionTypeGroup = createPrintableInspectionTypeGroup();
 				
 		InspectionType printableInspectionType = InspectionTypeBuilder.anInspectionType().withGroup(inspectionTypeGroup).build();
-		Inspection inspection = anInspection().ofType(printableInspectionType).build();
-		return inspection;
+		Event event = anEvent().ofType(printableInspectionType).build();
+		return event;
 	}
 	
 	private InspectionTypeGroup createPrintableInspectionTypeGroup() {

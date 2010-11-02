@@ -9,7 +9,7 @@ import com.n4systems.api.validation.validators.InspectionViewValidator;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.persistence.Transaction;
 
 public class InspectionImporter extends AbstractImporter<InspectionView> {
@@ -30,11 +30,11 @@ public class InspectionImporter extends AbstractImporter<InspectionView> {
 
 	@Override
 	protected void importView(Transaction transaction, InspectionView view) throws ConversionException {
-		Inspection inspection = converter.toModel(view, transaction);
+		Event event = converter.toModel(view, transaction);
 		
 		try {
 			inspectionPersistenceFactory.createInspectionCreator().create(
-						new CreateInspectionParameterBuilder(inspection, modifiedBy)
+						new CreateInspectionParameterBuilder(event, modifiedBy)
 							.withANextInspectionDate(view.getNextInspectionDateAsDate())
 							.doNotCalculateInspectionResult()
 							.build());

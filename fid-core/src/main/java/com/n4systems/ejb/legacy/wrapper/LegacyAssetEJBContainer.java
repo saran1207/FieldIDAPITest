@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
@@ -16,7 +17,6 @@ import rfid.ejb.entity.AssetStatus;
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
@@ -132,7 +132,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Inspection findLastInspections(Asset asset, SecurityFilter securityFilter) {
+	public Event findLastInspections(Asset asset, SecurityFilter securityFilter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

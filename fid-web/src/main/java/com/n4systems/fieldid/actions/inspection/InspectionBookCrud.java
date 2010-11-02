@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.inspection;
 
 import java.util.List;
 
+import com.n4systems.model.EventBook;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -14,8 +15,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
+import com.n4systems.model.Event;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -34,12 +34,12 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	private static final Logger logger = Logger.getLogger(InspectionBookCrud.class);
 
 
-	private InspectionBook book;
+	private EventBook book;
 
 	private boolean withClosed;
 	private List<ListingPair> books;
 
-	private Pager<InspectionBook> page;
+	private Pager<EventBook> page;
 
 	private OwnerPicker ownerPicker;
 	
@@ -49,12 +49,12 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 	@Override
 	protected void initMemberFields() {
-		book = new InspectionBook();
+		book = new EventBook();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		book = persistenceManager.find(InspectionBook.class, uniqueId, getTenant());
+		book = persistenceManager.find(EventBook.class, uniqueId, getTenant());
 	}
 	
 	
@@ -67,7 +67,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 
 	@SkipValidation
 	public String doList() {
-		QueryBuilder<InspectionBook> queryBuilder = new QueryBuilder<InspectionBook>(InspectionBook.class, new OpenSecurityFilter());
+		QueryBuilder<EventBook> queryBuilder = new QueryBuilder<EventBook>(EventBook.class, new OpenSecurityFilter());
 
 		queryBuilder.applyFilter(getSecurityFilter());
 		queryBuilder.addOrder("name");
@@ -198,7 +198,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 			return MISSING;
 		}
 
-		QueryBuilder<Inspection> builder = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
+		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 
 		builder.setCountSelect();
 		builder.addSimpleWhere("book", book);
@@ -218,11 +218,11 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 		return SUCCESS;
 	}
 
-	public InspectionBook getBook() {
+	public EventBook getBook() {
 		return book;
 	}
 
-	public Pager<InspectionBook> getPage() {
+	public Pager<EventBook> getPage() {
 		return page;
 	}
 	
@@ -245,7 +245,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	}
 	
 	public boolean duplicateValueExists(String formValue) {
-		return !persistenceManager.uniqueNameAvailableWithCustomer(InspectionBook.class, formValue, uniqueID, getTenantId(), getOwnerId());
+		return !persistenceManager.uniqueNameAvailableWithCustomer(EventBook.class, formValue, uniqueID, getTenantId(), getOwnerId());
 	}
 
 	public void setWithClosed(boolean withClosed) {

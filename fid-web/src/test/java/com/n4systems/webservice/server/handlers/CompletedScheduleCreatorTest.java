@@ -1,18 +1,18 @@
 package com.n4systems.webservice.server.handlers;
 
-import static com.n4systems.model.builders.InspectionBuilder.anInspection;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
 import static com.n4systems.model.builders.JobBuilder.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import org.junit.Test;
 
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Project;
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -22,7 +22,7 @@ import com.n4systems.webservice.server.InspectionNotFoundException;
 
 public class CompletedScheduleCreatorTest {
 
-	private final Inspection inspection = anInspection().build();
+	private final Event event = anEvent().build();
 	private final Project job = aJob().build();
 	
 	@Test
@@ -32,7 +32,7 @@ public class CompletedScheduleCreatorTest {
 		CompletedScheduleCreator sut = new CompletedScheduleCreator(testableInspectionLoader(), saver, testableJobLoader());
 		sut.create("SOME GUID", new Date(), 1L);
 		
-		assertEquals(inspection, saver.getSavedSchedule().getInspection());
+		assertEquals(event, saver.getSavedSchedule().getEvent());
 	}
 	
 	@Test
@@ -77,21 +77,21 @@ public class CompletedScheduleCreatorTest {
 		sut.create("SOME GUID", new Date(), 1L);		
 	}
 	
-	private InspectionByMobileGuidLoader<Inspection> testableInspectionLoader() {
-		InspectionByMobileGuidLoader<Inspection> loader = new InspectionByMobileGuidLoader<Inspection>(new TenantOnlySecurityFilter(1L), Inspection.class) {
+	private InspectionByMobileGuidLoader<Event> testableInspectionLoader() {
+		InspectionByMobileGuidLoader<Event> loader = new InspectionByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(1L), Event.class) {
 			@Override
-			public Inspection load() {
-				return inspection;
+			public Event load() {
+				return event;
 			}
 			
 		};
 		return loader;
 	}
 	
-	private InspectionByMobileGuidLoader<Inspection> testableNoInspectionLoader() {
-		InspectionByMobileGuidLoader<Inspection> loader = new InspectionByMobileGuidLoader<Inspection>(new TenantOnlySecurityFilter(1L), Inspection.class) {
+	private InspectionByMobileGuidLoader<Event> testableNoInspectionLoader() {
+		InspectionByMobileGuidLoader<Event> loader = new InspectionByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(1L), Event.class) {
 			@Override
-			public Inspection load() {
+			public Event load() {
 				return null;
 			}
 			
@@ -111,14 +111,14 @@ public class CompletedScheduleCreatorTest {
 }
 
 class TestableScheduleSaver extends InspectionScheduleSaver {
-	private InspectionSchedule savedSchedule;
+	private EventSchedule savedSchedule;
 	
 	@Override
-	public void save(InspectionSchedule schedule) {
+	public void save(EventSchedule schedule) {
 		savedSchedule = schedule;
 	}
 	
-	public InspectionSchedule getSavedSchedule() {
+	public EventSchedule getSavedSchedule() {
 		return savedSchedule;
 	}
 }

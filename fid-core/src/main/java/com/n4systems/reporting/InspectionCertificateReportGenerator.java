@@ -1,15 +1,15 @@
 package com.n4systems.reporting;
 
+import com.n4systems.model.Event;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.ReportException;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.utils.DateTimeDefiner;
 
-public class InspectionCertificateReportGenerator extends CertificateReportGenerator<Inspection> {
+public class InspectionCertificateReportGenerator extends CertificateReportGenerator<Event> {
 	private Logger logger = Logger.getLogger(InspectionCertificateReportGenerator.class);
 	
 	private final InspectionCertificateGenerator certGenerator;
@@ -40,17 +40,17 @@ public class InspectionCertificateReportGenerator extends CertificateReportGener
 	
 
 	@Override
-	protected JasperPrint singleCert(Inspection inspection)	throws ReportException {
-		return certGenerator.generate(type, inspection, transaction);
+	protected JasperPrint singleCert(Event event)	throws ReportException {
+		return certGenerator.generate(type, event, transaction);
 	}
 
 	@Override
-	protected void logCertError(Inspection inspection, Exception e) {
-		logger.warn("Failed to generate report for Inspection [" + inspection.getId() + "].  Moving on to next Inspection.", e);
+	protected void logCertError(Event event, Exception e) {
+		logger.warn("Failed to generate report for Inspection [" + event.getId() + "].  Moving on to next Inspection.", e);
 	}
 	
 	@Override
-	protected  boolean isPrintable(Inspection certObject) {
+	protected  boolean isPrintable(Event certObject) {
 		return certObject.isPrintableForReportType(type);
 
 	}

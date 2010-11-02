@@ -8,11 +8,11 @@ import java.util.Map;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.utils.StrutsListHelper;
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
@@ -32,19 +32,19 @@ public class InspectionHelper {
 	/**
 	 * Converts the CriteriaResult Set on an Inspection into a List in the 
 	 * order it would appear on a form (by CriteriaSection, then Criteria).
-	 * @param inspection	The inspection to find CriteriaResults from
+	 * @param event	The inspection to find CriteriaResults from
 	 * @return				A List of ordered CriteriaResults.  Returns an empty List if the inspection's results are empty.
 	 */
-	public List<CriteriaResult> orderCriteriaResults(AbstractInspection inspection) {
+	public List<CriteriaResult> orderCriteriaResults(AbstractEvent event) {
 		List<CriteriaResult> orderedResults = new ArrayList<CriteriaResult>();
 		
 		// don't go through all the trouble if the inspection has no results.
-		if (inspection != null && !inspection.getResults().isEmpty()) {
+		if (event != null && !event.getResults().isEmpty()) {
 			// go through the InspectionType's sections and criteria, hunting down the corresponding CriteriaResult.
-			for(CriteriaSection section: inspection.getType().getSections()) {
+			for(CriteriaSection section: event.getType().getSections()) {
 				for(Criteria criteria: section.getCriteria()) {
 					// find the corresponding CriteriaResult on the Inspection
-					for(CriteriaResult result: inspection.getResults()) {
+					for(CriteriaResult result: event.getResults()) {
 						if (result.getCriteria().equals(criteria)) {
 							// we also need to order our observations before adding this criteria
 							orderedResults.add(orderObservations(result));
@@ -101,26 +101,26 @@ public class InspectionHelper {
 	 * and tenant fields.  The results Observations are then processed before adding it to the inspeciton's result list.  When complete
 	 * inspection will have it's full list of processed CriteriaResults attached.
 	 * @see #processObservations(CriteriaResult, User)
-	 * @param inspection			An AbstractInspection (sub or master)
+	 * @param event			An AbstractInspection (sub or master)
 	 * @param formCriteriaResults	CriteriaResults input from a form.
 	 * @param modifiedBy			A modifiedBy user to set on the Observations
 	 * @param pm					A PersistenceManager instance
 	 */
-	public void processFormCriteriaResults(AbstractInspection inspection, List<CriteriaResult> formCriteriaResults, User modifiedBy) {
+	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResult> formCriteriaResults, User modifiedBy) {
 		// if our forms criteria results are null (as is the case with a repair), just stop.  
 		if (formCriteriaResults == null) {
 			return;
 		}
 		
 		// since we'll add later, this list should be empty
-		inspection.getResults().clear();
+		event.getResults().clear();
 		
 		CriteriaResult realResult;
 		// process the criteria and state lists. and attach to the real objects.
 		for (CriteriaResult formResult: formCriteriaResults) {
 			
 			// clean the observations for this result
-			processObservations(formResult, inspection.getTenant(), modifiedBy);
+			processObservations(formResult, event.getTenant(), modifiedBy);
 			
 			// on edit the results will come in with an id
 			// we want to load the real result and then modify it's fields
@@ -133,19 +133,19 @@ public class InspectionHelper {
 			} else {
 				// this is a new result, need to set the basics
 				realResult = new CriteriaResult();
-				realResult.setInspection(inspection);
-				realResult.setTenant(inspection.getTenant());
+				realResult.setInspection(event);
+				realResult.setTenant(event.getTenant());
 				
 				realResult.setDeficiencies(formResult.getDeficiencies());
 				realResult.setRecommendations(formResult.getRecommendations());
 			}
 			
 			// these get re-attached every time
-			realResult.setCriteria(pm.find(Criteria.class, formResult.getCriteria().getId(), inspection.getTenant()));
-			realResult.setState(pm.find(State.class, formResult.getState().getId(), inspection.getTenant()));
+			realResult.setCriteria(pm.find(Criteria.class, formResult.getCriteria().getId(), event.getTenant()));
+			realResult.setState(pm.find(State.class, formResult.getState().getId(), event.getTenant()));
 			
 			// and attach back onto the inspection
-			inspection.getResults().add(realResult);
+			event.getResults().add(realResult);
 		}
 	}
 	
@@ -239,14 +239,14 @@ public class InspectionHelper {
 	
 	/**
 	 * Finds a Criteria from an Inspection's InspectionType, by Id.
-	 * @param inspection	Inspection to find Criteria from
+	 * @param event	Inspection to find Criteria from
 	 * @param criteriaId	Id of a Criteria
 	 * @return				The Criteria or null if one could not be located
 	 */
-	public Criteria findCriteriaOnInspectionType(Inspection inspection, Long criteriaId) {
+	public Criteria findCriteriaOnInspectionType(Event event, Long criteriaId) {
 		// first we need to hunt down our criteria by id
 		Criteria criteria = null;
-		for (CriteriaSection sec: inspection.getType().getSections()) {
+		for (CriteriaSection sec: event.getType().getSections()) {
 			for (Criteria crit: sec.getCriteria()) {
 				if (crit.getId().equals(criteriaId)) {
 					criteria = crit;

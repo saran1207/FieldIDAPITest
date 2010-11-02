@@ -1,7 +1,7 @@
 package com.n4systems.exporting;
 
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Asset;
 import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -24,7 +24,7 @@ public class ExporterFactory {
 		return new AssetExporter(assetLoader);
 	}
 	
-	public InspectionExporter createInspectionExporter(ListLoader<Inspection> inspectionLoader, NextInspectionDateByInspectionLoader nextDateLoader) {
+	public InspectionExporter createInspectionExporter(ListLoader<Event> inspectionLoader, NextInspectionDateByInspectionLoader nextDateLoader) {
 		return new InspectionExporter(inspectionLoader, nextDateLoader);
 	}
 	

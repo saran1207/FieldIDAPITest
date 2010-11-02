@@ -3,15 +3,15 @@ package com.n4systems.ejb;
 import java.util.List;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 
 public interface InspectionScheduleManager {
 	
-	public List<InspectionSchedule> autoSchedule(Asset asset);
+	public List<EventSchedule> autoSchedule(Asset asset);
 	
-	public InspectionSchedule update(InspectionSchedule schedule);
-	public void restoreScheduleForInspection(Inspection inspection);
+	public EventSchedule update(EventSchedule schedule);
+	public void restoreScheduleForInspection(Event event);
 	
 
 	
@@ -19,7 +19,7 @@ public interface InspectionScheduleManager {
 	
 	
 	
-	public List<InspectionSchedule> getAvailableSchedulesFor(Asset asset);
+	public List<EventSchedule> getAvailableSchedulesFor(Asset asset);
 	
 	public boolean schedulePastDue(Long scheduleId);
 	public Long getAssetIdForSchedule(Long scheduleId);

@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -18,8 +20,6 @@ import com.n4systems.fieldid.actions.helpers.MassUpdateInspectionHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
 import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
@@ -33,7 +33,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 
 	private LegacyAsset assetManager;
 	private InspectionSearchContainer criteria;
-	private Inspection inspection = new Inspection();
+	private Event event = new Event();
 
 	private OwnerPicker ownerPicker;
 	
@@ -46,7 +46,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public void prepare() throws Exception {
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), inspection);
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), event);
 		overrideHelper(new MassUpdateInspectionHelper(getLoaderFactory()));
 	}
 
@@ -83,9 +83,9 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 		}
 
 		try {
-			inspection.setAdvancedLocation(location.createLocation());
+			event.setAdvancedLocation(location.createLocation());
 			List<Long> inspectionIds = getSearchIds(criteria, criteria.getSecurityFilter());
-			Long results = massUpdateManager.updateInspections(inspectionIds, inspection, select, getSessionUser().getUniqueID());
+			Long results = massUpdateManager.updateInspections(inspectionIds, event, select, getSessionUser().getUniqueID());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
 			addFlashMessage(getText("message.eventmassupdatesuccessful", messageArgs));
@@ -103,15 +103,15 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 
 	
 	public Long getInspectionBook() {
-		return (inspection.getBook() == null) ? null : inspection.getBook().getId();
+		return (event.getBook() == null) ? null : event.getBook().getId();
 	}
 
 	public void setInspectionBook(Long inspectionBookId) {
 		if (inspectionBookId == null) {
-			inspection.setBook(null);
-		} else if (inspection.getBook() == null || !inspectionBookId.equals(inspection.getBook().getId())) {
-			InspectionBook inspectionBook = persistenceManager.find(InspectionBook.class, inspectionBookId);
-			inspection.setBook(inspectionBook);
+			event.setBook(null);
+		} else if (event.getBook() == null || !inspectionBookId.equals(event.getBook().getId())) {
+			EventBook eventBook = persistenceManager.find(EventBook.class, inspectionBookId);
+			event.setBook(eventBook);
 		}
 	}
 
@@ -122,11 +122,11 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public boolean isPrintable() {
-		return inspection.isPrintable();
+		return event.isPrintable();
 	}
 
 	public void setPrintable(boolean printable) {
-		inspection.setPrintable(printable);
+		event.setPrintable(printable);
 	}
 
 	public Long getOwnerId() {
@@ -146,14 +146,14 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public Long getAssetStatus() {
-		return (inspection.getAssetStatus() == null) ? null : inspection.getAssetStatus().getUniqueID();
+		return (event.getAssetStatus() == null) ? null : event.getAssetStatus().getUniqueID();
 	}
 
 	public void setAssetStatus(Long assetStatus) {
 		if (assetStatus == null) {
-			inspection.setAssetStatus(null);
-		} else if (inspection.getAssetStatus() == null || !assetStatus.equals(inspection.getAssetStatus().getUniqueID())) {
-			inspection.setAssetStatus(assetManager.findAssetStatus(assetStatus, getTenantId()));
+			event.setAssetStatus(null);
+		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getUniqueID())) {
+			event.setAssetStatus(assetManager.findAssetStatus(assetStatus, getTenantId()));
 		}
 	}
 

@@ -2,12 +2,12 @@ package com.n4systems.model.inspectionschedule;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class InspectionScheduleByGuidOrIdLoader extends SecurityFilteredLoader<InspectionSchedule> {
+public class InspectionScheduleByGuidOrIdLoader extends SecurityFilteredLoader<EventSchedule> {
 
 	private String mobileGuid;
 	private long id;
@@ -18,8 +18,8 @@ public class InspectionScheduleByGuidOrIdLoader extends SecurityFilteredLoader<I
 	}
 
 	@Override
-	protected InspectionSchedule load(EntityManager em, SecurityFilter filter) {
-		InspectionSchedule schedule = null;
+	protected EventSchedule load(EntityManager em, SecurityFilter filter) {
+		EventSchedule schedule = null;
 		
 		if (mobileGuid != null && mobileGuid.trim().length() > 0) {
 			schedule = loadByGuid(em, filter);
@@ -32,9 +32,9 @@ public class InspectionScheduleByGuidOrIdLoader extends SecurityFilteredLoader<I
 		return schedule;
 	}
 
-	private InspectionSchedule loadByGuid(EntityManager em,
+	private EventSchedule loadByGuid(EntityManager em,
 			SecurityFilter filter) {
-		QueryBuilder<InspectionSchedule> query = getQueryBuilder(filter);
+		QueryBuilder<EventSchedule> query = getQueryBuilder(filter);
 		query.addSimpleWhere("mobileGUID", mobileGuid);
 		
 		return query.getSingleResult(em);
@@ -51,12 +51,12 @@ public class InspectionScheduleByGuidOrIdLoader extends SecurityFilteredLoader<I
 		return this;
 	}
 	
-	protected QueryBuilder<InspectionSchedule> getQueryBuilder(SecurityFilter filter) {
-		return new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, filter);
+	protected QueryBuilder<EventSchedule> getQueryBuilder(SecurityFilter filter) {
+		return new QueryBuilder<EventSchedule>(EventSchedule.class, filter);
 	}
 	
-	protected InspectionSchedule findByIdUsingEntityManager(EntityManager em) {
-		return em.find(InspectionSchedule.class, id);
+	protected EventSchedule findByIdUsingEntityManager(EntityManager em) {
+		return em.find(EventSchedule.class, id);
 	}
 	
 }

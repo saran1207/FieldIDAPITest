@@ -8,9 +8,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.n4systems.ejb.EventManager;
+import com.n4systems.model.Event;
+import com.n4systems.model.SubEvent;
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
@@ -20,12 +22,10 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionGroup;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
-import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.ManualSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -38,14 +38,14 @@ import com.n4systems.webservice.dto.WSJobSearchCriteria;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 
 
-public class InspectionManagerImpl implements InspectionManager {
-	static Logger logger = Logger.getLogger(InspectionManagerImpl.class);
+public class EventManagerImpl implements EventManager {
+	static Logger logger = Logger.getLogger(EventManagerImpl.class);
 
 	
 	private EntityManager em;
 
 	private final PersistenceManager persistenceManager;
-	private final ManagerBackedInspectionSaver inspectionSaver;
+	private final ManagerBackedEventSaver eventSaver;
 
 
 	private final EntityManagerLastInspectionDateFinder lastInspectionFinder;
@@ -54,13 +54,12 @@ public class InspectionManagerImpl implements InspectionManager {
 	private final InspectionScheduleManager inspectionScheduleManager;
 
 	
-	public InspectionManagerImpl(EntityManager em) {
-		super();
+	public EventManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.lastInspectionFinder = new EntityManagerLastInspectionDateFinder(persistenceManager, em);
 		this.inspectionScheduleManager = new InspectionScheduleManagerImpl(em);
-		this.inspectionSaver = new ManagerBackedInspectionSaver(new LegacyAssetManager(em),
+		this.eventSaver = new ManagerBackedEventSaver(new LegacyAssetManager(em),
 				persistenceManager, em, lastInspectionFinder);
 	}
 
@@ -68,12 +67,12 @@ public class InspectionManagerImpl implements InspectionManager {
 	 * finds all the groups that you can view with the defined security filter.
 	 */
 	@SuppressWarnings("unchecked")
-	private List<InspectionGroup> findAllInspectionGroups(SecurityFilter userFilter, Long assetId) {
+	private List<EventGroup> findAllInspectionGroups(SecurityFilter userFilter, Long assetId) {
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
-		filter.setTargets("ig.tenant.id", "inspection.owner", null, null);
+		filter.setTargets("eg.tenant.id", "event.owner", null, null);
 
-		String queryString = "Select DISTINCT ig FROM InspectionGroup as ig INNER JOIN ig.inspections as inspection LEFT JOIN inspection.asset as asset"
-				+ " WHERE asset.id = :id AND inspection.state = :activeState  AND " + filter.produceWhereClause() + " ORDER BY ig.created ";
+		String queryString = "Select DISTINCT eg FROM "+ EventGroup.class.getName()+" as eg INNER JOIN eg.events as events LEFT JOIN event.asset as asset"
+				+ " WHERE asset.id = :id AND event.state = :activeState  AND " + filter.produceWhereClause() + " ORDER BY eg.created ";
 
 		Query query = em.createQuery(queryString);
 
@@ -87,19 +86,19 @@ public class InspectionManagerImpl implements InspectionManager {
 	/**
 	 * finds all the groups that you can view with the defined security filter.
 	 */
-	public List<InspectionGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
-		return (List<InspectionGroup>) persistenceManager.postFetchFields(findAllInspectionGroups(filter, assetId), postFetchFields);
+	public List<EventGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
+		return (List<EventGroup>) persistenceManager.postFetchFields(findAllInspectionGroups(filter, assetId), postFetchFields);
 	}
 
 	
-	public Inspection findInspectionThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
-		String str = "select i FROM Inspection i, IN( i.subInspections ) s WHERE s.id = :subInspection AND ";
-		str += filter.produceWhereClause(Inspection.class, "i");
+	public Event findEventThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
+		String str = "select e FROM "+Event.class.getName()+" e, IN( e.subInspections ) s WHERE s.id = :subInspection AND ";
+		str += filter.produceWhereClause(Event.class, "e");
 		Query query = em.createQuery(str);
 		query.setParameter("subInspection", subInspectionId);
-		filter.applyParameters(query, Inspection.class);
+		filter.applyParameters(query, Event.class);
 		try {
-			return (Inspection) query.getSingleResult();
+			return (Event) query.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
@@ -108,15 +107,15 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 	}
 
-	public SubInspection findSubInspection(Long subInspectionId, SecurityFilter filter) {
-		Inspection inspection = findInspectionThroughSubInspection(subInspectionId, filter);
+	public SubEvent findSubEvent(Long subInspectionId, SecurityFilter filter) {
+		Event event = findEventThroughSubInspection(subInspectionId, filter);
 
-		if (inspection == null) {
+		if (event == null) {
 			return null;
 		}
 
 		try {
-			return persistenceManager.find(SubInspection.class, subInspectionId, "attachments");
+			return persistenceManager.find(SubEvent.class, subInspectionId, "attachments");
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
@@ -125,20 +124,20 @@ public class InspectionManagerImpl implements InspectionManager {
 		}
 	}
 
-	public Inspection findAllFields(Long id, SecurityFilter filter) {
-		Inspection inspection = null;
+	public Event findAllFields(Long id, SecurityFilter filter) {
+		Event event = null;
 
-		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
+		QueryBuilder<Event> queryBuilder = new QueryBuilder<Event>(Event.class, filter);
 		queryBuilder.setSimpleSelect().addSimpleWhere("id", id).addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addOrder("created");
-		queryBuilder.addPostFetchPaths(Inspection.ALL_FIELD_PATHS_WITH_SUBINSPECTIONS);
+		queryBuilder.addPostFetchPaths(Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
 
 		try {
-			inspection = persistenceManager.find(queryBuilder);
-			if (inspection != null) {
+			event = persistenceManager.find(queryBuilder);
+			if (event != null) {
 				// now we need to postfetch the rec/def lists on the results. We
 				// can't do this above since the results themselvs are a list.
-				persistenceManager.postFetchFields(inspection.getResults(), "recommendations", "deficiencies");
+				persistenceManager.postFetchFields(event.getResults(), "recommendations", "deficiencies");
 
 			}
 
@@ -146,46 +145,46 @@ public class InspectionManagerImpl implements InspectionManager {
 			logger.error("bad query while loading inspection", iqe);
 		}
 
-		return inspection;
+		return event;
 	}
 
-	public List<Inspection> findInspectionsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
+	public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		
 
-		QueryBuilder<Inspection> queryBuilder = new QueryBuilder<Inspection>(Inspection.class, filter);
+		QueryBuilder<Event> queryBuilder = new QueryBuilder<Event>(Event.class, filter);
 		queryBuilder.setSimpleSelect();
 		queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addWhere(Comparator.GE, "beginingDate", "date", datePerformedRangeStart).addWhere(Comparator.LE, "endingDate", "date", datePerformedRangeEnd); 
 		queryBuilder.addSimpleWhere("asset", asset);
 
-		List<Inspection> inspections;
+		List<Event> events;
 		try {
-			inspections = persistenceManager.findAll(queryBuilder);
+			events = persistenceManager.findAll(queryBuilder);
 		} catch (InvalidQueryException e) {
-			inspections = new ArrayList<Inspection>();
+			events = new ArrayList<Event>();
 			logger.error("Unable to load Inspections by Date and Asset", e);
 		}
 
-		return inspections;
+		return events;
 	}
 
 
 	
 
 	
-	public Inspection updateInspection(Inspection inspection, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
-		return inspectionSaver.updateInspection(inspection, userId, fileData, uploadedFiles);
+	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+		return eventSaver.updateInspection(event, userId, fileData, uploadedFiles);
 	}
 
 
 
-	public Inspection retireInspection(Inspection inspection, Long userId) {
-		inspection.retireEntity();
-		inspection = persistenceManager.update(inspection, userId);
-		inspectionSaver.updateAssetInspectionDate(inspection.getAsset());
-		inspection.setAsset(persistenceManager.update(inspection.getAsset()));
-		inspectionScheduleManager.restoreScheduleForInspection(inspection);
-		return inspection;
+	public Event retireEvent(Event event, Long userId) {
+		event.retireEntity();
+		event = persistenceManager.update(event, userId);
+		eventSaver.updateAssetInspectionDate(event.getAsset());
+		event.setAsset(persistenceManager.update(event.getAsset()));
+		inspectionScheduleManager.restoreScheduleForInspection(event);
+		return event;
 	}
 
 	
@@ -197,8 +196,8 @@ public class InspectionManagerImpl implements InspectionManager {
 	/**
 	 * This must be called AFTER the inspection and subinspection have been persisted
 	 */
-	public Inspection attachFilesToSubInspection(Inspection inspection, SubInspection subInspection, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
-		return inspectionSaver.attachFilesToSubInspection(inspection, subInspection, uploadedFiles);
+	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+		return eventSaver.attachFilesToSubEvent(event, subEvent, uploadedFiles);
 	}
 
 	
@@ -208,7 +207,7 @@ public class InspectionManagerImpl implements InspectionManager {
 	/**
 	 * ensure that all criteria are retired under a retired section.
 	 */
-	public InspectionType updateInspectionForm(InspectionType inspectionType, Long modifyingUserId) {
+	public InspectionType updateEventForm(InspectionType inspectionType, Long modifyingUserId) {
 		if (inspectionType.getSections() != null && !inspectionType.getSections().isEmpty()) {
 			for (CriteriaSection section : inspectionType.getSections()) {
 				if (section.isRetired()) {
@@ -227,7 +226,7 @@ public class InspectionManagerImpl implements InspectionManager {
 
 	
 
-	public Pager<Inspection> findNewestInspections(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 
 		List<Long> customerIds = searchCriteria.getCustomerIds();
 		List<Long> divisionIds = searchCriteria.getDivisionIds();
@@ -235,7 +234,7 @@ public class InspectionManagerImpl implements InspectionManager {
 		boolean setCustomerInfo = (customerIds != null && customerIds.size() > 0);
 		boolean setDivisionInfo = (divisionIds != null && divisionIds.size() > 0);
 
-		String selectStatement = " from Inspection i ";
+		String selectStatement = " from "+Event.class.getName()+" i ";
 
 		String whereClause = "where ( ";
 		if (setCustomerInfo) {
@@ -250,61 +249,61 @@ public class InspectionManagerImpl implements InspectionManager {
 			whereClause += "i.asset.owner.divisionOrg.id in (:divisionIds)";
 		}
 
-		whereClause += ") AND i.asset.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(Inspection.class, "i") + ")";
+		whereClause += ") AND i.asset.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(Event.class, "i") + ")";
 
 		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
 		if (setCustomerInfo)
 			query.setParameter("customerIds", customerIds);
 		if (setDivisionInfo)
 			query.setParameter("divisionIds", divisionIds);
-		securityFilter.applyParameters(query, Inspection.class);
+		securityFilter.applyParameters(query, Event.class);
 
 		Query countQuery = em.createQuery("select count( i.id ) " + selectStatement + whereClause);
 		if (setCustomerInfo)
 			countQuery.setParameter("customerIds", customerIds);
 		if (setDivisionInfo)
 			countQuery.setParameter("divisionIds", divisionIds);
-		securityFilter.applyParameters(countQuery, Inspection.class);
+		securityFilter.applyParameters(countQuery, Event.class);
 
-		return new Page<Inspection>(query, countQuery, page, pageSize);
+		return new Page<Event>(query, countQuery, page, pageSize);
 	}
 
-	public Pager<Inspection> findNewestInspections(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+	public Pager<Event> findNewestEvents(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 
 		List<Long> jobIds = searchCriteria.getJobIds();
 
-		String selectStatement = " from Inspection i ";
+		String selectStatement = " from "+Event.class.getName()+" i ";
 
 		String whereClause = "where ( ";
 		
 		whereClause += "i.asset.id in (select sch.asset.id from Project p, IN (p.schedules) sch where p.id in (:jobIds))";
 
-		whereClause += ") AND i.asset.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(InspectionGroup.class, "i") + ")";
+		whereClause += ") AND i.asset.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(EventGroup.class, "i") + ")";
 
 		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
 		query.setParameter("jobIds", jobIds);
-		securityFilter.applyParameters(query, InspectionGroup.class);
+		securityFilter.applyParameters(query, EventGroup.class);
 
 		Query countQuery = em.createQuery("select count( i.id ) " + selectStatement + whereClause);
 		countQuery.setParameter("jobIds", jobIds);
-		securityFilter.applyParameters(countQuery, InspectionGroup.class);
+		securityFilter.applyParameters(countQuery, EventGroup.class);
 
-		return new Page<Inspection>(query, countQuery, page, pageSize);
+		return new Page<Event>(query, countQuery, page, pageSize);
 	}
 	
-	public boolean isMasterInspection(Long id) {
-		Inspection inspection = em.find(Inspection.class, id);
+	public boolean isMasterEvent(Long id) {
+		Event event = em.find(Event.class, id);
 
-		return (inspection != null) ? (!inspection.getSubInspections().isEmpty()) : false;
+		return (event != null) ? (!event.getSubEvents().isEmpty()) : false;
 	}
 
 	
-	public Date findLastInspectionDate(InspectionSchedule schedule) {
-		return lastInspectionFinder.findLastInspectionDate(schedule);
+	public Date findLastEventDate(EventSchedule schedule) {
+		return lastInspectionFinder.findLastEventDate(schedule);
 	}
 
-	public Date findLastInspectionDate(Long scheduleId) {
-		return lastInspectionFinder.findLastInspectionDate(scheduleId);
+	public Date findLastEventDate(Long scheduleId) {
+		return lastInspectionFinder.findLastEventDate(scheduleId);
 	}
 
 

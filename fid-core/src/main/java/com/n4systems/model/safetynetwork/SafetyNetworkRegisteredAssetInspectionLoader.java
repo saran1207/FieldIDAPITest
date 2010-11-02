@@ -2,7 +2,7 @@ package com.n4systems.model.safetynetwork;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.asset.AssetWithNetworkIdExistsLoader;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
@@ -10,7 +10,7 @@ import com.n4systems.persistence.loaders.NonSecureIdLoader;
 public class SafetyNetworkRegisteredAssetInspectionLoader extends SafetyNetworkInspectionLoader {
 	private final AssetWithNetworkIdExistsLoader assetExistsLoader;
 	
-	public SafetyNetworkRegisteredAssetInspectionLoader(SecurityFilter filter, NonSecureIdLoader<Inspection> inspectionLoader, AssetWithNetworkIdExistsLoader assetExistsLoader) {
+	public SafetyNetworkRegisteredAssetInspectionLoader(SecurityFilter filter, NonSecureIdLoader<Event> inspectionLoader, AssetWithNetworkIdExistsLoader assetExistsLoader) {
 		super(filter, inspectionLoader);
 		this.assetExistsLoader = assetExistsLoader;
 	}
@@ -21,9 +21,9 @@ public class SafetyNetworkRegisteredAssetInspectionLoader extends SafetyNetworkI
 	}
 
 	@Override
-	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Inspection inspection) {
+	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Event event) {
 		// Access is allowed to this inspection if we have an asset that is linked to its asset
-		assetExistsLoader.setNetworkId(inspection.getAsset().getNetworkId());
+		assetExistsLoader.setNetworkId(event.getAsset().getNetworkId());
 		
 		boolean accessAllowed = assetExistsLoader.load(em, filter);
 		return accessAllowed;

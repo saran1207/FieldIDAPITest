@@ -36,7 +36,7 @@
     
     <bean id="configEJBContainer"     	class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer"    />
     
-    <bean id="inspectionEJBContainer"     	class="com.n4systems.ejb.wrapper.InspectionManagerEJBContainer"    />
+    <bean id="inspectionEJBContainer"     	class="com.n4systems.ejb.wrapper.EventManagerEJBContainer"    />
     
     <bean id="proofTestHandler"     	class="com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer"    />
     

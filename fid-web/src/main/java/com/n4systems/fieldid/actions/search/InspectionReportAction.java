@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.model.Event;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -24,7 +25,6 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
@@ -287,13 +287,13 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	}
 	
 	public boolean isLocalInspection(int rowId) {
-		Inspection inspection = (Inspection)getEntityForRow(rowId);
-		return inspection.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
+		Event event = (Event)getEntityForRow(rowId);
+		return event.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
 	}
 	
 	public Long getAssetId(int rowId){
-		Inspection inspection = (Inspection)getEntityForRow(rowId);
-		return inspection.getAsset().getId();
+		Event event = (Event)getEntityForRow(rowId);
+		return event.getAsset().getId();
 	}
 	
 	public List<Status> getStatuses() {

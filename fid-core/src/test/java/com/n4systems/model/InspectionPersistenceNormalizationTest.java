@@ -1,6 +1,6 @@
 package com.n4systems.model;
 
-import static com.n4systems.model.builders.InspectionBuilder.*;
+import static com.n4systems.model.builders.EventBuilder.*;
 import static com.n4systems.model.inspection.AssignedToUpdate.*;
 import static org.hamcrest.Matchers.*;
 
@@ -17,21 +17,21 @@ public class InspectionPersistenceNormalizationTest {
 	
 	@Test
 	public void should_update_assigned_to_update_on_create_to_an_ignored_assignment_when_null() throws Exception {
-		Inspection inspection = anInspection().withNoAssignedToUpdate().build();
+		Event event = anEvent().withNoAssignedToUpdate().build();
 		
-		inspection.onCreate();
+		event.onCreate();
 		
-		Assert.assertThat(inspection.getAssignedTo(), anIngoredAssignedToUpdate());
+		Assert.assertThat(event.getAssignedTo(), anIngoredAssignedToUpdate());
 		
 	}
 	
 	@Test
 	public void should_update_assigned_to_update_on_update_to_an_ignored_assignment_when_null() throws Exception {
-		Inspection inspection = anInspection().withNoAssignedToUpdate().build();
+		Event event = anEvent().withNoAssignedToUpdate().build();
 		
-		inspection.onUpdate();
+		event.onUpdate();
 		
-		Assert.assertThat(inspection.getAssignedTo(), anIngoredAssignedToUpdate());
+		Assert.assertThat(event.getAssignedTo(), anIngoredAssignedToUpdate());
 		
 	}
 	
@@ -39,22 +39,22 @@ public class InspectionPersistenceNormalizationTest {
 	@Test
 	public void should_not_update_an_assigned_to_update_on_create_to_when_it_has_been_filled_in() throws Exception {
 		User user = null;
-		Inspection inspection = anInspection().withAssignedToUpdate(assignAssetToUser(user)).build();
+		Event event = anEvent().withAssignedToUpdate(assignAssetToUser(user)).build();
 		
-		inspection.onCreate();
+		event.onCreate();
 		
-		Assert.assertThat(inspection.getAssignedTo(), not(anIngoredAssignedToUpdate()));
+		Assert.assertThat(event.getAssignedTo(), not(anIngoredAssignedToUpdate()));
 		
 	}
 	
 	@Test
 	public void should_not_update_an_assigned_to_update_on_update_to_when_it_has_been_filled_in() throws Exception {
 		User user = null;
-		Inspection inspection = anInspection().withAssignedToUpdate(assignAssetToUser(user)).build();
+		Event event = anEvent().withAssignedToUpdate(assignAssetToUser(user)).build();
 		
-		inspection.onUpdate();
+		event.onUpdate();
 		
-		Assert.assertThat(inspection.getAssignedTo(), not(anIngoredAssignedToUpdate()));
+		Assert.assertThat(event.getAssignedTo(), not(anIngoredAssignedToUpdate()));
 		
 	}
 	

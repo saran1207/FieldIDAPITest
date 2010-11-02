@@ -3,12 +3,12 @@ package com.n4systems.model.inspectionschedulecount;
 import static com.n4systems.model.builders.NotificationSettingBuilder.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.model.EventSchedule;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -79,7 +79,7 @@ public class OverdueInspectionScheduleCountListLoaderTest {
 
 		@Override
 		protected QueryBuilder<InspectionScheduleCount> getQueryBuilder(SecurityFilter filter) {
-			queryBuilder = new TestingQueryBuilder<InspectionScheduleCount>(InspectionSchedule.class);
+			queryBuilder = new TestingQueryBuilder<InspectionScheduleCount>(EventSchedule.class);
 			return queryBuilder;
 		}
 		

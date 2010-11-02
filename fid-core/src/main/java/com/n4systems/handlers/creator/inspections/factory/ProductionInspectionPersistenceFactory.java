@@ -5,11 +5,11 @@ import javax.persistence.EntityManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.CreateInspectionsMethodObject;
 import com.n4systems.ejb.impl.EntityManagerLastInspectionDateFinder;
-import com.n4systems.ejb.impl.InspectionSaver;
+import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
-import com.n4systems.ejb.impl.LastInspectionDateFinder;
+import com.n4systems.ejb.impl.LastEventDateFinder;
 import com.n4systems.ejb.impl.ManagerBackedCreateInspectionsMethodObject;
-import com.n4systems.ejb.impl.ManagerBackedInspectionSaver;
+import com.n4systems.ejb.impl.ManagerBackedEventSaver;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
@@ -32,12 +32,12 @@ public class ProductionInspectionPersistenceFactory implements InspectionPersist
 		return new Log4JAuditLogger(new CreateInspectionAuditHandler());
 	}
 
-	public InspectionSaver createInspectionSaver(Transaction transaction) {
+	public EventSaver createInspectionSaver(Transaction transaction) {
 		EntityManager em = transaction.getEntityManager();
 		PersistenceManager persistenceManager = new PersistenceManagerImpl(em);
-		LastInspectionDateFinder lastInspectionDateFinder = new EntityManagerLastInspectionDateFinder(persistenceManager, em);
+		LastEventDateFinder lastEventDateFinder = new EntityManagerLastInspectionDateFinder(persistenceManager, em);
 		
-		return new ManagerBackedInspectionSaver(new LegacyAssetManager(em), persistenceManager, em, lastInspectionDateFinder);
+		return new ManagerBackedEventSaver(new LegacyAssetManager(em), persistenceManager, em, lastEventDateFinder);
 	}
 
 	public InspectionCreator createInspectionCreator() {

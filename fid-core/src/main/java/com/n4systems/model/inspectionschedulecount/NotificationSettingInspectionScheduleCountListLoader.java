@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -71,7 +71,7 @@ public abstract class NotificationSettingInspectionScheduleCountListLoader exten
 	}
 
 	protected QueryBuilder<InspectionScheduleCount> getQueryBuilder(SecurityFilter filter) {
-		return new QueryBuilder<InspectionScheduleCount>(InspectionSchedule.class, filter);
+		return new QueryBuilder<InspectionScheduleCount>(EventSchedule.class, filter);
 	}
 
 	public void setNotificationSetting(NotificationSetting notification) {

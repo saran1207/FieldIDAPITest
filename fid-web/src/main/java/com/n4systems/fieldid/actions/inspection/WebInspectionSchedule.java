@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.actions.inspection;
 
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 
 public class WebInspectionSchedule {
-	public static WebInspectionSchedule createAutoScheduled(InspectionSchedule schedule) {
+	public static WebInspectionSchedule createAutoScheduled(EventSchedule schedule) {
 		WebInspectionSchedule webInspectionSchedule = new WebInspectionSchedule();
 		webInspectionSchedule.setAutoScheduled(true);
 		return webInspectionSchedule;

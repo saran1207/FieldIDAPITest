@@ -7,16 +7,16 @@ import java.util.Map;
 import java.util.Random;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
 import com.n4systems.model.SubAsset;
+import com.n4systems.model.SubEvent;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.fieldid.actions.inspection.WebInspectionSchedule;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
@@ -26,23 +26,23 @@ public class MasterInspection {
 
 	private Asset masterAsset;
 
-	private Inspection inspection;
+	private Event event;
 
 	private FileDataContainer proofTestFile;
 
 	private AssetStatus assetStatus;
 
-	private List<SubInspection> subInspections = new ArrayList<SubInspection>();
+	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 
 	private Long currentId = -1L;
 
 	private Long inspectionGroupId;
 
-	private Map<SubInspection, List<FileAttachment>> subInspectionUploadedFiles;
+	private Map<SubEvent, List<FileAttachment>> subInspectionUploadedFiles;
 
 	private List<FileAttachment> uploadedFiles;
 
-	private InspectionSchedule schedule;
+	private EventSchedule schedule;
 	
 	private Long scheduleId;
 
@@ -55,17 +55,17 @@ public class MasterInspection {
 	
 	public MasterInspection() {
 		token = String.valueOf(Math.abs(new Random().nextLong()));
-		subInspectionUploadedFiles = new HashMap<SubInspection, List<FileAttachment>>();
+		subInspectionUploadedFiles = new HashMap<SubEvent, List<FileAttachment>>();
 	}
 
-	public MasterInspection(Inspection inspection) {
+	public MasterInspection(Event event) {
 		this();
 
-		currentId = inspection.getId();
-		inspectionGroupId = inspection.getGroup().getId();
-		masterAsset = inspection.getAsset();
-		subInspections = new ArrayList<SubInspection>(inspection.getSubInspections());
-		this.inspection = inspection;
+		currentId = event.getId();
+		inspectionGroupId = event.getGroup().getId();
+		masterAsset = event.getAsset();
+		subEvents = new ArrayList<SubEvent>(event.getSubEvents());
+		this.event = event;
 	}
 
 	public String getToken() {
@@ -84,12 +84,12 @@ public class MasterInspection {
 		this.masterAsset = masterAsset;
 	}
 
-	public Inspection getInspection() {
-		return inspection;
+	public Event getInspection() {
+		return event;
 	}
 
-	public void setInspection(Inspection inspection) {
-		this.inspection = inspection;
+	public void setInspection(Event event) {
+		this.event = event;
 	}
 
 	public FileDataContainer getProofTestFile() {
@@ -116,72 +116,72 @@ public class MasterInspection {
 		return currentId--;
 	}
 
-	public void addSubInspection(SubInspection inspection) {
-		inspection.setId(nextId());
-		subInspections.add(inspection);
+	public void addSubInspection(SubEvent event) {
+		event.setId(nextId());
+		subEvents.add(event);
 	}
 
-	public void replaceSubInspection(SubInspection updatedInspection) {
-		SubInspection oldInspeciton = getSubInspection(updatedInspection.getId());
-		subInspections.set(subInspections.indexOf(oldInspeciton), updatedInspection);
+	public void replaceSubInspection(SubEvent updatedEvent) {
+		SubEvent oldInspeciton = getSubInspection(updatedEvent.getId());
+		subEvents.set(subEvents.indexOf(oldInspeciton), updatedEvent);
 	}
 
-	public SubInspection getSubInspection(Long id) {
-		SubInspection i = new SubInspection();
+	public SubEvent getSubInspection(Long id) {
+		SubEvent i = new SubEvent();
 
 		i.setId(id); // this doesn't seem good.
 
-		if (subInspections.contains(i)) {
-			return subInspections.get(subInspections.indexOf(i));
+		if (subEvents.contains(i)) {
+			return subEvents.get(subEvents.indexOf(i));
 		}
 
 		return null;
 	}
 
-	public Inspection createInspectionFromSubInspection(SubInspection subInspection) {
-		Inspection inspection = new Inspection();
+	public Event createInspectionFromSubInspection(SubEvent subEvent) {
+		Event event = new Event();
 
-		inspection.setFormVersion(subInspection.getFormVersion());
-		inspection.setId(subInspection.getId());
-		inspection.setAsset(subInspection.getAsset());
-		inspection.setTenant(subInspection.getTenant());
-		inspection.setType(subInspection.getType());
-		inspection.setComments(subInspection.getComments());
-		inspection.setResults(subInspection.getResults());
-		inspection.setInfoOptionMap(subInspection.getInfoOptionMap());
-		inspection.setAttachments(subInspection.getAttachments());
-		inspection.setCreated(subInspection.getCreated());
-		inspection.setModified(subInspection.getModified());
-		inspection.setModifiedBy(subInspection.getModifiedBy());
+		event.setFormVersion(subEvent.getFormVersion());
+		event.setId(subEvent.getId());
+		event.setAsset(subEvent.getAsset());
+		event.setTenant(subEvent.getTenant());
+		event.setType(subEvent.getType());
+		event.setComments(subEvent.getComments());
+		event.setResults(subEvent.getResults());
+		event.setInfoOptionMap(subEvent.getInfoOptionMap());
+		event.setAttachments(subEvent.getAttachments());
+		event.setCreated(subEvent.getCreated());
+		event.setModified(subEvent.getModified());
+		event.setModifiedBy(subEvent.getModifiedBy());
 
-		return inspection;
+		return event;
 	}
 
-	public SubInspection createSubInspectionFromInspection(Inspection inspection) {
-		SubInspection subInspection = new SubInspection();
+	public SubEvent createSubInspectionFromInspection(Event event) {
+		SubEvent subEvent = new SubEvent();
 
-		subInspection.setFormVersion(inspection.getFormVersion());
-		subInspection.setId(inspection.getId());
-		subInspection.setAsset(inspection.getAsset());
-		subInspection.setName(findLabelOfSubAsset(inspection));
-		subInspection.setTenant(inspection.getTenant());
-		subInspection.setType(inspection.getType());
-		subInspection.setComments(inspection.getComments());
-		subInspection.setInfoOptionMap(inspection.getInfoOptionMap());
-		subInspection.setAttachments(inspection.getAttachments());
-		subInspection.setCreated(inspection.getCreated());
-		subInspection.setModified(inspection.getModified());
-		subInspection.setModifiedBy(inspection.getModifiedBy());
+		subEvent.setFormVersion(event.getFormVersion());
+		subEvent.setId(event.getId());
+		subEvent.setAsset(event.getAsset());
+		subEvent.setName(findLabelOfSubAsset(event));
+		subEvent.setTenant(event.getTenant());
+		subEvent.setType(event.getType());
+		subEvent.setComments(event.getComments());
+		subEvent.setInfoOptionMap(event.getInfoOptionMap());
+		subEvent.setAttachments(event.getAttachments());
+		subEvent.setCreated(event.getCreated());
+		subEvent.setModified(event.getModified());
+		subEvent.setModifiedBy(event.getModifiedBy());
 
-		return subInspection;
+		return subEvent;
 	}
 
-	private String findLabelOfSubAsset(Inspection inspection) {
-		Asset asset = inspection.getAsset();
+	private String findLabelOfSubAsset(Event event) {
+		Asset asset = event.getAsset();
 		if (asset == null) {
 			return null;
 		}
-		if (this.inspection.isNew()) {
+		if (this.event.isNew()) {
 
 			for (SubAsset subAsset : this.masterAsset.getSubAssets()) {
 				if (subAsset.getAsset().equals(asset)) {
@@ -189,9 +189,9 @@ public class MasterInspection {
 				}
 			}
 		} else {
-			for (SubInspection subInspection : subInspections) {
-				if (subInspection.getId().equals(inspection.getId())) {
-					return subInspection.getName();
+			for (SubEvent subEvent : subEvents) {
+				if (subEvent.getId().equals(event.getId())) {
+					return subEvent.getName();
 				}
 			}
 		}
@@ -199,28 +199,28 @@ public class MasterInspection {
 	}
 
 	
-	public Inspection getCompletedInspection() {
+	public Event getCompletedInspection() {
 		applyAssignToUpdateToInspection();
 		processSubInspections();
 
-		return inspection;
+		return event;
 	}
 
 	private void processSubInspections() {
-		inspection.getSubInspections().clear();
-		StrutsListHelper.clearNulls(subInspections);
-		for (SubInspection subInspection : subInspections) {
-			SubInspection s = createSubInspectionFromInspection(createInspectionFromSubInspection(subInspection));
-			s.setId((subInspection.getId() < 0) ? null : subInspection.getId());
-			s.setResults(subInspection.getResults());
+		event.getSubEvents().clear();
+		StrutsListHelper.clearNulls(subEvents);
+		for (SubEvent subEvent : subEvents) {
+			SubEvent s = createSubInspectionFromInspection(createInspectionFromSubInspection(subEvent));
+			s.setId((subEvent.getId() < 0) ? null : subEvent.getId());
+			s.setResults(subEvent.getResults());
 			processResults(s);
-			s.setFormVersion(subInspection.getFormVersion());
-			inspection.getSubInspections().add(s);
+			s.setFormVersion(subEvent.getFormVersion());
+			event.getSubEvents().add(s);
 
 		}
 	}
 
-	private void processResults(SubInspection s) {
+	private void processResults(SubEvent s) {
 		for (CriteriaResult criteria : s.getResults()) {
 			criteria.setInspection(s);
 		}
@@ -235,7 +235,7 @@ public class MasterInspection {
 	}
 
 	public boolean isMainInspectionStored() {
-		return (inspection.getDate() != null);
+		return (event.getDate() != null);
 	}
 
 	public Long getInspectionGroupId() {
@@ -246,47 +246,47 @@ public class MasterInspection {
 		this.inspectionGroupId = inspectionGroupId;
 	}
 
-	public List<SubInspection> getSubInspectionFor(Asset asset) {
-		List<SubInspection> inspectionTypes = new ArrayList<SubInspection>();
-		for (SubInspection subInspection : subInspections) {
-			if (subInspection.getAsset().getId().equals(asset.getId())) {
-				inspectionTypes.add(subInspection);
+	public List<SubEvent> getSubInspectionFor(Asset asset) {
+		List<SubEvent> eventTypes = new ArrayList<SubEvent>();
+		for (SubEvent subEvent : subEvents) {
+			if (subEvent.getAsset().getId().equals(asset.getId())) {
+				eventTypes.add(subEvent);
 			}
 		}
-		return inspectionTypes;
+		return eventTypes;
 	}
 
 	public void removeInspectionsForAsset(Asset subAsset) {
-		for (int i = 0; i < subInspections.size(); i++) {
-			if (subInspections.get(i).getAsset().equals(subAsset)) {
-				subInspections.set(i, null);
+		for (int i = 0; i < subEvents.size(); i++) {
+			if (subEvents.get(i).getAsset().equals(subAsset)) {
+				subEvents.set(i, null);
 			}
 		}
 	}
 
 	public void cleanSubInspectionsForNonValidSubAssets(Asset upToDateProduct) {
-		List<SubInspection> subInspectionsToKeep = new ArrayList<SubInspection>();
+		List<SubEvent> subInspectionsToKeep = new ArrayList<SubEvent>();
 		
 		/*
 		 * this checks that each sub inspection is for an asset that is still
 		 * attached to our updated master asset.
 		 */
-		for (SubInspection subInspection : subInspections) {
+		for (SubEvent subEvent : subEvents) {
 			for (SubAsset subAsset : upToDateProduct.getSubAssets()) {
-				if (subAsset.getAsset().equals(subInspection.getAsset())) {
-					subInspectionsToKeep.add(subInspection);
+				if (subAsset.getAsset().equals(subEvent.getAsset())) {
+					subInspectionsToKeep.add(subEvent);
 					break;
 				}
 			}
 		}
-		subInspections.retainAll(subInspectionsToKeep);
+		subEvents.retainAll(subInspectionsToKeep);
 	}
 
-	public Map<SubInspection, List<FileAttachment>> getSubInspectionUploadedFiles() {
+	public Map<SubEvent, List<FileAttachment>> getSubInspectionUploadedFiles() {
 		return subInspectionUploadedFiles;
 	}
 
-	public void setSubInspectionUploadedFiles(Map<SubInspection, List<FileAttachment>> subInspectionUploadedFiles) {
+	public void setSubInspectionUploadedFiles(Map<SubEvent, List<FileAttachment>> subInspectionUploadedFiles) {
 		this.subInspectionUploadedFiles = subInspectionUploadedFiles;
 	}
 
@@ -298,15 +298,15 @@ public class MasterInspection {
 		this.uploadedFiles = uploadedFiles;
 	}
 
-	public List<SubInspection> getSubInspections() {
-		return subInspections;
+	public List<SubEvent> getSubInspections() {
+		return subEvents;
 	}
 
-	public InspectionSchedule getSchedule() {
+	public EventSchedule getSchedule() {
 		return schedule;
 	}
 
-	public void setSchedule(InspectionSchedule schedule) {
+	public void setSchedule(EventSchedule schedule) {
 		this.schedule = schedule;
 	}
 
@@ -334,11 +334,11 @@ public class MasterInspection {
 	
 	
 	public void applyAssignToUpdateToInspection() {
-		if (inspection.isNew()) {
+		if (event.isNew()) {
 			if (assignToSomeone) {
-				inspection.setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
+				event.setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
 			} else {
-				inspection.removeAssignTo();
+				event.removeAssignTo();
 			}
 		}
 	}

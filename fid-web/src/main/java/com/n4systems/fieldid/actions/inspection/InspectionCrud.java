@@ -10,14 +10,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.SubEvent;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
@@ -47,16 +51,12 @@ import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPe
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
-import com.n4systems.model.InspectionGroup;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
-import com.n4systems.model.SubInspection;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
@@ -79,7 +79,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(InspectionCrud.class);
 
-	private final InspectionManager inspectionManager;
+	private final EventManager eventManager;
 	private final LegacyAsset legacyProductManager;
 	private final UserManager userManager;
 	protected final AssetManager assetManager;
@@ -88,9 +88,9 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	protected final InspectionHelper inspectionHelper;
 	protected final InspectionFormHelper inspectionFormHelper; 
 	
-	private InspectionGroup inspectionGroup;
+	private EventGroup eventGroup;
 	protected Asset asset;
-	protected Inspection inspection;
+	protected Event event;
 	
 	protected List<CriteriaResult> criteriaResults;
 	protected String charge;
@@ -99,19 +99,19 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	protected String peakLoad;
 	protected String testDuration;
 	protected String peakLoadDuration;
-	protected InspectionSchedule inspectionSchedule;
+	protected EventSchedule eventSchedule;
 	protected Long inspectionScheduleId;
 	private boolean inspectionScheduleOnInspection = false;
 	private boolean scheduleSuggested = false;
 	private String newInspectionBookTitle;
 	private boolean allowNetworkResults = false;
-	private List<SubInspection> subInspections;
+	private List<SubEvent> subEvents;
 	private List<ListingPair> examiners;
 	private List<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> inspectionBooks;
-	private List<InspectionSchedule> availableSchedules;
+	private List<EventSchedule> availableSchedules;
 	private List<ListingPair> eventJobs;
 	
 	private InspectionWebModel modifiableInspection;
@@ -128,10 +128,10 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	private User assignedTo;
 	private boolean assignToSomeone = false;
 	
-	public InspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyAsset legacyProductManager,
+	public InspectionCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyProductManager,
 			AssetManager assetManager, InspectionScheduleManager inspectionScheduleManager) {
 		super(persistenceManager);
-		this.inspectionManager = inspectionManager;
+		this.eventManager = eventManager;
 		this.legacyProductManager = legacyProductManager;
 		this.userManager = userManager;
 		this.assetManager = assetManager;
@@ -143,8 +143,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	@Override
 	protected void initMemberFields() {
-		inspection = new Inspection();
-		inspection.setDate(new Date());
+		event = new Event();
+		event.setDate(new Date());
 	}
 
 	@Override
@@ -153,19 +153,19 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			if (allowNetworkResults) {
 				
 				// if we're in a vendor context we need to look inspections for assigned products rather than registered products
-				inspection = getLoaderFactory().createSafetyNetworkInspectionLoader(isInVendorContext()).setId(uniqueId).load();
+				event = getLoaderFactory().createSafetyNetworkInspectionLoader(isInVendorContext()).setId(uniqueId).load();
 				
 			} else {
-				inspection = inspectionManager.findAllFields(uniqueId, getSecurityFilter());
+				event = eventManager.findAllFields(uniqueId, getSecurityFilter());
 			}
 			
-			if (inspection != null && !inspection.isActive()) {
-				inspection = null;
+			if (event != null && !event.isActive()) {
+				event = null;
 			}
 	
-			if (inspection != null) {
-				inspectionGroup = inspection.getGroup();
-				inspectionScheduleOnInspection = (inspection.getSchedule() != null);
+			if (event != null) {
+				eventGroup = event.getGroup();
+				inspectionScheduleOnInspection = (event.getSchedule() != null);
 			}
 		} catch(RuntimeException e) {
 			logger.error("Failed to load inspection", e);
@@ -176,12 +176,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@Override
 	protected void postInit() {
 		super.postInit();
-		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), inspection), getSessionUser().createUserDateConverter(), this);
+		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), event), getSessionUser().createUserDateConverter(), this);
 		overrideHelper(new InspectionCrudHelper(getLoaderFactory()));
 	}
 	
 	protected void testDependencies() throws MissingEntityException {
-		if (inspection == null) {
+		if (event == null) {
 			addActionError(getText("error.noevent"));
 			throw new MissingEntityException();
 		}
@@ -191,7 +191,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			throw new MissingEntityException();
 		}
 
-		if (inspection.getType() == null) {
+		if (event.getType() == null) {
 			addActionError(getText("error.eventtype"));
 			throw new MissingEntityException();
 		}
@@ -206,14 +206,14 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			return MISSING;
 		}
 
-		if (inspection == null) {
+		if (event == null) {
 			addActionError(getText("error.noevent"));
 			return MISSING;
 		}
 		
 		if (getInspectionTypes().size() == 1) {
 			setType(getInspectionTypes().get(0).getInspectionType().getId());
-			if (inspection.getType().isMaster()) {
+			if (event.getType().isMaster()) {
 				return "oneFoundMaster";
 			}
 			return "oneFound";
@@ -229,13 +229,13 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
 	public String doSelect() {
-		if (inspection == null) {
+		if (event == null) {
 			addActionError(getText("error.noevent"));
 			return MISSING;
 		}
 		
-		if (!inspection.isNew()) {
-			setAssetId(inspection.getAsset().getId());
+		if (!event.isNew()) {
+			setAssetId(event.getAsset().getId());
 		}
 		
 		if (asset == null) {
@@ -243,7 +243,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			return MISSING;
 		}
 
-		if (inspection.getType().isMaster()) {
+		if (event.getType().isMaster()) {
 			return "master";
 		}
 		
@@ -258,19 +258,19 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		testDependencies();
 
 		// set defaults.
-		inspection.setAssetStatus(asset.getAssetStatus());
-		inspection.setOwner(asset.getOwner());
-		inspection.setAdvancedLocation(asset.getAdvancedLocation());
-		inspection.setDate(DateHelper.getTodayWithTime());
+		event.setAssetStatus(asset.getAssetStatus());
+		event.setOwner(asset.getOwner());
+		event.setAdvancedLocation(asset.getAdvancedLocation());
+		event.setDate(DateHelper.getTodayWithTime());
 		setPerformedBy(getSessionUser().getUniqueID());
-		inspection.setPrintable(inspection.getType().isPrintable());
+		event.setPrintable(event.getType().isPrintable());
 		setUpSupportedProofTestTypes();
 		assignedTo = asset.getAssignedUser();
 		
-		if (inspectionSchedule != null) {	
-			inspectionSchedule.inProgress();
+		if (eventSchedule != null) {
+			eventSchedule.inProgress();
 			try {
-				persistenceManager.update(inspectionSchedule, getSessionUser().getId());
+				persistenceManager.update(eventSchedule, getSessionUser().getId());
 				addActionMessageText("message.scheduleinprogress");
 			} catch (Exception e) {
 				logger.warn("could not move schedule to in progress", e);
@@ -282,25 +282,25 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		autoSchedule();
 		
 		
-		modifiableInspection.updateValuesToMatch(inspection);
+		modifiableInspection.updateValuesToMatch(event);
 		
 		return SUCCESS;
 	}
 
 	private void autoSchedule() {
-		AssetTypeSchedule schedule = asset.getType().getSchedule(inspection.getType(), asset.getOwner());
+		AssetTypeSchedule schedule = asset.getType().getSchedule(event.getType(), asset.getOwner());
 		if (schedule != null) {
 			ScheduleToWebInspectionScheduleConverter converter = new ScheduleToWebInspectionScheduleConverter(getSessionUser().createUserDateConverter());
-			WebInspectionSchedule nextSchedule = converter.convert(schedule, inspection.getDate());
+			WebInspectionSchedule nextSchedule = converter.convert(schedule, event.getDate());
 			nextSchedule.setAutoScheduled(true);
 			nextSchedules.add(nextSchedule);
 		}
 	}
 
 	private void suggestSchedule() {
-		if (inspectionScheduleOnInspection == false && inspectionSchedule == null) {
+		if (inspectionScheduleOnInspection == false && eventSchedule == null) {
 			setScheduleId(new InspectionScheduleSuggestion(getAvailableSchedules()).getSuggestedScheduleId());
-			scheduleSuggested = (inspectionSchedule != null);
+			scheduleSuggested = (eventSchedule != null);
 			
 		}
 	}
@@ -308,10 +308,10 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@SkipValidation
 	@NetworkAwareAction
 	public String doShow() {
-		asset = inspection != null ? inspection.getAsset() : null;
+		asset = event != null ? event.getAsset() : null;
 		testDependencies();
 
-		inspectionGroup = inspection.getGroup();
+		eventGroup = event.getGroup();
 		return SUCCESS;
 	}
 	
@@ -319,36 +319,36 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
 	public String doEdit() {
 		try {
-			setAssetId(inspection.getAsset().getId());
+			setAssetId(event.getAsset().getId());
 			testDependencies();
 		} catch (NullPointerException e) {
 			return MISSING;
 		}
 
-		setAttachments(inspection.getAttachments());
+		setAttachments(event.getAttachments());
 		// Re-encode the inspection info option map so it displays properly
 		encodeInfoOptionMapForUseInForm();
 		
 
-		if (inspection.getProofTestInfo() != null) {
-			peakLoad = inspection.getProofTestInfo().getPeakLoad();
-			testDuration = inspection.getProofTestInfo().getDuration();
-			peakLoadDuration = inspection.getProofTestInfo().getPeakLoadDuration();
+		if (event.getProofTestInfo() != null) {
+			peakLoad = event.getProofTestInfo().getPeakLoad();
+			testDuration = event.getProofTestInfo().getDuration();
+			peakLoadDuration = event.getProofTestInfo().getPeakLoadDuration();
 		}
 
 		setUpSupportedProofTestTypes();
 		
-		modifiableInspection.updateValuesToMatch(inspection);
+		modifiableInspection.updateValuesToMatch(event);
 		return SUCCESS;
 	}
 
 	protected void encodeInfoOptionMapForUseInForm() {
-		encodedInfoOptionMap = encodeMapKeys(inspection.getInfoOptionMap());
+		encodedInfoOptionMap = encodeMapKeys(event.getInfoOptionMap());
 	}
 
 	protected void setUpSupportedProofTestTypes() {
-		if (inspection.getProofTestInfo() != null && inspection.getProofTestInfo().getProofTestType() != null) {
-			proofTestType = inspection.getProofTestInfo().getProofTestType();
+		if (event.getProofTestInfo() != null && event.getProofTestInfo().getProofTestType() != null) {
+			proofTestType = event.getProofTestInfo().getProofTestType();
 		} else if (!getInspectionType().getSupportedProofTests().isEmpty()) {
 			proofTestType = getInspectionType().getSupportedProofTests().iterator().next();
 		}
@@ -377,46 +377,46 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			
 			findInspectionBook();
 			
-			modifiableInspection.pushValuesTo(inspection);
+			modifiableInspection.pushValuesTo(event);
 
-			inspection.setInfoOptionMap(decodeMapKeys(encodedInfoOptionMap));
+			event.setInfoOptionMap(decodeMapKeys(encodedInfoOptionMap));
 
-			inspection.setGroup(inspectionGroup);
-			inspection.setTenant(getTenant());
-			inspection.setAsset(asset);
+			event.setGroup(eventGroup);
+			event.setTenant(getTenant());
+			event.setAsset(asset);
 			
 			if (assignToSomeone) {
 				AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(assignedTo);
-				inspection.setAssignedTo(assignedToUpdate);
+				event.setAssignedTo(assignedToUpdate);
 			}
 			
 			
 			processProofTestFile();
 			
-			if (inspection.isNew()) {
+			if (event.isNew()) {
 				// the criteriaResults from the form must be processed before setting them on the inspection
-				inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);
+				inspectionHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
 				
 				// ensure the form version is set from the inspection type on create
-				inspection.syncFormVersionWithType();
+				event.syncFormVersionWithType();
 				
-				CreateInspectionParameterBuilder createInspectionParameterBuilder = new CreateInspectionParameterBuilder(inspection, getSessionUserId())
+				CreateInspectionParameterBuilder createInspectionParameterBuilder = new CreateInspectionParameterBuilder(event, getSessionUserId())
 						.withProofTestFile(fileData)
 						.withUploadedImages(getUploadedFiles());
 				
 				createInspectionParameterBuilder.addSchedules(createInspectionScheduleBundles());
 				
-				inspection = inspectionPersistenceFactory.createInspectionCreator().create(createInspectionParameterBuilder.build());
-				uniqueID = inspection.getId();
+				event = inspectionPersistenceFactory.createInspectionCreator().create(createInspectionParameterBuilder.build());
+				uniqueID = event.getId();
 				
 			} else {
 				// only process criteria results if form editing is allowed
-				if (inspection.isEditable()) {
-					inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);
+				if (event.isEditable()) {
+					inspectionHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
 				}
 				// when updating, we need to remove any files that should no longer be attached
-				updateAttachmentList(inspection, modifiedBy);
-				inspection = inspectionManager.updateInspection(inspection, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
+				updateAttachmentList(event, modifiedBy);
+				event = eventManager.updateEvent(event, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
 			}
 			
 			completeSchedule();
@@ -470,20 +470,20 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			InspectionBookByNameLoader bookLoader = new InspectionBookByNameLoader(getSecurityFilter());
 			bookLoader.setName(newInspectionBookTitle);
 			bookLoader.setOwner(getOwner());
-			InspectionBook inspectionBook = bookLoader.load();
+			EventBook eventBook = bookLoader.load();
 			
-			if (inspectionBook == null) {
-				inspectionBook = new InspectionBook();
-				inspectionBook.setName(newInspectionBookTitle);
-				inspectionBook.setOpen(true);
-				inspectionBook.setOwner(getOwner());
-				inspectionBook.setTenant(getTenant());
+			if (eventBook == null) {
+				eventBook = new EventBook();
+				eventBook.setName(newInspectionBookTitle);
+				eventBook.setOpen(true);
+				eventBook.setOwner(getOwner());
+				eventBook.setTenant(getTenant());
 				
 				InspectionBookSaver bookSaver = new InspectionBookSaver();
-				bookSaver.save(inspectionBook);
+				bookSaver.save(eventBook);
 			}
 			
-			inspection.setBook(inspectionBook);			
+			event.setBook(eventBook);
 		}
 	}
 	
@@ -491,12 +491,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (inspectionScheduleOnInspection == false ) {
 			try {
 				if (inspectionScheduleId.equals(InspectionScheduleSuggestion.NEW_SCHEDULE)) {
-					inspectionSchedule = new InspectionSchedule(inspection);
-				} else if (inspectionSchedule != null) {
-					inspectionSchedule.completed(inspection);
+					eventSchedule = new EventSchedule(event);
+				} else if (eventSchedule != null) {
+					eventSchedule.completed(event);
 				}
-				if (inspectionSchedule != null) {
-					inspectionScheduleManager.update(inspectionSchedule);
+				if (eventSchedule != null) {
+					inspectionScheduleManager.update(eventSchedule);
 					addFlashMessageText("message.schedulecompleted");
 				}
 			} catch (Exception e) {
@@ -513,12 +513,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 
 		if (proofTest != null && proofTestType != ProofTestType.OTHER) {
-			inspection.setProofTestInfo(new ProofTestInfo());
-			inspection.getProofTestInfo().setProofTestType(proofTestType);
+			event.setProofTestInfo(new ProofTestInfo());
+			event.getProofTestInfo().setProofTestType(proofTestType);
 			fileData = createFileDataContainer();
 		} else if (proofTestType == ProofTestType.OTHER) {
-			inspection.setProofTestInfo(new ProofTestInfo());
-			inspection.getProofTestInfo().setProofTestType(proofTestType);
+			event.setProofTestInfo(new ProofTestInfo());
+			event.getProofTestInfo().setProofTestType(proofTestType);
 			fileData = new FileDataContainer();
 			fileData.setFileType(proofTestType);
 			fileData.setPeakLoad(peakLoad);
@@ -531,7 +531,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 		FileDataContainer fileData;
 		try {
-			fileData = inspection.getProofTestInfo().getProofTestType().getFileProcessorInstance().processFile(proofTest);
+			fileData = event.getProofTestInfo().getProofTestType().getFileProcessorInstance().processFile(proofTest);
 		} catch (Exception e) {
 			throw new ProcessingProofTestException(e);
 		} finally {
@@ -551,7 +551,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			return MISSING;
 		}
 		try {
-			inspectionManager.retireInspection(inspection, getSessionUser().getUniqueID());
+			eventManager.retireEvent(event, getSessionUser().getUniqueID());
 		} catch (Exception e) {
 			addFlashErrorText("error.eventdeleting");
 			logger.error("event retire " + asset.getSerialNumber(), e);
@@ -566,40 +566,40 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 
 	public Long getType() {
-		return (inspection.getType() != null) ? inspection.getType().getId() : null;
+		return (event.getType() != null) ? event.getType().getId() : null;
 	}
 
 	public InspectionType getInspectionType() {
-		return inspection.getType();
+		return event.getType();
 	}
 
 	public boolean isPrintable() {
-		return inspection.isPrintable();
+		return event.isPrintable();
 	}
 
 
 	public void setPrintable(boolean printable) {
-		inspection.setPrintable(printable);
+		event.setPrintable(printable);
 	}
 
 	@RequiredFieldValidator(message="", key="error.noeventtype")
 	public void setType(Long type) {
 		if (type == null) {
-			inspection.setType(null);
-		} else if (inspection.getType() == null || !type.equals(inspection.getType().getId())) {
-			inspection.setType(persistenceManager.find(InspectionType.class, type, getTenantId(), "sections", "supportedProofTests", "infoFieldNames"));
+			event.setType(null);
+		} else if (event.getType() == null || !type.equals(event.getType().getId())) {
+			event.setType(persistenceManager.find(InspectionType.class, type, getTenantId(), "sections", "supportedProofTests", "infoFieldNames"));
 		}
 	}
 
 	public Long getInspectionGroupId() {
-		return (inspectionGroup != null) ? inspectionGroup.getId() : null;
+		return (eventGroup != null) ? eventGroup.getId() : null;
 	}
 
 	public void setInspectionGroupId(Long inspectionGroupId) {
 		if (inspectionGroupId == null) {
-			inspectionGroup = null;
-		} else if (inspectionGroup == null || inspectionGroupId.equals(inspectionGroup.getId())) {
-			inspectionGroup = persistenceManager.find(InspectionGroup.class, inspectionGroupId, getTenantId());
+			eventGroup = null;
+		} else if (eventGroup == null || inspectionGroupId.equals(eventGroup.getId())) {
+			eventGroup = persistenceManager.find(EventGroup.class, inspectionGroupId, getTenantId());
 		}
 	}
 
@@ -621,15 +621,15 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 	}
 
-	public Inspection getInspection() {
-		return inspection;
+	public Event getInspection() {
+		return event;
 	}
 
 	
 	public List<ListingPair> getExaminers() {
 		if (examiners == null) {
 			examiners = userManager.getExaminers(getSecurityFilter());
-			OptionLists.includeInList(examiners, new ListingPair(inspection.getPerformedBy()));
+			OptionLists.includeInList(examiners, new ListingPair(event.getPerformedBy()));
 		}
 		return examiners;
 	}
@@ -651,47 +651,47 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	public String getComments() {
-		return inspection.getComments();
+		return event.getComments();
 	}
 	
 	public void setComments(String comments) {
-		inspection.setComments(comments);
+		event.setComments(comments);
 	}
 
 	public Long getAssetStatus() {
-		return (inspection.getAssetStatus() != null) ? inspection.getAssetStatus().getUniqueID() : null;
+		return (event.getAssetStatus() != null) ? event.getAssetStatus().getUniqueID() : null;
 	}
 
 	public void setAssetStatus(Long assetStatus) {
 		if (assetStatus == null) {
-			inspection.setAssetStatus(null);
-		} else if (inspection.getAssetStatus() == null || !assetStatus.equals(inspection.getAssetStatus().getUniqueID())) {
-			inspection.setAssetStatus(legacyProductManager.findAssetStatus(assetStatus, getTenantId()));
+			event.setAssetStatus(null);
+		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getUniqueID())) {
+			event.setAssetStatus(legacyProductManager.findAssetStatus(assetStatus, getTenantId()));
 		}
 	}
 
 	public Long getperformedBy() {
-		return (inspection.getPerformedBy() != null) ? inspection.getPerformedBy().getId() : null;
+		return (event.getPerformedBy() != null) ? event.getPerformedBy().getId() : null;
 	}
 
 	public void setPerformedBy(Long performedBy) {
 		if (performedBy == null) {
-			inspection.setPerformedBy(null);
-		} else if (inspection.getPerformedBy() == null || !performedBy.equals(inspection.getPerformedBy())) {
-			inspection.setPerformedBy(persistenceManager.find(User.class, performedBy, getTenantId()));
+			event.setPerformedBy(null);
+		} else if (event.getPerformedBy() == null || !performedBy.equals(event.getPerformedBy())) {
+			event.setPerformedBy(persistenceManager.find(User.class, performedBy, getTenantId()));
 		}
 
 	}
 
 	public Long getBook() {
-		return (inspection.getBook() != null) ? inspection.getBook().getId() : null;
+		return (event.getBook() != null) ? event.getBook().getId() : null;
 	}
 
 	public void setBook(Long book) {
 		if (book == null) {
-			inspection.setBook(null);
-		} else if (inspection.getBook() == null || !book.equals(inspection.getBook())) {
-			inspection.setBook(persistenceManager.find(InspectionBook.class, book, getTenantId()));
+			event.setBook(null);
+		} else if (event.getBook() == null || !book.equals(event.getBook())) {
+			event.setBook(persistenceManager.find(EventBook.class, book, getTenantId()));
 		}
 	}
 	
@@ -707,7 +707,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (criteriaResults == null) {
 			// criteria results need to be placed back in the order that they appear on the form
 			// so that the states and button images line up correctly.
-			criteriaResults = inspectionHelper.orderCriteriaResults(inspection);
+			criteriaResults = inspectionHelper.orderCriteriaResults(event);
 		}
 
 		return criteriaResults;
@@ -725,7 +725,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public ProofTestType getProofTestTypeEnum() {
 		if (proofTestType == null) {
-			proofTestType = (inspection.getProofTestInfo() != null) ? inspection.getProofTestInfo().getProofTestType() : null;
+			proofTestType = (event.getProofTestInfo() != null) ? event.getProofTestInfo().getProofTestType() : null;
 		}
 		return proofTestType;
 	}
@@ -745,11 +745,11 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 
 	public String getResult() {
-		return (inspection.getStatus() != null) ? inspection.getStatus().name() : Status.NA.name();
+		return (event.getStatus() != null) ? event.getStatus().name() : Status.NA.name();
 	}
 
 	public void setResult(String result) {
-		inspection.setStatus((result != null && result.trim().length() > 0) ? Status.valueOf(result) : Status.NA);
+		event.setStatus((result != null && result.trim().length() > 0) ? Status.valueOf(result) : Status.NA);
 	}
 
 	public List<Status> getResults() {
@@ -758,12 +758,12 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	@SuppressWarnings("unchecked")
 	public Map getInfoOptionMap() {
-		return inspection.getInfoOptionMap();
+		return event.getInfoOptionMap();
 	}
 
 	@SuppressWarnings("unchecked")
 	public void setInfoOptionMap(Map infoOptionMap) {
-		inspection.setInfoOptionMap(infoOptionMap);
+		event.setInfoOptionMap(infoOptionMap);
 	}
 
 	
@@ -797,7 +797,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public Map<String, Boolean> getProofTestTypesUpload() {
 		Map<String, Boolean> uploadFlags = new HashMap<String, Boolean>();
-		for (ProofTestType proofTestType : inspection.getType().getSupportedProofTests()) {
+		for (ProofTestType proofTestType : event.getType().getSupportedProofTests()) {
 			uploadFlags.put(proofTestType.name(), proofTestType.isUploadable());
 		}
 
@@ -824,17 +824,17 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return true;
 	}
 
-	public List<SubInspection> getSubInspections() {
-		if (subInspections == null) {
-			if (!inspection.getSubInspections().isEmpty()) {
+	public List<SubEvent> getSubInspections() {
+		if (subEvents == null) {
+			if (!event.getSubEvents().isEmpty()) {
 				Set<Long> ids = new HashSet<Long>();
-				for (SubInspection subInspection : inspection.getSubInspections()) {
-					ids.add(subInspection.getId());
+				for (SubEvent subEvent : event.getSubEvents()) {
+					ids.add(subEvent.getId());
 				}
-				subInspections = persistenceManager.findAll(SubInspection.class, ids, getTenant(), "asset", "type.sections", "results", "attachments", "infoOptionMap");
+				subEvents = persistenceManager.findAll(SubEvent.class, ids, getTenant(), "asset", "type.sections", "results", "attachments", "infoOptionMap");
 			}
 		}
-		return subInspections;
+		return subEvents;
 	}	
 
 	
@@ -845,7 +845,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		CriteriaResult result = inspectionHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		
 		// next we need the text of our Recommendation
-		String recText = inspectionHelper.findCriteriaOnInspectionType(inspection, criteriaId).getRecommendations().get(recIndex);
+		String recText = inspectionHelper.findCriteriaOnInspectionType(event, criteriaId).getRecommendations().get(recIndex);
 		
 		// now we need to hunt down a matching Recommendation from our criteria results (if it exists)
 		return inspectionHelper.getObservationForText(result.getRecommendations(), recText);
@@ -857,7 +857,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		CriteriaResult result = inspectionHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		
 		// next we need the text of our Deficiency
-		String defText = inspectionHelper.findCriteriaOnInspectionType(inspection, criteriaId).getDeficiencies().get(defIndex);
+		String defText = inspectionHelper.findCriteriaOnInspectionType(event, criteriaId).getDeficiencies().get(defIndex);
 		
 		// now we need to hunt down a matching Deficiency from our criteria results (if it exists)
 		return inspectionHelper.getObservationForText(result.getDeficiencies(), defText);
@@ -895,23 +895,23 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public void setScheduleId(Long inspectionScheduleId) {
 		if (inspectionScheduleId == null) {
-			inspectionSchedule = null; 
+			eventSchedule = null;
 		} else if ((!inspectionScheduleId.equals(InspectionScheduleSuggestion.NEW_SCHEDULE) && !inspectionScheduleId.equals(InspectionScheduleSuggestion.NO_SCHEDULE)) && 
 				(this.inspectionScheduleId == null || !inspectionScheduleId.equals(this.inspectionScheduleId))) {
 			// XXX should this lock to just the correct asset and inspection type?
-			inspectionSchedule = persistenceManager.find(InspectionSchedule.class, inspectionScheduleId, getTenantId());
+			eventSchedule = persistenceManager.find(EventSchedule.class, inspectionScheduleId, getTenantId());
 		}
 		this.inspectionScheduleId = inspectionScheduleId;
 	}
 
-	public List<InspectionSchedule> getAvailableSchedules() {
+	public List<EventSchedule> getAvailableSchedules() {
 		if (availableSchedules == null) {
 			availableSchedules = getLoaderFactory().createIncompleteInspectionSchedulesListLoader()
 					.setAsset(asset)
-					.setInspectionType(inspection.getType())
+					.setInspectionType(event.getType())
 					.load();
-			if (inspectionSchedule != null && !availableSchedules.contains(inspectionSchedule)) {
-				availableSchedules.add(0, inspectionSchedule);  
+			if (eventSchedule != null && !availableSchedules.contains(eventSchedule)) {
+				availableSchedules.add(0, eventSchedule);
 			}
 		}
 		return availableSchedules;
@@ -921,7 +921,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		List<ListingPair> scheduleOptions = new ArrayList<ListingPair>();
 		scheduleOptions.add(new ListingPair(InspectionScheduleSuggestion.NO_SCHEDULE, getText("label.notscheduled")));
 		scheduleOptions.add(new ListingPair(InspectionScheduleSuggestion.NEW_SCHEDULE, getText("label.createanewscheduled")));
-		for (InspectionSchedule schedule : getAvailableSchedules()) {
+		for (EventSchedule schedule : getAvailableSchedules()) {
 			scheduleOptions.add(new ListingPair(schedule.getId(), convertDate(schedule.getNextDate())));
 		}
 		
@@ -978,7 +978,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 	
 	public boolean isLinkedInspection() {
-		return !inspection.getTenant().equals(getTenant());
+		return !event.getTenant().equals(getTenant());
 	}
 
 	public InspectionFormHelper getInspectionFormHelper() {

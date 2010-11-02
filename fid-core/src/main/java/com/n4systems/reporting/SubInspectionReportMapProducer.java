@@ -2,37 +2,37 @@ package com.n4systems.reporting;
 
 import java.io.File;
 
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 import com.n4systems.util.DateTimeDefinition;
 
 public class SubInspectionReportMapProducer extends AbsractInspectionReportMapProducer {
 
-	private final SubInspection inspection;
-	private final Inspection masterInspection;
+	private final SubEvent event;
+	private final Event masterEvent;
 	
-	public SubInspectionReportMapProducer(SubInspection inspection, Inspection masterInspection, DateTimeDefinition dateTimeDefinition) {
+	public SubInspectionReportMapProducer(SubEvent event, Event masterEvent, DateTimeDefinition dateTimeDefinition) {
 		super(dateTimeDefinition);
-		this.inspection = inspection;
-		this.masterInspection = masterInspection;
+		this.event = event;
+		this.masterEvent = masterEvent;
 	}
 	
 	@Override
 	public void inspectionParameter() {
-		SubInspection subInspection = (SubInspection) getInspection();
-		add("productLabel", subInspection.getName());
+		SubEvent subEvent = (SubEvent) getInspection();
+		add("productLabel", subEvent.getName());
 	}
 
 	@Override
 	protected File imagePath(FileAttachment imageAttachment) {
-		return PathHandler.getInspectionAttachmentFile(masterInspection, inspection, imageAttachment);
+		return PathHandler.getInspectionAttachmentFile(masterEvent, event, imageAttachment);
 	}
 
 	@Override
-	protected AbstractInspection getInspection() {
-		return inspection;
+	protected AbstractEvent getInspection() {
+		return event;
 	}
 
 

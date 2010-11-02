@@ -1,24 +1,24 @@
 package com.n4systems.model.builders;
 
-import static com.n4systems.model.builders.InspectionBuilder.anInspection;
+import static com.n4systems.model.builders.EventBuilder.anEvent;
 import static com.n4systems.model.builders.InspectionTypeBuilder.anInspectionType;
 import static com.n4systems.model.builders.AssetBuilder.anAsset;
 
 import java.util.Date;
 
 import com.n4systems.exceptions.ProcessFailureException;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 
-public class InspectionScheduleBuilder extends BaseBuilder<InspectionSchedule> {
+public class InspectionScheduleBuilder extends BaseBuilder<EventSchedule> {
 
 	private final Asset asset;
 	private final InspectionType inspectionType;
 	private final Date nextDate;
-	private final Inspection inspection;
+	private final Event event;
 	private final Project job;
 	
 	public static InspectionScheduleBuilder aScheduledInspectionSchedule() {
@@ -28,54 +28,54 @@ public class InspectionScheduleBuilder extends BaseBuilder<InspectionSchedule> {
 	public static InspectionScheduleBuilder aCompletedInspectionSchedule() {
 		InspectionType inspectionType = anInspectionType().build();
 		Asset asset = anAsset().build();
-		Inspection inspection = anInspection().ofType(inspectionType).on(asset).build();
-		return new InspectionScheduleBuilder(asset,inspectionType,new Date(), inspection, null);
+		Event event = anEvent().ofType(inspectionType).on(asset).build();
+		return new InspectionScheduleBuilder(asset,inspectionType,new Date(), event, null);
 	}
 
-	public InspectionScheduleBuilder(Asset asset, InspectionType inspectionType, Date nextDate, Inspection inspection, Project job) {
+	public InspectionScheduleBuilder(Asset asset, InspectionType inspectionType, Date nextDate, Event event, Project job) {
 		this.asset = asset;
 		this.inspectionType = inspectionType;
 		this.nextDate = nextDate;
-		this.inspection = inspection;
+		this.event = event;
 		this.job = job;
 	}
 	
 	public InspectionScheduleBuilder asset(Asset asset) {
-		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, inspection, job);
+		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, event, job);
 	}
 	
 	public InspectionScheduleBuilder inspectionType(InspectionType inspectionType) {
-		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, inspection, job);
+		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, event, job);
 	}
 	
 	public InspectionScheduleBuilder nextDate(Date nextDate) {
-		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, inspection, job);
+		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, event, job);
 	}
 	
-	public InspectionScheduleBuilder completedDoing(Inspection inspection) {
-		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, inspection, job);
+	public InspectionScheduleBuilder completedDoing(Event event) {
+		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, event, job);
 	}
 	
 	public InspectionScheduleBuilder forJob(Project job) {
-		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, inspection, job);
+		return new InspectionScheduleBuilder(asset, inspectionType, nextDate, event, job);
 	}
 	
 	@Override
-	public InspectionSchedule createObject() {
-		InspectionSchedule inspectionSchedule = new InspectionSchedule(asset, inspectionType);
-		inspectionSchedule.setNextDate(nextDate);
-		inspectionSchedule.setId(id);
-		inspectionSchedule.setProject(job);
+	public EventSchedule createObject() {
+		EventSchedule eventSchedule = new EventSchedule(asset, inspectionType);
+		eventSchedule.setNextDate(nextDate);
+		eventSchedule.setId(id);
+		eventSchedule.setProject(job);
 		
-		if (inspection != null) {
-			inspectionSchedule.completed(inspection);
+		if (event != null) {
+			eventSchedule.completed(event);
 			try {
-				injectField(inspection, "schedule", inspectionSchedule);
+				injectField(event, "schedule", eventSchedule);
 			} catch (Exception e) {
 				throw new ProcessFailureException("couldn't inject schedule", e);
 			}
 		}
-		return inspectionSchedule;
+		return eventSchedule;
 	}
 	
 }

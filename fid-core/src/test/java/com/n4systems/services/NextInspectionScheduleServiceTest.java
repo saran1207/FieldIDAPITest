@@ -11,11 +11,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventSchedule;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.ejb.InspectionScheduleManager;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.test.helpers.DateHelper;
 
@@ -33,15 +33,15 @@ public class NextInspectionScheduleServiceTest {
 		Asset asset = anAsset().build();
 		InspectionType inspectionType = anInspectionType().build();
 		Date nextDate = DateHelper.oneYearFromToday();
-		InspectionSchedule schedule = aScheduledInspectionSchedule().asset(asset).inspectionType(inspectionType).nextDate(nextDate).build();
-		List<InspectionSchedule> existingSchedules = new ArrayList<InspectionSchedule>();
+		EventSchedule schedule = aScheduledInspectionSchedule().asset(asset).inspectionType(inspectionType).nextDate(nextDate).build();
+		List<EventSchedule> existingSchedules = new ArrayList<EventSchedule>();
 		
 		expect(mockInspectionScheduleManager.getAvailableSchedulesFor(asset)).andReturn(existingSchedules);
-		expect(mockInspectionScheduleManager.update((InspectionSchedule)anyObject())).andReturn(schedule);
+		expect(mockInspectionScheduleManager.update((EventSchedule)anyObject())).andReturn(schedule);
 		replay(mockInspectionScheduleManager);
 		
 		ManagerBackedNextInspectionScheduleService scheduleService = new ManagerBackedNextInspectionScheduleService(mockInspectionScheduleManager);		
-		InspectionSchedule returnedSchedule = scheduleService.createNextSchedule(new InspectionSchedule(asset, inspectionType, nextDate));
+		EventSchedule returnedSchedule = scheduleService.createNextSchedule(new EventSchedule(asset, inspectionType, nextDate));
 		
 		verify(mockInspectionScheduleManager);
 		assertEquals(schedule.getId(), returnedSchedule.getId());
@@ -53,15 +53,15 @@ public class NextInspectionScheduleServiceTest {
 		InspectionType inspectionType = anInspectionType().build();
 		Date nextDate = DateHelper.oneYearFromToday();
 		Date nextDateDifferentTime = new Date(nextDate.getTime() + 1);
-		InspectionSchedule schedule = aScheduledInspectionSchedule().asset(asset).inspectionType(inspectionType).nextDate(nextDate).build();
-		List<InspectionSchedule> existingSchedules = new ArrayList<InspectionSchedule>();
+		EventSchedule schedule = aScheduledInspectionSchedule().asset(asset).inspectionType(inspectionType).nextDate(nextDate).build();
+		List<EventSchedule> existingSchedules = new ArrayList<EventSchedule>();
 		existingSchedules.add(schedule);
 				
 		expect(mockInspectionScheduleManager.getAvailableSchedulesFor(asset)).andReturn(existingSchedules);
 		replay(mockInspectionScheduleManager);
 		
 		ManagerBackedNextInspectionScheduleService scheduleService = new ManagerBackedNextInspectionScheduleService(mockInspectionScheduleManager);
-		InspectionSchedule returnedSchedule = scheduleService.createNextSchedule(new InspectionSchedule(asset, inspectionType, nextDateDifferentTime));
+		EventSchedule returnedSchedule = scheduleService.createNextSchedule(new EventSchedule(asset, inspectionType, nextDateDifferentTime));
 		
 		verify(mockInspectionScheduleManager);
 		assertEquals(schedule.getId(), returnedSchedule.getId());		

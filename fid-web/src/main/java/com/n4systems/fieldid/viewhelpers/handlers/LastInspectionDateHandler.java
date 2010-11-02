@@ -2,17 +2,17 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 
 import java.util.Date;
 
-import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.util.ServiceLocator;
 
 public class LastInspectionDateHandler extends DateTimeHandler {
 
-	private final InspectionManager inspectionManager;
+	private final EventManager eventManager;
 		
 	public LastInspectionDateHandler(AbstractAction action) {
 		super(action);
-		inspectionManager = ServiceLocator.getInspectionManager();
+		eventManager = ServiceLocator.getInspectionManager();
 	}
 
 	public String handleWeb(Long entityId, Object value) {
@@ -27,7 +27,7 @@ public class LastInspectionDateHandler extends DateTimeHandler {
 	}
 
 	private Date getLastDate(Long entityId) {
-		Date lastDate = inspectionManager.findLastInspectionDate(entityId);
+		Date lastDate = eventManager.findLastEventDate(entityId);
 		return lastDate;
 	}
 	

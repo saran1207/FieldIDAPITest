@@ -1,13 +1,13 @@
 package com.n4systems.handlers.creator.inspections;
 
 import com.n4systems.ejb.impl.CreateInspectionParameter;
-import com.n4systems.ejb.impl.InspectionSaver;
+import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.ejb.impl.InspectionScheduleBundle;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.handlers.creator.BasicTransactionManagement;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
@@ -18,16 +18,16 @@ public class InspectionCreator extends BasicTransactionManagement {
 	private final InspectionPersistenceFactory inspectionPersistenceFactory;
 	private AuditLogger auditLogger;
 	private CreateInspectionParameter parameter;
-	private Inspection result;
+	private Event result;
 	private NextInspectionScheduleSerivce nextScheduleSerivce;
-	private InspectionSaver createInspectionSaver;
+	private EventSaver createEventSaver;
 
 	public InspectionCreator(TransactionManager transactionManager, InspectionPersistenceFactory inspectionPersistenceFactory) {
 		super(transactionManager);
 		this.inspectionPersistenceFactory = inspectionPersistenceFactory;
 	}
 
-	public Inspection create(CreateInspectionParameter parameter) throws ProcessFailureException {
+	public Event create(CreateInspectionParameter parameter) throws ProcessFailureException {
 		this.parameter = parameter;
 		auditLogger = inspectionPersistenceFactory.createCreateInspectionAuditLogger();
 		
@@ -45,7 +45,7 @@ public class InspectionCreator extends BasicTransactionManagement {
 	}
 
 	private void audit(CreateInspectionParameter parameter, AuditLogger auditLogger, Exception e) {
-		auditLogger.audit("createInspection", parameter.inspection, e);
+		auditLogger.audit("createEvent", parameter.event, e);
 	}
 	
 	private void recordSuccess(CreateInspectionParameter parameter) {
@@ -62,20 +62,20 @@ public class InspectionCreator extends BasicTransactionManagement {
 	}
 
 	private void createTransactionDependentServices(Transaction transaction) {
-		createInspectionSaver = inspectionPersistenceFactory.createInspectionSaver(transaction);
+		createEventSaver = inspectionPersistenceFactory.createInspectionSaver(transaction);
 		nextScheduleSerivce = inspectionPersistenceFactory.createNextInspectionScheduleService(transaction);
 	}
 
 	private void createSchedules(Transaction transaction) {
 		for (InspectionScheduleBundle inspectionScheduleBundle : parameter.schedules) {
-			InspectionSchedule inspectionSchedule = new InspectionSchedule(inspectionScheduleBundle.getAsset(), inspectionScheduleBundle.getType(), inspectionScheduleBundle.getScheduledDate());
-			inspectionSchedule.setProject(inspectionScheduleBundle.getJob());
-			nextScheduleSerivce.createNextSchedule(inspectionSchedule);
+			EventSchedule eventSchedule = new EventSchedule(inspectionScheduleBundle.getAsset(), inspectionScheduleBundle.getType(), inspectionScheduleBundle.getScheduledDate());
+			eventSchedule.setProject(inspectionScheduleBundle.getJob());
+			nextScheduleSerivce.createNextSchedule(eventSchedule);
 		}
 	}
 
 	private void createInspection(Transaction transaction) {
-		result = createInspectionSaver.createInspection(parameter);
+		result = createEventSaver.createEvent(parameter);
 	}
 
 	@Override

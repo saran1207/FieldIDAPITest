@@ -11,7 +11,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.security.Permissions;
@@ -25,11 +25,11 @@ public class ProjectEventCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	private ProjectManager projectManager;
-	private InspectionSchedule schedule;
+	private EventSchedule schedule;
 
 	private Project project;
 
-	private Pager<InspectionSchedule> page;
+	private Pager<EventSchedule> page;
 
 	private CompressedScheduleStatus searchStatuses = CompressedScheduleStatus.ALL;
 
@@ -44,7 +44,7 @@ public class ProjectEventCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		schedule = persistenceManager.find(InspectionSchedule.class, uniqueId, getSecurityFilter());
+		schedule = persistenceManager.find(EventSchedule.class, uniqueId, getSecurityFilter());
 	}
 	
 	@SkipValidation
@@ -103,7 +103,7 @@ public class ProjectEventCrud extends AbstractCrud {
 		}
 	}
 
-	public Pager<InspectionSchedule> getPage() {
+	public Pager<EventSchedule> getPage() {
 		if (page == null) {
 			page = projectManager.getSchedulesPaged(project, getSecurityFilter(), getCurrentPage(), Constants.PAGE_SIZE, searchStatuses.getScheduleStatuses());
 		}
@@ -111,7 +111,7 @@ public class ProjectEventCrud extends AbstractCrud {
 		return page;
 	}
 
-	public InspectionSchedule getSchedule() {
+	public EventSchedule getSchedule() {
 		return schedule;
 	}
 

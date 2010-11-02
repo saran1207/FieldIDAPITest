@@ -10,7 +10,7 @@ import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.impl.ProofTestHandlerImpl;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -24,7 +24,7 @@ public class ProofTestHandlerEJBContainer extends EJBTransactionEmulator<ProofTe
 	}
 
 
-	public Map<String, Inspection> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException {
+	public Map<String, Event> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -39,7 +39,7 @@ public class ProofTestHandlerEJBContainer extends EJBTransactionEmulator<ProofTe
 		}
 	}
 
-	public Map<String, Inspection> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long inspectionBookId) throws FileProcessingException {
+	public Map<String, Event> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long inspectionBookId) throws FileProcessingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {

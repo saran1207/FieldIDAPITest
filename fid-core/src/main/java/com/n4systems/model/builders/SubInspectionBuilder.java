@@ -4,9 +4,9 @@ import static com.n4systems.model.builders.InspectionTypeBuilder.anInspectionTyp
 import static com.n4systems.model.builders.AssetBuilder.anAsset;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 
-public class SubInspectionBuilder extends BaseBuilder<SubInspection> {
+public class SubInspectionBuilder extends BaseBuilder<SubEvent> {
 
 	private final String name;
 	private final InspectionType inspectionType;
@@ -31,13 +31,13 @@ public class SubInspectionBuilder extends BaseBuilder<SubInspection> {
 	}
 	
 	@Override
-	public SubInspection createObject() {
-		SubInspection subInspection = new SubInspection();
-		subInspection.setId(id);
-		subInspection.setName(name);
-		subInspection.setType(inspectionType);
-		subInspection.setAsset(asset);
-		return subInspection;
+	public SubEvent createObject() {
+		SubEvent subEvent = new SubEvent();
+		subEvent.setId(id);
+		subEvent.setName(name);
+		subEvent.setType(inspectionType);
+		subEvent.setAsset(asset);
+		return subEvent;
 	}
 
 }

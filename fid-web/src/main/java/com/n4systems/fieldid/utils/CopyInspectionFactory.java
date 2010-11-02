@@ -7,52 +7,52 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.parents.EntityWithTenant;
 
 public class CopyInspectionFactory {
 
-	public static Inspection copyInspection( Inspection inspection ) {
-		Inspection newInspection = new Inspection();
+	public static Event copyInspection( Event event) {
+		Event newEvent = new Event();
 		
-		copyAbstractInspection( newInspection, inspection );
+		copyAbstractInspection(newEvent, event);
 		
-		newInspection.setAssignedTo(inspection.getAssignedTo());
-		newInspection.setOwner( inspection.getOwner() );
-		newInspection.setBook( inspection.getBook() );
-		newInspection.setGroup( inspection.getGroup() );
-		newInspection.setPerformedBy( inspection.getPerformedBy() );
-		newInspection.setAdvancedLocation(inspection.getAdvancedLocation());
-		newInspection.setPrintable( inspection.isPrintable() );
-		if( inspection.isRetired() ) {
-			newInspection.retireEntity();
+		newEvent.setAssignedTo(event.getAssignedTo());
+		newEvent.setOwner( event.getOwner() );
+		newEvent.setBook( event.getBook() );
+		newEvent.setGroup( event.getGroup() );
+		newEvent.setPerformedBy( event.getPerformedBy() );
+		newEvent.setAdvancedLocation(event.getAdvancedLocation());
+		newEvent.setPrintable( event.isPrintable() );
+		if( event.isRetired() ) {
+			newEvent.retireEntity();
 		} else {
-			newInspection.activateEntity();
+			newEvent.activateEntity();
 		}
-		newInspection.setStatus( inspection.getStatus() );
+		newEvent.setStatus( event.getStatus() );
 		
-		newInspection.setDate( ( inspection.getDate() != null ) ? new Date( inspection.getDate().getTime() ) : null );
-		newInspection.setProofTestInfo( copyProofTestInfo( inspection.getProofTestInfo() ) );
-		newInspection.setSubInspections( copySubInspections( inspection.getSubInspections() ) );
+		newEvent.setDate( ( event.getDate() != null ) ? new Date( event.getDate().getTime() ) : null );
+		newEvent.setProofTestInfo( copyProofTestInfo( event.getProofTestInfo() ) );
+		newEvent.setSubEvents( copySubInspections( event.getSubEvents() ) );
 		
-		return newInspection;
+		return newEvent;
 	}
 	
-	protected static List<SubInspection> copySubInspections( List<SubInspection> oldSubInspections ) {
-		List<SubInspection> newSubInspections = new ArrayList<SubInspection>();
+	protected static List<SubEvent> copySubInspections( List<SubEvent> oldSubEvents) {
+		List<SubEvent> newSubEvents = new ArrayList<SubEvent>();
 		
-		for( SubInspection oldSubInspection : oldSubInspections ) {
-			newSubInspections.add( copySubInspection( oldSubInspection ) );
+		for( SubEvent oldSubEvent : oldSubEvents) {
+			newSubEvents.add( copySubInspection(oldSubEvent) );
 		}
 		
-		return newSubInspections;
+		return newSubEvents;
 	}
 	
 	
@@ -67,31 +67,31 @@ public class CopyInspectionFactory {
 		return newProofTestInfo;
 	}
 	
-	public static SubInspection copySubInspection( SubInspection oldSubInspection ) {
-		SubInspection newSubInspection = new SubInspection();
-		copyAbstractInspection( newSubInspection, oldSubInspection );
-		newSubInspection.setName( oldSubInspection.getName() );
+	public static SubEvent copySubInspection( SubEvent oldSubEvent) {
+		SubEvent newSubEvent = new SubEvent();
+		copyAbstractInspection(newSubEvent, oldSubEvent);
+		newSubEvent.setName( oldSubEvent.getName() );
 		
 		
-		return newSubInspection;
+		return newSubEvent;
 	}
 	
 	
-	protected static void copyAbstractInspection( AbstractInspection newInspection, AbstractInspection originalInspection ) {
-		copyEntity( newInspection, originalInspection );
+	protected static void copyAbstractInspection( AbstractEvent newEvent, AbstractEvent originalEvent) {
+		copyEntity(newEvent, originalEvent);
 		
-		newInspection.setAssetStatus(originalInspection.getAssetStatus());
-		newInspection.setAsset( originalInspection.getAsset() );
-		newInspection.setType( originalInspection.getType() );
-		newInspection.setComments( originalInspection.getComments() );
+		newEvent.setAssetStatus(originalEvent.getAssetStatus());
+		newEvent.setAsset( originalEvent.getAsset() );
+		newEvent.setType( originalEvent.getType() );
+		newEvent.setComments( originalEvent.getComments() );
 		
 		
-		newInspection.setAttachments( copyFileAttachments( originalInspection.getAttachments() ) );
-		newInspection.setInfoOptionMap( new HashMap<String, String>( originalInspection.getInfoOptionMap() ) );
+		newEvent.setAttachments( copyFileAttachments( originalEvent.getAttachments() ) );
+		newEvent.setInfoOptionMap( new HashMap<String, String>( originalEvent.getInfoOptionMap() ) );
 		
-		newInspection.setResults( copyCriteriaResults( originalInspection.getResults(), newInspection ) );
+		newEvent.setResults( copyCriteriaResults( originalEvent.getResults(), newEvent) );
 		
-		newInspection.setFormVersion(originalInspection.getFormVersion());
+		newEvent.setFormVersion(originalEvent.getFormVersion());
 	}
 	
 	protected static List<FileAttachment> copyFileAttachments( List<FileAttachment> oldFileAttachments ) {
@@ -118,7 +118,7 @@ public class CopyInspectionFactory {
 		newEntity.setTenant( oldEntity.getTenant() );
 	}
 	
-	protected static Set<CriteriaResult> copyCriteriaResults( Set<CriteriaResult> oldResults, AbstractInspection newInspection ) {
+	protected static Set<CriteriaResult> copyCriteriaResults( Set<CriteriaResult> oldResults, AbstractEvent newEvent) {
 		Set<CriteriaResult> newResults = new HashSet<CriteriaResult>();
 		
 		for( CriteriaResult oldResult : oldResults ) {
@@ -126,7 +126,7 @@ public class CopyInspectionFactory {
 			copyEntity( newResult, oldResult );
 			newResult.setCriteria( oldResult.getCriteria() );
 			newResult.setState( oldResult.getState() );
-			newResult.setInspection( newInspection );
+			newResult.setInspection(newEvent);
 			newResult.setRecommendations( copyRecommendations( oldResult.getRecommendations() ) );
 			newResult.setDeficiencies( copyDeficiencies( oldResult.getDeficiencies() ) );
 			

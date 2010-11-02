@@ -8,10 +8,10 @@ import javax.persistence.Query;
 
 import com.n4systems.handlers.remover.summary.ScheduleListRemovalSummary;
 import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.InspectionSchedule.ScheduleStatusGrouping;
+import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
@@ -37,10 +37,10 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 		Query query = null;
 		
 		if (target == ScheduleStatusGrouping.NON_COMPLETE) {
-			String archiveQuery = "DELETE FROM " + InspectionSchedule.class.getName() +	" WHERE id IN (:ids)";
+			String archiveQuery = "DELETE FROM " + EventSchedule.class.getName() +	" WHERE id IN (:ids)";
 			query = this.transaction.getEntityManager().createQuery(archiveQuery);
 		} else {
-			String archiveQuery = "UPDATE " + InspectionSchedule.class.getName() + " SET state = :archivedState, modified = :now " +	
+			String archiveQuery = "UPDATE " + EventSchedule.class.getName() + " SET state = :archivedState, modified = :now " +
 					" WHERE id IN (:ids)";
 			query = this.transaction.getEntityManager().createQuery(archiveQuery);
 			query.setParameter("archivedState", EntityState.ARCHIVED);
@@ -52,7 +52,7 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 
 	
 	private List<Long> scheduleIds() {
-		QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(InspectionSchedule.class, new OpenSecurityFilter());
+		QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("inspectionType", inspectionType);
 		schedulesToDelete.addWhere(Comparator.IN, "status", "status", Arrays.asList(target.getMembers()));
 				

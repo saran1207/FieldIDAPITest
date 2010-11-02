@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.n4systems.model.Event;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
@@ -15,7 +16,6 @@ import com.n4systems.api.model.InspectionView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapWriter;
-import com.n4systems.model.Inspection;
 import com.n4systems.persistence.loaders.ListLoader;
 
 public class InspectionExporterTest {
@@ -23,18 +23,18 @@ public class InspectionExporterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_export() throws ExportException, ConversionException, MarshalingException, IOException {
-		Inspection model1 = new Inspection();
-		Inspection model2 = new Inspection();
+		Event model1 = new Event();
+		Event model2 = new Event();
 		InspectionView view1 = new InspectionView();
 		InspectionView view2 = new InspectionView();
 		Map<String, Object> map1 = new HashMap<String, Object>();
 		Map<String, Object> map2 = new HashMap<String, Object>();
 		
-		ListLoader<Inspection> inspectionLoader = createMock(ListLoader.class);
+		ListLoader<Event> inspectionLoader = createMock(ListLoader.class);
 		expect(inspectionLoader.load()).andReturn(Arrays.asList(model1, model2));
 		replay(inspectionLoader);
 		
-		ModelToViewConverter<Inspection, InspectionView> converter = createMock(ModelToViewConverter.class);
+		ModelToViewConverter<Event, InspectionView> converter = createMock(ModelToViewConverter.class);
 		expect(converter.toView(model1)).andReturn(view1);
 		expect(converter.toView(model2)).andReturn(view2);
 		replay(converter);

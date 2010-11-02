@@ -11,8 +11,8 @@ import com.n4systems.ejb.impl.MassUpdateManagerImpl;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
@@ -85,11 +85,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateInspections(List<Long> ids, Inspection inspection, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
+	public Long updateInspections(List<Long> ids, Event event, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateInspections(ids, inspection, values, userId);
+			return createManager(transaction.getEntityManager()).updateInspections(ids, event, values, userId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -102,11 +102,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Long updateInspectionSchedules(Set<Long> ids, InspectionSchedule inspectionSchedule, Map<String, Boolean> values) throws UpdateFailureException {
+	public Long updateInspectionSchedules(Set<Long> ids, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateInspectionSchedules(ids, inspectionSchedule, values);
+			return createManager(transaction.getEntityManager()).updateInspectionSchedules(ids, eventSchedule, values);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

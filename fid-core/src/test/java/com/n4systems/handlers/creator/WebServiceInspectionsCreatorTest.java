@@ -1,6 +1,6 @@
 package com.n4systems.handlers.creator;
 
-import static com.n4systems.model.builders.InspectionBuilder.*;
+import static com.n4systems.model.builders.EventBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import org.easymock.IAnswer;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,8 +21,6 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.services.NextInspectionScheduleSerivce;
@@ -30,13 +30,13 @@ import com.n4systems.test.helpers.FluentArrayList;
 public class WebServiceInspectionsCreatorTest {
 	private final class CreateInspectionsMethodObjectSabatour implements CreateInspectionsMethodObject {
 		@Override
-		public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections, Map<Inspection, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
+		public List<Event> createInspections(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
 				FileAttachmentException, UnknownSubAsset {
-					return createInspections(transactionGUID, inspections);
+					return createInspections(transactionGUID, events);
 				}
 
 		@Override
-		public List<Inspection> createInspections(String transactionGUID, List<Inspection> inspections) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
+		public List<Event> createInspections(String transactionGUID, List<Event> events) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
 				FileAttachmentException, UnknownSubAsset {
 			throw new TransactionAlreadyProcessedException();
 		}
@@ -48,8 +48,8 @@ public class WebServiceInspectionsCreatorTest {
 
 	
 	private String transactionGUID = "301001-aas-df-as-dl2kajd";
-	private List<Inspection> inspections = new FluentArrayList<Inspection>(anInspection().build(), anInspection().build());
-	private Map<Inspection, Date> nextInspectionDates = ImmutableMap.of(inspections.get(0), new Date(), inspections.get(1), new Date());
+	private List<Event> events = new FluentArrayList<Event>(anEvent().build(), anEvent().build());
+	private Map<Event, Date> nextInspectionDates = ImmutableMap.of(events.get(0), new Date(), events.get(1), new Date());
 	
 	
 	@Test
@@ -71,7 +71,7 @@ public class WebServiceInspectionsCreatorTest {
 		
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
 		
-		sut.create(transactionGUID, inspections, nextInspectionDates);
+		sut.create(transactionGUID, events, nextInspectionDates);
 		
 		verify(inspectionPersistenceFactory);
 	}
@@ -85,7 +85,7 @@ public class WebServiceInspectionsCreatorTest {
 		
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
 		
-		sut.create(transactionGUID, inspections, nextInspectionDates);
+		sut.create(transactionGUID, events, nextInspectionDates);
 		
 	}	
 	
@@ -94,7 +94,7 @@ public class WebServiceInspectionsCreatorTest {
 	public void should_call_the_with_the_inspections_sent_in_CreateInspectionsMethodObject() throws Exception {
 		
 		CreateInspectionsMethodObject mockCreateInspectionsMethod = createMock(CreateInspectionsMethodObject.class);
-		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, inspections)).andReturn(inspections);
+		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, events)).andReturn(events);
 		replay(mockCreateInspectionsMethod);
 		
 		inspectionPersistenceFactory.createInspectionsMethodObject = mockCreateInspectionsMethod;
@@ -102,7 +102,7 @@ public class WebServiceInspectionsCreatorTest {
 		
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
 		
-		sut.create(transactionGUID, inspections, nextInspectionDates);
+		sut.create(transactionGUID, events, nextInspectionDates);
 		
 		verify(mockCreateInspectionsMethod);
 	}
@@ -111,10 +111,10 @@ public class WebServiceInspectionsCreatorTest {
 	
 	@Test
 	public void should_return_the_inspections_returned_from_CreateInspectionsMethodObject() throws Exception {
-		List<Inspection> savedInspections = new FluentArrayList<Inspection>(anInspection().build(), anInspection().build());
+		List<Event> savedEvents = new FluentArrayList<Event>(anEvent().build(), anEvent().build());
 		
 		CreateInspectionsMethodObject mockCreateInspectionsMethod = createMock(CreateInspectionsMethodObject.class);
-		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, inspections)).andReturn(savedInspections);
+		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, events)).andReturn(savedEvents);
 		replay(mockCreateInspectionsMethod);
 		
 		inspectionPersistenceFactory.createInspectionsMethodObject = mockCreateInspectionsMethod;
@@ -122,9 +122,9 @@ public class WebServiceInspectionsCreatorTest {
 		
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
 		
-		List<Inspection> actualSavedInspections = sut.create(transactionGUID, inspections, nextInspectionDates);
+		List<Event> actualSavedEvents = sut.create(transactionGUID, events, nextInspectionDates);
 		
-		Assert.assertThat(actualSavedInspections, equalTo(savedInspections));
+		Assert.assertThat(actualSavedEvents, equalTo(savedEvents));
 	}
 	
 	
@@ -133,8 +133,8 @@ public class WebServiceInspectionsCreatorTest {
 	public void should_send_a_success_audit_for_each_inspection_saved_after_everything_has_been_saved() throws Exception {
 		
 		AuditLogger auditLogger = createMock(AuditLogger.class);
-		for (Inspection inspection : inspections) {
-			auditLogger.audit((String)anyObject(), same(inspection), (Throwable)isNull());
+		for (Event event : events) {
+			auditLogger.audit((String)anyObject(), same(event), (Throwable)isNull());
 		}
 		
 		replay(auditLogger);
@@ -143,7 +143,7 @@ public class WebServiceInspectionsCreatorTest {
 
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
 		
-		sut.create(transactionGUID, inspections, nextInspectionDates);
+		sut.create(transactionGUID, events, nextInspectionDates);
 				
 		verify(auditLogger);
 	}
@@ -153,8 +153,8 @@ public class WebServiceInspectionsCreatorTest {
 	public void should_send_a_failure_audit_for_each_inspection_after_everything_has_failed() throws Exception {
 		
 		AuditLogger auditLogger = createMock(AuditLogger.class);
-		for (Inspection inspection : inspections) {
-			auditLogger.audit(isA(String.class), same(inspection), isA(TransactionAlreadyProcessedException.class));
+		for (Event event : events) {
+			auditLogger.audit(isA(String.class), same(event), isA(TransactionAlreadyProcessedException.class));
 		}
 		replay(auditLogger);
 		
@@ -166,7 +166,7 @@ public class WebServiceInspectionsCreatorTest {
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
 		
 		try {
-			sut.create(transactionGUID, inspections, nextInspectionDates);
+			sut.create(transactionGUID, events, nextInspectionDates);
 		} catch(Exception e) {}
 				
 		verify(auditLogger);
@@ -177,8 +177,8 @@ public class WebServiceInspectionsCreatorTest {
 	public void should_create_all_schedules_for_the_next_inspeciton_date_map() throws Exception {
 		
 		NextInspectionScheduleSerivce nextInspectionScheduleSerivce = createMock(NextInspectionScheduleSerivce.class);
-		expect(nextInspectionScheduleSerivce.createNextSchedule(isA(InspectionSchedule.class)))
-			.andAnswer(new IAnswer<InspectionSchedule>() {	@Override public InspectionSchedule answer() throws Throwable { return (InspectionSchedule)getCurrentArguments()[0]; } })
+		expect(nextInspectionScheduleSerivce.createNextSchedule(isA(EventSchedule.class)))
+			.andAnswer(new IAnswer<EventSchedule>() {	@Override public EventSchedule answer() throws Throwable { return (EventSchedule)getCurrentArguments()[0]; } })
 			.times(nextInspectionDates.size());
 		replay(nextInspectionScheduleSerivce);
 		
@@ -187,7 +187,7 @@ public class WebServiceInspectionsCreatorTest {
 		
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
 		
-		sut.create(transactionGUID, inspections, nextInspectionDates);
+		sut.create(transactionGUID, events, nextInspectionDates);
 		
 		verify(nextInspectionScheduleSerivce);
 	}

@@ -19,7 +19,7 @@ import com.n4systems.model.security.SecurityLevel;
 
 @Entity
 @Table(name = "inspectionbooks")
-public class InspectionBook extends EntityWithOwner implements NamedEntity, Listable<Long>, Comparable<InspectionBook>, SecurityEnhanced<InspectionBook> {
+public class EventBook extends EntityWithOwner implements NamedEntity, Listable<Long>, Comparable<EventBook>, SecurityEnhanced<EventBook> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)
@@ -29,11 +29,11 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 	private boolean open = true;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="book")
-	private Set<Inspection> inspections = new TreeSet<Inspection>();
+	private Set<Event> events = new TreeSet<Event>();
 	
 	private Long legacyId;
 
-	public InspectionBook() {}
+	public EventBook() {}
 	
 	@Override
 	protected void onCreate() {
@@ -75,12 +75,12 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 	}
 	
 	@AllowSafetyNetworkAccess
-	public Set<Inspection> getInspections() {
-		return inspections;
+	public Set<Event> getEvents() {
+		return events;
 	}
 	
-	public void setInspections(Set<Inspection> inspections) {
-		this.inspections = inspections;
+	public void setEvents(Set<Event> events) {
+		this.events = events;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -98,13 +98,13 @@ public class InspectionBook extends EntityWithOwner implements NamedEntity, List
 		this.legacyId = legacyId;
 	}
 
-	public int compareTo(InspectionBook o) {
+	public int compareTo(EventBook o) {
 		if (o == null || getName() == null) return 0;
 		
 		return getName().compareToIgnoreCase(o.getName());
 	}
 
-	public InspectionBook enhance(SecurityLevel level) {
+	public EventBook enhance(SecurityLevel level) {
 		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
 	

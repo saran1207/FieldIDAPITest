@@ -5,65 +5,65 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 
 public class InspectionFormHelper {
 
-	private Map<AbstractInspection, List<CriteriaSection>> availableSections = new HashMap<AbstractInspection, List<CriteriaSection>>();
+	private Map<AbstractEvent, List<CriteriaSection>> availableSections = new HashMap<AbstractEvent, List<CriteriaSection>>();
 	private List<CriteriaSection> currentCriteriaSections;
 	
-	private Map<AbstractInspection, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractInspection, Map<CriteriaSection, List<CriteriaResult>>>();
+	private Map<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>>();
 	
 	
-	public List<CriteriaSection> getAvailableSections(AbstractInspection inspection) {
-		if (availableSections.get(inspection) == null) {
-			availableSections.put(inspection, new ArrayList<CriteriaSection>());
-			getVisibleResults(inspection);
+	public List<CriteriaSection> getAvailableSections(AbstractEvent event) {
+		if (availableSections.get(event) == null) {
+			availableSections.put(event, new ArrayList<CriteriaSection>());
+			getVisibleResults(event);
 	
-			if (!inspection.getType().getSections().isEmpty()) {
-				for (CriteriaSection section : inspection.getType().getSections()) {
-					if (!sections.get(inspection).isEmpty()) {
-						if (sections.get(inspection).containsKey(section)) {
-							availableSections.get(inspection).add(section);
+			if (!event.getType().getSections().isEmpty()) {
+				for (CriteriaSection section : event.getType().getSections()) {
+					if (!sections.get(event).isEmpty()) {
+						if (sections.get(event).containsKey(section)) {
+							availableSections.get(event).add(section);
 						}
-					} else if (inspection.isNew()) {
+					} else if (event.isNew()) {
 						if (!section.isRetired()) {
-							availableSections.get(inspection).add(section);
+							availableSections.get(event).add(section);
 						}
 					}
 				}
 			}
 		}
-		currentCriteriaSections = availableSections.get(inspection);
-		return availableSections.get(inspection);
+		currentCriteriaSections = availableSections.get(event);
+		return availableSections.get(event);
 	}
 	public List<CriteriaSection> getCurrentCriteriaSections() {
 		return currentCriteriaSections;
 	}
-	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractInspection inspection) {
-		if (sections.get(inspection) == null) {
-			sections.put(inspection, new HashMap<CriteriaSection, List<CriteriaResult>>());
-			if (!inspection.getType().getSections().isEmpty() && !inspection.getResults().isEmpty()) {
-				for (CriteriaSection section : inspection.getType().getSections()) {
+	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractEvent event) {
+		if (sections.get(event) == null) {
+			sections.put(event, new HashMap<CriteriaSection, List<CriteriaResult>>());
+			if (!event.getType().getSections().isEmpty() && !event.getResults().isEmpty()) {
+				for (CriteriaSection section : event.getType().getSections()) {
 					List<CriteriaResult> results = new ArrayList<CriteriaResult>();
 					for (Criteria criteria : section.getCriteria()) {
-						for (CriteriaResult criteriaResult : inspection.getResults()) {
+						for (CriteriaResult criteriaResult : event.getResults()) {
 							if (criteriaResult.getCriteria().equals(criteria)) {
 								results.add(criteriaResult);
 							}
 						}
 					}
 					if (!results.isEmpty()) {
-						sections.get(inspection).put(section, results);
+						sections.get(event).put(section, results);
 					}
 				}
 			}
 		}
 	
-		return sections.get(inspection);
+		return sections.get(event);
 	
 	}
 

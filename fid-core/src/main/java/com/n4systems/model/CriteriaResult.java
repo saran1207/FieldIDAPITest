@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -28,7 +29,8 @@ public class CriteriaResult extends EntityWithTenant {
 	private State state;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
-	private AbstractInspection inspection;
+    @JoinColumn(name="inspection_id")
+	private AbstractEvent event;
 	
 	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinTable(name="criteriaresults_recommendations")
@@ -64,12 +66,12 @@ public class CriteriaResult extends EntityWithTenant {
 		this.state = state;
 	}
 
-	public AbstractInspection getInspection() {
-		return inspection;
+	public AbstractEvent getInspection() {
+		return event;
 	}
 
-	public void setInspection(AbstractInspection inspection) {
-		this.inspection = inspection;
+	public void setInspection(AbstractEvent event) {
+		this.event = event;
 	}
 	
 	public List<Recommendation> getRecommendations() {

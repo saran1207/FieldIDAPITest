@@ -1,10 +1,10 @@
 package com.n4systems.model.builders;
 
-import com.n4systems.model.InspectionBook;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 
-public class InspectionBookBuilder extends BaseBuilder<InspectionBook> {
+public class InspectionBookBuilder extends BaseBuilder<EventBook> {
 
     private Tenant tenant;
     private BaseOrg owner;
@@ -35,8 +35,8 @@ public class InspectionBookBuilder extends BaseBuilder<InspectionBook> {
     }
 
     @Override
-    public InspectionBook createObject() {
-        InspectionBook book = new InspectionBook();
+    public EventBook createObject() {
+        EventBook book = new EventBook();
         book.setTenant(tenant);
         book.setOwner(owner);
         book.setName(name);

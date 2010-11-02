@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.n4systems.exceptions.UnknownSubAsset;
+import com.n4systems.model.builders.EventBuilder;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
@@ -29,9 +30,8 @@ import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.handlers.creator.NullObjectDefaultedInspectionPersistenceFactory;
 import com.n4systems.handlers.creator.inspections.InspectionCreator;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.InspectionType;
-import com.n4systems.model.builders.InspectionBuilder;
 import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
@@ -60,7 +60,7 @@ public class InspectionImporterTest {
 		final InspectionView view = new InspectionView();
 		view.setNextInspectionDate(new Date());
 		
-		Inspection inspection = InspectionBuilder.anInspection().build();
+		Event event = EventBuilder.anEvent().build();
 		
 		Validator<ExternalModelView> validator = createMock(Validator.class);
 		expect(validator.getValidationContext()).andReturn(new HashMap<String, Object>());
@@ -68,16 +68,16 @@ public class InspectionImporterTest {
 
 		InspectionToModelConverter converter = createMock(InspectionToModelConverter.class);
 		expect(converter.getType()).andReturn(new InspectionType());
-		expect(converter.toModel(view, transaction)).andReturn(inspection);
+		expect(converter.toModel(view, transaction)).andReturn(event);
 		replay(converter);
 		
 		
-		CreateInspectionParameter createInspectionParameter = new CreateInspectionParameterBuilder(inspection, modifiedBy)
+		CreateInspectionParameter createInspectionParameter = new CreateInspectionParameterBuilder(event, modifiedBy)
 				.withANextInspectionDate(view.getNextInspectionDateAsDate())
 				.doNotCalculateInspectionResult().build();
 
 		InspectionCreator creator = createMock(InspectionCreator.class);
-		expect(creator.create(eq(createInspectionParameter))).andReturn(inspection);
+		expect(creator.create(eq(createInspectionParameter))).andReturn(event);
 		replay(creator);
 		
 		NullObjectDefaultedInspectionPersistenceFactory inspectionPersistenceFactory = new NullObjectDefaultedInspectionPersistenceFactory();

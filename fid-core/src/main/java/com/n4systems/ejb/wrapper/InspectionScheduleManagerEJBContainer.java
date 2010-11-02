@@ -6,8 +6,8 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Asset;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -19,7 +19,7 @@ public class InspectionScheduleManagerEJBContainer extends EJBTransactionEmulato
 		return new InspectionScheduleManagerImpl(em);
 	}
 
-	public List<InspectionSchedule> autoSchedule(Asset asset) {
+	public List<EventSchedule> autoSchedule(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -34,7 +34,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<InspectionSchedule> getAvailableSchedulesFor(Asset asset) {
+	public List<EventSchedule> getAvailableSchedulesFor(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -118,11 +118,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public void restoreScheduleForInspection(Inspection inspection) {
+	public void restoreScheduleForInspection(Event event) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).restoreScheduleForInspection(inspection);
+			createManager(transaction.getEntityManager()).restoreScheduleForInspection(event);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -148,7 +148,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public InspectionSchedule update(InspectionSchedule schedule) {
+	public EventSchedule update(EventSchedule schedule) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

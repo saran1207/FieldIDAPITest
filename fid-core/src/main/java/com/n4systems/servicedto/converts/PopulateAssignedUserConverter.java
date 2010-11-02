@@ -2,7 +2,7 @@ package com.n4systems.servicedto.converts;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;
@@ -31,21 +31,21 @@ public class PopulateAssignedUserConverter implements AssignedUserConverter {
 	}
 
 	@Override
-	public Inspection convert(InspectionServiceDTO inspectionServiceDTO, Inspection inspection) throws ConversionException {
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event event) throws ConversionException {
 		if (inspectionServiceDTO.isAssignmentIncluded()) {
-			applyAssignment(inspectionServiceDTO, inspection);
+			applyAssignment(inspectionServiceDTO, event);
 		}
-		return inspection;
+		return event;
 	}
 
-	private void applyAssignment(InspectionServiceDTO inspectionServiceDTO, Inspection inspection) throws ConversionException {
+	private void applyAssignment(InspectionServiceDTO inspectionServiceDTO, Event event) throws ConversionException {
 		User user = null;
 		if (inspectionServiceDTO.assignedUserIdExists()) {
 			user = loadUser(inspectionServiceDTO);
 		}
 		
 		AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(user);
-		inspection.setAssignedTo(assignedToUpdate);
+		event.setAssignedTo(assignedToUpdate);
 	}
 
 	private User loadUser(InspectionServiceDTO inspectionServiceDTO) throws ConversionException {

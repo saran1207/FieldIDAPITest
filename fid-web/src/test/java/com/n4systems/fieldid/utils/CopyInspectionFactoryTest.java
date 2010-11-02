@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.State;
 
@@ -32,7 +32,7 @@ public class CopyInspectionFactoryTest {
 	@Test
 	public void testCopyCriteriaResult() {
 		
-		Inspection i = new Inspection();
+		Event i = new Event();
 		
 		Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 		CriteriaResult criteriaResult = new CriteriaResult();

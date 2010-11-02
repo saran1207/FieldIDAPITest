@@ -2,11 +2,11 @@ package com.n4systems.reporting;
 
 import java.io.Serializable;
 
-import com.n4systems.model.AbstractInspection;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 
 public class ObservationView implements Serializable {
 		private static final long serialVersionUID = 1L;
@@ -20,14 +20,14 @@ public class ObservationView implements Serializable {
 		
 		public ObservationView() {}
 
-		public ObservationView(AbstractInspection insp, CriteriaResult result, Observation obs) {
+		public ObservationView(AbstractEvent insp, CriteriaResult result, Observation obs) {
 			
-			if(insp instanceof Inspection) {
+			if(insp instanceof Event) {
 				// master inspections just use their type as the part name
 				part = insp.getAsset().getType().getName();
-			} else if(insp instanceof SubInspection) {
+			} else if(insp instanceof SubEvent) {
 				// sub inspection need to use their specific part name
-				part = ((SubInspection)insp).getName();
+				part = ((SubEvent)insp).getName();
 			}
 			
 			type = obs.getType().getDisplayTitle();

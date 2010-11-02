@@ -4,11 +4,11 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
-import com.n4systems.model.InspectionGroup;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.UserRequest;
@@ -42,7 +42,7 @@ public class TenantCleaner {
         List<Asset> assets = assetsQuery.getResultList();
 
         removeAllForTenant(em, Catalog.class, tenantId);
-        removeAllForTenant(em, Inspection.class, tenantId);
+        removeAllForTenant(em, Event.class, tenantId);
         removeAllForTenant(em, AssociatedInspectionType.class, tenantId);
         removeAllForTenant(em, InspectionType.class, tenantId);
 
@@ -67,8 +67,8 @@ public class TenantCleaner {
         removeAll(em, ActiveSession.class);
         cleanUpOrgConnections(em, tenantId);
         cleanUpSignUpReferrals(em, tenantId);
-        removeAllForTenant(em, InspectionGroup.class, tenantId);
-        removeAllForTenant(em, InspectionBook.class, tenantId);
+        removeAllForTenant(em, EventGroup.class, tenantId);
+        removeAllForTenant(em, EventBook.class, tenantId);
         removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
         removeAllForTenant(em, AutoAttributeDefinition.class, tenantId);
         removeAllForTenant(em, AssetType.class, tenantId);
@@ -98,8 +98,8 @@ public class TenantCleaner {
         Query query = em.createQuery("from " + ExternalOrg.class.getName() + " where linkedOrg.tenant.id = " + tenantId);
         List<ExternalOrg> orgs = query.getResultList();
         for (ExternalOrg org : orgs) {
-            cleanOwnedEntities(em, Inspection.class, org);
-            cleanOwnedEntities(em, InspectionSchedule.class, org);
+            cleanOwnedEntities(em, Event.class, org);
+            cleanOwnedEntities(em, EventSchedule.class, org);
             cleanOwnedEntities(em, AddAssetHistory.class, org);
             Query assetQuery = em.createQuery("from " + Asset.class.getName() + " where owner.id = " + org.getId());
             List<Asset> assets = assetQuery.getResultList();
@@ -157,9 +157,9 @@ public class TenantCleaner {
     }
 
     private void safeRemoveAsset(EntityManager em, Asset asset) {
-        Query scheduleQuery =  em.createQuery("from " + InspectionSchedule.class.getName() + " where asset.id = " + asset.getId());
+        Query scheduleQuery =  em.createQuery("from " + EventSchedule.class.getName() + " where asset.id = " + asset.getId());
         Query attachmentQuery = em.createQuery("from " + AssetAttachment.class.getName() + " where asset.id = " + asset.getId());
-        Query inspQuery = em.createQuery("from " + Inspection.class.getName() + " where asset.id = " + asset.getId());
+        Query inspQuery = em.createQuery("from " + Event.class.getName() + " where asset.id = " + asset.getId());
 
         removeAllFromQuery(em, scheduleQuery);
         removeAllFromQuery(em, attachmentQuery);

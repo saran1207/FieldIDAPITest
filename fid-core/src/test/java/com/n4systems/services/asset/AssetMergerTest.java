@@ -8,23 +8,23 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.exceptions.asset.AssetTypeMissMatchException;
 import com.n4systems.exceptions.asset.DuplicateAssetException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.builders.AssetTypeBuilder;
+import com.n4systems.model.builders.EventBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.SubInspection;
-import com.n4systems.model.builders.InspectionBuilder;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.builders.InspectionScheduleBuilder;
 import com.n4systems.model.builders.SubInspectionBuilder;
 import com.n4systems.model.builders.TenantBuilder;
@@ -41,7 +41,7 @@ public class AssetMergerTest {
 	private Asset winningAsset;
 	private Asset losingAsset;
 	private PersistenceManager mockPersistenceManager;
-	private InspectionManager mockInspectionManager;
+	private EventManager mockEventManager;
 	private AssetManager mockAssetManager;
 	private InspectionScheduleService mockInspectionScheduleService;
 	
@@ -56,7 +56,7 @@ public class AssetMergerTest {
 		// managers mocks  each test is required to put them into reply mode.
 		mockPersistenceManager = createMock(PersistenceManager.class);
 		mockAssetManager = createMock(AssetManager.class);
-		mockInspectionManager = createMock(InspectionManager.class);
+		mockEventManager = createMock(EventManager.class);
 		mockInspectionScheduleService = createMock(InspectionScheduleService.class);
 	}
 	
@@ -105,14 +105,14 @@ public class AssetMergerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_merge_products_together_with_inspections() {
-		List<Inspection> inspectionsOnLosingProduct = new ArrayList<Inspection>(); 
-		inspectionsOnLosingProduct.add(InspectionBuilder.anInspection().on(losingAsset).build());
+		List<Event> inspectionsOnLosingProduct = new ArrayList<Event>();
+		inspectionsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
 		
-		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Inspection>());
+		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Event>());
 		
 				
 		try {
-			expect(mockInspectionManager.updateInspection((Inspection)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(inspectionsOnLosingProduct.get(0));
+			expect(mockEventManager.updateEvent((Event)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(inspectionsOnLosingProduct.get(0));
 		} catch (Exception e1) {
 			fail("should not throw exception");
 		} 
@@ -134,16 +134,16 @@ public class AssetMergerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_merge_products_together_with_inspections_that_have_a_schedule_on_it() {
-		List<Inspection> inspectionsOnLosingProduct = new ArrayList<Inspection>(); 
-		inspectionsOnLosingProduct.add(InspectionBuilder.anInspection().on(losingAsset).build());
+		List<Event> inspectionsOnLosingProduct = new ArrayList<Event>();
+		inspectionsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
 		
 		// puts the schedule onto the inspection.
 		InspectionScheduleBuilder.aCompletedInspectionSchedule().completedDoing(inspectionsOnLosingProduct.get(0)).asset(inspectionsOnLosingProduct.get(0).getAsset()).build();
 		
-		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Inspection>());
+		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Event>());
 				
 		try {
-			expect(mockInspectionManager.updateInspection((Inspection)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(inspectionsOnLosingProduct.get(0));
+			expect(mockEventManager.updateEvent((Event)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(inspectionsOnLosingProduct.get(0));
 		} catch (Exception e1) {
 			fail("should not throw exception");
 		} 
@@ -166,19 +166,19 @@ public class AssetMergerTest {
 	@SuppressWarnings("unchecked")
 	@Test 
 	public void should_merge_subasset_together() {
-		SubInspection sub = SubInspectionBuilder.aSubInspection("tom").withAsset(losingAsset).build();
-		List<SubInspection> subInspections = new ArrayList<SubInspection>();
-		subInspections.add(sub);
+		SubEvent sub = SubInspectionBuilder.aSubInspection("tom").withAsset(losingAsset).build();
+		List<SubEvent> subEvents = new ArrayList<SubEvent>();
+		subEvents.add(sub);
 		
-		List<Inspection> masterInspections = new ArrayList<Inspection>();
-		masterInspections.add(InspectionBuilder.anInspection().withSubInspections(subInspections).build());
+		List<Event> masterEvents = new ArrayList<Event>();
+		masterEvents.add(EventBuilder.anEvent().withSubInspections(subEvents).build());
 	
-		mockInspectionLists(new ArrayList<Inspection>(), masterInspections);
+		mockInspectionLists(new ArrayList<Event>(), masterEvents);
 		mockArchiveOfLosingProduct();
 		
 		
 		try {
-			expect(mockInspectionManager.updateInspection(eq(masterInspections.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(masterInspections.get(0));
+			expect(mockEventManager.updateEvent(eq(masterEvents.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(masterEvents.get(0));
 		} catch (Exception e) {
 			fail("should not throw exception " + e.getMessage());
 		}
@@ -206,24 +206,24 @@ public class AssetMergerTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void mockInspectionLists(List<Inspection> inspections, List<Inspection> masterInspections) {
-		expect(mockPersistenceManager.findAll((QueryBuilder<Inspection>)anyObject())).andReturn(inspections);
-		for (Inspection inspection : inspections) {
-			if (inspection.getSchedule() != null) {
-				expect(mockInspectionScheduleService.updateSchedule((InspectionSchedule)eq(inspection.getSchedule()))).andReturn(inspection.getSchedule());
+	private void mockInspectionLists(List<Event> events, List<Event> masterEvents) {
+		expect(mockPersistenceManager.findAll((QueryBuilder<Event>)anyObject())).andReturn(events);
+		for (Event event : events) {
+			if (event.getSchedule() != null) {
+				expect(mockInspectionScheduleService.updateSchedule((EventSchedule)eq(event.getSchedule()))).andReturn(event.getSchedule());
 			}
 		}
-		expect(mockPersistenceManager.passThroughFindAll(contains("SELECT"), (Map<String,Object>)anyObject())).andReturn(new ArrayList<Object>(masterInspections));
+		expect(mockPersistenceManager.passThroughFindAll(contains("SELECT"), (Map<String,Object>)anyObject())).andReturn(new ArrayList<Object>(masterEvents));
 		
-		for (Inspection inspection : masterInspections) {
-			if (inspection.getSchedule() != null) {
-				expect(mockInspectionScheduleService.updateSchedule((InspectionSchedule)eq(inspection.getSchedule()))).andReturn(inspection.getSchedule());
+		for (Event event : masterEvents) {
+			if (event.getSchedule() != null) {
+				expect(mockInspectionScheduleService.updateSchedule((EventSchedule)eq(event.getSchedule()))).andReturn(event.getSchedule());
 			}
 		}
 	}
 	
 	private void mockEmptInspectionList() {
-		mockInspectionLists(new ArrayList<Inspection>(), new ArrayList<Inspection>());
+		mockInspectionLists(new ArrayList<Event>(), new ArrayList<Event>());
 	}
 
 	
@@ -238,18 +238,18 @@ public class AssetMergerTest {
 	private void verifyMocks() {
 		verify(mockPersistenceManager);
 		verify(mockAssetManager);
-		verify(mockInspectionManager);
+		verify(mockEventManager);
 		verify(mockInspectionScheduleService);
 	}
 	
 	private void replayMocks() {
 		replay(mockAssetManager);
 		replay(mockPersistenceManager);
-		replay(mockInspectionManager);
+		replay(mockEventManager);
 		replay(mockInspectionScheduleService);
 	}
 	
 	private AssetMerger createSystemUnderTest() {
-		return new AssetMerger(mockPersistenceManager, mockAssetManager, mockInspectionManager, mockInspectionScheduleService, user);
+		return new AssetMerger(mockPersistenceManager, mockAssetManager, mockEventManager, mockInspectionScheduleService, user);
 	}
 }

@@ -6,7 +6,7 @@ package com.n4systems.model.utils;
 import java.util.Arrays;
 import java.util.List;
 
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.api.DisplayEnum;
 
 public enum CompressedScheduleStatus implements DisplayEnum {

@@ -4,19 +4,19 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.EventSchedule;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class EntityManagerLastInspectionDateFinder implements LastInspectionDateFinder {
+public class EntityManagerLastInspectionDateFinder implements LastEventDateFinder {
 	private static Logger logger = Logger.getLogger(EntityManagerLastInspectionDateFinder.class);
 	
 	
@@ -29,21 +29,21 @@ public class EntityManagerLastInspectionDateFinder implements LastInspectionDate
 		this.em = em;
 	}
 
-	public Date findLastInspectionDate(Asset asset) {
-		return findLastInspectionDate(asset, null);
+	public Date findLastEventDate(Asset asset) {
+		return findLastEventDate(asset, null);
 	}
 
-	public Date findLastInspectionDate(Long scheduleId) {
-		return findLastInspectionDate(persistenceManager.find(InspectionSchedule.class, scheduleId));
+	public Date findLastEventDate(Long scheduleId) {
+		return findLastEventDate(persistenceManager.find(EventSchedule.class, scheduleId));
 	}
 
-	public Date findLastInspectionDate(InspectionSchedule schedule) {
-		return findLastInspectionDate(schedule.getAsset(), schedule.getInspectionType());
+	public Date findLastEventDate(EventSchedule schedule) {
+		return findLastEventDate(schedule.getAsset(), schedule.getInspectionType());
 	}
 
-	public Date findLastInspectionDate(Asset asset, InspectionType inspectionType) {
+	public Date findLastEventDate(Asset asset, InspectionType inspectionType) {
 
-		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Inspection.class, new OpenSecurityFilter(), "i");
+		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter(), "i");
 
 		qBuilder.setMaxSelect("date");
 		qBuilder.addSimpleWhere("asset.id", asset.getId());

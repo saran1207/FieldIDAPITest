@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.safetynetwork.InspectionsByNetworkIdLoader;
 import com.n4systems.model.security.SecurityFilter;
 
@@ -17,8 +17,8 @@ public class AllInspectionHelper {
 	
 	private Long inspectionCount;
 	private Long localInspectionCount;
-	private List<Inspection> inspections;
-	private Inspection lastInspection; 
+	private List<Event> events;
+	private Event lastEvent;
 	
 	public AllInspectionHelper(LegacyAsset legacyAssetManager, Asset asset, SecurityFilter filter) {
 		this.legacyAssetManager = legacyAssetManager;
@@ -33,20 +33,20 @@ public class AllInspectionHelper {
 		return inspectionCount;
 	}
 
-	public List<Inspection> getInspections() {
-		if (inspections == null) {
+	public List<Event> getInspections() {
+		if (events == null) {
 			InspectionsByNetworkIdLoader loader = new InspectionsByNetworkIdLoader(filter);
-			inspections = loader.setNetworkId(asset.getNetworkId()).load();
-			Collections.sort(inspections);
+			events = loader.setNetworkId(asset.getNetworkId()).load();
+			Collections.sort(events);
 		}
-		return inspections;
+		return events;
 	}
 
-	public Inspection getLastInspection() {
-		if (lastInspection == null) {
-			lastInspection = legacyAssetManager.findLastInspections(asset, filter);
+	public Event getLastInspection() {
+		if (lastEvent == null) {
+			lastEvent = legacyAssetManager.findLastInspections(asset, filter);
 		}
-		return lastInspection;
+		return lastEvent;
 	}
 
 	public Long getLocalInspectionCount() {

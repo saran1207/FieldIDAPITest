@@ -2,13 +2,13 @@ package com.n4systems.services;
 
 import java.util.Date;
 
+import com.n4systems.model.EventBook;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.CommentTempBean;
 
 import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.InspectionBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -46,7 +46,7 @@ public enum SetupDataGroup {
 			lastModeDates.setAssetTypes(newDate);
 		}
 	},
-	INSPECTION_TYPE(InspectionType.class, State.class, InspectionBook.class, CommentTempBean.class, UnitOfMeasure.class) {
+	INSPECTION_TYPE(InspectionType.class, State.class, EventBook.class, CommentTempBean.class, UnitOfMeasure.class) {
 		@Override
 		public Date getLastModDate(SetupDataLastModDates lastModeDates) {
 			return lastModeDates.getInspectionTypes();

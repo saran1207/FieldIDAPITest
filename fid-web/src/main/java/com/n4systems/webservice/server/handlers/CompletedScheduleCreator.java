@@ -2,8 +2,8 @@ package com.n4systems.webservice.server.handlers;
 
 import java.util.Date;
 
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
 import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
@@ -12,33 +12,33 @@ import com.n4systems.webservice.server.InspectionNotFoundException;
 
 public class CompletedScheduleCreator {
 	
-	private InspectionByMobileGuidLoader<Inspection> inspectionLoader;
+	private InspectionByMobileGuidLoader<Event> inspectionLoader;
 	private InspectionScheduleSaver inspectionScheduleSaver;
 	private FilteredIdLoader<Project> jobLoader;
 	
-	public CompletedScheduleCreator(InspectionByMobileGuidLoader<Inspection> inspectionLoader, InspectionScheduleSaver inspectionScheduleSaver, FilteredIdLoader<Project> projectLoader) {
+	public CompletedScheduleCreator(InspectionByMobileGuidLoader<Event> inspectionLoader, InspectionScheduleSaver inspectionScheduleSaver, FilteredIdLoader<Project> projectLoader) {
 		this.inspectionLoader = inspectionLoader;
 		this.inspectionScheduleSaver = inspectionScheduleSaver;
 		this.jobLoader = projectLoader;
 	}
 	
 	public void create(String inspectionMobileGuid, Date scheduledDate, long jobId) {
-		InspectionSchedule schedule = new InspectionSchedule();
+		EventSchedule schedule = new EventSchedule();
 		schedule.setNextDate(scheduledDate);
 		schedule.setProject(findJob(jobId));
-		Inspection inspection = findInspection(inspectionMobileGuid); 
-		schedule.completed(inspection);
-		schedule.setInspectionType(inspection.getType());
-		schedule.setAsset(inspection.getAsset());
-		schedule.setTenant(inspection.getTenant());
+		Event event = findInspection(inspectionMobileGuid);
+		schedule.completed(event);
+		schedule.setInspectionType(event.getType());
+		schedule.setAsset(event.getAsset());
+		schedule.setTenant(event.getTenant());
 		inspectionScheduleSaver.save(schedule);
 	}
 	
-	private Inspection findInspection(String inspectionMobileGuid) {
+	private Event findInspection(String inspectionMobileGuid) {
 		inspectionLoader.setMobileGuid(inspectionMobileGuid);
-		Inspection inspection = inspectionLoader.load();
-		if (inspection == null) throw new InspectionNotFoundException();
-		return inspection;
+		Event event = inspectionLoader.load();
+		if (event == null) throw new InspectionNotFoundException();
+		return event;
 	}
 	
 	private Project findJob(long jobId) {

@@ -1,7 +1,7 @@
 package com.n4systems.servicedto.converts;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 
@@ -12,7 +12,7 @@ public class NullAssignedUserConverter implements AssignedUserConverter {
 	}
 
 	@Override
-	public Inspection convert(InspectionServiceDTO inspectionServiceDTO, Inspection inspection) {
-		return inspection;
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event event) {
+		return event;
 	}
 }

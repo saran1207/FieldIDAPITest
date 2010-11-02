@@ -1,6 +1,6 @@
 package com.n4systems.servicedto.converts;
 
-import static com.n4systems.model.builders.InspectionBuilder.*;
+import static com.n4systems.model.builders.EventBuilder.*;
 import static com.n4systems.model.builders.AssetBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static com.n4systems.servicedto.builders.InspectionServiceDTOBuilder.*;
@@ -13,7 +13,7 @@ import com.n4systems.model.Asset;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.inspection.AssignedToUpdate;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -81,11 +81,11 @@ public class PopulateAssignedUserConverterTest {
 		
 		PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(UNUSED_LOADER_FACTORY);
 		
-		Inspection targetInspection = anInspection().build();
-		sut.convert(inspectionServiceDTO, targetInspection);
+		Event targetEvent = anEvent().build();
+		sut.convert(inspectionServiceDTO, targetEvent);
 		
 		
-		assertThat(targetInspection.hasAssignToUpdate(), is(false));
+		assertThat(targetEvent.hasAssignToUpdate(), is(false));
 	}
 
 	@Test
@@ -94,11 +94,11 @@ public class PopulateAssignedUserConverterTest {
 		
 		PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(UNUSED_LOADER_FACTORY);
 		
-		Inspection targetInspection = anInspection().build();
-		sut.convert(inspectionServiceDTO, targetInspection);
+		Event targetEvent = anEvent().build();
+		sut.convert(inspectionServiceDTO, targetEvent);
 		
 		
-		assertThat(targetInspection.getAssignedTo(), equalTo(assignmentToUnassigned()));
+		assertThat(targetEvent.getAssignedTo(), equalTo(assignmentToUnassigned()));
 	}
 	
 	
@@ -114,9 +114,9 @@ public class PopulateAssignedUserConverterTest {
 		
 		PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(loaderFactoryWith(loader));
 		
-		Inspection targetInspection = anInspection().build();
+		Event targetEvent = anEvent().build();
 		
-		sut.convert(inspectionServiceDTO, targetInspection);
+		sut.convert(inspectionServiceDTO, targetEvent);
 		
 		
 		verify(loader);
@@ -131,11 +131,11 @@ public class PopulateAssignedUserConverterTest {
 		
 		PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(loaderFactoryWith(loader));
 		
-		Inspection targetInspection = anInspection().build();
+		Event targetEvent = anEvent().build();
 		
-		sut.convert(inspectionServiceDTO, targetInspection);
+		sut.convert(inspectionServiceDTO, targetEvent);
 		
-		assertThat(targetInspection.getAssignedTo(), equalTo(assigmentTo(assignedUser)));
+		assertThat(targetEvent.getAssignedTo(), equalTo(assigmentTo(assignedUser)));
 	}
 	
 	
@@ -152,9 +152,9 @@ public class PopulateAssignedUserConverterTest {
 		
 		PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(loaderFactoryWith(loader));
 		
-		Inspection targetInspection = anInspection().build();
+		Event targetEvent = anEvent().build();
 		
-		sut.convert(inspectionServiceDTO, targetInspection);
+		sut.convert(inspectionServiceDTO, targetEvent);
 		
 	}
 

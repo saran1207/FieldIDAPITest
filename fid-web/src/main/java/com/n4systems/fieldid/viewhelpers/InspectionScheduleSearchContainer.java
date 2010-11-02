@@ -4,7 +4,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -34,7 +34,7 @@ public class InspectionScheduleSearchContainer extends SearchContainer {
 	private CompressedScheduleStatus status = CompressedScheduleStatus.INCOMPLETE;
 	
 	public InspectionScheduleSearchContainer(SecurityFilter securityFilter, LoaderFactory loaderFactory) {
-		super(InspectionSchedule.class, "id", securityFilter, loaderFactory);	
+		super(EventSchedule.class, "id", securityFilter, loaderFactory);
 	}
 
 	@Override

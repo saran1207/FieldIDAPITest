@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import org.junit.Test;
 
@@ -12,8 +13,7 @@ import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.InspectionView;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionBook;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Status;
@@ -37,19 +37,19 @@ public class InspectionToModelConverterTest {
 			super(null, null, null, null, userLoader);
 		}
 
-		protected void resolveType(Inspection model) {}
+		protected void resolveType(Event model) {}
 
-		protected void resolveStatus(String statusName, Inspection model) {}
+		protected void resolveStatus(String statusName, Event model) {}
 
-		protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
+		protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
 
-		protected void resolvePrintable(InspectionView view, Inspection model) {}
+		protected void resolvePrintable(InspectionView view, Event model) {}
 
-		protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
+		protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
 
-		protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
+		protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
 
-		protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+		protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 	}
 
 	private static final String PERSONS_NAME = "Full Name";
@@ -58,13 +58,13 @@ public class InspectionToModelConverterTest {
 	@Test
 	public void to_model_sets_type_form_version_and_tenant_from_type() throws ConversionException {
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null) {
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveStatus(String statusName, Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		InspectionType type = InspectionTypeBuilder.anInspectionType().build();
@@ -72,11 +72,11 @@ public class InspectionToModelConverterTest {
 		
 		converter.setType(type);
 		
-		Inspection inspection = converter.toModel(new InspectionView(), transaction);
+		Event event = converter.toModel(new InspectionView(), transaction);
 		
-		assertEquals(type, inspection.getType());
-		assertEquals(type.getFormVersion(), inspection.getFormVersion());
-		assertEquals(type.getTenant(), inspection.getTenant());
+		assertEquals(type, event.getType());
+		assertEquals(type.getFormVersion(), event.getFormVersion());
+		assertEquals(type.getTenant(), event.getTenant());
 	}
 	
 	@Test
@@ -96,13 +96,13 @@ public class InspectionToModelConverterTest {
 		replay(orgLoader);
 		
 		InspectionToModelConverter converter = new InspectionToModelConverter(orgLoader, null, null, null, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveType(Event model) {}
+			protected void resolveStatus(String statusName, Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		assertEquals(org, converter.toModel(view, transaction).getOwner());
@@ -112,13 +112,13 @@ public class InspectionToModelConverterTest {
 	@Test
 	public void to_model_resolves_status_ignoring_case() throws ConversionException {
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveType(Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		InspectionView view = new InspectionView();
@@ -136,13 +136,13 @@ public class InspectionToModelConverterTest {
 	@Test
 	public void to_model_resolves_status_defaulting_to_na() throws ConversionException {
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveType(Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		InspectionView view = new InspectionView();
@@ -164,13 +164,13 @@ public class InspectionToModelConverterTest {
 		replay(smartSearchLoader);
 		
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, smartSearchLoader, null, null, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveType(Event model) {}
+			protected void resolveStatus(String statusName, Event model) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		assertEquals(asset, converter.toModel(view, transaction).getAsset());
@@ -198,13 +198,13 @@ public class InspectionToModelConverterTest {
 	@Test
 	public void to_model_resolves_printable() throws ConversionException {
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveType(Event model) {}
+			protected void resolveStatus(String statusName, Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		InspectionView view = new InspectionView();
@@ -222,7 +222,7 @@ public class InspectionToModelConverterTest {
 		view.setInspectionBook("my book");
 		
 		final BaseOrg owner = OrgBuilder.aPrimaryOrg().build();
-		InspectionBook book = new InspectionBook();
+		EventBook book = new EventBook();
 		
 		InspectionBookFindOrCreateLoader bookLoader = createMock(InspectionBookFindOrCreateLoader.class);
 		bookLoader.setName(view.getInspectionBook());
@@ -231,13 +231,13 @@ public class InspectionToModelConverterTest {
 		replay(bookLoader);
 		
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, bookLoader, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {
+			protected void resolveType(Event model) {}
+			protected void resolveStatus(String statusName, Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {
 				model.setOwner(owner);
 			}
 		};
@@ -252,13 +252,13 @@ public class InspectionToModelConverterTest {
 		replay(bookLoader);
 		
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, bookLoader, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveAssetStatus(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveType(Event model) {}
+			protected void resolveStatus(String statusName, Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveAssetStatus(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		assertNull(converter.toModel(new InspectionView(), transaction).getBook());
@@ -278,13 +278,13 @@ public class InspectionToModelConverterTest {
 		replay(psLoader);
 		
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, psLoader, null, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveType(Event model) {}
+			protected void resolveStatus(String statusName, Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		assertSame(ps, converter.toModel(view, transaction).getAssetStatus());
@@ -297,13 +297,13 @@ public class InspectionToModelConverterTest {
 		replay(psLoader);
 		
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, psLoader, null, null) {
-			protected void resolveType(Inspection model) {}
-			protected void resolveStatus(String statusName, Inspection model) {}
-			protected void resolveAsset(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolvePrintable(InspectionView view, Inspection model) {}
-			protected void resolvePerformedBy(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveInspectionBook(InspectionView view, Inspection model, Transaction transaction) {}
-			protected void resolveOwner(InspectionView view, Inspection model, Transaction transaction) {}
+			protected void resolveType(Event model) {}
+			protected void resolveStatus(String statusName, Event model) {}
+			protected void resolveAsset(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolvePrintable(InspectionView view, Event model) {}
+			protected void resolvePerformedBy(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveInspectionBook(InspectionView view, Event model, Transaction transaction) {}
+			protected void resolveOwner(InspectionView view, Event model, Transaction transaction) {}
 		};
 		
 		assertNull(converter.toModel(new InspectionView(), transaction).getAssetStatus());

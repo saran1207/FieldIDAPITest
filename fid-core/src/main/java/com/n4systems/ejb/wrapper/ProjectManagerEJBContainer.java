@@ -10,9 +10,9 @@ import com.n4systems.exceptions.AssetAlreadyAttachedException;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionSchedule;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
-import com.n4systems.model.InspectionSchedule.ScheduleStatus;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -171,7 +171,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Pager<InspectionSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<ScheduleStatus> statuses) {
+	public Pager<EventSchedule> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<ScheduleStatus> statuses) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

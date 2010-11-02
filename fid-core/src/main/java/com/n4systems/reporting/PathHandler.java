@@ -7,13 +7,13 @@ import java.util.UUID;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
 import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Project;
 import com.n4systems.model.State;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.asset.AssetAttachment;
@@ -323,9 +323,9 @@ public class PathHandler {
 		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(SUMMARY_REPORT_FILE_NAME);
 	}
 	
-	private static String getInspectionPath(Inspection inspection) {
-		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(inspection.getCreated());
-		return mergePaths(dateCreatedPath, inspection.getId().toString());
+	private static String getInspectionPath(Event event) {
+		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(event.getCreated());
+		return mergePaths(dateCreatedPath, event.getId().toString());
 	}
 	
 	private static String getProjectPath(Project project) {
@@ -342,8 +342,8 @@ public class PathHandler {
 		return mergePaths(dateCreatedPath, asset.getId().toString());
 	}
 	
-	private static String getSubInspectionPath(SubInspection subInspection) {
-		return subInspection.getId().toString();
+	private static String getSubInspectionPath(SubEvent subEvent) {
+		return subEvent.getId().toString();
 	}
 	
 	private static String getAssetTypePath(Long assetTypeId) {
@@ -354,8 +354,8 @@ public class PathHandler {
 		return getAssetTypePath(assetType.getId());
 	}
 	
-	private static String getAttachmentPath(Inspection inspection) {
-		return mergePaths(getInspectionPath(inspection));
+	private static String getAttachmentPath(Event event) {
+		return mergePaths(getInspectionPath(event));
 	}
 	
 	private static String getNotePath(FileAttachment note) {
@@ -366,20 +366,20 @@ public class PathHandler {
 		return pAttachment.getId().toString();
 	}
 
-	public static File getInspectionAttachmentFile(Inspection inspection, SubInspection subInspection, FileAttachment attachment) {
-		return new File(getAttachmentFile(inspection, subInspection), attachment.getFileName());
+	public static File getInspectionAttachmentFile(Event event, SubEvent subEvent, FileAttachment attachment) {
+		return new File(getAttachmentFile(event, subEvent), attachment.getFileName());
 	}
 	
-	public static File getInspectionAttachmentFile(Inspection inspection, FileAttachment attachment) {
-		return new File(getAttachmentFile(inspection), attachment.getFileName());
+	public static File getInspectionAttachmentFile(Event event, FileAttachment attachment) {
+		return new File(getAttachmentFile(event), attachment.getFileName());
 	}
 	
-	public static File getAttachmentFile(Inspection inspection, SubInspection subInspection ) {
-		return absolutize(mergePaths(getInspectionAttachmentBasePath(inspection.getTenant()), getAttachmentPath(inspection), getSubInspectionPath(subInspection)));
+	public static File getAttachmentFile(Event event, SubEvent subEvent) {
+		return absolutize(mergePaths(getInspectionAttachmentBasePath(event.getTenant()), getAttachmentPath(event), getSubInspectionPath(subEvent)));
 	}
 	
-	public static File getAttachmentFile(Inspection inspection) {
-		return absolutize(mergePaths(getInspectionAttachmentBasePath(inspection.getTenant()), getAttachmentPath(inspection)));
+	public static File getAttachmentFile(Event event) {
+		return absolutize(mergePaths(getInspectionAttachmentBasePath(event.getTenant()), getAttachmentPath(event)));
 	}
 	
 	public static File getInspectionAttachmentBaseFile(Tenant tenant) {
@@ -414,8 +414,8 @@ public class PathHandler {
 		return mergePaths(ASSET_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
-	public static File getChartImageFile(Inspection inspection) {
-		return absolutize(mergePaths(getInspectionChartImageBasePath(inspection.getTenant()), getInspectionPath(inspection), CHART_FILE_NAME));
+	public static File getChartImageFile(Event event) {
+		return absolutize(mergePaths(getInspectionChartImageBasePath(event.getTenant()), getInspectionPath(event), CHART_FILE_NAME));
 	}
 	
 	public static File getInspectionChartImageBaseFile(Tenant tenant) {
@@ -426,8 +426,8 @@ public class PathHandler {
 		return mergePaths(CHART_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
-	public static File getProofTestFile(Inspection inspection) {
-		return absolutize(mergePaths(getInspectionProoftestBasePath(inspection.getTenant()), getInspectionPath(inspection), PROOF_TEST_FILE_NAME));
+	public static File getProofTestFile(Event event) {
+		return absolutize(mergePaths(getInspectionProoftestBasePath(event.getTenant()), getInspectionPath(event), PROOF_TEST_FILE_NAME));
 	}
 	
 	public static File getInspectionProoftestBaseFile(Tenant tenant) {

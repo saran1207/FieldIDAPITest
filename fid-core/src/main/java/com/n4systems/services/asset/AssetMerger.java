@@ -6,7 +6,7 @@ import java.util.Map;
 
 
 import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.InspectionManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.TenantNotValidForActionException;
@@ -14,9 +14,9 @@ import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.exceptions.asset.AssetTypeMissMatchException;
 import com.n4systems.exceptions.asset.DuplicateAssetException;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
-import com.n4systems.model.SubInspection;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
@@ -28,19 +28,19 @@ public class AssetMerger {
 
 	private final PersistenceManager persistenceManager;
 	private final AssetManager assetManager;
-	private final InspectionManager inspectionManager;
+	private final EventManager eventManager;
 	private final User user;
 
 	private final InspectionScheduleService scheduleService;
 
-	public AssetMerger(PersistenceManager persistenceManager, AssetManager assetManager, InspectionManager inspectionManger, User user) {
-		this(persistenceManager, assetManager, inspectionManger, new InspectionScheduleServiceImpl(persistenceManager), user);
+	public AssetMerger(PersistenceManager persistenceManager, AssetManager assetManager, EventManager eventManger, User user) {
+		this(persistenceManager, assetManager, eventManger, new InspectionScheduleServiceImpl(persistenceManager), user);
 	}
 
-	public AssetMerger(PersistenceManager persistenceManager, AssetManager assetManager, InspectionManager inspectionManger, InspectionScheduleService inspectionScheduleService, User user) {
+	public AssetMerger(PersistenceManager persistenceManager, AssetManager assetManager, EventManager eventManger, InspectionScheduleService inspectionScheduleService, User user) {
 		this.persistenceManager = persistenceManager;
 		this.assetManager = assetManager;
-		this.inspectionManager = inspectionManger;
+		this.eventManager = eventManger;
 		this.user = user;
 		this.scheduleService = inspectionScheduleService;
 	}
@@ -78,17 +78,17 @@ public class AssetMerger {
 	}
 
 	private void moveInspections(Asset winningAsset, Asset losingAsset) {
-		QueryBuilder<Inspection> inspections = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("asset", losingAsset);
-		List<Inspection> inspectionsToMove = persistenceManager.findAll(inspections);
+		QueryBuilder<Event> inspections = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("asset", losingAsset);
+		List<Event> inspectionsToMove = persistenceManager.findAll(inspections);
 
-		for (Inspection inspectionToMove : inspectionsToMove) {
-			inspectionToMove.setAsset(winningAsset);
-			updateInspection(inspectionToMove);
-			updateSchedule(winningAsset, inspectionToMove.getSchedule());
+		for (Event eventToMove : inspectionsToMove) {
+			eventToMove.setAsset(winningAsset);
+			updateInspection(eventToMove);
+			updateSchedule(winningAsset, eventToMove.getSchedule());
 		}
 	}
 
-	private void updateSchedule(Asset winningAsset, InspectionSchedule schedule) {
+	private void updateSchedule(Asset winningAsset, EventSchedule schedule) {
 		if (schedule != null) {
 			schedule.setAsset(winningAsset);
 			scheduleService.updateSchedule(schedule);
@@ -96,31 +96,31 @@ public class AssetMerger {
 	}
 
 	private void moveSubInspections(Asset winningAsset, Asset losingAsset) {
-		String query = "SELECT DISTINCT master from " + Inspection.class.getName() + " master, IN (master.subInspections) subInspection "
+		String query = "SELECT DISTINCT master from " + Event.class.getName() + " master, IN (master.subInspections) subInspection "
 				+ "where subInspection.asset = :losingAsset AND master.state = :activeState";
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("losingAsset", losingAsset);
 		parameters.put("activeState", EntityState.ACTIVE);
-		List<Inspection> masterInspectionsWithSubInspectionToMove = persistenceManager.passThroughFindAll(query, parameters);
+		List<Event> masterInspectionsWithSubEventToMove = persistenceManager.passThroughFindAll(query, parameters);
 
-		for (Inspection masterInspection : masterInspectionsWithSubInspectionToMove) {
-			updateSubInspectionAssets(winningAsset, losingAsset, masterInspection);
-			updateInspection(masterInspection);
+		for (Event masterEvent : masterInspectionsWithSubEventToMove) {
+			updateSubInspectionAssets(winningAsset, losingAsset, masterEvent);
+			updateInspection(masterEvent);
 		}
 	}
 
-	private void updateInspection(Inspection inspection) {
+	private void updateInspection(Event event) {
 		try {
-			inspectionManager.updateInspection(inspection, user.getId(), null, null);
+			eventManager.updateEvent(event, user.getId(), null, null);
 		} catch (Exception e) {
 			throw new ProcessFailureException("could not update inspections to new asset", e);
 		}
 	}
 
-	private void updateSubInspectionAssets(Asset winningAsset, Asset losingAsset, Inspection masterInspection) {
-		for (SubInspection subInspection : masterInspection.getSubInspections()) {
-			if (subInspection.getAsset().equals(losingAsset)) {
-				subInspection.setAsset(winningAsset);
+	private void updateSubInspectionAssets(Asset winningAsset, Asset losingAsset, Event masterEvent) {
+		for (SubEvent subEvent : masterEvent.getSubEvents()) {
+			if (subEvent.getAsset().equals(losingAsset)) {
+				subEvent.setAsset(winningAsset);
 			}
 		}
 	}

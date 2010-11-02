@@ -5,11 +5,12 @@ import static com.n4systems.fieldid.utils.CopyInspectionFactory.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.model.SubEvent;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
-import com.n4systems.ejb.InspectionManager;
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
@@ -25,10 +26,9 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
+import com.n4systems.model.Event;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ProofTestInfo;
-import com.n4systems.model.SubInspection;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
@@ -40,16 +40,16 @@ public class SubInspectionCrud extends InspectionCrud {
 	private MasterInspection masterInspectionHelper;
 	private boolean currentInspectionNew = true;
 
-	public SubInspectionCrud(PersistenceManager persistenceManager, InspectionManager inspectionManager, UserManager userManager, LegacyAsset legacyProductManager,
+	public SubInspectionCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyProductManager,
 			AssetManager assetManager, InspectionScheduleManager inspectionScheduleManager) {
 
-		super(persistenceManager, inspectionManager, userManager, legacyProductManager, assetManager, inspectionScheduleManager);
+		super(persistenceManager, eventManager, userManager, legacyProductManager, assetManager, inspectionScheduleManager);
 	}
 
 	@Override
 	protected void initMemberFields() {
 		masterInspectionHelper = (MasterInspection) getSession().get(MasterInspectionCrud.SESSION_KEY);
-		inspection = new Inspection();
+		event = new Event();
 	}
 
 	@Override
@@ -58,24 +58,24 @@ public class SubInspectionCrud extends InspectionCrud {
 
 		if (MasterInspection.matchingMasterInspection(masterInspectionHelper, token)) {
 			if (uniqueId == 0) {
-				inspection = CopyInspectionFactory.copyInspection(masterInspectionHelper.getInspection());
+				event = CopyInspectionFactory.copyInspection(masterInspectionHelper.getInspection());
 				if (masterInspectionHelper.isMainInspectionStored()) {
 					currentInspectionNew = false;
 				}
 			} else {
-				inspection = copyInspection(masterInspectionHelper.createInspectionFromSubInspection(masterInspectionHelper.getSubInspection(uniqueId)));
+				event = copyInspection(masterInspectionHelper.createInspectionFromSubInspection(masterInspectionHelper.getSubInspection(uniqueId)));
 				if (uniqueId != null) {
 					currentInspectionNew = false;
 				}
 			}
 			if (currentInspectionNew) {
-				inspection.setAsset(null);
-				inspection.setType(null);
+				event.setAsset(null);
+				event.setType(null);
 			} else {
 				parentAsset = masterInspectionHelper.getInspection().getAsset();
 
-				setType(inspection.getType().getId());
-				setAssetId(inspection.getAsset().getId());
+				setType(event.getType().getId());
+				setAssetId(event.getAsset().getId());
 			}
 		} else {
 			masterInspectionHelper = null;
@@ -90,8 +90,8 @@ public class SubInspectionCrud extends InspectionCrud {
 			return MISSING;
 		}
 		reattachUploadedFiles();
-		inspection.setId(null);
-		if (inspection.getResults() != null) {
+		event.setId(null);
+		if (event.getResults() != null) {
 			restoreCriteriaResultsFromStoredInspection();
 		}
 		
@@ -112,12 +112,12 @@ public class SubInspectionCrud extends InspectionCrud {
 		setUpSupportedProofTestTypes();
 		encodeInfoOptionMapForUseInForm();
 		setUpAssignTo();
-		inspection.setAssetStatus(masterInspectionHelper.getAssetStatus());
+		event.setAssetStatus(masterInspectionHelper.getAssetStatus());
 		
 		setScheduleId(masterInspectionHelper.getScheduleId());
 		reattachUploadedFiles();
 
-		getModifiableInspection().updateValuesToMatch(inspection);
+		getModifiableInspection().updateValuesToMatch(event);
 		
 		
 		getNextSchedules().addAll(masterInspectionHelper.getNextSchedules());
@@ -134,12 +134,12 @@ public class SubInspectionCrud extends InspectionCrud {
 	private void restoreCriteriaResultsFromStoredInspection() {
 		criteriaResults = new ArrayList<CriteriaResult>();
 
-		List<CriteriaSection> availbleSections = getInspectionFormHelper().getAvailableSections(inspection);
+		List<CriteriaSection> availbleSections = getInspectionFormHelper().getAvailableSections(event);
 
 		for (CriteriaSection criteriaSection : availbleSections) {
 			for (Criteria criteria : criteriaSection.getCriteria()) {
 				boolean found = false;
-				for (CriteriaResult result : inspection.getResults()) {
+				for (CriteriaResult result : event.getResults()) {
 					if (result.getCriteria().equals(criteria)) {
 						criteriaResults.add(result);
 						found = true;
@@ -178,7 +178,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		reattachUploadedFiles();
 		setScheduleId(masterInspectionHelper.getScheduleId());
 		
-		getModifiableInspection().updateValuesToMatch(inspection);
+		getModifiableInspection().updateValuesToMatch(event);
 		return super.doEdit();
 	}
 
@@ -200,38 +200,38 @@ public class SubInspectionCrud extends InspectionCrud {
 			return MISSING;
 		}
 
-		inspection.setTenant(getTenant());
-		inspection.setAsset(asset);
-		getModifiableInspection().pushValuesTo(inspection);
+		event.setTenant(getTenant());
+		event.setAsset(asset);
+		getModifiableInspection().pushValuesTo(event);
 
 		User modifiedBy = fetchCurrentUser();
 
-		SubInspection subInspection = masterInspectionHelper.createSubInspectionFromInspection(inspection);
-		subInspection.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
+		SubEvent subEvent = masterInspectionHelper.createSubInspectionFromInspection(event);
+		subEvent.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
 
 		if (!masterInspectionHelper.getInspection().isNew()) {
-			updateAttachmentList(inspection, modifiedBy);
+			updateAttachmentList(event, modifiedBy);
 		}
 
 		if (uniqueID == null) {
-			subInspection.syncFormVersionWithType();
+			subEvent.syncFormVersionWithType();
 
-			if (subInspection.isEditable()) {
-				inspectionHelper.processFormCriteriaResults(subInspection, criteriaResults, modifiedBy);
+			if (subEvent.isEditable()) {
+				inspectionHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
 			}
 
-			masterInspectionHelper.addSubInspection(subInspection);
+			masterInspectionHelper.addSubInspection(subEvent);
 		} else {
-			subInspection.setId(uniqueID);
+			subEvent.setId(uniqueID);
 
-			if (subInspection.isEditable()) {
-				inspectionHelper.processFormCriteriaResults(subInspection, criteriaResults, modifiedBy);
+			if (subEvent.isEditable()) {
+				inspectionHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
 			}
 
-			masterInspectionHelper.replaceSubInspection(subInspection);
+			masterInspectionHelper.replaceSubInspection(subEvent);
 		}
 
-		masterInspectionHelper.getSubInspectionUploadedFiles().put(subInspection, getUploadedFiles());
+		masterInspectionHelper.getSubInspectionUploadedFiles().put(subEvent, getUploadedFiles());
 
 		addFlashMessageText("message.eventstored");
 
@@ -260,36 +260,36 @@ public class SubInspectionCrud extends InspectionCrud {
 		try {
 			findInspectionBook();
 			processProofTestFile();
-			getModifiableInspection().pushValuesTo(inspection);
+			getModifiableInspection().pushValuesTo(event);
 			masterInspectionHelper.setProofTestFile(fileData);
 			masterInspectionHelper.setAssignToUpdate(getAssignedTo(), isAssignToSomeone());
 
 			if (masterInspectionHelper.getInspection().isNew()) {
-				inspection.setTenant(getTenant());
-				inspection.setAsset(asset);
-				inspection.syncFormVersionWithType();
+				event.setTenant(getTenant());
+				event.setAsset(asset);
+				event.syncFormVersionWithType();
 
-				masterInspectionHelper.setAssetStatus(inspection.getAssetStatus());
+				masterInspectionHelper.setAssetStatus(event.getAssetStatus());
 
-				if (inspection.isEditable()) {
-					inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);
+				if (event.isEditable()) {
+					inspectionHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
 				}
 					
 				masterInspectionHelper.setNextSchedules(getNextSchedules());
 				
 			} else {
-				if (inspection.isEditable()) {
-					inspectionHelper.processFormCriteriaResults(inspection, criteriaResults, modifiedBy);
+				if (event.isEditable()) {
+					inspectionHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
 				}
 
-				updateAttachmentList(inspection, modifiedBy);
+				updateAttachmentList(event, modifiedBy);
 			}
 		
-			inspection.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
-			masterInspectionHelper.setSchedule(inspectionSchedule);
+			event.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
+			masterInspectionHelper.setSchedule(eventSchedule);
 			masterInspectionHelper.setScheduleId(inspectionScheduleId);
 			masterInspectionHelper.setUploadedFiles(getUploadedFiles());
-			masterInspectionHelper.setInspection(inspection);
+			masterInspectionHelper.setInspection(event);
 
 		} catch (ProcessingProofTestException e) {
 			addActionErrorText("error.processingprooftest");
@@ -313,11 +313,11 @@ public class SubInspectionCrud extends InspectionCrud {
 		super.processProofTestFile();
 
 		if (fileData != null) {
-			if (inspection.getProofTestInfo() == null) {
-				inspection.setProofTestInfo(new ProofTestInfo());
+			if (event.getProofTestInfo() == null) {
+				event.setProofTestInfo(new ProofTestInfo());
 			}
-			inspection.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-			inspection.getProofTestInfo().setDuration(fileData.getTestDuration());
+			event.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
+			event.getProofTestInfo().setDuration(fileData.getTestDuration());
 		}
 
 	}
@@ -359,7 +359,7 @@ public class SubInspectionCrud extends InspectionCrud {
 	
 	@Override
 	public void setType(Long type) {
-		inspection.setType(null);
+		event.setType(null);
 		super.setType(type);
 	}
 

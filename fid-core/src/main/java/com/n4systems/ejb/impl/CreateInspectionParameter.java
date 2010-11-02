@@ -3,16 +3,16 @@ package com.n4systems.ejb.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.model.Event;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Inspection;
 import com.n4systems.tools.FileDataContainer;
 
 public class CreateInspectionParameter {
-	public final Inspection inspection;
+	public final Event event;
 	public final Date nextInspectionDate;
 	public final Long userId;
 	public final FileDataContainer fileData;
@@ -22,8 +22,8 @@ public class CreateInspectionParameter {
 	public final List<InspectionScheduleBundle> schedules;
 
 
-	public CreateInspectionParameter(Inspection inspection, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, boolean calculateInspectionResult, List<InspectionScheduleBundle> schedules) {
-		this.inspection = inspection;
+	public CreateInspectionParameter(Event event, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, boolean calculateInspectionResult, List<InspectionScheduleBundle> schedules) {
+		this.event = event;
 		this.nextInspectionDate = nextInspectionDate;
 		this.userId = userId;
 		this.fileData = fileData;

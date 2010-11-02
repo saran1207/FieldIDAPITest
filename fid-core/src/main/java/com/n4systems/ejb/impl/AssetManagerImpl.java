@@ -16,6 +16,8 @@ import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.utils.FindSubAssets;
@@ -31,8 +33,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
-import com.n4systems.model.Inspection;
-import com.n4systems.model.InspectionSchedule;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -337,7 +337,7 @@ public class AssetManagerImpl implements AssetManager {
 	}
 	
 	private Set<Long> getInspectionIdsForAsset(Asset asset) {
-		QueryBuilder<Long> idBuilder = new QueryBuilder<Long>(Inspection.class, new OpenSecurityFilter());
+		QueryBuilder<Long> idBuilder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 		idBuilder.setSimpleSelect("id");
 		idBuilder.addWhere(WhereClauseFactory.create("asset.id", asset.getId()));
 		
@@ -345,7 +345,7 @@ public class AssetManagerImpl implements AssetManager {
 	}
 
 	private void archiveSchedules(Asset asset, User archivedBy) {
-		String updateQuery = "UPDATE " + InspectionSchedule.class.getName() + " SET state = :archiveState,  modifiedBy = :archivingUser , modified = :now "
+		String updateQuery = "UPDATE " + EventSchedule.class.getName() + " SET state = :archiveState,  modifiedBy = :archivingUser , modified = :now "
 				+ " WHERE asset = :asset AND state = :activeState ";
 
 		Query update = em.createQuery(updateQuery);
@@ -400,15 +400,15 @@ public class AssetManagerImpl implements AssetManager {
 			assetCount.setCountSelect().addSimpleWhere("type", assetType).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setAssetsToDelete(persistenceManager.findCount(assetCount));
 
-			QueryBuilder<Inspection> inspectionCount = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
+			QueryBuilder<Event> inspectionCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 			inspectionCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setInspectionsToDelete(persistenceManager.findCount(inspectionCount));
 
-			QueryBuilder<InspectionSchedule> scheduleCount = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
+			QueryBuilder<EventSchedule> scheduleCount = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
 			scheduleCount.setCountSelect().addSimpleWhere("asset.type", assetType);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
-			String subInspectionQuery = "select count(i) From " + Inspection.class.getName() + " i, IN( i.subInspections ) si WHERE si.asset.type = :assetType AND i.state = :activeState ";
+			String subInspectionQuery = "select count(i) From " + Event.class.getName() + " i, IN( i.subInspections ) si WHERE si.asset.type = :assetType AND i.state = :activeState ";
 			Query subInspectionCount = em.createQuery(subInspectionQuery);
 			subInspectionCount.setParameter("assetType", assetType).setParameter("activeState", EntityState.ACTIVE);
 			summary.setAssetsUsedInMasterInspection((Long) subInspectionCount.getSingleResult());
@@ -480,15 +480,15 @@ public class AssetManagerImpl implements AssetManager {
 	public AssetRemovalSummary testArchive(Asset asset) {
 		AssetRemovalSummary summary = new AssetRemovalSummary(asset);
 		try {
-			QueryBuilder<Inspection> inspectionCount = new QueryBuilder<Inspection>(Inspection.class, new OpenSecurityFilter());
+			QueryBuilder<Event> inspectionCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 			inspectionCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setInspectionsToDelete(persistenceManager.findCount(inspectionCount));
 
-			QueryBuilder<InspectionSchedule> scheduleCount = new QueryBuilder<InspectionSchedule>(InspectionSchedule.class, new OpenSecurityFilter());
+			QueryBuilder<EventSchedule> scheduleCount = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
 			scheduleCount.setCountSelect().addSimpleWhere("asset", asset);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
-			String subInspectionQuery = "select count(i) From " + Inspection.class.getName() + " i, IN( i.subInspections ) si WHERE si.asset = :asset AND i.state = :activeState ";
+			String subInspectionQuery = "select count(i) From " + Event.class.getName() + " i, IN( i.subInspections ) si WHERE si.asset = :asset AND i.state = :activeState ";
 			Query subInspectionCount = em.createQuery(subInspectionQuery);
 			subInspectionCount.setParameter("asset", asset).setParameter("activeState", EntityState.ACTIVE);
 			summary.setAssetUsedInMasterInspection((Long) subInspectionCount.getSingleResult());
@@ -555,7 +555,7 @@ public class AssetManagerImpl implements AssetManager {
 	}
 
 	public Asset mergeAssets(Asset winningAsset, Asset losingAsset, User user) {
-		AssetMerger merger = new AssetMerger(persistenceManager, this, new InspectionManagerImpl(em), user);
+		AssetMerger merger = new AssetMerger(persistenceManager, this, new EventManagerImpl(em), user);
 		// reload the winning and losing assets so they are fully under managed scope.
 		Asset reloadedWinner = persistenceManager.find(Asset.class, winningAsset.getId());
 		Asset reloadedLoser = persistenceManager.find(Asset.class, losingAsset.getId());
