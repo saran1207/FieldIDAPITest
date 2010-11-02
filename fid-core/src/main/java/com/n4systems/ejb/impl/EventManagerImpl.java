@@ -71,7 +71,7 @@ public class EventManagerImpl implements EventManager {
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
 		filter.setTargets("eg.tenant.id", "event.owner", null, null);
 
-		String queryString = "Select DISTINCT eg FROM "+ EventGroup.class.getName()+" as eg INNER JOIN eg.events as events LEFT JOIN event.asset as asset"
+		String queryString = "Select DISTINCT eg FROM "+ EventGroup.class.getName()+" as eg INNER JOIN eg.events as event LEFT JOIN event.asset as asset"
 				+ " WHERE asset.id = :id AND event.state = :activeState  AND " + filter.produceWhereClause() + " ORDER BY eg.created ";
 
 		Query query = em.createQuery(queryString);
