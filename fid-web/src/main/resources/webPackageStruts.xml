@@ -1556,6 +1556,12 @@
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
+		
+		<action name="assetTypeGroupCreateFromList" method="create" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+			<result name="input" type="freemarker">/templates/html/assetTypeGroup/list.ftl</result>
+			<result name="error" type="freemarker">/templates/html/assetTypeGroup/list.ftl</result>
+			<result name="success" type="redirectAction">assetTypeGroups</result>
+		</action>
 
 		<action name="assetTypeGroupEdit" method="edit" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeGroup/edit.ftl</result>

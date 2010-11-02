@@ -1,11 +1,9 @@
-<head>
-	<style>
-		div.formAction {
-			text-align:left;
-		}
-	</style>
-</head>
 ${action.setPageType('asset_type_group', 'list')!}
+
+<head>
+	<@n4.includeStyle href="assetTypeGroupList" type="page"/>
+</head>
+
 <#if !groups.empty >
 	<div class="formAction">
 		<button onclick="redirect('<@s.url action="reorderAssetTypeGroups"/>');"><@s.text name="label.reorder"/></button>
@@ -30,10 +28,17 @@ ${action.setPageType('asset_type_group', 'list')!}
 	</table>
 	
 <#else>
-	<div class="emptyList" >
-		<h2><@s.text name="label.noresults" /></h2>
-		<p>
-			<@s.text name="label.emptyassettypegrouplist" /> <a href="<@s.url action="assetTypeGroupAdd"/>"><@s.text name="label.addfirstassettypegroup" /></a>
-		</p>
+	<#include "/templates/html/common/_formErrors.ftl" />	
+	<div class="initialMessage">
+		<div class="textContainer" >
+			<h1><@s.text name="label.create_asset_type_group"/></h1>
+			<p><@s.text name="label.create_asset_type_group_message" /></p>
+		</div>
+		<@s.form action="assetTypeGroupCreateFromList" theme="fieldid" cssClass="crudForm bigForm pageSection layout">
+			<@s.textfield name="name" required="true"/>
+			<@s.submit key="label.create_asset_type_group_now"/>
+		</@s.form>
 	</div>
+
+	
 </#if>	
