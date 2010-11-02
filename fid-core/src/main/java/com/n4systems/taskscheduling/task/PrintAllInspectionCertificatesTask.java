@@ -22,20 +22,20 @@ import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.utils.LazyLoadingList;
-import com.n4systems.reporting.InspectionCertificateReportGenerator;
-import com.n4systems.reporting.InspectionReportType;
+import com.n4systems.reporting.EventReportType;
+import com.n4systems.reporting.EventCertificateReportGenerator;
 
 
 public class PrintAllInspectionCertificatesTask extends DownloadTask {
-	private final InspectionCertificateReportGenerator reportGen;
+	private final EventCertificateReportGenerator reportGen;
 	private final SafetyNetworkInspectionLoader inspectionLoader;
 	
 	private List<Long> inspectionIds;
-	private InspectionReportType reportType;
+	private EventReportType reportType;
 	
 	public PrintAllInspectionCertificatesTask(DownloadLink downloadLink, String downloadUrl, DateTimeDefiner dateDefiner, SafetyNetworkInspectionLoader inspectionLoader) {
 		super(downloadLink, downloadUrl, "printAllEventCerts");
-		this.reportGen = new InspectionCertificateReportGenerator(dateDefiner);
+		this.reportGen = new EventCertificateReportGenerator(dateDefiner);
 		this.inspectionLoader = inspectionLoader;
 	}
 	
@@ -83,7 +83,7 @@ public class PrintAllInspectionCertificatesTask extends DownloadTask {
     	this.inspectionIds = inspectionIds;
     }
 
-	public void setReportType(InspectionReportType reportType) {
+	public void setReportType(EventReportType reportType) {
     	this.reportType = reportType;
 	}
 

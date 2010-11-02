@@ -23,7 +23,7 @@ public interface InspectionScheduleManager {
 	
 	public boolean schedulePastDue(Long scheduleId);
 	public Long getAssetIdForSchedule(Long scheduleId);
-	public Long getInspectionTypeIdForSchedule(Long scheduleId);
+	public Long getEventTypeIdForSchedule(Long scheduleId);
 	
 	public Long getInspectionIdForSchedule(Long scheduleId);
 }

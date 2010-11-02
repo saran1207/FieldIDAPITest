@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.utils;
 
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.SecurityFilter;
@@ -17,8 +17,8 @@ public class SavedReportSearchCriteriaConverter {
 		this.filter = filter;
 	}
 
-	public InspectionSearchContainer convert(SavedReport savedReport) {
-		InspectionSearchContainer container = new InspectionSearchContainer(filter, loaderFactory);
+	public EventSearchContainer convert(SavedReport savedReport) {
+		EventSearchContainer container = new EventSearchContainer(filter, loaderFactory);
 		container.setSelectedColumns(savedReport.getColumns());
 		container.setSortColumn(savedReport.getSortColumn());
 		container.setSortDirection(savedReport.getSortDirection());
@@ -52,7 +52,7 @@ public class SavedReportSearchCriteriaConverter {
 	}
 	
 	
-	public SavedReport convertInto(InspectionSearchContainer container, SavedReport report) {
+	public SavedReport convertInto(EventSearchContainer container, SavedReport report) {
 		
 		
 		report.setSortColumn(container.getSortColumn());

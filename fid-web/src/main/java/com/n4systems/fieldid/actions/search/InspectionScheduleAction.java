@@ -1,5 +1,5 @@
 package com.n4systems.fieldid.actions.search;
-import static com.n4systems.fieldid.viewhelpers.InspectionSearchContainer.*;
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -17,10 +18,9 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
@@ -30,7 +30,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.Preparable;
 
-public class InspectionScheduleAction extends CustomizableSearchAction<InspectionScheduleSearchContainer> implements Preparable {
+public class InspectionScheduleAction extends CustomizableSearchAction<EventScheduleSearchContainer> implements Preparable {
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
 	private static final long serialVersionUID = 1L;
 	
@@ -51,7 +51,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	}
 	
 	
-	public <T extends CustomizableSearchAction<InspectionScheduleSearchContainer>>InspectionScheduleAction(String sessionKey, Class<T> implementingClass,
+	public <T extends CustomizableSearchAction<EventScheduleSearchContainer>>InspectionScheduleAction(String sessionKey, Class<T> implementingClass,
 			final PersistenceManager persistenceManager, 
 			final EventManager eventManager,
 			final AssetManager assetManager,
@@ -73,8 +73,8 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	}
 	
 	@Override
-	protected InspectionScheduleSearchContainer createSearchContainer() {
-		return new InspectionScheduleSearchContainer(getSecurityFilter(), getLoaderFactory());
+	protected EventScheduleSearchContainer createSearchContainer() {
+		return new EventScheduleSearchContainer(getSecurityFilter(), getLoaderFactory());
 	}
 	
 	@Override
@@ -130,7 +130,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	}
 	
 	public List<ListingPair> getInspectionTypes() {
-		return persistenceManager.findAllLP(InspectionTypeGroup.class, getTenantId(), "name");
+		return persistenceManager.findAllLP(EventTypeGroup.class, getTenantId(), "name");
 	}
 	
 	public List<Listable<Long>> getEmployees() {
@@ -151,7 +151,7 @@ public class InspectionScheduleAction extends CustomizableSearchAction<Inspectio
 	}
 	
 	public Long getInspectionTypeIdForInspectionScheduleId(String inspectionScheduleId) {
-		return inspectionScheduleManager.getInspectionTypeIdForSchedule(Long.valueOf(inspectionScheduleId));
+		return inspectionScheduleManager.getEventTypeIdForSchedule(Long.valueOf(inspectionScheduleId));
 	}
 	
 	public Long getInspectionIdForInspectionScheduleId(String inspectionScheduleId) {

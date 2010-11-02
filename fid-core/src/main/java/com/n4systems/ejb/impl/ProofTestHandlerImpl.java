@@ -18,6 +18,7 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.InfoFieldBean;
@@ -33,7 +34,6 @@ import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.EventBook;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -395,11 +395,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		event.setAdvancedLocation(asset.getAdvancedLocation());
 		
 		// find the first inspection that for this asset that supports our file type
-		InspectionType inspType = findSupportedInspectionTypeForAsset(fileData.getFileType(), asset);
+		EventType inspType = findSupportedEventTypeForAsset(fileData.getFileType(), asset);
 		
 		// if we were unable to find an inspection type, we cannot continue.
 		if(inspType == null) {
-			writeLogMessage(tenant, "Unable to find InspectionType for AssetType: [" + asset.getType().getId() + "], Proof Test Type: [" + fileData.getFileType().name() + "]", false, null);
+			writeLogMessage(tenant, "Unable to find EventType for AssetType: [" + asset.getType().getId() + "], Proof Test Type: [" + fileData.getFileType().name() + "]", false, null);
 			return null;
 		}
 		
@@ -440,11 +440,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return event;
 	}
 	
-	private InspectionType findSupportedInspectionTypeForAsset(ProofTestType proofTestType, Asset asset) {
-		InspectionType type = null;
+	private EventType findSupportedEventTypeForAsset(ProofTestType proofTestType, Asset asset) {
+		EventType type = null;
 		
 		// here we simply find the first inspection type that supports this asset type and proof test type
-		for(InspectionType inspType: asset.getType().getInspectionTypes()) {
+		for(EventType inspType: asset.getType().getEventTypes()) {
 			if(inspType.supports(proofTestType)) {
 				type = inspType;
 				break;

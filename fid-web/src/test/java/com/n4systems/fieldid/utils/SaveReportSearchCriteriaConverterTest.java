@@ -4,9 +4,9 @@ import static com.n4systems.model.builders.OrgBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import org.junit.Test;
 
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.EntityByIdIncludingArchivedLoader;
 import com.n4systems.model.savedreports.SavedReport;
@@ -35,7 +35,7 @@ public class SaveReportSearchCriteriaConverterTest {
 		
 		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null);
 		
-		InspectionSearchContainer actualContainer = sut.convert(savedReport);
+		EventSearchContainer actualContainer = sut.convert(savedReport);
 		
 		assertNotNull(actualContainer.getOwner());
 	}
@@ -54,7 +54,7 @@ public class SaveReportSearchCriteriaConverterTest {
 		
 		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null);
 		
-		InspectionSearchContainer actualContainer = sut.convert(savedReport);
+		EventSearchContainer actualContainer = sut.convert(savedReport);
 		
 		assertNull(actualContainer.getOwner());
 	}

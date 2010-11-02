@@ -13,7 +13,7 @@ import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -79,7 +79,7 @@ public class ImporterFactory {
 		return new ProductionInspectionPersistenceFactory();
 	}
 
-	protected InspectionToModelConverter createInspectionToModelConverter(InspectionType type) {
+	protected InspectionToModelConverter createInspectionToModelConverter(EventType type) {
 		InspectionToModelConverter converter = new InspectionToModelConverter(
 				loaderFactory.createOrgByNameLoader(), 
 				loaderFactory.createSmartSearchListLoader(), 
@@ -103,7 +103,7 @@ public class ImporterFactory {
 		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
 	}
 
-	public InspectionImporter createInspectionImporter(MapReader reader, Long modifiedBy, InspectionType type) {
+	public InspectionImporter createInspectionImporter(MapReader reader, Long modifiedBy, EventType type) {
 		InspectionImporter importer = new InspectionImporter(reader, createViewValidator(), createInspectionPersistenceFactory(), createInspectionToModelConverter(type));
 		importer.setModifiedBy(modifiedBy);
 		return importer;

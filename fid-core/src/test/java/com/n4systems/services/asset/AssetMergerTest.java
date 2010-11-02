@@ -16,6 +16,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.EventBuilder;
+import com.n4systems.model.builders.EventScheduleBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,8 +26,7 @@ import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.builders.InspectionScheduleBuilder;
-import com.n4systems.model.builders.SubInspectionBuilder;
+import com.n4systems.model.builders.SubEventBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
@@ -138,7 +138,7 @@ public class AssetMergerTest {
 		inspectionsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
 		
 		// puts the schedule onto the inspection.
-		InspectionScheduleBuilder.aCompletedInspectionSchedule().completedDoing(inspectionsOnLosingProduct.get(0)).asset(inspectionsOnLosingProduct.get(0).getAsset()).build();
+		EventScheduleBuilder.aCompletedEventSchedule().completedDoing(inspectionsOnLosingProduct.get(0)).asset(inspectionsOnLosingProduct.get(0).getAsset()).build();
 		
 		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Event>());
 				
@@ -166,7 +166,7 @@ public class AssetMergerTest {
 	@SuppressWarnings("unchecked")
 	@Test 
 	public void should_merge_subasset_together() {
-		SubEvent sub = SubInspectionBuilder.aSubInspection("tom").withAsset(losingAsset).build();
+		SubEvent sub = SubEventBuilder.aSubInspection("tom").withAsset(losingAsset).build();
 		List<SubEvent> subEvents = new ArrayList<SubEvent>();
 		subEvents.add(sub);
 		

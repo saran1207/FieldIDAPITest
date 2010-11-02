@@ -7,12 +7,12 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventType;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.AssociatedEventType;
 
 public class InspectionGroupCrud extends AbstractCrud {
 
@@ -32,7 +32,7 @@ public class InspectionGroupCrud extends AbstractCrud {
 	private EventManager eventManager;
 	private AssetManager assetManager;
 
-	private List<InspectionType> inspectionTypes;
+	private List<EventType> eventTypes;
 
 	public InspectionGroupCrud(EventManager eventManager, AssetManager assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -118,15 +118,15 @@ public class InspectionGroupCrud extends AbstractCrud {
 		return eventGroups;
 	}
 
-	public List<InspectionType> getInspectionTypes() {
-		if (inspectionTypes == null) {
-			inspectionTypes = new ArrayList<InspectionType>();
-			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(getAsset().getType()).load();
-			for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
-				inspectionTypes.add(associatedInspectionType.getInspectionType());
+	public List<EventType> getInspectionTypes() {
+		if (eventTypes == null) {
+			eventTypes = new ArrayList<EventType>();
+			List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(getAsset().getType()).load();
+			for (AssociatedEventType associatedEventType : associatedEventTypes) {
+				eventTypes.add(associatedEventType.getEventType());
 			}
 		}
-		return inspectionTypes;
+		return eventTypes;
 		
 	}
 

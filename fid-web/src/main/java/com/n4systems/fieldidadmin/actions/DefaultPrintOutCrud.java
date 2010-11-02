@@ -1,8 +1,8 @@
 package com.n4systems.fieldidadmin.actions;
 
+import com.n4systems.model.EventTypeGroup;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -89,7 +89,7 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 	@SkipValidation
 	public String doDelete() {
 		testRequiredEntities(true);
-		QueryBuilder<InspectionTypeGroup> printOutUsedQuery = new QueryBuilder<InspectionTypeGroup>(InspectionTypeGroup.class, new OpenSecurityFilter());
+		QueryBuilder<EventTypeGroup> printOutUsedQuery = new QueryBuilder<EventTypeGroup>(EventTypeGroup.class, new OpenSecurityFilter());
 		printOutUsedQuery.addSimpleWhere("printOut", printOut);
 		Long numberOfInspectionGroupsUsingPrintOut = persistenceEJBContainer.findCount(printOutUsedQuery);
 		if (numberOfInspectionGroupsUsingPrintOut != 0 ) {

@@ -1,6 +1,6 @@
 package com.n4systems.handlers.remover;
 
-import static com.n4systems.model.builders.InspectionTypeBuilder.*;
+import static com.n4systems.model.builders.EventTypeBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
@@ -9,10 +9,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.n4systems.model.EventType;
 import org.junit.Test;
 
 import com.n4systems.handlers.remover.summary.NotificationSettingDeleteSummary;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.persistence.FieldIdTransaction;
 import com.n4systems.persistence.Transaction;
@@ -25,7 +25,7 @@ public class NotificationSettingDeleteHandlerTest {
 
 	@Test
 	public void should_find_1_notification_to_delete() {
-		InspectionType inspectionTypeToDelete = anInspectionType().build(); 
+		EventType eventTypeToDelete = anEventType().build();
 		
 		
 		Query mockQuery = createMock(Query.class);
@@ -43,7 +43,7 @@ public class NotificationSettingDeleteHandlerTest {
 		
 		NotificationSettingDeleteHandler sut = new NotificationSettingDeleteHandlerImpl();
 		
-		NotificationSettingDeleteSummary summary = sut.forInspectionType(inspectionTypeToDelete).summary(mockTransaction);
+		NotificationSettingDeleteSummary summary = sut.forEventType(eventTypeToDelete).summary(mockTransaction);
 		
 		assertEquals(new Long(1), summary.getNotificationsToDelete());
 		verify(mockTransaction);
@@ -54,7 +54,7 @@ public class NotificationSettingDeleteHandlerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_delete_1_notification() {
-		InspectionType inspectionTypeToDelete = anInspectionType().build(); 
+		EventType eventTypeToDelete = anEventType().build();
 		
 		List<Long> inspectionToRemove = new FluentArrayList<Long>().stickOn(1L);
 		
@@ -80,7 +80,7 @@ public class NotificationSettingDeleteHandlerTest {
 		
 		NotificationSettingDeleteHandler sut = new NotificationSettingDeleteHandlerImpl();
 		
-		sut.forInspectionType(inspectionTypeToDelete).remove(mockTransaction);
+		sut.forEventType(eventTypeToDelete).remove(mockTransaction);
 		
 		
 		verify(mockTransaction);

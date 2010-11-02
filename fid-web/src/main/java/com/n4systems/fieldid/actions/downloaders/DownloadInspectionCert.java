@@ -4,18 +4,18 @@ import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
 
 import com.n4systems.model.Event;
+import com.n4systems.reporting.EventCertificateGenerator;
+import com.n4systems.reporting.EventReportType;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.NonPrintableEventType;
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.reporting.CertificatePrinter;
-import com.n4systems.reporting.InspectionCertificateGenerator;
-import com.n4systems.reporting.InspectionReportType;
 
 
 public class DownloadInspectionCert extends DownloadAction {
@@ -23,7 +23,7 @@ public class DownloadInspectionCert extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 	private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	
-	private InspectionReportType reportType;
+	private EventReportType reportType;
 	
 	public DownloadInspectionCert(com.n4systems.ejb.PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -49,7 +49,7 @@ public class DownloadInspectionCert extends DownloadAction {
 		try {
 			transaction = PersistenceManager.startTransaction();
 			
-			InspectionCertificateGenerator certGen = new InspectionCertificateGenerator(new DateTimeDefiner(getUser()));
+			EventCertificateGenerator certGen = new EventCertificateGenerator(new DateTimeDefiner(getUser()));
 			JasperPrint p = certGen.generate(reportType, event, transaction);
 			
 			byte[] pdf = new CertificatePrinter().printToPDF(p);
@@ -76,7 +76,7 @@ public class DownloadInspectionCert extends DownloadAction {
 		return reportType.getReportNamePrefix() + "-" + dateFormatter.format(event.getDate()) + ".pdf";
 	}
 
-	public InspectionSearchContainer getCriteria() {
+	public EventSearchContainer getCriteria() {
 		return getSession().getReportCriteria();
 	}
 	
@@ -85,7 +85,7 @@ public class DownloadInspectionCert extends DownloadAction {
 	}
 
 	public void setReportType(String reportType) {
-		this.reportType = InspectionReportType.valueOf(reportType);
+		this.reportType = EventReportType.valueOf(reportType);
 	}
 	
 }

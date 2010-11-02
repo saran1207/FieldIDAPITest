@@ -11,7 +11,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
-import com.n4systems.reporting.InspectionReportType;
+import com.n4systems.reporting.EventReportType;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.AssetExportTask;
@@ -58,7 +58,7 @@ public class DownloadCoordinator {
 		executor.execute(task);
 	}
 	
-	public void generateAllInspectionCertificates(String name, String downloadUrl, InspectionReportType type, List<Long> inspectionIds) {
+	public void generateAllInspectionCertificates(String name, String downloadUrl, EventReportType type, List<Long> inspectionIds) {
 		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
 		PrintAllInspectionCertificatesTask task = taskFactory.createPrintAllInspectionCertificatesTask(link, downloadUrl, type, inspectionIds);
 		

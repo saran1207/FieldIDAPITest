@@ -1,18 +1,18 @@
 package com.n4systems.handlers.creator.signup;
 
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
+import com.n4systems.model.inspectiontypegroup.EventTypeGroupSaver;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
 import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 import com.n4systems.persistence.Transaction;
@@ -22,16 +22,16 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 	
 	private final TagOptionSaver tagSaver;
 	private final AssetTypeSaver assetTypeSaver;
-	private final InspectionTypeGroupSaver inspectionTypeGroupSaver;
+	private final EventTypeGroupSaver eventTypeGroupSaver;
 	private final StateSetSaver stateSetSaver;
 	private final AssetStatusSaver assetStatusSaver;
 	
 	private Tenant tenant;
 
-	public BaseSystemSetupDataCreateHandlerImpl(TagOptionSaver tagSaver, AssetTypeSaver assetTypeSaver, InspectionTypeGroupSaver inspectionTypeGroupSaver, StateSetSaver stateSetSaver, AssetStatusSaver assetStatusSaver) {
+	public BaseSystemSetupDataCreateHandlerImpl(TagOptionSaver tagSaver, AssetTypeSaver assetTypeSaver, EventTypeGroupSaver eventTypeGroupSaver, StateSetSaver stateSetSaver, AssetStatusSaver assetStatusSaver) {
 		this.tagSaver = tagSaver;
 		this.assetTypeSaver = assetTypeSaver;
-		this.inspectionTypeGroupSaver = inspectionTypeGroupSaver;
+		this.eventTypeGroupSaver = eventTypeGroupSaver;
 		this.stateSetSaver = stateSetSaver;
 		this.assetStatusSaver = assetStatusSaver;
 	}
@@ -82,15 +82,15 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 	}
 
 	private void createDefaultInspectionTypeGroups(Transaction transaction) {
-		inspectionTypeGroupSaver.save(transaction, createVisualInspection());
+		eventTypeGroupSaver.save(transaction, createVisualInspection());
 	}
 
-	private InspectionTypeGroup createVisualInspection() {
-		InspectionTypeGroup visualInspection = new InspectionTypeGroup();
-		visualInspection.setName("Visual Inspection");
-		visualInspection.setReportTitle("Visual Inspection");
-		visualInspection.setTenant(tenant);
-		return visualInspection;
+	private EventTypeGroup createVisualInspection() {
+		EventTypeGroup visualEvent = new EventTypeGroup();
+		visualEvent.setName("Visual Inspection");
+		visualEvent.setReportTitle("Visual Inspection");
+		visualEvent.setTenant(tenant);
+		return visualEvent;
 	}
 
 	private void createDefaultStateSets(Transaction transaction) {

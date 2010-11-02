@@ -24,7 +24,7 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.ManualSecurityFilter;
@@ -207,9 +207,9 @@ public class EventManagerImpl implements EventManager {
 	/**
 	 * ensure that all criteria are retired under a retired section.
 	 */
-	public InspectionType updateEventForm(InspectionType inspectionType, Long modifyingUserId) {
-		if (inspectionType.getSections() != null && !inspectionType.getSections().isEmpty()) {
-			for (CriteriaSection section : inspectionType.getSections()) {
+	public EventType updateEventForm(EventType eventType, Long modifyingUserId) {
+		if (eventType.getSections() != null && !eventType.getSections().isEmpty()) {
+			for (CriteriaSection section : eventType.getSections()) {
 				if (section.isRetired()) {
 					for (Criteria criteria : section.getCriteria()) {
 						criteria.setRetired(true);
@@ -219,9 +219,9 @@ public class EventManagerImpl implements EventManager {
 		}
 		
 		// any update to an inspection form, requires an increment of the form version
-		inspectionType.incrementFormVersion();
+		eventType.incrementFormVersion();
 		
-		return persistenceManager.update(inspectionType, modifyingUserId);
+		return persistenceManager.update(eventType, modifyingUserId);
 	}
 
 	

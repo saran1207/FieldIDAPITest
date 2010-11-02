@@ -18,10 +18,15 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.asset.AssetSubAssetsLoader;
-import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
+import com.n4systems.model.inspection.EventAttachmentSaver;
+import com.n4systems.model.inspection.EventByMobileGuidLoader;
+import com.n4systems.model.inspection.EventBySubEventLoader;
+import com.n4systems.model.inspection.NewestEventsForAssetIdLoader;
+import com.n4systems.model.inspectionschedule.EventScheduleSaver;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.webservice.server.handlers.RealTimeAssetLookupHandler;
 import org.apache.log4j.Logger;
@@ -52,18 +57,13 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.inspection.InspectionAttachmentSaver;
-import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
-import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
-import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
-import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
+import com.n4systems.model.inspectionschedule.EventScheduleByGuidOrIdLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
@@ -242,15 +242,15 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
-			QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, securityFilter);
+			QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 			queryBuilder.addPostFetchPaths("sections", "infoFieldNames");
 			
-			List<InspectionType> inspectionTypes = null;
-				inspectionTypes = persistenceManager.findAll( queryBuilder );
+			List<EventType> eventTypes = null;
+				eventTypes = persistenceManager.findAll( queryBuilder );
 			
-			for (InspectionType inspectionType : inspectionTypes) {
-				response.getInspectionTypes().add( converter.convert(inspectionType) );
+			for (EventType eventType : eventTypes) {
+				response.getInspectionTypes().add( converter.convert(eventType) );
 			}
 			
 			response.setCurrentPage(1);
@@ -725,8 +725,8 @@ public class DataServiceImpl implements DataService {
 
 			new InspectionScheduleCreateHandler(new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())),
 					new FilteredIdLoader<Asset>(new TenantOnlySecurityFilter(request.getTenantId()), Asset.class),
-					new FilteredIdLoader<InspectionType>(new TenantOnlySecurityFilter(request.getTenantId()), InspectionType.class),
-					new InspectionScheduleSaver()).createNewInspectionSchedule(eventSchedule, request.getScheduleService());
+					new FilteredIdLoader<EventType>(new TenantOnlySecurityFilter(request.getTenantId()), EventType.class),
+					new EventScheduleSaver()).createNewInspectionSchedule(eventSchedule, request.getScheduleService());
 
 				
 		} catch (Exception e) {
@@ -741,8 +741,8 @@ public class DataServiceImpl implements DataService {
 	
 		try {
 
-			new InspectionScheduleUpdateHandler(new InspectionScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
-					new InspectionScheduleSaver()).updateInspectionSchedule(request.getScheduleService());
+			new InspectionScheduleUpdateHandler(new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
+					new EventScheduleSaver()).updateInspectionSchedule(request.getScheduleService());
 			
 		} catch (Exception e) {
 			logger.error("Exception occured while updating inspection schedule");
@@ -757,8 +757,8 @@ public class DataServiceImpl implements DataService {
 		
 		try {
 
-			new InspectionScheduleUpdateHandler(new InspectionScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
-					new InspectionScheduleSaver()).removeInspectionSchedule(request.getScheduleService());
+			new InspectionScheduleUpdateHandler(new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
+					new EventScheduleSaver()).removeInspectionSchedule(request.getScheduleService());
 			
 		} catch (Exception e) {
 			logger.error("Exception occured while removing inspection schedule");
@@ -1067,7 +1067,7 @@ public class DataServiceImpl implements DataService {
 			Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
 			Map<Event, EventSchedule> inspectionSchedules = new HashMap<Event, EventSchedule>();
 			Asset asset = null;
-			InspectionScheduleByGuidOrIdLoader scheduleLoader = new InspectionScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
+			EventScheduleByGuidOrIdLoader scheduleLoader = new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
 			for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
 				asset = findOrTagProduct( tenantId, inspectionServiceDTO );
 				inspectionServiceDTO.setProductId( asset.getId() );
@@ -1149,7 +1149,7 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private EventSchedule loadScheduleFromInspectionDto(
-			InspectionScheduleByGuidOrIdLoader scheduleLoader,
+			EventScheduleByGuidOrIdLoader scheduleLoader,
 			InspectionServiceDTO inspectionServiceDTO) {
 		return scheduleLoader.setId(inspectionServiceDTO.getInspectionScheduleId()).setMobileGuid(inspectionServiceDTO.getInspectionScheduleMobileGuid()).load();
 	}
@@ -1175,25 +1175,25 @@ public class DataServiceImpl implements DataService {
 
 			User performedBy = persistenceManager.find(User.class, inspectionImageServiceDTO.getPerformedById());
 			
-			InspectionAttachmentSaver attachmentSaver = new InspectionAttachmentSaver();
+			EventAttachmentSaver attachmentSaver = new EventAttachmentSaver();
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());
 			
 			//1. find out inspection using inspection Mobile Guid
 			AbstractEvent targetEvent;
 			if (inspectionImageServiceDTO.isFromSubInspection()) {
-				InspectionByMobileGuidLoader<SubEvent> loader = new InspectionByMobileGuidLoader<SubEvent>(new TenantOnlySecurityFilter(tenantId), SubEvent.class);
+				EventByMobileGuidLoader<SubEvent> loader = new EventByMobileGuidLoader<SubEvent>(new TenantOnlySecurityFilter(tenantId), SubEvent.class);
 				SubEvent subEvent = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
 				
-				InspectionBySubInspectionLoader masterInspectionLoader = new InspectionBySubInspectionLoader();
-				masterInspectionLoader.setSubInspection(subEvent);
-				Event masterEvent = masterInspectionLoader.load();
+				EventBySubEventLoader masterEventLoader = new EventBySubEventLoader();
+				masterEventLoader.setSubInspection(subEvent);
+				Event masterEvent = masterEventLoader.load();
 				
 				attachmentSaver.setInspection(masterEvent);
 				attachmentSaver.setSubInspection(subEvent);
 
 				targetEvent = subEvent;
 			} else {
-				InspectionByMobileGuidLoader<Event> loader = new InspectionByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(tenantId), Event.class);
+				EventByMobileGuidLoader<Event> loader = new EventByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(tenantId), Event.class);
 				Event event = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
 				
 				attachmentSaver.setInspection(event);
@@ -1374,7 +1374,7 @@ public class DataServiceImpl implements DataService {
 		try {	
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(requestInformation.getTenantId());			
-			NewestInspectionsForAssetIdLoader loader = new NewestInspectionsForAssetIdLoader(filter);
+			NewestEventsForAssetIdLoader loader = new NewestEventsForAssetIdLoader(filter);
 			RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(loader);
 			
 			List<Event> events = lookupHandler
@@ -1605,8 +1605,8 @@ public class DataServiceImpl implements DataService {
 			Date convertedNextDate = DtoDateConverter.convertStringToDate(request.getNextDate());
 			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(request.getTenantId());
 			
-			CompletedScheduleCreator scheduleCreator = new CompletedScheduleCreator(new InspectionByMobileGuidLoader<Event>(filter, Event.class),
-															new InspectionScheduleSaver(), new FilteredIdLoader<Project>(filter, Project.class));
+			CompletedScheduleCreator scheduleCreator = new CompletedScheduleCreator(new EventByMobileGuidLoader<Event>(filter, Event.class),
+															new EventScheduleSaver(), new FilteredIdLoader<Project>(filter, Project.class));
 			scheduleCreator.create(request.getInspectionMobileGuid(), convertedNextDate, request.getJobId());
 		} catch (InspectionNotFoundException e) {
 			logger.error("could not find inspection for completed job schedule", e);

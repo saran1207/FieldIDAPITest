@@ -11,6 +11,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.utils.FindSubAssets;
@@ -32,7 +33,6 @@ import com.n4systems.fieldid.utils.CopyInspectionFactory;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
-import com.n4systems.model.InspectionType;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
@@ -326,7 +326,7 @@ public class MasterInspectionCrud extends AbstractCrud {
 			asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 			if (asset != null) {
 				for (SubAsset subAsset : asset.getSubAssets()) {
-					persistenceManager.reattchAndFetch(subAsset.getAsset().getType(), "inspectionTypes");
+					persistenceManager.reattchAndFetch(subAsset.getAsset().getType(), "eventTypes");
 				}
 			}
 
@@ -360,11 +360,11 @@ public class MasterInspectionCrud extends AbstractCrud {
 		if (type == null) {
 			event.setType(null);
 		} else if (event.getType() == null || !type.equals(event.getType())) {
-			event.setType(persistenceManager.find(InspectionType.class, type, getTenantId()));
+			event.setType(persistenceManager.find(EventType.class, type, getTenantId()));
 		}
 	}
 
-	public InspectionType getInspectionType() {
+	public EventType getInspectionType() {
 		return event.getType();
 	}
 

@@ -1,7 +1,7 @@
 package com.n4systems.webservice.server;
 
 import static com.n4systems.model.builders.EventBuilder.anEvent;
-import static com.n4systems.model.builders.InspectionScheduleBuilder.aScheduledInspectionSchedule;
+import static com.n4systems.model.builders.EventScheduleBuilder.aScheduledEventSchedule;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
@@ -9,13 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.n4systems.model.inspectionschedule.EventScheduleByGuidOrIdLoader;
+import com.n4systems.model.inspectionschedule.EventScheduleSaver;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.inspectionschedule.InspectionScheduleByGuidOrIdLoader;
-import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
@@ -23,8 +23,8 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 public class InspectionScheduleUpdateHandlerTest {
 
 
-	private InspectionScheduleSaver saver;
-	private InspectionScheduleByGuidOrIdLoader inspectionScheduleByMobileGuidLoader;
+	private EventScheduleSaver saver;
+	private EventScheduleByGuidOrIdLoader eventScheduleByMobileGuidLoader;
 	private EventSchedule eventSchedule;
 	private InspectionScheduleServiceDTO inspectionScheduleServiceDTO;
 	private Event event;
@@ -32,7 +32,7 @@ public class InspectionScheduleUpdateHandlerTest {
 	@Before
 	public void setup() {
 		
-		eventSchedule = aScheduledInspectionSchedule().build();
+		eventSchedule = aScheduledEventSchedule().build();
 		
 		event = anEvent().build();
 	}
@@ -45,7 +45,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(eventScheduleByMobileGuidLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
@@ -59,11 +59,11 @@ public class InspectionScheduleUpdateHandlerTest {
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(eventScheduleByMobileGuidLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
-		verify(inspectionScheduleByMobileGuidLoader);
+		verify(eventScheduleByMobileGuidLoader);
 		
 	}
 
@@ -74,7 +74,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		
 		createInspectionScheduleByMobileGuidLoaderMockReturningNull();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, null);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(eventScheduleByMobileGuidLoader, null);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
@@ -91,7 +91,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(eventScheduleByMobileGuidLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
@@ -110,7 +110,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(eventScheduleByMobileGuidLoader, saver);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		verify(saver);
@@ -125,7 +125,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, null);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(eventScheduleByMobileGuidLoader, null);
 		
 		sut.updateInspectionSchedule(inspectionScheduleServiceDTO);
 		
@@ -139,7 +139,7 @@ public class InspectionScheduleUpdateHandlerTest {
 		createInspectionScheduleByMobileGuidLoaderMock();
 		createSaverRemoveMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, saver);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(eventScheduleByMobileGuidLoader, saver);
 		
 		sut.removeInspectionSchedule(inspectionScheduleServiceDTO);
 		verify(saver);
@@ -154,36 +154,36 @@ public class InspectionScheduleUpdateHandlerTest {
 
 		createInspectionScheduleByMobileGuidLoaderMock();
 		
-		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(inspectionScheduleByMobileGuidLoader, null);
+		InspectionScheduleUpdateHandler  sut = new InspectionScheduleUpdateHandler(eventScheduleByMobileGuidLoader, null);
 		
 		sut.removeInspectionSchedule(inspectionScheduleServiceDTO);
 		
 	}
 
 	private void createInspectionScheduleByMobileGuidLoaderMock() {
-		inspectionScheduleByMobileGuidLoader = createMock(InspectionScheduleByGuidOrIdLoader.class);
-		expect(inspectionScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid())).andReturn(inspectionScheduleByMobileGuidLoader);
-		expect(inspectionScheduleByMobileGuidLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(inspectionScheduleByMobileGuidLoader);
-		expect(inspectionScheduleByMobileGuidLoader.load()).andReturn(eventSchedule);
-		replay(inspectionScheduleByMobileGuidLoader);
+		eventScheduleByMobileGuidLoader = createMock(EventScheduleByGuidOrIdLoader.class);
+		expect(eventScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid())).andReturn(eventScheduleByMobileGuidLoader);
+		expect(eventScheduleByMobileGuidLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(eventScheduleByMobileGuidLoader);
+		expect(eventScheduleByMobileGuidLoader.load()).andReturn(eventSchedule);
+		replay(eventScheduleByMobileGuidLoader);
 	}
 
 	private void createInspectionScheduleByMobileGuidLoaderMockReturningNull() {
-		inspectionScheduleByMobileGuidLoader = createMock(InspectionScheduleByGuidOrIdLoader.class);
-		expect(inspectionScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid())).andReturn(inspectionScheduleByMobileGuidLoader);
-		expect(inspectionScheduleByMobileGuidLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(inspectionScheduleByMobileGuidLoader);
-		expect(inspectionScheduleByMobileGuidLoader.load()).andReturn(null);
-		replay(inspectionScheduleByMobileGuidLoader);
+		eventScheduleByMobileGuidLoader = createMock(EventScheduleByGuidOrIdLoader.class);
+		expect(eventScheduleByMobileGuidLoader.setMobileGuid(inspectionScheduleServiceDTO.getMobileGuid())).andReturn(eventScheduleByMobileGuidLoader);
+		expect(eventScheduleByMobileGuidLoader.setId(inspectionScheduleServiceDTO.getId())).andReturn(eventScheduleByMobileGuidLoader);
+		expect(eventScheduleByMobileGuidLoader.load()).andReturn(null);
+		replay(eventScheduleByMobileGuidLoader);
 	}
 	
 	private void createSaverMock() {
-		saver = createMock(InspectionScheduleSaver.class);
+		saver = createMock(EventScheduleSaver.class);
 		expect(saver.saveOrUpdate(eventSchedule)).andReturn(eventSchedule);
 		replay(saver);
 	}
 
 	private void createSaverRemoveMock() throws Exception {
-		saver = createMock(InspectionScheduleSaver.class);
+		saver = createMock(EventScheduleSaver.class);
 		saver.remove(eventSchedule);
 		replay(saver);
 	}

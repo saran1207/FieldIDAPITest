@@ -58,7 +58,7 @@ public class ScheduleToWebInspectionScheduleConverterTest {
 
 		WebInspectionSchedule convertedWebSchedule = sut.convert(schedule, new Date());
 
-		assertThat(convertedWebSchedule, allOf(hasProperty("type", equalTo(schedule.getInspectionType().getId())), hasProperty("typeName", equalTo(schedule.getInspectionType().getName()))));
+		assertThat(convertedWebSchedule, allOf(hasProperty("type", equalTo(schedule.getEventType().getId())), hasProperty("typeName", equalTo(schedule.getEventType().getName()))));
 	}
 
 

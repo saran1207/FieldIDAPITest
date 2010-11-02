@@ -3,10 +3,10 @@ package com.n4systems.taskscheduling.task;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
+import com.n4systems.model.inspectionschedulecount.OverdueEventScheduleCountListLoader;
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.inspectionschedulecount.OverdueInspectionScheduleCountListLoader;
-import com.n4systems.model.inspectionschedulecount.UpcomingInspectionScheduleCountListLoader;
+import com.n4systems.model.inspectionschedulecount.UpcomingEventScheduleCountListLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -49,7 +49,7 @@ public class InspectionScheduleNotificationTask extends ScheduledTask {
 				
 				logger.info(LogUtils.prepare("Generating inspection schedule report for Tenant [$0], Name [$1], User [$2]",	setting.getTenant(), setting.getName(), setting.getUser().getUserID()));
 				
-				new InspectionScheduleCountGenerator(new SimpleDateFormat(primaryOrg.getDateFormat()), new UpcomingInspectionScheduleCountListLoader(settingUserFilter), new OverdueInspectionScheduleCountListLoader(settingUserFilter), ServiceLocator.getMailManager()).sendReport(setting, clock);
+				new InspectionScheduleCountGenerator(new SimpleDateFormat(primaryOrg.getDateFormat()), new UpcomingEventScheduleCountListLoader(settingUserFilter), new OverdueEventScheduleCountListLoader(settingUserFilter), ServiceLocator.getMailManager()).sendReport(setting, clock);
 				
 			} catch(Exception e) {
 				logger.error("Failed sending notification: " + setting.getId(), e);

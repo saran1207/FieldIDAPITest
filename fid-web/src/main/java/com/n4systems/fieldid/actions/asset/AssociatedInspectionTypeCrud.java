@@ -3,19 +3,19 @@ package com.n4systems.fieldid.actions.asset;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.handlers.remover.EventFrequenciesDeleteHandlerImpl;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AssociatedEventType;
+import com.n4systems.model.EventType;
+import com.n4systems.model.inspectiontype.EventFrequencySaver;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandler;
-import com.n4systems.handlers.remover.InspectionFrequenciesDeleteHandlerImpl;
-import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.InspectionType;
+import com.n4systems.handlers.remover.EventFrequenciesDeleteHandler;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.inspectiontype.AssociatedInspectionTypeSaver;
-import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
+import com.n4systems.model.inspectiontype.AssociatedEventTypeSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -27,7 +27,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	private AssetType assetType;
-	private List<InspectionType> inspectionTypes;
+	private List<EventType> eventTypes;
 	private List<Boolean> assetTypeInspections;
 
 	public AssociatedInspectionTypeCrud(PersistenceManager persistenceManager) {
@@ -49,24 +49,24 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	public String doSave() {
 		
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
-		List<InspectionType> selectedInspectionTypes = findInspectionsTypesSet();
-		List<AssociatedInspectionType> types = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(assetType).load(transaction);
+		List<EventType> selectedEventTypes = findInspectionsTypesSet();
+		List<AssociatedEventType> types = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(assetType).load(transaction);
 		
 		try {
 			
-			List<AssociatedInspectionType> toBeAdded = findInspectionTypesToAdd(selectedInspectionTypes, types);
-			List<AssociatedInspectionType> toBeRemoved = findInspectionTypesToRemoved(selectedInspectionTypes, types);
-			AssociatedInspectionTypeSaver saver = new AssociatedInspectionTypeSaver();
+			List<AssociatedEventType> toBeAdded = findInspectionTypesToAdd(selectedEventTypes, types);
+			List<AssociatedEventType> toBeRemoved = findInspectionTypesToRemoved(selectedEventTypes, types);
+			AssociatedEventTypeSaver saver = new AssociatedEventTypeSaver();
 			
-			InspectionFrequenciesDeleteHandler frequenciesDeleteHandler = new InspectionFrequenciesDeleteHandlerImpl(getLoaderFactory().createInspectionFrequenciesListLoader(), new InspectionFrequencySaver());
+			EventFrequenciesDeleteHandler frequenciesDeleteHandler = new EventFrequenciesDeleteHandlerImpl(getLoaderFactory().createEventFrequenciesListLoader(), new EventFrequencySaver());
 			
-			for (AssociatedInspectionType associatedInspectionType : toBeRemoved) {
-				saver.remove(transaction, associatedInspectionType);
-				frequenciesDeleteHandler.forAssociatedInspectionType(associatedInspectionType).remove(transaction);
+			for (AssociatedEventType associatedEventType : toBeRemoved) {
+				saver.remove(transaction, associatedEventType);
+				frequenciesDeleteHandler.forAssociatedEventType(associatedEventType).remove(transaction);
 			}
 			
-			for (AssociatedInspectionType associatedInspectionType : toBeAdded) {
-				saver.save(transaction, associatedInspectionType);
+			for (AssociatedEventType associatedEventType : toBeAdded) {
+				saver.save(transaction, associatedEventType);
 			}
 
 			
@@ -84,50 +84,50 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	private List<AssociatedInspectionType> findInspectionTypesToAdd(List<InspectionType> selectedInspectionTypes, List<AssociatedInspectionType> types) {
-		List<AssociatedInspectionType> toBeAdded = new ArrayList<AssociatedInspectionType>();
-		for (InspectionType selectedInspectionType : selectedInspectionTypes) {
+	private List<AssociatedEventType> findInspectionTypesToAdd(List<EventType> selectedEventTypes, List<AssociatedEventType> types) {
+		List<AssociatedEventType> toBeAdded = new ArrayList<AssociatedEventType>();
+		for (EventType selectedEventType : selectedEventTypes) {
 			boolean found = false;
-			for (AssociatedInspectionType associatedInspectionType : types) {
-				if (associatedInspectionType.getInspectionType().equals(selectedInspectionType)) {
+			for (AssociatedEventType associatedEventType : types) {
+				if (associatedEventType.getEventType().equals(selectedEventType)) {
 					found = true;
 				}
 			}
 			if (!found) {
-				toBeAdded.add(new AssociatedInspectionType(selectedInspectionType, assetType));
+				toBeAdded.add(new AssociatedEventType(selectedEventType, assetType));
 			}
 		}
 		return toBeAdded;
 	}
 	
-	private List<AssociatedInspectionType> findInspectionTypesToRemoved(List<InspectionType> selectedInspectionTypes, List<AssociatedInspectionType> types) {
-		List<AssociatedInspectionType> toBeRemoved = new ArrayList<AssociatedInspectionType>();
-		for (AssociatedInspectionType associatedInspectionType : types) {
+	private List<AssociatedEventType> findInspectionTypesToRemoved(List<EventType> selectedEventTypes, List<AssociatedEventType> types) {
+		List<AssociatedEventType> toBeRemoved = new ArrayList<AssociatedEventType>();
+		for (AssociatedEventType associatedEventType : types) {
 			boolean found = false;
 			
-			for (InspectionType selectedInspectionType : selectedInspectionTypes) {
-				if (associatedInspectionType.getInspectionType().equals(selectedInspectionType)) {
+			for (EventType selectedEventType : selectedEventTypes) {
+				if (associatedEventType.getEventType().equals(selectedEventType)) {
 					found = true;
 				}
 			}
 			if (!found) {
-				toBeRemoved.add(associatedInspectionType);
+				toBeRemoved.add(associatedEventType);
 			}
 		}
 		return toBeRemoved;
 	}
 	
 
-	private List<InspectionType> findInspectionsTypesSet() {
-		List<InspectionType> selectedInspectionTypes = new ArrayList<InspectionType>();
+	private List<EventType> findInspectionsTypesSet() {
+		List<EventType> selectedEventTypes = new ArrayList<EventType>();
 
-		for (InspectionType inspectionType : getInspectionTypes()) {
-			if (assetTypeInspections.get(getInspectionTypes().indexOf(inspectionType))) {
-				selectedInspectionTypes.add(inspectionType);
+		for (EventType eventType : getInspectionTypes()) {
+			if (assetTypeInspections.get(getInspectionTypes().indexOf(eventType))) {
+				selectedEventTypes.add(eventType);
 			}
 		}
 
-		return selectedInspectionTypes;
+		return selectedEventTypes;
 	}
 
 	/**
@@ -161,10 +161,10 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	public List<Boolean> getAssetTypeInspectionTypes() {
 		if (assetTypeInspections == null) {
 			assetTypeInspections = new ArrayList<Boolean>();
-			for (InspectionType inspectionType : getInspectionTypes()) {
+			for (EventType eventType : getInspectionTypes()) {
 				boolean found = false;
-				for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes()) {
-					if (inspectionType.equals(associatedInspectionType.getInspectionType())) {
+				for (AssociatedEventType associatedEventType : associatedInspectionTypes()) {
+					if (eventType.equals(associatedEventType.getEventType())) {
 						assetTypeInspections.add(true);
 						found = true;
 						break;
@@ -178,7 +178,7 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 		return assetTypeInspections;
 	}
 
-	private List<AssociatedInspectionType> associatedInspectionTypes() {
+	private List<AssociatedEventType> associatedInspectionTypes() {
 		return getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(assetType).load();
 	}
 
@@ -193,14 +193,14 @@ public class AssociatedInspectionTypeCrud extends AbstractCrud {
 	/**
 	 * @return the eventTypes
 	 */
-	public List<InspectionType> getInspectionTypes() {
-		if (inspectionTypes == null) {
-			QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter());
+	public List<EventType> getInspectionTypes() {
+		if (eventTypes == null) {
+			QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
 			queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 			queryBuilder.addOrder("name");
-			inspectionTypes = persistenceManager.findAll(queryBuilder);
+			eventTypes = persistenceManager.findAll(queryBuilder);
 		}
-		return inspectionTypes;
+		return eventTypes;
 	}
 
 }

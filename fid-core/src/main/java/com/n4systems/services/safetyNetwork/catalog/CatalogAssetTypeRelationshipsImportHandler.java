@@ -8,8 +8,8 @@ import java.util.Set;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.AssociatedEventType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.assettype.AssetTypeScheduleSaver;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -20,7 +20,7 @@ import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHandler {
 
 	private Map<Long, AssetType> importedAssetTypeMapping = new HashMap<Long, AssetType>();
-	private Map<Long, InspectionType> importedInspectionTypeMapping = new HashMap<Long, InspectionType>();
+	private Map<Long, EventType> importedInspectionTypeMapping = new HashMap<Long, EventType>();
 	private AssetTypeRelationshipsImportSummary summary;
 	private AssetTypeScheduleSaver assetTypeScheduleSaver;
 	private PrimaryOrg primaryOrg;
@@ -46,8 +46,8 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	public void importAssetTypeRelationships(AssetType originalAssetType) throws ImportFailureException {
 		AssetType importedAssetType = importedAssetTypeMapping.get(originalAssetType.getId());
 		try {
-			for (InspectionType connectedInspectionType : originalAssetType.getInspectionTypes()) {
-				importConnectionsToInspectionTypes(originalAssetType, importedAssetType, connectedInspectionType);
+			for (EventType connectedEventType : originalAssetType.getEventTypes()) {
+				importConnectionsToInspectionTypes(originalAssetType, importedAssetType, connectedEventType);
 				persistenceManager.update(importedAssetType);
 			}
 		} catch (Exception e) {
@@ -57,29 +57,29 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	}
 
 
-	private void importConnectionsToInspectionTypes(AssetType originalAssetType, AssetType importedAssetType, InspectionType connectedInspectionType) {
-		if (importedInspectionTypeMapping.get(connectedInspectionType.getId()) != null) {
-			persistenceManager.save(new AssociatedInspectionType(importedInspectionTypeMapping.get(connectedInspectionType.getId()), importedAssetType));
-			importAssetTypeSchedules(originalAssetType, importedAssetType, connectedInspectionType);
+	private void importConnectionsToInspectionTypes(AssetType originalAssetType, AssetType importedAssetType, EventType connectedEventType) {
+		if (importedInspectionTypeMapping.get(connectedEventType.getId()) != null) {
+			persistenceManager.save(new AssociatedEventType(importedInspectionTypeMapping.get(connectedEventType.getId()), importedAssetType));
+			importAssetTypeSchedules(originalAssetType, importedAssetType, connectedEventType);
 		}
 	}
 
 
-	private void importAssetTypeSchedules(AssetType originalAssetType, AssetType importedAssetType, InspectionType connectedInspectionType) {
-		if (originalAssetType.getDefaultSchedule(connectedInspectionType) != null) {
-			AssetTypeSchedule originalSchedule = originalAssetType.getDefaultSchedule(connectedInspectionType);
+	private void importAssetTypeSchedules(AssetType originalAssetType, AssetType importedAssetType, EventType connectedEventType) {
+		if (originalAssetType.getDefaultSchedule(connectedEventType) != null) {
+			AssetTypeSchedule originalSchedule = originalAssetType.getDefaultSchedule(connectedEventType);
 			
-			AssetTypeSchedule importedSchedule = copyAssetTypeSchedule(connectedInspectionType, originalSchedule);
+			AssetTypeSchedule importedSchedule = copyAssetTypeSchedule(connectedEventType, originalSchedule);
 			
 			assetTypeScheduleSaver.save(importedSchedule);
 		}
 	}
 
-	private AssetTypeSchedule copyAssetTypeSchedule(InspectionType connectedInspectionType, AssetTypeSchedule originalSchedule) {
+	private AssetTypeSchedule copyAssetTypeSchedule(EventType connectedEventType, AssetTypeSchedule originalSchedule) {
 		AssetTypeSchedule importedSchedule = new AssetTypeSchedule();
 		importedSchedule.setAutoSchedule(originalSchedule.isAutoSchedule());
 		importedSchedule.setFrequency(originalSchedule.getFrequency());
-		importedSchedule.setInspectionType(importedInspectionTypeMapping.get(connectedInspectionType.getId()));
+		importedSchedule.setEventType(importedInspectionTypeMapping.get(connectedEventType.getId()));
 		importedSchedule.setAssetType(importedAssetTypeMapping.get(originalSchedule.getAssetType().getId()));
 		importedSchedule.setOwner(primaryOrg);
 		importedSchedule.setTenant(tenant);
@@ -108,7 +108,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	}
 
 
-	public CatalogAssetTypeRelationshipsImportHandler setImportedInspectionTypeMapping(Map<Long, InspectionType> importedInspectionTypeMapping) {
+	public CatalogAssetTypeRelationshipsImportHandler setImportedInspectionTypeMapping(Map<Long, EventType> importedInspectionTypeMapping) {
 		this.importedInspectionTypeMapping = importedInspectionTypeMapping;
 		return this;
 	}

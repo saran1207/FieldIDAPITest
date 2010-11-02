@@ -5,20 +5,20 @@ import java.util.Date;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
-import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
-import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
+import com.n4systems.model.inspection.EventByMobileGuidLoader;
+import com.n4systems.model.inspectionschedule.EventScheduleSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.server.InspectionNotFoundException;
 
 public class CompletedScheduleCreator {
 	
-	private InspectionByMobileGuidLoader<Event> inspectionLoader;
-	private InspectionScheduleSaver inspectionScheduleSaver;
+	private EventByMobileGuidLoader<Event> eventLoader;
+	private EventScheduleSaver eventScheduleSaver;
 	private FilteredIdLoader<Project> jobLoader;
 	
-	public CompletedScheduleCreator(InspectionByMobileGuidLoader<Event> inspectionLoader, InspectionScheduleSaver inspectionScheduleSaver, FilteredIdLoader<Project> projectLoader) {
-		this.inspectionLoader = inspectionLoader;
-		this.inspectionScheduleSaver = inspectionScheduleSaver;
+	public CompletedScheduleCreator(EventByMobileGuidLoader<Event> eventLoader, EventScheduleSaver eventScheduleSaver, FilteredIdLoader<Project> projectLoader) {
+		this.eventLoader = eventLoader;
+		this.eventScheduleSaver = eventScheduleSaver;
 		this.jobLoader = projectLoader;
 	}
 	
@@ -28,15 +28,15 @@ public class CompletedScheduleCreator {
 		schedule.setProject(findJob(jobId));
 		Event event = findInspection(inspectionMobileGuid);
 		schedule.completed(event);
-		schedule.setInspectionType(event.getType());
+		schedule.setEventType(event.getType());
 		schedule.setAsset(event.getAsset());
 		schedule.setTenant(event.getTenant());
-		inspectionScheduleSaver.save(schedule);
+		eventScheduleSaver.save(schedule);
 	}
 	
 	private Event findInspection(String inspectionMobileGuid) {
-		inspectionLoader.setMobileGuid(inspectionMobileGuid);
-		Event event = inspectionLoader.load();
+		eventLoader.setMobileGuid(inspectionMobileGuid);
+		Event event = eventLoader.load();
 		if (event == null) throw new InspectionNotFoundException();
 		return event;
 	}

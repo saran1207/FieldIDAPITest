@@ -9,6 +9,9 @@ import java.util.List;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
+import com.n4systems.model.EventType;
+import com.n4systems.model.inspectionschedule.NextEventDateByEventLoader;
+import com.n4systems.model.inspectionschedule.NextEventDateByEventPassthruLoader;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AssetStatus;
@@ -21,12 +24,9 @@ import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Status;
 import com.n4systems.model.downloadlink.ContentType;
-import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
-import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionPassthruLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.ImportFailureNotification;
@@ -43,7 +43,7 @@ import com.n4systems.util.DateHelper;
 public class InspectionImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(InspectionImportAction.class);
 	
-	private InspectionType type;
+	private EventType type;
 	private InputStream exampleExportFileStream;
 	private String exampleExportFileSize;
 	
@@ -68,7 +68,7 @@ public class InspectionImportAction extends AbstractImportAction {
 	
 	public String doDownloadExample() {
 		ListLoader<Event> inspectionLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleInspection()));
-		NextInspectionDateByInspectionLoader nextDateLoader = new NextInspectionDateByInspectionPassthruLoader(createExampleNextDate());
+		NextEventDateByEventLoader nextDateLoader = new NextEventDateByEventPassthruLoader(createExampleNextDate());
 
 		InspectionExporter exporter = new InspectionExporter(inspectionLoader, nextDateLoader);
 		
@@ -125,7 +125,7 @@ public class InspectionImportAction extends AbstractImportAction {
 		return (statuses.isEmpty()) ? null : statuses.get(0);
 	}
 	
-	public InspectionType getInspectionType() {
+	public EventType getInspectionType() {
 		return type;
 	}
 
@@ -135,7 +135,7 @@ public class InspectionImportAction extends AbstractImportAction {
 
 	public void setUniqueID(Long id) {
 		if (type == null || !type.getId().equals(id)) {
-			type = getLoaderFactory().createFilteredIdLoader(InspectionType.class).setPostFetchFields("sections").setId(id).load();
+			type = getLoaderFactory().createFilteredIdLoader(EventType.class).setPostFetchFields("sections").setId(id).load();
 		}
 	}
 	

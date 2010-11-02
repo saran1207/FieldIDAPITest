@@ -1,9 +1,9 @@
 package com.n4systems.handlers.remover;
 
 import com.n4systems.model.catalog.CatalogSaver;
-import com.n4systems.model.inspectiontype.AssociatedInspectionTypeSaver;
-import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
-import com.n4systems.model.inspectiontype.InspectionTypeSaver;
+import com.n4systems.model.inspectiontype.AssociatedEventTypeSaver;
+import com.n4systems.model.inspectiontype.EventFrequencySaver;
+import com.n4systems.model.inspectiontype.EventTypeSaver;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
 public class RemovalHandlerFactory {
@@ -15,10 +15,10 @@ public class RemovalHandlerFactory {
 	}
 	
 	
-	public InspectionTypeArchiveHandler getInspectionTypeArchiveHandler() {
-		return new InspectionTypeArchiveHandlerImpl(new InspectionTypeSaver(), 
-													new InspectionListArchiveHandlerImp(getScheduleDeleter()), 
-													getAssociatedInspectionTypeListDeleter(), 
+	public EventTypeArchiveHandler getInspectionTypeArchiveHandler() {
+		return new EventTypeArchiveHandlerImpl(new EventTypeSaver(),
+													new EventListArchiveHandlerImp(getScheduleDeleter()),
+													getAssociatedEventTypeListDeleter(),
 													getCatalogElementRemovalHandler(), 
 													new NotificationSettingDeleteHandlerImpl());
 	}
@@ -30,20 +30,20 @@ public class RemovalHandlerFactory {
 		new CatalogSaver());
 	}
 
-	private AssociatedInspectionTypeListDeleteHandler getAssociatedInspectionTypeListDeleter() {
-		return new AssociatedInspectionTypeListDeleteHandlerImpl(loaderFacotry.createAssociatedInspectionTypesLoader(), 
-																getAssociatedInspectionTypeDeleter());
+	private AssociatedEventTypeListDeleteHandler getAssociatedEventTypeListDeleter() {
+		return new AssociatedEventTypeListDeleteHandlerImpl(loaderFacotry.createAssociatedInspectionTypesLoader(),
+																getAssociatedEventTypeDeleter());
 	}
 
-	private AssociatedInspectionTypeDeleteHandler getAssociatedInspectionTypeDeleter() {
-		return new AssociatedInspectionTypeDeleteHandlerImpl(getInspectionFrequenciesDeleteHandler(), 
-															new AssociatedInspectionTypeSaver(), 
+	private AssociatedEventTypeDeleteHandler getAssociatedEventTypeDeleter() {
+		return new AssociatedEventTypeDeleteHandlerImpl(getEventFrequenciesDeleteHandler(),
+															new AssociatedEventTypeSaver(),
 															getScheduleDeleter());
 	}
 	
-	private InspectionFrequenciesDeleteHandler getInspectionFrequenciesDeleteHandler() {
-		return new InspectionFrequenciesDeleteHandlerImpl(loaderFacotry.createInspectionFrequenciesListLoader(), 
-														new InspectionFrequencySaver());
+	private EventFrequenciesDeleteHandler getEventFrequenciesDeleteHandler() {
+		return new EventFrequenciesDeleteHandlerImpl(loaderFacotry.createEventFrequenciesListLoader(),
+														new EventFrequencySaver());
 	}
 
 	private ScheduleListDeleteHandler getScheduleDeleter() {

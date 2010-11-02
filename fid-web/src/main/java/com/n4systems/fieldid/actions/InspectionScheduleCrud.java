@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
+import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -15,8 +17,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.model.utils.FindSubAssets;
@@ -37,7 +37,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	private InspectionScheduleManager inspectionScheduleManager;
 	protected EventSchedule eventSchedule;
 	
-	private InspectionType inspectionType;
+	private EventType eventType;
 	private List<ListingPair> jobs;
 	private Asset asset;
 	private String nextDate;
@@ -80,7 +80,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 			throw new MissingEntityException();
 		}
 		
-		if (inspectionTypeRequired && inspectionType == null) {
+		if (inspectionTypeRequired && eventType == null) {
 			addActionErrorText("error.noeventtype");
 			throw new MissingEntityException();
 		} 
@@ -103,7 +103,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 		testRequiredEntities(false);
 		try {
 			Project tmpProject = eventSchedule.getProject();
-			eventSchedule = new EventSchedule(asset, inspectionType);
+			eventSchedule = new EventSchedule(asset, eventType);
 			eventSchedule.setNextDate(convertDate(nextDate));
 			eventSchedule.setProject(tmpProject);
 			
@@ -191,7 +191,7 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	public void setAssetId(Long id) {
 		if (asset == null || !asset.getId().equals(id)) {
 			if (!isInVendorContext()) {
-				asset = persistenceManager.find(Asset.class, id, getSecurityFilter(), "type.subTypes", "type.inspectionTypes");
+				asset = persistenceManager.find(Asset.class, id, getSecurityFilter(), "type.subTypes", "type.eventTypes");
 				asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 			} else {
 				asset = getLoaderFactory().createSafetyNetworkAssetLoader().withAllFields().setAssetId(id).load();
@@ -200,32 +200,32 @@ public class InspectionScheduleCrud extends AbstractCrud {
 	}
 
 	public Long getType() {
-		return (inspectionType != null) ? inspectionType.getId() : null;
+		return (eventType != null) ? eventType.getId() : null;
 	}
 
 	public void setType(Long inspectionTypeId) {
-		if (this.inspectionType == null || !this.inspectionType.getId().equals(inspectionTypeId)) {
-			this.inspectionType = null;
-			for (InspectionType insType : getInspectionTypes()) {
+		if (this.eventType == null || !this.eventType.getId().equals(inspectionTypeId)) {
+			this.eventType = null;
+			for (EventType insType : getInspectionTypes()) {
 				if (insType.getId().equals(inspectionTypeId)) {
-					this.inspectionType = insType;
+					this.eventType = insType;
 					break;
 				}
 			}
 		}
 	}
 
-	public InspectionType getInspectionType() {
-		return inspectionType;
+	public EventType getInspectionType() {
+		return eventType;
 	}
 
-	public List<InspectionType> getInspectionTypes() {
-		List<InspectionType> inspectionTypes = new ArrayList<InspectionType>();
-		List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(asset.getType()).load();
-		for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
-			inspectionTypes.add(associatedInspectionType.getInspectionType());
+	public List<EventType> getInspectionTypes() {
+		List<EventType> eventTypes = new ArrayList<EventType>();
+		List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(asset.getType()).load();
+		for (AssociatedEventType associatedEventType : associatedEventTypes) {
+			eventTypes.add(associatedEventType.getEventType());
 		}
-		return inspectionTypes;
+		return eventTypes;
 		
 	}
 

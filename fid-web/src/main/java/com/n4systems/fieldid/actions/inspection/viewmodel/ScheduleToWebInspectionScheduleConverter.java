@@ -22,8 +22,8 @@ public class ScheduleToWebInspectionScheduleConverter {
 		
 		WebInspectionSchedule webInspectionSchedule = new WebInspectionSchedule();
 		
-		webInspectionSchedule.setType(schedule.getInspectionType().getId());
-		webInspectionSchedule.setTypeName(schedule.getInspectionType().getName());
+		webInspectionSchedule.setType(schedule.getEventType().getId());
+		webInspectionSchedule.setTypeName(schedule.getEventType().getName());
 		
 		
 		webInspectionSchedule.setDate(dateConverter.convertDate(schedule.getNextDate(currentDatePerformed)));

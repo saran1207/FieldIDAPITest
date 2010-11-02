@@ -5,14 +5,14 @@ import java.util.List;
 import javax.persistence.Query;
 
 import com.n4systems.handlers.remover.summary.NotificationSettingDeleteSummary;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 
 public class NotificationSettingDeleteHandlerImpl implements NotificationSettingDeleteHandler {
 
-	private InspectionType inspectionType;
+	private EventType eventType;
 	
 	public void remove(Transaction transaction) {
 		List<Long> notificationsToDelete = getNotificationIdsWithInspectionType(transaction);
@@ -31,16 +31,16 @@ public class NotificationSettingDeleteHandlerImpl implements NotificationSetting
 
 	@SuppressWarnings("unchecked")
 	private List<Long> getNotificationIdsWithInspectionType(Transaction transaction) {
-		Query query = transaction.getEntityManager().createQuery("SELECT ns.id FROM " + NotificationSetting.class.getName() + " ns, IN (ns.inspectionTypes) inspectionTypeId WHERE inspectionTypeId = :inspectionTypeId" );
-		query.setParameter("inspectionTypeId", inspectionType.getId());
+		Query query = transaction.getEntityManager().createQuery("SELECT ns.id FROM " + NotificationSetting.class.getName() + " ns, IN (ns.eventTypes) eventTypeId WHERE eventTypeId = :eventTypeId" );
+		query.setParameter("eventTypeId", eventType.getId());
 		
 		 
 		return (List<Long>)query.getResultList();
 	}
 
 
-	public NotificationSettingDeleteHandlerImpl forInspectionType(InspectionType inspectionType) {
-		this.inspectionType = inspectionType;
+	public NotificationSettingDeleteHandlerImpl forEventType(EventType eventType) {
+		this.eventType = eventType;
 		return this;
 	}
 

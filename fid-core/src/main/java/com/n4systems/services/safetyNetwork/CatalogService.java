@@ -6,7 +6,7 @@ import java.util.Set;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
@@ -30,7 +30,7 @@ public interface CatalogService {
 
 	public Catalog publishAssetTypes(Set<AssetType> assetTypes);
 	
-	public Catalog publishInspectionTypes(Set<InspectionType> inspectionTypes);
+	public Catalog publishInspectionTypes(Set<EventType> eventTypes);
 
 	public AssetType getPublishedAssetType(Long assetTypeId, String...postFetchFields);
 	
@@ -44,7 +44,7 @@ public interface CatalogService {
 
 	public Set<ListingPair> getInspectionTypeGroupsFor(Set<Long> inspectionTypeIds);
 	
-	public InspectionType getPublishedInspectionType(Long inspectionTypeId);
+	public EventType getPublishedInspectionType(Long inspectionTypeId);
 	
 	public List<StateSet> getStateSetsUsedIn(Set<Long> inspectionTypeIds);
 	

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import org.apache.log4j.Logger;
@@ -19,8 +20,7 @@ import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.fieldid.actions.helpers.MassUpdateInspectionHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
-import com.n4systems.model.inspectionbook.InspectionBookListLoader;
+import com.n4systems.model.inspectionbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
@@ -32,7 +32,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	private static Logger logger = Logger.getLogger(InspectionMassUpdate.class);
 
 	private LegacyAsset assetManager;
-	private InspectionSearchContainer criteria;
+	private EventSearchContainer criteria;
 	private Event event = new Event();
 
 	private OwnerPicker ownerPicker;
@@ -116,7 +116,7 @@ public class InspectionMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public Collection<ListingPair> getInspectionBooks() {
-		InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
+		EventBookListLoader loader = new EventBookListLoader(getSecurityFilter());
 		loader.setOpenBooksOnly(true);
 		return loader.loadListingPair();
 	}

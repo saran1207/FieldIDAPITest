@@ -36,7 +36,7 @@ public class CommonAssetTypeDatabaseLoader extends ListLoader<AssetType> impleme
 		QueryBuilder<AssetType> builder = getAssetTypeQueryBuilder(filter);
 		builder.addWhere(Comparator.IN, "assetIds", "id", assetIds);
 		
-		builder.addPostFetchPaths("inspectionTypes");
+		builder.addPostFetchPaths("eventTypes");
 		
 		builder.setSimpleSelect("type", true);
 		return builder.getResultList(em);

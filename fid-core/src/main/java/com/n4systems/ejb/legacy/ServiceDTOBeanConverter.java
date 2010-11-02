@@ -15,7 +15,7 @@ import rfid.ejb.entity.AssetStatus;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
@@ -50,7 +50,7 @@ public interface ServiceDTOBeanConverter {
 	public List<com.n4systems.webservice.dto.InspectionServiceDTO> convert(EventGroup eventGroup);
 	public Asset convert( ProductServiceDTO productServiceDTO, Asset targetProduct, long tenantId );
 	public ProductServiceDTO convert(Asset product);
-	public InspectionTypeServiceDTO convert( InspectionType inspectionType );
+	public InspectionTypeServiceDTO convert( EventType eventType);
 	public StateSetServiceDTO convert( StateSet stateSet );
 	public com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO convert( AutoAttributeCriteria criteria );
 	public com.n4systems.webservice.dto.AutoAttributeDefinitionServiceDTO convert( AutoAttributeDefinition definition );

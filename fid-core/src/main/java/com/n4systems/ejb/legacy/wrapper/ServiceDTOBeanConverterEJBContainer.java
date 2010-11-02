@@ -20,7 +20,7 @@ import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
@@ -228,11 +228,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public InspectionTypeServiceDTO convert(InspectionType inspectionType) {
+	public InspectionTypeServiceDTO convert(EventType eventType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).convert(inspectionType);
+			return createManager(transaction.getEntityManager()).convert(eventType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

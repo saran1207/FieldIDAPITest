@@ -42,7 +42,7 @@ import com.n4systems.model.utils.PlainDate;
 @Table(name = "assets")
 public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
-	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
+	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
 	
 	@Column(name="network_id", nullable=true)
 	private Long networkId;

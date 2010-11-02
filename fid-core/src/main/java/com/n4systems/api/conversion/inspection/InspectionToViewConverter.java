@@ -4,21 +4,21 @@ import java.util.Date;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
-import com.n4systems.api.model.InspectionView;
+import com.n4systems.api.model.EventView;
 import com.n4systems.model.Event;
-import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
+import com.n4systems.model.inspectionschedule.NextEventDateByEventLoader;
 import com.n4systems.model.orgs.BaseOrg;
 
-public class InspectionToViewConverter implements ModelToViewConverter<Event, InspectionView> {
-	private final NextInspectionDateByInspectionLoader nextDateLoader;
+public class InspectionToViewConverter implements ModelToViewConverter<Event, EventView> {
+	private final NextEventDateByEventLoader nextDateLoader;
 	
-	public InspectionToViewConverter(NextInspectionDateByInspectionLoader nextDateLoader) {
+	public InspectionToViewConverter(NextEventDateByEventLoader nextDateLoader) {
 		this.nextDateLoader = nextDateLoader;
 	}
 	
 	@Override
-	public InspectionView toView(Event model) throws ConversionException {
-		InspectionView view = new InspectionView();
+	public EventView toView(Event model) throws ConversionException {
+		EventView view = new EventView();
 		
 		convertDirectFields(model, view);
 		converterPerformedBy(model, view);
@@ -32,43 +32,43 @@ public class InspectionToViewConverter implements ModelToViewConverter<Event, In
 		return view;
 	}
 
-	protected void convertDirectFields(Event model, InspectionView view) {
+	protected void convertDirectFields(Event model, EventView view) {
 		view.setComments(model.getComments());
 		view.setDatePerformed(model.getDate());
 		view.setLocation(model.getAdvancedLocation().getFreeformLocation());
 		view.setPrintable(model.isPrintable());
 	}
 
-	protected void convertInspectionStatus(Event model, InspectionView view) {
+	protected void convertInspectionStatus(Event model, EventView view) {
 		view.setStatus(model.getStatus().getDisplayName());
 	}
 
-	protected void convertAssetIdentifier(Event model, InspectionView view) {
+	protected void convertAssetIdentifier(Event model, EventView view) {
 		view.setIdentifier(model.getAsset().getSerialNumber());
 	}
 
-	protected void converterPerformedBy(Event model, InspectionView view) {
+	protected void converterPerformedBy(Event model, EventView view) {
 		view.setPerformedBy(model.getPerformedBy().getFullName());
 	}
 	
-	protected void convertNextDate(Event model, InspectionView view) {
+	protected void convertNextDate(Event model, EventView view) {
 		Date nextDate = nextDateLoader.setInspection(model).load();
 		view.setNextInspectionDate(nextDate);
 	}
 
-	protected void convertBook(Event model, InspectionView view) {
+	protected void convertBook(Event model, EventView view) {
 		if (model.getBook() != null) {
 			view.setInspectionBook(model.getBook().getName());
 		}
 	}
 
-	protected void convertAssetStatus(Event model, InspectionView view) {
+	protected void convertAssetStatus(Event model, EventView view) {
 		if (model.getAssetStatus() != null) {
 			view.setAssetStatus(model.getAssetStatus().getName());
 		}
 	}
 
-	protected void convertOwnerFields(BaseOrg owner, InspectionView view) {
+	protected void convertOwnerFields(BaseOrg owner, EventView view) {
 		view.setOrganization(owner.getInternalOrg().getName());
 		
 		if (owner.isExternal()) {

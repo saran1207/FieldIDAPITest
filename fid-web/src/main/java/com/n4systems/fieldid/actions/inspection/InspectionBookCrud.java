@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.inspection;
 import java.util.List;
 
 import com.n4systems.model.EventBook;
+import com.n4systems.model.inspectionbook.EventBookListLoader;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -16,7 +17,6 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.Event;
-import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.security.Permissions;
@@ -85,7 +85,7 @@ public class InspectionBookCrud extends AbstractCrud implements HasDuplicateValu
 	@UserPermissionFilter(open=true)
 	public String doLPList() {
 		try {
-			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
+			EventBookListLoader loader = new EventBookListLoader(getSecurityFilter());
 			loader.setOpenBooksOnly(!withClosed);
 			loader.setOwner(getOwner());
 			books = loader.loadListingPair();

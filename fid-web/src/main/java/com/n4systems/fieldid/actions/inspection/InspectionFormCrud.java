@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.inspection;
 import java.util.List;
 
 import com.n4systems.ejb.EventManager;
+import com.n4systems.model.EventType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -11,7 +12,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.StateSet;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -24,7 +24,7 @@ public class InspectionFormCrud extends AbstractCrud {
 	
 	private List<StateSet> stateSets;	
 	protected List<CriteriaSection> criteriaSections;
-	protected InspectionType inspectionType;
+	protected EventType eventType;
 	
 	public InspectionFormCrud(PersistenceManager persistenceManager, EventManager eventManager) {
 		super(persistenceManager);
@@ -36,23 +36,23 @@ public class InspectionFormCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		inspectionType = persistenceManager.find( InspectionType.class, uniqueId, getTenantId(), "sections" ); 
+		eventType = persistenceManager.find( EventType.class, uniqueId, getTenantId(), "sections" );
 	}
 
 	@SkipValidation
 	public String doEdit() {
-		if( inspectionType == null ) {
+		if( eventType == null ) {
 			addActionError( getText( "error.noeventtype" ) );
 			return MISSING;
 		}
 		
-		criteriaSections = inspectionType.getSections();
+		criteriaSections = eventType.getSections();
 		
 		return SUCCESS;
 	}
 	
 	public String doSave() {
-		if( inspectionType == null ) {
+		if( eventType == null ) {
 			addActionError( getText( "error.noeventtype" ) );
 			return MISSING;
 		}
@@ -60,8 +60,8 @@ public class InspectionFormCrud extends AbstractCrud {
 		processCriteriaSections();
 		
 		try{
-			inspectionType.setSections( criteriaSections );
-			eventManager.updateEventForm( inspectionType, getSessionUser().getUniqueID() );
+			eventType.setSections( criteriaSections );
+			eventManager.updateEventForm(eventType, getSessionUser().getUniqueID() );
 			addFlashMessage( getText( "message.eventformsaved" ) );
 		} catch (Exception e) {
 			addActionError( getText( "error.couldnotsave" ) );
@@ -107,7 +107,7 @@ public class InspectionFormCrud extends AbstractCrud {
 	
 	public List<CriteriaSection> getCriteriaSections() {
 		if( criteriaSections == null ) {
-			criteriaSections = inspectionType.getSections();
+			criteriaSections = eventType.getSections();
 		}
 		return criteriaSections; 
 	}
@@ -132,15 +132,15 @@ public class InspectionFormCrud extends AbstractCrud {
 		return stateSets;
 	}
 
-	public InspectionType getInspectionType() {
-		return inspectionType;
+	public EventType getInspectionType() {
+		return eventType;
 	}
 
 	public boolean isNewForm() {
-		return (inspectionType.getSections().isEmpty());
+		return (eventType.getSections().isEmpty());
 	}
 	
 	public String getName(){
-		return inspectionType.getName();
+		return eventType.getName();
 	}
 }

@@ -1,6 +1,6 @@
 package com.n4systems.model;
 
-import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
+import static com.n4systems.model.builders.EventScheduleBuilder.*;
 import static com.n4systems.model.builders.AssetBuilder.*;
 import static org.junit.Assert.*;
 
@@ -25,7 +25,7 @@ public class InspectionScheduleTest {
 		event.setId(1L);
 		event.setAsset(asset);
 		
-		schedule = aScheduledInspectionSchedule().asset(asset).build();
+		schedule = aScheduledEventSchedule().asset(asset).build();
 	}
 
 	@After public void tearDown() throws Exception {

@@ -8,12 +8,12 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.model.EventType;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetType;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -90,12 +90,12 @@ public class CatalogCrud extends SafetyNetwork {
 			catalogService.publishAssetTypes(publishedAssetTypes);
 			
 			
-			HashSet<InspectionType> publishedInspectionTypes = new HashSet<InspectionType>();
+			HashSet<EventType> publishedEventTypes = new HashSet<EventType>();
 			if (!publishInspectionTypeIds.isEmpty()) {
-				publishedInspectionTypes.addAll(persistenceManager.findAll(InspectionType.class, publishInspectionTypeIds, getTenant()));
+				publishedEventTypes.addAll(persistenceManager.findAll(EventType.class, publishInspectionTypeIds, getTenant()));
 				
 			}
-			catalogService.publishInspectionTypes(publishedInspectionTypes);
+			catalogService.publishInspectionTypes(publishedEventTypes);
 			
 			addFlashMessageText("message.catalog_published");
 			return SUCCESS;
@@ -124,7 +124,7 @@ public class CatalogCrud extends SafetyNetwork {
 	
 	public List<ListingPair> getInspectionTypes() {
 		if (inspectionTypes == null) {
-			QueryBuilder<ListingPair> inspectionTypeQuery = new QueryBuilder<ListingPair>(InspectionType.class, getSecurityFilter());
+			QueryBuilder<ListingPair> inspectionTypeQuery = new QueryBuilder<ListingPair>(EventType.class, getSecurityFilter());
 			inspectionTypes = persistenceManager.findAllLP(inspectionTypeQuery, "name");
 		}
 

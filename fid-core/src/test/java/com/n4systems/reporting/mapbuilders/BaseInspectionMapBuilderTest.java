@@ -1,14 +1,14 @@
 package com.n4systems.reporting.mapbuilders;
 
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.builders.EventBuilder;
+import com.n4systems.model.builders.EventTypeBuilder;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.InspectionTypeGroup;
-import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.BaseOrg;
@@ -23,7 +23,7 @@ public class BaseInspectionMapBuilderTest {
 	@Test
 	public void testSetAllFields() {
 		MapBuilder<User> performedByMapBuilder = EasyMock.createMock(MapBuilder.class);
-		MapBuilder<InspectionTypeGroup> typeGroupMapBuilder = EasyMock.createMock(MapBuilder.class);
+		MapBuilder<EventTypeGroup> typeGroupMapBuilder = EasyMock.createMock(MapBuilder.class);
 		MapBuilder<InternalOrg> orgMapBuilder = EasyMock.createMock(MapBuilder.class);
 		MapBuilder<BaseOrg> ownerMapBuilder = EasyMock.createMock(MapBuilder.class);
 		MapBuilder<Event> scheduleMapBuilder = EasyMock.createMock(MapBuilder.class);
@@ -33,8 +33,8 @@ public class BaseInspectionMapBuilderTest {
 		
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 		
-		Event event = EventBuilder.anEvent().ofType(InspectionTypeBuilder.anInspectionType().build()).build();
-		event.getType().setGroup(new InspectionTypeGroup());
+		Event event = EventBuilder.anEvent().ofType(EventTypeBuilder.anEventType().build()).build();
+		event.getType().setGroup(new EventTypeGroup());
 		event.setOwner(OrgBuilder.aSecondaryOrg().build());
 		event.setPerformedBy(UserBuilder.anEmployee().build());
 		event.setAssetStatus(new AssetStatus());

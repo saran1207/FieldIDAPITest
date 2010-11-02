@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 
+import com.n4systems.model.EventType;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -20,7 +21,6 @@ import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.exceptions.FileImportException;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.FuzzyResolver;
@@ -52,7 +52,7 @@ public class ImportManagerImpl implements ImportManager {
 		Reader fRead = null;
 		CSVReader csvRead = null;
 		
-		InspectionType type;
+		EventType type;
 		CriteriaSection section;
 		Criteria criteria;
 		String observationType;
@@ -70,9 +70,9 @@ public class ImportManagerImpl implements ImportManager {
 			// we're going to need all the inspection types for this tenant.  Let's find them now.
 			SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 			
-			QueryBuilder<InspectionType> builder = new QueryBuilder<InspectionType>(InspectionType.class, filter);
+			QueryBuilder<EventType> builder = new QueryBuilder<EventType>(EventType.class, filter);
 			builder.setSimpleSelect();
-			List<InspectionType> inspectionTypes = persistenceManager.findAll(builder);
+			List<EventType> eventTypes = persistenceManager.findAll(builder);
 			
 			// read to end of file
 			while((lineParts = csvRead.readNext()) != null) {
@@ -85,20 +85,20 @@ public class ImportManagerImpl implements ImportManager {
 					throw new FileImportException("Bad Line Format.  Observation lines must have exactly " + OBS_LINE_PARTS + " columns");
 				}
 				
-				// let's try and find our inspection type
-				type = FuzzyResolver.resolve(lineParts[OBS_INSPECTION_TYPE_NAME], inspectionTypes, "name");
+				// let's try and find our event type
+				type = FuzzyResolver.resolve(lineParts[OBS_EVENT_TYPE_NAME], eventTypes, "name");
 				
 				if(type == null) {
-					throw new FileImportException("Unable to find InspectionType named [" + lineParts[OBS_INSPECTION_TYPE_NAME] + "] for Tenant [" + tenantId + "]");
+					throw new FileImportException("Unable to find EventType named [" + lineParts[OBS_EVENT_TYPE_NAME] + "] for Tenant [" + tenantId + "]");
 				}
 				
-				logger.debug("Found InspectionType [" + type.getName() + "]");
+				logger.debug("Found EventType [" + type.getName() + "]");
 				
 				// now let's try and resolve the section
 				section = FuzzyResolver.resolve(lineParts[OBS_SECTION_NAME], type.getSections(), "title");
 				
 				if(section == null) {
-					throw new FileImportException("Unable to find CriteriaSection named [" + lineParts[OBS_SECTION_NAME] + "] for Tenant [" + tenantId + "] and InspectionType [" + type.getName() + "]");
+					throw new FileImportException("Unable to find CriteriaSection named [" + lineParts[OBS_SECTION_NAME] + "] for Tenant [" + tenantId + "] and EventType [" + type.getName() + "]");
 				}
 				
 				logger.debug("Found CriteriaSection [" + section.getTitle() + "]");
@@ -107,7 +107,7 @@ public class ImportManagerImpl implements ImportManager {
 				criteria = FuzzyResolver.resolve(lineParts[OBS_CRITERIA_NAME], section.getCriteria(), "displayText");
 				
 				if(criteria == null) {
-					throw new FileImportException("Unable to find Criteria named [" + lineParts[OBS_CRITERIA_NAME] + "] for Tenant [" + tenantId + "], InspectionType [" + type.getName() + "] and Section [" + section.getTitle() + "]");
+					throw new FileImportException("Unable to find Criteria named [" + lineParts[OBS_CRITERIA_NAME] + "] for Tenant [" + tenantId + "], EventType [" + type.getName() + "] and Section [" + section.getTitle() + "]");
 				}
 				
 				logger.debug("Found Criteria [" + criteria.getDisplayText() + "]");
@@ -140,8 +140,8 @@ public class ImportManagerImpl implements ImportManager {
 				em.merge(criteria);
 				observationsImported++;
 				
-				logger.debug("Updating InspectionType");
-				// we should also update the mod time on our inspection type so that mobile knows to get a new one
+				logger.debug("Updating EventType");
+				// we should also update the mod time on our event type so that mobile knows to get a new one
 				type.touch();
 				em.merge(type);
 				

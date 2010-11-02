@@ -3,15 +3,15 @@ package com.n4systems.services.safetyNetwork.catalog.summary;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 
 public class InspectionTypeImportSummary extends BaseImportSummary {
 
-	private Map<Long, InspectionType> importMapping = new HashMap<Long, InspectionType>();
+	private Map<Long, EventType> importMapping = new HashMap<Long, EventType>();
 	private boolean renamed = false;
 	private int numberRenamed = 0;
 	
-	public Map<Long, InspectionType> getImportMapping() {
+	public Map<Long, EventType> getImportMapping() {
 		return importMapping;
 	}
 

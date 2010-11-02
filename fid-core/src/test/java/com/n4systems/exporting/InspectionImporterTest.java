@@ -10,18 +10,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.n4systems.api.model.EventView;
+import com.n4systems.api.validation.validators.EventViewValidator;
 import com.n4systems.exceptions.UnknownSubAsset;
+import com.n4systems.model.EventType;
 import com.n4systems.model.builders.EventBuilder;
+import com.n4systems.model.builders.EventTypeBuilder;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.inspection.InspectionToModelConverter;
 import com.n4systems.api.model.ExternalModelView;
-import com.n4systems.api.model.InspectionView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
-import com.n4systems.api.validation.validators.InspectionViewValidator;
 import com.n4systems.ejb.impl.CreateInspectionParameter;
 import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -31,8 +33,6 @@ import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.handlers.creator.NullObjectDefaultedInspectionPersistenceFactory;
 import com.n4systems.handlers.creator.inspections.InspectionCreator;
 import com.n4systems.model.Event;
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
 
@@ -41,13 +41,13 @@ public class InspectionImporterTest {
 	@Test
 	public void test_constructor_sets_inspection_type_into_validator() {
 		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null);
-		converter.setType(InspectionTypeBuilder.anInspectionType().build());
+		converter.setType(EventTypeBuilder.anEventType().build());
 		
 		Validator<ExternalModelView> validator = new ViewValidator(null);
 		
 		new InspectionImporter(null, validator, null, converter);
 		
-		assertSame(converter.getType(), validator.getValidationContext().get(InspectionViewValidator.INSPECTION_TYPE_KEY));
+		assertSame(converter.getType(), validator.getValidationContext().get(EventViewValidator.INSPECTION_TYPE_KEY));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -57,7 +57,7 @@ public class InspectionImporterTest {
 		
 		Long modifiedBy = 12345L;
 		
-		final InspectionView view = new InspectionView();
+		final EventView view = new EventView();
 		view.setNextInspectionDate(new Date());
 		
 		Event event = EventBuilder.anEvent().build();
@@ -67,7 +67,7 @@ public class InspectionImporterTest {
 		replay(validator);
 
 		InspectionToModelConverter converter = createMock(InspectionToModelConverter.class);
-		expect(converter.getType()).andReturn(new InspectionType());
+		expect(converter.getType()).andReturn(new EventType());
 		expect(converter.toModel(view, transaction)).andReturn(event);
 		replay(converter);
 		
@@ -84,11 +84,11 @@ public class InspectionImporterTest {
 		inspectionPersistenceFactory.inspectionCreator = creator;
 		
 		InspectionImporter importer = new InspectionImporter(null, validator, inspectionPersistenceFactory, converter) {
-			protected List<InspectionView> readAllViews() throws IOException, ParseException, MarshalingException {
+			protected List<EventView> readAllViews() throws IOException, ParseException, MarshalingException {
 				return Arrays.asList(view);
 			}
 			
-			protected ExportMapUnmarshaler<InspectionView> createMapUnmarshaler() throws IOException, ParseException {
+			protected ExportMapUnmarshaler<EventView> createMapUnmarshaler() throws IOException, ParseException {
 				return null;
 			}
 			

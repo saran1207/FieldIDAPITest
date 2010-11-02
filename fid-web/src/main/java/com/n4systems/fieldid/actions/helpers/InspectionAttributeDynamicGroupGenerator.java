@@ -6,8 +6,8 @@ import java.util.List;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.inspectiontype.CommonInspectionAttributeNameListLoader;
+import com.n4systems.model.EventType;
+import com.n4systems.model.inspectiontype.CommonEventAttributeNameListLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 public class InspectionAttributeDynamicGroupGenerator {
@@ -32,15 +32,15 @@ public class InspectionAttributeDynamicGroupGenerator {
 			int order = 1024;
 			if (inspectionTypeId != null) {
 				// when an asset type has been selected, we will use all the infofields from the asset type
-				InspectionType inspectionType = persistenceManager.find(InspectionType.class, inspectionTypeId, filter, "infoFieldNames");
+				EventType eventType = persistenceManager.find(EventType.class, inspectionTypeId, filter, "infoFieldNames");
 				
 				// construct and add our field mappings
-				for (String fieldName: inspectionType.getInfoFieldNames()) {
+				for (String fieldName: eventType.getInfoFieldNames()) {
 					attributeGroup.getMappings().add(createAttributeMapping(fieldName, idPrefix, pathPrefix, order));
 					order++;
 				}
 			} else {
-				CommonInspectionAttributeNameListLoader loader = new CommonInspectionAttributeNameListLoader(filter);
+				CommonEventAttributeNameListLoader loader = new CommonEventAttributeNameListLoader(filter);
 				
 				// if no asset type was selected we need to compute all the common infofields
 				for (String fieldName: loader.load()) {

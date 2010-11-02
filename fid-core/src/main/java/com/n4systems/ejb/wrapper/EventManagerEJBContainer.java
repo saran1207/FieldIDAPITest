@@ -12,9 +12,9 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
@@ -244,11 +244,11 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 	}
 
 
-	public InspectionType updateEventForm(InspectionType inspectionType, Long modifyingUserId) {
+	public EventType updateEventForm(EventType eventType, Long modifyingUserId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateEventForm(inspectionType, modifyingUserId);
+			return createManager(transaction.getEntityManager()).updateEventForm(eventType, modifyingUserId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

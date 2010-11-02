@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.n4systems.reporting.EventReportType;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.api.Archivable;
@@ -36,7 +37,6 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
-import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
 
@@ -237,7 +237,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	}
 	
 	@AllowSafetyNetworkAccess
-	public boolean isPrintableForReportType(InspectionReportType reportType) { 
+	public boolean isPrintableForReportType(EventReportType reportType) {
 		if (!printable) {
 			return false;
 		}
@@ -248,18 +248,18 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
 	@AllowSafetyNetworkAccess
 	public boolean isInspectionCertPrintable() { 
-		return isPrintableForReportType(InspectionReportType.INSPECTION_CERT);
+		return isPrintableForReportType(EventReportType.INSPECTION_CERT);
 	}
 
 	@AllowSafetyNetworkAccess
 	public boolean isObservationCertPrintable() { 
-		return isPrintableForReportType(InspectionReportType.OBSERVATION_CERT);
+		return isPrintableForReportType(EventReportType.OBSERVATION_CERT);
 	}
 	
 	@AllowSafetyNetworkAccess
 	public boolean isAnyCertPrintable() {
 		boolean isAnyPrintable = false;
-		for (InspectionReportType reportType: InspectionReportType.values()) {
+		for (EventReportType reportType: EventReportType.values()) {
 			if (isPrintableForReportType(reportType)) {
 				isAnyPrintable = true;
 				break;

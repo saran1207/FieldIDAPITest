@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.inspectionbook.EventBookListLoader;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -17,7 +18,6 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.inspectionbook.InspectionBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
@@ -138,7 +138,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 
 	public List<ListingPair> getInspectionBooks() {
 		if( inspectionBooks == null ) {
-			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
+			EventBookListLoader loader = new EventBookListLoader(getSecurityFilter());
 			loader.setOpenBooksOnly(true);
 			loader.setOwner(event.getOwner());
 			inspectionBooks = loader.loadListingPair();

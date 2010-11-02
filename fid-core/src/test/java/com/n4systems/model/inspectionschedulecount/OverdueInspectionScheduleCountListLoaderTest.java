@@ -67,9 +67,9 @@ public class OverdueInspectionScheduleCountListLoaderTest {
 	}
 	
 	
-	private class OverdueInspectionScheduleCountListLoaderExtention extends OverdueInspectionScheduleCountListLoader {
+	private class OverdueInspectionScheduleCountListLoaderExtention extends OverdueEventScheduleCountListLoader {
 
-		private TestingQueryBuilder<InspectionScheduleCount> queryBuilder;
+		private TestingQueryBuilder<EventScheduleCount> queryBuilder;
 
 		public OverdueInspectionScheduleCountListLoaderExtention(SecurityFilter filter) {
 			super(filter);
@@ -78,8 +78,8 @@ public class OverdueInspectionScheduleCountListLoaderTest {
 
 
 		@Override
-		protected QueryBuilder<InspectionScheduleCount> getQueryBuilder(SecurityFilter filter) {
-			queryBuilder = new TestingQueryBuilder<InspectionScheduleCount>(EventSchedule.class);
+		protected QueryBuilder<EventScheduleCount> getQueryBuilder(SecurityFilter filter) {
+			queryBuilder = new TestingQueryBuilder<EventScheduleCount>(EventSchedule.class);
 			return queryBuilder;
 		}
 		

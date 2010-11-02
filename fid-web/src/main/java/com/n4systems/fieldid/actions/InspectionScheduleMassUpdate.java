@@ -9,7 +9,7 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.search.InspectionScheduleAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
+import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListHelper;
@@ -21,7 +21,7 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 	private static Logger logger = Logger.getLogger(InspectionScheduleMassUpdate.class);
 	public static final String NEXT_DATE = "nextDate";
 	
-	private InspectionScheduleSearchContainer criteria;
+	private EventScheduleSearchContainer criteria;
 	private EventSchedule schedule = new EventSchedule();
 	private String nextDate;
 	private boolean removeIncomplete = false;
@@ -78,7 +78,7 @@ public class InspectionScheduleMassUpdate extends MassUpdate {
 	
 	private boolean findCriteria() {
 		if (getSession().containsKey(InspectionScheduleAction.SCHEDULE_CRITERIA) && getSession().get(InspectionScheduleAction.SCHEDULE_CRITERIA) != null) {
-			criteria = (InspectionScheduleSearchContainer)getSession().get(InspectionScheduleAction.SCHEDULE_CRITERIA);
+			criteria = (EventScheduleSearchContainer)getSession().get(InspectionScheduleAction.SCHEDULE_CRITERIA);
 		}
 
 		if (criteria == null || searchId == null || !searchId.equals(criteria.getSearchId())) {

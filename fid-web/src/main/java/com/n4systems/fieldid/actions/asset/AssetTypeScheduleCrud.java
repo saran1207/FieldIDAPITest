@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.AssociatedEventType;
+import com.n4systems.model.EventType;
+import com.n4systems.model.inspectiontype.EventFrequencySaver;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
@@ -15,10 +18,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.AssociatedInspectionType;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.inspectiontype.InspectionFrequencySaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.Transaction;
@@ -34,12 +34,12 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 	private Long assetTypeId;
 	private Long inspectionTypeId;
 	private AssetType assetType;
-	private InspectionType inspectionType;
+	private EventType eventType;
 	
 	private boolean customerForm = false;
 	private AssetTypeSchedule schedule;
 
-	private List<InspectionType> inspectionTypes;
+	private List<EventType> eventTypes;
 	private Map<String, AssetTypeSchedule> schedules;
 	private Map<String, List<AssetTypeSchedule>> overrideSchedules;
 
@@ -111,7 +111,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 	}
 
 	private void removeSchedules(Transaction transaction, List<AssetTypeSchedule> schedulesToRemove) {
-		InspectionFrequencySaver saver = new InspectionFrequencySaver();
+		EventFrequencySaver saver = new EventFrequencySaver();
 		for (AssetTypeSchedule scheduleToRemove : schedulesToRemove) {
 			saver.remove(transaction, scheduleToRemove);
 		}
@@ -121,7 +121,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 		List<AssetTypeSchedule> schedulesToRemove = new ArrayList<AssetTypeSchedule>();
 
 		if (!schedule.getOwner().isExternal()) {
-			schedulesToRemove.addAll(getLoaderFactory().createInspectionFrequenciesListLoader().setInspectionTypeId(inspectionTypeId).setAssetTypeId(assetTypeId).load(transaction));
+			schedulesToRemove.addAll(getLoaderFactory().createEventFrequenciesListLoader().setEventTypeId(inspectionTypeId).setAssetTypeId(assetTypeId).load(transaction));
 		} else {
 			schedulesToRemove.add(new QueryBuilder<AssetTypeSchedule>(AssetTypeSchedule.class, new OpenSecurityFilter()).addSimpleWhere("id", schedule.getId()).getSingleResult(
 					transaction.getEntityManager()));
@@ -136,7 +136,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 		try {
 			if (schedule.getId() == null) {
 				schedule.setAssetType(assetType);
-				schedule.setInspectionType(inspectionType);
+				schedule.setEventType(eventType);
 				schedule.setTenant(getTenant());
 				schedule.setOwner(getOwner());
 				persistenceManager.save(schedule);
@@ -146,7 +146,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 			}
 
 			assetType = assetTypeManager.updateAssetType(assetType);
-			schedule = assetType.getSchedule(schedule.getInspectionType(), schedule.getOwner());
+			schedule = assetType.getSchedule(schedule.getEventType(), schedule.getOwner());
 		} catch (Exception e) {
 			addActionError(getText("error.failedtosave"));
 			return ERROR;
@@ -171,22 +171,22 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 		return assetType;
 	}
 
-	public InspectionType getInspectionType() {
-		if (inspectionType == null) {
-			inspectionType = persistenceManager.find(InspectionType.class, inspectionTypeId, getTenant());
+	public EventType getInspectionType() {
+		if (eventType == null) {
+			eventType = persistenceManager.find(EventType.class, inspectionTypeId, getTenant());
 		}
-		return inspectionType;
+		return eventType;
 	}
 
-	public List<InspectionType> getInspectionTypes() {
-		if (inspectionTypes == null) {
-			inspectionTypes = new ArrayList<InspectionType>();
-			List<AssociatedInspectionType> associatedInspectionTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(getAssetType()).load();
-			for (AssociatedInspectionType associatedInspectionType : associatedInspectionTypes) {
-				inspectionTypes.add(associatedInspectionType.getInspectionType());
+	public List<EventType> getInspectionTypes() {
+		if (eventTypes == null) {
+			eventTypes = new ArrayList<EventType>();
+			List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(getAssetType()).load();
+			for (AssociatedEventType associatedEventType : associatedEventTypes) {
+				eventTypes.add(associatedEventType.getEventType());
 			}
 		}
-		return inspectionTypes;
+		return eventTypes;
 	}
 
 	public Map<String, AssetTypeSchedule> getSchedules() {
@@ -195,7 +195,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 			schedules = new HashMap<String, AssetTypeSchedule>();
 			for (AssetTypeSchedule schedule : assetType.getSchedules()) {
 				if (schedule.getOwner().isPrimary()) {
-					schedules.put(schedule.getInspectionType().getName(), schedule);
+					schedules.put(schedule.getEventType().getName(), schedule);
 				}
 			}
 		}
@@ -208,10 +208,10 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 			overrideSchedules = new HashMap<String, List<AssetTypeSchedule>>();
 			for (AssetTypeSchedule schedule : assetType.getSchedules()) {
 				if (schedule.isOverride()) {
-					if (overrideSchedules.get(schedule.getInspectionType().getName()) == null) {
-						overrideSchedules.put(schedule.getInspectionType().getName(), new ArrayList<AssetTypeSchedule>());
+					if (overrideSchedules.get(schedule.getEventType().getName()) == null) {
+						overrideSchedules.put(schedule.getEventType().getName(), new ArrayList<AssetTypeSchedule>());
 					}
-					overrideSchedules.get(schedule.getInspectionType().getName()).add(schedule);
+					overrideSchedules.get(schedule.getEventType().getName()).add(schedule);
 				}
 			}
 		}
@@ -273,7 +273,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 		getInspectionType();
 
 		Map<String, List<AssetTypeSchedule>> overrideSchedules = getOverrideSchedules();
-		List<AssetTypeSchedule> existingSchedules = overrideSchedules.get(inspectionType.getName());
+		List<AssetTypeSchedule> existingSchedules = overrideSchedules.get(eventType.getName());
 		
 		if (existingSchedules == null) {
 			return false;

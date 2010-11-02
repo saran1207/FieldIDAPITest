@@ -109,7 +109,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 
 		List<AssetType> assetTypes = (List<AssetType>)query.getResultList();
 		
-		return (List<AssetType>) persistenceManager.postFetchFields(assetTypes, "infoFields", "inspectionTypes", "subTypes");
+		return (List<AssetType>) persistenceManager.postFetchFields(assetTypes, "infoFields", "eventTypes", "subTypes");
 	}
 	
 	public AssetType updateAssetType(AssetType assetType, List<FileAttachment> uploadedFiles, File assetImage ) throws FileAttachmentException, ImageAttachmentException {

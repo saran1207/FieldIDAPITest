@@ -2,7 +2,7 @@ package com.n4systems.persistence.loaders;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.downloadlink.AllDownloadLinksByDateLoader;
-import com.n4systems.model.inspection.InspectionBySubInspectionLoader;
+import com.n4systems.model.inspection.EventBySubEventLoader;
 import com.n4systems.model.asset.LastInspectionDateLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.model.signuppackage.ContractPricingByExternalIdLoader;
@@ -24,8 +24,8 @@ public class NonSecureLoaderFactory {
 		return new ContractPricingByExternalIdLoader();
 	}
 
-	public InspectionBySubInspectionLoader createInspectionBySubInspectionLoader() {
-		return new InspectionBySubInspectionLoader();
+	public EventBySubEventLoader createInspectionBySubInspectionLoader() {
+		return new EventBySubEventLoader();
 	}
 
 	public LastInspectionDateLoader createLastInspectionDateLoader(Long networkId) {

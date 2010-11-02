@@ -217,7 +217,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			subEvent.syncFormVersionWithType();
 
 			if (subEvent.isEditable()) {
-				inspectionHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
+				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
 			}
 
 			masterInspectionHelper.addSubInspection(subEvent);
@@ -225,7 +225,7 @@ public class SubInspectionCrud extends InspectionCrud {
 			subEvent.setId(uniqueID);
 
 			if (subEvent.isEditable()) {
-				inspectionHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
+				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
 			}
 
 			masterInspectionHelper.replaceSubInspection(subEvent);
@@ -272,14 +272,14 @@ public class SubInspectionCrud extends InspectionCrud {
 				masterInspectionHelper.setAssetStatus(event.getAssetStatus());
 
 				if (event.isEditable()) {
-					inspectionHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
 				}
 					
 				masterInspectionHelper.setNextSchedules(getNextSchedules());
 				
 			} else {
 				if (event.isEditable()) {
-					inspectionHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
 				}
 
 				updateAttachmentList(event, modifiedBy);
@@ -326,7 +326,7 @@ public class SubInspectionCrud extends InspectionCrud {
 		if (assetId == null) {
 			parentAsset = null;
 		} else if (parentAsset == null || !assetId.equals(parentAsset.getId())) {
-			parentAsset = persistenceManager.find(Asset.class, assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions");
+			parentAsset = persistenceManager.find(Asset.class, assetId, getSecurityFilter(), "type.eventTypes", "infoOptions");
 			parentAsset = assetManager.fillInSubAssetsOnAsset(parentAsset);
 		}
 	}

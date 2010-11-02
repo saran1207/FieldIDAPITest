@@ -9,7 +9,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.security.SecurityFilter;
@@ -50,6 +50,6 @@ public interface EventManager {
 
 	
 
-	public InspectionType updateEventForm(InspectionType inspectionType, Long modifyingUserId);
+	public EventType updateEventForm(EventType eventType, Long modifyingUserId);
 
 }

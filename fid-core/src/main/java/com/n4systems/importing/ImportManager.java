@@ -6,7 +6,7 @@ import com.n4systems.exceptions.FileImportException;
 
 public interface ImportManager {
 	
-	public static final int OBS_INSPECTION_TYPE_NAME = 0;
+	public static final int OBS_EVENT_TYPE_NAME = 0;
 	public static final int OBS_SECTION_NAME = 1;
 	public static final int OBS_CRITERIA_NAME = 2;
 	public static final int OBS_TYPE = 3;

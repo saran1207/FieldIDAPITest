@@ -3,11 +3,11 @@ package com.n4systems.fieldid.actions.inspection;
 import java.util.Date;
 
 import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.EventType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.util.DateHelper;
@@ -16,7 +16,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
-	private InspectionType inspectionType;
+	private EventType eventType;
 	private Asset asset;
 	private Project job;
 	private String date;
@@ -41,7 +41,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 			startDate = DateHelper.getToday();
 		}
 		
-		AssetTypeSchedule schedule = asset.getType().getSchedule(inspectionType, asset.getOwner());
+		AssetTypeSchedule schedule = asset.getType().getSchedule(eventType, asset.getOwner());
 		if (schedule != null) {
 			Date nextDate = schedule.getNextDate(startDate);
 			setDate(convertDate(nextDate));
@@ -51,18 +51,18 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 		return SUCCESS;
 	}
 	
-	public InspectionType getInspectionType() {
-		return inspectionType;
+	public EventType getInspectionType() {
+		return eventType;
 	}
 	
 	public Long getInspectionTypeId() {
-		return inspectionType.getId();
+		return eventType.getId();
 	}
 
 	public void setInspectionTypeId(Long id) {
-		inspectionType = persistenceManager.find(InspectionType.class, id, getTenantId());
+		eventType = persistenceManager.find(EventType.class, id, getTenantId());
 		nextSchedule.setType(id);
-		nextSchedule.setTypeName(inspectionType.getName());
+		nextSchedule.setTypeName(eventType.getName());
 	}
 
 	public Long getAsset() {
@@ -70,7 +70,7 @@ public class AddInspectionScheduleAjaxAction extends AbstractAction {
 	}
 
 	public void setAsset(Long id) {
-		asset = getLoaderFactory().createFilteredIdLoader(Asset.class).setId(id).setPostFetchFields("type.inspectionTypes").load();
+		asset = getLoaderFactory().createFilteredIdLoader(Asset.class).setId(id).setPostFetchFields("type.eventTypes").load();
 	}
 
 	public Project getJob() {

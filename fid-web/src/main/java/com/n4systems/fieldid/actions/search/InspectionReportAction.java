@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.InspectionSearchContainer.*;
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventTypeGroup;
+import com.n4systems.reporting.EventReportType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -22,17 +24,15 @@ import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
-import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.inspectionbook.InspectionBookListLoader;
+import com.n4systems.model.inspectionbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
-import com.n4systems.reporting.InspectionReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -40,7 +40,7 @@ import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
 import com.opensymphony.xwork2.Preparable;
 
-public class InspectionReportAction extends CustomizableSearchAction<InspectionSearchContainer> implements Preparable {
+public class InspectionReportAction extends CustomizableSearchAction<EventSearchContainer> implements Preparable {
 	
 	private static final String REPORT_PAGE_NUMBER = "reportPageNumber";
 	private static final long serialVersionUID = 1L;
@@ -48,7 +48,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	private final UserManager userManager;
 	
 	private OwnerPicker ownerPicker;
-	private InspectionReportType reportType;
+	private EventReportType reportType;
 	private String savedReportName;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> savedReports;
@@ -90,8 +90,8 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	}
 
 	@Override
-	protected InspectionSearchContainer createSearchContainer() {
-		return new InspectionSearchContainer(getSecurityFilter(), getLoaderFactory());
+	protected EventSearchContainer createSearchContainer() {
+		return new EventSearchContainer(getSecurityFilter(), getLoaderFactory());
 	}
 	
 	@SkipValidation
@@ -210,7 +210,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	
 	public List<ListingPair> getInspectionBooks() {
 		if (inspectionBooks == null) {
-			InspectionBookListLoader bookLoader = new InspectionBookListLoader(getSecurityFilter());
+			EventBookListLoader bookLoader = new EventBookListLoader(getSecurityFilter());
 			bookLoader.setOpenBooksOnly(false);
 			inspectionBooks = bookLoader.loadListingPair();
 			inspectionBooks.add(new ListingPair(0L, "Inspections not in a book"));
@@ -220,7 +220,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 
 	public List<ListingPair> getInspectionTypes() {
 		if (inspectionTypes == null) {
-			inspectionTypes = persistenceManager.findAllLP( InspectionTypeGroup.class, getTenantId(), "name" );
+			inspectionTypes = persistenceManager.findAllLP( EventTypeGroup.class, getTenantId(), "name" );
 		}
 		return inspectionTypes;
 	}
@@ -239,7 +239,7 @@ public class InspectionReportAction extends CustomizableSearchAction<InspectionS
 	}
 
 	public void setReportType(String reportType) {
-		this.reportType = InspectionReportType.valueOf(reportType);
+		this.reportType = EventReportType.valueOf(reportType);
 	}
 	
 	public List<ListingPair> getSavedReports() {

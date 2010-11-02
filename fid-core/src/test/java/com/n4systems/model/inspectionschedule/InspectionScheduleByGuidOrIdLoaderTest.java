@@ -21,7 +21,7 @@ public class InspectionScheduleByGuidOrIdLoaderTest {
 	public void should_try_to_lookup_by_mobile_guid_when_set() {
 		String mobileGuid = "SOME GUID";
 		
-		TestableInspectionScheduleByGuidOrIdLoader sut = new TestableInspectionScheduleByGuidOrIdLoader(new OpenSecurityFilter());
+		TestableEventScheduleByGuidOrIdLoader sut = new TestableEventScheduleByGuidOrIdLoader(new OpenSecurityFilter());
 		sut.setMobileGuid(mobileGuid).load(new TestingTransaction());
 		
 		WhereParameter<?> whereParameter = (WhereParameter<?>)sut.queryBuilder.getWhereParameter("mobileGUID");
@@ -31,18 +31,18 @@ public class InspectionScheduleByGuidOrIdLoaderTest {
 	
 	@Test
 	public void should_try_by_id_if_mobile_guid_not_set() {
-		TestableInspectionScheduleByGuidOrIdLoader sut = new TestableInspectionScheduleByGuidOrIdLoader(new OpenSecurityFilter());
+		TestableEventScheduleByGuidOrIdLoader sut = new TestableEventScheduleByGuidOrIdLoader(new OpenSecurityFilter());
 		sut.setId(1L).load(new TestingTransaction());
 		
 		assertTrue(sut.findByIdCalled);
 	}
 
-	private class TestableInspectionScheduleByGuidOrIdLoader extends InspectionScheduleByGuidOrIdLoader {
+	private class TestableEventScheduleByGuidOrIdLoader extends EventScheduleByGuidOrIdLoader {
 
 		private TestingQueryBuilder<EventSchedule> queryBuilder;
 		private boolean findByIdCalled = false;
 		
-		public TestableInspectionScheduleByGuidOrIdLoader(SecurityFilter filter) {
+		public TestableEventScheduleByGuidOrIdLoader(SecurityFilter filter) {
 			super(filter);
 		}
 

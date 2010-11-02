@@ -10,7 +10,7 @@ ${action.setPageType('inspection_type', 'edit')!}
 		</div>
 	<#else>
 		<div class="errors">
-			<@s.text name="error.can_not_delete_event_type.part_of_master"><@s.param>${archiveSummary.inspectionsPartOfMaster}</@s.param></@s.text>
+			<@s.text name="error.can_not_delete_event_type.part_of_master"><@s.param>${archiveSummary.eventsPartOfMaster}</@s.param></@s.text>
 		</div>
 	</#if>
 		
@@ -23,7 +23,7 @@ ${action.setPageType('inspection_type', 'edit')!}
 			</div>
 			<div class="infoSet">
 				<label class="label"><@s.text name="label.delete_event_frequencies"/></label>
-				<span class="fieldHolder">${archiveSummary.deleteInspectionFrequencies}</span>
+				<span class="fieldHolder">${archiveSummary.deleteEventFrequencies}</span>
 			</div>
 			<div class="infoSet">
 				<label class="label"><@s.text name="label.delete_notifcation_settings"/></label>
@@ -33,11 +33,11 @@ ${action.setPageType('inspection_type', 'edit')!}
 		<div class="infoBlock">
 			<div class="infoSet <#if !archiveSummary.canBeRemoved()>error</#if>">
 				<label class="label"><@s.text name="label.delete_part_of_master_events"/></label>
-				<span class="fieldHolder">${archiveSummary.inspectionsPartOfMaster}</span>
+				<span class="fieldHolder">${archiveSummary.eventsPartOfMaster}</span>
 			</div>
 			<div class="infoSet ">
 				<label class="label"><@s.text name="label.delete_events"/></label>
-				<span class="fieldHolder">${archiveSummary.deleteInspections}</span>
+				<span class="fieldHolder">${archiveSummary.deleteEvents}</span>
 			</div>
 			
 			<div class="infoSet ">

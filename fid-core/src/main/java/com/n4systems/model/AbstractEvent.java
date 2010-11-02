@@ -37,7 +37,7 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	private String comments;
 	
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
-	private InspectionType type;
+	private EventType type;
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="asset_id")
@@ -96,11 +96,11 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	}
 	
 	@AllowSafetyNetworkAccess
-	public InspectionType getType() {
+	public EventType getType() {
 		return type;
 	}
 
-	public void setType(InspectionType type) {
+	public void setType(EventType type) {
 		this.type = type;
 	}
 

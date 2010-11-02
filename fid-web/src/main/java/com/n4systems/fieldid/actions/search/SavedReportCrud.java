@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.search;
 
 import java.util.List;
 
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -11,7 +12,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
 import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.ViewTree;
 import com.n4systems.fieldid.viewhelpers.ViewTreeHelper;
@@ -66,7 +66,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 		testRequiredEntities(true);
 		SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter());
 		
-		InspectionSearchContainer container = converter.convert(report);
+		EventSearchContainer container = converter.convert(report);
 		
 		searchId = container.getSearchId();
 		getSession().setReportCriteria(container); 
@@ -101,13 +101,13 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 			report.setTenant(getTenant());
 			report.setUser(fetchCurrentUser());
 										
-			InspectionSearchContainer inspectionSearchContainer = getContainer();
-			convertReport(inspectionSearchContainer);
+			EventSearchContainer eventSearchContainer = getContainer();
+			convertReport(eventSearchContainer);
 			
 			
 			uniqueID = persistenceManager.save(report, getSessionUser().getId());
-			inspectionSearchContainer.setSavedReportId(uniqueID);
-			inspectionSearchContainer.setSavedReportModified(false);
+			eventSearchContainer.setSavedReportId(uniqueID);
+			eventSearchContainer.setSavedReportModified(false);
 			
 			addFlashMessageText("message.savedreportsaved");
 		} catch (Exception e) {
@@ -118,8 +118,8 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 		return SUCCESS;
 	}
 
-	private void convertReport(InspectionSearchContainer inspectionSearchContainer) {
-		report = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter()).convertInto(inspectionSearchContainer, report);
+	private void convertReport(EventSearchContainer eventSearchContainer) {
+		report = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter()).convertInto(eventSearchContainer, report);
 	}
 
 	@SkipValidation
@@ -139,10 +139,10 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 			return INVALID_SEARCH_ID;
 		}
 		try {
-			InspectionSearchContainer inspectionSearchContainer = getContainer();
-			convertReport(inspectionSearchContainer);
+			EventSearchContainer eventSearchContainer = getContainer();
+			convertReport(eventSearchContainer);
 			persistenceManager.update(report, getSessionUser().getId());
-			inspectionSearchContainer.setSavedReportModified(false);
+			eventSearchContainer.setSavedReportModified(false);
 			
 			addFlashMessageText("message.savedreportsaved");
 		} catch (Exception e) {
@@ -190,8 +190,8 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 		return SUCCESS;
 	}
 	
-	private InspectionSearchContainer getContainer() {
-		return (InspectionSearchContainer)getSession().getReportCriteria();
+	private EventSearchContainer getContainer() {
+		return (EventSearchContainer)getSession().getReportCriteria();
 	}
 	
 	public ViewTree<Long> getShareUserList() {

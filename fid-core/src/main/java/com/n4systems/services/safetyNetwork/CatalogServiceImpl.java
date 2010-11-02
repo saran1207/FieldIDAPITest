@@ -9,11 +9,11 @@ import java.util.Set;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.AssociatedInspectionType;
+import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
@@ -93,7 +93,7 @@ public class CatalogServiceImpl implements CatalogService {
 		Set<Long> inspectionTypeIds = new HashSet<Long>();
 		Catalog catalog = getCatalog();
 		if (catalog != null) {
-			for (InspectionType publishedType : catalog.getPublishedInspectionTypes()) {
+			for (EventType publishedType : catalog.getPublishedInspectionTypes()) {
 				inspectionTypeIds.add(publishedType.getId());
 			}
 		}
@@ -107,16 +107,16 @@ public class CatalogServiceImpl implements CatalogService {
 			return new ArrayList<ListingPair>();
 		}
 		
-		QueryBuilder<ListingPair> inspectionTypesQuery = new QueryBuilder<ListingPair>(InspectionType.class, new TenantOnlySecurityFilter(tenant.getId()));
+		QueryBuilder<ListingPair> inspectionTypesQuery = new QueryBuilder<ListingPair>(EventType.class, new TenantOnlySecurityFilter(tenant.getId()));
 		inspectionTypesQuery.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name")).addWhere(Comparator.IN, "ids", "id", inspectionTypeIdsPublished);
 		inspectionTypesQuery.addOrder("name");
 
 		return persistenceManager.findAll(inspectionTypesQuery);
 	}
 
-	public Catalog publishInspectionTypes(Set<InspectionType> inspectionTypes) {
+	public Catalog publishInspectionTypes(Set<EventType> eventTypes) {
 		Catalog catalog = getCatalog();
-		catalog.setPublishedInspectionTypes(inspectionTypes);
+		catalog.setPublishedInspectionTypes(eventTypes);
 		return persistenceManager.update(catalog);
 	}
 
@@ -179,7 +179,7 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	public Set<ListingPair> getInspectionTypeGroupsFor(Set<Long> inspectionTypeIds) {
-		QueryBuilder<ListingPair> importingInspectionTypeGroups = new QueryBuilder<ListingPair>(InspectionType.class, filter);
+		QueryBuilder<ListingPair> importingInspectionTypeGroups = new QueryBuilder<ListingPair>(EventType.class, filter);
 		importingInspectionTypeGroups.setSelectArgument(new NewObjectSelect(ListingPair.class, "group.id", "group.name"));
 		importingInspectionTypeGroups.addWhere(Comparator.IN, "ids", "id", inspectionTypeIds);
 		importingInspectionTypeGroups.addWhere(Comparator.IN, "publishedIds", "id", getInspectionTypeIdsPublished());
@@ -188,17 +188,17 @@ public class CatalogServiceImpl implements CatalogService {
 		return new HashSet<ListingPair>(persistenceManager.findAll(importingInspectionTypeGroups));
 	}
 
-	public InspectionType getPublishedInspectionType(Long inspectionTypeId) {
+	public EventType getPublishedInspectionType(Long inspectionTypeId) {
 		if (!getInspectionTypeIdsPublished().contains(inspectionTypeId)) {
 			throw new NotPublishedException("not published");
 		}
-		return persistenceManager.find(InspectionType.class, inspectionTypeId, getTenant().getId(), "supportedProofTests", "sections", "infoFieldNames");
+		return persistenceManager.find(EventType.class, inspectionTypeId, getTenant().getId(), "supportedProofTests", "sections", "infoFieldNames");
 	}
 
 	public List<StateSet> getStateSetsUsedIn(Set<Long> inspectionTypeIds) {
 		List<StateSet> originalStateSets = new ArrayList<StateSet>();
 		if (!inspectionTypeIds.isEmpty()) {
-			QueryBuilder<Long> usedSectionsInInspectionTypesQuery = new QueryBuilder<Long>(InspectionType.class, filter); 
+			QueryBuilder<Long> usedSectionsInInspectionTypesQuery = new QueryBuilder<Long>(EventType.class, filter);
 			usedSectionsInInspectionTypesQuery.addRequiredLeftJoin("sections", "section").setSelectArgument(new SimpleSelect("section.id", true));
 			usedSectionsInInspectionTypesQuery.addWhere(Comparator.IN, "ids", "id", inspectionTypeIds);
 			usedSectionsInInspectionTypesQuery.addWhere(Comparator.IN, "publishedIds", "id", getInspectionTypeIdsPublished());
@@ -247,7 +247,7 @@ public class CatalogServiceImpl implements CatalogService {
 		SimpleSelect inspectionTypeId = new SimpleSelect("inspectionType.id", true);
 		inspectionTypeId.setDistinct(true);
 		
-		QueryBuilder<Long> additionalInspectionTypeIdQuery = new QueryBuilder<Long>(AssociatedInspectionType.class, filter);
+		QueryBuilder<Long> additionalInspectionTypeIdQuery = new QueryBuilder<Long>(AssociatedEventType.class, filter);
 		additionalInspectionTypeIdQuery.setSelectArgument(inspectionTypeId);
 		additionalInspectionTypeIdQuery.addWhere(Comparator.IN, "ptIds", "assetType.id", assetTypeIds);
 		

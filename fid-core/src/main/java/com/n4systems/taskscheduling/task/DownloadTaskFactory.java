@@ -11,7 +11,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
-import com.n4systems.reporting.InspectionReportType;
+import com.n4systems.reporting.EventReportType;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.search.SearchDefiner;
@@ -44,7 +44,7 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public PrintAllInspectionCertificatesTask createPrintAllInspectionCertificatesTask(DownloadLink link, String downloadUrl, InspectionReportType type, List<Long> inspectionIds) {
+	public PrintAllInspectionCertificatesTask createPrintAllInspectionCertificatesTask(DownloadLink link, String downloadUrl, EventReportType type, List<Long> inspectionIds) {
 		PrintAllInspectionCertificatesTask task = new PrintAllInspectionCertificatesTask(link, downloadUrl);
 		task.setReportType(type);
 		task.setInspectionIds(inspectionIds);

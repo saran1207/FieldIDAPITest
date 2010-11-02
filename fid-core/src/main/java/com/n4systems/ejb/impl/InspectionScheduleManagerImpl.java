@@ -10,12 +10,12 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Event;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.InspectionScheduleService;
@@ -45,7 +45,7 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 		
 		AssetType assetType = persistenceManager.find(AssetType.class, asset.getType().getId());
 		if (assetType != null) {
-			for (InspectionType type : assetType.getInspectionTypes()) {
+			for (EventType type : assetType.getEventTypes()) {
 				AssetTypeSchedule schedule = assetType.getSchedule(type, asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
 					EventSchedule eventSchedule = new EventSchedule(asset, type);
@@ -112,9 +112,9 @@ public class InspectionScheduleManagerImpl implements InspectionScheduleManager 
 		return persistenceManager.find(builder);
 	}
 	
-	public Long getInspectionTypeIdForSchedule(Long scheduleId) {
+	public Long getEventTypeIdForSchedule(Long scheduleId) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
-		builder.setSimpleSelect("inspectionType.id");
+		builder.setSimpleSelect("eventType.id");
 		builder.addSimpleWhere("id", scheduleId);
 		
 		return persistenceManager.find(builder);

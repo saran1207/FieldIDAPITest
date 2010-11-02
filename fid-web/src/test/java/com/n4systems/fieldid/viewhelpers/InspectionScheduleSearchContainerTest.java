@@ -19,12 +19,12 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class InspectionScheduleSearchContainerTest extends SearchContainerTestCase {
 
-	private InspectionScheduleSearchContainer inspectionScheduleSearchContainer;
+	private EventScheduleSearchContainer eventScheduleSearchContainer;
 	
 	@Before
 	public void setUp() {
 		SecurityFilter filter = new OpenSecurityFilter();
-		inspectionScheduleSearchContainer = new InspectionScheduleSearchContainer(filter, new TestDoubleLoaderFactory(filter));
+		eventScheduleSearchContainer = new EventScheduleSearchContainer(filter, new TestDoubleLoaderFactory(filter));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -32,7 +32,7 @@ public class InspectionScheduleSearchContainerTest extends SearchContainerTestCa
 	public void no_search_terms_should_give_one_clause_of_status() {
 		// Set no fields on the container.
 		
-		WhereParameter<?> clause = getSingleWhereClause(inspectionScheduleSearchContainer);
+		WhereParameter<?> clause = getSingleWhereClause(eventScheduleSearchContainer);
 		
 		assertEquals("status", clause.getName());
 		List<ScheduleStatus> items = (List<ScheduleStatus>) clause.getValue();
@@ -43,9 +43,9 @@ public class InspectionScheduleSearchContainerTest extends SearchContainerTestCa
 
 	@Test
 	public void single_search_term_no_asterisk_should_be_eq_comparator() throws Exception {
-		inspectionScheduleSearchContainer.setSerialNumber("12345");
+		eventScheduleSearchContainer.setSerialNumber("12345");
 		
-		WhereParameter<?> whereClause = getWhereClauseNamed(inspectionScheduleSearchContainer, "asset_serialNumber");
+		WhereParameter<?> whereClause = getWhereClauseNamed(eventScheduleSearchContainer, "asset_serialNumber");
 
 		assertEquals("asset_serialNumber", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());

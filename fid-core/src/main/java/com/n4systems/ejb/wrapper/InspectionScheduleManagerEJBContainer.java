@@ -67,11 +67,11 @@ Transaction transaction = transactionManager.startTransaction();
 	
 
 
-	public Long getInspectionTypeIdForSchedule(Long scheduleId) {
+	public Long getEventTypeIdForSchedule(Long scheduleId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getInspectionTypeIdForSchedule(scheduleId);
+			return createManager(transaction.getEntityManager()).getEventTypeIdForSchedule(scheduleId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

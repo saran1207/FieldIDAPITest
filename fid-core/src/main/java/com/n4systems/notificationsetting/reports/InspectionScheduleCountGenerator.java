@@ -13,12 +13,12 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.naming.NamingException;
 
+import com.n4systems.model.inspectionschedulecount.OverdueEventScheduleCountListLoader;
+import com.n4systems.model.inspectionschedulecount.UpcomingEventScheduleCountListLoader;
 import org.apache.log4j.Logger;
 
 import com.n4systems.mail.MailManager;
-import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
-import com.n4systems.model.inspectionschedulecount.OverdueInspectionScheduleCountListLoader;
-import com.n4systems.model.inspectionschedulecount.UpcomingInspectionScheduleCountListLoader;
+import com.n4systems.model.inspectionschedulecount.EventScheduleCount;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.LogUtils;
@@ -29,12 +29,12 @@ import com.n4systems.util.time.Clock;
 public class InspectionScheduleCountGenerator {
 	private static Logger logger = Logger.getLogger(InspectionScheduleCountGenerator.class);
 	private SimpleDateFormat dateFormatter;
-	private UpcomingInspectionScheduleCountListLoader upcomingLoader;
-	private OverdueInspectionScheduleCountListLoader overdueLoader;
+	private UpcomingEventScheduleCountListLoader upcomingLoader;
+	private OverdueEventScheduleCountListLoader overdueLoader;
 	private final MailManager mailManager;
 
 	
-	public InspectionScheduleCountGenerator(SimpleDateFormat dateFormatter, UpcomingInspectionScheduleCountListLoader upcomingLoader, OverdueInspectionScheduleCountListLoader overdueLoader, MailManager mailManager) {
+	public InspectionScheduleCountGenerator(SimpleDateFormat dateFormatter, UpcomingEventScheduleCountListLoader upcomingLoader, OverdueEventScheduleCountListLoader overdueLoader, MailManager mailManager) {
 		super();
 		this.dateFormatter = dateFormatter;
 		this.upcomingLoader = upcomingLoader;
@@ -58,45 +58,45 @@ public class InspectionScheduleCountGenerator {
 		Date endDate = dateRange.getEnding();
 		
 		
-		SortedSet<InspectionScheduleCount> upcomingInspections = null;
+		SortedSet<EventScheduleCount> upcomingEvents = null;
 		if (setting.getUpcommingReport().isIncludeUpcoming()) {
-			upcomingInspections = getUpcommingInspections(setting, startDate, endDate);
+			upcomingEvents = getUpcommingInspections(setting, startDate, endDate);
 		}
 		
-		SortedSet<InspectionScheduleCount> overdueInspections = null;
+		SortedSet<EventScheduleCount> overdueEvents = null;
 		if (setting.isIncludeOverdue()) {
-			overdueInspections = getOverdueInspections(setting, clock);
+			overdueEvents = getOverdueInspections(setting, clock);
 		}
 		
 		
-		sendMessage(setting, startDate, endDate, upcomingInspections, overdueInspections);
+		sendMessage(setting, startDate, endDate, upcomingEvents, overdueEvents);
 	}
 
 	private boolean shouldGenerateReport(NotificationSetting setting, Clock clock) {
 		return !setting.getFrequency().isSameDay(clock.currentTime());
 	}
 
-	private SortedSet<InspectionScheduleCount> getOverdueInspections(NotificationSetting setting, Clock clock) {
-		OverdueInspectionScheduleCountListLoader loader = setupOverdueLoader(setting, clock);
+	private SortedSet<EventScheduleCount> getOverdueInspections(NotificationSetting setting, Clock clock) {
+		OverdueEventScheduleCountListLoader loader = setupOverdueLoader(setting, clock);
 		
 		
-		return new TreeSet<InspectionScheduleCount>(loader.load());
+		return new TreeSet<EventScheduleCount>(loader.load());
 	}
 
-	private OverdueInspectionScheduleCountListLoader setupOverdueLoader(NotificationSetting setting, Clock clock) {
+	private OverdueEventScheduleCountListLoader setupOverdueLoader(NotificationSetting setting, Clock clock) {
 		overdueLoader.setNotificationSetting(setting);
 		overdueLoader.setClock(clock);
 		return overdueLoader;
 	}
 
 
-	private SortedSet<InspectionScheduleCount> getUpcommingInspections(NotificationSetting setting, Date start, Date end) {
-		UpcomingInspectionScheduleCountListLoader loader = setupUpcomingLoader(setting, start, end);
+	private SortedSet<EventScheduleCount> getUpcommingInspections(NotificationSetting setting, Date start, Date end) {
+		UpcomingEventScheduleCountListLoader loader = setupUpcomingLoader(setting, start, end);
 		
-		return new TreeSet<InspectionScheduleCount>(loader.load());
+		return new TreeSet<EventScheduleCount>(loader.load());
 	}
 
-	private UpcomingInspectionScheduleCountListLoader setupUpcomingLoader(NotificationSetting setting, Date start, Date end) {
+	private UpcomingEventScheduleCountListLoader setupUpcomingLoader(NotificationSetting setting, Date start, Date end) {
 		upcomingLoader.setNotificationSetting(setting);
 		upcomingLoader.setFromDate(start);
 		upcomingLoader.setToDate(end);
@@ -106,7 +106,7 @@ public class InspectionScheduleCountGenerator {
 
 	
 
-	private void sendMessage(NotificationSetting setting, Date start, Date end, SortedSet<InspectionScheduleCount> upcomingInspectionCounts, SortedSet<InspectionScheduleCount> overdueInspections) throws NoSuchProviderException, MessagingException {
+	private void sendMessage(NotificationSetting setting, Date start, Date end, SortedSet<EventScheduleCount> upcomingEventCounts, SortedSet<EventScheduleCount> overdueEvents) throws NoSuchProviderException, MessagingException {
 		String messageSubject = createSubject(setting, start, end);
 		
 		// no we need to build the message body with the html inspection report table
@@ -114,8 +114,8 @@ public class InspectionScheduleCountGenerator {
 		
 		message.getTemplateMap().put("dateFormatter", dateFormatter);
 		message.getTemplateMap().put("setting", setting);
-		message.getTemplateMap().put("upcomingEvents", upcomingInspectionCounts);
-		message.getTemplateMap().put("overdueEvents", overdueInspections);
+		message.getTemplateMap().put("upcomingEvents", upcomingEventCounts);
+		message.getTemplateMap().put("overdueEvents", overdueEvents);
 		message.getTemplateMap().put("overdueDate", new PlainDate());
 		
 		message.setToAddresses(getAddressList(setting));

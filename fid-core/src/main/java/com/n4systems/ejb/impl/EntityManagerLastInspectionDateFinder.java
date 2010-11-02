@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.Event;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -38,10 +38,10 @@ public class EntityManagerLastInspectionDateFinder implements LastEventDateFinde
 	}
 
 	public Date findLastEventDate(EventSchedule schedule) {
-		return findLastEventDate(schedule.getAsset(), schedule.getInspectionType());
+		return findLastEventDate(schedule.getAsset(), schedule.getEventType());
 	}
 
-	public Date findLastEventDate(Asset asset, InspectionType inspectionType) {
+	public Date findLastEventDate(Asset asset, EventType eventType) {
 
 		QueryBuilder<Date> qBuilder = new QueryBuilder<Date>(Event.class, new OpenSecurityFilter(), "i");
 
@@ -49,8 +49,8 @@ public class EntityManagerLastInspectionDateFinder implements LastEventDateFinde
 		qBuilder.addSimpleWhere("asset.id", asset.getId());
 		qBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 
-		if (inspectionType != null) {
-			qBuilder.addSimpleWhere("type.id", inspectionType.getId());
+		if (eventType != null) {
+			qBuilder.addSimpleWhere("type.id", eventType.getId());
 		}
 
 		Date lastInspectionDate = null;

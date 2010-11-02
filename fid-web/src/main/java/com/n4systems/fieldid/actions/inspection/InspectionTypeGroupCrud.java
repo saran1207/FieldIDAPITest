@@ -2,6 +2,8 @@ package com.n4systems.fieldid.actions.inspection;
 
 import java.util.List;
 
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -12,8 +14,6 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -23,13 +23,13 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
-public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTypeGroup> implements HasDuplicateValueValidator{
+public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> implements HasDuplicateValueValidator{
 	
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(InspectionTypeGroupCrud.class);
 	
-	private InspectionTypeGroup inspectionTypeGroup;
-	private List<InspectionType> inspectionTypes;
+	private EventTypeGroup eventTypeGroup;
+	private List<EventType> eventTypes;
 	private List<PrintOut> certPrintOuts;
 	private List<PrintOut> observationPrintOuts;
 	
@@ -40,20 +40,20 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 
 	@Override
 	protected void initMemberFields() {
-		inspectionTypeGroup = new InspectionTypeGroup();
+		eventTypeGroup = new EventTypeGroup();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		inspectionTypeGroup = persistenceManager.find(InspectionTypeGroup.class, uniqueId, getTenantId());
+		eventTypeGroup = persistenceManager.find(EventTypeGroup.class, uniqueId, getTenantId());
 	}
 		
 	private void testRequiredEntities(boolean existing) {
-		if (inspectionTypeGroup == null) {
+		if (eventTypeGroup == null) {
 			logger.info(getLogLinePrefix() + " could not load the requested event type :" + ((uniqueID != null) ? uniqueID.toString() : "null"));
 			addActionErrorText("error.noeventtypegroup");
 			throw new MissingEntityException();
-		} else if (existing && inspectionTypeGroup.isNew()) {
+		} else if (existing && eventTypeGroup.isNew()) {
 			logger.info(getLogLinePrefix() + " event type must be loaded but no id was provided");
 			addActionErrorText("error.noeventtypegroup");
 			throw new MissingEntityException();
@@ -69,7 +69,7 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 	@SkipValidation
 	public String doList() {
 		try {
-			QueryBuilder<InspectionTypeGroup> query = new QueryBuilder<InspectionTypeGroup>(InspectionTypeGroup.class, getSecurityFilter());
+			QueryBuilder<EventTypeGroup> query = new QueryBuilder<EventTypeGroup>(EventTypeGroup.class, getSecurityFilter());
 			query.addOrder("name");
 			page = persistenceManager.findAllPaged(query, getCurrentPage(), Constants.PAGE_SIZE);
 		} catch (Exception e) {
@@ -87,9 +87,9 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 
 	public String doCreate() {
 		testRequiredEntities(false);
-		inspectionTypeGroup.setTenant(getTenant());
+		eventTypeGroup.setTenant(getTenant());
 		try {
-			uniqueID = persistenceManager.save(inspectionTypeGroup);
+			uniqueID = persistenceManager.save(eventTypeGroup);
 			addFlashMessageText("message.eventtypegroupsaved");
 			return SUCCESS;
 		} catch (Exception e) {
@@ -108,12 +108,12 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 	public String doUpdate() {
 		testRequiredEntities(true);
 		try {
-			inspectionTypeGroup = persistenceManager.update(inspectionTypeGroup, getSessionUser().getId());
+			eventTypeGroup = persistenceManager.update(eventTypeGroup, getSessionUser().getId());
 			addFlashMessageText("message.eventtypegroupsaved");
 			return SUCCESS;
 		} catch (Exception e) {
 			addActionErrorText("error.savingeventtypegroup");
-			logger.error("failed to updating event type group " + inspectionTypeGroup.getName(), e);
+			logger.error("failed to updating event type group " + eventTypeGroup.getName(), e);
 		}
 		return ERROR;
 	}
@@ -121,9 +121,9 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 	@SkipValidation
 	public String doDelete() {
 		testRequiredEntities(true);
-		if (canBeDeleted(inspectionTypeGroup)) {
+		if (canBeDeleted(eventTypeGroup)) {
 			try {
-				persistenceManager.delete(inspectionTypeGroup);
+				persistenceManager.delete(eventTypeGroup);
 				addFlashMessageText("message.eventtypegroupdeleted");
 				return SUCCESS;
 			} catch (Exception e) {
@@ -137,74 +137,74 @@ public class InspectionTypeGroupCrud extends AbstractPaginatedCrud<InspectionTyp
 		
 	}
 	
-	public boolean canBeDeleted(InspectionTypeGroup group) {
-		if (group.equals(inspectionTypeGroup)) {
+	public boolean canBeDeleted(EventTypeGroup group) {
+		if (group.equals(eventTypeGroup)) {
 			return getInspectionTypes().isEmpty();
 		} else {
-			QueryBuilder<Long> inspectionTypeCountQuery = new QueryBuilder<Long>(InspectionType.class, getSecurityFilter());
+			QueryBuilder<Long> inspectionTypeCountQuery = new QueryBuilder<Long>(EventType.class, getSecurityFilter());
 			inspectionTypeCountQuery.setCountSelect().addSimpleWhere("group", group);
 			return (persistenceManager.findCount(inspectionTypeCountQuery) == 0);
 		}
 	}
 	
 	public boolean duplicateValueExists(String formValue) {
-		return !persistenceManager.uniqueNameAvailable(InspectionTypeGroup.class, formValue.trim(), uniqueID, getTenantId());
+		return !persistenceManager.uniqueNameAvailable(EventTypeGroup.class, formValue.trim(), uniqueID, getTenantId());
 	}
 
 	public String getName() {
-		return inspectionTypeGroup.getName();
+		return eventTypeGroup.getName();
 	}
 
 	public String getReportTitle() {
-		return inspectionTypeGroup.getReportTitle();
+		return eventTypeGroup.getReportTitle();
 	}
 	
 	@RequiredStringValidator(message="", key="error.namerequired")
 	@CustomValidator(type="uniqueValue", message = "", key="error.eventtypegroupnameduplicated")
 	public void setName(String name) {
-		inspectionTypeGroup.setName(name);
+		eventTypeGroup.setName(name);
 	}
 	
 	@RequiredStringValidator(message="", key="error.reporttitlerequired")
 	public void setReportTitle(String reportTitle) {
-		inspectionTypeGroup.setReportTitle(reportTitle);
+		eventTypeGroup.setReportTitle(reportTitle);
 	}
 
-	public InspectionTypeGroup getGroup() {
-		return inspectionTypeGroup;
+	public EventTypeGroup getGroup() {
+		return eventTypeGroup;
 	}
 
 	
-	public List<InspectionType> getInspectionTypes() {
-		if (inspectionTypes == null) {
-			QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter());
-			query.addSimpleWhere("group", inspectionTypeGroup).addOrder("name");
-			inspectionTypes = persistenceManager.findAll(query);
+	public List<EventType> getInspectionTypes() {
+		if (eventTypes == null) {
+			QueryBuilder<EventType> query = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
+			query.addSimpleWhere("group", eventTypeGroup).addOrder("name");
+			eventTypes = persistenceManager.findAll(query);
 		}
-		return inspectionTypes;
+		return eventTypes;
 	}
 
 	public Long getCertPrintOutId() {
-		return (inspectionTypeGroup.getPrintOut() != null) ? inspectionTypeGroup.getPrintOut().getId() : 0L;
+		return (eventTypeGroup.getPrintOut() != null) ? eventTypeGroup.getPrintOut().getId() : 0L;
 	}
 
 	public void setCertPrintOutId(Long printOut) {
 		if (printOut == null || printOut.equals(0L)) {
-			inspectionTypeGroup.setPrintOut(null);
-		} else if (inspectionTypeGroup.getPrintOut() == null || !printOut.equals(inspectionTypeGroup.getPrintOut().getId())) {
-			inspectionTypeGroup.setPrintOut(persistenceManager.find(PrintOut.class, printOut));
+			eventTypeGroup.setPrintOut(null);
+		} else if (eventTypeGroup.getPrintOut() == null || !printOut.equals(eventTypeGroup.getPrintOut().getId())) {
+			eventTypeGroup.setPrintOut(persistenceManager.find(PrintOut.class, printOut));
 		}
 	}
 	
 	public Long getObservationPrintOutId() {
-		return (inspectionTypeGroup.getObservationPrintOut() != null) ? inspectionTypeGroup.getObservationPrintOut().getId() : 0L;
+		return (eventTypeGroup.getObservationPrintOut() != null) ? eventTypeGroup.getObservationPrintOut().getId() : 0L;
 	}
 
 	public void setObservationPrintOutId(Long printOut) {
 		if (printOut == null || printOut.equals(0L)) {
-			inspectionTypeGroup.setObservationPrintOut(null);
-		} else if (inspectionTypeGroup.getObservationPrintOut() == null || !printOut.equals(inspectionTypeGroup.getObservationPrintOut().getId())) {
-			inspectionTypeGroup.setObservationPrintOut(persistenceManager.find(PrintOut.class, printOut));
+			eventTypeGroup.setObservationPrintOut(null);
+		} else if (eventTypeGroup.getObservationPrintOut() == null || !printOut.equals(eventTypeGroup.getObservationPrintOut().getId())) {
+			eventTypeGroup.setObservationPrintOut(persistenceManager.find(PrintOut.class, printOut));
 		}
 	}
 

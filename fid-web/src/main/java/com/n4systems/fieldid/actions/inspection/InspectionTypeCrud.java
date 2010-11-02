@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
+import com.n4systems.model.EventType;
+import com.n4systems.model.inspectiontype.EventTypeCopier;
+import com.n4systems.model.inspectiontype.EventTypeSaver;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -18,12 +22,8 @@ import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.viewhelpers.TrimmedString;
 
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.handlers.remover.summary.InspectionTypeArchiveSummary;
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.inspectiontype.InspectionTypeCopier;
-import com.n4systems.model.inspectiontype.InspectionTypeSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.Transaction;
@@ -43,12 +43,12 @@ public class InspectionTypeCrud extends AbstractCrud {
 	private Logger logger = Logger.getLogger(InspectionTypeCrud.class);
 
 	private List<ListingPair> inspectionTypeGroups;
-	private List<InspectionType> inspectionTypes;
-	private InspectionType inspectionType;
+	private List<EventType> eventTypes;
+	private EventType eventType;
 	private List<TrimmedString> infoFieldNames;
 	private String saveAndAdd;
 	private Map<String, Boolean> types;
-	private InspectionTypeArchiveSummary archiveSummary;
+	private EventTypeArchiveSummary archiveSummary;
 	
 	private boolean assignedToAvailable = false;
 	
@@ -59,20 +59,20 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		inspectionType = new InspectionType();
+		eventType = new EventType();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		QueryBuilder<InspectionType> query = new QueryBuilder<InspectionType>(InspectionType.class, getSecurityFilter());
+		QueryBuilder<EventType> query = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
 		query.addSimpleWhere("id", uniqueId);
 		query.addPostFetchPaths("sections", "supportedProofTests", "infoFieldNames");
-		inspectionType = persistenceManager.find(query);
+		eventType = persistenceManager.find(query);
 		
 	}
 
 	private void testRequiredEntities(boolean existing) {
-		if (inspectionType == null || (existing && inspectionType.isNew())) {
+		if (eventType == null || (existing && eventType.isNew())) {
 			addActionErrorText("error.noeventtype");
 			throw new MissingEntityException("no inspection type could be found.");
 		}
@@ -92,16 +92,16 @@ public class InspectionTypeCrud extends AbstractCrud {
 	@SkipValidation
 	public String doAdd() {
 		testRequiredEntities(false);
-		assignedToAvailable = inspectionType.isAssignedToAvailable();
-		infoFieldNames = TrimmedString.mapToTrimmedStrings(inspectionType.getInfoFieldNames());
+		assignedToAvailable = eventType.isAssignedToAvailable();
+		infoFieldNames = TrimmedString.mapToTrimmedStrings(eventType.getInfoFieldNames());
 		return SUCCESS;
 	}
 
 	@SkipValidation
 	public String doEdit() {
 		testRequiredEntities(true);
-		assignedToAvailable = inspectionType.isAssignedToAvailable();
-		infoFieldNames = TrimmedString.mapToTrimmedStrings(inspectionType.getInfoFieldNames());
+		assignedToAvailable = eventType.isAssignedToAvailable();
+		infoFieldNames = TrimmedString.mapToTrimmedStrings(eventType.getInfoFieldNames());
 		return SUCCESS;
 	}
 
@@ -117,21 +117,21 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	private String doSave() {
 
-		inspectionType.setInfoFieldNames(TrimmedString.mapFromTrimmedStrings(infoFieldNames));
+		eventType.setInfoFieldNames(TrimmedString.mapFromTrimmedStrings(infoFieldNames));
 
 		processSupportedTypes();
 		
 		processAssignedToAvailable();
 
-		StrutsListHelper.clearNulls(inspectionType.getInfoFieldNames());
+		StrutsListHelper.clearNulls(eventType.getInfoFieldNames());
 
-		inspectionType.setTenant(getTenant());
+		eventType.setTenant(getTenant());
 		try {
-			if (inspectionType.getId() == null) {
-				persistenceManager.save(inspectionType);
-				uniqueID = inspectionType.getId();
+			if (eventType.getId() == null) {
+				persistenceManager.save(eventType);
+				uniqueID = eventType.getId();
 			} else {
-				inspectionType = persistenceManager.update(inspectionType);
+				eventType = persistenceManager.update(eventType);
 			}
 
 			addFlashMessageText("message.savedeventtype");
@@ -148,9 +148,9 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	private void processAssignedToAvailable() {
 		if (assignedToAvailable && getSecurityGuard().isAssignedToEnabled()) {
-			inspectionType.makeAssignedToAvailable();
+			eventType.makeAssignedToAvailable();
 		} else {
-			inspectionType.removeAssignedTo();
+			eventType.removeAssignedTo();
 		}
 		
 	}
@@ -174,8 +174,8 @@ public class InspectionTypeCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	private InspectionTypeArchiveSummary fillArchiveSummary(Transaction transaction) {
-		archiveSummary = getRemovalHandlerFactory().getInspectionTypeArchiveHandler().forInspectionType(inspectionType).summary(transaction);
+	private EventTypeArchiveSummary fillArchiveSummary(Transaction transaction) {
+		archiveSummary = getRemovalHandlerFactory().getInspectionTypeArchiveHandler().forEventType(eventType).summary(transaction);
 		return archiveSummary;
 	}
 
@@ -206,8 +206,8 @@ public class InspectionTypeCrud extends AbstractCrud {
 	
 	public String doCopy() {
 		try {
-			InspectionTypeCopier typeCopier = createInspectionTypeCopier();
-			InspectionType newType = typeCopier.copy(getUniqueID());
+			EventTypeCopier typeCopier = createInspectionTypeCopier();
+			EventType newType = typeCopier.copy(getUniqueID());
 			
 			addFlashMessageText(getText("message.event_type_copied", new String[] {newType.getName()}));
 		} catch(Exception e) {
@@ -218,53 +218,53 @@ public class InspectionTypeCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 	
-	protected InspectionTypeCopier createInspectionTypeCopier() {
-		return new InspectionTypeCopier(getTenant());
+	protected EventTypeCopier createInspectionTypeCopier() {
+		return new EventTypeCopier(getTenant());
 	}
 
 	private void archiveInspection(Transaction transaction) {
-		inspectionType.archiveEntity();
-		inspectionType = new InspectionTypeSaver().update(transaction, inspectionType);
+		eventType.archiveEntity();
+		eventType = new EventTypeSaver().update(transaction, eventType);
 	}
 
 	private void startBackgroundTask() {
-		InspectionTypeArchiveTask task = new InspectionTypeArchiveTask(inspectionType, fetchCurrentUser(), getRemovalHandlerFactory());
+		InspectionTypeArchiveTask task = new InspectionTypeArchiveTask(eventType, fetchCurrentUser(), getRemovalHandlerFactory());
 		TaskExecutor.getInstance().execute(task);
 	}
 
 	
 
-	public List<InspectionType> getInspectionTypes() {
-		if (inspectionTypes == null) {
+	public List<EventType> getInspectionTypes() {
+		if (eventTypes == null) {
 			try {
-				QueryBuilder<InspectionType> queryBuilder = new QueryBuilder<InspectionType>(InspectionType.class, new OpenSecurityFilter());
+				QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, new OpenSecurityFilter());
 				SecurityFilter filter = getSecurityFilter();
 				queryBuilder.applyFilter(filter);
 				queryBuilder.addOrder("name");
 				queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 				queryBuilder.setSimpleSelect();
-				inspectionTypes = persistenceManager.findAll(queryBuilder);
+				eventTypes = persistenceManager.findAll(queryBuilder);
 			} catch (Exception e) {
-				logger.error("Failed finding InspectionTypes", e);
+				logger.error("Failed finding EventTypes", e);
 			}
 		}
 
-		return inspectionTypes;
+		return eventTypes;
 	}
 
-	public InspectionType getInspectionType() {
-		return inspectionType;
+	public EventType getInspectionType() {
+		return eventType;
 	}
 
 	public List<ListingPair> getInspectionTypeGroups() {
 		if (inspectionTypeGroups == null) {
-			inspectionTypeGroups = persistenceManager.findAllLP(InspectionTypeGroup.class, getTenantId(), "name");
+			inspectionTypeGroups = persistenceManager.findAllLP(EventTypeGroup.class, getTenantId(), "name");
 		}
 		return inspectionTypeGroups;
 	}
 
-	public void setInspectionType(InspectionType inspectionType) {
-		this.inspectionType = inspectionType;
+	public void setInspectionType(EventType eventType) {
+		this.eventType = eventType;
 	}
 
 	public List<ProofTestType> getProofTestTypes() {
@@ -273,23 +273,23 @@ public class InspectionTypeCrud extends AbstractCrud {
 
 	@RequiredStringValidator(message = "", key = "error.namerequired")
 	public String getName() {
-		return inspectionType.getName();
+		return eventType.getName();
 	}
 
 	public void setName(String name) {
-		inspectionType.setName(name);
+		eventType.setName(name);
 	}
 
 	public Long getGroup() {
-		return (inspectionType.getGroup() != null) ? inspectionType.getGroup().getId() : null;
+		return (eventType.getGroup() != null) ? eventType.getGroup().getId() : null;
 	}
 
 	@RequiredFieldValidator(message = "", key = "error.grouprequired")
 	public void setGroup(Long group) {
 		if (group == null) {
-			inspectionType.setGroup(null);
-		} else if (!group.equals(inspectionType.getGroup())) {
-			inspectionType.setGroup(persistenceManager.find(InspectionTypeGroup.class, group, getTenantId()));
+			eventType.setGroup(null);
+		} else if (!group.equals(eventType.getGroup())) {
+			eventType.setGroup(persistenceManager.find(EventTypeGroup.class, group, getTenantId()));
 		}
 	}
 
@@ -303,7 +303,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 				types.put(type.name(), false);
 			}
 
-			for (ProofTestType type : inspectionType.getSupportedProofTests()) {
+			for (ProofTestType type : eventType.getSupportedProofTests()) {
 				types.put(type.name(), true);
 			}
 		}
@@ -312,7 +312,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 	}
 
 	private void processSupportedTypes() {
-		Set<ProofTestType> supportedTypes = inspectionType.getSupportedProofTests();
+		Set<ProofTestType> supportedTypes = eventType.getSupportedProofTests();
 		supportedTypes.clear();
 		// convert the map of types back to a list of prooftestTypes
 		if (!types.isEmpty()) {
@@ -330,19 +330,19 @@ public class InspectionTypeCrud extends AbstractCrud {
 	}
 
 	public boolean isPrintable() {
-		return inspectionType.isPrintable();
+		return eventType.isPrintable();
 	}
 
 	public void setPrintable(boolean printable) {
-		inspectionType.setPrintable(printable);
+		eventType.setPrintable(printable);
 	}
 
 	public boolean isMaster() {
-		return inspectionType.isMaster();
+		return eventType.isMaster();
 	}
 
 	public void setMaster(boolean master) {
-		inspectionType.setMaster(master);
+		eventType.setMaster(master);
 	}
 
 	public void setSaveAndAdd(String saveAndAdd) {
@@ -363,7 +363,7 @@ public class InspectionTypeCrud extends AbstractCrud {
 		infoFieldNames = infoFields;
 	}
 
-	public InspectionTypeArchiveSummary getArchiveSummary() {
+	public EventTypeArchiveSummary getArchiveSummary() {
 		return archiveSummary;
 	}
 

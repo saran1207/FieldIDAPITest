@@ -21,6 +21,7 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.utils.FindSubAssets;
+import com.n4systems.persistence.archivers.EventListArchiver;
 import com.n4systems.taskscheduling.task.ArchiveAssetTypeTask;
 import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.AssetTypeRemovalSummary;
@@ -39,7 +40,6 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.persistence.archivers.InspectionListArchiver;
 import com.n4systems.services.asset.AssetMerger;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.util.GUIDHelper;
@@ -105,7 +105,7 @@ public class AssetManagerImpl implements AssetManager {
 	
 
 	public Asset findAssetAllFields(Long id, SecurityFilter filter) {
-		Asset asset =  findAsset(id, filter, "infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
+		Asset asset =  findAsset(id, filter, "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName");
 		asset = fillInSubAssetsOnAsset(asset);
 		
 		// load linked assets all the way up the chain
@@ -332,7 +332,7 @@ public class AssetManagerImpl implements AssetManager {
 	}
 
 	private void archiveInspections(Asset asset, User archivedBy) {
-		InspectionListArchiver archiver = new InspectionListArchiver(getInspectionIdsForAsset(asset));
+		EventListArchiver archiver = new EventListArchiver(getInspectionIdsForAsset(asset));
 		archiver.archive(em);	
 	}
 	

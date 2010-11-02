@@ -11,12 +11,12 @@ import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
+import com.n4systems.model.inspectiontypegroup.EventTypeGroupSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
@@ -49,9 +49,9 @@ public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactio
 		mockAssetTypeSaver.save(same(mockTransaction), isA(AssetType.class));
 		replay(mockAssetTypeSaver);
 
-		InspectionTypeGroupSaver mockInspectionTypeGroupSaver = createMock(InspectionTypeGroupSaver.class);
-		mockInspectionTypeGroupSaver.save(same(mockTransaction), isA(InspectionTypeGroup.class));
-		replay(mockInspectionTypeGroupSaver);
+		EventTypeGroupSaver mockEventTypeGroupSaver = createMock(EventTypeGroupSaver.class);
+		mockEventTypeGroupSaver.save(same(mockTransaction), isA(EventTypeGroup.class));
+		replay(mockEventTypeGroupSaver);
 
 		StateSetSaver mockStateSetSaver = createMock(StateSetSaver.class);
 		mockStateSetSaver.save(same(mockTransaction), isA(StateSet.class));
@@ -63,12 +63,12 @@ public class BaseSystemSetupDataCreateHandlerImplTest extends TestUsesTransactio
 		expectLastCall().times(5);
 		replay(mockStatusSaver);
 		
-		BaseSystemSetupDataCreateHandler sut = new BaseSystemSetupDataCreateHandlerImpl(mockTagSaver, mockAssetTypeSaver, mockInspectionTypeGroupSaver, mockStateSetSaver, mockStatusSaver);
+		BaseSystemSetupDataCreateHandler sut = new BaseSystemSetupDataCreateHandlerImpl(mockTagSaver, mockAssetTypeSaver, mockEventTypeGroupSaver, mockStateSetSaver, mockStatusSaver);
 		sut.forTenant(tenant).create(mockTransaction);
 		
 		verify(mockTagSaver);
 		verify(mockAssetTypeSaver);
-		verify(mockInspectionTypeGroupSaver);
+		verify(mockEventTypeGroupSaver);
 		verify(mockStateSetSaver);
 		verify(mockStatusSaver);
 	}

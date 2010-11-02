@@ -4,17 +4,17 @@ import static com.n4systems.model.builders.EventBuilder.anEvent;
 import static org.easymock.EasyMock.*;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.builders.EventTypeBuilder;
 import org.apache.commons.io.output.NullOutputStream;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
-import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.util.ConfigContext;
@@ -40,13 +40,13 @@ public class InspectionCertificateReportGeneratorTest {
 	public void should_send_a_printable_inspection_to_the_cert_generateor() throws Exception {
 		Event printableEvent = createPrintableInspection();
 		
-		InspectionCertificateGenerator certGenerator = createMock(InspectionCertificateGenerator.class);
-		expect(certGenerator.generate(InspectionReportType.INSPECTION_CERT, printableEvent, null)).andReturn(null);
+		EventCertificateGenerator certGenerator = createMock(EventCertificateGenerator.class);
+		expect(certGenerator.generate(EventReportType.INSPECTION_CERT, printableEvent, null)).andReturn(null);
 		replay(certGenerator);
 		
-		InspectionCertificateReportGenerator sut = new InspectionCertificateReportGenerator(certGenerator);
+		EventCertificateReportGenerator sut = new EventCertificateReportGenerator(certGenerator);
 		
-		sut.setType(InspectionReportType.INSPECTION_CERT);
+		sut.setType(EventReportType.INSPECTION_CERT);
 		Transaction transaction = null;
 		sut.generate(new FluentArrayList<Event>(printableEvent), new NullOutputStream(), "packageName", transaction);
 		
@@ -54,21 +54,21 @@ public class InspectionCertificateReportGeneratorTest {
 	}
 
 	private Event createPrintableInspection() {
-		InspectionTypeGroup inspectionTypeGroup = createPrintableInspectionTypeGroup();
+		EventTypeGroup eventTypeGroup = createPrintableInspectionTypeGroup();
 		
-		InspectionType printableInspectionType = InspectionTypeBuilder.anInspectionType().withGroup(inspectionTypeGroup).build();
-		Event event = anEvent().ofType(printableInspectionType).build();
+		EventType printableEventType = EventTypeBuilder.anEventType().withGroup(eventTypeGroup).build();
+		Event event = anEvent().ofType(printableEventType).build();
 		return event;
 	}
 
-	private InspectionTypeGroup createPrintableInspectionTypeGroup() {
-		InspectionTypeGroup inspectionTypeGroup = new InspectionTypeGroup();
-		inspectionTypeGroup.setPrintOut(new PrintOut());
-		inspectionTypeGroup.getPrintOut().setPdfTemplate("somefile");
-		inspectionTypeGroup.getPrintOut().setType(PrintOutType.CERT);
+	private EventTypeGroup createPrintableInspectionTypeGroup() {
+		EventTypeGroup eventTypeGroup = new EventTypeGroup();
+		eventTypeGroup.setPrintOut(new PrintOut());
+		eventTypeGroup.getPrintOut().setPdfTemplate("somefile");
+		eventTypeGroup.getPrintOut().setType(PrintOutType.CERT);
 		
-		Assert.assertTrue(inspectionTypeGroup.getPrintOutForReportType(InspectionReportType.INSPECTION_CERT) != null);
+		Assert.assertTrue(eventTypeGroup.getPrintOutForReportType(EventReportType.INSPECTION_CERT) != null);
 		
-		return inspectionTypeGroup;
+		return eventTypeGroup;
 	}
 }

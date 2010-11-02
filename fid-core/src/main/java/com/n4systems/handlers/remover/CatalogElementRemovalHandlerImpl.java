@@ -1,6 +1,6 @@
 package com.n4systems.handlers.remover;
 
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
@@ -12,7 +12,7 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 	private final CatalogLoader catalogLoader;
 	private final CatalogSaver catalogSaver;
 
-	private InspectionType inspectionType;
+	private EventType eventType;
 	private AssetType assetType;
 	
 	
@@ -31,8 +31,8 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 	}
 
 	private void removeElementFromCatalog(Catalog catalog) {
-		if (inspectionType != null) {
-			catalog.getPublishedInspectionTypes().remove(inspectionType);
+		if (eventType != null) {
+			catalog.getPublishedInspectionTypes().remove(eventType);
 		}
 		if (assetType != null) {
 			catalog.getPublishedAssetTypes().remove(assetType);
@@ -40,8 +40,8 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 	}
 	
 	private Tenant getTenant() {
-		if (inspectionType != null) {
-			return inspectionType.getTenant();
+		if (eventType != null) {
+			return eventType.getTenant();
 		}
 		if (assetType != null) {
 			return assetType.getTenant();
@@ -49,8 +49,8 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 		return null;
 	}
 	
-	public CatalogElementRemovalHandler setInspectionType(InspectionType inspectionType) {
-		this.inspectionType = inspectionType;
+	public CatalogElementRemovalHandler setEventType(EventType eventType) {
+		this.eventType = eventType;
 		return this;
 	}
 

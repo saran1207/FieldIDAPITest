@@ -1,6 +1,6 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
-import static com.n4systems.model.inspectiontype.InspectionTypeCleanerFactory.*;
+import static com.n4systems.model.inspectiontype.EventTypeCleanerFactory.*;
 
 import java.util.List;
 import java.util.Map;
@@ -9,8 +9,8 @@ import java.util.Set;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -21,7 +21,7 @@ import com.n4systems.util.ListingPair;
 
 public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 
-	private Map<Long, InspectionTypeGroup> importedGroupMapping;
+	private Map<Long, EventTypeGroup> importedGroupMapping;
 	private Map<Long, StateSet> importedStateSetMapping;
 	private Set<Long> originalInspectionTypeIds;
 	private InspectionTypeImportSummary summary = new InspectionTypeImportSummary();
@@ -40,47 +40,47 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	}
 	
 	private void importInspectionType(Long originalId) throws ImportFailureException {
-		InspectionType importedInspectionType = importCatalog.getPublishedInspectionType(originalId);
+		EventType importedEventType = importCatalog.getPublishedInspectionType(originalId);
 		try {
-			importIntoAccount(importedInspectionType);
+			importIntoAccount(importedEventType);
 			
-			summary.getImportMapping().put(originalId, importedInspectionType);
+			summary.getImportMapping().put(originalId, importedEventType);
 		} catch (Exception e) {
-			summary.setFailure(importedInspectionType.getName(), FailureType.COULD_NOT_CREATE, e);
+			summary.setFailure(importedEventType.getName(), FailureType.COULD_NOT_CREATE, e);
 			throw new ImportFailureException(e);
 		}
 	}
 
-	private void importIntoAccount(InspectionType importedInspectionType) {
-		clean(importedInspectionType);
+	private void importIntoAccount(EventType importedEventType) {
+		clean(importedEventType);
 		
-		resolveGroup(importedInspectionType);
+		resolveGroup(importedEventType);
 		
-		produceUniqueName(importedInspectionType);
+		produceUniqueName(importedEventType);
 		
-		mapStateSets(importedInspectionType);
+		mapStateSets(importedEventType);
 		
-		save(importedInspectionType);
+		save(importedEventType);
 	}
 
-	private void save(InspectionType importedInspectionType) {
-		persistenceManager.save(importedInspectionType);
+	private void save(EventType importedEventType) {
+		persistenceManager.save(importedEventType);
 	}
 
-	private void produceUniqueName(InspectionType importedInspectionType) {
-		importedInspectionType.setName(createUniqueInspectionTypeName(importedInspectionType.getName()));
+	private void produceUniqueName(EventType importedEventType) {
+		importedEventType.setName(createUniqueInspectionTypeName(importedEventType.getName()));
 	}
 
-	private void resolveGroup(InspectionType importedInspectionType) {
-		importedInspectionType.setGroup(importedGroupMapping.get(importedInspectionType.getGroup().getId()));
+	private void resolveGroup(EventType importedEventType) {
+		importedEventType.setGroup(importedGroupMapping.get(importedEventType.getGroup().getId()));
 	}
 
-	private void clean(InspectionType importedInspectionType) {
-		cleanerFor(tenant).clean(importedInspectionType);
+	private void clean(EventType importedEventType) {
+		cleanerFor(tenant).clean(importedEventType);
 	}
 
-	private void mapStateSets(InspectionType importedInspectionType) {
-		for (CriteriaSection criteriaSection : importedInspectionType.getSections()) {
+	private void mapStateSets(EventType importedEventType) {
+		for (CriteriaSection criteriaSection : importedEventType.getSections()) {
 			for (Criteria criteria : criteriaSection.getCriteria()) {
 				criteria.setStates(importedStateSetMapping.get(criteria.getStates().getId()));
 			}
@@ -96,7 +96,7 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 		List<ListingPair> inspectionTypes = importCatalog.getPublishedInspectionTypesLP();
 		for (ListingPair inspectionType : inspectionTypes) {
 			if (inspectionTypeIds.contains(inspectionType.getId())) {
-				summary.getImportMapping().put(inspectionType.getId(), new InspectionType(createUniqueInspectionTypeName(inspectionType.getName())) );
+				summary.getImportMapping().put(inspectionType.getId(), new EventType(createUniqueInspectionTypeName(inspectionType.getName())) );
 			}
 		}
 		return summary;
@@ -104,11 +104,11 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	
 	
 	private String createUniqueInspectionTypeName(String inspectionTypeName) {
-		if (!persistenceManager.uniqueNameAvailable(InspectionType.class, inspectionTypeName, null, tenant.getId())) {
+		if (!persistenceManager.uniqueNameAvailable(EventType.class, inspectionTypeName, null, tenant.getId())) {
 			int namePostFix = 1;
 			inspectionTypeName += "(" + importCatalog.getTenant().getName() + ")";
 			String tmpInspectionTypeName = inspectionTypeName; 
-			while (!persistenceManager.uniqueNameAvailable(InspectionType.class, tmpInspectionTypeName, null, tenant.getId())) {
+			while (!persistenceManager.uniqueNameAvailable(EventType.class, tmpInspectionTypeName, null, tenant.getId())) {
 				tmpInspectionTypeName = inspectionTypeName + "(" + namePostFix + ")";
 				namePostFix++;
 			}
@@ -119,13 +119,13 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	}
 
 
-	public Map<Long, InspectionType> getImportMapping() {
+	public Map<Long, EventType> getImportMapping() {
 		return summary.getImportMapping();
 	}
 	
 	public void rollback() {
-		for (InspectionType inspectionTypeToBeRemoved : summary.getImportMapping().values()) {
-			persistenceManager.delete(inspectionTypeToBeRemoved);
+		for (EventType eventTypeToBeRemoved : summary.getImportMapping().values()) {
+			persistenceManager.delete(eventTypeToBeRemoved);
 		}
 	}
 
@@ -142,7 +142,7 @@ public class CatalogInspectionTypeImportHandler extends CatalogImportHandler {
 	}
 
 
-	public CatalogInspectionTypeImportHandler setImportedGroupMapping(Map<Long, InspectionTypeGroup> importedGroupMapping) {
+	public CatalogInspectionTypeImportHandler setImportedGroupMapping(Map<Long, EventTypeGroup> importedGroupMapping) {
 		this.importedGroupMapping = importedGroupMapping;
 		return this;
 	}

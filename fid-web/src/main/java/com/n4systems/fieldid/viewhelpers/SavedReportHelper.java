@@ -9,8 +9,8 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 
 public class SavedReportHelper {
 
-	public static boolean isModified(InspectionSearchContainer inspectionSearchContainer, SavedReport originalReport, SecurityFilter filter, LoaderFactory loaderFactory) {
-		SavedReport report = new SavedReportSearchCriteriaConverter(loaderFactory, filter).convertInto(inspectionSearchContainer, new SavedReport());
+	public static boolean isModified(EventSearchContainer eventSearchContainer, SavedReport originalReport, SecurityFilter filter, LoaderFactory loaderFactory) {
+		SavedReport report = new SavedReportSearchCriteriaConverter(loaderFactory, filter).convertInto(eventSearchContainer, new SavedReport());
 		return areReportsDifferent(originalReport, report);
 	}
 	

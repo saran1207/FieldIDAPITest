@@ -1,19 +1,19 @@
 package com.n4systems.webservice.server;
 
-import static com.n4systems.model.builders.InspectionScheduleBuilder.*;
-import static com.n4systems.model.builders.InspectionTypeBuilder.*;
+import static com.n4systems.model.builders.EventScheduleBuilder.*;
+import static com.n4systems.model.builders.EventTypeBuilder.*;
 import static com.n4systems.model.builders.AssetBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventType;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
+import com.n4systems.model.inspectionschedule.EventScheduleSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 
@@ -21,19 +21,19 @@ import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 public class InspectionScheduleCreateHandlerTest {
 	
 	private Asset asset;
-	private InspectionType inspectionType;
+	private EventType eventType;
 	private EventSchedule eventSchedule;
-	private InspectionScheduleSaver saver;
+	private EventScheduleSaver saver;
 	private AssetByMobileGuidLoader assetByMobileGuidLoader;
 	private FilteredIdLoader<Asset> filteredProductLoader;
-	private FilteredIdLoader<InspectionType> filteredInspectionTypeLoader;
+	private FilteredIdLoader<EventType> filteredInspectionTypeLoader;
 	
 	
 	@Before
 	public void setup() {
 		asset = anAsset().build();
-		inspectionType = anInspectionType().build();
-		eventSchedule = aScheduledInspectionSchedule().build();
+		eventType = anEventType().build();
+		eventSchedule = aScheduledEventSchedule().build();
 	}
 	
 	@Test
@@ -42,7 +42,7 @@ public class InspectionScheduleCreateHandlerTest {
 		InspectionScheduleServiceDTO inspectionScheduleServiceDTO = new InspectionScheduleServiceDTO();
 		inspectionScheduleServiceDTO.setProductMobileGuid("productMobileGuid");
 		inspectionScheduleServiceDTO.setProductId(asset.getId());
-		inspectionScheduleServiceDTO.setInspectionTypeId(inspectionType.getId());
+		inspectionScheduleServiceDTO.setInspectionTypeId(eventType.getId());
 		
 		createMocks();
 
@@ -52,7 +52,7 @@ public class InspectionScheduleCreateHandlerTest {
 		sut.createNewInspectionSchedule(eventSchedule, inspectionScheduleServiceDTO);
 		
 		assertEquals(asset, eventSchedule.getAsset());
-		assertEquals(inspectionType, eventSchedule.getInspectionType());
+		assertEquals(eventType, eventSchedule.getEventType());
 		
 	}
 
@@ -92,7 +92,7 @@ public class InspectionScheduleCreateHandlerTest {
 	
 	@SuppressWarnings("unchecked")
 	private void createMocks() {
-		saver = createMock(InspectionScheduleSaver.class);
+		saver = createMock(EventScheduleSaver.class);
 		expect(saver.saveOrUpdate(eventSchedule)).andReturn(eventSchedule);
 		replay(saver);
 
@@ -108,7 +108,7 @@ public class InspectionScheduleCreateHandlerTest {
 
 		filteredInspectionTypeLoader =  createMock(FilteredIdLoader.class);
 		expect(filteredInspectionTypeLoader.setId(anyLong())).andReturn(filteredInspectionTypeLoader);
-		expect(filteredInspectionTypeLoader.load()).andReturn(inspectionType);
+		expect(filteredInspectionTypeLoader.load()).andReturn(eventType);
 		replay(filteredInspectionTypeLoader);
 	}
 
@@ -117,7 +117,7 @@ public class InspectionScheduleCreateHandlerTest {
 		InspectionScheduleServiceDTO inspectionScheduleServiceDTO = new InspectionScheduleServiceDTO();
 		inspectionScheduleServiceDTO.setProductMobileGuid("productMobileGuid");
 		inspectionScheduleServiceDTO.setProductId(productId);
-		inspectionScheduleServiceDTO.setInspectionTypeId(inspectionType.getId());
+		inspectionScheduleServiceDTO.setInspectionTypeId(eventType.getId());
 		
 		return inspectionScheduleServiceDTO;
 	}

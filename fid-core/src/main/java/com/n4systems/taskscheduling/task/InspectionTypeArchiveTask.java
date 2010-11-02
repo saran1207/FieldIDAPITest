@@ -1,12 +1,12 @@
 package com.n4systems.taskscheduling.task;
 
+import com.n4systems.handlers.remover.EventTypeArchiveHandler;
+import com.n4systems.model.EventType;
 import org.apache.log4j.Logger;
 
 
-import com.n4systems.handlers.remover.InspectionTypeArchiveHandler;
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.inspectiontype.InspectionTypeSaver;
+import com.n4systems.model.inspectiontype.EventTypeSaver;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
@@ -18,17 +18,17 @@ public class InspectionTypeArchiveTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(InspectionTypeArchiveTask.class);	
 	
 	
-	private final InspectionType inspectionType;
+	private final EventType eventType;
 	private final RemovalHandlerFactory handlerFactory;
 	private final User currentUser;
 	
 	private Transaction transaction;
-	private InspectionTypeArchiveHandler archiveHandler;
+	private EventTypeArchiveHandler archiveHandler;
 	
 	
-	public InspectionTypeArchiveTask(InspectionType inspectionType, User user, RemovalHandlerFactory handlerFactory) {
+	public InspectionTypeArchiveTask(EventType eventType, User user, RemovalHandlerFactory handlerFactory) {
 		super();
-		this.inspectionType = inspectionType;
+		this.eventType = eventType;
 		this.handlerFactory = handlerFactory;
 		this.currentUser = user;
 	}
@@ -60,8 +60,8 @@ public class InspectionTypeArchiveTask implements Runnable {
 
 	private void revertInspectionTypeToNonArchivedState() {
 		transaction = PersistenceManager.startTransaction();
-		inspectionType.activateEntity();
-		new InspectionTypeSaver().update(transaction, inspectionType);
+		eventType.activateEntity();
+		new EventTypeSaver().update(transaction, eventType);
 		transaction.commit();
 	}
 
@@ -73,32 +73,32 @@ public class InspectionTypeArchiveTask implements Runnable {
 
 
 	private void executeArchiving() {
-		archiveHandler.forInspectionType(inspectionType).remove(transaction);
+		archiveHandler.forEventType(eventType).remove(transaction);
 	}
 
 
 	private void sendFailureEmailResponse() {
-		String subject = "Inspection Type Removal Failed To Complete";
-		String body = "<h2>Inspection Type Removed " + inspectionType.getArchivedName() + "</h2>" +
-				"The inspection type and all other associated elements have been restored.  You may try to delete the inspection type again or contact support@n4systems for more insformations.";
+		String subject = "Event Type Removal Failed To Complete";
+		String body = "<h2>Event Type Removed " + eventType.getArchivedName() + "</h2>" +
+				"The event type and all other associated elements have been restored.  You may try to delete the event type again or contact support@n4systems for more information.";
 		
 		logger.info("Sending failure email [" + currentUser.getEmailAddress() + "]");
 		try {
 	        ServiceLocator.getMailManager().sendMessage(new MailMessage(subject, body, currentUser.getEmailAddress()));
         } catch (Exception e) {
-	        logger.error("Unable to send Inspection Type removal email", e);
+	        logger.error("Unable to send Event Type removal email", e);
         }
 	}
 	
 	private void sendSuccessEmailResponse() {
-		String subject = "Inspection Type Removal Completed";
-		String body = "<h2>Inspection Type Removed " +  inspectionType.getArchivedName() + "</h2>";
+		String subject = "Event Type Removal Completed";
+		String body = "<h2>Event Type Removed " +  eventType.getArchivedName() + "</h2>";
 		
 		logger.info("Sending email [" + currentUser.getEmailAddress() + "]");
 		try {
 	        ServiceLocator.getMailManager().sendMessage(new MailMessage(subject, body, currentUser.getEmailAddress()));
         } catch (Exception e) {
-	        logger.error("Unable to send Inspection Type removal email", e);
+	        logger.error("Unable to send Event Type removal email", e);
         }
 	}
 	

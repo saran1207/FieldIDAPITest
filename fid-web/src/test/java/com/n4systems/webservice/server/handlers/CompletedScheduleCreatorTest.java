@@ -9,12 +9,12 @@ import java.util.Date;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.inspection.EventByMobileGuidLoader;
+import com.n4systems.model.inspectionschedule.EventScheduleSaver;
 import org.junit.Test;
 
 import com.n4systems.model.Project;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
-import com.n4systems.model.inspection.InspectionByMobileGuidLoader;
-import com.n4systems.model.inspectionschedule.InspectionScheduleSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -77,8 +77,8 @@ public class CompletedScheduleCreatorTest {
 		sut.create("SOME GUID", new Date(), 1L);		
 	}
 	
-	private InspectionByMobileGuidLoader<Event> testableInspectionLoader() {
-		InspectionByMobileGuidLoader<Event> loader = new InspectionByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(1L), Event.class) {
+	private EventByMobileGuidLoader<Event> testableInspectionLoader() {
+		EventByMobileGuidLoader<Event> loader = new EventByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(1L), Event.class) {
 			@Override
 			public Event load() {
 				return event;
@@ -88,8 +88,8 @@ public class CompletedScheduleCreatorTest {
 		return loader;
 	}
 	
-	private InspectionByMobileGuidLoader<Event> testableNoInspectionLoader() {
-		InspectionByMobileGuidLoader<Event> loader = new InspectionByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(1L), Event.class) {
+	private EventByMobileGuidLoader<Event> testableNoInspectionLoader() {
+		EventByMobileGuidLoader<Event> loader = new EventByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(1L), Event.class) {
 			@Override
 			public Event load() {
 				return null;
@@ -110,7 +110,7 @@ public class CompletedScheduleCreatorTest {
 	}
 }
 
-class TestableScheduleSaver extends InspectionScheduleSaver {
+class TestableScheduleSaver extends EventScheduleSaver {
 	private EventSchedule savedSchedule;
 	
 	@Override

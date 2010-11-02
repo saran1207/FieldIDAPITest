@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.n4systems.model.AssetType;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -27,7 +27,8 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	private Set<AssetType> publishedAssetTypes = new HashSet<AssetType>();
 	
 	@OneToMany(fetch=FetchType.LAZY)
-	private Set<InspectionType> publishedInspectionTypes = new HashSet<InspectionType>();
+    @JoinTable(name="catalogs_inspectiontypes", joinColumns = @JoinColumn(name="catalogs_id"), inverseJoinColumns = @JoinColumn(name="publishedinspectiontypes_id"))
+	private Set<EventType> publishedEventTypes = new HashSet<EventType>();
 	
 	
 	public Catalog() {
@@ -45,15 +46,15 @@ public class Catalog extends EntityWithTenant implements Saveable{
 		this.publishedAssetTypes = publishedAssetTypes;
 	}
 
-	public Set<InspectionType> getPublishedInspectionTypes() {
-		return publishedInspectionTypes;
+	public Set<EventType> getPublishedInspectionTypes() {
+		return publishedEventTypes;
 	}
 
-	public void setPublishedInspectionTypes(Set<InspectionType> publishedInspectionTypes) {
-		this.publishedInspectionTypes = publishedInspectionTypes;
+	public void setPublishedInspectionTypes(Set<EventType> publishedEventTypes) {
+		this.publishedEventTypes = publishedEventTypes;
 	}
 
 	public boolean hasTypesPublished() {
-		return (!publishedInspectionTypes.isEmpty() || !publishedAssetTypes.isEmpty());
+		return (!publishedEventTypes.isEmpty() || !publishedAssetTypes.isEmpty());
 	}
 }

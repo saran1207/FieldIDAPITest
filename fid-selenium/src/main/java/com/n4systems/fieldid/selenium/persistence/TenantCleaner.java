@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.selenium.persistence;
 
 import com.n4systems.model.Asset;
-import com.n4systems.model.AssociatedInspectionType;
+import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Event;
@@ -9,7 +9,7 @@ import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventBook;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
@@ -43,8 +43,8 @@ public class TenantCleaner {
 
         removeAllForTenant(em, Catalog.class, tenantId);
         removeAllForTenant(em, Event.class, tenantId);
-        removeAllForTenant(em, AssociatedInspectionType.class, tenantId);
-        removeAllForTenant(em, InspectionType.class, tenantId);
+        removeAllForTenant(em, AssociatedEventType.class, tenantId);
+        removeAllForTenant(em, EventType.class, tenantId);
 
         List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
         for (Asset asset : networkRegisteredAssets) {

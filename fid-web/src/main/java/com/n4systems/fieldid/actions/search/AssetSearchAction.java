@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.InspectionSearchContainer.*;
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
@@ -20,7 +21,6 @@ import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.util.HashCode;
@@ -104,8 +104,8 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	}
 	
 	
-	public InspectionSearchContainer getReportCriteria() {
-		return get(REPORT_CRITERIA, InspectionSearchContainer.class);
+	public EventSearchContainer getReportCriteria() {
+		return get(REPORT_CRITERIA, EventSearchContainer.class);
 	}
 	
 	public void setReportCriteria(SearchContainer container) {

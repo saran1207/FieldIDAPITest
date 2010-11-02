@@ -26,7 +26,8 @@ public class AssetTypeSchedule extends EntityWithOwner implements Saveable, Secu
 	private AssetType assetType;
 	
 	@ManyToOne(optional=false)
-	private InspectionType inspectionType;
+    @JoinColumn(name = "inspectiontype_id")
+	private EventType eventType;
 	
 
 	@Column(name="frequency")
@@ -45,12 +46,12 @@ public class AssetTypeSchedule extends EntityWithOwner implements Saveable, Secu
 	}
 	
 	@AllowSafetyNetworkAccess
-	public InspectionType getInspectionType() {
-		return inspectionType;
+	public EventType getEventType() {
+		return eventType;
 	}
 
-	public void setInspectionType(InspectionType inspectionType) {
-		this.inspectionType = inspectionType;
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
 	}
 
 	public Long getFrequency() {
@@ -80,7 +81,7 @@ public class AssetTypeSchedule extends EntityWithOwner implements Saveable, Secu
 	public AssetTypeSchedule enhance(SecurityLevel level) {
 		AssetTypeSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setAssetType(enhance(assetType, level));
-		enhanced.setInspectionType(enhance(inspectionType, level));
+		enhanced.setEventType(enhance(eventType, level));
 		return enhanced;
 	}
 	

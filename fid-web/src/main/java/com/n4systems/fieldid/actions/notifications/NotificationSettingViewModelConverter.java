@@ -46,9 +46,9 @@ public class NotificationSettingViewModelConverter {
 			view.setAssetTypeId(model.getAssetTypes().get(0));
 		}
 		
-		if (!model.getInspectionTypes().isEmpty()) {
+		if (!model.getEventTypes().isEmpty()) {
 			// we only support a single inspection type right now
-			view.setInspectionTypeId(model.getInspectionTypes().get(0));
+			view.setInspectionTypeId(model.getEventTypes().get(0));
 		}
 		
 		view.getAddresses().addAll(model.getAddresses());
@@ -80,7 +80,7 @@ public class NotificationSettingViewModelConverter {
 		}
 		
 		if (view.getInspectionTypeId() != null) {
-			model.getInspectionTypes().add(view.getInspectionTypeId());
+			model.getEventTypes().add(view.getInspectionTypeId());
 		}
 		
 		model.getAddresses().addAll(view.getAddresses());

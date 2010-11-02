@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.api.Listable;
 
 public class MultiInspectGroupSorter {
@@ -19,27 +19,27 @@ public class MultiInspectGroupSorter {
 		}
 	}
 
-	private Map<InspectionTypeGroup, List<InspectionType>> groupToInspectionTypeMap = new HashMap<InspectionTypeGroup, List<InspectionType>>();
+	private Map<EventTypeGroup, List<EventType>> groupToInspectionTypeMap = new HashMap<EventTypeGroup, List<EventType>>();
 	 
 	
-	public MultiInspectGroupSorter(Set<InspectionType> inspectionTypes) {
-		sortIntoMap(inspectionTypes);
+	public MultiInspectGroupSorter(Set<EventType> eventTypes) {
+		sortIntoMap(eventTypes);
 	}
 	
-	public List<InspectionTypeGroup> getGroups(){
-		List<InspectionTypeGroup> eventTypeGroupList = new ArrayList<InspectionTypeGroup>(groupToInspectionTypeMap.keySet());
+	public List<EventTypeGroup> getGroups(){
+		List<EventTypeGroup> eventTypeGroupList = new ArrayList<EventTypeGroup>(groupToInspectionTypeMap.keySet());
 		
 		Collections.sort(eventTypeGroupList, new ListableByDisplayNameComparator());
 		return eventTypeGroupList;
 	}
 		
-	public List<InspectionType> getInspectionTypesForGroup(InspectionTypeGroup group){
+	public List<EventType> getInspectionTypesForGroup(EventTypeGroup group){
 		return groupToInspectionTypeMap.get(group);
 	}
 
-	private void sortIntoMap(Set<InspectionType> inspectionTypes) {
-		for (InspectionType type : inspectionTypes) {
-			List<InspectionType> typeList = fetchCurrentList(type.getGroup());
+	private void sortIntoMap(Set<EventType> eventTypes) {
+		for (EventType type : eventTypes) {
+			List<EventType> typeList = fetchCurrentList(type.getGroup());
 			
 			typeList.add(type);
 			
@@ -49,20 +49,20 @@ public class MultiInspectGroupSorter {
 		}
 	}
 
-	private void storeList(InspectionTypeGroup group, List<InspectionType> typeList) {
+	private void storeList(EventTypeGroup group, List<EventType> typeList) {
 		groupToInspectionTypeMap.put(group, typeList);
 	}
 
-	private void sortList(List<InspectionType> typeList) {
+	private void sortList(List<EventType> typeList) {
 		Collections.sort(typeList, new ListableByDisplayNameComparator());
 	}
 
-	private List<InspectionType> fetchCurrentList(InspectionTypeGroup group) {
-		List<InspectionType> typeList;
+	private List<EventType> fetchCurrentList(EventTypeGroup group) {
+		List<EventType> typeList;
 		if (groupToInspectionTypeMap.containsKey(group)) {
 			typeList = groupToInspectionTypeMap.get(group);
 		} else {
-			typeList = new ArrayList<InspectionType>();
+			typeList = new ArrayList<EventType>();
 		}
 		return typeList;
 	}

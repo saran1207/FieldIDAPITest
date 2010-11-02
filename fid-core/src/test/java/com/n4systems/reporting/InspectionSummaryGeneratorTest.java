@@ -13,6 +13,7 @@ import java.util.TimeZone;
 
 import com.n4systems.ejb.EventManager;
 import com.n4systems.model.Event;
+import com.n4systems.model.builders.EventTypeBuilder;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.junit.Assert;
@@ -20,11 +21,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.InspectionType;
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
-import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -53,7 +53,7 @@ public class InspectionSummaryGeneratorTest {
 		
 		setReportDefinerExpectations(printableEvent);
 		
-		InspectionSummaryGenerator generator = new InspectionSummaryGenerator(dateDefiner, persistenceManager, eventManager) {
+		EventSummaryGenerator generator = new EventSummaryGenerator(dateDefiner, persistenceManager, eventManager) {
 			@Override
 			protected List<Long> getSearchIds(ReportDefiner reportDefiner,
 					User user) {
@@ -91,21 +91,21 @@ public class InspectionSummaryGeneratorTest {
 	}
 
 	private Event createPrintableInspection() {
-		InspectionTypeGroup inspectionTypeGroup = createPrintableInspectionTypeGroup();
+		EventTypeGroup eventTypeGroup = createPrintableInspectionTypeGroup();
 				
-		InspectionType printableInspectionType = InspectionTypeBuilder.anInspectionType().withGroup(inspectionTypeGroup).build();
-		Event event = anEvent().ofType(printableInspectionType).build();
+		EventType printableEventType = EventTypeBuilder.anEventType().withGroup(eventTypeGroup).build();
+		Event event = anEvent().ofType(printableEventType).build();
 		return event;
 	}
 	
-	private InspectionTypeGroup createPrintableInspectionTypeGroup() {
-		InspectionTypeGroup inspectionTypeGroup = new InspectionTypeGroup();
-		inspectionTypeGroup.setPrintOut(new PrintOut());
-		inspectionTypeGroup.getPrintOut().setPdfTemplate("somefile");
-		inspectionTypeGroup.getPrintOut().setType(PrintOutType.CERT);
+	private EventTypeGroup createPrintableInspectionTypeGroup() {
+		EventTypeGroup eventTypeGroup = new EventTypeGroup();
+		eventTypeGroup.setPrintOut(new PrintOut());
+		eventTypeGroup.getPrintOut().setPdfTemplate("somefile");
+		eventTypeGroup.getPrintOut().setType(PrintOutType.CERT);
 		
-		Assert.assertTrue(inspectionTypeGroup.getPrintOutForReportType(InspectionReportType.INSPECTION_CERT) != null);
+		Assert.assertTrue(eventTypeGroup.getPrintOutForReportType(EventReportType.INSPECTION_CERT) != null);
 		
-		return inspectionTypeGroup;
+		return eventTypeGroup;
 	}
 }

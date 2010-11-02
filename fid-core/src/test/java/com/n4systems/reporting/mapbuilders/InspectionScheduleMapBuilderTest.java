@@ -9,11 +9,11 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.inspectionschedule.NextEventScheduleLoader;
 import org.junit.Test;
 
-import com.n4systems.model.builders.InspectionTypeBuilder;
+import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.AssetBuilder;
-import com.n4systems.model.inspectionschedule.NextInspectionScheduleLoader;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.testutils.DummyTransaction;
 import com.n4systems.util.DateHelper;
@@ -27,14 +27,14 @@ public class InspectionScheduleMapBuilderTest {
 		
 		Event event = new Event();
 		event.setAsset(AssetBuilder.anAsset().build());
-		event.setType(InspectionTypeBuilder.anInspectionType().build());
+		event.setType(EventTypeBuilder.anEventType().build());
 		
 		final EventSchedule schedule = new EventSchedule();
 		schedule.setNextDate(new Date());
 		
 		DateTimeDefiner dateDefiner = new DateTimeDefiner("dd-MM-yyyy", TimeZone.getDefault());
 		
-		NextInspectionScheduleLoader loader = new NextInspectionScheduleLoader() {
+		NextEventScheduleLoader loader = new NextEventScheduleLoader() {
 			protected EventSchedule load(EntityManager em) {
 				return schedule;
 			}

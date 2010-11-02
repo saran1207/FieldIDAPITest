@@ -11,7 +11,7 @@ public class InspectionViewTest {
 	public void test_get_next_inspection_date_as_date() {
 		Date date = new Date();
 		
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		
 		view.setNextInspectionDate(date);
 		
@@ -20,13 +20,13 @@ public class InspectionViewTest {
 	
 	@Test
 	public void test_get_next_inspection_date_as_date_allows_null() {
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		assertNull(view.getNextInspectionDateAsDate());
 	}
 	
 	@Test(expected=ClassCastException.class)
 	public void test_get_next_inspection_date_as_date_throws_exception_on_wrong_type() {
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		view.setNextInspectionDate("bad date type");
 		
 		view.getNextInspectionDateAsDate();
@@ -36,7 +36,7 @@ public class InspectionViewTest {
 	public void test_get_inspection_date_as_date() {
 		Date date = new Date();
 		
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		
 		view.setDatePerformed(date);
 		
@@ -45,13 +45,13 @@ public class InspectionViewTest {
 	
 	@Test
 	public void test_get_inspection_date_as_date_allows_null() {
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		assertNull(view.getDatePerformedAsDate());
 	}
 	
 	@Test(expected=ClassCastException.class)
 	public void test_get_inspection_date_as_date_throws_exception_on_wrong_type() {
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		view.setDatePerformed("bad date type");
 		
 		view.getDatePerformedAsDate();
@@ -59,7 +59,7 @@ public class InspectionViewTest {
 	
 	@Test
 	public void set_printable_encodes_boolean() {
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		
 		view.setPrintable(true);
 		assertEquals("Y", view.getPrintable());
@@ -70,20 +70,20 @@ public class InspectionViewTest {
 	
 	@Test
 	public void is_printable_allows_null() {
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		assertNull(view.isPrintable());
 	}
 	
 	@Test
 	public void is_printable_is_true_on_Y() {
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		view.setPrintable("Y");
 		assertTrue(view.isPrintable());
 	}
 	
 	@Test
 	public void is_printable_defaults_false() {
-		InspectionView view = new InspectionView();
+		EventView view = new EventView();
 		view.setPrintable("N");
 		assertFalse(view.isPrintable());
 		

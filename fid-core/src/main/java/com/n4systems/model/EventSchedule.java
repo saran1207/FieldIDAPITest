@@ -74,7 +74,8 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	private Asset asset;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	private InspectionType inspectionType;
+    @JoinColumn(name="inspectiontype_id")
+	private EventType eventType;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
@@ -100,14 +101,14 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	public EventSchedule() {
 	}
 
-	public EventSchedule(Asset asset, InspectionType inspectionType) {
-		this(asset, inspectionType, null);
+	public EventSchedule(Asset asset, EventType eventType) {
+		this(asset, eventType, null);
 	}
 
-	public EventSchedule(Asset asset, InspectionType inspectionType, Date scheduledDate) {
+	public EventSchedule(Asset asset, EventType eventType, Date scheduledDate) {
 		this.setTenant(asset.getTenant());
 		this.setAsset(asset);
-		this.inspectionType = inspectionType;
+		this.eventType = eventType;
 		this.nextDate = scheduledDate;
 	}
 
@@ -118,7 +119,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	}
 
 	public EventSchedule(Asset asset, AssetTypeSchedule typeSchedule) {
-		this(asset, typeSchedule.getInspectionType());
+		this(asset, typeSchedule.getEventType());
 	}
 
 	@AllowSafetyNetworkAccess
@@ -139,12 +140,12 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	}
 
 	@AllowSafetyNetworkAccess
-	public InspectionType getInspectionType() {
-		return inspectionType;
+	public EventType getEventType() {
+		return eventType;
 	}
 
-	public void setInspectionType(InspectionType inspectionType) {
-		this.inspectionType = inspectionType;
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
 	}
 
 	public void setNextDate(PlainDate nextDate) {
@@ -286,7 +287,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	public EventSchedule enhance(SecurityLevel level) {
 		EventSchedule enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setAsset(enhance(asset, level));
-		enhanced.setInspectionType(enhance(inspectionType, level));
+		enhanced.setEventType(enhance(eventType, level));
 		enhanced.event = enhance(event, level);
 		return enhanced;
 	}

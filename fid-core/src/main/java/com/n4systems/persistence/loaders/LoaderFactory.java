@@ -18,14 +18,14 @@ import com.n4systems.model.downloadlink.DownloadLinkListLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.fileattachment.FileAttachmentLoader;
-import com.n4systems.model.inspection.LastInspectionLoader;
-import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
-import com.n4systems.model.inspectionbook.InspectionBookFindOrCreateLoader;
-import com.n4systems.model.inspectionbook.InspectionBookListLoader;
-import com.n4systems.model.inspectionschedule.IncompleteInspectionSchedulesListLoader;
-import com.n4systems.model.inspectionschedule.NextInspectionDateByInspectionLoader;
-import com.n4systems.model.inspectiontype.AssociatedInspectionTypesLoader;
-import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
+import com.n4systems.model.inspection.LastEventLoader;
+import com.n4systems.model.inspectionbook.EventBookByNameLoader;
+import com.n4systems.model.inspectionbook.EventBookFindOrCreateLoader;
+import com.n4systems.model.inspectionbook.EventBookListLoader;
+import com.n4systems.model.inspectionschedule.IncompleteEventSchedulesListLoader;
+import com.n4systems.model.inspectionschedule.NextEventDateByEventLoader;
+import com.n4systems.model.inspectiontype.AssociatedEventTypesLoader;
+import com.n4systems.model.inspectiontype.EventTypeListableLoader;
 import com.n4systems.model.jobs.EventJobListableLoader;
 import com.n4systems.model.location.AllPredefinedLocationsPaginatedLoader;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
@@ -55,7 +55,7 @@ import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.assettype.AssetTypeByAttachmentLoader;
 import com.n4systems.model.assettype.AssetTypeListableLoader;
 import com.n4systems.model.assettype.AssetTypeLoader;
-import com.n4systems.model.assettype.InspectionFrequencyListLoader;
+import com.n4systems.model.assettype.EventFrequencyListLoader;
 import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
 import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
@@ -123,8 +123,8 @@ public class LoaderFactory implements Serializable {
 		return new AllPredefinedLocationsPaginatedLoader(filter);
 	}
 
-	public AssociatedInspectionTypesLoader createAssociatedInspectionTypesLoader() {
-		return new AssociatedInspectionTypesLoader(filter);
+	public AssociatedEventTypesLoader createAssociatedInspectionTypesLoader() {
+		return new AssociatedEventTypesLoader(filter);
 	}
 	
 	public AutoAttributeCriteriaByAssetTypeIdLoader createAutoAttributeCriteriaByAssetTypeIdLoader() {
@@ -231,28 +231,28 @@ public class LoaderFactory implements Serializable {
 		return createUserListableLoader().employeesOnly();
 	}
 
-	public IncompleteInspectionSchedulesListLoader createIncompleteInspectionSchedulesListLoader() {
-		return new IncompleteInspectionSchedulesListLoader(filter);
+	public IncompleteEventSchedulesListLoader createIncompleteInspectionSchedulesListLoader() {
+		return new IncompleteEventSchedulesListLoader(filter);
 	}
 
-	public InspectionBookByNameLoader createInspectionBookByNameLoader() {
-		return new InspectionBookByNameLoader(filter);
+	public EventBookByNameLoader createInspectionBookByNameLoader() {
+		return new EventBookByNameLoader(filter);
 	}
 
-	public InspectionBookFindOrCreateLoader createInspectionBookFindOrCreateLoader() {
-		return new InspectionBookFindOrCreateLoader(filter);
+	public EventBookFindOrCreateLoader createInspectionBookFindOrCreateLoader() {
+		return new EventBookFindOrCreateLoader(filter);
 	}
 
-	public InspectionBookListLoader createInspectionBookListLoader() {
-		return new InspectionBookListLoader(filter);
+	public EventBookListLoader createInspectionBookListLoader() {
+		return new EventBookListLoader(filter);
 	}
 
-	public InspectionFrequencyListLoader createInspectionFrequenciesListLoader() {
-		return new InspectionFrequencyListLoader(filter);
+	public EventFrequencyListLoader createEventFrequenciesListLoader() {
+		return new EventFrequencyListLoader(filter);
 	}
 
-	public InspectionTypeListableLoader createInspectionTypeListableLoader() {
-		return new InspectionTypeListableLoader(filter);
+	public EventTypeListableLoader createEventTypeListableLoader() {
+		return new EventTypeListableLoader(filter);
 	}
 
 	public InternalOrgByNameLoader createInternalOrgByNameLoader() {
@@ -263,16 +263,16 @@ public class LoaderFactory implements Serializable {
 		return new InternalOrgListableLoader(filter);
 	}
 
-	public LastInspectionLoader createLastInspectionLoader() {
-		return new LastInspectionLoader(filter);
+	public LastEventLoader createLastInspectionLoader() {
+		return new LastEventLoader(filter);
 	}
 	
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
 	}
 
-	public NextInspectionDateByInspectionLoader createNextInspectionDateByInspectionLoader() {
-		return new NextInspectionDateByInspectionLoader(filter);
+	public NextEventDateByEventLoader createNextInspectionDateByInspectionLoader() {
+		return new NextEventDateByEventLoader(filter);
 	}
 
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {

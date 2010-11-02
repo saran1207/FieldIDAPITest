@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.util.ListingPair;
 
 public class InspectionTypeGroupImportSummary extends BaseImportSummary {
@@ -13,24 +13,24 @@ public class InspectionTypeGroupImportSummary extends BaseImportSummary {
 
 	private List<ListingPair> inspectionsGroupsToCreate = new ArrayList<ListingPair>();
 	
-	private Map<Long, InspectionTypeGroup> importMapping = new HashMap<Long, InspectionTypeGroup>();
+	private Map<Long, EventTypeGroup> importMapping = new HashMap<Long, EventTypeGroup>();
 	
-	private List<InspectionTypeGroup> createdGroups = new ArrayList<InspectionTypeGroup>();
+	private List<EventTypeGroup> createdGroups = new ArrayList<EventTypeGroup>();
 	
 
 	public List<ListingPair> getInspectionsGroupsToCreate() {
 		return inspectionsGroupsToCreate;
 	}
 
-	public Map<Long, InspectionTypeGroup> getImportMapping() {
+	public Map<Long, EventTypeGroup> getImportMapping() {
 		return importMapping;
 	}
 
-	public List<InspectionTypeGroup> getCreatedGroups() {
+	public List<EventTypeGroup> getCreatedGroups() {
 		return createdGroups;
 	}
 	
-	public void createdGroup(InspectionTypeGroup group) {
+	public void createdGroup(EventTypeGroup group) {
 		createdGroups.add(group);
 	}
 

@@ -5,7 +5,7 @@ import java.util.Date;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
@@ -27,11 +27,11 @@ public class CalcNextDateAction extends AbstractAction {
 	public String doCalculate() {
 		AssetType assetType = getLoaderFactory().createAssetTypeLoader().setId(assetTypeId).load();
 		
-		InspectionType inspectionType = getLoaderFactory().createFilteredIdLoader(InspectionType.class).setId(inspectionTypeId).load();
+		EventType eventType = getLoaderFactory().createFilteredIdLoader(EventType.class).setId(inspectionTypeId).load();
 		
 		BaseOrg owner = getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(ownerId).load();
 		
-		AssetTypeSchedule schedule = assetType.getSchedule(inspectionType, owner);
+		AssetTypeSchedule schedule = assetType.getSchedule(eventType, owner);
 		
 		if (schedule != null) {
 			if (startDate == null) {

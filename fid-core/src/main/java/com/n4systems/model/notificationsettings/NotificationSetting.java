@@ -56,7 +56,7 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@Column(name="inspectiontype_id", nullable=false)
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	@IndexColumn(name="orderidx")
-	private List<Long> inspectionTypes = new ArrayList<Long>();
+	private List<Long> eventTypes = new ArrayList<Long>();
 	
 	private OverdueEventReport overdueReport = new OverdueEventReport();
 
@@ -118,12 +118,12 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     	this.assetTypes = assetTypes;
     }
 
-	public List<Long> getInspectionTypes() {
-    	return inspectionTypes;
+	public List<Long> getEventTypes() {
+    	return eventTypes;
     }
 
-	public void setInspectionTypes(List<Long> inspectionTypes) {
-    	this.inspectionTypes = inspectionTypes;
+	public void setEventTypes(List<Long> eventTypes) {
+    	this.eventTypes = eventTypes;
     }
 
 	public boolean isIncludeOverdue() {

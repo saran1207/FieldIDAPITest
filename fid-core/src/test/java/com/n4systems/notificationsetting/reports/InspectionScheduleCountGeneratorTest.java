@@ -10,12 +10,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.inspectionschedulecount.EventScheduleCount;
+import com.n4systems.model.inspectionschedulecount.OverdueEventScheduleCountListLoader;
+import com.n4systems.model.inspectionschedulecount.UpcomingEventScheduleCountListLoader;
 import org.junit.Test;
 
 import com.n4systems.ejb.MailManagerTestDouble;
-import com.n4systems.model.inspectionschedulecount.InspectionScheduleCount;
-import com.n4systems.model.inspectionschedulecount.OverdueInspectionScheduleCountListLoader;
-import com.n4systems.model.inspectionschedulecount.UpcomingInspectionScheduleCountListLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.util.mail.TemplateMailMessage;
@@ -29,7 +29,7 @@ public class InspectionScheduleCountGeneratorTest {
 	@Test
 	public void should_create_the_correct_subject_when_overdue_schedules_are_included() throws Exception {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
-		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<InspectionScheduleCount>()), null, mailManager);
+		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), null, mailManager);
 		
 		
 		NotificationSetting notificationSetting = aNotificationSetting().doNotIncludeOverdue().build();
@@ -42,7 +42,7 @@ public class InspectionScheduleCountGeneratorTest {
 	@Test
 	public void should_not_send_null_to_mail_message_for_overdue_schedules() throws Exception {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
-		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<InspectionScheduleCount>()), null, mailManager);
+		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), null, mailManager);
 		
 		NotificationSetting notificationSetting = aNotificationSetting().doNotIncludeOverdue().build();
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -56,16 +56,16 @@ public class InspectionScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().includeOverdue().build();
 		
-		FluentArrayList<InspectionScheduleCount> overdueInspecitonCounts = new FluentArrayList<InspectionScheduleCount>();
+		FluentArrayList<EventScheduleCount> overdueInspecitonCounts = new FluentArrayList<EventScheduleCount>();
 		
-		OverdueInspectionScheduleCountListLoader overdueLoader = createMock(OverdueInspectionScheduleCountListLoader.class);
+		OverdueEventScheduleCountListLoader overdueLoader = createMock(OverdueEventScheduleCountListLoader.class);
 		overdueLoader.setNotificationSetting(notificationSetting);
 		expect(overdueLoader.setClock((Clock)anyObject())).andReturn(overdueLoader);
 		expect(overdueLoader.load()).andReturn(overdueInspecitonCounts);
 		replay(overdueLoader);
 		
 		
-		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<InspectionScheduleCount>()), overdueLoader, mailManager);
+		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), overdueLoader, mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -79,11 +79,11 @@ public class InspectionScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().includeOverdue().build();
 		
-		FluentArrayList<InspectionScheduleCount> overdueInspecitonCounts = new FluentArrayList<InspectionScheduleCount>(new InspectionScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
-		OverdueInspectionScheduleCountListLoader overdueLoader = createSuccessfulOverdueLoader(notificationSetting, overdueInspecitonCounts);
+		FluentArrayList<EventScheduleCount> overdueInspecitonCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
+		OverdueEventScheduleCountListLoader overdueLoader = createSuccessfulOverdueLoader(notificationSetting, overdueInspecitonCounts);
 		
 		
-		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<InspectionScheduleCount>()), overdueLoader, mailManager);
+		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), overdueLoader, mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -91,7 +91,7 @@ public class InspectionScheduleCountGeneratorTest {
 		TemplateMailMessage message = (TemplateMailMessage) mailManager.message;
 		
 		
-		assertEquals(overdueInspecitonCounts, new FluentArrayList<InspectionScheduleCount>((Set)message.getTemplateMap().get("overdueEvents")));
+		assertEquals(overdueInspecitonCounts, new FluentArrayList<EventScheduleCount>((Set)message.getTemplateMap().get("overdueEvents")));
 	}
 	
 	
@@ -102,15 +102,15 @@ public class InspectionScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().includeUpcoming().build();
 		
-		UpcomingInspectionScheduleCountListLoader upcomingLoader = createMock(UpcomingInspectionScheduleCountListLoader.class);
+		UpcomingEventScheduleCountListLoader upcomingLoader = createMock(UpcomingEventScheduleCountListLoader.class);
 		upcomingLoader.setFromDate((Date)anyObject());
 		upcomingLoader.setToDate((Date)anyObject());
 		upcomingLoader.setNotificationSetting((NotificationSetting)anyObject());
-		expect(upcomingLoader.load()).andReturn(new ArrayList<InspectionScheduleCount>());
+		expect(upcomingLoader.load()).andReturn(new ArrayList<EventScheduleCount>());
 		replay(upcomingLoader);
 		
 		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), upcomingLoader, 
-					createSuccessfulOverdueLoader(notificationSetting, new ArrayList<InspectionScheduleCount>()), mailManager);
+					createSuccessfulOverdueLoader(notificationSetting, new ArrayList<EventScheduleCount>()), mailManager);
 		
 		
 		Clock clock = new StoppedClock();
@@ -127,9 +127,9 @@ public class InspectionScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().includeUpcoming().build();
 		
-		List<InspectionScheduleCount> upcomingInspectionCounts = new FluentArrayList<InspectionScheduleCount>(new InspectionScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
-		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingInspectionCounts), 
-					createSuccessfulOverdueLoader(notificationSetting, upcomingInspectionCounts), mailManager);
+		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
+		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
+					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -137,7 +137,7 @@ public class InspectionScheduleCountGeneratorTest {
 		TemplateMailMessage message = (TemplateMailMessage) mailManager.message;
 		
 		
-		assertEquals(upcomingInspectionCounts, new ArrayList<InspectionScheduleCount>((Set)message.getTemplateMap().get("upcomingEvents")));
+		assertEquals(upcomingEventCounts, new ArrayList<EventScheduleCount>((Set)message.getTemplateMap().get("upcomingEvents")));
 	}
 	
 	@Test
@@ -145,9 +145,9 @@ public class InspectionScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().doNotIncludeUpcoming().build();
 		
-		List<InspectionScheduleCount> upcomingInspectionCounts = new FluentArrayList<InspectionScheduleCount>(new InspectionScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
-		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingInspectionCounts), 
-					createSuccessfulOverdueLoader(notificationSetting, upcomingInspectionCounts), mailManager);
+		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
+		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
+					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -163,9 +163,9 @@ public class InspectionScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().doNotIncludeUpcoming().build();
 		
-		List<InspectionScheduleCount> upcomingInspectionCounts = new FluentArrayList<InspectionScheduleCount>(new InspectionScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
-		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingInspectionCounts), 
-					createSuccessfulOverdueLoader(notificationSetting, upcomingInspectionCounts), mailManager);
+		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
+		InspectionScheduleCountGenerator sut = new InspectionScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
+					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -174,8 +174,8 @@ public class InspectionScheduleCountGeneratorTest {
 	}
 	
 
-	private OverdueInspectionScheduleCountListLoader createSuccessfulOverdueLoader(NotificationSetting notificationSetting, List<InspectionScheduleCount> overdueInspecitonCounts) {
-		OverdueInspectionScheduleCountListLoader overdueLoader = createMock(OverdueInspectionScheduleCountListLoader.class);
+	private OverdueEventScheduleCountListLoader createSuccessfulOverdueLoader(NotificationSetting notificationSetting, List<EventScheduleCount> overdueInspecitonCounts) {
+		OverdueEventScheduleCountListLoader overdueLoader = createMock(OverdueEventScheduleCountListLoader.class);
 		overdueLoader.setNotificationSetting(notificationSetting);
 		expect(overdueLoader.setClock((Clock)anyObject())).andReturn(overdueLoader);
 		expect(overdueLoader.load()).andReturn(overdueInspecitonCounts);
@@ -186,12 +186,12 @@ public class InspectionScheduleCountGeneratorTest {
 	
 	
 	
-	private UpcomingInspectionScheduleCountListLoader createSuccessfulUpcomingLoader(List<InspectionScheduleCount> inspectionScheduleCounts) {
-		UpcomingInspectionScheduleCountListLoader upcomingLoader = createMock(UpcomingInspectionScheduleCountListLoader.class);
+	private UpcomingEventScheduleCountListLoader createSuccessfulUpcomingLoader(List<EventScheduleCount> eventScheduleCounts) {
+		UpcomingEventScheduleCountListLoader upcomingLoader = createMock(UpcomingEventScheduleCountListLoader.class);
 		upcomingLoader.setFromDate((Date)anyObject());
 		upcomingLoader.setToDate((Date)anyObject());
 		upcomingLoader.setNotificationSetting((NotificationSetting)anyObject());
-		expect(upcomingLoader.load()).andReturn(inspectionScheduleCounts);
+		expect(upcomingLoader.load()).andReturn(eventScheduleCounts);
 		replay(upcomingLoader);
 		
 		return upcomingLoader;

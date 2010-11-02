@@ -12,11 +12,17 @@ import java.util.Set;
 
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.fieldid.viewhelpers.EventHelper;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.inspectionbook.EventBookByNameLoader;
+import com.n4systems.model.inspectionbook.EventBookListLoader;
+import com.n4systems.model.inspectionbook.EventBookSaver;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -45,23 +51,17 @@ import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.utils.StrutsListHelper;
-import com.n4systems.fieldid.viewhelpers.InspectionHelper;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
-import com.n4systems.model.AssociatedInspectionType;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.EventBook;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.inspection.AssignedToUpdate;
-import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
-import com.n4systems.model.inspectionbook.InspectionBookListLoader;
-import com.n4systems.model.inspectionbook.InspectionBookSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
@@ -85,7 +85,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	protected final AssetManager assetManager;
 	private final InspectionScheduleManager inspectionScheduleManager;
 	protected final ProductionInspectionPersistenceFactory inspectionPersistenceFactory;
-	protected final InspectionHelper inspectionHelper;
+	protected final EventHelper eventHelper;
 	protected final InspectionFormHelper inspectionFormHelper; 
 	
 	private EventGroup eventGroup;
@@ -135,7 +135,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		this.legacyProductManager = legacyProductManager;
 		this.userManager = userManager;
 		this.assetManager = assetManager;
-		this.inspectionHelper = new InspectionHelper(persistenceManager);
+		this.eventHelper = new EventHelper(persistenceManager);
 		this.inspectionScheduleManager = inspectionScheduleManager;
 		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
 		this.inspectionFormHelper = new InspectionFormHelper();
@@ -212,7 +212,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		}
 		
 		if (getInspectionTypes().size() == 1) {
-			setType(getInspectionTypes().get(0).getInspectionType().getId());
+			setType(getInspectionTypes().get(0).getEventType().getId());
 			if (event.getType().isMaster()) {
 				return "oneFoundMaster";
 			}
@@ -222,7 +222,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return SUCCESS;
 	}
 
-	private List<AssociatedInspectionType> getInspectionTypes() {
+	private List<AssociatedEventType> getInspectionTypes() {
 		return getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(asset.getType()).load();
 	}
 	
@@ -395,7 +395,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			
 			if (event.isNew()) {
 				// the criteriaResults from the form must be processed before setting them on the inspection
-				inspectionHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
 				
 				// ensure the form version is set from the inspection type on create
 				event.syncFormVersionWithType();
@@ -412,7 +412,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			} else {
 				// only process criteria results if form editing is allowed
 				if (event.isEditable()) {
-					inspectionHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
 				}
 				// when updating, we need to remove any files that should no longer be attached
 				updateAttachmentList(event, modifiedBy);
@@ -467,7 +467,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 			}
 
 			// TODO: change this to the InspectionBookFindOrCreateLoader
-			InspectionBookByNameLoader bookLoader = new InspectionBookByNameLoader(getSecurityFilter());
+			EventBookByNameLoader bookLoader = new EventBookByNameLoader(getSecurityFilter());
 			bookLoader.setName(newInspectionBookTitle);
 			bookLoader.setOwner(getOwner());
 			EventBook eventBook = bookLoader.load();
@@ -479,7 +479,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 				eventBook.setOwner(getOwner());
 				eventBook.setTenant(getTenant());
 				
-				InspectionBookSaver bookSaver = new InspectionBookSaver();
+				EventBookSaver bookSaver = new EventBookSaver();
 				bookSaver.save(eventBook);
 			}
 			
@@ -569,7 +569,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		return (event.getType() != null) ? event.getType().getId() : null;
 	}
 
-	public InspectionType getInspectionType() {
+	public EventType getInspectionType() {
 		return event.getType();
 	}
 
@@ -587,7 +587,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (type == null) {
 			event.setType(null);
 		} else if (event.getType() == null || !type.equals(event.getType().getId())) {
-			event.setType(persistenceManager.find(InspectionType.class, type, getTenantId(), "sections", "supportedProofTests", "infoFieldNames"));
+			event.setType(persistenceManager.find(EventType.class, type, getTenantId(), "sections", "supportedProofTests", "infoFieldNames"));
 		}
 	}
 
@@ -616,7 +616,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (assetId == null) {
 			asset = null;
 		} else if (asset == null || !assetId.equals(asset.getId())) {
-			asset = assetManager.findAsset(assetId, getSecurityFilter(), "type.inspectionTypes", "infoOptions", "projects");
+			asset = assetManager.findAsset(assetId, getSecurityFilter(), "type.eventTypes", "infoOptions", "projects");
 			asset = assetManager.fillInSubAssetsOnAsset(asset);
 		}
 	}
@@ -707,7 +707,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 		if (criteriaResults == null) {
 			// criteria results need to be placed back in the order that they appear on the form
 			// so that the states and button images line up correctly.
-			criteriaResults = inspectionHelper.orderCriteriaResults(event);
+			criteriaResults = eventHelper.orderCriteriaResults(event);
 		}
 
 		return criteriaResults;
@@ -736,7 +736,7 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 
 	public List<ListingPair> getInspectionBooks() {
 		if (inspectionBooks == null) {
-			InspectionBookListLoader loader = new InspectionBookListLoader(getSecurityFilter());
+			EventBookListLoader loader = new EventBookListLoader(getSecurityFilter());
 			loader.setOpenBooksOnly((uniqueID == null));
 			loader.setOwner(getOwner());
 			inspectionBooks = loader.loadListingPair();
@@ -842,51 +842,51 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	/** Finds a Recommendation on the criteriaResults for this criteriaId and recommendation index */
 	public Recommendation findEditRecommendation(Long criteriaId, int recIndex) {
 		// first let's grab the result for this Criteria
-		CriteriaResult result = inspectionHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
+		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		
 		// next we need the text of our Recommendation
-		String recText = inspectionHelper.findCriteriaOnInspectionType(event, criteriaId).getRecommendations().get(recIndex);
+		String recText = eventHelper.findCriteriaOnInspectionType(event, criteriaId).getRecommendations().get(recIndex);
 		
 		// now we need to hunt down a matching Recommendation from our criteria results (if it exists)
-		return inspectionHelper.getObservationForText(result.getRecommendations(), recText);
+		return eventHelper.getObservationForText(result.getRecommendations(), recText);
 	}
 	
 	/** Finds a Deficiency on the criteriaResults for this criteriaId and deficiency index */
 	public Deficiency findEditDeficiency(Long criteriaId, int defIndex) {
 		// first let's grab the result for this Criteria
-		CriteriaResult result = inspectionHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
+		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		
 		// next we need the text of our Deficiency
-		String defText = inspectionHelper.findCriteriaOnInspectionType(event, criteriaId).getDeficiencies().get(defIndex);
+		String defText = eventHelper.findCriteriaOnInspectionType(event, criteriaId).getDeficiencies().get(defIndex);
 		
 		// now we need to hunt down a matching Deficiency from our criteria results (if it exists)
-		return inspectionHelper.getObservationForText(result.getDeficiencies(), defText);
+		return eventHelper.getObservationForText(result.getDeficiencies(), defText);
 	}
 	
 	/** Finds a comment Recommendation on the criteriaResults for this criteriaId */
 	public Recommendation findEditRecommendationComment(Long criteriaId) {
-		CriteriaResult result = inspectionHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
-		return inspectionHelper.getCommentObservation(result.getRecommendations());
+		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
+		return eventHelper.getCommentObservation(result.getRecommendations());
 	}
 	
 	/** Finds a comment Deficiency on the criteriaResults for this criteriaId */
 	public Deficiency findEditDeficiencyComment(Long criteriaId) {
-		CriteriaResult result = inspectionHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
-		return inspectionHelper.getCommentObservation(result.getDeficiencies());
+		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
+		return eventHelper.getCommentObservation(result.getDeficiencies());
 	}
 
 	public int countRecommendations(int criteriaIndex) {
 		if (criteriaResults == null || criteriaResults.isEmpty() || criteriaResults.get(criteriaIndex) == null) {
 			return 0;
 		}
-		return inspectionHelper.countObservations(criteriaResults.get(criteriaIndex).getRecommendations());
+		return eventHelper.countObservations(criteriaResults.get(criteriaIndex).getRecommendations());
 	}
 	
 	public int countDeficiencies(int criteriaIndex) {
 		if (criteriaResults == null || criteriaResults.isEmpty() || criteriaResults.get(criteriaIndex) == null) {
 			return 0;
 		}
-		return inspectionHelper.countObservations(criteriaResults.get(criteriaIndex).getDeficiencies());
+		return eventHelper.countObservations(criteriaResults.get(criteriaIndex).getDeficiencies());
 	}
 	
 	public Long getScheduleId() {
@@ -986,8 +986,8 @@ public class InspectionCrud extends UploadFileSupport implements SafetyNetworkAw
 	}
 	
 	@SuppressWarnings("deprecation")
-	public List<InspectionType> getEventTypes() {
-		return new ArrayList<InspectionType>(asset.getType().getInspectionTypes());
+	public List<EventType> getEventTypes() {
+		return new ArrayList<EventType>(asset.getType().getEventTypes());
 	}
 
 	public List<WebInspectionSchedule> getNextSchedules() {

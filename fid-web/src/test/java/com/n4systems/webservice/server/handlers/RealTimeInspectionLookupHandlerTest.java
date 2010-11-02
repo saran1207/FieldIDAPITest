@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
+import com.n4systems.model.inspection.NewestEventsForAssetIdLoader;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,8 +60,8 @@ public class RealTimeInspectionLookupHandlerTest {
 		assertEquals(0, lookupHandler.setProductId(anyProductId).setLastInspectionDate(mostRecentDate).lookup().size());						
 	}
 	
-	private NewestInspectionsForAssetIdLoader getInspectionsLoaderThatReturnsMultipleInspections() {
-		NewestInspectionsForAssetIdLoader loader = new NewestInspectionsForAssetIdLoader(new TenantOnlySecurityFilter(anyTenantId)) {
+	private NewestEventsForAssetIdLoader getInspectionsLoaderThatReturnsMultipleInspections() {
+		NewestEventsForAssetIdLoader loader = new NewestEventsForAssetIdLoader(new TenantOnlySecurityFilter(anyTenantId)) {
 			@Override
 			public List<Event> load() {
 				return multipleEvents;

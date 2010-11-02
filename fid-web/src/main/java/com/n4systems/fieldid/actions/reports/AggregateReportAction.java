@@ -9,7 +9,7 @@ import com.n4systems.ejb.AggregateReportManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.util.AggregateReport;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 
@@ -20,7 +20,7 @@ public class AggregateReportAction extends AbstractAction {
 
 	private final AggregateReportManager aggregateReportManager;
 	
-	private InspectionSearchContainer criteria;
+	private EventSearchContainer criteria;
 	
 	protected String searchId;
 	private Long currentPage;

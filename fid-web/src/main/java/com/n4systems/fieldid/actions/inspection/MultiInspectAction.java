@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.handlers.CommonEventTypeHandler;
+import com.n4systems.handlers.LoaderBackedCommonEventTypeHandler;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
 import com.n4systems.model.inspectiontype.CommonAssetTypeDatabaseLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -21,9 +24,6 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValues;
 import com.n4systems.fieldid.collection.helpers.CommonAssetValuesFinder;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.handlers.CommonInspectionTypeHandler;
-import com.n4systems.handlers.LoaderBackedCommonInspectionTypeHandler;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
@@ -41,9 +41,9 @@ public class MultiInspectAction extends AbstractCrud {
 	private static final long UNASSIGNED_OPTION_VALUE = 0L;
 	private static final long KEEP_THE_SAME_OPTION = -1L;
 	private List<Long> assetIds = new ArrayList<Long>();
-	private Set<InspectionType> eventTypes;
+	private Set<EventType> eventTypes;
 
-	private InspectionType inspectionType;
+	private EventType eventType;
 	private Event event;
 	
 	private final InspectionFormHelper inspectionFormHelper;
@@ -53,7 +53,7 @@ public class MultiInspectAction extends AbstractCrud {
 	private List<ListingPair> examiners;
 	private List<Listable<Long>> commentTemplates;
 	private List<AssetStatus> assetStatuses;
-	private CommonInspectionTypeHandler commonInspectionTypeHandler;
+	private CommonEventTypeHandler commonEventTypeHandler;
 	private CommonAssetValues commonAssetValues;
 	private InspectionWebModel modifiableInspection;
 	private MultiInspectGroupSorter multiInspectGroupSorter;
@@ -68,7 +68,7 @@ public class MultiInspectAction extends AbstractCrud {
 	@Override
 	protected void initMemberFields() {
 		event = new Event();
-		event.setType(inspectionType);
+		event.setType(eventType);
 		event.setDate(new Date());
 	}
 
@@ -80,7 +80,7 @@ public class MultiInspectAction extends AbstractCrud {
 	@Override
 	protected void postInit() {
 		super.postInit();
-		commonInspectionTypeHandler = createCommonInspectionTypeHandler();
+		commonEventTypeHandler = createCommonInspectionTypeHandler();
 		modifiableInspection = new InspectionWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), event), getSessionUser().createUserDateConverter(), this);
 		overrideHelper(new MultiInspectActionHelper(getLoaderFactory()));
 	}
@@ -98,8 +98,8 @@ public class MultiInspectAction extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	private CommonInspectionTypeHandler createCommonInspectionTypeHandler() {
-		return new LoaderBackedCommonInspectionTypeHandler(new CommonAssetTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()));
+	private CommonEventTypeHandler createCommonInspectionTypeHandler() {
+		return new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()));
 	}
 
 	@SkipValidation
@@ -124,22 +124,22 @@ public class MultiInspectAction extends AbstractCrud {
 		return assetIds;
 	}
 
-	public Set<InspectionType> getEventTypes() {
+	public Set<EventType> getEventTypes() {
 		if (eventTypes == null) {
-			eventTypes = commonInspectionTypeHandler.findCommonInspectionTypesFor(assetIds);
+			eventTypes = commonEventTypeHandler.findCommonEventTypesFor(assetIds);
 		}
 		return eventTypes;
 	}
 
 	public Long getType() {
-		return inspectionType != null ? inspectionType.getId() : null;
+		return eventType != null ? eventType.getId() : null;
 	}
 
 	public void setType(Long type) {
 		if (type == null) {
-			inspectionType = null;
-		} else if (inspectionType == null || !type.equals(inspectionType.getId())) {
-			inspectionType = persistenceManager.find(InspectionType.class, type, getTenantId(), "sections", "supportedProofTests", "infoFieldNames");
+			eventType = null;
+		} else if (eventType == null || !type.equals(eventType.getId())) {
+			eventType = persistenceManager.find(EventType.class, type, getTenantId(), "sections", "supportedProofTests", "infoFieldNames");
 		}
 	}
 
@@ -147,8 +147,8 @@ public class MultiInspectAction extends AbstractCrud {
 		return getSessionUser().getUniqueID();
 	}
 
-	public InspectionType getInspectionType() {
-		return inspectionType;
+	public EventType getInspectionType() {
+		return eventType;
 	}
 
 	public List<Asset> getAssets() {
@@ -164,7 +164,7 @@ public class MultiInspectAction extends AbstractCrud {
 	}
 
 	public boolean isPrintable() {
-		return inspectionType.isPrintable();
+		return eventType.isPrintable();
 	}
 
 	public List<ListingPair> getExaminers() {

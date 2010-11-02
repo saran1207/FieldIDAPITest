@@ -9,7 +9,6 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Project;
 import com.n4systems.model.State;
@@ -257,7 +256,7 @@ public class PathHandler {
 	
 	/**
 	 * Resolves an InspectionTypeGroup to its report file name.  Appends the master suffix if isMaster is true.
-	 * @see 	InspectionTypeGroup#getFileSystemName()
+	 * @see 	com.n4systems.model.EventTypeGroup#getFileSystemName()
 	 * @param 	group		An InspectionTypeGroup
 	 * @param	isMaster	Appends the master suffix when true.
 	 * @return				A string representing the reports file name
@@ -269,7 +268,7 @@ public class PathHandler {
 	/**
 	 * Finds the relative Tenant specific path to an InspectionTypeGroup's report.  Uses the Tenant from the InspectionTypeGroup to resolve the Teanant path part. Appends the master suffix if isMaster is true.
 	 * @see 	#getTenantPathPart(Tenant)
-	 * @see 	#getReportFileName(InspectionTypeGroup)
+	 * @see 	#getReportFileName(com.n4systems.model.EventTypeGroup)
 	 * @param 	group		An InspectionTypeGroup
 	 * @param 	isMaster	Appends the master suffix when true.
 	 * @return				A string path relative to the application root

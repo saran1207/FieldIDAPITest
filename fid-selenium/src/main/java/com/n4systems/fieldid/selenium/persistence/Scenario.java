@@ -4,8 +4,8 @@ import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectio
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.AssetBuilder;
-import com.n4systems.model.builders.InspectionBookBuilder;
-import com.n4systems.model.inspectionbook.InspectionBookSaver;
+import com.n4systems.model.builders.EventBookBuilder;
+import com.n4systems.model.inspectionbook.EventBookSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -75,9 +75,9 @@ public class Scenario {
         return builder;
     }
 
-    public InspectionBookBuilder anInspectionBook() {
-        InspectionBookBuilder builder = InspectionBookBuilder.anInspectionBook();
-        builder.setSaver(new InspectionBookSaver()).setTransaction(trans);
+    public EventBookBuilder anInspectionBook() {
+        EventBookBuilder builder = EventBookBuilder.anEventBook();
+        builder.setSaver(new EventBookSaver()).setTransaction(trans);
         return builder;
     }
 

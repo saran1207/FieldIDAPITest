@@ -20,6 +20,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.SubEvent;
 import org.apache.log4j.Logger;
 
@@ -41,7 +42,6 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Observation;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -52,7 +52,7 @@ import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.inspectionbook.InspectionBookByNameLoader;
+import com.n4systems.model.inspectionbook.EventBookByNameLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
@@ -425,7 +425,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		// Required object lookups
 		event.setTenant(tenant);
-		event.setType(persistenceManager.find(InspectionType.class, inspectionServiceDTO.getInspectionTypeId(), new TenantOnlySecurityFilter(tenant.getId())));
+		event.setType(persistenceManager.find(EventType.class, inspectionServiceDTO.getInspectionTypeId(), new TenantOnlySecurityFilter(tenant.getId())));
 		event.setAsset((Asset) em.find(Asset.class, inspectionServiceDTO.getProductId()));
 
 		// Optional object lookups
@@ -480,7 +480,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			event.setBook(persistenceManager.find(EventBook.class, inspectionServiceDTO.getInspectionBookId()));
 		} else if (inspectionServiceDTO.getInspectionBookTitle() != null) {
 
-			InspectionBookByNameLoader loader = new InspectionBookByNameLoader(new OrgOnlySecurityFilter(performedBy.getOwner()));
+			EventBookByNameLoader loader = new EventBookByNameLoader(new OrgOnlySecurityFilter(performedBy.getOwner()));
 			loader.setName(inspectionServiceDTO.getInspectionBookTitle());
 			loader.setOwner(owner);
 			EventBook eventBook = loader.load(em, new OrgOnlySecurityFilter(performedBy.getOwner()));
@@ -655,7 +655,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	private ProductTypeScheduleServiceDTO convert(AssetTypeSchedule assetTypeSchedule) {
 		ProductTypeScheduleServiceDTO productTypeScheduleServiceDTO = new ProductTypeScheduleServiceDTO();
 		productTypeScheduleServiceDTO.setDtoVersion(ProductTypeScheduleServiceDTO.CURRENT_DTO_VERSION);
-		productTypeScheduleServiceDTO.setInspectionTypeId(assetTypeSchedule.getInspectionType().getId());
+		productTypeScheduleServiceDTO.setInspectionTypeId(assetTypeSchedule.getEventType().getId());
 		productTypeScheduleServiceDTO.setFrequency(assetTypeSchedule.getFrequency());
 		productTypeScheduleServiceDTO.setId(assetTypeSchedule.getId());
 		productTypeScheduleServiceDTO.setProductTypeId(assetTypeSchedule.getAssetType().getId());
@@ -677,8 +677,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			}
 		}
 
-		for (InspectionType inspectionType : assetType.getInspectionTypes()) {
-			productTypeDTO.getInspectionTypeIds().add(inspectionType.getId());
+		for (EventType eventType : assetType.getEventTypes()) {
+			productTypeDTO.getInspectionTypeIds().add(eventType.getId());
 		}
 
 		for (AssetTypeSchedule schedule : assetType.getSchedules()) {
@@ -695,27 +695,27 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return productTypeDTO;
 	}
 
-	public InspectionTypeServiceDTO convert(InspectionType inspectionType) {
+	public InspectionTypeServiceDTO convert(EventType eventType) {
 
 		InspectionTypeServiceDTO inspectionTypeService = new InspectionTypeServiceDTO();
-		inspectionTypeService.setDescription(inspectionType.getDescription());
-		inspectionTypeService.setId(inspectionType.getId());
-		inspectionTypeService.setName(inspectionType.getName());
-		inspectionTypeService.setPrintable(inspectionType.isPrintable());
-		inspectionTypeService.setMaster(inspectionType.isMaster());
-		inspectionTypeService.setGroupId(inspectionType.getGroup().getId());
-		inspectionTypeService.setFormVersion(inspectionType.getFormVersion());
-		inspectionTypeService.setAssignedToAvailable(inspectionType.isAssignedToAvailable());
+		inspectionTypeService.setDescription(eventType.getDescription());
+		inspectionTypeService.setId(eventType.getId());
+		inspectionTypeService.setName(eventType.getName());
+		inspectionTypeService.setPrintable(eventType.isPrintable());
+		inspectionTypeService.setMaster(eventType.isMaster());
+		inspectionTypeService.setGroupId(eventType.getGroup().getId());
+		inspectionTypeService.setFormVersion(eventType.getFormVersion());
+		inspectionTypeService.setAssignedToAvailable(eventType.isAssignedToAvailable());
 
-		for (CriteriaSection section : inspectionType.getSections()) {
+		for (CriteriaSection section : eventType.getSections()) {
 			if (!section.isRetired()) {
-				inspectionTypeService.getSections().add(convert(section, inspectionType.getId()));
+				inspectionTypeService.getSections().add(convert(section, eventType.getId()));
 			}
 		}
 
 		// Info Field Names ; sent with an order index
 		int i = 0;
-		for (String infoFieldName : inspectionType.getInfoFieldNames()) {
+		for (String infoFieldName : eventType.getInfoFieldNames()) {
 			InfoFieldNameServiceDTO infoField = new InfoFieldNameServiceDTO();
 			infoField.setName(infoFieldName);
 			infoField.setOrderIndex(i);
@@ -1050,7 +1050,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		scheduleService.setId(eventSchedule.getId());
 		scheduleService.setNextDate(AbstractBaseServiceDTO.dateToString(eventSchedule.getNextDate()));
 		scheduleService.setProductId(eventSchedule.getAsset().getId());
-		scheduleService.setInspectionTypeId(eventSchedule.getInspectionType().getId());
+		scheduleService.setInspectionTypeId(eventSchedule.getEventType().getId());
 		scheduleService.setJobId(eventSchedule.getProject() != null ? eventSchedule.getProject().getId() : NULL_ID);
 		scheduleService.setCompleted(eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED);
 

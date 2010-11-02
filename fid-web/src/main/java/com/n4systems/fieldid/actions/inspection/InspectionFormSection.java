@@ -10,7 +10,6 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Deficiency;
-import com.n4systems.model.InspectionType;
 import com.n4systems.model.Observation;
 import com.n4systems.model.Recommendation;
 import com.n4systems.security.Permissions;
@@ -69,7 +68,7 @@ public class InspectionFormSection extends InspectionFormCrud {
 	}
 
 	/**
-	 * Adds default {@link CriteriaSection}s, {@link Criteria} and {@link Observation}s ({@link Recommendation}/{@link Deficiency}) to an {@link InspectionType}.<br />
+	 * Adds default {@link CriteriaSection}s, {@link Criteria} and {@link Observation}s ({@link Recommendation}/{@link Deficiency}) to an {@link com.n4systems.model.EventType}.<br />
 	 * Since this is an ajax method, and the InspectionType is loaded on every ajax request, it is necessary to create new Sections, Criteria (and so on) up to the requested index
 	 * such that:<br />
 	 * Given a <tt>sectionIndex</tt>; new, default CriteriaSections will be added so that <tt>inspectionType.getSections().size() == sectionIndex + 1</tt>.<br />
@@ -84,7 +83,7 @@ public class InspectionFormSection extends InspectionFormCrud {
 	 */
 	@SkipValidation
 	public String doAdd() {
-		if( inspectionType == null ) {
+		if( eventType == null ) {
 			addActionError( getText( "error.noeventtype" ) );
 			return MISSING;
 		}

@@ -16,7 +16,7 @@ import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
-import com.n4systems.model.inspectiontype.InspectionTypeListableLoader;
+import com.n4systems.model.inspectiontype.EventTypeListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingSaver;
@@ -213,7 +213,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	public List<Listable<Long>> getInspectionTypeList() {
 		if (inspectionTypeList == null) {
-			InspectionTypeListableLoader loader = getLoaderFactory().createInspectionTypeListableLoader();
+			EventTypeListableLoader loader = getLoaderFactory().createEventTypeListableLoader();
 			inspectionTypeList = loader.load();
 		}
     	return inspectionTypeList;

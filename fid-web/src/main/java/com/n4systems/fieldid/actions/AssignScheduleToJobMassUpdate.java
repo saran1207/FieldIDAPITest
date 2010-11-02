@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -13,8 +14,7 @@ import com.n4systems.fieldid.actions.search.InspectionScheduleAction;
 import com.n4systems.fieldid.actions.search.InspectionScheduleJobAssignment;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.fieldid.viewhelpers.InspectionScheduleSearchContainer;
-import com.n4systems.fieldid.viewhelpers.InspectionSearchContainer;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Project;
 import com.n4systems.model.security.SecurityFilter;
@@ -30,8 +30,8 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	private static final Logger logger = Logger.getLogger(AssignScheduleToJobMassUpdate.class);
 
 	
-	private InspectionScheduleSearchContainer scheduleCriteria;
-	private InspectionSearchContainer reportCriteria;
+	private EventScheduleSearchContainer scheduleCriteria;
+	private EventSearchContainer reportCriteria;
 	private Project job;
 	private List<ListingPair> jobs;
 	
@@ -120,7 +120,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 
 	private boolean getScheduleCriteria(String scheduleCriteriaKey) {
 		if (getSession().containsKey(scheduleCriteriaKey) && getSession().get(scheduleCriteriaKey) != null) {
-			scheduleCriteria = (InspectionScheduleSearchContainer)getSession().get(scheduleCriteriaKey);
+			scheduleCriteria = (EventScheduleSearchContainer)getSession().get(scheduleCriteriaKey);
 		} 
 		return !(scheduleCriteria == null || searchId == null || !searchId.equals(scheduleCriteria.getSearchId()));
 	}

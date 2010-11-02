@@ -5,17 +5,17 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.inspection.NewestInspectionsForAssetIdLoader;
+import com.n4systems.model.inspection.NewestEventsForAssetIdLoader;
 
 public class RealTimeInspectionLookupHandler {
 
-	private final NewestInspectionsForAssetIdLoader loader;
+	private final NewestEventsForAssetIdLoader loader;
 	
 	private long productId;
 	private Date lastInspectionDate;
 	private List<Event> events;
 	
-	public RealTimeInspectionLookupHandler(NewestInspectionsForAssetIdLoader loader) {
+	public RealTimeInspectionLookupHandler(NewestEventsForAssetIdLoader loader) {
 		this.loader = loader;
 	}
 	

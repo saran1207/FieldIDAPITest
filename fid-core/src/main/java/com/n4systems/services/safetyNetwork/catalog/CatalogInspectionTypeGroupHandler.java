@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.InspectionTypeGroup;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.PrintOut.PrintOutType;
@@ -38,7 +38,7 @@ public class CatalogInspectionTypeGroupHandler extends CatalogImportHandler {
 		
 		findGroupsToImport(inspectionTypeIds);
 		for (ListingPair originalGroup : inspectionTypesToBeCreated) {
-			InspectionTypeGroup importedGroup = copyGroup(originalGroup);
+			EventTypeGroup importedGroup = copyGroup(originalGroup);
 			try {
 				setDefaultCerts(importedGroup);
 				persistenceManager.save(importedGroup);
@@ -51,8 +51,8 @@ public class CatalogInspectionTypeGroupHandler extends CatalogImportHandler {
 		}
 	}
 
-	private InspectionTypeGroup copyGroup(ListingPair originalGroup) {
-		InspectionTypeGroup importedGroup = new InspectionTypeGroup();
+	private EventTypeGroup copyGroup(ListingPair originalGroup) {
+		EventTypeGroup importedGroup = new EventTypeGroup();
 		importedGroup.setName(originalGroup.getName());
 		importedGroup.setReportTitle(originalGroup.getName());
 		importedGroup.setTenant(tenant);
@@ -60,7 +60,7 @@ public class CatalogInspectionTypeGroupHandler extends CatalogImportHandler {
 		
 	}
 	
-	private void setDefaultCerts(InspectionTypeGroup importedGroup) {
+	private void setDefaultCerts(EventTypeGroup importedGroup) {
 		importedGroup.setPrintOut(getDefaultCert());
 		importedGroup.setObservationPrintOut(getDefaultObservationCert());
 	}
@@ -98,10 +98,10 @@ public class CatalogInspectionTypeGroupHandler extends CatalogImportHandler {
 		inspectionTypesToBeCreated = new ArrayList<ListingPair>();
 		
 		for (ListingPair existingInspectionType : existingGroups) {
-			if (persistenceManager.uniqueNameAvailable(InspectionTypeGroup.class, existingInspectionType.getName(), null, tenant.getId())) {
+			if (persistenceManager.uniqueNameAvailable(EventTypeGroup.class, existingInspectionType.getName(), null, tenant.getId())) {
 				inspectionTypesToBeCreated.add(existingInspectionType);
 			} else {
-				summary.getImportMapping().put(existingInspectionType.getId(), persistenceManager.findByName(InspectionTypeGroup.class, tenant.getId(), existingInspectionType.getName()));
+				summary.getImportMapping().put(existingInspectionType.getId(), persistenceManager.findByName(EventTypeGroup.class, tenant.getId(), existingInspectionType.getName()));
 			}
 		}
 		return inspectionTypesToBeCreated;
@@ -118,12 +118,12 @@ public class CatalogInspectionTypeGroupHandler extends CatalogImportHandler {
 	}
 
 	
-	public Map<Long, InspectionTypeGroup> getImportMapping() {
+	public Map<Long, EventTypeGroup> getImportMapping() {
 		return summary.getImportMapping();
 	}
 	
 	public void rollback() {
-		for (InspectionTypeGroup groupToBeDeleted : summary.getCreatedGroups()) {
+		for (EventTypeGroup groupToBeDeleted : summary.getCreatedGroups()) {
 			persistenceManager.delete(groupToBeDeleted);
 		}
 	}

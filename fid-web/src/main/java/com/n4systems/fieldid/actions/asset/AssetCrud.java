@@ -704,7 +704,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		if (assetTypeId != null) {
 			QueryBuilder<AssetType> query = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
 			query.addSimpleWhere("tenant", getTenant()).addSimpleWhere("id", assetTypeId).addSimpleWhere("state", EntityState.ACTIVE);
-			query.addPostFetchPaths("infoFields", "inspectionTypes", "attachments", "subTypes");
+			query.addPostFetchPaths("infoFields", "eventTypes", "attachments", "subTypes");
 			assetType = persistenceManager.find(query);
 		}
 		this.asset.setType(assetType);

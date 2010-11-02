@@ -78,7 +78,7 @@ public class CommonAssetTypeLoaderTest {
 		
 		List<String> postFetches = sut.queryBuilder.getPostFetchPaths();
 		
-		assertThat(postFetches, hasItem("inspectionTypes"));
+		assertThat(postFetches, hasItem("eventTypes"));
 	}
 	
 	

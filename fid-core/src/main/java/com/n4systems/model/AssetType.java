@@ -88,7 +88,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private String archivedName;
 	
 	@OneToMany(mappedBy="assetType")
-	private Set<AssociatedInspectionType> inspectionTypes;
+	private Set<AssociatedEventType> eventTypes;
 	
 	
 	
@@ -193,10 +193,10 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
 	@Deprecated
 	@AllowSafetyNetworkAccess
-	public Set<InspectionType> getInspectionTypes() {
-		Set<InspectionType> types = new HashSet<InspectionType>();
-		for (AssociatedInspectionType inspectionType : inspectionTypes) {
-			types.add(inspectionType.getInspectionType());
+	public Set<EventType> getEventTypes() {
+		Set<EventType> types = new HashSet<EventType>();
+		for (AssociatedEventType eventType : eventTypes) {
+			types.add(eventType.getEventType());
 		}
 		return types;
 	}
@@ -365,7 +365,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	 * @return		AssetTypeSchedule or null if no schedule was found
 	 */
 	@AllowSafetyNetworkAccess
-	public AssetTypeSchedule getSchedule(InspectionType type, BaseOrg owner) {
+	public AssetTypeSchedule getSchedule(EventType type, BaseOrg owner) {
 		AssetTypeSchedule scheduleForOrg = null;
 		
 		if(type == null || owner == null) {
@@ -374,7 +374,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		}
 		
 		for (AssetTypeSchedule schedule: schedules) {
-			if (schedule.getInspectionType().equals(type) && schedule.getOwner().equals(owner)) {
+			if (schedule.getEventType().equals(type) && schedule.getOwner().equals(owner)) {
 				scheduleForOrg = schedule;
 				break;
 			}				
@@ -388,9 +388,9 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		return scheduleForOrg;
 	}
 	
-	public AssetTypeSchedule getDefaultSchedule(InspectionType type) {
+	public AssetTypeSchedule getDefaultSchedule(EventType type) {
 		for (AssetTypeSchedule schedule: schedules) {
-			if (schedule.getInspectionType().equals(type) && schedule.getOwner().isPrimary()) {
+			if (schedule.getEventType().equals(type) && schedule.getOwner().isPrimary()) {
 				return  schedule;
 			}				
 		}
@@ -398,7 +398,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	}
 	
 	@AllowSafetyNetworkAccess
-	public Date getSuggestedNextInspectionDate(Date fromDate, InspectionType type, BaseOrg owner) {
+	public Date getSuggestedNextInspectionDate(Date fromDate, EventType type, BaseOrg owner) {
 		Date returnDate = fromDate;
 		
 		AssetTypeSchedule schedule = getSchedule(type, owner);

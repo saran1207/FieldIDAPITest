@@ -11,6 +11,7 @@ import java.util.List;
 import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.builders.EventTypeBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,7 +25,6 @@ import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.handlers.creator.inspections.InspectionCreator;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.builders.InspectionTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
@@ -162,8 +162,8 @@ public class InspectionCreatorTest {
 	public void should_save_the_set_inspection_schedules_given() throws Exception {
 		Event event = anEvent().build();
 		CreateInspectionParameter parameter = new CreateInspectionParameterBuilder(event, 1L)
-			.addSchedule(new InspectionScheduleBundle(event.getAsset(), InspectionTypeBuilder.anInspectionType().build(), null, new Date()))
-			.addSchedule(new InspectionScheduleBundle(event.getAsset(), InspectionTypeBuilder.anInspectionType().build(), null, new Date(2000)))
+			.addSchedule(new InspectionScheduleBundle(event.getAsset(), EventTypeBuilder.anEventType().build(), null, new Date()))
+			.addSchedule(new InspectionScheduleBundle(event.getAsset(), EventTypeBuilder.anEventType().build(), null, new Date(2000)))
 			.build();
 		
 		NextInspectionScheduleSerivce nextScheduleService = createMock(NextInspectionScheduleSerivce.class);

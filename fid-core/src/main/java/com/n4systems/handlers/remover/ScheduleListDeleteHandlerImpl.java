@@ -7,9 +7,9 @@ import java.util.List;
 import javax.persistence.Query;
 
 import com.n4systems.handlers.remover.summary.ScheduleListRemovalSummary;
-import com.n4systems.model.AssociatedInspectionType;
+import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.InspectionType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -23,7 +23,7 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler {
 	
 	
-	private InspectionType inspectionType;
+	private EventType eventType;
 	private AssetType assetType;
 	private ScheduleStatusGrouping target = ScheduleStatusGrouping.NON_COMPLETE;
 	
@@ -53,7 +53,7 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 	
 	private List<Long> scheduleIds() {
 		QueryBuilder<Long> schedulesToDelete = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
-		schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("inspectionType", inspectionType);
+		schedulesToDelete.setSelectArgument(new SimpleSelect("id")).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("eventType", eventType);
 		schedulesToDelete.addWhere(Comparator.IN, "status", "status", Arrays.asList(target.getMembers()));
 				
 		if (assetType != null) {
@@ -71,15 +71,15 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 	}
 
 	
-	public ScheduleListDeleteHandler setInspectionType(InspectionType inspectionType) {
-		this.inspectionType = inspectionType;
+	public ScheduleListDeleteHandler setInspectionType(EventType eventType) {
+		this.eventType = eventType;
 		return this;
 	}
 
 	
-	public ScheduleListDeleteHandler setAssociatedInspectionType(AssociatedInspectionType associatedInspectionType) {
-		this.assetType = associatedInspectionType.getAssetType();
-		this.inspectionType = associatedInspectionType.getInspectionType();
+	public ScheduleListDeleteHandler setAssociatedEventType(AssociatedEventType associatedEventType) {
+		this.assetType = associatedEventType.getAssetType();
+		this.eventType = associatedEventType.getEventType();
 		return this;
 	}
 

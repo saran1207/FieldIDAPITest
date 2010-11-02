@@ -16,19 +16,19 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class InspectionSearchContainerTest extends SearchContainerTestCase {
 	
-	private InspectionSearchContainer inspectionSearchContainer;
+	private EventSearchContainer eventSearchContainer;
 	
 	@Before
 	public void setUp() {
 		SecurityFilter filter = new OpenSecurityFilter();
-		inspectionSearchContainer = new InspectionSearchContainer(filter, new TestDoubleLoaderFactory(filter));
+		eventSearchContainer = new EventSearchContainer(filter, new TestDoubleLoaderFactory(filter));
 	}
 	
 	@Test
 	public void single_search_term_no_asterisk_should_be_eq_comparator() throws Exception {
-		inspectionSearchContainer.setSerialNumber("12345");
+		eventSearchContainer.setSerialNumber("12345");
 
-		WhereParameter<?> whereClause = getSingleWhereClause(inspectionSearchContainer);
+		WhereParameter<?> whereClause = getSingleWhereClause(eventSearchContainer);
 
 		assertEquals("asset_serialNumber", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
@@ -41,9 +41,9 @@ public class InspectionSearchContainerTest extends SearchContainerTestCase {
 	
 	@Test
 	public void single_search_term_with_right_asterisk() throws Exception {
-		inspectionSearchContainer.setSerialNumber("12345*");
+		eventSearchContainer.setSerialNumber("12345*");
 
-		WhereParameter<?> whereClause = getSingleWhereClause(inspectionSearchContainer);
+		WhereParameter<?> whereClause = getSingleWhereClause(eventSearchContainer);
 
 		assertEquals("asset_serialNumber", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
@@ -56,9 +56,9 @@ public class InspectionSearchContainerTest extends SearchContainerTestCase {
 	
 	@Test
 	public void single_search_term_with_left_asterisk() throws Exception {
-		inspectionSearchContainer.setSerialNumber("*12345");
+		eventSearchContainer.setSerialNumber("*12345");
 
-		WhereParameter<?> whereClause = getSingleWhereClause(inspectionSearchContainer);
+		WhereParameter<?> whereClause = getSingleWhereClause(eventSearchContainer);
 
 		assertEquals("asset_serialNumber", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());

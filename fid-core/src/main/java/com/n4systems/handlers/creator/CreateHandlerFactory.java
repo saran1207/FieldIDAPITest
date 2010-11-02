@@ -18,7 +18,7 @@ import com.n4systems.handlers.creator.signup.SignUpHandler;
 import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
 import com.n4systems.handlers.creator.signup.SignupReferralHandler;
 import com.n4systems.handlers.creator.signup.SignupReferralHandlerImpl;
-import com.n4systems.model.inspectiontypegroup.InspectionTypeGroupSaver;
+import com.n4systems.model.inspectiontypegroup.EventTypeGroupSaver;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
@@ -62,7 +62,7 @@ public class CreateHandlerFactory {
 
 	private BaseSystemStructureCreateHandler getBaseSystemStructureCreateHandler() {
 		return new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(),
-				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new AssetTypeSaver(), new InspectionTypeGroupSaver(), new StateSetSaver(), new AssetStatusSaver()));
+				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new AssetTypeSaver(), new EventTypeGroupSaver(), new StateSetSaver(), new AssetStatusSaver()));
 	}
 	
 	private AccountPlaceHolderCreateHandler getAccountPlaceHolderCreateHandler() {

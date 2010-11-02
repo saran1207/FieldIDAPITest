@@ -29,7 +29,7 @@ public class AggregateReport {
 		return inspectionTypeGroupsByAssetTypes;
 	}
 
-	public void setInspectionTypeGroupsByAssetTypes(
+	public void setEventTypeGroupsByAssetTypes(
 			List<AggregateReportRecord> inspectionTypeGroupsByAssetTypes) {
 		this.inspectionTypeGroupsByAssetTypes = inspectionTypeGroupsByAssetTypes;
 		

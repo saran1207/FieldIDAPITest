@@ -40,7 +40,7 @@ public class ManagerBackedNextInspectionScheduleService implements NextInspectio
 		
 		for (EventSchedule upcomingSchedule : upcomingSchedules) {
 			if (DateHelper.isEqualIgnoringTime(upcomingSchedule.getNextDate(), newSchedule.getNextDate()) 
-					&& upcomingSchedule.getInspectionType().equals(newSchedule.getInspectionType())) {
+					&& upcomingSchedule.getEventType().equals(newSchedule.getEventType())) {
 				return upcomingSchedule;
 			}
 		}
