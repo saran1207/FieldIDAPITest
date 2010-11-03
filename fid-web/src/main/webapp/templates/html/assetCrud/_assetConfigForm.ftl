@@ -75,13 +75,28 @@
 	</div>
 </div>
 
-<#include "_infoOptions.ftl">
+
+<div class="assetFormGroup">
+	<h2><@s.text name="label.asset_details"/></h2>
+	<div class="infoSet">
+		<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
+		<#if !parentAsset?exists >
+			<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
+		<#else>
+			<span class="fieldHolder" id="assetStatus">${(asset.assetStatus.name?html)!}</span>
+		</#if>		
+	</div>
+
+	<#include "_infoOptions.ftl">
+	
+	<div class="infoSet">
+		<label for="comments" class="label"><@s.text name="label.comments"/></label>
+		<span class="fieldHolder">
+			<@s.select id="commentTemplateSelection" name="commentTemplate" list="commentTemplates" listKey="id" listValue="displayName" emptyOption="true" onchange="changeComments(this)" theme="fieldidSimple"/><br/>
+			<@s.textarea id="comments"  name="comments" theme="fieldidSimple"/>
+		</span>
+	</div>
+</div>
 
 <#include "_fileAttachment.ftl"/>
 
-<#if userSecurityGuard.allowedManageSafetyNetwork == true && publishedState?exists>
-	<div class="infoSet">
-		<label for="publishedState" class="label"><@s.text name="label.publishedstateselector"/></label>
-		<@s.select name="publishedState" list="publishedStates" listKey="id" listValue="name" />
-	</div>
-</#if>

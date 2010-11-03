@@ -22,9 +22,10 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 	
 	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload infoSet'} 
 		).insert( new Element( 'input', { 'type':'hidden', 'name':'uploadedFiles[' + frameCount + '].fileName', value:directory } ) 
+		).insert( new Element( 'label', {'class':"commentsLabel"} ).update("Attachment")
 		).insert( fileName + " " 
 		).insert( new Element( 'a', { id: frameId + "_remove", href:"javascript:void(0)" } ).update( removeText )
-		).insert( new Element( 'div' 
+		).insert( new Element( 'div', {'class':'commentContainer'} 
 			).insert( new Element( 'label', {'class':"label"} ).update( commentsText ) 
 			).insert( new Element( 'span' , {'class':"fieldHolder"}
 				).insert( new Element( 'textarea', {id: 'uploadedFiles[' + frameCount + '].comments', 'rows': '3', 'cols': '50', 'name': 'uploadedFiles[' + frameCount + '].comments'} ) )
@@ -32,7 +33,6 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 		);
 	
 	$(frameId).replace( div );
-	
 	$(frameId + "_remove").onclick = func ;
 }
 
@@ -56,6 +56,3 @@ function addUploadFile(type) {
 	$('uploadedfiles').insert( { bottom: iframe } );
 	frameCount++;
 }
-
-
-

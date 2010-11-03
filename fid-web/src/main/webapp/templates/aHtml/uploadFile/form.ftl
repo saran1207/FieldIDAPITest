@@ -8,6 +8,7 @@
 <#if frameId?exists >
 	
 	<@s.form method="POST" action="uploadFile" namespace="/aHtml/fileUploads" theme="simple"  enctype="multipart/form-data" style="height:20px;">
+		<label><@s.text name="label.attachment"/>:&nbsp;<label>
 		<@s.file name="upload" onchange="$('progress').show(); parent.startFileUpload(); this.form.submit(); parent.completedFileUpload();" />
 		<@s.hidden name="frameId"/>
 		<@s.hidden name="frameCount"/>
