@@ -1,3 +1,5 @@
+${action.setPageType('setup','setup')!}
+
 <title><@s.text name="label.setup" /></title>
 <head>
 	<@n4.includeStyle type="page" href="setup" />

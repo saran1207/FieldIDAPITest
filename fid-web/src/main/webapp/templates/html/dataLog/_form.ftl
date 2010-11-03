@@ -1,4 +1,4 @@
-<title><@s.text name="title.data_log"/></title>
+<title><@s.text name="label.setup" /></title>
 <head><#include "/templates/html/common/_calendar.ftl"/></head>
 
 

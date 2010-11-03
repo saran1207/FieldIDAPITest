@@ -83,9 +83,15 @@
 				</li>
 			</#if>
 			<#if sessionUser.hasSetupAccess()>
-				<li>
-					<a href="<@s.url action="setup" namespace="/"/>" class="speedLink" id="menuSetup"><@s.text name="label.setup" /> </a>
-				</li>
+				<#if sessionUser.hasAccess("managesystemconfig")>
+					<li>
+						<a href="<@s.url action="settings" namespace="/"/>" class="speedLink" id="menuSetup"><@s.text name="label.setup" /> </a>
+					</li>
+				<#else>
+					<li>
+						<a href="<@s.url action="ownersUsersLocations" namespace="/"/>" class="speedLink" id="menuSetup"><@s.text name="label.setup" /> </a>
+					</li>
+				</#if>
 			</#if>
 			
 		</ul>

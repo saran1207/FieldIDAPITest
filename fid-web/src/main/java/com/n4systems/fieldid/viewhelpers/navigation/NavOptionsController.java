@@ -30,6 +30,11 @@ public class NavOptionsController {
 	private String entityIdentifier;
 	private boolean onSafetyNetwork = false;
 
+	private boolean onSetupSettings = false;
+	private boolean onSetupOwners = false;
+	private boolean onSetupAssets = false;
+	private boolean onSetupTemplate = false;
+
 	public NavOptionsController(SessionUser user, SystemSecurityGuard securityGuard) {
 		this.user = user;
 		this.securityGuard = securityGuard;
@@ -62,6 +67,10 @@ public class NavOptionsController {
 			p.load(propertyFile);
 			HierarchicalProperties commonProps = p.getProperties("common");
 			onSetup = commonProps.getBoolean("onSetup");
+			onSetupSettings = commonProps.getBoolean("onSetupSettings");
+			onSetupOwners = commonProps.getBoolean("onSetupOwners");
+			onSetupAssets = commonProps.getBoolean("onSetupAssets");
+			onSetupTemplate = commonProps.getBoolean("onSetupTemplate");
 			onSafetyNetwork = commonProps.getBoolean("onSafetyNetwork");
 			returnToReport = commonProps.getBoolean("returnToReport");
 			title =  commonProps.getString("title");
@@ -175,5 +184,21 @@ public class NavOptionsController {
 	
 	public boolean isOnSafetyNetwork() {
 		return onSafetyNetwork;
+	}
+
+	public boolean isOnSetupSettings() {
+		return onSetupSettings;
+	}
+
+	public boolean isOnSetupOwners() {
+		return onSetupOwners;
+	}
+
+	public boolean isOnSetupAssets() {
+		return onSetupAssets;
+	}
+
+	public boolean isOnSetupTemplate() {
+		return onSetupTemplate;
 	}
 }

@@ -16,6 +16,31 @@
 			<result name="error" type="freemarker">/templates/html/setup/view.ftl</result>
 			<result name="input" type="freemarker">/templates/html/setup/view.ftl</result>
 		</action>
+		
+		<action name="settings" class="com.n4systems.fieldid.actions.SetupAction">
+			<result name="success" type="freemarker">/templates/html/setup/settings.ftl</result>
+		</action>
+
+		<action name="ownersUsersLocations" class="com.n4systems.fieldid.actions.SetupAction">
+			<result name="success" type="freemarker">/templates/html/setup/ownersUsersLocations.ftl</result>
+		</action>
+
+		<action name="assetsAndEvents" class="com.n4systems.fieldid.actions.SetupAction">
+			<result name="success" type="freemarker">/templates/html/setup/assetsAndEvents.ftl</result>
+		</action>
+
+		<action name="templates" class="com.n4systems.fieldid.actions.SetupAction">
+			<result name="success" type="freemarker">/templates/html/setup/templates.ftl</result>
+		</action>
+
+		<action name="import" class="com.n4systems.fieldid.actions.SetupAction">
+			<result name="success" type="freemarker">/templates/html/setup/import.ftl</result>
+		</action>
+
+		<action name="widgets" class="com.n4systems.fieldid.actions.SetupAction">
+			<result name="success" type="freemarker">/templates/html/setup/widgets.ftl</result>
+		</action>
+
 
 		<action name="assetTypes" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeCrud/list.ftl</result>

@@ -1,0 +1,95 @@
+.organizations {
+	background-image: url(../../images/settings-manage-organizations-icon.png);
+}
+
+.systemConfig{
+	background-image: url(../../images/settings-system-settings-icon.png);
+}
+
+.branding {
+
+}
+
+.fieldIdPlan {
+}
+
+.customers {
+	background-image: url(../../images/owner-add-owner-icon.png);
+}
+
+.users{
+	background-image: url(../../images/owner-manager-users-icon.png);
+}
+
+.userRegistrations{
+	background-image: url(../../images/owner-user-registration-icon.png);
+}
+
+.locations{
+	background-image: url(../../images/owner-predefined-locations-icon.png);
+}
+
+.eventTypeGroup{
+	background-image: url(../../images/event-type-group-icon.png);
+}
+
+.eventTypes{
+	background-image: url(../../images/event-types-icon.png);
+}
+
+.eventBooks{
+	background-image: url(../../images/event-books-icon.png);
+}
+
+.assetTypeGroups{
+	background-image: url(../../images/asset-type-groups-icon.png);
+}
+
+.assetTypes{
+	background-image: url(../../images/asset-types-icon.png);
+}
+
+.assetStatusList{
+	background-image: url(../../images/asset-statuses-icon.png);
+}
+
+.autoAttributeCriteria{
+	background-image: url(../../images/templates-auto-attributes-icon.png);
+}
+
+.commentTemplate{
+	background-image: url(../../images/templates-comment-templates-icon.png);
+}
+
+.assetCodeMapping{
+	background-image: url(../../images/templates-product-code-mappings-icon.png);
+}
+
+.setupList{
+	margin-bottom: 30px;
+}
+
+.setupOption{
+	background-repeat: no-repeat;
+	background-position: left 5.5px;
+	margin-left: 30px;
+	padding-left: 50px;
+	margin-top: 20px;
+}
+
+.setupOption h1{
+	font-size: 14px;	
+}
+
+.setupOption p{
+	font-size: 13px;	
+	line-height: 14px;
+}
+
+.setupOption h1, .setupOption p{
+	padding: 5px;
+}
+
+.setupOption a{
+	color: black;
+}
