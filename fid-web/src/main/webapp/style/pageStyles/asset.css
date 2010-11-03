@@ -1,3 +1,10 @@
+
+#assetTypeIndicator{
+	padding: 0;
+	margin-top: 6px;
+	margin-left: 10px;
+}
+
 .serialNumberStatus {
 	margin-left: 25px;
 	font-weight: bold;
@@ -12,37 +19,49 @@
 	margin-bottom:5px;
 }
 
-h2{
-	background-color:#DADFFA;
-}
-
 #registerOverNetworkLinkContainer {
 	padding: 5px;
 }
 
 .assetFormGroup .infoSet{
 	padding-left: 50px;
-	padding-top: 10px;
+	padding-top: 5px;
 	border: none;
 }
 
 .assetFormGroup .infoSet label{
 	text-align:right;
 	padding: 5px;
+	color: #555555;
 }
 
 .assetFormGroup .infoSet input, .assetFormGroup .infoSet select, .assetFormGroup .infoSet textarea, .fieldHolder textarea{
 	padding: 4px;
 	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 250px;
+}
+
+.infoSet .fieldHolder .unitOfMeasure input{
+	width: 230px;                            
+}
+
+.assetFormGroup .infoSet select{
+	width: 260px;
 }
 
 .fluidSets .assetFormGroup .infoSet label{
 	width: 110px;
+	padding-top: 7px;
 }
 .assetFormGroup h2{
-	border: 1px solid #d7d7d7;
-	background-image: url(../../images/identify-bg.png);
-	background-position: center;
+	margin-bottom: 5px;
+	font-size: 1.1em;
+	background-color:#eeeeee;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+	padding-top:3px;
+	padding-bottom:3px;
 }
 
 .assetFormGroup .enlarged{
@@ -52,3 +71,4 @@ h2{
 .enlarged .fieldHolder select{
 	padding: 3px;
 }
+

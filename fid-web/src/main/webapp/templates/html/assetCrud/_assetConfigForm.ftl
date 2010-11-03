@@ -4,20 +4,6 @@
 </head>
 
 <div class="assetFormGroup">
-	<div class="infoSet enlarged">
-		<label for="assetTypeId" class="label"><@s.text name="label.assettype"/></label>
-		<@s.select id="assetType" name="assetTypeId" onchange="updateAssetType(this)">
-			<#include "/templates/html/common/_assetTypeOptions.ftl"/>
-		</@s.select>
-		<span class="fieldHolder updating" id="assetTypeIndicator">
-			<img src="<@s.url value="/images/indicator_mozilla_blu.gif" />" alt="<@s.text name="updating"/>" />
-		</span>	
-	</div>
-</div>
-
-<#include "_assetSerialAndRfidForm.ftl"/>
-
-<div class="assetFormGroup">
 	<h2><@s.text name="label.owner"/></h2>
 	<#if securityGuard.assignedToEnabled >
 		<div class="infoSet">
@@ -70,11 +56,10 @@
 <div class="assetFormGroup">
 	<h2><@s.text name="label.identifieddate"/></h2>
 	<div class="infoSet">
-		<label for="" class="label"><@s.text name="label.identified"/> <#include "../common/_requiredMarker.ftl"/></label>
+		<label for="" class="label"><#include "../common/_requiredMarker.ftl"/><@s.text name="label.identified"/></label>
 		<@s.datetimepicker id="identified" name="identified" type="dateTime"/>
 	</div>
 </div>
-
 
 <div class="assetFormGroup">
 	<h2><@s.text name="label.asset_details"/></h2>
@@ -96,6 +81,13 @@
 			<@s.textarea id="comments"  name="comments" theme="fieldidSimple"/>
 		</span>
 	</div>
+	
+	<#if userSecurityGuard.allowedManageSafetyNetwork == true && publishedState?exists>
+		<div class="infoSet">
+			<label for="publishedState" class="label"><@s.text name="label.visibility"/></label>
+			<@s.select name="publishedState" list="publishedStates" listKey="id" listValue="name" />
+		</div>
+	</#if>
 </div>
 
 <#include "_fileAttachment.ftl"/>
