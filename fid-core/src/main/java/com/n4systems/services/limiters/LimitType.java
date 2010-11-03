@@ -2,7 +2,7 @@ package com.n4systems.services.limiters;
 
 
 public enum LimitType {
-	DISK_SPACE		("Warning: Storage Capacity", "diskSpaceAlert", 90, 95, 99), 
+	DISK_SPACE, 
 	ASSETS			("Warning: Asset Limit", "assetLimitAlert", 90, 95, 99),
 	SECONDARY_ORGS	("Warning: Organization Limit", "secondaryOrgLimitAlert", 90, 95, 99),
 	EMPLOYEE_USERS;

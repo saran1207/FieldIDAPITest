@@ -161,7 +161,7 @@ public class TenantLimitService implements Serializable {
 			ResourceLimit limit = createLimit(primaryOrg.getLimits(), limitLoader, transaction);
 			
 			primaryOrgLimitMap.put(primaryOrg.getTenant().getId(), limit);
-			logger.trace(String.format("%s [%s]: %s", limitLoader.getType().name(), primaryOrg.toString(), limit.toString()));
+			logger.info(String.format("%s [%s]: %s", limitLoader.getType().name(), primaryOrg.toString(), limit.toString()));
 		}
 		
 		private ResourceLimit createLimit(TenantLimit tenantLimit, LimitLoader loader, Transaction transaction) {

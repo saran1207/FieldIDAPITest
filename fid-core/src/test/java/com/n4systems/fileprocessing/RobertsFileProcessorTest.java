@@ -77,6 +77,14 @@ public class RobertsFileProcessorTest {
 		assertNull(dataContainer.getPeakLoadDuration());
 	}
 	
+	@Test
+	public void allows_negative_load_values() throws FileProcessingException {
+		FileDataContainer dataContainer = new FileDataContainer();
+		processor.processFile(dataContainer, produceRobertsFile("roberts_negative_values.log"));
+
+		assertEquals("125.0", dataContainer.getTestDuration());
+	}
+	
 	private void confirmRegularDataFromRobertsProcessing(FileDataContainer dataContainer) {
 		assertEquals(ProofTestType.ROBERTS, dataContainer.getFileType());
 		assertEquals("164.0", dataContainer.getTestDuration());

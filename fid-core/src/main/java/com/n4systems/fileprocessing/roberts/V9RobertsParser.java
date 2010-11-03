@@ -56,7 +56,7 @@ public class V9RobertsParser implements RobertsParser {
 		
 		XYSeries xySeries = new XYSeries("Roberts Chart");
 		
-		Pattern pattern = Pattern.compile("^.*=\\s*(\\d*),.*$");
+		Pattern pattern = Pattern.compile("^.*=\\s*(-?\\d*),.*$");
 		Matcher dataMatcher;
 
 		double peakLoad = 0;
