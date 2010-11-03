@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.shared;
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -19,6 +20,7 @@ import com.opensymphony.xwork2.validator.annotations.Validations;
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag, Permissions.ManageSystemConfig, Permissions.ManageSystemUsers, 
 											Permissions.CreateInspection, Permissions.EditInspection, Permissions.ManageJobs})
 public class UploadFileAction extends AbstractAction {
+	private Logger logger = Logger.getLogger(UploadFileAction.class);
 	private File upload;
 	private String uploadFileName;
 	private String uploadContentType;
@@ -44,6 +46,7 @@ public class UploadFileAction extends AbstractAction {
 			FileUtils.copyFile(upload, tempFilePath);
 			uploadedFilePath = new File( tempFilePath.getParent() ).getName() + '/' + tempFilePath.getName(); 
 		} catch (Exception e) {
+			logger.error(String.format("Failed temp file copy.  uploadFileName [%s], tempFilePath [%s], uploadedFilePath [%s]", uploadFileName, tempFilePath, uploadedFilePath), e);
 			addActionError( getText("error.fileuploadfailed" ) );
 			return ERROR;
 		}
