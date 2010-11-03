@@ -5,6 +5,7 @@ import java.util.List;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
+import com.n4systems.fieldid.actions.helpers.AllEventHelper;
 import com.n4systems.model.Asset;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -12,7 +13,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Event;
 import com.n4systems.security.Permissions;
@@ -27,7 +27,7 @@ public class AssetMergeAction extends AbstractCrud {
 	private final AssetManager assetManager;
 	private final LegacyAsset legacyProductManager;
 	
-	private AllInspectionHelper allInspectionHelper;
+	private AllEventHelper allEventHelper;
 	
 	private Asset losingAsset;
 	private Asset winningAsset;
@@ -110,10 +110,10 @@ public class AssetMergeAction extends AbstractCrud {
 		}
 	}
 
-	public AllInspectionHelper getAllInspectionHelper() {
-		if (allInspectionHelper == null)
-			allInspectionHelper = new AllInspectionHelper(legacyProductManager, losingAsset, getSecurityFilter());
-		return allInspectionHelper;
+	public AllEventHelper getAllInspectionHelper() {
+		if (allEventHelper == null)
+			allEventHelper = new AllEventHelper(legacyProductManager, losingAsset, getSecurityFilter());
+		return allEventHelper;
 	}
 	
 	public Long getExcludeId() {
@@ -122,7 +122,7 @@ public class AssetMergeAction extends AbstractCrud {
 
 	
 	public Long getInspectionCount() {
-		return getAllInspectionHelper().getInspectionCount();
+		return getAllInspectionHelper().getEventCount();
 	}
 
 	public List<Event> getInspections() {
@@ -134,7 +134,7 @@ public class AssetMergeAction extends AbstractCrud {
 	}
 	
 	public Long getLocalInspectionCount() {
-		return getAllInspectionHelper().getLocalInspectionCount();
+		return getAllInspectionHelper().getLocalEventCount();
 	}
 	
 	public boolean isLinked() {

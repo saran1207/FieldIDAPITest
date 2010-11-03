@@ -22,7 +22,7 @@ import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.reporting.mapbuilders.BaseInspectionMapBuilder;
+import com.n4systems.reporting.mapbuilders.BaseEventMapBuilder;
 import com.n4systems.reporting.mapbuilders.LineItemMapBuilder;
 import com.n4systems.reporting.mapbuilders.MapBuilder;
 import com.n4systems.reporting.mapbuilders.AssetTypeMapBuilder;
@@ -45,7 +45,7 @@ public class EventCertificateGenerator {
 	}
 	
 	public EventCertificateGenerator(DateTimeDefiner dateDefiner) {
-		this(dateDefiner, new BaseInspectionMapBuilder(dateDefiner), new AssetTypeMapBuilder(), new ProofTestMapBuilder(), new LineItemMapBuilder());
+		this(dateDefiner, new BaseEventMapBuilder(dateDefiner), new AssetTypeMapBuilder(), new ProofTestMapBuilder(), new LineItemMapBuilder());
 	}
 	
 	public JasperPrint generate(EventReportType type, Event event, Transaction transaction) throws NonPrintableEventType, ReportException {

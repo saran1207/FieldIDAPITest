@@ -30,7 +30,7 @@
 	
 	<bean id="autoAttributeEJBContainer"     	class="com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer"    />
     
-    <bean id="scheduleEJBContainer"     	class="com.n4systems.ejb.wrapper.InspectionScheduleManagerEJBContainer"    />
+    <bean id="scheduleEJBContainer"     	class="com.n4systems.ejb.wrapper.EventScheduleManagerEJBContainer"    />
     
     <bean id="massUpdateEJBContainer"     	class="com.n4systems.ejb.wrapper.MassUpdateManagerEJBContainer"     />
     

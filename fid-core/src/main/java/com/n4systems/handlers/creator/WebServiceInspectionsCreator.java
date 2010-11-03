@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.n4systems.ejb.impl.CreateInspectionsMethodObject;
+import com.n4systems.ejb.impl.CreateEventsMethodObject;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -25,7 +25,7 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	private String transactionGUID;
 	private List<Event> results = null;
 	private NextInspectionScheduleSerivce createNextInspectionScheduleService;
-	private CreateInspectionsMethodObject createInspectionsMethod;
+	private CreateEventsMethodObject createEventsMethod;
 
 	public WebServiceInspectionsCreator(TransactionManager transactionManager, InspectionPersistenceFactory inspectionPersistenceFactory) {
 		super(transactionManager);
@@ -63,12 +63,12 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	}
 
 	private void createTransactionDepenancies(Transaction transaction) {
-		createInspectionsMethod = inspectionPersistenceFactory.createCreateInspectionsMethodObject(transaction);
+		createEventsMethod = inspectionPersistenceFactory.createCreateInspectionsMethodObject(transaction);
 		createNextInspectionScheduleService = inspectionPersistenceFactory.createNextInspectionScheduleService(transaction);
 	}
 
 	private void createInspections(Transaction transaction) {
-		results = createInspectionsMethod.createInspections(transactionGUID, events);
+		results = createEventsMethod.createInspections(transactionGUID, events);
 	}
 
 	private void createSchedules(Transaction transaction) {

@@ -44,8 +44,8 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public PrintAllInspectionCertificatesTask createPrintAllInspectionCertificatesTask(DownloadLink link, String downloadUrl, EventReportType type, List<Long> inspectionIds) {
-		PrintAllInspectionCertificatesTask task = new PrintAllInspectionCertificatesTask(link, downloadUrl);
+	public PrintAllEventCertificatesTask createPrintAllInspectionCertificatesTask(DownloadLink link, String downloadUrl, EventReportType type, List<Long> inspectionIds) {
+		PrintAllEventCertificatesTask task = new PrintAllEventCertificatesTask(link, downloadUrl);
 		task.setReportType(type);
 		task.setInspectionIds(inspectionIds);
 		
@@ -59,8 +59,8 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public PrintInspectionSummaryReportTask createPrintInspectionSummaryReportTask(DownloadLink link, String downloadUrl, ReportDefiner reportDefiner) {
-		PrintInspectionSummaryReportTask task = new PrintInspectionSummaryReportTask(link, downloadUrl);
+	public PrintEventSummaryReportTask createPrintInspectionSummaryReportTask(DownloadLink link, String downloadUrl, ReportDefiner reportDefiner) {
+		PrintEventSummaryReportTask task = new PrintEventSummaryReportTask(link, downloadUrl);
 		task.setReportDefiner(reportDefiner);
 		
 		return task;

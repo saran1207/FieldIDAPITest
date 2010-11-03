@@ -24,8 +24,8 @@ public class ExporterFactory {
 		return new AssetExporter(assetLoader);
 	}
 	
-	public InspectionExporter createInspectionExporter(ListLoader<Event> inspectionLoader, NextEventDateByEventLoader nextDateLoader) {
-		return new InspectionExporter(inspectionLoader, nextDateLoader);
+	public EventExporter createInspectionExporter(ListLoader<Event> inspectionLoader, NextEventDateByEventLoader nextDateLoader) {
+		return new EventExporter(inspectionLoader, nextDateLoader);
 	}
 	
 }

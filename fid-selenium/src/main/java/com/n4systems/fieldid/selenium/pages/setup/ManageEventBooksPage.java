@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import com.n4systems.fieldid.selenium.components.OrgPicker;
-import com.n4systems.fieldid.selenium.datatypes.InspectionBook;
+import com.n4systems.fieldid.selenium.datatypes.EventBook;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -71,7 +71,7 @@ public class ManageEventBooksPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	public void setInspectionBookFormFields(InspectionBook book) {
+	public void setInspectionBookFormFields(EventBook book) {
 		if(book.name != null) {
 			selenium.type("//input[@name='name']", book.name);
 		}

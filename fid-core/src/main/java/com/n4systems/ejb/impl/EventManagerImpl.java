@@ -9,11 +9,11 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.n4systems.ejb.EventManager;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -48,19 +48,19 @@ public class EventManagerImpl implements EventManager {
 	private final ManagerBackedEventSaver eventSaver;
 
 
-	private final EntityManagerLastInspectionDateFinder lastInspectionFinder;
+	private final EntityManagerLastEventDateFinder lastEventFinder;
 
 
-	private final InspectionScheduleManager inspectionScheduleManager;
+	private final EventScheduleManager eventScheduleManager;
 
 	
 	public EventManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
-		this.lastInspectionFinder = new EntityManagerLastInspectionDateFinder(persistenceManager, em);
-		this.inspectionScheduleManager = new InspectionScheduleManagerImpl(em);
+		this.lastEventFinder = new EntityManagerLastEventDateFinder(persistenceManager, em);
+		this.eventScheduleManager = new EventScheduleManagerImpl(em);
 		this.eventSaver = new ManagerBackedEventSaver(new LegacyAssetManager(em),
-				persistenceManager, em, lastInspectionFinder);
+				persistenceManager, em, lastEventFinder);
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class EventManagerImpl implements EventManager {
 		event = persistenceManager.update(event, userId);
 		eventSaver.updateAssetInspectionDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
-		inspectionScheduleManager.restoreScheduleForInspection(event);
+		eventScheduleManager.restoreScheduleForEvent(event);
 		return event;
 	}
 
@@ -299,11 +299,11 @@ public class EventManagerImpl implements EventManager {
 
 	
 	public Date findLastEventDate(EventSchedule schedule) {
-		return lastInspectionFinder.findLastEventDate(schedule);
+		return lastEventFinder.findLastEventDate(schedule);
 	}
 
 	public Date findLastEventDate(Long scheduleId) {
-		return lastInspectionFinder.findLastEventDate(scheduleId);
+		return lastEventFinder.findLastEventDate(scheduleId);
 	}
 
 

@@ -14,6 +14,8 @@ import javax.persistence.NoResultException;
 
 import javax.persistence.Query;
 
+import com.n4systems.ejb.EventScheduleManager;
+import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import org.apache.commons.io.FileUtils;
@@ -26,10 +28,8 @@ import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.AssetCodeMapping;
 
 import com.n4systems.ejb.AutoAttributeManager;
-import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.AutoAttributeManagerImpl;
-import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
@@ -61,7 +61,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 	 protected AssetCodeMappingService assetCodeMappingServiceManager;
 	 protected AutoAttributeManager autoAttributeManager;	
 	 protected LegacyAsset assetManager;
-	 protected InspectionScheduleManager inspectionScheduleManager;
+	 protected EventScheduleManager eventScheduleManager;
 	
 	
 	
@@ -74,7 +74,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 		this.assetCodeMappingServiceManager = new AssetCodeMappingManager(em);
 		this.autoAttributeManager = new AutoAttributeManagerImpl(em);	
 		this.assetManager = new LegacyAssetManager(em);
-		this.inspectionScheduleManager = new InspectionScheduleManagerImpl(em);
+		this.eventScheduleManager = new EventScheduleManagerImpl(em);
 	}
 
 	//TODO remove this only used by asset crud to determine if the asset type has changed.

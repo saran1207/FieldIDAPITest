@@ -6,8 +6,8 @@ import com.n4systems.api.validation.validators.AssetIdentifierValidator;
 import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
 import com.n4systems.api.validation.validators.AssociatedEventTypeValidator;
 import com.n4systems.api.validation.validators.DateValidator;
+import com.n4systems.api.validation.validators.EventStatusValidator;
 import com.n4systems.api.validation.validators.FullNameUserValidator;
-import com.n4systems.api.validation.validators.InspectionStatusValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.YNValidator;
@@ -23,7 +23,7 @@ public class EventView extends ExternalModelView {
 	@ExportField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
 	private Object datePerformed;
 
-	@ExportField(title = "Inspection Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, InspectionStatusValidator.class })
+	@ExportField(title = "Inspection Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, EventStatusValidator.class })
 	private String status;
 
 	@ExportField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })

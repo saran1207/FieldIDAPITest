@@ -5,7 +5,7 @@ package com.n4systems.handlers.creator;
 
 import java.util.List;
 
-import com.n4systems.ejb.impl.CreateInspectionParameter;
+import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
@@ -16,7 +16,7 @@ import com.n4systems.model.SubEvent;
 
 public class NullEventSaver implements EventSaver {
 	@Override
-	public Event createEvent(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
+	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 		return parameterObject.event;
 	}
 

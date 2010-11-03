@@ -181,7 +181,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 	public List<EventType> getInspectionTypes() {
 		if (eventTypes == null) {
 			eventTypes = new ArrayList<EventType>();
-			List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(getAssetType()).load();
+			List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(getAssetType()).load();
 			for (AssociatedEventType associatedEventType : associatedEventTypes) {
 				eventTypes.add(associatedEventType.getEventType());
 			}

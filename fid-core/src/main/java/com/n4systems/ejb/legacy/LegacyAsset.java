@@ -18,8 +18,8 @@ import com.n4systems.model.user.User;
 
 public interface LegacyAsset {
 	
-	public Long countAllInspections( Asset asset, SecurityFilter securityFilter );
-	public Long countAllLocalInspections(Asset asset, SecurityFilter securityFilter);
+	public Long countAllEvents( Asset asset, SecurityFilter securityFilter );
+	public Long countAllLocalEvents(Asset asset, SecurityFilter securityFilter);
 	
 	
 	public Asset create(Asset asset, User modifiedBy) throws SubAssetUniquenessException;
@@ -28,7 +28,7 @@ public interface LegacyAsset {
 	
 	public boolean duplicateSerialNumber( String serialNumber, Long uniqueID, Tenant tenant );
 	
-	public Event findLastInspections( Asset asset, SecurityFilter securityFilter );
+	public Event findLastEvents( Asset asset, SecurityFilter securityFilter );
 	
 	
 	

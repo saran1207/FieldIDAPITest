@@ -4,7 +4,7 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.ConfigManager;
 import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.InspectionScheduleManager;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
@@ -26,7 +26,7 @@ import com.n4systems.ejb.wrapper.AssetManagerEJBContainer;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
-import com.n4systems.ejb.wrapper.InspectionScheduleManagerEJBContainer;
+import com.n4systems.ejb.wrapper.EventScheduleManagerEJBContainer;
 import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
@@ -85,8 +85,8 @@ public class ServiceLocator {
 		return new AutoAttributeManagerEJBContainer();
 	}
 
-	public static final InspectionScheduleManager getInspectionScheduleManager() {
-		return new InspectionScheduleManagerEJBContainer();
+	public static final EventScheduleManager getInspectionScheduleManager() {
+		return new EventScheduleManagerEJBContainer();
 	}
 
 	public static final EventManager getInspectionManager() {

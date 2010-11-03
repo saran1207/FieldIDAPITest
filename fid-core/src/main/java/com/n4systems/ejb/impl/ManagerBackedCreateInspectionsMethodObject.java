@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
+import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -20,7 +20,7 @@ import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.TransactionSupervisor;
 
-public class ManagerBackedCreateInspectionsMethodObject implements CreateInspectionsMethodObject {
+public class ManagerBackedCreateInspectionsMethodObject implements CreateEventsMethodObject {
 	private final PersistenceManager persistenceManager;
 	private final EventSaver eventSaver;
 
@@ -74,7 +74,7 @@ public class ManagerBackedCreateInspectionsMethodObject implements CreateInspect
 				subEvent.setAttachments(new ArrayList<FileAttachment>());
 			}
 			
-			savedEvent = eventSaver.createEvent(new CreateInspectionParameterBuilder(event, event.getModifiedBy().getId())
+			savedEvent = eventSaver.createEvent(new CreateEventParameterBuilder(event, event.getModifiedBy().getId())
 					.withUploadedImages(fileAttachments).build());
 			
 			// handle the subinspection attachments

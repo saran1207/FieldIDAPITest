@@ -10,8 +10,8 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.search.InspectionScheduleAction;
-import com.n4systems.fieldid.actions.search.InspectionScheduleJobAssignment;
+import com.n4systems.fieldid.actions.search.EventScheduleAction;
+import com.n4systems.fieldid.actions.search.EventScheduleJobAssignment;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
@@ -111,11 +111,11 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	}
 	
 	private boolean findScheduleCriteria() {
-		if (getScheduleCriteria(InspectionScheduleAction.SCHEDULE_CRITERIA)) {
+		if (getScheduleCriteria(EventScheduleAction.SCHEDULE_CRITERIA)) {
 			return true;
 		} 
 		
-		return getScheduleCriteria(InspectionScheduleJobAssignment.SCHEDULE_CRITERIA);
+		return getScheduleCriteria(EventScheduleJobAssignment.SCHEDULE_CRITERIA);
 	}
 
 	private boolean getScheduleCriteria(String scheduleCriteriaKey) {

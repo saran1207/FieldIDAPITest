@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.n4systems.api.model.EventView;
 import com.n4systems.api.validation.validators.EventViewValidator;
+import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.EventType;
 import com.n4systems.model.builders.EventBuilder;
@@ -24,14 +25,13 @@ import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
-import com.n4systems.ejb.impl.CreateInspectionParameter;
-import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
+import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.handlers.creator.NullObjectDefaultedInspectionPersistenceFactory;
-import com.n4systems.handlers.creator.inspections.InspectionCreator;
+import com.n4systems.handlers.creator.inspections.EventCreator;
 import com.n4systems.model.Event;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
@@ -45,7 +45,7 @@ public class InspectionImporterTest {
 		
 		Validator<ExternalModelView> validator = new ViewValidator(null);
 		
-		new InspectionImporter(null, validator, null, converter);
+		new EventImporter(null, validator, null, converter);
 		
 		assertSame(converter.getType(), validator.getValidationContext().get(EventViewValidator.INSPECTION_TYPE_KEY));
 	}
@@ -72,18 +72,18 @@ public class InspectionImporterTest {
 		replay(converter);
 		
 		
-		CreateInspectionParameter createInspectionParameter = new CreateInspectionParameterBuilder(event, modifiedBy)
+		CreateEventParameter createEventParameter = new CreateEventParameterBuilder(event, modifiedBy)
 				.withANextInspectionDate(view.getNextInspectionDateAsDate())
 				.doNotCalculateInspectionResult().build();
 
-		InspectionCreator creator = createMock(InspectionCreator.class);
-		expect(creator.create(eq(createInspectionParameter))).andReturn(event);
+		EventCreator creator = createMock(EventCreator.class);
+		expect(creator.create(eq(createEventParameter))).andReturn(event);
 		replay(creator);
 		
 		NullObjectDefaultedInspectionPersistenceFactory inspectionPersistenceFactory = new NullObjectDefaultedInspectionPersistenceFactory();
-		inspectionPersistenceFactory.inspectionCreator = creator;
+		inspectionPersistenceFactory.eventCreator = creator;
 		
-		InspectionImporter importer = new InspectionImporter(null, validator, inspectionPersistenceFactory, converter) {
+		EventImporter importer = new EventImporter(null, validator, inspectionPersistenceFactory, converter) {
 			protected List<EventView> readAllViews() throws IOException, ParseException, MarshalingException {
 				return Arrays.asList(view);
 			}

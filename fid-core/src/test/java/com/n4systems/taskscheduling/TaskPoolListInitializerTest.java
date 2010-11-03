@@ -2,8 +2,8 @@ package com.n4systems.taskscheduling;
 
 import static org.junit.Assert.*;
 
-import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
-import com.n4systems.taskscheduling.task.PrintInspectionSummaryReportTask;
+import com.n4systems.taskscheduling.task.PrintAllEventCertificatesTask;
+import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
 import com.n4systems.util.properties.HierarchicalProperties;
 
 import java.util.Arrays;
@@ -34,11 +34,11 @@ public class TaskPoolListInitializerTest {
 		HierarchicalProperties conf = new HierarchicalProperties();
 		conf.setProperty("pool.0.name", poolNames.get(0));
 		conf.setProperty("pool.0.size", String.valueOf(poolSizes.get(0)));
-		conf.setProperty("pool.0.class.0", PrintAllInspectionCertificatesTask.class.getName());
+		conf.setProperty("pool.0.class.0", PrintAllEventCertificatesTask.class.getName());
 		
 		conf.setProperty("pool.1.name", poolNames.get(1));
 		conf.setProperty("pool.1.size", String.valueOf(poolSizes.get(1)));
-		conf.setProperty("pool.1.class.0", PrintInspectionSummaryReportTask.class.getName());
+		conf.setProperty("pool.1.class.0", PrintEventSummaryReportTask.class.getName());
 
 		conf.setProperty("pool.2.name", poolNames.get(1));
 		conf.setProperty("pool.2.size", String.valueOf(poolSizes.get(1)));
@@ -72,7 +72,7 @@ public class TaskPoolListInitializerTest {
 		HierarchicalProperties conf = new HierarchicalProperties();
 		conf.setProperty("name", poolName);
 		conf.setProperty("size", String.valueOf(poolSize));
-		conf.setProperty("class.0", PrintInspectionSummaryReportTask.class.getName());
+		conf.setProperty("class.0", PrintEventSummaryReportTask.class.getName());
 				
 		TaskPool pool = initializer.initPool(conf);
 		
@@ -91,7 +91,7 @@ public class TaskPoolListInitializerTest {
 	public void test_init_classes() {
 		TaskPool pool = new TaskPool("name", 1);
 
-		Class<?>[] classes = {PrintAllInspectionCertificatesTask.class, PrintInspectionSummaryReportTask.class};
+		Class<?>[] classes = {PrintAllEventCertificatesTask.class, PrintEventSummaryReportTask.class};
 		
 		HierarchicalProperties conf = new HierarchicalProperties();
 		conf.setProperty("0", classes[0].getName());

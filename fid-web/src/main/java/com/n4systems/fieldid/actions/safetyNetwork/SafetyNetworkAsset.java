@@ -14,7 +14,7 @@ import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.InspectionScheduleManager;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
@@ -33,10 +33,10 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 			AssetCodeMappingService assetCodeMappingServiceManager,
 			AssetManager assetManager, OrderManager orderManager,
 			ProjectManager projectManager,
-			InspectionScheduleManager inspectionScheduleManager) {
+			EventScheduleManager eventScheduleManager) {
 		super(assetTypeManager, legacyAssetManager, persistenceManager,
                 assetCodeMappingServiceManager, assetManager, orderManager,
-				projectManager, inspectionScheduleManager);
+				projectManager, eventScheduleManager);
 	}
 	
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
@@ -91,13 +91,13 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 
     public List<EventSchedule> getInspectionSchedules() {
         if (eventSchedules == null) {
-            eventSchedules = inspectionScheduleManager.getAvailableSchedulesFor(asset);
+            eventSchedules = eventScheduleManager.getAvailableSchedulesFor(asset);
         }
         return eventSchedules;
     }
 
     public List<Event> getInspections() {
-        return getLoaderFactory().createInspectionsByAssetIdLoader().setAssetId(asset.getId()).load();
+        return getLoaderFactory().createEventsByAssetIdLoader().setAssetId(asset.getId()).load();
     }
 
 	public boolean isPublishedCatalog(Tenant tenant) {

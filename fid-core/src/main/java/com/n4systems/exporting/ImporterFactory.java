@@ -84,7 +84,7 @@ public class ImporterFactory {
 				loaderFactory.createOrgByNameLoader(), 
 				loaderFactory.createSmartSearchListLoader(), 
 				loaderFactory.createAssetStatusByNameLoader(), 
-				loaderFactory.createInspectionBookFindOrCreateLoader(), 
+				loaderFactory.createEventBookFindOrCreateLoader(),
 				loaderFactory.createUserByFullNameLoader());
 		
 		converter.setType(type);
@@ -103,8 +103,8 @@ public class ImporterFactory {
 		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
 	}
 
-	public InspectionImporter createInspectionImporter(MapReader reader, Long modifiedBy, EventType type) {
-		InspectionImporter importer = new InspectionImporter(reader, createViewValidator(), createInspectionPersistenceFactory(), createInspectionToModelConverter(type));
+	public EventImporter createInspectionImporter(MapReader reader, Long modifiedBy, EventType type) {
+		EventImporter importer = new EventImporter(reader, createViewValidator(), createInspectionPersistenceFactory(), createInspectionToModelConverter(type));
 		importer.setModifiedBy(modifiedBy);
 		return importer;
 	}

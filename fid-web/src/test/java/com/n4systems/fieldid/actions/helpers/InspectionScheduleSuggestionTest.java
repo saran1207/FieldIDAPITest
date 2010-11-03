@@ -17,14 +17,14 @@ public class InspectionScheduleSuggestionTest {
 	@Test public void should_suggested_schedule_with_no_schedulesid() {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		
-		InspectionScheduleSuggestion suggestion = new InspectionScheduleSuggestion(schedules);
-		assertEquals(InspectionScheduleSuggestion.NO_SCHEDULE, suggestion.getSuggestedScheduleId());
+		EventScheduleSuggestion suggestion = new EventScheduleSuggestion(schedules);
+		assertEquals(EventScheduleSuggestion.NO_SCHEDULE, suggestion.getSuggestedScheduleId());
 	}
 	
 	@Test public void should_suggested_schedule_with_1_schedule_inside_30_days() {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		schedules.add(createSchedule(DateHelper.getTomorrow(), 1L));
-		InspectionScheduleSuggestion suggestion = new InspectionScheduleSuggestion(schedules);
+		EventScheduleSuggestion suggestion = new EventScheduleSuggestion(schedules);
 		assertEquals(new Long(1), suggestion.getSuggestedScheduleId());
 	}
 	
@@ -32,7 +32,7 @@ public class InspectionScheduleSuggestionTest {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		schedules.add(createSchedule(DateHelper.getTomorrow(), 1L));
 		schedules.add(createSchedule(DateHelper.getToday(), 2L));
-		InspectionScheduleSuggestion suggestion = new InspectionScheduleSuggestion(schedules);
+		EventScheduleSuggestion suggestion = new EventScheduleSuggestion(schedules);
 		assertEquals(new Long(2), suggestion.getSuggestedScheduleId());
 	}
 	
@@ -40,7 +40,7 @@ public class InspectionScheduleSuggestionTest {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		schedules.add(createSchedule(DateHelper.getTomorrow(), 1L));
 		schedules.add(createSchedule(DateHelper.getYesterday(), 2L));
-		InspectionScheduleSuggestion suggestion = new InspectionScheduleSuggestion(schedules);
+		EventScheduleSuggestion suggestion = new EventScheduleSuggestion(schedules);
 		assertEquals(new Long(2), suggestion.getSuggestedScheduleId());
 	}
 	
@@ -48,15 +48,15 @@ public class InspectionScheduleSuggestionTest {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		schedules.add(createSchedule(DateHelper.addDaysToDate(DateHelper.getToday(),32L), 1L));
 		schedules.add(createSchedule(DateHelper.addDaysToDate(DateHelper.getToday(),-41L), 2L));
-		InspectionScheduleSuggestion suggestion = new InspectionScheduleSuggestion(schedules);
-		assertEquals(InspectionScheduleSuggestion.NO_SCHEDULE, suggestion.getSuggestedScheduleId());
+		EventScheduleSuggestion suggestion = new EventScheduleSuggestion(schedules);
+		assertEquals(EventScheduleSuggestion.NO_SCHEDULE, suggestion.getSuggestedScheduleId());
 	}
 	
 	@Test public void should_suggested_schedule_with_today_vs_yesterday() {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		schedules.add(createSchedule(DateHelper.getToday(), 1L));
 		schedules.add(createSchedule(DateHelper.getYesterday(), 2L));
-		InspectionScheduleSuggestion suggestion = new InspectionScheduleSuggestion(schedules);
+		EventScheduleSuggestion suggestion = new EventScheduleSuggestion(schedules);
 		assertEquals(new Long(1), suggestion.getSuggestedScheduleId());
 	}
 	
@@ -64,7 +64,7 @@ public class InspectionScheduleSuggestionTest {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		schedules.add(createSchedule(DateHelper.getToday(), 1L));
 		schedules.add(createSchedule(DateHelper.getTomorrow(), 2L));
-		InspectionScheduleSuggestion suggestion = new InspectionScheduleSuggestion(schedules);
+		EventScheduleSuggestion suggestion = new EventScheduleSuggestion(schedules);
 		assertEquals(new Long(1), suggestion.getSuggestedScheduleId());
 	}
 	

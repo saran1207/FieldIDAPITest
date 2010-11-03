@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.datatypes.InspectionType;
+import com.n4systems.fieldid.selenium.datatypes.EventType;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
@@ -115,9 +115,9 @@ public class ManageInspectionTypes {
 		assertTrue(selenium.isElementPresent(editInspectionTypeCancelLinkLocator));
 	}
 
-	public InspectionType getInspectionType() {
+	public EventType getInspectionType() {
 		assertEditInspectionTypePage();
-		InspectionType result = new InspectionType(null);
+		EventType result = new EventType(null);
 		result.setName(selenium.getValue(editInspectionTypeNameTextFieldLocator));
 		result.setGroup(selenium.getSelectedLabel(editInspectionTypeGroupSelectListLocator));
 		result.setPrintable(selenium.isChecked(editInspectionTypePrintableCheckboxLocator));

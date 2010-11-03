@@ -62,21 +62,21 @@ import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionLoader;
 import com.n4systems.model.safetynetwork.CustomerOrgConnectionsListLoader;
+import com.n4systems.model.safetynetwork.EventsByAssetIdLoader;
 import com.n4systems.model.safetynetwork.HasLinkedAssetsLoader;
-import com.n4systems.model.safetynetwork.InspectionsByAssetIdLoader;
 import com.n4systems.model.safetynetwork.PaginatedConnectionListLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssetLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkAssignedAssetInspectionLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkAssignedAssetEventLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkInspectionLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkEventLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkPreAssignedAssetLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentListLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssetTypeLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetCountLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetInspectionLoader;
-import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredOrAssignedInspectionLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredAssetEventLoader;
+import com.n4systems.model.safetynetwork.SafetyNetworkRegisteredOrAssignedEventLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkSmartSearchLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkUnregisteredAssetCountLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -123,7 +123,7 @@ public class LoaderFactory implements Serializable {
 		return new AllPredefinedLocationsPaginatedLoader(filter);
 	}
 
-	public AssociatedEventTypesLoader createAssociatedInspectionTypesLoader() {
+	public AssociatedEventTypesLoader createAssociatedEventTypesLoader() {
 		return new AssociatedEventTypesLoader(filter);
 	}
 	
@@ -231,19 +231,19 @@ public class LoaderFactory implements Serializable {
 		return createUserListableLoader().employeesOnly();
 	}
 
-	public IncompleteEventSchedulesListLoader createIncompleteInspectionSchedulesListLoader() {
+	public IncompleteEventSchedulesListLoader createIncompleteEventSchedulesListLoader() {
 		return new IncompleteEventSchedulesListLoader(filter);
 	}
 
-	public EventBookByNameLoader createInspectionBookByNameLoader() {
+	public EventBookByNameLoader createEventBookByNameLoader() {
 		return new EventBookByNameLoader(filter);
 	}
 
-	public EventBookFindOrCreateLoader createInspectionBookFindOrCreateLoader() {
+	public EventBookFindOrCreateLoader createEventBookFindOrCreateLoader() {
 		return new EventBookFindOrCreateLoader(filter);
 	}
 
-	public EventBookListLoader createInspectionBookListLoader() {
+	public EventBookListLoader createEventBookListLoader() {
 		return new EventBookListLoader(filter);
 	}
 
@@ -263,7 +263,7 @@ public class LoaderFactory implements Serializable {
 		return new InternalOrgListableLoader(filter);
 	}
 
-	public LastEventLoader createLastInspectionLoader() {
+	public LastEventLoader createLastEventLoader() {
 		return new LastEventLoader(filter);
 	}
 	
@@ -271,7 +271,7 @@ public class LoaderFactory implements Serializable {
 		return new LatestEulaAcceptanceLoader(filter);
 	}
 
-	public NextEventDateByEventLoader createNextInspectionDateByInspectionLoader() {
+	public NextEventDateByEventLoader createNextEventDateByEventLoader() {
 		return new NextEventDateByEventLoader(filter);
 	}
 
@@ -359,8 +359,8 @@ public class LoaderFactory implements Serializable {
 		return new AssetTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
 	}
 
-	public SafetyNetworkInspectionLoader createSafetyNetworkAssignedAssetInspectionLoader() {
-		return new SafetyNetworkAssignedAssetInspectionLoader(filter);
+	public SafetyNetworkEventLoader createSafetyNetworkAssignedAssetEventLoader() {
+		return new SafetyNetworkAssignedAssetEventLoader(filter);
 	}
 
 	public SafetyNetworkAttachmentLoader createSafetyNetworkAttachmentLoader() {
@@ -371,12 +371,12 @@ public class LoaderFactory implements Serializable {
 		return new SafetyNetworkBackgroundSearchLoader(filter);
 	}
 
-	public SafetyNetworkInspectionLoader createSafetyNetworkInspectionLoader(boolean forAssignedAsset) {
-		return (forAssignedAsset) ? createSafetyNetworkAssignedAssetInspectionLoader() : createSafetyNetworkRegisteredAssetInspectionLoader();
+	public SafetyNetworkEventLoader createSafetyNetworkEventLoader(boolean forAssignedAsset) {
+		return (forAssignedAsset) ? createSafetyNetworkAssignedAssetEventLoader() : createSafetyNetworkRegisteredAssetEventLoader();
 	}
 
-	public SafetyNetworkRegisteredOrAssignedInspectionLoader createSafetyNetworkInspectionLoaderAssignedOrRegistered() {
-		return new SafetyNetworkRegisteredOrAssignedInspectionLoader(filter);
+	public SafetyNetworkRegisteredOrAssignedEventLoader createSafetyNetworkEventLoaderAssignedOrRegistered() {
+		return new SafetyNetworkRegisteredOrAssignedEventLoader(filter);
 	}
 
 	public SafetyNetworkAssetAttachmentListLoader createSafetyNetworkAssetAttachmentListLoader() {
@@ -395,8 +395,8 @@ public class LoaderFactory implements Serializable {
 		return new SafetyNetworkAssetTypeLoader();
 	}
 
-	public SafetyNetworkInspectionLoader createSafetyNetworkRegisteredAssetInspectionLoader() {
-		return new SafetyNetworkRegisteredAssetInspectionLoader(filter);
+	public SafetyNetworkEventLoader createSafetyNetworkRegisteredAssetEventLoader() {
+		return new SafetyNetworkRegisteredAssetEventLoader(filter);
 	}
 
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
@@ -487,8 +487,8 @@ public class LoaderFactory implements Serializable {
         return new SafetyNetworkRegisteredAssetCountLoader();
     }
 
-    public InspectionsByAssetIdLoader createInspectionsByAssetIdLoader() {
-        return new InspectionsByAssetIdLoader(filter);
+    public EventsByAssetIdLoader createEventsByAssetIdLoader() {
+        return new EventsByAssetIdLoader(filter);
     }
 
     public AssetAlreadyRegisteredLoader createAssetAlreadyRegisteredLoader() {

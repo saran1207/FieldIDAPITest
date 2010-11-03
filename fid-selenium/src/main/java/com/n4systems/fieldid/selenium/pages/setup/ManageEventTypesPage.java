@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.datatypes.InspectionForm;
-import com.n4systems.fieldid.selenium.datatypes.InspectionFormCriteria;
-import com.n4systems.fieldid.selenium.datatypes.InspectionFormObservations;
-import com.n4systems.fieldid.selenium.datatypes.InspectionFormSection;
-import com.n4systems.fieldid.selenium.datatypes.InspectionType;
+import com.n4systems.fieldid.selenium.datatypes.EventForm;
+import com.n4systems.fieldid.selenium.datatypes.EventFormCriteria;
+import com.n4systems.fieldid.selenium.datatypes.EventFormObservations;
+import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
+import com.n4systems.fieldid.selenium.datatypes.EventType;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -97,30 +97,30 @@ public class ManageEventTypesPage extends FieldIDPage {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + eventName + "')]");
 	}
 
-	public void setFormFields(InspectionType inspectionType) {
-		if(inspectionType.getName() != null) {
-			selenium.type("//input[@name='name']", inspectionType.getName());
+	public void setFormFields(EventType eventType) {
+		if(eventType.getName() != null) {
+			selenium.type("//input[@name='name']", eventType.getName());
 		}
-		if(inspectionType.getGroup() != null) {
-			selenium.select("//select[@name='group']", inspectionType.getGroup());
+		if(eventType.getGroup() != null) {
+			selenium.select("//select[@name='group']", eventType.getGroup());
 		}
-		if (inspectionType.isPrintable()) {
+		if (eventType.isPrintable()) {
 			selenium.check("//input[@name='printable']");
 		}
-		if(inspectionType.isMasterInspection()) {
+		if(eventType.isMasterInspection()) {
 			selenium.check("//input[@name='master']");
 		}
-		if (inspectionType.isAssignedToAvailable()) {
+		if (eventType.isAssignedToAvailable()) {
 			selenium.check("//input[@name='assignedToAvailable']");
 		}
-		if(inspectionType.getSupportedProofTestTypes() != null) {
-			for (String proofType : inspectionType.getSupportedProofTestTypes()) {
+		if(eventType.getSupportedProofTestTypes() != null) {
+			for (String proofType : eventType.getSupportedProofTestTypes()) {
 				selenium.check("//input[contains(@name,'" + proofType + "') and @value='true']");
 			}
 		}
-		if(inspectionType.getInspectionAttributes() != null) {
+		if(eventType.getInspectionAttributes() != null) {
 			int attributeCount = 0;
-			for (String attribute : inspectionType.getInspectionAttributes()) {
+			for (String attribute : eventType.getInspectionAttributes()) {
 				clickAddAttribute();
 				selenium.type("//input[@name='infoFields[" + attributeCount + "]']", attribute);
 				attributeCount++;
@@ -157,10 +157,10 @@ public class ManageEventTypesPage extends FieldIDPage {
 		waitForAjax();
 	}
 
-	public void setInpectionFormFields(InspectionForm inspectionForm) {
+	public void setEventFormFields(EventForm eventForm) {
 		int sectionCount = 0;
-		if (!inspectionForm.getSections().isEmpty()) {
-			for (InspectionFormSection section : inspectionForm.getSections()) {
+		if (!eventForm.getSections().isEmpty()) {
+			for (EventFormSection section : eventForm.getSections()) {
 				clickAddSection();
 				selenium.type("//input[@name='criteriaSections[" + sectionCount + "].title']", section.getSectionName());
 				if(!section.getCriteria().isEmpty()) {
@@ -171,9 +171,9 @@ public class ManageEventTypesPage extends FieldIDPage {
 		}
 	}
 
-	private void addCriteria(int sectionCount, List<InspectionFormCriteria> criterion) {
+	private void addCriteria(int sectionCount, List<EventFormCriteria> criterion) {
 		int criteriaCount = 0;
-		for (InspectionFormCriteria criteria : criterion) {			
+		for (EventFormCriteria criteria : criterion) {
 			clickAddCriteria(sectionCount);
 			if(criteria.getCriteriaLabel() != null) {
 				selenium.type("//input[@name='criteriaSections[" + sectionCount + "].criteria[" + criteriaCount + "].displayText']", criteria.getCriteriaLabel());
@@ -193,7 +193,7 @@ public class ManageEventTypesPage extends FieldIDPage {
 		}
 	}
 
-	private void addObservations(int sectionCount, int criteriaCount, InspectionFormObservations observations) {		
+	private void addObservations(int sectionCount, int criteriaCount, EventFormObservations observations) {
 		if(!observations.getRecommendations().isEmpty()) {
 			int recCount = 0;
 			for(String rec : observations.getRecommendations()) {
@@ -214,33 +214,33 @@ public class ManageEventTypesPage extends FieldIDPage {
 		}
 	}
 
-	public void clickSaveInspectionForm() {
+	public void clickSaveEventForm() {
 		selenium.click("//input[@name='hbutton.save']");
 		waitForPageToLoad();
 	}
 
-	public void verifyInspectionTypeSaved() {
+	public void verifyEventTypeSaved() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Inspection Type Saved", actionMessages.get(0).trim());
 	}
 
-	public void verifyInspectionFormSaved() {
+	public void verifyEventFormSaved() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Inspection Form saved.", actionMessages.get(0).trim());
 	}
 	
-	public void verifyInspectionFormDeleted() {
+	public void verifyEventFormDeleted() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Inspection Type is currently being deleted for you. This may take some time for the process to complete.", actionMessages.get(0).trim());
 	}
 
-	public void validateCopiedInspection(String inspectionName) {
+	public void validateCopiedEvent(String eventName) {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
-		assertEquals("Your Inspection Type has been copied and will appear below with the name - " + inspectionName, actionMessages.get(0).trim());
+		assertEquals("Your Inspection Type has been copied and will appear below with the name - " + eventName, actionMessages.get(0).trim());
 	}
 	
 }

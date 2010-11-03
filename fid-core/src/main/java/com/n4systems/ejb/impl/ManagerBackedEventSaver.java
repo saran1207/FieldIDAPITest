@@ -54,7 +54,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		this.lastEventDateFinder = lastEventDateFinder;
 	}
 
-	public Event createEvent(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
+	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 		// if the inspection has no group, lets create a new one now
 		if (parameterObject.event.getGroup() == null) {
 			parameterObject.event.setGroup(new EventGroup());

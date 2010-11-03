@@ -16,7 +16,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 @SuppressWarnings("serial")
 public abstract class DownloadAction extends AbstractAction {
 
-	private static Logger logger = Logger.getLogger(DownloadAttachedInspectionFile.class);
+	private static Logger logger = Logger.getLogger(DownloadAttachedEventFile.class);
 	protected Long uniqueID;
 	protected String fileName;
 	protected Integer fileSize;

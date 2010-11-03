@@ -87,39 +87,39 @@
 		</action>
 
 		<action name="eventScheduleEdit" method="edit"
-			class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+			class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="input" type="freemarker">/templates/ajax/eventScheduleCrud/edit.ftl</result>
 		</action>
 
 		<action name="eventScheduleShow" method="show"
-			class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+			class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventScheduleCrud/show.ftl</result>
 		</action>
 
 		<action name="eventScheduleSave" method="save"
-			class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+			class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="input" type="freemarker">/templates/ajax/eventScheduleCrud/edit.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/eventScheduleCrud/save.ftl</result>
 		</action>
 		
 		<action name="eventScheduleAssignToJob" method="save"
-			class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+			class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="input" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/eventScheduleCrud/assignToJob.ftl</result>
 		</action>
 		
 		<action name="eventScheduleCreate" method="create"
-			class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+			class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="input" type="freemarker">/templates/ajax/eventScheduleCrud/add.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/eventScheduleCrud/create.ftl</result>
 		</action>
 
-		<action name="eventScheduleStopProgress" method="stopProgress"	class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+		<action name="eventScheduleStopProgress" method="stopProgress"	class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventScheduleCrud/stopProgress.ftl</result>
 		</action>
 
 		<action name="eventScheduleDelete" method="delete"
-			class="com.n4systems.fieldid.actions.InspectionScheduleCrud">
+			class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventScheduleCrud/delete.ftl</result>
 		</action>
 
@@ -145,17 +145,17 @@
 		</action>
 
 		<action name="sectionAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.InspectionFormSection">
+			class="com.n4systems.fieldid.actions.inspection.EventFormSection">
 			<result name="success" type="freemarker">/templates/ajax/eventForm/addSection.ftl</result>
 		</action>
 
 		<action name="criteriaAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.InspectionFormSection">
+			class="com.n4systems.fieldid.actions.inspection.EventFormSection">
 			<result name="success" type="freemarker">/templates/ajax/eventForm/addCriteria.ftl</result>
 		</action>
 
 		<action name="observationAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.InspectionFormSection">
+			class="com.n4systems.fieldid.actions.inspection.EventFormSection">
 			<result name="success" type="freemarker">/templates/ajax/observationsCrud/addObservation.ftl</result>
 		</action>
 
@@ -164,27 +164,27 @@
 		
 
 		<action name="eventBookOpen" method="open"
-			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			class="com.n4systems.fieldid.actions.inspection.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/open.ftl</result>
 		</action>
 
 		<action name="eventBookClose" method="close"
-			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			class="com.n4systems.fieldid.actions.inspection.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/close.ftl</result>
 		</action>
 
 		<action name="eventBookDelete" method="delete"
-			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			class="com.n4systems.fieldid.actions.inspection.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/delete.ftl</result>
 		</action>
 		
 		<action name="eventAttributeAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.InspectionAttributeAction">
+			class="com.n4systems.fieldid.actions.inspection.EventAttributeAction">
 			<result name="success" type="freemarker">/templates/ajax/eventType/addAttribute.ftl</result>
 		</action>
 
 		<action name="eventBooks" method="lPList"
-			class="com.n4systems.fieldid.actions.inspection.InspectionBookCrud">
+			class="com.n4systems.fieldid.actions.inspection.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/list.ftl</result>
 		</action>
 
@@ -311,13 +311,13 @@
 			<result name="oneFound" type="freemarker">/templates/ajax/identifyCrud/listAssets.ftl</result>
 		</action>
 
-		<action name="reportDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.InspectionReportAction">
+		<action name="reportDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.EventReportAction">
 			<result name="success" type="freemarker">/templates/ajax/report/dynamicColumns.ftl</result>
 		</action>
 		<action name="searchDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.AssetSearchAction">
 			<result name="success" type="freemarker">/templates/ajax/search/dynamicColumns.ftl</result>
 		</action>
-		<action name="scheduleDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.InspectionScheduleAction">
+		<action name="scheduleDynamicColumns" method="getDynamicColumnOptions" class="com.n4systems.fieldid.actions.search.EventScheduleAction">
 			<result name="success" type="freemarker">/templates/ajax/schedule/dynamicColumns.ftl</result>
 		</action>
 			
@@ -422,15 +422,15 @@
 			<result name="success" type="freemarker">/templates/ajax/userCrud/sendWelcomeEmail.ftl</result>
 		</action>
 		
-		<action name="eventImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.inspection.InspectionImportAction">
+		<action name="eventImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.inspection.EventImportAction">
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
 		
-		<action name="addSchedule" method="add" class="com.n4systems.fieldid.actions.inspection.AddInspectionScheduleAjaxAction">
+		<action name="addSchedule" method="add" class="com.n4systems.fieldid.actions.inspection.AddEventScheduleAjaxAction">
 			<result name="success" type="freemarker">/templates/ajax/eventCrud/eventSchedule.ftl</result>
 		</action>
 		
-		<action name="autoSuggestSchedule" method="autoSuggest" class="com.n4systems.fieldid.actions.inspection.AddInspectionScheduleAjaxAction">
+		<action name="autoSuggestSchedule" method="autoSuggest" class="com.n4systems.fieldid.actions.inspection.AddEventScheduleAjaxAction">
 			<result name="success" type="freemarker">/templates/ajax/eventCrud/eventSchedule.ftl</result>
 		</action>
 		

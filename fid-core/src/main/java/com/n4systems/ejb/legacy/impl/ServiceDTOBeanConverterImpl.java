@@ -13,6 +13,8 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.ejb.EventScheduleManager;
+import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetTypeSchedule;
@@ -28,9 +30,7 @@ import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
@@ -129,7 +129,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 	private PersistenceManager persistenceManager;
 	
-	private InspectionScheduleManager inspectionScheduleManager;
+	private EventScheduleManager eventScheduleManager;
 	
 	private SerialNumberCounter serialNumberCounter;
 
@@ -141,7 +141,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	public ServiceDTOBeanConverterImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
-		this.inspectionScheduleManager = new InspectionScheduleManagerImpl(em);
+		this.eventScheduleManager = new EventScheduleManagerImpl(em);
 		this.serialNumberCounter = new SerialNumberCounterManager(em);
 	}
 
@@ -300,7 +300,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			}
 		}
 
-		List<EventSchedule> schedules = inspectionScheduleManager.getAvailableSchedulesFor(asset);
+		List<EventSchedule> schedules = eventScheduleManager.getAvailableSchedulesFor(asset);
 		for (EventSchedule schedule : schedules) {
 			productDTO.getSchedules().add(convert(schedule));
 		}

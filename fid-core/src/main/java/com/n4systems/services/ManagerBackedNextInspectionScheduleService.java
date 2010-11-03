@@ -2,17 +2,17 @@ package com.n4systems.services;
 
 import java.util.List;
 
-import com.n4systems.ejb.InspectionScheduleManager;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.util.DateHelper;
 
 public class ManagerBackedNextInspectionScheduleService implements NextInspectionScheduleSerivce {
 
 	
-	private final InspectionScheduleManager inspectionScheduleManager;
+	private final EventScheduleManager eventScheduleManager;
 	
-	public ManagerBackedNextInspectionScheduleService(InspectionScheduleManager inspectionScheduleManager) {
-		this.inspectionScheduleManager = inspectionScheduleManager;
+	public ManagerBackedNextInspectionScheduleService(EventScheduleManager eventScheduleManager) {
+		this.eventScheduleManager = eventScheduleManager;
 	}
 	
 	
@@ -28,7 +28,7 @@ public class ManagerBackedNextInspectionScheduleService implements NextInspectio
 		EventSchedule eventSchedule = findExistingSchedule(schedule);
 		
 		if (eventSchedule == null) {
-			eventSchedule = inspectionScheduleManager.update(schedule);
+			eventSchedule = eventScheduleManager.update(schedule);
 		}
 		
 		return eventSchedule;
@@ -36,7 +36,7 @@ public class ManagerBackedNextInspectionScheduleService implements NextInspectio
 
 
 	private EventSchedule findExistingSchedule(EventSchedule newSchedule) {
-		List<EventSchedule> upcomingSchedules = inspectionScheduleManager.getAvailableSchedulesFor(newSchedule.getAsset());
+		List<EventSchedule> upcomingSchedules = eventScheduleManager.getAvailableSchedulesFor(newSchedule.getAsset());
 		
 		for (EventSchedule upcomingSchedule : upcomingSchedules) {
 			if (DateHelper.isEqualIgnoringTime(upcomingSchedule.getNextDate(), newSchedule.getNextDate()) 

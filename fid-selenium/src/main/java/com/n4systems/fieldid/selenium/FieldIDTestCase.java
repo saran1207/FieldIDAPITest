@@ -33,8 +33,8 @@ public abstract class FieldIDTestCase {
     private static final int SHUTDOWN_ATTEMPTS = 5;
     private static final int SHUTDOWN_RETRY_INTERVAL_MS = 5000;
 
-	private String host = System.getProperty("selenium-server", "localhost");
-	private int port = Integer.parseInt(System.getProperty("selenium-port", "7777"));
+	private String host = System.getProperty("selenium-server", "tools.n4systems.net");
+	private int port = Integer.parseInt(System.getProperty("selenium-port", "4444"));
 //	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
 	private String browser = System.getProperty("fieldid-browser", "*firefox");
 	private String protocol = System.getProperty("fieldid-protocol", "http");

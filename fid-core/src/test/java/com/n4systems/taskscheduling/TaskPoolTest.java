@@ -2,8 +2,8 @@ package com.n4systems.taskscheduling;
 
 import static org.junit.Assert.*;
 
-import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
-import com.n4systems.taskscheduling.task.PrintInspectionSummaryReportTask;
+import com.n4systems.taskscheduling.task.PrintAllEventCertificatesTask;
+import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -23,11 +23,11 @@ public class TaskPoolTest {
 	public void test_can_execute() {
 		TaskPool pool = new TaskPool("name", 0);
 		
-		pool.getExecutableTasks().add(PrintAllInspectionCertificatesTask.class);
-		pool.getExecutableTasks().add(PrintInspectionSummaryReportTask.class);
+		pool.getExecutableTasks().add(PrintAllEventCertificatesTask.class);
+		pool.getExecutableTasks().add(PrintEventSummaryReportTask.class);
 		
-		assertTrue(pool.canExecute(PrintAllInspectionCertificatesTask.class));
-		assertTrue(pool.canExecute(PrintInspectionSummaryReportTask.class));
+		assertTrue(pool.canExecute(PrintAllEventCertificatesTask.class));
+		assertTrue(pool.canExecute(PrintEventSummaryReportTask.class));
 		
 		assertFalse(pool.canExecute(Thread.class));
 	}

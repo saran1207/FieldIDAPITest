@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.asset;
 import java.util.HashMap;
 import java.util.List;
 
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
@@ -10,7 +11,6 @@ import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
 import com.n4systems.model.safetynetwork.SafetyNetworkAssetAttachmentListLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
@@ -23,8 +23,8 @@ public class TraceabilityCrud extends AssetCrud {
 	private boolean networkProduct;
 
 	public TraceabilityCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
-			AssetCodeMappingService assetCodeMappingServiceManager, AssetManager assetManager, OrderManager orderManager, ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
-		super(assetTypeManager, legacyAssetManager, persistenceManager, assetCodeMappingServiceManager, assetManager, orderManager, projectManager, inspectionScheduleManager);
+			AssetCodeMappingService assetCodeMappingServiceManager, AssetManager assetManager, OrderManager orderManager, ProjectManager projectManager, EventScheduleManager eventScheduleManager) {
+		super(assetTypeManager, legacyAssetManager, persistenceManager, assetCodeMappingServiceManager, assetManager, orderManager, projectManager, eventScheduleManager);
 	}
 	
 		

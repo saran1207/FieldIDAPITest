@@ -3,9 +3,9 @@
  */
 package com.n4systems.handlers.creator;
 
-import com.n4systems.ejb.impl.CreateInspectionsMethodObject;
+import com.n4systems.ejb.impl.CreateEventsMethodObject;
 import com.n4systems.ejb.impl.EventSaver;
-import com.n4systems.handlers.creator.inspections.InspectionCreator;
+import com.n4systems.handlers.creator.inspections.EventCreator;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.services.NextInspectionScheduleSerivce;
@@ -13,8 +13,8 @@ import com.n4systems.services.NextInspectionScheduleSerivce;
 public class NullObjectDefaultedInspectionPersistenceFactory implements InspectionPersistenceFactory {
 	public EventSaver eventSaver = new NullEventSaver();
 	public AuditLogger auditLogger = new NullAuditLogger();
-	public InspectionCreator inspectionCreator = null;
-	public CreateInspectionsMethodObject createInspectionsMethodObject = new NullCreateInspectionsMethodObject();
+	public EventCreator eventCreator = null;
+	public CreateEventsMethodObject createEventsMethodObject = new NullCreateInspectionsMethodObject();
 	public NextInspectionScheduleSerivce nextInspectionScheduleSerivce = new NullNextInspectionScheduleSerivce();
 
 	public EventSaver createInspectionSaver(Transaction transaction) {
@@ -25,12 +25,12 @@ public class NullObjectDefaultedInspectionPersistenceFactory implements Inspecti
 		return auditLogger;
 	}
 
-	public InspectionCreator createInspectionCreator() {
-		return inspectionCreator;
+	public EventCreator createInspectionCreator() {
+		return eventCreator;
 	}
 
-	public CreateInspectionsMethodObject createCreateInspectionsMethodObject(Transaction transaction) {
-		return createInspectionsMethodObject;
+	public CreateEventsMethodObject createCreateInspectionsMethodObject(Transaction transaction) {
+		return createEventsMethodObject;
 	}
 
 	public InspectionsInAGroupCreator createInspectionsInAGroupCreator() {

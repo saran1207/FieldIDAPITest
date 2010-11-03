@@ -31,7 +31,7 @@ public class RemovalHandlerFactory {
 	}
 
 	private AssociatedEventTypeListDeleteHandler getAssociatedEventTypeListDeleter() {
-		return new AssociatedEventTypeListDeleteHandlerImpl(loaderFacotry.createAssociatedInspectionTypesLoader(),
+		return new AssociatedEventTypeListDeleteHandlerImpl(loaderFacotry.createAssociatedEventTypesLoader(),
 																getAssociatedEventTypeDeleter());
 	}
 

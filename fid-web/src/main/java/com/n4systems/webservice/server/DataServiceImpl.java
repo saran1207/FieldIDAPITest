@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import rfid.util.PopulatorLogger;
 
 import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.InspectionScheduleManager;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
@@ -1060,7 +1060,7 @@ public class DataServiceImpl implements DataService {
 			InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
 			
 			LegacyAsset productManager = ServiceLocator.getAssetManager();
-			InspectionScheduleManager scheduleManager = ServiceLocator.getInspectionScheduleManager();
+			EventScheduleManager scheduleManager = ServiceLocator.getInspectionScheduleManager();
 			
 			List<Event> events = new ArrayList<Event>();
 //			Map<Inspection, AssetStatus> assetStatus = new HashMap<Inspection, AssetStatus>();

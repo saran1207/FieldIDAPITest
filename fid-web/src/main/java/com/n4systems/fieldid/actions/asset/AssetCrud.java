@@ -5,12 +5,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeSet;
 
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
+import com.n4systems.fieldid.actions.helpers.AllEventHelper;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
@@ -27,7 +28,6 @@ import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
@@ -35,7 +35,6 @@ import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.UsedOnMasterInspectionException;
-import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
@@ -104,7 +103,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private Long tagOptionId;
 
 	// viewextras
-	private AllInspectionHelper allInspectionHelper;
+	private AllEventHelper allEventHelper;
 	private List<Project> projects;
 
 	private Asset parentAsset;
@@ -123,7 +122,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private LegacyAsset legacyAssetManager;
 
 	private AssetCodeMappingService assetCodeMappingServiceManager;
-	protected InspectionScheduleManager inspectionScheduleManager;
+	protected EventScheduleManager eventScheduleManager;
 	private AssetManager assetManager;
 	private OrderManager orderManager;
 	private ProjectManager projectManager;
@@ -139,7 +138,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
 			AssetCodeMappingService assetCodeMappingServiceManager, AssetManager assetManager, OrderManager orderManager,
-			ProjectManager projectManager, InspectionScheduleManager inspectionScheduleManager) {
+			ProjectManager projectManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.assetTypeManager = assetTypeManager;
 		this.legacyAssetManager = legacyAssetManager;
@@ -147,7 +146,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.assetManager = assetManager;
 		this.orderManager = orderManager;
 		this.projectManager = projectManager;
-		this.inspectionScheduleManager = inspectionScheduleManager;
+		this.eventScheduleManager = eventScheduleManager;
 
 	}
 
@@ -428,7 +427,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			// if the new asset type is not equal to the old then the type
 			// has changed
 			if (!asset.getType().equals(oldType)) {
-				inspectionScheduleManager.removeAllSchedulesFor(asset);
+				eventScheduleManager.removeAllSchedulesFor(asset);
 			}
 
 			AssetSaveService saver = getAssetSaveService();
@@ -905,14 +904,14 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return assetTypes;
 	}
 
-	public AllInspectionHelper getAllInspectionHelper() {
-		if (allInspectionHelper == null)
-			allInspectionHelper = new AllInspectionHelper(legacyAssetManager, asset, getSecurityFilter());
-		return allInspectionHelper;
+	public AllEventHelper getAllInspectionHelper() {
+		if (allEventHelper == null)
+			allEventHelper = new AllEventHelper(legacyAssetManager, asset, getSecurityFilter());
+		return allEventHelper;
 	}
 
 	public Long getInspectionCount() {
-		return getAllInspectionHelper().getInspectionCount();
+		return getAllInspectionHelper().getEventCount();
 	}
 
 	public List<Event> getInspections() {

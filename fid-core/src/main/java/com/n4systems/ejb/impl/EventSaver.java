@@ -11,7 +11,7 @@ import com.n4systems.model.SubEvent;
 
 public interface EventSaver {
 
-	public Event createEvent(CreateInspectionParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;
+	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;
 
 	/**
 	 * This must be called AFTER the inspection and subinspection have been persisted

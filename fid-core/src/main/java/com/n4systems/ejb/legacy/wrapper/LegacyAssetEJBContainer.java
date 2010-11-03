@@ -30,11 +30,11 @@ public class LegacyAssetEJBContainer extends EJBTransactionEmulator<LegacyAsset>
 		return new LegacyAssetManager(em);
 	}
 
-	public Long countAllInspections(Asset asset, SecurityFilter securityFilter) {
+	public Long countAllEvents(Asset asset, SecurityFilter securityFilter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).countAllInspections(asset, securityFilter);
+			return createManager(transaction.getEntityManager()).countAllEvents(asset, securityFilter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -46,11 +46,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long countAllLocalInspections(Asset asset, SecurityFilter securityFilter) {
+	public Long countAllLocalEvents(Asset asset, SecurityFilter securityFilter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).countAllLocalInspections(asset, securityFilter);
+			return createManager(transaction.getEntityManager()).countAllLocalEvents(asset, securityFilter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -132,11 +132,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Event findLastInspections(Asset asset, SecurityFilter securityFilter) {
+	public Event findLastEvents(Asset asset, SecurityFilter securityFilter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findLastInspections(asset, securityFilter);
+			return createManager(transaction.getEntityManager()).findLastEvents(asset, securityFilter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

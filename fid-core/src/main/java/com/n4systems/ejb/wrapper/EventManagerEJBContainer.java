@@ -21,7 +21,7 @@ import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.Log4JAuditLogger;
-import com.n4systems.security.UpdateInspectionAuditHandler;
+import com.n4systems.security.UpdateEventAuditHandler;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.tools.Pager;
 import com.n4systems.webservice.dto.WSJobSearchCriteria;
@@ -225,7 +225,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 	}
 
 	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
-		Log4JAuditLogger auditLogger = new Log4JAuditLogger(new UpdateInspectionAuditHandler());
+		Log4JAuditLogger auditLogger = new Log4JAuditLogger(new UpdateEventAuditHandler());
 
 		Throwable t = null;
 		TransactionManager transactionManager = new FieldIdTransactionManager();

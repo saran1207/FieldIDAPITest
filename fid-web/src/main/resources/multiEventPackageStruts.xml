@@ -18,7 +18,7 @@
 			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
 		</global-results>
 		
-	 	<action name="selectEventType" method="inspectionTypes" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+	 	<action name="selectEventType" method="inspectionTypes" class="com.n4systems.fieldid.actions.inspection.MultiEventAction">
 			<result name="success" type="freemarker">/templates/html/event/multi_event/multi_event.ftl</result>
 		</action>
 	
@@ -33,16 +33,16 @@
 			</result>
 			
 		</global-results>
-		<action name="retrieveEventDetails" method="performEvent" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+		<action name="retrieveEventDetails" method="performEvent" class="com.n4systems.fieldid.actions.inspection.MultiEventAction">
 			<result name="success" type="freemarker">/templates/ajax/event/multi_event/retrieveEventDetails.ftl</result>
 		</action>
 		
-		<action name="eventCheck" method="inspectionCheck" class="com.n4systems.fieldid.actions.inspection.MultiInspectAction">
+		<action name="eventCheck" method="inspectionCheck" class="com.n4systems.fieldid.actions.inspection.MultiEventAction">
 			<result name="success" type="freemarker">/templates/ajax/event/multi_event/valid.ftl</result>
 			<result name="input" type="freemarker">/templates/ajax/event/multi_event/invalid.ftl</result>
 		</action>
 		
-	 	<action name="eventCreate" method="create" class="com.n4systems.fieldid.actions.inspection.InspectionCrud">
+	 	<action name="eventCreate" method="create" class="com.n4systems.fieldid.actions.inspection.EventCrud">
 			<result name="success" type="freemarker">/templates/ajax/event/multi_event/created.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/event/multi_event/failure.ftl</result>
 			<result name="input" type="freemarker">/templates/ajax/event/multi_event/failure.ftl</result>

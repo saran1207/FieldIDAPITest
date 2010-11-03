@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.ejb.impl.CreateEventsMethodObject;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import org.easymock.IAnswer;
@@ -16,7 +17,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
-import com.n4systems.ejb.impl.CreateInspectionsMethodObject;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -28,7 +28,7 @@ import com.n4systems.test.helpers.FluentArrayList;
 
 
 public class WebServiceInspectionsCreatorTest {
-	private final class CreateInspectionsMethodObjectSabatour implements CreateInspectionsMethodObject {
+	private final class CreateInspectionsMethodObjectSabatour implements CreateEventsMethodObject {
 		@Override
 		public List<Event> createInspections(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
 				FileAttachmentException, UnknownSubAsset {
@@ -80,7 +80,7 @@ public class WebServiceInspectionsCreatorTest {
 	
 	@Test(expected=TransactionAlreadyProcessedException.class)
 	public void should_not_wrap_an_exception_thrown_by_the_create_inspections_method() throws Exception {
-		inspectionPersistenceFactory.createInspectionsMethodObject = new CreateInspectionsMethodObjectSabatour();
+		inspectionPersistenceFactory.createEventsMethodObject = new CreateInspectionsMethodObjectSabatour();
 		
 		
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
@@ -93,18 +93,18 @@ public class WebServiceInspectionsCreatorTest {
 	@Test
 	public void should_call_the_with_the_inspections_sent_in_CreateInspectionsMethodObject() throws Exception {
 		
-		CreateInspectionsMethodObject mockCreateInspectionsMethod = createMock(CreateInspectionsMethodObject.class);
-		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, events)).andReturn(events);
-		replay(mockCreateInspectionsMethod);
+		CreateEventsMethodObject mockCreateEventsMethod = createMock(CreateEventsMethodObject.class);
+		expect(mockCreateEventsMethod.createInspections(transactionGUID, events)).andReturn(events);
+		replay(mockCreateEventsMethod);
 		
-		inspectionPersistenceFactory.createInspectionsMethodObject = mockCreateInspectionsMethod;
+		inspectionPersistenceFactory.createEventsMethodObject = mockCreateEventsMethod;
 		
 		
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
 		
 		sut.create(transactionGUID, events, nextInspectionDates);
 		
-		verify(mockCreateInspectionsMethod);
+		verify(mockCreateEventsMethod);
 	}
 	
 	
@@ -113,11 +113,11 @@ public class WebServiceInspectionsCreatorTest {
 	public void should_return_the_inspections_returned_from_CreateInspectionsMethodObject() throws Exception {
 		List<Event> savedEvents = new FluentArrayList<Event>(anEvent().build(), anEvent().build());
 		
-		CreateInspectionsMethodObject mockCreateInspectionsMethod = createMock(CreateInspectionsMethodObject.class);
-		expect(mockCreateInspectionsMethod.createInspections(transactionGUID, events)).andReturn(savedEvents);
-		replay(mockCreateInspectionsMethod);
+		CreateEventsMethodObject mockCreateEventsMethod = createMock(CreateEventsMethodObject.class);
+		expect(mockCreateEventsMethod.createInspections(transactionGUID, events)).andReturn(savedEvents);
+		replay(mockCreateEventsMethod);
 		
-		inspectionPersistenceFactory.createInspectionsMethodObject = mockCreateInspectionsMethod;
+		inspectionPersistenceFactory.createEventsMethodObject = mockCreateEventsMethod;
 		
 		
 		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
@@ -159,7 +159,7 @@ public class WebServiceInspectionsCreatorTest {
 		replay(auditLogger);
 		
 		
-		inspectionPersistenceFactory.createInspectionsMethodObject = new CreateInspectionsMethodObjectSabatour();
+		inspectionPersistenceFactory.createEventsMethodObject = new CreateInspectionsMethodObjectSabatour();
 		inspectionPersistenceFactory.auditLogger = auditLogger;
 		
 		

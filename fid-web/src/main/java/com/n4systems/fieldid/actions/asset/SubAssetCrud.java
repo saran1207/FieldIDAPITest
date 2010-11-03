@@ -6,6 +6,8 @@ import java.util.List;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
+import com.n4systems.fieldid.actions.helpers.AllEventHelper;
+import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
@@ -17,8 +19,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.actions.helpers.AllInspectionHelper;
-import com.n4systems.fieldid.actions.helpers.MasterInspection;
 import com.n4systems.fieldid.actions.helpers.SubAssetHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
@@ -40,7 +40,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	protected SubAssetHelper subAsset;
 	protected LegacyAsset productManager;
 
-	private AllInspectionHelper allInspectionHelper;
+	private AllEventHelper allEventHelper;
 	
 	private Long subAssetId;
 
@@ -215,9 +215,9 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 			asset.getSubAssets().remove(subAssetToRemove);
 			productManager.update(asset, getUser());
 
-			MasterInspection masterInspection = (MasterInspection) getSession().get("masterInspection");
-			if (MasterInspection.matchingMasterInspection(masterInspection, token)) {
-				masterInspection.removeInspectionsForAsset(subAsset.getAsset());
+			MasterEvent masterEvent = (MasterEvent) getSession().get("masterInspection");
+			if (MasterEvent.matchingMasterInspection(masterEvent, token)) {
+				masterEvent.removeInspectionsForAsset(subAsset.getAsset());
 			}
 
 			addActionMessageText("message.assetupdated");
@@ -293,7 +293,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 
 	public List<EventType> getInspectionTypes() {
 		List<EventType> eventTypes = new ArrayList<EventType>();
-		List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedInspectionTypesLoader().setAssetType(subAsset.getAsset().getType()).load();
+		List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(subAsset.getAsset().getType()).load();
 		for (AssociatedEventType associatedEventType : associatedEventTypes) {
 			eventTypes.add(associatedEventType.getEventType());
 		}
@@ -339,15 +339,15 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		this.indexes = indexes;
 	}
 	
-	public AllInspectionHelper getAllInspectionHelper() {
-		if (allInspectionHelper == null)
-			allInspectionHelper = new AllInspectionHelper(productManager, asset, getSecurityFilter());
-		return allInspectionHelper;
+	public AllEventHelper getAllInspectionHelper() {
+		if (allEventHelper == null)
+			allEventHelper = new AllEventHelper(productManager, asset, getSecurityFilter());
+		return allEventHelper;
 	}
 	
 	
 	public Long getInspectionCount() {
-		return getAllInspectionHelper().getInspectionCount();
+		return getAllInspectionHelper().getEventCount();
 	}
 
 	public boolean isLinked() {

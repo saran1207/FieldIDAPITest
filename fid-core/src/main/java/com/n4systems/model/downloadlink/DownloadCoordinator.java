@@ -19,9 +19,9 @@ import com.n4systems.taskscheduling.task.AutoAttributeExportTask;
 import com.n4systems.taskscheduling.task.CustomerExportTask;
 import com.n4systems.taskscheduling.task.DownloadTaskFactory;
 import com.n4systems.taskscheduling.task.ExcelReportExportTask;
-import com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask;
+import com.n4systems.taskscheduling.task.PrintAllEventCertificatesTask;
 import com.n4systems.taskscheduling.task.PrintAllAssetCertificatesTask;
-import com.n4systems.taskscheduling.task.PrintInspectionSummaryReportTask;
+import com.n4systems.taskscheduling.task.PrintEventSummaryReportTask;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
@@ -60,7 +60,7 @@ public class DownloadCoordinator {
 	
 	public void generateAllInspectionCertificates(String name, String downloadUrl, EventReportType type, List<Long> inspectionIds) {
 		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
-		PrintAllInspectionCertificatesTask task = taskFactory.createPrintAllInspectionCertificatesTask(link, downloadUrl, type, inspectionIds);
+		PrintAllEventCertificatesTask task = taskFactory.createPrintAllInspectionCertificatesTask(link, downloadUrl, type, inspectionIds);
 		
 		executor.execute(task);
 	}
@@ -74,7 +74,7 @@ public class DownloadCoordinator {
 	
 	public void generateInspectionSummaryReport(String name, String downloadUrl, ReportDefiner reportDefiner) {
 		DownloadLink link = createDownloadLink(name, ContentType.PDF);
-		PrintInspectionSummaryReportTask task = taskFactory.createPrintInspectionSummaryReportTask(link, downloadUrl, reportDefiner);
+		PrintEventSummaryReportTask task = taskFactory.createPrintInspectionSummaryReportTask(link, downloadUrl, reportDefiner);
 		
 		executor.execute(task);
 	}

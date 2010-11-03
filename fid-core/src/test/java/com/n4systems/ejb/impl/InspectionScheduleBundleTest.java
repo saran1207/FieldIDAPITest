@@ -24,7 +24,7 @@ public class InspectionScheduleBundleTest {
 	@Test
 	public void should_allow_the_creation_of_a_bundle() throws Exception {
 		
-		InspectionScheduleBundle sut = new InspectionScheduleBundle(asset, eventType, job, scheduleDate);
+		EventScheduleBundle sut = new EventScheduleBundle(asset, eventType, job, scheduleDate);
 		
 		Assert.assertThat(sut, notNullValue());
 	}
@@ -32,27 +32,27 @@ public class InspectionScheduleBundleTest {
 	@Test(expected=NullPointerException.class)
 	public void should_not_allow_null_for_asset() throws Exception {
 		
-		new InspectionScheduleBundle(null, eventType, job, scheduleDate);
+		new EventScheduleBundle(null, eventType, job, scheduleDate);
 		
 	}
 	
 	@Test(expected=NullPointerException.class)
 	public void should_not_allow_null_for_inspection_type() throws Exception {
 		
-		new InspectionScheduleBundle(asset, null, job, scheduleDate);
+		new EventScheduleBundle(asset, null, job, scheduleDate);
 		
 	}
 	
 	@Test(expected=NullPointerException.class)
 	public void should_not_allow_null_for_schedule_date() throws Exception {
 		
-		new InspectionScheduleBundle(asset, eventType, job, null);
+		new EventScheduleBundle(asset, eventType, job, null);
 		
 	}
 	
 	@Test
 	public void should_allow_null_for_job() throws Exception {
-		new InspectionScheduleBundle(asset, eventType, null, scheduleDate);
+		new EventScheduleBundle(asset, eventType, null, scheduleDate);
 		
 	}
 }

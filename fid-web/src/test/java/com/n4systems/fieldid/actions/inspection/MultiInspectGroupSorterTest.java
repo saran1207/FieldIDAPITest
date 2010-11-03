@@ -23,7 +23,7 @@ public class MultiInspectGroupSorterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_return_an_empty_list_of_groups_when_the_inspection_types_are_empty() throws Exception {
-		MultiInspectGroupSorter sut = new MultiInspectGroupSorter(Collections.EMPTY_SET);
+		MultiEventGroupSorter sut = new MultiEventGroupSorter(Collections.EMPTY_SET);
 		assertThat(sut.getGroups(), Matchers.equalTo(Collections.EMPTY_LIST));
 	}
 	
@@ -34,7 +34,7 @@ public class MultiInspectGroupSorterTest {
 		List<EventTypeGroup> eventTypeGroupNames = new FluentArrayList<EventTypeGroup>(group);
 		
 		
-		MultiInspectGroupSorter sut = new MultiInspectGroupSorter(eventTypes);
+		MultiEventGroupSorter sut = new MultiEventGroupSorter(eventTypes);
 		
 		assertThat(sut.getGroups(), Matchers.equalTo(eventTypeGroupNames));
 	}
@@ -49,7 +49,7 @@ public class MultiInspectGroupSorterTest {
 		List<EventTypeGroup> eventTypeGroupNames = new FluentArrayList<EventTypeGroup>(group);
 		
 		
-		MultiInspectGroupSorter sut = new MultiInspectGroupSorter(eventTypes);
+		MultiEventGroupSorter sut = new MultiEventGroupSorter(eventTypes);
 		
 		assertThat(sut.getGroups(), Matchers.equalTo(eventTypeGroupNames));
 	}
@@ -70,7 +70,7 @@ public class MultiInspectGroupSorterTest {
 				);
 		List<EventTypeGroup> eventTypeGroupNames = new FluentArrayList<EventTypeGroup>(aGroup, gGroup, qGroup, zGroup);
 		
-		MultiInspectGroupSorter sut = new MultiInspectGroupSorter(eventTypes);
+		MultiEventGroupSorter sut = new MultiEventGroupSorter(eventTypes);
 		
 		assertThat(sut.getGroups(), Matchers.equalTo(eventTypeGroupNames));
 	}
@@ -89,7 +89,7 @@ public class MultiInspectGroupSorterTest {
 		FluentHashSet<EventType> eventTypes = new FluentHashSet<EventType>(typeB, typeA, typeZ);
 		List<EventType> expectedList = ImmutableList.of(typeA, typeB, typeZ);
 		
-		MultiInspectGroupSorter sut = new MultiInspectGroupSorter(eventTypes);
+		MultiEventGroupSorter sut = new MultiEventGroupSorter(eventTypes);
 		
 		assertThat(sut.getInspectionTypesForGroup(group), Matchers.equalTo(expectedList));
 	}
@@ -107,7 +107,7 @@ public class MultiInspectGroupSorterTest {
 		List<EventType> expectedGroup1List = ImmutableList.of(typeB, typeZ);
 		List<EventType> expectedGroup2List = ImmutableList.of(typeA);
 		
-		MultiInspectGroupSorter sut = new MultiInspectGroupSorter(eventTypes);
+		MultiEventGroupSorter sut = new MultiEventGroupSorter(eventTypes);
 		
 		assertThat(sut.getInspectionTypesForGroup(group1), Matchers.equalTo(expectedGroup1List));
 		assertThat(sut.getInspectionTypesForGroup(group2), Matchers.equalTo(expectedGroup2List));

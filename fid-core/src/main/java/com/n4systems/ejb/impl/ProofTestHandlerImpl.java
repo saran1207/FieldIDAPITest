@@ -29,7 +29,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.impl.PopulatorLogManager;
-import com.n4systems.ejb.parameters.CreateInspectionParameterBuilder;
+import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.fileprocessing.ProofTestType;
@@ -68,7 +68,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		this.eventManager = new EventManagerImpl(em);
 		this.populatorLogManager = new PopulatorLogManager(em);
 		this.eventSaver = new ManagerBackedEventSaver(new LegacyAssetManager(em),
-				persistenceManager, em, new EntityManagerLastInspectionDateFinder(persistenceManager, em));
+				persistenceManager, em, new EntityManagerLastEventDateFinder(persistenceManager, em));
 		
 	}
 	
@@ -427,7 +427,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			
 			eventSaver.createEvent(
-					new CreateInspectionParameterBuilder(event,performedBy.getId())
+					new CreateEventParameterBuilder(event,performedBy.getId())
 					.withProofTestFile(fileData).build());
 			
 			writeLogMessage(tenant, "Created Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]");

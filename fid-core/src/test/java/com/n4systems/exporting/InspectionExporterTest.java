@@ -49,7 +49,7 @@ public class InspectionExporterTest {
 		writer.write(map2);
 		replay(writer);
 		
-		InspectionExporter exporter = new InspectionExporter(inspectionLoader, marshaler, converter);
+		EventExporter exporter = new EventExporter(inspectionLoader, marshaler, converter);
 		exporter.export(writer);
 		
 		verify(inspectionLoader);

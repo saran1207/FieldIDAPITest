@@ -1,20 +1,20 @@
 package com.n4systems.fieldid.actions.safetyNetwork;
 
+import com.n4systems.ejb.EventScheduleManager;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.fieldid.actions.InspectionScheduleCrud;
+import com.n4systems.fieldid.actions.EventScheduleCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 
-public class SafetyNetworkInspectionSchedule extends InspectionScheduleCrud{
+public class SafetyNetworkInspectionSchedule extends EventScheduleCrud {
 
 	public SafetyNetworkInspectionSchedule(
 			LegacyAsset legacyProductManager,
 			PersistenceManager persistenceManager,
-			InspectionScheduleManager inspectionScheduleManager) {
-		super(legacyProductManager, persistenceManager, inspectionScheduleManager);
+			EventScheduleManager eventScheduleManager) {
+		super(legacyProductManager, persistenceManager, eventScheduleManager);
 	}
 	
 	@Override

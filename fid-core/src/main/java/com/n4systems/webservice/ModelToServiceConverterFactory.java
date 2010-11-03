@@ -24,7 +24,7 @@ public class ModelToServiceConverterFactory {
 	}
 	
 	public AssetToServiceConverter createProductToServiceConverter() {
-		return new AssetToServiceConverter(legacyConverter, loaderFactory.createLastInspectionLoader(), createInspectionToServiceConverter());
+		return new AssetToServiceConverter(legacyConverter, loaderFactory.createLastEventLoader(), createInspectionToServiceConverter());
 	}
 	
 	public ModelToServiceConverter<Event, InspectionServiceDTO> createInspectionToServiceConverter() {

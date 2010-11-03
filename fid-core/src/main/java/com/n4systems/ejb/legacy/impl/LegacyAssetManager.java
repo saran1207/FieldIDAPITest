@@ -12,7 +12,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.AssetManagerImpl;
+import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
@@ -28,9 +30,7 @@ import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.ejb.InspectionScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.impl.InspectionScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.model.ExtendedFeature;
@@ -53,7 +53,7 @@ public class LegacyAssetManager implements LegacyAsset {
 	
 	protected final EntityManager em;
 	private final PersistenceManager persistenceManager;
-	private final InspectionScheduleManager inspectionScheduleManager;
+	private final EventScheduleManager eventScheduleManager;
 	private final AssetManager assetManager;
 	
 	private Logger auditLogger = Logger.getLogger("AuditLog");
@@ -61,7 +61,7 @@ public class LegacyAssetManager implements LegacyAsset {
 	public LegacyAssetManager(EntityManager em) {
 		this.em = em;
 		persistenceManager = new PersistenceManagerImpl(em);
-		inspectionScheduleManager =  new InspectionScheduleManagerImpl(em);
+		eventScheduleManager =  new EventScheduleManagerImpl(em);
 		assetManager =  new AssetManagerImpl(em);
 	}
 
@@ -136,7 +136,7 @@ public class LegacyAssetManager implements LegacyAsset {
 
 		saveSubAssets(asset);
 		// XXX not sure if this should be here.
-		inspectionScheduleManager.autoSchedule(asset);
+		eventScheduleManager.autoSchedule(asset);
 		return new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		
 	}
@@ -358,7 +358,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		return value != 0L;
 	}
 
-	public Event findLastInspections(Asset asset, SecurityFilter securityFilter) {
+	public Event findLastEvents(Asset asset, SecurityFilter securityFilter) {
 		Query inspectionQuery = createAllInspectionQuery(asset, securityFilter, false, true);
 		Event event = null;
 		try {
@@ -368,12 +368,12 @@ public class LegacyAssetManager implements LegacyAsset {
 		return event;
 	}
 
-	public Long countAllInspections(Asset asset, SecurityFilter securityFilter) {
-		Long count = countAllLocalInspections(asset, securityFilter);
+	public Long countAllEvents(Asset asset, SecurityFilter securityFilter) {
+		Long count = countAllLocalEvents(asset, securityFilter);
 		return count;
 	}
 	
-	public Long countAllLocalInspections(Asset asset, SecurityFilter securityFilter) {
+	public Long countAllLocalEvents(Asset asset, SecurityFilter securityFilter) {
 		Query inspectionQuery = createAllInspectionQuery(asset, securityFilter, true);
 		return (Long)inspectionQuery.getSingleResult();
 		
