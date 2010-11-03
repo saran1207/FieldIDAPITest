@@ -1,4 +1,4 @@
-${action.setPageType('setup','settings')!}
+${action.setPageType('setup','templates')!}
 
 <title><@s.text name="label.setup" /></title>
 <head> 
@@ -9,12 +9,12 @@ ${action.setPageType('setup','settings')!}
 	<#if sessionUser.hasAccess("managesystemconfig") >
 		<div class="setupOption autoAttributeCriteria">
 			<h1><a href="<@s.url action="autoAttributeCriteriaList"/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></h1>
-			<p><@s.text name="label.manage_organizational_units_msg" /></p>
+			<p><@s.text name="label.manage_auto_attirbute_criteria_msg" /></p>
 		</div>
 		
 		<div class="setupOption commentTemplate">
 			<h1><a href="<@s.url action="commentTemplateList"/>" ><@s.text name="title.manage_comment_templates.plural" /></a></h1>
-			<p><@s.text name="label.manage_organizational_units_msg" /></p>
+			<p><@s.text name="label.manage_comment_template_msg" /></p>
 		</div>
 		
 		<#if securityGuard.integrationEnabled>
