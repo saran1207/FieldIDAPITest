@@ -8,7 +8,7 @@ public class LimitTypeTest {
 
 	@Test
 	public void should_find_first_limit_to_match_the_highest_one() throws Exception {
-		LimitType sut = LimitType.DISK_SPACE;
+		LimitType sut = LimitType.ASSETS;
 		ResourceLimit oneHundredPercentUsed = new SecondaryOrgResourceLimit();
 		oneHundredPercentUsed.setMaximum(20);
 		oneHundredPercentUsed.setUsed(20);
@@ -18,7 +18,7 @@ public class LimitTypeTest {
 	
 	@Test
 	public void should_find_first_limit_to_match_the_second_highest_one() throws Exception {
-		LimitType sut = LimitType.DISK_SPACE;
+		LimitType sut = LimitType.ASSETS;
 		ResourceLimit ninetyFivePercentUsed = new SecondaryOrgResourceLimit();
 		ninetyFivePercentUsed.setMaximum(20);
 		ninetyFivePercentUsed.setUsed(19);
@@ -27,7 +27,7 @@ public class LimitTypeTest {
 	
 	@Test
 	public void should_find_first_limit_to_match_the_lowest_one() throws Exception {
-		LimitType sut = LimitType.DISK_SPACE;
+		LimitType sut = LimitType.ASSETS;
 		ResourceLimit ninetyPercentUsed = new SecondaryOrgResourceLimit();
 		ninetyPercentUsed.setMaximum(20);
 		ninetyPercentUsed.setUsed(18);
