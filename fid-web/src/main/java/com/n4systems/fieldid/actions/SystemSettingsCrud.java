@@ -24,7 +24,6 @@ import com.n4systems.persistence.TransactionManager;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.TenantCache;
-import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
@@ -88,7 +87,26 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 		try {
 			updateAssignedToFeature(transaction);
-			updateSystemSettings(transaction);
+			updateDateFormat(transaction);
+			save(transaction);
+			transactionManager().finishTransaction(transaction);
+			addFlashMessageText("message.system_settings_updated");
+		} catch (Exception e) {
+			addActionErrorText("error.updating_system_settings");
+			return ERROR;
+		} finally {
+			clearCachedValues();
+		}
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doUpdateBranding() {
+
+		Transaction transaction = transactionManager().startTransaction();
+
+		try {
+			updateBranding(transaction);
 			save(transaction);
 			transactionManager().finishTransaction(transaction);
 			addFlashMessageText("message.system_settings_updated");
@@ -111,19 +129,19 @@ public class SystemSettingsCrud extends AbstractCrud {
 	
 	}
 
-	private void updateSystemSettings(Transaction transaction) throws Exception {
-		PrimaryOrg primaryOrg = getPrimaryOrg();
+	private void updateDateFormat(Transaction transaction) throws Exception {
+		getPrimaryOrg().setDateFormat(dateFormat);
+	}
+
+	private void updateBranding(Transaction transaction) throws Exception {
 		
 		if (getSecurityGuard().isBrandingEnabled()) {
 			processLogo();
-			primaryOrg.setWebSite(webSite);
+			getPrimaryOrg().setWebSite(webSite);
 		}
 		
-		primaryOrg.setDateFormat(dateFormat);
-		
-		
 	}
-
+	
 	private TransactionManager transactionManager() {
 		if (transactionManager == null) {
 			transactionManager = new FieldIdTransactionManager();

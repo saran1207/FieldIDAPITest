@@ -1719,16 +1719,29 @@
 			<result name="error" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 		</action>
 
-
 		<action name="systemSettingsEdit" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="success" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
+		</action>
+		
+		<action name="yourPlan" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="success" type="freemarker">/templates/html/systemSettings/yourPlan.ftl</result>
+		</action>
+		
+		<action name="branding" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="success" type="freemarker">/templates/html/systemSettings/branding.ftl</result>
 		</action>
 
 		<action name="systemSettingsUpdate" method="update" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
 			<result name="success" type="redirectAction">systemSettingsEdit</result>
+		</action>
+		
+				<action name="brandingUpdate" method="updateBranding" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+			<result name="input" type="freemarker">/templates/html/systemSettings/branding.ftl</result>
+			<result name="error" type="freemarker">/templates/html/systemSettings/branding.ftl</result>
+			<result name="success" type="redirectAction">branding</result>
 		</action>
 
 		<action name="customerInformationEdit" method="edit" class="com.n4systems.fieldid.actions.asset.CustomerInformationCrud">

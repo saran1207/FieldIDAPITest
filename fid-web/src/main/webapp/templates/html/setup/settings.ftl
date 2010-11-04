@@ -18,12 +18,12 @@ ${action.setPageType('setup','settings')!}
 		</div>
 	
 		<div class="setupOption branding">
-			<h1><a href="<@s.url action=""/>" ><@s.text name="title.manage_branding" /></a></h1>
+			<h1><a href="<@s.url action="branding"/>" ><@s.text name="title.manage_branding.plural" /></a></h1>
 			<p><@s.text name="label.manage_branding_msg" /></p>
 		</div>
 	
 		<div class="setupOption fieldIdPlan">
-			<h1><a href="<@s.url action=""/>" ><@s.text name="title.manage_field_id_plan" /></a></h1>
+			<h1><a href="<@s.url action="yourPlan"/>" ><@s.text name="title.manage_field_id_plan.plural" /></a></h1>
 			<p><@s.text name="label.manage_field_id_plan_msg" /></p>
 		</div>
 	</#if>		

@@ -7,10 +7,11 @@
 }
 
 .branding {
-
+	background-image: url(../../images/branding-icon.png);
 }
 
 .fieldIdPlan {
+	background-image: url(../../images/plan-icon.png);
 }
 
 .customers {
