@@ -32,16 +32,16 @@ public class FilterByResultTest extends LoggedInTestCase {
 	}
 	
 	@Test
-	public void show_just_inspections_that_passed_when_pass_selected_in_the_result_filter() throws Exception {
+	public void show_just_events_that_passed_when_pass_selected_in_the_result_filter() throws Exception {
 		goToReporting();
 		
 		selenium.select("css=#reportForm_criteria_status", resultName);
 		
 		submitForm();
 
-		verifyInspectionResultsAreCorrectOnThisPage();
+		verifyEventResultsAreCorrectOnThisPage();
 		goToLastPage();
-		verifyInspectionResultsAreCorrectOnThisPage();
+		verifyEventResultsAreCorrectOnThisPage();
 	}
 
 	private void goToReporting() {
@@ -53,18 +53,18 @@ public class FilterByResultTest extends LoggedInTestCase {
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 
-	private void verifyInspectionResultsAreCorrectOnThisPage() {
-		assertEquals(resultName, selenium.getText("css=#inspection_search_inspectionresult_0"));
+	private void verifyEventResultsAreCorrectOnThisPage() {
+		assertEquals(resultName, selenium.getText("css=#event_search_eventresult_0"));
 		
 		String pageNumber = selenium.getText("css=.currentPage span");
-		String totalResults = selenium.getText("css=.total:contains('Total Inspections')");
+		String totalResults = selenium.getText("css=.total:contains('Total Events')");
 		
 		int page = Integer.parseInt(pageNumber.trim());
-		int total = Integer.parseInt(totalResults.replaceFirst("Total.*Inspections", "").trim());
+		int total = Integer.parseInt(totalResults.replaceFirst("Total.*Events", "").trim());
 		
 		int lastResultOnPage = total - (20 * (page - 1));
 		
-		assertEquals(resultName, selenium.getText("css=#inspection_search_inspectionresult_" + ((lastResultOnPage > 20) ? 19 : lastResultOnPage - 1)  ));
+		assertEquals(resultName, selenium.getText("css=#event_search_eventresult_" + ((lastResultOnPage > 20) ? 19 : lastResultOnPage - 1)  ));
 	}
 
 	private void goToLastPage() {

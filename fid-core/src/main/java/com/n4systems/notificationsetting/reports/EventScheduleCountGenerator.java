@@ -13,12 +13,12 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.naming.NamingException;
 
-import com.n4systems.model.inspectionschedulecount.OverdueEventScheduleCountListLoader;
-import com.n4systems.model.inspectionschedulecount.UpcomingEventScheduleCountListLoader;
+import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
+import com.n4systems.model.eventschedulecount.UpcomingEventScheduleCountListLoader;
 import org.apache.log4j.Logger;
 
 import com.n4systems.mail.MailManager;
-import com.n4systems.model.inspectionschedulecount.EventScheduleCount;
+import com.n4systems.model.eventschedulecount.EventScheduleCount;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.LogUtils;

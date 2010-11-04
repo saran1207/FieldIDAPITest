@@ -49,12 +49,12 @@ public enum SetupDataGroup {
 	INSPECTION_TYPE(EventType.class, State.class, EventBook.class, CommentTempBean.class, UnitOfMeasure.class) {
 		@Override
 		public Date getLastModDate(SetupDataLastModDates lastModeDates) {
-			return lastModeDates.getInspectionTypes();
+			return lastModeDates.getEventTypes();
 		}
 
 		@Override
 		public void setLastModDate(Date newDate, SetupDataLastModDates lastModeDates) {
-			lastModeDates.setInspectionTypes(newDate);
+			lastModeDates.setEventTypes(newDate);
 		}
 	},
 	AUTO_ATTRIBUTES(AutoAttributeCriteria.class, AutoAttributeDefinition.class

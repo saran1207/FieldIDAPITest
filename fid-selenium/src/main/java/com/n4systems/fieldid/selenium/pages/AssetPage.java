@@ -49,40 +49,40 @@ public class AssetPage extends FieldIDPage {
 		waitForAjax();
 	}
 
-	public void setSchedule(String date, String inspectionType, String job) {
+	public void setSchedule(String date, String eventType, String job) {
 		if (date != null) {
 			selenium.type("//input[@id='newSchedule_nextDate']", date);
 		}
-		if (inspectionType != null) {
-			selenium.select("//select[@id='newSchedule_type']", inspectionType);
+		if (eventType != null) {
+			selenium.select("//select[@id='newSchedule_type']", eventType);
 		}
 		if (job != null) {
 			selenium.select("//select[@id='newSchedule_project']", job);
 		}
 	}
 
-	public boolean checkScheduleExists(String date, String inspectionType, String job) {
-		return selenium.isElementPresent("//tbody[@id='schedules']/tr/td[text()='" + inspectionType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job) + "']");
+	public boolean checkScheduleExists(String date, String eventType, String job) {
+		return selenium.isElementPresent("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job) + "']");
 	}
 
-	public void clickRemoveSchdeule(String date, String inspectionType, String job) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
+	public void clickRemoveSchdeule(String date, String eventType, String job) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
 				+ "']/..//a[text()='Remove']");
 		waitForAjax();
 	}
 
-	public void clickEditSchedule(String date, String inspectionType, String job) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
+	public void clickEditSchedule(String date, String eventType, String job) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
 				+ "']/..//a[text()='Edit']");
 		waitForAjax();
 	}
 
-	public void editScheduleDate(String oldDate, String inspectionType, String newDate) {
-		selenium.type("//tbody[@id='schedules']/tr/td[text()='" + inspectionType + "']/..//input[@value='" + oldDate + "']", newDate);
+	public void editScheduleDate(String oldDate, String eventType, String newDate) {
+		selenium.type("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//input[@value='" + oldDate + "']", newDate);
 	}
 
-	public void clickEditSaveSchedule(String inspectionType) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType + "']/..//a[text()='Save']");
+	public void clickEditSaveSchedule(String eventType) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//a[text()='Save']");
 		waitForAjax();
 	}
 
@@ -98,14 +98,14 @@ public class AssetPage extends FieldIDPage {
 		return selenium.getText("//label[.='Purchase Order']/../span");
 	}
 
-	public EventPage clickInpectNow(String date, String inspectionType, String job) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
-				+ "']/..//a[text()='inspect now']");
+	public EventPage clickInpectNow(String date, String eventType, String job) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
+				+ "']/..//a[text()='start event now']");
 		return new EventPage(selenium);
 	}
 
-	public void clickStopProgress(String date, String inspectionType, String job) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + inspectionType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
+	public void clickStopProgress(String date, String event, String job) {
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + event + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
 				+ "']/..//a[text()='Stop Progress']");
 	}
 

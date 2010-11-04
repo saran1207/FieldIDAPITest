@@ -1,5 +1,5 @@
 <#assign form_action="EDIT" /> 
-${action.setPageType('inspection', 'edit')!}
+${action.setPageType('event', 'edit')!}
 
 <@s.form action="eventUpdate" cssClass="fullForm fluidSets" theme="fieldid" onsubmit="return checkForUploads()" >
 	<#include "_form.ftl"/>

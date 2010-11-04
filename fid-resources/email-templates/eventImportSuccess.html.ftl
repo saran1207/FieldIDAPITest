@@ -1,1 +1,1 @@
-Your inspection import completed sucessfully.  ${notification.totalImported} inspections imported.
+Your event import completed sucessfully.  ${notification.totalImported} events imported.

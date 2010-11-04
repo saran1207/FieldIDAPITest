@@ -87,7 +87,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	}
 
 	private void addEventBookTerm() {
-		// when inspectionBookId is 0, we search for inspections not in a book
+		// when eventBookId is 0, we search for events not in a book
 		if(eventBookId != null && eventBookId == 0) {
 			addNullTerm("book.id");
 		} else {

@@ -10,8 +10,8 @@ public class AssetSelectDisplayColumns {
 	boolean assetTypeGroup = false;
 	boolean assetType = true;
 	boolean assetStatus = true;
-	boolean lastInspectionDate = true;
-	boolean networkLastInspectionDate = false;
+	boolean lastEventDate = true;
+	boolean networkLastEventDate = false;
 	boolean dateIdentified = false;
 	boolean identifiedBy = false;
 	boolean modifiedBy = false;
@@ -37,8 +37,8 @@ public class AssetSelectDisplayColumns {
 		s.append("          Asset Type Group: ").append(assetTypeGroup).append("\n");
 		s.append("                Asset Type: ").append(assetType).append("\n");
 		s.append("              Asset Status: ").append(assetStatus).append("\n");
-		s.append("        Last Inspection Date: ").append(lastInspectionDate).append("\n");
-		s.append("Network Last Inspection Date: ").append(networkLastInspectionDate).append("\n");
+		s.append("           Last Event Date: ").append(lastEventDate).append("\n");
+		s.append("   Network Last Event Date: ").append(networkLastEventDate).append("\n");
 		s.append("             Date Identified: ").append(dateIdentified).append("\n");
 		s.append("               Identified By: ").append(identifiedBy).append("\n");
 		s.append("                 Modified By: ").append(modifiedBy).append("\n");
@@ -91,12 +91,12 @@ public class AssetSelectDisplayColumns {
 		assetStatus = b;
 	}
 	
-	public void setLastInspectionDate(boolean b) {
-		lastInspectionDate = b;
+	public void setLastEventDate(boolean b) {
+		lastEventDate = b;
 	}
 	
-	public void setNetworkLastInspectionDate(boolean b) {
-		networkLastInspectionDate = b;
+	public void setNetworkLastEventDate(boolean b) {
+		networkLastEventDate = b;
 	}
 	
 	public void setDateIdentified(boolean b) {
@@ -175,12 +175,12 @@ public class AssetSelectDisplayColumns {
 		return assetStatus;
 	}
 	
-	public boolean getLastInspectionDate() {
-		return lastInspectionDate;
+	public boolean getLastEventDate() {
+		return lastEventDate;
 	}
 	
-	public boolean getNetworkLastInspectionDate() {
-		return networkLastInspectionDate;
+	public boolean getNetworkLastEventDate() {
+		return networkLastEventDate;
 	}
 	
 	public boolean getDateIdentified() {
@@ -233,8 +233,8 @@ public class AssetSelectDisplayColumns {
 		assetTypeGroup = b;
 		assetType = b;
 		assetStatus = b;
-		lastInspectionDate = b;
-		networkLastInspectionDate = b;
+		lastEventDate = b;
+		networkLastEventDate = b;
 		dateIdentified = b;
 		identifiedBy = b;
 		modifiedBy = b;

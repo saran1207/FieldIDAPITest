@@ -8,7 +8,7 @@ import java.util.Map;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectiontype.EventFrequencySaver;
+import com.n4systems.model.eventtype.EventFrequencySaver;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 

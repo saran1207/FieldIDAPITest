@@ -12,7 +12,7 @@ import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
-import com.n4systems.handlers.creator.inspections.EventCreator;
+import com.n4systems.handlers.creator.events.EventCreator;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.builders.EventTypeBuilder;

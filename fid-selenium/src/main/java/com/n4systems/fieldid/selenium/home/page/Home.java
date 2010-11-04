@@ -21,8 +21,8 @@ public class Home {
 	private String quickLinksLocator = "xpath=//div[@id='quickLinks']";
 	private String gotoSectionHeaderLocator = quickLinksLocator + "/h3[contains(text(),'Go To:')]";
 	private String quickLinksListLocator = "xpath=//div[@id='quickLinks']/UL[@id='quickLinkList']";
-	private String viewUpcomingInspectionsLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View upcoming Inspections')]";
-	private String viewInspectionHistoryForAssetLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View the Inspection History for an Asset')]";
+	private String viewUpcomingEventsLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View upcoming Events')]";
+	private String viewEventHistoryForAssetLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View the Event History for an Asset')]";
 	private String findAAssetLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Find an Asset')]";
 	private String helpVideosLocator = "//div[@id='helpVideos']";
 	private String instructionalVideosHeaderLocator = helpVideosLocator + "/h3[contains(text(),'Instructional Videos')]";
@@ -89,8 +89,8 @@ public class Home {
 
 	public void assertGoToSection() {
 		assertTrue("Could not find the header for the 'Go To:' section", selenium.isElementPresent(gotoSectionHeaderLocator));
-		assertTrue("Could not find a link to 'View upcoming Inspections'", selenium.isElementPresent(viewUpcomingInspectionsLinkLocator));
-		assertTrue("Could not find a link to 'View the Inspection History for an Asset'", selenium.isElementPresent(viewInspectionHistoryForAssetLinkLocator));
+		assertTrue("Could not find a link to 'View upcoming Events'", selenium.isElementPresent(viewUpcomingEventsLinkLocator));
+		assertTrue("Could not find a link to 'View the Event History for an Asset'", selenium.isElementPresent(viewEventHistoryForAssetLinkLocator));
 		assertTrue("Could not find a link to 'Find an Asset'", selenium.isElementPresent(findAAssetLinkLocator));
 		// if there is no company website set up, there will be no link to company web site
 		// if we are not the admin, there will be no quick setup wizard link
@@ -104,15 +104,15 @@ public class Home {
 		assertTrue("Could not find the header for the 'Jobs' section", selenium.isElementPresent(jobsSectionHeaderLocator));
 	}
 
-	public void clickViewUpcomingInspections() {
+	public void clickViewUpcomingEvents() {
 		assertGoToSection();
-		selenium.click(viewUpcomingInspectionsLinkLocator);
+		selenium.click(viewUpcomingEventsLinkLocator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
-	public void clickViewInspectionHistoryForAnAsset() {
+	public void clickViewEventHistoryForAnAsset() {
 		assertGoToSection();
-		selenium.click(viewInspectionHistoryForAssetLinkLocator);
+		selenium.click(viewEventHistoryForAssetLinkLocator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 

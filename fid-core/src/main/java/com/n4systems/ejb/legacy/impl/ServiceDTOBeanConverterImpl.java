@@ -52,7 +52,7 @@ import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.inspectionbook.EventBookByNameLoader;
+import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
@@ -1075,7 +1075,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		SetupDataLastModDatesServiceDTO dto = new SetupDataLastModDatesServiceDTO();
 
 		dto.setAutoAttributes(setupModDates.getAutoAttributes());
-		dto.setInspectionTypes(setupModDates.getInspectionTypes());
+		dto.setInspectionTypes(setupModDates.getEventTypes());
 		dto.setOwners(setupModDates.getOwners());
 		dto.setProductTypes(setupModDates.getAssetTypes());
 		dto.setJobs(setupModDates.getJobs());

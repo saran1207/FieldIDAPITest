@@ -56,11 +56,11 @@ public class NotificationSettingDeleteHandlerTest {
 	public void should_delete_1_notification() {
 		EventType eventTypeToDelete = anEventType().build();
 		
-		List<Long> inspectionToRemove = new FluentArrayList<Long>().stickOn(1L);
+		List<Long> eventToRemove = new FluentArrayList<Long>().stickOn(1L);
 		
 		Query mockQuery = createMock(Query.class);
 		expect(mockQuery.setParameter((String)anyObject(), anyLong())).andReturn(mockQuery);
-		expect(mockQuery.getResultList()).andReturn(inspectionToRemove);
+		expect(mockQuery.getResultList()).andReturn(eventToRemove);
 		replay(mockQuery);
 		
 		Query mockDeleteQuery = createMock(Query.class);

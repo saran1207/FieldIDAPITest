@@ -7,7 +7,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.viewhelpers.ColumnMapping;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectiontype.CommonEventAttributeNameListLoader;
+import com.n4systems.model.eventtype.CommonEventAttributeNameListLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 public class EventAttributeDynamicGroupGenerator {

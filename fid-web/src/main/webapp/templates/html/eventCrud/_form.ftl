@@ -1,7 +1,7 @@
 	<head>
 		<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
-		<script type="text/javascript" src="<@s.url value="/javascript/inspection.js" />" ></script>
-		<script type="text/javascript" src="<@s.url value="/javascript/inspectionBook.js"/>" ></script>
+		<script type="text/javascript" src="<@s.url value="/javascript/event.js" />" ></script>
+		<script type="text/javascript" src="<@s.url value="/javascript/eventBook.js"/>" ></script>
 		<script type="text/javascript">
 			changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="ajax"   />';
 			updateEventBooksUrl = '<@s.url action="eventBooks" namespace="ajax"   />';
@@ -27,7 +27,7 @@
 			
 		</script>
 		
-		<@n4.includeStyle type="page" href="inspection" />
+		<@n4.includeStyle type="page" href="event" />
 		
 		
 		<#include "/templates/html/common/_calendar.ftl"/>

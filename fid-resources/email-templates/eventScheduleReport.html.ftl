@@ -32,10 +32,10 @@ table.overdue td {
 <center>
 
 	<#if upcomingEvents?exists>
-		<h3>Scheduled Inspection Report:  ${setting.name}</h3>
+		<h3>Scheduled Event Report:  ${setting.name}</h3>
 		
 		<#if upcomingEvents.empty>
-			<h5>There are no scheduled inspections for this period</h5>
+			<h5>There are no scheduled events for this period</h5>
 		<#else>
 			<table class="message" cellpadding=2 cellspacing=2 border>
 				<tr>
@@ -45,18 +45,18 @@ table.overdue td {
 					<th>Division</th>
 					<th>Asset Type</th>
 					<th>Event Type</th>
-					<th>Inspections Due</th>
+					<th>Events Due</th>
 				</tr>
 	
 				<#list upcomingEvents as isCount>
 					<tr>
-						<td>${dateFormatter.format(isCount.nextInspectionDate)}</td>
+						<td>${dateFormatter.format(isCount.nextEventDate)}</td>
 						<td>${isCount.organizationName}</td>
 						<td>${isCount.customerName}</td>
 						<td>${isCount.divisionName}</td>
 						<td>${isCount.assetTypeName}</td>
-						<td>${isCount.inspectionTypeName}</td>
-						<td>${isCount.inspectionCount}</td>
+						<td>${isCount.eventTypeName}</td>
+						<td>${isCount.eventCount}</td>
 					</tr>				
 	
 				</#list>
@@ -65,10 +65,10 @@ table.overdue td {
 		</#if>
 	</#if>	
 	<#if overdueEvents?exists>
-		<h3>Overdue Inspection Report:  ${setting.name} as of ${dateFormatter.format(overdueDate)}</h3>
+		<h3>Overdue Event Report:  ${setting.name} as of ${dateFormatter.format(overdueDate)}</h3>
 		
 		<#if overdueEvents.empty>
-			<h5>There are no over due inspections</h5>
+			<h5>There are no over due events</h5>
 		<#else>
 			<table class="message overdue" cellpadding=2 cellspacing=2 border>
 				<tr>
@@ -78,18 +78,18 @@ table.overdue td {
 					<th>Division</th>
 					<th>Asset Type</th>
 					<th>Event Type</th>
-					<th>Inspections Due</th>
+					<th>Events Due</th>
 				</tr>
 	
 				<#list overdueEvents as isCount>
 					<tr>
-						<td>${dateFormatter.format(isCount.nextInspectionDate)}</td>
+						<td>${dateFormatter.format(isCount.nextEventDate)}</td>
 						<td>${isCount.organizationName}</td>
 						<td>${isCount.customerName}</td>
 						<td>${isCount.divisionName}</td>
 						<td>${isCount.assetTypeName}</td>
-						<td>${isCount.inspectionTypeName}</td>
-						<td>${isCount.inspectionCount}</td>
+						<td>${isCount.eventTypeName}</td>
+						<td>${isCount.eventCount}</td>
 					</tr>				
 	
 				</#list>

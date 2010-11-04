@@ -59,7 +59,7 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		String eventName = manageEventTypesPage.clickFirstListItem();
 		assertEquals("View", manageEventTypesPage.getCurrentTab());
 		manageEventTypesPage.clickEventFormTab();
-		assertEquals("Inspection Form", manageEventTypesPage.getCurrentTab());
+		assertEquals("Event Form", manageEventTypesPage.getCurrentTab());
 		assertTrue(manageEventTypesPage.checkPageHeaderText(eventName));
 	}
 
@@ -176,10 +176,10 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		EventType eventType = new EventType(TEST_EVENT_NAME);
 		eventType.setGroup("Maintenance");
 		eventType.setPrintable(true);
-		eventType.setMasterInspection(false);
+		eventType.setMasterEvent(false);
 		eventType.setAssignedToAvailable(true);
 		eventType.setSupportedProofTestTypes(Arrays.asList(new String[]{"ROBERTS", "CHANT"}));
-		eventType.setInspectionAttributes(Arrays.asList(new String[]{"Attribute1", "Attribute2"}));
+		eventType.setEventAttributes(Arrays.asList(new String[]{"Attribute1", "Attribute2"}));
 		return eventType;
 	}
 

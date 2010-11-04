@@ -2,7 +2,7 @@ package com.n4systems.persistence.loaders;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.downloadlink.AllDownloadLinksByDateLoader;
-import com.n4systems.model.inspection.EventBySubEventLoader;
+import com.n4systems.model.event.EventBySubEventLoader;
 import com.n4systems.model.asset.LastEventDateLoader;
 import com.n4systems.model.safetynetwork.OrgConnectionExistsLoader;
 import com.n4systems.model.signuppackage.ContractPricingByExternalIdLoader;

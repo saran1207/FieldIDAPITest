@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.n4systems.api.conversion.inspection.EventToModelConverter;
+import com.n4systems.api.conversion.event.EventToModelConverter;
 import com.n4systems.api.model.EventView;
 import com.n4systems.api.validation.validators.EventViewValidator;
 import com.n4systems.ejb.impl.CreateEventParameter;
@@ -31,7 +31,7 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
-import com.n4systems.handlers.creator.inspections.EventCreator;
+import com.n4systems.handlers.creator.events.EventCreator;
 import com.n4systems.model.Event;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;

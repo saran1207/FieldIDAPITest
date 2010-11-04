@@ -4,7 +4,7 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.event.AssignedToUpdate;
 
 public class AssignedToUpdateHandler extends WebOutputHandler {
 	private static final String NO_ASSIGNMENT = "";

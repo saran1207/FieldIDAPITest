@@ -1,6 +1,6 @@
 <head>
-	<@n4.includeScript src="inspection"/>
-	<@n4.includeStyle type="page" href="inspection" />
+	<@n4.includeScript src="event"/>
+	<@n4.includeStyle type="page" href="event" />
 </head>
 
 <div id="pageContent">

@@ -1,8 +1,8 @@
 package com.n4systems.webservice.server;
 
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.inspectionschedule.EventScheduleByGuidOrIdLoader;
-import com.n4systems.model.inspectionschedule.EventScheduleSaver;
+import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
+import com.n4systems.model.eventschedule.EventScheduleSaver;
 import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.EntityStillReferencedException;

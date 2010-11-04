@@ -172,30 +172,30 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		return selenium.getValue("//form[@id='assetTypeUpdate']//input[@name='descriptionTemplate']");
 	}
 
-	public List<String> getInspectionTypes() {
+	public List<String> getEventTypes() {
 		return getColumnFromTableStartingAtRow("//form[@id='assetTypeEventTypesSave']//table[@class='list']", 2, 2);
 	}
 
-	public void selectInspectionType(String eventType) {
+	public void selectEventType(String eventType) {
 		selenium.check("//form[@id='assetTypeEventTypesSave']//table[@class='list']//td[position() = 2 and contains(.,'"+eventType+"')]//parent::tr/td[1]/input[@type='checkbox']");
 	}
 
-	public void saveInspectionTypes() {
+	public void saveEventTypes() {
 		selenium.click("//form[@id='assetTypeEventTypesSave']//input[@type='submit' and @value='Save']");
 		waitForPageToLoad();
 	}
 	
-	public void scheduleInspectionFrequencyForType(String inspectionType, int everyNDays) {
-		selenium.click("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]//a[.='Edit']");
-		String frequencyInputXPath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]//input[@type='text' and contains(@id, 'frequency')]";
+	public void scheduleEventFrequencyForType(String eventType, int everyNDays) {
+		selenium.click("//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//a[.='Edit']");
+		String frequencyInputXPath = "//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//input[@type='text' and contains(@id, 'frequency')]";
 		waitForElementToBePresent(frequencyInputXPath);
 		selenium.type(frequencyInputXPath, everyNDays+"");
-		selenium.click("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]//a[.='Save']");
+		selenium.click("//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//a[.='Save']");
 		waitForAjax();
 	}
 	
 	public void removeEventFrequencyForType(String eventType) {
-		selenium.click("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//a[.='Remove']");
+		selenium.click("//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//a[.='Remove']");
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -204,21 +204,21 @@ public class ManageAssetTypesPage extends FieldIDPage {
         waitForAjax();
 	}
 	
-	public boolean isInspectionFrequencyScheduledForType(String inspectionType) {
-		return !selenium.isElementPresent("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[position() = 2 and contains(., 'Not Scheduled')]");
+	public boolean isEventFrequencyScheduledForType(String eventType) {
+		return !selenium.isElementPresent("//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[position() = 2 and contains(., 'Not Scheduled')]");
 	}
 	
-	public int getScheduledFrequencyForInspectionType(String inspectionType) {
+	public int getScheduledFrequencyForEventType(String eventType) {
 		Pattern frequencyPattern = Pattern.compile("Schedule a .* every (\\d+) Days");
-		String freqStr = selenium.getText("//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]//span[@class='frequency']");
+		String freqStr = selenium.getText("//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//span[@class='frequency']");
 		Matcher m = frequencyPattern.matcher(freqStr);
 		if (!m.matches()) fail("Bad frequency pattern, could not parse: " + freqStr);
 		return Integer.parseInt(m.group(1).trim());
 	}
 
-	public void addOverrideForOwner(String inspectionType, Owner owner, int frequency) {
-		String cellXpath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]"; 
-		expandOverridesSectionIfNecessary(inspectionType);
+	public void addOverrideForOwner(String eventType, Owner owner, int frequency) {
+		String cellXpath = "//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]";
+		expandOverridesSectionIfNecessary(eventType);
 		
 		selenium.click(cellXpath + "//a[.='Add override']");
 		new ConditionWaiter(new Predicate() {
@@ -238,8 +238,8 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	private String expandOverridesSectionIfNecessary(String inspectionType) {
-		String cellXpath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]";
+	private String expandOverridesSectionIfNecessary(String eventType) {
+		String cellXpath = "//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]";
 		if (selenium.isElementPresent(cellXpath + "//a[starts-with(@id, 'overrideExpand')]//img[@alt='[+]']")) {
 			selenium.click(cellXpath + "//a[starts-with(@id, 'overrideExpand')]//img[@alt='[+]']");
 		}
@@ -247,16 +247,16 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		return cellXpath;
 	}
 	
-	public List<InspectionFrequencyOverride> getInspectionFrequencyOverrides(String inspectionType) {
-		expandOverridesSectionIfNecessary(inspectionType);
+	public List<EventFrequencyOverride> getEventFrequencyOverrides(String eventType) {
+		expandOverridesSectionIfNecessary(eventType);
 		
-		List<InspectionFrequencyOverride> overrides = new ArrayList<InspectionFrequencyOverride>();
+		List<EventFrequencyOverride> overrides = new ArrayList<EventFrequencyOverride>();
 		
-		String overrideXpath = "//table[@id='inspectionListTable']//td[position()=1 and contains(.,'"+inspectionType+"')]//parent::tr/td[2]"
+		String overrideXpath = "//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]"
 			+"//div[contains(@class, 'customerOverride')]";
 		int countOverrides = selenium.getXpathCount(overrideXpath).intValue();
 		for (int i = 1; i <= countOverrides; i++) {
-			InspectionFrequencyOverride override = new InspectionFrequencyOverride();
+			EventFrequencyOverride override = new EventFrequencyOverride();
 			override.customer = selenium.getText("xpath=("+overrideXpath+")["+i+"]/span[@class='customer']/b").trim();
 			override.frequency = Integer.parseInt(selenium.getText("xpath=("+overrideXpath+")["+i+"]/span[@class='frequency']/b[2]").trim());
 			overrides.add(override);
@@ -264,7 +264,7 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		return overrides;
 	}
 	
-	public static class InspectionFrequencyOverride {
+	public static class EventFrequencyOverride {
 		public String customer;
 		public int frequency;
 	}

@@ -30,7 +30,7 @@ import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
-import com.n4systems.model.inspectionbook.EventBookListLoader;
+import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.util.DateHelper;

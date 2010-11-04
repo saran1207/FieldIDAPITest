@@ -3,10 +3,10 @@ package com.n4systems.taskscheduling.task;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
-import com.n4systems.model.inspectionschedulecount.OverdueEventScheduleCountListLoader;
+import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.inspectionschedulecount.UpcomingEventScheduleCountListLoader;
+import com.n4systems.model.eventschedulecount.UpcomingEventScheduleCountListLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;

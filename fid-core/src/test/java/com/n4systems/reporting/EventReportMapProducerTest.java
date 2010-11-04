@@ -4,7 +4,7 @@ import static com.n4systems.model.builders.EventBuilder.*;
 import static com.n4systems.model.builders.EventTypeBuilder.*;
 import static com.n4systems.model.builders.SubEventBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
-import static com.n4systems.model.inspection.AssignedToUpdate.*;
+import static com.n4systems.model.event.AssignedToUpdate.*;
 import static com.n4systems.reporting.ReportMapEntryMatcher.*;
 import static com.n4systems.reporting.mapbuilders.ReportField.*;
 import static com.n4systems.test.helpers.Asserts.*;

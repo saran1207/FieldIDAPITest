@@ -5,7 +5,7 @@ import java.util.List;
 import com.n4systems.handlers.remover.summary.AssociatedEventTypeDeleteSummary;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectiontype.AssociatedEventTypesLoader;
+import com.n4systems.model.eventtype.AssociatedEventTypesLoader;
 import com.n4systems.persistence.Transaction;
 
 public class AssociatedEventTypeListDeleteHandlerImpl implements AssociatedEventTypeListDeleteHandler {

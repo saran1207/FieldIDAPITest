@@ -2,7 +2,7 @@ package com.n4systems.reporting.mapbuilders;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.inspectionschedule.NextEventScheduleLoader;
+import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.util.DateHelper;
@@ -33,7 +33,7 @@ public class EventScheduleMapBuilder extends AbstractMapBuilder<Event> {
 	}
 	
 	private EventSchedule loadNextEventSchedule(Event event, Transaction transaction) {
-		EventSchedule nextEventSchedule = nextEventScheduleLoader.setFieldsFromInspection(event).load(transaction);
+		EventSchedule nextEventSchedule = nextEventScheduleLoader.setFieldsFromEvent(event).load(transaction);
 		return nextEventSchedule;
 	}
 }

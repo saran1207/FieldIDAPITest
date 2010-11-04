@@ -28,7 +28,7 @@ public class MassUpdateSchedulesTest extends PageNavigatingTestCase<SchedulesSea
         SchedulesMassUpdatePage scheduleMassUpdatePage = resultsPage.clickMassUpdate();
         String nextDate = DateUtil.formatDate(DateUtil.theDayAfter(beginningDate));
 
-        scheduleMassUpdatePage.enterNextInspectionDate(nextDate);
+        scheduleMassUpdatePage.enterNextEventDate(nextDate);
         resultsPage = scheduleMassUpdatePage.clickSaveButtonAndConfirm();
 
         assertEquals(nextDate, resultsPage.getScheduledDateForResult(1));

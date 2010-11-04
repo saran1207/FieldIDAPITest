@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.n4systems.fieldid.actions.inspection.WebEventSchedule;
+import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubAsset;
@@ -17,7 +17,7 @@ import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import com.n4systems.tools.FileDataContainer;
 

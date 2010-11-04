@@ -1,4 +1,4 @@
-${action.setPageType('inspection_type', 'show')!}
+${action.setPageType('event_type', 'show')!}
 <style>
 	p.criteria span {
 		width:auto;

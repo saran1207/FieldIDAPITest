@@ -124,38 +124,38 @@
 		</action>
 
 		<action name="buttonGroupEdit" method="edit"
-			class="com.n4systems.fieldid.actions.inspection.ButtonGroupCrud">
+			class="com.n4systems.fieldid.actions.event.ButtonGroupCrud">
 			<result name="success" type="freemarker">/templates/ajax/buttonGroupCrud/edit.ftl</result>
 		</action>
 
 		<action name="buttonGroupSave" method="save"
-			class="com.n4systems.fieldid.actions.inspection.ButtonGroupCrud">
+			class="com.n4systems.fieldid.actions.event.ButtonGroupCrud">
 			<result name="input" type="freemarker">/templates/ajax/buttonGroupCrud/edit.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/buttonGroupCrud/edit.ftl</result>
 		</action>
 
 		<action name="buttonGroupAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.ButtonGroupCrud">
+			class="com.n4systems.fieldid.actions.event.ButtonGroupCrud">
 			<result name="success" type="freemarker">/templates/ajax/buttonGroupCrud/add.ftl</result>
 		</action>
 
 		<action name="buttonAdd" method="addButton"
-			class="com.n4systems.fieldid.actions.inspection.ButtonGroupCrud">
+			class="com.n4systems.fieldid.actions.event.ButtonGroupCrud">
 			<result name="success" type="freemarker">/templates/ajax/buttonGroupCrud/addButton.ftl</result>
 		</action>
 
 		<action name="sectionAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.EventFormSection">
+			class="com.n4systems.fieldid.actions.event.EventFormSection">
 			<result name="success" type="freemarker">/templates/ajax/eventForm/addSection.ftl</result>
 		</action>
 
 		<action name="criteriaAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.EventFormSection">
+			class="com.n4systems.fieldid.actions.event.EventFormSection">
 			<result name="success" type="freemarker">/templates/ajax/eventForm/addCriteria.ftl</result>
 		</action>
 
 		<action name="observationAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.EventFormSection">
+			class="com.n4systems.fieldid.actions.event.EventFormSection">
 			<result name="success" type="freemarker">/templates/ajax/observationsCrud/addObservation.ftl</result>
 		</action>
 
@@ -164,27 +164,27 @@
 		
 
 		<action name="eventBookOpen" method="open"
-			class="com.n4systems.fieldid.actions.inspection.EventBookCrud">
+			class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/open.ftl</result>
 		</action>
 
 		<action name="eventBookClose" method="close"
-			class="com.n4systems.fieldid.actions.inspection.EventBookCrud">
+			class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/close.ftl</result>
 		</action>
 
 		<action name="eventBookDelete" method="delete"
-			class="com.n4systems.fieldid.actions.inspection.EventBookCrud">
+			class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/delete.ftl</result>
 		</action>
 		
 		<action name="eventAttributeAdd" method="add"
-			class="com.n4systems.fieldid.actions.inspection.EventAttributeAction">
+			class="com.n4systems.fieldid.actions.event.EventAttributeAction">
 			<result name="success" type="freemarker">/templates/ajax/eventType/addAttribute.ftl</result>
 		</action>
 
 		<action name="eventBooks" method="lPList"
-			class="com.n4systems.fieldid.actions.inspection.EventBookCrud">
+			class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/list.ftl</result>
 		</action>
 
@@ -422,15 +422,15 @@
 			<result name="success" type="freemarker">/templates/ajax/userCrud/sendWelcomeEmail.ftl</result>
 		</action>
 		
-		<action name="eventImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.inspection.EventImportAction">
+		<action name="eventImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.event.EventImportAction">
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
 		
-		<action name="addSchedule" method="add" class="com.n4systems.fieldid.actions.inspection.AddEventScheduleAjaxAction">
+		<action name="addSchedule" method="add" class="com.n4systems.fieldid.actions.event.AddEventScheduleAjaxAction">
 			<result name="success" type="freemarker">/templates/ajax/eventCrud/eventSchedule.ftl</result>
 		</action>
 		
-		<action name="autoSuggestSchedule" method="autoSuggest" class="com.n4systems.fieldid.actions.inspection.AddEventScheduleAjaxAction">
+		<action name="autoSuggestSchedule" method="autoSuggest" class="com.n4systems.fieldid.actions.event.AddEventScheduleAjaxAction">
 			<result name="success" type="freemarker">/templates/ajax/eventCrud/eventSchedule.ftl</result>
 		</action>
 		

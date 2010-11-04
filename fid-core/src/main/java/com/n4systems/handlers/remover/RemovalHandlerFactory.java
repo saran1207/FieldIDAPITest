@@ -1,9 +1,9 @@
 package com.n4systems.handlers.remover;
 
 import com.n4systems.model.catalog.CatalogSaver;
-import com.n4systems.model.inspectiontype.AssociatedEventTypeSaver;
-import com.n4systems.model.inspectiontype.EventFrequencySaver;
-import com.n4systems.model.inspectiontype.EventTypeSaver;
+import com.n4systems.model.eventtype.AssociatedEventTypeSaver;
+import com.n4systems.model.eventtype.EventFrequencySaver;
+import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
 public class RemovalHandlerFactory {

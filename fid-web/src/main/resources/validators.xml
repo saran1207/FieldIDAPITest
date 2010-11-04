@@ -20,10 +20,10 @@
  <validator name="requiredStringSet" class="com.n4systems.fieldid.validators.RequiredStringSet" />
  <validator name="requiredSet" class="com.n4systems.fieldid.validators.RequiredSetValidator" />
  <validator name="requiredNameSet" class="com.n4systems.fieldid.validators.RequiredNameSetValidator" />
- <validator name="requiredCriteriaName" class="com.n4systems.fieldid.validators.inspection.CriteriaNameValidator" />
- <validator name="requiredCriteriaSets" class="com.n4systems.fieldid.validators.inspection.CriteriaSetValidator" />
- <validator name="requiredCriteriaStateSet" class="com.n4systems.fieldid.validators.inspection.CriteriaStateSetValidator" />  		
- <validator name="requiredSetsResult" class="com.n4systems.fieldid.validators.inspection.RequiredSetsResultValidator" />
+ <validator name="requiredCriteriaName" class="com.n4systems.fieldid.validators.event.CriteriaNameValidator" />
+ <validator name="requiredCriteriaSets" class="com.n4systems.fieldid.validators.event.CriteriaSetValidator" />
+ <validator name="requiredCriteriaStateSet" class="com.n4systems.fieldid.validators.event.CriteriaStateSetValidator" />
+ <validator name="requiredSetsResult" class="com.n4systems.fieldid.validators.event.RequiredSetsResultValidator" />
  <validator name="requiredIfFeature" class="com.n4systems.fieldid.validators.RequiredIfFeatureValidator" />
  <validator name="uploadFileLimitValidator" class="com.n4systems.fieldid.validators.UploadFileLimitValidator" />
  <validator name="uploadAttachmentLimitValidator" class="com.n4systems.fieldid.validators.UploadAttachmentLimitValidator" />

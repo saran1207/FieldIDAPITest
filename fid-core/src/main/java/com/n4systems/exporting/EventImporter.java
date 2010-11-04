@@ -1,7 +1,7 @@
 package com.n4systems.exporting;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.inspection.EventToModelConverter;
+import com.n4systems.api.conversion.event.EventToModelConverter;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.EventView;
 import com.n4systems.api.validation.Validator;

@@ -9,8 +9,8 @@ import java.util.Date;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.inspection.EventByMobileGuidLoader;
-import com.n4systems.model.inspectionschedule.EventScheduleSaver;
+import com.n4systems.model.event.EventByMobileGuidLoader;
+import com.n4systems.model.eventschedule.EventScheduleSaver;
 import org.junit.Test;
 
 import com.n4systems.model.Project;

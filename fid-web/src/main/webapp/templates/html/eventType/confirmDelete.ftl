@@ -1,4 +1,4 @@
-${action.setPageType('inspection_type', 'edit')!}
+${action.setPageType('event_type', 'edit')!}
 
 
 

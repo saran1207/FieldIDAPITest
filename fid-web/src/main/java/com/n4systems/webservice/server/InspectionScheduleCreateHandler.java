@@ -3,7 +3,7 @@ package com.n4systems.webservice.server;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectionschedule.EventScheduleSaver;
+import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;

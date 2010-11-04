@@ -7,7 +7,7 @@ import com.n4systems.handlers.remover.EventFrequenciesDeleteHandlerImpl;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectiontype.EventFrequencySaver;
+import com.n4systems.model.eventtype.EventFrequencySaver;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -15,7 +15,7 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.handlers.remover.EventFrequenciesDeleteHandler;
 import com.n4systems.model.api.Archivable.EntityState;
-import com.n4systems.model.inspectiontype.AssociatedEventTypeSaver;
+import com.n4systems.model.eventtype.AssociatedEventTypeSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;

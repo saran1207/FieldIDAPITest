@@ -8,7 +8,7 @@ import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.assettype.EventFrequencyListLoader;
-import com.n4systems.model.inspectiontype.EventFrequencySaver;
+import com.n4systems.model.eventtype.EventFrequencySaver;
 import com.n4systems.persistence.Transaction;
 
 public class EventFrequenciesDeleteHandlerImpl implements EventFrequenciesDeleteHandler {

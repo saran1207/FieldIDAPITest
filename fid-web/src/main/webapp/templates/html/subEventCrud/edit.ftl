@@ -5,7 +5,7 @@
 <#if action.isParentAsset() >
 	<#assign formAction="baseEventUpdate"/>
 </#if>
-${action.setPageType('inspection', 'edit')!}
+${action.setPageType('event', 'edit')!}
 
 <@s.form action="${formAction}" theme="simple" cssClass="crudForm largeForm" method="post" onsubmit="return checkForUploads();" >
 	<@s.hidden name="parentAssetId" />

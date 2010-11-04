@@ -1,5 +1,5 @@
 <head>
-	<script type="text/javascript" src="<@s.url value="/javascript/inspectionType.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/eventType.js"/>"></script>
 	<script type="text/javascript">
 		eventAttributeIndex = ${(infoFields?size)!0};
 		addEventAttributeUrl = '<@s.url action="eventAttributeAdd" namespace="/ajax"/>';

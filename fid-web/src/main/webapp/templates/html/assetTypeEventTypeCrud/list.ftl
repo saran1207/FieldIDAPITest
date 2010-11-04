@@ -29,7 +29,7 @@
 		
 </script>
 
-${action.setPageType('asset_type', 'select_inspection_types')!}
+${action.setPageType('asset_type', 'select_event_types')!}
 <#if ! eventTypes.isEmpty() >
 	<@s.form action="assetTypeEventTypesSave" id="assetTypeEventTypesSave" theme="simple">
 		<@s.hidden name="assetTypeId" />

@@ -46,7 +46,7 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 
 	@Column(name="inspectiontypes", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date inspectionTypes = new Date();
+	private Date eventTypes = new Date();
 	
 	@Column(name="autoattributes", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -117,12 +117,12 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 		this.assetTypes = assetTypes;
 	}
 
-	public Date getInspectionTypes() {
-		return inspectionTypes;
+	public Date getEventTypes() {
+		return eventTypes;
 	}
 
-	public void setInspectionTypes(Date inspectionTypes) {
-		this.inspectionTypes = inspectionTypes;
+	public void setEventTypes(Date eventTypes) {
+		this.eventTypes = eventTypes;
 	}
 
 	public Date getAutoAttributes() {

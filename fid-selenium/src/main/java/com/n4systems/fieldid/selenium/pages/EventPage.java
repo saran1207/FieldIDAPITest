@@ -16,7 +16,7 @@ public class EventPage extends FieldIDPage {
 	public boolean checkOnEventPage() {
 		checkForErrorMessages(null);
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event -')]") 
-			|| selenium.isElementPresent("//form[@id='inspectionCreate']") 
+			|| selenium.isElementPresent("//form[@id='eventCreate']") 
 			|| selenium.isElementPresent("//form[@id='eventUpdate']");
 	}
 

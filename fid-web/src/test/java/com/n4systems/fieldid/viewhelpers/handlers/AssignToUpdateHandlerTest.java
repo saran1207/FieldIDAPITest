@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.event.AssignedToUpdate;
 
 
 public class AssignToUpdateHandlerTest {

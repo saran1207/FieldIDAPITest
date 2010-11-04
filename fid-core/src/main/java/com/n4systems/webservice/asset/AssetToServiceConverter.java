@@ -6,7 +6,7 @@ import java.util.List;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.inspection.LastEventLoader;
+import com.n4systems.model.event.LastEventLoader;
 import com.n4systems.webservice.ModelToServiceConverter;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;

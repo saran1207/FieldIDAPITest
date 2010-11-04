@@ -54,26 +54,26 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	}
 	
 	@Test
-	public void search_results_view_inspection_link() throws Exception {
+	public void search_results_view_event_link() throws Exception {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
 		String serialNumber = page.getResultSerialNumbers().get(0);
 
-		page.clickViewInspection(serialNumber);
+		page.clickViewEvent(serialNumber);
 	}
 	
 	@Test
-	public void search_results_edit_inspection_link() throws Exception {
+	public void search_results_edit_event_link() throws Exception {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
 		String serialNumber = page.getResultSerialNumbers().get(0);
 
-		EventPage inpectPage = page.clickEditInspection(serialNumber);
-		assertEquals("Edit", inpectPage.getCurrentTab());
+		EventPage eventPage = page.clickEditEvent(serialNumber);
+		assertEquals("Edit", eventPage.getCurrentTab());
 	}
 	
 	//Lightbox issues.
@@ -93,7 +93,7 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		
 		page.clickStartEventLink();
 		
-		assertEquals("Inspect - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		assertEquals("Event - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 	
 	

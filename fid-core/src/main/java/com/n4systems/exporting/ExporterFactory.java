@@ -3,7 +3,7 @@ package com.n4systems.exporting;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Event;
 import com.n4systems.model.Asset;
-import com.n4systems.model.inspectionschedule.NextEventDateByEventLoader;
+import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;

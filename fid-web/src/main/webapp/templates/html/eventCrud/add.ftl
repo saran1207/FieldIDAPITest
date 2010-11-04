@@ -1,4 +1,4 @@
-${action.setPageType('inspection', 'add')!}
+${action.setPageType('event', 'add')!}
 
 <@s.form action="eventCreate" cssClass="fullForm fluidSets" theme="fieldid" method="post"  onsubmit="return checkForUploads();" >
 	<#assign form_action="ADD" />

@@ -9,8 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.n4systems.model.inspectionschedule.EventScheduleByGuidOrIdLoader;
-import com.n4systems.model.inspectionschedule.EventScheduleSaver;
+import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
+import com.n4systems.model.eventschedule.EventScheduleSaver;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -18,7 +18,7 @@ import com.n4systems.handlers.creator.signup.SignUpHandler;
 import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
 import com.n4systems.handlers.creator.signup.SignupReferralHandler;
 import com.n4systems.handlers.creator.signup.SignupReferralHandlerImpl;
-import com.n4systems.model.inspectiontypegroup.EventTypeGroupSaver;
+import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;

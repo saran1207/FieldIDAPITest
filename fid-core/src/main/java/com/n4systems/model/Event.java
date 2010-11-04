@@ -28,7 +28,7 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NetworkEntity;
-import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;

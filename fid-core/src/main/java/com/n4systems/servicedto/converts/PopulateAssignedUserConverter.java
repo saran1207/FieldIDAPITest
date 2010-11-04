@@ -3,7 +3,7 @@ package com.n4systems.servicedto.converts;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;

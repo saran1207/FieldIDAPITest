@@ -16,7 +16,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TagOption;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.inspectiontypegroup.EventTypeGroupSaver;
+import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;

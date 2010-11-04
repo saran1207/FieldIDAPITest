@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/asset.css"/>" />
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/subAsset.css"/>" />
-	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/masterInspection.css"/>" />
+	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/pageStyles/masterEvent.css"/>" />
 	
 	<script type="text/javascript">
 		lookupAssetUrl = "<@s.url action="assets" namespace="/aHtml"/>";

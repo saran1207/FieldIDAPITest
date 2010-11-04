@@ -9,7 +9,7 @@ public class ManageEventsPage extends FieldIDPage {
 	}
 
 	public EventPage clickFirstEventLink() {
-		selenium.click("//span[@class='inspectionType']/a");
+		selenium.click("//span[@class='eventType']/a");
 		return new EventPage(selenium);
 	}
 

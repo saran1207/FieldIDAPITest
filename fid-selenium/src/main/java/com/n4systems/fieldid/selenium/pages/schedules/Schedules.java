@@ -39,6 +39,6 @@ public class Schedules {
 
 	public int totalResults() {
 		String reportTotal = selenium.getText("css=.total");
-		return Integer.valueOf(reportTotal.trim().replace("Total Scheduled Inspections", "").trim());
+		return Integer.valueOf(reportTotal.trim().replace("Total Scheduled Events", "").trim());
 	}
 }

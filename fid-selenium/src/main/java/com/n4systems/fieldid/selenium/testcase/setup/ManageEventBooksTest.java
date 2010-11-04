@@ -32,18 +32,18 @@ public class ManageEventBooksTest extends FieldIDTestCase {
 		if(status1.equals("Open")) {
 			manageEventBooksPage.clickFirstListItemClose();
 			status2 = manageEventBooksPage.getFirstListItemStatus();
-			manageEventBooksPage.verifyInspectionBookSaved();
+			manageEventBooksPage.verifyEventBookSaved();
 			manageEventBooksPage.clickFirstListItemOpen();
 			status3 = manageEventBooksPage.getFirstListItemStatus();
 		}else {
 			manageEventBooksPage.clickFirstListItemOpen();
 			status2 = manageEventBooksPage.getFirstListItemStatus();
-			manageEventBooksPage.verifyInspectionBookSaved();
+			manageEventBooksPage.verifyEventBookSaved();
 			manageEventBooksPage.clickFirstListItemClose();
 			status3 = manageEventBooksPage.getFirstListItemStatus();
 		}
 		
-		manageEventBooksPage.verifyInspectionBookSaved();
+		manageEventBooksPage.verifyEventBookSaved();
 		assertFalse(status1.equals(status2));
 		assertEquals(status1, status3);
 	}
@@ -63,9 +63,9 @@ public class ManageEventBooksTest extends FieldIDTestCase {
 		manageEventBooksPage.clickAddTab();
 		assertEquals("Add", manageEventBooksPage.getCurrentTab());
 		EventBook book = getTestEventBook();
-		manageEventBooksPage.setInspectionBookFormFields(book);
+		manageEventBooksPage.setEventBookFormFields(book);
 		manageEventBooksPage.clickSave();
-		manageEventBooksPage.verifyInspectionBookSaved();
+		manageEventBooksPage.verifyEventBookSaved();
 		assertEquals("View All", manageEventBooksPage.getCurrentTab());
 		
 		deleteIfExists("Test Selenium");
@@ -74,7 +74,7 @@ public class ManageEventBooksTest extends FieldIDTestCase {
 	private void deleteIfExists(String bookName) {
 		if(manageEventBooksPage.listItemExists(bookName)) {
 			manageEventBooksPage.clickDelete(bookName);
-			manageEventBooksPage.verifyInspectionBookDeleted();
+			manageEventBooksPage.verifyEventBookDeleted();
 		}
 	}
 	

@@ -30,8 +30,8 @@ public class AssetPage {
 	private String locationLabelLocator = "xpath=//LABEL[contains(text(),'Location')]";
 	private String referenceNumberLabelLocator = "xpath=//LABEL[contains(text(),'Reference Number')]";
 	private String purchaseOrderLabelLocator = "xpath=//LABEL[contains(text(),'Purchase Order')]";
-	private String lastInspectionHeaderLocator = "xpath=//H2[contains(text(),'Last Inspection')]";
-	private String manageInspectionsLinkLocator = "xpath=//A[@id='manageInspections']";
+	private String lastEventHeaderLocator = "xpath=//H2[contains(text(),'Last Event')]";
+	private String manageEventsLinkLocator = "xpath=//A[@id='manageEvents']";
 	private String editAssetSerialNumberTextFieldLocator = "xpath=//INPUT[@id='serialNumberText']";
 	private String editAssetGenerateLinkLocator = "xpath=//A[contains(text(),'generate')]";
 	private String editAssetRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
@@ -45,7 +45,7 @@ public class AssetPage {
 	private String editAssetChooseLinkLocator = "xpath=//A[contains(text(),'Choose')]";
 	private String editAssetAttachAFileButtonLocator = "xpath=//BUTTON[contains(text(),'Attach A File')]";
 	private String editAssetSaveButtonLocator = "xpath=//INPUT[@id='saveButton']";
-	private String editAssetSaveAndInspectButtonLocator = "xpath=//INPUT[@id='saveAndInspButton']";
+	private String editAssetSaveAndStartEventButtonLocator = "xpath=//INPUT[@id='saveAndStartEventButton']";
 	private String editAssetCancelLinkLocator = "xpath=//A[text()='Cancel']";
 	private String editAssetMergeLinkLocator = "xpath=//A[text()='Merge']";
 	private String editAssetDeleteLinkLocator = "xpath=//A[text()='Delete']";
@@ -169,8 +169,8 @@ public class AssetPage {
 		assertTrue(selenium.isElementPresent(locationLabelLocator));
 		assertTrue(selenium.isElementPresent(referenceNumberLabelLocator));
 		assertTrue(selenium.isElementPresent(purchaseOrderLabelLocator));
-		assertTrue(selenium.isElementPresent(lastInspectionHeaderLocator));
-		assertTrue(selenium.isElementPresent(manageInspectionsLinkLocator));
+		assertTrue(selenium.isElementPresent(lastEventHeaderLocator));
+		assertTrue(selenium.isElementPresent(manageEventsLinkLocator));
 	}
 
 	public void gotoEdit() {
@@ -212,15 +212,15 @@ public class AssetPage {
 		assertTrue(selenium.isElementPresent(editAssetChooseLinkLocator));
 		assertTrue(selenium.isElementPresent(editAssetAttachAFileButtonLocator));
 		assertTrue(selenium.isElementPresent(editAssetSaveButtonLocator));
-		assertTrue(selenium.isElementPresent(editAssetSaveAndInspectButtonLocator));
+		assertTrue(selenium.isElementPresent(editAssetSaveAndStartEventButtonLocator));
 		assertTrue(selenium.isElementPresent(editAssetCancelLinkLocator));
 		assertTrue(selenium.isElementPresent(editAssetMergeLinkLocator));
 		assertTrue(selenium.isElementPresent(editAssetDeleteLinkLocator));
 	}
 
 	public void gotoSaveAndInspect() {
-		if (selenium.isElementPresent(editAssetSaveAndInspectButtonLocator)) {
-			selenium.click(editAssetSaveAndInspectButtonLocator);
+		if (selenium.isElementPresent(editAssetSaveAndStartEventButtonLocator)) {
+			selenium.click(editAssetSaveAndStartEventButtonLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
 			fail("Could not locate the Save And Inspect button");

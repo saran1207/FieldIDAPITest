@@ -1,4 +1,4 @@
-${action.setPageType('inspection', 'multi_proof_test')!}
+${action.setPageType('event', 'multi_proof_test')!}
 <div class="actions">
 	<a href="<@s.url action="multiProofTest.action" />" ><@s.text name="label.uploadmore"/></a>
 </div>

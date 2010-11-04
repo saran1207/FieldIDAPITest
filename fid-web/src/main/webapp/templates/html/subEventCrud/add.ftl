@@ -3,7 +3,7 @@
 <#if action.isParentAsset() >
 	<#assign formAction="baseEventCreate"/>
 </#if>
-${action.setPageType('inspection', 'add')!}
+${action.setPageType('event', 'add')!}
 <@s.form action="${formAction}" theme="simple" cssClass="crudForm fullPageForm" method="post" onsubmit="return checkForUploads();" >
 	<@s.hidden name="parentAssetId"/>
 	<@s.hidden name="token"/>

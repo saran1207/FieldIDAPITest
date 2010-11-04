@@ -19,14 +19,14 @@ public class AddScheduleTest extends PageNavigatingTestCase<AssetPage>{
 	
 	String testDate = format.format(new Date());
 	
-	String testInspectionType = "Check In";
+	String testEventType = "Check In";
 	
 	String testJob = "001";
 	
 	@Before
 	public void setUp() {
-		if (page.checkScheduleExists(testDate, testInspectionType, testJob)) {
-			page.clickRemoveSchdeule(testDate, testInspectionType, testJob);
+		if (page.checkScheduleExists(testDate, testEventType, testJob)) {
+			page.clickRemoveSchdeule(testDate, testEventType, testJob);
 		}
 	}
 
@@ -45,43 +45,43 @@ public class AddScheduleTest extends PageNavigatingTestCase<AssetPage>{
 	@Test
 	public void save_and_remove_schedule() throws Exception {
 		page.clickSchedulesTab();
-		page.setSchedule(testDate, testInspectionType, testJob);
+		page.setSchedule(testDate, testEventType, testJob);
 		page.clickSaveSchedule();
-		assertTrue(page.checkScheduleExists(testDate, testInspectionType, testJob));
-		page.clickRemoveSchdeule(testDate, testInspectionType, testJob);
-		assertFalse(page.checkScheduleExists(testDate, testInspectionType, testJob));
+		assertTrue(page.checkScheduleExists(testDate, testEventType, testJob));
+		page.clickRemoveSchdeule(testDate, testEventType, testJob);
+		assertFalse(page.checkScheduleExists(testDate, testEventType, testJob));
 	}
 	
 	@Test
 	public void edit_and_remove_schedule() throws Exception {
 		page.clickSchedulesTab();
-		page.setSchedule(testDate, testInspectionType, testJob);
+		page.setSchedule(testDate, testEventType, testJob);
 		page.clickSaveSchedule();
-		assertTrue(page.checkScheduleExists(testDate, testInspectionType, testJob));
+		assertTrue(page.checkScheduleExists(testDate, testEventType, testJob));
 		
 		String newDate = getNewdate();
-		page.clickEditSchedule(testDate, testInspectionType, testJob);
-		page.editScheduleDate(testDate, testInspectionType, newDate);
-		page.clickEditSaveSchedule(testInspectionType);
-		assertTrue(page.checkScheduleExists(newDate, testInspectionType, testJob));
+		page.clickEditSchedule(testDate, testEventType, testJob);
+		page.editScheduleDate(testDate, testEventType, newDate);
+		page.clickEditSaveSchedule(testEventType);
+		assertTrue(page.checkScheduleExists(newDate, testEventType, testJob));
 		
-		page.clickRemoveSchdeule(newDate, testInspectionType, testJob);
-		assertFalse(page.checkScheduleExists(newDate, testInspectionType, testJob));
+		page.clickRemoveSchdeule(newDate, testEventType, testJob);
+		assertFalse(page.checkScheduleExists(newDate, testEventType, testJob));
 	}
 	
 	@Test
-	public void schedule_inspect_now_stop_progress_test() {
+	public void schedule_event_now_stop_progress_test() {
 		page.clickSchedulesTab();
-		page.setSchedule(testDate, testInspectionType, testJob);
+		page.setSchedule(testDate, testEventType, testJob);
 		page.clickSaveSchedule();
-		assertTrue(page.checkScheduleExists(testDate, testInspectionType, testJob));
-		EventPage eventPage = page.clickInpectNow(testDate, testInspectionType, testJob);
+		assertTrue(page.checkScheduleExists(testDate, testEventType, testJob));
+		EventPage eventPage = page.clickInpectNow(testDate, testEventType, testJob);
 		eventPage.clickAssetInformationTab();
 		page.clickSchedulesTab();
-		page.clickStopProgress(testDate, testInspectionType, testJob);
+		page.clickStopProgress(testDate, testEventType, testJob);
 		
-		page.clickRemoveSchdeule(testDate, testInspectionType, testJob);
-		assertFalse(page.checkScheduleExists(testDate, testInspectionType, testJob));
+		page.clickRemoveSchdeule(testDate, testEventType, testJob);
+		assertFalse(page.checkScheduleExists(testDate, testEventType, testJob));
 	}
 	private String getNewdate() {
 		Calendar cal = Calendar.getInstance();

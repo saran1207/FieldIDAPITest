@@ -95,8 +95,8 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 		masterAssetPage.clickEditTab().clickDelete();
 	}
 
-	// TODO: Write this after setting up Inspection pages.
-	public void merged_asset_contains_inspections_of_both_assets() {
+	// TODO: Write this after setting up Event pages.
+	public void merged_asset_contains_events_of_both_assets() {
 
 	}
 

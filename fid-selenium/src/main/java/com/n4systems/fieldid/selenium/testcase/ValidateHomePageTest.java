@@ -64,26 +64,26 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void validate_going_to_upcoming_inspections_from_home_page() throws Exception {
+	public void validate_going_to_upcoming_events_from_home_page() throws Exception {
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
 		startAsCompany(company);
 		login.signInAllTheWayToHome(username, password);
-		home.clickViewUpcomingInspections();
+		home.clickViewUpcomingEvents();
 		schedule.assertSchedulesSearchResultsPageHeader();
 	}
 	
 	@Test
-	public void validate_going_to_inspection_history_for_asset_from_home_page() throws Exception {
+	public void validate_going_to_event_history_for_asset_from_home_page() throws Exception {
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
 		startAsCompany(company);
 		login.signInAllTheWayToHome(username, password);
-		home.clickViewInspectionHistoryForAnAsset();
+		home.clickViewEventHistoryForAnAsset();
 		reporting.assertReportingPageHeader();
 	}
 	

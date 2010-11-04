@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.inspectionschedule.NextEventScheduleLoader;
+import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import org.junit.Test;
 
 import com.n4systems.model.builders.EventTypeBuilder;

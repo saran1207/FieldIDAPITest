@@ -4,7 +4,7 @@ import com.n4systems.api.model.EventView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectiontype.AssociatedEventTypeExistsLoader;
+import com.n4systems.model.eventtype.AssociatedEventTypeExistsLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.security.SecurityFilter;
 

@@ -16,7 +16,7 @@ public class EventBook {
 		this.status = status;
 	}
 
-	public static EventBook aVaildInspectionBook() {
+	public static EventBook aVaildEventBook() {
 		return new EventBook(aRandomName(), someOrg(), true);
 	}
 

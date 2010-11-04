@@ -1,4 +1,4 @@
-${action.setPageType('inspection_book', 'list')!}
+${action.setPageType('event_book', 'list')!}
 
 <#if  page.hasResults() && page.validPage() >
 	<#assign currentAction="eventBooks.action" />

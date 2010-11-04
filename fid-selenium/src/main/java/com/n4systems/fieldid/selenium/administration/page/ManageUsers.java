@@ -35,8 +35,8 @@ public class ManageUsers {
 	private String addEmployeeUserManageSystemConfigurationOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'2'_true\"]";
 	private String addEmployeeUserManageSystemUsersOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'4'_true\"]";
 	private String addEmployeeUserManageCustomersOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'8'_true\"]";
-	private String addEmployeeUserCreateInspectionsOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'16'_true\"]";
-	private String addEmployeeUserEditInspectionsOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'32'_true\"]";
+	private String addEmployeeUserCreateEventsOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'16'_true\"]";
+	private String addEmployeeUserEditEventsOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'32'_true\"]";
 	private String addEmployeeUserManageJobsOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'64'_true\"]";
 	private String addEmployeeUserManageSafetyNetworkOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'128'_true\"]";
 	private String addEmployeeUserAccessWebStoreOnRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'256'_true\"]";
@@ -44,8 +44,8 @@ public class ManageUsers {
 	private String addEmployeeUserManageSystemConfigurationOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'2'_false\"]";
 	private String addEmployeeUserManageSystemUsersOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'4'_false\"]";
 	private String addEmployeeUserManageCustomersOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'8'_false\"]";
-	private String addEmployeeUserCreateInspectionsOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'16'_false\"]";
-	private String addEmployeeUserEditInspectionsOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'32'_false\"]";
+	private String addEmployeeUserCreateEventsOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'16'_false\"]";
+	private String addEmployeeUserEditEventsOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'32'_false\"]";
 	private String addEmployeeUserManageJobsOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'64'_false\"]";
 	private String addEmployeeUserManageSafetyNetworkOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'128'_false\"]";
 	private String addEmployeeUserAccessWebStoreOffRadioButtonLocator = "xpath=//INPUT[@id=\"employeeUserCreate_userPermissions_'256'_false\"]";
@@ -120,8 +120,8 @@ public class ManageUsers {
 		assertTrue("Could not find the On radio buttons for Manage System Configuration", selenium.isElementPresent(addEmployeeUserManageSystemConfigurationOnRadioButtonLocator));
 		assertTrue("Could not find the On radio buttons for Manage System Users", selenium.isElementPresent(addEmployeeUserManageSystemUsersOnRadioButtonLocator));
 		assertTrue("Could not find the On radio buttons for Manage Customers", selenium.isElementPresent(addEmployeeUserManageCustomersOnRadioButtonLocator));
-		assertTrue("Could not find the On radio buttons for Create Inspections", selenium.isElementPresent(addEmployeeUserCreateInspectionsOnRadioButtonLocator));
-		assertTrue("Could not find the On radio buttons for Edit Inspections", selenium.isElementPresent(addEmployeeUserEditInspectionsOnRadioButtonLocator));
+		assertTrue("Could not find the On radio buttons for Create Events", selenium.isElementPresent(addEmployeeUserCreateEventsOnRadioButtonLocator));
+		assertTrue("Could not find the On radio buttons for Edit Events", selenium.isElementPresent(addEmployeeUserEditEventsOnRadioButtonLocator));
 		assertTrue("Could not find the On radio buttons for Manage Jobs", selenium.isElementPresent(addEmployeeUserManageJobsOnRadioButtonLocator));
 		assertTrue("Could not find the On radio buttons for Manage Safety Network", selenium.isElementPresent(addEmployeeUserManageSafetyNetworkOnRadioButtonLocator));
 		assertTrue("Could not find the On radio buttons for Access Web Store", selenium.isElementPresent(addEmployeeUserAccessWebStoreOnRadioButtonLocator));
@@ -129,8 +129,8 @@ public class ManageUsers {
 		assertTrue("Could not find the Off radio buttons for Manage System Configuration", selenium.isElementPresent(addEmployeeUserManageSystemConfigurationOffRadioButtonLocator));
 		assertTrue("Could not find the Off radio buttons for Manage System Users", selenium.isElementPresent(addEmployeeUserManageSystemUsersOffRadioButtonLocator));
 		assertTrue("Could not find the Off radio buttons for Manage Customers", selenium.isElementPresent(addEmployeeUserManageCustomersOffRadioButtonLocator));
-		assertTrue("Could not find the Off radio buttons for Create Inspections", selenium.isElementPresent(addEmployeeUserCreateInspectionsOffRadioButtonLocator));
-		assertTrue("Could not find the Off radio buttons for Edit Inspections", selenium.isElementPresent(addEmployeeUserEditInspectionsOffRadioButtonLocator));
+		assertTrue("Could not find the Off radio buttons for Create Events", selenium.isElementPresent(addEmployeeUserCreateEventsOffRadioButtonLocator));
+		assertTrue("Could not find the Off radio buttons for Edit Events", selenium.isElementPresent(addEmployeeUserEditEventsOffRadioButtonLocator));
 		assertTrue("Could not find the Off radio buttons for Manage Jobs", selenium.isElementPresent(addEmployeeUserManageJobsOffRadioButtonLocator));
 		assertTrue("Could not find the Off radio buttons for Manage Safety Network", selenium.isElementPresent(addEmployeeUserManageSafetyNetworkOffRadioButtonLocator));
 		assertTrue("Could not find the Off radio buttons for Access Web Store", selenium.isElementPresent(addEmployeeUserAccessWebStoreOffRadioButtonLocator));

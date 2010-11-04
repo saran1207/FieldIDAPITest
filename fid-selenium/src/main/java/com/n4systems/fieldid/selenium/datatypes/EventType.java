@@ -7,10 +7,10 @@ public class EventType {
 	String name;
 	String group;
 	boolean printable;
-	boolean masterInspection;
+	boolean masterEvent;
 	boolean assignedToAvailable;
 	List<String> supportedProofTestTypes = new ArrayList<String>();
-	List<String> inspectionAttributes = new ArrayList<String>();
+	List<String> eventAttributes = new ArrayList<String>();
 	EventForm eventForm = null;
 	
 	public EventType(String name) {
@@ -41,12 +41,12 @@ public class EventType {
 		this.printable = printable;
 	}
 
-	public boolean isMasterInspection() {
-		return masterInspection;
+	public boolean isMasterEvent() {
+		return masterEvent;
 	}
 
-	public void setMasterInspection(boolean masterInspection) {
-		this.masterInspection = masterInspection;
+	public void setMasterEvent(boolean masterEvent) {
+		this.masterEvent = masterEvent;
 	}
 
 	public boolean isAssignedToAvailable() {
@@ -65,19 +65,19 @@ public class EventType {
 		this.supportedProofTestTypes = supportedProofTestTypes;
 	}
 
-	public List<String> getInspectionAttributes() {
-		return inspectionAttributes;
+	public List<String> getEventAttributes() {
+		return eventAttributes;
 	}
 
-	public void setInspectionAttributes(List<String> inspectionAttributes) {
-		this.inspectionAttributes = inspectionAttributes;
+	public void setEventAttributes(List<String> eventAttributes) {
+		this.eventAttributes = eventAttributes;
 	}
 
-	public EventForm getInspectionForm() {
+	public EventForm getEventForm() {
 		return eventForm;
 	}
 
-	public void setInspectionForm(EventForm eventForm) {
+	public void setEventForm(EventForm eventForm) {
 		this.eventForm = eventForm;
 	}
 }

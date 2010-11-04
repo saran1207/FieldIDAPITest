@@ -9,12 +9,12 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/inspection.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/masterInspection.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/event.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/masterEvent.js"/>"></script>
 	<@n4.includeStyle type="page" href="asset" />
 	<@n4.includeStyle type="page" href="subAsset" />
-	<@n4.includeStyle type="page" href="inspection" />
-	<@n4.includeStyle type="page" href="masterInspection" />
+	<@n4.includeStyle type="page" href="event" />
+	<@n4.includeStyle type="page" href="masterEvent" />
 	
 	<#include "/templates/html/common/_calendar.ftl"/>
 	
@@ -35,7 +35,7 @@
 		
 	</script>
 </head>
-${action.setPageType('inspection', 'add')!}
+${action.setPageType('event', 'add')!}
 
 <div id="masterEvent" >
 	<#include "/templates/html/common/_formErrors.ftl" />

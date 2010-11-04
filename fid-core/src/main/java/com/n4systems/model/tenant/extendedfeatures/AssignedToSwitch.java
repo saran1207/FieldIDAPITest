@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.inspectiontype.EventTypeListLoader;
-import com.n4systems.model.inspectiontype.EventTypeSaver;
+import com.n4systems.model.eventtype.EventTypeListLoader;
+import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.savedreports.SavedReportAssignedToTrimmer;
@@ -28,7 +28,7 @@ public class AssignedToSwitch extends ExtendedFeatureSwitch {
 	@Override
 	protected void featureTearDown(Transaction transaction) {
 		removeSavedReportsUsingAssignedTo(transaction);
-		disableAssignedToForAllInspectionTypes(transaction);
+		disableAssignedToForAllEventTypes(transaction);
 	}
 
 	private void removeSavedReportsUsingAssignedTo(Transaction transaction) {
@@ -43,7 +43,7 @@ public class AssignedToSwitch extends ExtendedFeatureSwitch {
 		}
 	}
 
-	private void disableAssignedToForAllInspectionTypes(Transaction transaction) {
+	private void disableAssignedToForAllEventTypes(Transaction transaction) {
 		EventTypeListLoader loader = new EventTypeListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant()));
 		EventTypeSaver saver = new EventTypeSaver();
 		List<EventType> eventTypesToToggle = loader.load(transaction);

@@ -2,7 +2,7 @@ package com.n4systems.exporting;
 
 
 import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
-import com.n4systems.api.conversion.inspection.EventToModelConverter;
+import com.n4systems.api.conversion.event.EventToModelConverter;
 import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.conversion.asset.AssetToModelConverter;
@@ -10,7 +10,7 @@ import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
-import com.n4systems.handlers.creator.inspections.factory.ProductionEventPersistenceFactory;
+import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.EventType;

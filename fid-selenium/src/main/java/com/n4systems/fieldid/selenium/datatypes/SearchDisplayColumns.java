@@ -24,9 +24,9 @@ public class SearchDisplayColumns {
 	
 	private boolean dateIdentified;
 	
-	private boolean lastInspectionDate;
+	private boolean lastEventDate;
 	
-	private boolean networkLastInspectionDate;
+	private boolean networkLastEventDate;
 	
 	private boolean assignedTo;
 	
@@ -48,11 +48,11 @@ public class SearchDisplayColumns {
 	
 	private boolean datePreformed;
 	
-	private boolean inpectionType;
+	private boolean eventType;
 	
 	private boolean result;
 	
-	private boolean inspectionBook;
+	private boolean eventBook;
 	
 	private boolean performedBy;
 	
@@ -158,20 +158,20 @@ public class SearchDisplayColumns {
 		this.dateIdentified = dateIdentified;
 	}
 
-	public boolean isLastInspectionDate() {
-		return lastInspectionDate;
+	public boolean isLastEventDate() {
+		return lastEventDate;
 	}
 
-	public void setLastInspectionDate(boolean lastInspectionDate) {
-		this.lastInspectionDate = lastInspectionDate;
+	public void setLastEventDate(boolean lastEventDate) {
+		this.lastEventDate = lastEventDate;
 	}
 
-	public boolean isNetworkLastInspectionDate() {
-		return networkLastInspectionDate;
+	public boolean isNetworkLastEventDate() {
+		return networkLastEventDate;
 	}
 
-	public void setNetworkLastInspectionDate(boolean networkLastInspectionDate) {
-		this.networkLastInspectionDate = networkLastInspectionDate;
+	public void setNetworkLastEventDate(boolean networkLastEventDate) {
+		this.networkLastEventDate = networkLastEventDate;
 	}
 
 	public boolean isAssignedTo() {
@@ -254,12 +254,12 @@ public class SearchDisplayColumns {
 		this.datePreformed = datePreformed;
 	}
 
-	public boolean isInpectionType() {
-		return inpectionType;
+	public boolean isEventType() {
+		return eventType;
 	}
 
-	public void setInpectionType(boolean inpectionType) {
-		this.inpectionType = inpectionType;
+	public void setEventType(boolean eventType) {
+		this.eventType = eventType;
 	}
 
 	public boolean isResult() {
@@ -270,12 +270,12 @@ public class SearchDisplayColumns {
 		this.result = result;
 	}
 
-	public boolean isInspectionBook() {
-		return inspectionBook;
+	public boolean isEventBook() {
+		return eventBook;
 	}
 
-	public void setInspectionBook(boolean inspectionBook) {
-		this.inspectionBook = inspectionBook;
+	public void setEventBook(boolean eventBook) {
+		this.eventBook = eventBook;
 	}
 
 	public boolean isPerformedBy() {
@@ -330,8 +330,8 @@ public class SearchDisplayColumns {
 		assetType = true;
 		assetStatus = true;
 		dateIdentified = true;	
-		lastInspectionDate = true;	
-		networkLastInspectionDate = true;	
+		lastEventDate = true;
+		networkLastEventDate = true;
 		assignedTo = true;	
 		identifiedBy = true;	
 		modifiedBy = true;	
@@ -342,9 +342,9 @@ public class SearchDisplayColumns {
 		orderNumber = true;	
 		purchaseOrder = true;
 		datePreformed = true;		
-		inpectionType = true;		
+		eventType = true;
 		result = true;		
-		inspectionBook = true;		
+		eventBook = true;
 		performedBy = true;		
 		peakLoad = true;		
 		testDuration = true;		

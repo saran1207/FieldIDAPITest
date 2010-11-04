@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 
 
 import com.n4systems.handlers.remover.RemovalHandlerFactory;
-import com.n4systems.model.inspectiontype.EventTypeSaver;
+import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;

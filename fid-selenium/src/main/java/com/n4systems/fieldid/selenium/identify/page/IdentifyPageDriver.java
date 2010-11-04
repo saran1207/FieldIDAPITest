@@ -38,7 +38,7 @@ public class IdentifyPageDriver {
 	private String identifyAddChooseLinkLocator = "xpath=//A[contains(text(),'Choose')]";
 	private String identifyAddAttachAFileButtonLocator = "xpath=//BUTTON[contains(text(),'Attach A File')]";
 	private String identifyAddSaveButtonLocator = "xpath=//INPUT[@id='saveButton']";
-	private String identifyAddSaveAndInspectButtonLocator = "xpath=//INPUT[@id='saveAndInspButton']";
+	private String identifyAddSaveAndInspectButtonLocator = "xpath=//INPUT[@id='saveAndStartEventButton']";
 	private String identifyAddSaveAndPrintButtonLocator = "xpath=//INPUT[@id='saveAndPrintButton']";
 	private String identifyAddSaveAndScheduleButtonLocator = "xpath=//INPUT[@id='saveAndScheduleButton']";
 	private String addWithOrderSelectedLocator = "xpath=//UL[contains(@class,'options')]/LI[contains(@class,'add') and contains(@class,'selected') and contains(text(),'Add with Order')]";

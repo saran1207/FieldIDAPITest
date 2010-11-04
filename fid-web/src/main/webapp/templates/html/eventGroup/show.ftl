@@ -1,9 +1,9 @@
 <head>
-	<@n4.includeStyle type="page" href="inspection" />
-	<script type="text/javascript" src="<@s.url value="/javascript/inspection.js"/>" ></script>
+	<@n4.includeStyle type="page" href="event" />
+	<script type="text/javascript" src="<@s.url value="/javascript/event.js"/>" ></script>
 </head>
 
-${action.setPageType('inspection', 'list')!}
+${action.setPageType('event', 'list')!}
 <#include "_eventSearchForm.ftl" />
 
 

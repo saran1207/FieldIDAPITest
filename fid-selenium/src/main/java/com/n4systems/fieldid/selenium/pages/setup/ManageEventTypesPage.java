@@ -107,7 +107,7 @@ public class ManageEventTypesPage extends FieldIDPage {
 		if (eventType.isPrintable()) {
 			selenium.check("//input[@name='printable']");
 		}
-		if(eventType.isMasterInspection()) {
+		if(eventType.isMasterEvent()) {
 			selenium.check("//input[@name='master']");
 		}
 		if (eventType.isAssignedToAvailable()) {
@@ -118,9 +118,9 @@ public class ManageEventTypesPage extends FieldIDPage {
 				selenium.check("//input[contains(@name,'" + proofType + "') and @value='true']");
 			}
 		}
-		if(eventType.getInspectionAttributes() != null) {
+		if(eventType.getEventAttributes() != null) {
 			int attributeCount = 0;
-			for (String attribute : eventType.getInspectionAttributes()) {
+			for (String attribute : eventType.getEventAttributes()) {
 				clickAddAttribute();
 				selenium.type("//input[@name='infoFields[" + attributeCount + "]']", attribute);
 				attributeCount++;
@@ -222,25 +222,25 @@ public class ManageEventTypesPage extends FieldIDPage {
 	public void verifyEventTypeSaved() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
-		assertEquals("Inspection Type Saved", actionMessages.get(0).trim());
+		assertEquals("Event Type Saved", actionMessages.get(0).trim());
 	}
 
 	public void verifyEventFormSaved() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
-		assertEquals("Inspection Form saved.", actionMessages.get(0).trim());
+		assertEquals("Event Form saved.", actionMessages.get(0).trim());
 	}
 	
 	public void verifyEventFormDeleted() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
-		assertEquals("Inspection Type is currently being deleted for you. This may take some time for the process to complete.", actionMessages.get(0).trim());
+		assertEquals("Event Type is currently being deleted for you. This may take some time for the process to complete.", actionMessages.get(0).trim());
 	}
 
 	public void validateCopiedEvent(String eventName) {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
-		assertEquals("Your Inspection Type has been copied and will appear below with the name - " + eventName, actionMessages.get(0).trim());
+		assertEquals("Your Event Type has been copied and will appear below with the name - " + eventName, actionMessages.get(0).trim());
 	}
 	
 }

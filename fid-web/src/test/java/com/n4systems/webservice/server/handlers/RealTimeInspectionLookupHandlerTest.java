@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.model.Event;
-import com.n4systems.model.inspection.NewestEventsForAssetIdLoader;
+import com.n4systems.model.event.NewestEventsForAssetIdLoader;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -2,7 +2,7 @@ package com.n4systems.handlers.remover;
 
 import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectiontype.EventTypeSaver;
+import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.persistence.Transaction;
 
 public class EventTypeArchiveHandlerImpl implements EventTypeArchiveHandler {

@@ -40,7 +40,7 @@ public class UserPermissionsTest extends FieldIDTestCase {
 		HomePage homePage = startAsCompany(COMPANY).login(CUSTOMER_USER, CUSTOMER_USER);
 
 		assertFalse("Shouldn't have identify permission", selenium.isElementPresent("//a[@id='menuIdentify']"));
-		assertFalse("Shouldn't have inspect permission", selenium.isElementPresent("//a[@id='menuInspect']"));
+		assertFalse("Shouldn't have event permission", selenium.isElementPresent("//a[@id='menuEvent']"));
 		assertFalse("Shouldn't have web store permission", selenium.isElementPresent("//a[contains(.,'Field ID Store')]"));
 		assertFalse("Shouldn't have manage system config permission", selenium.isElementPresent("//a[@id='menuSetup']"));
 		assertFalse("Shouldn't have safety network permission", selenium.isElementPresent("//a[@id='menuSafetyNetwork']"));
@@ -51,7 +51,7 @@ public class UserPermissionsTest extends FieldIDTestCase {
 		HomePage homePage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER);
 
 		assertFalse("Shouldn't have identify permission", selenium.isElementPresent("//a[@id='menuIdentify']"));
-		assertFalse("Shouldn't have inspect permission", selenium.isElementPresent("//a[@id='menuInspect']"));
+		assertFalse("Shouldn't have event permission", selenium.isElementPresent("//a[@id='menuEvent']"));
 		assertFalse("Shouldn't have web store permission", selenium.isElementPresent("//a[contains(.,'Field ID Store')]"));
 		assertFalse("Shouldn't have manage system config permission", selenium.isElementPresent("//a[@id='menuSetup']"));
 		assertFalse("Shouldn't have safety network permission", selenium.isElementPresent("//a[@id='menuSafetyNetwork']"));
@@ -84,7 +84,7 @@ public class UserPermissionsTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void verify_edit_inspections_is_disabled() {
+	public void verify_edit_events_is_disabled() {
 		HomePage homePage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER);
 		ReportingSearchResultsPage reportingSearchResultsPage = homePage.clickReportingLink().clickRunSearchButton();
 

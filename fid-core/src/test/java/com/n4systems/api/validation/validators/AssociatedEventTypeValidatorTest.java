@@ -14,7 +14,7 @@ import org.junit.Test;
 import com.n4systems.model.Asset;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.AssetBuilder;
-import com.n4systems.model.inspectiontype.AssociatedEventTypeExistsLoader;
+import com.n4systems.model.eventtype.AssociatedEventTypeExistsLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.security.SecurityFilter;
 

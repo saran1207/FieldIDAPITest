@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.inspectionschedule.EventScheduleSaver;
+import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 

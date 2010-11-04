@@ -3,7 +3,7 @@ package com.n4systems.handlers.creator.signup;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
-import com.n4systems.model.inspectiontypegroup.EventTypeGroupSaver;
+import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;

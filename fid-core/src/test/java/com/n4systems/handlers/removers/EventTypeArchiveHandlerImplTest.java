@@ -11,7 +11,7 @@ import com.n4systems.handlers.remover.EventTypeArchiveHandlerImpl;
 import com.n4systems.handlers.remover.summary.EventArchiveSummary;
 import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectiontype.EventTypeSaver;
+import com.n4systems.model.eventtype.EventTypeSaver;
 import org.junit.Before;
 import org.junit.Test;
 

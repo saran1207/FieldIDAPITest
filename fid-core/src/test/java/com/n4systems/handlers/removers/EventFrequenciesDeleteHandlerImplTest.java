@@ -4,7 +4,7 @@ import static org.easymock.EasyMock.*;
 
 import com.n4systems.handlers.remover.EventFrequenciesDeleteHandlerImpl;
 import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.inspectiontype.EventFrequencySaver;
+import com.n4systems.model.eventtype.EventFrequencySaver;
 import org.junit.Before;
 import org.junit.Test;
 

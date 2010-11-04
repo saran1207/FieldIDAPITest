@@ -1,6 +1,6 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
-	<script type="text/javascript" src="javascript/inspectionSchedule.js"></script>
+	<script type="text/javascript" src="javascript/eventSchedule.js"></script>
 	
 </head>
 

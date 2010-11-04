@@ -45,10 +45,10 @@ public class ManageAssetTypesDriver {
 	private String viewAllAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'View All')]";;
 	private String viewAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'View') and not(contains(text(),'All'))]";;
 	private String editAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Edit')]";
-	private String inspectionTypesAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Inspection Types')]";;
-	private String inspectionFrequenciesAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Inspection Frequencies')]";;
+	private String eventTypesAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Event Types')]";;
+	private String eventFrequenciesAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Event Frequencies')]";;
 	private String subComponentsAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'Sub-Components')]";
-	private String inspectionTypeTableXpath = "//form[@id='assetTypeEventTypesSave']/table";
+	private String eventTypeTableXpath = "//form[@id='assetTypeEventTypesSave']/table";
 	
 	public ManageAssetTypesDriver(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
@@ -480,32 +480,20 @@ public class ManageAssetTypesDriver {
 		}
 	}
 
-	/**
-	 * Go to the Inspection Types tab on Manage Asset Type. It assumes you
-	 * are not already on this page but are in one of the other tabs.
-	 */
-	public void gotoInspectionTypesAssetType() {
-		if(selenium.isElementPresent(inspectionTypesAssetTypeTabLinkLocator)) {
-			selenium.click(inspectionTypesAssetTypeTabLinkLocator);
+	public void gotoEventTypesAssetType() {
+		if(selenium.isElementPresent(eventTypesAssetTypeTabLinkLocator)) {
+			selenium.click(eventTypesAssetTypeTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		}
 	}
 
-	/**
-	 * Go to the Inspection Frequencies tab on Manage Asset Type. It assumes you
-	 * are not already on this page but are in one of the other tabs.
-	 */
-	public void gotoInspectionFrequenciesAssetType() {
-		if(selenium.isElementPresent(inspectionFrequenciesAssetTypeTabLinkLocator)) {
-			selenium.click(inspectionFrequenciesAssetTypeTabLinkLocator);
+	public void gotoEventFrequenciesAssetType() {
+		if(selenium.isElementPresent(eventFrequenciesAssetTypeTabLinkLocator)) {
+			selenium.click(eventFrequenciesAssetTypeTabLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		}
 	}
 
-	/**
-	 * Go to the Sub-Components tab on Manage Asset Type. It assumes you
-	 * are not already on this page but are in one of the other tabs.
-	 */
 	public void gotoSubComponentsAssetType() {
 		if(selenium.isElementPresent(subComponentsAssetTypeTabLinkLocator)) {
 			selenium.click(subComponentsAssetTypeTabLinkLocator);
@@ -644,18 +632,18 @@ public class ManageAssetTypesDriver {
 		deleteRetireAssetTypeAttributeHelper(attributes, false);
 	}
 
-	public List<String> getInspectionTypes() {
+	public List<String> getEventTypes() {
 		List<String> result = new ArrayList<String>();
 		int row = 2;
 		int column = 1;
-		String checkboxXpath = inspectionTypeTableXpath + "/tbody/tr/td/input[contains(@id,'selectType_')]";
+		String checkboxXpath = eventTypeTableXpath + "/tbody/tr/td/input[contains(@id,'selectType_')]";
 		Number n = selenium.getXpathCount(checkboxXpath);
 		int num = n.intValue();
-		String checkboxLocator = "xpath=" + inspectionTypeTableXpath + "/tbody/tr[" + row + "]/td[" + column + "]/input[contains(@id,'selectType_')]";
+		String checkboxLocator = "xpath=" + eventTypeTableXpath + "/tbody/tr[" + row + "]/td[" + column + "]/input[contains(@id,'selectType_')]";
 		for(int i = 0; i < num; i++) {
 			if(selenium.isChecked(checkboxLocator)) {
-				String inspectionTypeNameLocator = checkboxLocator + "/../../TD[contains(@class,'name')]";
-				String s = selenium.getText(inspectionTypeNameLocator);
+				String eventTypeNameLocator = checkboxLocator + "/../../TD[contains(@class,'name')]";
+				String s = selenium.getText(eventTypeNameLocator);
 				result.add(s);
 			}
 			checkboxLocator = checkboxLocator.replaceFirst("tr\\[" + (row+i), "tr[" + (row+i+1));

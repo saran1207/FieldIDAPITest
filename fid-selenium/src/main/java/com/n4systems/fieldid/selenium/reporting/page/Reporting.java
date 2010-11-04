@@ -34,10 +34,8 @@ public class Reporting {
 		misc.checkForErrorMessages(null);
 	}
 
-
-
 	public int totalResults() {
 		String reportTotal = selenium.getText("css=.total");
-		return Integer.valueOf(reportTotal.trim().replace("Total Inspections", "").trim());
+		return Integer.valueOf(reportTotal.trim().replace("Total Events", "").trim());
 	}
 }

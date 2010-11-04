@@ -16,7 +16,7 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 

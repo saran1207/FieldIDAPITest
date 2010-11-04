@@ -8,7 +8,7 @@ ${action.setPageType('asset', 'edit')!}
 	<div class="actions">
 		<@s.submit id="saveButton" key="hbutton.save" onclick=" return false;" cssClass="saveButton save"/>
 		
-		<@s.submit id="saveAndInspButton" name="saveAndInspect" key="hbutton.saveandinspect"  cssClass="saveButton save"/>
+		<@s.submit id="saveAndStartEventButton" name="saveAndInspect" key="hbutton.saveandstartevent"  cssClass="saveButton save"/>
 		
 		<@s.text name="label.or"/>
 		<a href="<@s.url action="asset"  uniqueID="${asset.id}"/>"><@s.text name="label.cancel"/></a>
@@ -22,9 +22,9 @@ ${action.setPageType('asset', 'edit')!}
 	
 </@s.form >
 <script type="text/javascript" >
-	var buttons = new Array( 'saveButton', 'saveAndInspButton' );
+	var buttons = new Array( 'saveButton', 'saveAndStartEventButton' );
 	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait"/>', '<@s.text name="hbutton.pleasewait"/>' );
-	var buttonMessages = new Array( '<@s.text name="hbutton.save"/>', '<@s.text name="hbutton.saveandinspect"/>' );
+	var buttonMessages = new Array( '<@s.text name="hbutton.save"/>', '<@s.text name="hbutton.saveandstartevent"/>' );
 	$$('#assetUpdate .save').each(function(element) {
 			element.observe('click', function(event) {
 				var element = Event.element(event);

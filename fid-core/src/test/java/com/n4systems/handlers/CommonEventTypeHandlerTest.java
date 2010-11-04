@@ -13,7 +13,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.inspectiontype.CommonAssetTypeLoader;
+import com.n4systems.model.eventtype.CommonAssetTypeLoader;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;

@@ -1,6 +1,6 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
-import static com.n4systems.model.inspectiontype.EventTypeCleanerFactory.*;
+import static com.n4systems.model.eventtype.EventTypeCleanerFactory.*;
 
 import java.util.List;
 import java.util.Map;

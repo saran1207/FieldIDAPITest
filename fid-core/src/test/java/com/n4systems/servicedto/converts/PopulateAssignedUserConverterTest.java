@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.model.Event;
-import com.n4systems.model.inspection.AssignedToUpdate;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;

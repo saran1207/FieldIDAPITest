@@ -39,14 +39,14 @@ public class EventCreateEditRemoveTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void create_master_event_no_sub_inspections() {
+	public void create_master_event_no_sub_events() {
 		eventPage = assetPage.clickEventsTab().clickManageEvents().clickStartNewEvent(masterEventType);
 		
 		performMandatoryEvent();
 
 		eventPage.clickSave();
 
-		selenium.isElementPresent("//span[contains(.,'Master Inspection Saved.')]");
+		selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]");
 	}
 
 	//Test is timing out...
@@ -61,7 +61,7 @@ public class EventCreateEditRemoveTest extends FieldIDTestCase {
 
 		eventPage.clickSave();
 
-		selenium.isElementPresent("//span[contains(.,'Master Inspection Saved.')]");
+		selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]");
 
 		assetPage = page.search(subSerial);
 		assetPage.clickEditTab().clickDelete();

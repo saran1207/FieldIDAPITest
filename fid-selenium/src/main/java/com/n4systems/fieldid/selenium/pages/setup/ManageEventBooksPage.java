@@ -17,12 +17,12 @@ public class ManageEventBooksPage extends FieldIDPage {
 
 	public ManageEventBooksPage(Selenium selenium) {
 		super(selenium);
-		if(!checkOnManageInspectionBooksPage()){
+		if(!checkOnManageEventBooksPage()){
 			fail("Expected to be on Manage Event Books page!");
 		}
 	}
 	
-	public boolean checkOnManageInspectionBooksPage() {
+	public boolean checkOnManageEventBooksPage() {
 		checkForErrorMessages(null);
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Event Books')]");
 	}
@@ -60,7 +60,7 @@ public class ManageEventBooksPage extends FieldIDPage {
 		return eventName;
 	}
 
-	public void verifyInspectionBookSaved() {
+	public void verifyEventBookSaved() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Event Book saved.", actionMessages.get(0).trim());		
@@ -71,7 +71,7 @@ public class ManageEventBooksPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	public void setInspectionBookFormFields(EventBook book) {
+	public void setEventBookFormFields(EventBook book) {
 		if(book.name != null) {
 			selenium.type("//input[@name='name']", book.name);
 		}
@@ -91,7 +91,7 @@ public class ManageEventBooksPage extends FieldIDPage {
 		waitForAjax();
 	}
 	
-	public void verifyInspectionBookDeleted() {
+	public void verifyEventBookDeleted() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Event Book deleted.", actionMessages.get(0).trim());		

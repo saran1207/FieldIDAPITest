@@ -1,8 +1,8 @@
 
-${action.setPageType('inspection_type', 'inspection_form')!}
+${action.setPageType('event_type', 'event_form')!}
 <head>
-	<@n4.includeStyle type="page" href="inspectionForm" />
-	<@n4.includeScript src="inspectionForm" />
+	<@n4.includeStyle type="page" href="eventForm" />
+	<@n4.includeScript src="eventForm" />
 
 	<@n4.includeScript>
 		addCriteriaUrl = '<@s.url action="criteriaAdd" namespace="/ajax"  uniqueID="${uniqueID}"/>';
@@ -44,7 +44,7 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 		</div>
 		
 		<div id="formChangewarning" class="formChangewarning" style="display: none;">
-			<h2><@s.text name="warning.eventformchangewarning_one"/>${name}?</h2>
+			<h2><@s.text name="warning.eventformchangewarning_one"/> ${name}?</h2>
 			<p><@s.text name="warning.eventformchangewarning_two"/></p>
 			<br/>
 			<p><@s.text name="warning.eventformchangewarning_three"/></p>

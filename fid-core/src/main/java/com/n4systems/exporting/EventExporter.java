@@ -1,12 +1,12 @@
 package com.n4systems.exporting;
 
 import com.n4systems.api.conversion.ModelToViewConverter;
-import com.n4systems.api.conversion.inspection.EventToViewConverter;
+import com.n4systems.api.conversion.event.EventToViewConverter;
 import com.n4systems.api.model.EventView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.model.Event;
-import com.n4systems.model.inspectionschedule.NextEventDateByEventLoader;
+import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.persistence.loaders.ListLoader;
 
 public class EventExporter implements Exporter {

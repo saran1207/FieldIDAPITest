@@ -8,7 +8,7 @@ public class ReportSearchCriteria extends AssetSearchCriteria {
 	
 	private String eventTypeGroup;
 	
-	private String inspectionBook;
+	private String eventBook;
 	
 	private boolean safetyNetworkResults;
 	
@@ -38,12 +38,12 @@ public class ReportSearchCriteria extends AssetSearchCriteria {
 		this.eventTypeGroup = eventTypeGroup;
 	}
 
-	public String getInspectionBook() {
-		return inspectionBook;
+	public String getEventBook() {
+		return eventBook;
 	}
 
-	public void setInspectionBook(String inspectionBook) {
-		this.inspectionBook = inspectionBook;
+	public void setEventBook(String eventBook) {
+		this.eventBook = eventBook;
 	}
 
 	public boolean getSafetyNetworkResults() {

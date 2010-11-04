@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
-import com.n4systems.model.inspectiontype.CommonAssetTypeLoader;
+import com.n4systems.model.eventtype.CommonAssetTypeLoader;
 
 public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandler {
 

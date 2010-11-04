@@ -3,7 +3,7 @@ package com.n4systems.handlers.remover;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.remover.summary.AssociatedEventTypeDeleteSummary;
 import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.inspectiontype.AssociatedEventTypeSaver;
+import com.n4systems.model.eventtype.AssociatedEventTypeSaver;
 import com.n4systems.persistence.Transaction;
 
 public class AssociatedEventTypeDeleteHandlerImpl implements AssociatedEventTypeDeleteHandler {

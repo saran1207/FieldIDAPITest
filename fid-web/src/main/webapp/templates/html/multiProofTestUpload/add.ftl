@@ -1,8 +1,8 @@
 
-${action.setPageType('inspection', 'multi_proof_test')!}
+${action.setPageType('event', 'multi_proof_test')!}
 <head>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
-	<@n4.includeScript src="inspectionBook" />
+	<@n4.includeScript src="eventBook" />
 	<script type="text/javascript" >
 		updateEventBooksUrl = '<@s.url action="eventBooks" namespace="ajax"  includeParams="none" />';
 		function multiProofSubmit( form )

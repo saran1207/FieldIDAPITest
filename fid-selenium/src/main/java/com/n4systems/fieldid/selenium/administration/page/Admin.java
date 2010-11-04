@@ -18,9 +18,9 @@ public class Admin {
 	private String manageAssetTypesLinkLocator = "xpath=//A[contains(text(),'Manage Asset Types')]";
 	private String manageAssetTypeGroupsLinkLocator = "xpath=//A[contains(text(),'Manage Asset Type Groups')]";
 	private String manageAssetStatusesLinkLocator = "xpath=//A[contains(text(),'Manage Asset Statuses')]";
-	private String manageInspectionTypesLinkLocator = "xpath=//A[contains(text(),'Manage Inspection Types')]";
+	private String manageEventTypesLinkLocator = "xpath=//A[contains(text(),'Manage Event Types')]";
 	private String manageEventTypeGroupsLinkLocator = "xpath=//A[contains(text(),'Manage Event Type Groups')]";
-	private String manageInspectionBooksLinkLocator = "xpath=//A[contains(text(),'Manage Inspection Books')]";
+	private String manageEventBooksLinkLocator = "xpath=//A[contains(text(),'Manage Event Books')]";
 	private String autoAttributeWizardLinkLocator = "xpath=//A[contains(text(),'Auto Attribute Wizard')]";
 	private String manageCommentTemplatesLinkLocator = "xpath=//A[contains(text(),'Manage Comment Templates')]";
 	private String dataLogLinkLocator = "xpath=//A[contains(text(),'Data Log')]";
@@ -31,10 +31,6 @@ public class Admin {
 		this.misc = misc;
 	}
 	
-	/**
-	 * Clicks the link to Manage Organizations. Need to call verify from
-	 * ManageOrganizations class to confirm we arrived properly.
-	 */
 	public void gotoManageOrganizations() {
 		if(selenium.isElementPresent(manageOrganizationsLinkLocator)) {
 			selenium.click(manageOrganizationsLinkLocator);
@@ -44,12 +40,6 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage Customers link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Customers page. In the ManageCustomers class
-	 * is a method to verify you arrived there successfully.
-	 */
 	public void gotoManageCustomers() {
 		if(selenium.isElementPresent(manageCustomersLinkLocator)) {
 			selenium.click(manageCustomersLinkLocator);
@@ -59,12 +49,6 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage Users link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Users page. In the ManageUsers class
-	 * is a method to verify you arrived there successfully.
-	 */
 	public void gotoManageUsers() {
 		if(selenium.isElementPresent(manageUsersLinkLocator)) {
 			selenium.click(manageUsersLinkLocator);
@@ -74,13 +58,6 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage User Registration link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage User Registration page. In the
-	 * ManageUserRegistration class is a method to verify you arrived there
-	 * successfully.
-	 */
 	public void gotoManageUserRegistrations() {
 		if(selenium.isElementPresent(manageUserRegistrationsLinkLocator)) {
 			selenium.click(manageUserRegistrationsLinkLocator);
@@ -90,13 +67,6 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage System Settings link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage System Settings page. In the
-	 * ManageSystemSettings class is a method to verify you arrived there
-	 * successfully.
-	 */
 	public void gotoManageSystemSettings() {
 		if(selenium.isElementPresent(manageSystemSettingsLinkLocator)) {
 			selenium.click(manageSystemSettingsLinkLocator);
@@ -106,12 +76,6 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage Asset Types link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Asset Types page. In the ManageAssetTypes
-	 * class is a method to verify you arrived there successfully.
-	 */
 	public void gotoManageAssetTypes() {
 		if(selenium.isElementPresent(manageAssetTypesLinkLocator)) {
 			selenium.click(manageAssetTypesLinkLocator);
@@ -121,13 +85,6 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage Asset Type Groups link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Asset Type Groups page. In the
-	 * ManageAssetTypeGroups class is a method to verify you arrived there
-	 * successfully.
-	 */
 	public void gotoManageAssetTypeGroups() {
 		if(selenium.isElementPresent(manageAssetTypeGroupsLinkLocator)) {
 			selenium.click(manageAssetTypeGroupsLinkLocator);
@@ -137,13 +94,6 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage Asset Statuses link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Asset Statuses page. In the
-	 * ManageAssetStatuses class is a method to verify you arrived there
-	 * successfully.
-	 */
 	public void gotoManageAssetStatuses() {
 		if(selenium.isElementPresent(manageAssetStatusesLinkLocator)) {
 			selenium.click(manageAssetStatusesLinkLocator);
@@ -153,29 +103,15 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage Inspection Types link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Inspection Types page. In the
-	 * ManageInspectionTypes class is a method to verify you arrived there
-	 * successfully.
-	 */
-	public void gotoManageInspectionTypes() {
-		if(selenium.isElementPresent(manageInspectionTypesLinkLocator)) {
-			selenium.click(manageInspectionTypesLinkLocator);
+	public void gotoManageEventTypes() {
+		if(selenium.isElementPresent(manageEventTypesLinkLocator)) {
+			selenium.click(manageEventTypesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
-			fail("Could not find the link to Manage Inspection Types");
+			fail("Could not find the link to Manage Event Types");
 		}
 	}
 	
-	/**
-	 * Click the Manage Event Type Groups link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Event Type Groups page. In the
-	 * ManageEventTypeGroups class is a method to verify you arrived there
-	 * successfully.
-	 */
 	public void gotoManageEventTypeGroups() {
 		if(selenium.isElementPresent(manageEventTypeGroupsLinkLocator)) {
 			selenium.click(manageEventTypeGroupsLinkLocator);
@@ -185,19 +121,12 @@ public class Admin {
 		}
 	}
 	
-	/**
-	 * Click the Manage Inspection Books link. Assumes you are already on the
-	 * Administration page. Will check for the Oops page but does not validate
-	 * you arrived at the Manage Inspection Books page. In the
-	 * ManageInspectionBooks class is a method to verify you arrived there
-	 * successfully.
-	 */
-	public void gotoManageInspectionBooks() {
-		if(selenium.isElementPresent(manageInspectionBooksLinkLocator)) {
-			selenium.click(manageInspectionBooksLinkLocator);
+	public void gotoManageEventBooks() {
+		if(selenium.isElementPresent(manageEventBooksLinkLocator)) {
+			selenium.click(manageEventBooksLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
 		} else {
-			fail("Could not find the link to Manage Inspection Books");
+			fail("Could not find the link to Manage Event Books");
 		}
 	}
 	
@@ -333,8 +262,8 @@ public class Admin {
 	 * 
 	 * @return true if the link exists, otherwise false.
 	 */
-	public boolean isManageInspectionTypes() {
-		boolean result = selenium.isElementPresent(manageInspectionTypesLinkLocator);
+	public boolean isManageEventTypes() {
+		boolean result = selenium.isElementPresent(manageEventTypesLinkLocator);
 		return result;
 	}
 	
@@ -354,7 +283,7 @@ public class Admin {
 	 * @return true if the link exists, otherwise false.
 	 */
 	public boolean isManageInspectionBooks() {
-		boolean result = selenium.isElementPresent(manageInspectionBooksLinkLocator);
+		boolean result = selenium.isElementPresent(manageEventBooksLinkLocator);
 		return result;
 	}
 	

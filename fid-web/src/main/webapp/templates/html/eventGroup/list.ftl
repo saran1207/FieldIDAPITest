@@ -1,7 +1,7 @@
 <head>
-	<@n4.includeStyle type="page" href="inspection" />
+	<@n4.includeStyle type="page" href="event" />
 </head>
-${action.setPageType('inspection', 'select_asset')!}
+${action.setPageType('event', 'select_asset')!}
 
 <#include "_eventSearchForm.ftl"/>
 

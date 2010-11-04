@@ -19,10 +19,10 @@
 	<@n4.includeStyle href="steps"/>
 	<@n4.includeScript src="steps"/>
 	
-	<@n4.includeScript src="inspection" />
+	<@n4.includeScript src="event" />
 	<@n4.includeScript src="multi_inspect" />
 	<@n4.includeStyle href="multi_event" type="page" />
-	<@n4.includeStyle type="page" href="inspection" />
+	<@n4.includeStyle type="page" href="event" />
 
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_orgPicker.ftl"/>

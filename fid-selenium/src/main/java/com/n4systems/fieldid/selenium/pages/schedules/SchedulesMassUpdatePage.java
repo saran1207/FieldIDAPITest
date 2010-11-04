@@ -9,7 +9,7 @@ public class SchedulesMassUpdatePage extends MassUpdatePage<SchedulesSearchResul
         super(selenium, SchedulesSearchResultsPage.class);
     }
 
-    public void enterNextInspectionDate(String date) {
+    public void enterNextEventDate(String date) {
         selenium.type("//input[@id='input_nextDate']", date);
     }
 

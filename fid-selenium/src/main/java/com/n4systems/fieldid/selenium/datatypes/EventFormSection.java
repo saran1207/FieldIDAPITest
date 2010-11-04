@@ -34,7 +34,7 @@ public class EventFormSection {
 		return criteria.get(index);
 	}
 	
-	public void setInspectionFormCriteria(int index, EventFormCriteria element) {
+	public void setEventFormCriteria(int index, EventFormCriteria element) {
 		criteria.add(index, element);
 	}
 }

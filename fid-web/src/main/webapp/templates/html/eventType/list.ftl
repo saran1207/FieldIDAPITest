@@ -1,4 +1,4 @@
-${action.setPageType('inspection_type', 'list')!}
+${action.setPageType('event_type', 'list')!}
 
 <#if !eventTypes.isEmpty() >
 	<table class="list">

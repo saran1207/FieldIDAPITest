@@ -5,7 +5,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.EventBookBuilder;
-import com.n4systems.model.inspectionbook.EventBookSaver;
+import com.n4systems.model.eventbook.EventBookSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -75,7 +75,7 @@ public class Scenario {
         return builder;
     }
 
-    public EventBookBuilder anInspectionBook() {
+    public EventBookBuilder anEventBook() {
         EventBookBuilder builder = EventBookBuilder.anEventBook();
         builder.setSaver(new EventBookSaver()).setTransaction(trans);
         return builder;

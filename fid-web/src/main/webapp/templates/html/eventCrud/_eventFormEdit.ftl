@@ -26,7 +26,7 @@
 			</#if>
 			<span class="criteriaButton">
 				<a href="javascript:void(0);" onclick="changeButton( ${criteria.id} ); return false;">
-					<img id="criteriaImage_${criteria.id}" src="<@s.url value="/images/inspectionButtons/${current_state.buttonName}.png"/>" />
+					<img id="criteriaImage_${criteria.id}" src="<@s.url value="/images/eventButtons/${current_state.buttonName}.png"/>" />
 				</a>
 			</span>
 			<span class="criteriaText" id="criteriaText_${criteria.id}">${current_state.displayText}</span>
@@ -55,7 +55,7 @@
 				state = new Object();	
 				state.stateId = '${state.id}';
 				state.stateText = '${state.displayText}';
-				state.stateButton = '<@s.url value="/images/inspectionButtons/${state.buttonName}.png"/>';
+				state.stateButton = '<@s.url value="/images/eventButtons/${state.buttonName}.png"/>';
 				state.status = '${state.status.name()}';
 				criteria.push( state );
 			</#list>

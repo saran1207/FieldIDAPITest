@@ -12,7 +12,7 @@ import com.n4systems.model.Event;
 
 public interface EventsInAGroupCreator {
 
-	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws TransactionAlreadyProcessedException,
+	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws TransactionAlreadyProcessedException,
 			ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;
 
 }
