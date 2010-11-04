@@ -7,8 +7,8 @@ import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.TextProvider;
 
 public enum PublishedState {
-	PUBLISHED		("label.dopublish", "label.dopublished"),
-	NOTPUBLISHED	("label.donotpublish", "label.notpublished");
+	PUBLISHED		("label.publishedstateselector", "label.publishedoversafetynetwork"),
+	NOTPUBLISHED	("label.unpublishedstateselector", "label.unpublishedoversafetynetwork");
 	
 	private final String label;
 	private final String pastTenseLabel;

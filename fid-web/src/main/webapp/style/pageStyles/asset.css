@@ -46,6 +46,10 @@
 	width: 230px;                            
 }
 
+.fluidSets .infoSet .fieldHolder {
+	width: 270px;
+}
+
 .assetFormGroup .infoSet select{
 	width: 260px;
 }
