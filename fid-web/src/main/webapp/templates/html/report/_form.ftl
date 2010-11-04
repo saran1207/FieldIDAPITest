@@ -19,10 +19,10 @@ ${action.setPageType('report', 'show')!}
 				<@s.text name="label.reportcriteria"/>
 			</span>
 		<#else>
-			<span class="footnoteText">
-				<img src="<@s.url value="/images/tip-icon.png" />"/>
+			<img src="<@s.url value="/images/tip-icon.png" />"/>
+			<p class="footnoteText">
 				<@s.text name="label.wildcard_explanation"/>
-			</span>
+			</p>
 		</#if>
 	</div>
 	<@s.form action="report!createSearch" id="reportForm" cssClass="crudForm searchForm" theme="fieldid" cssStyle="${listPage?exists?string('display:none;','')}" >

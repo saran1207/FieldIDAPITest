@@ -1590,7 +1590,7 @@ input.description {
 	position:absolute;
 	width:550px;
 	border:2px solid #999999;
-	left: 1px 
+	left: 1px; 
 	top: 1px;
 	background:#EAEAEA;
 	padding:12px;
@@ -1609,8 +1609,15 @@ input.description {
 	text-align: left;
 }
 
+.headerWithFootnote img{
+	float:left;
+}
+
 .headerWithFootnote .footnoteText {
 	font-size: 11px;
+	padding-left:5px;
+	padding-top: 5px;
+	float:left;
 }
 
 #listContainer {
