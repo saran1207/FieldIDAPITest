@@ -14,7 +14,7 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.reporting.EventReportType;
 
 @Entity
-@Table(name="inspectiontypegroups")
+@Table(name="eventtypegroups")
 public class EventTypeGroup extends EntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 	

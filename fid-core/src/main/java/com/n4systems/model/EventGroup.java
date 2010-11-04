@@ -19,7 +19,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
-@Table(name = "inspectiongroups")
+@Table(name = "eventgroups")
 public class EventGroup extends EntityWithTenant implements SecurityEnhanced<EventGroup> {
 	private static final long serialVersionUID = 1L;
 

@@ -12,7 +12,7 @@ import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.StringUtils;
 
 @Entity
-@Table(name = "inspectionssub")
+@Table(name = "subevents")
 @PrimaryKeyJoinColumn(name="inspection_id")
 public class SubEvent extends AbstractEvent implements SecurityEnhanced<SubEvent> {
 	private static final long serialVersionUID = 1L;

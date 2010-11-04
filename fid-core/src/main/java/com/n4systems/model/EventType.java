@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -30,7 +32,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
-@Table(name = "inspectiontypes")
+@Table(name = "eventtypes")
 public class EventType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<EventType> {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
@@ -67,6 +69,7 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	
 	@CollectionOfElements(fetch= FetchType.LAZY)
 	@IndexColumn(name="orderidx")
+    @JoinTable(name="eventtypes_infofieldnames", joinColumns = {@JoinColumn(name="inspectiontypes_id")})
 	private List<String> infoFieldNames = new ArrayList<String>();
 	
 	@Column(nullable=false)

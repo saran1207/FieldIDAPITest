@@ -16,7 +16,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 
 @Entity
-@Table(name="inspectionsmaster_inspectionssub")
+@Table(name="masterevents_subevents")
 public class SubEventRelation {
 
 	@SuppressWarnings("unused")

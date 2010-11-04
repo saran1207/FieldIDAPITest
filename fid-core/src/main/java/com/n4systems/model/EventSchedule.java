@@ -28,7 +28,7 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
 
 @Entity
-@Table(name = "inspectionschedules")
+@Table(name = "eventschedules")
 public class EventSchedule extends ArchivableEntityWithOwner implements NetworkEntity<EventSchedule> {
 	private static final long serialVersionUID = 1L;
 

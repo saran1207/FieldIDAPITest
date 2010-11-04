@@ -27,7 +27,7 @@ public class Catalog extends EntityWithTenant implements Saveable{
 	private Set<AssetType> publishedAssetTypes = new HashSet<AssetType>();
 	
 	@OneToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="catalogs_inspectiontypes", joinColumns = @JoinColumn(name="catalogs_id"), inverseJoinColumns = @JoinColumn(name="publishedinspectiontypes_id"))
+    @JoinTable(name="catalogs_eventtypes", joinColumns = @JoinColumn(name="catalogs_id"), inverseJoinColumns = @JoinColumn(name="publishedinspectiontypes_id"))
 	private Set<EventType> publishedEventTypes = new HashSet<EventType>();
 	
 	

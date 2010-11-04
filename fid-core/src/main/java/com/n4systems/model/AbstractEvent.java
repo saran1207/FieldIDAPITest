@@ -28,7 +28,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.util.StringUtils;
 
 @Entity
-@Table(name = "inspections")
+@Table(name = "events")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class AbstractEvent extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;

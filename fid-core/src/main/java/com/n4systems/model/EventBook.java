@@ -18,7 +18,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
 @Entity
-@Table(name = "inspectionbooks")
+@Table(name = "eventbooks")
 public class EventBook extends EntityWithOwner implements NamedEntity, Listable<Long>, Comparable<EventBook>, SecurityEnhanced<EventBook> {
 	private static final long serialVersionUID = 1L;
 	

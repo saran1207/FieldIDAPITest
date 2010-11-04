@@ -41,7 +41,7 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
 
 @Entity
-@Table(name = "inspectionsmaster")
+@Table(name = "masterevents")
 @PrimaryKeyJoinColumn(name="inspection_id")
 public class Event extends AbstractEvent implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<Event>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
@@ -78,7 +78,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@IndexColumn(name="orderidx")
-    @JoinTable(name = "inspectionsmaster_inspectionssub", joinColumns = @JoinColumn(name="inspectionsmaster_inspection_id"), inverseJoinColumns = @JoinColumn(name="subinspections_inspection_id"))
+    @JoinTable(name = "masterevents_subevents", joinColumns = @JoinColumn(name="inspectionsmaster_inspection_id"), inverseJoinColumns = @JoinColumn(name="subinspections_inspection_id"))
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 	
 	@Enumerated(EnumType.STRING)
