@@ -30,7 +30,7 @@ public class AssignToUpdateHandlerTest {
 	}
 
 
-	private static final long INSPECTION_ID = 1L;
+	private static final long EVENT_ID = 1L;
 	private static final String BLANK = "";
 	private static final Object NO_ASSIGNED_TO_UPDATE = BLANK;
 	private static final AbstractAction UNUSED_ABSTRACT_ACTION = null;
@@ -38,7 +38,7 @@ public class AssignToUpdateHandlerTest {
 	@Test
 	public void should_render_blank_when_assign_to_update_was_not_done() throws Exception {
 		WebOutputHandler sut = new AssignedToUpdateHandler(UNUSED_ABSTRACT_ACTION);
-		assertThat(sut .handleWeb(INSPECTION_ID, NO_ASSIGNED_TO_UPDATE), equalTo(BLANK));
+		assertThat(sut .handleWeb(EVENT_ID, NO_ASSIGNED_TO_UPDATE), equalTo(BLANK));
 	}
 	
 	
@@ -46,7 +46,7 @@ public class AssignToUpdateHandlerTest {
 	public void should_have_assign_to_update_render_the_assigned_user_when_assign_to_update_exists_and_for_unassigned() throws Exception {
 		AssignedToUpdateHandler sut = new AssignedToUpdateHandler(UNUSED_ABSTRACT_ACTION);
 		sut.setAssignToHandler(new StaticHandler(UNUSED_ABSTRACT_ACTION));
-		assertThat(sut.handleWeb(INSPECTION_ID, AssignedToUpdate.unassignAsset()), equalTo(StaticHandler.handlerString));
+		assertThat(sut.handleWeb(EVENT_ID, AssignedToUpdate.unassignAsset()), equalTo(StaticHandler.handlerString));
 	}
 	
 	@Test
@@ -54,7 +54,7 @@ public class AssignToUpdateHandlerTest {
 		AssignedToUpdateHandler sut = new AssignedToUpdateHandler(UNUSED_ABSTRACT_ACTION);
 		sut.setAssignToHandler(new StaticHandler(UNUSED_ABSTRACT_ACTION));
 		
-		String renderedString = sut.handleWeb(INSPECTION_ID, AssignedToUpdate.assignAssetToUser(anEmployee().build()));
+		String renderedString = sut.handleWeb(EVENT_ID, AssignedToUpdate.assignAssetToUser(anEmployee().build()));
 		
 		assertThat(renderedString, equalTo(StaticHandler.handlerString));
 	}

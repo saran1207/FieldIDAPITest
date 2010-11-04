@@ -73,7 +73,7 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 			query.addOrder("name");
 			page = persistenceManager.findAllPaged(query, getCurrentPage(), Constants.PAGE_SIZE);
 		} catch (Exception e) {
-			logger.error("Could not load the list of inspection types", e);
+			logger.error("Could not load the list of event types", e);
 			addActionErrorText("error.noeventtypegrouplist");
 			return ERROR;
 		}
@@ -139,11 +139,11 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	
 	public boolean canBeDeleted(EventTypeGroup group) {
 		if (group.equals(eventTypeGroup)) {
-			return getInspectionTypes().isEmpty();
+			return getEventTypes().isEmpty();
 		} else {
-			QueryBuilder<Long> inspectionTypeCountQuery = new QueryBuilder<Long>(EventType.class, getSecurityFilter());
-			inspectionTypeCountQuery.setCountSelect().addSimpleWhere("group", group);
-			return (persistenceManager.findCount(inspectionTypeCountQuery) == 0);
+			QueryBuilder<Long> eventTypeCountQuery = new QueryBuilder<Long>(EventType.class, getSecurityFilter());
+			eventTypeCountQuery.setCountSelect().addSimpleWhere("group", group);
+			return (persistenceManager.findCount(eventTypeCountQuery) == 0);
 		}
 	}
 	
@@ -175,7 +175,7 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	}
 
 	
-	public List<EventType> getInspectionTypes() {
+	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
 			QueryBuilder<EventType> query = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
 			query.addSimpleWhere("group", eventTypeGroup).addOrder("name");

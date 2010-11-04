@@ -9,7 +9,7 @@ import javax.persistence.EntityManager;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.impl.AssetManagerImpl;
 import com.n4systems.exceptions.NonUniqueAssetException;
-import com.n4systems.exceptions.UsedOnMasterInspectionException;
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -30,7 +30,7 @@ public class AssetManagerEJBContainer extends EJBTransactionEmulator<AssetManage
 		return new AssetManagerImpl(em);
 	}
 
-	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterInspectionException {
+	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterEventException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

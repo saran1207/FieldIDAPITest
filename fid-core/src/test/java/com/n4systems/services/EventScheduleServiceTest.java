@@ -21,7 +21,7 @@ public class EventScheduleServiceTest {
 		expect(mockPersistenceManager.update(schedule.getAsset())).andReturn(schedule.getAsset());
 		replay(mockPersistenceManager);
 		
-		InspectionScheduleService sut = new InspectionScheduleServiceImpl(mockPersistenceManager);
+		EventScheduleService sut = new EventScheduleServiceImpl(mockPersistenceManager);
 		
 		assertEquals(new Long(3), sut.createSchedule(schedule));
 		verify(mockPersistenceManager);
@@ -36,7 +36,7 @@ public class EventScheduleServiceTest {
 		expect(mockPersistenceManager.update(schedule.getAsset())).andReturn(schedule.getAsset());
 		replay(mockPersistenceManager);
 		
-		InspectionScheduleService sut = new InspectionScheduleServiceImpl(mockPersistenceManager);
+		EventScheduleService sut = new EventScheduleServiceImpl(mockPersistenceManager);
 		
 		assertEquals(schedule, sut.updateSchedule(schedule));
 		verify(mockPersistenceManager);

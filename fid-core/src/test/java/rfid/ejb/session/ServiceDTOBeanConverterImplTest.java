@@ -110,7 +110,7 @@ public class ServiceDTOBeanConverterImplTest {
 		
 		Date createDate = new Date( 1000000L );
 		Date modifyDate = new Date( 2000000L );
-		Date lastInspectionDate = new Date( 300000L );
+		Date lastEventDate = new Date( 300000L );
 		productServiceDTO.setSerialNumber("serialTest12311123123");
 		
 		LineItem shopOrder = new LineItem();
@@ -130,7 +130,7 @@ public class ServiceDTOBeanConverterImplTest {
 		asset.setId( 1L );
 		asset.setCreated(createDate);
 		asset.setModified(modifyDate);
-		asset.setLastInspectionDate( lastInspectionDate );
+		asset.setLastEventDate( lastEventDate );
 		asset.setShopOrder( shopOrder );
 		asset.setCustomerOrder( customerOrder );
 		
@@ -147,7 +147,7 @@ public class ServiceDTOBeanConverterImplTest {
 		assertEquals( new Long( 1L ) , asset.getId() );
 		assertEquals( createDate , asset.getCreated());
 		assertEquals( modifyDate, asset.getModified());
-		assertEquals( lastInspectionDate, asset.getLastInspectionDate() );
+		assertEquals( lastEventDate, asset.getLastEventDate() );
 		assertEquals( shopOrder, asset.getShopOrder() );
 		assertEquals( customerOrder, asset.getCustomerOrder() );
 		assertEquals( 2, asset.getSubAssets().size() );

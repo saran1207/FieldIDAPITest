@@ -30,7 +30,7 @@ public class CatalogImportTask implements Runnable {
 	private PrimaryOrg primaryOrg;
 	private Tenant linkedTenant;
 	private Set<Long> importProductTypeIds;
-	private Set<Long> importInspectionTypeIds;
+	private Set<Long> importEventTypeIds;
 	private boolean usingPackages;
 	private boolean failed;
 	
@@ -55,7 +55,7 @@ public class CatalogImportTask implements Runnable {
 			importCatalogService = new ImportCatalogService(persistenceManager, primaryOrg, linkedCatalogAccess, assetTypeManager);
 			importCatalogService.setImportAllRelations(true);
 			importCatalogService.setImportAssetTypeIds(importProductTypeIds);
-			importCatalogService.setImportInspectionTypeIds(importInspectionTypeIds);
+			importCatalogService.setImportEventTypeIds(importEventTypeIds);
 			importCatalogService.setImportAllRelations(usingPackages);
 			failed = !importCatalogService.importSelection();
 		} catch (Exception e) {
@@ -90,7 +90,7 @@ public class CatalogImportTask implements Runnable {
 				body += "Auto attributes for asset type  " + summary.getAssetTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
 			}
 		} else if (summary.getInspectionTypeImportSummary().failed()) {
-			body += "Inspection Type  " + summary.getInspectionTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
+			body += "Event Type  " + summary.getInspectionTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
 		} else if (summary.getInspectionTypeGroupImportSummary().failed()) {
 			body += "Event Type Group " + summary.getInspectionTypeGroupImportSummary().getFailedImporting() + " could not be correctly imported.";
 		} else if (summary.getStateSetImportSummary().failed()) {
@@ -108,7 +108,7 @@ public class CatalogImportTask implements Runnable {
 					"<tr><td>" + importCatalogService.getSummary().getAssetTypeImportSummary().getImportMapping().size() + "</td>" +
 					"<td>Asset Type(s) have been imported.</td></tr>" +
 					"<tr><td>" + importCatalogService.getSummary().getInspectionTypeImportSummary().numberImported() + "</td>" +
-					"<td>Inspection Type(s) have been imported.</td></tr>" +
+					"<td>Event Type(s) have been imported.</td></tr>" +
 				"</table>";
 		return body;
 	}
@@ -152,12 +152,12 @@ public class CatalogImportTask implements Runnable {
 		this.importProductTypeIds = importProductTypeIds;
 	}
 
-	public Set<Long> getImportInspectionTypeIds() {
-		return importInspectionTypeIds;
+	public Set<Long> getImportEventTypeIds() {
+		return importEventTypeIds;
 	}
 
-	public void setImportInspectionTypeIds(Set<Long> importInspectionTypeIds) {
-		this.importInspectionTypeIds = importInspectionTypeIds;
+	public void setImportEventTypeIds(Set<Long> importEventTypeIds) {
+		this.importEventTypeIds = importEventTypeIds;
 	}
 
 	public boolean isUsingPackages() {

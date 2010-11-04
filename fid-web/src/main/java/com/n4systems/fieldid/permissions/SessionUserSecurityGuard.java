@@ -16,12 +16,12 @@ public class SessionUserSecurityGuard implements UserSecurityGuard {
 		return Permissions.hasOneOf(permissions, Permissions.ManageSafetyNetwork);
 	}
 
-	public boolean isAllowedCreateInspection() {
-		return Permissions.hasOneOf(permissions, Permissions.CreateInspection);
+	public boolean isAllowedCreateEvent() {
+		return Permissions.hasOneOf(permissions, Permissions.CreateEvent);
 	}
 
-	public boolean isAllowedEditInspection() {
-		return Permissions.hasOneOf(permissions, Permissions.EditInspection);
+	public boolean isAllowedEditEvent() {
+		return Permissions.hasOneOf(permissions, Permissions.EditEvent);
 	}
 
 	public boolean isAllowedManageEndUsers() {

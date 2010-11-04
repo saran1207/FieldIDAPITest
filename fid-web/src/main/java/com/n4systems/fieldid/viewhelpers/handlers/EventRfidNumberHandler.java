@@ -4,9 +4,9 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityLevel;
 
-public class InspectionRfidNumberHandler extends WebOutputHandler {
+public class EventRfidNumberHandler extends WebOutputHandler {
 
-	public InspectionRfidNumberHandler(AbstractAction action) {
+	public EventRfidNumberHandler(AbstractAction action) {
 		super(action);
 	}
 	

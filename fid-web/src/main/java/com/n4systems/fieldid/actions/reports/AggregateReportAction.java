@@ -46,8 +46,8 @@ public class AggregateReportAction extends AbstractAction {
 			return ERROR;
 		}
 		try {
-			List<Long> inspectionIds = getSearchIds();
-			report = aggregateReportManager.createAggregateReport(inspectionIds);
+			List<Long> eventIds = getSearchIds();
+			report = aggregateReportManager.createAggregateReport(eventIds);
 		} catch (Exception e) {
 			logger.error("could not produce aggregate report", e);
 			addFlashErrorText("error.couldnotgeneratesummaryreport");

@@ -1,9 +1,9 @@
-<#assign localInspection = action.isLocalInspection(rowIdx)/>
+<#assign localEvent = action.isLocalEvent(rowIdx)/>
 <#assign assetId = action.getAssetId(rowIdx)>
 
 <#if criteria.includeNetworkResults>
 	<td>
-		<#if localInspection>
+		<#if localEvent>
 			<@s.text name="label.no"/>
 		<#else>
 			<@s.text name="label.yes"/>
@@ -21,9 +21,9 @@
 		</a>
 		<ul id="moreActions_list_${entityId}">
 			<li>
-				<a href='<@s.url action="event" namespace="/aHtml/iframe" uniqueID="${entityId}"/>'  ${inspectionLightViewOptions} ><@s.text name="link.view" /></a>
+				<a href='<@s.url action="event" namespace="/aHtml/iframe" uniqueID="${entityId}"/>'  ${eventLightViewOptions} ><@s.text name="link.view" /></a>
 			</li>
-			<#if sessionUser.hasAccess("editinspection") && localInspection >
+			<#if sessionUser.hasAccess("editevent") && localEvent >
 			<li>
 				<a href='<@s.url action="selectEventEdit" namespace="/" uniqueID="${entityId}"/>'><@s.text name="label.edit" /></a>
 			</li>
@@ -31,21 +31,21 @@
 			<li>
 				<a href='${printReport}' class='lightview summaryReport' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.print_report" /></a>
 			</li>
-			<#if sessionUser.hasAccess('createinspection') && localInspection >
+			<#if sessionUser.hasAccess('createevent') && localEvent >
 				<li id="floatingDropdownStartEventLink">
 					<a href='<@s.url action="quickEvent" assetId="${assetId}" />' >
 						<@s.text name="label.startevent"/>
 					</a>
 				</li>
 			</#if>
-			<#if localInspection>
+			<#if localEvent>
 				<li>
 					<a href="<@s.url action="asset" uniqueID="${assetId}" />" >
 						<@s.text name="label.view_asset"/>
 					</a>
 				</li>
 			</#if>
-			<#if sessionUser.hasAccess('tag') && localInspection>
+			<#if sessionUser.hasAccess('tag') && localEvent>
 				<li>
 					<a href='<@s.url action="assetEdit" uniqueID="${assetId}" />' >
 						<@s.text name="label.edit_asset"/>

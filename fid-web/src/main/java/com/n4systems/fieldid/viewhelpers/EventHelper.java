@@ -19,7 +19,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.user.User;
 
 /**
- * A helper class for the InspectionCrud and SubInspectionCrud.  Consolidates form processing, 
+ * A helper class for the EventCrud and SubEventCrud.  Consolidates form processing, 
  * and pre-save/update logic into a single place.
  */
 public class EventHelper {
@@ -30,20 +30,20 @@ public class EventHelper {
 	}
 	
 	/**
-	 * Converts the CriteriaResult Set on an Inspection into a List in the 
+	 * Converts the CriteriaResult Set on an Event into a List in the
 	 * order it would appear on a form (by CriteriaSection, then Criteria).
-	 * @param event	The inspection to find CriteriaResults from
-	 * @return				A List of ordered CriteriaResults.  Returns an empty List if the inspection's results are empty.
+	 * @param event	The event to find CriteriaResults from
+	 * @return				A List of ordered CriteriaResults.  Returns an empty List if the event's results are empty.
 	 */
 	public List<CriteriaResult> orderCriteriaResults(AbstractEvent event) {
 		List<CriteriaResult> orderedResults = new ArrayList<CriteriaResult>();
 		
-		// don't go through all the trouble if the inspection has no results.
+		// don't go through all the trouble if the event has no results.
 		if (event != null && !event.getResults().isEmpty()) {
-			// go through the InspectionType's sections and criteria, hunting down the corresponding CriteriaResult.
+			// go through the EventType's sections and criteria, hunting down the corresponding CriteriaResult.
 			for(CriteriaSection section: event.getType().getSections()) {
 				for(Criteria criteria: section.getCriteria()) {
-					// find the corresponding CriteriaResult on the Inspection
+					// find the corresponding CriteriaResult on the Event
 					for(CriteriaResult result: event.getResults()) {
 						if (result.getCriteria().equals(criteria)) {
 							// we also need to order our observations before adding this criteria
@@ -96,12 +96,12 @@ public class EventHelper {
 	}
 	
 	/**
-	 * Processes CriteriaResults coming back from a create inspection form.  These results will only have the id of the Criteria and State on
-	 * them.  Each skeleton CriteriaResult is processed into a full result by looking up the Criteria and State by id, and then setting the inspection
+	 * Processes CriteriaResults coming back from a create event form.  These results will only have the id of the Criteria and State on
+	 * them.  Each skeleton CriteriaResult is processed into a full result by looking up the Criteria and State by id, and then setting the event
 	 * and tenant fields.  The results Observations are then processed before adding it to the inspeciton's result list.  When complete
-	 * inspection will have it's full list of processed CriteriaResults attached.
+	 * event will have it's full list of processed CriteriaResults attached.
 	 * @see #processObservations(CriteriaResult, User)
-	 * @param event			An AbstractInspection (sub or master)
+	 * @param event			An AbstractEvent (sub or master)
 	 * @param formCriteriaResults	CriteriaResults input from a form.
 	 * @param modifiedBy			A modifiedBy user to set on the Observations
 	 * @param pm					A PersistenceManager instance
@@ -133,7 +133,7 @@ public class EventHelper {
 			} else {
 				// this is a new result, need to set the basics
 				realResult = new CriteriaResult();
-				realResult.setInspection(event);
+				realResult.setEvent(event);
 				realResult.setTenant(event.getTenant());
 				
 				realResult.setDeficiencies(formResult.getDeficiencies());
@@ -144,7 +144,7 @@ public class EventHelper {
 			realResult.setCriteria(pm.find(Criteria.class, formResult.getCriteria().getId(), event.getTenant()));
 			realResult.setState(pm.find(State.class, formResult.getState().getId(), event.getTenant()));
 			
-			// and attach back onto the inspection
+			// and attach back onto the event
 			event.getResults().add(realResult);
 		}
 	}
@@ -154,7 +154,7 @@ public class EventHelper {
 	 * on the Observations, and ensures Recommendations/Deficiencies only
 	 * contain elements if they're allowed to by the results Status
 	 * (NA/PASS/FAIL)<br/> This should be called on each result prior to
-	 * persisting an inspection.
+	 * persisting an event.
 	 * 
 	 * @param result		A CriteriaResult
 	 * @param modifiedBy	A modifiedBy user to set on the result
@@ -238,12 +238,12 @@ public class EventHelper {
 	}
 	
 	/**
-	 * Finds a Criteria from an Inspection's InspectionType, by Id.
-	 * @param event	Inspection to find Criteria from
+	 * Finds a Criteria from an Event's EventType, by Id.
+	 * @param event	Event to find Criteria from
 	 * @param criteriaId	Id of a Criteria
 	 * @return				The Criteria or null if one could not be located
 	 */
-	public Criteria findCriteriaOnInspectionType(Event event, Long criteriaId) {
+	public Criteria findCriteriaOnEventType(Event event, Long criteriaId) {
 		// first we need to hunt down our criteria by id
 		Criteria criteria = null;
 		for (CriteriaSection sec: event.getType().getSections()) {

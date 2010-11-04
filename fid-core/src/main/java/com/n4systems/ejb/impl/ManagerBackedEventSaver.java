@@ -32,7 +32,7 @@ import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Status;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.services.InspectionScheduleServiceImpl;
+import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.tools.FileDataContainer;
 
 public class ManagerBackedEventSaver implements EventSaver {
@@ -202,7 +202,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		if (schedule != null) {
 			schedule.setOwner(event.getOwner());
 			schedule.setAdvancedLocation(event.getAdvancedLocation());
-			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
+			new EventScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
 		}
 	}
 
@@ -350,7 +350,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
 	public Asset updateAssetInspectionDate(Asset asset) {
-		asset.setLastInspectionDate(lastEventDateFinder.findLastEventDate(asset));
+		asset.setLastEventDate(lastEventDateFinder.findLastEventDate(asset));
 		return asset;
 	}
 

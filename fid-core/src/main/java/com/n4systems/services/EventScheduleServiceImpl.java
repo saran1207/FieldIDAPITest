@@ -3,11 +3,11 @@ package com.n4systems.services;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.EventSchedule;
 
-public class InspectionScheduleServiceImpl implements InspectionScheduleService {
+public class EventScheduleServiceImpl implements EventScheduleService {
 
 	private final PersistenceManager persistenceManager;
 
-	public InspectionScheduleServiceImpl(PersistenceManager persistenceManager) {
+	public EventScheduleServiceImpl(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
 	}
 	

@@ -69,7 +69,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		addSimpleTerm("status", status);
 		addDateRangeTerm("date", fromDate, toDate);
 		
-		addInspectionBookTerm();
+		addEventBookTerm();
 		addAssignedToTerm();
 		addPredefinedLocationTerm();
 	}
@@ -86,7 +86,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		}
 	}
 
-	private void addInspectionBookTerm() {
+	private void addEventBookTerm() {
 		// when inspectionBookId is 0, we search for inspections not in a book
 		if(eventBookId != null && eventBookId == 0) {
 			addNullTerm("book.id");
@@ -177,12 +177,12 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.assetStatusId = assetStatusId;
 	}
 
-	public Long getInspectionTypeGroup() {
+	public Long getEventTypeGroup() {
 		return eventTypeGroupId;
 	}
 
-	public void setInspectionTypeGroup(Long inspectionTypeGroupId) {
-		this.eventTypeGroupId = inspectionTypeGroupId;
+	public void setEventTypeGroup(Long eventTypeGroupId) {
+		this.eventTypeGroupId = eventTypeGroupId;
 	}
 
 	public Long getPerformedBy() {
@@ -193,12 +193,12 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.performedBy = performedBy;
 	}
 
-	public Long getInspectionBook() {
+	public Long getEventBook() {
 		return eventBookId;
 	}
 
-	public void setInspectionBook(Long inspectionBookId) {
-		this.eventBookId = inspectionBookId;
+	public void setEventBook(Long eventBookId) {
+		this.eventBookId = eventBookId;
 	}
 
 	public String getPurchaseOrder() {

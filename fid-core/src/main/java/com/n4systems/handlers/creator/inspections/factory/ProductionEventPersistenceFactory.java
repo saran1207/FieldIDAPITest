@@ -8,11 +8,11 @@ import com.n4systems.ejb.impl.EntityManagerLastEventDateFinder;
 import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.ejb.impl.LastEventDateFinder;
-import com.n4systems.ejb.impl.ManagerBackedCreateInspectionsMethodObject;
+import com.n4systems.ejb.impl.ManagerBackedCreateEventsMethodObject;
 import com.n4systems.ejb.impl.ManagerBackedEventSaver;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
-import com.n4systems.handlers.creator.InspectionPersistenceFactory;
+import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.handlers.creator.InspectionsInAGroupCreator;
 import com.n4systems.handlers.creator.WebServiceInspectionsCreator;
 import com.n4systems.handlers.creator.inspections.EventCreator;
@@ -26,13 +26,13 @@ import com.n4systems.services.NextInspectionScheduleSerivce;
 
 
 
-public class ProductionInspectionPersistenceFactory implements InspectionPersistenceFactory {
+public class ProductionEventPersistenceFactory implements EventPersistenceFactory {
 
-	public AuditLogger createCreateInspectionAuditLogger() {
+	public AuditLogger createCreateEventAuditLogger() {
 		return new Log4JAuditLogger(new CreateEventAuditHandler());
 	}
 
-	public EventSaver createInspectionSaver(Transaction transaction) {
+	public EventSaver createEventSaver(Transaction transaction) {
 		EntityManager em = transaction.getEntityManager();
 		PersistenceManager persistenceManager = new PersistenceManagerImpl(em);
 		LastEventDateFinder lastEventDateFinder = new EntityManagerLastEventDateFinder(persistenceManager, em);
@@ -40,7 +40,7 @@ public class ProductionInspectionPersistenceFactory implements InspectionPersist
 		return new ManagerBackedEventSaver(new LegacyAssetManager(em), persistenceManager, em, lastEventDateFinder);
 	}
 
-	public EventCreator createInspectionCreator() {
+	public EventCreator createEventCreator() {
 		return  new EventCreator(createTransactionManager(), this);
 	}
 
@@ -48,18 +48,18 @@ public class ProductionInspectionPersistenceFactory implements InspectionPersist
 		return new FieldIdTransactionManager();
 	}
 
-	public CreateEventsMethodObject createCreateInspectionsMethodObject(Transaction transaction) {
+	public CreateEventsMethodObject createCreateEventsMethodObject(Transaction transaction) {
 		EntityManager em = transaction.getEntityManager();
 		PersistenceManager persistenceManager = new PersistenceManagerImpl(em);
 		
-		return new ManagerBackedCreateInspectionsMethodObject(persistenceManager, createInspectionSaver(transaction));
+		return new ManagerBackedCreateEventsMethodObject(persistenceManager, createEventSaver(transaction));
 	}
 	
-	public InspectionsInAGroupCreator createInspectionsInAGroupCreator() {
+	public InspectionsInAGroupCreator createEventsInAGroupCreator() {
 		return new WebServiceInspectionsCreator(createTransactionManager(), this);
 	}
 	
-	public NextInspectionScheduleSerivce createNextInspectionScheduleService(Transaction transaction) {
+	public NextInspectionScheduleSerivce createNextEventScheduleService(Transaction transaction) {
 		return new ManagerBackedNextInspectionScheduleService(new EventScheduleManagerImpl(transaction.getEntityManager()));
 	}
 		

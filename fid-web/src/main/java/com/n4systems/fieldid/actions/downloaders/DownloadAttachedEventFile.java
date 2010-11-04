@@ -25,7 +25,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 
 	public String doDownload() {
 		
-		// load the inspection
+		// load the event
 		event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
 		
 		if( event == null ) {
@@ -35,7 +35,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		
 		FileAttachment attachment = null;
 		
-		// make sure our attachment is actually attached to this inspection
+		// make sure our attachment is actually attached to this event
 		for(FileAttachment attach: event.getAttachments()) {
 			if(attach.getId().equals(attachmentID)) {
 				attachment = attach;
@@ -50,8 +50,8 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		}
 		
 		// construct a file path to our attachment
-		File inspectionDirectory = PathHandler.getAttachmentFile(event);
-		File attachedFile = new File( inspectionDirectory.getAbsolutePath(), attachment.getFileName() );
+		File eventDirectory = PathHandler.getAttachmentFile(event);
+		File attachedFile = new File( eventDirectory.getAbsolutePath(), attachment.getFileName() );
 		
 		// make sure the file actually exists
 		if( !attachedFile.exists() ) {
@@ -74,10 +74,10 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		return (failure) ? ERROR : null;
 	}
 	
-	public String doDownloadSubInspection()  {
+	public String doDownloadSubEvent()  {
 		
-		// load the inspection
-		event = eventManager.findEventThroughSubInspection( uniqueID, getSecurityFilter() );
+		// load the event
+		event = eventManager.findEventThroughSubEvent( uniqueID, getSecurityFilter() );
 		
 		SubEvent subEvent = eventManager.findSubEvent( uniqueID, getSecurityFilter() );
 		
@@ -88,7 +88,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		
 		FileAttachment attachment = null;
 		
-		// make sure our attachment is actually attached to this inspection
+		// make sure our attachment is actually attached to this event
 		for(FileAttachment attach: subEvent.getAttachments()) {
 			if(attach.getId().equals(attachmentID)) {
 				attachment = attach;
@@ -103,8 +103,8 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		}
 		
 		// construct a file path to our attachment
-		File inspectionDirectory = PathHandler.getAttachmentFile(event, subEvent);
-		File attachedFile = new File( inspectionDirectory.getAbsolutePath(), attachment.getFileName() );
+		File eventDirectory = PathHandler.getAttachmentFile(event, subEvent);
+		File attachedFile = new File( eventDirectory.getAbsolutePath(), attachment.getFileName() );
 		
 		// make sure the file actually exists
 		if( !attachedFile.exists() ) {

@@ -9,6 +9,7 @@ import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.services.EventScheduleServiceImpl;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -21,14 +22,13 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.Project;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class EventScheduleCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EventScheduleCrud.class);
@@ -66,7 +66,7 @@ public class EventScheduleCrud extends AbstractCrud {
 		testRequiredEntities(existing, false);
 	}
 	
-	protected void testRequiredEntities(boolean existing, boolean inspectionTypeRequired) {
+	protected void testRequiredEntities(boolean existing, boolean eventTypeRequired) {
 		if (eventSchedule == null) {
 			addActionErrorText("error.noschedule");
 			throw new MissingEntityException();
@@ -80,7 +80,7 @@ public class EventScheduleCrud extends AbstractCrud {
 			throw new MissingEntityException();
 		}
 		
-		if (inspectionTypeRequired && eventType == null) {
+		if (eventTypeRequired && eventType == null) {
 			addActionErrorText("error.noeventtype");
 			throw new MissingEntityException();
 		} 
@@ -107,7 +107,7 @@ public class EventScheduleCrud extends AbstractCrud {
 			eventSchedule.setNextDate(convertDate(nextDate));
 			eventSchedule.setProject(tmpProject);
 			
-			uniqueID = new InspectionScheduleServiceImpl(persistenceManager).createSchedule(eventSchedule);
+			uniqueID = new EventScheduleServiceImpl(persistenceManager).createSchedule(eventSchedule);
 			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
 			logger.error("could not save schedule", e);
@@ -126,12 +126,12 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.ManageJobs})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent, Permissions.ManageJobs})
 	public String doSave() {
 		testRequiredEntities(true);
 		try {
 			eventSchedule.setNextDate(convertDate(nextDate));
-			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
+			new EventScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
 			addActionMessageText("message.eventschedulesaved");
 		} catch (Exception e) {
 			logger.error("could not save schedule", e);
@@ -203,11 +203,11 @@ public class EventScheduleCrud extends AbstractCrud {
 		return (eventType != null) ? eventType.getId() : null;
 	}
 
-	public void setType(Long inspectionTypeId) {
-		if (this.eventType == null || !this.eventType.getId().equals(inspectionTypeId)) {
+	public void setType(Long eventTypeId) {
+		if (this.eventType == null || !this.eventType.getId().equals(eventTypeId)) {
 			this.eventType = null;
-			for (EventType insType : getInspectionTypes()) {
-				if (insType.getId().equals(inspectionTypeId)) {
+			for (EventType insType : getEventTypes()) {
+				if (insType.getId().equals(eventTypeId)) {
 					this.eventType = insType;
 					break;
 				}
@@ -215,11 +215,11 @@ public class EventScheduleCrud extends AbstractCrud {
 		}
 	}
 
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		return eventType;
 	}
 
-	public List<EventType> getInspectionTypes() {
+	public List<EventType> getEventTypes() {
 		List<EventType> eventTypes = new ArrayList<EventType>();
 		List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(asset.getType()).load();
 		for (AssociatedEventType associatedEventType : associatedEventTypes) {
@@ -243,18 +243,18 @@ public class EventScheduleCrud extends AbstractCrud {
 		this.nextDate = nextDate;
 	}
 
-	public List<EventSchedule> getInspectionSchedules() {
+	public List<EventSchedule> getEventSchedules() {
 		if (eventSchedules == null) {
 			eventSchedules = eventScheduleManager.getAvailableSchedulesFor(asset);
 		}
 		return eventSchedules;
 	}
 
-	public Long getInspectionCount() {
+	public Long getEventCount() {
 		return legacyProductManager.countAllEvents(asset, getSecurityFilter());
 	}
 
-	public EventSchedule getInspectionSchedule() {
+	public EventSchedule getEventSchedule() {
 		return eventSchedule;
 	}
 

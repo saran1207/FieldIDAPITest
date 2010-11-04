@@ -39,25 +39,25 @@ public class RealTimeInspectionLookupHandlerTest {
 	@Test
 	public void inspections_found_and_no_modified_date_returns_inspections() {
 		RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(getInspectionsLoaderThatReturnsMultipleInspections());
-		assertEquals(multipleEvents, lookupHandler.setProductId(anyProductId).setLastInspectionDate(null).lookup());
+		assertEquals(multipleEvents, lookupHandler.setProductId(anyProductId).setLastEventDate(null).lookup());
 	}
 	
 	@Test
 	public void inspections_found_and_older_modified_date_returns_inspections() {
 		RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(getInspectionsLoaderThatReturnsMultipleInspections());
-		assertEquals(multipleEvents, lookupHandler.setProductId(anyProductId).setLastInspectionDate(olderDate).lookup());
+		assertEquals(multipleEvents, lookupHandler.setProductId(anyProductId).setLastEventDate(olderDate).lookup());
 	}
 	
 	@Test
 	public void inspections_found_and_same_modified_date_as_inspections_returns_empty_list() {
 		RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(getInspectionsLoaderThatReturnsMultipleInspections());
-		assertEquals(0, lookupHandler.setProductId(anyProductId).setLastInspectionDate(recentDate).lookup().size());				
+		assertEquals(0, lookupHandler.setProductId(anyProductId).setLastEventDate(recentDate).lookup().size());
 	}
 	
 	@Test
 	public void inspections_found_and_newer_modified_date_than_inspections_returns_empty_list() {
 		RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(getInspectionsLoaderThatReturnsMultipleInspections());
-		assertEquals(0, lookupHandler.setProductId(anyProductId).setLastInspectionDate(mostRecentDate).lookup().size());						
+		assertEquals(0, lookupHandler.setProductId(anyProductId).setLastEventDate(mostRecentDate).lookup().size());
 	}
 	
 	private NewestEventsForAssetIdLoader getInspectionsLoaderThatReturnsMultipleInspections() {

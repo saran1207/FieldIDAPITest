@@ -10,7 +10,7 @@ import com.n4systems.model.SubAsset;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.exceptions.NonUniqueAssetException;
-import com.n4systems.exceptions.UsedOnMasterInspectionException;
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ListingPair;
@@ -43,7 +43,7 @@ public interface AssetManager {
 
 	public boolean partOfAMasterAsset(Long typeId);
 
-	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterInspectionException;
+	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterEventException;
 	
 	public AssetRemovalSummary testArchive(Asset asset);
 

@@ -86,16 +86,16 @@ public class EventManagerImpl implements EventManager {
 	/**
 	 * finds all the groups that you can view with the defined security filter.
 	 */
-	public List<EventGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
+	public List<EventGroup> findAllEventGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
 		return (List<EventGroup>) persistenceManager.postFetchFields(findAllInspectionGroups(filter, assetId), postFetchFields);
 	}
 
 	
-	public Event findEventThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
+	public Event findEventThroughSubEvent(Long subEventId, SecurityFilter filter) {
 		String str = "select e FROM "+Event.class.getName()+" e, IN( e.subInspections ) s WHERE s.id = :subInspection AND ";
 		str += filter.produceWhereClause(Event.class, "e");
 		Query query = em.createQuery(str);
-		query.setParameter("subInspection", subInspectionId);
+		query.setParameter("subInspection", subEventId);
 		filter.applyParameters(query, Event.class);
 		try {
 			return (Event) query.getSingleResult();
@@ -107,15 +107,15 @@ public class EventManagerImpl implements EventManager {
 		}
 	}
 
-	public SubEvent findSubEvent(Long subInspectionId, SecurityFilter filter) {
-		Event event = findEventThroughSubInspection(subInspectionId, filter);
+	public SubEvent findSubEvent(Long subEventId, SecurityFilter filter) {
+		Event event = findEventThroughSubEvent(subEventId, filter);
 
 		if (event == null) {
 			return null;
 		}
 
 		try {
-			return persistenceManager.find(SubEvent.class, subInspectionId, "attachments");
+			return persistenceManager.find(SubEvent.class, subEventId, "attachments");
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
@@ -142,7 +142,7 @@ public class EventManagerImpl implements EventManager {
 			}
 
 		} catch (InvalidQueryException iqe) {
-			logger.error("bad query while loading inspection", iqe);
+			logger.error("bad query while loading event", iqe);
 		}
 
 		return event;
@@ -162,7 +162,7 @@ public class EventManagerImpl implements EventManager {
 			events = persistenceManager.findAll(queryBuilder);
 		} catch (InvalidQueryException e) {
 			events = new ArrayList<Event>();
-			logger.error("Unable to load Inspections by Date and Asset", e);
+			logger.error("Unable to load Events by Date and Asset", e);
 		}
 
 		return events;
@@ -249,7 +249,7 @@ public class EventManagerImpl implements EventManager {
 			whereClause += "i.asset.owner.divisionOrg.id in (:divisionIds)";
 		}
 
-		whereClause += ") AND i.asset.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(Event.class, "i") + ")";
+		whereClause += ") AND i.asset.lastEventDate = i.date and " + securityFilter.produceWhereClause(Event.class, "i") + ")";
 
 		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
 		if (setCustomerInfo)
@@ -278,7 +278,7 @@ public class EventManagerImpl implements EventManager {
 		
 		whereClause += "i.asset.id in (select sch.asset.id from Project p, IN (p.schedules) sch where p.id in (:jobIds))";
 
-		whereClause += ") AND i.asset.lastInspectionDate = i.date and " + securityFilter.produceWhereClause(EventGroup.class, "i") + ")";
+		whereClause += ") AND i.asset.lastEventDate = i.date and " + securityFilter.produceWhereClause(EventGroup.class, "i") + ")";
 
 		Query query = em.createQuery("select i " + selectStatement + whereClause + " ORDER BY i.id");
 		query.setParameter("jobIds", jobIds);

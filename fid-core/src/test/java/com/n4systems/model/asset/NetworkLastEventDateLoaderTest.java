@@ -4,11 +4,11 @@ import javax.persistence.EntityManager;
 
 import org.junit.Test;
 
-public class NetworkLastInspectionDateLoaderTest {
+public class NetworkLastEventDateLoaderTest {
 
 	@Test(expected=SecurityException.class)
 	public void load_throws_security_exception_on_null_networkid() {
-		LastInspectionDateLoader loader = new LastInspectionDateLoader();
+		LastEventDateLoader loader = new LastEventDateLoader();
 		
 		loader.load((EntityManager)null);	
 	}

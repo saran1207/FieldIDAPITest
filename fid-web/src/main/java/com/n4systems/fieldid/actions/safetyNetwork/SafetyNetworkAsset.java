@@ -65,7 +65,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 
 	@SkipValidation
 	@Override
-	public String doInspections() {
+	public String doEvents() {
 		testExistingAsset();
 
 		return SUCCESS;
@@ -89,14 +89,14 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 		return assetAttachments;
 	}
 
-    public List<EventSchedule> getInspectionSchedules() {
+    public List<EventSchedule> getEventSchedules() {
         if (eventSchedules == null) {
             eventSchedules = eventScheduleManager.getAvailableSchedulesFor(asset);
         }
         return eventSchedules;
     }
 
-    public List<Event> getInspections() {
+    public List<Event> getEvents() {
         return getLoaderFactory().createEventsByAssetIdLoader().setAssetId(asset.getId()).load();
     }
 

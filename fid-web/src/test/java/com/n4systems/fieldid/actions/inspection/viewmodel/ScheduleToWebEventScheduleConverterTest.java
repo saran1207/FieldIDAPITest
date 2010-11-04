@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 
-public class ScheduleToWebInspectionScheduleConverterTest {
+public class ScheduleToWebEventScheduleConverterTest {
 
 	private class NullUserDateConverter implements UserDateConverter {
 
@@ -43,7 +43,7 @@ public class ScheduleToWebInspectionScheduleConverterTest {
 	}
 
 	@Test
-	public void should_return_null_when_given_a_null_inspection_schedule() throws Exception {
+	public void should_return_null_when_given_a_null_event_schedule() throws Exception {
 		ScheduleToWebEventScheduleConverter sut = new ScheduleToWebEventScheduleConverter(new NullUserDateConverter());
 		assertThat(sut.convert(null, new Date()), nullValue(WebEventSchedule.class));
 
@@ -51,7 +51,7 @@ public class ScheduleToWebInspectionScheduleConverterTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_have_the_right_inspection_type_name_and_id() throws Exception {
+	public void should_have_the_right_event_type_name_and_id() throws Exception {
 		AssetTypeSchedule schedule = AssetTypeScheduleBuilder.anAssetTypeSchedule().build();
 
 		ScheduleToWebEventScheduleConverter sut = new ScheduleToWebEventScheduleConverter(new NullUserDateConverter());

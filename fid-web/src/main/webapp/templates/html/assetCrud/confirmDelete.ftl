@@ -16,7 +16,7 @@ ${action.setPageType('asset', 'edit')!}
 	<div class="sectionContent">
 		
 		<div class="infoSet">
-			<label for="">${removalSummary.inspectionsToDelete}</label>
+			<label for="">${removalSummary.eventsToDelete}</label>
 			<span><@s.text name="label.eventsbeingdeleted"/></span>
 		</div>
 		

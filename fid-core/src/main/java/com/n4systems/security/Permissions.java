@@ -19,8 +19,8 @@ public class Permissions {
 	public static final int ManageSystemConfig	= 1 << 1;
 	public static final int ManageSystemUsers	= 1 << 2;
 	public static final int ManageEndUsers		= 1 << 3;
-	public static final int CreateInspection	= 1 << 4;
-	public static final int EditInspection		= 1 << 5;
+	public static final int CreateEvent         = 1 << 4;
+	public static final int EditEvent           = 1 << 5;
 	public static final int ManageJobs			= 1 << 6;
 	public static final int ManageSafetyNetwork = 1 << 7;
 	public static final int AccessWebStore		= 1 << 8;
@@ -32,12 +32,12 @@ public class Permissions {
 	public static final int ADMIN				= ALL;
 	public static final int SYSTEM				= ALL;
 	public static final int CUSTOMER			= NO_PERMISSIONS;
-	public static final int ALLINSPECTION		= CreateInspection | EditInspection;
+	public static final int ALLINSPECTION		= CreateEvent | EditEvent;
 	
 	
 	
 	/** permissions visible for admins to select for system users */
-	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateInspection, EditInspection, ManageJobs, ManageSafetyNetwork, AccessWebStore };
+	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateEvent, EditEvent, ManageJobs, ManageSafetyNetwork, AccessWebStore };
 
 	
 	/**
@@ -59,10 +59,10 @@ public class Permissions {
 			case ManageEndUsers:
 				label = "label.managecustomers_permission";;
 				break;
-			case CreateInspection:
+			case CreateEvent:
 				label = "label.createevent_permission";;
 				break;
-			case EditInspection:
+			case EditEvent:
 				label = "label.editevent_permission";;
 				break;
 			case ManageJobs:
@@ -92,10 +92,10 @@ public class Permissions {
 			return ManageSystemUsers;
 		} else if (safeName.equals("manageendusers")) {
 			return ManageEndUsers;
-		} else if (safeName.equals("createinspection")) {
-			return CreateInspection;
-		} else if (safeName.equals("editinspection")) {
-			return EditInspection;
+		} else if (safeName.equals("createevent")) {
+			return CreateEvent;
+		} else if (safeName.equals("editevent")) {
+			return EditEvent;
 		} else if (safeName.equals("managejobs")) {
 			return ManageJobs;
 		} else if (safeName.equals("accesswebstore")) {

@@ -11,13 +11,13 @@
 <#assign form_action="EDIT" /> 
 ${action.setPageType('inspection', 'edit')!}
 
-<div id="masterInspection" >
+<div id="masterEvent" >
 	<#include "/templates/html/common/_formErrors.ftl" />
 	
 	<div class="masterAsset done">
 		<div class="definition"><div class="identifier"><span>${asset.type.name!}</span></div></div>
-		<div class="performedInspection">
-			<span>${(inspectionType.name)!}</span> 
+		<div class="performedEvent">
+			<span>${(eventType.name)!}</span> 
 			<span>
 				<a class="exitLink" href="<@s.url action="subEventEdit"  uniqueID="0" assetId="${asset.id}" type="${type}" parentAssetId="${asset.id}" token="${token}"/>">
 					<@s.text name="label.edit_this_event"/>
@@ -37,7 +37,7 @@ ${action.setPageType('inspection', 'edit')!}
 		<@s.hidden name="uniqueID" id="uniqueID"/>
 		<@s.hidden name="token"/>
 		<@s.hidden name="type"/>
-		<@s.hidden name="inspectionGroupId"/>
+		<@s.hidden name="eventGroupId"/>
 		<@s.hidden name="assetId" id="assetId"/>
 		<div class="formAction">
 			<@s.url id="cancelUrl" action="eventGroups" uniqueID="${asset.id}"/>

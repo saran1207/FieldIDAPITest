@@ -1,11 +1,11 @@
-var inspectionAttributeIndex = 0;
-var addInspectionAttributeUrl = '';
+var eventAttributeIndex = 0;
+var addEventAttributeUrl = '';
 
-function addInspectionAttribute() {
-	getResponse( addInspectionAttributeUrl + '?fieldIndex='+ inspectionAttributeIndex++ );
+function addEventAttribute() {
+	getResponse( addEventAttributeUrl + '?fieldIndex='+ eventAttributeIndex++ );
 }
 
 
-function removeInspectionAttribute( index ) {
+function removeEventAttribute( index ) {
 	$( 'attribute_' + index ).remove();
 }

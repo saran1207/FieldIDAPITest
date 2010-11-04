@@ -42,7 +42,7 @@ public class EventTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger(EventTypeCrud.class);
 
-	private List<ListingPair> inspectionTypeGroups;
+	private List<ListingPair> eventTypeGroups;
 	private List<EventType> eventTypes;
 	private EventType eventType;
 	private List<TrimmedString> infoFieldNames;
@@ -74,7 +74,7 @@ public class EventTypeCrud extends AbstractCrud {
 	private void testRequiredEntities(boolean existing) {
 		if (eventType == null || (existing && eventType.isNew())) {
 			addActionErrorText("error.noeventtype");
-			throw new MissingEntityException("no inspection type could be found.");
+			throw new MissingEntityException("no event type could be found.");
 		}
 	}
 
@@ -136,11 +136,11 @@ public class EventTypeCrud extends AbstractCrud {
 
 			addFlashMessageText("message.savedeventtype");
 			if (saveAndAdd != null) {
-				return "createInspectionForm";
+				return "createEventForm";
 			}
 			return SUCCESS;
 		} catch (Exception e) {
-			logger.error("Failed saving InspectionType", e);
+			logger.error("Failed saving EventType", e);
 			addActionErrorText("error.failedtosave");
 			return ERROR;
 		}
@@ -175,7 +175,7 @@ public class EventTypeCrud extends AbstractCrud {
 	}
 
 	private EventTypeArchiveSummary fillArchiveSummary(Transaction transaction) {
-		archiveSummary = getRemovalHandlerFactory().getInspectionTypeArchiveHandler().forEventType(eventType).summary(transaction);
+		archiveSummary = getRemovalHandlerFactory().getEventTypeArchiveHandler().forEventType(eventType).summary(transaction);
 		return archiveSummary;
 	}
 
@@ -185,7 +185,7 @@ public class EventTypeCrud extends AbstractCrud {
 		try {
 			if (fillArchiveSummary(transaction).canBeRemoved()) {
 			
-				archiveInspection(transaction);
+				archiveEvent(transaction);
 				transaction.commit();
 				
 				startBackgroundTask();
@@ -197,7 +197,7 @@ public class EventTypeCrud extends AbstractCrud {
 			}
 		} catch (Exception e) {
 			transaction.rollback();
-			logger.error(getLogLinePrefix() + "could not archive inspection type", e);
+			logger.error(getLogLinePrefix() + "could not archive event type", e);
 			addFlashErrorText("error.delete_event_type");
 			return ERROR;
 		}
@@ -206,23 +206,23 @@ public class EventTypeCrud extends AbstractCrud {
 	
 	public String doCopy() {
 		try {
-			EventTypeCopier typeCopier = createInspectionTypeCopier();
+			EventTypeCopier typeCopier = createEventTypeCopier();
 			EventType newType = typeCopier.copy(getUniqueID());
 			
 			addFlashMessageText(getText("message.event_type_copied", new String[] {newType.getName()}));
 		} catch(Exception e) {
-			logger.error(getLogLinePrefix() + "failed coping inspection type", e);
+			logger.error(getLogLinePrefix() + "failed coping event type", e);
 			addFlashErrorText("error.unable_to_copy_event_type");
 			return ERROR;
 		}
 		return SUCCESS;
 	}
 	
-	protected EventTypeCopier createInspectionTypeCopier() {
+	protected EventTypeCopier createEventTypeCopier() {
 		return new EventTypeCopier(getTenant());
 	}
 
-	private void archiveInspection(Transaction transaction) {
+	private void archiveEvent(Transaction transaction) {
 		eventType.archiveEntity();
 		eventType = new EventTypeSaver().update(transaction, eventType);
 	}
@@ -234,7 +234,7 @@ public class EventTypeCrud extends AbstractCrud {
 
 	
 
-	public List<EventType> getInspectionTypes() {
+	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
 			try {
 				QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, new OpenSecurityFilter());
@@ -252,18 +252,18 @@ public class EventTypeCrud extends AbstractCrud {
 		return eventTypes;
 	}
 
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		return eventType;
 	}
 
-	public List<ListingPair> getInspectionTypeGroups() {
-		if (inspectionTypeGroups == null) {
-			inspectionTypeGroups = persistenceManager.findAllLP(EventTypeGroup.class, getTenantId(), "name");
+	public List<ListingPair> getEventTypeGroups() {
+		if (eventTypeGroups == null) {
+			eventTypeGroups = persistenceManager.findAllLP(EventTypeGroup.class, getTenantId(), "name");
 		}
-		return inspectionTypeGroups;
+		return eventTypeGroups;
 	}
 
-	public void setInspectionType(EventType eventType) {
+	public void setEventType(EventType eventType) {
 		this.eventType = eventType;
 	}
 

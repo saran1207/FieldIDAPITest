@@ -39,7 +39,7 @@ import com.n4systems.util.ArrayUtils;
 import com.n4systems.util.DateHelper;
 
 @SuppressWarnings("serial")
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class EventImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(EventImportAction.class);
 	
@@ -53,7 +53,7 @@ public class EventImportAction extends AbstractImportAction {
 
 	@Override
 	protected Importer createImporter(MapReader reader) {
-		return getImporterFactory().createInspectionImporter(reader, getSessionUserId(), type);
+		return getImporterFactory().createEventImporter(reader, getSessionUserId(), type);
 	}
 	
 	@Override
@@ -67,10 +67,10 @@ public class EventImportAction extends AbstractImportAction {
 	}
 	
 	public String doDownloadExample() {
-		ListLoader<Event> inspectionLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleInspection()));
+		ListLoader<Event> eventLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleEvent()));
 		NextEventDateByEventLoader nextDateLoader = new NextEventDateByEventPassthruLoader(createExampleNextDate());
 
-		EventExporter exporter = new EventExporter(inspectionLoader, nextDateLoader);
+		EventExporter exporter = new EventExporter(eventLoader, nextDateLoader);
 		
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -79,7 +79,7 @@ public class EventImportAction extends AbstractImportAction {
 			exporter.export(writer);
 			
 		} catch (Exception e) {
-			logger.error("Failed generating example inspection export", e);
+			logger.error("Failed generating example event export", e);
 			return ERROR;
 		} finally {
 			StreamUtils.close(writer);
@@ -92,7 +92,7 @@ public class EventImportAction extends AbstractImportAction {
 		return SUCCESS;
 	}
 	
-	private Event createExampleInspection() {
+	private Event createExampleEvent() {
 		Event example = new Event();
 		
 		example.setDate(new Date());
@@ -125,7 +125,7 @@ public class EventImportAction extends AbstractImportAction {
 		return (statuses.isEmpty()) ? null : statuses.get(0);
 	}
 	
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		return type;
 	}
 

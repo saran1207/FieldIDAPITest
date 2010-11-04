@@ -4,17 +4,17 @@
 	
 </head>
 
-<#if !inVendorContext && action.sessionUser.hasAccess("createinspection")>
+<#if !inVendorContext && action.sessionUser.hasAccess("createevent")>
 	<#include "_addForm.ftl"/>
 </#if>
 
-<table class="list" id="scheduleList" <#if inspectionSchedules?exists && inspectionSchedules.isEmpty() >style="display:none"</#if>>
+<table class="list" id="scheduleList" <#if eventSchedules?exists && eventSchedules.isEmpty() >style="display:none"</#if>>
 	<tr>
 		<th class="rowName"><@s.text name="label.eventtype"/></th>
 		<th><@s.text name="label.nextscheduleddate"/></th>
 	</tr>
 	<tbody id="schedules">
-		<#list inspectionSchedules as inspectionSchedule>
+		<#list eventSchedules as eventSchedule>
 			<#include "show.ftl"/>
 		</#list>
 	</tbody>

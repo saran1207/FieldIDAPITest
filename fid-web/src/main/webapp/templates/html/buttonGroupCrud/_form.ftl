@@ -21,7 +21,7 @@
 		<div style="float:left">
 			<ul class="buttonGroup" id="buttonStates__${buttonGroupIndex}">
 				<li class="buttonGroupLabels">
-					<div class="label inspectionButton"><@s.text name="label.image"/>:</div> 
+					<div class="label eventButton"><@s.text name="label.image"/>:</div> 
 					<div class="label" ><@s.text name="label.label"/>:</div>
 					<div class="label" ><@s.text name="label.indicates"/>:</div>
 					<div class="label" ><@s.text name="label.options"/>:</div>

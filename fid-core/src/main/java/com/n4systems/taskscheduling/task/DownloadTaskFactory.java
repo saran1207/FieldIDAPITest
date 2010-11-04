@@ -44,10 +44,10 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public PrintAllEventCertificatesTask createPrintAllInspectionCertificatesTask(DownloadLink link, String downloadUrl, EventReportType type, List<Long> inspectionIds) {
+	public PrintAllEventCertificatesTask createPrintAllEventCertificatesTask(DownloadLink link, String downloadUrl, EventReportType type, List<Long> eventIds) {
 		PrintAllEventCertificatesTask task = new PrintAllEventCertificatesTask(link, downloadUrl);
 		task.setReportType(type);
-		task.setInspectionIds(inspectionIds);
+		task.setEventIds(eventIds);
 		
 		return task;
 	}
@@ -59,7 +59,7 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public PrintEventSummaryReportTask createPrintInspectionSummaryReportTask(DownloadLink link, String downloadUrl, ReportDefiner reportDefiner) {
+	public PrintEventSummaryReportTask createPrintEventSummaryReportTask(DownloadLink link, String downloadUrl, ReportDefiner reportDefiner) {
 		PrintEventSummaryReportTask task = new PrintEventSummaryReportTask(link, downloadUrl);
 		task.setReportDefiner(reportDefiner);
 		

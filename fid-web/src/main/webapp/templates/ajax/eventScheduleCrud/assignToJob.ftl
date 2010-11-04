@@ -1,6 +1,6 @@
 $('assignmentIndicator_${uniqueID}').hide();
 	
-<#if inspectionSchedule.project?exists>
+<#if eventSchedule.project?exists>
 	$('assignToJob_${uniqueID}').hide();
 	$('removeFromJob_${uniqueID}').show();
 <#else>

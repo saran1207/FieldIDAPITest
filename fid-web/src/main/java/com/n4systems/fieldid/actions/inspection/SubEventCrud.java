@@ -38,7 +38,7 @@ public class SubEventCrud extends EventCrud {
 	private String token;
 	private Asset parentAsset;
 	private MasterEvent masterEventHelper;
-	private boolean currentInspectionNew = true;
+	private boolean currentEventNew = true;
 
 	public SubEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyProductManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
@@ -56,23 +56,23 @@ public class SubEventCrud extends EventCrud {
 	protected void loadMemberFields(Long uniqueId) {
 		masterEventHelper = (MasterEvent) getSession().get(MasterEventCrud.SESSION_KEY);
 
-		if (MasterEvent.matchingMasterInspection(masterEventHelper, token)) {
+		if (MasterEvent.matchingMasterEvent(masterEventHelper, token)) {
 			if (uniqueId == 0) {
-				event = CopyEventFactory.copyInspection(masterEventHelper.getInspection());
-				if (masterEventHelper.isMainInspectionStored()) {
-					currentInspectionNew = false;
+				event = CopyEventFactory.copyEvent(masterEventHelper.getEvent());
+				if (masterEventHelper.isMainEventStored()) {
+					currentEventNew = false;
 				}
 			} else {
-				event = copyInspection(masterEventHelper.createInspectionFromSubInspection(masterEventHelper.getSubInspection(uniqueId)));
+				event = copyEvent(masterEventHelper.createEventFromSubEvent(masterEventHelper.getSubEvent(uniqueId)));
 				if (uniqueId != null) {
-					currentInspectionNew = false;
+					currentEventNew = false;
 				}
 			}
-			if (currentInspectionNew) {
+			if (currentEventNew) {
 				event.setAsset(null);
 				event.setType(null);
 			} else {
-				parentAsset = masterEventHelper.getInspection().getAsset();
+				parentAsset = masterEventHelper.getEvent().getAsset();
 
 				setType(event.getType().getId());
 				setAssetId(event.getAsset().getId());
@@ -83,7 +83,7 @@ public class SubEventCrud extends EventCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 	public String doAdd() {
 		if (masterEventHelper == null) {
 			addActionErrorText("error.nomasterevent");
@@ -92,7 +92,7 @@ public class SubEventCrud extends EventCrud {
 		reattachUploadedFiles();
 		event.setId(null);
 		if (event.getResults() != null) {
-			restoreCriteriaResultsFromStoredInspection();
+			restoreCriteriaResultsFromStoredEvent();
 		}
 		
 		try {
@@ -105,7 +105,7 @@ public class SubEventCrud extends EventCrud {
 		masterAsset = assetManager.fillInSubAssetsOnAsset(masterAsset);
 		masterEventHelper.setMasterAsset(masterAsset);
 
-		if (currentInspectionNew) {
+		if (currentEventNew) {
 			return super.doAdd();
 		}
 
@@ -117,7 +117,7 @@ public class SubEventCrud extends EventCrud {
 		setScheduleId(masterEventHelper.getScheduleId());
 		reattachUploadedFiles();
 
-		getModifiableInspection().updateValuesToMatch(event);
+		getModifiableEvent().updateValuesToMatch(event);
 		
 		
 		getNextSchedules().addAll(masterEventHelper.getNextSchedules());
@@ -131,10 +131,10 @@ public class SubEventCrud extends EventCrud {
 		
 	}
 
-	private void restoreCriteriaResultsFromStoredInspection() {
+	private void restoreCriteriaResultsFromStoredEvent() {
 		criteriaResults = new ArrayList<CriteriaResult>();
 
-		List<CriteriaSection> availbleSections = getInspectionFormHelper().getAvailableSections(event);
+		List<CriteriaSection> availbleSections = getEventFormHelper().getAvailableSections(event);
 
 		for (CriteriaSection criteriaSection : availbleSections) {
 			for (Criteria criteria : criteriaSection.getCriteria()) {
@@ -159,7 +159,7 @@ public class SubEventCrud extends EventCrud {
 			if (uniqueID == 0) {
 				uploadedFiles = masterEventHelper.getUploadedFiles();
 			} else {
-				uploadedFiles = masterEventHelper.getSubInspectionUploadedFiles().get(masterEventHelper.getSubInspection(uniqueID));
+				uploadedFiles = masterEventHelper.getSubEventUploadedFiles().get(masterEventHelper.getSubEvent(uniqueID));
 			}
 
 			if (uploadedFiles != null) {
@@ -169,7 +169,7 @@ public class SubEventCrud extends EventCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
 	public String doEdit() {
 		if (masterEventHelper == null) {
 			addActionErrorText("error.nomasterevent");
@@ -178,23 +178,23 @@ public class SubEventCrud extends EventCrud {
 		reattachUploadedFiles();
 		setScheduleId(masterEventHelper.getScheduleId());
 		
-		getModifiableInspection().updateValuesToMatch(event);
+		getModifiableEvent().updateValuesToMatch(event);
 		return super.doEdit();
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
-	public String doStoreNewSubInspection() {
-		return storeSubInspection();
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	public String doStoreNewSubEvent() {
+		return storeSubEvent();
 	}
 	
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
-	public String doStoreExistingSubInspection() {
-		return storeSubInspection();
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	public String doStoreExistingSubEvent() {
+		return storeSubEvent();
 	}
 	
-	public String storeSubInspection() {
+	public String storeSubEvent() {
 		if (masterEventHelper == null) {
 			addActionErrorText("error.nomasterevent");
 			return MISSING;
@@ -202,14 +202,14 @@ public class SubEventCrud extends EventCrud {
 
 		event.setTenant(getTenant());
 		event.setAsset(asset);
-		getModifiableInspection().pushValuesTo(event);
+		getModifiableEvent().pushValuesTo(event);
 
 		User modifiedBy = fetchCurrentUser();
 
-		SubEvent subEvent = masterEventHelper.createSubInspectionFromInspection(event);
+		SubEvent subEvent = masterEventHelper.createSubEventFromEvent(event);
 		subEvent.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
 
-		if (!masterEventHelper.getInspection().isNew()) {
+		if (!masterEventHelper.getEvent().isNew()) {
 			updateAttachmentList(event, modifiedBy);
 		}
 
@@ -220,7 +220,7 @@ public class SubEventCrud extends EventCrud {
 				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
 			}
 
-			masterEventHelper.addSubInspection(subEvent);
+			masterEventHelper.addSubEvent(subEvent);
 		} else {
 			subEvent.setId(uniqueID);
 
@@ -228,27 +228,27 @@ public class SubEventCrud extends EventCrud {
 				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
 			}
 
-			masterEventHelper.replaceSubInspection(subEvent);
+			masterEventHelper.replaceSubEvent(subEvent);
 		}
 
-		masterEventHelper.getSubInspectionUploadedFiles().put(subEvent, getUploadedFiles());
+		masterEventHelper.getSubEventUploadedFiles().put(subEvent, getUploadedFiles());
 
 		addFlashMessageText("message.eventstored");
 
 		return SUCCESS;
 	}
 
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
-	public String doStoreNewMasterInspection() {
-		return storeMasterInspection();
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	public String doStoreNewMasterEvent() {
+		return storeMasterEvent();
 	}
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
-	public String doStoreExistingMasterInspection() {
-		return storeMasterInspection();
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
+	public String doStoreExistingMasterEvent() {
+		return storeMasterEvent();
 	}
 	
-	public String storeMasterInspection() {
+	public String storeMasterEvent() {
 		if (masterEventHelper == null) {
 			addActionErrorText("error.nomasterevent");
 			return MISSING;
@@ -258,13 +258,13 @@ public class SubEventCrud extends EventCrud {
 		User modifiedBy = fetchCurrentUser();
 
 		try {
-			findInspectionBook();
+			findEventBook();
 			processProofTestFile();
-			getModifiableInspection().pushValuesTo(event);
+			getModifiableEvent().pushValuesTo(event);
 			masterEventHelper.setProofTestFile(fileData);
 			masterEventHelper.setAssignToUpdate(getAssignedTo(), isAssignToSomeone());
 
-			if (masterEventHelper.getInspection().isNew()) {
+			if (masterEventHelper.getEvent().isNew()) {
 				event.setTenant(getTenant());
 				event.setAsset(asset);
 				event.syncFormVersionWithType();
@@ -287,9 +287,9 @@ public class SubEventCrud extends EventCrud {
 		
 			event.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
 			masterEventHelper.setSchedule(eventSchedule);
-			masterEventHelper.setScheduleId(inspectionScheduleId);
+			masterEventHelper.setScheduleId(eventScheduleId);
 			masterEventHelper.setUploadedFiles(getUploadedFiles());
-			masterEventHelper.setInspection(event);
+			masterEventHelper.setEvent(event);
 
 		} catch (ProcessingProofTestException e) {
 			addActionErrorText("error.processingprooftest");
@@ -351,17 +351,14 @@ public class SubEventCrud extends EventCrud {
 		this.token = token;
 	}
 
-	public MasterEvent getMasterInspection() {
+	public MasterEvent getMasterEvent() {
 		return masterEventHelper;
 	}
-	
-	
 	
 	@Override
 	public void setType(Long type) {
 		event.setType(null);
 		super.setType(type);
 	}
-
 
 }

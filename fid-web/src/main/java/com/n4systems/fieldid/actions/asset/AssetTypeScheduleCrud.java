@@ -32,7 +32,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 	private static final long serialVersionUID = 1L;
 
 	private Long assetTypeId;
-	private Long inspectionTypeId;
+	private Long eventTypeId;
 	private AssetType assetType;
 	private EventType eventType;
 	
@@ -121,7 +121,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 		List<AssetTypeSchedule> schedulesToRemove = new ArrayList<AssetTypeSchedule>();
 
 		if (!schedule.getOwner().isExternal()) {
-			schedulesToRemove.addAll(getLoaderFactory().createEventFrequenciesListLoader().setEventTypeId(inspectionTypeId).setAssetTypeId(assetTypeId).load(transaction));
+			schedulesToRemove.addAll(getLoaderFactory().createEventFrequenciesListLoader().setEventTypeId(eventTypeId).setAssetTypeId(assetTypeId).load(transaction));
 		} else {
 			schedulesToRemove.add(new QueryBuilder<AssetTypeSchedule>(AssetTypeSchedule.class, new OpenSecurityFilter()).addSimpleWhere("id", schedule.getId()).getSingleResult(
 					transaction.getEntityManager()));
@@ -132,7 +132,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 
 	public String doSave() {
 		getAssetType();
-		getInspectionType();
+		getEventType();
 		try {
 			if (schedule.getId() == null) {
 				schedule.setAssetType(assetType);
@@ -171,14 +171,14 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 		return assetType;
 	}
 
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		if (eventType == null) {
-			eventType = persistenceManager.find(EventType.class, inspectionTypeId, getTenant());
+			eventType = persistenceManager.find(EventType.class, eventTypeId, getTenant());
 		}
 		return eventType;
 	}
 
-	public List<EventType> getInspectionTypes() {
+	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
 			eventTypes = new ArrayList<EventType>();
 			List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(getAssetType()).load();
@@ -218,12 +218,12 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 		return overrideSchedules;
 	}
 
-	public Long getInspectionTypeId() {
-		return inspectionTypeId;
+	public Long getEventTypeId() {
+		return eventTypeId;
 	}
 
-	public void setInspectionTypeId(Long inspectionTypeId) {
-		this.inspectionTypeId = inspectionTypeId;
+	public void setEventTypeId(Long eventTypeId) {
+		this.eventTypeId = eventTypeId;
 	}
 
 	public boolean isAutoSchedule() {
@@ -270,7 +270,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 
 		// check if there is already an override for this customer.
 		getAssetType();
-		getInspectionType();
+		getEventType();
 
 		Map<String, List<AssetTypeSchedule>> overrideSchedules = getOverrideSchedules();
 		List<AssetTypeSchedule> existingSchedules = overrideSchedules.get(eventType.getName());

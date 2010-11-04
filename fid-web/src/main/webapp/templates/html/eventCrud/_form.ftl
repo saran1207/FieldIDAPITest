@@ -4,7 +4,7 @@
 		<script type="text/javascript" src="<@s.url value="/javascript/inspectionBook.js"/>" ></script>
 		<script type="text/javascript">
 			changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="ajax"   />';
-			updateInspectionBooksUrl = '<@s.url action="eventBooks" namespace="ajax"   />';
+			updateEventBooksUrl = '<@s.url action="eventBooks" namespace="ajax"   />';
 			assetTypeId = ${asset.type.id}
 			var proofTestTypes = ${json.toJson( proofTestTypesUpload )}
 		</script>
@@ -32,7 +32,7 @@
 		
 		<#include "/templates/html/common/_calendar.ftl"/>
 	</head>
-	<title>${(inspectionType.name)!} <@s.text name="label.on"/> ${asset.serialNumber}</title>
+	<title>${(eventType.name)!} <@s.text name="label.on"/> ${asset.serialNumber}</title>
 	
 	<#include "/templates/html/common/_formErrors.ftl" />
 	
@@ -40,18 +40,18 @@
 
 	<#include "_attributes.ftl"/>
 
-	<#if inspection.id?exists && action.isParentAsset() >
+	<#if event.id?exists && action.isParentAsset() >
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.result"/></label>
 			<@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" />
 		</div>
 	</#if>
 	
-	<#assign formInspection=inspection>
-	<#assign identifier="inspectionForm">
+	<#assign formEvent=event>
+	<#assign identifier="eventForm">
 	<#include "_event.ftl" />
 	
-	<#if action.isParentAsset() && !inspectionType.supportedProofTests.isEmpty() >
+	<#if action.isParentAsset() && !eventType.supportedProofTests.isEmpty() >
 		<#include "_proofTest.ftl"/>
 	</#if>
 	

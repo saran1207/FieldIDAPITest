@@ -14,8 +14,8 @@ public interface ReportDefiner extends BaseSearchDefiner {
 	public Date getToDate();
 	public Date getFromDate();
 	public Long getAssetType();
-	public Long getInspectionBook();
-	public Long getInspectionTypeGroup();
+	public Long getEventBook();
+	public Long getEventTypeGroup();
 	public Long getPerformedBy();
 	public BaseOrg getOwner();
 }

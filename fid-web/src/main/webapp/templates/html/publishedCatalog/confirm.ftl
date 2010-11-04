@@ -4,16 +4,16 @@
 	<#list publishedAssetTypes as assetType>
 		<@s.hidden name="importAssetTypeIds['${assetType.id}']" />
 	</#list>
-	<#list publishedInspectionTypes as inspectionType>
-		<@s.hidden name="importInspectionTypeIds['${inspectionType.id}']" />
+	<#list publishedEventTypes as event>
+		<@s.hidden name="importEventTypeIds['${event.id}']" />
 	</#list>
 	
 	<p>
-		<@s.text name="label.import_summary"><@s.param>${summary.assetTypeImportSummary.importMapping.size()}</@s.param><@s.param>${summary.inspectionTypeImportSummary.importMapping.size()}</@s.param></@s.text>
+		<@s.text name="label.import_summary"><@s.param>${summary.assetTypeImportSummary.importMapping.size()}</@s.param><@s.param>${summary.eventTypeImportSummary.importMapping.size()}</@s.param></@s.text>
 	</p>
-	<#if summary.assetTypeImportSummary.anyRenamed || summary.inspectionTypeImportSummary.anyRenamed>
+	<#if summary.assetTypeImportSummary.anyRenamed || summary.eventTypeImportSummary.anyRenamed>
 		<p>
-			<span class="attention"><@s.text name="label.important_warning"/>:</span> <@s.text name="warning.import_renaming"><@s.param>${summary.assetTypeImportSummary.numberRenamed}</@s.param><@s.param>${summary.inspectionTypeImportSummary.numberRenamed}</@s.param></@s.text>
+			<span class="attention"><@s.text name="label.important_warning"/>:</span> <@s.text name="warning.import_renaming"><@s.param>${summary.assetTypeImportSummary.numberRenamed}</@s.param><@s.param>${summary.eventTypeImportSummary.numberRenamed}</@s.param></@s.text>
 			<a href="javascript:void(0);" onclick="$('renamedElements').toggle()" ><@s.text name="label.view_details"/></a>
 		</p>
 		<table id="renamedElements" style="display:none">
@@ -29,14 +29,14 @@
 					</#if> 
 				</#list>
 			</#if>
-			<#if summary.inspectionTypeImportSummary.anyRenamed >
+			<#if summary.eventTypeImportSummary.anyRenamed >
 				<tr><th colspan="3"><@s.text name="label.event_types"/></th></tr>
-				<#list publishedInspectionTypes as inpsectionType>
-					<#if summary.inspectionTypeImportSummary.importMapping.get(inpsectionType.id)?exists && summary.inspectionTypeImportSummary.isRenamed(inpsectionType.id, inpsectionType.name)>
+				<#list publishedEventTypes as inpsectionType>
+					<#if summary.eventTypeImportSummary.importMapping.get(inpsectionType.id)?exists && summary.eventTypeImportSummary.isRenamed(inpsectionType.id, inpsectionType.name)>
 						<tr >
 							<td>${inpsectionType.name?html}</td>
 							<td><@s.text name="label.will_be_named"/></td>
-							<td>${summary.inspectionTypeImportSummary.importMapping.get(inpsectionType.id).name?html}</td>
+							<td>${summary.eventTypeImportSummary.importMapping.get(inpsectionType.id).name?html}</td>
 						</tr>
 					</#if> 
 				</#list>

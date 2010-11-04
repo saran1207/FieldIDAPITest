@@ -76,7 +76,7 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 			return SUCCESS;
 		} catch (InvalidQueryException iqe) {
 			addActionErrorText("error.failedtoloadeventbooks");
-			logger.error("couldn't load the list of inspection docs", iqe);
+			logger.error("couldn't load the list of event docs", iqe);
 			return ERROR;
 		}
 	}
@@ -92,7 +92,7 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 			return SUCCESS;
 		} catch (Exception e) {
 			addActionErrorText("error.failedtoloadeventbooks");
-			logger.error("couldn't load the list of inspection docs", e);
+			logger.error("couldn't load the list of event docs", e);
 			return ERROR;
 		}
 	}
@@ -140,7 +140,7 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 			}
 			addFlashMessageText("message.eventbooksaved");
 		} catch (Exception e) {
-			logger.error("failed to save inspection book", e);
+			logger.error("failed to save event book", e);
 			addActionErrorText("error.eventbooksavefailed");
 			return ERROR;
 		}
@@ -162,7 +162,7 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 			book = persistenceManager.update(book, getSessionUser().getUniqueID());
 			addFlashMessage(getText("message.eventbooksaved"));
 		} catch (Exception e) {
-			logger.error("failed to save inspection book", e);
+			logger.error("failed to save event book", e);
 			addActionError(getText("error.eventbooksavefailed"));
 			return ERROR;
 		}
@@ -183,7 +183,7 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 			book = persistenceManager.update(book, getSessionUser().getUniqueID());
 			addFlashMessageText("message.eventbooksaved");
 		} catch (Exception e) {
-			logger.error("failed to save inspection book", e);
+			logger.error("failed to save event book", e);
 			addActionErrorText("error.eventbooksavefailed");
 			return ERROR;
 		}
@@ -211,7 +211,7 @@ public class EventBookCrud extends AbstractCrud implements HasDuplicateValueVali
 			persistenceManager.delete(book);
 			addFlashMessageText("message.eventbookdeleted");
 		} catch (Exception e) {
-			logger.error("failed to save inspection book", e);
+			logger.error("failed to save event book", e);
 			addActionErrorText("error.eventbookdeletefailed");
 			return ERROR;
 		}

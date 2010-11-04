@@ -42,7 +42,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("productIdentified", formatDate(asset.getIdentified(),false));
 		add("currentProductStatus", assetStatusName());
 		add("infoOptionMap", produceInfoOptionMap());
-		add("lastInspectionDate", formatDate(asset.getLastInspectionDate(), true));
+		add("lastInspectionDate", formatDate(asset.getLastEventDate(), true));
 		add("infoOptionBeanList", asset.getOrderedInfoOptionList());
 		add("infoOptionDataSource", new JRBeanCollectionDataSource(asset.getOrderedInfoOptionList()));
 		add(ReportField.ASSIGNED_USER.getParamKey(), assignedUserName());

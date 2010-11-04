@@ -3,16 +3,16 @@
 	width: 375px;
 }
 
-#inspectionTypeForm {
+#eventTypeForm {
 	float: left;
 	width: 600px;
 }
 
-	#inspectionTypeForm .formAction {
+	#eventTypeForm .formAction {
 		float: left;
 	}
 	
-	#inspectionTypeForm select {
+	#eventTypeForm select {
 		width: 150px;
 	}
 

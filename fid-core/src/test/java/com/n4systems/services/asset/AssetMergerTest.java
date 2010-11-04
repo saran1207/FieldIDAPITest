@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.exceptions.asset.AssetTypeMissMatchException;
 import com.n4systems.exceptions.asset.DuplicateAssetException;
 import com.n4systems.model.Asset;
@@ -17,20 +18,19 @@ import com.n4systems.model.SubEvent;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
+import com.n4systems.services.EventScheduleService;
 import org.junit.Before;
 import org.junit.Test;
 
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.TenantNotValidForActionException;
-import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.builders.SubEventBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
-import com.n4systems.services.InspectionScheduleService;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -43,7 +43,7 @@ public class AssetMergerTest {
 	private PersistenceManager mockPersistenceManager;
 	private EventManager mockEventManager;
 	private AssetManager mockAssetManager;
-	private InspectionScheduleService mockInspectionScheduleService;
+	private EventScheduleService mockEventScheduleService;
 	
 	
 	@Before
@@ -57,7 +57,7 @@ public class AssetMergerTest {
 		mockPersistenceManager = createMock(PersistenceManager.class);
 		mockAssetManager = createMock(AssetManager.class);
 		mockEventManager = createMock(EventManager.class);
-		mockInspectionScheduleService = createMock(InspectionScheduleService.class);
+		mockEventScheduleService = createMock(EventScheduleService.class);
 	}
 	
 	@Test 
@@ -210,14 +210,14 @@ public class AssetMergerTest {
 		expect(mockPersistenceManager.findAll((QueryBuilder<Event>)anyObject())).andReturn(events);
 		for (Event event : events) {
 			if (event.getSchedule() != null) {
-				expect(mockInspectionScheduleService.updateSchedule((EventSchedule)eq(event.getSchedule()))).andReturn(event.getSchedule());
+				expect(mockEventScheduleService.updateSchedule((EventSchedule)eq(event.getSchedule()))).andReturn(event.getSchedule());
 			}
 		}
 		expect(mockPersistenceManager.passThroughFindAll(contains("SELECT"), (Map<String,Object>)anyObject())).andReturn(new ArrayList<Object>(masterEvents));
 		
 		for (Event event : masterEvents) {
 			if (event.getSchedule() != null) {
-				expect(mockInspectionScheduleService.updateSchedule((EventSchedule)eq(event.getSchedule()))).andReturn(event.getSchedule());
+				expect(mockEventScheduleService.updateSchedule((EventSchedule)eq(event.getSchedule()))).andReturn(event.getSchedule());
 			}
 		}
 	}
@@ -230,7 +230,7 @@ public class AssetMergerTest {
 	private void mockArchiveOfLosingProduct() {
 		try {
 			expect(mockAssetManager.archive((Asset)eq(losingAsset), (User)anyObject())).andReturn(losingAsset);
-		} catch (UsedOnMasterInspectionException e) {
+		} catch (UsedOnMasterEventException e) {
 			fail("mock should not throw exception");
 		}
 	}
@@ -239,17 +239,17 @@ public class AssetMergerTest {
 		verify(mockPersistenceManager);
 		verify(mockAssetManager);
 		verify(mockEventManager);
-		verify(mockInspectionScheduleService);
+		verify(mockEventScheduleService);
 	}
 	
 	private void replayMocks() {
 		replay(mockAssetManager);
 		replay(mockPersistenceManager);
 		replay(mockEventManager);
-		replay(mockInspectionScheduleService);
+		replay(mockEventScheduleService);
 	}
 	
 	private AssetMerger createSystemUnderTest() {
-		return new AssetMerger(mockPersistenceManager, mockAssetManager, mockEventManager, mockInspectionScheduleService, user);
+		return new AssetMerger(mockPersistenceManager, mockAssetManager, mockEventManager, mockEventScheduleService, user);
 	}
 }

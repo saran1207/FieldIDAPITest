@@ -68,11 +68,11 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public List<EventGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
+	public List<EventGroup> findAllEventGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findAllInspectionGroups(filter, assetId, postFetchFields);
+			return createManager(transaction.getEntityManager()).findAllEventGroups(filter, assetId, postFetchFields);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -100,11 +100,11 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public Event findEventThroughSubInspection(Long subInspectionId, SecurityFilter filter) {
+	public Event findEventThroughSubEvent(Long subEventId, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findEventThroughSubInspection(subInspectionId, filter);
+			return createManager(transaction.getEntityManager()).findEventThroughSubEvent(subEventId, filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -179,11 +179,11 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public SubEvent findSubEvent(Long subInspectionId, SecurityFilter filter) {
+	public SubEvent findSubEvent(Long subEventId, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findSubEvent(subInspectionId, filter);
+			return createManager(transaction.getEntityManager()).findSubEvent(subEventId, filter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

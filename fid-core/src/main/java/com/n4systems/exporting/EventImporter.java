@@ -1,27 +1,27 @@
 package com.n4systems.exporting;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.inspection.InspectionToModelConverter;
+import com.n4systems.api.conversion.inspection.EventToModelConverter;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.EventView;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.validators.EventViewValidator;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exporting.io.MapReader;
-import com.n4systems.handlers.creator.InspectionPersistenceFactory;
+import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.model.Event;
 import com.n4systems.persistence.Transaction;
 
 public class EventImporter extends AbstractImporter<EventView> {
-	private final InspectionToModelConverter converter;
-	private final InspectionPersistenceFactory inspectionPersistenceFactory;
+	private final EventToModelConverter converter;
+	private final EventPersistenceFactory eventPersistenceFactory;
 	
 	private Long modifiedBy;
 	
 	
-	public EventImporter(MapReader mapReader, Validator<ExternalModelView> validator, InspectionPersistenceFactory inspectionPersistenceFactory, InspectionToModelConverter converter) {
+	public EventImporter(MapReader mapReader, Validator<ExternalModelView> validator, EventPersistenceFactory eventPersistenceFactory, EventToModelConverter converter) {
 		super(EventView.class, mapReader, validator);
-		this.inspectionPersistenceFactory = inspectionPersistenceFactory;
+		this.eventPersistenceFactory = eventPersistenceFactory;
 		this.converter = converter;
 		
 		// probably not the best place for this but, it's the only place I can think of right now
@@ -33,7 +33,7 @@ public class EventImporter extends AbstractImporter<EventView> {
 		Event event = converter.toModel(view, transaction);
 		
 		try {
-			inspectionPersistenceFactory.createInspectionCreator().create(
+			eventPersistenceFactory.createEventCreator().create(
 						new CreateEventParameterBuilder(event, modifiedBy)
 							.withANextInspectionDate(view.getNextInspectionDateAsDate())
 							.doNotCalculateInspectionResult()

@@ -32,7 +32,7 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
 
 public class InspectionToModelConverterTest {
-	private final class InspectionToModelConverterWithAllButConvertPerformedByEmptied extends InspectionToModelConverter {
+	private final class InspectionToModelConverterWithAllButConvertPerformedByEmptied extends EventToModelConverter {
 		private InspectionToModelConverterWithAllButConvertPerformedByEmptied(UserByFullNameLoader userLoader) {
 			super(null, null, null, null, userLoader);
 		}
@@ -57,7 +57,7 @@ public class InspectionToModelConverterTest {
 		
 	@Test
 	public void to_model_sets_type_form_version_and_tenant_from_type() throws ConversionException {
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null) {
 			protected void resolveStatus(String statusName, Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
 			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
@@ -95,7 +95,7 @@ public class InspectionToModelConverterTest {
 		expect(orgLoader.load(transaction)).andReturn(org);
 		replay(orgLoader);
 		
-		InspectionToModelConverter converter = new InspectionToModelConverter(orgLoader, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(orgLoader, null, null, null, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveStatus(String statusName, Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -111,7 +111,7 @@ public class InspectionToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_status_ignoring_case() throws ConversionException {
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
 			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
@@ -135,7 +135,7 @@ public class InspectionToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_status_defaulting_to_na() throws ConversionException {
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
 			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
@@ -163,7 +163,7 @@ public class InspectionToModelConverterTest {
 		expect(smartSearchLoader.load(transaction)).andReturn(Arrays.asList(asset));
 		replay(smartSearchLoader);
 		
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, smartSearchLoader, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, smartSearchLoader, null, null, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveStatus(String statusName, Event model) {}
 			protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
@@ -189,7 +189,7 @@ public class InspectionToModelConverterTest {
 		expect(userLoader.load(transaction)).andReturn(Arrays.asList(user));
 		replay(userLoader);
 		
-		InspectionToModelConverter converter = new InspectionToModelConverterWithAllButConvertPerformedByEmptied(userLoader);
+		EventToModelConverter converter = new InspectionToModelConverterWithAllButConvertPerformedByEmptied(userLoader);
 		
 		assertEquals(user, converter.toModel(view, transaction).getPerformedBy());
 		verify(userLoader);
@@ -197,7 +197,7 @@ public class InspectionToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_printable() throws ConversionException {
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveStatus(String statusName, Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -230,7 +230,7 @@ public class InspectionToModelConverterTest {
 		expect(bookLoader.load(transaction)).andReturn(book);
 		replay(bookLoader);
 		
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, bookLoader, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveStatus(String statusName, Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -251,7 +251,7 @@ public class InspectionToModelConverterTest {
 		EventBookFindOrCreateLoader bookLoader = createMock(EventBookFindOrCreateLoader.class);
 		replay(bookLoader);
 		
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, bookLoader, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveStatus(String statusName, Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -277,7 +277,7 @@ public class InspectionToModelConverterTest {
 		expect(psLoader.load(transaction)).andReturn(ps);
 		replay(psLoader);
 		
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, psLoader, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveStatus(String statusName, Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -296,7 +296,7 @@ public class InspectionToModelConverterTest {
 		AssetStatusByNameLoader psLoader = createMock(AssetStatusByNameLoader.class);
 		replay(psLoader);
 		
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, psLoader, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null) {
 			protected void resolveType(Event model) {}
 			protected void resolveStatus(String statusName, Event model) {}
 			protected void resolveAsset(EventView view, Event model, Transaction transaction) {}

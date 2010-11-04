@@ -28,11 +28,11 @@ public class CatalogCrud extends SafetyNetwork {
 	private static final Logger logger = Logger.getLogger(CatalogCrud.class);
 	
 	private Map<String,Boolean> publishedAssetTypeIds = new HashMap<String, Boolean>();
-	private Map<String,Boolean> publishedInspectionTypeIds = new HashMap<String, Boolean>();
+	private Map<String,Boolean> publishedEventTypeIds = new HashMap<String, Boolean>();
 	private CatalogService catalogService;
 	
 	private List<ListingPair> assetTypes;
-	private List<ListingPair> inspectionTypes;
+	private List<ListingPair> eventTypes;
 
 	public CatalogCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -60,8 +60,8 @@ public class CatalogCrud extends SafetyNetwork {
 			publishedAssetTypeIds.put(id.toString(),true);
 		}
 		
-		for (Long id : catalogService.getInspectionTypeIdsPublished()) {
-			publishedInspectionTypeIds.put(id.toString(),true);
+		for (Long id : catalogService.getEventTypeIdsPublished()) {
+			publishedEventTypeIds.put(id.toString(),true);
 		}
 		return SUCCESS;
 	}
@@ -76,10 +76,10 @@ public class CatalogCrud extends SafetyNetwork {
 				}
 			}
 			
-			Set<Long> publishInspectionTypeIds = new HashSet<Long>();
-			for (Entry<String,Boolean> entry : publishedInspectionTypeIds.entrySet()) {
+			Set<Long> publishEventTypeIds = new HashSet<Long>();
+			for (Entry<String,Boolean> entry : publishedEventTypeIds.entrySet()) {
 				if (entry.getValue()) {
-					publishInspectionTypeIds.add(Long.parseLong(entry.getKey()));
+					publishEventTypeIds.add(Long.parseLong(entry.getKey()));
 				}
 			}
 			
@@ -91,11 +91,11 @@ public class CatalogCrud extends SafetyNetwork {
 			
 			
 			HashSet<EventType> publishedEventTypes = new HashSet<EventType>();
-			if (!publishInspectionTypeIds.isEmpty()) {
-				publishedEventTypes.addAll(persistenceManager.findAll(EventType.class, publishInspectionTypeIds, getTenant()));
+			if (!publishEventTypeIds.isEmpty()) {
+				publishedEventTypes.addAll(persistenceManager.findAll(EventType.class, publishEventTypeIds, getTenant()));
 				
 			}
-			catalogService.publishInspectionTypes(publishedEventTypes);
+			catalogService.publishEventTypes(publishedEventTypes);
 			
 			addFlashMessageText("message.catalog_published");
 			return SUCCESS;
@@ -118,17 +118,17 @@ public class CatalogCrud extends SafetyNetwork {
 		return assetTypes;
 	}
 	
-	public Map<String,Boolean> getPublishedInspectionTypeIds() {
-		return publishedInspectionTypeIds;
+	public Map<String,Boolean> getPublishedEventTypeIds() {
+		return publishedEventTypeIds;
 	}
 	
-	public List<ListingPair> getInspectionTypes() {
-		if (inspectionTypes == null) {
-			QueryBuilder<ListingPair> inspectionTypeQuery = new QueryBuilder<ListingPair>(EventType.class, getSecurityFilter());
-			inspectionTypes = persistenceManager.findAllLP(inspectionTypeQuery, "name");
+	public List<ListingPair> getEventTypes() {
+		if (eventTypes == null) {
+			QueryBuilder<ListingPair> eventTypeQuery = new QueryBuilder<ListingPair>(EventType.class, getSecurityFilter());
+			eventTypes = persistenceManager.findAllLP(eventTypeQuery, "name");
 		}
 
-		return inspectionTypes;
+		return eventTypes;
 	}
 
 

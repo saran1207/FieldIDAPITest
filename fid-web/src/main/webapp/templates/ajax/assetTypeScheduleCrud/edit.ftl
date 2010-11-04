@@ -3,9 +3,9 @@
 	<#include "/templates/html/assetTypeScheduleCrud/_form.ftl" >
 </#assign>
 <#if schedule.override>
-	<#assign containerId="eventFrequencyOverride_${inspectionTypeId}_${schedule.owner.id}"/>
+	<#assign containerId="eventFrequencyOverride_${eventTypeId}_${schedule.owner.id}"/>
 <#else>
-	<#assign containerId="eventFrequency_${inspectionTypeId}" />
+	<#assign containerId="eventFrequency_${eventTypeId}" />
 </#if>
 
 	

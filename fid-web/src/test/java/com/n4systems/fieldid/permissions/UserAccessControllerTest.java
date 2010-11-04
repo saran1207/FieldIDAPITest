@@ -30,13 +30,13 @@ public class UserAccessControllerTest {
 	
 	@Test
 	public void should_allow_access_to_action_when_user_has_the_permission() throws Exception {
-		UserAccessController sut = new UserAccessController(new SampleAction(Permissions.CreateInspection));
+		UserAccessController sut = new UserAccessController(new SampleAction(Permissions.CreateEvent));
 		assertTrue(sut.userHasAccessToAction("doSinglePermissionRequiredAction"));
 	}
 	
 	@Test
 	public void should_allow_access_to_action_when_user_has_on_of_the_requied_permission() throws Exception {
-		UserAccessController sut = new UserAccessController(new SampleAction(Permissions.CreateInspection));
+		UserAccessController sut = new UserAccessController(new SampleAction(Permissions.CreateEvent));
 		assertTrue(sut.userHasAccessToAction("doMultiPermissionRequiredAction"));
 	}
 	
@@ -75,12 +75,12 @@ public class UserAccessControllerTest {
 			return SUCCESS;
 		}
 		
-		@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+		@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 		public String doSinglePermissionRequiredAction() {
 			return SUCCESS;
 		}
 		
-		@UserPermissionFilter(userRequiresOneOf={Permissions.Tag, Permissions.CreateInspection, Permissions.EditInspection})
+		@UserPermissionFilter(userRequiresOneOf={Permissions.Tag, Permissions.CreateEvent, Permissions.EditEvent})
 		public String doMultiPermissionRequiredAction() {
 			return SUCCESS;
 		}

@@ -6,7 +6,7 @@
 	<#if existingState >
 		<@s.hidden id="buttonState__${buttonGroupIndex}_${state_index}_retired" name="states[${state_index}].retired" theme="simple"/>
 		<@s.hidden id="buttonState__${buttonGroupIndex}_${state_index}_id" name="states[${state_index}].id" theme="simple" />
-		<div class="inspectionButton">
+		<div class="eventButton">
 			<img src="<@s.url value="/images/inspectionButtons/${(states[state_index].buttonName)!'btn0'}.png"/>"/>
 			<@s.hidden name="states[${state_index}].buttonName" value="${(states[state_index].buttonName)!'btn0'}" theme="simple"/>
 		</div> 
@@ -16,7 +16,7 @@
 	<#else>
 		<@s.textfield id="buttonState__${buttonGroupIndex}_${state_index}_retired" name="states[${state_index}].retired" theme="simple" cssClass="disabledInput" disabled="${disableInput?string}"/>
 		<@s.textfield id="buttonState__${buttonGroupIndex}_${state_index}_id" name="states[${state_index}].id" theme="simple" cssClass="disabledInput" disabled="${disableInput?string}" />
-		<div class="inspectionButton">
+		<div class="eventButton">
 			<a href="javascript:void(0);" onclick="changeButtonImage(this); enableGroupSaveButton(${buttonGroupIndex})">
 				<img src="<@s.url value="/images/inspectionButtons/${(states[state_index].buttonName)!'btn0'}.png"/>"  <#if !(states[state_index].buttonName)?exists >style="visibility:hidden"</#if>/>
 				<@s.textfield name="states[${state_index}].buttonName" value="${(states[state_index].buttonName)!'btn0'}" cssClass="disabledInput"  theme="simple" disabled="${disableInput?string}"/>

@@ -48,12 +48,12 @@ ${action.setPageType('setup','setup')!}
 			<h2 id="yourAssetSetup"><@s.text name="label.yourassetsetup" /></h2>
 			<p>
 				<label><a href="<@s.url action="eventTypeGroups"/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></label>
-				<span >Create and manage event type groups to allow you to group inspection types and pick the certificate for those inspection types.</span>
+				<span >Create and manage event type groups to allow you to group event types and pick the certificate for those event types.</span>
 			</p>
 			
 			<p>
 				<label><a href="<@s.url action="eventTypes"/>" ><@s.text name="title.manage_event_types.plural" /></a></label>
-				<span>Create inspection types to allow you to do different types of inspections.</span>
+				<span>Create event types to allow you to do different types of events.</span>
 			</p>
 		
 			<p>
@@ -72,7 +72,7 @@ ${action.setPageType('setup','setup')!}
 			
 			<p>
 				<label><a href="<@s.url action="eventBooks"/>" ><@s.text name="title.manage_event_books.plural" /></a></label>
-				<span>Create inspection books to organize your inspections.</span>
+				<span>Create event books to organize your events.</span>
 			</p>
 			<#if locationHeirarchyFeatureEnabled>
 				<p>

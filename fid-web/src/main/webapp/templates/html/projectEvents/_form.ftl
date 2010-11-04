@@ -22,8 +22,8 @@
 					<@s.select name="criteria.status" list="scheduleStatuses" listKey="name" listValue="%{getText(label)}"/>
 				</div>
 				<div class="infoSet">
-					<label for="criteria.inspectionType"><@s.text name="label.eventtypegroup"/></label>
-					<@s.select name="criteria.inspectionType" list="inspectionTypes" listKey="id" listValue="name" emptyOption="true"/>
+					<label for="criteria.eventType"><@s.text name="label.eventtypegroup"/></label>
+					<@s.select name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true"/>
 				</div>
 			</div>
 			

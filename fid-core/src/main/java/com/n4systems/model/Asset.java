@@ -16,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -67,7 +66,8 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	private Date identified;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastInspectionDate;
+    @Column(name="lastinspectiondate")
+	private Date lastEventDate;
 	
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "shoporder_id")
@@ -325,12 +325,12 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	}
 
 	@AllowSafetyNetworkAccess
-	public Date getLastInspectionDate() {
-		return lastInspectionDate;
+	public Date getLastEventDate() {
+		return lastEventDate;
 	}
 
-	public void setLastInspectionDate(Date lastInspectionDate) {
-		this.lastInspectionDate = lastInspectionDate;
+	public void setLastEventDate(Date lastEventDate) {
+		this.lastEventDate = lastEventDate;
 	}
 
 	@AllowSafetyNetworkAccess

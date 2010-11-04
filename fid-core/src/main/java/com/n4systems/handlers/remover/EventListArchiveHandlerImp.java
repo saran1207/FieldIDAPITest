@@ -40,7 +40,7 @@ public class EventListArchiveHandlerImp implements EventTypeListArchiveHandler {
 		List<Long> ids = getInspectionIds(em);
 		
 		archiveInspections(em, ids);
-		updateAssetsLastInspectionDate(em, ids);
+		updateAssetsLastEventDate(em, ids);
 	}
 
 	private void archiveInspections(EntityManager em, List<Long> ids) {
@@ -48,7 +48,7 @@ public class EventListArchiveHandlerImp implements EventTypeListArchiveHandler {
 		archiver.archive(em);
 	}
 
-	private void updateAssetsLastInspectionDate(EntityManager em, List<Long> ids) {
+	private void updateAssetsLastEventDate(EntityManager em, List<Long> ids) {
 		
 		List<Long> assetsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Event.class, new OpenSecurityFilter())
 				.setSimpleSelect("asset.id", true)
@@ -66,14 +66,14 @@ public class EventListArchiveHandlerImp implements EventTypeListArchiveHandler {
 			qBuilder.addSimpleWhere("asset", asset);
 
 
-			Date lastInspectionDate = null;
+			Date lastEventDate = null;
 			try {
-				lastInspectionDate = qBuilder.getSingleResult(em);
+				lastEventDate = qBuilder.getSingleResult(em);
 			} catch (Exception e) {
 				throw new ProcessFailureException("could not archive the inspections", e);
 			}
 
-			asset.setLastInspectionDate(lastInspectionDate);
+			asset.setLastEventDate(lastEventDate);
 			
 			em.merge(asset);
 		}

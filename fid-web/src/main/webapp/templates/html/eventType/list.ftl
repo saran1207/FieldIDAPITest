@@ -1,6 +1,6 @@
 ${action.setPageType('inspection_type', 'list')!}
 
-<#if !inspectionTypes.isEmpty() >
+<#if !eventTypes.isEmpty() >
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.name" /></th>
@@ -9,16 +9,16 @@ ${action.setPageType('inspection_type', 'list')!}
 			<th></th>
 		<tr>
 		
-		<#list inspectionTypes as inspectionType>
+		<#list eventTypes as eventType>
 			<tr>
-				<td><a href="<@s.url action="eventType" uniqueID="${inspectionType.id}" />">${inspectionType.name}</a></td>
+				<td><a href="<@s.url action="eventType" uniqueID="${eventType.id}" />">${eventType.name}</a></td>
 				<td>
-					<#if inspectionType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
+					<#if eventType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
 				</td>
-				<td>${inspectionType.group.name}</td>
+				<td>${eventType.group.name}</td>
 				<td>
-					<a href="<@s.url action="eventTypeEdit" uniqueID="${inspectionType.id}" />"><@s.text name="label.edit" /></a>&nbsp;
-					<a href="<@s.url action="eventTypeCopy" uniqueID="${inspectionType.id}" />"><@s.text name="label.copy" /></a>
+					<a href="<@s.url action="eventTypeEdit" uniqueID="${eventType.id}" />"><@s.text name="label.edit" /></a>&nbsp;
+					<a href="<@s.url action="eventTypeCopy" uniqueID="${eventType.id}" />"><@s.text name="label.copy" /></a>
 				</td>
 			</tr>
 		</#list>
@@ -26,7 +26,7 @@ ${action.setPageType('inspection_type', 'list')!}
 <#else >
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults"/></h2>
-		<#if inspectionTypeGroups.empty>
+		<#if eventTypeGroups.empty>
 			<p>
 				<@s.text name="label.emptyeventtypelist" />
 				<a href="<@s.url action="eventTypeGroupAdd"/>"><@s.text name="label.addthefirsteventtypegroup"/></a>

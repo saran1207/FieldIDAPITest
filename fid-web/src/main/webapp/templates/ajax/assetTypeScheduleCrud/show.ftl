@@ -7,12 +7,12 @@
 </#assign>
 var container = null;
 <#if !schedule.new && schedule.override>
-	<#assign containerId="eventFrequencyOverride_${inspectionTypeId}_${schedule.owner.id}"/>
+	<#assign containerId="eventFrequencyOverride_${eventTypeId}_${schedule.owner.id}"/>
 	container = $('${containerId}');
 	<#if schedule.id?exists >
 		if( container == null ) {
 			container = new Element('div', { id: '${containerId}', 'class':'override customerOverride' } );
-			$('eventFrequencyOverrides_${inspectionTypeId}').insert(container);
+			$('eventFrequencyOverrides_${eventTypeId}').insert(container);
 			container = $('${containerId}');
 		}
 	<#else>
@@ -21,13 +21,13 @@ var container = null;
 		}
 	</#if>
 <#else>
-	<#assign containerId="eventFrequency_${inspectionTypeId}" />
+	<#assign containerId="eventFrequency_${eventTypeId}" />
 	container = $('${containerId}');
 	<#if schedule?exists && schedule.id?exists>
-		$('eventFrequencyOverrides_${inspectionTypeId}_container').show();
+		$('eventFrequencyOverrides_${eventTypeId}_container').show();
 	<#else>
-		$('eventFrequencyOverrides_${inspectionTypeId}_container').hide();
-		removeChildren( $('eventFrequencyOverrides_${inspectionTypeId}') );
+		$('eventFrequencyOverrides_${eventTypeId}_container').hide();
+		removeChildren( $('eventFrequencyOverrides_${eventTypeId}') );
 	</#if>
 </#if>
 

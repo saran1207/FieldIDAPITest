@@ -44,15 +44,15 @@ ${reportActions}
 			<span class="total"><@s.text name="label.totalevents"/> ${totalResults}</span>
 		</div>
 		<div class="adminLink alternateActions">
-			<#-- The following displays the drop down menu for the print report, all inspections and all observations link -->
+			<#-- The following displays the drop down menu for the print report, all events and all observations link -->
 			<@s.url id="printReport" action="printReport.action" namespace="/aHtml" searchId="${searchId}"/>
-			<@s.url id="printAllInspectionUrl" action="reportPrintAllCerts" namespace="/aHtml" reportType="INSPECTION_CERT" searchId="${searchId}" />
+			<@s.url id="printAllEventUrl" action="reportPrintAllCerts" namespace="/aHtml" reportType="INSPECTION_CERT" searchId="${searchId}" />
 			<@s.url id="printAllobservationUrl" action="reportPrintAllCerts" namespace="/aHtml" reportType="OBSERVATION_CERT" searchId="${searchId}" />
 	
 			<div id="print_link" class="print printRelative" style="display: inline;" onmouseover="repositionPrintList('print_list', 'print_link');" >
 				<ul id="print_list">
 					<li><a href='${printReport}'			class='lightview summaryReport' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printreport" /></a></li>
-					<li><a href="${printAllInspectionUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printallpdfreports"/></a></li>
+					<li><a href="${printAllEventUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printallpdfreports"/></a></li>
 					<li><a href="${printAllobservationUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printallobservationcertificate"/></a></li>
 				</ul>
 				
@@ -61,11 +61,11 @@ ${reportActions}
 			|
 			<a href='<@s.url action="reportResults" namespace="/aHtml" searchId="${searchId}" />' class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a>
 			
-			<#if Session.sessionUser.hasAccess('editinspection') && !criteria.includeNetworkResults>
+			<#if Session.sessionUser.hasAccess('editevent') && !criteria.includeNetworkResults>
 				| <a href="<@s.url action="massUpdateEvents"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
-			<#if securityGuard.projectsEnabled && sessionUser.hasAccess('createinspection') && !criteria.includeNetworkResults>
-				| <a href="<@s.url action="selectJobToAssignEventsTo"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="assignInspectionsToJob"><@s.text name="label.assigntojob" /></a>
+			<#if securityGuard.projectsEnabled && sessionUser.hasAccess('createevent') && !criteria.includeNetworkResults>
+				| <a href="<@s.url action="selectJobToAssignEventsTo"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="assignEventsToJob"><@s.text name="label.assigntojob" /></a>
 			</#if>
 			
 		</div>

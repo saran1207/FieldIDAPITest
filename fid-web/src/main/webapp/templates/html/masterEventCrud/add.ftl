@@ -37,22 +37,22 @@
 </head>
 ${action.setPageType('inspection', 'add')!}
 
-<div id="masterInspection" >
+<div id="masterEvent" >
 	<#include "/templates/html/common/_formErrors.ftl" />
-	<div class="inspectionHeader">
+	<div class="eventHeader">
 		<h3><@s.text name="label.perform_event"/></h3>
 		<p class="instructions smallInstructions">
 			<@s.text name="instructions.master_event"/>
 		</p>
 	</div>
 	
-	<div class="masterAsset <#if masterInspection.mainInspectionStored >done</#if>">
+	<div class="masterAsset <#if masterEvent.mainEventStored >done</#if>">
 		<div class="definition"><div class="identifier"><span>${asset.type.name!}</span></div></div>
-		<div class="performedInspection">
-			<span>${(inspectionType.name)!}</span> 
+		<div class="performedEvent">
+			<span>${(eventType.name)!}</span>
 			<span>
 				<a class="exitLink" href="<@s.url action="subEventAdd" uniqueID="0" assetId="${asset.id}" type="${type}" parentAssetId="${asset.id}" token="${token}" scheduleId="${scheduleId!}" />">
-					<#if !masterInspection.mainInspectionStored >
+					<#if !masterEvent.mainEventStored >
 						<@s.text name="label.you_must_perform_this_event"/>
 					<#else>
 						<@s.text name="label.edit_this_event"/>
@@ -72,9 +72,9 @@ ${action.setPageType('inspection', 'add')!}
 		<@s.hidden name="uniqueID" id="uniqueID"/>
 		<@s.hidden name="token" id="searchToken"/>
 		<@s.hidden name="type"/>
-		<@s.hidden name="inspectionGroupId"/>
+		<@s.hidden name="eventGroupId"/>
 		<@s.hidden name="assetId" id="assetId"/>
-		<@s.hidden name="cleanToInspectionsToMatchConfiguration" />
+		<@s.hidden name="cleanToEventsToMatchConfiguration" />
 		<div class="formAction">
 			<@s.url id="cancelUrl" action="eventGroups" uniqueID="${asset.id}"/>
 			<@s.submit key="label.cancel" onclick="return redirect( '${cancelUrl}' );"/>
@@ -89,7 +89,7 @@ ${action.setPageType('inspection', 'add')!}
 	</div>
 	
 	<div id="addComponents" class="componentTypes" >
-		<div class="inspectionHeader">
+		<div class="eventHeader">
 			<h3><@s.text name="label.add_new_component"/></h3>
 			<p class="instructions smallInstructions">
 				<@s.text name="instructions.add_new_component"/>

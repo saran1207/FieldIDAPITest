@@ -26,7 +26,7 @@ public class ImportCatalogService {
 	private final CatalogEventTypeGroupHandler importEventTypeGroup;
 	private final CatalogStateSetsImportHandler importStateSets;
 	private Set<Long> importAssetTypeIds;
-	private Set<Long> importInspectionTypeIds;
+	private Set<Long> importEventTypeIds;
 	private boolean importAllRelations = false;
 	private CatalogImportSummary summary = new CatalogImportSummary();
 	
@@ -57,9 +57,9 @@ public class ImportCatalogService {
 	private void importCatalog() throws ImportFailureException {
 		importAssetTypeGroup.setAssetTypeIds(importAssetTypeIds).importCatalog();
 		importAssetType.setAssetGroupMapping(importAssetTypeGroup.getImportMapping()).setImportAssetTypeIds(importAssetTypeIds).importCatalog();
-		importEventTypeGroup.setInspectionTypeIds(importInspectionTypeIds).importCatalog();
-		importStateSets.setInspectionTypeIds(importInspectionTypeIds).importCatalog();
-		importEventType.setOriginalInspectionTypeIds(importInspectionTypeIds).setImportedGroupMapping(importEventTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).importCatalog();
+		importEventTypeGroup.setInspectionTypeIds(importEventTypeIds).importCatalog();
+		importStateSets.setInspectionTypeIds(importEventTypeIds).importCatalog();
+		importEventType.setOriginalInspectionTypeIds(importEventTypeIds).setImportedGroupMapping(importEventTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).importCatalog();
 
 		if (importAllRelations) {
 			importAssetTypeInspectionTypeRelations.setImportedAssetTypeMapping(importAssetType.getImportedMap()).setImportedInspectionTypeMapping(importEventType.getImportMapping()).importCatalog();
@@ -79,9 +79,9 @@ public class ImportCatalogService {
 		adjustWhatToImport();
 		importAssetTypeGroup.getSummaryForImport(importAssetTypeIds);
 		importAssetType.getSummaryForImport(importAssetTypeIds);
-		importEventType.getSummaryForImport(importInspectionTypeIds);
-		importEventTypeGroup.getSummaryForImport(importInspectionTypeIds);
-		importStateSets.getSummaryForImport(importInspectionTypeIds);
+		importEventType.getSummaryForImport(importEventTypeIds);
+		importEventTypeGroup.getSummaryForImport(importEventTypeIds);
+		importStateSets.getSummaryForImport(importEventTypeIds);
 		return summary;
 	}
 
@@ -89,7 +89,7 @@ public class ImportCatalogService {
 	private void adjustWhatToImport() {
 		importAssetTypeIds.addAll(importAssetType.getAdditionalAssetTypes(importAssetTypeIds));
 		if (importAllRelations) {
-			importInspectionTypeIds.addAll(importAssetTypeInspectionTypeRelations.getAdditionalInspectionTypesForRelationships(importAssetTypeIds, importInspectionTypeIds));
+			importEventTypeIds.addAll(importAssetTypeInspectionTypeRelations.getAdditionalInspectionTypesForRelationships(importAssetTypeIds, importEventTypeIds));
 		}
 	}
 	
@@ -102,12 +102,12 @@ public class ImportCatalogService {
 		this.importAssetTypeIds = importAssetTypeIds;
 	}
 
-	public Set<Long> getImportInspectionTypeIds() {
-		return importInspectionTypeIds;
+	public Set<Long> getImportEventTypeIds() {
+		return importEventTypeIds;
 	}
 
-	public void setImportInspectionTypeIds(Set<Long> importInspectionTypeIds) {
-		this.importInspectionTypeIds = importInspectionTypeIds;
+	public void setImportEventTypeIds(Set<Long> importEventTypeIds) {
+		this.importEventTypeIds = importEventTypeIds;
 	}
 
 

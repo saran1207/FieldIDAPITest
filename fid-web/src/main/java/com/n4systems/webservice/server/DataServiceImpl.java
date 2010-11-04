@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import javax.naming.NamingException;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -50,9 +51,8 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.handlers.creator.InspectionPersistenceFactory;
 import com.n4systems.handlers.creator.InspectionsInAGroupCreator;
-import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
+import com.n4systems.handlers.creator.inspections.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.ExtendedFeature;
@@ -1096,9 +1096,9 @@ public class DataServiceImpl implements DataService {
 			List<Event> savedEvents = null;
 			
 			try {
-				InspectionPersistenceFactory inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
+				EventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
 				
-				InspectionsInAGroupCreator inspectionsInAGroupCreator = inspectionPersistenceFactory.createInspectionsInAGroupCreator();
+				InspectionsInAGroupCreator inspectionsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
 				
 				savedEvents = inspectionsInAGroupCreator.create( requestInformation.getMobileGuid(), events, nextInspectionDates);
 				logger.info( "save inspections on asset " + asset.getSerialNumber() );
@@ -1311,7 +1311,7 @@ public class DataServiceImpl implements DataService {
 			InspectionListResponse response = new InspectionListResponse();
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			EventManager eventManager = ServiceLocator.getInspectionManager();
+			EventManager eventManager = ServiceLocator.getEventManager();
 			
 			int INSPECTIONS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_INSPECTIONS);
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();
@@ -1379,7 +1379,7 @@ public class DataServiceImpl implements DataService {
 			
 			List<Event> events = lookupHandler
 											.setProductId(requestInformation.getProductId())
-											.setLastInspectionDate(requestInformation.getLastInspectionDate())
+											.setLastEventDate(requestInformation.getLastInspectionDate())
 											.lookup();
 			
 			FindInspectionResponse response = new FindInspectionResponse();
@@ -1533,7 +1533,7 @@ public class DataServiceImpl implements DataService {
 			InspectionListResponse response = new InspectionListResponse();
 			
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			EventManager eventManager = ServiceLocator.getInspectionManager();
+			EventManager eventManager = ServiceLocator.getEventManager();
 			
 			int INSPECTIONS_PER_PAGE = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MOBILE_PAGESIZE_INSPECTIONS);
 			int CURRENT_PAGE = requestInformation.getPageNumber().intValue();

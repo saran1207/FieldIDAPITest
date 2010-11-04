@@ -19,9 +19,9 @@ if( $('linkedEvents') != null ) {
 		$('emptyEventList').highlight();
 	}
 }
-if ($('incompleteInspectionCount') != null) {
-	$('incompleteInspectionCount').update('${action.getText("label.incompleteevents", "", countOfIncompleteSchedules.toString())?html}');
-	$('completeInspectionCount').update('${action.getText("label.completeevents", "", countOfCompleteSchedules.toString())?html}');
+if ($('incompleteEventCount') != null) {
+	$('incompleteEventCount').update('${action.getText("label.incompleteevents", "", countOfIncompleteSchedules.toString())?html}');
+	$('completeEventCount').update('${action.getText("label.completeevents", "", countOfCompleteSchedules.toString())?html}');
 }
 
 

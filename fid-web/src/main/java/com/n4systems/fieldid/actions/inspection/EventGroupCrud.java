@@ -79,7 +79,7 @@ public class EventGroupCrud extends AbstractCrud {
 			return MISSING;
 		}
 
-		eventGroups = eventManager.findAllInspectionGroups(getSecurityFilter(), uniqueID, "inspections");
+		eventGroups = eventManager.findAllEventGroups(getSecurityFilter(), uniqueID, "events");
 		return SUCCESS;
 	}
 
@@ -106,7 +106,7 @@ public class EventGroupCrud extends AbstractCrud {
 		this.search = search;
 	}
 
-	public EventGroup getInspectionGroup() {
+	public EventGroup getEventGroup() {
 		return eventGroup;
 	}
 
@@ -114,11 +114,11 @@ public class EventGroupCrud extends AbstractCrud {
 		return assets;
 	}
 
-	public List<EventGroup> getInspectionGroups() {
+	public List<EventGroup> getEventGroups() {
 		return eventGroups;
 	}
 
-	public List<EventType> getInspectionTypes() {
+	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
 			eventTypes = new ArrayList<EventType>();
 			List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(getAsset().getType()).load();
@@ -130,7 +130,7 @@ public class EventGroupCrud extends AbstractCrud {
 		
 	}
 
-	public boolean isMasterInspection(Long id) {
+	public boolean isMasterEvent(Long id) {
 		return eventManager.isMasterEvent(id);
 	}
 

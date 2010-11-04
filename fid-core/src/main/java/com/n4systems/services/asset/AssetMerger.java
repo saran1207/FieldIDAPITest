@@ -10,7 +10,7 @@ import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.TenantNotValidForActionException;
-import com.n4systems.exceptions.UsedOnMasterInspectionException;
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.exceptions.asset.AssetTypeMissMatchException;
 import com.n4systems.exceptions.asset.DuplicateAssetException;
 import com.n4systems.model.Asset;
@@ -20,8 +20,8 @@ import com.n4systems.model.SubEvent;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.services.InspectionScheduleService;
-import com.n4systems.services.InspectionScheduleServiceImpl;
+import com.n4systems.services.EventScheduleService;
+import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class AssetMerger {
@@ -31,18 +31,18 @@ public class AssetMerger {
 	private final EventManager eventManager;
 	private final User user;
 
-	private final InspectionScheduleService scheduleService;
+	private final EventScheduleService scheduleService;
 
 	public AssetMerger(PersistenceManager persistenceManager, AssetManager assetManager, EventManager eventManger, User user) {
-		this(persistenceManager, assetManager, eventManger, new InspectionScheduleServiceImpl(persistenceManager), user);
+		this(persistenceManager, assetManager, eventManger, new EventScheduleServiceImpl(persistenceManager), user);
 	}
 
-	public AssetMerger(PersistenceManager persistenceManager, AssetManager assetManager, EventManager eventManger, InspectionScheduleService inspectionScheduleService, User user) {
+	public AssetMerger(PersistenceManager persistenceManager, AssetManager assetManager, EventManager eventManger, EventScheduleService eventScheduleService, User user) {
 		this.persistenceManager = persistenceManager;
 		this.assetManager = assetManager;
 		this.eventManager = eventManger;
 		this.user = user;
-		this.scheduleService = inspectionScheduleService;
+		this.scheduleService = eventScheduleService;
 	}
 
 	public Asset merge(Asset winningAsset, Asset losingAsset) {
@@ -72,7 +72,7 @@ public class AssetMerger {
 	private void archiveLosingAsset(Asset losingAsset) {
 		try {
 			assetManager.archive(losingAsset, user);
-		} catch (UsedOnMasterInspectionException e) {
+		} catch (UsedOnMasterEventException e) {
 			throw new ProcessFailureException("could not archive the asset. still on a master", e);
 		}
 	}

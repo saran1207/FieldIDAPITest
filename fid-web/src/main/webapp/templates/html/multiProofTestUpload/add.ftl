@@ -4,7 +4,7 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<@n4.includeScript src="inspectionBook" />
 	<script type="text/javascript" >
-		updateInspectionBooksUrl = '<@s.url action="eventBooks" namespace="ajax"  includeParams="none" />';
+		updateEventBooksUrl = '<@s.url action="eventBooks" namespace="ajax"  includeParams="none" />';
 		function multiProofSubmit( form )
 		{
 			var Flash;
@@ -80,7 +80,7 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 	<p>
 		<label><@s.text name="label.eventbook"/></label>
 		<span>
-			<@s.select id="inspectionBooks" name="inspection.book.iD" list="inspectionBooks" listKey="id" listValue="name" headerKey="" headerValue=""/>
+			<@s.select id="eventBooks" name="event.book.iD" list="eventBooks" listKey="id" listValue="name" headerKey="" headerValue=""/>
 		</span>
 	</p>
 	

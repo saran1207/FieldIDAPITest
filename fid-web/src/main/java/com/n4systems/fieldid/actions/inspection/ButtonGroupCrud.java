@@ -26,7 +26,7 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 	private static final long serialVersionUID = 1L;
 	
 	private StateSet stateSet;
-	private Long inspectionTypeId;
+	private Long eventTypeId;
 	private Long buttonGroupIndex;
 	private Long buttonIndex;
 	
@@ -115,12 +115,12 @@ public class ButtonGroupCrud extends AbstractCrud implements HasDuplicateValueVa
 		return SUCCESS;
 	}
 
-	public Long getInspectionTypeId() {
-		return inspectionTypeId;
+	public Long getEventTypeId() {
+		return eventTypeId;
 	}
 
-	public void setInspectionTypeId(Long inspectionTypeId) {
-		this.inspectionTypeId = inspectionTypeId;
+	public void setEventTypeId(Long eventTypeId) {
+		this.eventTypeId = eventTypeId;
 	}
 
 	public StateSet getStateSet() {

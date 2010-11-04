@@ -10,34 +10,34 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.services.NextInspectionScheduleSerivce;
 
-public class NullObjectDefaultedInspectionPersistenceFactory implements InspectionPersistenceFactory {
+public class NullObjectDefaultedInspectionPersistenceFactory implements EventPersistenceFactory {
 	public EventSaver eventSaver = new NullEventSaver();
 	public AuditLogger auditLogger = new NullAuditLogger();
 	public EventCreator eventCreator = null;
-	public CreateEventsMethodObject createEventsMethodObject = new NullCreateInspectionsMethodObject();
+	public CreateEventsMethodObject createEventsMethodObject = new NullCreateEventsMethodObject();
 	public NextInspectionScheduleSerivce nextInspectionScheduleSerivce = new NullNextInspectionScheduleSerivce();
 
-	public EventSaver createInspectionSaver(Transaction transaction) {
+	public EventSaver createEventSaver(Transaction transaction) {
 		return eventSaver;
 	}
 	
-	public AuditLogger createCreateInspectionAuditLogger() {
+	public AuditLogger createCreateEventAuditLogger() {
 		return auditLogger;
 	}
 
-	public EventCreator createInspectionCreator() {
+	public EventCreator createEventCreator() {
 		return eventCreator;
 	}
 
-	public CreateEventsMethodObject createCreateInspectionsMethodObject(Transaction transaction) {
+	public CreateEventsMethodObject createCreateEventsMethodObject(Transaction transaction) {
 		return createEventsMethodObject;
 	}
 
-	public InspectionsInAGroupCreator createInspectionsInAGroupCreator() {
+	public InspectionsInAGroupCreator createEventsInAGroupCreator() {
 		return null;
 	}
 
-	public NextInspectionScheduleSerivce createNextInspectionScheduleService(Transaction transaction) {
+	public NextInspectionScheduleSerivce createNextEventScheduleService(Transaction transaction) {
 		return nextInspectionScheduleSerivce;
 	}
 }

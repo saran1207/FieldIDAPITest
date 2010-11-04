@@ -4,8 +4,8 @@
 </head>
 <@s.hidden name="uniqueID" id="uniqueID"/>
 <@s.hidden name="assetId"/>
-<@s.hidden name="inspectionGroupId"/>
-<@s.hidden id="inspectionTypeId" name="type"/>
+<@s.hidden name="eventGroupId"/>
+<@s.hidden id="eventTypeId" name="type"/>
 <div id="assetSummary">
 	<h2>${asset.type.name!?html} <@s.text name="label.summary"/></h2>
 	
@@ -33,19 +33,19 @@
 	
 	<div class="infoSet">
 		<label class="label" ><@s.text name="label.owner"/></label>
-		<@n4.orgPicker name="modifiableInspection.owner" required="true" id="ownerId" />
+		<@n4.orgPicker name="modifiableEvent.owner" required="true" id="ownerId" />
 	</div>	
 	
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
-		<div class="fieldHolder"><@n4.location name="modifiableInspection.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableInspection.location)}" theme="simple"/></div>
+		<div class="fieldHolder"><@n4.location name="modifiableEvent.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}" theme="simple"/></div>
 	</div>
 
 
 
 </#if>
 
-<h2>${inspection.type.name?html} <@s.text name="label.details"/></h2>
+<h2>${event.type.name?html} <@s.text name="label.details"/></h2>
 
 <#if action.isParentAsset() >
 	<div class="infoSet">
@@ -55,14 +55,14 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.date_performed"/></label>
 		<#if form_action="ADD">		
-			<@s.datetimepicker theme="fieldid" id="datePerformed" onchange="updateAutoSuggest();" name="modifiableInspection.datePerformed"  type="dateTime"/>
+			<@s.datetimepicker theme="fieldid" id="datePerformed" onchange="updateAutoSuggest();" name="modifiableEvent.datePerformed"  type="dateTime"/>
 		<#else>
-			<@s.datetimepicker theme="fieldid" id="datePerformed" name="modifiableInspection.datePerformed"  type="dateTime"/>
+			<@s.datetimepicker theme="fieldid" id="datePerformed" name="modifiableEvent.datePerformed"  type="dateTime"/>
 		</#if>
 		
 	</div>
 	
-	<#if inspectionType.assignedToAvailable && form_action="ADD">
+	<#if eventType.assignedToAvailable && form_action="ADD">
 		<div  class="infoSet">
 			<label class="label"><@s.text name="label.assign_asset_to"/></label>
 			<@s.select name="assignedToId" list="employees" listKey="id" listValue="displayName" />
@@ -72,13 +72,13 @@
 		<#include "_assigned_to.ftl"/>
 	</#if>
 	
-	<#if inspectionScheduleOnInspection>
+	<#if eventScheduleOnEvent>
 		<div class="infoSet"> 
 			<label class="label"><@s.text name="label.scheduledon"/></label>
 		
-			<#if inspection.schedule?exists>
+			<#if event.schedule?exists>
 				<span  class="fieldHolder">
-					${action.formatDate(inspection.schedule.nextDate, false )}
+					${action.formatDate(event.schedule.nextDate, false )}
 				</span>
 			<#else>
 				<@s.text name="label.notscheduled"/>
@@ -105,25 +105,25 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.eventbook"/></label>
 		<div class="fieldHolder">
-			<span id="inspectionBookSelect" <#if newInspectionBookTitle?exists>style="display:none"</#if>>
-				<@s.select name="book" id="inspectionBooks" list="inspectionBooks" listKey="id" listValue="name" theme="fieldidSimple">
+			<span id="eventBookSelect" <#if newEventBookTitle?exists>style="display:none"</#if>>
+				<@s.select name="book" id="eventBooks" list="eventBooks" listKey="id" listValue="name" theme="fieldidSimple">
 					<#if !sessionUser.anEndUser >
 						<@s.param name="headerKey"></@s.param>
 						<@s.param name="headerValue"></@s.param>
 					</#if>
-					<#if newInspectionBookTitle?exists>
+					<#if newEventBookTitle?exists>
 						<@s.param name="disabled" value="true"/>
 					</#if> 
 				</@s.select>
-				<a href="javascript:void(0);" onclick="changeToNewInspectionBook();"><@s.text name="label.new_event_book"/></a>
+				<a href="javascript:void(0);" onclick="changeToNewEventBook();"><@s.text name="label.new_event_book"/></a>
 			</span>
-			<span id="inspectionBookTitle" <#if !newInspectionBookTitle?exists>style="display:none;"</#if>>
-				<@s.textfield name="newInspectionBookTitle" id="newInspectionBook" theme="fieldidSimple">
-					<#if !newInspectionBookTitle?exists>
+			<span id="eventBookTitle" <#if !newEventBookTitle?exists>style="display:none;"</#if>>
+				<@s.textfield name="newEventBookTitle" id="newEventBook" theme="fieldidSimple">
+					<#if !newEventBookTitle?exists>
 						<@s.param name="disabled" value="true"/>
 					</#if>
 				</@s.textfield> 
-				<a href="javascript:void(0);" onclick="changeToInspectionBookSelect()"><@s.text name="label.select_existing"/></a>
+				<a href="javascript:void(0);" onclick="changeToEventBookSelect()"><@s.text name="label.select_existing"/></a>
 			</span>
 		</div>
 	</div>

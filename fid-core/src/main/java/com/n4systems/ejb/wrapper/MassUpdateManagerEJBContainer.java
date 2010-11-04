@@ -40,11 +40,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<Long> createSchedulesForInspections(List<Long> inspectionIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
+	public List<Long> createSchedulesForEvents(List<Long> eventIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).createSchedulesForInspections(inspectionIds, userId);
+			return createManager(transaction.getEntityManager()).createSchedulesForEvents(eventIds, userId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -55,11 +55,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long deleteInspectionSchedules(Set<Long> scheduleIds) throws UpdateFailureException {
+	public Long deleteEventSchedules(Set<Long> scheduleIds) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).deleteInspectionSchedules(scheduleIds);
+			return createManager(transaction.getEntityManager()).deleteEventSchedules(scheduleIds);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -85,11 +85,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateInspections(List<Long> ids, Event event, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
+	public Long updateEvents(List<Long> ids, Event event, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateInspections(ids, event, values, userId);
+			return createManager(transaction.getEntityManager()).updateEvents(ids, event, values, userId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -102,11 +102,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
-	public Long updateInspectionSchedules(Set<Long> ids, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
+	public Long updateEventSchedules(Set<Long> ids, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateInspectionSchedules(ids, eventSchedule, values);
+			return createManager(transaction.getEntityManager()).updateEventSchedules(ids, eventSchedule, values);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

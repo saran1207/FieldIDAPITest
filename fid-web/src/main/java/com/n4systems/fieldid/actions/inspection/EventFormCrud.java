@@ -132,7 +132,7 @@ public class EventFormCrud extends AbstractCrud {
 		return stateSets;
 	}
 
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		return eventType;
 	}
 

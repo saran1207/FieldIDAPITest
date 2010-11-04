@@ -21,11 +21,11 @@ import com.n4systems.webservice.dto.WSSearchCritiera;
 public interface EventManager {
 
 
-	public List<EventGroup> findAllInspectionGroups(SecurityFilter filter, Long assetId, String... postFetchFields);
+	public List<EventGroup> findAllEventGroups(SecurityFilter filter, Long assetId, String... postFetchFields);
 
-	public SubEvent findSubEvent(Long subInspectionId, SecurityFilter filter);
+	public SubEvent findSubEvent(Long subEventId, SecurityFilter filter);
 
-	public Event findEventThroughSubInspection(Long subInspectionId, SecurityFilter filter);
+	public Event findEventThroughSubEvent(Long subEventId, SecurityFilter filter);
 
 	public Event findAllFields(Long id, SecurityFilter filter);
 

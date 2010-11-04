@@ -110,7 +110,7 @@ public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
 	
 	private List<ListingPair> getOriginialGroups(Set<Long> inspectionTypeIds) {
 		if (!inspectionTypeIds.isEmpty()) {
-			List<ListingPair> existingInspectionTypes = new ArrayList<ListingPair>(importCatalog.getInspectionTypeGroupsFor(inspectionTypeIds));
+			List<ListingPair> existingInspectionTypes = new ArrayList<ListingPair>(importCatalog.getEventTypeGroupsFor(inspectionTypeIds));
 			Collections.sort(existingInspectionTypes);
 			return existingInspectionTypes;
 		} 

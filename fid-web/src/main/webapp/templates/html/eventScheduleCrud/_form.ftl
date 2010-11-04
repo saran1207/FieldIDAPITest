@@ -9,8 +9,8 @@
 			<@s.select name="project" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
 		</#if>
 		<span>
-			<a id="save_${inspectionSchedule.id}"href="javascript:void(0);" onclick="saveSchedule( ${uniqueID} ); return false;" ><@s.text name="label.save" /></a> | 
-			<a id="cancel_${inspectionSchedule.id}"href="javascript:void(0);" onclick="cancelSchedule(${type}, ${assetId},  ${uniqueID}); return false;" ><@s.text name="label.cancel" /></a>
+			<a id="save_${eventSchedule.id}"href="javascript:void(0);" onclick="saveSchedule( ${uniqueID} ); return false;" ><@s.text name="label.save" /></a> |
+			<a id="cancel_${eventSchedule.id}"href="javascript:void(0);" onclick="cancelSchedule(${type}, ${assetId},  ${uniqueID}); return false;" ><@s.text name="label.cancel" /></a>
 		</span>
 		
 		<@s.fielderror>

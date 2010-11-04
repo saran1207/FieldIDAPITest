@@ -28,19 +28,19 @@
 
     <div style="clear: both;"></div>
 
-    <#if inspectionSchedules?exists && !inspectionSchedules.isEmpty()>
+    <#if eventSchedules?exists && !eventSchedules.isEmpty()>
         <table class="list" id="scheduleList">
             <tr>
                 <th class="rowName"><@s.text name="label.eventtype"/></th>
                 <th><@s.text name="label.nextscheduleddate"/></th>
             </tr>
             <tbody id="schedules">
-                <#list inspectionSchedules as inspectionSchedule>
+                <#list eventSchedules as eventSchedule>
                     <tr>
-                        <td class="name">${inspectionSchedule.inspectionType.name}</td>
+                        <td class="name">${eventSchedule.eventType.name}</td>
                         
                         <td>
-                            <span >${action.formatDate(inspectionSchedule.nextDate, false)}</span>
+                            <span >${action.formatDate(eventSchedule.nextDate, false)}</span>
                         </td>
                     </tr>
                 </#list>

@@ -30,7 +30,7 @@
 </script>
 
 ${action.setPageType('asset_type', 'select_inspection_types')!}
-<#if ! inspectionTypes.isEmpty() >
+<#if ! eventTypes.isEmpty() >
 	<@s.form action="assetTypeEventTypesSave" id="assetTypeEventTypesSave" theme="simple">
 		<@s.hidden name="assetTypeId" />
 		<table class="list" >
@@ -41,16 +41,16 @@ ${action.setPageType('asset_type', 'select_inspection_types')!}
 				
 			</tr>
 			
-			<#list inspectionTypes as inspectionType>
-				<tr  <#if assetTypeInspectionTypes[inspectionType_index] > class="selectedEvent"</#if> id="event_selectType_${inspectionType.id}">
-					<td><@s.checkbox name="assetTypeInspectionTypes[${inspectionType_index}]" onclick="changeSelection(this)" id="selectType_${inspectionType.id}" /></td>
-					<td class="name">${inspectionType.name}
-						<#if inspectionType.screenBean?exists > - ${(inspectionType.screenBean.name)!}</#if>
+			<#list eventTypes as eventType>
+				<tr  <#if assetTypeEventTypes[eventType_index] > class="selectedEvent"</#if> id="event_selectType_${eventType.id}">
+					<td><@s.checkbox name="assetTypeEventTypes[${eventType_index}]" onclick="changeSelection(this)" id="selectType_${eventType.id}" /></td>
+					<td class="name">${eventType.name}
+						<#if eventType.screenBean?exists > - ${(eventType.screenBean.name)!}</#if>
 					</td>
 					
-					<#if assetTypeInspectionTypes[inspectionType_index] >
+					<#if assetTypeEventTypes[eventType_index] >
 						<script type="text/javascript">
-							selectedEvents.push( 'selectType_${inspectionType.id}' );
+							selectedEvents.push( 'selectType_${eventType.id}' );
 						</script>
 					</#if>
 				</tr>

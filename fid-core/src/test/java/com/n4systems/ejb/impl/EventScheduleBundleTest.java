@@ -14,7 +14,7 @@ import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.AssetBuilder;
 
 
-public class InspectionScheduleBundleTest {
+public class EventScheduleBundleTest {
 
 	Asset asset = AssetBuilder.anAsset().build();
 	EventType eventType = EventTypeBuilder.anEventType().build();

@@ -123,25 +123,25 @@ ${action.setPageType('asset', 'show')!}
 	
 	<div class="viewSection smallViewSection" >
 		<h2><@s.text name="label.lastevent"/> 
-			<a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageInspections"><@s.text name="label.manageevents"/></a>
+			<a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageEvents"><@s.text name="label.manageevents"/></a>
 		</h2>
-		<#if inspectionCount gt 0 >
+		<#if eventCount gt 0 >
 			<p>
 				<label><@s.text name="label.lasteventdate"/></label>
-				<span class="fieldValue">${action.formatDateTime(lastInspection.date)}</span>
+				<span class="fieldValue">${action.formatDateTime(lastEvent.date)}</span>
 			</p>
 			<p>
 				<label><@s.text name="label.eventtype"/></label>
-				<span class="fieldValue">${ lastInspection.type.name! }</span>
+				<span class="fieldValue">${ lastEvent.type.name! }</span>
 			</p>
 			<p>
 				<label><@s.text name="label.result"/></label>
-				<span class="fieldValue"><@s.text name="${(lastInspection.status.label?html)!}"/></span>
+				<span class="fieldValue"><@s.text name="${(lastEvent.status.label?html)!}"/></span>
 			</p>
 			<p>
 				<label><@s.text name="label.details"/></label>
 				<span class="fieldValue">
-					<#assign inspection=lastInspection/>
+					<#assign event=lastEvent/>
 					<#include "../eventCrud/_viewEventLink.ftl"/>
 				</span>
 			</p>				

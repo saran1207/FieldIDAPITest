@@ -1,20 +1,20 @@
 <@s.bean id="moneyUtil" name="com.n4systems.tools.MoneyUtils"/>
-<div id="inspection" >
+<div id="event" >
 	<div id="assetSummary">
 		<h2>
 			<span>${asset.type.name!""?html} <@s.text name="label.summary"/></span>
 			
 			
-			<@s.url id="inspectionCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
+			<@s.url id="eventCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
 			<@s.url id="observationCertUrl" action="downloadEventCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
 				
-			<#if inspection.anyCertPrintable>
+			<#if event.anyCertPrintable>
 				<div id="cert_links" class="print" onmouseover="repositionCertLinks('cert_list', 'cert_links');" >
 					<ul id="cert_list">
-						<#if inspection.inspectionCertPrintable>
-							<li><a href="${inspectionCertUrl}" target="_blank" >${inspection.type.group.reportTitle?html} (<@s.text name="label.pdfreport"/>)</a></li>
+						<#if event.eventCertPrintable>
+							<li><a href="${eventCertUrl}" target="_blank" >${event.type.group.reportTitle?html} (<@s.text name="label.pdfreport"/>)</a></li>
 						</#if>
-						<#if inspection.observationCertPrintable>
+						<#if event.observationCertPrintable>
 							<li><a href="${observationCertUrl}" target="_blank" ><@s.text name="label.printobservationcertificate"/></a></li>
 						</#if>
 					</ul>
@@ -51,25 +51,25 @@
 	
 	<p>
 		<label><@s.text name="label.organization"/></label>
-		<span>${(inspection.owner.internalOrg.name)!?html}</span>
+		<span>${(event.owner.internalOrg.name)!?html}</span>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.customer"/></label>
-		<span>${(inspection.owner.customerOrg.name)!?html}</span>
+		<span>${(event.owner.customerOrg.name)!?html}</span>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.division"/></label>
-		<span>${(inspection.owner.divisionOrg.name)!?html}</span>
+		<span>${(event.owner.divisionOrg.name)!?html}</span>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.location"/></label>
-		<span>${helper.getFullNameOfLocation(inspection.advancedLocation)!?html}</span>
+		<span>${helper.getFullNameOfLocation(event.advancedLocation)!?html}</span>
 	</p>
 	
-	<h2>${inspectionType.name?html} <@s.text name="label.information"/></h2>
+	<h2>${eventType.name?html} <@s.text name="label.information"/></h2>
 		
 	<p>
 		<label><@s.text name="label.performed_by"/></label>
@@ -79,21 +79,21 @@
 	</p>
 	<p>
 		<label><@s.text name="label.date_performed"/></label>
-		<span>${action.formatDateTime(inspection.date)}</span>
+		<span>${action.formatDateTime(event.date)}</span>
 	</p>
 
-	<#if inspection.hasAssignToUpdate()>
+	<#if event.hasAssignToUpdate()>
 	<p>
 		<label><@s.text name="label.assigned_to"/></label>
-		<span>${(inspection.assignedTo.assignedUser.userLabel)!action.getText('label.unassigned')}</span>
+		<span>${(event.assignedTo.assignedUser.userLabel)!action.getText('label.unassigned')}</span>
 	</p>
 	</#if>
 
 	<p> 
 		<label><@s.text name="label.scheduledon"/></label>
 		<span>
-			<#if inspection.schedule?exists>																																																					
-				${action.formatDate(inspection.schedule.nextDate, false)}
+			<#if event.schedule?exists>
+				${action.formatDate(event.schedule.nextDate, false)}
 			<#else>
 				<@s.text name="label.notscheduled"/>
 			</#if>
@@ -102,46 +102,46 @@
 	
 	<p>
 		<label><@s.text name="label.eventbook"/></label>
-		<span>${(inspection.book.name)!?html}</span>
+		<span>${(event.book.name)!?html}</span>
 	</p>
 	
 	
-	<#list inspection.infoOptionMap.keySet() as key >
+	<#list event.infoOptionMap.keySet() as key >
 		<p>	
 			<label>${key}:</label>
-			<span> ${inspection.infoOptionMap[key]?html}</span>
+			<span> ${event.infoOptionMap[key]?html}</span>
 		</p>
 	</#list>
 	
 	<p>
 		<label><@s.text name="label.result"/></label>
-		<span><@s.text name="${(inspection.status.label?html)!}"/></span>
+		<span><@s.text name="${(event.status.label?html)!}"/></span>
 	</p>
 
-	<#assign formInspection=inspection/>
-	<#assign identifier="inspectionForm"/>
+	<#assign formEvent=event/>
+	<#assign identifier="eventForm"/>
 	<#include "_event.ftl" />
 	
-	<#if inspection.proofTestInfo?exists >
+	<#if event.proofTestInfo?exists >
 		<h2><@s.text name="label.prooftest"/></h2>
 		<p>
 			<label><@s.text name="label.prooftesttype"/></label>
-			<span><@s.text name="${(inspection.proofTestInfo.proofTestType.label)! action.getText( 'label.unknown') }"/></span>
+			<span><@s.text name="${(event.proofTestInfo.proofTestType.label)! action.getText( 'label.unknown') }"/></span>
 		</p>
 		<p>
 			<label><@s.text name="label.peakload"/></label>
-			<span><@s.text name="${(inspection.proofTestInfo.peakLoad)!?html}"/></span>
+			<span><@s.text name="${(event.proofTestInfo.peakLoad)!?html}"/></span>
 		</p>
 		<p>
 			<label><@s.text name="label.duration"/></label>
-			<span><@s.text name="${(inspection.proofTestInfo.duration)!?html}"/></span>
+			<span><@s.text name="${(event.proofTestInfo.duration)!?html}"/></span>
 		</p>
 		<p>
 			<label><@s.text name="label.peakloadduration"/></label>
-			<span><@s.text name="${(inspection.proofTestInfo.peakLoadDuration)!?html}"/></span>
+			<span><@s.text name="${(event.proofTestInfo.peakLoadDuration)!?html}"/></span>
 		</p>
 		
-		<#if inspection.proofTestInfo.proofTestType?exists && inspection.proofTestInfo.proofTestType.uploadable >
+		<#if event.proofTestInfo.proofTestType?exists && event.proofTestInfo.proofTestType.uploadable >
 			<p>
 				<label id="chartImage">
 					<img alt="<@s.text name="label.nochart"/>" src="<@s.url action="downloadProofTestChart" namespace="/file" includeParams="none" uniqueID="${uniqueID}"/>" width="450"/>
@@ -159,57 +159,57 @@
 	<p>
 		<label><@s.text name="label.comments"/></label>
 		<#escape x as action.replaceCR(x?html) >
-			<span>${inspection.comments!}</span>
+			<span>${event.comments!}</span>
 		</#escape>
 	</p>
 	
 	<p>
 		<label><@s.text name="label.modifiedby"/></label>
 		<span>
-			<#if inspection.modifiedBy?exists >
-				<#assign user=inspection.modifiedBy >
+			<#if event.modifiedBy?exists >
+				<#assign user=event.modifiedBy >
 			<#else>
-				<#assign user=inspection >
+				<#assign user=event >
 			</#if>
 			<#include "_userName.ftl"/> 
-			<@s.text name="label.on"/> ${action.formatDateTime(inspection.modified)} 
+			<@s.text name="label.on"/> ${action.formatDateTime(event.modified)}
 		</span>
 	</p>
 	<p>
 		<label><@s.text name="label.assetstatus"/></label>
 		<span>
-			${(inspection.assetStatus.name)!}
+			${(event.assetStatus.name)!}
 		</span>
 	</p>
 	
-	<#if !linkedInspection >
+	<#if !linkedEvent >
 		<#assign downloadAction="downloadAttachedFile"/>
-		<#assign attachments=inspection.attachments/>
+		<#assign attachments=event.attachments/>
 		
 		<#include "/templates/html/common/_attachedFilesShow.ftl"/>
 	</#if>
 	
 	
-	<#if subInspections?exists >
-		<#list subInspections as subInspection >
+	<#if subEvents?exists >
+		<#list subEvents as subEvent >
 			<h2>
-				<a href="javascript:void(0);" id="expand_${subInspection.id}" onclick=" openSection( 'subInspection_${subInspection.id}', 'expand_${subInspection.id}', 'collapse_${subInspection.id}' ); return false;"><img src="<@s.url value="/images/expandLarge.gif" />" ></a>
-				<a href="javascript:void(0);" id="collapse_${subInspection.id}" onclick="closeSection( 'subInspection_${subInspection.id}', 'collapse_${subInspection.id}', 'expand_${subInspection.id}' ); return false;" style="display:none"><img src="<@s.url value="/images/collapseLarge.gif" />" ></a>
-				${subInspection.type.name?html} - ${(subInspection.name?html)!}
+				<a href="javascript:void(0);" id="expand_${subEvent.id}" onclick=" openSection( 'subEvent_${subEvent.id}', 'expand_${subEvent.id}', 'collapse_${subEvent.id}' ); return false;"><img src="<@s.url value="/images/expandLarge.gif" />" ></a>
+				<a href="javascript:void(0);" id="collapse_${subEvent.id}" onclick="closeSection( 'subEvent_${subEvent.id}', 'collapse_${subEvent.id}', 'expand_${subEvent.id}' ); return false;" style="display:none"><img src="<@s.url value="/images/collapseLarge.gif" />" ></a>
+				${subEvent.type.name?html} - ${(subEvent.name?html)!}
 			</h2>
-			<div id="subInspection_${subInspection.id}" style="display:none">
-				<#if !subInspection.infoOptionMap.keySet().isEmpty() >
+			<div id="subEvent_${subEvent.id}" style="display:none">
+				<#if !subEvent.infoOptionMap.keySet().isEmpty() >
 					<h2><@s.text name="label.assetsummary"/></h2>
-					<#list subInspection.infoOptionMap.keySet() as key >
+					<#list subEvent.infoOptionMap.keySet() as key >
 						<p>	
 							<label>${key?html}:</label>
-							<span> ${subInspection.infoOptionMap[key]?html}</span>
+							<span> ${subEvent.infoOptionMap[key]?html}</span>
 						</p>
 					</#list>
 				</#if>
 			
-				<#assign formInspection=subInspection>
-				<#assign identifier=subInspection.id/>
+				<#assign formEvent=subEvent>
+				<#assign identifier=subEvent.id/>
 				
 				<#include "_event.ftl" />
 				<h2><@s.text name="label.posteventinformation"/></h2>
@@ -217,12 +217,12 @@
 				<p>
 					<label><@s.text name="label.comments"/></label>
 					<#escape x as action.replaceCR(x?html) >
-						<span>${subInspection.comments!?html}</span>
+						<span>${subEvent.comments!?html}</span>
 					</#escape>
 				</p>
 				<#assign downloadAction="downloadSubAttachedFile"/>
-				<#assign attachments=subInspection.attachments/>
-				<#assign attachmentID=subInspection.id>
+				<#assign attachments=subEvent.attachments/>
+				<#assign attachmentID=subEvent.id>
 				<#include "/templates/html/common/_attachedFilesShow.ftl"/>
 			</div>
 			

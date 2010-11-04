@@ -125,7 +125,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 			return ERROR;
 		}
 		
-		// this is to get the inspection types for this asset loaded correctly  gah!
+		// this is to get the event types for this asset loaded correctly  gah!
 		Asset foundSubAsset = persistenceManager.find(Asset.class, subAsset.getAsset().getId(), getSecurityFilter(), "type.eventTypes");
 		if (foundSubAsset == null) {
 			addActionErrorText("error.nosubproduct");
@@ -215,9 +215,9 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 			asset.getSubAssets().remove(subAssetToRemove);
 			productManager.update(asset, getUser());
 
-			MasterEvent masterEvent = (MasterEvent) getSession().get("masterInspection");
-			if (MasterEvent.matchingMasterInspection(masterEvent, token)) {
-				masterEvent.removeInspectionsForAsset(subAsset.getAsset());
+			MasterEvent masterEvent = (MasterEvent) getSession().get("masterEvent");
+			if (MasterEvent.matchingMasterEvent(masterEvent, token)) {
+				masterEvent.removeEventsForAsset(subAsset.getAsset());
 			}
 
 			addActionMessageText("message.assetupdated");
@@ -291,7 +291,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		this.subAssetId = subAssetId;
 	}
 
-	public List<EventType> getInspectionTypes() {
+	public List<EventType> getEventTypes() {
 		List<EventType> eventTypes = new ArrayList<EventType>();
 		List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(subAsset.getAsset().getType()).load();
 		for (AssociatedEventType associatedEventType : associatedEventTypes) {
@@ -319,7 +319,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		return false;
 	}
 
-	public List<SubEvent> getInspectionsFor(Asset product) {
+	public List<SubEvent> getEventsFor(Asset product) {
 		return new ArrayList<SubEvent>();
 	}
 
@@ -339,15 +339,15 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		this.indexes = indexes;
 	}
 	
-	public AllEventHelper getAllInspectionHelper() {
+	public AllEventHelper getAllEventHelper() {
 		if (allEventHelper == null)
 			allEventHelper = new AllEventHelper(productManager, asset, getSecurityFilter());
 		return allEventHelper;
 	}
 	
 	
-	public Long getInspectionCount() {
-		return getAllInspectionHelper().getEventCount();
+	public Long getEventCount() {
+		return getAllEventHelper().getEventCount();
 	}
 
 	public boolean isLinked() {

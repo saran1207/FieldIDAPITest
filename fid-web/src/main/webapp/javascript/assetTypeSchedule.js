@@ -3,33 +3,33 @@ var cancelScheduleUrl = '';
 var removeScheduleUrl = '';
 var removeWarning = '';
 
-function editSchedule( inspectionTypeId, assetTypeId, uniqueId, ownerId ) {
-	getResponse(editScheduleUrl,"get", makeInspectionFrequencyParams(inspectionTypeId, assetTypeId, uniqueId, ownerId)); 
+function editSchedule( eventTypeId, assetTypeId, uniqueId, ownerId ) {
+	getResponse(editScheduleUrl,"get", makeEventFrequencyParams(eventTypeId, assetTypeId, uniqueId, ownerId)); 
 }
 
-function saveSchedule( inspectionTypeId ) {
-	$( 'schedule_' + inspectionTypeId ).request(getStandardCallbacks());
+function saveSchedule( eventTypeId ) {
+	$( 'schedule_' + eventTypeId ).request(getStandardCallbacks());
 }
 
-function cancelSchedule( inspectionTypeId, assetTypeId, uniqueId ) {
-	getResponse(cancelScheduleUrl, "get", makeInspectionFrequencyParams(inspectionTypeId, assetTypeId, uniqueId));  
+function cancelSchedule( eventTypeId, assetTypeId, uniqueId ) {
+	getResponse(cancelScheduleUrl, "get", makeEventFrequencyParams(eventTypeId, assetTypeId, uniqueId));
 }
 
-function removeSchedule( inspectionTypeId, assetTypeId, uniqueId, tryConfirm ) {
+function removeSchedule( eventTypeId, assetTypeId, uniqueId, tryConfirm ) {
 	var doRemove = true;
 	
-	if( tryConfirm && ( $('eventFrequencyOverrides_' + inspectionTypeId + '_container' ).getElementsByClassName( 'customerOverride' ).length != 0 )) {
+	if( tryConfirm && ( $('eventFrequencyOverrides_' + eventTypeId + '_container' ).getElementsByClassName( 'customerOverride' ).length != 0 )) {
 		doRemove = confirm( removeWarning );
 	}
 	 
 	if (doRemove) {
-		getResponse(removeScheduleUrl, "get", makeInspectionFrequencyParams(inspectionTypeId, assetTypeId, uniqueId));  
+		getResponse(removeScheduleUrl, "get", makeEventFrequencyParams(eventTypeId, assetTypeId, uniqueId));
 	}	
 }
 
-function makeInspectionFrequencyParams( inspectionTypeId, assetTypeId, uniqueId, ownerId ) {
+function makeEventFrequencyParams( eventTypeId, assetTypeId, uniqueId, ownerId ) {
 	var params = new Object();
-	params.inspectionTypeId= inspectionTypeId;
+	params.eventTypeId= eventTypeId;
 	params.assetTypeId= assetTypeId;
 	if (uniqueId != null) { 
 	 	params.uniqueID= uniqueId;
@@ -40,16 +40,16 @@ function makeInspectionFrequencyParams( inspectionTypeId, assetTypeId, uniqueId,
 	return params;
 }
 
-function expandOverride( inspectionTypeId ) {
-	$('overrides_'+ inspectionTypeId).style.display="block";
-	$('overrideExpand_'+ inspectionTypeId).style.display="none";
-	$('overrideCollapse_'+ inspectionTypeId).style.display="inline";
+function expandOverride( eventTypeId ) {
+	$('overrides_'+ eventTypeId).style.display="block";
+	$('overrideExpand_'+ eventTypeId).style.display="none";
+	$('overrideCollapse_'+ eventTypeId).style.display="inline";
 	
 }
 
-function collapseOverride( inspectionTypeId ) {
-	$('overrides_'+ inspectionTypeId).style.display="none";
-	$('overrideExpand_'+ inspectionTypeId).style.display="inline";
-	$('overrideCollapse_'+ inspectionTypeId).style.display="none";
+function collapseOverride( eventTypeId ) {
+	$('overrides_'+ eventTypeId).style.display="none";
+	$('overrideExpand_'+ eventTypeId).style.display="inline";
+	$('overrideCollapse_'+ eventTypeId).style.display="none";
 	
 }  

@@ -19,20 +19,20 @@ public class EventAttributeDynamicGroupGenerator {
 		this.persistenceManager = persistenceManager;
 	}
 	
-	public List<ColumnMappingGroup> getDynamicGroups(Long inspectionTypeId, String idPrefix, final SecurityFilter filter) {
-		return getDynamicGroups(inspectionTypeId, idPrefix, null, filter);
+	public List<ColumnMappingGroup> getDynamicGroups(Long eventTypeId, String idPrefix, final SecurityFilter filter) {
+		return getDynamicGroups(eventTypeId, idPrefix, null, filter);
 	}
 	
-	public List<ColumnMappingGroup> getDynamicGroups(Long inspectionTypeId, String idPrefix, String pathPrefix, final SecurityFilter filter) {
+	public List<ColumnMappingGroup> getDynamicGroups(Long eventTypeId, String idPrefix, String pathPrefix, final SecurityFilter filter) {
 		if (dynamigGroups == null) {
 			dynamigGroups = new ArrayList<ColumnMappingGroup>();
-			ColumnMappingGroup attributeGroup = new ColumnMappingGroup(idPrefix + "_inspection_attributes", "label.eventattributes", 1024);
+			ColumnMappingGroup attributeGroup = new ColumnMappingGroup(idPrefix + "_event_attributes", "label.eventattributes", 1024);
 			attributeGroup.setDynamic(true);
 			
 			int order = 1024;
-			if (inspectionTypeId != null) {
+			if (eventTypeId != null) {
 				// when an asset type has been selected, we will use all the infofields from the asset type
-				EventType eventType = persistenceManager.find(EventType.class, inspectionTypeId, filter, "infoFieldNames");
+				EventType eventType = persistenceManager.find(EventType.class, eventTypeId, filter, "infoFieldNames");
 				
 				// construct and add our field mappings
 				for (String fieldName: eventType.getInfoFieldNames()) {

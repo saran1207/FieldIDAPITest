@@ -5,7 +5,7 @@ import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.handlers.creator.BasicTransactionManagement;
-import com.n4systems.handlers.creator.InspectionPersistenceFactory;
+import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
@@ -15,21 +15,21 @@ import com.n4systems.services.NextInspectionScheduleSerivce;
 
 public class EventCreator extends BasicTransactionManagement {
 
-	private final InspectionPersistenceFactory inspectionPersistenceFactory;
+	private final EventPersistenceFactory eventPersistenceFactory;
 	private AuditLogger auditLogger;
 	private CreateEventParameter parameter;
 	private Event result;
 	private NextInspectionScheduleSerivce nextScheduleSerivce;
 	private EventSaver createEventSaver;
 
-	public EventCreator(TransactionManager transactionManager, InspectionPersistenceFactory inspectionPersistenceFactory) {
+	public EventCreator(TransactionManager transactionManager, EventPersistenceFactory eventPersistenceFactory) {
 		super(transactionManager);
-		this.inspectionPersistenceFactory = inspectionPersistenceFactory;
+		this.eventPersistenceFactory = eventPersistenceFactory;
 	}
 
 	public Event create(CreateEventParameter parameter) throws ProcessFailureException {
 		this.parameter = parameter;
-		auditLogger = inspectionPersistenceFactory.createCreateInspectionAuditLogger();
+		auditLogger = eventPersistenceFactory.createCreateEventAuditLogger();
 		
 		run();
 		return result;
@@ -62,8 +62,8 @@ public class EventCreator extends BasicTransactionManagement {
 	}
 
 	private void createTransactionDependentServices(Transaction transaction) {
-		createEventSaver = inspectionPersistenceFactory.createInspectionSaver(transaction);
-		nextScheduleSerivce = inspectionPersistenceFactory.createNextInspectionScheduleService(transaction);
+		createEventSaver = eventPersistenceFactory.createEventSaver(transaction);
+		nextScheduleSerivce = eventPersistenceFactory.createNextEventScheduleService(transaction);
 	}
 
 	private void createSchedules(Transaction transaction) {

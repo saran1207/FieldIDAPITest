@@ -1,5 +1,5 @@
-function updateInspectionBookList( list ) {
-	var books = $('inspectionBooks');
+function updateEventBookList( list ) {
+	var books = $('eventBooks');
 	var blankOption = books.options[0];
 		
 	books.options.length = 0;
@@ -12,16 +12,16 @@ function updateInspectionBookList( list ) {
 	
 }
 
-var updateInspectionBooksUrl = '';
+var updateEventBooksUrl = '';
 
-function updateInspectionBooks(event) {
+function updateEventBooks(event) {
 	
 	var ownerId = Event.element(event).getValue();
-	var url =  updateInspectionBooksUrl + '?ownerId='+ ownerId + '&withClosed=false';
+	var url =  updateEventBooksUrl + '?ownerId='+ ownerId + '&withClosed=false';
 
 	getResponse( url );		
 
 }
 
-Element.extend(document).observe("owner:change", updateInspectionBooks);
+Element.extend(document).observe("owner:change", updateEventBooks);
 

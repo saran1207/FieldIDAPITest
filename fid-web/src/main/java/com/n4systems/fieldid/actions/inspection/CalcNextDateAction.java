@@ -16,7 +16,7 @@ public class CalcNextDateAction extends AbstractAction {
 
 	private Long ownerId;
 	private Long assetTypeId;
-	private Long inspectionTypeId;
+	private Long eventTypeId;
 	private Date startDate;
 	private Date nextDate;
 	
@@ -27,7 +27,7 @@ public class CalcNextDateAction extends AbstractAction {
 	public String doCalculate() {
 		AssetType assetType = getLoaderFactory().createAssetTypeLoader().setId(assetTypeId).load();
 		
-		EventType eventType = getLoaderFactory().createFilteredIdLoader(EventType.class).setId(inspectionTypeId).load();
+		EventType eventType = getLoaderFactory().createFilteredIdLoader(EventType.class).setId(eventTypeId).load();
 		
 		BaseOrg owner = getLoaderFactory().createFilteredIdLoader(BaseOrg.class).setId(ownerId).load();
 		
@@ -52,8 +52,8 @@ public class CalcNextDateAction extends AbstractAction {
 		this.assetTypeId = assetTypeId;
 	}
 
-	public void setInspectionTypeId(Long inspectionTypeId) {
-		this.inspectionTypeId = inspectionTypeId;
+	public void setEventTypeId(Long eventTypeId) {
+		this.eventTypeId = eventTypeId;
 	}
 
 	public void setStartDate(String startDate) {

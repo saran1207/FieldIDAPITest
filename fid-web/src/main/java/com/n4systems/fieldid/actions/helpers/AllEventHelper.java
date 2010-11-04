@@ -6,7 +6,7 @@ import java.util.List;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.safetynetwork.InspectionsByNetworkIdLoader;
+import com.n4systems.model.safetynetwork.EventsByNetworkIdLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 public class AllEventHelper {
@@ -33,16 +33,16 @@ public class AllEventHelper {
 		return eventCount;
 	}
 
-	public List<Event> getInspections() {
+	public List<Event> getEvents() {
 		if (events == null) {
-			InspectionsByNetworkIdLoader loader = new InspectionsByNetworkIdLoader(filter);
+			EventsByNetworkIdLoader loader = new EventsByNetworkIdLoader(filter);
 			events = loader.setNetworkId(asset.getNetworkId()).load();
 			Collections.sort(events);
 		}
 		return events;
 	}
 
-	public Event getLastInspection() {
+	public Event getLastEvent() {
 		if (lastEvent == null) {
 			lastEvent = legacyAssetManager.findLastEvents(asset, filter);
 		}

@@ -19,7 +19,7 @@ import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.ConfigContextRequiredTestCase;
 
 
-public class CreateInspectionParameterBuilderTest extends ConfigContextRequiredTestCase {
+public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCase {
 
 	private static final ArrayList<EventScheduleBundle> EMPTY_SCHEDULEs = new ArrayList<EventScheduleBundle>();
 	Long userId = 1L;

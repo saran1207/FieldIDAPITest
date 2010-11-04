@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.n4systems.util.DateHelper;
 
 
-public class InspectionScheduleSuggestionTest {
+public class EventScheduleSuggestionTest {
 	
 	@Test public void should_suggested_schedule_with_no_schedulesid() {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();

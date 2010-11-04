@@ -20,22 +20,22 @@ import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.TransactionSupervisor;
 
-public class ManagerBackedCreateInspectionsMethodObject implements CreateEventsMethodObject {
+public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethodObject {
 	private final PersistenceManager persistenceManager;
 	private final EventSaver eventSaver;
 
 
-	public ManagerBackedCreateInspectionsMethodObject(PersistenceManager persistenceManager, EventSaver eventSaver) {
+	public ManagerBackedCreateEventsMethodObject(PersistenceManager persistenceManager, EventSaver eventSaver) {
 		super();
 		this.persistenceManager = persistenceManager;
 		this.eventSaver = eventSaver;
 	}
 
-	public List<Event> createInspections(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
-		return createInspections(transactionGUID, events);
+	public List<Event> createEvents(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
+		return createEvents(transactionGUID, events);
 	}
 
-	public List<Event> createInspections(String transactionGUID, List<Event> events) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
+	public List<Event> createEvents(String transactionGUID, List<Event> events) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
 		List<Event> savedEvents = new ArrayList<Event>();
 		
 		/*

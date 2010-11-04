@@ -57,11 +57,11 @@
 		</tr>
 			
 		<tr>
-			<td><@s.checkbox name="select['inspectionBook']" id="check_inspectionBook"/></td>
+			<td><@s.checkbox name="select['eventBook']" id="check_eventBook"/></td>
 			<td>
 				<div class="infoSet">
 					<label class="label" ><@s.text name="label.eventbook"/>:</label> 
-					<span class="field"><@s.select  name="inspectionBook" list="inspectionBooks" listKey="id" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('inspectionBook');" /></span>
+					<span class="field"><@s.select  name="eventBook" list="eventBooks" listKey="id" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('eventBook');" /></span>
 				</div>
 			</td>
 		</tr>

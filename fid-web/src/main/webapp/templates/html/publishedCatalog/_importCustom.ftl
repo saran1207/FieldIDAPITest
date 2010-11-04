@@ -10,10 +10,10 @@
 
 <div class="customSelection">
 	<h3><@s.text name="label.event_types"/></h3>
-	<#list publishedInspectionTypes as inspectionType>
+	<#list publishedEventTypes as eventType>
 		<div class="customSelectionType">
-			<@s.checkbox name="importInspectionTypeIds['${inspectionType.id}']" />
-			<label>${inspectionType.name?html}</label>
+			<@s.checkbox name="importEventTypeIds['${eventType.id}']" />
+			<label>${eventType.name?html}</label>
 		</div>
 	</#list>
 </div>

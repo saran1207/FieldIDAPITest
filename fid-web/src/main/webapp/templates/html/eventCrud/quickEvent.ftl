@@ -12,7 +12,7 @@
 		
 		
 
-	<#list 	asset.type.inspectionTypes as type >
+	<#list 	asset.type.eventTypes as type >
 		<p>
 			<span><a href="<@s.url action="selectEventAdd" assetId="${assetId}" type="${type.id}"/>">${type.name}</a></span>
 		</p>

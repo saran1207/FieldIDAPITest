@@ -91,9 +91,9 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 		testRequiredEntities(true);
 		QueryBuilder<EventTypeGroup> printOutUsedQuery = new QueryBuilder<EventTypeGroup>(EventTypeGroup.class, new OpenSecurityFilter());
 		printOutUsedQuery.addSimpleWhere("printOut", printOut);
-		Long numberOfInspectionGroupsUsingPrintOut = persistenceEJBContainer.findCount(printOutUsedQuery);
-		if (numberOfInspectionGroupsUsingPrintOut != 0 ) {
-			addActionError("this can not be deleted, it is being used by " + numberOfInspectionGroupsUsingPrintOut);
+		Long numberOfEventGroupsUsingPrintOut = persistenceEJBContainer.findCount(printOutUsedQuery);
+		if (numberOfEventGroupsUsingPrintOut != 0 ) {
+			addActionError("this can not be deleted, it is being used by " + numberOfEventGroupsUsingPrintOut);
 			return INPUT;
 		}
 		try {

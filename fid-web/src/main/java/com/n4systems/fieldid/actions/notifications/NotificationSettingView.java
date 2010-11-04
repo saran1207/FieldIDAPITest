@@ -24,7 +24,7 @@ public class NotificationSettingView implements Serializable {
 	private String periodStart;
 	private String periodEnd;
 	private Long assetTypeId;
-	private Long inspectionTypeId;
+	private Long eventTypeId;
 	private Boolean includeOverdue = false;
 	private List<String> addresses = new ArrayList<String>();
 
@@ -104,12 +104,12 @@ public class NotificationSettingView implements Serializable {
     	this.assetTypeId = assetTypeId;
     }
 
-	public Long getInspectionTypeId() {
-    	return inspectionTypeId;
+	public Long getEventTypeId() {
+    	return eventTypeId;
     }
 
-	public void setInspectionTypeId(Long inspectionTypeId) {
-    	this.inspectionTypeId = inspectionTypeId;
+	public void setEventTypeId(Long eventTypeId) {
+    	this.eventTypeId = eventTypeId;
     }
 
 	public List<String> getAddresses() {

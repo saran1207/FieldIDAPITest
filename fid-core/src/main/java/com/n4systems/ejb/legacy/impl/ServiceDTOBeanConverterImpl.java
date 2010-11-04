@@ -246,7 +246,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		persistenceManager.reattach(eventGroup, false);
 
 		List<com.n4systems.webservice.dto.InspectionServiceDTO> inspectionDTOs = new ArrayList<com.n4systems.webservice.dto.InspectionServiceDTO>();
-		for (Event event : eventGroup.getAvailableInspections()) {
+		for (Event event : eventGroup.getAvailableEvents()) {
 			inspectionDTOs.add(convert(event));
 		}
 
@@ -264,7 +264,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setId(asset.getId());
 		productDTO.setCustomerRefNumber(asset.getCustomerRefNumber());
 		productDTO.setIdentified(AbstractBaseServiceDTO.dateToString(asset.getIdentified()));
-		productDTO.setLastInspectionDate(AbstractBaseServiceDTO.dateToString(asset.getLastInspectionDate()));
+		productDTO.setLastInspectionDate(AbstractBaseServiceDTO.dateToString(asset.getLastEventDate()));
 		productDTO.setMobileGuid(asset.getMobileGUID());
 		productDTO.setProductStatusId(asset.getAssetStatus() != null ? asset.getAssetStatus().getUniqueID() : 0);
 		productDTO.setProductTypeId(asset.getType().getId());
@@ -588,7 +588,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			result.setState(persistenceManager.find(State.class, resultDTO.getStateId()));
 			result.setCriteria(persistenceManager.find(Criteria.class, resultDTO.getCriteriaId()));
 			result.setTenant(tenant);
-			result.setInspection(event);
+			result.setEvent(event);
 
 			if (resultDTO.getRecommendations() != null) {
 				for (ObservationResultServiceDTO recommendationDTO : resultDTO.getRecommendations()) {
@@ -771,7 +771,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		CriteriaResultServiceDTO criteriaResultServiceDTO = new CriteriaResultServiceDTO();
 		criteriaResultServiceDTO.setId(criteriaResult.getId());
 		criteriaResultServiceDTO.setCriteriaId(criteriaResult.getCriteria().getId());
-		criteriaResultServiceDTO.setInspectionId(criteriaResult.getInspection().getId());
+		criteriaResultServiceDTO.setInspectionId(criteriaResult.getEvent().getId());
 		criteriaResultServiceDTO.setStateId(criteriaResult.getState().getId());
 
 		int i = 0;
@@ -961,7 +961,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		userService.setSecurityRfidNumber(user.getHashSecurityCardNumber());
 		BitField permField = new BitField(user.getPermissions());
 		userService.setAllowedToIdentify(permField.isSet(Permissions.Tag));
-		userService.setAllowedToInspect(permField.isSet(Permissions.CreateInspection));
+		userService.setAllowedToInspect(permField.isSet(Permissions.CreateEvent));
 
 		populateOwners(user.getOwner(), userService);
 

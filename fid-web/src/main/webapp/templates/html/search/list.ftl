@@ -18,7 +18,7 @@
 			<#if sessionUser.hasAccess('tag') >
 				| <a href="<@s.url action="massUpdateAssets" searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
-			<#if sessionUser.hasAccess('createinspection') >
+			<#if sessionUser.hasAccess('createevent') >
 				| <a href="#multiEvent" name="multiEvent" id="multiInspect" class="multiEvent"><@s.text name="label.preform_mass_event"/></a>
 			</#if>
 		</div>
@@ -38,7 +38,7 @@
 	</div>
 </#if>
 <#include "../customizableSearch/_massActionRestriction.ftl"/>
-<#if (totalResults <= maxSizeForMultiInspect) >
+<#if (totalResults <= maxSizeForMultiEvent) >
 	<@s.form id="performMultiInspect" action="selectEventType" namespace="/multiEvent">
 		<#list searchIds as assetId>
 			<@s.hidden name="assetIds[${assetId_index}]" value="${assetId}"/> 

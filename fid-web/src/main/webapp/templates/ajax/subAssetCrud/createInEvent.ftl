@@ -1,6 +1,6 @@
 <#assign html>
 	<#assign assetId=asset.id />
-	<#assign inInspection=true />
+	<#assign inEvent=true />
 	<#include "/templates/html/masterEventCrud/_subAssetEvent.ftl"/>
 </#assign>
 

@@ -79,16 +79,16 @@ function retireSection( sectionIndex ) {
 	}
 }
 
-var inspectionFormChangedMessage = '';
+var eventFormChangedMessage = '';
 var formChanged = false;
 
 /**
- * Checks to see if the form has changed and display a conformation message (inspectionFormChangedMessage)
+ * Checks to see if the form has changed and display a conformation message (eventFormChangedMessage)
  * if it has
  */
 function hasFormChanged() {
 	if( formChanged == true ) {
-		return confirm( inspectionFormChangedMessage );
+		return confirm( eventFormChangedMessage );
 	}
 
 	return true;

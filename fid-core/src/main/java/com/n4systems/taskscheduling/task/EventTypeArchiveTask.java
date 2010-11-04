@@ -68,7 +68,7 @@ public class EventTypeArchiveTask implements Runnable {
 
 	private void setUp() {
 		transaction = PersistenceManager.startTransaction();
-		archiveHandler = handlerFactory.getInspectionTypeArchiveHandler();
+		archiveHandler = handlerFactory.getEventTypeArchiveHandler();
 	}
 
 

@@ -35,7 +35,7 @@ import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class MultiEventAction extends AbstractCrud {
 
 	private static final long UNASSIGNED_OPTION_VALUE = 0L;
@@ -80,7 +80,7 @@ public class MultiEventAction extends AbstractCrud {
 	@Override
 	protected void postInit() {
 		super.postInit();
-		commonEventTypeHandler = createCommonInspectionTypeHandler();
+		commonEventTypeHandler = createCommonEventTypeHandler();
 		modifiableEvent = new EventWebModel(new OwnerPicker(getLoaderFactory().createEntityByIdLoader(BaseOrg.class), event), getSessionUser().createUserDateConverter(), this);
 		overrideHelper(new MultiEventActionHelper(getLoaderFactory()));
 	}
@@ -93,12 +93,12 @@ public class MultiEventAction extends AbstractCrud {
 	}
 	
 	@SkipValidation
-	public String doInspectionTypes() {
+	public String doEventTypes() {
 		testDependencies();
 		return SUCCESS;
 	}
 
-	private CommonEventTypeHandler createCommonInspectionTypeHandler() {
+	private CommonEventTypeHandler createCommonEventTypeHandler() {
 		return new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeDatabaseLoader(getSecurityFilter(), ConfigContext.getCurrentContext()));
 	}
 
@@ -116,7 +116,7 @@ public class MultiEventAction extends AbstractCrud {
 		return SUCCESS;
 	}
 	
-	public String doInspectionCheck() {
+	public String doEventCheck() {
 		return SUCCESS;
 	}
 
@@ -147,7 +147,7 @@ public class MultiEventAction extends AbstractCrud {
 		return getSessionUser().getUniqueID();
 	}
 
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		return eventType;
 	}
 
@@ -174,15 +174,15 @@ public class MultiEventAction extends AbstractCrud {
 		return examiners;
 	}
 
-	public Event getInspection() {
+	public Event getEvent() {
 		return event;
 	}
 
-	public void setInspection(Event event) {
+	public void setEvent(Event event) {
 		this.event = event;
 	}
 
-	public EventFormHelper getInspectionFormHelper() {
+	public EventFormHelper getEventFormHelper() {
 		return eventFormHelper;
 	}
 	
@@ -213,14 +213,14 @@ public class MultiEventAction extends AbstractCrud {
 	}
 	
 	@VisitorFieldValidator(message="")
-	public EventWebModel getModifiableInspection() {
+	public EventWebModel getModifiableEvent() {
 		if (modifiableEvent == null) {
 			throw new NullPointerException("action has not been initialized.");
 		}
 		return modifiableEvent;
 	}
 	
-	public MultiEventGroupSorter getMultiInspectGroupSorter() {
+	public MultiEventGroupSorter getMultiEventGroupSorter() {
 		if (multiEventGroupSorter == null) {
 			multiEventGroupSorter = new MultiEventGroupSorter(getEventTypes());
 		}

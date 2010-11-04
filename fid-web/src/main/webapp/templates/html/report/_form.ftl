@@ -91,16 +91,16 @@ ${action.setPageType('report', 'show')!}
 		<div class="fieldGroup clearLeft">
 			<h2><@s.text name="label.event_details"/></h2>
 			<div class="infoSet">
-				<label for="criteria.inspectionTypeGroup"><@s.text name="label.eventtypegroup"/></label>
-				<@s.select name="criteria.inspectionTypeGroup" list="inspectionTypes" listKey="id" listValue="name" emptyOption="true" />
+				<label for="criteria.eventTypeGroup"><@s.text name="label.eventtypegroup"/></label>
+				<@s.select name="criteria.eventTypeGroup" list="eventTypes" listKey="id" listValue="name" emptyOption="true" />
 			</div>
 			<div class="infoSet">
 				<label for="criteria.performedBy"><@s.text name="label.performed_by"/></label>
 				<@s.select name="criteria.performedBy" list="examiners" listKey="id" listValue="name" emptyOption="true" />
 			</div>
 			<div class="infoSet">
-				<label for="criteria.inspectionBook"><@s.text name="label.eventbook"/></label>
-				<@s.select key="label.inspectionbook" name="criteria.inspectionBook" list="inspectionBooks" listKey="id" listValue="name" emptyOption="true" />
+				<label for="criteria.eventBook"><@s.text name="label.eventbook"/></label>
+				<@s.select key="label.eventbook" name="criteria.eventBook" list="eventBooks" listKey="id" listValue="name" emptyOption="true" />
 			</div>
 			
 			<#if securityGuard.projectsEnabled>

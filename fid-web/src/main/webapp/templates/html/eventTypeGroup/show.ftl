@@ -27,12 +27,12 @@ ${action.setPageType('event_type_group', 'show')!}
 	<h2><@s.text name="label.eventtypes"/></h2>
 	<div class="crudForm bigForm sectionContent">
 		
-		<#list inspectionTypes as inspectionType>
+		<#list eventTypes as eventType>
 			<div class="infoSet">
-				<label class="line" ><a href="<@s.url action="eventType" uniqueID="${inspectionType.id}"/>">${(inspectionType.name?html) !}</a></label>
+				<label class="line" ><a href="<@s.url action="eventType" uniqueID="${eventType.id}"/>">${(eventType.name?html) !}</a></label>
 			</div>
 		</#list>
-		<#if inspectionTypes.empty >
+		<#if eventTypes.empty >
 			<div class="infoSet">
 				<label class="line"><@s.text name="label.noeventtypesundergroup"/></label>
 			</div>

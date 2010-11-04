@@ -42,7 +42,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	private LegacyAssetType assetTypeManager;
 	
 	private Map<String,Boolean> importAssetTypeIds = new HashMap<String, Boolean>();
-	private Map<String,Boolean> importInspectionTypeIds = new HashMap<String, Boolean>();
+	private Map<String,Boolean> importEventTypeIds = new HashMap<String, Boolean>();
 	private boolean usingPackage = false;
 	
 	private CatalogImportSummary summary;
@@ -94,12 +94,12 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	public String doConfirm() {
 		doShow();
 		Set<Long> importTheseProductTypeIds = covertSelectedIdsToSet(importAssetTypeIds);
-		Set<Long> importTheseInspectionTypeIds = covertSelectedIdsToSet(importInspectionTypeIds);
+		Set<Long> importTheseEventTypeIds = covertSelectedIdsToSet(importEventTypeIds);
 		
 		try {
 			ImportCatalogService importCatalogService = new ImportCatalogService(persistenceManager, getPrimaryOrg(), linkedCatalogAccess, assetTypeManager);
 			importCatalogService.setImportAssetTypeIds(importTheseProductTypeIds);
-			importCatalogService.setImportInspectionTypeIds(importTheseInspectionTypeIds);
+			importCatalogService.setImportEventTypeIds(importTheseEventTypeIds);
 			importCatalogService.setImportAllRelations(usingPackage);
 			summary = importCatalogService.importSelectionSummary();
 		} catch (Exception e) {
@@ -136,7 +136,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		try {
 			CatalogImportTask importTask = new CatalogImportTask();
 			
-			importTask.setImportInspectionTypeIds(covertSelectedIdsToSet(importInspectionTypeIds));
+			importTask.setImportEventTypeIds(covertSelectedIdsToSet(importEventTypeIds));
 			importTask.setImportProductTypeIds(covertSelectedIdsToSet(importAssetTypeIds));
 			importTask.setPrimaryOrg(getPrimaryOrg());
 			importTask.setLinkedTenant(getLinkedTenant());
@@ -164,12 +164,12 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		return linkedCatalogAccess.getPublishedAssetTypesLP();
 	}
 
-	public Map<String, Boolean> getImportInspectionTypeIds() {
-		return importInspectionTypeIds;
+	public Map<String, Boolean> getImportEventTypeIds() {
+		return importEventTypeIds;
 	}
 	
-	public List<ListingPair> getPublishedInspectionTypes() {
-		return linkedCatalogAccess.getPublishedInspectionTypesLP();
+	public List<ListingPair> getPublishedEventTypes() {
+		return linkedCatalogAccess.getPublishedEventTypesLP();
 		
 	}
 
@@ -178,18 +178,18 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	}
 
 
-	public List<ListingPair> getInspectionTypesFor(Long assetTypeId) {
+	public List<ListingPair> getEventTypesFor(Long assetTypeId) {
 		if (!cacheInpsectionTypes.containsKey(assetTypeId)) {
 			Set<Long> ids = new HashSet<Long>();
 			ids.add(assetTypeId);
-			Set<Long> inspectionTypeIds = linkedCatalogAccess.getPublishedInspectionTypeIdsConnectedTo(ids);
-			List<ListingPair> inspectionTypes = new ArrayList<ListingPair>();
-			for (ListingPair inspectionType : getPublishedInspectionTypes()) {
-				if (inspectionTypeIds.contains(inspectionType.getId())) {
-					inspectionTypes.add(inspectionType);
+			Set<Long> eventTypeIds = linkedCatalogAccess.getPublishedEventTypeIdsConnectedTo(ids);
+			List<ListingPair> eventTypes = new ArrayList<ListingPair>();
+			for (ListingPair eventType : getPublishedEventTypes()) {
+				if (eventTypeIds.contains(eventType.getId())) {
+					eventTypes.add(eventType);
 				}
 			}
-			cacheInpsectionTypes.put(assetTypeId, inspectionTypes);
+			cacheInpsectionTypes.put(assetTypeId, eventTypes);
 		}
 		return cacheInpsectionTypes.get(assetTypeId);
 	}

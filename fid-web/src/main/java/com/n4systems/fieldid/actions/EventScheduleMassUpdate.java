@@ -15,7 +15,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.ListHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class EventScheduleMassUpdate extends MassUpdate {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(EventScheduleMassUpdate.class);
@@ -56,19 +56,19 @@ public class EventScheduleMassUpdate extends MassUpdate {
 			if (select.get("removeIncomplete") == true) {
 				messageKey = "message.eventschedulemassremovesuccessful";
 				
-				results = massUpdateManager.deleteInspectionSchedules(scheduleIds);
+				results = massUpdateManager.deleteEventSchedules(scheduleIds);
 			} else {
 				messageKey = "message.eventschedulemassupdatesuccessful";
 				
 				schedule.setNextDate(convertDate(nextDate));
-				results = massUpdateManager.updateInspectionSchedules(scheduleIds, schedule, select);	
+				results = massUpdateManager.updateEventSchedules(scheduleIds, schedule, select);
 			}
 			
 			addFlashMessage(getText(messageKey, new String[] {results.toString()}));	
 			
 			return SUCCESS;
 		} catch (Exception e) {
-			logger.error("failed to run a mass update on inspection schedules", e);
+			logger.error("failed to run a mass update on event schedules", e);
 		}
 
 		addActionError(getText("error.failedtomassupdate"));

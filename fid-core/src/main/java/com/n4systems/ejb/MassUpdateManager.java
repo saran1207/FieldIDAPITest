@@ -24,17 +24,17 @@ public interface MassUpdateManager {
 	 */
 	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
 
-	public Long updateInspections(List<Long> ids, Event event, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
+	public Long updateEvents(List<Long> ids, Event event, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
 
-	public Long updateInspectionSchedules(Set<Long> ids, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException;
+	public Long updateEventSchedules(Set<Long> ids, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException;
 
-	public Long deleteInspectionSchedules(Set<Long> scheduleIds) throws UpdateFailureException;
+	public Long deleteEventSchedules(Set<Long> scheduleIds) throws UpdateFailureException;
 	
 	public Long updateAssetModifiedDate(List<Long> ids);
 	
 	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
 
-	public List<Long> createSchedulesForInspections(List<Long> inspectionIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
+	public List<Long> createSchedulesForEvents(List<Long> eventIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException;
 
 	
 }

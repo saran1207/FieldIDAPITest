@@ -69,17 +69,17 @@ public class EventFormSection extends EventFormCrud {
 
 	/**
 	 * Adds default {@link CriteriaSection}s, {@link Criteria} and {@link Observation}s ({@link Recommendation}/{@link Deficiency}) to an {@link com.n4systems.model.EventType}.<br />
-	 * Since this is an ajax method, and the InspectionType is loaded on every ajax request, it is necessary to create new Sections, Criteria (and so on) up to the requested index
+	 * Since this is an ajax method, and the EventType is loaded on every ajax request, it is necessary to create new Sections, Criteria (and so on) up to the requested index
 	 * such that:<br />
-	 * Given a <tt>sectionIndex</tt>; new, default CriteriaSections will be added so that <tt>inspectionType.getSections().size() == sectionIndex + 1</tt>.<br />
+	 * Given a <tt>sectionIndex</tt>; new, default CriteriaSections will be added so that <tt>eventType.getSections().size() == sectionIndex + 1</tt>.<br />
 	 * Given a <tt>criteriaIndex</tt>; new, default Criteria will be added so that <tt>criteriaSection.getCriteria().size() == criteriaIndex + 1</tt>.<br />
-	 * Given an <tt>observationIndex</tt> and <tt>observationType</tt>; new, empty strings will be added to the recomendation or deficiency list (depending on <tt>observationType</tt>)
-	 * such that <tt>criteria.get</tt>(Recomendations or Deficiencies)<tt>.size() == observationIndex + 1</tt>.
+	 * Given an <tt>observationIndex</tt> and <tt>observationType</tt>; new, empty strings will be added to the recommendation or deficiency list (depending on <tt>observationType</tt>)
+	 * such that <tt>criteria.get</tt>(Recommendations or Deficiencies)<tt>.size() == observationIndex + 1</tt>.
 	 * 
 	 * @see EventFormCrud
 	 * @see EventFormCrud#loadMemberFields(Long)
 	 * 
-	 * @return MISSING if no InspectionType could be found for the given uniqueID.
+	 * @return MISSING if no EventType could be found for the given uniqueID.
 	 */
 	@SkipValidation
 	public String doAdd() {

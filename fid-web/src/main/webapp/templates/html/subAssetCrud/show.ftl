@@ -38,7 +38,7 @@ ${action.setPageType('asset', 'assetconfiguration')!}
 	
 <@s.hidden name="uniqueID" id="uniqueID"/>
 <div id="assetComponents">
-	<div class="inspectionHeader">
+	<div class="eventHeader">
 		<h3><@s.text name="label.orangize_sub_assets"/></h3>
 		<p class="instructions smallInstructions">
 			<@s.text name="instructions.organize_sub_assets"/>
@@ -66,7 +66,7 @@ ${action.setPageType('asset', 'assetconfiguration')!}
 
 
 <div id="addComponents" class="componentTypes notAllowedDuringOrdering" >
-	<div class="inspectionHeader">
+	<div class="eventHeader">
 		<h3><@s.text name="label.add_new_component"/></h3>
 		<p class="instructions smallInstructions">
 			<@s.text name="instructions.add_new_component"/>

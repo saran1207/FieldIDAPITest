@@ -51,15 +51,15 @@ public class AddEventScheduleAjaxAction extends AbstractAction {
 		return SUCCESS;
 	}
 	
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		return eventType;
 	}
 	
-	public Long getInspectionTypeId() {
+	public Long getEventTypeId() {
 		return eventType.getId();
 	}
 
-	public void setInspectionTypeId(Long id) {
+	public void setEventTypeId(Long id) {
 		eventType = persistenceManager.find(EventType.class, id, getTenantId());
 		nextSchedule.setType(id);
 		nextSchedule.setTypeName(eventType.getName());

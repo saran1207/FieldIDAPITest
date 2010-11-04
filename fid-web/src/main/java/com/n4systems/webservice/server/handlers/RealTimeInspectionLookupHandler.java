@@ -12,7 +12,7 @@ public class RealTimeInspectionLookupHandler {
 	private final NewestEventsForAssetIdLoader loader;
 	
 	private long productId;
-	private Date lastInspectionDate;
+	private Date lastEventDate;
 	private List<Event> events;
 	
 	public RealTimeInspectionLookupHandler(NewestEventsForAssetIdLoader loader) {
@@ -26,9 +26,9 @@ public class RealTimeInspectionLookupHandler {
 	}
 	
 	private void clearListIfInspectionNotNewer() {
-		if (lastInspectionDate != null && events.size() > 0) {
+		if (lastEventDate != null && events.size() > 0) {
 			Event compareEvent = events.get(0);
-			if (!compareEvent.getDate().after(lastInspectionDate)) {
+			if (!compareEvent.getDate().after(lastEventDate)) {
 				events = new ArrayList<Event>();
 			}
 		}
@@ -39,8 +39,8 @@ public class RealTimeInspectionLookupHandler {
 		return this;
 	}
 	
-	public RealTimeInspectionLookupHandler setLastInspectionDate(Date lastInspectionDate) {
-		this.lastInspectionDate = lastInspectionDate;
+	public RealTimeInspectionLookupHandler setLastEventDate(Date lastEventDate) {
+		this.lastEventDate = lastEventDate;
 		return this;
 	}
 	

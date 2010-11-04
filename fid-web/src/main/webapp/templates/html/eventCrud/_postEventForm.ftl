@@ -22,7 +22,7 @@
 		<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
 	</div>
 	
-	<#if inspection.new >
+	<#if event.new >
 		<#include "_schedules.ftl"/>
 	</#if>	
 	

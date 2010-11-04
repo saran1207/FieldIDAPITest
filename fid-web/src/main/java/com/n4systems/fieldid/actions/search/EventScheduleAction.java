@@ -57,8 +57,8 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 			final AssetManager assetManager,
 			final EventScheduleManager eventScheduleManager) {
 		
-		super(implementingClass, sessionKey, "Inspection Schedule Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "inspection_schedule_search", "asset"));
+		super(implementingClass, sessionKey, "Event Schedule Report", persistenceManager, 
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "event_schedule_search", "asset"));
 		
 		this.eventManager = eventManager;
 		this.eventScheduleManager = eventScheduleManager;
@@ -129,7 +129,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		return psList;
 	}
 	
-	public List<ListingPair> getInspectionTypes() {
+	public List<ListingPair> getEventTypes() {
 		return persistenceManager.findAllLP(EventTypeGroup.class, getTenantId(), "name");
 	}
 	
@@ -142,20 +142,20 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		return employees;
 	}
 	
-	public Date getLastInspectionDate(EventSchedule schedule) {
+	public Date getLastEventDate(EventSchedule schedule) {
 		return eventManager.findLastEventDate(schedule);
 	}
 	
-	public Long getAssetIdForInspectionScheduleId(String inspectionScheduleId) {
-		return eventScheduleManager.getAssetIdForSchedule(Long.valueOf(inspectionScheduleId));
+	public Long getAssetIdForEventScheduleId(String eventScheduleId) {
+		return eventScheduleManager.getAssetIdForSchedule(Long.valueOf(eventScheduleId));
 	}
 	
-	public Long getInspectionTypeIdForInspectionScheduleId(String inspectionScheduleId) {
-		return eventScheduleManager.getEventTypeIdForSchedule(Long.valueOf(inspectionScheduleId));
+	public Long getEventTypeIdForEventScheduleId(String eventScheduleId) {
+		return eventScheduleManager.getEventTypeIdForSchedule(Long.valueOf(eventScheduleId));
 	}
 	
-	public Long getInspectionIdForInspectionScheduleId(String inspectionScheduleId) {
-		return eventScheduleManager.getEventIdForSchedule(Long.valueOf(inspectionScheduleId));
+	public Long getEventIdForEventScheduleId(String eventScheduleId) {
+		return eventScheduleManager.getEventIdForSchedule(Long.valueOf(eventScheduleId));
 	}
 	
 	public CompressedScheduleStatus[] getScheduleStatuses() {

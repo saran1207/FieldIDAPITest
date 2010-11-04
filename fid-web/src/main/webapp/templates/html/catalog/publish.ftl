@@ -31,10 +31,10 @@
 						
 						<div class="customSelection">
 							<h3><@s.text name="label.event_types"/></h3>
-							<#list inspectionTypes as inspectionType>
+							<#list eventTypes as eventType>
 								<div class="customSelectionType">
-									<@s.checkbox name="publishedInspectionTypeIds['${inspectionType.id}']" />
-									<label>${inspectionType.name?html}</label>
+									<@s.checkbox name="publishedEventTypeIds['${eventType.id}']" />
+									<label>${eventType.name?html}</label>
 								</div>
 							</#list>
 						</div>	

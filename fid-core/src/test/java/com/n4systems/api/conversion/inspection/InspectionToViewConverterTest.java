@@ -26,7 +26,7 @@ public class InspectionToViewConverterTest {
 
 	@Test
 	public void to_view_copies_simple_fields() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 //			protected void convertDirectFields(Inspection model, InspectionView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
@@ -53,7 +53,7 @@ public class InspectionToViewConverterTest {
 	
 	@Test
 	public void to_view_copies_inspection_status() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 //			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
@@ -74,7 +74,7 @@ public class InspectionToViewConverterTest {
 	
 	@Test
 	public void to_view_copies_serialnumber_to_identifier() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 //			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
@@ -95,7 +95,7 @@ public class InspectionToViewConverterTest {
 	
 	@Test
 	public void to_view_copies_performed_by_full_name() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
@@ -123,7 +123,7 @@ public class InspectionToViewConverterTest {
 		expect(loader.load()).andReturn(nextDate);
 		replay(loader);
 		
-		InspectionToViewConverter converter = new InspectionToViewConverter(loader) {
+		EventToViewConverter converter = new EventToViewConverter(loader) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
@@ -143,7 +143,7 @@ public class InspectionToViewConverterTest {
 	
 	@Test
 	public void to_view_copies_book_name() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
@@ -167,7 +167,7 @@ public class InspectionToViewConverterTest {
 	
 	@Test
 	public void to_view_allows_null_books() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
@@ -185,7 +185,7 @@ public class InspectionToViewConverterTest {
 	
 	@Test
 	public void to_view_copies_asset_status_name() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
@@ -209,7 +209,7 @@ public class InspectionToViewConverterTest {
 	
 	@Test
 	public void to_view_allows_null_asset_status() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
@@ -227,7 +227,7 @@ public class InspectionToViewConverterTest {
 	
 	@Test
 	public void to_view_copies_owner_fields() throws ConversionException {
-		InspectionToViewConverter converter = new InspectionToViewConverter(null) {
+		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertInspectionStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}

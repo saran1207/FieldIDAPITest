@@ -13,13 +13,13 @@
 	<p>
 		<label><@s.text name="label.type"/></label>
 		<span class="fieldValue">
-			<#if inspectionType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
+			<#if eventType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
 		</span>
 	</p>		
 	
 	<h2><@s.text name="label.supportedprooftesttypes"/></h2>
-	<#if inspectionType.supportedProofTests?size != 0 >
-		<#list inspectionType.supportedProofTests as proofTestType >
+	<#if eventType.supportedProofTests?size != 0 >
+		<#list eventType.supportedProofTests as proofTestType >
 			<p class="fieldValue">${ action.getText( proofTestType.displayName! ) }</p>
 		</#list>
 	<#else>
@@ -27,11 +27,11 @@
 	</#if>
 
 
-	<#if inspectionType.infoFieldNames?exists && !inspectionType.infoFieldNames.isEmpty()>
+	<#if eventType.infoFieldNames?exists && !eventType.infoFieldNames.isEmpty()>
 		<div >
 			<h2><@s.text name="label.eventattributes"/></h2>
 			<div id="infoFields">
-				<#list inspectionType.infoFieldNames as infoField >
+				<#list eventType.infoFieldNames as infoField >
 					<#include "_eventAttribute.ftl"/>
 				</#list>
 			</div>
@@ -41,10 +41,10 @@
 
 	
 	<h2><@s.text name="label.eventform"/></h2>
-	<#if !inspectionType.sections.isEmpty()  >
+	<#if !eventType.sections.isEmpty()  >
 		
-		<div id="inspectionForm">
-			<#list inspectionType.sections as section >
+		<div id="eventForm">
+			<#list eventType.sections as section >
 				<#if !section.retired >
 					<h2>${section.title}</h2>
 					<div id="${section.title}">

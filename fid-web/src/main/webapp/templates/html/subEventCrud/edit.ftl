@@ -13,7 +13,7 @@ ${action.setPageType('inspection', 'edit')!}
 	<#include "/templates/html/eventCrud/_form.ftl"/>
 
 	<div class="formAction">
-		<button onclick="return redirect('<@s.url action="masterEventEdit" uniqueID="${masterInspection.inspection.id}" token="${token}"/>' );"><@s.text name="label.cancel"/></button>
+		<button onclick="return redirect('<@s.url action="masterEventEdit" uniqueID="${masterEvent.event.id}" token="${token}"/>' );"><@s.text name="label.cancel"/></button>
 		<@s.submit key="hbutton.store" />
 	</div>
 	

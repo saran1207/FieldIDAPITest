@@ -31,7 +31,7 @@ ${action.setPageType('job','events')!}
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
-			<@s.text name="label.emptyprojecteventslist"/> <#if sessionUser.hasAccess("createinspection")><@s.text name="label.emptyprojecteventlistinstruction"/></#if></label>
+			<@s.text name="label.emptyprojecteventslist"/> <#if sessionUser.hasAccess("createevent")><@s.text name="label.emptyprojecteventlistinstruction"/></#if></label>
 		</p>
 	</div>
 <#else>

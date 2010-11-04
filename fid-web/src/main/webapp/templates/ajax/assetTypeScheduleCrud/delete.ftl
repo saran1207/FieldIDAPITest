@@ -2,7 +2,7 @@
 	var container = null;
 	
 	<#if schedule.override>
-		<#assign containerId="eventFrequencyOverride_${inspectionTypeId}_${schedule.owner.id}"/>
+		<#assign containerId="eventFrequencyOverride_${eventTypeId}_${schedule.owner.id}"/>
 		container = $('${containerId}');
 		if( container != null ) {
 			container.remove();
@@ -10,10 +10,10 @@
 		
 	<#else>
 		
-		<#assign containerId="eventFrequency_${inspectionTypeId}" />
+		<#assign containerId="eventFrequency_${eventTypeId}" />
 		container = $('${containerId}');
-		$('eventFrequencyOverrides_${inspectionTypeId}_container').hide();
-		removeChildren( $('eventFrequencyOverrides_${inspectionTypeId}') );
+		$('eventFrequencyOverrides_${eventTypeId}_container').hide();
+		removeChildren( $('eventFrequencyOverrides_${eventTypeId}') );
 		
 		${schedule.setId(null)!}
 		<#assign html>

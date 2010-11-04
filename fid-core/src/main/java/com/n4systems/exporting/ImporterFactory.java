@@ -2,15 +2,15 @@ package com.n4systems.exporting;
 
 
 import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
-import com.n4systems.api.conversion.inspection.InspectionToModelConverter;
+import com.n4systems.api.conversion.inspection.EventToModelConverter;
 import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
 import com.n4systems.api.conversion.asset.AssetToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exporting.io.MapReader;
-import com.n4systems.handlers.creator.InspectionPersistenceFactory;
-import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
+import com.n4systems.handlers.creator.EventPersistenceFactory;
+import com.n4systems.handlers.creator.inspections.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.EventType;
@@ -75,12 +75,12 @@ public class ImporterFactory {
 		return ServiceLocator.getAssetManager();
 	}
 
-	protected InspectionPersistenceFactory createInspectionPersistenceFactory() {
-		return new ProductionInspectionPersistenceFactory();
+	protected EventPersistenceFactory createEventPersistenceFactory() {
+		return new ProductionEventPersistenceFactory();
 	}
 
-	protected InspectionToModelConverter createInspectionToModelConverter(EventType type) {
-		InspectionToModelConverter converter = new InspectionToModelConverter(
+	protected EventToModelConverter createEventToModelConverter(EventType type) {
+		EventToModelConverter converter = new EventToModelConverter(
 				loaderFactory.createOrgByNameLoader(), 
 				loaderFactory.createSmartSearchListLoader(), 
 				loaderFactory.createAssetStatusByNameLoader(), 
@@ -103,8 +103,8 @@ public class ImporterFactory {
 		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
 	}
 
-	public EventImporter createInspectionImporter(MapReader reader, Long modifiedBy, EventType type) {
-		EventImporter importer = new EventImporter(reader, createViewValidator(), createInspectionPersistenceFactory(), createInspectionToModelConverter(type));
+	public EventImporter createEventImporter(MapReader reader, Long modifiedBy, EventType type) {
+		EventImporter importer = new EventImporter(reader, createViewValidator(), createEventPersistenceFactory(), createEventToModelConverter(type));
 		importer.setModifiedBy(modifiedBy);
 		return importer;
 	}

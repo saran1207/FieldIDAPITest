@@ -19,10 +19,10 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 public class CopyEventFactory {
 
-	public static Event copyInspection( Event event) {
+	public static Event copyEvent( Event event) {
 		Event newEvent = new Event();
 		
-		copyAbstractInspection(newEvent, event);
+		copyAbstractEvent(newEvent, event);
 		
 		newEvent.setAssignedTo(event.getAssignedTo());
 		newEvent.setOwner( event.getOwner() );
@@ -40,16 +40,16 @@ public class CopyEventFactory {
 		
 		newEvent.setDate( ( event.getDate() != null ) ? new Date( event.getDate().getTime() ) : null );
 		newEvent.setProofTestInfo( copyProofTestInfo( event.getProofTestInfo() ) );
-		newEvent.setSubEvents( copySubInspections( event.getSubEvents() ) );
+		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
 		
 		return newEvent;
 	}
 	
-	protected static List<SubEvent> copySubInspections( List<SubEvent> oldSubEvents) {
+	protected static List<SubEvent> copySubEvents( List<SubEvent> oldSubEvents) {
 		List<SubEvent> newSubEvents = new ArrayList<SubEvent>();
 		
 		for( SubEvent oldSubEvent : oldSubEvents) {
-			newSubEvents.add( copySubInspection(oldSubEvent) );
+			newSubEvents.add( copySubEvent(oldSubEvent) );
 		}
 		
 		return newSubEvents;
@@ -67,9 +67,9 @@ public class CopyEventFactory {
 		return newProofTestInfo;
 	}
 	
-	public static SubEvent copySubInspection( SubEvent oldSubEvent) {
+	public static SubEvent copySubEvent( SubEvent oldSubEvent) {
 		SubEvent newSubEvent = new SubEvent();
-		copyAbstractInspection(newSubEvent, oldSubEvent);
+		copyAbstractEvent(newSubEvent, oldSubEvent);
 		newSubEvent.setName( oldSubEvent.getName() );
 		
 		
@@ -77,7 +77,7 @@ public class CopyEventFactory {
 	}
 	
 	
-	protected static void copyAbstractInspection( AbstractEvent newEvent, AbstractEvent originalEvent) {
+	protected static void copyAbstractEvent( AbstractEvent newEvent, AbstractEvent originalEvent) {
 		copyEntity(newEvent, originalEvent);
 		
 		newEvent.setAssetStatus(originalEvent.getAssetStatus());
@@ -126,7 +126,7 @@ public class CopyEventFactory {
 			copyEntity( newResult, oldResult );
 			newResult.setCriteria( oldResult.getCriteria() );
 			newResult.setState( oldResult.getState() );
-			newResult.setInspection(newEvent);
+			newResult.setEvent(newEvent);
 			newResult.setRecommendations( copyRecommendations( oldResult.getRecommendations() ) );
 			newResult.setDeficiencies( copyDeficiencies( oldResult.getDeficiencies() ) );
 			

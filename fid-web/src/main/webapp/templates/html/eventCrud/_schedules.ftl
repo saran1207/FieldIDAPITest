@@ -21,7 +21,7 @@
 	<h2><@s.text name="label.add_a_schedule"/></h2>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.event_type"/></label>
-		<@s.select name="nextInspectionTypeSelection" id="nextInspectionTypeSelection" list="eventTypes" listKey="id" listValue="name" theme="fieldid"/>
+		<@s.select name="nextEventTypeSelection" id="nextEventTypeSelection" list="eventTypes" listKey="id" listValue="name" theme="fieldid"/>
 	</div>
 	
 	<div class="infoSet">
@@ -45,7 +45,7 @@
 	addScheduleUrl = '<@s.url action="addSchedule" namespace="/ajax" />';
 	autoSuggestUrl = '<@s.url action="autoSuggestSchedule" namespace="/ajax" />';
 	dateErrorText = '<@s.text name="error.mustbeadate"/>';
-	inspectionTypeId = '${type!0}';
+	eventTypeId = '${type!0}';
 	assetId = '${assetId!0}';
 	
 	onDocumentLoad(scheduleListUpdated);

@@ -22,7 +22,7 @@
 					<@s.text name="label.view_schedules"/>
 				</a>
 			</li>
-			<#if sessionUser.hasAccess('createinspection') >
+			<#if sessionUser.hasAccess('createevent') >
 				<li id="floatingDropdownStartEventLink">
 					<a href='<@s.url action="quickEvent" assetId="${entityId}" />' >
 						<@s.text name="label.startevent"/>

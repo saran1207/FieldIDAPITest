@@ -9,5 +9,5 @@
 	$('scheduleList').show();
 	$('schedules').insert({top: "${html}"});
 	$('newSchedule').replace("${form}");
-	$('type_${inspectionSchedule.id}').highlight();
+	$('type_${eventSchedule.id}').highlight();
 </#escape>

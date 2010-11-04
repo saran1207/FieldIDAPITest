@@ -78,7 +78,7 @@ abstract public class UploadAttachmentSupport extends AbstractCrud {
 	 * <li>Attachments which remain attached will have their {@link FileAttachment#getComments() comments} and
 	 * {@link FileAttachment#getModifiedBy() modifiedBy} user updated provided the <tt>comments</tt> have changed.</li>
 	 * <p/>
-	 * @param hasAttachments	A bean implementing {@link HasFileAttachments} to update and clean inspections on
+	 * @param hasAttachments	A bean implementing {@link HasFileAttachments} to update and clean events on
 	 * @param modifiedBy		The {@link User} to set as the modifiedBy user if comments on the attachment have changed. 
 	 */
 	protected void updateAttachmentList(HasFileAttachments hasAttachments, User modifiedBy) {

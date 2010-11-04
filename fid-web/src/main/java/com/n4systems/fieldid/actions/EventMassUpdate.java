@@ -26,7 +26,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
 
-@UserPermissionFilter(userRequiresOneOf = { Permissions.EditInspection })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.EditEvent})
 public class EventMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(EventMassUpdate.class);
@@ -52,7 +52,7 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 
 	private void applyCriteriaDefaults() {
 		setOwnerId(criteria.getOwnerId());
-		setInspectionBook(criteria.getInspectionBook());
+		setEventBook(criteria.getEventBook());
 		setAssetStatus(criteria.getAssetStatus());
 	}
 
@@ -84,17 +84,17 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 
 		try {
 			event.setAdvancedLocation(location.createLocation());
-			List<Long> inspectionIds = getSearchIds(criteria, criteria.getSecurityFilter());
-			Long results = massUpdateManager.updateInspections(inspectionIds, event, select, getSessionUser().getUniqueID());
+			List<Long> eventIds = getSearchIds(criteria, criteria.getSecurityFilter());
+			Long results = massUpdateManager.updateEvents(eventIds, event, select, getSessionUser().getUniqueID());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
 			addFlashMessage(getText("message.eventmassupdatesuccessful", messageArgs));
 
 			return SUCCESS;
 		} catch (UpdateFailureException ufe) {
-			logger.error("failed to run a mass update on inspections", ufe);
+			logger.error("failed to run a mass update on events", ufe);
 		} catch (Exception e) {
-			logger.error("failed to run a mass update on inspections", e);
+			logger.error("failed to run a mass update on events", e);
 		}
 
 		addActionError(getText("error.failedtomassupdate"));
@@ -102,20 +102,20 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	
-	public Long getInspectionBook() {
+	public Long getEventBook() {
 		return (event.getBook() == null) ? null : event.getBook().getId();
 	}
 
-	public void setInspectionBook(Long inspectionBookId) {
-		if (inspectionBookId == null) {
+	public void setEventBook(Long eventBookId) {
+		if (eventBookId == null) {
 			event.setBook(null);
-		} else if (event.getBook() == null || !inspectionBookId.equals(event.getBook().getId())) {
-			EventBook eventBook = persistenceManager.find(EventBook.class, inspectionBookId);
+		} else if (event.getBook() == null || !eventBookId.equals(event.getBook().getId())) {
+			EventBook eventBook = persistenceManager.find(EventBook.class, eventBookId);
 			event.setBook(eventBook);
 		}
 	}
 
-	public Collection<ListingPair> getInspectionBooks() {
+	public Collection<ListingPair> getEventBooks() {
 		EventBookListLoader loader = new EventBookListLoader(getSecurityFilter());
 		loader.setOpenBooksOnly(true);
 		return loader.loadListingPair();

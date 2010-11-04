@@ -28,7 +28,7 @@ public class EventTypeBuilder extends EntityWithTenantBuilder<EventType> {
 	}
 	
 	public static EventTypeBuilder anEventType() {
-		return new EventTypeBuilder("some Name", "some description", true, false, false, EventType.DEFAULT_FORM_VERSION, anInspectionTypeGroup().build(), false);
+		return new EventTypeBuilder("some Name", "some description", true, false, false, EventType.DEFAULT_FORM_VERSION, anEventTypeGroup().build(), false);
 	}
 	
 	public EventTypeBuilder named(String name) {

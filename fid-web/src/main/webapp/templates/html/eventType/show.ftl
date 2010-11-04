@@ -28,30 +28,30 @@ ${action.setPageType('inspection_type', 'show')!}
 	<p>	
 		<label><@s.text name="label.name"/></label>
 		<span class="fieldValue">
-			${inspectionType.name?html}
+			${eventType.name?html}
 		</span>
 	</p>
 	<p>
 		<label><@s.text name="label.group"/></label>
 		<span class="fieldValue">
-			<a href="<@s.url action="eventTypeGroup" uniqueID="${inspectionType.group.id}"/>">${inspectionType.group.name?html}</a>
+			<a href="<@s.url action="eventTypeGroup" uniqueID="${eventType.group.id}"/>">${eventType.group.name?html}</a>
 		</span>
 	</p>
 	<p>
 		<label><@s.text name="label.type"/></label>
 		<span class="fieldValue">
-			<#if inspectionType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
+			<#if eventType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
 		</span>
 	</p>		
 	<#if securityGuard.assignedToEnabled>
 		<p>
 			<label><@s.text name="label.assigned_to_can_be_updated"/></label>
-			<span class="fieldValue">${inspectionType.assignedToAvailable?string(action.getText('label.yes'), action.getText('label.no'))}</span>
+			<span class="fieldValue">${eventType.assignedToAvailable?string(action.getText('label.yes'), action.getText('label.no'))}</span>
 		</p>	
 	</#if>
 	<h2><@s.text name="label.supportedprooftesttypes"/></h2>
-	<#if inspectionType.supportedProofTests?size != 0 >
-		<#list inspectionType.supportedProofTests as proofTestType >
+	<#if eventType.supportedProofTests?size != 0 >
+		<#list eventType.supportedProofTests as proofTestType >
 			<p class="fieldValue">${ action.getText( proofTestType.displayName! ) }</p>
 		</#list>
 	<#else>
@@ -59,11 +59,11 @@ ${action.setPageType('inspection_type', 'show')!}
 	</#if>
 
 
-	<#if inspectionType.infoFieldNames?exists && !inspectionType.infoFieldNames.isEmpty()>
+	<#if eventType.infoFieldNames?exists && !eventType.infoFieldNames.isEmpty()>
 		<div >
 			<h2><@s.text name="label.eventattributes"/></h2>
 			<div id="infoFields">
-				<#list inspectionType.infoFieldNames as infoField >
+				<#list eventType.infoFieldNames as infoField >
 					<#include "_eventAttribute.ftl"/>
 				</#list>
 			</div>
@@ -73,10 +73,10 @@ ${action.setPageType('inspection_type', 'show')!}
 
 	
 	<h2><@s.text name="label.eventform"/></h2>
-	<#if !inspectionType.sections.isEmpty()  >
+	<#if !eventType.sections.isEmpty()  >
 		
-		<div id="inspectionForm">
-			<#list inspectionType.sections as section >
+		<div id="eventForm">
+			<#list eventType.sections as section >
 				<#if !section.retired >
 					<h2>${section.title}</h2>
 					<div id="${section.title}">

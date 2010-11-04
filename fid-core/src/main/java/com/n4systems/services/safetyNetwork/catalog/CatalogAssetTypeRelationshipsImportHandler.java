@@ -90,7 +90,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	public Set<Long> getAdditionalInspectionTypesForRelationships(Set<Long> assetTypeIds, Set<Long> inspectionTypeIds) {
 		Set<Long> additionalInspectionTypeIds = new HashSet<Long>();
 		if (!assetTypeIds.isEmpty()) {
-			additionalInspectionTypeIds.addAll(importCatalog.getPublishedInspectionTypeIdsConnectedTo(assetTypeIds));
+			additionalInspectionTypeIds.addAll(importCatalog.getPublishedEventTypeIdsConnectedTo(assetTypeIds));
 			additionalInspectionTypeIds.removeAll(inspectionTypeIds);
 		}
 		

@@ -57,20 +57,20 @@ public class InspectionCreatorTest {
 	@Test
 	public void should_create_dependancies_from_the_factory_with_the_entity_manager_from_the_created_transaction() throws Exception {
 		Transaction transaction = transactionManager.startTransaction();
-		InspectionPersistenceFactory inspectionPersistenceFactory = createMock(InspectionPersistenceFactory.class);
+		EventPersistenceFactory eventPersistenceFactory = createMock(EventPersistenceFactory.class);
 		
 		// dependency creation.
-		expect(inspectionPersistenceFactory.createInspectionSaver(transaction)).andReturn(new NullEventSaver());
-		expect(inspectionPersistenceFactory.createNextInspectionScheduleService(transaction)).andReturn(new NullNextInspectionScheduleSerivce());
-		expect(inspectionPersistenceFactory.createCreateInspectionAuditLogger()).andReturn(new NullAuditLogger());
+		expect(eventPersistenceFactory.createEventSaver(transaction)).andReturn(new NullEventSaver());
+		expect(eventPersistenceFactory.createNextEventScheduleService(transaction)).andReturn(new NullNextInspectionScheduleSerivce());
+		expect(eventPersistenceFactory.createCreateEventAuditLogger()).andReturn(new NullAuditLogger());
 		
-		replay(inspectionPersistenceFactory);
+		replay(eventPersistenceFactory);
 
-		EventCreator sut = new EventCreator(transactionManager, inspectionPersistenceFactory);
+		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
 		sut.create(new CreateEventParameterBuilder(anEvent().build(), 1L).build());
 		
-		verify(inspectionPersistenceFactory);
+		verify(eventPersistenceFactory);
 	}
 	
 	@Test

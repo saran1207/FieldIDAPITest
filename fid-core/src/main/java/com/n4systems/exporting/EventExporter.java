@@ -1,7 +1,7 @@
 package com.n4systems.exporting;
 
 import com.n4systems.api.conversion.ModelToViewConverter;
-import com.n4systems.api.conversion.inspection.InspectionToViewConverter;
+import com.n4systems.api.conversion.inspection.EventToViewConverter;
 import com.n4systems.api.model.EventView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
 import com.n4systems.exporting.io.MapWriter;
@@ -21,7 +21,7 @@ public class EventExporter implements Exporter {
 	}
 	
 	public EventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader) {
-		this(eventLoader, new ExportMapMarshaler<EventView>(EventView.class), new InspectionToViewConverter(nextDateLoader));
+		this(eventLoader, new ExportMapMarshaler<EventView>(EventView.class), new EventToViewConverter(nextDateLoader));
 	}
 
 	@Override

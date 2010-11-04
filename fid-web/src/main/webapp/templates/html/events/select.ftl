@@ -7,7 +7,7 @@
 		<h2 class="clean"><a href="<@s.url action="selectEventAsset"/>"><@s.text name="label.perform_event_single_asset"/></a></h2>
 		<p><a href="<@s.url action="selectEventAsset"/>"><@s.text name="label.perform_event_single_asset.full"/></a></p>
 	</li>
-	<#if sessionUser.hasAccess("createinspection") == true >
+	<#if sessionUser.hasAccess("createevent") == true >
 		<li id="multipleEvents">
 			<h2 class="clean"><a href="<@s.url action="assetSelection"/>"><@s.text name="label.multi_event"/></a></h2>
 			<p><a href="<@s.url action="assetSelection"/>"><@s.text name="label.multi_event.full"><@s.param>${maxAssetsFromMassEvent!250}</@s.param></@s.text></a></p>

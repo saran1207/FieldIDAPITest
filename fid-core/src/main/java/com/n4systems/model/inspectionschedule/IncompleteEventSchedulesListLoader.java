@@ -38,7 +38,7 @@ public class IncompleteEventSchedulesListLoader extends ListLoader<EventSchedule
 		return this;
 	}
 
-	public IncompleteEventSchedulesListLoader setInspectionType(EventType eventType) {
+	public IncompleteEventSchedulesListLoader setEventType(EventType eventType) {
 		this.eventType = eventType;
 		return this;
 	}

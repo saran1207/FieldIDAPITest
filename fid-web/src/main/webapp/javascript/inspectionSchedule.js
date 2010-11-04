@@ -24,6 +24,6 @@ function removeSchedule( inspTypeId, assetId, uniqueId ) {
 
 
 function progressStopped(uniqueId) {
-	$('inspectNow_' + uniqueId).show();
+	$('startEventNow_' + uniqueId).show();
 	$('stopProgress_' + uniqueId).hide();
 }

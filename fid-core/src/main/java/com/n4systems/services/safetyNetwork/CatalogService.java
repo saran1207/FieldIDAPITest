@@ -24,13 +24,13 @@ public interface CatalogService {
 
 	public List<ListingPair> getPublishedAssetTypesLP();
 	
-	public Set<Long> getInspectionTypeIdsPublished();
+	public Set<Long> getEventTypeIdsPublished();
 
-	public List<ListingPair> getPublishedInspectionTypesLP();
+	public List<ListingPair> getPublishedEventTypesLP();
 
 	public Catalog publishAssetTypes(Set<AssetType> assetTypes);
 	
-	public Catalog publishInspectionTypes(Set<EventType> eventTypes);
+	public Catalog publishEventTypes(Set<EventType> eventTypes);
 
 	public AssetType getPublishedAssetType(Long assetTypeId, String...postFetchFields);
 	
@@ -42,15 +42,15 @@ public interface CatalogService {
 	
 	public Long getAutoAttributeCountFor(Long assetTypeId);
 
-	public Set<ListingPair> getInspectionTypeGroupsFor(Set<Long> inspectionTypeIds);
+	public Set<ListingPair> getEventTypeGroupsFor(Set<Long> eventTypeIds);
 	
-	public EventType getPublishedInspectionType(Long inspectionTypeId);
+	public EventType getPublishedEventType(Long eventTypeId);
 	
-	public List<StateSet> getStateSetsUsedIn(Set<Long> inspectionTypeIds);
+	public List<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds);
 	
 	public AutoAttributeCriteria getCriteriaFor(Long assetTypeId);
 	
 	public Pager<AutoAttributeDefinition> getDefinitionPageFor(Long assetTypeId, int pageNumber, int pageSize);
 	
-	public Set<Long> getPublishedInspectionTypeIdsConnectedTo(Set<Long> assetTypeIds);
+	public Set<Long> getPublishedEventTypeIdsConnectedTo(Set<Long> assetTypeIds);
 }

@@ -37,7 +37,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	private List<Listable<String>> periodStartList;
 	private List<Listable<String>> periodEndList;
 	private List<Listable<Long>> assetTypeList;
-	private List<Listable<Long>> inspectionTypeList;
+	private List<Listable<Long>> eventTypeList;
 	private List<FrequencyGroupView> frequencyGroups;
 	
 	private List<NotificationSetting> settingsList;
@@ -167,7 +167,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 			return MISSING;
 			
 		} catch (Exception e) {
-			logger.error("Could not delete Inspection Schedule", e);
+			logger.error("Could not delete Event Schedule", e);
 			addActionErrorText("error.notificationsettingdeletefailed");
 			
 			return ERROR;
@@ -211,12 +211,12 @@ public class NotificationSettingsCrud extends AbstractCrud {
     	return periodEndList;
     }
 
-	public List<Listable<Long>> getInspectionTypeList() {
-		if (inspectionTypeList == null) {
+	public List<Listable<Long>> getEventTypeList() {
+		if (eventTypeList == null) {
 			EventTypeListableLoader loader = getLoaderFactory().createEventTypeListableLoader();
-			inspectionTypeList = loader.load();
+			eventTypeList = loader.load();
 		}
-    	return inspectionTypeList;
+    	return eventTypeList;
     }
 
 	public List<Listable<Long>> getAssetTypeList() {

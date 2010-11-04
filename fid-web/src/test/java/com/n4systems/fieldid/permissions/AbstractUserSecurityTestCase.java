@@ -12,8 +12,8 @@ public abstract class AbstractUserSecurityTestCase {
 		
 		switch (permission) {
 			case Permissions.Tag : permissionName="Tag"; break;
-			case Permissions.CreateInspection : permissionName = "CreateInspection"; break;
-			case Permissions.EditInspection : permissionName = "EditInspection"; break;
+			case Permissions.CreateEvent: permissionName = "CreateEvent"; break;
+			case Permissions.EditEvent: permissionName = "EditEvent"; break;
 			case Permissions.ManageEndUsers : permissionName = "ManageEndUsers"; break;
 			case Permissions.ManageJobs : permissionName = "ManageJobs"; break;
 			case Permissions.ManageSafetyNetwork : permissionName = "ManageSafetyNetwork"; break;

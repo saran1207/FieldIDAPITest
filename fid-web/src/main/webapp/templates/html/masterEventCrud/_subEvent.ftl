@@ -5,11 +5,11 @@
 		</div>
 	</div>
 	
-	<div class="performedInspection" id="inspectionPreformed_${subAsset.id}" >
+	<div class="performedEvent" id="eventPreformed_${subAsset.id}" >
 		<ul>
-			<#if masterInspection?exists >
-				<#list action.getInspectionsFor(subAsset) as subInspection >
-					<li>${subInspection.type.name!} - <a href="<@s.url action="subEventEdit" uniqueID="${subInspection.id}" token="${token}"/>"><@s.text name="label.edit_this_event"/></a></li>
+			<#if masterEvent?exists >
+				<#list action.getEventsFor(subAsset) as subEvent >
+					<li>${subEvent.type.name!} - <a href="<@s.url action="subEventEdit" uniqueID="${subEvent.id}" token="${token}"/>"><@s.text name="label.edit_this_event"/></a></li>
 				</#list>
 			</#if>
 		</ul>		

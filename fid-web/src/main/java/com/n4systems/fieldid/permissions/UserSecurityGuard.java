@@ -5,8 +5,8 @@ public interface UserSecurityGuard {
 	public boolean isAllowedTag();
 	public boolean isAllowedManageSystemConfig();
 	public boolean isAllowedManageEndUsers();
-	public boolean isAllowedCreateInspection();
-	public boolean isAllowedEditInspection();
+	public boolean isAllowedCreateEvent();
+	public boolean isAllowedEditEvent();
 	public boolean isAllowedManageJobs();
 	public boolean isAllowedManageSafetyNetwork();
 	public boolean isAllowedManageSystemUsers();

@@ -6,13 +6,13 @@ import com.n4systems.ejb.EventManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.util.ServiceLocator;
 
-public class LastInspectionDateHandler extends DateTimeHandler {
+public class LastEventDateHandler extends DateTimeHandler {
 
 	private final EventManager eventManager;
 		
-	public LastInspectionDateHandler(AbstractAction action) {
+	public LastEventDateHandler(AbstractAction action) {
 		super(action);
-		eventManager = ServiceLocator.getInspectionManager();
+		eventManager = ServiceLocator.getEventManager();
 	}
 
 	public String handleWeb(Long entityId, Object value) {

@@ -51,7 +51,7 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 	}
 	
 	@SkipValidation 
-	@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig, Permissions.Tag, Permissions.CreateInspection, Permissions.EditInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig, Permissions.Tag, Permissions.CreateEvent, Permissions.EditEvent})
 	public String doShow() {
 		if( commentTemplate == null ) {
 			commentTemplate = new CommentTempBean();

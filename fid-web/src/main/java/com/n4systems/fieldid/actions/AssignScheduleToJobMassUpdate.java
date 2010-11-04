@@ -79,7 +79,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 	}
 
 	@SkipValidation
-	public String doEditInspections() {
+	public String doEditEvents() {
 		if (!findReportCriteria()) {
 			addFlashErrorText("error.searchexpired");
 			return ERROR;
@@ -87,19 +87,19 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		return SUCCESS;
 	}
 	
-	public String doSaveInspections() {
+	public String doSaveEvents() {
 		if (!findReportCriteria()) {
 			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 		
 		try {
-			List<Long> inspectionIds = getSearchIds(reportCriteria, reportCriteria.getSecurityFilter());
-			List<Long> scheduleIds = massUpdateManager.createSchedulesForInspections(inspectionIds, getSessionUserId());
+			List<Long> eventIds = getSearchIds(reportCriteria, reportCriteria.getSecurityFilter());
+			List<Long> scheduleIds = massUpdateManager.createSchedulesForEvents(eventIds, getSessionUserId());
 			Long results = massUpdateManager.assignToJob(scheduleIds, job, getSessionUserId());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
-			addFlashMessage(getText("message.inspectionscheduleassignedtojobsuccessfully", messageArgs));
+			addFlashMessage(getText("message.eventscheduleassignedtojobsuccessfully", messageArgs));
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error("failed to run a mass assignment of schedules to a job", e);

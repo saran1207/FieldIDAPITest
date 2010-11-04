@@ -8,8 +8,8 @@
 		</style>
 	<script type="text/javascript">
 		function setId(newId, newName){
-			$('inspectionTypeIdToUpdate').value=newId;
-			$('inspectionTypeName').innerHTML=newName;
+			$('eventTypeIdToUpdate').value=newId;
+			$('eventTypeName').innerHTML=newName;
 			$('orgPickerForm').show();
 		}
 	</script>
@@ -17,49 +17,49 @@
 </head>
 ${action.setPageType('asset_type', 'schedule_frequencies')!}
 <#include "/templates/html/common/_formErrors.ftl"/>
-<#if !inspectionTypes.isEmpty() >
-	<table id="inspectionListTable" class="list" >
+<#if !eventTypes.isEmpty() >
+	<table id="eventListTable" class="list" >
 		<tr>
 			<th class="rowName"><@s.text name="label.eventtype"/></th>
 			
 			<th><@s.text name="label.schedulefrequency"/></th>
 		</tr>
 		
-		<#list inspectionTypes as inspectionType>
+		<#list eventTypes as eventType>
 		  
-			<tr id="event_${inspectionType.id}">
-				<td class="name">${inspectionType.name} 
-					<#if inspectionType.discription?exists > - ${(inspectionType.description)!}</#if>
+			<tr id="event_${eventType.id}">
+				<td class="name">${eventType.name}
+					<#if eventType.discription?exists > - ${(eventType.description)!}</#if>
 				</td>
 				<td>
-					<div id="eventFrequency_${inspectionType.id}" class="schedule">
-						<#if schedules[inspectionType.name]?exists >
-							<#assign schedule=schedules[inspectionType.name] />
+					<div id="eventFrequency_${eventType.id}" class="schedule">
+						<#if schedules[eventType.name]?exists >
+							<#assign schedule=schedules[eventType.name] />
 						<#else>
 							<#assign schedule=action.newSchedule() />
 						</#if>
 						<#include "_show.ftl" />
 					</div>
 					
-					<div id="eventFrequencyOverrides_${inspectionType.id}_container" <#if !schedules[inspectionType.name]?exists >style="display:none"</#if> >
+					<div id="eventFrequencyOverrides_${eventType.id}_container" <#if !schedules[eventType.name]?exists >style="display:none"</#if> >
 						<p style="padding-top:10px; font-size:12px;"><@s.text name="label.overrides"/> 
-							<a id="overrideExpand_${inspectionType.id}" href="javasript:void(0);" onclick="expandOverride( ${inspectionType.id} ); $('orgPickerForm').hide();; return false;"><img src="<@s.url value="/images/expand.gif" includeParams="none"/>" alt="[+]" title="show customer overrides"/></a>
-							<a style="display:none" id="overrideCollapse_${inspectionType.id}" href="javasript:void(0);" onclick="collapseOverride( ${inspectionType.id} ); $('orgPickerForm').hide();; return false;"><img src="<@s.url value="/images/collapse.gif" includeParams="none"/>" alt="[+]" title="hide customer overrides"/></a>
+							<a id="overrideExpand_${eventType.id}" href="javasript:void(0);" onclick="expandOverride( ${eventType.id} ); $('orgPickerForm').hide();; return false;"><img src="<@s.url value="/images/expand.gif" includeParams="none"/>" alt="[+]" title="show customer overrides"/></a>
+							<a style="display:none" id="overrideCollapse_${eventType.id}" href="javasript:void(0);" onclick="collapseOverride( ${eventType.id} ); $('orgPickerForm').hide();; return false;"><img src="<@s.url value="/images/collapse.gif" includeParams="none"/>" alt="[+]" title="hide customer overrides"/></a>
 						</p>
 						
-						<div id="overrides_${inspectionType.id}"  style="display:none">
-							<div id="eventFrequencyOverrides_${inspectionType.id}" >
-								<#if overrideSchedules[inspectionType.name]?exists >
-									<#list overrideSchedules[inspectionType.name] as schedule >
-										<div id="eventFrequencyOverride_${inspectionType.id}_${schedule.owner.id}" class="override customerOverride"> 
+						<div id="overrides_${eventType.id}"  style="display:none">
+							<div id="eventFrequencyOverrides_${eventType.id}" >
+								<#if overrideSchedules[eventType.name]?exists >
+									<#list overrideSchedules[eventType.name] as schedule >
+										<div id="eventFrequencyOverride_${eventType.id}_${schedule.owner.id}" class="override customerOverride">
 											<#include "_show.ftl"/>
 										</div>
 									</#list>
 								</#if>
 							</div>	 
-							<div id="eventFrequencyOverrideForm_${inspectionType.id}" class="overrideForm">			
+							<div id="eventFrequencyOverrideForm_${eventType.id}" class="overrideForm">
 								<#assign schedule=action.newSchedule() />
-								<a href="javascript:void(0);" onclick="setId('${inspectionType.id}','${inspectionType.name}'); translate($('orgFormContainer'), this, 0, 0); return false;" ><@s.text name="label.add_override" /></a>
+								<a href="javascript:void(0);" onclick="setId('${eventType.id}','${eventType.name}'); translate($('orgFormContainer'), this, 0, 0); return false;" ><@s.text name="label.add_override" /></a>
 							</div>
 						</div>
 					</div>
@@ -82,7 +82,7 @@ ${action.setPageType('asset_type', 'schedule_frequencies')!}
 	<@s.form id="orgForm" name="orgPickerForm" action="eventFrequencyOverrideCreate" theme="fieldidSimple" >
 		<@s.hidden name="assetTypeId" />
 		<@s.hidden name="uniqueID" />
-		<@s.hidden id="inspectionTypeIdToUpdate" name="inspectionTypeId"/>
+		<@s.hidden id="eventTypeIdToUpdate" name="eventTypeId"/>
 		<h3><@s.text name="label.overrides_title"/></h3>
 		<br/>
 		<p><@s.text name="label.overrides_description"/></p>
@@ -100,7 +100,7 @@ ${action.setPageType('asset_type', 'schedule_frequencies')!}
 		
 		, <@s.text name="label.schedule_a"/> 
 		
-		<b><span id="inspectionTypeName" > </span> </b>&nbsp;<@s.text name="label.every"/> 
+		<b><span id="eventTypeName" > </span> </b>&nbsp;<@s.text name="label.every"/> 
 		<span class="frequency">
 			<@s.textfield name="frequency"/>
 		</span>

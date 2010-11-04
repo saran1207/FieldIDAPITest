@@ -89,7 +89,7 @@ public class ServiceLocator {
 		return new EventScheduleManagerEJBContainer();
 	}
 
-	public static final EventManager getInspectionManager() {
+	public static final EventManager getEventManager() {
 		return new EventManagerEJBContainer();
 	}
 

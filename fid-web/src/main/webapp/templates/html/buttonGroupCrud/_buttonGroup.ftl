@@ -2,7 +2,7 @@
 	<#list states as state >
 		<#if !state.retired >
 			<li>
-				<div class="inspectionButton"><img src="<@s.url value="/images/inspectionButtons/${state.buttonName}.png"/>"/></div> 
+				<div class="eventButton"><img src="<@s.url value="/images/inspectionButtons/${state.buttonName}.png"/>"/></div> 
 				<div>${state.displayName}</div>
 			</li>
 		</#if>

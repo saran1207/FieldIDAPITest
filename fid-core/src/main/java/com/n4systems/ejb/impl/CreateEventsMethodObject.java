@@ -12,10 +12,10 @@ import com.n4systems.model.Event;
 
 public interface CreateEventsMethodObject {
 
-	public List<Event> createInspections(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws ProcessingProofTestException,
+	public List<Event> createEvents(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws ProcessingProofTestException,
 	FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset;
 
-	public List<Event> createInspections(String transactionGUID, List<Event> events) throws ProcessingProofTestException,
+	public List<Event> createEvents(String transactionGUID, List<Event> events) throws ProcessingProofTestException,
 			FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset;
 
 }

@@ -54,7 +54,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	
 	private OwnerPicker ownerPicker;
-	private String saveAndInspect;
+	private String saveAndStartEvent;
 	private Integer maxAssets;
 	private List<Long> listOfIds = new ArrayList<Long>();
 	
@@ -132,8 +132,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			return ERROR;
 		}
 	
-		if(saveAndInspect!=null){
-			return "saveinspect";
+		if(saveAndStartEvent !=null){
+			return "savestartevent";
 		}
 		
 		logger.info("Asset Multi-Add Complete");
@@ -281,12 +281,12 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		return PublishedState.getPublishedStates(this);
 	}
 
-	public void setSaveAndInspect(String saveAndInspect) {
-		this.saveAndInspect = saveAndInspect;
+	public void setSaveAndStartEvent(String saveAndStartEvent) {
+		this.saveAndStartEvent = saveAndStartEvent;
 	}
 
-	public String getSaveAndInspect() {
-		return saveAndInspect;
+	public String getSaveAndStartEvent() {
+		return saveAndStartEvent;
 	}
 
 	public List<Long> getListOfIds() {

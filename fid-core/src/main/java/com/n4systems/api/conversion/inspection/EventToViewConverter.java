@@ -9,10 +9,10 @@ import com.n4systems.model.Event;
 import com.n4systems.model.inspectionschedule.NextEventDateByEventLoader;
 import com.n4systems.model.orgs.BaseOrg;
 
-public class InspectionToViewConverter implements ModelToViewConverter<Event, EventView> {
+public class EventToViewConverter implements ModelToViewConverter<Event, EventView> {
 	private final NextEventDateByEventLoader nextDateLoader;
 	
-	public InspectionToViewConverter(NextEventDateByEventLoader nextDateLoader) {
+	public EventToViewConverter(NextEventDateByEventLoader nextDateLoader) {
 		this.nextDateLoader = nextDateLoader;
 	}
 	

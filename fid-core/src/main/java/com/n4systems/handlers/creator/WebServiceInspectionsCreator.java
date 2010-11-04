@@ -19,7 +19,7 @@ import com.n4systems.services.NextInspectionScheduleSerivce;
 
 public class WebServiceInspectionsCreator extends BasicTransactionManagement implements InspectionsInAGroupCreator {
 
-	private final InspectionPersistenceFactory inspectionPersistenceFactory;
+	private final EventPersistenceFactory eventPersistenceFactory;
 	private Map<Event, Date> nextInspectionDates;
 	private List<Event> events;
 	private String transactionGUID;
@@ -27,9 +27,9 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	private NextInspectionScheduleSerivce createNextInspectionScheduleService;
 	private CreateEventsMethodObject createEventsMethod;
 
-	public WebServiceInspectionsCreator(TransactionManager transactionManager, InspectionPersistenceFactory inspectionPersistenceFactory) {
+	public WebServiceInspectionsCreator(TransactionManager transactionManager, EventPersistenceFactory eventPersistenceFactory) {
 		super(transactionManager);
-		this.inspectionPersistenceFactory = inspectionPersistenceFactory;
+		this.eventPersistenceFactory = eventPersistenceFactory;
 	}
 
 	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws TransactionAlreadyProcessedException,
@@ -63,12 +63,12 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	}
 
 	private void createTransactionDepenancies(Transaction transaction) {
-		createEventsMethod = inspectionPersistenceFactory.createCreateInspectionsMethodObject(transaction);
-		createNextInspectionScheduleService = inspectionPersistenceFactory.createNextInspectionScheduleService(transaction);
+		createEventsMethod = eventPersistenceFactory.createCreateEventsMethodObject(transaction);
+		createNextInspectionScheduleService = eventPersistenceFactory.createNextEventScheduleService(transaction);
 	}
 
 	private void createInspections(Transaction transaction) {
-		results = createEventsMethod.createInspections(transactionGUID, events);
+		results = createEventsMethod.createEvents(transactionGUID, events);
 	}
 
 	private void createSchedules(Transaction transaction) {
@@ -88,7 +88,7 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	}
 
 	private void auditLogInspection(List<Event> events, Exception e) {
-		AuditLogger auditLogger = inspectionPersistenceFactory.createCreateInspectionAuditLogger();
+		AuditLogger auditLogger = eventPersistenceFactory.createCreateEventAuditLogger();
 		for (Event event : events) {
 			auditLogger.audit("Create Inspections", event, e);
 		}

@@ -10,11 +10,11 @@ import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.MaxSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class LastInspectionDateLoader extends Loader<Date> {
+public class LastEventDateLoader extends Loader<Date> {
 
 	private Long networkId;
 	
-	public LastInspectionDateLoader() {}
+	public LastEventDateLoader() {}
 
 	@Override
 	protected Date load(EntityManager em) {
@@ -23,13 +23,13 @@ public class LastInspectionDateLoader extends Loader<Date> {
 		}
 		
 		QueryBuilder<Date> loader = new QueryBuilder<Date>(Asset.class, new AssetNetworkFilter(networkId));
-		loader.setSelectArgument(new MaxSelect("lastInspectionDate"));
+		loader.setSelectArgument(new MaxSelect("lastEventDate"));
 
 		Date lastDate = loader.getSingleResult(em);
 		return lastDate;
 	}
 
-	public LastInspectionDateLoader setNetworkId(Long networkId) { 
+	public LastEventDateLoader setNetworkId(Long networkId) {
 		this.networkId = networkId;
 		return this;
 	}

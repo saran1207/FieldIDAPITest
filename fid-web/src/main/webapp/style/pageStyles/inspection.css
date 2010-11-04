@@ -1,5 +1,5 @@
 
-.inspectionTypes ul{
+.eventTypes ul{
 	display:none;
 	
 	position:absolute;
@@ -9,40 +9,40 @@
 	background-repeat: no-repeat;
 	width:200px;
 }
-.inspectionTypesLeft ul{
+.eventTypesLeft ul{
 	background-position:top left;
 	background-image: url(../../images/dropdownArrow-left.gif);
 }
-.inspectionTypes ul li{
+.eventTypes ul li{
 	background-color: #333;
 	color:#cccccc;
 	padding: 10px;
 }
 
-.inspectionTypes ul li a, .inspectionTypes ul li a:visited {
+.eventTypes ul li a, .eventTypes ul li a:visited {
 	color:#cccccc;
 }
 
-.inspectionTypes ul li:hover{
+.eventTypes ul li:hover{
 	
 	background: #1b5ccd;
 }
-.inspectionTypes ul li:hover a, .inspectionTypes ul li:hover, .inspectionTypes ul li:hover a:visited {
+.eventTypes ul li:hover a, .eventTypes ul li:hover, .eventTypes ul li:hover a:visited {
 	color:#fff;
 }
 
-.inspectionTypes:hover ul{
+.eventTypes:hover ul{
 	display:block;
 	text-align:left;
 	font-size:1em;
 }
 
 
-.inspectionTypesRelative:hover ul a{
+.eventTypesRelative:hover ul a{
 	font-size:1em;
 }
 
-.inspectionTypes:hover ul li, .inspectionTypes ul:hover li{
+.eventTypes:hover ul li, .eventTypes ul:hover li{
 	display:block;
 	border:5px solid #333;
 }
@@ -53,7 +53,7 @@
 
 
 
-.inspectionForm h2 {
+.eventForm h2 {
 	overflow: hidden;
 }
 
@@ -69,11 +69,11 @@
 	font-size: 0.8em;
 }
 
-.inspectionForm {
+.eventForm {
 	overflow:hidden;
 }
 
-.inspectionForm h3 {
+.eventForm h3 {
 	border-top: 1px solid #E8EDFF;
 	border-bottom: 1px solid #E8EDFF;
 	overflow:hidden;
@@ -82,7 +82,7 @@
 }
 
 
-.inspectionForm div.infoSet {
+.eventForm div.infoSet {
 	border:none;
 	display:block;
 	float:left;
@@ -91,36 +91,36 @@
 	
 }
 
-.inspectionForm div.infoSet span, .inspectionForm div.infoSet div.simpleContainer {
+.eventForm div.infoSet span, .eventForm div.infoSet div.simpleContainer {
 	padding-top: 10px;	
 	width:auto;
 }
 
-.inspectionForm div.infoSet span.criteriaButton, .inspectionForm div.infoSet div.criteriaButton {
+.eventForm div.infoSet span.criteriaButton, .eventForm div.infoSet div.criteriaButton {
 	padding-top:0px;
 	padding-bottom: 0px;
 	float:left;
 	display:block;
 }
 
-.inspectionForm div.infoSet span.criteriaText {
+.eventForm div.infoSet span.criteriaText {
 	width: 10em;
 	float:left;
 	display:block;
 }
 
-.youAreOn, .inspectionSectionIndex, .inspectionSectionTitle {
+.youAreOn, .eventSectionIndex, .eventSectionTitle {
 	display: block;
 	float:left;
 }
 
-.youAreOn, .inspectionSectionIndex {
+.youAreOn, .eventSectionIndex {
 	padding-right: 5px;
 	font-weight: normal;
 	color:#333399;
 }
 
-.inspectionSectionIndex {
+.eventSectionIndex {
 	float:right;
 	font-size: 1.3em;
 }
@@ -156,7 +156,7 @@
 	width:500px;
 }
 
-.inspections {
+.events {
 	
 	margin-left: 30px;
 	border-left: 3px solid #CCC;
@@ -167,11 +167,11 @@
 	width:700px;
 }
 
-.inspectionList {
+.eventList {
 	margin-top:5px;
 }
 
-.inspectionType, .datePerformed, .performedBy, .editInspection {
+.eventType, .datePerformed, .performedBy, .editEvent {
 	display: block;
 	float: left;
 	width: 200px;
@@ -184,11 +184,11 @@
 	width:250px;	
 }
 
-.editInspection {
+.editEvent {
 	width:60px;
 	float:right;
 }
-.addInspectionColumn {
+.addEventColumn {
 	width:170px;
 }
 
@@ -327,7 +327,7 @@
 	margin-top: 5px;
 }
 
-.inspectionPreformed {
+.eventPreformed {
 	margin-left:200px;
 	clear:both;
 }
@@ -393,7 +393,7 @@
 	background-color:#fff;
 }
 
-.inspectionSchedule {
+.eventSchedule {
 	padding: 10px 5px;
 }
 

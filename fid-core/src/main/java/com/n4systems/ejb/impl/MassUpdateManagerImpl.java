@@ -31,7 +31,7 @@ import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.LargeInListQueryExecutor;
-import com.n4systems.services.InspectionScheduleServiceImpl;
+import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -59,7 +59,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		this.assetManager = new AssetManagerImpl(em);
 	}
 
-	public Long updateInspectionSchedules(Set<Long> scheduleIds, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
+	public Long updateEventSchedules(Set<Long> scheduleIds, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException {
 		if (scheduleIds.size() == 0) {
 			return 0L;
 		}
@@ -126,7 +126,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 	
-	public Long deleteInspectionSchedules(Set<Long> ids) throws UpdateFailureException {
+	public Long deleteEventSchedules(Set<Long> ids) throws UpdateFailureException {
 		if (ids == null || ids.isEmpty()) {
 			return 0L;
 		}
@@ -239,7 +239,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 	}
 
-	public Long updateInspections(List<Long> ids, Event eventChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {
+	public Long updateEvents(List<Long> ids, Event eventChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {
 		if (ids.isEmpty()) {
 			return 0L;
 		}
@@ -296,7 +296,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		
 		schedule.completed(event);
 		
-		updateInspectionSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
+		updateEventSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
 	}
 	
 	/** Extracts a set of keys, whose values are True */
@@ -358,9 +358,9 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
-	public List<Long> createSchedulesForInspections(List<Long> inspectionIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
+	public List<Long> createSchedulesForEvents(List<Long> eventIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-		query.addWhere(Comparator.IN, "ids", "id", inspectionIds).addLeftJoin("schedule", "schedule").addWhere(Comparator.NULL, "scheduleId", "schedule.id", "true").addOrder("id");
+		query.addWhere(Comparator.IN, "ids", "id", eventIds).addLeftJoin("schedule", "schedule").addWhere(Comparator.NULL, "scheduleId", "schedule.id", "true").addOrder("id");
 		int page = 1;
 		int pageSize = 100;
 
@@ -370,14 +370,14 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			inspections = persistenceManager.findAllPaged(query, page, pageSize);
 			for (Event event : inspections.getList()) {
 				EventSchedule schedule = new EventSchedule(event);
-				new InspectionScheduleServiceImpl(persistenceManager).createSchedule(schedule);
+				new EventScheduleServiceImpl(persistenceManager).createSchedule(schedule);
 			}
 			page++;
 		} while (inspections.isHasNextPage());
 
 		QueryBuilder<Long> scheduleQuery = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		scheduleQuery.setSimpleSelect("id");
-		scheduleQuery.addWhere(Comparator.IN, "ids", "event.id", inspectionIds).addOrder("id");
+		scheduleQuery.addWhere(Comparator.IN, "ids", "event.id", eventIds).addOrder("id");
 		try {
 			return persistenceManager.findAll(scheduleQuery);
 		} catch (InvalidQueryException e) {

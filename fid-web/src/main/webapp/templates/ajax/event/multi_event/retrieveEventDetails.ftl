@@ -12,7 +12,7 @@ $('step2').update('${html?js_string}');
 $('step2').show();
 $('continueButton').observe("click", function(){	
 		var options = getStandardCallbacks();
-		options.parameters = $('inspectionCreate').serialize();
+		options.parameters = $('eventCreate').serialize();
 		options.method =  "post";
 		new Ajax.Request('<@s.url action="eventCheck" namespace="ajax"/>', options);
 });

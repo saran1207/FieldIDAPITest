@@ -14,13 +14,13 @@ import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Event;
 
-final class NullCreateInspectionsMethodObject implements CreateEventsMethodObject {
-	public List<Event> createInspections(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws ProcessingProofTestException,
+final class NullCreateEventsMethodObject implements CreateEventsMethodObject {
+	public List<Event> createEvents(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws ProcessingProofTestException,
 	FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
-		return createInspections(transactionGUID, events);
+		return createEvents(transactionGUID, events);
 	}
 
-	public List<Event> createInspections(String transactionGUID, List<Event> events) throws ProcessingProofTestException,
+	public List<Event> createEvents(String transactionGUID, List<Event> events) throws ProcessingProofTestException,
 			FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
 		return events;
 	}

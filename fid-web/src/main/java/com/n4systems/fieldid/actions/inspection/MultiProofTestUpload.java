@@ -24,7 +24,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class MultiProofTestUpload extends AbstractAction implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiProofTestUpload.class);
@@ -32,13 +32,13 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 	private ProofTestHandler proofTestHandler;
 	private Event event = new Event();
 	private ProofTestType proofTestType;
-	private List<ListingPair> inspectionBooks;
+	private List<ListingPair> eventBooks;
 	
 	private File filedata;
 	private String filedataFileName;
 	
 	private Map<String, Exception> fileProcessingFailureMap = new HashMap<String, Exception>();
-	private Map<String, Map<String, Event>> inspectionProcessingFailureMap = new HashMap<String, Map<String, Event>>();
+	private Map<String, Map<String, Event>> eventProcessingFailureMap = new HashMap<String, Map<String, Event>>();
 
 	private OwnerPicker ownerPicker;
 	
@@ -59,31 +59,31 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 	public String doSave() {
 		
 		/*
-		 *  Note that inspection will have the Customer and InspectionBook attached.
+		 *  Note that event will have the Customer and EventBook attached.
 		 *  These objects are not fully constructed.  They are actually just holders for the Id's
-		 *  DO NOT! persist this inspection on the attached Customer/InspectionBook!!
+		 *  DO NOT! persist this event on the attached Customer/EventBook!!
 		 */
-		event = (Event)getSession().get( "proofTestFiles_inspection" );
+		event = (Event)getSession().get( "proofTestFiles_event" );
 		proofTestType = (ProofTestType)getSession().get( "proofTestFiles_type" );
 		
 		List<File> proofTestFiles = getProofTestFiles();
 		
 		// we should clear these out of session asap
-		getSession().remove("proofTestFiles_inspection");
+		getSession().remove("proofTestFiles_event");
 		getSession().remove("proofTestFiles_type");
 		getSession().remove("proofTestFiles");
 		
 		// clear status maps before we start processing
 		fileProcessingFailureMap.clear();
-		inspectionProcessingFailureMap.clear();
+		eventProcessingFailureMap.clear();
 		
-		Map<String, Event> inspectionMap;
+		Map<String, Event> eventMap;
 		// process each uploaded proof test file
 		for(File proofTest: proofTestFiles) {
 			
 			try {
 				// processes this prooftest file
-				inspectionMap = proofTestHandler.multiProofTestUpload(
+				eventMap = proofTestHandler.multiProofTestUpload(
 											proofTest, 
 											proofTestType, 
 											getSessionUser().getTenant().getId(), 
@@ -92,11 +92,11 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 											event.getBook().getId()
 										);
 				
-				inspectionProcessingFailureMap.put(proofTest.getName(), inspectionMap);
+				eventProcessingFailureMap.put(proofTest.getName(), eventMap);
 				
 			} catch (Exception e) {
 				fileProcessingFailureMap.put(proofTest.getName(), e);
-				inspectionProcessingFailureMap.put(proofTest.getName(), new HashMap<String, Event>());
+				eventProcessingFailureMap.put(proofTest.getName(), new HashMap<String, Event>());
 				logger.error("failed while processing multiproof upload for file " + proofTest.getName(), e);
 			}
 			
@@ -126,7 +126,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		// now we can add it to our list of files.  Note that this call actually operates on a session variable
 		getProofTestFiles().add(newPath);
 		
-		getSession().put("proofTestFiles_inspection", event);
+		getSession().put("proofTestFiles_event", event);
 		getSession().put("proofTestFiles_type", proofTestType);
 		
 		return SUCCESS;
@@ -136,21 +136,21 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		return Arrays.asList( ProofTestType.values() );
 	}
 
-	public List<ListingPair> getInspectionBooks() {
-		if( inspectionBooks == null ) {
+	public List<ListingPair> getEventBooks() {
+		if( eventBooks == null ) {
 			EventBookListLoader loader = new EventBookListLoader(getSecurityFilter());
 			loader.setOpenBooksOnly(true);
 			loader.setOwner(event.getOwner());
-			inspectionBooks = loader.loadListingPair();
+			eventBooks = loader.loadListingPair();
 		}
-		return inspectionBooks;
+		return eventBooks;
 	}
 
-	public Event getInspection() {
+	public Event getEvent() {
 		return event;
 	}
 
-	public void setInspection( Event event) {
+	public void setEvent( Event event) {
 		this.event = event;
 	}
 
@@ -194,8 +194,8 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		return files;
 	}
 
-	public Map<String, Map<String, Event>> getInspectionProcessingFailureMap() {
-		return inspectionProcessingFailureMap;
+	public Map<String, Map<String, Event>> getEventProcessingFailureMap() {
+		return eventProcessingFailureMap;
 	}
 
 	

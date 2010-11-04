@@ -25,7 +25,7 @@ public class AssetMergeAction extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	
 	private final AssetManager assetManager;
-	private final LegacyAsset legacyProductManager;
+	private final LegacyAsset legacyAssetManager;
 	
 	private AllEventHelper allEventHelper;
 	
@@ -36,7 +36,7 @@ public class AssetMergeAction extends AbstractCrud {
 	public AssetMergeAction(PersistenceManager persistenceManager, AssetManager assetManager, LegacyAsset legacyAssetManager) {
 		super(persistenceManager);
 		this.assetManager = assetManager;
-		this.legacyProductManager = legacyAssetManager;
+		this.legacyAssetManager = legacyAssetManager;
 	}
 
 
@@ -110,9 +110,9 @@ public class AssetMergeAction extends AbstractCrud {
 		}
 	}
 
-	public AllEventHelper getAllInspectionHelper() {
+	public AllEventHelper getAllEventHelper() {
 		if (allEventHelper == null)
-			allEventHelper = new AllEventHelper(legacyProductManager, losingAsset, getSecurityFilter());
+			allEventHelper = new AllEventHelper(legacyAssetManager, losingAsset, getSecurityFilter());
 		return allEventHelper;
 	}
 	
@@ -121,20 +121,20 @@ public class AssetMergeAction extends AbstractCrud {
 	}
 
 	
-	public Long getInspectionCount() {
-		return getAllInspectionHelper().getEventCount();
+	public Long getEventCount() {
+		return getAllEventHelper().getEventCount();
 	}
 
-	public List<Event> getInspections() {
-		return getAllInspectionHelper().getInspections();
+	public List<Event> getEvents() {
+		return getAllEventHelper().getEvents();
 	}
 
-	public Event getLastInspection() {
-		return getAllInspectionHelper().getLastInspection();
+	public Event getLastEvent() {
+		return getAllEventHelper().getLastEvent();
 	}
 	
-	public Long getLocalInspectionCount() {
-		return getAllInspectionHelper().getLocalEventCount();
+	public Long getLocalEventCount() {
+		return getAllEventHelper().getLocalEventCount();
 	}
 	
 	public boolean isLinked() {

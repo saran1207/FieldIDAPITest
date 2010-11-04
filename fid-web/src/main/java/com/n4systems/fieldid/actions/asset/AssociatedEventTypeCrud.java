@@ -28,7 +28,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 
 	private AssetType assetType;
 	private List<EventType> eventTypes;
-	private List<Boolean> assetTypeInspections;
+	private List<Boolean> assetTypeEvents;
 
 	public AssociatedEventTypeCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -49,13 +49,13 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	public String doSave() {
 		
 		Transaction transaction = com.n4systems.persistence.PersistenceManager.startTransaction();
-		List<EventType> selectedEventTypes = findInspectionsTypesSet();
+		List<EventType> selectedEventTypes = findEventsTypesSet();
 		List<AssociatedEventType> types = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(assetType).load(transaction);
 		
 		try {
 			
-			List<AssociatedEventType> toBeAdded = findInspectionTypesToAdd(selectedEventTypes, types);
-			List<AssociatedEventType> toBeRemoved = findInspectionTypesToRemoved(selectedEventTypes, types);
+			List<AssociatedEventType> toBeAdded = findEventTypesToAdd(selectedEventTypes, types);
+			List<AssociatedEventType> toBeRemoved = findEventTypesToRemoved(selectedEventTypes, types);
 			AssociatedEventTypeSaver saver = new AssociatedEventTypeSaver();
 			
 			EventFrequenciesDeleteHandler frequenciesDeleteHandler = new EventFrequenciesDeleteHandlerImpl(getLoaderFactory().createEventFrequenciesListLoader(), new EventFrequencySaver());
@@ -75,7 +75,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 			addFlashMessageText("message.eventtypesselected");
 		} catch (Exception e) {
 			addActionErrorText("error.failedtosaveeventtypeselection");
-			logger.error("failed to change the inspection type selection", e);
+			logger.error("failed to change the event type selection", e);
 			transaction.rollback();
 			
 			return ERROR;
@@ -84,7 +84,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	private List<AssociatedEventType> findInspectionTypesToAdd(List<EventType> selectedEventTypes, List<AssociatedEventType> types) {
+	private List<AssociatedEventType> findEventTypesToAdd(List<EventType> selectedEventTypes, List<AssociatedEventType> types) {
 		List<AssociatedEventType> toBeAdded = new ArrayList<AssociatedEventType>();
 		for (EventType selectedEventType : selectedEventTypes) {
 			boolean found = false;
@@ -100,7 +100,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 		return toBeAdded;
 	}
 	
-	private List<AssociatedEventType> findInspectionTypesToRemoved(List<EventType> selectedEventTypes, List<AssociatedEventType> types) {
+	private List<AssociatedEventType> findEventTypesToRemoved(List<EventType> selectedEventTypes, List<AssociatedEventType> types) {
 		List<AssociatedEventType> toBeRemoved = new ArrayList<AssociatedEventType>();
 		for (AssociatedEventType associatedEventType : types) {
 			boolean found = false;
@@ -118,11 +118,11 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	}
 	
 
-	private List<EventType> findInspectionsTypesSet() {
+	private List<EventType> findEventsTypesSet() {
 		List<EventType> selectedEventTypes = new ArrayList<EventType>();
 
-		for (EventType eventType : getInspectionTypes()) {
-			if (assetTypeInspections.get(getInspectionTypes().indexOf(eventType))) {
+		for (EventType eventType : getEventTypes()) {
+			if (assetTypeEvents.get(getEventTypes().indexOf(eventType))) {
 				selectedEventTypes.add(eventType);
 			}
 		}
@@ -158,42 +158,38 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	/**
 	 * @return the productTypeEvents
 	 */
-	public List<Boolean> getAssetTypeInspectionTypes() {
-		if (assetTypeInspections == null) {
-			assetTypeInspections = new ArrayList<Boolean>();
-			for (EventType eventType : getInspectionTypes()) {
+	public List<Boolean> getAssetTypeEventTypes() {
+		if (assetTypeEvents == null) {
+			assetTypeEvents = new ArrayList<Boolean>();
+			for (EventType eventType : getEventTypes()) {
 				boolean found = false;
-				for (AssociatedEventType associatedEventType : associatedInspectionTypes()) {
+				for (AssociatedEventType associatedEventType : associatedEventTypes()) {
 					if (eventType.equals(associatedEventType.getEventType())) {
-						assetTypeInspections.add(true);
+						assetTypeEvents.add(true);
 						found = true;
 						break;
 					}
 				}
 				if (!found) {
-					assetTypeInspections.add(false);
+					assetTypeEvents.add(false);
 				}
 			}
 		}
-		return assetTypeInspections;
+		return assetTypeEvents;
 	}
 
-	private List<AssociatedEventType> associatedInspectionTypes() {
+	private List<AssociatedEventType> associatedEventTypes() {
 		return getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(assetType).load();
 	}
 
-	/**
-	 * @param productTypeEvents
-	 *            the productTypeEvents to set
-	 */
-	public void setAssetTypeInspectionTypes(List<Boolean> assetTypeInspections) {
-		this.assetTypeInspections = assetTypeInspections;
+	public void setAssetTypeEventTypes(List<Boolean> assetTypeEvents) {
+		this.assetTypeEvents = assetTypeEvents;
 	}
 
 	/**
 	 * @return the eventTypes
 	 */
-	public List<EventType> getInspectionTypes() {
+	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
 			QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
 			queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);

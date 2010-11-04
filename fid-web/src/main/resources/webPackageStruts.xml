@@ -441,7 +441,7 @@
 			</result>
 		</action>
 
-		<action name="assetEvents" method="inspections" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetEvents" method="events" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/events.ftl</result>
 		</action>
@@ -478,7 +478,7 @@
 				<param name="actionName">assetPrint</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="saveinspect" type="redirectAction">
+			<result name="savestartevent" type="redirectAction">
 				<param name="actionName">quickEvent</param>
 				<param name="assetId">${uniqueID}</param>
 			</result>
@@ -529,7 +529,7 @@
 				<param name="actionName">asset</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="saveinspect" type="redirectAction">
+			<result name="savestartevent" type="redirectAction">
 				<param name="actionName">eventGroups</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
@@ -803,13 +803,13 @@
 			</result>
 		</action>
 
-		<action name="selectJobToAssignEventsTo" method="editInspections"
+		<action name="selectJobToAssignEventsTo" method="editEvents"
 			class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
 			<result name="error" type="redirectAction">report</result>
 			<result name="success" type="freemarker">/templates/html/assignToJob/formEvents.ftl</result>
 		</action>
 
-		<action name="assignEventsToJob" method="saveInspections" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
+		<action name="assignEventsToJob" method="saveEvents" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
 			<result name="error" type="redirectAction">report</result>
 			<result name="input" type="freemarker">/templates/html/assignToJob/formEvents.ftl</result>
 			<result name="success" type="redirectAction">
@@ -845,7 +845,7 @@
 				<param name="actionName">eventType</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="createInspectionForm" type="redirectAction">
+			<result name="createEventForm" type="redirectAction">
 				<param name="actionName">eventTypeForm</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
@@ -919,7 +919,7 @@
 			<result name="success" type="freemarker">/templates/html/eventGroup/show.ftl</result>
 		</action>
 
-		<action name="quickEvent" method="quickInspect" class="com.n4systems.fieldid.actions.inspection.EventCrud">
+		<action name="quickEvent" method="quickEvent" class="com.n4systems.fieldid.actions.inspection.EventCrud">
 			<result name="success" type="freemarker">/templates/html/eventCrud/quickEvent.ftl</result>
 			<result name="oneFound" type="redirectAction">
 				<param name="actionName">eventAdd</param>
@@ -938,14 +938,14 @@
 				<param name="actionName">eventAdd</param>
 				<param name="assetId">${assetId}</param>
 				<param name="type">${type}</param>
-				<param name="inspectionGroupId">${inspectionGroupId}</param>
+				<param name="eventGroupId">${eventGroupId}</param>
 				<param name="scheduleId">${scheduleId}</param>
 			</result>
 			<result name="master" type="redirectAction">
 				<param name="actionName">masterEventAdd</param>
 				<param name="assetId">${assetId}</param>
 				<param name="type">${type}</param>
-				<param name="inspectionGroupId">${inspectionGroupId}</param>
+				<param name="eventGroupId">${eventGroupId}</param>
 				<param name="scheduleId">${scheduleId}</param>
 			</result>
 		</action>
@@ -1038,7 +1038,7 @@
 		</action>
 
 
-		<action name="baseEventCreate" method="storeNewMasterInspection" class="com.n4systems.fieldid.actions.inspection.SubEventCrud">
+		<action name="baseEventCreate" method="storeNewMasterEvent" class="com.n4systems.fieldid.actions.inspection.SubEventCrud">
 			<result name="input" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1067,7 +1067,7 @@
 			<result name="error" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">masterEventEdit</param>
-				<param name="uniqueID">${masterInspection.inspection.id}</param>
+				<param name="uniqueID">${masterEvent.event.id}</param>
 				<param name="token">${token}</param>
 			</result>
 		</action>
@@ -1077,7 +1077,7 @@
 			<result name="error" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">masterEventEdit</param>
-				<param name="uniqueID">${masterInspection.inspection.id}</param>
+				<param name="uniqueID">${masterEvent.event.id}</param>
 				<param name="token">${token}</param>
 			</result>
 		</action>
@@ -1715,7 +1715,7 @@
 			<result name="success" type="redirectAction">
 				<param name="actionName">assetMultiAdd</param>
 			</result>
-			<result name="saveinspect" type="freemarker">/templates/html/multiAssetCrud/renderOut.ftl</result>
+			<result name="savestartevent" type="freemarker">/templates/html/multiAssetCrud/renderOut.ftl</result>
 			<result name="error" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 		</action>
 
@@ -2079,7 +2079,7 @@
 			<result name="success" type="freemarker">/templates/html/networkAsset/show.ftl</result>
 		</action>
 		
-		<action name="networkAssetEvents" method="inspections" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
+		<action name="networkAssetEvents" method="events" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/networkAsset/events.ftl</result>
 		</action>

@@ -1,8 +1,8 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="/javascript/inspectionType.js"/>"></script>
 	<script type="text/javascript">
-		inspectionAttributeIndex = ${(infoFields?size)!0};
-		addInspectionAttributeUrl = '<@s.url action="eventAttributeAdd" namespace="/ajax"/>';
+		eventAttributeIndex = ${(infoFields?size)!0};
+		addEventAttributeUrl = '<@s.url action="eventAttributeAdd" namespace="/ajax"/>';
 	</script>
 	
 </head>
@@ -27,7 +27,7 @@
 <p>
 	<@s.label value="${action.getText('label.group')}:" />
 	<span>
-		<@s.select name="group" list="inspectionTypeGroups" listKey="id" listValue="name" />
+		<@s.select name="group" list="eventTypeGroups" listKey="id" listValue="name" />
 	</span>
 </p>
 <p>
@@ -76,7 +76,7 @@
 		</#list>
 	</div>
 	<div class="formAction">
-		<button onclick="addInspectionAttribute(); return false;" ><@s.text name="label.addattribute"/></button>
+		<button onclick="addEventAttribute(); return false;" ><@s.text name="label.addattribute"/></button>
 	</div>
 </div>
 

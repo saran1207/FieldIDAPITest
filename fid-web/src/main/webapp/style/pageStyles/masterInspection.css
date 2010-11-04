@@ -1,10 +1,10 @@
-#masterInspection { 
+#masterEvent {
 	width: 450px;
 	float:left;
 	
 }
 
-.inspectionHeader {
+.eventHeader {
 	border: 1px solid #ddd;
 	border-left: 0;
 	border-right: 0;
@@ -14,13 +14,13 @@
 #addComponents {
 	float: left;
 }
-#masterInspection div.infoSet {
+#masterEvent div.infoSet {
 	border: 1px solid #ddd;
 	padding: 5px 5px 5px 15px;
 	margin: 10px 0;
 }
 
-#masterInspection div.infoSet label {
+#masterEvent div.infoSet label {
 		padding-right: 15px;
 		font-weight
 }
@@ -40,7 +40,7 @@ h3 {
 	border: 1px solid #dddddd;
 	margin: 10px 0;
 }
-.definition, .performedInspection, .addComponent, .labelForm {
+.definition, .performedEvent, .addComponent, .labelForm {
 	overflow:hidden;
 	padding: 5px 0;
 	margin: 5px 5px 5px 15px;

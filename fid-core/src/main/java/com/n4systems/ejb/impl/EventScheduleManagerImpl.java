@@ -11,6 +11,8 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.services.EventScheduleService;
+import com.n4systems.services.EventScheduleServiceImpl;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.EventScheduleManager;
@@ -18,8 +20,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.services.InspectionScheduleService;
-import com.n4systems.services.InspectionScheduleServiceImpl;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -51,7 +51,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 					EventSchedule eventSchedule = new EventSchedule(asset, type);
 					eventSchedule.setNextDate(assetType.getSuggestedNextInspectionDate(new Date(), type, asset.getOwner()));
 					schedules.add(eventSchedule);
-					new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
+					new EventScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
 				}
 			}
 		}
@@ -60,7 +60,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	}
 	
 	public EventSchedule update(EventSchedule schedule) {
-		InspectionScheduleService service = new InspectionScheduleServiceImpl(persistenceManager);
+		EventScheduleService service = new EventScheduleServiceImpl(persistenceManager);
 		return service.updateSchedule(schedule);
 	}
 	
@@ -68,7 +68,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		EventSchedule schedule = event.getSchedule();
 		if (schedule != null) {
 			schedule.removeInspection();
-			new InspectionScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
+			new EventScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
 		}
 		
 	}

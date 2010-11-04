@@ -8,9 +8,9 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.EventScheduleCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 
-public class SafetyNetworkInspectionSchedule extends EventScheduleCrud {
+public class SafetyNetworkEventSchedule extends EventScheduleCrud {
 
-	public SafetyNetworkInspectionSchedule(
+	public SafetyNetworkEventSchedule(
 			LegacyAsset legacyProductManager,
 			PersistenceManager persistenceManager,
 			EventScheduleManager eventScheduleManager) {

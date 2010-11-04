@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAssetType;
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.fieldid.actions.helpers.AllEventHelper;
 import com.n4systems.model.Asset;
@@ -34,7 +35,6 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.MissingEntityException;
-import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
@@ -111,7 +111,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	// save buttons.z
 	private String save;
-	private String saveAndInspect;
+	private String saveAndStartEvent;
 	private String saveAndPrint;
 	private String saveAndSchedule;
 
@@ -319,7 +319,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	// TODO this shouldn't be in this class this is not really about the asset
 	// - AA
 	@SkipValidation
-	public String doInspections() {
+	public String doEvents() {
 		setPageType("asset", "events");
 		testExistingAsset();
 
@@ -377,8 +377,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 			return INPUT;
 		}
 
-		if (saveAndInspect != null) {
-			return "saveinspect";
+		if (saveAndStartEvent != null) {
+			return "savestartevent";
 		}
 
 		if (saveAndPrint != null) {
@@ -445,8 +445,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 			return INPUT;
 		}
 
-		if (saveAndInspect != null) {
-			return "saveinspect";
+		if (saveAndStartEvent != null) {
+			return "savestartevent";
 		}
 
 		return "saved";
@@ -544,7 +544,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			assetManager.archive(asset, fetchCurrentUser());
 			addFlashMessageText("message.assetdeleted");
 			return SUCCESS;
-		} catch (UsedOnMasterInspectionException e) {
+		} catch (UsedOnMasterEventException e) {
 			addFlashErrorText("error.deleteusedonmasterevent");
 		} catch (Exception e) {
 			logger.error("failed to archive an asset", e);
@@ -728,8 +728,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return save;
 	}
 
-	public void setSaveAndInspect(String saveAndInspect) {
-		this.saveAndInspect = saveAndInspect;
+	public void setSaveAndStartEvent(String saveAndStartEvent) {
+		this.saveAndStartEvent = saveAndStartEvent;
 	}
 
 	public List<Listable<Long>> getCommentTemplates() {
@@ -904,22 +904,22 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return assetTypes;
 	}
 
-	public AllEventHelper getAllInspectionHelper() {
+	public AllEventHelper getAllEventHelper() {
 		if (allEventHelper == null)
 			allEventHelper = new AllEventHelper(legacyAssetManager, asset, getSecurityFilter());
 		return allEventHelper;
 	}
 
-	public Long getInspectionCount() {
-		return getAllInspectionHelper().getEventCount();
+	public Long getEventCount() {
+		return getAllEventHelper().getEventCount();
 	}
 
-	public List<Event> getInspections() {
-		return getAllInspectionHelper().getInspections();
+	public List<Event> getEvents() {
+		return getAllEventHelper().getEvents();
 	}
 
-	public Event getLastInspection() {
-		return getAllInspectionHelper().getLastInspection();
+	public Event getLastEvent() {
+		return getAllEventHelper().getLastEvent();
 	}
 
 	public Long getExcludeId() {

@@ -1,20 +1,20 @@
 var assets = new Array();
 function sendRequests() {
-	var inspectionCreator = new InpsectionCreator(assets);
-	inspectionCreator.start();
+	var eventCreator = new EventCreator(assets);
+	eventCreator.start();
 }
 
-function sendRequest(asset, inspectionCreator) {
+function sendRequest(asset, eventCreator) {
 	$('assetId').value= asset.id;
-	$('inspectionCreate').request({
+	$('eventCreate').request({
 		onSuccess: contentCallback,
 		onComplete: function(){	
-			inspectionCreator.completedCreation();
+			eventCreator.completedCreation();
 		}
 	});
 }
 
-function InpsectionCreator(assets) {
+function EventCreator(assets) {
 	this.totalAssets = assets.length;
 	this.assets = assets;
 	this.completed = 0;
@@ -23,15 +23,15 @@ function InpsectionCreator(assets) {
 	};
 	
 	this.completedCreation = function() {
-			this.inspectionCompleted();
+			this.eventCompleted();
 			this.updateProgress();
-			this.sendNextInspection();
+			this.sendNextEvent();
 		};
-	this.inspectionCompleted = function() {
+	this.eventCompleted = function() {
 		this.completed++;
 	};
 	
-	this.sendNextInspection = function() {
+	this.sendNextEvent = function() {
 		if (this.completed == this.totalAssets) {
 			toStep(4);
 		} else {
@@ -43,15 +43,15 @@ function InpsectionCreator(assets) {
 		var percentComplete = (this.completed/this.totalAssets) * 100;
 		
 		$$('#step3 .percentBarUsed').first().setStyle({width: percentComplete + "%"});
-		$$('#completedInspections').first().update(this.completed);
+		$$('#completedEvents').first().update(this.completed);
 	};
 }
 
 
 onDocumentLoad(function() {
-	$('saveInspections').observe('click', function(event) {
+	$('saveEvents').observe('click', function(event) {
 		event.stop();
-		$('saveInspections').disable();
+		$('saveEvents').disable();
 		$$("#step3 .stepAction").invoke("hide");
 		$$("#step3 .progress").invoke("show");
 		sendRequests();

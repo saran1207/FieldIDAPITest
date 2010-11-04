@@ -60,10 +60,10 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("observationsBeanList", createObservationViews);
 		add("observations", new JRBeanCollectionDataSource(createObservationViews));
 		
-		add("images", createInspectionImages());
+		add("images", createEventImages());
 	}
 
-	private List<InspectionImage> createInspectionImages() {
+	private List<InspectionImage> createEventImages() {
 		List<InspectionImage> imageList = new ArrayList<InspectionImage>();
 		
 		for (FileAttachment imageAttachment : getEvent().getImageAttachments()) {

@@ -10,7 +10,7 @@
 		
 		<div class="infoSet"> 
 			<label for="type"><@s.text name="label.eventtype"/></label>
-			<@s.select name="type" list="inspectionTypes" listKey="id" listValue="name"/>
+			<@s.select name="type" list="eventTypes" listKey="id" listValue="name"/>
 		</div>
 		<#if securityGuard.projectsEnabled>
 			<div class="infoSet"> 

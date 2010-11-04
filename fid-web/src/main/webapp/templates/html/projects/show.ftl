@@ -152,19 +152,19 @@ ${action.setPageType('job', 'show')!}
 	</div>
 <#else>
 	<div id="events" class="pageSection" style="" >
-		<h2><@s.text name="label.eventsonproject"/>	<#if sessionUser.hasAccess("createinspection")><a href="<@s.url action="startAssignSchedulesToJob" jobId="${uniqueID}"/>"><@s.text name="label.addanevent"/></a></#if></h2>
+		<h2><@s.text name="label.eventsonproject"/>	<#if sessionUser.hasAccess("createevent")><a href="<@s.url action="startAssignSchedulesToJob" jobId="${uniqueID}"/>"><@s.text name="label.addanevent"/></a></#if></h2>
 		<div class="sectionContent" id="emptyEventList" <#if !schedules.isEmpty()> style="display:none" </#if>>
 			<div id="noLinkedEvents"  >
 				<div class="emptyEvents">
-					<label><@s.text name="label.emptyprojecteventlist"/> <#if sessionUser.hasAccess("createinspection")><@s.text name="label.emptyprojecteventlistinstruction"/></#if></label>
 				</div>
-			</div>
+                <label><@s.text name="label.emptyprojecteventlist"/> <#if sessionUser.hasAccess("createevent")><@s.text name="label.emptyprojecteventlistinstruction"/></#if></label>
+            </div>
 		</div>
 		
 		<div class="sectionContent" id="events" <#if schedules.isEmpty()> style="display:none" </#if>>
 			<div id="eventCounts">
-				<a id="incompleteInspectionCount" href="<@s.url action="jobEvents" projectId="${project.id}" searchStatuses="INCOMPLETE"/>">${action.getText("label.incompleteevents", "", countOfIncompleteSchedules.toString())}</a> 
-				<a id="completeInspectionCount" href="<@s.url action="jobEvents" projectId="${project.id}" searchStatuses="COMPLETE"/>">${action.getText("label.completeevents", "", countOfCompleteSchedules.toString())}</a>
+				<a id="incompleteEventCount" href="<@s.url action="jobEvents" projectId="${project.id}" searchStatuses="INCOMPLETE"/>">${action.getText("label.incompleteevents", "", countOfIncompleteSchedules.toString())}</a>
+				<a id="completeEventCount" href="<@s.url action="jobEvents" projectId="${project.id}" searchStatuses="COMPLETE"/>">${action.getText("label.completeevents", "", countOfCompleteSchedules.toString())}</a>
 			</div>
 			
 			<div id="linkedEvents" >

@@ -359,38 +359,38 @@ function checkDefComment(criteriaId, observationText) {
 }
 
 
-function changeToNewInspectionBook() {
-	$('inspectionBookSelect').hide();
-	$('inspectionBooks').disable();
-	$('inspectionBookTitle').show();
-	$('newInspectionBook').enable();
-	$('newInspectionBook').select();
+function changeToNewEventBook() {
+	$('eventBookSelect').hide();
+	$('eventBooks').disable();
+	$('eventBookTitle').show();
+	$('newEventBook').enable();
+	$('newEventBook').select();
 }
 
-function changeToInspectionBookSelect() {
-	$('inspectionBookSelect').show();
-	$('inspectionBooks').enable();
-	$('inspectionBookTitle').hide();
-	$('newInspectionBook').disable();
-	$('inspectionBooks').focus();
+function changeToEventBookSelect() {
+	$('eventBookSelect').show();
+	$('eventBooks').enable();
+	$('eventBookTitle').hide();
+	$('newEventBook').disable();
+	$('eventBooks').focus();
 }
 
 var index;
 var addScheduleUrl;
 var autoSuggestUrl;
 var dateErrorText;
-var inspectionTypeId;
+var eventTypeId;
 var assetId;
 
 function addSchedule() {
-	var types = $('nextInspectionTypeSelection');
+	var types = $('nextEventTypeSelection');
 	var jobs = $('jobSelection');
 	var nextDate = $('nextDate');
 	
 	
 	var params = new Object();
 	params.date =  nextDate.getValue();
-	params.inspectionTypeId = types.options[types.selectedIndex].value;
+	params.eventTypeId = types.options[types.selectedIndex].value;
 	params.index = index;
 	
 	if (jobs != null) {
@@ -414,7 +414,7 @@ function validDate(date) {
 
 function autoSuggest() {
 	var params = new Object();
-	params.inspectionTypeId = inspectionTypeId;
+	params.eventTypeId = eventTypeId;
 	params.datePerformed = $('datePerformed').getValue();
 	params.asset = assetId;
 	params.index = index;

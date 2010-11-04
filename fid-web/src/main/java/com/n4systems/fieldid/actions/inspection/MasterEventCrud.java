@@ -10,6 +10,7 @@ import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.actions.helpers.SubAssetHelper;
 import com.n4systems.fieldid.actions.inspection.viewmodel.WebEventScheduleToEventScheduleBundleConverter;
 import com.n4systems.fieldid.utils.CopyEventFactory;
+import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
@@ -31,21 +32,20 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.helpers.EventScheduleSuggestion;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
-import com.n4systems.handlers.creator.InspectionPersistenceFactory;
-import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
+import com.n4systems.handlers.creator.inspections.factory.ProductionEventPersistenceFactory;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
 
 public class MasterEventCrud extends AbstractCrud {
-	protected static final String SESSION_KEY = "masterInspection";
+	protected static final String SESSION_KEY = "masterEvent";
 	private static Logger logger = Logger.getLogger(MasterEventCrud.class);
 	private static final long serialVersionUID = 1L;
 
 	private EventManager eventManager;
 	private EventScheduleManager eventScheduleManager;
-	private final InspectionPersistenceFactory inspectionPersistenceFactory;
+	private final EventPersistenceFactory eventPersistenceFactory;
 
 	private Event event;
 	private EventGroup eventGroup;
@@ -56,14 +56,14 @@ public class MasterEventCrud extends AbstractCrud {
 	private String token;
 	private boolean dirtySession = true;
 
-	private boolean cleanToInspectionsToMatchConfiguration = false;
+	private boolean cleanToEventsToMatchConfiguration = false;
 	
 
 	public MasterEventCrud(PersistenceManager persistenceManager, EventManager eventManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.eventManager = eventManager;
 		this.eventScheduleManager = eventScheduleManager;
-		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
+		this.eventPersistenceFactory = new ProductionEventPersistenceFactory();
 	}
 
 	@Override
@@ -71,31 +71,31 @@ public class MasterEventCrud extends AbstractCrud {
 		masterEvent = (MasterEvent) getSession().get(SESSION_KEY);
 
 		if (masterEvent == null || token == null) {
-			createNewMasterInspection();
-		} else if (!MasterEvent.matchingMasterInspection(masterEvent, token)) {
+			createNewMasterEvent();
+		} else if (!MasterEvent.matchingMasterEvent(masterEvent, token)) {
 			masterEvent = null;
 			return;
 		}
 
 		if (eventGroup == null) {
-			setInspectionGroupId(masterEvent.getInspectionGroupId());
+			setEventGroupId(masterEvent.getEventGroupId());
 		}
-		event = masterEvent.getInspection();
+		event = masterEvent.getEvent();
 	}
 
-	private void createNewMasterInspection() {
+	private void createNewMasterEvent() {
 		masterEvent = new MasterEvent();
-		masterEvent.setInspection(new Event());
+		masterEvent.setEvent(new Event());
 		token = masterEvent.getToken();
-		masterEvent.getInspection().setAsset(asset);
-		getSession().put("masterInspection", masterEvent);
+		masterEvent.getEvent().setAsset(asset);
+		getSession().put("masterEvent", masterEvent);
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		masterEvent = (MasterEvent) getSession().get(SESSION_KEY);
 
-		if (masterEvent == null || token == null || !MasterEvent.matchingMasterInspection(masterEvent, token)) {
+		if (masterEvent == null || token == null || !MasterEvent.matchingMasterEvent(masterEvent, token)) {
 			Event event = eventManager.findAllFields(uniqueId, getSecurityFilter());
 			masterEvent = new MasterEvent(event);
 			if (event != null) {
@@ -106,15 +106,15 @@ public class MasterEventCrud extends AbstractCrud {
 		}
 
 		if (masterEvent != null) {
-			event = masterEvent.getInspection();
+			event = masterEvent.getEvent();
 			token = masterEvent.getToken();
-			setAssetId(masterEvent.getInspection().getAsset().getId());
-			getSession().put("masterInspection", masterEvent);
+			setAssetId(masterEvent.getEvent().getAsset().getId());
+			getSession().put("masterEvent", masterEvent);
 		}
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 	public String doAdd() {
 
 		if (masterEvent == null) {
@@ -123,27 +123,27 @@ public class MasterEventCrud extends AbstractCrud {
 		}
 
 		if (asset == null) {
-			if (masterEvent.getInspection().getAsset() == null) {
+			if (masterEvent.getEvent().getAsset() == null) {
 				addActionError(getText("error.noasset"));
 				return MISSING;
 			} else {
-				asset = masterEvent.getInspection().getAsset();
+				asset = masterEvent.getEvent().getAsset();
 			}
 		}
 
-		if (masterEvent.getInspection() == null) {
+		if (masterEvent.getEvent() == null) {
 			addActionError(getText("error.noevent"));
 			return ERROR;
 		}
-		if (masterEvent.getInspection().getType() == null) {
+		if (masterEvent.getEvent().getType() == null) {
 			addActionError(getText("error.noinpsectiontype"));
 			return MISSING;
 		}
 
-		event = masterEvent.getInspection();
+		event = masterEvent.getEvent();
 
 		if (eventGroup != null) {
-			masterEvent.setInspectionGroupId(eventGroup.getId());
+			masterEvent.setEventGroupId(eventGroup.getId());
 		}
 
 		if (masterEvent.getSchedule() != null) {
@@ -160,7 +160,7 @@ public class MasterEventCrud extends AbstractCrud {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
 	public String doEdit() {
 
 		if (masterEvent == null) {
@@ -169,15 +169,15 @@ public class MasterEventCrud extends AbstractCrud {
 		}
 
 		if (asset == null) {
-			if (masterEvent.getInspection().getAsset() == null) {
+			if (masterEvent.getEvent().getAsset() == null) {
 				addActionError(getText("error.noasset"));
 				return MISSING;
 			} else {
-				asset = masterEvent.getInspection().getAsset();
+				asset = masterEvent.getEvent().getAsset();
 			}
 		}
 
-		if (masterEvent.getInspection() == null) {
+		if (masterEvent.getEvent() == null) {
 			addActionError(getText("error.noevent"));
 			return MISSING;
 		}
@@ -186,33 +186,33 @@ public class MasterEventCrud extends AbstractCrud {
 	}
 
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 	public String doCreate() {
 		return save();
 	}
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
 	public String doUpdate() {
 		return save();
 	}
 	
 	
-	@Validations(requiredFields = { @RequiredFieldValidator(message = "", key = "error.mastereventnotcomplete", fieldName = "inspectionComplete") })
+	@Validations(requiredFields = { @RequiredFieldValidator(message = "", key = "error.mastereventnotcomplete", fieldName = "eventComplete") })
 	private String save() {
 
 		if (masterEvent == null) {
 			return ERROR;
 		}
 
-		setInspectionGroupId(masterEvent.getInspectionGroupId());
+		setEventGroupId(masterEvent.getEventGroupId());
 		event.setGroup(eventGroup);
 
 		try {
 			if (uniqueID == null) {
-				if (cleanToInspectionsToMatchConfiguration) {
-					masterEvent.cleanSubInspectionsForNonValidSubAssets(asset);
+				if (cleanToEventsToMatchConfiguration) {
+					masterEvent.cleanSubEventsForNonValidSubAssets(asset);
 				}
-				Event master = CopyEventFactory.copyInspection(masterEvent.getCompletedInspection());
+				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
 				
 				
 				CreateEventParameterBuilder createInspecitonBuiler = new CreateEventParameterBuilder(master, getSessionUserId())
@@ -221,26 +221,26 @@ public class MasterEventCrud extends AbstractCrud {
 				
 				
 				
-				createInspecitonBuiler.addSchedules(createInspectionScheduleBundles(masterEvent.getNextSchedules()));
+				createInspecitonBuiler.addSchedules(createEventScheduleBundles(masterEvent.getNextSchedules()));
 				
-				event = inspectionPersistenceFactory.createInspectionCreator().create(
+				event = eventPersistenceFactory.createEventCreator().create(
 						createInspecitonBuiler.build());
 				uniqueID = event.getId();
 			} else {
-				Event master = CopyEventFactory.copyInspection(masterEvent.getCompletedInspection());
+				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
 				event = eventManager.updateEvent(master, getSessionUser().getUniqueID(), masterEvent.getProofTestFile(), masterEvent.getUploadedFiles());
 			}
 
 			completeSchedule(masterEvent.getScheduleId(), masterEvent.getSchedule());
 
-			for (int i = 0; i < masterEvent.getSubInspections().size(); i++) {
+			for (int i = 0; i < masterEvent.getSubEvents().size(); i++) {
 				SubEvent subEvent = new SubEvent();
 				subEvent.setName("unknown");
-				SubEvent uploadedFileKey = masterEvent.getSubInspections().get(i);
+				SubEvent uploadedFileKey = masterEvent.getSubEvents().get(i);
 				try {
 					subEvent = event.getSubEvents().get(i);
 
-					event = eventManager.attachFilesToSubEvent(event, subEvent, masterEvent.getSubInspectionUploadedFiles().get(uploadedFileKey));
+					event = eventManager.attachFilesToSubEvent(event, subEvent, masterEvent.getSubEventUploadedFiles().get(uploadedFileKey));
 
 				} catch (Exception e) {
 					addFlashError(getText("error.subeventfileupload", subEvent.getName()));
@@ -257,7 +257,7 @@ public class MasterEventCrud extends AbstractCrud {
 
 			return INPUT;
 		} catch (UnknownSubAsset e) {
-			cleanToInspectionsToMatchConfiguration = true;
+			cleanToEventsToMatchConfiguration = true;
 			addActionError(getText("error.assetconfigurationchanged"));
 			return INPUT;
 		} catch (FileAttachmentException e) {
@@ -272,11 +272,11 @@ public class MasterEventCrud extends AbstractCrud {
 
 	
 	
-	protected List<EventScheduleBundle> createInspectionScheduleBundles(List<WebEventSchedule> nextSchedules) {
+	protected List<EventScheduleBundle> createEventScheduleBundles(List<WebEventSchedule> nextSchedules) {
 		List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
 		StrutsListHelper.clearNulls(nextSchedules);
 		
-		WebEventScheduleToEventScheduleBundleConverter converter = createWebInspectionScheduleToInspectionScheduleBundleConverter();
+		WebEventScheduleToEventScheduleBundleConverter converter = createWebEventScheduleToEventScheduleBundleConverter();
 		
 		for (WebEventSchedule nextSchedule : nextSchedules) {
 			EventScheduleBundle bundle = converter.convert(nextSchedule, asset);
@@ -287,16 +287,16 @@ public class MasterEventCrud extends AbstractCrud {
 		return scheduleBundles;
 	}
 
-	private WebEventScheduleToEventScheduleBundleConverter createWebInspectionScheduleToInspectionScheduleBundleConverter() {
+	private WebEventScheduleToEventScheduleBundleConverter createWebEventScheduleToEventScheduleBundleConverter() {
 		WebEventScheduleToEventScheduleBundleConverter converter = new WebEventScheduleToEventScheduleBundleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
 		return converter;
 	}
 	
 	
-	private void completeSchedule(Long inspectionScheduleId, EventSchedule eventSchedule) {
-		if (inspectionScheduleId != null) {
+	private void completeSchedule(Long eventScheduleId, EventSchedule eventSchedule) {
+		if (eventScheduleId != null) {
 
-			if (inspectionScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
+			if (eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
 				eventSchedule = new EventSchedule(event);
 			} else if (eventSchedule != null) {
 				eventSchedule.completed(event);
@@ -337,15 +337,15 @@ public class MasterEventCrud extends AbstractCrud {
 		}
 	}
 
-	public Long getInspectionGroupId() {
+	public Long getEventGroupId() {
 		return (eventGroup != null) ? eventGroup.getId() : null;
 	}
 
-	public void setInspectionGroupId(Long inspectionGroupId) {
-		if (inspectionGroupId == null) {
+	public void setEventGroupId(Long eventGroupId) {
+		if (eventGroupId == null) {
 			eventGroup = null;
-		} else if (eventGroup == null || inspectionGroupId.equals(eventGroup.getId())) {
-			eventGroup = persistenceManager.find(EventGroup.class, inspectionGroupId, getTenantId());
+		} else if (eventGroup == null || eventGroupId.equals(eventGroup.getId())) {
+			eventGroup = persistenceManager.find(EventGroup.class, eventGroupId, getTenantId());
 		}
 	}
 
@@ -364,21 +364,21 @@ public class MasterEventCrud extends AbstractCrud {
 		}
 	}
 
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		return event.getType();
 	}
 
 	// validate this to be sure we have
-	public MasterEvent getMasterInspection() {
+	public MasterEvent getMasterEvent() {
 		return masterEvent;
 	}
 
-	public List<SubEvent> getInspectionsFor(Asset asset) {
-		return masterEvent.getSubInspectionFor(asset);
+	public List<SubEvent> getEventsFor(Asset asset) {
+		return masterEvent.getSubEventFor(asset);
 	}
 	
 	public String getNameFor(Asset asset) {
-		List<SubEvent> subEvents = getInspectionsFor(asset);
+		List<SubEvent> subEvents = getEventsFor(asset);
 		String result = null;
 		if (!subEvents.isEmpty()) {
 			result = subEvents.iterator().next().getName();
@@ -387,7 +387,7 @@ public class MasterEventCrud extends AbstractCrud {
 		return result;
 	}
 
-	public Event getInspection() {
+	public Event getEvent() {
 		return event;
 	}
 
@@ -400,25 +400,25 @@ public class MasterEventCrud extends AbstractCrud {
 	}
 
 	public boolean isComplete() {
-		return (masterEvent != null && masterEvent.isMainInspectionStored());
+		return (masterEvent != null && masterEvent.isMainEventStored());
 	}
 
-	public Object getInspectionComplete() {
+	public Object getEventComplete() {
 		if (isComplete()) {
 			return new Object();
 		}
 		return null;
 	}
 
-	public boolean isCleanToInspectionsToMatchConfiguration() {
-		return cleanToInspectionsToMatchConfiguration;
+	public boolean isCleanToEventsToMatchConfiguration() {
+		return cleanToEventsToMatchConfiguration;
 	}
 
-	public void setCleanToInspectionsToMatchConfiguration(boolean cleanToInspectionsToMatchConfiguration) {
-		this.cleanToInspectionsToMatchConfiguration = cleanToInspectionsToMatchConfiguration;
+	public void setCleanToEventsToMatchConfiguration(boolean cleanToEventsToMatchConfiguration) {
+		this.cleanToEventsToMatchConfiguration = cleanToEventsToMatchConfiguration;
 	}
 
-	public boolean isMasterInspection(Long id) {
+	public boolean isMasterEvent(Long id) {
 		return eventManager.isMasterEvent(id);
 	}
 

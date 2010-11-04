@@ -17,7 +17,7 @@
 		
 		<p>
 			<label><@s.text name="label.totalevents"/></label>
-			<span>${report.totalInspections}</span>
+			<span>${report.totalEvents}</span>
 		</p>
 		
 		<p>
@@ -27,7 +27,7 @@
 		
 		<p>
 			<label><@s.text name="label.numberofeventtypegroup"/></label>
-			<span>${report.inspectionTypeGroups?size}</span>
+			<span>${report.eventTypeGroups?size}</span>
 		</p>
 	</div>
 	<h2><@s.text name="label.details"/></h2>
@@ -49,12 +49,12 @@
 					<div id="detailRowAsset_${key}" style="display:none" class="subList">
 						<#list report.countsByAssetType[ key ] as record >
 							<div class="count">
-								${record.count!0} ${record.inspectionTypeGroupName?html}
+								${record.count!0} ${record.eventTypeGroupName?html}
 							</div> 
 						</#list>
 					</div>
 				</td>
-				<td>${report.getInspectionsForAssetType( key ) }</td>
+				<td>${report.getEventsForAssetType( key ) }</td>
 				<td>${report.getDisinctAssetsForAssetType( key ) }</td>
 			</tr>
 			
@@ -68,21 +68,21 @@
 			<th><@s.text name="label.totalevents"/></th>
 		</tr>
 		
-		<#list report.inspectionTypeGroups as key >
+		<#list report.eventTypeGroups as key >
 			<tr>
 				<td class="nameRow">
-					<a id="detailRowInspectionOpen_${key}" href="javascript:void(0);" onclick="return openSection( 'detailRowInspection_${key}', 'detailRowInspectionOpen_${key}','detailRowInspectionClose_${key}');"><img src="<@s.url value="/images/expandLarge.gif"/>" alt"+"></a>  
-					<a id="detailRowInspectionClose_${key}" style="display:none" href="javascript:void(0);" onclick="return closeSection( 'detailRowInspection_${key}', 'detailRowInspectionClose_${key}','detailRowInspectionOpen_${key}');"><img src="<@s.url value="/images/collapseLarge.gif"/>" alt="-"></a> 
+					<a id="detailRowEventOpen_${key}" href="javascript:void(0);" onclick="return openSection( 'detailRowEvent_${key}', 'detailRowEventOpen_${key}','detailRowEventClose_${key}');"><img src="<@s.url value="/images/expandLarge.gif"/>" alt"+"></a>
+					<a id="detailRowEventClose_${key}" style="display:none" href="javascript:void(0);" onclick="return closeSection( 'detailRowEvent_${key}', 'detailRowEventClose_${key}','detailRowEventOpen_${key}');"><img src="<@s.url value="/images/collapseLarge.gif"/>" alt="-"></a>
 					${key?html}
-					<div id="detailRowInspection_${key}" style="display:none" class="subList">
-						<#list report.countsByInspectionTypeGroup[ key ] as record >
+					<div id="detailRowEvent_${key}" style="display:none" class="subList">
+						<#list report.countsByEventTypeGroup[ key ] as record >
 							<div class="count">
 								${record.count!0} ${record.assetTypeName?html}
 							</div> 
 						</#list>
 					</div>
 				</td>
-				<td>${report.getInspectionsForInspectionTypeGroup( key ) }</td>
+				<td>${report.getEventsForEventTypeGroup( key ) }</td>
 			</tr>
 			
 			

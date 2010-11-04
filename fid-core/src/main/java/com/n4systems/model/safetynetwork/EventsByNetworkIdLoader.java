@@ -18,11 +18,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-public class InspectionsByNetworkIdLoader extends ListLoader<Event> {
+public class EventsByNetworkIdLoader extends ListLoader<Event> {
 
 	private Long networkId;
 	
-	public InspectionsByNetworkIdLoader(SecurityFilter filter) {
+	public EventsByNetworkIdLoader(SecurityFilter filter) {
 		super(filter);
 	}
 
@@ -50,7 +50,7 @@ public class InspectionsByNetworkIdLoader extends ListLoader<Event> {
 		return enhancedEvents;
 	}
 
-	public InspectionsByNetworkIdLoader setNetworkId(Long networkId) {
+	public EventsByNetworkIdLoader setNetworkId(Long networkId) {
 		this.networkId = networkId;
 		return this;
 	}

@@ -66,11 +66,11 @@ public class CriteriaResult extends EntityWithTenant {
 		this.state = state;
 	}
 
-	public AbstractEvent getInspection() {
+	public AbstractEvent getEvent() {
 		return event;
 	}
 
-	public void setInspection(AbstractEvent event) {
+	public void setEvent(AbstractEvent event) {
 		this.event = event;
 	}
 	

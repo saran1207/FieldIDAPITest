@@ -1,7 +1,7 @@
 	<h2><@s.text name="label.prooftest"/></h2>
 		<div class="infoSet">
 		
-			<label class="label"><@s.select id="proofTestType" theme="fieldidSimple" name="proofTestType" list="inspectionType.supportedProofTests" listKey="name()" listValue="%{ getText( label ) }" onchange="checkProofTestType( 'proofTestType' )"/></label>
+			<label class="label"><@s.select id="proofTestType" theme="fieldidSimple" name="proofTestType" list="eventType.supportedProofTests" listKey="name()" listValue="%{ getText( label ) }" onchange="checkProofTestType( 'proofTestType' )"/></label>
 			<div class="fieldHolder">
 				<div id="proofTestUpload" <#if proofTestTypeEnum?exists && !proofTestTypeEnum.uploadable >style="display:none"</#if> >
 					<#if !proofTestDirectory?exists || proofTestDirectory.length() == 0  >

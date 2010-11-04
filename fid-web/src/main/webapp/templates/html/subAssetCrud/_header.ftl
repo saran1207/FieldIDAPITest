@@ -6,12 +6,12 @@
 		<div class="subAssetLabel ">${(subAsset.label?html)!} <a href="#change" class="notAllowedDuringOrdering" onclick="$('subAssetDefinition_${subAsset.asset.id}').hide(); $('subAssetLabelForm_${subAsset.asset.id}').show(); return false;"><@s.text name="label.change_label"/></a></div>
 	</div>
 	<div class="subAssetActions">
-		<#if inInspection?exists>
-			<div id="subInspection_${subAsset.asset.id}" class="subAssetAction inspectionTypes inspectionTypesMiddle simpleContainer" onmouseover="positionDropdown(this);">
+		<#if inEvent?exists>
+			<div id="subEvent_${subAsset.asset.id}" class="subAssetAction eventTypes eventTypesMiddle simpleContainer" onmouseover="positionDropdown(this);">
 				<a class="exitLink" href="javascript:void(0);"  ><@s.text name="label.start_event"/></a>
-				<ul id="subInspection_${subAsset.asset.id}_list" >
-					<#assign inspectionTypes=subAsset.asset.type.inspectionTypes  />
-					<#assign subInspection=true/>
+				<ul id="subEvent_${subAsset.asset.id}_list" >
+					<#assign eventTypes=subAsset.asset.type.eventTypes  />
+					<#assign subEvent=true/>
 					<#include "/templates/html/eventGroup/_eventSelect.ftl" />
 				</ul>
 			</div>

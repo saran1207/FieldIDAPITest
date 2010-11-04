@@ -58,9 +58,9 @@ public class DownloadCoordinator {
 		executor.execute(task);
 	}
 	
-	public void generateAllInspectionCertificates(String name, String downloadUrl, EventReportType type, List<Long> inspectionIds) {
+	public void generateAllEventCertificates(String name, String downloadUrl, EventReportType type, List<Long> eventIds) {
 		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
-		PrintAllEventCertificatesTask task = taskFactory.createPrintAllInspectionCertificatesTask(link, downloadUrl, type, inspectionIds);
+		PrintAllEventCertificatesTask task = taskFactory.createPrintAllEventCertificatesTask(link, downloadUrl, type, eventIds);
 		
 		executor.execute(task);
 	}
@@ -72,9 +72,9 @@ public class DownloadCoordinator {
 		executor.execute(task);
 	}
 	
-	public void generateInspectionSummaryReport(String name, String downloadUrl, ReportDefiner reportDefiner) {
+	public void generateEventSummaryReport(String name, String downloadUrl, ReportDefiner reportDefiner) {
 		DownloadLink link = createDownloadLink(name, ContentType.PDF);
-		PrintEventSummaryReportTask task = taskFactory.createPrintInspectionSummaryReportTask(link, downloadUrl, reportDefiner);
+		PrintEventSummaryReportTask task = taskFactory.createPrintEventSummaryReportTask(link, downloadUrl, reportDefiner);
 		
 		executor.execute(task);
 	}

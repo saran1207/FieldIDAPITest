@@ -14,7 +14,7 @@
 </p>
 <p>
 	<label>Prints with Sub Events</label>
-	<span><@s.checkbox name="printOut.withSubInspections" /></span>
+	<span><@s.checkbox name="printOut.withSubEvents" /></span>
 </p>
 <p>
 	<label>Jasper template name ( with out .japser on it )</label>

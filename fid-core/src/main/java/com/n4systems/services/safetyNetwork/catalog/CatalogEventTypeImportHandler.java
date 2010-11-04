@@ -40,7 +40,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 	
 	private void importInspectionType(Long originalId) throws ImportFailureException {
-		EventType importedEventType = importCatalog.getPublishedInspectionType(originalId);
+		EventType importedEventType = importCatalog.getPublishedEventType(originalId);
 		try {
 			importIntoAccount(importedEventType);
 			
@@ -93,7 +93,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 			throw new RuntimeException();
 		}
 		
-		List<ListingPair> inspectionTypes = importCatalog.getPublishedInspectionTypesLP();
+		List<ListingPair> inspectionTypes = importCatalog.getPublishedEventTypesLP();
 		for (ListingPair inspectionType : inspectionTypes) {
 			if (inspectionTypeIds.contains(inspectionType.getId())) {
 				summary.getImportMapping().put(inspectionType.getId(), new EventType(createUniqueInspectionTypeName(inspectionType.getName())) );

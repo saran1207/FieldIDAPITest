@@ -195,7 +195,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// if we were unable to locate an inspection, then we'll need to create a new one
 			if (event == null) {
-				event = createInspection(tenant, performedBy, customer, asset, book, datePerformedInUTC, fileData);
+				event = createEvent(tenant, performedBy, customer, asset, book, datePerformedInUTC, fileData);
 			} else {
 				try {
 					// we have a valid inspection, now we can update it
@@ -364,7 +364,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return asset;
 	}
 	
-	private Event createInspection(Tenant tenant, User performedBy, BaseOrg owner, Asset asset, EventBook book, Date datePerformed, FileDataContainer fileData) {
+	private Event createEvent(Tenant tenant, User performedBy, BaseOrg owner, Asset asset, EventBook book, Date datePerformed, FileDataContainer fileData) {
 		Event event = new Event();
 		event.setTenant(tenant);
 		

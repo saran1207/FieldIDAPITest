@@ -89,7 +89,7 @@ public class CatalogServiceImpl implements CatalogService {
 		return additionalSubTypesRequiredForPublishing;
 	}
 
-	public Set<Long> getInspectionTypeIdsPublished() {
+	public Set<Long> getEventTypeIdsPublished() {
 		Set<Long> inspectionTypeIds = new HashSet<Long>();
 		Catalog catalog = getCatalog();
 		if (catalog != null) {
@@ -100,8 +100,8 @@ public class CatalogServiceImpl implements CatalogService {
 		return inspectionTypeIds;
 	}
 
-	public List<ListingPair> getPublishedInspectionTypesLP() {
-		Set<Long> inspectionTypeIdsPublished = getInspectionTypeIdsPublished();
+	public List<ListingPair> getPublishedEventTypesLP() {
+		Set<Long> inspectionTypeIdsPublished = getEventTypeIdsPublished();
 		
 		if (inspectionTypeIdsPublished.isEmpty()) {
 			return new ArrayList<ListingPair>();
@@ -114,7 +114,7 @@ public class CatalogServiceImpl implements CatalogService {
 		return persistenceManager.findAll(inspectionTypesQuery);
 	}
 
-	public Catalog publishInspectionTypes(Set<EventType> eventTypes) {
+	public Catalog publishEventTypes(Set<EventType> eventTypes) {
 		Catalog catalog = getCatalog();
 		catalog.setPublishedInspectionTypes(eventTypes);
 		return persistenceManager.update(catalog);
@@ -178,30 +178,30 @@ public class CatalogServiceImpl implements CatalogService {
 		return persistenceManager.findCount(definisionCountQuery);
 	}
 
-	public Set<ListingPair> getInspectionTypeGroupsFor(Set<Long> inspectionTypeIds) {
+	public Set<ListingPair> getEventTypeGroupsFor(Set<Long> eventTypeIds) {
 		QueryBuilder<ListingPair> importingInspectionTypeGroups = new QueryBuilder<ListingPair>(EventType.class, filter);
 		importingInspectionTypeGroups.setSelectArgument(new NewObjectSelect(ListingPair.class, "group.id", "group.name"));
-		importingInspectionTypeGroups.addWhere(Comparator.IN, "ids", "id", inspectionTypeIds);
-		importingInspectionTypeGroups.addWhere(Comparator.IN, "publishedIds", "id", getInspectionTypeIdsPublished());
+		importingInspectionTypeGroups.addWhere(Comparator.IN, "ids", "id", eventTypeIds);
+		importingInspectionTypeGroups.addWhere(Comparator.IN, "publishedIds", "id", getEventTypeIdsPublished());
 		importingInspectionTypeGroups.addOrder("group.name");
 
 		return new HashSet<ListingPair>(persistenceManager.findAll(importingInspectionTypeGroups));
 	}
 
-	public EventType getPublishedInspectionType(Long inspectionTypeId) {
-		if (!getInspectionTypeIdsPublished().contains(inspectionTypeId)) {
+	public EventType getPublishedEventType(Long eventTypeId) {
+		if (!getEventTypeIdsPublished().contains(eventTypeId)) {
 			throw new NotPublishedException("not published");
 		}
-		return persistenceManager.find(EventType.class, inspectionTypeId, getTenant().getId(), "supportedProofTests", "sections", "infoFieldNames");
+		return persistenceManager.find(EventType.class, eventTypeId, getTenant().getId(), "supportedProofTests", "sections", "infoFieldNames");
 	}
 
-	public List<StateSet> getStateSetsUsedIn(Set<Long> inspectionTypeIds) {
+	public List<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds) {
 		List<StateSet> originalStateSets = new ArrayList<StateSet>();
-		if (!inspectionTypeIds.isEmpty()) {
+		if (!eventTypeIds.isEmpty()) {
 			QueryBuilder<Long> usedSectionsInInspectionTypesQuery = new QueryBuilder<Long>(EventType.class, filter);
 			usedSectionsInInspectionTypesQuery.addRequiredLeftJoin("sections", "section").setSelectArgument(new SimpleSelect("section.id", true));
-			usedSectionsInInspectionTypesQuery.addWhere(Comparator.IN, "ids", "id", inspectionTypeIds);
-			usedSectionsInInspectionTypesQuery.addWhere(Comparator.IN, "publishedIds", "id", getInspectionTypeIdsPublished());
+			usedSectionsInInspectionTypesQuery.addWhere(Comparator.IN, "ids", "id", eventTypeIds);
+			usedSectionsInInspectionTypesQuery.addWhere(Comparator.IN, "publishedIds", "id", getEventTypeIdsPublished());
 			
 			QueryBuilder<StateSet> usedStateSetsInInspectionTypesQuery = new QueryBuilder<StateSet>(CriteriaSection.class, filter);
 			SimpleSelect selectStates = new SimpleSelect("oneCriteria.states", true);
@@ -238,8 +238,8 @@ public class CatalogServiceImpl implements CatalogService {
 		return persistenceManager.findAllPaged(query, pageNumber, pageSize);
 	}
 
-	public Set<Long> getPublishedInspectionTypeIdsConnectedTo(Set<Long> assetTypeIds) {
-		Set<Long> inspectionTypeIdsPublished = getInspectionTypeIdsPublished();
+	public Set<Long> getPublishedEventTypeIdsConnectedTo(Set<Long> assetTypeIds) {
+		Set<Long> inspectionTypeIdsPublished = getEventTypeIdsPublished();
 		if (inspectionTypeIdsPublished.isEmpty() || assetTypeIds.isEmpty()) {
 			return new HashSet<Long>();
 		}

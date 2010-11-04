@@ -30,7 +30,7 @@ public class PrintAllEventCertificatesTask extends DownloadTask {
 	private final EventCertificateReportGenerator reportGen;
 	private final SafetyNetworkEventLoader eventLoader;
 	
-	private List<Long> inspectionIds;
+	private List<Long> eventIds;
 	private EventReportType reportType;
 	
 	public PrintAllEventCertificatesTask(DownloadLink downloadLink, String downloadUrl, DateTimeDefiner dateDefiner, SafetyNetworkEventLoader eventLoader) {
@@ -62,12 +62,12 @@ public class PrintAllEventCertificatesTask extends DownloadTask {
 	protected void sendFailureNotification(MailManager mailManager, DownloadLink downloadLink, Exception cause) throws MessagingException {
 		// if the failure was caused by an empty report, we send a message.  Otherwise the failure is silent to the end user
 		if (cause instanceof EmptyReportException) {
-			mailManager.sendMessage(downloadLink.generateMailMessage("We're sorry, your report did not contain any printable inspections."));
+			mailManager.sendMessage(downloadLink.generateMailMessage("We're sorry, your report did not contain any printable events."));
 		}
 	}
 
 	private void generateReport(User user, File downloadFile, String downloadName, Transaction transaction) throws IOException, UnsupportedEncodingException, NonPrintableEventType, ReportException {
-		List<Event> events = loadInspections(user, transaction);
+		List<Event> events = loadEvents(user, transaction);
 		reportGen.setType(reportType);
 		
 		reportGen.generate(events, new FileOutputStream(downloadFile), downloadName, transaction);
@@ -75,12 +75,12 @@ public class PrintAllEventCertificatesTask extends DownloadTask {
 
 	
 
-	private List<Event> loadInspections(User user, Transaction transaction) {
-		return new LazyLoadingList<Event>(inspectionIds, eventLoader, transaction);
+	private List<Event> loadEvents(User user, Transaction transaction) {
+		return new LazyLoadingList<Event>(eventIds, eventLoader, transaction);
 	}
 
-	public void setInspectionIds(List<Long> inspectionIds) {
-    	this.inspectionIds = inspectionIds;
+	public void setEventIds(List<Long> eventIds) {
+    	this.eventIds = eventIds;
     }
 
 	public void setReportType(EventReportType reportType) {

@@ -6,7 +6,7 @@ public class EventTypeGroupBuilder extends BaseBuilder<EventTypeGroup> {
 
 	private final String name;
 
-	public static EventTypeGroupBuilder anInspectionTypeGroup() {
+	public static EventTypeGroupBuilder anEventTypeGroup() {
 		return new EventTypeGroupBuilder("some name");
 	}
 

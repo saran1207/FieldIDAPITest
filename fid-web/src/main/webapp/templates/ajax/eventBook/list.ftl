@@ -1,1 +1,1 @@
-updateInspectionBookList( ${json.toJson(books)} );
+updateEventBookList( ${json.toJson(books)} );

@@ -20,7 +20,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 
-public class InspectionToModelConverter implements ViewToModelConverter<Event, EventView> {
+public class EventToModelConverter implements ViewToModelConverter<Event, EventView> {
 	private final OrgByNameLoader orgLoader;
 	private final SmartSearchLoader assetLoader;
 	private final AssetStatusByNameLoader assetStatusLoader;
@@ -29,7 +29,7 @@ public class InspectionToModelConverter implements ViewToModelConverter<Event, E
 	
 	private EventType type;
 	
-	public InspectionToModelConverter(OrgByNameLoader orgLoader, SmartSearchLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader) {
+	public EventToModelConverter(OrgByNameLoader orgLoader, SmartSearchLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader) {
 		this.orgLoader = orgLoader;
 		this.assetLoader = assetLoader;
 		this.assetStatusLoader = assetStatusLoader;

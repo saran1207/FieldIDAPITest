@@ -1,15 +1,15 @@
 
-<#list inspectionTypes as inspectionType>
+<#list eventTypes as eventType>
 	<li>
-		<#if subInspection?exists && subInspection  > 
-			<@s.url id="inspectionUrl" action="subEventAdd" assetId="${subAsset.asset.id}" type="${inspectionType.id}" parentAssetId="${assetId}" token="${token}" namespace="/"/>
+		<#if subEvent?exists && subEvent  > 
+			<@s.url id="eventUrl" action="subEventAdd" assetId="${subAsset.asset.id}" type="${eventType.id}" parentAssetId="${assetId}" token="${token}" namespace="/"/>
 		<#else>
-			<@s.url id="inspectionUrl" action="selectEventAdd" assetId="${uniqueID}" type="${inspectionType.id}" inspectionGroupId="${(inspectionGroup.id)!}"/>
+			<@s.url id="eventUrl" action="selectEventAdd" assetId="${uniqueID}" type="${eventType.id}" eventGroupId="${(eventGroup.id)!}"/>
 		</#if>
-		<a href="${inspectionUrl}" >${inspectionType.name}</a>
+		<a href="${eventUrl}" >${eventType.name}</a>
 	</li>
 </#list>
-<#if inspectionTypes.isEmpty() >
+<#if eventTypes.isEmpty() >
 	<li>
 		<@s.text name="label.noeventtypes"/>
 	</li>

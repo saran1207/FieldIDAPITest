@@ -1,6 +1,6 @@
-<#assign assetId="${action.getAssetIdForInspectionScheduleId(entityId)}" />
-<#assign inspectionTypeId="${action.getInspectionTypeIdForInspectionScheduleId(entityId)}" />
-<#assign inspectionId="${action.getInspectionIdForInspectionScheduleId(entityId)!0}" />
+<#assign assetId="${action.getAssetIdForEventScheduleId(entityId)}" />
+<#assign eventTypeId="${action.getEventTypeIdForEventScheduleId(entityId)}" />
+<#assign eventId="${action.getEventIdForEventScheduleId(entityId)!0}" />
 
 <td id="actionsContainer_${entityId}">
 	<span class="floatingDropdown floatingDropdownRelative">
@@ -10,9 +10,9 @@
 
 		</a>
 		<ul id="moreActions_list_${entityId}">
-			<#if sessionUser.hasAccess("createinspection") >
+			<#if sessionUser.hasAccess("createevent") >
 				<li id="floatingDropdownStartEventLink">
-					<a href='<@s.url action="selectEventAdd" namespace="/" assetId="${assetId}" type="${inspectionTypeId}" scheduleId="${entityId}" />'>
+					<a href='<@s.url action="selectEventAdd" namespace="/" assetId="${assetId}" type="${eventTypeId}" scheduleId="${entityId}" />'>
 						<@s.text name="label.startevent"/>
 					</a>
 				</li>
@@ -28,7 +28,7 @@
 						<@s.text name="label.edit_schedule"/>
 					</a>
 				</li>
-				<#if inspectionId == "0">
+				<#if eventId == "0">
 					<li>
 						<a href='<@s.url action="eventScheduleDelete" uniqueID="${entityId}" assetId="${assetId}" searchId="${searchId}" currentPage="${currentPage}" />'>
 							<@s.text name="label.delete_schedule"/>
@@ -36,10 +36,10 @@
 					</li>
 				</#if>
 			</#if>
-			<#if inspectionId != "0">
+			<#if eventId != "0">
 				<li>
 					<#include "../eventCrud/_eventViewLightBoxOptions.ftl"/>
-					<a href='<@s.url action="event" namespace="/aHtml/iframe" uniqueID="${inspectionId}" assetId="${assetId}"/>'  ${inspectionLightViewOptions} >
+					<a href='<@s.url action="event" namespace="/aHtml/iframe" uniqueID="${eventId}" assetId="${assetId}"/>'  ${eventLightViewOptions} >
 						<@s.text name="label.view_event"/>
 					</a>
 				</li>

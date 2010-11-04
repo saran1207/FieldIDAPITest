@@ -52,9 +52,9 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	private String savedReportName;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> savedReports;
-	private List<ListingPair> inspectionBooks;
+	private List<ListingPair> eventBooks;
 	private List<ListingPair> examiners;
-	private List<ListingPair> inspectionTypes;
+	private List<ListingPair> eventTypes;
 	private List<AssetStatus> statuses;
 	private List<ListingPair> eventJobs;
 	
@@ -63,8 +63,8 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 			final UserManager userManager, 
 			final AssetManager assetManager) {
 		//TODO refactor search action so that we don't have to pass in the session key but a way of getting the current criteria.
-		super(EventReportAction.class, WebSession.REPORT_CRITERIA, "Inspection Report", persistenceManager,
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "inspection_search", "asset"));
+		super(EventReportAction.class, WebSession.REPORT_CRITERIA, "Event Report", persistenceManager,
+				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "event_search", "asset"));
 
 		this.userManager = userManager;
 		
@@ -83,7 +83,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		List<ColumnMappingGroup> dynamicGroups = super.getDynamicGroups();
 		
-		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "inspection_search", getSecurityFilter()));
+		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "event_search", getSecurityFilter()));
 		
 		
 		return dynamicGroups;
@@ -129,11 +129,11 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		String reportName = String.format("%s Report - %s", reportType.getDisplayName(), DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
-			List<Long> inspectionIds = getSearchIds();
+			List<Long> eventIds = getSearchIds();
 	
-			getDownloadCoordinator().generateAllInspectionCertificates(reportName, getDownloadLinkUrl(), reportType, inspectionIds);
+			getDownloadCoordinator().generateAllEventCertificates(reportName, getDownloadLinkUrl(), reportType, eventIds);
 		} catch(RuntimeException e) {
-			logger.error("Failed to print all inspection certs", e);
+			logger.error("Failed to print all event certs", e);
 			addFlashErrorText("error.reportgeneration");
 			return ERROR;
 		}
@@ -151,12 +151,12 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 			addFlashErrorText("error.reportexpired");
 			return INPUT;
 		}
-		String reportName = String.format("Inspection Summary Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
+		String reportName = String.format("Event Summary Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
 		
 		try {
-			getDownloadCoordinator().generateInspectionSummaryReport(reportName, getDownloadLinkUrl(), getContainer());
+			getDownloadCoordinator().generateEventSummaryReport(reportName, getDownloadLinkUrl(), getContainer());
 		} catch(RuntimeException e) {
-			logger.error("Failed to print inspection report summary", e);
+			logger.error("Failed to print event report summary", e);
 			addFlashErrorText("error.reportgeneration");
 			return ERROR;
 		}
@@ -208,21 +208,21 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		return examiners;
 	}
 	
-	public List<ListingPair> getInspectionBooks() {
-		if (inspectionBooks == null) {
+	public List<ListingPair> getEventBooks() {
+		if (eventBooks == null) {
 			EventBookListLoader bookLoader = new EventBookListLoader(getSecurityFilter());
 			bookLoader.setOpenBooksOnly(false);
-			inspectionBooks = bookLoader.loadListingPair();
-			inspectionBooks.add(new ListingPair(0L, "Inspections not in a book"));
+			eventBooks = bookLoader.loadListingPair();
+			eventBooks.add(new ListingPair(0L, "Events not in a book"));
 		}
-		return inspectionBooks;
+		return eventBooks;
 	}
 
-	public List<ListingPair> getInspectionTypes() {
-		if (inspectionTypes == null) {
-			inspectionTypes = persistenceManager.findAllLP( EventTypeGroup.class, getTenantId(), "name" );
+	public List<ListingPair> getEventTypes() {
+		if (eventTypes == null) {
+			eventTypes = persistenceManager.findAllLP( EventTypeGroup.class, getTenantId(), "name" );
 		}
-		return inspectionTypes;
+		return eventTypes;
 	}
 	 
 	public List<Listable<Long>> getEmployees() {
@@ -286,7 +286,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		return eventJobs;
 	}
 	
-	public boolean isLocalInspection(int rowId) {
+	public boolean isLocalEvent(int rowId) {
 		Event event = (Event)getEntityForRow(rowId);
 		return event.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
 	}

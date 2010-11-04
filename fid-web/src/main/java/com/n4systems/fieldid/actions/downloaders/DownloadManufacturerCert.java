@@ -92,7 +92,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 			logger.debug("Cert was non-printable", npe);
 			return "cantprint";
 		} catch (Exception e) {
-			logger.error("Unable to download inspection cert", e);
+			logger.error("Unable to download event cert", e);
 			return ERROR;
 		}
 

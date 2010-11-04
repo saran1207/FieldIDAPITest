@@ -247,7 +247,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	}
 
 	@AllowSafetyNetworkAccess
-	public boolean isInspectionCertPrintable() { 
+	public boolean isEventCertPrintable() {
 		return isPrintableForReportType(EventReportType.INSPECTION_CERT);
 	}
 
@@ -270,9 +270,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	
 	@Override
     public String toString() {
-		String subInspectionString = new String();
+		String subEventString = new String();
 		for (SubEvent subEvent : getSubEvents()) {
-			subInspectionString += "\n" + subEvent;
+			subEventString += "\n" + subEvent;
 		}
 		
 	    return	super.toString() +
@@ -283,7 +283,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	    		"\nBook: " + getBook() +
 	    		"\nPerformed By: " + getPerformedBy() + 
 	    		"\nStatus: " + getStatus() + 
-	    		"\nSubInspections: " + StringUtils.indent(subInspectionString, 1);
+	    		"\nSubEvents: " + StringUtils.indent(subEventString, 1);
     }
 
 	@AllowSafetyNetworkAccess
@@ -314,7 +314,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		return enhanced;
 	}
 
-	// Inspection are never exported
+	// Events are never exported
 	@Override
 	public String getGlobalId() {
 		return null;

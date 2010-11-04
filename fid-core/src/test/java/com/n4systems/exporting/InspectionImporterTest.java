@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.n4systems.api.conversion.inspection.EventToModelConverter;
 import com.n4systems.api.model.EventView;
 import com.n4systems.api.validation.validators.EventViewValidator;
 import com.n4systems.ejb.impl.CreateEventParameter;
@@ -20,7 +21,6 @@ import com.n4systems.model.builders.EventTypeBuilder;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.inspection.InspectionToModelConverter;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
@@ -40,7 +40,7 @@ public class InspectionImporterTest {
 	
 	@Test
 	public void test_constructor_sets_inspection_type_into_validator() {
-		InspectionToModelConverter converter = new InspectionToModelConverter(null, null, null, null, null);
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null);
 		converter.setType(EventTypeBuilder.anEventType().build());
 		
 		Validator<ExternalModelView> validator = new ViewValidator(null);
@@ -66,7 +66,7 @@ public class InspectionImporterTest {
 		expect(validator.getValidationContext()).andReturn(new HashMap<String, Object>());
 		replay(validator);
 
-		InspectionToModelConverter converter = createMock(InspectionToModelConverter.class);
+		EventToModelConverter converter = createMock(EventToModelConverter.class);
 		expect(converter.getType()).andReturn(new EventType());
 		expect(converter.toModel(view, transaction)).andReturn(event);
 		replay(converter);

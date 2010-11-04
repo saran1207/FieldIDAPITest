@@ -30,13 +30,13 @@ import com.n4systems.test.helpers.FluentArrayList;
 public class WebServiceInspectionsCreatorTest {
 	private final class CreateInspectionsMethodObjectSabatour implements CreateEventsMethodObject {
 		@Override
-		public List<Event> createInspections(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
+		public List<Event> createEvents(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
 				FileAttachmentException, UnknownSubAsset {
-					return createInspections(transactionGUID, events);
+					return createEvents(transactionGUID, events);
 				}
 
 		@Override
-		public List<Event> createInspections(String transactionGUID, List<Event> events) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
+		public List<Event> createEvents(String transactionGUID, List<Event> events) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
 				FileAttachmentException, UnknownSubAsset {
 			throw new TransactionAlreadyProcessedException();
 		}
@@ -63,17 +63,17 @@ public class WebServiceInspectionsCreatorTest {
 	public void should_create_dependancies_from_the_factory_with_the_created_transaction() throws Exception {
 		Transaction transaction = transactionManager.getTransaction();
 		
-		InspectionPersistenceFactory inspectionPersistenceFactory = createMock(InspectionPersistenceFactory.class);
-		expect(inspectionPersistenceFactory.createCreateInspectionsMethodObject(transaction)).andReturn(new NullCreateInspectionsMethodObject());
-		expect(inspectionPersistenceFactory.createNextInspectionScheduleService(transaction)).andReturn(new NullNextInspectionScheduleSerivce());
-		expect(inspectionPersistenceFactory.createCreateInspectionAuditLogger()).andReturn(new NullAuditLogger());
-		replay(inspectionPersistenceFactory);
+		EventPersistenceFactory eventPersistenceFactory = createMock(EventPersistenceFactory.class);
+		expect(eventPersistenceFactory.createCreateEventsMethodObject(transaction)).andReturn(new NullCreateEventsMethodObject());
+		expect(eventPersistenceFactory.createNextEventScheduleService(transaction)).andReturn(new NullNextInspectionScheduleSerivce());
+		expect(eventPersistenceFactory.createCreateEventAuditLogger()).andReturn(new NullAuditLogger());
+		replay(eventPersistenceFactory);
 		
-		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, inspectionPersistenceFactory);
+		WebServiceInspectionsCreator sut = new WebServiceInspectionsCreator(transactionManager, eventPersistenceFactory);
 		
 		sut.create(transactionGUID, events, nextInspectionDates);
 		
-		verify(inspectionPersistenceFactory);
+		verify(eventPersistenceFactory);
 	}
 	
 
@@ -94,7 +94,7 @@ public class WebServiceInspectionsCreatorTest {
 	public void should_call_the_with_the_inspections_sent_in_CreateInspectionsMethodObject() throws Exception {
 		
 		CreateEventsMethodObject mockCreateEventsMethod = createMock(CreateEventsMethodObject.class);
-		expect(mockCreateEventsMethod.createInspections(transactionGUID, events)).andReturn(events);
+		expect(mockCreateEventsMethod.createEvents(transactionGUID, events)).andReturn(events);
 		replay(mockCreateEventsMethod);
 		
 		inspectionPersistenceFactory.createEventsMethodObject = mockCreateEventsMethod;
@@ -114,7 +114,7 @@ public class WebServiceInspectionsCreatorTest {
 		List<Event> savedEvents = new FluentArrayList<Event>(anEvent().build(), anEvent().build());
 		
 		CreateEventsMethodObject mockCreateEventsMethod = createMock(CreateEventsMethodObject.class);
-		expect(mockCreateEventsMethod.createInspections(transactionGUID, events)).andReturn(savedEvents);
+		expect(mockCreateEventsMethod.createEvents(transactionGUID, events)).andReturn(savedEvents);
 		replay(mockCreateEventsMethod);
 		
 		inspectionPersistenceFactory.createEventsMethodObject = mockCreateEventsMethod;

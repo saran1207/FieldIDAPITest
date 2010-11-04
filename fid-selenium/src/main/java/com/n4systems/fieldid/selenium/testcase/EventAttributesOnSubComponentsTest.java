@@ -13,7 +13,7 @@ import com.n4systems.fieldid.selenium.administration.page.ManageAssetTypesDriver
 import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
-public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
+public class EventAttributesOnSubComponentsTest extends FieldIDTestCase {
 
 	private Login login;
 	private Admin admin;
@@ -36,7 +36,7 @@ public class InspectionAttributesOnSubComponentsTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void updated_inspection_attributes_on_new_sub_component_should_be_saved() throws Exception {
+	public void updated_event_attributes_on_new_sub_component_should_be_saved() throws Exception {
 		String masterInspectionType = getMasterInspectionType();
 		String masterAssetType = getMasterAssetType(masterInspectionType);
 		addInspectionAttributeIfNecessary(masterInspectionType);

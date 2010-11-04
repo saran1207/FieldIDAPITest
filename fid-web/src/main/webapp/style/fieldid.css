@@ -200,7 +200,7 @@ h2 a {
 }
 
 
-#menuInspect {
+#menuEvent {
 	background-image: url(../images/menu/inspect.png);
 }
 
@@ -998,7 +998,7 @@ strong.fail {
 	height: 35px;
 }
 
-div.inspectionButton {
+div.eventButton {
 	height: 40px;
 }
 
@@ -1533,12 +1533,12 @@ input.description {
 	margin-top: 1.2em;
 }
 
-.groupInspectionTypeList {
+.groupEventTypeList {
 	float: left;
 	overflow:hidden;
 }
 
-.groupInspectionTypeList li {
+.groupEventTypeList li {
 	padding:5px 5px;
 }
 
@@ -1569,7 +1569,7 @@ input.description {
 	padding-left:0px;
 	}
 	
-#inspectionListTable tr:hover td{
+#eventListTable tr:hover td{
 	background-color:white;
 	color:#333399;
 	}

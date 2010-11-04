@@ -15,7 +15,7 @@ public class RemovalHandlerFactory {
 	}
 	
 	
-	public EventTypeArchiveHandler getInspectionTypeArchiveHandler() {
+	public EventTypeArchiveHandler getEventTypeArchiveHandler() {
 		return new EventTypeArchiveHandlerImpl(new EventTypeSaver(),
 													new EventListArchiveHandlerImp(getScheduleDeleter()),
 													getAssociatedEventTypeListDeleter(),

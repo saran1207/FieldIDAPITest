@@ -13,6 +13,7 @@ import javax.persistence.Query;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.exceptions.NonUniqueAssetException;
+import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -33,7 +34,6 @@ import rfid.ejb.entity.InfoFieldBean;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.exceptions.UsedOnMasterInspectionException;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -293,11 +293,11 @@ public class AssetManagerImpl implements AssetManager {
 		}
 	}
 
-	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterInspectionException {
+	public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterEventException {
 		asset = persistenceManager.reattach(asset);
 		asset = fillInSubAssetsOnAsset(asset);
 		if (!testArchive(asset).validToDelete()) {
-			throw new UsedOnMasterInspectionException();
+			throw new UsedOnMasterEventException();
 		}
 
 		if (asset.isMasterAsset()) {

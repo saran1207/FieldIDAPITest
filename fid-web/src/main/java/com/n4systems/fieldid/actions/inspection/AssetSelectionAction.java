@@ -7,7 +7,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigEntry;
 
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class AssetSelectionAction extends AbstractAction {
 
 	public AssetSelectionAction(PersistenceManager persistenceManager) {

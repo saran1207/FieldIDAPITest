@@ -1,11 +1,11 @@
 <#if customer?exists >
-	<#assign formId="${inspectionType.id}_customer"/>
+	<#assign formId="${eventType.id}_customer"/>
 <#else>
-	<#assign formId="${inspectionType.id}"/>
+	<#assign formId="${eventType.id}"/>
 </#if>
 <@s.form id="schedule_${formId}" action="assetTypeScheduleSave" namespace="/ajax" theme="fieldidSimple" >
 	<@s.hidden name="assetTypeId" />
-	<@s.hidden name="inspectionTypeId" value="${inspectionType.id}" />
+	<@s.hidden name="eventTypeId" value="${eventType.id}" />
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="customerForm" />
 	<span class="customer">
@@ -20,14 +20,14 @@
 	</span>
 	
 	<span class="frequency">
-		<@s.text name="label.capital_schedule_a"/> <b>${inspectionType.name}</b> &nbsp; <@s.text name="label.every"/>
+		<@s.text name="label.capital_schedule_a"/> <b>${eventType.name}</b> &nbsp; <@s.text name="label.every"/>
 		<@s.textfield name="frequency" onkeypress="if (event.keyCode==13) {saveSchedule( ${formId} ); return false;} return true;" /> <@s.text name="label.days"/>
 	</span>
 	<br/>
 	<span class="autoSchedule">
 			<br/>
 			<@s.checkbox name="autoSchedule" /> <@s.text name="label.automatically_schedule_checkbox_1"/> <b>${assetType.name}</b>
-			<@s.text name="label.automatically_schedule_checkbox_2"/> <b>${inspectionType.name}</b>		
+			<@s.text name="label.automatically_schedule_checkbox_2"/> <b>${eventType.name}</b>		
 	</span>
 	<span class="actions">
 		<a href="javascript:void(0);" onclick="saveSchedule( ${formId} ); return false;" ><@s.text name="label.save" /></a> | 

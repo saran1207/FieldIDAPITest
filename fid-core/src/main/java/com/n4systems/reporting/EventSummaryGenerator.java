@@ -56,7 +56,7 @@ public class EventSummaryGenerator {
 	}
 	
 	public EventSummaryGenerator(DateTimeDefiner dateDefiner) {
-		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getInspectionManager());
+		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getEventManager());
 	}
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, User user) throws ReportException {
@@ -200,16 +200,16 @@ public class EventSummaryGenerator {
 			reportMap.put("assetType", assetType.getName());
 		}
 
-		if (reportDefiner.getInspectionBook() != null) { 
-			if (reportDefiner.getInspectionBook() != 0L) {
-			reportMap.put("inspectionBook", persistenceManager.find(EventBook.class, reportDefiner.getInspectionBook()).getName());
+		if (reportDefiner.getEventBook() != null) {
+			if (reportDefiner.getEventBook() != 0L) {
+			reportMap.put("inspectionBook", persistenceManager.find(EventBook.class, reportDefiner.getEventBook()).getName());
 			} else {
 				reportMap.put("inspectionBook", "no inspection book");
 			}
 		}
 
-		if (reportDefiner.getInspectionTypeGroup() != null) {
-			reportMap.put("inspectionTypeGroup", persistenceManager.find(EventTypeGroup.class, reportDefiner.getInspectionTypeGroup()).getName());
+		if (reportDefiner.getEventTypeGroup() != null) {
+			reportMap.put("inspectionTypeGroup", persistenceManager.find(EventTypeGroup.class, reportDefiner.getEventTypeGroup()).getName());
 		}
 
 		if (reportDefiner.getPerformedBy() != null) {

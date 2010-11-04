@@ -14,12 +14,12 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 					<#if fileProcessingFailureMap[key]?exists >
 						<@s.text name="label.failedtoprocess"/>
 					<#else>
-						<#list inspectionProcessingFailureMap[key].keySet() as serialnumber >
+						<#list eventProcessingFailureMap[key].keySet() as serialnumber >
 							<p>
 								<label><@s.text name="label.serialnumber"/>: ${serialnumber}</label>
 								<span>
-									<#if inspectionProcessingFailureMap[key][serialnumber]?exists>
-										<a href='<@s.url action="event" namespace="/aHtml/iframe"  assetId="${inspectionProcessingFailureMap[key][serialnumber].asset.uniqueID}" uniqueID="${inspectionProcessingFailureMap[key][serialnumber].id}"/>'  class='lightview' rel='iframe' title='<@s.text name="title.viewevent"/> :: :: scrolling:true, width: 520, height: 420' >
+									<#if eventProcessingFailureMap[key][serialnumber]?exists>
+										<a href='<@s.url action="event" namespace="/aHtml/iframe"  assetId="${eventProcessingFailureMap[key][serialnumber].asset.uniqueID}" uniqueID="${eventProcessingFailureMap[key][serialnumber].id}"/>'  class='lightview' rel='iframe' title='<@s.text name="title.viewevent"/> :: :: scrolling:true, width: 520, height: 420' >
 							  				<@s.text name="link.view" />
 							  			</a>
 									<#else>
@@ -30,7 +30,7 @@ ${action.setPageType('inspection', 'multi_proof_test')!}
 								</span>
 							</p>
 						</#list>
-						<#if inspectionProcessingFailureMap[key].keySet().isEmpty() >
+						<#if eventProcessingFailureMap[key].keySet().isEmpty() >
 							<@s.text name="label.failedtoprocess"/>
 						</#if>		
 					</#if>

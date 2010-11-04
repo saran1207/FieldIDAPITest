@@ -9,7 +9,7 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 		addSectionUrl = '<@s.url action="sectionAdd" namespace="/ajax" uniqueID="${uniqueID}"/>';
 		addObservationUrl = '<@s.url action="observationAdd" namespace="/ajax" uniqueID="${uniqueID}"/>';
 		
-		inspectionFormChangedMessage = '${action.getText("warning.eventformnotsaved")?js_string}';
+		eventFormChangedMessage = '${action.getText("warning.eventformnotsaved")?js_string}';
 		<#list criteriaSections as section >
 			<#if section?exists >
 				sectionIndexes[${section_index}] = new Array();
@@ -30,9 +30,9 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 
 
 <#include "/templates/html/common/_formErrors.ftl"/>
-<div id="inspectionTypeForm">
+<div id="eventTypeForm">
 	
-	<@s.form name="inspectionTypeForm" action="eventTypeFormSave" theme="simple" >
+	<@s.form name="eventTypeForm" action="eventTypeFormSave" theme="simple" >
 		<@s.hidden name="uniqueID" />
 		<div id="sectionContainer">
 			<#list criteriaSections as section >
@@ -50,7 +50,7 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 			<p><@s.text name="warning.eventformchangewarning_three"/></p>
 			<div class="formAction" style="margin-left:auto; margin-right:auto;">
 				<button onclick="Lightview.hide(); return false;" ><@s.text name="label.cancel"/></button>
-				<button onclick="document.inspectionTypeForm.submit();" ><@s.text name="label.ok"/></button>
+				<button onclick="document.eventTypeForm.submit();" ><@s.text name="label.ok"/></button>
 			</div>
 		</div>
 		
@@ -70,7 +70,7 @@ ${action.setPageType('inspection_type', 'inspection_form')!}
 
 
 <div id="buttonGroupLists" class="viewSection">
-	<h2><@s.text name="label.yourbuttongroups"/> <a href="<@s.url action="buttonGroups" inspectionTypeId="${uniqueID}"/>" onclick="return hasFormChanged();"><@s.text name="label.manage"/></a></h2>
+	<h2><@s.text name="label.yourbuttongroups"/> <a href="<@s.url action="buttonGroups" eventTypeId="${uniqueID}"/>" onclick="return hasFormChanged();"><@s.text name="label.manage"/></a></h2>
 	<table class="simpleTable">
 		<tr>
 			<th><@s.text name="label.name"/></th>

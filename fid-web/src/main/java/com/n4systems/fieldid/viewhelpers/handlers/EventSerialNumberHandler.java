@@ -4,9 +4,9 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityLevel;
 
-public class InspectionSerialNumberHandler extends WebOutputHandler {
+public class EventSerialNumberHandler extends WebOutputHandler {
 
-	public InspectionSerialNumberHandler(AbstractAction action) {
+	public EventSerialNumberHandler(AbstractAction action) {
 		super(action);
 	}
 	

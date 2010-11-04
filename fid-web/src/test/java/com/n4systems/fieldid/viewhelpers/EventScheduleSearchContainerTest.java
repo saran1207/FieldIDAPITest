@@ -17,7 +17,7 @@ import com.n4systems.util.BitField;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-public class InspectionScheduleSearchContainerTest extends SearchContainerTestCase {
+public class EventScheduleSearchContainerTest extends SearchContainerTestCase {
 
 	private EventScheduleSearchContainer eventScheduleSearchContainer;
 	

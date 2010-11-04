@@ -52,7 +52,7 @@ public class EventGroup extends EntityWithTenant implements SecurityEnhanced<Eve
 	@AllowSafetyNetworkAccess
 	public Date getFirstDate() {
 		Date minDate = null;
-		for (Event event : getAvailableInspections()) {
+		for (Event event : getAvailableEvents()) {
 			if (minDate == null) {
 				minDate = event.getDate();
 			} else if (event.getDate().before(minDate)) {
@@ -66,7 +66,7 @@ public class EventGroup extends EntityWithTenant implements SecurityEnhanced<Eve
 	@AllowSafetyNetworkAccess
 	public Date getLastDate() {
 		Date maxDate = null;
-		for (Event event : getAvailableInspections()) {
+		for (Event event : getAvailableEvents()) {
 			if (maxDate == null) {
 				maxDate = event.getDate();
 			} else if (event.getDate().after(maxDate)) {
@@ -78,7 +78,7 @@ public class EventGroup extends EntityWithTenant implements SecurityEnhanced<Eve
 	}
 
 	@AllowSafetyNetworkAccess
-	public List<Event> getAvailableInspections() {
+	public List<Event> getAvailableEvents() {
 		List<Event> availableEvents = new ArrayList<Event>();
 
 		for (Event event : events) {

@@ -20,6 +20,7 @@ import com.n4systems.fieldid.actions.helpers.EventScheduleSuggestion;
 import com.n4systems.fieldid.actions.inspection.viewmodel.ScheduleToWebEventScheduleConverter;
 import com.n4systems.fieldid.actions.inspection.viewmodel.WebEventScheduleToEventScheduleBundleConverter;
 import com.n4systems.fieldid.viewhelpers.EventHelper;
+import com.n4systems.handlers.creator.inspections.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.Event;
@@ -52,7 +53,6 @@ import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.handlers.creator.inspections.factory.ProductionInspectionPersistenceFactory;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.EventBook;
@@ -84,7 +84,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private final UserManager userManager;
 	protected final AssetManager assetManager;
 	private final EventScheduleManager eventScheduleManager;
-	protected final ProductionInspectionPersistenceFactory inspectionPersistenceFactory;
+	protected final ProductionEventPersistenceFactory eventPersistenceFactory;
 	protected final EventHelper eventHelper;
 	protected final EventFormHelper eventFormHelper;
 	
@@ -100,17 +100,17 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	protected String testDuration;
 	protected String peakLoadDuration;
 	protected EventSchedule eventSchedule;
-	protected Long inspectionScheduleId;
-	private boolean inspectionScheduleOnInspection = false;
+	protected Long eventScheduleId;
+	private boolean eventScheduleOnEvent = false;
 	private boolean scheduleSuggested = false;
-	private String newInspectionBookTitle;
+	private String newEventBookTitle;
 	private boolean allowNetworkResults = false;
 	private List<SubEvent> subEvents;
 	private List<ListingPair> examiners;
 	private List<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private List<Listable<Long>> employees;
-	private List<ListingPair> inspectionBooks;
+	private List<ListingPair> eventBooks;
 	private List<EventSchedule> availableSchedules;
 	private List<ListingPair> eventJobs;
 	
@@ -137,7 +137,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		this.assetManager = assetManager;
 		this.eventHelper = new EventHelper(persistenceManager);
 		this.eventScheduleManager = eventScheduleManager;
-		this.inspectionPersistenceFactory = new ProductionInspectionPersistenceFactory();
+		this.eventPersistenceFactory = new ProductionEventPersistenceFactory();
 		this.eventFormHelper = new EventFormHelper();
 	}
 
@@ -152,7 +152,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		try {
 			if (allowNetworkResults) {
 				
-				// if we're in a vendor context we need to look inspections for assigned products rather than registered products
+				// if we're in a vendor context we need to look events for assigned products rather than registered products
 				event = getLoaderFactory().createSafetyNetworkEventLoader(isInVendorContext()).setId(uniqueId).load();
 				
 			} else {
@@ -165,10 +165,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	
 			if (event != null) {
 				eventGroup = event.getGroup();
-				inspectionScheduleOnInspection = (event.getSchedule() != null);
+				eventScheduleOnEvent = (event.getSchedule() != null);
 			}
 		} catch(RuntimeException e) {
-			logger.error("Failed to load inspection", e);
+			logger.error("Failed to load event", e);
 			
 		}
 	}
@@ -198,8 +198,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
-	public String doQuickInspect() {
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
+	public String doQuickEvent() {
 
 		if (asset == null) {
 			addActionError(getText("error.noasset"));
@@ -211,8 +211,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			return MISSING;
 		}
 		
-		if (getInspectionTypes().size() == 1) {
-			setType(getInspectionTypes().get(0).getEventType().getId());
+		if (getAssociatedEventTypes().size() == 1) {
+			setType(getAssociatedEventTypes().get(0).getEventType().getId());
 			if (event.getType().isMaster()) {
 				return "oneFoundMaster";
 			}
@@ -222,12 +222,12 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return SUCCESS;
 	}
 
-	private List<AssociatedEventType> getInspectionTypes() {
+	private List<AssociatedEventType> getAssociatedEventTypes() {
 		return getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(asset.getType()).load();
 	}
 	
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection, Permissions.EditInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent, Permissions.EditEvent})
 	public String doSelect() {
 		if (event == null) {
 			addActionError(getText("error.noevent"));
@@ -253,7 +253,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 	public String doAdd() {
 		testDependencies();
 
@@ -298,7 +298,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	private void suggestSchedule() {
-		if (inspectionScheduleOnInspection == false && eventSchedule == null) {
+		if (eventScheduleOnEvent == false && eventSchedule == null) {
 			setScheduleId(new EventScheduleSuggestion(getAvailableSchedules()).getSuggestedScheduleId());
 			scheduleSuggested = (eventSchedule != null);
 			
@@ -316,7 +316,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 	
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
 	public String doEdit() {
 		try {
 			setAssetId(event.getAsset().getId());
@@ -326,7 +326,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		}
 
 		setAttachments(event.getAttachments());
-		// Re-encode the inspection info option map so it displays properly
+		// Re-encode the event info option map so it displays properly
 		encodeInfoOptionMapForUseInForm();
 		
 
@@ -349,17 +349,17 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	protected void setUpSupportedProofTestTypes() {
 		if (event.getProofTestInfo() != null && event.getProofTestInfo().getProofTestType() != null) {
 			proofTestType = event.getProofTestInfo().getProofTestType();
-		} else if (!getInspectionType().getSupportedProofTests().isEmpty()) {
-			proofTestType = getInspectionType().getSupportedProofTests().iterator().next();
+		} else if (!getEventType().getSupportedProofTests().isEmpty()) {
+			proofTestType = getEventType().getSupportedProofTests().iterator().next();
 		}
 	}
 
-	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 	public String doCreate() {
 		return save();
 	}
 	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
 	public String doUpdate() {
 		return save();
 	}
@@ -375,7 +375,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			// get the user to set modifiedBy's later
 			User modifiedBy = fetchCurrentUser();
 			
-			findInspectionBook();
+			findEventBook();
 			
 			modifiableEvent.pushValuesTo(event);
 
@@ -404,9 +404,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 						.withProofTestFile(fileData)
 						.withUploadedImages(getUploadedFiles());
 				
-				createEventParameterBuilder.addSchedules(createInspectionScheduleBundles());
+				createEventParameterBuilder.addSchedules(createEventScheduleBundles());
 				
-				event = inspectionPersistenceFactory.createInspectionCreator().create(createEventParameterBuilder.build());
+				event = eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());
 				uniqueID = event.getId();
 				
 			} else {
@@ -439,11 +439,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return SUCCESS;
 	}
 
-	protected List<EventScheduleBundle> createInspectionScheduleBundles() {
+	protected List<EventScheduleBundle> createEventScheduleBundles() {
 		List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
 		StrutsListHelper.clearNulls(nextSchedules);
 		
-		WebEventScheduleToEventScheduleBundleConverter converter = createWebInspectionScheduleToInspectionScheduleBundleConverter();
+		WebEventScheduleToEventScheduleBundleConverter converter = createWebEventScheduleToEventScheduleBundleConverter();
 		
 		for (WebEventSchedule nextSchedule : nextSchedules) {
 			EventScheduleBundle bundle = converter.convert(nextSchedule, asset);
@@ -454,27 +454,27 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return scheduleBundles;
 	}
 
-	private WebEventScheduleToEventScheduleBundleConverter createWebInspectionScheduleToInspectionScheduleBundleConverter() {
+	private WebEventScheduleToEventScheduleBundleConverter createWebEventScheduleToEventScheduleBundleConverter() {
 		WebEventScheduleToEventScheduleBundleConverter converter = new WebEventScheduleToEventScheduleBundleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
 		return converter;
 	}
 
-	protected void findInspectionBook() throws ValidationException, PersistenceException {
-		if (newInspectionBookTitle != null) {
-			if (newInspectionBookTitle.trim().length() == 0) {
-				addFieldError("newInspectionBookTitle", getText("error.event_book_title_required"));
+	protected void findEventBook() throws ValidationException, PersistenceException {
+		if (newEventBookTitle != null) {
+			if (newEventBookTitle.trim().length() == 0) {
+				addFieldError("newEventBookTitle", getText("error.event_book_title_required"));
 				throw new ValidationException("not validated.");
 			}
 
-			// TODO: change this to the InspectionBookFindOrCreateLoader
+			// TODO: change this to the EventBookFindOrCreateLoader
 			EventBookByNameLoader bookLoader = new EventBookByNameLoader(getSecurityFilter());
-			bookLoader.setName(newInspectionBookTitle);
+			bookLoader.setName(newEventBookTitle);
 			bookLoader.setOwner(getOwner());
 			EventBook eventBook = bookLoader.load();
 			
 			if (eventBook == null) {
 				eventBook = new EventBook();
-				eventBook.setName(newInspectionBookTitle);
+				eventBook.setName(newEventBookTitle);
 				eventBook.setOpen(true);
 				eventBook.setOwner(getOwner());
 				eventBook.setTenant(getTenant());
@@ -488,9 +488,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 	
 	private void completeSchedule() {
-		if (inspectionScheduleOnInspection == false ) {
+		if (eventScheduleOnEvent == false ) {
 			try {
-				if (inspectionScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
+				if (eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
 					eventSchedule = new EventSchedule(event);
 				} else if (eventSchedule != null) {
 					eventSchedule.completed(event);
@@ -543,7 +543,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.EditInspection})
+	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
 	public String doDelete() {
 		try {
 			testDependencies();
@@ -569,7 +569,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return (event.getType() != null) ? event.getType().getId() : null;
 	}
 
-	public EventType getInspectionType() {
+	public EventType getEventType() {
 		return event.getType();
 	}
 
@@ -591,15 +591,15 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		}
 	}
 
-	public Long getInspectionGroupId() {
+	public Long getEventGroupId() {
 		return (eventGroup != null) ? eventGroup.getId() : null;
 	}
 
-	public void setInspectionGroupId(Long inspectionGroupId) {
-		if (inspectionGroupId == null) {
+	public void setEventGroupId(Long eventGroupId) {
+		if (eventGroupId == null) {
 			eventGroup = null;
-		} else if (eventGroup == null || inspectionGroupId.equals(eventGroup.getId())) {
-			eventGroup = persistenceManager.find(EventGroup.class, inspectionGroupId, getTenantId());
+		} else if (eventGroup == null || eventGroupId.equals(eventGroup.getId())) {
+			eventGroup = persistenceManager.find(EventGroup.class, eventGroupId, getTenantId());
 		}
 	}
 
@@ -621,10 +621,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		}
 	}
 
-	public Event getInspection() {
+	public Event getEvent() {
 		return event;
 	}
-
 	
 	public List<ListingPair> getExaminers() {
 		if (examiners == null) {
@@ -633,8 +632,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		}
 		return examiners;
 	}
-
-	
 
 	public List<AssetStatus> getAssetStatuses() {
 		if (assetStatuses == null) {
@@ -695,12 +692,12 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		}
 	}
 	
-	public String getNewInspectionBookTitle() {
-		return newInspectionBookTitle;
+	public String getNewEventBookTitle() {
+		return newEventBookTitle;
 	}
 	
-	public void setNewInspectionBookTitle(String newInspectionBookTitle) {
-		this.newInspectionBookTitle = newInspectionBookTitle;
+	public void setNewEventBookTitle(String newEventBookTitle) {
+		this.newEventBookTitle = newEventBookTitle;
 	}
 
 	public List<CriteriaResult> getCriteriaResults() {
@@ -734,14 +731,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		this.proofTestType = ProofTestType.valueOf(proofTestType);
 	}
 
-	public List<ListingPair> getInspectionBooks() {
-		if (inspectionBooks == null) {
+	public List<ListingPair> getEventBooks() {
+		if (eventBooks == null) {
 			EventBookListLoader loader = new EventBookListLoader(getSecurityFilter());
 			loader.setOpenBooksOnly((uniqueID == null));
 			loader.setOwner(getOwner());
-			inspectionBooks = loader.loadListingPair();
+			eventBooks = loader.loadListingPair();
 		}
-		return inspectionBooks;
+		return eventBooks;
 	}
 
 	public String getResult() {
@@ -824,7 +821,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return true;
 	}
 
-	public List<SubEvent> getSubInspections() {
+	public List<SubEvent> getSubEvents() {
 		if (subEvents == null) {
 			if (!event.getSubEvents().isEmpty()) {
 				Set<Long> ids = new HashSet<Long>();
@@ -845,7 +842,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		
 		// next we need the text of our Recommendation
-		String recText = eventHelper.findCriteriaOnInspectionType(event, criteriaId).getRecommendations().get(recIndex);
+		String recText = eventHelper.findCriteriaOnEventType(event, criteriaId).getRecommendations().get(recIndex);
 		
 		// now we need to hunt down a matching Recommendation from our criteria results (if it exists)
 		return eventHelper.getObservationForText(result.getRecommendations(), recText);
@@ -857,7 +854,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		
 		// next we need the text of our Deficiency
-		String defText = eventHelper.findCriteriaOnInspectionType(event, criteriaId).getDeficiencies().get(defIndex);
+		String defText = eventHelper.findCriteriaOnEventType(event, criteriaId).getDeficiencies().get(defIndex);
 		
 		// now we need to hunt down a matching Deficiency from our criteria results (if it exists)
 		return eventHelper.getObservationForText(result.getDeficiencies(), defText);
@@ -890,25 +887,25 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 	
 	public Long getScheduleId() {
-		return inspectionScheduleId;
+		return eventScheduleId;
 	}
 
-	public void setScheduleId(Long inspectionScheduleId) {
-		if (inspectionScheduleId == null) {
+	public void setScheduleId(Long eventScheduleId) {
+		if (eventScheduleId == null) {
 			eventSchedule = null;
-		} else if ((!inspectionScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE) && !inspectionScheduleId.equals(EventScheduleSuggestion.NO_SCHEDULE)) &&
-				(this.inspectionScheduleId == null || !inspectionScheduleId.equals(this.inspectionScheduleId))) {
-			// XXX should this lock to just the correct asset and inspection type?
-			eventSchedule = persistenceManager.find(EventSchedule.class, inspectionScheduleId, getTenantId());
+		} else if ((!eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE) && !eventScheduleId.equals(EventScheduleSuggestion.NO_SCHEDULE)) &&
+				(this.eventScheduleId == null || !eventScheduleId.equals(this.eventScheduleId))) {
+			// XXX should this lock to just the correct asset and event type?
+			eventSchedule = persistenceManager.find(EventSchedule.class, eventScheduleId, getTenantId());
 		}
-		this.inspectionScheduleId = inspectionScheduleId;
+		this.eventScheduleId = eventScheduleId;
 	}
 
 	public List<EventSchedule> getAvailableSchedules() {
 		if (availableSchedules == null) {
 			availableSchedules = getLoaderFactory().createIncompleteEventSchedulesListLoader()
 					.setAsset(asset)
-					.setInspectionType(event.getType())
+					.setEventType(event.getType())
 					.load();
 			if (eventSchedule != null && !availableSchedules.contains(eventSchedule)) {
 				availableSchedules.add(0, eventSchedule);
@@ -936,8 +933,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return eventJobs;
 	}
 	
-	public boolean isInspectionScheduleOnInspection() {
-		return inspectionScheduleOnInspection;
+	public boolean isEventScheduleOnEvent() {
+		return eventScheduleOnEvent;
 	}
 
 	public boolean isScheduleSuggested() {
@@ -962,7 +959,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	@VisitorFieldValidator(message = "")
-	public EventWebModel getModifiableInspection() {
+	public EventWebModel getModifiableEvent() {
 		if (modifiableEvent == null) {
 			throw new NullPointerException("action has not been initialized.");
 		}
@@ -977,11 +974,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		this.allowNetworkResults = allow;
 	}
 	
-	public boolean isLinkedInspection() {
+	public boolean isLinkedEvent() {
 		return !event.getTenant().equals(getTenant());
 	}
 
-	public EventFormHelper getInspectionFormHelper() {
+	public EventFormHelper getEventFormHelper() {
 		return eventFormHelper;
 	}
 	
