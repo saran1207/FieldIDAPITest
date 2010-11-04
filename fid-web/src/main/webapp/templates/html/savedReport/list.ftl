@@ -6,13 +6,14 @@ ${action.setPageType('saved_reports', 'saved_reports')!}
 <#if page.hasResults() && page.validPage() >
 	
 	<div class="headerWithFootnote">
-		<span class="footnoteText">
-			<img src="<@s.url value="/images/tip-icon.png" />"/>
+		<img src="<@s.url value="/images/tip-icon.png" />"/>
+		<p class="footnoteText">
+			
 			<@s.text name="label.saved_report_explanation"/>
 			<a href="<@s.url action="userList" namespace="/" />">
 				<@s.text name="label.add_new_user"/>
 			</a>
-		</span>
+		</p>
 	</div>
 
 	<#assign currentAction="savedReports.action" />
