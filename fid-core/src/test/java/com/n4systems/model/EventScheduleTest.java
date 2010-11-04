@@ -32,16 +32,16 @@ public class EventScheduleTest {
 	}
 
 	
-	@Test public void test_completed_inspection() {
+	@Test public void test_completed_event() {
 		schedule.completed(event);
 		assertEquals(event, schedule.getEvent());
 		assertInRange(new Date(), schedule.getCompletedDate(), 1000L);
 	}
 
-	@Test public void test_remove_inspection() {
-		test_completed_inspection();
+	@Test public void test_remove_event() {
+		test_completed_event();
 		
-		schedule.removeInspection();
+		schedule.removeEvent();
 		assertNull(schedule.getCompletedDate());
 		assertNull(schedule.getEvent());
 		assertEquals(ScheduleStatus.SCHEDULED, schedule.getStatus());

@@ -7,10 +7,10 @@ public class AssetTypeRemovalSummary {
 	private AssetType assetType;
 
 	private Long assetsToDelete = 0L;
-	private Long inspectionsToDelete = 0L;
+	private Long eventsToDelete = 0L;
 	private Long subAssetsToDetach = 0L;
 	private Long schedulesToDelete = 0L;
-	private Long assetsUsedInMasterInspection = 0L;
+	private Long assetsUsedInMasterEvent = 0L;
 	private Long assetsToDetachFromProjects = 0L;
 	private Long assetTypesToDetachFrom = 0L;
 	private Long assetCodeMappingsToDelete = 0L;
@@ -21,7 +21,7 @@ public class AssetTypeRemovalSummary {
 	}
 
 	public boolean validToDelete() {
-		return (assetsUsedInMasterInspection == 0);
+		return (assetsUsedInMasterEvent == 0);
 	}
 
 	public Long getAssetsToDelete() {
@@ -32,12 +32,12 @@ public class AssetTypeRemovalSummary {
 		this.assetsToDelete = assetsToDelete;
 	}
 
-	public Long getInspectionsToDelete() {
-		return inspectionsToDelete;
+	public Long getEventsToDelete() {
+		return eventsToDelete;
 	}
 
-	public void setInspectionsToDelete(Long inspectionsToDelete) {
-		this.inspectionsToDelete = inspectionsToDelete;
+	public void setEventsToDelete(Long eventsToDelete) {
+		this.eventsToDelete = eventsToDelete;
 	}
 
 	public Long getSchedulesToDelete() {
@@ -48,12 +48,12 @@ public class AssetTypeRemovalSummary {
 		this.schedulesToDelete = schedulesToDelete;
 	}
 
-	public Long getAssetsUsedInMasterInspection() {
-		return assetsUsedInMasterInspection;
+	public Long getAssetsUsedInMasterEvent() {
+		return assetsUsedInMasterEvent;
 	}
 
-	public void setAssetsUsedInMasterInspection(Long assetsUsedInMasterInspection) {
-		this.assetsUsedInMasterInspection = assetsUsedInMasterInspection;
+	public void setAssetsUsedInMasterEvent(Long assetsUsedInMasterEvent) {
+		this.assetsUsedInMasterEvent = assetsUsedInMasterEvent;
 	}
 
 	public AssetType getAssetType() {

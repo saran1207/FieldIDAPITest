@@ -33,12 +33,12 @@ public class EventCertificateGenerator {
 	private final MapBuilder<AssetType> productTypeMapBuilder;
 	private final MapBuilder<LineItem> orderMapBuilder;
 	private final MapBuilder<ProofTestInfo> proofTestMapBuilder;
-	private final MapBuilder<Event> baseInspectionMapBuilder;
+	private final MapBuilder<Event> baseEventMapBuilder;
 	private final DateTimeDefiner dateDefiner;
 	
-	public EventCertificateGenerator(DateTimeDefiner dateDefiner, MapBuilder<Event> baseInspectionMapBuilder, MapBuilder<AssetType> productTypeMapBuilder, MapBuilder<ProofTestInfo> proofTestMapBuilder, MapBuilder<LineItem> orderMapBuilder) {
+	public EventCertificateGenerator(DateTimeDefiner dateDefiner, MapBuilder<Event> baseEventMapBuilder, MapBuilder<AssetType> productTypeMapBuilder, MapBuilder<ProofTestInfo> proofTestMapBuilder, MapBuilder<LineItem> orderMapBuilder) {
 		this.dateDefiner = dateDefiner;
-		this.baseInspectionMapBuilder = baseInspectionMapBuilder;
+		this.baseEventMapBuilder = baseEventMapBuilder;
 		this.productTypeMapBuilder = productTypeMapBuilder;
 		this.proofTestMapBuilder = proofTestMapBuilder;
 		this.orderMapBuilder = orderMapBuilder;
@@ -55,7 +55,7 @@ public class EventCertificateGenerator {
 		
 		PrintOut printOutToPrint = event.getType().getGroup().getPrintOutForReportType(type);
 		
-		if (printOutToPrint.isWithSubInspections()) {
+		if (printOutToPrint.isWithSubEvents()) {
 			jPrint = generateFull(event, transaction, printOutToPrint);
 		} else {
 			jPrint = generate(event, transaction, printOutToPrint);
@@ -66,7 +66,7 @@ public class EventCertificateGenerator {
 
 	private void guard(EventReportType type, Event event) throws NonPrintableEventType {
 		if (!event.isPrintableForReportType(type)) {
-			throw new NonPrintableEventType(String.format("Inspection [%s] was not printable or did not have a PrintOut for InspectionReportType [%s]", event.getId(), type.getDisplayName()));
+			throw new NonPrintableEventType(String.format("Event [%s] was not printable or did not have a PrintOut for EventReportType [%s]", event.getId(), type.getDisplayName()));
 		}
 	}
 	
@@ -75,7 +75,7 @@ public class EventCertificateGenerator {
 		
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
 		
-		baseInspectionMapBuilder.addParams(reportMap, event, transaction);
+		baseEventMapBuilder.addParams(reportMap, event, transaction);
 		
 		return reportMap;
 	}
@@ -89,20 +89,20 @@ public class EventCertificateGenerator {
 			
 			ReportMap<Object> reportMap = createMainReportMap(event, jasperFile, transaction);
 			
-			ReportMap<Object> inspectionReportMap = new EventReportMapProducer(event, dateDefiner).produceMap();
-			reportMap.put("mainInspection", inspectionReportMap);
-			reportMap.put("asset", inspectionReportMap.get("asset"));
+			ReportMap<Object> eventReportMan = new EventReportMapProducer(event, dateDefiner).produceMap();
+			reportMap.put("mainInspection", eventReportMan);
+			reportMap.put("asset", eventReportMan.get("asset"));
 			
-			List<ReportMap<Object>> inspectionResultMaps = new ArrayList<ReportMap<Object>>();
-			inspectionResultMaps.add(inspectionReportMap);
+			List<ReportMap<Object>> eventResultMaps = new ArrayList<ReportMap<Object>>();
+			eventResultMaps.add(eventReportMan);
 			
 			for (SubEvent subEvent : event.getSubEvents()) {
-				inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner).produceMap());
+				eventResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner).produceMap());
 			}
 
-			JRDataSource jrDataSource = new JRMapCollectionDataSource(inspectionResultMaps);
+			JRDataSource jrDataSource = new JRMapCollectionDataSource(eventResultMaps);
 			
-			reportMap.put("allInspections", inspectionResultMaps);
+			reportMap.put("allInspections", eventResultMaps);
 			
 			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, jrDataSource);
 		
@@ -131,11 +131,11 @@ public class EventCertificateGenerator {
 	
 			reportMap.putAll(new AssetReportMapProducer(event.getAsset(), dateDefiner).produceMap());
 			
-			ReportMap<Object> inspectionMap = new EventReportMapProducer(event, dateDefiner).produceMap();
-			reportMap.putAll(inspectionMap);
+			ReportMap<Object> eventMap = new EventReportMapProducer(event, dateDefiner).produceMap();
+			reportMap.putAll(eventMap);
 			
 			
-			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, (JRDataSource)inspectionMap.get("results"));
+			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, (JRDataSource)eventMap.get("results"));
 		
 		} catch (Exception e) {
 			throw new ReportException("Failed to generate report", e);
@@ -153,7 +153,7 @@ public class EventCertificateGenerator {
 
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
-			throw new ReportException(String.format("Report file [%s] missing for tenant [%s] and Inspection Type Group [%s]", jasperFile.getAbsolutePath(), event.getTenant().getName(), event.getType().getGroup().getName()));
+			throw new ReportException(String.format("Report file [%s] missing for tenant [%s] and Event Type Group [%s]", jasperFile.getAbsolutePath(), event.getTenant().getName(), event.getType().getGroup().getName()));
 		}
 		
 		return jasperFile;

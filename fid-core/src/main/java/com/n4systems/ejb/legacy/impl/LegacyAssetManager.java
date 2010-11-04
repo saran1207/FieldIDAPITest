@@ -359,10 +359,10 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 	public Event findLastEvents(Asset asset, SecurityFilter securityFilter) {
-		Query inspectionQuery = createAllInspectionQuery(asset, securityFilter, false, true);
+		Query eventQuery = createAllEventQuery(asset, securityFilter, false, true);
 		Event event = null;
 		try {
-			event = (Event) inspectionQuery.getSingleResult();
+			event = (Event) eventQuery.getSingleResult();
 		} catch (NoResultException e) {
 		}
 		return event;
@@ -374,18 +374,15 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 	
 	public Long countAllLocalEvents(Asset asset, SecurityFilter securityFilter) {
-		Query inspectionQuery = createAllInspectionQuery(asset, securityFilter, true);
-		return (Long)inspectionQuery.getSingleResult();
-		
+		Query eventQuery = createAllEventQuery(asset, securityFilter, true);
+		return (Long)eventQuery.getSingleResult();
 	}
 
-	
-
-	private Query createAllInspectionQuery(Asset asset, SecurityFilter securityFilter, boolean count) {
-		return createAllInspectionQuery(asset, securityFilter, count, false);
+	private Query createAllEventQuery(Asset asset, SecurityFilter securityFilter, boolean count) {
+		return createAllEventQuery(asset, securityFilter, count, false);
 	}
 
-	private Query createAllInspectionQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastInspection) {
+	private Query createAllEventQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastEvent) {
 		String query = "from "+Event.class.getName()+" event  left join event.asset " + "WHERE  " + securityFilter.produceWhereClause(Event.class, "event")
 				+ " AND event.asset = :asset AND event.state= :activeState";
 		if (count) {
@@ -397,17 +394,17 @@ public class LegacyAssetManager implements LegacyAsset {
 		if (!count)
 			query += " ORDER BY event.date DESC, event.created ASC";
 
-		Query inspectionQuery = em.createQuery(query);
+		Query eventQuery = em.createQuery(query);
 
-		if (lastInspection) {
-			inspectionQuery.setMaxResults(1);
+		if (lastEvent) {
+			eventQuery.setMaxResults(1);
 		}
 
-		inspectionQuery.setParameter("asset", asset);
-		securityFilter.applyParameters(inspectionQuery, Event.class);
-		inspectionQuery.setParameter("activeState", EntityState.ACTIVE);
+		eventQuery.setParameter("asset", asset);
+		securityFilter.applyParameters(eventQuery, Event.class);
+		eventQuery.setParameter("activeState", EntityState.ACTIVE);
 
-		return inspectionQuery;
+		return eventQuery;
 	}
 
 	public Asset createAssetWithServiceTransaction(String transactionGUID, Asset asset, User modifiedBy) throws TransactionAlreadyProcessedException, SubAssetUniquenessException {

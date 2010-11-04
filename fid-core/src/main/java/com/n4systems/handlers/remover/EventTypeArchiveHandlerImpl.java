@@ -31,10 +31,10 @@ public class EventTypeArchiveHandlerImpl implements EventTypeArchiveHandler {
 		this.transaction = transaction;
 		
 		breakConnectionsToAssetType();
-		archiveInspectionsOfType();
-		removeInspectionTypeFromCatalog();
+		archiveEventsOfType();
+		removeEventTypeFromCatalog();
 		deleteNotificationSettingsUsing();
-		archiveInspectionType();
+		archiveEventType();
 		
 		this.transaction = null;
 	}
@@ -45,12 +45,12 @@ public class EventTypeArchiveHandlerImpl implements EventTypeArchiveHandler {
 	}
 	
 
-	private void archiveInspectionsOfType() {
+	private void archiveEventsOfType() {
 		eventDeleter.setEventType(eventType).remove(transaction);
 	}
 
 
-	private void removeInspectionTypeFromCatalog() {
+	private void removeEventTypeFromCatalog() {
 		catalogElementRemovalHandler.setEventType(eventType).cleanUp(transaction);
 	}
 	
@@ -59,7 +59,7 @@ public class EventTypeArchiveHandlerImpl implements EventTypeArchiveHandler {
 	}
 	
 	
-	private void archiveInspectionType() {
+	private void archiveEventType() {
 		eventType.archiveEntity();
 		eventType = eventTypeSaver.update(transaction, eventType);
 	}

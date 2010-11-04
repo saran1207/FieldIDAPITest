@@ -37,7 +37,7 @@ public class EventScheduleBundleTest {
 	}
 	
 	@Test(expected=NullPointerException.class)
-	public void should_not_allow_null_for_inspection_type() throws Exception {
+	public void should_not_allow_null_for_event_type() throws Exception {
 		
 		new EventScheduleBundle(asset, null, job, scheduleDate);
 		

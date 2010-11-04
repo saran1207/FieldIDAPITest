@@ -55,8 +55,8 @@ public class DiskUsageTask extends ScheduledTask {
 	}
 
 	private String createCsvContent(List<TenantDiskUsageCalculator> summaries) {
-		String csv = "Tenant, tenant file size, tenant file count, Inspection Attachment file size,	Inspection Attachment file count," +
-						"Inspection Chart Image file size, Inspection Chart Image file count, Inspection Prooftest File file size, Inspection Prooftest File file count," + 
+		String csv = "Tenant, tenant file size, tenant file count, Event Attachment file size,	Event Attachment file count," +
+						"Event Chart Image file size, Event Chart Image file count, Event Prooftest File file size, Event Prooftest File file count," + 
 						"Asset Attachment file size, Asset Attachment file count, Asset Type Image file size,	Asset Type Image file count," +
 						"Asset Type Attachment file size, Asset Type Attachment file count, Job Note file size, Job Note file count, User file size," +
 						"User file count\n";
@@ -64,12 +64,12 @@ public class DiskUsageTask extends ScheduledTask {
 			csv += summary.getTenant().getName() + ",";
 			csv += summary.totalSpaceUsed() + ",";
 			csv += summary.totalFiles() + ",";
-			csv += summary.getInspectionAttachmentUsage().getTotalSize() + ",";
-			csv += summary.getInspectionAttachmentUsage().getNumberOfFiles() + ",";
-			csv += summary.getInspectionChartImageUsage().getTotalSize() + ",";
-			csv += summary.getInspectionChartImageUsage().getNumberOfFiles() + ",";
-			csv += summary.getInspectionProoftestFileUsage().getTotalSize() + ",";
-			csv += summary.getInspectionProoftestFileUsage().getNumberOfFiles() + ",";
+			csv += summary.getEventAttachmentUsage().getTotalSize() + ",";
+			csv += summary.getEventAttachmentUsage().getNumberOfFiles() + ",";
+			csv += summary.getEventChartImageUsage().getTotalSize() + ",";
+			csv += summary.getEventChartImageUsage().getNumberOfFiles() + ",";
+			csv += summary.getEventProoftestFileUsage().getTotalSize() + ",";
+			csv += summary.getEventProoftestFileUsage().getNumberOfFiles() + ",";
 			csv += summary.getProductAttachmentUsage().getTotalSize() + ",";
 			csv += summary.getProductAttachmentUsage().getNumberOfFiles() + ",";
 			csv += summary.getProductTypeImageUsage().getTotalSize() + ",";

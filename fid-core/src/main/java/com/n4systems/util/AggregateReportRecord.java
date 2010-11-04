@@ -5,19 +5,19 @@ public class AggregateReportRecord {
 	
 	private String assetTypeName;
 	
-	private String inspectionTypeGroupName;
-	private Long inspectionTypeGroupId;
+	private String eventTypeGroupName;
+	private Long eventTypeGroupId;
 
 	
 	public AggregateReportRecord(Long count, String assetTypeName) {
 		this( count, assetTypeName, null, null );
 	}
 	
-	public AggregateReportRecord(Long count, String assetTypeName, String inspectionTypeGroupName, Long inspectionTypeGroupId) {
+	public AggregateReportRecord(Long count, String assetTypeName, String eventTypeGroupName, Long eventTypeGroupId) {
 		this.count = count;
 		this.assetTypeName = assetTypeName;
-		this.inspectionTypeGroupName = inspectionTypeGroupName;
-		this.inspectionTypeGroupId = inspectionTypeGroupId;
+		this.eventTypeGroupName = eventTypeGroupName;
+		this.eventTypeGroupId = eventTypeGroupId;
 	}
 	
 	public Long getCount() {
@@ -36,20 +36,20 @@ public class AggregateReportRecord {
 		this.assetTypeName = assetTypeName;
 	}
 	
-	public String getInspectionTypeGroupName() {
-		return inspectionTypeGroupName;
+	public String getEventTypeGroupName() {
+		return eventTypeGroupName;
 	}
 	
-	public void setInspectionTypeGroupName( String inspectionTypeGroupName ) {
-		this.inspectionTypeGroupName = inspectionTypeGroupName;
+	public void setEventTypeGroupName( String eventTypeGroupName) {
+		this.eventTypeGroupName = eventTypeGroupName;
 	}
 	
-	public Long getInspectionTypeGroupId() {
-		return inspectionTypeGroupId;
+	public Long getEventTypeGroupId() {
+		return eventTypeGroupId;
 	}
 	
-	public void setInspectionTypeGroupId( Long inspectionTypeGroupId ) {
-		this.inspectionTypeGroupId = inspectionTypeGroupId;
+	public void setEventTypeGroupId( Long eventTypeGroupId) {
+		this.eventTypeGroupId = eventTypeGroupId;
 	}
 	
 }

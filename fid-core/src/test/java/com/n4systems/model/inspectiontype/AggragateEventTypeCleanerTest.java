@@ -10,7 +10,7 @@ import com.n4systems.model.api.Cleaner;
 
 
 
-public class AggragateInspectionTypeCleanerTest {
+public class AggragateEventTypeCleanerTest {
 
 	EventType eventType = anEventType().build();
 	
@@ -24,7 +24,7 @@ public class AggragateInspectionTypeCleanerTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_push_clean_call_to_supplied_inspection_type_cleaner() throws Exception {
+	public void should_push_clean_call_to_supplied_event_type_cleaner() throws Exception {
 		
 		
 		Cleaner<EventType> subCleaner = createMock(Cleaner.class);
@@ -41,7 +41,7 @@ public class AggragateInspectionTypeCleanerTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_push_clean_call_to_supplied_inspection_type_cleaners() throws Exception {
+	public void should_push_clean_call_to_supplied_event_type_cleaners() throws Exception {
 		Cleaner<EventType> subCleaner = createMock(Cleaner.class);
 		subCleaner.clean(eventType);
 		replay(subCleaner);

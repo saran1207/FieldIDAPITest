@@ -5,7 +5,7 @@ import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.handlers.creator.inspections.EventCreator;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.AuditLogger;
-import com.n4systems.services.NextInspectionScheduleSerivce;
+import com.n4systems.services.NextEventScheduleSerivce;
 
 public interface EventPersistenceFactory {
 
@@ -17,8 +17,8 @@ public interface EventPersistenceFactory {
 
 	public CreateEventsMethodObject createCreateEventsMethodObject(Transaction transaction);
 
-	public InspectionsInAGroupCreator createEventsInAGroupCreator();
+	public EventsInAGroupCreator createEventsInAGroupCreator();
 
-	public NextInspectionScheduleSerivce createNextEventScheduleService(Transaction transaction);
+	public NextEventScheduleSerivce createNextEventScheduleService(Transaction transaction);
 
 }

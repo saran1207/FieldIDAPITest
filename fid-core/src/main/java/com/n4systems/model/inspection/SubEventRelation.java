@@ -44,19 +44,19 @@ public class SubEventRelation {
 		throw new UnsupportedOperationException("This entity is read-only");
 	}
 	
-	public Event getMasterInspection() {
+	public Event getMasterEvent() {
 		return masterEvent;
 	}
 
-	public void setMasterInspection(Event masterEvent) {
+	public void setMasterEvent(Event masterEvent) {
 		this.masterEvent = masterEvent;
 	}
 
-	public SubEvent getSubInspection() {
+	public SubEvent getSubEvent() {
 		return subEvent;
 	}
 
-	public void setSubInspection(SubEvent subEvent) {
+	public void setSubEvent(SubEvent subEvent) {
 		this.subEvent = subEvent;
 	}
 

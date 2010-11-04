@@ -17,11 +17,11 @@ public class AggregateReportManagerEJBContainer extends EJBTransactionEmulator<A
 		return new AggregateReportManagerImpl(em);
 	}
 
-	public AggregateReport createAggregateReport(List<Long> inspectionIds) {
+	public AggregateReport createAggregateReport(List<Long> eventIds) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).createAggregateReport(inspectionIds);
+			return createManager(transaction.getEntityManager()).createAggregateReport(eventIds);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

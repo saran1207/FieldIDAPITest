@@ -6,21 +6,18 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.util.DateHelper;
 
-public class ManagerBackedNextInspectionScheduleService implements NextInspectionScheduleSerivce {
+public class ManagerBackedNextEventScheduleService implements NextEventScheduleSerivce {
 
 	
 	private final EventScheduleManager eventScheduleManager;
 	
-	public ManagerBackedNextInspectionScheduleService(EventScheduleManager eventScheduleManager) {
+	public ManagerBackedNextEventScheduleService(EventScheduleManager eventScheduleManager) {
 		this.eventScheduleManager = eventScheduleManager;
 	}
 	
-	
-	
-	
 	/**
-	 * Creates the next inspection schedule for the asset.  If there is already a schedule
-	 * for the contained asset and inspection type it will simply return that one.
+	 * Creates the next event schedule for the asset.  If there is already a schedule
+	 * for the contained asset and event type it will simply return that one.
 	 * @return The newly created schedule, or the already existing one.
 	 */
 	public EventSchedule createNextSchedule(EventSchedule schedule) {

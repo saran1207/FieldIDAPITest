@@ -23,10 +23,10 @@ public class ObservationView implements Serializable {
 		public ObservationView(AbstractEvent insp, CriteriaResult result, Observation obs) {
 			
 			if(insp instanceof Event) {
-				// master inspections just use their type as the part name
+				// master events just use their type as the part name
 				part = insp.getAsset().getType().getName();
 			} else if(insp instanceof SubEvent) {
-				// sub inspection need to use their specific part name
+				// sub event need to use their specific part name
 				part = ((SubEvent)insp).getName();
 			}
 			

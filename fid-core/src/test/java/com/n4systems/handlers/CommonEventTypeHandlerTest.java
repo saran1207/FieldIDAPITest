@@ -86,7 +86,7 @@ public class CommonEventTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_an_empty_list_of_inspection_types_when_there_is_one_asset_type_with_no_associated_inspection_types() throws Exception {
+	public void should_return_an_empty_list_of_event_types_when_there_is_one_asset_type_with_no_associated_event_types() throws Exception {
 
 		AssetType assetType = AssetTypeBuilder.anAssetType().build();
 
@@ -99,7 +99,7 @@ public class CommonEventTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_entire_inspection_type_list_given_one_asset_type_with_many_inspection_types() {
+	public void should_return_entire_event_type_list_given_one_asset_type_with_many_event_types() {
 
 		EventType eventType = EventTypeBuilder.anEventType().build();
 		EventType eventType2 = EventTypeBuilder.anEventType().build();
@@ -114,7 +114,7 @@ public class CommonEventTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_common_inspection_types_of_two_or_more_asset_types() {
+	public void should_return_common_event_types_of_two_or_more_asset_types() {
 
 		EventType eventType = EventTypeBuilder.anEventType().build();
 		EventType eventType2 = EventTypeBuilder.anEventType().build();
@@ -130,7 +130,7 @@ public class CommonEventTypeHandlerTest {
 	}
 
 	@Test
-	public void should_return_empty_set_from_multiple_asset_types_with_no_common_inspections() {
+	public void should_return_empty_set_from_multiple_asset_types_with_no_common_events() {
 
 		EventType eventType = EventTypeBuilder.anEventType().build();
 		EventType eventType2 = EventTypeBuilder.anEventType().build();

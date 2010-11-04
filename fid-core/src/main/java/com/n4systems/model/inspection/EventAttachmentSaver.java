@@ -61,9 +61,9 @@ public class EventAttachmentSaver extends Saver<FileAttachment> {
 	private File resolveAttachmentPath(FileAttachment attachment) {
 		File attachmentFile;
 		if (subEvent == null) {
-			attachmentFile = PathHandler.getInspectionAttachmentFile(event, attachment);
+			attachmentFile = PathHandler.getEventAttachmentFile(event, attachment);
 		} else {
-			attachmentFile = PathHandler.getInspectionAttachmentFile(event, subEvent, attachment);
+			attachmentFile = PathHandler.getEventAttachmentFile(event, subEvent, attachment);
 		}
 		return attachmentFile;
 	}
@@ -78,11 +78,11 @@ public class EventAttachmentSaver extends Saver<FileAttachment> {
 		throw new NotImplementedException();
 	}
 
-	public void setInspection(Event event) {
+	public void setEvent(Event event) {
 		this.event = event;
 	}
 
-	public void setSubInspection(SubEvent subEvent) {
+	public void setSubEvent(SubEvent subEvent) {
 		this.subEvent = subEvent;
 	}
 

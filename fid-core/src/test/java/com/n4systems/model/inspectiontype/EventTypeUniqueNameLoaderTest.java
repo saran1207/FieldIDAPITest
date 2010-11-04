@@ -29,7 +29,7 @@ public class EventTypeUniqueNameLoaderTest {
 	
 	@Test
 	public void test_load_multiple_conflicts() {
-		String origName = "Inspection Type Name";
+		String origName = "Event Type Name";
 		
 		TestEventTypeUniqueNameLoader loader = new TestEventTypeUniqueNameLoader(null, 5);
 		loader.setName(origName);
@@ -39,7 +39,7 @@ public class EventTypeUniqueNameLoaderTest {
 	
 	@Test
 	public void test_load_no_conflicts() {
-		String origName = "Inspection Type Name";
+		String origName = "Event Type Name";
 		
 		TestEventTypeUniqueNameLoader loader = new TestEventTypeUniqueNameLoader(null, 0);
 		loader.setName(origName);
@@ -50,7 +50,7 @@ public class EventTypeUniqueNameLoaderTest {
 	@Test(expected=RuntimeException.class)
 	public void test_load_throws_exception_on_too_many_conflicts() {
 		TestEventTypeUniqueNameLoader loader = new TestEventTypeUniqueNameLoader(null, 501);
-		loader.setName("Inspection Type Name");
+		loader.setName("Event Type Name");
 		loader.load(new DummyEntityManager(), new OpenSecurityFilter());
 	}
 	

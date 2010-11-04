@@ -71,7 +71,7 @@ public class ScheduleListDeleteHandlerImpl implements ScheduleListDeleteHandler 
 	}
 
 	
-	public ScheduleListDeleteHandler setInspectionType(EventType eventType) {
+	public ScheduleListDeleteHandler setEventType(EventType eventType) {
 		this.eventType = eventType;
 		return this;
 	}

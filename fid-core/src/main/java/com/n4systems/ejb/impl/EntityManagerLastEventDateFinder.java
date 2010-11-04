@@ -53,16 +53,16 @@ public class EntityManagerLastEventDateFinder implements LastEventDateFinder {
 			qBuilder.addSimpleWhere("type.id", eventType.getId());
 		}
 
-		Date lastInspectionDate = null;
+		Date lastEventDate = null;
 		try {
-			lastInspectionDate = qBuilder.getSingleResult(em);
+			lastEventDate = qBuilder.getSingleResult(em);
 		} catch (InvalidQueryException e) {
-			logger.error("Unable to find last inspection date", e);
+			logger.error("Unable to find last event date", e);
 		} catch (Exception e) {
-			logger.error("Unable to find last inspection date", e);
+			logger.error("Unable to find last event date", e);
 		}
 
-		return lastInspectionDate;
+		return lastEventDate;
 	}
 
 }

@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.fieldid.certificate.model.InspectionImage;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
@@ -24,15 +24,12 @@ import com.n4systems.util.ReportMap;
 
 public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
-
 	public AbsractEventReportMapProducer(DateTimeDefinition dateTimeDefinition) {
 		super(dateTimeDefinition);
 	}
 
-	
-
 	public void addParameters() {
-		abstractInspectionParameters();
+		addAbstractEventParameters();
 		eventParameter();
 	}
 
@@ -43,7 +40,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	protected abstract AbstractEvent getEvent();
 
 	
-	private void abstractInspectionParameters() {
+	private void addAbstractEventParameters() {
 		add("type", getEvent().getType().getName());
 		
 		add("comments", getEvent().getComments());
@@ -73,8 +70,6 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		return imageList;
 	}
 
-	
-
 	private ReportMap<String> eventInfoOptions() {
 		ReportMap<String> eventIOMap = new ReportMap<String>(getEvent().getType().getInfoFieldNames().size());
 		for (String fieldName : getEvent().getType().getInfoFieldNames()) {
@@ -85,10 +80,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 	/**
 	 * Creates a list of ObservationViews to be used by the JasperEngine.
-	 * Includes all sub inspections if there are any
+	 * Includes all sub events if there are any
 	 * 
-	 * @param inspections
-	 *            An inspection
 	 * @return A flattened view of observations
 	 */
 	private List<ObservationView> createObservationViews() {
@@ -105,8 +98,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		
 		/*
 		 * Lame alert: Jasper requires that at least 1 element be in it's
-		 * collection datasource. Since it's not required that an inspectiontype
-		 * have a criteria (and thus the inspection will have an empty result
+		 * collection datasource. Since it's not required that an eventtype
+		 * have a criteria (and thus the event will have an empty result
 		 * list) we need to add a dummy entry.
 		 */
 		if (observationViews.isEmpty()) {
@@ -117,11 +110,9 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	}
 
 	/**
-	 * Creates ObservationViews for the Recommendations of an inspection's
+	 * Creates ObservationViews for the Recommendations of an event's
 	 * result list and adds them to observationViews
 	 * 
-	 * @param inspection
-	 *            An inspection (could be master or sub)
 	 * @param observationViews
 	 *            The ObservationView list
 	 */
@@ -134,11 +125,9 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	}
 
 	/**
-	 * Creates ObservationViews for the Deficiencies of an inspection's result
+	 * Creates ObservationViews for the Deficiencies of an event's result
 	 * list and adds them to observationViews
 	 * 
-	 * @param inspection
-	 *            An inspection (could be master or sub)
 	 * @param observationViews
 	 *            The ObservationView list
 	 */
@@ -151,13 +140,13 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	}
 
 	private List<CriteriaStateView> createCriteriaViews() {
-		// add the main inspection to the views
+		// add the main event to the views
 		List<CriteriaStateView> criteriaViews = addToCriteriaView();
 	
 		/*
 		 * Lame alert: Jasper requires that at least 1 element be in it's
-		 * collection datasource. Since it's not required that an inspectiontype
-		 * have a criteria (and thus the inspection will have an empty result
+		 * collection datasource. Since it's not required that an eventtype
+		 * have a criteria (and thus the event will have an empty result
 		 * list) we need to add a dummy entry.
 		 */
 		if (criteriaViews.isEmpty()) {
@@ -168,15 +157,9 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	}
 
 	/**
-	 * Creates CriteriaStateViews for an inspection and adds them to the
+	 * Creates CriteriaStateViews for an event and adds them to the
 	 * criteriaView list.
 	 * 
-	 * @param inspection
-	 *            inspection to add the views for
-	 * @param criteriaViews
-	 *            List of criteriaViews to append to
-	 * @param stateMap
-	 *            A state map of Criteria to their States
 	 */
 	private List<CriteriaStateView> addToCriteriaView() {
 		List<CriteriaStateView> criteriaViews = new ArrayList<CriteriaStateView>(getEvent().getResults().size());
@@ -228,8 +211,5 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		}
 		return proofTestInfo;
 	}
-
-
-
 
 }

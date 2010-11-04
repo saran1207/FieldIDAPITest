@@ -48,7 +48,7 @@ public class AssetMergerTest {
 	
 	@Before
 	public void setUp() {
-		// default assets to merge same tenant and same type, no inspections.
+		// default assets to merge same tenant and same type, no events.
 		winningAsset = anAsset().forTenant(TenantBuilder.n4()).build();
 		losingAsset = anAsset().forTenant(TenantBuilder.n4()).ofType(winningAsset.getType()).build();
 		
@@ -61,9 +61,9 @@ public class AssetMergerTest {
 	}
 	
 	@Test 
-	public void should_merge_products_together_with_no_inspections() {
+	public void should_merge_products_together_with_no_events() {
 		
-		mockEmptInspectionList();		
+		mockEmptyEventList();
 		mockArchiveOfLosingProduct();
 		replayMocks();
 		
@@ -74,9 +74,6 @@ public class AssetMergerTest {
 		assertEquals(winningAsset, mergedAsset);
 		verifyMocks();
 	}
-
-	
-	
 	
 	@Test(expected= AssetTypeMissMatchException.class)
 	public void should_fail_to_merge_products_of_different_types() {
@@ -88,7 +85,6 @@ public class AssetMergerTest {
 		
 		verifyMocks();
 	}
-	
 	
 	@Test(expected=TenantNotValidForActionException.class)
 	public void should_fail_to_merge_products_for_different_tenants() {
@@ -104,15 +100,15 @@ public class AssetMergerTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_merge_products_together_with_inspections() {
-		List<Event> inspectionsOnLosingProduct = new ArrayList<Event>();
-		inspectionsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
+	public void should_merge_products_together_with_events() {
+		List<Event> eventsOnLosingProduct = new ArrayList<Event>();
+		eventsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
 		
-		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Event>());
+		mockEventLists(eventsOnLosingProduct, new ArrayList<Event>());
 		
 				
 		try {
-			expect(mockEventManager.updateEvent((Event)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(inspectionsOnLosingProduct.get(0));
+			expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
 		} catch (Exception e1) {
 			fail("should not throw exception");
 		} 
@@ -125,25 +121,23 @@ public class AssetMergerTest {
 		Asset mergedAsset = sut.merge(winningAsset, losingAsset);
 		
 		assertEquals(winningAsset, mergedAsset);
-		assertEquals(winningAsset, inspectionsOnLosingProduct.get(0).getAsset());
+		assertEquals(winningAsset, eventsOnLosingProduct.get(0).getAsset());
 		verifyMocks();
-		
 	}
 
-	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void should_merge_products_together_with_inspections_that_have_a_schedule_on_it() {
-		List<Event> inspectionsOnLosingProduct = new ArrayList<Event>();
-		inspectionsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
+	public void should_merge_products_together_with_events_that_have_a_schedule_on_it() {
+		List<Event> eventsOnLosingProduct = new ArrayList<Event>();
+		eventsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
 		
-		// puts the schedule onto the inspection.
-		EventScheduleBuilder.aCompletedEventSchedule().completedDoing(inspectionsOnLosingProduct.get(0)).asset(inspectionsOnLosingProduct.get(0).getAsset()).build();
+		// puts the schedule onto the event.
+		EventScheduleBuilder.aCompletedEventSchedule().completedDoing(eventsOnLosingProduct.get(0)).asset(eventsOnLosingProduct.get(0).getAsset()).build();
 		
-		mockInspectionLists(inspectionsOnLosingProduct, new ArrayList<Event>());
+		mockEventLists(eventsOnLosingProduct, new ArrayList<Event>());
 				
 		try {
-			expect(mockEventManager.updateEvent((Event)eq(inspectionsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(inspectionsOnLosingProduct.get(0));
+			expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
 		} catch (Exception e1) {
 			fail("should not throw exception");
 		} 
@@ -156,24 +150,21 @@ public class AssetMergerTest {
 		Asset mergedAsset = sut.merge(winningAsset, losingAsset);
 		
 		assertEquals(winningAsset, mergedAsset);
-		assertEquals(winningAsset, inspectionsOnLosingProduct.get(0).getAsset());
+		assertEquals(winningAsset, eventsOnLosingProduct.get(0).getAsset());
 		verifyMocks();
-		
 	}
-	
-	
 	
 	@SuppressWarnings("unchecked")
 	@Test 
 	public void should_merge_subasset_together() {
-		SubEvent sub = SubEventBuilder.aSubInspection("tom").withAsset(losingAsset).build();
+		SubEvent sub = SubEventBuilder.aSubEvent("tom").withAsset(losingAsset).build();
 		List<SubEvent> subEvents = new ArrayList<SubEvent>();
 		subEvents.add(sub);
 		
 		List<Event> masterEvents = new ArrayList<Event>();
-		masterEvents.add(EventBuilder.anEvent().withSubInspections(subEvents).build());
+		masterEvents.add(EventBuilder.anEvent().withSubEvents(subEvents).build());
 	
-		mockInspectionLists(new ArrayList<Event>(), masterEvents);
+		mockEventLists(new ArrayList<Event>(), masterEvents);
 		mockArchiveOfLosingProduct();
 		
 		
@@ -192,8 +183,6 @@ public class AssetMergerTest {
 		assertEquals(winningAsset, sub.getAsset());
 		verifyMocks();
 	}
-
-	
 	
 	@Test(expected= DuplicateAssetException.class)
 	public void should_not_merge_products_when_they_are_the_same_product() {
@@ -206,7 +195,7 @@ public class AssetMergerTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void mockInspectionLists(List<Event> events, List<Event> masterEvents) {
+	private void mockEventLists(List<Event> events, List<Event> masterEvents) {
 		expect(mockPersistenceManager.findAll((QueryBuilder<Event>)anyObject())).andReturn(events);
 		for (Event event : events) {
 			if (event.getSchedule() != null) {
@@ -222,8 +211,8 @@ public class AssetMergerTest {
 		}
 	}
 	
-	private void mockEmptInspectionList() {
-		mockInspectionLists(new ArrayList<Event>(), new ArrayList<Event>());
+	private void mockEmptyEventList() {
+		mockEventLists(new ArrayList<Event>(), new ArrayList<Event>());
 	}
 
 	

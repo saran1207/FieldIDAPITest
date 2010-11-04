@@ -11,7 +11,7 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
-import com.n4systems.services.NextInspectionScheduleSerivce;
+import com.n4systems.services.NextEventScheduleSerivce;
 
 public class EventCreator extends BasicTransactionManagement {
 
@@ -19,7 +19,7 @@ public class EventCreator extends BasicTransactionManagement {
 	private AuditLogger auditLogger;
 	private CreateEventParameter parameter;
 	private Event result;
-	private NextInspectionScheduleSerivce nextScheduleSerivce;
+	private NextEventScheduleSerivce nextScheduleSerivce;
 	private EventSaver createEventSaver;
 
 	public EventCreator(TransactionManager transactionManager, EventPersistenceFactory eventPersistenceFactory) {
@@ -57,7 +57,7 @@ public class EventCreator extends BasicTransactionManagement {
 	@Override
 	protected void doProcess(Transaction transaction) {
 		createTransactionDependentServices(transaction);
-		createInspection(transaction);
+		createEvent(transaction);
 		createSchedules(transaction);
 	}
 
@@ -74,7 +74,7 @@ public class EventCreator extends BasicTransactionManagement {
 		}
 	}
 
-	private void createInspection(Transaction transaction) {
+	private void createEvent(Transaction transaction) {
 		result = createEventSaver.createEvent(parameter);
 	}
 

@@ -28,7 +28,7 @@ public class AssociatedEventTypeValidatorTest {
 	}
 
 	@Test
-	public void validate_passes_when_associated_inspection_type_found() {
+	public void validate_passes_when_associated_event_type_found() {
 		String searchText = "serial number";
 		
 		Asset asset = AssetBuilder.anAsset().build();
@@ -51,14 +51,14 @@ public class AssociatedEventTypeValidatorTest {
 				return ssLoader;
 			}
 			
-			protected AssociatedEventTypeExistsLoader createAssociatedInspectionTypeExistsLoader(SecurityFilter filter) {
+			protected AssociatedEventTypeExistsLoader createAssociatedEventTypeExistsLoader(SecurityFilter filter) {
 				return aitLoader;
 			}
 		};
 		
 		
 		Map<String, Object> context = new HashMap<String, Object>();
-		context.put(EventViewValidator.INSPECTION_TYPE_KEY, inspType);
+		context.put(EventViewValidator.EVENT_TYPE_KEY, inspType);
 		
 		assertTrue(validator.validate(searchText, null, null, null, context).isPassed());
 		verify(ssLoader);
@@ -66,7 +66,7 @@ public class AssociatedEventTypeValidatorTest {
 	}
 	
 	@Test
-	public void validate_fails_when_associated_inspection_type_not_found() {
+	public void validate_fails_when_associated_event_type_not_found() {
 		String searchText = "serial number";
 		
 		Asset asset = AssetBuilder.anAsset().build();
@@ -89,14 +89,14 @@ public class AssociatedEventTypeValidatorTest {
 				return ssLoader;
 			}
 			
-			protected AssociatedEventTypeExistsLoader createAssociatedInspectionTypeExistsLoader(SecurityFilter filter) {
+			protected AssociatedEventTypeExistsLoader createAssociatedEventTypeExistsLoader(SecurityFilter filter) {
 				return aitLoader;
 			}
 		};
 		
 		
 		Map<String, Object> context = new HashMap<String, Object>();
-		context.put(EventViewValidator.INSPECTION_TYPE_KEY, inspType);
+		context.put(EventViewValidator.EVENT_TYPE_KEY, inspType);
 		
 		assertFalse(validator.validate(searchText, null, null, null, context).isPassed());
 		verify(ssLoader);

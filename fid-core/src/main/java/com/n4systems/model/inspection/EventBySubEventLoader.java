@@ -18,14 +18,14 @@ public class EventBySubEventLoader extends Loader<Event> {
 	@Override
 	protected Event load(EntityManager em) {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(SubEventRelation.class, new OpenSecurityFilter());
-		builder.setSimpleSelect("masterInspection");
-		builder.addWhere(WhereClauseFactory.create("subInspection.id", subEvent.getId()));
+		builder.setSimpleSelect("masterEvent");
+		builder.addWhere(WhereClauseFactory.create("subEvent.id", subEvent.getId()));
 		
 		Event event = builder.getSingleResult(em);
 		return event;
 	}
 
-	public EventBySubEventLoader setSubInspection(SubEvent subEvent) {
+	public EventBySubEventLoader setSubEvent(SubEvent subEvent) {
 		this.subEvent = subEvent;
 		return this;
 	}

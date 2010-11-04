@@ -16,6 +16,7 @@ import com.n4systems.handlers.creator.inspections.EventCreator;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.builders.EventTypeBuilder;
+import com.n4systems.services.NextEventScheduleSerivce;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,13 +29,12 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
-import com.n4systems.services.NextInspectionScheduleSerivce;
 
 
-public class InspectionCreatorTest {
+public class EventCreatorTest {
 
 	private TransactionManager transactionManager  = new TestDoubleTransactionManager();
-	private NullObjectDefaultedInspectionPersistenceFactory inspectionPersistenceFactory = new NullObjectDefaultedInspectionPersistenceFactory();
+	private NullObjectDefaultedEventPersistenceFactory eventPersistenceFactory = new NullObjectDefaultedEventPersistenceFactory();
 
 	private final class EventSaverSaboteur implements EventSaver {
 		
@@ -49,7 +49,7 @@ public class InspectionCreatorTest {
 
 	@Test
 	public void should_use_basic_transaction_management() throws Exception {
-		EventCreator sut = new EventCreator(transactionManager, inspectionPersistenceFactory );
+		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
 		Assert.assertThat(sut, instanceOf(BasicTransactionManagement.class));
 	}
@@ -61,7 +61,7 @@ public class InspectionCreatorTest {
 		
 		// dependency creation.
 		expect(eventPersistenceFactory.createEventSaver(transaction)).andReturn(new NullEventSaver());
-		expect(eventPersistenceFactory.createNextEventScheduleService(transaction)).andReturn(new NullNextInspectionScheduleSerivce());
+		expect(eventPersistenceFactory.createNextEventScheduleService(transaction)).andReturn(new NullNextEventScheduleSerivce());
 		expect(eventPersistenceFactory.createCreateEventAuditLogger()).andReturn(new NullAuditLogger());
 		
 		replay(eventPersistenceFactory);
@@ -74,16 +74,16 @@ public class InspectionCreatorTest {
 	}
 	
 	@Test
-	public void should_have_saver_perform_inspection_save_with_the_passed_in_parameter() throws Exception {
+	public void should_have_saver_perform_event_save_with_the_passed_in_parameter() throws Exception {
 		CreateEventParameter parameter = new CreateEventParameterBuilder(anEvent().build(), 1L).build();
 		
 		final EventSaver eventSaver = createMock(EventSaver.class);
 		expect(eventSaver.createEvent(parameter)).andReturn(parameter.event);
 		replay(eventSaver);
 		
-		inspectionPersistenceFactory.eventSaver = eventSaver;
+		eventPersistenceFactory.eventSaver = eventSaver;
 		
-		EventCreator sut = new EventCreator(transactionManager, inspectionPersistenceFactory);
+		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
 		sut.create(parameter);
 		
@@ -94,23 +94,23 @@ public class InspectionCreatorTest {
 	public void should_throw_a_wrapping_exception_when_saver_throws_an_exception() throws Exception {
 		CreateEventParameter parameter = new CreateEventParameterBuilder(anEvent().build(), 1L).build();
 		
-		inspectionPersistenceFactory.eventSaver = new EventSaverSaboteur();
+		eventPersistenceFactory.eventSaver = new EventSaverSaboteur();
 		
-		EventCreator sut = new EventCreator(transactionManager, inspectionPersistenceFactory);
+		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
 		sut.create(parameter);
 	}
 	
 	@Test
-	public void should_call_the_audit_with_the_saved_inspection_on_success() throws Exception {
+	public void should_call_the_audit_with_the_saved_event_on_success() throws Exception {
 		CreateEventParameter parameter = new CreateEventParameterBuilder(anEvent().build(), 1L).build();
 		AuditLogger auditLogger = createMock(AuditLogger.class);
 		auditLogger.audit((String)anyObject(), same(parameter.event), (Throwable)isNull());
 		replay(auditLogger);
 		
-		inspectionPersistenceFactory.auditLogger = auditLogger;
+		eventPersistenceFactory.auditLogger = auditLogger;
 		
-		EventCreator sut = new EventCreator(transactionManager, inspectionPersistenceFactory);
+		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
 		sut.create(parameter);
 		
@@ -118,16 +118,16 @@ public class InspectionCreatorTest {
 	}
 	
 	@Test
-	public void should_call_the_audit_with_the_unsaved_inspection_and_the_failure_exception_failure() throws Exception {
+	public void should_call_the_audit_with_the_unsaved_event_and_the_failure_exception_failure() throws Exception {
 		CreateEventParameter parameter = new CreateEventParameterBuilder(anEvent().build(), 1L).build();
 		AuditLogger auditLogger = createMock(AuditLogger.class);
 		auditLogger.audit(isA(String.class), same(parameter.event), isA(ProcessingProofTestException.class));
 		replay(auditLogger);
 		
-		inspectionPersistenceFactory.auditLogger = auditLogger;
-		inspectionPersistenceFactory.eventSaver = new EventSaverSaboteur();
+		eventPersistenceFactory.auditLogger = auditLogger;
+		eventPersistenceFactory.eventSaver = new EventSaverSaboteur();
 		
-		EventCreator sut = new EventCreator(transactionManager, inspectionPersistenceFactory);
+		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
 		try {
 			sut.create(parameter);
@@ -137,10 +137,10 @@ public class InspectionCreatorTest {
 	}
 	
 	@Test
-	public void should_return_the_saved_inspection_on_success() throws Exception {
+	public void should_return_the_saved_event_on_success() throws Exception {
 		final Event savedEvent = anEvent().build();
 		
-		inspectionPersistenceFactory.eventSaver = new EventSaver() {
+		eventPersistenceFactory.eventSaver = new EventSaver() {
 			public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException ,FileAttachmentException , UnknownSubAsset {
 				return savedEvent;
 			}
@@ -151,7 +151,7 @@ public class InspectionCreatorTest {
 			}
 		};
 		
-		EventCreator sut = new EventCreator(transactionManager, inspectionPersistenceFactory);
+		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
 		Event actualReturnedEvent = sut.create(new CreateEventParameterBuilder(anEvent().build(), 1L).build());
 		
@@ -159,20 +159,20 @@ public class InspectionCreatorTest {
 	}
 	
 	@Test
-	public void should_save_the_set_inspection_schedules_given() throws Exception {
+	public void should_save_the_set_event_schedules_given() throws Exception {
 		Event event = anEvent().build();
 		CreateEventParameter parameter = new CreateEventParameterBuilder(event, 1L)
 			.addSchedule(new EventScheduleBundle(event.getAsset(), EventTypeBuilder.anEventType().build(), null, new Date()))
 			.addSchedule(new EventScheduleBundle(event.getAsset(), EventTypeBuilder.anEventType().build(), null, new Date(2000)))
 			.build();
 		
-		NextInspectionScheduleSerivce nextScheduleService = createMock(NextInspectionScheduleSerivce.class);
+		NextEventScheduleSerivce nextScheduleService = createMock(NextEventScheduleSerivce.class);
 		expect(nextScheduleService.createNextSchedule(isA(EventSchedule.class))).andReturn(null).times(2);
 		replay(nextScheduleService);
 		
-		inspectionPersistenceFactory.nextInspectionScheduleSerivce = nextScheduleService;
+		eventPersistenceFactory.nextEventScheduleSerivce = nextScheduleService;
 		
-		EventCreator sut = new EventCreator(transactionManager, inspectionPersistenceFactory);
+		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
 		sut.create(parameter);
 		

@@ -15,11 +15,11 @@ import com.n4systems.util.properties.HierarchicalProperties;
  * 
  * pool.0.name=heavy_task
  * pool.0.size=2
- * pool.0.class.0=com.n4systems.taskscheduling.task.PrintAllInspectionCertificatesTask
+ * pool.0.class.0=com.n4systems.taskscheduling.task.PrintAllEventCertificatesTask
  * 
  * pool.1.name=medium_task
  * pool.1.size=4
- * pool.1.class.0=com.n4systems.taskscheduling.task.PrintInspectionSummaryReportTask
+ * pool.1.class.0=com.n4systems.taskscheduling.task.PrintEventSummaryReportTask
  * 
  */
 public class TaskPoolListInitializer {

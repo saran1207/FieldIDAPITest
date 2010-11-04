@@ -15,7 +15,7 @@ public class SavedReportAssignedToRemovalTest {
 	private SavedReport reportNormal;
 	private SavedReport reportWithColumnToRemove;
 	private SavedReport reportWithCriteriaToRemove;
-	static final String ASSIGNED_TO_COLUMN = "inspection_search_assignedto";
+	static final String ASSIGNED_TO_COLUMN = "event_search_assignedto";
 	static final String ASSIGNED_TO_CRITERIA = "assignedUser";
 	
 	private List<String> columns;

@@ -17,7 +17,7 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 
 /**
- * Loads a list of inspection books.  Note that the security on this list is backwards to our normal security model.
+ * Loads a list of event books.  Note that the security on this list is backwards to our normal security model.
  * Each owner level is allowed to see itself and all the way up the parent chain but not down the chain.  Eg, 
  * CustomerOrgs will see their Customer, the parent SecondaryOrg and the PrimaryOrg.
  */
@@ -89,29 +89,29 @@ public class EventBookListLoader extends ListLoader<EventBook> {
 
 	@SuppressWarnings("unchecked")
 	private List<EventBook> getUpwardTreeList(BaseOrg owner, EntityManager em, SecurityFilter filter) {
-		StringBuilder inspectionBookQuery = getStartOfQuery();
-		inspectionBookQuery.append(" AND ");
+		StringBuilder eventBookQuery = getStartOfQuery();
+		eventBookQuery.append(" AND ");
 		
-		inspectionBookQuery.append("(");
+		eventBookQuery.append("(");
 		if (owner.getDivisionOrg() != null) {
-			inspectionBookQuery.append("(i.owner.divisionOrg.id = :owner_division_id)");
-			inspectionBookQuery.append(" OR ");
+			eventBookQuery.append("(i.owner.divisionOrg.id = :owner_division_id)");
+			eventBookQuery.append(" OR ");
 		}
 		
 		if (owner.getCustomerOrg() != null) {
-			inspectionBookQuery.append("(i.owner.customerOrg.id = :owner_customer_id AND i.owner.divisionOrg IS NULL)");
-			inspectionBookQuery.append(" OR ");
+			eventBookQuery.append("(i.owner.customerOrg.id = :owner_customer_id AND i.owner.divisionOrg IS NULL)");
+			eventBookQuery.append(" OR ");
 		}
 		
 		if (owner.getSecondaryOrg() != null) {
-			inspectionBookQuery.append("(i.owner.secondaryOrg.id = :owner_secondary_id AND i.owner.customerOrg IS NULL AND i.owner.divisionOrg IS NULL)");
-			inspectionBookQuery.append(" OR ");
+			eventBookQuery.append("(i.owner.secondaryOrg.id = :owner_secondary_id AND i.owner.customerOrg IS NULL AND i.owner.divisionOrg IS NULL)");
+			eventBookQuery.append(" OR ");
 		}
 		
-		inspectionBookQuery.append("(owner.secondaryOrg IS NULL AND owner.customerOrg IS NULL AND owner.divisionOrg IS NULL)");
-		inspectionBookQuery.append(")");
+		eventBookQuery.append("(owner.secondaryOrg IS NULL AND owner.customerOrg IS NULL AND owner.divisionOrg IS NULL)");
+		eventBookQuery.append(")");
 
-		Query query = em.createQuery(inspectionBookQuery.toString());
+		Query query = em.createQuery(eventBookQuery.toString());
 		
 		applyOrgParams(query, owner, "owner");
 		applyTenantSecurity(filter, query);

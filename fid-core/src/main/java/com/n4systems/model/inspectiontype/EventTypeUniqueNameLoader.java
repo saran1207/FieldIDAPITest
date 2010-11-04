@@ -9,7 +9,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
 /**
- * Given a name String, finds a new unique InspectionType name.  Names are generated via the format String.
+ * Given a name String, finds a new unique EventType name.  Names are generated via the format String.
  * The default for this is "<old name> - <#>".  The number will increment until a non-conflicting name is found.
  */
 public class EventTypeUniqueNameLoader extends SecurityFilteredLoader<String> {

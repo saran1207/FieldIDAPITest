@@ -15,7 +15,7 @@ public class NotificationSettingDeleteHandlerImpl implements NotificationSetting
 	private EventType eventType;
 	
 	public void remove(Transaction transaction) {
-		List<Long> notificationsToDelete = getNotificationIdsWithInspectionType(transaction);
+		List<Long> notificationsToDelete = getNotificationIdsWithEventType(transaction);
 		
 		String deleteQuery = "DELETE FROM " + NotificationSetting.class.getName() + " WHERE id IN (:ids)";
 		new LargeInListQueryExecutor().executeUpdate(transaction.getEntityManager().createQuery(deleteQuery), notificationsToDelete);
@@ -24,13 +24,13 @@ public class NotificationSettingDeleteHandlerImpl implements NotificationSetting
 	public NotificationSettingDeleteSummary summary(Transaction transaction) {
 		NotificationSettingDeleteSummary summary = new NotificationSettingDeleteSummary();
 		
-		summary.setNotificationsToDelete(getNotificationIdsWithInspectionType(transaction).size());
+		summary.setNotificationsToDelete(getNotificationIdsWithEventType(transaction).size());
 		
 		return summary;
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Long> getNotificationIdsWithInspectionType(Transaction transaction) {
+	private List<Long> getNotificationIdsWithEventType(Transaction transaction) {
 		Query query = transaction.getEntityManager().createQuery("SELECT ns.id FROM " + NotificationSetting.class.getName() + " ns, IN (ns.eventTypes) eventTypeId WHERE eventTypeId = :eventTypeId" );
 		query.setParameter("eventTypeId", eventType.getId());
 		

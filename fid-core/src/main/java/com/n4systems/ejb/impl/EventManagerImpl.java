@@ -41,19 +41,14 @@ import com.n4systems.webservice.dto.WSSearchCritiera;
 public class EventManagerImpl implements EventManager {
 	static Logger logger = Logger.getLogger(EventManagerImpl.class);
 
-	
 	private EntityManager em;
 
 	private final PersistenceManager persistenceManager;
 	private final ManagerBackedEventSaver eventSaver;
 
-
 	private final EntityManagerLastEventDateFinder lastEventFinder;
-
-
 	private final EventScheduleManager eventScheduleManager;
 
-	
 	public EventManagerImpl(EntityManager em) {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
@@ -67,7 +62,7 @@ public class EventManagerImpl implements EventManager {
 	 * finds all the groups that you can view with the defined security filter.
 	 */
 	@SuppressWarnings("unchecked")
-	private List<EventGroup> findAllInspectionGroups(SecurityFilter userFilter, Long assetId) {
+	private List<EventGroup> findAllEventGroups(SecurityFilter userFilter, Long assetId) {
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
 		filter.setTargets("eg.tenant.id", "event.owner", null, null);
 
@@ -87,22 +82,22 @@ public class EventManagerImpl implements EventManager {
 	 * finds all the groups that you can view with the defined security filter.
 	 */
 	public List<EventGroup> findAllEventGroups(SecurityFilter filter, Long assetId, String... postFetchFields) {
-		return (List<EventGroup>) persistenceManager.postFetchFields(findAllInspectionGroups(filter, assetId), postFetchFields);
+		return (List<EventGroup>) persistenceManager.postFetchFields(findAllEventGroups(filter, assetId), postFetchFields);
 	}
 
 	
 	public Event findEventThroughSubEvent(Long subEventId, SecurityFilter filter) {
-		String str = "select e FROM "+Event.class.getName()+" e, IN( e.subInspections ) s WHERE s.id = :subInspection AND ";
+		String str = "select e FROM "+Event.class.getName()+" e, IN( e.subEvents ) s WHERE s.id = :subEventId AND ";
 		str += filter.produceWhereClause(Event.class, "e");
 		Query query = em.createQuery(str);
-		query.setParameter("subInspection", subEventId);
+		query.setParameter("subEventId", subEventId);
 		filter.applyParameters(query, Event.class);
 		try {
 			return (Event) query.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
-			logger.error("Could not check if sub inspection attached", e);
+			logger.error("Could not check if sub event attached", e);
 			return null;
 		}
 	}
@@ -119,7 +114,7 @@ public class EventManagerImpl implements EventManager {
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
-			logger.error("Could not check if sub inspection attached ", e);
+			logger.error("Could not check if sub event attached ", e);
 			return null;
 		}
 	}
@@ -173,7 +168,7 @@ public class EventManagerImpl implements EventManager {
 
 	
 	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
-		return eventSaver.updateInspection(event, userId, fileData, uploadedFiles);
+		return eventSaver.updateEvent(event, userId, fileData, uploadedFiles);
 	}
 
 
@@ -181,29 +176,19 @@ public class EventManagerImpl implements EventManager {
 	public Event retireEvent(Event event, Long userId) {
 		event.retireEntity();
 		event = persistenceManager.update(event, userId);
-		eventSaver.updateAssetInspectionDate(event.getAsset());
+		eventSaver.updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
 		eventScheduleManager.restoreScheduleForEvent(event);
 		return event;
 	}
 
-	
-
-	
-	
-
-	
 	/**
-	 * This must be called AFTER the inspection and subinspection have been persisted
+	 * This must be called AFTER the event and subevent have been persisted
 	 */
 	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		return eventSaver.attachFilesToSubEvent(event, subEvent, uploadedFiles);
 	}
 
-	
-
-	
-	
 	/**
 	 * ensure that all criteria are retired under a retired section.
 	 */
@@ -218,13 +203,11 @@ public class EventManagerImpl implements EventManager {
 			}
 		}
 		
-		// any update to an inspection form, requires an increment of the form version
+		// any update to an event form, requires an increment of the form version
 		eventType.incrementFormVersion();
 		
 		return persistenceManager.update(eventType, modifyingUserId);
 	}
-
-	
 
 	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 
@@ -297,7 +280,6 @@ public class EventManagerImpl implements EventManager {
 		return (event != null) ? (!event.getSubEvents().isEmpty()) : false;
 	}
 
-	
 	public Date findLastEventDate(EventSchedule schedule) {
 		return lastEventFinder.findLastEventDate(schedule);
 	}
@@ -305,6 +287,5 @@ public class EventManagerImpl implements EventManager {
 	public Date findLastEventDate(Long scheduleId) {
 		return lastEventFinder.findLastEventDate(scheduleId);
 	}
-
 
 }

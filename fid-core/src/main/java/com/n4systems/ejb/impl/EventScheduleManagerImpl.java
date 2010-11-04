@@ -49,7 +49,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 				AssetTypeSchedule schedule = assetType.getSchedule(type, asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
 					EventSchedule eventSchedule = new EventSchedule(asset, type);
-					eventSchedule.setNextDate(assetType.getSuggestedNextInspectionDate(new Date(), type, asset.getOwner()));
+					eventSchedule.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
 					schedules.add(eventSchedule);
 					new EventScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
 				}
@@ -67,7 +67,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public void restoreScheduleForEvent(Event event) {
 		EventSchedule schedule = event.getSchedule();
 		if (schedule != null) {
-			schedule.removeInspection();
+			schedule.removeEvent();
 			new EventScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
 		}
 		

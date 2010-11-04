@@ -19,7 +19,7 @@ import com.n4systems.util.ConfigEntry;
 /**
  * Acts as an in-mem cache of {@link SetupDataLastModDates} for each tenant.  This service should be loaded
  * on startup and notified of any changes to {@link SetupDataLastModDates}.  The {@link #touchModDate(Long, SetupDataGroup)} 
- * should be used to update modification dates when changes are made to asset types, inspection type, etc..
+ * should be used to update modification dates when changes are made to asset types, event type, etc..
  */
 public class SetupDataLastModUpdateService {
 	private static Logger logger = Logger.getLogger(SetupDataLastModUpdateService.class);

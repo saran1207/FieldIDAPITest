@@ -36,19 +36,19 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 	
 	@Test
 	public void should_take_the_id_list_by_value_not_reference() throws Exception {
-		List<Long> inspectionIds = new FluentArrayList<Long>(1L, 2L, 3L);
-		List<Event> sut = new LazyLoadingList<Event>(inspectionIds, null, null);
+		List<Long> eventIds = new FluentArrayList<Long>(1L, 2L, 3L);
+		List<Event> sut = new LazyLoadingList<Event>(eventIds, null, null);
 		
-		inspectionIds.clear();
+		eventIds.clear();
 		assertEquals(3, sut.size());
 	}
 
 	@Test
-	public void should_load_only_first_inspection_when_index_is_accessed() throws Exception {
+	public void should_load_only_first_event_when_index_is_accessed() throws Exception {
 		IdLoaderFake loader = new IdLoaderFake();
 		mockTransaction();
-		List<Long> inspectionIds = new FluentArrayList<Long>(1L, 2L, 3L);
-		List<Event> sut = new LazyLoadingList<Event>(inspectionIds, loader, mockTransaction);
+		List<Long> eventIds = new FluentArrayList<Long>(1L, 2L, 3L);
+		List<Event> sut = new LazyLoadingList<Event>(eventIds, loader, mockTransaction);
 		sut.get(0);
 		
 		Assert.assertEquals(new FluentArrayList<Long>(1L), loader.loadedIds);
@@ -56,24 +56,24 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 	
 	
 	@Test
-	public void should_load_each_inspection_when_iterated() throws Exception {
+	public void should_load_each_event_when_iterated() throws Exception {
 		IdLoaderFake loader = new IdLoaderFake();
 		mockTransaction();
-		List<Long> inspectionIds = new FluentArrayList<Long>(1L, 2L, 3L);
-		List<Event> sut = new LazyLoadingList<Event>(inspectionIds, loader, mockTransaction);
+		List<Long> eventIds = new FluentArrayList<Long>(1L, 2L, 3L);
+		List<Event> sut = new LazyLoadingList<Event>(eventIds, loader, mockTransaction);
 		for (Event event : sut) {
 			assertNotNull(event);
 		}
 		
-		Assert.assertEquals(inspectionIds, loader.loadedIds);
+		Assert.assertEquals(eventIds, loader.loadedIds);
 	}
 	
 	@Test
-	public void should_load_the_same_inspection_multiple_times_if_requested_multiple_times() throws Exception {
+	public void should_load_the_same_event_multiple_times_if_requested_multiple_times() throws Exception {
 		IdLoaderFake loader = new IdLoaderFake();
 		mockTransaction();
-		List<Long> inspectionIds = new FluentArrayList<Long>(1L, 2L, 3L);
-		List<Event> sut = new LazyLoadingList<Event>(inspectionIds, loader, mockTransaction);
+		List<Long> eventIds = new FluentArrayList<Long>(1L, 2L, 3L);
+		List<Event> sut = new LazyLoadingList<Event>(eventIds, loader, mockTransaction);
 	
 		sut.get(0);
 		sut.get(0);

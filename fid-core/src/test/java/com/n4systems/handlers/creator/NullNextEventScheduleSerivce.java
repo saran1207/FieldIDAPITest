@@ -6,9 +6,9 @@ package com.n4systems.handlers.creator;
 import java.util.Random;
 
 import com.n4systems.model.EventSchedule;
-import com.n4systems.services.NextInspectionScheduleSerivce;
+import com.n4systems.services.NextEventScheduleSerivce;
 
-final class NullNextInspectionScheduleSerivce implements NextInspectionScheduleSerivce {
+final class NullNextEventScheduleSerivce implements NextEventScheduleSerivce {
 	@Override
 	public EventSchedule createNextSchedule(EventSchedule schedule) {
 		schedule.setId(new Random().nextLong());

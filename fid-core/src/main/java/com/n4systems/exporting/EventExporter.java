@@ -33,7 +33,7 @@ public class EventExporter implements Exporter {
 				view = converter.toView(event);
 				mapWriter.write(marshaler.toBeanMap(view));
 			} catch (Exception e) {
-				throw new ExportException(String.format("Unable to export inspection [%s]", event), e);
+				throw new ExportException(String.format("Unable to export event [%s]", event), e);
 			}
 		}
 	}

@@ -49,19 +49,19 @@ public class EventScheduleCountGenerator {
 	}
 
 	private void generateNotificationMessage(NotificationSetting setting, Clock clock) throws NamingException, NoSuchProviderException, MessagingException {
-		Range<Date> dateRange = setting.getUpcommingReport().getDateRange(clock);
+		Range<Date> dateRange = setting.getUpcomingReport().getDateRange(clock);
 		
 		Date startDate = dateRange.getBeginning();
 		Date endDate = dateRange.getEnding();
 		
 		SortedSet<EventScheduleCount> upcomingEvents = null;
-		if (setting.getUpcommingReport().isIncludeUpcoming()) {
-			upcomingEvents = getUpcommingInspections(setting, startDate, endDate);
+		if (setting.getUpcomingReport().isIncludeUpcoming()) {
+			upcomingEvents = getUpcomingEvents(setting, startDate, endDate);
 		}
 		
 		SortedSet<EventScheduleCount> overdueEvents = null;
 		if (setting.isIncludeOverdue()) {
-			overdueEvents = getOverdueInspections(setting, clock);
+			overdueEvents = getOverdueEvents(setting, clock);
 		}
 
 		sendMessage(setting, startDate, endDate, upcomingEvents, overdueEvents);
@@ -71,7 +71,7 @@ public class EventScheduleCountGenerator {
 		return !setting.getFrequency().isSameDay(clock.currentTime());
 	}
 
-	private SortedSet<EventScheduleCount> getOverdueInspections(NotificationSetting setting, Clock clock) {
+	private SortedSet<EventScheduleCount> getOverdueEvents(NotificationSetting setting, Clock clock) {
 		OverdueEventScheduleCountListLoader loader = setupOverdueLoader(setting, clock);
 
 		return new TreeSet<EventScheduleCount>(loader.load());
@@ -83,7 +83,7 @@ public class EventScheduleCountGenerator {
 		return overdueLoader;
 	}
 
-	private SortedSet<EventScheduleCount> getUpcommingInspections(NotificationSetting setting, Date start, Date end) {
+	private SortedSet<EventScheduleCount> getUpcomingEvents(NotificationSetting setting, Date start, Date end) {
 		UpcomingEventScheduleCountListLoader loader = setupUpcomingLoader(setting, start, end);
 		
 		return new TreeSet<EventScheduleCount>(loader.load());
@@ -99,7 +99,7 @@ public class EventScheduleCountGenerator {
 	private void sendMessage(NotificationSetting setting, Date start, Date end, SortedSet<EventScheduleCount> upcomingEventCounts, SortedSet<EventScheduleCount> overdueEvents) throws NoSuchProviderException, MessagingException {
 		String messageSubject = createSubject(setting, start, end);
 		
-		// no we need to build the message body with the html inspection report table
+		// no we need to build the message body with the html event report table
 		TemplateMailMessage message = new TemplateMailMessage(messageSubject, "eventScheduleReport");
 		
 		message.getTemplateMap().put("dateFormatter", dateFormatter);
@@ -120,7 +120,7 @@ public class EventScheduleCountGenerator {
 	private String createSubject(NotificationSetting setting, Date start, Date end) {
 		String messageSubject = "Scheduled Events Report: " + setting.getName();
 		
-		if (setting.getUpcommingReport().isIncludeUpcoming()) {
+		if (setting.getUpcomingReport().isIncludeUpcoming()) {
 			messageSubject += " - " + dateFormatter.format(start) + " to " + dateFormatter.format(end);
 		}
 		return messageSubject;

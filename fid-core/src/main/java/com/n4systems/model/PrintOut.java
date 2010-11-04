@@ -38,11 +38,11 @@ public class PrintOut extends EntityWithTenant implements NamedEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private PrintOutType type;
-	
-	private boolean withSubInspections = false;
+
+    @Column(name="withsubinspections")
+	private boolean withSubEvents = false;
 	
 	public PrintOut() {
-		super();
 	}
 	
 	@Override
@@ -118,12 +118,12 @@ public class PrintOut extends EntityWithTenant implements NamedEntity {
 		this.custom = custom;
 	}
 
-	public boolean isWithSubInspections() {
-		return withSubInspections;
+	public boolean isWithSubEvents() {
+		return withSubEvents;
 	}
 
-	public void setWithSubInspections(boolean withSubInspections) {
-		this.withSubInspections = withSubInspections;
+	public void setWithSubEvents(boolean withSubEvents) {
+		this.withSubEvents = withSubEvents;
 	}
 
 }

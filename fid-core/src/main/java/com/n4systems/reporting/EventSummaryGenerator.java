@@ -85,60 +85,60 @@ public class EventSummaryGenerator {
 				
 				event = eventManager.findAllFields(inspectionId, user.getSecurityFilter());
 
-				ReportMap<Object> inspectionMap = new ReportMap<Object>();
-				inspectionMap.put("date", event.getDate());
-				inspectionMap.put("referenceNumber", event.getAsset().getCustomerRefNumber());
-				inspectionMap.put("productType", event.getAsset().getType().getName());
-				inspectionMap.put("serialNumber", event.getAsset().getSerialNumber());
-				inspectionMap.put("description", event.getAsset().getDescription());
-				inspectionMap.put("organization", event.getOwner().getInternalOrg().getName());
-				inspectionMap.put("inspectionType", event.getType().getName());
-				inspectionMap.put("dateFormat", new DateTimeDefiner(user).getDateFormat());
-				inspectionMap.put("performedBy", event.getPerformedBy().getUserLabel());
-				inspectionMap.put("result", event.getStatus().getDisplayName());
-				inspectionMap.put("division", (event.getOwner().isDivision()) ? event.getOwner().getName() : null);
+				ReportMap<Object> eventMap = new ReportMap<Object>();
+				eventMap.put("date", event.getDate());
+				eventMap.put("referenceNumber", event.getAsset().getCustomerRefNumber());
+				eventMap.put("productType", event.getAsset().getType().getName());
+				eventMap.put("serialNumber", event.getAsset().getSerialNumber());
+				eventMap.put("description", event.getAsset().getDescription());
+				eventMap.put("organization", event.getOwner().getInternalOrg().getName());
+				eventMap.put("inspectionType", event.getType().getName());
+				eventMap.put("dateFormat", new DateTimeDefiner(user).getDateFormat());
+				eventMap.put("performedBy", event.getPerformedBy().getUserLabel());
+				eventMap.put("result", event.getStatus().getDisplayName());
+				eventMap.put("division", (event.getOwner().isDivision()) ? event.getOwner().getName() : null);
 				
 				Long tenantId = event.getTenant().getId();
 				
 				PrimaryOrg tenant = getTenant(user, tenantId);
 				
-				inspectionMap.put("tenantAddress", tenant.getAddressInfo() !=null? tenant.getAddressInfo().getDisplay() : "");
+				eventMap.put("tenantAddress", tenant.getAddressInfo() !=null? tenant.getAddressInfo().getDisplay() : "");
 				
-				inspectionMap.put("productTypeGroup", event.getAsset().getType().getGroup() != null ? event.getAsset().getType().getGroup().getName() : "");
-				inspectionMap.put("assetComments", event.getAsset().getComments());
-				inspectionMap.put("customer", event.getOwner().getCustomerOrg() != null? event.getOwner().getCustomerOrg().getName() :"");
+				eventMap.put("productTypeGroup", event.getAsset().getType().getGroup() != null ? event.getAsset().getType().getGroup().getName() : "");
+				eventMap.put("assetComments", event.getAsset().getComments());
+				eventMap.put("customer", event.getOwner().getCustomerOrg() != null? event.getOwner().getCustomerOrg().getName() :"");
 				
 				LineItem shopOrder = event.getAsset().getShopOrder();
-				inspectionMap.put("orderNumber", shopOrder !=null ? shopOrder.getOrder().getOrderNumber() : "");
-				inspectionMap.put("PONumber", event.getAsset().getPurchaseOrder());
-				inspectionMap.put("attributes", produceInfoOptionLP(event.getAsset().getOrderedInfoOptionList()));
-				inspectionMap.put("productStatus", event.getAsset().getAssetStatus()!=null ? event.getAsset().getAssetStatus().getName() : "");
+				eventMap.put("orderNumber", shopOrder !=null ? shopOrder.getOrder().getOrderNumber() : "");
+				eventMap.put("PONumber", event.getAsset().getPurchaseOrder());
+				eventMap.put("attributes", produceInfoOptionLP(event.getAsset().getOrderedInfoOptionList()));
+				eventMap.put("productStatus", event.getAsset().getAssetStatus()!=null ? event.getAsset().getAssetStatus().getName() : "");
 				
-				inspectionMap.put("eventTypeGroup", event.getType().getGroup() !=null ? event.getType().getGroup().getName() : "");
-				inspectionMap.put("location", event.getAdvancedLocation() != null ? event.getAdvancedLocation().getFullName() : "");
-				inspectionMap.put("eventComments", event.getComments());
-				inspectionMap.put("assignedTo", event.getAssignedTo() != null && event.getAssignedTo().getAssignedUser() != null
+				eventMap.put("eventTypeGroup", event.getType().getGroup() !=null ? event.getType().getGroup().getName() : "");
+				eventMap.put("location", event.getAdvancedLocation() != null ? event.getAdvancedLocation().getFullName() : "");
+				eventMap.put("eventComments", event.getComments());
+				eventMap.put("assignedTo", event.getAssignedTo() != null && event.getAssignedTo().getAssignedUser() != null
 						? event.getAssignedTo().getAssignedUser().getDisplayName() : "");
 
 				
-				ReportMap<Object> inspectionReportMap = new EventReportMapProducer(event, dateDefiner).produceMap();
-				inspectionMap.put("mainInspection", inspectionReportMap);
-				inspectionMap.put("product", inspectionReportMap.get("product"));
+				ReportMap<Object> eventReportMap = new EventReportMapProducer(event, dateDefiner).produceMap();
+				eventMap.put("mainInspection", eventReportMap);
+				eventMap.put("product", eventReportMap.get("product"));
 				
 				List<ReportMap<Object>> inspectionResultMaps = new ArrayList<ReportMap<Object>>();
-				inspectionResultMaps.add(inspectionReportMap);
+				inspectionResultMaps.add(eventReportMap);
 				
 				for (SubEvent subEvent : event.getSubEvents()) {
 					inspectionResultMaps.add(new SubEventReportMapProducer(subEvent, event, dateDefiner).produceMap());
 				}
 
-				inspectionMap.put("allInspections", inspectionResultMaps);
+				eventMap.put("allInspections", inspectionResultMaps);
 				
 				if (event.getProofTestInfo() != null) {
-					inspectionMap.put("peakLoad", event.getProofTestInfo().getPeakLoad());
+					eventMap.put("peakLoad", event.getProofTestInfo().getPeakLoad());
 				}
 
-				collection.add(inspectionMap);
+				collection.add(eventMap);
 				
 				totalNumEvents++;
 				if (event.getStatus().equals(Status.PASS)) {

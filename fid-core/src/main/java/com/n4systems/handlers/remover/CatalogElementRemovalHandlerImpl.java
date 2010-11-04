@@ -32,7 +32,7 @@ public class CatalogElementRemovalHandlerImpl implements CatalogElementRemovalHa
 
 	private void removeElementFromCatalog(Catalog catalog) {
 		if (eventType != null) {
-			catalog.getPublishedInspectionTypes().remove(eventType);
+			catalog.getPublishedEventTypes().remove(eventType);
 		}
 		if (assetType != null) {
 			catalog.getPublishedAssetTypes().remove(assetType);

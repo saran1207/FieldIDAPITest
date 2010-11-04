@@ -27,7 +27,7 @@ public class SubEventReportMapProducer extends AbsractEventReportMapProducer {
 
 	@Override
 	protected File imagePath(FileAttachment imageAttachment) {
-		return PathHandler.getInspectionAttachmentFile(masterEvent, event, imageAttachment);
+		return PathHandler.getEventAttachmentFile(masterEvent, event, imageAttachment);
 	}
 
 	@Override

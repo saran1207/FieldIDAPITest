@@ -46,11 +46,11 @@ public class Catalog extends EntityWithTenant implements Saveable{
 		this.publishedAssetTypes = publishedAssetTypes;
 	}
 
-	public Set<EventType> getPublishedInspectionTypes() {
+	public Set<EventType> getPublishedEventTypes() {
 		return publishedEventTypes;
 	}
 
-	public void setPublishedInspectionTypes(Set<EventType> publishedEventTypes) {
+	public void setPublishedEventTypes(Set<EventType> publishedEventTypes) {
 		this.publishedEventTypes = publishedEventTypes;
 	}
 

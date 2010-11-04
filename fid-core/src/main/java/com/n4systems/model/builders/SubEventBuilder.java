@@ -13,7 +13,7 @@ public class SubEventBuilder extends BaseBuilder<SubEvent> {
 	private final EventType eventType;
 	private final Asset asset;
 	
-	public static SubEventBuilder aSubInspection(String name) {
+	public static SubEventBuilder aSubEvent(String name) {
 		return new SubEventBuilder(name, anEventType().build(), anAsset().build());
 	}
 

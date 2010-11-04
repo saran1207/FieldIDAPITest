@@ -14,38 +14,38 @@ import com.n4systems.webservice.dto.ProductServiceDTO;
 public class AssetToServiceConverter implements ModelToServiceConverter<Asset, ProductServiceDTO> {
 	private final ServiceDTOBeanConverter serviceConverter;
 	private final LastEventLoader lastEventLoader;
-	private final ModelToServiceConverter<Event, InspectionServiceDTO> inspectionConverter;
-	private boolean withPreviosInspections;
+	private final ModelToServiceConverter<Event, InspectionServiceDTO> eventConverter;
+	private boolean withPreviousEvents;
 	
-	public AssetToServiceConverter(ServiceDTOBeanConverter serviceConverter, LastEventLoader lastEventLoader, ModelToServiceConverter<Event, InspectionServiceDTO> inspectionConverter) {
+	public AssetToServiceConverter(ServiceDTOBeanConverter serviceConverter, LastEventLoader lastEventLoader, ModelToServiceConverter<Event, InspectionServiceDTO> eventConverter) {
 		this.serviceConverter = serviceConverter;
 		this.lastEventLoader = lastEventLoader;
-		this.inspectionConverter = inspectionConverter;
+		this.eventConverter = eventConverter;
 	}
 	
 	@Override
 	public ProductServiceDTO toServiceDTO(Asset model) {
 		ProductServiceDTO dto = serviceConverter.convert(model);
 		
-		if (withPreviosInspections) {
-			dto.setLastInspections(convertLastInspections(model.getId()));
+		if (withPreviousEvents) {
+			dto.setLastInspections(convertLastEvents(model.getId()));
 		}
 		
 		return dto;
 	}
 	
-	private List<InspectionServiceDTO> convertLastInspections(Long productId) {
-		List<Event> events = lastEventLoader.setAssetId(productId).load();
+	private List<InspectionServiceDTO> convertLastEvents(Long assetId) {
+		List<Event> events = lastEventLoader.setAssetId(assetId).load();
 		
 		List<InspectionServiceDTO> dtos = new ArrayList<InspectionServiceDTO>();
 		for (Event insp: events) {
-			dtos.add(inspectionConverter.toServiceDTO(insp));
+			dtos.add(eventConverter.toServiceDTO(insp));
 		}
 		
 		return dtos;
 	}
 
-	public void setWithPreviosInspections(boolean withPreviosInspections) {
-		this.withPreviosInspections = withPreviosInspections;
+	public void setWithPreviousEvents(boolean withPreviousEvents) {
+		this.withPreviousEvents = withPreviousEvents;
 	}
 }

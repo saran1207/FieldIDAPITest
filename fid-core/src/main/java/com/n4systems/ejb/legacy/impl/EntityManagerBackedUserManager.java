@@ -244,7 +244,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		return (List<ListingPair>) query.getResultList();
 	}
 
-	// TODO extract to a loader it is only used by one call on inspection crud.
+	// TODO extract to a loader it is only used by one call on event crud.
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getExaminers(SecurityFilter filter) {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
@@ -257,7 +257,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 		// get the userlist and filter out users not having the create/edit
 		// inspect
-		List<User> users = Permissions.filterHasOneOf((List<User>) query.getResultList(), Permissions.ALLINSPECTION);
+		List<User> users = Permissions.filterHasOneOf((List<User>) query.getResultList(), Permissions.ALLEVENT);
 
 		return ListHelper.longListableToListingPair(users);
 	}

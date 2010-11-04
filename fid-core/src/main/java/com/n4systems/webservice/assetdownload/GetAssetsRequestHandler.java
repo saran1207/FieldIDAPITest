@@ -24,7 +24,7 @@ public class GetAssetsRequestHandler implements RequestHandler<AssetRequest, Ass
 	
 	@Override
 	public AssetListResponse getResponse(AssetRequest request) throws ServiceException {
-		converter.setWithPreviosInspections(request.isWithPreviousEvents());
+		converter.setWithPreviousEvents(request.isWithPreviousEvents());
 		
 		if (request.getAssetIds().size() > MAX_ASSET_REQUEST_SIZE) {
 			throw new ServiceException("Asset request size cannot exceed " + MAX_ASSET_REQUEST_SIZE);

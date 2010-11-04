@@ -42,7 +42,7 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 	}
 
 	protected void applyGroupings(QueryBuilder<EventScheduleCount> builder) {
-		// the aggregate queries are grouped: next_inspection_date, (customer, division) or (jobsite),  asset_type, inspection_type
+		// the aggregate queries are grouped: next_event_date, (customer, division) or (jobsite),  asset_type, event_type
 		builder.addGroupBy("nextDate");
 		builder.addGroupBy("owner");
 		builder.addGroupBy("asset.type.name", "eventType.name");
@@ -50,7 +50,7 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 
 	protected void applyNotificationFilters(QueryBuilder<EventScheduleCount> builder) {
 		/*
-		 * NOTE: only a single assettype and inspectiontype are allowed via the interface.  If we have one
+		 * NOTE: only a single assettype and eventtype are allowed via the interface.  If we have one
 		 * we will use it directly (rather then an in-list)
 		 */
 		if (!notification.getAssetTypes().isEmpty()) {

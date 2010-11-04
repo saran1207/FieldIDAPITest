@@ -25,7 +25,7 @@ public class EventImporter extends AbstractImporter<EventView> {
 		this.converter = converter;
 		
 		// probably not the best place for this but, it's the only place I can think of right now
-		validator.getValidationContext().put(EventViewValidator.INSPECTION_TYPE_KEY, converter.getType());
+		validator.getValidationContext().put(EventViewValidator.EVENT_TYPE_KEY, converter.getType());
 	}
 
 	@Override
@@ -35,11 +35,11 @@ public class EventImporter extends AbstractImporter<EventView> {
 		try {
 			eventPersistenceFactory.createEventCreator().create(
 						new CreateEventParameterBuilder(event, modifiedBy)
-							.withANextInspectionDate(view.getNextInspectionDateAsDate())
-							.doNotCalculateInspectionResult()
+							.withANextEventDate(view.getNextEventDateAsDate())
+							.doNotCalculateEventResult()
 							.build());
 		} catch (Exception e) {
-			throw new ConversionException("Could not create inspection", e);
+			throw new ConversionException("Could not create event", e);
 		}
 	}
 

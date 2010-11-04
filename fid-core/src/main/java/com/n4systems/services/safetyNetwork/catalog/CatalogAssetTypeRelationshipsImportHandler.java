@@ -20,7 +20,7 @@ import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHandler {
 
 	private Map<Long, AssetType> importedAssetTypeMapping = new HashMap<Long, AssetType>();
-	private Map<Long, EventType> importedInspectionTypeMapping = new HashMap<Long, EventType>();
+	private Map<Long, EventType> importedEventTypeMapping = new HashMap<Long, EventType>();
 	private AssetTypeRelationshipsImportSummary summary;
 	private AssetTypeScheduleSaver assetTypeScheduleSaver;
 	private PrimaryOrg primaryOrg;
@@ -39,7 +39,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	
 	public void importCatalog() throws ImportFailureException {
 		for (Long assetTypeId : importedAssetTypeMapping.keySet()) {
-			importAssetTypeRelationships(importCatalog.getPublishedAssetType(assetTypeId, "inspectionTypes" , "schedules"));
+			importAssetTypeRelationships(importCatalog.getPublishedAssetType(assetTypeId, "eventTypes" , "schedules"));
 		}
 	}
 	@SuppressWarnings("deprecation")
@@ -47,19 +47,19 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 		AssetType importedAssetType = importedAssetTypeMapping.get(originalAssetType.getId());
 		try {
 			for (EventType connectedEventType : originalAssetType.getEventTypes()) {
-				importConnectionsToInspectionTypes(originalAssetType, importedAssetType, connectedEventType);
+				importConnectionsToEventTypes(originalAssetType, importedAssetType, connectedEventType);
 				persistenceManager.update(importedAssetType);
 			}
 		} catch (Exception e) {
-			summary.setFailure(importedAssetType.getName(), FailureType.COULD_NOT_LINK_ASSET_TYPE_TO_INSPECTION_TYPE, e);
+			summary.setFailure(importedAssetType.getName(), FailureType.COULD_NOT_LINK_ASSET_TYPE_TO_EVENT_TYPE, e);
 			throw new ImportFailureException(e);
 		}
 	}
 
 
-	private void importConnectionsToInspectionTypes(AssetType originalAssetType, AssetType importedAssetType, EventType connectedEventType) {
-		if (importedInspectionTypeMapping.get(connectedEventType.getId()) != null) {
-			persistenceManager.save(new AssociatedEventType(importedInspectionTypeMapping.get(connectedEventType.getId()), importedAssetType));
+	private void importConnectionsToEventTypes(AssetType originalAssetType, AssetType importedAssetType, EventType connectedEventType) {
+		if (importedEventTypeMapping.get(connectedEventType.getId()) != null) {
+			persistenceManager.save(new AssociatedEventType(importedEventTypeMapping.get(connectedEventType.getId()), importedAssetType));
 			importAssetTypeSchedules(originalAssetType, importedAssetType, connectedEventType);
 		}
 	}
@@ -79,7 +79,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 		AssetTypeSchedule importedSchedule = new AssetTypeSchedule();
 		importedSchedule.setAutoSchedule(originalSchedule.isAutoSchedule());
 		importedSchedule.setFrequency(originalSchedule.getFrequency());
-		importedSchedule.setEventType(importedInspectionTypeMapping.get(connectedEventType.getId()));
+		importedSchedule.setEventType(importedEventTypeMapping.get(connectedEventType.getId()));
 		importedSchedule.setAssetType(importedAssetTypeMapping.get(originalSchedule.getAssetType().getId()));
 		importedSchedule.setOwner(primaryOrg);
 		importedSchedule.setTenant(tenant);
@@ -87,14 +87,14 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	}
 	
 	
-	public Set<Long> getAdditionalInspectionTypesForRelationships(Set<Long> assetTypeIds, Set<Long> inspectionTypeIds) {
-		Set<Long> additionalInspectionTypeIds = new HashSet<Long>();
+	public Set<Long> getAdditionalEventTypesForRelationships(Set<Long> assetTypeIds, Set<Long> eventTypeIds) {
+		Set<Long> additionalEventTypeIds = new HashSet<Long>();
 		if (!assetTypeIds.isEmpty()) {
-			additionalInspectionTypeIds.addAll(importCatalog.getPublishedEventTypeIdsConnectedTo(assetTypeIds));
-			additionalInspectionTypeIds.removeAll(inspectionTypeIds);
+			additionalEventTypeIds.addAll(importCatalog.getPublishedEventTypeIdsConnectedTo(assetTypeIds));
+			additionalEventTypeIds.removeAll(eventTypeIds);
 		}
 		
-		return additionalInspectionTypeIds;
+		return additionalEventTypeIds;
 	}
 	
 	// there is nothing that can be directly undone here the other elements need to removed.
@@ -108,8 +108,8 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	}
 
 
-	public CatalogAssetTypeRelationshipsImportHandler setImportedInspectionTypeMapping(Map<Long, EventType> importedInspectionTypeMapping) {
-		this.importedInspectionTypeMapping = importedInspectionTypeMapping;
+	public CatalogAssetTypeRelationshipsImportHandler setImportedEventTypeMapping(Map<Long, EventType> importedEventTypeMapping) {
+		this.importedEventTypeMapping = importedEventTypeMapping;
 		return this;
 	}
 	

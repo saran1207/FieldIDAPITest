@@ -13,7 +13,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.safetyNetwork.CatalogService;
-import com.n4systems.services.safetyNetwork.catalog.summary.InspectionTypeGroupImportSummary;
+import com.n4systems.services.safetyNetwork.catalog.summary.EventTypeGroupImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.ListingPair;
@@ -21,23 +21,23 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
 	
-	private List<ListingPair> inspectionTypesToBeCreated;
-	private InspectionTypeGroupImportSummary summary;
-	private Set<Long> inspectionTypeIds;
+	private List<ListingPair> eventTypesToBeCreated;
+	private EventTypeGroupImportSummary summary;
+	private Set<Long> eventTypeIds;
 	
 	public CatalogEventTypeGroupHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
-		this(persistenceManager, tenant, importCatalog, new InspectionTypeGroupImportSummary());
+		this(persistenceManager, tenant, importCatalog, new EventTypeGroupImportSummary());
 	}
 	
-	public CatalogEventTypeGroupHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, InspectionTypeGroupImportSummary summary) {
+	public CatalogEventTypeGroupHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, EventTypeGroupImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
 		this.summary = summary;
 	}
 	
 	public void importCatalog() throws ImportFailureException{
 		
-		findGroupsToImport(inspectionTypeIds);
-		for (ListingPair originalGroup : inspectionTypesToBeCreated) {
+		findGroupsToImport(eventTypeIds);
+		for (ListingPair originalGroup : eventTypesToBeCreated) {
 			EventTypeGroup importedGroup = copyGroup(originalGroup);
 			try {
 				setDefaultCerts(importedGroup);
@@ -81,38 +81,38 @@ public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
 		return persistenceManager.findAllPaged(queryCert, 1, 1).getList().iterator().next();
 	}
 	
-	public InspectionTypeGroupImportSummary getSummaryForImport(Set<Long> inspectionTypeIds) {
-		if (inspectionTypeIds == null) { 
+	public EventTypeGroupImportSummary getSummaryForImport(Set<Long> eventTypeIds) {
+		if (eventTypeIds == null) {
 			throw new RuntimeException();
 		}
 				
-		if (!inspectionTypeIds.isEmpty()) {
-			summary.getInspectionsGroupsToCreate().addAll(findGroupsToImport(inspectionTypeIds));
+		if (!eventTypeIds.isEmpty()) {
+			summary.getEventGroupsToCreate().addAll(findGroupsToImport(eventTypeIds));
 		}
 		
 		return summary;
 	}
 
-	private List<ListingPair> findGroupsToImport(Set<Long> inspectionTypeIds) {
-		List<ListingPair> existingGroups = getOriginialGroups(inspectionTypeIds);
-		inspectionTypesToBeCreated = new ArrayList<ListingPair>();
+	private List<ListingPair> findGroupsToImport(Set<Long> eventTypeIds) {
+		List<ListingPair> existingGroups = getOriginialGroups(eventTypeIds);
+		eventTypesToBeCreated = new ArrayList<ListingPair>();
 		
-		for (ListingPair existingInspectionType : existingGroups) {
-			if (persistenceManager.uniqueNameAvailable(EventTypeGroup.class, existingInspectionType.getName(), null, tenant.getId())) {
-				inspectionTypesToBeCreated.add(existingInspectionType);
+		for (ListingPair existingEventType : existingGroups) {
+			if (persistenceManager.uniqueNameAvailable(EventTypeGroup.class, existingEventType.getName(), null, tenant.getId())) {
+				eventTypesToBeCreated.add(existingEventType);
 			} else {
-				summary.getImportMapping().put(existingInspectionType.getId(), persistenceManager.findByName(EventTypeGroup.class, tenant.getId(), existingInspectionType.getName()));
+				summary.getImportMapping().put(existingEventType.getId(), persistenceManager.findByName(EventTypeGroup.class, tenant.getId(), existingEventType.getName()));
 			}
 		}
-		return inspectionTypesToBeCreated;
+		return eventTypesToBeCreated;
 	}
 
 	
-	private List<ListingPair> getOriginialGroups(Set<Long> inspectionTypeIds) {
-		if (!inspectionTypeIds.isEmpty()) {
-			List<ListingPair> existingInspectionTypes = new ArrayList<ListingPair>(importCatalog.getEventTypeGroupsFor(inspectionTypeIds));
-			Collections.sort(existingInspectionTypes);
-			return existingInspectionTypes;
+	private List<ListingPair> getOriginialGroups(Set<Long> eventTypeIds) {
+		if (!eventTypeIds.isEmpty()) {
+			List<ListingPair> existingEventTypes = new ArrayList<ListingPair>(importCatalog.getEventTypeGroupsFor(eventTypeIds));
+			Collections.sort(existingEventTypes);
+			return existingEventTypes;
 		} 
 		return new ArrayList<ListingPair>();
 	}
@@ -128,8 +128,8 @@ public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
 		}
 	}
 
-	public CatalogEventTypeGroupHandler setInspectionTypeIds(Set<Long> inspectionTypeIds) {
-		this.inspectionTypeIds = inspectionTypeIds;
+	public CatalogEventTypeGroupHandler setEventTypeIds(Set<Long> eventTypeIds) {
+		this.eventTypeIds = eventTypeIds;
 		return this;
 	}
 	

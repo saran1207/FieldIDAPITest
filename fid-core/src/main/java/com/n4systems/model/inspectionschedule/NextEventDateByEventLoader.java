@@ -33,7 +33,7 @@ public class NextEventDateByEventLoader extends SecurityFilteredLoader<Date> {
 		return nextDate;
 	}
 
-	public NextEventDateByEventLoader setInspection(Event event) {
+	public NextEventDateByEventLoader setEvent(Event event) {
 		this.event = event;
 		return this;
 	}

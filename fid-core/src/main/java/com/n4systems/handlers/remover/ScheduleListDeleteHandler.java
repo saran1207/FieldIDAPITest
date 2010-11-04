@@ -7,7 +7,7 @@ import com.n4systems.model.EventType;
 public interface ScheduleListDeleteHandler extends RemovalHandler<ScheduleListRemovalSummary> {
 
 	
-	public ScheduleListDeleteHandler setInspectionType(EventType eventType);
+	public ScheduleListDeleteHandler setEventType(EventType eventType);
 	public ScheduleListDeleteHandler setAssociatedEventType(AssociatedEventType associatedEventType);
 	
 	public ScheduleListDeleteHandler targetNonCompleted();

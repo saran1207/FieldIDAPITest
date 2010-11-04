@@ -60,7 +60,7 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	
 	private OverdueEventReport overdueReport = new OverdueEventReport();
 
-	private UpcomingEventReport upcommingReport = new UpcomingEventReport();
+	private UpcomingEventReport upcomingReport = new UpcomingEventReport();
 
 	public NotificationSetting() {}
 	
@@ -85,12 +85,12 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     }
 
 	public RelativeTime getPeriodStart() {
-    	return upcommingReport.getPeriodStart();
+    	return upcomingReport.getPeriodStart();
     }
 
 	
 	public RelativeTime getPeriodEnd() {
-    	return upcommingReport.getPeriodEnd();
+    	return upcomingReport.getPeriodEnd();
     }
 
 	
@@ -134,11 +134,11 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 		this.overdueReport.includeOverdue = includeOverdue;
 	}
 
-	public UpcomingEventReport getUpcommingReport() {
-		return upcommingReport;
+	public UpcomingEventReport getUpcomingReport() {
+		return upcomingReport;
 	}
 
-	public void setUpcommingReport(UpcomingEventReport upcommingReport) {
-		this.upcommingReport = upcommingReport;
+	public void setUpcomingReport(UpcomingEventReport upcomingReport) {
+		this.upcomingReport = upcomingReport;
 	}
 }

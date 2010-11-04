@@ -31,8 +31,8 @@ public class TransactionSupervisor {
 		completeTransaction( transactionGUID, tenant, "create asset" );
 	}
 	
-	public void completeInspectionTransaction( String transactionGUID, Tenant tenant ) throws TransactionAlreadyProcessedException {
-		completeTransaction( transactionGUID, tenant, "create inspections" );
+	public void completeEventTransaction( String transactionGUID, Tenant tenant ) throws TransactionAlreadyProcessedException {
+		completeTransaction( transactionGUID, tenant, "create events" );
 	}
 	
 	private void completeTransaction( String transactionGUID, Tenant tenant, String transactiontype ) throws TransactionAlreadyProcessedException { 

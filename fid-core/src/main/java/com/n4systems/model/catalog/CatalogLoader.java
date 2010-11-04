@@ -19,7 +19,7 @@ public class CatalogLoader extends Loader<Catalog> {
 
 	@Override
 	protected Catalog load(EntityManager em) {
-		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class, new OpenSecurityFilter()).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedAssetTypes", "publishedInspectionTypes");
+		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class, new OpenSecurityFilter()).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedAssetTypes", "publishedEventTypes");
 		return query.getSingleResult(em);
 	}
 

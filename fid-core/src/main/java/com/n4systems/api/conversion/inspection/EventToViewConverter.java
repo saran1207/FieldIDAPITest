@@ -23,7 +23,7 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		convertDirectFields(model, view);
 		converterPerformedBy(model, view);
 		convertAssetIdentifier(model, view);
-		convertInspectionStatus(model, view);
+		convertEventStatus(model, view);
 		convertOwnerFields(model.getOwner(), view);
 		convertBook(model, view);
 		convertAssetStatus(model, view);
@@ -39,7 +39,7 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		view.setPrintable(model.isPrintable());
 	}
 
-	protected void convertInspectionStatus(Event model, EventView view) {
+	protected void convertEventStatus(Event model, EventView view) {
 		view.setStatus(model.getStatus().getDisplayName());
 	}
 
@@ -52,13 +52,13 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 	}
 	
 	protected void convertNextDate(Event model, EventView view) {
-		Date nextDate = nextDateLoader.setInspection(model).load();
-		view.setNextInspectionDate(nextDate);
+		Date nextDate = nextDateLoader.setEvent(model).load();
+		view.setNextEventDate(nextDate);
 	}
 
 	protected void convertBook(Event model, EventView view) {
 		if (model.getBook() != null) {
-			view.setInspectionBook(model.getBook().getName());
+			view.setEventBook(model.getBook().getName());
 		}
 	}
 

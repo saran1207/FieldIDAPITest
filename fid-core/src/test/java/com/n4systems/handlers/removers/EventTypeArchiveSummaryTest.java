@@ -33,8 +33,8 @@ public class EventTypeArchiveSummaryTest {
 	@Test
 	public void should_be_archiveable_if_event_archive_summary_is_archivable() {
 		EventArchiveSummary stubSummary = new EventArchiveSummary() {
-													@SuppressWarnings("unused")
-													public boolean inspectionsCanBeArchived() {
+                                                    @Override
+													public boolean canBeRemoved() {
 														return true;
 													}
 												};

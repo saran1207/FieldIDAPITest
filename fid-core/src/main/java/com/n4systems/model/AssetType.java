@@ -357,10 +357,10 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	}
 	
 	/**
-	 * Finds the AssetTypeSchedule for the given inspection type and owner, looking for schedules
+	 * Finds the AssetTypeSchedule for the given event type and owner, looking for schedules
 	 * up the owners {@link BaseOrg#getParent() parent} chain until it finds one or reaches the 
 	 * PrimaryOrg.
-	 * @param type	Inspection type
+	 * @param type	Event type
 	 * @param owner	Owner
 	 * @return		AssetTypeSchedule or null if no schedule was found
 	 */
@@ -398,7 +398,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	}
 	
 	@AllowSafetyNetworkAccess
-	public Date getSuggestedNextInspectionDate(Date fromDate, EventType type, BaseOrg owner) {
+	public Date getSuggestedNextEventDate(Date fromDate, EventType type, BaseOrg owner) {
 		Date returnDate = fromDate;
 		
 		AssetTypeSchedule schedule = getSchedule(type, owner);

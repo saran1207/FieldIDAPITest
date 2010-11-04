@@ -25,15 +25,15 @@ import com.n4systems.model.user.User;
 import com.n4systems.test.helpers.Asserts;
 import com.n4systems.util.ReportMap;
 
-public class InspectionReportMapProducerTest {
+public class EventReportMapProducerTest {
 
 	private static final String FREEFORM_LOCATION = "FREEFORM";
 
 	@Test
-	public void test_sub_inspetion_map_creation() {
+	public void test_sub_event_map_creation() {
 		EventType eventType = anEventType().named("test").build();
 		Event masterEvent = anEvent().build();
-		SubEvent targetEvent = aSubInspection("bob").withType(eventType).build();
+		SubEvent targetEvent = aSubEvent("bob").withType(eventType).build();
 
 		ReportMap<Object> expectedReportMap = new ReportMap<Object>();
 		expectedReportMap.put("productLabel", "bob");
@@ -45,7 +45,7 @@ public class InspectionReportMapProducerTest {
 	}
 
 	@Test
-	public void test_inspetion_map_creation() {
+	public void test_event_map_creation() {
 		EventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
 		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
@@ -60,7 +60,7 @@ public class InspectionReportMapProducerTest {
 	}
 
 	@Test
-	public void test_inspection_map_with_null_predefinedLocation_creation() {
+	public void test_event_map_with_null_predefinedLocation_creation() {
 
 		EventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
@@ -82,7 +82,7 @@ public class InspectionReportMapProducerTest {
 	}
 
 	@Test
-	public void test_inspection_map_with_one_predefinedLocation_creation() {
+	public void test_event_map_with_one_predefinedLocation_creation() {
 		EventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
 		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
@@ -103,7 +103,7 @@ public class InspectionReportMapProducerTest {
 	}
 
 	@Test
-	public void test_inspection_map_with_two_predefinedLocations_creation() {
+	public void test_event_map_with_two_predefinedLocations_creation() {
 		EventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
 		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
@@ -128,7 +128,7 @@ public class InspectionReportMapProducerTest {
 	}
 
 	@Test
-	public void should_have_assinged_user_null_when_no_assignment_was_done_on_an_event() {
+	public void should_have_assigned_user_null_when_no_assignment_was_done_on_an_event() {
 		Event event = anEvent().withNoAssignedToUpdate().build();
 
 		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner());
@@ -138,7 +138,7 @@ public class InspectionReportMapProducerTest {
 	}
 
 	@Test
-	public void should_have_assinged_user_unassigned_when_an_assignment_to_unassigned_was_done() {
+	public void should_have_assigned_user_unassigned_when_an_assignment_to_unassigned_was_done() {
 		Event event = anEvent().withAssignedToUpdate(unassignAsset()).build();
 
 		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner());
@@ -148,7 +148,7 @@ public class InspectionReportMapProducerTest {
 	}
 
 	@Test
-	public void should_have_assinged_user_as_first_name_last_name_when_an_assignment_to_a_user_was_done() {
+	public void should_have_assigned_user_as_first_name_last_name_when_an_assignment_to_a_user_was_done() {
 		User namedEmployee = anEmployee().withFirstName("first").withLastName("last").build();
 		Event event = anEvent().withAssignedToUpdate(assignAssetToUser(namedEmployee)).build();
 

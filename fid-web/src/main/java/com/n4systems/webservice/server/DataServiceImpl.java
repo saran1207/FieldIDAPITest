@@ -51,7 +51,7 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.handlers.creator.InspectionsInAGroupCreator;
+import com.n4systems.handlers.creator.EventsInAGroupCreator;
 import com.n4systems.handlers.creator.inspections.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
@@ -1060,7 +1060,7 @@ public class DataServiceImpl implements DataService {
 			InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
 			
 			LegacyAsset productManager = ServiceLocator.getAssetManager();
-			EventScheduleManager scheduleManager = ServiceLocator.getInspectionScheduleManager();
+			EventScheduleManager scheduleManager = ServiceLocator.getEventScheduleManager();
 			
 			List<Event> events = new ArrayList<Event>();
 //			Map<Inspection, AssetStatus> assetStatus = new HashMap<Inspection, AssetStatus>();
@@ -1098,9 +1098,9 @@ public class DataServiceImpl implements DataService {
 			try {
 				EventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
 				
-				InspectionsInAGroupCreator inspectionsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
+				EventsInAGroupCreator eventsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
 				
-				savedEvents = inspectionsInAGroupCreator.create( requestInformation.getMobileGuid(), events, nextInspectionDates);
+				savedEvents = eventsInAGroupCreator.create( requestInformation.getMobileGuid(), events, nextInspectionDates);
 				logger.info( "save inspections on asset " + asset.getSerialNumber() );
 				populatorLogger.logMessage(tenantId, "Created inspection for asset with serial number "+ asset.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
 			} catch ( TransactionAlreadyProcessedException e) {
@@ -1185,18 +1185,18 @@ public class DataServiceImpl implements DataService {
 				SubEvent subEvent = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
 				
 				EventBySubEventLoader masterEventLoader = new EventBySubEventLoader();
-				masterEventLoader.setSubInspection(subEvent);
+				masterEventLoader.setSubEvent(subEvent);
 				Event masterEvent = masterEventLoader.load();
 				
-				attachmentSaver.setInspection(masterEvent);
-				attachmentSaver.setSubInspection(subEvent);
+				attachmentSaver.setEvent(masterEvent);
+				attachmentSaver.setSubEvent(subEvent);
 
 				targetEvent = subEvent;
 			} else {
 				EventByMobileGuidLoader<Event> loader = new EventByMobileGuidLoader<Event>(new TenantOnlySecurityFilter(tenantId), Event.class);
 				Event event = loader.setMobileGuid(inspectionImageServiceDTO.getInspectionMobileGuid()).load();
 				
-				attachmentSaver.setInspection(event);
+				attachmentSaver.setEvent(event);
 				
 				targetEvent = event;
 			}

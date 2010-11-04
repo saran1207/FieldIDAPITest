@@ -32,31 +32,31 @@ public class EventListArchiveHandlerImp implements EventTypeListArchiveHandler {
 	}
 	
 	public void remove(Transaction transaction) {
-		archiveInspections(transaction.getEntityManager());
-		scheduleListDeleter.targetCompleted().setInspectionType(eventType).remove(transaction);
+		archiveEvents(transaction.getEntityManager());
+		scheduleListDeleter.targetCompleted().setEventType(eventType).remove(transaction);
 	}
 
-	private void archiveInspections(EntityManager em) {
-		List<Long> ids = getInspectionIds(em);
+	private void archiveEvents(EntityManager em) {
+		List<Long> ids = getEventIds(em);
 		
-		archiveInspections(em, ids);
+		archiveEvents(em, ids);
 		updateAssetsLastEventDate(em, ids);
 	}
 
-	private void archiveInspections(EntityManager em, List<Long> ids) {
+	private void archiveEvents(EntityManager em, List<Long> ids) {
 		EventListArchiver archiver = new EventListArchiver(new TreeSet<Long>(ids));
 		archiver.archive(em);
 	}
 
 	private void updateAssetsLastEventDate(EntityManager em, List<Long> ids) {
 		
-		List<Long> assetsToUpdateInspectionDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Event.class, new OpenSecurityFilter())
+		List<Long> assetsToUpdateEventDate = new LargeInClauseSelect<Long>( new QueryBuilder<Long>(Event.class, new OpenSecurityFilter())
 				.setSimpleSelect("asset.id", true)
 				.addSimpleWhere("asset.state", EntityState.ACTIVE),
 		  ids,
 		  em).getResultList();
 		
-		for (Long assetId : new HashSet<Long>(assetsToUpdateInspectionDate)) {
+		for (Long assetId : new HashSet<Long>(assetsToUpdateEventDate)) {
 			Asset asset = em.find(Asset.class, assetId);
 			
 			
@@ -70,7 +70,7 @@ public class EventListArchiveHandlerImp implements EventTypeListArchiveHandler {
 			try {
 				lastEventDate = qBuilder.getSingleResult(em);
 			} catch (Exception e) {
-				throw new ProcessFailureException("could not archive the inspections", e);
+				throw new ProcessFailureException("could not archive the events", e);
 			}
 
 			asset.setLastEventDate(lastEventDate);
@@ -79,7 +79,7 @@ public class EventListArchiveHandlerImp implements EventTypeListArchiveHandler {
 		}
 	}
 
-	private List<Long> getInspectionIds(EntityManager em) {
+	private List<Long> getEventIds(EntityManager em) {
 		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter())
 				.setSelectArgument(new SimpleSelect("id"))
 				.addSimpleWhere("type", eventType);
@@ -89,13 +89,13 @@ public class EventListArchiveHandlerImp implements EventTypeListArchiveHandler {
 	public EventArchiveSummary summary(Transaction transaction) {
 		EventArchiveSummary summary = new EventArchiveSummary();
 		
-		summary.setDeleteEvents(inspectionToBeDeleted(transaction));
-		summary.setDeleteSchedules(scheduleListDeleter.targetCompleted().setInspectionType(eventType).summary(transaction).getSchedulesToRemove());
+		summary.setDeleteEvents(eventToBeDeleted(transaction));
+		summary.setDeleteSchedules(scheduleListDeleter.targetCompleted().setEventType(eventType).summary(transaction).getSchedulesToRemove());
 		
 		return summary;
 	}
 
-	private Long inspectionToBeDeleted(Transaction transaction) {
+	private Long eventToBeDeleted(Transaction transaction) {
 		String archiveQuery = "SELECT COUNT(id) FROM " + Event.class.getName() + " i WHERE i.type = :eventType AND i.state = :active";
 		Query query = transaction.getEntityManager().createQuery(archiveQuery);
 		query.setParameter("eventType", eventType);

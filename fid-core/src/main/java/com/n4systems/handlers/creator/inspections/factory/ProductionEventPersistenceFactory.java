@@ -13,17 +13,16 @@ import com.n4systems.ejb.impl.ManagerBackedEventSaver;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
-import com.n4systems.handlers.creator.InspectionsInAGroupCreator;
-import com.n4systems.handlers.creator.WebServiceInspectionsCreator;
+import com.n4systems.handlers.creator.EventsInAGroupCreator;
+import com.n4systems.handlers.creator.WebServiceEventsCreator;
 import com.n4systems.handlers.creator.inspections.EventCreator;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.security.CreateEventAuditHandler;
 import com.n4systems.security.Log4JAuditLogger;
-import com.n4systems.services.ManagerBackedNextInspectionScheduleService;
-import com.n4systems.services.NextInspectionScheduleSerivce;
-
+import com.n4systems.services.ManagerBackedNextEventScheduleService;
+import com.n4systems.services.NextEventScheduleSerivce;
 
 
 public class ProductionEventPersistenceFactory implements EventPersistenceFactory {
@@ -55,12 +54,12 @@ public class ProductionEventPersistenceFactory implements EventPersistenceFactor
 		return new ManagerBackedCreateEventsMethodObject(persistenceManager, createEventSaver(transaction));
 	}
 	
-	public InspectionsInAGroupCreator createEventsInAGroupCreator() {
-		return new WebServiceInspectionsCreator(createTransactionManager(), this);
+	public EventsInAGroupCreator createEventsInAGroupCreator() {
+		return new WebServiceEventsCreator(createTransactionManager(), this);
 	}
 	
-	public NextInspectionScheduleSerivce createNextEventScheduleService(Transaction transaction) {
-		return new ManagerBackedNextInspectionScheduleService(new EventScheduleManagerImpl(transaction.getEntityManager()));
+	public NextEventScheduleSerivce createNextEventScheduleService(Transaction transaction) {
+		return new ManagerBackedNextEventScheduleService(new EventScheduleManagerImpl(transaction.getEntityManager()));
 	}
 		
 

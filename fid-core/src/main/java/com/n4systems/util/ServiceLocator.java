@@ -85,7 +85,7 @@ public class ServiceLocator {
 		return new AutoAttributeManagerEJBContainer();
 	}
 
-	public static final EventScheduleManager getInspectionScheduleManager() {
+	public static final EventScheduleManager getEventScheduleManager() {
 		return new EventScheduleManagerEJBContainer();
 	}
 

@@ -10,8 +10,8 @@ import com.n4systems.persistence.loaders.NonSecureIdLoader;
 public class SafetyNetworkRegisteredAssetEventLoader extends SafetyNetworkEventLoader {
 	private final AssetWithNetworkIdExistsLoader assetExistsLoader;
 	
-	public SafetyNetworkRegisteredAssetEventLoader(SecurityFilter filter, NonSecureIdLoader<Event> inspectionLoader, AssetWithNetworkIdExistsLoader assetExistsLoader) {
-		super(filter, inspectionLoader);
+	public SafetyNetworkRegisteredAssetEventLoader(SecurityFilter filter, NonSecureIdLoader<Event> eventLoader, AssetWithNetworkIdExistsLoader assetExistsLoader) {
+		super(filter, eventLoader);
 		this.assetExistsLoader = assetExistsLoader;
 	}
 	
@@ -22,7 +22,7 @@ public class SafetyNetworkRegisteredAssetEventLoader extends SafetyNetworkEventL
 
 	@Override
 	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Event event) {
-		// Access is allowed to this inspection if we have an asset that is linked to its asset
+		// Access is allowed to this event if we have an asset that is linked to its asset
 		assetExistsLoader.setNetworkId(event.getAsset().getNetworkId());
 		
 		boolean accessAllowed = assetExistsLoader.load(em, filter);

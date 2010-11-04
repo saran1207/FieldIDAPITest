@@ -14,7 +14,7 @@ public interface EventSaver {
 	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;
 
 	/**
-	 * This must be called AFTER the inspection and subinspection have been persisted
+	 * This must be called AFTER the event and subevent have been persisted
 	 */
 	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException;
 

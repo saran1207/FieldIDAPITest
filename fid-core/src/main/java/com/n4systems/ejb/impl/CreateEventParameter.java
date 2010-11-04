@@ -13,22 +13,22 @@ import com.n4systems.tools.FileDataContainer;
 
 public class CreateEventParameter {
 	public final Event event;
-	public final Date nextInspectionDate;
+	public final Date nextEventDate;
 	public final Long userId;
 	public final FileDataContainer fileData;
 	public final List<FileAttachment> uploadedFiles;
-	public final boolean calculateInspectionResult;
+	public final boolean calculateEventResult;
 	
 	public final List<EventScheduleBundle> schedules;
 
 
-	public CreateEventParameter(Event event, Date nextInspectionDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, boolean calculateInspectionResult, List<EventScheduleBundle> schedules) {
+	public CreateEventParameter(Event event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, boolean calculateEventResult, List<EventScheduleBundle> schedules) {
 		this.event = event;
-		this.nextInspectionDate = nextInspectionDate;
+		this.nextEventDate = nextEventDate;
 		this.userId = userId;
 		this.fileData = fileData;
 		this.uploadedFiles = uploadedFiles;
-		this.calculateInspectionResult = calculateInspectionResult;
+		this.calculateEventResult = calculateEventResult;
 		this.schedules = schedules;
 	}
 

@@ -54,17 +54,17 @@ public class EventAttachmentSaverTest {
 		attachment = FileAttachmentBuilder.aFileAttachment().build();
 		attachmentData = TestHelper.randomString().getBytes();
 		
-		subEvent = SubEventBuilder.aSubInspection("bleh").build();
+		subEvent = SubEventBuilder.aSubEvent("bleh").build();
 		subEvent.setCreated(new Date());
 		subEvent.setTenant(attachment.getTenant());
 		
-		event = EventBuilder.anEvent().withSubInspections(Arrays.asList(subEvent)).build();
+		event = EventBuilder.anEvent().withSubEvents(Arrays.asList(subEvent)).build();
 		event.setCreated(subEvent.getCreated());
 		event.setTenant(attachment.getTenant());
 		
 		saver = new EventAttachmentSaver();
 		saver.setData(attachmentData);
-		saver.setInspection(event);
+		saver.setEvent(event);
 	}
 	
 	@After
@@ -76,7 +76,7 @@ public class EventAttachmentSaverTest {
 	}
 	
 	@Test
-	public void test_saves_against_regular_inspection() throws IOException {		
+	public void test_saves_against_regular_event() throws IOException {
 		EntityManager em = EasyMock.createMock(EntityManager.class);
 		em.persist(attachment);
 		EasyMock.expect(em.merge(event)).andReturn(event);
@@ -87,12 +87,12 @@ public class EventAttachmentSaverTest {
 		
 		assertTrue(event.getAttachments().contains(attachment));
 		
-		verifyData(PathHandler.getInspectionAttachmentFile(event, attachment));
+		verifyData(PathHandler.getEventAttachmentFile(event, attachment));
 	}
 	
 	@Test
-	public void test_saves_against_sub_inspection() throws IOException {
-		saver.setSubInspection(subEvent);
+	public void test_saves_against_sub_event() throws IOException {
+		saver.setSubEvent(subEvent);
 		
 		EntityManager em = EasyMock.createMock(EntityManager.class);
 		em.persist(attachment);
@@ -104,7 +104,7 @@ public class EventAttachmentSaverTest {
 		
 		assertTrue(subEvent.getAttachments().contains(attachment));
 		
-		verifyData(PathHandler.getInspectionAttachmentFile(event, subEvent, attachment));
+		verifyData(PathHandler.getEventAttachmentFile(event, subEvent, attachment));
 	}
 	
 	@Test(expected=NotImplementedException.class)

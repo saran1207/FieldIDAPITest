@@ -52,7 +52,7 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		resolveAsset(view, model, transaction);
 		resolvePrintable(view, model);
 		resolvePerformedBy(view, model, transaction);
-		resolveInspectionBook(view, model, transaction);
+		resolveEventBook(view, model, transaction);
 		
 		resolveAssetStatus(view, model, transaction);
 		
@@ -98,9 +98,9 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		}
 	}
 
-	protected void resolveInspectionBook(EventView view, Event model, Transaction transaction) {
-		if (view.getInspectionBook() != null) {
-			eventBookLoader.setName(view.getInspectionBook());
+	protected void resolveEventBook(EventView view, Event model, Transaction transaction) {
+		if (view.getEventBook() != null) {
+			eventBookLoader.setName(view.getEventBook());
 			eventBookLoader.setOwner(model.getOwner());
 			EventBook book = eventBookLoader.load(transaction);
 			model.setBook(book);

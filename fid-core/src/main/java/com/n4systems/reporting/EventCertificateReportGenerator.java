@@ -46,7 +46,7 @@ public class EventCertificateReportGenerator extends CertificateReportGenerator<
 
 	@Override
 	protected void logCertError(Event event, Exception e) {
-		logger.warn("Failed to generate report for Inspection [" + event.getId() + "].  Moving on to next Inspection.", e);
+		logger.warn("Failed to generate report for Event [" + event.getId() + "].  Moving on to next Event.", e);
 	}
 	
 	@Override

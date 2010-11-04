@@ -27,7 +27,7 @@ public class AssociatedEventTypeValidator extends EventViewValidator {
 		// the AssetIdentifierValidator ensures the following is safe
 		Asset asset = assetLoader.load().get(0);
 		
-		AssociatedEventTypeExistsLoader assocLoader = createAssociatedInspectionTypeExistsLoader(filter);
+		AssociatedEventTypeExistsLoader assocLoader = createAssociatedEventTypeExistsLoader(filter);
 		assocLoader.setEventType(eventType);
 		assocLoader.setAssetType(asset.getType());
 		
@@ -35,7 +35,7 @@ public class AssociatedEventTypeValidator extends EventViewValidator {
 		if (exists) {
 			return ValidationResult.pass();
 		} else {
-			return ValidationResult.fail(AssociatedInspectionTypeValidationFail, eventType.getName(), asset.getType().getName());
+			return ValidationResult.fail(AssociatedEventTypeValidationFail, eventType.getName(), asset.getType().getName());
 		}
 	}
 
@@ -43,7 +43,7 @@ public class AssociatedEventTypeValidator extends EventViewValidator {
 		return new SmartSearchLoader(filter);
 	}
 	
-	protected AssociatedEventTypeExistsLoader createAssociatedInspectionTypeExistsLoader(SecurityFilter filter) {
+	protected AssociatedEventTypeExistsLoader createAssociatedEventTypeExistsLoader(SecurityFilter filter) {
 		return new AssociatedEventTypeExistsLoader(filter);
 	}
 }

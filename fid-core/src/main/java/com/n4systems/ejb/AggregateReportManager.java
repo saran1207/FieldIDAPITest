@@ -5,5 +5,5 @@ import java.util.List;
 import com.n4systems.util.AggregateReport;
 
 public interface AggregateReportManager {
-	public AggregateReport createAggregateReport(List<Long> inspectionIds);
+	public AggregateReport createAggregateReport(List<Long> eventIds);
 }

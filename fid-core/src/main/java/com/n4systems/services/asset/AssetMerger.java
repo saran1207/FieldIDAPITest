@@ -48,8 +48,8 @@ public class AssetMerger {
 	public Asset merge(Asset winningAsset, Asset losingAsset) {
 		guard(winningAsset, losingAsset);
 
-		moveInspections(winningAsset, losingAsset);
-		moveSubInspections(winningAsset, losingAsset);
+		moveEvents(winningAsset, losingAsset);
+		moveSubEvents(winningAsset, losingAsset);
 		archiveLosingAsset(losingAsset);
 
 		return winningAsset;
@@ -77,13 +77,13 @@ public class AssetMerger {
 		}
 	}
 
-	private void moveInspections(Asset winningAsset, Asset losingAsset) {
-		QueryBuilder<Event> inspections = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("asset", losingAsset);
-		List<Event> inspectionsToMove = persistenceManager.findAll(inspections);
+	private void moveEvents(Asset winningAsset, Asset losingAsset) {
+		QueryBuilder<Event> eventsQuery = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("asset", losingAsset);
+		List<Event> eventsToMove = persistenceManager.findAll(eventsQuery);
 
-		for (Event eventToMove : inspectionsToMove) {
+		for (Event eventToMove : eventsToMove) {
 			eventToMove.setAsset(winningAsset);
-			updateInspection(eventToMove);
+			updateEvent(eventToMove);
 			updateSchedule(winningAsset, eventToMove.getSchedule());
 		}
 	}
@@ -95,29 +95,29 @@ public class AssetMerger {
 		}
 	}
 
-	private void moveSubInspections(Asset winningAsset, Asset losingAsset) {
-		String query = "SELECT DISTINCT master from " + Event.class.getName() + " master, IN (master.subInspections) subInspection "
-				+ "where subInspection.asset = :losingAsset AND master.state = :activeState";
+	private void moveSubEvents(Asset winningAsset, Asset losingAsset) {
+		String query = "SELECT DISTINCT master from " + Event.class.getName() + " master, IN (master.subEvents) subEvent "
+				+ "where subEvent.asset = :losingAsset AND master.state = :activeState";
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("losingAsset", losingAsset);
 		parameters.put("activeState", EntityState.ACTIVE);
-		List<Event> masterInspectionsWithSubEventToMove = persistenceManager.passThroughFindAll(query, parameters);
+		List<Event> masterEventsWithSubEventToMove = persistenceManager.passThroughFindAll(query, parameters);
 
-		for (Event masterEvent : masterInspectionsWithSubEventToMove) {
-			updateSubInspectionAssets(winningAsset, losingAsset, masterEvent);
-			updateInspection(masterEvent);
+		for (Event masterEvent : masterEventsWithSubEventToMove) {
+			updateSubEventAssets(winningAsset, losingAsset, masterEvent);
+			updateEvent(masterEvent);
 		}
 	}
 
-	private void updateInspection(Event event) {
+	private void updateEvent(Event event) {
 		try {
 			eventManager.updateEvent(event, user.getId(), null, null);
 		} catch (Exception e) {
-			throw new ProcessFailureException("could not update inspections to new asset", e);
+			throw new ProcessFailureException("could not update events to new asset", e);
 		}
 	}
 
-	private void updateSubInspectionAssets(Asset winningAsset, Asset losingAsset, Event masterEvent) {
+	private void updateSubEventAssets(Asset winningAsset, Asset losingAsset, Event masterEvent) {
 		for (SubEvent subEvent : masterEvent.getSubEvents()) {
 			if (subEvent.getAsset().equals(losingAsset)) {
 				subEvent.setAsset(winningAsset);

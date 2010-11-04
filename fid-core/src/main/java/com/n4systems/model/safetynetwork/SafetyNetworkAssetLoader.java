@@ -62,7 +62,7 @@ public class SafetyNetworkAssetLoader extends SecurityFilteredLoader<Asset> {
 	}
 	
 	public SafetyNetworkAssetLoader withAllFields() {
-		postLoadFields = new String[] {"infoOptions", "type.infoFields", "type.inspectionTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName"};
+		postLoadFields = new String[] {"infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName"};
 		return this;
 	}
 }

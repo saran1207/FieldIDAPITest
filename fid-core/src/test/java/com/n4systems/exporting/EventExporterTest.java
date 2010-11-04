@@ -18,7 +18,7 @@ import com.n4systems.exporting.beanutils.MarshalingException;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.persistence.loaders.ListLoader;
 
-public class InspectionExporterTest {
+public class EventExporterTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -30,9 +30,9 @@ public class InspectionExporterTest {
 		Map<String, Object> map1 = new HashMap<String, Object>();
 		Map<String, Object> map2 = new HashMap<String, Object>();
 		
-		ListLoader<Event> inspectionLoader = createMock(ListLoader.class);
-		expect(inspectionLoader.load()).andReturn(Arrays.asList(model1, model2));
-		replay(inspectionLoader);
+		ListLoader<Event> eventLoader = createMock(ListLoader.class);
+		expect(eventLoader.load()).andReturn(Arrays.asList(model1, model2));
+		replay(eventLoader);
 		
 		ModelToViewConverter<Event, EventView> converter = createMock(ModelToViewConverter.class);
 		expect(converter.toView(model1)).andReturn(view1);
@@ -49,10 +49,10 @@ public class InspectionExporterTest {
 		writer.write(map2);
 		replay(writer);
 		
-		EventExporter exporter = new EventExporter(inspectionLoader, marshaler, converter);
+		EventExporter exporter = new EventExporter(eventLoader, marshaler, converter);
 		exporter.export(writer);
 		
-		verify(inspectionLoader);
+		verify(eventLoader);
 		verify(marshaler);
 		verify(converter);
 		verify(writer);

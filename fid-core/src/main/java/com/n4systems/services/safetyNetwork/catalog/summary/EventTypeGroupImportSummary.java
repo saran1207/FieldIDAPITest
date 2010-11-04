@@ -8,18 +8,18 @@ import java.util.Map;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.util.ListingPair;
 
-public class InspectionTypeGroupImportSummary extends BaseImportSummary {
+public class EventTypeGroupImportSummary extends BaseImportSummary {
 
 
-	private List<ListingPair> inspectionsGroupsToCreate = new ArrayList<ListingPair>();
+	private List<ListingPair> eventGroupsToCreate = new ArrayList<ListingPair>();
 	
 	private Map<Long, EventTypeGroup> importMapping = new HashMap<Long, EventTypeGroup>();
 	
 	private List<EventTypeGroup> createdGroups = new ArrayList<EventTypeGroup>();
 	
 
-	public List<ListingPair> getInspectionsGroupsToCreate() {
-		return inspectionsGroupsToCreate;
+	public List<ListingPair> getEventGroupsToCreate() {
+		return eventGroupsToCreate;
 	}
 
 	public Map<Long, EventTypeGroup> getImportMapping() {

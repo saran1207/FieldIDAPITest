@@ -8,34 +8,34 @@ import java.util.Map;
 
 public class AggregateReport {
 
-	private List<AggregateReportRecord> inspectionTypeGroupsByAssetTypes;
+	private List<AggregateReportRecord> eventTypeGroupsByAssetTypes;
 	
 	private Map<String,List<AggregateReportRecord>> countsByAssetType;
 	
-	private Map<String,List<AggregateReportRecord>> countsByInspectionTypeGroup;
+	private Map<String,List<AggregateReportRecord>> countsByEventTypeGroup;
 	
 	private List<AggregateReportRecord> distinctAssetsByAssetType;
 
-	private Long totalInspections;
+	private Long totalEvents;
 	
 	private Long totalAssets;
 	
 	private List<String> assetTypes;
 	
-	private List<String> inspectionTypeGroups;
+	private List<String> eventTypeGroups;
 	
 	
-	public List<AggregateReportRecord> getInspectionTypeGroupsByAssetTypes() {
-		return inspectionTypeGroupsByAssetTypes;
+	public List<AggregateReportRecord> getEventTypeGroupsByAssetTypes() {
+		return eventTypeGroupsByAssetTypes;
 	}
 
 	public void setEventTypeGroupsByAssetTypes(
-			List<AggregateReportRecord> inspectionTypeGroupsByAssetTypes) {
-		this.inspectionTypeGroupsByAssetTypes = inspectionTypeGroupsByAssetTypes;
+			List<AggregateReportRecord> eventTypeGroupsByAssetTypes) {
+		this.eventTypeGroupsByAssetTypes = eventTypeGroupsByAssetTypes;
 		
 		countsByAssetType = new HashMap<String, List<AggregateReportRecord>>();
-		countsByInspectionTypeGroup = new HashMap<String, List<AggregateReportRecord>>();
-		for( AggregateReportRecord record : inspectionTypeGroupsByAssetTypes) {
+		countsByEventTypeGroup = new HashMap<String, List<AggregateReportRecord>>();
+		for( AggregateReportRecord record : eventTypeGroupsByAssetTypes) {
 			List<AggregateReportRecord> records = countsByAssetType.get( record.getAssetTypeName() );
 			if( records == null ) {
 				records = new ArrayList<AggregateReportRecord>();
@@ -44,15 +44,15 @@ public class AggregateReport {
 			countsByAssetType.put( record.getAssetTypeName(), records );
 			
 			
-			records = countsByInspectionTypeGroup.get( record.getInspectionTypeGroupName() );
+			records = countsByEventTypeGroup.get( record.getEventTypeGroupName() );
 			if( records == null ) {
 				records = new ArrayList<AggregateReportRecord>();
 			}
 			records.add( record );
-			countsByInspectionTypeGroup.put( record.getInspectionTypeGroupName(), records );
+			countsByEventTypeGroup.put( record.getEventTypeGroupName(), records );
 		}
 		assetTypes = null;
-		inspectionTypeGroups = null;
+		eventTypeGroups = null;
 	}
 
 	public List<AggregateReportRecord> getDistinctAssetsByAssetType() {
@@ -75,17 +75,17 @@ public class AggregateReport {
 	}
 	
 	
-	public Long getInspectionsForAssetType( String productTypeName ) {
+	public Long getEventsForAssetType( String assetTypeName ) {
 		Long count = 0L;
-		for( AggregateReportRecord record : countsByAssetType.get( productTypeName ) ) {
+		for( AggregateReportRecord record : countsByAssetType.get( assetTypeName ) ) {
 			count += record.getCount();
 		}
 		return count;
 	}
 	
-	public Long getInspectionsForInspectionTypeGroup( String inspectionTypeGroupName ) {
+	public Long getEventsForEventTypeGroup( String eventTypeGroupName ) {
 		Long count = 0L;
-		for( AggregateReportRecord record : countsByInspectionTypeGroup.get( inspectionTypeGroupName ) ) {
+		for( AggregateReportRecord record : countsByEventTypeGroup.get( eventTypeGroupName ) ) {
 			count += record.getCount();
 		}
 		return count;
@@ -93,14 +93,14 @@ public class AggregateReport {
 	
 	
 
-	public Long getTotalInspections() {
-		if( totalInspections == null ) {
-			totalInspections = 0L;
-			for( AggregateReportRecord record : inspectionTypeGroupsByAssetTypes) {
-				totalInspections += record.getCount();
+	public Long getTotalEvents() {
+		if( totalEvents == null ) {
+			totalEvents = 0L;
+			for( AggregateReportRecord record : eventTypeGroupsByAssetTypes) {
+				totalEvents += record.getCount();
 			}
 		}
-		return totalInspections;
+		return totalEvents;
 	}
 
 	public Long getTotalAssets() {
@@ -117,8 +117,8 @@ public class AggregateReport {
 		return countsByAssetType;
 	}
 
-	public Map<String, List<AggregateReportRecord>> getCountsByInspectionTypeGroup() {
-		return countsByInspectionTypeGroup;
+	public Map<String, List<AggregateReportRecord>> getCountsByEventTypeGroup() {
+		return countsByEventTypeGroup;
 	}
 
 	public List<String> getAssetTypes() {
@@ -129,12 +129,12 @@ public class AggregateReport {
 		return assetTypes;
 	}
 
-	public List<String> getInspectionTypeGroups() {
-		if( inspectionTypeGroups == null ) {
-			inspectionTypeGroups = new ArrayList<String>( countsByInspectionTypeGroup.keySet() );
-			Collections.sort( inspectionTypeGroups );
+	public List<String> getEventTypeGroups() {
+		if( eventTypeGroups == null ) {
+			eventTypeGroups = new ArrayList<String>( countsByEventTypeGroup.keySet() );
+			Collections.sort(eventTypeGroups);
 		}
-		return inspectionTypeGroups;
+		return eventTypeGroups;
 	}
 	
 	

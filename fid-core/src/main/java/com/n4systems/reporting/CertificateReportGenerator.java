@@ -73,9 +73,9 @@ public abstract class CertificateReportGenerator<T> {
 	private List<T> getNextCertGroup() {
 		List<T> certGroup = new ArrayList<T>();
 		while(certGroup.size() < reportsPerOutputFile() && certIterator().hasNext()) {
-			T nextInspection = certIterator().next();
-			if (isPrintable(nextInspection)) {
-				certGroup.add(nextInspection);
+			T nextEvent = certIterator().next();
+			if (isPrintable(nextEvent)) {
+				certGroup.add(nextEvent);
 			}
 			
 		}
@@ -94,15 +94,15 @@ public abstract class CertificateReportGenerator<T> {
 		}
 	}
 	
-	private List<JasperPrint> createCerts(List<T> inspections) {
+	private List<JasperPrint> createCerts(List<T> events) {
 		List<JasperPrint> page = new ArrayList<JasperPrint>();
 		
-		for (T inspection: inspections) {
+		for (T event: events) {
 			try {
-				JasperPrint cert = singleCert(inspection);
+				JasperPrint cert = singleCert(event);
 				page.add(cert);
 			} catch (Exception e) {
-				logCertError(inspection, e);
+				logCertError(event, e);
 			}
 		}
 		return page;
@@ -112,7 +112,7 @@ public abstract class CertificateReportGenerator<T> {
 
 	protected abstract Logger getLogger();
 	protected abstract void guard();
-	protected abstract JasperPrint singleCert(T inspection) throws ReportException;
+	protected abstract JasperPrint singleCert(T event) throws ReportException;
 	protected abstract void logCertError(T product, Exception e);
 
 	public void generate(List<T> products, OutputStream outputFile, String packageName, Transaction transaction)
@@ -142,10 +142,10 @@ public abstract class CertificateReportGenerator<T> {
 	
 	private void createReports(Transaction transaction) throws IOException {
 		int pageNumber = 1;
-		List<T> inspectionPage = null;
-		while ((inspectionPage = getNextCertGroup()) != null && !inspectionPage.isEmpty()) {
+		List<T> eventPage = null;
+		while ((eventPage = getNextCertGroup()) != null && !eventPage.isEmpty()) {
 			zipOut.putNextEntry(new ZipEntry(createPageFileName(packageName, pageNumber)));
-			generateReportPage(zipOut, inspectionPage, transaction);
+			generateReportPage(zipOut, eventPage, transaction);
 			pageNumber++;
 		}
 	}

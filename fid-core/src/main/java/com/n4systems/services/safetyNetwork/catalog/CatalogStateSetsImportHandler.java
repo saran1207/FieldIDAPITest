@@ -17,7 +17,7 @@ import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 
 	private StateSetImportSummary summary = new StateSetImportSummary();
-	private Set<Long> inspectionTypeIds;
+	private Set<Long> eventTypeIds;
 	
 	public CatalogStateSetsImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog) {
 		this(persistenceManager, tenant, importCatalog, new StateSetImportSummary());
@@ -31,7 +31,7 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 
 	
 	public void importCatalog() throws ImportFailureException {
-		findStateSetsToImport(inspectionTypeIds);
+		findStateSetsToImport(eventTypeIds);
 		for (StateSet originalStateSet : summary.getStateSetsToCreate()) {
 			try {
 				importStateSet(originalStateSet);
@@ -50,14 +50,14 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 		summary.createdStateSet(originalStateSet);
 	}
 	
-	public BaseImportSummary getSummaryForImport(Set<Long> inspectionTypeIds) {
-		findStateSetsToImport(inspectionTypeIds);
+	public BaseImportSummary getSummaryForImport(Set<Long> eventTypeIds) {
+		findStateSetsToImport(eventTypeIds);
 		return summary;
 	}
 
 
-	private void findStateSetsToImport(Set<Long> inspectionTypeIds) {
-		List<StateSet> originalStateSets = getUsedStateSets(inspectionTypeIds);
+	private void findStateSetsToImport(Set<Long> eventTypeIds) {
+		List<StateSet> originalStateSets = getUsedStateSets(eventTypeIds);
 		List<StateSet> currentStateSets = persistenceManager.findAll(StateSet.class, tenant.getId());
 			
 		for (StateSet originalStateSet : originalStateSets) {
@@ -71,8 +71,8 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 	}
 
 
-	private List<StateSet> getUsedStateSets(Set<Long> inspectionTypeIds) {
-		return importCatalog.getStateSetsUsedIn(inspectionTypeIds);
+	private List<StateSet> getUsedStateSets(Set<Long> eventTypeIds) {
+		return importCatalog.getStateSetsUsedIn(eventTypeIds);
 	}
 
 	public Map<Long, StateSet> getImportMapping() {
@@ -86,8 +86,8 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 	}
 
 
-	public CatalogStateSetsImportHandler setInspectionTypeIds(Set<Long> inspectionTypeIds) {
-		this.inspectionTypeIds = inspectionTypeIds;
+	public CatalogStateSetsImportHandler setEventTypeIds(Set<Long> eventTypeIds) {
+		this.eventTypeIds = eventTypeIds;
 		return this;
 	}
 }

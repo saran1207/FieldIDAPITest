@@ -16,7 +16,6 @@ public class AssociatedEventTypeDeleteSummary extends RemovalSummary {
 		this.deleteNonCompletedEvent = deleteNonCompletedEvent;
 	}
 
-	
 	@Override
 	public boolean canBeRemoved() {
 		return true;
@@ -38,8 +37,8 @@ public class AssociatedEventTypeDeleteSummary extends RemovalSummary {
 		this.deleteEventFrequencies = deleteEventFrequencies;
 	}
 	
-	public void addToDeleteInspectionFrequencies(Long deleteInspectionFrequencies) {
-		this.deleteEventFrequencies += deleteInspectionFrequencies;
+	public void addToDeleteEventFrequencies(Long deleteEventFrequencies) {
+		this.deleteEventFrequencies += deleteEventFrequencies;
 	}
 
 	public Long getDeleteNonCompletedEvent() {
@@ -50,7 +49,7 @@ public class AssociatedEventTypeDeleteSummary extends RemovalSummary {
 		this.deleteNonCompletedEvent = deleteNonCompletedEvent;
 	}
 	
-	public void addToDeleteNonCompletedInspection(Long deleteNonCompletedEvent) {
+	public void addToDeleteNonCompletedEvent(Long deleteNonCompletedEvent) {
 		this.deleteNonCompletedEvent += deleteNonCompletedEvent;
 	}
 

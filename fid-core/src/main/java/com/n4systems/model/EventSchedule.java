@@ -170,14 +170,14 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	 * A static method consolidating the logic for checking if a next inspection
 	 * date is past due.
 	 * 
-	 * @param nextInspectionDate
-	 *            The next inspection date
-	 * @return True if nextInspectionDate is after {@link DateHelper#getToday()
+	 * @param nextEventDate
+	 *            The next event date
+	 * @return True if nextEventDate is after {@link DateHelper#getToday()
 	 *         today}
 	 */
 	@AllowSafetyNetworkAccess
-	public static boolean isPastDue(Date nextInspectionDate) {
-		return DateHelper.getToday().after(nextInspectionDate);
+	public static boolean isPastDue(Date nextEventDate) {
+		return DateHelper.getToday().after(nextEventDate);
 	}
 
 	@AllowSafetyNetworkAccess
@@ -215,7 +215,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 		if (schedule == null)
 			return false;
 		if (getId() == null) {
-			return false; //asset.equals(schedule.asset) && inspectionType.equals(schedule.inspectionType) && nextDate.equals(schedule.nextDate);
+			return false; //asset.equals(schedule.asset) && inspectionType.equals(schedule.eventType) && nextDate.equals(schedule.nextDate);
 		}
 			
 
@@ -263,7 +263,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 		return event;
 	}
 
-	public void removeInspection() {
+	public void removeEvent() {
 		status = ScheduleStatus.SCHEDULED;
 		event = null;
 		completedDate = null;

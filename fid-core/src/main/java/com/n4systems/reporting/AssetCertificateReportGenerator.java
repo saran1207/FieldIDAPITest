@@ -39,8 +39,8 @@ public class AssetCertificateReportGenerator extends CertificateReportGenerator<
 
 
 	@Override
-	protected JasperPrint singleCert(Asset asset) throws ReportException {
-		return certGenerator.generate(asset, user);
+	protected JasperPrint singleCert(Asset event) throws ReportException {
+		return certGenerator.generate(event, user);
 	}
 
 	@Override

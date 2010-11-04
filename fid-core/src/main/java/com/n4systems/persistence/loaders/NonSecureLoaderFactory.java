@@ -24,7 +24,7 @@ public class NonSecureLoaderFactory {
 		return new ContractPricingByExternalIdLoader();
 	}
 
-	public EventBySubEventLoader createEventBySubInspectionLoader() {
+	public EventBySubEventLoader createEventBySubEventLoader() {
 		return new EventBySubEventLoader();
 	}
 

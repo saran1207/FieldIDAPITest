@@ -25,7 +25,7 @@ public class AssociatedEventTypesLoader extends ListLoader<AssociatedEventType> 
 	@Override
 	protected List<AssociatedEventType> load(EntityManager em, SecurityFilter filter) {
 		if (eventType == null && assetType == null) {
-			throw new InvalidArgumentException("You must look up by asset type of inspection type.");
+			throw new InvalidArgumentException("You must look up by asset type of event type.");
 		}
  		
 		QueryBuilder<AssociatedEventType> query = prepareQuery();

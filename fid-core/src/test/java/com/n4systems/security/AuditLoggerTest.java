@@ -85,7 +85,7 @@ public class AuditLoggerTest {
 		AuditHandler auditHandler = new AuditHandler() {
 			
 			@Override
-			public String getMessage(Event inspection) {
+			public String getMessage(Event event) {
 				return "Audit Handler Message ----____----";
 			}
 		};
@@ -107,7 +107,7 @@ public class AuditLoggerTest {
 		
 		AuditHandler auditHandler = new AuditHandler() {
 			@Override
-			public String getMessage(Event inspection)  {
+			public String getMessage(Event event)  {
 				throw new RuntimeException();
 			}
 		};

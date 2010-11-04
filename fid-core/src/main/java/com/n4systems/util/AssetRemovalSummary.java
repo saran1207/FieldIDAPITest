@@ -5,11 +5,11 @@ import com.n4systems.model.Asset;
 public class AssetRemovalSummary {
 	private Asset asset;
 	
-	private Long inspectionsToDelete = 0L;
+	private Long eventsToDelete = 0L;
 	private boolean detachFromMaster = false;
 	private Long subAssetsToDetach = 0L;
 	private Long schedulesToDelete = 0L;
-	private Long assetUsedInMasterInspection = 0L;
+	private Long assetUsedInMasterEvent = 0L;
 	private Long projectToDetachFrom = 0L;
 	
 
@@ -18,15 +18,15 @@ public class AssetRemovalSummary {
 	}
 	
 	public boolean validToDelete() {
-		return (assetUsedInMasterInspection == 0);
+		return (assetUsedInMasterEvent == 0);
 	}
 
-	public Long getInspectionsToDelete() {
-		return inspectionsToDelete;
+	public Long getEventsToDelete() {
+		return eventsToDelete;
 	}
 
-	public void setInspectionsToDelete(Long inspectionsToDelete) {
-		this.inspectionsToDelete = inspectionsToDelete;
+	public void setEventsToDelete(Long eventsToDelete) {
+		this.eventsToDelete = eventsToDelete;
 	}
 
 	public boolean isDetachFromMaster() {
@@ -53,12 +53,12 @@ public class AssetRemovalSummary {
 		this.schedulesToDelete = schedulesToDelete;
 	}
 
-	public Long getAssetUsedInMasterInspection() {
-		return assetUsedInMasterInspection;
+	public Long getAssetUsedInMasterEvent() {
+		return assetUsedInMasterEvent;
 	}
 
-	public void setAssetUsedInMasterInspection(Long assetUsedInMasterInspection) {
-		this.assetUsedInMasterInspection = assetUsedInMasterInspection;
+	public void setAssetUsedInMasterEvent(Long assetUsedInMasterEvent) {
+		this.assetUsedInMasterEvent = assetUsedInMasterEvent;
 	}
 
 	public Long getProjectToDetachFrom() {

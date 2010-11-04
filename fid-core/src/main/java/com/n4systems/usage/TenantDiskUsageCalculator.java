@@ -39,9 +39,9 @@ public class TenantDiskUsageCalculator implements LimitLoader {
 	
 	private void initDirMap() {
 		dirs = new HashMap<TenantDirType, Directory>();
-		dirs.put(TenantDirType.INSPECTION_ATTACH, 		new Directory(getInspectionAttachmentBaseFile(tenant)));
-		dirs.put(TenantDirType.INSPECTION_CHART, 		new Directory(getInspectionChartImageBaseFile(tenant)));
-		dirs.put(TenantDirType.INSPECTION_PROOFTEST,	new Directory(getInspectionProoftestBaseFile(tenant)));
+		dirs.put(TenantDirType.INSPECTION_ATTACH, 		new Directory(getEventAttachmentBaseFile(tenant)));
+		dirs.put(TenantDirType.INSPECTION_CHART, 		new Directory(getEventChartImageBaseFile(tenant)));
+		dirs.put(TenantDirType.INSPECTION_PROOFTEST,	new Directory(getEventProoftestBaseFile(tenant)));
 		dirs.put(TenantDirType.ASSET_ATTACH,  		new Directory(getAssetAttachmentBaseFile(tenant)));
 		dirs.put(TenantDirType.ASSET_TYPE_IMAGE,  	new Directory(getAssetTypeImageBaseFile(tenant)));
 		dirs.put(TenantDirType.ASSET_TYPE_ATTACH, 	new Directory(getAssetTypeAttachmentBaseFile(tenant)));
@@ -58,15 +58,15 @@ public class TenantDiskUsageCalculator implements LimitLoader {
 		return tenant;
 	}
 	
-	public Directory getInspectionAttachmentUsage() {
+	public Directory getEventAttachmentUsage() {
 		return dirs.get(TenantDirType.INSPECTION_ATTACH);
 	}
 
-	public Directory getInspectionChartImageUsage() {
+	public Directory getEventChartImageUsage() {
 		return dirs.get(TenantDirType.INSPECTION_CHART);
 	}
 
-	public Directory getInspectionProoftestFileUsage() {
+	public Directory getEventProoftestFileUsage() {
 		return dirs.get(TenantDirType.INSPECTION_PROOFTEST);
 	}
 

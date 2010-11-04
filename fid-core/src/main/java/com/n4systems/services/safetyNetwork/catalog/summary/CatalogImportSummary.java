@@ -5,7 +5,7 @@ public class CatalogImportSummary {
 	private AssetTypeGroupImportSummary assetTypeGroupImportSummary = new AssetTypeGroupImportSummary();
 	private AssetTypeImportSummary assetTypeImportSummary = new AssetTypeImportSummary();
 	private EventTypeImportSummary eventTypeImportSummary = new EventTypeImportSummary();
-	private InspectionTypeGroupImportSummary inspectionTypeGroupImportSummary = new InspectionTypeGroupImportSummary();
+	private EventTypeGroupImportSummary eventTypeGroupImportSummary = new EventTypeGroupImportSummary();
 	private StateSetImportSummary stateSetImportSummary = new StateSetImportSummary();
 	private AssetTypeRelationshipsImportSummary assetTypeRelationshipsImportSummary = new AssetTypeRelationshipsImportSummary();
 	
@@ -18,20 +18,20 @@ public class CatalogImportSummary {
 		this.assetTypeImportSummary = assetTypeImportSummary;
 	}
 
-	public EventTypeImportSummary getInspectionTypeImportSummary() {
+	public EventTypeImportSummary getEventTypeImportSummary() {
 		return eventTypeImportSummary;
 	}
 
-	public void setInspectionTypeImportSummary(EventTypeImportSummary eventTypeImportSummary) {
+	public void setEventTypeImportSummary(EventTypeImportSummary eventTypeImportSummary) {
 		this.eventTypeImportSummary = eventTypeImportSummary;
 	}
 
-	public InspectionTypeGroupImportSummary getInspectionTypeGroupImportSummary() {
-		return inspectionTypeGroupImportSummary;
+	public EventTypeGroupImportSummary getEventTypeGroupImportSummary() {
+		return eventTypeGroupImportSummary;
 	}
 
-	public void setInspectionTypeGroupImportSummary(InspectionTypeGroupImportSummary inspectionTypeGroupImportSummary) {
-		this.inspectionTypeGroupImportSummary = inspectionTypeGroupImportSummary;
+	public void setEventTypeGroupImportSummary(EventTypeGroupImportSummary eventTypeGroupImportSummary) {
+		this.eventTypeGroupImportSummary = eventTypeGroupImportSummary;
 	}
 
 	public StateSetImportSummary getStateSetImportSummary() {

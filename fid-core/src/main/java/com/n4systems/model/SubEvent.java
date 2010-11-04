@@ -38,7 +38,7 @@ public class SubEvent extends AbstractEvent implements SecurityEnhanced<SubEvent
 
 	@Override
     public String toString() {
-	    return "SubInspection: " + getName() + StringUtils.indent("\n" + super.toString(), 1);
+	    return "SubEvent: " + getName() + StringUtils.indent("\n" + super.toString(), 1);
     }
 
 	public SubEvent enhance(SecurityLevel level) {

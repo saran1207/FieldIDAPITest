@@ -33,7 +33,7 @@ public class EventFrequenciesDeleteHandlerImplTest {
 	}
 	
 	@Test
-	public void should_remove_all_inspection_frequencies_for_inspection_type() {
+	public void should_remove_all_event_frequencies_for_event_type() {
 		
 		EventType eventTypeToBeRemoved = anEventType().build();
 		AssetTypeSchedule scheduleToBeRemoved = new AssetTypeSchedule();

@@ -40,7 +40,7 @@ public class NextEventScheduleServiceTest {
 		expect(mockEventScheduleManager.update((EventSchedule)anyObject())).andReturn(schedule);
 		replay(mockEventScheduleManager);
 		
-		ManagerBackedNextInspectionScheduleService scheduleService = new ManagerBackedNextInspectionScheduleService(mockEventScheduleManager);
+		ManagerBackedNextEventScheduleService scheduleService = new ManagerBackedNextEventScheduleService(mockEventScheduleManager);
 		EventSchedule returnedSchedule = scheduleService.createNextSchedule(new EventSchedule(asset, eventType, nextDate));
 		
 		verify(mockEventScheduleManager);
@@ -60,7 +60,7 @@ public class NextEventScheduleServiceTest {
 		expect(mockEventScheduleManager.getAvailableSchedulesFor(asset)).andReturn(existingSchedules);
 		replay(mockEventScheduleManager);
 		
-		ManagerBackedNextInspectionScheduleService scheduleService = new ManagerBackedNextInspectionScheduleService(mockEventScheduleManager);
+		ManagerBackedNextEventScheduleService scheduleService = new ManagerBackedNextEventScheduleService(mockEventScheduleManager);
 		EventSchedule returnedSchedule = scheduleService.createNextSchedule(new EventSchedule(asset, eventType, nextDateDifferentTime));
 		
 		verify(mockEventScheduleManager);

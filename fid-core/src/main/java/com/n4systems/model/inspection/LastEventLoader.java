@@ -13,7 +13,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
 /**
- * Loads the latest Inspection for each Inspection Type for a given Asset
+ * Loads the latest Event for each Event Type for a given Asset
  */
 public class LastEventLoader extends ListLoader<Event> {
 	private Long assetId;
@@ -27,7 +27,7 @@ public class LastEventLoader extends ListLoader<Event> {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, filter, "i");
 		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
 		
-		PassthruWhereClause latestClause = new PassthruWhereClause("latest_inspection");
+		PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
 		String maxDateSelect = String.format("SELECT MAX(iSub.date) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
 		latestClause.setClause(String.format("i.date IN (%s)", maxDateSelect));
 		latestClause.getParams().put("iSubAssetId", assetId);

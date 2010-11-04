@@ -30,7 +30,7 @@ public class RealTimeAssetLookupHandler {
 			}
 		}
 		
-		assets = addAnyNeededSubProducts(assets);
+		assets = addAnyNeededSubAssets(assets);
 		
 		return assets;
 	}
@@ -45,13 +45,13 @@ public class RealTimeAssetLookupHandler {
 		return this;
 	}
 	
-	private List<Asset> addAnyNeededSubProducts(List<Asset> assets) {
+	private List<Asset> addAnyNeededSubAssets(List<Asset> assets) {
 		
-		List<Asset> productsWithSubProducts = subAssetLoader.setAssets(assets).load();
+		List<Asset> assetsWithSubAssets = subAssetLoader.setAssets(assets).load();
 		
 		List<Asset> newSubProducts = new ArrayList<Asset>();
 		
-		for (Asset asset : productsWithSubProducts) {
+		for (Asset asset : assetsWithSubAssets) {
 			for (SubAsset subAsset : asset.getSubAssets()) {
 				newSubProducts.add(subAsset.getAsset());
 			}

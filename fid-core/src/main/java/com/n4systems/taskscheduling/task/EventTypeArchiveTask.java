@@ -47,18 +47,18 @@ public class EventTypeArchiveTask implements Runnable {
 
 
 	private void failure(Exception e) {
-		logger.error("failed to archive inspection type", e);
+		logger.error("failed to archive event type", e);
 		transaction.rollback();
 		
 		PersistenceManager.shutdown();
 		
 		sendFailureEmailResponse();
 		
-		revertInspectionTypeToNonArchivedState();
+		revertEventTypeToNonArchivedState();
 	}
 
 
-	private void revertInspectionTypeToNonArchivedState() {
+	private void revertEventTypeToNonArchivedState() {
 		transaction = PersistenceManager.startTransaction();
 		eventType.activateEntity();
 		new EventTypeSaver().update(transaction, eventType);

@@ -14,8 +14,8 @@ public class CreateEventParameterBuilder {
 
 	private final Event event;
 	private final long userId;
-	private boolean calculateInspectionResult = true;
-	private Date nextInspectionDate = null;
+	private boolean calculateEventResult = true;
+	private Date nextEventDate = null;
 	private FileDataContainer proofTestData = null;
 	private List<FileAttachment> uploadedImages = null;
 	private ArrayList<EventScheduleBundle> schedules = new ArrayList<EventScheduleBundle>();
@@ -27,19 +27,19 @@ public class CreateEventParameterBuilder {
 	}
 
 	public CreateEventParameter build() {
-		return new CreateEventParameter(event, nextInspectionDate, userId, proofTestData, uploadedImages, calculateInspectionResult, schedules);
+		return new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, calculateEventResult, schedules);
 	}
 	
-	public CreateEventParameterBuilder doNotCalculateInspectionResult() {
-		calculateInspectionResult  = false;
+	public CreateEventParameterBuilder doNotCalculateEventResult() {
+		calculateEventResult = false;
 		return this;
 	}
 	
-	public CreateEventParameterBuilder withANextInspectionDate(Date nextInspectionDate) {
-		this.nextInspectionDate = nextInspectionDate;
+	public CreateEventParameterBuilder withANextEventDate(Date nextEventDate) {
+		this.nextEventDate = nextEventDate;
 		
-		if (nextInspectionDate != null) {
-			addSchedule(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextInspectionDate));
+		if (nextEventDate != null) {
+			addSchedule(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate));
 		}
 		return this;
 	}

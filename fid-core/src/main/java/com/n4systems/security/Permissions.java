@@ -32,7 +32,7 @@ public class Permissions {
 	public static final int ADMIN				= ALL;
 	public static final int SYSTEM				= ALL;
 	public static final int CUSTOMER			= NO_PERMISSIONS;
-	public static final int ALLINSPECTION		= CreateEvent | EditEvent;
+	public static final int ALLEVENT = CreateEvent | EditEvent;
 	
 	
 	

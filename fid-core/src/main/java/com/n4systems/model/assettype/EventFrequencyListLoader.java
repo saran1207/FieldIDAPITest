@@ -23,7 +23,7 @@ public class EventFrequencyListLoader extends ListLoader<AssetTypeSchedule> {
 	@Override
 	protected List<AssetTypeSchedule> load(EntityManager em, SecurityFilter filter) {
 		if (eventTypeId == null && assetTypeId == null) {
-			throw new InvalidArgumentException("you must choose an asset type or an inspection type or both.  You didn't select either");
+			throw new InvalidArgumentException("you must choose an asset type or an event type or both.  You didn't select either");
 		}
 		
 		return createQuery(em, filter);

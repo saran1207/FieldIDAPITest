@@ -23,10 +23,8 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 
 	private Map<Long, EventTypeGroup> importedGroupMapping;
 	private Map<Long, StateSet> importedStateSetMapping;
-	private Set<Long> originalInspectionTypeIds;
+	private Set<Long> originalEventTypeIds;
 	private EventTypeImportSummary summary = new EventTypeImportSummary();
-	
-	
 	
 	public CatalogEventTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, EventTypeImportSummary summary) {
 		super(persistenceManager, tenant, importCatalog);
@@ -34,12 +32,12 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 
 	public void importCatalog() throws ImportFailureException {
-		for (Long originalInspetionTypeId : originalInspectionTypeIds) {
-			importInspectionType(originalInspetionTypeId);
+		for (Long originEventTypeId : originalEventTypeIds) {
+			importEventType(originEventTypeId);
 		}
 	}
 	
-	private void importInspectionType(Long originalId) throws ImportFailureException {
+	private void importEventType(Long originalId) throws ImportFailureException {
 		EventType importedEventType = importCatalog.getPublishedEventType(originalId);
 		try {
 			importIntoAccount(importedEventType);
@@ -68,7 +66,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private void produceUniqueName(EventType importedEventType) {
-		importedEventType.setName(createUniqueInspectionTypeName(importedEventType.getName()));
+		importedEventType.setName(createUniqueEventTypeName(importedEventType.getName()));
 	}
 
 	private void resolveGroup(EventType importedEventType) {
@@ -88,34 +86,34 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 	
 	
-	public EventTypeImportSummary getSummaryForImport(Set<Long> inspectionTypeIds) {
-		if (inspectionTypeIds == null) { 
+	public EventTypeImportSummary getSummaryForImport(Set<Long> eventTypeIds) {
+		if (eventTypeIds == null) {
 			throw new RuntimeException();
 		}
 		
-		List<ListingPair> inspectionTypes = importCatalog.getPublishedEventTypesLP();
-		for (ListingPair inspectionType : inspectionTypes) {
-			if (inspectionTypeIds.contains(inspectionType.getId())) {
-				summary.getImportMapping().put(inspectionType.getId(), new EventType(createUniqueInspectionTypeName(inspectionType.getName())) );
+		List<ListingPair> eventTypesLP = importCatalog.getPublishedEventTypesLP();
+		for (ListingPair eventType : eventTypesLP) {
+			if (eventTypeIds.contains(eventType.getId())) {
+				summary.getImportMapping().put(eventType.getId(), new EventType(createUniqueEventTypeName(eventType.getName())) );
 			}
 		}
 		return summary;
 	}
 	
 	
-	private String createUniqueInspectionTypeName(String inspectionTypeName) {
-		if (!persistenceManager.uniqueNameAvailable(EventType.class, inspectionTypeName, null, tenant.getId())) {
+	private String createUniqueEventTypeName(String eventTypeName) {
+		if (!persistenceManager.uniqueNameAvailable(EventType.class, eventTypeName, null, tenant.getId())) {
 			int namePostFix = 1;
-			inspectionTypeName += "(" + importCatalog.getTenant().getName() + ")";
-			String tmpInspectionTypeName = inspectionTypeName; 
-			while (!persistenceManager.uniqueNameAvailable(EventType.class, tmpInspectionTypeName, null, tenant.getId())) {
-				tmpInspectionTypeName = inspectionTypeName + "(" + namePostFix + ")";
+			eventTypeName += "(" + importCatalog.getTenant().getName() + ")";
+			String tmpEventTypeName = eventTypeName;
+			while (!persistenceManager.uniqueNameAvailable(EventType.class, tmpEventTypeName, null, tenant.getId())) {
+				tmpEventTypeName = eventTypeName + "(" + namePostFix + ")";
 				namePostFix++;
 			}
 			summary.renamed();
-			return tmpInspectionTypeName;
+			return tmpEventTypeName;
 		}
-		return inspectionTypeName;
+		return eventTypeName;
 	}
 
 
@@ -130,8 +128,8 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 
 
-	public CatalogEventTypeImportHandler setOriginalInspectionTypeIds(Set<Long> originalInspectionTypeIds) {
-		this.originalInspectionTypeIds = originalInspectionTypeIds;
+	public CatalogEventTypeImportHandler setOriginalEventTypeIds(Set<Long> originalEventTypeIds) {
+		this.originalEventTypeIds = originalEventTypeIds;
 		return this;
 	}
 

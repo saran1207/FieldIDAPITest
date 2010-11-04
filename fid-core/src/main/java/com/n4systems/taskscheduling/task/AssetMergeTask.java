@@ -60,14 +60,14 @@ public class AssetMergeTask implements Runnable {
 			body += "<p>An error occured while merging the products " + serialNumberOfLoser + " and " + serialNumberOfWinner +
 				 " please contact support and we will be able to help get this problem resolved.</p>";
 		} else {
-			body += "<p>All inspections from asset " + serialNumberOfLoser + " have been moved to asset " + serialNumberOfWinner + "</p>";
+			body += "<p>All events from asset " + serialNumberOfLoser + " have been moved to asset " + serialNumberOfWinner + "</p>";
 		}
 		
 		logger.info("Sending email [" + user.getEmailAddress() + "]");
 		try {
 	        ServiceLocator.getMailManager().sendMessage(new MailMessage(subject, body, user.getEmailAddress()));
         } catch (Exception e) {
-	        logger.error("Unable to send Multi-Inspection certificate report email", e);
+	        logger.error("Unable to send Multi-Event certificate report email", e);
         }
 
 	}

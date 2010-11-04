@@ -55,23 +55,23 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
 	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
-		// if the inspection has no group, lets create a new one now
+		// if the event has no group, lets create a new one now
 		if (parameterObject.event.getGroup() == null) {
 			parameterObject.event.setGroup(new EventGroup());
 			parameterObject.event.getGroup().setTenant(parameterObject.event.getTenant());
 			persistenceManager.save(parameterObject.event.getGroup(), parameterObject.userId);
 		}
 		
-		if (parameterObject.calculateInspectionResult) {
-			parameterObject.event.setStatus(calculateInspectionResult(parameterObject.event));
+		if (parameterObject.calculateEventResult) {
+			parameterObject.event.setStatus(calculateEventResult(parameterObject.event));
 		}
 		
 		
 		setProofTestData(parameterObject.event, parameterObject.fileData);
 	
-		confirmSubInspectionsAreAgainstAttachedSubAssets(parameterObject.event);
+		confirmSubEventsAreAgainstAttachedSubAssets(parameterObject.event);
 	
-		setOrderForSubInspections(parameterObject.event);
+		setOrderForSubEvents(parameterObject.event);
 		
 		persistenceManager.save(parameterObject.event, parameterObject.userId);
 	
@@ -85,15 +85,12 @@ public class ManagerBackedEventSaver implements EventSaver {
 		return parameterObject.event;
 	}
 
-	
-	
-
-	public Event updateInspection(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		setProofTestData(event, fileData);
 		updateDeficiencies(event.getResults());
 		event = persistenceManager.update(event, userId);
 		
-		updateAssetInspectionDate(event.getAsset());
+		updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
 		saveProofTestFiles(event, fileData);
 		processUploadedFiles(event, uploadedFiles);
@@ -117,7 +114,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		event.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
 	}
 	
-	private void confirmSubInspectionsAreAgainstAttachedSubAssets(Event event) throws UnknownSubAsset {
+	private void confirmSubEventsAreAgainstAttachedSubAssets(Event event) throws UnknownSubAsset {
 		Asset asset = persistenceManager.find(Asset.class, event.getAsset().getId());
 		asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		for (SubEvent subEvent : event.getSubEvents()) {
@@ -127,7 +124,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		}
 	}
 	
-	private void setOrderForSubInspections(Event event) {
+	private void setOrderForSubEvents(Event event) {
 		Asset asset = persistenceManager.find(Asset.class, event.getAsset().getId());
 		asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		List<SubEvent> reorderedSubEvents = new ArrayList<SubEvent>();
@@ -142,29 +139,28 @@ public class ManagerBackedEventSaver implements EventSaver {
 		
 	}
 
-	private Status calculateInspectionResult(Event event) {
+	private Status calculateEventResult(Event event) {
 		// determine result of the sections.
-		Status inspectionResult = Status.NA;
-		inspectionResult = findInspectionResult(event);
+		Status eventResult = Status.NA;
+		eventResult = findEventResult(event);
 		for (SubEvent subEvent : event.getSubEvents()) {
-			inspectionResult = adjustStatus(inspectionResult, findInspectionResult(subEvent));
-			if (inspectionResult == Status.FAIL) {
+			eventResult = adjustStatus(eventResult, findEventResult(subEvent));
+			if (eventResult == Status.FAIL) {
 				break;
 			}
 		}
 
-		return inspectionResult;
+		return eventResult;
 	}
-	
 	
 	private void updateAsset(Event event, Long modifiedById) {
 		User modifiedBy = em.find(User.class, modifiedById);
 		Asset asset = em.find(Asset.class, event.getAsset().getId());
 
-		updateAssetInspectionDate(asset);
+		updateAssetLastEventDate(asset);
 
 		// pushes the location and the ownership to the asset based on the
-		// inspections data.
+		// events data.
 		ownershipUpdates(event, asset);
 		statusUpdates(event, asset);
 		assignedToUpdates(event, asset);
@@ -194,9 +190,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		asset.setOwner(event.getOwner());
 		asset.setAdvancedLocation(event.getAdvancedLocation());
 	}
-	
-	
-	
+
 	private void updateScheduleOwnerShip(Event event, Long userId) {
 		EventSchedule schedule = event.getSchedule();
 		if (schedule != null) {
@@ -209,7 +203,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 	/**
 	 * Updates changed Deficiencies on a list of CriteriaResults. Deficiencies
 	 * are detected as being changed, iff their modified date is null. This
-	 * should only be called on inspection update. If the deficiency is new
+	 * should only be called on event update. If the deficiency is new
 	 * create it.
 	 * 
 	 * @param results
@@ -281,7 +275,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		}
 	
 		// Now we need to cleanup any files that are no longer attached to the
-		// inspection
+		// event
 		if (attachmentDirectory.exists()) {
 	
 			/*
@@ -349,22 +343,22 @@ public class ManagerBackedEventSaver implements EventSaver {
 
 	}
 
-	public Asset updateAssetInspectionDate(Asset asset) {
+	public Asset updateAssetLastEventDate(Asset asset) {
 		asset.setLastEventDate(lastEventDateFinder.findLastEventDate(asset));
 		return asset;
 	}
 
-	private Status findInspectionResult(AbstractEvent event) {
-		Status inspectionResult = Status.NA;
+	private Status findEventResult(AbstractEvent event) {
+		Status eventResult = Status.NA;
 		for (CriteriaResult result : event.getResults()) {
 
-			inspectionResult = adjustStatus(inspectionResult, result.getResult());
+			eventResult = adjustStatus(eventResult, result.getResult());
 
-			if (inspectionResult == Status.FAIL) {
+			if (eventResult == Status.FAIL) {
 				break;
 			}
 		}
-		return inspectionResult;
+		return eventResult;
 	}
 
 	private Status adjustStatus(Status currentStatus, Status newStatus) {
@@ -379,7 +373,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
 
 	/**
-	 * This must be called AFTER the inspection and sub-inspection have been persisted
+	 * This must be called AFTER the event and sub-event have been persisted
 	 */
 	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		event = attachUploadedFiles(event, subEvent, uploadedFiles);

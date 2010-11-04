@@ -24,11 +24,11 @@ public class ProofTestHandlerEJBContainer extends EJBTransactionEmulator<ProofTe
 	}
 
 
-	public Map<String, Event> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException {
+	public Map<String, Event> eventServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).inspectionServiceUpload(fileData, performedBy);
+			return createManager(transaction.getEntityManager()).eventServiceUpload(fileData, performedBy);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -39,11 +39,11 @@ public class ProofTestHandlerEJBContainer extends EJBTransactionEmulator<ProofTe
 		}
 	}
 
-	public Map<String, Event> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long inspectionBookId) throws FileProcessingException {
+	public Map<String, Event> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long eventBookId) throws FileProcessingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).multiProofTestUpload(proofTestFile, type, tenantId, userId, ownerId, inspectionBookId);
+			return createManager(transaction.getEntityManager()).multiProofTestUpload(proofTestFile, type, tenantId, userId, ownerId, eventBookId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

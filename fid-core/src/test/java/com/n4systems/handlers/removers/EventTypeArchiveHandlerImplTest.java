@@ -32,7 +32,7 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 
 	
 	@Test
-	public void should_be_able_to_archive_inspection_type_not_used_by_anything() {
+	public void should_be_able_to_archive_event_type_not_used_by_anything() {
 		EventType eventTypeToDelete = anEventType().build();
 		
 		EventListArchiveHandlerImp mockListDeleter = createNiceMock(EventListArchiveHandlerImp.class);
@@ -68,7 +68,7 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 	}
 	
 	@Test
-	public void should_archive_inspection_type_not_used_by_anything() {
+	public void should_archive_event_type_not_used_by_anything() {
 		EventType eventTypeToDelete = anEventType().build();
 		
 		EventTypeSaver mockEventTypeSaver = createMock(EventTypeSaver.class);
@@ -110,7 +110,7 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 
 	
 	@Test
-	public void should_be_able_to_archive_inspection_type_tied_to_1_asset_type() {
+	public void should_be_able_to_archive_event_type_tied_to_1_asset_type() {
 		EventType eventTypeToDelete = anEventType().build();
 		
 		EventListArchiveHandlerImp mockEventListDeleter = createMock(EventListArchiveHandlerImp.class);
@@ -145,7 +145,7 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 	}
 	
 	@Test
-	public void should_be_to_archive_inspection_type_tied_to_1_asset_type() {
+	public void should_be_to_archive_event_type_tied_to_1_asset_type() {
 		EventType eventTypeToDelete = anEventType().build();
 		
 		
@@ -185,7 +185,7 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 	}
 	
 	@Test
-	public void should_be_able_to_archive_inspection_type_tied_used_in_a_master_inspection() {
+	public void should_be_able_to_archive_event_type_tied_used_in_a_master_event() {
 		EventType eventTypeToDelete = anEventType().build();
 		
 	

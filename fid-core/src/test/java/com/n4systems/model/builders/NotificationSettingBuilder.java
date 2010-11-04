@@ -50,7 +50,7 @@ public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting>
 		notificationSettings.setName(name);
 		notificationSettings.setIncludeOverdue(includeOverdue);
 		notificationSettings.setUser(user);
-		notificationSettings.setUpcommingReport(upcomingReport);
+		notificationSettings.setUpcomingReport(upcomingReport);
 		return notificationSettings;
 	}
 

@@ -32,7 +32,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	}
 	
 	@Test
-	public void should_create_a_default_inspection_creation_parameter() throws Exception {
+	public void should_create_a_default_event_creation_parameter() throws Exception {
 		CreateEventParameter defaultCreateInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, EMPTY_SCHEDULEs);
 		
 		assertThat(sut.build(), is(equalTo(defaultCreateInpsectionParameter)));
@@ -40,98 +40,97 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	
 	
 	@Test
-	public void should_create_a_create_inspection_parameter_with_stop_the_inpsection_result_from_being_calculated() throws Exception {
+	public void should_create_a_create_event_parameter_with_stop_the_inpsection_result_from_being_calculated() throws Exception {
 		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, false, EMPTY_SCHEDULEs);
 		
-		sut.doNotCalculateInspectionResult();
+		sut.doNotCalculateEventResult();
 		
 		assertThat(sut.build(), equalTo(createInpsectionParameter));
 	}
 	
 	
 	@Test
-	public void should_create_a_create_inspection_parameter_with_a_next_inspection_date() throws Exception {
-		Date nextInspectionDate = new Date();
-		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextInspectionDate));
-		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, nextInspectionDate, userId, null, null, true, schedules);
+	public void should_create_a_create_event_parameter_with_a_next_event_date() throws Exception {
+		Date nextEventDate = new Date();
+		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate));
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, nextEventDate, userId, null, null, true, schedules);
 		
-		sut.withANextInspectionDate(nextInspectionDate);
+		sut.withANextEventDate(nextEventDate);
 		
 		CreateEventParameter build = sut.build();
-		assertThat(build, equalTo(createInpsectionParameter));
+		assertThat(build, equalTo(createEventParameter));
 	}
 	
 	@Test
-	public void should_create_a_create_inspection_parameter_with_no_schedules_when_given_a_null_next_inspection_date() throws Exception {
-		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, EMPTY_SCHEDULEs);
+	public void should_create_a_create_event_parameter_with_no_schedules_when_given_a_null_next_event_date() throws Exception {
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, null, true, EMPTY_SCHEDULEs);
 		
-		sut.withANextInspectionDate(null);
+		sut.withANextEventDate(null);
 		
 		CreateEventParameter build = sut.build();
-		assertThat(build, equalTo(createInpsectionParameter));
+		assertThat(build, equalTo(createEventParameter));
 	}
 	
 	
 	@Test
-	public void should_create_a_create_inspection_parameter_with_a_proof_test_file_uploaded() throws Exception {
+	public void should_create_a_create_event_parameter_with_a_proof_test_file_uploaded() throws Exception {
 		FileDataContainer proofTestData = new FileDataContainer();
-		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, proofTestData, null, true, EMPTY_SCHEDULEs);
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, proofTestData, null, true, EMPTY_SCHEDULEs);
 		
 		sut.withProofTestFile(proofTestData);
 		
-		assertThat(sut.build(), equalTo(createInpsectionParameter));
+		assertThat(sut.build(), equalTo(createEventParameter));
 	}
 	
 	
 	@Test
-	public void should_create_a_create_inspection_parameter_with_uploadedImages() throws Exception {
+	public void should_create_a_create_event_parameter_with_uploaded_images() throws Exception {
 		ArrayList<FileAttachment> uploadedImages = new ArrayList<FileAttachment>();
-		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, uploadedImages, true, EMPTY_SCHEDULEs);
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, uploadedImages, true, EMPTY_SCHEDULEs);
 		
 		sut.withUploadedImages(uploadedImages);
 		
-		assertThat(sut.build(), equalTo(createInpsectionParameter));
+		assertThat(sut.build(), equalTo(createEventParameter));
 	}
 	
 	
-	
 	@Test
-	public void should_use_fluid_interface_add_multiple_things_to_the_create_inspection_parameter() throws Exception {
-		Date nextInspectionDate = new Date();
+	public void should_use_fluid_interface_add_multiple_things_to_the_create_event_parameter() throws Exception {
+		Date nextEventDate = new Date();
 		FileDataContainer proofTestData = new FileDataContainer();
 		ArrayList<FileAttachment> uploadedImages = new ArrayList<FileAttachment>();
-		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextInspectionDate));
+		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate));
 		
-		CreateEventParameter expectedCreateInpsectionParameter = new CreateEventParameter(event, nextInspectionDate, userId, proofTestData, uploadedImages, false, schedules);
+		CreateEventParameter expectedCreateEventParameter = new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, false, schedules);
 		
 		CreateEventParameter actualCreateEventParameter = new CreateEventParameterBuilder(event, userId)
 																				.withUploadedImages(uploadedImages)
-																				.withANextInspectionDate(nextInspectionDate)
-																				.doNotCalculateInspectionResult()
+																				.withANextEventDate(nextEventDate)
+																				.doNotCalculateEventResult()
 																				.withProofTestFile(proofTestData)
 																				.build();
 																		
-		assertThat(actualCreateEventParameter, equalTo(expectedCreateInpsectionParameter));
+		assertThat(actualCreateEventParameter, equalTo(expectedCreateEventParameter));
 	}
 	
 	
 	@Test
-	public void should_create_inspection_bundle_with_a_single_schedule_bundles_added() throws Exception {
-		Date nextInspectionDate = new Date();
+	public void should_create_event_bundle_with_a_single_schedule_bundles_added() throws Exception {
+		Date nextEventDate = new Date();
 		
-		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextInspectionDate)));
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, null, true, ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate)));
 		
-		sut.addSchedule(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextInspectionDate));
+		sut.addSchedule(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate));
 		
 		CreateEventParameter build = sut.build();
-		assertThat(build, equalTo(createInpsectionParameter));
+		assertThat(build, equalTo(createEventParameter));
 	}
 	
 	@Test
-	public void should_create_inspection_bundle_with_the_list_of_schedule_bundles_added() throws Exception {
-		Date nextInspectionDate = new Date();
+	public void should_create_event_bundle_with_the_list_of_schedule_bundles_added() throws Exception {
+		Date nextEventDate = new Date();
 		
-		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextInspectionDate),
+		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate),
 				new EventScheduleBundle(event.getAsset(), event.getType(), null, new Date(100000L)));
 		
 		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, schedules);
@@ -144,10 +143,10 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	}
 	
 	@Test
-	public void should_create_inspection_bundle_with_the_list_of_schedule_bundles_added_in_a_single_call() throws Exception {
-		Date nextInspectionDate = new Date();
+	public void should_create_event_bundle_with_the_list_of_schedule_bundles_added_in_a_single_call() throws Exception {
+		Date nextEventDate = new Date();
 		
-		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextInspectionDate),
+		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate),
 				new EventScheduleBundle(event.getAsset(), event.getType(), null, new Date(100000L)));
 		
 		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, schedules);

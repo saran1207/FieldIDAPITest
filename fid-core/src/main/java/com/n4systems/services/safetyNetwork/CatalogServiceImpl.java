@@ -90,38 +90,38 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	public Set<Long> getEventTypeIdsPublished() {
-		Set<Long> inspectionTypeIds = new HashSet<Long>();
+		Set<Long> eventTypeIds = new HashSet<Long>();
 		Catalog catalog = getCatalog();
 		if (catalog != null) {
-			for (EventType publishedType : catalog.getPublishedInspectionTypes()) {
-				inspectionTypeIds.add(publishedType.getId());
+			for (EventType publishedType : catalog.getPublishedEventTypes()) {
+				eventTypeIds.add(publishedType.getId());
 			}
 		}
-		return inspectionTypeIds;
+		return eventTypeIds;
 	}
 
 	public List<ListingPair> getPublishedEventTypesLP() {
-		Set<Long> inspectionTypeIdsPublished = getEventTypeIdsPublished();
+		Set<Long> eventTypeIdsPublished = getEventTypeIdsPublished();
 		
-		if (inspectionTypeIdsPublished.isEmpty()) {
+		if (eventTypeIdsPublished.isEmpty()) {
 			return new ArrayList<ListingPair>();
 		}
 		
-		QueryBuilder<ListingPair> inspectionTypesQuery = new QueryBuilder<ListingPair>(EventType.class, new TenantOnlySecurityFilter(tenant.getId()));
-		inspectionTypesQuery.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name")).addWhere(Comparator.IN, "ids", "id", inspectionTypeIdsPublished);
-		inspectionTypesQuery.addOrder("name");
+		QueryBuilder<ListingPair> eventTypesQuery = new QueryBuilder<ListingPair>(EventType.class, new TenantOnlySecurityFilter(tenant.getId()));
+		eventTypesQuery.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", "name")).addWhere(Comparator.IN, "ids", "id", eventTypeIdsPublished);
+		eventTypesQuery.addOrder("name");
 
-		return persistenceManager.findAll(inspectionTypesQuery);
+		return persistenceManager.findAll(eventTypesQuery);
 	}
 
 	public Catalog publishEventTypes(Set<EventType> eventTypes) {
 		Catalog catalog = getCatalog();
-		catalog.setPublishedInspectionTypes(eventTypes);
+		catalog.setPublishedEventTypes(eventTypes);
 		return persistenceManager.update(catalog);
 	}
 
 	private Catalog getCatalog() {
-		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class, new OpenSecurityFilter()).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedAssetTypes", "publishedInspectionTypes");
+		QueryBuilder<Catalog> query = new QueryBuilder<Catalog>(Catalog.class, new OpenSecurityFilter()).addSimpleWhere("tenant", tenant).addPostFetchPaths("publishedAssetTypes", "publishedEventTypes");
 		Catalog catalog = persistenceManager.find(query);
 		if (catalog == null) {
 			catalog = new Catalog();
@@ -179,13 +179,13 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	public Set<ListingPair> getEventTypeGroupsFor(Set<Long> eventTypeIds) {
-		QueryBuilder<ListingPair> importingInspectionTypeGroups = new QueryBuilder<ListingPair>(EventType.class, filter);
-		importingInspectionTypeGroups.setSelectArgument(new NewObjectSelect(ListingPair.class, "group.id", "group.name"));
-		importingInspectionTypeGroups.addWhere(Comparator.IN, "ids", "id", eventTypeIds);
-		importingInspectionTypeGroups.addWhere(Comparator.IN, "publishedIds", "id", getEventTypeIdsPublished());
-		importingInspectionTypeGroups.addOrder("group.name");
+		QueryBuilder<ListingPair> importingEventTypeGroups = new QueryBuilder<ListingPair>(EventType.class, filter);
+		importingEventTypeGroups.setSelectArgument(new NewObjectSelect(ListingPair.class, "group.id", "group.name"));
+		importingEventTypeGroups.addWhere(Comparator.IN, "ids", "id", eventTypeIds);
+		importingEventTypeGroups.addWhere(Comparator.IN, "publishedIds", "id", getEventTypeIdsPublished());
+		importingEventTypeGroups.addOrder("group.name");
 
-		return new HashSet<ListingPair>(persistenceManager.findAll(importingInspectionTypeGroups));
+		return new HashSet<ListingPair>(persistenceManager.findAll(importingEventTypeGroups));
 	}
 
 	public EventType getPublishedEventType(Long eventTypeId) {
@@ -198,18 +198,18 @@ public class CatalogServiceImpl implements CatalogService {
 	public List<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds) {
 		List<StateSet> originalStateSets = new ArrayList<StateSet>();
 		if (!eventTypeIds.isEmpty()) {
-			QueryBuilder<Long> usedSectionsInInspectionTypesQuery = new QueryBuilder<Long>(EventType.class, filter);
-			usedSectionsInInspectionTypesQuery.addRequiredLeftJoin("sections", "section").setSelectArgument(new SimpleSelect("section.id", true));
-			usedSectionsInInspectionTypesQuery.addWhere(Comparator.IN, "ids", "id", eventTypeIds);
-			usedSectionsInInspectionTypesQuery.addWhere(Comparator.IN, "publishedIds", "id", getEventTypeIdsPublished());
+			QueryBuilder<Long> usedSectionsInEventTypesQuery = new QueryBuilder<Long>(EventType.class, filter);
+			usedSectionsInEventTypesQuery.addRequiredLeftJoin("sections", "section").setSelectArgument(new SimpleSelect("section.id", true));
+			usedSectionsInEventTypesQuery.addWhere(Comparator.IN, "ids", "id", eventTypeIds);
+			usedSectionsInEventTypesQuery.addWhere(Comparator.IN, "publishedIds", "id", getEventTypeIdsPublished());
 			
-			QueryBuilder<StateSet> usedStateSetsInInspectionTypesQuery = new QueryBuilder<StateSet>(CriteriaSection.class, filter);
+			QueryBuilder<StateSet> usedStateSetsInEventTypesQuery = new QueryBuilder<StateSet>(CriteriaSection.class, filter);
 			SimpleSelect selectStates = new SimpleSelect("oneCriteria.states", true);
 			selectStates.setDistinct(true);
-			usedStateSetsInInspectionTypesQuery.addRequiredLeftJoin("criteria", "oneCriteria").setSelectArgument(selectStates);
-			usedStateSetsInInspectionTypesQuery.addWhere(Comparator.IN, "ids", "id", persistenceManager.findAll(usedSectionsInInspectionTypesQuery));
+			usedStateSetsInEventTypesQuery.addRequiredLeftJoin("criteria", "oneCriteria").setSelectArgument(selectStates);
+			usedStateSetsInEventTypesQuery.addWhere(Comparator.IN, "ids", "id", persistenceManager.findAll(usedSectionsInEventTypesQuery));
 			
-			originalStateSets = persistenceManager.findAll(usedStateSetsInInspectionTypesQuery);
+			originalStateSets = persistenceManager.findAll(usedStateSetsInEventTypesQuery);
 		}
 		return originalStateSets;
 	}
@@ -239,22 +239,22 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	public Set<Long> getPublishedEventTypeIdsConnectedTo(Set<Long> assetTypeIds) {
-		Set<Long> inspectionTypeIdsPublished = getEventTypeIdsPublished();
-		if (inspectionTypeIdsPublished.isEmpty() || assetTypeIds.isEmpty()) {
+		Set<Long> eventTypeIdsPublished = getEventTypeIdsPublished();
+		if (eventTypeIdsPublished.isEmpty() || assetTypeIds.isEmpty()) {
 			return new HashSet<Long>();
 		}
 		
-		SimpleSelect inspectionTypeId = new SimpleSelect("inspectionType.id", true);
-		inspectionTypeId.setDistinct(true);
+		SimpleSelect eventTypeId = new SimpleSelect("eventType.id", true);
+		eventTypeId.setDistinct(true);
 		
-		QueryBuilder<Long> additionalInspectionTypeIdQuery = new QueryBuilder<Long>(AssociatedEventType.class, filter);
-		additionalInspectionTypeIdQuery.setSelectArgument(inspectionTypeId);
-		additionalInspectionTypeIdQuery.addWhere(Comparator.IN, "ptIds", "assetType.id", assetTypeIds);
+		QueryBuilder<Long> additionalEventTypeIdQuery = new QueryBuilder<Long>(AssociatedEventType.class, filter);
+		additionalEventTypeIdQuery.setSelectArgument(eventTypeId);
+		additionalEventTypeIdQuery.addWhere(Comparator.IN, "ptIds", "assetType.id", assetTypeIds);
 		
-		additionalInspectionTypeIdQuery.addWhere(new WhereParameter<Collection<Long>>(Comparator.IN, "inspectionTypeIds", "inspectionType.id", inspectionTypeIdsPublished, null, true));
+		additionalEventTypeIdQuery.addWhere(new WhereParameter<Collection<Long>>(Comparator.IN, "eventTypeIds", "eventType.id", eventTypeIdsPublished, null, true));
 		
 		
-		return new HashSet<Long>(persistenceManager.findAll(additionalInspectionTypeIdQuery));
+		return new HashSet<Long>(persistenceManager.findAll(additionalEventTypeIdQuery));
 	}
 	
 	public boolean hasCatalog() {

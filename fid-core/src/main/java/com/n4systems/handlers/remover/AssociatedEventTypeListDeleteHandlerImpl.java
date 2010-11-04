@@ -22,13 +22,13 @@ public class AssociatedEventTypeListDeleteHandlerImpl implements AssociatedEvent
 	}
 	
 	public void remove(Transaction transaction) {
-		List<AssociatedEventType> associations = getAssociatedInspections(transaction);
+		List<AssociatedEventType> associations = getAssociatedEvents(transaction);
 		for (AssociatedEventType associatedEventType : associations) {
 			associatedEventTypeDeleteHandler.setAssociatedEventType(associatedEventType).remove(transaction);
 		}
 	}
 
-	private List<AssociatedEventType> getAssociatedInspections(Transaction transaction) {
+	private List<AssociatedEventType> getAssociatedEvents(Transaction transaction) {
 		List<AssociatedEventType> associations = associatedEventTypeLoader.setEventType(eventType).load(transaction);
 		return associations;
 	}
@@ -37,11 +37,11 @@ public class AssociatedEventTypeListDeleteHandlerImpl implements AssociatedEvent
 		AssociatedEventTypeDeleteSummary summary = new AssociatedEventTypeDeleteSummary();
 		summary.setRemoveFromAssetTypes(new Long(associatedEventTypeLoader.setEventType(eventType).load(transaction).size()));
 		
-		List<AssociatedEventType> associations = getAssociatedInspections(transaction);
+		List<AssociatedEventType> associations = getAssociatedEvents(transaction);
 		for (AssociatedEventType associatedEventType : associations) {
 			AssociatedEventTypeDeleteSummary singleAITSummary = associatedEventTypeDeleteHandler.setAssociatedEventType(associatedEventType).summary(transaction);
-			summary.addToDeleteInspectionFrequencies(singleAITSummary.getDeleteEventFrequencies());
-			summary.addToDeleteNonCompletedInspection(singleAITSummary.getDeleteNonCompletedEvent());
+			summary.addToDeleteEventFrequencies(singleAITSummary.getDeleteEventFrequencies());
+			summary.addToDeleteNonCompletedEvent(singleAITSummary.getDeleteNonCompletedEvent());
 		}
 		
 		return summary;

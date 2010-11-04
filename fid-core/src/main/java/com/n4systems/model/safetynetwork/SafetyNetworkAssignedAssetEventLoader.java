@@ -12,8 +12,8 @@ import com.n4systems.persistence.loaders.NonSecureIdLoader;
 public class SafetyNetworkAssignedAssetEventLoader extends SafetyNetworkEventLoader {
 	private final AssetsByNetworkIdLoader assetsByNetworkIdLoader;
 
-	public SafetyNetworkAssignedAssetEventLoader(SecurityFilter filter, NonSecureIdLoader<Event> inspectionLoader, AssetsByNetworkIdLoader assetsByNetworkIdLoader) {
-		super(filter, inspectionLoader);
+	public SafetyNetworkAssignedAssetEventLoader(SecurityFilter filter, NonSecureIdLoader<Event> eventLoader, AssetsByNetworkIdLoader assetsByNetworkIdLoader) {
+		super(filter, eventLoader);
 		this.assetsByNetworkIdLoader = assetsByNetworkIdLoader;
 	}
 	

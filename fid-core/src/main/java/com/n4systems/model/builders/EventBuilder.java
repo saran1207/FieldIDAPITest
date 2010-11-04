@@ -60,7 +60,7 @@ public class EventBuilder extends BaseBuilder<Event> {
 		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
 	}
 	
-	public EventBuilder withSubInspections(List<SubEvent> subEvents) {
+	public EventBuilder withSubEvents(List<SubEvent> subEvents) {
 		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
 	}
 

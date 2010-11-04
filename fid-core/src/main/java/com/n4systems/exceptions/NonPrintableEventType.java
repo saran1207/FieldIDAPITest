@@ -4,19 +4,19 @@ public class NonPrintableEventType extends ReportException {
 	private static final long serialVersionUID = 1L;
 
 	public NonPrintableEventType() {
-		super( "Inspection doc is not printable" );
+		super( "Event doc is not printable" );
 	}
 
-	public NonPrintableEventType(String arg0) {
-		super(arg0);
+	public NonPrintableEventType(String message) {
+		super(message);
 	}
 
-	public NonPrintableEventType(Throwable arg0) {
-		super("Inspection doc is not printable", arg0);
+	public NonPrintableEventType(Throwable cause) {
+		super("Event doc is not printable", cause);
 	}
 
-	public NonPrintableEventType(String arg0, Throwable arg1) {
-		super(arg0, arg1);
+	public NonPrintableEventType(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 }

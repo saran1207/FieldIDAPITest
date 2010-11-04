@@ -43,7 +43,7 @@ public class ImportManagerImpl implements ImportManager {
 
 	/**
 	 * Imports observations from a CSV formatted file.<br/>
-	 * Format: <code>inspection type name, section name, criteria name, &lt;R/D&gt;, observation text</code>
+	 * Format: <code>event type name, section name, criteria name, &lt;R/D&gt;, observation text</code>
 	 * 
 	 * @param tenantId			The id of the Tenant
 	 * @param observationsFile	The observation csv file
@@ -67,7 +67,7 @@ public class ImportManagerImpl implements ImportManager {
 			fRead = new FileReader(observationsFile);
 			csvRead = new CSVReader(fRead);
 			
-			// we're going to need all the inspection types for this tenant.  Let's find them now.
+			// we're going to need all the event types for this tenant.  Let's find them now.
 			SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 			
 			QueryBuilder<EventType> builder = new QueryBuilder<EventType>(EventType.class, filter);

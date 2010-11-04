@@ -36,7 +36,7 @@ public class PathHandler {
 	private static final String SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
 	private static final String ORGANIZATION_PATH_PART =  "orgs";
 	private static final String TENANT_IMAGE_PATH_BASE = PRIVATE_PATH_BASE + "/images";
-	private static final String INSPECTION_PATH_BASE = PRIVATE_PATH_BASE + "/inspections";
+	private static final String EVENT_PATH_BASE = PRIVATE_PATH_BASE + "/inspections";
 	private static final String ASSET_PATH_BASE = PRIVATE_PATH_BASE + "/products";
 	private static final String ASSET_TYPE_PATH_BASE = PRIVATE_PATH_BASE + "/productTypes";
 	private static final String PROJECT_PATH_BASE = PRIVATE_PATH_BASE + "/projects";
@@ -46,12 +46,12 @@ public class PathHandler {
 	private static final String ASSET_TYPE_IMAGE_PATH_BASE = ASSET_TYPE_PATH_BASE + "/images";
 	private static final String PROJECT_ATTACHMENT_PATH_BASE = PROJECT_PATH_BASE + "/attachments";
 	private static final String ASSET_ATTACHMENT_PATH_BASE = ASSET_PATH_BASE + "/attachments";
-	private static final String ATTACHMENT_PATH_BASE = INSPECTION_PATH_BASE + "/attachments";
-	private static final String PROOF_TEST_PATH_BASE = INSPECTION_PATH_BASE + "/prooftests";
-	private static final String CHART_IMAGE_PATH_BASE = INSPECTION_PATH_BASE + "/chartimages";
+	private static final String ATTACHMENT_PATH_BASE = EVENT_PATH_BASE + "/attachments";
+	private static final String PROOF_TEST_PATH_BASE = EVENT_PATH_BASE + "/prooftests";
+	private static final String CHART_IMAGE_PATH_BASE = EVENT_PATH_BASE + "/chartimages";
 	private static final String REPORT_PATH_BASE = PRIVATE_PATH_BASE + "/reports";
 	private static final String ALL_TENANT_REPORT_PATH = REPORT_PATH_BASE + "/all_tenants";
-	private static final String DEFAULT_INSPECTION_REPORTNAME = "default_inspection_cert" + REPORT_FILE_EXT;
+	private static final String DEFAULT_EVENT_REPORTNAME = "default_inspection_cert" + REPORT_FILE_EXT;
 	private static final String COMMON_IMAGE_PATH_BASE = COMMON_PATH_BASE + "/images";
 	private static final String COMMON_TEMPLATE_BASE = COMMON_PATH_BASE + "/templates";
 	private static final String COMMON_CONFIG_BASE = COMMON_PATH_BASE + "/conf";
@@ -60,7 +60,7 @@ public class PathHandler {
 	private static final String N4_LOGO_IMAGE = COMMON_IMAGE_PATH_BASE + "/n4_logo.gif";
 	private static final String RESERVED_TENANT_NAMES_CONFIG_FILE = COMMON_CONFIG_BASE + "/reservedTenantNames.txt";
 	
-	// paths are in the format <tenant id>/<created year>/<created month>/<inspection id>
+	// paths are in the format <tenant id>/<created year>/<created month>/<event id>
 	private static final String CREATED_DATE_PATH_FORMAT = "yy/MM";
 	
 	/**
@@ -173,7 +173,7 @@ public class PathHandler {
 	 * @return	 				An absolute File object for this report
 	*/
 	public static File getDefaultReportFile() {
-		return absolutize(mergePaths(ALL_TENANT_REPORT_PATH, DEFAULT_INSPECTION_REPORTNAME));
+		return absolutize(mergePaths(ALL_TENANT_REPORT_PATH, DEFAULT_EVENT_REPORTNAME));
 	}
 	
 	/**
@@ -255,9 +255,9 @@ public class PathHandler {
 	}
 	
 	/**
-	 * Resolves an InspectionTypeGroup to its report file name.  Appends the master suffix if isMaster is true.
+	 * Resolves an EventTypeGroup to its report file name.  Appends the master suffix if isMaster is true.
 	 * @see 	com.n4systems.model.EventTypeGroup#getFileSystemName()
-	 * @param 	group		An InspectionTypeGroup
+	 * @param 	group		An EventTypeGroup
 	 * @param	isMaster	Appends the master suffix when true.
 	 * @return				A string representing the reports file name
 	 */
@@ -266,10 +266,10 @@ public class PathHandler {
 	}
 	
 	/**
-	 * Finds the relative Tenant specific path to an InspectionTypeGroup's report.  Uses the Tenant from the InspectionTypeGroup to resolve the Teanant path part. Appends the master suffix if isMaster is true.
+	 * Finds the relative Tenant specific path to an EventTypeGroup's report.  Uses the Tenant from the EventTypeGroup to resolve the Tenant path part. Appends the master suffix if isMaster is true.
 	 * @see 	#getTenantPathPart(Tenant)
 	 * @see 	#getReportFileName(com.n4systems.model.EventTypeGroup)
-	 * @param 	group		An InspectionTypeGroup
+	 * @param 	group		An EventTypeGroup
 	 * @param 	isMaster	Appends the master suffix when true.
 	 * @return				A string path relative to the application root
 	 */
@@ -293,9 +293,9 @@ public class PathHandler {
 	}
 	
 	/**
-	 * Finds a report file for an InspectionTypeGroup.  
+	 * Finds a report file for an EventTypeGroup.
 	 * 		
-	 * @param 	type			An InspectionType
+	 * @param 	type			An EventType
 	 * @return					A File object for the resolved report
 	 */
 	public static File getPrintOutFile(PrintOut printOut) {
@@ -322,7 +322,7 @@ public class PathHandler {
 		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(SUMMARY_REPORT_FILE_NAME);
 	}
 	
-	private static String getInspectionPath(Event event) {
+	private static String getEventPath(Event event) {
 		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(event.getCreated());
 		return mergePaths(dateCreatedPath, event.getId().toString());
 	}
@@ -341,7 +341,7 @@ public class PathHandler {
 		return mergePaths(dateCreatedPath, asset.getId().toString());
 	}
 	
-	private static String getSubInspectionPath(SubEvent subEvent) {
+	private static String getSubEventPath(SubEvent subEvent) {
 		return subEvent.getId().toString();
 	}
 	
@@ -354,7 +354,7 @@ public class PathHandler {
 	}
 	
 	private static String getAttachmentPath(Event event) {
-		return mergePaths(getInspectionPath(event));
+		return mergePaths(getEventPath(event));
 	}
 	
 	private static String getNotePath(FileAttachment note) {
@@ -365,27 +365,27 @@ public class PathHandler {
 		return pAttachment.getId().toString();
 	}
 
-	public static File getInspectionAttachmentFile(Event event, SubEvent subEvent, FileAttachment attachment) {
+	public static File getEventAttachmentFile(Event event, SubEvent subEvent, FileAttachment attachment) {
 		return new File(getAttachmentFile(event, subEvent), attachment.getFileName());
 	}
 	
-	public static File getInspectionAttachmentFile(Event event, FileAttachment attachment) {
+	public static File getEventAttachmentFile(Event event, FileAttachment attachment) {
 		return new File(getAttachmentFile(event), attachment.getFileName());
 	}
 	
 	public static File getAttachmentFile(Event event, SubEvent subEvent) {
-		return absolutize(mergePaths(getInspectionAttachmentBasePath(event.getTenant()), getAttachmentPath(event), getSubInspectionPath(subEvent)));
+		return absolutize(mergePaths(getEventAttachmentBasePath(event.getTenant()), getAttachmentPath(event), getSubEventPath(subEvent)));
 	}
 	
 	public static File getAttachmentFile(Event event) {
-		return absolutize(mergePaths(getInspectionAttachmentBasePath(event.getTenant()), getAttachmentPath(event)));
+		return absolutize(mergePaths(getEventAttachmentBasePath(event.getTenant()), getAttachmentPath(event)));
 	}
 	
-	public static File getInspectionAttachmentBaseFile(Tenant tenant) {
-		return absolutize(getInspectionAttachmentBasePath(tenant));
+	public static File getEventAttachmentBaseFile(Tenant tenant) {
+		return absolutize(getEventAttachmentBasePath(tenant));
 	}
 	
-	private static String getInspectionAttachmentBasePath(Tenant tenant) {
+	private static String getEventAttachmentBasePath(Tenant tenant) {
 		return mergePaths(ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
@@ -414,26 +414,26 @@ public class PathHandler {
 	}
 	
 	public static File getChartImageFile(Event event) {
-		return absolutize(mergePaths(getInspectionChartImageBasePath(event.getTenant()), getInspectionPath(event), CHART_FILE_NAME));
+		return absolutize(mergePaths(getEventChartImageBasePath(event.getTenant()), getEventPath(event), CHART_FILE_NAME));
 	}
 	
-	public static File getInspectionChartImageBaseFile(Tenant tenant) {
-		return absolutize(getInspectionChartImageBasePath(tenant));
+	public static File getEventChartImageBaseFile(Tenant tenant) {
+		return absolutize(getEventChartImageBasePath(tenant));
 	}
 	
-	private static String getInspectionChartImageBasePath(Tenant tenant) {
+	private static String getEventChartImageBasePath(Tenant tenant) {
 		return mergePaths(CHART_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
 	public static File getProofTestFile(Event event) {
-		return absolutize(mergePaths(getInspectionProoftestBasePath(event.getTenant()), getInspectionPath(event), PROOF_TEST_FILE_NAME));
+		return absolutize(mergePaths(getEventProoftestBasePath(event.getTenant()), getEventPath(event), PROOF_TEST_FILE_NAME));
 	}
 	
-	public static File getInspectionProoftestBaseFile(Tenant tenant) {
-		return absolutize(getInspectionProoftestBasePath(tenant));
+	public static File getEventProoftestBaseFile(Tenant tenant) {
+		return absolutize(getEventProoftestBasePath(tenant));
 	}
 	
-	private static String getInspectionProoftestBasePath(Tenant tenant) {
+	private static String getEventProoftestBasePath(Tenant tenant) {
 		return mergePaths(PROOF_TEST_PATH_BASE, getTenantPathPart(tenant));
 	}
 	

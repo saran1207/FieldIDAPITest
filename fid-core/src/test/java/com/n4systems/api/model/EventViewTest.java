@@ -5,35 +5,35 @@ import java.util.Date;
 
 import org.junit.Test;
 
-public class InspectionViewTest {
+public class EventViewTest {
 
 	@Test
-	public void test_get_next_inspection_date_as_date() {
+	public void test_get_next_event_date_as_date() {
 		Date date = new Date();
 		
 		EventView view = new EventView();
 		
-		view.setNextInspectionDate(date);
+		view.setNextEventDate(date);
 		
-		assertSame(date, view.getNextInspectionDateAsDate());
+		assertSame(date, view.getNextEventDateAsDate());
 	}
 	
 	@Test
-	public void test_get_next_inspection_date_as_date_allows_null() {
+	public void test_get_next_event_date_as_date_allows_null() {
 		EventView view = new EventView();
-		assertNull(view.getNextInspectionDateAsDate());
+		assertNull(view.getNextEventDateAsDate());
 	}
 	
 	@Test(expected=ClassCastException.class)
-	public void test_get_next_inspection_date_as_date_throws_exception_on_wrong_type() {
+	public void test_get_next_event_date_as_date_throws_exception_on_wrong_type() {
 		EventView view = new EventView();
-		view.setNextInspectionDate("bad date type");
+		view.setNextEventDate("bad date type");
 		
-		view.getNextInspectionDateAsDate();
+		view.getNextEventDateAsDate();
 	}
 	
 	@Test
-	public void test_get_inspection_date_as_date() {
+	public void test_get_event_date_as_date() {
 		Date date = new Date();
 		
 		EventView view = new EventView();
@@ -44,13 +44,13 @@ public class InspectionViewTest {
 	}
 	
 	@Test
-	public void test_get_inspection_date_as_date_allows_null() {
+	public void test_get_event_date_as_date_allows_null() {
 		EventView view = new EventView();
 		assertNull(view.getDatePerformedAsDate());
 	}
 	
 	@Test(expected=ClassCastException.class)
-	public void test_get_inspection_date_as_date_throws_exception_on_wrong_type() {
+	public void test_get_event_date_as_date_throws_exception_on_wrong_type() {
 		EventView view = new EventView();
 		view.setDatePerformed("bad date type");
 		

@@ -15,28 +15,28 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
-import com.n4systems.services.NextInspectionScheduleSerivce;
+import com.n4systems.services.NextEventScheduleSerivce;
 
-public class WebServiceInspectionsCreator extends BasicTransactionManagement implements InspectionsInAGroupCreator {
+public class WebServiceEventsCreator extends BasicTransactionManagement implements EventsInAGroupCreator {
 
 	private final EventPersistenceFactory eventPersistenceFactory;
-	private Map<Event, Date> nextInspectionDates;
+	private Map<Event, Date> nextEventDates;
 	private List<Event> events;
 	private String transactionGUID;
 	private List<Event> results = null;
-	private NextInspectionScheduleSerivce createNextInspectionScheduleService;
+	private NextEventScheduleSerivce createNextEventScheduleService;
 	private CreateEventsMethodObject createEventsMethod;
 
-	public WebServiceInspectionsCreator(TransactionManager transactionManager, EventPersistenceFactory eventPersistenceFactory) {
+	public WebServiceEventsCreator(TransactionManager transactionManager, EventPersistenceFactory eventPersistenceFactory) {
 		super(transactionManager);
 		this.eventPersistenceFactory = eventPersistenceFactory;
 	}
 
-	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws TransactionAlreadyProcessedException,
+	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws TransactionAlreadyProcessedException,
 			ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 		this.transactionGUID = transactionGUID;
 		this.events = events;
-		this.nextInspectionDates = nextInspectionDates;
+		this.nextEventDates = nextEventDates;
 		
 		run();
 		
@@ -56,46 +56,46 @@ public class WebServiceInspectionsCreator extends BasicTransactionManagement imp
 	}
 
 	protected void doProcess(Transaction transaction) {
-		createTransactionDepenancies(transaction);
-		createInspections(transaction);
+		createTransactionDependencies(transaction);
+		createEvents(transaction);
 		createSchedules(transaction);
 		
 	}
 
-	private void createTransactionDepenancies(Transaction transaction) {
+	private void createTransactionDependencies(Transaction transaction) {
 		createEventsMethod = eventPersistenceFactory.createCreateEventsMethodObject(transaction);
-		createNextInspectionScheduleService = eventPersistenceFactory.createNextEventScheduleService(transaction);
+		createNextEventScheduleService = eventPersistenceFactory.createNextEventScheduleService(transaction);
 	}
 
-	private void createInspections(Transaction transaction) {
+	private void createEvents(Transaction transaction) {
 		results = createEventsMethod.createEvents(transactionGUID, events);
 	}
 
 	private void createSchedules(Transaction transaction) {
-		for (Entry<Event, Date> nextInspectionDate : nextInspectionDates.entrySet()) {
-			Event eventCreatingSchedule = nextInspectionDate.getKey();
+		for (Entry<Event, Date> nextEventDate : nextEventDates.entrySet()) {
+			Event eventCreatingSchedule = nextEventDate.getKey();
 			
-			if (nextInspectionDate.getValue() != null) {
-				EventSchedule schedule = new EventSchedule(eventCreatingSchedule.getAsset(), eventCreatingSchedule.getType(), nextInspectionDate.getValue());
-				createNextInspectionScheduleService.createNextSchedule(schedule);
+			if (nextEventDate.getValue() != null) {
+				EventSchedule schedule = new EventSchedule(eventCreatingSchedule.getAsset(), eventCreatingSchedule.getType(), nextEventDate.getValue());
+				createNextEventScheduleService.createNextSchedule(schedule);
 			}
 		}
 	}
 
 
 	private void logFailure(List<Event> events, Exception e) {
-		auditLogInspection(events, e);
+		auditLogEvent(events, e);
 	}
 
-	private void auditLogInspection(List<Event> events, Exception e) {
+	private void auditLogEvent(List<Event> events, Exception e) {
 		AuditLogger auditLogger = eventPersistenceFactory.createCreateEventAuditLogger();
 		for (Event event : events) {
-			auditLogger.audit("Create Inspections", event, e);
+			auditLogger.audit("Create Events", event, e);
 		}
 	}
 
 	private void logSuccess(List<Event> events) {
-		auditLogInspection(events, null);
+		auditLogEvent(events, null);
 	}
 
 	

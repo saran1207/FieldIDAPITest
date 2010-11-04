@@ -10,7 +10,7 @@ import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Event;
 
-public interface InspectionsInAGroupCreator {
+public interface EventsInAGroupCreator {
 
 	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextInspectionDates) throws TransactionAlreadyProcessedException,
 			ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;

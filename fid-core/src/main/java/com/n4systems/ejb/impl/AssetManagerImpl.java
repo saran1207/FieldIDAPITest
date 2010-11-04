@@ -318,7 +318,7 @@ public class AssetManagerImpl implements AssetManager {
 		asset.archiveEntity();
 		asset.archiveSerialNumber();
 
-		archiveInspections(asset, archivedBy);
+		archiveEvents(asset, archivedBy);
 		archiveSchedules(asset, archivedBy);
 		detatachFromProjects(asset, archivedBy);
 
@@ -331,12 +331,12 @@ public class AssetManagerImpl implements AssetManager {
 		}
 	}
 
-	private void archiveInspections(Asset asset, User archivedBy) {
-		EventListArchiver archiver = new EventListArchiver(getInspectionIdsForAsset(asset));
+	private void archiveEvents(Asset asset, User archivedBy) {
+		EventListArchiver archiver = new EventListArchiver(getEventIdsForAsset(asset));
 		archiver.archive(em);	
 	}
 	
-	private Set<Long> getInspectionIdsForAsset(Asset asset) {
+	private Set<Long> getEventIdsForAsset(Asset asset) {
 		QueryBuilder<Long> idBuilder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
 		idBuilder.setSimpleSelect("id");
 		idBuilder.addWhere(WhereClauseFactory.create("asset.id", asset.getId()));
@@ -400,18 +400,18 @@ public class AssetManagerImpl implements AssetManager {
 			assetCount.setCountSelect().addSimpleWhere("type", assetType).addSimpleWhere("state", EntityState.ACTIVE);
 			summary.setAssetsToDelete(persistenceManager.findCount(assetCount));
 
-			QueryBuilder<Event> inspectionCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-			inspectionCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("state", EntityState.ACTIVE);
-			summary.setInspectionsToDelete(persistenceManager.findCount(inspectionCount));
+			QueryBuilder<Event> eventCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+			eventCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("state", EntityState.ACTIVE);
+			summary.setEventsToDelete(persistenceManager.findCount(eventCount));
 
 			QueryBuilder<EventSchedule> scheduleCount = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
 			scheduleCount.setCountSelect().addSimpleWhere("asset.type", assetType);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
-			String subInspectionQuery = "select count(i) From " + Event.class.getName() + " i, IN( i.subInspections ) si WHERE si.asset.type = :assetType AND i.state = :activeState ";
-			Query subInspectionCount = em.createQuery(subInspectionQuery);
-			subInspectionCount.setParameter("assetType", assetType).setParameter("activeState", EntityState.ACTIVE);
-			summary.setAssetsUsedInMasterInspection((Long) subInspectionCount.getSingleResult());
+			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset.type = :assetType AND event.state = :activeState ";
+			Query subEventCount = em.createQuery(subEventQuery);
+			subEventCount.setParameter("assetType", assetType).setParameter("activeState", EntityState.ACTIVE);
+			summary.setAssetsUsedInMasterEvent((Long) subEventCount.getSingleResult());
 
 			String subAssetQuery = "select count(DISTINCT s.masterAsset) From "+SubAsset.class.getName()+" s WHERE s.asset.type = :assetType ";
 			Query subAssetCount = em.createQuery(subAssetQuery);
@@ -480,18 +480,18 @@ public class AssetManagerImpl implements AssetManager {
 	public AssetRemovalSummary testArchive(Asset asset) {
 		AssetRemovalSummary summary = new AssetRemovalSummary(asset);
 		try {
-			QueryBuilder<Event> inspectionCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-			inspectionCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE);
-			summary.setInspectionsToDelete(persistenceManager.findCount(inspectionCount));
+			QueryBuilder<Event> eventCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+			eventCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", EntityState.ACTIVE);
+			summary.setEventsToDelete(persistenceManager.findCount(eventCount));
 
 			QueryBuilder<EventSchedule> scheduleCount = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
 			scheduleCount.setCountSelect().addSimpleWhere("asset", asset);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
-			String subInspectionQuery = "select count(i) From " + Event.class.getName() + " i, IN( i.subInspections ) si WHERE si.asset = :asset AND i.state = :activeState ";
-			Query subInspectionCount = em.createQuery(subInspectionQuery);
-			subInspectionCount.setParameter("asset", asset).setParameter("activeState", EntityState.ACTIVE);
-			summary.setAssetUsedInMasterInspection((Long) subInspectionCount.getSingleResult());
+			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( i.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";
+			Query subEventCount = em.createQuery(subEventQuery);
+			subEventCount.setParameter("asset", asset).setParameter("activeState", EntityState.ACTIVE);
+			summary.setAssetUsedInMasterEvent((Long) subEventCount.getSingleResult());
 			asset = fillInSubAssetsOnAsset(asset);
 			summary.setSubAssetsToDetach((long) asset.getSubAssets().size());
 

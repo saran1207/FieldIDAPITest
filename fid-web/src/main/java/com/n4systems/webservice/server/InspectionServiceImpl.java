@@ -62,7 +62,7 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 			configureDataContainerForWebServiceProcessing(dataContainer, bundle);
 			
 			// proocess the file data container
-			Map<String, Event> inspectionMap = ServiceLocator.getProofTestHandler().inspectionServiceUpload(dataContainer, user);
+			Map<String, Event> inspectionMap = ServiceLocator.getProofTestHandler().eventServiceUpload(dataContainer, user);
 			
 			
 			

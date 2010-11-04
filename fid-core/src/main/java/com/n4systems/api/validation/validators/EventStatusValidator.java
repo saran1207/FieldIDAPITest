@@ -21,7 +21,7 @@ public class EventStatusValidator implements FieldValidator {
 				return ValidationResult.pass();
 			}
 		}
-		return ValidationResult.fail(InspectionStatusValidatorFail, status);
+		return ValidationResult.fail(EventStatusValidatorFail, status);
 	}
 
 }

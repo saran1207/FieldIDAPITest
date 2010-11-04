@@ -19,7 +19,7 @@ import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 
 public class ImportCatalogService {
 
-	private final CatalogAssetTypeRelationshipsImportHandler importAssetTypeInspectionTypeRelations;
+	private final CatalogAssetTypeRelationshipsImportHandler importAssetTypeEventTypeRelations;
 	private final CatalogAssetTypeGroupImportHandler importAssetTypeGroup;
 	private final CatalogAssetTypeImportHandler importAssetType;
 	private final CatalogEventTypeImportHandler importEventType;
@@ -33,11 +33,11 @@ public class ImportCatalogService {
 	
 	public ImportCatalogService(PersistenceManager persistenceManager, PrimaryOrg primaryOrg, CatalogService importCatalog, LegacyAssetType legacyAssetTypeManager) {
 		importAssetType = new CatalogAssetTypeImportHandler(persistenceManager, primaryOrg.getTenant(), importCatalog, legacyAssetTypeManager, summary.getAssetTypeImportSummary());
-		importEventType = new CatalogEventTypeImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getInspectionTypeImportSummary());
-		importEventTypeGroup = new CatalogEventTypeGroupHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getInspectionTypeGroupImportSummary());
+		importEventType = new CatalogEventTypeImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getEventTypeImportSummary());
+		importEventTypeGroup = new CatalogEventTypeGroupHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getEventTypeGroupImportSummary());
 		importStateSets = new CatalogStateSetsImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getStateSetImportSummary());
 		importAssetTypeGroup = new CatalogAssetTypeGroupImportHandler(persistenceManager,  primaryOrg.getTenant(), importCatalog, summary.getAssetTypeGroupImportSummary());
-		importAssetTypeInspectionTypeRelations = new CatalogAssetTypeRelationshipsImportHandler(persistenceManager, primaryOrg, importCatalog, new AssetTypeScheduleSaver(), summary.getAssetTypeRelationshipsImportSummary());
+		importAssetTypeEventTypeRelations = new CatalogAssetTypeRelationshipsImportHandler(persistenceManager, primaryOrg, importCatalog, new AssetTypeScheduleSaver(), summary.getAssetTypeRelationshipsImportSummary());
 	}
 	
 	
@@ -57,12 +57,12 @@ public class ImportCatalogService {
 	private void importCatalog() throws ImportFailureException {
 		importAssetTypeGroup.setAssetTypeIds(importAssetTypeIds).importCatalog();
 		importAssetType.setAssetGroupMapping(importAssetTypeGroup.getImportMapping()).setImportAssetTypeIds(importAssetTypeIds).importCatalog();
-		importEventTypeGroup.setInspectionTypeIds(importEventTypeIds).importCatalog();
-		importStateSets.setInspectionTypeIds(importEventTypeIds).importCatalog();
-		importEventType.setOriginalInspectionTypeIds(importEventTypeIds).setImportedGroupMapping(importEventTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).importCatalog();
+		importEventTypeGroup.setEventTypeIds(importEventTypeIds).importCatalog();
+		importStateSets.setEventTypeIds(importEventTypeIds).importCatalog();
+		importEventType.setOriginalEventTypeIds(importEventTypeIds).setImportedGroupMapping(importEventTypeGroup.getImportMapping()).setImportedStateSetMapping(importStateSets.getImportMapping()).importCatalog();
 
 		if (importAllRelations) {
-			importAssetTypeInspectionTypeRelations.setImportedAssetTypeMapping(importAssetType.getImportedMap()).setImportedInspectionTypeMapping(importEventType.getImportMapping()).importCatalog();
+			importAssetTypeEventTypeRelations.setImportedAssetTypeMapping(importAssetType.getImportedMap()).setImportedEventTypeMapping(importEventType.getImportMapping()).importCatalog();
 		}
 	}
 
@@ -89,7 +89,7 @@ public class ImportCatalogService {
 	private void adjustWhatToImport() {
 		importAssetTypeIds.addAll(importAssetType.getAdditionalAssetTypes(importAssetTypeIds));
 		if (importAllRelations) {
-			importEventTypeIds.addAll(importAssetTypeInspectionTypeRelations.getAdditionalInspectionTypesForRelationships(importAssetTypeIds, importEventTypeIds));
+			importEventTypeIds.addAll(importAssetTypeEventTypeRelations.getAdditionalEventTypesForRelationships(importAssetTypeIds, importEventTypeIds));
 		}
 	}
 	

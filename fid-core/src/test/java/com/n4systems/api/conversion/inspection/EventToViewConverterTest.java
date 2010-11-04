@@ -22,13 +22,12 @@ import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 
-public class InspectionToViewConverterTest {
+public class EventToViewConverterTest {
 
 	@Test
 	public void to_view_copies_simple_fields() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-//			protected void convertDirectFields(Inspection model, InspectionView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
@@ -52,10 +51,9 @@ public class InspectionToViewConverterTest {
 	}
 	
 	@Test
-	public void to_view_copies_inspection_status() throws ConversionException {
+	public void to_view_copies_event_status() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
-//			protected void convertInspectionStatus(Inspection model, InspectionView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
@@ -76,8 +74,7 @@ public class InspectionToViewConverterTest {
 	public void to_view_copies_serialnumber_to_identifier() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
-//			protected void convertAssetIdentifier(Inspection model, InspectionView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
 			protected void convertBook(Event model, EventView view) {}
@@ -97,7 +94,7 @@ public class InspectionToViewConverterTest {
 	public void to_view_copies_performed_by_full_name() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
 			protected void convertBook(Event model, EventView view) {}
@@ -114,21 +111,20 @@ public class InspectionToViewConverterTest {
 	}
 	
 	@Test
-	public void to_view_copies_loads_next_inspection_date() throws ConversionException {
+	public void to_view_copies_loads_next_event_date() throws ConversionException {
 		Event model = new Event();
 		Date nextDate = new Date();
 		
 		NextEventDateByEventLoader loader = createMock(NextEventDateByEventLoader.class);
-		expect(loader.setInspection(model)).andReturn(loader);
+		expect(loader.setEvent(model)).andReturn(loader);
 		expect(loader.load()).andReturn(nextDate);
 		replay(loader);
 		
 		EventToViewConverter converter = new EventToViewConverter(loader) {
 			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
-//			protected void convertNextDate(Inspection model, InspectionView view) {}
 			protected void convertBook(Event model, EventView view) {}
 			protected void convertAssetStatus(Event model, EventView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
@@ -136,7 +132,7 @@ public class InspectionToViewConverterTest {
 		
 		EventView view = converter.toView(model);
 		
-		assertEquals(nextDate, view.getNextInspectionDate());
+		assertEquals(nextDate, view.getNextEventDate());
 		
 		verify(loader);
 	}
@@ -145,54 +141,51 @@ public class InspectionToViewConverterTest {
 	public void to_view_copies_book_name() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
-//			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertAssetStatus(Event model, EventView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
 		EventBook book = new EventBook();
-		book.setName("inspection book");
+		book.setName("event book");
 		
 		Event model = new Event();
 		model.setBook(book);
 		
 		EventView view = converter.toView(model);
 		
-		assertEquals(model.getBook().getName(), view.getInspectionBook());
+		assertEquals(model.getBook().getName(), view.getEventBook());
 	}
 	
 	@Test
 	public void to_view_allows_null_books() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
-//			protected void convertBook(Inspection model, InspectionView view) {}
 			protected void convertAssetStatus(Event model, EventView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
 		EventView view = converter.toView(new Event());
 		
-		assertNull(view.getInspectionBook());
+		assertNull(view.getEventBook());
 	}
 	
 	@Test
 	public void to_view_copies_asset_status_name() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
 			protected void convertBook(Event model, EventView view) {}
-//			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
@@ -211,12 +204,11 @@ public class InspectionToViewConverterTest {
 	public void to_view_allows_null_asset_status() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
 			protected void convertBook(Event model, EventView view) {}
-//			protected void convertAssetStatus(Inspection model, InspectionView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
@@ -229,13 +221,12 @@ public class InspectionToViewConverterTest {
 	public void to_view_copies_owner_fields() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertInspectionStatus(Event model, EventView view) {}
+			protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertAssetIdentifier(Event model, EventView view) {}
 			protected void converterPerformedBy(Event model, EventView view) {}
 			protected void convertNextDate(Event model, EventView view) {}
 			protected void convertBook(Event model, EventView view) {}
 			protected void convertAssetStatus(Event model, EventView view) {}
-//			protected void convertOwnerFields(BaseOrg owner, InspectionView view) {}
 		};
 		
 		BaseOrg org = OrgBuilder.aDivisionOrg().withName("division").withParent(

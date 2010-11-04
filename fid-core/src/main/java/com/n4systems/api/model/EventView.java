@@ -23,7 +23,7 @@ public class EventView extends ExternalModelView {
 	@ExportField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
 	private Object datePerformed;
 
-	@ExportField(title = "Inspection Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, EventStatusValidator.class })
+	@ExportField(title = "Event Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, EventStatusValidator.class })
 	private String status;
 
 	@ExportField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
@@ -32,8 +32,8 @@ public class EventView extends ExternalModelView {
 	@ExportField(title = "Performed By", order = 500, validators = { NotNullValidator.class, FullNameUserValidator.class })
 	private String performedBy;
 
-	@ExportField(title = "Inspection Book", order = 600)
-	private String inspectionBook;
+	@ExportField(title = "Event Book", order = 600)
+	private String eventBook;
 
 	@ExportField(title = "Printable (Y/N)", order = 700, validators = { YNValidator.class })
 	private String printable;
@@ -41,8 +41,8 @@ public class EventView extends ExternalModelView {
 	@ExportField(title = "Asset Status", order = 800, validators = { AssetStatusExistsValidator.class })
 	private String assetStatus;
 
-	@ExportField(title = "Next Inspection Date", order = 900, validators = { DateValidator.class })
-	private Object nextInspectionDate;
+	@ExportField(title = "Next Event Date", order = 900, validators = { DateValidator.class })
+	private Object nextEventDate;
 
 	@ExportField(title = "Location", order = 1000)
 	private String location;	
@@ -94,12 +94,12 @@ public class EventView extends ExternalModelView {
 		this.performedBy = performedBy;
 	}
 
-	public String getInspectionBook() {
-		return inspectionBook;
+	public String getEventBook() {
+		return eventBook;
 	}
 
-	public void setInspectionBook(String inspectionBook) {
-		this.inspectionBook = inspectionBook;
+	public void setEventBook(String eventBook) {
+		this.eventBook = eventBook;
 	}
 
 	public String getPrintable() {
@@ -129,21 +129,21 @@ public class EventView extends ExternalModelView {
 		this.assetStatus = assetStatus;
 	}
 
-	public Object getNextInspectionDate() {
-		return nextInspectionDate;
+	public Object getNextEventDate() {
+		return nextEventDate;
 	}
 
-	public Date getNextInspectionDateAsDate() {
-		if (nextInspectionDate == null) {
+	public Date getNextEventDateAsDate() {
+		if (nextEventDate == null) {
 			return null;
-		} else if (!(nextInspectionDate instanceof Date)) {
-			throw new ClassCastException("nextInspectionDate should have been instance of java.lang.Date but was " + nextInspectionDate.getClass().getName());
+		} else if (!(nextEventDate instanceof Date)) {
+			throw new ClassCastException("nextEventDate should have been instance of java.lang.Date but was " + nextEventDate.getClass().getName());
 		}
-		return (Date)nextInspectionDate;
+		return (Date) nextEventDate;
 	}
 	
-	public void setNextInspectionDate(Object nextInspectionDate) {
-		this.nextInspectionDate = nextInspectionDate;
+	public void setNextEventDate(Object nextEventDate) {
+		this.nextEventDate = nextEventDate;
 	}
 
 	public String getComments() {

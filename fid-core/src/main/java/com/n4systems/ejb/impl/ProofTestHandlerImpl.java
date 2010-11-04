@@ -81,13 +81,13 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	 */
 	
 	/*
-	 * XXX Lame alert: all of the createOrUpdateProofTest methods, return a Map<String, Inspection>.  This is a map of serial numbers processed from the file
-	 * to the inspections they created or updated (or null on failure).  This sucks 'cause really only the Roberts processor has the ability
+	 * XXX Lame alert: all of the createOrUpdateProofTest methods, return a Map<String, Event>.  This is a map of serial numbers processed from the file
+	 * to the events they created or updated (or null on failure).  This sucks 'cause really only the Roberts processor has the ability
 	 * to hold more then a single serial number per file and even then it's only the way in which CG uses it that makes it possible.
 	 * Basically what I'm saying is that constantly having to handle a proof test with multiple serials creates a lot of complexity for
 	 * something that only one customer uses and is really just a hack in the first place. =;<
 	 */
-	public Map<String, Event> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long inspectionBookId) throws FileProcessingException {
+	public Map<String, Event> multiProofTestUpload(File proofTestFile, ProofTestType type, Long tenantId, Long userId, Long ownerId, Long eventBookId) throws FileProcessingException {
 		FileDataContainer fileData = null;
 		
 		// first we need to process this proof test
@@ -103,20 +103,20 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		// now lets look up our beans
 		User user = persistenceManager.find(User.class, userId, tenantId);
 		BaseOrg customer = persistenceManager.find(BaseOrg.class, ownerId, tenantId);
-		EventBook book = persistenceManager.find(EventBook.class, inspectionBookId, tenantId);
+		EventBook book = persistenceManager.find(EventBook.class, eventBookId, tenantId);
 		
 		return createOrUpdateProofTest(fileData, user, customer, book, false);
 	}
 	
-	public Map<String, Event> inspectionServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException  {
+	public Map<String, Event> eventServiceUpload(FileDataContainer fileData, User performedBy) throws FileProcessingException  {
 		return createOrUpdateProofTest(fileData, performedBy, null, null, true);
 	}
 	
 	/*
-	 * @returns		A map of Serial Numbers to Inspections.  A null inspection means that processing failed for that Serial Number
+	 * @returns		A map of Serial Numbers to Events.  A null event means that processing failed for that Serial Number
 	 */
 	private Map<String, Event> createOrUpdateProofTest(FileDataContainer fileData, User performedBy, BaseOrg customer, EventBook book, boolean assetOverridesPerformedBy) throws FileProcessingException {
-		Map<String, Event> inspectionMap = new HashMap<String, Event>();
+		Map<String, Event> eventMap = new HashMap<String, Event>();
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
 		
@@ -157,14 +157,14 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				asset = findOrCreateAsset(primaryOrg, performedBy, serialNumber, customer, fileData);
 			} catch (NonUniqueAssetException e) {
 				writeLogMessage(tenant, "There are multiple Asset with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
-				inspectionMap.put(serialNumber, null);
+				eventMap.put(serialNumber, null);
 				continue;
 			}
 			
 			// if the asset is null, log it and move on to the next serial
 			if (asset == null) {
 				writeLogMessage(tenant, "Could not find/create Asset [" + serialNumber + "] referenced in file [" + fileData.getFileName() + "]", false, null);
-				inspectionMap.put(serialNumber, null);
+				eventMap.put(serialNumber, null);
 				continue;
 			}
 			
@@ -181,41 +181,41 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			Date datePerformedRangeStartInUTC = DateHelper.convertToUTC(DateHelper.getBeginingOfDay(datePerformed), performedBy.getTimeZone());
 			Date datePerformedRangeEndInUTC = DateHelper.convertToUTC(DateHelper.getEndOfDay(datePerformed), performedBy.getTimeZone());
 
-			// if we find an asset then it's time to try and find an inspection inside the same day as given.
+			// if we find an asset then it's time to try and find an event inside the same day as given.
 			events = eventManager.findEventsByDateAndAsset(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, asset, performedBy.getSecurityFilter());
 			
-			// now we need to find the inspection, supporting out ProofTestType, and does not already have a chart
+			// now we need to find the event, supporting out ProofTestType, and does not already have a chart
 			for (Event insp: events) {
 				if(insp.getType().supports(fileData.getFileType()) && !chartImageExists(insp)) {
-					// we have found our inspection, move on
+					// we have found our event, move on
 					event = insp;
 					break;
 				}
 			}
 			
-			// if we were unable to locate an inspection, then we'll need to create a new one
+			// if we were unable to locate an event, then we'll need to create a new one
 			if (event == null) {
 				event = createEvent(tenant, performedBy, customer, asset, book, datePerformedInUTC, fileData);
 			} else {
 				try {
-					// we have a valid inspection, now we can update it
+					// we have a valid event, now we can update it
 					eventManager.updateEvent(event, performedBy.getId(), fileData, null);
-					writeLogMessage(tenant, "Updated Inspection for Asset with serial [" + serialNumber + "] and date performed [" + event.getDate() + "]");
+					writeLogMessage(tenant, "Updated Event for Asset with serial [" + serialNumber + "] and date performed [" + event.getDate() + "]");
 				} catch(Exception e) {
-					// we don't want a failure in one inspection to cause the others to fail, so we will simply log these expections and move on
-					writeLogMessage(tenant, "Failed to update Inspection for Asset with serial [" + serialNumber + "] and date performed [" + event.getDate() + "]", false, e);
-					inspectionMap.put(serialNumber, null);
+					// we don't want a failure in one event to cause the others to fail, so we will simply log these expections and move on
+					writeLogMessage(tenant, "Failed to update Event for Asset with serial [" + serialNumber + "] and date performed [" + event.getDate() + "]", false, e);
+					eventMap.put(serialNumber, null);
 					continue;
 				}
 			}
 
-			// update our map with the serial and inspection
-			inspectionMap.put(serialNumber, event);
+			// update our map with the serial and event
+			eventMap.put(serialNumber, event);
 		}
 		
 		logger.info("Completed processing of file [" + fileData.getFileName() + "]");
 		
-		return inspectionMap;
+		return eventMap;
 	}
 	
 	private CustomerOrg findOrCreateCustomer(PrimaryOrg primaryOrg, User user, String customerName, boolean createCustomer) {
@@ -371,7 +371,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		if (owner != null) {
 			/*
 			 * if the assets owner is a division, we need to see if the resolved owner is the parent
-			 * of the assets owner.  If that is the case, we preserve the division from the asset on the inspection.
+			 * of the assets owner.  If that is the case, we preserve the division from the asset on the event.
 			 * In all other cases we will use the resolved owner directly.
 			 */
 			if (asset.getOwner().isDivision() && asset.getOwner().getParent().equals(owner)) {
@@ -394,10 +394,10 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		event.setComments(fileData.getComments());
 		event.setAdvancedLocation(asset.getAdvancedLocation());
 		
-		// find the first inspection that for this asset that supports our file type
+		// find the first event that for this asset that supports our file type
 		EventType inspType = findSupportedEventTypeForAsset(fileData.getFileType(), asset);
 		
-		// if we were unable to find an inspection type, we cannot continue.
+		// if we were unable to find an event type, we cannot continue.
 		if(inspType == null) {
 			writeLogMessage(tenant, "Unable to find EventType for AssetType: [" + asset.getType().getId() + "], Proof Test Type: [" + fileData.getFileType().name() + "]", false, null);
 			return null;
@@ -408,16 +408,16 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		
 		
-		// let's see if there are any inspection info fields that need to be set
+		// let's see if there are any event info fields that need to be set
 		String infoFieldName, infoOptionName, resolvedInfoField;
 		for(Map.Entry<String, String> optEntry: fileData.getExtraInfo().entrySet()) {
 			infoFieldName = optEntry.getKey();
 			infoOptionName = optEntry.getValue();
 			
-			// see if our inspection type supports this info field
+			// see if our event type supports this info field
 			resolvedInfoField = FuzzyResolver.resolveString(infoFieldName, event.getType().getInfoFieldNames(), false);
 			
-			// if we've found one, let's update the inspection
+			// if we've found one, let's update the event
 			if(resolvedInfoField != null) {
 				event.getInfoOptionMap().put(resolvedInfoField, infoOptionName);
 			}
@@ -430,10 +430,10 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 					new CreateEventParameterBuilder(event,performedBy.getId())
 					.withProofTestFile(fileData).build());
 			
-			writeLogMessage(tenant, "Created Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]");
+			writeLogMessage(tenant, "Created Event for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]");
 		} catch(Exception e) {
-			// we failed to create an inspection, log the failure
-			writeLogMessage(tenant, "Failed to create Inspection for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]", false, e);
+			// we failed to create an event, log the failure
+			writeLogMessage(tenant, "Failed to create Event for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]", false, e);
 			return null;
 		}
 		
@@ -443,7 +443,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	private EventType findSupportedEventTypeForAsset(ProofTestType proofTestType, Asset asset) {
 		EventType type = null;
 		
-		// here we simply find the first inspection type that supports this asset type and proof test type
+		// here we simply find the first event type that supports this asset type and proof test type
 		for(EventType inspType: asset.getType().getEventTypes()) {
 			if(inspType.supports(proofTestType)) {
 				type = inspType;

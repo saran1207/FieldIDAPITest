@@ -60,7 +60,7 @@ public class AssetTypeLoader extends TenantFilteredLoader<AssetType> {
 	}	
 	
 	public AssetTypeLoader setStandardPostFetches() {
-		return setPostFetchFields("infoFields", "inspectionTypes", "attachments", "subTypes");
+		return setPostFetchFields("infoFields", "eventTypes", "attachments", "subTypes");
 	}
 	
 	

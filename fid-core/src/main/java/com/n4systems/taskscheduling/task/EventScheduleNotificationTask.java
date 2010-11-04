@@ -36,7 +36,7 @@ public class EventScheduleNotificationTask extends ScheduledTask {
 
 	@Override
     protected void runTask() throws Exception {
-		logger.info("Starting Inspection Schedule Notification Task");
+		logger.info("Starting Event Schedule Notification Task");
 		
 		AllEntityListLoader<NotificationSetting> loader = new AllEntityListLoader<NotificationSetting>(NotificationSetting.class);
 		
@@ -47,7 +47,7 @@ public class EventScheduleNotificationTask extends ScheduledTask {
 				PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(setting.getTenant().getId());
 				SecurityFilter settingUserFilter = new UserSecurityFilter(setting.getUser());
 				
-				logger.info(LogUtils.prepare("Generating inspection schedule report for Tenant [$0], Name [$1], User [$2]",	setting.getTenant(), setting.getName(), setting.getUser().getUserID()));
+				logger.info(LogUtils.prepare("Generating event schedule report for Tenant [$0], Name [$1], User [$2]",	setting.getTenant(), setting.getName(), setting.getUser().getUserID()));
 				
 				new EventScheduleCountGenerator(new SimpleDateFormat(primaryOrg.getDateFormat()), new UpcomingEventScheduleCountListLoader(settingUserFilter), new OverdueEventScheduleCountListLoader(settingUserFilter), ServiceLocator.getMailManager()).sendReport(setting, clock);
 				
@@ -56,7 +56,7 @@ public class EventScheduleNotificationTask extends ScheduledTask {
 			}
 		}
 		
-		logger.info("Completed Inspection Schedule Notification Task");
+		logger.info("Completed Event Schedule Notification Task");
     }
 	
 	

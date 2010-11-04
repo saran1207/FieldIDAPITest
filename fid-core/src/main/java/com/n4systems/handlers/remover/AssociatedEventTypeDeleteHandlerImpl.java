@@ -36,19 +36,19 @@ public class AssociatedEventTypeDeleteHandlerImpl implements AssociatedEventType
 		setTransaction(transaction);
 		
 		deleteNonCompleteSchedules();
-		deleteInspectionFrequencies();
-		deleteAssociatedInspectionType();
+		deleteEventFrequencies();
+		deleteAssociatedEventType();
 		
 		clearTransaction();
 	}
 
 
-	private void deleteAssociatedInspectionType() {
+	private void deleteAssociatedEventType() {
 		associatedEventTypeSaver.remove(transaction, associatedEventType);
 	}
 
 
-	private void deleteInspectionFrequencies() {
+	private void deleteEventFrequencies() {
 		eventFrequencyHandler.forAssociatedEventType(associatedEventType).remove(transaction);
 	}
 

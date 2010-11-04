@@ -259,7 +259,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					changeTarget.setOwner(eventChanges.getOwner());
 				}
 				
-				if (updateKey.equals("inspectionBook")) {
+				if (updateKey.equals("eventBook")) {
 					changeTarget.setBook(eventChanges.getBook());
 				}
 
@@ -281,14 +281,14 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 			
 		if (ownershipChanged) {
-			updateCompletedInspectionOwnership(ids, eventChanges, fieldMap);
+			updateCompletedEventOwnership(ids, eventChanges, fieldMap);
 		}
 
 		return new Long(ids.size());
 	}
 
-	private void updateCompletedInspectionOwnership(List<Long> ids, Event event, Map<String, Boolean> fieldMap) throws UpdateFailureException {
-		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "inspections", "inspection.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
+	private void updateCompletedEventOwnership(List<Long> ids, Event event, Map<String, Boolean> fieldMap) throws UpdateFailureException {
+		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "events", "event.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
 		
 		Map<String, Boolean> selectedAttributes = getOwnershipSelectedAttributes(fieldMap);
 		
@@ -364,16 +364,16 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		int page = 1;
 		int pageSize = 100;
 
-		Pager<Event> inspections = null;
+		Pager<Event> events = null;
 
 		do {
-			inspections = persistenceManager.findAllPaged(query, page, pageSize);
-			for (Event event : inspections.getList()) {
+			events = persistenceManager.findAllPaged(query, page, pageSize);
+			for (Event event : events.getList()) {
 				EventSchedule schedule = new EventSchedule(event);
 				new EventScheduleServiceImpl(persistenceManager).createSchedule(schedule);
 			}
 			page++;
-		} while (inspections.isHasNextPage());
+		} while (events.isHasNextPage());
 
 		QueryBuilder<Long> scheduleQuery = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		scheduleQuery.setSimpleSelect("id");
@@ -384,10 +384,5 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			return null;
 		}
 	}
-
-	
-
-	
-
 
 }

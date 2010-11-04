@@ -9,7 +9,7 @@ public class SavedReportAssignedToTrimmer {
 		List<SavedReport> savedReportsToRemove = new ArrayList<SavedReport>();
 		if (savedReports != null) {
 			for (SavedReport report : savedReports) {
-				if (report.getColumns().contains("inspection_search_assignedto") || report.getCriteria().containsKey("assignedUser")) {
+				if (report.getColumns().contains("event_search_assignedto") || report.getCriteria().containsKey("assignedUser")) {
 					savedReportsToRemove.add(report);
 				}
 			}

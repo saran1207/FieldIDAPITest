@@ -89,14 +89,14 @@ public class CatalogImportTask implements Runnable {
 			} else {
 				body += "Auto attributes for asset type  " + summary.getAssetTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
 			}
-		} else if (summary.getInspectionTypeImportSummary().failed()) {
-			body += "Event Type  " + summary.getInspectionTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
-		} else if (summary.getInspectionTypeGroupImportSummary().failed()) {
-			body += "Event Type Group " + summary.getInspectionTypeGroupImportSummary().getFailedImporting() + " could not be correctly imported.";
+		} else if (summary.getEventTypeImportSummary().failed()) {
+			body += "Event Type  " + summary.getEventTypeImportSummary().getFailedImporting() + " could not be correctly imported.";
+		} else if (summary.getEventTypeGroupImportSummary().failed()) {
+			body += "Event Type Group " + summary.getEventTypeGroupImportSummary().getFailedImporting() + " could not be correctly imported.";
 		} else if (summary.getStateSetImportSummary().failed()) {
 			body += "Button Group " + summary.getStateSetImportSummary().getFailedImporting() + " could not be correctly imported.";
 		} else if (summary.getAssetTypeRelationshipsImportSummary().failed()) {
-			body += "Could not set up the relationships to inspection types for asset type " + summary.getAssetTypeRelationshipsImportSummary().getFailedImporting();
+			body += "Could not set up the relationships to event types for asset type " + summary.getAssetTypeRelationshipsImportSummary().getFailedImporting();
 		}
 		 
 		return body + "</p><p>The rest of import has been undone.  You can attempt the import again, if the problem persists contact FieldID support by sending an email to support@fieldid.com</p>";
@@ -107,7 +107,7 @@ public class CatalogImportTask implements Runnable {
 		body += "<table>" +
 					"<tr><td>" + importCatalogService.getSummary().getAssetTypeImportSummary().getImportMapping().size() + "</td>" +
 					"<td>Asset Type(s) have been imported.</td></tr>" +
-					"<tr><td>" + importCatalogService.getSummary().getInspectionTypeImportSummary().numberImported() + "</td>" +
+					"<tr><td>" + importCatalogService.getSummary().getEventTypeImportSummary().numberImported() + "</td>" +
 					"<td>Event Type(s) have been imported.</td></tr>" +
 				"</table>";
 		return body;

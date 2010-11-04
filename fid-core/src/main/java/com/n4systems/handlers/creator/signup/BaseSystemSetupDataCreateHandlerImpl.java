@@ -43,7 +43,7 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 
 		createDefaultTagOptions(transaction);
 		createDefaultAssetType(transaction);
-		createDefaultInspectionTypeGroups(transaction);
+		createDefaultEventTypeGroups(transaction);
 		createDefaultStateSets(transaction);
 		createDefaultAssetStatuses(transaction);
 	}
@@ -81,11 +81,11 @@ public class BaseSystemSetupDataCreateHandlerImpl implements BaseSystemSetupData
 		assetTypeSaver.save(transaction, assetType);
 	}
 
-	private void createDefaultInspectionTypeGroups(Transaction transaction) {
-		eventTypeGroupSaver.save(transaction, createVisualInspection());
+	private void createDefaultEventTypeGroups(Transaction transaction) {
+		eventTypeGroupSaver.save(transaction, createVisualInspectionTypeGroup());
 	}
 
-	private EventTypeGroup createVisualInspection() {
+	private EventTypeGroup createVisualInspectionTypeGroup() {
 		EventTypeGroup visualEvent = new EventTypeGroup();
 		visualEvent.setName("Visual Inspection");
 		visualEvent.setReportTitle("Visual Inspection");

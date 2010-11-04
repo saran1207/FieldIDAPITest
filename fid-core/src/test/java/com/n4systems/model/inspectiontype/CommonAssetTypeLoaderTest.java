@@ -71,7 +71,7 @@ public class CommonAssetTypeLoaderTest {
 	
 	
 	@Test
-	public void should_post_fetch_associated_inspection_types() throws Exception {
+	public void should_post_fetch_associated_event_types() throws Exception {
 		CommonAssetTypeLoaderExtension sut = new CommonAssetTypeLoaderExtension(null,  new ConfigContextOverridableTestDouble());
 		sut.forAssets(ImmutableList.of(1L));
 		sut.load(new TestingTransaction());

@@ -5,22 +5,22 @@ import java.util.Date;
 import com.n4systems.model.orgs.BaseOrg;
 
 public class EventScheduleCount implements Comparable<EventScheduleCount> {
-	private Date nextInspectionDate;
+	private Date nextEventDate;
 	private BaseOrg owner;
 	private String assetTypeName;
-	private String inspectionTypeName;
-	private long inspectionCount;
+	private String eventTypeName;
+	private long eventCount;
 	
-	public EventScheduleCount(Date nextInspectionDate, BaseOrg owner, String assetTypeName, String inspectionTypeName, long inspectionCount) {
-		this.nextInspectionDate = nextInspectionDate;
+	public EventScheduleCount(Date nextEventDate, BaseOrg owner, String assetTypeName, String eventTypeName, long eventCount) {
+		this.nextEventDate = nextEventDate;
 		this.owner = owner;
 		this.assetTypeName = assetTypeName;
-		this.inspectionTypeName = inspectionTypeName;
-		this.inspectionCount = inspectionCount;
+		this.eventTypeName = eventTypeName;
+		this.eventCount = eventCount;
 	}
 
-	public Date getNextInspectionDate() {
-    	return nextInspectionDate;
+	public Date getNextEventDate() {
+    	return nextEventDate;
     }
 
 	public String getOrganizationName() {
@@ -39,16 +39,16 @@ public class EventScheduleCount implements Comparable<EventScheduleCount> {
     	return assetTypeName;
     }
 
-	public String getInspectionTypeName() {
-    	return inspectionTypeName;
+	public String getEventTypeName() {
+    	return eventTypeName;
     }
 
-	public long getInspectionCount() {
-    	return inspectionCount;
+	public long getEventCount() {
+    	return eventCount;
     }
 
 	public int compareTo(EventScheduleCount other) {
-		int comp = getNextInspectionDate().compareTo(other.getNextInspectionDate());
+		int comp = getNextEventDate().compareTo(other.getNextEventDate());
 		
 		if (comp == 0) {
 			comp = getOrganizationName().compareTo(other.getOrganizationName());
@@ -63,7 +63,7 @@ public class EventScheduleCount implements Comparable<EventScheduleCount> {
 			comp = getAssetTypeName().compareTo(other.getAssetTypeName());
 		}
 		if (comp == 0) {
-			comp = getInspectionTypeName().compareTo(other.getInspectionTypeName());
+			comp = getEventTypeName().compareTo(other.getEventTypeName());
 		}
 		
 		return comp;
