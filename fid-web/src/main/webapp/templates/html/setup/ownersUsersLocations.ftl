@@ -28,7 +28,7 @@ ${action.setPageType('setup','ownersUsersLocations')!}
 				<h1><a href="<@s.url action="userRequestList"/>" ><@s.text name="title.manage_user_registrations.plural" /></a></h1>
 				<p>
 					<@s.text name='label.manage_user_registrations_msg'>
-						<@s.param><@s.text name='label.customers'/></@s.param>
+						<@s.param><@s.text name='label.customer'/></@s.param>
 					</@s.text> 
 				</p>
 			</div>
