@@ -5,7 +5,6 @@
 
 ${action.setPageType('my_account', 'details')!}
 <@s.form id="accountDetails" action="myAccountUpdate" cssClass="fullForm contentBlock" theme="fieldid">
-	<h2 class="sectionTitle"><@s.text name="label.accountdetails"/></h2>
 	<#include "../common/_formErrors.ftl"/>
 	<div class="multiColumn fluidSets">
 			<div class="infoSet infoBlock">

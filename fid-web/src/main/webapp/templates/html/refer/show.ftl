@@ -3,8 +3,6 @@
 </head>
 ${action.setPageType('my_account', 'refer')!}
 
-<h2 id="referralTitle" class="sectionTitle"><@s.text name="label.refer_fieldid"/></h2>
-
 <div id="referralsTop">
 	<div id="referralInstructions">
 		<p><@s.text name="label.referral_text"/></p>

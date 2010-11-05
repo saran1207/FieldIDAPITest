@@ -6,8 +6,6 @@ ${action.setPageType('my_account', 'downloads')!}
 	</#if>
 </head>
 
-<h2 class="sectionTitle"><@s.text name="label.downloads_exports"/></h2>
-
 <#if !downloads.empty>
 	<table class="list">
 		<tr>

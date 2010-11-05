@@ -34,6 +34,9 @@ form.largeForm {
 	float: none;
 }
 
+.sectionContent{
+	border: none;
+}
 
 #emailAddresses {
 	width: 830px;
