@@ -57,10 +57,15 @@ h2,h2.oldHeader {
 	font-size: 1.2em;
 	padding: 5px 15px;
 	line-height: 21px;
+	background-color: #EEEEEE;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
 }
 
 h2.clean {
 	padding: 0;
+	border: none;
+	background-color: transparent;
 }
 
 h2 a {
@@ -1065,7 +1070,6 @@ li.buttonGroupLabels {
 
 .crudForm h2 {
 	margin: 5px 0px;
-	background-color: #D0DAFD;
 }
 
 .largeForm {
@@ -1298,9 +1302,6 @@ li.buttonGroupLabels {
 	margin: 5px 0;
 }
 
-.pageSection h2 {
-	background-color: #D0DAFA;
-}
 
 .searchPageSection h2{
 	background-color: #EEEEEE;
@@ -1744,4 +1745,12 @@ input.description {
 
 #savedReportCreate_name{
 	padding:3px;
+}
+
+#updatePassword, #updateSecurityCard{
+	padding-top: 10px;
+}
+
+#organizationUpdate .sectionContent, #organizationUpdate .formAction{
+	border-top: none;
 }

@@ -214,6 +214,10 @@ em {
 	overflow:hidden;
 }
 
+.fluidSets .borderLess{
+	border-style: none;
+}
+
 .limitWarning {
 	padding: 10px;
 	text-align: center;

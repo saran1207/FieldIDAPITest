@@ -2,7 +2,7 @@
 	<@n4.includeStyle type="page" href="importExport"/>
 </head>
 
-<h2 class="sectionTitle largeText"><@s.text name="label.import_export" /></h2>
+<h2 class="largeText"><@s.text name="label.import_export" /></h2>
 
 <div id="leftBox">
 	<p><@s.text name="label.import_export.desc.${labelTarget}" /></p>
