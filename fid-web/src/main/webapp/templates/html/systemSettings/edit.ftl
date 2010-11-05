@@ -43,7 +43,7 @@ ${action.setPageType('account_settings', 'list')!}
 				<@s.select name="dateFormat" list="dateFormats" listKey="id" listValue="name"/>
 			</div>
 		<div class="formAction">
-			<@s.submit key="label.save"/> <@s.text name="label.or"/> <a href="<@s.url action="setup"/>"><@s.text name="label.cancel"/></a>
+			<@s.submit key="label.save"/> <@s.text name="label.or"/> <a href="<@s.url action="settings"/>"><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 </div>

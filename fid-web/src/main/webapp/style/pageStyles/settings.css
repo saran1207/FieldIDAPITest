@@ -108,3 +108,14 @@
 	border: 1px solid black;
 	font-family: "courier";
 }
+
+fieldset {
+	border: 1px solid black;
+	padding: 3px;
+	font-size: 13px;
+}
+fieldset legend {
+	padding: 6px;
+	font-weight: bold;
+	font-size: 14px;
+}
