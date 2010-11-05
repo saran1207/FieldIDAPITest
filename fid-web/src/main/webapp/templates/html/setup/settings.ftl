@@ -17,10 +17,12 @@ ${action.setPageType('setup','settings')!}
 			<p><@s.text name="label.manage_system_settings_msg" /></p>
 		</div>
 	
-		<div class="setupOption branding">
-			<h1><a href="<@s.url action="branding"/>" ><@s.text name="title.manage_branding.plural" /></a></h1>
-			<p><@s.text name="label.manage_branding_msg" /></p>
-		</div>
+		<#if securityGuard.brandingEnabled>
+			<div class="setupOption branding">
+				<h1><a href="<@s.url action="branding"/>" ><@s.text name="title.manage_branding.plural" /></a></h1>
+				<p><@s.text name="label.manage_branding_msg" /></p>
+			</div>
+		</#if>
 	
 		<div class="setupOption fieldIdPlan">
 			<h1><a href="<@s.url action="yourPlan"/>" ><@s.text name="title.manage_field_id_plan.plural" /></a></h1>
