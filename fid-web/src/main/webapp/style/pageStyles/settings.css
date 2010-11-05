@@ -65,6 +65,13 @@
 .assetCodeMapping{
 	background-image: url(../../images/templates-product-code-mappings-icon.png);
 }
+.signIn {
+		background-image: url(../../images/widgets-portal-url.png);
+}
+
+.embeddedCode {
+		background-image: url(../../images/widgets-embedded.png);
+}
 
 .setupList{
 	margin-bottom: 30px;
@@ -93,4 +100,11 @@
 
 .setupOption a{
 	color: black;
+}
+
+.widget {
+	margin-top: 10px;
+	padding: 10px;
+	border: 1px solid black;
+	font-family: "courier";
 }
