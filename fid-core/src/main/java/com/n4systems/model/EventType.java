@@ -61,10 +61,12 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@IndexColumn(name="orderidx")
+    @JoinTable(name="eventtypes_criteriasections", joinColumns = {@JoinColumn(name="inspectiontypes_id")})
 	private List<CriteriaSection> sections = new ArrayList<CriteriaSection>();
 	
 	@CollectionOfElements(fetch= FetchType.LAZY)
 	@Enumerated(EnumType.STRING)
+    @JoinTable(name="eventtypes_supportedprooftests", joinColumns = {@JoinColumn(name="inspectiontypes_id")})
 	private Set<ProofTestType> supportedProofTests = new HashSet<ProofTestType>();
 	
 	@CollectionOfElements(fetch= FetchType.LAZY)
