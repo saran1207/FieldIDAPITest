@@ -8,7 +8,7 @@
 	<@s.form action="step2Complete" cssClass="fullForm  borderedSets" theme="fieldid">	
 		<#include "../common/_formErrors.ftl"/>
 		<div class="prominent">
-			<#include "../systemSettings/_settings.ftl"/>
+			<#include "../systemSettings/edit.ftl"/>
 			
 			
 			<div class="actions">
