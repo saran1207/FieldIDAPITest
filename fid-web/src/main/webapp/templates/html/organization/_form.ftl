@@ -40,7 +40,7 @@
 			<@s.textfield name="displayName"/>
 		</div>
 		<div class="infoSet">
-			<label><@s.text name="label.name_on_cert"/></label>
+			<label><@s.text name="label.name_on_pdf_reports"/></label>
 			<@s.textfield name="certificateName"/>
 		</div>
 		
@@ -103,10 +103,10 @@
 
 
 <div class="pageSection" >
-	<h2><@s.text name="label.cert_image"/></h2>
+	<h2><@s.text name="label.pdf_report_image"/></h2>
 	<div class="sectionContent">
 		<div class="infoSet">
-			<label><@s.text name="label.cert_image"/></label> 
+			<label><@s.text name="label.pdf_report_image"/></label> 
 			<span id="imageUploadField"  >
 				
 				<#if !certImageDirectory?exists || certImageDirectory.length() == 0  || removeImage >

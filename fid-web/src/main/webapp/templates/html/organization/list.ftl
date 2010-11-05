@@ -11,7 +11,7 @@ ${action.setPageType('organization','list')!}
 			<span class="fieldHolder">${primaryOrg.name?html}</span>
 		</div>
 		<div class="infoSet infoBlock borderLess">
-			<label for="name" class="label"><@s.text name="label.name_on_cert"/></label>
+			<label for="name" class="label"><@s.text name="label.name_on_pdf_reports"/></label>
 			<span class="fieldHolder">
 				${primaryOrg.certificateName?html}	
 			</span>
