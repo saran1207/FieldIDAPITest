@@ -1,14 +1,13 @@
 .setupWizardContent {
 	width:680px;
-	margin:20px 0px;
-	padding-left: 70px;
+	margin:20px;
 }
 
 #pageContent #steps{
 	display: block;
 	clear:both;
 	float: left;
-	}
+}
 
 #setupWizardComplete {
 	background: no-repeat url(../../images/small-check.png);
@@ -34,7 +33,6 @@
 	margin:10px 0;
 	padding-left:35px;
 	min-height:36px;
-	
 } 
 
 #setupMobile {
@@ -65,32 +63,57 @@
 	padding-left:55px;
 	line-height:50px;
 	background-repeat: no-repeat;
-	
-} 
+}
+.quickSetupHeader h2{
+	color: #34849C;
+}
+
+.quickSetupHeader h2, #setupWizardStart h2{
+	font-size: 14pt;
+	padding: 5px;
+}
 
 #companyProfile {
 	background-image: url(../../images/company_profile.png);
 }
 
-#systemSettings {
-	background-image:  url(../../images/system_settings.png);
+.quickSetupHeader {
+	background-image: url(../../images/system_settings.png);
+	background-repeat: no-repeat;
+	background-position: left 10px;
+	padding: 15px 0 0 50px;
+	height: 50px;
+	margin-top: 10px;
+	margin-left: 20px;
 }
 
 #importCatalogs {
 	background-image:  url(../../images/catalog.png);
 }
+
 #startButton {
 	font-size:1.5em;
-	
+}
+
+.setupContainer{
+	background-color: #eee;	
+}
+
+.setupWizardContent{
+	background-color: white;
+    border: 1px solid #e3e3e3;
+    padding: 20px;
+    width: auto;
 }
 
 .setupWizardContent p {
-	margin-top:10px
+	margin-top:10px;
+	font-size: 15px;
+	line-height: 20px;
 }
 
 #safetyNetworkConnections {
 	margin-top: 10px;
-	
 }
 #safetyNetworkConnections td {
 	padding:10px 8px;
@@ -100,4 +123,17 @@
 .actions {
 	border-top-color:#999;
 	margin:0;
+}
+
+#contentHeader,  #pageNavigation, #pageActions{
+	display: none;
+}
+
+#pageHeader{
+	margin-top: 15px;
+	border-bottom: 1px solid #999999;
+}
+
+.prominent{
+	padding: 20px;
 }
