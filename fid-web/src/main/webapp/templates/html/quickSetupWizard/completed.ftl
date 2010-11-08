@@ -26,7 +26,7 @@
 			</li>
 		</#if>
 		<li id="furtherAccountSetup">
-			<a href="<@s.url namespace="/"  action="setup"/>"><@s.text name="label.further_customize_your_account_setup"/></a><br/>
+			<a href="<@s.url namespace="/"  action="settings"/>"><@s.text name="label.further_customize_your_account_setup"/></a><br/>
 			<span><@s.text name="label.further_customize_your_account_setup.description"/></span>
 		</li>
 		<li id="visitHelp">
