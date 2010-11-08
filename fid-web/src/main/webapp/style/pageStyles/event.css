@@ -391,6 +391,7 @@
 	width:500px;
 	border:solid 3px #999;
 	background-color:#fff;
+	z-index: 1;
 }
 
 .eventSchedule {

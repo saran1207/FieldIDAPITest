@@ -154,7 +154,7 @@
 		
 	</div>
 	<#if user.new>
-		<h2 class="header"><label for="welcomeMessage.sendEmail"><@s.text name="label.send_welcome_email"/></label> <@s.checkbox name="welcomeMessage.sendEmail" id="sendEmail" theme="simple"/></h2>
+		<h2 class="decoratedHeader"><label for="welcomeMessage.sendEmail"><@s.text name="label.send_welcome_email"/></label> <@s.checkbox name="welcomeMessage.sendEmail" id="sendEmail" theme="simple"/></h2>
 		<div class="infoSet" id="personalMessage">
 			<label class="label" for="welcomeMessage.presonalMessage"><@s.text name="label.personal_message"/>  <@s.text name="label.optional"/></label>
 			<@s.textarea name="welcomeMessage.personalMessage"/>

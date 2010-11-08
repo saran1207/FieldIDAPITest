@@ -59,6 +59,12 @@ h2,h2.oldHeader {
 	line-height: 21px;
 }
 
+h2.decoratedHeader{
+	background-color: #EEEEEE;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+}
+
 h2.clean {
 	padding: 0;
 	border: none;
@@ -1086,7 +1092,7 @@ li.buttonGroupLabels {
 .crudForm p {
 	overflow: hidden;
 	padding: 5px 0px;
-	border-top: 1px solid #D0DAFD;
+	border-bottom: 1px solid #E2E2E2;
 }
 
 .crudForm p label {
