@@ -29,7 +29,7 @@ ${action.setPageType('setup','import')!}
 		<p><@s.text name="label.import_owners_msg" /></p>
 		<@s.url id="importCustomers" action="customerImportExport"/>
 		<div class="importAction">
-			<input type="submit" value="<@s.text name="label.start_import"/>"onclick="return redirect('${importCustomers}');"/></p>
+			<input type="submit" value="<@s.text name="label.start_import"/>"onclick="return redirect('${importCustomers}');"/>
 		</div>
 	</fieldset>
 	
