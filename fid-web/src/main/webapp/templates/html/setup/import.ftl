@@ -38,8 +38,12 @@ ${action.setPageType('setup','import')!}
 		<p><@s.text name="label.import_assets_msg" /></p>
 		
 		<div class="importAction">
-			<@s.select id="assetType" list="assetTypes" listValue="name" listKey="id" />
-			<input type="submit" value="<@s.text name="label.start_import" />" onclick="return redirectImportLink(importAssets, '?assetTypeId=', $('assetType').getValue());"/>
+			<#if assetTypes.isEmpty()>				
+				<a href='<@s.url action="assetTypeEdit" />'><@s.text name="label.import_assets_empty" /></a>
+			<#else>
+				<@s.select id="assetType" list="assetTypes" listValue="name" listKey="id" />
+				<input type="submit" value="<@s.text name="label.start_import" />" onclick="return redirectImportLink(importAssets, '?assetTypeId=', $('assetType').getValue());"/>
+			</#if>
 		</div>
 	</fieldset>
 	
@@ -48,8 +52,12 @@ ${action.setPageType('setup','import')!}
 		<p><@s.text name="label.import_events_msg" /></p>
 
 		<div class="importAction">
-			<@s.select id="eventType" list="EventTypes" listValue="name" listKey="id" />
-			<input type="submit" value="<@s.text name="label.start_import" />" onclick="return redirectImportLink(importEvents, '?uniqueID=', $('eventType').getValue());"/>
+			<#if eventTypes.isEmpty()>
+				<a href='<@s.url action="eventTypeAdd" />'><@s.text name="label.import_events_empty" /></a>
+			<#else>
+				<@s.select id="eventType" list="eventTypes" listValue="name" listKey="id" />
+				<input type="submit" value="<@s.text name="label.start_import" />" onclick="return redirectImportLink(importEvents, '?uniqueID=', $('eventType').getValue());"/>
+			</#if>
 		</div>
 	</fieldset>
 	
@@ -58,8 +66,12 @@ ${action.setPageType('setup','import')!}
 		<p><@s.text name="label.import_auto_attributes_msg" /></p>
 
 		<div class="importAction">
-			<@s.select id="attributeType" list="attributeTypes" listValue="name" listKey="autoAttributeCriteria.id" />
-			<input type="submit" value="<@s.text name="label.start_import" />" onclick="return redirectImportLink(importAutoAttributes, '?criteriaId=', $('attributeType').getValue());"/>
+			<#if attributeTypes.isEmpty()>
+				<a href='<@s.url action="autoAttributeCriteriaList" />'><@s.text name="label.import_auto_attributes_empty" /></a>
+			<#else>
+				<@s.select id="attributeType" list="attributeTypes" listValue="name" listKey="autoAttributeCriteria.id" />
+				<input type="submit" value="<@s.text name="label.start_import" />" onclick="return redirectImportLink(importAutoAttributes, '?criteriaId=', $('attributeType').getValue());"/>
+			</#if>
 		</div>
 	</fieldset>
 
