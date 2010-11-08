@@ -14,6 +14,7 @@ import javax.activation.FileTypeMap;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAssetType;
+import com.n4systems.fieldid.validators.HasAssetDescriptionTemplateValidator;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.utils.CleanAssetTypeFactory;
@@ -34,7 +35,6 @@ import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.fieldid.validators.HasProductDescriptionTemplateValidator;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.reporting.PathHandler;
@@ -52,7 +52,7 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 @Validation
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValueValidator,
-		HasProductDescriptionTemplateValidator {
+        HasAssetDescriptionTemplateValidator {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AssetTypeCrud.class);
 
@@ -177,7 +177,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 
 	private void testForAssetType() {
 		if (assetType == null) {
-			addActionErrorText("error.noproducttype");
+			addActionErrorText("error.noassettype");
 			throw new MissingEntityException();
 		}
 	}
@@ -393,7 +393,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 		return assetType.getDescriptionTemplate();
 	}
 
-	@CustomValidator(type = "productDescriptionTemplate", message = "", key = "errors.infofieldnamenotblank")
+	@CustomValidator(type = "assetDescriptionTemplate", message = "", key = "errors.infofieldnamenotblank")
 	public void setDescriptionTemplate(String descriptionTemplate) {
 		assetType.setDescriptionTemplate(descriptionTemplate);
 	}

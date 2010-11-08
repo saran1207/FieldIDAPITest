@@ -80,7 +80,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private static Logger logger = Logger.getLogger(EventCrud.class);
 
 	private final EventManager eventManager;
-	private final LegacyAsset legacyProductManager;
+	private final LegacyAsset legacyAssetManager;
 	private final UserManager userManager;
 	protected final AssetManager assetManager;
 	private final EventScheduleManager eventScheduleManager;
@@ -128,11 +128,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private User assignedTo;
 	private boolean assignToSomeone = false;
 	
-	public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyProductManager,
+	public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.eventManager = eventManager;
-		this.legacyProductManager = legacyProductManager;
+		this.legacyAssetManager = legacyAssetManager;
 		this.userManager = userManager;
 		this.assetManager = assetManager;
 		this.eventHelper = new EventHelper(persistenceManager);
@@ -152,7 +152,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		try {
 			if (allowNetworkResults) {
 				
-				// if we're in a vendor context we need to look events for assigned products rather than registered products
+				// if we're in a vendor context we need to look events for assigned assets rather than registered assets
 				event = getLoaderFactory().createSafetyNetworkEventLoader(isInVendorContext()).setId(uniqueId).load();
 				
 			} else {
@@ -663,7 +663,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		if (assetStatus == null) {
 			event.setAssetStatus(null);
 		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getUniqueID())) {
-			event.setAssetStatus(legacyProductManager.findAssetStatus(assetStatus, getTenantId()));
+			event.setAssetStatus(legacyAssetManager.findAssetStatus(assetStatus, getTenantId()));
 		}
 	}
 

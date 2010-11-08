@@ -12,7 +12,7 @@ public class AssetLinkedHelper {
 			return true;
 		}
 		
-		// this checks if there are any products linked to this asset
+		// this checks if there are any assets linked to this asset
 		HasLinkedAssetsLoader hasLinkedLoader = loaderFactory.createHasLinkedAssetsLoader();
 		hasLinkedLoader.setNetworkId(asset.getNetworkId());
 		hasLinkedLoader.setAssetId(asset.getId());

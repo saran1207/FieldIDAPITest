@@ -44,7 +44,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 	
 	@Override
 	protected void postInit() {
-		setNetworkProduct(true);
+		setNetworkAsset(true);
 		super.postInit();
 	}
 

@@ -38,7 +38,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	private Long subAssetIndex;
 	protected List<SubAssetHelper> subAssets;
 	protected SubAssetHelper subAsset;
-	protected LegacyAsset productManager;
+	protected LegacyAsset assetManager;
 
 	private AllEventHelper allEventHelper;
 	
@@ -48,9 +48,9 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	
 	private List<Long> indexes = new ArrayList<Long>();
 
-	public SubAssetCrud(PersistenceManager persistenceManager, LegacyAsset productManager) {
+	public SubAssetCrud(PersistenceManager persistenceManager, LegacyAsset assetManager) {
 		super(persistenceManager);
-		this.productManager = productManager;
+		this.assetManager = assetManager;
 	}
 
 	@Override
@@ -86,8 +86,8 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		subAssets.add(subAsset);
 
 		try {	
-			processSubProducts();
-			asset = productManager.update(asset, getUser());
+			processSubAssets();
+			asset = assetManager.update(asset, getUser());
 			addFlashMessageText("message.assetupdated");
 
 			return "saved";
@@ -121,14 +121,14 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 			return MISSING;
 		}
 		if (subAsset == null) {
-			addActionErrorText("error.nosubproduct");
+			addActionErrorText("error.nosubasset");
 			return ERROR;
 		}
 		
 		// this is to get the event types for this asset loaded correctly  gah!
 		Asset foundSubAsset = persistenceManager.find(Asset.class, subAsset.getAsset().getId(), getSecurityFilter(), "type.eventTypes");
 		if (foundSubAsset == null) {
-			addActionErrorText("error.nosubproduct");
+			addActionErrorText("error.nosubasset");
 			return ERROR;
 		}
 		subAsset.setAsset(foundSubAsset);
@@ -136,13 +136,13 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		SubAsset targetSubAsset = asset.getSubAssets().get(asset.getSubAssets().indexOf(new SubAsset(subAsset.getAsset(), asset)));
 		
 		if (targetSubAsset == null) {
-			addActionErrorText("error.nosubproduct");
+			addActionErrorText("error.nosubasset");
 			return ERROR;
 		}
 		try {	
 			SubAsset target = asset.getSubAssets().get(asset.getSubAssets().indexOf(new SubAsset(subAsset.getAsset(), asset)));
 			target.setLabel(subAsset.getLabel());
-			asset = productManager.update(asset, getUser());
+			asset = assetManager.update(asset, getUser());
 			addFlashMessageText("message.assetupdated");
 
 			return "saved";
@@ -177,7 +177,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		
 		asset.setSubAssets(reorderedList);
 		try {
-			asset = productManager.update(asset, getUser());
+			asset = assetManager.update(asset, getUser());
 		} catch (SubAssetUniquenessException e) {
 			return null;
 		} catch (Exception e) {
@@ -213,7 +213,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 
 		try {
 			asset.getSubAssets().remove(subAssetToRemove);
-			productManager.update(asset, getUser());
+			assetManager.update(asset, getUser());
 
 			MasterEvent masterEvent = (MasterEvent) getSession().get("masterEvent");
 			if (MasterEvent.matchingMasterEvent(masterEvent, token)) {
@@ -230,7 +230,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 
 	}
 
-	private void processSubProducts() throws MissingEntityException {
+	private void processSubAssets() throws MissingEntityException {
 		asset.getSubAssets().clear();
 		StrutsListHelper.clearNulls(subAssets);
 
@@ -306,8 +306,8 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 			if (subAsset != null) {
 				int count = 0;
 
-				for (SubAssetHelper subProduct2 : subAssets) {
-					if (subProduct2 != null && subAsset.getLabel().equals(subProduct2.getLabel())) {
+				for (SubAssetHelper subAsset2 : subAssets) {
+					if (subAsset2 != null && subAsset.getLabel().equals(subAsset2.getLabel())) {
 						count++;
 					}
 				}
@@ -319,7 +319,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 		return false;
 	}
 
-	public List<SubEvent> getEventsFor(Asset product) {
+	public List<SubEvent> getEventsFor(Asset asset) {
 		return new ArrayList<SubEvent>();
 	}
 
@@ -341,7 +341,7 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 	
 	public AllEventHelper getAllEventHelper() {
 		if (allEventHelper == null)
-			allEventHelper = new AllEventHelper(productManager, asset, getSecurityFilter());
+			allEventHelper = new AllEventHelper(assetManager, asset, getSecurityFilter());
 		return allEventHelper;
 	}
 	

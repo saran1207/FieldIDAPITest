@@ -17,13 +17,13 @@ public class DownloadAssetAttachmentFile extends AbstractDownloadAction {
 		super(persistenceManager);
 	}
 	
-	protected AssetAttachment loadProductAttachment() {
+	protected AssetAttachment loadAssetAttachment() {
 		return getLoaderFactory().createFilteredIdLoader(AssetAttachment.class).setId(attachmentID).load();
 	}
 	
 	@Override
 	protected boolean initializeDownload() {
-		attachment = loadProductAttachment();
+		attachment = loadAssetAttachment();
 
 		if (attachment == null) {
 			addActionError(getText("error.no_asset_attached_file"));

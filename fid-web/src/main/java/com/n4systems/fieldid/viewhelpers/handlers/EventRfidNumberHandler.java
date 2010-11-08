@@ -20,7 +20,7 @@ public class EventRfidNumberHandler extends WebOutputHandler {
 		
 		SecurityLevel level = asset.getSecurityLevel(action.getSecurityFilter().getOwner());
 		
-		// build the asset info link for local products, just show the serial for network products
+		// build the asset info link for local assets, just show the serial for network assets
 		String rfidNumber;
 		if (level.isLocal()) { 
 			rfidNumber = String.format("<a href='asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getRfidNumber());
@@ -32,9 +32,9 @@ public class EventRfidNumberHandler extends WebOutputHandler {
 	}
 
 	public Object handleExcel(Long entityId, Object value) {
-		Asset product = (Asset)value;
+		Asset asset = (Asset)value;
 		
-		return (product.getRfidNumber() != null) ? product.getRfidNumber() : "";
+		return (asset.getRfidNumber() != null) ? asset.getRfidNumber() : "";
 	}
 	
 }

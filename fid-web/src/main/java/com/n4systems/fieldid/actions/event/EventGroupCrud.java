@@ -63,7 +63,7 @@ public class EventGroupCrud extends AbstractCrud {
 					return "oneFound";
 				}
 			} catch (Exception e) {
-				logger.error("Failed to look up Products", e);
+				logger.error("Failed to look up Assets", e);
 				addActionError(getText("error.failedtoload"));
 				return ERROR;
 			}

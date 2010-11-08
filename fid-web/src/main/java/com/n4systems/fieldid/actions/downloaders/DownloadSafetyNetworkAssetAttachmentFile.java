@@ -13,7 +13,7 @@ public class DownloadSafetyNetworkAssetAttachmentFile extends DownloadAssetAttac
 	}
 	
 	@Override
-	protected AssetAttachment loadProductAttachment() {
+	protected AssetAttachment loadAssetAttachment() {
 		return getLoaderFactory().createSafetyNetworkAssetAttachmentLoader().setAttachmentId(attachmentID).setAssetNetworkId(assetNetworkId).load();
 	}
 	

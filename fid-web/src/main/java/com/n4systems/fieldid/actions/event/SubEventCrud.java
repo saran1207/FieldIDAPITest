@@ -40,10 +40,10 @@ public class SubEventCrud extends EventCrud {
 	private MasterEvent masterEventHelper;
 	private boolean currentEventNew = true;
 
-	public SubEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyProductManager,
+	public SubEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
 
-		super(persistenceManager, eventManager, userManager, legacyProductManager, assetManager, eventScheduleManager);
+		super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager);
 	}
 
 	@Override

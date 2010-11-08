@@ -93,12 +93,12 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 
 	public String doConfirm() {
 		doShow();
-		Set<Long> importTheseProductTypeIds = covertSelectedIdsToSet(importAssetTypeIds);
+		Set<Long> importTheseAssetTypeIds = covertSelectedIdsToSet(importAssetTypeIds);
 		Set<Long> importTheseEventTypeIds = covertSelectedIdsToSet(importEventTypeIds);
 		
 		try {
 			ImportCatalogService importCatalogService = new ImportCatalogService(persistenceManager, getPrimaryOrg(), linkedCatalogAccess, assetTypeManager);
-			importCatalogService.setImportAssetTypeIds(importTheseProductTypeIds);
+			importCatalogService.setImportAssetTypeIds(importTheseAssetTypeIds);
 			importCatalogService.setImportEventTypeIds(importTheseEventTypeIds);
 			importCatalogService.setImportAllRelations(usingPackage);
 			summary = importCatalogService.importSelectionSummary();
@@ -137,7 +137,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 			CatalogImportTask importTask = new CatalogImportTask();
 			
 			importTask.setImportEventTypeIds(covertSelectedIdsToSet(importEventTypeIds));
-			importTask.setImportProductTypeIds(covertSelectedIdsToSet(importAssetTypeIds));
+			importTask.setImportAssetTypeIds(covertSelectedIdsToSet(importAssetTypeIds));
 			importTask.setPrimaryOrg(getPrimaryOrg());
 			importTask.setLinkedTenant(getLinkedTenant());
 			importTask.setUsingPackages(usingPackage);
@@ -198,9 +198,9 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		if (!cacheSubTypes.containsKey(assetTypeId)) {
 			List<Long> subTypeIds = linkedCatalogAccess.getAllPublishedSubTypesFor(assetTypeId);
 			List<ListingPair> subTypes = new ArrayList<ListingPair>();
-			for (ListingPair productType : getPublishedAssetTypes()) {
-				if (subTypeIds.contains(productType.getId())) {
-					subTypes.add(productType);
+			for (ListingPair assetType : getPublishedAssetTypes()) {
+				if (subTypeIds.contains(assetType.getId())) {
+					subTypes.add(assetType);
 				}
 			}
 			cacheSubTypes.put(assetTypeId, subTypes);

@@ -33,7 +33,7 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 		SafetyNetworkSmartSearchLoader smartSearchLoader = setupLoader();
 		
 		try {
-			loadProducts(smartSearchLoader);
+			loadAssets(smartSearchLoader);
 			if (!assets.isEmpty()) {
 				if (assets.size() == 1) {
 					asset = assets.get(0);
@@ -51,7 +51,7 @@ public class SafetyNetworkSmartSearchAction extends AbstractAction {
 		}
 	}
 
-	private void loadProducts(SafetyNetworkSmartSearchLoader smartSearchLoader) {
+	private void loadAssets(SafetyNetworkSmartSearchLoader smartSearchLoader) {
 		assets = smartSearchLoader.load();
 	}
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
-import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -34,7 +34,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	private List<Long> searchIds;
 
 	public AssetSearchAction(final PersistenceManager persistenceManager, final AssetManager assetManager) {
-		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search"));
+		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search"));
 	}
 
 	public void prepare() throws Exception {

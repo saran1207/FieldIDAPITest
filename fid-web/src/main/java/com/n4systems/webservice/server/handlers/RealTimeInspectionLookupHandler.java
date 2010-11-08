@@ -11,7 +11,7 @@ public class RealTimeInspectionLookupHandler {
 
 	private final NewestEventsForAssetIdLoader loader;
 	
-	private long productId;
+	private long assetId;
 	private Date lastEventDate;
 	private List<Event> events;
 	
@@ -20,7 +20,7 @@ public class RealTimeInspectionLookupHandler {
 	}
 	
 	public List<Event> lookup() {
-		events = loader.setAssetId(productId).load();
+		events = loader.setAssetId(assetId).load();
 		clearListIfInspectionNotNewer();
 		return events;
 	}
@@ -34,8 +34,8 @@ public class RealTimeInspectionLookupHandler {
 		}
 	}
 	
-	public RealTimeInspectionLookupHandler setProductId(long productId) {
-		this.productId = productId;
+	public RealTimeInspectionLookupHandler setAssetId(long assetId) {
+		this.assetId = assetId;
 		return this;
 	}
 	

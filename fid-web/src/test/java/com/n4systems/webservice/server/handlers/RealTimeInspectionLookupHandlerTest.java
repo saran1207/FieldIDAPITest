@@ -18,7 +18,7 @@ import com.n4systems.test.helpers.FluentArrayList;
 public class RealTimeInspectionLookupHandlerTest {
 	
 	private final long anyTenantId = 1L;
-	private final long anyProductId = 1L;
+	private final long anyAssetId = 1L;
 	
 	private List<Event> multipleEvents;
 	private Date olderDate;
@@ -39,25 +39,25 @@ public class RealTimeInspectionLookupHandlerTest {
 	@Test
 	public void inspections_found_and_no_modified_date_returns_inspections() {
 		RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(getInspectionsLoaderThatReturnsMultipleInspections());
-		assertEquals(multipleEvents, lookupHandler.setProductId(anyProductId).setLastEventDate(null).lookup());
+		assertEquals(multipleEvents, lookupHandler.setAssetId(anyAssetId).setLastEventDate(null).lookup());
 	}
 	
 	@Test
 	public void inspections_found_and_older_modified_date_returns_inspections() {
 		RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(getInspectionsLoaderThatReturnsMultipleInspections());
-		assertEquals(multipleEvents, lookupHandler.setProductId(anyProductId).setLastEventDate(olderDate).lookup());
+		assertEquals(multipleEvents, lookupHandler.setAssetId(anyAssetId).setLastEventDate(olderDate).lookup());
 	}
 	
 	@Test
 	public void inspections_found_and_same_modified_date_as_inspections_returns_empty_list() {
 		RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(getInspectionsLoaderThatReturnsMultipleInspections());
-		assertEquals(0, lookupHandler.setProductId(anyProductId).setLastEventDate(recentDate).lookup().size());
+		assertEquals(0, lookupHandler.setAssetId(anyAssetId).setLastEventDate(recentDate).lookup().size());
 	}
 	
 	@Test
 	public void inspections_found_and_newer_modified_date_than_inspections_returns_empty_list() {
 		RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(getInspectionsLoaderThatReturnsMultipleInspections());
-		assertEquals(0, lookupHandler.setProductId(anyProductId).setLastEventDate(mostRecentDate).lookup().size());
+		assertEquals(0, lookupHandler.setAssetId(anyAssetId).setLastEventDate(mostRecentDate).lookup().size());
 	}
 	
 	private NewestEventsForAssetIdLoader getInspectionsLoaderThatReturnsMultipleInspections() {

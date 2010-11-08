@@ -33,7 +33,7 @@ public class EventScheduleCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EventScheduleCrud.class);
 
-	private LegacyAsset legacyProductManager;
+	private LegacyAsset legacyAssetManager;
 	private EventScheduleManager eventScheduleManager;
 	protected EventSchedule eventSchedule;
 	
@@ -46,9 +46,9 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	private List<EventSchedule> eventSchedules;
 
-	public EventScheduleCrud(LegacyAsset legacyProductManager, PersistenceManager persistenceManager, EventScheduleManager eventScheduleManager) {
+	public EventScheduleCrud(LegacyAsset legacyAssetManager, PersistenceManager persistenceManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
-		this.legacyProductManager = legacyProductManager;
+		this.legacyAssetManager = legacyAssetManager;
 		this.eventScheduleManager = eventScheduleManager;
 	}
 
@@ -251,7 +251,7 @@ public class EventScheduleCrud extends AbstractCrud {
 	}
 
 	public Long getEventCount() {
-		return legacyProductManager.countAllEvents(asset, getSecurityFilter());
+		return legacyAssetManager.countAllEvents(asset, getSecurityFilter());
 	}
 
 	public EventSchedule getEventSchedule() {

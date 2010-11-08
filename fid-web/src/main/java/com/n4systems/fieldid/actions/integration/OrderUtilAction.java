@@ -93,7 +93,7 @@ public class OrderUtilAction extends AbstractAction {
 		this.asset = asset;
 	}
 	
-	public int getIdentifiedProductCount(LineItem lineItem) { 
+	public int getIdentifiedAssetCount(LineItem lineItem) {
 		return orderManager.countAssetsTagged(lineItem);
 	}
 }

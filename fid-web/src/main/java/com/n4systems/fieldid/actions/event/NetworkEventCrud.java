@@ -9,8 +9,8 @@ import com.n4systems.ejb.legacy.UserManager;
 
 public class NetworkEventCrud extends EventCrud {
 
-    public NetworkEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyProductManager, AssetManager assetManager, EventScheduleManager eventScheduleManager) {
-        super(persistenceManager, eventManager, userManager, legacyProductManager, assetManager, eventScheduleManager);
+    public NetworkEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager, AssetManager assetManager, EventScheduleManager eventScheduleManager) {
+        super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager);
     }
 
     @Override

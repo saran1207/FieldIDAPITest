@@ -5,10 +5,10 @@ import java.util.SortedSet;
 
 import com.n4systems.ejb.AssetManager;
 
-public class ProductManagerBackedCommonAssetAttributeFinder implements CommonAssetAttributeFinder {
+public class AssetManagerBackedCommonAssetAttributeFinder implements CommonAssetAttributeFinder {
 	private final AssetManager assetManager;
 
-	public ProductManagerBackedCommonAssetAttributeFinder(AssetManager assetManager) {
+	public AssetManagerBackedCommonAssetAttributeFinder(AssetManager assetManager) {
 		this.assetManager = assetManager;
 	}
 

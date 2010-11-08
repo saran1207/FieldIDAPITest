@@ -422,7 +422,7 @@ public class MasterEventCrud extends AbstractCrud {
 		return eventManager.isMasterEvent(id);
 	}
 
-	public List<Asset> getAvailableSubProducts() {
+	public List<Asset> getAvailableSubAssets() {
 		List<Asset> availableSubAssets = new ArrayList<Asset>();
 		for (SubEvent subEvent : event.getSubEvents()) {
 			if (!availableSubAssets.contains(subEvent.getAsset())) {

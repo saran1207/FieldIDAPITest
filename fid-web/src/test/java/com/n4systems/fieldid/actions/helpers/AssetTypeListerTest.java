@@ -36,19 +36,19 @@ public class AssetTypeListerTest {
 	
 	@Before 
 	public void init() {
-		AssetTypeGroup group = createProductTypeGroup(GROUP_1);
+		AssetTypeGroup group = createAssetTypeGroup(GROUP_1);
 		
-		groups = ImmutableList.of(group, createProductTypeGroup(EMPTY_GROUP));
+		groups = ImmutableList.of(group, createAssetTypeGroup(EMPTY_GROUP));
 		
 		
 		
 		types = ImmutableList.of(anAssetType().named("type 1").withGroup(group).build(),
 						anAssetType().named("type 2").build());
 		
-		sut = new AssetTypeLister(persistenceManagerToLoadProductTypesAndGroups(), new OpenSecurityFilter());
+		sut = new AssetTypeLister(persistenceManagerToLoadAssetTypesAndGroups(), new OpenSecurityFilter());
 	}
 
-	private AssetTypeGroup createProductTypeGroup(String name) {
+	private AssetTypeGroup createAssetTypeGroup(String name) {
 		AssetTypeGroup group = new AssetTypeGroup();
 		group.setName(name);
 		group.setId(Math.abs(new Random().nextLong()));
@@ -56,7 +56,7 @@ public class AssetTypeListerTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	private PersistenceManager persistenceManagerToLoadProductTypesAndGroups() {
+	private PersistenceManager persistenceManagerToLoadAssetTypesAndGroups() {
 		PersistenceManager persistenceManager = createMock(PersistenceManager.class);
 		expect(persistenceManager.findAll((QueryBuilder<AssetTypeGroup>) anyObject())).andReturn(groups);
 		expect(persistenceManager.findAllLP(same(AssetType.class), (SecurityFilter)anyObject(), same("name"))).andReturn(ListHelper.longListableToListingPair(types));

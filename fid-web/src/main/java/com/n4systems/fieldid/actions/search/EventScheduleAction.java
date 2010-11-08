@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -58,7 +58,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 			final EventScheduleManager eventScheduleManager) {
 		
 		super(implementingClass, sessionKey, "Event Schedule Report", persistenceManager, 
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "event_schedule_search", "asset"));
+				new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "event_schedule_search", "asset"));
 		
 		this.eventManager = eventManager;
 		this.eventScheduleManager = eventScheduleManager;

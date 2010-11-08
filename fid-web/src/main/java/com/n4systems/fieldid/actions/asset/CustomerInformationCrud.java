@@ -29,7 +29,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 	
 	private Asset asset;
 	private AssetManager assetManager;
-	private LegacyAsset legacyProductManager;
+	private LegacyAsset legacyAssetManager;
 	
 	private OwnerPicker ownerPicker;
 	
@@ -40,7 +40,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 	public CustomerInformationCrud(PersistenceManager persistenceManager, AssetManager assetManager, LegacyAsset legacyAsset) {
 		super(persistenceManager);
 		this.assetManager = assetManager;
-		this.legacyProductManager = legacyAsset;
+		this.legacyAssetManager = legacyAsset;
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class CustomerInformationCrud extends AbstractCrud {
 		try {	
 			assetWebModel.fillInAsset(asset);
 			
-			legacyProductManager.update(asset, getUser());
+			legacyAssetManager.update(asset, getUser());
 			addFlashMessageText("message.assetupdated");
 			
 		} catch (Exception e) {

@@ -17,7 +17,7 @@ public class AssetDescriptionTemplateValidator extends FieldValidatorSupport {
 	
 	public void validate(Object object) throws ValidationException {
 		
-		HasProductDescriptionTemplateValidator form = (HasProductDescriptionTemplateValidator)object;
+		HasAssetDescriptionTemplateValidator form = (HasAssetDescriptionTemplateValidator)object;
 		
 		List<String> invalidInfoFields = getInvalidDescriptionTemplateVariables(form.getDescriptionTemplate(), form.getInfoFields());
 		

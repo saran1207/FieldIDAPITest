@@ -55,15 +55,15 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	
 	@Test
 	public void should_call_the_attribute_finder_with_list_of_asset_type_ids_passed_in_when_the_selected_asset_type_id_is_null() throws Exception {
-		List<Long> productTypeIds = new FluentArrayList<Long>(1L);
+		List<Long> assetTypeIds = new FluentArrayList<Long>(1L);
 
 		CommonAssetAttributeFinder commonAttributeFinder = createMock(CommonAssetAttributeFinder.class);
-		expect(commonAttributeFinder.findAllCommonInfoFieldNames(productTypeIds)).andReturn(new TreeSet<String>());
+		expect(commonAttributeFinder.findAllCommonInfoFieldNames(assetTypeIds)).andReturn(new TreeSet<String>());
 		replay(commonAttributeFinder);
 		
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(commonAttributeFinder, "pre");
 		
-		sut.getDynamicGroups(null, productTypeIds);
+		sut.getDynamicGroups(null, assetTypeIds);
 		
 		verify(commonAttributeFinder);
 	}
@@ -71,7 +71,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 	
 	@Test
 	public void should_call_the_attribute_finder_with_list_of_only_the_selected_asset_type_id_selected_asset_type_id_is_not_null() throws Exception {
-		List<Long> productTypeIds = new FluentArrayList<Long>(10L, 4L, 1L, 5040L);
+		List<Long> assetTypeIds = new FluentArrayList<Long>(10L, 4L, 1L, 5040L);
 
 		CommonAssetAttributeFinder commonAttributeFinder = createMock(CommonAssetAttributeFinder.class);
 		expect(commonAttributeFinder.findAllCommonInfoFieldNames(new FluentArrayList<Long>(1L))).andReturn(new TreeSet<String>());
@@ -79,7 +79,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 		
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(commonAttributeFinder, "pre");
 		
-		sut.getDynamicGroups(1L, productTypeIds);
+		sut.getDynamicGroups(1L, assetTypeIds);
 		
 		verify(commonAttributeFinder);
 	}

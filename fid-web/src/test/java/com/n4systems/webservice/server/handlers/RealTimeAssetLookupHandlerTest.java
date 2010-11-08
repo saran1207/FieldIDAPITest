@@ -19,7 +19,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.test.helpers.DateHelper;
 import com.n4systems.test.helpers.FluentArrayList;
 
-public class RealTimeProductLookupHandlerTest {
+public class RealTimeAssetLookupHandlerTest {
 	
 	private List<Asset> listOfMultipleAssets;
 	private List<Asset> listWithSingleAsset;
@@ -50,44 +50,44 @@ public class RealTimeProductLookupHandlerTest {
 	}
 
 	@Test
-	public void test_multiple_products_found_and_no_modified_date_return_all_products() {
-		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleProducts(), getSubProductLoaderMock(listOfMultipleAssets));
+	public void test_multiple_assets_found_and_no_modified_date_return_all_assets() {
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleAssets(), getSubProductLoaderMock(listOfMultipleAssets));
 		assertEquals(listOfMultipleAssets, handler.setSearchText("some text").setModified(null).lookup());
 	}
 	
 	@Test
-	public void test_multiple_products_found_and_send_modified_date_return_all_products() {
-		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleProducts(), getSubProductLoaderMock(listOfMultipleAssets));
+	public void test_multiple_assets_found_and_send_modified_date_return_all_assets() {
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleAssets(), getSubProductLoaderMock(listOfMultipleAssets));
 		assertEquals(listOfMultipleAssets, handler.setSearchText("some text").setModified(olderDate).lookup());
 	}
 	
 	@Test
-	public void test_single_product_found_modified_date_not_sent_return_product() {
-		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
+	public void test_single_asset_found_modified_date_not_sent_return_asset() {
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleAsset(), getSubProductLoaderMock(listWithSingleAsset));
 		assertEquals(listWithSingleAsset, handler.setSearchText("some text").setModified(null).lookup());
 	}
 	
 	@Test
-	public void test_single_product_found_modified_date_older_than_products_return_product() {
-		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
+	public void test_single_asset_found_modified_date_older_than_assets_return_asset() {
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleAsset(), getSubProductLoaderMock(listWithSingleAsset));
 		assertEquals(listWithSingleAsset, handler.setSearchText("some text").setModified(olderDate).lookup());
 	}
 	
 	@Test
-	public void test_single_product_found_modified_date_equals_products_return_empty_list() {
-		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
+	public void test_single_asset_found_modified_date_equals_assets_return_empty_list() {
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleAsset(), getSubProductLoaderMock(listWithSingleAsset));
 		assertEquals(0, handler.setSearchText("some text").setModified(moreRecentDate).lookup().size());						
 	}
 
 	@Test
-	public void test_single_product_found_modified_date_more_recent_than_products_return_empty_list() {
-		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleProduct(), getSubProductLoaderMock(listWithSingleAsset));
+	public void test_single_asset_found_modified_date_more_recent_than_assets_return_empty_list() {
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsListWithSingleAsset(), getSubProductLoaderMock(listWithSingleAsset));
 		assertEquals(0, handler.setSearchText("some text").setModified(mostRecentDate).lookup().size());								
 	}
 	
 	@Test
-	public void test_single_product_found_with_one_sub_product_modified_date_not_sent_return_product_and_sub_product() {
-		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsSingleProductWithOneSubProduct(), getSubProductLoaderMock(listWithSingleProductWithOneSubAsset));
+	public void test_single_asset_found_with_one_sub_asset_modified_date_not_sent_return_asset_and_sub_asset() {
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsSingleProductWithOneSubAsset(), getSubProductLoaderMock(listWithSingleProductWithOneSubAsset));
 		
 		List<Asset> expectedProductsReturned = getExpectedProductsReturned(listWithSingleProductWithOneSubAsset);
 		
@@ -101,8 +101,8 @@ public class RealTimeProductLookupHandlerTest {
 	}
 	
 	@Test
-	public void test_multiple_products_found_with_varied_sub_products_returns_products_and_all_sub_products() {
-		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleProductWithVariedSubProducts(), getSubProductLoaderMock(listOfMultipleProductsWithVariedSubAssets));
+	public void test_multiple_assets_found_with_varied_sub_assets_returns_assets_and_all_sub_assets() {
+		RealTimeAssetLookupHandler handler = new RealTimeAssetLookupHandler(getSmartSearchLoaderThatReturnsMultipleProductWithVariedSubAssets(), getSubProductLoaderMock(listOfMultipleProductsWithVariedSubAssets));
 		
 		List<Asset> expectedProductsReturned = getExpectedProductsReturned(listOfMultipleProductsWithVariedSubAssets);
 		
@@ -129,15 +129,15 @@ public class RealTimeProductLookupHandlerTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private AssetSubAssetsLoader getSubProductLoaderMock(List<Asset> productsToReturn) {
+	private AssetSubAssetsLoader getSubProductLoaderMock(List<Asset> assetsToReturn) {
 		AssetSubAssetsLoader subAssetsLoaderMock = createMock(AssetSubAssetsLoader.class);
 		expect(subAssetsLoaderMock.setAssets((List<Asset>)anyObject())).andReturn(subAssetsLoaderMock);
-		expect(subAssetsLoaderMock.load()).andReturn(productsToReturn);
+		expect(subAssetsLoaderMock.load()).andReturn(assetsToReturn);
 		replay(subAssetsLoaderMock);
 		return subAssetsLoaderMock;
 	}
 	
-	private SmartSearchLoader getSmartSearchLoaderThatReturnsMultipleProductWithVariedSubProducts() {
+	private SmartSearchLoader getSmartSearchLoaderThatReturnsMultipleProductWithVariedSubAssets() {
 		SmartSearchLoader loader = new SmartSearchLoader(new TenantOnlySecurityFilter(1L)) {
 			@Override
 			public List<Asset> load() {
@@ -147,7 +147,7 @@ public class RealTimeProductLookupHandlerTest {
 		return loader;				
 	}
 	
-	private SmartSearchLoader getSmartSearchLoaderThatReturnsSingleProductWithOneSubProduct() {
+	private SmartSearchLoader getSmartSearchLoaderThatReturnsSingleProductWithOneSubAsset() {
 		SmartSearchLoader loader = new SmartSearchLoader(new TenantOnlySecurityFilter(1L)) {
 			@Override
 			public List<Asset> load() {
@@ -157,7 +157,7 @@ public class RealTimeProductLookupHandlerTest {
 		return loader;				
 	}
 	
-	private SmartSearchLoader getSmartSearchLoaderThatReturnsMultipleProducts() {		
+	private SmartSearchLoader getSmartSearchLoaderThatReturnsMultipleAssets() {
 		SmartSearchLoader loader = new SmartSearchLoader(new TenantOnlySecurityFilter(1L)) {
 			@Override
 			public List<Asset> load() {
@@ -167,7 +167,7 @@ public class RealTimeProductLookupHandlerTest {
 		return loader;
 	}
 	
-	private SmartSearchLoader getSmartSearchLoaderThatReturnsListWithSingleProduct() {
+	private SmartSearchLoader getSmartSearchLoaderThatReturnsListWithSingleAsset() {
 		SmartSearchLoader loader = new SmartSearchLoader(new TenantOnlySecurityFilter(1L)) {
 			@Override
 			public List<Asset> load() {

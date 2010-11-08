@@ -131,7 +131,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	}
 
 	/**
-	 * @return the productType
+	 * @return the assetType
 	 */
 	public Long getAssetTypeId() {
 		return (assetType != null) ? assetType.getId() : null;
@@ -139,7 +139,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 
 	/**
 	 * @param assetType
-	 *            the productType to set
+	 *            the assetType to set
 	 */
 	public void setAssetTypeId(Long assetType) {
 		if (assetType == null) {
@@ -156,7 +156,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	}
 
 	/**
-	 * @return the productTypeEvents
+	 * @return the assetTypeEvents
 	 */
 	public List<Boolean> getAssetTypeEventTypes() {
 		if (assetTypeEvents == null) {

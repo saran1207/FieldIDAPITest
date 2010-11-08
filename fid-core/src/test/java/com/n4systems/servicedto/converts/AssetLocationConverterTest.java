@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.webservice.dto.LocationServiceDTO;
 
-public class ProductLocationConverterTest {
+public class AssetLocationConverterTest {
 
 	@Test
 	public void creates_freeform_only_when_predefined_location_is_null() {

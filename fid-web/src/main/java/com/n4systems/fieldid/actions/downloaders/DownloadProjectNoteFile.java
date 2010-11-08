@@ -34,7 +34,7 @@ public class DownloadProjectNoteFile extends DownloadAction {
 		
 		FileAttachment attachment = null;
 		
-		// make sure our attachment is actually attached to this producttype
+		// make sure our attachment is actually attached to this assettype
 		for(FileAttachment attach: project.getNotes()) {
 			if(attach.getId().equals(attachmentID)) {
 				attachment = attach;

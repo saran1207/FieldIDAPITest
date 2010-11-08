@@ -106,12 +106,12 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 
 			return SUCCESS;
 		} catch (UpdateFailureException ufe) {
-			logger.error("failed to run a mass update on products", ufe);
+			logger.error("failed to run a mass update on assets", ufe);
 		} catch (UpdateConatraintViolationException ucve) {
 			addActionError(getText("error.massupdateassetconstriantviolation"));
 			return INPUT;
 		} catch (Exception e) {
-			logger.error("failed to run a mass update on products", e);
+			logger.error("failed to run a mass update on assets", e);
 		}
 
 		addActionError(getText("error.failedtomassupdate"));

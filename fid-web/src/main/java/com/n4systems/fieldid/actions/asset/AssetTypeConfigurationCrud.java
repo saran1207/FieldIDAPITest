@@ -51,7 +51,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 	@SkipValidation
 	public String doEdit() {
 		if( assetType == null ) {
-			addActionError( getText( "error.noproducttype" ) );
+			addActionError( getText( "error.noassettype" ) );
 			return MISSING;
 		}
 		
@@ -66,7 +66,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 	public String doSave() {
 		
 		if( assetType == null ) {
-			addActionError( getText( "error.noproducttype" ) );
+			addActionError( getText( "error.noassettype" ) );
 			return MISSING;
 		}
 		if( isPartOfMasterAsset() ) {
@@ -79,7 +79,7 @@ public class AssetTypeConfigurationCrud extends AbstractCrud {
 			if( !subAssetIds.isEmpty() ) {
 				StrutsListHelper.clearNulls(subAssetIds);
 				QueryBuilder<AssetType> subTypeQuery = new QueryBuilder<AssetType>(AssetType.class, getSecurityFilter());
-				subTypeQuery.addWhere( Comparator.IN, "productIds", "id", subAssetIds);
+				subTypeQuery.addWhere( Comparator.IN, "assetIds", "id", subAssetIds);
 				subTypeQuery.setSimpleSelect();
 				subTypeQuery.setOrder( "name" );
 				assetType.getSubTypes().addAll( persistenceManager.findAll( subTypeQuery ) );

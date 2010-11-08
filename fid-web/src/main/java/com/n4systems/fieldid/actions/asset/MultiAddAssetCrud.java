@@ -37,7 +37,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiAddAssetCrud.class);
 	
-	private final LegacyAsset legacyProductManager;
+	private final LegacyAsset legacyAssetManager;
 	private final OrderManager orderManager;
 	
 	// drop down lists
@@ -60,10 +60,10 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 	
-	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyAsset legacyProductManager) {
+	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyAsset legacyAssetManager) {
 		super(persistenceManager);
 		this.orderManager = orderManager;
-		this.legacyProductManager = legacyProductManager;
+		this.legacyAssetManager = legacyAssetManager;
 	}
 	
 	@Override
@@ -93,13 +93,13 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	public String doCreate() {
 		AssetCleaner cleaner = new AssetCleaner();
 		
-		logger.info("Asset Multi-Add saving " + identifiers.size() + " products");
+		logger.info("Asset Multi-Add saving " + identifiers.size() + " assets");
 		
 		logger.info("Resolving fields on base asset");
 		AssetViewModeConverter converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getUser());
 		
 		try {
-			AssetSaveService saver = new AssetSaveService(legacyProductManager, fetchCurrentUser());
+			AssetSaveService saver = new AssetSaveService(legacyAssetManager, fetchCurrentUser());
 			int i = 1;
 			for (AssetIdentifierView assetIdent : identifiers) {
 				logger.info("Saving asset " + i + " of " + identifiers.size());

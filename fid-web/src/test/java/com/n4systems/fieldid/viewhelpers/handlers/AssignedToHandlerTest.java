@@ -34,36 +34,36 @@ public class AssignedToHandlerTest {
 
 	@Test
 	public void should_render_name_of_user_when_a_user_is_assigned_for_web() throws Exception {
-		Asset product = anAsset().assignedTo(anEmployee().build()).build();
+		Asset asset = anAsset().assignedTo(anEmployee().build()).build();
 		
 		WebOutputHandler sut = new AssignedToHandler(UNUSED_ABSTRACT_ACTION);
 		
-		assertThat(sut.handleWeb(product.getId(), product.getAssignedUser()), containsString(product.getAssignedUser().getUserLabel()));
+		assertThat(sut.handleWeb(asset.getId(), asset.getAssignedUser()), containsString(asset.getAssignedUser().getUserLabel()));
 	}
 	
 	@Test
 	public void should_render_unassigned_when_a_null_is_given_for_user_for_web() throws Exception {
-		Asset product = anAsset().assignedTo(anEmployee().build()).build();
+		Asset asset = anAsset().assignedTo(anEmployee().build()).build();
 		
 		WebOutputHandler sut = new AssignedToHandler(new ReturningLabelAbstractAction());
 		
-		assertThat(sut.handleWeb(product.getId(), null), containsString(UNASSIGNED_LABEL));
+		assertThat(sut.handleWeb(asset.getId(), null), containsString(UNASSIGNED_LABEL));
 	}
 	
 	
 	
 	@Test
-	public void should_render_the_unassigned_label_for_a_product_that_is_unassigned_for_web() throws Exception {
-		Asset product = anAsset().unassigned().build();
+	public void should_render_the_unassigned_label_for_an_asset_that_is_unassigned_for_web() throws Exception {
+		Asset asset = anAsset().unassigned().build();
 		
 		WebOutputHandler sut = new AssignedToHandler(new ReturningLabelAbstractAction());
 		
-		assertThat(sut.handleWeb(product.getId(), UNASSIGNED_USER_FROM_QUERY), containsString(UNASSIGNED_LABEL));
+		assertThat(sut.handleWeb(asset.getId(), UNASSIGNED_USER_FROM_QUERY), containsString(UNASSIGNED_LABEL));
 	}
 	
 	@Test
 	public void should_resolve_the_unassigned_label_for_unassigned_throught_the_text_provider_for_web() throws Exception {
-		Asset product = anAsset().unassigned().build();
+		Asset asset = anAsset().unassigned().build();
 		
 		AbstractAction textProvider = createMock(AbstractAction.class);
 		expect(textProvider.getText(UNASSIGNED_LABEL)).andReturn("rendered label");
@@ -71,7 +71,7 @@ public class AssignedToHandlerTest {
 		
 		WebOutputHandler sut = new AssignedToHandler(textProvider);
 		
-		sut.handleWeb(product.getId(), UNASSIGNED_USER_FROM_QUERY);
+		sut.handleWeb(asset.getId(), UNASSIGNED_USER_FROM_QUERY);
 		
 		verify(textProvider);
 	}
@@ -79,27 +79,27 @@ public class AssignedToHandlerTest {
 	
 	@Test
 	public void should_render_name_of_user_when_a_user_is_assigned_for_excel() throws Exception {
-		Asset product = anAsset().assignedTo(anEmployee().build()).build();
+		Asset asset = anAsset().assignedTo(anEmployee().build()).build();
 		
 		ExcelOutputHandler sut = new AssignedToHandler(UNUSED_ABSTRACT_ACTION);
 		
-		assertThat(sut.handleExcel(product.getId(), product.getAssignedUser()).toString(), containsString(product.getAssignedUser().getUserLabel()));
+		assertThat(sut.handleExcel(asset.getId(), asset.getAssignedUser()).toString(), containsString(asset.getAssignedUser().getUserLabel()));
 	}
 	
 	
 	
 	@Test
-	public void should_render_the_unassigned_label_for_a_product_that_is_unassigned_for_excel() throws Exception {
-		Asset product = anAsset().unassigned().build();
+	public void should_render_the_unassigned_label_for_an_asset_that_is_unassigned_for_excel() throws Exception {
+		Asset asset = anAsset().unassigned().build();
 		
 		ExcelOutputHandler sut = new AssignedToHandler(new ReturningLabelAbstractAction());
 		
-		assertThat(sut.handleExcel(product.getId(), UNASSIGNED_USER_FROM_QUERY).toString(), containsString(UNASSIGNED_LABEL));
+		assertThat(sut.handleExcel(asset.getId(), UNASSIGNED_USER_FROM_QUERY).toString(), containsString(UNASSIGNED_LABEL));
 	}
 	
 	@Test
 	public void should_resolve_the_unassigned_label_for_unassigned_throught_the_text_provider_for_excel() throws Exception {
-		Asset product = anAsset().unassigned().build();
+		Asset asset = anAsset().unassigned().build();
 		
 		AbstractAction textProvider = createMock(AbstractAction.class);
 		expect(textProvider.getText(UNASSIGNED_LABEL)).andReturn("rendered label");
@@ -107,7 +107,7 @@ public class AssignedToHandlerTest {
 		
 		ExcelOutputHandler sut = new AssignedToHandler(textProvider);
 		
-		sut.handleExcel(product.getId(), UNASSIGNED_USER_FROM_QUERY);
+		sut.handleExcel(asset.getId(), UNASSIGNED_USER_FROM_QUERY);
 		
 		verify(textProvider);
 	}

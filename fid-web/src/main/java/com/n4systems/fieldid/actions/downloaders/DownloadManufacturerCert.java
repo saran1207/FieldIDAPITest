@@ -25,7 +25,7 @@ public class DownloadManufacturerCert extends DownloadAction {
 	private Asset asset;
 	private AssetCertificateGenerator certGen;
 
-	private long linkedProductId;
+	private long linkedAssetId;
 
 	public DownloadManufacturerCert(AssetManager assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -35,20 +35,20 @@ public class DownloadManufacturerCert extends DownloadAction {
 
 	public String doDownloadLinked() {
 
-		Asset ownedProduct = assetManager.findAsset(uniqueID, getSecurityFilter());
+		Asset ownedAsset = assetManager.findAsset(uniqueID, getSecurityFilter());
 
-		if (ownedProduct == null) {
+		if (ownedAsset == null) {
 			addActionError(getText("error.noasset"));
 			return MISSING;
 		}
 
 		AssetsByNetworkIdLoader loader = new AssetsByNetworkIdLoader(getSecurityFilter());
-		loader.setNetworkId(ownedProduct.getNetworkId());
+		loader.setNetworkId(ownedAsset.getNetworkId());
 		
 		List<Asset> linkedAssets = loader.load();
 		
 		for (Asset linkedAsset : linkedAssets) {
-			if (linkedAsset.getId().equals(linkedProductId)) {
+			if (linkedAsset.getId().equals(linkedAssetId)) {
 				asset = linkedAsset;
 			}
 		}
@@ -99,11 +99,11 @@ public class DownloadManufacturerCert extends DownloadAction {
 		return null;
 	}
 
-	public long getLinkedProductId() {
-		return linkedProductId;
+	public long getLinkedAssetId() {
+		return linkedAssetId;
 	}
 
-	public void setLinkedProductId(long linkedProductId) {
-		this.linkedProductId = linkedProductId;
+	public void setLinkedAssetId(long linkedAssetId) {
+		this.linkedAssetId = linkedAssetId;
 	}
 }

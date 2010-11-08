@@ -11,10 +11,10 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 public class SafetyNetworkEventSchedule extends EventScheduleCrud {
 
 	public SafetyNetworkEventSchedule(
-			LegacyAsset legacyProductManager,
+			LegacyAsset legacyAssetManager,
 			PersistenceManager persistenceManager,
 			EventScheduleManager eventScheduleManager) {
-		super(legacyProductManager, persistenceManager, eventScheduleManager);
+		super(legacyAssetManager, persistenceManager, eventScheduleManager);
 	}
 	
 	@Override

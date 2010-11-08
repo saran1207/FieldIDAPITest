@@ -49,15 +49,15 @@ public class RealTimeAssetLookupHandler {
 		
 		List<Asset> assetsWithSubAssets = subAssetLoader.setAssets(assets).load();
 		
-		List<Asset> newSubProducts = new ArrayList<Asset>();
+		List<Asset> newSubAssets = new ArrayList<Asset>();
 		
 		for (Asset asset : assetsWithSubAssets) {
 			for (SubAsset subAsset : asset.getSubAssets()) {
-				newSubProducts.add(subAsset.getAsset());
+				newSubAssets.add(subAsset.getAsset());
 			}
 		}
 		
-		assets.addAll(newSubProducts);
+		assets.addAll(newSubAssets);
 		
 		return assets;
 	}

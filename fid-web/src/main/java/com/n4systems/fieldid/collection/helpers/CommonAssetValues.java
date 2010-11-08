@@ -42,7 +42,7 @@ public class CommonAssetValues {
 		CommonAssetValues otherAssetCommonValues = createFrom(asset);
 		Location commonLocation = commonLocation(otherAssetCommonValues);
 		BaseOrg commonOwner = commonOwner(otherAssetCommonValues);
-		AssetStatus commonAssetStatus = commonProductStatus(otherAssetCommonValues);
+		AssetStatus commonAssetStatus = commonAssetStatus(otherAssetCommonValues);
 		Assignment commonAssignment = commonAssignment(otherAssetCommonValues);
 		
 		return new CommonAssetValues(commonLocation, commonOwner, commonAssetStatus, commonAssignment);
@@ -52,7 +52,7 @@ public class CommonAssetValues {
 		return hasCommonAssignment() && assignment.equals(otherAssetCommonValues.assignment) ? assignment : NO_COMMON_ASSIGNMENT;
 	}
 
-	private AssetStatus commonProductStatus(CommonAssetValues otherAssetCommonValues) {
+	private AssetStatus commonAssetStatus(CommonAssetValues otherAssetCommonValues) {
 		return assetStatus != null && assetStatus.equals(otherAssetCommonValues.assetStatus) ? assetStatus : NO_COMMON_ASSET_STATUS;
 	}
 

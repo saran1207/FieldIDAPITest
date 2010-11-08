@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventTypeGroup;
@@ -19,7 +20,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
-import com.n4systems.fieldid.actions.helpers.ProductManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.WebSession;
@@ -64,7 +64,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 			final AssetManager assetManager) {
 		//TODO refactor search action so that we don't have to pass in the session key but a way of getting the current criteria.
 		super(EventReportAction.class, WebSession.REPORT_CRITERIA, "Event Report", persistenceManager,
-				new InfoFieldDynamicGroupGenerator(new ProductManagerBackedCommonAssetAttributeFinder(assetManager), "event_search", "asset"));
+				new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "event_search", "asset"));
 
 		this.userManager = userManager;
 		

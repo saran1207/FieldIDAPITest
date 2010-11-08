@@ -313,7 +313,7 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 
 	/**
 	 * these decorator classes add the is current method the sign up packages. which allows the view to render the 
-	 * selection of products correctly.
+	 * selection of assets correctly.
 	 * They have been placed here since this is the only context that they are needed in.
 	 * 
 	 * @author aaitken

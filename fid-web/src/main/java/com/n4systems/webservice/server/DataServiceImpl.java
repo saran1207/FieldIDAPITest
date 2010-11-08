@@ -1378,7 +1378,7 @@ public class DataServiceImpl implements DataService {
 			RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(loader);
 			
 			List<Event> events = lookupHandler
-											.setProductId(requestInformation.getProductId())
+											.setAssetId(requestInformation.getProductId())
 											.setLastEventDate(requestInformation.getLastInspectionDate())
 											.lookup();
 			

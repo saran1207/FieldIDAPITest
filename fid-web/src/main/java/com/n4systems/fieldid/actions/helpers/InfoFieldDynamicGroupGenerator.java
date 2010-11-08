@@ -32,9 +32,9 @@ public class InfoFieldDynamicGroupGenerator {
 	}
 
 
-	public List<ColumnMappingGroup> getDynamicGroups(Long productTypeId, List<Long> productTypeIds) {
+	public List<ColumnMappingGroup> getDynamicGroups(Long assetTypeId, List<Long> assetTypeIds) {
 		if (dynamigGroups == null) {
-			List<Long> consolidateAssetTypeIds = consolidateAssetTypeIds(productTypeId, productTypeIds);
+			List<Long> consolidateAssetTypeIds = consolidateAssetTypeIds(assetTypeId, assetTypeIds);
 			createDynamicGroups(consolidateAssetTypeIds);
 		}
 		return dynamigGroups;
@@ -77,7 +77,7 @@ public class InfoFieldDynamicGroupGenerator {
 
 	
 	private ColumnMappingGroup createColumnMappingGroup() {
-		ColumnMappingGroup infoFieldGroup = new ColumnMappingGroup(idPrefix + "_product_info_options", "label.assetattributes", LARGE_ORDER_NUMBER_TO_PLACE_GROUP_AT_THE_END_OF_COLUMN_SELECTION);
+		ColumnMappingGroup infoFieldGroup = new ColumnMappingGroup(idPrefix + "_asset_info_options", "label.assetattributes", LARGE_ORDER_NUMBER_TO_PLACE_GROUP_AT_THE_END_OF_COLUMN_SELECTION);
 		infoFieldGroup.setDynamic(true);
 		return infoFieldGroup;
 	}

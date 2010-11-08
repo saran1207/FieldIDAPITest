@@ -99,7 +99,7 @@ public class ImporterFactory {
 		return new AutoAttributeImporter(reader, createViewValidator(), saverFactory.createAutoAttributeDefinitionSaver(), createAutoAttributeToModelConverter(criteria));
 	}
 
-	public AssetImporter createProductImporter(MapReader reader, User identifiedBy, AssetType type) {
+	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {
 		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
 	}
 

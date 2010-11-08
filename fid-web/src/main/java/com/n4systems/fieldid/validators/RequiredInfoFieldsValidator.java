@@ -15,7 +15,7 @@ public class RequiredInfoFieldsValidator extends FieldValidatorSupport {
 		
 		String fieldName = getFieldName();
 		List<InfoOptionInput> value = (List<InfoOptionInput>)this.getFieldValue(fieldName, object);
-		List<InfoFieldBean> infoFields = (List<InfoFieldBean>)this.getFieldValue("productInfoFields", object);
+		List<InfoFieldBean> infoFields = (List<InfoFieldBean>)this.getFieldValue("assetInfoFields", object);
 		
 		if( infoFields == null ) { return; }
 		

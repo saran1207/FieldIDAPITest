@@ -15,7 +15,7 @@ public class EventSerialNumberHandler extends WebOutputHandler {
 		
 		SecurityLevel level = asset.getSecurityLevel(action.getSecurityFilter().getOwner());
 		
-		// build the asset info link for local products, just show the serial for network products
+		// build the asset info link for local assets, just show the serial for network assets
 		String serialNumber;
 		if (level.isLocal()) { 
 			serialNumber = String.format("<a href='asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getSerialNumber());
@@ -27,9 +27,9 @@ public class EventSerialNumberHandler extends WebOutputHandler {
 	}
 
 	public Object handleExcel(Long entityId, Object value) {
-		Asset product = (Asset)value;
+		Asset asset = (Asset)value;
 		
-		return product.getSerialNumber();
+		return asset.getSerialNumber();
 	}
 	
 }

@@ -20,7 +20,7 @@ import com.n4systems.ejb.legacy.LegacyAssetType;
 
 public class TraceabilityCrud extends AssetCrud {
 
-	private boolean networkProduct;
+	private boolean networkAsset;
 
 	public TraceabilityCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
 			AssetCodeMappingService assetCodeMappingServiceManager, AssetManager assetManager, OrderManager orderManager, ProjectManager projectManager, EventScheduleManager eventScheduleManager) {
@@ -59,7 +59,7 @@ public class TraceabilityCrud extends AssetCrud {
 
 
 	private void setPageType() {
-		if(!networkProduct) {
+		if(!networkAsset) {
 			setPageType("asset", "traceability");
 		}else {
 			setPageType("network_asset", "traceability");
@@ -82,12 +82,12 @@ public class TraceabilityCrud extends AssetCrud {
 	}
 
 
-	public boolean isNetworkProduct() {
-		return networkProduct;
+	public boolean isNetworkAsset() {
+		return networkAsset;
 	}
 
 
-	public void setNetworkProduct(boolean networkProduct) {
-		this.networkProduct = networkProduct;
+	public void setNetworkAsset(boolean networkAsset) {
+		this.networkAsset = networkAsset;
 	}
 }

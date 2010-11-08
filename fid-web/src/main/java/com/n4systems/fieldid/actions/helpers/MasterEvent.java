@@ -264,7 +264,7 @@ public class MasterEvent {
 		}
 	}
 
-	public void cleanSubEventsForNonValidSubAssets(Asset upToDateProduct) {
+	public void cleanSubEventsForNonValidSubAssets(Asset upToDateAsset) {
 		List<SubEvent> subEventsToKeep = new ArrayList<SubEvent>();
 		
 		/*
@@ -272,7 +272,7 @@ public class MasterEvent {
 		 * attached to our updated master asset.
 		 */
 		for (SubEvent subEvent : subEvents) {
-			for (SubAsset subAsset : upToDateProduct.getSubAssets()) {
+			for (SubAsset subAsset : upToDateAsset.getSubAssets()) {
 				if (subAsset.getAsset().equals(subEvent.getAsset())) {
 					subEventsToKeep.add(subEvent);
 					break;

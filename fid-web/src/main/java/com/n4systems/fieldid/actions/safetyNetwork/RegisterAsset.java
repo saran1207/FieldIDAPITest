@@ -44,7 +44,7 @@ public class RegisterAsset extends AbstractCrud{
 	private Asset newAsset;
 	
 	private AssetManager assetManager;
-	private LegacyAsset legacyProductManager;
+	private LegacyAsset legacyAssetManager;
 	private OrderManager orderManager;
 	
 	//Drop down lists
@@ -61,39 +61,39 @@ public class RegisterAsset extends AbstractCrud{
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 
 	public RegisterAsset(PersistenceManager persistenceManager, AssetManager assetManager,
-			OrderManager orderManager, LegacyAsset legacyProductManager) {
+			OrderManager orderManager, LegacyAsset legacyAssetManager) {
 		super(persistenceManager);
 		this.assetManager = assetManager;
 		this.orderManager = orderManager;
-		this.legacyProductManager = legacyProductManager;
+		this.legacyAssetManager = legacyAssetManager;
 	}
 
 	@Override
 	protected void initMemberFields() {
 		assetView = new AssetView();
 		identifiers = new AssetIdentifierView();
-		linkedAsset = lookUpLinkedProduct(linkedAssetId);
+		linkedAsset = lookUpLinkedAsset(linkedAssetId);
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		assetView = new AssetView();
 		identifiers = new AssetIdentifierView();
-		linkedAsset = lookUpLinkedProduct(uniqueId);
+		linkedAsset = lookUpLinkedAsset(uniqueId);
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), assetView);
 		if(linkedAsset != null) {
 			identifiers.setSerialNumber(linkedAsset.getSerialNumber());
 			identifiers.setRfidNumber(linkedAsset.getRfidNumber());
 			// set the default asset id.
 			getAssetTypes();
-			Long productId = assetTypeLister.getAssetTypes().iterator().next().getId();
-			setAssetTypeId(productId);
+			Long assetId = assetTypeLister.getAssetTypes().iterator().next().getId();
+			setAssetTypeId(assetId);
 			setOwnerId(getSessionUser().getOwner().getId());
 			assetView.setIdentified(DateHelper.getToday());
 		}
 	}
 	
-	private Asset lookUpLinkedProduct(Long uniqueId) {
+	private Asset lookUpLinkedAsset(Long uniqueId) {
 		return getLoaderFactory().createSafetyNetworkAssetLoader().withAllFields().setAssetId(uniqueId).load();
 	}
 
@@ -120,7 +120,7 @@ public class RegisterAsset extends AbstractCrud{
 		assetToSave.setLinkedAsset(linkedAsset);
 		assetWebModel.fillInAsset(assetToSave);
 		
-		AssetSaveService saver = new AssetSaveService(legacyProductManager, fetchCurrentUser());
+		AssetSaveService saver = new AssetSaveService(legacyAssetManager, fetchCurrentUser());
 		saver.setAsset(assetToSave);
 		newAsset = saver.create();
 			

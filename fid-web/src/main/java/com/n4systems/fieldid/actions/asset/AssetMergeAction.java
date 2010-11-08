@@ -102,11 +102,11 @@ public class AssetMergeAction extends AbstractCrud {
 		return (winningAsset != null) ? winningAsset.getId() : null;
 	}
 		
-	public void setWinningAssetId(Long productId) {
-		if (productId == null) {
+	public void setWinningAssetId(Long assetId) {
+		if (assetId == null) {
 			winningAsset = null;
-		} else if (winningAsset == null || !productId.equals(winningAsset.getId())){
-			winningAsset = assetManager.findAssetAllFields(productId, getSecurityFilter());
+		} else if (winningAsset == null || !assetId.equals(winningAsset.getId())){
+			winningAsset = assetManager.findAssetAllFields(assetId, getSecurityFilter());
 		}
 	}
 

@@ -63,7 +63,7 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 		
 		boolean editMode = false;
 		if (linkedAssetId != null) {
-			Asset linkedAsset = loadLinkedProduct(linkedAssetId);
+			Asset linkedAsset = loadLinkedAsset(linkedAssetId);
 			
 			if (linkedAsset != null) {
 				editMode = true;
@@ -94,8 +94,8 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 		return vendors;
 	}
 	
-	public Asset loadLinkedProduct(Long linkedProductId) {
-		return getLoaderFactory().createSafetyNetworkAssetLoader().setAssetId(linkedProductId).load();
+	public Asset loadLinkedAsset(Long linkedAssetId) {
+		return getLoaderFactory().createSafetyNetworkAssetLoader().setAssetId(linkedAssetId).load();
 	}
 
 	public Boolean getRefreshRegistration() {

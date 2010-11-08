@@ -48,7 +48,7 @@ public class AssetImportAction extends AbstractImportAction {
 
 	@Override
 	protected Importer createImporter(MapReader reader) {
-		return getImporterFactory().createProductImporter(reader, getUser(), type);
+		return getImporterFactory().createAssetImporter(reader, getUser(), type);
 	}
 	
 	@Override
@@ -62,7 +62,7 @@ public class AssetImportAction extends AbstractImportAction {
 	}
 	
 	public String doDownloadExample() {
-		AssetExporter exporter = new AssetExporter(getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleProduct())));
+		AssetExporter exporter = new AssetExporter(getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleAsset())));
 		
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -84,19 +84,19 @@ public class AssetImportAction extends AbstractImportAction {
 		return SUCCESS;
 	}
 	
-	private Asset createExampleProduct() {
+	private Asset createExampleAsset() {
 		Asset example = new Asset();
 		
-		example.setSerialNumber(getText("example.product.serialNumber"));
-		example.setRfidNumber(getText("example.product.rfidNumber"));
-		example.setCustomerRefNumber(getText("example.product.customerRefNumber"));
+		example.setSerialNumber(getText("example.asset.serialNumber"));
+		example.setRfidNumber(getText("example.asset.rfidNumber"));
+		example.setCustomerRefNumber(getText("example.asset.customerRefNumber"));
 		example.setOwner(getUser().getOwner());
-		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.product.location")));
-		example.setPurchaseOrder(getText("example.product.purchaseOrder"));
-		example.setComments(getText("example.product.comments"));
+		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.asset.location")));
+		example.setPurchaseOrder(getText("example.asset.purchaseOrder"));
+		example.setComments(getText("example.asset.comments"));
 		example.setIdentified(new Date());
 		
-		AssetStatus exampleStatus = getExampleProductStatus();
+		AssetStatus exampleStatus = getExampleAssetStatus();
 		if (exampleStatus != null) {
 			example.setAssetStatus(exampleStatus);
 		}
@@ -114,7 +114,7 @@ public class AssetImportAction extends AbstractImportAction {
 		return example;
 	}
 	
-	private AssetStatus getExampleProductStatus() {
+	private AssetStatus getExampleAssetStatus() {
 		List<AssetStatus> statuses = getLoaderFactory().createAssetStatusListLoader().load();
 		
 		return (statuses.isEmpty()) ? null : statuses.get(0);

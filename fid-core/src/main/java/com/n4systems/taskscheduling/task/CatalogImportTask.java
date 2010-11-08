@@ -148,7 +148,7 @@ public class CatalogImportTask implements Runnable {
 		return importProductTypeIds;
 	}
 
-	public void setImportProductTypeIds(Set<Long> importProductTypeIds) {
+	public void setImportAssetTypeIds(Set<Long> importProductTypeIds) {
 		this.importProductTypeIds = importProductTypeIds;
 	}
 
