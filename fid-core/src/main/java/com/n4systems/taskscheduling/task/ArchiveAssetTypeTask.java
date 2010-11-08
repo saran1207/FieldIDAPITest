@@ -47,7 +47,7 @@ public class ArchiveAssetTypeTask implements Runnable {
 
 	public ArchiveAssetTypeTask() {
 		persistenceManager = ServiceLocator.getPersistenceManager();
-		assetManager = ServiceLocator.getProductManager();
+		assetManager = ServiceLocator.getAssetManager();
 	}
 
 	public void run() {

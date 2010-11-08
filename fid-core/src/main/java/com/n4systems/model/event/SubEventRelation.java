@@ -21,8 +21,8 @@ public class SubEventRelation {
 
 	@SuppressWarnings("unused")
 	@Id
-	@Column(nullable=false, insertable=false, updatable=false, unique=true)
-	private Long subinspections_inspection_id;
+	@Column(name="subevents_event_id", nullable=false, insertable=false, updatable=false, unique=true)
+	private Long subEventsEventId;
 	
 	@OneToOne(fetch=FetchType.EAGER, optional=false)
 	@JoinColumn(name="subevents_event_id", nullable=false, insertable=false, updatable=false, unique=true)

@@ -18,7 +18,7 @@ public class InfoOptionCleanerTask extends ScheduledTask {
 
 	@Override
     protected void runTask() throws Exception {
-		LegacyAssetType assetTypeManager = ServiceLocator.getProductType();
+		LegacyAssetType assetTypeManager = ServiceLocator.getAssetType();
 
 		int page = 1 ;
 		int pageSize = 100;

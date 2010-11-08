@@ -215,7 +215,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 		if (schedule == null)
 			return false;
 		if (getId() == null) {
-			return false; //asset.equals(schedule.asset) && inspectionType.equals(schedule.eventType) && nextDate.equals(schedule.nextDate);
+			return false;
 		}
 			
 

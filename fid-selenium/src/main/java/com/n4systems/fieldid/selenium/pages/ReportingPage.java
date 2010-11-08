@@ -16,10 +16,10 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 	
 	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
 		setCheckBoxValue("//input[@id='chk_event_search_date_performed']", displayColumns.isDatePreformed());
-		setCheckBoxValue("//input[@id='chk_event_search_inspectiontype']", displayColumns.isEventType());
+		setCheckBoxValue("//input[@id='chk_event_search_eventtype']", displayColumns.isEventType());
 		setCheckBoxValue("//input[@id='chk_event_search_customer']", displayColumns.isJobSiteName());
-		setCheckBoxValue("//input[@id='chk_event_search_inspectionresult']", displayColumns.isResult());
-		setCheckBoxValue("//input[@id='chk_event_search_inspectionbook']", displayColumns.isEventBook());
+		setCheckBoxValue("//input[@id='chk_event_search_eventresult']", displayColumns.isResult());
+		setCheckBoxValue("//input[@id='chk_event_search_eventbook']", displayColumns.isEventBook());
 		setCheckBoxValue("//input[@id='chk_event_search_performed_by']", displayColumns.isPerformedBy());
 		setCheckBoxValue("//input[@id='chk_event_search_division']", displayColumns.isDivision());
 		setCheckBoxValue("//input[@id='chk_event_search_organization']", displayColumns.isOrganization());

@@ -23,7 +23,7 @@ public class ModelToServiceConverterFactory {
 		return new PredefinedLocationToServiceConverter(loaderFactory.createPredefinedLocationLevelsLoader());
 	}
 	
-	public AssetToServiceConverter createProductToServiceConverter() {
+	public AssetToServiceConverter createAssetToServiceConverter() {
 		return new AssetToServiceConverter(legacyConverter, loaderFactory.createLastEventLoader(), createEventToServiceConverter());
 	}
 	

@@ -42,7 +42,7 @@ import com.n4systems.util.StringUtils;
 
 @Entity
 @Table(name = "masterevents")
-@PrimaryKeyJoinColumn(name="inspection_id")
+@PrimaryKeyJoinColumn(name="event_id")
 public class Event extends AbstractEvent implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<Event>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };

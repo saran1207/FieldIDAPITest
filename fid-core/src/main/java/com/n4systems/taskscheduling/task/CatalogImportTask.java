@@ -115,7 +115,7 @@ public class CatalogImportTask implements Runnable {
 
 	private void init() {
 		persistenceManager = ServiceLocator.getPersistenceManager();
-		assetTypeManager = ServiceLocator.getProductType();
+		assetTypeManager = ServiceLocator.getAssetType();
 		
 		linkedCatalogAccess = null;
 		

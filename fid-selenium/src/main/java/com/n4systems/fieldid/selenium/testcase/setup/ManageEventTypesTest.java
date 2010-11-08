@@ -112,7 +112,7 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void test_add_event_type_and_inspection_form() throws Exception {
+	public void test_add_event_type_and_event_form() throws Exception {
 		deleteTestEvent(TEST_EVENT_NAME);
 
 		manageEventTypesPage.clickAddTab();

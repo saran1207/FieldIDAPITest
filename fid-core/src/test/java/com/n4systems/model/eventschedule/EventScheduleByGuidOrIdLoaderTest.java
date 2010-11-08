@@ -15,7 +15,7 @@ import com.n4systems.util.persistence.TestingTransaction;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-public class InspectionScheduleByGuidOrIdLoaderTest {
+public class EventScheduleByGuidOrIdLoaderTest {
 	
 	@Test
 	public void should_try_to_lookup_by_mobile_guid_when_set() {

@@ -72,7 +72,7 @@ public class ImporterFactory {
 	}
 
 	protected LegacyAsset createLegacyAsset() {
-		return ServiceLocator.getAssetManager();
+		return ServiceLocator.getLegacyAssetManager();
 	}
 
 	protected EventPersistenceFactory createEventPersistenceFactory() {

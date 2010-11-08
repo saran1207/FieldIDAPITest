@@ -12,7 +12,7 @@ import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-// This loader is a direct migration from InspectionScheduleManager.getNextScheduleFor(Long, Long)
+// This loader is a direct migration from EventScheduleManager.getNextScheduleFor(Long, Long)
 public class NextEventScheduleLoader extends Loader<EventSchedule> {
 
 	private Long assetId;

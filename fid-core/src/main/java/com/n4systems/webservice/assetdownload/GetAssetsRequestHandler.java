@@ -14,11 +14,11 @@ public class GetAssetsRequestHandler implements RequestHandler<AssetRequest, Ass
 	private Logger logger = Logger.getLogger(GetAssetsRequestHandler.class);
 	private static final int MAX_ASSET_REQUEST_SIZE = 2000;
 	
-	private final FilteredInListLoader<Asset> productLoader;
+	private final FilteredInListLoader<Asset> assetLoader;
 	private final AssetToServiceConverter converter;
 	
-	public GetAssetsRequestHandler(FilteredInListLoader<Asset> productLoader, AssetToServiceConverter converter) {
-		this.productLoader = productLoader;
+	public GetAssetsRequestHandler(FilteredInListLoader<Asset> assetLoader, AssetToServiceConverter converter) {
+		this.assetLoader = assetLoader;
 		this.converter = converter;
 	}
 	
@@ -35,9 +35,9 @@ public class GetAssetsRequestHandler implements RequestHandler<AssetRequest, Ass
 			
 			AssetListResponse response = new AssetListResponse();
 
-			List<Asset> assets = productLoader.setIds(request.getAssetIds()).load();
-			for(Asset product: assets) {
-				response.getAssets().add(converter.toServiceDTO(product));
+			List<Asset> assets = assetLoader.setIds(request.getAssetIds()).load();
+			for(Asset asset: assets) {
+				response.getAssets().add(converter.toServiceDTO(asset));
 			}
 			
 			return response;

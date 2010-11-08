@@ -481,7 +481,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
 	@Override
 	public String getGlobalId() {
-		// Products are exportable but are never edited
+		// Assets are exportable but are never edited
 		return null;
 	}
 	

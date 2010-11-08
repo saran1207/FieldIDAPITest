@@ -33,6 +33,6 @@ public class RequestHandlerFactory {
 	}
 	
 	public RequestHandler<AssetRequest, AssetListResponse> createGetAssetRequestHandler() {
-		return new GetAssetsRequestHandler(loaderFactory.createFilteredInListLoader(Asset.class), converterFactory.createProductToServiceConverter());
+		return new GetAssetsRequestHandler(loaderFactory.createFilteredInListLoader(Asset.class), converterFactory.createAssetToServiceConverter());
 	}
 }

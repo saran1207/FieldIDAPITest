@@ -33,7 +33,7 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 	private String user;
 	private String password;
 	private int numberOfAssetsVisible;
-	private int numberOfInspectionsVisible;
+	private int numberOfEventsVisible;
 	private int numberOfIncompleteSchedulesVisible;
 	private int numberOfCompleteSchedulesVisible;
 	private Collection<String> serailNumberThatCanBeViewed;
@@ -72,7 +72,7 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 		this.user = user;
 		this.password = password;
 		this.numberOfAssetsVisible = numberOfAssetsVisible;
-		this.numberOfInspectionsVisible = numberOfAssetsVisible;
+		this.numberOfEventsVisible = numberOfAssetsVisible;
 		this.numberOfIncompleteSchedulesVisible = numberOfAssetsVisible;
 		this.numberOfCompleteSchedulesVisible = numberOfAssetsVisible;
 		
@@ -111,11 +111,11 @@ public class MinimalSecurityTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void should_find_the_correct_number_of_inspections_visible() throws Exception {
+	public void should_find_the_correct_number_of_events_visible() throws Exception {
 		Reporting reporting = new Reporting(selenium, misc);
 		misc.gotoReporting();
 		reporting.runReport();
-		Assert.assertEquals(numberOfInspectionsVisible, reporting.totalResults());
+		Assert.assertEquals(numberOfEventsVisible, reporting.totalResults());
 	}
 
 	@Test

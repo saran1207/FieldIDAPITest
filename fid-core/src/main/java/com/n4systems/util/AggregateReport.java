@@ -65,9 +65,9 @@ public class AggregateReport {
 	}
 
 	
-	public Long getDisinctProductsForAssetType( String productTypeName ) {
+	public Long getDisinctAssetsForAssetType( String assetTypeName ) {
 		for( AggregateReportRecord record : distinctAssetsByAssetType) {
-			if( record.getAssetTypeName().equals( productTypeName ) ) {
+			if( record.getAssetTypeName().equals( assetTypeName ) ) {
 				return record.getCount();
 			}
 		}

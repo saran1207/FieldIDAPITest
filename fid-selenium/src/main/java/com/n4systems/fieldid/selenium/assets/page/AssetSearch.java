@@ -39,8 +39,8 @@ public class AssetSearch {
 	private String assetTypeGroupDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_assettypegroup']";
 	private String assetTypeDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_assettype']";
 	private String assetStatusDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_assetstatus']";
-	private String lastInspectionDateDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_lastinspdate']";
-	private String networkLastInspectionDateDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_network_lastinspdate']";
+	private String lastEventDateDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_lasteventdate']";
+	private String networkLastEventDateDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_network_lasteventdate']";
 	private String dateIdentifiedDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_identified']";
 	private String identifiedByDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_identifiedby']";
 	private String modifiedByDisplayColumnCheckBoxLocator = "xpath=//INPUT[@id='chk_asset_search_modifiedby']";
@@ -101,8 +101,8 @@ public class AssetSearch {
 		result.setAssetTypeGroup(misc.getCheckBoxValue(assetTypeGroupDisplayColumnCheckBoxLocator));
 		result.setAssetType(misc.getCheckBoxValue(assetTypeDisplayColumnCheckBoxLocator));
 		result.setAssetStatus(misc.getCheckBoxValue(assetStatusDisplayColumnCheckBoxLocator));
-		result.setLastEventDate(misc.getCheckBoxValue(lastInspectionDateDisplayColumnCheckBoxLocator));
-		result.setNetworkLastEventDate(misc.getCheckBoxValue(networkLastInspectionDateDisplayColumnCheckBoxLocator));
+		result.setLastEventDate(misc.getCheckBoxValue(lastEventDateDisplayColumnCheckBoxLocator));
+		result.setNetworkLastEventDate(misc.getCheckBoxValue(networkLastEventDateDisplayColumnCheckBoxLocator));
 		result.setDateIdentified(misc.getCheckBoxValue(dateIdentifiedDisplayColumnCheckBoxLocator));
 		result.setIdentifiedBy(misc.getCheckBoxValue(identifiedByDisplayColumnCheckBoxLocator));
 		result.setModifiedBy(misc.getCheckBoxValue(modifiedByDisplayColumnCheckBoxLocator));
@@ -127,8 +127,8 @@ public class AssetSearch {
 		misc.setCheckBoxValue(assetTypeGroupDisplayColumnCheckBoxLocator, sdc.getAssetTypeGroup());
 		misc.setCheckBoxValue(assetTypeDisplayColumnCheckBoxLocator, sdc.getAssetType());
 		misc.setCheckBoxValue(assetStatusDisplayColumnCheckBoxLocator, sdc.getAssetStatus());
-		misc.setCheckBoxValue(lastInspectionDateDisplayColumnCheckBoxLocator, sdc.getLastEventDate());
-		misc.setCheckBoxValue(networkLastInspectionDateDisplayColumnCheckBoxLocator, sdc.getNetworkLastEventDate());
+		misc.setCheckBoxValue(lastEventDateDisplayColumnCheckBoxLocator, sdc.getLastEventDate());
+		misc.setCheckBoxValue(networkLastEventDateDisplayColumnCheckBoxLocator, sdc.getNetworkLastEventDate());
 		misc.setCheckBoxValue(dateIdentifiedDisplayColumnCheckBoxLocator, sdc.getDateIdentified());
 		misc.setCheckBoxValue(identifiedByDisplayColumnCheckBoxLocator, sdc.getIdentifiedBy());
 		misc.setCheckBoxValue(modifiedByDisplayColumnCheckBoxLocator, sdc.getModifiedBy());

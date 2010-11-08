@@ -40,7 +40,7 @@ public class AssetMergeTask implements Runnable {
 	}
 	
 	private void setUp() {
-		assetManager = ServiceLocator.getProductManager();
+		assetManager = ServiceLocator.getAssetManager();
 	}
 	
 	private void executeMerge() {

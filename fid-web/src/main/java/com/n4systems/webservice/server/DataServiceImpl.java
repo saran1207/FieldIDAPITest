@@ -334,7 +334,7 @@ public class DataServiceImpl implements DataService {
 		try {
 			ProductTypeListResponse response = new ProductTypeListResponse();
 	
-			LegacyAssetType assetTypeManager = ServiceLocator.getProductType();
+			LegacyAssetType assetTypeManager = ServiceLocator.getAssetType();
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			
 			List<AssetType> assetTypes = assetTypeManager.getAssetTypesForTenant( paginatedRequestInformation.getTenantId() );
@@ -672,7 +672,7 @@ public class DataServiceImpl implements DataService {
 			LocationConverter locationConverter = new LocationServiceToContainerConverter(createLoaderFactory(request));
 			locationConverter.convert(request, asset);
 			
-			AssetSaveService saver = new AssetSaveService(ServiceLocator.getAssetManager(), user);
+			AssetSaveService saver = new AssetSaveService(ServiceLocator.getLegacyAssetManager(), user);
 			saver.setAsset(asset).update();
 			
 		} catch (Exception e) {
@@ -704,7 +704,7 @@ public class DataServiceImpl implements DataService {
 			asset.setCustomerRefNumber(request.getCustomerRefNumber());
 			asset.setPurchaseOrder(request.getPurchaseOrder());
 			
-			AssetSaveService saver = new AssetSaveService(ServiceLocator.getAssetManager(), user);
+			AssetSaveService saver = new AssetSaveService(ServiceLocator.getLegacyAssetManager(), user);
 			saver.setAsset(asset).update();
 			
 			
@@ -772,7 +772,7 @@ public class DataServiceImpl implements DataService {
 	
 	
 	private Asset lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
-		AssetManager assetManager = ServiceLocator.getProductManager();
+		AssetManager assetManager = ServiceLocator.getAssetManager();
 
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
@@ -812,7 +812,7 @@ public class DataServiceImpl implements DataService {
 			updateShopOrderOnProduct(asset, productDTO, orderManager, tenantId);
 			
 			// on edit, the identified by user is populated with the modified user
-			ServiceLocator.getAssetManager().update(asset, asset.getModifiedBy());
+			ServiceLocator.getLegacyAssetManager().update(asset, asset.getModifiedBy());
 			
 			return response;
 		} catch (Exception e) {
@@ -848,7 +848,7 @@ public class DataServiceImpl implements DataService {
 		
 		try {
 			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-			LegacyAsset productManager = ServiceLocator.getAssetManager();
+			LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
 			
 			if( isTransactionCompleted( requestInformation ) ) { 
 				return response; 
@@ -1021,7 +1021,7 @@ public class DataServiceImpl implements DataService {
 	
 	private Asset createProduct(ProductServiceDTO productDTO, Long tenantId) throws Exception {
 		PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-		LegacyAsset productManager = ServiceLocator.getAssetManager();
+		LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
 		
 		Asset asset = convertNewProduct( tenantId, productDTO );
 		
@@ -1059,7 +1059,7 @@ public class DataServiceImpl implements DataService {
 			
 			InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
 			
-			LegacyAsset productManager = ServiceLocator.getAssetManager();
+			LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
 			EventScheduleManager scheduleManager = ServiceLocator.getEventScheduleManager();
 			
 			List<Event> events = new ArrayList<Event>();
@@ -1159,7 +1159,7 @@ public class DataServiceImpl implements DataService {
 			InspectionServiceDTO inspectionServiceDTO,
 			List<SubAsset> subAssets) throws SubAssetUniquenessException {
 		
-		new UpdateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets, ServiceLocator.getProductManager()).run();
+		new UpdateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets, ServiceLocator.getAssetManager()).run();
 		
 	}
 	
@@ -1220,7 +1220,7 @@ public class DataServiceImpl implements DataService {
 		
 		if (subProductMaps == null) return subAssets;
 		
-		AssetManager assetManager = ServiceLocator.getProductManager();
+		AssetManager assetManager = ServiceLocator.getAssetManager();
 		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 		
 		for (SubProductMapServiceDTO subProductMap : subProductMaps) {
@@ -1271,8 +1271,8 @@ public class DataServiceImpl implements DataService {
 		Asset asset = null;
 		if( inspectionServiceDTO.productIdExists() ) {
 			try {
-				asset = ServiceLocator.getProductManager().findAsset( inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter( tenantId ) );
-				asset = ServiceLocator.getProductManager().fillInSubAssetsOnAsset(asset);
+				asset = ServiceLocator.getAssetManager().findAsset( inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter( tenantId ) );
+				asset = ServiceLocator.getAssetManager().fillInSubAssetsOnAsset(asset);
 			} catch( Exception e ) {
 				logger.error( "looking up asset with asset id " + inspectionServiceDTO.getProductId(), e );
 			}
@@ -1280,7 +1280,7 @@ public class DataServiceImpl implements DataService {
 		} else if( inspectionServiceDTO.productMobileGuidExists() ) {
 			// Try looking up by GUID
 			try {
-				asset = ServiceLocator.getProductManager().findAssetByGUID( inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
+				asset = ServiceLocator.getAssetManager().findAssetByGUID( inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
 			} catch (Exception e) {
 				logger.error("Looking up asset serial by GUID = "+inspectionServiceDTO.getProductMobileGuid(), e);
 			}

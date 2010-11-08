@@ -57,7 +57,7 @@ public class ServiceLocator {
 		return new UserEJBContainer();
 	}
 
-	public static final LegacyAssetType getProductType() {
+	public static final LegacyAssetType getAssetType() {
 		return new LegacyAssetTypeEJBContainer();
 	}
 
@@ -73,7 +73,7 @@ public class ServiceLocator {
 		return new ProofTestHandlerEJBContainer();
 	}
 
-	public static final LegacyAsset getAssetManager() {
+	public static final LegacyAsset getLegacyAssetManager() {
 		return new LegacyAssetEJBContainer();
 	}
 
@@ -93,7 +93,7 @@ public class ServiceLocator {
 		return new EventManagerEJBContainer();
 	}
 
-	public static final AssetManager getProductManager() {
+	public static final AssetManager getAssetManager() {
 		return new AssetManagerEJBContainer();
 	}
 
