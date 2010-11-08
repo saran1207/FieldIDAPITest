@@ -78,7 +78,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@IndexColumn(name="orderidx")
-    @JoinTable(name = "masterevents_subevents", joinColumns = @JoinColumn(name="inspectionsmaster_inspection_id"), inverseJoinColumns = @JoinColumn(name="subinspections_inspection_id"))
+    @JoinTable(name = "masterevents_subevents", joinColumns = @JoinColumn(name="masterevents_event_id"), inverseJoinColumns = @JoinColumn(name="subevents_event_id"))
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
 	
 	@Enumerated(EnumType.STRING)

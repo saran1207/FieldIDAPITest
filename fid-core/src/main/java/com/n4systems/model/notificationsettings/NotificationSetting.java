@@ -53,7 +53,7 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@IndexColumn(name="orderidx")
 	private List<Long> assetTypes = new ArrayList<Long>();
 	
-	@Column(name="inspectiontype_id", nullable=false)
+	@Column(name="eventtype_id", nullable=false)
 	@CollectionOfElements(fetch=FetchType.EAGER)
 	@IndexColumn(name="orderidx")
 	private List<Long> eventTypes = new ArrayList<Long>();

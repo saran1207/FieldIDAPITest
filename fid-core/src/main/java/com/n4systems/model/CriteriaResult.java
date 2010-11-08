@@ -29,7 +29,7 @@ public class CriteriaResult extends EntityWithTenant {
 	private State state;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
-    @JoinColumn(name="inspection_id")
+    @JoinColumn(name="event_id")
 	private AbstractEvent event;
 	
 	@OneToMany(fetch= FetchType.EAGER, cascade=CascadeType.ALL)

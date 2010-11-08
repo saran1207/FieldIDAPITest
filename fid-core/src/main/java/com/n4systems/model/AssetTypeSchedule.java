@@ -26,7 +26,7 @@ public class AssetTypeSchedule extends EntityWithOwner implements Saveable, Secu
 	private AssetType assetType;
 	
 	@ManyToOne(optional=false)
-    @JoinColumn(name = "inspectiontype_id")
+    @JoinColumn(name = "eventtype_id")
 	private EventType eventType;
 	
 

@@ -13,7 +13,7 @@ import com.n4systems.util.StringUtils;
 
 @Entity
 @Table(name = "subevents")
-@PrimaryKeyJoinColumn(name="inspection_id")
+@PrimaryKeyJoinColumn(name="event_id")
 public class SubEvent extends AbstractEvent implements SecurityEnhanced<SubEvent> {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap"};

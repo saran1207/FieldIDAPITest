@@ -25,11 +25,11 @@ public class SubEventRelation {
 	private Long subinspections_inspection_id;
 	
 	@OneToOne(fetch=FetchType.EAGER, optional=false)
-	@JoinColumn(name="subinspections_inspection_id", nullable=false, insertable=false, updatable=false, unique=true)	
+	@JoinColumn(name="subevents_event_id", nullable=false, insertable=false, updatable=false, unique=true)
 	private SubEvent subEvent;
 
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
-	@JoinColumn(name="inspectionsmaster_inspection_id", nullable=false, insertable=false, updatable=false)
+	@JoinColumn(name="masterevents_event_id", nullable=false, insertable=false, updatable=false)
 	private Event masterEvent;
 	
 	@Column(name="orderidx", nullable=false, insertable=false, updatable=false)

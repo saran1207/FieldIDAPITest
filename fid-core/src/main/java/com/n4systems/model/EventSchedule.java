@@ -74,7 +74,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	private Asset asset;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="inspectiontype_id")
+    @JoinColumn(name="eventtype_id")
 	private EventType eventType;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -88,7 +88,7 @@ public class EventSchedule extends ArchivableEntityWithOwner implements NetworkE
 	private ScheduleStatus status = ScheduleStatus.SCHEDULED;
 
 	@OneToOne
-    @JoinColumn(name="inspection_inspection_id")
+    @JoinColumn(name="event_event_id")
 	private Event event;
 
 	private Location advancedLocation = new Location();

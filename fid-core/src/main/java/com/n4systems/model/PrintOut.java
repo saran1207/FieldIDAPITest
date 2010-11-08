@@ -39,7 +39,7 @@ public class PrintOut extends EntityWithTenant implements NamedEntity {
 	@Column(nullable=false)
 	private PrintOutType type;
 
-    @Column(name="withsubinspections")
+    @Column(name="withsubevents")
 	private boolean withSubEvents = false;
 	
 	public PrintOut() {

@@ -14,7 +14,7 @@ public class AssociatedEventType extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
-    @JoinColumn(name="inspectiontype_id")
+    @JoinColumn(name="eventtype_id")
 	private EventType eventType;
 	
 	@ManyToOne

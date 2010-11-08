@@ -66,7 +66,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	private Date identified;
 
 	@Temporal(TemporalType.TIMESTAMP)
-    @Column(name="lastinspectiondate")
+    @Column(name="lasteventdate")
 	private Date lastEventDate;
 	
 	@ManyToOne(optional = true)

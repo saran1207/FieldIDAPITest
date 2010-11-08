@@ -44,7 +44,7 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date assetTypes = new Date();
 
-	@Column(name="inspectiontypes", nullable=false)
+	@Column(name="eventtypes", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date eventTypes = new Date();
 	
