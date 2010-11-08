@@ -300,7 +300,7 @@ public class SubEventCrud extends EventCrud {
 			return ERROR;
 		}
 
-		addFlashMessageText("message.eventstoreds");
+		addFlashMessageText("message.eventstored");
 
 		return SUCCESS;
 	}

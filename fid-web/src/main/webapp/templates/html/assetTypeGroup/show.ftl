@@ -10,7 +10,7 @@ ${action.setPageType('asset_type_group', 'show')!}
 </div>
 
 <div class="pageSection">
-	<h2><@s.text name="label.assettypes"/></h2>
+	<h2 class="decoratedHeader"><@s.text name="label.assettypes"/></h2>
 	<div class="crudForm bigForm sectionContent">
 		
 		<#list assetTypes as assetType>

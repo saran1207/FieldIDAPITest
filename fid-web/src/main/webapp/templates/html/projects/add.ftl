@@ -13,7 +13,7 @@
 </head>
 ${action.setPageType('job', 'add')!}
 <div class="pageSection" >
-	<h2><@s.text name="label.projectdetails"/></h2>
+	<h2 class="decoratedHeader"><@s.text name="label.projectdetails"/></h2>
 
 	<@s.form action="jobCreate" theme="fieldid" cssClass="crudForm largeForm bigForm pageSection layout">
 		<div class="infoSet">

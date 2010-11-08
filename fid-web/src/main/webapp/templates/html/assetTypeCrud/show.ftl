@@ -97,7 +97,7 @@ ${action.setPageType('asset_type', 'show')!}
 </div>
 <#if assetType.imageName?exists >
 	
-	<div class="viewSection smallViewSection" >
+	<div class="viewSection" >
 		<h2><@s.text name="label.assetimage" /></h2>
 		<p>
 			<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${assetType.uniqueID}" includeParams="none" />" alt="<@s.text name="label.assetimage"/>" width="300"/>

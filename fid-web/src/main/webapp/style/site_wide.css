@@ -120,12 +120,6 @@ em {
 	padding: 5px 5px;
 }
 
-.fullForm h2{
-		background-color: #EEEEEE;
-	border-bottom:1px solid #CCCCCC;
-	border-top:1px solid #CCCCCC;	
-}
-
 .fullForm input, .fullForm button  {
 	padding:1px 0;
 	
@@ -201,6 +195,12 @@ em {
 	min-width:430px;
 }
 
+.fluidSets h2{
+	background-color: #EEEEEE;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;	
+}
+
 .fluidSets .infoSet .label, .fluidSets .infoSet .fieldHolder {
 	display:block;
 	float:left;
@@ -257,10 +257,8 @@ em {
 	margin-top:10px;
 }
 
-
 .blockSeparated {
-	border-top: 1px solid #D0DAFA;
-	padding-top:5px;
+	padding-top:10px;
 }
 
 .fullPageForm {

@@ -10,7 +10,7 @@
 		</#list>
 	</#if>
 </div>
-<div id="emptySchedules" class="infoSet" >
+<div id="emptySchedules">
 	<div class="fieldHolder">
 		<@s.text name="label.no_schedules_have_been_created"/>
 	</div>

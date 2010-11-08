@@ -24,7 +24,7 @@ ${action.setPageType('event_type_group', 'show')!}
 </div>
 
 <div class="pageSection">
-	<h2><@s.text name="label.eventtypes"/></h2>
+	<h2 class="decoratedHeader"><@s.text name="label.eventtypes"/></h2>
 	<div class="crudForm bigForm sectionContent">
 		
 		<#list eventTypes as eventType>
