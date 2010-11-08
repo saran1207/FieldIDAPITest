@@ -3,7 +3,7 @@ ${action.setPageType('event_type', 'edit')!}
 
 
 <@s.form action="eventTypeDelete" id="mainContent" cssClass="fullForm fluidSets" theme="fieldid">
-	<h2 class="clean"><@s.text name="label.delete_summary"/></h2>
+	<h2><@s.text name="label.delete_summary"/></h2>
 	<#if archiveSummary.canBeRemoved()>
 		<div class="pageInstructions">
 			<@s.text name="instruction.delete_event_type"/>

@@ -67,7 +67,7 @@ h2.decoratedHeader{
 
 h2.clean {
 	padding: 0;
-	border: none;
+	border-style: none;
 	background-color: transparent;
 }
 
@@ -1754,4 +1754,8 @@ input.description {
 
 #organizationUpdate .sectionContent, #organizationUpdate .formAction{
 	border-top: none;
+}
+
+.pageInstructions{
+	padding: 10px;
 }
