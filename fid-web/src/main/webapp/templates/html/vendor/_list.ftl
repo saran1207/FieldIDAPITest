@@ -20,18 +20,16 @@
 			<#if asset.rfidNumber??>
 				<td>${asset.rfidNumber}</td>
 			<#else>
-				<td></td>
+				<td>&nbsp;</td>
 			</#if>			
 			<td>${asset.type.name}</td>
-			<td>${asset.description}</td>
+			<td>${asset.description!}&nbsp;</td>
 			<td>
 			    <#if action.isAssetAlreadyRegistered(asset)>
                     <@s.text name="label.already_registered"/>
                 <#else>
                     <a href='<@s.url action="regNetworkAsset.action" namespace="/aHtml/iframe" uniqueID="${asset.id}"/>' ${lightViewOptions} ><@s.text name="label.registerasset"/></a>
                 </#if>
-
-				
 			</td>
 		</tr>
 		</#list>			

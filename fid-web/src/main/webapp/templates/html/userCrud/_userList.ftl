@@ -18,8 +18,8 @@
 			<td>${user.userLabel?html! }</td>
 			<td>${(user.owner.getInternalOrg().name?html)!}</td>
 			<#if userType?exists && userType != "EMPLOYEES" >
-				<td>${(user.owner.customerOrg.name?html)!}</td>
-				<td>${(user.owner.divisionOrg.name?html)!}</td>
+				<td>${(user.owner.customerOrg.name?html)!}&nbsp;</td>
+				<td>${(user.owner.divisionOrg.name?html)!}&nbsp;</td>
 			</#if>
 			
 			<td>${user.emailAddress?html! } </td>
