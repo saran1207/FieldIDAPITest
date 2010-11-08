@@ -73,6 +73,10 @@
 		background-image: url(../../images/widgets-embedded.png);
 }
 
+.import {
+		background-image: url(../../images/xls-icon.png);
+}
+
 .setupList{
 	margin-bottom: 30px;
 }
@@ -110,12 +114,52 @@
 }
 
 fieldset {
-	border: 1px solid black;
+	border: 1px solid #CACACA;
 	padding: 3px;
 	font-size: 13px;
+	margin-top: 15px;
 }
 fieldset legend {
 	padding: 6px;
 	font-weight: bold;
 	font-size: 14px;
+}
+
+fieldset p {
+	padding-left: 10px;
+	padding-bottom: 6px;
+	width: 80%;
+}
+
+.importInfo {
+	background-color: #EEEEEE; 
+	border: 1px solid #CACACA;
+}
+
+.importInfo .setupOption{
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+.importInfo p {
+	font-size: 13px;	
+	line-height: 14px;
+	margin-left: 30px;
+	margin-bottom: 10px;
+}
+
+.importAction {
+	font-size: 13px;	
+	line-height: 14px;
+	margin-left: 10px;
+	margin-bottom: 6px;
+}
+
+.importAction select {
+	margin-right: 5px;
+}
+
+.wwgrp {
+	padding: 0;
+	width: auto;
 }

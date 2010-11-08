@@ -25,6 +25,7 @@ import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.eventschedule.IncompleteEventSchedulesListLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventtype.AssociatedEventTypesLoader;
+import com.n4systems.model.eventtype.EventTypeListLoader;
 import com.n4systems.model.eventtype.EventTypeListableLoader;
 import com.n4systems.model.jobs.EventJobListableLoader;
 import com.n4systems.model.location.AllPredefinedLocationsPaginatedLoader;
@@ -493,6 +494,10 @@ public class LoaderFactory implements Serializable {
 
     public AssetAlreadyRegisteredLoader createAssetAlreadyRegisteredLoader() {
         return new AssetAlreadyRegisteredLoader(filter);
+    }
+    
+    public EventTypeListLoader createEventTypeListLoader(){
+    	return new EventTypeListLoader(filter);
     }
 
 }
