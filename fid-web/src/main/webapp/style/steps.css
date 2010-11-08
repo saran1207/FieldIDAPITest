@@ -23,15 +23,14 @@
 }
 
 .step h2 {
-	background-color:#dadffa;
-	border-bottom: 1px solid #B5BACC;
+	background-color: #EEEEEE;
+	border-bottom:1px solid #CCCCCC;
 }
 .stepClosed h2 {
 	border-bottom:none;
 }
 
 .stepContent {
-	border-top: 1px solid #ddd;
 	margin: 5px 5px 5px 15px;
 	overflow:hidden;
 }

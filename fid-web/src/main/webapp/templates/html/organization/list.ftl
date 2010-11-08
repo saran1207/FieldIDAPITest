@@ -1,7 +1,7 @@
 ${action.setPageType('organization','list')!}
 	<@s.url action="organizations" id="pageAction"/>
 	
-	<h2>
+	<h2 class="decoratedHeader">
 		<@s.text name="label.primaryorganization"/>
 		<a href="<@s.url action="organizationEdit" uniqueID="${primaryOrg.id}"/>"><@s.text name="label.edit"/></a>
 	</h2>
