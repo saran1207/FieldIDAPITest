@@ -86,7 +86,7 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		IdentifyPage identifyPage = homePage.clickIdentifyLink();
 		int quantity = misc.getRandomNumber(2, 10);
 		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, quantity, "*");
-		verifyMultiAddWasSuccessful(identifiers);
+		verifyMultiAddWasSuccessful(identifyPage, identifiers);
 	}
 	
 	@Test
@@ -100,12 +100,12 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		IdentifyPage identifyPage = homePage.clickIdentifyLink();
 		int quantity = misc.getRandomNumber(2, 10);
 		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, quantity, "*");
-		verifyMultiAddWasSuccessful(identifiers);
+		verifyMultiAddWasSuccessful(identifyPage, identifiers);
 	}
 	
-	private void verifyMultiAddWasSuccessful(List<Identifier> identifiers) {
+	private void verifyMultiAddWasSuccessful(IdentifyPage identifyPage, List<Identifier> identifiers) {
 		for(Identifier identifier : identifiers) {
-			checkAssetIdentified(null,identifier.getSerialNumber());
+			checkAssetIdentified(identifyPage, identifier.getSerialNumber());
 		}
 	}
 

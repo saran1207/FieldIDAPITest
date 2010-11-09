@@ -24,7 +24,7 @@ public class ManageEventBooksPage extends FieldIDPage {
 	
 	public boolean checkOnManageEventBooksPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Event Books')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event Books')]");
 	}
 	
 	public void clickViewAllTab() {

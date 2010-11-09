@@ -36,7 +36,7 @@ public class IdentifyPageDriver {
 	private String identifyAddAssetTypeTextFieldLocator = "xpath=//SELECT[@id='assetType']";
 	private String identifyAddOwnerTextFieldLocator = "xpath=//INPUT[@id='assetCreate_owner_orgName']";
 	private String identifyAddChooseLinkLocator = "xpath=//A[contains(text(),'Choose')]";
-	private String identifyAddAttachAFileButtonLocator = "xpath=//BUTTON[contains(text(),'Attach A File')]";
+	private String identifyAddAttachAFileButtonLocator = "xpath=//A[.='Attach A File']";
 	private String identifyAddSaveButtonLocator = "xpath=//INPUT[@id='saveButton']";
 	private String identifyAddSaveAndInspectButtonLocator = "xpath=//INPUT[@id='saveAndStartEventButton']";
 	private String identifyAddSaveAndPrintButtonLocator = "xpath=//INPUT[@id='saveAndPrintButton']";
@@ -223,9 +223,9 @@ public class IdentifyPageDriver {
 			setRegisterThisAssetOverTheSafetyNetwork(p.getSafetyNetworkRegistration());
 		}
 		if(p.getPublished()) {
-			selenium.select(identifyAddPublishOverSafetyNetworkSelectListLocator, "Publish");
+			selenium.select(identifyAddPublishOverSafetyNetworkSelectListLocator, "Publish Over Safety Network");
 		} else {
-			selenium.select(identifyAddPublishOverSafetyNetworkSelectListLocator, "Do Not Publish");
+			selenium.select(identifyAddPublishOverSafetyNetworkSelectListLocator, "Do Not Publish Over Safety Network");
 		}
 		if(p.getOwner() != null) {
 			misc.gotoChooseOwner();

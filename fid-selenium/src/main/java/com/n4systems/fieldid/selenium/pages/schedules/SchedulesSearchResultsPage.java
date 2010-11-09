@@ -26,32 +26,32 @@ public class SchedulesSearchResultsPage extends FieldIDPage {
     }
     
     public EventPage clickStartEventLink(){
-    	selenium.click("//a[@id='moreActions'][1]");
-    	selenium.click("//li/a[contains(.,'Start Event')][1]");
+//    	selenium.click("//a[@id='moreActions'][1]");
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Start Event')][1]");
     	return new EventPage(selenium);
     }
     
     public AssetPage clickViewSchedulesLink(){
-     	selenium.click("//a[@id='moreActions'][1]");
-    	selenium.click("//li/a[contains(.,'View Schedules')][1]");
+//     	selenium.click("//a[@id='moreActions'][1]");
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'View Schedules')][1]");
     	return new AssetPage(selenium);
     }
     
     public AssetPage clickEditSchedulesLink(){
-     	selenium.click("//a[@id='moreActions'][1]");
-    	selenium.click("//li/a[contains(.,'Edit Schedule')][1]");
+//     	selenium.click("//a[@id='moreActions'][1]");
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Edit Schedule')][1]");
     	return new AssetPage(selenium);
     }
     
     public AssetPage clickViewAssetLink(){
-     	selenium.click("//a[@id='moreActions'][1]");
-    	selenium.click("//li/a[contains(.,'View Asset')][1]");
+//     	selenium.click("//a[@id='moreActions'][1]");
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'View Asset')][1]");
     	return new AssetPage(selenium);
     }
 
     public AssetPage clickEditAssetLink(){
-     	selenium.click("//a[@id='moreActions'][1]");
-    	selenium.click("//li/a[contains(.,'Edit Asset')][1]");
+//     	selenium.click("//a[@id='moreActions'][1]");
+    	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Edit Asset')][1]");
     	return new AssetPage(selenium);
     }
 }

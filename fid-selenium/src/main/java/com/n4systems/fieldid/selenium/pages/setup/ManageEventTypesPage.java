@@ -25,7 +25,7 @@ public class ManageEventTypesPage extends FieldIDPage {
 	
 	public boolean checkOnManageEventTypesPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Event Types')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event Types')]");
 	}
 	
 	public void clickViewAllTab() {

@@ -15,9 +15,13 @@ public class ConditionWaiter {
 	}
 	
 	public void run(String errorMessage) {
-		run(errorMessage, 30, 200);
+		run(errorMessage, 30);
 	}
-	
+
+    public void run(String errorMessage, int timeoutInSeconds) {
+        run(errorMessage, timeoutInSeconds, 200);
+    }
+
 	public void run(String errorOnTimeout, int timeoutInSeconds, long pollIntervalMillis) {
 		long startTime = System.currentTimeMillis();
 		

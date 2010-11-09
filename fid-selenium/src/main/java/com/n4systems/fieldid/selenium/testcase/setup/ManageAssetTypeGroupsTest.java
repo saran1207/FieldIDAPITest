@@ -22,7 +22,7 @@ public class ManageAssetTypeGroupsTest extends FieldIDTestCase {
 	
 	@Before
 	public void navigate() {
-		typeGroupsPage = start().login().clickSetupLink().clickManageAssetTypeGroups();
+		typeGroupsPage = start().login().clickSetupLink().clickAssetTypeGroups();
 		deleteAssetTypeIfExists(TEST_GROUP_NAME);
 		deleteAssetTypeIfExists(TEST_GROUP_NAME_2);
 	}
@@ -68,14 +68,14 @@ public class ManageAssetTypeGroupsTest extends FieldIDTestCase {
 	@Test
 	public void adding_asset_to_type_should_warn_when_deleting() throws Exception {
 		addTestGroup(TEST_GROUP_NAME);
-		ManageAssetTypesPage assetTypesPage = typeGroupsPage.clickSetupLink().clickManageAssetTypes();
+		ManageAssetTypesPage assetTypesPage = typeGroupsPage.clickSetupLink().clickAssetTypes();
 		
 		String firstAssetType = assetTypesPage.getAssetTypes().get(0);
 		assetTypesPage.clickEditAssetType(firstAssetType);
 		assetTypesPage.selectAssetTypeGroup(TEST_GROUP_NAME);
 		assetTypesPage.clickSaveAssetType();
 		
-		typeGroupsPage = assetTypesPage.clickSetupLink().clickManageAssetTypeGroups();
+		typeGroupsPage = assetTypesPage.clickSetupLink().clickAssetTypeGroups();
 		typeGroupsPage.clickDeleteGroup(TEST_GROUP_NAME);
 		assertEquals(1, typeGroupsPage.getWarningNumberOfAttachedAssetTypes());
 		typeGroupsPage.confirmDeleteGroup();

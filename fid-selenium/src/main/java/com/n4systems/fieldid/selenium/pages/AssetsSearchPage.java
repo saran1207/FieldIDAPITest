@@ -24,8 +24,8 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 		setCheckBoxValue("//input[@id='chk_asset_search_assettype']", displayColumns.isAssetType());
 		setCheckBoxValue("//input[@id='chk_asset_search_assetstatus']", displayColumns.isAssetStatus());
 		setCheckBoxValue("//input[@id='chk_asset_search_identified']", displayColumns.isDateIdentified());
-		setCheckBoxValue("//input[@id='chk_asset_search_lastinspdate']", displayColumns.isLastEventDate());
-		setCheckBoxValue("//input[@id='chk_asset_search_network_lastinspdate']", displayColumns.isNetworkLastEventDate());
+		setCheckBoxValue("//input[@id='chk_asset_search_lasteventdate']", displayColumns.isLastEventDate());
+		setCheckBoxValue("//input[@id='chk_asset_search_network_lasteventdate']", displayColumns.isNetworkLastEventDate());
 		setCheckBoxValue("//input[@id='chk_asset_search_assignedto']", displayColumns.isAssignedTo());
 		setCheckBoxValue("//input[@id='chk_asset_search_identifiedby']", displayColumns.isIdentifiedBy());
 		setCheckBoxValue("//input[@id='chk_asset_search_modifiedby']", displayColumns.isModifiedBy());

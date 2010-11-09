@@ -8,7 +8,7 @@ ${action.setPageType('asset', 'edit')!}
 	<div class="actions">
 		<@s.submit id="saveButton" key="hbutton.save" onclick=" return false;" cssClass="saveButton save"/>
 		
-		<@s.submit id="saveAndStartEventButton" name="saveAndInspect" key="hbutton.saveandstartevent"  cssClass="saveButton save"/>
+		<@s.submit id="saveAndStartEventButton" name="saveAndStartEvent" key="hbutton.saveandstartevent"  cssClass="saveButton save"/>
 		
 		<@s.text name="label.or"/>
 		<a href="<@s.url action="asset"  uniqueID="${asset.id}"/>"><@s.text name="label.cancel"/></a>

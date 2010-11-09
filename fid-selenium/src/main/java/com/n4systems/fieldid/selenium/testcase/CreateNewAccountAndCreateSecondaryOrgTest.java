@@ -39,7 +39,7 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 		SignUpCompletePage completePage = createANewUnlimitedTenant(username, password);
 		completePage.clickSignInNow();
 		HomePage homePage = logIntoNewTenant(username, password);
-		ManageOrganizationsPage orgsPage = homePage.clickSetupLink().clickManageOranizations();
+		ManageOrganizationsPage orgsPage = homePage.clickSetupLink().clickManageOrganizations();
 		String orgName = addASecondaryOrganization(orgsPage);
 		verifySecondaryOrganizationWasAdded(orgsPage, orgName);
 	}

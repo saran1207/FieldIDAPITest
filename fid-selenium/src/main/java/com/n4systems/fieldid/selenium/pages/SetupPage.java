@@ -25,58 +25,85 @@ public class SetupPage extends FieldIDPage {
 	}
 
 	public ManageCustomersPage clickManageCustomers() {
+        clickOwnersUsersAndLocationsTab();
 		selenium.click("//a[.='Manage Customers']");
 		return new ManageCustomersPage(selenium);
 	}
 	
 	public SystemSettingsPage clickSystemSettings() {
-		selenium.click("//a[.='Manage System Settings']");
+        clickSettingsTab();
+		selenium.click("//a[.='System Settings']");
 		return new SystemSettingsPage(selenium);
 	}
 
 	public ManageUsersPage clickManageUsers() {
+        clickOwnersUsersAndLocationsTab();
 		selenium.click("//a[.='Manage Users']");
 		return new ManageUsersPage(selenium);
 	}
 
-	public ManageOrganizationsPage clickManageOranizations() {
+	public ManageOrganizationsPage clickManageOrganizations() {
+        clickSettingsTab();
 		selenium.click("//a[.='Manage Organizations']");
 		return new ManageOrganizationsPage(selenium);
 	}
 
 	public AutoAttributeWizardPage clickAutoAttributeWizard() {
+        clickTemplatesTab();
 		selenium.click("//a[.='Auto Attribute Wizard']");
 		return new AutoAttributeWizardPage(selenium);
 	}
 
 	public MangageEventTypeGroupsPage clickManageEventTypeGroups() {
-		selenium.click("//a[.='Manage Event Type Groups']");
+        clickAssetsAndEventsTab();
+		selenium.click("//a[.='Event Type Groups & PDF Report Style']");
 		return new MangageEventTypeGroupsPage(selenium);
 	}
 	
 	public ManageCommentTemplatesPage clickManageCommentTemplates() {
+        clickTemplatesTab();
 		selenium.click("//a[.='Manage Comment Templates']");
 		return new ManageCommentTemplatesPage(selenium);
 	}
 	
-	public ManageAssetTypeGroupsPage clickManageAssetTypeGroups() {
-		selenium.click("//a[.='Manage Asset Type Groups']");
+	public ManageAssetTypeGroupsPage clickAssetTypeGroups() {
+        clickAssetsAndEventsTab();
+		selenium.click("//a[.='Asset Type Groups']");
 		return new ManageAssetTypeGroupsPage(selenium);
 	}
 	
-	public ManageAssetTypesPage clickManageAssetTypes() {
-		selenium.click("//a[.='Manage Asset Types']");
+	public ManageAssetTypesPage clickAssetTypes() {
+        clickAssetsAndEventsTab();
+		selenium.click("//a[.='Asset Types']");
 		return new ManageAssetTypesPage(selenium);
 	}
 	
 	public ManageEventTypesPage clickManageEventTypes() {
-		selenium.click("//a[.='Manage Event Types']");
+        clickAssetsAndEventsTab();
+		selenium.click("//a[.='Event Types']");
 		return new ManageEventTypesPage(selenium);
 	}
 
 	public ManageEventBooksPage clickManageEventBooks() {
-		selenium.click("//a[.='Manage Event Books']");
+        clickAssetsAndEventsTab();
+		selenium.click("//a[.='Event Books']");
 		return new ManageEventBooksPage(selenium);
 	}
-	
+
+    protected void clickOwnersUsersAndLocationsTab() {
+        clickNavOption("Owners, Users & Locations");
+    }
+
+    protected void clickSettingsTab() {
+        clickNavOption("Settings");
+    }
+
+    protected void clickTemplatesTab() {
+        clickNavOption("Template");
+    }
+
+    protected void clickAssetsAndEventsTab() {
+        clickNavOption("Assets & Events");
+    }
+
 }

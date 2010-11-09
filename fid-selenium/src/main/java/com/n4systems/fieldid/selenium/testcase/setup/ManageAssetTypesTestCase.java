@@ -18,7 +18,7 @@ public abstract class ManageAssetTypesTestCase extends PageNavigatingTestCase<Ma
 
 	@Override
 	protected ManageAssetTypesPage navigateToPage() {
-		return startAsCompany("aacm").login().clickSetupLink().clickManageAssetTypes();
+		return startAsCompany("aacm").login().clickSetupLink().clickAssetTypes();
 	}
 	
 	@Before

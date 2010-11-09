@@ -35,7 +35,7 @@ public class SafetyNetworkSettingsPage extends FieldIDPage {
 
 	public void saveSettings() {
 		selenium.click("//input[@id='privacySettingsSave_hbutton_save']");
-		waitForPageToLoad();
+		waitForPageToLoad("60000");
 	}
 
 	public boolean isAutoPublishChecked() {

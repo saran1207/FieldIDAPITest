@@ -9,7 +9,7 @@ public class InspectPage {
 	MiscDriver misc;
 	
 	// Locators
-	private String inspectHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Inspect - ')]";
+	private String inspectHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Event - ')]";
 
 	public InspectPage(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
@@ -35,7 +35,7 @@ public class InspectPage {
 	 */
 	private void verifyInspectPageHeader(String serialNumber) {
 		if(!(selenium.isElementPresent(inspectHeaderLocator) && selenium.getText(inspectHeaderLocator).contains(serialNumber))) {
-			fail("Could not find the header for 'Inspect - " + serialNumber + "'.");
+			fail("Could not find the header for 'Event - " + serialNumber + "'.");
 		}
 	}
 }

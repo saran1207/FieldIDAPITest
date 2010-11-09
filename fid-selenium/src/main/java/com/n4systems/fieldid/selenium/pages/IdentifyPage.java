@@ -98,9 +98,9 @@ public class IdentifyPage extends FieldIDPage {
 			setRegisterThisAssetOverTheSafetyNetwork(p.getSafetyNetworkRegistration());
 		}
 		if(p.getPublished()) {
-			selenium.select("//select[@id='assetCreate_publishedState']", "Publish");
+			selenium.select("//select[@id='assetCreate_publishedState']", "Publish Over Safety Network");
 		} else {
-			selenium.select("//select[@id='assetCreate_publishedState']", "Do Not Publish");
+			selenium.select("//select[@id='assetCreate_publishedState']", "Do Not Publish Over Safety Network");
 		}
 		if(p.getOwner() != null) {
 			OrgPicker orgPicker = getOrgPicker();
@@ -346,7 +346,7 @@ public class IdentifyPage extends FieldIDPage {
 	public void clickContinueButtonMultiAddStep3() {
 		selenium.click("//input[@id='step23Form_label_continue']");
 		checkForErrorMessages("MultiAddStep3");
-		waitForIdentifiersToBeGenerated(30);
+		waitForIdentifiersToBeGenerated();
 	}
 	
 	public List<Identifier> setMultiAddStep4Form(List<Identifier> identifiers) {
@@ -393,12 +393,12 @@ public class IdentifyPage extends FieldIDPage {
 		waitForPageToLoad("40000");
 	}
 
-	private void waitForIdentifiersToBeGenerated(int timeoutSeconds) {
+	private void waitForIdentifiersToBeGenerated() {
 		new ConditionWaiter(new Predicate() {
 			@Override
 			public boolean evaluate() {
-				return selenium.isElementPresent("//div[@id='step4Loading' and not(contains(@style,'display: none'))]");
+				return selenium.isElementPresent("//div[@id='step4Loading' and contains(@style,'display: none')]");
 			}
-		}).run();
+		}).run("Should be able to generate identifiers - timed out");
 	}
 }

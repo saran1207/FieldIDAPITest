@@ -43,7 +43,7 @@ public class AssetPage {
 	private String editAssetAssetTypeTextFieldLocator = "xpath=//SELECT[@id='assetType']";
 	private String editAssetOwnerTextFieldLocator = "xpath=//INPUT[@id='assetUpdate_owner_orgName']";
 	private String editAssetChooseLinkLocator = "xpath=//A[contains(text(),'Choose')]";
-	private String editAssetAttachAFileButtonLocator = "xpath=//BUTTON[contains(text(),'Attach A File')]";
+	private String editAssetAttachAFileButtonLocator = "xpath=//A[.='Attach A File']";
 	private String editAssetSaveButtonLocator = "xpath=//INPUT[@id='saveButton']";
 	private String editAssetSaveAndStartEventButtonLocator = "xpath=//INPUT[@id='saveAndStartEventButton']";
 	private String editAssetCancelLinkLocator = "xpath=//A[text()='Cancel']";

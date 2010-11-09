@@ -29,7 +29,7 @@
 		<div class="actions">
 			<@s.submit id="saveButton" name="save" cssClass="save" key="hbutton.save" />
 			<#if Session.sessionUser.hasAccess("createevent") >
-				| <@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndInspect" key="hbutton.saveandstartevent" />
+				| <@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndStartEvent" key="hbutton.saveandstartevent" />
 			</#if>
 			| <@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
 			<#if Session.sessionUser.hasAccess("createevent") >

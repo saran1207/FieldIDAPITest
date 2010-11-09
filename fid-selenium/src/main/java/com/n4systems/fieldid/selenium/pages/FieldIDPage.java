@@ -153,14 +153,20 @@ public class FieldIDPage extends WebPage {
 	}
 	
 	protected void clickNavOption(String navOption) {
-		selenium.click("//ul[@class='options ']//a[contains(., '"+ navOption +"')]");
-		waitForPageToLoad();
+        clickNavOption(navOption, DEFAULT_TIMEOUT);
 	}
 	
 	protected void clickNavOption(String navOption, String timeout) {
+        if (getActiveNavOption().equals(navOption)) {
+            return;
+        }
 		selenium.click("//ul[@class='options ']//a[contains(., '"+ navOption +"')]");
 		waitForPageToLoad(timeout);
 	}
+
+    protected String getActiveNavOption() {
+        return selenium.getText("//ul[@class='options ']/li[contains(@class, 'selected')]").trim();
+    }
 
 	protected void waitForElementToBePresent(String locator)  {
 		waitForElementToBePresent(locator, MiscDriver.DEFAULT_TIMEOUT);

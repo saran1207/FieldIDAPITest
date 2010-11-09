@@ -23,7 +23,7 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 	
 	public boolean checkOnManageEventTypeGroupsPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Manage Event Type Group')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event Type Groups & PDF Report Style')]");
 	}
 	
 	public void clickViewAllTab() {

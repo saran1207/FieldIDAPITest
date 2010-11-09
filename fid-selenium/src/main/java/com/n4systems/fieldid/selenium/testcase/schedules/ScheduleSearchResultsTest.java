@@ -23,7 +23,7 @@ public class ScheduleSearchResultsTest extends FieldIDTestCase {
 	public void start_event_link() {
 		serialNumberToVerify = selenium.getText(FIRST_ELEMENT_LOCATOR);
 		schedulesSearchResultsPage.clickStartEventLink();
-		assertEquals("Inspect - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		assertEquals("Event - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 
 	@Test

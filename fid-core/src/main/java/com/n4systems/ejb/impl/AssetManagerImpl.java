@@ -488,7 +488,7 @@ public class AssetManagerImpl implements AssetManager {
 			scheduleCount.setCountSelect().addSimpleWhere("asset", asset);
 			summary.setSchedulesToDelete(persistenceManager.findCount(scheduleCount));
 
-			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( i.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";
+			String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";
 			Query subEventCount = em.createQuery(subEventQuery);
 			subEventCount.setParameter("asset", asset).setParameter("activeState", EntityState.ACTIVE);
 			summary.setAssetUsedInMasterEvent((Long) subEventCount.getSingleResult());
