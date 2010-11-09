@@ -610,6 +610,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	public Long getAssetId() {
 		return (asset != null) ? asset.getId() : null;
 	}
+	
+	public List<EventSchedule> getEventSchedules() {
+		return eventScheduleManager.getAvailableSchedulesFor(asset);
+	}
 
 	@RequiredFieldValidator(message="", key="error.noasset")
 	public void setAssetId(Long assetId) {

@@ -1,0 +1,47 @@
+fieldset {
+	border: 1px solid #CACACA;
+	font-size: 13px;
+	margin: 15px;
+	width: 45%;
+	float: left;
+}
+fieldset legend {
+	background-repeat: no-repeat;
+	background-position: 2px 5.5px;
+	padding: 6px;
+	font-weight: bold;
+	font-size: 14px;
+	margin-left: 5px;
+}
+
+.labeltext {
+	margin-left: 18px;
+}
+
+.leftColumn{
+	margin-right: 40px;
+}
+
+.schedule {
+	background-image: url(../../images/quick-event-calendar-small.png);
+}
+
+.adhoc {
+	background-image: url(../../images/quick-event-plus-icon.png);
+}
+
+.footer{
+	background-color: #EEEEEE;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+fieldset p {
+	padding-left: 20px;
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+
+fieldset span {
+	margin-left: 20px;
+}

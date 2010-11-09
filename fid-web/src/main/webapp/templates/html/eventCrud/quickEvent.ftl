@@ -1,26 +1,71 @@
-<title><@s.text name="title.quickevent" /></title>
+<title>
+	<@s.text name="label.perform_an_event_on">
+		<@s.param>${asset.serialNumber}</@s.param>
+	</@s.text>
+</title>
 <head>
-	<style>
-		.crudForm p span {
-			padding-left: 10px;
-		}
-	</style>
+	<@n4.includeStyle href="quick_event" type="page"/>
 </head>
-<div class="crudForm">
+<fieldset class="leftColumn">
+	<legend class="schedule">
+		<span class="labeltext"><@s.text name="label.perform_scheduled_event"/></span>
+	</legend>
 	
-	<span><@s.text name="label.chooseeventtype"/></span>
-		
-		
+	<#if eventSchedules.isEmpty() >
+		<p><@s.text name="label.no_schedules"/></p>
+	<#else>
+		<#list eventSchedules as schedule>
+			<p>
+				<label>${schedule.nextDate?string("MM/dd/yy")}</label>  
+				<span>
+					<@s.url id="performSchedule" action="selectEventAdd" assetId="${schedule.asset.id}" type="${schedule.eventType.id}" scheduleId="${schedule.id}"/>
+					<#if schedule.project?exists>
+						<@s.text name="label.quickEventSchedule">
+							<@s.param><a href="${performSchedule}">${schedule.eventType.name}</a></@s.param>
+							<@s.param>${schedule.project.name}</@s.param>
+						</@s.text>
+					<#else>
+						<a href="${performSchedule}">${schedule.eventType.name}</a>
+					</#if>
+				</span>
+			</p>	
+		</#list>
+	</#if>
 
-	<#list 	asset.type.eventTypes as type >
+	<p class="footer"> 
+		<@s.url id="manageSchedule" action="eventScheduleList" assetId="${asset.id}" />
+		<a href='${manageSchedule}'><@s.text name="label.manage_schedules"/></a> 
+	</p>
+</fieldset>
+
+<fieldset>
+	<legend class="adhoc">
+		<span class="labeltext"><@s.text name="label.perform_ad_hoc_event"/></span>
+	</legend>
+	
+	<#if asset.type.eventTypes.isEmpty()>
 		<p>
-			<span><a href="<@s.url action="selectEventAdd" assetId="${assetId}" type="${type.id}"/>">${type.name}</a></span>
+			<@s.text name="label.no_events">
+				<@s.param>${asset.type.name}</@s.param>
+			</@s.text>
 		</p>
-		
+		<p>
+			<@s.url id="addEventType" action="selectEventTypes" assetTypeId="${asset.type.id}" />
+			<@s.text name="label.click_here_to_add_one">
+				<@s.param><a href="${addEventType}"><@s.text name="label.click_here"/></a></@s.param>
+			</@s.text>
+		</p>
+	<#else>
+	
+	<#list asset.type.eventTypes as eventType>
+		<p>
+			<@s.url id="performEvent" action="eventAdd" assetId="${asset.id}" type="${eventType.id}"/>
+			<a href="${performEvent}">${eventType.name}</a>
+		</p>
 	</#list>
-	<div class="formAction">
-		<a href="<@s.url action="assetAdd" />"><@s.text name="label.returntoaddasset"/></a>
-		
-	</div>
-
-</div>
+	
+	</#if>
+</fieldset>
+	
+	
+	
