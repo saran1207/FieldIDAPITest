@@ -13,10 +13,6 @@
 	background: no-repeat url(../../images/small-check.png);
 }
 
-#setupWizardStep2 {
-	background: no-repeat url(../../images/system_settings.png);
-}
-
 #setupWizardStep3, #steps { 
 	background: no-repeat url(../../images/catalog.png);
 }
@@ -63,6 +59,16 @@
 .setupWizardContent h2{
 	color: #34849C;
 	padding: 0;
+}
+.setupWizardContent .infoSet, .setupWizardContent .fieldHolder{
+	border-style: none;
+	min-height: 0;
+	line-height: 0;
+}
+
+.setupWizardContent .infoSet p{
+	display: block;	
+	padding-bottom: 5px;
 }
 
 .quickSetupHeader h2,.setupWizardContent h2{
@@ -138,4 +144,10 @@
 
 .prominent{
 	padding: 20px;
+}
+.setupWizardContent .hideInQuickSetup{
+	display: none;
+}
+.hideInQuickSetup{
+	display: none;
 }

@@ -80,6 +80,18 @@ public class SystemSettingsCrud extends AbstractCrud {
 		}
 		return SUCCESS;
 	}
+	
+	@SkipValidation
+	public String doEditQuickSetupWizard() {
+		dateFormat = primaryOrg.getDateFormat();
+		webSite = primaryOrg.getWebSite();
+
+		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
+		if (privateLogoPath.exists()) {
+			imageDirectory = privateLogoPath.getName();
+		}
+		return SUCCESS;
+	}
 
 	public String doUpdate() {
 
@@ -106,6 +118,26 @@ public class SystemSettingsCrud extends AbstractCrud {
 		Transaction transaction = transactionManager().startTransaction();
 
 		try {
+			updateBranding(transaction);
+			save(transaction);
+			transactionManager().finishTransaction(transaction);
+			addFlashMessageText("message.system_settings_updated");
+		} catch (Exception e) {
+			addActionErrorText("error.updating_system_settings");
+			return ERROR;
+		} finally {
+			clearCachedValues();
+		}
+		return SUCCESS;
+	}
+	
+	
+	public String doUpdateDateAndBranding() {
+
+		Transaction transaction = transactionManager().startTransaction();
+
+		try {
+			updateDateFormat(transaction);
 			updateBranding(transaction);
 			save(transaction);
 			transactionManager().finishTransaction(transaction);

@@ -1,6 +1,5 @@
-	
+<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>3</@s.param></@s.text></title>
 <head>
-	<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>3</@s.param></@s.text></title>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
 
