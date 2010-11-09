@@ -1557,14 +1557,6 @@ input.description {
 	font-weight: bold;
 }
 
-.assignToDescription {
-	padding-left: 26px;	
-}
-
-.altbox{
-	padding-left: 10px;
-}
-
 #freeFormLabel{
 	display:inline;
 	float:none;

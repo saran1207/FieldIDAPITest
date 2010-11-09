@@ -13,10 +13,6 @@
 	background: no-repeat url(../../images/small-check.png);
 }
 
-#setupWizardStep1 {
-	background: no-repeat url(../../images/company_profile.png);
-}
-
 #setupWizardStep2 {
 	background: no-repeat url(../../images/system_settings.png);
 }
@@ -64,13 +60,13 @@
 	line-height:50px;
 	background-repeat: no-repeat;
 }
-.quickSetupHeader h2{
+.setupWizardContent h2{
 	color: #34849C;
+	padding: 0;
 }
 
-.quickSetupHeader h2, #setupWizardStart h2{
+.quickSetupHeader h2,.setupWizardContent h2{
 	font-size: 14pt;
-	padding: 5px;
 }
 
 #companyProfile {
@@ -97,16 +93,22 @@
 
 .setupContainer{
 	background-color: #eee;	
+	border: 1px solid #999999;
+	margin-top: 5px;
 }
 
 .setupWizardContent{
 	background-color: white;
-    border: 1px solid #e3e3e3;
+    border: 1px solid #999;
     padding: 20px;
     width: auto;
 }
 
-.setupWizardContent p {
+.checkBoxLabel{
+	padding-left: 10px;	
+}
+
+.setupWizardContent p,.setupWizardContent label, .checkBoxLabel {
 	margin-top:10px;
 	font-size: 15px;
 	line-height: 20px;
@@ -115,6 +117,7 @@
 #safetyNetworkConnections {
 	margin-top: 10px;
 }
+
 #safetyNetworkConnections td {
 	padding:10px 8px;
 	border-top:1px solid #999;
@@ -131,7 +134,6 @@
 
 #pageHeader{
 	margin-top: 15px;
-	border-bottom: 1px solid #999999;
 }
 
 .prominent{
