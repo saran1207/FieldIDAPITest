@@ -34,15 +34,22 @@
 		<action name="step2Complete" method="updateDateAndBranding" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/quickSetupWizard/step2.ftl</result>
 			<result name="error" type="freemarker">/templates/html/quickSetupWizard/step2.ftl</result>
-			<result name="success" type="redirectAction">step3</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">step3</param>
+				<param name="quickSetupWizardCatalogImport">true</param>
+			</result>
 		</action>
-		<action name="step3" method="list" class="com.n4systems.fieldid.actions.setupwizard.QuickSetupWizardSafetyNetworkConnections">
-			<result name="input" type="freemarker">/templates/html/quickSetupWizard/step3.ftl</result>
+		<action name="step3" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+				<result name="missing" type="redirectAction">startWizard</result>
 			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step3.ftl</result>
 		</action>
-		<action name="step3Import" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
-			<result name="missing" type="redirectAction">step3</result>
-			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step3Import.ftl</result>
+		<action name="step3ImportCatalogOnlyConfirm" method="confirm" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+			<result name="missing" type="redirectAction">startWizard</result>
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step4.ftl</result>
+		</action>
+		<action name="step3ImportCatalogOnlyImport" method="import" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+			<result name="missing" type="redirectAction">startWizard</result>
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step5.ftl</result>
 		</action>
 	</package>
 </struts>

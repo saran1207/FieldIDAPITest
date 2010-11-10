@@ -10,7 +10,6 @@
 	
 	<@s.form action="step2Complete" cssClass="fullForm  borderedSets" theme="fieldid">	
 		<#include "../common/_formErrors.ftl"/>
-	
 		<div class="setupWizardContent">
 			<h2><@s.text name="label.preferred_date_format"/></h2>
 			<p><@s.text name="label.preferred_date_format_description"/></p>
