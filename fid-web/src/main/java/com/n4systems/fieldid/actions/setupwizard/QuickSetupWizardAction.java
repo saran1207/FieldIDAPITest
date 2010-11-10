@@ -93,7 +93,6 @@ public class QuickSetupWizardAction extends AbstractAction {
 	public boolean isTurnOnJobSites() {
 		return turnOnJobSites;
 	}
-
 	
 	public void setTurnOnJobSites(boolean turnOnJobSites) {
 		this.turnOnJobSites = turnOnJobSites;
@@ -107,7 +106,8 @@ public class QuickSetupWizardAction extends AbstractAction {
 		this.turnOnAssignedTo = turnOnAssignedTo;
 	}
 
-	
-
+	public String getLoginUrl(){
+		return getLoginUrlForTenant(getTenant());
+	}
 	
 }

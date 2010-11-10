@@ -1,11 +1,11 @@
-<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>3</@s.param></@s.text></title>
+<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>4</@s.param></@s.text></title>
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
 
 <div class="setupContainer">
 	<div class="quickSetupHeader">
-		<h2><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>3</@s.param></@s.text></h2>
+		<h2><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>1</@s.param><@s.param>4</@s.param></@s.text></h2>
 	</div>
 	
 	<@s.form action="step1Complete" cssClass="fullForm fluentSets" theme="fieldid">	

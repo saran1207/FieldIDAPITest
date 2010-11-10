@@ -4,7 +4,7 @@
 </head>
 <div class="setupContainer">
 	<div class="quickSetupHeader">
-		<h2><@s.text name="label.setup_wizard"/></h2>
+		<h2><@s.text name="label.quick_setup_wizard"/></h2>
 	</div>
 	<div id="setupWizardStart" class="setupWizardContent">
 	

@@ -18,7 +18,7 @@
 			<result name="success" type="freemarker">/templates/html/quickSetupWizard/start.ftl</result>
 		</action>
 		<action name="allDone" method="completed" class="com.n4systems.fieldid.actions.setupwizard.QuickSetupWizardAction">
-			<result name="success" type="freemarker">/templates/html/quickSetupWizard/completed.ftl</result>
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step4.ftl</result>
 		</action>
 		<action name="step1" method="step1" class="com.n4systems.fieldid.actions.setupwizard.QuickSetupWizardAction">
 			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step1.ftl</result>
@@ -40,16 +40,17 @@
 			</result>
 		</action>
 		<action name="step3" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
-				<result name="missing" type="redirectAction">startWizard</result>
+			<result name="missing" type="redirectAction">startWizard</result>
 			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step3.ftl</result>
 		</action>
 		<action name="step3ImportCatalogOnlyConfirm" method="confirm" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
 			<result name="missing" type="redirectAction">startWizard</result>
-			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step4.ftl</result>
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/_loadingImports.ftl</result>
 		</action>
 		<action name="step3ImportCatalogOnlyImport" method="import" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
 			<result name="missing" type="redirectAction">startWizard</result>
-			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step5.ftl</result>
+			<result name="success" type="redirectAction">allDone</result>
 		</action>
+		
 	</package>
 </struts>

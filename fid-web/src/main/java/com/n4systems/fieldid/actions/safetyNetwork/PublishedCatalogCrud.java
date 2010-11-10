@@ -98,7 +98,6 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		}
 		return SUCCESS;
 	}
-
 	public String doConfirm() {
 		doShow();
 		Set<Long> importTheseAssetTypeIds = covertSelectedIdsToSet(importAssetTypeIds);

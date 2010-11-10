@@ -3,20 +3,6 @@
 	margin:20px;
 }
 
-#pageContent #steps{
-	display: block;
-	clear:both;
-	float: left;
-}
-
-#setupWizardComplete {
-	background: no-repeat url(../../images/small-check.png);
-}
-
-#setupWizardStep3, #steps { 
-	background: no-repeat url(../../images/catalog.png);
-}
-
 #setupWizardStep1 form, #setupWizardStep2 form {
 	padding-top:10px;
 }
@@ -26,29 +12,6 @@
 	padding-left:35px;
 	min-height:36px;
 } 
-
-#setupMobile {
-	background: no-repeat url(../../images/mobile_software.png);
-}
-
-#identifyAssets {
-	background: no-repeat url(../../images/identify.png);
-}
-
-#furtherAccountSetup {
-	background: no-repeat url(../../images/setup.png);
-}
-
-#visitHelp {
-	background: no-repeat url(../../images/help-documentation.png);
-}
-#watchIntroductionVideo {
-	background: no-repeat url(../../images/intro-video.png);
-}
-#needMoreHelp {
-	border-top:1px solid #999;
-	background: no-repeat url(../../images/contact-support.png);
-}
 
 #setupWizardStart ul li {
 	margin:10px 0;
@@ -65,6 +28,19 @@
 	min-height: 0;
 	line-height: 0;
 }
+
+.setupWizardContent h3{
+	font-size: 14px;
+	padding: 5px;
+	}
+
+.setupWizardContent .customSelection .customSelectionType{
+	padding-left: 30px;
+	}
+
+.setupWizardContent .selectOptions, .setupWizardContent .customSelectionType{
+	padding: 4px;
+} 
 
 .setupWizardContent .infoSet p{
 	display: block;	
@@ -93,9 +69,6 @@
 	background-image:  url(../../images/catalog.png);
 }
 
-#startButton {
-	font-size:1.5em;
-}
 
 .setupContainer{
 	background-color: #eee;	
@@ -114,7 +87,12 @@
 	padding-left: 10px;	
 }
 
-.setupWizardContent p,.setupWizardContent label, .checkBoxLabel {
+.setupWizardContent p{
+	font-size: 15px;
+	line-height: 20px;
+}
+
+.setupWizardContent label, .checkBoxLabel {
 	margin-top:10px;
 	font-size: 15px;
 	line-height: 20px;
@@ -142,12 +120,30 @@
 	margin-top: 15px;
 }
 
-.prominent{
-	padding: 20px;
+.setupContainer .prominent{
+	padding: 10px 10px 10px 20px;
+
 }
+
+.setupContainer .contentIndentation{
+	padding: 2px 10px 10px 25px
+	} 
+
+.setupContainer .prominent input, .setupContainer .prominent button{
+	padding: 2px;
+	font-size: 1.2em;
+	}
+
 .setupWizardContent .hideInQuickSetup{
 	display: none;
 }
+
 .hideInQuickSetup{
 	display: none;
 }
+
+label.urlLabel{
+	padding: 10px;
+	border: 1px solid #999; 
+	margin-right: 5px;
+	}
