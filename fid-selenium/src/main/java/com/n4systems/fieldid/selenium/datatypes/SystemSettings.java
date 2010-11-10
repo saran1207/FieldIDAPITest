@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
-
+// Avoid using this kind class, just directly read and write values using a Page
+@Deprecated
 public class SystemSettings {
-	String companyID;
-	String currentPlan;
 	long diskSpaceMaximum;			// -1 for unlimited
 	long diskSpaceCurrent;
 	long employeeAccountsMaximum;	// -1 for unlimited
@@ -15,22 +14,6 @@ public class SystemSettings {
 	String preferredDateFormat;
 	String defaultVendorContext;
 	String webSiteAddress;
-	
-	public String getCompanyID() {
-		return companyID;
-	}
-	
-	public void setCompanyID(String companyID) {
-		this.companyID = companyID;
-	}
-	
-	public String getCurrentPlan() {
-		return currentPlan;
-	}
-	
-	public void setCurrentPlan(String currentPlan) {
-		this.currentPlan = currentPlan;
-	}
 	
 	public long getDiskSpaceMaximum() {
 		return diskSpaceMaximum;

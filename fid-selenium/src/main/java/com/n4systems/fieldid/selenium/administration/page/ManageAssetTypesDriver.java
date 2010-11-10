@@ -25,7 +25,7 @@ public class ManageAssetTypesDriver {
 	private String assetTypeTableLocator = "xpath=" + assetTypeTableXpath;
 	private String assetTypesXpath = assetTypeTableXpath + "/TBODY/TR/TD[1]/A";
 	private String addAssetTypeLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI[contains(@class,'add')]/A[contains(text(),'Add')]";
-	private String assetInformationHeaderLocator = "xpath=//FORM[@id='assetTypeUpdate']/H2[contains(text(),'Asset Information')]";
+	private String assetInformationHeaderLocator = "xpath=//FORM[@id='assetTypeUpdate']//H2[contains(text(),'Asset Information')]";
 	private String groupSelectListLocator = "xpath=//SELECT[@id='assetTypeUpdate_group']";
 	private String nameTextFieldLocator = "xpath=//INPUT[@id='assetTypeUpdate_name']";
 	private String warningsTextFieldLocator = "xpath=//TEXTAREA[@id='assetTypeUpdate_warnings']";
@@ -35,11 +35,11 @@ public class ManageAssetTypesDriver {
 	private String manufacturerCertificateTextFieldLocator = "xpath=//TEXTAREA[@id='assetTypeUpdate_manufacturerCertificateText']";
 	private String assetDescriptionTemplateTextFieldLocator = "xpath=//INPUT[@id='assetTypeUpdate_descriptionTemplate']";
 	private String uploadImageTextFieldLocator = "xpath=//INPUT[@id='uploadImage_upload']";
-	private String attributesHeaderLocator = "xpath=//FORM[@id='assetTypeUpdate']/H2[contains(text(),'Attributes')]";
+	private String attributesHeaderLocator = "xpath=//FORM[@id='assetTypeUpdate']//H2[contains(text(),'Attributes')]";
 	private String attributesAddButtonLocator = "xpath=//DIV[@id='infoFieldEditing']/DIV/INPUT[contains(@value,'Add')]";
 	private String attributesUndoDeletesButtonLocator = "xpath=//DIV[@id='infoFieldEditing']/DIV/INPUT[contains(@value,'Undo Deletes')]";
-	private String attachmentsHeaderLocator = "xpath=//FORM[@id='assetTypeUpdate']/H2[contains(text(),'Attachments')]";
-	private String attachAFileButtonLocator = "xpath=//FORM[@id='assetTypeUpdate']/P[contains(@class,'actions')]/BUTTON[contains(text(),'Attach A File')]";
+	private String attachmentsHeaderLocator = "xpath=//FORM[@id='assetTypeUpdate']//H2[contains(text(),'Attachments')]";
+	private String attachAFileButtonLocator = "xpath=//FORM[@id='assetTypeUpdate']//a[.='Attach A File']";
 	private String cancelButtonLocator = "xpath=//FORM[@id='assetTypeUpdate']/DIV[@class='formAction']/INPUT[contains(@value,'Cancel')]";
 	private String saveButtonLocator = "xpath=//FORM[@id='assetTypeUpdate']/DIV[@class='formAction']/INPUT[contains(@value,'Save')]";
 	private String viewAllAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'View All')]";;

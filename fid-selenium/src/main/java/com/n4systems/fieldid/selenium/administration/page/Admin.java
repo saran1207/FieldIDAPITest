@@ -13,12 +13,12 @@ public class Admin {
 	private String manageOrganizationsLinkLocator = "xpath=//A[contains(text(),'Manage Organizations')]";
 	private String manageCustomersLinkLocator = "xpath=//A[contains(text(),'Manage Customers')]";
 	private String manageUsersLinkLocator = "xpath=//A[contains(text(),'Manage Users')]";
-	private String manageUserRegistrationsLinkLocator = "xpath=//A[contains(text(),'Manage User Registrations')]";
-	private String manageSystemSettingsLinkLocator = "xpath=//A[contains(text(),'Manage System Settings')]";
-	private String manageAssetTypesLinkLocator = "xpath=//A[contains(text(),'Manage Asset Types')]";
-	private String manageAssetTypeGroupsLinkLocator = "xpath=//A[contains(text(),'Manage Asset Type Groups')]";
-	private String manageAssetStatusesLinkLocator = "xpath=//A[contains(text(),'Manage Asset Statuses')]";
-	private String manageEventTypesLinkLocator = "xpath=//A[contains(text(),'Manage Event Types')]";
+	private String manageUserRegistrationsLinkLocator = "xpath=//A[contains(text(),'User Registrations')]";
+	private String manageSystemSettingsLinkLocator = "xpath=//A[contains(text(),'System Settings')]";
+	private String manageAssetTypesLinkLocator = "xpath=//A[contains(text(),'Asset Types')]";
+	private String manageAssetTypeGroupsLinkLocator = "xpath=//A[contains(text(),'Asset Type Groups')]";
+	private String manageAssetStatusesLinkLocator = "xpath=//A[contains(text(),'Asset Statuses')]";
+	private String manageEventTypesLinkLocator = "xpath=//A[contains(text(),'Event Types')]";
 	private String manageEventTypeGroupsLinkLocator = "xpath=//A[contains(text(),'Manage Event Type Groups')]";
 	private String manageEventBooksLinkLocator = "xpath=//A[contains(text(),'Manage Event Books')]";
 	private String autoAttributeWizardLinkLocator = "xpath=//A[contains(text(),'Auto Attribute Wizard')]";
@@ -77,6 +77,7 @@ public class Admin {
 	}
 	
 	public void gotoManageAssetTypes() {
+        gotoAssetsEventsTab();
 		if(selenium.isElementPresent(manageAssetTypesLinkLocator)) {
 			selenium.click(manageAssetTypesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -86,6 +87,7 @@ public class Admin {
 	}
 	
 	public void gotoManageAssetTypeGroups() {
+        gotoAssetsEventsTab();
 		if(selenium.isElementPresent(manageAssetTypeGroupsLinkLocator)) {
 			selenium.click(manageAssetTypeGroupsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -95,6 +97,7 @@ public class Admin {
 	}
 	
 	public void gotoManageAssetStatuses() {
+        gotoAssetsEventsTab();
 		if(selenium.isElementPresent(manageAssetStatusesLinkLocator)) {
 			selenium.click(manageAssetStatusesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -104,6 +107,7 @@ public class Admin {
 	}
 	
 	public void gotoManageEventTypes() {
+        gotoAssetsEventsTab();
 		if(selenium.isElementPresent(manageEventTypesLinkLocator)) {
 			selenium.click(manageEventTypesLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -111,8 +115,19 @@ public class Admin {
 			fail("Could not find the link to Manage Event Types");
 		}
 	}
-	
-	public void gotoManageEventTypeGroups() {
+
+    private void gotoAssetsEventsTab() {
+        selenium.click("//ul[@class='options ']//a[contains(., 'Assets & Events')]");
+        misc.waitForPageToLoadAndCheckForOopsPage();
+    }
+
+    private void gotoTemplatesTab() {
+        selenium.click("//ul[@class='options ']//a[contains(., 'Templates')]");
+        misc.waitForPageToLoadAndCheckForOopsPage();
+    }
+
+    public void gotoManageEventTypeGroups() {
+        gotoAssetsEventsTab();
 		if(selenium.isElementPresent(manageEventTypeGroupsLinkLocator)) {
 			selenium.click(manageEventTypeGroupsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -122,6 +137,7 @@ public class Admin {
 	}
 	
 	public void gotoManageEventBooks() {
+        gotoAssetsEventsTab();
 		if(selenium.isElementPresent(manageEventBooksLinkLocator)) {
 			selenium.click(manageEventBooksLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
@@ -333,6 +349,7 @@ public class Admin {
 	 * ManageAssetCodeMappings class to confirm we arrived properly.
 	 */
 	public void gotoManageAssetCodeMappings() {
+        gotoTemplatesTab();
 		if(selenium.isElementPresent(manageAssetCodeMappingsLinkLocator)) {
 			selenium.click(manageAssetCodeMappingsLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

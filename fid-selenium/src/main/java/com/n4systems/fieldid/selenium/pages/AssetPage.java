@@ -100,7 +100,7 @@ public class AssetPage extends FieldIDPage {
 
 	public EventPage clickInpectNow(String date, String eventType, String job) {
 		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
-				+ "']/..//a[text()='start event now']");
+				+ "']/..//a[text()='Start event now']");
 		return new EventPage(selenium);
 	}
 
@@ -163,9 +163,9 @@ public class AssetPage extends FieldIDPage {
 	public void setAssetForm(Asset p) {
 
 		if (p.getPublished() == true) {
-			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Publish");
+			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Publish Over Safety Network");
 		} else {
-			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Do Not Publish");
+			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Do Not Publish Over Safety Network");
 		}
 		if (p.getSerialNumber() != null) {
 			selenium.type(editAssetSerialNumberTextFieldLocator, p.getSerialNumber());

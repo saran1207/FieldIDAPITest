@@ -35,7 +35,8 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		loginPage.signInWithSystemAccount();
 		
 		selenium.openAndWaitForPageLoad("/fieldid/setup.action");
-		selenium.clickAndWaitForPageLoad("link=Manage User Registrations");
+        selenium.clickAndWaitForPageLoad("//ul[@class='options ']//a[contains(., 'Owners, Users & Locations')]");
+		selenium.clickAndWaitForPageLoad("link=User Registrations");
 	}
 
 	private void verifyRegistrationInformationIsShown(String userId) {

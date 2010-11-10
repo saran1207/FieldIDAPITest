@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.pages;
 import static org.junit.Assert.fail;
 
 import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
+import com.n4systems.fieldid.selenium.pages.setup.BrandingPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
@@ -34,6 +35,12 @@ public class SetupPage extends FieldIDPage {
         clickSettingsTab();
 		selenium.click("//a[.='System Settings']");
 		return new SystemSettingsPage(selenium);
+	}
+
+	public BrandingPage clickBranding() {
+        clickSettingsTab();
+		selenium.click("//a[.='Branding']");
+		return new BrandingPage(selenium);
 	}
 
 	public ManageUsersPage clickManageUsers() {

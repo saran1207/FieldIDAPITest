@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.testcase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.n4systems.fieldid.selenium.pages.setup.BrandingPage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,15 +50,14 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	private TenantInfo createARandomNewBasicTenant(String referrer) {
 		startAsCompany(referrer);
 		String promoCode = "";	// no promo code
-		return ct.createARandomNewTenant(SignUpPackages.packageTypeBasic, promoCode);
+		return ct.createARandomNewTenant(SignUpPackages.packageTypePlus, promoCode);
 	}
 
 	private void verifyDefaultSettingsConfiguredProperly(AccountSetupWizardPage wizardPage, SystemSettings expected) {
 		SystemSettingsPage settingsPage = wizardPage.clickSetupLink().clickSystemSettings();
-		boolean hasVendors = (expected.getDefaultVendorContext() != null);
-		SystemSettings systemSettings = settingsPage.getSystemSettings(hasVendors);
-		assertTrue(expected.getPreferredDateFormat().equals(systemSettings.getPreferredDateFormat()));
-		assertEquals(expected.getWebSiteAddress(), systemSettings.getWebSiteAddress());
+		assertEquals(expected.getPreferredDateFormat(), settingsPage.getPreferredDateFormat());
+        BrandingPage brandingPage = settingsPage.clickSetupLink().clickBranding();
+		assertEquals(expected.getWebSiteAddress(), brandingPage.getWebSiteAddress());
 	}
 
 	private SystemSettings acceptDefaultSettingsForSetupWizardWorks(AccountSetupWizardPage page, boolean referrer) {

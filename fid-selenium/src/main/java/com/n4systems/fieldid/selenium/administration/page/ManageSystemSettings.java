@@ -41,8 +41,6 @@ public class ManageSystemSettings {
 	public SystemSettings getSystemSettings(boolean hasVendors) {
 		verifySystemSettingsPage();
 		SystemSettings ss = new SystemSettings();
-		ss.setCompanyID(getCompanyID());
-		ss.setCurrentPlan(getYourCurrentPlan());
 		ss.setDiskSpaceCurrent(getDiskSpaceCurrent());
 		ss.setDiskSpaceMaximum(getDiskSpaceMaximum());
 		ss.setEmployeeAccountsCurrent(getEmployeeAccountsCurrent());
