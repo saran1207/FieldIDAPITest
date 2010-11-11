@@ -28,7 +28,7 @@ public class Home {
 	private String instructionalVideosHeaderLocator = helpVideosLocator + "/h3[contains(text(),'Instructional Videos')]";
 	private String instructionalVideosMoreLinkLocator = instructionalVideosHeaderLocator + "/span/a[contains(text(),'more')]";
 	private String fieldIDIntroVideoLinkLocator = "xpath=//div[@id='introVideo']/a[@id='showVideo' and contains(text(),'Watch')]";
-	private String quickSetupWizardLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Quick Setup Wizard')]";
+	private String quickSetupWizardLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Setup Wizard')]";
 	private String jobsSectionHeaderLocator = "xpath=//div[@id='jobs']/h3[contains(text(),'Jobs')]";
 
 	public Home(FieldIdSelenium selenium, MiscDriver misc) {

@@ -35,7 +35,7 @@ public class QuickSetupWizard {
 	private String visitTheHelpDocumentationLinkLocator = "xpath=//A[contains(text(),'Visit the help documentation')]";
 	private String watchTheIntroductionVideoLinkLocator = "xpath=//A[contains(text(),'Watch the introduction video')]";
 	private String previewSystemLogoImageLocator = "xpath=//IMG[@id='previewImage')]";
-	private String quickSetupWizardLinkLocator = "xpath=//A[contains(text(),'Quick Setup Wizard')]";
+	private String quickSetupWizardLinkLocator = "xpath=//A[contains(text(),'Setup Wizard')]";
 	
 	public QuickSetupWizard(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
