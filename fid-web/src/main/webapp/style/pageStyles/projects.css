@@ -1,6 +1,5 @@
 .emptyAssets, .emptyEvents, .emptyNotes, .emptyResources {
 	padding: 5px 15px;
-	border-bottom:1px solid #D0DAFD;
 }
 #eventCounts {
 	padding: 5px 15px;

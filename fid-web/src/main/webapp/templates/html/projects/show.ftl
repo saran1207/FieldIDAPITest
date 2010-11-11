@@ -31,7 +31,7 @@
 ${action.setPageType('job', 'show')!}
 
 <div class="crudForm largeForm bigForm pageSection layout">
-	<h2><@s.text name="label.projectdetails"/> 
+	<h2 class="decoratedHeader"><@s.text name="label.projectdetails"/> 
 		<#if sessionUser.hasAccess("managejobs")> 
 			<a href="<@s.url action="jobEdit" uniqueID="${project.id}"/>"><@s.text name="label.littleedit"/></a>
 		</#if>	
@@ -120,7 +120,7 @@ ${action.setPageType('job', 'show')!}
 </div>
 <#if !project.eventJob>
 	<div id="assets" class="pageSection" style="" >
-		<h2><@s.text name="label.assetsonproject"/>
+		<h2 class="decoratedHeader"><@s.text name="label.assetsonproject"/>
 			<#if sessionUser.hasAccess( "managejobs" )> 
 				<a id="addNewAsset" href="<@s.url action="jobAssetAdd" uniqueID="${project.id}"/>"><@s.text name="label.addasset"/></a>
 				<a id="closeNewAsset" href="close" style="display:none"><@s.text name="label.closesearch"/></a>
@@ -152,12 +152,12 @@ ${action.setPageType('job', 'show')!}
 	</div>
 <#else>
 	<div id="events" class="pageSection" style="" >
-		<h2><@s.text name="label.eventsonproject"/>	<#if sessionUser.hasAccess("createevent")><a href="<@s.url action="startAssignSchedulesToJob" jobId="${uniqueID}"/>"><@s.text name="label.addanevent"/></a></#if></h2>
+		<h2 class="decoratedHeader"><@s.text name="label.eventsonproject"/>	<#if sessionUser.hasAccess("createevent")><a href="<@s.url action="startAssignSchedulesToJob" jobId="${uniqueID}"/>"><@s.text name="label.addanevent"/></a></#if></h2>
 		<div class="sectionContent" id="emptyEventList" <#if !schedules.isEmpty()> style="display:none" </#if>>
 			<div id="noLinkedEvents"  >
 				<div class="emptyEvents">
+					<label><@s.text name="label.emptyprojecteventlist"/> <#if sessionUser.hasAccess("createevent")><@s.text name="label.emptyprojecteventlistinstruction"/></#if></label>
 				</div>
-                <label><@s.text name="label.emptyprojecteventlist"/> <#if sessionUser.hasAccess("createevent")><@s.text name="label.emptyprojecteventlistinstruction"/></#if></label>
             </div>
 		</div>
 		
@@ -182,7 +182,7 @@ ${action.setPageType('job', 'show')!}
 
 
 <div id="notesandattachments" class="pageSection" style="clear:both">
-	<h2>
+	<h2 class="decoratedHeader">
 		<@s.text name="label.notes"/>
 		<#if sessionUser.hasAccess( "managejobs" )> 
 			<a id="addNewNote" href="<@s.url action="jobNoteAdd" projectId="${project.id}"/>"><@s.text name="label.addnote"/></a>
@@ -217,7 +217,7 @@ ${action.setPageType('job', 'show')!}
 
 
 <div id="resources" class="pageSection" style="">
-	<h2>
+	<h2 class="decoratedHeader">
 		<@s.text name="label.resourcesassigned"/>
 		<#if sessionUser.hasAccess("managejobs")> 
 			<a id="addNewResource" href="javascript:void(0);"><@s.text name="label.assign_resource"/></a>

@@ -19,7 +19,7 @@ ${action.setPageType('job','events')!}
 	<#assign currentAction="jobEvents" >
 	<#include '../common/_pagination.ftl' >
 	<div class="pageSection">
-		<h2><@s.text name="label.eventsonproject"/></h2>
+		<h2 class="decoratedHeader"><@s.text name="label.eventsonproject"/></h2>
 		<div class="sectionContent" >
 			<#list page.list as event > 
 				<#include "../projects/_attachedEvents.ftl"/>
@@ -36,7 +36,7 @@ ${action.setPageType('job','events')!}
 	</div>
 <#else>
 	<div class="emptyList" >
-		<h2><@s.text name="label.invalidpage" /></h2>
+		<h2 class="decoratedHeader"><@s.text name="label.invalidpage" /></h2>
 		<p>
 			<@s.text name="message.invalidpage" />
 			<a href="<@s.url  action="jobEvents" projectId="${projectId}"/>" ><@s.text name="message.backtopageone"/></a>

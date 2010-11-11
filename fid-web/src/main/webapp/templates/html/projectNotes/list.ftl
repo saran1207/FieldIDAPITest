@@ -11,7 +11,7 @@ ${action.setPageType('job', 'notes')!}
 	<#assign currentAction="jobNotes" >
 	<#include '../common/_pagination.ftl' >
 	<div class="pageSection">
-		<h2>
+		<h2 class="decoratedHeader">
 			<@s.text name="label.notes"/>
 		</h2>
 		<div class="sectionContent">
@@ -30,7 +30,7 @@ ${action.setPageType('job', 'notes')!}
 	</div>
 <#else>
 	<div class="emptyList" >
-		<h2><@s.text name="label.invalidpage" /></h2>
+		<h2 class="decoratedHeader"><@s.text name="label.invalidpage" /></h2>
 		<p>
 			<@s.text name="message.invalidpage" />
 			<a href="<@s.url action="jobNotes" projectId="${projectId}"/>" ><@s.text name="message.backtopageone"/></a>
