@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.handlers.remover.EventFrequenciesDeleteHandlerImpl;
+import com.n4systems.handlers.remover.ScheduleListDeleteHandler;
+import com.n4systems.handlers.remover.ScheduleListDeleteHandlerImpl;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
@@ -59,10 +61,12 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 			AssociatedEventTypeSaver saver = new AssociatedEventTypeSaver();
 			
 			EventFrequenciesDeleteHandler frequenciesDeleteHandler = new EventFrequenciesDeleteHandlerImpl(getLoaderFactory().createEventFrequenciesListLoader(), new EventFrequencySaver());
+			ScheduleListDeleteHandlerImpl scheduleDeleteHandler = new ScheduleListDeleteHandlerImpl();
 			
 			for (AssociatedEventType associatedEventType : toBeRemoved) {
 				saver.remove(transaction, associatedEventType);
 				frequenciesDeleteHandler.forAssociatedEventType(associatedEventType).remove(transaction);
+				scheduleDeleteHandler.setAssociatedEventType(associatedEventType).remove(transaction);
 			}
 			
 			for (AssociatedEventType associatedEventType : toBeAdded) {
