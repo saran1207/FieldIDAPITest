@@ -33,13 +33,13 @@ public abstract class FieldIDTestCase {
     private static final int SHUTDOWN_ATTEMPTS = 5;
     private static final int SHUTDOWN_RETRY_INTERVAL_MS = 5000;
 
-	private String host = System.getProperty("selenium-server", "tools.n4systems.net");
+	private String host = System.getProperty("selenium-server", "dev.n4systems.net");
 	private int port = Integer.parseInt(System.getProperty("selenium-port", "4444"));
 //	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
 	private String browser = System.getProperty("fieldid-browser", "*firefox");
 	private String protocol = System.getProperty("fieldid-protocol", "http");
 	private String initCompany = System.getProperty("fieldid-companyid", "n4");
-	private String domain = System.getProperty("fieldid-domain", "grumpy.n4systems.net");
+	private String domain = System.getProperty("fieldid-domain", "dev.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
 

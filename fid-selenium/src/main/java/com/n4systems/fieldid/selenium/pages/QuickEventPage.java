@@ -13,7 +13,7 @@ public class QuickEventPage extends FieldIDPage {
 
     public void verifyOnQuickEventPage() {
         checkForErrorMessages(null);
-        if (!selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(.,'Quick Event')]")) {
+        if (!selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(.,'Perform an Event on ')]")) {
             fail("Expected to be on quick event page");
         }
     }

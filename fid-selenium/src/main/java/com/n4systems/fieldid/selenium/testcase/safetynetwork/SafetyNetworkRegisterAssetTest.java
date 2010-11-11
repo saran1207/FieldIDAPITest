@@ -128,7 +128,7 @@ public class SafetyNetworkRegisterAssetTest extends PageNavigatingTestCase<Safet
 		asset.setOwner(new Owner("HALO", "Apache"));
 		asset.setPurchaseOrder("purchaseOrder");
 		asset.setNonIntegrationOrderNumber("nonIntegrationOrderNumber");
-		asset.setComments("Event Summary");
+		asset.setComments("Destroy");
 		return asset;
 	}
 
