@@ -1,5 +1,6 @@
 package com.n4systems.model.orgs;
 
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.PaginatedLoader;
@@ -12,6 +13,7 @@ public class DivisionOrgPaginatedLoader extends PaginatedLoader<DivisionOrg> {
 	private CustomerOrg customerOrg;
 	private boolean withLinkedDivisions = true;
 	private boolean archivedState;
+	private boolean archivedOnly;
 	private TenantOnlySecurityFilter archivedFilter;
 	
 	public DivisionOrgPaginatedLoader(SecurityFilter filter) {
@@ -37,6 +39,10 @@ public class DivisionOrgPaginatedLoader extends PaginatedLoader<DivisionOrg> {
 			builder.addWhere(new WhereParameter<Object>(Comparator.NULL, "linkedOrg"));
 		}
 		
+		if (archivedOnly) {
+			builder.addWhere(Comparator.EQ, "state", "state", EntityState.ARCHIVED);
+		}
+		
 		return builder;
 	}
 	
@@ -54,4 +60,10 @@ public class DivisionOrgPaginatedLoader extends PaginatedLoader<DivisionOrg> {
 		archivedState = true;
 		return this;
 	}
+	
+	public void setArchivedOnly(boolean archivedOnly) {
+		withArchivedState();
+		this.archivedOnly = archivedOnly;
+	}
+	
 }

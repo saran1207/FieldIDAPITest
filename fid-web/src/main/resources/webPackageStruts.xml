@@ -1821,6 +1821,37 @@
 				<param name="customerId">${customerId}</param>
 			</result>
 		</action>
+		
+		<action name="divisionArchive" method="archive" class="com.n4systems.fieldid.actions.DivisionCrud">
+			<result name="input" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
+		
+		<action name="divisionUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.DivisionCrud">
+			<result name="input" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">divisions</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
+		
 
 		<action name="customersUsers" method="list" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="success" type="freemarker">/templates/html/customersUser/list.ftl</result>

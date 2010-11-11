@@ -19,7 +19,6 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
-import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
@@ -45,7 +44,6 @@ public class CustomerCrud extends AbstractCrud {
 	private CustomerOrg customer;
 	private Pager<CustomerOrg> customerPage;
 	private String listFilter;
-	private Pager<User> userList;
 	private List<ListingPair> internalOrgList;
 	
 	public CustomerCrud(UserManager userManager, PersistenceManager persistenceManager) {

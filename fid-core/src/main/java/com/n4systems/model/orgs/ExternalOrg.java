@@ -13,7 +13,6 @@ import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyCustomerUsersAccess;
-import com.n4systems.model.security.SecurityLevel;
 
 
 @SuppressWarnings("serial")

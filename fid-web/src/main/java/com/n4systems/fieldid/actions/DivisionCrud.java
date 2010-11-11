@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -14,6 +15,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.division.DivisionOrgArchiver;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
@@ -30,9 +32,13 @@ public class DivisionCrud extends AbstractCrud {
 	private CustomerOrg customer;
 	private OrgSaver saver;
 	private Pager<DivisionOrg> page;
+	private Pager<DivisionOrg> archivedPage;
 	
-	public DivisionCrud(PersistenceManager persistenceManager) {
+	private final UserManager userManager;
+	
+	public DivisionCrud(PersistenceManager persistenceManager, UserManager userManager) {
 		super(persistenceManager);
+		this.userManager = userManager;
 		saver = new OrgSaver();
 	}
 	
@@ -43,7 +49,7 @@ public class DivisionCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		division = getLoaderFactory().createFilteredIdLoader(DivisionOrg.class).setId(uniqueId).load();
+		division = getLoaderFactory().createEntityByIdLoader(DivisionOrg.class).setId(uniqueId).load();
 	}
 	
 	private void testRequiredEntities(boolean existing) {
@@ -99,6 +105,46 @@ public class DivisionCrud extends AbstractCrud {
 			addActionErrorText("error.saving_divsion");
 			return ERROR;
 		}
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doArchive() {
+		String result = setDivisionActive(false);
+		if (SUCCESS.equals(result)) addFlashMessage("Archive successful");
+		return result;
+	}
+	
+	@SkipValidation
+	public String doUnarchive() {
+		String result = setDivisionActive(true);
+		if (SUCCESS.equals(result)) addFlashMessage("Unarchive successful");
+		return result;
+	}
+
+	private String setDivisionActive(boolean active) {
+		
+		if (division == null) {
+			addFlashError("Division not found");
+			return ERROR;
+		}
+		
+		// if the address info was created by our loadMemberFields, 
+		// we need to nullify it or it'll screw with the delete process
+		if (division.getAddressInfo().isNew()) {
+			division.setAddressInfo(null);
+		}
+		
+		try {
+			DivisionOrgArchiver archiver = new DivisionOrgArchiver();
+			archiver.archiveDivision(division, userManager, saver, getLoaderFactory(), getSecurityFilter(), active);
+			
+		} catch (Exception e) {
+			logger.error("Failed updating division", e);
+			addFlashErrorText("error.updatingdivision");
+			return ERROR;
+		}
+		
 		return SUCCESS;
 	}
 
@@ -181,6 +227,17 @@ public class DivisionCrud extends AbstractCrud {
 			page = loader.load();
 		}
 		return page;
+	}
+	
+	public Pager<DivisionOrg> getArchivedPage() {
+		if (archivedPage == null) {
+			DivisionOrgPaginatedLoader loader = getLoaderFactory().createDivisionOrgPaginatedLoader();
+			loader.setPage(getCurrentPage()).setPageSize(getConfigContext().getInteger(ConfigEntry.WEB_PAGINATION_PAGE_SIZE));
+			loader.setCustomerFilter(customer);
+			loader.setArchivedOnly(true);
+			archivedPage = loader.load();
+		}
+		return archivedPage;
 	}
 	
 	public String getDisplayName() {
