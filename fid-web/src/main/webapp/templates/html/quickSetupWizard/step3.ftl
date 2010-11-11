@@ -4,7 +4,7 @@
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
 </head>
 
-<@s.form action="step3ImportCatalogOnlyConfirm" cssClass="" theme="fieldid">
+<@s.form action="step3ImportCatalogOnlyConfirm" id="importForm" theme="fieldid">
 	<div class="setupContainer">
 		<div class="quickSetupHeader">
 			<h2><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>3</@s.param><@s.param>4</@s.param></@s.text></h2>
@@ -15,7 +15,7 @@
 			<br/>
 			
 			<div class="selectOptions">
-				<@s.text name="label.select"/>: <a href="javascript:void(0);" onclick="selectAll('step2Form');"><@s.text name="label.all"/></a>, <a href="javascript:void(0);" onclick="selectNone('step2Form')"><@s.text name="label.none"/></a>
+				<@s.text name="label.select"/>: <a href="javascript:void(0);" onclick="selectAll('importForm');"><@s.text name="label.all"/></a>, <a href="javascript:void(0);" onclick="selectNone('importForm')"><@s.text name="label.none"/></a>
 			</div>
 			
 			<@s.hidden name="quickSetupWizardCatalogImport" value="true"/>
@@ -28,7 +28,7 @@
 		
 		</div>
 		<div class="prominent">
-			<@s.submit key="label.next" id="continue" onclick="$('step2Form').request(getStandardCallbacks()); toStep(3, 'step3Loading'); return false;"/>
+			<@s.submit key="label.next" id="continue" />
 			<@s.text name="label.or"/>&nbsp;<a href="<@s.url action="home" namespace="/"/>"><@s.text name="label.cancel"/></a>
 		</div>	
 	</div>
