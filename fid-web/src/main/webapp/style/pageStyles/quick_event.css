@@ -45,3 +45,23 @@ fieldset p {
 fieldset span {
 	margin-left: 20px;
 }
+
+.red {
+	color: red;
+}
+
+a.red:link {
+	color: red;
+}
+
+a.red:active {
+	color: red;
+}
+
+a.red:visited {
+	color: red;
+}
+
+a.red:hover {
+	color: red;
+}

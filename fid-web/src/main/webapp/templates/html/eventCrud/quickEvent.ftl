@@ -15,17 +15,32 @@
 		<p><@s.text name="label.no_schedules"/></p>
 	<#else>
 		<#list eventSchedules as schedule>
-			<p>
+			<#if schedule.isPastDue()>
+				<p class="red">
+			<#else>
+				<p>
+			</#if>
 				<label>${schedule.nextDate?string("MM/dd/yy")}</label>  
 				<span>
 					<@s.url id="performSchedule" action="selectEventAdd" assetId="${schedule.asset.id}" type="${schedule.eventType.id}" scheduleId="${schedule.id}"/>
 					<#if schedule.project?exists>
 						<@s.text name="label.quickEventSchedule">
-							<@s.param><a href="${performSchedule}">${schedule.eventType.name}</a></@s.param>
+							<@s.param>
+								<#if schedule.isPastDue()>
+									<a class="red" href="${performSchedule}">
+								<#else>
+									<a href="${performSchedule}">
+								</#if>
+								${schedule.eventType.name}</a></@s.param>
 							<@s.param>${schedule.project.name}</@s.param>
 						</@s.text>
 					<#else>
-						<a href="${performSchedule}">${schedule.eventType.name}</a>
+						<#if schedule.isPastDue()>
+							<a class="red" href="${performSchedule}">
+						<#else>
+							<a href="${performSchedule}">
+						</#if>
+						${schedule.eventType.name}</a>
 					</#if>
 				</span>
 			</p>	
