@@ -83,9 +83,11 @@ ${action.setPageType('report', 'show')!}
 				<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
 				<@s.textfield name="criteria.purchaseOrder" />
 			</div>	
-			<div class="infoSet">
-				<label>&nbsp;</label>
-			</div>
+			<#if securityGuard.assignedToEnabled >
+				<div class="infoSet">
+					<label>&nbsp;</label>
+				</div>
+			</#if>
 		</div>
 		
 		<div class="fieldGroup clearLeft">
