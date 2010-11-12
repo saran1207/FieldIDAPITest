@@ -10,7 +10,7 @@
 			<p><@s.text name="label.bookmark_your_fieldid_login_page.description"/></p>
 			<br/>
 			<label class="urlLabel">${loginUrl}</label>
-			<button onclick="window.external.AddFavorite('${loginUrl}', 'Field ID');"><@s.text name="label.click_to_bookmark"/></button>
+			<button onclick="createBookmark('${loginUrl}', '<@s.text name="label.field_id"/>');"><@s.text name="label.click_to_bookmark"/></button>
 		</div>
 	</div>
 	<div class="setupWizardContent">
@@ -18,7 +18,7 @@
 		<div class="contentIndentation prominent">
 			<p><@s.text name="label.setup_your_mobile_device.description"/></p>
 			<br/>
-			<button onclick="return redirect('<@s.text name="label.hardware_wizard_url"/>');"><@s.text name="label.start_the_hardware_wizard"/></button>
+			<button onclick="return openNewWindow('<@s.text name="label.hardware_wizard_url"/>');"><@s.text name="label.start_the_hardware_wizard"/></button>
 		</div>
 	</div>
 	<div class="setupWizardContent">
@@ -30,6 +30,6 @@
 		</div>
 	</div>
 		<div class="contentIndentation prominent">
-			<button onclick="return redirect('<@s.url namespace="/" action="home"/>');"><@s.text name="label.proceed_to_my_fieldid_account"/></button>
+			<input type="button" onclick="return redirect('<@s.url namespace="/" action="home"/>');" value="<@s.text name="label.proceed_to_my_fieldid_account"/>"/>
 		</div>
 </div>

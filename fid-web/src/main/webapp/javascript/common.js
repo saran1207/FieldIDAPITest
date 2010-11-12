@@ -207,6 +207,11 @@ function redirect(url) {
 	return false;
 }
 
+function openNewWindow(url){
+	window.open(url);
+	return false;
+}
+
 Ajax.Responders.register( {
 	onComplete : function(transport) {
 		if (transport.transport.state == 200) {
@@ -583,3 +588,16 @@ function positionDropDown(a, entityId){
 	}
 	list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
 }
+
+ function createBookmark(url, title) {
+
+	if (window.sidebar) { // Mozilla Firefox Bookmark
+		window.sidebar.addPanel(title, url, "");
+	} else if (window.external) { // IE Favorite
+		window.external.AddFavorite(url, title);
+	} else if (window.opera && window.print) { // Opera Hotlist
+		return true;
+	}
+}
+
+

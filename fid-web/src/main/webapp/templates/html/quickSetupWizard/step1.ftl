@@ -17,13 +17,13 @@
 			<div class="infoSet">
 				<span class="fieldHolder">
 					<@s.radio name="turnOnJobSites" list="off"/>
-					<label class="description"> - <@s.text name="label.im_a_distributor_or_manufacturer"/></label>
+					<label class="description">&nbsp;<@s.text name="label.im_a_distributor_or_manufacturer"/></label>
 				</span>
 			</div>
 			<div class="infoSet">
 				<span class="fieldHolder">
 					<@s.radio name="turnOnJobSites" list="on" />
-					<label class="description"> - <@s.text name="label.im_an_end_user_or_manage_job_sites"/></label>
+					<label class="description">&nbsp;<@s.text name="label.im_an_end_user_or_manage_job_sites"/></label>
 				</span>
 			</div>
 			</span>

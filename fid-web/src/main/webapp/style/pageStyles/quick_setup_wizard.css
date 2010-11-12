@@ -3,6 +3,10 @@
 	margin:20px;
 }
 
+.fieldHolder select, .fieldHolder input{
+	padding: 5px;
+	}
+
 #setupWizardStep1 form, #setupWizardStep2 form {
 	padding-top:10px;
 }
@@ -21,8 +25,9 @@
 }
 .setupWizardContent h2{
 	color: #34849C;
-	padding: 0;
+	padding: 0 0 5px 0;
 }
+
 .setupWizardContent .infoSet, .setupWizardContent .fieldHolder{
 	border-style: none;
 	min-height: 0;
@@ -48,7 +53,8 @@
 }
 
 .quickSetupHeader h2,.setupWizardContent h2{
-	font-size: 14pt;
+	font-size: 22px;
+	font-weight: normal;
 }
 
 .quickSetupHeader {
@@ -63,13 +69,13 @@
 
 .setupContainer{
 	background-color: #eee;	
-	border: 1px solid #999999;
+	border: 1px solid #c2c2c2;
 	margin-top: 5px;
 }
 
 .setupWizardContent{
 	background-color: white;
-    border: 1px solid #999;
+    border: 1px solid #c2c2c2;
     padding: 20px;
     width: auto;
 }
@@ -79,7 +85,7 @@
 }
 
 .setupWizardContent p{
-	font-size: 15px;
+	font-size: 13px;
 	line-height: 20px;
 }
 
@@ -109,11 +115,11 @@
 
 #pageHeader{
 	margin-top: 15px;
+	padding: 10px 0;
 }
 
 .setupContainer .prominent{
 	padding: 10px 10px 10px 20px;
-
 }
 
 .setupContainer .contentIndentation{
@@ -124,6 +130,11 @@
 	padding: 2px;
 	font-size: 1.2em;
 }
+
+.setupContainer .prominent button{
+	font-size: 1.05em;
+}
+
 
 .setupWizardContent .hideInQuickSetup{
 	display: none;
