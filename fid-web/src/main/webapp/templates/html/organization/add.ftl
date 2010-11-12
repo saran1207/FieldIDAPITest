@@ -11,8 +11,9 @@ ${action.setPageType('organization','add')!}
 		<#include "_form.ftl"/>
 		<div class="formAction">
 			<@s.url id="cancelUrl" action="organizations"/>
-			<@s.reset key="label.cancel" onclick="return redirect( '${cancelUrl}' );" />
-			<@s.submit key="label.save"/>
+			<@s.submit key="label.save"/>	
+			<@s.text name="label.or"/>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );" />	<@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 </#if>
