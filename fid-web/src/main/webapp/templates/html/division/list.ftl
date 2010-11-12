@@ -2,6 +2,16 @@ ${action.setPageType('customer', 'divisions')!}
 <#assign secondaryNavAction="list"/>
 <#include "_secondaryNav.ftl"/>
 
+<head>
+	<style>
+		.link_img {
+			vertical-align: -30%;
+			padding-right: 2px;
+		}
+	</style>
+</head>
+
+
 <#if page.hasResults() && page.validPage() >
 	<#assign currentAction="divisions.action" />
 	<#include '../common/_pagination.ftl' />
@@ -45,10 +55,8 @@ ${action.setPageType('customer', 'divisions')!}
 
 <#if archivedPage.hasResults() && archivedPage.validPage() >
 	<div>
-		<img id="plus" src="<@s.url value="/images/plus.png"/>" alt="+" />
-		<img id="minus" src="<@s.url value="/images/minus.png"/>" alt="-" style="display:none"/>
-		<a id="expand_archived_list" onclick="openSection('archivedList', 'expand_archived_list', 'collapse_archived_list');plus.style.display='none';minus.style.display='';return false" href="javascript:void(0);" ><@s.text name="label.showarchiveddivisions"/></a>
-		<a id="collapse_archived_list" onclick="closeSection('archivedList', 'collapse_archived_list', 'expand_archived_list');plus.style.display='';minus.style.display='none';return false" href="javascript:void(0);" style="display:none"><@s.text name="label.hidearchiveddivisions"/></a>
+		<a id="expand_archived_list" onclick="openSection('archivedList', 'expand_archived_list', 'collapse_archived_list');plus.style.display='none';minus.style.display='';return false" href="javascript:void(0);" ><img id="plus" class="link_img" src="<@s.url value="/images/plus.png"/>" alt="+" /><@s.text name="label.showarchiveddivisions"/></a>
+		<a id="collapse_archived_list" onclick="closeSection('archivedList', 'collapse_archived_list', 'expand_archived_list');plus.style.display='';minus.style.display='none';return false" href="javascript:void(0);" style="display:none"><img id="minus" class="link_img" src="<@s.url value="/images/minus.png"/>" alt="-" style="display:none"/><@s.text name="label.hidearchiveddivisions"/></a>
 	</div>
 
 	<div id="archivedList" style="display:none">
