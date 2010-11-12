@@ -28,9 +28,9 @@
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
 		<#if !parentAsset?exists >
-			<div class="fieldHolder">
+			<span class="locationTree">
 				<@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="simple"/>
-			</div>
+			</span>
 		<#else>
 			<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(assetWebModel.location))?html}</span>
 		</#if>

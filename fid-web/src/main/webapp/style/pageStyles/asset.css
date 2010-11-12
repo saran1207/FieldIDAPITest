@@ -35,7 +35,22 @@
 	color: #555555;
 }
 
-.assetFormGroup .infoSet input, .assetFormGroup .infoSet select, .assetFormGroup .infoSet textarea, .fieldHolder textarea{
+.locationTree{
+	display:block;
+	float:left;
+	padding-bottom:5px;
+	padding-left:5px;
+	padding-top:5px;
+	width:270px;
+}
+
+.infoSet .locationTree .textbox{
+	border:1px solid #9C9C9C;
+	color:#555555;
+	padding:4px;
+}
+
+.infoSet .fieldHolder input, .assetFormGroup .infoSet select, .assetFormGroup .infoSet textarea, .fieldHolder textarea{
 	padding: 4px;
 	border: 1px solid #9C9C9C;
 	color: #555555;

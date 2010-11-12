@@ -1559,14 +1559,16 @@ input.description {
 
 #freeFormLabel{
 	display:inline;
-	float:none;
-	padding-left:0px;
-	}
+	float: none;
+	padding-left:0;
+	text-align:left;
+	width: 125px;
+}
 	
 #eventListTable tr:hover td{
 	background-color:white;
 	color:#333399;
-	}
+}
 
 .frequency input{
 	width:25px;
