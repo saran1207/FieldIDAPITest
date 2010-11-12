@@ -20,10 +20,10 @@
 			
 			<@s.hidden name="quickSetupWizardCatalogImport" value="true"/>
 			<@s.hidden name="uniqueID"/>
-			<@s.hidden name="usingPackage"/>	
+			<@s.hidden name="usingPackage" value="true"/>	
 			
 			<div class="importSelection">
-				<#include "../publishedCatalog/_importCustom.ftl"/>
+				<#include "../publishedCatalog/_importByPackage.ftl"/>
 			</div>
 		
 		</div>

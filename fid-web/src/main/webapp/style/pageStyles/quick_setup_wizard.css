@@ -43,7 +43,11 @@
 	padding-left: 30px;
 	}
 
-.setupWizardContent .selectOptions, .setupWizardContent .customSelectionType{
+.catalogPackage li a{
+	display: none;	
+}
+
+.setupWizardContent .selectOptions, .setupWizardContent .catalogPackage{
 	padding: 4px;
 } 
 
