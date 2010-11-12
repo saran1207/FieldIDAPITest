@@ -12,6 +12,7 @@
 		
 		<div class="setupWizardContent">
 			<h2><@s.text name="label.import_industry_standard_templates"/></h2>
+			<p><@s.text name="label.setup_wizard_catalog_description"/></p>
 			<br/>
 			
 			<div class="selectOptions">
@@ -23,7 +24,7 @@
 			<@s.hidden name="usingPackage" value="true"/>	
 			
 			<div class="importSelection">
-				<#include "../publishedCatalog/_importByPackage.ftl"/>
+					<#include "../publishedCatalog/_importByPackageGrouped.ftl"/>
 			</div>
 		
 		</div>
@@ -33,3 +34,5 @@
 		</div>	
 	</div>
 </@s.form>
+
+

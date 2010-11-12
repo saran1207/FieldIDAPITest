@@ -7,6 +7,16 @@
 	padding: 5px;
 	}
 
+#allDone{
+	background-image: url(../../images/setup-wizard-checkmark.png);
+	background-repeat: no-repeat;
+	background-position: left 10px;
+	padding: 15px 0 0 50px;
+	height: 50px;
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
 #setupWizardStep1 form, #setupWizardStep2 form {
 	padding-top:10px;
 }
@@ -43,8 +53,15 @@
 	padding-left: 30px;
 	}
 
-.catalogPackage li a{
-	display: none;	
+.setupWizardContent .importSelection label{
+	padding: 5px;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.catalogPackage li{
+	padding: 5px 5px 5px 25px;	
+	font-size: 12px;
 }
 
 .setupWizardContent .selectOptions, .setupWizardContent .catalogPackage{
@@ -62,7 +79,7 @@
 }
 
 .quickSetupHeader {
-	background-image: url(../../images/system_settings.png);
+	background-image: url(../../images/setup-wizard-gear.png);
 	background-repeat: no-repeat;
 	background-position: left 10px;
 	padding: 15px 0 0 50px;

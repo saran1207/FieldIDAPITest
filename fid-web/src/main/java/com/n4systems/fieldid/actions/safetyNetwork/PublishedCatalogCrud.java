@@ -18,7 +18,9 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NoAccessToTenantException;
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -34,13 +36,13 @@ import com.n4systems.util.ListingPair;
 public class PublishedCatalogCrud extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(PublishedCatalogCrud.class);
-
+	
 	private Tenant linkedTenant;
 	private CatalogService linkedCatalogAccess;
 	private LegacyAssetType assetTypeManager;
-
 	private boolean quickSetupWizardCatalogImport = false;
 
+	
 	private Map<String, Boolean> importAssetTypeIds = new HashMap<String, Boolean>();
 	public void setImportAssetTypeIds(Map<String, Boolean> importAssetTypeIds) {
 		this.importAssetTypeIds = importAssetTypeIds;
@@ -171,6 +173,10 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	public List<ListingPair> getPublishedAssetTypes() {
 		return linkedCatalogAccess.getPublishedAssetTypesLP();
 	}
+	
+	public Set<AssetTypeGroup> getPublishedAssetTypeGroups(){
+		return linkedCatalogAccess.getPublishedAssetTypeGroups();
+	}
 
 	public Map<String, Boolean> getImportEventTypeIds() {
 		return importEventTypeIds;
@@ -251,5 +257,14 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	public void setQuickSetupWizardCatalogImport(boolean quickSetupWizardCatalogImport) {
 		this.quickSetupWizardCatalogImport = quickSetupWizardCatalogImport;
 	}
-
+	
+	public List<ListingPair> getPublishedAssetTypesForGroup(String groupName){
+		List<ListingPair> types = new ArrayList<ListingPair>();
+		for (ListingPair assetType : getPublishedAssetTypes()){
+			 if(linkedCatalogAccess.getPublishedAssetType(assetType.getId(), "").getGroup().getName().equals(groupName)){
+				 types.add(assetType);
+			 }
+		}
+		return types;
+	}
 }

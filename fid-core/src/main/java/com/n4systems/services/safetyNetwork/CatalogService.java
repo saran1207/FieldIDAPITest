@@ -24,6 +24,8 @@ public interface CatalogService {
 
 	public List<ListingPair> getPublishedAssetTypesLP();
 	
+	public Set<AssetTypeGroup> getPublishedAssetTypeGroups(); 
+	
 	public Set<Long> getEventTypeIdsPublished();
 
 	public List<ListingPair> getPublishedEventTypesLP();

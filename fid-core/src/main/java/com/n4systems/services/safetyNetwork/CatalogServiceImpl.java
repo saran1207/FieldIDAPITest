@@ -66,6 +66,14 @@ public class CatalogServiceImpl implements CatalogService {
 
 		return persistenceManager.findAll(assetTypesQuery);
 	}
+	
+	public Set<AssetTypeGroup> getPublishedAssetTypeGroups() {
+		Set<Long> assetTypeIds = new HashSet<Long>();
+		for (ListingPair assetType : getPublishedAssetTypesLP()){
+			assetTypeIds.add(assetType.getId());
+		}
+		return getAssetTypeGroupsFor(assetTypeIds);
+	}
 
 	public Catalog publishAssetTypes(Set<AssetType> assetTypes) {
 		Catalog catalog = getCatalog();

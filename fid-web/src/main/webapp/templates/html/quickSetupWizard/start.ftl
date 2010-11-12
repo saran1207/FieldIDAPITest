@@ -17,7 +17,7 @@
 	</div> 
 	
 	<div class="prominent">
-		<button id="startButton" onclick="redirect('<@s.url action="step1"/>'); return false;"><@s.text name="label.im_ready_lets_go"/></button>  
+		<input type="button" id="startButton" onclick="redirect('<@s.url action="step1"/>'); return false;" value="<@s.text name="label.im_ready_lets_go"/>"/>  
 		<@s.text name="label.or"/> 
 		<a href="<@s.url action="home" namespace="/"/>" cssClass="cancel"><@s.text name="label.no_thanks"/></a><br/>
 	</div>

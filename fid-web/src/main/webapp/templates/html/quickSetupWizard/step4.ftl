@@ -4,6 +4,10 @@
 </head>
 
 <div class="setupContainer">
+	<div id="allDone" class="quickSetupHeader">
+		<h2><@s.text name="label.all_done"/> - <@s.text name="label.next_steps"/></h2>
+	</div>
+		
 	<div class="setupWizardContent">
 		<h2><@s.text name="label.bookmark_your_fieldid_login_page"/></h2>
 		<div class="contentIndentation prominent">
