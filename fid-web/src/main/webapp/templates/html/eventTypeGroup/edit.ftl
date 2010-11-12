@@ -1,6 +1,5 @@
 ${action.setPageType('event_type_group', 'edit')!}
 <div class="pageSection" >
-	<h2><@s.text name="label.groupdetails"/></h2>
 	<@s.form action="eventTypeGroupUpdate" theme="fieldid" cssClass="crudForm sectionContent bigForm">
 		<@s.hidden name="uniqueID"/>
 		<#include "_form.ftl"/>
