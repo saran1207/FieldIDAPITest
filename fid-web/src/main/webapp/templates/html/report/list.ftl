@@ -41,7 +41,7 @@ ${reportActions}
 		<#include '../customizableSearch/table.ftl'>
 	
 		<div class="adminLink">	
-			<span class="total"><@s.text name="label.totalevents"/> ${totalResults}</span>
+			<span class="total"><@s.text name="label.totalevents"/> ${totalResults}</span> (<span id="numSelectedItems">${numSelectedItems}</span> selected)
 		</div>
 		<div class="adminLink alternateActions">
 			<#-- The following displays the drop down menu for the print report, all events and all observations link -->
@@ -52,8 +52,8 @@ ${reportActions}
 			<div id="print_link" class="print printRelative" style="display: inline;" onmouseover="repositionPrintList('print_list', 'print_link');" >
 				<ul id="print_list">
 					<li><a href='${printReport}'			class='lightview summaryReport' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printreport" /></a></li>
-					<li><a href="${printAllEventUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printallpdfreports"/></a></li>
-					<li><a href="${printAllobservationUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printallobservationcertificate"/></a></li>
+					<li><a href="${printAllEventUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printselectedpdfreports"/></a></li>
+					<li><a href="${printAllobservationUrl}"	class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.printselectedobservationcertificate"/></a></li>
 				</ul>
 				
 				<a href="javascript:void(0);" class="pdfPrinting" ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.print"/></a>

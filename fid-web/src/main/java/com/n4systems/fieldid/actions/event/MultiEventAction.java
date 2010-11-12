@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.fieldid.actions.event.viewmodel.EventWebModel;
+import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.CommonEventTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonEventTypeHandler;
 import com.n4systems.model.Event;
@@ -58,6 +59,9 @@ public class MultiEventAction extends AbstractCrud {
 	private EventWebModel modifiableEvent;
 	private MultiEventGroupSorter multiEventGroupSorter;
 	private List<Listable<Long>> employees;
+
+    private String searchContainerKey;
+    private String searchId;
 
 	public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager) {
 		super(persistenceManager);
@@ -153,7 +157,14 @@ public class MultiEventAction extends AbstractCrud {
 
 	public List<Asset> getAssets() {
 		if (assets == null) {
-			if (!assetIds.isEmpty()) {
+            if (searchContainerKey != null && getSession().get(searchContainerKey) != null) {
+                SearchContainer container = (SearchContainer) getSession().get(searchContainerKey);
+                if (container.getSearchId().equals(searchId)) {
+                    assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", container.getMultiIdSelection().getSelectedIds()));
+                    this.assetIds = new ArrayList<Long>();
+                    this.assetIds.addAll(container.getMultiIdSelection().getSelectedIds());
+                }
+            } else if (!assetIds.isEmpty()) {
 				assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds));
 			} else {
 				assets = new ArrayList<Asset>();
@@ -239,4 +250,20 @@ public class MultiEventAction extends AbstractCrud {
 	public List<WebEventSchedule> getNextSchedules() {
 		return new ArrayList<WebEventSchedule>();
 	}
+
+    public String getSearchId() {
+        return searchId;
+    }
+
+    public void setSearchId(String searchId) {
+        this.searchId = searchId;
+    }
+
+    public String getSearchContainerKey() {
+        return searchContainerKey;
+    }
+
+    public void setSearchContainerKey(String searchContainerKey) {
+        this.searchContainerKey = searchContainerKey;
+    }
 }

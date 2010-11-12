@@ -15,12 +15,7 @@ public class ImmutableBaseSearchDefiner implements BaseSearchDefiner {
 	private List<QueryFilter> searchFilters;
 	private List<JoinTerm> joinTerms;
 	
-	public ImmutableBaseSearchDefiner() {
-		super();
-	}
-	
 	public ImmutableBaseSearchDefiner(BaseSearchDefiner definer) {
-		super();
 		sortTerms = new ArrayList<SortTerm>(definer.getSortTerms());
 		joinTerms = new ArrayList<JoinTerm>(definer.getJoinTerms());
 		searchClass = definer.getSearchClass();

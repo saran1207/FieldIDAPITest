@@ -286,6 +286,10 @@ h2 a {
 	border-top: 1px solid #CACACA;
 }
 
+table.list tr.multiSelected {
+    background-color: #D2E5FF;
+}
+
 .list tr:hover {
 	background-color: #EEEEEE;
 }
@@ -300,6 +304,10 @@ h2 a {
 
 .list th a,.list th a:visited,.list th a:hover {
 	color: #333333
+}
+
+.list th.checkBox, td.checkBox {
+    min-width: 0;
 }
 
 .list th.sorted {
@@ -1755,4 +1763,10 @@ input.description {
 
 .pageInstructions{
 	padding: 10px;
+}
+
+.selectionNotice {
+    text-align: center;
+    font-size: 1.1em;
+    margin: 10px 0 10px 0;
 }

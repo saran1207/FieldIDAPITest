@@ -97,7 +97,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 			
 			asset.setIdentified(convertDate(identified));
 			assetWebModel.fillInAsset(asset);
-			List<Long> ids = getSearchIds(criteria, criteria.getSecurityFilter());
+			List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
 			
 			Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser());
 			List<String> messageArgs = new ArrayList<String>();

@@ -1,0 +1,1 @@
+<input type="checkbox" id="selectAllBox" name="selectAllBox" onClick="toggleEntirePage('${searchContainerKey}', '${searchId}', this.checked)"/>

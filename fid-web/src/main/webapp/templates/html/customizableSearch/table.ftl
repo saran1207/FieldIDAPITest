@@ -1,9 +1,17 @@
 <#if resultsTable?exists >
 
+<#include '_rowSelectionPageHeader.ftl' />
+
 <#include '../common/_newpagination.ftl' />
+<div class="selectionNotice">
+</div>
 <table id="resultsTable" class="list">
 	<tr>
 		<#if preRowHeaderTemplate?exists ><#include "${preRowHeaderTemplate}" /></#if>
+
+        <th class="checkBox">
+            <#include "_rowSelectionTableHeader.ftl"/>
+        </th>
 		
 		<#list selectedColumns as columnId >
 			<#assign column_class="" />
@@ -42,9 +50,13 @@
 		<#assign entityId="${resultsTable.getId(rowIdx)}" />
 		<#assign rowClass="${action.getRowClass(rowIdx)!}" />
 		
-		<tr <#if rowClass?exists >class="${rowClass}"</#if> >
+		<tr <#if rowClass?exists >class="${rowClass}"</#if> id="row-${entityId}">
 			<#if preRowTemplate?exists ><#include "${preRowTemplate}" /></#if>
-		
+
+            <td class="checkBox">
+                <#include "_rowSelectionTableCell.ftl">
+            </td>
+
 			<#list 0..resultsTable.columnSize -1 as colIdx>
 				<td id="${selectedColumns.get(colIdx)}_${rowIdx}">${action.getCell(rowIdx, colIdx)}&nbsp;</td>
 			</#list>
@@ -54,4 +66,10 @@
 	</#list>
 </table>
 <#include '../common/_newpagination.ftl' />
+
+<script type="text/javascript">
+    <#list resultsTable.idList as itemId>
+        itemIdsOnCurrentPage.push(#{itemId});
+    </#list>
+</script>
 </#if>

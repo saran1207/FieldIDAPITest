@@ -24,6 +24,7 @@ import com.n4systems.util.persistence.search.terms.SimpleInTerm;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.SimpleTermOrNull;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
+import com.n4systems.util.selection.MultiIdSelection;
 
 abstract public class SearchContainer implements BaseSearchDefiner, Serializable, AssetTypeFilteredSearchContainer, LoaderFactoryProvider {
 	private static final String STRUTS_VALUE_WHEN_YOU_SELECT_NO_VALUES_FROM_CHECKBOXES = "false";
@@ -42,6 +43,8 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	private List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
 	private String sortColumn;
 	private String sortDirection;
+
+    private MultiIdSelection multiIdSelection = new MultiIdSelection();
 	
 	public SearchContainer(Class<?> searchClass, String searchClassIdField, SecurityFilter securityFilter, LoaderFactory loaderFactory) {
 		this.searchClass = searchClass;
@@ -231,4 +234,9 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	public LoaderFactory getLoaderFactory() {
 		return loaderFactory;
 	}
+
+    public MultiIdSelection getMultiIdSelection() {
+        return multiIdSelection;
+    }
+
 }

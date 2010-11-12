@@ -38,7 +38,6 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 	private OwnerPicker ownerPicker;
 	
 	private final LocationWebModel location = new LocationWebModel(this);
-
 	
 	public EventMassUpdate(MassUpdateManager massUpdateManager, PersistenceManager persistenceManager, LegacyAsset assetManager) {
 		super(massUpdateManager, persistenceManager);
@@ -84,7 +83,7 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 
 		try {
 			event.setAdvancedLocation(location.createLocation());
-			List<Long> eventIds = getSearchIds(criteria, criteria.getSecurityFilter());
+			List<Long> eventIds = criteria.getMultiIdSelection().getSelectedIds();
 			Long results = massUpdateManager.updateEvents(eventIds, event, select, getSessionUser().getUniqueID());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());

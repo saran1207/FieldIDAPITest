@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.util.selection.MultiIdSelection;
 import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
@@ -35,6 +36,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private static final String KEY_SIGNUP = "signUp";
 	private static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";
 	private static final String KEY_SEEN_IT_REGISTRY = "seenItRegistry";
+    private static final String KEY_MULTI_SELECTION = "multiSelection";
 	private static final String VENDOR_CONTEXT = "vendor_context";
 	private static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
 	private static final String IMPORT_TASK_ID = "import_task_id";
@@ -360,7 +362,14 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 		
 		return seenItRegistry;
 	}
-	
+
+    public MultiIdSelection getMultiIdSelection() {
+        return get(KEY_MULTI_SELECTION, MultiIdSelection.class);
+    }
+
+    public void setMultiIdSelection(MultiIdSelection selection) {
+        put(KEY_MULTI_SELECTION, selection);
+    }
 	
 	public Set<Long> getQuickSetupWizardImports() {
 		Set<Long> imports = (Set<Long>)get(KEY_QUICK_SETUP_WIZARD_IMPORTS);

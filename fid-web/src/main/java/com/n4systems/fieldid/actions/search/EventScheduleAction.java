@@ -79,13 +79,14 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	
 	@Override
 	public String getRowClass(int rowIndex) {
+        String cssClass = super.getRowClass(rowIndex);
+
 		boolean pastDue = eventScheduleManager.schedulePastDue(getIdForRow(rowIndex));
 		
-		String cssClass = null;
 		if (pastDue) {
-			cssClass = "pastDue";
+			cssClass += " pastDue";
 		}
-		
+
 		return cssClass;
 	}
 

@@ -57,9 +57,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		}
 		
 		try {
-			BaseSearchDefiner searchDefiner = scheduleCriteria;
-			SecurityFilter securityFilter = scheduleCriteria.getSecurityFilter();
-			List<Long> scheduleIds = getSearchIds(searchDefiner, securityFilter);
+			List<Long> scheduleIds = scheduleCriteria.getMultiIdSelection().getSelectedIds();
 			Long results = massUpdateManager.assignToJob(scheduleIds, job, getSessionUserId());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());

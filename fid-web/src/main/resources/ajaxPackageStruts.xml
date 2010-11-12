@@ -19,7 +19,7 @@
 			<result name="sessionBooted" type="freemarker">/templates/ajax/common/sessionKick.ftl</result>
 		</global-results>
 
-	
+
 
 		<action name="assetTypeImageRemove" method="removeImage"
 			class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
@@ -438,5 +438,23 @@
 			<result name="success" type="freemarker">/templates/ajax/assetCrud/list.ftl</result>
 			<result name="oneFound" type="freemarker">/templates/ajax/assetCrud/oneFound.ftl</result>
 		</action>
+
+        <action name="addItemsToSelection" method="add" class="com.n4systems.fieldid.actions.select.SelectAction">
+            <result name="success" type="freemarker">/templates/ajax/select/selection.ftl</result>
+            <result name="successMultiple" type="freemarker">/templates/ajax/select/multiSelection.ftl</result>
+        </action>
+
+        <action name="deleteItemsFromSelection" method="delete" class="com.n4systems.fieldid.actions.select.SelectAction">
+            <result name="success" type="freemarker">/templates/ajax/select/selection.ftl</result>
+        </action>
+
+        <action name="addEntireResultToSelection" method="addEntireResult" class="com.n4systems.fieldid.actions.select.SelectAction">
+            <result name="success" type="freemarker">/templates/ajax/select/selection.ftl</result>
+        </action>
+
+        <action name="clearSelection" method="clear" class="com.n4systems.fieldid.actions.select.SelectAction">
+            <result name="success" type="freemarker">/templates/ajax/select/selection.ftl</result>
+        </action>
+
 	</package>
 </struts>

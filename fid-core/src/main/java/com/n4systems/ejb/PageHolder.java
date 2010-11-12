@@ -6,10 +6,8 @@ public class PageHolder<K> {
 
 	private final K pageResults;
 	private final int totalsResults;
-	
-	
+
 	public PageHolder(K pageResults, int totalsResults) {
-		super();
 		if (pageResults == null) {
 			throw new InvalidArgumentException("the page results can not be null");
 		}
@@ -18,16 +16,12 @@ public class PageHolder<K> {
 		this.totalsResults = totalsResults;
 	}
 
-
 	public K getPageResults() {
 		return pageResults;
 	}
 
-
 	public int getTotalsResults() {
 		return totalsResults;
 	}
-	
-	
 	
 }

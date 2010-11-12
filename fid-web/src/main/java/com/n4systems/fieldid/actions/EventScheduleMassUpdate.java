@@ -49,7 +49,7 @@ public class EventScheduleMassUpdate extends MassUpdate {
 		}
 
 		try {
-			Set<Long> scheduleIds = ListHelper.toSet(getSearchIds(criteria, criteria.getSecurityFilter()));
+			Set<Long> scheduleIds = ListHelper.toSet(criteria.getMultiIdSelection().getSelectedIds());
 			
 			Long results;
 			String messageKey;

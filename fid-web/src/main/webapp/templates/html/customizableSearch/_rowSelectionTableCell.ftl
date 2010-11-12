@@ -1,0 +1,1 @@
+<input type="checkbox" onClick="resultSelectionChanged(${entityId}, '${searchContainerKey}', '${searchId}', this.checked)" <#if action.isRowIndexSelected(rowIdx)>checked="true"</#if>/>

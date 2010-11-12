@@ -9,17 +9,17 @@
 		<#include '../customizableSearch/table.ftl'>
 		
 		<div class="adminLink">	
-			<span class="total"><@s.text name="label.totalassets"/> ${totalResults}</span>
+			<span class="total"><@s.text name="label.totalassets"/> ${totalResults}</span> (<span id="numSelectedItems">${numSelectedItems}</span> selected)
 		</div>
 		<div class="adminLink alternateActions">
-			<a href="<@s.url action="searchPrintAllCerts" namespace="/aHtml" searchId="${searchId}"/>" class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.printallmanufacturercertificate"/></a>
+			<a href="<@s.url action="searchPrintAllCerts" namespace="/aHtml" searchId="${searchId}"/>" class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.printselectedmanufacturercertificate"/></a>
 			| 		
 			<a href='<@s.url action="searchResults" namespace="/aHtml" searchId="${searchId}"/>'  class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a> 
 			<#if sessionUser.hasAccess('tag') >
 				| <a href="<@s.url action="massUpdateAssets" searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
 			<#if sessionUser.hasAccess('createevent') >
-				| <a href="#multiEvent" name="multiEvent" id="multiInspect" class="multiEvent"><@s.text name="label.preform_mass_event"/></a>
+				| <a href="#multiEvent" name="multiEvent" id="multiEvent" class="multiEvent"><@s.text name="label.preform_mass_event"/></a>
 			</#if>
 		</div>
 	<#else>
@@ -38,21 +38,22 @@
 	</div>
 </#if>
 <#include "../customizableSearch/_massActionRestriction.ftl"/>
-<#if (totalResults <= maxSizeForMultiEvent) >
-	<@s.form id="performMultiInspect" action="selectEventType" namespace="/multiEvent">
-		<#list searchIds as assetId>
-			<@s.hidden name="assetIds[${assetId_index}]" value="${assetId}"/> 
-		</#list>
-	</@s.form>
-	
-	<@n4.includeScript>
-		onDocumentLoad(function() {
-			$$('#multiInspect').each(function(element) { 
-				element.observe('click', function(event) {
-					event.stop();
-					$('performMultiInspect').submit();
-				});
-			});
-		});
-	</@n4.includeScript>
-</#if>
+
+<@s.form id="performMultiEvent" action="selectEventType" namespace="/multiEvent">
+    <@s.hidden name="searchContainerKey" value="${searchContainerKey}"/>
+    <@s.hidden name="searchId" value="${searchId}"/>
+</@s.form>
+
+<@n4.includeScript>
+    onDocumentLoad(function() {
+        $$('#multiEvent').each(function(element) {
+            element.observe('click', function(event) {
+                if (numSelectedItems() > 0 && numSelectedItems() <= maxSizeForMultiEvent) {
+                    event.stop();
+                    $('performMultiEvent').submit();
+                }
+            });
+        });
+    });
+</@n4.includeScript>
+

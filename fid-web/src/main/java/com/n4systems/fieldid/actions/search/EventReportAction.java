@@ -129,7 +129,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		String reportName = String.format("%s Report - %s", reportType.getDisplayName(), DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
-			List<Long> eventIds = getSearchIds();
+			List<Long> eventIds = getContainer().getMultiIdSelection().getSelectedIds();
 	
 			getDownloadCoordinator().generateAllEventCertificates(reportName, getDownloadLinkUrl(), reportType, eventIds);
 		} catch(RuntimeException e) {

@@ -11,7 +11,7 @@
 
 	
 		<div class="adminLink">	
-			<span class="total"><@s.text name="label.totalschedules"/> ${totalResults}</span>
+			<span class="total"><@s.text name="label.totalschedules"/> ${totalResults}</span> (<span id="numSelectedItems">${numSelectedItems}</span> selected)
 		</div>
 		<div class="adminLink alternateActions">
 			<a href='<@s.url action="scheduleResults.action" namespace="/aHtml" searchId="${searchId}"/>'  class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a>  

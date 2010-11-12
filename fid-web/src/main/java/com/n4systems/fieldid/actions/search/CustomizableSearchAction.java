@@ -4,6 +4,7 @@ import static com.n4systems.util.ListingPairs.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.util.persistence.search.terms.SimpleInTerm;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PageHolder;
@@ -184,7 +186,11 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		String reportName = String.format("%s - %s", excelReportFileName, DateHelper.getFormattedCurrentDate(getUser()));
 		
 		try {
-			getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), immutableSearchDefiner(), buildExcelColumnTitles(), prepareExcelHandlers());
+            List<Long> selectedIds = getContainer().getMultiIdSelection().getSelectedIds();
+            ImmutableSearchDefiner<TableView> searchDefiner = immutableSearchDefiner();
+            searchDefiner.getSearchTerms().add(new SimpleInTerm<Long>("id", selectedIds));
+
+            getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), searchDefiner, buildExcelColumnTitles(), prepareExcelHandlers());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute ExcelExportTask", e);
 			addActionErrorText("error.cannotschedule");
@@ -367,7 +373,11 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	public TableView getResultsTable() {
 		return resultsTable;
 	}
-	
+
+    public boolean isItemSelected(Long itemId) {
+        return getContainer().getMultiIdSelection().containsId(itemId);
+    }
+
 	/**
 	 * Returns the entity for this row
 	 * @param rowIndex	index of the row
@@ -394,8 +404,16 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	 * @return			A String CSS classname or null to use no class.
 	 */
 	public String getRowClass(int rowIndex) {
-		return null;
+        String rowClass = "";
+        if (isRowIndexSelected(rowIndex)) {
+            rowClass += "multiSelected";
+        }
+		return rowClass;
 	}
+
+    public boolean isRowIndexSelected(int rowIndex) {
+        return isSearchIdValid() && getContainer().getMultiIdSelection().containsId(getIdForRow(rowIndex));
+    }
 	
 	/**
 	 * Returns the value for a cell, passing it through the OutputHandler defined for this column.
@@ -452,5 +470,13 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	public Integer getMaxSizeForMultiEvent() {
 		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_MULTI_INSPECT, getTenantId());
 	}
+
+    public String getSearchContainerKey() {
+        return containerSessionKey;
+    }
+
+    public int getNumSelectedItems() {
+        return getContainer().getMultiIdSelection().getNumSelectedIds();
+    }
 	
 }
