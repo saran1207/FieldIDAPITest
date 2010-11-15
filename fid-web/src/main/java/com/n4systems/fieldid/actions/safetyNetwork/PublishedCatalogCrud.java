@@ -20,6 +20,7 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NoAccessToTenantException;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
 import com.n4systems.security.Permissions;
@@ -36,14 +37,14 @@ import com.n4systems.util.ListingPair;
 public class PublishedCatalogCrud extends SafetyNetwork {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(PublishedCatalogCrud.class);
-	
+
 	private Tenant linkedTenant;
 	private CatalogService linkedCatalogAccess;
 	private LegacyAssetType assetTypeManager;
 	private boolean quickSetupWizardCatalogImport = false;
 
-	
 	private Map<String, Boolean> importAssetTypeIds = new HashMap<String, Boolean>();
+
 	public void setImportAssetTypeIds(Map<String, Boolean> importAssetTypeIds) {
 		this.importAssetTypeIds = importAssetTypeIds;
 	}
@@ -83,12 +84,11 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		return TenantCache.getInstance().findPrimaryOrg(uniqueID);
 	}
 
-
 	public String doShow() {
-		if (isQuickSetupWizardCatalogImport()){
+		if (isQuickSetupWizardCatalogImport()) {
 			getCatalogConnection();
 		}
-		
+
 		testPreconditions();
 		SafetyNetworkAccessService safetyNetwork = new SafetyNetworkAccessService(persistenceManager, getSecurityFilter());
 		try {
@@ -100,6 +100,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		}
 		return SUCCESS;
 	}
+
 	public String doConfirm() {
 		doShow();
 		Set<Long> importTheseAssetTypeIds = covertSelectedIdsToSet(importAssetTypeIds);
@@ -119,8 +120,6 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 
 		return SUCCESS;
 	}
-	
-	
 
 	private void testPreconditions() {
 		if (linkedTenant == null) {
@@ -141,7 +140,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	}
 
 	public String doImport() {
-		doShow(); 
+		doShow();
 
 		try {
 			CatalogImportTask importTask = new CatalogImportTask();
@@ -165,7 +164,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 
 		return SUCCESS;
 	}
-	
+
 	public Tenant getLinkedTenant() {
 		return linkedTenant;
 	}
@@ -173,8 +172,8 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	public List<ListingPair> getPublishedAssetTypes() {
 		return linkedCatalogAccess.getPublishedAssetTypesLP();
 	}
-	
-	public Set<AssetTypeGroup> getPublishedAssetTypeGroups(){
+
+	public Set<AssetTypeGroup> getPublishedAssetTypeGroups() {
 		return linkedCatalogAccess.getPublishedAssetTypeGroups();
 	}
 
@@ -221,15 +220,15 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		return cacheSubTypes.get(assetTypeId);
 	}
 
-	public void getCatalogConnection(){
+	public void getCatalogConnection() {
 		for (TypedOrgConnection connection : getConnections()) {
 			if (connection.getConnectedOrg().getTenant().getName().equals(getConfigContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME))) {
 				linkedTenant = connection.getConnectedOrg().getTenant();
-				
+
 			}
 		}
 	}
-	
+
 	public CatalogImportSummary getSummary() {
 		return summary;
 	}
@@ -249,7 +248,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	public int getEstimatedImportTime() {
 		return getConfigContext().getInteger(ConfigEntry.ESTIMATED_CATALOG_IMPORT_TIME_IN_MINUTES);
 	}
-	
+
 	public boolean isQuickSetupWizardCatalogImport() {
 		return quickSetupWizardCatalogImport;
 	}
@@ -257,14 +256,35 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	public void setQuickSetupWizardCatalogImport(boolean quickSetupWizardCatalogImport) {
 		this.quickSetupWizardCatalogImport = quickSetupWizardCatalogImport;
 	}
-	
-	public List<ListingPair> getPublishedAssetTypesForGroup(String groupName){
-		List<ListingPair> types = new ArrayList<ListingPair>();
-		for (ListingPair assetType : getPublishedAssetTypes()){
-			 if(linkedCatalogAccess.getPublishedAssetType(assetType.getId(), "").getGroup().getName().equals(groupName)){
-				 types.add(assetType);
-			 }
+
+	public List<ListingPair> getPublishedAssetTypesForGroup(String groupName) {
+		AssetType retrievedAssetType;
+
+		List<ListingPair> groupedTypes = new ArrayList<ListingPair>();
+
+		for (ListingPair assetType : getPublishedAssetTypes()) {
+			retrievedAssetType = linkedCatalogAccess.getPublishedAssetType(assetType.getId(), "infoFields");
+			if (retrievedAssetType.getGroup() != null) {
+				if (retrievedAssetType.getGroup().getName().equals(groupName)){
+					groupedTypes.add(assetType);
+				}
+			}
 		}
-		return types;
+
+		return groupedTypes;
+	}
+
+	public List<ListingPair> getPublishedAssetTypesUngrouped() {
+		AssetType retrievedAssetType;
+
+		List<ListingPair> unGroupedTypes = new ArrayList<ListingPair>();
+
+		for (ListingPair assetType : getPublishedAssetTypes()) {
+			retrievedAssetType = linkedCatalogAccess.getPublishedAssetType(assetType.getId(), "infoFields");
+			if (retrievedAssetType.getGroup() == null) {
+				unGroupedTypes.add(assetType);
+			}
+		}
+		return unGroupedTypes;
 	}
 }
