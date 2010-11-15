@@ -28,8 +28,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard() {
-		startAsCompany("n4");
-		login.signInAllTheWayToHome("aaitkens", "makemore$");
+		startAsCompany("illinois");
+		login.signInAllTheWayToHome("smoke", "smoke");
 		qsw.gotoQuickSetupWizard();
 		misc.forceSessionTimeout(getFieldIDDomain());
 		assertSessionTimeoutLightboxAppeared();
@@ -37,8 +37,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step1() {
-		startAsCompany("n4");
-		login.signInAllTheWayToHome("aaitkens", "makemore$");
+		startAsCompany("illinois");
+		login.signInAllTheWayToHome("smoke", "smoke");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		misc.forceSessionTimeout(getFieldIDDomain());
@@ -47,8 +47,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step2() {
-		startAsCompany("n4");
-		login.signInAllTheWayToHome("aaitkens", "makemore$");
+		startAsCompany("illinois");
+		login.signInAllTheWayToHome("smoke", "smoke");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
@@ -58,8 +58,8 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step3() {
-		startAsCompany("n4");
-		login.signInAllTheWayToHome("aaitkens", "makemore$");
+		startAsCompany("illinois");
+		login.signInAllTheWayToHome("smoke", "smoke");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
@@ -70,13 +70,13 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_you_are_done() {
-		startAsCompany("n4");
-		login.signInAllTheWayToHome("aaitkens", "makemore$");
+		startAsCompany("illinois");
+		login.signInAllTheWayToHome("smoke", "smoke");
 		qsw.gotoQuickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
 		qsw.gotoQuickSetupWizardStep3();
-		qsw.gotoSkipImport();
+		qsw.gotoQuickSetupWizardStep4();
 		misc.forceSessionTimeout(getFieldIDDomain());
 		assertSessionTimeoutLightboxAppeared();
 	}
