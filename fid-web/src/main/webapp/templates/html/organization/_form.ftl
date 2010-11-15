@@ -105,7 +105,7 @@
 <div class="pageSection" >
 	<h2><@s.text name="label.pdf_report_image"/></h2>
 	<div class="sectionContent">
-		<div class="infoSet">
+		<div class="infoSet borderLessInfoSet">
 			<label><@s.text name="label.pdf_report_image"/></label> 
 			<span id="imageUploadField"  >
 				

@@ -19,6 +19,11 @@
 			width:auto;
 		}
 		
+		.crudForm p.borderLess{
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+		
 		#imageUploaded {
 			padding:0px;
 			height:35px;
@@ -26,8 +31,9 @@
 			width:380px;
 		}
 		
-		
-		
+		#bestImage{
+			padding: 5px 5px 5px 245px;
+		}
 	</style>
 	
 	<script type="text/javascript">
@@ -68,7 +74,6 @@
 				
 		</span>
 	</p>
-		
 	<p>
 		<label><@s.text name="label.warnings"/></label>
 		<span>
@@ -81,15 +86,12 @@
 			<@s.textarea name="instructions"  rows="3" cols="50" />
 		</span>
 	</p>
-	
 	<p>
 		<label><@s.text name="label.cautionsurl" /></label>
 		<span>
 			<@s.textfield name="cautionsUrl" />
 		</span>
 	</p>
-	
-	
 	<p>
 		<label><@s.text name="label.hasmanufacturercertificate" /></label>
 		<span>
@@ -109,7 +111,7 @@
 		</span>
 	</p>
 	
-	<p>
+	<p class="borderLess">
 		<label><@s.text name="label.uploadimage"/></label> 
 		<span id="imageUploadField"  >
 			<#if !assetImageDirectory?exists || assetImageDirectory.length() == 0  || removeImage >
@@ -124,7 +126,6 @@
 			</span>
 		</span>
 		<div id="bestImage">
-			
 			<@s.text name="label.assetimageslookbest"/>
 		</div>
 	</p>
@@ -137,15 +138,17 @@
 	<#include "../common/_attachedFilesForm.ftl"/>
 	<div class="formAction">
 		
-		<#if uniqueID?exists  >
-			<input type="button" value="<@s.text name="label.delete" />" onclick="return redirect('<@s.url action="assetTypeConfirmDelete" uniqueID="${uniqueID}"/>');" />
-			<input type="button" value="<@s.text name="label.cancel" />" onclick="return redirect('<@s.url action="assetType" uniqueID="${uniqueID}"/>');" />
-		<#else>
-			<input type="button" value="<@s.text name="label.cancel" />" onclick="return redirect('<@s.url action="assetTypes"/>');" />
-		</#if>
 		<@s.submit key="label.save" onclick="formSubmit();" id="save"/>
+		<@s.text name="label.or"/>
+		
+		<#if uniqueID?exists  >
+			<a href="#" onclick="return redirect('<@s.url action="assetType" uniqueID="${uniqueID}"/>');" /><@s.text name="label.cancel" /></a>
+			<@s.text name="label.or"/>
+			<a href="#" onclick="return redirect('<@s.url action="assetTypeConfirmDelete" uniqueID="${uniqueID}"/>');" /><@s.text name="label.delete" /></a>
+		<#else>
+			<a href="#" onclick="return redirect('<@s.url action="assetTypes"/>');" /><@s.text name="label.cancel" /></a>
+		</#if>
 		
 	</div>
-	
 	
 </@s.form>

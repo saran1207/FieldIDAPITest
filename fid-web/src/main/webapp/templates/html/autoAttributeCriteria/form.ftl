@@ -1,5 +1,9 @@
 ${action.setPageType('auto_attribute', 'edit')!}
-
+<style>	
+	.formAction div{
+		padding: 0;
+	}
+</style>
 <@s.form action="autoAttributeCriteriaEdit!save" cssClass="inputForm" theme="css_xhtml" >
 	<@s.hidden name="uniqueID" id="uniqueId"/>
 	
@@ -129,13 +133,17 @@ ${action.setPageType('auto_attribute', 'edit')!}
 		</table>
 	</div>
 	<div class="formAction">
-		
-		<input type="button" value="<@s.text name="hbutton.cancel" />"  onclick="window.location='<@s.url action="autoAttributeCriteriaList"  />'; return false;" />
-		<#if autoAttributeCriteria.id?exists >
-			<input type="button" value="<@s.text name="hbutton.delete" />"  onclick="if( confirm('Are you sure?') ) { window.location='<@s.url action="autoAttributeCriteriaRemove"  uniqueID="${uniqueID}" />'; }" />
-		</#if>
+		<@s.url id="cancelUrl" action="autoAttributeCriteriaList"/>
 		
 		<@s.submit key="hbutton.save" onclick="return formSubmit();"/>
+		<@s.text name="label.or"/>
+		<a href="#" onclick="return redirect( '${cancelUrl}' );" />	<@s.text name="label.cancel"/></a>
+		<#if autoAttributeCriteria.id?exists >
+			<@s.url id="removeUrl" action="autoAttributeCriteriaRemove" uniqueID="${uniqueID}"/>
+			<@s.text name="label.or"/>
+			<a href="#" onclick="if( confirm('Are you sure?') ) { return redirect( '${removeUrl}' ); }" ><@s.text name="label.delete"/></a>
+		</#if>
+		
 	</div>
 	<#if autoAttributeCriteria.id?exists  >
 		<div class="actions">

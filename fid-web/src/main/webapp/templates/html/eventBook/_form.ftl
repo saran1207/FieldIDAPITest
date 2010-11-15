@@ -26,7 +26,8 @@
 		<@s.checkbox name="open" />
 	</span>
 </p>
-<div class="formAction">
-	<button onclick="return redirect( '<@s.url action="eventBooks" currentPage="${currentPage}" />' );" ><@s.text name="label.cancel"/></button>
+<div class="formAction borderLessFormAction">
 	<@s.submit key="hbutton.save" />
+	<@s.text name="label.or"/>
+	<a href="#" onclick="return redirect( '<@s.url action="eventBooks" currentPage="${currentPage}" />' );" ><@s.text name="label.cancel"/></a>
 </div>

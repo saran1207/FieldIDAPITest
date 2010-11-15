@@ -1168,6 +1168,10 @@ li.buttonGroupLabels {
 	text-align: left;
 }
 
+.crudForm .borderLessFormAction{
+	border-top: none;
+}
+
 .crudForm br {
 	margin: 5px 0px;
 }
@@ -1180,10 +1184,6 @@ li.buttonGroupLabels {
 	overflow: hidden;
 	padding: 5px 0px;
 	border-bottom: 1px solid #D0DAFD;
-}
-
-.crudForm .borderLessInfoSet{
-	border-bottom: none;	
 }
 
 .crudForm .infoSet label {
@@ -1351,7 +1351,7 @@ pageSection.largeForm {
 	width: 950px;
 }
 
-.pageSection .infoSet,.pageSection .formAction {
+.pageSection .infoSet, .pageSection .formAction {
 	border-bottom: 1px solid #e2e2e2;
 }
 

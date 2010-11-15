@@ -8,8 +8,9 @@ ${action.setPageType('asset_type_group', 'add')!}
 	
 		<div class="formAction">
 			<@s.url id="cancelUrl" action="assetTypeGroups"/>
-			<@s.reset key="label.cancel" onclick="return redirect( '${cancelUrl}' );" />
 			<@s.submit key="label.save"/>
+			<@s.text name="label.or"/>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );" /><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 </div>
