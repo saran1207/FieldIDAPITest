@@ -152,7 +152,12 @@ ${action.setPageType('job', 'show')!}
 	</div>
 <#else>
 	<div id="events" class="pageSection" style="" >
-		<h2 class="decoratedHeader"><@s.text name="label.eventsonproject"/>	<#if sessionUser.hasAccess("createevent")><a href="<@s.url action="startAssignSchedulesToJob" jobId="${uniqueID}"/>"><@s.text name="label.addanevent"/></a></#if></h2>
+		<h2 class="decoratedHeader"><@s.text name="label.eventsonproject"/>	<#if sessionUser.hasAccess("createevent")><a href="<@s.url action="startAssignSchedulesToJob" jobId="${uniqueID}"/>"><@s.text name="label.addanevent"/></a></#if>
+			<span class="viewMore" <#if schedules.isEmpty() || !sessionUser.hasAccess("createevent")> style="display:none" </#if>	>|</span>
+			<span id="linkedEventsMore" class="viewMore" <#if schedules.isEmpty()> style="display:none" </#if>  >
+				<a href="<@s.url action="jobEvents" projectId="${project.id}"/>"><@s.text name="label.view_all_events"/></a>
+			</span>
+		</h2>
 		<div class="sectionContent" id="emptyEventList" <#if !schedules.isEmpty()> style="display:none" </#if>>
 			<div id="noLinkedEvents"  >
 				<div class="emptyEvents">
@@ -172,9 +177,7 @@ ${action.setPageType('job', 'show')!}
 					<#include "_attachedEvents.ftl"/>
 				</#list>
 			</div>
-			<div id="linkedEventsMore" class="viewMore"  >
-				<a href="<@s.url action="jobEvents" projectId="${project.id}"/>"><@s.text name="label.view_all_events"/></a>
-			</div>
+			
 		</div>
 	</div>
 </#if>
@@ -186,6 +189,9 @@ ${action.setPageType('job', 'show')!}
 		<@s.text name="label.notes"/>
 		<#if sessionUser.hasAccess( "managejobs" )> 
 			<a id="addNewNote" href="<@s.url action="jobNoteAdd" projectId="${project.id}"/>"><@s.text name="label.addnote"/></a>
+			<span id="notesMore" class="viewMore" <#if notes.isEmpty() > style="display:none" </#if> >
+				| <a href="<@s.url action="jobNotes" projectId="${project.id}"/>"><@s.text name="label.allnotes"/></a>
+			</span>
 			<a id="closeNewNote" href="close" style="display:none"><@s.text name="label.closeform"/></a>
 		</#if>
 	</h2>
@@ -208,9 +214,7 @@ ${action.setPageType('job', 'show')!}
 				<#include "_attachedNote.ftl"/>
 			</#list>
 		</div>
-		<div id="notesMore" class="viewMore" <#if notes.isEmpty() > style="display:none" </#if> >
-			<a href="<@s.url action="jobNotes" projectId="${project.id}"/>"><@s.text name="label.allnotes"/></a>
-		</div>
+		
 	</div>
 </div>
 

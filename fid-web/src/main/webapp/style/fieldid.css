@@ -1176,9 +1176,10 @@ li.buttonGroupLabels {
 .crudForm .infoSet {
 	overflow: hidden;
 	padding: 5px 0px;
+	border-bottom: 1px solid #D0DAFD;
 }
 
-crudForm .borderLessInfoSet{
+.crudForm .borderLessInfoSet{
 	border-bottom: none;	
 }
 
@@ -1313,7 +1314,7 @@ crudForm .borderLessInfoSet{
 
 .viewMore {
 	text-align: right;
-	padding: 5px 10px;
+	font-weight: normal;
 }
 
 .pageSection {
