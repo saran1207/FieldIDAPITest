@@ -10,7 +10,7 @@ public class SearchResultsPage extends FieldIDPage {
     }
 
     public void selectAllItemsOnPage() {
-        checkAndFireClick("//table[@class='list']//tr[1]//td[1]/input");
+        checkAndFireClick("//table[@class='list']//tr[1]//th[1]/input");
         waitForAjax();
     }
 

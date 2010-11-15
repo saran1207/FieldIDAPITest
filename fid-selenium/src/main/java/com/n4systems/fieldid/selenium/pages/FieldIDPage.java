@@ -268,7 +268,8 @@ public class FieldIDPage extends WebPage {
 	}
 
     public void checkAndFireClick(String checkboxLocator) {
-        
+        selenium.check(checkboxLocator);
+        selenium.fireEvent(checkboxLocator, "click");
     }
 
 }
