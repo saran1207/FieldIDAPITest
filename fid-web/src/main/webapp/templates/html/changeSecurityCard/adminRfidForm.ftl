@@ -8,9 +8,12 @@ ${action.setPageType('user', 'change_rfid_number')!}
 		<@s.textfield name="securityCardNumber" />
 	</p>
 	
-	<div class="formAction">
+	<div class="formAction borderLessFormAction">
 		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'customerUserEdit')}" uniqueID="${uniqueID}"/>
-		<@s.reset key="label.cancel" onclick="redirect('${cancelUrl}'); return false;"/>
 		<@s.submit key="hbutton.save"/>
+		<@s.text name="label.or"/>
+	
+		<a href="#" onclick="redirect('${cancelUrl}'); return false;"><@s.text name="label.cancel"/></a>
+		
 	</div>
 </@s.form>

@@ -4,9 +4,9 @@
 			float:right;
 			width: 400px;
 			padding:20px 10px;
-			border: 2px solid #ddd;
+			border: 2px solid #ccc;
 			text-align: center;
-			background-color: #D0DAFD;
+			background-color: #eee;
 		}
 		.crudForm h2 { margin-top: 0; }
 	</style>
@@ -26,13 +26,11 @@ ${action.setPageType('user', 'change_password')!}
 		<@s.password name="confirmPassword" />
 	</p>
 	
-	<div class="formAction">
-		
-		 
-	
-		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'customerUserEdit')}" uniqueID="${uniqueID}"/>
-		<@s.reset key="label.cancel" onclick="redirect('${cancelUrl}'); return false;"/>
+	<div class="formAction borderLessFormAction">
 		<@s.submit key="hbutton.save"/>
+		<@s.text name="label.or"/>
+		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'customerUserEdit')}" uniqueID="${uniqueID}"/>
+		<a href="#" onclick="redirect('${cancelUrl}'); return false;"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>
 

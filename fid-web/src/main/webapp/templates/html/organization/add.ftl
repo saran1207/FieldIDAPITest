@@ -13,7 +13,7 @@ ${action.setPageType('organization','add')!}
 			<@s.url id="cancelUrl" action="organizations"/>
 			<@s.submit key="label.save"/>	
 			<@s.text name="label.or"/>
-			<a href="#" onclick="return redirect( '${cancelUrl}' );" />	<@s.text name="label.cancel"/></a>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 </#if>

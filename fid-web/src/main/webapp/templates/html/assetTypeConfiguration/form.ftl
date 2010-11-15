@@ -44,9 +44,10 @@ ${action.setPageType('asset_type', 'configuration')!}
 		</div>
 		
 		<div class="formAction">
-			<@s.url id="cancelUrl" action="assetType" uniqueID="${uniqueID}"/>
-			<@s.submit key="label.cancel" onclick="return redirect( '${cancelUrl}' );" />
 			<@s.submit key="label.save"/>
+			<@s.url id="cancelUrl" action="assetType" uniqueID="${uniqueID}"/>
+			<@s.text name="label.or"/>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.cancel"/></a>
 		</div>
 	
 	</@s.form>

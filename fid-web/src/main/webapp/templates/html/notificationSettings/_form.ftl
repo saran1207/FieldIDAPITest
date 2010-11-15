@@ -107,10 +107,11 @@ ${action.setPageType('my_account', 'notification_settings')!}
 			</div>
 		</div>
 	</div>
-	<div class="formAction" >
+	<div class="formAction borderLessFormAction" >
+	<@s.submit key="label.save"/>
 		<@s.url id="cancelUrl" action="notificationSettings"/>
-		<@s.reset key="label.cancel" onclick="return redirect('${cancelUrl}');" />
-		<@s.submit key="label.save"/>
+		<@s.text name="label.or"/>
+		<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
 	</div>
 </div>
 <script type="text/javascript">

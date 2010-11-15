@@ -58,7 +58,7 @@ ${action.setPageType('my_account', 'details')!}
 		</#if>
 	
 	</div>
-	<div class="actions">
+	<div class="formAction borderLessFormAction">
 		<@s.submit key="label.save" id="saveButton"/> <@s.text name="label.or"/> <a href="<@s.url action="myAccount"/>"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>

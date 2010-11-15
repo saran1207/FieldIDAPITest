@@ -26,9 +26,10 @@ ${action.setPageType('job', 'add')!}
 		<#include "_form.ftl"/>
 	
 		<div class="formAction">
-			<@s.url id="cancelUrl" action="jobs"/>
-			<@s.reset key="label.cancel" onclick="return redirect( '${cancelUrl}' );" />
 			<@s.submit key="label.save"/>
+			<@s.text name="label.or"/>
+			<@s.url id="cancelUrl" action="jobs"/>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 </div>

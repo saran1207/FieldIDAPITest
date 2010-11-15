@@ -7,11 +7,15 @@ ${action.setPageType('job', 'edit')!}
 		<#include "_form.ftl"/>
 	
 		<div class="formAction">
-			<@s.url id="deleteUrl" action="jobDelete" uniqueID="${uniqueID}"/>
-			<@s.reset key="label.delete" onclick="if( confirm( '${action.getText( 'warning.deleteproject' )}' ) ) { redirect( '${deleteUrl}' ); } return false;"/>
-			<@s.url id="cancelUrl" action="job" uniqueID="${project.id}"/>
-			<@s.reset key="label.cancel" onclick="return redirect( '${cancelUrl}' );"/>
 			<@s.submit key="label.save"/>
+			
+			<@s.text name="label.or"/>
+			<@s.url id="cancelUrl" action="job" uniqueID="${project.id}"/>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );"><@s.text name="label.cancel"/></a>
+			
+			<@s.text name="label.or"/>
+			<@s.url id="deleteUrl" action="jobDelete" uniqueID="${uniqueID}"/>
+			<a href="#" onclick="if( confirm( '${action.getText( 'warning.deleteproject' )}' ) ) { redirect( '${deleteUrl}' ); } return false;"><@s.text name="label.delete"/></a>
 		</div>
 	</@s.form>
 </div>

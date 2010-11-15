@@ -7,9 +7,10 @@ ${action.setPageType('my_account', 'security_card')!}
 		<@s.textfield name="securityCardNumber" />
 	</p>
 	
-	<div class="formAction">
+	<div class="formAction borderLessFormAction">
 		<@s.url id="cancelUrl" action="myAccount"/>
-		<@s.reset key="label.cancel" onclick="return redirect('${cancelUrl}');"/>
 		<@s.submit key="hbutton.save"/>
+		<@s.text name="label.or"/>
+		<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>

@@ -329,7 +329,7 @@ table.list tr.multiSelected {
 .simpleTable {
 	border-collapse: separate;
 	border-spacing: 0 2px;
-	border-bottom: 1px solid #D0DAFD;
+	border-bottom: 1px solid #ccc;
 	width: 100%;
 }
 
@@ -338,16 +338,16 @@ table.list tr.multiSelected {
 }
 
 .decorated th {
-	background-color: #D0DAFD;
+	background-color: #eee;
 }
 
-.simpleTable td,.decorated th {
-	border-top: 1px solid #D0DAFD;
+.simpleTable td, .decorated th {
+	border-top: 1px solid #eee;
 	padding: 5px;
 }
 
 .simpleTable tr:hover {
-	background-color: #D0DAFD;
+	background-color: #eee;
 }
 
 .rowName {
@@ -635,7 +635,6 @@ div.formAction {
 	clear: both;
 	padding: 10px 0px;
 	padding-right: 10px;
-	text-align: right;
 }
 
 .formAction a {
@@ -644,6 +643,7 @@ div.formAction {
 
 .formAction button,.formAction input {
 	margin-left: 10px;
+	margin-right: 2.5px;
 	padding: 2px 5px;
 }
 
@@ -1168,6 +1168,11 @@ li.buttonGroupLabels {
 	text-align: left;
 }
 
+.formAction a, .formAction div{
+	margin-left: 2.5px;
+	margin-right: 2.5px;
+	}
+
 .crudForm .borderLessFormAction{
 	border-top: none;
 }
@@ -1349,6 +1354,10 @@ pageSection.largeForm {
 
 .bigForm {
 	width: 950px;
+}
+
+.enlargedInput input{
+	 font-size: 16px;
 }
 
 .pageSection .infoSet, .pageSection .formAction {

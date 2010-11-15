@@ -57,8 +57,10 @@ ${action.setPageType('asset_type', 'select_event_types')!}
 			</#list>
 		</table>
 		<div class="formAction">
-			<button  onclick=" window.location = '<@s.url action="assetType" includeParams="none" uniqueID="${assetTypeId}" />'; return false;" ><@s.text name="hbutton.cancel" /></button>
+			<@s.url id="cancelUrl" action="assetType" includeParams="none" uniqueID="${assetTypeId}"/>
 			<@s.submit key="hbutton.save" onclick="return formSubmit();" />
+			<@s.text name="label.or"/>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );"><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 <#else>

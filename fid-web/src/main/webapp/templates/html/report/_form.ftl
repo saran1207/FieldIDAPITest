@@ -139,7 +139,7 @@ ${action.setPageType('report', 'show')!}
 
 		<#include "../customizableSearch/_selectColumns.ftl"/>
 		
-		<div class="formAction">
+		<div class="formAction enlargedInput">
 			<div class="centerContents">
 				<@s.submit key="label.Run"/>
 				<@s.text name="label.or"/>

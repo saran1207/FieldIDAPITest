@@ -17,9 +17,10 @@ ${action.setPageType('my_account', 'change_password')!}
 		<@s.password name="confirmPassword" />
 	</p>
 	
-	<div class="formAction">
-		<@s.url id="cancelUrl" action="myAccount"/>
-		<@s.reset key="label.cancel" onclick="redirect('${cancelUrl}'); return false;"/>
+	<div class="formAction borderLessFormAction">
 		<@s.submit key="hbutton.save"/>
+		<@s.text name="label.or"/>
+		<@s.url id="cancelUrl" action="myAccount"/>
+		<a href="#" onclick="redirect('${cancelUrl}'); return false;"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>
