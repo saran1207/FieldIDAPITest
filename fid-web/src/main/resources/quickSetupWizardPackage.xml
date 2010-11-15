@@ -40,15 +40,15 @@
 			</result>
 		</action>
 		<action name="step3" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
-			<result name="missing" type="redirectAction">startWizard</result>
+			<result name="missing" type="redirectAction">allDone</result>
 			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step3.ftl</result>
 		</action>
 		<action name="step3ImportCatalogOnlyConfirm" method="confirm" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
-			<result name="missing" type="redirectAction">startWizard</result>
+			<result name="missing" type="redirectAction">allDone</result>
 			<result name="success" type="freemarker">/templates/html/quickSetupWizard/_loadingImports.ftl</result>
 		</action>
 		<action name="step3ImportCatalogOnlyImport" method="import" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
-			<result name="missing" type="redirectAction">startWizard</result>
+			<result name="missing" type="redirectAction">allDone</result>
 			<result name="success" type="redirectAction">allDone</result>
 		</action>
 		
