@@ -1,21 +1,19 @@
 package com.n4systems.fieldid.actions.asset;
 
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
-import com.n4systems.model.AssetType;
-import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.Asset;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.assetstatus.AssetStatusFilteredLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.PersistenceManager;

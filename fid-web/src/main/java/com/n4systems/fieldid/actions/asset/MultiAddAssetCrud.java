@@ -1,34 +1,40 @@
 package com.n4systems.fieldid.actions.asset;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.fieldid.actions.helpers.MultiAddAssetCrudHelper;
-import com.n4systems.model.asset.AssetCleaner;
-import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
-import com.n4systems.services.asset.AssetSaveService;
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
+import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+import com.n4systems.fieldid.actions.helpers.MultiAddAssetCrudHelper;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.asset.AssetCleaner;
+import com.n4systems.model.assettype.AssetTypeLoader;
+import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -51,7 +57,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	// form inputs
 	private List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>();
 	private AssetView assetView = new AssetView();
-	
 	
 	private OwnerPicker ownerPicker;
 	private String saveAndStartEvent;
@@ -87,7 +92,45 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			addActionMessageText("error.you_can_not_add_anymore_assets");
 			return ERROR;
 		}
+		applyDefaults();
 		return SUCCESS;
+	}
+	
+	private void applyDefaults() {
+		assetView.setIdentified(DateHelper.getToday());
+
+		AddAssetHistory addAssetHistory = loadAddAssetHistory();
+		if (addAssetHistory != null) {
+			
+			setOwnerId(addAssetHistory.getOwner() != null ? addAssetHistory.getOwner().getId() : null);
+
+			// we need to make sure we load the assettype with its info fields
+			setAssetTypeId(addAssetHistory.getAssetType().getId());
+
+			assetView.setAssetStatus(addAssetHistory.getAssetStatus() != null ? addAssetHistory.getAssetStatus().getUniqueID(): null);
+			assetView.setPurchaseOrder(addAssetHistory.getPurchaseOrder());
+			assetWebModel.getLocation().setFreeformLocation(addAssetHistory.getLocation().getFreeformLocation());
+			
+			AssetType assetType = getAssetType(addAssetHistory.getAssetType().getId());
+			
+			List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(addAssetHistory.getInfoOptions(), assetType.getInfoFields());
+			assetView.setAssetInfoOptions(assetInfoOptions);			
+			
+		} else {
+			// set the default asset id.
+			getAssetTypes();
+			Long assetTypeId = assetTypeLister.getAssetTypes().iterator().next().getId();
+			setAssetTypeId(assetTypeId);
+			setOwnerId(getSessionUser().getOwner().getId());
+		}
+	}
+	
+	private AssetType getAssetType(Long id) {
+		return new AssetTypeLoader(getSecurityFilter()).setId(id).setStandardPostFetches().load();
+	}
+	
+	private AddAssetHistory loadAddAssetHistory() {
+		return legacyAssetManager.getAddAssetHistory(getSessionUser().getUniqueID());
 	}
 	
 	public String doCreate() {
@@ -230,13 +273,24 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		assetView.setAssetStatus(statusId);
 	}
 	
+	public Long getAssetStatus() {
+		return assetView.getAssetStatus();
+	}
+	
 	public void setAssetTypeId(Long typeId) {
 		assetView.setAssetTypeId(typeId);
 	}
 	
-	
+	public Long getAssetTypeId() {
+		return assetView.getAssetTypeId();
+	}
+		
 	public void setPurchaseOrder(String purchaseOrder) {
 		assetView.setPurchaseOrder(purchaseOrder);
+	}
+	
+	public String getPurchaseOrder() {
+		return assetView.getPurchaseOrder();
 	}
 	
 	public void setIdentified(String identified) {
@@ -247,12 +301,23 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		assetView.setNonIntegrationOrderNumber(orderNumber);
 	}
 	
+	public String getNonIntegrationOrderNumber() {
+		return assetView.getNonIntegrationOrderNumber();
+	}
+	
 	public void setComments(String comments) {
 		assetView.setComments(comments);
 	}
 	
 	public List<InfoOptionInput> getAssetInfoOptions() {
 		return assetView.getAssetInfoOptions();
+	}
+	
+	public Collection<InfoFieldBean> getAssetInfoFields() {
+		if (getAssetTypeId() != null) {
+				return getAssetType(getAssetTypeId()).getAvailableInfoFields();
+		}
+		return null;
 	}
 	
 	public void setAssetInfoOptions(List<InfoOptionInput> infoOptions) {
@@ -262,7 +327,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	public List<AssetIdentifierView> getIdentifiers() {
 		return identifiers;
 	}
-
 	
 	@RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner() {
