@@ -14,7 +14,7 @@ public class QuickSetupWizard {
 	// Locators
 	private String quickSetupWizardPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Quick Setup Wizard')]";
 	private String noThanksLinkLocator = "xpath=//A[contains(text(),'No Thanks')]";
-	private String readyLetsGoButtonLocator = "xpath=//BUTTON[@id='startButton']";
+	private String readyLetsGoButtonLocator = "xpath=//input[@id='startButton']";
 	private String quickSetupWizardStep1PageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Quick Setup Wizard - Step 1 of 3')]";
 	private String step1CompleteButtonLocator = "xpath=//INPUT[@id='step1Complete_label_next']";
 	private String companyProfileSetupMessage = "Your company profile has been setup";
@@ -90,6 +90,12 @@ public class QuickSetupWizard {
 		selenium.click(step2CompleteButtonLocator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
+	
+	public void gotoQuickSetupWizardStep4() {
+		selenium.click(step3CompleteLinkLocator);
+		misc.waitForPageToLoadAndCheckForOopsPage();
+	}
+
 
 	public void verifySystemSettingsUpdated() {
 		List<String> successMsgs = misc.getActionMessages();
