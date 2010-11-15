@@ -34,7 +34,8 @@ public class SavedReportSearchCriteriaConverter {
 		container.setEventTypeGroup(savedReport.getLongCriteria(SavedReport.EVENT_TYPE_GROUP));
 		container.setPerformedBy(savedReport.getLongCriteria(SavedReport.PERFORMED_BY));
 		container.setAssignedUser(savedReport.getLongCriteria(SavedReport.ASSIGNED_USER));
-		container.setStatus(savedReport.getStringCriteria(SavedReport.ASSET_STATUS));
+		container.setAssetStatus(savedReport.getLongCriteria(SavedReport.ASSET_STATUS));
+		container.setStatus(savedReport.getStringCriteria(SavedReport.EVENT_STATUS));
 		container.setAssetType(savedReport.getLongCriteria(SavedReport.ASSET_TYPE));
 		container.setAssetTypeGroup(savedReport.getLongCriteria(SavedReport.ASSET_TYPE_GROUP));
 		container.setJob(savedReport.getLongCriteria(SavedReport.JOB_ID));
@@ -70,7 +71,8 @@ public class SavedReportSearchCriteriaConverter {
 		report.setInCriteria(SavedReport.EVENT_BOOK, container.getEventBook());
 		report.setInCriteria(SavedReport.EVENT_TYPE_GROUP, container.getEventTypeGroup());
 		report.setInCriteria(SavedReport.PERFORMED_BY, container.getPerformedBy());
-		report.setInCriteria(SavedReport.ASSET_STATUS, container.getStatus());
+		report.setInCriteria(SavedReport.ASSET_STATUS, container.getAssetStatus());
+		report.setInCriteria(SavedReport.EVENT_STATUS, container.getStatus());
 		report.setInCriteria(SavedReport.ASSET_TYPE, container.getAssetType());
 		report.setInCriteria(SavedReport.ASSET_TYPE_GROUP, container.getAssetTypeGroup());
 		report.setInCriteria(SavedReport.ASSIGNED_USER, container.getAssignedUser());
