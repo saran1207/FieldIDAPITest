@@ -60,7 +60,7 @@ public class IdentifyPage extends FieldIDPage {
 	
 	public void clickLoadOrderNumberButton() {
 		selenium.click("//form[@id='searchOrder']/input[@id='searchOrder_load']");
-		waitForPageToLoad();
+		waitForPageToLoad("60000");
 	}
 	
 	public int getNumberOfLineItemsInOrder() {
@@ -71,7 +71,7 @@ public class IdentifyPage extends FieldIDPage {
 		String locator = "//div[@id='resultsTable']/table/tbody/tr[" + index + "]/td/a[contains(text(),'Identify')]";
 		if(selenium.isElementPresent(locator)) {
 			selenium.click(locator);
-			waitForPageToLoad();
+			waitForPageToLoad("60000");
 		} else {
 			fail("Could not find a line item in row '" + index + "'");
 		}

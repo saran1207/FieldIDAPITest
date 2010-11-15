@@ -100,7 +100,7 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
 	public abstract List<String> getResultSerialNumbers();
 
 	public AssetPage clickResultSerialNumber(String serialNumber) {
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/..//a");
+		selenium.click("//table[@class='list']//td[4]//a[text()='" +serialNumber+"']");
 		return new AssetPage(selenium);
 	}
 

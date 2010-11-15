@@ -144,7 +144,7 @@ public class FieldIDPage extends WebPage {
     	int numColumns = selenium.getXpathCount("//table[@class='list']/tbody/tr/th").intValue();
 		List<String> headers = new ArrayList<String>(numColumns);
 		
-		for (int i = 1; i <= numColumns; i++) {
+		for (int i = 2; i <= numColumns; i++) {
 			String headerXpath = "//table[@class='list']/tbody/tr/th[" + i + "]";
 			headers.add(selenium.getText(headerXpath));
 		}
@@ -266,5 +266,9 @@ public class FieldIDPage extends WebPage {
 			selenium.uncheck(locator);
 		}
 	}
+
+    public void checkAndFireClick(String checkboxLocator) {
+        
+    }
 
 }

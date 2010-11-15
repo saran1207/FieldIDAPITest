@@ -50,7 +50,7 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 
     @Override
 	public List<String> getResultSerialNumbers() {
-		return collectTableValuesUnderCellForCurrentPage(2, 1, "a");
+		return collectTableValuesUnderCellForCurrentPage(2, 2, "a");
 	}
 
 }

@@ -2,9 +2,10 @@ package com.n4systems.fieldid.selenium.pages.assets;
 
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
+import com.n4systems.fieldid.selenium.pages.search.SearchResultsPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class AssetsSearchResultsPage extends FieldIDPage {
+public class AssetsSearchResultsPage extends SearchResultsPage {
 
     public AssetsSearchResultsPage(Selenium selenium) {
         super(selenium);

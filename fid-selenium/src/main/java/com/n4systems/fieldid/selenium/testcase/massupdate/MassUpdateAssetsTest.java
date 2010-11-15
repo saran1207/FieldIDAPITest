@@ -38,6 +38,8 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
         assertEquals(2, resultsPage.getTotalResultsCount());
 
+        resultsPage.selectAllItemsOnPage();
+
         AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
         massUpdatePage.setAssetStatus("Out of Service");
         massUpdatePage.setPurchaseOrder("PO 5");

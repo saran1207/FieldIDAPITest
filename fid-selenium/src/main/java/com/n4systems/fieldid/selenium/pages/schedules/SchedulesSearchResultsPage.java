@@ -3,9 +3,10 @@ package com.n4systems.fieldid.selenium.pages.schedules;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
+import com.n4systems.fieldid.selenium.pages.search.SearchResultsPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class SchedulesSearchResultsPage extends FieldIDPage {
+public class SchedulesSearchResultsPage extends SearchResultsPage {
 
 	public SchedulesSearchResultsPage(Selenium selenium) {
         super(selenium);
@@ -26,31 +27,26 @@ public class SchedulesSearchResultsPage extends FieldIDPage {
     }
     
     public EventPage clickStartEventLink(){
-//    	selenium.click("//a[@id='moreActions'][1]");
     	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Start Event')][1]");
     	return new EventPage(selenium);
     }
     
     public AssetPage clickViewSchedulesLink(){
-//     	selenium.click("//a[@id='moreActions'][1]");
     	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'View Schedules')][1]");
     	return new AssetPage(selenium);
     }
     
     public AssetPage clickEditSchedulesLink(){
-//     	selenium.click("//a[@id='moreActions'][1]");
     	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Edit Schedule')][1]");
     	return new AssetPage(selenium);
     }
     
     public AssetPage clickViewAssetLink(){
-//     	selenium.click("//a[@id='moreActions'][1]");
     	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'View Asset')][1]");
     	return new AssetPage(selenium);
     }
 
     public AssetPage clickEditAssetLink(){
-//     	selenium.click("//a[@id='moreActions'][1]");
     	selenium.click("//ul[starts-with(@id,'moreActions')]/li/a[contains(.,'Edit Asset')][1]");
     	return new AssetPage(selenium);
     }
