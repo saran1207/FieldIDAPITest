@@ -4,6 +4,7 @@
 
 <#include '../common/_newpagination.ftl' />
 <div class="selectionNotice">
+    <#include '_selectionStatus.ftl'>
 </div>
 <table id="resultsTable" class="list">
 	<tr>

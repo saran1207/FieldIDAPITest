@@ -512,6 +512,9 @@ td.formAction {
 	padding-left: 0px;
 }
 
+.listOfLinks li.massUpdateIndicator {
+    border-left: none;
+}
 
 ul.navOptions {
 	margin-top: 10px;
