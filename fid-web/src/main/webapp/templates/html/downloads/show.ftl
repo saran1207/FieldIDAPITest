@@ -21,11 +21,13 @@ ${action.setPageType('my_account', 'downloads')!}
 				<td>${download.name}</td>
 				<td><@s.text name="${download.state.label}"/></td>
 				<td>
+					&nbsp;
 					<#if download.state.willExpire>
 						${action.getExpiresText(download.created)}
 					</#if>
 				</td>
 				<td>
+					&nbsp;
 					<#if download.state.ready>
 						<a href="<@s.url action="downloadFile" includeParams="get" fileId="${download.id}" />"><@s.text name="label.download"/></a>
 					</#if>
