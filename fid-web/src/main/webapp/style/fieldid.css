@@ -1675,17 +1675,17 @@ input.description {
 .floatingDropdown ul li{
 	background-color: #333;
 	color:#cccccc;
-	padding: 7px 10px 7px 10px;
 	text-decoration: none;
 }
 
 .floatingDropdown ul li a, .floatingDropdown ul li a:visited {
 	color:#cccccc;
 	text-decoration: none;
+	display: block;
+	padding: 7px 10px 7px 10px;
 }
 
 .floatingDropdown ul li:hover{
-	
 	background: #1b5ccd;
 }
 .floatingDropdown ul li:hover a, .floatingDropdown ul li:hover, .floatingDropdown ul li:hover a:visited {
