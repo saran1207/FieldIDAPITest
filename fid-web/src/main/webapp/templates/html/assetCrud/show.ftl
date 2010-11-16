@@ -25,7 +25,7 @@ ${action.setPageType('asset', 'show')!}
 			<span class="fieldValue">${asset.rfidNumber!}</span>
 		</p>
 		<p>
-			<label><@s.text name="label.publishedoversafetynetwork"/></label>
+			<label><@s.text name="label.visibility"/></label>
 			<span class="fieldValue"><@s.text name="${publishedStateLabel}"/></span>
 		</p>
 		<p>
