@@ -144,7 +144,7 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	
 	private List<String> getDefaultColumnHeaders() {
 		//Empty string for the empty last table column.
-        return Arrays.asList("Event Type", "Result", "Serial Number", "Job Site Name",
+        return Arrays.asList("Event Type", "Result", "Serial Number", "Customer Name",
                 "Asset Type", "Asset Status", "");
 
 	}

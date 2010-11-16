@@ -40,7 +40,7 @@ public class ManageAssetTypesDriver {
 	private String attributesUndoDeletesButtonLocator = "xpath=//DIV[@id='infoFieldEditing']/DIV/INPUT[contains(@value,'Undo Deletes')]";
 	private String attachmentsHeaderLocator = "xpath=//FORM[@id='assetTypeUpdate']//H2[contains(text(),'Attachments')]";
 	private String attachAFileButtonLocator = "xpath=//FORM[@id='assetTypeUpdate']//a[.='Attach A File']";
-	private String cancelButtonLocator = "xpath=//FORM[@id='assetTypeUpdate']/DIV[@class='formAction']/INPUT[contains(@value,'Cancel')]";
+	private String cancelButtonLocator = "xpath=//FORM[@id='assetTypeUpdate']/DIV[@class='formAction']/a[contains(.,'Cancel')]";
 	private String saveButtonLocator = "xpath=//FORM[@id='assetTypeUpdate']/DIV[@class='formAction']/INPUT[contains(@value,'Save')]";
 	private String viewAllAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'View All')]";;
 	private String viewAssetTypeTabLinkLocator = "xpath=//DIV[@id='contentHeader']/UL[contains(@class,'options')]/LI/A[contains(text(),'View') and not(contains(text(),'All'))]";;

@@ -81,7 +81,7 @@ public class ManageAssetTypesPage extends FieldIDPage {
 	}
 	
 	public void clickDeleteAssetType() {
-		selenium.click("//form[@id='assetTypeUpdate']//input[@type='button' and @value='Delete']");
+		selenium.click("//form[@id='assetTypeUpdate']//div[@class='formAction']//a[contains(.,'Delete')]");
 		waitForPageToLoad();
 		selenium.click("//input[@type='submit' and @value='Delete']");
 		waitForPageToLoad();

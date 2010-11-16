@@ -8,7 +8,7 @@ import com.thoughtworks.selenium.Selenium;
 
 public class AccountSetupWizardPage extends FieldIDPage {
 	
-	private static final String READY_LETS_GO_BUTTON_XPATH = "//button[@id='startButton']";
+	private static final String READY_LETS_GO_BUTTON_XPATH = "//input[@id='startButton']";
 	private static final String STEP_1_COMPLETE_XPATH = "//input[@id='step1Complete_label_next']";
 	private static final String STEP_1_PAGE_HEADER_XPATH = "//div[@id='contentTitle']/H1[contains(text(),'Setup Wizard - Step 1')]";
 	private static final String STEP_2_PAGE_HEADER_XPATH = "//div[@id='contentTitle']/H1[contains(text(),'Setup Wizard - Step 2')]";

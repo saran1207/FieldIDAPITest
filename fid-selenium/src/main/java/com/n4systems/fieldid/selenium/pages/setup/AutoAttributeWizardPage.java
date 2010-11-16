@@ -94,7 +94,7 @@ public class AutoAttributeWizardPage extends FieldIDPage {
 
 	public void clickDeleteButtonAndConfirm() {
 		selenium.chooseOkOnNextConfirmation();
-		selenium.click("//input[@type = 'button' and @value='Delete']");
+		selenium.click("//a[contains(.,'Delete')]");
 		selenium.getConfirmation();
 		waitForPageToLoad();
 	}

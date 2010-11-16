@@ -71,7 +71,7 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 	}
 
 	public void clickCancelButton() {
-		selenium.click("//input[@name='label.cancel']");
+		selenium.click("//a[contains(.,'Cancel')]");
 		waitForPageToLoad();		
 	}
 

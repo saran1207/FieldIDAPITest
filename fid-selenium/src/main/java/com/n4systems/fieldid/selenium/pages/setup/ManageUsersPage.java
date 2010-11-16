@@ -223,7 +223,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 
 	public void clickCancelChangePassword() {
-		selenium.click("label.cancel");
+		selenium.click("//a[contains(.,'Cancel')]");
 		waitForPageToLoad();
 	}
 
