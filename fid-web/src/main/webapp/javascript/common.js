@@ -583,8 +583,8 @@ function positionDropDown(a, entityId){
 	var actionsContainer = $("actionsContainer_"+entityId);
 	var coordinates = findPos(actionsContainer);
 	
-	if(navigator.appName=="Microsoft Internet Explorer"){
-		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - actionsContainer.offsetHeight - 5)+ "px"});
+	if(Prototype.Browser.IE){
+		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - actionsContainer.offsetHeight)+ "px"});
 	}
 	list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
 }
