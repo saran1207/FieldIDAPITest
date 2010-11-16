@@ -91,3 +91,7 @@
 	padding: 3px;
 }
 
+.unitMeasureDiv input[type="submit"]{
+	float:right;
+	width: 260px;
+}
