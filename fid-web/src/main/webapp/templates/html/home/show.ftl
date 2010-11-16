@@ -13,7 +13,7 @@
 			<#if securityGuard.brandingEnabled && primaryOrg.webSite?exists >
 				<li><a href="${primaryOrg.webSite?html}" target="_blank">${primaryOrg.name?html} <@s.text name="label.web_site"/></a></li>
 			</#if>
-			<#if sessionUser.admin>
+			<#if sessionUser.hasAccess("managesystemconfig")>
 				<li><a href="<@s.url action="startWizard" namespace="quickSetupWizard"/>"><@s.text name="label.quick_setup_wizard"/></a></li>
 			</#if>
 		</ul>
