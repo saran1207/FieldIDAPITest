@@ -2,7 +2,12 @@
 
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
+	<@n4.includeStyle href="loadingPage" type="page"/>
 </head>
+
+<div id="loading" class="centerWheel quickSetupLoadingWheel">
+	<img src="<@s.url value="/images/loader.gif"/>"/>
+</div>
 
 <@s.form action="step3ImportCatalogOnlyConfirm" id="importForm" theme="fieldid">
 	<div class="setupContainer">
@@ -35,6 +40,9 @@
 			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.back"/></a>
 		</div>	
 	</div>
+		<script>
+ 			 $('loading').hide();
+		</script>
 </@s.form>
 
 

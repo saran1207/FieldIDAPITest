@@ -12,7 +12,7 @@
 	</style>
 </head>
 <div class="centerWheel quickSetupLoadingWheel">
-	<img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/>
+	<img src="<@s.url value="/images/loader.gif"/>"/>
 </div>
 <span style="display:none">
 	<@s.form action="step3ImportCatalogOnlyImport" id="confirmForm" theme="fieldid">
