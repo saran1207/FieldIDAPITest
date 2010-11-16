@@ -64,7 +64,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 			if (job != null) {
 				addFlashMessage(getText("message.eventscheduleassignedtojobsuccessfully", messageArgs));
 			} else {
-				addFlashMessage(getText("message.eventscheduleassignedtojobsuccessfully", messageArgs));
+				addFlashMessage(getText("message.eventscheduleremovedfromjobsuccessfully", messageArgs));
 			}
 			return SUCCESS;
 		} catch (Exception e) {
