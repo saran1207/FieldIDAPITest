@@ -11,7 +11,7 @@ ${action.setPageType('event_type_group', 'edit')!}
 			&nbsp;<@s.text name="label.or"/>
 			<a href="javascript:void(0);" onclick="return redirect('${cancelUrl}'); return false;"/><@s.text name="label.cancel"/></a>	
 			&nbsp;<@s.text name="label.or"/>&nbsp;
-			<a href="#" onclick="if( confirm( '${action.getText( 'warning.deleteeventtypegroup' )}' ) ) { redirect( '${deleteUrl}' ); } return false;"/>	<@s.text name="label.delete"/></a>
+			<a href="#" onclick="if( confirm( '${action.getText( 'warning.deleteeventtypegroup' )}' ) ) { redirect( '${deleteUrl}' ); } return false;" ><@s.text name="label.delete"/></a>
 		</div>
 	</@s.form>
 </div>
