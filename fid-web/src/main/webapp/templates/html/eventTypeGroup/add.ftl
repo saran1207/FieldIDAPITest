@@ -1,6 +1,5 @@
 ${action.setPageType('event_type_group', 'add')!}
 <div class="pageSection" >
-	<h2><@s.text name="label.groupdetails"/></h2>
 
 	<@s.form action="eventTypeGroupCreate" theme="fieldid" cssClass="crudForm bigForm pageSection layout">
 		
