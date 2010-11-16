@@ -50,7 +50,13 @@
 	padding:4px;
 }
 
-.infoSet .fieldHolder input, .assetFormGroup .infoSet select, .assetFormGroup .infoSet textarea, .fieldHolder textarea{
+.assetFormGroup .infoSet select{
+	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 250px;
+}
+
+.infoSet .fieldHolder input, .assetFormGroup .infoSet textarea, .fieldHolder textarea{
 	padding: 4px;
 	border: 1px solid #9C9C9C;
 	color: #555555;
@@ -73,6 +79,11 @@
 	width: 110px;
 	padding-top: 7px;
 }
+
+.fluidSets .assetFormGroup .reducedPaddingInfoSet label{
+	padding-top: 5px;
+}
+
 .assetFormGroup h2{
 	margin-bottom: 5px;
 	font-size: 1.1em;
@@ -85,10 +96,6 @@
 
 .assetFormGroup .enlarged{
 	font-size: 16px;
-}
-
-.enlarged .fieldHolder select{
-	padding: 3px;
 }
 
 .unitMeasureDiv input[type="submit"]{

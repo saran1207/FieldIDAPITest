@@ -6,7 +6,7 @@
 <div class="assetFormGroup">
 	<h2><@s.text name="label.owner"/></h2>
 	<#if securityGuard.assignedToEnabled >
-		<div class="infoSet">
+		<div class="infoSet reducedPaddingInfoSet">
 			<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
 			<#if !parentAsset?exists >
 				<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.unassigned')}" />
@@ -63,7 +63,7 @@
 
 <div class="assetFormGroup">
 	<h2><@s.text name="label.asset_details"/></h2>
-	<div class="infoSet">
+	<div class="infoSet reducedPaddingInfoSet">
 		<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
 		<#if !parentAsset?exists >
 			<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
@@ -74,7 +74,7 @@
 
 	<#include "_infoOptions.ftl">
 	
-	<div class="infoSet">
+	<div class="infoSet reducedPaddingInfoSet">
 		<label for="comments" class="label"><@s.text name="label.comments"/></label>
 		<span class="fieldHolder">
 			<@s.select id="commentTemplateSelection" name="commentTemplate" list="commentTemplates" listKey="id" listValue="displayName" emptyOption="true" onchange="changeComments(this)" theme="fieldidSimple"/><br/>
@@ -83,7 +83,7 @@
 	</div>
 	
 	<#if userSecurityGuard.allowedManageSafetyNetwork == true && publishedState?exists>
-		<div class="infoSet">
+		<div class="infoSet reducedPaddingInfoSet">
 			<label for="publishedState" class="label"><@s.text name="label.visibility"/></label>
 			<@s.select name="publishedState" list="publishedStates" listKey="id" listValue="name" />
 		</div>
