@@ -36,6 +36,7 @@ public class SavedReportSearchCriteriaConverter {
 		container.setAssignedUser(savedReport.getLongCriteria(SavedReport.ASSIGNED_USER));
 		container.setAssetStatus(savedReport.getLongCriteria(SavedReport.ASSET_STATUS));
 		container.setStatus(savedReport.getStringCriteria(SavedReport.EVENT_STATUS));
+        container.setEventType(savedReport.getLongCriteria(SavedReport.EVENT_TYPE));
 		container.setAssetType(savedReport.getLongCriteria(SavedReport.ASSET_TYPE));
 		container.setAssetTypeGroup(savedReport.getLongCriteria(SavedReport.ASSET_TYPE_GROUP));
 		container.setJob(savedReport.getLongCriteria(SavedReport.JOB_ID));
@@ -69,6 +70,7 @@ public class SavedReportSearchCriteriaConverter {
 		report.setInCriteria(SavedReport.OWNER_ID, container.getOwnerId());
 		report.setInCriteria(SavedReport.REFERENCE_NUMBER, container.getReferenceNumber());
 		report.setInCriteria(SavedReport.EVENT_BOOK, container.getEventBook());
+        report.setInCriteria(SavedReport.EVENT_TYPE, container.getEventType());
 		report.setInCriteria(SavedReport.EVENT_TYPE_GROUP, container.getEventTypeGroup());
 		report.setInCriteria(SavedReport.PERFORMED_BY, container.getPerformedBy());
 		report.setInCriteria(SavedReport.ASSET_STATUS, container.getAssetStatus());

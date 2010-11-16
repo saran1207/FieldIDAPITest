@@ -25,7 +25,8 @@ public class EventScheduleSearchContainer extends SearchContainer {
 	private Long assetTypeId;
 	private Long assetTypeGroupId;
 	private Long assignedUserId;
-	private Long eventTypeId;
+	private Long eventTypeGroupId;
+    private Long eventTypeId;
 	private Long jobId;
 	private Long jobAndNullId;
 	private BaseOrg owner;
@@ -54,7 +55,8 @@ public class EventScheduleSearchContainer extends SearchContainer {
 		addSimpleTerm("asset.assetStatus.uniqueID", assetStatusId);
 		addSimpleTerm("asset.type.id", assetTypeId);
 		addSimpleTerm("asset.type.group.id", assetTypeGroupId);
-		addSimpleTerm("eventType.group.id", eventTypeId);
+		addSimpleTerm("eventType.group.id", eventTypeGroupId);
+        addSimpleTerm("eventType.id", eventTypeId);
 		addSimpleTerm("project.id", jobId);
 		addSimpleTermOrNull("project.id", jobAndNullId);
 		addDateRangeTerm("nextDate", fromDate, toDate);
@@ -155,10 +157,18 @@ public class EventScheduleSearchContainer extends SearchContainer {
 		this.assetTypeId = assetType;
 	}
 
+	public Long getEventTypeGroup() {
+		return eventTypeGroupId;
+	}
+	
+	public void setEventTypeGroup(Long eventTypeGroup) {
+		this.eventTypeGroupId = eventTypeGroup;
+	}
+
 	public Long getEventType() {
 		return eventTypeId;
 	}
-	
+
 	public void setEventType(Long eventType) {
 		this.eventTypeId = eventType;
 	}

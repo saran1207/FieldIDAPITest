@@ -47,6 +47,7 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	public static final String OWNER_ID = "ownerId";
 	public static final String ASSET_TYPE_GROUP = "assetTypeGroup";
 	public static final String EVENT_STATUS = "status";
+    public static final String EVENT_TYPE = "eventTypeId";
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(SavedReport.class);
 	}

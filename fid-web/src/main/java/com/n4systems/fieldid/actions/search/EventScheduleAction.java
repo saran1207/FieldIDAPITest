@@ -9,6 +9,8 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
+import com.n4systems.model.EventType;
+import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -130,10 +132,16 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		return psList;
 	}
 	
-	public List<ListingPair> getEventTypes() {
+	public List<ListingPair> getEventTypeGroups() {
 		return persistenceManager.findAllLP(EventTypeGroup.class, getTenantId(), "name");
 	}
-	
+
+	public List<EventType> getEventTypes() {
+        EventTypesByEventGroupIdLoader loader = getLoaderFactory().createEventTypesByGroupListLoader();
+        loader.setEventTypeGroupId(getContainer().getEventTypeGroup());
+        return loader.load();
+    }
+    
 	public List<Listable<Long>> getEmployees() {
 		if(employees == null) {
 			employees = new ArrayList<Listable<Long>>();

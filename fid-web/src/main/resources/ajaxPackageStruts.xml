@@ -456,5 +456,9 @@
             <result name="success" type="freemarker">/templates/ajax/select/selection.ftl</result>
         </action>
 
+        <action name="retrieveEventTypes" method="list" class="com.n4systems.fieldid.actions.event.EventTypesInEventTypeGroupAction">
+            <result name="success" type="freemarker">/templates/ajax/eventType/list.ftl</result>
+        </action>
+
 	</package>
 </struts>

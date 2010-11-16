@@ -10,7 +10,9 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.reporting.EventReportType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -54,7 +56,8 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	private List<ListingPair> savedReports;
 	private List<ListingPair> eventBooks;
 	private List<ListingPair> examiners;
-	private List<ListingPair> eventTypes;
+	private List<ListingPair> eventTypeGroups;
+    private List<EventType> eventTypes;
 	private List<AssetStatus> statuses;
 	private List<ListingPair> eventJobs;
 	
@@ -218,12 +221,21 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		return eventBooks;
 	}
 
-	public List<ListingPair> getEventTypes() {
-		if (eventTypes == null) {
-			eventTypes = persistenceManager.findAllLP( EventTypeGroup.class, getTenantId(), "name" );
+	public List<ListingPair> getEventTypeGroups() {
+		if (eventTypeGroups == null) {
+			eventTypeGroups = persistenceManager.findAllLP( EventTypeGroup.class, getTenantId(), "name" );
 		}
-		return eventTypes;
+		return eventTypeGroups;
 	}
+
+    public List<EventType> getEventTypes() {
+        if (eventTypes == null) {
+            EventTypesByEventGroupIdLoader loader = getLoaderFactory().createEventTypesByGroupListLoader();
+            loader.setEventTypeGroupId(getContainer().getEventTypeGroup());
+            eventTypes = loader.load();
+        }
+        return eventTypes;
+    }
 	 
 	public List<Listable<Long>> getEmployees() {
 		if(employees == null) {

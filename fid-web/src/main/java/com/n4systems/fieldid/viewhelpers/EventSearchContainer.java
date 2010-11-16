@@ -32,6 +32,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	private Long assetTypeGroupId;
 	private Long assetStatusId;
 	private Long assignedUserId;
+    private Long eventTypeId;
 	private Long eventTypeGroupId;
 	private Long eventBookId;
 	private Long jobId;
@@ -63,6 +64,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		addSimpleTerm("asset.type.id", assetTypeId);
 		addSimpleTerm("asset.type.group.id", assetTypeGroupId);
 		addSimpleTerm("assetStatus.uniqueID", assetStatusId);
+        addSimpleTerm("type.id", eventTypeId);
 		addSimpleTerm("type.group.id", eventTypeGroupId);
 		addSimpleTerm("performedBy.id", performedBy);
 		addSimpleTerm("schedule.project.id", jobId);
@@ -305,5 +307,12 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	public String getStatus() {
 		return status != null ? status.name() : null;
 	}
-	
+
+    public Long getEventType() {
+        return eventTypeId;
+    }
+
+    public void setEventType(Long eventTypeId) {
+        this.eventTypeId = eventTypeId;
+    }
 }

@@ -35,10 +35,16 @@
 					<label for="criteria.rfidNumber"><@s.text name="label.schedulestatus"/></label> 
 					<@s.select name="criteria.status" list="scheduleStatuses" listKey="name" listValue="%{getText(label)}"/>
 				</div>
-				<div class="infoSet">
-					<label for="criteria.eventType"><@s.text name="label.eventtypegroup"/></label>
-					<@s.select name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true"/>
-				</div>
+
+                <div class="infoSet">
+                    <label for="criteria.eventTypeGroup"><@s.text name="label.eventtypegroup"/></label>
+                    <@s.select name="criteria.eventTypeGroup" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" onchange="updateEventTypes(this)"/>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.eventType"><@s.text name="label.eventtype"/></label>
+                    <@s.select id="eventTypeSelect" name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true" />
+                </div>
+
 				<#if securityGuard.projectsEnabled>
 					<div class="infoSet">
 						<label for="criteria.job"><@s.text name="label.job"/></label>
@@ -127,3 +133,4 @@
 	</@s.form >
 </div>
 
+<#include '../customizableSearch/_eventTypeScript.ftl'/>

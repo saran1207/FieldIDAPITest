@@ -17,6 +17,7 @@ import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.downloadlink.DownloadLinkListLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
+import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.model.fileattachment.FileAttachmentLoader;
 import com.n4systems.model.event.LastEventLoader;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
@@ -498,6 +499,10 @@ public class LoaderFactory implements Serializable {
     
     public EventTypeListLoader createEventTypeListLoader(){
     	return new EventTypeListLoader(filter);
+    }
+
+    public EventTypesByEventGroupIdLoader createEventTypesByGroupListLoader(){
+    	return new EventTypesByEventGroupIdLoader(filter);
     }
 
 }

@@ -94,8 +94,12 @@ ${action.setPageType('report', 'show')!}
 			<h2><@s.text name="label.event_details"/></h2>
 			<div class="infoSet">
 				<label for="criteria.eventTypeGroup"><@s.text name="label.eventtypegroup"/></label>
-				<@s.select name="criteria.eventTypeGroup" list="eventTypes" listKey="id" listValue="name" emptyOption="true" />
+				<@s.select name="criteria.eventTypeGroup" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" onchange="updateEventTypes(this)"/>
 			</div>
+            <div class="infoSet">
+                <label for="criteria.eventType"><@s.text name="label.eventtype"/></label>
+                <@s.select id="eventTypeSelect" name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true" />
+            </div>
 			<div class="infoSet">
 				<label for="criteria.performedBy"><@s.text name="label.performed_by"/></label>
 				<@s.select name="criteria.performedBy" list="examiners" listKey="id" listValue="name" emptyOption="true" />
@@ -160,3 +164,5 @@ ${action.setPageType('report', 'show')!}
 		}
 	</script>
 </#if>
+
+<#include '../customizableSearch/_eventTypeScript.ftl'/>
