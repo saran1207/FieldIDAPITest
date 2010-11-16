@@ -380,6 +380,12 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return createActionURI(tenant, "");
 	}
 
+	public String getBaseBrandedNonFieldIDUrl(String tenantName){
+		Tenant tenant = new Tenant();
+		tenant.setName(tenantName);
+		return createNonFieldIDActionURI(tenant, "");
+	}
+	
 	public String getLoginUrl() {
 		return getLoginUrlForTenant(getTenant());
 	}
@@ -401,6 +407,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
 	}
 	
+	public URI getBaseNonFieldIdURI(){
+		return URI.create(getServletRequest().getRequestURL().toString()).resolve("/");
+	}
+	
 	public String createActionURI(String action) {
 		return createActionUrlBuilder().setAction(action).build();
 	}
@@ -409,8 +419,16 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return new ActionURLBuilder(getBaseURI(), getConfigContext());
 	}
 	
+	protected ActionURLBuilder createNonFieldIDActionUrlBuilder(){
+		return new ActionURLBuilder(getBaseNonFieldIdURI(), getConfigContext());
+	}
+	
 	public String createActionURI(Tenant tenant, String action) {
 		return createActionUrlBuilder().setAction(action).setCompany(tenant).build();
+	}
+	
+	public String createNonFieldIDActionURI(Tenant tenant, String action) {
+		return createNonFieldIDActionUrlBuilder().setAction(action).setCompany(tenant).build();
 	}
 	
 	public TenantLimitProxy getLimits() {

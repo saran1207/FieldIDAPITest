@@ -11,7 +11,7 @@
 		</div>
 		
 		<div class="setupWizardContent">
-			<h2><@s.text name="label.import_industry_standard_templates"/></h2>
+			<h2><@s.text name="label.import_common_templates"/></h2>
 			<p><@s.text name="label.setup_wizard_catalog_description"/></p>
 			<br/>
 			
@@ -29,8 +29,10 @@
 		
 		</div>
 		<div class="prominent">
+			<@s.url id="cancelUrl" action="step2"/>
 			<@s.submit key="label.next" id="continue" />
-			<@s.text name="label.or"/>&nbsp;<a href="<@s.url action="home" namespace="/"/>"><@s.text name="label.cancel"/></a>
+			<@s.text name="label.or"/>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.back"/></a>
 		</div>	
 	</div>
 </@s.form>

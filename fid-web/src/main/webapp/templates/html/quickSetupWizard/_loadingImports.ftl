@@ -1,5 +1,6 @@
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
+	<@n4.includeStyle href="loadingPage" type="page"/>
 	<script type="text/javascript">
 		document.observe("dom:loaded", function(){$('confirmForm').submit();} );
 	</script>
@@ -10,7 +11,9 @@
 		}
 	</style>
 </head>
-
+<div class="centerWheel quickSetupLoadingWheel">
+	<img src="<@s.url value="/images/indicator_mozilla_blu.gif"/>"/>
+</div>
 <span style="display:none">
 	<@s.form action="step3ImportCatalogOnlyImport" id="confirmForm" theme="fieldid">
 	

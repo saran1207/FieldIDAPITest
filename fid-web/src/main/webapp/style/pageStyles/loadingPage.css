@@ -13,3 +13,7 @@
    	text-align: center;
    	width: 10em;
 }
+
+.quickSetupLoadingWheel img{
+	width: 25px;
+}

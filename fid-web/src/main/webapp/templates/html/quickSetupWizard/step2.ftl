@@ -29,9 +29,10 @@
 			</div>
 		</#if>
 		<div class="prominent">
+			<@s.url id="cancelUrl" action="step1"/>
 			<@s.submit key="label.next"/> 
 			<@s.text name="label.or"/>
-			<a href="<@s.url action="home" namespace="/"/>"><@s.text name="label.cancel"/></a>
+			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.back"/></a>
 		</div>
 	
 	</@s.form>

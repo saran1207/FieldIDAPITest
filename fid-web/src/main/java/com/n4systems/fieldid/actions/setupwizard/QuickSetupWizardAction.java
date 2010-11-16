@@ -107,7 +107,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 	}
 
 	public String getLoginUrl(){
-		return getLoginUrlForTenant(getTenant());
+		return getBaseBrandedNonFieldIDUrl(getTenant().getName());
 	}
 	
 }
