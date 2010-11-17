@@ -1,6 +1,14 @@
 <title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>2</@s.param><@s.param>4</@s.param></@s.text></title>
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
+	<script type="text/javascript">
+		document.observe("dom:loaded", function() {
+			Event.observe('step2Complete', 'submit', function(){
+					$('formActions').hide();
+					$('loadingWheel').show();
+			});
+		});
+	</script>
 </head>
 
 <div class="setupContainer">
@@ -28,12 +36,15 @@
 				<#include "../systemSettings/_branding.ftl">		
 			</div>
 		</#if>
-		<div class="prominent">
+		<div id="formActions" class="prominent">
 			<@s.url id="cancelUrl" action="step1"/>
 			<@s.submit key="label.next"/> 
 			<@s.text name="label.or"/>
 			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.back"/></a>
 		</div>
-	
+		
+		<div id="loadingWheel" class="prominent centerWheel" style="display:none">
+			<img src="<@s.url value="/images/loader.gif"/>"/>
+		</div>
 	</@s.form>
 </div>
