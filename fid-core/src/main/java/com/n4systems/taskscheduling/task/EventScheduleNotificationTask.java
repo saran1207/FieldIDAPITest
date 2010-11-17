@@ -3,6 +3,7 @@ package com.n4systems.taskscheduling.task;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
+import com.n4systems.model.event.FailedEventListLoader;
 import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
 import org.apache.log4j.Logger;
 
@@ -49,7 +50,9 @@ public class EventScheduleNotificationTask extends ScheduledTask {
 				
 				logger.info(LogUtils.prepare("Generating event schedule report for Tenant [$0], Name [$1], User [$2]",	setting.getTenant(), setting.getName(), setting.getUser().getUserID()));
 				
-				new EventScheduleCountGenerator(new SimpleDateFormat(primaryOrg.getDateFormat()), new UpcomingEventScheduleCountListLoader(settingUserFilter), new OverdueEventScheduleCountListLoader(settingUserFilter), ServiceLocator.getMailManager()).sendReport(setting, clock);
+				new EventScheduleCountGenerator(new SimpleDateFormat(primaryOrg.getDateFormat()), new UpcomingEventScheduleCountListLoader(settingUserFilter), 
+						new OverdueEventScheduleCountListLoader(settingUserFilter), new FailedEventListLoader(settingUserFilter),
+						ServiceLocator.getMailManager()).sendReport(setting, clock);
 				
 			} catch(Exception e) {
 				logger.error("Failed sending notification: " + setting.getId(), e);

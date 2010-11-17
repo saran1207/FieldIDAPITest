@@ -58,6 +58,10 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		<label for="view.includeOverdue"><@s.text name="label.include_overdue"/></label>
 		<span class="infoField"><@s.checkbox name="view.includeOverdue"  theme="fieldidSimple" /></span>
 	</div>
+	<div class="infoSet fullInfoSet">
+		<label for="view.includeFailed"><@s.text name="label.include_failed"/></label>
+		<span class="infoField"><@s.checkbox name="view.includeFailed"  theme="fieldidSimple" /></span>
+	</div>
 </div>
 
 <h2><@s.text name="label.filters"/></h2>

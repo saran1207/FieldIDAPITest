@@ -29,12 +29,12 @@ public class EventScheduleCountGeneratorTest {
 	@Test
 	public void should_create_the_correct_subject_when_overdue_schedules_are_included() throws Exception {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
-		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), null, mailManager);
+		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), null, null, mailManager);
 		
 		
 		NotificationSetting notificationSetting = aNotificationSetting().doNotIncludeOverdue().build();
 		sut.sendReport(notificationSetting, new StoppedClock());
-		assertTrue("incorrect subject got " + mailManager.message.getSubject(), mailManager.message.getSubject().startsWith("Scheduled Events Report: " + notificationSetting.getName() + " - "));
+		assertTrue("incorrect subject got " + mailManager.message.getSubject(), mailManager.message.getSubject().startsWith("Events Report: " + notificationSetting.getName()));
 	}
 
 
@@ -42,7 +42,7 @@ public class EventScheduleCountGeneratorTest {
 	@Test
 	public void should_not_send_null_to_mail_message_for_overdue_schedules() throws Exception {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
-		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), null, mailManager);
+		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), null, null, mailManager);
 		
 		NotificationSetting notificationSetting = aNotificationSetting().doNotIncludeOverdue().build();
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -65,7 +65,7 @@ public class EventScheduleCountGeneratorTest {
 		replay(overdueLoader);
 		
 		
-		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), overdueLoader, mailManager);
+		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), overdueLoader, null, mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -83,7 +83,7 @@ public class EventScheduleCountGeneratorTest {
 		OverdueEventScheduleCountListLoader overdueLoader = createSuccessfulOverdueLoader(notificationSetting, overdueInspecitonCounts);
 		
 		
-		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), overdueLoader, mailManager);
+		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(new ArrayList<EventScheduleCount>()), overdueLoader, null, mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -110,7 +110,7 @@ public class EventScheduleCountGeneratorTest {
 		replay(upcomingLoader);
 		
 		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), upcomingLoader,
-					createSuccessfulOverdueLoader(notificationSetting, new ArrayList<EventScheduleCount>()), mailManager);
+					createSuccessfulOverdueLoader(notificationSetting, new ArrayList<EventScheduleCount>()), null, mailManager);
 		
 		
 		Clock clock = new StoppedClock();
@@ -129,7 +129,7 @@ public class EventScheduleCountGeneratorTest {
 		
 		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
 		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
-					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), mailManager);
+					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), null, mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -147,7 +147,7 @@ public class EventScheduleCountGeneratorTest {
 		
 		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
 		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
-					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), mailManager);
+					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), null, mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
@@ -165,12 +165,17 @@ public class EventScheduleCountGeneratorTest {
 		
 		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
 		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
-					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), mailManager);
+					createSuccessfulOverdueLoader(notificationSetting, upcomingEventCounts), null, mailManager);
 		
 		
 		sut.sendReport(notificationSetting, new StoppedClock());
 
-		assertEquals("Scheduled Events Report: " + notificationSetting.getName(), mailManager.message.getSubject());
+		assertEquals("Events Report: " + notificationSetting.getName(), mailManager.message.getSubject());
+	}
+	
+	@Test
+	public void should_include_failed_events() throws Exception {
+		
 	}
 	
 

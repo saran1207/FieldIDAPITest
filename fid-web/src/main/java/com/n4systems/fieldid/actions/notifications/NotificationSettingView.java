@@ -27,6 +27,7 @@ public class NotificationSettingView implements Serializable {
 	private Long eventTypeId;
 	private Boolean includeOverdue = false;
 	private List<String> addresses = new ArrayList<String>();
+	private Boolean includeFailed = false;
 
 	
 	public NotificationSettingView() {}
@@ -141,6 +142,13 @@ public class NotificationSettingView implements Serializable {
 	public boolean isReportSelected() {
 		return includeUpcoming || includeOverdue;
 	}
-	
+
+	public Boolean getIncludeFailed() {
+		return includeFailed;
+	}
+
+	public void setIncludeFailed(Boolean includeFailed) {
+		this.includeFailed = includeFailed;
+	}
 	
 }

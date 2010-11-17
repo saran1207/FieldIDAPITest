@@ -37,8 +37,6 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	@Enumerated(EnumType.STRING)
 	private SimpleFrequency frequency = SimpleFrequency.DAILY;
 	
-	
-	
 	@ManyToOne
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
@@ -61,6 +59,8 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	private OverdueEventReport overdueReport = new OverdueEventReport();
 
 	private UpcomingEventReport upcomingReport = new UpcomingEventReport();
+	
+	private FailedEventReport failedReport = new FailedEventReport();
 
 	public NotificationSetting() {}
 	
@@ -140,5 +140,13 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 
 	public void setUpcomingReport(UpcomingEventReport upcomingReport) {
 		this.upcomingReport = upcomingReport;
+	}
+	
+	public boolean isIncludeFailed(){
+		return failedReport.includeFailed;
+	}
+	
+	public void setIncludeFailed(boolean includeFailed) {
+		this.failedReport.includeFailed = includeFailed;
 	}
 }

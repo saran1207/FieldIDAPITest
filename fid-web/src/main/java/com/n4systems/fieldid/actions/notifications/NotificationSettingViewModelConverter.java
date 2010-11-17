@@ -35,6 +35,7 @@ public class NotificationSettingViewModelConverter {
 		view.setPeriodEnd(model.getUpcomingReport().getPeriodEnd().getId());
 		view.setIncludeOverdue(model.isIncludeOverdue());
 		view.setIncludeUpcoming(model.getUpcomingReport().isIncludeUpcoming());
+		view.setIncludeFailed(model.isIncludeFailed());
 		
 		// we'll need the created date to carry through on edit
 		if (model.getCreated() != null) {
@@ -69,6 +70,7 @@ public class NotificationSettingViewModelConverter {
 		model.setFrequency(SimpleFrequency.valueOf(view.getFrequency()));
 		model.setUpcomingReport(new UpcomingEventReport(RelativeTime.valueOf(view.getPeriodStart()), RelativeTime.valueOf(view.getPeriodEnd()), view.getIncludeUpcoming()));
 		model.setIncludeOverdue(view.getIncludeOverdue());
+		model.setIncludeFailed(view.getIncludeFailed());
 		
 		
 		if (view.getCreatedTimeStamp() != null) {

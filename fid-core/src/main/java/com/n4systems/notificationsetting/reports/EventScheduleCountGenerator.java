@@ -3,6 +3,7 @@ package com.n4systems.notificationsetting.reports;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -13,6 +14,9 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.naming.NamingException;
 
+import com.n4systems.model.Event;
+import com.n4systems.model.common.SimpleFrequency;
+import com.n4systems.model.event.FailedEventListLoader;
 import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
 import com.n4systems.model.eventschedulecount.UpcomingEventScheduleCountListLoader;
 import org.apache.log4j.Logger;
@@ -21,6 +25,7 @@ import com.n4systems.mail.MailManager;
 import com.n4systems.model.eventschedulecount.EventScheduleCount;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.LogUtils;
 import com.n4systems.util.Range;
 import com.n4systems.util.mail.TemplateMailMessage;
@@ -31,13 +36,16 @@ public class EventScheduleCountGenerator {
 	private SimpleDateFormat dateFormatter;
 	private UpcomingEventScheduleCountListLoader upcomingLoader;
 	private OverdueEventScheduleCountListLoader overdueLoader;
+	private FailedEventListLoader failedLoader;
 	private final MailManager mailManager;
 
 	
-	public EventScheduleCountGenerator(SimpleDateFormat dateFormatter, UpcomingEventScheduleCountListLoader upcomingLoader, OverdueEventScheduleCountListLoader overdueLoader, MailManager mailManager) {
+	public EventScheduleCountGenerator(SimpleDateFormat dateFormatter, UpcomingEventScheduleCountListLoader upcomingLoader, 
+			OverdueEventScheduleCountListLoader overdueLoader, FailedEventListLoader failedLoader, MailManager mailManager) {
 		this.dateFormatter = dateFormatter;
 		this.upcomingLoader = upcomingLoader;
 		this.overdueLoader = overdueLoader;
+		this.failedLoader = failedLoader;
 		this.mailManager = mailManager;
 	}
 
@@ -63,8 +71,23 @@ public class EventScheduleCountGenerator {
 		if (setting.isIncludeOverdue()) {
 			overdueEvents = getOverdueEvents(setting, clock);
 		}
+		
+		List<Event> failedEvents = null;
+		if (setting.isIncludeFailed()) {
+			failedEvents = getFailedEvents(setting, clock);
+		}
 
-		sendMessage(setting, startDate, endDate, upcomingEvents, overdueEvents);
+		sendMessage(setting, startDate, endDate, upcomingEvents, overdueEvents, failedEvents);
+	}
+
+	private List<Event> getFailedEvents(NotificationSetting setting, Clock clock) {
+		FailedEventListLoader loader = setupFailedLoader(setting, clock);
+		
+		return loader.load();
+	}
+
+	private FailedEventListLoader setupFailedLoader(NotificationSetting setting, Clock clock) {
+		return failedLoader.setFrequency(setting.getFrequency()).setClock(clock);
 	}
 
 	private boolean shouldGenerateReport(NotificationSetting setting, Clock clock) {
@@ -96,8 +119,8 @@ public class EventScheduleCountGenerator {
 		return upcomingLoader;
 	}
 
-	private void sendMessage(NotificationSetting setting, Date start, Date end, SortedSet<EventScheduleCount> upcomingEventCounts, SortedSet<EventScheduleCount> overdueEvents) throws NoSuchProviderException, MessagingException {
-		String messageSubject = createSubject(setting, start, end);
+	private void sendMessage(NotificationSetting setting, Date start, Date end, SortedSet<EventScheduleCount> upcomingEventCounts, SortedSet<EventScheduleCount> overdueEvents, List<Event> failedEvents) throws NoSuchProviderException, MessagingException {
+		String messageSubject = "Events Report: " + setting.getName();
 		
 		// no we need to build the message body with the html event report table
 		TemplateMailMessage message = new TemplateMailMessage(messageSubject, "eventScheduleReport");
@@ -107,7 +130,11 @@ public class EventScheduleCountGenerator {
 		message.getTemplateMap().put("upcomingEvents", upcomingEventCounts);
 		message.getTemplateMap().put("overdueEvents", overdueEvents);
 		message.getTemplateMap().put("overdueDate", new PlainDate());
-		
+		message.getTemplateMap().put("failedEvents", failedEvents);		
+		message.getTemplateMap().put("failedReportStart", getReportStartDate(setting.getFrequency(), new PlainDate()));
+		message.getTemplateMap().put("failedReportEnd", new PlainDate());
+		message.getTemplateMap().put("upcomingReportStart", start);
+		message.getTemplateMap().put("upcomingReportEnd", end);
 		message.setToAddresses(getAddressList(setting));
 		
 		logger.info(LogUtils.prepare("Sending Notification Message to [$0] recipients", setting.getAddresses().size()));
@@ -117,13 +144,16 @@ public class EventScheduleCountGenerator {
 	}
 
 
-	private String createSubject(NotificationSetting setting, Date start, Date end) {
-		String messageSubject = "Scheduled Events Report: " + setting.getName();
-		
-		if (setting.getUpcomingReport().isIncludeUpcoming()) {
-			messageSubject += " - " + dateFormatter.format(start) + " to " + dateFormatter.format(end);
-		}
-		return messageSubject;
+	private Date getReportStartDate(SimpleFrequency frequency, Date date) {
+		Date startDate = null;
+		if (frequency.equals(SimpleFrequency.DAILY)) {
+			startDate = date;
+		} else if (frequency.getGroupLabel().equals(SimpleFrequency.WEEKLY_SUNDAY.getGroupLabel())){
+			startDate = DateHelper.increment(date, DateHelper.WEEK, -1);
+		} else if (frequency.getGroupLabel().equals(SimpleFrequency.MONTHLY_LAST.getGroupLabel())){
+			startDate = DateHelper.increment(date, DateHelper.MONTH, -1);
+		} 
+		return startDate;
 	}
 
 	private Set<String> getAddressList(NotificationSetting setting) {
