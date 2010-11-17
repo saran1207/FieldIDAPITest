@@ -1,7 +1,5 @@
-
 .eventTypes ul{
 	display:none;
-	
 	position:absolute;
 	background-image: url(../../images/dropdownArrow-top-left.gif);
 	padding-top:11px;
@@ -37,7 +35,6 @@
 	font-size:1em;
 }
 
-
 .eventTypesRelative:hover ul a{
 	font-size:1em;
 }
@@ -50,8 +47,6 @@
 #resultsTable td {
 	vertical-align: top;
 }
-
-
 
 .eventForm h2 {
 	overflow: hidden;
@@ -81,14 +76,12 @@
 	padding:5px 15px 5px 30px;
 }
 
-
 .eventForm div.infoSet {
 	border:none;
 	display:block;
 	float:left;
 	width: 440px;
 	min-height: 40px;
-	
 }
 
 .eventForm div.infoSet span, .eventForm div.infoSet div.simpleContainer {
@@ -129,7 +122,6 @@
 	width:145px;	
 }
 
-
 #assetSummary h2 {
 	overflow:hidden;
 	
@@ -137,7 +129,6 @@
 #assetSummary h2 span {
 	display: block;
 	float:left;
-	
 }
 
 #assetSummary h2 span#certLink {
@@ -146,7 +137,6 @@
 	border:none;
 	color: #333333;
 	font-weight:normal;
-	
 }
 #certLink a, #certLink a:hover, #certLink a:visited, #certLink a:active {
 	color: #333333;
@@ -157,7 +147,6 @@
 }
 
 .events {
-	
 	margin-left: 30px;
 	border-left: 3px solid #CCC;
 	border-bottom: 1px solid #CCC;
@@ -201,7 +190,6 @@
 	padding-right:15px;
 }
 
-
 #comments {
 	display:block;
 	margin-top: 5px;
@@ -233,15 +221,12 @@
 	padding-left: 5px;
 }
 
-
 .observationsShow p.observationTextShow   {
 	border: 2px solid #E8EDFF;
 	padding: 10px 0 10px 40px;
 	width: 320px;
-	
 	background-repeat: no-repeat;
 	background-position: top left;
-	
 }
 
 .observationBox {
@@ -251,7 +236,6 @@
 } 
 
 .observationText {
-	
 	margin-top: 5px;
 	width: 390px;
 	border: 2px solid #E8EDFF;
@@ -266,40 +250,41 @@
 	border-color: #9fe8b7;
 	background-image: url(../../images/repairedOnSite.gif);
 }
-	.observationsShow p.defRepairedOnSite:hover, .defRepairedOnSite:hover {
-		border-color: #8dcda2;
-	}
+
+.observationsShow p.defRepairedOnSite:hover, .defRepairedOnSite:hover {
+	border-color: #8dcda2;
+}
 
 .observationsShow p.defRepaired, .defRepaired  {
 	border-color: #9fb7e8;
 	background-image: url(../../images/repaired.gif);
 }
-	.observationsShow p.defRepaired:hover, .defRepaired:hover {
-		border-color: #8da2cd;
-	}
+
+.observationsShow p.defRepaired:hover, .defRepaired:hover {
+	border-color: #8da2cd;
+}
 
 .observationsShow p.recSelected, .recSelected {
 	border-color: #ff9f40;
 	background-image: url(../../images/recommendation.gif);
 }
-	.observationsShow p.recSelected:hover, .recSelected:hover {
-		border-color: #e08c38;
-	}
+
+.observationsShow p.recSelected:hover, .recSelected:hover {
+	border-color: #e08c38;
+}
 
 .observationsShow p.defSelected, .defSelected {
 	border-color: #ff4f4f;
 	background-image: url(../../images/deficient.gif);
 }
-	.observationsShow p.defSelected:hover, .defSelected:hover  {
-		border-color: #de4545;
-	}
+
+.observationsShow p.defSelected:hover, .defSelected:hover  {
+	border-color: #de4545;
+}
 
 .observationsShow p.obsCommentShow, .obsCommentShow {
 	background-image: url(../../images/observationComment.gif);
-	
 }
-
-
 
 /*.observationCheck, .observationsShow p.observationTextShow span.observationCheck {
 	width: 20px;
@@ -313,14 +298,11 @@
 	overflow: hidden;
 	border: 1px solid;
 	width:380px;
-	
-	
 }
 
 .observationsShow p.observationTextShow span   {
 	display: inline;
 	padding:0;
-	
 }
 
 .observationTextShow {
@@ -405,6 +387,53 @@
 h2 {
 	background-color: #DADFFA;
 }
+
 .attachments  {
 	margin-top:5px;
+}
+
+.locationTree{
+	display:block;
+	float:left;
+	padding-bottom:5px;
+	padding-left:5px;
+	padding-top:5px;
+	width:270px;
+}
+
+.fluidSets .infoSet .fieldHolder {
+	width: 270px;
+}
+
+.infoSet .locationTree .textbox{
+	border:1px solid #9C9C9C;
+	color:#555555;
+	padding:4px;
+}
+
+.fullForm .eventForm .infoSet label{
+	text-align:left;
+	}
+
+ .fullForm .infoSet label, .fullForm .infoSet label{
+	text-align:right;
+	padding-right: 5px;
+	color: #555555;
+}
+
+.infoSet .fieldHolder select{
+	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 260px;
+}
+
+.infoSet .fieldHolder input, .assetFormGroup .infoSet textarea, .fieldHolder textarea{
+	padding: 4px;
+	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 250px;
+}
+
+.infoSet .fieldHolder input[type="checkbox"]{
+	width: auto;
 }
