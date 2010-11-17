@@ -2,6 +2,14 @@
 
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
+	<script type="text/javascript">
+		document.observe("dom:loaded", function() {
+			Event.observe('importForm', 'submit', function(){
+					$('formActions').hide();
+					$('loadingWheel').show();
+			});
+		});
+	</script>
 </head>
 
 <@s.form action="step3ImportCatalogOnlyConfirm" id="importForm" theme="fieldid">
@@ -28,12 +36,15 @@
 			</div>
 		
 		</div>
-		<div class="prominent">
+		<div id="formActions" class="prominent">
 			<@s.url id="cancelUrl" action="step2"/>
 			<@s.submit key="label.next" id="continue" />
 			<@s.text name="label.or"/>
 			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.back"/></a>
 		</div>	
+		<div id="loadingWheel" class="prominent centerWheel" style="display:none">
+			<img src="<@s.url value="/images/loader.gif"/>"/>
+		</div>
 	</div>
 	
 </@s.form>
