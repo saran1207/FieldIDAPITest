@@ -13,23 +13,27 @@
 <div class="pageSection searchPageSection" id="criteriaForm">
 	<div class="headerWithFootnote">
 		<#if listPage?exists>
-			<a href="javascript:void(0);" id="expandSection_reportForm" onclick="openSection('reportForm', 'expandSection_reportForm', 'collapseSection_reportForm');return false" ><img src="<@s.url value="/images/expandLarge.gif" />" /></a>
-			<a href="javascript:void(0);" id="collapseSection_reportForm" onclick="closeSection('reportForm', 'collapseSection_reportForm', 'expandSection_reportForm');return false" style="display:none;"><img src="<@s.url value="/images/collapseLarge.gif" />" /></a>
-			<span class="headerText">
-				<@s.text name="label.schedulecriteria"/>
-			</span>
+			<h2 class="decoratedHeaderAlternative">
+				<a href="javascript:void(0);" id="expandSection_reportForm" onclick="openSection('reportForm', 'expandSection_reportForm', 'collapseSection_reportForm');return false" ><img src="<@s.url value="/images/expandLarge.gif" />" /></a>
+				<a href="javascript:void(0);" id="collapseSection_reportForm" onclick="closeSection('reportForm', 'collapseSection_reportForm', 'expandSection_reportForm');return false" style="display:none;"><img src="<@s.url value="/images/collapseLarge.gif" />" /></a>
+				<span class="headerText">
+					<@s.text name="label.schedulecriteria"/>
+				</span>
+			</h2>
 		<#else>
-			<img src="<@s.url value="/images/tip-icon.png" />"/>
-			<p class="footnoteText">
-				<@s.text name="label.wildcard_explanation"/>
-			</p>
+			<div class="tipContainer">
+				<img src="<@s.url value="/images/tip-icon.png" />"/>
+				<p class="footnoteText">
+					<@s.text name="label.wildcard_explanation"/>
+				</p>
+			</div>
 		</#if>
 	</div>
 	
 	<@s.form action="schedule!createSearch" id="reportForm" cssClass="crudForm searchForm" theme="fieldid" cssStyle="${listPage?exists?string('display:none;','')}" >
 		<#include "../common/_formErrors.ftl"/>
 		
-			<div class="fieldGroup">
+			<div class="fieldGroup fieldGroupGap">
 				<h2><@s.text name="label.schedule_details"/></h2>
 				<div class="infoSet">
 					<label for="criteria.rfidNumber"><@s.text name="label.schedulestatus"/></label> 
@@ -61,7 +65,7 @@
 				</div>
 			</div>
 		
-			<div class="fieldGroup clearLeft">
+			<div class="fieldGroup fieldGroupGap">
 				<h2><@s.text name="label.identifiers"/></h2>
 			
 				<div class="infoSet">
@@ -98,7 +102,7 @@
 				</div>	
 			</div>
 			
-			<div class="fieldGroup clearLeft">	
+			<div class="fieldGroup fieldGroupGap clearLeft">	
 				<h2><@s.text name="label.orderdetails"/></h2>
 				<div class="infoSet">
 					<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>

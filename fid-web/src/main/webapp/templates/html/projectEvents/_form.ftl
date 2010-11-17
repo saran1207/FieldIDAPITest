@@ -14,7 +14,7 @@
 		<@s.hidden name="criteria.jobAndNullId"/>
 		<@s.hidden name="criteria.searchId"/>
 			
-			<div class="fieldGroup">
+			<div class="fieldGroup fieldGroupGap">
 				<h2><@s.text name="label.schedule_details"/></h2>
 			
 				<div class="infoSet">
@@ -32,7 +32,7 @@
 				<#include "../schedule/_dateRange.ftl"/>
 			</div>
 			
-			<div class="fieldGroup ">
+			<div class="fieldGroup fieldGroupGap">
 				<h2><@s.text name="label.identifiers"/></h2>
 				<div class="infoSet">
 					<label for="criteria.serialNumber"><@s.text name="${sessionUser.serialNumberLabel}"/></label> 
