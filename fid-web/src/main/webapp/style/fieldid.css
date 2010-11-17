@@ -1715,8 +1715,11 @@ input.description {
 #floatingDropdownStartEventLink{
 	border-top: 1px solid #cccccc;
 	border-bottom: 1px solid #cccccc;
-	padding-top: 12px;
-	padding-bottom: 12px;
+	}
+
+#floatingDropdownStartEventLink a {
+	padding-top: 17px;
+	padding-bottom: 17px;
 	}
 
 .dropDownLink{
