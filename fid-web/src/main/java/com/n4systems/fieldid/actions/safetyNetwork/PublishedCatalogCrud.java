@@ -100,6 +100,10 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 		}
 		return SUCCESS;
 	}
+	
+	public String doShowLoadingPage(){
+		return SUCCESS;
+	}
 
 	public String doConfirm() {
 		doShow();

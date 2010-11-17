@@ -5,11 +5,6 @@
 		document.observe("dom:loaded", function(){$('confirmForm').submit();} );
 	</script>
 	
-	<style>
-		#pageFooter, #pageHeader {
-			display: none;
-		}
-	</style>
 </head>
 <div class="centerWheel quickSetupLoadingWheel">
 	<img src="<@s.url value="/images/loader.gif"/>"/>

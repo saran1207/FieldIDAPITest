@@ -169,3 +169,7 @@ label.urlLabel{
 	border: 1px solid #999; 
 	margin-right: 5px;
 }
+
+.quickSetupLoadingWheel{
+	margin-bottom: 150px;
+}

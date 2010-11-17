@@ -34,11 +34,9 @@
 		<action name="step2Complete" method="updateDateAndBranding" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/quickSetupWizard/step2.ftl</result>
 			<result name="error" type="freemarker">/templates/html/quickSetupWizard/step2.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">step3</param>
-				<param name="quickSetupWizardCatalogImport">true</param>
-			</result>
+			<result name="success" type="freemarker">/templates/html/quickSetupWizard/_loadingCatalog.ftl</result>
 		</action>
+		
 		<action name="step3" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
 			<result name="missing" type="redirectAction">allDone</result>
 			<result name="success" type="freemarker">/templates/html/quickSetupWizard/step3.ftl</result>
