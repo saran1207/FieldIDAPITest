@@ -47,7 +47,7 @@ ${action.setPageType('event_type', 'edit')!}
 		</div>
 	</div>
 	
-	<div class="actions">
+	<div class="actions borderLess">
 		<#if archiveSummary.canBeRemoved()>
 			<@s.submit key="label.delete"/> <@s.text name="label.or"/> 
 		</#if>
