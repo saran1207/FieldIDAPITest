@@ -457,7 +457,11 @@
         </action>
 
         <action name="retrieveEventTypes" method="list" class="com.n4systems.fieldid.actions.event.EventTypesInEventTypeGroupAction">
-            <result name="success" type="freemarker">/templates/ajax/eventType/list.ftl</result>
+            <result name="success" type="freemarker">/templates/ajax/eventType/updateForGroupChanged.ftl</result>
+        </action>
+
+        <action name="retrieveAssetTypes" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypesInAssetTypeGroupAction">
+            <result name="success" type="freemarker">/templates/ajax/assetType/updateForGroupChanged.ftl</result>
         </action>
 
 	</package>

@@ -55,7 +55,15 @@
 				<@s.select  name="criteria.assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true" />
 			</div>
 
-			<#include "../customizableSearch/_assetTypeSelect.ftl"/>
+            <div class="infoSet">
+                <label for="criteria.assetTypeGroup"><@s.text name="label.asset_type_group"/></label>
+                <@s.select id="assetTypeGroup" name="criteria.assetTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateAssetTypes(this)" list="assetTypeGroups" listKey="id" listValue="name"/>
+            </div>
+
+            <div class="infoSet">
+                <label for="criteria.assetType"><@s.text name="label.assettype"/></label>
+                <@s.select cssClass="assetTypeSelect" id="assetType" name="criteria.assetType" emptyOption="true" list="assetTypes" listKey="id" listValue="name"/>
+            </div>
 		</div>		
 		<div class="fieldGroup fieldGroupGap">
 			<h2><@s.text name="label.ownership"/></h2>
@@ -111,3 +119,5 @@
 		</div>
 	</@s.form >
 </div>
+
+<#include '../customizableSearch/_assetTypeScript.ftl'/>

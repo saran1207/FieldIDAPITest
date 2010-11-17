@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.util.ListingPairs.*;
-
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,7 +10,9 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
 import com.n4systems.util.persistence.search.terms.SimpleInTerm;
 import org.apache.log4j.Logger;
 
@@ -69,7 +68,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private SortedSet<ColumnMappingGroup> mappingGroups;
 	private Map<String, WebOutputHandler> cellHandlers = new HashMap<String, WebOutputHandler>();
 	private TableView resultsTable;
-	private AssetTypeLister assetTypes;
+	private List<AssetType> assetTypes;
+    private List<AssetTypeGroup> assetTypeGroups;
 	protected final InfoFieldDynamicGroupGenerator infoGroupGen;
 	
 	public CustomizableSearchAction(
@@ -87,7 +87,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 
 	public List<ColumnMappingGroup> getDynamicGroups() {
-		return infoGroupGen.getDynamicGroups(getContainer().getAssetType(), convertToIdList(getAssetTypes().getGroupedAssetTypesById(getContainer().getAssetTypeGroup())));
+		return infoGroupGen.getDynamicGroups(getContainer().getAssetType(), getAssetTypeIds());
 	}
 
 	abstract protected T createSearchContainer();
@@ -438,15 +438,31 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return cellValue;
 	}
 	
-	public AssetTypeLister getAssetTypes() {
-		if (assetTypes == null) {
-			assetTypes = new AssetTypeLister(persistenceManager, getSecurityFilter());
-		}
+	public List<AssetType> getAssetTypes() {
+        if (assetTypes == null) {
+            AssetTypesByAssetGroupIdLoader typesByGroupListLoader = getLoaderFactory().createAssetTypesByGroupListLoader();
+            typesByGroupListLoader.setAssetTypeGroupId(getContainer().getAssetTypeGroup());
 
-		return assetTypes;
+            assetTypes = typesByGroupListLoader.load();
+        }
+        return assetTypes;
 	}
-	
-	
+
+	public List<Long> getAssetTypeIds() {
+        List<Long> assetTypeIds = new ArrayList<Long>();
+        for (AssetType type : getAssetTypes()) {
+            assetTypeIds.add(type.getId());
+        }
+        return assetTypeIds;
+	}
+
+    public List<AssetTypeGroup> getAssetTypeGroups() {
+        if (assetTypeGroups == null) {
+            assetTypeGroups = getLoaderFactory().createAssetTypeGroupsLoader().load();
+        }
+        return assetTypeGroups;
+    }
+
 	public Integer getMaxSizeForExcelExport() {
 		return getConfigContext().getInteger(ConfigEntry.MAX_SIZE_FOR_EXCEL_EXPORT, getTenantId());
 	}

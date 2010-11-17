@@ -10,6 +10,8 @@ import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.assetstatus.AssetStatusFilteredLoader;
 import com.n4systems.model.assetstatus.AssetStatusForNameExistsLoader;
 import com.n4systems.model.assetstatus.AssetStatusListLoader;
+import com.n4systems.model.assettype.AssetTypeGroupsLoader;
+import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
 import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.model.autoattribute.AutoAttributeDefinitionListLoader;
 import com.n4systems.model.catalog.CatalogLoader;
@@ -503,6 +505,14 @@ public class LoaderFactory implements Serializable {
 
     public EventTypesByEventGroupIdLoader createEventTypesByGroupListLoader(){
     	return new EventTypesByEventGroupIdLoader(filter);
+    }
+
+    public AssetTypesByAssetGroupIdLoader createAssetTypesByGroupListLoader(){
+    	return new AssetTypesByAssetGroupIdLoader(filter);
+    }
+
+    public AssetTypeGroupsLoader createAssetTypeGroupsLoader() {
+        return new AssetTypeGroupsLoader(filter);
     }
 
 }

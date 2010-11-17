@@ -25,6 +25,7 @@ public class EventTypesByEventGroupIdLoader extends ListLoader<EventType> {
             builder.addSimpleWhere("group.id", eventTypeGroupId);
         }
 
+        builder.addOrder("name");
 
         return builder.getResultList(em);
     }

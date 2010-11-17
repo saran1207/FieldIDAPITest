@@ -69,6 +69,7 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
 		}
 		if (criteria.getAssetTypeGroup() != null) {
 			selenium.select("//select[@id='assetTypeGroup']", criteria.getAssetTypeGroup());
+            waitForAjax();
 		}
 		if (criteria.getAssetType() != null) {
 			selenium.select("//select[@id='assettType']", criteria.getAssetType());

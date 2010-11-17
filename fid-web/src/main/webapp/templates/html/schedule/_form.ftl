@@ -46,7 +46,7 @@
                 </div>
                 <div class="infoSet">
                     <label for="criteria.eventType"><@s.text name="label.eventtype"/></label>
-                    <@s.select id="eventTypeSelect" name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true" />
+                    <@s.select cssClass="eventTypeSelect" name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true" />
                 </div>
 
 				<#if securityGuard.projectsEnabled>
@@ -116,7 +116,16 @@
 			
 			<div class="fieldGroup">
 				<h2><@s.text name="label.asset_details"/></h2>
-				<#include "../customizableSearch/_assetTypeSelect.ftl"/>
+
+                <div class="infoSet">
+                    <label for="criteria.assetTypeGroup"><@s.text name="label.asset_type_group"/></label>
+                    <@s.select id="assetTypeGroup" name="criteria.assetTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateAssetTypes(this)" list="assetTypeGroups" listKey="id" listValue="name"/>
+                </div>
+
+                <div class="infoSet">
+                    <label for="criteria.assetType"><@s.text name="label.assettype"/></label>
+                    <@s.select cssClass="assetTypeSelect" id="assetType" name="criteria.assetType" emptyOption="true" list="assetTypes" listKey="id" listValue="name"/>
+                </div>
 				
 				<div class="infoSet">
 					<label for="criteria.assetStatus"><@s.text name="label.assetstatus"/></label>
@@ -138,3 +147,4 @@
 </div>
 
 <#include '../customizableSearch/_eventTypeScript.ftl'/>
+<#include '../customizableSearch/_assetTypeScript.ftl'/>
