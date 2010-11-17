@@ -17,7 +17,7 @@ public class AssetPage {
 	private String assetSummaryHeaderLocator = "xpath=//H2[contains(text(),'Asset Summary')]";
 	private String serialNumberLabelLocator = "xpath=//LABEL[contains(text(),'Serial Number')]";
 	private String rfidNumberLabelLocator = "xpath=//LABEL[contains(text(),'RFID Number')]";
-	private String publishedLabelLocator = "xpath=//LABEL[contains(text(),'Published Over Safety Network')]";
+	private String publishedLabelLocator = "xpath=//LABEL[contains(text(),'Visibility')]";
 	private String assetTypeLabelLocator = "xpath=//LABEL[contains(text(),'Asset Type')]";
 	private String assetStatusLabelLocator = "xpath=//LABEL[contains(text(),'Asset Status')]";
 	private String identifiedLabelLocator = "xpath=//LABEL[contains(text(),'Identified')]";

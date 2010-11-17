@@ -27,7 +27,7 @@ public class QuickSetupWizard {
 	private String quickSetupWizardStep3PageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Quick Setup Wizard - Step 3 of 3')]";
 	private String fieldIDImportDescriptionString = "Field ID provides suggested templates for a wide range of equipment.";
 	private String fieldIDImportRadioButtonLocator = "xpath=//TD[contains(text(),'" + fieldIDImportDescriptionString + "')]/../TD[1]/INPUT[contains(@id,'step3Import_uniqueID')]";
-	private String step3CompleteLinkLocator = "xpath=//INPUT[@id='continue']";
+	private String step3CompleteLinkLocator = "xpath=//input[@id='continue']";
 	private String quickSetupWizardDonePageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Quick Setup Wizard - Done')]";
 	private String setupYourMobileComputerLinkLocator = "xpath=//A[contains(text(),'Setup your mobile computers')]";
 	private String identifyYourFirstAssetLinkLocator = "xpath=//A[contains(text(),'Identify your first asset')]";

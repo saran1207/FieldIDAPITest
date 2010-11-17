@@ -29,7 +29,7 @@ public class SaveReportForm extends FieldIDPage {
 	}
 
 	public ReportingPage clickCancel() {
-		selenium.click("//input[@name='label.cancel']");
+		selenium.click("//a[contains(.,'Cancel')]");
 		return new ReportingPage(selenium);
 	}
 }
