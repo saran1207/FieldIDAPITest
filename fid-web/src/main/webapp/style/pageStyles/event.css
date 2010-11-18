@@ -382,6 +382,20 @@
 	z-index: 1;
 }
 
+#newScheduleForm h2{
+	margin: 0;
+}
+
+#newScheduleForm button{
+	padding: 4px;
+}
+	
+#newScheduleForm .blockSeparated{
+	font-size: 1.1em;
+	padding: 5px;
+	border-top:1px solid #CCCCCC;
+}
+
 .eventSchedule {
 	padding: 10px 5px;
 }
@@ -421,13 +435,6 @@
 	border-bottom: none;
 }
 
-.fieldHolder p{
-	float: left;
-	padding-left:  5px;
-	margin-bottom: 20px;
-	border-style: none;
-}
-
  .crudForm .infoSet .eventFormLabel{
 	text-align:left;
 }
@@ -455,12 +462,26 @@
 	width: 250px;
 }
 
-
-.infoSet .printable p{
+.fieldHolder p{
 	display: inline;
+	padding-left: 5px;
+	border-style: none;
 }
 
 .infoSet .fieldHolder input[type="checkbox"]{
 	width: auto;
 	margin-top:8px;
+}
+
+.crudForm .infoSet .commentsLabel, .crudForm .infoSet .commentContainer label{
+	display: block;
+	text-align: left;
+	line-height: auto;
+	padding: 0;
+	width: 180px;
+}
+
+.fileUpload div {
+	float:left;
+ 	clear: left;
 }

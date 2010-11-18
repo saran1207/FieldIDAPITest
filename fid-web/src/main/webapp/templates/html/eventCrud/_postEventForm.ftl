@@ -14,7 +14,7 @@
 		<label class="label"><@s.text name="label.printable"/></label>
 		<div class="fieldHolder">
 			<@s.checkbox name="printable" theme="fieldidSimple" /> 
-			<@s.text name="label.printableexplination"/>
+		<p>	<@s.text name="label.printableexplination"/></p>
 		</div> 
 		
 	</div>
