@@ -83,16 +83,16 @@
 
 <div class="formAction actions">
 	<@s.submit key="hbutton.save" name="save"/> 
+
 	<#if !uniqueID?exists >
+		<@s.text name="label.or"/>
 		<@s.submit key="hbutton.saveandaddeventform" name="saveAndAdd"/> 
 	<#else >
 		<@s.text name="label.or"/>
 		<@s.url id="deleteConfirmUrl" action="eventTypeDeleteConfirm" uniqueID="${uniqueID}"/>
-		<@s.submit key="label.delete" name="delete" cssClass="delete" onclick="return redirect('${deleteConfirmUrl}');"/> 
+		<a href="#" onclick="return redirect('${deleteConfirmUrl}');"><@s.text name="label.delete"/></a>
 	</#if>
-	<@s.text name="label.or"/> <a href="${cancelUrl}"><@s.text name="label.cancel"/></a>
-	
-	
+		<@s.text name="label.or"/> <a href="${cancelUrl}"><@s.text name="label.cancel"/></a>
 </div>
 
 
