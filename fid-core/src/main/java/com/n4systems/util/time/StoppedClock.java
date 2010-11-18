@@ -7,7 +7,11 @@ public class StoppedClock implements Clock {
 	private final Date date;
 
 	public StoppedClock() {
-		date = new Date();
+		this(new Date());
+	}
+
+	public StoppedClock(Date date) {
+		this.date = date;
 	}
 	
 	public Date currentTime() {

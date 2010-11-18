@@ -11,10 +11,6 @@ public class PlainDate extends Date {
 		this(new Date());
 	}
 
-	public PlainDate(long arg0) {
-		this(new Date(arg0));
-	}
-	
 	public PlainDate(Date date) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);

@@ -482,4 +482,10 @@ public class DateHelper {
 		cal.add(Calendar.MILLISECOND, fromZone.getOffset(date.getTime()) * -1);
 		return cal.getTime();
 	}
+
+	public static Date localizeDate(Date date, TimeZone toZone) {
+		Calendar cal = createCalendarForDate(date);
+		cal.add(Calendar.MILLISECOND, toZone.getOffset(date.getTime()));
+		return cal.getTime();
+	}
 }
