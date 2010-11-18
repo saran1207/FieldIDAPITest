@@ -67,8 +67,10 @@
 	<#if eventType.assignedToAvailable && form_action="ADD">
 		<div  class="infoSet">
 			<label class="label"><@s.text name="label.assign_asset_to"/></label>
-			<@s.select name="assignedToId" list="employees" listKey="id" listValue="displayName" />
-			<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
+			<span class="fieldHolder">
+				<@s.select name="assignedToId" list="employees" listKey="id" listValue="displayName" />
+				<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
+			</span>
 		</div>
 	<#elseif form_action="EDIT">
 		<#include "_assigned_to.ftl"/>

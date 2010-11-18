@@ -118,6 +118,10 @@
 	font-size: 1.3em;
 }
 
+#orgBrowserForm label{
+	text-align: left;
+}
+
 #proofTestType {
 	width:145px;	
 	padding: 1px;
@@ -237,9 +241,16 @@
 
 .observationBox {
 	overflow: auto;
+	margin-left: auto;
+	margin-right: auto;
 	height: 300px;
 	width: 470px;
 } 
+
+.observationBox p{
+	margin-left: auto;
+	margin-right: auto;
+	}
 
 .observationText {
 	margin-top: 5px;
@@ -250,7 +261,6 @@
 	background-repeat: no-repeat;
 	background-position: top left;
 }
-	
 
 .observationsShow p.defRepairedOnSite, .defRepairedOnSite {
 	border-color: #9fe8b7;
@@ -324,6 +334,22 @@
 	padding-top: 10px;
 	width:425px;
 }
+
+.observationComment span textarea{
+	width: 400px;
+	height: 200px;
+	padding: 4px;
+	font-size: 15px;
+	border:1px solid #9C9C9C;
+	color:#555555;
+}
+
+.observationComment label{
+	display: block;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding-bottom: 10px;
+	}
 
 .print {
 	float: right;

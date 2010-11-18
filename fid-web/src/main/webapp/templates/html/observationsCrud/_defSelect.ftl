@@ -43,7 +43,7 @@
 			<@s.hidden id="def_${criteria.id}_${criteria.deficiencies.size()}_id" name="criteriaResults[${criteriaCount}].deficiencies[${criteria.deficiencies.size()}].iD" value="${criteriaResults[criteriaCount].deficiencies[criteria.deficiencies.size()].id}" />
 		</#if>
 		
-		<label><@s.text name="label.comments"/></label>
+		<label><@s.text name="label.comments"/>:</label>
 		<span><@s.textarea  id="def_${criteria.id}_${criteria.deficiencies.size()}_text" name="criteriaResults[${criteriaCount}].deficiencies[${criteria.deficiencies.size()}].text" cols="53" rows="3" onfocus="captureDefCommentState(this.value);" onchange="checkDefComment(${criteria.id}, this.value);" value="${(criteriaResults[criteriaCount].deficiencies[criteria.deficiencies.size()].text)!}"/></span>
 		<@s.hidden id="def_${criteria.id}_${criteria.deficiencies.size()}_state" name="criteriaResults[${criteriaCount}].deficiencies[${criteria.deficiencies.size()}].stateString" value="COMMENT" />
 	</p>

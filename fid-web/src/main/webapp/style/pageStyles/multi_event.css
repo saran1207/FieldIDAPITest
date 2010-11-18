@@ -43,3 +43,11 @@
 	width: 240px;
 	margin: 10px 0;
 }
+
+.stepContent .infoSet .fieldHolder input[type="checkbox"]{
+	margin-top:4px;
+}
+
+.stepContent .infoSet .fieldHolder{
+	width: 320px;
+}
