@@ -10,7 +10,7 @@
 <#list section.criteria as criteria >
 	<#if !criteria.retired >				
 		<div class="infoSet" >
-			<label class="label">${criteria.displayName}</label>
+			<label class="label eventFormLabel">${criteria.displayName}</label>
 			 
 			<#assign current_state=criteria.states.availableStates[0]>
 			<#if (criteriaResults[criteriaCount].state.id)?exists >

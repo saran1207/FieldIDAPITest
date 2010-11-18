@@ -10,7 +10,9 @@ ${action.setPageType('event', 'add')!}
 	<#include "/templates/html/eventCrud/_form.ftl"/>
 
 	<div class="formAction">
-		<button onclick="return redirect('<@s.url action="masterEventAdd" type="${masterEvent.event.type.id}" assetId="${parentAssetId}" token="${token}"/>' );"><@s.text name="label.cancel"/></button>
 		<@s.submit key="hbutton.store" />
+		<@s.text name="label.or"/>
+		<@s.url id="cancelUrl" action="masterEventAdd" type="${masterEvent.event.type.id}" assetId="${parentAssetId}" token="${token}" />
+		<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>

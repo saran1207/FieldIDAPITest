@@ -12,14 +12,18 @@
 <#if action.isParentAsset() >
 	<div  class="infoSet">
 		<label class="label"><@s.text name="label.printable"/></label>
-		<span class="fieldHolder">
-			<@s.checkbox name="printable" theme="fieldidSimple" /> <@s.text name="label.printableexplination"/>
-		</span> 
+		<div class="fieldHolder">
+			<@s.checkbox name="printable" theme="fieldidSimple" /> 
+			<@s.text name="label.printableexplination"/>
+		</div> 
+		
 	</div>
 	
 	<div  class="infoSet">
 		<label class="label"><@s.text name="label.assetstatus"/></label>
-		<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
+		<span class="fieldHolder">
+			<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
+		</span>
 	</div>
 	
 	<#if event.new >

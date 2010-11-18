@@ -38,7 +38,7 @@
 	
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
-		<div class="fieldHolder"><@n4.location name="modifiableEvent.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}" theme="simple"/></div>
+		<span class="fieldHolder locationFieldHolder"><@n4.location name="modifiableEvent.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}" theme="simple"/></span>
 	</div>
 
 
@@ -50,7 +50,9 @@
 <#if action.isParentAsset() >
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.performed_by"/></label>
-		<@s.select name="performedBy" list="examiners" listKey="id" listValue="name"  />
+		<span class="fieldHolder">
+			<@s.select name="performedBy" list="examiners" listKey="id" listValue="name"  />
+		</span>
 	</div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.date_performed"/></label>
@@ -77,7 +79,7 @@
 			<label class="label"><@s.text name="label.scheduledon"/></label>
 		
 			<#if event.schedule?exists>
-				<span  class="fieldHolder">
+				<span class="fieldHolder">
 					${action.formatDate(event.schedule.nextDate, false )}
 				</span>
 			<#else>
@@ -89,7 +91,7 @@
 		<div class="infoSet <#if scheduleSuggested>suggested</#if>">
 		
 			<label class="label"><@s.text name="label.schedulefor"/></label>
-			<div class="fieldHolder">
+			<span class="fieldHolder">
 				<@s.select id="schedule" name="scheduleId" list="schedules" listKey="id" listValue="name" theme="fieldidSimple"/>
 				<#if scheduleSuggested>
 					<a href="javascript:void(0);" id="suggestedSchedule_button">?</a>
@@ -98,7 +100,7 @@
 						$("suggestedSchedule_button").observe( 'click', function(event) { showQuickView('suggestedSchedule', event); } );
 					</script>
 				</#if>
-			</div>
+			</span>
 		</div>
 	</#if>
 		
@@ -115,6 +117,7 @@
 						<@s.param name="disabled" value="true"/>
 					</#if> 
 				</@s.select>
+				<br/>
 				<a href="javascript:void(0);" onclick="changeToNewEventBook();"><@s.text name="label.new_event_book"/></a>
 			</span>
 			<span id="eventBookTitle" <#if !newEventBookTitle?exists>style="display:none;"</#if>>
@@ -123,6 +126,7 @@
 						<@s.param name="disabled" value="true"/>
 					</#if>
 				</@s.textfield> 
+				<br/>
 				<a href="javascript:void(0);" onclick="changeToEventBookSelect()"><@s.text name="label.select_existing"/></a>
 			</span>
 		</div>

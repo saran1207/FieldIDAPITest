@@ -1,8 +1,9 @@
 	<h2><@s.text name="label.prooftest"/></h2>
 		<div class="infoSet">
 		
-			<label class="label"><@s.select id="proofTestType" theme="fieldidSimple" name="proofTestType" list="eventType.supportedProofTests" listKey="name()" listValue="%{ getText( label ) }" onchange="checkProofTestType( 'proofTestType' )"/></label>
+		
 			<div class="fieldHolder">
+			<label class="label"><@s.select id="proofTestType" theme="fieldidSimple" name="proofTestType" list="eventType.supportedProofTests" listKey="name()" listValue="%{ getText( label ) }" onchange="checkProofTestType( 'proofTestType' )"/></label>		
 				<div id="proofTestUpload" <#if proofTestTypeEnum?exists && !proofTestTypeEnum.uploadable >style="display:none"</#if> >
 					<#if !proofTestDirectory?exists || proofTestDirectory.length() == 0  >
 						<iframe id="singleFileUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="20" ></iframe>
