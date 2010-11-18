@@ -31,8 +31,10 @@
 			<#if Session.sessionUser.hasAccess("createevent") >
 				| <@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndStartEvent" key="hbutton.saveandstartevent" />
 			</#if>
-			| <@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
-			<#if Session.sessionUser.hasAccess("createevent") >
+			<span id="saveAndPrintAction" <#if !assetType.hasManufactureCertificate > style="display:none"</#if>>
+				| <@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
+			</span>
+			<#if Session.sessionUser.hasAccess("createevent")>
 				| <@s.submit id="saveAndScheduleButton" cssClass="save"  name="saveAndSchedule" key="hbutton.saveandschedule"  />
 			</#if>
 		</div>
