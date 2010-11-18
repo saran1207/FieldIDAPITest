@@ -19,8 +19,9 @@
 			</div>
 		</#if>
 		<div class="formAction">
-			<@s.reset key="label.cancel"/>
 			<@s.submit key="label.save"/>
+			<@s.text name="label.or"/>
+			<a href="<@s.url action="asset" namespace="/" uniqueID="${asset.id}"/>"><@s.text name="label.cancel"/></a>
 		</div>
 	</div>	
 </@s.form>
