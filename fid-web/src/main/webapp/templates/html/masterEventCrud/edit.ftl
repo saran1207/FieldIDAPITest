@@ -40,10 +40,13 @@ ${action.setPageType('event', 'edit')!}
 		<@s.hidden name="eventGroupId"/>
 		<@s.hidden name="assetId" id="assetId"/>
 		<div class="formAction">
-			<@s.url id="cancelUrl" action="eventGroups" uniqueID="${asset.id}"/>
-			<@s.submit key="label.cancel" onclick="return redirect( '${cancelUrl}' );"/>
-			<button onclick="return redirect('<@s.url action="masterEventDelete" uniqueID="${uniqueID}" assetId="${assetId}" /> ');"><@s.text name="label.delete"/></button>
 			<@s.submit key="label.save" />
+			<@s.text name="label.or"/>
+			<@s.url id="cancelUrl" action="eventGroups" uniqueID="${asset.id}"/>
+			<@s.url id="deleteUrl" action="masterEventDelete" uniqueID="${uniqueID}" assetId="${assetId}" /> 
+			<a href="#" onclick="return redirect( '${cancelUrl}' );"/><@s.text name="label.cancel"/></a>
+			<@s.text name="label.or"/>
+			<a href="#" onclick="javascript: if (window.confirm( '<@s.text name="label.confirm_event_delete"/>' )) return redirect( '${deleteUrl}' );" ><@s.text name='label.delete'/></a>
 		</div>
 	</@s.form>
 </div>
