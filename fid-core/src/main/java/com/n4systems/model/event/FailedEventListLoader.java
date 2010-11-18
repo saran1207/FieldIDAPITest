@@ -10,6 +10,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.Status;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.utils.PlainDate;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -38,7 +39,7 @@ public class FailedEventListLoader extends ListLoader<Event>{
 	}
 
 	private Date getFromDate() {
-		Date date = DateHelper.truncate(clock.currentTime(), DateHelper.DAY);
+		Date date = new PlainDate(clock.currentTime());
 		if (frequency.equals(SimpleFrequency.DAILY)) {
 			date = DateHelper.increment(date, DateHelper.DAY, -1);
 		}else if (frequency.getGroupLabel().equals(SimpleFrequency.WEEKLY_SUNDAY.getGroupLabel())) {
