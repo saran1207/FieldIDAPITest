@@ -61,6 +61,9 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	private UpcomingEventReport upcomingReport = new UpcomingEventReport();
 	
 	private FailedEventReport failedReport = new FailedEventReport();
+	
+	@Column(nullable=false)
+	private Boolean sendBlankReport;
 
 	public NotificationSetting() {}
 	
@@ -148,5 +151,13 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	
 	public void setIncludeFailed(boolean includeFailed) {
 		this.failedReport.includeFailed = includeFailed;
+	}
+
+	public Boolean getSendBlankReport() {
+		return sendBlankReport;
+	}
+
+	public void setSendBlankReport(Boolean sendBlankReport) {
+		this.sendBlankReport = sendBlankReport;
 	}
 }

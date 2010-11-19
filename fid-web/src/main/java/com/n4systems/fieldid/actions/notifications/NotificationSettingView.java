@@ -28,6 +28,7 @@ public class NotificationSettingView implements Serializable {
 	private Boolean includeOverdue = false;
 	private List<String> addresses = new ArrayList<String>();
 	private Boolean includeFailed = false;
+	private Boolean sendBlankReport = false;
 
 	
 	public NotificationSettingView() {}
@@ -140,7 +141,7 @@ public class NotificationSettingView implements Serializable {
 	
 	@FieldExpressionValidator(message="", key="error.you_must_select_at_least_one_type_of_report", expression="reportSelected == true")
 	public boolean isReportSelected() {
-		return includeUpcoming || includeOverdue;
+		return includeUpcoming || includeOverdue || includeFailed;
 	}
 
 	public Boolean getIncludeFailed() {
@@ -149,6 +150,14 @@ public class NotificationSettingView implements Serializable {
 
 	public void setIncludeFailed(Boolean includeFailed) {
 		this.includeFailed = includeFailed;
+	}
+
+	public Boolean getSendBlankReport() {
+		return sendBlankReport;
+	}
+
+	public void setSendBlankReport(Boolean sendBlankReport) {
+		this.sendBlankReport = sendBlankReport;
 	}
 	
 }

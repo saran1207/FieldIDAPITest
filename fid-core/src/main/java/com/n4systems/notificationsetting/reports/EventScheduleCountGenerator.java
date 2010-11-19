@@ -77,7 +77,24 @@ public class EventScheduleCountGenerator {
 			failedEvents = getFailedEvents(setting, clock);
 		}
 
-		sendMessage(setting, startDate, endDate, upcomingEvents, overdueEvents, failedEvents);
+		if(shouldSendMessage(setting, overdueEvents, overdueEvents, failedEvents)) {
+			sendMessage(setting, startDate, endDate, upcomingEvents, overdueEvents, failedEvents);
+		}
+	}
+
+	private boolean shouldSendMessage(NotificationSetting setting, SortedSet<EventScheduleCount> upcomingEvents, 
+			SortedSet<EventScheduleCount> overdueEvents, List<Event> failedEvents) {
+		if ( (upcomingEvents == null || upcomingEvents.isEmpty()) &&
+			 (overdueEvents == null || overdueEvents.isEmpty()) && 
+			 (failedEvents == null || failedEvents.isEmpty()) ) {
+			if (setting.getSendBlankReport()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
 	}
 
 	private List<Event> getFailedEvents(NotificationSetting setting, Clock clock) {

@@ -6,7 +6,7 @@
 ${action.setPageType('my_account', 'notification_settings')!}
 
 <#include "/templates/html/common/_formErrors.ftl" />
-<h2><@s.text name="label.notification"/></h2>
+
 
 
 <#include "/templates/html/common/_orgPicker.ftl"/>
@@ -14,11 +14,17 @@ ${action.setPageType('my_account', 'notification_settings')!}
 <@s.hidden name="uniqueID"/>
 <@s.hidden name="view.ID"/>
 <@s.hidden name="view.createdTimeStamp"/>
-<div class="sectionContent">
-	<div class="infoSet fullInfoSet">
-		<label for="view.name"><@s.text name="label.name"/></label>
-		<@s.textfield name="view.name"/>
+
+<div class="sectionContent name">
+	<div class="infoSet fullInfoSet enlarged">
+		<label class="bold" for="view.name"><@s.text name="label.name"/></label>
+		<span class="fieldHolder"><@s.textfield name="view.name"/><p class="instructions"><@s.text name="instruction.name"/></p></span>
 	</div>
+</div>
+
+<h2><@s.text name="label.delivery_options"/></h2>
+
+<div class="sectionContent deliveryOptions">
 	<div class="infoSet fullInfoSet">
 		<label for="view.frequency"><@s.text name="label.i_want_to_get_it"/></label>
 		<@s.select name="view.frequency" emptyOption="false">
@@ -27,10 +33,14 @@ ${action.setPageType('my_account', 'notification_settings')!}
 			</@s.iterator>
 		</@s.select>
 	</div>
+	<div class="infoSet fullInfoSet">
+		<label for="view.sendBlankReport"><@s.text name="label.send_blank_report"/></label>
+		<span class="infoField"><@s.checkbox name="view.sendBlankReport"  theme="fieldidSimple"/></span>
+	</div>
 </div>
 
 
-<h2><@s.text name="label.notification_content"/> (<@s.text name="instruction.you_must_select_atleast_one_peice_of_content"/>)</h2>
+<h2><@s.text name="label.notification_content"/></h2>
 <#if (action.fieldErrors['view.reportSelected'])?exists> 
 	<div class="formErrors" >
 		<@s.fielderror >
@@ -38,34 +48,31 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		</@s.fielderror>
 	</div>
 </#if>
-<div class="sectionContent">
-	<div class="infoSet fullInfoSet">
+<div class="sectionContent content">
+	<div id="upcomingEvents" class="infoSet fullInfoSet">
+		<span class="infoField checkbox"><@s.checkbox name="view.includeUpcoming"  theme="fieldidSimple" id="includeUpcoming" /></span>
 		<label for="view.includeUpcoming"><@s.text name="label.include_upcoming"/></label>
-		<span class="infoField"><@s.checkbox name="view.includeUpcoming"  theme="fieldidSimple" id="includeUpcoming" /></span>
-	</div>
-	<div class="tiedToUpcoming notificationContentOptions">
-		<div class="infoSet fullInfoSet">
-			<label for="view.periodStart"><@s.text name="label.events_starting"/></label>
+		<p class="upcomingDates">
 			<@s.select list="periodStartList" name="view.periodStart" listKey="id" listValue="displayName"  />
-		</div>
-		
-		<div class="infoSet fullInfoSet">
-			<label for="view.periodEnd"><@s.text name="label.for_the_next"/></label>
-			<@s.select list="periodEndList" name="view.periodEnd" listKey="id" listValue="displayName" />
-		</div>
-	</div>	
-	<div class="infoSet fullInfoSet">
-		<label for="view.includeOverdue"><@s.text name="label.include_overdue"/></label>
-		<span class="infoField"><@s.checkbox name="view.includeOverdue"  theme="fieldidSimple" /></span>
+			<span><@s.text name="label.for_the_next"/></span>
+			<@s.select list="periodEndList" name="view.periodEnd"  listKey="id" listValue="displayName" />
+		</p>
 	</div>
 	<div class="infoSet fullInfoSet">
-		<label for="view.includeFailed"><@s.text name="label.include_failed"/></label>
-		<span class="infoField"><@s.checkbox name="view.includeFailed"  theme="fieldidSimple" /></span>
+		<span class="infoField checkbox"><@s.checkbox name="view.includeOverdue"  theme="fieldidSimple" /></span>
+		<label for="view.includeOverdue"><@s.text name="label.include_overdue"/></label>
+	</div>
+	<div class="infoSet fullInfoSet">
+		<span class="infoField checkbox"><@s.checkbox name="view.includeFailed"  theme="fieldidSimple" /></span>
+		<span class="wide">
+			<label for="view.includeFailed"><@s.text name="label.include_failed"/></label>
+			<p class="instructions"><@s.text name="instruction.content_example"/></p>
+		</span>
 	</div>
 </div>
 
 <h2><@s.text name="label.filters"/></h2>
-<div class="sectionContent">	
+<div class="sectionContent filters">	
 	<div class="infoSet fullInfoSet">
 		<label for="owner"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="owner"/>
@@ -87,7 +94,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 	
 
 <h2><@s.text name="label.who_should_get_the_notification"/></h2>
-<div class="sectionContent">	
+<div class="sectionContent email">	
 	<div id="emailAddresses" class="infoSet fullInfoSet">
 		<label><@s.text name="label.emailaddresses"/></label>	
 		<div id="addressList">
@@ -121,18 +128,21 @@ ${action.setPageType('my_account', 'notification_settings')!}
 <script type="text/javascript">
 	retireImageSrc = "<@s.url value="/images/retire.gif" />";
 	addressCount = ${view.addresses.size()};
-	
-	function updateUpcomingOptions(element) {
+
+
+	function updateUpcomingOptions() {
 		if ($('includeUpcoming').checked) {
-			element.show();
+			$('notificationSettingUpdate_view_periodStart').disabled = false;
+			$('notificationSettingUpdate_view_periodEnd').disabled = false;
 		} else {
-			element.hide();
+			$('notificationSettingUpdate_view_periodStart').disabled = true;
+			$('notificationSettingUpdate_view_periodEnd').disabled = true;
 		}
 	}
 	
-	$$('.tiedToUpcoming').each(updateUpcomingOptions);
 	$('includeUpcoming').observe('change', function(event) {
-			$$('.tiedToUpcoming').each(updateUpcomingOptions);
-		});
-	
+			updateUpcomingOptions();
+	});
+
+	updateUpcomingOptions();
 </script>
