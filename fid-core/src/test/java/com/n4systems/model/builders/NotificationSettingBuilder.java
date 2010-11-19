@@ -55,6 +55,14 @@ public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting>
 		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), includeOverdue, false, sendBlankReport, user);
 	}
 
+	public NotificationSettingBuilder sendBlankReport() {
+		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), includeOverdue, includeFailed, true, user);
+	}
+
+	public NotificationSettingBuilder doNotSendBlankReport() {
+		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), includeOverdue, includeFailed, false, user);
+	}
+	
 	@Override
 	public NotificationSetting createObject() {
 		NotificationSetting notificationSettings = new NotificationSetting();

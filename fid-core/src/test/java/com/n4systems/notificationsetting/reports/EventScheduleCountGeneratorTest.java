@@ -48,6 +48,8 @@ public class EventScheduleCountGeneratorTest {
 		assertNull(message.getTemplateMap().get("overdueEvents"));
 	}
 	
+	
+	
 	@Test
 	public void should_you_load_the_overdue_schedules_when_the_notifications_set_to_include_overdue() throws Exception {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
@@ -186,6 +188,40 @@ public class EventScheduleCountGeneratorTest {
 		TemplateMailMessage message = (TemplateMailMessage) mailManager.message;
 		
 		assertNull(message.getTemplateMap().get("failedEvents"));
+	}
+	
+	@Test
+	public void should_send_blank_report() throws Exception {
+		MailManagerTestDouble mailManager = new MailManagerTestDouble();
+		NotificationSetting notificationSetting = aNotificationSetting().includeFailed().sendBlankReport().build();
+		
+		List<Event> failedEvents = new FluentArrayList<Event>();
+		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>();
+		
+		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
+				null, createSuccessfulFailedEventsLoader(notificationSetting, failedEvents), mailManager);
+		sut.sendReport(notificationSetting, new StoppedClock());
+
+		TemplateMailMessage message = (TemplateMailMessage) mailManager.message;
+		
+		assertNotNull(message);
+	}
+	
+	@Test
+	public void should_not_send_blank_report() throws Exception {
+		MailManagerTestDouble mailManager = new MailManagerTestDouble();
+		NotificationSetting notificationSetting = aNotificationSetting().includeFailed().doNotSendBlankReport().build();
+		
+		List<Event> failedEvents = new FluentArrayList<Event>();
+		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>();
+		
+		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
+				null, createSuccessfulFailedEventsLoader(notificationSetting, failedEvents), mailManager);
+		sut.sendReport(notificationSetting, new StoppedClock());
+
+		TemplateMailMessage message = (TemplateMailMessage) mailManager.message;
+		
+		assertNull(message);
 	}
 	
 	private FailedEventListLoader createSuccessfulFailedEventsLoader(NotificationSetting notificationSetting, List<Event> failedEvents) {
