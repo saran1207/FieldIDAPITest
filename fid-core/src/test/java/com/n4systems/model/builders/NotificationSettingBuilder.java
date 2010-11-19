@@ -15,42 +15,44 @@ public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting>
 	private final User user;
 	private final UpcomingEventReport upcomingReport;
 	private final Boolean includeFailed;
+	private final Boolean sendBlankReport;
 	
 	public static NotificationSettingBuilder aNotificationSetting() {
-		return new NotificationSettingBuilder(PrimaryOrgBuilder.aPrimaryOrg().build(), "name", true, false, false, UserBuilder.aUser().build());
+		return new NotificationSettingBuilder(PrimaryOrgBuilder.aPrimaryOrg().build(), "name", true, false, false, true, UserBuilder.aUser().build());
 	}
 	
-	private NotificationSettingBuilder(PrimaryOrg owner, String name, Boolean includeUpcoming, Boolean includeOverdue, Boolean includeFailed, User user) {
+	private NotificationSettingBuilder(PrimaryOrg owner, String name, Boolean includeUpcoming, Boolean includeOverdue, Boolean includeFailed, Boolean sendBlankReport, User user) {
 		this.owner = owner;
 		this.name = name;
 		this.upcomingReport = new UpcomingEventReport(RelativeTime.TODAY, RelativeTime.NEXT_WEEK, includeUpcoming);
 		this.includeOverdue = includeOverdue;
 		this.includeFailed = includeFailed;
 		this.user = user;
+		this.sendBlankReport = sendBlankReport;
 	}
 	
 	public NotificationSettingBuilder includeOverdue() {
-		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), true, includeFailed, user);
+		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), true, includeFailed, sendBlankReport, user);
 	}
 
 	public NotificationSettingBuilder doNotIncludeOverdue() {
-		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), false, includeFailed, user);
+		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), false, includeFailed, sendBlankReport, user);
 	}
 	
 	public NotificationSettingBuilder includeUpcoming() {
-		return new NotificationSettingBuilder(owner, name, true, includeOverdue, includeFailed, user);
+		return new NotificationSettingBuilder(owner, name, true, includeOverdue, includeFailed, sendBlankReport, user);
 	}
 
 	public NotificationSettingBuilder doNotIncludeUpcoming() {
-		return new NotificationSettingBuilder(owner, name, false, includeOverdue, includeFailed, user);
+		return new NotificationSettingBuilder(owner, name, false, includeOverdue, includeFailed, sendBlankReport, user);
 	}
 	
 	public NotificationSettingBuilder includeFailed() {
-		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), includeOverdue, true, user);
+		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), includeOverdue, true, sendBlankReport, user);
 	}
 
 	public NotificationSettingBuilder doNotIncludeFailed() {
-		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), includeOverdue, false, user);
+		return new NotificationSettingBuilder(owner, name, upcomingReport.isIncludeUpcoming(), includeOverdue, false, sendBlankReport, user);
 	}
 
 	@Override
@@ -62,6 +64,7 @@ public class NotificationSettingBuilder extends BaseBuilder<NotificationSetting>
 		notificationSettings.setUser(user);
 		notificationSettings.setUpcomingReport(upcomingReport);
 		notificationSettings.setIncludeFailed(includeFailed);
+		notificationSettings.setSendBlankReport(sendBlankReport);
 		return notificationSettings;
 	}
 

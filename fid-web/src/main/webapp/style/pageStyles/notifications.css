@@ -113,6 +113,10 @@ form.largeForm {
 	width: 255px;
 }
 
+.twoColumns {
+	width:auto;
+}
+
 .content .infoSet p {
 	display: inline;
 }
