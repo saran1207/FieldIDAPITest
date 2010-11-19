@@ -74,7 +74,9 @@ public enum ConfigEntry {
 	SAFETY_NETWORK_VIDEO_URL					(	"http://www.n4systems.com/qwe__wqe/training/safety_network_invite/"		),
 	SYSTEM_PROTOCOL								(	"https"					),
 	EXTERNAL_PLANS_AND_PRICING_ENABLED			(	"true" 					),
-	EXTERNAL_PLANS_AND_PRICING_URL				(	"http://www.n4systems.com/pricing/"	);
+	EXTERNAL_PLANS_AND_PRICING_URL				(	"http://www.n4systems.com/pricing/"	),
+
+    HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS       (	"0"	);
 	
 	private String defaultValue;
 	

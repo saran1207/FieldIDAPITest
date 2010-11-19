@@ -13,6 +13,8 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.notificationsetting.reports.EventScheduleCountGenerator;
 import com.n4systems.services.TenantCache;
 import com.n4systems.taskscheduling.ScheduledTask;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.LogUtils;
 import com.n4systems.util.ServiceLocator;
@@ -52,7 +54,7 @@ public class EventScheduleNotificationTask extends ScheduledTask {
     protected void runTask() throws Exception {
 		logger.info("Starting Event Schedule Notification Task");
 
-        Map<String, Date> midnightRegions = findRegionIdsAndDatesWhereItJustTurnedMidnight();
+        Map<String, Date> midnightRegions = findRegionIdsAndDatesWhereItJustTurnedConfiguredHour();
 
         for (String regionId : midnightRegions.keySet()) {
             logger.info("Performing notifications for region: " + regionId);
@@ -89,8 +91,8 @@ public class EventScheduleNotificationTask extends ScheduledTask {
         return new PlainDate(DateHelper.localizeDate(new Date(), TimeZone.getTimeZone(timeZoneId)));
     }
 
-    private static Map<String, Date> findRegionIdsAndDatesWhereItJustTurnedMidnight() {
-        Map<String, Date> midnightTimezones = new HashMap<String, Date>();
+    private static Map<String, Date> findRegionIdsAndDatesWhereItJustTurnedConfiguredHour() {
+        Map<String, Date> currentTimezones = new HashMap<String, Date>();
 
         SortedSet<Country> countries = CountryList.getInstance().getCountries();
         Set<String> regionIds = new HashSet<String>();
@@ -107,13 +109,14 @@ public class EventScheduleNotificationTask extends ScheduledTask {
             Calendar cal = new GregorianCalendar();
             cal.setTimeZone(timeZone);
 
-            if (cal.get(Calendar.HOUR_OF_DAY) == 0) {
-                midnightTimezones.put(regionId, getTheDateInTimeZone(regionId));
+            int configuredHour = ConfigContext.getCurrentContext().getInteger(ConfigEntry.HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS);
+            if (cal.get(Calendar.HOUR_OF_DAY) == configuredHour) {
+                currentTimezones.put(regionId, getTheDateInTimeZone(regionId));
             }
 
         }
 
-        return midnightTimezones;
+        return currentTimezones;
     }
-	
+
 }
