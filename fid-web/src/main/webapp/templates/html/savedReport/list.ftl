@@ -30,7 +30,7 @@ ${action.setPageType('saved_reports', 'saved_reports')!}
 		<#list page.getList() as report > 
 			<tr id="report_${report.id}" >
 				<td><a href="<@s.url action="savedReportLoad" uniqueID="${report.id}" namespace="/" />">${report.name?html}</a></td>
-				<td>${report.sharedByName!}</td>
+				<td>${report.sharedByName!}&nbsp;</td>
 				<td>${action.formatDateTime(report.modified)}</td>
 				<td>
 		     		<a href="<@s.url action="savedReportLoad" uniqueID="${report.id}" namespace="/" />"><@s.text name="label.Run"/></a> |
