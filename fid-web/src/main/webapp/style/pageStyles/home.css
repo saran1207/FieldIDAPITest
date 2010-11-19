@@ -21,17 +21,13 @@
 #dashboardShortCuts h2, #relaseInformation h2{
 	font-size: 1.3em;
 }
-	
-.emptyOptions{
-	border-bottom: none;	
-}
 
 .dashboardBlock {
 	overflow:hidden;
 }
 
 .dashboardSection {
-	width: 480px;
+	width: 490px;
 	float: left;
 	margin-bottom: 30px;
 }
