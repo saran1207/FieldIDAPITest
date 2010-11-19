@@ -88,7 +88,8 @@ public class EventScheduleNotificationTask extends ScheduledTask {
     }
 
     private static Date getTheDateInTimeZone(String timeZoneId) {
-        return new PlainDate(DateHelper.localizeDate(new Date(), TimeZone.getTimeZone(timeZoneId)));
+        Date localizedDate = DateHelper.localizeDate(new Date(), TimeZone.getTimeZone(timeZoneId));
+        return new PlainDate(localizedDate);
     }
 
     private static Map<String, Date> findRegionIdsAndDatesWhereItJustTurnedConfiguredHour() {
@@ -104,14 +105,15 @@ public class EventScheduleNotificationTask extends ScheduledTask {
         }
 
         for (String regionId : regionIds) {
-            TimeZone timeZone = CountryList.getInstance().getRegionByFullId(regionId).getTimeZone();
+            String timeZoneId = CountryList.getInstance().getRegionByFullId(regionId).getTimeZoneId();
+            TimeZone timeZone = TimeZone.getTimeZone(timeZoneId);
 
             Calendar cal = new GregorianCalendar();
             cal.setTimeZone(timeZone);
 
             int configuredHour = ConfigContext.getCurrentContext().getInteger(ConfigEntry.HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS);
             if (cal.get(Calendar.HOUR_OF_DAY) == configuredHour) {
-                currentTimezones.put(regionId, getTheDateInTimeZone(regionId));
+                currentTimezones.put(regionId, getTheDateInTimeZone(timeZoneId));
             }
 
         }
