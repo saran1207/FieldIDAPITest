@@ -30,7 +30,6 @@
 		<@s.text name="label.limit_reached"/>
 	</div>
 </div>
-<hr/>
 <@s.form action="selectEventType" namespace="/multiEvent" theme="fieldid" cssClass="hide">
 	<div class="formActions prominent" id="performEvent">
 		<@s.submit key="label.perform_event" id="perform_event" disabled="true"/>
