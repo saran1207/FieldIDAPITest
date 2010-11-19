@@ -342,7 +342,6 @@ table.list tr.multiSelected {
 }
 
 .simpleTable td, .decorated th {
-	border-top: 1px solid #eee;
 	padding: 5px;
 }
 

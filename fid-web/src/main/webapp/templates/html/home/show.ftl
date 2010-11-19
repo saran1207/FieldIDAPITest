@@ -4,8 +4,8 @@
 </head>
 <div id="dashboardShortCuts" class="dashboardBlock">
 	<div id="quickLinks" class="dashboardSection">
-		<h3><@s.text name="label.goto"/>:</h3>
-		<ul id="quickLinkList">
+		<h2 class="decoratedHeader"><@s.text name="label.you_might_want_to"/></h2>
+		<ul class="bulletList quickLinkList">
 			<li><a href="<@s.url action="schedule!createSearch"/>?criteria.status=INCOMPLETE"><@s.text name="label.viewupcomingevents"/></a></li>
  			<li><a href="<@s.url action="report"/>"><@s.text name="label.vieweventhistory"/></a></li>
 			<li><a href="<@s.url action="search"/>"><@s.text name="label.findanasset"/></a></li>
@@ -21,7 +21,7 @@
 	
 	<#if securityGuard.projectsEnabled && sessionUser.employeeUser>
 		<div id="jobs" class="dashboardSection">
-			<h3><@s.text name="label.jobs"/></h3>
+			<h2 class="decoratedHeader"><@s.text name="label.jobs"/></h2>
 			<table class="simpleTable decorated">
 				<#if myJobs.hasResults()>
 					<tr>
@@ -53,30 +53,27 @@
 			</table>
 		</div>
 	</#if>
+	
+	<div id="helpVideos" class="dashboardSection">
+		<h2 class="decoratedHeader"><@s.text name="label.learning_center"/></h2>
+		<ul class="bulletList quickLinkList">
+			<#list summary as video >
+				<li><a href="${video.url}" target="_blank">${video.name?html}</a></li>
+			</#list>
+		</ul>
+	</div>
 </div>
-
-
-
 
 <div id="relaseInformation" class="dashboardBlock dashboardBoardBottom">
 	<div id="releaseNotes" class="dashboardSection">
-		<h3>${currentReleaseNotes.title?html} <span class="moreLink"><a href="<@s.url value="${currentReleaseNotes.url}"/>" target="_blank"><@s.text name="label.more"/></a> </span></h3>
+		<h2 class="decoratedHeader"><@s.text name="label.messages_and_announcements"/></h2>
 		<#if !currentReleaseNotes.bullets.empty>
-			<ul class="informationList">
+			<ul class="bulletList">
 				<#list currentReleaseNotes.bullets as bullet>
-					<li>${bullet?html}</li>
+					<li>${bullet}</li>
 				</#list>
 			</ul>
 		</#if>
-	</div>
-	<div id="helpVideos" class="dashboardSection">
-		<h3 ><@s.text name="label.instructionalvidoes"/> <span class="moreLink"><a href="<@s.url action="instructionalVideos"/>"><@s.text name="label.more"/></a></span></h3>
-		<#include "../instructionalVideos/_watchIntroVideo.ftl"/>
-		<ul class="informationList">
-			<#list summary as video >
-				<li>${video.name?html} - <a href="${video.url}" target="_blank"><@s.text name="label.watchnow"/></a></li>
-			</#list>
-		</ul>
 	</div>
 </div>
 
