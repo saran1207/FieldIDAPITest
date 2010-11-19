@@ -1,12 +1,12 @@
-#multipleEvents p {
-	background: no-repeat url(../../images/multi-event.jpg) -4px 5px;
+#multipleEvents div {
+	background: no-repeat url(../../images/multi-event.jpg) 15px 10px;
 }
 
-#singleEvent p {
-	background: no-repeat url(../../images/single-asset.jpg) 0px 5px;
+#singleEvent div {
+	background: no-repeat url(../../images/single-asset.jpg) 15px 10px;
 }
 
-#multipleProofTests p {
-	background: no-repeat url(../../images/proof_test.jpg) 0px 5px;
+#multipleProofTests div {
+	background: no-repeat url(../../images/proof_test.jpg) 15px 10px;
 }
 

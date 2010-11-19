@@ -272,23 +272,32 @@ em {
 	width:600px;
 }
 .subSystemList {
-	float: left;
 	overflow:hidden;
+	width: 450px; 
+	margin-left: auto;
+	margin-right: auto;	
 }
 
 .subSystemList li { 
+	margin: 10px;
 	float:left;
-	width: 300px;
+	width: 420px;
+	border:1px solid #9c9c9c;
 }
 
+.subSystemList li div{
+	padding: 20px 10px 0 90px;
+	}
+
 .subSystemList li p {
-	min-height:65px;
-	padding: 20px 10px 0 65px;
+	margin-top: 5px;
+	min-height:40px;
 }
 
 .subSystemList li p a {
 	color: #000;
 	text-decoration: none;
+	display: block;
 }
 
 .subSystemList li h2 a {
