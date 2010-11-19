@@ -34,8 +34,9 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		</@s.select>
 	</div>
 	<div class="infoSet fullInfoSet">
-		<label for="view.sendBlankReport"><@s.text name="label.send_blank_report"/></label>
-		<span class="infoField"><@s.checkbox name="view.sendBlankReport"  theme="fieldidSimple"/></span>
+		<label>&nbsp;</label>
+		<span class="infoField checkbox"><@s.checkbox name="view.sendBlankReport"  theme="fieldidSimple"/></span>
+		<label class="large" for="view.sendBlankReport"><@s.text name="label.send_blank_report"/></label>
 	</div>
 </div>
 
@@ -144,5 +145,8 @@ ${action.setPageType('my_account', 'notification_settings')!}
 			updateUpcomingOptions();
 	});
 
-	updateUpcomingOptions();
+	document.observe("dom:loaded", function() {
+		updateUpcomingOptions();
+	});
+	
 </script>

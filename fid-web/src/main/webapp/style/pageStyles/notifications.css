@@ -97,6 +97,12 @@ form.largeForm {
 }
 
 .deliveryOptions .infoSet label {
+	width : 190px;
+	padding-left: 0;
+	padding-right: 5px;
+}
+
+.deliveryOptions .infoSet .large {
 	width : 340px;
 	padding-left: 0;
 }
@@ -105,8 +111,12 @@ form.largeForm {
 	padding-left : 4px;
 }
 
-.content .infoSet .checkbox {
+.content .infoSet .checkbox, .deliveryOptions .infoSet .checkbox {
 	width: 20px;
+}
+
+.deliveryOptions .infoSet {
+	min-height: 30px;
 }
 
 .content .infoSet label {
@@ -153,11 +163,11 @@ form.largeForm {
 	padding-bottom: 0;
 }
 
-.deliveryOptions .infoSet label, .filters .infoSet label, .email .infoSet label{
-	text-align: right;
-}
-
 .infoSet select {
 	border:1px solid #9C9C9C;
 	color:#555555;
+}
+
+.content .infoSet .upcomingDates {
+	width : auto;
 }
