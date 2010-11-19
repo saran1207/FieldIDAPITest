@@ -5,7 +5,7 @@ import java.util.List;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.signup.SignupReferral;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.uri.SignupUrlBuilder;
 
@@ -35,6 +35,6 @@ public class ReferCrud extends AbstractAction {
 	}
 	
 	public String getCompanyName(Long id) {
-		return TenantCache.getInstance().findPrimaryOrg(id).getName();
+		return TenantFinder.getInstance().findPrimaryOrg(id).getName();
 	}
 }

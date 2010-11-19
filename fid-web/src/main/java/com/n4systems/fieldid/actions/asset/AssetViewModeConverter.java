@@ -20,7 +20,7 @@ import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 
 public class AssetViewModeConverter {
 	private final LoaderFactory loaderFactory;
@@ -37,7 +37,7 @@ public class AssetViewModeConverter {
 	public Asset viewToModel(AssetView view) {
 		Asset model = new Asset();
 
-		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(identifier.getTenant().getId());
+		PrimaryOrg primaryOrg = TenantFinder.getInstance().findPrimaryOrg(identifier.getTenant().getId());
 		
 		transaction = PersistenceManager.startTransaction();
 		

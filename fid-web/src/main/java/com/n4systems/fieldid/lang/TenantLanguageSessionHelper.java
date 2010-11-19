@@ -17,7 +17,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 
 public class TenantLanguageSessionHelper {
 	private static Logger logger = Logger.getLogger(TenantLanguageSessionHelper.class);
@@ -32,7 +32,7 @@ public class TenantLanguageSessionHelper {
 	}
 	
 	public void populateSession(WebSession session) {
-		PrimaryOrg primary = TenantCache.getInstance().findPrimaryOrg(tenant.getId());
+		PrimaryOrg primary = TenantFinder.getInstance().findPrimaryOrg(tenant.getId());
 		
 		Map<String, String> language = new HashMap<String, String>();
 		

@@ -4,24 +4,24 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
 public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
-	private final TenantCache tenantCache;
+	private final TenantFinder tenantFinder;
 	
 	protected String organizationName;
 	protected String customerName;
 	protected String divisionName;
 	
-	public OrgByNameLoader(SecurityFilter filter, TenantCache tenantCache) {
+	public OrgByNameLoader(SecurityFilter filter, TenantFinder tenantFinder) {
 		super(filter);
-		this.tenantCache = tenantCache;
+		this.tenantFinder = tenantFinder;
 	}
 
 	public OrgByNameLoader(SecurityFilter filter) {
-		this(filter, TenantCache.getInstance());
+		this(filter, TenantFinder.getInstance());
 	}
 	
 	@Override
@@ -31,7 +31,7 @@ public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
 		 * organization is a primary or a secondary.  We'll start by checking 
 		 * the cached primary org.
 		 */
-		PrimaryOrg primaryOrg = tenantCache.findPrimaryOrg(filter.getTenantId());
+		PrimaryOrg primaryOrg = tenantFinder.findPrimaryOrg(filter.getTenantId());
 		boolean isUnderPrimary = primaryOrg.getName().equals(organizationName);
 		
 		QueryBuilder<BaseOrg> builder = new QueryBuilder<BaseOrg>(BaseOrg.class, filter);

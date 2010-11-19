@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.n4systems.services.TenantFinder;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -15,7 +16,6 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.services.TenantCache;
 
 public class DownloadOrganizationImages extends DownloadAction {
 	private static final long serialVersionUID = 1L;
@@ -33,9 +33,9 @@ public class DownloadOrganizationImages extends DownloadAction {
 	@Override
 	public String doDownload() {
 		if( uniqueID != null ) {
-			tenant = TenantCache.getInstance().findTenant(uniqueID);
+			tenant = TenantFinder.getInstance().findTenant(uniqueID);
 		} else if( tenantName != null ) {
-			tenant = TenantCache.getInstance().findTenant(tenantName);
+			tenant = TenantFinder.getInstance().findTenant(tenantName);
 		}
 		
 		if(tenant != null) {
@@ -68,7 +68,7 @@ public class DownloadOrganizationImages extends DownloadAction {
 	}
 	
 	private File getHouseAccountLogoPath() {
-		Tenant houseAccount = TenantCache.getInstance().findTenant(getHouseAccountName());
+		Tenant houseAccount = TenantFinder.getInstance().findTenant(getHouseAccountName());
 		return PathHandler.getTenantLogo(houseAccount);
 	}
 

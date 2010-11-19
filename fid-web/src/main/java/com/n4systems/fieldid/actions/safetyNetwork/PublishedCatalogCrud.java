@@ -12,13 +12,12 @@ import java.util.Map.Entry;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NoAccessToTenantException;
-import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -81,7 +80,7 @@ public class PublishedCatalogCrud extends SafetyNetwork {
 	}
 
 	protected PrimaryOrg getPrimaryOrgForThisTenant() {
-		return TenantCache.getInstance().findPrimaryOrg(uniqueID);
+		return TenantFinder.getInstance().findPrimaryOrg(uniqueID);
 	}
 
 	public String doShow() {

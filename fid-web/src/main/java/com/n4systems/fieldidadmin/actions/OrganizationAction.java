@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.n4systems.services.TenantFinder;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -21,7 +22,6 @@ import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.TenantCache;
 import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.util.ConfigContext;
@@ -47,8 +47,8 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 
 	public void prepare() throws Exception {
 		if (id != null) {
-			tenant = TenantCache.getInstance().findTenant(id); 
-			primaryOrg = TenantCache.getInstance().findPrimaryOrg(id);
+			tenant = TenantFinder.getInstance().findTenant(id);
+			primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
 			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
 				extendedFeatures.put(feature.name(), true);
 			}			
@@ -93,7 +93,6 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 			
 			PersistenceManager.finishTransaction(transaction);
 			
-			TenantCache.getInstance().reloadPrimaryOrg(primaryOrg.getTenant().getId());
 			TenantLimitService.getInstance().updateAll();
 			
 			
@@ -217,7 +216,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	}
 
 	public Collection<PrimaryOrg> getPrimaryOrgs() {
-		return TenantCache.getInstance().findAllPrimaryOrgs();
+		return TenantFinder.getInstance().findAllPrimaryOrgs();
 	}
 
 

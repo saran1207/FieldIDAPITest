@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
+import com.n4systems.services.TenantFinder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,6 @@ import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.services.TenantCache;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InfoOptionServiceDTO;
@@ -181,11 +181,11 @@ public class ServiceDTOBeanConverterImplTest {
 		replay( mockEntityManager );
 		converter.setEntityManager(mockEntityManager);
 
-		TenantCache mockCache = createMock(TenantCache.class);
-		expect(mockCache.findTenant(foundTenant.getId())).andReturn(foundTenant);
-		expect(mockCache.findPrimaryOrg(foundTenant.getId())).andReturn(primaryOrg);
-		replay(mockCache);
-		TenantCache.setInstance(mockCache);
+		TenantFinder mockFinder = createMock(TenantFinder.class);
+		expect(mockFinder.findTenant(foundTenant.getId())).andReturn(foundTenant);
+		expect(mockFinder.findPrimaryOrg(foundTenant.getId())).andReturn(primaryOrg);
+		replay(mockFinder);
+		TenantFinder.setInstance(mockFinder);
 		
 		asset = converter.convert( productServiceDTO, asset, foundTenant.getId() );
 		

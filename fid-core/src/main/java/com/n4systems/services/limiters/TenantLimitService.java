@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.n4systems.model.asset.AssetLimitCountLoader;
+import com.n4systems.services.TenantFinder;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -13,7 +14,6 @@ import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.EmployeeUserCountLoader;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.services.TenantCache;
 import com.n4systems.usage.TenantDiskUsageCalculator;
 
 public class TenantLimitService implements Serializable {
@@ -102,7 +102,7 @@ public class TenantLimitService implements Serializable {
 			transaction = PersistenceManager.startTransaction();
 			
 			// for each tenant, update all the limits.
-			for (PrimaryOrg primaryOrg: TenantCache.getInstance().findAllPrimaryOrgs()) {
+			for (PrimaryOrg primaryOrg: TenantFinder.getInstance().findAllPrimaryOrgs()) {
 				logger.debug("Updating all limits for [" + primaryOrg.toString() + "]");
 				for (LimitUpdater updater: limitUpdaters) {
 					updater.updateLimitMap(primaryOrg, transaction);

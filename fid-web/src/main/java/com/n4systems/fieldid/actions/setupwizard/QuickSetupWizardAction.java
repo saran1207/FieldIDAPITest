@@ -12,7 +12,6 @@ import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.TenantCache;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class QuickSetupWizardAction extends AbstractAction {
@@ -86,7 +85,6 @@ public class QuickSetupWizardAction extends AbstractAction {
 	}
 
 	private void clearCachedValues() {
-		TenantCache.getInstance().reloadPrimaryOrg(getPrimaryOrg().getTenant().getId());
 		refreshSessionUser();
 	}
 	

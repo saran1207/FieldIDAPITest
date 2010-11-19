@@ -526,12 +526,6 @@
 			</result>
 		</action>
 
-		<action name="reloadTenantCache" method="reloadTenantCache"
-			class="com.n4systems.fieldidadmin.actions.CacheControlAction">
-			<result name="success" type="freemarker">/admin/templates/html/cacheControl/show.ftl
-			</result>
-		</action>
-
 		<action name="reloadSetupDataLastModDatesCache" method="reloadSetupDataLastModDatesCache"
 			class="com.n4systems.fieldidadmin.actions.CacheControlAction">
 			<result name="success" type="freemarker">/admin/templates/html/cacheControl/show.ftl

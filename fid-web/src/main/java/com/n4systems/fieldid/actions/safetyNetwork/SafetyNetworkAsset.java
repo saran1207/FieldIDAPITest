@@ -9,7 +9,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.CatalogServiceImpl;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -60,7 +60,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 	}
 
     public PrimaryOrg getVendor() {
-        return TenantCache.getInstance().findPrimaryOrg(asset.getTenant().getId());
+        return TenantFinder.getInstance().findPrimaryOrg(asset.getTenant().getId());
     }
 
 	@SkipValidation

@@ -21,7 +21,7 @@ import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
@@ -192,7 +192,7 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 	
 	public List<ListingPair> getTenants() {
 		if (tenants == null) {
-			tenants = ListHelper.longListableToListingPair(TenantCache.getInstance().findAllTenants());
+			tenants = ListHelper.longListableToListingPair(TenantFinder.getInstance().findAllTenants());
 		}
 		return tenants;
 	}
@@ -212,7 +212,7 @@ public class ConnectionInvitationAction extends SafetyNetwork {
 		if (id == null) {
 			remoteTenant = null;
 		} else if (remoteTenant == null || !remoteTenant.getId().equals(id)) {
-			remoteTenant = TenantCache.getInstance().findTenant(id);
+			remoteTenant = TenantFinder.getInstance().findTenant(id);
 		}
 	}
 

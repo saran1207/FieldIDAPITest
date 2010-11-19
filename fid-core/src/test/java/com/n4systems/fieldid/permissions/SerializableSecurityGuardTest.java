@@ -7,14 +7,13 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 
+import com.n4systems.services.TenantFinder;
 import org.junit.Test;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.services.TenantCache;
-
 
 
 public class SerializableSecurityGuardTest {
@@ -25,10 +24,10 @@ public class SerializableSecurityGuardTest {
 		for (ExtendedFeature feature : ExtendedFeature.values()) {
 			Tenant tenant = aTenant().build();
 			
-			TenantCache mockCache = createMock(TenantCache.class);
-			expect(mockCache.findPrimaryOrg(tenant.getId())).andReturn(new PrimaryOrg());
-			replay(mockCache);
-			TenantCache.setInstance(mockCache);
+			TenantFinder mockFinder = createMock(TenantFinder.class);
+			expect(mockFinder.findPrimaryOrg(tenant.getId())).andReturn(new PrimaryOrg());
+			replay(mockFinder);
+			TenantFinder.setInstance(mockFinder);
 			
 			SerializableSecurityGuard sut = new SerializableSecurityGuard(tenant);
 			
@@ -42,10 +41,10 @@ public class SerializableSecurityGuardTest {
 			Tenant tenant = aTenant().build();
 			PrimaryOrg primaryOrg = aPrimaryOrg().withExtendedFeatures(feature).build();
 
-			TenantCache mockCache = createMock(TenantCache.class);
-			expect(mockCache.findPrimaryOrg(tenant.getId())).andReturn(primaryOrg);
-			replay(mockCache);
-			TenantCache.setInstance(mockCache);
+			TenantFinder mockFinder = createMock(TenantFinder.class);
+			expect(mockFinder.findPrimaryOrg(tenant.getId())).andReturn(primaryOrg);
+			replay(mockFinder);
+			TenantFinder.setInstance(mockFinder);
 			
 			
 			SerializableSecurityGuard sut = new SerializableSecurityGuard(tenant);

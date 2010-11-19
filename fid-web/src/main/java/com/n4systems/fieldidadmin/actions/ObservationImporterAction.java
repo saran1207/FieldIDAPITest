@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.n4systems.importing.ImportManager;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.util.ListHelper;
 
 public class ObservationImporterAction extends AbstractAdminAction {
@@ -60,7 +60,7 @@ public class ObservationImporterAction extends AbstractAdminAction {
 		
 		Map<Long, String> tenantMap = new HashMap<Long, String>();
 		try {
-			tenantMap = ListHelper.longListableToMap(TenantCache.getInstance().findAllTenants());
+			tenantMap = ListHelper.longListableToMap(TenantFinder.getInstance().findAllTenants());
 		} catch(Exception e) {
 			addActionError("Unable to load Tenants: " + e.getMessage());
 		}

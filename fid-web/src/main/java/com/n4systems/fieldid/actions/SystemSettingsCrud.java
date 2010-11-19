@@ -23,7 +23,6 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.TenantCache;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.UrlValidator;
@@ -182,7 +181,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
 	private void clearCachedValues() {
-		TenantCache.getInstance().reloadPrimaryOrg(getPrimaryOrg().getTenant().getId());
 		refreshSessionUser();
 	}
 

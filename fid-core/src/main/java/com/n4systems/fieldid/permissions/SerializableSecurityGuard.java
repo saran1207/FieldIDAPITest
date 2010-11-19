@@ -6,7 +6,7 @@ import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 
 public class SerializableSecurityGuard implements SystemSecurityGuard, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -15,7 +15,7 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	private final PrimaryOrg primaryOrg;
 	
 	public SerializableSecurityGuard(Tenant tenant) {
-		this(tenant, TenantCache.getInstance().findPrimaryOrg(tenant.getId()));
+		this(tenant, TenantFinder.getInstance().findPrimaryOrg(tenant.getId()));
 	}
 	
 	public SerializableSecurityGuard(Tenant tenant, PrimaryOrg primaryOrg) {

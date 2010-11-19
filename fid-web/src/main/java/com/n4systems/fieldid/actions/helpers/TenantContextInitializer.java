@@ -11,7 +11,7 @@ import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Tenant;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.HostNameParser;
@@ -83,7 +83,7 @@ public abstract class TenantContextInitializer {
 	}
 
 	private Tenant loadTenant() {
-		Tenant tenant = TenantCache.getInstance().findTenant(brandedCompanyId);
+		Tenant tenant = TenantFinder.getInstance().findTenant(brandedCompanyId);
 		return tenant;
 	}
 

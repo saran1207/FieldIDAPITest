@@ -24,6 +24,7 @@ import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.SubEvent;
+import com.n4systems.services.TenantFinder;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AssetStatus;
@@ -70,7 +71,6 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
-import com.n4systems.services.TenantCache;
 import com.n4systems.util.BitField;
 import com.n4systems.webservice.dto.AbstractBaseOrgServiceDTO;
 import com.n4systems.webservice.dto.AbstractExternalOrgServiceDTO;
@@ -330,8 +330,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	@Deprecated
 	public Asset convert(ProductServiceDTO productServiceDTO, Asset targetAsset, long tenantId) {
 
-		Tenant tenantOrganization = TenantCache.getInstance().findTenant(tenantId);
-		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(tenantOrganization.getId());
+		Tenant tenantOrganization = TenantFinder.getInstance().findTenant(tenantId);
+		PrimaryOrg primaryOrg = TenantFinder.getInstance().findPrimaryOrg(tenantOrganization.getId());
 
 		targetAsset.setComments(productServiceDTO.getComments());
 		targetAsset.setCustomerRefNumber(productServiceDTO.getCustomerRefNumber());

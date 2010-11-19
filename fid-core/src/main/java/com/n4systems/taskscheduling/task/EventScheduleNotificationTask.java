@@ -11,7 +11,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.notificationsetting.reports.EventScheduleCountGenerator;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -72,7 +72,7 @@ public class EventScheduleNotificationTask extends ScheduledTask {
 
 		for (NotificationSetting setting: loader.load()) {
 			try {
-				PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(setting.getTenant().getId());
+				PrimaryOrg primaryOrg = TenantFinder.getInstance().findPrimaryOrg(setting.getTenant().getId());
 				SecurityFilter settingUserFilter = new UserSecurityFilter(setting.getUser());
 
 				logger.info(LogUtils.prepare("Generating event schedule report for Tenant [$0], Name [$1], User [$2]",	setting.getTenant(), setting.getName(), setting.getUser().getUserID()));

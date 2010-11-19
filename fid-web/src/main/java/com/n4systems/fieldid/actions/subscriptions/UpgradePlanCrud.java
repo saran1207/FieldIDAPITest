@@ -24,7 +24,7 @@ import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
@@ -175,7 +175,6 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 
 
 	private void updateCachedValues() {
-		TenantCache.getInstance().reloadPrimaryOrg(getTenantId());
 		TenantLimitService.getInstance().updateAll();
 	}
 

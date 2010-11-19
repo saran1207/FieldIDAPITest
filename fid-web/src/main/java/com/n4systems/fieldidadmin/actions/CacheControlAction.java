@@ -1,17 +1,9 @@
 package com.n4systems.fieldidadmin.actions;
 
 
-import java.util.Collection;
-import java.util.TreeSet;
-
-import org.apache.log4j.Logger;
-
-import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.services.Initializer;
 import com.n4systems.services.SetupDataLastModUpdateServiceInitializer;
-import com.n4systems.services.TenantCache;
-import com.n4systems.services.TenantCachePreloader;
+import org.apache.log4j.Logger;
 
 
 
@@ -22,12 +14,7 @@ public class CacheControlAction extends AbstractAdminAction {
 	public String doShow() {
 		return SUCCESS;
 	}
-	
-	public String doReloadTenantCache() {
-		reload(new TenantCachePreloader(), "Tenant Cache");
-		return doShow();
-	}
-	
+
 	public String doReloadSetupDataLastModDatesCache() {
 		reload(new SetupDataLastModUpdateServiceInitializer(), "Setup Data Mod Date Cache");
 		return doShow();
@@ -44,11 +31,4 @@ public class CacheControlAction extends AbstractAdminAction {
 		}
 	}
 	
-	public Collection<Tenant> getTenants() {
-		return new TreeSet<Tenant>(TenantCache.getInstance().findAllTenants());
-	}
-	
-	public Collection<PrimaryOrg> getPrimaryOrgs() {
-		return new TreeSet<PrimaryOrg>(TenantCache.getInstance().findAllPrimaryOrgs());
-	}
 }

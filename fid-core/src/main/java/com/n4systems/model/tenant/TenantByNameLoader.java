@@ -23,8 +23,9 @@ public class TenantByNameLoader extends Loader<Tenant> {
 		return tenant;
 	}
 
-	public void setTenantName(String tenantName) {
+	public TenantByNameLoader setTenantName(String tenantName) {
 		this.tenantName = (tenantName != null) ? tenantName.toLowerCase() : null;
+        return this;
 	}
 	
 }

@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.n4systems.ejb.ConfigManager;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ListHelper;
@@ -81,7 +81,7 @@ public class ConfigurationAction extends AbstractAdminAction {
 	}
 	
 	public Map<Long, String> getTenants() {
-		return ListHelper.longListableToMap(TenantCache.getInstance().findAllTenants());
+		return ListHelper.longListableToMap(TenantFinder.getInstance().findAllTenants());
 	}
 
 	public String getKey() {

@@ -97,7 +97,7 @@ import com.n4systems.servicedto.converts.LocationServiceToContainerConverter;
 import com.n4systems.servicedto.converts.ProductServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.SetupDataLastModUpdateService;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -822,12 +822,12 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private SystemSecurityGuard createSecurityGuard(long tenantId) {
-		SystemSecurityGuard systemSecurityGuard = new SerializableSecurityGuard(getTenantCache().findTenant(tenantId));
+		SystemSecurityGuard systemSecurityGuard = new SerializableSecurityGuard(getTenantFinder().findTenant(tenantId));
 		return systemSecurityGuard;
 	}
 
 	private void updateShopOrderOnProduct(Asset asset, ProductServiceDTO productDTO, OrderManager orderManager, Long tenantId) {
-		PrimaryOrg primaryOrg = getTenantCache().findPrimaryOrg(tenantId);
+		PrimaryOrg primaryOrg = getTenantFinder().findPrimaryOrg(tenantId);
 		
 		// Update the shop order only if the tenant does not have Integration and the order number has changed
 		// Integration tenants cannot add/update order information from mobile
@@ -909,8 +909,8 @@ public class DataServiceImpl implements DataService {
 		try {
 			UserManager userManager = ServiceLocator.getUser();
 
-			Tenant tenant = getTenantCache().findTenant(requestInformation.getTenantId());
-			PrimaryOrg primaryOrg = getTenantCache().findPrimaryOrg(tenant.getId());
+			Tenant tenant = getTenantFinder().findTenant(requestInformation.getTenantId());
+			PrimaryOrg primaryOrg = getTenantFinder().findPrimaryOrg(tenant.getId());
 			
 			// if the userid is unique, we can assume it does not exist
 			if (userManager.userIdIsUnique(requestInformation.getTenantId(), userId)) {
@@ -952,7 +952,7 @@ public class DataServiceImpl implements DataService {
 		LegacyFindOrCreateDivisionOrgHandler divisionHandler = new LegacyFindOrCreateDivisionOrgHandler(pm);
 
 		
-		PrimaryOrg primaryOrg = getTenantCache().findPrimaryOrg(requestInformation.getTenantId());
+		PrimaryOrg primaryOrg = getTenantFinder().findPrimaryOrg(requestInformation.getTenantId());
 		try {
 
 			CustomerOrg customerOrg = customerHandler.findOrCreate(primaryOrg, customer.getName(), customer.getCode());
@@ -976,8 +976,8 @@ public class DataServiceImpl implements DataService {
 		return response;
 	}
 	
-	protected TenantCache getTenantCache() {
-		return TenantCache.getInstance();
+	protected TenantFinder getTenantFinder() {
+		return TenantFinder.getInstance();
 	}
 
 	private void testTransactionId( RequestInformation requestInformation ) throws ServiceException {

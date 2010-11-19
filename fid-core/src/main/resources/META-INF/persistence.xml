@@ -20,9 +20,9 @@
 			<property name="hibernate.generate_statistics" value="true" />
 			-->
 			
-			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
-			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
-			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.TenantCacheUpdateListener"/>
+			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
+			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
+			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
 			
 			<!--
 			<property name="hibernate.cache.use_second_level_cache" value="true" />

@@ -7,7 +7,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
-import com.n4systems.services.TenantCache;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
@@ -25,7 +25,7 @@ public class InternalOrgByNameLoader extends SecurityFilteredLoader<InternalOrg>
 		 * to see if the name matches the primary org, if not, then we'll query for our 
 		 * secondaries
 		 */
-		PrimaryOrg primaryOrg = TenantCache.getInstance().findPrimaryOrg(filter.getTenantId());
+		PrimaryOrg primaryOrg = TenantFinder.getInstance().findPrimaryOrg(filter.getTenantId());
 		
 		if (primaryOrg.getName().equals(name)) {
 			return primaryOrg;
