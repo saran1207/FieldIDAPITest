@@ -2,7 +2,7 @@ ${action.setPageType('asset', 'edit')!}
 <#if !removalSummary.validToDelete() >
 	<div class="formErrors error" >
 		<@s.text name="error.assetusedonamasterevent">
-			<@s.param>${removalSummary.assetUsedInMasterInpsection}</@s.param>
+			<@s.param>${removalSummary.assetUsedInMasterEvent}</@s.param>
 		</@s.text>
 	</div>
 </#if>
