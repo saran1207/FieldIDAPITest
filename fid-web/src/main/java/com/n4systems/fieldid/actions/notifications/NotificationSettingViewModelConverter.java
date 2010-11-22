@@ -70,7 +70,9 @@ public class NotificationSettingViewModelConverter {
 		
 		model.setFrequency(SimpleFrequency.valueOf(view.getFrequency()));
 		if(view.getIncludeUpcoming())
-			model.setUpcomingReport(new UpcomingEventReport(RelativeTime.valueOf(view.getPeriodStart()), RelativeTime.valueOf(view.getPeriodEnd()), view.getIncludeUpcoming()));
+			model.setUpcomingReport(new UpcomingEventReport(RelativeTime.valueOf(view.getPeriodStart()), RelativeTime.valueOf(view.getPeriodEnd()), true));
+		else
+			model.setUpcomingReport(new UpcomingEventReport(RelativeTime.TODAY, RelativeTime.TOMORROW, false));
 		model.setIncludeOverdue(view.getIncludeOverdue());
 		model.setIncludeFailed(view.getIncludeFailed());
 		model.setSendBlankReport(view.getSendBlankReport());
