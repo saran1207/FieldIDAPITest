@@ -495,8 +495,7 @@
 }
 
 .infoSet .fieldHolder input[type="checkbox"]{
-	width: auto;
-	margin-top:8px;
+	 vertical-align: bottom;
 }
 
 .crudForm .infoSet .commentsLabel, .crudForm .infoSet .commentContainer label{
@@ -511,3 +510,27 @@
 	float:left;
  	clear: left;
 }
+
+p.treeHeading{
+	display: block;
+}
+
+.fieldHolder label.checkBoxLabel{
+	position: relative;
+	display: block;
+	text-align: left;	
+	width: auto;
+	padding: 10px 0 0 0;
+	line-height: 100%;
+	top: -2px;
+}
+
+.fieldHolder label.checkBoxLabel input{
+	 width: 13px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    *overflow: hidden;
+	}

@@ -51,3 +51,7 @@
 .stepContent .infoSet .fieldHolder{
 	width: 320px;
 }
+
+.stepContent .fieldHolder label.checkBoxLabel{
+	padding-top: 2px;
+}

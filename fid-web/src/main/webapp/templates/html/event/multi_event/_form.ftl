@@ -61,7 +61,7 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.printable"/></label>
 		<span class="fieldHolder">	
-			<@s.checkbox name="printable" theme="simple"/> <@s.text name="label.printableexplination"/>
+			<label class="checkBoxLabel"><@s.checkbox name="printable" theme="simple"/> <@s.text name="label.printableexplination"/></label>
 		</span>
 	</div>
 	
