@@ -13,12 +13,13 @@
 		</ul>
 	</#assign>
 	
-	<#if assetType.hasManufactureCertificate>
-		$('saveAndPrintAction').show();
-	<#else>
-		$('saveAndPrintAction').hide();
-	</#if>
-	
+	if ($('saveAndPrintAction') != undefined){ 
+		<#if assetType.hasManufactureCertificate>
+			$('saveAndPrintAction').show();
+		<#else>
+			$('saveAndPrintAction').hide();
+		</#if>
+	}
 	updatingAssetComplete();
 	replacedAssetType( "${options}" )
 	
