@@ -138,7 +138,7 @@ public class ManageEventTypesPage extends FieldIDPage {
 	}
 
 	public void clickDelete() {
-		selenium.click("//input[@name='delete']");
+		selenium.click("//a[contains(.,'Delete')]");
 		waitForPageToLoad();
 	}
 	

@@ -23,7 +23,7 @@ public class AssetPage {
 	private String identifiedLabelLocator = "xpath=//LABEL[contains(text(),'Identified')]";
 	private String identifiedByLabelLocator = "xpath=//LABEL[contains(text(),'Identified By')]";
 	private String modifiedByLabelLocator = "xpath=//LABEL[contains(text(),'Modified By')]";
-	private String customerInformationHeaderLocator = "xpath=//H2[contains(text(),'Customer Information') or contains(text(),'Site Information')]";
+	private String customerInformationHeaderLocator = "xpath=//H2[contains(text(),'Owner')]";
 	private String organizationLabelLocator = "xpath=//LABEL[contains(text(),'Organization')]";
 	private String customerNameLabelLocator = "xpath=//LABEL[contains(text(),'Customer Name') or contains(text(),'Job Site Name')]";
 	private String divisionLabelLocator = "xpath=//LABEL[contains(text(),'Division')]";

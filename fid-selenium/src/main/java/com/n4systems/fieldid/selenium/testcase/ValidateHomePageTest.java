@@ -6,7 +6,6 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.assets.page.AssetSearch;
 import com.n4systems.fieldid.selenium.home.page.Home;
-import com.n4systems.fieldid.selenium.home.page.InstructionalVideos;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.pages.schedules.Schedules;
 import com.n4systems.fieldid.selenium.reporting.page.Reporting;
@@ -18,7 +17,6 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 	Schedules schedule;
 	Reporting reporting;
 	AssetSearch assets;
-	InstructionalVideos videos;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -27,7 +25,6 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		schedule = new Schedules(selenium, misc);
 		reporting = new Reporting(selenium, misc);
 		assets = new AssetSearch(selenium, misc);
-		videos = new InstructionalVideos(selenium, misc);
 	}
 	
 	@Test
@@ -99,7 +96,7 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		assets.assertAssetsPage();
 	}
 	
-	@Test
+/*	@Test
 	public void validate_going_to_instruction_videos_from_home_page() throws Exception {
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");
@@ -108,7 +105,6 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		startAsCompany(company);
 		login.signInAllTheWayToHome(username, password);
 		home.clickMoreForInstructionalVideos();
-		videos.assertInstructionalVideosPageHeader();
-	}
+	}*/
 	
 }

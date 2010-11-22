@@ -19,7 +19,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 	private String masterSerialToMergeInto;
 	private Asset asset;
 	private AssetPage assetPage;
-	private static String NEW_SERIAL = "newSerial";
+	private static String NEW_SERIAL = "newSerial" + MiscDriver.getRandomString(10);
 	private static String NEW_PURCHASE_ORDER = "newPurchaseOrder";
 	private static String NEW_STATUS = "Out of Service";
 	private static String NEW_ASSET_TYPE = "Bridge";
@@ -55,7 +55,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 		assetPage.clickSave();
 
-		assertTrue("Serial successfully edited", assetPage.getSerialNumber().equals(NEW_SERIAL));
+		assertTrue("Serial unsuccessfully edited", assetPage.getSerialNumber().equals(NEW_SERIAL));
 
 		AssetPage masterAssetPage = page.search(NEW_SERIAL);
 		masterAssetPage.clickEditTab().clickDelete();

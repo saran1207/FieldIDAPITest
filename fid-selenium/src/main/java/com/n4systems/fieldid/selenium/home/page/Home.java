@@ -19,17 +19,13 @@ public class Home {
 	private String jobsAssignedToMeTableLocator = "xpath=" + jobsAssignedToMeTableXPathLocator;
 	private String noOpenJobsAssignedToYouCellLocator = jobsAssignedToMeTableLocator + "/tbody/tr[1]/td[contains(text(),'You currently have no open jobs assigned to you.')]";
 	private String quickLinksLocator = "xpath=//div[@id='quickLinks']";
-	private String gotoSectionHeaderLocator = quickLinksLocator + "/h3[contains(text(),'Go To:')]";
+	private String gotoSectionHeaderLocator = quickLinksLocator + "/h2[contains(text(),'You might want to...')]";
 	private String quickLinksListLocator = "xpath=//div[@id='quickLinks']/UL[@id='quickLinkList']";
-	private String viewUpcomingEventsLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View upcoming Events')]";
-	private String viewEventHistoryForAssetLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'View the Event History for an Asset')]";
-	private String findAAssetLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Find an Asset')]";
-	private String helpVideosLocator = "//div[@id='helpVideos']";
-	private String instructionalVideosHeaderLocator = helpVideosLocator + "/h3[contains(text(),'Instructional Videos')]";
-	private String instructionalVideosMoreLinkLocator = instructionalVideosHeaderLocator + "/span/a[contains(text(),'more')]";
-	private String fieldIDIntroVideoLinkLocator = "xpath=//div[@id='introVideo']/a[@id='showVideo' and contains(text(),'Watch')]";
-	private String quickSetupWizardLinkLocator = quickLinksListLocator + "/li/a[contains(text(),'Setup Wizard')]";
-	private String jobsSectionHeaderLocator = "xpath=//div[@id='jobs']/h3[contains(text(),'Jobs')]";
+	private String viewUpcomingEventsLinkLocator = "//div[@id='dashboardShortCuts']/div[@id='quickLinks']/ul/li[1]/a";
+	private String viewEventHistoryForAssetLinkLocator = "//div[@id='dashboardShortCuts']/div[@id='quickLinks']/ul/li[2]/a";
+	private String findAAssetLinkLocator = "//div[@id='dashboardShortCuts']/div[@id='quickLinks']/ul/li[3]/a";
+	private String quickSetupWizardLinkLocator = "//div[@id='dashboardShortCuts']/div[@id='quickLinks']/ul/li[6]/a";
+	private String jobsSectionHeaderLocator = "xpath=//div[@id='jobs']/h2[contains(text(),'Jobs')]";
 
 	public Home(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
@@ -76,16 +72,7 @@ public class Home {
 	public void assertHomePage() {
 		assertHomePageHeader();
 		assertGoToSection();
-		assertInstructionalVideosSection();
 	}
-
-	private void assertInstructionalVideosSection() {
-		assertTrue("Could not find the header for the 'Instructional Videos' section", selenium.isElementPresent(instructionalVideosHeaderLocator));
-		assertTrue("Could not find a 'more' link to the Instructional Videos section", selenium.isElementPresent(instructionalVideosMoreLinkLocator));
-		assertTrue("Could not find the 'New to Field ID?' intro video link", selenium.isElementPresent(fieldIDIntroVideoLinkLocator));
-	}
-
-	
 
 	public void assertGoToSection() {
 		assertTrue("Could not find the header for the 'Go To:' section", selenium.isElementPresent(gotoSectionHeaderLocator));
@@ -119,12 +106,6 @@ public class Home {
 	public void clickFindAnAsset() {
 		assertGoToSection();
 		selenium.click(findAAssetLinkLocator);
-		misc.waitForPageToLoadAndCheckForOopsPage();
-	}
-
-	public void clickMoreForInstructionalVideos() {
-		assertGoToSection();
-		selenium.click(instructionalVideosMoreLinkLocator);
 		misc.waitForPageToLoadAndCheckForOopsPage();
 	}
 
