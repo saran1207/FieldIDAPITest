@@ -96,15 +96,15 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 		assets.assertAssetsPage();
 	}
 	
-/*	@Test
-	public void validate_going_to_instruction_videos_from_home_page() throws Exception {
+	@Test
+	public void validate_following_a_link_in_learning_center() throws Exception {
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");
 		String company = getStringProperty("companyid");
 
 		startAsCompany(company);
 		login.signInAllTheWayToHome(username, password);
-		home.clickMoreForInstructionalVideos();
-	}*/
+		home.clickFirstLearningCenterLink();
+	}
 	
 }

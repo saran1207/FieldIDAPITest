@@ -20,13 +20,13 @@ public class Home {
 	private String noOpenJobsAssignedToYouCellLocator = jobsAssignedToMeTableLocator + "/tbody/tr[1]/td[contains(text(),'You currently have no open jobs assigned to you.')]";
 	private String quickLinksLocator = "xpath=//div[@id='quickLinks']";
 	private String gotoSectionHeaderLocator = quickLinksLocator + "/h2[contains(text(),'You might want to...')]";
-	private String quickLinksListLocator = "xpath=//div[@id='quickLinks']/UL[@id='quickLinkList']";
 	private String viewUpcomingEventsLinkLocator = "//div[@id='dashboardShortCuts']/div[@id='quickLinks']/ul/li[1]/a";
 	private String viewEventHistoryForAssetLinkLocator = "//div[@id='dashboardShortCuts']/div[@id='quickLinks']/ul/li[2]/a";
 	private String findAAssetLinkLocator = "//div[@id='dashboardShortCuts']/div[@id='quickLinks']/ul/li[3]/a";
 	private String quickSetupWizardLinkLocator = "//div[@id='dashboardShortCuts']/div[@id='quickLinks']/ul/li[6]/a";
 	private String jobsSectionHeaderLocator = "xpath=//div[@id='jobs']/h2[contains(text(),'Jobs')]";
-
+	private String learningCenterLinkLocator = "xpath=//div[@id='dashboardShortCuts']/div[@id='helpVideos']/ul/li[1]/a";
+	
 	public Home(FieldIdSelenium selenium, MiscDriver misc) {
 		this.selenium = selenium;
 		this.misc = misc;
@@ -124,5 +124,15 @@ public class Home {
 		} else {
 			fail("Could not find a 'view' link to the Job with title '" + jobTitle + "'");
 		}
+	}
+
+	public void clickFirstLearningCenterLink() {
+		if(selenium.isElementPresent(learningCenterLinkLocator)) {
+			selenium.click(learningCenterLinkLocator);
+		} else {
+			fail("Could not find a link in LearningCenter");
+		}
+
+		
 	}
 }
