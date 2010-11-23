@@ -5,12 +5,12 @@ import com.n4systems.fieldid.selenium.datatypes.EventBook;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.setup.ManageEventBooksPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.Event;
+import com.n4systems.model.Tenant;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
 
@@ -23,52 +23,60 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
 
     @Override
     public void setupScenario(Scenario scenario) {
+        Tenant seaFit = scenario.tenant("seafit");
+
         scenario.anEventBook()
-                .forTenant(scenario.tenant("seafit"))
+                .forTenant(seaFit)
                 .withName("The Open Book")
                 .withOwner(scenario.primaryOrgFor("seafit"))
                 .open(true).build();
 
         scenario.anEventBook()
-                .forTenant(scenario.tenant("seafit"))
+                .forTenant(seaFit)
                 .withName("The Closed Book")
                 .withOwner(scenario.primaryOrgFor("seafit"))
                 .open(false).build();
+
+        Event event = scenario.aSimpleEvent().build();
+
+        scenario.anEventBook()
+                .forTenant(seaFit)
+                .withName("The In Use Book")
+                .withOwner(scenario.primaryOrgFor("seafit"))
+                .withEvents(event)
+                .open(true).build();
     }
 
     @Test
-    @Ignore
     public void test_view_all_event_books() throws Exception {
         assertEquals("View All", manageEventBooksPage.getCurrentTab());
     }
 
     @Test
-    @Ignore
-    public void test_open_and_close_book() throws Exception {
-        String status1 = manageEventBooksPage.getFirstListItemStatus();
-        String status2, status3;
+    public void test_open_a_closed_book() throws Exception {
+        String status = manageEventBooksPage.getStatusForBookNamed("The Open Book");
 
-        if(status1.equals("Open")) {
-            manageEventBooksPage.clickFirstListItemClose();
-            status2 = manageEventBooksPage.getFirstListItemStatus();
-            manageEventBooksPage.verifyEventBookSaved();
-            manageEventBooksPage.clickFirstListItemOpen();
-            status3 = manageEventBooksPage.getFirstListItemStatus();
-        }else {
-            manageEventBooksPage.clickFirstListItemOpen();
-            status2 = manageEventBooksPage.getFirstListItemStatus();
-            manageEventBooksPage.verifyEventBookSaved();
-            manageEventBooksPage.clickFirstListItemClose();
-            status3 = manageEventBooksPage.getFirstListItemStatus();
-        }
+        assertEquals("Open", status);
 
+        manageEventBooksPage.clickCloseForBookNamed("The Open Book");
         manageEventBooksPage.verifyEventBookSaved();
-        assertFalse(status1.equals(status2));
-        assertEquals(status1, status3);
+
+        assertEquals("Closed", manageEventBooksPage.getStatusForBookNamed("The Closed Book"));
     }
 
     @Test
-    @Ignore
+    public void test_close_an_open_book() throws Exception {
+        String status = manageEventBooksPage.getStatusForBookNamed("The Closed Book");
+
+        assertEquals("Closed", status);
+
+        manageEventBooksPage.clickOpenForBookNamed("The Closed Book");
+        manageEventBooksPage.verifyEventBookSaved();
+
+        assertEquals("Open", manageEventBooksPage.getStatusForBookNamed("The Closed Book"));
+    }
+
+    @Test
     public void test_add_with_error() throws Exception {
         manageEventBooksPage.clickAddTab();
         assertEquals("Add", manageEventBooksPage.getCurrentTab());
@@ -77,9 +85,8 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
     }
 
     @Test
-    @Ignore
     public void test_add_and_delete_book() throws Exception {
-        deleteIfExists("Test Selenium");
+        assertFalse(manageEventBooksPage.eventBookExists("Test Selenium"));
 
         manageEventBooksPage.clickAddTab();
         assertEquals("Add", manageEventBooksPage.getCurrentTab());
@@ -89,27 +96,19 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
         manageEventBooksPage.verifyEventBookSaved();
         assertEquals("View All", manageEventBooksPage.getCurrentTab());
 
-        deleteIfExists("Test Selenium");
-    }
-
-    private void deleteIfExists(String bookName) {
-        if(manageEventBooksPage.listItemExists(bookName)) {
-            manageEventBooksPage.clickDelete(bookName);
-            manageEventBooksPage.verifyEventBookDeleted();
-        }
+        assertTrue(manageEventBooksPage.eventBookExists("Test Selenium"));
+        manageEventBooksPage.clickDeleteForBookNamed("Test Selenium");
+        assertFalse(manageEventBooksPage.eventBookExists("Test Selenium"));
     }
 
     @Test
-    @Ignore
     public void test_delete_book_in_use() throws Exception {
-        String bookName = manageEventBooksPage.getFirstListItemName();
-        manageEventBooksPage.clickDelete(bookName);
+        manageEventBooksPage.clickDeleteForBookNamed("The In Use Book");
         assertEquals("Event Book can not be deleted. It is still in use.", manageEventBooksPage.getAlert().trim());
     }
 
     private EventBook getTestEventBook() {
-        return new EventBook("Test Selenium", new Owner("N4 Systems", "CP"), true);
+        return new EventBook("Test Selenium", new Owner("seafit", null), true);
     }
-
 
 }

@@ -133,6 +133,7 @@ public class TenantCleaner {
 
     private <T> void removeAllForTenant(EntityManager em, Class<T> entityToRemove, long tenantId, Callback<T> callback) {
         Query query = em.createQuery("from " + entityToRemove.getName() + " where tenant.id = " + tenantId);
+        System.out.println("Removing all: " + entityToRemove);
         List<T> results = query.getResultList();
         for (T entity : results) {
             callback.callback(entity);

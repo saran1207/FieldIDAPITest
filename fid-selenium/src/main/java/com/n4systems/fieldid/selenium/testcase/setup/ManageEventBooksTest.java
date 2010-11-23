@@ -72,8 +72,8 @@ public class ManageEventBooksTest extends FieldIDTestCase {
 	}
 
 	private void deleteIfExists(String bookName) {
-		if(manageEventBooksPage.listItemExists(bookName)) {
-			manageEventBooksPage.clickDelete(bookName);
+		if(manageEventBooksPage.eventBookExists(bookName)) {
+			manageEventBooksPage.clickDeleteForBookNamed(bookName);
 			manageEventBooksPage.verifyEventBookDeleted();
 		}
 	}
@@ -81,7 +81,7 @@ public class ManageEventBooksTest extends FieldIDTestCase {
 	@Test
 	public void test_delete_book_in_use() throws Exception {
 		String bookName = manageEventBooksPage.getFirstListItemName();
-		manageEventBooksPage.clickDelete(bookName);
+		manageEventBooksPage.clickDeleteForBookNamed(bookName);
 		assertEquals("Event Book can not be deleted. It is still in use.", manageEventBooksPage.getAlert().trim());
 	}
 

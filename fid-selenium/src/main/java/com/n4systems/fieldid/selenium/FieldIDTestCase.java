@@ -33,13 +33,13 @@ public abstract class FieldIDTestCase {
     private static final int SHUTDOWN_ATTEMPTS = 5;
     private static final int SHUTDOWN_RETRY_INTERVAL_MS = 5000;
 
-	private String host = System.getProperty("selenium-server", "dev.n4systems.net");
-	private int port = Integer.parseInt(System.getProperty("selenium-port", "4444"));
+	private String host = System.getProperty("selenium-server", "localhost");
+	private int port = Integer.parseInt(System.getProperty("selenium-port", "7777"));
 //	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
 	private String browser = System.getProperty("fieldid-browser", "*firefox");
 	private String protocol = System.getProperty("fieldid-protocol", "http");
 	private String initCompany = System.getProperty("fieldid-companyid", "n4");
-	private String domain = System.getProperty("fieldid-domain", "dev.n4systems.net");
+	private String domain = System.getProperty("fieldid-domain", "neil.n4systems.net");
 	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
 	private String actionDelay = System.getProperty("fieldid-delay", null);
 
@@ -268,35 +268,36 @@ public abstract class FieldIDTestCase {
 
     @Before
     public void doDatabaseSetup() throws Exception {
-        //TODO: Uncomment when persistence.xml / autodetection / classpath stuff is figured out
-//        new PersistenceTemplate(new PersistenceCallback() {
-//            @Override
-//            public void doInTransaction(Transaction transaction) throws Exception {
-//                for (long tenantId : TEST_TENANT_IDS) {
-//                    TenantCleaner cleaner = new TenantCleaner();
-//                    cleaner.cleanTenant(transaction.getEntityManager(), tenantId);
-//                }
-//            }
-//        }).execute();
-//
-//        new PersistenceTemplate(new PersistenceCallback() {
-//            @Override
-//            public void doInTransaction(Transaction transaction) throws Exception {
-//                for (long tenantId : TEST_TENANT_IDS) {
-//                    MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantId);
-//                    dataSetup.setupMinimalData();
-//                    dataSetup.createTestAssetTypes(TEST_ASSET_TYPES);
-//
-//                }
-//            }
-//        }).execute();
-//
-//        new PersistenceTemplate(new PersistenceCallback() {
-//            @Override
-//            public void doInTransaction(Transaction transaction) throws Exception {
-//                setupScenario(new Scenario(transaction));
-//            }
-//        }).execute();
+        new PersistenceTemplate(new PersistenceCallback() {
+            @Override
+            public void doInTransaction(Transaction transaction) throws Exception {
+                for (long tenantId : TEST_TENANT_IDS) {
+                    TenantCleaner cleaner = new TenantCleaner();
+                    cleaner.cleanTenant(transaction.getEntityManager(), tenantId);
+                }
+            }
+        }).execute();
+
+        new PersistenceTemplate(new PersistenceCallback() {
+            @Override
+            public void doInTransaction(Transaction transaction) throws Exception {
+                for (long tenantId : TEST_TENANT_IDS) {
+                    MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantId);
+                    dataSetup.setupMinimalData();
+                    dataSetup.createTestAssetTypes(TEST_ASSET_TYPES);
+
+                }
+            }
+        }).execute();
+
+        new PersistenceTemplate(new PersistenceCallback() {
+            @Override
+            public void doInTransaction(Transaction transaction) throws Exception {
+                Scenario scenario = new Scenario(transaction);
+                setupScenario(scenario);
+                scenario.persistAllBuiltObjects();
+            }
+        }).execute();
     }
 
     public void setupScenario(Scenario scenario) {}

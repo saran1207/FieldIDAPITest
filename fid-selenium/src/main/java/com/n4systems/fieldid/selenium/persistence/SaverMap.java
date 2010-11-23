@@ -1,0 +1,52 @@
+package com.n4systems.fieldid.selenium.persistence;
+
+import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetSaver;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.assettype.AssetTypeSaver;
+import com.n4systems.model.event.EventGroupSaver;
+import com.n4systems.model.event.SimpleEventSaver;
+import com.n4systems.model.eventbook.EventBookSaver;
+import com.n4systems.model.eventtype.EventTypeSaver;
+import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
+import com.n4systems.model.safetynetwork.OrgConnection;
+import com.n4systems.model.safetynetwork.OrgConnectionSaver;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserSaver;
+import com.n4systems.persistence.savers.Saver;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+
+import java.util.HashMap;
+
+public class SaverMap {
+
+    private static HashMap<Class<? extends Saveable>, Saver> classToSaverMap = new HashMap<Class<? extends Saveable>, Saver>();
+
+    static {
+        classToSaverMap.put(Asset.class, new SeleniumAssetSaver());
+        classToSaverMap.put(AssetType.class, new AssetTypeSaver());
+        classToSaverMap.put(Event.class, new SimpleEventSaver());
+        classToSaverMap.put(User.class, new UserSaver());
+        classToSaverMap.put(EventType.class, new EventTypeSaver());
+        classToSaverMap.put(EventGroup.class, new EventGroupSaver());
+        classToSaverMap.put(EventBook.class, new EventBookSaver());
+        classToSaverMap.put(EventTypeGroup.class, new EventTypeGroupSaver());
+        classToSaverMap.put(OrgConnection.class, new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID)));
+    }
+
+    public static Saver makeSaverFor(Class<? extends Saveable> clazz) {
+        Saver saver = classToSaverMap.get(clazz);
+        if (saver == null) {
+            throw new RuntimeException("No saver registered for class: " + clazz + "! Do so in SaverMap");
+        }
+        return saver;
+    }
+
+}

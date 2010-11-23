@@ -28,7 +28,7 @@ public class PathHandler {
 	private static final String PROPERTIES_FILE_EXT = ".properties";
 	private static final String PACKAGE_PROPERTIES_FILE = "package.properties";
 	private static final String SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + REPORT_FILE_EXT;
-	private static final String ASSET_REPORT_FILE_NAME = "asset" + REPORT_FILE_EXT;
+	private static final String ASSET_REPORT_FILE_NAME = "product" + REPORT_FILE_EXT;
 	private static final String CHART_FILE_NAME = "proof_test_chart.png";
 	private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
 	private static final String LOGO_IMAGE_FILE_NAME = "logo.gif";

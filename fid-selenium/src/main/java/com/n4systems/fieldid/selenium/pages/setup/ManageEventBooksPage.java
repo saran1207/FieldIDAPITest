@@ -43,6 +43,25 @@ public class ManageEventBooksPage extends FieldIDPage {
 		return selenium.getText("//table[@class='list']//tr[2]//td[4]/span");
 	}
 
+    public String getStatusForBookNamed(String bookName) {
+        return selenium.getText("//table[@class='list']//td[1]//a[.='"+bookName+"']/../../td[4]/span");
+    }
+
+    public void clickCloseForBookNamed(String bookName) {
+        selenium.click("//table[@class='list']//td[1]//a[.='"+bookName+"']/../../td[5]//a[contains(text(),'Close')]");
+        waitForAjax();
+    }
+
+    public void clickOpenForBookNamed(String bookName) {
+        selenium.click("//table[@class='list']//td[1]//a[.='"+bookName+"']/../../td[5]//a[contains(text(),'Open')]");
+        waitForAjax();
+    }
+
+    public void clickDeleteForBookNamed(String bookName) {
+        selenium.click("//table[@class='list']//td[1]//a[.='"+bookName+"']/../../td[5]//a[contains(text(),'Delete')]");
+        waitForAjax();
+    }
+
 	public void clickFirstListItemClose() {
 		selenium.click("//table[@class='list']//tr[2]//td[5]//a[contains(text(),'Close')]");
 		waitForAjax();
@@ -97,8 +116,8 @@ public class ManageEventBooksPage extends FieldIDPage {
 		assertEquals("Event Book deleted.", actionMessages.get(0).trim());		
 	}
 	
-	public boolean listItemExists(String book) {
+	public boolean eventBookExists(String book) {
 		return selenium.isElementPresent("//table[@class='list']//tr//td/a[text()='" + book + "']");
 	}
-	
+
 }
