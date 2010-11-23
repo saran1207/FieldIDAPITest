@@ -9,14 +9,11 @@ ${action.setPageType('event_type_group', 'edit')!}
 			<@s.url id="cancelUrl" action="eventTypeGroup" uniqueID="${uniqueID}"/>
 			<@s.submit key="label.save"/>
 			&nbsp;<@s.text name="label.or"/>
-			<a href="javascript:void(0);" onclick="return redirect('${cancelUrl}'); return false;"/><@s.text name="label.cancel"/></a>	
-			&nbsp;<@s.text name="label.or"/>&nbsp;
-			<a href="#" onclick="if( confirm( '${action.getText( 'warning.deleteeventtypegroup' )}' ) ) { redirect( '${deleteUrl}' ); } return false;" ><@s.text name="label.delete"/></a>
+			<a href="javascript:void(0);" onclick="return redirect('${cancelUrl}'); return false;"/><@s.text name="label.cancel"/></a>
+			<#if action.canBeDeleted(group)>
+				&nbsp;<@s.text name="label.or"/>&nbsp;
+				<a href="#" onclick="if( confirm( '${action.getText( 'warning.deleteeventtypegroup' )}' ) ) { redirect( '${deleteUrl}' ); } return false;" ><@s.text name="label.delete"/></a>
+			</#if>
 		</div>
 	</@s.form>
 </div>
-<script type="text/javascript">
-	<#if !action.canBeDeleted(group)>
-		$$("input[name='delete']").first().disable();
-	</#if>
-</script>

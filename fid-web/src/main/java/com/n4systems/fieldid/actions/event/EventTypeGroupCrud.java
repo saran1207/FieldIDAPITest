@@ -17,6 +17,7 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -138,12 +139,13 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	}
 	
 	public boolean canBeDeleted(EventTypeGroup group) {
+		QueryBuilder<Long> eventTypeCountQuery = new QueryBuilder<Long>(EventType.class, new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true));
+		eventTypeCountQuery.setCountSelect().addSimpleWhere("group", group);
+		
 		if (group.equals(eventTypeGroup)) {
-			return getEventTypes().isEmpty();
+			return getEventTypes().isEmpty() && persistenceManager.findCount(eventTypeCountQuery) == 0;
 		} else {
-			QueryBuilder<Long> eventTypeCountQuery = new QueryBuilder<Long>(EventType.class, getSecurityFilter());
-			eventTypeCountQuery.setCountSelect().addSimpleWhere("group", group);
-			return (persistenceManager.findCount(eventTypeCountQuery) == 0);
+			return (  persistenceManager.findCount(eventTypeCountQuery) == 0);
 		}
 	}
 	
