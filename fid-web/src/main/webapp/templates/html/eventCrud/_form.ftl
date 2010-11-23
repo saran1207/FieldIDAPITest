@@ -43,7 +43,9 @@
 	<#if event.id?exists && action.isParentAsset() >
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.result"/></label>
-			<@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" />
+			<span class="fieldHolder">
+				<@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" />
+			</span>
 		</div>
 	</#if>
 	
