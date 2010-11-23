@@ -30,11 +30,11 @@ public class TenantBuilder extends BaseBuilder<Tenant> {
 	}
 	
 	public TenantBuilder named(String name) {
-		return new TenantBuilder(name, this.linkedTenants, id);
+		return new TenantBuilder(name, this.linkedTenants, getId());
 	}
 	
 	public TenantBuilder linkedTo(Tenant...linkedTenants) {
-		return new TenantBuilder(name, Arrays.asList(linkedTenants), id);
+		return new TenantBuilder(name, Arrays.asList(linkedTenants), getId());
 	}
 	
 	public TenantBuilder withId(Long id) {
@@ -43,7 +43,7 @@ public class TenantBuilder extends BaseBuilder<Tenant> {
 	
 	@Override
 	public Tenant createObject() {
-		return new Tenant(id, name);
+		return new Tenant(getId(), name);
 	}
 
 }

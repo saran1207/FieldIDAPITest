@@ -12,21 +12,23 @@ abstract public class EntityWithTenantBuilder<K extends EntityWithTenant> extend
 	
 	public EntityWithTenantBuilder(Long id, Date created, Date modified, User modifiedBy, Tenant tenant) {
 		super(id, created, modified, modifiedBy);
-		this.tenant = tenant;
-	}
-	
-	public EntityWithTenantBuilder() {
-		this(generateNewId(), new Date(), new Date(), UserBuilder.aUser().build(), TenantBuilder.aTenant().build());
-		
-		// make sure the modified by user's tenant is in sync with ours
-		modifiedBy.setTenant(tenant);
+        this.tenant = tenant;
 	}
 
+    public EntityWithTenantBuilder() {
+		this(generateNewId(), new Date(), new Date(), UserBuilder.aUser().build(), TenantBuilder.aTenant().build());
+    }
+	
 	@Override
 	protected K assignAbstractFields(K model) {
 		super.assignAbstractFields(model);
 		model.setTenant(tenant);
 		return model;
 	}
-	
+
+    public EntityWithTenantBuilder<K> withTenant(Tenant tenant) {
+        this.tenant = tenant;
+        return this;
+    }
+
 }

@@ -30,7 +30,7 @@ public class SubAssetBuilder extends BaseBuilder<SubAsset> {
 	@Override
 	public SubAsset createObject() {
 		SubAsset subAsset = new SubAsset();
-		subAsset.setId(id);
+		subAsset.setId(getId());
 		subAsset.setAsset(asset);
 		subAsset.setMasterAsset(masterAsset);
 		

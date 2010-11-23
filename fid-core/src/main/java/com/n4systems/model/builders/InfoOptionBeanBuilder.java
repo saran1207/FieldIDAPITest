@@ -42,7 +42,7 @@ public class InfoOptionBeanBuilder extends BaseBuilder<InfoOptionBean> {
 		option.setName(name);
 		option.setInfoField(field);
 		option.setStaticData(!dynamicOption);
-		option.setUniqueID(id);
+		option.setUniqueID(getId());
 		
 		return option;
 	}

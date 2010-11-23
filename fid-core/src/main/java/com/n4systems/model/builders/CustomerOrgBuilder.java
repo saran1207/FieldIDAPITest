@@ -34,21 +34,21 @@ public class CustomerOrgBuilder extends BaseBuilder<CustomerOrg>{
 	}
 	
 	public CustomerOrgBuilder withName(String name) {
-		return new CustomerOrgBuilder(id, name, code, parent);
+		return new CustomerOrgBuilder(getId(), name, code, parent);
 	}
 	
 	public CustomerOrgBuilder withCode(String code) {
-		return new CustomerOrgBuilder(id, name, code, parent);
+		return new CustomerOrgBuilder(getId(), name, code, parent);
 	}
 	
 	public CustomerOrgBuilder withParent(InternalOrg parent) {
-		return new CustomerOrgBuilder(id, name, code, parent);		
+		return new CustomerOrgBuilder(getId(), name, code, parent);		
 	}
 
     @Override
 	public CustomerOrg createObject() {
 		CustomerOrg customerOrg = new CustomerOrg();
-		customerOrg.setId(id);
+		customerOrg.setId(getId());
 		customerOrg.setName(name);
 		customerOrg.setCode(code);
 		customerOrg.setTenant(parent.getTenant());

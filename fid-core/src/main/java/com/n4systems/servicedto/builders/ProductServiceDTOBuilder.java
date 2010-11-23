@@ -10,7 +10,7 @@ public class ProductServiceDTOBuilder extends BaseBuilder<ProductServiceDTO> {
 	@Override
 	public ProductServiceDTO createObject() {
 		ProductServiceDTO productServiceDTO = new ProductServiceDTO();
-		productServiceDTO.setId(id);
+		productServiceDTO.setId(getId());
 		productServiceDTO.setAssignedUserId(assignedUserId);
 		
 		return productServiceDTO;

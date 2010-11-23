@@ -44,7 +44,7 @@ public class UserBuilder extends BaseBuilder<User> {
 	public static UserBuilder aDivisionUser() {
 		return new UserBuilder(OrgBuilder.aDivisionOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null);
 	}
-	
+
 	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, boolean administratorAccess, String emailAddress, boolean systemAccess, String password, boolean resetPasswordKey, Long id) {
 		super(id);
 		this.owner = owner;
@@ -58,53 +58,53 @@ public class UserBuilder extends BaseBuilder<User> {
 		this.resetPasswordKey = resetPasswordKey;
 	}
 	
-	public UserBuilder withOwner(BaseOrg baseOrg) {
-		return new UserBuilder(baseOrg, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
+	public UserBuilder withOwner(BaseOrg owner) {
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, getId()));
 	}
 	
 	public UserBuilder withFirstName(String firstName) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, getId()));
 	}
 	
 	public UserBuilder withLastName(String lastName) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, getId()));
 	}
 	
 	public UserBuilder withUserId(String userId) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, getId()));
 	}
 	
 	public UserBuilder withAdministratorAccess() {
-		return new UserBuilder(owner, firstName, lastName, userId, true, emailAddress, false, password, resetPasswordKey, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, true, emailAddress, false, password, resetPasswordKey, getId()));
 	}
 	
 	public UserBuilder withEmailAddress(String emailAddress) {
-		return  new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, getId()));
 	}
 	
 	public UserBuilder withNoPassword() {
-		return  new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, null, resetPasswordKey, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, null, resetPasswordKey, getId()));
 	}
 	public UserBuilder withPassword(String password) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, resetPasswordKey, getId()));
 	}
 
 	public UserBuilder withResetPasswordKey() {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, true, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, true, getId()));
 	}
 
 	public UserBuilder withOutResetPasswordKey() {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, false, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, false, getId()));
 	}
 	
 	public UserBuilder withId(long id) {
-		return new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, false, id);
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, administratorAccess, emailAddress, false, password, false, id));
 	}
 	
 	@Override
 	public User createObject() {
 		User user = new User();
-		user.setId(id);
+		user.setId(getId());
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setUserID(userId);
@@ -134,9 +134,4 @@ public class UserBuilder extends BaseBuilder<User> {
 		return user;
 	}
 
-	
-
-	
-
-	
 }

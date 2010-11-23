@@ -67,7 +67,7 @@ public class AddressInfoBuilder extends BaseBuilder<AddressInfo> {
 	@Override
 	public AddressInfo createObject() {
 		AddressInfo address = new AddressInfo();
-		address.setId(id);
+		address.setId(getId());
 		address.setStreetAddress(streetAddress);
 		address.setCity(city);
 		address.setState(state);

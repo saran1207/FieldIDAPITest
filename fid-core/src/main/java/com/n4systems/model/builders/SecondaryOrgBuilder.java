@@ -22,15 +22,15 @@ public class SecondaryOrgBuilder extends BaseBuilder<SecondaryOrg> {
 	}
 	
 	public SecondaryOrgBuilder withName(String name) {
-		return new SecondaryOrgBuilder(id, name, primaryOrg);
+		return new SecondaryOrgBuilder(getId(), name, primaryOrg);
 	}
 	
 	public SecondaryOrgBuilder onTenant(Tenant tenant) {
-		return new SecondaryOrgBuilder(id, name, primaryOrg);		
+		return new SecondaryOrgBuilder(getId(), name, primaryOrg);
 	}
 	
 	public SecondaryOrgBuilder withPrimaryOrg(PrimaryOrg primaryOrg) {
-		return new SecondaryOrgBuilder(id, name, primaryOrg);				
+		return new SecondaryOrgBuilder(getId(), name, primaryOrg);
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class SecondaryOrgBuilder extends BaseBuilder<SecondaryOrg> {
 		secondaryOrg.setName(name);
 		secondaryOrg.setTenant(primaryOrg.getTenant());
 		secondaryOrg.setPrimaryOrg(primaryOrg);
-		secondaryOrg.setId(id);
+		secondaryOrg.setId(getId());
 		
 		return secondaryOrg;
 	}

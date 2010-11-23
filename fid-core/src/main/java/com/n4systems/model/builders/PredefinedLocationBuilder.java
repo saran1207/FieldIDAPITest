@@ -35,7 +35,7 @@ public class PredefinedLocationBuilder extends BaseBuilder<PredefinedLocation> {
 	@Override
 	public PredefinedLocation createObject() {
 		PredefinedLocation predefinedLocation = new PredefinedLocation(tenant, parent);
-		predefinedLocation.setId(id);
+		predefinedLocation.setId(getId());
 		predefinedLocation.setName(name);
 		return predefinedLocation;
 	}

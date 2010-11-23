@@ -30,17 +30,17 @@ public class DivisionOrgBuilder extends BaseBuilder<DivisionOrg> {
 	}
 	
 	public DivisionOrgBuilder withName(String name) {
-		return new DivisionOrgBuilder(id, name, customerOrg);
+		return new DivisionOrgBuilder(getId(), name, customerOrg);
 	}
 	
 	public DivisionOrgBuilder withCustomerOrg(CustomerOrg customerOrg) {
-		return new DivisionOrgBuilder(id, name, customerOrg);
+		return new DivisionOrgBuilder(getId(), name, customerOrg);
 	}
 	
 	@Override
 	public DivisionOrg createObject() {
 		DivisionOrg divisionOrg = new DivisionOrg();
-		divisionOrg.setId(id);
+		divisionOrg.setId(getId());
 		divisionOrg.setName(name);
 		divisionOrg.setParent(customerOrg);
 		divisionOrg.setTenant(customerOrg.getTenant());

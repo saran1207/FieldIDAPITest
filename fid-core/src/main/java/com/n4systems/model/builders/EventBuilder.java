@@ -1,5 +1,6 @@
 package com.n4systems.model.builders;
 
+import static com.n4systems.model.builders.EventGroupBuilder.anEventGroup;
 import static com.n4systems.model.builders.EventTypeBuilder.*;
 import static com.n4systems.model.builders.AssetBuilder.*;
 import static com.n4systems.model.builders.OrgBuilder.*;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Asset;
@@ -34,12 +36,18 @@ public class EventBuilder extends BaseBuilder<Event> {
 	private final BaseOrg owner;
 	private final User performedBy;
 	private final Tenant tenant;
-		
-	public static EventBuilder anEvent() {
-		return new EventBuilder(anEventType().build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build());
+
+    private final EventGroup group;
+
+    public static EventBuilder anEvent() {
+        return anEvent(anEventType(), anEventGroup());
+    }
+
+	public static EventBuilder anEvent(EventTypeBuilder eventTypeBuilder, EventGroupBuilder eventGroupBuilder) {
+		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), eventGroupBuilder.build());
 	}
-	
-	private EventBuilder(EventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant) {
+
+	protected EventBuilder(EventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventGroup group) {
 		this.eventType = type;
 		this.asset = asset;
 		this.subEvents = subEvents;
@@ -50,52 +58,57 @@ public class EventBuilder extends BaseBuilder<Event> {
 		this.owner = owner;
 		this.performedBy = performedBy;
 		this.tenant = tenant;
+        this.group = group;
 	}
 	
 	public EventBuilder ofType(EventType type) {
-		return new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
 	}
 	
 	public EventBuilder on(Asset asset) {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
 	}
 	
 	public EventBuilder withSubEvents(List<SubEvent> subEvents) {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
 	}
 
 	public EventBuilder performedOn(Date datePerformed) {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
 	}
 	
 	public EventBuilder withAttachment(List<FileAttachment> attachments) {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
 	}
 
 	public EventBuilder withNoAssignedToUpdate() {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, null, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, null, owner, performedBy, tenant, group));
 	}
 
 	public EventBuilder withAssignedToUpdate(AssignedToUpdate assignToUpdate) {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignToUpdate, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignToUpdate, owner, performedBy, tenant, group));
 	}
 	
 	public EventBuilder withOwner(BaseOrg owner) {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
 	}
 	
 	public EventBuilder withPerformedBy(User performedBy) {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
 	}
 	
 	public EventBuilder withTenant(Tenant tenant) {
-		return new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant);
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
+	}
+
+	public EventBuilder withGroup(EventGroup group) {
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, group));
 	}
 
 	@Override
 	public Event createObject() {
 		Event event = new Event();
-		event.setId(id);
+		event.setId(getId());
 		event.setType(eventType);
 		event.setAsset(asset);
 		event.setSubEvents(subEvents);
@@ -106,6 +119,7 @@ public class EventBuilder extends BaseBuilder<Event> {
 		event.setOwner(owner);
 		event.setPerformedBy(performedBy);
 		event.setTenant(tenant);
+        event.setGroup(group);
 		return event;
 	}
 

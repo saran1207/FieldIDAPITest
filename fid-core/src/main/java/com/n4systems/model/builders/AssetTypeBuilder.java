@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.Tenant;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.exceptions.Defect;
@@ -27,16 +28,17 @@ public class AssetTypeBuilder extends BaseBuilder<AssetType> {
     private final Collection<InfoFieldBean> infoFields;
     private final Set<AssetType> subTypes;
 	private final EventType[] eventTypes;
+    private final Tenant tenant;
 	
 	public static AssetTypeBuilder anAssetType() {
 		return new AssetTypeBuilder();
 	}
 	
 	public AssetTypeBuilder() {
-		this("*", "warnings", "instructions", "http://www.example.com", "no description", true, new ArrayList<InfoFieldBean>(), new HashSet<AssetType>(), null, new EventType[]{});
+		this("*", "warnings", "instructions", "http://www.example.com", "no description", true, new ArrayList<InfoFieldBean>(), new HashSet<AssetType>(), null, new EventType[]{}, null);
 	}
 	
-	private AssetTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<AssetType> subTypes, AssetTypeGroup group, EventType[] eventTypes) {
+	private AssetTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<AssetType> subTypes, AssetTypeGroup group, EventType[] eventTypes, Tenant tenant) {
 		this.name = name;
 		this.warnings = warnings;
 		this.instructions = instructions;
@@ -47,38 +49,44 @@ public class AssetTypeBuilder extends BaseBuilder<AssetType> {
 		this.subTypes = subTypes;
 		this.group = group;
 		this.eventTypes = eventTypes;
+        this.tenant = tenant;
 	}
 
 	public AssetTypeBuilder named(String name) {
-		return new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes);
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant));
 	}
 	
 	public AssetTypeBuilder withFields(InfoFieldBean...infoFields) {
-		return new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, Arrays.asList(infoFields), subTypes, group, eventTypes);
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, Arrays.asList(infoFields), subTypes, group, eventTypes, tenant));
 	}
 	
 	public AssetTypeBuilder withSubTypes(AssetType...subTypes) {
-		return new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, new HashSet<AssetType>(Arrays.asList(subTypes)), group, eventTypes);
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, new HashSet<AssetType>(Arrays.asList(subTypes)), group, eventTypes, tenant));
 	}
 	
 	public AssetTypeBuilder withGroup(AssetTypeGroup group) {
-		return new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes);
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant));
 	}
 	
 	public AssetTypeBuilder withEventTypes(EventType... eventTypes) {
-		return new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes);
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant));
+	}
+
+	public AssetTypeBuilder forTenant(Tenant tenant) {
+		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant));
 	}
 	
 	@Override
 	public AssetType createObject() {
 		AssetType assetType = new AssetType();
-		assetType.setId(id);
+		assetType.setId(getId());
 		assetType.setName(name);
 		assetType.setWarnings(warnings);
 		assetType.setInstructions(instructions);
 		assetType.setHasManufactureCertificate(manufactureCertificate);
 		assetType.setDescriptionTemplate(descriptionTemplate);
 		assetType.setCautionUrl(cautionsURL);
+        assetType.setTenant(tenant);
 		
 		for (InfoFieldBean infoField : infoFields) {
 			infoField.setAssetInfo(assetType);

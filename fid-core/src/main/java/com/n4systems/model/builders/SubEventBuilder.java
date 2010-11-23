@@ -34,7 +34,7 @@ public class SubEventBuilder extends BaseBuilder<SubEvent> {
 	@Override
 	public SubEvent createObject() {
 		SubEvent subEvent = new SubEvent();
-		subEvent.setId(id);
+		subEvent.setId(getId());
 		subEvent.setName(name);
 		subEvent.setType(eventType);
 		subEvent.setAsset(asset);

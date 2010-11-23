@@ -53,7 +53,7 @@ public class JobBuilder extends BaseBuilder<Project> {
 	@Override
 	public Project createObject() {
 		Project job = new Project();
-		job.setId(id);
+		job.setId(getId());
 		job.setTenant(tenantOrganization);
 		job.setOpen(true);
 		job.setName(title);

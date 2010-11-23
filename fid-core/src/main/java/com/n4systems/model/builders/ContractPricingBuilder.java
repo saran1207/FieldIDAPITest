@@ -43,7 +43,7 @@ public class ContractPricingBuilder extends BaseBuilder<ContractPricing> {
 	public ContractPricing createObject() {
 		ContractPricing contract = new ContractPricing();
 		
-		contract.setId(id);
+		contract.setId(getId());
 		contract.setExternalId(externalId);
 		contract.setSignUpPackage(signUpPackage);
 		contract.setPaymentOption(paymentOption);

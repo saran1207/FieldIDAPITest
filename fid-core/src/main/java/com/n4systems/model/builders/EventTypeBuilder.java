@@ -4,6 +4,7 @@ import static com.n4systems.model.builders.EventTypeGroupBuilder.*;
 
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.user.User;
 
 public class EventTypeBuilder extends EntityWithTenantBuilder<EventType> {
 	private final String name;
@@ -14,8 +15,15 @@ public class EventTypeBuilder extends EntityWithTenantBuilder<EventType> {
 	private final long formVersion;
 	private final EventTypeGroup group;
 	private final boolean assignedToAvailable;
-	
-	
+
+    public static EventTypeBuilder anEventType() {
+		return anEventType(anEventTypeGroup());
+	}
+
+    public static EventTypeBuilder anEventType(EventTypeGroupBuilder eventTypeGroupBuilder) {
+		return new EventTypeBuilder("some Name", "some description", true, false, false, EventType.DEFAULT_FORM_VERSION, eventTypeGroupBuilder.build(), false);
+	}
+
 	private EventTypeBuilder(String name, String description, boolean printable, boolean retired, boolean master, long formVersion, EventTypeGroup group, boolean assignedToAvailable) {
 		this.name = name;
 		this.description = description;
@@ -27,45 +35,41 @@ public class EventTypeBuilder extends EntityWithTenantBuilder<EventType> {
 		this.assignedToAvailable = assignedToAvailable;
 	}
 	
-	public static EventTypeBuilder anEventType() {
-		return new EventTypeBuilder("some Name", "some description", true, false, false, EventType.DEFAULT_FORM_VERSION, anEventTypeGroup().build(), false);
-	}
-	
 	public EventTypeBuilder named(String name) {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable));
 	}
 	
 	public EventTypeBuilder withDescription(String description) {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable));
 	}
 	
 	public EventTypeBuilder withPrintable(boolean printable) {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable));
 	}
 	
 	public EventTypeBuilder withRetired(boolean retired) {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable));
 	}
 	
 	public EventTypeBuilder withMaster(boolean master) {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable));
 	}
 	
 	public EventTypeBuilder withFormVersion(long formVersion) {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable));
 	}
 	
 	public EventTypeBuilder withGroup(EventTypeGroup group) {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, assignedToAvailable));
 	}
 	
 	public EventTypeBuilder withAssignedToAvailable() {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, true);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, true));
 	}
 	
 
 	public EventTypeBuilder withAssignedToNotAvailable() {
-		return new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, false);
+		return makeBuilder(new EventTypeBuilder(name, description, printable, retired, master, formVersion, group, false));
 	}
 	
 	@Override

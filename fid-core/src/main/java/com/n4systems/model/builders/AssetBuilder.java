@@ -107,7 +107,7 @@ public class AssetBuilder extends BaseBuilder<Asset> {
 	@Override
 	public Asset createObject() {
 		Asset asset = generate();
-		asset.setId(id);
+		asset.setId(getId());
 		populateMasterAssetInSubAssets(asset);
 		asset.setSubAssets(new ArrayList<SubAsset>(Arrays.asList(subAssets)));
 		return asset;

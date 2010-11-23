@@ -459,6 +459,10 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	public Long getNetworkId() {
 		return networkId;
 	}
+
+    public void setNetworkId(Long networkId) {
+        this.networkId = networkId;
+    }
 	
 	public boolean linkedAssetHasChanged() {
 		return (last_linked_id != linked_id);

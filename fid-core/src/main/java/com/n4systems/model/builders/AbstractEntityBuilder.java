@@ -1,10 +1,9 @@
 package com.n4systems.model.builders;
 
-import java.util.Date;
-
-
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.user.User;
+
+import java.util.Date;
 
 public abstract class AbstractEntityBuilder<K extends AbstractEntity> extends BaseEntityBuilder<K> {
 	protected Date created;
@@ -18,10 +17,6 @@ public abstract class AbstractEntityBuilder<K extends AbstractEntity> extends Ba
 		this.modifiedBy = modifiedBy;
 	}
 	
-	public AbstractEntityBuilder() {
-		this(generateNewId(), new Date(), new Date(), UserBuilder.aUser().build());
-	}
-
 	@Override
 	protected K assignAbstractFields(K model) {
 		super.assignAbstractFields(model);
@@ -30,5 +25,9 @@ public abstract class AbstractEntityBuilder<K extends AbstractEntity> extends Ba
 		model.setModifiedBy(modifiedBy);
 		return model;
 	}
+
+    public void modifiedBy(User user) {
+        this.modifiedBy = user;
+    }
 	
 }

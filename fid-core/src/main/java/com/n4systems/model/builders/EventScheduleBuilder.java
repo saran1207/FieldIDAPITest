@@ -64,7 +64,7 @@ public class EventScheduleBuilder extends BaseBuilder<EventSchedule> {
 	public EventSchedule createObject() {
 		EventSchedule eventSchedule = new EventSchedule(asset, eventType);
 		eventSchedule.setNextDate(nextDate);
-		eventSchedule.setId(id);
+		eventSchedule.setId(getId());
 		eventSchedule.setProject(job);
 		
 		if (event != null) {

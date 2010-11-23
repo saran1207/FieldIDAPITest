@@ -50,19 +50,12 @@ public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 		InfoFieldBean field =  new InfoFieldBean();
 		field.setName(name);
 		field.setFieldType(type);
-		field.setUniqueID(id);
+		field.setUniqueID(getId());
 		field.setRequired(required);
 		field.setUnfilteredInfoOptions(options);
 		field.associateOptions();
 		
 		return field;
 	}
-
-	
-
-	
-
-
-	
 
 }

@@ -94,7 +94,7 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	}
 	
 	private void build(BaseOrg org) {
-		org.setId(id);
+		org.setId(getId());
 		org.setName(name);
 		org.setAddressInfo(addressInfo);
 	}
