@@ -14,11 +14,16 @@ import javax.persistence.Table;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.security.SecurityDefiner;
 
 @Entity
 @Table(name="masterevents_subevents")
 public class SubEventRelation {
-
+	
+	public static final SecurityDefiner createSecurityDefiner() {
+		return new SecurityDefiner("masterEvent.tenant.id", "masterEvent.asset.owner", null, "masterEvent.state");
+	}
+	
 	@SuppressWarnings("unused")
 	@Id
 	@Column(name="subevents_event_id", nullable=false, insertable=false, updatable=false, unique=true)
