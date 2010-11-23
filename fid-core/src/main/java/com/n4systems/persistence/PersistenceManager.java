@@ -22,14 +22,17 @@ import com.n4systems.util.ExceptionHelper;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class PersistenceManager {
-	private static final String PERSISTENCE_UNIT = "fieldid";
+    public static final String PRODUCTION_PERSISTENCE_UNIT = "fieldid";
+	public static final String TESTING_PERSISTENCE_UNIT = "fieldid-test";
+    public static String persistenceUnit = PRODUCTION_PERSISTENCE_UNIT;
+
 	private static Logger logger = Logger.getLogger(PersistenceManager.class);
 	private static EntityManagerFactory entityManagerFactory;
 
 	private static synchronized EntityManagerFactory getEntityManagerFactory() {
 		if (entityManagerFactory == null) {
 			logger.debug("Creating EntityManagerFactory");
-			entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT);
+			entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit);
 		}
 		return entityManagerFactory;
 	}

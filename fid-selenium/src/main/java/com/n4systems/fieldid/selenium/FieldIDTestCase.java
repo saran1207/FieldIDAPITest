@@ -10,6 +10,7 @@ import com.n4systems.fieldid.selenium.persistence.PersistenceCallback;
 import com.n4systems.fieldid.selenium.persistence.PersistenceTemplate;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.TenantCleaner;
+import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.thoughtworks.selenium.SeleniumException;
 import org.junit.After;
@@ -268,6 +269,9 @@ public abstract class FieldIDTestCase {
 
     @Before
     public void doDatabaseSetup() throws Exception {
+
+        PersistenceManager.persistenceUnit = PersistenceManager.TESTING_PERSISTENCE_UNIT;
+
         new PersistenceTemplate(new PersistenceCallback() {
             @Override
             public void doInTransaction(Transaction transaction) throws Exception {
