@@ -49,8 +49,8 @@ public class Scenario {
     public Scenario(Transaction trans) {
         this.trans = trans;
 
-        defaultTenant = tenant("seafit");
-        defaultPrimaryOrg = primaryOrgFor("seafit");
+        defaultTenant = tenant("test1");
+        defaultPrimaryOrg = primaryOrgFor("test1");
         defaultUser = aUser().build();
     }
 

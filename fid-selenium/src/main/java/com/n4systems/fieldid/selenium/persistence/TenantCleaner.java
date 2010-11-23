@@ -14,6 +14,8 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.catalog.Catalog;
+import com.n4systems.model.eula.EulaAcceptance;
+import com.n4systems.model.messages.Message;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -44,6 +46,7 @@ public class TenantCleaner {
         removeAllForTenant(em, Catalog.class, tenantId);
         removeAllForTenant(em, Event.class, tenantId);
         removeAllForTenant(em, AssociatedEventType.class, tenantId);
+        removeAllForTenant(em, EventSchedule.class, tenantId);
         removeAllForTenant(em, EventType.class, tenantId);
 
         List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
@@ -75,6 +78,8 @@ public class TenantCleaner {
         removeAllForTenant(em, FileAttachment.class, tenantId);
         removeAllForTenant(em, UserRequest.class, tenantId);
         removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
+        removeAllForTenant(em, Message.class, tenantId);
+        removeAllForTenant(em, EulaAcceptance.class, tenantId);
         removeAllForTenant(em, User.class, tenantId);
 
         removeAllExternalOrgsPointingToThisTenant(em, tenantId);
@@ -158,6 +163,7 @@ public class TenantCleaner {
     }
 
     private void safeRemoveAsset(EntityManager em, Asset asset) {
+        System.out.println("Removing asset id: " + asset.getId());
         Query scheduleQuery =  em.createQuery("from " + EventSchedule.class.getName() + " where asset.id = " + asset.getId());
         Query attachmentQuery = em.createQuery("from " + AssetAttachment.class.getName() + " where asset.id = " + asset.getId());
         Query inspQuery = em.createQuery("from " + Event.class.getName() + " where asset.id = " + asset.getId());

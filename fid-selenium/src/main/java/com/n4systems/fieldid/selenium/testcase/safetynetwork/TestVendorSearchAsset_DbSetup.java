@@ -22,34 +22,34 @@ public class TestVendorSearchAsset_DbSetup extends PageNavigatingTestCase<Vendor
     @Override
     public void setupScenario(Scenario scenario) {
         scenario.aSafetyNetworkConnection()
-                .from(scenario.primaryOrgFor("seafit"))
-                .to(scenario.primaryOrgFor("iti"))
+                .from(scenario.primaryOrgFor("test1"))
+                .to(scenario.primaryOrgFor("test2"))
                 .type(TypedOrgConnection.ConnectionType.VENDOR)
                 .build();
 
         AssetBuilder builder = scenario.anAsset()
-                .forTenant(scenario.tenant("iti"))
-                .ofType(scenario.assetType("iti", TEST_ASSET_TYPE_1));
+                .forTenant(scenario.tenant("test2"))
+                .ofType(scenario.assetType("test2", TEST_ASSET_TYPE_1));
 
         builder.published(true)
-                .withOwner(scenario.customerOrg("iti", "seafit"))
+                .withOwner(scenario.customerOrg("test2", "test1"))
                 .withSerialNumber(PREASSIGNED_ASSET)
                 .build();
 
         builder.published(true)
-                .withOwner(scenario.primaryOrgFor("iti"))
+                .withOwner(scenario.primaryOrgFor("test2"))
                 .withSerialNumber(NON_PREASSIGNED_ASSET)
                 .build();
 
         builder.published(false)
-                .withOwner(scenario.customerOrg("iti", "seafit"))
+                .withOwner(scenario.customerOrg("test2", "test1"))
                 .withSerialNumber(NON_PUBLISHED_ASSET)
                 .build();
     }
 
 	@Override
 	protected VendorConnectionProfilePage navigateToPage() {
-		return startAsCompany("seafit").login().clickSafetyNetworkLink().selectVendorConnection("iti");
+		return startAsCompany("test1").login().clickSafetyNetworkLink().selectVendorConnection("test2");
 	}
 
 	@Test

@@ -261,7 +261,7 @@ public abstract class FieldIDTestCase {
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 
-    public static final long[] TEST_TENANT_IDS = { 15511513L, 15511654L };
+    public static final long[] TEST_TENANT_IDS = { 15511682L, 15511683L };
 
     public static final String TEST_ASSET_TYPE_1 = "TestType1";
     public static final String TEST_ASSET_TYPE_2 = "TestType2";
