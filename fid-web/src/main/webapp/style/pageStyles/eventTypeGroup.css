@@ -14,15 +14,19 @@
 .printOutSelection li {
 	list-style-position: none inside none;
 	text-align: center;
-	display: inline;
-	float: left;
+	display: -moz-inline-box;
+	display: inline-block;
 	width: 200px;
 	height: 200px;
 	margin: 8px;
 	border: 1px solid #D0DAFD;
 	padding: 5px;
 	overflow: hidden;
+	vertical-align:top
 }
+
+* html .printOutSelection li { display:inline; }  /* for IE 6 */
+* + html .printOutSelection li { display:inline; }  /* for IE 7 */
 
 .printOutDetails {
 	text-align: center;
