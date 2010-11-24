@@ -9,31 +9,32 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.ejb.legacy.LegacyAssetType;
-import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
-import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.ejb.entity.PopulatorLogBean;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.ProofTestHandler;
+import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.PopulatorLog;
+import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.ejb.legacy.impl.PopulatorLogManager;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueAssetException;
+import com.n4systems.exceptions.SubAssetUniquenessException;
+import com.n4systems.exceptions.TooManySerialsException;
 import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
+import com.n4systems.model.EventType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -42,6 +43,8 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.FuzzyResolver;
 import com.n4systems.util.StringUtils;
@@ -120,11 +123,13 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
 		
+		int maxSerials = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SERIALS_PER_PROOFTEST);
+		if (fileData.getSerialNumbers().size() > maxSerials){
+			throw new TooManySerialsException("Max number of serials exceeded.  Size was " + fileData.getSerialNumbers().size() + " max allowed is " + maxSerials);
+		}
+		
 		Tenant tenant = performedBy.getTenant();
 		PrimaryOrg primaryOrg = performedBy.getOwner().getPrimaryOrg();
-		
-		
-		
 		
 		// sending a null customer will lookup assets with no customer (rather then assets for any customer)
 		Long customerId = (customer != null) ? customer.getId() : null;
