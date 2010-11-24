@@ -1,6 +1,8 @@
 package com.n4systems.persistence;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,6 +27,7 @@ public class PersistenceManager {
     public static final String PRODUCTION_PERSISTENCE_UNIT = "fieldid";
 	public static final String TESTING_PERSISTENCE_UNIT = "fieldid-test";
     public static String persistenceUnit = PRODUCTION_PERSISTENCE_UNIT;
+    public static Map<String, String> testProperties = new HashMap<String, String>();
 
 	private static Logger logger = Logger.getLogger(PersistenceManager.class);
 	private static EntityManagerFactory entityManagerFactory;
@@ -32,7 +35,7 @@ public class PersistenceManager {
 	private static synchronized EntityManagerFactory getEntityManagerFactory() {
 		if (entityManagerFactory == null) {
 			logger.debug("Creating EntityManagerFactory");
-			entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit);
+			entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit, testProperties);
 		}
 		return entityManagerFactory;
 	}

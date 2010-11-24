@@ -1,48 +1,36 @@
 package com.n4systems.fieldid.selenium;
 
-import static org.junit.Assert.fail;
-
-import java.io.InputStream;
-import java.util.Properties;
-
+import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
+import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.persistence.MinimalTenantDataSetup;
 import com.n4systems.fieldid.selenium.persistence.PersistenceCallback;
 import com.n4systems.fieldid.selenium.persistence.PersistenceTemplate;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.TenantCleaner;
+import com.n4systems.fieldid.selenium.testcase.assets.IdentifyAssetsTest;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.SeleniumException;
 import org.junit.After;
 import org.junit.Before;
 
-import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
-import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
-import com.n4systems.fieldid.selenium.pages.LoginPage;
-import com.n4systems.fieldid.selenium.testcase.assets.IdentifyAssetsTest;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.Selenium;
+import java.io.InputStream;
+import java.util.Properties;
+
+import static org.junit.Assert.fail;
 
 public abstract class FieldIDTestCase {
 	
 	public static boolean runningInsideSuite = false;
 
-	// NOTE: if you have -Dfieldid-companyid=unirope tests will default to unirope
-	// Otherwise, they will default to fieldid.
-
     private static final int SHUTDOWN_ATTEMPTS = 5;
     private static final int SHUTDOWN_RETRY_INTERVAL_MS = 5000;
 
-	private String host = System.getProperty("selenium-server", "dev.n4systems.net");
-	private int port = Integer.parseInt(System.getProperty("selenium-port", "4444"));
-//	private String snapshots = System.getProperty("selenium-snapshots", "C:\\selenium-snapshots\\");
-	private String browser = System.getProperty("fieldid-browser", "*firefox");
-	private String protocol = System.getProperty("fieldid-protocol", "http");
-	private String initCompany = System.getProperty("fieldid-companyid", "n4");
-	private String domain = System.getProperty("fieldid-domain", "dev.n4systems.net");
-	private String contextRoot = System.getProperty("fieldid-contextroot", "/fieldid/");
-	private String actionDelay = System.getProperty("fieldid-delay", null);
+    private SeleniumConfig seleniumConfig;
 
     public static FieldIdSelenium selenium;
 	protected MiscDriver misc;
@@ -51,26 +39,31 @@ public abstract class FieldIDTestCase {
 	public SystemDriverFactory systemDriverFactory;
 	
 	protected void setInitialCompany(String initCompany) {
-		this.initCompany = initCompany;
+		this.seleniumConfig.setInitCompany(initCompany);
 	}
 	
 	@Before
-	public final void setupSelenium() {
+	public final void setupSelenium() throws Exception {
 		loadProperties();
-		if (!runningInsideSuite) {
-			selenium = createWebBrowser();
-		} else if (selenium == null) {
+		if (!runningInsideSuite || selenium == null) {
 			selenium = createWebBrowser();
 		}
 		openBaseSite(selenium);
 		setWebBrowserSpeed();
 		initializeSystemDrivers();
 	}
+
+    private SeleniumConfig getSeleniumConfig() {
+        if (seleniumConfig == null) {
+            seleniumConfig = new SeleniumConfigLoader().loadConfig();
+        }
+        return seleniumConfig;
+    }
 	
 	private void openBaseSite(Selenium selenium) {
 		String url = generateUrl();
 		selenium.open(url);
-		selenium.open(contextRoot);
+		selenium.open(getSeleniumConfig().getTestServerContextRoot());
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 		selenium.windowMaximize();
 	}
@@ -130,8 +123,8 @@ public abstract class FieldIDTestCase {
 	 * no delay.
 	 */
 	private void setWebBrowserSpeed() {
-		if(actionDelay != null) {
-			selenium.setSpeed(actionDelay);
+		if(getSeleniumConfig().getActionDelay() != null) {
+			selenium.setSpeed(getSeleniumConfig().getActionDelay());
 		}
 	}
 
@@ -167,11 +160,6 @@ public abstract class FieldIDTestCase {
 		}
 	}
 	
-	public static void main(String[] args) {
-		InputStream resourceAsStream = new IdentifyAssetsTest().getClass().getResourceAsStream("/ValidateHomePageTest.properties");
-		System.out.println(resourceAsStream);
-	}
-	
 	/**
 	 * If a System property exists, this will return the System property.
 	 * Otherwise it will check to see if the property was loaded by the
@@ -201,7 +189,12 @@ public abstract class FieldIDTestCase {
 	 */
 	protected FieldIdSelenium createWebBrowser() {
 		String url = generateUrl();
-		FieldIdSelenium selenium = new DefaultFieldIdSelenium(new DefaultSelenium(host, port, browser, url));
+		FieldIdSelenium selenium = new DefaultFieldIdSelenium(
+                new DefaultSelenium(
+                        seleniumConfig.getSeleniumServerHost(),
+                        seleniumConfig.getSeleniumServerPort(),
+                        seleniumConfig.getSeleniumBrowser(),
+                        url));
 		
 		selenium.start();
 		selenium.setTimeout(MiscDriver.DEFAULT_TIMEOUT);
@@ -210,7 +203,9 @@ public abstract class FieldIDTestCase {
 	}
 	
 	protected String generateUrl() {
-		return protocol + "://" + initCompany + "." + domain;
+		return getSeleniumConfig().getProtocol()
+                + "://" + getSeleniumConfig().getInitCompany()
+                + "." + getSeleniumConfig().getTestServerDomain();
 	}
 	
 	/**
@@ -220,7 +215,7 @@ public abstract class FieldIDTestCase {
 	 * @return
 	 */
 	public String getFieldIDDomain() {
-		return domain;
+		return getSeleniumConfig().getTestServerDomain();
 	}
 
 	/**
@@ -230,7 +225,7 @@ public abstract class FieldIDTestCase {
 	 * @return
 	 */
 	public String getFieldIDProtocol() {
-		return protocol;
+		return getSeleniumConfig().getProtocol();
 	}
 
 	/**
@@ -241,7 +236,7 @@ public abstract class FieldIDTestCase {
 	 * @return
 	 */
 	public String getFieldIDContextRoot() {
-		return contextRoot;
+		return getSeleniumConfig().getTestServerContextRoot();
 	}
 
 	protected LoginPage startAsCompany(String companyID) {
@@ -271,6 +266,9 @@ public abstract class FieldIDTestCase {
     public void doDatabaseSetup() throws Exception {
 
         PersistenceManager.persistenceUnit = PersistenceManager.TESTING_PERSISTENCE_UNIT;
+        PersistenceManager.testProperties.put("hibernate.connection.url", getSeleniumConfig().getDatabaseUrl());
+        PersistenceManager.testProperties.put("hibernate.connection.username", getSeleniumConfig().getDatabaseUser());
+        PersistenceManager.testProperties.put("hibernate.connection.password", getSeleniumConfig().getDatabasePassword());
 
         new PersistenceTemplate(new PersistenceCallback() {
             @Override
