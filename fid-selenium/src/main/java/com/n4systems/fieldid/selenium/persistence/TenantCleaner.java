@@ -72,7 +72,7 @@ public class TenantCleaner {
 
         cleanNullTenantEntities(em, AddAssetHistory.class);
 
-        removeAll(em, ActiveSession.class);
+        removeAllActiveSessionsForTenant(em, tenantId);
         cleanUpOrgConnections(em, tenantId);
         cleanUpSignUpReferrals(em, tenantId);
         removeAllForTenant(em, EventGroup.class, tenantId);
@@ -93,6 +93,11 @@ public class TenantCleaner {
         removeAllForTenant(em, DivisionOrg.class, tenantId);
         removeAllForTenant(em, SecondaryOrg.class, tenantId);
         removeAllForTenant(em, PrimaryOrg.class, tenantId);
+    }
+
+    private void removeAllActiveSessionsForTenant(EntityManager em, long tenantId) {
+        Query query = em.createQuery("from " + ActiveSession.class.getName() + " where user.tenant.id = " + tenantId);
+        removeAllFromQuery(em, query);
     }
 
     private void cleanNullTenantEntities(EntityManager em, Class c) {
