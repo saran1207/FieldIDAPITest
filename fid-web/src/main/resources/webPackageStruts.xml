@@ -1370,14 +1370,14 @@
 			<result name="error" type="freemarker">/templates/html/projectNotes/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">jobNotes</param>
-				<param name="projectId">${project.id}</param>
+				<param name="projectId">${action.getProjectId()}</param>
 			</result>
 		</action>
 
 		<action name="jobNoteDelete" method="delete" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">jobNotes</param>
-				<param name="projectId">${project.id}</param>
+				<param name="projectId">${action.getProjectId()}</param>
 			</result>
 		</action>
 
