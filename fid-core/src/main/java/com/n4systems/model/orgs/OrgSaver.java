@@ -63,7 +63,7 @@ public class OrgSaver extends Saver<BaseOrg> {
 		String updateQuery = "UPDATE " + BaseOrg.class.getName() + " SET secondaryOrg.id = :secondaryOrg WHERE customerOrg.id = :customer";
 		
 		Query query = em.createQuery(updateQuery);
-		query.setParameter("secondaryOrg", (customer.getSecondaryOrg() != null) ? customer.getSecondaryOrg().getId() : null);
+		query.setParameter("secondaryOrg", customer.getSecondaryOrg());
 		query.setParameter("customer", customer.getId());
 		
 		query.executeUpdate();
