@@ -261,7 +261,7 @@ public abstract class FieldIDTestCase {
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
 
-    public static final long[] TEST_TENANT_IDS = { 15511682L, 15511683L };
+    public static final String[] TEST_TENANT_NAMES = { "test1", "test2" };
 
     public static final String TEST_ASSET_TYPE_1 = "TestType1";
     public static final String TEST_ASSET_TYPE_2 = "TestType2";
@@ -275,9 +275,9 @@ public abstract class FieldIDTestCase {
         new PersistenceTemplate(new PersistenceCallback() {
             @Override
             public void doInTransaction(Transaction transaction) throws Exception {
-                for (long tenantId : TEST_TENANT_IDS) {
+                for (String tenantName : TEST_TENANT_NAMES) {
                     TenantCleaner cleaner = new TenantCleaner();
-                    cleaner.cleanTenant(transaction.getEntityManager(), tenantId);
+                    cleaner.cleanTenant(transaction.getEntityManager(), tenantName);
                 }
             }
         }).execute();
@@ -285,11 +285,10 @@ public abstract class FieldIDTestCase {
         new PersistenceTemplate(new PersistenceCallback() {
             @Override
             public void doInTransaction(Transaction transaction) throws Exception {
-                for (long tenantId : TEST_TENANT_IDS) {
-                    MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantId);
+                for (String tenantName : TEST_TENANT_NAMES) {
+                    MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantName);
                     dataSetup.setupMinimalData();
                     dataSetup.createTestAssetTypes(TEST_ASSET_TYPES);
-
                 }
             }
         }).execute();

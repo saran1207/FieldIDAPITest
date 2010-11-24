@@ -48,11 +48,6 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
     }
 
     @Test
-    public void test_view_all_event_books() throws Exception {
-//        assertEquals("View All", manageEventBooksPage.getCurrentTab());
-    }
-
-    @Test
     public void test_open_a_closed_book() throws Exception {
         String status = manageEventBooksPage.getStatusForBookNamed("The Open Book");
 
@@ -108,7 +103,7 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
     }
 
     private EventBook getTestEventBook() {
-        return new EventBook("Test Selenium", new Owner("seafit", null), true);
+        return new EventBook("Test Selenium", new Owner("test1", null), true);
     }
 
 }

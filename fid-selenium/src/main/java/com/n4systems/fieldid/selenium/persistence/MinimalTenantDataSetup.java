@@ -11,6 +11,7 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 public class MinimalTenantDataSetup {
 
@@ -18,10 +19,11 @@ public class MinimalTenantDataSetup {
     private EntityManager em;
     private Transaction trans;
 
-    public MinimalTenantDataSetup(Transaction trans, long tenantId) {
+    public MinimalTenantDataSetup(Transaction trans, String tenantName) {
         this.em = trans.getEntityManager();
         this.trans = trans;
-        tenant = em.find(Tenant.class, tenantId);
+        Query query = em.createQuery("from " + Tenant.class.getName() + " where name = '" + tenantName + "'");
+        this.tenant = (Tenant) query.getSingleResult();
     }
 
     public void setupMinimalData() {

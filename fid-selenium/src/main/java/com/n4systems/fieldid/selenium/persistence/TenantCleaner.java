@@ -11,6 +11,7 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventType;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.catalog.Catalog;
@@ -38,7 +39,11 @@ import javax.persistence.Query;
 
 public class TenantCleaner {
 
-    public void cleanTenant(EntityManager em, long tenantId) {
+    public void cleanTenant(EntityManager em, String tenantName) {
+        Query tenantQuery = em.createQuery("from "+ Tenant.class.getName()+" where name = '" + tenantName+"'");
+        Tenant tenant = (Tenant) tenantQuery.getSingleResult();
+        Long tenantId = tenant.getId();
+
         Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id = " + tenantId);
         Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id = " + tenantId);
         List<Asset> assets = assetsQuery.getResultList();
