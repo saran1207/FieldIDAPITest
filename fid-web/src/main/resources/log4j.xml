@@ -44,6 +44,24 @@
 			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
 		</layout>
 	</appender>
+	<appender name="LIMIT_SERVICE" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/limit-service.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="200MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="INSPECTION_SERVICE" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/inspect-service.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="200MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		</layout>
+	</appender>
 	<category name="org.apache">
 		<priority value="INFO" />
 	</category>
@@ -82,6 +100,14 @@
 	<category name="com.n4systems.taskscheduling" additivity="false">
 		<priority value="DEBUG" />
 		<appender-ref ref="FIELDID_TASK" />
+	</category>
+	<category name="com.n4systems.services.limiters.TenantLimitService" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="LIMIT_SERVICE" />
+	</category>
+	<category name="com.n4systems.webservice.server.InspectionServiceImpl" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="INSPECTION_SERVICE" />
 	</category>
 	<root>
 		<priority value="info" />

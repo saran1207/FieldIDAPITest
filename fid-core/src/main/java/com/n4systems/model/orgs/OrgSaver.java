@@ -60,12 +60,12 @@ public class OrgSaver extends Saver<BaseOrg> {
 	}
 
 	private void updateDivisionsSecurityInformation(CustomerOrg customer, EntityManager em) {
-		String updateQuery = "UPDATE " + BaseOrg.class.getName() + " SET secondaryOrg = :secondaryOrg WHERE customerOrg = :customer";
+		String updateQuery = "UPDATE " + BaseOrg.class.getName() + " SET secondaryOrg.id = :secondaryOrg WHERE customerOrg.id = :customer";
 		
 		Query query = em.createQuery(updateQuery);
 			
-		query.setParameter("secondaryOrg", customer.getSecondaryOrg());
-		query.setParameter("customer", customer);
+		query.setParameter("secondaryOrg", customer.getSecondaryOrg().getId());
+		query.setParameter("customer", customer.getId());
 		
 		query.executeUpdate();
 		
