@@ -48,7 +48,7 @@
 						<@s.hidden name="${prefix}InfoOptions[${stat.index}].uniqueIDString" /> 
 					</span>
 				<#else>
-					<label class="label">${infoField.name?html} <#if  requires == true && infoField.required ><#include "../common/_requiredMarker.ftl"/></#if> </label>	
+					<label class="label"> <#if  requires == true && infoField.required ><#include "../common/_requiredMarker.ftl"/></#if> ${infoField.name?html} </label>	
 					<#if infoField.fieldType == "selectbox" || infoField.fieldType == "combobox" >
 						<@s.select cssClass="attribute ${requiredClass}"  list="%{ getComboBoxInfoOptions( ${fieldPrefix}InfoFields[${stat.index}], ${prefix}InfoOptions[${stat.index}] ) }" listKey="id" listValue="name" name="${prefix}InfoOptions[${stat.index}].uniqueIDString" id="${infoField.uniqueID}" theme="fieldid" >
 							<#if autoAttributeInputFields?exists && autoAttributeInputFields.contains( infoField ) >
