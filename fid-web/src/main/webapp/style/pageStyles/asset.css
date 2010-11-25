@@ -98,6 +98,10 @@
 	font-size: 16px;
 }
 
+.assetFormGroup .withAdditionalContent .fieldHolder{
+	padding: 0px;
+}
+
 .unitMeasureDiv input[type="submit"]{
 	float:right;
 	width: 260px;

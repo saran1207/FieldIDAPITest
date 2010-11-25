@@ -4,8 +4,8 @@
 	<div id="serialNumberRow_${uniqueID!}" class="assetFormGroup">
 		<div class="infoSet">
 			<label for="serialNumber" class="label"> <#include "../common/_requiredMarker.ftl"/><@s.text name="${action.getText( Session.sessionUser.serialNumberLabel )}"/></label>
-			<span class="fieldHolder">
-				<input id="serialNumberText"  name="serialNumber" onchange="checkSerialNumber('serialNumberText', '${uniqueID?default('')}');"/>
+			<span class="fieldHolder withAdditionalContent">
+				<@s.textfield id="serialNumberText"  name="serialNumber" onchange="checkSerialNumber('serialNumberText', '${uniqueID?default('')}');"/>
 				<a href="#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''});return false;"><@s.text name="label.generate" /></a>
 			</span>
 			<span class="fieldHolder serialNumberStatus"></span>

@@ -522,9 +522,9 @@
 		</action>
 
 		<action name="assetUpdate" method="update" class="com.n4systems.fieldid.actions.asset.AssetCrud">
-			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
-			<result name="input" type="freemarker">../webapp/templates/html/assetCrud/edit.ftl</result>
-			<result name="success" type="freemarker">../webapp/templates/html/assetCrud/edit.ftl</result>
+			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
+			<result name="input" type="freemarker">/templates/html/assetCrud/edit.ftl</result>
+			<result name="success" type="freemarker">/templates/html/assetCrud/edit.ftl</result>
 			<result name="saved" type="redirectAction">
 				<param name="actionName">asset</param>
 				<param name="uniqueID">${uniqueID}</param>
