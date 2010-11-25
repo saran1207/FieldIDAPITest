@@ -147,7 +147,7 @@ public class AssetCertificateGenerator {
 	}
 	
 	private void addAssetTypeParams(ReportMap<Object> params, AssetType assetType) {
-		params.put("assetType", assetType.getName());
+		params.put("productType", assetType.getName());
 		params.put("itemNumber", assetType.getName());
 		params.put("productWarning", assetType.getWarnings());
 		params.put("certificateText", assetType.getManufactureCertificateText());

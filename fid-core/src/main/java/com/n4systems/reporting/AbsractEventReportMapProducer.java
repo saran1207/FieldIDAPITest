@@ -47,7 +47,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("eventTypeDescription", getEvent().getType().getName());
 		add("eventInfoOptionMap", eventInfoOptions());
 		
-		add("asset", new AssetReportMapProducer(getEvent().getAsset(), dateTimeDefinition).produceMap());
+		add("product", new AssetReportMapProducer(getEvent().getAsset(), dateTimeDefinition).produceMap());
 		
 		List<CriteriaStateView> createCriteriaViews = createCriteriaViews();
 		add("resultsBeanList", createCriteriaViews);

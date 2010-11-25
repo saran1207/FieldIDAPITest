@@ -91,7 +91,7 @@ public class EventCertificateGenerator {
 			
 			ReportMap<Object> eventReportMan = new EventReportMapProducer(event, dateDefiner).produceMap();
 			reportMap.put("mainInspection", eventReportMan);
-			reportMap.put("asset", eventReportMan.get("asset"));
+			reportMap.put("product", eventReportMan.get("asset"));
 			
 			List<ReportMap<Object>> eventResultMaps = new ArrayList<ReportMap<Object>>();
 			eventResultMaps.add(eventReportMan);
