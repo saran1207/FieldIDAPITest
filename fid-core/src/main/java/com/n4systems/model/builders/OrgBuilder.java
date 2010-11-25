@@ -13,7 +13,7 @@ import com.n4systems.model.orgs.SecondaryOrg;
 
 public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	private enum OrgType { PRIMARY, SECONDARY, CUSTOMER, DIVISION }
-	
+
 	private String name;
 	private Tenant tenant;
 	private OrgType type;
@@ -52,19 +52,19 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	}
 	
 	public OrgBuilder withParent(BaseOrg parent) {
-		return new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent);
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent));
 	}
 	
 	public OrgBuilder withName(String name) {
-		return new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent);
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent));
 	}
 	
 	public OrgBuilder withTestAddress() {
-		return new OrgBuilder(type, tenant, name, AddressInfoBuilder.anAddressWithTestData().build(), code, contact, parent);
+		return makeBuilder(new OrgBuilder(type, tenant, name, AddressInfoBuilder.anAddressWithTestData().build(), code, contact, parent));
 	}
 	
 	public OrgBuilder withTestContact() {
-		return new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent);
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent));
 	}
 	
 	public OrgBuilder withAllTestData() {

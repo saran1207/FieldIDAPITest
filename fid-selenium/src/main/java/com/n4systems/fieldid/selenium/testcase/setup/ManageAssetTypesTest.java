@@ -11,8 +11,6 @@ public class ManageAssetTypesTest extends ManageAssetTypesTestCase {
 	
 	@Test
 	public void test_add_asset_type_and_view_details() throws Exception {
-		addTestAssetType();
-		
 		assertTrue(page.getAssetTypes().contains(TEST_ASSET_TYPE_NAME));
 		
 		page.clickAssetType(TEST_ASSET_TYPE_NAME);
@@ -36,7 +34,6 @@ public class ManageAssetTypesTest extends ManageAssetTypesTestCase {
 	
 	@Test
 	public void test_copy_asset_type() throws Exception {
-		addTestAssetType();
 		page.clickCopyAssetType(TEST_ASSET_TYPE_NAME);
 		
 		assertEquals("Copied asset name should be blank in form", "", page.getEditName());

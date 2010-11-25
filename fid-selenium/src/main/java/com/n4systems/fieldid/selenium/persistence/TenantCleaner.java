@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.persistence;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
@@ -29,6 +30,7 @@ import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.user.User;
 import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetStatus;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -52,6 +54,7 @@ public class TenantCleaner {
         removeAllForTenant(em, Event.class, tenantId);
         removeAllForTenant(em, AssociatedEventType.class, tenantId);
         removeAllForTenant(em, EventSchedule.class, tenantId);
+        removeAllForTenant(em, AssetTypeSchedule.class, tenantId);
         removeAllForTenant(em, EventType.class, tenantId);
 
         List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
@@ -80,6 +83,7 @@ public class TenantCleaner {
         removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
         removeAllForTenant(em, AutoAttributeDefinition.class, tenantId);
         removeAllForTenant(em, AssetType.class, tenantId);
+        removeAllForTenant(em, AssetStatus.class, tenantId);
         removeAllForTenant(em, FileAttachment.class, tenantId);
         removeAllForTenant(em, UserRequest.class, tenantId);
         removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);

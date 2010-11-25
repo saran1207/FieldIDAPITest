@@ -21,10 +21,16 @@ public abstract class BaseBuilder<K> implements Builder<K> {
 	}
 	
 	public K build() {
+        if (builderCallback != null) {
+            builderCallback.onBeforeBuild(this);
+        }
+
         K builtObject = createObject();
+
         if (builderCallback != null) {
             builderCallback.onObjectBuilt(builtObject);
         }
+
         return builtObject;
     }
 

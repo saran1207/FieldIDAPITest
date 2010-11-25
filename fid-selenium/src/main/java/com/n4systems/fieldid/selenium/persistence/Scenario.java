@@ -8,6 +8,7 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assettype.AssetTypeByNameLoader;
 import com.n4systems.model.builders.AbstractEntityBuilder;
 import com.n4systems.model.builders.AssetBuilder;
+import com.n4systems.model.builders.AssetStatusBuilder;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.BaseBuilder;
 import com.n4systems.model.builders.EntityWithTenantBuilder;
@@ -16,20 +17,19 @@ import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventGroupBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.EventTypeGroupBuilder;
+import com.n4systems.model.builders.InfoFieldBuilder;
+import com.n4systems.model.builders.InfoOptionBeanBuilder;
+import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
-import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.persistence.savers.Saver;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.ArrayList;
@@ -109,6 +109,21 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
+    public AssetStatusBuilder anAssetStatus() {
+        AssetStatusBuilder builder = AssetStatusBuilder.anAssetStatus();
+        return createPersistentBuilder(builder);
+    }
+
+    public InfoFieldBuilder anInfoField() {
+        InfoFieldBuilder builder = InfoFieldBuilder.anInfoField();
+        return createPersistentBuilder(builder);
+    }
+
+    public InfoOptionBeanBuilder anInfoOption() {
+        InfoOptionBeanBuilder builder = InfoOptionBeanBuilder.aStaticInfoOption();
+        return createPersistentBuilder(builder);
+    }
+
     public EventBookBuilder anEventBook() {
         EventBookBuilder builder = EventBookBuilder.anEventBook();
         return createPersistentBuilder(builder);
@@ -139,18 +154,22 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
-    public void save(Saveable entity) {
+    public OrgBuilder aCustomerOrg() {
+        OrgBuilder builder = OrgBuilder.aCustomerOrg();
+        return createPersistentBuilder(builder);
+    }
+
+    public void save(Object entity) {
         System.out.println("Save: " + ToStringBuilder.reflectionToString(entity));
-        SaverMap.makeSaverFor(entity.getClass()).save(trans, entity);
+        if (entity instanceof Saveable) {
+            Saveable saveable = (Saveable) entity;
+            SaverMap.makeSaverFor(saveable.getClass()).save(trans, saveable);
+        }
     }
 
     private <T extends BaseBuilder> T createPersistentBuilder(T builder) {
         builder.setAlwaysUseNullId(true);
         builder.setBuilderCallback(new ScenarioBuilderCallback(this));
-        if (builder instanceof AbstractEntityBuilder) {
-            AbstractEntityBuilder entBuilder = (AbstractEntityBuilder) builder;
-            entBuilder.modifiedBy(aUser().build());
-        }
         if (builder instanceof EntityWithTenantBuilder) {
             EntityWithTenantBuilder withTenantBuilder = (EntityWithTenantBuilder) builder;
             withTenantBuilder.withTenant(defaultTenant);
@@ -164,9 +183,7 @@ public class Scenario {
 
     public void persistAllBuiltObjects() {
         for (Object o : builtObjects) {
-            if (!(o instanceof Saveable)) {
-                throw new RuntimeException("Cannot save non saveable object!");
-            }
+            System.out.println("Final persist on: " + ToStringBuilder.reflectionToString(o));
             trans.getEntityManager().merge(o);
         }
     }
@@ -182,4 +199,14 @@ public class Scenario {
         return defaultTenant;
     }
 
+    public BaseOrg defaultPrimaryOrg() {
+        return defaultPrimaryOrg;
+    }
+
+    public void onBeforeBuild(BaseBuilder builder) {
+        if (builder instanceof AbstractEntityBuilder) {
+            AbstractEntityBuilder entBuilder = (AbstractEntityBuilder) builder;
+            entBuilder.modifiedBy(aUser().build());
+        }
+    }
 }

@@ -4,13 +4,28 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.persistence.Scenario;
 import org.junit.Test;
 
 public class ManageAssetTypes_SubComponentsTest extends ManageAssetTypesTestCase {
-	
-	@Test
+
+    @Override
+    public void setupScenario(Scenario scenario) {
+        super.setupScenario(scenario);
+
+        scenario.anAssetType()
+                .forTenant(scenario.defaultTenant())
+                .named("Mobile Crane")
+                .build();
+
+        scenario.anAssetType()
+                .forTenant(scenario.defaultTenant())
+                .named("Shackle")
+                .build();
+    }
+
+    @Test
 	public void add_subcomponents_to_asset_type() {
-		addTestAssetType();
 		page.clickAssetType(TEST_ASSET_TYPE_NAME);
 		page.clickSubComponentsTab();
 		
@@ -30,7 +45,6 @@ public class ManageAssetTypes_SubComponentsTest extends ManageAssetTypesTestCase
 	
 	@Test
 	public void remove_subcomponents_from_asset_type() throws Exception {
-		addTestAssetType();
 		page.clickAssetType(TEST_ASSET_TYPE_NAME);
 		page.clickSubComponentsTab();
 		

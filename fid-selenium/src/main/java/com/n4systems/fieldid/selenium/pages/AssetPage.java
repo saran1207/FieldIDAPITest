@@ -6,7 +6,6 @@ import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
-// TODO: Merge the two AssetPage classes.
 public class AssetPage extends FieldIDPage {
 
 	MiscDriver misc;
@@ -210,6 +209,10 @@ public class AssetPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
+    public String getValueForAttribute(String attributeName) {
+        return selenium.getText("//span[@infofieldname='"+attributeName+"']");
+    }
+
 	public void setMiscDriver(MiscDriver misc) {
 		this.misc = misc;
 	}
@@ -228,4 +231,16 @@ public class AssetPage extends FieldIDPage {
 		selenium.click("//input[@id='merge']");
 		waitForPageToLoad();
 	}
+
+    public void enterAttributeValue(String attrName, String value) {
+        selenium.type("//div[@infofieldname='"+attrName+"']//input[@type='text']", value);
+    }
+
+    public void selectAttributeValue(String attrName, String value) {
+        selenium.select("//div[@infofieldname='"+attrName+"']//select", value);
+    }
+
+    public boolean wasMergeSuccessful(String firstSerialNumber, String mergeSerialNumber) {
+        return selenium.isElementPresent("//h1[contains(.,'Merge Assets - " + firstSerialNumber + " into " + mergeSerialNumber + "')]");
+    }
 }

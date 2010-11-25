@@ -48,7 +48,7 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
     }
 
     @Test
-    public void test_open_a_closed_book() throws Exception {
+    public void test_close_an_open_book() throws Exception {
         String status = manageEventBooksPage.getStatusForBookNamed("The Open Book");
 
         assertEquals("Open", status);
@@ -60,7 +60,7 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
     }
 
     @Test
-    public void test_close_an_open_book() throws Exception {
+    public void test_open_a_closed_book() throws Exception {
         String status = manageEventBooksPage.getStatusForBookNamed("The Closed Book");
 
         assertEquals("Closed", status);

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.persistence;
 
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.builders.BaseBuilder;
 import com.n4systems.model.builders.context.BuilderCallback;
 
 public class ScenarioBuilderCallback implements BuilderCallback {
@@ -12,8 +13,13 @@ public class ScenarioBuilderCallback implements BuilderCallback {
     }
 
     @Override
+    public void onBeforeBuild(BaseBuilder builder) {
+        scenario.onBeforeBuild(builder);
+    }
+
+    @Override
     public void onObjectBuilt(Object o) {
-        scenario.save((Saveable) o);
+        scenario.save(o);
         scenario.addBuiltObject(o);
     }
 }

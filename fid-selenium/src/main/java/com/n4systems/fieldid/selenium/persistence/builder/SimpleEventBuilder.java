@@ -26,7 +26,7 @@ public class SimpleEventBuilder extends BaseBuilder<Event> {
                 .build();
 
         Asset asset = scenario.anAsset()
-                .withOwner(scenario.primaryOrgFor("seafit"))
+                .withOwner(scenario.defaultPrimaryOrg())
                 .forTenant(scenario.defaultTenant())
                 .withSerialNumber("9671111")
                 .ofType(type)
@@ -34,7 +34,7 @@ public class SimpleEventBuilder extends BaseBuilder<Event> {
 
         return scenario.anEvent().on(asset)
                 .withPerformedBy(scenario.defaultUser())
-                .withOwner(scenario.primaryOrgFor("seafit"))
+                .withOwner(scenario.defaultPrimaryOrg())
                 .withTenant(scenario.defaultTenant()).build();
     }
 

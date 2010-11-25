@@ -178,8 +178,8 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		eventType.setPrintable(true);
 		eventType.setMasterEvent(false);
 		eventType.setAssignedToAvailable(true);
-		eventType.setSupportedProofTestTypes(Arrays.asList(new String[]{"ROBERTS", "CHANT"}));
-		eventType.setEventAttributes(Arrays.asList(new String[]{"Attribute1", "Attribute2"}));
+		eventType.setSupportedProofTestTypes(Arrays.asList("ROBERTS", "CHANT"));
+		eventType.setEventAttributes(Arrays.asList("Attribute1", "Attribute2"));
 		return eventType;
 	}
 
@@ -191,23 +191,23 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		criteria1.setSetsResult(true);
 		
 		EventFormObservations observation1 = new EventFormObservations();
-		observation1.setRecommendations(Arrays.asList(new String [] {"recommendation1", "recommendation2"}));
-		observation1.setDeficiencies(Arrays.asList(new String [] {"deficiency1", "deficiency2"}));					
+		observation1.setRecommendations(Arrays.asList("recommendation1", "recommendation2"));
+		observation1.setDeficiencies(Arrays.asList("deficiency1", "deficiency2"));					
 		criteria1.setObservations(observation1);
 
 		EventFormCriteria criteria2 = new EventFormCriteria("Criteria2", "Acceptable");
 		EventFormObservations observation2 = new EventFormObservations();
-		observation2.setRecommendations(Arrays.asList(new String [] {"recommendation3"}));
-		observation2.setDeficiencies(Arrays.asList(new String [] {"deficiency3"}));
+		observation2.setRecommendations(Arrays.asList("recommendation3"));
+		observation2.setDeficiencies(Arrays.asList("deficiency3"));
 		criteria2.setObservations(observation2);		
 
-		section1.setCriteria(Arrays.asList(new EventFormCriteria[] {criteria1, criteria2}));
+		section1.setCriteria(Arrays.asList(criteria1, criteria2));
 		
 		EventFormSection section2 = new EventFormSection("Section2");
 
-		section2.setCriteria(Arrays.asList(new EventFormCriteria[] {criteria2}));
+		section2.setCriteria(Arrays.asList(criteria2));
 		
-		form.setSections(Arrays.asList(new EventFormSection[] {section1, section2}));
+		form.setSections(Arrays.asList(section1, section2));
 		
 		return form;
 	}

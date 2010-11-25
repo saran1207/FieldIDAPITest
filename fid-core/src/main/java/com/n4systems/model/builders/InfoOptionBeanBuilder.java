@@ -28,11 +28,11 @@ public class InfoOptionBeanBuilder extends BaseBuilder<InfoOptionBean> {
 	}
 	
 	public InfoOptionBeanBuilder withName(String name) {
-		return new InfoOptionBeanBuilder(dynamicOption, name, field);
+		return makeBuilder(new InfoOptionBeanBuilder(dynamicOption, name, field));
 	}
 	
 	public InfoOptionBeanBuilder forField(InfoFieldBean field) {
-		return new InfoOptionBeanBuilder(dynamicOption, name, field);
+		return makeBuilder(new InfoOptionBeanBuilder(dynamicOption, name, field));
 	}
 	
 	@Override
