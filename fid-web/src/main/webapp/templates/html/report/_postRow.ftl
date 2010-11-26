@@ -28,9 +28,12 @@
 				<a href='<@s.url action="selectEventEdit" namespace="/" uniqueID="${entityId}"/>'><@s.text name="label.edit" /></a>
 			</li>
 			</#if>
-			<li>
-				<a href='${printReport}' class='lightview summaryReport' rel='ajax' title=' :: :: scrolling: false, autosize: true' ><@s.text name="label.print_report" /></a>
-			</li>
+			<#if action.isPrintable(rowIdx)>
+				<li>
+					<@s.url id="eventCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${entityId}" />
+					<a href="${eventCertUrl}" target="_blank" /><@s.text name="label.print_report" /></a>
+				</li>
+			</#if>
 			<#if sessionUser.hasAccess('createevent') && localEvent >
 				<li id="floatingDropdownStartEventLink">
 					<a href='<@s.url action="quickEvent" assetId="${assetId}" />' >

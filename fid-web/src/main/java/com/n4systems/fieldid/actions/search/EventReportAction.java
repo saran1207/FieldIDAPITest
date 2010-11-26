@@ -303,6 +303,11 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		return event.getSecurityLevel(getSecurityFilter().getOwner()).isLocal();
 	}
 	
+	public boolean isPrintable(int rowId){
+		Event event = (Event)getEntityForRow(rowId);
+		return event.isEventCertPrintable();
+	}
+	
 	public Long getAssetId(int rowId){
 		Event event = (Event)getEntityForRow(rowId);
 		return event.getAsset().getId();
