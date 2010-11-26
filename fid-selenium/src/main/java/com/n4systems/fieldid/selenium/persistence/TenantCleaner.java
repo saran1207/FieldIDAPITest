@@ -8,6 +8,7 @@ import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventType;
@@ -56,7 +57,8 @@ public class TenantCleaner {
         removeAllForTenant(em, EventSchedule.class, tenantId);
         removeAllForTenant(em, AssetTypeSchedule.class, tenantId);
         removeAllForTenant(em, EventType.class, tenantId);
-
+        removeAllForTenant(em, EventTypeGroup.class, tenantId);
+        
         List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
         for (Asset asset : networkRegisteredAssets) {
             safeRemoveAsset(em, asset);

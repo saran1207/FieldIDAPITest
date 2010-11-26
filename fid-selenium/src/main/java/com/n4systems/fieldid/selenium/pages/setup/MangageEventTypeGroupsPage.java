@@ -96,12 +96,12 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 	}
 	
 	public void deleteListItem(String name) {
-		selenium.click("//table[@class='list']//td[text()='" + name + "']/..//a[contains(@id, 'delete_')]");
+		selenium.click("//table[@class='list']//a[text()='" + name + "']/../..//a[contains(@id, 'delete_')]");
 		waitForPageToLoad();
 	}
 	
 	public boolean listItemExists(String name) {
-		return selenium.isElementPresent("//table[@class='list']//td[text()='" + name + "']");
+		return selenium.isElementPresent("//table[@class='list']//a[text()='" + name + "']");
 	}
 
 	public void verifyEventTypeSaved() {

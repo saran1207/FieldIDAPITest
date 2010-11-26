@@ -9,6 +9,8 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.EventTypeGroup;
 import com.n4systems.fieldid.selenium.pages.setup.MangageEventTypeGroupsPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.Tenant;
 
 public class MangageEventTypeGroupsTest extends FieldIDTestCase {
 	
@@ -16,7 +18,19 @@ public class MangageEventTypeGroupsTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() {
-		manageEventTypeGroupsPage = start().systemLogin().clickSetupLink().clickManageEventTypeGroups();		
+		manageEventTypeGroupsPage = startAsCompany("test1").systemLogin().clickSetupLink().clickManageEventTypeGroups();		
+	}
+
+	@Override
+	public void setupScenario(Scenario scenario) {
+        Tenant tenant = scenario.tenant("test1");
+        
+        scenario.anEventTypeGroup()
+                .forTenant(tenant)
+                .withName("EventTypeGroup1")
+                .withReportTitle("EventTypeGroup1Report")
+                .build();
+
 	}
 
 	@Test
@@ -73,26 +87,19 @@ public class MangageEventTypeGroupsTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void test_add_and_delete_event_type_group() throws Exception {
-		deleteEventTypeIfExists("Test");
-		
+	public void test_add_event_type_group() throws Exception {
 		manageEventTypeGroupsPage.clickAddTab();
 		assertEquals("Add", manageEventTypeGroupsPage.getCurrentTab());
 		EventTypeGroup eventTypeGroup = new EventTypeGroup("Test", "Test", "Basic Visual Inspection", "Full Observation Report");
 		manageEventTypeGroupsPage.setEventTypeGroupFormFields(eventTypeGroup);
 		manageEventTypeGroupsPage.clickSaveButton();
 		manageEventTypeGroupsPage.verifyEventTypeSaved();
-		
-		assertEquals("View", manageEventTypeGroupsPage.getCurrentTab());
-		manageEventTypeGroupsPage.clickViewAllTab();
-		assertTrue(manageEventTypeGroupsPage.listItemExists("Test"));
-		manageEventTypeGroupsPage.deleteListItem("Test");
+	}	
+	
+	@Test
+	public void test_delete_event_type_group() throws Exception {
+		assertTrue(manageEventTypeGroupsPage.listItemExists("EventTypeGroup1"));
+		manageEventTypeGroupsPage.deleteListItem("EventTypeGroup1");
 		manageEventTypeGroupsPage.verifyEventTypeDeleted();
-	}
-
-	private void deleteEventTypeIfExists(String eventName) {
-		if(manageEventTypeGroupsPage.listItemExists(eventName)){
-			manageEventTypeGroupsPage.deleteListItem(eventName);			
-		}
 	}
 }
