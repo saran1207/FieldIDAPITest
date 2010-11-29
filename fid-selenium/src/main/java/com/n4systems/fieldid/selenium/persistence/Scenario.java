@@ -203,7 +203,7 @@ public class Scenario {
     public void onBeforeBuild(BaseBuilder builder) {
         if (builder instanceof AbstractEntityBuilder) {
             AbstractEntityBuilder entBuilder = (AbstractEntityBuilder) builder;
-            entBuilder.modifiedBy(aUser().build());
+            entBuilder.modifiedBy(createAppropriateUser(entBuilder));
         }
         if (builder instanceof EntityWithTenantBuilder) {
             EntityWithTenantBuilder withTenantBuilder = (EntityWithTenantBuilder) builder;
@@ -216,6 +216,7 @@ public class Scenario {
             if (withOwnerBuilder.getOwner() == null) {
                 withOwnerBuilder.setOwner(defaultPrimaryOrg);
             }
+            withOwnerBuilder.setTenant(withOwnerBuilder.getOwner().getTenant());
         }
         if (builder instanceof AssetStatusBuilder) {
             AssetStatusBuilder statusBuilder = (AssetStatusBuilder) builder;
@@ -223,5 +224,17 @@ public class Scenario {
                 statusBuilder.setTenant(defaultTenant);
             }
         }
+    }
+
+    private User createAppropriateUser(AbstractEntityBuilder entBuilder) {
+        Tenant tenant = defaultTenant;
+        if (entBuilder instanceof EntityWithTenantBuilder) {
+            Tenant setTenant = ((EntityWithTenantBuilder) entBuilder).getTenant();
+            if (setTenant != null) {
+                tenant = setTenant;
+            }
+        }
+        BaseOrg owner = new PrimaryOrgByTenantLoader().setTenantId(tenant.getId()).load(trans);
+        return aUser().withOwner(owner).build();
     }
 }
