@@ -17,15 +17,15 @@
 				
 				<span id="proofTestManual" <#if proofTestTypeEnum?exists && proofTestTypeEnum.uploadable >style="display:none"</#if> >
 					<div>
-						<label><@s.text name="label.peakload"/></label><br/>
+						<label class="label"><@s.text name="label.peakload"/></label><br/>
 						<span><@s.textfield name="peakLoad" theme="fieldidSimple"/></span>
 					</div>
 					<div>
-						<label><@s.text name="label.duration"/></label><br/>
+						<label class="label"><@s.text name="label.duration"/></label><br/>
 						<span><@s.textfield name="testDuration" theme="fieldidSimple"/></span>
 					</div>
 					<div>
-						<label><@s.text name="label.peakloadduration"/></label><br/>
+						<label class="label"><@s.text name="label.peakloadduration"/></label><br/>
 						<span><@s.textfield name="peakLoadDuration" theme="fieldidSimple"/></span>
 					</div>
 				</span>

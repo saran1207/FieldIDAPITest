@@ -205,16 +205,17 @@
 	width: 250px;
 }
 
+#proofTestManual{
+	padding: 0;
+}
+
 #proofTestManual label {
 	width:120px;
 	padding-left:0px;
 	clear:left;
+	text-align: left;
 }
 
-#proofTestManual span {
-	width:350px;
-	
-}
 #proofTestUploadFile {
 	height:20px;
 }
