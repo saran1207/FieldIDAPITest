@@ -2,34 +2,35 @@ package com.n4systems.reporting;
 
 import static com.n4systems.model.builders.EventBuilder.*;
 import static com.n4systems.model.builders.OrgBuilder.*;
-
-import static org.junit.Assert.*;
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.n4systems.ejb.EventManager;
-import com.n4systems.model.Event;
-import com.n4systems.model.builders.EventTypeBuilder;
 import net.sf.jasperreports.engine.JasperPrint;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.PrintOut;
 import com.n4systems.model.PrintOut.PrintOutType;
+import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
+import com.n4systems.testutils.TestConfigContext;
 
 public class EventSummaryGeneratorTest {
 	
@@ -45,6 +46,13 @@ public class EventSummaryGeneratorTest {
 		persistenceManager = createMock(PersistenceManager.class);
 		eventManager = createMock(EventManager.class);
 		user = UserBuilder.aUser().createObject();
+		
+		TestConfigContext.newContext();
+	}
+	
+	@After
+	public void reset_config_context() {
+		TestConfigContext.resetToDefaultContext();
 	}
 	
 	@Test

@@ -5,14 +5,26 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.UUID;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-
 
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
+import com.n4systems.testutils.TestConfigContext;
 
 public class DownloadLinkTest {
 
+	@Before
+	public void setup_config_context() {
+		TestConfigContext.newContext();
+	}
+	
+	@After
+	public void reset_config_context() {
+		TestConfigContext.resetToDefaultContext();
+	}
+	
 	@Test(expected=IllegalStateException.class)
 	public void get_file_throws_exception_on_null_user() {
 		DownloadLink link = new DownloadLink();
