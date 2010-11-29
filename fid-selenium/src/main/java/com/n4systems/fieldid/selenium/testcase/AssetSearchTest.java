@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.pages.QuickEventPage;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
@@ -125,19 +126,23 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	}
 	
 	@Test
-	public void search_results_start_event_link() throws Exception {
+	public void search_results_start_event_link_quick_event() throws Exception {
+        AssetSearchCriteria criteria = new AssetSearchCriteria();
+        criteria.setAssetType("Chain Sling");
+        page.setSearchCriteria(criteria);
+
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
 		String serialNumber = page.getResultSerialNumbers().get(0);
-		
-		page.clickResultStartEvent(serialNumber);
-	}
-	
+
+        QuickEventPage quickEventPage = page.clickResultStartEvent(serialNumber);
+    }
 	
 	private List<String> getDefaultColumnHeaders() {
 		return Arrays.asList("Serial Number", "Reference Number", "Customer Name", "Location", 
 				"Asset Type", "Asset Status", "Last Event Date", "Date Identified", "");
 	}
+
 }

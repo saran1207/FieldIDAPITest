@@ -72,7 +72,7 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
             waitForAjax();
 		}
 		if (criteria.getAssetType() != null) {
-			selenium.select("//select[@id='assettType']", criteria.getAssetType());
+			selenium.select("//select[@id='assetType']", criteria.getAssetType());
 		}
 		if (criteria.getLocation() != null) {
 			LocationPicker locPicker = getLocationPicker();
