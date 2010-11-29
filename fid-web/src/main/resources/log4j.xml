@@ -18,6 +18,15 @@
 			<param name="ConversionPattern" value="%d: %c: %m%n" />
 		</layout>
 	</appender>
+	<appender name="CACHE_LOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/fieldid-cache.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d: %c: %m%n" />
+		</layout>
+	</appender>
 	<appender name="FIELDID_LOG" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/fieldid.log" />
 		<param name="Append" value="true" />
@@ -109,6 +118,11 @@
 		<priority value="INFO" />
 		<appender-ref ref="INSPECTION_SERVICE" />
 	</category>
+	<category name="cache-info" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="CACHE_LOG" />
+	</category>
+	
 	<root>
 		<priority value="info" />
 		<appender-ref ref="CONSOLE" />

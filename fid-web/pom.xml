@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-		<version>2010.10.0-SNAPSHOT</version>
+		<version>2010.11.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.fieldid</groupId>
 	<artifactId>fid-web</artifactId>
@@ -107,6 +107,22 @@
 				<exclusion>
 					<artifactId>junit</artifactId>
 					<groupId>junit</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-api</artifactId>
+					<groupId>javax.xml</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-api</artifactId>
+					<groupId>javax.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-impl</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-xjc</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>

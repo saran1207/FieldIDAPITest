@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fieldid</groupId>
 	<artifactId>fieldid-root</artifactId>
-	<version>2010.10.0-SNAPSHOT</version>
+	<version>2010.11.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Field ID Parent POM</name>
 	<modules>
@@ -17,7 +17,14 @@
 			<id>JBoss</id>
 			<name>JBoss Repsitory</name>
 			<layout>default</layout>
-			<url>http://repository.jboss.org/maven2</url>
+			<url>http://http://repository.jboss.org/nexus/content/groups/public/</url>
+		</repository>
+
+		<repository>
+			<id>EHCache</id>
+			<name>EHCache Release Repsitory</name>
+			<layout>default</layout>
+			<url>http://oss.sonatype.org/content/repositories/sourceforge-releases/net/sf/ehcache/</url>
 		</repository>
 
         <repository>
