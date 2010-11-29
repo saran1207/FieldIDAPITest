@@ -9,7 +9,6 @@ public class CriteriaBuilder extends EntityWithTenantBuilder<Criteria> {
 	private final boolean principal;
 	
 	public CriteriaBuilder(String text, boolean retired, boolean principal) {
-		super();
 		this.text = text;
 		this.retired = retired;
 		this.principal = principal;
@@ -20,15 +19,15 @@ public class CriteriaBuilder extends EntityWithTenantBuilder<Criteria> {
 	}
 	
 	public CriteriaBuilder withText(String text) {
-		return new CriteriaBuilder(text, retired, principal);
+		return makeBuilder(new CriteriaBuilder(text, retired, principal));
 	}
 	
 	public CriteriaBuilder withRetired(boolean retired) {
-		return new CriteriaBuilder(text, retired, principal);
+		return makeBuilder(new CriteriaBuilder(text, retired, principal));
 	}
 	
 	public CriteriaBuilder withPrincipal(boolean principal) {
-		return new CriteriaBuilder(text, retired, principal);
+		return makeBuilder(new CriteriaBuilder(text, retired, principal));
 	}
 	
 	@Override

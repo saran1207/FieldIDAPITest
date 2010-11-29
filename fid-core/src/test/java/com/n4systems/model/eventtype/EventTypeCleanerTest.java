@@ -10,6 +10,7 @@ import java.util.Set;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.builders.EventTypeBuilder;
+import com.n4systems.model.builders.UserBuilder;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
@@ -46,7 +47,6 @@ public class EventTypeCleanerTest {
 		assertNotNull(type.getCreated());
 		assertNotNull(type.getModified());
 		assertNotNull(type.getModifiedBy());
-		assertNotNull(type.getTenant());
 		
 		Cleaner<CriteriaSection> sectionCleaner = EasyMock.createMock(Cleaner.class);
 		sectionCleaner.clean(sections.get(0));
@@ -93,6 +93,7 @@ public class EventTypeCleanerTest {
 		type.setSupportedProofTests(supportedProofTests);
 		type.setInfoFieldNames(infoFieldNames);
 		type.setSections(sections);
+        type.setModifiedBy(UserBuilder.aUser().build());
 		return type;
 	}
 	

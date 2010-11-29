@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.model.builders.UserBuilder;
 import org.junit.Test;
 
 import com.n4systems.model.Criteria;
@@ -29,8 +30,8 @@ public class CriteriaCleanerTest {
 		assertNotNull(criteria.getCreated());
 		assertNotNull(criteria.getModified());
 		assertNotNull(criteria.getModifiedBy());
-		assertNotNull(criteria.getTenant());
-		
+        assertNotNull(criteria.getTenant());
+
 		CriteriaCleaner cleaner = new CriteriaCleaner(newTenant);
 		cleaner.clean(criteria);
 		
@@ -60,6 +61,8 @@ public class CriteriaCleanerTest {
 		criteria.setRetired(retired);
 		criteria.setRecommendations(recommendations);
 		criteria.setDeficiencies(deficiencies);
+        criteria.setTenant(TenantBuilder.aTenant().build());
+        criteria.setModifiedBy(UserBuilder.aUser().build());
 		return criteria;
 	}
 	

@@ -16,7 +16,7 @@ import com.n4systems.exceptions.Defect;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 
-public class AssetTypeBuilder extends BaseBuilder<AssetType> {
+public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 
 	private final String name;
 	private final String warnings;
@@ -29,8 +29,7 @@ public class AssetTypeBuilder extends BaseBuilder<AssetType> {
     private final Collection<InfoFieldBean> infoFields;
     private final Set<AssetType> subTypes;
 	private final EventType[] eventTypes;
-    private final Tenant tenant;
-	
+
 	public static AssetTypeBuilder anAssetType() {
 		return new AssetTypeBuilder();
 	}
@@ -40,6 +39,7 @@ public class AssetTypeBuilder extends BaseBuilder<AssetType> {
 	}
 	
 	private AssetTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<AssetType> subTypes, AssetTypeGroup group, EventType[] eventTypes, Tenant tenant, String manufactureCertificateText) {
+        super(tenant);
 		this.name = name;
 		this.warnings = warnings;
 		this.instructions = instructions;
@@ -50,7 +50,6 @@ public class AssetTypeBuilder extends BaseBuilder<AssetType> {
 		this.subTypes = subTypes;
 		this.group = group;
 		this.eventTypes = eventTypes;
-        this.tenant = tenant;
         this.manufactureCertificateText = manufactureCertificateText;
 	}
 
@@ -71,10 +70,6 @@ public class AssetTypeBuilder extends BaseBuilder<AssetType> {
 	}
 	
 	public AssetTypeBuilder withEventTypes(EventType... eventTypes) {
-		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
-	}
-
-	public AssetTypeBuilder forTenant(Tenant tenant) {
 		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText));
 	}
 

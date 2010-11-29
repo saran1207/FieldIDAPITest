@@ -6,7 +6,6 @@ import static org.junit.Assert.assertFalse;
 import java.util.List;
 
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.EventType;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.datatypes.Owner;
@@ -23,7 +22,6 @@ public class ManageAssetTypes_EventFrequenciesTest extends ManageAssetTypesTestC
 
         scenario.anEventType()
                 .named(TEST_EVENT_TYPE)
-                .withTenant(scenario.defaultTenant())
                 .build();
 
         scenario.aCustomerOrg()

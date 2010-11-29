@@ -9,17 +9,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EventBookBuilder extends BaseBuilder<EventBook> {
+public class EventBookBuilder extends EntityWithOwnerBuilder<EventBook> {
 
-    private Tenant tenant;
-    private BaseOrg owner;
     private String name;
     private boolean open;
     private Set<Event> events;
 
     private EventBookBuilder(Tenant tenant, BaseOrg owner, String name, boolean open, Set<Event> events) {
-        this.tenant = tenant;
-        this.owner = owner;
+        super(tenant, owner);
         this.name = name;
         this.open = open;
         this.events = events;
@@ -48,9 +45,7 @@ public class EventBookBuilder extends BaseBuilder<EventBook> {
 
     @Override
     public EventBook createObject() {
-        EventBook book = new EventBook();
-        book.setTenant(tenant);
-        book.setOwner(owner);
+        EventBook book = super.assignAbstractFields(new EventBook());
         book.setName(name);
         book.setOpen(open);
 

@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.model.builders.UserBuilder;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,6 @@ public class CriteriaSectionCleanerTest {
 		assertNotNull(section.getCreated());
 		assertNotNull(section.getModified());
 		assertNotNull(section.getModifiedBy());
-		assertNotNull(section.getTenant());
 		
 		Cleaner<Criteria> criteriaCleaner = EasyMock.createMock(Cleaner.class);
 		criteriaCleaner.clean(criteria.get(0));
@@ -66,6 +66,7 @@ public class CriteriaSectionCleanerTest {
 	
 	private CriteriaSection buildSection() {
 		CriteriaSection section = CriteriaSectionBuilder.aCriteriaSection().withTitle(title).withRetired(retired).withCriteria(criteria).build();
+        section.setModifiedBy(UserBuilder.aUser().build());
 		return section;
 	}
 	

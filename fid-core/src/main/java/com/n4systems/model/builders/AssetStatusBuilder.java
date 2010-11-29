@@ -6,7 +6,7 @@ import rfid.ejb.entity.AssetStatus;
 public class AssetStatusBuilder extends BaseBuilder<AssetStatus> {
 
     private final String name;
-    private final Tenant tenant;
+    private Tenant tenant;
 
     public static AssetStatusBuilder anAssetStatus() {
         return new AssetStatusBuilder(null, null);
@@ -32,6 +32,14 @@ public class AssetStatusBuilder extends BaseBuilder<AssetStatus> {
         status.setTenant(tenant);
         
         return status;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
     }
 
 }

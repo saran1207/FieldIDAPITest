@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.builders.AssetBuilder;
+import com.n4systems.model.orgs.BaseOrg;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +32,8 @@ public class SafetyNetworkAssetSecurityManagerTest {
 	@Test
 	public void is_assigned_returns_false_on_non_linked_owners() {
 		SafetyNetworkAssetSecurityManager assetSecurityManager = new SafetyNetworkAssetSecurityManager(primary);
-		assertFalse(assetSecurityManager.isAssigned(AssetBuilder.anAsset().build()));
+        BaseOrg otherOrg = OrgBuilder.aPrimaryOrg().build();
+        assertFalse(assetSecurityManager.isAssigned(AssetBuilder.anAsset().withOwner(otherOrg).build()));
 	}
 	
 	@Test
@@ -82,10 +84,10 @@ public class SafetyNetworkAssetSecurityManagerTest {
 		SafetyNetworkAssetSecurityManager assetSecurityManager = new SafetyNetworkAssetSecurityManager(secondary);
 		
 		List<Asset> assets = Arrays.asList(
-				AssetBuilder.anAsset().build(),
+				AssetBuilder.anAsset().withOwner(primary).build(),
 				AssetBuilder.anAsset().withOwner(otherOrg).build(),
-				AssetBuilder.anAsset().build(),
-				AssetBuilder.anAsset().build());
+				AssetBuilder.anAsset().withOwner(primary).build(),
+				AssetBuilder.anAsset().withOwner(primary).build());
 		
 		
 		assertTrue(assetSecurityManager.listContainsAnAssignedAsset(assets));
@@ -102,11 +104,11 @@ public class SafetyNetworkAssetSecurityManagerTest {
 		SafetyNetworkAssetSecurityManager assetSecurityManager = new SafetyNetworkAssetSecurityManager(secondary);
 		
 		List<Asset> assets = Arrays.asList(
-				AssetBuilder.anAsset().build(),
+				AssetBuilder.anAsset().withOwner(primary).build(),
 				AssetBuilder.anAsset().withOwner(otherOrg1).build(),
 				AssetBuilder.anAsset().withOwner(otherOrg2).build(),
-				AssetBuilder.anAsset().build(),
-				AssetBuilder.anAsset().build());
+				AssetBuilder.anAsset().withOwner(primary).build(),
+				AssetBuilder.anAsset().withOwner(primary).build());
 		
 		
 		assertTrue(assetSecurityManager.listContainsAnAssignedAsset(assets));
@@ -117,9 +119,9 @@ public class SafetyNetworkAssetSecurityManagerTest {
 		SafetyNetworkAssetSecurityManager assetSecurityManager = new SafetyNetworkAssetSecurityManager(secondary);
 		
 		List<Asset> assets = Arrays.asList(
-				AssetBuilder.anAsset().build(),
-				AssetBuilder.anAsset().build(),
-				AssetBuilder.anAsset().build());
+				AssetBuilder.anAsset().withOwner(primary).build(),
+				AssetBuilder.anAsset().withOwner(primary).build(),
+				AssetBuilder.anAsset().withOwner(primary).build());
 		
 		
 		assertFalse(assetSecurityManager.listContainsAnAssignedAsset(assets));

@@ -9,7 +9,6 @@ import com.n4systems.fieldid.selenium.persistence.PersistenceCallback;
 import com.n4systems.fieldid.selenium.persistence.PersistenceTemplate;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.TenantCleaner;
-import com.n4systems.fieldid.selenium.testcase.assets.IdentifyAssetsTest;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.thoughtworks.selenium.DefaultSelenium;

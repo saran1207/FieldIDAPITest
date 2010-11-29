@@ -21,13 +21,11 @@ public class SimpleEventBuilder extends BaseBuilder<Event> {
     @Override
     public Event createObject() {
         AssetType type = scenario.anAssetType()
-                .forTenant(scenario.defaultTenant())
                 .named("Test Asset Type")
                 .build();
 
         Asset asset = scenario.anAsset()
                 .withOwner(scenario.defaultPrimaryOrg())
-                .forTenant(scenario.defaultTenant())
                 .withSerialNumber("9671111")
                 .ofType(type)
                 .build();

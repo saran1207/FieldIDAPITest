@@ -14,12 +14,10 @@ public class ManageAssetTypes_SubComponentsTest extends ManageAssetTypesTestCase
         super.setupScenario(scenario);
 
         scenario.anAssetType()
-                .forTenant(scenario.defaultTenant())
                 .named("Mobile Crane")
                 .build();
 
         scenario.anAssetType()
-                .forTenant(scenario.defaultTenant())
                 .named("Shackle")
                 .build();
     }

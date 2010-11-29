@@ -5,23 +5,23 @@ import static org.junit.Assert.assertTrue;
 
 import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.builders.AssetBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.IdentifyPage;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	private HomePage page;
-	private Asset asset;
-	private AssetPage assetPage;
+
     private static final String TEST_SERIAL_NUMBER = "oldSerial";
-    private static final String MERGE_SERIAL_NUMBER = "oldSerial_MERGED";
+    private static final String MERGE_SERIAL_NUMBER = "oldSerial_toMerge";
 	private static final String NEW_SERIAL = "newSerial";
 	private static final String NEW_PURCHASE_ORDER = "newPurchaseOrder";
 	private static final String NEW_STATUS = "Out of Service";
@@ -31,15 +31,9 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
     @Override
     public void setupScenario(Scenario scenario) {
-        scenario.anAssetStatus()
-                .named("OMG PLS")
-                .forTenant(scenario.defaultTenant())
-                .build();
+        scenario.anAssetStatus().named("OMG PLS").build();
 
-        scenario.anAssetStatus()
-                .named(NEW_STATUS)
-                .forTenant(scenario.defaultTenant())
-                .build();
+        scenario.anAssetStatus().named(NEW_STATUS).build();
 
         InfoOptionBean opt1 = scenario.anInfoOption()
                 .withName("Val1").build();
@@ -57,11 +51,15 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
                 .withOptions(opt1, opt2)
                 .build();
 
-        scenario.anAssetType()
+       AssetType type = scenario.anAssetType()
                 .named("Gantry Crane - Cab Controlled")
-                .forTenant(scenario.defaultTenant())
                 .withFields(field1, field2)
                 .build();
+
+        AssetBuilder builder = scenario.anAsset().ofType(type).purchaseOrder("PO 3");
+
+        builder.withSerialNumber(TEST_SERIAL_NUMBER).build();
+        builder.withSerialNumber(MERGE_SERIAL_NUMBER).build();
     }
 
     @Before
@@ -71,9 +69,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	@Test
 	public void delete_asset() {
-		identifyAssetWithSerialNumber(TEST_SERIAL_NUMBER, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
-
-		assetPage = page.search(TEST_SERIAL_NUMBER);
+		AssetPage assetPage = page.search(TEST_SERIAL_NUMBER);
 		assetPage.clickEditTab().clickDelete();
 
 		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(., 'The asset has been deleted.')]"));
@@ -81,13 +77,10 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	@Test
 	public void edit_asset() {
-		identifyAssetWithSerialNumber(TEST_SERIAL_NUMBER, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
+		AssetPage assetPage = page.search(TEST_SERIAL_NUMBER).clickEditTab();
 
-		assetPage = page.search(TEST_SERIAL_NUMBER).clickEditTab();
-		assetPage.setMiscDriver(misc);
-
-		prepareNewAssetFields();
-
+		Asset asset = createNewAssetData();
+        assetPage.setAssetForm(asset);
 		assetPage.clickSave();
 
 		assertTrue("Serial unsuccessfully edited", assetPage.getSerialNumber().equals(NEW_SERIAL));
@@ -98,9 +91,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	@Test
 	public void edit_asset_attributes() {
-		identifyAssetWithSerialNumber(TEST_SERIAL_NUMBER, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
-
-		assetPage = page.search(TEST_SERIAL_NUMBER).clickEditTab();
+		AssetPage assetPage = page.search(TEST_SERIAL_NUMBER).clickEditTab();
 
         assetPage.enterAttributeValue("Make/Model", NEW_MAKEMODEL);
         assetPage.selectAttributeValue("SelectOpt", NEW_ATTR_VALUE);
@@ -115,10 +106,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	@Test
 	public void merge_two_assets() {
-		identifyAssetWithSerialNumber(TEST_SERIAL_NUMBER, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
-		identifyAssetWithSerialNumber(MERGE_SERIAL_NUMBER, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
-
-		assetPage = page.search(TEST_SERIAL_NUMBER).clickEditTab();
+		AssetPage assetPage = page.search(TEST_SERIAL_NUMBER).clickEditTab();
 
 		assetPage.clickMerge();
 		assetPage.loadAssetToMergeIntoAndSubmit(MERGE_SERIAL_NUMBER);
@@ -128,25 +116,13 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 		page.search(MERGE_SERIAL_NUMBER);
 	}
 
-	private void identifyAssetWithSerialNumber(String serial, String assetType, String purchaseOrder, String status) {
-		IdentifyPage identifyPage = page.clickIdentifyLink();
-		asset = new Asset();
-		asset.setSerialNumber(serial);
-		asset.setAssetType(assetType);
-		asset.setPurchaseOrder(purchaseOrder);
-		asset.setAssetStatus(status);
-
-		identifyPage.setAddAssetForm(asset, false);
-		identifyPage.saveNewAsset();
-	}
-
-	private void prepareNewAssetFields() {
-		asset = new Asset();
+	private Asset createNewAssetData() {
+		Asset asset = new Asset();
 		asset.setSerialNumber(NEW_SERIAL);
 		asset.setAssetType(NEW_ASSET_TYPE);
 		asset.setPurchaseOrder(NEW_PURCHASE_ORDER);
 		asset.setAssetStatus(NEW_STATUS);
-		assetPage.setAssetForm(asset);
+        return asset;
 	}
 
 }

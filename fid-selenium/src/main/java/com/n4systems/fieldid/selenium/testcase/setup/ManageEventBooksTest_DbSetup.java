@@ -23,26 +23,18 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
 
     @Override
     public void setupScenario(Scenario scenario) {
-        Tenant seaFit = scenario.tenant("test1");
-
         scenario.anEventBook()
-                .forTenant(seaFit)
                 .withName("The Open Book")
-                .withOwner(scenario.primaryOrgFor("test1"))
                 .open(true).build();
 
         scenario.anEventBook()
-                .forTenant(seaFit)
                 .withName("The Closed Book")
-                .withOwner(scenario.primaryOrgFor("test1"))
                 .open(false).build();
 
         Event event = scenario.aSimpleEvent().build();
 
         scenario.anEventBook()
-                .forTenant(seaFit)
                 .withName("The In Use Book")
-                .withOwner(scenario.primaryOrgFor("test1"))
                 .withEvents(event)
                 .open(true).build();
     }

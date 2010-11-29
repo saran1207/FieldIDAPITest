@@ -16,7 +16,11 @@ abstract public class EntityWithTenantBuilder<K extends EntityWithTenant> extend
 	}
 
     public EntityWithTenantBuilder() {
-		this(generateNewId(), new Date(), new Date(), UserBuilder.aUser().build(), TenantBuilder.aTenant().build());
+		this(null);
+    }
+
+    public EntityWithTenantBuilder(Tenant tenant) {
+		this(generateNewId(), new Date(), new Date(), null, tenant);
     }
 	
 	@Override
@@ -26,9 +30,13 @@ abstract public class EntityWithTenantBuilder<K extends EntityWithTenant> extend
 		return model;
 	}
 
-    public EntityWithTenantBuilder<K> withTenant(Tenant tenant) {
+    public EntityWithTenantBuilder<K> setTenant(Tenant tenant) {
         this.tenant = tenant;
         return this;
+    }
+
+    public Tenant getTenant() {
+        return tenant;
     }
 
 }

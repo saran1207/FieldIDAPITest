@@ -1,16 +1,17 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.Asset;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.IdentifyPage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.builders.AssetBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import rfid.ejb.entity.AssetStatus;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,22 +19,39 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
     private HomePage page;
 
+    @Override
+    public void setupScenario(Scenario scenario) {
+        AssetType type = scenario.anAssetType()
+                .named("Workman Harness")
+                .build();
+
+        AssetStatus status1 = scenario.anAssetStatus()
+                .named("In Service")
+                .build();
+
+        scenario.anAssetStatus()
+                .named("Out of Service")
+                .build();
+
+        AssetBuilder anAsset = scenario.anAsset()
+                .withSerialNumber("123456")
+                .ofType(type)
+                .havingStatus(status1);
+
+        anAsset.purchaseOrder("PO 3").build();
+        anAsset.purchaseOrder("PO 4").build();
+    }
+
     @Before
     public void setUp() {
-        page = startAsCompany("msa").login();
+        page = startAsCompany("test1").login();
     }
 
     @Test
     public void test_mass_update_asset() throws Exception {
-        // TODO: Replace identification at the beginning with data setup.
-        String assetSerialNumber = MiscDriver.getRandomString(10);
-
-        identifyAssetWithSerialNumber(assetSerialNumber, "Workman Harness", "PO 3", "In Service");
-        identifyAssetWithSerialNumber(assetSerialNumber, "Workman Harness", "PO 4", "In Service");
-
         AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
-        assetsSearchPage.enterSerialNumber(assetSerialNumber);
+        assetsSearchPage.enterSerialNumber("123456");
         AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
 
         assertEquals(2, resultsPage.getTotalResultsCount());
@@ -57,18 +75,6 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
         assertEquals("PO 5", assetPage.getPurchaseOrder());
         assertEquals("Out of Service", assetPage.getAssetStatus());
-    }
-
-    private void identifyAssetWithSerialNumber(String serial, String assetType, String purchaseOrder, String status) {
-        IdentifyPage identifyPage = page.clickIdentifyLink();
-        Asset asset = new Asset();
-        asset.setSerialNumber(serial);
-        asset.setAssetType(assetType);
-        asset.setPurchaseOrder(purchaseOrder);
-        asset.setAssetStatus(status);
-
-        identifyPage.setAddAssetForm(asset, false);
-        identifyPage.saveNewAsset();
     }
 
 }

@@ -28,7 +28,6 @@ public abstract class ManageAssetTypesTestCase extends PageNavigatingTestCase<Ma
                 .manufactureCertificate(true)
                 .manufactureCertificateText(TEST_ASSET_TYPE_MANUFACTURER_CERTIFICATE_TEXT)
                 .descriptionTemplate(TEST_ASSET_TYPE_ASSET_DESCRIPTION_TEMPLATE)
-                .forTenant(scenario.defaultTenant())
                 .build();
     }
 

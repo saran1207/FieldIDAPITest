@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.builders.TenantBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ private ConfigContext oldContext;
 	
 	@Test 
 	public void should_get_asset_attachment_file() {
-		Asset asset = anAsset().build();
+		Asset asset = anAsset().forTenant(TenantBuilder.n4()).build();
 		asset.setCreated(DateHelper.string2Date("yyyy-MM-dd h:mm a", "2009-06-01 12:01 pm"));
 		asset.setId(2L);
 		AssetAttachment attachment = new AssetAttachment();

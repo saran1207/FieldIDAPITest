@@ -3,12 +3,11 @@ package com.n4systems.fieldid.selenium.pages;
 import static org.junit.Assert.fail;
 
 import com.n4systems.fieldid.selenium.datatypes.Asset;
+import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
 public class AssetPage extends FieldIDPage {
-
-	MiscDriver misc;
 
 	// Locators
 	private String editAssetSerialNumberTextFieldLocator = "xpath=//INPUT[@id='serialNumberText']";
@@ -160,6 +159,7 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public void setAssetForm(Asset p) {
+        MiscDriver misc = new MiscDriver((FieldIdSelenium) selenium);
 
 		if (p.getPublished() == true) {
 			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Publish Over Safety Network");
@@ -212,10 +212,6 @@ public class AssetPage extends FieldIDPage {
     public String getValueForAttribute(String attributeName) {
         return selenium.getText("//span[@infofieldname='"+attributeName+"']");
     }
-
-	public void setMiscDriver(MiscDriver misc) {
-		this.misc = misc;
-	}
 
 	public void clickMerge() {
 		selenium.click("//a[contains(.,'Merge')]");

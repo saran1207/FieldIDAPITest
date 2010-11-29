@@ -102,7 +102,7 @@ public class AssetMergerTest {
 	@Test
 	public void should_merge_products_together_with_events() {
 		List<Event> eventsOnLosingProduct = new ArrayList<Event>();
-		eventsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
+		eventsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).withTenant(TenantBuilder.aTenant().build()).build());
 		
 		mockEventLists(eventsOnLosingProduct, new ArrayList<Event>());
 		
@@ -129,7 +129,7 @@ public class AssetMergerTest {
 	@Test
 	public void should_merge_products_together_with_events_that_have_a_schedule_on_it() {
 		List<Event> eventsOnLosingProduct = new ArrayList<Event>();
-		eventsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).build());
+		eventsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).withTenant(TenantBuilder.aTenant().build()).build());
 		
 		// puts the schedule onto the event.
 		EventScheduleBuilder.aCompletedEventSchedule().completedDoing(eventsOnLosingProduct.get(0)).asset(eventsOnLosingProduct.get(0).getAsset()).build();

@@ -11,6 +11,7 @@ import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.AssetStatusBuilder;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.BaseBuilder;
+import com.n4systems.model.builders.EntityWithOwnerBuilder;
 import com.n4systems.model.builders.EntityWithTenantBuilder;
 import com.n4systems.model.builders.EventBookBuilder;
 import com.n4systems.model.builders.EventBuilder;
@@ -170,10 +171,6 @@ public class Scenario {
     private <T extends BaseBuilder> T createPersistentBuilder(T builder) {
         builder.setAlwaysUseNullId(true);
         builder.setBuilderCallback(new ScenarioBuilderCallback(this));
-        if (builder instanceof EntityWithTenantBuilder) {
-            EntityWithTenantBuilder withTenantBuilder = (EntityWithTenantBuilder) builder;
-            withTenantBuilder.withTenant(defaultTenant);
-        }
         return builder;
     }
 
@@ -207,6 +204,24 @@ public class Scenario {
         if (builder instanceof AbstractEntityBuilder) {
             AbstractEntityBuilder entBuilder = (AbstractEntityBuilder) builder;
             entBuilder.modifiedBy(aUser().build());
+        }
+        if (builder instanceof EntityWithTenantBuilder) {
+            EntityWithTenantBuilder withTenantBuilder = (EntityWithTenantBuilder) builder;
+            if (withTenantBuilder.getTenant() == null) {
+                withTenantBuilder.setTenant(defaultTenant);
+            }
+        }
+        if (builder instanceof EntityWithOwnerBuilder) {
+            EntityWithOwnerBuilder withOwnerBuilder = (EntityWithOwnerBuilder) builder;
+            if (withOwnerBuilder.getOwner() == null) {
+                withOwnerBuilder.setOwner(defaultPrimaryOrg);
+            }
+        }
+        if (builder instanceof AssetStatusBuilder) {
+            AssetStatusBuilder statusBuilder = (AssetStatusBuilder) builder;
+            if (statusBuilder.getTenant() == null) {
+                statusBuilder.setTenant(defaultTenant);
+            }
         }
     }
 }
