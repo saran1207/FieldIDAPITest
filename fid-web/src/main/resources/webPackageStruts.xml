@@ -767,8 +767,14 @@
 		</action>
 		
 		<action name="massAssetDelete" method="delete" class="com.n4systems.fieldid.actions.AssetMassUpdate">
-			<result name="error" type="redirectAction">search</result>
-			<result name="input" type="freemarker">/templates/html/massUpdate/asset/form.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">searchResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">massUpdateAssets</param>
+				<param name="searchId">${searchId}</param>
+			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">searchResults</param>
 				<param name="searchId">${searchId}</param>
