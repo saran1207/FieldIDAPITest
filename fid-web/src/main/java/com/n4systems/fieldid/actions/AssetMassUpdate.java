@@ -30,22 +30,23 @@ import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
-@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 public class AssetMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AssetMassUpdate.class);
-	
+
 	private LegacyAsset assetManager;
 	private AssetSearchContainer criteria;
 
 	private Asset asset = new Asset();
 	private List<Listable<Long>> employees;
-	
+	private boolean forDeletion;
+
 	private String identified;
 	private OwnerPicker ownerPicker;
-	
+
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
-	
+
 	public AssetMassUpdate(MassUpdateManager massUpdateManager, LegacyAsset assetManager, PersistenceManager persistenceManager) {
 		super(massUpdateManager, persistenceManager);
 		this.assetManager = assetManager;
@@ -55,11 +56,11 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), asset);
 		overrideHelper(new MassUpdateAssetHelper(getLoaderFactory()));
 	}
-	
+
 	private void applyCriteriaDefaults() {
-	
+
 		setOwnerId(criteria.getOwnerId());
-		
+
 		setAssetStatus(criteria.getAssetStatus());
 		setPurchaseOrder(criteria.getPurchaseOrder());
 		setAssignedUser(criteria.getAssignedUser());
@@ -71,49 +72,70 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
-		
+
 		identified = convertDate(asset.getIdentified());
 
 		applyCriteriaDefaults();
-		
+
 		assetWebModel.match(asset);
 		return SUCCESS;
 	}
 
 	public String doSave() {
+		
 		if (!findCriteria()) {
 			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
 		
-		if (select.get("identified") != null && select.get("identified")) {
-			if (identified == null || identified.length() == 0) {
-				addFlashErrorText("error.identifiedrequired");
+		if (isForDeletion()) {
+			try {
+
+				List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
+				
+				Long results = massUpdateManager.deleteAssets(ids, fetchCurrentUser());
+				List<String> messageArgs = new ArrayList<String>();
+				messageArgs.add(results.toString());
+				addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
+
+				criteria.getMultiIdSelection().clear();
+				
+				return SUCCESS;
+			} catch (UpdateFailureException ufe) {
+				logger.error("failed to run a mass update on assets", ufe);
+			} catch (Exception e) {
+				logger.error("failed to run a mass update on assets", e);
+			}
+			return SUCCESS;
+		} else {
+			if (select.get("identified") != null && select.get("identified")) {
+				if (identified == null || identified.length() == 0) {
+					addFlashErrorText("error.identifiedrequired");
+					return INPUT;
+				}
+			}
+
+			try {
+
+				asset.setIdentified(convertDate(identified));
+				assetWebModel.fillInAsset(asset);
+				List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
+
+				Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser());
+				List<String> messageArgs = new ArrayList<String>();
+				messageArgs.add(results.toString());
+				addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
+
+				return SUCCESS;
+			} catch (UpdateFailureException ufe) {
+				logger.error("failed to run a mass update on assets", ufe);
+			} catch (UpdateConatraintViolationException ucve) {
+				addActionError(getText("error.massupdateassetconstriantviolation"));
 				return INPUT;
+			} catch (Exception e) {
+				logger.error("failed to run a mass update on assets", e);
 			}
 		}
-
-		try {
-			
-			asset.setIdentified(convertDate(identified));
-			assetWebModel.fillInAsset(asset);
-			List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
-			
-			Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser());
-			List<String> messageArgs = new ArrayList<String>();
-			messageArgs.add(results.toString());
-			addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
-
-			return SUCCESS;
-		} catch (UpdateFailureException ufe) {
-			logger.error("failed to run a mass update on assets", ufe);
-		} catch (UpdateConatraintViolationException ucve) {
-			addActionError(getText("error.massupdateassetconstriantviolation"));
-			return INPUT;
-		} catch (Exception e) {
-			logger.error("failed to run a mass update on assets", e);
-		}
-
 		addActionError(getText("error.failedtomassupdate"));
 		return INPUT;
 	}
@@ -121,10 +143,10 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	public FilteredIdLoader<BaseOrg> getOrgLoader() {
 		return getLoaderFactory().createFilteredIdLoader(BaseOrg.class);
 	}
-	
+
 	private boolean findCriteria() {
 		if (getSession().containsKey(AssetSearchAction.SEARCH_CRITERIA) && getSession().get(AssetSearchAction.SEARCH_CRITERIA) != null) {
-			criteria = (AssetSearchContainer)getSession().get(AssetSearchAction.SEARCH_CRITERIA);
+			criteria = (AssetSearchContainer) getSession().get(AssetSearchAction.SEARCH_CRITERIA);
 		}
 
 		if (criteria == null || searchId == null || !searchId.equals(criteria.getSearchId())) {
@@ -150,28 +172,28 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 		return asset.getPurchaseOrder();
 	}
 
-	public void setPurchaseOrder(String purcahseOrder) {
-		asset.setPurchaseOrder(purcahseOrder);
+	public void setPurchaseOrder(String purchaseOrder) {
+		asset.setPurchaseOrder(purchaseOrder);
 	}
 
 	public List<AssetStatus> getAssetStatuses() {
 		return getLoaderFactory().createAssetStatusListLoader().load();
 	}
-	
+
 	public Long getAssignedUser() {
-		return ( asset.getAssignedUser() != null ) ? asset.getAssignedUser().getId() : null;
+		return (asset.getAssignedUser() != null) ? asset.getAssignedUser().getId() : null;
 	}
-	
+
 	public void setAssignedUser(Long user) {
-		if(user == null) {
+		if (user == null) {
 			asset.setAssignedUser(null);
 		} else if (asset.getAssignedUser() == null || !user.equals(asset.getAssignedUser().getId())) {
 			asset.setAssignedUser(getLoaderFactory().createUserFilteredLoader().setId(user).load());
 		}
 	}
-	
+
 	public List<Listable<Long>> getEmployees() {
-		if( employees == null ) {
+		if (employees == null) {
 			UserListableLoader loader = getLoaderFactory().createHistoricalEmployeesListableLoader();
 			employees = loader.load();
 		}
@@ -182,7 +204,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 		return identified;
 	}
 
-	@CustomValidator(type = "n4systemsDateValidator",  message = "", key = "error.mustbeadate" )	
+	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public void setIdentified(String identified) {
 		this.identified = identified;
 	}
@@ -202,16 +224,24 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	public void setPublished(String stateName) {
 		asset.setPublished(PublishedState.valueOf(stateName).isPublished());
 	}
-	
+
 	public String getPublished() {
 		return PublishedState.resolvePublishedState(asset.isPublished()).name();
 	}
-	
+
 	public List<StringListingPair> getPublishedStates() {
 		return PublishedState.getPublishedStates(this);
 	}
 
 	public AssetWebModel getAssetWebModel() {
 		return assetWebModel;
+	}
+
+	public boolean isForDeletion() {
+		return forDeletion;
+	}
+
+	public void setForDeletion(boolean isForDeletion) {
+		this.forDeletion = isForDeletion;
 	}
 }

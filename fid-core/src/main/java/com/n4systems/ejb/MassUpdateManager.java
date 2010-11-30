@@ -24,6 +24,8 @@ public interface MassUpdateManager {
 	 */
 	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
 
+	public Long deleteAssets(List<Long> ids, User modifiedBy) throws UpdateFailureException;
+	
 	public Long updateEvents(List<Long> ids, Event event, Map<String, Boolean> values, Long userId) throws UpdateFailureException;
 
 	public Long updateEventSchedules(Set<Long> ids, EventSchedule eventSchedule, Map<String, Boolean> values) throws UpdateFailureException;

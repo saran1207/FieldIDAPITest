@@ -96,9 +96,21 @@
 				</td>
 			</tr>
 		</#if>
-		
-	</table>	
-		
+	
+		<tr>
+			<td>
+				<@s.checkbox name="forDeletion" onchange="selectField('delete');"  />
+				<span style="display: none">
+					<@s.checkbox name="select['delete']" id="check_delete"/>
+				</span>
+			</td>
+				
+			<td>
+				<label class="label"><@s.text name="label.mass_delete"/></label>
+			</td>
+		</tr>
+	</table>
+
 	<div class="formAction">
 		<a href="<@s.url action="searchResults" includeParams="none" searchId="${searchId!1}"currentPager="${currentPage!1}"/>"><@s.text name="label.returntosearch"/></a>
 		<@s.submit key="hbutton.save" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
@@ -120,4 +132,5 @@
 		
 		field.checked = true;
 	}
+	
 </script>

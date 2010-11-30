@@ -38,17 +38,13 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
-
 public class MassUpdateManagerImpl implements MassUpdateManager {
 
-	
 	private EntityManager em;
 
-	
 	private PersistenceManager persistenceManager;
-	
-	private LegacyAsset legacyAssetManager;
 
+	private LegacyAsset legacyAssetManager;
 
 	private AssetManager assetManager;
 
@@ -94,7 +90,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 					bindParams.put(paramKey + "_freeform", eventSchedule.getAdvancedLocation().getFreeformLocation());
 					bindParams.put(paramKey + "_predefined", eventSchedule.getAdvancedLocation().getPredefinedLocation());
 				}
-				
+
 				if (paramKey.equals("owner")) {
 					updateJpql += ", owner = :owner ";
 					bindParams.put("owner", eventSchedule.getOwner());
@@ -115,37 +111,38 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 			// execute the update
 			result = new Long(updateStmt.executeUpdate());
-			
-			//update assets as well.
+
+			// update assets as well.
 			modifyAssetsForSchedules(scheduleIds);
-			
+
 		} catch (Exception e) {
 			throw new UpdateFailureException(e);
 		}
 
 		return result;
 	}
-	
+
 	public Long deleteEventSchedules(Set<Long> ids) throws UpdateFailureException {
 		if (ids == null || ids.isEmpty()) {
 			return 0L;
 		}
-		
+
 		Set<Long> incompleteSchedules = getIncompleteSchedules(ids);
-		
+
 		if (incompleteSchedules.isEmpty()) {
 			return 0L;
 		}
-		
-		// we'll modify the assets first as we won't be able to find the asset ids
+
+		// we'll modify the assets first as we won't be able to find the asset
+		// ids
 		// after we delete.
 		modifyAssetsForSchedules(incompleteSchedules);
-		
+
 		String deleteStmt = String.format("DELETE from %s WHERE id IN (:ids)", EventSchedule.class.getName());
-		
+
 		LargeInListQueryExecutor deleteRunner = new LargeInListQueryExecutor();
 		int removeCount = deleteRunner.executeUpdate(em.createQuery(deleteStmt), ListHelper.toList(incompleteSchedules));
-		
+
 		return new Long(removeCount);
 	}
 
@@ -153,13 +150,14 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		QueryBuilder<Long> incompleteScheduleBuilder = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		incompleteScheduleBuilder.setSimpleSelect("id", true);
 		incompleteScheduleBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "status", Arrays.asList(ScheduleStatusGrouping.NON_COMPLETE.getMembers())));
-		
-		// we will leave our id list empty for now as, the LargeInListQueryExecutor will handle setting this
+
+		// we will leave our id list empty for now as, the
+		// LargeInListQueryExecutor will handle setting this
 		incompleteScheduleBuilder.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
-		
+
 		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
 		List<Long> incompleteSchedules = queryExecutor.getResultList(em, incompleteScheduleBuilder, ListHelper.toList(scheduleIds));
-		
+
 		return ListHelper.toSet(incompleteSchedules);
 	}
 
@@ -167,18 +165,18 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		QueryBuilder<Long> assetIdQuery = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter());
 		assetIdQuery.setSimpleSelect("asset.id", true);
 		assetIdQuery.addWhere(WhereClauseFactory.create(Comparator.IN, "scheduleIds", "id", Collections.EMPTY_LIST));
-		
+
 		LargeInListQueryExecutor queryExecutor = new LargeInListQueryExecutor("scheduleIds");
 		List<Long> assetIds = queryExecutor.getResultList(em, assetIdQuery, ListHelper.toList(scheduleIds));
 
 		updateAssetModifiedDate(assetIds);
 	}
-	
+
 	public Long updateAssetModifiedDate(List<Long> ids) {
 		if (ids == null || ids.size() == 0) {
 			return 0L;
 		}
-		
+
 		String updateQueryString = "UPDATE " + Asset.class.getName() + " SET modified = :now WHERE id IN (:ids)";
 		return new Long(em.createQuery(updateQueryString).setParameter("now", new Date()).setParameter("ids", ids).executeUpdate());
 	}
@@ -188,11 +186,11 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		try {
 			for (Long id : ids) {
 				Asset asset = assetManager.findAssetAllFields(id, new OpenSecurityFilter());
-				
+
 				updateAsset(asset, assetModificationData, values);
-				
+
 				legacyAssetManager.update(asset, modifiedBy);
-				
+
 				result++;
 			}
 
@@ -202,7 +200,22 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 			throw new UpdateConatraintViolationException(cve);
 		}
 
-		
+		return result;
+	}
+
+	public Long deleteAssets(List<Long> ids, User modifiedBy) throws UpdateFailureException {
+		Long result = 0L;
+
+		try {
+			for (Long id : ids) {
+				Asset asset = assetManager.findAssetAllFields(id, new OpenSecurityFilter());
+				result++;
+				assetManager.archive(asset, modifiedBy);
+			}
+		} catch (Exception e) {
+			throw new UpdateFailureException(e);
+		}
+
 		return result;
 	}
 
@@ -243,22 +256,22 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		if (ids.isEmpty()) {
 			return 0L;
 		}
-		
+
 		User user = persistenceManager.find(User.class, userId);
-		
+
 		Set<String> updateKeys = getEnabledKeys(fieldMap);
-		
+
 		boolean ownershipChanged = false;
 		Event changeTarget;
-		for (Long id: ids) {
+		for (Long id : ids) {
 			changeTarget = persistenceManager.find(Event.class, id);
-			
-			for (String updateKey: updateKeys) {
+
+			for (String updateKey : updateKeys) {
 				if (updateKey.equals("owner")) {
 					ownershipChanged = true;
 					changeTarget.setOwner(eventChanges.getOwner());
 				}
-				
+
 				if (updateKey.equals("eventBook")) {
 					changeTarget.setBook(eventChanges.getBook());
 				}
@@ -271,15 +284,15 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (updateKey.equals("printable")) {
 					changeTarget.setPrintable(eventChanges.isPrintable());
 				}
-				
+
 				if (updateKey.equals("assetStatus")) {
 					changeTarget.setAssetStatus(eventChanges.getAssetStatus());
 				}
 			}
-			
+
 			persistenceManager.update(changeTarget, user);
 		}
-			
+
 		if (ownershipChanged) {
 			updateCompletedEventOwnership(ids, eventChanges, fieldMap);
 		}
@@ -288,17 +301,18 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	}
 
 	private void updateCompletedEventOwnership(List<Long> ids, Event event, Map<String, Boolean> fieldMap) throws UpdateFailureException {
-		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "events", "event.id", ids).addSimpleWhere("status", ScheduleStatus.COMPLETED);
-		
+		QueryBuilder<Long> scheduleIds = new QueryBuilder<Long>(EventSchedule.class, new OpenSecurityFilter()).setSimpleSelect("id").addWhere(Comparator.IN, "events", "event.id", ids).addSimpleWhere(
+				"status", ScheduleStatus.COMPLETED);
+
 		Map<String, Boolean> selectedAttributes = getOwnershipSelectedAttributes(fieldMap);
-		
+
 		EventSchedule schedule = new EventSchedule();
-		
+
 		schedule.completed(event);
-		
+
 		updateEventSchedules(ListHelper.toSet(persistenceManager.findAll(scheduleIds)), schedule, selectedAttributes);
 	}
-	
+
 	/** Extracts a set of keys, whose values are True */
 	private Set<String> getEnabledKeys(Map<String, Boolean> values) {
 		Set<String> keys = new HashSet<String>();
@@ -312,18 +326,18 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 	private Map<String, Boolean> getOwnershipSelectedAttributes(Map<String, Boolean> values) {
 		Map<String, Boolean> selectedAttributes = new HashMap<String, Boolean>();
-		selectedAttributes.put("owner", (values.get("owner") != null) ? values.get("owner") : false );
+		selectedAttributes.put("owner", (values.get("owner") != null) ? values.get("owner") : false);
 		selectedAttributes.put("location", (values.get("location") != null) ? values.get("location") : false);
 		return selectedAttributes;
 	}
 
 	public Long assignToJob(List<Long> scheduleIds, Project project, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
-		
+
 		if (scheduleIds == null || scheduleIds.isEmpty()) {
 			return 0L;
 		}
-		
+
 		try {
 			String updateQueryString = "UPDATE " + EventSchedule.class.getName() + " SET modified = :now ";
 			Map<String, Object> parameters = new HashMap<String, Object>();

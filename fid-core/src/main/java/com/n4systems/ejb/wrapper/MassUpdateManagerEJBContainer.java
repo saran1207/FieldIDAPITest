@@ -132,4 +132,20 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
+	public Long deleteAssets(List<Long> ids, User modifiedBy) throws UpdateFailureException {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+		Transaction transaction = transactionManager.startTransaction();
+		try {
+			return createManager(transaction.getEntityManager()).deleteAssets(ids, modifiedBy);
+
+		} catch (RuntimeException e) {
+			transactionManager.rollbackTransaction(transaction);
+
+			throw e;
+		} finally {
+			transactionManager.finishTransaction(transaction);
+		}
+	}
+
 }
