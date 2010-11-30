@@ -454,6 +454,10 @@
 	padding:4px;
 }
 
+.component .fullForm .infoSet label{
+	text-align: left;
+}
+
 .fullForm .infoSet label, .fullForm .eventForm .infoSet label{
 	text-align:left;
 }
