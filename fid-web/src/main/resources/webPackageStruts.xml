@@ -760,6 +760,20 @@
 				<param name="searchId">${searchId}</param>
 			</result>
 		</action>
+		
+		<action name="massAssetConfirmDelete" method="confirmDelete" class="com.n4systems.fieldid.actions.AssetMassUpdate">
+			<result name="error" type="redirectAction">search</result>
+			<result name="success" type="freemarker">/templates/html/massUpdate/asset/confirmDelete.ftl</result>
+		</action>
+		
+		<action name="massAssetDelete" method="delete" class="com.n4systems.fieldid.actions.AssetMassUpdate">
+			<result name="error" type="redirectAction">search</result>
+			<result name="input" type="freemarker">/templates/html/massUpdate/asset/form.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">searchResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
 
 		<action name="massUpdateEvents" method="edit" class="com.n4systems.fieldid.actions.EventMassUpdate">
 			<result name="error" type="redirectAction">report</result>

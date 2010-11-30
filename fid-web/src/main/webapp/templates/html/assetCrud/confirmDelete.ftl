@@ -47,14 +47,17 @@ ${action.setPageType('asset', 'edit')!}
 	</div>
 	<div class="formAction">
 		<@s.url id="cancelUrl" action="assetEdit" uniqueID="${uniqueID}"/>
-		<@s.reset key="label.cancel" onclick="return redirect('${cancelUrl}');" theme="fieldid"/>
-		
 		<@s.url id="deleteUrl" action="assetDelete" uniqueID="${uniqueID}"/>
+		
 		<@s.submit key="label.delete" onclick="return redirect('${deleteUrl}');" theme="fieldid" >
 			<#if !removalSummary.validToDelete() >
 				<@s.param name="disabled" value="true"/>
 			</#if>
 		</@s.submit>	
+		
+		<@s.text name="label.or"/>
+		
+		<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
 	</div>
 </div>
 

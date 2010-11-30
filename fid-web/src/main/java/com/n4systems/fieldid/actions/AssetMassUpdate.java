@@ -14,6 +14,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
@@ -23,9 +24,12 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.AssetRemovalSummary;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -35,12 +39,14 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AssetMassUpdate.class);
 
-	private LegacyAsset assetManager;
+	private LegacyAsset legacyAssetManager;
+	private AssetManager assetManager;
+
 	private AssetSearchContainer criteria;
+	private List<AssetRemovalSummary> removalSummaries = new ArrayList<AssetRemovalSummary>();
 
 	private Asset asset = new Asset();
 	private List<Listable<Long>> employees;
-	private boolean forDeletion;
 
 	private String identified;
 	private OwnerPicker ownerPicker;
@@ -49,7 +55,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 
 	public AssetMassUpdate(MassUpdateManager massUpdateManager, LegacyAsset assetManager, PersistenceManager persistenceManager) {
 		super(massUpdateManager, persistenceManager);
-		this.assetManager = assetManager;
+		this.legacyAssetManager = assetManager;
 	}
 
 	public void prepare() throws Exception {
@@ -82,62 +88,95 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public String doSave() {
-		
+
 		if (!findCriteria()) {
 			addFlashErrorText("error.searchexpired");
 			return ERROR;
 		}
-		
-		if (isForDeletion()) {
-			try {
 
-				List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
-				
-				Long results = massUpdateManager.deleteAssets(ids, fetchCurrentUser());
-				List<String> messageArgs = new ArrayList<String>();
-				messageArgs.add(results.toString());
-				addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
-
-				criteria.getMultiIdSelection().clear();
-				
-				return SUCCESS;
-			} catch (UpdateFailureException ufe) {
-				logger.error("failed to run a mass update on assets", ufe);
-			} catch (Exception e) {
-				logger.error("failed to run a mass update on assets", e);
-			}
-			return SUCCESS;
-		} else {
-			if (select.get("identified") != null && select.get("identified")) {
-				if (identified == null || identified.length() == 0) {
-					addFlashErrorText("error.identifiedrequired");
-					return INPUT;
-				}
-			}
-
-			try {
-
-				asset.setIdentified(convertDate(identified));
-				assetWebModel.fillInAsset(asset);
-				List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
-
-				Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser());
-				List<String> messageArgs = new ArrayList<String>();
-				messageArgs.add(results.toString());
-				addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
-
-				return SUCCESS;
-			} catch (UpdateFailureException ufe) {
-				logger.error("failed to run a mass update on assets", ufe);
-			} catch (UpdateConatraintViolationException ucve) {
-				addActionError(getText("error.massupdateassetconstriantviolation"));
+		if (select.get("identified") != null && select.get("identified")) {
+			if (identified == null || identified.length() == 0) {
+				addFlashErrorText("error.identifiedrequired");
 				return INPUT;
-			} catch (Exception e) {
-				logger.error("failed to run a mass update on assets", e);
 			}
+		}
+
+		try {
+			asset.setIdentified(convertDate(identified));
+			assetWebModel.fillInAsset(asset);
+			List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
+
+			Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser());
+			List<String> messageArgs = new ArrayList<String>();
+			messageArgs.add(results.toString());
+			addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
+
+			return SUCCESS;
+		} catch (UpdateFailureException ufe) {
+			logger.error("failed to run a mass update on assets", ufe);
+		} catch (UpdateConatraintViolationException ucve) {
+			addActionError(getText("error.massupdateassetconstriantviolation"));
+			return INPUT;
+		} catch (Exception e) {
+			logger.error("failed to run a mass update on assets", e);
+
 		}
 		addActionError(getText("error.failedtomassupdate"));
 		return INPUT;
+	}
+
+	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	public String doConfirmDelete() {
+
+		if (!findCriteria()) {
+			addFlashErrorText("error.searchexpired");
+			return ERROR;
+		}
+
+		assetManager = ServiceLocator.getAssetManager();
+		List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
+
+		try {
+			for (Long id : ids) {
+				Asset asset = assetManager.findAssetAllFields(id, new OpenSecurityFilter());
+				removalSummaries.add(assetManager.testArchive(asset));
+			}
+
+		} catch (Exception e) {
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
+	public String doDelete() {
+
+		if (!findCriteria()) {
+			addFlashErrorText("error.searchexpired");
+			return ERROR;
+		}
+
+		try {
+
+			List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
+
+			Long results = massUpdateManager.deleteAssets(ids, fetchCurrentUser());
+			List<String> messageArgs = new ArrayList<String>();
+
+			criteria.getMultiIdSelection().clear();
+
+			messageArgs.add(results.toString());
+			addFlashMessage(getText("message.asset_massdelete_successful", messageArgs));
+
+			return SUCCESS;
+		} catch (UpdateFailureException ufe) {
+			logger.error("failed to run a mass update on assets", ufe);
+		} catch (Exception e) {
+			logger.error("failed to run a mass update on assets", e);
+		}
+		return SUCCESS;
 	}
 
 	public FilteredIdLoader<BaseOrg> getOrgLoader() {
@@ -163,7 +202,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 		if (statusId == null) {
 			asset.setAssetStatus(null);
 		} else if (asset.getAssetStatus() == null || !statusId.equals(asset.getAssetStatus().getUniqueID())) {
-			AssetStatus assetStatus = assetManager.findAssetStatus(statusId, getTenantId());
+			AssetStatus assetStatus = legacyAssetManager.findAssetStatus(statusId, getTenantId());
 			asset.setAssetStatus(assetStatus);
 		}
 	}
@@ -237,11 +276,26 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 		return assetWebModel;
 	}
 
-	public boolean isForDeletion() {
-		return forDeletion;
+	public List<AssetRemovalSummary> getRemovalSummaries() {
+		return removalSummaries;
 	}
 
-	public void setForDeletion(boolean isForDeletion) {
-		this.forDeletion = isForDeletion;
+	public AssetRemovalSummary getAggregateRemovalSummary() {
+		AssetRemovalSummary aggregateSummary = new AssetRemovalSummary(null);
+
+		for (AssetRemovalSummary summary : getRemovalSummaries()) {
+			if (summary.getAssetUsedInMasterEvent() != 0L) {
+				aggregateSummary.setAssetUsedInMasterEvent(summary.getAssetUsedInMasterEvent());
+			} else if (summary.isDetachFromMaster()) {
+				aggregateSummary.setDetachFromMaster(true);
+			}
+
+			aggregateSummary.setEventsToDelete(aggregateSummary.getEventsToDelete() + summary.getEventsToDelete());
+			aggregateSummary.setSchedulesToDelete(aggregateSummary.getSchedulesToDelete() + summary.getSchedulesToDelete());
+			aggregateSummary.setSubAssetsToDetach(aggregateSummary.getSubAssetsToDetach() + summary.getSubAssetsToDetach());
+			aggregateSummary.setProjectToDetachFrom(aggregateSummary.getProjectToDetachFrom() + summary.getProjectToDetachFrom());
+
+		}
+		return aggregateSummary;
 	}
 }

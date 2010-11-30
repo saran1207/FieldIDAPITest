@@ -4,18 +4,20 @@
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 </head>
-<h4 >Instructions </h4>
+<h4><@s.text name="label.instructions"/></h4>
 <div class="help">
 	<div class="infoSet">
 		<@s.text name="instruction.massupdate" /> 
 	</div>
-	
 </div>
 
 <@s.form action="massUpdateAssetsSave" id="massUpdateAssetsSave" theme="fieldidSimple" cssClass="listForm">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="searchId" />
 	<@s.hidden name="currentPage" />
+	<@s.url id="deleteUrl" action="massAssetConfirmDelete" namespace="/" />
+	<@s.url id="updateUrl" action="massUpdateAssetsSave" namespace="/" />
+	
 	<table class="list">
 		<tr>
 			<th class="checkboxRow"><@s.text name="label.select"/></th>
@@ -96,15 +98,8 @@
 				</td>
 			</tr>
 		</#if>
-	
 		<tr>
-			<td>
-				<@s.checkbox name="forDeletion" onchange="selectField('delete');"  />
-				<span style="display: none">
-					<@s.checkbox name="select['delete']" id="check_delete"/>
-				</span>
-			</td>
-				
+			<td><@s.checkbox name="select['delete']" id="check_delete"  onchange="changeAction();"/></td>
 			<td>
 				<label class="label"><@s.text name="label.mass_delete"/></label>
 			</td>
@@ -112,11 +107,13 @@
 	</table>
 
 	<div class="formAction">
+		<@s.submit key="label.update" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
+		<@s.text name="label.or"/>
 		<a href="<@s.url action="searchResults" includeParams="none" searchId="${searchId!1}"currentPager="${currentPage!1}"/>"><@s.text name="label.returntosearch"/></a>
-		<@s.submit key="hbutton.save" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
 	</div>
 
 </@s.form>
+
 <script type="text/javascript">
 	
 	$('owner').observe("owner:change", function() {
@@ -133,4 +130,11 @@
 		field.checked = true;
 	}
 	
+	function changeAction(){
+		if($('check_delete').checked ){
+			 $('massUpdateAssetsSave').writeAttribute('action', '${deleteUrl}');
+		}else{
+			 $('massUpdateAssetsSave').writeAttribute('action', '${updateUrl}');
+		}
+	}
 </script>
