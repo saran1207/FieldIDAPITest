@@ -70,7 +70,7 @@
 				<div>
 					<label class="label"><@s.text name="label.location"/>:</label> 
 					<div class="field">
-						<@n4.location name="asset.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}" onchange="selectField('location');" />
+						<@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}" onchange="selectField('location');" />
 					</div>
 				</div>
 			</td>
