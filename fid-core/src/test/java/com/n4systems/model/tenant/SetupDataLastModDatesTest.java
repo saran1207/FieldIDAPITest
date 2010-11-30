@@ -8,8 +8,6 @@ import org.junit.Test;
 import com.n4systems.model.Tenant;
 
 public class SetupDataLastModDatesTest {
-
-	
 	@Test
 	public void should_set_tenant_and_tenant_id_since_hibernate_will_not_propogate_that_information_correctly() {
 		Tenant tenant = new Tenant();
@@ -23,5 +21,4 @@ public class SetupDataLastModDatesTest {
 		assertSame(tenant, setupModDates.getTenant());
 		assertEquals(tenant.getId(), setupModDates.getTenantId());
 	}
-	
 }

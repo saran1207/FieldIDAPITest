@@ -11,34 +11,16 @@ import java.util.Map.Entry;
 
 import javax.naming.NamingException;
 
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.handlers.creator.EventPersistenceFactory;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.EventType;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.asset.AssetSubAssetsLoader;
-import com.n4systems.model.event.EventAttachmentSaver;
-import com.n4systems.model.event.EventByMobileGuidLoader;
-import com.n4systems.model.event.EventBySubEventLoader;
-import com.n4systems.model.event.NewestEventsForAssetIdLoader;
-import com.n4systems.model.eventschedule.EventScheduleSaver;
-import com.n4systems.services.asset.AssetSaveService;
-import com.n4systems.webservice.server.handlers.RealTimeAssetLookupHandler;
 import org.apache.log4j.Logger;
 
 import rfid.util.PopulatorLogger;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.PopulatorLog;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
@@ -51,19 +33,37 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.handlers.creator.EventsInAGroupCreator;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.asset.AssetByMobileGuidLoader;
+import com.n4systems.model.asset.AssetSubAssetsLoader;
+import com.n4systems.model.asset.SmartSearchLoader;
+import com.n4systems.model.event.EventAttachmentSaver;
+import com.n4systems.model.event.EventByMobileGuidLoader;
+import com.n4systems.model.event.EventBySubEventLoader;
+import com.n4systems.model.event.NewestEventsForAssetIdLoader;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
+import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
@@ -76,8 +76,6 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
-import com.n4systems.model.asset.AssetByMobileGuidLoader;
-import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.SafetyNetworkBackgroundSearchLoader;
 import com.n4systems.model.safetynetwork.TenantWideVendorOrgConnPaginatedLoader;
@@ -85,6 +83,7 @@ import com.n4systems.model.security.OrgOnlySecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
+import com.n4systems.model.tenant.SetupDataLastModDatesLoader;
 import com.n4systems.model.user.EmployeePaginatedLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -96,8 +95,8 @@ import com.n4systems.servicedto.converts.LocationConverter;
 import com.n4systems.servicedto.converts.LocationServiceToContainerConverter;
 import com.n4systems.servicedto.converts.ProductServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
-import com.n4systems.services.SetupDataLastModUpdateService;
 import com.n4systems.services.TenantFinder;
+import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -172,6 +171,7 @@ import com.n4systems.webservice.exceptions.ServiceException;
 import com.n4systems.webservice.predefinedlocation.PredefinedLocationListResponse;
 import com.n4systems.webservice.server.handlers.CompletedScheduleCreator;
 import com.n4systems.webservice.server.handlers.HelloHandler;
+import com.n4systems.webservice.server.handlers.RealTimeAssetLookupHandler;
 import com.n4systems.webservice.server.handlers.RealTimeInspectionLookupHandler;
 
 @SuppressWarnings("deprecation")
@@ -1582,8 +1582,10 @@ public class DataServiceImpl implements DataService {
 	
 	public SetupDataLastModDatesServiceDTO getSetupDataLastModDates(RequestInformation requestInformation) throws ServiceException {
 		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-		
-		SetupDataLastModDates setupLastModDates = SetupDataLastModUpdateService.getInstance().getModDates(requestInformation.getTenantId());
+
+		SetupDataLastModDatesLoader loader = createLoaderFactory(requestInformation).createSetupDataLastModDatesLoader();
+			
+		SetupDataLastModDates setupLastModDates = loader.load();
 		SetupDataLastModDatesServiceDTO setupLastModDatesDTO = converter.convert(setupLastModDates);
 		
 		return setupLastModDatesDTO;

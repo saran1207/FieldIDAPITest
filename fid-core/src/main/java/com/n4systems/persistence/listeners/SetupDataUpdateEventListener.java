@@ -13,39 +13,24 @@ import org.hibernate.event.PostUpdateEventListener;
 
 import com.n4systems.model.api.CrossTenantEntity;
 import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.setupdata.SetupDataLastModDatesUpdater;
 import com.n4systems.model.tenant.HasSetupDataTenant;
+import com.n4systems.persistence.PersistenceManagerTransactor;
+import com.n4systems.persistence.Transactor;
 import com.n4systems.services.InvalidSetupDataGroupClassException;
 import com.n4systems.services.SetupDataGroup;
-import com.n4systems.services.SetupDataLastModUpdateService;
+import com.n4systems.taskscheduling.TaskExecutor;
 
 public class SetupDataUpdateEventListener implements PostUpdateEventListener, PostInsertEventListener, PostDeleteEventListener {
-	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(SetupDataUpdateEventListener.class);
 	
-	private static Map<Class<?>, SetupDataGroup> setupDataGroupMap;
-	
-	private static Map<Class<?>, SetupDataGroup> getSetupDataGroupMap() {
-		if (setupDataGroupMap == null) {
-			initSetupDataGroupMap();
-		}
-		
-		return setupDataGroupMap;
-	}
-	
-	private static synchronized void initSetupDataGroupMap() {
-		logger.info("SetupDataUpdateEventListener is initializing");
-		setupDataGroupMap = new HashMap<Class<?>, SetupDataGroup>();
-		
+	private static final Map<Class<?>, SetupDataGroup> entityToGroupMap = new HashMap<Class<?>, SetupDataGroup>();
+	static {
 		for (SetupDataGroup group: SetupDataGroup.values()) {
 			for (Class<?> clazz: group.getGroupClasses()) {
-				setupDataGroupMap.put(clazz, group);
+				entityToGroupMap.put(clazz, group);
 			}
 		}
-	}
-	
-	public SetupDataUpdateEventListener() {
-		// force initialization
-		getSetupDataGroupMap();
 	}
 	
 	public void onPostUpdate(PostUpdateEvent event) {
@@ -59,33 +44,45 @@ public class SetupDataUpdateEventListener implements PostUpdateEventListener, Po
 	public void onPostDelete(PostDeleteEvent event) {
 		updateSetupDataModDates(event.getEntity());
 	}
-
-	private boolean isUpdateClass(Class<?> clazz) {
-		return getSetupDataGroupMap().containsKey(clazz);
-	}
 	
 	private void updateSetupDataModDates(Object entity) {
-		if (entity == null || !isUpdateClass(entity.getClass())) {
-			// we do not need to update for this class
+		SetupDataGroup group = entityToGroupMap.get(entity.getClass());
+		
+		if (entity == null || group == null) {
 			return;
 		}
 		
-		SetupDataGroup group = getSetupDataGroupMap().get(entity.getClass());
-		SetupDataLastModUpdateService updateService = SetupDataLastModUpdateService.getInstance();
-		
 		if (entity instanceof HasSetupDataTenant) {
 			Long tenantId = ((HasSetupDataTenant)entity).getSetupDataTenant().getId();
-			updateService.touchModDate(tenantId, group);
+			touchModDate(group, tenantId);
 		} else if (entity instanceof HasTenant) {
-			// if the entity has a tenant, then we will update just for the specific tenant
 			Long tenantId = ((HasTenant)entity).getTenant().getId();
-			updateService.touchModDate(tenantId, group);
+			touchModDate(group, tenantId);
 		} else if (entity instanceof CrossTenantEntity) {
-			// if the entity is a CrossTenantEntity we will update for all tenants
-			updateService.touchAllModDates(group);
+			touchAllModDates(group);
 		} else {
-			// an entity was specified (programatically) that was not of type HasTenant or CrossTenantEntity.  We cannot process it.
+			// if the entity is not a member of HasTenant or CrossTenantEntity.  We cannot process it.
 			throw new InvalidSetupDataGroupClassException(entity.getClass());
 		}
+	}
+
+	public void touchAllModDates(SetupDataGroup group) {
+		touchModDate(group, null);
+	}
+
+	public void touchModDate(final SetupDataGroup group, final Long tenantId) {
+		TaskExecutor.getInstance().execute(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					logger.debug("Updating setup data mod date for tenant [" + tenantId + "], group [" + group.name() + "]");
+					
+					Transactor transactor = new PersistenceManagerTransactor();
+					transactor.execute(new SetupDataLastModDatesUpdater(group, tenantId));
+				} catch (Exception e) {
+					logger.error("Failed updating SetupDataLastModDates for tenant [" + tenantId + "], group [" + group.name() + "]", e);
+				}
+			}
+		});
 	}
 }

@@ -68,6 +68,19 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date locations = new Date();	
 	
+	public static String getFieldNameForSetupDataGroup(SetupDataGroup group) {
+		switch (group) {
+			case PRODUCT_TYPE:		return "assetTypes";
+			case INSPECTION_TYPE:	return "eventTypes";
+			case AUTO_ATTRIBUTES:	return "autoAttributes";
+			case OWNERS:			return "owners";
+			case JOBS:				return "jobs";
+			case EMPLOYEES:			return "employees";
+			case LOCATIONS:			return "locations";
+			default: 				throw new IllegalArgumentException("Unknown group " + group.name());
+		}
+	}
+	
 	public SetupDataLastModDates() {}
 	
 	public SetupDataLastModDates(Tenant tenant) {
@@ -82,14 +95,6 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	
 	public Object getIdentifier() {
 		return getTenantId();
-	}
-	
-	public void setModDate(SetupDataGroup group, Date newDate) {
-		group.setLastModDate(newDate, this);
-	}
-	
-	public Date getModDate(SetupDataGroup group) {
-		return group.getLastModDate(this);
 	}
 	
 	public Long getTenantId() {

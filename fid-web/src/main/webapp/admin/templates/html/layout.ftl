@@ -32,7 +32,6 @@
 			<option value="taskCrud.action">Tasks</option>
 			<option value="changeAdminPass.action">Change System Pass</option>
 			<option value="promoCodes.action">Promo Codes</option>
-			<option value="cacheShow.action">Cache Control</option>
 		</select>
 	</div>
 	
