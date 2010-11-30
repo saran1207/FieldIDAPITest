@@ -193,11 +193,11 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 		if (userType != null) {
 			switch (userType) {
-			case CUSTOMERS:
-				queryString += "AND ub.owner.customerOrg IS NOT NULL ";
+			case READONLY:
+				queryString += "AND ub.employee = false ";
 				break;
 			case EMPLOYEES:
-				queryString += "AND ub.owner.customerOrg IS NULL ";
+				queryString += "AND ub.employee= true ";
 				break;
 
 			}

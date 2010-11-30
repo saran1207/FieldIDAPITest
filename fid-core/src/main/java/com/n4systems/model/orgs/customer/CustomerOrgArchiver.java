@@ -69,7 +69,7 @@ public class CustomerOrgArchiver {
 	}
 
 	private List<User> getUserList(UserManager userManager, SecurityFilter securityFilter, CustomerOrg customer) {
-		return userManager.getUsers(securityFilter, true, 1, USER_RESULTS_MAX, null, UserType.CUSTOMERS, customer).getList();
+		return userManager.getUsers(securityFilter, true, 1, USER_RESULTS_MAX, null, UserType.READONLY, customer).getList();
 	}
 	
 	protected DivisionOrgByCustomerListLoader createDivisionsLoader(SecurityFilter filter) {

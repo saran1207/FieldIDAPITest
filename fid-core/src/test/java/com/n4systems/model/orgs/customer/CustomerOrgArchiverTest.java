@@ -103,7 +103,7 @@ public class CustomerOrgArchiverTest {
 	}
 
 	private void setUserManagerExpectations(Pager<User> pager) {
-		expect(userManager.getUsers(securityFilter, true, 1, 100000, null, UserType.CUSTOMERS, customer)).andReturn(pager);
+		expect(userManager.getUsers(securityFilter, true, 1, 100000, null, UserType.READONLY, customer)).andReturn(pager);
 		
 		for (int i = 0; i < pager.getList().size(); i++) {
 			userManager.updateUser(pager.getList().get(i));

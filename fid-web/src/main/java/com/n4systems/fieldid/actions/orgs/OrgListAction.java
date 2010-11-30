@@ -113,7 +113,11 @@ public class OrgListAction extends AbstractAction implements Preparable {
 	}
 
 	private boolean isDivisionListRequired() {
-		if (orgTypeFilter.equalsIgnoreCase("internal") || orgTypeFilter.equalsIgnoreCase("customer") || orgTypeFilter.equalsIgnoreCase("primary") || orgTypeFilter.equalsIgnoreCase("secondary")) {
+		if (orgTypeFilter.equalsIgnoreCase("internal") 
+				|| orgTypeFilter.equalsIgnoreCase("customer") 
+				|| orgTypeFilter.equalsIgnoreCase("readonly") 
+				|| orgTypeFilter.equalsIgnoreCase("primary") 
+				|| orgTypeFilter.equalsIgnoreCase("secondary")) {
 			return false;
 		}
 		return true;
@@ -146,6 +150,8 @@ public class OrgListAction extends AbstractAction implements Preparable {
 	}
 	
 	private OrgType getOrgType() {
+		if(orgTypeFilter.equalsIgnoreCase("readonly"))
+			return OrgType.ALL;
 		return OrgType.getByName(this.orgTypeFilter);
 	}
 

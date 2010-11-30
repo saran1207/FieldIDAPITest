@@ -47,6 +47,7 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	
 	private boolean active = false;
 	private boolean deleted = false;
+	private boolean employee = false;
 	
 	private boolean system = false;
 	private boolean admin = false;
@@ -126,7 +127,11 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	}
 
 	public boolean isEmployee() {
-		return getOwner().isInternal();
+		return employee;
+	}
+	
+	public void setEmployee(boolean employee) {
+		this.employee = employee;
 	}
 
 	public boolean isDeleted() {

@@ -176,7 +176,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		user.setActive(true);
 		user.setSystem(false);
 
-		
+		user.setEmployee(isEmployee());
 		
 		try {
 			if (user.getId() == null) {

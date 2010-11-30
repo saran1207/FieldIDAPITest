@@ -57,7 +57,7 @@ public class CustomersUserCrud extends CustomerUserCrud {
 	
 	public Pager<User> getPage() {
 		if( page == null ) {
-			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, "", UserType.CUSTOMERS, customer);
+			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, "", UserType.READONLY, customer);
 		}
 		return page;
 	}

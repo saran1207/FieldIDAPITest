@@ -20,7 +20,7 @@
 		<div class="infoBlock">
 			<div class="infoSet">
 				<label class="label" for="owner"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-				<@n4.orgPicker name="owner" required="true" orgType="${(employee)?string('internal','external')}"/>
+				<@n4.orgPicker name="owner" required="true" orgType="${(employee)?string('internal','readonly')}"/>
 			</div>
 			
 			<div class="infoSet">

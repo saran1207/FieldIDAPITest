@@ -3,7 +3,7 @@ package com.n4systems.util;
 public enum UserType {
 	ALL( "All" ),
 	EMPLOYEES( "Employee" ),
-	CUSTOMERS( "Customers" );
+	READONLY( "Read-Only" );
 	
 	
 	String label;
