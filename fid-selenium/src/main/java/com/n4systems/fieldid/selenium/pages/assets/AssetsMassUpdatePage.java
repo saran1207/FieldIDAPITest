@@ -19,4 +19,9 @@ public class AssetsMassUpdatePage extends MassUpdatePage<AssetsSearchResultsPage
         selenium.fireEvent("//input[@id='massUpdateAssetsSave_purchaseOrder']", "change");
     }
 
+    public void checkMassDelete(){
+    	selenium.check("//input[@id='check_delete']");
+        selenium.fireEvent("//input[@id='check_delete']", "change");
+    	waitForAjax();
+    }
 }

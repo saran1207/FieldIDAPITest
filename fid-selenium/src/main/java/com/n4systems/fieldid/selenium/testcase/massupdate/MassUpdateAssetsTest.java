@@ -4,77 +4,144 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.ReportingPage;
+import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
 import com.n4systems.model.builders.AssetBuilder;
+import com.n4systems.model.builders.EventScheduleBuilder;
+
 import org.junit.Before;
 import org.junit.Test;
 import rfid.ejb.entity.AssetStatus;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MassUpdateAssetsTest extends FieldIDTestCase {
 
-    private HomePage page;
+	private HomePage page;
 
-    @Override
-    public void setupScenario(Scenario scenario) {
-        AssetType type = scenario.anAssetType()
-                .named("Workman Harness")
-                .build();
+	@Override
+	public void setupScenario(Scenario scenario) {
+		AssetType type = scenario.anAssetType().named("Workman Harness").build();
 
-        AssetStatus status1 = scenario.anAssetStatus()
-                .named("In Service")
-                .build();
+		AssetStatus status1 = scenario.anAssetStatus().named("In Service").build();
 
-        scenario.anAssetStatus()
-                .named("Out of Service")
-                .build();
+		scenario.anAssetStatus().named("Out of Service").build();
 
-        AssetBuilder anAsset = scenario.anAsset()
-                .withSerialNumber("123456")
-                .ofType(type)
-                .havingStatus(status1);
+		AssetBuilder anAsset = scenario.anAsset()
+			.withSerialNumber("123456")
+			.withOneSubAsset()
+			.ofType(type)
+			.havingStatus(status1);
 
-        anAsset.purchaseOrder("PO 3").build();
-        anAsset.purchaseOrder("PO 4").build();
-    }
+		SimpleEventBuilder.aSimpleEvent(scenario).build();
 
-    @Before
-    public void setUp() {
-        page = startAsCompany("test1").login();
-    }
+		EventScheduleBuilder.aScheduledEventSchedule().asset(anAsset.build());
+		anAsset.purchaseOrder("PO 3").build();
+		anAsset.purchaseOrder("PO 4").build();
+	}
 
-    @Test
-    public void test_mass_update_asset() throws Exception {
-        AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
+	@Before
+	public void setUp() {
+		page = startAsCompany("test1").login();
+	}
 
-        assetsSearchPage.enterSerialNumber("123456");
-        AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
+	@Test
+	public void test_mass_update_asset() throws Exception {
+		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
-        assertEquals(2, resultsPage.getTotalResultsCount());
+		assetsSearchPage.enterSerialNumber("123456");
+		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
 
-        resultsPage.selectAllItemsOnPage();
+		assertEquals(3, resultsPage.getTotalResultsCount());
 
-        AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
-        massUpdatePage.setAssetStatus("Out of Service");
-        massUpdatePage.setPurchaseOrder("PO 5");
+		resultsPage.selectAllItemsOnPage();
 
-        resultsPage = massUpdatePage.clickSaveButtonAndConfirm();
+		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		massUpdatePage.setAssetStatus("Out of Service");
+		massUpdatePage.setPurchaseOrder("PO 5");
 
-        AssetPage assetPage = resultsPage.clickAssetLinkForResult(1);
+		resultsPage = massUpdatePage.clickSaveButtonAndConfirm();
 
-        assertEquals("PO 5", assetPage.getPurchaseOrder());
-        assertEquals("Out of Service", assetPage.getAssetStatus());
+		AssetPage assetPage = resultsPage.clickAssetLinkForResult(1);
 
-        assetPage.goBack();
+		assertEquals("PO 5", assetPage.getPurchaseOrder());
+		assertEquals("Out of Service", assetPage.getAssetStatus());
 
-        resultsPage.clickAssetLinkForResult(2);
+		assetPage.goBack();
 
-        assertEquals("PO 5", assetPage.getPurchaseOrder());
-        assertEquals("Out of Service", assetPage.getAssetStatus());
-    }
+		resultsPage.clickAssetLinkForResult(2);
 
+		assertEquals("PO 5", assetPage.getPurchaseOrder());
+		assertEquals("Out of Service", assetPage.getAssetStatus());
+	}
+
+	@Test
+	public void test_mass_delete_assets_with_schedule() {
+		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
+
+		assetsSearchPage.enterSerialNumber("123456");
+		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
+
+		resultsPage.selectAllItemsOnPage();
+
+		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		massUpdatePage.checkMassDelete();
+
+		massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+
+		assertTrue("Assets weren't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 3 assets removed.')]"));
+
+		SchedulesSearchPage schedulesSearchPage = page.clickSchedulesLink();
+		schedulesSearchPage.enterSerialNumber("123456");
+		schedulesSearchPage.clickRunSearchButton();
+
+		assertTrue("Schedule wasn't successfully deleted", selenium.isElementPresent("//div[@class='emptyList']"));
+	}
+
+	@Test
+	public void test_mass_delete_assets_with_events() {
+		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
+
+		assetsSearchPage.enterSerialNumber("9671111");
+		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
+
+		resultsPage.selectAllItemsOnPage();
+
+		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		massUpdatePage.checkMassDelete();
+
+		massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+		
+		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 1 assets removed.')]"));
+	
+		ReportingPage reportingSearchPage = page.clickReportingLink();
+		reportingSearchPage.enterSerialNumber("123456");
+		reportingSearchPage.clickRunSearchButton();
+
+		assertTrue("Event wasn't successfully deleted", selenium.isElementPresent("//div[@class='emptyList']"));
+	}
+
+	@Test
+	public void test_mass_delete_assets_with_attached_sub_assets() {
+
+		
+		
+	}
+
+	@Test
+	public void test_mass_delete_sub_assets_attached_to_master_assets() {
+
+	}
+
+	@Test
+	public void test_mass_delete_asset_attached_to_a_job() {
+
+	}
 }
