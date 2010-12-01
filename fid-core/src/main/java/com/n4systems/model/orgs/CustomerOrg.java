@@ -8,7 +8,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyCustomerUsersAccess;
+import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
@@ -31,31 +31,31 @@ public class CustomerOrg extends ExternalOrg {
 	public CustomerOrg() {}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public InternalOrg getInternalOrg() {
 		return getParent();
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public SecondaryOrg getSecondaryOrg() {
 		return parent.getSecondaryOrg();
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public CustomerOrg getCustomerOrg() {
 		return this;
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}
@@ -66,7 +66,7 @@ public class CustomerOrg extends ExternalOrg {
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public InternalOrg getParent() {
 		// Note the type is downcast to InternalOrg (should always be the case because of forced setter)
 		return (InternalOrg)parent;

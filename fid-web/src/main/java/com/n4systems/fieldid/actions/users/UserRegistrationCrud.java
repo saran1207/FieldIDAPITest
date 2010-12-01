@@ -32,7 +32,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
+@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;

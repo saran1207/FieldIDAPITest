@@ -22,7 +22,7 @@
 					<@s.text name="label.view_schedules"/>
 				</a>
 			</li>
-			<#if !sessionUser.isCustomerUser()>
+			<#if !sessionUser.isReadOnlyUser()>
 				<li>
 					<a href='<@s.url action="eventScheduleList" assetId="${assetId}" />'>
 						<@s.text name="label.edit_schedule"/>

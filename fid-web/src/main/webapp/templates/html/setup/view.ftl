@@ -26,7 +26,7 @@ ${action.setPageType('setup','setup')!}
 				<label><a href="<@s.url action="userList"/>" ><@s.text name="title.manage_users.plural" /></a></label>
 				<span >View and setup all of your users in Field ID.</span>
 			</p>
-			<#if securityGuard.partnerCenterEnabled>
+			<#if securityGuard.readOnlyUserEnabled>
 				<p>
 					<label><a href="<@s.url action="userRequestList"/>" ><@s.text name="title.manage_user_registrations.plural" /></a></label>
 					<span >Accept or deny requests for <@s.text name='label.customer'/> user accounts.</span>

@@ -8,7 +8,7 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyCustomerUsersAccess;
+import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.GlobalID;
@@ -92,13 +92,13 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	}
 	
 	@AllowSafetyNetworkAccess
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public String getDisplayName() {
 		return name;
 	}
 	
 	@AllowSafetyNetworkAccess
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public String getName() {
 		return name;
 	}
@@ -108,7 +108,7 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	}
 
 	@AllowSafetyNetworkAccess
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public AddressInfo getAddressInfo() {
 		return addressInfo;
 	}

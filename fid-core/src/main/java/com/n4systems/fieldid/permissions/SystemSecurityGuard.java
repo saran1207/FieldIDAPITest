@@ -11,7 +11,7 @@ public interface SystemSecurityGuard {
 	public Tenant getTenant();
 	public PrimaryOrg getPrimaryOrg();
 	public boolean isExtendedFeatureEnabled(ExtendedFeature feature);
-	public boolean isPartnerCenterEnabled();
+	public boolean isReadOnlyUserEnabled();
 	public boolean isIntegrationEnabled();
 	public boolean isProjectsEnabled();
 	public boolean isBrandingEnabled();

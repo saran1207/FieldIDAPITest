@@ -4,7 +4,7 @@ ${action.setPageType('user','list')!}
 	<@s.form method="GET" cssClass="simpleInputForm" theme="css_xhtml" > 
 		<@s.hidden name="currentPage" value="1"/>
 		<@s.textfield id="nameFilter" name="listFilter" key="label.name" labelposition="left"/>
-		<#if securityGuard.partnerCenterEnabled>
+		<#if securityGuard.readOnlyUserEnabled>
 			<@s.select id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
 		</#if>
 		<div class="formAction">

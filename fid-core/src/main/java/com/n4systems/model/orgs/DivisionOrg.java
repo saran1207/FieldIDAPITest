@@ -8,7 +8,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyCustomerUsersAccess;
+import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
@@ -25,31 +25,31 @@ public class DivisionOrg extends ExternalOrg {
 	public DivisionOrg() {}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return parent.getPrimaryOrg();
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public InternalOrg getInternalOrg() {
 		return parent.getInternalOrg();
 	}
 
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public SecondaryOrg getSecondaryOrg() {
 		return parent.getSecondaryOrg();
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public CustomerOrg getCustomerOrg() {
 		return parent;
 	}
 
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public DivisionOrg getDivisionOrg() {
 		return this;
 	}
@@ -60,7 +60,7 @@ public class DivisionOrg extends ExternalOrg {
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public CustomerOrg getParent() {
 		return parent;
 	}

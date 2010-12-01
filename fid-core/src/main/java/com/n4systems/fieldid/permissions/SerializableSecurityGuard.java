@@ -41,8 +41,8 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Integration);
 	}
 
-	public boolean isPartnerCenterEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.PartnerCenter);
+	public boolean isReadOnlyUserEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.ReadOnlyUser);
 	}
 
 	public boolean isProjectsEnabled() {
@@ -98,7 +98,7 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	}
 
 	public boolean isPlansAndPricingAvailable() {
-		if (!isPartnerCenterEnabled() || primaryOrg.isPlansAndPricingAvailable()) {
+		if (!isReadOnlyUserEnabled() || primaryOrg.isPlansAndPricingAvailable()) {
 			return true;
 		}
 		return false;

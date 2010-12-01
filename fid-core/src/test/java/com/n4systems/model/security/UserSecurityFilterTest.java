@@ -35,7 +35,7 @@ public class UserSecurityFilterTest {
 	}
 	
 	@Test public void should_apply_tenant_and_customer_user_belongs_to_a_primary_customer() throws Exception {
-		User user = aCustomerUser().withOwner(aPrimaryCustomerOrg().build()).build();
+		User user = aReadOnlyUser().withOwner(aPrimaryCustomerOrg().build()).build();
 		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
@@ -48,7 +48,7 @@ public class UserSecurityFilterTest {
 	
 	
 	@Test public void should_apply_tenant_and_owner_division_user_belongs_to_a_primary_division() throws Exception {
-		User user = aCustomerUser().withOwner(aPrimaryDivisionOrg().build()).build();
+		User user = aReadOnlyUser().withOwner(aPrimaryDivisionOrg().build()).build();
 		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
@@ -61,7 +61,7 @@ public class UserSecurityFilterTest {
 	
 	
 	@Test public void should_apply_tenant_and_customer_user_belongs_to_a_secondary_customer() throws Exception {
-		User user = aCustomerUser().withOwner(aSecondaryCustomerOrg().build()).build();
+		User user = aReadOnlyUser().withOwner(aSecondaryCustomerOrg().build()).build();
 		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
@@ -74,7 +74,7 @@ public class UserSecurityFilterTest {
 	
 	
 	@Test public void should_apply_tenant_and_owner_division_user_belongs_to_a_secondary_division() throws Exception {
-		User user = aCustomerUser().withOwner(aSecondaryDivisionOrg().build()).build();
+		User user = aReadOnlyUser().withOwner(aSecondaryDivisionOrg().build()).build();
 		QueryBuilder<User> queryBuilder = new TestingQueryBuilder<User>(User.class);
 
 		AbstractSecurityFilter sut = new UserSecurityFilter(user);
@@ -181,7 +181,7 @@ public class UserSecurityFilterTest {
 	
 	@Test
 	public void test_where_clause_with_tenant_owner_user_state_for_customer_org_user() throws Exception {
-		SecurityFilter filter = new UserSecurityFilter(aCustomerUser().build());
+		SecurityFilter filter = new UserSecurityFilter(aReadOnlyUser().build());
 		
 		SecurityTestEntity.securityDefiner = new SecurityDefiner("tenant.id", "owner.id", "user.id", "state");
 		
@@ -191,7 +191,7 @@ public class UserSecurityFilterTest {
 	
 	@Test
 	public void test_where_clause_with_tenant_owner_user_for_customer_org_user() throws Exception {
-		SecurityFilter filter = new UserSecurityFilter(aCustomerUser().build());
+		SecurityFilter filter = new UserSecurityFilter(aReadOnlyUser().build());
 		
 		SecurityTestEntity.securityDefiner = new SecurityDefiner("tenant.id", "owner.id", "user.id", null);
 		
@@ -201,7 +201,7 @@ public class UserSecurityFilterTest {
 	
 	@Test
 	public void test_where_clause_with_tenant_owner_for_customer_org_user() throws Exception {
-		SecurityFilter filter = new UserSecurityFilter(aCustomerUser().build());
+		SecurityFilter filter = new UserSecurityFilter(aReadOnlyUser().build());
 		
 		SecurityTestEntity.securityDefiner = new SecurityDefiner("tenant.id", "owner.id", null, null);
 		
@@ -211,7 +211,7 @@ public class UserSecurityFilterTest {
 	
 	@Test
 	public void test_where_clause_with_tenant_for_customer_org_user() throws Exception {
-		SecurityFilter filter = new UserSecurityFilter(aCustomerUser().build());
+		SecurityFilter filter = new UserSecurityFilter(aReadOnlyUser().build());
 		
 		SecurityTestEntity.securityDefiner = new SecurityDefiner("tenant.id", null, null, null);
 		

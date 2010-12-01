@@ -398,7 +398,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		ownerPicker.setOwnerId(id);
 	}
 
-	public boolean isCustomerUser() {
+	public boolean isReadOnlyUser() {
 		return false;
 	}
 

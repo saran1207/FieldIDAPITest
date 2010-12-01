@@ -12,7 +12,7 @@ import javax.persistence.MappedSuperclass;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyCustomerUsersAccess;
+import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 
 
 @SuppressWarnings("serial")
@@ -65,7 +65,7 @@ abstract public class ExternalOrg extends BaseOrg {
 	}
 	
 	@AllowSafetyNetworkAccess
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public String getCode() {
 		return code;
 	}

@@ -8,7 +8,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyCustomerUsersAccess;
+import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
@@ -25,25 +25,25 @@ public class SecondaryOrg extends InternalOrg {
 	public SecondaryOrg() {}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public InternalOrg getInternalOrg() {
 		return this;
 	}
 
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public SecondaryOrg getSecondaryOrg() {
 		return this;
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public CustomerOrg getCustomerOrg() {
 		return null;
 	}
 
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}
@@ -53,7 +53,7 @@ public class SecondaryOrg extends InternalOrg {
 		return SECONDARY_ID_FILTER_PATH;
 	}
 
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}

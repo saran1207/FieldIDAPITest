@@ -29,7 +29,7 @@ ${action.setPageType('user', 'change_password')!}
 	<div class="formAction borderLessFormAction">
 		<@s.submit key="hbutton.save"/>
 		<@s.text name="label.or"/>
-		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'customerUserEdit')}" uniqueID="${uniqueID}"/>
+		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'readOnlyUserEdit')}" uniqueID="${uniqueID}"/>
 		<a href="#" onclick="redirect('${cancelUrl}'); return false;"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>

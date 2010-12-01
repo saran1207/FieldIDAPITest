@@ -1,9 +1,8 @@
-<#if securityGuard.partnerCenterEnabled>
+<#if securityGuard.readOnlyUserEnabled>
 	<div id="users_container" style="display:none" >
 		<#include "../userCrud/_userList.ftl" />
 		<div class="actions">
-			<a href="<@s.url value="customerUserEdit.action" uniqueID="" customer="${uniqueID}"/>"><@s.text name="label.addcustomeruser" /></a>
+			<a href="<@s.url value="readOnlyUserEdit.action" uniqueID="" customer="${uniqueID}"/>"><@s.text name="label.addreadonlyuser" /></a>
 		</div>
-		
 	</div>	
 </#if>

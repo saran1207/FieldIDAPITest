@@ -15,12 +15,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyCustomerUsersAccess;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.ExternalCredentialProvider;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.tenant.TenantLimit;
@@ -80,31 +80,31 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 	
 	@Override
 	@AllowSafetyNetworkAccess
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public PrimaryOrg getPrimaryOrg() {
 		return this;
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public InternalOrg getInternalOrg() {
 		return this;
 	}
 
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public SecondaryOrg getSecondaryOrg() {
 		return null;
 	}
 	
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public CustomerOrg getCustomerOrg() {
 		return null;
 	}
 
 	@Override
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public DivisionOrg getDivisionOrg() {
 		return null;
 	}

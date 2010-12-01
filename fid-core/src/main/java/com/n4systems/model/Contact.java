@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyCustomerUsersAccess;
+import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
@@ -28,7 +28,7 @@ public class Contact implements Serializable, SecurityEnhanced<Contact> {
 	}
 
 	@AllowSafetyNetworkAccess
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public String getName() {
 		return name;
 	}
@@ -38,7 +38,7 @@ public class Contact implements Serializable, SecurityEnhanced<Contact> {
 	}
 	
 	@AllowSafetyNetworkAccess
-    @DenyCustomerUsersAccess
+    @DenyReadOnlyUsersAccess
 	public String getEmail() {
 		return email;
 	}

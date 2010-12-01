@@ -80,7 +80,7 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 	}
 
 
-	public boolean isPartnerCenterEnabled() {
+	public boolean isReadOnlyUserEnabled() {
 		return false;
 	}
 

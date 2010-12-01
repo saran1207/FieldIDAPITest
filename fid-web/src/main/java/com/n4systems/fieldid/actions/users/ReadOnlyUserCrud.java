@@ -9,12 +9,12 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.security.Permissions;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
+@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
-public class CustomerUserCrud extends UserCrud {
+public class ReadOnlyUserCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
 	
-	public CustomerUserCrud( UserManager userManager, PersistenceManager persistenceManager ) {
+	public ReadOnlyUserCrud( UserManager userManager, PersistenceManager persistenceManager ) {
 		super(userManager, persistenceManager);
 	}
 	

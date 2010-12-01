@@ -2073,7 +2073,7 @@ CREATE TABLE `org_extendedfeatures` (
 
 LOCK TABLES `org_extendedfeatures` WRITE;
 /*!40000 ALTER TABLE `org_extendedfeatures` DISABLE KEYS */;
-INSERT INTO `org_extendedfeatures` VALUES (15511550,'Branding'),(15539065,'EmailAlerts'),(15539066,'EmailAlerts'),(15539068,'Projects'),(15539068,'MultiLocation'),(15539068,'Branding'),(15539068,'DedicatedProgramManager'),(15539068,'EmailAlerts'),(15539068,'AllowIntegration'),(15539068,'CustomCert'),(15539068,'PartnerCenter'),(15539092,'Projects'),(15539092,'CustomCert'),(15539092,'DedicatedProgramManager'),(15539092,'EmailAlerts'),(15539092,'PartnerCenter'),(15539092,'Branding'),(15539092,'AllowIntegration'),(15539092,'MultiLocation');
+INSERT INTO `org_extendedfeatures` VALUES (15511550,'Branding'),(15539065,'EmailAlerts'),(15539066,'EmailAlerts'),(15539068,'Projects'),(15539068,'MultiLocation'),(15539068,'Branding'),(15539068,'DedicatedProgramManager'),(15539068,'EmailAlerts'),(15539068,'AllowIntegration'),(15539068,'CustomCert'),(15539068,'ReadOnlyUser'),(15539092,'Projects'),(15539092,'CustomCert'),(15539092,'DedicatedProgramManager'),(15539092,'EmailAlerts'),(15539092,'ReadOnlyUser'),(15539092,'Branding'),(15539092,'AllowIntegration'),(15539092,'MultiLocation');
 /*!40000 ALTER TABLE `org_extendedfeatures` ENABLE KEYS */;
 UNLOCK TABLES;
 

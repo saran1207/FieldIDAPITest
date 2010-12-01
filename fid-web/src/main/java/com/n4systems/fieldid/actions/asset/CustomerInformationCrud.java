@@ -21,7 +21,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
+@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 public class CustomerInformationCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;

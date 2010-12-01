@@ -586,9 +586,9 @@
 			<result name="success" type="freemarker">templates/html/userCrud/list.ftl</result>
 		</action>
 
-		<action name="addCustomerUser" method="add" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
-			<result name="success" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
-			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
+		<action name="addReadOnlyUser" method="add" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
@@ -599,8 +599,8 @@
 
 		</action>
 
-		<action name="customerUserCreate" method="create" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
-			<result name="input" type="freemarker">templates/html/userCrud/addCustomer.ftl</result>
+		<action name="readOnlyUserCreate" method="create" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+			<result name="input" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
@@ -608,7 +608,7 @@
 				<param name="userType">${userType}</param>
 			</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">customerUserEdit</param>
+				<param name="actionName">readOnlyUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
@@ -669,9 +669,9 @@
 		</action>
 
 
-		<action name="customerUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
-			<result name="success" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
-			<result name="input" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
+		<action name="readOnlyUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -680,10 +680,10 @@
 			</result>
 		</action>
 
-		<action name="customerUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.CustomerUserCrud">
-			<result name="input" type="freemarker">templates/html/userCrud/customerUserEdit.ftl</result>
+		<action name="readOnlyUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+			<result name="input" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">customerUserEdit</param>
+				<param name="actionName">readOnlyUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="customer">${customer}</param>
 				<param name="currentPage">${currentPage}</param>

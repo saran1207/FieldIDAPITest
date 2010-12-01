@@ -36,7 +36,7 @@ public class JobResourceServiceTest {
 	@Test(expected=NonEmployeeUserException.class)
 	public void should_stop_attachment_non_employee() throws NonEmployeeUserException, EmployeeAlreadyAttachedException {
 		Project job = aJob().build();
-		User customer = aCustomerUser().build();
+		User customer = aReadOnlyUser().build();
 		JobResourceService sut = new JobResourceService(job, null, modifier);
 		
 		sut.attach(customer);
@@ -94,7 +94,7 @@ public class JobResourceServiceTest {
 	@Test(expected=NonEmployeeUserException.class)
 	public void should_stop_dettachment_of_a_non_employee() throws NonEmployeeUserException {
 		Project job = aJob().build();
-		User customer = aCustomerUser().build();
+		User customer = aReadOnlyUser().build();
 		JobResourceService sut = new JobResourceService(job, null, modifier);
 		
 		sut.dettach(customer);

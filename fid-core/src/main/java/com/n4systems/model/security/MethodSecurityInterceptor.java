@@ -35,7 +35,7 @@ public class MethodSecurityInterceptor<T> implements MethodInterceptor {
 		
 		boolean accessAllowed = false;
         if (userSecurityLevel == SecurityLevel.LOCAL_ENDUSER) {
-			accessAllowed = method.getAnnotation(DenyCustomerUsersAccess.class) == null;
+			accessAllowed = method.getAnnotation(DenyReadOnlyUsersAccess.class) == null;
 		} else if (userSecurityLevel == SecurityLevel.SAFETY_NETWORK) {
 			accessAllowed = method.getAnnotation(AllowSafetyNetworkAccess.class) != null;
 		}

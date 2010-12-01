@@ -7,8 +7,8 @@ public class ExtendedFeatureFactory {
 
 	public static ExtendedFeatureSwitch getSwitchFor(ExtendedFeature feature, PrimaryOrg primaryOrg) {
 		switch (feature) {
-			case PartnerCenter:
-				return new PartnerCenterSwitch(primaryOrg);
+			case ReadOnlyUser:
+				return new ReadOnlyUserSwitch(primaryOrg);
 			case EmailAlerts:
 				return new EmailAlertsSwitch(primaryOrg);
 			case AssignedTo:

@@ -16,11 +16,11 @@ public enum SignUpPackageDetails {
 				ExtendedFeature.Projects),
 																	
 	Enterprise("FIDENTERPRISE", "Enterprise", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
-				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.PartnerCenter, ExtendedFeature.MultiLocation,
+				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.ReadOnlyUser, ExtendedFeature.MultiLocation,
 				ExtendedFeature.AllowIntegration),
 				
 	Unlimited("FIDUNLIMITED", "Unlimited", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
-				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.PartnerCenter,
+				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.ReadOnlyUser,
 				ExtendedFeature.AllowIntegration, ExtendedFeature.MultiLocation, ExtendedFeature.CustomCert, 
 				ExtendedFeature.DedicatedProgramManager);
 	

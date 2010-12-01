@@ -14,7 +14,7 @@
 	<#assign count=0 >
 	<#list userList as user >
 		<tr id="user_${user.id!}" >
-			<td><a href="<@s.url action="${user.employee?string('employeeUserEdit', 'customerUserEdit')}" uniqueID="${user.id!}" />" >${user.userID?html! }</a> </td>
+			<td><a href="<@s.url action="${user.employee?string('employeeUserEdit', 'readOnlyUserEdit')}" uniqueID="${user.id!}" />" >${user.userID?html! }</a> </td>
 			<td>${user.userLabel?html! }</td>
 			<td>${(user.owner.getInternalOrg().name?html)!}</td>
 			<#if userType?exists && userType != "EMPLOYEES" >
@@ -27,7 +27,7 @@
 			<td>${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>		
 			<td>
 				<#if user.id != sessionUser.id && !user.admin >
-					<div><a href="#deleteUser" onclick="deleteUser('<@s.url action="${user.employee?string('employeeUserDelete', 'customerUserDelete')}" namespace="/ajax" uniqueID="${(user.id)!}" />', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
+					<div><a href="#deleteUser" onclick="deleteUser('<@s.url action="${user.employee?string('employeeUserDelete', 'readOnlyUserDelete')}" namespace="/ajax" uniqueID="${(user.id)!}" />', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
 				</#if>
 			</td>
 			

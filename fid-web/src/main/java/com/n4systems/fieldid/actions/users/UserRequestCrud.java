@@ -28,7 +28,7 @@ import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
+@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class UserRequestCrud extends AbstractCrud {
 

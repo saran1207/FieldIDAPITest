@@ -19,7 +19,7 @@ public enum ExtendedFeature {
 	AssignedTo("feature.assigned_to", "allows users to be assigned to assets."),
 	Projects("feature.jobs", "allows the use of projects to track larger safety systems."),
 	Branding("feature.branding", "allows the user to up load their own image for the tenant logo."),
-	PartnerCenter("feature.partner_center", "allows the tenant to add customer users"),
+	ReadOnlyUser("feature.partner_center", "allows the tenant to add customer users"),
 	EmailAlerts("feature.email_alerts", "allows the tenant to use Notifications"),
 	CustomCert("feature.cust_cert", "This tenant gets a custom cert creation included"), 
 	DedicatedProgramManager("feature.dedicated_program_manager", "Some individual will be assigned to this tenant."), 

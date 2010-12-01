@@ -138,7 +138,7 @@
 			<td class="description"><@s.text name="label.partner_center"/></td>
 			<#list packages as package>
 				<td <@columnClass package/>>
-					<#if package.includes('PartnerCenter') >
+					<#if package.includes('ReadOnlyUser') >
 						<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 					</#if>
 				</td>

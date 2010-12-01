@@ -34,6 +34,7 @@ public class SessionUser implements DateTimeDefinition {
 	private SecurityFilter securityFilter;
 	private String externalAuthKey;
 	private boolean admin;
+	private boolean employee;
 	
 	public SessionUser( User user ) {
 		this.tenant = user.getTenant();
@@ -49,6 +50,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.otherDateFormat = DateHelper.java2Unix(dateFormat);
 		this.securityFilter = new UserSecurityFilter(user);
 		this.admin = user.isAdmin(); 
+		this.employee = user.isEmployee();
 	}
 
 	public Tenant getTenant() {
@@ -178,15 +180,15 @@ public class SessionUser implements DateTimeDefinition {
 	}
 
 	public boolean isEmployeeUser() {
-		return !isCustomerUser();
+		return employee;
 	}
 	
-	public boolean isCustomerUser() {
-		return owner.isExternal();
+	public boolean isReadOnlyUser() {
+		return !employee;
 	}
 	
 	public boolean isAnEndUser() {
-		return isCustomerUser();
+		return isReadOnlyUser();
 	}
 	
 	public boolean isInDivision() {
@@ -238,7 +240,7 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	public boolean hasSetupAccess() {
-		return (!isCustomerUser() && (hasAccess("manageendusers") || hasAccess("managesystemusers") || hasAccess("managesystemconfig")));
+		return (!isReadOnlyUser() && (hasAccess("manageendusers") || hasAccess("managesystemusers") || hasAccess("managesystemconfig")));
 	}
 	
 	public String getSerialNumberLabel(){

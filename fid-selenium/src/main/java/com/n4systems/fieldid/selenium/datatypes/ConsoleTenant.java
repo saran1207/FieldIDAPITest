@@ -27,7 +27,7 @@ public class ConsoleTenant {
 	boolean jobSites = false;
 	boolean projects = false;
 	boolean branding = false;
-	boolean partnerCenter = false;
+	boolean readOnlyUser = false;
 	boolean emailAlerts = true;
 	boolean customCerts = false;
 	boolean dedicatedProgramManager = false;
@@ -84,8 +84,8 @@ public class ConsoleTenant {
 		return this.branding;
 	}
 	
-	public boolean getPartnerCenter() {
-		return this.partnerCenter;
+	public boolean getReadOnlyUser() {
+		return this.readOnlyUser;
 	}
 	
 	public boolean getEmailAlerts() {	
@@ -160,8 +160,8 @@ public class ConsoleTenant {
 		this.branding = b;
 	}
 	
-	public void setPartnerCenter(boolean b) {
-		this.partnerCenter = b;
+	public void setReadOnlyUser(boolean b) {
+		this.readOnlyUser = b;
 	}
 	
 	public void setEmailAlerts(boolean b) {	

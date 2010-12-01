@@ -21,7 +21,7 @@ import com.n4systems.fieldid.selenium.misc.MiscDriver;
  * @author dgrainge
  *
  */
-public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase {
+public class TurnOnPlansAndPricingWithReadOnlyUserTest extends FieldIDTestCase {
 
 	Login login;
 	ConsoleLogin console;
@@ -47,45 +47,45 @@ public class TurnOnPlansAndPricingWithPartnerCenterTest extends FieldIDTestCase 
 	}
 
 	@Test
-	public void partnerCenterOnEnablePlansAndPricingOffShowsRequestAnAccount() throws Exception {
-		boolean partnerCenter = true;
+	public void readOnlyUserOnEnablePlansAndPricingOffShowsRequestAnAccount() throws Exception {
+		boolean readOnlyUser = true;
 		boolean showPlansAndPricing = false;
-		setTenantFeatures(partnerCenter, showPlansAndPricing);
+		setTenantFeatures(readOnlyUser, showPlansAndPricing);
 		startAsCompany(t.getCompanyName());
 		verifyRequestAnAccountIsPresent();
 	}
 	
 	@Test
-	public void partnerCenterOnEnablePlansAndPricingOnShowsRequestAnAccount() throws Exception {
-		boolean partnerCenter = true;
+	public void readOnlyUserOnEnablePlansAndPricingOnShowsRequestAnAccount() throws Exception {
+		boolean readOnlyUser = true;
 		boolean showPlansAndPricing = true;
-		setTenantFeatures(partnerCenter, showPlansAndPricing);
+		setTenantFeatures(readOnlyUser, showPlansAndPricing);
 		startAsCompany(t.getCompanyName());
 		verifyPlansAndPricingIsPresent();
 	}
 	
 	@Test
-	public void partnerCenterOffEnablePlansAndPricingOnShowsRequestAnAccount() throws Exception {
-		boolean partnerCenter = false;
+	public void readOnlyUserOffEnablePlansAndPricingOnShowsRequestAnAccount() throws Exception {
+		boolean readOnlyUser = false;
 		boolean showPlansAndPricing = true;
-		setTenantFeatures(partnerCenter, showPlansAndPricing);
+		setTenantFeatures(readOnlyUser, showPlansAndPricing);
 		startAsCompany(t.getCompanyName());
 		verifyPlansAndPricingIsPresent();
 	}
 	
 	@Test
-	public void partnerCenterOffEnablePlansAndPricingOffShowsRequestAnAccount() throws Exception {
-		boolean partnerCenter = false;
+	public void readOnlyUserOffEnablePlansAndPricingOffShowsRequestAnAccount() throws Exception {
+		boolean readOnlyUser = false;
 		boolean showPlansAndPricing = false;
-		setTenantFeatures(partnerCenter, showPlansAndPricing);
+		setTenantFeatures(readOnlyUser, showPlansAndPricing);
 		startAsCompany(t.getCompanyName());
 		verifyPlansAndPricingIsPresent();
 	}
 	
-	private void setTenantFeatures(boolean partnerCenter, boolean showPlansAndPricing) {
+	private void setTenantFeatures(boolean readOnlyUser, boolean showPlansAndPricing) {
 		console.gotoAdminConsoleAndLogin();
 		consoleOrgs.gotoEditTenant(t.getSiteAddress());
-		consoleOrgs.setPartnerCenter(partnerCenter);
+		consoleOrgs.setReadOnlyUser(readOnlyUser);
 		consoleOrgs.setShowPlansAndPricing(showPlansAndPricing);
 		consoleOrgs.gotoSubmitTenantInformation();
 	}

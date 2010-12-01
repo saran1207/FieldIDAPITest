@@ -245,24 +245,24 @@ public class Login {
 	}
 
 	/**
-	 * If the current tenant does not have PartnerCenter then this will return
-	 * false. If PartnerCenter is off then the link is for Plans And Pricing.
+	 * If the current tenant does not have ReadOnlyUser then this will return
+	 * false. If ReadOnlyUser is off then the link is for Plans And Pricing.
 	 * Otherwise this will return true and the link to Request An Account will
 	 * exist.
 	 * 
-	 * @return true if link exists, i.e. PartnerCenter is on.
+	 * @return true if link exists, i.e. ReadOnlyUser is on.
 	 */
 	public boolean isRequestAnAccountAvailable() {
 		return selenium.isElementPresent(requestAnAccountLinkLocator);
 	}
 	
 	/**
-	 * If the current tenant does have PartnerCenter then this will return
-	 * false. If PartnerCenter is on then the link is for Request An Account.
+	 * If the current tenant does have ReadOnlyUser then this will return
+	 * false. If ReadOnlyUser is on then the link is for Request An Account.
 	 * Otherwise this will return true and the link to Plans And Pricing will
 	 * exist.
 	 * 
-	 * @return true if link exists, i.e. PartnerCenter is off.
+	 * @return true if link exists, i.e. ReadOnlyUser is off.
 	 */
 	public boolean isPlansAndPricingAvailable() {
 		return selenium.isElementPresent(planAndPricingLinkLocator);

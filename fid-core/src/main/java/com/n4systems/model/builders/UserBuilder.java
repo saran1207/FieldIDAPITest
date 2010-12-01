@@ -38,7 +38,7 @@ public class UserBuilder extends BaseBuilder<User> {
 		return new UserBuilder(OrgBuilder.aSecondaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null, false);
 	}
 	
-	public static UserBuilder aCustomerUser() {
+	public static UserBuilder aReadOnlyUser() {
 		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null, false);
 	}
 	

@@ -18,9 +18,9 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.PartnerCenter)
+@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
-public class CustomersUserCrud extends CustomerUserCrud {
+public class CustomersUserCrud extends ReadOnlyUserCrud {
 	private static final long serialVersionUID = 1L;
 	
 	private CustomerOrg customer;

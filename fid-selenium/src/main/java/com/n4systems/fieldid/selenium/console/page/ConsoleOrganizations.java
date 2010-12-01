@@ -1,9 +1,10 @@
 package com.n4systems.fieldid.selenium.console.page;
 
 import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.n4systems.fieldid.selenium.datatypes.ConsoleTenant;
+
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
@@ -14,10 +15,9 @@ public class ConsoleOrganizations {
 	// Locators
 	private String organizationsTableXpath = "//DIV[@id='content']/TABLE";
 	private String numberOfTenantsXpath = organizationsTableXpath + "/TBODY/TR";
-	private String totalTenantsTextLocator = "xpath=//DIV[@id='content']";
 	private String tenantIDColumn = "2";
 	private String editTenantColumn = "3";
-	private String partnerCenterCheckBoxLocator = "xpath=//INPUT[contains(@id,'PartnerCenter')]";
+	private String readOnlyUserCheckBoxLocator = "xpath=//INPUT[contains(@id,'ReadOnlyUser')]";
 	private String submitButtonLocator = "xpath=//INPUT[@id='organizationUpdate_0']";
 	private String cancelButtonLocator = "xpath=//INPUT[@id='organizationUpdate_redirectAction:organizations']";
 	private String showPlansAndPricingCheckBoxLocator = "xpath=//INPUT[@id='organizationUpdate_primaryOrg_plansAndPricingAvailable']";
@@ -75,15 +75,15 @@ public class ConsoleOrganizations {
 		}
 	}
 	
-	public void setPartnerCenter(boolean partnerCenter) {
-		if(selenium.isElementPresent(partnerCenterCheckBoxLocator)) {
-			if(partnerCenter) {
-				selenium.check(partnerCenterCheckBoxLocator);
+	public void setReadOnlyUser(boolean readOnlyUser) {
+		if(selenium.isElementPresent(readOnlyUserCheckBoxLocator)) {
+			if(readOnlyUser) {
+				selenium.check(readOnlyUserCheckBoxLocator);
 			} else {
-				selenium.uncheck(partnerCenterCheckBoxLocator);
+				selenium.uncheck(readOnlyUserCheckBoxLocator);
 			}
 		} else {
-			fail("Could not find the check box for PartnerCenter");
+			fail("Could not find the check box for ReadOnlyUser");
 		}
 	}
 

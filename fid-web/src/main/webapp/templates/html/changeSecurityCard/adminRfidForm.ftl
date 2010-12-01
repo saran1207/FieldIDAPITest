@@ -9,7 +9,7 @@ ${action.setPageType('user', 'change_rfid_number')!}
 	</p>
 	
 	<div class="formAction borderLessFormAction">
-		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'customerUserEdit')}" uniqueID="${uniqueID}"/>
+		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'readOnlyUserEdit')}" uniqueID="${uniqueID}"/>
 		<@s.submit key="hbutton.save"/>
 		<@s.text name="label.or"/>
 	
