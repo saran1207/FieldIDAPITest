@@ -10,10 +10,11 @@ import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
+import com.n4systems.model.builders.SubAssetBuilder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,10 +34,9 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		AssetStatus status1 = scenario.anAssetStatus().named("In Service").build();
 
 		scenario.anAssetStatus().named("Out of Service").build();
-
+		
 		AssetBuilder anAsset = scenario.anAsset()
 			.withSerialNumber("123456")
-			.withOneSubAsset()
 			.ofType(type)
 			.havingStatus(status1);
 
@@ -44,7 +44,16 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 		EventScheduleBuilder.aScheduledEventSchedule().asset(anAsset.build());
 		anAsset.purchaseOrder("PO 3").build();
-		anAsset.purchaseOrder("PO 4").build();
+		Asset masterAsset = anAsset.purchaseOrder("PO 4").build();
+		
+		
+		AssetBuilder aSubAsset = scenario.anAsset()
+			.withSerialNumber("123456sub")
+			.ofType(type)
+			.havingStatus(status1);
+			
+		SubAssetBuilder subBuilder = new SubAssetBuilder(aSubAsset.build(), masterAsset);
+		subBuilder.createObject();
 	}
 
 	@Before
@@ -84,17 +93,8 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 	@Test
 	public void test_mass_delete_assets_with_schedule() {
-		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
-
-		assetsSearchPage.enterSerialNumber("123456");
-		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
-
-		resultsPage.selectAllItemsOnPage();
-
-		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
-		massUpdatePage.checkMassDelete();
-
-		massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+		
+		doDelete("123456");
 
 		assertTrue("Assets weren't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 3 assets removed.')]"));
 
@@ -107,17 +107,8 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 	@Test
 	public void test_mass_delete_assets_with_events() {
-		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
-
-		assetsSearchPage.enterSerialNumber("9671111");
-		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
-
-		resultsPage.selectAllItemsOnPage();
-
-		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
-		massUpdatePage.checkMassDelete();
-
-		massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+		
+		doDelete("9671111");
 		
 		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 1 assets removed.')]"));
 	
@@ -129,19 +120,43 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void test_mass_delete_assets_with_attached_sub_assets() {
-
+	public void test_mass_delete_sub_assets_attached_to_master_assets_still_persist_after_removing_master() {
 		
+		doDelete("123456");
 		
+		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
+
+		assetsSearchPage.enterSerialNumber("123456sub");
+		assetsSearchPage.clickRunSearchButton();
+		
+		assertTrue("Sub asset was incorrectly removed!", !selenium.isElementPresent("//div[@class='emptyList']"));
 	}
-
+	
 	@Test
-	public void test_mass_delete_sub_assets_attached_to_master_assets() {
+	public void test_mass_delete_sub_assets_attached_to_master_dont_remove_master(){
+	
+		doDelete("123456sub");
+		
+		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
+		assetsSearchPage.enterSerialNumber("123456");
+		assetsSearchPage.clickRunSearchButton();
+		
+		assertTrue("Master asset was incorrectly removed!", !selenium.isElementPresent("//div[@class='emptyList']"));
 	}
+	
+	public void doDelete(String serialNumber){
+		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
-	@Test
-	public void test_mass_delete_asset_attached_to_a_job() {
+		assetsSearchPage.enterSerialNumber(serialNumber);
+		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
 
+		resultsPage.selectAllItemsOnPage();
+
+		AssetsMassUpdatePage massUpdatePage = resultsPage.clickMassUpdate();
+		massUpdatePage.checkMassDelete();
+
+		massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+	
 	}
 }
