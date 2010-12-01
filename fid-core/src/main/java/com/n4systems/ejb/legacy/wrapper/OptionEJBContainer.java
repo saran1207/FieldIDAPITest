@@ -1,11 +1,8 @@
 package com.n4systems.ejb.legacy.wrapper;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-
-import rfid.ejb.entity.FindAssetOptionManufacture;
 
 import com.n4systems.ejb.legacy.Option;
 import com.n4systems.ejb.legacy.impl.OptionManager;
@@ -61,78 +58,6 @@ Transaction transaction = transactionManager.startTransaction();
 Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).findTagOptions(filter);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public Collection<FindAssetOptionManufacture> getAllFindAssetOptionManufacture() {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getAllFindAssetOptionManufacture();
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	
-
-	
-
-	public FindAssetOptionManufacture getFindAssetOptionManufacture(Long uniqueID) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getFindAssetOptionManufacture(uniqueID);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	
-
-	public Collection<FindAssetOptionManufacture> getFindAssetOptionsForTenant(Long tenantId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getFindAssetOptionsForTenant(tenantId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	
-
-	public void updateFindAssetOptionManufacture(FindAssetOptionManufacture findAssetOptionManufacturer) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			createManager(transaction.getEntityManager()).updateFindAssetOptionManufacture(findAssetOptionManufacturer);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import rfid.ejb.entity.FindAssetOptionManufacture;
 import rfid.web.helper.SessionUser;
 
 import com.google.gson.Gson;
@@ -66,7 +65,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	
 	private Collection<String> flashMessages = new ArrayList<String>();
 	private Collection<String> flashErrors = new ArrayList<String>();
-	private Collection<FindAssetOptionManufacture> searchOptions;
 	private LoaderFactory loaderFactory;
 	private SaverFactory saverFactory;
 	private Gson json;
@@ -253,17 +251,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return new FieldidDateFormatter(date, getSessionUser(), convertTimeZone, showTime).format();
 	}
 	
-	public Collection<FindAssetOptionManufacture> getSearchOptions() {
-		if( searchOptions == null ) {
-			try {
-				searchOptions = ServiceLocator.getOption().getFindAssetOptionsForTenant( getTenantId() );
-			} catch (Exception e) {
-				// eat the exception.
-			}
-		}
-		return searchOptions;
-	}
-	
 	public boolean isDevMode() {
 		String serverName = getServletRequest().getServerName();
 		String systemDomain = getConfigContext().getString(ConfigEntry.SYSTEM_DOMAIN);
@@ -273,7 +260,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public String replaceCR(String string) {
 		return string.replace("\n", "<br />");
 	}
-	
 		
 	protected boolean isBlank( String testString ) {
 		return ( testString == null || testString.trim().length() == 0  );

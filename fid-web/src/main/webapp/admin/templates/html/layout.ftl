@@ -22,7 +22,6 @@
 			<option value="eulas.action">EULA</option>
 			<option value="releaseNotes.action">Release Notes</option>
 			<option value="instructionalVideos.action">Instructional Videos</option>
-			<option value="findAssetOptionList.action">Find Asset Option</option>
 			<option value="unitOfMeasureList.action">Unit of Measures</option>
 			<option value="orderMappingList.action">Order Mappings</option>
 			<option value="importObservations.action">Observation Importer</option>
