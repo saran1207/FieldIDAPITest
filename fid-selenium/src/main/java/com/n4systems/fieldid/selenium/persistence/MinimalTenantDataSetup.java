@@ -33,6 +33,7 @@ public class MinimalTenantDataSetup {
 
     private void createN4UserAccountForTenant(PrimaryOrg org) {
 		User user = new User();
+        user.setEmployee(true);
 		user.setTenant(tenant);
 		user.setOwner(org);
 		user.setTimeZoneID("United States:New York - New York");
