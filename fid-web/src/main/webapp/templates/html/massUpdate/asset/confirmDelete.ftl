@@ -4,13 +4,21 @@
 	<@s.text name="instruction.delete_multiple_assets"><@s.param >${removalSummaries.size()}</@s.param></@s.text>
 </div>
 
-	<#if !aggregateRemovalSummary.validToDelete() >
-		<div class="formErrors error" >
-			<@s.text name="error.assetusedonamasterevent">
-				<@s.param>${removalSummary.assetUsedInMasterEvent}</@s.param>
-			</@s.text>
-		</div>
-	</#if>
+<#if !aggregateRemovalSummary.validToDelete() >
+	<div class="formErrors error" >
+		<@s.text name="error.mass_delete_asset_used_on_master_event">
+			<@s.param>${aggregateRemovalSummary.assetUsedInMasterEvent}</@s.param>
+		</@s.text>
+		<ul class="borderLess">
+			<li>&nbsp;</li>
+			<#list removalSummaries as removalSummary>
+				<#if !removalSummary.validToDelete()>
+					<li>${removalSummary.asset.serialNumber}</li>
+				</#if>
+			</#list>
+		</ul>
+	</div>
+</#if>
 
 
 <div class="crudForm largeForm bigForm pageSection">

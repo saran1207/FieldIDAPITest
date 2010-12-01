@@ -1798,3 +1798,7 @@ input.description {
 	border-bottom:1px solid #CCCCCC;
 	font-size: 1em;
 }
+
+ul.borderLess{
+	border-style: none;
+	}
