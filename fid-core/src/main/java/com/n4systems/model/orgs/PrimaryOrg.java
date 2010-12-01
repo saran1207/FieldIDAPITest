@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,7 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.ExternalCredentialProvider;
@@ -34,7 +34,7 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 	@Embedded
 	private TenantLimit limits = new TenantLimit();
 
-	@CollectionOfElements(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	@JoinTable(
             name = "org_extendedfeatures",

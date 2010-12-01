@@ -3,11 +3,13 @@ package com.n4systems.model.location;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.parents.EntityWithTenant;
@@ -17,7 +19,8 @@ import com.n4systems.model.parents.EntityWithTenant;
 @Table(name="predefined_location_levels")
 public class PredefinedLocationLevels extends EntityWithTenant {
 
-	@CollectionOfElements(fetch=FetchType.EAGER)
+	@ElementCollection(fetch=FetchType.EAGER)
+    @JoinTable(name="predefined_location_levels_levels", joinColumns = @JoinColumn(name="predefined_location_levels_id"))
 	@IndexColumn(name="orderidx")
 	private List<LevelName> levels = new ArrayList<LevelName>();
 

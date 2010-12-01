@@ -9,17 +9,19 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import org.hibernate.annotations.CollectionOfElements;
 
 import rfid.ejb.entity.AssetStatus;
 
@@ -53,7 +55,10 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<FileAttachment> attachments = new ArrayList<FileAttachment>();
 
-	@CollectionOfElements(fetch=FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.LAZY)
+    @JoinTable(name="events_infooptionmap", joinColumns = @JoinColumn(name="events_id"))
+    @MapKeyColumn(name = "mapkey")
+    @Column(name="element")
     private Map<String, String> infoOptionMap = new HashMap<String, String>();
 	
 	@Column(nullable=false)

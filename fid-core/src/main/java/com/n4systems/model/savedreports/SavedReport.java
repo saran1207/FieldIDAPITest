@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.api.HasUser;
@@ -60,17 +62,22 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 	private String sortColumn;
 	private String sortDirection;
 	
-	@CollectionOfElements(fetch= FetchType.EAGER)
+	@ElementCollection(fetch= FetchType.EAGER)
 	@IndexColumn(name="idx")
+    @JoinTable(name="savedreports_columns", joinColumns = {@JoinColumn(name="savedreports_id")})
+    @Column(name="element")
 	private List<String> columns = new ArrayList<String>();
 	
 	@ManyToOne(optional=false)
 	@JoinColumn(name="user_id", updatable=false)
 	private User user;
 	
-	@CollectionOfElements(fetch=FetchType.EAGER)
-	private Map<String, String> criteria = new HashMap<String, String>(); 
-	
+	@ElementCollection(fetch=FetchType.EAGER)
+    @JoinTable(name="savedreports_criteria", joinColumns = {@JoinColumn(name="savedreports_id")})
+    @MapKeyColumn(name = "mapkey")
+    @Column(name="element")
+	private Map<String, String> criteria = new HashMap<String, String>();
+
 	public SavedReport() {}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,8 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.Saveable;
@@ -28,7 +27,7 @@ public class PromoCode extends AbstractEntity implements Saveable {
 	@Column(name="code", nullable=false)
 	private String code;
 	
-	@CollectionOfElements(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	@JoinTable(
             name = "promocode_extendedfeatures",

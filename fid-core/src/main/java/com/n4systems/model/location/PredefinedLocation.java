@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.CollectionOfElements;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.NamedEntity;
@@ -28,7 +27,7 @@ public class PredefinedLocation extends ArchivableEntityWithTenant implements Na
 	@ManyToOne
 	private PredefinedLocation parent;
 	
-	@CollectionOfElements(fetch=FetchType.LAZY)
+	@ElementCollection(fetch=FetchType.LAZY)
 	@JoinTable(name="predefinedlocations_searchids", joinColumns = {@JoinColumn(name="predefinedlocation_id")})
 	@Column(name="search_id")
 	private List<Long> searchIds = new ArrayList<Long>();

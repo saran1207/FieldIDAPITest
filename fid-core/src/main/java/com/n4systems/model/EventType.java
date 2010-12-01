@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.fileprocessing.ProofTestType;
@@ -63,15 +63,17 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	@IndexColumn(name="orderidx")
     @JoinTable(name="eventtypes_criteriasections", joinColumns = {@JoinColumn(name="eventtypes_id")})
 	private List<CriteriaSection> sections = new ArrayList<CriteriaSection>();
-	
-	@CollectionOfElements(fetch= FetchType.LAZY)
+
+	@ElementCollection(fetch= FetchType.LAZY)
 	@Enumerated(EnumType.STRING)
     @JoinTable(name="eventtypes_supportedprooftests", joinColumns = {@JoinColumn(name="eventtypes_id")})
+    @Column(name="element")
 	private Set<ProofTestType> supportedProofTests = new HashSet<ProofTestType>();
 	
-	@CollectionOfElements(fetch= FetchType.LAZY)
+	@ElementCollection(fetch= FetchType.LAZY)
 	@IndexColumn(name="orderidx")
     @JoinTable(name="eventtypes_infofieldnames", joinColumns = {@JoinColumn(name="eventtypes_id")})
+    @Column(name="element")
 	private List<String> infoFieldNames = new ArrayList<String>();
 	
 	@Column(nullable=false)
