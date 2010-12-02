@@ -71,6 +71,7 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 		setCommonUserFields(primaryOrg, user);
 		
 		user.setAdmin(true);
+		user.setEmployee(true);
 		user.setUserID(accountInfo.getUsername());
 		user.assignPassword(accountInfo.getPassword());
 		user.setEmailAddress(accountInfo.getEmail());
@@ -89,6 +90,7 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 		
 		setCommonUserFields(primaryOrg, user);
 		
+		user.setEmployee(true);
 		user.setTimeZoneID("Canada:Ontario - Toronto"); 
 		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
 		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));
