@@ -9,7 +9,7 @@
 </head>
 <#include "/templates/html/common/_orgPicker.ftl"/>
 
-<@s.form action="${userSaveAction}" cssClass="fullForm" theme="fieldid" >
+<@s.form action="${userSaveAction}" cssClass="fullForm fluidSets" theme="fieldid" >
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="customerId"/>
@@ -18,7 +18,7 @@
 	<@s.hidden name="userType" />
 	<div class="multiColumn">
 		<div class="fieldGroup fieldGroupGap">
-			<h2 class="decoratedHeader"><@s.text name="label.identifiers"/></h2>
+			<h2><@s.text name="label.identifiers"/></h2>
 			
 			<div class="infoSet">
 				<label class="label" for="owner"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
@@ -69,7 +69,7 @@
 		</div>
 		<div class="fieldGroup">
 		
-			<h2 class="decoratedHeader"><@s.text name="label.account_heading"/></h2>
+			<h2><@s.text name="label.account_heading"/></h2>
 		
 			<div class="infoSet">
 				<label class="label" for="userId"><@s.text name="label.username"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
@@ -78,8 +78,11 @@
 			
 			<#if user.new >
 				<div class="infoSet">
-					<div class="label">
-						<label for="assignPassword"><@s.text name="label.assign_password"/></label> <@s.checkbox id="assignPassword" name="assignPassword"  theme="simple"/>
+					<label class="label"><@s.text name="label.assign_password"/></label>
+					<div class="fieldHolder">
+						<label class="checkBoxLabel" for="assignPassword">
+							<@s.checkbox id="assignPassword" name="assignPassword"  theme="simple"/>
+						</label>
 					</div>
 				</div>
 				<div id="passwords">
@@ -98,8 +101,11 @@
 					<@s.textfield key="label.securityrfidnumber" name="securityRfidNumber" />
 				</div>
 				<div class="infoSet">
-					<div class="label">
-						<label for="welcomeMessage.sendEmail"><@s.text name="label.send_welcome_email"/></label><@s.checkbox name="welcomeMessage.sendEmail" id="sendEmail" theme="simple"/>
+					<label class="label" for="welcomeMessage.sendEmail"><@s.text name="label.send_welcome_email"/></label>
+					<div class="fieldHolder">
+						<label class="checkBoxContainer">
+							<@s.checkbox name="welcomeMessage.sendEmail" id="sendEmail" theme="simple"/>
+						</label>
 					</div>
 				</div>
 				<div class="infoSet" id="personalMessage">
@@ -109,7 +115,7 @@
 		</div>
 		
 		<div class="fieldGroup fieldGroupGap clearLeft">
-			<h2 class="decoratedHeader"><@s.text name="label.localization"/></h2>
+			<h2><@s.text name="label.localization"/></h2>
 			
 			<div class="infoSet">
 				<label class="label" for="countryId"><@s.text name="label.country"/></label>
@@ -123,7 +129,7 @@
 		
 		<div class="fieldGroup">
 		
-			<h2 class="decoratedHeader"><@s.text name="label.permissions"/></h2>
+			<h2><@s.text name="label.permissions"/></h2>
 		
 			<#if !user.admin && employee>
 				<div class="infoSet">

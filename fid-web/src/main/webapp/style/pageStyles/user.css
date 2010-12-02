@@ -16,7 +16,6 @@
 	border-top: 1px solid #999;
 }
 
-
 .radio {
 	width: 60px;
 	text-align:center;
@@ -38,4 +37,12 @@
 
 .extraActions p {
 	margin-bottom:10px;
+}
+
+.fieldGroup #welcomeMessageTextarea {
+	margin-left: 165px;	
+}
+
+.fieldGroup .infoSet label{
+	text-align: right;
 }

@@ -130,7 +130,6 @@ em {
 }
  .fullForm input.textbox, .fullForm input.passwordBox, .fullForm textarea, .fullForm select {
 	width: 250px;
-	border: 1px solid #666;
 }
 .fullForm textarea {
 	height: 100px;
@@ -231,7 +230,7 @@ em {
 }
 
 .infoSet .fieldHolder .unitOfMeasure input, .infoSet .fieldHolder input.dateTime, .infoSet .fieldHolder input.date {
-	width: 200px;
+	width: 250px;
 }	
 
 #noPermissionMessage, #planLimitExceeded, #ieOnlyMessage {

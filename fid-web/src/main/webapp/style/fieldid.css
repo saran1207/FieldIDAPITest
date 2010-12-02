@@ -1228,12 +1228,9 @@ li.buttonGroupLabels {
 	width: auto;
 }
 
-.crudForm .infoSet  textarea {
-	
-}
-
 .crudForm .infoSet  select,.crudForm .infoSet  textarea {
-	width: 229px;
+	border: 1px solid #9C9C9C;
+	width: 260px;
 }
 
 .crudForm .infoSet input[type="text"],.crudForm .infoSet input.textbox {
@@ -1807,7 +1804,7 @@ ul.borderLess{
 	border-style: none;
 }
 
-.fieldGroup .infoSet{
+.crudForm .fieldGroup .infoSet, .fluidSets .fieldGroup .infoSet, .fieldGroup .infoSet{
 	border-top: none;
 	border-bottom: none;
 }
@@ -1822,3 +1819,41 @@ ul.borderLess{
 .fieldGroupGap{
 	margin-right: 10px;	
 }
+
+.infoSet .fieldHolder input[type="text"], .infoSet .fieldHolder input[type="password"], .fieldHolder textarea{
+	padding: 4px;
+	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 250px;
+	overflow: hidden;
+}
+
+.fieldGroup h2,.formGroup h2{
+	margin-bottom: 5px;
+	background-color:#eeeeee;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+	padding-top:3px;
+	padding-bottom:3px;
+}
+
+.infoSet .fieldHolder input[type="checkbox"]{
+	 vertical-align: bottom;
+}
+
+.fieldHolder label.checkBoxLabel{
+	text-align: left;	
+	width: auto;
+	padding: 10px 0 0 0;
+	line-height: 100%;
+}
+
+.fieldHolder label.checkBoxLabel input{
+	width: 13px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    *overflow: hidden;
+	}
