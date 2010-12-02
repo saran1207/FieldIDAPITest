@@ -1,43 +1,65 @@
 package com.n4systems.fieldid.selenium.testcase.users;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import com.n4systems.fieldid.selenium.pages.ManageEventsPage;
-import org.junit.Before;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.AssetPage;
-import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.JobsListPage;
-import com.n4systems.fieldid.selenium.pages.LoginPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
+import com.n4systems.fieldid.selenium.pages.ManageEventsPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
 import com.n4systems.fieldid.selenium.reporting.page.ReportingSearchResultsPage;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class UserPermissionsTest extends FieldIDTestCase {
 
-	private HomePage homePage;
-	private static String COMPANY = "illinois";
-	private static String CUSTOMER_USER = "aCustomerUser";
-	private static String EMPLOYEE_USER = "anEmployeeUser";
-	private LoginPage loginPage;
-	private ManageUsersPage manageUsersPage;
+	private static String COMPANY = "test1";
+	private static String READ_ONLY_USER = "aReadOnlyUser";
+	private static String EMPLOYEE_USER = "anEmployeeUser1";
+	private static String EMPLOYEE_USER_WITH_PERMISSIONS = "anEmployeeUser2";
 
-	@Before
-	public void setUp() throws Exception {
-		loginPage = startAsCompany(COMPANY);
-		homePage = loginPage.systemLogin();
-
-		manageUsersPage = homePage.clickSetupLink().clickManageUsers();
-		manageUsersPage.clickUserID(EMPLOYEE_USER);
-
-		manageUsersPage.clickPermissionsAllOff();
-		manageUsersPage.clickSaveUserEdit();
+	@Override
+	public void setupScenario(Scenario scenario) {
+		
+		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(
+				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
+		
+		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor(COMPANY);
+		
+		defaultPrimaryOrg.setExtendedFeatures(extendedFeatures);
+		
+		scenario.save(defaultPrimaryOrg);
+		
+		scenario.aReadOnlyUser()
+		        .withUserId(READ_ONLY_USER)
+		        .withPassword(READ_ONLY_USER)
+		        .build();
+		
+		scenario.aUser()
+		        .withUserId(EMPLOYEE_USER)
+		        .withPassword(EMPLOYEE_USER)
+		        .build();
+		
+		scenario.aUser()
+                .withUserId(EMPLOYEE_USER_WITH_PERMISSIONS)
+                .withPassword(EMPLOYEE_USER_WITH_PERMISSIONS)
+                .withPermissions(511)
+                .build();		
+		
+		SimpleEventBuilder.aSimpleEvent(scenario).createObject();
 	}
-
+	
+	
 	@Test
 	public void verify_customer_menu_controls_are_disabled() {
-		HomePage homePage = startAsCompany(COMPANY).login(CUSTOMER_USER, CUSTOMER_USER);
+		startAsCompany(COMPANY).login(READ_ONLY_USER, READ_ONLY_USER);
 
 		assertFalse("Shouldn't have identify permission", selenium.isElementPresent("//a[@id='menuIdentify']"));
 		assertFalse("Shouldn't have event permission", selenium.isElementPresent("//a[@id='menuEvent']"));
@@ -48,7 +70,7 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 	@Test
 	public void verify_employee_menu_controls_are_disabled() {
-		HomePage homePage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER);
+		startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER);
 
 		assertFalse("Shouldn't have identify permission", selenium.isElementPresent("//a[@id='menuIdentify']"));
 		assertFalse("Shouldn't have event permission", selenium.isElementPresent("//a[@id='menuEvent']"));
@@ -59,24 +81,20 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 	@Test
 	public void verify_employee_user_job_actions_are_disabled() {
-		JobsListPage jobsListPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickJobsLink().clickJobsLink();
+		startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickJobsLink().clickJobsLink();
 		assertFalse("Shouldn't have job addition permission", selenium.isElementPresent("//a[contains(.,'Add')]"));
 	}
 
 	@Test
 	public void verify_customer_user_job_actions_are_disabled() {
-		JobsListPage jobsListPage = startAsCompany(COMPANY).login(CUSTOMER_USER, CUSTOMER_USER).clickJobsLink().clickJobsLink();
+		startAsCompany(COMPANY).login(READ_ONLY_USER, READ_ONLY_USER).clickJobsLink().clickJobsLink();
 		assertFalse("Shouldn't have job addition permission", selenium.isElementPresent("//a[contains(.,'Add')]"));
 	}
 
 	@Test
 	public void verify_manage_system_users_and_manage_customer_users_is_disabled() {
 
-		manageUsersPage.enableManageSystemConfigPermission();
-		manageUsersPage.clickSaveUserEdit();
-
-		HomePage homePage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER);
-		homePage.clickSetupLink();
+		startAsCompany(COMPANY).login(EMPLOYEE_USER_WITH_PERMISSIONS, EMPLOYEE_USER_WITH_PERMISSIONS).clickSetupLink();
 
 		assertFalse("Shouldn't have manage employee users permission", selenium.isElementPresent("//a[contains(., 'Manage Users')]"));
 		assertFalse("Shouldn't have manage customer users permission", selenium.isElementPresent("//a[contains(., 'Manage Customers')]"));
@@ -85,12 +103,11 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 	@Test
 	public void verify_edit_events_is_disabled() {
-		HomePage homePage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER);
-		ReportingSearchResultsPage reportingSearchResultsPage = homePage.clickReportingLink().clickRunSearchButton();
+		ReportingSearchResultsPage resultsPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickReportingLink().clickRunSearchButton();
 
 		assertFalse("Shouldn't be able to see edit link next to view", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
-		ManageEventsPage manageEventsPage = reportingSearchResultsPage.clickReportLinkForResult(1).clickEventsTab().clickManageEvents();
+		ManageEventsPage manageEventsPage = resultsPage.clickReportLinkForResult(1).clickEventsTab().clickManageEvents();
 
 		assertFalse("Shouldn't be able to see edit link", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
@@ -102,9 +119,8 @@ public class UserPermissionsTest extends FieldIDTestCase {
 	
 	@Test
 	public void verify_customers_can_only_edit_four_unrestricted_fields_on_asset(){
-		AssetPage assetPage = startAsCompany(COMPANY).login(CUSTOMER_USER, CUSTOMER_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1).clickEditTab();
+		startAsCompany(COMPANY).login(READ_ONLY_USER, READ_ONLY_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1).clickEditTab();
 		
-		//Check for 4 fields + 3 fields inside orgpicker.
 		assertEquals(7, selenium.getXpathCount("//div[@class='infoSet']/label"));
 		assertTrue("Coudldn't find owner field", selenium.isElementPresent("//label[contains(.,'Owner')]"));
 		assertTrue("Coudldn't find Location field", selenium.isElementPresent("//label[contains(.,'Location')]"));
@@ -114,7 +130,7 @@ public class UserPermissionsTest extends FieldIDTestCase {
 	
 	@Test
 	public void verify_employee_users_with_no_edit_permissions_cannot_view_asset_edit_tab(){
-		AssetPage assetPage = startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1);
+		startAsCompany(COMPANY).login(EMPLOYEE_USER, EMPLOYEE_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1);
 	
 		assertFalse("Shouldn't be able to see edit tab on asset page", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 	}

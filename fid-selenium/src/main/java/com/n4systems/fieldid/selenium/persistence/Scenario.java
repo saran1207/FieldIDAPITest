@@ -1,5 +1,10 @@
 package com.n4systems.fieldid.selenium.persistence;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectionBuilder;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
 import com.n4systems.model.AssetType;
@@ -31,10 +36,6 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Scenario {
 
@@ -64,6 +65,10 @@ public class Scenario {
     public PrimaryOrg primaryOrgFor(String tenantName) {
         Tenant tenant = tenant(tenantName);
         return new PrimaryOrgByTenantLoader().setTenantId(tenant.getId()).load(trans);
+    }
+    
+    public void updatePrimaryOrg(PrimaryOrg primaryOrg) {
+    	save(primaryOrg);
     }
 
     public AssetType assetType(String tenantName, String assetTypeName) {
@@ -99,7 +104,13 @@ public class Scenario {
         builder = builder.withUserId("test_user"+(++nextUserId));
         return createPersistentBuilder(builder);
     }
-
+    
+    public UserBuilder aReadOnlyUser() {
+        UserBuilder builder = UserBuilder.aReadOnlyUser();
+        builder = builder.withOwner(defaultPrimaryOrg);
+        return createPersistentBuilder(builder);
+    }
+    
     public AssetBuilder anAsset() {
         AssetBuilder builder = AssetBuilder.anAsset();
         return createPersistentBuilder(builder);

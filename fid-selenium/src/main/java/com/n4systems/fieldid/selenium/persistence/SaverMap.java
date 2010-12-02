@@ -18,6 +18,7 @@ import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.user.User;
@@ -46,6 +47,7 @@ public class SaverMap {
         classToSaverMap.put(OrgConnection.class, new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID)));
 
         classToSaverMap.put(CustomerOrg.class, new OrgSaver());
+        classToSaverMap.put(PrimaryOrg.class, new OrgSaver());
     }
 
     public static Saver makeSaverFor(Class<? extends Saveable> clazz) {
