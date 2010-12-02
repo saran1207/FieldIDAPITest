@@ -23,6 +23,10 @@ img {
 	clear: both;
 }
 
+.clearLeft{
+	clear:left;
+}
+
 body {
 	text-align: left;
 	color: #333333;
@@ -1792,7 +1796,7 @@ input.description {
 }
 
 .decoratedHeaderAlternative{
-		background-color: #EEEEEE;
+	background-color: #EEEEEE;
 	padding:5px 15px;
 	border-top:1px solid #CCCCCC;
 	border-bottom:1px solid #CCCCCC;
@@ -1801,4 +1805,20 @@ input.description {
 
 ul.borderLess{
 	border-style: none;
-	}
+}
+
+.fieldGroup .infoSet{
+	border-top: none;
+	border-bottom: none;
+}
+
+.fieldGroup{
+	display:block;
+	float:left;
+	overflow: hidden;
+	width:495px;
+}
+
+.fieldGroupGap{
+	margin-right: 10px;	
+}

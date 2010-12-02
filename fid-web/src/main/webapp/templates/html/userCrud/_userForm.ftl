@@ -17,23 +17,12 @@
 	<@s.hidden name="listFilter" />
 	<@s.hidden name="userType" />
 	<div class="multiColumn">
-		<div class="infoBlock">
+		<div class="fieldGroup fieldGroupGap">
+			<h2 class="decoratedHeader"><@s.text name="label.identifiers"/></h2>
+			
 			<div class="infoSet">
 				<label class="label" for="owner"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 				<@n4.orgPicker name="owner" required="true" orgType="${(employee)?string('internal','readonly')}"/>
-			</div>
-			
-			<div class="infoSet">
-				<label class="label" for="firstname"><@s.text name="label.firstname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-				<@s.textfield id="firstname" name="firstName"  required="true" cssClass="initalsInput"/>
-			</div>
-			<div class="infoSet">
-				<label class="label" for="lastname"><@s.text name="label.lastname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-				<@s.textfield id="lastname" name="lastName"  required="true" cssClass="initalsInput"/>
-			</div>
-			<div class="infoSet">
-				<label class="label" for="initials"><@s.text name="label.initials"/></label>
-				<@s.textfield id="initials" name="initials"   />
 			</div>
 			
 			<div class="infoSet">
@@ -42,22 +31,27 @@
 			</div>
 			
 			<div class="infoSet">
+				<label class="label" for="firstname"><@s.text name="label.firstname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				<@s.textfield id="firstname" name="firstName"  required="true" cssClass="initalsInput"/>
+			</div>
+			
+			<div class="infoSet">
+				<label class="label" for="lastname"><@s.text name="label.lastname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				<@s.textfield id="lastname" name="lastName"  required="true" cssClass="initalsInput"/>
+			</div>
+			
+			<div class="infoSet">
+				<label class="label" for="initials"><@s.text name="label.initials"/></label>
+				<@s.textfield id="initials" name="initials"   />
+			</div>
+			
+			<div class="infoSet">
 				<label class="label" for="position"><@s.text name="label.position"/></label>
 				<@s.textfield  name="position" />
 			</div>
 			
-			
 			<div class="infoSet">
-				<label class="label" for="countryId"><@s.text name="label.country"/></label>
-				<@s.select  name="countryId" list="countries" listKey="id" listValue="displayName"  cssClass="changesTimeZone"/>
-			</div>
-			<div class="infoSet">
-				<label class="label" for="timeZoneID"><@s.text name="label.timezone"/></label>
-				<@s.select id="tzlist" name="timeZoneID" list="timeZones" listKey="id" listValue="displayName"  emptyOption="false"/>
-			</div>
-			
-			<div class="infoSet">
-				<label class="label" for="signature"><@s.text name="label.signature"/></label>
+				<label class="label" for="signature"><@s.text name="label.digital_signature"/></label>
 				<div id="imageUploadField" class="fieldHolder" <#if signature.existingImage>style="display:none"</#if> >
 					<div>
 						<@s.text name="label.signature_size"/>
@@ -73,9 +67,12 @@
 			</div>
 			
 		</div>
-		<div class="infoBlock">
+		<div class="fieldGroup">
+		
+			<h2 class="decoratedHeader"><@s.text name="label.account_heading"/></h2>
+		
 			<div class="infoSet">
-				<label class="label" for="userId"><@s.text name="label.userid"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				<label class="label" for="userId"><@s.text name="label.username"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 				<@s.textfield name="userId"/>
 			</div>
 			
@@ -100,7 +97,34 @@
 					<label class="label" for="securityRfidNumber"><@s.text name="label.securityrfidnumber"/></label>
 					<@s.textfield key="label.securityrfidnumber" name="securityRfidNumber" />
 				</div>
+				<div class="infoSet">
+					<div class="label">
+						<label for="welcomeMessage.sendEmail"><@s.text name="label.send_welcome_email"/></label><@s.checkbox name="welcomeMessage.sendEmail" id="sendEmail" theme="simple"/>
+					</div>
+				</div>
+				<div class="infoSet" id="personalMessage">
+					<@s.textarea name="welcomeMessage.personalMessage" id="welcomeMessageTextarea"/>
+				</div>
 			</#if>
+		</div>
+		
+		<div class="fieldGroup fieldGroupGap clearLeft">
+			<h2 class="decoratedHeader"><@s.text name="label.localization"/></h2>
+			
+			<div class="infoSet">
+				<label class="label" for="countryId"><@s.text name="label.country"/></label>
+				<@s.select  name="countryId" list="countries" listKey="id" listValue="displayName"  cssClass="changesTimeZone"/>
+			</div>
+			<div class="infoSet">
+				<label class="label" for="timeZoneID"><@s.text name="label.timezone"/></label>
+				<@s.select id="tzlist" name="timeZoneID" list="timeZones" listKey="id" listValue="displayName"  emptyOption="false"/>
+			</div>
+		</div>	
+		
+		<div class="fieldGroup">
+		
+			<h2 class="decoratedHeader"><@s.text name="label.permissions"/></h2>
+		
 			<#if !user.admin && employee>
 				<div class="infoSet">
 					<@s.fielderror>
@@ -115,7 +139,7 @@
 						</tr>
 					
 						<#list permissions as permission >
-							<tr >
+							<tr>
 								<td class="permissionName">
 									<@s.text name="${permission.name}"/>
 								</td>
@@ -150,16 +174,7 @@
 				</div>
 			</#if>
 		</div>
-			
-		
 	</div>
-	<#if user.new>
-		<h2 class="decoratedHeader"><label for="welcomeMessage.sendEmail"><@s.text name="label.send_welcome_email"/></label> <@s.checkbox name="welcomeMessage.sendEmail" id="sendEmail" theme="simple"/></h2>
-		<div class="infoSet" id="personalMessage">
-			<label class="label" for="welcomeMessage.presonalMessage"><@s.text name="label.personal_message"/>  <@s.text name="label.optional"/></label>
-			<@s.textarea name="welcomeMessage.personalMessage"/>
-		</div>
-	</#if>
 	
 	<div class="actions">
 		<@s.submit name="save" key="label.save" />

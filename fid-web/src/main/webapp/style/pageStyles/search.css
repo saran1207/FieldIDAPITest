@@ -53,25 +53,6 @@
 	clear:both;
 }
 
-.fieldGroup .infoSet{
-	border-top: none;
-	border-bottom: none;
-}
-
-.fieldGroup{
-	display:block;
-	float:left;
-	overflow: hidden;
-	width:495px;
-}
-
-.fieldGroupGap{
-	margin-right: 10px;	
-}
-
-.clearLeft{
-	clear:left;
-}
 .ieFix{
 	margin-bottom:6px;
 }
