@@ -12,3 +12,7 @@
 		<@s.submit theme="fieldidSimple" key="label.continue" onclick="validateForm1(); return false;"/>
 	</div>
 </div>
+
+<script type="text/javascript">
+	updateAssetType($('assetType'));
+</script>
