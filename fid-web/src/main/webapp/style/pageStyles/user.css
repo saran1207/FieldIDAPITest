@@ -1,24 +1,36 @@
-.permissions {
-	margin: 5px 0px;
-	width:250px;
+.fluidSets .infoSet .fieldHolder {
+	width: 280px;
 }
 
-.permissions th,.permissions td {
+.fluidSets .infoSet .permissions {
+	width:auto;
+}
+
+.permissions th, .permissions td {
 	padding: 5px 5px 5px 0px;
 	empty-cells: show;
 }
+
+td.permissionName{
+	width: 350px;
+}
+
+.permissions .permissionAction{
+	border-bottom: none;
+	}
 
 .permissions th {
 	font-weight: bold;
 }
 
 .permissions td {
-	border-top: 1px solid #999;
+	border-bottom: 1px solid #ccc;
 }
 
 .radio {
 	width: 60px;
 	text-align:center;
+	border-style: none;
 }
 
 .header {
@@ -39,6 +51,10 @@
 	margin-bottom:10px;
 }
 
+.fieldGroup{
+	height: 400px;
+}
+
 .fieldGroup #welcomeMessageTextarea {
 	margin-left: 165px;	
 }
@@ -46,3 +62,31 @@
 .fieldGroup .infoSet label{
 	text-align: right;
 }
+
+.fluidSets .infoSet {
+	padding: 0px;
+}
+
+#passwords .fieldHolder, #passwords input{
+	width: 117px;
+	display: inline;
+	margin-right: 10px;
+}
+
+#passwords .increasedMargin{
+ 	margin-left: 170px;
+ 	margin-right: 117px;
+ }
+
+#passwords .labelContainers{
+ 	color: #999;
+ 	display: inline;
+	margin-right: 90px;
+ }
+ 
+.fieldHolder label.checkBoxLabel {
+ 	color: #999;
+ 	font-size: 10px;
+ 	padding-top: 3px;
+ 	padding-left: 2px;
+ }

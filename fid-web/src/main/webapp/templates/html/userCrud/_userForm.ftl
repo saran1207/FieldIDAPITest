@@ -65,8 +65,8 @@
 					<@s.hidden name="signature.uploadDirectory" id="imageDirectory"/>
 				</div>
 			</div>
-			
 		</div>
+		
 		<div class="fieldGroup">
 		
 			<h2><@s.text name="label.account_heading"/></h2>
@@ -88,12 +88,8 @@
 				<div id="passwords">
 					<div class="infoSet">
 						<label class="label" for="passwordEntry.password"><@s.text name="label.password"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-						<@s.password  name="passwordEntry.password"  required="true"/>
-					</div>
-					
-					<div class="infoSet">
-						<label class="label" for="passwordEntry.passwordVerify"><@s.text name="label.vpassword"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-						<@s.password name="passwordEntry.passwordVerify"  required="true"/>
+						<@s.password name="passwordEntry.password" required="true"/><@s.password name="passwordEntry.passwordVerify" required="true"/>
+						<div class="labelContainers increasedMargin"><@s.text name="label.password"/></div><div class="labelContainers"><@s.text name="label.vpassword"/></div>
 					</div>
 				</div>	
 				<div class="infoSet">
@@ -103,15 +99,20 @@
 				<div class="infoSet">
 					<label class="label" for="welcomeMessage.sendEmail"><@s.text name="label.send_welcome_email"/></label>
 					<div class="fieldHolder">
-						<label class="checkBoxContainer">
-							<@s.checkbox name="welcomeMessage.sendEmail" id="sendEmail" theme="simple"/>
+						<label class="checkBoxLabel">
+							<@s.checkbox name="welcomeMessage.sendEmail" id="sendEmail" theme="simple"/>&nbsp;<@s.text name="label.welcome_email_description"/>
 						</label>
 					</div>
 				</div>
-				<div class="infoSet" id="personalMessage">
-					<@s.textarea name="welcomeMessage.personalMessage" id="welcomeMessageTextarea"/>
+				<div class="infoSet" >
+					<div id="personalMessage"">
+						<@s.textarea name="welcomeMessage.personalMessage" id="welcomeMessageTextarea"/>
+					</div>
 				</div>
 			</#if>
+			<div class="infoSet">
+				<label class="label" for="position">&nbsp;</label>
+			</div>
 		</div>
 		
 		<div class="fieldGroup fieldGroupGap clearLeft">
@@ -127,7 +128,7 @@
 			</div>
 		</div>	
 		
-		<div class="fieldGroup">
+		<div class="fieldGroup permissionsFieldGroup">
 		
 			<h2><@s.text name="label.permissions"/></h2>
 		
@@ -139,7 +140,7 @@
 					<table class="permissions fieldHolder">
 						
 						<tr class="titleRow">
-							<th class="permissionName"><@s.text name="label.permissions"/></th>
+							<th class="permissionName">&nbsp;</th>
 							<th class="radio"><@s.text name="label.on"/></th>
 							<th class="radio"><@s.text name="label.off"/></th>
 						</tr>
@@ -158,9 +159,9 @@
 							</tr >
 						</#list>
 						<tr>
-							<td class="permissionName"></td>
-							<td class="radio"><input type="reset" name="allOn" onclick="allPermissionsOn();return false;" value="<@s.text name="label.allon"/>"/></td>
-							<td class="radio"><input type="reset" name="allOff" onclick="allPermissionsOff();return false;" value="<@s.text name="label.alloff"/>"/></td>
+							<td class="permissionName permissionAction"></td>
+							<td class="radio permissionAction"><input type="reset" name="allOn" onclick="allPermissionsOn();return false;" value="<@s.text name="label.allon"/>"/></td>
+							<td class="radio permissionAction"><input type="reset" name="allOff" onclick="allPermissionsOff();return false;" value="<@s.text name="label.alloff"/>"/></td>
 						</tr>
 					</table>
 				</div>
@@ -173,7 +174,6 @@
 				</div>
 			<#else>
 				<div class="infoSet">
-					<label class="label" for="passwordEntry.password"><@s.text name="label.permissions"/></label>
 					<span class="fieldHolder">
 						<@s.text name="label.customer_users_have_read_only_access"/>
 					</span>
