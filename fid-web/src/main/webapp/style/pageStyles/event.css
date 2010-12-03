@@ -480,17 +480,11 @@
 	border: 1px solid #9C9C9C;
 	color: #555555;
 	width: 260px;
+	padding: 4px;
 }
 
 .crudForm .infoSet .orgPicker{
 	width: 260px;
-}
-
-.infoSet .fieldHolder input[type="text"], .fieldHolder textarea, .infoSet .fieldHolder select, .crudForm .infoSet .orgPicker input{
-	padding: 4px;
-	border: 1px solid #9C9C9C;
-	color: #555555;
-	width: 250px;
 }
 
 .fieldHolder p{
@@ -498,7 +492,6 @@
 	padding-left: 5px;
 	border-style: none;
 }
-
 
 .crudForm .infoSet .commentsLabel, .crudForm .infoSet .commentContainer label{
 	display: block;
@@ -520,4 +513,9 @@ p.treeHeading{
 .fieldHolder label.checkBoxLabel{
 	position: relative;
 	top: -2px;
+}
+
+.fullForm .infoSet select{
+	width: 260px;
+	padding: 4px;
 }

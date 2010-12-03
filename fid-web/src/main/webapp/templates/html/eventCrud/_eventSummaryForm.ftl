@@ -33,7 +33,7 @@
 	
 	<div class="infoSet">
 		<label class="label" ><@s.text name="label.owner"/></label>
-		<@n4.orgPicker name="modifiableEvent.owner" required="true" id="ownerId" />
+		<span class="fieldHolder"><@n4.orgPicker name="modifiableEvent.owner" required="true" id="ownerId" /></span>
 	</div>	
 	
 	<div class="infoSet">
