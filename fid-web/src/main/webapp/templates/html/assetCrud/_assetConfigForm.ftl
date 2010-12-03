@@ -55,7 +55,7 @@
 
 <div class="assetFormGroup">
 	<h2><@s.text name="label.identifieddate"/></h2>
-	<div class="infoSet">
+	<div class="infoSet increasedWidthFieldHolder">
 		<label for="" class="label"><#include "../common/_requiredMarker.ftl"/><@s.text name="label.identified"/></label>
 		<@s.datetimepicker id="identified" name="identified" type="dateTime"/>
 	</div>
