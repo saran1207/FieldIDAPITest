@@ -81,4 +81,66 @@ td.permissionName{
  	font-size: 10px;
  	padding-top: 3px;
  	padding-left: 2px;
- }
+}
+ 
+.horizontalGrouping h2{
+ 	padding: 10px;
+ 	font-size: 1.3em;
+}
+
+.horizontalGroup h2{
+	padding: 0px;
+}
+ 
+.horizontalGroup p{
+	font-size: 13px; 
+	padding: 5px;
+}
+ 
+ .horizontalGroup .addUserAction{
+ 	margin-left: auto;
+ 	margin-right: auto;
+ 	width: 150px;
+}
+
+.addUserAction input{
+	padding: 5px;
+	font-size: 14px;
+}
+
+div.groupContents{
+	height: 250px;
+}
+ 
+.horizontalGrouping .horizontalGroup{
+	border: 1px solid #999;
+    float: left;
+    width: 290px;
+    height: 300px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.horizontalGrouping .increasedMargins{
+	margin: 0px 30px;
+}
+
+.horizontalGroup .permissionListing{
+	padding-left: 10px;
+    padding-top: 10px;
+}
+
+.permissionListing li{
+	list-style-image: url(/fieldid/images/links-arrow.png);
+	list-style-type: square;
+	list-style-position: inside;
+	padding: 5px;
+	font-size: 13px;
+}
+
+.permissionListing label{
+	padding-top: 5px;
+	position: relative;
+	top: -5px;
+	color: #666
+}

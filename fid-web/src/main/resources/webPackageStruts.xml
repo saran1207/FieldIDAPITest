@@ -616,7 +616,17 @@
 			</result>
 
 		</action>
-
+		
+		<action name="addUser" method="show" class="com.n4systems.fieldid.actions.users.UserCrudSelection">
+			<result name="success" type="freemarker">templates/html/userSelection/add.ftl</result>
+			<result name="input" type="freemarker">templates/html/userSelection/add.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">userlist</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+				<param name="userType">${userType}</param>
+			</result>
+		</action>
 
 		<action name="addEmployeeUser" method="add" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/employee/add.ftl</result>
@@ -627,7 +637,6 @@
 				<param name="listFilter">${listFilter}</param>
 				<param name="userType">${userType}</param>
 			</result>
-
 		</action>
 
 
