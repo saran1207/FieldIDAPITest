@@ -38,19 +38,6 @@ td.permissionName{
 	padding: 5px;
 }
 
-.extraActions {
-	float: right;
-	width: 220px;
-	background-color:#E8EDFF;
-	border: 1px solid #B5BACC;
-	margin:5px 0;
-	padding: 10px;
-}
-
-.extraActions p {
-	margin-bottom:10px;
-}
-
 .fieldGroup{
 	height: 400px;
 }
@@ -61,6 +48,11 @@ td.permissionName{
 
 .fieldGroup .infoSet label{
 	text-align: right;
+}
+
+.fieldGroup .infoSet select{
+	padding: 4px;
+    width: 260px;
 }
 
 .fluidSets .infoSet {
