@@ -12,6 +12,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgCountLoader;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.EmployeeUserCountLoader;
+import com.n4systems.model.user.LiteUserCountLoader;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.usage.TenantDiskUsageCalculator;
@@ -28,17 +29,20 @@ public class TenantLimitService implements Serializable {
 	
 	private final Map<Long, ResourceLimit> diskSpace = new ResourceLimitConcurrentHashMap();
 	private final Map<Long, ResourceLimit> employeeUsers = new ResourceLimitConcurrentHashMap();
+	private final Map<Long, ResourceLimit> liteUsers = new ResourceLimitConcurrentHashMap();
 	private final Map<Long, ResourceLimit> assets = new ResourceLimitConcurrentHashMap();
 	private final Map<Long, ResourceLimit> secondaryOrgs = new ResourceLimitConcurrentHashMap();
 	
 	private final AssetLimitCountLoader assetCountLoader = new AssetLimitCountLoader();
 	private final EmployeeUserCountLoader employeeCountLoader = new EmployeeUserCountLoader();
+	private final LiteUserCountLoader liteUserCountLoader = new LiteUserCountLoader();
 	private final SecondaryOrgCountLoader secondaryOrgCountLoader = new SecondaryOrgCountLoader();
 	
 	private final LimitUpdater[] limitUpdaters = {
 			new LimitUpdater(new TenantDiskUsageCalculator(), diskSpace),
 			new LimitUpdater(assetCountLoader, assets),
 			new LimitUpdater(employeeCountLoader, employeeUsers),
+			new LimitUpdater(liteUserCountLoader, liteUsers),
 			new LimitUpdater(secondaryOrgCountLoader, secondaryOrgs),
 	};
 	
@@ -52,6 +56,11 @@ public class TenantLimitService implements Serializable {
 		// user counts are refreshed in real-time
 		refreshEmployeeUserCount(tenantId);
 		return employeeUsers.get(tenantId);
+	}
+	
+	public ResourceLimit getLiteUsers(Long tenantId){
+		refreshLiteUserCount(tenantId);
+		return liteUsers.get(tenantId);
 	}
 	
 	
@@ -125,6 +134,12 @@ public class TenantLimitService implements Serializable {
 		employeeCountLoader.setTenantId(tenantId);
 		
 		employeeUsers.get(tenantId).setUsed(employeeCountLoader.load());
+	}
+	
+	private void refreshLiteUserCount(Long tenantId){
+		liteUserCountLoader.setTenantId(tenantId);
+		
+		liteUsers.get(tenantId).setUsed(employeeCountLoader.load());
 	}
 	
 	/**

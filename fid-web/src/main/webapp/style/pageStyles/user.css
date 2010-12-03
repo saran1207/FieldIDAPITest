@@ -100,12 +100,13 @@ td.permissionName{
  .horizontalGroup .addUserAction{
  	margin-left: auto;
  	margin-right: auto;
- 	width: 150px;
+ 	width: 180px;
 }
 
 .addUserAction input{
 	padding: 5px;
 	font-size: 14px;
+	overflow: visible
 }
 
 div.groupContents{
@@ -144,3 +145,10 @@ div.groupContents{
 	top: -5px;
 	color: #666
 }
+
+div.userLimitWarning{
+	font-size: 13px;
+	padding: 5px 0px 0px 45px;
+	height: 50px;
+	background: no-repeat url(../../images/warning-icon.png);
+	}

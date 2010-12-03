@@ -24,6 +24,12 @@ public class UserCrudSelection extends UserCrud {
 		return SUCCESS;
 	}
 	
+	public boolean isEmployeeLimitReached(){
+		return getLimits().isEmployeeUsersMaxed();
+	}
 	
+	public boolean isLiteUserLimitReached(){
+		return getLimits().isLiteUsersMaxed();
+	}
 
 }

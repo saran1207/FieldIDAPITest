@@ -29,9 +29,15 @@ ${action.setPageType('user','adduser')!}
 				<li><label><@s.text name="label.run_searches" /></label></li>
 			</ul>
 		</div>
-		<div class="addUserAction">
-			<input type="button" value="<@s.text name="label.add_new_full_user" />" onclick="return redirect('${addFullUserUrl}');" />
-		</div>
+		<#if employeeLimitReached>
+			<div class="userLimitWarning">
+				<@s.text name="label.employee_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
+			</div>	
+		<#else>
+			<div class="addUserAction">
+				<input type="button" value="<@s.text name="label.add_new_full_user" />" onclick="return redirect('${addFullUserUrl}');" />
+			</div>
+		</#if>
 	</div>
 	<div class="horizontalGroup increasedMargins">
 		<div class="groupContents">
@@ -44,9 +50,9 @@ ${action.setPageType('user','adduser')!}
 			</ul>
 		</div>
 
-		<#if false>
+		<#if true>
 			<div class="userLimitWarning">
-				
+				<@s.text name="label.lite_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
 			</div>		
 		<#else>
 			<div class="addUserAction">
