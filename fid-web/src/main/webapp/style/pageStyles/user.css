@@ -6,6 +6,11 @@
 	width:auto;
 }
 
+.permissions {
+	margin: 5px 0px;
+	width:250px;
+}
+
 .permissions th, .permissions td {
 	padding: 5px 5px 5px 0px;
 	empty-cells: show;
@@ -17,7 +22,7 @@ td.permissionName{
 
 .permissions .permissionAction{
 	border-bottom: none;
-	}
+}
 
 .permissions th {
 	font-weight: bold;
@@ -40,6 +45,19 @@ td.permissionName{
 
 .fieldGroup{
 	height: 400px;
+}
+
+.extraActions {
+	float: right;
+	width: 220px;
+	background-color:#E8EDFF;
+	border: 1px solid #B5BACC;
+	margin:5px 0;
+	padding: 10px;
+}
+
+.extraActions p {
+	margin-bottom:10px;
 }
 
 .fieldGroup #welcomeMessageTextarea {
@@ -152,3 +170,88 @@ div.userLimitWarning{
 	height: 50px;
 	background: no-repeat url(../../images/warning-icon.png);
 	}
+
+.leftColumn, .rightColumn{
+	float : left;
+	padding-right : 15px;
+}
+
+.viewSection p {
+	border-bottom : 0;
+}
+
+.viewSection p label {
+	text-align : right;
+	color: #999999;
+}
+
+.viewSection p span {
+	color: #000000;
+}
+
+.smallViewSection p label {
+	width : 100px;
+}
+
+.viewpermissions p label {
+	text-align : left;
+	width : 180px;
+}
+
+.viewpermissions p {
+	border-bottom : 1px solid #E2E2E2;
+}
+
+.viewpermissions span {
+	text-align : right;
+}
+
+.viewSection .username {
+	color : #347235;
+}
+
+.actions {
+	padding: 10px;
+	border-top: 0;
+}
+
+.useractions{
+	background-repeat: no-repeat;
+	background-position: left 1px;
+	padding-left: 25px;
+	padding-right: 40px;
+	margin-top: 10px;
+	float: left;
+	padding-bottom: 10px;
+}
+
+.viewactions {
+	display: block;
+	width: 100%;
+	padding: 0;
+	float: left;
+}
+
+.useractions p {
+	line-height: 24px;
+}
+	
+.delete{
+		background-image: url(../../images/delete-icon.png);
+}
+
+.changeaccount{
+		background-image: url(../../images/upgrade-icon.png);
+}
+
+.email{
+		background-image: url(../../images/welcome-email-icon.png);
+}
+
+.viewpermissions p .no {
+	color: #999999;
+}
+
+.viewpermissions p label {
+	color: #000000;
+}

@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;

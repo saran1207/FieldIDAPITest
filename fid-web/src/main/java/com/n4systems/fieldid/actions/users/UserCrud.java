@@ -80,6 +80,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	protected void loadMemberFields(Long uniqueId) {
 		if (user == null) {
 			user = persistenceManager.find(User.class, uniqueId, getTenantId());
+			if(user.isEmployee())
+				setUserType(UserType.EMPLOYEES.getLabel());
+			else
+				setUserType(UserType.READONLY.getLabel());
 			initializeTimeZoneLists();
 		}
 	}
@@ -101,6 +105,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	protected void testRequiredEntities(boolean existing) {
+		testUserEntity(existing);
+	}
+
+	private void testUserEntity(boolean existing) {
 		if (user == null || (existing && user.getId() == null)) {
 			addActionErrorText("error.no_user");
 			throw new MissingEntityException("user is required.");
@@ -109,10 +117,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	@SkipValidation
 	public String doShow() {
-		testRequiredEntities(true);
+		testUserEntity(true);
+		loadCurrentSignature();
 		return SUCCESS;
 	}
-
 
 	@SkipValidation
 	public String doAdd() {
@@ -281,6 +289,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public String getTimeZoneID() {
 		return region.getId();
 	}
+	
+	public String getTimeZoneName() {
+		return region.getDisplayName();
+	}
 
 	public void setTimeZoneID(String regionId) {
 		if (country != null) {
@@ -320,6 +332,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return country.getId();
 	}
 
+	public String getCountryName(){
+		return country.getDisplayName();
+	}
+	
 	public void setCountryId(String countryId) {
 		country = CountryList.getInstance().getCountryById(countryId);
 	}

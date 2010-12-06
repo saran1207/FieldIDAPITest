@@ -586,6 +586,10 @@
 			<result name="success" type="freemarker">templates/html/userCrud/list.ftl</result>
 		</action>
 
+		<action name="viewUser" method="show" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/show.ftl</result>
+		</action>
+
 		<action name="addReadOnlyUser" method="add" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
@@ -595,8 +599,6 @@
 				<param name="listFilter">${listFilter}</param>
 				<param name="userType">${userType}</param>
 			</result>
-
-
 		</action>
 
 		<action name="readOnlyUserCreate" method="create" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">

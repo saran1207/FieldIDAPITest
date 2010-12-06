@@ -39,7 +39,6 @@ public class EmployeeCrud extends UserCrud {
 		}
 	}
 	
-	
 	@Override
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
@@ -47,7 +46,7 @@ public class EmployeeCrud extends UserCrud {
 			throw new MissingEntityException("customer user was loaded for when an employee was expected.");
 		}
 	}
-
+	
 	@Override
 	@SkipValidation
 	public String doAdd() {
@@ -66,6 +65,11 @@ public class EmployeeCrud extends UserCrud {
 		return result;
 	}
 	
+	@Override
+	public String doShow() {
+		setupPermissions();
+		return super.doShow();
+	}
 		
 	@SuppressWarnings("unchecked")
 	public Map getUserPermissions() {
@@ -82,6 +86,10 @@ public class EmployeeCrud extends UserCrud {
 			permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
 		}
 		return permissions;
+	}
+	
+	public boolean getUserPermissionValue(Long id) {
+		return userPermissions.get(id.toString());
 	}
 
 	@Override
