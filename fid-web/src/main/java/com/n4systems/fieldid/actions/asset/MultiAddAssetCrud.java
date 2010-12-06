@@ -16,6 +16,7 @@ import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.MultiAddAssetCrudHelper;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
@@ -360,5 +361,11 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	public AssetWebModel getAssetWebModel() {
 		return assetWebModel;
 	}
+	
+
+	public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field, InfoOptionInput inputOption) {
+		return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
+	}
+	
 	
 }

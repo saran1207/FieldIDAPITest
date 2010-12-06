@@ -13,6 +13,3 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-	updateAssetType($('assetType'));
-</script>

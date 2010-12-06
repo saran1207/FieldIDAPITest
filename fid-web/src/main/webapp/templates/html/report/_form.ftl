@@ -63,7 +63,7 @@ ${action.setPageType('report', 'show')!}
 
             <div class="infoSet">
                 <label for="criteria.assetType"><@s.text name="label.assettype"/></label>
-                <@s.select cssClass="assetTypeSelect" id="assetType" name="criteria.assetType" emptyOption="true" list="assetTypes" listKey="id" listValue="name"/>
+                <@s.select cssClass="assetTypeSelect" id="assetType" name="criteria.assetType" emptyOption="true" list="assetTypes" listKey="id" listValue="name" onchange="assetTypeChanged(this)"/>
             </div>
 
 		</div>
