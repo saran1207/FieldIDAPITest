@@ -42,7 +42,7 @@ public class TenantLimitService implements Serializable {
 			new LimitUpdater(new TenantDiskUsageCalculator(), diskSpace),
 			new LimitUpdater(assetCountLoader, assets),
 			new LimitUpdater(employeeCountLoader, employeeUsers),
-			new LimitUpdater(liteUserCountLoader, liteUsers),
+		//	new LimitUpdater(liteUserCountLoader, liteUsers),
 			new LimitUpdater(secondaryOrgCountLoader, secondaryOrgs),
 	};
 	
