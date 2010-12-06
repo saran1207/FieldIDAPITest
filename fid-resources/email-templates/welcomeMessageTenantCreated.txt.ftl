@@ -1,24 +1,16 @@
-++++++++++++++++++++++++++++++++++++++++++
-Welcome to Field ID
-++++++++++++++++++++++++++++++++++++++++++
+Thank you for joining Field ID. You are moments away from signing into your newly created account. We hope you enjoy using Field ID for all of your safety compliance needs.
 
-Thank you for joining Field ID. We are happy to provide you the details of your newly created Field ID account. You can sign in securely using the following information.
-
-Your Account Details
-------------------------------------------
-Company ID: ${companyId}
-Portal URL: ${portalUrl!}
+===============================================
+Your login information
+===============================================
 User Name: ${username}
-Password: If you forget your password please see the password retrieval on your portal URL
+Password: If you forgot your password you can reset it from your login page
+Login Page: ${portalUrl!}
 
+===============================================
 Need Support? We're here to help
-------------------------------------------
-If you have any questions or if you ever need help, please contact us:
-Phone: 416-599-6466
-Email: support@fieldid.com
-Help Documentation: https://help.fieldid.com/fieldid_help
-Video Tutorials: Look on your dashboard in Field ID
+===============================================
+Get all of your Field ID questions answered:
+http://www.fieldid.com/support
 
-We hope you enjoy using Field ID for all of your safety compliance needs. Please send us feedback support@fieldid.com any time you have an idea that would make Field ID a better service for you to use.
-
-<#include "_helpfulFieldIDResources.txt.ftl"/>
+Thanks again for using Field ID!
