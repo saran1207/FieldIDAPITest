@@ -1,6 +1,7 @@
 package com.n4systems.util;
 
 import java.lang.reflect.Array;
+import java.util.List;
 
 public class ArrayUtils {
 	
@@ -118,5 +119,10 @@ public class ArrayUtils {
 	 */
 	public static <T> T[] newArray(T...values) {
 		return values;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T[] toArray(List<? extends T> list, Class<T> clazz) {
+		return list.toArray((T[])Array.newInstance(clazz, list.size()));
 	}
 }

@@ -34,6 +34,7 @@ import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.eventschedule.IncompleteEventSchedulesListLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventtype.AssociatedEventTypesLoader;
+import com.n4systems.model.eventtype.EventTypeFormVersionLoader;
 import com.n4systems.model.eventtype.EventTypeListLoader;
 import com.n4systems.model.eventtype.EventTypeListableLoader;
 import com.n4systems.model.fileattachment.FileAttachmentLoader;
@@ -292,6 +293,10 @@ public class LoaderFactory implements Serializable {
         return new EventsByAssetIdLoader(filter);
     }
 
+	public EventTypeFormVersionLoader createEventTypeFormVersionLoader() {
+    	return new EventTypeFormVersionLoader(filter);
+    }
+
 	public EventTypeListableLoader createEventTypeListableLoader() {
 		return new EventTypeListableLoader(filter);
 	}
@@ -415,7 +420,7 @@ public class LoaderFactory implements Serializable {
 	public SafetyNetworkAssetLoader createSafetyNetworkAssetLoader() {
 		return new SafetyNetworkAssetLoader(filter);
 	}
-
+	
 	public SafetyNetworkAssetTypeLoader createSafetyNetworkAssetTypeLoader() {
 		return new SafetyNetworkAssetTypeLoader();
 	}
@@ -427,7 +432,7 @@ public class LoaderFactory implements Serializable {
 	public SafetyNetworkAttachmentLoader createSafetyNetworkAttachmentLoader() {
 		return new SafetyNetworkAttachmentLoader();
 	}
-	
+
 	public SafetyNetworkBackgroundSearchLoader createSafetyNetworkBackgroundSearchLoader() {
 		return new SafetyNetworkBackgroundSearchLoader(filter);
 	}
@@ -439,7 +444,7 @@ public class LoaderFactory implements Serializable {
 	public SafetyNetworkRegisteredOrAssignedEventLoader createSafetyNetworkEventLoaderAssignedOrRegistered() {
 		return new SafetyNetworkRegisteredOrAssignedEventLoader(filter);
 	}
-
+	
 	public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader(){
     	return new SafetyNetworkPreAssignedAssetLoader();
     }
@@ -463,19 +468,19 @@ public class LoaderFactory implements Serializable {
 	public SecondaryOrgPaginatedLoader createSecondaryOrgPaginatedLoader() {
 		return new SecondaryOrgPaginatedLoader(filter);
 	}
-	
+
 	public SetupDataLastModDatesLoader createSetupDataLastModDatesLoader() {
     	return new SetupDataLastModDatesLoader(filter);
     }
 
-	public SignupReferralListLoader createSignupReferralListLoader() {
+    public SignupReferralListLoader createSignupReferralListLoader() {
 		return new SignupReferralListLoader(filter);
 	}
-
+    
     public SmartSearchLoader createSmartSearchListLoader() {
 		return new SmartSearchLoader(filter);
 	}
-    
+
     public TaskConfigLoader createTaskConfigLoader() {
 		return new TaskConfigLoader();
 	}
@@ -495,11 +500,11 @@ public class LoaderFactory implements Serializable {
     public UserByFullNameLoader createUserByFullNameLoader() {
 		return new UserByFullNameLoader(filter);
 	}
-
+    
     public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
-    
+
     public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}
@@ -515,7 +520,7 @@ public class LoaderFactory implements Serializable {
     public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}
-
+    
     public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}

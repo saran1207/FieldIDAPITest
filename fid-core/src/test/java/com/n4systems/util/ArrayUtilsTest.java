@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -90,4 +92,29 @@ public class ArrayUtilsTest {
 		
 		assertArrayEquals(new String[] {}, ArrayUtils.combine(new String[] {}));
 	}
+	
+	@Test
+	public void to_array_allows_empty_list() {
+		String[] strs  = ArrayUtils.toArray(new ArrayList<String>(), String.class);
+		assertEquals(0, strs.length);
+	}
+	
+	@Test
+	public void to_array_converts_all_list_elements() {
+		String[] strs  = ArrayUtils.toArray(Arrays.asList("0", "1", "2"), String.class);
+		assertEquals(3, strs.length);
+		assertEquals("0", strs[0]);
+		assertEquals("1", strs[1]);
+		assertEquals("2", strs[2]);
+	}
+	
+	@Test
+	public void to_array_allows_abstract_types() {
+		Number[] nums  = ArrayUtils.toArray(Arrays.asList(4L, 1L, 10L), Number.class);
+		assertEquals(3, nums.length);
+		assertEquals(4L, nums[0]);
+		assertEquals(1L, nums[1]);
+		assertEquals(10L, nums[2]);
+	}
+	
 }
