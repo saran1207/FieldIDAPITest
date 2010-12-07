@@ -588,6 +588,8 @@
 
 		<action name="viewUser" method="show" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/show.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/show.ftl</result>
+			<result name="error" type="freemarker">templates/html/userCrud/show.ftl</result>
 		</action>
 
 		<action name="addReadOnlyUser" method="add" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
