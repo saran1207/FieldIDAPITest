@@ -641,7 +641,6 @@
 			</result>
 		</action>
 
-
 		<action name="employeeUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="input" type="freemarker">templates/html/employee/edit.ftl</result>
@@ -653,7 +652,6 @@
 			</result>
 
 		</action>
-
 
 		<action name="employeeUserCreate" method="create" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
@@ -679,7 +677,6 @@
 			</result>
 		</action>
 
-
 		<action name="readOnlyUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
@@ -703,8 +700,36 @@
 
 		</action>
 
+		<action name="employeeUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">userList</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">viewUser</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+		<action name="readOnlyUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">userList</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">viewUser</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
 
-	
+		<action name="sendWelcomeEmail" method="sendWelcomeMessage" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">viewUser</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">viewUser</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
 
 		<action name="schedule" method="searchCriteria" class="com.n4systems.fieldid.actions.search.EventScheduleAction">
 			<result name="input" type="freemarker">/templates/html/schedule/form.ftl</result>

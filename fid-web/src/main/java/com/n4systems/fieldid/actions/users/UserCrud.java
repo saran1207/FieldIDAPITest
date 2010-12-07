@@ -141,6 +141,14 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 		return SUCCESS;
 	}
+	
+	@SkipValidation
+	public String doSendWelcomeMessage() {
+		testUserEntity(true);
+		welcomeMessage.setSendEmail(true);
+		sendWelcomeEmail();
+		return SUCCESS;
+	}
 
 	private void loadCurrentSignature() {
 		File signatureImage = PathHandler.getSignatureImage(user);
@@ -226,7 +234,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		new FileSystemUserSignatureFileProcessor(PathHandler.getSignatureImage(user)).process(signature);
 	}
 
-	private void sendWelcomeEmail() {
+	protected void sendWelcomeEmail() {
 		if (welcomeMessage.isSendEmail()) {
 			if (welcomeMessage.isPersonalMessageProvided()) {
 				getWelcomeNotifier().sendPersonalizedWelcomeNotificationTo(user, welcomeMessage.getPersonalMessage());
@@ -235,8 +243,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			}
 			addFlashMessageText("label.welcome_message_sent");
 		}
-		
-		
 	}
 
 	private UserWelcomeNotificationProducer getWelcomeNotifier() {
