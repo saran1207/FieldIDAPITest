@@ -589,7 +589,31 @@
 		<action name="viewUser" method="show" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/show.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/show.ftl</result>
-			<result name="error" type="freemarker">templates/html/userCrud/show.ftl</result>
+		</action>
+
+		<action name="upgradeUser" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/upgrade.ftl</result>
+		</action>
+		
+		<action name="changeToFull" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">employeeUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+		<action name="changeToLite" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">employeeUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+		<action name="changeToReadOnly" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">readOnlyUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
 		</action>
 
 		<action name="addReadOnlyUser" method="add" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">

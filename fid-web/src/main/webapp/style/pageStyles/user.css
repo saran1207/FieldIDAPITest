@@ -115,16 +115,16 @@ td.permissionName{
 	padding: 5px;
 }
  
- .horizontalGroup .addUserAction{
+.horizontalGroup .addUserAction, .horizontalGroup .upgradeUserAction {
  	margin-left: auto;
  	margin-right: auto;
  	width: 180px;
 }
 
-.addUserAction input{
+.addUserAction input, .upgradeUserAction input{
 	padding: 5px;
 	font-size: 14px;
-	overflow: visible
+	overflow: visible;
 }
 
 div.groupContents{

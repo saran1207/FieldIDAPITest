@@ -123,6 +123,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	@SkipValidation
+	public String doUpgrade() {
+		testUserEntity(true);
+		return SUCCESS;
+	}
+	
+	@SkipValidation
 	public String doAdd() {
 		testRequiredEntities(false);
 		return SUCCESS;
@@ -163,6 +169,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return SUCCESS;
 	}
 
+	
 	
 	@SkipValidation
 	public String doDelete() {
@@ -388,7 +395,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		}
 		return userTypes;
 	}
-
+	
 	public String getListFilter() {
 		return listFilter;
 	}

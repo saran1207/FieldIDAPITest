@@ -14,7 +14,7 @@ ${action.setPageType('user','view')!}
 	</div>
 	</#if>
 	<div class="useractions changeaccount">
-		<p><a href=""><@s.text name="label.change_account_type"/></a></p>
+		<p><a href="<@s.url action="upgradeUser" uniqueID="${user.id!}" />"><@s.text name="label.change_account_type"/></a></p>
 		
 	</div>
 	<div class="useractions email">
