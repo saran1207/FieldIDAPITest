@@ -56,7 +56,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	public User findUser(String tenantName, String userID, String plainTextPassword) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
-		
+
 		builder.addSimpleWhere("hashPassword", User.hashPassword(plainTextPassword));
 		builder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE);
 		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
@@ -70,14 +70,14 @@ public class EntityManagerBackedUserManager implements UserManager {
 		if (rfidNumber.trim().length() == 0) {
 			return null;
 		}
-		
+
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
 		builder.addSimpleWhere("hashSecurityCardNumber", User.hashPassword(rfidNumber));
 		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
 
 		List<User> userBeans = builder.getResultList(em, 0, 2);
-		
+
 		if (userBeans.size() != 1) {
 			return null;
 		} else {
@@ -94,8 +94,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		if (userId == null) {
 			return true;
 		}
-		
-		
+
 		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(User.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
 		queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userId, WhereParameter.IGNORE_CASE);
 
@@ -118,7 +117,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		}
 
 		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(User.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
-		queryBuilder.addSimpleWhere("hashSecurityCardNumber",  EncryptionUtility.getSHA1HexHash(userRfid.toUpperCase()));
+		queryBuilder.addSimpleWhere("hashSecurityCardNumber", EncryptionUtility.getSHA1HexHash(userRfid.toUpperCase()));
 
 		if (currentUserId != null) {
 			queryBuilder.addWhere(Comparator.NE, "id", "id", currentUserId);
@@ -176,8 +175,8 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	public Pager<User> getUsers(SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, CustomerOrg customer) {
-
-		String queryString = "from " + User.class.getName() + " ub where  " + filter.produceWhereClause(User.class, "ub") + " AND ub.active = true AND ub.system = false ";
+		String queryString = "from " + User.class.getName() + " ub where  " + filter.produceWhereClause(User.class, "ub") + " AND ub.active = true AND ub.userType != " + "'"
+				+ UserType.SYSTEM.toString() + "'";
 
 		if (onlyActive) {
 			queryString += " AND ub.deleted = false ";
@@ -193,13 +192,23 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 		if (userType != null) {
 			switch (userType) {
+			case ADMIN:
+				queryString += "AND ub.userType = " + "'" + UserType.ADMIN.toString() + "'";
+				break;
 			case READONLY:
-				queryString += "AND ub.employee = false ";
+				queryString += "AND ub.userType = " + "'" + UserType.READONLY.toString() + "'";
 				break;
 			case EMPLOYEES:
-				queryString += "AND ub.employee= true ";
+				// It's not necessary to specify anymore where clauses, since
+				// ub.userType!=SYSTEM
+				// implies that only admin, employee, lite and read-only users
+				// will be returned.
+				// This hinges on the assumption that Lite and Read-Only users
+				// are Employees, too.
 				break;
-
+			case LITE:
+				queryString += "AND ub.userType= " + "'" + UserType.LITE.toString() + "'";
+				break;
 			}
 		}
 
@@ -235,8 +244,8 @@ public class EntityManagerBackedUserManager implements UserManager {
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getUserList(SecurityFilter filter) {
 
-		String queryString = "select new com.n4systems.util.ListingPair( ub.id, CONCAT(ub.firstName, ' ', ub.lastName ) ) from " + User.class.getName()
-				+ " ub where ub.system = false and ub.active = true and " + filter.produceWhereClause(User.class, "ub") + " ORDER BY ub.firstName, ub.lastName";
+		String queryString = "select new com.n4systems.util.ListingPair( ub.id, CONCAT(ub.firstName, ' ', ub.lastName ) ) from " + User.class.getName() + " ub where ub.userType !='"
+				+ UserType.SYSTEM.toString() + "' and ub.active = true and " + filter.produceWhereClause(User.class, "ub") + " ORDER BY ub.firstName, ub.lastName";
 
 		Query query = em.createQuery(queryString);
 		filter.applyParameters(query, User.class);
@@ -248,7 +257,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getExaminers(SecurityFilter filter) {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
-		String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.active = true and deleted = false and ub.system = false and ( "
+		String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.active = true and deleted = false and ub.usertype != '" + UserType.SYSTEM.toString() + "' and ( "
 				+ filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )"
 				+ " ORDER BY ub.firstName, ub.lastName";
 		Query query = em.createQuery(queryString);

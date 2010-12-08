@@ -5,6 +5,8 @@ import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import com.n4systems.model.api.Listable;
@@ -20,6 +22,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.RandomString;
+import com.n4systems.util.UserType;
 import com.n4systems.util.timezone.CountryList;
 
 @Entity
@@ -45,13 +48,12 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	private String resetPasswordKey;
 	private String hashSecurityCardNumber;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable=false)
+	private UserType userType=UserType.READONLY;
+	
 	private boolean active = false;
 	private boolean deleted = false;
-	private boolean employee = false;
-	
-	private boolean system = false;
-	private boolean admin = false;
-	
 	
 	@Column(name="permissions", nullable=false)
 	private int permissions = Permissions.NO_PERMISSIONS;
@@ -88,7 +90,6 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 			referralKey = RandomString.getString(REFERRAL_KEY_LENGTH);
 		}
 	}
-	
 	
 	public String getEmailAddress() {
 		return emailAddress;
@@ -127,11 +128,15 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	}
 
 	public boolean isEmployee() {
-		return employee;
+		return userType.equals(UserType.EMPLOYEES) || userType.equals(UserType.ADMIN) || userType.equals(UserType.LITE);
 	}
 	
-	public void setEmployee(boolean employee) {
-		this.employee = employee;
+	public boolean isReadOnly(){
+		return userType.equals(UserType.READONLY);
+	}
+	
+	public void setEmployee(boolean employee ) {
+		this.userType = (employee) ? UserType.EMPLOYEES : UserType.READONLY ;
 	}
 
 	public boolean isDeleted() {
@@ -149,19 +154,19 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	}
 
 	public boolean isSystem() {
-		return system;
+		return userType.equals(UserType.SYSTEM);
 	}
 
 	public void setSystem(boolean system) {
-		this.system = system;
+		this.userType = (system) ? UserType.SYSTEM : UserType.READONLY;
 	}
 
 	public boolean isAdmin() {
-		return admin;
+		return userType.equals(UserType.ADMIN);
 	}
 
 	public void setAdmin(boolean admin) {
-		this.admin = admin;
+		this.userType = (admin) ? UserType.ADMIN : UserType.READONLY;
 	}
 
 	public int getPermissions() {
@@ -348,5 +353,13 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	public boolean isPasswordAssigned() {
 		return hashPassword != null;
 	}
+
+/*	public boolean isLiteUser() {
+		return liteUser;
+	}
+
+	public void setLiteUser(boolean liteUser) {
+		this.liteUser = liteUser;
+	}*/
 
 } 

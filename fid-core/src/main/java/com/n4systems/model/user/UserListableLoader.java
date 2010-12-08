@@ -1,11 +1,19 @@
 package com.n4systems.model.user;
 
 
+import java.util.Arrays;
+
+import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListableLoader;
+import com.n4systems.util.UserType;
 import com.n4systems.util.persistence.ListableSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClause;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereClause.ChainOp;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class UserListableLoader extends ListableLoader {
 	private boolean noDeleted = false;
@@ -24,7 +32,6 @@ public class UserListableLoader extends ListableLoader {
 		QueryBuilder<Listable<Long>> builder = new QueryBuilder<Listable<Long>>(User.class, filter);
 		builder.setSelectArgument(new ListableSelect("id", "CONCAT(firstName, ' ', lastName)"));
 		
-		builder.addSimpleWhere("system", false);
 		builder.addOrder("firstName", "lastName");
 		builder.addSimpleWhere("active", true);
 		
@@ -33,9 +40,8 @@ public class UserListableLoader extends ListableLoader {
 		}
 		
 		if (employeesOnly) {
-			builder.addSimpleWhere("employee", true);
+			builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Arrays.asList(UserType.ADMIN, UserType.EMPLOYEES, UserType.LITE)));
 		}
-		
 		
 		return builder;
 	}

@@ -35,6 +35,7 @@ public class SessionUser implements DateTimeDefinition {
 	private String externalAuthKey;
 	private boolean admin;
 	private boolean employee;
+	private boolean readOnly;
 	
 	public SessionUser( User user ) {
 		this.tenant = user.getTenant();
@@ -51,6 +52,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.securityFilter = new UserSecurityFilter(user);
 		this.admin = user.isAdmin(); 
 		this.employee = user.isEmployee();
+		this.readOnly= user.isReadOnly();
 	}
 
 	public Tenant getTenant() {
@@ -184,7 +186,7 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	public boolean isReadOnlyUser() {
-		return !employee;
+		return readOnly;
 	}
 	
 	public boolean isAnEndUser() {
@@ -240,7 +242,7 @@ public class SessionUser implements DateTimeDefinition {
 	}
 	
 	public boolean hasSetupAccess() {
-		return (!isReadOnlyUser() && (hasAccess("manageendusers") || hasAccess("managesystemusers") || hasAccess("managesystemconfig")));
+		return (!isReadOnlyUser() && ((hasAccess("manageendusers") || hasAccess("managesystemusers") || hasAccess("managesystemconfig"))));
 	}
 	
 	public String getSerialNumberLabel(){
