@@ -42,7 +42,7 @@
 </#if>
 
 <script type="text/javascript" >
-	var buttons = new Array( 'saveButton', 'saveAndInspButton', 'saveAndPrintButton','saveAndScheduleButton');
+	var buttons = new Array( 'saveButton', 'saveAndStartEventButton', 'saveAndPrintButton','saveAndScheduleButton');
 	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />' );
 	var buttonMessages = new Array( '<@s.text name="hbutton.save" />', '<@s.text name="hbutton.saveandstartevent" />', '<@s.text name="hbutton.saveandprint" />', '<@s.text name="hbutton.saveandschedule" />' );
 	
