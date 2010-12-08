@@ -21,7 +21,7 @@ public class JobResourceServiceTest {
 	public void should_attach_first_employee_resource() throws NonEmployeeUserException, EmployeeAlreadyAttachedException {
 		Project job = aJob().build();
 		User employee = anEmployee().build();
-	
+		employee.setEmployee(true);
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.reattchAndFetch(job, "resources")).andReturn(job);
 		expect(mockPersistenceManager.update(job, modifier)).andReturn(job);
@@ -46,6 +46,8 @@ public class JobResourceServiceTest {
 	public void should_stop_attaching_the_same_employee_twice() throws NonEmployeeUserException, EmployeeAlreadyAttachedException {
 		User employeeAssigned = anEmployee().build();
 		User employee = anEmployee().build();
+		employee.setEmployee(true);
+		
 		employee.setId(employeeAssigned.getId());
 		Project job = aJob().withResources(employeeAssigned).build();
 		
@@ -63,6 +65,7 @@ public class JobResourceServiceTest {
 	@Test
 	public void should_remove_the_employee_from_job() throws NonEmployeeUserException {
 		User employee = anEmployee().build();
+		employee.setEmployee(true);
 		Project job = aJob().withResources(employee).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
@@ -79,6 +82,8 @@ public class JobResourceServiceTest {
 	@Test
 	public void should_not_save_the_removal_of_an_employee_not_assigned_to_job() throws NonEmployeeUserException {
 		User employee = anEmployee().build();
+		employee.setEmployee(true);
+		
 		Project job = aJob().build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);

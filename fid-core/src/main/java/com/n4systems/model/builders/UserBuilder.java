@@ -127,6 +127,7 @@ public class UserBuilder extends BaseBuilder<User> {
 		
 		if (administratorAccess) {
 			user.setPermissions(Permissions.ADMIN);
+			user.setAdmin(administratorAccess);
 		} else if (systemAccess) {
 			user.setPermissions(Permissions.SYSTEM);
 		} else {

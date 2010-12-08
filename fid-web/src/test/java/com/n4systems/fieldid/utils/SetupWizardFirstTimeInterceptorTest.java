@@ -13,12 +13,16 @@ import com.n4systems.fieldid.ui.seenit.SeenItRegistryEmpyDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.utils.SetupWizardFirstTimeInterceptor;
 import com.n4systems.model.ui.seenit.SeenItItem;
+import com.n4systems.model.user.User;
 
 public class SetupWizardFirstTimeInterceptorTest {
 
 	@Test
 	public void should_require_set_up_wizard_if_user_is_an_admin_and_has_not_() {
-		SessionUser adminSessionUser = new SessionUser(anAdminUser().build());
+		User user = anAdminUser().build();
+		user.setAdmin(true);
+		SessionUser adminSessionUser = new SessionUser(user);
+		
 		SetupWizardFirstTimeInterceptor sut = new SetupWizardFirstTimeInterceptor();
 	
 		assertTrue(sut.forceUserToSetupWizard(adminSessionUser, createSeenItRegistryThatHasSeenNothing()));
@@ -38,7 +42,10 @@ public class SetupWizardFirstTimeInterceptorTest {
 	public void should_not_require_set_up_wizard_if_user_is_an_admin_but_has_already_visited_the_setup_wizard() {
 		SeenItRegistry seenItRegistry = createSeenItRegistryThatHasSeen(SeenItItem.SetupWizard);
 		
-		SessionUser adminSessionUser = new SessionUser(anAdminUser().build());
+		User user = anAdminUser().build();
+		user.setAdmin(true);
+		SessionUser adminSessionUser = new SessionUser(user);
+		
 		
 		SetupWizardFirstTimeInterceptor sut = new SetupWizardFirstTimeInterceptor();
 		
