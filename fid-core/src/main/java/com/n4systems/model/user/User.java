@@ -354,6 +354,14 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 		return hashPassword != null;
 	}
 
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
+	}
+
 /*	public boolean isLiteUser() {
 		return liteUser;
 	}
