@@ -1028,4 +1028,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return employees;
 	}
 	
+	public Long getEventId() {
+		return event.getId();
+	}
 }

@@ -361,4 +361,8 @@ public class SubEventCrud extends EventCrud {
 		super.setType(type);
 	}
 
+	@Override
+	public Long getEventId() {
+		return masterEventHelper.getEvent().getId();
+	}
 }

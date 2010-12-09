@@ -460,4 +460,9 @@ public class MasterEventCrud extends AbstractCrud {
 	public Long getScheduleId() {
 		return (masterEvent != null) ? masterEvent.getScheduleId() : null;
 	}
+	
+	public Long getEventId() {
+		return masterEvent.getEvent().getId();
+	}
+	
 }
