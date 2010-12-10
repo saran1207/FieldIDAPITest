@@ -39,11 +39,12 @@ ${action.setPageType('user','view')!}
 		</p>
 		<p>
 			<label for="initials"><@s.text name="label.initials"/></label>
-			<span class="fieldValue">${initials}</span>
+			<span class="fieldValue">${initials!}
+			</span>
 		</p>
 		<p>
 			<label for="position"><@s.text name="label.position"/></label>
-			<span class="fieldValue">${position}</span>
+			<span class="fieldValue">${position!}</span>
 		</p>
 		<p>
 			<label for="digitalSignature"><@s.text name="label.digital_signature"/></label>
