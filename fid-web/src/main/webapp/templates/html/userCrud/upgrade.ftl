@@ -7,7 +7,7 @@ ${action.setPageType('user','change')!}
 
 	<h2>
 		<@s.text name="label.upgrade_user_heading">
-			<@s.param>${userType}</@s.param>
+			<@s.param>${user.userType.label}</@s.param>
 			<@s.param>${userId}</@s.param>
 		</@s.text>
 	</h2>

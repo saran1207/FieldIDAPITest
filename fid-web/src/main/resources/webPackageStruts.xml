@@ -595,21 +595,21 @@
 			<result name="success" type="freemarker">templates/html/userCrud/upgrade.ftl</result>
 		</action>
 		
-		<action name="changeToFull" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+		<action name="changeToFull" method="changeToFull" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">employeeUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
 		
-		<action name="changeToLite" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+		<action name="changeToLite" method="changeToLite" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">employeeUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
 		
-		<action name="changeToReadOnly" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+		<action name="changeToReadOnly" method="changeToReadOnly" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">readOnlyUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>

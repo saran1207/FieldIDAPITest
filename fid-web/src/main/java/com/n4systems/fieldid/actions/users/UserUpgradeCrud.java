@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.users;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.UserType;
 
 public class UserUpgradeCrud extends UserCrud{
 
@@ -11,19 +12,19 @@ public class UserUpgradeCrud extends UserCrud{
 	}
 	
 	public String doChangeToFull() {
-		//TODO set user type
+		user.setUserType(UserType.EMPLOYEES);
 		save();
 		return SUCCESS;
 	}
 	
 	public String doChangeToLite() {
-		//TODO set user type
+		user.setUserType(UserType.LITE);
 		save();
 		return SUCCESS;
 	}
 	
 	public String doChangeToReadOnly() {
-		//TODO set user type
+		user.setUserType(UserType.READONLY);
 		save();
 		return SUCCESS;
 	}
@@ -34,15 +35,15 @@ public class UserUpgradeCrud extends UserCrud{
 	}
 	
 	public boolean isFullUser() {
-		return user.isEmployee();
+		return user.getUserType().equals(UserType.EMPLOYEES);
 	}
 	
 	public boolean isLiteUser() {
-		return false;
+		return user.getUserType().equals(UserType.LITE);
 	}
 	
 	public boolean isReadOnlyUser() {
-		return !user.isEmployee();
+		return user.getUserType().equals(UserType.READONLY);
 	}
 
 	@Override
