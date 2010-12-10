@@ -137,15 +137,19 @@ div.groupContents{
  
 .horizontalGrouping .horizontalGroup{
 	border: 1px solid #999;
-    float: left;
     width: 290px;
+    float: left;
     height: 300px;
     overflow: hidden;
     padding: 10px;
 }
+	
+.horizontalGrouping	.twoGroup{
+	margin-left: 150px;
+	}
 
 .horizontalGrouping .increasedMargins{
-	margin: 0px 30px;
+	margin-left: 30px;
 }
 
 .horizontalGroup .permissionListing{

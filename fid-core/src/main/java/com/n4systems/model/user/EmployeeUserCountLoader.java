@@ -15,7 +15,6 @@ import com.n4systems.util.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class EmployeeUserCountLoader extends Loader<Long> implements LimitLoader {

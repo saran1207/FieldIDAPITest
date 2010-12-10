@@ -14,6 +14,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
+import com.n4systems.util.UserType;
 
 public class SessionUser implements DateTimeDefinition {
 	private Tenant tenant;
@@ -36,6 +37,7 @@ public class SessionUser implements DateTimeDefinition {
 	private boolean admin;
 	private boolean employee;
 	private boolean readOnly;
+	private boolean systemUser;
 	
 	public SessionUser( User user ) {
 		this.tenant = user.getTenant();
@@ -53,6 +55,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.admin = user.isAdmin(); 
 		this.employee = user.isEmployee();
 		this.readOnly= user.isReadOnly();
+		this.systemUser=user.isSystem();
 	}
 
 	public Tenant getTenant() {
@@ -268,16 +271,20 @@ public class SessionUser implements DateTimeDefinition {
 		this.externalAuthKey = externalAuthKey;
 	}
 
-	
-
 	public boolean isAdmin() {
 		return admin ;
+	}
+	
+	public boolean isSystemUser() {
+		return systemUser;
 	}
 	
 	
 	public SessionUserDateConverter createUserDateConverter() {
 		return new SessionUserDateConverter(this);
 	}
+
+
 	
 	
 }

@@ -5,6 +5,7 @@ public enum LimitType {
 	DISK_SPACE, 
 	ASSETS			("Warning: Asset Limit", "assetLimitAlert", 90, 95, 99),
 	SECONDARY_ORGS	("Warning: Organization Limit", "secondaryOrgLimitAlert", 90, 95, 99),
+	LITE_USERS,
 	EMPLOYEE_USERS;
 	
 	private boolean alertByEmail;

@@ -31,6 +31,10 @@ public class TenantLimitProxy {
 		return limitService.getEmployeeUsers(tenantId).isMaxed();
 	}
 	
+	public Long getLiteUsersUsed(){
+		return limitService.getLiteUsers(tenantId).getUsed();
+	}
+	
 	public boolean isLiteUsersMaxed(){
 		return limitService.getLiteUsers(tenantId).isMaxed();
 	}

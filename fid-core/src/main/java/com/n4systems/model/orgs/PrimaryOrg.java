@@ -24,6 +24,7 @@ import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.tenant.TenantLimit;
+import com.n4systems.services.limiters.LimitType;
 
 @Entity
 @Table(name = "org_primary")
@@ -233,5 +234,13 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 
     public void setSearchableOnSafetyNetwork(boolean searchableOnSafetyNetwork) {
         this.searchableOnSafetyNetwork = searchableOnSafetyNetwork;
+    }
+    
+    public boolean isLiteUsersEnabled(){
+    	return getLimits().getLimitForType(LimitType.LITE_USERS) != 0;
+    }
+    
+    public boolean isReadOnlyUsersEnabled(){
+    	return hasExtendedFeature(ExtendedFeature.ReadOnlyUser);
     }
 }

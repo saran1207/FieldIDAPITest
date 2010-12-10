@@ -26,15 +26,19 @@ public class TenantLimit implements Serializable {
 	@Column(name="org_limit", nullable = false)
 	private Long secondaryOrgs;
 	
+	@Column(name="lite_user_limit", nullable = false)
+	private Long liteUsers;
+	
 	public TenantLimit() {
-		this(0L, 0L, 0L, 0L);
+		this(0L, 0L, 0L, 0L, 0L);
 	}
 	
-	public TenantLimit(long diskSpace, long assets, long users, long secondaryOrgs) {
+	public TenantLimit(long diskSpace, long assets, long users, long secondaryOrgs, long liteUsers) {
 		this.diskSpace = diskSpace;
 		this.assets = assets;
 		this.users = users;
 		this.secondaryOrgs = secondaryOrgs;
+		this.liteUsers=liteUsers;
 	}
 
 	public Long getLimitForType(LimitType type) {
@@ -48,6 +52,9 @@ public class TenantLimit implements Serializable {
 				break;
 			case EMPLOYEE_USERS:
 				limit = users;
+				break;
+			case LITE_USERS:
+				limit = liteUsers;
 				break;
 			case SECONDARY_ORGS:
 				limit = secondaryOrgs;
@@ -74,6 +81,14 @@ public class TenantLimit implements Serializable {
 
 	public Long getUsers() {
 		return users;
+	}
+	
+	public Long getLiteUsers(){
+		return liteUsers;
+	}
+	
+	public void setLiteUsers(Long liteUsers){
+		this.liteUsers=liteUsers;
 	}
 
 	public void setUsers(Long users) {
@@ -191,6 +206,6 @@ public class TenantLimit implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TenantLimit [assets=" + assets + ", diskSpace=" + diskSpace + ", secondaryOrgs=" + secondaryOrgs + ", users=" + users + "]";
+		return "TenantLimit [assets=" + assets + ", diskSpace=" + diskSpace + ", secondaryOrgs=" + secondaryOrgs + ", users=" + users + ", liteUsers=" + liteUsers + "]";
 	}
 }

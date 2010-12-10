@@ -60,6 +60,7 @@ public class TenantLimitService implements Serializable {
 	
 	public ResourceLimit getLiteUsers(Long tenantId){
 		refreshLiteUserCount(tenantId);
+		ResourceLimit limit = liteUsers.get(tenantId);
 		return liteUsers.get(tenantId);
 	}
 	

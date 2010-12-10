@@ -275,12 +275,20 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		primaryOrg.getLimits().setAssets(assets);
 	}
 	
+	public Long getLiteUsers(){
+		return primaryOrg.getLimits().getLiteUsers();
+	}
+	
 	public Long getUsers() {
 		return primaryOrg.getLimits().getUsers();
 	}
 	
 	public void setUsers(Long users) {
 		primaryOrg.getLimits().setUsers(users);
+	}
+	
+	public void setLiteUsers(Long users){
+		primaryOrg.getLimits().setLiteUsers(users);
 	}
 	
 	public Long getSecondaryOrgs() {

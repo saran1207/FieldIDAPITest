@@ -11,6 +11,7 @@
 	<@s.textfield name="diskSpace" label="Disk space limit in bytes (-1 for unlimited)" />
 	<@s.textfield name="assets" label="Asset limit (-1 for unlimited)" />
 	<@s.textfield name="users" label="User limit (-1 for unlimited)" />
+	<@s.textfield name="liteUsers" label="Lite User limit (-1 for unlimited)" />
 	<@s.textfield name="secondaryOrgs" label="Secondary Orgs limit (-1 for unlimited)" />
 
 	
@@ -23,7 +24,7 @@
 	</@s.iterator>	
 	
 	<@s.label label="Extras" />
-	<@s.checkbox name="primaryOrg.plansAndPricingAvailable" label="Show Plans and pricing when Partner Center enabled" labelposition="left" />
+	<@s.checkbox name="primaryOrg.plansAndPricingAvailable" label="Show Plans and pricing when Read Only Users enabled" labelposition="left" />
 	
 	
 	<@s.submit />

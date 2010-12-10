@@ -19,7 +19,7 @@
 		</ul>
 	</div>
 	
-	<#if securityGuard.projectsEnabled && sessionUser.employeeUser>
+	<#if securityGuard.projectsEnabled && (sessionUser.employeeUser || sessionUser.systemUser || sessionUser.liteUser || sessionUser.admin)>
 		<div id="jobs" class="dashboardSection">
 			<h2 class="decoratedHeader"><@s.text name="label.jobs"/></h2>
 			<table class="simpleTable decorated">

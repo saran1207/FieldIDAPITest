@@ -90,7 +90,7 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 		primaryOrg.setExternalId(externalId);
 		primaryOrg.setPlansAndPricingAvailable(plansAndPricingAvailable);
 		
-		primaryOrg.setLimits(new TenantLimit(diskSpaceInBytes, assetLimit, employeeLimit, 0));
+		primaryOrg.setLimits(new TenantLimit(diskSpaceInBytes, assetLimit, employeeLimit, 0, 0L));
 		return primaryOrg;
 	}
 	
