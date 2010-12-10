@@ -20,22 +20,22 @@
 			<h2><@s.text name="label.identifiers"/></h2>
 			
 			<div class="infoSet">
-				<label class="label" for="owner"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				 <label class="label" for="owner"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
 				<@n4.orgPicker name="owner" required="true" orgType="${(employee)?string('internal','readonly')}"/>
 			</div>
 			
 			<div class="infoSet">
-				<label class="label" for="emailAddress"><@s.text name="label.emailaddress"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				 <label class="label" for="emailAddress"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.emailaddress"/></label>
 				<@s.textfield key="label.emailaddress" name="emailAddress"  required="true"/>
 			</div>
 			
 			<div class="infoSet">
-				<label class="label" for="firstname"><@s.text name="label.firstname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				 <label class="label" for="firstname"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.firstname"/></label>
 				<@s.textfield id="firstname" name="firstName"  required="true" cssClass="initalsInput"/>
 			</div>
 			
 			<div class="infoSet">
-				<label class="label" for="lastname"><@s.text name="label.lastname"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				 <label class="label" for="lastname"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.lastname"/></label>
 				<@s.textfield id="lastname" name="lastName"  required="true" cssClass="initalsInput"/>
 			</div>
 			
@@ -71,7 +71,7 @@
 			<h2><@s.text name="label.account_heading"/></h2>
 		
 			<div class="infoSet">
-				<label class="label" for="userId"><@s.text name="label.username"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+				 <label class="label" for="userId"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.username"/></label>
 				<@s.textfield name="userId"/>
 			</div>
 			
@@ -86,7 +86,7 @@
 				</div>
 				<div id="passwords">
 					<div class="infoSet">
-						<label class="label" for="passwordEntry.password"><@s.text name="label.password"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+						<label class="label" for="passwordEntry.password"> <#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.password"/></label>
 						<@s.password name="passwordEntry.password" required="true"/><@s.password name="passwordEntry.passwordVerify" required="true"/>
 						<div class="labelContainers increasedMargin"><@s.text name="label.password"/></div><div class="labelContainers"><@s.text name="label.vpassword"/></div>
 					</div>
@@ -105,6 +105,8 @@
 				</div>
 				<div class="infoSet" >
 					<div id="personalMessage"">
+						<div class="personalMessageHeading"><@s.text name="label.personal_message_title"/></div>
+						
 						<@s.textarea name="welcomeMessage.personalMessage" id="welcomeMessageTextarea"/>
 					</div>
 				</div>
@@ -173,7 +175,7 @@
 				</div>
 			<#else>
 				<div class="infoSet">
-					<span class="fieldHolder">
+					<span class="fieldHolder enlargedFont">
 						<@s.text name="label.customer_users_have_read_only_access"/>
 					</span>
 				</div>

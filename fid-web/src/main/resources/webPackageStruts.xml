@@ -688,10 +688,8 @@
 			<result name="input" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="error" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">employeeUserEdit</param>
+				<param name="actionName">viewUser</param>
 				<param name="uniqueID">${uniqueID}</param>
-				<param name="currentPage">${currentPage}</param>
-				<param name="listFilter">${listFilter}</param>
 			</result>
 		</action>
 
@@ -709,11 +707,8 @@
 		<action name="readOnlyUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">readOnlyUserEdit</param>
+			<param name="actionName">viewUser</param>
 				<param name="uniqueID">${uniqueID}</param>
-				<param name="customer">${customer}</param>
-				<param name="currentPage">${currentPage}</param>
-				<param name="listFilter">${listFilter}</param>
 			</result>
 
 		</action>
