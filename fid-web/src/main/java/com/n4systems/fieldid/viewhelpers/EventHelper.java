@@ -14,8 +14,11 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.user.User;
 
 /**
@@ -35,7 +38,7 @@ public class EventHelper {
 	 * @param event	The event to find CriteriaResults from
 	 * @return				A List of ordered CriteriaResults.  Returns an empty List if the event's results are empty.
 	 */
-	public List<CriteriaResult> orderCriteriaResults(AbstractEvent event) {
+	public List<? extends CriteriaResult> orderCriteriaResults(AbstractEvent event) {
 		List<CriteriaResult> orderedResults = new ArrayList<CriteriaResult>();
 		
 		// don't go through all the trouble if the event has no results.
@@ -106,7 +109,7 @@ public class EventHelper {
 	 * @param modifiedBy			A modifiedBy user to set on the Observations
 	 * @param pm					A PersistenceManager instance
 	 */
-	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResult> formCriteriaResults, User modifiedBy) {
+	public void processFormCriteriaResults(AbstractEvent event, List<? extends CriteriaResult> formCriteriaResults, User modifiedBy) {
 		// if our forms criteria results are null (as is the case with a repair), just stop.  
 		if (formCriteriaResults == null) {
 			return;
@@ -125,14 +128,15 @@ public class EventHelper {
 			// on edit the results will come in with an id
 			// we want to load the real result and then modify it's fields
 			if (formResult.getId() != null) {
-				realResult = pm.find(CriteriaResult.class, formResult.getId());
+				realResult = pm.find(OneClickCriteriaResult.class, formResult.getId());
 				
 				reconstructEditObservations(realResult.getRecommendations(), formResult.getRecommendations());
 				reconstructEditObservations(realResult.getDeficiencies(), formResult.getDeficiencies());
 				
 			} else {
+                // TODO: This will probably change when we go to adding different types of criteria results. Use a web model?
 				// this is a new result, need to set the basics
-				realResult = new CriteriaResult();
+				realResult = createNewResult(formResult);
 				realResult.setEvent(event);
 				realResult.setTenant(event.getTenant());
 				
@@ -141,15 +145,30 @@ public class EventHelper {
 			}
 			
 			// these get re-attached every time
-			realResult.setCriteria(pm.find(Criteria.class, formResult.getCriteria().getId(), event.getTenant()));
-			realResult.setState(pm.find(State.class, formResult.getState().getId(), event.getTenant()));
+			realResult.setCriteria(pm.find(OneClickCriteria.class, formResult.getCriteria().getId(), event.getTenant()));
+            if (formResult instanceof OneClickCriteriaResult) {
+                ((OneClickCriteriaResult)realResult).setState(pm.find(State.class, ((OneClickCriteriaResult)formResult).getState().getId(), event.getTenant()));
+            } else if (formResult instanceof TextFieldCriteriaResult) {
+                ((TextFieldCriteriaResult)realResult).setValue(((TextFieldCriteriaResult)formResult).getValue());
+            }
+
 			
 			// and attach back onto the event
 			event.getResults().add(realResult);
 		}
 	}
-	
-	/**
+
+    private CriteriaResult createNewResult(CriteriaResult formResult) {
+        if (formResult instanceof OneClickCriteriaResult) {
+            return new OneClickCriteriaResult();
+        } else if (formResult instanceof TextFieldCriteriaResult) {
+            return new TextFieldCriteriaResult();
+        } else {
+            throw new RuntimeException("error converting form result!");
+        }
+    }
+
+    /**
 	 * Ensures nulls have been removed from the lists, sets security information
 	 * on the Observations, and ensures Recommendations/Deficiencies only
 	 * contain elements if they're allowed to by the results Status
@@ -262,7 +281,7 @@ public class EventHelper {
 	 * @param criteriaId	Id of a Criteria
 	 * @return				The found CriteriaResult or null
 	 */
-	public CriteriaResult findResultInCriteriaResultsByCriteriaId(List<CriteriaResult> results, Long criteriaId) {
+	public CriteriaResult findResultInCriteriaResultsByCriteriaId(List<? extends CriteriaResult> results, Long criteriaId) {
 		CriteriaResult result = null;
 		for (CriteriaResult critRes: results) {
 			if (critRes.getCriteria().getId().equals(criteriaId)) {

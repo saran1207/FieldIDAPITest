@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.model.OneClickCriteria;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class WsCriteriaSectionConverterTest {
 		CriteriaSection model = new CriteriaSection();
 		model.setId(10L);
 		model.setTitle("title");
-		model.getCriteria().add(new Criteria());
+		model.getCriteria().add(new OneClickCriteria());
 		
 		List<WsCriteria> wsCriteria = Arrays.asList(new WsCriteria());
 		WsModelConverter<Criteria, WsCriteria> criteriaConverter = EasyMock.createMock(WsModelConverter.class);

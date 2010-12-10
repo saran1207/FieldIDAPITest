@@ -61,8 +61,8 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
     @Column(name="element")
     private Map<String, String> infoOptionMap = new HashMap<String, String>();
 	
-	@Column(nullable=false)
-	private long formVersion;
+    @Column(nullable=false)
+    private boolean editable = true;
 	
 	private String mobileGUID;
 	
@@ -90,14 +90,13 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	    return	"id: " + getId() +
 	    		"\nTenant: " + getTenant() + 
 	    		"\nType: " + getType() +
-	    		"\nForm Ver: " + getFormVersion() +
 	    		"\nAsset: " + getAsset() +
 	    		"\nResults: " + StringUtils.indent(resultString, 1);
     }
 
 	@AllowSafetyNetworkAccess
 	public boolean isEditable() {
-		return (formVersion == type.getFormVersion());
+		return editable;
 	}
 	
 	@AllowSafetyNetworkAccess
@@ -163,15 +162,6 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 		this.comments = comments;
 	}
 
-	@AllowSafetyNetworkAccess
-	public long getFormVersion() {
-    	return formVersion;
-    }
-
-	public void setFormVersion(long formVersion) {
-    	this.formVersion = formVersion;
-    }
-	
 	public List<FileAttachment> getImageAttachments() {
 		List<FileAttachment> imageAttachments = new ArrayList<FileAttachment>();
 		for (FileAttachment fileAttachment : attachments) {
@@ -181,8 +171,5 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 		}
 		return imageAttachments;
 	}
-	public void syncFormVersionWithType() {
-		setFormVersion(getType().getFormVersion());
-	}
-	
+
 }

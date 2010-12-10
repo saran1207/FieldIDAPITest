@@ -9,8 +9,8 @@ import com.n4systems.fieldid.actions.api.FlashScopeAware;
 
 public class FlashScopeMarshaller {
 
-	protected static final String FLASH_MESSAGES = "flashScope_Messages";
-	protected static final String FLASH_ERRORS = "flashScope_Errors";
+	public static final String FLASH_MESSAGES = "flashScope_Messages";
+	public static final String FLASH_ERRORS = "flashScope_Errors";
 	
 	private final FlashScopeAware flashScopeAction;
 	private final HttpSession session;

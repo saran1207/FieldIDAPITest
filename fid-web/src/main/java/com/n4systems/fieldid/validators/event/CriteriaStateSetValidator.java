@@ -3,6 +3,7 @@ package com.n4systems.fieldid.validators.event;
 import java.util.Collection;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.opensymphony.xwork2.validator.ValidationException;
@@ -22,10 +23,13 @@ public class CriteriaStateSetValidator extends FieldValidatorSupport {
 			for( CriteriaSection section : set ) {
 				if( section != null && section.getCriteria() != null && !section.getCriteria().isEmpty() ) {
 					for( Criteria criteria : section.getCriteria() ) {
-						if( criteria != null && ( criteria.getStates() == null || criteria.getStates().getId() == null ) ) {
-							addFieldError( fieldName, action );
-							return;
-						}
+                        if (criteria instanceof OneClickCriteria) {
+                            OneClickCriteria oneClickCriteria = (OneClickCriteria) criteria;
+                            if( oneClickCriteria.getStates() == null || oneClickCriteria.getStates().getId() == null ) {
+                                addFieldError( fieldName, action );
+                                return;
+                            }
+                        }
 					}
 				}
 			}

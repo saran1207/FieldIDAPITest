@@ -12,9 +12,11 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
+import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.parents.EntityWithTenant;
 
 public class CopyEventFactory {
@@ -90,8 +92,6 @@ public class CopyEventFactory {
 		newEvent.setInfoOptionMap( new HashMap<String, String>( originalEvent.getInfoOptionMap() ) );
 		
 		newEvent.setResults( copyCriteriaResults( originalEvent.getResults(), newEvent) );
-		
-		newEvent.setFormVersion(originalEvent.getFormVersion());
 	}
 	
 	protected static List<FileAttachment> copyFileAttachments( List<FileAttachment> oldFileAttachments ) {
@@ -122,10 +122,9 @@ public class CopyEventFactory {
 		Set<CriteriaResult> newResults = new HashSet<CriteriaResult>();
 		
 		for( CriteriaResult oldResult : oldResults ) {
-			CriteriaResult newResult = new CriteriaResult();
+			CriteriaResult newResult = createBasicCopy(oldResult);
 			copyEntity( newResult, oldResult );
 			newResult.setCriteria( oldResult.getCriteria() );
-			newResult.setState( oldResult.getState() );
 			newResult.setEvent(newEvent);
 			newResult.setRecommendations( copyRecommendations( oldResult.getRecommendations() ) );
 			newResult.setDeficiencies( copyDeficiencies( oldResult.getDeficiencies() ) );
@@ -137,8 +136,22 @@ public class CopyEventFactory {
 		
 		return newResults;
 	}
-	
-	protected static List<Recommendation> copyRecommendations( List<Recommendation> oldRecommendations ) {
+
+    private static CriteriaResult createBasicCopy(CriteriaResult oldResult) {
+        if (oldResult instanceof OneClickCriteriaResult) {
+            OneClickCriteriaResult oneClickResult = new OneClickCriteriaResult();
+            oneClickResult.setState(((OneClickCriteriaResult)oldResult).getState());
+            return oneClickResult;
+        } else if (oldResult instanceof TextFieldCriteriaResult) {
+            TextFieldCriteriaResult textFieldResult = new TextFieldCriteriaResult();
+            textFieldResult.setValue(((TextFieldCriteriaResult)oldResult).getValue());
+            return textFieldResult;
+        } else {
+            throw new RuntimeException("Don't know how to copy: " + oldResult);
+        }
+    }
+
+    protected static List<Recommendation> copyRecommendations( List<Recommendation> oldRecommendations ) {
 		List<Recommendation> newRecommendations = new ArrayList<Recommendation>();
 		for( Recommendation oldRecommendation : oldRecommendations ) {
 			Recommendation newRecommendation = new Recommendation();

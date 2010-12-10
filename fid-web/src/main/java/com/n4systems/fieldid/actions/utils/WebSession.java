@@ -29,17 +29,17 @@ import com.n4systems.util.HashCode;
 @SuppressWarnings("unchecked")
 public class WebSession extends AbstractMap<String, Object> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final String KEY_SESSION_USER = "sessionUser";
-	private static final String KEY_SECURITY_GUARD = "securityGaurd";
-	private static final String KEY_USER_SECURITY_GUARD = "userSecurityGuard";
-	private static final String KEY_TENANT_LANG_OVERRIDES = "TENANT_LANG_OVERRIDES";
-	private static final String KEY_SIGNUP = "signUp";
-	private static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";
-	private static final String KEY_SEEN_IT_REGISTRY = "seenItRegistry";
-    private static final String KEY_MULTI_SELECTION = "multiSelection";
-	private static final String VENDOR_CONTEXT = "vendor_context";
-	private static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
-	private static final String IMPORT_TASK_ID = "import_task_id";
+	public static final String KEY_SESSION_USER = "sessionUser";
+	public static final String KEY_SECURITY_GUARD = "securityGaurd";
+	public static final String KEY_USER_SECURITY_GUARD = "userSecurityGuard";
+	public static final String KEY_TENANT_LANG_OVERRIDES = "TENANT_LANG_OVERRIDES";
+	public static final String KEY_SIGNUP = "signUp";
+	public static final String KEY_EULA_ACCEPTANCE = "eula_acceptance";
+	public static final String KEY_SEEN_IT_REGISTRY = "seenItRegistry";
+    public static final String KEY_MULTI_SELECTION = "multiSelection";
+	public static final String VENDOR_CONTEXT = "vendor_context";
+	public static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
+	public static final String IMPORT_TASK_ID = "import_task_id";
 	
 	private final HttpSession session;
 	public static final String REPORT_CRITERIA = "reportCriteria";
@@ -329,12 +329,10 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 			return 0;
 		}
 		int count = 0;
-		synchronized (session) {
-			Enumeration<String> keys = session.getAttributeNames();
-			while(keys.hasMoreElements()) {
-				count++;
-			}
-		}
+        Enumeration<String> keys = session.getAttributeNames();
+        while(keys.hasMoreElements()) {
+            count++;
+        }
 		return count;
 	}
 

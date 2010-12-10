@@ -75,7 +75,6 @@ public class EventToModelConverterTest {
 		Event event = converter.toModel(new EventView(), transaction);
 		
 		assertEquals(type, event.getType());
-		assertEquals(type.getFormVersion(), event.getFormVersion());
 		assertEquals(type.getTenant(), event.getTenant());
 	}
 	

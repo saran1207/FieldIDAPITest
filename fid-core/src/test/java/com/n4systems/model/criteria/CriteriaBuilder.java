@@ -1,5 +1,6 @@
 package com.n4systems.model.criteria;
 
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.builders.EntityWithTenantBuilder;
 
@@ -32,7 +33,7 @@ public class CriteriaBuilder extends EntityWithTenantBuilder<Criteria> {
 	
 	@Override
 	public Criteria createObject() {
-		Criteria criteria = assignAbstractFields(new Criteria());
+		Criteria criteria = assignAbstractFields(new OneClickCriteria());
 		criteria.setRetired(retired);
 		criteria.setPrincipal(principal);
 		return criteria;

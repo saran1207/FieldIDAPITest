@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.OneClickCriteriaResult;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class CopyEventFactoryTest {
 		Event i = new Event();
 		
 		Set<CriteriaResult> results = new HashSet<CriteriaResult>();
-		CriteriaResult criteriaResult = new CriteriaResult();
+		OneClickCriteriaResult criteriaResult = new OneClickCriteriaResult();
 		State state = new State();
 		state.setId( STATE_ID );
 		criteriaResult.setState( state );
@@ -52,7 +53,7 @@ public class CopyEventFactoryTest {
 		
 		assertEquals( results.size(), copiedResults.size() );
 		CriteriaResult copiedResult = copiedResults.iterator().next();
-		assertEquals( criteriaResult.getState(), copiedResult.getState() );
+		assertEquals( criteriaResult.getState(), ((OneClickCriteriaResult)copiedResult).getState() );
 		assertEquals( criteriaResult, copiedResult );
 		assertEquals( criteriaResult.getRecommendations().size(), copiedResult.getRecommendations().size() );
 		
@@ -62,8 +63,6 @@ public class CopyEventFactoryTest {
 		copiedResult.setId( 4L );
 		assertFalse( criteriaResult.equals( copiedResult ) );
 	}
-	
-	
 	
 	@Test
 	public void testCopyRecommendations() {

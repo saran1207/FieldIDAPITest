@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -18,14 +20,12 @@ import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "criteria")
-public class Criteria extends EntityWithTenant implements Listable<Long> {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Criteria extends EntityWithTenant implements Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)
 	private String displayText;
-	
-	@ManyToOne(fetch=FetchType.EAGER, cascade={CascadeType.REFRESH}, optional=false)
-	private StateSet states;
 	
 	private boolean principal;
 
@@ -50,14 +50,6 @@ public class Criteria extends EntityWithTenant implements Listable<Long> {
 
 	public void setDisplayText(String displayText) {
 		this.displayText = displayText;
-	}
-
-	public StateSet getStates() {
-		return states;
-	}
-
-	public void setStates(StateSet states) {
-		this.states = states;
 	}
 	
 	public String getDisplayName() {
@@ -109,5 +101,17 @@ public class Criteria extends EntityWithTenant implements Listable<Long> {
     public String toString() {
 	    return getDisplayText() + " (" + getId() + ")";
     }
-		
+
+    public boolean isOneClickCriteria() {
+        return false;
+    }
+
+    public boolean isTextFieldCriteria() {
+        return false;
+    }
+
+    public String getTypeDescription() {
+        return "NONE";
+    }
+
 }

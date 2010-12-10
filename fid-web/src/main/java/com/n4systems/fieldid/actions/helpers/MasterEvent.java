@@ -141,7 +141,6 @@ public class MasterEvent {
 	public Event createEventFromSubEvent(SubEvent subEvent) {
 		Event event = new Event();
 
-		event.setFormVersion(subEvent.getFormVersion());
 		event.setId(subEvent.getId());
 		event.setAsset(subEvent.getAsset());
 		event.setTenant(subEvent.getTenant());
@@ -160,7 +159,6 @@ public class MasterEvent {
 	public SubEvent createSubEventFromEvent(Event event) {
 		SubEvent subEvent = new SubEvent();
 
-		subEvent.setFormVersion(event.getFormVersion());
 		subEvent.setId(event.getId());
 		subEvent.setAsset(event.getAsset());
 		subEvent.setName(findLabelOfSubAsset(event));
@@ -214,9 +212,7 @@ public class MasterEvent {
 			s.setId((subEvent.getId() < 0) ? null : subEvent.getId());
 			s.setResults(subEvent.getResults());
 			processResults(s);
-			s.setFormVersion(subEvent.getFormVersion());
 			event.getSubEvents().add(s);
-
 		}
 	}
 

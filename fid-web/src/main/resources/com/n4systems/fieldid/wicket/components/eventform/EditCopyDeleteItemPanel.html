@@ -1,0 +1,28 @@
+<wicket:panel>
+    <div class="deleteLinkSection">
+        <img wicket:id="deleteImage"/>
+    </div>
+    <div wicket:id="viewContainer">
+        <div class="itemLinkTitle">
+            <a wicket:id="viewLink" class="mainLink">
+                <span wicket:id="linkLabel"></span>
+                <br/>
+                <div class="subTitle" wicket:id="subTitle"></div>
+            </a>
+        </div>
+        <div class="editCopyLinks">
+            <a wicket:id="editLink">Edit</a> <wicket:enclosure>| <a wicket:id="copyLink">Copy</a></wicket:enclosure>
+        </div>
+    </div>
+    <div class="editForm">
+        <form wicket:id="editForm">
+            <div class="itemLinkTitle">
+                <input wicket:id="newText"/>
+            </div>
+            <div class="editCopyLinks">
+                <a wicket:id="storeLink">Store</a> | <a wicket:id="cancelLink">Cancel</a>
+            </div>
+        </form>
+    </div>
+    <div style="clear:both;"></div>
+</wicket:panel>

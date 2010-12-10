@@ -27,6 +27,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
@@ -92,7 +93,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	protected Asset asset;
 	protected Event event;
 	
-	protected List<CriteriaResult> criteriaResults;
+	protected List<OneClickCriteriaResult> criteriaResults;
 	protected String charge;
 	protected ProofTestType proofTestType;
 	protected File proofTest;// The actual file
@@ -396,9 +397,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			if (event.isNew()) {
 				// the criteriaResults from the form must be processed before setting them on the event
 				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
-				
-				// ensure the form version is set from the event type on create
-				event.syncFormVersionWithType();
 				
 				CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, getSessionUserId())
 						.withProofTestFile(fileData)
@@ -704,17 +702,17 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		this.newEventBookTitle = newEventBookTitle;
 	}
 
-	public List<CriteriaResult> getCriteriaResults() {
+	public List<OneClickCriteriaResult> getCriteriaResults() {
 		if (criteriaResults == null) {
 			// criteria results need to be placed back in the order that they appear on the form
 			// so that the states and button images line up correctly.
-			criteriaResults = eventHelper.orderCriteriaResults(event);
+			criteriaResults = (List<OneClickCriteriaResult>) eventHelper.orderCriteriaResults(event);
 		}
 
 		return criteriaResults;
 	}
 
-	public void setCriteriaResults(List<CriteriaResult> results) {
+	public void setCriteriaResults(List<OneClickCriteriaResult> results) {
 		criteriaResults = results;
 	}
 
@@ -880,14 +878,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		if (criteriaResults == null || criteriaResults.isEmpty() || criteriaResults.get(criteriaIndex) == null) {
 			return 0;
 		}
-		return eventHelper.countObservations(criteriaResults.get(criteriaIndex).getRecommendations());
+		return eventHelper.countObservations(((CriteriaResult)criteriaResults.get(criteriaIndex)).getRecommendations());
 	}
 	
 	public int countDeficiencies(int criteriaIndex) {
 		if (criteriaResults == null || criteriaResults.isEmpty() || criteriaResults.get(criteriaIndex) == null) {
 			return 0;
 		}
-		return eventHelper.countObservations(criteriaResults.get(criteriaIndex).getDeficiencies());
+		return eventHelper.countObservations(((CriteriaResult)criteriaResults.get(criteriaIndex)).getDeficiencies());
 	}
 	
 	public Long getScheduleId() {

@@ -82,7 +82,7 @@ ${action.setPageType('event_type', 'show')!}
 					<div id="${section.title}">
 						<table class="criteriaList">
 							<#list section.criteria as criteria >
-								<#if !criteria.retired >
+								<#if !criteria.retired && criteria.oneClickCriteria>
 									<tr>
 										<td class="criteriaName"><label>${criteria.displayName}</label></td>
 										<td class="buttonGroupIcons">

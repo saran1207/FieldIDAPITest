@@ -23,7 +23,7 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 		wsModel.setPrincipal(model.isPrincipal());
 		wsModel.setRecommendations(model.getRecommendations());
 		wsModel.setDeficiencies(model.getDeficiencies());
-		wsModel.setStates(stateConverter.fromModels(model.getStates().getStates()));
+//		wsModel.setStates(stateConverter.fromModels(model.getStates().getStates()));
 		return wsModel;
 	}
 

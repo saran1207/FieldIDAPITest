@@ -10,6 +10,7 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.utils.CopyEventFactory;
+import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SubEvent;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -132,7 +133,7 @@ public class SubEventCrud extends EventCrud {
 	}
 
 	private void restoreCriteriaResultsFromStoredEvent() {
-		criteriaResults = new ArrayList<CriteriaResult>();
+		criteriaResults = new ArrayList<OneClickCriteriaResult>();
 
 		List<CriteriaSection> availbleSections = getEventFormHelper().getAvailableSections(event);
 
@@ -141,7 +142,7 @@ public class SubEventCrud extends EventCrud {
 				boolean found = false;
 				for (CriteriaResult result : event.getResults()) {
 					if (result.getCriteria().equals(criteria)) {
-						criteriaResults.add(result);
+						criteriaResults.add((OneClickCriteriaResult) result);
 						found = true;
 						break;
 					}
@@ -214,8 +215,6 @@ public class SubEventCrud extends EventCrud {
 		}
 
 		if (uniqueID == null) {
-			subEvent.syncFormVersionWithType();
-
 			if (subEvent.isEditable()) {
 				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
 			}
@@ -267,7 +266,6 @@ public class SubEventCrud extends EventCrud {
 			if (masterEventHelper.getEvent().isNew()) {
 				event.setTenant(getTenant());
 				event.setAsset(asset);
-				event.syncFormVersionWithType();
 
 				masterEventHelper.setAssetStatus(event.getAssetStatus());
 

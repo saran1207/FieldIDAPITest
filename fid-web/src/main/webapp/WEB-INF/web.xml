@@ -19,6 +19,18 @@
 			<param-value>com.n4systems.fieldid.actions,com.n4systems.fieldidadmin.actions</param-value>
 		</init-param>
 	</filter>
+	<filter>
+		<filter-name>wicket.fieldid</filter-name>
+ 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+		<init-param>
+			<param-name>applicationClassName</param-name>
+			<param-value>com.n4systems.fieldid.wicket.FieldIDWicketApp</param-value>
+ 		</init-param>
+        <init-param>
+            <param-name>configuration</param-name>
+            <param-value>deployment</param-value>
+        </init-param>
+ 	</filter>
 	<filter-mapping>
 		<filter-name>struts-cleanup</filter-name>
 		<url-pattern>*.action</url-pattern>
@@ -31,6 +43,10 @@
 		<filter-name>struts2</filter-name>
 		<url-pattern>*.action</url-pattern>
 	</filter-mapping>
+    <filter-mapping>
+       <filter-name>wicket.fieldid</filter-name>
+	   <url-pattern>/w/*</url-pattern>
+    </filter-mapping>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener
 		</listener-class>

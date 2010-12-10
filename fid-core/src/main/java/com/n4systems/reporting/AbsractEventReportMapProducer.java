@@ -193,7 +193,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	private void flattenCriteriaResults(Map<Criteria, State> stateMap, Map<Criteria, List<Recommendation>> recommendations, Map<Criteria, List<Deficiency>> deficiencies) {
 		// set the map size to increase performance
 		for (CriteriaResult result : getEvent().getResults()) {
-			stateMap.put(result.getCriteria(), result.getState());
+//			stateMap.put(result.getCriteria(), result.getState());
 			deficiencies.put(result.getCriteria(), result.getDeficiencies());
 			recommendations.put(result.getCriteria(), result.getRecommendations());
 		}

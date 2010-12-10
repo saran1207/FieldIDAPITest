@@ -42,7 +42,7 @@ public class CriteriaCleanerTest {
 		
 		assertSame(newTenant, criteria.getTenant());
 		assertSame(displayText, criteria.getDisplayText());
-		assertSame(states, criteria.getStates());
+//		assertSame(states, criteria.getStates());
 		assertSame(principal, criteria.isPrincipal());
 		assertSame(retired, criteria.isRetired());
 		
@@ -56,7 +56,7 @@ public class CriteriaCleanerTest {
 	private Criteria buildCriteria() {
 		Criteria criteria = CriteriaBuilder.aCriteria().build();
 		criteria.setDisplayText(displayText);
-		criteria.setStates(states);
+//		criteria.setStates(states);
 		criteria.setPrincipal(principal);
 		criteria.setRetired(retired);
 		criteria.setRecommendations(recommendations);

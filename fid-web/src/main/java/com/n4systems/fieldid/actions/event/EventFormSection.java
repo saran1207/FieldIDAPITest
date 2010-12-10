@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.event;
 import java.util.List;
 
 import com.n4systems.ejb.EventManager;
+import com.n4systems.model.OneClickCriteria;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -18,28 +19,28 @@ import com.n4systems.security.Permissions;
 public class EventFormSection extends EventFormCrud {
 	private static final long serialVersionUID = 1L;
 	
-	private Long sectionIndex;	
-	private Long criteriaIndex;
-	private Long observationIndex;
+	private Integer sectionIndex;
+	private Integer criteriaIndex;
+	private Integer observationIndex;
 	private Observation.Type observationType;
 
 	public EventFormSection(PersistenceManager persistenceManager, EventManager eventManager) {
 		super(persistenceManager, eventManager);
 	}
 
-	public Long getSectionIndex() {
+	public Integer getSectionIndex() {
 		return sectionIndex;
 	}
 
-	public void setSectionIndex(Long sectionIndex) {
+	public void setSectionIndex(Integer sectionIndex) {
 		this.sectionIndex = sectionIndex;
 	}
 
-	public Long getCriteriaIndex() {
+	public Integer getCriteriaIndex() {
 		return criteriaIndex;
 	}
 
-	public void setCriteriaIndex(Long criteriaIndex) {
+	public void setCriteriaIndex(Integer criteriaIndex) {
 		this.criteriaIndex = criteriaIndex;
 	}
 
@@ -51,19 +52,19 @@ public class EventFormSection extends EventFormCrud {
 		this.observationType = Observation.Type.valueOf(observationType);
 	}
 	
-	private CriteriaSection getSection(long sectionIdx) {
-		return getCriteriaSections().get((int)sectionIdx);
+	private CriteriaSection getSection(int sectionIdx) {
+		return getCriteriaSections().get(sectionIdx);
 	}
 	
-	private Criteria getCriteria(long sectionIdx, long criteriaIdx) {
-		return getSection(sectionIdx).getCriteria().get((int)criteriaIdx);
+	private Criteria getCriteria(int sectionIdx, int criteriaIdx) {
+		return getSection(sectionIdx).getCriteria().get(criteriaIdx);
 	}
 	
-	public Long getObservationIndex() {
+	public Integer getObservationIndex() {
 		return observationIndex;
 	}
 	
-	public void setObservationIndex(Long observationIndex) {
+	public void setObservationIndex(Integer observationIndex) {
 		this.observationIndex = observationIndex;
 	}
 
@@ -89,8 +90,8 @@ public class EventFormSection extends EventFormCrud {
 		}
 		
 		// create default CriteriaSections up to sectionIndex
-		for(long i = getCriteriaSections().size(); i <= sectionIndex; i++) {
-			getCriteriaSections().add((int)i, new CriteriaSection());
+		for(int i = getCriteriaSections().size(); i <= sectionIndex; i++) {
+			getCriteriaSections().add(i, new CriteriaSection());
 		}
 		
 		// if criteriaIndex is set, then we also need to create Criteria
@@ -100,9 +101,9 @@ public class EventFormSection extends EventFormCrud {
 			
 			// create default Criteria up to criteriaIndex
 			for(long i = section.getCriteria().size(); i <= criteriaIndex; i++) {
-				section.getCriteria().add((int)i, new Criteria());
+				section.getCriteria().add((int)i, new OneClickCriteria());
 			}
-			
+
 			/*
 			 * Now we need to add any recommendations or deficiencies.  We'll do this the same as sections and criteria 
 			 * but first we'll use the observationType to figure out which one we're dealing with.  Since you can only
@@ -134,4 +135,4 @@ public class EventFormSection extends EventFormCrud {
 		
 		return SUCCESS;
 	}
-}
+        }

@@ -1,0 +1,132 @@
+package com.n4systems.fieldid.wicket.components.eventform;
+
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+
+public class EditCopyDeleteItemPanel extends Panel {
+
+    private EditForm editForm;
+    private WebMarkupContainer viewContainer;
+    private String contextRelativeImage = "images/large-x.png";
+
+    public EditCopyDeleteItemPanel(String id, IModel<String> stringModel) {
+        this(id, stringModel, true);
+    }
+
+    public EditCopyDeleteItemPanel(String id, IModel<String> stringModel, boolean displayCopyLink) {
+        this(id, stringModel, null, displayCopyLink);
+    }
+
+    public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel) {
+        this(id, titleModel, subTitleModel, true);
+    }
+
+    public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel, boolean displayCopyLink) {
+        super(id, titleModel);
+        setOutputMarkupPlaceholderTag(true);
+
+        ContextImage ci = new ContextImage("deleteImage", new PropertyModel<String>(this, "contextRelativeImage"));
+        ci.add(new AjaxEventBehavior("onclick"){
+            @Override
+            protected void onEvent(AjaxRequestTarget target) {
+                onDeleteButtonClicked(target);
+            }
+        });
+        add(ci);
+
+        AjaxLink viewLink;
+        viewContainer = new WebMarkupContainer("viewContainer");
+        viewContainer.add(viewLink = new AjaxLink("viewLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onViewLinkClicked(target);
+            }
+        });
+        viewLink.add(new Label("linkLabel", titleModel));
+        if (subTitleModel != null) {
+            viewLink.add(new Label("subTitle", subTitleModel));
+        } else {
+            viewLink.add(new WebMarkupContainer("subTitle").setVisible(false));
+        }
+
+        viewContainer.add(new AjaxLink("editLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setEditState(target);
+            }
+        });
+
+        viewContainer.add(new AjaxLink("copyLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onCopyLinkClicked(target);
+            }
+        }.setVisible(displayCopyLink));
+
+        add(viewContainer);
+
+        editForm = new EditForm("editForm", titleModel);
+        add(editForm.setVisible(false));
+    }
+
+    class EditForm extends Form {
+
+        private IModel<String> stringModel;
+
+        public EditForm(String id, IModel<String> model) {
+            super(id);
+            this.stringModel = model;
+            add(new TextField<String>("newText", stringModel));
+            add(new AjaxSubmitLink("storeLink") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    setViewState(target);
+                }
+            });
+            add(new AjaxLink("cancelLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    setViewState(target);
+                }
+            });
+        }
+
+    }
+
+    protected IModel<String> getStringModel() {
+        return (IModel<String>) getDefaultModelObject();
+    }
+
+    protected void onViewLinkClicked(AjaxRequestTarget target) { }
+
+    protected void onDeleteButtonClicked(AjaxRequestTarget target) { }
+
+    protected void onCopyLinkClicked(AjaxRequestTarget target) { }
+
+    private void setViewState(AjaxRequestTarget target) {
+        editForm.setVisible(false);
+        viewContainer.setVisible(true);
+        target.addComponent(this);
+    }
+
+    private void setEditState(AjaxRequestTarget target) {
+        editForm.setVisible(true);
+        viewContainer.setVisible(false);
+        target.addComponent(this);
+    }
+
+    public String getContextRelativeImage() {
+        return contextRelativeImage;
+    }
+
+}

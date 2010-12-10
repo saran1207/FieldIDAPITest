@@ -23,6 +23,8 @@ import com.n4systems.model.EventBook;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SubEvent;
 import com.n4systems.services.TenantFinder;
 import org.apache.log4j.Logger;
@@ -185,7 +187,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 	private void populateAbstractInspectionInfo(AbstractInspectionServiceDTO inspectionDTO, AbstractEvent event) {
 		inspectionDTO.setComments(event.getComments());
-		inspectionDTO.setFormVersion(event.getFormVersion());
 		inspectionDTO.setId(event.getId());
 
 		Map<String, String> infoOptionMap = event.getInfoOptionMap();
@@ -438,10 +439,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 				event.getInfoOptionMap().put(infoOption.getInfoFieldName(), infoOption.getInfoOptionValue());
 			}
 		}
-		event.setFormVersion(inspectionServiceDTO.getFormVersion());
 
 		event.setMobileGUID(inspectionServiceDTO.getInspectionMobileGUID());
-
 	}
 
 	/**
@@ -584,9 +583,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 
 		for (CriteriaResultServiceDTO resultDTO : resultDTOs) {
-			CriteriaResult result = new CriteriaResult();
+			OneClickCriteriaResult result = new OneClickCriteriaResult();
 			result.setState(persistenceManager.find(State.class, resultDTO.getStateId()));
-			result.setCriteria(persistenceManager.find(Criteria.class, resultDTO.getCriteriaId()));
+			result.setCriteria(persistenceManager.find(OneClickCriteria.class, resultDTO.getCriteriaId()));
 			result.setTenant(tenant);
 			result.setEvent(event);
 
@@ -749,7 +748,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		criteriaServiceDTO.setDisplayText(criteria.getDisplayText());
 		criteriaServiceDTO.setPrincipal(criteria.isPrincipal());
 		criteriaServiceDTO.setCriteriaSectionId(criteriaSectionId);
-		criteriaServiceDTO.setStateSetId(criteria.getStates().getId());
+//		criteriaServiceDTO.setStateSetId(criteria.getStates().getId());
 
 		int i = 0;
 		for (String recommendation : criteria.getRecommendations()) {
@@ -772,7 +771,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		criteriaResultServiceDTO.setId(criteriaResult.getId());
 		criteriaResultServiceDTO.setCriteriaId(criteriaResult.getCriteria().getId());
 		criteriaResultServiceDTO.setInspectionId(criteriaResult.getEvent().getId());
-		criteriaResultServiceDTO.setStateId(criteriaResult.getState().getId());
+//		criteriaResultServiceDTO.setStateId(criteriaResult.getState().getId());
 
 		int i = 0;
 		for (Recommendation recommendation : criteriaResult.getRecommendations()) {

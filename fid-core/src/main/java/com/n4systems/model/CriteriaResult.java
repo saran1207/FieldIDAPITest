@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -19,14 +21,12 @@ import com.n4systems.util.StringUtils;
 
 @Entity
 @Table(name = "criteriaresults")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class CriteriaResult extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
-	private Criteria criteria;
-	
-	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
-	private State state;
+	private OneClickCriteria criteria;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
     @JoinColumn(name="event_id")
@@ -44,26 +44,17 @@ public class CriteriaResult extends EntityWithTenant {
 	
 	public CriteriaResult() {}
 	
-	public CriteriaResult(Tenant tenant, Criteria criteria, State state) {
+	public CriteriaResult(Tenant tenant, OneClickCriteria criteria) {
 		super(tenant);
 		this.criteria = criteria;
-		this.state = state;
 	}
 
-	public Criteria getCriteria() {
+	public OneClickCriteria getCriteria() {
 		return criteria;
 	}
 
-	public void setCriteria(Criteria criteria) {
+	public void setCriteria(OneClickCriteria criteria) {
 		this.criteria = criteria;
-	}
-
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
 	}
 
 	public AbstractEvent getEvent() {
@@ -91,7 +82,7 @@ public class CriteriaResult extends EntityWithTenant {
 	}
 
 	public Status getResult() {
-		return (criteria.isPrincipal()) ? state.getStatus() : null;
+		return null;
 	}
 
 	@Override
@@ -106,7 +97,7 @@ public class CriteriaResult extends EntityWithTenant {
 			defString += "\n" + observation;
 		}
 		
-	    return "Result: " + getId() + ", " + getCriteria() + " = " + getState() + StringUtils.indent(recString, 1) + StringUtils.indent(defString, 1);
+	    return "Result: " + getId() + ", " + getCriteria() + " = " + StringUtils.indent(recString, 1) + StringUtils.indent(defString, 1);
     }
 	
 }

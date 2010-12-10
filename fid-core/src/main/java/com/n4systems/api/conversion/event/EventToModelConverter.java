@@ -61,7 +61,6 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 
 	protected void resolveType(Event model) {
 		model.setType(type);
-		model.setFormVersion(type.getFormVersion());
 		model.setTenant(type.getTenant());
 	}
 	

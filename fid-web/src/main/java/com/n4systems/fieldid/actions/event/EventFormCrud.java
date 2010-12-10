@@ -16,6 +16,7 @@ import com.n4systems.model.StateSet;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
+
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class EventFormCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
@@ -87,14 +88,14 @@ public class EventFormCrud extends AbstractCrud {
 	/**
 	 * clears out the nulls for criteria that can come from the form.
 	 * also assign the right tenant.
-	 * @param section
+	 * @param sectionaddCriteriaUrl
 	 */
 	private void processCriteria( CriteriaSection section ) {
 		StrutsListHelper.clearNulls( section.getCriteria() );
 		
 		for( Criteria criteria : section.getCriteria() ) {
 			criteria.setTenant( getTenant() );
-			criteria.setStates( persistenceManager.find( StateSet.class, criteria.getStates().getId(), getTenantId() ) );
+//			criteria.setStates( persistenceManager.find( StateSet.class, criteria.getStates().getId(), getTenantId() ) );
 			
 			StrutsListHelper.clearNulls(criteria.getRecommendations());
 			StrutsListHelper.removeMarkedEntries("--deleted--", criteria.getRecommendations());
