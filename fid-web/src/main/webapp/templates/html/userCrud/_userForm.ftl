@@ -146,7 +146,12 @@
 							<th class="radio"><@s.text name="label.off"/></th>
 						</tr>
 					
-						<#list permissions as permission >
+						<#if user.liteUser>
+							<#assign permissionsList = litePermissions >			
+						<#else>
+							<#assign permissionsList = permissions >			
+						</#if>
+						<#list permissionsList as permission >
 							<tr>
 								<td class="permissionName">
 									<@s.text name="${permission.name}"/>

@@ -39,6 +39,8 @@ public class Permissions {
 	/** permissions visible for admins to select for system users */
 	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateEvent, EditEvent, ManageJobs, ManageSafetyNetwork, AccessWebStore };
 
+	private static final int[] visibleLiteUserPermissions = { CreateEvent, EditEvent };
+
 	
 	/**
 	 * @param permission a Primary permission (ie not composite)
@@ -112,6 +114,10 @@ public class Permissions {
 	 */
 	public static List<Listable<Integer>> getSystemUserPermissions() {
 		return createPermissionDisplayList(visibleSytemUserPermissions);
+	}
+	
+	public static List<Listable<Integer>> getLiteUserPermissions() {
+		return createPermissionDisplayList(visibleLiteUserPermissions);
 	}
 	
 	public static int[] getVisibleSystemUserPermissions() {

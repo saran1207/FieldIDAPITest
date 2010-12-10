@@ -26,6 +26,7 @@ public class EmployeeCrud extends UserCrud {
 	
 	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
 	protected List<ListingPair> permissions;
+	protected List<ListingPair> litePermissions;
 	
 	public EmployeeCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
@@ -96,6 +97,13 @@ public class EmployeeCrud extends UserCrud {
 			permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
 		}
 		return permissions;
+	}
+	
+	public List<ListingPair> getLitePermissions() {
+		if (litePermissions == null) {
+			litePermissions = ListHelper.intListableToListingPair(Permissions.getLiteUserPermissions());
+		}
+		return litePermissions;
 	}
 	
 	public boolean getUserPermissionValue(Long id) {

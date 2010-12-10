@@ -72,7 +72,7 @@ ${action.setPageType('user','view')!}
 		<h2><@s.text name="label.account_heading"/></h2>
 		<p>
 			<label for="accountType"><@s.text name="label.accounttype"/></label>
-			<span class="fieldValue">${userType}</span>
+			<span class="fieldValue">${user.userType.label}</span>
 		</p>
 		<p>
 			<label for="lastlogin"><@s.text name="label.lastlogin"/></label>
@@ -86,7 +86,13 @@ ${action.setPageType('user','view')!}
 	<#if user.employee>
 		<div class="viewpermissions viewSection smallViewSection">
 			<h2><@s.text name="label.permissions"/></h2>
-			<#list permissions as permission >
+			
+			<#if user.liteUser>
+				<#assign permissionsList = litePermissions >			
+			<#else>
+				<#assign permissionsList = permissions >			
+			</#if>
+			<#list permissionsList as permission >
 				<p>
 					<label><@s.text name="${permission.name}"/></label>
 						<#if action.getUserPermissionValue(permission.id)>
