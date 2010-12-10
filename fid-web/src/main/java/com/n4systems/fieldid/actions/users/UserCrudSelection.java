@@ -11,11 +11,6 @@ public class UserCrudSelection extends UserCrud {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public boolean isEmployee() {
-		return false;
-	}
-
-	@Override
 	protected int processPermissions() {
 		return 0;
 	}
@@ -30,6 +25,21 @@ public class UserCrudSelection extends UserCrud {
 	
 	public boolean isLiteUserLimitReached(){
 		return getLimits().isLiteUsersMaxed();
+	}
+
+	@Override
+	public boolean isLiteUser() {
+		return false;
+	}
+
+	@Override
+	public boolean isReadOnlyUser() {
+		return false;
+	}
+
+	@Override
+	public boolean isEmployee() {
+		return false;
 	}
 
 }
