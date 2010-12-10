@@ -34,7 +34,7 @@ ${action.setPageType('user','change')!}
 		</div>
 	</div>
 	
-	<div class="horizontalGroup increasedMargins">
+	<div class="horizontalGroup leftRightMargins">
 		<div class="groupContents">
 			<h2><@s.text name="label.lite_user" /></h2>
 			<p><@s.text name="label.employees_that_may" /></p>

@@ -156,6 +156,11 @@ div.groupContents{
 	margin-left: 30px;
 }
 
+.horizontalGrouping .leftRightMargins{
+	margin-left: 30px;
+	margin-right: 30px;
+}
+
 .horizontalGroup .permissionListing{
 	padding-left: 10px;
     padding-top: 10px;
@@ -183,9 +188,15 @@ div.userLimitWarning{
 	background: no-repeat url(../../images/warning-icon.png);
 	}
 
-.leftColumn, .rightColumn{
+.viewRow {
 	float : left;
 	padding-right : 15px;
+	width: 100%;
+}
+
+.viewSection {
+	float : left;
+	margin-right: 15px;
 }
 
 .viewSection p {

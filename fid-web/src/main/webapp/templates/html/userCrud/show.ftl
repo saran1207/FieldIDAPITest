@@ -22,7 +22,7 @@ ${action.setPageType('user','view')!}
 	</div>
 </div>
 
-<div class="leftColumn">
+<div class="viewRow">
 	<div class="userDetails viewSection smallViewSection">
 		<h2><@s.text name="label.user_details"/></h2>
 		<p>
@@ -54,20 +54,7 @@ ${action.setPageType('user','view')!}
 			</span>
 		</p>
 	</div>
-	<div class="localization viewSection smallViewSection">
-		<h2><@s.text name="label.localization"/></h2>
-		<p>
-			<label for="country"><@s.text name="label.country"/></label>
-			<span class="fieldValue">${countryName}</span>
-		</p>
-		<p>
-			<label for="timezone"><@s.text name="label.timezone"/></label>
-			<span class="fieldValue">${timeZoneName}</span>
-		</p>
-	</div>
-</div>
 
-<div class="rightColumn">
 	<div class="account viewSection smallViewSection">
 		<h2><@s.text name="label.account_heading"/></h2>
 		<p>
@@ -83,6 +70,23 @@ ${action.setPageType('user','view')!}
 			<span class="fieldValue username">${userId}</span>
 		</p>
 	</div>
+
+</div>
+
+<div class="viewRow">
+
+	<div class="localization viewSection smallViewSection">
+		<h2><@s.text name="label.localization"/></h2>
+		<p>
+			<label for="country"><@s.text name="label.country"/></label>
+			<span class="fieldValue">${countryName}</span>
+		</p>
+		<p>
+			<label for="timezone"><@s.text name="label.timezone"/></label>
+			<span class="fieldValue">${timeZoneName}</span>
+		</p>
+	</div>
+
 	<#if user.employee>
 		<div class="viewpermissions viewSection smallViewSection">
 			<h2><@s.text name="label.permissions"/></h2>
