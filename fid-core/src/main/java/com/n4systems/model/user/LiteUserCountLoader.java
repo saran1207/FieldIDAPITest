@@ -3,13 +3,22 @@
  */
 package com.n4systems.model.user;
 
+import java.util.Arrays;
+
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Tenant;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.services.limiters.LimitLoader;
 import com.n4systems.services.limiters.LimitType;
+import com.n4systems.util.UserType;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class LiteUserCountLoader extends Loader<Long> implements LimitLoader {
 	private Long tenantId;
@@ -18,31 +27,33 @@ public class LiteUserCountLoader extends Loader<Long> implements LimitLoader {
 	
 	@Override
 	protected Long load(EntityManager em) {
-		// TODO Auto-generated method stub
-		return null;
+		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
+
+		QueryBuilder<Long> builder = new QueryBuilder<Long>(User.class, filter);
+		builder.addWhere(WhereClauseFactory.create("userType", UserType.LITE));
+		UserQueryHelper.applyFullyActiveFilter(builder);
+		builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "owner.customerOrg"));
+
+		Long userCount = builder.getCount(em);
+		return userCount;
 	}
 
-	@Override
 	public long getLimit(Transaction transaction) {
-		// TODO Auto-generated method stub
-		return 0;
+		return load(transaction);
 	}
 
-	@Override
-	public LimitType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void setTenant(Tenant tenant) {
-		// TODO Auto-generated method stub
-		
+		setTenantId(tenant.getId());
 	}
 
 	public LiteUserCountLoader setTenantId(Long tenantId) {
 		this.tenantId = tenantId;
 		return this;
+	}
+	
+	@Override
+	public LimitType getType() {
+		return LimitType.LITE_USERS;
 	}
 
 }

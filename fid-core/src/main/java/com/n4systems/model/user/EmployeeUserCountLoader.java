@@ -28,7 +28,7 @@ public class EmployeeUserCountLoader extends Loader<Long> implements LimitLoader
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(User.class, filter);
-		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Arrays.asList(UserType.ADMIN, UserType.EMPLOYEES, UserType.LITE)));
+		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Arrays.asList(UserType.ADMIN, UserType.EMPLOYEES)));
 		UserQueryHelper.applyFullyActiveFilter(builder);
 		builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "owner.customerOrg"));
 

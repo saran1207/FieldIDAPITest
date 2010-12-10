@@ -42,7 +42,7 @@ public class TenantLimitService implements Serializable {
 			new LimitUpdater(new TenantDiskUsageCalculator(), diskSpace),
 			new LimitUpdater(assetCountLoader, assets),
 			new LimitUpdater(employeeCountLoader, employeeUsers),
-		//	new LimitUpdater(liteUserCountLoader, liteUsers),
+			new LimitUpdater(liteUserCountLoader, liteUsers),
 			new LimitUpdater(secondaryOrgCountLoader, secondaryOrgs),
 	};
 	
@@ -140,7 +140,7 @@ public class TenantLimitService implements Serializable {
 	private void refreshLiteUserCount(Long tenantId){
 		liteUserCountLoader.setTenantId(tenantId);
 		
-		liteUsers.get(tenantId).setUsed(employeeCountLoader.load());
+		liteUsers.get(tenantId).setUsed(liteUserCountLoader.load());
 	}
 	
 	/**

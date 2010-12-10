@@ -24,7 +24,6 @@ public class UserCrudSelection extends UserCrud {
 	}
 	
 	public boolean isLiteUserLimitReached(){
-		boolean is = getLimits().isLiteUsersMaxed();
 		return getLimits().isLiteUsersMaxed();
 	}
 
