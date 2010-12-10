@@ -133,7 +133,7 @@
 		
 			<h2><@s.text name="label.permissions"/></h2>
 		
-			<#if !user.admin && employee>
+			<#if !user.admin && (user.employee || user.liteUser)>
 				<div class="infoSet">
 					<@s.fielderror>
 							<@s.param>userPermissions</@s.param>				

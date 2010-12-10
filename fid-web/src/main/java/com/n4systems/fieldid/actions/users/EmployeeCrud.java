@@ -52,7 +52,7 @@ public class EmployeeCrud extends UserCrud {
 	@Override
 	@SkipValidation
 	public String doAdd() {
-		
+		user.setUserType(UserType.EMPLOYEES);
 		String result = super.doAdd();
 		setupPermissions();
 		isEmployeeLimitReached();
@@ -61,8 +61,8 @@ public class EmployeeCrud extends UserCrud {
 	
 	@Override
 	public String doCreate(){
-		testRequiredEntities(false);
 		user.setUserType(UserType.EMPLOYEES);
+		testRequiredEntities(false);
 		save();
 		return SUCCESS;
 	}
@@ -97,13 +97,6 @@ public class EmployeeCrud extends UserCrud {
 			permissions = ListHelper.intListableToListingPair(Permissions.getSystemUserPermissions());
 		}
 		return permissions;
-	}
-	
-	public List<ListingPair> getLitePermissions() {
-		if (litePermissions == null) {
-			litePermissions = ListHelper.intListableToListingPair(Permissions.getLiteUserPermissions());
-		}
-		return litePermissions;
 	}
 	
 	public boolean getUserPermissionValue(Long id) {

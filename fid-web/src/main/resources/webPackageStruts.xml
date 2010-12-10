@@ -652,11 +652,44 @@
 			</result>
 		</action>
 
+		<action name="addLiteUser" method="add" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/addLite.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/addLite.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">userlist</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+		</action>
+		
+		<action name="liteUserCreate" method="create" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/addLite.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/addLite.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">viewUser</param>
+					<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+		</action>
+		
+
 		<action name="addEmployeeUser" method="add" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">userlist</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+		</action>
+
+		<action name="employeeUserCreate" method="create" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
+			<result name="error" type="freemarker">templates/html/employee/add.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">employeeUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 			</result>
@@ -671,17 +704,6 @@
 				<param name="listFilter">${listFilter}</param>
 			</result>
 
-		</action>
-
-		<action name="employeeUserCreate" method="create" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
-			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
-			<result name="error" type="freemarker">templates/html/employee/add.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">employeeUserEdit</param>
-				<param name="uniqueID">${uniqueID}</param>
-				<param name="currentPage">${currentPage}</param>
-				<param name="listFilter">${listFilter}</param>
-			</result>
 		</action>
 
 		<action name="employeeUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
