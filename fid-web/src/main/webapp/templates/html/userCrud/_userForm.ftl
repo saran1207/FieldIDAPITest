@@ -180,7 +180,7 @@
 				</div>
 			<#else>
 				<div class="infoSet">
-					<span class="fieldHolder enlargedFont">
+					<span class="fieldHolder enlargedFieldHolder">
 						<@s.text name="label.customer_users_have_read_only_access"/>
 					</span>
 				</div>

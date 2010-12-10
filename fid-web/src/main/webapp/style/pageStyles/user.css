@@ -2,6 +2,10 @@
 	width: 280px;
 }
 
+.fluidSets .infoSet .enlargedFieldHolder{
+	width:300px;
+}
+
 .fluidSets .infoSet .permissions {
 	width:auto;
 }
@@ -266,5 +270,4 @@ div.userLimitWarning{
 
 #employeeUserCreate .actions, #readOnlyUserCreate .actions, #liteUserCreate .actions{
 	border-top: 1px solid #E2E2E2;
-	}
-
+}
