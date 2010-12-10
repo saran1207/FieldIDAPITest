@@ -85,7 +85,13 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			initializeTimeZoneLists();
 		}
 	}
-
+	
+	public abstract boolean isEmployee();
+	
+	public abstract boolean isLiteUser();
+	
+	public abstract boolean isReadOnlyUser();
+	
 	private void initializeTimeZoneLists() {
 		country = CountryList.getInstance().getCountryByFullName(user.getTimeZoneID());
 		region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());
@@ -166,8 +172,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		save();
 		return SUCCESS;
 	}
-
-	
 	
 	@SkipValidation
 	public String doDelete() {
@@ -197,7 +201,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		user.setActive(true);
 		
 		try {
-			user.setUserType(UserType.valueOf(userType));
 			
 			if (user.getId() == null) {
 				user.assignPassword(passwordEntry.getPassword());
@@ -419,11 +422,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
-
-	public boolean isReadOnlyUser() {
-		return false;
-	}
-
 	
 	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "checkPasswords == true") })
 	public PasswordEntry getPasswordEntry() {
@@ -433,8 +431,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public boolean isCheckPasswords() {
 		return user.isNew() && assignPassword;
 	}
-	
-	public abstract boolean isEmployee();
 
 	public UploadedImage getSignature() {
 		return signature;

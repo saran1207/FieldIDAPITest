@@ -28,17 +28,31 @@ public class ReadOnlyUserCrud extends UserCrud {
 	}
 	
 	@Override
+	public String doCreate(){
+		testRequiredEntities(false);
+		user.setUserType(UserType.READONLY);
+		save();
+		return SUCCESS;
+	}
+	
+	@Override
 	protected int processPermissions() {
-		
-		setUserType(UserType.READONLY.name());
-		
 		return Permissions.CUSTOMER;
 	}
-
 
 	@Override
 	public boolean isEmployee() {
 		return false;
+	}
+
+	@Override
+	public boolean isLiteUser() {
+		return false;
+	}
+
+	@Override
+	public boolean isReadOnlyUser() {
+		return true;
 	}	
 
 }

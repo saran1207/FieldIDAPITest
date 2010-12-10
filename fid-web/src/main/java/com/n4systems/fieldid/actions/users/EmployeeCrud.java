@@ -23,7 +23,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class EmployeeCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
-
+	
 	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
 	protected List<ListingPair> permissions;
 	
@@ -33,8 +33,6 @@ public class EmployeeCrud extends UserCrud {
 
 	private void setupPermissions() {
 		userPermissions = new HashMap<String, Boolean>();
-		
-		setUserType(UserType.EMPLOYEES.name());
 		
 		BitField permField = new BitField(user.getPermissions());
 		for (ListingPair permission : getPermissions()) {
@@ -61,6 +59,14 @@ public class EmployeeCrud extends UserCrud {
 	}
 	
 	@Override
+	public String doCreate(){
+		testRequiredEntities(false);
+		user.setUserType(UserType.EMPLOYEES);
+		save();
+		return SUCCESS;
+	}
+	
+	@Override
 	@SkipValidation
 	public String doEdit() {
 		String result = super.doEdit();
@@ -73,6 +79,7 @@ public class EmployeeCrud extends UserCrud {
 		setupPermissions();
 		return super.doShow();
 	}
+	
 		
 	@SuppressWarnings("unchecked")
 	public Map getUserPermissions() {
@@ -152,6 +159,16 @@ public class EmployeeCrud extends UserCrud {
 			addActionError(getText("label.exceeded_your_employee_user_limit", new String[] { getLimits().getEmployeeUsersMax().toString() } ));
 			return true;
 		}
+		return false;
+	}
+
+	@Override
+	public boolean isLiteUser() {
+		return false;
+	}
+
+	@Override
+	public boolean isReadOnlyUser() {
 		return false;
 	}
 
