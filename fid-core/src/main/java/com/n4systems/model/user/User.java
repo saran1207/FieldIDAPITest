@@ -50,7 +50,7 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
-	private UserType userType=UserType.READONLY;
+	private UserType userType=UserType.ALL;
 	
 	private boolean active = false;
 	private boolean deleted = false;
@@ -58,9 +58,7 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	@Column(name="permissions", nullable=false)
 	private int permissions = Permissions.NO_PERMISSIONS;
 	
-	
 	private Long externalId;
-    
 	
 	@Override
 	protected void onCreate() {
@@ -131,12 +129,16 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 		return userType.equals(UserType.EMPLOYEES) || userType.equals(UserType.ADMIN) || userType.equals(UserType.LITE);
 	}
 	
-	public boolean isReadOnly(){
-		return userType.equals(UserType.READONLY);
+	public boolean isFullUser(){
+		return userType.equals(UserType.EMPLOYEES);
 	}
 	
-	public void setEmployee(boolean employee ) {
-		this.userType = (employee) ? UserType.EMPLOYEES : UserType.READONLY ;
+	public boolean isLiteUser() {
+		return userType.equals(UserType.LITE);
+	}
+	
+	public boolean isReadOnly(){
+		return userType.equals(UserType.READONLY);
 	}
 
 	public boolean isDeleted() {
@@ -157,16 +159,8 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 		return userType.equals(UserType.SYSTEM);
 	}
 
-	public void setSystem(boolean system) {
-		this.userType = (system) ? UserType.SYSTEM : UserType.READONLY;
-	}
-
 	public boolean isAdmin() {
 		return userType.equals(UserType.ADMIN);
-	}
-
-	public void setAdmin(boolean admin) {
-		this.userType = (admin) ? UserType.ADMIN : UserType.READONLY;
 	}
 
 	public int getPermissions() {
@@ -354,20 +348,12 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 		return hashPassword != null;
 	}
 
-	public UserType getUserType() {
-		return userType;
-	}
-
-	public void setUserType(UserType userType) {
+	public void setUserType(UserType userType){
 		this.userType = userType;
 	}
 
-/*	public boolean isLiteUser() {
-		return liteUser;
+	public UserType getUserType() {
+		return userType;
 	}
-
-	public void setLiteUser(boolean liteUser) {
-		this.liteUser = liteUser;
-	}*/
 
 } 

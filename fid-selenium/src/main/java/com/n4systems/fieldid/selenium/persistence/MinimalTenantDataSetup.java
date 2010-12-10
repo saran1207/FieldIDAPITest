@@ -9,6 +9,7 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.UserType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -33,13 +34,12 @@ public class MinimalTenantDataSetup {
 
     private void createN4UserAccountForTenant(PrimaryOrg org) {
 		User user = new User();
-        user.setEmployee(true);
 		user.setTenant(tenant);
 		user.setOwner(org);
 		user.setTimeZoneID("United States:New York - New York");
 		user.setActive(true);
 		user.setPermissions(Permissions.SYSTEM);
-		user.setSystem(true);
+		user.setUserType(UserType.SYSTEM);
 		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
 		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));
 		user.setEmailAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_ADDRESS));

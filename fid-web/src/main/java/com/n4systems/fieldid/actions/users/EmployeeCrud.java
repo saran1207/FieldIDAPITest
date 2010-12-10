@@ -16,6 +16,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -32,7 +33,9 @@ public class EmployeeCrud extends UserCrud {
 
 	private void setupPermissions() {
 		userPermissions = new HashMap<String, Boolean>();
-
+		
+		setUserType(UserType.EMPLOYEES.name());
+		
 		BitField permField = new BitField(user.getPermissions());
 		for (ListingPair permission : getPermissions()) {
 			userPermissions.put(permission.getId().toString(), permField.isSet(permission.getId().intValue()));

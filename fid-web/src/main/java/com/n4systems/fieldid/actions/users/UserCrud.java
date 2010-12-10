@@ -80,10 +80,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	protected void loadMemberFields(Long uniqueId) {
 		if (user == null) {
 			user = persistenceManager.find(User.class, uniqueId, getTenantId());
-			if(user.isEmployee())
-				setUserType(UserType.EMPLOYEES.getLabel());
-			else
-				setUserType(UserType.READONLY.getLabel());
+			setUserType(user.getUserType().toString());
+				
 			initializeTimeZoneLists();
 		}
 	}
@@ -121,7 +119,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		loadCurrentSignature();
 		return SUCCESS;
 	}
-
+	
 	@SkipValidation
 	public String doUpgrade() {
 		testUserEntity(true);
@@ -197,11 +195,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 		user.setTenant(getTenant());
 		user.setActive(true);
-		user.setSystem(false);
-
-		user.setEmployee(isEmployee());
 		
 		try {
+			user.setUserType(UserType.valueOf(userType));
+			
 			if (user.getId() == null) {
 				user.assignPassword(passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
@@ -356,14 +353,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	public Pager<User> getPage() {
 		if (page == null) {
-			UserType userTypeFilter = UserType.ALL;
-			if (userType != null) {
-				try {
-					userTypeFilter = UserType.valueOf(userType);
-				} catch (IllegalArgumentException e) {
-				}
-			}
-			page = userManager.getUsers(getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, listFilter, userTypeFilter);
+			UserType typeFilter = UserType.valueOf(userType);
+			page = userManager.getUsers(getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, listFilter, typeFilter);
 		}
 		return page;
 	}

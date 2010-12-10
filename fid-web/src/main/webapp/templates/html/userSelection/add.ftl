@@ -6,12 +6,12 @@ ${action.setPageType('user','adduser')!}
 </head>
 
 <#assign backToList>
-	<a href="<@s.url action="userList" currentPage="${currentPage!}" listFilter="${listFilter!}" userType="${userType!}"/>"><@s.text name="label.cancel" /></a>
+	<a href="<@s.url action="userList" currentPage="${currentPage!}" listFilter="${listFilter!}" />"><@s.text name="label.cancel" /></a>
 </#assign>
 
 <@s.url id="addFullUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addEmployeeUser"/>
 <@s.url id="addLiteUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addLiteUser"/>
-<@s.url id="addReadOnlyUserUrl" namespace="/" listFilter="${listFilter!}" userType="${userType!}" currentPage="${currentPage!}" action="addReadOnlyUser"/>
+<@s.url id="addReadOnlyUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addReadOnlyUser"/>
 
 <div class="horizontalGrouping">
 	
@@ -50,7 +50,7 @@ ${action.setPageType('user','adduser')!}
 			</ul>
 		</div>
 
-		<#if true>
+		<#if liteUserLimitUser>
 			<div class="userLimitWarning">
 				<@s.text name="label.lite_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
 			</div>		

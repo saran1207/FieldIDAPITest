@@ -14,13 +14,14 @@ import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.utils.SetupWizardFirstTimeInterceptor;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.model.user.User;
+import com.n4systems.util.UserType;
 
 public class SetupWizardFirstTimeInterceptorTest {
 
 	@Test
 	public void should_require_set_up_wizard_if_user_is_an_admin_and_has_not_() {
 		User user = anAdminUser().build();
-		user.setAdmin(true);
+		user.setUserType(UserType.ADMIN);
 		SessionUser adminSessionUser = new SessionUser(user);
 		
 		SetupWizardFirstTimeInterceptor sut = new SetupWizardFirstTimeInterceptor();
@@ -43,7 +44,7 @@ public class SetupWizardFirstTimeInterceptorTest {
 		SeenItRegistry seenItRegistry = createSeenItRegistryThatHasSeen(SeenItItem.SetupWizard);
 		
 		User user = anAdminUser().build();
-		user.setAdmin(true);
+		user.setUserType(UserType.ADMIN);
 		SessionUser adminSessionUser = new SessionUser(user);
 		
 		

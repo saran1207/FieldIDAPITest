@@ -27,6 +27,7 @@ import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
@@ -159,7 +160,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		user.setTimeZoneID("United States:New York - New York");
 		user.setActive(true);
 		user.setPermissions(Permissions.SYSTEM);
-		user.setSystem(true);
+		user.setUserType(UserType.SYSTEM);
 		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
 		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));
 		user.setEmailAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_ADDRESS));

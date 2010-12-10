@@ -4,6 +4,7 @@ package com.n4systems.model.builders;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.UserType;
 
 public class UserBuilder extends BaseBuilder<User> {
 
@@ -121,19 +122,20 @@ public class UserBuilder extends BaseBuilder<User> {
 		user.setTenant(owner.getTenant());
 		user.setOwner(owner);
 		user.setTimeZoneID("Canada:Ontario - Toronto");
-		user.setAdmin(administratorAccess);
-		user.setEmployee(employee);
 		user.setActive(true);
 		
 		if (administratorAccess) {
 			user.setPermissions(Permissions.ADMIN);
-			user.setAdmin(administratorAccess);
-		} else if (systemAccess) {
+			user.setUserType(UserType.ADMIN);
+		}else if (employee) {
+			user.setUserType(UserType.EMPLOYEES);
+		
+		}else if (systemAccess) {
 			user.setPermissions(Permissions.SYSTEM);
 		} else {
 			user.setPermissions(permissions);
 		}
-		user.setSystem(systemAccess);
+		//user.setSystem(systemAccess);
 		user.setEmailAddress(emailAddress);
 		if (password != null) {
 			user.assignPassword(password);

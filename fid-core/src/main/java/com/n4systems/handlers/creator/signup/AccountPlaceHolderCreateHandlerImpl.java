@@ -13,6 +13,7 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.UserType;
 
 public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCreateHandler {
 
@@ -70,8 +71,7 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 		
 		setCommonUserFields(primaryOrg, user);
 		
-		user.setAdmin(true);
-		user.setEmployee(true);
+		user.setUserType(UserType.ADMIN);
 		user.setUserID(accountInfo.getUsername());
 		user.assignPassword(accountInfo.getPassword());
 		user.setEmailAddress(accountInfo.getEmail());
@@ -86,11 +86,11 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 
 	private User createSystemUser(Transaction transaction, PrimaryOrg primaryOrg) {
 		User user = new User();
-		user.setSystem(true);
+		user.setUserType(UserType.SYSTEM);
 		
 		setCommonUserFields(primaryOrg, user);
 		
-		user.setEmployee(true);
+		
 		user.setTimeZoneID("Canada:Ontario - Toronto"); 
 		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
 		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));

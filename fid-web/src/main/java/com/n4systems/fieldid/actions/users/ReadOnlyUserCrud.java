@@ -7,6 +7,7 @@ import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.UserType;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
@@ -28,6 +29,9 @@ public class ReadOnlyUserCrud extends UserCrud {
 	
 	@Override
 	protected int processPermissions() {
+		
+		setUserType(UserType.READONLY.name());
+		
 		return Permissions.CUSTOMER;
 	}
 

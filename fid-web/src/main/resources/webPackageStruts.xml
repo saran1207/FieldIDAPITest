@@ -623,7 +623,6 @@
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
 			</result>
 		</action>
 
@@ -633,14 +632,12 @@
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
 			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">readOnlyUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
 			</result>
 
 		</action>
@@ -652,7 +649,6 @@
 				<param name="actionName">userlist</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
 			</result>
 		</action>
 
@@ -663,7 +659,6 @@
 				<param name="actionName">userlist</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
 			</result>
 		</action>
 
@@ -674,7 +669,6 @@
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
 			</result>
 
 		</action>
@@ -687,7 +681,6 @@
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
 			</result>
 		</action>
 
@@ -699,7 +692,6 @@
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
-				<param name="userType">${userType}</param>
 			</result>
 		</action>
 

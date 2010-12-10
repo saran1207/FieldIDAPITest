@@ -17,6 +17,7 @@ import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.util.ConfigContext;
+import com.n4systems.util.UserType;
 import com.n4systems.util.time.Clock;
 import com.n4systems.util.time.StoppedClock;
 import com.n4systems.util.time.SystemClock;
@@ -113,7 +114,7 @@ public class SessionUserInUseTest {
 	@Test
 	public void should_find_that_the_session_for_a_system_user_does_belong_to_you_if_it_is_not_active_and_it_is_not_expired(){
 		User user = aSystemUser().build();
-		
+		user.setUserType(UserType.SYSTEM);
 		ActiveSession activeSession = new ActiveSession(user, A_SESSION_ID_2);
 		activeSession.setActive(false);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
@@ -178,7 +179,7 @@ public class SessionUserInUseTest {
 	@Test
 	public void should_find_that_a_system_users_owns_the_active_session_when_the_active_session_is_their_session() throws Exception {
 		User systemUser = aSystemUser().build();
-		
+		systemUser.setUserType(UserType.SYSTEM);
 		ActiveSession activeSession = new ActiveSession(systemUser, A_SESSION_ID_1);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
 		
@@ -191,7 +192,7 @@ public class SessionUserInUseTest {
 	@Test
 	public void should_find_that_a_system_users_owns_the_active_session_when_the_active_session_is_not_their_session() throws Exception {
 		User systemUser = aSystemUser().build();
-		
+		systemUser.setUserType(UserType.SYSTEM);
 		ActiveSession activeSession = new ActiveSession(systemUser, A_SESSION_ID_2);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
 		
@@ -224,6 +225,8 @@ public class SessionUserInUseTest {
 	@Test
 	public void should_find_that_there_is_not_an_active_session_for_a_system_user_when_one_exists_and_has_not_expired() throws Exception {
 		User sysetmUser = aSystemUser().build();
+		sysetmUser.setUserType(UserType.SYSTEM);
+		
 		ActiveSession activeSession = new ActiveSession(sysetmUser, A_SESSION_ID_2);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);
 		
@@ -234,6 +237,8 @@ public class SessionUserInUseTest {
 	@Test
 	public void should_find_there_is_not_an_active_session_for_a_system_user_when_one_exists_and_has_not_expired_but_is_inactive(){
 		User sysetmUser = aSystemUser().build();
+		
+		sysetmUser.setUserType(UserType.SYSTEM);
 		ActiveSession activeSession = new ActiveSession(sysetmUser, A_SESSION_ID_2);
 		activeSession.setActive(false);
 		IdLoader<Loader<ActiveSession>> loader = createActiveSessionLoader(activeSession);

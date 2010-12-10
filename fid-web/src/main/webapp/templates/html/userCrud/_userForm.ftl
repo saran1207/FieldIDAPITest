@@ -15,7 +15,6 @@
 	<@s.hidden name="customerId"/>
 	<@s.hidden name="currentPage" />
 	<@s.hidden name="listFilter" />
-	<@s.hidden name="userType" />
 	<div class="multiColumn">
 		<div class="fieldGroup fieldGroupGap">
 			<h2><@s.text name="label.identifiers"/></h2>
