@@ -4,10 +4,10 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.ButtonGroupDisplayPanel;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.stateset.StateSetLoader;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -49,6 +49,8 @@ public class OneClickDetailsPanel extends Panel {
                 protected void onError(AjaxRequestTarget target) {
                 }
             });
+            add(new AjaxCheckBox("setsResultCheckbox", new PropertyModel<Boolean>(getCriteriaModel(), "principal")) {
+                @Override protected void onUpdate(AjaxRequestTarget target) {}});
         }
 
         private List<StateSet> getStateSetList() {

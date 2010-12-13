@@ -5,7 +5,7 @@ import java.util.List;
 
 public class EventFormSection {
 	String sectionName;
-	List<EventFormCriteria> criteria = new ArrayList<EventFormCriteria>();
+	List<OneClickEventFormCriteria> criteria = new ArrayList<OneClickEventFormCriteria>();
 
 	public EventFormSection(String sectionName) {
 		this.sectionName = sectionName;
@@ -19,22 +19,22 @@ public class EventFormSection {
 		this.sectionName = sectionName;
 	}
 
-	public List<EventFormCriteria> getCriteria() {
+	public List<OneClickEventFormCriteria> getCriteria() {
 		return criteria;
 	}
 
-	public void setCriteria(List<EventFormCriteria> criteria) {
+	public void setCriteria(List<OneClickEventFormCriteria> criteria) {
 		this.criteria = criteria;
 	}
 
-	public EventFormCriteria getCriteria(int index) {
+	public OneClickEventFormCriteria getCriteria(int index) {
 		if(criteria.size() < index) {
 			return null;
 		}
 		return criteria.get(index);
 	}
 	
-	public void setEventFormCriteria(int index, EventFormCriteria element) {
+	public void setEventFormCriteria(int index, OneClickEventFormCriteria element) {
 		criteria.add(index, element);
 	}
 }

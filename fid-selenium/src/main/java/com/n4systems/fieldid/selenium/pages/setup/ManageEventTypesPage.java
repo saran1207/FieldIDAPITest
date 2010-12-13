@@ -1,18 +1,18 @@
 package com.n4systems.fieldid.selenium.pages.setup;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
-
 import com.n4systems.fieldid.selenium.datatypes.EventForm;
-import com.n4systems.fieldid.selenium.datatypes.EventFormCriteria;
+import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
 import com.n4systems.fieldid.selenium.datatypes.EventFormObservations;
 import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
 import com.n4systems.fieldid.selenium.datatypes.EventType;
-import com.n4systems.fieldid.selenium.pages.FieldIDPage;
+import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class ManageEventTypesPage extends FieldIDPage {
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class ManageEventTypesPage extends WicketFieldIDPage {
 
 	final static String FIRST_LIST_ITEM = "//table[@class='list']//tr[3]/td[1]/a";
 	
@@ -152,71 +152,76 @@ public class ManageEventTypesPage extends FieldIDPage {
 		waitForAjax();
 	}
 	
-	public void clickAddCriteria(int section) {
-		selenium.click("//div[@id='criteriaSection_" + section + "']//div[1]//button");
-		waitForAjax();
-	}
-
 	public void setEventFormFields(EventForm eventForm) {
-		int sectionCount = 0;
 		if (!eventForm.getSections().isEmpty()) {
 			for (EventFormSection section : eventForm.getSections()) {
-				clickAddSection();
-				selenium.type("//input[@name='criteriaSections[" + sectionCount + "].title']", section.getSectionName());
+                addCriteriaSection(section.getSectionName());
 				if(!section.getCriteria().isEmpty()) {
-					addCriteria(sectionCount, section.getCriteria());
+					addCriteria(section.getCriteria());
 				}
-				sectionCount++;
 			}
 		}
 	}
 
-	private void addCriteria(int sectionCount, List<EventFormCriteria> criterion) {
-		int criteriaCount = 0;
-		for (EventFormCriteria criteria : criterion) {
-			clickAddCriteria(sectionCount);
-			if(criteria.getCriteriaLabel() != null) {
-				selenium.type("//input[@name='criteriaSections[" + sectionCount + "].criteria[" + criteriaCount + "].displayText']", criteria.getCriteriaLabel());
-			}
+    public void addCriteriaSection(String name) {
+        selenium.selectFrame("//iframe");
+        selenium.type("//div[@id='criteriaSectionsPanel']//input[@name='sectionNameField']", name);
+        selenium.click("//div[@id='criteriaSectionsPanel']//button[.='Add']");
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
+	private void addCriteria(List<OneClickEventFormCriteria> criterion) {
+		for (OneClickEventFormCriteria criteria : criterion) {
+            addCriteriaNamed(criteria.getCriteriaLabel());
 			if(criteria.getButtonGroup() != null) {
-				selenium.select("//select[@name='criteriaSections[" + sectionCount + "].criteria[" + criteriaCount + "].states.iD']", criteria.getButtonGroup());
+				selenium.select("//div[@id='criteriaEditor']//select[@name='stateSetSelect']", criteria.getButtonGroup());
 			}
 			if(criteria.isSetsResult()) {
-				selenium.check("//input[@name='criteriaSections[" + sectionCount + "].criteria[" + criteriaCount + "].principal']");
-			}
+                selenium.check("//div[@id='criteriaEditor']//input[@name='setsResultCheckbox']");
+			} else {
+                selenium.uncheck("//div[@id='criteriaEditor']//input[@name='setsResultCheckbox']");
+            }
 			if(criteria.getObservations() != null) {
-				selenium.click("//a[@id='obs_open_" + sectionCount + "_" + criteriaCount + "']");
-				waitForAjax();
-				addObservations(sectionCount, criteriaCount, criteria.getObservations());
+				addObservations(criteria.getObservations());
 			}
-			criteriaCount++;
 		}
 	}
 
-	private void addObservations(int sectionCount, int criteriaCount, EventFormObservations observations) {
+    private void addCriteriaNamed(String criteriaLabel) {
+        selenium.selectFrame("//iframe");
+        selenium.type("//div[@id='criteriaPanel']//input[@name='criteriaName']", criteriaLabel);
+        selenium.select("//div[@id='criteriaPanel']//select[@name='criteriaType']", "One-Click");
+        selenium.click("//div[@id='criteriaPanel']//button[.='Add']");
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
+    private void addObservations(EventFormObservations observations) {
+        selenium.selectFrame("//iframe");
 		if(!observations.getRecommendations().isEmpty()) {
-			int recCount = 0;
 			for(String rec : observations.getRecommendations()) {
-				selenium.click("//button[@id='addRecommendation_" + sectionCount + "_" + criteriaCount + "']");
-				waitForAjax();
-				selenium.type("//input[@name='criteriaSections[" + sectionCount + "].criteria[" + criteriaCount + "].recommendations[" + recCount + "]']", rec);
-				recCount++;
+                selenium.type("//div[.='Pre-Configured Recommendations']/following-sibling::div[1]//input[@name='string']", rec);
+                selenium.click("//div[.='Pre-Configured Recommendations']/following-sibling::div[1]//button");
+                waitForWicketAjax();
 			}
 		}
 		if(!observations.getDeficiencies().isEmpty()) {
-			int defCount = 0;
 			for(String def : observations.getRecommendations()) {
-				selenium.click("//button[@id='addDeficiencies_" + sectionCount + "_" + criteriaCount + "']");
-				waitForAjax();
-				selenium.type("//input[@name='criteriaSections[" + sectionCount + "].criteria[" + criteriaCount + "].deficiencies[" + defCount + "]']", def);
-				defCount++;
+                selenium.type("//div[.='Pre-Configured Deficiencies']/following-sibling::div[1]//input[@name='string']", def);
+                selenium.click("//div[.='Pre-Configured Deficiencies']/following-sibling::div[1]//button");
+                waitForWicketAjax();
 			}
 		}
+        selenium.selectFrame("relative=up");
 	}
 
 	public void clickSaveEventForm() {
-		selenium.click("//input[@name='hbutton.save']");
-		waitForPageToLoad();
+        selenium.selectFrame("//iframe");
+        selenium.click("//button[.='DONE']");
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+        waitForPageToLoad();
 	}
 
 	public void verifyEventTypeSaved() {

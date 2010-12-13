@@ -20,7 +20,7 @@ public abstract class MassUpdatePage<T extends WebPage> extends FieldIDPage {
     
     public T clickSaveButtonAndConfirmMassDelete() {
         selenium.chooseOkOnNextConfirmation();
-        selenium.click("//input[@type='submit' and @value='']");
+        selenium.click("//input[@type='submit' and @value='"+getSubmitButtonLabel()+"']");
         selenium.getConfirmation();
         waitForPageToLoad();
         selenium.click("//input[@id='label_delete']");

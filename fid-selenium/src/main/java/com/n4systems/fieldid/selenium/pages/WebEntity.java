@@ -47,7 +47,7 @@ public class WebEntity {
 		return false;
 	}
 	
-	protected void waitForAjax() {
+	protected final void waitForAjax() {
 		waitForAjax(MiscDriver.AJAX_TIMEOUT);
 	}
 

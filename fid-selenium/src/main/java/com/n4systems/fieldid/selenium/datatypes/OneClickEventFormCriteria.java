@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.selenium.datatypes;
 
 
-public class EventFormCriteria {
+public class OneClickEventFormCriteria {
 	String criteriaLabel;
 	String buttonGroup;
 	boolean setsResult;
 	EventFormObservations observations;
 	
-	public EventFormCriteria(String criteriaLabel, String buttonGroup) {
+	public OneClickEventFormCriteria(String criteriaLabel, String buttonGroup) {
 		this.criteriaLabel = criteriaLabel;
 		this.buttonGroup = buttonGroup;
 	}
