@@ -239,7 +239,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 
 	public String getUserId() {
-		return selenium.getValue("//div[@class='infoBlock']//input[@name='userId']").trim();
+		return selenium.getValue("//input[@name='userId']").trim();
 	}
 
 	public void clickUserID(String userID){

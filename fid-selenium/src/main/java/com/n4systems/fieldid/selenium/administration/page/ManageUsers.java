@@ -9,14 +9,15 @@ import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.util.UserType;
 
 public class ManageUsers {
 	FieldIdSelenium selenium;
 	MiscDriver misc;
 
-	public final static String USER_TYPE_ALL = "All";
-	public final static String USER_TYPE_CUSTOMER = "Customers";
-	public final static String USER_TYPE_EMPLOYEE = "Employee";
+	public final static String USER_TYPE_ALL = UserType.ALL.getLabel();
+	public final static String USER_TYPE_READONLY = UserType.READONLY.getLabel();
+	public final static String USER_TYPE_EMPLOYEE = UserType.EMPLOYEES.getLabel();
 	
 	private String manageUsersPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Users')]";
 	private String addEmployeeUserLinkLocator = "xpath=//A[contains(text(),'Add Employee User')]";
