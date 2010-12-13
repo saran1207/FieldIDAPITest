@@ -40,6 +40,16 @@ ${action.setPageType('your_account', 'list')!}
 				
 			</div>
 		</div>
+			<div class="infoSet">
+			<label><@s.text name="label.lite_user_accounts"/></label>
+			<div class="fieldHolder" style="float:left; padding: 5px 0;">
+				
+				<div style="width:300px; float:left;">
+					<@n4.percentbar progress="${limits.liteUsersUsed}" total="${limits.liteUsersMax}"/>
+				</div>
+				<div style="float:left; margin:5px;">${limits.liteUsersUsed} <@s.text name="label.of"/> <#if limits.liteUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.liteUsersMax}</#if></div>
+			</div>
+		</div>
 		<div class="infoSet">
 			<label><@s.text name="label.assets"/></label>
 			<div class="fieldHolder" style="float:left; padding: 5px 0;">

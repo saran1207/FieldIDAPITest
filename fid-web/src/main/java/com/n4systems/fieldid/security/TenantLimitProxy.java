@@ -54,6 +54,10 @@ public class TenantLimitProxy {
 	public boolean isEmployeeUsersUnlimited() {
 		return limitService.getEmployeeUsers(tenantId).isUnlimited();
 	}
+	
+	public boolean isLiteUsersUnlimited() {
+		return limitService.getLiteUsers(tenantId).isUnlimited();
+	}
 
 	public boolean isAssetsMaxed() {
 		return limitService.getAssets(tenantId).isMaxed();
