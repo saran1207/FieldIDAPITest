@@ -12,7 +12,7 @@ ${action.setPageType('user','change')!}
 		</@s.text>
 	</h2>
 
-	<div class="horizontalGroup">
+	<div class="horizontalGroup <#if !securityGuard.readOnlyUserEnabled> twoGroup </#if> ">
 		<div class="groupContents">
 			<h2><@s.text name="label.full_user" /></h2>
 			<p><@s.text name="label.employees_that_may" /></p>
@@ -40,8 +40,8 @@ ${action.setPageType('user','change')!}
 			</div>
 		</#if>
 	</div>
-	
-	<div class="horizontalGroup leftRightMargins">
+		
+	<div class="horizontalGroup <#if !securityGuard.readOnlyUserEnabled> increasedMargins <#else> leftRightMargins </#if> ">
 		<div class="groupContents">
 			<h2><@s.text name="label.lite_user" /></h2>
 			<p><@s.text name="label.employees_that_may" /></p>
@@ -68,23 +68,25 @@ ${action.setPageType('user','change')!}
 		</#if>
 	</div>
 	
-	<div class="horizontalGroup">
-		<div class="groupContents">
-			<h2><@s.text name="label.ready_only_user" /></h2>
-			<p><@s.text name="label.lite_users_that_may" /></p>
-			
-			<ul class="permissionListing">
-				<li><label><@s.text name="label.view_their_assets" /></label></li>
-				<li><label><@s.text name="label.run_searches" /></label></li>
-			</ul>
+	<#if securityGuard.readOnlyUserEnabled>
+		<div class="horizontalGroup">
+			<div class="groupContents">
+				<h2><@s.text name="label.ready_only_user" /></h2>
+				<p><@s.text name="label.lite_users_that_may" /></p>
+				
+				<ul class="permissionListing">
+					<li><label><@s.text name="label.view_their_assets" /></label></li>
+					<li><label><@s.text name="label.run_searches" /></label></li>
+				</ul>
+			</div>
+			<div class="upgradeUserAction center">
+				<#if readOnlyUser >
+					<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
+				<#else>
+					<@s.url id="changeToReadOnly" action="changeToReadOnly" uniqueID="${uniqueID}"/>
+					<input type="button" value="<@s.text name='hbutton.change_to_readonly'/>" onclick="return redirect('${changeToReadOnly}');"/>
+				</#if>
+			</div>
 		</div>
-		<div class="upgradeUserAction center">
-			<#if readOnlyUser >
-				<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
-			<#else>
-				<@s.url id="changeToReadOnly" action="changeToReadOnly" uniqueID="${uniqueID}"/>
-				<input type="button" value="<@s.text name='hbutton.change_to_readonly'/>" onclick="return redirect('${changeToReadOnly}');"/>
-			</#if>
-		</div>
-	</div>
+	</#if>
 </div>	
