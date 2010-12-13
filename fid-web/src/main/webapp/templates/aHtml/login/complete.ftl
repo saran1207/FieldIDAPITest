@@ -25,5 +25,8 @@
 		function(pe) {
  			pe.stop();
  			Lightview.hide();
+            if (typeof (window.onSuccessfulSessionRefresh) == 'function') {
+                onSuccessfulSessionRefresh();
+            }
  		}, 3 );
 </script>

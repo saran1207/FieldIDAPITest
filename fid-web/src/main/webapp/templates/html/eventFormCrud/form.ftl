@@ -6,6 +6,10 @@ ${action.setPageType('event_type', 'event_form')!}
     function refreshPageToNewEventTypeId(id) {
         window.location = eventTypeFormUrl + "?uniqueID=" + id;
     }
+
+    function onSuccessfulSessionRefresh() {
+        window.location.reload();
+    }
 </script>
 
 <#assign eventFormEditUrl>/fieldid/w/eventFormEdit/id/#{eventType.id}</#assign>
