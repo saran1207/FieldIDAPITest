@@ -3,7 +3,6 @@ package rfid.web.helper;
 import java.util.Date;
 import java.util.TimeZone;
 
-
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
@@ -14,7 +13,6 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
-import com.n4systems.util.UserType;
 
 public class SessionUser implements DateTimeDefinition {
 	private Tenant tenant;
@@ -38,6 +36,7 @@ public class SessionUser implements DateTimeDefinition {
 	private boolean employee;
 	private boolean readOnly;
 	private boolean systemUser;
+	private boolean liteUser;
 	
 	public SessionUser( User user ) {
 		this.tenant = user.getTenant();
@@ -56,6 +55,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.employee = user.isEmployee();
 		this.readOnly= user.isReadOnly();
 		this.systemUser=user.isSystem();
+		this.liteUser=user.isLiteUser();
 	}
 
 	public Tenant getTenant() {
@@ -284,7 +284,9 @@ public class SessionUser implements DateTimeDefinition {
 		return new SessionUserDateConverter(this);
 	}
 
-
+	public boolean isLiteUser(){
+		return liteUser;
+	}
 	
 	
 }
