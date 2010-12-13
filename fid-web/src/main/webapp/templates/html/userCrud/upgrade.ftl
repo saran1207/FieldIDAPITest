@@ -27,7 +27,7 @@ ${action.setPageType('user','change')!}
 		
 		<#if employeeLimitReached>
 			<div class="userLimitWarning">
-				<@s.text name="label.employee_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
+				<@s.text name="label.full_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
 			</div>	
 		<#else>
 			<div class="upgradeUserAction center">
