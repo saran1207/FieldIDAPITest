@@ -80,7 +80,6 @@ public class EmployeeCrud extends UserCrud {
 		setupPermissions();
 		return super.doShow();
 	}
-	
 		
 	@SuppressWarnings("unchecked")
 	public Map getUserPermissions() {

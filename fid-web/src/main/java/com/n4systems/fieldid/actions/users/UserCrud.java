@@ -28,7 +28,10 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.ListHelper;
+import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.UserType;
 import com.n4systems.util.timezone.Country;
@@ -64,6 +67,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private WelcomeMessage welcomeMessage = new WelcomeMessage();
 	private UploadedImage signature = new UploadedImage();
 
+	protected List<ListingPair> litePermissions;
+	
 	protected UserCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
@@ -95,7 +100,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private void initializeTimeZoneLists() {
 		country = CountryList.getInstance().getCountryByFullName(user.getTimeZoneID());
 		region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());
-		
 	}
 
 	@Override
@@ -188,9 +192,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		addFlashMessageText("message.userdeleted");
 		return SUCCESS;
 	} 
-	
-	
-	
 
 	protected String save() {
 		clearErrorsAndMessages();
@@ -378,7 +379,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return !userManager.userRfidIsUnique(getTenantId(), formValue, uniqueID);
 	}
 
-	
+	public List<ListingPair> getLitePermissions() {
+		if (litePermissions == null) {
+			litePermissions = ListHelper.intListableToListingPair(Permissions.getLiteUserPermissions());
+		}
+		return litePermissions;
+	}
 
 	public List<StringListingPair> getUserTypes() {
 		ArrayList<StringListingPair> userTypes = new ArrayList<StringListingPair>();

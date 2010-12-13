@@ -23,7 +23,6 @@ public class LiteUserCrud extends UserCrud {
 	
 	private Map<String, Boolean> userPermissions = new HashMap<String, Boolean>();
 	protected List<ListingPair> permissions;
-	protected List<ListingPair> litePermissions;
 	
 	protected LiteUserCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
@@ -91,13 +90,6 @@ public class LiteUserCrud extends UserCrud {
 			return true;
 		}
 		return false;
-	}
-	
-	public List<ListingPair> getLitePermissions() {
-		if (litePermissions == null) {
-			litePermissions = ListHelper.intListableToListingPair(Permissions.getLiteUserPermissions());
-		}
-		return litePermissions;
 	}
 	
 	@Override

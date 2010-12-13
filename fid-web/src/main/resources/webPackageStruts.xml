@@ -634,7 +634,7 @@
 				<param name="listFilter">${listFilter}</param>
 			</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">readOnlyUserEdit</param>
+				<param name="actionName">userList</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
@@ -663,10 +663,15 @@
 		</action>
 		
 		<action name="liteUserCreate" method="create" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
-			<result name="success" type="freemarker">templates/html/userCrud/addLite.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addLite.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">userList</param>
+					<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">viewUser</param>
+				<param name="actionName">userList</param>
 					<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
@@ -688,7 +693,7 @@
 			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="error" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">employeeUserEdit</param>
+				<param name="actionName">userList</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
@@ -699,11 +704,10 @@
 			<result name="success" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="input" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">userList</param>
+				<param name="actionName">viewUser</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 			</result>
-
 		</action>
 
 		<action name="employeeUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
@@ -724,6 +728,7 @@
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 			</result>
+		
 		</action>
 
 		<action name="readOnlyUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
@@ -732,7 +737,6 @@
 			<param name="actionName">viewUser</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-
 		</action>
 
 		<action name="employeeUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.EmployeeCrud">

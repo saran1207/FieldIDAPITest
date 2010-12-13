@@ -21,7 +21,7 @@
 			
 			<div class="infoSet">
 				 <label class="label" for="owner"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
-				<@n4.orgPicker name="owner" required="true" orgType="${(employee)?string('internal','readonly')}"/>
+				<@n4.orgPicker name="owner" required="true" orgType="${(readOnlyUser)?string('readonly','internal')}"/>
 			</div>
 			
 			<div class="infoSet">
@@ -173,7 +173,6 @@
 				</div>
 			<#elseif user.admin>
 				<div class="infoSet">
-					<label class="label" for="passwordEntry.password"><@s.text name="label.permissions"/></label>
 					<span class="fieldHolder">
 						<@s.text name="label.admin_user_always_have_full_permissions"/> 
 					</span>
