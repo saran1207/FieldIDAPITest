@@ -24,14 +24,21 @@ ${action.setPageType('user','change')!}
 				<li><label><@s.text name="label.run_searches" /></label></li>
 			</ul>
 		</div>
-		<div class="upgradeUserAction center">
-			<#if fullUser >
-				<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
-			<#else>
-				<@s.url id="changeToFull" action="changeToFull" uniqueID="${uniqueID}"/>
-				<input type="button" value="<@s.text name='hbutton.change_to_full'/>" onclick="return redirect('${changeToFull}');"/>
-			</#if>
-		</div>
+		
+		<#if employeeLimitReached>
+			<div class="userLimitWarning">
+				<@s.text name="label.employee_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
+			</div>	
+		<#else>
+			<div class="upgradeUserAction center">
+				<#if fullUser >
+					<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
+				<#else>
+					<@s.url id="changeToFull" action="changeToFull" uniqueID="${uniqueID}"/>
+					<input type="button" value="<@s.text name='hbutton.change_to_full'/>" onclick="return redirect('${changeToFull}');"/>
+				</#if>
+			</div>
+		</#if>
 	</div>
 	
 	<div class="horizontalGroup leftRightMargins">
@@ -44,14 +51,21 @@ ${action.setPageType('user','change')!}
 				<li><label><@s.text name="label.run_searches" /></label></li>
 			</ul>
 		</div>
-		<div class="upgradeUserAction center">
-			<#if liteUser >
-				<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
-			<#else>
-				<@s.url id="changeToLite" action="changeToLite" uniqueID="${uniqueID}"/>
-				<input type="button" value="<@s.text name='hbutton.change_to_lite'/>" onclick="return redirect('${changeToLite}');"/>
-			</#if>
-		</div>
+		
+		<#if liteUserLimitReached>
+			<div class="userLimitWarning">
+				<@s.text name="label.lite_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
+			</div>		
+		<#else>
+			<div class="upgradeUserAction center">
+				<#if liteUser >
+					<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
+				<#else>
+					<@s.url id="changeToLite" action="changeToLite" uniqueID="${uniqueID}"/>
+					<input type="button" value="<@s.text name='hbutton.change_to_lite'/>" onclick="return redirect('${changeToLite}');"/>
+				</#if>
+			</div>
+		</#if>
 	</div>
 	
 	<div class="horizontalGroup">

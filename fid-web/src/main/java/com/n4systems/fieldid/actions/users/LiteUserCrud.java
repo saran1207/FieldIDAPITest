@@ -84,7 +84,8 @@ public class LiteUserCrud extends UserCrud {
 		}
 	}
 	
-	private boolean isLiteUserLimitReached() {
+	@Override
+	public boolean isLiteUserLimitReached() {
 		if (user.isNew() && getLimits().isLiteUsersMaxed()) {
 			addActionError(getText("label.exceeded_your_lite_user_limit", new String[] { getLimits().getLiteUsersMax().toString() } ));
 			return true;

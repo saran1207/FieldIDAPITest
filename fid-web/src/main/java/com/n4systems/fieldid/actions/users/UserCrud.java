@@ -462,5 +462,13 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		ActiveSession session = new ActiveSessionLoader().setId(user.getId()).load();
 		return (session != null) ? session.getDateCreated() : null;
 	}
+
+	public boolean isEmployeeLimitReached() {
+		return getLimits().isEmployeeUsersMaxed();
+	}
+
+	public boolean isLiteUserLimitReached() {
+		return getLimits().isLiteUsersMaxed();
+	}
 	
 }
