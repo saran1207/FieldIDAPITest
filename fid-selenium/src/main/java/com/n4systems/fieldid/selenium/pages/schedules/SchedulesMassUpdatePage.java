@@ -13,4 +13,8 @@ public class SchedulesMassUpdatePage extends MassUpdatePage<SchedulesSearchResul
         selenium.type("//input[@id='input_nextDate']", date);
     }
 
+    @Override
+    protected String getSubmitButtonLabel() {
+        return "Save";
+    }
 }

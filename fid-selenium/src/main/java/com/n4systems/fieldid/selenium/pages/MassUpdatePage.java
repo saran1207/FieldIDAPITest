@@ -13,20 +13,22 @@ public abstract class MassUpdatePage<T extends WebPage> extends FieldIDPage {
 
     public T clickSaveButtonAndConfirm() {
         selenium.chooseOkOnNextConfirmation();
-        selenium.click("//input[@type='submit' and @value='Update']");
+        selenium.click("//input[@type='submit' and @value='"+getSubmitButtonLabel()+"']");
         selenium.getConfirmation();
         return PageFactory.createPage(searchResultsPageClass, selenium); 
     }
     
     public T clickSaveButtonAndConfirmMassDelete() {
         selenium.chooseOkOnNextConfirmation();
-        selenium.click("//input[@type='submit' and @value='Update']");
+        selenium.click("//input[@type='submit' and @value='']");
         selenium.getConfirmation();
         waitForPageToLoad();
         selenium.click("//input[@id='label_delete']");
         return PageFactory.createPage(searchResultsPageClass, selenium); 
     }
-    
-    
+
+    protected String getSubmitButtonLabel() {
+        return "Update";
+    }
 
 }

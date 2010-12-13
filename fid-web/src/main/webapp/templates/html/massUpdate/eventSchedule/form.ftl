@@ -23,7 +23,7 @@
 				<label class="label"><@s.text name="label.nexteventdate"/>:</label>
 				<span class="field">
 					<@s.textfield id="input_nextDate" key="label.tdate" name="nextDate" size="10" labelposition="left" onchange="selectField('nextDate');" title="${Session.sessionUser.displayDateFormat}" />
-					<img src="images/icons/FieldID_CALENDAR-CHECK-normal.png" border="0" id="nextDateTrigger">
+					<img src="images/calendar-icon.png" border="0" id="nextDateTrigger">
 					<script type="text/javascript">
 						Calendar.setup({
 							inputField  : "input_nextDate",
