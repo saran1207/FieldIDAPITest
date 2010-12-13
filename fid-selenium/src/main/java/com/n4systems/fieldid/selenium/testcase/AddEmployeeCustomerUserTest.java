@@ -3,7 +3,10 @@ package com.n4systems.fieldid.selenium.testcase;
 import static com.n4systems.fieldid.selenium.datatypes.Owner.someOrg;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,26 +17,41 @@ import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.datatypes.SystemUser;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 
 	private HomePage homePage;
 	
+	private static String COMPANY = "test1";
+	
+	@Override
+	public void setupScenario(Scenario scenario) {
+		
+		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(
+				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
+		
+		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor(COMPANY);
+		
+		defaultPrimaryOrg.setExtendedFeatures(extendedFeatures);
+		
+		scenario.save(defaultPrimaryOrg);
+	}
+	
 	@Before
 	public void setUp() throws Exception {
-		String company = getStringProperty("company");
-		LoginPage loginPage = startAsCompany(company);
-		homePage = loginPage.systemLogin();
+		homePage = startAsCompany(COMPANY).systemLogin();
 	}
 	
 	@Test
 	public void should_be_able_to_add_an_employee_user() throws Exception {
 		ManageUsersPage manageUsersPage = homePage.clickSetupLink().clickManageUsers();
-		manageUsersPage.clickAddEmployeeUserTab();
+		manageUsersPage.clickAddUserTab();
+		manageUsersPage.clickAddFullUser();
 		EmployeeUser eu = addAnEmployeeUser(manageUsersPage);
 		verifyUserWasAdded(manageUsersPage, eu);
 	}
@@ -41,7 +59,8 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 	@Test
 	public void should_be_able_to_add_a_customer_user() throws Exception {
 		ManageUsersPage manageUsersPage = homePage.clickSetupLink().clickManageUsers();
-		manageUsersPage.clickAddCustomerUserTab();
+		manageUsersPage.clickAddUserTab();
+		manageUsersPage.clickAddReadOnlyUser();
 		CustomerUser cu = addACustomerUser(manageUsersPage);
 		verifyUserWasAdded(manageUsersPage, cu);
 	}
@@ -50,11 +69,11 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		String email = "selenium@fieldid.com";
 		String password = getStringProperty("customer-password");
 		Owner owner = someOrg();
-		String firstName = MiscDriver.getRandomString(10);
-		String lastName = MiscDriver.getRandomString(10);
-		String userid = firstName.toLowerCase();
+		String firstName = "ReadOnly";
+		String lastName = "User";
+		String userid = "TestReadOnly";
 		CustomerUser cu = new CustomerUser(userid, email, password, password, owner, firstName, lastName);
-		manageUsersPage.setCustomerFormFields(cu);
+		manageUsersPage.setReadOnlyUserFormFields(cu);
 		manageUsersPage.clickSaveCustomerUser();
 		return cu;
 	}
@@ -78,9 +97,9 @@ public class AddEmployeeCustomerUserTest extends FieldIDTestCase {
 		String email = "selenium@fieldid.com";
 		String password = getStringProperty("employee-password");
 		Owner owner = someOrg();
-		String firstName = MiscDriver.getRandomString(10);
-		String lastName = MiscDriver.getRandomString(10);
-		String userid = firstName.toLowerCase();
+		String firstName = "Full";
+		String lastName = "User";
+		String userid = "TestFullUser";
 		EmployeeUser employeeUser = new EmployeeUser(userid, email, password, password, owner, firstName, lastName);
 		employeeUser.addPermission(EmployeeUser.create);
 		employeeUser.addPermission(EmployeeUser.safety);

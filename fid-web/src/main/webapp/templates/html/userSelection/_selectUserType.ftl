@@ -35,7 +35,7 @@ ${action.setPageType('user','adduser')!}
 			</div>	
 		<#else>
 			<div class="addUserAction">
-				<input type="button" value="<@s.text name="label.add_new_full_user" />" onclick="return redirect('${addFullUserUrl}');" />
+				<input id="addFullUser" type="button" value="<@s.text name="label.add_new_full_user" />" onclick="return redirect('${addFullUserUrl}');" />
 			</div>
 		</#if>
 	</div>
@@ -58,7 +58,7 @@ ${action.setPageType('user','adduser')!}
 				</div>		
 			<#else>
 				<div class="addUserAction">
-					<input type="button" value="<@s.text name="label.add_new_lite_user" />" onclick="return redirect('${addLiteUserUrl}');" />
+					<input id="addLiteUser"  type="button" value="<@s.text name="label.add_new_lite_user" />" onclick="return redirect('${addLiteUserUrl}');" />
 				</div>
 			</#if>
 		</div>
@@ -75,7 +75,7 @@ ${action.setPageType('user','adduser')!}
 				</ul>
 			</div>	
 			<div class="addUserAction">
-				<input type="button" value="<@s.text name="label.add_new_read_only_user" />" onclick="return redirect('${addReadOnlyUserUrl}');"/>
+				<input id="addReadOnlyUser" type="button" value="<@s.text name="label.add_new_read_only_user" />" onclick="return redirect('${addReadOnlyUserUrl}');"/>
 			</div>
 		</div>
 	</#if>

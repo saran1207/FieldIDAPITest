@@ -30,35 +30,46 @@ public class ManageUsersPage extends FieldIDPage {
 	public ManageUsersPage(Selenium selenium) {
 		super(selenium);
 	}
-
-	public void clickAddCustomerUserTab() {
-		clickNavOption("Add Customer User");
+	
+	public void clickAddUserTab() {
+	clickNavOption("Add User");
+    }
+	
+	public void clickAddFullUser() {
+		selenium.click("//input[@id='addFullUser']");
+		waitForPageToLoad();
 	}
 
-	public void clickAddEmployeeUserTab() {
-		clickNavOption("Add Employee User");
+	public void clickAddLiteUser() {
+		selenium.click("//input[@id='addLiteUser']");
+		waitForPageToLoad();
+	}
+
+	public void clickAddReadOnlyUser() {
+		selenium.click("//input[@id='addReadOnlyUser']");
+		waitForPageToLoad();
 	}
 
 	public void clickViewAllTab() {
 		clickNavOption("View All");
 	}
 
-	public void setCustomerFormFields(CustomerUser cu) {
+	public void setReadOnlyUserFormFields(CustomerUser cu) {
 		assertNotNull(cu);
 		if (cu.getUserid() != null) {
-			selenium.type("//INPUT[@id='customerUserCreate_userId']", cu.getUserid());
+			selenium.type("//INPUT[@id='readOnlyUserCreate_userId']", cu.getUserid());
 		}
 		if (cu.getEmail() != null) {
-			selenium.type("//INPUT[@id='customerUserCreate_emailAddress']", cu.getEmail());
+			selenium.type("//INPUT[@id='readOnlyUserCreate_emailAddress']", cu.getEmail());
 		}
 		if (cu.getSecurityRFIDNumber() != null) {
-			selenium.type("//INPUT[@id='customerUserCreate_securityRfidNumber']", cu.getSecurityRFIDNumber());
+			selenium.type("//INPUT[@id='readOnlyUserCreate_securityRfidNumber']", cu.getSecurityRFIDNumber());
 		}
 		if (cu.getPassword() != null) {
-			selenium.type("//INPUT[@id='customerUserCreate_passwordEntry_password']", cu.getPassword());
+			selenium.type("//INPUT[@id='readOnlyUserCreate_passwordEntry_password']", cu.getPassword());
 		}
 		if (cu.getVerifyPassword() != null) {
-			selenium.type("//INPUT[@id='customerUserCreate_passwordEntry_passwordVerify']", cu.getVerifyPassword());
+			selenium.type("//INPUT[@id='readOnlyUserCreate_passwordEntry_passwordVerify']", cu.getVerifyPassword());
 		}
 		if (cu.getOwner() != null) {
 			OrgPicker orgPicker = getOrgPicker();
@@ -76,11 +87,11 @@ public class ManageUsersPage extends FieldIDPage {
 			selenium.type("//INPUT[@id='initials']", cu.getInitials());
 		}
 		if (cu.getPosition() != null) {
-			selenium.type("//INPUT[@id='customerUserCreate_position']", cu.getPosition());
+			selenium.type("//INPUT[@id='readOnlyUserCreate_position']", cu.getPosition());
 		}
 		if (cu.getCountry() != null) {
-			if (isOptionPresent("//SELECT[@id='customerUserCreate_countryId']", cu.getCountry())) {
-				selenium.select("//SELECT[@id='customerUserCreate_countryId']", cu.getCountry());
+			if (isOptionPresent("//SELECT[@id='readOnlyUserCreate_countryId']", cu.getCountry())) {
+				selenium.select("//SELECT[@id='readOnlyUserCreate_countryId']", cu.getCountry());
 				waitForAjax();
 			} else {
 				fail("The country '" + cu.getCountry() + "' does not exist on the select list");
@@ -160,7 +171,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 
 	public void clickSaveCustomerUser() {
-		selenium.click("//INPUT[@id='customerUserCreate_save']");
+		selenium.click("//INPUT[@id='readOnlyUserCreate_save']");
 		waitForPageToLoad();
 	}
 
