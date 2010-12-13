@@ -13,10 +13,12 @@ ${action.setPageType('user','view')!}
 		<p>
 	</div>
 	</#if>
+	<#if owner.primary>
 	<div class="useractions changeaccount">
 		<p><a href="<@s.url action="upgradeUser" uniqueID="${user.id!}" />"><@s.text name="label.change_account_type"/></a></p>
 		
 	</div>
+	</#if>
 	<div class="useractions email">
 		<p><a href="<@s.url action="sendWelcomeEmail" uniqueID="${user.id!}" />"><@s.text name="label.send_welcome_email"/></a></p>
 	</div>
