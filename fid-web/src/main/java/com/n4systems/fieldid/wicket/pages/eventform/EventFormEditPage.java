@@ -8,6 +8,8 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventType;
 import com.n4systems.model.eventtype.EventTypeSaver;
+import com.n4systems.persistence.PersistenceManager;
+import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.services.EventTypeService;
@@ -132,13 +134,19 @@ public class EventFormEditPage extends WebPage {
             add(new AjaxButton("submitButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    new EventTypeService().retireEventType(eventType.getId());
+                    Transaction tx = PersistenceManager.startTransaction();
 
+                    EventTypeService eventTypeService = new EventTypeService();
+                    Long oldEventTypeId = eventType.getId();
+
+                    eventTypeService.retireEventType(tx, oldEventTypeId);
                     clearOutIds(eventType);
-
                     new EventTypeSaver().save(eventType);
 
                     target.appendJavascript("parent.refreshPageToNewEventTypeId("+eventType.getId()+");");
+
+                    eventTypeService.pointOldAssociationsToNewEventType(tx, oldEventTypeId, eventType.getId());
+                    tx.commit();
 
                     FieldIDSession.get().storeInfoMessageForStruts("Event Form saved.");
                 }
