@@ -4,7 +4,7 @@ public enum UserType {
 	ALL( "All" ),
 	ADMIN( "Admin" ),
 	SYSTEM( "System" ),
-	EMPLOYEES( "Employee" ),
+	FULL( "Full" ),
 	READONLY( "Read-Only" ),
 	LITE( "Lite" );
 	

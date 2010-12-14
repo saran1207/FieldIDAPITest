@@ -34,4 +34,9 @@ public class UserCrudSelection extends UserCrud {
 		return false;
 	}
 
+	@Override
+	public boolean isFullUser() {
+		return false;
+	}
+
 }

@@ -26,7 +26,7 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 	
 	public static UserBuilder anEmployee() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null, true, 0, UserType.EMPLOYEES);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null, true, 0, UserType.FULL);
 	}
 	
 	public static UserBuilder aSystemUser() {
@@ -38,7 +38,7 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 	
 	public static UserBuilder aSecondaryUser() {
-		return new UserBuilder(OrgBuilder.aSecondaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null, false, 0, UserType.EMPLOYEES);
+		return new UserBuilder(OrgBuilder.aSecondaryOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null, false, 0, UserType.FULL);
 	}
 	
 	public static UserBuilder aReadOnlyUser() {
@@ -46,7 +46,7 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 	
 	public static UserBuilder aDivisionUser() {
-		return new UserBuilder(OrgBuilder.aDivisionOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null, false, 0, UserType.EMPLOYEES);
+		return new UserBuilder(OrgBuilder.aDivisionOrg().build(), "some first", "last name", "user_id", false, "user@example.com", false, null, false, null, false, 0, UserType.FULL);
 	}
 
 	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, boolean administratorAccess, 
@@ -134,7 +134,7 @@ public class UserBuilder extends BaseBuilder<User> {
 			user.setPermissions(Permissions.ADMIN);
 			user.setUserType(UserType.ADMIN);
 		}else if (employee) {
-			user.setUserType(UserType.EMPLOYEES);
+			user.setUserType(UserType.FULL);
 			user.setPermissions(permissions);
 		}else if (systemAccess) {
 			user.setUserType(UserType.SYSTEM);

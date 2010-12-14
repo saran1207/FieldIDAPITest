@@ -12,7 +12,7 @@ public class UserUpgradeCrud extends UserCrud{
 	}
 	
 	public String doChangeToFull() {
-		user.setUserType(UserType.EMPLOYEES);
+		user.setUserType(UserType.FULL);
 		save();
 		return SUCCESS;
 	}
@@ -35,7 +35,7 @@ public class UserUpgradeCrud extends UserCrud{
 	}
 	
 	public boolean isFullUser() {
-		return user.getUserType().equals(UserType.EMPLOYEES);
+		return user.getUserType().equals(UserType.FULL);
 	}
 	
 	public boolean isLiteUser() {

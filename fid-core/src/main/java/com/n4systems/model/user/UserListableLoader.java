@@ -37,7 +37,7 @@ public class UserListableLoader extends ListableLoader {
 		}
 		
 		if (employeesOnly) {
-			builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Arrays.asList(UserType.ADMIN, UserType.EMPLOYEES, UserType.LITE)));
+			builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Arrays.asList(UserType.ADMIN, UserType.FULL, UserType.LITE)));
 		}
 		
 		return builder;

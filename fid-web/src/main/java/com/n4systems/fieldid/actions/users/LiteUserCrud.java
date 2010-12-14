@@ -154,4 +154,9 @@ public class LiteUserCrud extends UserCrud {
 		return false;
 	}
 
+	@Override
+	public boolean isFullUser() {
+		return false;
+	}
+
 }

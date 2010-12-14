@@ -126,11 +126,11 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	}
 
 	public boolean isEmployee() {
-		return userType.equals(UserType.EMPLOYEES) || userType.equals(UserType.ADMIN) || userType.equals(UserType.LITE);
+		return userType.equals(UserType.FULL) || userType.equals(UserType.ADMIN) || userType.equals(UserType.LITE);
 	}
 	
 	public boolean isFullUser(){
-		return userType.equals(UserType.EMPLOYEES);
+		return userType.equals(UserType.FULL);
 	}
 	
 	public boolean isLiteUser() {

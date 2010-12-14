@@ -44,15 +44,15 @@ public class EmployeeCrud extends UserCrud {
 	@Override
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
-		if (existing && !user.isEmployee()) {
-			throw new MissingEntityException("customer user was loaded for when an employee was expected.");
+		if (existing && !user.isFullUser()) {
+			throw new MissingEntityException("customer user was loaded for when a full user was expected.");
 		}
 	}
 	
 	@Override
 	@SkipValidation
 	public String doAdd() {
-		user.setUserType(UserType.EMPLOYEES);
+		user.setUserType(UserType.FULL);
 		String result = super.doAdd();
 		setupPermissions();
 		isEmployeeLimitReached();
@@ -61,7 +61,7 @@ public class EmployeeCrud extends UserCrud {
 	
 	@Override
 	public String doCreate(){
-		user.setUserType(UserType.EMPLOYEES);
+		user.setUserType(UserType.FULL);
 		testRequiredEntities(false);
 		save();
 		return SUCCESS;
@@ -143,10 +143,6 @@ public class EmployeeCrud extends UserCrud {
 		return (user.isAdmin()) ? Permissions.ADMIN : Permissions.NO_PERMISSIONS;
 	}
 
-	public boolean isEmployee() {
-		return true;
-	}
-
 	@Override
 	@FieldExpressionValidator(message="", key="error.owner_must_be_an_organization", expression="owner.internal == true")
 	public BaseOrg getOwner() {
@@ -163,6 +159,11 @@ public class EmployeeCrud extends UserCrud {
 	}
 
 	@Override
+	public boolean isEmployee() {
+		return true;
+	}
+	
+	@Override
 	public boolean isLiteUser() {
 		return false;
 	}
@@ -172,7 +173,10 @@ public class EmployeeCrud extends UserCrud {
 		return false;
 	}
 
-	
+	@Override
+	public boolean isFullUser(){
+		return true;
+	}
 
 	
 }

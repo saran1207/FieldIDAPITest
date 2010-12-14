@@ -21,9 +21,8 @@ public class ReadOnlyUserCrud extends UserCrud {
 	@Override
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
-		if (existing && user.isEmployee()) {
-			addActionErrorText("error.user_should_be_for_a_customer");
-			throw new MissingEntityException("employee user was loaded for when a customer user was expected.");
+		if (existing && !user.isReadOnly()) {
+			throw new MissingEntityException("another user was loaded for when a read-only user was expected.");
 		}
 	}
 	
@@ -40,6 +39,11 @@ public class ReadOnlyUserCrud extends UserCrud {
 		return Permissions.CUSTOMER;
 	}
 
+	@Override
+	public boolean isFullUser(){
+		return false;
+	}
+	
 	@Override
 	public boolean isEmployee() {
 		return false;

@@ -17,7 +17,7 @@ public class ManageUsers {
 
 	public final static String USER_TYPE_ALL = UserType.ALL.getLabel();
 	public final static String USER_TYPE_READONLY = UserType.READONLY.getLabel();
-	public final static String USER_TYPE_EMPLOYEE = UserType.EMPLOYEES.getLabel();
+	public final static String USER_TYPE_EMPLOYEE = UserType.FULL.getLabel();
 	
 	private String manageUsersPageHeaderLocator = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Manage Users')]";
 	private String addEmployeeUserLinkLocator = "xpath=//A[contains(text(),'Add Employee User')]";
