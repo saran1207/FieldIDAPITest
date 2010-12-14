@@ -15,6 +15,7 @@ public class SafetyNetworkInvitePage extends FieldIDPage {
 		if (selenium.isElementPresent("//input[@id='sendInvite_email']")){
 			selenium.type("//input[@id='sendInvite_email']", "123hurf@123durf.com");
 			selenium.click("//.[@id='sendinvitation']");
+            waitForPageToLoad();
 		}else{
 			fail("Couldn't find input box.");
 		}
