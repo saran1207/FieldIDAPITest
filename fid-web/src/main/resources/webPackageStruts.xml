@@ -749,6 +749,16 @@
 			</result>
 		</action>
 		
+		<action name="liteUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">userList</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">viewUser</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
 		<action name="readOnlyUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>

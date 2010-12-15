@@ -29,7 +29,14 @@
 			<td>${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>		
 			<td>
 				<#if user.id != sessionUser.id && !user.admin >
-					<div><a href="#deleteUser" onclick="deleteUser('<@s.url action="${user.employee?string('employeeUserDelete', 'readOnlyUserDelete')}" namespace="/ajax" uniqueID="${(user.id)!}" />', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
+					<#if user.fullUser>
+						<@s.url id="deleteUrl" namespace="/ajax" action="employeeUserDelete" uniqueID="${(user.id)!}" />
+					<#elseif user.liteUser>
+						<@s.url id="deleteUrl" namespace="/ajax" action="liteUserDelete" uniqueID="${(user.id)!}" />
+					<#else>
+						<@s.url  id="deleteUrl" namespace="/ajax" action="readOnlyUserDelete" uniqueID="${(user.id)!}" />
+					</#if>
+					<div><a href="#deleteUser" onclick="deleteUser('${deleteUrl}', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
 				</#if>
 			</td>
 			

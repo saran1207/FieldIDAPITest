@@ -5,10 +5,18 @@ ${action.setPageType('user','view')!}
 </head>
 
 <div class="viewactions">
-	<#if !user.isAdmin()>
+	<#if !user.admin>
+	
+		<#if user.fullUser>
+			<@s.url id="deleteUrl" action="employeeUserDelete" uniqueID="${(user.id)!}" />
+		<#elseif user.liteUser>
+			<@s.url id="deleteUrl" action="liteUserDelete" uniqueID="${(user.id)!}" />
+		<#else>
+			<@s.url  id="deleteUrl"  action="readOnlyUserDelete" uniqueID="${(user.id)!}" />
+		</#if>
 	<div class="useractions delete">
 		<p>
-			<a href="<@s.url action="${user.employee?string('employeeUserDelete', 'readOnlyUserDelete')}" uniqueID="${(user.id)!}" />" 
+			<a href="${deleteUrl}" 
 			onclick="return confirm('${action.getText( 'warning.deleteuser',"", user.userID )}');"><@s.text name="label.delete_account"/></a>
 		<p>
 	</div>

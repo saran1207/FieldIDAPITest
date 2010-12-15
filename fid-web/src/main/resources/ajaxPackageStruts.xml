@@ -62,6 +62,12 @@
 			<result name="success" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
 		</action>
+		
+		<action name="liteUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+			<result name="success" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
+			<result name="error" type="freemarker">/templates/ajax/userCrud/delete.ftl</result>
+		</action>
+		
 
 		<action name="assetTypeScheduleEdit" method="edit"
 			class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
