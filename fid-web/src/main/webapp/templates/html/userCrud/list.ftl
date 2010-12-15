@@ -4,9 +4,12 @@ ${action.setPageType('user','list')!}
 	<@s.form method="GET" cssClass="simpleInputForm" theme="css_xhtml" > 
 		<@s.hidden name="currentPage" value="1"/>
 		<@s.textfield id="nameFilter" name="listFilter" key="label.name" labelposition="left"/>
+		
+		<@s.select id="userGroup" name="userGroup" list="userGroups" onchange="updateUserTypes(this)" listKey="id" listValue="name" key="label.usergroup" labelposition="left"/>
 		<#if securityGuard.readOnlyUserEnabled>
-			<@s.select id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
+			<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
 		</#if>
+		
 		<div class="formAction">
 			<@s.submit name="search" key="hbutton.search" />
 			<@s.submit name="clear" key="hbutton.clear" onclick="$('nameFilter').value='';"/>
@@ -17,7 +20,7 @@ ${action.setPageType('user','list')!}
 <#if  page.hasResults() && page.validPage() >
 	<#assign currentAction="userList.action" />
 	<#include '../common/_pagination.ftl' />
-	<#assign userList=page.list />
+	<#assign userList=userList />
 	<#include "_userList.ftl" />
 	<#include '../common/_pagination.ftl' />
 <#elseif !page.hasResults() >
@@ -36,3 +39,5 @@ ${action.setPageType('user','list')!}
 		</p>
 	</div>
 </#if>
+
+<#include '../userCrud/_userGroupChangeScript.ftl'/>

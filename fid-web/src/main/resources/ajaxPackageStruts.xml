@@ -19,8 +19,6 @@
 			<result name="sessionBooted" type="freemarker">/templates/ajax/common/sessionKick.ftl</result>
 		</global-results>
 
-
-
 		<action name="assetTypeImageRemove" method="removeImage"
 			class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
 			<result name="success" type="freemarker">/templates/ajax/assetTypeCrud/remove.ftl</result>
@@ -33,7 +31,7 @@
 			<result name="success" type="freemarker">/templates/ajax/assetCrud/changeAssetType.ftl</result>
 		</action>
 		
-				<action name="regAssetTypeChange" method="assetTypeChange"
+		<action name="regAssetTypeChange" method="assetTypeChange"
 			class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="success" type="freemarker">/templates/ajax/registerAsset/changeAssetType.ftl</result>
 		</action>
@@ -463,6 +461,10 @@
         <action name="retrieveAssetTypes" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypesInAssetTypeGroupAction">
             <result name="success" type="freemarker">/templates/ajax/assetType/updateForGroupChanged.ftl</result>
         </action>
+        
+        <action name="filterUserTypes" method="filterUserTypes" class="com.n4systems.fieldid.actions.users.FilterUserTypesByGroupAction">
+			 <result name="success" type="freemarker">/templates/ajax/userCrud/updateForUserGroupChanged.ftl</result>
+		</action>
 
 	</package>
 </struts>
