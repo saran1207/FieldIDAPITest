@@ -22,6 +22,7 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
@@ -841,6 +842,21 @@ Transaction transaction = transactionManager.startTransaction();
 Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).uniqueNameAvailable(entityClass, name, id, tenantId);
+
+		} catch (RuntimeException e) {
+			transactionManager.rollbackTransaction(transaction);
+
+			throw e;
+		} finally {
+			transactionManager.finishTransaction(transaction);
+		}
+	}
+	
+	public <T extends LegacyBeanTenantWithCreateModifyDate> boolean uniqueAssetStatusNameAvailable(Class<T> entityClass, String name, Long id, Long tenantId) {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+		Transaction transaction = transactionManager.startTransaction();
+		try {
+			return createManager(transaction.getEntityManager()).uniqueAssetStatusNameAvailable(entityClass, name, id, tenantId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

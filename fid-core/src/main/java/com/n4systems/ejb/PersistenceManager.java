@@ -20,6 +20,7 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.tools.Pager;
@@ -135,8 +136,10 @@ public interface PersistenceManager {
 
 	public <T extends EntityWithTenant & NamedEntity> boolean uniqueNameAvailable(Class<T> entityClass, String name, Long id, Long tenantId);
 
+	public <T extends LegacyBeanTenantWithCreateModifyDate> boolean uniqueAssetStatusNameAvailable(Class<T> entityClass, String name, Long id, Long tenantId);
+	
 	public <T extends EntityWithTenant & NamedEntity> boolean uniqueNameAvailableWithCustomer(Class<T> entityClass, String name, Long id, Long tenantId, Long customerId);
-
+	
 	public <T> T reattach(T entity);
 
 	public <T> T reattach(T entity, boolean refresh);

@@ -36,6 +36,7 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -544,6 +545,26 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
 	}
 
+	public <T extends LegacyBeanTenantWithCreateModifyDate> boolean uniqueAssetStatusNameAvailable(Class<T> entityClass, String name, Long id, Long tenantId){
+		String jpql = "SELECT id " + generateFromClause(defaultTableAlias, entityClass) + " WHERE tenant.id = :tenantId AND LOWER(name) = :name ";
+		
+		if (id != null) {
+			jpql += " AND id != :id ";
+		}
+
+		Query query = em.createQuery(jpql);
+		query.setParameter("tenantId", tenantId);
+		query.setParameter("name", name.toLowerCase().trim());
+
+		
+		if (id != null) {
+			query.setParameter("id", id);
+		}
+
+		List<Long> matchingNames = query.getResultList();
+		return (matchingNames.size() == 0);
+	}
+	
 	public <T extends EntityWithTenant & NamedEntity> boolean uniqueNameAvailableWithCustomer(Class<T> entityClass, String name, Long id, Long tenantId, Long customerId) {
 		return uniqueNameAvailable(entityClass, name, id, tenantId, customerId, true);
 	}

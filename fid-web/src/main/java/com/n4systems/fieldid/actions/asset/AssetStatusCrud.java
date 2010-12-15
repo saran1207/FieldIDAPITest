@@ -10,12 +10,16 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.StateSet;
 import com.n4systems.security.Permissions;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
-public class AssetStatusCrud extends AbstractCrud {
+public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -99,12 +103,17 @@ public class AssetStatusCrud extends AbstractCrud {
 	
 	
 	@RequiredStringValidator(type=ValidatorType.FIELD, message = "", key="error.required")
+	@CustomValidator(type = "uniqueValue", message = "", key = "error.assetstatusduplicate")
 	public void setName(String name) {
 		assetStatus.setName(name);
 	}
 	
 	public String getName() {
 		return assetStatus.getName();
+	}
+
+	public boolean duplicateValueExists( String formValue ) {
+		return !persistenceManager.uniqueAssetStatusNameAvailable(AssetStatus.class, formValue, uniqueID, getTenantId());
 	}
 
 }

@@ -1,5 +1,10 @@
 <head>
 	<style>
+		#assetStatusEdit p{
+		border-bottom: none;
+		padding-bottom: 10px;
+		}
+		
 		.formAction div{
 			padding: 0;
 		}
@@ -21,11 +26,14 @@
 	</title>
 </head>
 
-<@s.form action="assetStatusEdit!save" cssClass="crudForm" theme="css_xhtml">
+<@s.form action="assetStatusEdit!save" cssClass="crudForm" theme="simple">
+	<#include "/templates/html/common/_formErrors.ftl" />
 	<@s.hidden name="uniqueID" />
-	<div class="formRowHolder">
-		<@s.textfield key="label.name" name="name" size="30" labelposition="left"/>
-	</div>
+	<p>
+		<label><@s.text name="label.name"/>:</label>
+		
+		<span><@s.textfield key="label.name" name="name" size="30" labelposition="left"/></span>
+	</p>
 	<div class="formAction">
 		<@s.url id="cancelUrl" action="assetStatusList"/>
 		<@s.submit key="hbutton.save" />
