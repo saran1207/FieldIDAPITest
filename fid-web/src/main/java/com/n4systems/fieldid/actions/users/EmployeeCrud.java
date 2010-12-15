@@ -44,7 +44,7 @@ public class EmployeeCrud extends UserCrud {
 	@Override
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
-		if (existing && !user.isFullUser()) {
+		if (existing && !user.isFullUser() && !user.isAdmin()) {
 			throw new MissingEntityException("customer user was loaded for when a full user was expected.");
 		}
 	}

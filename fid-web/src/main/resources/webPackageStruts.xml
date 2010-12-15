@@ -718,17 +718,35 @@
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
+		
+		<action name="liteUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/liteUserEdit.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/liteUserEdit.ftl</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">viewUser</param>
+				<param name="uniqueID">${uniqueID}</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>
+		</action>
+
+		<action name="liteUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+			<result name="input" type="freemarker">templates/html/userCrud/liteUserEdit.ftl</result>
+			<result name="success" type="redirectAction">
+			<param name="actionName">viewUser</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
 
 		<action name="readOnlyUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">userList</param>
+				<param name="actionName">viewUser</param>
 				<param name="uniqueID">${uniqueID}</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 			</result>
-		
 		</action>
 
 		<action name="readOnlyUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">

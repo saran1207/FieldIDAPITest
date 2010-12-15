@@ -46,6 +46,14 @@ public class LiteUserCrud extends UserCrud {
 		return SUCCESS;
 	}
 	
+	@Override
+	@SkipValidation
+	public String doEdit() {
+		String result = super.doEdit();
+		setupPermissions();
+		return result;
+	}
+	
 	private void setupPermissions() {
 		userPermissions = new HashMap<String, Boolean>();
 		
