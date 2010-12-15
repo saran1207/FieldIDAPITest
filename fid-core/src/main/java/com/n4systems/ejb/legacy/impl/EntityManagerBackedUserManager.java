@@ -192,19 +192,11 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 		if (userType != null) {
 			switch (userType) {
-			case ADMIN:
-				queryString += "AND ub.userType = " + "'" + UserType.ADMIN.toString() + "'";
-				break;
 			case READONLY:
 				queryString += "AND ub.userType = " + "'" + UserType.READONLY.toString() + "'";
 				break;
 			case FULL:
-				// It's not necessary to specify anymore where clauses, since
-				// ub.userType!=SYSTEM
-				// implies that only admin, employee, lite and read-only users
-				// will be returned.
-				// This hinges on the assumption that Lite and Read-Only users
-				// are Employees, too.
+				queryString += "AND ub.userType = " + "'" + UserType.FULL.toString() + "'";
 				break;
 			case LITE:
 				queryString += "AND ub.userType= " + "'" + UserType.LITE.toString() + "'";

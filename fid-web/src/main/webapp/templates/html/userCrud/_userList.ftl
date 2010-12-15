@@ -39,14 +39,11 @@
 					<div><a href="#deleteUser" onclick="deleteUser('${deleteUrl}', '${action.getText( 'warning.deleteuser',"", user.userID )}' ); return false;" ><@s.text name="label.remove" /></a></div>
 				</#if>
 			</td>
-			
-		
 		</tr>
 	</#list>
 </table>
 
 <script type="text/javascript" >
-	
 	function deleteUser(url, message) {
 		if (confirm(message)) {
 			getResponse(url); 
@@ -63,11 +60,6 @@
 				}
 			}
 		}
-		
 		updateMessages(jsonObject.messages, jsonObject.errors);
 	}
-	
-
-	
-
 </script>

@@ -10,7 +10,7 @@ ${action.setPageType('user','list')!}
 			<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
 		</#if>
 		
-		<div class="formAction">
+		<div class="filterActions">
 			<@s.submit name="search" key="hbutton.search" />
 			<@s.submit name="clear" key="hbutton.clear" onclick="$('nameFilter').value='';"/>
 		</div>
