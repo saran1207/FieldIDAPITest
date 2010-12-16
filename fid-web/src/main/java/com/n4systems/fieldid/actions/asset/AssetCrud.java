@@ -53,6 +53,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -289,16 +290,18 @@ public class AssetCrud extends UploadAttachmentSupport {
 		// default asset code if one could not be found.
 		AssetCodeMapping assetCodeMapping = assetCodeMappingServiceManager.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode(), getTenantId());
 
-		if (assetCodeMapping.getAssetInfo() != null) {
+		if (assetCodeMapping.getAssetInfo() != null && 
+				!assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
 			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
+
+			if (assetCodeMapping.getInfoOptions() != null && !assetCodeMapping.getInfoOptions().isEmpty()) {
+				asset.setInfoOptions(new TreeSet<InfoOptionBean>(assetCodeMapping.getInfoOptions()));
+			}
 		}
 		if (asset.getType() == null) {
 			applyDefaults();
 		}
 
-		if (assetCodeMapping.getInfoOptions() != null && !assetCodeMapping.getInfoOptions().isEmpty()) {
-			asset.setInfoOptions(new TreeSet<InfoOptionBean>(assetCodeMapping.getInfoOptions()));
-		}
 
 		asset.setCustomerRefNumber(assetCodeMapping.getCustomerRefNumber());
 		asset.setShopOrder(lineItem);
