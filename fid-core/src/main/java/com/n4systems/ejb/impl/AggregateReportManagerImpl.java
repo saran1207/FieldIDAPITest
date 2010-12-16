@@ -10,9 +10,8 @@ import com.n4systems.model.Event;
 import com.n4systems.util.AggregateReport;
 import com.n4systems.util.AggregateReportRecord;
 
-
 public class AggregateReportManagerImpl implements AggregateReportManager {
-	
+
 	private EntityManager em;
 
 	public AggregateReportManagerImpl() {
@@ -24,32 +23,28 @@ public class AggregateReportManagerImpl implements AggregateReportManager {
 
 	@SuppressWarnings("unchecked")
 	public AggregateReport createAggregateReport(List<Long> eventIds) {
-		if( eventIds == null || eventIds.size() == 0 ) {
+		if (eventIds == null || eventIds.size() == 0) {
 			return null;
 		}
-		
+
 		AggregateReport report = new AggregateReport();
+
+		String groupByQuery = "select new " + AggregateReportRecord.class.getName() + "( count(event.id), event.asset.type.name, " + "event.type.group.name, event.type.group.id ) from "
+				+ Event.class.getName() + " as event LEFT JOIN event.asset as asset LEFT JOIN asset.type as type " + "LEFT JOIN event.type.group where event.id IN ( :eventIds ) " +
+				"GROUP BY type.name, " + "event.type.group.name, event.type.group.id " + "ORDER BY UPPER(event.asset.type.name), UPPER(event.type.group.name) ";
 		
-		String groupByQuery = "select new " + AggregateReportRecord.class.getName() + "( count(event.id), event.asset.type.name, " +
-				"event.type.group.name, event.type.group.id ) from " + Event.class.getName() + " as event LEFT JOIN event.asset LEFT JOIN event.asset.type " +
-				"LEFT JOIN event.type.group where event.id IN ( :eventIds ) " +
-				"GROUP BY event.asset.type.name, " +
-				"event.type.group.name, event.type.group.id " +
-				"ORDER BY UPPER(event.asset.type.name), UPPER(event.type.group.name) ";
-		Query query = em.createQuery( groupByQuery );
-		query.setParameter( "eventIds", eventIds );
+		Query query = em.createQuery(groupByQuery);
+		query.setParameter("eventIds", eventIds);
+
+		report.setEventTypeGroupsByAssetTypes(query.getResultList());
+
+		String distinctAssets = "select new " + AggregateReportRecord.class.getName() + "( count( DISTINCT asset.id), asset.type.name ) " + " from " + Event.class.getName()
+				+ " as event LEFT JOIN event.asset as asset LEFT JOIN asset.type" + " WHERE event.id IN ( :eventIds ) " + " GROUP BY asset.type.name  ";
 		
-		report.setEventTypeGroupsByAssetTypes( query.getResultList() );
-		
-		
-		String distinctAssets = "select new " + AggregateReportRecord.class.getName() + "( count( DISTINCT asset.id), asset.type.name ) " +
-			" from " + Event.class.getName() + " as event LEFT JOIN event.asset as asset LEFT JOIN asset.type" +
-			" WHERE event.id IN ( :eventIds ) " +
-			" GROUP BY asset.type.name  ";
-		Query distinctAssetQuery = em.createQuery( distinctAssets );
-		distinctAssetQuery.setParameter( "eventIds", eventIds );
-		report.setDistinctAssetsByAssetType( distinctAssetQuery.getResultList() );
-		
+		Query distinctAssetQuery = em.createQuery(distinctAssets);
+		distinctAssetQuery.setParameter("eventIds", eventIds);
+		report.setDistinctAssetsByAssetType(distinctAssetQuery.getResultList());
+
 		return report;
 	}
 

@@ -43,7 +43,7 @@
 			
 			<tr>
 				<td class="nameRow">
-					<a id="detailRowAssetOpen_${key}" href="javascript:void(0);" onclick="return openSection( 'detailRowAsset_${key}', 'detailRowPAssetOpen_${key}','detailRowAssetClose_${key}');"><img src="<@s.url value="/images/expandLarge.gif"/>" alt"+"></a>
+					<a id="detailRowAssetOpen_${key}" href="javascript:void(0);" onclick="return openSection( 'detailRowAsset_${key}', 'detailRowAssetOpen_${key}','detailRowAssetClose_${key}');"><img src="<@s.url value="/images/expandLarge.gif"/>" alt"+"></a>
 					<a id="detailRowAssetClose_${key}" style="display:none" href="javascript:void(0);" onclick="return closeSection( 'detailRowAsset_${key}', 'detailRowAssetClose_${key}','detailRowAssetOpen_${key}');"><img src="<@s.url value="/images/collapseLarge.gif"/>" alt="-"></a>
 					${key?html}
 					<div id="detailRowAsset_${key}" style="display:none" class="subList">

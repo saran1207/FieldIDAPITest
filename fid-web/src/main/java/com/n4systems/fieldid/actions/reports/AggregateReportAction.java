@@ -33,7 +33,6 @@ public class AggregateReportAction extends AbstractAction {
 	}
 	
 	private boolean findCriteria() {
-		
 		criteria =  getSession().getReportCriteria();
 		
 		return !( criteria == null || searchId == null || !searchId.equals( criteria.getSearchId() ) );
@@ -58,7 +57,7 @@ public class AggregateReportAction extends AbstractAction {
 	}
 
 	private List<Long> getSearchIds() {
-		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(criteria), criteria.getSecurityFilter());
+		return criteria.getMultiIdSelection().getSelectedIds();
 	}
 	
 	public String getSearchId() {

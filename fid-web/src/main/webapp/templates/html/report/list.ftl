@@ -64,6 +64,8 @@ ${reportActions}
 			<#if Session.sessionUser.hasAccess('editevent') && !criteria.includeNetworkResults>
 				| <a href="<@s.url action="massUpdateEvents"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
 			</#if>
+			| 
+			<a id="warning_summaryReport_button" href="<@s.url action="summaryReport" searchId="${searchId}" currentPage="${currentPage!}"/>" class="summaryReport"><@s.text name="label.summary_report" /></a>
 			<#if securityGuard.projectsEnabled && sessionUser.hasAccess('createevent') && !criteria.includeNetworkResults>
 				| <a href="<@s.url action="selectJobToAssignEventsTo"  searchId="${searchId}" currentPage="${currentPage!}"/>" class="assignEventsToJob"><@s.text name="label.assigntojob" /></a>
 			</#if>

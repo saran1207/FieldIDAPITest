@@ -2250,6 +2250,11 @@
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/networkAsset/events.ftl</result>
 		</action>
+		
+		<action name="summaryReport" method="show" class="com.n4systems.fieldid.actions.reports.AggregateReportAction">
+			<result name="error" type="redirectAction">report</result>
+			<result name="success" type="freemarker">/templates/html/aggregateReport/show.ftl</result>
+		</action>
 
 		<action name="networkEventScheduleList" method="schedules" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
