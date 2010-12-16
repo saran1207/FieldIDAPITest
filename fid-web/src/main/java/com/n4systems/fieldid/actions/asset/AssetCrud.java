@@ -296,7 +296,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			applyDefaults();
 		}
 
-		if (assetCodeMapping.getInfoOptions() != null) {
+		if (assetCodeMapping.getInfoOptions() != null && !assetCodeMapping.getInfoOptions().isEmpty()) {
 			asset.setInfoOptions(new TreeSet<InfoOptionBean>(assetCodeMapping.getInfoOptions()));
 		}
 
@@ -352,12 +352,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doCreate() {
 		testAsset();
 
-		
-
 		try {
 			
 			prepareAssetToBeSaved();
-			
 			
 			// we only set identified by on save
 			asset.setIdentifiedBy(fetchCurrentUser());
@@ -420,7 +417,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 		try {
 			prepareAssetToBeSaved();
 			
-		
 			// on edit, we need to know if the asset type has changed
 			AssetType oldType = assetTypeManager.findAssetTypeForAsset(asset.getId());
 
