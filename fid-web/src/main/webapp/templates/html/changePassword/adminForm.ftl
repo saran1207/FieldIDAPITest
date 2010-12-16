@@ -29,7 +29,14 @@ ${action.setPageType('user', 'change_password')!}
 	<div class="formAction borderLessFormAction">
 		<@s.submit key="hbutton.save"/>
 		<@s.text name="label.or"/>
-		<@s.url id="cancelUrl" action="${user.employee?string('employeeUserEdit', 'readOnlyUserEdit')}" uniqueID="${uniqueID}"/>
+		
+		<#if user.fullUser || user.admin>
+			<@s.url id="cancelUrl" action="employeeUserEdit" uniqueID="${uniqueID}"/>		
+		<#elseif user.liteUser>
+			<@s.url id="cancelUrl" action="liteUserEdit" uniqueID="${uniqueID}"/>
+		<#else>
+			<@s.url id="cancelUrl" action="readOnlyUserEdit" uniqueID="${uniqueID}"/>
+		</#if>
 		<a href="#" onclick="redirect('${cancelUrl}'); return false;"><@s.text name="label.cancel"/></a>
 	</div>
 </@s.form>
