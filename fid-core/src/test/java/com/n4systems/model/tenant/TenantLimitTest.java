@@ -13,12 +13,13 @@ public class TenantLimitTest {
 	public void should_add_limits_together() {
 		TenantLimit expectedTenantLimit = new TenantLimit(10L, 20L, 30L, 40L, 50L);
 		
-		TenantLimit sut = new TenantLimit(1L, 2L, 3L, 4L, 50L);
+		TenantLimit sut = new TenantLimit(1L, 2L, 3L, 4L, 5L);
 		
 		// exercise
 		sut.addDiskSpace(9L);
 		sut.addAssets(18L);
 		sut.addUsers(27L);
+		sut.addLiteUsers(45L);
 		sut.addSecondaryOrgs(36L);
 		
 		// verify
@@ -36,6 +37,7 @@ public class TenantLimitTest {
 		sut.addDiskSpace(9L);
 		sut.addAssets(18L);
 		sut.addUsers(27L);
+		sut.addLiteUsers(45L);
 		sut.addSecondaryOrgs(36L);
 		
 		// verify
@@ -53,6 +55,7 @@ public class TenantLimitTest {
 		sut.addDiskSpace(TenantLimit.UNLIMITED);
 		sut.addAssets(TenantLimit.UNLIMITED);
 		sut.addUsers(TenantLimit.UNLIMITED);
+		sut.addLiteUsers(TenantLimit.UNLIMITED);
 		sut.addSecondaryOrgs(TenantLimit.UNLIMITED);
 		
 		// verify
@@ -69,6 +72,7 @@ public class TenantLimitTest {
 		sut.addDiskSpace(TenantLimit.UNLIMITED);
 		sut.addAssets(TenantLimit.UNLIMITED);
 		sut.addUsers(TenantLimit.UNLIMITED);
+		sut.addLiteUsers(TenantLimit.UNLIMITED);
 		sut.addSecondaryOrgs(TenantLimit.UNLIMITED);
 		
 		// verify
