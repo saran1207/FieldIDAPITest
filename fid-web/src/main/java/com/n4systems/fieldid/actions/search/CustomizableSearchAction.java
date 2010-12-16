@@ -133,7 +133,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	public String doCreateSearch() {
-		setSearchId(getContainer().getSearchId());	
+		setSearchId(getContainer().getSearchId());
+        getContainer().getMultiIdSelection().clear();
 		return SUCCESS;
 	}
 	
@@ -333,7 +334,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 	
 	/**
-	 * Sorts a list of column ids by their {@link ColumnMapping.getOrder()}s
+	 * Sorts a list of column ids
 	 * @param selectedColumns	List of columns ids
 	 * @return					List of sorted column ids
 	 */
