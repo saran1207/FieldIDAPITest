@@ -54,9 +54,9 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		<span class="infoField checkbox"><@s.checkbox name="view.includeUpcoming"  theme="fieldidSimple" id="includeUpcoming" /></span>
 		<label for="view.includeUpcoming"><@s.text name="label.include_upcoming"/></label>
 		<p class="upcomingDates">
-			<@s.select list="periodStartList" name="view.periodStart" listKey="id" listValue="displayName"  />
+			<@s.select list="periodStartList" name="view.periodStart" listKey="id" listValue="displayName" id="periodStart" />
 			<span><@s.text name="label.for_the_next"/></span>
-			<@s.select list="periodEndList" name="view.periodEnd"  listKey="id" listValue="displayName" />
+			<@s.select list="periodEndList" name="view.periodEnd"  listKey="id" listValue="displayName" id="periodEnd"/>
 		</p>
 	</div>
 	<div class="infoSet fullInfoSet">
@@ -133,11 +133,11 @@ ${action.setPageType('my_account', 'notification_settings')!}
 
 	function updateUpcomingOptions() {
 		if ($('includeUpcoming').checked) {
-			$('notificationSettingUpdate_view_periodStart').disabled = false;
-			$('notificationSettingUpdate_view_periodEnd').disabled = false;
+			$('periodStart').disabled = false;
+			$('periodEnd').disabled = false;
 		} else {
-			$('notificationSettingUpdate_view_periodStart').disabled = true;
-			$('notificationSettingUpdate_view_periodEnd').disabled = true;
+			$('periodStart').disabled = true;
+			$('periodEnd').disabled = true;
 		}
 	}
 	
