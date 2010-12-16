@@ -33,6 +33,7 @@
     addGuardForTooManySelectedToElements(".printAllPDFs", maxSizeForPDFPrintOuts, 'warning_printAllPDFs');
     addGuardForTooManySelectedToElements(".multiEvent", maxSizeForMultiEvent, 'warning_multi_event');
     addGuardForTooManySelectedToElements(".assignEventsToJob", maxSizeForAssigningEventsToJobs, 'warning_assignEventsToJob');
+	addGuardForTooManySelectedToElements(".summaryReport", maxSizeForSummaryReport, 'warning_summaryReport');
 
     if (totalResults > maxSizeForSummaryReport) {
         $$(".summaryReport").each(function(element) {
