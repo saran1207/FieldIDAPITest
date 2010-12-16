@@ -32,7 +32,8 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	
 	// these are the relative times that will be used in each period list (in order)
 	private static final RelativeTime[] startTimes = {RelativeTime.TODAY, RelativeTime.TOMORROW, RelativeTime.THIS_WEEK, RelativeTime.NEXT_WEEK, RelativeTime.THIS_MONTH, RelativeTime.NEXT_MONTH};
-	private static final RelativeTime[] endTimes = {RelativeTime.DAY_1, RelativeTime.DAY_2, RelativeTime.WEEK_1, RelativeTime.WEEK_2, RelativeTime.MONTH_1, RelativeTime.MONTH_2, RelativeTime.MONTH_3};
+	private static final RelativeTime[] endTimes = { RelativeTime.DAY_1, RelativeTime.DAY_2, RelativeTime.WEEK_1, RelativeTime.WEEK_2, RelativeTime.MONTH_1, RelativeTime.MONTH_2,
+			RelativeTime.MONTH_3, RelativeTime.MONTH_6, RelativeTime.MONTH_9, RelativeTime.MONTH_12, RelativeTime.MONTH_18, RelativeTime.MONTH_24 };
 
 	private List<Listable<String>> periodStartList;
 	private List<Listable<String>> periodEndList;

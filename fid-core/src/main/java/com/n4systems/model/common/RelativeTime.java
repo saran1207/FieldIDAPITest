@@ -20,6 +20,11 @@ public enum RelativeTime implements Listable<String> {
 	MONTH_1		("label.1_month",		DateHelper.MONTH,	1),
 	MONTH_2		("label.2_month",		DateHelper.MONTH,	2),
 	MONTH_3		("label.3_month",		DateHelper.MONTH,	3),
+	MONTH_6		("label.6_month",		DateHelper.MONTH,	6),
+	MONTH_9		("label.9_month",		DateHelper.MONTH,	9),
+	MONTH_12	("label.12_month",		DateHelper.MONTH,	12),
+	MONTH_18	("label.18_month",		DateHelper.MONTH,	18),
+	MONTH_24	("label.24_month",		DateHelper.MONTH,	24),
 	THIS_YEAR	("label.this_year",		DateHelper.YEAR, 	0),
 	NEXT_YEAR	("label.next_year",		DateHelper.YEAR,	1);
 	
