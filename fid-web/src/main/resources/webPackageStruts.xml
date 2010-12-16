@@ -604,7 +604,7 @@
 		
 		<action name="changeToLite" method="changeToLite" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="redirectAction">
-				<param name="actionName">employeeUserEdit</param>
+				<param name="actionName">liteUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
