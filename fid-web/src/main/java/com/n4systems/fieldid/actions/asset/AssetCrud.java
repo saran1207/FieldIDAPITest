@@ -53,7 +53,6 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -800,7 +799,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {
-			employees = getLoaderFactory().createCurrentCombinedUserListableLoader().load();
+			employees = getLoaderFactory().createHistoricalCombinedUserListableLoader().load();
 			
 		}
 		return employees;
@@ -1009,7 +1008,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public AssignedToUserGrouper getUserGrouper() {
 		if (userGrouper == null){
-			userGrouper = new AssignedToUserGrouper(getSecurityFilter(), getEmployees());
+			userGrouper = new AssignedToUserGrouper(getSecurityFilter(), getEmployees(), getSessionUser());
 		}
 		return userGrouper;
 	}

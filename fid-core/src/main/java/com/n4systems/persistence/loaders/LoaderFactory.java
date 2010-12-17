@@ -209,12 +209,12 @@ public class LoaderFactory implements Serializable {
 		return new CommentTemplateListableLoader(filter);
 	}
 
-	public UserListableLoader createCurrentEmployeesListableLoader() {
-		return createHistoricalEmployeesListableLoader().setNoDeleted(true);
-	}
-	
 	public UserListableLoader createCurrentCombinedUserListableLoader() {
 		return createHistoricalCombinedUserListableLoader().setNoDeleted(true);
+	}
+	
+	public UserListableLoader createCurrentEmployeesListableLoader() {
+		return createHistoricalEmployeesListableLoader().setNoDeleted(true);
 	}
 
 	public CurrentEulaLoader createCurrentEulaLoader() {
@@ -337,12 +337,12 @@ public class LoaderFactory implements Serializable {
 		return new HasLinkedAssetsLoader(filter);
 	}
 
-	public UserListableLoader createHistoricalEmployeesListableLoader() {
-		return createUserListableLoader().employeesOnly();
-	}
-	
 	public UserListableLoader createHistoricalCombinedUserListableLoader() {
 		return createUserListableLoader();
+	}
+	
+	public UserListableLoader createHistoricalEmployeesListableLoader() {
+		return createUserListableLoader().employeesOnly();
 	}
 
 	public IncompleteEventSchedulesListLoader createIncompleteEventSchedulesListLoader() {

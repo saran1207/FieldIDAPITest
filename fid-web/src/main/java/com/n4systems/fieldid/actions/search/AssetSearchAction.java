@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
+
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AssetStatus;
@@ -20,6 +22,8 @@ import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
@@ -32,6 +36,8 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	private OwnerPicker ownerPicker;
 	private List<Listable<Long>> employees;
 	private List<Long> searchIds;
+	private AssignedToUserGrouper userGrouper;
+	private LoaderFactory loaderFactory;
 
 	public AssetSearchAction(final PersistenceManager persistenceManager, final AssetManager assetManager) {
 		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search"));
@@ -118,9 +124,17 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 		if (employees == null) {
 			employees = new ArrayList<Listable<Long>>();
 			employees.add(new SimpleListable<Long>(UNASSIGNED_USER, getText("label.unassigned")));
-			employees.addAll(getLoaderFactory().createHistoricalEmployeesListableLoader().load());
+			employees.addAll(getLoaderFactory().createHistoricalCombinedUserListableLoader().load());
 		}
 		return employees;
+	}
+	
+	@Override
+	public LoaderFactory getLoaderFactory() {
+		if (loaderFactory == null) {
+			loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(getTenantId()));
+		}
+		return loaderFactory;
 	}
 	
 	public BaseOrg getOwner() {
@@ -134,5 +148,12 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 		getContainer().setOwner(ownerPicker.getOwner());	
+	}
+	
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+		}
+		return userGrouper;
 	}
 }

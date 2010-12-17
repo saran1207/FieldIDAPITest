@@ -192,6 +192,10 @@ public class SessionUser implements DateTimeDefinition {
 		return readOnly;
 	}
 	
+	public boolean isReadOnlyCustomerUser(){
+		return isReadOnlyUser() && getOwner().isExternal();
+	}
+	
 	public boolean isAnEndUser() {
 		return isReadOnlyUser();
 	}

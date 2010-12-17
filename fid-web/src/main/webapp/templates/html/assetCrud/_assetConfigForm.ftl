@@ -9,7 +9,9 @@
 		<div class="infoSet reducedPaddingInfoSet">
 			<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
 			<#if !parentAsset?exists>
-				<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+				<@s.select name="assignedUser" headerKey="0" headerValue="${action.getText('label.unassigned')}" >
+					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+				</@s.select>
 			<#else>
 				<span class="fieldHolder" id="assignedUser">${(asset.assignedUser.userLabel)!}</span>
 			</#if>
