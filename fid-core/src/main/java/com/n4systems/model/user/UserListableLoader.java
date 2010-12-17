@@ -31,6 +31,7 @@ public class UserListableLoader extends ListableLoader {
 		
 		builder.addOrder("firstName", "lastName");
 		builder.addSimpleWhere("active", true);
+		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.SYSTEM));
 		
 		if (noDeleted) {
 			builder.addSimpleWhere("deleted", false);

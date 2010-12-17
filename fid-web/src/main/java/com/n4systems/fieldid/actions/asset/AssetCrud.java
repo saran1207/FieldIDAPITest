@@ -35,6 +35,7 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.ProjectManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.MissingEntityException;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
@@ -52,6 +53,7 @@ import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -77,7 +79,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	private List<Asset> assets;
 	private List<Listable<Long>> employees;
-
 	protected List<AssetAttachment> assetAttachments;
 
 	// form inputs
@@ -88,6 +89,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private String identified;
 	private LineItem lineItem;
 	private OwnerPicker ownerPicker;
+	
+	private AssignedToUserGrouper userGrouper;
 	
 	private boolean refreshRegirstation = false;
 
@@ -797,12 +800,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {
-			employees = getLoaderFactory().createCurrentEmployeesListableLoader().load();
+			employees = getLoaderFactory().createCurrentCombinedUserListableLoader().load();
 			
 		}
 		return employees;
 	}
-
+	
 	public Long getAssignedUser() {
 		return (asset.getAssignedUser() != null) ? asset.getAssignedUser().getId() : null;
 	}
@@ -984,8 +987,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 		}
 	}
 	
-	
-	
 	public List<Asset> getLinkedAssets() {
 		return linkedAssets;
 	}
@@ -998,7 +999,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return refreshRegirstation;
 	}
 
-
 	public void setAssetWebModel(AssetWebModel assetWebModel) {
 		this.assetWebModel = assetWebModel;
 	}
@@ -1006,6 +1006,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public AssetWebModel getAssetWebModel() {
 		return assetWebModel;
 	}
-	
+
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(getSecurityFilter(), getEmployees());
+		}
+		return userGrouper;
+	}
 	
 }

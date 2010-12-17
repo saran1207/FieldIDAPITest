@@ -212,6 +212,10 @@ public class LoaderFactory implements Serializable {
 	public UserListableLoader createCurrentEmployeesListableLoader() {
 		return createHistoricalEmployeesListableLoader().setNoDeleted(true);
 	}
+	
+	public UserListableLoader createCurrentCombinedUserListableLoader() {
+		return createHistoricalCombinedUserListableLoader().setNoDeleted(true);
+	}
 
 	public CurrentEulaLoader createCurrentEulaLoader() {
 		return new CurrentEulaLoader();
@@ -335,6 +339,10 @@ public class LoaderFactory implements Serializable {
 
 	public UserListableLoader createHistoricalEmployeesListableLoader() {
 		return createUserListableLoader().employeesOnly();
+	}
+	
+	public UserListableLoader createHistoricalCombinedUserListableLoader() {
+		return createUserListableLoader();
 	}
 
 	public IncompleteEventSchedulesListLoader createIncompleteEventSchedulesListLoader() {

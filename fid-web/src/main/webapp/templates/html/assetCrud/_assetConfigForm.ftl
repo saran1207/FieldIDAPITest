@@ -8,8 +8,8 @@
 	<#if securityGuard.assignedToEnabled >
 		<div class="infoSet reducedPaddingInfoSet">
 			<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
-			<#if !parentAsset?exists >
-				<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.unassigned')}" />
+			<#if !parentAsset?exists>
+				<#include "/templates/html/common/_assignedToDropDown.ftl"/>
 			<#else>
 				<span class="fieldHolder" id="assignedUser">${(asset.assignedUser.userLabel)!}</span>
 			</#if>
