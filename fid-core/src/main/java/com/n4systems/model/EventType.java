@@ -16,7 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -59,10 +59,9 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	@ManyToOne(cascade={CascadeType.REFRESH}, optional=false)
 	private EventTypeGroup group;
 
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@IndexColumn(name="orderidx")
-    @JoinTable(name="eventtypes_criteriasections", joinColumns = {@JoinColumn(name="eventtypes_id")})
-	private List<CriteriaSection> sections = new ArrayList<CriteriaSection>();
+    @OneToOne(cascade = {CascadeType.MERGE}, orphanRemoval = false)
+    @JoinColumn(name="eventform_id")
+    private EventForm eventForm;
 
 	@ElementCollection(fetch= FetchType.LAZY)
 	@Enumerated(EnumType.STRING)
@@ -126,7 +125,7 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	 */
 	public CriteriaSection findSection(Criteria criteria) {
 		CriteriaSection criteriaSection = null;
-		for(CriteriaSection section: sections) {
+		for(CriteriaSection section: getEventForm().getSections()) {
 			if(section.getCriteria().contains(criteria)) {
 				criteriaSection = section;
 				break;
@@ -162,15 +161,6 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 		this.infoFieldNames = infoFieldNames;
 	}
 
-	@AllowSafetyNetworkAccess
-	public List<CriteriaSection> getSections() {
-		return sections;
-	}
-
-	public void setSections(List<CriteriaSection> sections) {
-		this.sections = sections;
-	}
-	
 	@AllowSafetyNetworkAccess
 	public Set<ProofTestType> getSupportedProofTests() {
 		return supportedProofTests;
@@ -265,4 +255,13 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	public void removeAssignedTo() {
 		assignedToAvailable = false;
 	}
+
+    @AllowSafetyNetworkAccess
+    public EventForm getEventForm() {
+        return eventForm;
+    }
+
+    public void setEventForm(EventForm eventForm) {
+        this.eventForm = eventForm;
+    }
 }

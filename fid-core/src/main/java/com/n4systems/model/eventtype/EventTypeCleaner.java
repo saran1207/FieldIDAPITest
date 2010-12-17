@@ -39,16 +39,18 @@ public class EventTypeCleaner extends EntityWithTenantCleaner<EventType> {
 	private void cleanSections(EventType type) {
 		// we want to create a new list of sections, rather then removing old ones to avoid ConcurrentModification while we iterate
 		List<CriteriaSection> cleanedSections = new ArrayList<CriteriaSection>();
-		for (CriteriaSection section: type.getSections()) {
-			// there's no need to copy the retired criteria
-			if (!section.isRetired()) {
-				sectionCleaner.clean(section);
-				
-				cleanedSections.add(section);
-			}
-		}
-		
-		type.setSections(cleanedSections);
+        if (type.getEventForm() != null) {
+            for (CriteriaSection section: type.getEventForm().getSections()) {
+                // there's no need to copy the retired criteria
+                if (!section.isRetired()) {
+                    sectionCleaner.clean(section);
+
+                    cleanedSections.add(section);
+                }
+            }
+
+            type.getEventForm().setSections(cleanedSections);
+        }
 	}
 	
 	private void cleanSupportedProofTests(EventType type) {

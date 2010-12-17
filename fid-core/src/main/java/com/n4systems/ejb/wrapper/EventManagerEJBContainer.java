@@ -243,19 +243,4 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-
-	public EventType updateEventForm(EventType eventType, Long modifyingUserId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).updateEventForm(eventType, modifyingUserId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 }

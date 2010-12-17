@@ -40,7 +40,11 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
 	private EventType type;
-	
+
+    @ManyToOne(fetch=FetchType.EAGER, optional=false)
+    @JoinColumn(name="eventform_id", nullable = false)
+    private EventForm eventForm;
+
 	@ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="asset_id")
 	private Asset asset;
@@ -162,7 +166,15 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 		this.comments = comments;
 	}
 
-	public List<FileAttachment> getImageAttachments() {
+    public EventForm getEventForm() {
+        return eventForm;
+    }
+
+    public void setEventForm(EventForm eventForm) {
+        this.eventForm = eventForm;
+    }
+
+    public List<FileAttachment> getImageAttachments() {
 		List<FileAttachment> imageAttachments = new ArrayList<FileAttachment>();
 		for (FileAttachment fileAttachment : attachments) {
 			if (fileAttachment.isImage()) {

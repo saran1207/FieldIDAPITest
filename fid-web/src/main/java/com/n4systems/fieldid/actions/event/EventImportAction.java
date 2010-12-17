@@ -135,7 +135,7 @@ public class EventImportAction extends AbstractImportAction {
 
 	public void setUniqueID(Long id) {
 		if (type == null || !type.getId().equals(id)) {
-			type = getLoaderFactory().createFilteredIdLoader(EventType.class).setPostFetchFields("sections").setId(id).load();
+			type = getLoaderFactory().createFilteredIdLoader(EventType.class).setPostFetchFields("eventForm.sections").setId(id).load();
 		}
 	}
 	

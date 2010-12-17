@@ -189,26 +189,6 @@ public class EventManagerImpl implements EventManager {
 		return eventSaver.attachFilesToSubEvent(event, subEvent, uploadedFiles);
 	}
 
-	/**
-	 * ensure that all criteria are retired under a retired section.
-	 */
-	public EventType updateEventForm(EventType eventType, Long modifyingUserId) {
-		if (eventType.getSections() != null && !eventType.getSections().isEmpty()) {
-			for (CriteriaSection section : eventType.getSections()) {
-				if (section.isRetired()) {
-					for (Criteria criteria : section.getCriteria()) {
-						criteria.setRetired(true);
-					}
-				}
-			}
-		}
-		
-		// any update to an event form, requires an increment of the form version
-		eventType.incrementFormVersion();
-		
-		return persistenceManager.update(eventType, modifyingUserId);
-	}
-
 	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 
 		List<Long> customerIds = searchCriteria.getCustomerIds();

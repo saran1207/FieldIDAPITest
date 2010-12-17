@@ -9,6 +9,7 @@ import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.EventForm;
 
 public class EventFormHelper {
 
@@ -22,9 +23,10 @@ public class EventFormHelper {
 		if (availableSections.get(event) == null) {
 			availableSections.put(event, new ArrayList<CriteriaSection>());
 			getVisibleResults(event);
-	
-			if (!event.getType().getSections().isEmpty()) {
-				for (CriteriaSection section : event.getType().getSections()) {
+
+            EventForm eventForm = event.getEventForm();
+            if (eventForm != null && !eventForm.getSections().isEmpty()) {
+				for (CriteriaSection section : eventForm.getSections()) {
 					if (!sections.get(event).isEmpty()) {
 						if (sections.get(event).containsKey(section)) {
 							availableSections.get(event).add(section);
@@ -46,8 +48,9 @@ public class EventFormHelper {
 	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractEvent event) {
 		if (sections.get(event) == null) {
 			sections.put(event, new HashMap<CriteriaSection, List<CriteriaResult>>());
-			if (!event.getType().getSections().isEmpty() && !event.getResults().isEmpty()) {
-				for (CriteriaSection section : event.getType().getSections()) {
+            EventForm eventForm = event.getEventForm();
+			if (eventForm != null && !eventForm.getSections().isEmpty() && !event.getResults().isEmpty()) {
+				for (CriteriaSection section : eventForm.getSections()) {
 					List<CriteriaResult> results = new ArrayList<CriteriaResult>();
 					for (Criteria criteria : section.getCriteria()) {
 						for (CriteriaResult criteriaResult : event.getResults()) {

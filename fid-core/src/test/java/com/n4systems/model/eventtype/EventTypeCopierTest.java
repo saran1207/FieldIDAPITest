@@ -27,7 +27,7 @@ public class EventTypeCopierTest {
 		EventTypeCopier copier = new EventTypeCopier(typeCleaner, typeLoader, typeSaver, typeNameLoader);
 		
 		EasyMock.expect(typeLoader.setId(typeId)).andReturn(typeLoader);
-		EasyMock.expect(typeLoader.setPostFetchFields("sections", "supportedProofTests", "infoFieldNames")).andReturn(typeLoader);
+		EasyMock.expect(typeLoader.setPostFetchFields("eventForm.sections", "supportedProofTests", "infoFieldNames")).andReturn(typeLoader);
 		EasyMock.expect(typeLoader.load()).andReturn(fromType);
 		
 		typeCleaner.clean(fromType);

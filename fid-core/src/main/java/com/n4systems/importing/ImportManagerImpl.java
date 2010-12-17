@@ -93,9 +93,13 @@ public class ImportManagerImpl implements ImportManager {
 				}
 				
 				logger.debug("Found EventType [" + type.getName() + "]");
-				
+
+                if(type.getEventForm() == null) {
+                    throw new FileImportException("EventType named [" + lineParts[OBS_EVENT_TYPE_NAME] + "] for Tenant [" + tenantId + "] has no event form!");
+                }
+
 				// now let's try and resolve the section
-				section = FuzzyResolver.resolve(lineParts[OBS_SECTION_NAME], type.getSections(), "title");
+				section = FuzzyResolver.resolve(lineParts[OBS_SECTION_NAME], type.getEventForm().getSections(), "title");
 				
 				if(section == null) {
 					throw new FileImportException("Unable to find CriteriaSection named [" + lineParts[OBS_SECTION_NAME] + "] for Tenant [" + tenantId + "] and EventType [" + type.getName() + "]");

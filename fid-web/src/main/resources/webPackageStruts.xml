@@ -1013,16 +1013,6 @@
 			<result name="missing" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/eventFormCrud/form.ftl</result>
 		</action>
-		<action name="eventTypeFormSave" method="save" class="com.n4systems.fieldid.actions.event.EventFormCrud">
-			<result name="missing" type="freemarker">templates/html/common/error.ftl</result>
-			<result name="error" type="freemarker">/templates/html/eventFormCrud/form.ftl</result>
-			<result name="input" type="freemarker">/templates/html/eventFormCrud/form.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">eventTypeForm</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
-		</action>
-
 
 		<action name="startEvent" class="com.n4systems.fieldid.actions.event.StartEvent">
 			<result name="success" type="freemarker">/templates/html/events/select.ftl</result>

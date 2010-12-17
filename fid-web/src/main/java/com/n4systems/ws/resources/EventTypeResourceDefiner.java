@@ -29,7 +29,7 @@ public class EventTypeResourceDefiner implements ResourceDefiner<EventType, WsEv
 
 	@Override
 	public IdLoader<FilteredIdLoader<EventType>> getResourceIdLoader(LoaderFactory loaderFactory) {
-		return loaderFactory.createFilteredIdLoader(EventType.class).setPostFetchFields("sections");
+		return loaderFactory.createFilteredIdLoader(EventType.class).setPostFetchFields("eventForm.sections");
 	}
 	
 }

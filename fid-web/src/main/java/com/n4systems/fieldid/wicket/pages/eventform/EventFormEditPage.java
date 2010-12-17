@@ -4,15 +4,18 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
+import com.n4systems.model.api.Archivable;
+import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.services.EventTypeService;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -23,13 +26,16 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EventFormEditPage extends WebPage {
 
     private List<CriteriaSection> criteriaSections;
 
-    private EventType eventType;
+    private Long eventTypeId;
+    private Long oldEventFormId;
 
     private CriteriaSectionsPanel criteriaSectionsPanel;
     private CriteriaPanel criteriaPanel;
@@ -37,15 +43,21 @@ public class EventFormEditPage extends WebPage {
 
     public EventFormEditPage(PageParameters params) {
         super(params);
-        Long id = params.getAsLong("id");
         add(new DoneForm("doneForm"));
 
-        FilteredIdLoader<EventType> idLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
-        idLoader.setPostFetchFields("sections");
-        idLoader.setId(id);
+        eventTypeId = params.getAsLong("id");
 
-        eventType = idLoader.load();
-        criteriaSections = eventType.getSections();
+        FilteredIdLoader<EventType> idLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
+        idLoader.setPostFetchFields("eventForm.sections");
+        idLoader.setId(eventTypeId);
+        EventType eventType = idLoader.load();
+
+        if (eventType.getEventForm() != null) {
+            oldEventFormId = eventType.getEventForm().getId();
+            criteriaSections = eventType.getEventForm().getSections();
+        } else {
+            criteriaSections = Collections.emptyList();
+        }
 
         add(CSSPackageResource.getHeaderContribution("style/fieldid.css"));
         add(CSSPackageResource.getHeaderContribution("style/eventFormEdit.css"));
@@ -54,6 +66,7 @@ public class EventFormEditPage extends WebPage {
         {
             @Override
             public void onCriteriaSectionAdded(AjaxRequestTarget target, CriteriaSection section) {
+                section.setTenant(FieldIDSession.get().getSessionUser().getTenant());
                 criteriaSections.add(section);
                 setSelectedIndex(criteriaSections.size() - 1);
                 onCriteriaSectionSelected(target, criteriaSections.size() - 1);
@@ -83,6 +96,7 @@ public class EventFormEditPage extends WebPage {
         add(criteriaPanel = new CriteriaPanel("criteriaPanel") {
             @Override
             public void onCriteriaAdded(AjaxRequestTarget target, Criteria criteria, int newIndex) {
+                criteria.setTenant(FieldIDSession.get().getSessionUser().getTenant());
                 setSelectedIndex(newIndex);
                 onCriteriaSelected(target, criteria);
                 focusOnCriteriaNameField(target);
@@ -136,16 +150,25 @@ public class EventFormEditPage extends WebPage {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     Transaction tx = PersistenceManager.startTransaction();
 
-                    EventTypeService eventTypeService = new EventTypeService();
-                    Long oldEventTypeId = eventType.getId();
+                    FilteredIdLoader<EventForm> eventFormLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventForm.class);
+                    EventForm oldEventForm = eventFormLoader.setId(oldEventFormId).load(tx);
+                    oldEventForm.setState(Archivable.EntityState.RETIRED);
+                    new EventFormSaver().save(tx, oldEventForm);
 
-                    eventTypeService.retireEventType(tx, oldEventTypeId);
-                    clearOutIds(eventType);
-                    new EventTypeSaver().save(eventType);
+                    FilteredIdLoader<EventType> eventTypeLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
 
-                    target.appendJavascript("parent.refreshPageToNewEventTypeId("+eventType.getId()+");");
+                    EventType eventType = eventTypeLoader.setId(eventTypeId).setPostFetchFields("eventForm.sections").load(tx);
 
-                    eventTypeService.pointOldAssociationsToNewEventType(tx, oldEventTypeId, eventType.getId());
+                    EventForm eventForm = new EventForm();
+                    eventForm.setSections(createCopiesOf(criteriaSections));
+                    eventForm.setTenant(FieldIDSession.get().getSessionUser().getTenant());
+                    eventType.setEventForm(eventForm);
+                    
+                    new EventFormSaver().save(tx, eventForm);
+                    new EventTypeSaver().save(tx, eventType);
+
+                    target.appendJavascript("parent.location.reload();");
+
                     tx.commit();
 
                     FieldIDSession.get().storeInfoMessageForStruts("Event Form saved.");
@@ -155,14 +178,13 @@ public class EventFormEditPage extends WebPage {
 
     }
 
-    private void clearOutIds(EventType eventType) {
-        eventType.setId(null);
-        for (CriteriaSection section : eventType.getSections()) {
-            section.setId(null);
-            for (Criteria criteria : section.getCriteria()) {
-                criteria.setId(null);
-            }
+    private List<CriteriaSection> createCopiesOf(List<CriteriaSection> criteriaSections) {
+        CriteriaSectionCopyUtil copyUtil = new CriteriaSectionCopyUtil();
+        List<CriteriaSection> copiedSections = new ArrayList<CriteriaSection>();
+        for (CriteriaSection section : criteriaSections) {
+            copiedSections.add(copyUtil.copySection(section));
         }
+        return copiedSections;
     }
 
 }

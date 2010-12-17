@@ -33,7 +33,7 @@ public class EventTypeCopier implements Copier<EventType> {
 	public EventType copy(Long id) {
 		// note we don't maintain a transaction here as we don't want our type to be in managed scope.
 		// otherwise we would be editing the model as we copied
-		EventType type = typeLoader.setId(id).setPostFetchFields("sections", "supportedProofTests", "infoFieldNames").load();
+		EventType type = typeLoader.setId(id).setPostFetchFields("eventForm.sections", "supportedProofTests", "infoFieldNames").load();
 		
 		typeCleaner.clean(type);
 

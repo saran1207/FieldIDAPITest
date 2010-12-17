@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.event;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.n4systems.ejb.EventManager;
@@ -37,7 +38,7 @@ public class EventFormCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		eventType = persistenceManager.find( EventType.class, uniqueId, getTenantId(), "sections" );
+		eventType = persistenceManager.find( EventType.class, uniqueId, getTenantId(), "eventForm.sections" );
 	}
 
 	@SkipValidation
@@ -47,27 +48,7 @@ public class EventFormCrud extends AbstractCrud {
 			return MISSING;
 		}
 		
-		criteriaSections = eventType.getSections();
-		
-		return SUCCESS;
-	}
-	
-	public String doSave() {
-		if( eventType == null ) {
-			addActionError( getText( "error.noeventtype" ) );
-			return MISSING;
-		}
-		
-		processCriteriaSections();
-		
-		try{
-			eventType.setSections( criteriaSections );
-			eventManager.updateEventForm(eventType, getSessionUser().getUniqueID() );
-			addFlashMessage( getText( "message.eventformsaved" ) );
-		} catch (Exception e) {
-			addActionError( getText( "error.couldnotsave" ) );
-			return ERROR;
-		}
+		criteriaSections = eventType.getEventForm() != null ? eventType.getEventForm().getSections() : Collections.<CriteriaSection>emptyList(); ;
 		
 		return SUCCESS;
 	}
@@ -107,8 +88,12 @@ public class EventFormCrud extends AbstractCrud {
 	
 	
 	public List<CriteriaSection> getCriteriaSections() {
-		if( criteriaSections == null ) {
-			criteriaSections = eventType.getSections();
+		if( criteriaSections == null) {
+            if (eventType.getEventForm() != null) {
+                criteriaSections = eventType.getEventForm().getSections();
+            } else {
+                criteriaSections = Collections.emptyList();
+            }
 		}
 		return criteriaSections; 
 	}
@@ -138,7 +123,7 @@ public class EventFormCrud extends AbstractCrud {
 	}
 
 	public boolean isNewForm() {
-		return (eventType.getSections().isEmpty());
+		return (eventType.getEventForm() == null || eventType.getEventForm().getSections().isEmpty());
 	}
 	
 	public String getName(){

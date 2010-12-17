@@ -66,7 +66,7 @@ public class EventTypeCrud extends AbstractCrud {
 	protected void loadMemberFields(Long uniqueId) {
 		QueryBuilder<EventType> query = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
 		query.addSimpleWhere("id", uniqueId);
-		query.addPostFetchPaths("sections", "supportedProofTests", "infoFieldNames");
+		query.addPostFetchPaths("eventForm.sections", "supportedProofTests", "infoFieldNames");
 		eventType = persistenceManager.find(query);
 		
 	}

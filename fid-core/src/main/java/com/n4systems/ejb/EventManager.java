@@ -48,8 +48,4 @@ public interface EventManager {
 
 	public Event retireEvent(Event event, Long userId);
 
-	
-
-	public EventType updateEventForm(EventType eventType, Long modifyingUserId);
-
 }

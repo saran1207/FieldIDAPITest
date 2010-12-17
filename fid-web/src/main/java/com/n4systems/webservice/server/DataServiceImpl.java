@@ -244,7 +244,7 @@ public class DataServiceImpl implements DataService {
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, securityFilter);
 			queryBuilder.setSimpleSelect();
-			queryBuilder.addPostFetchPaths("sections", "infoFieldNames");
+			queryBuilder.addPostFetchPaths("eventForm.sections", "infoFieldNames");
 			
 			List<EventType> eventTypes = null;
 				eventTypes = persistenceManager.findAll( queryBuilder );

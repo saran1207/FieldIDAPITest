@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.builders.EventTypeBuilder;
@@ -76,7 +77,7 @@ public class EventTypeCleanerTest {
 		assertEquals(infoFieldNames, type.getInfoFieldNames());
 		assertNotSame(infoFieldNames, type.getInfoFieldNames());
 		
-		assertEquals(2, type.getSections().size());
+		assertEquals(2, type.getEventForm().getSections().size());
 		
 		EasyMock.verify(sectionCleaner);
 	}
@@ -92,7 +93,8 @@ public class EventTypeCleanerTest {
 		type.setGroup(GROUP);
 		type.setSupportedProofTests(supportedProofTests);
 		type.setInfoFieldNames(infoFieldNames);
-		type.setSections(sections);
+        type.setEventForm(new EventForm());
+		type.getEventForm().setSections(sections);
         type.setModifiedBy(UserBuilder.aUser().build());
 		return type;
 	}

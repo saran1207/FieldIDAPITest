@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.model.EventForm;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
@@ -26,7 +27,8 @@ public class WsEventTypeConverterTest {
 		model.setMaster(true);
 		model.makeAssignedToAvailable();
 		model.setGroup(new EventTypeGroup());
-		model.getSections().add(new CriteriaSection());
+        model.setEventForm(new EventForm());
+		model.getEventForm().getSections().add(new CriteriaSection());
 		
 		WsEventTypeGroup wsGroup = new WsEventTypeGroup();
 		WsModelConverter<EventTypeGroup, WsEventTypeGroup> groupConverter = EasyMock.createMock(WsModelConverter.class);
@@ -35,7 +37,7 @@ public class WsEventTypeConverterTest {
 		
 		List<WsCriteriaSection> wsCritSections = Arrays.asList(new WsCriteriaSection());
 		WsModelConverter<CriteriaSection, WsCriteriaSection> sectionConverter = EasyMock.createMock(WsModelConverter.class);
-		EasyMock.expect(sectionConverter.fromModels(model.getSections())).andReturn(wsCritSections);
+		EasyMock.expect(sectionConverter.fromModels(model.getEventForm().getSections())).andReturn(wsCritSections);
 		EasyMock.replay(sectionConverter);
 		
 		WsEventType wsModel = new WsEventTypeConverter(sectionConverter, groupConverter).fromModel(model);

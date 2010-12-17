@@ -200,7 +200,7 @@ public class CatalogServiceImpl implements CatalogService {
 		if (!getEventTypeIdsPublished().contains(eventTypeId)) {
 			throw new NotPublishedException("not published");
 		}
-		return persistenceManager.find(EventType.class, eventTypeId, getTenant().getId(), "supportedProofTests", "sections", "infoFieldNames");
+		return persistenceManager.find(EventType.class, eventTypeId, getTenant().getId(), "supportedProofTests", "eventForm.sections", "infoFieldNames");
 	}
 
 	public List<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds) {

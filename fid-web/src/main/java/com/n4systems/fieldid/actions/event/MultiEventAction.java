@@ -143,7 +143,7 @@ public class MultiEventAction extends AbstractCrud {
 		if (type == null) {
 			eventType = null;
 		} else if (eventType == null || !type.equals(eventType.getId())) {
-			eventType = persistenceManager.find(EventType.class, type, getTenantId(), "sections", "supportedProofTests", "infoFieldNames");
+			eventType = persistenceManager.find(EventType.class, type, getTenantId(), "eventForm.sections", "supportedProofTests", "infoFieldNames");
 		}
 	}
 

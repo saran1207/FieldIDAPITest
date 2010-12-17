@@ -28,7 +28,8 @@ public class WsEventTypeConverter extends WsModelConverter<EventType, WsEventTyp
 		wsEventType.setMaster(model.isMaster());
 		wsEventType.setAssignedToAvailable(model.isAssignedToAvailable());
 		wsEventType.setGroup(groupConverter.fromModel(model.getGroup()));
-		wsEventType.setSections(sectionConverter.fromModels(model.getSections()));
+        if (model.getEventForm() != null)
+		    wsEventType.setSections(sectionConverter.fromModels(model.getEventForm().getSections()));
 		return wsEventType;
 	}
 

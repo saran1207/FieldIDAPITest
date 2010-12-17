@@ -78,11 +78,14 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private void mapStateSets(EventType importedEventType) {
-		for (CriteriaSection criteriaSection : importedEventType.getSections()) {
-			for (Criteria criteria : criteriaSection.getCriteria()) {
+        if (importedEventType.getEventForm() != null) {
+            for (CriteriaSection criteriaSection : importedEventType.getEventForm().getSections()) {
+                for (Criteria criteria : criteriaSection.getCriteria()) {
+                // TODO: Fix for different criteria types
 //				criteria.setStates(importedStateSetMapping.get(criteria.getStates().getId()));
-			}
-		}
+                }
+            }
+        }
 	}
 	
 	

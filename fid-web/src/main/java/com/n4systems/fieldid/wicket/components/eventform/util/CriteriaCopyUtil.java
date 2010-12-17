@@ -30,6 +30,9 @@ public class CriteriaCopyUtil {
         newCriteria.setTenant(criteria.getTenant());
         newCriteria.setRecommendations(copyList(criteria.getRecommendations()));
         newCriteria.setDeficiencies(copyList(criteria.getDeficiencies()));
+        newCriteria.setModified(criteria.getModified());
+        newCriteria.setModifiedBy(criteria.getModifiedBy());
+        newCriteria.setCreated(criteria.getCreated());
         if (existingCriteria != null) {
             newCriteria.setDisplayText(findUnusedNameBasedOn(criteria.getDisplayText(), existingCriteria));
         } else {

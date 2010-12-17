@@ -73,10 +73,10 @@ ${action.setPageType('event_type', 'show')!}
 
 	
 	<h2><@s.text name="label.eventform"/></h2>
-	<#if !eventType.sections.isEmpty()  >
+	<#if eventType.eventForm?exists && !eventType.eventForm.sections.isEmpty()  >
 		
 		<div id="eventForm">
-			<#list eventType.sections as section >
+			<#list eventType.eventForm.sections as section >
 				<#if !section.retired >
 					<h2>${section.title}</h2>
 					<div id="${section.title}">

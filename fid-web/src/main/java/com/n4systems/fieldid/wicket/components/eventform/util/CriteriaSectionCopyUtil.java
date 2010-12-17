@@ -7,10 +7,21 @@ import java.util.List;
 
 public class CriteriaSectionCopyUtil {
 
+    public CriteriaSection copySection(CriteriaSection section) {
+        return copySection(section, null);
+    }
+
     public CriteriaSection copySection(CriteriaSection section, List<CriteriaSection> existingSections) {
         CriteriaSection copiedSection = new CriteriaSection();
-        String newName = findUnusedNameBasedOn(section.getName(), existingSections);
-        copiedSection.setTitle(newName);
+        if (existingSections != null) {
+            copiedSection.setTitle(findUnusedNameBasedOn(section.getName(), existingSections));
+        } else {
+            copiedSection.setTitle(section.getName());
+        }
+        copiedSection.setModifiedBy(section.getModifiedBy());
+        copiedSection.setModified(section.getModified());
+        copiedSection.setCreated(section.getCreated());
+        copiedSection.setTenant(section.getTenant());
         copyCriteriaInto(section, copiedSection);
         return copiedSection;
     }

@@ -706,11 +706,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionTypeService.setFormVersion(eventType.getFormVersion());
 		inspectionTypeService.setAssignedToAvailable(eventType.isAssignedToAvailable());
 
-		for (CriteriaSection section : eventType.getSections()) {
-			if (!section.isRetired()) {
-				inspectionTypeService.getSections().add(convert(section, eventType.getId()));
-			}
-		}
+        if (eventType.getEventForm() != null) {
+            for (CriteriaSection section : eventType.getEventForm().getSections()) {
+                if (!section.isRetired()) {
+                    inspectionTypeService.getSections().add(convert(section, eventType.getId()));
+                }
+            }
+        }
 
 		// Info Field Names ; sent with an order index
 		int i = 0;
