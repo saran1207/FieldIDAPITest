@@ -1,5 +1,6 @@
 <head>
 	<script type="text/javascript" src="javascript/notificationSettings.js"> </script>
+	
 	<@n4.includeStyle type="page" href="notifications"/>
 	
 </head>
@@ -78,22 +79,24 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		<label for="owner"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="owner"/>
 	</div>
+		
+   <div class="infoSet fullInfoSet">
+        <label for="criteria.assetTypeGroup"><@s.text name="label.asset_type_group"/></label>
+        <@s.select id="assetTypeGroup" name="criteria.assetTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateAssetTypes(this)" list="assetTypeGroups" listKey="id" listValue="name"/>
+    </div>
+
+    <div class="infoSet fullInfoSet">
+        <label for="criteria.assetType"><@s.text name="label.assettype"/></label>
+        <@s.select cssClass="assetTypeSelect" id="assetType" name="view.assetTypeId" emptyOption="true" list="assetTypes" listKey="id" listValue="name"/>
+    </div>
 	
 	<div class="infoSet fullInfoSet">
-		<label for="view.assetTypeId"><@s.text name="label.asset_types"/></label>
-		<@s.select name="view.assetTypeId" list="assetTypeList" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_asset_types')}" />
+		<label for="view.eventTypeId"><@s.text name="label.event_type"/></label>
+		<@s.select name="view.eventTypeId" emptyOption="true" list="eventTypes" listKey="id" listValue="name" />
 	</div>
-	
-	<div class="infoSet fullInfoSet">
-		<label for="view.eventTypeId"><@s.text name="label.event_types"/></label>
-		<@s.select name="view.eventTypeId" list="eventTypeList" listKey="id" listValue="displayName" headerKey="" headerValue="${action.getText('label.all_event_types')}" />
-	</div>
-	
 	
 </div>
 	
-	
-
 <h2><@s.text name="label.who_should_get_the_notification"/></h2>
 <div class="sectionContent email">	
 	<div id="emailAddresses" class="infoSet fullInfoSet">
@@ -126,10 +129,12 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
 	</div>
 </div>
+
+<#include '_assetTypeScript.ftl'/>
+
 <script type="text/javascript">
 	retireImageSrc = "<@s.url value="/images/retire.gif" />";
 	addressCount = ${view.addresses.size()};
-
 
 	function updateUpcomingOptions() {
 		if ($('includeUpcoming').checked) {
@@ -148,5 +153,4 @@ ${action.setPageType('my_account', 'notification_settings')!}
 	document.observe("dom:loaded", function() {
 		updateUpcomingOptions();
 	});
-	
 </script>

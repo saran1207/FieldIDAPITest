@@ -472,5 +472,10 @@
 			 <result name="success" type="freemarker">/templates/ajax/userCrud/updateForUserGroupChanged.ftl</result>
 		</action>
 
+        <action name="retrieveNotificationAssetTypes" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypesInAssetTypeGroupAction">
+            <result name="success" type="freemarker">/templates/ajax/assetType/updateForNotificationsGroupChanged.ftl</result>
+        </action>
+
+
 	</package>
 </struts>

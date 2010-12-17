@@ -13,15 +13,16 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.utils.StrutsListHelper;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.EventType;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
-import com.n4systems.model.eventtype.EventTypeListableLoader;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingSaver;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.assettype.AssetTypeListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
@@ -37,8 +38,9 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	private List<Listable<String>> periodStartList;
 	private List<Listable<String>> periodEndList;
-	private List<Listable<Long>> assetTypeList;
-	private List<Listable<Long>> eventTypeList;
+	private List<AssetTypeGroup> assetTypeGroups;
+	private List<AssetType> assetTypes;
+	private List<EventType> eventTypes;
 	private List<FrequencyGroupView> frequencyGroups;
 	
 	private List<NotificationSetting> settingsList;
@@ -212,20 +214,25 @@ public class NotificationSettingsCrud extends AbstractCrud {
     	return periodEndList;
     }
 
-	public List<Listable<Long>> getEventTypeList() {
-		if (eventTypeList == null) {
-			EventTypeListableLoader loader = getLoaderFactory().createEventTypeListableLoader();
-			eventTypeList = loader.load();
+	public List<EventType> getEventTypes() {
+		if (eventTypes == null) {
+			eventTypes = getLoaderFactory().createEventTypeListLoader().load();
 		}
-    	return eventTypeList;
+    	return eventTypes;
     }
 
-	public List<Listable<Long>> getAssetTypeList() {
-		if (assetTypeList == null) {
-			AssetTypeListableLoader loader = getLoaderFactory().createAssetTypeListableLoader();
-			assetTypeList = loader.load();
+	public List<AssetType> getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = getLoaderFactory().createAssetTypesByGroupListLoader().load();
 		}
-    	return assetTypeList;
+    	return assetTypes;
+    }
+	
+    public List<AssetTypeGroup> getAssetTypeGroups() {
+        if (assetTypeGroups == null) {
+            assetTypeGroups = getLoaderFactory().createAssetTypeGroupsLoader().load();
+        }
+        return assetTypeGroups;
     }
 	
 	
