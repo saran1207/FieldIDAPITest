@@ -6,6 +6,7 @@ import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventTypeGroup;
@@ -56,6 +57,7 @@ public class TenantCleaner {
         removeAllForTenant(em, AssociatedEventType.class, tenantId);
         removeAllForTenant(em, EventSchedule.class, tenantId);
         removeAllForTenant(em, AssetTypeSchedule.class, tenantId);
+        removeAllForTenant(em, EventForm.class, tenantId);
         removeAllForTenant(em, EventType.class, tenantId);
         removeAllForTenant(em, EventTypeGroup.class, tenantId);
         
