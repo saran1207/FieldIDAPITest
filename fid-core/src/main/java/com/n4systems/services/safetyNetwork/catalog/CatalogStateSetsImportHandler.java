@@ -13,8 +13,11 @@ import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.StateSetImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
+import org.apache.log4j.Logger;
 
 public class CatalogStateSetsImportHandler extends CatalogImportHandler {
+
+    private static final Logger logger = Logger.getLogger(CatalogStateSetsImportHandler.class);
 
 	private StateSetImportSummary summary = new StateSetImportSummary();
 	private Set<Long> eventTypeIds;
@@ -36,6 +39,7 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 			try {
 				importStateSet(originalStateSet);
 			} catch (Exception e) {
+                logger.error("Error importing state sets", e);
 				summary.setFailure(originalStateSet.getName(), FailureType.COULD_NOT_CREATE, e);
 				throw new ImportFailureException(e);
 			}

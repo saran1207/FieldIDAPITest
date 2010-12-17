@@ -18,8 +18,11 @@ import com.n4systems.services.safetyNetwork.catalog.summary.EventTypeImportSumma
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.ListingPair;
+import org.apache.log4j.Logger;
 
 public class CatalogEventTypeImportHandler extends CatalogImportHandler {
+
+    private static final Logger logger = Logger.getLogger(CatalogEventTypeImportHandler.class);
 
 	private Map<Long, EventTypeGroup> importedGroupMapping;
 	private Map<Long, StateSet> importedStateSetMapping;
@@ -44,6 +47,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 			
 			summary.getImportMapping().put(originalId, importedEventType);
 		} catch (Exception e) {
+            logger.error("Error importing event type", e);
 			summary.setFailure(importedEventType.getName(), FailureType.COULD_NOT_CREATE, e);
 			throw new ImportFailureException(e);
 		}

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.model.AssetType;
+import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -22,6 +23,8 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
+
+    private static final Logger logger = Logger.getLogger(CatalogAutoAttributesImportHandler.class);
 	
 	private AutoAttributeCriteria criteria;
 	private AutoAttributeCriteria importCriteria;
@@ -40,7 +43,8 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 			try {
 				importAutoAttributes();
 			} catch (Exception e) {
-				throw new ImportFailureException();
+                logger.error("Error importing auto attributes", e);
+				throw new ImportFailureException(e);
 			}
 		}
 	}
@@ -56,6 +60,7 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 		importCriteria.setTenant(tenant);
 		importCriteria.setAssetType(importedAssetType);
 		persistenceManager.save(importCriteria);
+        importedAssetType.setAutoAttributeCriteria(importCriteria);
 		
 		importDefinitions();
 	}
@@ -137,19 +142,28 @@ public class CatalogAutoAttributesImportHandler extends CatalogImportHandler {
 	}
 	
 	public void rollback() {
-		rollbackDefinitions();
-		persistenceManager.delete(importCriteria);
+        if (importCriteria != null) {
+            rollbackDefinitions();
+		    persistenceManager.delete(importCriteria);
+        }
 	}
 
+    public CatalogAutoAttributesImportHandler setImportedCriteria(AutoAttributeCriteria criteria) {
+        this.importCriteria = criteria;
+        return this;
+    }
+
 	private void rollbackDefinitions() {
-		Pager<AutoAttributeDefinition> pager = null;
-		QueryBuilder<AutoAttributeDefinition> existingDefinitionQuery = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
-		existingDefinitionQuery.addSimpleWhere("criteria", importCriteria);
-		while ((pager = persistenceManager.findAllPaged(existingDefinitionQuery, 1, ConfigContext.getCurrentContext().getInteger(ConfigEntry.CATALOG_IMPORTER_PAGE_SIZE))).validPage() ) {
-			for (AutoAttributeDefinition definition : pager.getList()) {
-				persistenceManager.delete(definition);
-			}
-		}
+        if (importCriteria.getId() != null) {
+            Pager<AutoAttributeDefinition> pager = null;
+            QueryBuilder<AutoAttributeDefinition> existingDefinitionQuery = new QueryBuilder<AutoAttributeDefinition>(AutoAttributeDefinition.class, new OpenSecurityFilter());
+            existingDefinitionQuery.addSimpleWhere("criteria", importCriteria);
+            while ((pager = persistenceManager.findAllPaged(existingDefinitionQuery, 1, ConfigContext.getCurrentContext().getInteger(ConfigEntry.CATALOG_IMPORTER_PAGE_SIZE))).validPage() ) {
+                for (AutoAttributeDefinition definition : pager.getList()) {
+                    persistenceManager.delete(definition);
+                }
+            }
+        }
 	}
 	
 }

@@ -18,8 +18,11 @@ import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.Fa
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
 
 public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
+
+    private static final Logger logger = Logger.getLogger(CatalogEventTypeGroupHandler.class);
 	
 	private List<ListingPair> eventTypesToBeCreated;
 	private EventTypeGroupImportSummary summary;
@@ -45,6 +48,7 @@ public class CatalogEventTypeGroupHandler extends CatalogImportHandler {
 				summary.getImportMapping().put(originalGroup.getId(), importedGroup);
 				summary.createdGroup(importedGroup);
 			} catch (Exception e) {
+                logger.error("Error importing event type group", e);
 				summary.setFailure(originalGroup.getName(), FailureType.COULD_NOT_CREATE, e);
 				throw new ImportFailureException(e);
 			}

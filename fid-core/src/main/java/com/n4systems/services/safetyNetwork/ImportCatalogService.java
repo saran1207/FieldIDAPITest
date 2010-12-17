@@ -15,9 +15,12 @@ import com.n4systems.services.safetyNetwork.catalog.CatalogAssetTypeRelationship
 import com.n4systems.services.safetyNetwork.catalog.CatalogStateSetsImportHandler;
 import com.n4systems.services.safetyNetwork.catalog.summary.CatalogImportSummary;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
+import org.apache.log4j.Logger;
 
 
 public class ImportCatalogService {
+
+    private static final Logger logger = Logger.getLogger(ImportCatalogService.class);
 
 	private final CatalogAssetTypeRelationshipsImportHandler importAssetTypeEventTypeRelations;
 	private final CatalogAssetTypeGroupImportHandler importAssetTypeGroup;
@@ -47,10 +50,10 @@ public class ImportCatalogService {
 			importCatalog();
 			return true;
 		} catch (ImportFailureException e) {
+            logger.error("Error importing catalog, rolling back", e);
 			rollback();
 			return false;
 		}
-		
 	}
 
 

@@ -207,7 +207,7 @@ public class CatalogServiceImpl implements CatalogService {
 		List<StateSet> originalStateSets = new ArrayList<StateSet>();
 		if (!eventTypeIds.isEmpty()) {
 			QueryBuilder<Long> usedSectionsInEventTypesQuery = new QueryBuilder<Long>(EventType.class, filter);
-			usedSectionsInEventTypesQuery.addRequiredLeftJoin("sections", "section").setSelectArgument(new SimpleSelect("section.id", true));
+			usedSectionsInEventTypesQuery.addRequiredLeftJoin("eventForm.sections", "section").setSelectArgument(new SimpleSelect("section.id", true));
 			usedSectionsInEventTypesQuery.addWhere(Comparator.IN, "ids", "id", eventTypeIds);
 			usedSectionsInEventTypesQuery.addWhere(Comparator.IN, "publishedIds", "id", getEventTypeIdsPublished());
 			

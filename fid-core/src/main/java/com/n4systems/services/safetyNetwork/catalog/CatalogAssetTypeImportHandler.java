@@ -27,6 +27,7 @@ import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.ListingPair;
 
 public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
+
 	private static final Logger logger = Logger.getLogger(CatalogAssetTypeImportHandler.class);
 		
 	private final LegacyAssetType assetTypeManager;
@@ -75,6 +76,7 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 					summary.getImportMapping().put(assetTypeId, persistenceManager.update(importedType));
 				}
 			} catch (Exception e) {
+                logger.error("Error importing asset type", e);
 				summary.setFailure(summary.getImportMapping().get(assetTypeId).getName(), FailureType.COULD_NOT_CONNECT_SUB_ASSET,e);
 				throw new ImportFailureException(e);
 			}
@@ -96,10 +98,12 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 			try {
 				processAutoattributes();
 			} catch (Exception e) {
+                logger.error("Error processing auto attributes", e);
 				summary.setFailure(originalType.getName(), FailureType.COULD_NOT_CREATE_AUTOATTRIBUTE, e);
 				throw new ImportFailureException(e);
 			}
 		} catch (Exception e) {
+            logger.error("Error saving asset", e);
 			summary.setFailure(originalType.getName(), FailureType.COULD_NOT_CREATE, e);
 			throw new ImportFailureException(e);
 		}
@@ -148,6 +152,7 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 				copiedAssetImage = null;
 			}
 		} catch (IOException e) {
+            logger.error("Error preparing asset image for import", e);
 			copiedAssetImage = null;
 
 		}
@@ -231,10 +236,13 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 	private void rollbackAssetType() {
 		for (AssetType assetTypeToDelete : summary.getImportMapping().values()) {
 			try {
-				new CatalogAutoAttributesImportHandler(persistenceManager, tenant, importCatalog).setImportedAssetType(assetTypeToDelete).rollback();
+				new CatalogAutoAttributesImportHandler(persistenceManager, tenant, importCatalog)
+                        .setImportedAssetType(assetTypeToDelete)
+                        .setImportedCriteria(assetTypeToDelete.getAutoAttributeCriteria())
+                        .rollback();
 				persistenceManager.delete(assetTypeToDelete);
 			} catch (Exception e) {
-				logger.error("failed to delete asset durning rollback");
+				logger.error("failed to delete asset durning rollback", e);
 			}
 		}
 	}

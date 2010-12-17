@@ -16,8 +16,11 @@ import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeRelationshipsImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
+import org.apache.log4j.Logger;
 
 public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHandler {
+
+    private static final Logger logger = Logger.getLogger(CatalogAssetTypeRelationshipsImportHandler.class);
 
 	private Map<Long, AssetType> importedAssetTypeMapping = new HashMap<Long, AssetType>();
 	private Map<Long, EventType> importedEventTypeMapping = new HashMap<Long, EventType>();
@@ -51,6 +54,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 				persistenceManager.update(importedAssetType);
 			}
 		} catch (Exception e) {
+            logger.error("Error importing asset type relationships", e);
 			summary.setFailure(importedAssetType.getName(), FailureType.COULD_NOT_LINK_ASSET_TYPE_TO_EVENT_TYPE, e);
 			throw new ImportFailureException(e);
 		}

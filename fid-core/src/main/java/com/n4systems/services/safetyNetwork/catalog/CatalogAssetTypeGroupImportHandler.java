@@ -1,10 +1,5 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
@@ -14,8 +9,16 @@ import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeGroupImport
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CatalogAssetTypeGroupImportHandler extends CatalogImportHandler {
+
+    private static final Logger logger = Logger.getLogger(CatalogAssetTypeGroupImportHandler.class);
 
 	
 	private AssetTypeGroupImportSummary summary;
@@ -44,6 +47,7 @@ public class CatalogAssetTypeGroupImportHandler extends CatalogImportHandler {
 			try {
 				importGroup(originalGroup);
 			} catch (Exception e) {
+                logger.error("Error importing asset type group", e);
 				summary.setFailure(originalGroup.getName(), FailureType.COULD_NOT_CREATE, e);
 				throw new ImportFailureException(e);
 			}
