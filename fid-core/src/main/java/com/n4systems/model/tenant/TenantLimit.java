@@ -158,6 +158,10 @@ public class TenantLimit implements Serializable {
 		users = addLimits(users, additionalUsers);
 	}
 	
+	public void addLiteUsers(Long additionalUsers){
+		liteUsers = addLimits(liteUsers, additionalUsers);
+	}
+	
 	public void addDiskSpace(Long additionalDiskSpace) {
 		diskSpace = addLimits(diskSpace, additionalDiskSpace);
 	}
