@@ -9,6 +9,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
+import rfid.ejb.entity.AssetStatus;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -40,12 +42,14 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	private List<Listable<String>> periodEndList;
 	private List<AssetTypeGroup> assetTypeGroups;
 	private List<AssetType> assetTypes;
+	private List<AssetStatus> assetStatuses;
 	private List<EventType> eventTypes;
 	private List<FrequencyGroupView> frequencyGroups;
 	
 	private List<NotificationSetting> settingsList;
 	private NotificationSettingViewModelConverter converter;
 	private NotificationSettingView view = new NotificationSettingView();
+	
 	
 	public NotificationSettingsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -233,6 +237,13 @@ public class NotificationSettingsCrud extends AbstractCrud {
             assetTypeGroups = getLoaderFactory().createAssetTypeGroupsLoader().load();
         }
         return assetTypeGroups;
+    }
+    
+    public List<AssetStatus> getAssetStatuses(){
+    	if(assetStatuses == null) {
+    		assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
+    	}
+    	return assetStatuses;
     }
 	
 	

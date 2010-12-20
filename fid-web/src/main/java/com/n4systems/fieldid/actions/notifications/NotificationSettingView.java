@@ -23,7 +23,9 @@ public class NotificationSettingView implements Serializable {
 	private Boolean includeUpcoming = true;
 	private String periodStart;
 	private String periodEnd;
+	private Long assetTypeGroupId;
 	private Long assetTypeId;
+	private Long assetStatus;
 	private Long eventTypeId;
 	private Boolean includeOverdue = false;
 	private List<String> addresses = new ArrayList<String>();
@@ -158,6 +160,22 @@ public class NotificationSettingView implements Serializable {
 
 	public void setSendBlankReport(Boolean sendBlankReport) {
 		this.sendBlankReport = sendBlankReport;
+	}
+
+	public Long getAssetTypeGroupId() {
+		return assetTypeGroupId;
+	}
+
+	public void setAssetTypeGroupId(Long assetTypeGroupId) {
+		this.assetTypeGroupId = assetTypeGroupId;
+	}
+
+	public Long getAssetStatus() {
+		return assetStatus;
+	}
+
+	public void setAssetStatus(Long assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 	
 }

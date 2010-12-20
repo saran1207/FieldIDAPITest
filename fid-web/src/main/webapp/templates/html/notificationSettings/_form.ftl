@@ -82,7 +82,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 		
    <div class="infoSet fullInfoSet">
         <label for="criteria.assetTypeGroup"><@s.text name="label.asset_type_group"/></label>
-        <@s.select id="assetTypeGroup" name="criteria.assetTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateAssetTypes(this)" list="assetTypeGroups" listKey="id" listValue="name"/>
+        <@s.select id="assetTypeGroup" name="view.assetTypeGroupId" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateAssetTypes(this)" list="assetTypeGroups" listKey="id" listValue="name"/>
     </div>
 
     <div class="infoSet fullInfoSet">
@@ -90,6 +90,11 @@ ${action.setPageType('my_account', 'notification_settings')!}
         <@s.select cssClass="assetTypeSelect" id="assetType" name="view.assetTypeId" emptyOption="true" list="assetTypes" listKey="id" listValue="name"/>
     </div>
 	
+	<div class="infoSet fullInfoSet">
+		<label for="view.assetStatus"><@s.text name="label.assetstatus"/></label>
+		<@s.select name="view.assetStatus" emptyOption="true" list="assetStatuses" listKey="uniqueID" listValue="name" />		
+	</div>
+
 	<div class="infoSet fullInfoSet">
 		<label for="view.eventTypeId"><@s.text name="label.event_type"/></label>
 		<@s.select name="view.eventTypeId" emptyOption="true" list="eventTypes" listKey="id" listValue="name" />

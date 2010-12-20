@@ -98,7 +98,7 @@ public class EventScheduleCountGenerator {
 	}
 
 	private FailedEventListLoader setupFailedLoader(NotificationSetting setting, Clock clock) {
-		return failedLoader.setFrequency(setting.getFrequency()).setClock(clock);
+		return failedLoader.setFrequency(setting.getFrequency()).setClock(clock).setNotificationSetting(setting);
 	}
 
 	private boolean shouldGenerateReport(NotificationSetting setting, Clock clock) {

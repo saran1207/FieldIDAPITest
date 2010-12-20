@@ -43,10 +43,14 @@ public class NotificationSettingViewModelConverter {
 			view.setCreatedTimeStamp(model.getCreated().getTime());
 		}
 		
+		view.setAssetTypeGroupId(model.getAssetTypeGroup());
+		
 		if (!model.getAssetTypes().isEmpty()) {
 			// we only support a single asset type right now
 			view.setAssetTypeId(model.getAssetTypes().get(0));
 		}
+		
+		view.setAssetStatus(model.getAssetStatus());
 		
 		if (!model.getEventTypes().isEmpty()) {
 			// we only support a single event type right now
@@ -81,9 +85,13 @@ public class NotificationSettingViewModelConverter {
 			model.setCreated(new Date(view.getCreatedTimeStamp()));
 		}
 		
+		model.setAssetTypeGroup(view.getAssetTypeGroupId());
+		
 		if (view.getAssetTypeId() != null) {
 			model.getAssetTypes().add(view.getAssetTypeId());
 		}
+		
+		model.setAssetStatus(view.getAssetStatus());
 		
 		if (view.getEventTypeId() != null) {
 			model.getEventTypes().add(view.getEventTypeId());

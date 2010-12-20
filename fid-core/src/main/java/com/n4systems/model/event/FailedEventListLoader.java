@@ -9,6 +9,8 @@ import javax.persistence.EntityManager;
 import com.n4systems.model.Event;
 import com.n4systems.model.Status;
 import com.n4systems.model.common.SimpleFrequency;
+import com.n4systems.model.notificationsettings.NotificationSetting;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -22,7 +24,8 @@ public class FailedEventListLoader extends ListLoader<Event>{
 	
 	private Clock clock;
 	private SimpleFrequency frequency;
-
+	private NotificationSetting setting;
+	
 	public FailedEventListLoader(SecurityFilter filter) {
 		super(filter);
 	}
@@ -33,9 +36,35 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		
 		builder.addWhere(WhereClauseFactory.create("status", Status.FAIL));
 		builder.addWhere(Comparator.GE, "date", "date", getFromDate());
+
+		if(setting != null) {
+			applyNotificationFilters(builder);
+		}
+		
 		builder.addOrder("date");
 		builder.getPostFetchPaths().addAll(Arrays.asList(Event.ALL_FIELD_PATHS));
 		return builder.getResultList(em);
+	}
+
+	private void applyNotificationFilters(QueryBuilder<Event> builder) {
+		if(setting.getOwner() != null) {
+			builder.applyFilter(new OwnerAndDownFilter(setting.getOwner()));
+		}
+		if(!setting.getAssetTypes().isEmpty()) {
+			builder.addSimpleWhere("asset.type.id", setting.getAssetTypes().get(0));
+		}
+
+		if (setting.getAssetTypes().isEmpty() && setting.getAssetTypeGroup() != null) {
+			builder.addSimpleWhere("asset.type.group.id", setting.getAssetTypeGroup());
+		}
+
+		if (setting.getAssetStatus() != null) {
+			builder.addSimpleWhere("asset.assetStatus.uniqueID", setting.getAssetStatus());
+		}		
+		
+		if(!setting.getEventTypes().isEmpty()) {
+			builder.addSimpleWhere("eventType.id", setting.getEventTypes().get(0));
+		}
 	}
 
 	private Date getFromDate() {
@@ -60,4 +89,8 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		return this;
 	}
 
+	public FailedEventListLoader setNotificationSetting(NotificationSetting setting) {
+		this.setting = setting;
+		return this;
+	}
 }

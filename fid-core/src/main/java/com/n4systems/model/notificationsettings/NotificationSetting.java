@@ -67,6 +67,10 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 	
 	@Column(nullable=false)
 	private Boolean sendBlankReport;
+	
+	private Long assetStatus;
+    
+    private Long assetTypeGroup;
 
 	public NotificationSetting() {}
 	
@@ -162,5 +166,21 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 
 	public void setSendBlankReport(Boolean sendBlankReport) {
 		this.sendBlankReport = sendBlankReport;
+	}
+
+	public Long getAssetTypeGroup() {
+		return assetTypeGroup;
+	}
+
+	public void setAssetTypeGroup(Long assetTypeGroup) {
+		this.assetTypeGroup = assetTypeGroup;
+	}
+
+	public Long getAssetStatus() {
+		return assetStatus;
+	}
+
+	public void setAssetStatus(Long assetStatus) {
+		this.assetStatus = assetStatus;
 	}
 }
