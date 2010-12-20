@@ -128,7 +128,7 @@ function validateForm2() {
 
 function startNumberIsValid() {
 	if ($('snRange').getValue() != null) {
-		if (isNaN(parseInt($('start').getValue()))) {
+		if (isNaN(parseInt($('start').getValue())) || $('start').getValue().length > 18 ) {
 			return false;
 		}	
 	}
