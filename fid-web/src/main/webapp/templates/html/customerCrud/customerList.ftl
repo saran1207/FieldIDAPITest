@@ -2,8 +2,9 @@
 	<@n4.includeStyle href="customerList" type="page"/>
 </head>
 
-<#if page.hasResults() && page.validPage() >
 
+
+<#if page.hasResults() && page.validPage() >
 	<div class="listFilter quickForm" >
 		<@s.form action="${filterAction}" method="get">
 			<@s.textfield key="label.filtername" name="listFilter" id="listFilter" labelposition="left" />
@@ -12,7 +13,7 @@
 			</div>
 		</@s.form>
 	</div>
-	
+
 	<#assign currentAction="customerList.action" />
 	<#include '../common/_pagination.ftl' />
 	<table class="list" id="customerTable">
@@ -49,7 +50,7 @@
 	</#list>
 	</table>
 	<#include '../common/_pagination.ftl' />
-<#elseif !page.hasResults() >
+<#elseif !page.hasResults() && !listFilter??>
 	<@s.url id="addCustomerUrl" action="customerEdit"/>
 	
 	<div class="initialMessage">
@@ -58,6 +59,22 @@
 			<p><@s.text name="label.create_owner_message" /></p>
 		</div>
 			<input type="submit" value="<@s.text name="label.create_owner_now"/>"onclick="return redirect('${addCustomerUrl}');"/>
+	</div>
+<#elseif !page.hasResults() && listFilter??>
+	<div class="listFilter quickForm" >
+		<@s.form action="${filterAction}" method="get">
+			<@s.textfield key="label.filtername" name="listFilter" id="listFilter" labelposition="left" />
+			<div class="formAction">
+				<@s.submit key="hbutton.filter" />
+			</div>
+		</@s.form>
+	</div>
+	
+	<div class="emptyList" >
+		<h2><@s.text name="label.noresults"/></h2>
+		<p>
+			<@s.text name="label.emptylistcustomers" />
+		</p>
 	</div>
 <#else>
 	<div class="emptyList" >
