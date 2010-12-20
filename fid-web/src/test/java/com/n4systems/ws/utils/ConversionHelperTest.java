@@ -33,7 +33,7 @@ public class ConversionHelperTest {
 		EasyMock.expect(converter.fromModel(model)).andReturn(convertedModel);
 		EasyMock.replay(converter);
 		
-		String result = helper.convert(loader, converter);
+		String result = helper.convertSingle(loader, converter);
 		
 		EasyMock.verify(loader);
 		EasyMock.verify(converter);
@@ -55,7 +55,7 @@ public class ConversionHelperTest {
 		EasyMock.expect(converter.fromModels(models)).andReturn(convertedModels);
 		EasyMock.replay(converter);
 		
-		List<String> result = helper.convert(loader, converter);
+		List<String> result = helper.convertList(loader, converter);
 		
 		EasyMock.verify(loader);
 		EasyMock.verify(converter);
@@ -77,7 +77,7 @@ public class ConversionHelperTest {
 			}
 		};
 		
-		helper.convert(loader, EasyMock.createMock(WsModelConverter.class));
+		helper.convertSingle(loader, EasyMock.createMock(WsModelConverter.class));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -94,7 +94,7 @@ public class ConversionHelperTest {
 			}
 		};
 		
-		helper.convert(loader, (WsModelConverter<Object, Long>)EasyMock.createMock(WsModelConverter.class));
+		helper.convertList(loader, (WsModelConverter<Object, Long>)EasyMock.createMock(WsModelConverter.class));
 	}
 	
 	

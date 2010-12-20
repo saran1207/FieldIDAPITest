@@ -33,7 +33,7 @@ public abstract class BaseResource<M, W> {
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	public W[] getList() {
-		List<W> wsList = converter.convert(definer.getResourceListLoader(context.getLoaderFactory()), definer.getResourceConverter());
+		List<W> wsList = converter.convertList(definer.getResourceListLoader(context.getLoaderFactory()), definer.getResourceConverter());
 		return ArrayUtils.toArray(wsList, definer.getWsModelClass());
 	}
 	
@@ -42,7 +42,7 @@ public abstract class BaseResource<M, W> {
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	public W getSingle(@PathParam("id") long id) {
-		W wsModel = converter.convert(definer.getResourceIdLoader(context.getLoaderFactory()).setId(id), definer.getResourceConverter());
+		W wsModel = converter.convertSingle(definer.getResourceIdLoader(context.getLoaderFactory()).setId(id), definer.getResourceConverter());
 		return wsModel;
 	}
 }

@@ -63,7 +63,7 @@ public class BaseResourceTest {
 		
 		expect(definer.getResourceListLoader(loaderFactory)).andReturn(loader);
 		expect(definer.getWsModelClass()).andReturn(Long.class);
-		expect(converter.convert(loader, modelConverter)).andReturn(wsModels);
+		expect(converter.convertList(loader, modelConverter)).andReturn(wsModels);
 		replay(loader, definer, converter);
 		
 		Long[] result = resource.getList();
@@ -81,7 +81,7 @@ public class BaseResourceTest {
 		
 		expect(definer.getResourceIdLoader(loaderFactory)).andReturn(loader);
 		expect(loader.setId(id)).andReturn(loader);
-		expect(converter.convert(loader, modelConverter)).andReturn(wsModel);
+		expect(converter.convertSingle(loader, modelConverter)).andReturn(wsModel);
 		replay(loader, definer, converter);
 		
 		assertEquals(wsModel, resource.getSingle(id));

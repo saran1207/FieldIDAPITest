@@ -16,8 +16,9 @@ public class WsEventType extends WsModel {
 	private boolean master;
 	private boolean assignedToAvailable;
 	private WsEventTypeGroup group;
-	private List<WsCriteriaSection> sections = new ArrayList<WsCriteriaSection>();
-
+	private WsEventForm form;
+	private List<String> infoFieldNames = new ArrayList<String>();
+	
 	@XmlElement(name="Name")
 	public String getName() {
 		return name;
@@ -71,13 +72,23 @@ public class WsEventType extends WsModel {
 	public void setGroup(WsEventTypeGroup group) {
 		this.group = group;
 	}
-
-	@XmlElement(name="Sections")
-	public List<WsCriteriaSection> getSections() {
-		return sections;
+	
+	@XmlElement(name="Form")
+	public WsEventForm getForm() {
+		return form;
 	}
 
-	public void setSections(List<WsCriteriaSection> sections) {
-		this.sections = sections;
+	public void setForm(WsEventForm form) {
+		this.form = form;
 	}
+
+	@XmlElement(name="InfoFieldNames")
+	public List<String> getInfoFieldNames() {
+		return infoFieldNames;
+	}
+
+	public void setInfoFieldNames(List<String> infoFieldNames) {
+		this.infoFieldNames = infoFieldNames;
+	}
+	
 }

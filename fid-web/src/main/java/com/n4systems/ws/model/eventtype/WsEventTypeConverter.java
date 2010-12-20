@@ -1,20 +1,20 @@
 package com.n4systems.ws.model.eventtype;
 
-import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.ws.model.WsModelConverter;
 
 public class WsEventTypeConverter extends WsModelConverter<EventType, WsEventType> {
-	private final WsModelConverter<CriteriaSection, WsCriteriaSection> sectionConverter;
 	private final WsModelConverter<EventTypeGroup, WsEventTypeGroup> groupConverter;
+	private final WsModelConverter<EventForm, WsEventForm> formConverter;
 	
 	public WsEventTypeConverter() {
-		this(new WsCriteriaSectionConverter(), new WsEventTypeGroupConverter());
+		this(new WsEventFormConverter(), new WsEventTypeGroupConverter());
 	}
 	
-	protected WsEventTypeConverter(WsModelConverter<CriteriaSection, WsCriteriaSection> sectionConverter, WsModelConverter<EventTypeGroup, WsEventTypeGroup> groupConverter) {
-		this.sectionConverter = sectionConverter;
+	protected WsEventTypeConverter(WsModelConverter<EventForm, WsEventForm> formConverter, WsModelConverter<EventTypeGroup, WsEventTypeGroup> groupConverter) {
+		this.formConverter = formConverter;
 		this.groupConverter = groupConverter;
 	}
 	
@@ -27,9 +27,10 @@ public class WsEventTypeConverter extends WsModelConverter<EventType, WsEventTyp
 		wsEventType.setPrintable(model.isPrintable());
 		wsEventType.setMaster(model.isMaster());
 		wsEventType.setAssignedToAvailable(model.isAssignedToAvailable());
+		wsEventType.setInfoFieldNames(model.getInfoFieldNames());
 		wsEventType.setGroup(groupConverter.fromModel(model.getGroup()));
         if (model.getEventForm() != null)
-		    wsEventType.setSections(sectionConverter.fromModels(model.getEventForm().getSections()));
+        	wsEventType.setForm(formConverter.fromModel(model.getEventForm()));
 		return wsEventType;
 	}
 

@@ -20,8 +20,10 @@ import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
 import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.model.assettype.EventFrequencyListLoader;
+import com.n4systems.model.autoattribute.AutoAttributeCriteriaListLoader;
 import com.n4systems.model.autoattribute.AutoAttributeDefinitionListLoader;
 import com.n4systems.model.catalog.CatalogLoader;
+import com.n4systems.model.commenttemplate.CommentTemplateListLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.downloadlink.DownloadLinkListLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
@@ -34,7 +36,6 @@ import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.eventschedule.IncompleteEventSchedulesListLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventtype.AssociatedEventTypesLoader;
-import com.n4systems.model.eventtype.EventTypeFormVersionLoader;
 import com.n4systems.model.eventtype.EventTypeListLoader;
 import com.n4systems.model.eventtype.EventTypeListableLoader;
 import com.n4systems.model.fileattachment.FileAttachmentLoader;
@@ -124,15 +125,15 @@ public class LoaderFactory implements Serializable {
 	public <T> AllEntityListLoader<T> createAllEntityListLoader(Class<T> clazz) {
 		return new AllEntityListLoader<T>(clazz);
 	}
-	
+
 	public AllPredefinedLocationsPaginatedLoader createAllPredefinedLocationsPaginatedLoader() {
 		return new AllPredefinedLocationsPaginatedLoader(filter);
 	}
 
 	public AssetAlreadyRegisteredLoader createAssetAlreadyRegisteredLoader() {
-        return new AssetAlreadyRegisteredLoader(filter);
-    }
-	
+		return new AssetAlreadyRegisteredLoader(filter);
+	}
+
 	public AssetAttachmentListLoader createAssetAttachmentListLoader() {
 		return new AssetAttachmentListLoader(filter);
 	}
@@ -170,8 +171,8 @@ public class LoaderFactory implements Serializable {
 	}
 
 	public AssetTypeGroupsLoader createAssetTypeGroupsLoader() {
-        return new AssetTypeGroupsLoader(filter);
-    }
+		return new AssetTypeGroupsLoader(filter);
+	}
 
 	public AssetTypeListableLoader createAssetTypeListableLoader() {
 		return new AssetTypeListableLoader(filter);
@@ -181,9 +182,9 @@ public class LoaderFactory implements Serializable {
 		return new AssetTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
 	}
 
-	public AssetTypesByAssetGroupIdLoader createAssetTypesByGroupListLoader(){
-    	return new AssetTypesByAssetGroupIdLoader(filter);
-    }
+	public AssetTypesByAssetGroupIdLoader createAssetTypesByGroupListLoader() {
+		return new AssetTypesByAssetGroupIdLoader(filter);
+	}
 
 	public AssociatedEventTypesLoader createAssociatedEventTypesLoader() {
 		return new AssociatedEventTypesLoader(filter);
@@ -191,6 +192,10 @@ public class LoaderFactory implements Serializable {
 
 	public AutoAttributeCriteriaByAssetTypeIdLoader createAutoAttributeCriteriaByAssetTypeIdLoader() {
 		return new AutoAttributeCriteriaByAssetTypeIdLoader(filter);
+	}
+
+	public AutoAttributeCriteriaListLoader createAutoAttributeCriteriaListLoader() {
+		return new AutoAttributeCriteriaListLoader(filter);
 	}
 
 	public AutoAttributeDefinitionListLoader createAutoAttributeDefinitionListLoader() {
@@ -209,10 +214,14 @@ public class LoaderFactory implements Serializable {
 		return new CommentTemplateListableLoader(filter);
 	}
 
+	public CommentTemplateListLoader createCommentTemplateListLoader() {
+		return new CommentTemplateListLoader(filter);
+	}
+
 	public UserListableLoader createCurrentCombinedUserListableLoader() {
 		return createHistoricalCombinedUserListableLoader().setNoDeleted(true);
 	}
-	
+
 	public UserListableLoader createCurrentEmployeesListableLoader() {
 		return createHistoricalEmployeesListableLoader().setNoDeleted(true);
 	}
@@ -262,8 +271,8 @@ public class LoaderFactory implements Serializable {
 	}
 
 	public TypedOrgConnectionListLoader createdTypedOrgConnectionListLoader() {
-        return new TypedOrgConnectionListLoader(filter);
-    }
+		return new TypedOrgConnectionListLoader(filter);
+	}
 
 	public EmployeePaginatedLoader createEmployeePaginatedLoader() {
 		return new EmployeePaginatedLoader(filter);
@@ -276,7 +285,7 @@ public class LoaderFactory implements Serializable {
 	public EventBookByNameLoader createEventBookByNameLoader() {
 		return new EventBookByNameLoader(filter);
 	}
-	
+
 	public EventBookFindOrCreateLoader createEventBookFindOrCreateLoader() {
 		return new EventBookFindOrCreateLoader(filter);
 	}
@@ -294,24 +303,20 @@ public class LoaderFactory implements Serializable {
 	}
 
 	public EventsByAssetIdLoader createEventsByAssetIdLoader() {
-        return new EventsByAssetIdLoader(filter);
-    }
-
-	public EventTypeFormVersionLoader createEventTypeFormVersionLoader() {
-    	return new EventTypeFormVersionLoader(filter);
-    }
+		return new EventsByAssetIdLoader(filter);
+	}
 
 	public EventTypeListableLoader createEventTypeListableLoader() {
 		return new EventTypeListableLoader(filter);
 	}
 
-	public EventTypeListLoader createEventTypeListLoader(){
-    	return new EventTypeListLoader(filter);
-    }
+	public EventTypeListLoader createEventTypeListLoader() {
+		return new EventTypeListLoader(filter);
+	}
 
-	public EventTypesByEventGroupIdLoader createEventTypesByGroupListLoader(){
-    	return new EventTypesByEventGroupIdLoader(filter);
-    }
+	public EventTypesByEventGroupIdLoader createEventTypesByGroupListLoader() {
+		return new EventTypesByEventGroupIdLoader(filter);
+	}
 
 	public FileAttachmentLoader createFileAttachmentLoader() {
 		return new FileAttachmentLoader(filter);
@@ -340,7 +345,7 @@ public class LoaderFactory implements Serializable {
 	public UserListableLoader createHistoricalCombinedUserListableLoader() {
 		return createUserListableLoader();
 	}
-	
+
 	public UserListableLoader createHistoricalEmployeesListableLoader() {
 		return createUserListableLoader().employeesOnly();
 	}
@@ -410,12 +415,12 @@ public class LoaderFactory implements Serializable {
 	}
 
 	public PrimaryOrgsWithNameLikeLoader createPrimaryOrgsWithNameLikeLoader() {
-        return new PrimaryOrgsWithNameLikeLoader(filter);
-    }
+		return new PrimaryOrgsWithNameLikeLoader(filter);
+	}
 
 	public SafetyNetworkRegisteredAssetCountLoader createRegisteredAssetCountLoader() {
-        return new SafetyNetworkRegisteredAssetCountLoader();
-    }
+		return new SafetyNetworkRegisteredAssetCountLoader();
+	}
 
 	public SafetyNetworkAssetAttachmentListLoader createSafetyNetworkAssetAttachmentListLoader() {
 		return new SafetyNetworkAssetAttachmentListLoader();
@@ -428,15 +433,15 @@ public class LoaderFactory implements Serializable {
 	public SafetyNetworkAssetLoader createSafetyNetworkAssetLoader() {
 		return new SafetyNetworkAssetLoader(filter);
 	}
-	
+
 	public SafetyNetworkAssetTypeLoader createSafetyNetworkAssetTypeLoader() {
 		return new SafetyNetworkAssetTypeLoader();
 	}
-	
+
 	public SafetyNetworkEventLoader createSafetyNetworkAssignedAssetEventLoader() {
 		return new SafetyNetworkAssignedAssetEventLoader(filter);
 	}
-	
+
 	public SafetyNetworkAttachmentLoader createSafetyNetworkAttachmentLoader() {
 		return new SafetyNetworkAttachmentLoader();
 	}
@@ -452,84 +457,84 @@ public class LoaderFactory implements Serializable {
 	public SafetyNetworkRegisteredOrAssignedEventLoader createSafetyNetworkEventLoaderAssignedOrRegistered() {
 		return new SafetyNetworkRegisteredOrAssignedEventLoader(filter);
 	}
-	
-	public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader(){
-    	return new SafetyNetworkPreAssignedAssetLoader();
-    }
-	
+
+	public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader() {
+		return new SafetyNetworkPreAssignedAssetLoader();
+	}
+
 	public SafetyNetworkEventLoader createSafetyNetworkRegisteredAssetEventLoader() {
 		return new SafetyNetworkRegisteredAssetEventLoader(filter);
 	}
-	
+
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
 		return new SafetyNetworkSmartSearchLoader(filter);
 	}
-	
+
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {
 		return new SecondaryOrgByNameLoader(filter);
 	}
-	
+
 	public SecondaryOrgListableLoader createSecondaryOrgListableLoader() {
 		return new SecondaryOrgListableLoader(filter);
 	}
-	
+
 	public SecondaryOrgPaginatedLoader createSecondaryOrgPaginatedLoader() {
 		return new SecondaryOrgPaginatedLoader(filter);
 	}
 
 	public SetupDataLastModDatesLoader createSetupDataLastModDatesLoader() {
-    	return new SetupDataLastModDatesLoader(filter);
-    }
+		return new SetupDataLastModDatesLoader(filter);
+	}
 
-    public SignupReferralListLoader createSignupReferralListLoader() {
+	public SignupReferralListLoader createSignupReferralListLoader() {
 		return new SignupReferralListLoader(filter);
 	}
-    
-    public SmartSearchLoader createSmartSearchListLoader() {
+
+	public SmartSearchLoader createSmartSearchListLoader() {
 		return new SmartSearchLoader(filter);
 	}
 
-    public TaskConfigLoader createTaskConfigLoader() {
+	public TaskConfigLoader createTaskConfigLoader() {
 		return new TaskConfigLoader();
 	}
 
-    public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
+	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
 		return new TenantWideVendorOrgConnPaginatedLoader(filter);
 	}
 
-    public UnreadMessageCountLoader createUnreadMessageCountLoader() {
+	public UnreadMessageCountLoader createUnreadMessageCountLoader() {
 		return new UnreadMessageCountLoader(filter);
 	}
 
-    public SafetyNetworkUnregisteredAssetCountLoader createUnregisteredAssetCountLoader() {
-        return new SafetyNetworkUnregisteredAssetCountLoader();
-    }
+	public SafetyNetworkUnregisteredAssetCountLoader createUnregisteredAssetCountLoader() {
+		return new SafetyNetworkUnregisteredAssetCountLoader();
+	}
 
-    public UserByFullNameLoader createUserByFullNameLoader() {
+	public UserByFullNameLoader createUserByFullNameLoader() {
 		return new UserByFullNameLoader(filter);
 	}
-    
-    public UserFilteredLoader createUserFilteredLoader() {
+
+	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
 
-    public UserListableLoader createUserListableLoader() {
+	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}
 
-    public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
+	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
 		return new VendorLinkedOrgListLoader(filter);
 	}
 
-    public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
+	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
 		return new VendorLinkedOrgLoader(filter);
 	}
 
-    public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
+	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}
-    
-    public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
+
+	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}
 }

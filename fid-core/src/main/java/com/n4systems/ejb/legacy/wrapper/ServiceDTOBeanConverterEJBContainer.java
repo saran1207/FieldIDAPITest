@@ -5,25 +5,19 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.EventSchedule;
-import rfid.ejb.entity.AssetStatus;
-
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.impl.ServiceDTOBeanConverterImpl;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.FileAttachment;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.AssetType;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Project;
-import com.n4systems.model.StateSet;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -35,27 +29,21 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
-import com.n4systems.webservice.dto.AutoAttributeCriteriaServiceDTO;
-import com.n4systems.webservice.dto.AutoAttributeDefinitionServiceDTO;
 import com.n4systems.webservice.dto.CustomerOrgServiceDTO;
 import com.n4systems.webservice.dto.DivisionOrgServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookServiceDTO;
 import com.n4systems.webservice.dto.InspectionImageServiceDTO;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
-import com.n4systems.webservice.dto.InspectionTypeServiceDTO;
 import com.n4systems.webservice.dto.InternalOrgServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeGroupServiceDTO;
 import com.n4systems.webservice.dto.ProductTypeServiceDTO;
 import com.n4systems.webservice.dto.SetupDataLastModDatesServiceDTO;
-import com.n4systems.webservice.dto.StateSetServiceDTO;
 import com.n4systems.webservice.dto.TenantServiceDTO;
 import com.n4systems.webservice.dto.UserServiceDTO;
 import com.n4systems.webservice.dto.VendorServiceDTO;
-
-import fieldid.web.services.dto.ProductStatusServiceDTO;
 
 public class ServiceDTOBeanConverterEJBContainer extends EJBTransactionEmulator<ServiceDTOBeanConverter> implements ServiceDTOBeanConverter {
 
@@ -83,36 +71,6 @@ Transaction transaction = transactionManager.startTransaction();
 Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(event, inspectionImageServiceDTO, performedBy);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public AutoAttributeCriteriaServiceDTO convert(AutoAttributeCriteria criteria) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).convert(criteria);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public AutoAttributeDefinitionServiceDTO convert(AutoAttributeDefinition definition) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).convert(definition);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -228,21 +186,6 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public InspectionTypeServiceDTO convert(EventType eventType) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).convert(eventType);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
 	public InternalOrgServiceDTO convert(InternalOrg internalOrg) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -333,21 +276,6 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public ProductStatusServiceDTO convert(AssetStatus assetStatus) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).convert(assetStatus);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
 	public ProductTypeGroupServiceDTO convert(AssetTypeGroup assetTypeGroup) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -383,21 +311,6 @@ Transaction transaction = transactionManager.startTransaction();
 Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(setupModDates);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
-
-	public StateSetServiceDTO convert(StateSet stateSet) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).convert(stateSet);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

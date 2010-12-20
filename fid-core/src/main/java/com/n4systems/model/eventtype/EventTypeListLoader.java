@@ -18,10 +18,8 @@ public class EventTypeListLoader extends ListLoader<EventType> {
 	@Override
 	protected List<EventType> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<EventType> builder = new QueryBuilder<EventType>(EventType.class, filter);
+		builder.addPostFetchPaths("eventForm.sections", "infoFieldNames");
 		List<EventType> eventTypes = builder.getResultList(em);
 		return eventTypes;
 	}
-
-	
-
 }

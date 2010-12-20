@@ -1,15 +1,17 @@
 package com.n4systems.webservice.server;
 
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
-import com.n4systems.model.eventschedule.EventScheduleSaver;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.EntityStillReferencedException;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
+import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
+import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
-
-import fieldid.web.services.dto.AbstractBaseServiceDTO;
 
 public class InspectionScheduleUpdateHandler {
 	
@@ -65,7 +67,7 @@ public class InspectionScheduleUpdateHandler {
 		
 		//update only when it is not completed
 		if (eventSchedule.getStatus() != ScheduleStatus.COMPLETED) {
-			eventSchedule.setNextDate( AbstractBaseServiceDTO.stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
+			eventSchedule.setNextDate( stringToDate(inspectionScheduleServiceDTO.getNextDate()) );
 			saver.saveOrUpdate(eventSchedule);
 		}
 	}
@@ -84,6 +86,16 @@ public class InspectionScheduleUpdateHandler {
 		}
 	}
 	
-	
-
+	public static Date stringToDate(String originalDate) {
+		SimpleDateFormat DF = new SimpleDateFormat("MM/dd/yy hh:mm:ss a");
+		Date dateConvert = null;		
+		try {
+			dateConvert = DF.parse(originalDate);
+		} catch (ParseException e) {
+			// do nothing, return null
+		} catch (NullPointerException e) {
+			// do nothing, return null
+		}
+		return dateConvert;
+	}
 }
