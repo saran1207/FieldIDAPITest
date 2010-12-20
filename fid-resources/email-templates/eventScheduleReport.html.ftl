@@ -105,9 +105,11 @@ body {
 						<td>${event.date}</td>
 						<td>${event.owner.internalOrg.name}</td>
 						<td>
-							${event.owner.customerOrg.name}
+							<#if event.owner.customerOrg?exists >
+								${event.owner.customerOrg.name!}
+							</#if>
 							<#if event.owner.divisionOrg?exists >
-								&nbsp;>&nbsp;${event.owner.divisionOrg.name}
+								&nbsp;>&nbsp;${event.owner.divisionOrg.name!}
 							</#if>
 						</td>
 						<td>${event.asset.serialNumber}</td>
