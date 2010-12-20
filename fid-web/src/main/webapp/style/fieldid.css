@@ -640,6 +640,15 @@ div.formAction {
 	padding-right: 10px;
 }
 
+#archivedCustomerList .formAction div, #customerList .formAction div{
+	padding: 0;
+}
+
+#archivedCustomerList div.formAction ,#customerList div.formAction{
+	clear: none;
+	padding: 5px 0;
+	}
+
 .formAction a {
 	font-size: 1.2em;
 }
