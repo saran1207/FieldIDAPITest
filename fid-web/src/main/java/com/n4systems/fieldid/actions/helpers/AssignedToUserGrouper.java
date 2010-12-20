@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.helpers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import rfid.web.helper.SessionUser;
 
@@ -23,34 +24,59 @@ public class AssignedToUserGrouper {
 	}
 
 	public List<String> getUserOwners() {
-		List<String> owners = new ArrayList<String>();
+		List<BaseOrg> owners = new ArrayList<BaseOrg>();
+		BaseOrg baseOrg;
 
 		for (Listable<Long> user : employees) {
 			userLoader.setId(user.getId());
-			if (!(userLoader.load()==null) && !owners.contains(userLoader.load().getOwner().getDisplayName())) {
-			
-				BaseOrg baseOrg = userLoader.load().getOwner();
-				if (sessionUser.isReadOnlyCustomerUser() && baseOrg.isExternal()){
-					if (baseOrg.equals(sessionUser.getOwner())){
-						owners.add(baseOrg.getDisplayName());	
+
+			if (userLoader.load() != null && !owners.contains(userLoader.load().getOwner())) {
+				baseOrg = userLoader.load().getOwner();
+				// If user is read-only customer, check that this baseOrg is the customer org
+				if (sessionUser.isReadOnlyCustomerUser() && baseOrg.isExternal()) {
+					
+					//Ensure customer read-only users only view the customer org they belong to.
+					if (baseOrg.equals(sessionUser.getOwner())) {
+						owners.add(baseOrg);
 					}
-				}else{
-					owners.add(userLoader.load().getOwner().getDisplayName());	
+				// Else must be a primaryOrg.
+				} else {
+					owners.add(baseOrg);
 				}
 			}
 		}
-		return owners;
+		return sortByPrimaryOrgFirst(new ArrayList<BaseOrg>(owners), new ArrayList<String>());
 	}
 
 	public List<Listable<Long>> getUsersForOwner(String owner) {
 		List<Listable<Long>> users = new ArrayList<Listable<Long>>();
 
 		for (Listable<Long> user : employees) {
+			
 			userLoader.setId(user.getId());
-			if (!(userLoader.load()==null) && owner.equals(userLoader.load().getOwner().getDisplayName())) {
+			if (!(userLoader.load() == null) && owner.equals(userLoader.load().getOwner().getDisplayName())) {
 				users.add(user);
 			}
 		}
 		return users;
+	}
+
+	public List<String> sortByPrimaryOrgFirst(ArrayList<BaseOrg> orgs, ArrayList<String> resultSet) {
+		ListIterator<BaseOrg> it = orgs.listIterator();
+		BaseOrg org;
+		
+		if (!it.hasNext()) {
+			return resultSet;
+		} else {
+			org = it.next();
+			orgs.remove(org);
+			// Group primaryOrgs toward the top of the list.
+			if (org.isPrimary()) {
+				resultSet.add(0, org.getDisplayName());
+			} else {
+				resultSet.add(org.getDisplayName());
+			}
+			return sortByPrimaryOrgFirst(orgs, resultSet);
+		}
 	}
 }
