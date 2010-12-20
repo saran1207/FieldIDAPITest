@@ -41,8 +41,8 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)
 	private EventType type;
 
-    @ManyToOne(fetch=FetchType.EAGER, optional=false)
-    @JoinColumn(name="eventform_id", nullable = false)
+    @ManyToOne(fetch=FetchType.EAGER, optional=true)
+    @JoinColumn(name="eventform_id")
     private EventForm eventForm;
 
 	@ManyToOne(fetch=FetchType.LAZY, optional = false)
