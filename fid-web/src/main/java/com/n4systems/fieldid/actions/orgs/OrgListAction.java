@@ -115,7 +115,6 @@ public class OrgListAction extends AbstractAction implements Preparable {
 	private boolean isDivisionListRequired() {
 		if (orgTypeFilter.equalsIgnoreCase("internal") 
 				|| orgTypeFilter.equalsIgnoreCase("customer") 
-				|| orgTypeFilter.equalsIgnoreCase("readonly") 
 				|| orgTypeFilter.equalsIgnoreCase("primary") 
 				|| orgTypeFilter.equalsIgnoreCase("secondary")) {
 			return false;
