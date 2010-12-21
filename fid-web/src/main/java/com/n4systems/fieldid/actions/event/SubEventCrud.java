@@ -8,6 +8,8 @@ import java.util.List;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
 import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.model.OneClickCriteriaResult;
@@ -133,16 +135,18 @@ public class SubEventCrud extends EventCrud {
 	}
 
 	private void restoreCriteriaResultsFromStoredEvent() {
-		criteriaResults = new ArrayList<OneClickCriteriaResult>();
+		criteriaResults = new ArrayList<CriteriaResultWebModel>();
 
 		List<CriteriaSection> availbleSections = getEventFormHelper().getAvailableSections(event);
+
+        CriteriaResultWebModelConverter converter = new CriteriaResultWebModelConverter();
 
 		for (CriteriaSection criteriaSection : availbleSections) {
 			for (Criteria criteria : criteriaSection.getCriteria()) {
 				boolean found = false;
 				for (CriteriaResult result : event.getResults()) {
 					if (result.getCriteria().equals(criteria)) {
-						criteriaResults.add((OneClickCriteriaResult) result);
+						criteriaResults.add(converter.convertToWebModel(result));
 						found = true;
 						break;
 					}

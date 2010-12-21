@@ -73,6 +73,9 @@ public class MultiEventAction extends AbstractCrud {
 	protected void initMemberFields() {
 		event = new Event();
 		event.setType(eventType);
+        if (eventType != null) {
+            event.setEventForm(eventType.getEventForm());
+        }
 		event.setDate(new Date());
 	}
 

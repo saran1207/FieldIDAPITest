@@ -7,6 +7,8 @@ import java.util.Map;
 
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Criteria;
@@ -14,7 +16,6 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
-import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
@@ -38,7 +39,7 @@ public class EventHelper {
 	 * @param event	The event to find CriteriaResults from
 	 * @return				A List of ordered CriteriaResults.  Returns an empty List if the event's results are empty.
 	 */
-	public List<? extends CriteriaResult> orderCriteriaResults(AbstractEvent event) {
+	public List<CriteriaResultWebModel> orderCriteriaResults(AbstractEvent event) {
 		List<CriteriaResult> orderedResults = new ArrayList<CriteriaResult>();
 		
 		// don't go through all the trouble if the event has no results.
@@ -58,8 +59,17 @@ public class EventHelper {
 			}
 		}
 		
-		return orderedResults;
+		return convertAll(orderedResults);
 	}
+
+    private List<CriteriaResultWebModel> convertAll(List<CriteriaResult> results) {
+        List<CriteriaResultWebModel> resultWebModels = new ArrayList<CriteriaResultWebModel>(results.size());
+        CriteriaResultWebModelConverter converter = new CriteriaResultWebModelConverter();
+        for (CriteriaResult result : results) {
+            resultWebModels.add(converter.convertToWebModel(result));
+        }
+        return resultWebModels;
+    }
 	
 	/**
 	 * Reorders both the recommendations and deficiencies on a CriteriaResult.
@@ -103,13 +113,11 @@ public class EventHelper {
 	 * them.  Each skeleton CriteriaResult is processed into a full result by looking up the Criteria and State by id, and then setting the event
 	 * and tenant fields.  The results Observations are then processed before adding it to the inspeciton's result list.  When complete
 	 * event will have it's full list of processed CriteriaResults attached.
-	 * @see #processObservations(CriteriaResult, User)
 	 * @param event			An AbstractEvent (sub or master)
 	 * @param formCriteriaResults	CriteriaResults input from a form.
 	 * @param modifiedBy			A modifiedBy user to set on the Observations
-	 * @param pm					A PersistenceManager instance
 	 */
-	public void processFormCriteriaResults(AbstractEvent event, List<? extends CriteriaResult> formCriteriaResults, User modifiedBy) {
+	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResultWebModel> formCriteriaResults, User modifiedBy) {
 		// if our forms criteria results are null (as is the case with a repair), just stop.  
 		if (formCriteriaResults == null) {
 			return;
@@ -120,23 +128,22 @@ public class EventHelper {
 		
 		CriteriaResult realResult;
 		// process the criteria and state lists. and attach to the real objects.
-		for (CriteriaResult formResult: formCriteriaResults) {
+		for (CriteriaResultWebModel formResult: formCriteriaResults) {
 			
 			// clean the observations for this result
 			processObservations(formResult, event.getTenant(), modifiedBy);
 			
 			// on edit the results will come in with an id
-			// we want to load the real result and then modify it's fields
+			// we want to load the real result and then modify its fields
 			if (formResult.getId() != null) {
-				realResult = pm.find(OneClickCriteriaResult.class, formResult.getId());
+				realResult = pm.find(CriteriaResult.class, formResult.getId());
 				
 				reconstructEditObservations(realResult.getRecommendations(), formResult.getRecommendations());
 				reconstructEditObservations(realResult.getDeficiencies(), formResult.getDeficiencies());
 				
 			} else {
-                // TODO: This will probably change when we go to adding different types of criteria results. Use a web model?
 				// this is a new result, need to set the basics
-				realResult = createNewResult(formResult);
+                realResult = new CriteriaResultWebModelConverter().convertFromWebModel(formResult, pm, event.getTenant());
 				realResult.setEvent(event);
 				realResult.setTenant(event.getTenant());
 				
@@ -144,12 +151,11 @@ public class EventHelper {
 				realResult.setRecommendations(formResult.getRecommendations());
 			}
 			
-			// these get re-attached every time
-			realResult.setCriteria(pm.find(OneClickCriteria.class, formResult.getCriteria().getId(), event.getTenant()));
-            if (formResult instanceof OneClickCriteriaResult) {
-                ((OneClickCriteriaResult)realResult).setState(pm.find(State.class, ((OneClickCriteriaResult)formResult).getState().getId(), event.getTenant()));
-            } else if (formResult instanceof TextFieldCriteriaResult) {
-                ((TextFieldCriteriaResult)realResult).setValue(((TextFieldCriteriaResult)formResult).getValue());
+			realResult.setCriteria(pm.find(Criteria.class, formResult.getCriteriaId(), event.getTenant()));
+            if (realResult instanceof OneClickCriteriaResult) {
+                ((OneClickCriteriaResult)realResult).setState(pm.find(State.class, formResult.getStateId(), event.getTenant()));
+            } else if (realResult instanceof TextFieldCriteriaResult) {
+                ((TextFieldCriteriaResult)realResult).setValue(formResult.getTextValue());
             }
 
 			
@@ -157,16 +163,6 @@ public class EventHelper {
 			event.getResults().add(realResult);
 		}
 	}
-
-    private CriteriaResult createNewResult(CriteriaResult formResult) {
-        if (formResult instanceof OneClickCriteriaResult) {
-            return new OneClickCriteriaResult();
-        } else if (formResult instanceof TextFieldCriteriaResult) {
-            return new TextFieldCriteriaResult();
-        } else {
-            throw new RuntimeException("error converting form result!");
-        }
-    }
 
     /**
 	 * Ensures nulls have been removed from the lists, sets security information
@@ -178,7 +174,7 @@ public class EventHelper {
 	 * @param result		A CriteriaResult
 	 * @param modifiedBy	A modifiedBy user to set on the result
 	 */
-	public void processObservations(CriteriaResult result, Tenant tenant, User modifiedBy) {
+	public void processObservations(CriteriaResultWebModel result, Tenant tenant, User modifiedBy) {
 		// these lists can have nulls in them
 		StrutsListHelper.clearNulls(result.getDeficiencies());
 		StrutsListHelper.clearNulls(result.getRecommendations());
@@ -282,15 +278,13 @@ public class EventHelper {
 	 * @param criteriaId	Id of a Criteria
 	 * @return				The found CriteriaResult or null
 	 */
-	public CriteriaResult findResultInCriteriaResultsByCriteriaId(List<? extends CriteriaResult> results, Long criteriaId) {
-		CriteriaResult result = null;
-		for (CriteriaResult critRes: results) {
-			if (critRes.getCriteria().getId().equals(criteriaId)) {
-				result = critRes;
-				break;
+	public CriteriaResultWebModel findResultInCriteriaResultsByCriteriaId(List<CriteriaResultWebModel> results, Long criteriaId) {
+		for (CriteriaResultWebModel critRes: results) {
+			if (critRes.getCriteriaId().equals(criteriaId)) {
+                return critRes;
 			}
 		}
-		return result;
+		return null;
 	}
 	
 	/**

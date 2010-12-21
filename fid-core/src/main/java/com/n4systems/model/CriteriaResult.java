@@ -26,7 +26,7 @@ public class CriteriaResult extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
-	private OneClickCriteria criteria;
+	private Criteria criteria;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
     @JoinColumn(name="event_id")
@@ -44,16 +44,16 @@ public class CriteriaResult extends EntityWithTenant {
 	
 	public CriteriaResult() {}
 	
-	public CriteriaResult(Tenant tenant, OneClickCriteria criteria) {
+	public CriteriaResult(Tenant tenant, Criteria criteria) {
 		super(tenant);
 		this.criteria = criteria;
 	}
 
-	public OneClickCriteria getCriteria() {
+	public Criteria getCriteria() {
 		return criteria;
 	}
 
-	public void setCriteria(OneClickCriteria criteria) {
+	public void setCriteria(Criteria criteria) {
 		this.criteria = criteria;
 	}
 

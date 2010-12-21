@@ -77,11 +77,28 @@
 }
 
 .eventForm div.infoSet {
-	border:none;
-	display:block;
-	float:left;
-	width: 440px;
-	min-height: 40px;
+	border: none;
+	display: block;
+	float: left;
+	width: 100%;
+    border-bottom: 1px solid #dddddd;
+}
+
+.eventForm div.criteriaEditContainer {
+    display: block;
+    float: left;
+    width:30%;
+}
+
+.eventForm div.textCriteriaContainer {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.eventForm div.textCriteriaDisplayContainer {
+    padding-top: 10px;
+    display:block;
+    float:left;
 }
 
 .eventForm div.infoSet span, .eventForm div.infoSet div.simpleContainer {
@@ -97,7 +114,6 @@
 }
 
 .eventForm div.infoSet span.criteriaText {
-	width: 10em;
 	float:left;
 	display:block;
 }
@@ -466,8 +482,9 @@
 	border-bottom: none;
 }
 
- .crudForm .infoSet .eventFormLabel{
+ .crudForm .infoSet .eventFormLabel {
 	text-align:left;
+    width: 50%;
 }
 
  .crudForm .infoSet label, .fullForm .infoSet label{

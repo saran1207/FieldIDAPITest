@@ -10,6 +10,8 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.TextFieldCriteria;
 
 public class EventFormHelper {
 
@@ -17,7 +19,6 @@ public class EventFormHelper {
 	private List<CriteriaSection> currentCriteriaSections;
 	
 	private Map<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>> sections = new HashMap<AbstractEvent, Map<CriteriaSection, List<CriteriaResult>>>();
-	
 	
 	public List<CriteriaSection> getAvailableSections(AbstractEvent event) {
 		if (availableSections.get(event) == null) {
@@ -42,9 +43,11 @@ public class EventFormHelper {
 		currentCriteriaSections = availableSections.get(event);
 		return availableSections.get(event);
 	}
+
 	public List<CriteriaSection> getCurrentCriteriaSections() {
 		return currentCriteriaSections;
 	}
+
 	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractEvent event) {
 		if (sections.get(event) == null) {
 			sections.put(event, new HashMap<CriteriaSection, List<CriteriaResult>>());
@@ -67,7 +70,16 @@ public class EventFormHelper {
 		}
 	
 		return sections.get(event);
-	
 	}
+
+    public String getTypeCodeFor(Criteria criteria) {
+        if (criteria instanceof OneClickCriteria) {
+            return "oneclick";
+        } else if (criteria instanceof TextFieldCriteria) {
+            return "textfield";
+        } else {
+            throw new RuntimeException("Unknown criteria type: " + criteria.getClass());
+        }
+    }
 
 }

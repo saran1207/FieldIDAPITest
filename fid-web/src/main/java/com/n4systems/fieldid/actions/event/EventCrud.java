@@ -15,6 +15,7 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.EventCrudHelper;
 import com.n4systems.fieldid.actions.helpers.EventScheduleSuggestion;
@@ -24,12 +25,15 @@ import com.n4systems.fieldid.viewhelpers.EventHelper;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssociatedEventType;
+import com.n4systems.model.Criteria;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.eventbook.EventBookSaver;
@@ -95,7 +99,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	protected Asset asset;
 	protected Event event;
 	
-	protected List<OneClickCriteriaResult> criteriaResults;
+	protected List<CriteriaResultWebModel> criteriaResults;
 	protected String charge;
 	protected ProofTestType proofTestType;
 	protected File proofTest;// The actual file
@@ -707,17 +711,17 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		this.newEventBookTitle = newEventBookTitle;
 	}
 
-	public List<OneClickCriteriaResult> getCriteriaResults() {
+	public List<CriteriaResultWebModel> getCriteriaResults() {
 		if (criteriaResults == null) {
 			// criteria results need to be placed back in the order that they appear on the form
 			// so that the states and button images line up correctly.
-			criteriaResults = (List<OneClickCriteriaResult>) eventHelper.orderCriteriaResults(event);
+            criteriaResults = eventHelper.orderCriteriaResults(event);
 		}
 
 		return criteriaResults;
 	}
 
-	public void setCriteriaResults(List<OneClickCriteriaResult> results) {
+    public void setCriteriaResults(List<CriteriaResultWebModel> results) {
 		criteriaResults = results;
 	}
 
@@ -846,7 +850,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	/** Finds a Recommendation on the criteriaResults for this criteriaId and recommendation index */
 	public Recommendation findEditRecommendation(Long criteriaId, int recIndex) {
 		// first let's grab the result for this Criteria
-		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
+		CriteriaResultWebModel result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		
 		// next we need the text of our Recommendation
 		String recText = eventHelper.findCriteriaOnEventType(event, criteriaId).getRecommendations().get(recIndex);
@@ -858,7 +862,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	/** Finds a Deficiency on the criteriaResults for this criteriaId and deficiency index */
 	public Deficiency findEditDeficiency(Long criteriaId, int defIndex) {
 		// first let's grab the result for this Criteria
-		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
+		CriteriaResultWebModel result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		
 		// next we need the text of our Deficiency
 		String defText = eventHelper.findCriteriaOnEventType(event, criteriaId).getDeficiencies().get(defIndex);
@@ -869,13 +873,13 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	
 	/** Finds a comment Recommendation on the criteriaResults for this criteriaId */
 	public Recommendation findEditRecommendationComment(Long criteriaId) {
-		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
+		CriteriaResultWebModel result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		return eventHelper.getCommentObservation(result.getRecommendations());
 	}
 	
 	/** Finds a comment Deficiency on the criteriaResults for this criteriaId */
 	public Deficiency findEditDeficiencyComment(Long criteriaId) {
-		CriteriaResult result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
+		CriteriaResultWebModel result = eventHelper.findResultInCriteriaResultsByCriteriaId(criteriaResults, criteriaId);
 		return eventHelper.getCommentObservation(result.getDeficiencies());
 	}
 
@@ -883,14 +887,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		if (criteriaResults == null || criteriaResults.isEmpty() || criteriaResults.get(criteriaIndex) == null) {
 			return 0;
 		}
-		return eventHelper.countObservations(((CriteriaResult)criteriaResults.get(criteriaIndex)).getRecommendations());
+		return eventHelper.countObservations(criteriaResults.get(criteriaIndex).getRecommendations());
 	}
 	
 	public int countDeficiencies(int criteriaIndex) {
 		if (criteriaResults == null || criteriaResults.isEmpty() || criteriaResults.get(criteriaIndex) == null) {
 			return 0;
 		}
-		return eventHelper.countObservations(((CriteriaResult)criteriaResults.get(criteriaIndex)).getDeficiencies());
+		return eventHelper.countObservations(criteriaResults.get(criteriaIndex).getDeficiencies());
 	}
 	
 	public Long getScheduleId() {
@@ -1020,7 +1024,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	public boolean isAssignToSomeone() {
 		return assignToSomeone;
 	}
-	
 	
 	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {

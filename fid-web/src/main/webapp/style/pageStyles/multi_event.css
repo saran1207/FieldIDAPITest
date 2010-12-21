@@ -55,3 +55,7 @@
 .stepContent .fieldHolder label.checkBoxLabel{
 	padding-top: 2px;
 }
+
+.infoSet .textCriteriaContainer .fieldHolder input[type="text"] {
+    width: 170px;
+}
