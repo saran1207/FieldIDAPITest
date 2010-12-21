@@ -30,7 +30,11 @@
 				<td>
 					<div class="infoSet">
 						<label class="label" ><@s.text name="label.assignedto"/>:</label>
-						<span class="field"><@s.select name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.unassigned')}" labelposition="left" onchange="selectField('assignedUser');" /></span>
+						<span class="field">
+							<@s.select name="assignedUser" headerKey="0" headerValue="${action.getText('label.unassigned')}" labelposition="left" onchange="selectField('assignedUser');" >
+									<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+							</@s.select>
+						</span>
 					</div>
 				</td>
 			</tr>

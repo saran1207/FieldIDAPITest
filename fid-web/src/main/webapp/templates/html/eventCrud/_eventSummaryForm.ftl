@@ -68,7 +68,9 @@
 		<div  class="infoSet">
 			<label class="label"><@s.text name="label.assign_asset_to"/></label>
 			<span class="fieldHolder">
-				<@s.select name="assignedToId" list="employees" listKey="id" listValue="displayName" />
+				<@s.select name="assignedToId"  headerKey="0" headerValue="${action.getText('label.unassigned')}" >
+					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+				</@s.select>
 				<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
 			</span>
 		</div>

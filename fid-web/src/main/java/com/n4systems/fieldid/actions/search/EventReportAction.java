@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
@@ -35,6 +36,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -60,6 +62,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
     private List<EventType> eventTypes;
 	private List<AssetStatus> statuses;
 	private List<ListingPair> eventJobs;
+	private AssignedToUserGrouper userGrouper;
 	
 	public EventReportAction(
 			final PersistenceManager persistenceManager,
@@ -241,7 +244,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		if(employees == null) {
 			employees = new ArrayList<Listable<Long>>();
 			employees.add(new SimpleListable<Long>(UNASSIGNED_USER, getText("label.unassigned")));
-			employees.addAll(getLoaderFactory().createHistoricalEmployeesListableLoader().load());
+			employees.addAll(getLoaderFactory().createHistoricalCombinedUserListableLoader().load());
 		}
 		return employees;
 	}
@@ -328,5 +331,12 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 		getContainer().setOwner(ownerPicker.getOwner());	
+	}
+	
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+		}
+		return userGrouper;
 	}
 }

@@ -15,6 +15,7 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.EventCrudHelper;
 import com.n4systems.fieldid.actions.helpers.EventScheduleSuggestion;
 import com.n4systems.fieldid.actions.event.viewmodel.ScheduleToWebEventScheduleConverter;
@@ -64,6 +65,7 @@ import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
@@ -114,6 +116,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private List<ListingPair> eventBooks;
 	private List<EventSchedule> availableSchedules;
 	private List<ListingPair> eventJobs;
+	private AssignedToUserGrouper userGrouper;
 	
 	private EventWebModel modifiableEvent;
 
@@ -1023,12 +1026,19 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		if (employees == null) {
 			employees = new ArrayList<Listable<Long>>();
 			employees.add(new SimpleListable<Long>(0L, getText("label.unassigned")));
-			employees.addAll(getLoaderFactory().createCurrentEmployeesListableLoader().load());
+			employees.addAll(getLoaderFactory().createCombinedUserListableLoader().load());
 		}
 		return employees;
 	}
 	
 	public Long getEventId() {
 		return event.getId();
+	}
+	
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+		}
+		return userGrouper;
 	}
 }

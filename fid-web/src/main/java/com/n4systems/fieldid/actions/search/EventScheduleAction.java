@@ -8,6 +8,7 @@ import java.util.List;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.model.EventType;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
@@ -26,6 +27,7 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -42,6 +44,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	private OwnerPicker ownerPicker;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> eventJobs;
+	private AssignedToUserGrouper userGrouper;
 	
 	public EventScheduleAction(
 			final PersistenceManager persistenceManager, 
@@ -146,7 +149,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		if(employees == null) {
 			employees = new ArrayList<Listable<Long>>();
 			employees.add(new SimpleListable<Long>(UNASSIGNED_USER, getText("label.unassigned")));
-			employees.addAll(getLoaderFactory().createHistoricalEmployeesListableLoader().load());
+			employees.addAll(getLoaderFactory().createHistoricalCombinedUserListableLoader().load());
 		}
 		return employees;
 	}
@@ -177,9 +180,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 			query.addSimpleWhere("eventJob", true);
 			query.addSimpleWhere("retired", false);
 			eventJobs = persistenceManager.findAllLP(query, "name");
-		
 		}
-
 		return eventJobs;
 	}
 	
@@ -194,5 +195,12 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 		getContainer().setOwner(ownerPicker.getOwner());	
+	}
+	
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+		}
+		return userGrouper;
 	}
 }

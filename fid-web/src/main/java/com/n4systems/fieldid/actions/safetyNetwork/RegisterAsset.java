@@ -9,6 +9,7 @@ import com.n4systems.fieldid.actions.asset.AssetView;
 import com.n4systems.fieldid.actions.asset.AssetViewModeConverter;
 import com.n4systems.fieldid.actions.asset.AssetWebModel;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -25,6 +26,7 @@ import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.DateHelper;
@@ -54,7 +56,8 @@ public class RegisterAsset extends AbstractCrud{
 	private List<Listable<Long>> commentTemplates;
 	private OwnerPicker ownerPicker;
 	private AutoAttributeCriteria autoAttributeCriteria;
-
+	private AssignedToUserGrouper userGrouper;
+	
     //Form Inputs
 	private AssetIdentifierView identifiers;
 	private AssetView assetView;
@@ -160,8 +163,7 @@ public class RegisterAsset extends AbstractCrud{
 	
 	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {
-			employees = getLoaderFactory().createCurrentEmployeesListableLoader().load();
-			
+			employees = getLoaderFactory().createCombinedUserListableLoader().load();
 		}
 		return employees;
 	}
@@ -288,5 +290,12 @@ public class RegisterAsset extends AbstractCrud{
 	
 	public void setLinkedAssetId(Long linkedAssetId) {
 		this.linkedAssetId = linkedAssetId;
+	}
+	
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+		}
+		return userGrouper;
 	}
 }

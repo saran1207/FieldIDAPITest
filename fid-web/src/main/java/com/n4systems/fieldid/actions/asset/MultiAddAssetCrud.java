@@ -16,6 +16,7 @@ import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.MultiAddAssetCrudHelper;
@@ -32,6 +33,7 @@ import com.n4systems.model.asset.AssetCleaner;
 import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.assettype.AutoAttributeCriteriaByAssetTypeIdLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ConfigEntry;
@@ -54,6 +56,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private List<AssetExtension> extentions;
 	private AssetTypeLister assetTypeLister;
 	private AutoAttributeCriteria autoAttributeCriteria;
+	private AssignedToUserGrouper userGrouper;
 	
 	// form inputs
 	private List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>();
@@ -198,7 +201,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
 	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {
-			employees = getLoaderFactory().createCurrentEmployeesListableLoader().load();
+			employees = getLoaderFactory().createCombinedUserListableLoader().load();
 		}
 		return employees;
 	}
@@ -362,10 +365,14 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		return assetWebModel;
 	}
 	
-
 	public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field, InfoOptionInput inputOption) {
 		return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
 	}
-	
-	
+
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+		}
+		return userGrouper;
+	}
 }

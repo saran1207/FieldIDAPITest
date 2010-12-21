@@ -19,12 +19,14 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.MassUpdateAssetHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.security.Permissions;
@@ -50,7 +52,8 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 
 	private String identified;
 	private OwnerPicker ownerPicker;
-
+	private AssignedToUserGrouper userGrouper;
+	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 
 	public AssetMassUpdate(MassUpdateManager massUpdateManager, LegacyAsset assetManager, PersistenceManager persistenceManager) {
@@ -233,7 +236,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 
 	public List<Listable<Long>> getEmployees() {
 		if (employees == null) {
-			UserListableLoader loader = getLoaderFactory().createHistoricalEmployeesListableLoader();
+			UserListableLoader loader = getLoaderFactory().createCombinedUserListableLoader();
 			employees = loader.load();
 		}
 		return employees;
@@ -297,5 +300,12 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 
 		}
 		return aggregateSummary;
+	}
+	
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+		}
+		return userGrouper;
 	}
 }

@@ -87,7 +87,9 @@
 				<#if securityGuard.assignedToEnabled>
 					<div class="infoSet">
 						<label for="criteria.assignedUser"><@s.text name="label.assignedto"/></label>
-						<@s.select name="criteria.assignedUser" list="employees" listKey="id" listValue="displayName" emptyOption="true" />
+						<@s.select name="criteria.assignedUser" emptyOption="true" >
+							<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+						</@s.select>
 					</div>	
 				</#if>
 				<div class="infoSet">

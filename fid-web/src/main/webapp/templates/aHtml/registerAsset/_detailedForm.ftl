@@ -31,7 +31,9 @@
 		<div class="infoSet">
 			<label for="assignedUser" class="label"><@s.text name="label.assignedto"/></label>
 			<#if !parentAsset?exists >
-				<@s.select  name="assignedUser" list="employees" listKey="id" listValue="displayName" headerKey="0" headerValue="${action.getText('label.unassigned')}" />
+				<@s.select name="assignedUser"  headerKey="0" headerValue="${action.getText('label.unassigned')}" >
+						<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+				</@s.select>
 			<#else>
 				<span class="fieldHolder" id="assignedUser">${(asset.assignedUser.userLabel)!}</span>
 			</#if>

@@ -346,6 +346,10 @@ public class LoaderFactory implements Serializable {
 		return createUserListableLoader();
 	}
 
+	public UserListableLoader createCombinedUserListableLoader() {
+		return createUserListableLoader().setNoDeleted(true);
+	}
+	
 	public UserListableLoader createHistoricalEmployeesListableLoader() {
 		return createUserListableLoader().employeesOnly();
 	}
