@@ -17,7 +17,7 @@ ${action.setPageType('user','adduser')!}
 	
 	<h2><@s.text name="label.add_user_heading" /></h2>
 	
-	<div class="horizontalGroup <#if !primaryOrg.liteUsersEnabled || !primaryOrg.readOnlyUsersEnabled  > twoGroup </#if> ">
+	<div class="horizontalGroup">
 		<div class="groupContents ">
 			<h2><@s.text name="label.full_user" /></h2>
 			<p><@s.text name="label.employees_that_may" /></p>
