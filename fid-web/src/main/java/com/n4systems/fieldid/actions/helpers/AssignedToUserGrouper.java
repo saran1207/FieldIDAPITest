@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.actions.helpers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import rfid.web.helper.SessionUser;
 
@@ -16,6 +18,7 @@ public class AssignedToUserGrouper {
 	private List<Listable<Long>> employees;
 	private SessionUser sessionUser;
 	UserFilteredLoader userLoader;
+	private Map<String, List<Listable<Long>>> ownerToUserMap = new HashMap<String, List<Listable<Long>>>();
 
 	public AssignedToUserGrouper(SecurityFilter filter, List<Listable<Long>> employees, SessionUser sessionUser) {
 		this.employees = employees;
@@ -24,52 +27,65 @@ public class AssignedToUserGrouper {
 	}
 
 	public List<String> getUserOwners() {
-		List<BaseOrg> owners = new ArrayList<BaseOrg>();
 		BaseOrg baseOrg;
+		List<BaseOrg> owners = new ArrayList<BaseOrg>();
 
 		for (Listable<Long> user : employees) {
 			userLoader.setId(user.getId());
+			baseOrg = userLoader.load().getOwner();
 
-			if (userLoader.load() != null && !owners.contains(userLoader.load().getOwner())) {
-				baseOrg = userLoader.load().getOwner();
-				// If user is read-only customer, check that this baseOrg is the customer org
-				if (sessionUser.isReadOnlyCustomerUser() && baseOrg.isExternal()) {
+			// If user is read-only customer, check that this baseOrg is the customer org
+			if (sessionUser.isReadOnlyCustomerUser() && baseOrg.isExternal()) {
+
+				// Ensure customer read-only users only view the customer org they belong to.
+				if (baseOrg.equals(sessionUser.getOwner())) {
+					addToMap(baseOrg, user);
 					
-					//Ensure customer read-only users only view the customer org they belong to.
-					if (baseOrg.equals(sessionUser.getOwner())) {
+					//Maintain a list of owners in order to sort the dropdown list later.
+					if (!owners.contains(baseOrg)) {
 						owners.add(baseOrg);
 					}
+				}
+
 				// Else must be a primaryOrg.
-				} else {
+			} else {
+				addToMap(baseOrg, user);
+				if (!owners.contains(baseOrg)) {
 					owners.add(baseOrg);
 				}
 			}
 		}
-		return sortByPrimaryOrgFirst(new ArrayList<BaseOrg>(owners), new ArrayList<String>());
+		return sortByPrimaryOrgFirst(owners, new ArrayList<String>());
+	}
+
+	private void addToMap(BaseOrg baseOrg, Listable<Long> user) {
+		List<Listable<Long>> employeesForThisOwner;
+
+		if (ownerToUserMap.containsKey(baseOrg.getDisplayName())) {
+			employeesForThisOwner = ownerToUserMap.get(baseOrg.getDisplayName());
+			employeesForThisOwner.add(user);
+			ownerToUserMap.put(baseOrg.getDisplayName(), employeesForThisOwner);
+		} else {
+			employeesForThisOwner = new ArrayList<Listable<Long>>();
+			employeesForThisOwner.add(user);
+			ownerToUserMap.put(baseOrg.getDisplayName(), employeesForThisOwner);
+		}
 	}
 
 	public List<Listable<Long>> getUsersForOwner(String owner) {
-		List<Listable<Long>> users = new ArrayList<Listable<Long>>();
-
-		for (Listable<Long> user : employees) {
-			
-			userLoader.setId(user.getId());
-			if (!(userLoader.load() == null) && owner.equals(userLoader.load().getOwner().getDisplayName())) {
-				users.add(user);
-			}
-		}
-		return users;
+		return ownerToUserMap.get(owner);
 	}
 
-	public List<String> sortByPrimaryOrgFirst(ArrayList<BaseOrg> orgs, ArrayList<String> resultSet) {
+	public List<String> sortByPrimaryOrgFirst(List<BaseOrg> orgs, ArrayList<String> resultSet) {
 		ListIterator<BaseOrg> it = orgs.listIterator();
 		BaseOrg org;
-		
+
 		if (!it.hasNext()) {
 			return resultSet;
 		} else {
 			org = it.next();
 			orgs.remove(org);
+			
 			// Group primaryOrgs toward the top of the list.
 			if (org.isPrimary()) {
 				resultSet.add(0, org.getDisplayName());
