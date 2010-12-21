@@ -5,8 +5,9 @@ public enum UserType {
 	ADMIN( "Admin" ),
 	SYSTEM( "System" ),
 	FULL( "Full" ),
-	READONLY( "Read-Only" ),
-	LITE( "Lite" );
+	LITE( "Lite" ),
+	READONLY( "Read-Only" );
+
 	
 	String label;
 	

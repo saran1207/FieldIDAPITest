@@ -391,9 +391,14 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public List<StringListingPair> getUserTypes() {
 		if (userTypes == null) {
 			userTypes = new ArrayList<StringListingPair>();
-			for (int i = 0; i < UserType.values().length; i++) {
-				if (!UserType.values()[i].equals(UserType.SYSTEM) && !UserType.values()[i].equals(UserType.ADMIN)) {
-					userTypes.add(new StringListingPair(UserType.values()[i].name(), UserType.values()[i].getLabel()));
+			UserType[] allUserTypes = UserType.values();
+			for (int i = 0; i < allUserTypes.length; i++) {
+				if (!allUserTypes[i].equals(UserType.SYSTEM) && !allUserTypes[i].equals(UserType.ADMIN)) {	
+					
+					if(allUserTypes[i].equals(UserType.LITE) && getPrimaryOrg().isLiteUsersEnabled() 
+							|| !allUserTypes[i].equals(UserType.LITE)) {					
+						userTypes.add(new StringListingPair(allUserTypes[i].name(), allUserTypes[i].getLabel()));
+					}
 				}
 			}
 		}
