@@ -228,6 +228,7 @@ public class EventScheduleCountGeneratorTest {
 		FailedEventListLoader loader = createMock(FailedEventListLoader.class);
 		expect(loader.setFrequency(notificationSetting.getFrequency())).andReturn(loader);
 		expect(loader.setClock((Clock)anyObject())).andReturn(loader);
+		expect(loader.setNotificationSetting(notificationSetting)).andReturn(loader);
 		expect(loader.load()).andReturn(failedEvents);
 		replay(loader);
 		return loader;
