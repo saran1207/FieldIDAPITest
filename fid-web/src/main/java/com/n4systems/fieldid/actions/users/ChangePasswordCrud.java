@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.actions.users;
 
-import com.n4systems.taskscheduling.task.EventScheduleNotificationTask;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
