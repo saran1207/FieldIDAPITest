@@ -31,27 +31,31 @@ public class AssignedToUserGrouper {
 		List<BaseOrg> owners = new ArrayList<BaseOrg>();
 
 		for (Listable<Long> user : employees) {
-			userLoader.setId(user.getId());
-			baseOrg = userLoader.load().getOwner();
 
-			// If user is read-only customer, check that this baseOrg is the customer org
-			if (sessionUser.isReadOnlyCustomerUser() && baseOrg.isExternal()) {
+			if (user.getId() != 0) {
+				
+				userLoader.setId(user.getId());
+				baseOrg = userLoader.load().getOwner();
 
-				// Ensure customer read-only users only view the customer org they belong to.
-				if (baseOrg.equals(sessionUser.getOwner())) {
+				// If user is read-only customer, check that this baseOrg is the customer org
+				if (sessionUser.isReadOnlyCustomerUser() && baseOrg.isExternal()) {
+
+					// Ensure customer read-only users only view the customer org they belong to.
+					if (baseOrg.equals(sessionUser.getOwner())) {
+						addToMap(baseOrg, user);
+
+						// Maintain a list of owners in order to sort the dropdown list later.
+						if (!owners.contains(baseOrg)) {
+							owners.add(baseOrg);
+						}
+					}
+
+					// Else must be a primaryOrg.
+				} else {
 					addToMap(baseOrg, user);
-					
-					//Maintain a list of owners in order to sort the dropdown list later.
 					if (!owners.contains(baseOrg)) {
 						owners.add(baseOrg);
 					}
-				}
-
-				// Else must be a primaryOrg.
-			} else {
-				addToMap(baseOrg, user);
-				if (!owners.contains(baseOrg)) {
-					owners.add(baseOrg);
 				}
 			}
 		}
@@ -85,7 +89,7 @@ public class AssignedToUserGrouper {
 		} else {
 			org = it.next();
 			orgs.remove(org);
-			
+
 			// Group primaryOrgs toward the top of the list.
 			if (org.isPrimary()) {
 				resultSet.add(0, org.getDisplayName());
