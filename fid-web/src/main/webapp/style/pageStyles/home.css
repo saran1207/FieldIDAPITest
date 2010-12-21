@@ -2,6 +2,10 @@
 	margin-right: 20px;
 }
 
+#helpVideos{
+	float:right;
+}
+
 #dashboardShortCuts ul{
 	padding-top: 10px;
 	padding-left: 10px;
@@ -29,7 +33,7 @@
 .dashboardSection {
 	width: 490px;
 	float: left;
-	margin-bottom: 30px;
+	margin-bottom: 15px;
 }
 
 #quickLinks .bulletList li{
