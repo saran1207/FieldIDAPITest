@@ -7,6 +7,7 @@ import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventType;
 import com.n4systems.model.builders.BaseBuilder;
@@ -35,7 +36,10 @@ public class SimpleEventBuilder extends BaseBuilder<Event> {
                 .ofType(type)
                 .build();
 
+        EventForm eventForm = scenario.anEventForm().build();
+
         EventType eventType = scenario.anEventType()
+                .withEventForm(eventForm)
                 .named("Test Event Type")
                 .build();
         

@@ -5,12 +5,14 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
+import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
@@ -44,6 +46,7 @@ public class SaverMap {
         classToSaverMap.put(EventGroup.class, new EventGroupSaver());
         classToSaverMap.put(EventBook.class, new EventBookSaver());
         classToSaverMap.put(EventTypeGroup.class, new EventTypeGroupSaver());
+        classToSaverMap.put(EventForm.class, new EventFormSaver());
         classToSaverMap.put(OrgConnection.class, new OrgConnectionSaver(ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID)));
 
         classToSaverMap.put(CustomerOrg.class, new OrgSaver());
@@ -53,7 +56,7 @@ public class SaverMap {
     public static Saver makeSaverFor(Class<? extends Saveable> clazz) {
         Saver saver = classToSaverMap.get(clazz);
         if (saver == null) {
-            throw new RuntimeException("No saver registered for class: " + clazz + "! Do so in SaverMap");
+            throw new RuntimeException("No saver registered for class: " + clazz + "! Do so in " + SaverMap.class.getName());
         }
         return saver;
     }

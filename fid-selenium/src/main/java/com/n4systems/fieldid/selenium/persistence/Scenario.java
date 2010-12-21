@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.builders.EventFormBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectionBuilder;
@@ -148,6 +149,11 @@ public class Scenario {
 
     public EventGroupBuilder anEventGroup() {
         EventGroupBuilder builder = EventGroupBuilder.anEventGroup();
+        return createPersistentBuilder(builder);
+    }
+
+    public EventFormBuilder anEventForm() {
+        EventFormBuilder builder = EventFormBuilder.anEventForm();
         return createPersistentBuilder(builder);
     }
 

@@ -21,6 +21,7 @@ public class ManageAssetTypes_EventFrequenciesTest extends ManageAssetTypesTestC
         super.setupScenario(scenario);
 
         scenario.anEventType()
+                .withEventForm(scenario.anEventForm().build())
                 .named(TEST_EVENT_TYPE)
                 .build();
 
