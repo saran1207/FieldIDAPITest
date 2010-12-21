@@ -31,7 +31,7 @@ ${action.setPageType('user','adduser')!}
 		</div>
 		<#if employeeLimitReached>
 			<div class="userLimitWarning">
-				<@s.text name="label.full_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
+				<@s.text name="label.full_user_limit_reached" />	
 			</div>	
 		<#else>
 			<div class="addUserAction">
@@ -54,7 +54,7 @@ ${action.setPageType('user','adduser')!}
 	
 			<#if liteUserLimitReached>
 				<div class="userLimitWarning">
-					<@s.text name="label.lite_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
+					<@s.text name="label.lite_user_limit_reached"/>	
 				</div>		
 			<#else>
 				<div class="addUserAction">
