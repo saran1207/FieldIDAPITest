@@ -59,6 +59,7 @@
 
 .searchForm{
 	width:100%;
+	clear:both;
 }
 
 .fieldHolder input, .fieldHolder select{
