@@ -89,7 +89,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		List<ColumnMappingGroup> dynamicGroups = super.getDynamicGroups();
 		
-		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(null, "event_search", getSecurityFilter()));
+		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(getSession().getReportCriteria().getEventType(), "event_search", getSecurityFilter()));
 		
 		
 		return dynamicGroups;

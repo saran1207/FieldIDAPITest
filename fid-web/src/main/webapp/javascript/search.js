@@ -29,6 +29,17 @@ function assetTypeChanged(assetType) {
 	getResponse(dynamicColumnUrl, "GET", { "criteria.assetType": Element.extend(assetType).getValue(), "criteria.assetTypeGroup" : $('assetTypeGroup').getValue() } );
 }
 
+function eventTypeChanged(eventType) {
+	var dynamicSections = $$('.dynamic div');
+	for (var i = 0; i < dynamicSections.length; i++) {
+		dynamicSections[i].remove();
+	}
+	var area = $('selectColumnNotificationArea');
+	area.update(updatingColumnText);
+	area.show();
+	getResponse(dynamicColumnUrl, "GET", { "criteria.eventType": Element.extend(eventType).getValue(), "criteria.eventTypeGroup" : $('eventTypeGroup').getValue() } );
+}
+
 var groupToAssetType = new Object();
 function assetTypeGroupChanged() {
 	var assetTypeGroup = $('assetTypeGroup');

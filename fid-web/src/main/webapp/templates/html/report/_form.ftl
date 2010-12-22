@@ -109,11 +109,11 @@ ${action.setPageType('report', 'show')!}
 			<h2><@s.text name="label.event_details"/></h2>
 			<div class="infoSet">
 				<label for="criteria.eventTypeGroup"><@s.text name="label.eventtypegroup"/></label>
-				<@s.select name="criteria.eventTypeGroup" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" onchange="updateEventTypes(this)"/>
+				<@s.select id="eventTypeGroup" name="criteria.eventTypeGroup" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" onchange="updateEventTypes(this)"/>
 			</div>
             <div class="infoSet">
                 <label for="criteria.eventType"><@s.text name="label.eventtype"/></label>
-                <@s.select cssClass="eventTypeSelect" name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true" onchange="eventTypeChanged(this)" />
+                <@s.select cssClass="eventTypeSelect" id="eventType" name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true" onchange="eventTypeChanged(this)" />
             </div>
 			<div class="infoSet">
 				<label for="criteria.performedBy"><@s.text name="label.performed_by"/></label>

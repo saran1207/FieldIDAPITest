@@ -8,6 +8,19 @@
 $('${dynamicGroups[0].id}').replace('${html?js_string}');
 
 $('${dynamicGroups[0].id}').highlight();
+
+<#assign html>
+	<#if dynamicGroups[1]?exists>
+		<#assign group = dynamicGroups[1]/>
+		<#include "/templates/html/customizableSearch/_columnGroup.ftl"/>
+	</#if>
+</#assign>
+
+$('${dynamicGroups[1].id}').replace('${html?js_string}');
+
+$('${dynamicGroups[1].id}').highlight();
+
+
 var area = $('selectColumnNotificationArea');
 area.update('<@s.text name="label.availablecolumnsupdated"/>');
 area.show();
