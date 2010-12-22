@@ -83,10 +83,6 @@ public class Home {
 		// if we are not the admin, there will be no quick setup wizard link
 	}
 
-	public void assertHomePageQuickSetupWizard() {
-		assertTrue("Could not find the 'Qucik Setup Wizard' link", selenium.isElementPresent(quickSetupWizardLinkLocator));
-	}
-
 	public void assertHomePageJobsSection() {
 		assertTrue("Could not find the header for the 'Jobs' section", selenium.isElementPresent(jobsSectionHeaderLocator));
 	}
