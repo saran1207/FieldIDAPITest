@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
 
 import com.n4systems.fieldid.selenium.administration.page.ManageAssetStatusDriver;
 import com.n4systems.fieldid.selenium.datatypes.AssetStatus;
@@ -48,8 +49,8 @@ public class AssetStatusCrudTest extends LoggedInTestCase {
 		driver.gotoAddStatus();
 		
 		driver.createStatus(invalidNameInTempalte);
-		
-		driver.assertVaildationErrorFor(ManageAssetStatusDriver.FieldName.NAME_FIELD, containsString("required"));
+
+        assertEquals("name is a required field.", driver.getValidationErrors().get(0));
 	}
 	
 	@Test
@@ -59,8 +60,7 @@ public class AssetStatusCrudTest extends LoggedInTestCase {
 		AssetStatus status = driver.selectAnExistingStatus();
 		
 		driver.editStatus(status, invalidNameInTempalte);
-		
-		driver.assertVaildationErrorFor(ManageAssetStatusDriver.FieldName.NAME_FIELD, allOf(containsString("required"), containsString("name")));
+		assertEquals("name is a required field.", driver.getValidationErrors().get(0));
 	}
 	
 }

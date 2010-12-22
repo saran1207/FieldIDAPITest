@@ -13,6 +13,7 @@ import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.pages.setup.MangageEventTypeGroupsPage;
+import com.n4systems.fieldid.selenium.pages.setup.SetupWizardPage;
 import com.n4systems.fieldid.selenium.pages.setup.SystemSettingsPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -41,6 +42,12 @@ public class SetupPage extends FieldIDPage {
         clickSettingsTab();
 		selenium.click("//a[.='Branding']");
 		return new BrandingPage(selenium);
+	}
+
+	public SetupWizardPage clickSetupWizard() {
+        clickSettingsTab();
+		selenium.click("//a[.='Setup Wizard']");
+		return new SetupWizardPage(selenium);
 	}
 
 	public ManageUsersPage clickManageUsers() {

@@ -9,12 +9,6 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.home.page.QuickSetupWizard;
 import com.n4systems.fieldid.selenium.login.page.Login;
 
-/**
- * WEB-1569
- * 
- * @author dgrainge
- *
- */
 public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTestCase {
 
 	Login login;
@@ -28,18 +22,14 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard() {
-		startAsCompany("illinois");
-		login.signInAllTheWayToHome("smoke", "smoke");
-		qsw.gotoQuickSetupWizard();
+        startAsCompany("illinois").login().clickSetupLink().clickSetupWizard();
 		misc.forceSessionTimeout(getFieldIDDomain());
 		assertSessionTimeoutLightboxAppeared();
 	}
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step1() {
-		startAsCompany("illinois");
-		login.signInAllTheWayToHome("smoke", "smoke");
-		qsw.gotoQuickSetupWizard();
+        startAsCompany("illinois").login().clickSetupLink().clickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		misc.forceSessionTimeout(getFieldIDDomain());
 		assertSessionTimeoutLightboxAppeared();
@@ -47,9 +37,7 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step2() {
-		startAsCompany("illinois");
-		login.signInAllTheWayToHome("smoke", "smoke");
-		qsw.gotoQuickSetupWizard();
+        startAsCompany("illinois").login().clickSetupLink().clickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
 		misc.forceSessionTimeout(getFieldIDDomain());
@@ -58,9 +46,7 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_step3() {
-		startAsCompany("illinois");
-		login.signInAllTheWayToHome("smoke", "smoke");
-		qsw.gotoQuickSetupWizard();
+        startAsCompany("illinois").login().clickSetupLink().clickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
 		qsw.gotoQuickSetupWizardStep3();
@@ -70,9 +56,7 @@ public class QuickSetupWizardCausesErrorOnSessionTimeoutTest extends FieldIDTest
 
 	@Test
 	public void no_error_dialog_if_session_times_out_in_quick_setup_wizard_you_are_done() {
-		startAsCompany("illinois");
-		login.signInAllTheWayToHome("smoke", "smoke");
-		qsw.gotoQuickSetupWizard();
+        startAsCompany("illinois").login().clickSetupLink().clickSetupWizard();
 		qsw.gotoImReadyLetsGo();
 		qsw.gotoQuickSetupWizardStep2();
 		qsw.gotoQuickSetupWizardStep3();

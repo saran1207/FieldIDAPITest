@@ -52,11 +52,10 @@ public class EventFormEditPage extends WebPage {
         idLoader.setId(eventTypeId);
         EventType eventType = idLoader.load();
 
+        criteriaSections = new ArrayList<CriteriaSection>();
         if (eventType.getEventForm() != null) {
             oldEventFormId = eventType.getEventForm().getId();
-            criteriaSections = eventType.getEventForm().getSections();
-        } else {
-            criteriaSections = Collections.emptyList();
+            criteriaSections .addAll(eventType.getEventForm().getSections());
         }
 
         add(CSSPackageResource.getHeaderContribution("style/fieldid.css"));
@@ -151,9 +150,11 @@ public class EventFormEditPage extends WebPage {
                     Transaction tx = PersistenceManager.startTransaction();
 
                     FilteredIdLoader<EventForm> eventFormLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventForm.class);
-                    EventForm oldEventForm = eventFormLoader.setId(oldEventFormId).load(tx);
-                    oldEventForm.setState(Archivable.EntityState.RETIRED);
-                    new EventFormSaver().save(tx, oldEventForm);
+                    if (oldEventFormId != null) {
+                        EventForm oldEventForm = eventFormLoader.setId(oldEventFormId).load(tx);
+                        oldEventForm.setState(Archivable.EntityState.RETIRED);
+                        new EventFormSaver().update(tx, oldEventForm);
+                    }
 
                     FilteredIdLoader<EventType> eventTypeLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
 
@@ -165,7 +166,7 @@ public class EventFormEditPage extends WebPage {
                     eventType.setEventForm(eventForm);
                     
                     new EventFormSaver().save(tx, eventForm);
-                    new EventTypeSaver().save(tx, eventType);
+                    new EventTypeSaver().update(tx, eventType);
 
                     target.appendJavascript("parent.location.reload();");
 

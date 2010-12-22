@@ -39,17 +39,6 @@ public class ValidateHomePageTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void validate_home_page_quick_setup_wizard_for_admin_user() throws Exception {
-		String username = getStringProperty("adminusername");
-		String password = getStringProperty("adminpassword");
-		String company = getStringProperty("companyid");
-
-		startAsCompany(company);
-		login.signInAllTheWayToHome(username, password);
-		home.assertHomePageQuickSetupWizard();
-	}
-	
-	@Test
 	public void validate_home_page_jobs_section() throws Exception {
 		String username = getStringProperty("username");
 		String password = getStringProperty("password");

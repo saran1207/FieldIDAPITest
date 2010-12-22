@@ -9,6 +9,9 @@ import org.hamcrest.Matcher;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.nav.OptionNavgationDriver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ManageAssetStatusDriver {
 	public enum FieldName {
 		NAME_FIELD("assetStatusEdit_name");
@@ -98,14 +101,15 @@ public class ManageAssetStatusDriver {
 		assertFalse("status " + status + " still appears in the list", selenium.isTextPresent(status.name));
 	}
 
-	public void assertVaildationErrorFor(FieldName field, Matcher<String> messageMatcher) {
-		String fieldErrorLocator = "css=*[errorfor='" + field.inputId + "']";
-		assertThat("there is no error message for field " + field.name(), selenium.isElementPresent(fieldErrorLocator), is(true));
-		
-		assertThat(selenium.getAttribute(fieldErrorLocator + "@class"), containsString("errorMessage"));
-		assertThat(selenium.getText(fieldErrorLocator), messageMatcher);
-		
-	}
+    public List<String> getValidationErrors() {
+        List<String> validationErrors = new ArrayList<String>();
+        int errors = selenium.getXpathCount("//div[@class='formErrors']//span[@class='errorMessage']").intValue();
+
+        for (int i = 1; i <= errors; i++) {
+            validationErrors.add(selenium.getText("//div[@class='formErrors']//span[@class='errorMessage']["+i+"]"));
+        }
+        return validationErrors;
+    }
 
 	public AssetStatus selectAnExistingStatus() {
 		gotoAssetStatuses();
