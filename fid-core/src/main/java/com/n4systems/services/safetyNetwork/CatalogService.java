@@ -1,5 +1,6 @@
 package com.n4systems.services.safetyNetwork;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public interface CatalogService {
 	
 	public EventType getPublishedEventType(Long eventTypeId);
 	
-	public List<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds);
+	public Collection<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds);
 	
 	public AutoAttributeCriteria getCriteriaFor(Long assetTypeId);
 	

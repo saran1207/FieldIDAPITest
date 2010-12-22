@@ -1,5 +1,6 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,7 +62,7 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 
 
 	private void findStateSetsToImport(Set<Long> eventTypeIds) {
-		List<StateSet> originalStateSets = getUsedStateSets(eventTypeIds);
+		Collection<StateSet> originalStateSets = getUsedStateSets(eventTypeIds);
 		List<StateSet> currentStateSets = persistenceManager.findAll(StateSet.class, tenant.getId());
 			
 		for (StateSet originalStateSet : originalStateSets) {
@@ -75,7 +76,7 @@ public class CatalogStateSetsImportHandler extends CatalogImportHandler {
 	}
 
 
-	private List<StateSet> getUsedStateSets(Set<Long> eventTypeIds) {
+	private Collection<StateSet> getUsedStateSets(Set<Long> eventTypeIds) {
 		return importCatalog.getStateSetsUsedIn(eventTypeIds);
 	}
 

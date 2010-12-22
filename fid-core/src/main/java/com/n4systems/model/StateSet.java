@@ -106,6 +106,10 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
 	public boolean equals(StateSet stateSet) {
 		return (getId().equals(stateSet.getId())) ? true : getAvailableStates().equals(stateSet.getAvailableStates());
 	}
-	
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.intValue();
+    }
 }
 

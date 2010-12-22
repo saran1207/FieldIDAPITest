@@ -12,8 +12,10 @@ import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventType;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.catalog.Catalog;
@@ -203,21 +205,24 @@ public class CatalogServiceImpl implements CatalogService {
 		return persistenceManager.find(EventType.class, eventTypeId, getTenant().getId(), "supportedProofTests", "eventForm.sections", "infoFieldNames");
 	}
 
-	public List<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds) {
-		List<StateSet> originalStateSets = new ArrayList<StateSet>();
+	public Collection<StateSet> getStateSetsUsedIn(Set<Long> eventTypeIds) {
+		Set<StateSet> originalStateSets = new HashSet<StateSet>();
 		if (!eventTypeIds.isEmpty()) {
-			QueryBuilder<Long> usedSectionsInEventTypesQuery = new QueryBuilder<Long>(EventType.class, filter);
-			usedSectionsInEventTypesQuery.addRequiredLeftJoin("eventForm.sections", "section").setSelectArgument(new SimpleSelect("section.id", true));
+			QueryBuilder<CriteriaSection> usedSectionsInEventTypesQuery = new QueryBuilder<CriteriaSection>(EventType.class, filter);
+            usedSectionsInEventTypesQuery.setSelectArgument(new SimpleSelect("eventForm.sections", true));
 			usedSectionsInEventTypesQuery.addWhere(Comparator.IN, "ids", "id", eventTypeIds);
 			usedSectionsInEventTypesQuery.addWhere(Comparator.IN, "publishedIds", "id", getEventTypeIdsPublished());
-			
-			QueryBuilder<StateSet> usedStateSetsInEventTypesQuery = new QueryBuilder<StateSet>(CriteriaSection.class, filter);
-			SimpleSelect selectStates = new SimpleSelect("oneCriteria.states", true);
-			selectStates.setDistinct(true);
-			usedStateSetsInEventTypesQuery.addRequiredLeftJoin("criteria", "oneCriteria").setSelectArgument(selectStates);
-			usedStateSetsInEventTypesQuery.addWhere(Comparator.IN, "ids", "id", persistenceManager.findAll(usedSectionsInEventTypesQuery));
-			
-			originalStateSets = persistenceManager.findAll(usedStateSetsInEventTypesQuery);
+
+            List<CriteriaSection> sections = persistenceManager.findAll(usedSectionsInEventTypesQuery);
+
+            for (CriteriaSection section : sections) {
+                for (Criteria criteria : section.getCriteria()) {
+                    if (criteria instanceof OneClickCriteria) {
+                        OneClickCriteria oneClickCriteria = (OneClickCriteria) criteria;
+                        originalStateSets.add(oneClickCriteria.getStates());
+                    }
+                }
+            }
 		}
 		return originalStateSets;
 	}

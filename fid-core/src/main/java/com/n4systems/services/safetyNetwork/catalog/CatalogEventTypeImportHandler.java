@@ -11,6 +11,7 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -85,8 +86,10 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
         if (importedEventType.getEventForm() != null) {
             for (CriteriaSection criteriaSection : importedEventType.getEventForm().getSections()) {
                 for (Criteria criteria : criteriaSection.getCriteria()) {
-                // TODO: Fix for different criteria types
-//				criteria.setStates(importedStateSetMapping.get(criteria.getStates().getId()));
+                    if (criteria instanceof OneClickCriteria) {
+                        OneClickCriteria oneClickCriteria = (OneClickCriteria) criteria;
+                        oneClickCriteria.setStates(importedStateSetMapping.get(oneClickCriteria.getStates().getId()));
+                    }
                 }
             }
         }
