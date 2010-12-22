@@ -1,4 +1,4 @@
-class MakeEventformColumnNullable < ActiveRecord::Migration
+class MakeEventformColumnNullableInEventtypes < ActiveRecord::Migration
 
   def self.up
     change_column(:eventtypes, :eventform_id, :integer, :null => true)
