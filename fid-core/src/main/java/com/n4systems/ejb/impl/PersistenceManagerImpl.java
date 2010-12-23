@@ -245,6 +245,20 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		}
 		return results;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Long tenantId, String... postFetchFields) {
+		Query query = em.createQuery(generateFromClause(defaultTableAlias, entityClass) + "where " + defaultTableAlias + ".tenant.id = :tenantId and " + defaultTableAlias + ".id in (:idlist)");
+
+		query.setParameter("tenantId", tenantId);
+		query.setParameter("idlist", ids);
+
+		List<T> results = (List<T>) query.getResultList();
+		if (postFetchFields.length > 0) {
+			postFetchFields(results, postFetchFields);
+		}
+		return results;
+	}
 
 	@SuppressWarnings("unchecked")
 	public <T extends EntityWithTenant> List<T> findAllByDate(Class<T> entityClass, Long tenantId, Date startDate, Date endDate, Long beginningId, Integer limit) {

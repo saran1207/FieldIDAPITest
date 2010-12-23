@@ -307,6 +307,21 @@ Transaction transaction = transactionManager.startTransaction();
 			transactionManager.finishTransaction(transaction);
 		}
 	}
+	
+	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Long tenantId, String... postFetchFields) {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+Transaction transaction = transactionManager.startTransaction();
+		try {
+			return createManager(transaction.getEntityManager()).findAll(entityClass, ids, tenantId, postFetchFields);
+
+		} catch (RuntimeException e) {
+			transactionManager.rollbackTransaction(transaction);
+
+			throw e;
+		} finally {
+			transactionManager.finishTransaction(transaction);
+		}
+	}
 
 	public <T> List<T> findAll(Class<T> entityClass, String jpqlQuery, Map<String, Object> parameters) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

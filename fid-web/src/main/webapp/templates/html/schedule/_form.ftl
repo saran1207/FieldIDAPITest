@@ -42,7 +42,7 @@
 
                 <div class="infoSet">
                     <label for="criteria.eventTypeGroup"><@s.text name="label.eventtypegroup"/></label>
-                    <@s.select name="criteria.eventTypeGroup" id="eventTypeGroup" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" onchange="updateEventTypes(this)"/>
+                    <@s.select name="criteria.eventTypeGroup" id="eventTypeGroup" list="eventTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateEventTypes(this)"/>
                 </div>
                 <div class="infoSet">
                     <label for="criteria.eventType"><@s.text name="label.eventtype"/></label>

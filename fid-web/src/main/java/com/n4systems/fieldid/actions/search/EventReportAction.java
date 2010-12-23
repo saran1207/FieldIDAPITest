@@ -4,7 +4,9 @@ import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
@@ -88,8 +90,8 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		List<ColumnMappingGroup> dynamicGroups = super.getDynamicGroups();
-		
-		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(getSession().getReportCriteria().getEventType(), "event_search", getSecurityFilter()));
+	
+		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(getSession().getReportCriteria().getEventType(), getEventTypeIds(), getTenantId(),"event_search", getSecurityFilter()));
 		
 		
 		return dynamicGroups;
@@ -238,6 +240,14 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
             eventTypes = loader.load();
         }
         return eventTypes;
+    }
+    
+    public Set<Long> getEventTypeIds(){
+    	Set<Long> eventTypeIds = new HashSet<Long>();
+    	for (EventType type : getEventTypes()){
+    		eventTypeIds.add(type.getId());
+    	}
+    	return eventTypeIds;
     }
 	 
 	public List<Listable<Long>> getEmployees() {

@@ -56,6 +56,8 @@ public interface PersistenceManager {
 
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Tenant tenant, String... postFetchFields);
 
+	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Long tenantId, String... postFetchFields);
+	
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Tenant tenant);
 
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Long tenantId);
