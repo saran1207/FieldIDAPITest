@@ -42,11 +42,11 @@
 
                 <div class="infoSet">
                     <label for="criteria.eventTypeGroup"><@s.text name="label.eventtypegroup"/></label>
-                    <@s.select name="criteria.eventTypeGroup" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" onchange="updateEventTypes(this)"/>
+                    <@s.select name="criteria.eventTypeGroup" id="eventTypeGroup" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" onchange="updateEventTypes(this)"/>
                 </div>
                 <div class="infoSet">
                     <label for="criteria.eventType"><@s.text name="label.eventtype"/></label>
-                    <@s.select cssClass="eventTypeSelect" name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true" />
+                   <@s.select cssClass="eventTypeSelect" id="eventType" name="criteria.eventType" list="eventTypes" listKey="id" listValue="name" emptyOption="true" onchange="eventTypeChanged(this)" />
                 </div>
 
 				<#if securityGuard.projectsEnabled>

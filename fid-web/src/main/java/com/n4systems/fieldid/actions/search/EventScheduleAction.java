@@ -9,6 +9,8 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
+import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.model.EventType;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
@@ -40,6 +42,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	
 	private final EventManager eventManager;
 	private final EventScheduleManager eventScheduleManager;
+	private final EventAttributeDynamicGroupGenerator attribGroupGen;
 	
 	private OwnerPicker ownerPicker;
 	private List<Listable<Long>> employees;
@@ -65,6 +68,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 		super(implementingClass, sessionKey, "Event Schedule Report", persistenceManager, 
 				new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "event_schedule_search", "asset"));
 		
+		attribGroupGen = new EventAttributeDynamicGroupGenerator(persistenceManager);
 		this.eventManager = eventManager;
 		this.eventScheduleManager = eventScheduleManager;
 		
@@ -195,6 +199,14 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 		getContainer().setOwner(ownerPicker.getOwner());	
+	}
+	
+	@Override
+	public List<ColumnMappingGroup> getDynamicGroups() {
+		List<ColumnMappingGroup> dynamicGroups = super.getDynamicGroups();
+		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(getSession().getScheduleCriteria().getEventType(), "event_search", getSecurityFilter()));
+		
+		return dynamicGroups;
 	}
 	
 	public AssignedToUserGrouper getUserGrouper() {

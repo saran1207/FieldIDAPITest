@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.util.selection.MultiIdSelection;
 import rfid.web.helper.SessionEulaAcceptance;
@@ -43,6 +44,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	
 	private final HttpSession session;
 	public static final String REPORT_CRITERIA = "reportCriteria";
+	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
 	
 	public WebSession(HttpSession session) {
 		this.session = session;
@@ -108,6 +110,10 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	
 	public EventSearchContainer getReportCriteria() {
 		return get(REPORT_CRITERIA, EventSearchContainer.class);
+	}
+	
+	public EventScheduleSearchContainer getScheduleCriteria() {
+		return get(SCHEDULE_CRITERIA, EventScheduleSearchContainer.class);
 	}
 	
 	public void setReportCriteria(SearchContainer container) {
