@@ -1,22 +1,34 @@
 package com.n4systems.fieldid.selenium.persistence;
 
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetStatus;
+
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.AssetType;
+import com.n4systems.model.Project;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.eula.EulaAcceptance;
 import com.n4systems.model.messages.Message;
@@ -26,20 +38,10 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
-import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.user.User;
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetStatus;
-
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class TenantCleaner {
 
@@ -93,6 +95,7 @@ public class TenantCleaner {
         removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
         removeAllForTenant(em, Message.class, tenantId);
         removeAllForTenant(em, EulaAcceptance.class, tenantId);
+        removeAllForTenant(em, Project.class, tenantId);
         removeAllForTenant(em, User.class, tenantId);
 
         removeAllExternalOrgsPointingToThisTenant(em, tenantId);
