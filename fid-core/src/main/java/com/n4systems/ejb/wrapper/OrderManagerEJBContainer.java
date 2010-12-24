@@ -204,4 +204,19 @@ Transaction transaction = transactionManager.startTransaction();
 			transactionManager.finishTransaction(transaction);
 		}
 	}
+
+	public LineItem findLineItemById(Long lineItemId) {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+		Transaction transaction = transactionManager.startTransaction();
+				try {
+					return createManager(transaction.getEntityManager()).findLineItemById(lineItemId);
+
+				} catch (RuntimeException e) {
+					transactionManager.rollbackTransaction(transaction);
+
+					throw e;
+				} finally {
+					transactionManager.finishTransaction(transaction);
+				}
+	}
 }

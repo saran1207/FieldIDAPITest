@@ -1823,13 +1823,23 @@
 			<result name="success" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 		</action>
-
+		
+		<action name="assetMultiAddWithOrder" method="addWithOrder" class="com.n4systems.fieldid.actions.asset.MultiAddAssetCrud">
+			<result name="success" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
+			<result name="input" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
+		</action>
+		
 		<action name="assetMultiAddCreate" method="create" class="com.n4systems.fieldid.actions.asset.MultiAddAssetCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">assetMultiAdd</param>
 			</result>
 			<result name="savestartevent" type="freemarker">/templates/html/multiAssetCrud/renderOut.ftl</result>
 			<result name="error" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
+			<result name="savedWithOrder" type="redirectAction">
+				<param name="actionName">searchOrder</param>
+				<param name="tagOptionId">${tagOptionId}</param>
+				<param name="orderNumber">${lineItem.order.orderNumber}</param>
+			</result>
 		</action>
 
 		<action name="systemSettingsEdit" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">

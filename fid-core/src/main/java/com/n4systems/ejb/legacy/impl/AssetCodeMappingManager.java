@@ -55,6 +55,8 @@ public class AssetCodeMappingManager implements AssetCodeMappingService {
 		builder.addSimpleWhere("assetCode", assetCode);
 		builder.addSimpleWhere("tenant.id", tenantId);
 		
+		builder.addPostFetchPaths("assetInfo.infoFields");
+		
 		AssetCodeMapping assetMapping = null;
 		try {
 			assetMapping = persistenceManager.find(builder);

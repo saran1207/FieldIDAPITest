@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Asset;
-import com.n4systems.services.TenantFinder;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.OrderMappingBean;
@@ -19,6 +17,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.OrderMapping;
 import com.n4systems.ejb.legacy.impl.OrderMappingManager;
 import com.n4systems.exceptions.OrderProcessingException;
+import com.n4systems.model.Asset;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderKey;
@@ -36,6 +35,7 @@ import com.n4systems.plugins.integration.CustomerOrderTransfer;
 import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.plugins.integration.OrderTransfer;
 import com.n4systems.plugins.integration.ShopOrderTransfer;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -90,6 +90,16 @@ public class OrderManagerImpl implements OrderManager {
 		}
 		
 		return lineItems;
+	}
+	
+	public LineItem findLineItemById(Long lineItemId) {
+		LineItem lineItem = null;
+		try {
+			lineItem = persistenceManager.find(LineItem.class, lineItemId);
+		} catch (Exception e) {
+			logger.error("Failed finding LineItem", e);
+		}
+		return lineItem;
 	}
 	
 	public List<LineItem> findLineItems(Order order) {

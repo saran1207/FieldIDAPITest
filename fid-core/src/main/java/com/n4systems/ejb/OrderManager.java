@@ -105,6 +105,13 @@ public interface OrderManager {
 	public LineItem findLineItem(Order order, String lineId);
 	
 	/**
+	 * Finds a LineItem using it's lineItemId
+	 * @param lineItemId	The lineId of the LineItem
+	 * @return			A LineItem or null
+	 */
+	public LineItem findLineItemById(Long lineItemId);
+
+	/**
 	 * Finds LineItems associated with an Order
 	 * @param order	An Order
 	 * @return		A List of LineItems

@@ -6,14 +6,17 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
@@ -26,6 +29,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.LineItem;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
 import com.n4systems.model.asset.AssetAttachment;
@@ -48,6 +52,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	private final LegacyAsset legacyAssetManager;
 	private final OrderManager orderManager;
+	private AssetCodeMappingService assetCodeMappingServiceManager;
 	
 	// drop down lists
 	private List<Listable<Long>> employees;
@@ -61,6 +66,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	// form inputs
 	private List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>();
 	private AssetView assetView = new AssetView();
+	private LineItem lineItem;
 	
 	private OwnerPicker ownerPicker;
 	private String saveAndStartEvent;
@@ -69,10 +75,12 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 	
-	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, LegacyAsset legacyAssetManager) {
+	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, 
+			LegacyAsset legacyAssetManager, AssetCodeMappingService assetCodeMappingServiceManager) {
 		super(persistenceManager);
 		this.orderManager = orderManager;
 		this.legacyAssetManager = legacyAssetManager;
+		this.assetCodeMappingServiceManager = assetCodeMappingServiceManager;
 	}
 	
 	@Override
@@ -97,6 +105,39 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			return ERROR;
 		}
 		applyDefaults();
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	public String doAddWithOrder() {
+
+		if (lineItem == null || lineItem.getId() == null) {
+			addActionErrorText("error.noorder");
+			return MISSING;
+		}
+
+		// find the asset code mapping by asset code. This will return the
+		// default asset code if one could not be found.
+		AssetCodeMapping assetCodeMapping = assetCodeMappingServiceManager.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode(), getTenantId());
+
+		if (assetCodeMapping.getAssetInfo() != null && 
+				!assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
+			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
+
+			if (assetCodeMapping.getInfoOptions() != null && !assetCodeMapping.getInfoOptions().isEmpty()) {
+				List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields());
+				assetView.setAssetInfoOptions(assetInfoOptions);
+			}
+		}
+		if (assetView.getAssetTypeId() == null) {
+			applyDefaults();
+		}
+
+		assetView.setLineItemId(lineItem.getId());
+		assetView.setOwner(lineItem.getOrder().getOwner());
+		assetView.setPurchaseOrder(lineItem.getOrder().getPoNumber());
+
 		return SUCCESS;
 	}
 	
@@ -181,6 +222,10 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 		if(saveAndStartEvent !=null){
 			return "savestartevent";
+		}
+		
+		if (lineItem != null) {
+			return "savedWithOrder";
 		}
 		
 		logger.info("Asset Multi-Add Complete");
@@ -375,4 +420,24 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		}
 		return userGrouper;
 	}
+	
+	public Long getLineItemId() {
+		return assetView.getLineItemId();
+	}
+
+	public void setLineItemId(Long lineItemId) {
+		if (lineItem == null && lineItemId != null) {
+			setLineItem(persistenceManager.find(LineItem.class, lineItemId));
+		}
+		assetView.setLineItemId(lineItemId);
+	}
+
+	public void setLineItem(LineItem lineItem) {
+		this.lineItem = lineItem;
+	}
+
+	public LineItem getLineItem() {
+		return lineItem;
+	}	
+	
 }

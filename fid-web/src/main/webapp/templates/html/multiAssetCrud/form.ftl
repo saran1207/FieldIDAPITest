@@ -25,8 +25,11 @@
 	</script>
 	<#include "/templates/html/common/_calendar.ftl"/>
 </head>
-
-${action.setPageType('asset', 'multi_add')!}
+<#if lineItem?exists>
+	${action.setPageType('asset', 'add_with_order')!}
+<#else>
+	${action.setPageType('asset', 'multi_add')!}
+</#if>
 
 <#if limits.assetsMaxed>
 	<div class="limitWarning">

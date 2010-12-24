@@ -21,6 +21,7 @@ public class AssetView implements Serializable, HasOwner {
 	private String comments;
 	private Date identified;
 	private List<InfoOptionInput> assetInfoOptions;
+	private Long lineItemId;
 	
 	public AssetView() {}
 
@@ -103,6 +104,14 @@ public class AssetView implements Serializable, HasOwner {
 
 	public void setTenant(Tenant tenant) {
 		
+	}
+
+	public Long getLineItemId() {
+		return lineItemId;
+	}
+
+	public void setLineItemId(Long lineItemId) {
+		this.lineItemId = lineItemId;
 	}
 	
 }

@@ -58,6 +58,10 @@ public class AssetViewModeConverter {
 			List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getAssetInfoOptions(), model.getType().getInfoFields());
 			model.setInfoOptions(new TreeSet<InfoOptionBean>(infoOptions));
 			
+			if (view.getLineItemId() != null && primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {
+				model.setShopOrder(orderManager.findLineItemById(view.getLineItemId()));
+			}
+									
 		} finally {
 			transaction.commit();
 		}
