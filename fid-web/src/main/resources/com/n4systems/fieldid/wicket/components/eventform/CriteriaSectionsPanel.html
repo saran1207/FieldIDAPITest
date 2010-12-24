@@ -1,17 +1,23 @@
 <wicket:panel>
 
-    <div class="columnHeader">Sections</div>
+    <div class="columnHeader">
+        <div wicket:id="reorderSectionsButton"></div>
+    </div>
 
-    <div wicket:id="criteriaSections" class="criteriaSections">
-        <div wicket:id="editCopyDeletePanel">
+    <div class="sortableSectionContainer" wicket:id="sortableSectionContainer">
+        <div wicket:id="criteriaSections" class="criteriaSections">
+            <div wicket:id="editCopyDeletePanel">
+            </div>
         </div>
     </div>
 
-    <div class="addCriteriaForm">
-        <div class="addCriteriaTitle">New Section Name</div>
-        <form wicket:id="formSectionAddForm">
-            <input wicket:id="sectionNameField" style="width:80%;"></input><button wicket:id="submitButton">Add</button>
-        </form>
+    <div wicket:id="criteriaFormContainer">
+        <div class="addCriteriaForm">
+            <div class="addCriteriaTitle">New Section Name</div>
+            <form wicket:id="formSectionAddForm">
+                <input wicket:id="sectionNameField" style="width:80%;"></input><button wicket:id="submitButton">Add</button>
+            </form>
+        </div>
     </div>
 
     <div class="feedback" wicket:id="feedbackPanel">

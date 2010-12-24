@@ -63,7 +63,7 @@ public class CriteriaPanel extends Panel {
                     }
 
                     @Override
-                    public String getContextRelativeImage() {
+                    public String getDeleteImage() {
                         return "images/small-x.png";
                     }
                 });

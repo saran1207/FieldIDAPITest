@@ -10,9 +10,11 @@
                 <div class="subTitle" wicket:id="subTitle"></div>
             </a>
         </div>
-        <div class="editCopyLinks">
-            <a wicket:id="editLink">Edit</a> <wicket:enclosure>| <a wicket:id="copyLink">Copy</a></wicket:enclosure>
-        </div>
+        <wicket:enclosure child="editLink">
+            <div class="editCopyLinks">
+                <a wicket:id="editLink">Edit</a> <wicket:enclosure>| <a wicket:id="copyLink">Copy</a></wicket:enclosure>
+            </div>
+        </wicket:enclosure>
     </div>
     <div class="editForm">
         <form wicket:id="editForm">
@@ -23,6 +25,9 @@
                 <a wicket:id="storeLink">Store</a> | <a wicket:id="cancelLink">Cancel</a>
             </div>
         </form>
+    </div>
+    <div class="reorderLinkSection">
+        <img wicket:id="reorderImage"/>
     </div>
     <div style="clear:both;"></div>
 </wicket:panel>

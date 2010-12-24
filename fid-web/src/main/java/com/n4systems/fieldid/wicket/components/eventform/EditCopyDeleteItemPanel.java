@@ -15,9 +15,11 @@ import org.apache.wicket.model.PropertyModel;
 
 public class EditCopyDeleteItemPanel extends Panel {
 
+    private static final String DELETE_IMAGE = "images/small-x.png";
+    private static final String REORDER_IMAGE = "images/reorder.png";
+
     private EditForm editForm;
     private WebMarkupContainer viewContainer;
-    private String contextRelativeImage = "images/large-x.png";
 
     public EditCopyDeleteItemPanel(String id, IModel<String> stringModel) {
         this(id, stringModel, true);
@@ -35,21 +37,36 @@ public class EditCopyDeleteItemPanel extends Panel {
         super(id, titleModel);
         setOutputMarkupPlaceholderTag(true);
 
-        ContextImage ci = new ContextImage("deleteImage", new PropertyModel<String>(this, "contextRelativeImage"));
-        ci.add(new AjaxEventBehavior("onclick"){
+        ContextImage deleteImage = new ContextImage("deleteImage", new PropertyModel<String>(this, "deleteImage")) {
+            @Override
+            public boolean isVisible() {
+                return !isReorderState();
+            }
+        };
+        deleteImage.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                onDeleteButtonClicked(target);
+                if (!isReorderState())
+                    onDeleteButtonClicked(target);
             }
         });
-        add(ci);
+        add(deleteImage);
+
+        ContextImage reorderImage = new ContextImage("reorderImage", new PropertyModel<String>(this, "reorderImage")) {
+            @Override
+            public boolean isVisible() {
+                return isReorderState();
+            }
+        };
+        add(reorderImage);
 
         AjaxLink viewLink;
         viewContainer = new WebMarkupContainer("viewContainer");
         viewContainer.add(viewLink = new AjaxLink("viewLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                onViewLinkClicked(target);
+                if (!isReorderState())
+                    onViewLinkClicked(target);
             }
         });
         viewLink.add(new Label("linkLabel", titleModel));
@@ -64,6 +81,11 @@ public class EditCopyDeleteItemPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 setEditState(target);
             }
+
+            @Override
+            public boolean isVisible() {
+                return !isReorderState();
+            }
         });
 
         viewContainer.add(new AjaxLink("copyLink") {
@@ -71,6 +93,11 @@ public class EditCopyDeleteItemPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 onCopyLinkClicked(target);
             }
+            @Override
+            public boolean isVisible() {
+                return !isReorderState();
+            }
+
         }.setVisible(displayCopyLink));
 
         add(viewContainer);
@@ -125,8 +152,16 @@ public class EditCopyDeleteItemPanel extends Panel {
         target.addComponent(this);
     }
 
-    public String getContextRelativeImage() {
-        return contextRelativeImage;
+    protected boolean isReorderState() {
+        return false;
+    }
+
+    public String getDeleteImage() {
+        return DELETE_IMAGE;
+    }
+
+    public String getReorderImage() {
+        return REORDER_IMAGE;
     }
 
 }

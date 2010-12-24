@@ -202,3 +202,15 @@ div.buttonGroupDetails {
     padding-bottom: 10px;
     border-bottom: 2px solid #ccc;
 }
+
+/*Reorder button form*/
+form.twoStateForm {
+    margin-bottom: 0;
+}
+
+div.reorderLinkSection {
+    padding-bottom: 10px;
+    padding-right: 5px;
+    display: block;
+    float: right;
+}

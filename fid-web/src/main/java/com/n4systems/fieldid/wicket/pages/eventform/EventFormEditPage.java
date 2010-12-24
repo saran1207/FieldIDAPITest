@@ -27,7 +27,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class EventFormEditPage extends WebPage {

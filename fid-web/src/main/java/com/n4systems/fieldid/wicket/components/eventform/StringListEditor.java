@@ -31,7 +31,7 @@ public class StringListEditor extends Panel {
                     }
 
                     @Override
-                    public String getContextRelativeImage() {
+                    public String getReorderImage() {
                         return "images/small-x.png";
                     }
                 });
