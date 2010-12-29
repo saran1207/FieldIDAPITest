@@ -24,6 +24,8 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.FileAttachment;
+import com.n4systems.model.LineItem;
+import com.n4systems.model.Order;
 import com.n4systems.model.Project;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
@@ -97,6 +99,8 @@ public class TenantCleaner {
         removeAllForTenant(em, EulaAcceptance.class, tenantId);
         removeAllForTenant(em, Project.class, tenantId);
         removeAllForTenant(em, User.class, tenantId);
+        removeAllForTenant(em, LineItem.class, tenantId);
+        removeAllForTenant(em, Order.class, tenantId);
 
         removeAllExternalOrgsPointingToThisTenant(em, tenantId);
 

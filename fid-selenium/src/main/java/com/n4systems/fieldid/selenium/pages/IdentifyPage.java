@@ -77,6 +77,17 @@ public class IdentifyPage extends FieldIDPage {
 		}
 	}
 	
+	public void clickIdentifyMultipleForOrderLineItem(int index) {
+		String locator = "//div[@id='resultsTable']/table/tbody/tr[" + index + "]/td/a[contains(text(),'Identify Multiple')]";
+		if(selenium.isElementPresent(locator)) {
+			selenium.click(locator);
+			waitForPageToLoad("60000");
+		} else {
+			fail("Could not find a line item in row '" + index + "'");
+		}		
+	}
+
+	
 	public boolean checkIdentifyWithOrderNumberPage(String orderNumber) {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Identify')][contains(text(),'Order Number " + orderNumber + "')]");
 	}
@@ -401,4 +412,5 @@ public class IdentifyPage extends FieldIDPage {
 			}
 		}).run("Should be able to generate identifiers - timed out");
 	}
+
 }

@@ -9,6 +9,10 @@ import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.LineItem;
+import com.n4systems.model.LineItemSaver;
+import com.n4systems.model.Order;
+import com.n4systems.model.OrderSaver;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
@@ -51,6 +55,8 @@ public class SaverMap {
 
         classToSaverMap.put(CustomerOrg.class, new OrgSaver());
         classToSaverMap.put(PrimaryOrg.class, new OrgSaver());
+        classToSaverMap.put(Order.class, new OrderSaver());
+        classToSaverMap.put(LineItem.class, new LineItemSaver());
     }
 
     public static Saver makeSaverFor(Class<? extends Saveable> clazz) {

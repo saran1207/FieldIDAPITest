@@ -3,104 +3,130 @@ package com.n4systems.fieldid.selenium.testcase.assets;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import com.n4systems.fieldid.selenium.datatypes.Asset;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Identifier;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
-import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.IdentifyPage;
-import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.LineItem;
+import com.n4systems.model.Order;
+import com.n4systems.model.Order.OrderType;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class IdentifyAssetsTest extends FieldIDTestCase {
 
-	private HomePage homePage;
+	private static final String COMPANY1 = "test1";
+	private static final String COMPANY2 = "test2";
+	private static final String ORDER_NUMBER = "11111";
+	
+	private IdentifyPage identifyPage;
+	
+	@Override
+	public void setupScenario(Scenario scenario) {
+		
+		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(Arrays.asList(ExtendedFeature.Integration));
+		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY1);
+		primaryOrg.setExtendedFeatures(extendedFeatures);
+		scenario.save(primaryOrg);
+		
+		Order order = new Order(OrderType.SHOP, ORDER_NUMBER);
+		order.setTenant(scenario.tenant(COMPANY1));
+		order.setOwner(primaryOrg);				
+		scenario.save(order);
+		
+		LineItem lineItem = new LineItem(order);
+		lineItem.setTenant(scenario.tenant(COMPANY1));
+		lineItem.setIndex(0);
+		lineItem.setDescription("test line item");
+		lineItem.setQuantity(5);
+		lineItem.setLineId("1");
+		lineItem.setAssetCode("22222");
+		scenario.save(lineItem);
+		
+		scenario.anAssetStatus()
+		    .forTenant(scenario.tenant(COMPANY1))
+		    .named("test status").build();
+
+		scenario.anAssetStatus()
+	    .forTenant(scenario.tenant(COMPANY2))
+	    .named("test status").build();
+
+	}
 		
 	@Test
 	public void identify_with_integration_enabled() throws Exception {
-		String username = getStringProperty("integrationusername");
-		String password = getStringProperty("integrationpassword");
-		String company = getStringProperty("integrationcompanyid");
+		identifyPage = startAsCompany(COMPANY1).systemLogin().clickIdentifyLink();		
 		
-		LoginPage loginPage = startAsCompany(company);		
-		homePage = loginPage.login(username, password);
-		IdentifyPage identifyPage = homePage.clickIdentifyLink();
-		
-		assertEquals(identifyPage.getCurrentTab(), "Add with Order");
+		assertEquals("Add with Order", identifyPage.getCurrentTab());
 	}
 	
 	@Test
 	public void identify_an_asset_using_add_with_order() throws Exception {
-		String username = getStringProperty("integrationusername");
-		String password = getStringProperty("integrationpassword");
-		String company = getStringProperty("integrationcompanyid");
-		String orderNumber = getStringProperty("integrationordernumber");
-		
-		LoginPage loginPage = startAsCompany(company);		
-		homePage = loginPage.login(username, password);
-		IdentifyPage identifyPage = homePage.clickIdentifyLink();
+		identifyPage = startAsCompany(COMPANY1).systemLogin().clickIdentifyLink();		
 
-		String serialNumber = identifyAssetWithOrderNumber(identifyPage, orderNumber);
+		String serialNumber = identifyAssetWithOrderNumber(identifyPage, ORDER_NUMBER);
 		checkAssetIdentified(identifyPage, serialNumber);
 	}
 	
 	@Test
-	public void identify_a_single_asset_non_integration_tenant() throws Exception {
-		String username = getStringProperty("notintegrationusername");
-		String password = getStringProperty("notintegrationpassword");
-		String company = getStringProperty("notintegrationcompanyid");
+	public void identify_multiple_assets_using_add_with_order() throws Exception {
+		identifyPage = startAsCompany(COMPANY1).systemLogin().clickIdentifyLink();		
 
-		LoginPage loginPage = startAsCompany(company);		
-		homePage = loginPage.login(username, password);
-		IdentifyPage identifyPage = homePage.clickIdentifyLink();
+		List<Identifier> identifiers = identifyMultipleAssetsWithOrderNumber(identifyPage, ORDER_NUMBER);
+		verifyMultiAddWasSuccessful(identifyPage, identifiers);
+	}
+	
+	@Test
+	public void identify_a_single_asset_non_integration_tenant() throws Exception {
+		identifyPage = startAsCompany(COMPANY2).systemLogin().clickIdentifyLink();		
+		
 		String serialNumber = identifyAsset(identifyPage);
 		checkAssetIdentified(identifyPage, serialNumber);
 	}
 	
 	@Test
 	public void identify_a_single_asset_integration_tenant() throws Exception {
-		String username = getStringProperty("integrationusername");
-		String password = getStringProperty("integrationpassword");
-		String company = getStringProperty("integrationcompanyid");
+		identifyPage = startAsCompany(COMPANY1).systemLogin().clickIdentifyLink();		
 
-		LoginPage loginPage = startAsCompany(company);		
-		homePage = loginPage.login(username, password);
-		IdentifyPage identifyPage = homePage.clickIdentifyLink();
 		String serialNumber = identifySingleAssetIntegrationTenant(identifyPage);
 		checkAssetIdentified(identifyPage,serialNumber);
 	}
 	
 	@Test
 	public void identify_multiple_assets_integration_tenant() throws Exception {
-		String username = getStringProperty("integrationusername");
-		String password = getStringProperty("integrationpassword");
-		String company = getStringProperty("integrationcompanyid");
-
-		LoginPage loginPage = startAsCompany(company);		
-		homePage = loginPage.login(username, password);
-		IdentifyPage identifyPage = homePage.clickIdentifyLink();
-		int quantity = misc.getRandomNumber(2, 10);
-		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, quantity, "*");
+		identifyPage = startAsCompany(COMPANY1).systemLogin().clickIdentifyLink();	
+		
+		identifyPage.clickMultiAdd();
+		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, 3, "*");
 		verifyMultiAddWasSuccessful(identifyPage, identifiers);
 	}
 	
 	@Test
 	public void identifying_multiple_assets_non_integration_tenant() throws Exception {
-		String username = getStringProperty("notintegrationusername");
-		String password = getStringProperty("notintegrationpassword");
-		String company = getStringProperty("notintegrationcompanyid");
+		identifyPage = startAsCompany(COMPANY2).systemLogin().clickIdentifyLink();		
 
-		LoginPage loginPage = startAsCompany(company);		
-		homePage = loginPage.login(username, password);
-		IdentifyPage identifyPage = homePage.clickIdentifyLink();
-		int quantity = misc.getRandomNumber(2, 10);
-		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, quantity, "*");
+		identifyPage.clickMultiAdd();
+		List<Identifier> identifiers = identifyMultipleAssetsRange(identifyPage, 3, "*");
 		verifyMultiAddWasSuccessful(identifyPage, identifiers);
+	}
+	
+	@Test
+	public void identify_a_single_asset_with_errors() throws Exception {
+		identifyPage = startAsCompany(COMPANY2).systemLogin().clickIdentifyLink();		
+		
+		identifyPage.saveNewAsset();
+		assertTrue(identifyPage.getFormErrorMessages().size() > 0);
 	}
 	
 	private void verifyMultiAddWasSuccessful(IdentifyPage identifyPage, List<Identifier> identifiers) {
@@ -114,9 +140,7 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		String prefix = String.format("%1$04d%2$02d%3$02d-", now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
 		String start = "1";	// start must be a number
 		String suffix = String.format("-%1$02d%2$02d%3$02d%4$04d", now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), now.get(Calendar.SECOND), now.get(Calendar.MILLISECOND));
-		
-		identifyPage.clickMultiAdd();
-		
+				
 		Asset asset = new Asset();
 		asset.setLocation("here");
 		List<String> assetStatuses = identifyPage.getAssetStatusesFromMultiAddForm();
@@ -162,9 +186,18 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		identifyPage.setOrderNumber(orderNumber);
 		identifyPage.clickLoadOrderNumberButton();
 		int index = identifyPage.getNumberOfLineItemsInOrder();
-		identifyPage.clickIdentifyForOrderLineItem(index);
+		identifyPage.clickIdentifyForOrderLineItem(index + 1);
 		identifyPage.checkIdentifyWithOrderNumberPage(orderNumber);
 		return identifyAsset(identifyPage);
 	}
+	
+	private List<Identifier> identifyMultipleAssetsWithOrderNumber(IdentifyPage identifyPage, String orderNumber) {
+		identifyPage.setOrderNumber(orderNumber);
+		identifyPage.clickLoadOrderNumberButton();
+		int index = identifyPage.getNumberOfLineItemsInOrder();
+		identifyPage.clickIdentifyMultipleForOrderLineItem(index + 1);
+		return identifyMultipleAssetsRange(identifyPage, 3, "*");
+	}
+
 
 }
