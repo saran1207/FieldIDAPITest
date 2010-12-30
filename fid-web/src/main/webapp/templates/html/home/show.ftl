@@ -10,7 +10,7 @@
  			<li><a href="<@s.url action="report"/>"><@s.text name="label.vieweventhistory"/></a></li>
 			<li><a href="<@s.url action="search"/>"><@s.text name="label.findanasset"/></a></li>
 			<#if securityGuard.brandingEnabled && primaryOrg.webSite?exists >
-				<li><a href="${primaryOrg.webSite?html}" target="_blank">${primaryOrg.name?html} <@s.text name="label.web_site"/></a></li>
+				<li><a href="${primaryOrg.webSite?html}" target="_blank"><@s.text name="label.web_site"><@s.param>${primaryOrg.name?html}</@s.param></@s.text></a></li>
 			</#if>
 		</ul>
 	</div>
