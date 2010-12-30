@@ -69,6 +69,18 @@
 				</div>
 			</td>
 		</tr>
+		
+		<#if !securityGuard.integrationEnabled>
+			<tr>
+				<td><@s.checkbox name="select['nonIntegrationOrderNumber']" id="check_nonIntegrationOrderNumber"/></td>
+				<td>
+					<div class="infoSet">
+						<label class="label"><@s.text name="label.ordernumber"/>:</label> 
+						<span class="field"><@s.textfield name="nonIntegrationOrderNumber" onchange="selectField('nonIntegrationOrderNumber');" /></span>
+					</div>
+				</td>
+			</tr>
+		</#if>
 			
 		<tr>
 			<td><@s.checkbox name="select['location']" id="check_location"/></td>

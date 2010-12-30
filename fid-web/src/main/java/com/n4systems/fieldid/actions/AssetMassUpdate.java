@@ -9,6 +9,8 @@ import com.n4systems.fieldid.actions.asset.PublishedState;
 import com.n4systems.fieldid.actions.search.AssetSearchAction;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Order;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -16,6 +18,7 @@ import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.MassUpdateManager;
+import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
@@ -55,10 +58,13 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	private AssignedToUserGrouper userGrouper;
 	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
+	private OrderManager orderManager;
 
-	public AssetMassUpdate(MassUpdateManager massUpdateManager, LegacyAsset assetManager, PersistenceManager persistenceManager) {
+	public AssetMassUpdate(MassUpdateManager massUpdateManager, LegacyAsset assetManager, PersistenceManager persistenceManager,
+			OrderManager orderManager) {
 		super(massUpdateManager, persistenceManager);
 		this.legacyAssetManager = assetManager;
+		this.orderManager = orderManager;
 	}
 
 	public void prepare() throws Exception {
@@ -216,6 +222,35 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 
 	public void setPurchaseOrder(String purchaseOrder) {
 		asset.setPurchaseOrder(purchaseOrder);
+	}
+	
+	public String getNonIntegrationOrderNumber() {
+		if (!getSecurityGuard().isIntegrationEnabled()) {
+			if (asset.getShopOrder() != null) {
+				return asset.getShopOrder().getOrder().getOrderNumber();
+			}
+		}
+
+		return null;
+	}
+
+	public void setNonIntegrationOrderNumber(String nonIntegrationOrderNumber) {
+		if (nonIntegrationOrderNumber != null) {
+			String orderNumber = nonIntegrationOrderNumber.trim();
+			// only do this for customers without integration
+			if (!getSecurityGuard().isIntegrationEnabled()) {
+				// if the asset doesn't have a shop order, we need to create
+				// one
+				if (asset.getShopOrder() == null) {
+					asset.setShopOrder(orderManager.createNonIntegrationShopOrder(orderNumber, getTenantId()));
+				} else {
+					// otherwise we'll just change the order number
+					Order order = asset.getShopOrder().getOrder();
+					order.setOrderNumber(orderNumber);
+					persistenceManager.update(order);
+				}
+			}
+		}
 	}
 
 	public List<AssetStatus> getAssetStatuses() {

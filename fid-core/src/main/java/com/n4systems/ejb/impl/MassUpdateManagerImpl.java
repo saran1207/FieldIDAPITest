@@ -248,6 +248,10 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				if (entry.getKey().equals("published")) {
 					asset.setPublished(assetModificationData.isPublished());
 				}
+				
+				if (entry.getKey().equals("nonIntegrationOrderNumber")) {
+					asset.setShopOrder(assetModificationData.getShopOrder());
+				}
 			}
 		}
 	}
