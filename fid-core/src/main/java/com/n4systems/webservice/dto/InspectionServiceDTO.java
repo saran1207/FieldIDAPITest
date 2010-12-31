@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.n4systems.util.StringUtils;
 
-public class InspectionServiceDTO extends AbstractInspectionServiceDTO implements DTOHasOwners, LocationServiceDTO {
+public class InspectionServiceDTO extends AbstractInspectionServiceDTO implements LocationServiceDTO {
 
 	private String location;
 	private Long predefinedLocationId;
@@ -22,21 +22,13 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private String status;
 	private String nextDate;
 	private long productStatusId;
-	private long jobSiteId;
 	private long inspectionScheduleId;
 	private String inspectionScheduleMobileGuid;
 	private List<SubInspectionServiceDTO> subInspections = new ArrayList<SubInspectionServiceDTO>();
 	private List<SubProductMapServiceDTO> newSubProducts = new ArrayList<SubProductMapServiceDTO>();
 	private List<SubProductMapServiceDTO> detachSubProducts = new ArrayList<SubProductMapServiceDTO>();
-	private long orgId;
-	private long customerId;
-	private long divisionId;
-
 	private long assignedUserId;
 	private boolean assignmentIncluded = false;
-
-	// These are only used by PRE 1.14 mobile versions; now uses ownerId
-	private long organizationId;
 
 	/*
 	 * These are here only for the mobile side. The mobile will record the
@@ -47,10 +39,6 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private String serialNumber;
 	private String rfidNumber;
 	private long productTypeId;
-
-	@Deprecated
-	// in Version 1.11 of the mobile
-	private String date;
 
 	public List<SubProductMapServiceDTO> getNewSubProducts() {
 		return newSubProducts;
@@ -118,42 +106,6 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 		this.inspectionBookId = inspectionBookId;
 	}
 
-	public boolean organizationExists() {
-		return isValidServerId(organizationId);
-	}
-
-	public long getOrganizationId() {
-		return organizationId;
-	}
-
-	public void setOrganizationId(long organizationId) {
-		this.organizationId = organizationId;
-	}
-
-	public boolean customerExists() {
-		return isValidServerId(customerId);
-	}
-
-	public long getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(long customerId) {
-		this.customerId = customerId;
-	}
-
-	public boolean divisionExists() {
-		return isValidServerId(divisionId);
-	}
-
-	public long getDivisionId() {
-		return divisionId;
-	}
-
-	public void setDivisionId(long divisionId) {
-		this.divisionId = divisionId;
-	}
-
 	public String getStatus() {
 		return status;
 	}
@@ -170,10 +122,6 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 		this.nextDate = nextDate;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
-	}
-
 	public boolean productStatusExists() {
 		return isValidServerId(productStatusId);
 	}
@@ -186,28 +134,12 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 		this.productStatusId = productStatusId;
 	}
 
-	public String getDate() {
-		return date;
-	}
-
 	public String getInspectionBookTitle() {
 		return inspectionBookTitle;
 	}
 
 	public void setInspectionBookTitle(String inspectionBookTitle) {
 		this.inspectionBookTitle = inspectionBookTitle;
-	}
-
-	public boolean jobSiteExists() {
-		return isValidServerId(jobSiteId);
-	}
-
-	public long getJobSiteId() {
-		return jobSiteId;
-	}
-
-	public void setJobSiteId(long jobSiteId) {
-		this.jobSiteId = jobSiteId;
 	}
 
 	public List<SubInspectionServiceDTO> getSubInspections() {
@@ -268,18 +200,6 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 
 	public void setOwnerId(long ownerId) {
 		this.ownerId = ownerId;
-	}
-
-	public boolean ownerIdExists() {
-		return isValidServerId(ownerId);
-	}
-
-	public long getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(long orgId) {
-		this.orgId = orgId;
 	}
 
 	public List<SubProductMapServiceDTO> getDetachSubProducts() {

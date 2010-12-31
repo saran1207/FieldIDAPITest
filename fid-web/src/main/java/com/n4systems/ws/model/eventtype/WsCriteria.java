@@ -9,13 +9,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.n4systems.ws.model.WsModel;
 
 @XmlRootElement
-public class WsCriteria extends WsModel {
+public abstract class WsCriteria extends WsModel {
 	private String displayText;
 	private boolean principal;
 	private List<String> recommendations = new ArrayList<String>();
 	private List<String> deficiencies = new ArrayList<String>();
-	private List<WsState> states = new ArrayList<WsState>();
-	
+
 	@XmlElement(name="DisplayText")
 	public String getDisplayText() {
 		return displayText;
@@ -50,14 +49,5 @@ public class WsCriteria extends WsModel {
 
 	public void setDeficiencies(List<String> deficiencies) {
 		this.deficiencies = deficiencies;
-	}
-
-	@XmlElement(name="States")
-	public List<WsState> getStates() {
-		return states;
-	}
-
-	public void setStates(List<WsState> states) {
-		this.states = states;
 	}
 }

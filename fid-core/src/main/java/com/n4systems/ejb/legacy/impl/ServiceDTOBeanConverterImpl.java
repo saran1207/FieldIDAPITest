@@ -38,6 +38,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
+import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
@@ -84,6 +85,7 @@ import com.n4systems.webservice.dto.InfoFieldServiceDTO;
 import com.n4systems.webservice.dto.InspectionBookServiceDTO;
 import com.n4systems.webservice.dto.InspectionInfoOptionServiceDTO;
 import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
+import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.InternalOrgServiceDTO;
 import com.n4systems.webservice.dto.JobServiceDTO;
 import com.n4systems.webservice.dto.LocationServiceDTO;
@@ -194,29 +196,19 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	}
 
 	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Event event) {
-
-		com.n4systems.webservice.dto.InspectionServiceDTO inspectionDTO = new com.n4systems.webservice.dto.InspectionServiceDTO();
+		InspectionServiceDTO inspectionDTO = new InspectionServiceDTO();
 		persistenceManager.reattach(event, false);
 
 		populateAbstractInspectionInfo(inspectionDTO, event);
-
 		inspectionDTO.setOwnerId(retrieveOwnerId(event.getOwner()));
 		inspectionDTO.setPerformedById( event.getPerformedBy().getId() );
 		inspectionDTO.setStatus( event.getStatus().name() );
 		inspectionDTO.setInspectionBookId( ( event.getBook() != null ) ? event.getBook().getId() : 0L );
 		inspectionDTO.setUtcDate(event.getDate());
-
 		convertLocationToDTO(inspectionDTO, event);
-		
-		populateOwners(event.getOwner(), inspectionDTO);
-
-		// TODO convert date to their time zone
-		inspectionDTO.setDate(dateToString(event.getDate()));
-
 		for (SubEvent subEvent : event.getSubEvents()) {
 			inspectionDTO.getSubInspections().add(convert(subEvent));
 		}
-
 		return inspectionDTO;
 
 	}
@@ -436,7 +428,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * @deprecated Use the InspectionServiceDTOConverter
 	 */
 	@Deprecated
-	public Event convert(com.n4systems.webservice.dto.InspectionServiceDTO inspectionServiceDTO, Long tenantId) throws IOException {
+	public Event convert(InspectionServiceDTO inspectionServiceDTO, Long tenantId) throws IOException {
 
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 
@@ -445,15 +437,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		populate(event, inspectionServiceDTO, tenant);
 		
 		event.setPrintable(inspectionServiceDTO.isPrintable());
-
-		// Check if utcDate is set, if not, dealing with a PRE 1.11 version: use
-		// date
-		if (inspectionServiceDTO.getUtcDate() != null) {
-			event.setDate(inspectionServiceDTO.getUtcDate());
-		} else {
-			// TODO convert from their set timezone
-			event.setDate( DtoDateConverter.convertStringToDate(inspectionServiceDTO.getDate()) );
-		}		
+		event.setDate(inspectionServiceDTO.getUtcDate());
 		
 		// Required object lookups		
 		User performedBy = (User)em.find(User.class, inspectionServiceDTO.getPerformedById());
@@ -497,6 +481,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 				event.getSubEvents().add(convert(subInspection, tenant, performedBy));
 			}
 		}
+		
+		// Mobile prior to 1.26 will send formVersion.
+		if (inspectionServiceDTO.getFormId() != null) {
+			event.setEventForm(persistenceManager.find(EventForm.class, inspectionServiceDTO.getFormId()));
+		} else {
+			event.setEventForm(event.getType().getEventForm());
+			
+			boolean eventEditable = inspectionServiceDTO.getFormVersion() == event.getType().getFormVersion();
+			event.setEditable(eventEditable);
+		}	
 
 		event.setAssetStatus(convertProductStatus(inspectionServiceDTO));
 		event.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));

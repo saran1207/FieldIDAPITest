@@ -163,6 +163,7 @@ public class EventFormEditPage extends WebPage {
                     eventForm.setSections(createCopiesOf(criteriaSections));
                     eventForm.setTenant(FieldIDSession.get().getSessionUser().getTenant());
                     eventType.setEventForm(eventForm);
+                    eventType.incrementFormVersion();
                     
                     new EventFormSaver().save(tx, eventForm);
                     new EventTypeSaver().update(tx, eventType);

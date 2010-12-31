@@ -2,15 +2,15 @@ package com.n4systems.ws.model.eventtype;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.model.OneClickCriteria;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.ws.model.WsModelConverter;
 
 public class WsCriteriaSectionConverterTest {
@@ -23,7 +23,9 @@ public class WsCriteriaSectionConverterTest {
 		model.setTitle("title");
 		model.getCriteria().add(new OneClickCriteria());
 		
-		List<WsCriteria> wsCriteria = Arrays.asList(new WsCriteria());
+		List<WsCriteria> wsCriteria = new ArrayList<WsCriteria>();
+		wsCriteria.add(new WsOneClickCriteria());
+
 		WsModelConverter<Criteria, WsCriteria> criteriaConverter = EasyMock.createMock(WsModelConverter.class);
 		EasyMock.expect(criteriaConverter.fromModels(model.getCriteria())).andReturn(wsCriteria);
 		EasyMock.replay(criteriaConverter);

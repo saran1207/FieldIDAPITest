@@ -30,6 +30,7 @@ import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.model.event.LastEventLoader;
+import com.n4systems.model.eventbook.AllEventBookListLoader;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
@@ -47,6 +48,7 @@ import com.n4systems.model.location.PredefinedLocationTreeLoader;
 import com.n4systems.model.messages.PaginatedMessageLoader;
 import com.n4systems.model.messages.UnreadMessageCountLoader;
 import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoader;
+import com.n4systems.model.orgs.AllOrgsWithArchivedListLoader;
 import com.n4systems.model.orgs.BaseOrgParentFilterListLoader;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
 import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
@@ -124,6 +126,14 @@ public class LoaderFactory implements Serializable {
 
 	public <T> AllEntityListLoader<T> createAllEntityListLoader(Class<T> clazz) {
 		return new AllEntityListLoader<T>(clazz);
+	}
+
+	public AllEventBookListLoader createAllEventBookListLoader() {
+		return new AllEventBookListLoader(filter);
+	}
+
+	public AllOrgsWithArchivedListLoader createAllOrgsWithArchivedListLoader() {
+		return new AllOrgsWithArchivedListLoader(new TenantOnlySecurityFilter(filter));
 	}
 
 	public AllPredefinedLocationsPaginatedLoader createAllPredefinedLocationsPaginatedLoader() {
@@ -208,6 +218,10 @@ public class LoaderFactory implements Serializable {
 
 	public CatalogLoader createCatalogLoader() {
 		return new CatalogLoader();
+	}
+
+	public UserListableLoader createCombinedUserListableLoader() {
+		return createUserListableLoader().setNoDeleted(true);
 	}
 
 	public CommentTemplateListableLoader createCommentTemplateListableLoader() {
@@ -337,7 +351,7 @@ public class LoaderFactory implements Serializable {
 	public <T extends Exportable> GlobalIdLoader<T> createGlobalIdLoader(Class<T> clazz) {
 		return new GlobalIdLoader<T>(filter, clazz);
 	}
-
+	
 	public HasLinkedAssetsLoader createHasLinkedAssetsLoader() {
 		return new HasLinkedAssetsLoader(filter);
 	}
@@ -346,10 +360,6 @@ public class LoaderFactory implements Serializable {
 		return createUserListableLoader();
 	}
 
-	public UserListableLoader createCombinedUserListableLoader() {
-		return createUserListableLoader().setNoDeleted(true);
-	}
-	
 	public UserListableLoader createHistoricalEmployeesListableLoader() {
 		return createUserListableLoader().employeesOnly();
 	}
@@ -533,11 +543,11 @@ public class LoaderFactory implements Serializable {
 	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
 		return new VendorLinkedOrgLoader(filter);
 	}
-
+	
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
 		return new VendorOrgConnectionLoader(filter);
 	}
-
+	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}

@@ -102,6 +102,10 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 	public boolean isEditable() {
 		return editable;
 	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
 	
 	@AllowSafetyNetworkAccess
 	public EventType getType() {
