@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.wicket.components;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
-public class TwoStateAjaxButton extends Panel {
+public class TwoStateAjaxLink extends Panel {
 
     private boolean inInitialState = true;
 
@@ -16,28 +15,27 @@ public class TwoStateAjaxButton extends Panel {
 
     private String currentStateLabel;
 
-    private AjaxButton button;
-    private Label buttonLabel;
+    private Label linkLabel;
+    private AjaxLink link;
 
-    public TwoStateAjaxButton(String id, String stateOneLabel, String stateTwoLabel) {
+    public TwoStateAjaxLink(String id, String stateOneLabel, String stateTwoLabel) {
         super(id);
         this.stateOneLabel = stateOneLabel;
         this.stateTwoLabel = stateTwoLabel;
         this.currentStateLabel = stateOneLabel;
         setOutputMarkupId(true);
 
-        Form form = new Form("theForm");
-        add(form);
-        form.add(button = new AjaxButton("button") {
+        add(link = new AjaxLink("link") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onClick(AjaxRequestTarget target) {
                 inInitialState = !inInitialState;
                 callCorrectCallback(target);
                 setCorrectStateLabel();
-                target.addComponent(TwoStateAjaxButton.this);
+                target.addComponent(TwoStateAjaxLink.this);
             }
         });
-        button.add(buttonLabel = new Label("buttonLabel", new PropertyModel<String>(this, "currentStateLabel")));
+        link.add(linkLabel = new Label("linkLabel", new PropertyModel<String>(this, "currentStateLabel")));
+        linkLabel.setRenderBodyOnly(true);
     }
 
     private void setCorrectStateLabel() {

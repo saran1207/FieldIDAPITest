@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.components.eventform;
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
-import com.n4systems.fieldid.wicket.components.TwoStateAjaxButton;
+import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
 import com.n4systems.model.CriteriaSection;
 import org.apache.wicket.Component;
@@ -36,7 +36,7 @@ public class CriteriaSectionsPanel extends Panel {
     public CriteriaSectionsPanel(String id, IModel<List<CriteriaSection>> sectionsModel) {
         super(id, sectionsModel);
         setOutputMarkupId(true);
-        add(new TwoStateAjaxButton("reorderSectionsButton", "Reorder Sections", "Done Reordering") {
+        add(new TwoStateAjaxLink("reorderSectionsButton", "Reorder Sections", "Done Reordering") {
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
                 target.addComponent(CriteriaSectionsPanel.this);

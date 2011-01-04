@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
+import com.n4systems.fieldid.wicket.pages.FieldIDWicketPage;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
@@ -19,8 +20,6 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -29,7 +28,7 @@ import org.apache.wicket.model.PropertyModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventFormEditPage extends WebPage {
+public class EventFormEditPage extends FieldIDWicketPage {
 
     private List<CriteriaSection> criteriaSections;
 
@@ -56,9 +55,6 @@ public class EventFormEditPage extends WebPage {
             oldEventFormId = eventType.getEventForm().getId();
             criteriaSections .addAll(eventType.getEventForm().getSections());
         }
-
-        add(CSSPackageResource.getHeaderContribution("style/fieldid.css"));
-        add(CSSPackageResource.getHeaderContribution("style/eventFormEdit.css"));
 
         add(criteriaSectionsPanel = new CriteriaSectionsPanel("criteriaSectionsPanel", new PropertyModel<List<CriteriaSection>>(this, "criteriaSections"))
         {
