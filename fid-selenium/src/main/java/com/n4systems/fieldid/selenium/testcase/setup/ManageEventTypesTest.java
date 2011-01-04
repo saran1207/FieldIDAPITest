@@ -1,20 +1,26 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
-import com.n4systems.fieldid.selenium.datatypes.EventForm;
-import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
-import com.n4systems.fieldid.selenium.datatypes.EventType;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.datatypes.EventForm;
 import com.n4systems.fieldid.selenium.datatypes.EventFormObservations;
 import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
+import com.n4systems.fieldid.selenium.datatypes.EventType;
+import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
 import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class ManageEventTypesTest extends FieldIDTestCase {
 	
@@ -22,9 +28,27 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 	
 	ManageEventTypesPage manageEventTypesPage;
 	
+	@Override
+	public void setupScenario(Scenario scenario) {
+		
+		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor("test1");
+		
+		defaultPrimaryOrg.setExtendedFeatures(new HashSet<ExtendedFeature>(
+				Arrays.asList(ExtendedFeature.AssignedTo)));
+		
+		scenario.save(defaultPrimaryOrg);
+		
+		scenario.anEventTypeGroup()
+		    .forTenant(scenario.defaultTenant())
+		    .withName("Maintenance")
+		    .build();
+		
+		SimpleEventBuilder.aSimpleEvent(scenario).createObject();
+	}
+	
 	@Before
 	public void setUp() {
-		manageEventTypesPage = start().systemLogin().clickSetupLink().clickManageEventTypes();
+		manageEventTypesPage = startAsCompany("test1").systemLogin().clickSetupLink().clickManageEventTypes();
 	}
 	
 	@Test
@@ -189,7 +213,7 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		EventForm form = new EventForm();
 		
 		EventFormSection section1 = new EventFormSection("Section1");
-		OneClickEventFormCriteria criteria1 = new OneClickEventFormCriteria("Criteria1", "Pass,Fail");
+		OneClickEventFormCriteria criteria1 = new OneClickEventFormCriteria("Criteria1", "Pass, Fail");
 		criteria1.setSetsResult(true);
 		
 		EventFormObservations observation1 = new EventFormObservations();
@@ -197,7 +221,7 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		observation1.setDeficiencies(Arrays.asList("deficiency1", "deficiency2"));					
 		criteria1.setObservations(observation1);
 
-		OneClickEventFormCriteria criteria2 = new OneClickEventFormCriteria("Criteria2", "Acceptable");
+		OneClickEventFormCriteria criteria2 = new OneClickEventFormCriteria("Criteria2", "NA, Pass, Fail");
 		EventFormObservations observation2 = new EventFormObservations();
 		observation2.setRecommendations(Arrays.asList("recommendation3"));
 		observation2.setDeficiencies(Arrays.asList("deficiency3"));
