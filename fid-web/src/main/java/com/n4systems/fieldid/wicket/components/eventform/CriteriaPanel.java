@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
@@ -21,18 +20,13 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
-import org.odlabs.wiquery.ui.sortable.SortableBehavior;
-import org.odlabs.wiquery.ui.sortable.SortableContainment;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class CriteriaPanel extends Panel {
-
-    private int currentlySelectedIndex = 1;
+public class CriteriaPanel extends SortableListPanel {
 
     private FeedbackPanel feedbackPanel;
     private CriteriaAddForm criteriaAddForm;
@@ -115,30 +109,6 @@ public class CriteriaPanel extends Panel {
         feedbackPanel.setOutputMarkupId(true);
     }
 
-    private SortableAjaxBehavior makeSortableBehavior() {
-        SortableAjaxBehavior sortable = new SimpleSortableAjaxBehavior() {
-            @Override
-            public void onUpdate(Component component, int index, AjaxRequestTarget target) {
-                if (component == null) {
-                    return;
-                }
-                List<Criteria> theCriteriaList = getCriteriaSection().getCriteria();
-                Criteria criteria = (Criteria) component.getDefaultModelObject();
-                if (theCriteriaList.indexOf(criteria) == currentlySelectedIndex) {
-                    // If we're moving the selected item, we need to update the selected index to reflect its new position
-                    currentlySelectedIndex = index;
-                }
-                theCriteriaList.remove(criteria);
-                theCriteriaList.add(index, criteria);
-                target.addComponent(CriteriaPanel.this);
-            }
-        };
-        sortable.getSortableBehavior().setContainment(new SortableContainment("#criteriaPanel"));
-        sortable.getSortableBehavior().setAxis(SortableBehavior.AxisEnum.Y);
-        sortable.setDisabled(true);
-        return sortable;
-    }
-
     public CriteriaSection getCriteriaSection() {
         return (CriteriaSection) getDefaultModelObject();
     }
@@ -182,6 +152,24 @@ public class CriteriaPanel extends Panel {
         }
     }
 
+    @Override
+    protected int getIndexOfComponent(Component component) {
+        Criteria criteria = (Criteria) component.getDefaultModelObject();
+        return getCriteriaSection().getCriteria().indexOf(criteria);
+    }
+
+    @Override
+    protected void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target) {
+        Criteria movingCriteria = getCriteriaSection().getCriteria().remove(oldIndex);
+        getCriteriaSection().getCriteria().add(newIndex, movingCriteria);
+        target.addComponent(this);
+    }
+
+    @Override
+    protected String getSortableContainmentCss() {
+        return "#criteriaPanel";
+    }
+
     protected void onCriteriaAdded(AjaxRequestTarget target, Criteria criteria, int newIndex) { }
 
     protected void onCriteriaSelected(AjaxRequestTarget target, Criteria criteria) { }
@@ -192,14 +180,6 @@ public class CriteriaPanel extends Panel {
 
     public String getAddTextFieldId() {
         return criteriaAddForm.addTextField.getMarkupId();
-    }
-
-    public void clearSelection() {
-        currentlySelectedIndex = -1;
-    }
-
-    public void setSelectedIndex(int newIndex) {
-        this.currentlySelectedIndex = newIndex;
     }
 
 }

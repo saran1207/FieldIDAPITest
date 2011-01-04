@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
@@ -16,18 +15,14 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
-import org.odlabs.wiquery.ui.sortable.SortableBehavior;
-import org.odlabs.wiquery.ui.sortable.SortableContainment;
 
 import java.util.List;
 
-public class CriteriaSectionsPanel extends Panel {
+public class CriteriaSectionsPanel extends SortableListPanel {
 
-    private int currentlySelectedIndex = -1;
     private FeedbackPanel feedbackPanel;
     private boolean reorderState = false;
     SortableAjaxBehavior sortableBehavior;
@@ -108,28 +103,22 @@ public class CriteriaSectionsPanel extends Panel {
         feedbackPanel.setOutputMarkupId(true);
     }
 
-    private SortableAjaxBehavior makeSortableBehavior() {
-        SortableAjaxBehavior sortable = new SimpleSortableAjaxBehavior() {
-            @Override
-            public void onUpdate(Component component, int index, AjaxRequestTarget target) {
-                if (component == null) {
-                    return;
-                }
-                List<CriteriaSection> theCriteriaList = getListModel().getObject();
-                CriteriaSection section = (CriteriaSection) component.getDefaultModelObject();
-                if (theCriteriaList.indexOf(section) == currentlySelectedIndex) {
-                    // If we're moving the selected item, we need to update the selected index to reflect its new position
-                    currentlySelectedIndex = index;
-                }
-                theCriteriaList.remove(section);
-                theCriteriaList.add(index, section);
-                target.addComponent(CriteriaSectionsPanel.this);
-            }
-        };
-        sortable.getSortableBehavior().setContainment(new SortableContainment("#criteriaSectionsPanel"));
-        sortable.getSortableBehavior().setAxis(SortableBehavior.AxisEnum.Y);
-        sortable.setDisabled(true);
-        return sortable;
+    @Override
+    protected int getIndexOfComponent(Component component) {
+        CriteriaSection section = (CriteriaSection) component.getDefaultModelObject();
+        return getListModel().getObject().indexOf(section);
+    }
+
+    @Override
+    protected void onItemMoving(int oldIndex, int newIndex, AjaxRequestTarget target) {
+        CriteriaSection movingSection = getListModel().getObject().remove(oldIndex);
+        getListModel().getObject().add(newIndex, movingSection);
+        target.addComponent(CriteriaSectionsPanel.this);
+    }
+
+    @Override
+    protected String getSortableContainmentCss() {
+        return "#criteriaSectionsPanel";
     }
 
     private void processCopy(int index) {
@@ -141,10 +130,6 @@ public class CriteriaSectionsPanel extends Panel {
 
     protected IModel<List<CriteriaSection>> getListModel() {
         return (IModel<List<CriteriaSection>>) getDefaultModel();
-    }
-
-    protected void setSelectedIndex(int newSelectedIndex) {
-        this.currentlySelectedIndex = newSelectedIndex;
     }
 
     class CriteriaSectionAddForm extends Form {
