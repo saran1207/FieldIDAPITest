@@ -1,14 +1,19 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
+import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
-import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.TextFieldCriteria;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.EnclosureContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -18,6 +23,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
+import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
+import org.odlabs.wiquery.ui.sortable.SortableBehavior;
+import org.odlabs.wiquery.ui.sortable.SortableContainment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,13 +36,18 @@ public class CriteriaPanel extends Panel {
 
     private FeedbackPanel feedbackPanel;
     private CriteriaAddForm criteriaAddForm;
+    private SortableAjaxBehavior sortableAjaxBehavior;
+    private boolean reorderState = false;
 
     public CriteriaPanel(String id) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
-        add(new ListView<Criteria>("criteria", new PropertyModel<List<Criteria>>(CriteriaPanel.this, "criteriaSection.criteria")) {
+
+        WebMarkupContainer sortableCriteriaContainer = new WebMarkupContainer("sortableCriteriaContainer");
+        sortableCriteriaContainer.add(new ListView<Criteria>("criteria", new PropertyModel<List<Criteria>>(CriteriaPanel.this, "criteriaSection.criteria")) {
             @Override
             protected void populateItem(final ListItem<Criteria> item) {
+                item.setOutputMarkupId(true);
                 item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "displayText"), new PropertyModel<String>(item.getModel(), "typeDescription")) {
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
@@ -63,22 +76,67 @@ public class CriteriaPanel extends Panel {
                     }
 
                     @Override
-                    public String getDeleteImage() {
-                        return "images/small-x.png";
+                    protected boolean isReorderState() {
+                        return reorderState;
                     }
                 });
 
                 item.add(new AppendToClassIfCondition("selectedCriteria", new Predicate() {
                     @Override
                     public boolean evaluate() {
-                        return item.getIndex() == currentlySelectedIndex;
+                        return item.getIndex() == currentlySelectedIndex && !reorderState;
                     }
                 }));
             }
         });
-        add(criteriaAddForm = new CriteriaAddForm("criteriaAddForm"));
+        add(new TwoStateAjaxLink("reorderCriteriaButton", "Reorder Criteria", "Done Reordering") {
+            @Override
+            protected void onEnterInitialState(AjaxRequestTarget target) {
+                target.addComponent(CriteriaPanel.this);
+                sortableAjaxBehavior.setDisabled(true);
+                reorderState = false;
+            }
+
+            @Override
+            protected void onEnterSecondaryState(AjaxRequestTarget target) {
+                target.addComponent(CriteriaPanel.this);
+                sortableAjaxBehavior.setDisabled(false);
+                reorderState = true;
+            }
+        });
+
+        criteriaAddForm = new CriteriaAddForm("criteriaAddForm");
+        EnclosureContainer enclosureContainer = new EnclosureContainer("addCriteriaFormContainer", criteriaAddForm);
+        enclosureContainer.add(criteriaAddForm);
+        add(enclosureContainer);
         add(feedbackPanel = new FeedbackPanel("feedbackPanel"));
+        sortableCriteriaContainer.add(sortableAjaxBehavior = makeSortableBehavior());
+        add(sortableCriteriaContainer);
         feedbackPanel.setOutputMarkupId(true);
+    }
+
+    private SortableAjaxBehavior makeSortableBehavior() {
+        SortableAjaxBehavior sortable = new SimpleSortableAjaxBehavior() {
+            @Override
+            public void onUpdate(Component component, int index, AjaxRequestTarget target) {
+                if (component == null) {
+                    return;
+                }
+                List<Criteria> theCriteriaList = getCriteriaSection().getCriteria();
+                Criteria criteria = (Criteria) component.getDefaultModelObject();
+                if (theCriteriaList.indexOf(criteria) == currentlySelectedIndex) {
+                    // If we're moving the selected item, we need to update the selected index to reflect its new position
+                    currentlySelectedIndex = index;
+                }
+                theCriteriaList.remove(criteria);
+                theCriteriaList.add(index, criteria);
+                target.addComponent(CriteriaPanel.this);
+            }
+        };
+        sortable.getSortableBehavior().setContainment(new SortableContainment("#criteriaPanel"));
+        sortable.getSortableBehavior().setAxis(SortableBehavior.AxisEnum.Y);
+        sortable.setDisabled(true);
+        return sortable;
     }
 
     public CriteriaSection getCriteriaSection() {
@@ -116,6 +174,11 @@ public class CriteriaPanel extends Panel {
                     target.addComponent(feedbackPanel);
                 }
             });
+        }
+
+        @Override
+        public boolean isVisible() {
+            return !reorderState;
         }
     }
 

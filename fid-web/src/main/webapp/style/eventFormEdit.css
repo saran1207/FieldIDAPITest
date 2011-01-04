@@ -237,3 +237,8 @@ div.reorderLinkSection {
 .twoStateLink a:hover {
     border-color: #999;
 }
+
+div.detailsHeader {
+    padding-top: 14px;
+    padding-bottom: 13px;
+}

@@ -22,7 +22,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 import org.odlabs.wiquery.ui.sortable.SortableBehavior;
 import org.odlabs.wiquery.ui.sortable.SortableContainment;
-import org.odlabs.wiquery.ui.sortable.SortableRevert;
 
 import java.util.List;
 
@@ -95,14 +94,14 @@ public class CriteriaSectionsPanel extends Panel {
                 item.add(new AppendToClassIfCondition("selectedSection", new Predicate() {
                     @Override
                     public boolean evaluate() {
-                        return !reorderState && item.getIndex() == currentlySelectedIndex;
+                        return item.getIndex() == currentlySelectedIndex && !reorderState;
                     }
                 }));
             }
         });
 
         CriteriaSectionAddForm addForm = new CriteriaSectionAddForm("formSectionAddForm");
-        EnclosureContainer addFormContainer = new EnclosureContainer("criteriaFormContainer", addForm);
+        EnclosureContainer addFormContainer = new EnclosureContainer("addCriteriaSectionFormContainer", addForm);
         addFormContainer.add(addForm);
         add(addFormContainer);
         add(feedbackPanel = new FeedbackPanel("feedbackPanel"));
@@ -118,13 +117,15 @@ public class CriteriaSectionsPanel extends Panel {
                 }
                 List<CriteriaSection> theCriteriaList = getListModel().getObject();
                 CriteriaSection section = (CriteriaSection) component.getDefaultModelObject();
+                if (theCriteriaList.indexOf(section) == currentlySelectedIndex) {
+                    // If we're moving the selected item, we need to update the selected index to reflect its new position
+                    currentlySelectedIndex = index;
+                }
                 theCriteriaList.remove(section);
                 theCriteriaList.add(index, section);
                 target.addComponent(CriteriaSectionsPanel.this);
             }
         };
-        sortable.getSortableBehavior().setConnectWith(".sortableSectionContainer");
-        sortable.getSortableBehavior().setRevert(new SortableRevert(true));
         sortable.getSortableBehavior().setContainment(new SortableContainment("#criteriaSectionsPanel"));
         sortable.getSortableBehavior().setAxis(SortableBehavior.AxisEnum.Y);
         sortable.setDisabled(true);

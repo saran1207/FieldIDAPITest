@@ -1,19 +1,25 @@
 <wicket:panel>
 
-    <div class="columnHeader">Criteria</div>
-
-    <div wicket:id="criteria" class="criteria">
-        <div wicket:id="editCopyDeletePanel">
-        </div>
-        <div style="clear:both;"></div>
+    <div class="columnHeader">
+        <div wicket:id="reorderCriteriaButton"></div>
     </div>
 
-    <div class="addCriteriaForm">
-        <div class="addCriteriaTitle">New Criteria</div>
-        <form wicket:id="criteriaAddForm">
-            <input wicket:id="criteriaName" style="width:80%;"></input> <button wicket:id="submitButton">Add</button> <br/>
-            <select wicket:id="criteriaType" style="width:40%;"></select>
-        </form>
+    <div wicket:id="sortableCriteriaContainer">
+        <div wicket:id="criteria" class="criteria">
+            <div wicket:id="editCopyDeletePanel">
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+
+    <div wicket:id="addCriteriaFormContainer">
+        <div class="addCriteriaForm">
+            <div class="addCriteriaTitle">New Criteria</div>
+            <form wicket:id="criteriaAddForm">
+                <input wicket:id="criteriaName" style="width:80%;"></input> <button wicket:id="submitButton">Add</button> <br/>
+                <select wicket:id="criteriaType" style="width:40%;"></select>
+            </form>
+        </div>
     </div>
 
     <div class="feedback" wicket:id="feedbackPanel">
