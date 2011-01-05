@@ -242,3 +242,12 @@ div.detailsHeader {
     padding-top: 14px;
     padding-bottom: 13px;
 }
+
+ul.feedbackPanel {
+    border: 1px #deadad solid;
+    background-color: #f5d9d2;
+    margin: 2px 2px 2px 2px;
+    list-style-type:none;
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
