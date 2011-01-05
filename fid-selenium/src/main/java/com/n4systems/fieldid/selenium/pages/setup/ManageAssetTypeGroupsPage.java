@@ -14,7 +14,7 @@ public class ManageAssetTypeGroupsPage extends FieldIDPage {
 	}
 	
 	public List<String> getAssetTypeGroups() {
-		return getColumnFromTableStartingAtRow("//div[@id='pageContent']//table[@class='list']", 1, 3);
+		return getColumnFromTableStartingAtRow("//div[@id='pageContent']//table[@class='list']", 1, 2);
 	}
 
 	public void deleteAssetTypeGroup(String assetTypeGroup) {

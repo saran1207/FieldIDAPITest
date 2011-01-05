@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -25,7 +25,7 @@ public class ManageCommentTemplatesTest extends FieldIDTestCase {
 	
 	@Before
 	public void setupDrivers() throws Exception {
-		templatesPage = start().login().clickSetupLink().clickManageCommentTemplates();
+		templatesPage = startAsCompany("test1").login().clickSetupLink().clickManageCommentTemplates();
 		removeTestTemplates();
 	}
 	
@@ -60,6 +60,7 @@ public class ManageCommentTemplatesTest extends FieldIDTestCase {
 		assertThat(templatesPage.getValidationErrorFor(ManageCommentTemplatesPage.FIELD_TEMPLATE_NAME), containsString("required"));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void should_require_an_edited_comment_template_to_have_name() throws Exception {
 		templatesPage.clickAddTab();
@@ -74,6 +75,7 @@ public class ManageCommentTemplatesTest extends FieldIDTestCase {
 		assertThat(templatesPage.getValidationErrorFor(ManageCommentTemplatesPage.FIELD_TEMPLATE_NAME), allOf(containsString("required"), containsString("name")));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void should_not_allow_two_comment_template_to_have_the_same_name() throws Exception {
 		templatesPage.clickAddTab();

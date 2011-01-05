@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 
 public class ManageAssetTypeGroupsTest extends FieldIDTestCase {
@@ -22,9 +22,7 @@ public class ManageAssetTypeGroupsTest extends FieldIDTestCase {
 	
 	@Before
 	public void navigate() {
-		typeGroupsPage = start().login().clickSetupLink().clickAssetTypeGroups();
-		deleteAssetTypeIfExists(TEST_GROUP_NAME);
-		deleteAssetTypeIfExists(TEST_GROUP_NAME_2);
+		typeGroupsPage = startAsCompany("test1").login().clickSetupLink().clickAssetTypeGroups();
 	}
 
 	@Test
@@ -58,13 +56,6 @@ public class ManageAssetTypeGroupsTest extends FieldIDTestCase {
 		assertTrue("New name should be present in list", typeGroupsPage.getAssetTypeGroups().contains(TEST_GROUP_NAME_2));
 	}
 
-	private void addTestGroup(String groupName) {
-		typeGroupsPage.clickAddTab();
-		typeGroupsPage.enterName(TEST_GROUP_NAME);
-		typeGroupsPage.clickSave();
-		typeGroupsPage.clickViewAllTab();
-	}
-	
 	@Test
 	public void adding_asset_to_type_should_warn_when_deleting() throws Exception {
 		addTestGroup(TEST_GROUP_NAME);
@@ -81,6 +72,26 @@ public class ManageAssetTypeGroupsTest extends FieldIDTestCase {
 		typeGroupsPage.confirmDeleteGroup();
 	}
 	
+	@Test
+	public void adding_and_deleting_group_with_valid_name_should_succeed() throws Exception {
+		addTestGroup(TEST_GROUP_NAME);
+		
+		assertEquals("Save should have succeeded", 0, typeGroupsPage.getFormErrorMessages().size());
+		assertTrue(typeGroupsPage.getAssetTypeGroups().contains(TEST_GROUP_NAME));
+		
+		deleteAssetTypeIfExists(TEST_GROUP_NAME);
+		assertEquals("Delete should have succeeded", 0, typeGroupsPage.getFormErrorMessages().size());
+		assertFalse(typeGroupsPage.getAssetTypeGroups().contains(TEST_GROUP_NAME));
+	}
+	
+
+	private void addTestGroup(String groupName) {
+		typeGroupsPage.clickAddTab();
+		typeGroupsPage.enterName(TEST_GROUP_NAME);
+		typeGroupsPage.clickSave();
+		typeGroupsPage.clickViewAllTab();
+	}
+
 	private void deleteAssetTypeIfExists(String typeName) {
 		for (String assetType : typeGroupsPage.getAssetTypeGroups()) {
 			if (assetType.equals(typeName)) {

@@ -12,6 +12,7 @@ import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
@@ -91,6 +92,7 @@ public class TenantCleaner {
         removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
         removeAllForTenant(em, AutoAttributeDefinition.class, tenantId);
         removeAllForTenant(em, AssetType.class, tenantId);
+        removeAllForTenant(em, AssetTypeGroup.class, tenantId);
         removeAllForTenant(em, AssetStatus.class, tenantId);
         removeAllForTenant(em, FileAttachment.class, tenantId);
         removeAllForTenant(em, UserRequest.class, tenantId);
