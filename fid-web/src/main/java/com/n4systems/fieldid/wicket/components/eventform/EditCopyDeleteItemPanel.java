@@ -33,7 +33,7 @@ public class EditCopyDeleteItemPanel extends Panel {
         this(id, titleModel, subTitleModel, true);
     }
 
-    public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel, boolean displayCopyLink) {
+    public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel, final boolean displayCopyLink) {
         super(id, titleModel);
         setOutputMarkupPlaceholderTag(true);
 
@@ -95,10 +95,10 @@ public class EditCopyDeleteItemPanel extends Panel {
             }
             @Override
             public boolean isVisible() {
-                return !isReorderState();
+                return displayCopyLink && !isReorderState();
             }
 
-        }.setVisible(displayCopyLink));
+        });
 
         add(viewContainer);
 
