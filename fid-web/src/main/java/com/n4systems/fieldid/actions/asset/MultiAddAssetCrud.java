@@ -125,7 +125,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 				!assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
 			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
 
-			if (assetCodeMapping.getInfoOptions() != null && !assetCodeMapping.getInfoOptions().isEmpty()) {
+			if (assetCodeMapping.getInfoOptions() != null) {
 				List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields());
 				assetView.setAssetInfoOptions(assetInfoOptions);
 			}
