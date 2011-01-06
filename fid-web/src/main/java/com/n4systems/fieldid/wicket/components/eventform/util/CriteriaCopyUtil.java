@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.eventform.util;
 
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
+import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.TextFieldCriteria;
 
 import java.util.ArrayList;
@@ -17,14 +18,17 @@ public class CriteriaCopyUtil {
         Criteria newCriteria = null;
         if (criteria instanceof OneClickCriteria) {
             newCriteria = copyButtonCriteria((OneClickCriteria)criteria);
-        } else {
+        } else if (criteria instanceof TextFieldCriteria){
             newCriteria = copyTextFieldCriteria((TextFieldCriteria) criteria);
+        } else if (criteria instanceof SelectCriteria){
+            newCriteria = copySelectCriteria((SelectCriteria) criteria);
         }
+        
         copyCommonFields(criteria, newCriteria, existingCriteria);
         return newCriteria;
     }
 
-    private void copyCommonFields(Criteria criteria, Criteria newCriteria, List<Criteria> existingCriteria) {
+	private void copyCommonFields(Criteria criteria, Criteria newCriteria, List<Criteria> existingCriteria) {
         newCriteria.setRetired(criteria.isRetired());
         newCriteria.setPrincipal(criteria.isPrincipal());
         newCriteria.setTenant(criteria.getTenant());
@@ -43,6 +47,12 @@ public class CriteriaCopyUtil {
     private Criteria copyTextFieldCriteria(TextFieldCriteria textFieldCriteria) {
         return new TextFieldCriteria();
     }
+    
+    private Criteria copySelectCriteria(SelectCriteria criteria) {
+		SelectCriteria selectCriteria = new SelectCriteria();
+		selectCriteria.setOptions(new ArrayList<String>(criteria.getOptions()));
+		return selectCriteria;
+	}
 
     private Criteria copyButtonCriteria(OneClickCriteria oneClickCriteria) {
         OneClickCriteria criteria = new OneClickCriteria();

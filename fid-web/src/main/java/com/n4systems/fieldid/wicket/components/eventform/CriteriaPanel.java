@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.stateset.StateSetLoader;
@@ -117,7 +118,7 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     class CriteriaAddForm extends Form {
-        private List<String> criteriaTypes = Arrays.asList("One-Click", "Text Field");
+        private List<String> criteriaTypes = Arrays.asList("One-Click", "Text Field", "Select");
         protected TextField addTextField;
         private String criteriaName;
         private String criteriaType;
@@ -144,7 +145,10 @@ public class CriteriaPanel extends SortableListPanel {
                         criteria = oneClickCriteria;
                     } else if ("Text Field".equals(criteriaType)) {
                         criteria = new TextFieldCriteria();
+                    } else if ("Select".equals(criteriaType)) {
+                        criteria = new SelectCriteria();
                     }
+                    
                     criteria.setDisplayText(criteriaName);
                     criteriaName = null;
                     getCriteriaSection().getCriteria().add(criteria);
