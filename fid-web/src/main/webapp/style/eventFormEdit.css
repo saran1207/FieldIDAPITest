@@ -244,10 +244,56 @@ div.detailsHeader {
 }
 
 ul.feedbackPanel {
-    border: 1px #deadad solid;
-    background-color: #f5d9d2;
+    border: 1px #ff0000 solid;
+    background-color: #ffdddd;
     margin: 2px 2px 2px 2px;
     list-style-type:none;
     padding-top: 9px;
     padding-bottom: 9px;
 }
+
+a.glossyButtonLink {
+    font-size: 0.8em;
+    background: #fff repeat-x url(../images/button_background.jpg);
+    border:1px solid #ddd;
+    padding: 5px 15px 5px 15px;
+    text-decoration:none;
+    color: #333;
+}
+
+a.glossyButtonLink.activated {
+	background: #fff repeat-x url(../images/button_background_activated.jpg);
+}
+
+a.glossyButtonLink:hover {
+    border-color: #999;
+}
+
+div.savePanel {
+    display: block;
+    min-height: 25px;
+}
+
+div.warningPanel {
+    display: block;
+    float: left;
+    width:77%;
+    background-color: #ffffe0;
+    border: 1px #e4df52 solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+div.savePanel {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 915px;
+}
+
+div.savePanel a.glossyButtonLink {
+    float:right;
+    display:block;
+    font-size: 1.0em;
+}
+
