@@ -40,6 +40,7 @@ public class OneClickDetailsPanel extends Panel {
             DropDownChoice<StateSet> stateChoice;
 
             add(stateChoice = new DropDownChoice<StateSet>("stateSetSelect", new PropertyModel<StateSet>(getCriteriaModel(), "states"), stateSetList, createChoiceRenderer()));
+            stateChoice.setNullValid(false);
             stateChoice.add(new AjaxFormSubmitBehavior("onchange") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {

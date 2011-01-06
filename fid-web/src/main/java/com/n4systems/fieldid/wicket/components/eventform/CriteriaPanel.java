@@ -1,13 +1,16 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
+import com.n4systems.model.stateset.StateSetLoader;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -129,7 +132,16 @@ public class CriteriaPanel extends SortableListPanel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     Criteria criteria = null;
                     if ("One-Click".equals(criteriaType)) {
-                        criteria = new OneClickCriteria();
+                        OneClickCriteria oneClickCriteria = new OneClickCriteria();
+                        StateSetLoader stateSetLoader = new StateSetLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
+                        List<StateSet> stateSetList =  stateSetLoader.load();
+                        if (stateSetList.isEmpty()) {
+                            error("You must configure at least one Button Group to use One-Click criteria");
+                            target.addComponent(feedbackPanel);
+                            return;
+                        }
+                        oneClickCriteria.setStates(stateSetList.get(0));
+                        criteria = oneClickCriteria;
                     } else if ("Text Field".equals(criteriaType)) {
                         criteria = new TextFieldCriteria();
                     }
