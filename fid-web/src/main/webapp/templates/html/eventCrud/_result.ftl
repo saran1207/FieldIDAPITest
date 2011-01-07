@@ -4,7 +4,7 @@
 	<span class="fieldHolder">
         <select id="overrideResult" name="overrideResult">
             <#if action.hasAtLeastOneResultSettingCriteria()>
-                <option value="auto">Set from criteria</option>
+                <option value="auto"><@s.text name="label.set_from_criteria"/></option>
             </#if>
             <#list results as result>
                 <option value="${result.name()}">${action.getText(result.label)}</option>
