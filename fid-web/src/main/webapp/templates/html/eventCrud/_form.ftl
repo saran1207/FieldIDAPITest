@@ -52,6 +52,10 @@
 	<#assign formEvent=event>
 	<#assign identifier="eventForm">
 	<#include "_event.ftl" />
+
+    <#if !event.id?exists>
+        <#include "_result.ftl" />
+    </#if>
 	
 	<#if action.isParentAsset() && !eventType.supportedProofTests.isEmpty() >
 		<#include "_proofTest.ftl"/>

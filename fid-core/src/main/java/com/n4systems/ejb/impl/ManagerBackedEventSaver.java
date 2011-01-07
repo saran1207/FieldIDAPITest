@@ -62,8 +62,10 @@ public class ManagerBackedEventSaver implements EventSaver {
 			parameterObject.event.getGroup().setTenant(parameterObject.event.getTenant());
 			persistenceManager.save(parameterObject.event.getGroup(), parameterObject.userId);
 		}
-		
-		if (parameterObject.calculateEventResult) {
+
+        if (parameterObject.overrideStatus != null) {
+            parameterObject.event.setStatus(parameterObject.overrideStatus);
+        } else if (parameterObject.calculateEventResult) {
 			parameterObject.event.setStatus(calculateEventResult(parameterObject.event));
 		}
 		

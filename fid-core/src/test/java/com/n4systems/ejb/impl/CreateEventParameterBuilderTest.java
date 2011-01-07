@@ -33,7 +33,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	
 	@Test
 	public void should_create_a_default_event_creation_parameter() throws Exception {
-		CreateEventParameter defaultCreateInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, EMPTY_SCHEDULEs);
+		CreateEventParameter defaultCreateInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, EMPTY_SCHEDULEs, null);
 		
 		assertThat(sut.build(), is(equalTo(defaultCreateInpsectionParameter)));
 	}
@@ -41,7 +41,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	
 	@Test
 	public void should_create_a_create_event_parameter_with_stop_the_inpsection_result_from_being_calculated() throws Exception {
-		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, false, EMPTY_SCHEDULEs);
+		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, false, EMPTY_SCHEDULEs, null);
 		
 		sut.doNotCalculateEventResult();
 		
@@ -53,7 +53,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	public void should_create_a_create_event_parameter_with_a_next_event_date() throws Exception {
 		Date nextEventDate = new Date();
 		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate));
-		CreateEventParameter createEventParameter = new CreateEventParameter(event, nextEventDate, userId, null, null, true, schedules);
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, nextEventDate, userId, null, null, true, schedules, null);
 		
 		sut.withANextEventDate(nextEventDate);
 		
@@ -63,7 +63,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	
 	@Test
 	public void should_create_a_create_event_parameter_with_no_schedules_when_given_a_null_next_event_date() throws Exception {
-		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, null, true, EMPTY_SCHEDULEs);
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, null, true, EMPTY_SCHEDULEs, null);
 		
 		sut.withANextEventDate(null);
 		
@@ -75,7 +75,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	@Test
 	public void should_create_a_create_event_parameter_with_a_proof_test_file_uploaded() throws Exception {
 		FileDataContainer proofTestData = new FileDataContainer();
-		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, proofTestData, null, true, EMPTY_SCHEDULEs);
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, proofTestData, null, true, EMPTY_SCHEDULEs, null);
 		
 		sut.withProofTestFile(proofTestData);
 		
@@ -86,7 +86,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	@Test
 	public void should_create_a_create_event_parameter_with_uploaded_images() throws Exception {
 		ArrayList<FileAttachment> uploadedImages = new ArrayList<FileAttachment>();
-		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, uploadedImages, true, EMPTY_SCHEDULEs);
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, uploadedImages, true, EMPTY_SCHEDULEs, null);
 		
 		sut.withUploadedImages(uploadedImages);
 		
@@ -101,7 +101,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 		ArrayList<FileAttachment> uploadedImages = new ArrayList<FileAttachment>();
 		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate));
 		
-		CreateEventParameter expectedCreateEventParameter = new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, false, schedules);
+		CreateEventParameter expectedCreateEventParameter = new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, false, schedules, null);
 		
 		CreateEventParameter actualCreateEventParameter = new CreateEventParameterBuilder(event, userId)
 																				.withUploadedImages(uploadedImages)
@@ -118,7 +118,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 	public void should_create_event_bundle_with_a_single_schedule_bundles_added() throws Exception {
 		Date nextEventDate = new Date();
 		
-		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, null, true, ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate)));
+		CreateEventParameter createEventParameter = new CreateEventParameter(event, null, userId, null, null, true, ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate)), null);
 		
 		sut.addSchedule(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate));
 		
@@ -133,7 +133,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate),
 				new EventScheduleBundle(event.getAsset(), event.getType(), null, new Date(100000L)));
 		
-		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, schedules);
+		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, schedules, null);
 		for (EventScheduleBundle bundle : schedules) {
 			sut.addSchedule(bundle);
 		}
@@ -149,7 +149,7 @@ public class CreateEventParameterBuilderTest extends ConfigContextRequiredTestCa
 		List<EventScheduleBundle> schedules = ImmutableList.of(new EventScheduleBundle(event.getAsset(), event.getType(), null, nextEventDate),
 				new EventScheduleBundle(event.getAsset(), event.getType(), null, new Date(100000L)));
 		
-		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, schedules);
+		CreateEventParameter createInpsectionParameter = new CreateEventParameter(event, null, userId, null, null, true, schedules, null);
 		sut.addSchedules(schedules);
 		
 		

@@ -26,14 +26,12 @@ import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceF
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SubEvent;
-import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.eventbook.EventBookSaver;
@@ -59,7 +57,6 @@ import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.AssetTypeSchedule;
@@ -135,6 +132,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	
 	private User assignedTo;
 	private boolean assignToSomeone = false;
+
+    private String overrideResult;
 	
 	public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
@@ -410,7 +409,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 						.withUploadedImages(getUploadedFiles());
 				
 				createEventParameterBuilder.addSchedules(createEventScheduleBundles());
-				
+                if (overrideResult != null && !"auto".equals(overrideResult)) {
+                    createEventParameterBuilder.withOverrideStatus(Status.valueOf(overrideResult));
+                }
+
 				event = eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());
 				uniqueID = event.getId();
 				
@@ -1044,4 +1046,23 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		}
 		return userGrouper;
 	}
+
+    public boolean hasAtLeastOneResultSettingCriteria() {
+        for (CriteriaSection section : event.getEventForm().getSections()) {
+            for (Criteria criteria : section.getCriteria()) {
+                if (criteria.isPrincipal()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public String getOverrideResult() {
+        return overrideResult;
+    }
+
+    public void setOverrideResult(String overrideResult) {
+        this.overrideResult = overrideResult;
+    }
 }
