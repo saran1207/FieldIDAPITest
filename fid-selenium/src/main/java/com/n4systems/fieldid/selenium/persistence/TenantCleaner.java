@@ -68,8 +68,8 @@ public class TenantCleaner {
         removeAllForTenant(em, EventSchedule.class, tenantId);
         removeAllForTenant(em, AssetTypeSchedule.class, tenantId);
         removeAllForTenant(em, OneClickCriteria.class, tenantId);
-        removeAllForTenant(em, TextFieldCriteria.class, tenantId);
-        removeAllForTenant(em, SelectCriteria.class, tenantId);
+//        removeAllForTenant(em, TextFieldCriteria.class, tenantId);
+//        removeAllForTenant(em, SelectCriteria.class, tenantId);
         removeAllForTenant(em, CriteriaSection.class, tenantId);
         removeAllForTenant(em, EventForm.class, tenantId);
         removeAllForTenant(em, EventType.class, tenantId);
