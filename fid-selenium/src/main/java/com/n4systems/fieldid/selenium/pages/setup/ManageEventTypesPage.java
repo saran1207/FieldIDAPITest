@@ -218,7 +218,7 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 
 	public void clickSaveEventForm() {
         selenium.selectFrame("//iframe");
-        selenium.click("//button[.='DONE']");
+        selenium.click("//a[contains(text(), 'I'm Done, Save and Finish')]");
         waitForWicketAjax();
         selenium.selectFrame("relative=up");
         waitForPageToLoad();
