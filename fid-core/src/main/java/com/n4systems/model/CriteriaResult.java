@@ -26,7 +26,7 @@ public class CriteriaResult extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
-	private Criteria criteria;
+	protected Criteria criteria;
 	
 	@ManyToOne(cascade=CascadeType.REFRESH, fetch=FetchType.EAGER, optional=false)
     @JoinColumn(name="event_id")
@@ -81,10 +81,6 @@ public class CriteriaResult extends EntityWithTenant {
 		this.deficiencies = deficiencies;
 	}
 
-	public Status getResult() {
-		return null;
-	}
-
 	@Override
     public String toString() {
 		String recString = new String();
@@ -99,5 +95,9 @@ public class CriteriaResult extends EntityWithTenant {
 		
 	    return "Result: " + getId() + ", " + getCriteria() + " = " + StringUtils.indent(recString, 1) + StringUtils.indent(defString, 1);
     }
-	
+
+    public Status getResult() {
+        return null;
+    }
+
 }

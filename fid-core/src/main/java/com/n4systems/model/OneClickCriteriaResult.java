@@ -23,4 +23,8 @@ public class OneClickCriteriaResult extends CriteriaResult {
 		this.state = state;
 	}
 
+	public Status getResult() {
+		return (criteria.isPrincipal()) ? state.getStatus() : null;
+	}
+
 }

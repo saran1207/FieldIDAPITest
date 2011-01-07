@@ -15,6 +15,7 @@ import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
+import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.utils.FindSubAssets;
@@ -351,12 +352,16 @@ public class ManagerBackedEventSaver implements EventSaver {
 	private Status findEventResult(AbstractEvent event) {
 		Status eventResult = Status.NA;
 		for (CriteriaResult result : event.getResults()) {
+            if (result instanceof OneClickCriteriaResult) {
+                OneClickCriteriaResult oneClickResult = (OneClickCriteriaResult) result;
 
-			eventResult = adjustStatus(eventResult, result.getResult());
+                eventResult = adjustStatus(eventResult, oneClickResult.getResult());
 
-			if (eventResult == Status.FAIL) {
-				break;
-			}
+                if (eventResult == Status.FAIL) {
+                    break;
+                }
+            }
+
 		}
 		return eventResult;
 	}

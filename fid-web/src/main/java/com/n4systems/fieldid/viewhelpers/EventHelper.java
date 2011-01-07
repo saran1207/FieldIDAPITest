@@ -43,9 +43,9 @@ public class EventHelper {
 		List<CriteriaResult> orderedResults = new ArrayList<CriteriaResult>();
 		
 		// don't go through all the trouble if the event has no results.
-		if (event != null && !event.getResults().isEmpty() && event.getType().getEventForm() != null) {
+		if (event != null && !event.getResults().isEmpty() && event.getEventForm() != null) {
 			// go through the EventType's sections and criteria, hunting down the corresponding CriteriaResult.
-			for(CriteriaSection section: event.getType().getEventForm().getSections()) {
+			for(CriteriaSection section: event.getEventForm().getSections()) {
 				for(Criteria criteria: section.getCriteria()) {
 					// find the corresponding CriteriaResult on the Event
 					for(CriteriaResult result: event.getResults()) {
