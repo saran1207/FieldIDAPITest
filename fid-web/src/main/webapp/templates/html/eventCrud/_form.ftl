@@ -40,20 +40,21 @@
 
 	<#include "_attributes.ftl"/>
 
-	<#if event.id?exists && action.isParentAsset() >
-		<div class="infoSet">
-			<label class="label"><@s.text name="label.result"/></label>
-			<span class="fieldHolder">
-				<@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" />
-			</span>
-		</div>
-	</#if>
-	
+
 	<#assign formEvent=event>
 	<#assign identifier="eventForm">
 	<#include "_event.ftl" />
 
-    <#if !event.id?exists>
+    <#if event.id?exists && action.isParentAsset() >
+        <h2><@s.text name="label.result"/></h2>
+        <div class="infoSet">
+            <label class="label"><@s.text name="label.result"/></label>
+            <span class="fieldHolder">
+                <@s.select name="result" list="results" listKey="name()" listValue="%{getText( label )}" />
+            </span>
+        </div>
+    </#if>
+    <#if !event.id?exists && action.isParentAsset()>
         <#include "_result.ftl" />
     </#if>
 	

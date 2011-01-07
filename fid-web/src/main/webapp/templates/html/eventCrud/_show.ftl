@@ -113,14 +113,16 @@
 		</p>
 	</#list>
 	
-	<p>
-		<label><@s.text name="label.result"/></label>
-		<span><@s.text name="${(event.status.label?html)!}"/></span>
-	</p>
-
 	<#assign formEvent=event/>
 	<#assign identifier="eventForm"/>
 	<#include "_event.ftl" />
+
+    <h2><@s.text name="label.result"/></h2>
+    <p>
+        <label><@s.text name="label.result"/></label>
+        <span><@s.text name="${(event.status.label?html)!}"/></span>
+    </p>
+
 	
 	<#if event.proofTestInfo?exists >
 		<h2><@s.text name="label.prooftest"/></h2>
