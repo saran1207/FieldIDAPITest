@@ -112,9 +112,13 @@ ${action.setPageType('asset', 'edit')!}
 		<script type="text/javascript">
 			$( 'mergeSmartSearch' ).observe( 'submit', 
 				function( event ) {
-					event.stop(); 
-					var element = Event.element( event ); 
-					element.request( getStandardCallbacks() );
+						event.stop();
+					if ($$('#mergeSmartSearch input').first().value.strip().empty()){
+						alert("You cannot search for a blank serial number or rfid number");
+					}else{
+						var element = Event.element( event ); 
+						element.request( getStandardCallbacks() );
+					}
 				} );
 		</script>	
 	</div>

@@ -233,7 +233,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		if (search != null && search.length() > 0) {
 			
 			try {
-				page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(search).setPage(getCurrentPage()).load();
+				page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(getSearch()).setAssetType(getAssetTypeId()).setPage(getCurrentPage()).load();
 		
 				// remove the asset given. ( this is for asset merging, you
 				// don't want to merge the asset with itself.)

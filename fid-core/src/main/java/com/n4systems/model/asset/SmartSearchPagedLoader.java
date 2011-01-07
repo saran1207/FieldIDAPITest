@@ -14,7 +14,8 @@ public class SmartSearchPagedLoader extends Loader<Pager<Asset>> {
 	private Integer pageSize = 10;
 	private String searchText;
 	private SecurityFilter filter;
-
+	private Long assetTypeId;
+	
 	public SmartSearchPagedLoader(SecurityFilter filter) {
 		this.filter = filter;
 	}
@@ -26,6 +27,13 @@ public class SmartSearchPagedLoader extends Loader<Pager<Asset>> {
 
 	protected QueryBuilder<Asset> createQuery(SecurityFilter filter) {
 		QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, filter);
+		
+		//If we're smart-searching for assets from merge or during an event, for example, we'll
+		//only want certain asset types to be retrieved. Otherwise we want everything. 
+		if (assetTypeId!=null){
+			builder.addSimpleWhere("type.id", assetTypeId);
+		}
+	
 		builder.addWhere(new SmartSearchWhereClause(searchText, true, true, true));
 		builder.addOrder("created");
 
@@ -44,6 +52,11 @@ public class SmartSearchPagedLoader extends Loader<Pager<Asset>> {
 
 	public SmartSearchPagedLoader setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
+		return this;
+	}
+	
+	public SmartSearchPagedLoader setAssetType(Long assetTypeId) {
+		this.assetTypeId = assetTypeId;
 		return this;
 	}
 
