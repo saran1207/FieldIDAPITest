@@ -8,6 +8,7 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.asset.AssetAttachmentListLoader;
 import com.n4systems.model.asset.AssetExtensionListLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
+import com.n4systems.model.asset.SmartSearchPagedLoader;
 import com.n4systems.model.asset.SyncAssetListLoader;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.assetstatus.AssetStatusFilteredLoader;
@@ -475,7 +476,7 @@ public class LoaderFactory implements Serializable {
 	public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader() {
 		return new SafetyNetworkPreAssignedAssetLoader();
 	}
-
+	
 	public SafetyNetworkEventLoader createSafetyNetworkRegisteredAssetEventLoader() {
 		return new SafetyNetworkRegisteredAssetEventLoader(filter);
 	}
@@ -506,6 +507,10 @@ public class LoaderFactory implements Serializable {
 
 	public SmartSearchLoader createSmartSearchListLoader() {
 		return new SmartSearchLoader(filter);
+	}
+
+	public SmartSearchPagedLoader createSmartSearchPagedLoader(){
+		return new SmartSearchPagedLoader(filter);
 	}
 
 	public TaskConfigLoader createTaskConfigLoader() {

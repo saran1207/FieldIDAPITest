@@ -55,6 +55,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringListingPair;
@@ -77,7 +78,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private Collection<AssetExtension> extentions;
 	private AutoAttributeCriteria autoAttributeCriteria;
 
-	private List<Asset> assets;
 	private List<Listable<Long>> employees;
 	protected List<AssetAttachment> assetAttachments;
 
@@ -138,6 +138,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 	protected Map<Long, List<AssetAttachment>> linkedAssetAttachments;
 	
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
+	
+	private Pager<Asset> page;
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
@@ -231,26 +233,19 @@ public class AssetCrud extends UploadAttachmentSupport {
 		if (search != null && search.length() > 0) {
 			
 			try {
-				
-				if (!isInVendorContext()) {
-					assets = assetManager.findAssetByIdentifiers(getSecurityFilter(), search, assetType);
-					
-					// remove the asset given. ( this is for asset merging, you
-					// don't want to merge the asset with itself.)
-					if (excludeId != null) {
-						Asset excludeAsset = new Asset();
-						excludeAsset.setId(excludeId);
-						assets.remove(excludeAsset);
-					}
-					
-				} else {
-					assets = getLoaderFactory().createSafetyNetworkSmartSearchLoader().setVendorOrgId(getVendorContext()).setSearchText(search).load();
+				page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(search).setPage(getCurrentPage()).load();
+		
+				// remove the asset given. ( this is for asset merging, you
+				// don't want to merge the asset with itself.)
+				if (excludeId != null) {
+					Asset excludeAsset = new Asset();
+					excludeAsset.setId(excludeId);
+					page.getList().remove(excludeAsset);
 				}
-
-				// if there is only one forward. directly to the group view
-				// screen.
-				if (assets.size() == 1) {
-					asset = assets.get(0);
+				
+				// if there is only one forward directly to the group view screen.
+				if (page.getTotalResults() == 1) {
+					asset = page.getList().get(0);
 					uniqueID = asset.getId();
 					
 					// if we're in a vendor context we go to the tracebility tab instead
@@ -264,6 +259,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 		}
 
 		return SUCCESS;
+	}
+	
+	public Pager<Asset> getPage() {
+		return page;
 	}
 
 	@SkipValidation
@@ -772,14 +771,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.search = search;
 	}
 
-	public List<Asset> getAssets() {
-		return assets;
-	}
-
 	public List<StringListingPair> getComboBoxInfoOptions(InfoFieldBean field, InfoOptionInput inputOption) {
 		return InfoFieldInput.getComboBoxInfoOptions(field, inputOption);
 	}
-	
 
 	public Long getTagOptionId() {
 		return tagOptionId;
