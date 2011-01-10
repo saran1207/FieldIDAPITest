@@ -297,3 +297,6 @@ div.savePanel a.glossyButtonLink {
     font-size: 1.0em;
 }
 
+div.observationsListEditor div.stringListItem input[type="text"] {
+    width: 150px;
+}
