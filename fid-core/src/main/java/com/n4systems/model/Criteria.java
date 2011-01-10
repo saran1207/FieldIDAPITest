@@ -25,8 +25,6 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	@Column(nullable=false)
 	private String displayText;
 	
-	private boolean principal;
-
 	@Column(nullable=false)
 	private boolean retired = false;
 	
@@ -53,15 +51,7 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	public String getDisplayName() {
 		return getDisplayText();
 	}
-	
-	public boolean isPrincipal() {
-		return principal;
-	}
 
-	public void setPrincipal(boolean principal) {
-		this.principal = principal;
-	}
-	
 	public boolean isRetired() {
 		return retired;
 	}
@@ -108,6 +98,7 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
         return false;
     }
 
+    // TODO: Remove and replace with wicket model
     public String getTypeDescription() {
         return "NONE";
     }

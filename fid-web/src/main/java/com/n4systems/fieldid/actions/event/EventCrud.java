@@ -31,6 +31,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
@@ -1053,7 +1054,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 
         for (CriteriaSection section : event.getEventForm().getSections()) {
             for (Criteria criteria : section.getCriteria()) {
-                if (criteria.isPrincipal()) {
+                if (criteria instanceof OneClickCriteria && ((OneClickCriteria)criteria).isPrincipal()) {
                     return true;
                 }
             }

@@ -10,6 +10,7 @@ import java.util.Set;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import org.easymock.EasyMock;
@@ -20,7 +21,6 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.builders.TenantBuilder;
-import com.n4systems.model.criteriasection.CriteriaSectionBuilder;
 
 public class EventTypeCleanerTest {
 	private static final String name = "type_name";	

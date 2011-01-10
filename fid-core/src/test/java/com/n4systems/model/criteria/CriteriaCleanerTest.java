@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import org.junit.Test;
 
@@ -23,7 +25,7 @@ public class CriteriaCleanerTest {
 	
 	@Test
 	public void clean_cleans_required_fields() {
-		Criteria criteria = buildCriteria();
+		OneClickCriteria criteria = buildCriteria();
 		Tenant newTenant = TenantBuilder.aTenant().build();
 		
 		assertNotNull(criteria.getId());
@@ -42,7 +44,7 @@ public class CriteriaCleanerTest {
 		
 		assertSame(newTenant, criteria.getTenant());
 		assertSame(displayText, criteria.getDisplayText());
-//		assertSame(states, criteria.getStates());
+		assertSame(states, criteria.getStates());
 		assertSame(principal, criteria.isPrincipal());
 		assertSame(retired, criteria.isRetired());
 		
@@ -53,10 +55,10 @@ public class CriteriaCleanerTest {
 		assertNotSame(deficiencies, criteria.getDeficiencies());
 	}
 
-	private Criteria buildCriteria() {
-		Criteria criteria = CriteriaBuilder.aCriteria().build();
+	private OneClickCriteria buildCriteria() {
+		OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().build();
 		criteria.setDisplayText(displayText);
-//		criteria.setStates(states);
+		criteria.setStates(states);
 		criteria.setPrincipal(principal);
 		criteria.setRetired(retired);
 		criteria.setRecommendations(recommendations);

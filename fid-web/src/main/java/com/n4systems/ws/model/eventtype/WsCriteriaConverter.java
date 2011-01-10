@@ -35,7 +35,6 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 	private void convertBaseFields(Criteria model, WsCriteria wsModel) {
 		wsModel.setId(model.getId());
 		wsModel.setDisplayText(model.getDisplayText());
-		wsModel.setPrincipal(model.isPrincipal());
 		wsModel.setRecommendations(model.getRecommendations());
 		wsModel.setDeficiencies(model.getDeficiencies());
 	}
@@ -43,6 +42,7 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 	private WsOneClickCriteria convertOneClickCriteria(OneClickCriteria model) {
 		WsOneClickCriteria wsModel = new WsOneClickCriteria();
 		wsModel.setStates(stateConverter.fromModels(model.getStates().getStates()));
+        wsModel.setPrincipal(model.isPrincipal());
 		return wsModel;
 	}
 	

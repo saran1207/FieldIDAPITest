@@ -3,6 +3,8 @@ package com.n4systems.fieldid.selenium.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.builders.OneClickCriteriaBuilder;
+import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EventFormBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -174,6 +176,16 @@ public class Scenario {
 
     public OrgBuilder aCustomerOrg() {
         OrgBuilder builder = OrgBuilder.aCustomerOrg();
+        return createPersistentBuilder(builder);
+    }
+
+    public CriteriaSectionBuilder aCriteriaSection() {
+        CriteriaSectionBuilder builder = CriteriaSectionBuilder.aCriteriaSection();
+        return createPersistentBuilder(builder);
+    }
+
+    public OneClickCriteriaBuilder aCriteria() {
+        OneClickCriteriaBuilder builder = OneClickCriteriaBuilder.aCriteria();
         return createPersistentBuilder(builder);
     }
 

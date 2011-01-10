@@ -17,7 +17,7 @@ public class CriteriaCopyUtil {
     public Criteria copyCriteria(Criteria criteria, List<Criteria> existingCriteria) {
         Criteria newCriteria = null;
         if (criteria instanceof OneClickCriteria) {
-            newCriteria = copyButtonCriteria((OneClickCriteria)criteria);
+            newCriteria = copyOneClickCriteria((OneClickCriteria) criteria);
         } else if (criteria instanceof TextFieldCriteria){
             newCriteria = copyTextFieldCriteria((TextFieldCriteria) criteria);
         } else if (criteria instanceof SelectCriteria){
@@ -30,7 +30,6 @@ public class CriteriaCopyUtil {
 
 	private void copyCommonFields(Criteria criteria, Criteria newCriteria, List<Criteria> existingCriteria) {
         newCriteria.setRetired(criteria.isRetired());
-        newCriteria.setPrincipal(criteria.isPrincipal());
         newCriteria.setTenant(criteria.getTenant());
         newCriteria.setRecommendations(copyList(criteria.getRecommendations()));
         newCriteria.setDeficiencies(copyList(criteria.getDeficiencies()));
@@ -54,8 +53,9 @@ public class CriteriaCopyUtil {
 		return selectCriteria;
 	}
 
-    private Criteria copyButtonCriteria(OneClickCriteria oneClickCriteria) {
+    private Criteria copyOneClickCriteria(OneClickCriteria oneClickCriteria) {
         OneClickCriteria criteria = new OneClickCriteria();
+        criteria.setPrincipal(oneClickCriteria.isPrincipal());
         criteria.setStates(oneClickCriteria.getStates());
         return criteria;
     }

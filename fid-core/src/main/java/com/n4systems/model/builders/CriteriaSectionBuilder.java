@@ -1,14 +1,14 @@
-package com.n4systems.model.criteriasection;
+package com.n4systems.model.builders;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.builders.EntityWithTenantBuilder;
-import com.n4systems.model.criteria.CriteriaBuilder;
 
 public class CriteriaSectionBuilder extends EntityWithTenantBuilder<CriteriaSection> {
+
 	private String title;
 	private boolean retired;
 	private List<Criteria> criteria;
@@ -20,7 +20,7 @@ public class CriteriaSectionBuilder extends EntityWithTenantBuilder<CriteriaSect
 	}
 	
 	public static CriteriaSectionBuilder aCriteriaSection() {
-		return new CriteriaSectionBuilder("section_title", false, Arrays.asList(CriteriaBuilder.aCriteria().build(), CriteriaBuilder.aCriteria().build()));
+		return new CriteriaSectionBuilder("section_title", false, Collections.<Criteria>emptyList());
 	}
 	
 	public CriteriaSectionBuilder withTitle(String title) {
@@ -33,6 +33,10 @@ public class CriteriaSectionBuilder extends EntityWithTenantBuilder<CriteriaSect
 	
 	public CriteriaSectionBuilder withCriteria(List<Criteria> criteria) {
 		return new CriteriaSectionBuilder(title, retired, criteria);
+	}
+
+	public CriteriaSectionBuilder withCriteria(Criteria... criteria) {
+		return new CriteriaSectionBuilder(title, retired, Arrays.asList(criteria));
 	}
 	
 	@Override

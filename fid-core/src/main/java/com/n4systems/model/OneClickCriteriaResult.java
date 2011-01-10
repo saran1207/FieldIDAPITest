@@ -24,7 +24,7 @@ public class OneClickCriteriaResult extends CriteriaResult {
 	}
 
 	public Status getResult() {
-		return (criteria.isPrincipal()) ? state.getStatus() : null;
+		return ((OneClickCriteria)criteria).isPrincipal() ? state.getStatus() : null;
 	}
 
 }

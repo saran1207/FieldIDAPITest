@@ -104,8 +104,7 @@ public class EventFormCrud extends AbstractCrud {
 					@CustomValidator( type="requiredNameSet", message="", key="error.sectionnamerequired" ),
 					@CustomValidator( type="requiredCriteriaName", message="", key="error.criterianamerequired" ),
 					@CustomValidator( type="requiredCriteriaSets", message="", key="error.criteriarequired" ),
-					@CustomValidator( type="requiredCriteriaStateSet", message="", key="error.criteriastatesetrequired" ),
-					@CustomValidator( type="requiredSetsResult", message="", key="error.setsresultrequired" ) }
+					@CustomValidator( type="requiredCriteriaStateSet", message="", key="error.criteriastatesetrequired" )}
 			)
 	public void setCriteriaSections(List<CriteriaSection> criteriaSections) {
 		this.criteriaSections = criteriaSections;

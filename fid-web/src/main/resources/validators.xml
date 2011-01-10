@@ -23,7 +23,6 @@
  <validator name="requiredCriteriaName" class="com.n4systems.fieldid.validators.event.CriteriaNameValidator" />
  <validator name="requiredCriteriaSets" class="com.n4systems.fieldid.validators.event.CriteriaSetValidator" />
  <validator name="requiredCriteriaStateSet" class="com.n4systems.fieldid.validators.event.CriteriaStateSetValidator" />
- <validator name="requiredSetsResult" class="com.n4systems.fieldid.validators.event.RequiredSetsResultValidator" />
  <validator name="requiredIfFeature" class="com.n4systems.fieldid.validators.RequiredIfFeatureValidator" />
  <validator name="uploadFileLimitValidator" class="com.n4systems.fieldid.validators.UploadFileLimitValidator" />
  <validator name="uploadAttachmentLimitValidator" class="com.n4systems.fieldid.validators.UploadAttachmentLimitValidator" />

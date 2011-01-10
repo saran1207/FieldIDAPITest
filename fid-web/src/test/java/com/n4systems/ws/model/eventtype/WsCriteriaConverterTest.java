@@ -20,7 +20,6 @@ public class WsCriteriaConverterTest {
 	private void populateBaseCriteriaFields(Criteria model) {
 		model.setId(10L);
 		model.setDisplayText("display text");
-		model.setPrincipal(true);
 		model.setRecommendations(Arrays.asList("rec1", "rec2"));
 		model.setDeficiencies(Arrays.asList("def1", "def2"));
 	}
@@ -28,7 +27,6 @@ public class WsCriteriaConverterTest {
 	private void verifyBaseCriteriaFields(Criteria model, WsCriteria wsModel) {
 		assertEquals((long)model.getId(), wsModel.getId());
 		assertEquals(model.getDisplayText(), wsModel.getDisplayText());
-		assertEquals(model.isPrincipal(), wsModel.isPrincipal());
 		assertEquals(model.getRecommendations(), wsModel.getRecommendations());
 		assertEquals(model.getDeficiencies(), wsModel.getDeficiencies());
 	}
@@ -38,7 +36,8 @@ public class WsCriteriaConverterTest {
 	public void from_model_converts_all_fields_on_one_click_criteria() {
 		OneClickCriteria model = new OneClickCriteria();
 		populateBaseCriteriaFields(model);
-		
+
+		model.setPrincipal(true);
 		model.setStates(new StateSet());
 		model.getStates().getStates().add(new State());
 		
@@ -53,6 +52,7 @@ public class WsCriteriaConverterTest {
 		
 		verifyBaseCriteriaFields(model, wsModel);
 		assertEquals(WsOneClickCriteria.class, wsModel.getClass());
+        assertEquals(model.isPrincipal(), wsModel.isPrincipal());
 		assertSame(wsStates, ((WsOneClickCriteria)wsModel).getStates());
 	}
 	

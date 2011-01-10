@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.builders.OneClickCriteriaBuilder;
+import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -15,7 +18,6 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.builders.TenantBuilder;
-import com.n4systems.model.criteria.CriteriaBuilder;
 
 public class CriteriaSectionCleanerTest {
 	private static final String title = "title";
@@ -24,10 +26,10 @@ public class CriteriaSectionCleanerTest {
 	
 	@Before
 	public void setupCriteria() {
-		criteria = Arrays.asList(
-					CriteriaBuilder.aCriteria().build(),
-					CriteriaBuilder.aCriteria().withRetired(true).build(),
-					CriteriaBuilder.aCriteria().build()
+		criteria = Arrays.<Criteria>asList(
+					OneClickCriteriaBuilder.aCriteria().build(),
+					OneClickCriteriaBuilder.aCriteria().withRetired(true).build(),
+					OneClickCriteriaBuilder.aCriteria().build()
 				);
 	}
 	
