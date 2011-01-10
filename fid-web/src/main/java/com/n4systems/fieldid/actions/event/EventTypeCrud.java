@@ -2,15 +2,12 @@
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
-import com.n4systems.model.EventType;
-import com.n4systems.model.eventtype.EventTypeCopier;
-import com.n4systems.model.eventtype.EventTypeSaver;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -20,10 +17,13 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.fieldid.viewhelpers.TrimmedString;
-
 import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
+import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.eventtype.EventTypeCopier;
+import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.Transaction;
@@ -126,6 +126,10 @@ public class EventTypeCrud extends AbstractCrud {
 		StrutsListHelper.clearNulls(eventType.getInfoFieldNames());
 
 		eventType.setTenant(getTenant());
+		
+		eventType.setModifiedBy(getUser());
+		eventType.setModified(new Date());
+		
 		try {
 			if (eventType.getId() == null) {
 				persistenceManager.save(eventType);
