@@ -1048,6 +1048,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
     public boolean hasAtLeastOneResultSettingCriteria() {
+        if (event.getEventForm() == null)
+            return false;
+
         for (CriteriaSection section : event.getEventForm().getSections()) {
             for (Criteria criteria : section.getCriteria()) {
                 if (criteria.isPrincipal()) {
@@ -1055,6 +1058,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
                 }
             }
         }
+
         return false;
     }
 
