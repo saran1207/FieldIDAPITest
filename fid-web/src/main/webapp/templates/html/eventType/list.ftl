@@ -18,8 +18,8 @@ ${action.setPageType('event_type', 'list')!}
 					<#if eventType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
 				</td>
 				<td><#if eventType.group?exists>${eventType.group.name!}</#if></td>
-				<td><#if eventType.createdBy?exists>${eventType.createdBy.fullName!},</#if>${eventType.created?string.short_long}</td>
-				<td><#if eventType.modifiedBy?exists>${eventType.modifiedBy.fullName!},</#if>${eventType.modified?string.short_long}</td>
+				<td><#if eventType.createdBy?exists>${eventType.createdBy.fullName!},&nbsp;</#if>${eventType.created?string.short_long}</td>
+				<td><#if eventType.modifiedBy?exists>${eventType.modifiedBy.fullName!},&nbsp;</#if>${eventType.modified?string.short_long}</td>
 				<td>
 					<a href="<@s.url action="eventTypeEdit" uniqueID="${eventType.id}" />"><@s.text name="label.edit" /></a>&nbsp;
 					<a href="<@s.url action="eventTypeCopy" uniqueID="${eventType.id}" />"><@s.text name="label.copy" /></a>

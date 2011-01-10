@@ -21,11 +21,8 @@ import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.eventtype.EventTypeCopier;
 import com.n4systems.model.eventtype.EventTypeSaver;
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.taskscheduling.TaskExecutor;
@@ -240,17 +237,7 @@ public class EventTypeCrud extends AbstractCrud {
 
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-			try {
-				QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, new OpenSecurityFilter());
-				SecurityFilter filter = getSecurityFilter();
-				queryBuilder.applyFilter(filter);
-				queryBuilder.addOrder("name");
-				queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
-				queryBuilder.setSimpleSelect();
-				eventTypes = persistenceManager.findAll(queryBuilder);
-			} catch (Exception e) {
-				logger.error("Failed finding EventTypes", e);
-			}
+			eventTypes = getLoaderFactory().createEventTypeListLoader().setPostFetchFields("modifiedBy").load();
 		}
 
 		return eventTypes;
