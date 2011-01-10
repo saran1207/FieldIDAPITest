@@ -1,4 +1,3 @@
-
 var goToPageURL = '';
 function paginateGoto(event) {
 	var element = Event.element(event);
@@ -8,24 +7,28 @@ function paginateGoto(event) {
 		var brokenUpUrl = goToPageURL.split('?');
 		var params = brokenUpUrl[1].unescapeHTML().toQueryParams();
 		params['currentPage'] = element.getValue();
-		redirect(brokenUpUrl[0] + "?" + Object.toQueryString(params));
+		
+		if (usingAjaxPagination){
+			getResponse(brokenUpUrl[0] + "?" + Object.toQueryString(params), 'get');
+		}else{
+			redirect(brokenUpUrl[0] + "?" + Object.toQueryString(params));
+		}
 	}
 }
-
 
 function isNumber(value) {
 	return !(isNaN(parseInt(value)));
 }
 
-Element.extend(document).observe("dom:loaded", function() {
-		$$('.toPage').each( function(element) { 
-				element.observe('change', paginateGoto)
-				element.observe('keypress', function(event) {
-						if (Event.KEY_RETURN == event.keyCode) {
-								paginateGoto(event);
-						}
-					});
-			} 
-		);
-		
-});
+function attachListenerToPageJumpInputs() {
+	$$('.toPage').each( function(element) { 
+		element.observe('change', paginateGoto);
+		element.observe('keypress', function(event) {
+				if (Event.KEY_RETURN == event.keyCode) {
+						paginateGoto(event);
+				}
+			});
+	});
+}
+
+Element.extend(document).observe("dom:loaded", attachListenerToPageJumpInputs);

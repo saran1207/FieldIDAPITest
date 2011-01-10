@@ -1,6 +1,6 @@
 <#if !namespace?exists><#assign namespace="/"/></#if>
-<#if page?exists>
-	<div id="results">
+<div id="results">
+	<#if page?exists>
 		<#if page.validPage() && page.hasResults()  >	
 			<#include '../common/_pagination.ftl' />
 			<h2 class="clean"><@s.text name="label.found_multiple_assets"/></h2>
@@ -27,8 +27,8 @@
 						</tr>
 					</#list>
 				</table>
-				<#include '../common/_pagination.ftl' />
 			</div>
+			<#include '../common/_pagination.ftl' />
 		<#else>
 			<div class="emptyList" >
 				<h2><@s.text name="label.noresults"/></h2>
@@ -37,15 +37,15 @@
 				</p>
 			</div>
 		</#if>
-	</div>
-	<#if page.validPage() && page.hasResults()  >	
-		<#list page.list as asset >
-			<@n4.includeScript>
-				var asset = null;
-				<#assign asset=asset/>
-				<#include "/templates/html/assetCrud/_js_asset.ftl"/>
-				$$("[assetId='${asset.id}']").first().asset = asset;
-			</@n4.includeScript>
-		</#list>
+		<#if page.validPage() && page.hasResults()  >	
+			<#list page.list as asset >
+				<@n4.includeScript>
+					var asset = null;
+					<#assign asset=asset/>
+					<#include "/templates/html/assetCrud/_js_asset.ftl"/>
+					$$("[assetId='${asset.id}']").first().asset = asset;
+				</@n4.includeScript>
+			</#list>
+		</#if>
 	</#if>
-</#if>
+</div>

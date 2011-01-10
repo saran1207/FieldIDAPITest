@@ -15,15 +15,30 @@
 		<#assign endingPage=startingPage + 9 />
 		<#if (endingPage > page.totalPages) > <#assign endingPage=page.totalPages /></#if>
 		
-		<#if page.hasPreviousPage> <li><a class="paginationLink" href="<@s.url action="${currentAction}" currentPage="1" includeParams="get" />"><@s.text name="label.pagenavigation.first"/></a></li> </#if>
-		<#if page.hasPreviousPage> <li><a class="paginationLink" href="<@s.url action="${currentAction}" currentPage="${page.previousPage}" includeParams="get" />">&lt;<@s.text name="label.pagenavigation.previous"/></a></li> </#if>
+		<#if useAjaxPagination>
+			<@s.url id="firstPageUrl" action="${currentAction}" currentPage="1" includeParams="get" />
+			<@s.url id="previousPageUrl" action="${currentAction}" currentPage="${page.previousPage}" includeParams="get" />
+			
+			<#if page.hasPreviousPage> <li><a class="paginationLink" onclick="getResponse('${firstPageUrl}', 'get')"><@s.text name="label.pagenavigation.first"/></a></li> </#if>
+			<#if page.hasPreviousPage> <li><a class="paginationLink" onclick="getResponse('${previousPageUrl}', 'get')">&lt;<@s.text name="label.pagenavigation.previous"/></a></li> </#if>
+		<#else>
+			<#if page.hasPreviousPage> <li><a class="paginationLink" href="<@s.url action="${currentAction}" currentPage="1" includeParams="get" />"><@s.text name="label.pagenavigation.first"/></a></li> </#if>
+			<#if page.hasPreviousPage> <li><a class="paginationLink" href="<@s.url action="${currentAction}" currentPage="${page.previousPage}" includeParams="get" />">&lt;<@s.text name="label.pagenavigation.previous"/></a></li> </#if>
+		</#if>
 		
+	
 		<#list startingPage..endingPage as pageIdx >
 			
 			<li class="<#if pageIdx == page.readableCurrentPage >currentPage</#if>" >
 				
 				<#if pageIdx != currentPage >
-					<a href="<@s.url action="${currentAction}" currentPage="${pageIdx}" includeParams="get" />">
+					<#if useAjaxPagination>
+						<@s.url id="pageUrl" action="${currentAction}" currentPage="${pageIdx}" includeParams="get"  />
+						
+						<a href='#' onclick="getResponse('${pageUrl}', 'get')" >
+					<#else>
+						<a href="<@s.url action="${currentAction}" currentPage="${pageIdx}" includeParams="get" />">
+					</#if>
 				<#else>
 					<span>
 				</#if>
@@ -38,11 +53,20 @@
 			
 				
 		</#list>
+		
+		
+		<#if useAjaxPagination>
+			<@s.url id="nextUrl" action="${currentAction}" currentPage="${page.nextPage}" includeParams="get"  />
+			<@s.url id="lastUrl" action="${currentAction}" currentPage="${page.totalPages}" includeParams="get"  />
 			
-		<#if page.hasNextPage> <li><a class="paginationLink" href="<@s.url action="${currentAction}" currentPage="${page.nextPage}" includeParams="get"  />"><@s.text name="label.pagenavigation.next"/>&gt;</a></li> </#if>
+			<#if page.hasNextPage> <li><a class="paginationLink" onclick="getResponse('${nextUrl}', 'get')" currentPage="${page.nextPage}" includeParams="get" ><@s.text name="label.pagenavigation.next"/>&gt;</a></li> </#if>	
 		
-		<#if page.hasNextPage> <li><a class="paginationLink" href="<@s.url action="${currentAction}" currentPage="${page.totalPages}" includeParams="get"  />"><@s.text name="label.pagenavigation.last"/></a></li> </#if>
+			<#if page.hasNextPage> <li><a class="paginationLink" onclick="getResponse('${lastUrl}', 'get')" currentPage="${page.totalPages}" includeParams="get" ><@s.text name="label.pagenavigation.last"/></a></li> </#if>
+		<#else>
+			<#if page.hasNextPage> <li><a class="paginationLink" href="<@s.url action="${currentAction}" currentPage="${page.nextPage}" includeParams="get"  />"><@s.text name="label.pagenavigation.next"/>&gt;</a></li> </#if>
 		
+			<#if page.hasNextPage> <li><a class="paginationLink" href="<@s.url action="${currentAction}" currentPage="${page.totalPages}" includeParams="get"  />"><@s.text name="label.pagenavigation.last"/></a></li> </#if>
+		</#if>
 		
 		<li>
 			<span class="gotoPage">

@@ -2,6 +2,7 @@ ${action.setPageType('asset', 'edit')!}
 <head>
 	<@n4.includeStyle href="steps" />
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
 	<script type="text/javascript">
 		function findAssets() {
 			$$('.assetLink').each( function(element) { 
@@ -112,7 +113,7 @@ ${action.setPageType('asset', 'edit')!}
 		<script type="text/javascript">
 			$( 'mergeSmartSearch' ).observe( 'submit', 
 				function( event ) {
-						event.stop();
+					event.stop();
 					if ($$('#mergeSmartSearch input').first().value.strip().empty()){
 						alert("You cannot search for a blank serial number or rfid number");
 					}else{

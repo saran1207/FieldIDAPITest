@@ -93,7 +93,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private AssignedToUserGrouper userGrouper;
 	
 	private boolean refreshRegirstation = false;
-
+	private boolean useAjaxPagination = false;
+	
 	/**
 	 * Set only when coming from searchOrder.action, when attached a customer
 	 * order through editWithCustomerOrder()
@@ -1005,6 +1006,14 @@ public class AssetCrud extends UploadAttachmentSupport {
 			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
 		}
 		return userGrouper;
+	}
+
+	public boolean isUseAjaxPagination() {
+		return useAjaxPagination;
+	}
+
+	public void setUseAjaxPagination(boolean useAjaxPagination) {
+		this.useAjaxPagination = useAjaxPagination;
 	}
 	
 }

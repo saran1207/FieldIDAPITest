@@ -3,6 +3,9 @@
 	<@s.form method="get" id="${assetFormId!'assetSearchForm'}" cssClass="simpleInputForm" action="${assetSearchAction}" namespace="${namespace}" theme="simple">
 		<label class="label"><@s.text name="label.smartsearch"/></label>
 		<span><@s.textfield name="search" /></span>
+		
+		<@s.hidden name="useAjaxPagination" value="true" />
+		
 		<#if useOverRides?exists && useOverRides >
 			<@s.hidden name="assetTypeId">
 				<#if overRideAssetType?exists>
