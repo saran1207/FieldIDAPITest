@@ -16,6 +16,7 @@ import com.n4systems.model.assetstatus.AssetStatusForNameExistsLoader;
 import com.n4systems.model.assetstatus.AssetStatusListLoader;
 import com.n4systems.model.assettype.AssetTypeByAttachmentLoader;
 import com.n4systems.model.assettype.AssetTypeGroupsLoader;
+import com.n4systems.model.assettype.AssetTypeListLoader;
 import com.n4systems.model.assettype.AssetTypeListableLoader;
 import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
@@ -187,6 +188,10 @@ public class LoaderFactory implements Serializable {
 
 	public AssetTypeListableLoader createAssetTypeListableLoader() {
 		return new AssetTypeListableLoader(filter);
+	}
+	
+	public AssetTypeListLoader createAssetTypeListLoader() {
+		return new AssetTypeListLoader(filter);
 	}
 
 	public AssetTypeLoader createAssetTypeLoader() {

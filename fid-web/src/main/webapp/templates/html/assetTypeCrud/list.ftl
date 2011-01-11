@@ -4,12 +4,17 @@ ${action.setPageType('asset_type', 'list')!}
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.assettype" /></th>
+			<th><@s.text name="label.created_by" /></th>
+			<th><@s.text name="label.last_modified_by" /></th>		
 			<th></th>
 		</tr>
 		
 		<#list assetTypes as assetType>
 			<tr>
 				<td><a href="<@s.url action="assetType" uniqueID="${assetType.id}" />">${assetType.name?html}</a></td>
+				<td><#if assetType.createdBy?exists>${assetType.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(assetType.created)}</td>
+				<td><#if assetType.modifiedBy?exists>${assetType.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(assetType.modified)}</td>
+				
 				<td>
 					<a href="<@s.url action="assetTypeEdit" uniqueID="${assetType.id}" />"><@s.text name="label.edit" /></a>&nbsp;
 					<a href="<@s.url action="assetTypeCopy" uniqueID="${assetType.id}" />"><@s.text name="label.copy" /></a>

@@ -62,7 +62,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 
 	private AssetType assetType;
 	private AssetTypeRemovalSummary removalSummary;
-		
+	private List<AssetType> assetTypes;
 
 	private Collection<InfoFieldBean.InfoFieldType> infoFieldTypes;
 	private List<InfoOptionInput> editInfoOptions;
@@ -419,8 +419,11 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 		this.infoFields = infoFields;
 	}
 
-	public Collection<ListingPair> getAssetTypes() {
-		return assetTypeManager.getAssetTypeListForTenant(getTenantId());
+	public List<AssetType> getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = getLoaderFactory().createAssetTypeListLoader().setPostFetchFields("modifiedBy").load();
+		}
+		return assetTypes;
 	}
 
 	public Collection<InfoFieldBean.InfoFieldType> getInfoFieldTypes() {

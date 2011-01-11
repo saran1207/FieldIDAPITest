@@ -23,8 +23,7 @@ public class EventTypeListLoader extends ListLoader<EventType> {
 		builder.addOrder("name");
 		builder.addPostFetchPaths("eventForm.sections", "infoFieldNames");
 		builder.addPostFetchPaths(postFetchFields);
-		List<EventType> eventTypes = builder.getResultList(em);
-		return eventTypes;
+		return builder.getResultList(em);
 	}
 	
 	public EventTypeListLoader setPostFetchFields(String...fields) {
