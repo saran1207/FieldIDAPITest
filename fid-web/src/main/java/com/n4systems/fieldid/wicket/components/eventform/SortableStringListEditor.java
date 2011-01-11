@@ -53,7 +53,7 @@ public class SortableStringListEditor extends SortableListPanel {
 
                     @Override
                     public String getReorderImage() {
-                        return "images/small-x.png";
+                        return "images/reorder-small.png";
                     }
                     
                     @Override
