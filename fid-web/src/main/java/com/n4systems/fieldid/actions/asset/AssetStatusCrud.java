@@ -11,8 +11,6 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.StateSet;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -92,7 +90,7 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 	
 	public List<AssetStatus> getAssetStatuses() {
 		if( assetStatuses == null ) {
-			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
+			assetStatuses = getLoaderFactory().createAssetStatusListLoader().setPostFetchFields("modifiedBy").load();
 		}
 		return assetStatuses;
 	}

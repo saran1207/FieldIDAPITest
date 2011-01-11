@@ -12,6 +12,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class AssetStatusListLoader extends ListLoader<AssetStatus> {
 
+	private String[] postFetchFields = new String[0];
+
 	public AssetStatusListLoader(SecurityFilter filter) {
 		super(filter);
 	}
@@ -22,7 +24,14 @@ public class AssetStatusListLoader extends ListLoader<AssetStatus> {
 		builder.addOrder("name");
 		
 		List<AssetStatus> assetStatuses = builder.getResultList(em);
+		builder.addPostFetchPaths(postFetchFields);
+
 		return assetStatuses;
+	}
+
+	public AssetStatusListLoader setPostFetchFields(String...fields) {
+		this.postFetchFields = fields;
+		return this;
 	}
 
 }
