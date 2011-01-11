@@ -14,14 +14,12 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
 public class LoginInterceptor extends AbstractInterceptor implements StrutsStatics {
 
-	private static final long serialVersionUID = 1L;
-
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		ActionInvocationWrapper invocationWrapper = new ActionInvocationWrapper(invocation);
 		
 		SessionUser user = invocationWrapper.getSessionUser();
-		if (isUserLoggedIn(invocationWrapper, user)) {
+		if (userNotLoggedIn(invocationWrapper, user)) {
 			getForwardingUrl(invocationWrapper.getRequest(), invocationWrapper.getSession().getHttpSession(), invocation.getInvocationContext());
 			return "login";
 		}
@@ -29,7 +27,7 @@ public class LoginInterceptor extends AbstractInterceptor implements StrutsStati
 		return invocation.invoke();
 	}
 
-	private boolean isUserLoggedIn(ActionInvocationWrapper invocationWrapper, SessionUser user) {
+	private boolean userNotLoggedIn(ActionInvocationWrapper invocationWrapper, SessionUser user) {
 		return user == null || !userTenantMatchesSecurityGuard(invocationWrapper.getSession(), user);
 	}
 

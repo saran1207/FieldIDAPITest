@@ -16,6 +16,7 @@
 
 		<interceptors>
 			<interceptor name="login" class="com.n4systems.fieldid.utils.LoginInterceptor" />
+            <interceptor name="setCurrentUser" class="com.n4systems.fieldid.utils.SetCurrentUserInterceptor" />
 			<interceptor name="enabledFeatures" class="com.n4systems.fieldid.permissions.ExtendedFeatureInterceptor" />
 			<interceptor name="userPermissions" class="com.n4systems.fieldid.permissions.UserPermissionInterceptor" />
 			<interceptor name="security" class="com.n4systems.fieldid.security.SecurityInterceptor" />
@@ -43,6 +44,7 @@
 				<interceptor-ref name="tenatRequired" />
 				<interceptor-ref name="login" />
 				<interceptor-ref name="concurrentSession"/>
+                <interceptor-ref name="setCurrentUser" />
 				<interceptor-ref name="security" />
 				<interceptor-ref name="safetyNetworkAware"/>
 				<interceptor-ref name="publicStack" />

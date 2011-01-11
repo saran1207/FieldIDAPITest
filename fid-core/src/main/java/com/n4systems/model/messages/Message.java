@@ -11,16 +11,11 @@ import javax.persistence.Table;
 
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.parents.EntityWithOwner;
-import com.n4systems.model.user.User;
 
 @Entity
 @Table(name="messages")
 public class Message extends EntityWithOwner {
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "createdBy", nullable = false)
-	private User createdBy;
-	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "sender_id")
 	private PrimaryOrg sender;
@@ -42,14 +37,6 @@ public class Message extends EntityWithOwner {
 	private boolean processed;
 	
 	public Message() {
-	}
-
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public User getCreatedBy() {
-		return createdBy;
 	}
 
 	public boolean isRead() {

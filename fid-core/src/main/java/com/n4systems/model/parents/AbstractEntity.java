@@ -9,12 +9,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.HasModifiedBy;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.utils.DefaultEntityModifiedCreatedHandler;
+import com.n4systems.persistence.utils.EntityModifiedCreatedHandler;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -26,27 +29,37 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modified;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdBy")
+    private User createdBy;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "modifiedBy")
 	private User modifiedBy;
 
-	public AbstractEntity() {}
-	
+    @Transient
+    private transient EntityModifiedCreatedHandler modifiedCreatedHandler;
+
+    public AbstractEntity() {
+        this(new DefaultEntityModifiedCreatedHandler());
+    }
+
+    public AbstractEntity(EntityModifiedCreatedHandler modifiedCreatedHandler) {
+        this.modifiedCreatedHandler = modifiedCreatedHandler;
+    }
+
 	@Override
 	protected void onCreate() {
 		super.onCreate();
-		if (created == null) {
-			created = new Date();
-		}
-		modified = new Date();
+        modifiedCreatedHandler.onCreate(this);
 	}
-	
+
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
-		modified = new Date();
+        modifiedCreatedHandler.onUpdate(this);
 	}
-	
+
 	@AllowSafetyNetworkAccess
 	public Date getCreated() {
 		return created;
@@ -79,4 +92,11 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		modified = null;
 	}
 
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
 }
