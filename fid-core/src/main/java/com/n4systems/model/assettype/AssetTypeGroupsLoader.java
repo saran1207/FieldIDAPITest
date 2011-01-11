@@ -10,6 +10,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 public class AssetTypeGroupsLoader extends ListLoader<AssetTypeGroup> {
+	
+	private String[] postFetchFields = new String[0];
 
     public AssetTypeGroupsLoader(SecurityFilter filter) {
         super(filter);
@@ -20,8 +22,15 @@ public class AssetTypeGroupsLoader extends ListLoader<AssetTypeGroup> {
         QueryBuilder<AssetTypeGroup> queryBuilder = new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, filter);
 
         queryBuilder.addOrder("name");
+        queryBuilder.addPostFetchPaths(postFetchFields);
 
         return queryBuilder.getResultList(em);
     }
+    
+	public AssetTypeGroupsLoader setPostFetchFields(String...fields) {
+		this.postFetchFields = fields;
+		return this;
+	}
+
 
 }

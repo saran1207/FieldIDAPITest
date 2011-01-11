@@ -12,13 +12,15 @@ ${action.setPageType('asset_type_group', 'list')!}
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.name" /></th>
-			<th><@s.text name="label.datecreated" /></th>
+			<th><@s.text name="label.created_by" /></th>
+			<th><@s.text name="label.last_modified_by" /></th>		
 			<th></th>
 		</tr>
 		<#list groups as group > 
 			<tr id="group_${group.id}" >
 				<td><a href="<@s.url action="assetTypeGroup" uniqueID="${group.id}"/>" >${group.name?html}</a></td>
-				<td>${action.formatDate(group.created, true)}</td>
+				<td><#if group.createdBy?exists>${group.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(group.created)}</td>
+				<td><#if group.modifiedBy?exists>${group.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(group.modified)}</td>
 				<td>
 					<a id="edit_${group.id}" href="<@s.url action="assetTypeGroupEdit" uniqueID="${group.id}"/>"><@s.text name="label.edit"/></a>
 					<a id="delete_${group.id}" href="<@s.url action="assetTypeGroupDeleteConfirm" uniqueID="${group.id}"/>"><@s.text name="label.delete"/></a>
