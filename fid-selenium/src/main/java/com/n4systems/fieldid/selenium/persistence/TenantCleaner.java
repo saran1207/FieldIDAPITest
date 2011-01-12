@@ -1,12 +1,14 @@
 package com.n4systems.fieldid.selenium.persistence;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.n4systems.model.AddressInfo;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetStatus;
 
@@ -17,7 +19,6 @@ import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
-import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
@@ -31,9 +32,7 @@ import com.n4systems.model.LineItem;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
-import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.asset.AssetAttachment;
@@ -53,27 +52,27 @@ import com.n4systems.model.user.User;
 
 public class TenantCleaner {
 
-    public void cleanTenant(EntityManager em, String tenantName) {
-        Query tenantQuery = em.createQuery("from "+ Tenant.class.getName()+" where name = '" + tenantName+"'");
-        Tenant tenant = (Tenant) tenantQuery.getSingleResult();
-        Long tenantId = tenant.getId();
+    public void cleanTenants(EntityManager em, String[] tenants) {
+        Query tenantQuery = em.createQuery("select id from "+ Tenant.class.getName()+" where name in (:tenantNames)");
+        tenantQuery.setParameter("tenantNames", Arrays.asList(tenants));
+        List tenantIds = tenantQuery.getResultList();
 
-        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id = " + tenantId);
-        Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id = " + tenantId);
+        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
+        Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         List<Asset> assets = assetsQuery.getResultList();
 
-        removeAllForTenant(em, Catalog.class, tenantId);
-        removeAllForTenant(em, Event.class, tenantId);
-        removeAllForTenant(em, AssociatedEventType.class, tenantId);
-        removeAllForTenant(em, EventSchedule.class, tenantId);
-        removeAllForTenant(em, AssetTypeSchedule.class, tenantId);
-        removeAllForTenant(em, OneClickCriteria.class, tenantId);
-//        removeAllForTenant(em, TextFieldCriteria.class, tenantId);
-//        removeAllForTenant(em, SelectCriteria.class, tenantId);
-        removeAllForTenant(em, CriteriaSection.class, tenantId);
-        removeAllForTenant(em, EventForm.class, tenantId);
-        removeAllForTenant(em, EventType.class, tenantId);
-        removeAllForTenant(em, EventTypeGroup.class, tenantId);
+        removeAllForTenants(em, Catalog.class, tenantIds);
+        removeAllForTenants(em, Event.class, tenantIds);
+        removeAllForTenants(em, AssociatedEventType.class, tenantIds);
+        removeAllForTenants(em, EventSchedule.class, tenantIds);
+        removeAllForTenants(em, AssetTypeSchedule.class, tenantIds);
+        removeAllForTenants(em, OneClickCriteria.class, tenantIds);
+//        removeAllForTenants(em, TextFieldCriteria.class, tenantIds);
+//        removeAllForTenants(em, SelectCriteria.class, tenantIds);
+        removeAllForTenants(em, CriteriaSection.class, tenantIds);
+        removeAllForTenants(em, EventForm.class, tenantIds);
+        removeAllForTenants(em, EventType.class, tenantIds);
+        removeAllForTenants(em, EventTypeGroup.class, tenantIds);
         
         List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
         for (Asset asset : networkRegisteredAssets) {
@@ -84,7 +83,7 @@ public class TenantCleaner {
             safeRemoveAsset(em, asset);
         }
 
-        removeAllForTenant(em, AddAssetHistory.class, tenantId, new Callback<AddAssetHistory>(){
+        removeAllForTenant(em, AddAssetHistory.class, tenantIds, new Callback<AddAssetHistory>(){
             @Override
             public void callback(AddAssetHistory entity) {
                 entity.getInfoOptions().clear();
@@ -93,36 +92,70 @@ public class TenantCleaner {
 
         cleanNullTenantEntities(em, AddAssetHistory.class);
 
-        removeAllActiveSessionsForTenant(em, tenantId);
-        cleanUpOrgConnections(em, tenantId);
-        cleanUpSignUpReferrals(em, tenantId);
-        removeAllForTenant(em, EventGroup.class, tenantId);
-        removeAllForTenant(em, EventBook.class, tenantId);
-        removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
-        removeAllForTenant(em, AutoAttributeDefinition.class, tenantId);
-        removeAllForTenant(em, AssetType.class, tenantId);
-        removeAllForTenant(em, AssetTypeGroup.class, tenantId);
-        removeAllForTenant(em, AssetStatus.class, tenantId);
-        removeAllForTenant(em, FileAttachment.class, tenantId);
-        removeAllForTenant(em, UserRequest.class, tenantId);
-        removeAllForTenant(em, AutoAttributeCriteria.class, tenantId);
-        removeAllForTenant(em, Message.class, tenantId);
-        removeAllForTenant(em, EulaAcceptance.class, tenantId);
-        removeAllForTenant(em, Project.class, tenantId);
-        removeAllForTenant(em, User.class, tenantId);
-        removeAllForTenant(em, LineItem.class, tenantId);
-        removeAllForTenant(em, Order.class, tenantId);
+        removeAllActiveSessionsForTenant(em, tenantIds);
+        cleanUpOrgConnections(em, tenantIds);
+        cleanUpSignUpReferrals(em, tenantIds);
+        removeAllForTenants(em, EventGroup.class, tenantIds);
+        removeAllForTenants(em, EventBook.class, tenantIds);
+        removeAllForTenants(em, AutoAttributeCriteria.class, tenantIds);
+        removeAllForTenants(em, AutoAttributeDefinition.class, tenantIds);
+        removeAllForTenants(em, AssetType.class, tenantIds);
+        removeAllForTenants(em, AssetTypeGroup.class, tenantIds);
+        removeAllForTenants(em, AssetStatus.class, tenantIds);
+        removeAllForTenants(em, FileAttachment.class, tenantIds);
+        removeAllForTenants(em, UserRequest.class, tenantIds);
+        removeAllForTenants(em, AutoAttributeCriteria.class, tenantIds);
+        removeAllForTenants(em, Message.class, tenantIds);
+        removeAllForTenants(em, EulaAcceptance.class, tenantIds);
+        removeAllForTenants(em, Project.class, tenantIds);
+        removeAllForTenants(em, LineItem.class, tenantIds);
+        removeAllForTenants(em, Order.class, tenantIds);
 
-        removeAllExternalOrgsPointingToThisTenant(em, tenantId);
+        removeAllExternalOrgsPointingToTenants(em, tenantIds);
 
-        removeAllForTenant(em, CustomerOrg.class, tenantId);
-        removeAllForTenant(em, DivisionOrg.class, tenantId);
-        removeAllForTenant(em, SecondaryOrg.class, tenantId);
-        removeAllForTenant(em, PrimaryOrg.class, tenantId);
+        cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, CustomerOrg.class, DivisionOrg.class, SecondaryOrg.class, PrimaryOrg.class);
+
+        cleanUpAddressInfo(em);
+
+        removeAllWhereModifiedOrCreatedByUsersFromTenant(em, tenantIds, EventGroup.class, EventTypeGroup.class);
+
+        removeAllForTenants(em, User.class, tenantIds);
+
+        removeAllForTenants(em, CustomerOrg.class, tenantIds);
+        removeAllForTenants(em, DivisionOrg.class, tenantIds);
+        removeAllForTenants(em, SecondaryOrg.class, tenantIds);
+        removeAllForTenants(em, PrimaryOrg.class, tenantIds);
     }
 
-    private void removeAllActiveSessionsForTenant(EntityManager em, long tenantId) {
-        Query query = em.createQuery("from " + ActiveSession.class.getName() + " where user.tenant.id = " + tenantId);
+    private void cleanUpAddressInfo(EntityManager em) {
+        Query query = em.createQuery("update " + AddressInfo.class.getName() + " set createdby = null ");
+        query.executeUpdate();
+        query = em.createQuery("update " + AddressInfo.class.getName() + " set modifiedby = null ");
+        query.executeUpdate();
+    }
+
+    private void cleanUpModifiedOrCreatedReferencesForTenant(EntityManager em, List tenantIds, Class... entityClasses) {
+        for (Class entityClass : entityClasses) {
+            Query query = em.createQuery("update " + entityClass.getName() + " set createdBy = null where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
+            query.executeUpdate();
+            query = em.createQuery("update " + entityClass.getName() + " set modifiedBy = null where tenant.id in (:tenantIds)" ).setParameter("tenantIds", tenantIds);
+            query.executeUpdate();
+        }
+    }
+
+    private void removeAllWhereModifiedOrCreatedByUsersFromTenant(EntityManager em, List tenantIds, Class... entityClasses) {
+        for (Class c : entityClasses) {
+            Query query = em.createQuery("from " + c.getName() + " where createdBy in (from "+User.class.getName()+" where tenant.id in (:tenantIds1)) "+
+                    " or modifiedBy in (from "+User.class.getName()+" where tenant.id in (:tenantIds2))");
+            query.setParameter("tenantIds1", tenantIds);
+            query.setParameter("tenantIds2", tenantIds);
+            removeAllFromQuery(em, query);
+        }
+    }
+
+    private void removeAllActiveSessionsForTenant(EntityManager em, List tenantIds) {
+        Query query = em.createQuery("from " + ActiveSession.class.getName() + " where user.tenant.id in (:tenantIds)");
+        query.setParameter("tenantIds", tenantIds);
         removeAllFromQuery(em, query);
     }
 
@@ -135,8 +168,8 @@ public class TenantCleaner {
         removeAllFromQuery(em, query);
     }
 
-    private void removeAllExternalOrgsPointingToThisTenant(EntityManager em, long tenantId) {
-        Query query = em.createQuery("from " + ExternalOrg.class.getName() + " where linkedOrg.tenant.id = " + tenantId);
+    private void removeAllExternalOrgsPointingToTenants(EntityManager em, List tenantIds) {
+        Query query = em.createQuery("from " + ExternalOrg.class.getName() + " where linkedOrg.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         List<ExternalOrg> orgs = query.getResultList();
         for (ExternalOrg org : orgs) {
             cleanOwnedEntities(em, Event.class, org);
@@ -152,28 +185,28 @@ public class TenantCleaner {
         removeAllFromQuery(em, query);
     }
 
-    private void cleanUpSignUpReferrals(EntityManager em, long tenantId) {
-        Query query = em.createQuery("from " + SignupReferral.class.getName() + " where referredTenant.id = " + tenantId + " or referralTenant.id = " + tenantId);
+    private void cleanUpSignUpReferrals(EntityManager em, List tenantIds) {
+        Query query = em.createQuery("from " + SignupReferral.class.getName() + " where referredTenant.id in (:tenantIds) or referralTenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         removeAllFromQuery(em, query);
     }
 
-    private void cleanUpOrgConnections(EntityManager em, long tenantId) {
-        Query typedQuery = em.createQuery("from " + TypedOrgConnection.class.getName() + " where tenant.id = " + tenantId + " or connectedOrg.tenant.id = " +tenantId );
-        Query query = em.createQuery("from " + OrgConnection.class.getName() + " where vendor.tenant.id = " + tenantId + " or customer.tenant.id = " +tenantId );
+    private void cleanUpOrgConnections(EntityManager em, List tenantIds) {
+        Query typedQuery = em.createQuery("from " + TypedOrgConnection.class.getName() + " where tenant.id in (:tenantIds1) or connectedOrg.tenant.id in (:tenantIds2)").setParameter("tenantIds1", tenantIds).setParameter("tenantIds2", tenantIds);
+        Query query = em.createQuery("from " + OrgConnection.class.getName() + " where vendor.tenant.id in (:tenantIds1)  or customer.tenant.id in (:tenantIds2)").setParameter("tenantIds1", tenantIds).setParameter("tenantIds2", tenantIds);
 
         removeAllFromQuery(em, typedQuery);
         removeAllFromQuery(em, query);
     }
 
-    private <T> void removeAllForTenant(EntityManager em, Class<T> entityToRemove, long tenantId) {
-        removeAllForTenant(em, entityToRemove, tenantId, new Callback<T> () {
+    private <T> void removeAllForTenants(EntityManager em, Class<T> entityToRemove, List tenantIds) {
+        removeAllForTenant(em, entityToRemove, tenantIds, new Callback<T> () {
             @Override
             public void callback(T entity) { }
         });
     }
 
-    private <T> void removeAllForTenant(EntityManager em, Class<T> entityToRemove, long tenantId, Callback<T> callback) {
-        Query query = em.createQuery("from " + entityToRemove.getName() + " where tenant.id = " + tenantId);
+    private <T> void removeAllForTenant(EntityManager em, Class<T> entityToRemove, List tenantIds, Callback<T> callback) {
+        Query query = em.createQuery("from " + entityToRemove.getName() + " where tenant.id in (:tenantIds) ").setParameter("tenantIds", tenantIds);
         System.out.println("Removing all: " + entityToRemove);
         List<T> results = query.getResultList();
         for (T entity : results) {

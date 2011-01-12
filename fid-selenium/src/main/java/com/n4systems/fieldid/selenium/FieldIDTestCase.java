@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.selenium;
 
+import com.n4systems.fieldid.context.ThreadLocalUserContext;
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
@@ -263,7 +264,6 @@ public abstract class FieldIDTestCase {
 
     @Before
     public void doDatabaseSetup() throws Exception {
-
         PersistenceManager.persistenceUnit = PersistenceManager.TESTING_PERSISTENCE_UNIT;
         PersistenceManager.testProperties.put("hibernate.connection.url", getSeleniumConfig().getDatabaseUrl());
         PersistenceManager.testProperties.put("hibernate.connection.username", getSeleniumConfig().getDatabaseUser());
@@ -272,10 +272,8 @@ public abstract class FieldIDTestCase {
         new PersistenceTemplate(new PersistenceCallback() {
             @Override
             public void doInTransaction(Transaction transaction) throws Exception {
-                for (String tenantName : TEST_TENANT_NAMES) {
-                    TenantCleaner cleaner = new TenantCleaner();
-                    cleaner.cleanTenant(transaction.getEntityManager(), tenantName);
-                }
+                TenantCleaner cleaner = new TenantCleaner();
+                cleaner.cleanTenants(transaction.getEntityManager(), TEST_TENANT_NAMES);
             }
         }).execute();
 
@@ -283,8 +281,10 @@ public abstract class FieldIDTestCase {
             @Override
             public void doInTransaction(Transaction transaction) throws Exception {
                 for (String tenantName : TEST_TENANT_NAMES) {
+                    ThreadLocalUserContext.getInstance().setCurrentUser(null);
                     MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantName);
                     dataSetup.setupMinimalData();
+                    ThreadLocalUserContext.getInstance().setCurrentUser(dataSetup.getCreatedUser());
                     dataSetup.createTestAssetTypes(TEST_ASSET_TYPES);
                 }
             }

@@ -35,7 +35,7 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
         if (entity.getCreated() == null) {
             entity.setCreated(time);
         }
-        if (user != null) {
+        if (user != null && shouldStoreUserOnEntity(entity)) {
             entity.setCreatedBy(user);
         }
 
@@ -48,10 +48,10 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
 
     private void onUpdate(AbstractEntity entity, Date time) {
         User user = lookupCurrentUser();
-        if (user != null) {
+        if (shouldStoreUserOnEntity(entity)) {
             entity.setModifiedBy(user);
-            entity.setModified(time);
         }
+        entity.setModified(time);
     }
 
     private User lookupCurrentUser() {
@@ -60,6 +60,10 @@ public class DefaultEntityModifiedCreatedHandler implements EntityModifiedCreate
             logger.warn("Entity persisted without current user set in context", new Exception());
         }
         return user;
+    }
+
+    private boolean shouldStoreUserOnEntity(AbstractEntity entity) {
+        return !(entity instanceof User);
     }
 
 }

@@ -11,6 +11,8 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.UserType;
 
+import java.util.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -19,6 +21,8 @@ public class MinimalTenantDataSetup {
     private Tenant tenant;
     private EntityManager em;
     private Transaction trans;
+
+    private User createdUser;
 
     public MinimalTenantDataSetup(Transaction trans, String tenantName) {
         this.em = trans.getEntityManager();
@@ -46,6 +50,7 @@ public class MinimalTenantDataSetup {
 		user.setFirstName("N4");
 		user.setLastName("Admin");
         em.persist(user);
+        createdUser = user;
     }
 
     private PrimaryOrg createPrimaryOrgForTenant() {
@@ -61,6 +66,7 @@ public class MinimalTenantDataSetup {
         org.getLimits().setDiskSpaceUnlimited();
         org.getLimits().setSecondaryOrgsUnlimited();
         org.getLimits().setUsersUnlimited();
+        org.setModified(new Date());
 
         em.persist(org);
         return org;
@@ -81,4 +87,7 @@ public class MinimalTenantDataSetup {
         return type;
     }
 
+    public User getCreatedUser() {
+        return createdUser;
+    }
 }

@@ -13,6 +13,7 @@ import java.util.Date;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 public class DefaultEntityModifiedCreatedHandlerTest {
@@ -61,6 +62,18 @@ public class DefaultEntityModifiedCreatedHandlerTest {
     }
 
     @Test
+    public void update_abstract_entity_should_set_modified_to_null_when_no_user_in_context() {
+        EULA eula = new EULA();
+
+        setupMockContextForGetUser(null);
+
+        modifiedCreatedHandler.onUpdate(eula);
+
+        assertNull(eula.getModifiedBy());
+        assertEquals(testDate, eula.getModified());
+    }
+
+    @Test
     public void insert_entity_with_created_already_set_isnt_overwritten() throws Exception {
         Date preExistingDate = TEST_DATE_FORMAT.parse("01/01/2001");
 
@@ -76,7 +89,8 @@ public class DefaultEntityModifiedCreatedHandlerTest {
     }
 
     private void setupMockContextForGetUser(User user) {
-        user.setUserID("testuser");
+        if (user != null)
+            user.setUserID("testuser");
 
         expect(mockUserContext.getCurrentUser()).andReturn(user).anyTimes();
         replay(mockUserContext);
