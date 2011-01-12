@@ -34,7 +34,11 @@ public class SetCurrentUserInterceptor extends AbstractInterceptor implements St
             userContext.setCurrentUser(user);
         }
 
-        return invocation.invoke();
+        String result = invocation.invoke();
+
+        userContext.setCurrentUser(null);
+
+        return result;
     }
 
 }
