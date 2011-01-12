@@ -28,7 +28,7 @@ public class ManageAssetTypeGroupsPage extends FieldIDPage {
 	}
 	
 	public void clickDeleteGroup(String assetTypeGroup) {
-		selenium.click("//div[@id='pageContent']//table[@class='list']//td[position() = 1 and . = '"+assetTypeGroup+"']/parent::tr/td[3]/a[.='Delete']");
+		selenium.click("//div[@id='pageContent']//table[@class='list']//td[position() = 1 and . = '"+assetTypeGroup+"']/parent::tr/td[4]/a[.='Delete']");
 		waitForPageToLoad();
 	}
 	
@@ -50,7 +50,7 @@ public class ManageAssetTypeGroupsPage extends FieldIDPage {
 	}
 
 	public void clickEditGroup(String groupName) {
-		selenium.click("//div[@id='pageContent']//table[@class='list']//td[position() = 1 and . = '"+groupName+"']/parent::tr/td[3]/a[.='Edit']");
+		selenium.click("//div[@id='pageContent']//table[@class='list']//td[position() = 1 and . = '"+groupName+"']/parent::tr/td[4]/a[.='Edit']");
 		waitForPageToLoad();
 	}
 	

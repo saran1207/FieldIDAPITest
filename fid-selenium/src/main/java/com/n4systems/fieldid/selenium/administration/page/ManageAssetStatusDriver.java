@@ -54,7 +54,7 @@ public class ManageAssetStatusDriver {
 	
 	private void selectStatusEditPage(AssetStatus status) {
 		assertStatusIsInList(status);
-		selenium.clickAndWaitForPageLoad("css=td:contains('" + status.name + "') + td a:contains('Edit')");
+        selenium.clickAndWaitForPageLoad("//table[@class='list']//td[position() = 1 and text() = '"+status.name+"']//parent::tr/td[4]//a[.='Edit']");
 	}
 
 	private void assertStatusIsInList(AssetStatus status) {
@@ -85,7 +85,7 @@ public class ManageAssetStatusDriver {
 		gotoAssetStatuses();
 		
 		selenium.chooseOkOnNextConfirmation();
-		selenium.click("css=td:contains('" + status.name + "') + td a:contains('Remove')");
+        selenium.clickAndWaitForPageLoad("//table[@class='list']//td[position() = 1 and text() = '"+status.name+"']//parent::tr/td[4]//a[.='Remove']");
 		
 		assertThat(selenium.getConfirmation(), startsWith("Are you sure you want to delete this?"));
 		selenium.waitForPageToLoad();

@@ -619,7 +619,7 @@ public class ManageAssetTypesDriver {
 	 * @param name the name of the asset type.
 	 */
 	public void gotoEditAssetType(String name) {
-		String editAssetTypeLinkLocator = getAssetTypeLinkLocator(name) + "/../../TD[2]/A[contains(text(),'Edit')]";
+		String editAssetTypeLinkLocator = getAssetTypeLinkLocator(name) + "/../../TD[4]/A[contains(text(),'Edit')]";
 		if (selenium.isElementPresent(editAssetTypeLinkLocator)) {
 			selenium.click(editAssetTypeLinkLocator);
 			misc.waitForPageToLoadAndCheckForOopsPage();

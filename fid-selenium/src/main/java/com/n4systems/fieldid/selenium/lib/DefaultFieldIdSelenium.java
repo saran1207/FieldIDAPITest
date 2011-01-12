@@ -17,7 +17,7 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 	}
 
 	public void waitForAjax(String timeout)  {
-		delegateSelenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
+		delegateSelenium.waitForCondition("typeof(selenium.browserbot.getCurrentWindow().Ajax) == 'object' && selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
 	}
 
 	public void waitForElementToBePresent(String locator)  {
