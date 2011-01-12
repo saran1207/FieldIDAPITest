@@ -536,3 +536,8 @@ p.treeHeading{
 	width: 260px;
 	padding: 4px;
 }
+
+.crudForm .infoSet select.selectCriteria {
+    margin-top:6px;
+    width: 150px;
+}

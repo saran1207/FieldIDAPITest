@@ -37,4 +37,10 @@ public class SelectCriteria extends Criteria {
     public String getTypeDescription() {
         return "Select";
     }
+
+    @Override
+    public boolean isSelectCriteria() {
+        return true;
+    }
+
 }

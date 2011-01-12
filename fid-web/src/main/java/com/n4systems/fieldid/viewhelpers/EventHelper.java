@@ -17,6 +17,7 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
 import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
@@ -156,6 +157,8 @@ public class EventHelper {
                 ((OneClickCriteriaResult)realResult).setState(pm.find(State.class, formResult.getStateId(), event.getTenant()));
             } else if (realResult instanceof TextFieldCriteriaResult) {
                 ((TextFieldCriteriaResult)realResult).setValue(formResult.getTextValue());
+            } else if (realResult instanceof SelectCriteriaResult) {
+                ((SelectCriteriaResult)realResult).setValue(formResult.getTextValue());
             }
 
 			

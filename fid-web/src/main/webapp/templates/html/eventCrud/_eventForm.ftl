@@ -9,6 +9,8 @@
                 <#include '_oneClickCriteriaResultDisplay.ftl'>
             <#elseif criteriaResult.criteria.textFieldCriteria>
                 <#include '_textFieldCriteriaResultDisplay.ftl'>
+            <#elseif criteriaResult.criteria.selectCriteria>
+                <#include '_selectCriteriaResultDisplay.ftl'>
             </#if>
 
             <#include "../observationsCrud/observationsShow.ftl"/>

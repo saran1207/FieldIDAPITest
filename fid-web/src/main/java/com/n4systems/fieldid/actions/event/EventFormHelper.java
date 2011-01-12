@@ -11,6 +11,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.TextFieldCriteria;
 
 public class EventFormHelper {
@@ -77,6 +78,8 @@ public class EventFormHelper {
             return "oneclick";
         } else if (criteria instanceof TextFieldCriteria) {
             return "textfield";
+        } else if (criteria instanceof SelectCriteria) {
+            return "select";
         } else {
             throw new RuntimeException("Unknown criteria type: " + criteria.getClass());
         }

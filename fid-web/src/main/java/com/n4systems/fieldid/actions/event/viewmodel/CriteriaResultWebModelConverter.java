@@ -4,6 +4,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
@@ -16,10 +17,13 @@ public class CriteriaResultWebModelConverter {
         CriteriaResultWebModel webModel = new CriteriaResultWebModel();
         if (result instanceof OneClickCriteriaResult) {
             webModel.setType("oneclick");
-            webModel.setStateId(((OneClickCriteriaResult)result).getState().getId());
+            webModel.setStateId(((OneClickCriteriaResult) result).getState().getId());
         } else if (result instanceof TextFieldCriteriaResult) {
             webModel.setType("textfield");
             webModel.setTextValue(((TextFieldCriteriaResult)result).getValue());
+        } else if (result instanceof SelectCriteriaResult) {
+            webModel.setType("select");
+            webModel.setTextValue(((SelectCriteriaResult)result).getValue());
         }
 
         webModel.setDeficiencies(result.getDeficiencies());
@@ -38,6 +42,10 @@ public class CriteriaResultWebModelConverter {
             criteriaResult = result;
         } else if ("textfield".equals(webModel.getType())) {
             TextFieldCriteriaResult result = new TextFieldCriteriaResult();
+            result.setValue(webModel.getTextValue());
+            criteriaResult = result;
+        } else if ("select".equals(webModel.getType())) {
+            SelectCriteriaResult result = new SelectCriteriaResult();
             result.setValue(webModel.getTextValue());
             criteriaResult = result;
         } else {

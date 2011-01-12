@@ -29,6 +29,8 @@
                 <#include '_oneClickCriteriaResultEdit.ftl'>
             <#elseif criteria.textFieldCriteria>
                 <#include '_textFieldCriteriaResultEdit.ftl'>
+            <#elseif criteria.selectCriteria>
+                <#include '_selectCriteriaResultEdit.ftl'>
             </#if>
 
 			<span class="recDefButtons">
