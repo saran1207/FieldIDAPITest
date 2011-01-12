@@ -12,6 +12,8 @@
 
 <#assign assetSearchAction="assets"/>
 <#assign namespace="/ajax"/>
+<#assign usePaginatedResults=true/>
+<#assign useAjaxPaginatedResults=true/>
 <#include "../eventGroup/_searchForm.ftl"/>
 <div id="resultBlock">
 	<div id="searchResults">
@@ -69,6 +71,7 @@
 
 <head>
 	<@n4.includeStyle type="page" href="multi_event"/>
+	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
 	<@n4.includeScript>
 		function selectAsset(event) {
 			event.stop();

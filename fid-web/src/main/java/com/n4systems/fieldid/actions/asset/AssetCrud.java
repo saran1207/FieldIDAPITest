@@ -94,7 +94,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	
 	private boolean refreshRegirstation = false;
 	private boolean useAjaxPagination = false;
-	
+	private boolean usePagination = true;
 	/**
 	 * Set only when coming from searchOrder.action, when attached a customer
 	 * order through editWithCustomerOrder()
@@ -141,6 +141,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
 	
 	private Pager<Asset> page;
+	private List<Asset> assets;
 	
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
@@ -234,8 +235,28 @@ public class AssetCrud extends UploadAttachmentSupport {
 		if (search != null && search.length() > 0) {
 			
 			try {
-				page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(getSearch()).setAssetType(getAssetTypeId()).setPage(getCurrentPage()).load();
-		
+				
+				if(isUsePagination()){
+					page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(getSearch()).setAssetType(getAssetTypeId()).setPage(getCurrentPage()).load();
+					
+					// if there is only one forward directly to the group view screen.
+					if (page.getTotalResults() == 1) {
+						asset = page.getList().get(0);
+						uniqueID = asset.getId();
+						
+						// if we're in a vendor context we go to the tracebility tab instead
+						return (isInVendorContext()) ? "oneFoundVendorContext" : "oneFound";
+					}
+				}else{
+					assets = assetManager.findAssetByIdentifiers(getSecurityFilter(), search, assetType);
+					
+					if (assets.size() == 1) {
+						asset = assets.get(0);
+						uniqueID = asset.getId();
+						return (isInVendorContext()) ? "oneFoundVendorContext" : "oneFound";
+					}
+				}
+				
 				// remove the asset given. ( this is for asset merging, you
 				// don't want to merge the asset with itself.)
 				if (excludeId != null) {
@@ -244,14 +265,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 					page.getList().remove(excludeAsset);
 				}
 				
-				// if there is only one forward directly to the group view screen.
-				if (page.getTotalResults() == 1) {
-					asset = page.getList().get(0);
-					uniqueID = asset.getId();
-					
-					// if we're in a vendor context we go to the tracebility tab instead
-					return (isInVendorContext()) ? "oneFoundVendorContext" : "oneFound";
-				}
+				
 			} catch (Exception e) {
 				logger.error("Failed to look up Assets", e);
 				addActionErrorText("error.failedtoload");
@@ -1014,6 +1028,18 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public void setUseAjaxPagination(boolean useAjaxPagination) {
 		this.useAjaxPagination = useAjaxPagination;
+	}
+
+	public List<Asset> getAssets() {
+		return assets;
+	}
+
+	public void setUsePagination(boolean usePagination) {
+		this.usePagination = usePagination;
+	}
+
+	public boolean isUsePagination() {
+		return usePagination;
 	}
 	
 }

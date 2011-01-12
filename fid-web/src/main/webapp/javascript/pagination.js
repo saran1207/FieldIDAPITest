@@ -1,4 +1,5 @@
 var goToPageURL = '';
+var usingAjaxPagination=false;
 function paginateGoto(event) {
 	var element = Event.element(event);
 	

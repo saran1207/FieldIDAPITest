@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.AssociatedEventType;
+import com.n4systems.tools.Pager;
 
 public class EventGroupCrud extends AbstractCrud {
 
@@ -34,6 +35,11 @@ public class EventGroupCrud extends AbstractCrud {
 
 	private List<EventType> eventTypes;
 
+	private Pager<Asset> page;
+
+	private boolean usePagination = true;
+	private boolean useAjaxPagination = false;
+
 	public EventGroupCrud(EventManager eventManager, AssetManager assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.eventManager = eventManager;
@@ -54,13 +60,24 @@ public class EventGroupCrud extends AbstractCrud {
 		// if no search param came just show the form.
 		if (search != null && search.length() > 0) {
 			try {
-				assets = assetManager.findAssetByIdentifiers(getSecurityFilter(), search);
-				// if there is only one forward. directly to the group view
-				// screen.
-				if (assets.size() == 1) {
-					asset = assets.get(0);
-					uniqueID = asset.getId();
-					return "oneFound";
+				if(isUsePagination()){
+					page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(getSearch()).setPage(getCurrentPage()).load();
+					
+					// if there is only one forward directly to the group view screen.
+					if (page.getTotalResults() == 1) {
+						asset = page.getList().get(0);
+						uniqueID = asset.getId();
+												
+						return "oneFound";
+					}
+				}else{
+					assets = assetManager.findAssetByIdentifiers(getSecurityFilter(), search);
+					
+					if (assets.size() == 1) {
+						asset = assets.get(0);
+						uniqueID = asset.getId();
+						return "oneFound";
+					}
 				}
 			} catch (Exception e) {
 				logger.error("Failed to look up Assets", e);
@@ -132,6 +149,26 @@ public class EventGroupCrud extends AbstractCrud {
 
 	public boolean isMasterEvent(Long id) {
 		return eventManager.isMasterEvent(id);
+	}
+	
+	public void setUsePagination(boolean usePagination) {
+		this.usePagination = usePagination;
+	}
+
+	public boolean isUsePagination() {
+		return usePagination;
+	}
+
+	public void setUseAjaxPagination(boolean useAjaxPagination) {
+		this.useAjaxPagination = useAjaxPagination;
+	}
+
+	public boolean isUseAjaxPagination() {
+		return useAjaxPagination;
+	}
+
+	public Pager<Asset> getPage() {
+		return page;
 	}
 
 }

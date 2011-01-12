@@ -5,6 +5,7 @@
 	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projectNotes.css"/>"/>
 	<script type="text/javascript" src="<@s.url value="/javascript/fileUpload.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/projects.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
 	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projects.css"/>"/>
 	<script type="text/javascript">
 		attachAssetToProjectUrl = "<@s.url action="jobAssetCreate" namespace="/ajax"/>";
@@ -131,6 +132,8 @@ ${action.setPageType('job', 'show')!}
 				<#assign namespace="/ajax"/>
 				<#assign assetSearchAction="jobFindAsset"/>
 				<#assign assetFormId="projectAssetSearch"/>
+				<#assign usePaginatedResults=true/>
+				<#assign useAjaxPaginatedResults=true/>
 				<#include "../eventGroup/_searchForm.ftl"/>
 				<div id="results" class="hidden">
 				</div>

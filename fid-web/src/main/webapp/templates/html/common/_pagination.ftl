@@ -15,7 +15,7 @@
 		<#assign endingPage=startingPage + 9 />
 		<#if (endingPage > page.totalPages) > <#assign endingPage=page.totalPages /></#if>
 		
-		<#if useAjaxPagination>
+		<#if useAjaxPagination?exists && useAjaxPagination>
 			<@s.url id="firstPageUrl" action="${currentAction}" currentPage="1" includeParams="get" />
 			<@s.url id="previousPageUrl" action="${currentAction}" currentPage="${page.previousPage}" includeParams="get" />
 			
@@ -32,7 +32,7 @@
 			<li class="<#if pageIdx == page.readableCurrentPage >currentPage</#if>" >
 				
 				<#if pageIdx != currentPage >
-					<#if useAjaxPagination>
+					<#if useAjaxPagination?exists && useAjaxPagination>
 						<@s.url id="pageUrl" action="${currentAction}" currentPage="${pageIdx}" includeParams="get"  />
 						
 						<a href='#' onclick="getResponse('${pageUrl}', 'get')" >
@@ -55,7 +55,7 @@
 		</#list>
 		
 		
-		<#if useAjaxPagination>
+		<#if useAjaxPagination?exists && useAjaxPagination>
 			<@s.url id="nextUrl" action="${currentAction}" currentPage="${page.nextPage}" includeParams="get"  />
 			<@s.url id="lastUrl" action="${currentAction}" currentPage="${page.totalPages}" includeParams="get"  />
 			

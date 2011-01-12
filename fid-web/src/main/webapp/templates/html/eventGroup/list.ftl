@@ -5,7 +5,6 @@ ${action.setPageType('event', 'select_asset')!}
 
 <#include "_eventSearchForm.ftl"/>
 
-
 <#assign actionTarget="eventGroups"/>
 <#include "_assetList.ftl"/>
 <script type="text/javascript">

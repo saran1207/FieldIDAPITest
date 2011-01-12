@@ -9,3 +9,5 @@ $$('input[name="search"]')[1].focus();
 
 updateResults('${html?js_string}');
 $$('#searchResults .assetLink').each(function(element) { element.observe('click', selectAsset) });
+usingAjaxPagination=true;
+attachListenerToPageJumpInputs();

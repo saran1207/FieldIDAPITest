@@ -4,7 +4,17 @@
 		<label class="label"><@s.text name="label.smartsearch"/></label>
 		<span><@s.textfield name="search" /></span>
 		
-		<@s.hidden name="useAjaxPagination" value="true" />
+		<#if usePaginatedResults?exists && usePaginatedResults >
+			<@s.hidden name="usePagination" value="true"/>
+			<#if useAjaxPaginatedResults?exists && useAjaxPaginatedResults>
+				<@s.hidden name="useAjaxPagination" value="true"/>
+			<#else>
+				<@s.hidden name="useAjaxPagination" value="false"/>
+			</#if>
+		<#else>
+			<@s.hidden name="usePagination" value="false"/>
+			<@s.hidden name="useAjaxPagination" value="false"/>
+		</#if>
 		
 		<#if useOverRides?exists && useOverRides >
 			<@s.hidden name="assetTypeId">

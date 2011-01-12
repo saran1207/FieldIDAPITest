@@ -34,6 +34,7 @@
 			<@s.form method="get" action="assetInformation" namespace="/" id="smartSearch" theme="fieldid" >
 				<label for="search"><@s.text name="label.find"/>:</label>
 				<@s.hidden name="useContext" value="true"/>
+				<@s.hidden name="usePagination" value="true"/>
 				<@s.textfield name="search" id="searchText" value="${action.getText('label.smart_search_search_types')}" cssClass="description"/>
 				<@s.submit name="load" key="label.load" id="smartSearchButton"/>
 			</@s.form>

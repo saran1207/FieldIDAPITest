@@ -7,7 +7,6 @@
 	$('results').replace( '${html}' );
 	findAssets();
 	$('results').highlight();
-	
 	usingAjaxPagination=true;
 	attachListenerToPageJumpInputs();
 </#escape>

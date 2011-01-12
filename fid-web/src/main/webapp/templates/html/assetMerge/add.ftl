@@ -102,6 +102,8 @@ ${action.setPageType('asset', 'edit')!}
 				<#assign assetFormId="mergeSmartSearch"/>
 				<#assign overRideAssetType=losingAsset.type.id/>
 				<#assign useOverRides=true/>
+				<#assign usePaginatedResults=true/>
+				<#assign useAjaxPaginatedResults=true>
 				<#include "../eventGroup/_searchForm.ftl"/>
 				<div id="results" class="hidden">
 				</div>
