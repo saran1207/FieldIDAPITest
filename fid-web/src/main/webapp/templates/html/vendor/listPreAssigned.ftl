@@ -9,4 +9,5 @@
 <h1><@s.text name="title.pre_assigned_assets"/></h1>
 
 <#assign isSearch=false />
+<#assign currentAction="preAssignedAssets" />
 <#include '_list.ftl'>		

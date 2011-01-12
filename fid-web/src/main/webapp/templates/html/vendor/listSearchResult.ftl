@@ -8,4 +8,5 @@
 <div id="mainContent">
 <h1><@s.text name="label.register_asset"/></h1>
 <#assign isSearch=true />
+<#assign currentAction="searchNetworkAsset" />
 <#include '_list.ftl'>		

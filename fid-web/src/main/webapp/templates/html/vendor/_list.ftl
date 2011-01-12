@@ -1,5 +1,4 @@
 <#if page.hasResults() && page.validPage() >	
-	<#assign currentAction="preAssignedAssets.action" />
 	<#include '../common/_pagination.ftl' />
     <#include "../common/_lightView.ftl" />
     <#include '_lightViewBoxOptions.ftl'>
