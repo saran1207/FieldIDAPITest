@@ -34,16 +34,17 @@ public class LocationTreeToHierarchicalNodesConverter {
 		for (PredefinedLocationTreeNode child : nextLevel) {
 			children.add(convertLocationToNode(child, levels));
 		}
-		
 		sortNodesAlphabetically(children);
 		return children;
 	}
 
 	private void sortNodesAlphabetically(List<HierarchicalNode> children) {
 		Collections.sort(children, 
+				
+				
 			new Comparator<HierarchicalNode>() {
 				public int compare(HierarchicalNode o1, HierarchicalNode o2) {
-					return o1.getName().compareToIgnoreCase(o2.getName());
+					return NaturalOrderSort.compareNaturalIgnoreCaseAscii(o1.getName(), o2.getName());
 				}
 			});
 	}
