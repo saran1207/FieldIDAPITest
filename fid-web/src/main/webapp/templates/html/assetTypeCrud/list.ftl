@@ -4,8 +4,8 @@ ${action.setPageType('asset_type', 'list')!}
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.assettype" /></th>
-			<th><@s.text name="label.created_by" /></th>
-			<th><@s.text name="label.last_modified_by" /></th>		
+			<th><@s.text name="label.created" /></th>
+			<th><@s.text name="label.last_modified" /></th>		
 			<th></th>
 		</tr>
 		

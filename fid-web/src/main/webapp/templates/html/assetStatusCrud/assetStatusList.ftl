@@ -4,8 +4,8 @@ ${action.setPageType('asset_status', 'list')!}
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.assetstatus" /></th>
-			<th><@s.text name="label.created_by" /></th>
-			<th><@s.text name="label.last_modified_by" /></th>		
+			<th><@s.text name="label.created" /></th>
+			<th><@s.text name="label.last_modified" /></th>		
 			<th></th>
 		</tr>
 	

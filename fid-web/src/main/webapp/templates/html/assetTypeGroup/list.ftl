@@ -12,8 +12,8 @@ ${action.setPageType('asset_type_group', 'list')!}
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.name" /></th>
-			<th><@s.text name="label.created_by" /></th>
-			<th><@s.text name="label.last_modified_by" /></th>		
+			<th><@s.text name="label.created" /></th>
+			<th><@s.text name="label.last_modified" /></th>		
 			<th></th>
 		</tr>
 		<#list groups as group > 

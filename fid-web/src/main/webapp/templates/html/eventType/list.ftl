@@ -6,8 +6,8 @@ ${action.setPageType('event_type', 'list')!}
 			<th><@s.text name="label.name" /></th>
 			<th><@s.text name="label.type"/></th>
 			<th><@s.text name="label.group"/></th>
-			<th><@s.text name="label.created_by" /></th>
-			<th><@s.text name="label.last_modified_by" /></th>		
+			<th><@s.text name="label.created" /></th>
+			<th><@s.text name="label.last_modified" /></th>		
 			<th></th>
 		<tr>
 		
