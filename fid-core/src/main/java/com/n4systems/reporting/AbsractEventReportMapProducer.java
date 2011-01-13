@@ -171,8 +171,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		flattenCriteriaResults(stateMap, recommendations, deficiencies);
 		//TODO : move criteria view to 
 		// walk the section, and criteria tree and construct report views
-        if (getEvent().getType().getEventForm() != null) {
-            for (CriteriaSection section : getEvent().getType().getEventForm().getSections()) {
+        if (getEvent().getEventForm() != null) {
+            for (CriteriaSection section : getEvent().getEventForm().getSections()) {
                 for (Criteria criteria : section.getCriteria()) {
                     if (stateMap.containsKey(criteria)) {
                         criteriaViews.add(new CriteriaStateView(section, criteria, stateMap.get(criteria), recommendations.get(criteria), deficiencies.get(criteria)));

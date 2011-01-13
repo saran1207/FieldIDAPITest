@@ -187,4 +187,22 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 		return imageAttachments;
 	}
 
+	/**
+	 * Finds the CriteriaSections for a given Criteria.
+	 * @param criteria	Criteria
+	 * @return			The CriteriaSection containing the Criteria or null if no section was found
+	 */
+	public CriteriaSection findSection(Criteria criteria) {
+		CriteriaSection criteriaSection = null;
+		if (getEventForm() != null) {
+            for(CriteriaSection section: getEventForm().getSections()) {
+                if(section.getCriteria().contains(criteria)) {
+                    criteriaSection = section;
+                    break;
+                }
+            }
+        }
+		return criteriaSection;
+    }
+
 }

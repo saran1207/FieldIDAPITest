@@ -31,7 +31,7 @@ public class ObservationView implements Serializable {
 			}
 			
 			type = obs.getType().getDisplayTitle();
-			section = insp.getType().findSection(result.getCriteria()).getTitle();
+			section = insp.findSection(result.getCriteria()).getTitle();
 			criteria = result.getCriteria().getDisplayText();
 			status = obs.getState().getDisplayName();
 			observation = obs.getText();
