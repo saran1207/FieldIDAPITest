@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
 import com.n4systems.model.SubEvent;
@@ -31,7 +32,8 @@ public class ObservationView implements Serializable {
 			}
 			
 			type = obs.getType().getDisplayTitle();
-			section = insp.findSection(result.getCriteria()).getTitle();
+            CriteriaSection section = insp.findSection(result.getCriteria());
+            this.section = section != null ? section.getTitle() : "";
 			criteria = result.getCriteria().getDisplayText();
 			status = obs.getState().getDisplayName();
 			observation = obs.getText();
