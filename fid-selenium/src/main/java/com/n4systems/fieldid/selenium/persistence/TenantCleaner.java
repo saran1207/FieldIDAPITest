@@ -83,7 +83,7 @@ public class TenantCleaner {
             safeRemoveAsset(em, asset);
         }
 
-        removeAllForTenant(em, AddAssetHistory.class, tenantIds, new Callback<AddAssetHistory>(){
+        removeAllForTenants(em, AddAssetHistory.class, tenantIds, new Callback<AddAssetHistory>() {
             @Override
             public void callback(AddAssetHistory entity) {
                 entity.getInfoOptions().clear();
@@ -199,15 +199,22 @@ public class TenantCleaner {
     }
 
     private <T> void removeAllForTenants(EntityManager em, Class<T> entityToRemove, List tenantIds) {
-        removeAllForTenant(em, entityToRemove, tenantIds, new Callback<T> () {
+        removeAllForTenants(em, entityToRemove, tenantIds, new Callback<T>() {
             @Override
-            public void callback(T entity) { }
+            public void callback(T entity) {
+            }
         });
     }
 
-    private <T> void removeAllForTenant(EntityManager em, Class<T> entityToRemove, List tenantIds, Callback<T> callback) {
-        Query query = em.createQuery("from " + entityToRemove.getName() + " where tenant.id in (:tenantIds) ").setParameter("tenantIds", tenantIds);
+    private <T> void removeAllForTenants(EntityManager em, Class<T> entityToRemove, List<Long> tenantIds, Callback<T> callback) {
         System.out.println("Removing all: " + entityToRemove);
+        for (Long tenantId : tenantIds) {
+            removeAllForTenant(em, entityToRemove, tenantId, callback);
+        }
+    }
+
+    private <T> void removeAllForTenant(EntityManager em, Class<T> entityToRemove, Long tenantId, Callback<T> callback) {
+        Query query = em.createQuery("from " + entityToRemove.getName() + " where tenant.id = :tenantId ").setParameter("tenantId", tenantId);
         List<T> results = query.getResultList();
         for (T entity : results) {
             callback.callback(entity);
