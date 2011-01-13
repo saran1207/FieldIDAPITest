@@ -70,8 +70,8 @@ public class TenantCleaner {
 //        removeAllForTenants(em, TextFieldCriteria.class, tenantIds);
 //        removeAllForTenants(em, SelectCriteria.class, tenantIds);
         removeAllForTenants(em, CriteriaSection.class, tenantIds);
-        removeAllForTenants(em, EventForm.class, tenantIds);
         removeAllForTenants(em, EventType.class, tenantIds);
+        removeAllForTenants(em, EventForm.class, tenantIds);
         removeAllForTenants(em, EventTypeGroup.class, tenantIds);
         
         List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
