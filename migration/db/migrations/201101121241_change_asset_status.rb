@@ -13,8 +13,8 @@ class ChangeAssetStatus < ActiveRecord::Migration
   	
   	rename_column(:assetstatus, :datecreated, :created)
   	rename_column(:assetstatus, :datemodified, :modified)
-  	change_column(:assetstatus, :modifiedby, :integer, :null => true)
   	execute("update assetstatus set modifiedby = null")
+  	change_column(:assetstatus, :modifiedby, :integer, :null => true)
   	add_column(:assetstatus, :createdby, :integer, :null => true)
   	execute("alter table assetstatus add foreign key fk_created_by_user (createdby) references users(id) on update no action on delete no action")
   end
@@ -32,8 +32,8 @@ class ChangeAssetStatus < ActiveRecord::Migration
 
   	rename_column(:assetstatus, :created, :datecreated)
   	rename_column(:assetstatus, :modified, :datemodified)
-  	change_column(:assetstatus, :modifiedby, :string, :null => true)
   	execute("update assetstatus set modifiedby = null")
+  	change_column(:assetstatus, :modifiedby, :string, :null => true)
   	execute("alter table assetstatus drop foreign key assetstatus_ibfk_1")
   	remove_column(:assetstatus, :createdby)
   end
