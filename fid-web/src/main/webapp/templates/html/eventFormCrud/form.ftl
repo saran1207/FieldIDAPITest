@@ -14,6 +14,6 @@ ${action.setPageType('event_type', 'event_form')!}
 
 <#assign eventFormEditUrl>/fieldid/w/eventFormEdit/id/#{eventType.id}</#assign>
 
-<iframe name="eventFormEditor" id="eventFormEditor" width="980" height="730" src="${eventFormEditUrl}" style="border: none;" frameBorder="0">
+<iframe name="eventFormEditor" id="eventFormEditor" width="100%" height="730" src="${eventFormEditUrl}" style="border: none;" frameBorder="0">
     
 </iframe>
