@@ -66,14 +66,14 @@ public class TenantCleaner {
         removeAllForTenants(em, AssociatedEventType.class, tenantIds);
         removeAllForTenants(em, EventSchedule.class, tenantIds);
         removeAllForTenants(em, AssetTypeSchedule.class, tenantIds);
-        removeAllForTenants(em, OneClickCriteria.class, tenantIds);
-//        removeAllForTenants(em, TextFieldCriteria.class, tenantIds);
-//        removeAllForTenants(em, SelectCriteria.class, tenantIds);
-        removeAllForTenants(em, CriteriaSection.class, tenantIds);
         removeAllForTenants(em, EventType.class, tenantIds);
         removeAllForTenants(em, EventForm.class, tenantIds);
         removeAllForTenants(em, EventTypeGroup.class, tenantIds);
-        
+        removeAllForTenants(em, CriteriaSection.class, tenantIds);
+        removeAllForTenants(em, OneClickCriteria.class, tenantIds);
+//        removeAllForTenants(em, TextFieldCriteria.class, tenantIds);
+//        removeAllForTenants(em, SelectCriteria.class, tenantIds);
+
         List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
         for (Asset asset : networkRegisteredAssets) {
             safeRemoveAsset(em, asset);
