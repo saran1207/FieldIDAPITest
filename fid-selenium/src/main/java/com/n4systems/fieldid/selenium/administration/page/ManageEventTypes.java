@@ -85,7 +85,7 @@ public class ManageEventTypes {
 	}
 
 	public void gotoEditEventType(String eventType) {
-		String locator = "xpath="  + eventTypeTableXpath + "/tbody/tr/td/a[contains(text(),'" + eventType + "')]/../../td[4]/A[contains(text(),'Edit')]";
+		String locator = "xpath="  + eventTypeTableXpath + "/tbody/tr/td/a[contains(text(),'" + eventType + "')]/../../td[6]/A[contains(text(),'Edit')]";
 		if(selenium.isElementPresent(locator)) {
 			selenium.click(locator);
 			misc.waitForPageToLoadAndCheckForOopsPage();
