@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.n4systems.model.AddressInfo;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetStatus;
 
@@ -99,7 +100,12 @@ public class TenantCleaner {
         removeAllForTenants(em, EventBook.class, tenantIds);
         removeAllForTenants(em, AutoAttributeCriteria.class, tenantIds);
         removeAllForTenants(em, AutoAttributeDefinition.class, tenantIds);
-        removeAllForTenants(em, AssetType.class, tenantIds);
+        removeAllForTenants(em, AssetType.class, tenantIds, new Callback<AssetType>() {
+            @Override
+            public void callback(AssetType entity) {
+                entity.getSchedules().clear();
+            }
+        });
         removeAllForTenants(em, AssetTypeGroup.class, tenantIds);
         removeAllForTenants(em, AssetStatus.class, tenantIds);
         removeAllForTenants(em, FileAttachment.class, tenantIds);
