@@ -17,15 +17,19 @@
 		#groupList li {
 			padding: 10px 0;
 			overflow:hidden;
-			border-bottom: 1px solid #D0DAFD;
+			border-bottom: 1px solid #CCCCCC;
 		}
 		
 		
 		#groupList li div {
 			float:left;
-			padding: 0 15px;
+			padding: 0px 5px;
+			margin-top: 2px;
 		}
 		
+		#groupList li div.drag {
+			margin: 0px;
+		}
 		
 		div.formAction {
 			text-align:left;
@@ -42,7 +46,7 @@ ${action.setPageType('asset_type_group', 'list')!}
 	<ul id="groupList" class="contentSection">
 		<#list groups as group > 
 			<li id="sort_group_${group.id}" groupId="${group.id}" >
-				<div class="drag" ><img src="<@s.url value="/images/drag.gif"/>" alt="<@s.text name="label.drag"/>"/></div>
+				<div class="drag" ><img src="<@s.url value="/images/reorder.png"/>" alt="<@s.text name="label.drag"/>"/></div>
 				<div >${group.name?html}</div>
 			</li>
 		</#list>
