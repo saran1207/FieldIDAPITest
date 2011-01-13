@@ -16,7 +16,7 @@ import com.n4systems.util.StringUtils;
 @PrimaryKeyJoinColumn(name="event_id")
 public class SubEvent extends AbstractEvent implements SecurityEnhanced<SubEvent> {
 	private static final long serialVersionUID = 1L;
-	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap"};
+	public static final String[] ALL_FIELD_PATHS = { "modifiedBy.userID", "type.form.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "asset", "asset.infoOptions", "infoOptionMap"};
 	
 	@Column( length = 255 )
 	private String name;
