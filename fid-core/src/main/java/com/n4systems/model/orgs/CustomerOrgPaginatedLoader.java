@@ -13,6 +13,7 @@ public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 	private String nameFilter;
 	private boolean withLinkedCustomers = true;
 	private boolean archivedOnly;
+	private String[] postFetchFields = new String[0];
 	
 	public CustomerOrgPaginatedLoader(SecurityFilter filter) {
 		super(filter);
@@ -35,6 +36,8 @@ public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 			builder.addWhere(Comparator.EQ, "state", "state", EntityState.ARCHIVED);
 		}
 		
+		builder.addPostFetchPaths(postFetchFields);
+		
 		return builder;
 	}
 
@@ -45,6 +48,11 @@ public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 	
 	public CustomerOrgPaginatedLoader setWithLinkedCustomers(boolean withLinkedCustomers) {
 		this.withLinkedCustomers = withLinkedCustomers;
+		return this;
+	}
+	
+	public CustomerOrgPaginatedLoader setPostFetchFields(String...fields) {
+		this.postFetchFields = fields;
 		return this;
 	}
 

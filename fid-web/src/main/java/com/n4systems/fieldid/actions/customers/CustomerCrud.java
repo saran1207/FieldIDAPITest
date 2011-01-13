@@ -181,12 +181,13 @@ public class CustomerCrud extends AbstractCrud {
 	}
 	
 	protected CustomerOrgListLoader createCustomerOrgListLoader() {
-		return getLoaderFactory().createCustomerOrgListLoader().withoutLinkedOrgs();
+		return getLoaderFactory().createCustomerOrgListLoader().withoutLinkedOrgs().setPostFetchFields("modifiedBy", "createdBy");
 	}
 	
 	public Pager<CustomerOrg> getPage() {
 		if (customerPage == null) {
 			CustomerOrgPaginatedLoader loader = getLoaderFactory().createCustomerOrgPaginatedLoader();
+			loader.setPostFetchFields("modifiedBy", "createdBy");
 			loader.setPage(getCurrentPage()).setPageSize(CRUD_RESULTS_PER_PAGE);
 			loader.setNameFilter(listFilter);
 			loader.setArchivedOnly(archivedOnly);

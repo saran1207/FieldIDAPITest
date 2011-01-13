@@ -421,7 +421,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 
 	public List<AssetType> getAssetTypes() {
 		if (assetTypes == null) {
-			assetTypes = getLoaderFactory().createAssetTypeListLoader().setPostFetchFields("modifiedBy").load();
+			assetTypes = getLoaderFactory().createAssetTypeListLoader().setPostFetchFields("modifiedBy", "createdBy").load();
 		}
 		return assetTypes;
 	}

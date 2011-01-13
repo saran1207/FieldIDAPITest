@@ -237,7 +237,7 @@ public class EventTypeCrud extends AbstractCrud {
 
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-			eventTypes = getLoaderFactory().createEventTypeListLoader().setPostFetchFields("modifiedBy").load();
+			eventTypes = getLoaderFactory().createEventTypeListLoader().setPostFetchFields("modifiedBy", "createdBy").load();
 		}
 
 		return eventTypes;

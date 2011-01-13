@@ -172,7 +172,7 @@ public class AssetTypeGroupCrud extends AbstractCrud implements HasDuplicateValu
 
 	public List<AssetTypeGroup> getGroups() {
 		if (groups == null) {
-			groups = getLoaderFactory().createAssetTypeGroupsLoader().setPostFetchFields("modifiedBy").load();
+			groups = getLoaderFactory().createAssetTypeGroupsLoader().setPostFetchFields("modifiedBy", "createdBy").load();
 		}
 		return groups;
 	}

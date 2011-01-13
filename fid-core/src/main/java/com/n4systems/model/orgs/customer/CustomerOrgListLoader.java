@@ -12,6 +12,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 
 public class CustomerOrgListLoader extends ListLoader<CustomerOrg> {
 	private boolean withLinkedOrgs = true;
+	private String[] postFetchFields = new String[0];
 	
 	public CustomerOrgListLoader(SecurityFilter filter) {
 		super(filter);
@@ -26,6 +27,7 @@ public class CustomerOrgListLoader extends ListLoader<CustomerOrg> {
 		}
 		
 		builder.addOrder("parent.name", "name", "code");
+		builder.addPostFetchPaths(postFetchFields);
 		
 		List<CustomerOrg> customers = builder.getResultList(em);
 		return customers;
@@ -38,6 +40,11 @@ public class CustomerOrgListLoader extends ListLoader<CustomerOrg> {
 	
 	public CustomerOrgListLoader withoutLinkedOrgs() {
 		withLinkedOrgs = false;
+		return this;
+	}
+	
+	public CustomerOrgListLoader setPostFetchFields(String...fields) {
+		this.postFetchFields = fields;
 		return this;
 	}
 }

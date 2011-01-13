@@ -21,6 +21,8 @@
 			<th><@s.text name="label.customername" /></th>
 			<th><@s.text name="label.customerid" /></th>
 			<th><@s.text name="label.organization" /></th>
+			<th><@s.text name="label.created" /></th>
+			<th><@s.text name="label.last_modified" /></th>					
 			<th></th>
 		</tr>
 	
@@ -36,6 +38,8 @@
 			</td>
 			<td>${customer.code!}</td>
 			<td>${customer.getInternalOrg().name}</td>
+			<td><#if customer.createdBy?exists>${customer.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(customer.created)}</td>
+			<td><#if customer.modifiedBy?exists>${customer.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(customer.modified)}</td>
 			<td>
 				<#if customer.linked >
 					<@s.text name="label.linked_customer" />
