@@ -42,10 +42,12 @@ public class CatalogImportTask implements Runnable {
 	public void run() {
 		init();
 		doImport();
-		try {
-			sendEmail();
-		} catch (Exception e) {
-			logger.error("Failed to send notification email for CatalogImportTask", e);
+		if (failed) {
+			try {
+				sendEmail();
+			} catch (Exception e) {
+				logger.error("Failed to send notification email for CatalogImportTask", e);
+			}
 		}
 	}
 
@@ -65,14 +67,8 @@ public class CatalogImportTask implements Runnable {
 	}
 
 	private void sendEmail() throws NoSuchProviderException, MessagingException {
-		String body;
-		if (failed) {
-			body = failureBody();
-		} else {
-			body = successBody();
-		}
-		
-		logger.info("Sending catalog import notification email [" + user.getEmailAddress() + "] " + ((failed) ? "Failure" : "Successful"));
+		String body = failureBody();
+		logger.info("Sending catalog import notification email [" + user.getEmailAddress() + "] " + "Failure");
 		MailMessage message = new MailMessage("Catalog Import", body, user.getEmailAddress());
 		ServiceLocator.getMailManager().sendMessage(message);
 	}
@@ -100,17 +96,6 @@ public class CatalogImportTask implements Runnable {
 		}
 		 
 		return body + "</p><p>The rest of import has been undone.  You can attempt the import again, if the problem persists contact FieldID support by sending an email to support@fieldid.com</p>";
-	}
-
-	private String successBody() {
-		String body = "<h4>Your Catalog Import has completed.</h4>";
-		body += "<table>" +
-					"<tr><td>" + importCatalogService.getSummary().getAssetTypeImportSummary().getImportMapping().size() + "</td>" +
-					"<td>Asset Type(s) have been imported.</td></tr>" +
-					"<tr><td>" + importCatalogService.getSummary().getEventTypeImportSummary().numberImported() + "</td>" +
-					"<td>Event Type(s) have been imported.</td></tr>" +
-				"</table>";
-		return body;
 	}
 
 	private void init() {
