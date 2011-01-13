@@ -34,7 +34,7 @@ public class SavePanel extends Panel implements IHeaderContributor {
                 onSaveAndContinueClicked(target);
             }
         });
-        warningContainer.add(minutesAgoLabel = new Label("minutesAgoLabel", ""));
+        warningContainer.add(minutesAgoLabel = new Label("minutesAgoLabel", "0"));
         warningContainer.setOutputMarkupId(true);
         minutesAgoLabel.setOutputMarkupId(true);
     }
