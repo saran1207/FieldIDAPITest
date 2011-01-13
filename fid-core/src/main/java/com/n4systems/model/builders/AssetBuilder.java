@@ -8,9 +8,9 @@ import java.util.Arrays;
 import java.util.Date;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.SubAsset;
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.Tenant;
 import com.n4systems.model.location.Location;

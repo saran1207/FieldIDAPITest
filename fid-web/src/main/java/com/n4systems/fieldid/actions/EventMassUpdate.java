@@ -7,12 +7,12 @@ import java.util.List;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -145,13 +145,13 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public Long getAssetStatus() {
-		return (event.getAssetStatus() == null) ? null : event.getAssetStatus().getUniqueID();
+		return (event.getAssetStatus() == null) ? null : event.getAssetStatus().getId();
 	}
 
 	public void setAssetStatus(Long assetStatus) {
 		if (assetStatus == null) {
 			event.setAssetStatus(null);
-		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getUniqueID())) {
+		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getId())) {
 			event.setAssetStatus(assetManager.findAssetStatus(assetStatus, getTenantId()));
 		}
 	}

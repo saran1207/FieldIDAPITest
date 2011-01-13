@@ -67,7 +67,7 @@
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.assetstatus"/></label>
-			<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" headerKey="" headerValue="" />
+			<@s.select name="assetStatus" list="assetStatuses" listKey="id" listValue="name" headerKey="" headerValue="" />
 	</div>
 	
 	<#if eventType.assignedToAvailable>

@@ -6,13 +6,13 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import org.junit.Test;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.EventView;

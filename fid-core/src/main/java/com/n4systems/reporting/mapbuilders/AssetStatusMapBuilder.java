@@ -1,7 +1,7 @@
 package com.n4systems.reporting.mapbuilders;
 
-import rfid.ejb.entity.AssetStatus;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.persistence.Transaction;
 
 

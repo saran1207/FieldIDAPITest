@@ -14,9 +14,9 @@ import org.junit.Test;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;

@@ -1,11 +1,11 @@
 package com.n4systems.api.conversion.event;
 
 import com.n4systems.api.model.EventView;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventType;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;

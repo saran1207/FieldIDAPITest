@@ -4,9 +4,9 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;

@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.HasUser;

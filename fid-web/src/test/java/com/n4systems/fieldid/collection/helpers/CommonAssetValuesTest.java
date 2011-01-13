@@ -8,12 +8,13 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
@@ -51,7 +52,7 @@ public class CommonAssetValuesTest {
 	@Test
 	public void should_create_a_common_values_with_the_asset_status_on_the_asset() throws Exception {
 		AssetStatus assetStatus = new AssetStatus();
-		assetStatus.setUniqueID(1L);
+		assetStatus.setId(1L);
 		Asset asset = anAsset().havingStatus(assetStatus).build();
 		
 		CommonAssetValues sut = CommonAssetValues.createFrom(asset);

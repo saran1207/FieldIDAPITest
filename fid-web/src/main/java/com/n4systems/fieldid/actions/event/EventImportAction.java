@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.n4systems.exporting.EventExporter;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventType;
@@ -16,7 +17,6 @@ import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.notifiers.notifications.EventImportSuccessNotification;
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.Importer;

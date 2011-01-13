@@ -2,8 +2,8 @@ package com.n4systems.ws.resources;
 
 import java.util.List;
 
-import rfid.ejb.entity.AssetStatus;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.loaders.LoaderFactory;

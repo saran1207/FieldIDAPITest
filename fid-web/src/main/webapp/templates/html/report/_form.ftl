@@ -53,7 +53,7 @@ ${action.setPageType('report', 'show')!}
 			<h2><@s.text name="label.asset_details"/></h2>
 			<div class="infoSet">
 				<label for="criteria.assetStatus"><@s.text name="label.assetstatus"/></label>
-				<@s.select name="criteria.assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true" />
+				<@s.select name="criteria.assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true" />
 			</div>
 					
             <div class="infoSet">

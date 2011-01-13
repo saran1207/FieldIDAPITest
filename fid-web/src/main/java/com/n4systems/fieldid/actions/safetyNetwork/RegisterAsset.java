@@ -11,10 +11,11 @@ import com.n4systems.fieldid.actions.asset.AssetWebModel;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;

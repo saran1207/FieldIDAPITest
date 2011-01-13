@@ -32,7 +32,7 @@
 		
 		<div class="infoSet">
 			<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
-			<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
+			<@s.select name="assetStatus" list="assetStatuses" listKey="Id" listValue="name" emptyOption="true"  />
 		</div>
 
 		<#include "/templates/html/assetCrud/_attributes.ftl"/>

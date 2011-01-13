@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import rfid.ejb.entity.AssetStatus;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.util.ReportMap;
 
 public class ProductStatusMapBuilderTest {

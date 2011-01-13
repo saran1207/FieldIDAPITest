@@ -1,12 +1,12 @@
 package com.n4systems.reporting.mapbuilders;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.builders.OrgBuilder;

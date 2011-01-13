@@ -9,12 +9,12 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.utils.StrutsListHelper;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventType;

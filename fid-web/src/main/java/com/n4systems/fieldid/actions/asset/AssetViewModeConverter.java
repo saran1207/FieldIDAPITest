@@ -3,12 +3,12 @@ package com.n4systems.fieldid.actions.asset;
 import java.util.List;
 import java.util.TreeSet;
 
-import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;

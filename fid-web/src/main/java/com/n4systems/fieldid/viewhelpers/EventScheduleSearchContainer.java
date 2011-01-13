@@ -52,7 +52,7 @@ public class EventScheduleSearchContainer extends SearchContainer {
 		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
 		addWildcardOrStringTerm("asset.purchaseOrder", purchaseOrder);
 		addWildcardOrStringTerm("asset.customerRefNumber", referenceNumber);
-		addSimpleTerm("asset.assetStatus.uniqueID", assetStatusId);
+		addSimpleTerm("asset.assetStatus.id", assetStatusId);
 		addSimpleTerm("asset.type.id", assetTypeId);
 		addSimpleTerm("asset.type.group.id", assetTypeGroupId);
 		addSimpleTerm("eventType.group.id", eventTypeGroupId);

@@ -1,7 +1,7 @@
 package com.n4systems.model.builders;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Tenant;
-import rfid.ejb.entity.AssetStatus;
 
 public class AssetStatusBuilder extends BaseBuilder<AssetStatus> {
 

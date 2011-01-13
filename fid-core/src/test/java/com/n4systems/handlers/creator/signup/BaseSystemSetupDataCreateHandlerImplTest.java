@@ -7,10 +7,10 @@ import com.n4systems.model.assetstatus.AssetStatusSaver;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.StateSet;

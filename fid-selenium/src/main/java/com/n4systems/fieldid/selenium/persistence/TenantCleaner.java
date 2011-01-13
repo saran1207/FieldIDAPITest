@@ -11,9 +11,9 @@ import javax.persistence.Query;
 import com.n4systems.model.AddressInfo;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssetTypeSchedule;

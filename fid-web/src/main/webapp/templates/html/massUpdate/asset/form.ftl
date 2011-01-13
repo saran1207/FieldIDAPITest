@@ -55,7 +55,7 @@
 			<td>
 				<div class="infoSet">
 					<label class="label" ><@s.text name="label.assetstatus"/>:</label> 
-					<span class="field"><@s.select  name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('assetStatus');" /></span>
+					<span class="field"><@s.select  name="assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true" labelposition="left" onchange="selectField('assetStatus');" /></span>
 				</div>
 			</td>
 		</tr>

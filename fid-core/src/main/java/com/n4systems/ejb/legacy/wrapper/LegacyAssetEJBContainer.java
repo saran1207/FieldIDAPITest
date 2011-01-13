@@ -9,10 +9,10 @@ import javax.persistence.EntityManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.legacy.impl.LegacyAssetManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;

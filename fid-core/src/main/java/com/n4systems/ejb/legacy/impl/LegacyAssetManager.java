@@ -18,6 +18,7 @@ import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.SubAsset;
@@ -27,7 +28,6 @@ import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -66,7 +66,7 @@ public class LegacyAssetManager implements LegacyAsset {
 	}
 
 	public AssetStatus findAssetStatus(Long uniqueID, Long tenantId) {
-		Query query = em.createQuery("FROM "+AssetStatus.class.getName()+" st WHERE st.uniqueID = :uniqueID AND st.tenant.id = :tenantId");
+		Query query = em.createQuery("FROM "+AssetStatus.class.getName()+" st WHERE st.id = :uniqueID AND st.tenant.id = :tenantId");
 		query.setParameter("uniqueID", uniqueID);
 		query.setParameter("tenantId", tenantId);
 		AssetStatus obj = null;

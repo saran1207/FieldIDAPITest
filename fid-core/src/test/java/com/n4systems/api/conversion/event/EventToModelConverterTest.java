@@ -12,9 +12,9 @@ import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import org.junit.Test;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.api.conversion.ConversionException;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Status;

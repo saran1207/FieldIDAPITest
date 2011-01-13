@@ -92,7 +92,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 	
 	<div class="infoSet fullInfoSet">
 		<label for="view.assetStatus"><@s.text name="label.assetstatus"/></label>
-		<@s.select name="view.assetStatus" emptyOption="true" list="assetStatuses" listKey="uniqueID" listValue="name" />		
+		<@s.select name="view.assetStatus" emptyOption="true" list="assetStatuses" listKey="id" listValue="name" />		
 	</div>
 
 	<div class="infoSet fullInfoSet">

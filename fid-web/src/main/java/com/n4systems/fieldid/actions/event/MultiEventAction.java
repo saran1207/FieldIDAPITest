@@ -9,12 +9,12 @@ import com.n4systems.fieldid.actions.event.viewmodel.EventWebModel;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.CommonEventTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonEventTypeHandler;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.eventtype.CommonAssetTypeDatabaseLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
@@ -223,7 +223,7 @@ public class MultiEventAction extends AbstractCrud {
 	}
 	
 	public Long getAssetStatus() {
-		return commonAssetValues.assetStatus != null ? commonAssetValues.assetStatus.getUniqueID() : null;
+		return commonAssetValues.assetStatus != null ? commonAssetValues.assetStatus.getId() : null;
 	}
 	
 	@VisitorFieldValidator(message="")

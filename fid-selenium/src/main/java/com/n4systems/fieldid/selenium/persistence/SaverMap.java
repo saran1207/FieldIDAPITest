@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.persistence;
 
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetSaver;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
@@ -32,7 +33,6 @@ import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import rfid.ejb.entity.AssetStatus;
 
 import java.util.HashMap;
 

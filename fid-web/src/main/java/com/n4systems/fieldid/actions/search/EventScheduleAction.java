@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
@@ -25,6 +24,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
@@ -130,7 +130,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	public List<ListingPair> getAssetStatuses() {
 		List<ListingPair> psList = new ArrayList<ListingPair>();
 		for (AssetStatus assetStatus : getLoaderFactory().createAssetStatusListLoader().load()) {
-			psList.add(new ListingPair(assetStatus.getUniqueID(), assetStatus.getName()));
+			psList.add(new ListingPair(assetStatus.getId(), assetStatus.getName()));
 		}
 		return psList;
 	}

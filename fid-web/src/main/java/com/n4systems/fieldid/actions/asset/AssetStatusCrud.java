@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -58,8 +57,8 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 	}
 		
 	public String doSave() {
-		assetStatus.setModifiedBy( getSessionUser().getName() );
-		if ( assetStatus.getUniqueID() == null ) {
+		assetStatus.setModifiedBy( getUser() );
+		if ( assetStatus.getId() == null ) {
 			assetStatus.setTenant(getTenant());
 			
 			persistenceManager.saveAny(assetStatus);
@@ -90,7 +89,7 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 	
 	public List<AssetStatus> getAssetStatuses() {
 		if( assetStatuses == null ) {
-			assetStatuses = getLoaderFactory().createAssetStatusListLoader().setPostFetchFields("modifiedBy").load();
+			assetStatuses = getLoaderFactory().createAssetStatusListLoader().setPostFetchFields("modifiedBy", "createdBy").load();
 		}
 		return assetStatuses;
 	}
@@ -111,7 +110,7 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 	}
 
 	public boolean duplicateValueExists( String formValue ) {
-		return !persistenceManager.uniqueAssetStatusNameAvailable(AssetStatus.class, formValue, uniqueID, getTenantId());
+		return getLoaderFactory().createAssetStatusForNameExistsLoader().setName(formValue).setId(uniqueID).load();
 	}
 
 }

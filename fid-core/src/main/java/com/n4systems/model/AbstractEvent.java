@@ -23,7 +23,6 @@ import javax.persistence.Table;
 
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.parents.EntityWithTenant;

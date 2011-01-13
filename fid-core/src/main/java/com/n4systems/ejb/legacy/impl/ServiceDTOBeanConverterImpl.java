@@ -18,7 +18,6 @@ import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -31,6 +30,7 @@ import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssetTypeSchedule;
@@ -247,7 +247,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setIdentified(dateToString(asset.getIdentified()));
 		productDTO.setLastInspectionDate(dateToString(asset.getLastEventDate()));
 		productDTO.setMobileGuid(asset.getMobileGUID());
-		productDTO.setProductStatusId(asset.getAssetStatus() != null ? asset.getAssetStatus().getUniqueID() : 0);
+		productDTO.setProductStatusId(asset.getAssetStatus() != null ? asset.getAssetStatus().getId() : 0);
 		productDTO.setProductTypeId(asset.getType().getId());
 		productDTO.setPurchaseOrder(asset.getPurchaseOrder());
 		productDTO.setRfidNumber(asset.getRfidNumber() == null ? null : asset.getRfidNumber().toUpperCase());

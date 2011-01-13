@@ -1,8 +1,8 @@
 package com.n4systems.services;
 
-import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.CommentTempBean;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssetTypeSchedule;

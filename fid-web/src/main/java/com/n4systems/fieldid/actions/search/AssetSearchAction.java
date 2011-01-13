@@ -11,7 +11,6 @@ import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
@@ -20,6 +19,7 @@ import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;

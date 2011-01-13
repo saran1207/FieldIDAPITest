@@ -9,10 +9,10 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.builders.AssetBuilder;
 import org.junit.Test;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.model.location.Location;
 import com.n4systems.test.helpers.FluentArrayList;
@@ -28,7 +28,7 @@ public class CommonAssetValuesFinderTest {
 	public CommonAssetValuesFinderTest() {
 		super();
 		assetStatus = new AssetStatus();
-		assetStatus.setUniqueID(1L);
+		assetStatus.setId(1L);
 	}
 
 

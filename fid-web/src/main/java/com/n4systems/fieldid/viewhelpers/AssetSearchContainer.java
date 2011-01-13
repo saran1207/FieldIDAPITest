@@ -46,7 +46,7 @@ public class AssetSearchContainer extends SearchContainer {
 		addWildcardOrStringTerm("purchaseOrder", purchaseOrder);
 		addSimpleTerm("type.id", assetTypeId);
 		addSimpleTerm("type.group.id", assetTypeGroupId);
-		addSimpleTerm("assetStatus.uniqueID", assetStatusId);
+		addSimpleTerm("assetStatus.id", assetStatusId);
 		addDateRangeTerm("identified", fromDate, toDate);
 		
 		addPredefinedLocationTerm();

@@ -8,9 +8,9 @@ import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;

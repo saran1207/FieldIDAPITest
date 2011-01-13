@@ -24,6 +24,7 @@ import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToEventSche
 import com.n4systems.fieldid.viewhelpers.EventHelper;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
@@ -39,7 +40,6 @@ import com.n4systems.model.eventbook.EventBookSaver;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
@@ -670,13 +670,13 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	public Long getAssetStatus() {
-		return (event.getAssetStatus() != null) ? event.getAssetStatus().getUniqueID() : null;
+		return (event.getAssetStatus() != null) ? event.getAssetStatus().getId() : null;
 	}
 
 	public void setAssetStatus(Long assetStatus) {
 		if (assetStatus == null) {
 			event.setAssetStatus(null);
-		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getUniqueID())) {
+		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getId())) {
 			event.setAssetStatus(legacyAssetManager.findAssetStatus(assetStatus, getTenantId()));
 		}
 	}

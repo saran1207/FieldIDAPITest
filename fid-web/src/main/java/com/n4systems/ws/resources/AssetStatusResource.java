@@ -4,8 +4,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
-import rfid.ejb.entity.AssetStatus;
 
+import com.n4systems.model.AssetStatus;
 import com.n4systems.ws.model.assettype.WsAssetStatus;
 
 @Path("/AssetStatus")

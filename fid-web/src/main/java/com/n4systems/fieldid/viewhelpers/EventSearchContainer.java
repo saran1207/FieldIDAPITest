@@ -63,7 +63,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
 		addSimpleTerm("asset.type.id", assetTypeId);
 		addSimpleTerm("asset.type.group.id", assetTypeGroupId);
-		addSimpleTerm("assetStatus.uniqueID", assetStatusId);
+		addSimpleTerm("assetStatus.id", assetStatusId);
         addSimpleTerm("type.id", eventTypeId);
 		addSimpleTerm("type.group.id", eventTypeGroupId);
 		addSimpleTerm("performedBy.id", performedBy);

@@ -8,10 +8,10 @@ import java.util.Random;
 
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.CriteriaResult;

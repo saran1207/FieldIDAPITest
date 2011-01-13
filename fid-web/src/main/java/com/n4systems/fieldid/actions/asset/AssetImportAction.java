@@ -9,9 +9,10 @@ import java.util.List;
 
 import com.n4systems.exporting.AssetExporter;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
+
 import org.apache.log4j.Logger;
 
-import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 

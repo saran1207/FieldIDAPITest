@@ -25,7 +25,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -44,6 +43,7 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
@@ -684,7 +684,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	
 
 	public Long getAssetStatus() {
-		return (asset.getAssetStatus() != null) ? asset.getAssetStatus().getUniqueID() : null;
+		return (asset.getAssetStatus() != null) ? asset.getAssetStatus().getId() : null;
 	}
 
 	public void setAssetStatus(Long assetStatusId) {

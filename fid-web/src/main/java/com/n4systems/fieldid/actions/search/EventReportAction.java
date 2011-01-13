@@ -12,6 +12,7 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
@@ -19,7 +20,6 @@ import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.reporting.EventReportType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;

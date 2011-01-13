@@ -10,7 +10,7 @@
 	<div class="infoSet">
 		<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
 			<#if !parentAsset?exists >
-				<@s.select name="assetStatus" list="assetStatuses" listKey="uniqueID" listValue="name" emptyOption="true"  />
+				<@s.select name="assetStatus" list="assetStatuses" listKey="Id" listValue="name" emptyOption="true"  />
 			<#else>
 				<span class="fieldHolder" id="assetStatus">${(asset.assetStatus.name?html)!}</span>
 			</#if>		

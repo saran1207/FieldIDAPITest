@@ -62,7 +62,7 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 		}
 
 		if (notification.getAssetStatus() != null) {
-			builder.addSimpleWhere("asset.assetStatus.uniqueID", notification.getAssetStatus());
+			builder.addSimpleWhere("asset.assetStatus.id", notification.getAssetStatus());
 		}
 		
 		if (!notification.getEventTypes().isEmpty()) {

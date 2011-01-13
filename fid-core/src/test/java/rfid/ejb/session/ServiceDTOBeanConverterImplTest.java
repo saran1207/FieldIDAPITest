@@ -314,7 +314,7 @@ public class ServiceDTOBeanConverterImplTest {
 		}
 		
 		if (productServiceDTO.getProductStatusId() > 0) {
-			assertEquals(new Long(productServiceDTO.getProductStatusId()), asset.getAssetStatus().getUniqueID());
+			assertEquals(new Long(productServiceDTO.getProductStatusId()), asset.getAssetStatus().getId());
 		} else {
 			if (productServiceDTO.getProductStatusId() == ServiceDTOBeanConverterImpl.NULL_ID) {
 				assertNull(asset.getAssetStatus());

@@ -21,7 +21,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.model.api.Exportable;

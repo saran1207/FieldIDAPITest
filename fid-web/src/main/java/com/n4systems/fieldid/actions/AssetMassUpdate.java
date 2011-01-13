@@ -9,12 +9,12 @@ import com.n4systems.fieldid.actions.asset.PublishedState;
 import com.n4systems.fieldid.actions.search.AssetSearchAction;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Order;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-import rfid.ejb.entity.AssetStatus;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.MassUpdateManager;
@@ -204,13 +204,13 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	}
 
 	public Long getAssetStatus() {
-		return (asset.getAssetStatus() == null) ? null : asset.getAssetStatus().getUniqueID();
+		return (asset.getAssetStatus() == null) ? null : asset.getAssetStatus().getId();
 	}
 
 	public void setAssetStatus(Long statusId) {
 		if (statusId == null) {
 			asset.setAssetStatus(null);
-		} else if (asset.getAssetStatus() == null || !statusId.equals(asset.getAssetStatus().getUniqueID())) {
+		} else if (asset.getAssetStatus() == null || !statusId.equals(asset.getAssetStatus().getId())) {
 			AssetStatus assetStatus = legacyAssetManager.findAssetStatus(statusId, getTenantId());
 			asset.setAssetStatus(assetStatus);
 		}

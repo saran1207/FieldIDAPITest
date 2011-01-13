@@ -11,6 +11,7 @@ import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
@@ -18,7 +19,6 @@ import com.n4systems.model.builders.SubAssetBuilder;
 
 import org.junit.Before;
 import org.junit.Test;
-import rfid.ejb.entity.AssetStatus;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

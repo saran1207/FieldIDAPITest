@@ -11,7 +11,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.AssetExtension;
-import rfid.ejb.entity.AssetStatus;
 import rfid.ejb.entity.InfoFieldBean;
 
 import com.n4systems.ejb.OrderManager;
@@ -27,6 +26,7 @@ import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.LineItem;
@@ -152,7 +152,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			// we need to make sure we load the assettype with its info fields
 			setAssetTypeId(addAssetHistory.getAssetType().getId());
 
-			assetView.setAssetStatus(addAssetHistory.getAssetStatus() != null ? addAssetHistory.getAssetStatus().getUniqueID(): null);
+			assetView.setAssetStatus(addAssetHistory.getAssetStatus() != null ? addAssetHistory.getAssetStatus().getId(): null);
 			assetView.setPurchaseOrder(addAssetHistory.getPurchaseOrder());
 			assetWebModel.getLocation().setFreeformLocation(addAssetHistory.getLocation().getFreeformLocation());
 			
