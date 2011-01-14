@@ -91,6 +91,7 @@ public class CustomerCrudTest {
 
 	private void setUpLoaderExpectations() {
 		expect(loaderFactory.createCustomerOrgPaginatedLoader()).andReturn(loader);
+		expect(loader.setPostFetchFields("modifiedBy", "createdBy")).andReturn(loader);
 		expect(loader.setPage(1)).andReturn(loader);
 		expect(loader.setPageSize(20)).andReturn(loader);
 		expect(loader.setNameFilter(null)).andReturn(loader);
