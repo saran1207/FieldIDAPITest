@@ -18,7 +18,7 @@ public class AssetStatusFilteredLoader extends SecurityFilteredLoader<AssetStatu
 	@Override
 	protected AssetStatus load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<AssetStatus> builder = new QueryBuilder<AssetStatus>(AssetStatus.class, filter);
-		builder.addSimpleWhere("uniqueID", id);
+		builder.addSimpleWhere("id", id);
 		
 		AssetStatus assetStatus = builder.getSingleResult(em);
 	    return assetStatus;
