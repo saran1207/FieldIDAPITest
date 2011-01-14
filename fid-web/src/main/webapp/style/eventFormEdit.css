@@ -221,6 +221,11 @@ div.reorderLinkSection {
     float: right;
 }
 
+div.criteriaDetailsEditor div.reorderLinkSection {
+    padding-top:3px;
+    padding-bottom:3px;
+}
+
 .twoStateLink {
     padding-top: 10px;
     padding-bottom: 10px;
