@@ -1,18 +1,22 @@
 ${action.setPageType('event_type', 'event_form')!}
 
 <script type="text/javascript">
-    var eventTypeFormUrl = '<@s.url namespace="/" action="eventTypeForm"/>';
-
-    function refreshPageToNewEventTypeId(id) {
-        window.location = eventTypeFormUrl + "?uniqueID=" + id;
-    }
+    var eventTypeViewUrl = '<@s.url namespace="/" action="eventType" uniqueID="${eventType.id}"/>';
+    var promptBeforeLeaving = true;
 
     function onSuccessfulSessionRefresh() {
+        promptBeforeLeaving = false;
         window.location.reload();
     }
 
+    function navigateBackToEvenTypeView() {
+        promptBeforeLeaving = false;
+        window.location = eventTypeViewUrl;
+    }
+
     window.onbeforeunload = function() {
-        return "It looks like you're about to leave this page. Please ensure that any changes are saved.";
+        if (promptBeforeLeaving)
+            return "It looks like you're about to leave this page. Please ensure that any changes are saved.";
     }
 </script>
 

@@ -142,7 +142,7 @@ public class EventFormEditPage extends FieldIDWicketPage {
             protected void onSaveAndFinishClicked(AjaxRequestTarget target) {
                 saveEventForm();
                 FieldIDSession.get().storeInfoMessageForStruts("Event Form saved.");
-                target.appendJavascript("parent.window.location = '/fieldid/eventType.action?uniqueID=" + eventTypeId + "';");
+                target.appendJavascript("parent.navigateBackToEvenTypeView();");
             }
         };
     }
