@@ -12,7 +12,7 @@ ${action.setPageType('event_type', 'event_form')!}
     }
 
     window.onbeforeunload = function() {
-        return "Any unsaved changes will be lost upon leaving this page.";
+        return "It looks like you're about to leave this page. Please ensure that any changes are saved.";
     }
 </script>
 
