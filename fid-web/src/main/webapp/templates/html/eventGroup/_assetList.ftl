@@ -1,7 +1,7 @@
 <#if !namespace?exists><#assign namespace="/"/></#if>
 <div id="results">
 	<#if page?exists>
-		<#if page.validPage() && page.hasResults()  >	
+		<#if page.validPage() && !page.list.isEmpty()  >
 			<#include '../common/_pagination.ftl' />
 			<h2 class="clean"><@s.text name="label.found_multiple_assets"/></h2>
 			<div id="resultsTable">
@@ -37,7 +37,7 @@
 				</p>
 			</div>
 		</#if>
-		<#if page.validPage() && page.hasResults()  >	
+		<#if page.validPage() && !page.list.isEmpty()  >	
 			<#list page.list as asset >
 				<@n4.includeScript>
 					var asset = null;

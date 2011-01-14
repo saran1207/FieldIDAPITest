@@ -89,21 +89,19 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private String identified;
 	private LineItem lineItem;
 	private OwnerPicker ownerPicker;
-	
+
 	private AssignedToUserGrouper userGrouper;
-	
+
 	private boolean refreshRegirstation = false;
 	private boolean useAjaxPagination = false;
 	private boolean usePagination = true;
 	/**
-	 * Set only when coming from searchOrder.action, when attached a customer
-	 * order through editWithCustomerOrder()
+	 * Set only when coming from searchOrder.action, when attached a customer order through editWithCustomerOrder()
 	 */
 	private Order customerOrder;
 
 	/**
-	 * Set only when coming from searchOrder.action, and used to recreate the
-	 * URL going back to search
+	 * Set only when coming from searchOrder.action, and used to recreate the URL going back to search
 	 */
 	private Long tagOptionId;
 
@@ -134,19 +132,18 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private AssetTypeLister assetTypes;
 	private AssetSaveService assetSaverService;
 	private Long excludeId;
-	
+
 	protected List<Asset> linkedAssets;
 	protected Map<Long, List<AssetAttachment>> linkedAssetAttachments;
-	
+
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
-	
+
 	private Pager<Asset> page;
 	private List<Asset> assets;
-	
+
 	// XXX: this needs access to way to many managers to be healthy!!! AA
-	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
-			AssetCodeMappingService assetCodeMappingServiceManager, AssetManager assetManager, OrderManager orderManager,
-			ProjectManager projectManager, EventScheduleManager eventScheduleManager) {
+	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager, AssetCodeMappingService assetCodeMappingServiceManager,
+			AssetManager assetManager, OrderManager orderManager, ProjectManager projectManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.assetTypeManager = assetTypeManager;
 		this.legacyAssetManager = legacyAssetManager;
@@ -172,21 +169,20 @@ public class AssetCrud extends UploadAttachmentSupport {
 			} else {
 				asset = getLoaderFactory().createSafetyNetworkAssetLoader().withAllFields().setAssetId(uniqueId).load();
 			}
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			logger.error("Unable to load asset", e);
 		}
 		assetWebModel.match(asset);
-		
+
 	}
-	
+
 	@Override
 	protected void postInit() {
 		super.postInit();
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), asset);
 		overrideHelper(new AssetCrudHelper(getLoaderFactory()));
 	}
-	
 
 	private void loadAddAssetHistory() {
 		addAssetHistory = legacyAssetManager.getAddAssetHistory(getSessionUser().getUniqueID());
@@ -194,12 +190,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	private void applyDefaults() {
 		refreshRegirstation = true;
-		
+
 		asset.setIdentified(DateHelper.getToday());
 
 		loadAddAssetHistory();
 		if (addAssetHistory != null) {
-			
+
 			setOwnerId(addAssetHistory.getOwner() != null ? addAssetHistory.getOwner().getId() : null);
 
 			// we need to make sure we load the assettype with its info fields
@@ -217,10 +213,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 			setAssetTypeId(assetTypeId);
 			setOwnerId(getSessionUser().getOwner().getId());
 		}
-		
+
 		assetWebModel.match(asset);
 
-		
 	}
 
 	private void convertInputsToInfoOptions() {
@@ -233,39 +228,33 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doList() {
 		// if no search param came just show the form.
 		if (search != null && search.length() > 0) {
-			
+
 			try {
-				
-				if(isUsePagination()){
-					page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(getSearch()).setAssetType(getAssetTypeId()).setPage(getCurrentPage()).load();
-					
+				if (isUsePagination()) {
+
+					retrievePagedAssets();
+
 					// if there is only one forward directly to the group view screen.
-					if (page.getTotalResults() == 1) {
+					if (page.getTotalResults() == 1 && !page.getList().isEmpty()) {
 						asset = page.getList().get(0);
 						uniqueID = asset.getId();
-						
-						// if we're in a vendor context we go to the tracebility tab instead
-						return (isInVendorContext()) ? "oneFoundVendorContext" : "oneFound";
+
+						return "oneFound";
 					}
-				}else{
-					assets = assetManager.findAssetByIdentifiers(getSecurityFilter(), search, assetType);
+					
+				/*Keeping this branch for the time being as the sub-component and sub-event pages take
+				 * a list of assets. Once they're rewritten we'll get rid of this. */
+				} else {
+					
+					retrievedListedAssets();
 					
 					if (assets.size() == 1) {
 						asset = assets.get(0);
 						uniqueID = asset.getId();
-						return (isInVendorContext()) ? "oneFoundVendorContext" : "oneFound";
+					
+						return "oneFound";
 					}
 				}
-				
-				// remove the asset given. ( this is for asset merging, you
-				// don't want to merge the asset with itself.)
-				if (excludeId != null) {
-					Asset excludeAsset = new Asset();
-					excludeAsset.setId(excludeId);
-					page.getList().remove(excludeAsset);
-				}
-				
-				
 			} catch (Exception e) {
 				logger.error("Failed to look up Assets", e);
 				addActionErrorText("error.failedtoload");
@@ -275,27 +264,51 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 		return SUCCESS;
 	}
-	
+
+	private void retrievePagedAssets() {
+		page = getLoaderFactory().createSmartSearchPagedLoader().setSearchText(getSearch()).setAssetType(getAssetTypeId()).setPage(getCurrentPage()).load();
+
+		// remove the asset given. ( this is for asset merging, you
+		// don't want to merge the asset with itself.)
+		if (excludeId != null) {
+			Asset excludeAsset = new Asset();
+			excludeAsset.setId(excludeId);
+			page.getList().remove(excludeAsset);
+		}
+	}
+
+	private void retrievedListedAssets() {
+		assets = assetManager.findAssetByIdentifiers(getSecurityFilter(), search, assetType);
+
+		// remove the asset given. ( this is for asset merging, you
+		// don't want to merge the asset with itself.)
+		if (excludeId != null) {
+			Asset excludeAsset = new Asset();
+			excludeAsset.setId(excludeId);
+			assets.remove(excludeAsset);
+		}
+	}
+
 	public Pager<Asset> getPage() {
 		return page;
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doAddNoHistory() {
 		asset.setIdentified(DateHelper.getToday());
 		return SUCCESS;
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doAdd() {
 		applyDefaults();
 		return SUCCESS;
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doAddWithOrder() {
 
 		if (lineItem == null || lineItem.getId() == null) {
@@ -307,8 +320,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		// default asset code if one could not be found.
 		AssetCodeMapping assetCodeMapping = assetCodeMappingServiceManager.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode(), getTenantId());
 
-		if (assetCodeMapping.getAssetInfo() != null && 
-				!assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
+		if (assetCodeMapping.getAssetInfo() != null && !assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
 			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
 
 			if (assetCodeMapping.getInfoOptions() != null && !assetCodeMapping.getInfoOptions().isEmpty()) {
@@ -318,7 +330,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 		if (asset.getType() == null) {
 			applyDefaults();
 		}
-
 
 		asset.setCustomerRefNumber(assetCodeMapping.getCustomerRefNumber());
 		asset.setShopOrder(lineItem);
@@ -351,7 +362,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doEdit() {
 		makeEmployeesIncludeCurrentAssignedUser();
 		testExistingAsset();
@@ -362,23 +373,21 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	private void makeEmployeesIncludeCurrentAssignedUser() {
 		Listable<Long> assignedUserListable = asset.getAssignedUser() != null ? new SimpleListable<Long>(asset.getAssignedUser()) : null;
-		
+
 		OptionLists.includeInList(getEmployees(), assignedUserListable);
 	}
-	
-	
 
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doCreate() {
 		testAsset();
 
 		try {
-			
+
 			prepareAssetToBeSaved();
-			
+
 			// we only set identified by on save
 			asset.setIdentifiedBy(fetchCurrentUser());
-			
+
 			AssetSaveService saver = getAssetSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setAsset(asset);
@@ -422,21 +431,21 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private void prepareAssetToBeSaved() {
 		asset.setTenant(getTenant());
 		asset.setIdentified(convertDate(identified));
-		
+
 		convertInputsToInfoOptions();
 		processOrderMasters();
-		
+
 		assetWebModel.fillInAsset(asset);
 	}
-	
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doUpdate() {
 		testAsset();
 		makeEmployeesIncludeCurrentAssignedUser();
-		
+
 		try {
 			prepareAssetToBeSaved();
-			
+
 			// on edit, we need to know if the asset type has changed
 			AssetType oldType = assetTypeManager.findAssetTypeForAsset(asset.getId());
 
@@ -469,7 +478,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doConnectToShopOrder() {
 		testExistingAsset();
 
@@ -510,7 +519,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doConnectToCustomerOrder() {
 		testExistingAsset();
 
@@ -541,7 +550,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doConfirmDelete() {
 		testExistingAsset();
 		try {
@@ -553,7 +562,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doDelete() {
 		testExistingAsset();
 		try {
@@ -571,7 +580,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	@SkipValidation
-	@UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
+	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doAssetTypeChange() {
 		return SUCCESS;
 	}
@@ -580,7 +589,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doPrint() {
 		return SUCCESS;
 	}
-	
+
 	public List<StringListingPair> getPublishedStates() {
 		return PublishedState.getPublishedStates(this);
 	}
@@ -680,8 +689,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public void setCustomerRefNumber(String customerRefNumber) {
 		asset.setCustomerRefNumber(customerRefNumber);
 	}
-
-	
 
 	public Long getAssetStatus() {
 		return (asset.getAssetStatus() != null) ? asset.getAssetStatus().getId() : null;
@@ -813,7 +820,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		}
 		return employees;
 	}
-	
+
 	public Long getAssignedUser() {
 		return (asset.getAssignedUser() != null) ? asset.getAssignedUser().getId() : null;
 	}
@@ -950,7 +957,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public List<AssetAttachment> getLinkedAssetAttachments(Long linkedAssetId) {
 		return linkedAssetAttachments.get(linkedAssetId);
 	}
-	
+
 	public List<AssetAttachment> getAssetAttachments() {
 		if (assetAttachments == null) {
 			assetAttachments = getLoaderFactory().createAssetAttachmentListLoader().setAsset(asset).load();
@@ -965,8 +972,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
-	
-	@RequiredFieldValidator(message="", key="error.owner_required")
+
+	@RequiredFieldValidator(message = "", key = "error.owner_required")
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
@@ -974,11 +981,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String getPublishedState() {
 		return PublishedState.resolvePublishedState(asset.isPublished()).name();
 	}
-	
+
 	public void setPublishedState(String stateName) {
 		asset.setPublished(PublishedState.valueOf(stateName).isPublished());
 	}
-	
+
 	public String getPublishedStateLabel() {
 		return PublishedState.resolvePublishedState(asset.isPublished()).getPastTenseLabel();
 	}
@@ -994,11 +1001,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 			asset.setLinkedAsset(getLoaderFactory().createSafetyNetworkAssetLoader().setAssetId(id).load());
 		}
 	}
-	
+
 	public List<Asset> getLinkedAssets() {
 		return linkedAssets;
 	}
-	
+
 	public boolean isLinked() {
 		return AssetLinkedHelper.isLinked(asset, getLoaderFactory());
 	}
@@ -1016,7 +1023,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	public AssignedToUserGrouper getUserGrouper() {
-		if (userGrouper == null){
+		if (userGrouper == null) {
 			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
 		}
 		return userGrouper;
@@ -1041,5 +1048,5 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public boolean isUsePagination() {
 		return usePagination;
 	}
-	
+
 }
