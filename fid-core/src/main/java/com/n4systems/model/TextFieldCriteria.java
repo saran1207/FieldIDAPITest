@@ -14,9 +14,4 @@ public class TextFieldCriteria extends Criteria {
         return true;
     }
 
-    @Override
-    public String getTypeDescription() {
-        return "Text Field";
-    }
-
 }

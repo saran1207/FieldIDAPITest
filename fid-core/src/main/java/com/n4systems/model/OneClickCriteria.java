@@ -38,8 +38,4 @@ public class OneClickCriteria extends Criteria {
 		this.principal = principal;
 	}
 
-    @Override
-    public String getTypeDescription() {
-        return "One-Click";
-    }
 }

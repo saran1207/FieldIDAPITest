@@ -86,7 +86,7 @@ div.deleteLinkSection {
     float: left;
 }
 
-div.editForm {
+div.criteriaSections div.editForm, div.criteria div.editForm {
     padding-top: 10px;
 }
 
@@ -303,6 +303,17 @@ div.savePanel a.glossyButtonLink {
     margin-left: 31px;
 }
 
-div.observationsListEditor div.stringListItem input[type="text"] {
+div.criteriaDetailsEditor div.stringListItem input[type="text"] {
     width: 150px;
+    margin-left: 10px;
+}
+
+div.criteriaDetailsEditor form {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+div.buttonGroupConfiguration {
+    padding-left: 15px;
+    padding-top: 5px;
 }

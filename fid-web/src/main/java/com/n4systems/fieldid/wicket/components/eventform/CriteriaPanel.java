@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
+import com.n4systems.fieldid.wicket.model.CriteriaTypeDescriptionModel;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.OneClickCriteria;
@@ -37,6 +38,8 @@ public class CriteriaPanel extends SortableListPanel {
     private SortableAjaxBehavior sortableAjaxBehavior;
     private boolean reorderState = false;
 
+    private StateSet previouslySelectedStateSet;
+
     public CriteriaPanel(String id) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
@@ -46,7 +49,7 @@ public class CriteriaPanel extends SortableListPanel {
             @Override
             protected void populateItem(final ListItem<Criteria> item) {
                 item.setOutputMarkupId(true);
-                item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "displayText"), new PropertyModel<String>(item.getModel(), "typeDescription")) {
+                item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "displayText"), new CriteriaTypeDescriptionModel(item.getModel())) {
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
                         currentlySelectedIndex = item.getIndex();
@@ -118,7 +121,7 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     class CriteriaAddForm extends Form {
-        private List<String> criteriaTypes = Arrays.asList("One-Click", "Text Field", "Select");
+        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box");
         protected TextField addTextField;
         private String criteriaName;
         private String criteriaType;
@@ -132,7 +135,7 @@ public class CriteriaPanel extends SortableListPanel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     Criteria criteria = null;
-                    if ("One-Click".equals(criteriaType)) {
+                    if ("One-Click Button".equals(criteriaType)) {
                         OneClickCriteria oneClickCriteria = new OneClickCriteria();
                         StateSetLoader stateSetLoader = new StateSetLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
                         List<StateSet> stateSetList =  stateSetLoader.load();
@@ -141,11 +144,15 @@ public class CriteriaPanel extends SortableListPanel {
                             target.addComponent(feedbackPanel);
                             return;
                         }
-                        oneClickCriteria.setStates(stateSetList.get(0));
+                        if (previouslySelectedStateSet != null) {
+                            oneClickCriteria.setStates(previouslySelectedStateSet);
+                        } else {
+                            oneClickCriteria.setStates(stateSetList.get(0));
+                        }
                         criteria = oneClickCriteria;
                     } else if ("Text Field".equals(criteriaType)) {
                         criteria = new TextFieldCriteria();
-                    } else if ("Select".equals(criteriaType)) {
+                    } else if ("Select Box".equals(criteriaType)) {
                         criteria = new SelectCriteria();
                     }
                     
@@ -198,4 +205,7 @@ public class CriteriaPanel extends SortableListPanel {
         return criteriaAddForm.addTextField.getMarkupId();
     }
 
+    public void setPreviouslySelectedStateSet(StateSet previouslySelectedStateSet) {
+        this.previouslySelectedStateSet = previouslySelectedStateSet;
+    }
 }

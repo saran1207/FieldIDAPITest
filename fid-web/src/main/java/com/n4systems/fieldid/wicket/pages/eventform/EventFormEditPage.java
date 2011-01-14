@@ -11,6 +11,7 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
+import com.n4systems.model.StateSet;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.eventtype.EventTypeSaver;
@@ -119,7 +120,12 @@ public class EventFormEditPage extends FieldIDWicketPage {
         });
         criteriaPanel.setVisible(false);
 
-        add(criteriaDetailsPanel = new CriteriaDetailsPanel("criteriaDetailsPanel", new Model<Criteria>()));
+        add(criteriaDetailsPanel = new CriteriaDetailsPanel("criteriaDetailsPanel", new Model<Criteria>()) {
+            @Override
+            protected void onStateSetSelected(StateSet stateSet) {
+                criteriaPanel.setPreviouslySelectedStateSet(stateSet);
+            }
+        });
         criteriaDetailsPanel.setVisible(false);
     }
 

@@ -44,6 +44,7 @@ public class OneClickDetailsPanel extends Panel {
             stateChoice.add(new AjaxFormSubmitBehavior("onchange") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {
+                    onStateSetSelected(getCriteriaModel().getObject().getStates());
                     target.addComponent(buttonGroupDisplayPanel);
                 }
                 @Override
@@ -73,5 +74,7 @@ public class OneClickDetailsPanel extends Panel {
             }
         };
     }
+
+    protected void onStateSetSelected(StateSet stateSet) { }
 
 }

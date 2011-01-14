@@ -8,6 +8,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -101,16 +102,19 @@ public class SortableStringListEditor extends SortableListPanel {
     class AddStringForm extends Form {
 
         private String string;
+        private TextField<String> addItemTextField;
 
         public AddStringForm(String id) {
             super(id);
-            add(new RequiredTextField<String>("string", new PropertyModel<String>(this, "string")));
+            add(addItemTextField = new RequiredTextField<String>("string", new PropertyModel<String>(this, "string")));
+            addItemTextField.setOutputMarkupId(true);
             add(new AjaxButton("addButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     getStringList().add(string);
                     string = null;
                     target.addComponent(SortableStringListEditor.this);
+                    focusOnAddItemTextField(target);
                 }
             });
         }
@@ -119,6 +123,11 @@ public class SortableStringListEditor extends SortableListPanel {
         public boolean isVisible() {
             return !reorderState;
         }
+
+        private void focusOnAddItemTextField(AjaxRequestTarget target) {
+            target.appendJavascript("document.getElementById('"+addItemTextField.getMarkupId()+"').focus()");
+        }
+
     }
 
 

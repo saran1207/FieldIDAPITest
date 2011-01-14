@@ -102,9 +102,4 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
         return false;
     }
 
-    // TODO: Remove and replace with wicket model
-    public String getTypeDescription() {
-        return "NONE";
-    }
-
 }
