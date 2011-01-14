@@ -10,6 +10,10 @@ ${action.setPageType('event_type', 'event_form')!}
     function onSuccessfulSessionRefresh() {
         window.location.reload();
     }
+
+    window.onbeforeunload = function() {
+        return "Any unsaved changes will be lost upon leaving this page.";
+    }
 </script>
 
 <#assign eventFormEditUrl>/fieldid/w/eventFormEdit/id/#{eventType.id}</#assign>

@@ -317,3 +317,8 @@ div.buttonGroupConfiguration {
     padding-left: 15px;
     padding-top: 5px;
 }
+
+div.addItemTitle {
+    font-size: 0.9em;
+    font-weight: bold;
+}

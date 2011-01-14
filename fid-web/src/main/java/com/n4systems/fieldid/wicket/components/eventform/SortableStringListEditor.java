@@ -6,6 +6,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -25,9 +26,11 @@ public class SortableStringListEditor extends SortableListPanel {
     private SortableAjaxBehavior sortableAjaxBehavior;
     private boolean reorderState = false;
 
-	public SortableStringListEditor(String id, IModel<List<String>> listModel) {
+	public SortableStringListEditor(String id, IModel<List<String>> listModel, IModel<String> addItemLabelModel) {
 		super(id, listModel);
         setOutputMarkupId(true);
+
+        add(new Label("addItemTitle", addItemLabelModel));
         
         WebMarkupContainer sortableCriteriaContainer = new WebMarkupContainer("sortableCriteriaContainer");
         sortableCriteriaContainer.add(stringList = new ListView<String>("stringList", listModel) {
@@ -129,7 +132,6 @@ public class SortableStringListEditor extends SortableListPanel {
         }
 
     }
-
 
 	@Override
 	protected int getIndexOfComponent(Component component) {
