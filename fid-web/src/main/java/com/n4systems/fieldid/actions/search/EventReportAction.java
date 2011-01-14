@@ -4,6 +4,8 @@ import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +46,7 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleListable;
 import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
+import com.n4systems.util.views.TableView;
 import com.opensymphony.xwork2.Preparable;
 
 public class EventReportAction extends CustomizableSearchAction<EventSearchContainer> implements Preparable {
@@ -65,7 +68,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	private List<AssetStatus> statuses;
 	private List<ListingPair> eventJobs;
 	private AssignedToUserGrouper userGrouper;
-	
+	private TableView table;
 	public EventReportAction(
 			final PersistenceManager persistenceManager,
 			final UserManager userManager, 
@@ -137,8 +140,8 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		String reportName = String.format("%s Report - %s", reportType.getDisplayName(), DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
-			List<Long> eventIds = getContainer().getMultiIdSelection().getSelectedIds();
-	
+			List<Long> eventIds = sortEventIdsByRowIndex(getContainer().getMultiIdSelection().getSelectedIds());
+			
 			getDownloadCoordinator().generateAllEventCertificates(reportName, getDownloadLinkUrl(), reportType, eventIds);
 		} catch(RuntimeException e) {
 			logger.error("Failed to print all event certs", e);
@@ -349,4 +352,16 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		}
 		return userGrouper;
 	}
+
+	private List<Long> sortEventIdsByRowIndex(List<Long> eventIds) {
+		final TableView table = getSearchResults();
+
+		Collections.sort(eventIds, new Comparator<Long>() {
+			public int compare(Long o1, Long o2) {
+				return (table.getRowForId(o1).compareTo(table.getRowForId(o2)));
+			}
+		});
+		return eventIds;
+	}
+
 }

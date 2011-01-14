@@ -157,7 +157,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return status;
 	}
 
-	private TableView getSearchResults() {
+	public TableView getSearchResults() {
 		PageHolder<TableView> searchResults = new SearchPerformerWithReadOnlyTransactionManagement().search(new ImmutableSearchDefiner<TableView>(this), getContainer().getSecurityFilter());
 		setTotalResults(searchResults.getTotalsResults());
 		return searchResults.getPageResults();

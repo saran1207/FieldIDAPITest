@@ -77,6 +77,10 @@ public class TableView extends AbstractCollection<List<Object>> {
 		return idList.get(row);
 	}
 	
+	public Long getRowForId(Long id){
+		return new Long(idList.indexOf(id));
+	}
+	
 	public List<Long> getIdList() {
 		return idList;
 	}
