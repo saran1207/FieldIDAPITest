@@ -25,7 +25,9 @@ public class NextEventScheduleLoader extends Loader<EventSchedule> {
 		EventSchedule schedule = null;
 		
 		QueryBuilder<EventSchedule> query = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED).addSimpleWhere("eventType.id", typeId);
+		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.NE, "status", "status", ScheduleStatus.COMPLETED);
+		if(typeId != null)
+			query.addSimpleWhere("eventType.id", typeId);
 		query.addOrder("nextDate");
 		
 		List<EventSchedule> schedules = query.getResultList(em, 0, 1);
