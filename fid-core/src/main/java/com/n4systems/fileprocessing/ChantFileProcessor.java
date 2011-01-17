@@ -154,7 +154,17 @@ public class ChantFileProcessor extends FileProcessor {
 		
 		String serialNumber = getChildNodeText(fixDataNode, "Serial_x0020_Number");
 		fileDataContainer.setSerialNumbers(serialNumber);
-		
+
+        String companyId = getChildNodeText(fixDataNode, "Customer_x0020_ID");
+        @SuppressWarnings("unchecked")
+        List<Node> dataNodes = doc.selectNodes("/TestCertificate/dtCustomer/Customer_x0020_ID[.='" + companyId + "']/../Customer_x0020_Name");
+        if (dataNodes.size() > 0) {
+            String customerName = dataNodes.get(0).getText();
+            fileDataContainer.setCustomerName(customerName);
+        } else {
+            logger.warn("Company name not found for serial number ["+serialNumber+"]");
+        }
+
 		logger.debug("Chant file is for serial number [" + serialNumber + "] and date performed [" + String.valueOf(datePerformed) + "]");
 		// note: FileDataContainer.PEAK_LOAD is set later on when processing series data
 	}
