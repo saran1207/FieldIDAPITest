@@ -152,6 +152,7 @@ public class CustomerCrud extends AbstractCrud {
 			if (customer.getTenant() == null) {
 				customer.setTenant(getTenant());
 			}
+            customer.touch();
 			saver.saveOrUpdate(customer);
 			addFlashMessage(getText("message.saved"));
 			uniqueID = customer.getId();
