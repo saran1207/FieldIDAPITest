@@ -62,7 +62,7 @@ public class CustomerCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		customer = getLoaderFactory().createEntityByIdLoader(CustomerOrg.class).setId(uniqueId).load();
+		customer = getLoaderFactory().createEntityByIdLoader(CustomerOrg.class).setId(uniqueId).setPostFetchFields("createdBy", "modifiedBy").load();
 		if (customer.getAddressInfo() == null) {
 			customer.setAddressInfo(new AddressInfo());
 		}
