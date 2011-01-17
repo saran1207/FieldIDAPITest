@@ -159,7 +159,7 @@ public class EventFormEditPage extends FieldIDWicketPage {
     }
 
     private void focusOnCriteriaNameField(AjaxRequestTarget target) {
-        target.appendJavascript("document.getElementById('"+criteriaPanel.getAddTextFieldId()+"').focus()");
+        target.focusComponent(criteriaPanel.getAddTextField());
     }
 
     private void saveEventForm() {

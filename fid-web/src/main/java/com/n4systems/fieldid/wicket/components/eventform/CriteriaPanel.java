@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
@@ -122,16 +123,17 @@ public class CriteriaPanel extends SortableListPanel {
 
     class CriteriaAddForm extends Form {
         private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box");
-        protected TextField addTextField;
+        protected TextField<String> addTextField;
         private String criteriaName;
         private String criteriaType;
 
         public CriteriaAddForm(String id) {
             super(id);
             add(new DropDownChoice<String>("criteriaType", new PropertyModel<String>(this, "criteriaType"), criteriaTypes).setRequired(true));
+            AjaxButton submitButton;
             add(addTextField = new RequiredTextField<String>("criteriaName", new PropertyModel<String>(this, "criteriaName")));
             addTextField.setOutputMarkupId(true);
-            add(new AjaxButton("submitButton") {
+            add(submitButton = new AjaxButton("submitButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     Criteria criteria = null;
@@ -167,6 +169,8 @@ public class CriteriaPanel extends SortableListPanel {
                     target.addComponent(feedbackPanel);
                 }
             });
+
+            addTextField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(submitButton));
         }
 
         @Override
@@ -203,6 +207,10 @@ public class CriteriaPanel extends SortableListPanel {
 
     public String getAddTextFieldId() {
         return criteriaAddForm.addTextField.getMarkupId();
+    }
+
+    public TextField<String> getAddTextField() {
+        return criteriaAddForm.addTextField;
     }
 
     public void setPreviouslySelectedStateSet(StateSet previouslySelectedStateSet) {

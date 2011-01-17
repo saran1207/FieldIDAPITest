@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
@@ -56,7 +57,8 @@ public class StringListEditor extends Panel {
             super(id);
             add(addItemTextField = new RequiredTextField<String>("string", new PropertyModel<String>(this, "string")));
             addItemTextField.setOutputMarkupId(true);
-            add(new AjaxButton("addButton") {
+            AjaxButton addButton;
+            add(addButton = new AjaxButton("addButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     getStringList().add(string);
@@ -65,10 +67,11 @@ public class StringListEditor extends Panel {
                     focusOnAddItemTextField(target);
                 }
             });
+            addItemTextField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(addButton));
         }
 
         private void focusOnAddItemTextField(AjaxRequestTarget target) {
-            target.appendJavascript("document.getElementById('"+addItemTextField.getMarkupId()+"').focus()");
+            target.focusComponent(addItemTextField);
         }
 
     }

@@ -167,7 +167,7 @@ div.addStringForm {
 }
 
 div.addStringForm input {
-    width: 80%;
+    width: 250px;
 }
 
 div.stringListItem {
@@ -260,6 +260,7 @@ ul.feedbackPanel {
     list-style-type:none;
     padding-top: 9px;
     padding-bottom: 9px;
+    padding-left: 12px;
 }
 
 a.glossyButtonLink {
@@ -326,4 +327,12 @@ div.buttonGroupConfiguration {
 div.addItemTitle {
     font-size: 0.9em;
     font-weight: bold;
+}
+
+input.newCriteriaSectionName {
+    width: 250px;
+}
+
+input.newCriteriaName {
+    width: 250px;
 }

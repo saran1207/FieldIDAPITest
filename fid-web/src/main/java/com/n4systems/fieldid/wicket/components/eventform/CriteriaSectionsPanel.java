@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
@@ -12,6 +13,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -134,12 +136,14 @@ public class CriteriaSectionsPanel extends SortableListPanel {
 
     class CriteriaSectionAddForm extends Form {
         private String sectionTitle;
+        private AjaxButton submitButton;
+        private TextField<String> sectionNameField;
 
         public CriteriaSectionAddForm(String id) {
             super(id);
 
-            add(new RequiredTextField<String>("sectionNameField", new PropertyModel<String>(this, "sectionTitle")));
-            add(new AjaxButton("submitButton") {
+            add(sectionNameField =new RequiredTextField<String>("sectionNameField", new PropertyModel<String>(this, "sectionTitle")));
+            add(submitButton = new AjaxButton("submitButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     CriteriaSection section = new CriteriaSection();
@@ -153,6 +157,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
                     target.addComponent(feedbackPanel);
                 }
             });
+            sectionNameField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(submitButton));
         }
 
         @Override
