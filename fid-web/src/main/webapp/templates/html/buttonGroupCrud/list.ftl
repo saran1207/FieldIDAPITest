@@ -1,3 +1,4 @@
+${action.setPageType('event_type', 'button_groups')!}
 <title><@s.text name="title.buttonsetup"/></title>
 <head>
 	<style>
