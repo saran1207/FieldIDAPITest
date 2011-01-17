@@ -5,16 +5,16 @@ ${action.setPageType('customer','show')!}
 </head>
 
 <div class="viewactions">
-	<#if securityGuard.readOnlyUserEnabled>
-		<div class="useractions addUser">
-			<p><a href="<@s.url action="customersUserAdd" uniqueID=""  customerId="${customer.id}"/>"><@s.text name="label.add_user"/></a></p>
-		</div>
-	</#if>
 	<#if !customer.linked >
 		<div class="useractions delete">
 			<p>
 				<a href="<@s.url value="customerArchive.action" uniqueID="${customer.id}" />" onclick="return confirm('<@s.text name="label.areyousurearchivecustomer" />');" ><@s.text name="label.archive" /></a>
 			<p>
+		</div>
+	</#if>
+	<#if securityGuard.readOnlyUserEnabled>
+		<div class="useractions addUser">
+			<p><a href="<@s.url action="customersUserAdd" uniqueID=""  customerId="${customer.id}"/>"><@s.text name="label.add_user"/></a></p>
 		</div>
 	</#if>
 	<#if securityGuard.emailAlertsEnabled>
