@@ -263,6 +263,10 @@ div.userLimitWarning{
 		background-image: url(../../images/welcome-email-icon.png);
 }
 
+.addUser{
+	background-image: url(../../images/add-user.png);
+	}
+
 .viewpermissions p .no {
 	color: #999999;
 }
