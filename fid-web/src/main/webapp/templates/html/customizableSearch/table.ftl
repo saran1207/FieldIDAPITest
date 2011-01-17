@@ -37,7 +37,7 @@
 			<th class="${column_class}">
 				<#if action.getColumnMapping(columnId).sortable >
 					<@s.url id="sortUrl" action="${currentAction}" includeParams="get" sortDirection="${linkDirection}" sortColumn="${columnPath}" />	
-					<a href="${sortUrl}"><@s.text name="${columnLabel}"/></a>
+					<a href="${sortUrl}" onClick="clearSelection('${searchContainerKey}', '${searchId}')"><@s.text name="${columnLabel}"/></a>
 				<#else>
 					<@s.text name="${columnLabel}"/>
 				</#if>
