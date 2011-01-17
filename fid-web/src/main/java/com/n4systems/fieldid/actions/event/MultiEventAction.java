@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.event;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -128,6 +129,7 @@ public class MultiEventAction extends AbstractCrud {
 	}
 
 	public List<Long> getAssetIds() {
+		 assetIds.removeAll(Collections.singleton(null));
 		return assetIds;
 	}
 
