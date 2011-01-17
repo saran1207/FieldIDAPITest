@@ -34,7 +34,7 @@ public enum ConfigEntry {
 	INDEX_JOB_WORKERS							(	"2"						),
 	DEFAULT_PRODUCT_TYPE_NAME					(	"*"						),
 	CATALOG_IMPORTER_PAGE_SIZE					(	"100"					),
-	ESTIMATED_CATALOG_IMPORT_TIME_IN_MINUTES	(   "30"                    ),
+	ESTIMATED_CATALOG_IMPORT_TIME_IN_MINUTES	(   "10"                    ),
 	MAX_SIZE_FOR_EXCEL_EXPORT					(   "10000"					),
 	MAX_SIZE_FOR_PDF_PRINT_OUTS					(	"10000"					),
 	MAX_SIZE_FOR_SUMMARY_REPORT					(   "6000"					),
