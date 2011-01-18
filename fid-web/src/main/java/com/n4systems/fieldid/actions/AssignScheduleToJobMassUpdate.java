@@ -92,7 +92,7 @@ public class AssignScheduleToJobMassUpdate extends MassUpdate {
 		}
 		
 		try {
-			List<Long> eventIds = getSearchIds(reportCriteria, reportCriteria.getSecurityFilter());
+			List<Long> eventIds = reportCriteria.getMultiIdSelection().getSelectedIds();
 			List<Long> scheduleIds = massUpdateManager.createSchedulesForEvents(eventIds, getSessionUserId());
 			Long results = massUpdateManager.assignToJob(scheduleIds, job, getSessionUserId());
 			List<String> messageArgs = new ArrayList<String>();
