@@ -1888,3 +1888,11 @@ ul.borderLess{
     position: relative;
     *overflow: hidden;
 	}
+	
+.instructionsBox{
+	background-color: #eee;
+	text-align: center;
+	font-size: 13px;
+	padding: 10px;
+	border: 2px solid #ccc;
+	}

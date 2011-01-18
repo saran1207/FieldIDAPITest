@@ -13,6 +13,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
+import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -25,6 +26,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
@@ -55,7 +57,7 @@ public class UserRequestCrud extends AbstractCrud {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		userRequest = persistenceManager.find(UserRequest.class, uniqueId, getTenantId());
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), userRequest.getUserAccount());
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 	}
 	
 	
@@ -74,8 +76,8 @@ public class UserRequestCrud extends AbstractCrud {
 			addFlashErrorText("error.unknownuserrequest");
 			return ERROR;
 		}
-		// customer users have no permissions
-		userRequest.getUserAccount().setPermissions(0);
+		
+		userRequest.getUserAccount().setUserType(UserType.READONLY);
 		
 		try {
 			userManager.acceptRequest(userRequest);
@@ -154,7 +156,6 @@ public class UserRequestCrud extends AbstractCrud {
 	}
 
 	@RequiredFieldValidator(message="", key="error.owner_required")
-	@FieldExpressionValidator(message="", key="error.owner_be_a_customer_or_division", expression="owner.external == true")
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
