@@ -100,3 +100,94 @@
 	float:right;
 	width: 260px;
 }
+
+.columnLeft, .columnCenter, .colummRight {
+	display: block;
+}
+
+.columnCenter {
+	border-right: 1px solid #999999;
+	margin-right: 5px;
+	padding-right: 5px;
+	border-left: 1px solid #999999;
+	margin-left: 5px;
+	padding-left: 5px;
+}
+
+.columnLeft, .columnRight{
+	width: 260px;
+}
+
+.subheading {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-size: 1.3em;	
+}
+
+.columnCenter{
+	float: left;
+}
+
+.leftViewSection {
+	border-top: 1px solid #E2E2E2;
+}
+
+.leftViewSection, .rightViewSection {
+	padding-bottom: 10px;
+}
+
+.leftViewSection p, .columnRight p{
+	line-height: 1.5em;
+}
+
+#assetComponents{
+	padding-bottom: 20px;
+}
+
+#assetComponents label, #assetComponents span{
+	display: block;
+	float: left;
+	width: 125px;
+}
+
+#assetComponents p span {
+	text-align: right;
+}
+
+#attachedfiles img {
+	border: 1px solid #E2E2E2;
+	padding-left: 5px;
+}
+
+.fileUploadShow {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	display: block;
+	float: left;
+}
+
+.fileUploadShow label, .fileUploadShow span{
+	display: block;
+	float: left;
+}
+
+.fileUploadShow span{
+	padding-left: 5px;
+	width: 190px;
+}
+
+.fileUploadShow span p {
+	display: block;
+}
+
+#more {
+	border-top: 1px solid #E2E2E2;
+	border-bottom: 1px solid #E2E2E2;	
+	background-repeat: no-repeat;
+	background-position: left;
+	height: 20px;
+	padding-left: 25px;
+	padding-top: 5px;
+	background-image: url(../../images/www.png);	
+	padding-bottom: 3px;
+}

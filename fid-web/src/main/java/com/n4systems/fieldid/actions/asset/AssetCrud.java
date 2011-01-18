@@ -7,18 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.legacy.AssetCodeMappingService;
-import com.n4systems.ejb.legacy.LegacyAssetType;
-import com.n4systems.exceptions.UsedOnMasterEventException;
-import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
-import com.n4systems.fieldid.actions.helpers.AllEventHelper;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.services.asset.AssetSaveService;
-import com.n4systems.util.AssetRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -28,34 +16,48 @@ import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.ProjectManager;
+import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.exceptions.MissingEntityException;
+import com.n4systems.exceptions.UsedOnMasterEventException;
+import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
+import com.n4systems.fieldid.actions.helpers.AllEventHelper;
+import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
-import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.UploadAttachmentSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.viewhelpers.AssetCrudHelper;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringListingPair;
@@ -937,6 +939,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public Event getLastEvent() {
 		return getAllEventHelper().getLastEvent();
+	}
+	
+	public EventSchedule getNextEvent() {
+		return new NextEventScheduleLoader().setAssetId(uniqueID).load();
 	}
 
 	public Long getExcludeId() {

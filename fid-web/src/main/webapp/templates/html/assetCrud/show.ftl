@@ -9,11 +9,101 @@
 		marryOrderTitle = '<@s.text name="label.connectorder" />';
 		
 	</script>
+	
+	<@n4.includeStyle href="asset" type="page"/>
 </head>
 
 
 ${action.setPageType('asset', 'show')!}
+
+
 <div class="columnLeft">
+	<div>	
+		<#if asset.type.imageName?exists >
+			<p>
+				<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${asset.type.uniqueID}"  />" alt="<@s.text name="label.assetimage"/>" width="250"/>
+			</p>
+		</#if>
+	</div>
+	<div class="viewSection">
+		<h2 class="subheading"><@s.text name="label.activity"/></h2> 
+	</div>
+	<div class="leftViewSection">
+		<h3 class="subheading"><@s.text name="label.lastevent"/></h3>
+		<#if eventCount gt 0 >
+			<p>
+				<#assign event=lastEvent/>
+				<#assign urlLabel="label.view_this_event" />
+				<@s.text name="label.lasteventdate_msg">
+					<@s.param>${lastEvent.type.name!}</@s.param>
+					<@s.param>${action.formatDateTime(lastEvent.date)}</@s.param>
+					<@s.param><@s.text name="${(lastEvent.status.label?html)!}"/></@s.param>
+					<@s.param><#include "../eventCrud/_viewEventLink.ftl"/></@s.param>
+				</@s.text>
+			</p>				
+		<#else>	
+			<p>
+				<@s.text name="label.noevents"/>
+			</p>	
+		</#if>
+	</div>
+
+	<div class="leftViewSection">
+		<h3 class="subheading"><@s.text name="label.nextevent"/></h3>
+		<#if nextEvent?exists >
+			<p>
+				<@s.text name="label.nexteventdate_msg">
+					<@s.param>${nextEvent.eventType.name!}</@s.param>
+					<@s.param>${nextEvent.daysToDue!}</@s.param>
+					<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
+				</@s.text>
+			</p>				
+		<#else>	
+			<p>
+				<@s.text name="label.noevents"/>
+			</p>	
+		</#if>
+	</div>
+	
+	<#if asset.subAssets?exists && !asset.subAssets.isEmpty() >
+		<div id="assetComponents" class="leftViewSection">
+			<h3 class="subheading"><@s.text name="label.subassets"/></h3>
+			<#list asset.subAssets as subAsset >
+				<p>
+					<label>${subAsset.asset.type.name!}</label>
+					<span>
+						<a href="<@s.url action="asset"  uniqueID="${subAsset.asset.id}"/>">${subAsset.asset.serialNumber}</a>
+					</span>  
+				</p>
+			</#list>
+		</div>
+	
+	<#elseif parentAsset?exists>
+		<div id="assetComponents" class="leftViewSection">
+			<h3 class="subheading"><@s.text name="label.partof"/></h3>
+			<p>
+				<label>${parentAsset.type.name!}</label> 
+				<span>
+					<a href="<@s.url action="asset"  uniqueID="${parentAsset.id}"/>">${parentAsset.serialNumber}</a>
+				</span>  
+			</p>
+		</div>		
+	</#if>	
+	
+	<#if securityGuard.projectsEnabled && projects?exists && !projects.isEmpty() >
+		<div id="projects" class="leftViewSection">
+			<h3 class="subheading"><@s.text name="label.projects"/></h3>
+			<#list projects as project >
+				<p>
+					<a href="<@s.url action="job"  uniqueID="${project.id}"/>">${project.name!}</a>
+				</p>
+			</#list>
+		</div>
+	</#if>
+</div>
+
+
+<div class="columnCenter">
 	<div class="viewSection smallViewSection" >
 		<h2><@s.text name="label.assetsummary"/></h2>
 		<p>
@@ -119,99 +209,10 @@ ${action.setPageType('asset', 'show')!}
 				</#if>
 			</#if>	
 		</div>
-	</#if>
-	
-	<div class="viewSection smallViewSection" >
-		<h2><@s.text name="label.lastevent"/> 
-			<a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageEvents"><@s.text name="label.manageevents"/></a>
-		</h2>
-		<#if eventCount gt 0 >
-			<p>
-				<label><@s.text name="label.lasteventdate"/></label>
-				<span class="fieldValue">${action.formatDateTime(lastEvent.date)}</span>
-			</p>
-			<p>
-				<label><@s.text name="label.eventtype"/></label>
-				<span class="fieldValue">${ lastEvent.type.name! }</span>
-			</p>
-			<p>
-				<label><@s.text name="label.result"/></label>
-				<span class="fieldValue"><@s.text name="${(lastEvent.status.label?html)!}"/></span>
-			</p>
-			<p>
-				<label><@s.text name="label.details"/></label>
-				<span class="fieldValue">
-					<#assign event=lastEvent/>
-					<#include "../eventCrud/_viewEventLink.ftl"/>
-				</span>
-			</p>				
-		<#else>	
-			<p class="fieldValue">
-				<@s.text name="label.noevents"/>
-			</p>	
-		</#if>
-	</div>
-</div>
-
-<div class="columnRight">
-	<#if asset.type.warnings?exists && asset.type.warnings?length gt 0 >
-		<div class="viewSection smallViewSection" >
-			<h2><@s.text name="label.warnings"/></h2>
-			<p class="fieldValue">
-				${asset.type.warnings!}
-			</p>
-		</div>
-	</#if>
-	
-	<#if asset.type.instructions?exists && asset.type.instructions?length gt 0 >
-		<div class="viewSection smallViewSection" >
-			<h2><@s.text name="label.instructions"/></h2>
-			<p class="fieldValue">
-				${asset.type.instructions!}
-			</p>
-		</div>
-	</#if>
-	
-	<#if securityGuard.projectsEnabled && projects?exists && !projects.isEmpty() >
-		<div id="projects" class="viewSection smallViewSection" >
-			<h2><@s.text name="label.projects"/></h2>
-			<#list projects as project >
-				<p class="fieldValue">
-					<a href="<@s.url action="job"  uniqueID="${project.id}"/>">${project.name!}</a>
-				</p>
-			</#list>
-		</div>
-	</#if>
-	
-	<#if asset.subAssets?exists && !asset.subAssets.isEmpty() >
-		<div id="assetComponents" class="viewSection smallViewSection" >
-			<h2><@s.text name="label.subassets"/></h2>
-			<#list asset.subAssets as subAsset >
-				<p>
-					<label><a href="<@s.url action="asset"  uniqueID="${subAsset.asset.id}"/>">${subAsset.asset.type.name!}</a></label>
-					<span>
-						${subAsset.label!}
-					</span>  
-				</p>
-			
-			</#list>
-		</div>
-	
-	<#elseif parentAsset?exists>
-		<div id="assetComponents" class="viewSection smallViewSection" >
-			<h2><@s.text name="label.partof"/></h2>
-			<p>
-				<label>${parentAsset.type.name!}</label> 
-				<span>
-					<a href="<@s.url action="asset"  uniqueID="${parentAsset.id}"/>">${parentAsset.serialNumber}</a>
-				</span>  
-			</p>
-		</div>
-	</#if>
-			
+	</#if>	
 	
 	<#if asset.comments?exists && asset.comments?length gt 0 >
-		<div class="viewSection smallViewSection" >
+		<div class="viewSection smallViewSection">
 			<h2><@s.text name="label.comments"/></h2>
 			<p class="fieldValue">
 				${asset.comments!}
@@ -219,68 +220,61 @@ ${action.setPageType('asset', 'show')!}
 		</div>
 	</#if>
 	
-	<#if linkedAssets?exists && !linkedAssets.empty >
-		<div class="viewSection smallViewSection" >
-			<h2><@s.text name="label.fieldidsafetynetwork"/></h2>
-			<p >
-				<label class="heading"><@s.text name="label.company"/></label>
-				<span class="heading">
-					<@s.text name="label.serialnumber"/>
-				</span>
+</div>
+
+<div class="columnRight">
+	<div class="viewSection">
+		<h2 class="subheading"><@s.text name="label.additionalinformation"/></h2> 
+	</div>
+	<#if asset.type.warnings?exists && asset.type.warnings?length gt 0 >
+		<div class="rightViewSection">
+			<h3 class="subheading"><@s.text name="label.warnings"/></h3>
+			<p>
+				${asset.type.warnings!}
 			</p>
-			
-			<#list linkedAssets as linkedAsset >
-				<p >
-					<label><#assign tenant=linkedAsset.tenant/>
-							<#include "../common/_displayTenantLogo.ftl"/>
-					</label>
-					<span class="fieldValue">
-						${linkedAsset.serialNumber}
-						&nbsp;
-						<#if linkedAsset.type.hasManufactureCertificate >
-							<img src="<@s.url value="/images/pdf_small.gif"/>"/>
-							<a href="<@s.url action="downloadLinkedManufacturerCert" namespace="/file" uniqueID="${asset.uniqueID}" linkedAssetId="${linkedAsset.id}" />" target="_blank" >
-								<@s.text name="label.downloadnow"/>
-							</a>
-						</#if>	
-					</span>
-				</p>	
-			</#list>
 		</div>
 	</#if>
+	
+	<#if asset.type.instructions?exists && asset.type.instructions?length gt 0 >
+		<div class="rightViewSection">
+			<h3 class="subheading"><@s.text name="label.instructions"/></h3>
+			<p>
+				${asset.type.instructions!}
+			</p>
+		</div>
+	</#if>
+				
+	<#if !assetAttachments.isEmpty() || !asset.type.attachments.isEmpty() >
+		<div class="rightViewSection">
+			<h3 class="subheading"><@s.text name="label.attachments"/></h3>
+			<#if !assetAttachments.isEmpty() >
+					<#assign downloadAction="downloadAssetAttachedFile"/>
+					<#assign attachments=assetAttachments />
+					<#assign attachmentID=asset.uniqueID/>
+					<#include "_attachedFilesList.ftl"/>
+			</#if>
+			
+			<#if !asset.type.attachments.isEmpty() >
+					<#assign downloadAction="downloadAssetTypeAttachedFile"/>
+					<#assign attachments=asset.type.attachments />
+					<#assign attachmentID=asset.type.uniqueID/>
+					<#include "_attachedFilesList.ftl"/>
+			</#if>			
+		</div>
+		
+		<div style="clear:both"></div>
+	</#if>	
 	
 	<#if (asset.type.cautions?exists && asset.type.cautions?length gt 0) ||
 			(asset.type.imageName?exists) || (!asset.type.attachments.isEmpty()) ||
 			(!assetAttachments.isEmpty())>
-		<div class="viewSection smallViewSection" >
-			<h2><@s.text name="label.additionalinformation"/></h2> 
+		<div id="more" class="rightViewSection">
 			<#if asset.type.cautions?exists && asset.type.cautions?length gt 0 >
 				<p>
 					<a href="${asset.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/></a>
-				
 				</p>
 			</#if>
-			
-			<#if !assetAttachments.isEmpty() >
-				<#assign downloadAction="downloadAssetAttachedFile"/>
-				<#assign attachments=assetAttachments />
-				<#assign attachmentID=asset.uniqueID/>
-				<#include "/templates/html/common/_attachedFilesList.ftl"/>
-			</#if>
-			
-			<#if !asset.type.attachments.isEmpty() >
-				<#assign downloadAction="downloadAssetTypeAttachedFile"/>
-				<#assign attachments=asset.type.attachments />
-				<#assign attachmentID=asset.type.uniqueID/>
-				<#include "/templates/html/common/_attachedFilesList.ftl"/>
-			</#if>
-			
-			<#if asset.type.imageName?exists >
-				<p>
-					<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${asset.type.uniqueID}"  />" alt="<@s.text name="label.assetimage"/>" width="300"/>
-				</p>
-			</#if>
-			
+					
 		</div>
 	</#if>
 </div>
