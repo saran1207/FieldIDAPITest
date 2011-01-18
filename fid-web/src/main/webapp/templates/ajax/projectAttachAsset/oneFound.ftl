@@ -4,10 +4,6 @@
 </#assign>
 
 <#escape x as x?js_string>
-	
-	 
-	oneResultAsset( ${assets[0].id}, '${html}' );
-	
-	
+	oneResultAsset( ${page.list.get(0).id}, '${html}' );
 </#escape>
 
