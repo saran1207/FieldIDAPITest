@@ -477,6 +477,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
 
-	
-	
+    public Set<AssociatedEventType> getAssociatedEventTypes() {
+        return eventTypes;
+    }
+
 }

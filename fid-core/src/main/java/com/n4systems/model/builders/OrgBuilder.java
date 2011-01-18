@@ -66,7 +66,11 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	public OrgBuilder withTestContact() {
 		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent));
 	}
-	
+
+    public OrgBuilder tenant(Tenant tenant) {
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent));
+    }
+
 	public OrgBuilder withAllTestData() {
 		return withTestContact().withTestAddress();
 	}

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.persistence;
 
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetSaver;
+import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetTypeSaver;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
@@ -16,7 +17,6 @@ import com.n4systems.model.Order;
 import com.n4systems.model.OrderSaver;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
-import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
@@ -43,7 +43,7 @@ public class SaverMap {
     static {
         classToSaverMap.put(Asset.class, new SeleniumAssetSaver());
         classToSaverMap.put(AssetStatus.class, new AssetStatusSaver());
-        classToSaverMap.put(AssetType.class, new AssetTypeSaver());
+        classToSaverMap.put(AssetType.class, new SeleniumAssetTypeSaver());
         classToSaverMap.put(Event.class, new SimpleEventSaver());
         classToSaverMap.put(User.class, new UserSaver());
         classToSaverMap.put(EventType.class, new EventTypeSaver());

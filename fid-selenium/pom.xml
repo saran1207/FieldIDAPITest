@@ -43,5 +43,41 @@
 			<artifactId>selenium-java-client-driver</artifactId>
 			<version>1.0.2</version>
 		</dependency>
+        <dependency>
+            <groupId>com.n4systems.fieldid</groupId>
+            <artifactId>fieldid-wis-client</artifactId>
+            <version>1.19</version>
+        </dependency>
+		<dependency>
+			<groupId>org.codehaus.xfire</groupId>
+			<artifactId>xfire-all</artifactId>
+			<version>1.2.6</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>spring</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>junit</artifactId>
+					<groupId>junit</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-api</artifactId>
+					<groupId>javax.xml</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-api</artifactId>
+					<groupId>javax.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-impl</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-xjc</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 </project>

@@ -29,16 +29,17 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 	private Location location;
 	private AssetStatus assetStatus;
 	private User assignedTo;
+    private User identifiedBy;
     private boolean published;
     private String purchaseOrder;
 
     public static AssetBuilder anAsset() {
-		return new AssetBuilder(null, null, anAssetType().build(), null, null, new Location(), null, NOT_ASSIGNED, true, null);
+		return new AssetBuilder(null, null, anAssetType().build(), null, null, new Location(), null, NOT_ASSIGNED, true, null, null);
 	}
 
     public AssetBuilder(){}
 
-	private AssetBuilder(Tenant tenant, BaseOrg owner, AssetType type, String serialNumber, Date modified, Location location, AssetStatus assetStatus, User assignedTo, boolean published, String purchaseOrder, SubAsset... subAssets) {
+	private AssetBuilder(Tenant tenant, BaseOrg owner, AssetType type, String serialNumber, Date modified, Location location, AssetStatus assetStatus, User assignedTo, boolean published, String purchaseOrder, User identifiedBy, SubAsset... subAssets) {
         super(tenant, owner);
 		this.type = type;
 		this.serialNumber = serialNumber;
@@ -49,34 +50,39 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 		this.subAssets = subAssets;
         this.published = published;
         this.purchaseOrder = purchaseOrder;
+        this.identifiedBy = identifiedBy;
 	}
 
+    public AssetBuilder identifiedBy(User identifiedBy) {
+        return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets));
+    }
+
 	public AssetBuilder ofType(AssetType type) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	public AssetBuilder forTenant(Tenant tenant) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	public AssetBuilder withOwner(BaseOrg owner) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	public AssetBuilder withSerialNumber(String serialNumber) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	public AssetBuilder withModifiedDate(Date modified) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	public AssetBuilder withOneSubAsset() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, aSubAsset().build()));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, aSubAsset().build()));
 	}
 	
 	public AssetBuilder withTwoSubAssets() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, aSubAsset().build(), aSubAsset().build()));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, aSubAsset().build(), aSubAsset().build()));
 	}
 	
 	public AssetBuilder inFreeformLocation(String location) {
@@ -84,27 +90,27 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 	}
 	
 	public AssetBuilder withAdvancedLocation(Location location) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	public AssetBuilder havingStatus(AssetStatus assetStatus) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	public AssetBuilder assignedTo(User employee) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, employee, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, employee, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	public AssetBuilder unassigned() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets));
 	}
 
     public AssetBuilder published(boolean published) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets));
 	}
 
     public AssetBuilder purchaseOrder(String purchaseOrder) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, subAssets));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets));
 	}
 	
 	@Override
@@ -127,6 +133,7 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 		asset.setAdvancedLocation(location);
         asset.setPublished(published);
         asset.setPurchaseOrder(purchaseOrder);
+        asset.setIdentifiedBy(identifiedBy);
 
 		return asset;
 	}
