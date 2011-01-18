@@ -21,15 +21,14 @@ public class CriteriaStateView implements Serializable {
 	private Integer deficiencies;
 	private String compressedRecommendations;
 	private String compressedDeficiencies;
+    private String type;
 	
 	public CriteriaStateView() {}
 	
-	public CriteriaStateView(CriteriaSection section, Criteria criteria, State state, List<Recommendation> recommendations, List<Deficiency> deficiencies) {
+	public CriteriaStateView(CriteriaSection section, Criteria criteria, List<Recommendation> recommendations, List<Deficiency> deficiencies) {
 		this.section = section.getTitle();
 		this.criteria = criteria.getDisplayText();
-		this.state = state.getDisplayText();
-		this.stateImage = PathHandler.getButtonImageFile(state);
-		this.recommendations = recommendations.size(); 
+		this.recommendations = recommendations.size();
 		this.deficiencies = deficiencies.size();
 		this.compressedDeficiencies = "";
 		this.compressedRecommendations = "";
@@ -41,7 +40,11 @@ public class CriteriaStateView implements Serializable {
 			this.compressedRecommendations += "-" + recommendation.getText() + "\n";
 		}
 	}
-	
+
+    public void setStateButtonGroup(State state) {
+        this.state = state.getDisplayText();
+        this.stateImage = PathHandler.getButtonImageFile(state);
+    }
 	
 	public String getCriteria() {
 		return criteria;
@@ -107,6 +110,11 @@ public class CriteriaStateView implements Serializable {
 		this.compressedDeficiencies = compressedDeficiencies;
 	}
 
-	
-		
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.fieldid.certificate.model.InspectionImage;
+import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.SelectCriteriaResult;
+import com.n4systems.model.TextFieldCriteriaResult;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.n4systems.model.AbstractEvent;
@@ -18,7 +21,6 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
 import com.n4systems.model.Recommendation;
-import com.n4systems.model.State;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.ReportMap;
 
@@ -144,7 +146,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		List<CriteriaStateView> criteriaViews = addToCriteriaView();
 	
 		/*
-		 * Lame alert: Jasper requires that at least 1 element be in it's
+		 * Lame alert: Jasper requires that at least 1 element be in its
 		 * collection datasource. Since it's not required that an eventtype
 		 * have a criteria (and thus the event will have an empty result
 		 * list) we need to add a dummy entry.
@@ -163,19 +165,31 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	 */
 	private List<CriteriaStateView> addToCriteriaView() {
 		List<CriteriaStateView> criteriaViews = new ArrayList<CriteriaStateView>(getEvent().getResults().size());
-		Map<Criteria, State> stateMap = new HashMap<Criteria, State>(getEvent().getResults().size());
+		Map<Criteria, CriteriaResult> resultMap = new HashMap<Criteria, CriteriaResult>(getEvent().getResults().size());
 		Map<Criteria, List<Recommendation>> recommendations =  new HashMap<Criteria, List<Recommendation>>(getEvent().getResults().size());
 		Map<Criteria, List<Deficiency>> deficiencies = new HashMap<Criteria, List<Deficiency>>(getEvent().getResults().size());
 		
 		
-		flattenCriteriaResults(stateMap, recommendations, deficiencies);
+		flattenCriteriaResults(resultMap, recommendations, deficiencies);
 		//TODO : move criteria view to 
 		// walk the section, and criteria tree and construct report views
         if (getEvent().getEventForm() != null) {
             for (CriteriaSection section : getEvent().getEventForm().getSections()) {
                 for (Criteria criteria : section.getCriteria()) {
-                    if (stateMap.containsKey(criteria)) {
-                        criteriaViews.add(new CriteriaStateView(section, criteria, stateMap.get(criteria), recommendations.get(criteria), deficiencies.get(criteria)));
+                    if (resultMap.containsKey(criteria)) {
+                        CriteriaStateView stateView = new CriteriaStateView(section, criteria, recommendations.get(criteria), deficiencies.get(criteria));
+                        CriteriaResult result = resultMap.get(criteria);
+                        if (result instanceof OneClickCriteriaResult) {
+                            stateView.setStateButtonGroup(((OneClickCriteriaResult)result).getState());
+                            stateView.setType("oneclick");
+                        } else if (result instanceof TextFieldCriteriaResult) {
+                            stateView.setState(((TextFieldCriteriaResult)result).getValue());
+                            stateView.setType("textfield");
+                        } else if (result instanceof SelectCriteriaResult) {
+                            stateView.setState(((SelectCriteriaResult) result).getValue());
+                            stateView.setType("select");
+                        }
+                        criteriaViews.add(stateView);
                     }
                 }
             }
@@ -186,20 +200,19 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 	/**
 	 * Given a list of CriteriaResults, returns a Map of the same results of
-	 * Criteria to State
+	 * Criteria to Result
 	 * 
 	 * @param results
 	 *            The CriteriaResult list
 	 * @return The flattened map
 	 */
-	private void flattenCriteriaResults(Map<Criteria, State> stateMap, Map<Criteria, List<Recommendation>> recommendations, Map<Criteria, List<Deficiency>> deficiencies) {
+	private void flattenCriteriaResults(Map<Criteria, CriteriaResult> stateMap, Map<Criteria, List<Recommendation>> recommendations, Map<Criteria, List<Deficiency>> deficiencies) {
 		// set the map size to increase performance
 		for (CriteriaResult result : getEvent().getResults()) {
-//			stateMap.put(result.getCriteria(), result.getState());
+            stateMap.put(result.getCriteria(), result);
 			deficiencies.put(result.getCriteria(), result.getDeficiencies());
 			recommendations.put(result.getCriteria(), result.getRecommendations());
 		}
-		
 	}
 
 	protected ReportMap<Object> addProofTestInfoParams(Event event) {
