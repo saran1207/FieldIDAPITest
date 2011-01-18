@@ -42,6 +42,7 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 
 	public void clickEventFormTab() {
 		clickNavOption("Event Form");
+        disableTheWarningThatPromptsWhenYouLeavePage();
 	}
 
 	public void clickImportTab() {
@@ -52,17 +53,22 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 		selenium.click("//input[@name='save']");
 		waitForPageToLoad();
 	}
-	
+
 	public void clickSaveAndAdd(){
 		selenium.click("//input[@name='saveAndAdd']");
 		waitForPageToLoad();
+        disableTheWarningThatPromptsWhenYouLeavePage();
 	}
-	
+
+    private void disableTheWarningThatPromptsWhenYouLeavePage() {
+        selenium.runScript("promptBeforeLeaving = false;");
+    }
+
 	public void clickCancel(){
 		selenium.click("//a[text()='Cancel']");
 		waitForPageToLoad();
 	}
-	
+
 	public void clickAddAttribute() {
 		selenium.click("//button[text()='Add Attribute']");
 		waitForAjax();
@@ -191,7 +197,7 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
     private void addCriteriaNamed(String criteriaLabel) {
         selenium.selectFrame("//iframe");
         selenium.type("//div[@id='criteriaPanel']//input[@name='criteriaName']", criteriaLabel);
-        selenium.select("//div[@id='criteriaPanel']//select[@name='criteriaType']", "One-Click");
+        selenium.select("//div[@id='criteriaPanel']//select[@name='criteriaType']", "One-Click Button");
         selenium.click("//div[@id='criteriaPanel']//button[.='Add']");
         waitForWicketAjax();
         selenium.selectFrame("relative=up");
