@@ -378,7 +378,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 	public List<Long> createSchedulesForEvents(List<Long> eventIds, Long userId) throws UpdateFailureException, UpdateConatraintViolationException {
 		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
-		query.addWhere(Comparator.IN, "ids", "id", eventIds).addLeftJoin("schedule", "schedule").addWhere(Comparator.NULL, "scheduleId", "schedule.id", "true").addOrder("id");
+		query.addWhere(WhereClauseFactory.create(Comparator.IN, "id", eventIds)).addOrder("id");
 		int page = 1;
 		int pageSize = 100;
 
@@ -387,8 +387,10 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		do {
 			events = persistenceManager.findAllPaged(query, page, pageSize);
 			for (Event event : events.getList()) {
-				EventSchedule schedule = new EventSchedule(event);
-				new EventScheduleServiceImpl(persistenceManager).createSchedule(schedule);
+                if (event.getSchedule() == null) {
+                    EventSchedule schedule = new EventSchedule(event);
+                    new EventScheduleServiceImpl(persistenceManager).createSchedule(schedule);
+                }
 			}
 			page++;
 		} while (events.isHasNextPage());
