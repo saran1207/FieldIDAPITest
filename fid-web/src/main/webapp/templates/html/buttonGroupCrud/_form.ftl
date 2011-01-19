@@ -1,6 +1,6 @@
 
 <div id="stateSet_${buttonGroupIndex}" class="buttons">
-	<@s.form action="buttonGroupSave" namespace="/ajax" id="stateSet_${buttonGroupIndex}_form" name="stateSet_${buttonGroupIndex}_form" theme="simple" >	
+	<@s.form action="buttonGroupSave" cssClass="stateSetForm" namespace="/ajax" id="stateSet_${buttonGroupIndex}_form" name="stateSet_${buttonGroupIndex}_form" theme="simple" >	
 		<@s.hidden name="buttonGroupIndex" value="${buttonGroupIndex!}"/> 
 		<div class="messageContainer">
 			<div class="message" id="${buttonGroupIndex}_message"></div>
@@ -13,8 +13,6 @@
 				<@s.hidden name="uniqueID" value="${stateSet.id!}"/>
 			</p>
 			<p id="buttons_${buttonGroupIndex}" style="display:none">
-				<button id="save_${buttonGroupIndex}" onclick="saveButtonGroup( ${buttonGroupIndex} ); return false;" ><@s.text name="label.save"/></button>
-				<@s.text name="label.or"/>
 				<button id="undo_${buttonGroupIndex}" onclick="undoButtonGroup( ${stateSet.id!"null"}, ${buttonGroupIndex} ); return false;"  ><@s.text name="label.undo_changes"/></button>
 			</p>
 			

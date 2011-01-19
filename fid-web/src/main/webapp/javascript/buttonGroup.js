@@ -10,13 +10,19 @@ function confirmNoChanges() {
 			changesNotSaved = true;
 		}
 	}
-	if( changesNotSaved == true ) {
-		return confirm( changesWarning );
-	} else {  
-		return true;
-	}
+	if( changesNotSaved == true && confirm( changesWarning ) ) {
+		saveAllChanges();
+	} 
 }
 
+function saveAllChanges(){
+	numberOfButtonGroups=$$('form.stateSetForm').size();
+	for(i=0; i < numberOfButtonGroups; i++){
+		if(buttonsUpdated[ 'state_' + i ] == true)
+		saveButtonGroup(i);
+	}
+	return true;
+}
 
 function changeButtonImage( link ) {
 	var hidden = link.getElementsByTagName( 'input' )[0];

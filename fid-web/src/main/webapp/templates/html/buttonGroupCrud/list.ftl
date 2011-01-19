@@ -40,7 +40,7 @@ ${action.setPageType('event_type', 'button_groups')!}
 	<button id="addGroup" class="submitButton" onclick="addButtonGroup()" ><@s.text name="label.addbuttongroup"/></button>
 </div>
 <div class="buttonActions">
-	<button id="save" class="submitButton" onclick="if( confirmNoChanges() == true ) { redirect( '<@s.url action="eventTypes" />' ); }" ><@s.text name="label.save"/></button>
+	<button id="save" class="submitButton" onclick="confirmNoChanges();" ><@s.text name="label.save"/></button>
 	<@s.text name="label.or"/>
 	<@s.url id="cancelUrl" action="eventTypes"/>
 	<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
