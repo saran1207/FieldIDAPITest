@@ -5,11 +5,11 @@ import javax.persistence.Table;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
 @Entity
 @Table(name = "assetstatus")
-public class AssetStatus extends EntityWithTenant implements Listable<Long>, Saveable{
+public class AssetStatus extends ArchivableEntityWithTenant implements Listable<Long>, Saveable{
 	private static final long serialVersionUID = 1L;
 	
 	private String name;

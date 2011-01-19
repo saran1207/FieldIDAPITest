@@ -24,6 +24,7 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 	private AssetStatus assetStatus;
 	
 	private List<AssetStatus> assetStatuses;
+	private List<AssetStatus> archivedAssetStatuses;
 	
 	public AssetStatusCrud(LegacyAsset assetManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -57,6 +58,13 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 	}
 		
 	public String doSave() {
+		saveAssetStatus(assetStatus);		
+		addActionMessage("Data has been updated.");
+		
+		return SUCCESS;
+	}
+
+	private void saveAssetStatus(AssetStatus assetStatus) {
 		assetStatus.setModifiedBy( getUser() );
 		if ( assetStatus.getId() == null ) {
 			assetStatus.setTenant(getTenant());
@@ -65,10 +73,6 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 		} else {
 			persistenceManager.updateAny(assetStatus);
 		}
-		
-		addActionMessage("Data has been updated.");
-		
-		return SUCCESS;
 	}
 	
 	@SkipValidation
@@ -83,8 +87,35 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 			addActionError("Asset Status can not be removed");
 			return ERROR;
 		}
-		addActionMessage("Asset Status has be removed");
+		addActionMessage("Asset Status has been removed");
 		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doArchive() {
+		if (assetStatus == null) {
+			addActionError("Asset Status not found");
+			return ERROR;
+		} else {
+			assetStatus.archiveEntity();
+			saveAssetStatus(assetStatus);
+			addActionMessage("Asset Status has been archived");
+
+			return SUCCESS;
+		}
+	}
+	
+	@SkipValidation
+	public String doUnarchive() {
+		if (assetStatus == null) {
+			addActionError("Asset Status not found");
+			return ERROR;
+		} else {
+			assetStatus.activateEntity();
+			saveAssetStatus(assetStatus);
+			addActionMessage("Asset Status has been unarchived");
+			return SUCCESS;
+		}
 	}
 	
 	public List<AssetStatus> getAssetStatuses() {
@@ -92,6 +123,13 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 			assetStatuses = getLoaderFactory().createAssetStatusListLoader().setPostFetchFields("modifiedBy", "createdBy").load();
 		}
 		return assetStatuses;
+	}
+	
+	public List<AssetStatus> getArchivedAssetStatuses() {
+		if( archivedAssetStatuses == null ) {
+			archivedAssetStatuses = getLoaderFactory().createAssetStatusListLoader().setPostFetchFields("modifiedBy", "createdBy").archivedOnly().load();
+		}
+		return archivedAssetStatuses;
 	}
 
 	public AssetStatus getAssetStatus() {
