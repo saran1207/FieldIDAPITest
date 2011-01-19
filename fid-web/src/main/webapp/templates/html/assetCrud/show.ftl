@@ -275,14 +275,13 @@ ${action.setPageType('asset', 'show')!}
 	<#if (asset.type.cautions?exists && asset.type.cautions?length gt 0) ||
 			(asset.type.imageName?exists) || (!asset.type.attachments.isEmpty()) ||
 			(!assetAttachments.isEmpty())>
-		<div id="more" class="rightViewSection topBorder">
-			<#if asset.type.cautions?exists && asset.type.cautions?length gt 0 >
-				<p>
-					<a href="${asset.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/></a>
-				</p>
-			</#if>
-					
-		</div>
+		<#if asset.type.cautions?exists && asset.type.cautions?length gt 0 >
+			<div id="more" class="rightViewSection topBorder">
+					<p>
+						<a href="${asset.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/></a>
+					</p>
+			</div>
+		</#if>
 	</#if>
 </div>
 </#escape>

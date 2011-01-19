@@ -11,7 +11,6 @@
 					    <img src="images/default-filetype.png" alt="${attachedFile.fileName}"/>
 					</#if>
 				</label>
-				</#noescape>
 				<span>
 					<p>
 						<a href="${attachment_url}" target="_blank">${attachedFile.fileName}</a>
@@ -20,6 +19,7 @@
 						${(attachedFile.comments)!}
 					</p>
 				</span>
+				</#noescape>
 			</p>
 		</#list>
 	</div>
