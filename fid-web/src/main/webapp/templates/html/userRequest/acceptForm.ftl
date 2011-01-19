@@ -12,11 +12,11 @@
 		
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-			<@n4.orgPicker name="owner" required="true" orgType="internal"/>
+			<@n4.orgPicker name="owner" required="true" orgType="all"/>
 		</div>
 		
 		<div class="formAction">
-			<@s.submit key="hbutton.accept"/>
+			<input type="submit" id="userRequestSubmit" onclick="verifyOwnerSelection(); return false;">
 			<@s.text name="label.or"/>
 			<a href="<@s.url action="userRequestView" uniqueID="${uniqueID}"/>" id="cancelAccept"><@s.text name="hbutton.cancel"/></a>
 			

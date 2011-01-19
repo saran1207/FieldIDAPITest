@@ -22,6 +22,7 @@ ${action.setPageType('user_registration', 'show')!}
 					<#if action.customersExist() >
 						$('request').hide();
 						$('acceptForm').show();	
+						$('userRequestAccept_owner_orgName').value="";
 					<#else>
 						alert('<@s.text name="warning.nocustomerscreated"/>');
 					</#if>
@@ -37,6 +38,14 @@ ${action.setPageType('user_registration', 'show')!}
 		$('acceptForm').hide();
 	});
 	
-	
+	function verifyOwnerSelection(){
+	    if ($('userRequestAccept_owner_orgName').value=="") {
+	     	alert('Please select an Owner');
+   		 }else{
+   		    event.stop();
+            $('userRequestAccept').submit();
+   		 }
+    }
+
 </@n4.includeScript>
 </head>

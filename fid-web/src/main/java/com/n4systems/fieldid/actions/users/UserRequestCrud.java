@@ -27,7 +27,6 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.UserType;
-import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
@@ -57,7 +56,7 @@ public class UserRequestCrud extends AbstractCrud {
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
 		userRequest = persistenceManager.find(UserRequest.class, uniqueId, getTenantId());
-		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
+		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), userRequest.getUserAccount());
 	}
 	
 	
