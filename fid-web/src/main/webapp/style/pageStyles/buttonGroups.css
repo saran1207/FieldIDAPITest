@@ -1,0 +1,64 @@
+.submitButton{
+	padding: 5px;
+}
+
+div.rowName{
+	clear:both;
+	}
+	
+div.iconGroup{
+	margin-left: 150px;
+	}
+
+p.groupName input{
+	padding: 5px;
+	width: 180px;
+	}
+	
+p.groupName {
+	border-style: none;
+	width: 200px;
+	}
+
+.simpleTable td{
+	border: 1px solid #ccc;
+	margin: 5px 0;
+}
+
+.viewSection p{
+	border-style: none;
+}
+
+.viewSection p button{
+	padding: 5px;
+}
+
+div.rowName{
+	display: inline;
+	}
+
+div.messageContainer{
+	display:inline;
+	float:right;
+}
+
+.message ul{
+	padding: 10px;
+	margin: 10px;
+}
+
+.buttonActions{
+	margin: 10px 0;
+	border-top: 1px solid #ccc;
+	font-size: 13px;
+	padding-top: 10px;
+}
+
+.addNewGroup button{
+	padding: 10px;
+	}
+
+.addNewGroup{
+	text-align: center;
+	margin: 10px auto;
+}

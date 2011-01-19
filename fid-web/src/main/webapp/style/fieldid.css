@@ -1043,14 +1043,16 @@ strong.fail {
 }
 
 .buttonGroup li {
+	margin: 0 2.5px;
 	float: left;
-	width: 40px;
+	width: 60px;
 	text-align: center;
 	padding: 5px 15px;
 }
 
 .buttonGroup div {
 	height: 35px;
+	overflow: hidden;
 }
 
 div.eventButton {
@@ -1895,4 +1897,5 @@ ul.borderLess{
 	font-size: 13px;
 	padding: 10px;
 	border: 2px solid #ccc;
+	margin: 5px 0;
 	}

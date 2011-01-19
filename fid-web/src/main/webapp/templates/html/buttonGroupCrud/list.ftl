@@ -1,6 +1,7 @@
 ${action.setPageType('event_type', 'button_groups')!}
 <title><@s.text name="title.buttonsetup"/></title>
 <head>
+	<@n4.includeStyle href="buttonGroups" type="page" />
 	<style>
 		.rowName{ width:220px; }
 		.formErrors { width:190px; }
@@ -10,33 +11,21 @@ ${action.setPageType('event_type', 'button_groups')!}
 	<script type="text/javascript">
 		undoButtonGroupUrl = '<@s.url action="buttonGroupEdit" namespace="/ajax"/>';
 		changesWarning = "<@s.text name="warning.buttongroupsnotsave"/>"; 
-	</script>
-	<script type="text/javascript">
 		maxNumberOfImages = ${ maxNumberOfImages!0};
 		addButtonGroupUrl = '<@s.url action="buttonGroupAdd" namespace="/ajax"/>';
 		addButtonUrl = '<@s.url action="buttonAdd" namespace="/ajax"/>';
 	</script>
 </head>
-<p class="instructions">
+<p class="instructionsBox">
 	<@s.text name="instruction.buttongroup"/>
 </p>
 
-<#assign actions>
-	<div>
-		<button onclick="addButtonGroup()" ><@s.text name="label.addbuttongroup"/></button>
-		<button onclick="if( confirmNoChanges() == true ) { redirect( '<@s.url action="eventTypes" />' ); }" ><@s.text name="label.imdone"/></button>
-	</div>
-</#assign>
-${actions}
+<div class="addNewGroup">
+	<button id="addGroup" class="submitButton" onclick="addButtonGroup()" ><@s.text name="label.addbuttongroup"/></button>
+</div>
 <div class="viewSection" />
-	<h2><@s.text name="label.yourbuttongroups"/></h2>
 	<table class="simpleTable" id="buttonGroups" >
-		<tr>
-			<th class="" ><@s.text name="label.name"/></th>
-			
-			<th><@s.text name="label.buttonsandlabels"/></th>
-		</tr>
-		<#list stateSets as stateSet >
+			<#list stateSets as stateSet >
 			<tr id="stateRow_${stateSet_index}">
 				<td colspan="2"> 
 					<#assign states=stateSet.states />
@@ -45,12 +34,17 @@ ${actions}
 				</td>
 			</tr>
 		</#list>
-		
 	</table>
-	
-		
 </div>
-${actions}
+<div class="addNewGroup">
+	<button id="addGroup" class="submitButton" onclick="addButtonGroup()" ><@s.text name="label.addbuttongroup"/></button>
+</div>
+<div class="buttonActions">
+	<button id="save" class="submitButton" onclick="if( confirmNoChanges() == true ) { redirect( '<@s.url action="eventTypes" />' ); }" ><@s.text name="label.save"/></button>
+	<@s.text name="label.or"/>
+	<@s.url id="cancelUrl" action="eventTypes"/>
+	<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
+</div>
 
 
 
