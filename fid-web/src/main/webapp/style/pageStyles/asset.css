@@ -106,29 +106,29 @@
 }
 
 .columnCenter {
-	border-right: 1px solid #999999;
+	border-right: 1px solid #E2E2E2;
 	margin-right: 5px;
 	padding-right: 5px;
-	border-left: 1px solid #999999;
+	border-left: 1px solid #E2E2E2;
 	margin-left: 5px;
 	padding-left: 5px;
 }
 
 .columnLeft, .columnRight{
-	width: 260px;
+	width: 264px;
 }
 
 .subheading {
 	padding-top: 5px;
 	padding-bottom: 5px;
-	font-size: 1.3em;	
+	font-size: 1.0em;	
 }
 
 .columnCenter{
 	float: left;
 }
 
-.leftViewSection {
+.topBorder {
 	border-top: 1px solid #E2E2E2;
 }
 
@@ -137,26 +137,39 @@
 }
 
 .leftViewSection p, .columnRight p{
-	line-height: 1.5em;
+	line-height: 1.6em;
+	padding-left: 15px;
+}
+
+.leftViewSection h3, .columnRight h3{
+	padding-left: 15px;
 }
 
 #assetComponents{
-	padding-bottom: 20px;
+	padding-bottom: 25px;
 }
 
 #assetComponents label, #assetComponents span{
 	display: block;
 	float: left;
-	width: 125px;
+	width: 120px;
 }
 
 #assetComponents p span {
 	text-align: right;
 }
 
+#attachedfiles {
+	padding-left: 15px;
+}
+
 #attachedfiles img {
 	border: 1px solid #E2E2E2;
 	padding-left: 5px;
+}
+
+#attachedfiles p {
+	padding-left: 0;
 }
 
 .fileUploadShow {
@@ -173,7 +186,7 @@
 
 .fileUploadShow span{
 	padding-left: 5px;
-	width: 190px;
+	width: 180px;
 }
 
 .fileUploadShow span p {
@@ -184,10 +197,14 @@
 	border-top: 1px solid #E2E2E2;
 	border-bottom: 1px solid #E2E2E2;	
 	background-repeat: no-repeat;
-	background-position: left;
+	background-position: 12px center;
 	height: 20px;
 	padding-left: 25px;
 	padding-top: 5px;
 	background-image: url(../../images/www.png);	
 	padding-bottom: 3px;
+}
+
+.viewSection {
+	margin: 0;
 }

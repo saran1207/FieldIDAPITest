@@ -21,52 +21,60 @@ ${action.setPageType('asset', 'show')!}
 	<div>	
 		<#if asset.type.imageName?exists >
 			<p>
-				<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${asset.type.uniqueID}"  />" alt="<@s.text name="label.assetimage"/>" width="250"/>
+				<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${asset.type.uniqueID}"  />" alt="<@s.text name="label.assetimage"/>" width="264"/>
 			</p>
 		</#if>
 	</div>
 	<div class="viewSection">
-		<h2 class="subheading"><@s.text name="label.activity"/></h2> 
+		<h2><@s.text name="label.activity"/></h2> 
 	</div>
 	<div class="leftViewSection">
-		<h3 class="subheading"><@s.text name="label.lastevent"/></h3>
+		<h3 class="subheading"><@s.text name="label.lasteventperformed"/></h3>
 		<#if eventCount gt 0 >
+			<#assign event=lastEvent/>
+			<#assign urlLabel="label.view_this_event" />
 			<p>
-				<#assign event=lastEvent/>
-				<#assign urlLabel="label.view_this_event" />
 				<@s.text name="label.lasteventdate_msg">
 					<@s.param>${lastEvent.type.name!}</@s.param>
 					<@s.param>${action.formatDateTime(lastEvent.date)}</@s.param>
 					<@s.param><@s.text name="${(lastEvent.status.label?html)!}"/></@s.param>
-					<@s.param><#include "../eventCrud/_viewEventLink.ftl"/></@s.param>
+					
 				</@s.text>
-			</p>				
+			</p>		
+			<p><#include "../eventCrud/_viewEventLink.ftl"/></p>		
 		<#else>	
 			<p>
-				<@s.text name="label.noevents"/>
+				<@s.text name="label.nolastevents"/>
 			</p>	
 		</#if>
 	</div>
 
-	<div class="leftViewSection">
+	<div class="leftViewSection topBorder">
 		<h3 class="subheading"><@s.text name="label.nextevent"/></h3>
 		<#if nextEvent?exists >
 			<p>
-				<@s.text name="label.nexteventdate_msg">
-					<@s.param>${nextEvent.eventType.name!}</@s.param>
-					<@s.param>${nextEvent.daysToDue!}</@s.param>
-					<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
-				</@s.text>
+				<#if nextEvent.pastDue>
+					<@s.text name="label.nexteventdate_pastdue">
+						<@s.param>${nextEvent.eventType.name!}</@s.param>
+						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
+					</@s.text>
+				<#else>
+					<@s.text name="label.nexteventdate_msg">
+						<@s.param>${nextEvent.eventType.name!}</@s.param>
+						<@s.param>${nextEvent.daysToDue!}</@s.param>
+						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
+					</@s.text>
+				</#if>
 			</p>				
 		<#else>	
 			<p>
-				<@s.text name="label.noevents"/>
+				<@s.text name="label.nonextevents"/>
 			</p>	
 		</#if>
 	</div>
 	
 	<#if asset.subAssets?exists && !asset.subAssets.isEmpty() >
-		<div id="assetComponents" class="leftViewSection">
+		<div id="assetComponents" class="leftViewSection topBorder">
 			<h3 class="subheading"><@s.text name="label.subassets"/></h3>
 			<#list asset.subAssets as subAsset >
 				<p>
@@ -79,7 +87,7 @@ ${action.setPageType('asset', 'show')!}
 		</div>
 	
 	<#elseif parentAsset?exists>
-		<div id="assetComponents" class="leftViewSection">
+		<div id="assetComponents" class="leftViewSection topBorder">
 			<h3 class="subheading"><@s.text name="label.partof"/></h3>
 			<p>
 				<label>${parentAsset.type.name!}</label> 
@@ -91,7 +99,7 @@ ${action.setPageType('asset', 'show')!}
 	</#if>	
 	
 	<#if securityGuard.projectsEnabled && projects?exists && !projects.isEmpty() >
-		<div id="projects" class="leftViewSection">
+		<div id="projects" class="leftViewSection topBorder">
 			<h3 class="subheading"><@s.text name="label.projects"/></h3>
 			<#list projects as project >
 				<p>
@@ -101,7 +109,6 @@ ${action.setPageType('asset', 'show')!}
 		</div>
 	</#if>
 </div>
-
 
 <div class="columnCenter">
 	<div class="viewSection smallViewSection" >
@@ -224,7 +231,7 @@ ${action.setPageType('asset', 'show')!}
 
 <div class="columnRight">
 	<div class="viewSection">
-		<h2 class="subheading"><@s.text name="label.additionalinformation"/></h2> 
+		<h2><@s.text name="label.additionalinformation"/></h2> 
 	</div>
 	<#if asset.type.warnings?exists && asset.type.warnings?length gt 0 >
 		<div class="rightViewSection">
@@ -236,7 +243,7 @@ ${action.setPageType('asset', 'show')!}
 	</#if>
 	
 	<#if asset.type.instructions?exists && asset.type.instructions?length gt 0 >
-		<div class="rightViewSection">
+		<div class="rightViewSection topBorder">
 			<h3 class="subheading"><@s.text name="label.instructions"/></h3>
 			<p>
 				${asset.type.instructions!}
@@ -245,7 +252,7 @@ ${action.setPageType('asset', 'show')!}
 	</#if>
 				
 	<#if !assetAttachments.isEmpty() || !asset.type.attachments.isEmpty() >
-		<div class="rightViewSection">
+		<div class="rightViewSection topBorder">
 			<h3 class="subheading"><@s.text name="label.attachments"/></h3>
 			<#if !assetAttachments.isEmpty() >
 					<#assign downloadAction="downloadAssetAttachedFile"/>
@@ -268,7 +275,7 @@ ${action.setPageType('asset', 'show')!}
 	<#if (asset.type.cautions?exists && asset.type.cautions?length gt 0) ||
 			(asset.type.imageName?exists) || (!asset.type.attachments.isEmpty()) ||
 			(!assetAttachments.isEmpty())>
-		<div id="more" class="rightViewSection">
+		<div id="more" class="rightViewSection topBorder">
 			<#if asset.type.cautions?exists && asset.type.cautions?length gt 0 >
 				<p>
 					<a href="${asset.type.cautions}" target="_blank" ><@s.text name="label.morefromtheweb"/></a>
