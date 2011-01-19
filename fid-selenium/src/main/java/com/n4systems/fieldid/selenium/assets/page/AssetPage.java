@@ -30,8 +30,7 @@ public class AssetPage {
 	private String locationLabelLocator = "xpath=//LABEL[contains(text(),'Location')]";
 	private String referenceNumberLabelLocator = "xpath=//LABEL[contains(text(),'Reference Number')]";
 	private String purchaseOrderLabelLocator = "xpath=//LABEL[contains(text(),'Purchase Order')]";
-	private String lastEventHeaderLocator = "xpath=//H2[contains(text(),'Last Event')]";
-	private String manageEventsLinkLocator = "xpath=//A[@id='manageEvents']";
+	private String lastEventHeaderLocator = "xpath=//H3[contains(text(),'Last Event')]";
 	private String editAssetSerialNumberTextFieldLocator = "xpath=//INPUT[@id='serialNumberText']";
 	private String editAssetGenerateLinkLocator = "xpath=//A[contains(text(),'generate')]";
 	private String editAssetRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
@@ -170,7 +169,6 @@ public class AssetPage {
 		assertTrue(selenium.isElementPresent(referenceNumberLabelLocator));
 		assertTrue(selenium.isElementPresent(purchaseOrderLabelLocator));
 		assertTrue(selenium.isElementPresent(lastEventHeaderLocator));
-		assertTrue(selenium.isElementPresent(manageEventsLinkLocator));
 	}
 
 	public void gotoEdit() {

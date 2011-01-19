@@ -38,7 +38,7 @@ public class ManageCustomersPage extends FieldIDPage {
 	
 	public void archiveCustomerNamed(String name, boolean confirm) {
 		confirmNextDialog(confirm);
-		selenium.click("//table[@id='customerTable']//td/a[.='" + name + "']/../parent::tr/td[4]/a[.='Archive']");
+		selenium.click("//table[@id='customerTable']//td/a[.='" + name + "']/../parent::tr/td[6]/a[.='Archive']");
 		selenium.getConfirmation();
 		if(confirm) {
 			waitForPageToLoad();
