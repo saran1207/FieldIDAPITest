@@ -112,7 +112,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private boolean allowNetworkResults = false;
 	private List<SubEvent> subEvents;
 	private List<ListingPair> examiners;
-	private List<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private List<Listable<Long>> employees;
 	private List<ListingPair> eventBooks;
@@ -135,6 +134,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private boolean assignToSomeone = false;
 
     private String overrideResult;
+	private boolean isEditing;
 	
 	public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
@@ -152,6 +152,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	@Override
 	protected void initMemberFields() {
 		event = new Event();
+		isEditing = false;
 		event.setDate(new Date());
 	}
 
@@ -326,6 +327,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
 	public String doEdit() {
+		isEditing = true;
 		try {
 			setAssetId(event.getAsset().getId());
 			testDependencies();
@@ -648,9 +650,12 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	public List<AssetStatus> getAssetStatuses() {
-		if (assetStatuses == null) {
-			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
+		List<AssetStatus> assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
+	
+		if(isEditing && !assetStatuses.contains(event.getAssetStatus())) {
+			assetStatuses.add(event.getAssetStatus());
 		}
+		
 		return assetStatuses;
 	}
 

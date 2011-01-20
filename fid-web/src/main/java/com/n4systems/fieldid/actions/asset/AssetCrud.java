@@ -74,7 +74,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private static Logger logger = Logger.getLogger(AssetCrud.class);
 
 	// drop down lists
-	private Collection<AssetStatus> assetStatuses;
 	private List<Listable<Long>> commentTemplates;
 	private AssetType assetType;
 	private Collection<AssetExtension> extentions;
@@ -142,6 +141,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	private Pager<Asset> page;
 	private List<Asset> assets;
+	private boolean isEditing;
 
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager, AssetCodeMappingService assetCodeMappingServiceManager,
@@ -160,6 +160,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	@Override
 	protected void initMemberFields() {
 		asset = new Asset();
+		isEditing = false;
 		asset.setPublished(getPrimaryOrg().isAutoPublish());
 	}
 
@@ -366,6 +367,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doEdit() {
+		isEditing  = true;
 		makeEmployeesIncludeCurrentAssignedUser();
 		testExistingAsset();
 		setAssetTypeId(asset.getType().getId());
@@ -626,9 +628,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	public Collection<AssetStatus> getAssetStatuses() {
-		if (assetStatuses == null) {
-			assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
+		Collection<AssetStatus> assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
+		
+		if(isEditing && !assetStatuses.contains(asset.getAssetStatus())) {
+			assetStatuses.add(asset.getAssetStatus());
 		}
+		
 		return assetStatuses;
 	}
 
