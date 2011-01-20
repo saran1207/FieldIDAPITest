@@ -306,19 +306,28 @@ public class EntityManagerBackedUserManager implements UserManager {
 		MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext()).sendMessage(message);
 	}
 
-	public User findUserByResetKey(String tenantName, String userName, String resetPasswordKey) {
+	public User findAndClearResetKey(String tenantName, String userName, String resetPasswordKey) {
 		if (resetPasswordKey != null) {
 			User user = findUserBeanByID(tenantName, userName);
-			if (user != null) {
-				if (resetPasswordKey.equals(user.getResetPasswordKey()) && DateHelper.withinTheLastHour(user.getModified())) {
-					user.clearResetPasswordKey();
-					em.merge(user);
-					return user;
-				}
-
-			}
+            if (resetKeyValid(resetPasswordKey, user)) {
+                user.clearResetPasswordKey();
+                em.merge(user);
+                return user;
+            }
 		}
 		return null;
 	}
+
+    public boolean resetKeyIsValid(String tenantName, String userName, String resetPasswordKey) {
+        if (resetPasswordKey != null) {
+            User user = findUserBeanByID(tenantName, userName);
+            return resetKeyValid(resetPasswordKey, user);
+        }
+        return false;
+    }
+
+    private boolean resetKeyValid(String resetKey, User user) {
+        return user != null && resetKey.equals(user.getResetPasswordKey()) && DateHelper.withinTheLastHour(user.getModified());
+    }
 
 }

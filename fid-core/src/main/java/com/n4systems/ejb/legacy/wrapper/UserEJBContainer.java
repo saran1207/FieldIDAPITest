@@ -139,11 +139,11 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
 
-	public User findUserByResetKey(String tenantName, String userName, String resetPasswordKey) {
+	public User findAndClearResetKey(String tenantName, String userName, String resetPasswordKey) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findUserByResetKey(tenantName, userName, resetPasswordKey);
+			return createManager(transaction.getEntityManager()).findAndClearResetKey(tenantName, userName, resetPasswordKey);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -154,7 +154,22 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public List<ListingPair> getExaminers(SecurityFilter filter) {
+    public boolean resetKeyIsValid(String tenantName, String userName, String resetPasswordKey) {
+        TransactionManager transactionManager = new FieldIdTransactionManager();
+Transaction transaction = transactionManager.startTransaction();
+        try {
+            return createManager(transaction.getEntityManager()).resetKeyIsValid(tenantName, userName, resetPasswordKey);
+
+        } catch (RuntimeException e) {
+            transactionManager.rollbackTransaction(transaction);
+
+            throw e;
+        } finally {
+            transactionManager.finishTransaction(transaction);
+        }
+    }
+
+    public List<ListingPair> getExaminers(SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

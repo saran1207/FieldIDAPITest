@@ -1358,10 +1358,16 @@
 			<result name="error" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 		</action>
 
-		<action name="resetPassword" method="reset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="resetPassword" method="prepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>
-			<result name="success" type="redirectAction">editPassword</result>
+            <result name="success" type="freemarker">/templates/html/resetPassword/form.ftl</result>
+		</action>
+
+		<action name="finalizeReset" method="reset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="input" type="freemarker">/templates/html/resetPassword/form.ftl</result>
+			<result name="success" type="redirectAction">login</result>
 		</action>
 
 		<action name="editSecurityCard" method="edit" class="com.n4systems.fieldid.actions.user.ChangeSecurityCard">

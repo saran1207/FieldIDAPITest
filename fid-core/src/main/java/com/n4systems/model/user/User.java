@@ -2,6 +2,7 @@ package com.n4systems.model.user;
 
 import java.io.File;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -238,7 +239,7 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	}
 
 	public void createResetPasswordKey() {
-		resetPasswordKey = EncryptionUtility.getSHA1HexHash( emailAddress + System.currentTimeMillis() );
+		resetPasswordKey = EncryptionUtility.getSHA1HexHash( emailAddress + UUID.randomUUID().toString());
 	}
 
 	public String getResetPasswordKey() {
@@ -356,4 +357,4 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 		return userType;
 	}
 
-} 
+}

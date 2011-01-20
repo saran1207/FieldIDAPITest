@@ -47,7 +47,8 @@ public interface UserManager {
 	public void denyRequest( UserRequest userRequest ) ;
 
 	public void createAndEmailLoginKey(User user, URI baseURI) throws MessagingException ;
-	public User findUserByResetKey( String tenantName, String userName, String resetPasswordKey );
-	
+	public User findAndClearResetKey(String tenantName, String userName, String resetPasswordKey);
+
+    public boolean resetKeyIsValid(String tenantName, String userName, String resetPasswordKey);
 	
 }
