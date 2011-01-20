@@ -33,79 +33,7 @@ ${action.setPageType('report', 'show')!}
 		
 		<#include "../common/_formErrors.ftl"/>
 		
-		<div class="fieldGroup fieldGroupGap">
-			<h2><@s.text name="label.identifiers"/></h2>
-			<div class="infoSet">
-				<label for="criteria.rfidNumber"><@s.text name="label.rfidnumber"/></label> 
-				<@s.textfield name="criteria.rfidNumber"/>
-			</div>
-			<div class="infoSet">
-				<label for="criteria.serialNumber"><@s.text name="${sessionUser.serialNumberLabel}"/></label> 
-				<@s.textfield name="criteria.serialNumber"/>
-			</div>
-			<div class="infoSet">
-				<label for="criteria.referenceNumber"><@s.text name="label.referencenumber"/></label>
-				<@s.textfield name="criteria.referenceNumber"/>
-			</div>
-		</div>
-		
-		<div class="fieldGroup">
-			<h2><@s.text name="label.asset_details"/></h2>
-			<div class="infoSet">
-				<label for="criteria.assetStatus"><@s.text name="label.assetstatus"/></label>
-				<@s.select name="criteria.assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true" />
-			</div>
-					
-            <div class="infoSet">
-                <label for="criteria.assetTypeGroup"><@s.text name="label.asset_type_group"/></label>
-                <@s.select id="assetTypeGroup" name="criteria.assetTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateAssetTypes(this)" list="assetTypeGroups" listKey="id" listValue="name"/>
-            </div>
-
-            <div class="infoSet">
-                <label for="criteria.assetType"><@s.text name="label.assettype"/></label>
-                <@s.select cssClass="assetTypeSelect" id="assetType" name="criteria.assetType" emptyOption="true" list="assetTypes" listKey="id" listValue="name" onchange="assetTypeChanged(this)"/>
-            </div>
-
-		</div>
-		
-		<div class="fieldGroup fieldGroupGap">
-			<h2><@s.text name="label.ownership"/></h2>
-			<#if securityGuard.assignedToEnabled >
-				<div class="infoSet">
-					<label for="criteria.assignedUser"><@s.text name="label.assignedto"/></label>
-					<@s.select name="criteria.assignedUser" emptyOption="true" >
-						<#include "/templates/html/common/_assignedToDropDown.ftl"/>
-					</@s.select> 
-				</div>
-			</#if>
-			<div class="infoSet">
-				<label for="criteria.location"><@s.text name="label.location"/></label>
-				<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
-			</div>	
-			<div class="infoSet">
-				<label for="owner"><@s.text name="label.owner"/></label>
-				<@n4.orgPicker name="owner"/>
-			</div>
-		</div>
-		
-		<div class="fieldGroup ieFix">
-			<h2><@s.text name="label.orderdetails"/></h2>
-			<div class="infoSet">
-				<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
-				<@s.textfield name="criteria.orderNumber" />
-			</div>
-			<div class="infoSet">
-				<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
-				<@s.textfield name="criteria.purchaseOrder" />
-			</div>	
-			<#if securityGuard.assignedToEnabled >
-				<div class="infoSet">
-					<label>&nbsp;</label>
-				</div>
-			</#if>
-		</div>
-		
-		<div class="fieldGroup fieldGroupGap clearLeft">
+		<div class="fieldGroup floatLeft fieldGroupGap">
 			<h2><@s.text name="label.event_details"/></h2>
 			<div class="infoSet">
 				<label for="criteria.eventTypeGroup"><@s.text name="label.eventtypegroup"/></label>
@@ -134,15 +62,67 @@ ${action.setPageType('report', 'show')!}
 				<label for="criteria.status"><@s.text name="label.result"/></label>
 				<@s.select name="criteria.status" emptyOption="true" list="statuses" listKey="id" listValue="%{getText(label)}"/>
 			</div>
-			<#if sessionUser.employeeUser>
+			<#if sessionUser.employeeUser || sessionUser.systemUser>
 				<div class="infoSet">
 					<label id="reducedLineHeightLabel" for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
 					<@s.checkbox name="criteria.includeNetworkResults" fieldValue="true"/>
 				</div>
+			<#else>
+				<div class="infoSet">
+					&nbsp;
+				</div>
+			</#if>
+			<#if !securityGuard.projectsEnabled && securityGuard.assignedToEnabled>	
+				<div class="infoSet">
+					&nbsp;
+				</div>
 			</#if>
 		</div>
+		
+		<div class="fieldGroup floatRight">
+			<h2><@s.text name="label.asset_details"/></h2>
+			<div class="infoSet">
+				<label for="criteria.assetStatus"><@s.text name="label.assetstatus"/></label>
+				<@s.select name="criteria.assetStatus" list="assetStatuses" listKey="id" listValue="name" emptyOption="true" />
+			</div>
+					
+            <div class="infoSet">
+                <label for="criteria.assetTypeGroup"><@s.text name="label.asset_type_group"/></label>
+                <@s.select id="assetTypeGroup" name="criteria.assetTypeGroup" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateAssetTypes(this)" list="assetTypeGroups" listKey="id" listValue="name"/>
+            </div>
 
-		<div class="fieldGroup inline">
+            <div class="infoSet">
+                <label for="criteria.assetType"><@s.text name="label.assettype"/></label>
+                <@s.select cssClass="assetTypeSelect" id="assetType" name="criteria.assetType" emptyOption="true" list="assetTypes" listKey="id" listValue="name" onchange="assetTypeChanged(this)"/>
+            </div>
+		</div>
+			
+		<div class="fieldGroup floatRight">
+			<h2><@s.text name="label.ownership"/></h2>
+			<#if securityGuard.assignedToEnabled >
+				<div class="infoSet">
+					<label for="criteria.assignedUser"><@s.text name="label.assignedto"/></label>
+					<@s.select name="criteria.assignedUser" emptyOption="true" >
+						<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+					</@s.select> 
+				</div>
+			</#if>
+			<div class="infoSet">
+				<label for="criteria.location"><@s.text name="label.location"/></label>
+				<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
+			</div>	
+			<div class="infoSet">
+				<label for="owner"><@s.text name="label.owner"/></label>
+				<@n4.orgPicker name="owner"/>
+			</div>
+			<#if !securityGuard.assignedToEnabled && securityGuard.projectsEnabled>
+				<div class="infoSet">
+					&nbsp;
+				</div>
+			</#if>
+		</div>
+	
+		<div class="fieldGroup fieldGroupGap floatLeft">
 			<h2><@s.text name="label.eventdate"/></h2>
 			<div class="container">
 				<div class="infoSet">
@@ -154,6 +134,39 @@ ${action.setPageType('report', 'show')!}
 					<@s.datetimepicker  name="toDate" />
 				</div>
 			</div>
+		</div>
+	
+		<div class="fieldGroup floatRight">
+			<h2><@s.text name="label.identifiers"/></h2>
+			<div class="infoSet">
+				<label for="criteria.rfidNumber"><@s.text name="label.rfidnumber"/></label> 
+				<@s.textfield name="criteria.rfidNumber"/>
+			</div>
+			<div class="infoSet">
+				<label for="criteria.serialNumber"><@s.text name="${sessionUser.serialNumberLabel}"/></label> 
+				<@s.textfield name="criteria.serialNumber"/>
+			</div>
+			<div class="infoSet">
+				<label for="criteria.referenceNumber"><@s.text name="label.referencenumber"/></label>
+				<@s.textfield name="criteria.referenceNumber"/>
+			</div>
+		</div>
+		
+		<div class="fieldGroup fieldGroupGap floatLeft">
+			<h2><@s.text name="label.orderdetails"/></h2>
+			<div class="infoSet">
+				<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
+				<@s.textfield name="criteria.orderNumber" />
+			</div>
+			<div class="infoSet">
+				<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
+				<@s.textfield name="criteria.purchaseOrder" />
+			</div>	
+			<#if securityGuard.assignedToEnabled >
+				<div class="infoSet">
+					<label>&nbsp;</label>
+				</div>
+			</#if>
 		</div>
 
 		<#include "../customizableSearch/_selectColumns.ftl"/>

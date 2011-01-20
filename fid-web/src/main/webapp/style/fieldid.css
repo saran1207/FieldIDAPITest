@@ -1849,6 +1849,14 @@ ul.borderLess{
 	width:495px;
 }
 
+.floatLeft{
+	float:left;
+	}
+
+.floatRight{
+	float:right;
+	}
+
 .fieldGroupGap{
 	margin-right: 10px;	
 }
