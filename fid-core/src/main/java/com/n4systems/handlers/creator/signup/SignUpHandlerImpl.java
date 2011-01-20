@@ -13,6 +13,7 @@ import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.MultiTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -51,6 +52,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		guard();
 		holdNamesForSignUp(signUp);
 		confirmSubscription(signUp);
+		generateLoginKey();
 		activateAccount(signUp, referrerOrg, portalUrl);
 		processReferral(referrerOrg, referralCode);
 	}
@@ -145,7 +147,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		invitationMessage.getToAddresses().add(placeHolder.getAdminUser().getEmailAddress());
 		invitationMessage.getBccAddresses().add("sales@fieldid.com");
 		invitationMessage.getTemplateMap().put("companyId", placeHolder.getTenant().getName());
-		invitationMessage.getTemplateMap().put("portalUrl", portalUrl);
+		invitationMessage.getTemplateMap().put("portalUrl", createLoginUri(placeHolder.getAdminUser(), portalUrl));
 		invitationMessage.getTemplateMap().put("username", placeHolder.getAdminUser().getUserID());
 		
 		return invitationMessage;
@@ -182,4 +184,15 @@ public class SignUpHandlerImpl implements SignUpHandler {
 		return this;
 	}
 	
+	private String createLoginUri(User user, String portalUrl){
+		return portalUrl + "firstTimeLogin.action?u=" + user.getDisplayName() + "&k=" + user.getResetPasswordKey();
+	}
+	
+	private void generateLoginKey() {
+		User user = placeHolder.getAdminUser();
+		user.createResetPasswordKey();
+
+		logger.info("Created loginkey for User [" + user.getUserID() + "], Tenant [" + user.getTenant().getName() + "]");
+	}
+
 }

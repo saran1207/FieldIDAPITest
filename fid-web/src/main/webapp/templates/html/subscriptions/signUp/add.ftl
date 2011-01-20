@@ -48,8 +48,6 @@
 				<label class="label" for="email"><@s.text name="label.email"/></label>
 				<@s.textfield name="signUp.email"/>
 			</div>
-			
-			
 			<div class="infoSet">
 				<label class="label"><@s.text name="label.country"/></label>
 				<@s.select name="signUp.countryId" list="countries" listKey="id" listValue="displayName" cssClass="changesTimeZone setsCountry"/>
@@ -65,16 +63,7 @@
 				<label class="label" for="username"><@s.text name="label.username"/></label>
 				<@s.textfield name="signUp.username"/>
 			</div>
-			<div class="infoSet">
-				<label class="label" for="password"><@s.text name="label.password"/></label>
-				<@s.password name="signUp.password"/>
-			</div>
-			<div class="infoSet">
-				<label class="label" for="passwordConfirm"><@s.text name="label.password_again"/></label>
-				<@s.password name="signUp.passwordConfirm"/>
-			</div>
 		</div>
-		
 	</div>
 	
 	<div class="infoSection">

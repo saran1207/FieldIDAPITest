@@ -73,7 +73,6 @@ public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCr
 		
 		user.setUserType(UserType.ADMIN);
 		user.setUserID(accountInfo.getUsername());
-		user.assignPassword(accountInfo.getPassword());
 		user.setEmailAddress(accountInfo.getEmail());
 		user.setFirstName(accountInfo.getFirstName());
 		user.setLastName(accountInfo.getLastName());

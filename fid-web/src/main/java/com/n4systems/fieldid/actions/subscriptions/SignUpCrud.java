@@ -22,6 +22,7 @@ import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIDMultiTransactionManager;
 import com.n4systems.persistence.MultiTransactionManager;
 import com.n4systems.subscription.AddressInfo;
@@ -139,7 +140,6 @@ public class SignUpCrud extends AbstractCrud {
 			
 			result = ERROR;
 		}
-
 		return result;
 	}
 
@@ -149,7 +149,7 @@ public class SignUpCrud extends AbstractCrud {
 			signUpRequest.setPurchaseOrderNumber("");
 		}
 	}
-
+	
 	private String signUpLogLine(String action) {
 		return getLogLinePrefix() + action + (" for an account tenant [" + signUpRequest.getTenantName() + "]  package [" + signUpRequest.getSignUpPackage().getName() + "]");
 	}
@@ -158,7 +158,7 @@ public class SignUpCrud extends AbstractCrud {
 	private void createAccount() throws BillingValidationException, PromoCodeValidationException, CommunicationErrorException, TenantNameUsedException, ProcessFailureException, SignUpCompletionException {
 		MultiTransactionManager transactionManager = new FieldIDMultiTransactionManager();
 		
-		getCreateHandlerFactory().getSignUpHandler().withTransactionManager(transactionManager).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg(), getLoginUrlForTenant(signUpRequest.getTenantName()), refCode);
+		getCreateHandlerFactory().getSignUpHandler().withTransactionManager(transactionManager).signUp(signUpRequest.getSignUpRequest(), getPrimaryOrg(), getBaseBrandedUrl(signUpRequest.getTenantName()), refCode);
 	}
 
 	public SortedSet<? extends Listable<String>> getCountries() {
@@ -200,8 +200,6 @@ public class SignUpCrud extends AbstractCrud {
 	public SignUpRequestDecorator getSignUp() {
 		return signUpRequest;
 	}
-	
-	
 	
 	@CustomValidator(type = "conditionalVisitorFieldValidator", message = "", parameters = { @ValidationParameter(name = "expression", value = "aNeedToCheckCreditCard == true") })
 	public CreditCard getCreditCard() {
