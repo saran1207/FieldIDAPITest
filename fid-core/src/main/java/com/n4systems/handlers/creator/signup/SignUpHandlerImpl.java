@@ -190,9 +190,13 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	
 	private void generateLoginKey() {
 		User user = placeHolder.getAdminUser();
-		user.createResetPasswordKey();
+		if (user!=null){
+			user.createResetPasswordKey();
 
-		logger.info("Created loginkey for User [" + user.getUserID() + "], Tenant [" + user.getTenant().getName() + "]");
+			logger.info("Created loginkey for User [" + user.getUserID() + "], Tenant [" + user.getTenant().getName() + "]");
+		}else{
+			logger.warn("Couldn't create loginkey for new User!");
+		}
 	}
 
 }
