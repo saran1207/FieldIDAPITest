@@ -1,77 +1,133 @@
 package com.n4systems.api.validation.validators;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
+import com.n4systems.model.asset.SmartSearchLoader;
+import com.n4systems.model.builders.AssetBuilder;
+import com.n4systems.model.builders.AssetTypeBuilder;
+import com.n4systems.model.builders.EventTypeBuilder;
+import com.n4systems.model.eventtype.AssociatedEventTypeExistsLoader;
+import com.n4systems.model.security.SecurityFilter;
+import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.model.asset.SmartSearchCounter;
-import com.n4systems.model.security.SecurityFilter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AssetIdentifierValidatorTest {
+
+    private static final String TEST_SEARCH_TEXT = "serial number";
+
+    private Map<String, Object> validationContext;
+    private EventType eventType;
+    private AssetType assetType;
+    private Asset asset;
+
+    @Before
+    public void setUp() {
+        validationContext = new HashMap<String,Object>();
+        eventType = EventTypeBuilder.anEventType().build();
+        validationContext.put("eventType", eventType);
+        assetType = AssetTypeBuilder.anAssetType().build();
+        asset = AssetBuilder.anAsset().ofType(assetType).build();
+    }
 	
 	@Test
-	public void validate_passes_on_null_value() { 
-		AssetIdentifierValidator validator = new AssetIdentifierValidator();
+	public void validate_passes_on_null_value() {
+        SmartSearchLoader smartSearchLoader = createMockSmartSearchLoaderReturning(Arrays.asList(asset));
+        AssociatedEventTypeExistsLoader associateDoesExistLoader = createMockAssociatedEventTypeExistsLoaderReturning(true);
+        AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, associateDoesExistLoader);
 		
-		assertTrue(validator.validate(null, null, null, null, null).isPassed());
-	}
-	
+		assertTrue(validator.validate(null, null, null, null, validationContext).isPassed());
+    }
+
 	@Test
-	public void validate_passes_when_one_user_found() {
-		String searchText = "serial number";
-		
-		final SmartSearchCounter loader = createMock(SmartSearchCounter.class);
-		expect(loader.setSearchText(searchText)).andReturn(loader);
-		expect(loader.load()).andReturn(1L);
+	public void validate_passes_when_one_asset_found_if_association_exists() {
+		SmartSearchLoader loader = createMockSmartSearchLoaderReturning(Arrays.asList(asset));
 		replay(loader);
-		
-		AssetIdentifierValidator validator = new AssetIdentifierValidator() {
-			protected SmartSearchCounter createSmartSearchCounter(SecurityFilter filter) {
-				return loader;
-			}
-		};
-		
-		assertTrue(validator.validate(searchText, null, null, null, null).isPassed());
+
+        AssociatedEventTypeExistsLoader existsLoader = createMockAssociatedEventTypeExistsLoaderReturning(true);
+        replay(existsLoader);
+
+		AssetIdentifierValidator validator = createTestIdentifierValidator(loader, existsLoader);
+
+		assertTrue(validator.validate(TEST_SEARCH_TEXT, null, null, null, validationContext).isPassed());
 		verify(loader);
+        verify(existsLoader);
+	}
+
+    @Test
+    public void validate_fails_when_one_asset_found_if_association_doesnt_exist() {
+        SmartSearchLoader loader = createMockSmartSearchLoaderReturning(Arrays.asList(asset));
+        replay(loader);
+
+        AssociatedEventTypeExistsLoader existsLoader = createMockAssociatedEventTypeExistsLoaderReturning(false);
+        replay(existsLoader);
+
+        AssetIdentifierValidator validator = createTestIdentifierValidator(loader, existsLoader);
+
+        assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, validationContext).isPassed());
+        verify(loader);
+        verify(existsLoader);
+    }
+
+	
+	@Test
+	public void validate_fails_when_no_assets_found() {
+        SmartSearchLoader smartSearchLoader = createMockSmartSearchLoaderReturning(Collections.<Asset>emptyList());
+        replay(smartSearchLoader);
+        AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, null);
+
+		assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, validationContext).isPassed());
+		verify(smartSearchLoader);
 	}
 	
 	@Test
-	public void validate_fails_when_no_users_found() {
-		String searchText = "serial number";
-		
-		final SmartSearchCounter loader = createMock(SmartSearchCounter.class);
-		expect(loader.setSearchText(searchText)).andReturn(loader);
-		expect(loader.load()).andReturn(0L);
-		replay(loader);
-		
-		AssetIdentifierValidator validator = new AssetIdentifierValidator() {
-			protected SmartSearchCounter createSmartSearchCounter(SecurityFilter filter) {
-				return loader;
-			}
-		};
-		
-		assertFalse(validator.validate(searchText, null, null, null, null).isPassed());
-		verify(loader);
+	public void validate_fails_when_more_than_one_asset_found() {
+        SmartSearchLoader smartSearchLoader = createMockSmartSearchLoaderReturning(Arrays.asList(asset, asset));
+        replay(smartSearchLoader);
+        AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, null);
+
+		assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, validationContext).isPassed());
+		verify(smartSearchLoader);
 	}
-	
-	@Test
-	public void validate_fails_when_more_than_one_user_found() {
-		String searchText = "serial number";
-		
-		final SmartSearchCounter loader = createMock(SmartSearchCounter.class);
-		expect(loader.setSearchText(searchText)).andReturn(loader);
-		expect(loader.load()).andReturn(2L);
-		replay(loader);
-		
-		AssetIdentifierValidator validator = new AssetIdentifierValidator() {
-			protected SmartSearchCounter createSmartSearchCounter(SecurityFilter filter) {
-				return loader;
-			}
-		};
-		
-		assertFalse(validator.validate(searchText, null, null, null, null).isPassed());
-		verify(loader);
-	}
+
+    private AssetIdentifierValidator createTestIdentifierValidator(final SmartSearchLoader smartSearchLoader, final AssociatedEventTypeExistsLoader associatedEventTypeExistsLoader) {
+        return new AssetIdentifierValidator() {
+            @Override
+            protected SmartSearchLoader createSmartSearchLoader(SecurityFilter filter) {
+                return smartSearchLoader;
+            }
+
+            @Override
+            protected AssociatedEventTypeExistsLoader createAssociatedEventTypeExistsLoader(SecurityFilter filter) {
+                return associatedEventTypeExistsLoader;
+            }
+        };
+    }
+
+    private AssociatedEventTypeExistsLoader createMockAssociatedEventTypeExistsLoaderReturning(final boolean result) {
+        AssociatedEventTypeExistsLoader loader = createMock(AssociatedEventTypeExistsLoader.class);
+        expect(loader.setAssetType(assetType)).andReturn(loader);
+        expect(loader.setEventType(eventType)).andReturn(loader);
+        expect(loader.load()).andReturn(result);
+        return loader;
+    }
+
+    private SmartSearchLoader createMockSmartSearchLoaderReturning(List<Asset> assets) {
+        SmartSearchLoader smartSearchLoader = createMock(SmartSearchLoader.class);
+        expect(smartSearchLoader.setSearchText(TEST_SEARCH_TEXT)).andReturn(smartSearchLoader);
+        smartSearchLoader.setMaxResults(2);
+		expect(smartSearchLoader.load()).andReturn(assets);
+        return smartSearchLoader;
+    }
 	
 }

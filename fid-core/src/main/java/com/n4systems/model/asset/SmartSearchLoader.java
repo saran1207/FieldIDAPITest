@@ -15,6 +15,7 @@ public class SmartSearchLoader extends ListLoader<Asset> {
 	private boolean useSerialNumber = true;
 	private boolean useRfidNumber = true;
 	private boolean useRefNumber = true;
+    private Integer maxResults = null;
 	
 	public SmartSearchLoader(SecurityFilter filter) {
 		super(filter);
@@ -40,9 +41,20 @@ public class SmartSearchLoader extends ListLoader<Asset> {
 		this.useRefNumber = useRefNumber;
 	}
 
+    public void setMaxResults(Integer maxResults) {
+        this.maxResults = maxResults;
+    }
+
+
 	@Override
 	public List<Asset> load(EntityManager em, SecurityFilter filter) {
-		List<Asset> assets = createQuery(filter).getResultList(em);
+        List<Asset> assets;
+        if (maxResults != null) {
+            assets = createQuery(filter).getResultList(em, 0, maxResults);
+        } else {
+            assets = createQuery(filter).getResultList(em);
+        }
+
 		return assets;
 	}
 

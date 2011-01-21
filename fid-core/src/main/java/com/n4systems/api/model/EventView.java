@@ -4,7 +4,6 @@ import java.util.Date;
 
 import com.n4systems.api.validation.validators.AssetIdentifierValidator;
 import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
-import com.n4systems.api.validation.validators.AssociatedEventTypeValidator;
 import com.n4systems.api.validation.validators.DateValidator;
 import com.n4systems.api.validation.validators.EventStatusValidator;
 import com.n4systems.api.validation.validators.FullNameUserValidator;
@@ -17,7 +16,7 @@ import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 public class EventView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
 
-	@ExportField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, AssetIdentifierValidator.class, AssociatedEventTypeValidator.class })
+	@ExportField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, AssetIdentifierValidator.class })
 	private String identifier;
 
 	@ExportField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
