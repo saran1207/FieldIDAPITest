@@ -17,6 +17,7 @@ public enum ConfigEntry {
 	MAIL_BODY_HTML_HEADER						(	""						),
 	MAIL_BODY_HTML_FOOTER						(	"<br/><br/>---<br/>The Field ID Team<br/><br/>49 Fraser Street, Ground Floor<br/>" +
 													"Toronto, Ontario, Canada, M6K1Y7<br/>contact@fieldid.com<br/><hr/>This e-mail address is not a valid return address and is not monitored - for questions please email support@fieldid.com</hr>"),
+	SALES_ADDRESS								(	"sales@fieldid.com"		),										
 	GRAPHING_CHART_SIZE_X						(	"400"					),
 	GRAPHING_CHART_SIZE_Y						(	"200"					),
 	GRAPHING_CHART_PEAK_MARKERS					(	"false"					),

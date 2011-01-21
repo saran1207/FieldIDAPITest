@@ -203,3 +203,11 @@ h2, #totalPriceSection {
 .fullScreen h1 {
 	text-align:center;
 }
+
+.infoSet .fieldHolder input[type="text"]{
+	width: 245px;
+}
+
+.fullForm select{
+ 	width: 253px;
+ }

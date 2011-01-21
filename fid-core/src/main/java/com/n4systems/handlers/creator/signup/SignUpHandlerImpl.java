@@ -21,6 +21,8 @@ import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.SignUpTenantResponse;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
 
@@ -145,7 +147,9 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	private MailMessage createWelcomeMessage(AccountPlaceHolder placeHolder, String portalUrl) {
 		TemplateMailMessage invitationMessage = new TemplateMailMessage("Welcome to Field ID", "welcomeMessageTenantCreated");
 		invitationMessage.getToAddresses().add(placeHolder.getAdminUser().getEmailAddress());
-		invitationMessage.getBccAddresses().add("sales@fieldid.com");
+		if (!ConfigContext.getCurrentContext().getString(ConfigEntry.SALES_ADDRESS).equals("")){
+			invitationMessage.getBccAddresses().add("sales@fieldid.com");
+		}
 		invitationMessage.getTemplateMap().put("companyId", placeHolder.getTenant().getName());
 		invitationMessage.getTemplateMap().put("portalUrl", createLoginUri(placeHolder.getAdminUser(), portalUrl));
 		invitationMessage.getTemplateMap().put("username", placeHolder.getAdminUser().getUserID());
@@ -185,7 +189,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 	}
 	
 	private String createLoginUri(User user, String portalUrl){
-		return portalUrl + "firstTimeLogin.action?u=" + user.getDisplayName() + "&k=" + user.getResetPasswordKey();
+		return portalUrl + "firstTimeLogin.action?u=" + user.getUserID() + "&k=" + user.getResetPasswordKey();
 	}
 	
 	private void generateLoginKey() {

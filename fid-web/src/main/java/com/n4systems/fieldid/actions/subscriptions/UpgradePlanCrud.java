@@ -30,6 +30,8 @@ import com.n4systems.subscription.BillingInfoException;
 import com.n4systems.subscription.CommunicationException;
 import com.n4systems.subscription.PaymentOption;
 import com.n4systems.subscription.UpgradeResponse;
+import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.opensymphony.xwork2.validator.annotations.ExpressionValidator;
@@ -303,7 +305,9 @@ public class UpgradePlanCrud extends AbstractUpgradeCrud {
 		TemplateMailMessage invitationMessage = new TemplateMailMessage("Your Field ID Account Has Been Upgraded", "planUpgrade");
 		String emailAddress = new AdminUserListLoader(getSecurityFilter()).load().get(0).getEmailAddress();
 		invitationMessage.getToAddresses().add(emailAddress);
-		invitationMessage.getBccAddresses().add("sales@fieldid.com");
+		if (!getConfigContext().getString(ConfigEntry.SALES_ADDRESS).equals("")){
+			invitationMessage.getBccAddresses().add("sales@fieldid.com");
+		}
 		
 		
 		

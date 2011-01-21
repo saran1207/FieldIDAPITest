@@ -1364,10 +1364,10 @@
             <result name="success" type="freemarker">/templates/html/resetPassword/form.ftl</result>
 		</action>
 		
-		<action name="firstTimeLogin" method="reset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="firstTimeLogin" method="prepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>
-			<result name="success" type="redirectAction">editPassword</result>
+            <result name="success" type="freemarker">/templates/html/resetPassword/form.ftl</result>
 		</action>
 
 		<action name="finalizeReset" method="reset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
