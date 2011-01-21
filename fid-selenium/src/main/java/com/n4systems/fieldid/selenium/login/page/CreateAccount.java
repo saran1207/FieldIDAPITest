@@ -57,8 +57,6 @@ public class CreateAccount {
 		assertTrue("Could not find the Country select list", selenium.isElementPresent(countrySelectListLocator));
 		assertTrue("Could not find the Time Zone select list", selenium.isElementPresent(timeZoneSelectListLocator));
 		assertTrue("Could not find the User Name text field", selenium.isElementPresent(userNameTextFieldLocator));
-		assertTrue("Could not find the Password text field", selenium.isElementPresent(passwordTextFieldLocator));
-		assertTrue("Could not find the Password Again text field", selenium.isElementPresent(passwordAgainTextFieldLocator));
 		assertTrue("Could not find the Company Name text field", selenium.isElementPresent(companyNameTextFieldLocator));
 		assertTrue("Could not find the Company Address text field", selenium.isElementPresent(companyAddressTextFieldLocator));
 		assertTrue("Could not find the Company City text field", selenium.isElementPresent(companyCityTextFieldLocator));
@@ -95,8 +93,6 @@ public class CreateAccount {
 		}
 		if(t.getTimeZone() != null)				selenium.select(timeZoneSelectListLocator, t.getTimeZone());
 		if(t.getUserName() != null)				selenium.type(userNameTextFieldLocator, t.getUserName());
-		if(t.getPassword() != null)				selenium.type(passwordTextFieldLocator, t.getPassword());
-		if(t.getPassword2() != null)			selenium.type(passwordAgainTextFieldLocator, t.getPassword2());
 		
 		if(t.getCompanyName() != null)			selenium.type(companyNameTextFieldLocator, t.getCompanyName());
 		if(t.getCompanyAddress() != null)		selenium.type(companyAddressTextFieldLocator, t.getCompanyAddress());
