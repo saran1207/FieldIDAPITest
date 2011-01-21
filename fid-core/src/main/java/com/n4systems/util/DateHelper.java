@@ -181,6 +181,13 @@ public class DateHelper {
 		return (target.before(now) && target.after(oneHourAgo));
 
 	}
+	
+	public static boolean withinSevenDays(Date target){
+		Date now = new Date();
+		Date oneWeekAgo = increment(now, DAY, -7);
+		
+		return (target.before(now) && target.after(oneWeekAgo));
+	}
 
 	public static Date getYesterday() {
 		return increment(getToday(), DAY, -1);

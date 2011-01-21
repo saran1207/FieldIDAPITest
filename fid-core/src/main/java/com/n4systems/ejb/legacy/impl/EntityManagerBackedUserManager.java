@@ -327,7 +327,7 @@ public class EntityManagerBackedUserManager implements UserManager {
     }
 
     private boolean resetKeyValid(String resetKey, User user) {
-        return user != null && resetKey.equals(user.getResetPasswordKey()) && DateHelper.withinTheLastHour(user.getModified());
+        return user != null && resetKey.equals(user.getResetPasswordKey()) && DateHelper.withinSevenDays(user.getModified());
     }
 
 }
