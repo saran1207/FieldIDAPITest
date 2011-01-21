@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
 import com.n4systems.fieldid.selenium.pages.setup.BrandingPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageAssetStatusPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
@@ -92,6 +93,12 @@ public class SetupPage extends FieldIDPage {
 		return new ManageAssetTypesPage(selenium);
 	}
 	
+	public ManageAssetStatusPage clickManageAssetStatuses() {
+        clickAssetsAndEventsTab();
+		selenium.click("//a[.='Asset Statuses']");
+		return new ManageAssetStatusPage(selenium);
+	}
+
 	public ManageEventTypesPage clickManageEventTypes() {
         clickAssetsAndEventsTab();
 		selenium.click("//a[.='Event Types']");
