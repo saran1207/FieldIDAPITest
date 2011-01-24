@@ -599,7 +599,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		} else if (event.getType() == null || !type.equals(event.getType().getId())) {
             EventType eventType = persistenceManager.find(EventType.class, type, getTenantId(), "eventForm.sections", "supportedProofTests", "infoFieldNames");
             event.setType(eventType);
-            event.setEventForm(eventType.getEventForm());
+            if (event.getEventForm() == null) {
+                event.setEventForm(eventType.getEventForm());
+            }
 		}
 	}
 

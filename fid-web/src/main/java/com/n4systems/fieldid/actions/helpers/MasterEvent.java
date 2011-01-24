@@ -152,6 +152,7 @@ public class MasterEvent {
 		event.setCreated(subEvent.getCreated());
 		event.setModified(subEvent.getModified());
 		event.setModifiedBy(subEvent.getModifiedBy());
+        event.setEventForm(subEvent.getEventForm());
 
 		return event;
 	}
@@ -170,6 +171,7 @@ public class MasterEvent {
 		subEvent.setCreated(event.getCreated());
 		subEvent.setModified(event.getModified());
 		subEvent.setModifiedBy(event.getModifiedBy());
+        subEvent.setEventForm(event.getEventForm());
 
 		return subEvent;
 	}

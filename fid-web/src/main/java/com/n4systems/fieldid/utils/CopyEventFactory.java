@@ -88,7 +88,7 @@ public class CopyEventFactory {
 		newEvent.setAsset( originalEvent.getAsset() );
 		newEvent.setType( originalEvent.getType() );
 		newEvent.setComments( originalEvent.getComments() );
-		
+        newEvent.setEventForm( originalEvent.getEventForm() );
 		
 		newEvent.setAttachments( copyFileAttachments( originalEvent.getAttachments() ) );
 		newEvent.setInfoOptionMap( new HashMap<String, String>( originalEvent.getInfoOptionMap() ) );

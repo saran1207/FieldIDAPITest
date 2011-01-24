@@ -99,8 +99,8 @@ public class MasterEventCrud extends AbstractCrud {
 			Event event = eventManager.findAllFields(uniqueId, getSecurityFilter());
 			masterEvent = new MasterEvent(event);
 			if (event != null) {
-				for (SubEvent i : event.getSubEvents()) {
-					persistenceManager.reattchAndFetch(i, "asset.id", "results", "infoOptionMap", "type", "attachments");
+				for (SubEvent subEvent : event.getSubEvents()) {
+					persistenceManager.reattchAndFetch(subEvent, "asset.id", "results", "infoOptionMap", "type", "attachments", "eventForm");
 				}
 			}
 		}
