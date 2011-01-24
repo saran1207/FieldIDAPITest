@@ -44,6 +44,7 @@ public class CopyEventFactory {
 		newEvent.setDate( ( event.getDate() != null ) ? new Date( event.getDate().getTime() ) : null );
 		newEvent.setProofTestInfo( copyProofTestInfo( event.getProofTestInfo() ) );
 		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
+        newEvent.setEventForm(event.getEventForm());
 		
 		return newEvent;
 	}
