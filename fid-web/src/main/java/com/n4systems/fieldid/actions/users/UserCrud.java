@@ -16,6 +16,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.user.UserPasswordWelcomeNotificationProducer;
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.PasswordEntry;
@@ -33,8 +34,8 @@ import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.StringListingPair;
-import com.n4systems.util.UserType;
 import com.n4systems.util.UserGroup;
+import com.n4systems.util.UserType;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
@@ -208,6 +209,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 		user.setTenant(getTenant());
 		user.setActive(true);
+		user.setModifiedBy(super.getUser());
+		user.setCreatedBy(super.getUser());
 
 		try {
 
@@ -216,7 +219,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 				user.assignSecruityCardNumber(securityCardNumber);
 				new UserSaver().save(user);
 				uniqueID = user.getId();
-				sendWelcomeEmail();
+				if(isAssignPassword())
+					sendWelcomeEmail();
+				else
+					sendCreatePasswordEmail();
 			} else {
 				new UserSaver().update(user);
 			}
@@ -259,11 +265,29 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		}
 	}
 
+	private void sendCreatePasswordEmail() {
+		user.createResetPasswordKey();
+		new UserSaver().update(user);
+		if (welcomeMessage.isSendEmail()) {
+			if (welcomeMessage.isPersonalMessageProvided()) {
+				getPasswordWelcomeNotifier().sendPersonalizedWelcomeNotificationTo(user, welcomeMessage.getPersonalMessage());
+			} else {
+				getPasswordWelcomeNotifier().sendWelcomeNotificationTo(user);
+			}
+			addFlashMessageText("label.welcome_message_sent");
+		}
+	}
+
 	private UserWelcomeNotificationProducer getWelcomeNotifier() {
 		UserWelcomeNotificationProducer userWelcomeNotificationProducer = new UserWelcomeNotificationProducer(getDefaultNotifier(), createActionUrlBuilder());
 		return userWelcomeNotificationProducer;
 	}
 
+	private UserPasswordWelcomeNotificationProducer getPasswordWelcomeNotifier() {
+		UserPasswordWelcomeNotificationProducer userWelcomeNotificationProducer = new UserPasswordWelcomeNotificationProducer(getDefaultNotifier(), createActionUrlBuilder());
+		return userWelcomeNotificationProducer;
+	}
+	
 	protected abstract int processPermissions();
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.useridrequired")
