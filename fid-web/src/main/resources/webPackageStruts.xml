@@ -245,16 +245,12 @@
 		</action>
 
 		<action name="assetStatusArchive" method="archive" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
-			<result name="success" type="redirectAction">
-				<param name="actionName">assetStatusList</param>
-			</result>			
+			<result name="success" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 		</action>
 
 		<action name="assetStatusUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
-			<result name="success" type="redirectAction">
-				<param name="actionName">assetStatusList</param>
-			</result>			
+			<result name="success" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 		</action>
 
