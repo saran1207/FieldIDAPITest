@@ -16,12 +16,12 @@ ${action.setPageType('setup','settings')!}
 			<h1><a href="<@s.url action="systemSettingsEdit"/>" ><@s.text name="title.manage_system_settings.plural" /></a></h1>
 			<p><@s.text name="label.manage_system_settings_msg" /></p>
 		</div>
-		<div class="setupOption setupWizard">
-			<#if sessionUser.admin || sessionUser.systemUser>
+		<#if sessionUser.admin || sessionUser.systemUser>
+			<div class="setupOption setupWizard">
 				<h1><a href="<@s.url action="startWizard" namespace="quickSetupWizard"/>"><@s.text name="label.quick_setup_wizard"/></a></h1>
 				<p><@s.text name='label.quick_setup_description'/></p>
-			</#if>
-		</div>
+			</div>
+		</#if>
 		<#if securityGuard.brandingEnabled>
 			<div class="setupOption branding">
 				<h1><a href="<@s.url action="branding"/>" ><@s.text name="title.manage_branding.plural" /></a></h1>
