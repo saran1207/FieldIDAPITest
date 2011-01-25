@@ -82,20 +82,28 @@ ${action.setPageType('event_type', 'show')!}
 					<div id="${section.title}">
 						<table class="criteriaList">
 							<#list section.criteria as criteria >
-								<#if !criteria.retired && criteria.oneClickCriteria>
-									<tr>
-										<td class="criteriaName"><label>${criteria.displayName}</label></td>
-										<td class="buttonGroupIcons">
-											<#assign states=criteria.states.states/>
-											<#include "../buttonGroupCrud/_buttonGroup.ftl"/>
-										</td>
-										<td>
-											<#assign sectionIdx=section_index/>
-											<#assign criteriaIdx=criteria_index/>
-											<#include "../observationsCrud/show.ftl"/>
-										</td>
-									</tr>
-								</#if>
+                                <#if !criteria.retired>
+                                    <tr>
+                                        <td class="criteriaName"><label>${criteria.displayName}</label></td>
+                                        <td class="buttonGroupIcons">
+                                            <#if criteria.oneClickCriteria>
+                                                <#assign states=criteria.states.states/>
+                                                <#include "../buttonGroupCrud/_buttonGroup.ftl"/>
+                                            </#if>
+                                            <#if criteria.selectCriteria>
+                                                <@s.text name="label.textfield"/>
+                                            </#if>
+                                            <#if criteria.textFieldCriteria>
+                                                <@s.text name="label.textfield"/>
+                                            </#if>
+                                        </td>
+                                        <td>
+                                            <#assign sectionIdx=section_index/>
+                                            <#assign criteriaIdx=criteria_index/>
+                                            <#include "../observationsCrud/show.ftl"/>
+                                        </td>
+                                    </tr>
+                                </#if>
 							</#list>
 						</table>
 					</div>
