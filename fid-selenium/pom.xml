@@ -48,6 +48,17 @@
             <artifactId>fieldid-wis-client</artifactId>
             <version>1.19</version>
         </dependency>
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+            <version>3.1.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 		<dependency>
 			<groupId>org.codehaus.xfire</groupId>
 			<artifactId>xfire-all</artifactId>

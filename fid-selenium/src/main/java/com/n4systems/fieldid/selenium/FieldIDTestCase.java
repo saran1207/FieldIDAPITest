@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium;
 
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.mail.MailServer;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.thoughtworks.selenium.DefaultSelenium;
@@ -27,10 +28,22 @@ public abstract class FieldIDTestCase extends DBTestCase {
 	protected Properties p;
 	public static final String badProperty = "INVALID";
 	public SystemDriverFactory systemDriverFactory;
+    protected MailServer mailServer;
 	
 	protected void setInitialCompany(String initCompany) {
 		getSeleniumConfig().setInitCompany(initCompany);
 	}
+
+    @Before
+    public void startMailServer() {
+        mailServer = new MailServer(getSeleniumConfig());
+        mailServer.start();
+    }
+
+    @After
+    public void shutdownMailServer() {
+        mailServer.stop();
+    }
 	
 	@Before
 	public final void setupSelenium() throws Exception {

@@ -10,9 +10,16 @@ import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
+import com.n4systems.fieldid.selenium.mail.MailMessage;
+import com.n4systems.fieldid.selenium.mail.MailServer;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.SetPasswordPage;
+import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
+import com.thoughtworks.selenium.Selenium;
 
 public class CreateTenants {
+
+    private Selenium selenium;
 
 	private Login login;
 	private SignUpPackages sup;
@@ -22,6 +29,7 @@ public class CreateTenants {
 
 	public CreateTenants(FieldIdSelenium selenium, MiscDriver misc) {
 		this.r = new Random();
+        this.selenium = selenium;
 		login = new Login(selenium, misc);
 		sup = new SignUpPackages(selenium, misc);
 		create = new CreateAccount(selenium, misc);
@@ -33,11 +41,13 @@ public class CreateTenants {
 	 * All the information about the tenant is returned in a
 	 * CreateTenant object.
 	 * 
-	 * @param packageName
-	 * @param promoCode
-	 * @return
+	 *
+     * @param packageName
+     * @param promoCode
+     * @param mailServer
+     * @return
 	 */
-	public TenantInfo createARandomNewTenant(String packageName, String promoCode) {
+	public TenantInfo createARandomNewTenant(String packageName, String promoCode, MailServer mailServer) {
 		assertNotNull("Need a package name", packageName);
 		if(promoCode == null) {
 			promoCode = "";
@@ -65,9 +75,18 @@ public class CreateTenants {
 		}
 		create.setCreateYourAccountForm(t);
 		create.submitCreateYourAccountForm();
-		LoginPage page = complete.gotoSignInNow();
+
+        mailServer.waitForMessages(1);
+        MailMessage accountActivationMessage = mailServer.getAndClearMessages().get(0);
+
+        SetPasswordPage setPasswordPage = new SignUpEmailLoginNavigator().navigateToSignInPageSpecifiedIn(accountActivationMessage, selenium);
+        setPasswordPage.enterAndConfirmPassword(password);
+        LoginPage page = setPasswordPage.submitConfirmPassword();
+
 		t.setLoginPage(page);
 		
 		return t;
 	}
+
+
 }

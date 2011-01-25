@@ -13,6 +13,7 @@ public class SeleniumConfig {
     private String databaseUrl;
     private String databaseUser;
     private String databasePassword;
+    private int mailServerPort;
 
     public String getSeleniumServerHost() {
         return seleniumServerHost;
@@ -101,4 +102,13 @@ public class SeleniumConfig {
     public void setDatabasePassword(String databasePassword) {
         this.databasePassword = databasePassword;
     }
+
+    public int getMailServerPort() {
+        return mailServerPort;
+    }
+
+    public void setMailServerPort(int mailServerPort) {
+        this.mailServerPort = mailServerPort;
+    }
+
 }

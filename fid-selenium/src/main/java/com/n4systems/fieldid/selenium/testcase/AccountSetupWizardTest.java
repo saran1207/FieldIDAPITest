@@ -50,8 +50,8 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	private TenantInfo createARandomNewBasicTenant(String referrer) {
 		startAsCompany(referrer);
 		String promoCode = "";	// no promo code
-		return ct.createARandomNewTenant(SignUpPackages.packageTypePlus, promoCode);
-	}
+        return ct.createARandomNewTenant(SignUpPackages.packageTypePlus, promoCode, mailServer);
+    }
 
 	private void verifyDefaultSettingsConfiguredProperly(AccountSetupWizardPage wizardPage, SystemSettings expected) {
 		SystemSettingsPage settingsPage = wizardPage.clickSetupLink().clickSystemSettings();

@@ -4,6 +4,8 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.mail.MailMessage;
+import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -87,6 +89,12 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 		t.setPurchaseOrderNumber("88888");
 
 		signUpPage.enterCreateAccountForm(t);
-		return signUpPage.submitCreateYourAccountForm();
+        SignUpCompletePage signUpCompletePage = signUpPage.submitCreateYourAccountForm();
+
+        mailServer.waitForMessages(1);
+        MailMessage activationMessage = mailServer.getAndClearMessages().get(0);
+        new SignUpEmailLoginNavigator().navigateToSignInPageSpecifiedIn(activationMessage, selenium);
+
+        return signUpCompletePage;
 	}
 }

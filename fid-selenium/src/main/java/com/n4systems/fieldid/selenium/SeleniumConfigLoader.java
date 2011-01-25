@@ -42,6 +42,7 @@ public class SeleniumConfigLoader {
         config.setDatabaseUrl(props.getProperty("databaseUrl"));
         config.setDatabaseUser(props.getProperty("databaseUser"));
         config.setDatabasePassword(props.getProperty("databasePassword"));
+        config.setMailServerPort(Integer.parseInt(props.getProperty("embeddedMailServerPort")));
 
         return config;
     }

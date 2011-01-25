@@ -2,6 +2,10 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.assertEquals;
 
+import com.n4systems.fieldid.selenium.mail.MailMessage;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.SetPasswordPage;
+import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,7 +53,6 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 
 		try {
 			TenantInfo t = createANewTenant(username, password);
-			returnToLogin();
 			logIntoNewTenant(username, password);
 			PrimaryOrganization p = getPrimaryOrganization();
 			verifyEquals(t, p);
@@ -122,6 +125,15 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 
 		create.setCreateYourAccountForm(t);
 		create.submitCreateYourAccountForm();
+
+        mailServer.waitForMessages(1);
+        MailMessage accountActivationMessage = mailServer.getAndClearMessages().get(0);
+
+        SetPasswordPage page = new SignUpEmailLoginNavigator().navigateToSignInPageSpecifiedIn(accountActivationMessage, selenium);
+        page.enterAndConfirmPassword(password);
+        LoginPage loginPage = page.submitConfirmPassword();
+
+        t.setLoginPage(loginPage);
 		
 		return t;
 	}
