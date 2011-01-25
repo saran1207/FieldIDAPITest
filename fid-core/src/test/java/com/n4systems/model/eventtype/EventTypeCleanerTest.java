@@ -10,14 +10,12 @@ import java.util.Set;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.builders.TenantBuilder;
@@ -32,11 +30,6 @@ public class EventTypeCleanerTest {
 	private static final EventTypeGroup GROUP = new EventTypeGroup();
 	private static final Set<ProofTestType> supportedProofTests = new HashSet<ProofTestType>(Arrays.asList(ProofTestType.CHANT, ProofTestType.NATIONALAUTOMATION));;
 	private static final List<String> infoFieldNames = Arrays.asList("field 1", "field 2", "field 3");	
-	private static final List<CriteriaSection> sections= Arrays.asList(
-			CriteriaSectionBuilder.aCriteriaSection().build(),
-			CriteriaSectionBuilder.aCriteriaSection().withRetired(true).build(),
-			CriteriaSectionBuilder.aCriteriaSection().build()
-		);
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -49,12 +42,11 @@ public class EventTypeCleanerTest {
 		assertNotNull(type.getModified());
 		assertNotNull(type.getModifiedBy());
 		
-		Cleaner<CriteriaSection> sectionCleaner = EasyMock.createMock(Cleaner.class);
-		sectionCleaner.clean(sections.get(0));
-		sectionCleaner.clean(sections.get(2));
-		EasyMock.replay(sectionCleaner);
+		Cleaner<EventForm> eventFormCleaner = EasyMock.createMock(Cleaner.class);
+		eventFormCleaner.clean(type.getEventForm());
+		EasyMock.replay(eventFormCleaner);
 		
-		EventTypeCleaner cleaner = new EventTypeCleaner(newTenant, sectionCleaner);
+		EventTypeCleaner cleaner = new EventTypeCleaner(newTenant, eventFormCleaner);
 		cleaner.clean(type);
 		
 		assertNull(type.getId());
@@ -77,9 +69,7 @@ public class EventTypeCleanerTest {
 		assertEquals(infoFieldNames, type.getInfoFieldNames());
 		assertNotSame(infoFieldNames, type.getInfoFieldNames());
 		
-		assertEquals(2, type.getEventForm().getSections().size());
-		
-		EasyMock.verify(sectionCleaner);
+		EasyMock.verify(eventFormCleaner);
 	}
 	
 	private EventType buildType() {
@@ -94,7 +84,6 @@ public class EventTypeCleanerTest {
 		type.setSupportedProofTests(supportedProofTests);
 		type.setInfoFieldNames(infoFieldNames);
         type.setEventForm(new EventForm());
-		type.getEventForm().setSections(sections);
         type.setModifiedBy(UserBuilder.aUser().build());
 		return type;
 	}

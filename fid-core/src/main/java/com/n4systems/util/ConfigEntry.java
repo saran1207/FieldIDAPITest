@@ -10,6 +10,7 @@ public enum ConfigEntry {
 	MAIL_FROM_ADDR								(	"\"Field ID\" <noreply@fieldid.com>"),
 	MAIL_REPLY_TO								(	""						),
 	MAIL_HOST									(	"localhost"				),
+    MAIL_PORT									(	"25"				),
 	MAIL_SUBJECT_PREFIX							(	""				),
 	MAIL_BODY_PLAIN_HEADER						(	""						),
 	MAIL_BODY_PLAIN_FOOTER						(	"\n\n---\nThe Field ID Team\n\n49 Fraser Street, Ground Floor\nToronto, Ontario, Canada, M6K1Y7\ncontact@fieldid.com" +

@@ -18,6 +18,7 @@ public class StateSetLoader extends ListLoader<StateSet> {
     @Override
     protected List<StateSet> load(EntityManager em, SecurityFilter filter) {
         QueryBuilder<StateSet> query = new QueryBuilder<StateSet>(StateSet.class, filter);
+        query.addSimpleWhere("retired", false);
         return query.getResultList(em);
     }
 

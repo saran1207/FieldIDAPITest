@@ -47,6 +47,7 @@ public class SMTPMailManager implements MailManager {
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
 		props.setProperty("mail.smtp.host", config.getString(ConfigEntry.MAIL_HOST));
+        props.setProperty("mail.smtp.port", config.getString(ConfigEntry.MAIL_PORT));
 		props.setProperty("mail.host", config.getString(ConfigEntry.MAIL_HOST));
 		
 		return props;

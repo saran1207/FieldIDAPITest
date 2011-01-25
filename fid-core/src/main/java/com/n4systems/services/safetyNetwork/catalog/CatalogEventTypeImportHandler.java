@@ -67,6 +67,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 
 	private void save(EventType importedEventType) {
+        persistenceManager.save(importedEventType.getEventForm());
 		persistenceManager.save(importedEventType);
 	}
 

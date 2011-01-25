@@ -18,7 +18,7 @@ public class ButtonGroupDisplayPanel extends Panel {
         super(id, model);
         setOutputMarkupPlaceholderTag(true);
 
-        add(new ListView<State>("buttonGroup", new PropertyModel<List<State>>(model, "states")) {
+        add(new ListView<State>("buttonGroup", new PropertyModel<List<State>>(model, "availableStates")) {
             @Override
             protected void populateItem(ListItem<State> item) {
                 State state = item.getModelObject();

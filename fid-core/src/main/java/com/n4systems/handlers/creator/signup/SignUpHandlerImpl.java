@@ -179,7 +179,7 @@ public class SignUpHandlerImpl implements SignUpHandler {
 			transactionManager.finishTransaction(transaction);
 		} catch (Exception e) {
 			transactionManager.rollbackTransaction(transaction);
-			throw new SignUpSoftFailureException("failed to destory account place holder", e);
+			throw new SignUpSoftFailureException("failed to destroy account placeholder", e);
 		}
 	}
 
