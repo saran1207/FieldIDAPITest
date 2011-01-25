@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.util.DateHelper;
 
 public class ManagerBackedNextEventScheduleService implements NextEventScheduleSerivce {
@@ -37,7 +38,8 @@ public class ManagerBackedNextEventScheduleService implements NextEventScheduleS
 		
 		for (EventSchedule upcomingSchedule : upcomingSchedules) {
 			if (DateHelper.isEqualIgnoringTime(upcomingSchedule.getNextDate(), newSchedule.getNextDate()) 
-					&& upcomingSchedule.getEventType().equals(newSchedule.getEventType())) {
+					&& upcomingSchedule.getEventType().equals(newSchedule.getEventType()) 
+					&& !upcomingSchedule.getStatus().equals(ScheduleStatus.IN_PROGRESS)) {
 				return upcomingSchedule;
 			}
 		}
