@@ -27,6 +27,8 @@ import com.n4systems.exceptions.InvalidScheduleStateException;
 import com.n4systems.exceptions.InvalidTransactionGUIDException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.fieldid.context.ThreadLocalUserContext;
+import com.n4systems.fieldid.context.UserContext;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
@@ -60,6 +62,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
+import com.n4systems.model.orgs.EntityByIdIncludingArchivedLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
@@ -494,17 +497,18 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException {
-
 		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+		ProductLookupInformation lookupInformation = request.getProductLookupInformation();
+		
+		UserContext uc = ThreadLocalUserContext.getInstance();
+		User user = null;
 		try {
-			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
-
-			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
-
-			User user = null;
 			if (request.modifiedByIdExists()) {
 				user = persistenceManager.find(User.class, request.getModifiedById());
 			}
+			uc.setCurrentUser(user);
+
+			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
 
 			LocationConverter locationConverter = new LocationServiceToContainerConverter(createLoaderFactory(request));
 			locationConverter.convert(request, asset);
@@ -515,6 +519,8 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("Exception occured while doing a limited asset update");
 			throw new ServiceException();
+		} finally {
+			uc.setCurrentUser(null);
 		}
 
 		return new RequestResponse();
@@ -522,22 +528,21 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException {
-
+		UserContext uc = ThreadLocalUserContext.getInstance();
 		try {
-			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
-
-			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
-
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-			asset.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
-
+			
 			User user = null;
-
 			if (request.modifiedByIdExists()) {
 				user = persistenceManager.find(User.class, request.getModifiedById());
 			}
+			uc.setCurrentUser(user);
+			
+			ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 
+			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
+			asset.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
 			asset.setAdvancedLocation(Location.onlyFreeformLocation(request.getLocation()));
 			asset.setCustomerRefNumber(request.getCustomerRefNumber());
 			asset.setPurchaseOrder(request.getPurchaseOrder());
@@ -548,6 +553,8 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("Exception occured while doing asset update by customer");
 			throw new ServiceException();
+		} finally {
+			uc.setCurrentUser(null);
 		}
 
 		return new RequestResponse();
@@ -555,9 +562,7 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {
-
 		try {
-
 			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 			EventSchedule eventSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
 
@@ -578,7 +583,6 @@ public class DataServiceImpl implements DataService {
 	public RequestResponse updateInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {
 
 		try {
-
 			new InspectionScheduleUpdateHandler(new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(request.getTenantId())),
 					new EventScheduleSaver()).updateInspectionSchedule(request.getScheduleService());
 
@@ -687,7 +691,13 @@ public class DataServiceImpl implements DataService {
 
 		testTransactionId(requestInformation);
 
+		UserContext uc = ThreadLocalUserContext.getInstance();
 		try {
+			if (productDTO.identifiedByExists()) {
+				EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
+				uc.setCurrentUser(userLoader.setId(productDTO.getIdentifiedById()).load());
+			}
+			
 			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
 			LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
 
@@ -735,6 +745,8 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("failed while processing asset", e);
 			throw new ServiceException("Problem creating asset");
+		} finally {
+			uc.setCurrentUser(null);
 		}
 		return response;
 	}
@@ -813,96 +825,98 @@ public class DataServiceImpl implements DataService {
 				return response;
 			}
 
-			Long tenantId = requestInformation.getTenantId();
-
-			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-
-			InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
-
-			LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
-			EventScheduleManager scheduleManager = ServiceLocator.getEventScheduleManager();
-
-			List<Event> events = new ArrayList<Event>();
-			// Map<Inspection, AssetStatus> assetStatus = new
-			// HashMap<Inspection, AssetStatus>();
-			Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
-			Map<Event, EventSchedule> inspectionSchedules = new HashMap<Event, EventSchedule>();
-			Asset asset = null;
-			EventScheduleByGuidOrIdLoader scheduleLoader = new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
-			for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
-				asset = findOrTagProduct(tenantId, inspectionServiceDTO);
-				inspectionServiceDTO.setProductId(asset.getId());
-
-				// lets look up or create all newly attached sub products and
-				// attach to asset
-				List<SubAsset> subAssets = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset,
-						requestInformation.getVersionNumber());
-				updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets);
-
-				// we also need to get the asset for any sub-inspections
-				if (inspectionServiceDTO.getSubInspections() != null) {
-					Asset subProduct = null;
-					for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
-						subProduct = findOrTagProduct(tenantId, subInspection);
-						subInspection.setProductId(subProduct.getId());
-					}
-				}
-
-				Event event = converter.convert(inspectionServiceDTO);
-				events.add(event);
-				nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
-				inspectionSchedules.put(event, loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO));
-			}
-
-			List<Event> savedEvents = null;
-
+			
+			UserContext userContext = ThreadLocalUserContext.getInstance();
 			try {
-				EventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
+				// The performedBy user will be the same for all events in this group.
+				EntityByIdIncludingArchivedLoader<User> userLoader = createLoaderFactory(requestInformation).createEntityByIdLoader(User.class);
+				userContext.setCurrentUser(userLoader.setId(inspectionDTOs.get(0).getPerformedById()).load());
+			
+				Long tenantId = requestInformation.getTenantId();
+				PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
+				InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
+				LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
+				EventScheduleManager scheduleManager = ServiceLocator.getEventScheduleManager();
+	
+				List<Event> events = new ArrayList<Event>();
+				Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
+				Map<Event, EventSchedule> inspectionSchedules = new HashMap<Event, EventSchedule>();
+				Asset asset = null;
 
-				EventsInAGroupCreator eventsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
-
-				savedEvents = eventsInAGroupCreator.create(requestInformation.getMobileGuid(), events, nextInspectionDates);
-				logger.info("save inspections on asset " + asset.getSerialNumber());
-				populatorLogger.logMessage(tenantId, "Created inspection for asset with serial number " + asset.getSerialNumber(), PopulatorLog.logType.mobile,
-						PopulatorLog.logStatus.success);
-			} catch (TransactionAlreadyProcessedException e) {
-				// if the transaction is already complete just return success.
-				logger.info("transaction already processed for inspections on asset  " + asset.getSerialNumber());
-			} catch (Exception e) {
-				logger.error("failed to save inspections", e);
-				throw new InspectionException("Failed to save inspections");
-			}
-
-			if (savedEvents != null) {
-				for (Event savedEvent : savedEvents) {
-					for (Entry<Event, EventSchedule> scheduleEntry : inspectionSchedules.entrySet()) {
-						if (savedEvent.equals(scheduleEntry.getKey())) {
-							EventSchedule schedule = scheduleEntry.getValue();
-							try {
-								if (schedule != null) {
-									schedule.completed(scheduleEntry.getKey());
-									scheduleManager.update(schedule);
+				EventScheduleByGuidOrIdLoader scheduleLoader = new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
+				for (InspectionServiceDTO inspectionServiceDTO : inspectionDTOs) {
+					asset = findOrTagProduct(tenantId, inspectionServiceDTO);
+					inspectionServiceDTO.setProductId(asset.getId());
+	
+					// lets look up or create all newly attached sub products and
+					// attach to asset
+					List<SubAsset> subAssets = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset, requestInformation.getVersionNumber());
+					updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets);
+	
+					// we also need to get the asset for any sub-inspections
+					if (inspectionServiceDTO.getSubInspections() != null) {
+						Asset subProduct = null;
+						for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
+							subProduct = findOrTagProduct(tenantId, subInspection);
+							subInspection.setProductId(subProduct.getId());
+						}
+					}
+	
+					Event event = converter.convert(inspectionServiceDTO);
+					events.add(event);
+					nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
+					inspectionSchedules.put(event, loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO));
+				}
+	
+				List<Event> savedEvents = null;
+	
+				try {
+					EventPersistenceFactory eventPersistenceFactory = new ProductionEventPersistenceFactory();
+	
+					EventsInAGroupCreator eventsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
+	
+					savedEvents = eventsInAGroupCreator.create(requestInformation.getMobileGuid(), events, nextInspectionDates);
+					logger.info("save inspections on asset " + asset.getSerialNumber());
+					populatorLogger.logMessage(tenantId, "Created inspection for asset with serial number " + asset.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
+				} catch (TransactionAlreadyProcessedException e) {
+					logger.info("Transaction already processed for inspections on asset  " + asset.getSerialNumber());
+				} catch (Exception e) {
+					logger.error("failed to save inspections", e);
+					throw new InspectionException("Failed to save inspections");
+				}
+	
+				if (savedEvents != null) {
+					for (Event savedEvent : savedEvents) {
+						for (Entry<Event, EventSchedule> scheduleEntry : inspectionSchedules.entrySet()) {
+							if (savedEvent.equals(scheduleEntry.getKey())) {
+								EventSchedule schedule = scheduleEntry.getValue();
+								try {
+									if (schedule != null) {
+										schedule.completed(scheduleEntry.getKey());
+										scheduleManager.update(schedule);
+									}
+								} catch (InvalidScheduleStateException e) {
+									logger.warn("the state of the schedule is not valid to be completed.");
+									populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "
+											+ savedEvent.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+								} catch (Exception e) {
+									logger.error("failed to attach schedule to inspection", e);
+									populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "
+											+ savedEvent.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+									// We allow the inspection to still go through
+									// even if this happens
 								}
-							} catch (InvalidScheduleStateException e) {
-								logger.warn("the state of the schedule is not valid to be completed.");
-								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "
-										+ savedEvent.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
-							} catch (Exception e) {
-								logger.error("failed to attach schedule to inspection", e);
-								populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "
-										+ savedEvent.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
-								// We allow the inspection to still go through
-								// even if this happens
+	
+								break;
 							}
-
-							break;
 						}
 					}
 				}
+	
+				return response;
+			} finally {
+				userContext.setCurrentUser(null);
 			}
-
-			return response;
-
 		} catch (InspectionException e) {
 			throw e;
 		} catch (FindAssetFailure e) {
@@ -935,10 +949,12 @@ public class DataServiceImpl implements DataService {
 		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
 		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
 
+		UserContext uc = ThreadLocalUserContext.getInstance();
 		try {
 
 			User performedBy = persistenceManager.find(User.class, inspectionImageServiceDTO.getPerformedById());
-
+			uc.setCurrentUser(performedBy);
+			
 			EventAttachmentSaver attachmentSaver = new EventAttachmentSaver();
 			attachmentSaver.setData(inspectionImageServiceDTO.getImage().getImage());
 
@@ -971,6 +987,8 @@ public class DataServiceImpl implements DataService {
 		} catch (Exception e) {
 			logger.error("failed while processing inspection image", e);
 			throw new ServiceException("Problem processing inspection image");
+		} finally {
+			uc.setCurrentUser(null);
 		}
 
 		return response;

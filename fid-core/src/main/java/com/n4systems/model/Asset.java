@@ -143,10 +143,17 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	}
 
 	private void adjustAssetForSave() {
+		ensureMobileGuidIsSet();
 		trimSerialNumber();
 		trimRfidNumber();
 		removeBlankInfoOptions();
 		synchronizeNetworkId();
+	}
+	
+	private void ensureMobileGuidIsSet() {
+		if (mobileGUID == null) {
+			mobileGUID = UUID.randomUUID().toString();
+		}
 	}
 	
 	private void synchronizeNetworkId() {

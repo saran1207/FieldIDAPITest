@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -29,6 +30,24 @@ public class EventGroup extends EntityWithTenant implements SecurityEnhanced<Eve
 	private String mobileGuid;
 
 	public EventGroup() {
+	}
+
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		ensureMobileGuidIsSet();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		ensureMobileGuidIsSet();
+	}
+	
+	private void ensureMobileGuidIsSet() {
+		if (mobileGuid == null) {
+			mobileGuid = UUID.randomUUID().toString();
+		}
 	}
 
 	public void setEvents(Set<Event> events) {

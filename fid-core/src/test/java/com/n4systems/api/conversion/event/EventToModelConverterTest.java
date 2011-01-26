@@ -224,8 +224,8 @@ public class EventToModelConverterTest {
 		EventBook book = new EventBook();
 		
 		EventBookFindOrCreateLoader bookLoader = createMock(EventBookFindOrCreateLoader.class);
-		bookLoader.setName(view.getEventBook());
-		bookLoader.setOwner(owner);
+		expect(bookLoader.setName(view.getEventBook())).andReturn(bookLoader);
+		expect(bookLoader.setOwner(owner)).andReturn(bookLoader);
 		expect(bookLoader.load(transaction)).andReturn(book);
 		replay(bookLoader);
 		

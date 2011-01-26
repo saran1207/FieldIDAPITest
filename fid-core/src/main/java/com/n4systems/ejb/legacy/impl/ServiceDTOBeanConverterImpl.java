@@ -28,12 +28,14 @@ import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.exceptions.MissingEntityException;
+import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
@@ -44,16 +46,18 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Observation;
-import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.Project;
 import com.n4systems.model.Recommendation;
+import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.eventbook.EventBookByNameLoader;
+import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.eventbook.EventBookByMobileIdLoader;
+import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
@@ -63,7 +67,9 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.security.OrgOnlySecurityFilter;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubAssets;
@@ -73,6 +79,8 @@ import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.util.BitField;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.webservice.dto.AbstractBaseOrgServiceDTO;
 import com.n4systems.webservice.dto.AbstractExternalOrgServiceDTO;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
@@ -203,8 +211,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionDTO.setOwnerId(retrieveOwnerId(event.getOwner()));
 		inspectionDTO.setPerformedById( event.getPerformedBy().getId() );
 		inspectionDTO.setStatus( event.getStatus().name() );
-		inspectionDTO.setInspectionBookId( ( event.getBook() != null ) ? event.getBook().getId() : 0L );
+		inspectionDTO.setEventBookId((event.getBook() != null) ? event.getBook().getMobileId() : null);
 		inspectionDTO.setUtcDate(event.getDate());
+		inspectionDTO.setEventGroupId(event.getGroup().getMobileGuid());
 		convertLocationToDTO(inspectionDTO, event);
 		for (SubEvent subEvent : event.getSubEvents()) {
 			inspectionDTO.getSubInspections().add(convert(subEvent));
@@ -447,28 +456,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		BaseOrg owner = em.find(BaseOrg.class, inspectionServiceDTO.getOwnerId());
 		event.setOwner(owner);
 
-		if (inspectionServiceDTO.inspectionBookExists()) {
-			event.setBook(persistenceManager.find(EventBook.class, inspectionServiceDTO.getInspectionBookId()));
-		} else if (inspectionServiceDTO.getInspectionBookTitle() != null) {
+		findOrCreateEventBook(inspectionServiceDTO, event);
 
-			EventBookByNameLoader loader = new EventBookByNameLoader(new OrgOnlySecurityFilter(performedBy.getOwner()));
-			loader.setName(inspectionServiceDTO.getInspectionBookTitle());
-			loader.setOwner(owner);
-			EventBook eventBook = loader.load(em, new OrgOnlySecurityFilter(performedBy.getOwner()));
-
-			if (eventBook == null) {
-				eventBook = new EventBook();
-				eventBook.setName(inspectionServiceDTO.getInspectionBookTitle());
-				eventBook.setOwner(event.getOwner());
-				eventBook.setTenant(tenant);
-
-				persistenceManager.save(eventBook);
-			}
-
-			event.setBook(eventBook);
-		}
-
-		if (inspectionServiceDTO.inspectionGroupExists()) {
+		if (inspectionServiceDTO.getEventGroupId() != null) {
+			event.setGroup(findOrCreateEventGroup(inspectionServiceDTO.getEventGroupId(), performedBy));
+		} else if (inspectionServiceDTO.inspectionGroupExists()) {
 			event.setGroup(persistenceManager.find(EventGroup.class, inspectionServiceDTO.getInspectionGroupId()));
 		}
 
@@ -496,6 +488,49 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		event.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));
 
 		return event;
+	}
+
+	private void findOrCreateEventBook(InspectionServiceDTO eventDto, Event event) {
+		SecurityFilter filter = new OrgOnlySecurityFilter(event.getPerformedBy().getOwner());
+		
+		EventBook book = null;
+		if (eventDto.getEventBookId() != null){
+			EventBookByMobileIdLoader loader = new EventBookByMobileIdLoader(null);
+			book = loader.setMobileId(eventDto.getEventBookId()).load(em, filter);
+			
+			if (book == null && eventDto.getInspectionBookTitle() != null) {
+				book = new EventBook();
+				book.setMobileId(eventDto.getEventBookId());
+				book.setName(eventDto.getInspectionBookTitle());
+				book.setTenant(event.getOwner().getTenant());
+				book.setOwner(event.getOwner());
+				persistenceManager.save(book);
+			}
+		} else if (eventDto.inspectionBookExists()) { // Legacy
+			book = persistenceManager.find(EventBook.class, eventDto.getInspectionBookId()); 
+		} else if (eventDto.getInspectionBookTitle() != null) { // Legacy
+			EventBookFindOrCreateLoader loader = new EventBookFindOrCreateLoader(null);
+			loader.setName(eventDto.getInspectionBookTitle()).setOwner(event.getOwner());
+			book = loader.load(em, filter);
+		}
+		
+		event.setBook(book);
+	}
+	
+	private EventGroup findOrCreateEventGroup(String mobileGuid, User createdBy) {
+		QueryBuilder<EventGroup> builder = new QueryBuilder<EventGroup>(EventGroup.class, new UserSecurityFilter(createdBy));
+		builder.addWhere(WhereClauseFactory.create("mobileGuid", mobileGuid));
+		
+		EventGroup group = persistenceManager.find(builder);
+		
+		if (group == null) {
+			group = new EventGroup();
+			group.setTenant(createdBy.getTenant());
+			group.setMobileGuid(mobileGuid);
+			persistenceManager.save(group, createdBy);
+		}
+		
+		return group;
 	}
 
 	public FileAttachment convert(AbstractEvent event, com.n4systems.webservice.dto.InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException {
@@ -565,9 +600,22 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 
 		for (CriteriaResultServiceDTO resultDTO : resultDTOs) {
-			OneClickCriteriaResult result = new OneClickCriteriaResult();
-			result.setState(persistenceManager.find(State.class, resultDTO.getStateId()));
-			result.setCriteria(persistenceManager.find(OneClickCriteria.class, resultDTO.getCriteriaId()));
+			CriteriaResult result;
+			
+			if (resultDTO.getType() == null || resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_ONE_CLICK)) {
+				result = new OneClickCriteriaResult();
+				((OneClickCriteriaResult)result).setState(persistenceManager.find(State.class, resultDTO.getStateId()));
+			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_TEXT_FIELD)) {
+				result = new TextFieldCriteriaResult();
+				((TextFieldCriteriaResult)result).setValue(resultDTO.getTextFieldValue());
+			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_SELECT_FIELD)) {
+				result = new SelectCriteriaResult();
+				((SelectCriteriaResult)result).setValue(resultDTO.getSelectFieldValue());
+			} else {
+				throw new NotImplementedException("Conversion of CriteriaResultServiceDTO [" + resultDTO.getType() + "] not implemented");
+			}
+			
+			result.setCriteria(persistenceManager.find(Criteria.class, resultDTO.getCriteriaId()));
 			result.setTenant(tenant);
 			result.setEvent(event);
 
@@ -582,12 +630,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 					result.getDeficiencies().add(convertDeficiency(deficiencyDTO, tenant));
 				}
 			}
-
+			
 			results.add(result);
 		}
 
 		return results;
 	}
+	
 
 	private Recommendation convertRecommendation(ObservationResultServiceDTO recommendationDTO, Tenant tenant) {
 		Recommendation recommendation = new Recommendation();
@@ -664,13 +713,25 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	}
 
 	private CriteriaResultServiceDTO convert(CriteriaResult criteriaResult) {
-
 		CriteriaResultServiceDTO criteriaResultServiceDTO = new CriteriaResultServiceDTO();
+		
+		if (criteriaResult instanceof OneClickCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_ONE_CLICK);
+			criteriaResultServiceDTO.setStateId(((OneClickCriteriaResult)criteriaResult).getState().getId());
+		} else if (criteriaResult instanceof TextFieldCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_TEXT_FIELD);
+			criteriaResultServiceDTO.setTextFieldValue(((TextFieldCriteriaResult)criteriaResult).getValue());
+		} else if (criteriaResult instanceof SelectCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_SELECT_FIELD);
+			criteriaResultServiceDTO.setSelectFieldValue(((SelectCriteriaResult)criteriaResult).getValue());
+		} else {
+			throw new NotImplementedException("Conversion of CriteriaResult [" + criteriaResult.getClass() + "] not implemented");
+		}
+
 		criteriaResultServiceDTO.setId(criteriaResult.getId());
 		criteriaResultServiceDTO.setCriteriaId(criteriaResult.getCriteria().getId());
 		criteriaResultServiceDTO.setInspectionId(criteriaResult.getEvent().getId());
-//		criteriaResultServiceDTO.setStateId(criteriaResult.getState().getId());
-
+		
 		int i = 0;
 		for (Recommendation recommendation : criteriaResult.getRecommendations()) {
 			criteriaResultServiceDTO.getRecommendations().add(convert(recommendation, i, criteriaResult.getId()));

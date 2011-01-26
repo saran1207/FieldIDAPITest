@@ -20,7 +20,7 @@ public class WsEventBookConverter extends WsModelConverter<EventBook, WsEventBoo
 	@Override
 	public WsEventBook fromModel(EventBook model) {
 		WsEventBook wsModel = new WsEventBook();
-		wsModel.setId(model.getId());
+		wsModel.setId(model.getMobileId());
 		wsModel.setName(model.getName());
 		wsModel.setOpen(model.isOpen());
 		wsModel.setOwner(orgConverter.fromModel(model.getOwner()));

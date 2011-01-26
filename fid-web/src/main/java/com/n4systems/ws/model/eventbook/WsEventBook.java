@@ -3,11 +3,11 @@ package com.n4systems.ws.model.eventbook;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.n4systems.ws.model.WsModel;
+import com.n4systems.ws.model.WsUploadModel;
 import com.n4systems.ws.model.org.WsOrg;
 
 @XmlRootElement
-public class WsEventBook extends WsModel {
+public class WsEventBook extends WsUploadModel {
 	private String name;
 	private boolean open;
 	private WsOrg owner;

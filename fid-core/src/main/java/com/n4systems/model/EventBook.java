@@ -2,6 +2,7 @@ package com.n4systems.model;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,21 +31,30 @@ public class EventBook extends EntityWithOwner implements NamedEntity, Listable<
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="book")
 	private Set<Event> events = new TreeSet<Event>();
-	
-	private Long legacyId;
 
+	@Column(nullable=false)
+	private String mobileId;
+	
 	public EventBook() {}
 	
 	@Override
 	protected void onCreate() {
 		super.onCreate();
 		trimName();
+		ensureMobileId();
 	}
 	
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
 		trimName();
+		ensureMobileId();
+	}
+	
+	private void ensureMobileId() {
+		if (mobileId == null) {
+			mobileId = UUID.randomUUID().toString();
+		}
 	}
 
 	private void trimName() {
@@ -82,20 +92,20 @@ public class EventBook extends EntityWithOwner implements NamedEntity, Listable<
 	public void setEvents(Set<Event> events) {
 		this.events = events;
 	}
+	
+	@AllowSafetyNetworkAccess
+	public String getMobileId() {
+		return mobileId;
+	}
+
+	public void setMobileId(String mobileId) {
+		this.mobileId = mobileId;
+	}
 
 	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		String ownerName = (getOwner() != null) ? " (" + getOwner().getName() + ")" : "";
 		return getName() + ownerName;
-	}
-	
-	@AllowSafetyNetworkAccess
-	public Long getLegacyId() {
-		return legacyId;
-	}
-
-	public void setLegacyId(Long legacyId) {
-		this.legacyId = legacyId;
 	}
 
 	public int compareTo(EventBook o) {

@@ -16,9 +16,7 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private boolean printable;
 	private long performedById;
 	private long inspectionGroupId;
-	private long inspectionBookId;
 	private long ownerId;
-	private String inspectionBookTitle;
 	private String status;
 	private String nextDate;
 	private long productStatusId;
@@ -39,7 +37,12 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private String serialNumber;
 	private String rfidNumber;
 	private long productTypeId;
-
+	private String eventGroupId;
+	
+	private long inspectionBookId;
+	private String inspectionBookTitle;
+	private String eventBookId;
+	
 	public List<SubProductMapServiceDTO> getNewSubProducts() {
 		return newSubProducts;
 	}
@@ -104,6 +107,14 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 
 	public void setInspectionBookId(long inspectionBookId) {
 		this.inspectionBookId = inspectionBookId;
+	}
+	
+	public String getEventBookId() {
+		return eventBookId;
+	}
+
+	public void setEventBookId(String eventBookId) {
+		this.eventBookId = eventBookId;
 	}
 
 	public String getStatus() {
@@ -244,6 +255,14 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 
 	public void setAssignmentIncluded(boolean assignmentIncluded) {
 		this.assignmentIncluded = assignmentIncluded;
+	}
+
+	public String getEventGroupId() {
+		return eventGroupId;
+	}
+
+	public void setEventGroupId(String eventGroupId) {
+		this.eventGroupId = eventGroupId;
 	}
 
 }

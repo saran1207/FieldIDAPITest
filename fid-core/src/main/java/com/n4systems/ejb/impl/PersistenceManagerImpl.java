@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -22,7 +22,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.impl.SessionImpl;
 import org.hibernate.stat.Statistics;
 
-
 import com.n4systems.ejb.PerformSearchRequiringTransaction;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
@@ -30,9 +29,9 @@ import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
-import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
@@ -401,7 +400,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
 	
 	public <T extends AbstractEntity> Long save(T entity, User user) {
-		return save(updateModifiedBy(entity, user));
+		return save(updateCreatedAndModifiedBy(entity, user));
 	}
 
 	public <T extends AbstractEntity> T update(T entity, User user) {
@@ -409,7 +408,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	public <T extends AbstractEntity> Long save(T entity, Long userId) {
-		return save(updateModifiedBy(entity, userId));
+		return save(updateCreatedAndModifiedBy(entity, userId));
 	}
 
 	public <T extends AbstractEntity> T update(T entity, Long userId) {
@@ -453,7 +452,16 @@ public class PersistenceManagerImpl implements PersistenceManager {
 			}
 		}
 	}
+	
+	private <T extends AbstractEntity> T updateCreatedAndModifiedBy(T entity, Long userId) {
+		return updateCreatedAndModifiedBy(entity, find(User.class, userId));
+	}
 
+	private <T extends AbstractEntity> T updateCreatedAndModifiedBy(T entity, User user) {
+		entity.setCreatedBy(user);
+		return updateModifiedBy(entity, user);
+	}
+	
 	private <T extends AbstractEntity> T updateModifiedBy(T entity, Long userId) {
 		return updateModifiedBy(entity, find(User.class, userId));
 	}
@@ -462,7 +470,6 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		entity.setModifiedBy(user);
 		return entity;
 	}
-
 	
 	private String generateFromClause(String tableAlias, Class<?> tableClass) {
 		return generateFromClause(tableAlias, tableClass, null);

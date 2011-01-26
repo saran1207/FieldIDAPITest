@@ -25,16 +25,18 @@ public class EventBookByNameLoader extends SecurityFilteredLoader<EventBook> {
 		return builder.getSingleResult(em);
 	}
 
-	public void setOwner(BaseOrg owner) {
+	public EventBookByNameLoader setOwner(BaseOrg owner) {
 		this.owner = owner;
+		return this;
 	}
 	
 	public BaseOrg getOwner() {
 		return owner;
 	}
 	
-	public void setName(String name) {
+	public EventBookByNameLoader setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getName() {

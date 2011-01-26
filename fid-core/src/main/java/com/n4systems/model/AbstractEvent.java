@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,11 +22,9 @@ import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.n4systems.model.security.AllowSafetyNetworkAccess;
-
-
 import com.n4systems.model.api.HasFileAttachments;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.util.StringUtils;
 
 @Entity
@@ -81,6 +80,24 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 
 	public AbstractEvent(Tenant tenant) {
 		super(tenant);
+	}
+	
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		ensureMobileGuidIsSet();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		ensureMobileGuidIsSet();
+	}
+	
+	private void ensureMobileGuidIsSet() {
+		if (mobileGUID == null) {
+			mobileGUID = UUID.randomUUID().toString();
+		}
 	}
 	
 	@Override
