@@ -91,7 +91,7 @@ ${action.setPageType('event_type', 'show')!}
                                                 <#include "../buttonGroupCrud/_buttonGroup.ftl"/>
                                             </#if>
                                             <#if criteria.selectCriteria>
-                                                <@s.text name="label.textfield"/>
+                                                <@s.text name="label.selectbox"/>
                                             </#if>
                                             <#if criteria.textFieldCriteria>
                                                 <@s.text name="label.textfield"/>
