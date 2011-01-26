@@ -3,6 +3,11 @@
 	<#include "/templates/html/common/_calendar.ftl"/>	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<style type="text/css">
+		.view .label, .listForm .label {
+			padding:10px 5px 5px;
+		}
+	</style>
 </head>
 <h4><@s.text name="label.instructions"/></h4>
 <div class="help">
@@ -85,11 +90,9 @@
 		<tr>
 			<td><@s.checkbox name="select['location']" id="check_location"/></td>
 			<td>
-				<div>
+				<div class="infoSet">
 					<label class="label"><@s.text name="label.location"/>:</label> 
-					<div class="field">
-						<@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}" onchange="selectField('location');" />
-					</div>
+					<span class="field"><@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}" onchange="selectField('location');" /></span>
 				</div>
 			</td>
 		</tr>
@@ -97,10 +100,10 @@
 		<tr>
 			<td><@s.checkbox name="select['identified']" id="check_identified" /></td>
 			<td>
-				<label class="label"><@s.text name="label.identified"/>:</label>
-				<span class="field">
-					<@s.datetimepicker id="identified" name="identified" type="dateTime" onchange="selectField('identified');"/>
-				</span>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.identified"/>:</label>
+					<span class="field"><@s.datetimepicker id="identified" name="identified" type="dateTime" onchange="selectField('identified');"/></span>
+				</div>
 			</td>
 		</tr>
 		
@@ -109,15 +112,19 @@
 			<tr>
 				<td><@s.checkbox name="select['published']" id="check_published" /></td>
 				<td>
-					<label class="label"><@s.text name="label.publishedstateselector"/>:</label>
-					<@s.select name="published" list="publishedStates" listKey="id" listValue="name" onchange="selectField('published');" />
+					<div class="infoSet">
+						<label class="label"><@s.text name="label.publishedstateselector"/>:</label>
+						<span class="field"><@s.select name="published" list="publishedStates" listKey="id" listValue="name" onchange="selectField('published');" /></span>
+					</div>
 				</td>
 			</tr>
 		</#if>
 		<tr>
 			<td><@s.checkbox name="select['delete']" id="check_delete"  onchange="changeAction();"/></td>
 			<td>
-				<label class="label"><@s.text name="label.mass_delete"/></label>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.mass_delete"/></label>
+				</div>
 			</td>
 		</tr>
 	</table>
