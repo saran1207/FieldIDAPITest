@@ -89,7 +89,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 
 	public List<Long> getSearchIds() {
 		if (searchIds == null) {
-			searchIds = new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableBaseSearchDefiner(this), getSecurityFilter());
+            searchIds = getContainer().getMultiIdSelection().getSelectedIds();
 		}
 
 		return searchIds;
