@@ -41,11 +41,15 @@ ${action.setPageType('asset', 'show')!}
 					
 				</@s.text>
 			</p>		
-			<p><#include "../eventCrud/_viewEventLink.ftl"/></p>		
-		<#else>	
 			<p>
-				<@s.text name="label.nolastevents"/>
-			</p>	
+				<#include "../eventCrud/_viewEventLink.ftl"/> |
+				
+				<a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageEvents"><@s.text name="label.manage_all_events"/></a> 
+			
+			</p>		
+		<#else>	
+			<p><@s.text name="label.nolastevents"/></p>
+			<p><a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageEvents"><@s.text name="label.manage_all_events"/></a></p>	
 		</#if>
 	</div>
 
