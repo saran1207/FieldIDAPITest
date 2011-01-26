@@ -140,7 +140,7 @@ public class AssetStatusCrud extends AbstractCrud implements HasDuplicateValueVa
 	@RequiredStringValidator(type=ValidatorType.FIELD, message = "", key="error.required")
 	@CustomValidator(type = "uniqueValue", message = "", key = "error.assetstatusduplicate")
 	public void setName(String name) {
-		assetStatus.setName(name);
+		assetStatus.setName(name.trim());
 	}
 	
 	public String getName() {
