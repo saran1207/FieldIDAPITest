@@ -618,6 +618,7 @@
 				<param name="actionName">employeeUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
+			<result name="error" type="freemarker">templates/html/userCrud/upgrade.ftl</result>
 		</action>
 		
 		<action name="changeToLite" method="changeToLite" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
@@ -625,6 +626,7 @@
 				<param name="actionName">liteUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
+			<result name="error" type="freemarker">templates/html/userCrud/upgrade.ftl</result>
 		</action>
 		
 		<action name="changeToReadOnly" method="changeToReadOnly" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">

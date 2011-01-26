@@ -12,15 +12,25 @@ public class UserUpgradeCrud extends UserCrud{
 	}
 	
 	public String doChangeToFull() {
-		user.setUserType(UserType.FULL);
-		save();
-		return SUCCESS;
+		if(!isEmployeeLimitReached()) {
+			user.setUserType(UserType.FULL);
+			save();
+			return SUCCESS;
+		}else {
+			addActionErrorText("label.full_user_limit_reached");
+			return ERROR;
+		}
 	}
 	
 	public String doChangeToLite() {
-		user.setUserType(UserType.LITE);
-		save();
-		return SUCCESS;
+		if(!isLiteUserLimitReached()) {
+			user.setUserType(UserType.LITE);
+			save();
+			return SUCCESS;
+		}else {
+			addActionErrorText("label.lite_user_limit_reached");
+			return ERROR;
+		}
 	}
 	
 	public String doChangeToReadOnly() {
