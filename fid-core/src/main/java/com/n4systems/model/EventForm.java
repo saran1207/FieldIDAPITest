@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "eventforms")
@@ -31,6 +32,17 @@ public class EventForm extends ArchivableEntityWithTenant {
 
     public void setSections(List<CriteriaSection> sections) {
         this.sections = sections;
+    }
+
+    @Transient
+    public List<CriteriaSection> getAvailableSections() {
+        List<CriteriaSection> availableSections = new ArrayList<CriteriaSection>();
+        for (CriteriaSection section : getSections()) {
+            if (!section.isRetired()) {
+                availableSections.add(section);
+            }
+        }
+        return availableSections;
     }
 
 }

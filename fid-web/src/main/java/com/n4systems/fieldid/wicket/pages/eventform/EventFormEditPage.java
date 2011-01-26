@@ -57,7 +57,7 @@ public class EventFormEditPage extends FieldIDWicketPage {
         criteriaSections = new ArrayList<CriteriaSection>();
         if (eventType.getEventForm() != null) {
             oldEventFormId = eventType.getEventForm().getId();
-            criteriaSections .addAll(eventType.getEventForm().getSections());
+            criteriaSections.addAll(eventType.getEventForm().getAvailableSections());
         }
 
         add(criteriaSectionsPanel = new CriteriaSectionsPanel("criteriaSectionsPanel", new PropertyModel<List<CriteriaSection>>(this, "criteriaSections"))
