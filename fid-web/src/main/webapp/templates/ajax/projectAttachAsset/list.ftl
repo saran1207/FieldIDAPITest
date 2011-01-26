@@ -9,5 +9,4 @@
 	findAssets();
 	$('results').highlight();
 	usingAjaxPagination=true;
-	attachListenerToPageJumpInputs();
 </#escape>

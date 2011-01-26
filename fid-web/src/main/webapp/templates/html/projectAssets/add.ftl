@@ -46,6 +46,8 @@ ${action.setPageType('job','assets')!}
 <div id="assetLookup" >
 	<@s.hidden name="projectId"/>
 	<#assign namespace="/ajax"/>
+	<#assign usePaginatedResults=true/>
+	<#assign useAjaxPaginatedResults=true>
 	<#assign assetSearchAction="jobFindAsset"/>
 	<#assign assetFormId="projectAssetSearch"/>
 	<#include "../eventGroup/_searchForm.ftl"/>
