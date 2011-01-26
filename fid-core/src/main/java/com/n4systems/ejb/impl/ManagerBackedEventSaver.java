@@ -63,12 +63,9 @@ public class ManagerBackedEventSaver implements EventSaver {
 			persistenceManager.save(parameterObject.event.getGroup(), parameterObject.userId);
 		}
 
-        if (parameterObject.overrideStatus != null) {
-            parameterObject.event.setStatus(parameterObject.overrideStatus);
-        } else if (parameterObject.calculateEventResult) {
+		if (parameterObject.event.getStatus() == null) {
 			parameterObject.event.setStatus(calculateEventResult(parameterObject.event));
 		}
-		
 		
 		setProofTestData(parameterObject.event, parameterObject.fileData);
 	

@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.InfoFieldBean;
@@ -464,10 +465,17 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			event.setGroup(persistenceManager.find(EventGroup.class, inspectionServiceDTO.getInspectionGroupId()));
 		}
 
-		if (inspectionServiceDTO.getStatus() != null) {
-			event.setStatus(Status.valueOf(inspectionServiceDTO.getStatus()));
+		Status status = null;
+		if (StringUtils.isNotBlank(inspectionServiceDTO.getStatus())) {
+			try {
+				status = Status.valueOf(inspectionServiceDTO.getStatus());
+			} catch (Exception e) {
+				logger.error("Unable to convert Event Status value of [" + inspectionServiceDTO.getStatus() + "] defaulting to N/A", e);
+				status = Status.NA;
+			}
 		}
-
+		event.setStatus(status);
+		
 		if (inspectionServiceDTO.getSubInspections() != null) {
 			for (SubInspectionServiceDTO subInspection : inspectionServiceDTO.getSubInspections()) {
 				event.getSubEvents().add(convert(subInspection, tenant, performedBy));

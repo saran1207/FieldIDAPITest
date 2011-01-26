@@ -11,6 +11,7 @@ import com.n4systems.ws.model.WsModel;
 @XmlRootElement
 public class WsCriteriaSection extends WsModel {
 	private String title;
+	private boolean retired;
 	private List<WsCriteria> criteria = new ArrayList<WsCriteria>();
 
 	@XmlElement(name="Title")
@@ -31,4 +32,12 @@ public class WsCriteriaSection extends WsModel {
 		this.criteria = criteria;
 	}
 
+	@XmlElement(name="Retired")
+	public boolean isRetired() {
+		return retired;
+	}
+
+	public void setRetired(boolean retired) {
+		this.retired = retired;
+	}
 }

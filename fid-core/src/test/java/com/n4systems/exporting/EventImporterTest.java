@@ -10,29 +10,29 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.n4systems.api.conversion.event.EventToModelConverter;
-import com.n4systems.api.model.EventView;
-import com.n4systems.api.validation.validators.EventViewValidator;
-import com.n4systems.ejb.impl.CreateEventParameter;
-import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.handlers.creator.NullObjectDefaultedEventPersistenceFactory;
-import com.n4systems.model.EventType;
-import com.n4systems.model.builders.EventBuilder;
-import com.n4systems.model.builders.EventTypeBuilder;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
+import com.n4systems.api.conversion.event.EventToModelConverter;
+import com.n4systems.api.model.EventView;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.ViewValidator;
+import com.n4systems.api.validation.validators.EventViewValidator;
+import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
+import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.exporting.beanutils.ExportMapUnmarshaler;
 import com.n4systems.exporting.beanutils.MarshalingException;
+import com.n4systems.handlers.creator.NullObjectDefaultedEventPersistenceFactory;
 import com.n4systems.handlers.creator.events.EventCreator;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
+import com.n4systems.model.builders.EventBuilder;
+import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.testutils.DummyTransaction;
 
@@ -73,8 +73,7 @@ public class EventImporterTest {
 		
 		
 		CreateEventParameter createEventParameter = new CreateEventParameterBuilder(event, modifiedBy)
-				.withANextEventDate(view.getNextEventDateAsDate())
-				.doNotCalculateEventResult().build();
+				.withANextEventDate(view.getNextEventDateAsDate()).build();
 
 		EventCreator creator = createMock(EventCreator.class);
 		expect(creator.create(eq(createEventParameter))).andReturn(event);

@@ -20,6 +20,7 @@ public class WsCriteriaSectionConverter extends WsModelConverter<CriteriaSection
 		WsCriteriaSection wsModel = new WsCriteriaSection();
 		wsModel.setId(model.getId());
 		wsModel.setTitle(model.getTitle());
+		wsModel.setRetired(model.isRetired());
 		wsModel.setCriteria(criteriaConverter.fromModels(model.getCriteria()));
 		return wsModel;
 	}

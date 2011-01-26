@@ -37,6 +37,7 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 		wsModel.setDisplayText(model.getDisplayText());
 		wsModel.setRecommendations(model.getRecommendations());
 		wsModel.setDeficiencies(model.getDeficiencies());
+		wsModel.setRetired(model.isRetired());
 	}
 	
 	private WsOneClickCriteria convertOneClickCriteria(OneClickCriteria model) {

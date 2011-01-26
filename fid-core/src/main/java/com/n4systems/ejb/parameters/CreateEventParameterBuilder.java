@@ -8,19 +8,16 @@ import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.Status;
 import com.n4systems.tools.FileDataContainer;
 
 public class CreateEventParameterBuilder {
 
 	private final Event event;
 	private final long userId;
-	private boolean calculateEventResult = true;
 	private Date nextEventDate = null;
 	private FileDataContainer proofTestData = null;
 	private List<FileAttachment> uploadedImages = null;
 	private ArrayList<EventScheduleBundle> schedules = new ArrayList<EventScheduleBundle>();
-    private Status overrideStatus = null;
 
 	public CreateEventParameterBuilder(Event event, long userId) {
 		this.event = event;
@@ -28,12 +25,7 @@ public class CreateEventParameterBuilder {
 	}
 
 	public CreateEventParameter build() {
-		return new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, calculateEventResult, schedules, overrideStatus);
-	}
-	
-	public CreateEventParameterBuilder doNotCalculateEventResult() {
-		calculateEventResult = false;
-		return this;
+		return new CreateEventParameter(event, nextEventDate, userId, proofTestData, uploadedImages, schedules);
 	}
 	
 	public CreateEventParameterBuilder withANextEventDate(Date nextEventDate) {
@@ -67,10 +59,5 @@ public class CreateEventParameterBuilder {
 		}
 		return this;
 	}
-
-    public CreateEventParameterBuilder withOverrideStatus(Status status) {
-        this.overrideStatus = status;
-        return this;
-    }
 
 }

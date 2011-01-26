@@ -11,7 +11,7 @@ import com.n4systems.ws.model.WsModel;
 @XmlRootElement
 public abstract class WsCriteria extends WsModel {
 	private String displayText;
-	private boolean principal;
+	private boolean retired;
 	private List<String> recommendations = new ArrayList<String>();
 	private List<String> deficiencies = new ArrayList<String>();
 
@@ -24,13 +24,13 @@ public abstract class WsCriteria extends WsModel {
 		this.displayText = displayText;
 	}
 
-	@XmlElement(name="Principal")
-	public boolean isPrincipal() {
-		return principal;
+	@XmlElement(name="Retired")
+	public boolean isRetired() {
+		return retired;
 	}
 
-	public void setPrincipal(boolean principal) {
-		this.principal = principal;
+	public void setRetired(boolean retired) {
+		this.retired = retired;
 	}
 
 	@XmlElement(name="Recommendations")

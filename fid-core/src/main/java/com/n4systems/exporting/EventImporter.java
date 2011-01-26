@@ -2,8 +2,8 @@ package com.n4systems.exporting;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.event.EventToModelConverter;
-import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.EventView;
+import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.validators.EventViewValidator;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
@@ -36,7 +36,6 @@ public class EventImporter extends AbstractImporter<EventView> {
 			eventPersistenceFactory.createEventCreator().create(
 						new CreateEventParameterBuilder(event, modifiedBy)
 							.withANextEventDate(view.getNextEventDateAsDate())
-							.doNotCalculateEventResult()
 							.build());
 		} catch (Exception e) {
 			throw new ConversionException("Could not create event", e);

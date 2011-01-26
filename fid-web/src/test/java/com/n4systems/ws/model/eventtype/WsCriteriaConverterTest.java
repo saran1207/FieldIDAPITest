@@ -52,7 +52,7 @@ public class WsCriteriaConverterTest {
 		
 		verifyBaseCriteriaFields(model, wsModel);
 		assertEquals(WsOneClickCriteria.class, wsModel.getClass());
-        assertEquals(model.isPrincipal(), wsModel.isPrincipal());
+        assertEquals(model.isPrincipal(), ((WsOneClickCriteria)wsModel).isPrincipal());
 		assertSame(wsStates, ((WsOneClickCriteria)wsModel).getStates());
 	}
 	
