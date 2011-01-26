@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 public class AssetTypeGroupsLoader extends ListLoader<AssetTypeGroup> {
 	
 	private String[] postFetchFields = new String[0];
+	private String orderBy;
 
     public AssetTypeGroupsLoader(SecurityFilter filter) {
         super(filter);
@@ -20,8 +21,11 @@ public class AssetTypeGroupsLoader extends ListLoader<AssetTypeGroup> {
     @Override
     protected List<AssetTypeGroup> load(EntityManager em, SecurityFilter filter) {
         QueryBuilder<AssetTypeGroup> queryBuilder = new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, filter);
-
-        queryBuilder.addOrder("name");
+        
+        if(orderBy == null)
+        	queryBuilder.addOrder("name");
+        else
+        	queryBuilder.addOrder(orderBy);
         queryBuilder.addPostFetchPaths(postFetchFields);
 
         return queryBuilder.getResultList(em);
@@ -29,6 +33,11 @@ public class AssetTypeGroupsLoader extends ListLoader<AssetTypeGroup> {
     
 	public AssetTypeGroupsLoader setPostFetchFields(String...fields) {
 		this.postFetchFields = fields;
+		return this;
+	}
+	
+	public AssetTypeGroupsLoader setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
 		return this;
 	}
 
