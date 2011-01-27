@@ -3,6 +3,7 @@ package com.n4systems.ws.model.eventtype;
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.State;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.ws.model.WsModelConverter;
@@ -25,6 +26,8 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 			wsModel = convertOneClickCriteria((OneClickCriteria)model);
 		} else if (model.isTextFieldCriteria()) {
 			wsModel = convertTextFieldCriteria((TextFieldCriteria)model);
+		} else if (model.isSelectCriteria()) {
+			wsModel = convertSelectCriteria((SelectCriteria)model);
 		} else {
 			throw new NotImplementedException("Conversion not implemented for Criteria type: " + model.getClass().getName());
 		}
@@ -51,4 +54,7 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 		return new WsTextFieldCriteria();
 	}
 
+	private WsSelectCriteria convertSelectCriteria(SelectCriteria model) {
+		return new WsSelectCriteria();
+	}
 }
