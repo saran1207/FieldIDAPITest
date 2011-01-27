@@ -16,7 +16,7 @@
 		</div>
 		
 		<div class="formAction">
-			<input type="submit" id="userRequestSubmit" onclick="verifyOwnerSelection(); return false;">
+			<input type="submit" value="<@s.text name="label.submit"/>" id="userRequestSubmit" onclick="verifyOwnerSelection(); return false;" />
 			<@s.text name="label.or"/>
 			<a href="<@s.url action="userRequestView" uniqueID="${uniqueID}"/>" id="cancelAccept"><@s.text name="hbutton.cancel"/></a>
 			
