@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlType(name="ONECLICK")
+@XmlRootElement
 public class WsOneClickCriteria extends WsCriteria {
 	private boolean principal;
 	private List<WsState> states = new ArrayList<WsState>();
+	
+	public WsOneClickCriteria() {
+		setType("ONECLICK");
+	}
 	
 	@XmlElement(name="Principal")
 	public boolean isPrincipal() {

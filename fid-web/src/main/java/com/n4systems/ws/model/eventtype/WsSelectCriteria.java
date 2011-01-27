@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlType(name="SELECTBOX")
+@XmlRootElement
 public class WsSelectCriteria extends WsCriteria {
 	private List<String> options = new ArrayList<String>();
 
+	public WsSelectCriteria() {
+		setType("SELECTBOX");
+	}
+	
 	@XmlElement(name="Options")
 	public List<String> getOptions() {
 		return options;

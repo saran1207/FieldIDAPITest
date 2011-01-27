@@ -10,10 +10,20 @@ import com.n4systems.ws.model.WsModel;
 
 @XmlRootElement
 public abstract class WsCriteria extends WsModel {
+	private String type;
 	private String displayText;
 	private boolean retired;
 	private List<String> recommendations = new ArrayList<String>();
 	private List<String> deficiencies = new ArrayList<String>();
+	
+	@XmlElement(name="Type")
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	@XmlElement(name="DisplayText")
 	public String getDisplayText() {

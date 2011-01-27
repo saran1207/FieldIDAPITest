@@ -1,8 +1,12 @@
 package com.n4systems.ws.model.eventtype;
 
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlType(name="TEXTFIELD")
+@XmlRootElement
 public class WsTextFieldCriteria extends WsCriteria {
+	
+	public WsTextFieldCriteria() {
+		setType("TEXTFIELD");
+	}
 	
 }
