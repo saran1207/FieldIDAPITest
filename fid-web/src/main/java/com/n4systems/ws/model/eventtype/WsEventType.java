@@ -17,6 +17,7 @@ public class WsEventType extends WsModel {
 	private boolean assignedToAvailable;
 	private WsEventTypeGroup group;
 	private WsEventForm form;
+	private long formVersion;
 	private List<String> infoFieldNames = new ArrayList<String>();
 	
 	@XmlElement(name="Name")
@@ -80,6 +81,15 @@ public class WsEventType extends WsModel {
 
 	public void setForm(WsEventForm form) {
 		this.form = form;
+	}
+
+	@XmlElement(name="FormVersion")
+	public long getFormVersion() {
+		return formVersion;
+	}
+
+	public void setFormVersion(long formVersion) {
+		this.formVersion = formVersion;
 	}
 
 	@XmlElement(name="InfoFieldNames")

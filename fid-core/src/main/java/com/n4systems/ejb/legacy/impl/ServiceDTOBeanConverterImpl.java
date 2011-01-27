@@ -187,6 +187,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	private void populateAbstractInspectionInfo(AbstractInspectionServiceDTO inspectionDTO, AbstractEvent event) {
 		inspectionDTO.setComments(event.getComments());
 		inspectionDTO.setId(event.getId());
+		inspectionDTO.setInspectionMobileGUID(event.getMobileGUID());
 
 		Map<String, String> infoOptionMap = event.getInfoOptionMap();
 		Set<String> infoOptionKeys = event.getInfoOptionMap().keySet();
@@ -198,6 +199,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		inspectionDTO.setInspectionTypeId(event.getType().getId());
 		inspectionDTO.setProductId(event.getAsset().getId());
+		inspectionDTO.setProductMobileGuid(event.getAsset().getMobileGUID());
 		for (CriteriaResult criteriaResult : event.getResults()) {
 			inspectionDTO.getResults().add(convert(criteriaResult));
 		}
@@ -215,6 +217,12 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionDTO.setEventBookId((event.getBook() != null) ? event.getBook().getMobileId() : null);
 		inspectionDTO.setUtcDate(event.getDate());
 		inspectionDTO.setEventGroupId(event.getGroup().getMobileGuid());
+		inspectionDTO.setPrintable(event.isPrintable());
+
+		if (event.getAssetStatus() != null) {
+			inspectionDTO.setProductStatusId(event.getAssetStatus().getId());
+		}
+		
 		convertLocationToDTO(inspectionDTO, event);
 		for (SubEvent subEvent : event.getSubEvents()) {
 			inspectionDTO.getSubInspections().add(convert(subEvent));

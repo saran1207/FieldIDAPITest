@@ -29,6 +29,7 @@ public class WsEventTypeConverter extends WsModelConverter<EventType, WsEventTyp
 		wsEventType.setAssignedToAvailable(model.isAssignedToAvailable());
 		wsEventType.setInfoFieldNames(model.getInfoFieldNames());
 		wsEventType.setGroup(groupConverter.fromModel(model.getGroup()));
+		wsEventType.setFormVersion(model.getFormVersion());
         if (model.getEventForm() != null)
         	wsEventType.setForm(formConverter.fromModel(model.getEventForm()));
 		return wsEventType;
