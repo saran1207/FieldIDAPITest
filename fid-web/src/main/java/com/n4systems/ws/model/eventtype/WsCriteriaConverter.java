@@ -55,6 +55,8 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 	}
 
 	private WsSelectCriteria convertSelectCriteria(SelectCriteria model) {
-		return new WsSelectCriteria();
+		WsSelectCriteria wsModel = new WsSelectCriteria();
+		wsModel.setOptions(model.getOptions());
+		return wsModel;
 	}
 }
