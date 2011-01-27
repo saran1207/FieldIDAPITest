@@ -62,6 +62,11 @@ ${action.setPageType('asset', 'show')!}
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
 						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
 					</@s.text>
+				<#elseif nextEvent.daysToDue == 0>
+					<@s.text name="label.nexteventdate_due_today">
+						<@s.param>${nextEvent.eventType.name!}</@s.param>
+						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
+					</@s.text>					
 				<#else>
 					<@s.text name="label.nexteventdate_msg">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
