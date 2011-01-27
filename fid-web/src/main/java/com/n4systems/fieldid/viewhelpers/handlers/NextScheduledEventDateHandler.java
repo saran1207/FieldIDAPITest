@@ -17,19 +17,14 @@ public class NextScheduledEventDateHandler extends WebOutputHandler implements
 
 	@Override
 	public String handleWeb(Long entityId, Object value) {		
-		EventSchedule nextScheduledEvent = getNextScheduledEvent(entityId);
-		if(nextScheduledEvent != null)
-			return new FieldidDateFormatter(nextScheduledEvent.getNextDate(), this, false, false).format();
-		else
-			return "";
-	}
-
-	private EventSchedule getNextScheduledEvent(Long entityId) {
-		NextEventScheduleLoader loader = new NextEventScheduleLoader();
-		loader.setAssetId(entityId);
-		return loader.load();
+		return getNextScheduledEventDate(entityId);
 	}
 	
+	@Override
+	public Object handleExcel(Long entityId, Object value) {
+		return getNextScheduledEventDate(entityId);
+	}
+
 	@Override
 	public String getDateFormat() {
 		return action.getSessionUser().getDateFormat();
@@ -45,9 +40,12 @@ public class NextScheduledEventDateHandler extends WebOutputHandler implements
 		return action.getSessionUser().getTimeZone();
 	}
 
-	@Override
-	public Object handleExcel(Long entityId, Object value) {
-		return value;
+	private String getNextScheduledEventDate(Long entityId) {
+		EventSchedule nextScheduledEvent = new NextEventScheduleLoader().setAssetId(entityId).load();
+		if(nextScheduledEvent != null)
+			return new FieldidDateFormatter(nextScheduledEvent.getNextDate(), this, false, false).format();
+		else
+			return "";
 	}
 
 }
