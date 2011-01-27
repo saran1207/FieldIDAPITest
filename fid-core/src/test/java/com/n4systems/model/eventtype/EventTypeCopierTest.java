@@ -2,7 +2,10 @@ package com.n4systems.model.eventtype;
 
 import static org.junit.Assert.*;
 
+import com.n4systems.model.EventForm;
+import com.n4systems.model.builders.EventFormBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
+import com.n4systems.model.event.EventFormSaver;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
@@ -19,38 +22,35 @@ public class EventTypeCopierTest {
 		FilteredIdLoader<EventType> typeLoader = EasyMock.createMock(FilteredIdLoader.class);
 		EventTypeSaver typeSaver = EasyMock.createMock(EventTypeSaver.class);
 		EventTypeUniqueNameLoader typeNameLoader = EasyMock.createMock(EventTypeUniqueNameLoader.class);
+        EventFormSaver formSaver = EasyMock.createMock(EventFormSaver.class);
 		
 		Long typeId = 42L;
 		String newName = "new name";
 		EventType fromType = EventTypeBuilder.anEventType().build();
+        EventForm eventForm = EventFormBuilder.anEventForm().build();
+        fromType.setEventForm(eventForm);
 		
-		EventTypeCopier copier = new EventTypeCopier(typeCleaner, typeLoader, typeSaver, typeNameLoader);
+		EventTypeCopier copier = new EventTypeCopier(typeCleaner, typeLoader, typeSaver, formSaver, typeNameLoader);
 		
 		EasyMock.expect(typeLoader.setId(typeId)).andReturn(typeLoader);
 		EasyMock.expect(typeLoader.setPostFetchFields("eventForm.sections", "supportedProofTests", "infoFieldNames")).andReturn(typeLoader);
 		EasyMock.expect(typeLoader.load()).andReturn(fromType);
 		
 		typeCleaner.clean(fromType);
-		
+
 		EasyMock.expect(typeNameLoader.setName(fromType.getName())).andReturn(typeNameLoader);
 		EasyMock.expect(typeNameLoader.load()).andReturn(newName);
 		
 		typeSaver.save(fromType);
+        formSaver.save(eventForm);
 		
-		EasyMock.replay(typeCleaner);
-		EasyMock.replay(typeLoader);
-		EasyMock.replay(typeSaver);
-		EasyMock.replay(typeNameLoader);
+		EasyMock.replay(typeCleaner, typeLoader, typeSaver, formSaver, typeNameLoader);
 		
 		EventType copiedType = copier.copy(typeId);
 		
 		assertEquals(newName, copiedType.getName());
 		
-		EasyMock.verify(typeCleaner);
-		EasyMock.verify(typeLoader);
-		EasyMock.verify(typeSaver);
-		EasyMock.verify(typeNameLoader);
-		
+		EasyMock.verify(typeCleaner, typeLoader, typeSaver, formSaver, typeNameLoader);
 	}
 	
 }
