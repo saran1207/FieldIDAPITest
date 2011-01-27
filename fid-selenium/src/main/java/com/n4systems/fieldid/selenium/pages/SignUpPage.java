@@ -54,8 +54,6 @@ public class SignUpPage extends WebPage {
 		}
 		if(t.getTimeZone() != null)				selenium.select(timeZoneSelectListLocator, t.getTimeZone());
 		if(t.getUserName() != null)				selenium.type(userNameTextFieldLocator, t.getUserName());
-		if(t.getPassword() != null)				selenium.type(passwordTextFieldLocator, t.getPassword());
-		if(t.getPassword2() != null)			selenium.type(passwordAgainTextFieldLocator, t.getPassword2());
 		
 		if(t.getCompanyName() != null)			selenium.type(companyNameTextFieldLocator, t.getCompanyName());
 		if(t.getCompanyAddress() != null)		selenium.type(companyAddressTextFieldLocator, t.getCompanyAddress());
