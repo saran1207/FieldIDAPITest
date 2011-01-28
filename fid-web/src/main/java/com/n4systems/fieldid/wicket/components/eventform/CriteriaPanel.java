@@ -46,7 +46,7 @@ public class CriteriaPanel extends SortableListPanel {
         setOutputMarkupPlaceholderTag(true);
 
         WebMarkupContainer sortableCriteriaContainer = new WebMarkupContainer("sortableCriteriaContainer");
-        sortableCriteriaContainer.add(new ListView<Criteria>("criteria", new PropertyModel<List<Criteria>>(CriteriaPanel.this, "criteriaSection.criteria")) {
+        sortableCriteriaContainer.add(new ListView<Criteria>("criteria", new PropertyModel<List<Criteria>>(CriteriaPanel.this, "criteriaSection.availableCriteria")) {
             @Override
             protected void populateItem(final ListItem<Criteria> item) {
                 item.setOutputMarkupId(true);

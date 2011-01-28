@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.IndexColumn;
 
@@ -91,5 +92,16 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	public String toString() {
 		return "CriteriaSection [" + title + "]";
 	}
+
+    @Transient
+    public List<Criteria> getAvailableCriteria() {
+        List<Criteria> availableCriteria = new ArrayList<Criteria>();
+        for (Criteria criteria : getCriteria()) {
+            if (!criteria.isRetired()) {
+                availableCriteria.add(criteria);
+            }
+        }
+        return availableCriteria;
+    }
 	
 }
