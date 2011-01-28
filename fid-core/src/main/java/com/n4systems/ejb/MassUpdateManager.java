@@ -22,7 +22,7 @@ public interface MassUpdateManager {
 	 * @param values
 	 * @return
 	 */
-	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException;
+	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy, String orderNumber) throws UpdateFailureException, UpdateConatraintViolationException;
 
 	public Long deleteAssets(List<Long> ids, User modifiedBy) throws UpdateFailureException;
 	

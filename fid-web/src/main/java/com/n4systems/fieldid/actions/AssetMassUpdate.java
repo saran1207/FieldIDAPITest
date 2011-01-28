@@ -60,6 +60,8 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 	private OrderManager orderManager;
 
+	private String orderNumber;
+	
 	public AssetMassUpdate(MassUpdateManager massUpdateManager, LegacyAsset assetManager, PersistenceManager persistenceManager,
 			OrderManager orderManager) {
 		super(massUpdateManager, persistenceManager);
@@ -114,8 +116,7 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 			asset.setIdentified(convertDate(identified));
 			assetWebModel.fillInAsset(asset);
 			List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
-
-			Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser());
+			Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser(), getNonIntegrationOrderNumber());
 			List<String> messageArgs = new ArrayList<String>();
 			messageArgs.add(results.toString());
 			addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
@@ -226,30 +227,15 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	
 	public String getNonIntegrationOrderNumber() {
 		if (!getSecurityGuard().isIntegrationEnabled()) {
-			if (asset.getShopOrder() != null) {
-				return asset.getShopOrder().getOrder().getOrderNumber();
-			}
+			return orderNumber;
 		}
-
 		return null;
 	}
 
 	public void setNonIntegrationOrderNumber(String nonIntegrationOrderNumber) {
-		if (nonIntegrationOrderNumber != null) {
-			String orderNumber = nonIntegrationOrderNumber.trim();
-			// only do this for customers without integration
-			if (!getSecurityGuard().isIntegrationEnabled()) {
-				// if the asset doesn't have a shop order, we need to create
-				// one
-				if (asset.getShopOrder() == null) {
-					asset.setShopOrder(orderManager.createNonIntegrationShopOrder(orderNumber, getTenantId()));
-				} else {
-					// otherwise we'll just change the order number
-					Order order = asset.getShopOrder().getOrder();
-					order.setOrderNumber(orderNumber);
-					persistenceManager.update(order);
-				}
-			}
+		// only do this for customers without integration
+		if (nonIntegrationOrderNumber != null && !getSecurityGuard().isIntegrationEnabled()) {
+			this.orderNumber = nonIntegrationOrderNumber.trim();
 		}
 	}
 

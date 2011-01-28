@@ -25,6 +25,7 @@ import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.Order;
 import com.n4systems.model.Project;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.EventSchedule.ScheduleStatusGrouping;
@@ -34,6 +35,7 @@ import com.n4systems.persistence.utils.LargeInListQueryExecutor;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -181,14 +183,14 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return new Long(em.createQuery(updateQueryString).setParameter("now", new Date()).setParameter("ids", ids).executeUpdate());
 	}
 
-	public Long updateAssets(List<Long> ids, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long updateAssets(List<Long> ids, Asset assetModificationData, Map<String, Boolean> values, User modifiedBy, String orderNumber) throws UpdateFailureException, UpdateConatraintViolationException {
 		Long result = 0L;
 		try {
 			for (Long id : ids) {
 				Asset asset = assetManager.findAssetAllFields(id, new OpenSecurityFilter());
-
-				updateAsset(asset, assetModificationData, values);
-
+				
+				updateAsset(asset, assetModificationData, values, orderNumber);
+				
 				legacyAssetManager.update(asset, modifiedBy);
 
 				result++;
@@ -201,6 +203,19 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		}
 
 		return result;
+	}
+
+	private void setOrderNumber(Asset asset, String orderNumber) {
+		//If no order exists, create one.
+		if (asset.getShopOrder() == null) {
+			asset.setShopOrder(ServiceLocator.getOrderManager().createNonIntegrationShopOrder(orderNumber, asset.getTenant().getId()));
+		} else {
+			// otherwise we'll just change the order number
+			Order order = asset.getShopOrder().getOrder();
+			order.setOrderNumber(orderNumber);
+			persistenceManager.update(order);
+		}
+		
 	}
 
 	public Long deleteAssets(List<Long> ids, User modifiedBy) throws UpdateFailureException {
@@ -219,7 +234,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
-	private void updateAsset(Asset asset, Asset assetModificationData, Map<String, Boolean> values) {
+	private void updateAsset(Asset asset, Asset assetModificationData, Map<String, Boolean> values, String orderNumber) {
 		for (Map.Entry<String, Boolean> entry : values.entrySet()) {
 			if (entry.getValue() == true) {
 				if (entry.getKey().equals("owner")) {
@@ -250,7 +265,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 				}
 				
 				if (entry.getKey().equals("nonIntegrationOrderNumber")) {
-					asset.setShopOrder(assetModificationData.getShopOrder());
+					setOrderNumber(asset, orderNumber);
 				}
 			}
 		}

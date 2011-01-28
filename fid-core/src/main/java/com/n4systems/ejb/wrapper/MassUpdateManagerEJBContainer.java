@@ -117,11 +117,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy) throws UpdateFailureException, UpdateConatraintViolationException {
+	public Long updateAssets(List<Long> ids, Asset asset, Map<String, Boolean> values, User modifiedBy, String orderNumber) throws UpdateFailureException, UpdateConatraintViolationException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).updateAssets(ids, asset, values, modifiedBy);
+			return createManager(transaction.getEntityManager()).updateAssets(ids, asset, values, modifiedBy, orderNumber);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
