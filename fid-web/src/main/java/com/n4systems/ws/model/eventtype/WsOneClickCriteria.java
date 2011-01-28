@@ -12,7 +12,7 @@ public class WsOneClickCriteria extends WsCriteria {
 	private List<WsState> states = new ArrayList<WsState>();
 	
 	public WsOneClickCriteria() {
-		setType("ONECLICK");
+		setCriteriaType("ONECLICK");
 	}
 	
 	@XmlElement(name="Principal")

@@ -11,7 +11,7 @@ public class WsSelectCriteria extends WsCriteria {
 	private List<String> options = new ArrayList<String>();
 
 	public WsSelectCriteria() {
-		setType("SELECTBOX");
+		setCriteriaType("SELECTBOX");
 	}
 	
 	@XmlElement(name="Options")

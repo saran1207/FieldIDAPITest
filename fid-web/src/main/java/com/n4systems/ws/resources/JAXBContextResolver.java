@@ -8,8 +8,12 @@ import com.n4systems.ws.model.assettype.WsAssetStatus;
 import com.n4systems.ws.model.autoattribute.WsAutoAttributeCriteria;
 import com.n4systems.ws.model.commenttemplate.WsCommentTemplate;
 import com.n4systems.ws.model.eventbook.WsEventBook;
+import com.n4systems.ws.model.eventtype.WsCriteria;
 import com.n4systems.ws.model.eventtype.WsEventForm;
 import com.n4systems.ws.model.eventtype.WsEventType;
+import com.n4systems.ws.model.eventtype.WsOneClickCriteria;
+import com.n4systems.ws.model.eventtype.WsSelectCriteria;
+import com.n4systems.ws.model.eventtype.WsTextFieldCriteria;
 import com.n4systems.ws.model.lastmod.WsLastModified;
 import com.n4systems.ws.model.org.WsOrg;
 import com.n4systems.ws.model.unitofmeasure.WsUnitOfMeasure;
@@ -33,7 +37,11 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
 		WsOrg.class,
 		WsEventBook.class,
 		WsLastModified.class,
-		WsEventForm.class
+		WsEventForm.class,
+		WsCriteria.class,
+		WsSelectCriteria.class,
+		WsOneClickCriteria.class,
+		WsTextFieldCriteria.class
 	};
 	
 	private final JAXBContext context;
