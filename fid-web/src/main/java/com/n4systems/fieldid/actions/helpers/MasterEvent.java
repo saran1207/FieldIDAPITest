@@ -204,8 +204,12 @@ public class MasterEvent {
 	public Event getCompletedEvent() {
 		applyAssignToUpdateToEvent();
 		processSubEvents();
-        if (overrideResult != null && !"auto".equals(overrideResult)) {
-            event.setStatus(Status.valueOf(overrideResult));
+        if (overrideResult != null) {
+            if ("auto".equals(overrideResult)) {
+                event.setStatus(null);
+            } else {
+                event.setStatus(Status.valueOf(overrideResult));
+            }
         }
 
 		return event;
