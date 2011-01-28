@@ -99,6 +99,8 @@
     padding-top: 10px;
     display:block;
     float:left;
+    max-width: 400px;
+    padding-bottom: 10px;
 }
 
 .eventForm div.infoSet span, .eventForm div.infoSet div.simpleContainer {
