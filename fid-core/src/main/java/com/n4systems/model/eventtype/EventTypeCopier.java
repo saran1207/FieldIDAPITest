@@ -43,7 +43,9 @@ public class EventTypeCopier implements Copier<EventType> {
 		String newName = typeNameLoader.setName(type.getName()).load();
 		type.setName(newName);
 
-        formSaver.save(type.getEventForm());
+        if (type.getEventForm() != null) {
+            formSaver.save(type.getEventForm());
+        }
 		typeSaver.save(type);
 		
 		return type;
