@@ -28,4 +28,9 @@ public class AssetStatusResourceDefiner implements ResourceDefiner<AssetStatus, 
 		return loaderFactory.createFilteredIdLoader(AssetStatus.class);
 	}
 
+	@Override
+	public Class<WsAssetStatus> getWsModelClass() {
+		return WsAssetStatus.class;
+	}
+
 }

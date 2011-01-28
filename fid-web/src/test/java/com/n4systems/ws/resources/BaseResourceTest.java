@@ -50,7 +50,7 @@ public class BaseResourceTest {
 		
 		expect(context.getLoaderFactory()).andReturn(loaderFactory);
 		
-		replay(context, loaderFactory, modelConverter, lastModifiedConverter);
+		replay(loaderFactory, lastModifiedConverter);
 	}
 	
 	@After
@@ -67,9 +67,9 @@ public class BaseResourceTest {
 		
 		expect(definer.getLastModifiedLoader(loaderFactory)).andReturn(loader);
 		expect(converter.convertList(loader, lastModifiedConverter)).andReturn(wsModels);
-		replay(loader, definer, converter);
+		replay(loader, context, definer, converter, modelConverter);
 		
-		WsLastModified[] result = resource.getList();
+		WsLastModified[] result = resource.list();
 		
 		assertArrayEquals(wsModels.toArray(new WsLastModified[wsModels.size()]), result);
 	}
@@ -78,18 +78,24 @@ public class BaseResourceTest {
 	@Test
 	public void test_get_single() {
 		Long id = 42L;
-		Long wsModel = 56L;
-		
-		expect(definer.getResourceConverter()).andReturn(modelConverter);
-		
+		List<String> models = Arrays.asList("56");
+		List<Long> wsModels = Arrays.asList(56L);
+
 		FilteredIdLoader loader = createMock(FilteredIdLoader.class);
 		
 		expect(definer.getResourceIdLoader(loaderFactory)).andReturn(loader);
 		expect(loader.setId(id)).andReturn(loader);
-		expect(converter.convertSingle(loader, modelConverter)).andReturn(wsModel);
-		replay(loader, definer, converter);
+		expect(loader.load()).andReturn(models.get(0));
+		expect(definer.getResourceConverter()).andReturn(modelConverter);
+		expect(modelConverter.fromModels(models)).andReturn(wsModels);
+		expect(definer.getWsModelClass()).andReturn(Long.class);
 		
-		assertEquals(wsModel, resource.getSingle(id));
+		replay(loader, context, definer, converter, modelConverter);
+		
+		Long[] res = resource.get(id.toString());
+		
+		assertTrue(res.length == 1);
+		assertEquals(wsModels.get(0), res[0]);
 	}
 	
 }

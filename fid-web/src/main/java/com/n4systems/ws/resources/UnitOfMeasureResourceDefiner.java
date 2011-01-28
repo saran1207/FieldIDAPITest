@@ -28,4 +28,9 @@ public class UnitOfMeasureResourceDefiner implements ResourceDefiner<UnitOfMeasu
 		return loaderFactory.createFilteredIdLoader(UnitOfMeasure.class);
 	}
 
+	@Override
+	public Class<WsUnitOfMeasure> getWsModelClass() {
+		return WsUnitOfMeasure.class;
+	}
+
 }

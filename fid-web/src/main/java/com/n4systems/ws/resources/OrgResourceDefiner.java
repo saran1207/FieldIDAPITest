@@ -28,4 +28,9 @@ public class OrgResourceDefiner implements ResourceDefiner<BaseOrg, WsOrg> {
 		return loaderFactory.createFilteredIdLoader(BaseOrg.class).setPostFetchFields("secondaryOrg.id", "customerOrg.id", "divisionOrg.id");
 	}
 
+	@Override
+	public Class<WsOrg> getWsModelClass() {
+		return WsOrg.class;
+	}
+
 }

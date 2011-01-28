@@ -28,4 +28,9 @@ public class EventBookResourceDefiner implements ResourceDefiner<EventBook, WsEv
 		return loaderFactory.createFilteredIdLoader(EventBook.class);
 	}
 
+	@Override
+	public Class<WsEventBook> getWsModelClass() {
+		return WsEventBook.class;
+	}
+
 }

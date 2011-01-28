@@ -28,4 +28,9 @@ public class AutoAttributeResourceDefiner implements ResourceDefiner<AutoAttribu
 		return loaderFactory.createFilteredIdLoader(AutoAttributeCriteria.class).setPostFetchFields("inputs", "outputs", "definitions.outputs");
 	}
 
+	@Override
+	public Class<WsAutoAttributeCriteria> getWsModelClass() {
+		return WsAutoAttributeCriteria.class;
+	}
+
 }

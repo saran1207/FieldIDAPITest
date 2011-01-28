@@ -31,5 +31,10 @@ public class EventTypeResourceDefiner implements ResourceDefiner<EventType, WsEv
 	public IdLoader<FilteredIdLoader<EventType>> getResourceIdLoader(LoaderFactory loaderFactory) {
 		return loaderFactory.createFilteredIdLoader(EventType.class).setPostFetchFields("eventForm.sections", "infoFieldNames");
 	}
+
+	@Override
+	public Class<WsEventType> getWsModelClass() {
+		return WsEventType.class;
+	}
 	
 }

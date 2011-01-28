@@ -12,34 +12,11 @@ import org.junit.Test;
 
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
-import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.ws.exceptions.WsResourceNotFoundException;
 import com.n4systems.ws.model.WsModelConverter;
 
 public class ConversionHelperTest {
 	private ConversionHelper helper = new ConversionHelper();
-	
-	@SuppressWarnings("unchecked")
-	@Test
-	public void test_convert_single() {
-		Long model = 10L;
-		String convertedModel = "10";
-		
-		Loader<Long> loader = EasyMock.createMock(Loader.class);
-		EasyMock.expect(loader.load()).andReturn(model);
-		EasyMock.replay(loader);
-		
-		WsModelConverter<Long, String> converter = EasyMock.createMock(WsModelConverter.class);
-		EasyMock.expect(converter.fromModel(model)).andReturn(convertedModel);
-		EasyMock.replay(converter);
-		
-		String result = helper.convertSingle(loader, converter);
-		
-		EasyMock.verify(loader);
-		EasyMock.verify(converter);
-
-		assertEquals(convertedModel, result);
-	}
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -61,23 +38,6 @@ public class ConversionHelperTest {
 		EasyMock.verify(converter);
 
 		assertEquals(convertedModels, result);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Test(expected=WsResourceNotFoundException.class)
-	public void test_convert_single_throws_exception_on_null_load() {
-		Loader<Object> loader = new Loader<Object>() {
-			@Override
-			public Object load() {
-				return null;
-			}
-			@Override
-			protected Object load(EntityManager em) {
-				return null;
-			}
-		};
-		
-		helper.convertSingle(loader, EasyMock.createMock(WsModelConverter.class));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -28,4 +28,9 @@ public class EventFormResourceDefiner implements ResourceDefiner<EventForm, WsEv
 		return loaderFactory.createFilteredIdLoader(EventForm.class).setPostFetchFields("sections");
 	}
 
+	@Override
+	public Class<WsEventForm> getWsModelClass() {
+		return WsEventForm.class;
+	}
+
 }

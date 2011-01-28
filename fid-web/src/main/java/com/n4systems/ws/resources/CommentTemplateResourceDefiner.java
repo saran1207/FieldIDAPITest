@@ -29,4 +29,9 @@ public class CommentTemplateResourceDefiner implements ResourceDefiner<CommentTe
 		return loaderFactory.createCommentTemplateIdLoader();
 	}
 
+	@Override
+	public Class<WsCommentTemplate> getWsModelClass() {
+		return WsCommentTemplate.class;
+	}
+
 }

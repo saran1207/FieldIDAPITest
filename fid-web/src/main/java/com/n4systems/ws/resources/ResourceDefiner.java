@@ -12,4 +12,5 @@ public interface ResourceDefiner<M, W> {
 	public WsModelConverter<M, W> getResourceConverter();
 	public Loader<List<LastModified>> getLastModifiedLoader(LoaderFactory loaderFactory);
 	public IdLoader<? extends Loader<M>> getResourceIdLoader(LoaderFactory loaderFactory);
+	public Class<W> getWsModelClass();
 }
