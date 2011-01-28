@@ -12,7 +12,7 @@ import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
 import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.utils.CopyEventFactory;
-import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.Status;
 import com.n4systems.model.SubEvent;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -42,6 +42,7 @@ public class SubEventCrud extends EventCrud {
 	private Asset parentAsset;
 	private MasterEvent masterEventHelper;
 	private boolean currentEventNew = true;
+    private String overrideResult;
 
 	public SubEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
@@ -76,6 +77,7 @@ public class SubEventCrud extends EventCrud {
 				event.setType(null);
 			} else {
 				parentAsset = masterEventHelper.getEvent().getAsset();
+                overrideResult = masterEventHelper.getOverrideResult();
 
 				setType(event.getType().getId());
 				setAssetId(event.getAsset().getId());
@@ -208,6 +210,9 @@ public class SubEventCrud extends EventCrud {
 		event.setTenant(getTenant());
 		event.setAsset(asset);
 		getModifiableEvent().pushValuesTo(event);
+        if (overrideResult != null) {
+            event.setStatus(Status.valueOf(overrideResult));
+        }
 
 		User modifiedBy = fetchCurrentUser();
 
@@ -266,6 +271,7 @@ public class SubEventCrud extends EventCrud {
 			getModifiableEvent().pushValuesTo(event);
 			masterEventHelper.setProofTestFile(fileData);
 			masterEventHelper.setAssignToUpdate(getAssignedTo(), isAssignToSomeone());
+            masterEventHelper.setOverrideResult(overrideResult);
 
 			if (masterEventHelper.getEvent().isNew()) {
 				event.setTenant(getTenant());
@@ -367,4 +373,12 @@ public class SubEventCrud extends EventCrud {
 	public Long getEventId() {
 		return masterEventHelper.getEvent().getId();
 	}
+
+    public String getOverrideResult() {
+        return overrideResult;
+    }
+
+    public void setOverrideResult(String overrideResult) {
+        this.overrideResult = overrideResult;
+    }
 }

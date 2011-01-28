@@ -215,16 +215,16 @@ public class MasterEventCrud extends AbstractCrud {
 				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
 				
 				
-				CreateEventParameterBuilder createInspecitonBuiler = new CreateEventParameterBuilder(master, getSessionUserId())
+				CreateEventParameterBuilder createEventBuilder = new CreateEventParameterBuilder(master, getSessionUserId())
 						.withProofTestFile(masterEvent.getProofTestFile())
 						.withUploadedImages(masterEvent.getUploadedFiles());
 				
 				
 				
-				createInspecitonBuiler.addSchedules(createEventScheduleBundles(masterEvent.getNextSchedules()));
+				createEventBuilder.addSchedules(createEventScheduleBundles(masterEvent.getNextSchedules()));
 				
 				event = eventPersistenceFactory.createEventCreator().create(
-						createInspecitonBuiler.build());
+                        createEventBuilder.build());
 				uniqueID = event.getId();
 			} else {
 				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());

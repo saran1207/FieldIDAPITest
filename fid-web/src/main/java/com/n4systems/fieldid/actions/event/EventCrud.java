@@ -761,11 +761,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	public String getResult() {
-		return (event.getStatus() != null) ? event.getStatus().name() : Status.NA.name();
+		return (event.getStatus() != null) ? event.getStatus().name() : null;
 	}
 
 	public void setResult(String result) {
-		event.setStatus((result != null && result.trim().length() > 0) ? Status.valueOf(result) : Status.NA);
+		event.setStatus((result != null && result.trim().length() > 0) ? Status.valueOf(result) : null);
 	}
 
 	public List<Status> getResults() {
@@ -1074,5 +1074,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 
     public void setOverrideResult(String overrideResult) {
         this.overrideResult = overrideResult;
+    }
+
+    public void statusFor(String statusStr) {
+
     }
 }

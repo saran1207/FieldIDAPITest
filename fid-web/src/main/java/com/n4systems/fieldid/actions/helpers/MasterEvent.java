@@ -10,6 +10,7 @@ import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
+import com.n4systems.model.Status;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 
@@ -52,6 +53,8 @@ public class MasterEvent {
 	private User assignedTo;
 
 	private boolean assignToSomeone;
+
+    private String overrideResult;
 	
 	public MasterEvent() {
 		token = String.valueOf(Math.abs(new Random().nextLong()));
@@ -198,10 +201,12 @@ public class MasterEvent {
 		return null;
 	}
 
-	
 	public Event getCompletedEvent() {
 		applyAssignToUpdateToEvent();
 		processSubEvents();
+        if (overrideResult != null && !"auto".equals(overrideResult)) {
+            event.setStatus(Status.valueOf(overrideResult));
+        }
 
 		return event;
 	}
@@ -348,6 +353,12 @@ public class MasterEvent {
 	public boolean isAssignToSomeone() {
 		return assignToSomeone;
 	}
-	
-	
+
+    public String getOverrideResult() {
+        return overrideResult;
+    }
+
+    public void setOverrideResult(String overrideResult) {
+        this.overrideResult = overrideResult;
+    }
 }

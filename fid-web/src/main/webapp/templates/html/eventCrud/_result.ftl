@@ -7,7 +7,12 @@
                 <option value="auto"><@s.text name="label.set_from_criteria"/></option>
             </#if>
             <#list results as result>
-                <option value="${result.name()}">${action.getText(result.label)}</option>
+                <#if overrideResult?exists && overrideResult == result.name()>
+                    <#assign selectedStr = 'selected'/>
+                <#else>
+                    <#assign selectedStr = ''/>
+                </#if>
+                <option value="${result.name()}" ${selectedStr}>${action.getText(result.label)}</option>
             </#list>
         </select>
 	</span>
