@@ -10,18 +10,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.model.lastmodified.LastModified;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.ws.model.WsModelConverter;
+import com.n4systems.ws.model.lastmod.WsLastModified;
 import com.n4systems.ws.utils.ConversionHelper;
 import com.n4systems.ws.utils.ResourceContext;
 
 public class BaseResourceTest {
 	
 	private class TestBaseResource extends BaseResource<String, Long> {
-		public TestBaseResource(ResourceContext context, ConversionHelper converter, ResourceDefiner<String, Long> definer) {
-			super(context, converter, definer);
+		public TestBaseResource(ResourceContext context, ConversionHelper converter,WsModelConverter<LastModified, WsLastModified> lastModifiedConverter, ResourceDefiner<String, Long> definer) {
+			super(context, converter, lastModifiedConverter, definer);
 		}
 	}
 	
@@ -30,6 +32,7 @@ public class BaseResourceTest {
 	private ResourceDefiner<String, Long> definer;
 	private LoaderFactory loaderFactory;
 	private WsModelConverter<String, Long> modelConverter;
+	private WsModelConverter<LastModified, WsLastModified> lastModifiedConverter;
 	private TestBaseResource resource;
 	
 	@SuppressWarnings("unchecked")
@@ -38,37 +41,37 @@ public class BaseResourceTest {
 		context = createMock(ResourceContext.class);
 		converter = createMock(ConversionHelper.class);
 		definer = createMock(ResourceDefiner.class);
-		resource = new TestBaseResource(context, converter, definer);
+		lastModifiedConverter = createMock(WsModelConverter.class);
+		
+		resource = new TestBaseResource(context, converter, lastModifiedConverter, definer);
 		
 		loaderFactory = createMock(LoaderFactory.class);
 		modelConverter = createMock(WsModelConverter.class);
 		
 		expect(context.getLoaderFactory()).andReturn(loaderFactory);
-		expect(definer.getResourceConverter()).andReturn(modelConverter);
 		
-		replay(context, loaderFactory, modelConverter);
+		replay(context, loaderFactory, modelConverter, lastModifiedConverter);
 	}
 	
 	@After
 	public void verify_mocks() {
-		verify(context, converter, definer, loaderFactory, modelConverter);
+		verify(context, converter, definer, loaderFactory, modelConverter, lastModifiedConverter);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_get_list() {
-		List<Long> wsModels = Arrays.asList(1L, 2L, 3L);
+		List<WsLastModified> wsModels = Arrays.asList(new WsLastModified(), new WsLastModified());
 		
-		ListLoader<String> loader = createMock(ListLoader.class);
+		ListLoader<LastModified> loader = createMock(ListLoader.class);
 		
-		expect(definer.getResourceListLoader(loaderFactory)).andReturn(loader);
-		expect(definer.getWsModelClass()).andReturn(Long.class);
-		expect(converter.convertList(loader, modelConverter)).andReturn(wsModels);
+		expect(definer.getLastModifiedLoader(loaderFactory)).andReturn(loader);
+		expect(converter.convertList(loader, lastModifiedConverter)).andReturn(wsModels);
 		replay(loader, definer, converter);
 		
-		Long[] result = resource.getList();
+		WsLastModified[] result = resource.getList();
 		
-		assertArrayEquals(wsModels.toArray(new Long[wsModels.size()]), result);
+		assertArrayEquals(wsModels.toArray(new WsLastModified[wsModels.size()]), result);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -76,6 +79,8 @@ public class BaseResourceTest {
 	public void test_get_single() {
 		Long id = 42L;
 		Long wsModel = 56L;
+		
+		expect(definer.getResourceConverter()).andReturn(modelConverter);
 		
 		FilteredIdLoader loader = createMock(FilteredIdLoader.class);
 		

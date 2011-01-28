@@ -11,6 +11,7 @@ public class WsAssetStatusConverter extends WsModelConverter<AssetStatus, WsAsse
 		WsAssetStatus wsModel = new WsAssetStatus();
 		wsModel.setId(model.getId());
 		wsModel.setName(model.getName());
+		wsModel.setActive(model.isActive());
 		return wsModel;
 	}
 

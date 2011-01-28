@@ -22,6 +22,7 @@ public abstract class AbstractInspectionServiceDTO extends AbstractBaseServiceDT
 	private long formVersion;
 	
 	private Long formId;
+	private boolean editable = true;
 	
 	public String getInspectionMobileGUID() {
 		return inspectionMobileGUID;
@@ -121,6 +122,14 @@ public abstract class AbstractInspectionServiceDTO extends AbstractBaseServiceDT
 
 	public void setFormId(Long formId) {
 		this.formId = formId;
+	}
+
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 
 }

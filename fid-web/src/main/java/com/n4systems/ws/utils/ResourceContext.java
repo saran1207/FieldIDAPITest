@@ -20,7 +20,10 @@ public class ResourceContext {
 	public ResourceContext(TenantLoadHandler tenantHandler, UriInfo uriInfo) {
 		this.uriInfo = uriInfo;
 		tenant = tenantHandler.getTenant(uriInfo.getRequestUri());
+		
 		securityFilter = new TenantOnlySecurityFilter(tenant);
+		securityFilter.enableShowArchived();
+		
 		loaderFactory = new LoaderFactory(securityFilter);
 	}
 

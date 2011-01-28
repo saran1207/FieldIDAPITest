@@ -10,31 +10,36 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-import com.n4systems.util.ArrayUtils;
+import com.n4systems.model.lastmodified.LastModified;
+import com.n4systems.ws.model.WsModelConverter;
+import com.n4systems.ws.model.lastmod.WsLastModified;
+import com.n4systems.ws.model.lastmod.WsLastModifiedConverter;
 import com.n4systems.ws.utils.ConversionHelper;
 import com.n4systems.ws.utils.ResourceContext;
 
 public abstract class BaseResource<M, W> {
 	protected final ConversionHelper converter;
 	protected final ResourceContext context;
+	protected final WsModelConverter<LastModified, WsLastModified> lastModifiedConverter;
 	protected final ResourceDefiner<M, W> definer;
 	
-	protected BaseResource(ResourceContext context, ConversionHelper converter, ResourceDefiner<M, W> definer) {
+	protected BaseResource(ResourceContext context, ConversionHelper converter, WsModelConverter<LastModified, WsLastModified> lastModifiedConverter, ResourceDefiner<M, W> definer) {
 		this.context = context;
 		this.converter = converter;
 		this.definer = definer;
+		this.lastModifiedConverter = lastModifiedConverter;
 	}
 	
 	protected BaseResource(UriInfo uriInfo, ResourceDefiner<M, W> definer) {
-		this(new ResourceContext(uriInfo), new ConversionHelper(), definer);
+		this(new ResourceContext(uriInfo), new ConversionHelper(), new WsLastModifiedConverter(), definer);
 	}
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
-	public W[] getList() {
-		List<W> wsList = converter.convertList(definer.getResourceListLoader(context.getLoaderFactory()), definer.getResourceConverter());
-		return ArrayUtils.toArray(wsList, definer.getWsModelClass());
+	public WsLastModified[] getList() {
+		List<WsLastModified> wsList = converter.convertList(definer.getLastModifiedLoader(context.getLoaderFactory()), lastModifiedConverter);
+		return wsList.toArray(new WsLastModified[wsList.size()]);
 	}
 	
 	@GET

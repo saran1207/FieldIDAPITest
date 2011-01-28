@@ -188,7 +188,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionDTO.setComments(event.getComments());
 		inspectionDTO.setId(event.getId());
 		inspectionDTO.setInspectionMobileGUID(event.getMobileGUID());
-
+		
 		Map<String, String> infoOptionMap = event.getInfoOptionMap();
 		Set<String> infoOptionKeys = event.getInfoOptionMap().keySet();
 		Iterator<String> It = infoOptionKeys.iterator();
@@ -197,6 +197,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			inspectionDTO.getInfoOptions().add(convert(event.getId(), infoFieldName, infoOptionMap.get(infoFieldName)));
 		}
 
+		inspectionDTO.setEditable(event.isEditable());
+		inspectionDTO.setFormId(event.getEventForm().getId());
 		inspectionDTO.setInspectionTypeId(event.getType().getId());
 		inspectionDTO.setProductId(event.getAsset().getId());
 		inspectionDTO.setProductMobileGuid(event.getAsset().getMobileGUID());
@@ -218,7 +220,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionDTO.setUtcDate(event.getDate());
 		inspectionDTO.setEventGroupId(event.getGroup().getMobileGuid());
 		inspectionDTO.setPrintable(event.isPrintable());
-
+		
 		if (event.getAssetStatus() != null) {
 			inspectionDTO.setProductStatusId(event.getAssetStatus().getId());
 		}
@@ -493,6 +495,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		// Mobile prior to 1.26 will send formVersion.
 		if (inspectionServiceDTO.getFormId() != null) {
 			event.setEventForm(persistenceManager.find(EventForm.class, inspectionServiceDTO.getFormId()));
+			event.setEditable(true);
 		} else {
 			event.setEventForm(event.getType().getEventForm());
 			

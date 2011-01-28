@@ -12,12 +12,12 @@ import com.n4systems.ws.model.WsModel;
 public class WsEventType extends WsModel {
 	private String name;
 	private String description;
+	private boolean active;
 	private boolean printable;
 	private boolean master;
 	private boolean assignedToAvailable;
+	private Long formId;
 	private WsEventTypeGroup group;
-	private WsEventForm form;
-	private long formVersion;
 	private List<String> infoFieldNames = new ArrayList<String>();
 	
 	@XmlElement(name="Name")
@@ -36,6 +36,15 @@ public class WsEventType extends WsModel {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@XmlElement(name="Active")
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	@XmlElement(name="Printable")
@@ -64,6 +73,15 @@ public class WsEventType extends WsModel {
 	public void setAssignedToAvailable(boolean assignedToAvailable) {
 		this.assignedToAvailable = assignedToAvailable;
 	}
+	
+	@XmlElement(name="FormId")
+	public Long getFormId() {
+		return formId;
+	}
+
+	public void setFormId(Long formId) {
+		this.formId = formId;
+	}
 
 	@XmlElement(name="Group")
 	public WsEventTypeGroup getGroup() {
@@ -72,24 +90,6 @@ public class WsEventType extends WsModel {
 
 	public void setGroup(WsEventTypeGroup group) {
 		this.group = group;
-	}
-	
-	@XmlElement(name="Form")
-	public WsEventForm getForm() {
-		return form;
-	}
-
-	public void setForm(WsEventForm form) {
-		this.form = form;
-	}
-
-	@XmlElement(name="FormVersion")
-	public long getFormVersion() {
-		return formVersion;
-	}
-
-	public void setFormVersion(long formVersion) {
-		this.formVersion = formVersion;
 	}
 
 	@XmlElement(name="InfoFieldNames")

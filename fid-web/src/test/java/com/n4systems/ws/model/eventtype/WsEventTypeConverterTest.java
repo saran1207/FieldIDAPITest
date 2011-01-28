@@ -28,20 +28,16 @@ public class WsEventTypeConverterTest {
 								.withId(10L)
 								.build();
 		
+		model.getEventForm().setId(2l);
+		
 		WsEventTypeGroup wsGroup = new WsEventTypeGroup();
 		WsModelConverter<EventTypeGroup, WsEventTypeGroup> groupConverter = EasyMock.createMock(WsModelConverter.class);
 		EasyMock.expect(groupConverter.fromModel(model.getGroup())).andReturn(wsGroup);
 		EasyMock.replay(groupConverter);
-
-		WsEventForm wsEventForm = new WsEventForm();
-		WsModelConverter<EventForm, WsEventForm> formConverter = EasyMock.createMock(WsModelConverter.class);
-		EasyMock.expect(formConverter.fromModel(model.getEventForm())).andReturn(wsEventForm);
-		EasyMock.replay(formConverter);
 		
-		WsEventType wsModel = new WsEventTypeConverter(formConverter, groupConverter).fromModel(model);
+		WsEventType wsModel = new WsEventTypeConverter(groupConverter).fromModel(model);
 		
 		EasyMock.verify(groupConverter);
-		EasyMock.verify(formConverter);
 		
 		assertEquals((long)model.getId(), wsModel.getId());
 		assertEquals(model.getName(), wsModel.getName());
@@ -49,23 +45,19 @@ public class WsEventTypeConverterTest {
 		assertEquals(model.isPrintable(), wsModel.isPrintable());
 		assertEquals(model.isMaster(), wsModel.isMaster());
 		assertEquals(model.isAssignedToAvailable(), wsModel.isAssignedToAvailable());
+		assertSame(model.getEventForm().getId(), wsModel.getFormId());
 		assertArrayEquals(model.getInfoFieldNames().toArray(), wsModel.getInfoFieldNames().toArray());
 		assertSame(wsGroup, wsModel.getGroup());
-		assertSame(wsEventForm, wsModel.getForm());
+		
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void does_not_attempt_form_conversion_when_null() {
 		EventType model = EventTypeBuilder.anEventType().withEventForm(null).build();
+		WsEventType wsModel = new WsEventTypeConverter(EasyMock.createMock(WsModelConverter.class)).fromModel(model);
 		
-		WsModelConverter<EventForm, WsEventForm> formConverter = EasyMock.createMock(WsModelConverter.class);
-		EasyMock.replay(formConverter);
-		
-		WsEventType wsModel = new WsEventTypeConverter(formConverter, EasyMock.createMock(WsModelConverter.class)).fromModel(model);
-		EasyMock.verify(formConverter);
-		
-		assertNull(wsModel.getForm());
+		assertNull(wsModel.getFormId());
 	}
 	
 }

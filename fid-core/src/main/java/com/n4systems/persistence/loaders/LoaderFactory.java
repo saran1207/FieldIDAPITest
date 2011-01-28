@@ -25,6 +25,7 @@ import com.n4systems.model.assettype.EventFrequencyListLoader;
 import com.n4systems.model.autoattribute.AutoAttributeCriteriaListLoader;
 import com.n4systems.model.autoattribute.AutoAttributeDefinitionListLoader;
 import com.n4systems.model.catalog.CatalogLoader;
+import com.n4systems.model.commenttemplate.CommentTemplateIdLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.downloadlink.DownloadLinkListLoader;
@@ -43,6 +44,8 @@ import com.n4systems.model.eventtype.EventTypeListLoader;
 import com.n4systems.model.eventtype.EventTypeListableLoader;
 import com.n4systems.model.fileattachment.FileAttachmentLoader;
 import com.n4systems.model.jobs.EventJobListableLoader;
+import com.n4systems.model.lastmodified.LastModifiedListLoader;
+import com.n4systems.model.lastmodified.LegacyLastModifiedListLoader;
 import com.n4systems.model.location.AllPredefinedLocationsPaginatedLoader;
 import com.n4systems.model.location.PredefinedLocationByIdLoader;
 import com.n4systems.model.location.PredefinedLocationListLoader;
@@ -66,6 +69,7 @@ import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.model.parents.legacy.LegacyEntityCreateModifyDate;
 import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
 import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
@@ -124,6 +128,10 @@ public class LoaderFactory implements Serializable {
 	 */
 	public LoaderFactory(SecurityFilter filter) {
 		this.filter = filter;
+	}
+	
+	public SecurityFilter getSecurityFilter() {
+		return filter;
 	}
 
 	public <T> AllEntityListLoader<T> createAllEntityListLoader(Class<T> clazz) {
@@ -228,6 +236,10 @@ public class LoaderFactory implements Serializable {
 
 	public UserListableLoader createCombinedUserListableLoader() {
 		return createUserListableLoader().setNoDeleted(true);
+	}
+
+	public CommentTemplateIdLoader createCommentTemplateIdLoader() {
+		return new CommentTemplateIdLoader(filter);
 	}
 
 	public CommentTemplateListableLoader createCommentTemplateListableLoader() {
@@ -353,11 +365,11 @@ public class LoaderFactory implements Serializable {
 	public FilteredListableLoader createFilteredListableLoader(Class<? extends NamedEntity> clazz) {
 		return new FilteredListableLoader(filter, clazz);
 	}
-
+	
 	public <T extends Exportable> GlobalIdLoader<T> createGlobalIdLoader(Class<T> clazz) {
 		return new GlobalIdLoader<T>(filter, clazz);
 	}
-	
+
 	public HasLinkedAssetsLoader createHasLinkedAssetsLoader() {
 		return new HasLinkedAssetsLoader(filter);
 	}
@@ -386,8 +398,16 @@ public class LoaderFactory implements Serializable {
 		return new LastEventLoader(filter);
 	}
 
+	public LastModifiedListLoader createLastModifiedListLoader(Class<? extends AbstractEntity> clazz) { 
+		return new LastModifiedListLoader(filter, clazz);
+	}
+
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
 		return new LatestEulaAcceptanceLoader(filter);
+	}
+
+	public <T extends LegacyEntityCreateModifyDate> LegacyLastModifiedListLoader<T> createLegacyLastModifiedListLoader(Class<T> clazz) {
+		return new LegacyLastModifiedListLoader<T>(filter, clazz);
 	}
 
 	public NextEventDateByEventLoader createNextEventDateByEventLoader() {
@@ -469,7 +489,7 @@ public class LoaderFactory implements Serializable {
 	public SafetyNetworkBackgroundSearchLoader createSafetyNetworkBackgroundSearchLoader() {
 		return new SafetyNetworkBackgroundSearchLoader(filter);
 	}
-
+	
 	public SafetyNetworkEventLoader createSafetyNetworkEventLoader(boolean forAssignedAsset) {
 		return (forAssignedAsset) ? createSafetyNetworkAssignedAssetEventLoader() : createSafetyNetworkRegisteredAssetEventLoader();
 	}
@@ -481,7 +501,7 @@ public class LoaderFactory implements Serializable {
 	public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader() {
 		return new SafetyNetworkPreAssignedAssetLoader();
 	}
-	
+
 	public SafetyNetworkEventLoader createSafetyNetworkRegisteredAssetEventLoader() {
 		return new SafetyNetworkRegisteredAssetEventLoader(filter);
 	}
@@ -541,15 +561,15 @@ public class LoaderFactory implements Serializable {
 	public UserFilteredLoader createUserFilteredLoader() {
 		return new UserFilteredLoader(filter);
 	}
-
+	
 	public UserListableLoader createUserListableLoader() {
 		return new UserListableLoader(filter);
 	}
-
+	
 	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
 		return new VendorLinkedOrgListLoader(filter);
 	}
-
+	
 	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
 		return new VendorLinkedOrgLoader(filter);
 	}
