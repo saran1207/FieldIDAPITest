@@ -71,14 +71,12 @@
 			</@s.text>
 		</p>
 	<#else>
-	
-	<#list asset.type.eventTypes as eventType>
-		<p>
-			<@s.url id="performEvent" action="eventAdd" assetId="${asset.id}" type="${eventType.id}"/>
-			<a href="${performEvent}">${eventType.name}</a>
-		</p>
-	</#list>
-	
+		<#list asset.type.eventTypes as eventType>
+			<p>
+				<@s.url id="performEvent" action="selectEventAdd" assetId="${asset.id}" type="${eventType.id}"/>
+				<a href="${performEvent}">${eventType.name}</a>
+			</p>
+		</#list>
 	</#if>
 </fieldset>
 	
