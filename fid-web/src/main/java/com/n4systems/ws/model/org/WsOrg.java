@@ -9,6 +9,7 @@ import com.n4systems.ws.model.WsModel;
 public class WsOrg extends WsModel {
 	private String name;
 	private boolean active;
+	private Long parentId;
 	private Long secondaryId;
 	private Long customerId;
 	private Long divisionId;
@@ -29,6 +30,15 @@ public class WsOrg extends WsModel {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	
+	@XmlElement(name="ParentId")
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 	@XmlElement(name="SecondaryId")

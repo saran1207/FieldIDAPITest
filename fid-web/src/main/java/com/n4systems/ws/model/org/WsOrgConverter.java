@@ -12,6 +12,9 @@ public class WsOrgConverter extends WsModelConverter<BaseOrg, WsOrg> {
 		wsModel.setName(model.getName());
 		wsModel.setActive(model.isActive());
 		
+		if (model.getParent() != null)
+			wsModel.setParentId(model.getParent().getId());
+		
 		if (model.getSecondaryOrg() != null) 
 			wsModel.setSecondaryId(model.getSecondaryOrg().getId());
 		
