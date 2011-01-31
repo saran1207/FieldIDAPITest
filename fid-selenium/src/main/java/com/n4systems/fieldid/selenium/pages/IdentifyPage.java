@@ -148,7 +148,31 @@ public class IdentifyPage extends FieldIDPage {
 		
 		return p;
 	}
-	
+
+    public void clickGenerateSerialNumber() {
+        selenium.click("//a[contains(text(),'generate')]");
+    }
+
+    public void enterSerialNumber(String serialNumber) {
+        selenium.type("//input[@id='serialNumberText']", serialNumber);
+    }
+
+    public void enterRfidNumber(String rfidNumber) {
+        selenium.type("//input[@id='rfidNumber']", rfidNumber);
+    }
+
+    public void enterReferenceNumber(String rfidNumber) {
+        selenium.type("//input[@id='customerRefNumber']", rfidNumber);
+    }
+
+    public void selectPublishedOnSafetyNetwork(boolean published) {
+		if(published) {
+            selenium.select("//select[@id='assetCreate_publishedState']", "Publish Over Safety Network");
+        } else {
+            selenium.select("//select[@id='assetCreate_publishedState']", "Do Not Publish Over Safety Network");
+        }
+    }
+
 	public void setRegisterThisAssetOverTheSafetyNetwork(SafetyNetworkRegistration registration) {
 		if(selenium.isElementPresent("//a[@id='showSmartSearchLink']")) {
 			selenium.click("//a[@id='showSmartSearchLink']");
@@ -411,6 +435,18 @@ public class IdentifyPage extends FieldIDPage {
 				return selenium.isElementPresent("//div[@id='step4Loading' and contains(@style,'display: none')]");
 			}
 		}).run("Should be able to generate identifiers - timed out");
+	}
+
+	public void fillInTextAttribute(String fieldName, String value) {
+		selenium.type("css=.infoSet[infoFieldName='" + fieldName.replace("'", "/'") + "'] .attribute", value);
+	}
+
+	public void fillInSelectAttribute(String fieldName, String value) {
+		selenium.select("css=.infoSet[infoFieldName='" + fieldName.replace("'", "/'") + "'] .attribute", value);
+	}
+
+	public void fillInComboAttribute(String fieldName, String value) {
+		selenium.select("css=.infoSet[infoFieldName='" + fieldName.replace("'", "/'") + "'] .attribute", value);
 	}
 
 }

@@ -32,7 +32,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 	
 	public void clickAddUserTab() {
-	clickNavOption("Add User");
+	    clickNavOption("Add User");
     }
 	
 	public void clickAddFullUser() {

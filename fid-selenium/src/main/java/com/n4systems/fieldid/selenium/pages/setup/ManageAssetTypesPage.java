@@ -295,4 +295,20 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		selenium.click("//ul[@id='subAssets']//span[.='"+componentName+"']/../a[.='Remove']");
 	}
 
+    public void retireAttributes(String... attrNames) {
+        for (String attrName : attrNames) {
+            clickAttributeLink(attrName, "Retire");
+        }
+    }
+
+    public void deleteAttributes(String... attrNames) {
+        for (String attrName : attrNames) {
+            clickAttributeLink(attrName, "Delete");
+        }
+    }
+
+    private void clickAttributeLink(String attributeName, String linkText) {
+        selenium.click("//div[@id='infoFields']//input[@class = 'name' and @value= '"+attributeName+"']/../..//div[contains(@class,'linkCol')]//a[.='"+linkText+"']");
+    }
+
 }

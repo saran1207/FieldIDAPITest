@@ -85,7 +85,7 @@ public class MailServer implements MessageHandlerFactory {
             public boolean evaluate() {
                 return countMessages() >= numMessages;
             }
-        }).run("Expected " + numMessages + " to arrive.", timeoutInSeconds, pollIntervalMs);
+        }).run("Expected " + numMessages + " e-mail messages to arrive.", timeoutInSeconds, pollIntervalMs);
     }
 
     public synchronized List<MailMessage> getAndClearMessages() {

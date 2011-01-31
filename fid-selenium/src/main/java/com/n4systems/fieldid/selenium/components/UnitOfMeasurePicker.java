@@ -8,17 +8,12 @@ import com.thoughtworks.selenium.Selenium;
 public class UnitOfMeasurePicker extends WebEntity {
 	
 	final static String ID_PREFIX = "unitOfMeasureId_";
+    private String id;
 
-	public UnitOfMeasurePicker(Selenium selenium) {
+    public UnitOfMeasurePicker(Selenium selenium, String pickerId) {
 		super(selenium);
+		id = pickerId;
 	}
-	
-	public UnitOfMeasurePicker(Selenium selenium, String picker_id) {
-		super(selenium);
-		id = picker_id;
-	}
-	
-	private String id;
 	
 	private void waitForUnitofMeasurePickerLoadingToFinish() {
 		new ConditionWaiter(new Predicate() {
@@ -30,25 +25,27 @@ public class UnitOfMeasurePicker extends WebEntity {
 			}
 		}).run("Unit of Measure picker: " + id + " loading image never went away");
 	}
+
+    public void setUnitOfMeasure(String value) {
+        setUnitOfMeasure(this.id, value);
+	}
 	
 	public void setUnitOfMeasure(String id, String value) {
 		String locator = "//input[contains(@class,'unitOfMeasure') and @id='" + id + "']";
-		if(selenium.isElementPresent(locator)) {
-			String anchor = locator + "/../../SPAN[@class='action']/A[contains(@id,'" + id + "')]";
-			selenium.click(anchor);
-			waitForUnitofMeasurePickerLoadingToFinish();
-			
-			String typeOfUnitOfMeasure = getSelectedValueIfPresent("//select[contains(@id,'" + ID_PREFIX + id + "')]");
-			
-			String unitOfMeasureInputLocator = "//input[@id='" + typeOfUnitOfMeasure + "_" + id + "']";
-			
-			if(getValueIfPresent(unitOfMeasureInputLocator).equals("")) {
-				selenium.type(unitOfMeasureInputLocator, value);
-			}
-			String submitButton = "css=#unitOfMeasureForm_" + id + "_hbutton_submit";
-			selenium.click(submitButton);
-			waitForAjax();
-		}
+        String anchor = locator + "/../../SPAN[@class='action']/A[contains(@id,'" + id + "')]";
+        selenium.click(anchor);
+        waitForUnitofMeasurePickerLoadingToFinish();
+
+        String typeOfUnitOfMeasure = getSelectedValueIfPresent("//select[contains(@id,'" + ID_PREFIX + id + "')]");
+
+        String unitOfMeasureInputLocator = "//input[@id='" + typeOfUnitOfMeasure + "_" + id + "']";
+
+        if(getValueIfPresent(unitOfMeasureInputLocator).equals("")) {
+            selenium.type(unitOfMeasureInputLocator, value);
+        }
+        String submitButton = "css=#unitOfMeasureForm_" + id + "_hbutton_submit";
+        selenium.click(submitButton);
+        waitForAjax();
 	}
 
 }

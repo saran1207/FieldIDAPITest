@@ -52,7 +52,7 @@ public class WebEntity {
 	}
 
 	protected void waitForAjax(String timeout)  {
-		selenium.waitForCondition("selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
+		selenium.waitForCondition("typeof(selenium.browserbot.getCurrentWindow().Ajax) == 'object' && selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
 	}
 
 }

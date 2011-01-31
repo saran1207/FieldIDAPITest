@@ -3,6 +3,8 @@ package com.n4systems.fieldid.selenium.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EventFormBuilder;
@@ -39,6 +41,9 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
+import rfid.ejb.entity.InfoFieldBean;
+
+import javax.persistence.Query;
 
 public class Scenario {
 
@@ -266,4 +271,11 @@ public class Scenario {
         BaseOrg owner = new PrimaryOrgByTenantLoader().setTenantId(tenant.getId()).load(trans);
         return aUser().withOwner(owner).build();
     }
+
+    public UnitOfMeasure unitOfMeasure(String uomName) {
+        Query query = trans.getEntityManager().createQuery("from " + UnitOfMeasure.class.getName() + " where name = :name");
+        query.setParameter("name", uomName);
+        return (UnitOfMeasure) query.getSingleResult();
+    }
+
 }

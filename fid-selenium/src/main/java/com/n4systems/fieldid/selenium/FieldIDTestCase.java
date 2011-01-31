@@ -12,7 +12,10 @@ import org.junit.After;
 import org.junit.Before;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import static org.junit.Assert.fail;
 
@@ -42,7 +45,8 @@ public abstract class FieldIDTestCase extends DBTestCase {
 
     @After
     public void shutdownMailServer() {
-        mailServer.stop();
+        if (mailServer != null)
+            mailServer.stop();
     }
 	
 	@Before
@@ -251,5 +255,11 @@ public abstract class FieldIDTestCase extends DBTestCase {
 		selenium.open(url);
 		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
 	}
+
+    protected <K> Set<K> setOf(K... items) {
+        Set<K> set = new HashSet<K>();
+        set.addAll(Arrays.asList(items));
+        return set;
+    }
 
 }

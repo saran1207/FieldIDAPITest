@@ -25,6 +25,10 @@ public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 	public static InfoFieldBeanBuilder aSelectBox() {
 		return new InfoFieldBeanBuilder("some field", InfoFieldBean.SELECTBOX_FIELD_TYPE, false, new TreeSet<InfoOptionBean>());
 	}
+
+    public static InfoFieldBeanBuilder anInfoField() {
+        return new InfoFieldBeanBuilder("some field", null, false, new TreeSet<InfoOptionBean>());
+    }
 	
 	private InfoFieldBeanBuilder(String name, String type, boolean required, Set<InfoOptionBean> options) {
 		this.name = name;
@@ -34,15 +38,15 @@ public class InfoFieldBeanBuilder extends BaseBuilder<InfoFieldBean> {
 	}
 
 	public InfoFieldBeanBuilder named(String name) {
-		return new InfoFieldBeanBuilder(name, type, required, options);
+		return makeBuilder(new InfoFieldBeanBuilder(name, type, required, options));
 	}
 	
 	public InfoFieldBeanBuilder withOptions(InfoOptionBean ... options) {
-		return new InfoFieldBeanBuilder(name, type, required, new TreeSet<InfoOptionBean>(Arrays.asList(options)));
+		return makeBuilder(new InfoFieldBeanBuilder(name, type, required, new TreeSet<InfoOptionBean>(Arrays.asList(options))));
 	}
 
 	public InfoFieldBeanBuilder setRequired(boolean required) {
-		return new InfoFieldBeanBuilder(name, type, required, options);
+		return makeBuilder(new InfoFieldBeanBuilder(name, type, required, options));
 	}
 	
 	@Override

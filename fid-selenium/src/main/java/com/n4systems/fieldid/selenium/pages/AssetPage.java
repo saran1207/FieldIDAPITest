@@ -92,6 +92,10 @@ public class AssetPage extends FieldIDPage {
 		return selenium.getText("//label[.='Serial Number']/../span");
 	}
 
+	public String getAssetType() {
+		return selenium.getText("//label[.='Asset Type']/../span");
+	}
+
 	public String getPurchaseOrder() {
 		return selenium.getText("//label[.='Purchase Order']/../span");
 	}
@@ -206,6 +210,11 @@ public class AssetPage extends FieldIDPage {
 
 	public void clickSave() {
 		selenium.click("//input[@id='saveButton']");
+		waitForPageToLoad();
+	}
+
+	public void clickSaveAndStartEvent() {
+		selenium.click("//input[@id='saveAndStartEventButton']");
 		waitForPageToLoad();
 	}
 

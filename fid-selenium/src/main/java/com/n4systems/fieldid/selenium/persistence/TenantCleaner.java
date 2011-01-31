@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.n4systems.model.AddressInfo;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import rfid.ejb.entity.AddAssetHistory;
 
 import com.n4systems.model.Asset;
@@ -50,6 +49,7 @@ import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.user.User;
+import rfid.ejb.entity.AssetCodeMapping;
 
 public class TenantCleaner {
 
@@ -62,6 +62,7 @@ public class TenantCleaner {
         Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         List<Asset> assets = assetsQuery.getResultList();
 
+        removeAllForTenants(em, AssetCodeMapping.class, tenantIds);
         removeAllForTenants(em, Catalog.class, tenantIds);
         removeAllForTenants(em, Event.class, tenantIds);
         removeAllForTenants(em, AssociatedEventType.class, tenantIds);

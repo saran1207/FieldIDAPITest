@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
 import com.n4systems.fieldid.selenium.pages.setup.BrandingPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageAssetCodeMappingsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetStatusPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
@@ -92,7 +93,7 @@ public class SetupPage extends FieldIDPage {
 		selenium.click("//a[.='Asset Types']");
 		return new ManageAssetTypesPage(selenium);
 	}
-	
+
 	public ManageAssetStatusPage clickManageAssetStatuses() {
         clickAssetsAndEventsTab();
 		selenium.click("//a[.='Asset Statuses']");
@@ -110,6 +111,12 @@ public class SetupPage extends FieldIDPage {
 		selenium.click("//a[.='Event Books']");
 		return new ManageEventBooksPage(selenium);
 	}
+
+    public ManageAssetCodeMappingsPage clickManageAssetCodeMappings() {
+        clickTemplatesTab();
+        selenium.click("//a[.='Manage Asset Code Mappings']");
+        return new ManageAssetCodeMappingsPage(selenium);
+    }
 
     protected void clickOwnersUsersAndLocationsTab() {
         clickNavOption("Owners, Users & Locations");

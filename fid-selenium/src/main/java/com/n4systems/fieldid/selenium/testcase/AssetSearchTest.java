@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.n4systems.fieldid.selenium.pages.QuickEventPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.ExtendedFeature;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
@@ -18,9 +21,24 @@ import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 
 public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 
-	@Override
+    @Override
+    public void setupScenario(Scenario scenario) {
+        scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.AssignedTo));
+
+        AssetType type = scenario.anAssetType()
+                .named("Chain Sling")
+                .build();
+
+        scenario.anAsset()
+                .ofType(type)
+                .rfidNumber("123456")
+                .withSerialNumber("10105")
+                .build();
+    }
+
+    @Override
 	protected AssetsSearchPage navigateToPage() {
-		return start().login().clickAssetsLink();
+		return startAsCompany("test1").login().clickAssetsLink();
 	}
 	
 	@Test

@@ -1,90 +1,90 @@
 package com.n4systems.fieldid.minimaldata.idenitfy;
 
-import java.util.Date;
-
-import com.n4systems.fieldid.selenium.datatypes.Asset;
-import org.junit.Before;
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.AssetPage;
+import com.n4systems.fieldid.selenium.pages.IdentifyPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
 import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean;
 
-import com.n4systems.fieldid.selenium.assets.page.AssetPage;
-import com.n4systems.fieldid.selenium.identify.page.IdentifyPageDriver;
-import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
+import static org.junit.Assert.assertEquals;
 
-public class AssetAttributeFillInTest extends LoggedInTestCase {
+public class AssetAttributeFillInTest extends PageNavigatingTestCase<IdentifyPage> {
 
-	private AssetPage assetPage;
-	private IdentifyPageDriver identifyPage;
+    private static final String TEST_SERIAL_NUMBER = "TEST-424299";
 
-	public AssetAttributeFillInTest() {
-		setInitialCompany("write-company");
-	}
-	
-	@Before
-	public void init() {
-		identifyPage = new IdentifyPageDriver(selenium, misc);
-		assetPage = new AssetPage(selenium, misc);
-		identifyPage.gotoAddSingleAsset();
-	}
+    @Override
+    public void setupScenario(Scenario scenario) {
+        InfoFieldBean textField =  scenario.anInfoField()
+                .type(InfoFieldBean.TEXTFIELD_FIELD_TYPE)
+                .withName("Text field")
+                .build();
+
+        InfoFieldBean selectField =  scenario.anInfoField()
+                .type(InfoFieldBean.SELECTBOX_FIELD_TYPE)
+                .withOptions(scenario.anInfoOption().withName("option 1").build(), scenario.anInfoOption().withName("option 2").build())
+                .withName("select field")
+                .build();
+
+        InfoFieldBean comboField =  scenario.anInfoField()
+                .type(InfoFieldBean.COMBOBOX_FIELD_TYPE)
+                .withOptions(scenario.anInfoOption().withName("combo option 1").build(), scenario.anInfoOption().withName("combo option 2").build())
+                .withName("combo field")
+                .build();
+
+        scenario.anAssetType()
+                .withFields(textField, selectField, comboField)
+                .named("Simple Multi Attribute Asset")
+                .build();
+    }
+
+    @Override
+    protected IdentifyPage navigateToPage() {
+        return startAsCompany("test1").login().clickIdentifyLink();
+    }
 	
 	@Test
 	public void should_store_a_value_in_a_text_field_during_asset_identify() throws Exception {
-		Asset asset = new Asset();
-		asset.setSerialNumber("TEST-" + new Date().getTime());
-		asset.setAssetType("Simple Multi Attribute Asset");
-		
-		identifyPage.setAddAssetForm(asset, false);
-		
-		identifyPage.fillInTextAttribute("Text field", "Filling in text field value");
-		identifyPage.saveNewAsset();
-	
-		goToAsset(asset);
-		
-		assetPage.verifyAssetViewPageDynamicContents(asset);
-		
-		assetPage.verifyAttribute("Text field", "Filling in text field value");
+        page.enterSerialNumber(TEST_SERIAL_NUMBER);
+        page.selectAssetType("Simple Multi Attribute Asset");
+		page.fillInTextAttribute("Text field", "Filling in text field value");
+		page.saveNewAsset();
+
+        AssetPage assetPage = page.search(TEST_SERIAL_NUMBER);
+
+        assertEquals(TEST_SERIAL_NUMBER, assetPage.getSerialNumber());
+
+        assertEquals("Simple Multi Attribute Asset", assetPage.getAssetType());
+        assertEquals("Filling in text field value", assetPage.getValueForAttribute("Text field"));
 	}
 	
 	@Test
 	public void should_store_a_value_in_a_select_field_during_asset_identify() throws Exception {
-		Asset asset = new Asset();
-		asset.setSerialNumber("TEST-" + new Date().getTime());
-		asset.setAssetType("Simple Multi Attribute Asset");
-		
-		identifyPage.setAddAssetForm(asset, false);
-		
-		identifyPage.fillInSelectAttribute("select field", "option 1");
-		
-		identifyPage.saveNewAsset();
+        page.enterSerialNumber(TEST_SERIAL_NUMBER);
+        page.selectAssetType("Simple Multi Attribute Asset");
+		page.fillInSelectAttribute("select field", "option 1");
+		page.saveNewAsset();
 	
-		goToAsset(asset);
-		
-		assetPage.verifyAssetViewPageDynamicContents(asset);
-		
-		assetPage.verifyAttribute("select field", "option 1");
+        AssetPage assetPage = page.search(TEST_SERIAL_NUMBER);
+
+        assertEquals(TEST_SERIAL_NUMBER, assetPage.getSerialNumber());
+
+        assertEquals("Simple Multi Attribute Asset", assetPage.getAssetType());
+        assertEquals("option 1", assetPage.getValueForAttribute("select field"));
 	}
 	
 	@Test
 	public void should_store_a_value_in_a_combo_field_with_a_static_value_during_asset_identify() throws Exception {
-		Asset asset = new Asset();
-		asset.setSerialNumber("TEST-" + new Date().getTime());
-		asset.setAssetType("Simple Multi Attribute Asset");
-		
-		identifyPage.setAddAssetForm(asset, false);
-		
-		identifyPage.fillInComboAttribute("combo field", "combo option 1");
-		
-		identifyPage.saveNewAsset();
-	
-		goToAsset(asset);
-		
-		assetPage.verifyAssetViewPageDynamicContents(asset);
-		
-		assetPage.verifyAttribute("select field", "option 1");
+        page.enterSerialNumber(TEST_SERIAL_NUMBER);
+        page.selectAssetType("Simple Multi Attribute Asset");
+
+		page.fillInComboAttribute("combo field", "combo option 1");
+		page.saveNewAsset();
+
+        AssetPage assetPage = page.search(TEST_SERIAL_NUMBER);
+
+        assertEquals("Simple Multi Attribute Asset", assetPage.getAssetType());
+        assertEquals("combo option 1", assetPage.getValueForAttribute("combo field"));
 	}
 
-	private void goToAsset(Asset asset) {
-		misc.setSmartSearch(asset.getSerialNumber());
-		misc.submitSmartSearch();
-	}
-	
 }
