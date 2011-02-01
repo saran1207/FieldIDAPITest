@@ -208,8 +208,9 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	@Override
 	public List<ColumnMappingGroup> getDynamicGroups() {
 		List<ColumnMappingGroup> dynamicGroups = super.getDynamicGroups();
-		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(getSession().getScheduleCriteria().getEventType(), getEventTypeIds(),getTenantId(), "event_schedule_search", "event", getSecurityFilter()));
-
+		if (getSession().getScheduleCriteria() != null){
+			dynamicGroups.addAll(attribGroupGen.getDynamicGroups(getSession().getScheduleCriteria().getEventType(), getEventTypeIds(),getTenantId(), "event_schedule_search", "event", getSecurityFilter()));
+		}
 		return dynamicGroups;
 	}
 
