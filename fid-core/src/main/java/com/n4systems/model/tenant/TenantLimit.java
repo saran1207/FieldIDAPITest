@@ -90,6 +90,10 @@ public class TenantLimit implements Serializable {
 	public void setLiteUsers(Long liteUsers){
 		this.liteUsers=liteUsers;
 	}
+	
+	public void setLiteUsersUnlimited() {
+		setLiteUsers(UNLIMITED);
+	}
 
 	public void setUsers(Long users) {
 		this.users = users;

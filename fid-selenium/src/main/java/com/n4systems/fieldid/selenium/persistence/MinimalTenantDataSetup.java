@@ -66,6 +66,7 @@ public class MinimalTenantDataSetup {
         org.getLimits().setDiskSpaceUnlimited();
         org.getLimits().setSecondaryOrgsUnlimited();
         org.getLimits().setUsersUnlimited();
+        org.getLimits().setLiteUsersUnlimited();
         org.setModified(new Date());
 
         em.persist(org);

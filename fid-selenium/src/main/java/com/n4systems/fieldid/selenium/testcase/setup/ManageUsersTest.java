@@ -19,7 +19,6 @@ import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.TenantLimit;
 
 public class ManageUsersTest extends FieldIDTestCase {
 
@@ -36,12 +35,9 @@ public class ManageUsersTest extends FieldIDTestCase {
 		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(
 				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
 		
-		TenantLimit limits = new TenantLimit(-1L, -1L, -1L, -1L, -1L); 
-		
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY);
 		
 		primaryOrg.setExtendedFeatures(extendedFeatures);
-		primaryOrg.setLimits(limits);
 		
 		scenario.save(primaryOrg);
 		
