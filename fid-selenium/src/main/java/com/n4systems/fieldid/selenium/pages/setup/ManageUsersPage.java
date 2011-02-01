@@ -10,22 +10,17 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
+import com.n4systems.fieldid.selenium.datatypes.SystemUser;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
+import com.n4systems.util.UserType;
 import com.thoughtworks.selenium.Selenium;
 
 public class ManageUsersPage extends FieldIDPage {
-
-	private String addEmployeeUserUserIDTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_userId']";
-	private String addEmployeeUserEmailAddressTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_emailAddress']";
-	private String addEmployeeUserSecurityRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_securityRfidNumber']";
-	private String addEmployeeUserPasswordTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_passwordEntry_password']";
-	private String addEmployeeUserVerifyPasswordTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_passwordEntry_passwordVerify']";
-	private String addEmployeeUserFirstNameTextFieldLocator = "xpath=//INPUT[@id='firstname']";
-	private String addEmployeeUserLastNameTextFieldLocator = "xpath=//INPUT[@id='lastname']";
-	private String addEmployeeUserInitialsTextFieldLocator = "xpath=//INPUT[@id='initials']";
-	private String addEmployeeUserPositionTextFieldLocator = "xpath=//INPUT[@id='employeeUserCreate_position']";
-	private String addEmployeeUserCountrySelectListLocator = "xpath=//SELECT[@id='employeeUserCreate_countryId']";
-	private String addEmployeeUserTimeZoneSelectListLocator = "xpath=//SELECT[@id='tzlist']";
+	
+	public final static String USER_TYPE_ALL = UserType.ALL.getLabel();
+	public final static String USER_TYPE_READONLY = UserType.READONLY.getLabel();
+	public final static String USER_TYPE_LITE = UserType.LITE.getLabel();
+	public final static String USER_TYPE_FULL = UserType.FULL.getLabel();
 
 	public ManageUsersPage(Selenium selenium) {
 		super(selenium);
@@ -54,115 +49,81 @@ public class ManageUsersPage extends FieldIDPage {
 		clickNavOption("View All");
 	}
 
-	public void setReadOnlyUserFormFields(CustomerUser cu) {
-		assertNotNull(cu);
-		if (cu.getUserid() != null) {
-			selenium.type("//INPUT[@id='readOnlyUserCreate_userId']", cu.getUserid());
-		}
-		if (cu.getEmail() != null) {
-			selenium.type("//INPUT[@id='readOnlyUserCreate_emailAddress']", cu.getEmail());
-		}
-		if (cu.getSecurityRFIDNumber() != null) {
-			selenium.type("//INPUT[@id='readOnlyUserCreate_securityRfidNumber']", cu.getSecurityRFIDNumber());
-		}
-		if (cu.getPassword() != null) {
-			selenium.type("//INPUT[@id='readOnlyUserCreate_passwordEntry_password']", cu.getPassword());
-		}
-		if (cu.getVerifyPassword() != null) {
-			selenium.type("//INPUT[@id='readOnlyUserCreate_passwordEntry_passwordVerify']", cu.getVerifyPassword());
-		}
-		if (cu.getOwner() != null) {
-			OrgPicker orgPicker = getOrgPicker();
-			orgPicker.clickChooseOwner();
-			orgPicker.setOwner(cu.getOwner());
-			orgPicker.clickSelectOwner();
-		}
-		if (cu.getFirstName() != null) {
-			selenium.type("//INPUT[@id='firstname']", cu.getFirstName());
-		}
-		if (cu.getLastName() != null) {
-			selenium.type("//INPUT[@id='lastname']", cu.getLastName());
-		}
-		if (cu.getInitials() != null) {
-			selenium.type("//INPUT[@id='initials']", cu.getInitials());
-		}
-		if (cu.getPosition() != null) {
-			selenium.type("//INPUT[@id='readOnlyUserCreate_position']", cu.getPosition());
-		}
-		if (cu.getCountry() != null) {
-			if (isOptionPresent("//SELECT[@id='readOnlyUserCreate_countryId']", cu.getCountry())) {
-				selenium.select("//SELECT[@id='readOnlyUserCreate_countryId']", cu.getCountry());
-				waitForAjax();
-			} else {
-				fail("The country '" + cu.getCountry() + "' does not exist on the select list");
-			}
-		}
-		if (cu.getTimeZone() != null) {
-			if (isOptionPresent("//SELECT[@id='tzlist']", cu.getTimeZone())) {
-				selenium.select("//SELECT[@id='tzlist']", cu.getTimeZone());
-			} else {
-				fail("The time zone '" + cu.getTimeZone() + "' does not exist on the select list");
-			}
-		}
+	public void setReadOnlyUserFormFields(CustomerUser user) {
+		assertNotNull(user);
+		setCommonUserFields(user, "readOnly");
 	}
-
-	public void setAddEmployeeUser(EmployeeUser employeeUser) {
-		assertNotNull(employeeUser);
-		if (employeeUser.getUserid() != null) {
-			selenium.type(addEmployeeUserUserIDTextFieldLocator, employeeUser.getUserid());
-		}
-		if (employeeUser.getEmail() != null) {
-			selenium.type(addEmployeeUserEmailAddressTextFieldLocator, employeeUser.getEmail());
-		}
-		if (employeeUser.getSecurityRFIDNumber() != null) {
-			selenium.type(addEmployeeUserSecurityRFIDNumberTextFieldLocator, employeeUser.getSecurityRFIDNumber());
-		}
-		if (employeeUser.getPassword() != null) {
-			selenium.type(addEmployeeUserPasswordTextFieldLocator, employeeUser.getPassword());
-		}
-		if (employeeUser.getVerifyPassword() != null) {
-			selenium.type(addEmployeeUserVerifyPasswordTextFieldLocator, employeeUser.getVerifyPassword());
-		}
-		if (employeeUser.getOwner() != null) {
-			OrgPicker orgPicker = getOrgPicker();
-			orgPicker.clickChooseOwner();
-			orgPicker.setOwner(employeeUser.getOwner());
-			orgPicker.clickSelectOwner();
-		}
-		if (employeeUser.getFirstName() != null) {
-			selenium.type(addEmployeeUserFirstNameTextFieldLocator, employeeUser.getFirstName());
-		}
-		if (employeeUser.getLastName() != null) {
-			selenium.type(addEmployeeUserLastNameTextFieldLocator, employeeUser.getLastName());
-		}
-		if (employeeUser.getInitials() != null) {
-			selenium.type(addEmployeeUserInitialsTextFieldLocator, employeeUser.getInitials());
-		}
-		if (employeeUser.getPosition() != null) {
-			selenium.type(addEmployeeUserPositionTextFieldLocator, employeeUser.getPosition());
-		}
-		if (employeeUser.getCountry() != null) {
-			if (isOptionPresent(addEmployeeUserCountrySelectListLocator, employeeUser.getCountry())) {
-				selenium.select(addEmployeeUserCountrySelectListLocator, employeeUser.getCountry());
-				waitForAjax();
-			} else {
-				fail("The country '" + employeeUser.getCountry() + "' does not exist on the select list");
-			}
-		}
-		if (employeeUser.getTimeZone() != null) {
-			if (isOptionPresent(addEmployeeUserTimeZoneSelectListLocator, employeeUser.getTimeZone())) {
-				selenium.select(addEmployeeUserTimeZoneSelectListLocator, employeeUser.getTimeZone());
-			} else {
-				fail("The time zone '" + employeeUser.getTimeZone() + "' does not exist on the select list");
-			}
-		}
-		if (employeeUser.getPermissions() != null && employeeUser.getPermissions().size() > 0) {
+	
+	public void setLiteUserFormFields(EmployeeUser user) {
+		assertNotNull(user);
+		setCommonUserFields(user, "lite");
+		if (user.getPermissions() != null && user.getPermissions().size() > 0) {
 			clickPermissionsAllOff();
-			setPermissionsAddEmployeeUser(employeeUser.getPermissions());
+			setUserPermissions(user.getPermissions());
 		}
 	}
 
-	public void setPermissionsAddEmployeeUser(List<String> permissions) {
+	public void setFullUserFormFields(EmployeeUser user) {
+		assertNotNull(user);
+		setCommonUserFields(user, "employee");
+		if (user.getPermissions() != null && user.getPermissions().size() > 0) {
+			clickPermissionsAllOff();
+			setUserPermissions(user.getPermissions());
+		}
+	}
+
+	private void setCommonUserFields(SystemUser user, String prefix) {
+		if (user.getUserid() != null) {
+			selenium.type("//INPUT[@id='" + prefix + "UserCreate_userId']", user.getUserid());
+		}
+		if (user.getEmail() != null) {
+			selenium.type("//INPUT[@id='" + prefix + "UserCreate_emailAddress']", user.getEmail());
+		}
+		if (user.getSecurityRFIDNumber() != null) {
+			selenium.type("//INPUT[@id='" + prefix + "UserCreate_securityRfidNumber']", user.getSecurityRFIDNumber());
+		}
+		if (user.getPassword() != null) {
+			selenium.type("//INPUT[@id='" + prefix + "UserCreate_passwordEntry_password']", user.getPassword());
+		}
+		if (user.getVerifyPassword() != null) {
+			selenium.type("//INPUT[@id='" + prefix + "UserCreate_passwordEntry_passwordVerify']", user.getVerifyPassword());
+		}
+		if (user.getOwner() != null) {
+			OrgPicker orgPicker = getOrgPicker();
+			orgPicker.clickChooseOwner();
+			orgPicker.setOwner(user.getOwner());
+			orgPicker.clickSelectOwner();
+		}
+		if (user.getFirstName() != null) {
+			selenium.type("//INPUT[@id='firstname']", user.getFirstName());
+		}
+		if (user.getLastName() != null) {
+			selenium.type("//INPUT[@id='lastname']", user.getLastName());
+		}
+		if (user.getInitials() != null) {
+			selenium.type("//INPUT[@id='initials']", user.getInitials());
+		}
+		if (user.getPosition() != null) {
+			selenium.type("//INPUT[@id='" + prefix + "UserCreate_position']", user.getPosition());
+		}
+		if (user.getCountry() != null) {
+			if (isOptionPresent("//SELECT[@id='" + prefix + "UserCreate_countryId']", user.getCountry())) {
+				selenium.select("//SELECT[@id='" + prefix + "UserCreate_countryId']", user.getCountry());
+				waitForAjax();
+			} else {
+				fail("The country '" + user.getCountry() + "' does not exist on the select list");
+			}
+		}
+		if (user.getTimeZone() != null) {
+			if (isOptionPresent("//SELECT[@id='tzlist']", user.getTimeZone())) {
+				selenium.select("//SELECT[@id='tzlist']", user.getTimeZone());
+			} else {
+				fail("The time zone '" + user.getTimeZone() + "' does not exist on the select list");
+			}
+		}
+	}
+
+	private void setUserPermissions(List<String> permissions) {
 		String permissionTableLocator1 = "css=.permissions";
 		for (String permission : permissions) {
 			String permissionOnButtonLocator = permissionTableLocator1 + " td:contains('" + permission + "') ~ td input[value='true']";
@@ -170,13 +131,8 @@ public class ManageUsersPage extends FieldIDPage {
 		}
 	}
 
-	public void clickSaveCustomerUser() {
-		selenium.click("//INPUT[@id='readOnlyUserCreate_save']");
-		waitForPageToLoad();
-	}
-
-	public void clickSaveEmployeeUser() {
-		selenium.click("//INPUT[@id='employeeUserCreate_save']");
+	public void clickSaveUser(String prefix) {
+		selenium.click("//INPUT[@id='" + prefix + "UserCreate_save']");
 		waitForPageToLoad();
 	}
 	

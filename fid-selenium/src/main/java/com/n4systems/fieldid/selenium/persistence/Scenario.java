@@ -113,6 +113,13 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
     
+    public UserBuilder aLiteUser() {
+        UserBuilder builder = UserBuilder.anLiteUser();
+        builder = builder.withOwner(defaultPrimaryOrg);
+        builder = builder.withUserId("test_user"+(++nextUserId));
+        return createPersistentBuilder(builder);
+    }
+    
     public UserBuilder aReadOnlyUser() {
         UserBuilder builder = UserBuilder.aReadOnlyUser();
         builder = builder.withOwner(defaultPrimaryOrg);
