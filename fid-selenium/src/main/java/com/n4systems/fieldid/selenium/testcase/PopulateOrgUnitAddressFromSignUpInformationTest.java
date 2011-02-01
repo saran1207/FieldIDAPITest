@@ -1,136 +1,90 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static org.junit.Assert.assertEquals;
-
+import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.mail.MailMessage;
+import com.n4systems.fieldid.selenium.pages.EULAPage;
+import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
 import com.n4systems.fieldid.selenium.pages.SetPasswordPage;
+import com.n4systems.fieldid.selenium.pages.SignUpPage;
+import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
-import org.junit.Before;
+import com.n4systems.util.ConfigEntry;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.administration.page.Admin;
-import com.n4systems.fieldid.selenium.administration.page.ManageOrganizations;
-import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
-import com.n4systems.fieldid.selenium.datatypes.Organization;
-import com.n4systems.fieldid.selenium.datatypes.PrimaryOrganization;
-import com.n4systems.fieldid.selenium.login.page.CreateAccount;
-import com.n4systems.fieldid.selenium.login.page.Login;
-import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
-import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import static org.junit.Assert.assertEquals;
 
-/**
- * WEB-1469
- * 
- * @author dgrainge
- *
- */
 public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTestCase {
 
-	Login login;
-	SignUpPackages sup;
-	CreateAccount create;
-	SignUpComplete complete;
-	Admin admin;
-	ManageOrganizations mos;
-	
-	@Before
-	public void setUp() throws Exception {
-		login = new Login(selenium, misc);
-		sup = new SignUpPackages(selenium, misc);
-		create = new CreateAccount(selenium, misc);
-		complete = new SignUpComplete(selenium, misc);
-		admin = new Admin(selenium, misc);
-		mos = new ManageOrganizations(selenium, misc);
-	}
-	
-	@Test
+    private static final String REFERRING_TENANT_NAME = TEST_TENANT_NAMES[0];
+    private static final String NEW_TENANT_NAME = TEST_CREATED_TENANT_NAMES[0];
+    private static final String NEW_USER = "testuser";
+    private static final String NEW_PASSWORD = "testuser";
+
+    private static final String TEST_ADDRESS = "123 Main St";
+    private static final String TEST_CITY = "Townsville";
+    private static final String TEST_STATE = "KY";
+    private static final String TEST_COUNTRY = "United States";
+    private static final String TEST_ZIP = "90210";
+    private static final String TEST_PHONE = "555-OMG1";
+
+    @Override
+    public void setupScenario(Scenario scenario) {
+        scenario.updateConfigurationForTenant(REFERRING_TENANT_NAME, ConfigEntry.EXTERNAL_PLANS_AND_PRICING_ENABLED, "true");
+    }
+
+    @Test
 	public void shouldBePopulatingPrimaryOrganizationAddressWithInformationGivenAtAccountSetUp() throws Exception {
-		String username = "darrell";
-		String password = "makemore$";
+        TenantInfo t = createANewTenant();
+        HomePage homePage = logIntoNewTenant();
 
-		try {
-			TenantInfo t = createANewTenant(username, password);
-			logIntoNewTenant(username, password);
-			PrimaryOrganization p = getPrimaryOrganization();
-			verifyEquals(t, p);
-		} catch(Exception e) {
-			throw e;
-		}
+        ManageOrganizationsPage orgsPage = homePage.clickSetupLink().clickManageOrganizations();
+        orgsPage.clickEditPrimaryOrg();
+
+        assertEquals(TEST_ADDRESS, orgsPage.getCompanyAddress());
+		assertEquals(TEST_CITY, orgsPage.getCompanyCity());
+		assertEquals(TEST_STATE, orgsPage.getCompanyState());
+		assertEquals(TEST_COUNTRY, orgsPage.getCompanyCountry());
+		assertEquals(TEST_ZIP, orgsPage.getCompanyZip());
+		assertEquals(TEST_PHONE, orgsPage.getCompanyPhoneNumber());
 	}
 
-	/**
-	 * Checks the tenant information and compares it to the primary organization
-	 * information.
-	 * 
-	 * @param t
-	 * @param prime
-	 */
-	private void verifyEquals(TenantInfo expected, Organization actual) {
-		assertEquals(expected.getCompanyAddress(), actual.getCompanyStreetAddress());
-		assertEquals(expected.getCompanyCity(), actual.getCompanyCity());
-		assertEquals(expected.getCompanyState(), actual.getCompanyState());
-		assertEquals(expected.getCompanyCountry(), actual.getCompanyCountry());
-		assertEquals(expected.getCompanyZipCode(), actual.getCompanyZipCode());
-		assertEquals(expected.getCompanyPhoneNumber(), actual.getCompanyPhoneNumber());
+	private HomePage logIntoNewTenant() {
+        LoginPage loginPage = startAsCompany(NEW_TENANT_NAME);
+        EULAPage eulaPage = loginPage.loginToEula(NEW_USER, NEW_PASSWORD);
+        eulaPage.scrollToBottomOfEULA();
+        return eulaPage.clickAcceptEULAToWizard().clickNoThanks();
 	}
 
-	private PrimaryOrganization getPrimaryOrganization() {
-		misc.gotoAdministration();
-		admin.verifyAdministrationPage();
-		admin.gotoManageOrganizations();
-		
-		mos.verifyManageOrganizationsPage();
-		mos.gotoEditPrimaryOrganization();
-		PrimaryOrganization prime = mos.getPrimaryOrganization();
-		return prime;
-	}
+	private TenantInfo createANewTenant() {
+        SelectPackagePage selectPackagePage = startAsCompany(REFERRING_TENANT_NAME).clickPlansAndPricingLink();
+        SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink("Unlimited");
 
-	private void logIntoNewTenant(String username, String password) {
-		login.setUserName(username);
-		login.setPassword(password);
-		login.submitSignIn();
-		
-		login.verifySignedInWithEULA();
-		misc.scrollToBottomOfEULA();
-		misc.gotoAcceptEULA();
-		login.verifySignedInHomePage();
-	}
-
-	private void returnToLogin() {
-		complete.gotoSignInNow();
-	}
-
-	private TenantInfo createANewTenant(String username, String password) {
-		String tenantName = MiscDriver.getRandomString(8);
-		String tenantID = tenantName.toLowerCase();
-
-		if(!login.isPlansAndPricingAvailable()) {
-			startAsCompany("msa");
-		}
-		login.gotoPlansAndPricing();
-		String packageName = "Unlimited";
-		sup.gotoSignUpNow(packageName);
-		create.verifyCreateAccountPage(packageName);
-
-		TenantInfo t = new TenantInfo(username, password, tenantName, tenantID);
+		TenantInfo t = new TenantInfo(NEW_USER, NEW_PASSWORD, NEW_TENANT_NAME, NEW_TENANT_NAME);
 		t.setNumberOfUsers(2);
 		t.setPhoneSupport(true);
 		t.setPromoCode("promo");
 		t.setPaymentOptions(TenantInfo.paymentOptionsTwoYear);
 		t.setPaymentType(TenantInfo.payByPurchaseOrder);
 		t.setPurchaseOrderNumber("88888");
+        t.setCompanyCountry(TEST_COUNTRY);
+        t.setCompanyCity(TEST_CITY);
+        t.setCompanyState(TEST_STATE);
+        t.setCompanyAddress(TEST_ADDRESS);
+        t.setCompanyPhoneNumber(TEST_PHONE);
+        t.setCompanyZipCode(TEST_ZIP);
 
-		create.setCreateYourAccountForm(t);
-		create.submitCreateYourAccountForm();
+		signUpPage.enterCreateAccountForm(t);
+		signUpPage.submitCreateYourAccountForm();
 
         mailServer.waitForMessages(1);
         MailMessage accountActivationMessage = mailServer.getAndClearMessages().get(0);
 
         SetPasswordPage page = new SignUpEmailLoginNavigator().navigateToSignInPageSpecifiedIn(accountActivationMessage, selenium);
-        page.enterAndConfirmPassword(password);
+        page.enterAndConfirmPassword(NEW_PASSWORD);
         LoginPage loginPage = page.submitConfirmPassword();
 
         t.setLoginPage(loginPage);

@@ -12,6 +12,7 @@ import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.AccountSetupWizardPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 
 public class Login {
 	
@@ -199,7 +200,7 @@ public class Login {
 	 */
 	public void submitSignIn() {
 		selenium.click(signInButtonLocator);
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 
 	/**
@@ -384,7 +385,7 @@ public class Login {
 
 	public void confirmKickingSession() {
 		selenium.click("kickOtherUserOut");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 
 	private void acceptEULAIfNeed() {

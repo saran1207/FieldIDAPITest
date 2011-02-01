@@ -1,86 +1,75 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static org.junit.Assert.fail;
-
-import java.util.List;
-
-import com.n4systems.fieldid.selenium.mail.MailMessage;
-import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.Organization;
 import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
-import com.n4systems.fieldid.selenium.login.page.CreateAccount;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.mail.MailMessage;
 import com.n4systems.fieldid.selenium.pages.EULAPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
-import com.n4systems.fieldid.selenium.pages.SignUpCompletePage;
+import com.n4systems.fieldid.selenium.pages.SetPasswordPage;
 import com.n4systems.fieldid.selenium.pages.SignUpPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
+import com.n4systems.util.ConfigEntry;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.fail;
 
 public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
+
+    private static final String NEW_TENANT_NAME = TEST_CREATED_TENANT_NAMES[0];
+    private static final String NEW_ORG_NAME = "TestOrg";
+    private static final String NEW_USER = "testuser";
+    private static final String NEW_PASSWORD = "testuser";
 	
-	LoginPage loginPage;
-	CreateAccount create;
-	
-	@Before
-	public void setUp() throws Exception {
-		loginPage = start();
-		create = new CreateAccount(selenium, misc);
-	}
-	
-	@Test
+    @Override
+    public void setupScenario(Scenario scenario) {
+        scenario.updateConfigurationForTenant("test1", ConfigEntry.EXTERNAL_PLANS_AND_PRICING_ENABLED, "true");
+    }
+
+    @Test
 	public void create_unlimited_account_type_tenant_and_it_should_be_able_to_create_secondary_org() throws Exception {
-		String username = "darrell";
-		String password = "makemore$";
-
-		SignUpCompletePage completePage = createANewUnlimitedTenant(username, password);
-		completePage.clickSignInNow();
-		HomePage homePage = logIntoNewTenant(username, password);
+		SetPasswordPage completePage = createANewUnlimitedTenant(NEW_USER, NEW_PASSWORD);
+        completePage.enterAndConfirmPassword(NEW_PASSWORD);
+        LoginPage loginPage = completePage.submitConfirmPassword();
+		HomePage homePage = logIntoNewTenant(loginPage, NEW_USER, NEW_PASSWORD);
 		ManageOrganizationsPage orgsPage = homePage.clickSetupLink().clickManageOrganizations();
-		String orgName = addASecondaryOrganization(orgsPage);
-		verifySecondaryOrganizationWasAdded(orgsPage, orgName);
+		addASecondaryOrganization(orgsPage);
+		verifySecondaryOrganizationWasAdded(orgsPage);
 	}
 
-	private void verifySecondaryOrganizationWasAdded(ManageOrganizationsPage orgsPage, String orgName) {
+	private void verifySecondaryOrganizationWasAdded(ManageOrganizationsPage orgsPage) {
 		List<String> orgs = orgsPage.getOrganizationNames();
-		if(!orgs.contains(orgName)) {
-			fail("Did not find newly created Secondary Organization '" + orgName + "' in list: " + orgs);
+		if(!orgs.contains(NEW_ORG_NAME)) {
+			fail("Did not find newly created Secondary Organization '" + NEW_ORG_NAME + "' in list: " + orgs);
 		}
 	}
 
-	private String addASecondaryOrganization(ManageOrganizationsPage orgsPage) {
+	private void addASecondaryOrganization(ManageOrganizationsPage orgsPage) {
 		orgsPage.clickAdd();
 		
-		String name = MiscDriver.getRandomString(15);
-		Organization o = new Organization(name);
-		orgsPage.fillOrganizationForm(o);
+		Organization o = new Organization(NEW_ORG_NAME);
+		orgsPage.enterOrganizationName(NEW_ORG_NAME);
 		orgsPage.clickSave();
-		return o.getName();
 	}
 
-	private HomePage logIntoNewTenant(String username, String password) {
+	private HomePage logIntoNewTenant(LoginPage loginPage, String username, String password) {
 		EULAPage eulaPage = loginPage.loginToEula(username, password);
 		eulaPage.scrollToBottomOfEULA();
 		return eulaPage.clickAcceptEULAToWizard().clickNoThanks();
 	}
 
-	private SignUpCompletePage createANewUnlimitedTenant(String username, String password) {
-		String tenantName = MiscDriver.getRandomString(8);
-		String tenantID = tenantName.toLowerCase();
-
-		if(!loginPage.isPlansAndPricingAvailable()) {
-			loginPage = startAsCompany("msa");
-		}
-		SelectPackagePage selectPackagePage = loginPage.clickPlansAndPricingLink();
+	private SetPasswordPage createANewUnlimitedTenant(String username, String password) {
+		SelectPackagePage selectPackagePage = startAsCompany("test1").clickPlansAndPricingLink();
 		String packageName = "Unlimited";	// must be unlimited
 		SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink(packageName);
 
-		TenantInfo t = new TenantInfo(username, password, tenantName, tenantID);
+		TenantInfo t = new TenantInfo(username, password, NEW_TENANT_NAME, NEW_TENANT_NAME);
 		t.setNumberOfUsers(2);
 		t.setPhoneSupport(true);
 		t.setPromoCode("promo");
@@ -89,12 +78,11 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 		t.setPurchaseOrderNumber("88888");
 
 		signUpPage.enterCreateAccountForm(t);
-        SignUpCompletePage signUpCompletePage = signUpPage.submitCreateYourAccountForm();
+        signUpPage.submitCreateYourAccountForm();
 
         mailServer.waitForMessages(1);
         MailMessage activationMessage = mailServer.getAndClearMessages().get(0);
-        new SignUpEmailLoginNavigator().navigateToSignInPageSpecifiedIn(activationMessage, selenium);
-
-        return signUpCompletePage;
+        return new SignUpEmailLoginNavigator().navigateToSignInPageSpecifiedIn(activationMessage, selenium);
 	}
+
 }

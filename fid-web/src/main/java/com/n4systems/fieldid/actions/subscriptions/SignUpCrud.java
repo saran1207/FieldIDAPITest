@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.subscriptions;
 import java.util.List;
 import java.util.SortedSet;
 
+import com.n4systems.services.limiters.TenantLimitService;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -108,6 +109,8 @@ public class SignUpCrud extends AbstractCrud {
 			
 			addFlashMessageText("message.your_account_has_been_created");
 			logger.info(signUpLogLine("signed up"));
+
+            TenantLimitService.getInstance().updateAll();
 			
 			result = SUCCESS;
 			

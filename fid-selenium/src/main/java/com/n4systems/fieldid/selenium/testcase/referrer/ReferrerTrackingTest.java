@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.regex.Pattern;
 
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -39,8 +40,8 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		signOutAndGoToReferalLink(referralLink);
 		
 		createANewUnlimitedTenant("admin", "password");
-		
-		
+
+
 		goToReferFieldId();
 		
 		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
@@ -103,6 +104,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 	
 	private TenantInfo createANewUnlimitedTenant(String username, String password) {
 		String tenantName = MiscDriver.getRandomString(8);
+//        String tenantName = TEST_CREATED_TENANT_NAMES[0];
 		String tenantID = tenantName.toLowerCase();
 
 		CreateAccount create = new CreateAccount(selenium, misc);
@@ -142,7 +144,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		loginPage.signInWithSystemAccount();
 		
 		selenium.open("/fieldid/refer.action");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 
 	private void assertReferrerLinkIsInTheCorrectForm(String referralLink) {

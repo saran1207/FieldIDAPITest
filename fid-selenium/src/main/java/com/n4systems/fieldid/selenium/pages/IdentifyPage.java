@@ -1,23 +1,22 @@
 package com.n4systems.fieldid.selenium.pages;
 
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.components.UnitOfMeasurePicker;
 import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Identifier;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.datatypes.SafetyNetworkRegistration;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.util.ConditionWaiter;
 import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 public class IdentifyPage extends FieldIDPage {
 		
@@ -185,7 +184,7 @@ public class IdentifyPage extends FieldIDPage {
 			String asset = registration.getAssetNumber();
 			selenium.type("//input[@id='snSmartSearchText']", asset);
 			selenium.click("//input[@id='snSmartSearchSubmit']");
-			waitForAjax(MiscDriver.DEFAULT_TIMEOUT);
+			waitForAjax(DEFAULT_TIMEOUT);
 			assertFalse("Could not find vendor '" + vendor + "', asset '" + asset + "'", selenium.isElementPresent("div[@id='snSmartSearchResults']"));
 		} else {
 			fail("Could not find a link to register the asset over the safety network");
@@ -269,7 +268,7 @@ public class IdentifyPage extends FieldIDPage {
 		for (String id : requiredTextFieldIDs) {
 			String locator = "//input[contains(@class,'requiredField') and not(contains(@class,'unitOfMeasure')) and @id='" + id + "']";
 			if(selenium.isElementPresent(locator) && selenium.getValue(locator).equals("")) {
-				String value = MiscDriver.getRandomString(8);
+				String value = "abcde";
 				selenium.type(locator, value);
 			}
 		}

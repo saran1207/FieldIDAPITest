@@ -62,8 +62,8 @@ public class ManageEventBooksTest extends FieldIDTestCase {
 		
 		manageEventBooksPage.clickAddTab();
 		assertEquals("Add", manageEventBooksPage.getCurrentTab());
-		EventBook book = getTestEventBook();
-		manageEventBooksPage.setEventBookFormFields(book);
+		EventBook book = createTestEventBook();
+		manageEventBooksPage.enterEventBookFormFields(book);
 		manageEventBooksPage.clickSave();
 		manageEventBooksPage.verifyEventBookSaved();
 		assertEquals("View All", manageEventBooksPage.getCurrentTab());
@@ -85,7 +85,7 @@ public class ManageEventBooksTest extends FieldIDTestCase {
 		assertEquals("Event Book can not be deleted. It is still in use.", manageEventBooksPage.getAlert().trim());
 	}
 
-	private EventBook getTestEventBook() {
+	private EventBook createTestEventBook() {
 		return new EventBook("Test Selenium", new Owner("N4 Systems", "CP"), true);
 	}
 

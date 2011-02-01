@@ -90,7 +90,7 @@ public class ManageEventBooksPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	public void setEventBookFormFields(EventBook book) {
+	public void enterEventBookFormFields(EventBook book) {
 		if(book.name != null) {
 			selenium.type("//input[@name='name']", book.name);
 		}

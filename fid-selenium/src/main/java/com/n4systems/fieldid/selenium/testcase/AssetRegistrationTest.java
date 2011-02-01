@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.assertEquals;
 
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ public class AssetRegistrationTest extends LoggedInTestCase {
 
 	private void goToAssetAdd() {
 		selenium.open("/fieldid/productAdd.action");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 	
 	@Test
@@ -43,7 +44,7 @@ public class AssetRegistrationTest extends LoggedInTestCase {
 		String invalidSerialNumber = "";
 		selenium.type("serialNumberText", invalidSerialNumber);
 		selenium.click("saveButton");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		assertEquals("", selenium.getValue("serialNumberText"));
 	}
 	
@@ -60,7 +61,7 @@ public class AssetRegistrationTest extends LoggedInTestCase {
 		selenium.click("showSmartSearchLink");
 		selenium.type("snSmartSearchText", identifyingNumber);
 		selenium.click("snSmartSearchSubmit");
-		selenium.waitForCondition("!" + SeleniumJavaScriptInteraction.CURRENT_WINDOW_IN_JAVASCRIPT + "$('networkSmartSearchContainer').visible()", MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForCondition("!" + SeleniumJavaScriptInteraction.CURRENT_WINDOW_IN_JAVASCRIPT + "$('networkSmartSearchContainer').visible()", WebEntity.DEFAULT_TIMEOUT);
 	}
 
 }

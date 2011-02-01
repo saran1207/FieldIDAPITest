@@ -13,13 +13,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.CommentTemplate;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
 
 public class ManageCommentTemplatesTest extends FieldIDTestCase {
 	
 	private static final String TEMPLATE_NAME_THAT_IS_TOO_SHORT = "";
-	private static final String TEST_TEMPLATE_PREFIX = "SelTest-";
+	private static final String TEST_TEMPLATE_NAME = "SelTest-";
 	private static final String TEST_TEMPLATE_COMMENT = "My Test Template Comment";
 	private ManageCommentTemplatesPage templatesPage;
 	
@@ -33,7 +32,7 @@ public class ManageCommentTemplatesTest extends FieldIDTestCase {
 	public void should_allow_the_creation_editing_and_removal_of_a_comment_template() throws Exception {
 		templatesPage.clickAddTab();
 		
-		String testTemplateName = TEST_TEMPLATE_PREFIX + CommentTemplate.randomStatusName();
+		String testTemplateName = TEST_TEMPLATE_NAME;
 		addTemplate(testTemplateName, TEST_TEMPLATE_COMMENT);
 		
 		assertTrue("Template should have been created", templatesPage.getCommentTemplateNames().contains(testTemplateName));
@@ -65,7 +64,7 @@ public class ManageCommentTemplatesTest extends FieldIDTestCase {
 	public void should_require_an_edited_comment_template_to_have_name() throws Exception {
 		templatesPage.clickAddTab();
 		
-		String testTemplateName = TEST_TEMPLATE_PREFIX + CommentTemplate.randomStatusName();
+		String testTemplateName = TEST_TEMPLATE_NAME;
 		addTemplate(testTemplateName, TEST_TEMPLATE_COMMENT);
 		
 		templatesPage.clickEditOnTemplate(testTemplateName);
@@ -80,7 +79,7 @@ public class ManageCommentTemplatesTest extends FieldIDTestCase {
 	public void should_not_allow_two_comment_template_to_have_the_same_name() throws Exception {
 		templatesPage.clickAddTab();
 		
-		String testTemplateName = TEST_TEMPLATE_PREFIX + CommentTemplate.randomStatusName();
+		String testTemplateName = TEST_TEMPLATE_NAME;
 		addTemplate(testTemplateName, TEST_TEMPLATE_COMMENT);
 		
 		templatesPage.clickAddTab();
@@ -92,7 +91,7 @@ public class ManageCommentTemplatesTest extends FieldIDTestCase {
 	private void removeTestTemplates() {
 		List<String> templateNames = templatesPage.getCommentTemplateNames();
 		for (String templateName : templateNames) {
-			if (templateName.startsWith(TEST_TEMPLATE_PREFIX)) {
+			if (templateName.startsWith(TEST_TEMPLATE_NAME)) {
 				templatesPage.removeTemplateNamed(templateName);
 				assertFalse("Test template needs to be removed", templatesPage.getCommentTemplateNames().contains(templateName));
 			}

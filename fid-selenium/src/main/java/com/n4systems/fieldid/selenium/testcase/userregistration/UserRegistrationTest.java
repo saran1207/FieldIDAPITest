@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -25,7 +26,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 
 	private void openRequestFromUser(String userId) {
 		selenium.click("css=#viewRequest_" + userId);
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 
 	private void goToUserRequests() {
@@ -61,7 +62,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		selenium.type("registerUserCreate_emailAddress", "dev@fieldid.com");
 		selenium.type("registerUserCreate_city", "Toronto");
 		selenium.select("countryId", "value=CA");
-		selenium.waitForAjax(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForAjax(WebEntity.DEFAULT_TIMEOUT);
 		selenium.select("tzlist", "label=Ontario - Toronto");
 		selenium.type("registerUserCreate_position", "some position");
 		selenium.type("registerUserCreate_phoneNumber", "647-202-2789");
@@ -71,6 +72,6 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		selenium.type("registerUserCreate_password", "makemore$");
 		selenium.type("registerUserCreate_passwordConfirmation", "makemore$");
 		selenium.click("registerUserCreate_save");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 }

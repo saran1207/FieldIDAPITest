@@ -1,9 +1,10 @@
 package com.n4systems.fieldid.selenium.persistence;
 
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Configuration;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.assettype.AssetTypeSaver;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
@@ -75,11 +76,11 @@ public class MinimalTenantDataSetup {
 
     public void createTestAssetTypes(String[] testAssetTypes) {
         for (String typeName : testAssetTypes) {
-            createSimpleAssetType(em, typeName);
+            createSimpleAssetType(typeName);
         }
     }
     
-    private AssetType createSimpleAssetType(EntityManager em, String name) {
+    private AssetType createSimpleAssetType(String name) {
         AssetType type = new AssetType();
         type.setTenant(tenant);
         type.setName(name);

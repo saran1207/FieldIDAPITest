@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -50,7 +51,7 @@ public class FilterByResultTest extends LoggedInTestCase {
 
 	private void submitForm() {
 		selenium.click("css=#reportForm_label_Run");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 
 	private void verifyEventResultsAreCorrectOnThisPage() {
@@ -69,7 +70,7 @@ public class FilterByResultTest extends LoggedInTestCase {
 
 	private void goToLastPage() {
 		selenium.click("link=Last");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 
 }

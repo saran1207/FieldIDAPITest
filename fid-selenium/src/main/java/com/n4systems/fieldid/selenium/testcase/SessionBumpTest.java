@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.assertTrue;
 
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -68,16 +69,16 @@ public class SessionBumpTest extends FieldIDTestCase {
 		loginSession2.signInAllTheWayToHome("sricci", "makemore$");
 		
 		selenium.open("/fieldid/home.action");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		secondSession.open("/fieldid/home.action");
-		secondSession.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		secondSession.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		selenium.open("/fieldid/search.action");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		selenium.open("/fieldid/report.action");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
 	}
@@ -96,10 +97,10 @@ public class SessionBumpTest extends FieldIDTestCase {
 		loginSession2.signInWithSystemAccount();
 		
 		selenium.open("/fieldid/home.action");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		secondSession.open("/fieldid/home.action");
-		secondSession.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		secondSession.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		home1.assertHomePage();
 		home2.assertHomePage();
@@ -113,12 +114,12 @@ public class SessionBumpTest extends FieldIDTestCase {
 		
 		loginSession1.signInAllTheWayToHome("sricci", "makemore$");
 		selenium.open("/fieldid/productAdd.action");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		loginSession2.signInAllTheWayToHome("sricci", "makemore$");
 		
 		selenium.click("css=.searchOwner");
-		selenium.waitForAjax(MiscDriver.AJAX_TIMEOUT);
+		selenium.waitForAjax(WebEntity.AJAX_TIMEOUT);
 		
 		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
 	}

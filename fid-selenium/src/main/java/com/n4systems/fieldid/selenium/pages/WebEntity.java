@@ -6,7 +6,10 @@ import com.thoughtworks.selenium.Selenium;
 public class WebEntity {
 	
 	protected Selenium selenium;
-	
+    public static final String DEFAULT_TIMEOUT = "60000";
+    public static final String JS_TIMEOUT = "1000";
+    public static final String AJAX_TIMEOUT = "10000";
+
 	public WebEntity(Selenium selenium) {
 		this.selenium = selenium;
 	}
@@ -48,7 +51,7 @@ public class WebEntity {
 	}
 	
 	protected final void waitForAjax() {
-		waitForAjax(MiscDriver.AJAX_TIMEOUT);
+		waitForAjax(AJAX_TIMEOUT);
 	}
 
 	protected void waitForAjax(String timeout)  {

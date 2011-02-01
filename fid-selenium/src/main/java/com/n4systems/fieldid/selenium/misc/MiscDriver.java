@@ -15,19 +15,17 @@ import java.util.Random;
 
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 
 public class MiscDriver {
 
 	public static Random r = new Random(System.currentTimeMillis());
-	public static final String DEFAULT_TIMEOUT = "60000";
 	// Current timeout for session is 30 minutes. This is set to 31 minutes
 	// just to be safe. That is, session will timeout in 30 minutes but it
 	// might take the javascript another minute to detect the session has
 	// timed out and display the lightbox.
 	public static final int sessionTimeoutLightBoxTimeout = 31 * 60;
 	//javascript functions should complete dom updates in under a second (this is not for ajax that can take longer.)
-	public static final String JS_TIMEOUT = "1000";
-	public static final String AJAX_TIMEOUT = "10000";
 	private static String snapshots = null;
 	private FieldIdSelenium selenium;
 	private Search search;
@@ -95,7 +93,7 @@ public class MiscDriver {
 	 * found.
 	 */
 	public void waitForPageToLoadAndCheckForOopsPage() {
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		if(isOopsPage()) {
 			fail("Got an Oops page. Check Field ID logs.");
 		}
@@ -120,7 +118,7 @@ public class MiscDriver {
 	
 	private boolean confirmPopupWindow(String locator) {
 		try {
-			selenium.waitForPopUp("", DEFAULT_TIMEOUT);
+			selenium.waitForPopUp("", WebEntity.DEFAULT_TIMEOUT);
 			selenium.selectWindow(locator);
 			selenium.close();
 			selenium.selectWindow("");
@@ -396,60 +394,7 @@ public class MiscDriver {
 		SimpleDateFormat now = new SimpleDateFormat(format);
 		return now.format(new Date());
 	}
-	
-	/**
-	 * Get a date string in the format MM/dd/yy but offset it from today by
-	 * 'months'. If months is positive this will be in the future. If months
-	 * is negative this will be in the past. For example, if today is 01/05/10
-	 * (January 5th, 2010) then getDateStringNMonthsFromNow(-3) will return
-	 * 10/05/09 (October 5th, 2009) and getDateStringNMonthsFromNow(1) will
-	 * return 02/05/10 (February 5th, 2010). This method use the Calendar.add
-	 * and SimpleDateFormat.format. See JDK documentation for them.
-	 * 
-	 * @param months
-	 * @return
-	 */
-	public String getDateStringNMonthsFromNow(int months) {
-		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy");
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.MONTH, months);
-		String monthOffset = now.format(c.getTime());
-		return monthOffset;
-	}
-	
-	/**
-	 * Get a date string in the format MM/dd/yy but offset it from today by
-	 * 'years'. If years is positive this will be in the future. If years
-	 * is negative this will be in the past. For example, if today is 01/05/10
-	 * (January 5th, 2010) then getDateStringNYearsFromNow(-3) will return
-	 * 01/05/07 (January 5th, 2007) and getDateStringNYearsFromNow(1) will
-	 * return 01/05/11 (January 5th, 2011). This method use the Calendar.add
-	 * and SimpleDateFormat.format. See JDK documentation for them.
-	 * 
-	 * @param months
-	 * @return
-	 */
-	public String getDateStringNYearsFromNow(int years) {
-		SimpleDateFormat now = new SimpleDateFormat("MM/dd/yy");
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.YEAR, years);
-		String yearOffset = now.format(c.getTime());
-		return yearOffset;
-	}
-	
-	/**
-	 * Generate a random RFID number. The string will be all uppercase, length
-	 * of 16 characters and hexidecimal.
-	 * @return
-	 */
-	@Deprecated
-	public String getRandomRFIDNumber() {
-		int maxLength = 16;
-		String validCharacters = "01234567890ABCDEF";
-		StringBuffer s = getRandomString(validCharacters, maxLength);
-		return s.toString();
-	}
-	
+
 	@Deprecated
 	private static StringBuffer getRandomString(String validCharacters, int maxLength) {
 		StringBuffer s = new StringBuffer(maxLength);
@@ -461,13 +406,6 @@ public class MiscDriver {
 		return s;
 	}
 	
-	/**
-	 * Generates a random string of all alphabetic characters. The first
-	 * character will be uppercase and subsequent characters will be lowercase.
-	 * 
-	 * @param length
-	 * @return
-	 */
 	@Deprecated
 	public static String getRandomString(int length) {
 		String validCharacters = "abcdefghijklmnopqrstuvwxyz";
@@ -874,14 +812,14 @@ public class MiscDriver {
 	public void setOwner(Owner owner) {
 		if (!owner.specifiesOrg()) {
 			selenium.select(selectOwnerOrganizationSelectListLocator, "index=0");
-			waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
+			waitForLoadingToFinish(WebEntity.DEFAULT_TIMEOUT);
 		}
 		
 		String organization = owner.getOrganization();
 		if(organization != null) {
 			if(isOptionPresent(selectOwnerOrganizationSelectListLocator, organization)) {
 				selenium.select(selectOwnerOrganizationSelectListLocator, organization);
-				waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
+				waitForLoadingToFinish(WebEntity.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the organization '" + organization + "' in choose owner dialog");
 			}
@@ -892,7 +830,7 @@ public class MiscDriver {
 			customer = owner.getCustomer() + " (" + owner.getOrganization() + ")";
 			if(isOptionPresent(selectOwnerCustomerSelectListLocator, customer)) {
 				selenium.select(selectOwnerCustomerSelectListLocator, customer);
-				waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
+				waitForLoadingToFinish(WebEntity.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the customer '" + customer + "' in choose owner dialog");
 			}
@@ -903,7 +841,7 @@ public class MiscDriver {
 			division = owner.getDivision() + ", " + customer;
 			if(isOptionPresent(selectOwnerDivisionSelectListLocator, division)) {
 				selenium.select(selectOwnerDivisionSelectListLocator, division);
-				waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
+				waitForLoadingToFinish(WebEntity.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the division '" + division + "' in choose owner dialog");
 			}
@@ -945,7 +883,7 @@ public class MiscDriver {
 	public void gotoChooseOwner() {
 		if(selenium.isElementPresent(chooseOwnerLinkLocator)) {
 			selenium.click(chooseOwnerLinkLocator);
-			waitForLoadingToFinish(MiscDriver.DEFAULT_TIMEOUT);
+			waitForLoadingToFinish(WebEntity.DEFAULT_TIMEOUT);
 		} else {
 			fail("Could not find a link to Choose owner");
 		}

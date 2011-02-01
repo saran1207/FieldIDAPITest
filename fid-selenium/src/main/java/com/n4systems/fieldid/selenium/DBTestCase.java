@@ -6,9 +6,15 @@ import com.n4systems.fieldid.selenium.persistence.PersistenceCallback;
 import com.n4systems.fieldid.selenium.persistence.PersistenceTemplate;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.TenantCleaner;
+import com.n4systems.model.Tenant;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import org.junit.Before;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.Query;
 
 public abstract class DBTestCase {
 
@@ -16,6 +22,8 @@ public abstract class DBTestCase {
     public static final String TEST_ASSET_TYPE_2 = "TestType2";
 
     public static final String[] TEST_TENANT_NAMES = { "test1", "test2" };
+    // Tests that need to sign up as a new tenant may use one of these:
+    public static final String[] TEST_CREATED_TENANT_NAMES = { "newtest1", "newtest2" };
     public static final String[] TEST_ASSET_TYPES = {TEST_ASSET_TYPE_1, TEST_ASSET_TYPE_2};
 
     private SeleniumConfig seleniumConfig;
@@ -39,6 +47,12 @@ public abstract class DBTestCase {
             public void doInTransaction(Transaction transaction) throws Exception {
                 TenantCleaner cleaner = new TenantCleaner();
                 cleaner.cleanTenants(transaction.getEntityManager(), TEST_TENANT_NAMES);
+                cleaner.cleanTenants(transaction.getEntityManager(), TEST_CREATED_TENANT_NAMES);
+                Query q = transaction.getEntityManager().createQuery("from " + Tenant.class.getName() + " where name in (:tenantNames)");
+                q.setParameter("tenantNames", Arrays.asList(TEST_CREATED_TENANT_NAMES));
+                for (Tenant t : (List<Tenant>)q.getResultList()) {
+                    transaction.getEntityManager().remove(t);
+                }
             }
         }).execute();
 

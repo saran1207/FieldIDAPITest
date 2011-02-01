@@ -6,7 +6,6 @@ import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.setup.ManageEventBooksPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Event;
-import com.n4systems.model.Tenant;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -78,7 +77,7 @@ public class ManageEventBooksTest_DbSetup extends FieldIDTestCase {
         manageEventBooksPage.clickAddTab();
         assertEquals("Add", manageEventBooksPage.getCurrentTab());
         EventBook book = getTestEventBook();
-        manageEventBooksPage.setEventBookFormFields(book);
+        manageEventBooksPage.enterEventBookFormFields(book);
         manageEventBooksPage.clickSave();
         manageEventBooksPage.verifyEventBookSaved();
         assertEquals("View All", manageEventBooksPage.getCurrentTab());

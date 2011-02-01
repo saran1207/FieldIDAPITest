@@ -9,6 +9,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.Configuration;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import rfid.ejb.entity.AddAssetHistory;
 
 import com.n4systems.model.Asset;
@@ -58,10 +61,14 @@ public class TenantCleaner {
         tenantQuery.setParameter("tenantNames", Arrays.asList(tenants));
         List tenantIds = tenantQuery.getResultList();
 
+        if (tenantIds.isEmpty())
+            return;
+
         Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         List<Asset> assets = assetsQuery.getResultList();
 
+        removeAllConfigsForTenants(em, tenantIds);
         removeAllForTenants(em, AssetCodeMapping.class, tenantIds);
         removeAllForTenants(em, Catalog.class, tenantIds);
         removeAllForTenants(em, Event.class, tenantIds);
@@ -124,7 +131,7 @@ public class TenantCleaner {
 
         cleanUpAddressInfo(em);
 
-        removeAllWhereModifiedOrCreatedByUsersFromTenant(em, tenantIds, EventGroup.class, EventTypeGroup.class);
+        removeAllWhereModifiedOrCreatedByUsersFromTenant(em, tenantIds, EventGroup.class, EventTypeGroup.class, SeenItStorageItem.class);
 
         removeAllForTenants(em, User.class, tenantIds);
 
@@ -132,6 +139,13 @@ public class TenantCleaner {
         removeAllForTenants(em, DivisionOrg.class, tenantIds);
         removeAllForTenants(em, SecondaryOrg.class, tenantIds);
         removeAllForTenants(em, PrimaryOrg.class, tenantIds);
+    }
+
+    private void removeAllConfigsForTenants(EntityManager em, List<Long> tenantIds) {
+        for (Long tenantId : tenantIds) {
+            Query query = em.createQuery("from " + Configuration.class.getName() + " where tenantId = " + tenantId);
+            removeAllFromQuery(em, query);
+        }
     }
 
     private void cleanUpAddressInfo(EntityManager em) {
@@ -250,10 +264,12 @@ public class TenantCleaner {
         Query scheduleQuery =  em.createQuery("from " + EventSchedule.class.getName() + " where asset.id = " + asset.getId());
         Query attachmentQuery = em.createQuery("from " + AssetAttachment.class.getName() + " where asset.id = " + asset.getId());
         Query inspQuery = em.createQuery("from " + Event.class.getName() + " where asset.id = " + asset.getId());
+        Query subAssetQuery = em.createQuery("from " + SubAsset.class.getName() + " where masterAsset.id = " + asset.getId());
 
         removeAllFromQuery(em, scheduleQuery);
         removeAllFromQuery(em, attachmentQuery);
         removeAllFromQuery(em, inspQuery);
+        removeAllFromQuery(em, subAssetQuery);
 
         asset.getInfoOptions().clear();
         em.merge(asset);

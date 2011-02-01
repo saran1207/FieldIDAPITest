@@ -15,12 +15,6 @@ import com.n4systems.fieldid.selenium.login.page.SignUpComplete;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
-/**
- * WEB-1378
- * 
- * @author dgrainge
- *
- */
 public class TurnOnPlansAndPricingWithReadOnlyUserTest extends FieldIDTestCase {
 
 	Login login;

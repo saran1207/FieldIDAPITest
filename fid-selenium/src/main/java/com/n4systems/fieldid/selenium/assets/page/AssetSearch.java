@@ -9,6 +9,7 @@ import com.n4systems.fieldid.selenium.datatypes.AssetSelectDisplayColumns;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.misc.Search;
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 
 public class AssetSearch {
 	FieldIdSelenium selenium;
@@ -174,7 +175,7 @@ public class AssetSearch {
 		if(asc.getAssetTypeGroup() != null) {
 			if(misc.isOptionPresent(assetTypeGroupSelectListLocator, asc.getAssetTypeGroup())) {
 				selenium.select(assetTypeGroupSelectListLocator, asc.getAssetTypeGroup());
-				search.waitForDisplayColumnsToUpdate(MiscDriver.DEFAULT_TIMEOUT);
+				search.waitForDisplayColumnsToUpdate(WebEntity.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the asset type group '" + asc.getAssetTypeGroup() + "'");
 			}
@@ -183,7 +184,7 @@ public class AssetSearch {
 		if(asc.getAssetType() != null) {
 			if(misc.isOptionPresent(assetTypeSelectListLocator, asc.getAssetType())) {
 				selenium.select(assetTypeSelectListLocator, asc.getAssetType());
-				search.waitForDisplayColumnsToUpdate(MiscDriver.DEFAULT_TIMEOUT);
+				search.waitForDisplayColumnsToUpdate(WebEntity.DEFAULT_TIMEOUT);
 			} else {
 				fail("Could not find the asset type  '" + asc.getAssetType() + "'");
 			}

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 
 public class ConsoleLogin {
 	FieldIdSelenium selenium;
@@ -90,7 +91,7 @@ public class ConsoleLogin {
 
 	public ConsoleLogin gotoPage(String pageUrl) {
 		selenium.open(adminConsoleURL + pageUrl);
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		return this;
 	}
 }

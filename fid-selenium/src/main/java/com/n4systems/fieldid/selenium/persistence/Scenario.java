@@ -3,11 +3,13 @@ package com.n4systems.fieldid.selenium.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.Configuration;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EventFormBuilder;
+import com.n4systems.util.ConfigEntry;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectionBuilder;
@@ -283,6 +285,23 @@ public class Scenario {
         Query query = trans.getEntityManager().createQuery("from " + UnitOfMeasure.class.getName() + " where name = :name");
         query.setParameter("name", uomName);
         return (UnitOfMeasure) query.getSingleResult();
+    }
+
+    public void updateConfigurationForTenant(String tenantName, ConfigEntry entry, String newValue) {
+        Tenant tenant = tenant(tenantName);
+        Query query = trans.getEntityManager().createQuery("from " + Configuration.class.getName() + " where tenantId = :tenantId and identifier = :identifier");
+
+        query.setParameter("tenantId", tenant.getId());
+        query.setParameter("identifier", entry);
+
+        List<Configuration> configs = query.getResultList();
+        if (!configs.isEmpty()) {
+            configs.get(0).setValue(newValue);
+            trans.getEntityManager().merge(configs.get(0));
+        } else {
+            Configuration config = new Configuration(entry, newValue, tenant.getId());
+            trans.getEntityManager().persist(config);
+        }
     }
 
 }

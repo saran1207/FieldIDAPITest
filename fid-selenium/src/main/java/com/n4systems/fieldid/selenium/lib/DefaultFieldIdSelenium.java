@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.selenium.lib;
 
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.SeleniumException;
 
@@ -13,7 +14,7 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 	}
 
 	public void waitForAjax() {
-		waitForAjax(MiscDriver.AJAX_TIMEOUT);
+		waitForAjax(WebEntity.AJAX_TIMEOUT);
 	}
 
 	public void waitForAjax(String timeout)  {
@@ -21,14 +22,14 @@ public class DefaultFieldIdSelenium implements FieldIdSelenium {
 	}
 
 	public void waitForElementToBePresent(String locator)  {
-		waitForElementToBePresent(locator, MiscDriver.DEFAULT_TIMEOUT);
+		waitForElementToBePresent(locator, WebEntity.DEFAULT_TIMEOUT);
 	}
 	public void waitForElementToBePresent(String locator, String timeout)  {
 		delegateSelenium.waitForCondition("var value = selenium.isElementPresent( '" + locator.replace("'", "\\'") + "'); value == true", timeout);
 	}
 
 	public void waitForPageToLoad() {
-		delegateSelenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		delegateSelenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 	}
 	
 	public void openAndWaitForPageLoad(String url) {

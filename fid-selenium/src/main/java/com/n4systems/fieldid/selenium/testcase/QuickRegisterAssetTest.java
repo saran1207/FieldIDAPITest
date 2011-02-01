@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.*;
 
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -51,7 +52,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		searchForSerialNumberInVendorContext("alex-share-2", contextToSwitchTo);
 		
 		selenium.click("copyAsset");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		assertTrue("linked asset registration should be visible", selenium.isVisible("linkedAssetContainer"));
 		assertEquals("alex-share-2", selenium.getText("linkedAssetSerial"));
@@ -63,7 +64,7 @@ public class QuickRegisterAssetTest extends LoggedInTestCase {
 		searchForSerialNumberInVendorContext("alex-share-2", contextToSwitchTo);
 		
 		selenium.click("copyAsset");
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		assertTrue("linked asset registration should be visible", selenium.isVisible("linkedAssetContainer"));
 		assertEquals("alex-share-2", selenium.getValue("serialNumberText"));

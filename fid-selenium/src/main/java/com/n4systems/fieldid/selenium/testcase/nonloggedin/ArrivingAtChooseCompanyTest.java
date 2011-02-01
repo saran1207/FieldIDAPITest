@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.testcase.nonloggedin;
 import static com.n4systems.fieldid.selenium.asserts.FieldIdAssert.assertSystemLogoIsUsed;
 import static org.junit.Assert.assertTrue;
 
+import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 	public void should_forward_to_choose_company_page_from_root_of_www_domain() throws Exception {
 		String url = getFieldIDProtocol() + "://www." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.open(url);
-		selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
+		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		
 		choosePage.verifyChooseCompany();
 	}

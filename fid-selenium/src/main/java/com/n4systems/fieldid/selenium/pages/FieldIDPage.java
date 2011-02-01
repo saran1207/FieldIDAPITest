@@ -169,7 +169,7 @@ public class FieldIDPage extends WebPage {
     }
 
 	protected void waitForElementToBePresent(String locator)  {
-		waitForElementToBePresent(locator, MiscDriver.DEFAULT_TIMEOUT);
+		waitForElementToBePresent(locator, DEFAULT_TIMEOUT);
 	}
 
 	protected void waitForElementToBePresent(String locator, String timeout)  {

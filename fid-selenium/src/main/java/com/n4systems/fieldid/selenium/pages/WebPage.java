@@ -12,10 +12,7 @@ public class WebPage extends WebEntity {
 	public WebPage(Selenium selenium, boolean waitForLoad) {
 		super(selenium);
 		if (waitForLoad) {
-			selenium.waitForPageToLoad(MiscDriver.DEFAULT_TIMEOUT);
-			if (isOopsPage()) {
-				fail("Loaded oops page");
-			}
+			waitForPageToLoad();
 		}
 	}
 

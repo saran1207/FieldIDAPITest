@@ -1,17 +1,13 @@
 package com.n4systems.fieldid.selenium;
 
-import com.n4systems.fieldid.selenium.administration.page.ManageEventBookDriver;
-import com.n4systems.fieldid.selenium.administration.page.ManageAssetStatusDriver;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class SystemDriverFactory {
 
-	private final FieldIdSelenium selenium;
 	private final MiscDriver misc;
 	
 	public SystemDriverFactory(FieldIdSelenium selenium) {
-		this.selenium = selenium;
 		this.misc = new MiscDriver(selenium);
 	}
 	
@@ -19,11 +15,4 @@ public class SystemDriverFactory {
 		return misc;
 	}
 
-	public ManageAssetStatusDriver createAssetStatusDriver() {
-		return new ManageAssetStatusDriver(selenium);
-	}
-
-	public ManageEventBookDriver createEventBookDriver() {
-		return new ManageEventBookDriver(selenium, misc);
-	}
 }
