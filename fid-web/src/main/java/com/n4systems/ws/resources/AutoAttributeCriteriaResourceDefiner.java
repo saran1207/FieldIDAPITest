@@ -11,7 +11,7 @@ import com.n4systems.ws.model.WsModelConverter;
 import com.n4systems.ws.model.autoattribute.WsAutoAttributeCriteria;
 import com.n4systems.ws.model.autoattribute.WsAutoAttributeCriteriaConverter;
 
-public class AutoAttributeResourceDefiner implements ResourceDefiner<AutoAttributeCriteria, WsAutoAttributeCriteria> {
+public class AutoAttributeCriteriaResourceDefiner implements ResourceDefiner<AutoAttributeCriteria, WsAutoAttributeCriteria> {
 
 	@Override
 	public WsModelConverter<AutoAttributeCriteria, WsAutoAttributeCriteria> getResourceConverter() {
@@ -25,7 +25,7 @@ public class AutoAttributeResourceDefiner implements ResourceDefiner<AutoAttribu
 
 	@Override
 	public IdLoader<? extends Loader<AutoAttributeCriteria>> getResourceIdLoader(LoaderFactory loaderFactory) {
-		return loaderFactory.createFilteredIdLoader(AutoAttributeCriteria.class).setPostFetchFields("inputs", "outputs", "definitions.outputs");
+		return loaderFactory.createFilteredIdLoader(AutoAttributeCriteria.class).setPostFetchFields("inputs", "outputs");
 	}
 
 	@Override

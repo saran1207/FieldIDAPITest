@@ -21,7 +21,9 @@ public class WsAutoAttributeDefinitionConverter extends WsModelConverter<AutoAtt
 	@Override
 	public WsAutoAttributeDefinition fromModel(AutoAttributeDefinition model) {
 		WsAutoAttributeDefinition wsModel = new WsAutoAttributeDefinition();
-
+		wsModel.setId(model.getId());
+		wsModel.setCriteriaId(model.getCriteria().getId());
+		
 		for (InfoOptionBean option: model.getInputs()) {
 			wsModel.getInputs().add(option.getUniqueID());
 		}

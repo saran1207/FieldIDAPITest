@@ -6,11 +6,12 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.n4systems.ws.model.WsModel;
+
 @XmlRootElement
-public class WsAutoAttributeCriteria {
+public class WsAutoAttributeCriteria extends WsModel {
 	private long assetTypeId;
 	private List<Long> inputs = new ArrayList<Long>();
-	private List<WsAutoAttributeDefinition> definitions = new ArrayList<WsAutoAttributeDefinition>();
 
 	@XmlElement(name="AssetTypeId")
 	public long getAssetTypeId() {
@@ -28,14 +29,5 @@ public class WsAutoAttributeCriteria {
 
 	public void setInputs(List<Long> inputs) {
 		this.inputs = inputs;
-	}
-
-	@XmlElement(name="Definitions")
-	public List<WsAutoAttributeDefinition> getDefinitions() {
-		return definitions;
-	}
-
-	public void setDefinitions(List<WsAutoAttributeDefinition> definitions) {
-		this.definitions = definitions;
 	}
 }

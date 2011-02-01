@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBContext;
 
 import com.n4systems.ws.model.assettype.WsAssetStatus;
 import com.n4systems.ws.model.autoattribute.WsAutoAttributeCriteria;
+import com.n4systems.ws.model.autoattribute.WsAutoAttributeDefinition;
 import com.n4systems.ws.model.commenttemplate.WsCommentTemplate;
 import com.n4systems.ws.model.eventbook.WsEventBook;
 import com.n4systems.ws.model.eventtype.WsCriteria;
@@ -31,6 +32,7 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
 	private static final Class<?>[] rootTypes = {
 		WsEventType.class,
 		WsAutoAttributeCriteria.class,
+		WsAutoAttributeDefinition.class,
 		WsAssetStatus.class,
 		WsCommentTemplate.class,
 		WsUnitOfMeasure.class,
