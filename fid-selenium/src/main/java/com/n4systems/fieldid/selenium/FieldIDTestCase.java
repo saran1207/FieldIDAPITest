@@ -6,6 +6,7 @@ import com.n4systems.fieldid.selenium.mail.MailServer;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
+import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.SeleniumException;
@@ -26,8 +27,6 @@ public abstract class FieldIDTestCase extends DBTestCase {
 
     private static final int SHUTDOWN_ATTEMPTS = 5;
     private static final int SHUTDOWN_RETRY_INTERVAL_MS = 5000;
-
-
 
     public static FieldIdSelenium selenium;
 	protected MiscDriver misc;
@@ -190,12 +189,24 @@ public abstract class FieldIDTestCase extends DBTestCase {
 		return getSeleniumConfig().getTestServerContextRoot();
 	}
 
-	protected LoginPage startAsCompany(String companyID) {
+	protected LoginPage startAsCompany(String companyID, Selenium selenium) {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
 		selenium.deleteAllVisibleCookies();
 		selenium.open(url);
+        selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		return new LoginPage(selenium);
 	}
+
+	protected LoginPage startAsCompany(String companyID) {
+        return startAsCompany(companyID, selenium);
+	}
+
+    protected AdminLoginPage startAdmin() {
+        String url = getFieldIDProtocol() + "://n4." + getFieldIDDomain() + getFieldIDContextRoot() + "/admin/";
+        selenium.deleteAllVisibleCookies();
+        selenium.open(url);
+        return new AdminLoginPage(selenium);
+    }
 	
 	public LoginPage start() {
 		return startAsCompany("n4");

@@ -1,90 +1,83 @@
 package com.n4systems.fieldid.selenium.testcase.events;
 
-import com.n4systems.fieldid.selenium.datatypes.Asset;
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
-import org.junit.After;
-import org.junit.Before;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
-import com.n4systems.fieldid.selenium.pages.AssetPage;
-import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.IdentifyPage;
+import static org.junit.Assert.assertTrue;
 
-public class EventCreateEditRemoveTest extends FieldIDTestCase {
+public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage> {
 
-	private HomePage page;
-	private AssetPage assetPage;
-	private EventPage eventPage;
-	private String masterSerial;
-	private String subSerial;
+    private static final String TEST_SERIAL_NUMBER = "4242QQ";
+    private static final String TEST_SUB_SERIAL_NUMBER = TEST_SERIAL_NUMBER + "_SUB";
 
-	private String masterEventType = "Crane - Cab Controlled";
+    @Override
+    public void setupScenario(Scenario scenario) {
+        EventType eventType = scenario.anEventType()
+                .withMaster(true)
+                .named("Master Event Type").build();
 
-	@Before
-	public void setUp() {
-		page = startAsCompany("illinois").login();
-		masterSerial = MiscDriver.getRandomString(10);
-		subSerial = masterSerial + "_Sub";
-		identifyAssetWithSerialNumber(masterSerial, "Gantry Crane - Cab Controlled", "PO 3", "OMG PLS");
+        AssetType subType = scenario.anAssetType()
+                .named("Sub Asset Type")
+                .withEventTypes(eventType)
+                .build();
 
-		assetPage = page.search(masterSerial);
-	}
+        AssetType masterType = scenario.anAssetType()
+                .named("Master Asset Type")
+                .withSubTypes(subType)
+                .withEventTypes(eventType)
+                .build();
 
-	@After
-	public void cleanUp() {
-		assetPage = page.search(masterSerial);
-		assetPage.clickEditTab().clickDelete();
-	}
+        scenario.anAsset()
+                .purchaseOrder("PO 3")
+                .withSerialNumber(TEST_SERIAL_NUMBER)
+                .ofType(masterType)
+                .build();
+    }
+
+    @Override
+    protected AssetPage navigateToPage() {
+        return startAsCompany("test1").login().search(TEST_SERIAL_NUMBER);
+    }
 
 	@Test
 	public void create_master_event_no_sub_events() {
-		eventPage = assetPage.clickEventsTab().clickManageEvents().clickStartNewEvent(masterEventType);
-		
-		performMandatoryEvent();
+        EventPage eventPage = page.clickEventsTab().clickManageEvents().clickStartNewEvent("Master Event Type");
+
+        performMandatoryEvent(eventPage);
 
 		eventPage.clickSave();
 
 		selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]");
 	}
 
-	//Test is timing out...
+    @Test
+    @Ignore("Timing out?")
 	public void create_master_with_sub_event() {
-		assetPage.clickSubComponentsTab();
-		assetPage.addNewSubcomponent(subSerial);
+		page.clickSubComponentsTab();
+		page.addNewSubcomponent(TEST_SUB_SERIAL_NUMBER);
 		
-		eventPage = assetPage.clickEventsTab().clickManageEvents().clickStartNewEvent(masterEventType);
+		EventPage eventPage = page.clickEventsTab().clickManageEvents().clickStartNewEvent("Master Event Type");
 
-		performMandatoryEvent();
-		performSubEvent();
+		performMandatoryEvent(eventPage);
+		performSubEvent(eventPage);
 
 		eventPage.clickSave();
 
-		selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]");
-
-		assetPage = page.search(subSerial);
-		assetPage.clickEditTab().clickDelete();
+		assertTrue(selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]"));
 	}
 
-	private void identifyAssetWithSerialNumber(String serial, String assetType, String purchaseOrder, String status) {
-		IdentifyPage identifyPage = page.clickIdentifyLink();
-		Asset asset = new Asset();
-		asset.setSerialNumber(serial);
-		asset.setAssetType(assetType);
-		asset.setPurchaseOrder(purchaseOrder);
-		asset.setAssetStatus(status);
-
-		identifyPage.setAddAssetForm(asset, false);
-		identifyPage.saveNewAsset();
-	}
-
-	private void performMandatoryEvent() {
+	private void performMandatoryEvent(EventPage eventPage) {
 		eventPage.clickMandatoryEventToPerformLink();
 		eventPage.clickStore();
 	}
 
-	private void performSubEvent() {
+	private void performSubEvent(EventPage eventPage) {
 		eventPage.clickSubStartEventLink();
 		eventPage.clickStore();
 	}

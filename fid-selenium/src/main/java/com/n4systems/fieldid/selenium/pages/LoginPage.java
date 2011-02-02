@@ -5,6 +5,8 @@ import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
+import static org.junit.Assert.assertTrue;
+
 public class LoginPage extends WebPage {
 	
 	public static final String SYSTEM_USER_NAME = "n4systems";
@@ -37,12 +39,21 @@ public class LoginPage extends WebPage {
 		return legacyLogin.signInAllTheWayToWizard(userName, password);
 	}
 
+	public SessionBumpPage signInToSessionBump(String userName, String password) {
+		doSignIn(userName, password);
+        return new SessionBumpPage(selenium);
+	}
+
 	public void signOut() {
 		legacyLogin.signOut();
 	}
 	
 	public boolean isPlansAndPricingAvailable() {
 		return selenium.isElementPresent("//div[@id='plansPricingButton']/a");
+	}
+
+	public boolean isRequestAnAccountAvailable() {
+		return selenium.isElementPresent("xpath=//DIV[@id='requestAccountButton']/A");
 	}
 	
 	public SelectPackagePage clickPlansAndPricingLink() {
@@ -51,10 +62,18 @@ public class LoginPage extends WebPage {
 	}
 
 	public EULAPage loginToEula(String username, String password) {
-		selenium.type("//input[@id='userName']", username);
-		selenium.type("//input[@id='password']", password);
-		selenium.click("//input[@id='signInButton']");
+        doSignIn(username, password);
 		return new EULAPage(selenium);
 	}
-	
+
+    private void doSignIn(String userName, String password) {
+		selenium.type("//input[@id='userName']", userName);
+		selenium.type("//input[@id='password']", password);
+		selenium.click("//input[@id='signInButton']");
+    }
+
+    public void verifySessionKickMessageDisplayed() {
+        assertTrue("message saying you were kicked out is not displayed", selenium.isTextPresent("signed in with the same username causing you to be signed out"));
+    }
+
 }

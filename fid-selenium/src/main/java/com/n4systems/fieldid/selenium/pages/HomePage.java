@@ -23,5 +23,15 @@ public class HomePage extends FieldIDPage {
 		checkForErrorMessages(null);
 		return selenium.isElementPresent(HOME_PAGE_HEADER_XPATH);
 	}
+
+    public void clickFirstLearningCenterLink() {
+        selenium.click("//div[@id='dashboardShortCuts']/div[@id='helpVideos']/ul/li[1]/a");
+        waitForPageToLoad();
+    }
+
+    public LoginPage clickHomeExpectingSessionBoot() {
+        selenium.click("//div[@id='pageNavigation']//a[.='Home']");
+        return new LoginPage(selenium);
+    }
 	
 }

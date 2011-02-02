@@ -10,7 +10,8 @@ import java.util.List;
 
 import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
 
 public class FieldIDPage extends WebPage {
@@ -271,5 +272,21 @@ public class FieldIDPage extends WebPage {
         selenium.check(checkboxLocator);
         selenium.fireEvent(checkboxLocator, "click");
     }
+
+    public void forceSessionTimeout() {
+        selenium.deleteAllVisibleCookies();
+		selenium.runScript("testSession();");
+        new ConditionWaiter(new Predicate(){
+            @Override
+            public boolean evaluate() {
+                return isSessionExpiredLightboxVisible();
+            }
+        }).run("Session Expired lightbox never appeared.");
+	}
+
+	public boolean isSessionExpiredLightboxVisible() {
+		String sessionExpiredLightboxLocator = "xpath=//DIV[@class='lv_Title' and contains(text(),'Session Expired')]";
+		return selenium.isElementPresent(sessionExpiredLightboxLocator) && selenium.isVisible(sessionExpiredLightboxLocator);
+	}
 
 }

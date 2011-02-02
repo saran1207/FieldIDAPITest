@@ -1,15 +1,13 @@
 package com.n4systems.fieldid.selenium.testcase.nonloggedin;
 
-import static com.n4systems.fieldid.selenium.asserts.FieldIdAssert.assertSystemLogoIsUsed;
-import static org.junit.Assert.assertTrue;
-
+import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.login.page.Choose;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.page.Choose;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import static com.n4systems.fieldid.selenium.asserts.FieldIdAssert.assertSystemLogoIsUsed;
+import static org.junit.Assert.assertTrue;
 
 public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 

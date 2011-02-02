@@ -13,7 +13,6 @@ import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.login.page.CreateAccount;
 import com.n4systems.fieldid.selenium.login.page.Login;
 import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class ReferrerTrackingTest extends FieldIDTestCase {
 	
@@ -57,7 +56,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		signOutAndGoToReferalLink(referralLink);
 		
 		TenantInfo t = createANewUnlimitedTenant("admin", "password");
-		
+
 		goToReferFieldId();
 		
 		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
@@ -103,8 +102,7 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 	}
 	
 	private TenantInfo createANewUnlimitedTenant(String username, String password) {
-		String tenantName = MiscDriver.getRandomString(8);
-//        String tenantName = TEST_CREATED_TENANT_NAMES[0];
+        String tenantName = TEST_CREATED_TENANT_NAMES[0];
 		String tenantID = tenantName.toLowerCase();
 
 		CreateAccount create = new CreateAccount(selenium, misc);

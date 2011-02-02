@@ -1,24 +1,28 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static org.junit.Assert.assertTrue;
-
-import com.n4systems.fieldid.selenium.pages.WebEntity;
+import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
+import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.SessionBumpPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.home.page.Home;
-import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.login.page.Login;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 
 public class SessionBumpTest extends FieldIDTestCase {
 
+    private static final String TEST_USER = "testuser";
+    private static final String TEST_PASSWORD = "testpass";
+
 	private FieldIdSelenium secondSession;
-	
-	@Before
+
+    @Override
+    public void setupScenario(Scenario scenario) {
+        scenario.aUser().withUserId(TEST_USER).withPassword(TEST_PASSWORD).build();
+    }
+
+    @Before
 	public void createSecondBrowserSession() throws Exception {
 		secondSession = createOpenedWebBrowser();
 	}
@@ -30,98 +34,36 @@ public class SessionBumpTest extends FieldIDTestCase {
 	
 	@Test
 	public void should_warn_second_user_that_another_user_will_be_kicked_out_if_they_confirm() throws Exception {
-		Login loginSession1 = new Login(selenium, misc);
-		
-		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
-		
-		loginSession1.signInAllTheWayToHome("aaitkens", "makemore$");
-		
-		loginSession2.doSignIn("aaitkens", "makemore$");
-		loginSession2.assertOnConfirmSessionKick();
+        LoginPage loginPage1 = startAsCompany("test1");
+        LoginPage loginPage2 = startAsCompany("test1", secondSession);
+
+        loginPage1.login(TEST_USER, TEST_PASSWORD);
+        loginPage2.signInToSessionBump(TEST_USER, TEST_PASSWORD);
 	}
 	
 	@Test
 	public void should_kick_out_first_account_if_the_second_user_confirms_session_kick() throws Exception {
-		Login loginSession1 = new Login(selenium, misc);
-		
-		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
-		
-		loginSession1.signInAllTheWayToHome("aaitkens", "makemore$");
-		
-		loginSession2.doSignIn("aaitkens", "makemore$");
-		loginSession2.assertOnConfirmSessionKick();
-		loginSession2.confirmKickingSession();
-		loginSession2.verifySignedIn();
-		
-		misc.gotoHome();
-		loginSession1.verifyLoginPageWithKickMessage();
-	}
-	
-	@Ignore
-	@Test
-	public void should_warn_the_user_that_they_will_be_booted_next_release_on_every_request_after_it_happens() throws Exception {
-		Login loginSession1 = new Login(selenium, misc);
-		
-		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
-		
-		loginSession1.signInAllTheWayToHome("sricci", "makemore$");
-		
-		loginSession2.signInAllTheWayToHome("sricci", "makemore$");
-		
-		selenium.open("/fieldid/home.action");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-		
-		secondSession.open("/fieldid/home.action");
-		secondSession.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-		
-		selenium.open("/fieldid/search.action");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-		
-		selenium.open("/fieldid/report.action");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-		
-		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
+        LoginPage loginPage1 = startAsCompany("test1");
+        LoginPage loginPage2 = startAsCompany("test1", secondSession);
+
+        HomePage homePage1 = loginPage1.login(TEST_USER, TEST_PASSWORD);
+        SessionBumpPage sessionBumpPage = loginPage2.signInToSessionBump(TEST_USER, TEST_PASSWORD);
+        sessionBumpPage.confirmKickingSession();
+
+        loginPage1 = homePage1.clickHomeExpectingSessionBoot();
+        loginPage1.verifySessionKickMessageDisplayed();
 	}
 	
 	@Test
 	public void should_not_boot_out_multiple_system_account_sign_ins() throws Exception {
-		Login loginSession1 = new Login(selenium, misc);
-		Home home1 = new Home(selenium, misc);
-		
-		MiscDriver misc2 = new MiscDriver(secondSession);
-		Login loginSession2 = new Login(secondSession, misc2);
-		Home home2 = new Home(secondSession, misc2);
-		
-		loginSession1.signInWithSystemAccount();
-		
-		loginSession2.signInWithSystemAccount();
-		
-		selenium.open("/fieldid/home.action");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-		
-		secondSession.open("/fieldid/home.action");
-		secondSession.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-		
-		home1.assertHomePage();
-		home2.assertHomePage();
+        LoginPage loginPage1 = startAsCompany("test1");
+        LoginPage loginPage2 = startAsCompany("test1", secondSession);
+
+        HomePage home1 = loginPage1.login().clickHomeLink();
+        HomePage home2 = loginPage2.login().clickHomeLink();
+
+        home1.clickSetupLink();
+        home2.clickSetupLink();
 	}
-	
-	@Test
-	@Ignore
-	public void should_find_that_an_ajax_request_by_kicked_out_user_will_place_the_warning_on_the_page() throws Exception {
-		Login loginSession1 = new Login(selenium, misc);
-		Login loginSession2 = new Login(secondSession, new MiscDriver(secondSession));
-		
-		loginSession1.signInAllTheWayToHome("sricci", "makemore$");
-		selenium.open("/fieldid/productAdd.action");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-		
-		loginSession2.signInAllTheWayToHome("sricci", "makemore$");
-		
-		selenium.click("css=.searchOwner");
-		selenium.waitForAjax(WebEntity.AJAX_TIMEOUT);
-		
-		assertTrue("The is no warning of session kick out ", selenium.isElementPresent("sessionKickNotice"));
-	}
-	
+
 }

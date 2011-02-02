@@ -38,7 +38,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 
     @Test
 	public void shouldBePopulatingPrimaryOrganizationAddressWithInformationGivenAtAccountSetUp() throws Exception {
-        TenantInfo t = createANewTenant();
+        createANewTenant();
         HomePage homePage = logIntoNewTenant();
 
         ManageOrganizationsPage orgsPage = homePage.clickSetupLink().clickManageOrganizations();
@@ -59,7 +59,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
         return eulaPage.clickAcceptEULAToWizard().clickNoThanks();
 	}
 
-	private TenantInfo createANewTenant() {
+	private void createANewTenant() {
         SelectPackagePage selectPackagePage = startAsCompany(REFERRING_TENANT_NAME).clickPlansAndPricingLink();
         SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink("Unlimited");
 
@@ -85,10 +85,6 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 
         SetPasswordPage page = new SignUpEmailLoginNavigator().navigateToSignInPageSpecifiedIn(accountActivationMessage, selenium);
         page.enterAndConfirmPassword(NEW_PASSWORD);
-        LoginPage loginPage = page.submitConfirmPassword();
-
-        t.setLoginPage(loginPage);
-		
-		return t;
+        page.submitConfirmPassword();
 	}
 }

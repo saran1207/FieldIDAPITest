@@ -37,6 +37,10 @@ public class IdentifyPage extends FieldIDPage {
 		selenium.fireEvent("//select[@id='assetType']", "change");
 		waitForAjax();
 	}
+
+	public void selectAssetStatus(String status) {
+		selenium.select("//select[@id='assetCreate_assetStatus']", status);
+	}
 	
 	public void selectAttributeValue(String attribute, String value) {
 		String selectXpath = "//div[@id='infoOptions']//div[@infofieldname='"+attribute+"']//select"; 
@@ -154,6 +158,10 @@ public class IdentifyPage extends FieldIDPage {
 
     public void enterSerialNumber(String serialNumber) {
         selenium.type("//input[@id='serialNumberText']", serialNumber);
+    }
+
+    public void enterPurchaseOrder(String purchaseOrder) {
+        selenium.type("//input[@id='assetCreate_purchaseOrder']", purchaseOrder);
     }
 
     public void enterRfidNumber(String rfidNumber) {

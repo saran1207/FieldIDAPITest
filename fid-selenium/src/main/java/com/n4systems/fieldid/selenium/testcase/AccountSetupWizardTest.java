@@ -33,14 +33,14 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 
     @Test
 	public void admin_logs_in_says_no_thanks_to_setup_wizard() {
-		LoginPage loginPage = createARandomNewBasicTenant(REFERRING_TENANT);
+		LoginPage loginPage = createNewBasicTenant(REFERRING_TENANT);
 		AccountSetupWizardPage wizardPage = loginPage.signInAllTheWayToWizard(TEST_USER_NAME, TEST_PASSWORD);
 		assertNoThanksWorks(wizardPage);
 	}
 
 	@Test
 	public void no_referral_basic_admin_logs_in_accepts_all_defaults_for_setup_wizard() {
-		LoginPage loginPage = createARandomNewBasicTenant(REFERRING_TENANT);
+		LoginPage loginPage = createNewBasicTenant(REFERRING_TENANT);
 		AccountSetupWizardPage wizardPage = loginPage.signInAllTheWayToWizard(TEST_USER_NAME, TEST_PASSWORD);
 		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks(wizardPage, false);
 		verifyDefaultSettingsConfiguredProperly(wizardPage, defaults);
@@ -51,7 +51,7 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		wizardPage.clickNoThanks();
 	}
 
-	private LoginPage createARandomNewBasicTenant(String referrer) {
+	private LoginPage createNewBasicTenant(String referrer) {
         SelectPackagePage selectPackagePage = startAsCompany(referrer).clickPlansAndPricingLink();
         String packageName = SignUpPackages.packageTypePlus;	// must be unlimited
         SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink(packageName);
