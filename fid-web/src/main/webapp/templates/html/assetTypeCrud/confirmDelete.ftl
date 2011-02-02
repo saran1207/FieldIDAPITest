@@ -4,7 +4,7 @@ ${action.setPageType('asset_type', 'edit')!}
 	<div class="formErrors error" >
 		<@s.text name="error.assetsusedonamasterevent">
 			<@s.param>${assetType.name?html}</@s.param>
-			<@s.param>${removalSummary.assetsUsedInMasterInpsection}</@s.param>
+			<@s.param>${removalSummary.assetsUsedInMasterEvent}</@s.param>
 		</@s.text>
 	</div>
 </#if>
