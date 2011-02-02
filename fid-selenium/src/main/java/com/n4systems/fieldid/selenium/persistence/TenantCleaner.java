@@ -127,7 +127,7 @@ public class TenantCleaner {
 
         removeAllExternalOrgsPointingToTenants(em, tenantIds);
 
-        cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, CustomerOrg.class, DivisionOrg.class, SecondaryOrg.class, PrimaryOrg.class);
+        cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, BaseOrg.class);
 
         cleanUpAddressInfo(em);
 
@@ -155,12 +155,17 @@ public class TenantCleaner {
         query.executeUpdate();
     }
 
-    private void cleanUpModifiedOrCreatedReferencesForTenant(EntityManager em, List tenantIds, Class... entityClasses) {
-        for (Class entityClass : entityClasses) {
-            Query query = em.createQuery("update " + entityClass.getName() + " set createdBy = null where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
-            query.executeUpdate();
-            query = em.createQuery("update " + entityClass.getName() + " set modifiedBy = null where tenant.id in (:tenantIds)" ).setParameter("tenantIds", tenantIds);
-            query.executeUpdate();
+    private void cleanUpModifiedOrCreatedReferencesForTenant(EntityManager em, List<Long> tenantIds, Class<? extends BaseOrg>... entityClasses) {
+        for (Long tenantId : tenantIds) {
+            for (Class entityClass : entityClasses) {
+                Query query = em.createQuery("from " + entityClass.getName() + " where tenant.id = :tenantId").setParameter("tenantId", tenantId);
+                List<BaseOrg> orgs = query.getResultList();
+                for (BaseOrg org : orgs) {
+                    org.setCreatedBy(null);
+                    org.setModifiedBy(null);
+                    em.merge(org);
+                }
+            }
         }
     }
 
