@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.selenium.persistence;
 
+import java.util.Date;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import com.n4systems.model.AssetType;
-import com.n4systems.model.Configuration;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -11,11 +15,6 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.UserType;
-
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class MinimalTenantDataSetup {
 
@@ -67,7 +66,6 @@ public class MinimalTenantDataSetup {
         org.getLimits().setDiskSpaceUnlimited();
         org.getLimits().setSecondaryOrgsUnlimited();
         org.getLimits().setUsersUnlimited();
-        org.getLimits().setLiteUsersUnlimited();
         org.setModified(new Date());
 
         em.persist(org);

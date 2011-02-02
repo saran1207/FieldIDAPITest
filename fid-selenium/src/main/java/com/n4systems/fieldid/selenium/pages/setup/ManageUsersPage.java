@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.selenium.pages.setup;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -131,8 +130,8 @@ public class ManageUsersPage extends FieldIDPage {
 		}
 	}
 
-	public void clickSaveUser(String prefix) {
-		selenium.click("//INPUT[@id='" + prefix + "UserCreate_save']");
+	public void clickSaveUser() {
+		selenium.click("//INPUT[@name='save']");
 		waitForPageToLoad();
 	}
 	
@@ -173,7 +172,6 @@ public class ManageUsersPage extends FieldIDPage {
 			result.add(permission.trim());
 			userIDCellLocator = userIDCellLocator.replaceFirst("\\." + row, "." + (row + 1));
 		}
-		assertTrue("There should be at least one user but the list is empty!", result.size() > 0);
 		return result;
 	}
 
@@ -206,5 +204,38 @@ public class ManageUsersPage extends FieldIDPage {
 	public void enableManageSystemConfigPermission(){
 		selenium.click("//tr[3]/td[2]/input");
 	}
+
+	public void clickEditTab() {
+		clickNavOption("Edit");
+	}
+
+	public void clickChangeAccountType() {
+		selenium.click("//a[text()='Change Account Type']");
+		waitForPageToLoad();
+	}
+
+	public void clickChangeToReadOnlyUser() {
+		selenium.click("//input[@value='Change to a Read-Only User']");
+		waitForPageToLoad();
+	}
 	
+	public void clickChangeToLiteUser() {
+		selenium.click("//input[@value='Change to a Lite User']");
+		waitForPageToLoad();
+	}
+
+	public void clickChangeToFullUser() {
+		selenium.click("//input[@value='Change to a Full User']");
+		waitForPageToLoad();
+	}
+
+	public void removeUser(String userid, boolean confirm) {
+		confirmNextDialog(confirm);
+		selenium.click("//a[contains(text(),'" + userid + "')]/../..//a[text()='Remove']");
+		selenium.getConfirmation();
+//		if(confirm) {
+//			waitForPageToLoad();
+//		}
+	}
+
 }

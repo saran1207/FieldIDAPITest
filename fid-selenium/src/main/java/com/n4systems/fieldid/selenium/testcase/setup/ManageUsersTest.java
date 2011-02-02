@@ -34,8 +34,10 @@ public class ManageUsersTest extends FieldIDTestCase {
 		
 		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(
 				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
-		
+			
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY);
+		
+		primaryOrg.getLimits().setLiteUsersUnlimited();	
 		
 		primaryOrg.setExtendedFeatures(extendedFeatures);
 		
@@ -82,7 +84,7 @@ public class ManageUsersTest extends FieldIDTestCase {
 	}
 	
 	@Test
-	public void test_filter_for_full_users() throws Exception {
+	public void filter_for_full_users_test() throws Exception {
 		manageUsersPage.selectSearchUserType(ManageUsersPage.USER_TYPE_FULL);
 		manageUsersPage.clickSearchButton();
 		List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
@@ -91,7 +93,7 @@ public class ManageUsersTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void test_filter_for_lite_users() throws Exception {
+	public void filter_for_lite_users_test() throws Exception {
 		manageUsersPage.selectSearchUserType(ManageUsersPage.USER_TYPE_LITE);
 		manageUsersPage.clickSearchButton();
 		List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
@@ -100,12 +102,23 @@ public class ManageUsersTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void test_filter_for_readonly_users() throws Exception {
+	public void filter_for_readonly_users_test() throws Exception {
 		manageUsersPage.selectSearchUserType(ManageUsersPage.USER_TYPE_READONLY);
 		manageUsersPage.clickSearchButton();
 		List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
 		assertTrue(users.size() > 0);
 		assertTrue(users.contains(READ_ONLY_USER));
+	}
+	
+	@Test
+	public void remove_user_test() throws Exception {
+		manageUsersPage.removeUser(READ_ONLY_USER, true);
+		
+		manageUsersPage.selectSearchUserType(ManageUsersPage.USER_TYPE_READONLY);
+		manageUsersPage.clickSearchButton();
+		List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
+		assertTrue(users.size() == 0);
+		assertTrue(!users.contains(READ_ONLY_USER));
 	}
 
 	private EmployeeUser addAnEmployeeUser(ManageUsersPage manageUsersPage) {
@@ -114,7 +127,7 @@ public class ManageUsersTest extends FieldIDTestCase {
 		employeeUser.addPermission(EmployeeUser.safety);
 		employeeUser.addPermission(EmployeeUser.tag);
 		manageUsersPage.setFullUserFormFields(employeeUser);
-		manageUsersPage.clickSaveUser("employee");
+		manageUsersPage.clickSaveUser();
 		return employeeUser;
 	}
 	
@@ -123,14 +136,14 @@ public class ManageUsersTest extends FieldIDTestCase {
 		user.addPermission(EmployeeUser.create);
 		user.addPermission(EmployeeUser.edit);
 		manageUsersPage.setLiteUserFormFields(user);
-		manageUsersPage.clickSaveUser("lite");
+		manageUsersPage.clickSaveUser();
 		return user;
 	}
 	
 	private CustomerUser addAReadonlyUser(ManageUsersPage manageUsersPage) {
 		CustomerUser user = new CustomerUser("TestReadOnly", "selenium@fieldid.com", PASSWORD, PASSWORD, new Owner(COMPANY), "ReadOnly", "User");
 		manageUsersPage.setReadOnlyUserFormFields(user);
-		manageUsersPage.clickSaveUser("readOnly");
+		manageUsersPage.clickSaveUser();
 		return user;
 	}	
 
