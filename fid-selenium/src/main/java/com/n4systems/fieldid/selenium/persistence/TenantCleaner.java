@@ -127,7 +127,7 @@ public class TenantCleaner {
 
         removeAllExternalOrgsPointingToTenants(em, tenantIds);
 
-        cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, BaseOrg.class);
+        cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, CustomerOrg.class, DivisionOrg.class, SecondaryOrg.class, PrimaryOrg.class);
 
         cleanUpAddressInfo(em);
 
