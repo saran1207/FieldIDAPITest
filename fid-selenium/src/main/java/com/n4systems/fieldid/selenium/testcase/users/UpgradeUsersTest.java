@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		
 		defaultPrimaryOrg.getLimits().setLiteUsersUnlimited();
 		
-		scenario.save(defaultPrimaryOrg);
+		scenario.updatePrimaryOrg(defaultPrimaryOrg);		
 		
 		scenario.aReadOnlyUser()
 		        .withUserId(READ_ONLY_USER)
@@ -54,10 +55,16 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		manageUsersPage = startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageUsers();
 	}
 	
+	@After
+	public void tearDown() {
+		manageUsersPage.clickSignOut();
+	}
+	
 	@Test
 	public void upgrade_read_only_user_to_lite() throws Exception {
 		manageUsersPage.clickUserID(READ_ONLY_USER);
 		manageUsersPage.clickChangeAccountType();
+		assertTrue(manageUsersPage.canChangeToLiteUser());
 		manageUsersPage.clickChangeToLiteUser();
 		manageUsersPage.clickSaveUser();
 		
@@ -68,6 +75,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 	public void upgrade_read_only_user_to_full() throws Exception {
 		manageUsersPage.clickUserID(READ_ONLY_USER);
 		manageUsersPage.clickChangeAccountType();
+		assertTrue(manageUsersPage.canChangeToFullUser());
 		manageUsersPage.clickChangeToFullUser();
 		manageUsersPage.clickSaveUser();
 		
@@ -78,6 +86,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 	public void upgrade_lite_user_to_full() throws Exception {
 		manageUsersPage.clickUserID(LITE_USER);
 		manageUsersPage.clickChangeAccountType();
+		assertTrue(manageUsersPage.canChangeToFullUser());
 		manageUsersPage.clickChangeToFullUser();
 		manageUsersPage.clickSaveUser();
 		
@@ -108,6 +117,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 	public void downgrade_full_user_lite() throws Exception {
 		manageUsersPage.clickUserID(FULL_USER);
 		manageUsersPage.clickChangeAccountType();
+		assertTrue(manageUsersPage.canChangeToLiteUser());
 		manageUsersPage.clickChangeToLiteUser();
 		manageUsersPage.clickSaveUser();
 		

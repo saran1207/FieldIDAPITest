@@ -33,10 +33,18 @@ public class ManageUsersPage extends FieldIDPage {
 		selenium.click("//input[@id='addFullUser']");
 		waitForPageToLoad();
 	}
+	
+	public boolean canAddFullUser() {
+		return selenium.isElementPresent("//input[@id='addFullUser']");
+	}
 
 	public void clickAddLiteUser() {
 		selenium.click("//input[@id='addLiteUser']");
 		waitForPageToLoad();
+	}
+
+	public boolean canAddLiteUser() {
+		return selenium.isElementPresent("//input[@id='addLiteUser']");
 	}
 
 	public void clickAddReadOnlyUser() {
@@ -224,18 +232,23 @@ public class ManageUsersPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
+	public boolean canChangeToLiteUser() {
+		return selenium.isElementPresent("//input[@value='Change to a Lite User']");
+	}
+	
 	public void clickChangeToFullUser() {
 		selenium.click("//input[@value='Change to a Full User']");
 		waitForPageToLoad();
+	}
+	
+	public boolean canChangeToFullUser() {
+		return selenium.isElementPresent("//input[@value='Change to a Full User']");
 	}
 
 	public void removeUser(String userid, boolean confirm) {
 		confirmNextDialog(confirm);
 		selenium.click("//a[contains(text(),'" + userid + "')]/../..//a[text()='Remove']");
 		selenium.getConfirmation();
-//		if(confirm) {
-//			waitForPageToLoad();
-//		}
 	}
 
 }

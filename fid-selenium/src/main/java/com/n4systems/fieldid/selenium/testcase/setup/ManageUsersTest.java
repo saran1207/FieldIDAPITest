@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +42,7 @@ public class ManageUsersTest extends FieldIDTestCase {
 		
 		primaryOrg.setExtendedFeatures(extendedFeatures);
 		
-		scenario.save(primaryOrg);
+		scenario.updatePrimaryOrg(primaryOrg);
 		
 		scenario.aReadOnlyUser()
         	 	.withUserId(READ_ONLY_USER)
@@ -57,6 +58,11 @@ public class ManageUsersTest extends FieldIDTestCase {
 	@Before
 	public void setUp() throws Exception {
 		manageUsersPage = startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageUsers();
+	}
+	
+	@After
+	public void tearDown() {
+		manageUsersPage.clickSignOut();
 	}
 	
 	@Test
