@@ -421,7 +421,17 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * @param inspectionDTO
 	 */
 	private void populate(AbstractEvent event, AbstractInspectionServiceDTO inspectionServiceDTO, Tenant tenant) {
-
+		// Mobile prior to 1.26 will send formVersion.
+		if (inspectionServiceDTO.getFormId() != null) {
+			event.setEventForm(persistenceManager.find(EventForm.class, inspectionServiceDTO.getFormId()));
+			event.setEditable(true);
+		} else {
+			event.setEventForm(event.getType().getEventForm());
+			
+			boolean eventEditable = inspectionServiceDTO.getFormVersion() == event.getType().getFormVersion();
+			event.setEditable(eventEditable);
+		}
+		
 		event.setComments(inspectionServiceDTO.getComments());
 
 		// Required object lookups
@@ -491,17 +501,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 				event.getSubEvents().add(convert(subInspection, tenant, performedBy));
 			}
 		}
-		
-		// Mobile prior to 1.26 will send formVersion.
-		if (inspectionServiceDTO.getFormId() != null) {
-			event.setEventForm(persistenceManager.find(EventForm.class, inspectionServiceDTO.getFormId()));
-			event.setEditable(true);
-		} else {
-			event.setEventForm(event.getType().getEventForm());
-			
-			boolean eventEditable = inspectionServiceDTO.getFormVersion() == event.getType().getFormVersion();
-			event.setEditable(eventEditable);
-		}	
 
 		event.setAssetStatus(convertProductStatus(inspectionServiceDTO));
 		event.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));
