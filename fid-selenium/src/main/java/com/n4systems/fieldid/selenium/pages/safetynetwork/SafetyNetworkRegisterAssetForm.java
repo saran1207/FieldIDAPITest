@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.pages.safetynetwork;
 
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Asset;
+import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
@@ -49,12 +50,70 @@ public class SafetyNetworkRegisterAssetForm extends FieldIDPage{
 		selenium.click("//a[@id='expand_details']");
 		waitForElementToBePresent("//div[@id='extraDetails']");
 	}
+	
+	
+	public void setRFIDNumber(String value) {
+		selenium.type("//input[contains(@id, 'rfidNumber')]", value);
+	}
+	
+	public void setReferenceNumber(String value) {
+		selenium.type("//input[contains(@id, 'customerRefNumber')]", value);
+	}
+	
+	public void setLocation(String value) {
+		selenium.type("//input[contains(@id, 'freeformLocation')]", value);
+	}
+	
+	public void setAssetStatus(String value) {
+		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+			openDetailedForm();
+		}
+		selenium.select("//select[@name='assetStatus']", value);
+	}
+	
+	public void setOwner(Owner owner) {
+		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+			openDetailedForm();
+		}
+		OrgPicker orgPicker = getOrgPicker();
+		orgPicker.clickChooseOwner();
+		orgPicker.setOwner(owner);
+		orgPicker.clickSelectOwner();	
+	}
+	
+	public void setPurchaseOrder(String value) {
+		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+			openDetailedForm();
+		}
+		selenium.type("//input[contains(@id, 'purchaseOrder')]", value);
+	}
 
+	public void setNonIntegrationOrderNumber(String value) {
+		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+			openDetailedForm();
+		}
+		selenium.type("//input[contains(@id, 'nonIntegrationOrderNumber')]", value);
+	}
+	
+	public void selectComments(String value) {
+		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+			openDetailedForm();
+		}
+		selenium.select("//select[@id='commentTemplateSelection']", value);
+	}
+	
+	public void enterComments(String value) {
+		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+			openDetailedForm();
+		}
+		selenium.type("//textarea[@id='comments']", value);
+	}
+	
 	public void setAsset(Asset asset) {
 		if (asset.getRFIDNumber() != null) {
 			selenium.type("//input[contains(@id, 'rfidNumber')]", asset.getRFIDNumber());
 		}
-		if (asset.getRFIDNumber() != null) {
+		if (asset.getReferenceNumber() != null) {
 			selenium.type("//input[contains(@id, 'customerRefNumber')]", asset.getReferenceNumber());
 		} 
 		if (asset.getLocation() != null) {

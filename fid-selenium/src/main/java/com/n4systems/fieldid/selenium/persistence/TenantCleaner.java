@@ -56,7 +56,8 @@ import rfid.ejb.entity.AssetCodeMapping;
 
 public class TenantCleaner {
 
-    public void cleanTenants(EntityManager em, String[] tenants) {
+    @SuppressWarnings("unchecked")
+	public void cleanTenants(EntityManager em, String[] tenants) {
         Query tenantQuery = em.createQuery("select id from "+ Tenant.class.getName()+" where name in (:tenantNames)");
         tenantQuery.setParameter("tenantNames", Arrays.asList(tenants));
         List tenantIds = tenantQuery.getResultList();
@@ -64,7 +65,7 @@ public class TenantCleaner {
         if (tenantIds.isEmpty())
             return;
 
-        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
+        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id in (:tenantIds) and linked_id is null").setParameter("tenantIds", tenantIds);
         Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         List<Asset> assets = assetsQuery.getResultList();
 

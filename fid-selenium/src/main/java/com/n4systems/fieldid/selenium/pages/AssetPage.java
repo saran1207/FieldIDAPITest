@@ -2,7 +2,9 @@ package com.n4systems.fieldid.selenium.pages;
 
 import static org.junit.Assert.fail;
 
+import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Asset;
+import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
@@ -253,4 +255,11 @@ public class AssetPage extends FieldIDPage {
     public boolean wasMergeSuccessful(String firstSerialNumber, String mergeSerialNumber) {
         return selenium.isElementPresent("//h1[contains(.,'Merge Assets - " + firstSerialNumber + " into " + mergeSerialNumber + "')]");
     }
+    
+	public void setOwner(Owner owner) {
+		OrgPicker orgPicker = getOrgPicker();
+		orgPicker.clickChooseOwner();
+		orgPicker.setOwner(owner);
+		orgPicker.clickSelectOwner();	
+	}
 }
