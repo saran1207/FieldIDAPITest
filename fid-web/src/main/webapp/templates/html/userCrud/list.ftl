@@ -1,4 +1,11 @@
 ${action.setPageType('user','list')!}
+<head>
+	<script type="text/javascript">
+		document.observe("dom:loaded", function() {
+			updateUserTypes($('userGroup'));
+		});
+	</script>
+</head>
 <div class="quickForm">
 	<h3><@s.text name="label.filter" /></h3>
 	<@s.form method="GET" cssClass="simpleInputForm" theme="css_xhtml" > 
