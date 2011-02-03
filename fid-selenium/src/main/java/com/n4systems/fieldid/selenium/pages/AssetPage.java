@@ -37,6 +37,11 @@ public class AssetPage extends FieldIDPage {
 		checkForErrorMessages(null);
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + serialNumber + "')]");
 	}
+	
+	public boolean checkRfidNumber(String rfidNumber){
+		checkForErrorMessages(null);
+		return selenium.isElementPresent("//div[@class='columnCenter']/div[1]/p[2]/span[contains(text(),'" + rfidNumber + "')]");
+	}
 
 	public void clickSchedulesTab() {
 		clickNavOption("Schedules");

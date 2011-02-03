@@ -260,6 +260,12 @@ public class FieldIDPage extends WebPage {
 		return new AssetPage(selenium);
 	}
 	
+	public SmartSearchResultsPage searchWithMultipleResults(String criteria){
+		selenium.type("//input[@id='searchText']", criteria);
+		selenium.click("//input[@id='smartSearchButton']");
+		return new SmartSearchResultsPage(selenium);
+	}
+	
 	public void setCheckBoxValue(String locator, boolean checked) {
 		if(checked){
 			selenium.check(locator);
