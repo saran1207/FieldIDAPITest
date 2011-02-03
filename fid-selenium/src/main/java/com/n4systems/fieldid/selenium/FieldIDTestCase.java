@@ -50,12 +50,7 @@ public abstract class FieldIDTestCase extends DBTestCase {
         if (mailServer != null)
             mailServer.stop();
     }
-    
-    @After
-    public void deleteAllCookies() {
-    	selenium.deleteAllVisibleCookies();
-    }
-	
+    	
 	@Before
 	public final void setupSelenium() throws Exception {
 		loadProperties();

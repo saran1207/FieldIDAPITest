@@ -7,15 +7,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.tenant.TenantLimit;
 
 public class UpgradeUsersTest extends FieldIDTestCase {
 	
@@ -34,9 +35,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor(COMPANY);
 		
 		defaultPrimaryOrg.setExtendedFeatures(extendedFeatures);
-		
-		defaultPrimaryOrg.getLimits().setLiteUsersUnlimited();
-		
+				
 		scenario.updatePrimaryOrg(defaultPrimaryOrg);		
 		
 		scenario.aReadOnlyUser()
@@ -52,14 +51,12 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
+		AdminOrgPage adminPage = startAdmin().login().clickEditOrganization(COMPANY);
+		adminPage.enterTenantLimits(new TenantLimit(-1L, -1L, -1L, -1L, -1L));
+		adminPage.submitOrganizationChanges();
 		manageUsersPage = startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageUsers();
 	}
-	
-	@After
-	public void tearDown() {
-		manageUsersPage.clickSignOut();
-	}
-	
+		
 	@Test
 	public void upgrade_read_only_user_to_lite() throws Exception {
 		manageUsersPage.clickUserID(READ_ONLY_USER);

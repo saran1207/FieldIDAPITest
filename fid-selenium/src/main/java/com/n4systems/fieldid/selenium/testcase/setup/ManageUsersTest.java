@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,10 +15,12 @@ import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.datatypes.SystemUser;
+import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.tenant.TenantLimit;
 
 public class ManageUsersTest extends FieldIDTestCase {
 
@@ -37,9 +38,7 @@ public class ManageUsersTest extends FieldIDTestCase {
 				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
 			
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY);
-		
-		primaryOrg.getLimits().setLiteUsersUnlimited();	
-		
+				
 		primaryOrg.setExtendedFeatures(extendedFeatures);
 		
 		scenario.updatePrimaryOrg(primaryOrg);
@@ -57,12 +56,10 @@ public class ManageUsersTest extends FieldIDTestCase {
 	
 	@Before
 	public void setUp() throws Exception {
+		AdminOrgPage adminPage = startAdmin().login().clickEditOrganization(COMPANY);
+		adminPage.enterTenantLimits(new TenantLimit(-1L, -1L, -1L, -1L, -1L));
+		adminPage.submitOrganizationChanges();
 		manageUsersPage = startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageUsers();
-	}
-	
-	@After
-	public void tearDown() {
-		manageUsersPage.clickSignOut();
 	}
 	
 	@Test
