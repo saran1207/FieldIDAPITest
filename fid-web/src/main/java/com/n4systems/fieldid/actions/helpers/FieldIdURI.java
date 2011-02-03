@@ -11,12 +11,10 @@ import com.n4systems.util.HostNameParser;
 
 public class FieldIdURI {
 
-	private static String PROTOCOL = "https://";
 	private final ActionInvocationWrapper invocation;
 	private final String tenantName;
 
 	public FieldIdURI(ActionInvocationWrapper invocation, String tenantName) {
-		super();
 		this.invocation = invocation;
 		this.tenantName = tenantName;
 	}
@@ -25,7 +23,6 @@ public class FieldIdURI {
 		return invocation.getRequest();
 	}
 	
-	
 	public boolean isNonBrandedUrl() {
 		HostNameParser hostParser = HostNameParser.create(getBaseURI());
 		boolean b = !hostParser.hasSubDomain();
@@ -33,22 +30,20 @@ public class FieldIdURI {
 		return (b || nonbrandedsubdomain);
 	}
 	
-	
 	public String baseNonBrandedUrl() {
 		String unbrandedSubDomain = ConfigContext.getCurrentContext().getString(ConfigEntry.UNBRANDED_SUBDOMAIN);
 		HostNameParser hostParser = HostNameParser.create(getBaseURI());
 		String newHostname = hostParser.replaceFirstSubDomain(unbrandedSubDomain);
 		
-		return PROTOCOL + newHostname + "/fieldid";
+		return getProtocol() + newHostname + "/fieldid";
 	}
 	
 	public String baseBrandedUrl() {
 		HostNameParser hostParser = HostNameParser.create(getBaseURI());
 		String newHostname = hostParser.replaceFirstSubDomain(tenantName);
 		
-		return PROTOCOL + newHostname + "/fieldid";
+		return getProtocol() + newHostname + "/fieldid";
 	}
-	
 	
 	public URI getBaseURI() {
 		// creates a URI based on the current url, and resolved against the context path which should be /fieldid.  We add on the extra / since we currently need it.
@@ -58,5 +53,9 @@ public class FieldIdURI {
 	public URI createActionURI(String action) {
 		return getBaseURI().resolve(action);
 	}
+
+    private String getProtocol() {
+        return ConfigContext.getCurrentContext().getEntry(ConfigEntry.SYSTEM_PROTOCOL).getValue() + "://";
+    }
 	
 }

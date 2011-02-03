@@ -3,13 +3,17 @@ package com.n4systems.fieldid.selenium.testcase;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
+public class AssetTypeValidationTest extends PageNavigatingTestCase<HomePage> {
 
-public class AssetTypeValidationTest extends LoggedInTestCase {
+    @Override
+    protected HomePage navigateToPage() {
+        return start().login();
+    }
 
 	@Test
 	public void should_not_validate_an_info_option_after_the_field_is_changed_to_one_that_does_not_have_static_options() throws Exception {

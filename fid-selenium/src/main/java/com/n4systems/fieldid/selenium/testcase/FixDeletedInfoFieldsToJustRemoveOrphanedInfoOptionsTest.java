@@ -1,24 +1,13 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.components.UnitOfMeasurePicker;
-import com.n4systems.fieldid.selenium.datatypes.AssetCodeMapping;
-import com.n4systems.fieldid.selenium.datatypes.AssetType;
 import com.n4systems.fieldid.selenium.pages.SetupPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetCodeMappingsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
 import org.junit.Test;
-
-import com.n4systems.fieldid.selenium.datatypes.Attribute;
-import com.n4systems.fieldid.selenium.datatypes.ComboBoxAttribute;
-import com.n4systems.fieldid.selenium.datatypes.SelectBoxAttribute;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import rfid.ejb.entity.InfoFieldBean;
 
 public class FixDeletedInfoFieldsToJustRemoveOrphanedInfoOptionsTest extends PageNavigatingTestCase<SetupPage> {

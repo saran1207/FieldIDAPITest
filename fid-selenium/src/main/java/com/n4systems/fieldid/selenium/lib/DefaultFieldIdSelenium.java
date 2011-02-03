@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.selenium.lib;
 
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.SeleniumException;

@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
 public class WebEntity {

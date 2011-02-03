@@ -1,15 +1,12 @@
 package com.n4systems.fieldid.selenium.testcase.userregistration;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Date;
-
+import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.page.Login;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import java.util.Date;
+
+import static org.junit.Assert.assertTrue;
 
 public class UserRegistrationTest extends FieldIDTestCase {
 
@@ -30,10 +27,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 	}
 
 	private void goToUserRequests() {
-		Login loginPage = new Login(selenium, misc);
-		loginPage.gotoSignInPage();
-		
-		loginPage.signInWithSystemAccount();
+		start().login();
 		
 		selenium.openAndWaitForPageLoad("/fieldid/setup.action");
         selenium.clickAndWaitForPageLoad("//ul[@class='options ']//a[contains(., 'Owners, Users & Locations')]");

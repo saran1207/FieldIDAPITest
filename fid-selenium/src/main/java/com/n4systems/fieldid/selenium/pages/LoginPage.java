@@ -1,18 +1,14 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
-import com.n4systems.fieldid.selenium.login.page.Login;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class LoginPage extends WebPage {
 	
 	public static final String SYSTEM_USER_NAME = "n4systems";
 	public static final String SYSTEM_USER_PASSWORD = "Xk43g8!@";
-	
-	private Login legacyLogin;
 	
 	public LoginPage(Selenium selenium) {
 		this(selenium, true);
@@ -20,34 +16,29 @@ public class LoginPage extends WebPage {
 	
 	public LoginPage(Selenium selenium, boolean waitForPageToLoad) {
 		super(selenium, waitForPageToLoad);
-		legacyLogin = new Login(new DefaultFieldIdSelenium(selenium), new MiscDriver(new DefaultFieldIdSelenium(selenium)));
 	}
 	
 	public HomePage login() {
-		return legacyLogin.signInAllTheWayToHome(SYSTEM_USER_NAME, SYSTEM_USER_PASSWORD);
+		return signInAllTheWayToHome(SYSTEM_USER_NAME, SYSTEM_USER_PASSWORD);
 	}
 	
 	public HomePage login(String username, String password) {
-		return legacyLogin.signInAllTheWayToHome(username, password);
+		return signInAllTheWayToHome(username, password);
 	}
 	
 	public HomePage systemLogin() {
-		return legacyLogin.signInWithSystemAccount();
+		return login();
 	}
 
 	public AccountSetupWizardPage signInAllTheWayToWizard(String userName, String password) {
-		return legacyLogin.signInAllTheWayToWizard(userName, password);
+		return signInAllTheWayToWizard(userName, password);
 	}
 
 	public SessionBumpPage signInToSessionBump(String userName, String password) {
-		doSignIn(userName, password);
+		enterCredentialsAndSubmit(userName, password);
         return new SessionBumpPage(selenium);
 	}
 
-	public void signOut() {
-		legacyLogin.signOut();
-	}
-	
 	public boolean isPlansAndPricingAvailable() {
 		return selenium.isElementPresent("//div[@id='plansPricingButton']/a");
 	}
@@ -62,18 +53,66 @@ public class LoginPage extends WebPage {
 	}
 
 	public EULAPage loginToEula(String username, String password) {
-        doSignIn(username, password);
+        enterCredentialsAndSubmit(username, password);
 		return new EULAPage(selenium);
 	}
 
-    private void doSignIn(String userName, String password) {
+    private void enterCredentialsAndSubmit(String userName, String password) {
 		selenium.type("//input[@id='userName']", userName);
 		selenium.type("//input[@id='password']", password);
 		selenium.click("//input[@id='signInButton']");
+        waitForPageToLoad();
     }
 
     public void verifySessionKickMessageDisplayed() {
         assertTrue("message saying you were kicked out is not displayed", selenium.isTextPresent("signed in with the same username causing you to be signed out"));
+    }
+
+	private void signIn(String username, String password) {
+		enterCredentialsAndSubmit(username, password);
+		kickOtherSessionIfNeeded();
+
+		acceptEULAIfNeed();
+	}
+
+	private void kickOtherSessionIfNeeded() {
+		if (selenium.isElementPresent("kickOtherUserOut")) {
+			confirmKickingSession();
+		}
+	}
+
+    private void confirmKickingSession() {
+		selenium.click("kickOtherUserOut");
+        waitForPageToLoad();
+	}
+
+	private void acceptEULAIfNeed() {
+		if (isEULA()) {
+			scrollToBottomOfEULA();
+			gotoAcceptEULA();
+		}
+	}
+
+    public boolean isEULA() {
+        return selenium.isElementPresent("//h1[contains(text(),'Field ID End User Licence Agreement')]");
+    }
+
+	public void scrollToBottomOfEULA() {
+        selenium.runScript("toggleEula();");
+	}
+
+	public void gotoAcceptEULA() {
+        selenium.click("//input[@id='acceptEula']");
+	}
+
+    private HomePage signInAllTheWayToHome(String username, String password) {
+		signIn(username, password);
+		return new HomePage(selenium, false);
+	}
+
+    public ForgotPasswordPage clickForgotMyPassword() {
+        selenium.click("//a[.='I forgot my password']");
+        return new ForgotPasswordPage(selenium);
     }
 
 }

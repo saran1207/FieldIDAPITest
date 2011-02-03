@@ -13,7 +13,6 @@ import com.thoughtworks.selenium.Selenium;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
@@ -218,8 +217,7 @@ public class IdentifyPage extends FieldIDPage {
 	
 	private void setRequiredUnitsOfMeasure(List<String> requiredTextFieldIDs) {
 		for (String id : requiredTextFieldIDs) {
-			Random r = new Random();
-			String value = Integer.toString(Math.abs((r.nextInt(100)+1)));
+			String value = "50";
 			UnitOfMeasurePicker picker = new UnitOfMeasurePicker(selenium, id);
 			picker.setUnitOfMeasure(id, value);
 		}

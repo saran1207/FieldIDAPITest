@@ -78,7 +78,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
         t.setCompanyZipCode(TEST_ZIP);
 
 		signUpPage.enterCreateAccountForm(t);
-		signUpPage.submitCreateYourAccountForm();
+		signUpPage.submitCreateAccountForm();
 
         mailServer.waitForMessages(1);
         MailMessage accountActivationMessage = mailServer.getAndClearMessages().get(0);

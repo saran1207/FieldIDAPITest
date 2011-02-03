@@ -21,10 +21,6 @@ public class AccountSetupWizardPage extends FieldIDPage {
 	private static final String STEP_3_COMPLETE_LINK_XPATH = "//input[@id='continue']";
 	private static final String WIZARD_DONE_PAGE_HEADER_XPATH = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Setup Wizard - Done')]";
 	
-	public AccountSetupWizardPage(Selenium selenium, boolean waitForLoad) {
-		super(selenium, waitForLoad);
-	}
-	
 	public AccountSetupWizardPage(Selenium selenium) {
 		super(selenium);
 	}

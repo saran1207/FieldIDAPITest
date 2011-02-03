@@ -1,13 +1,11 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.junit.Assert.fail;
-
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
-import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
 import com.thoughtworks.selenium.Selenium;
+
+import static org.junit.Assert.fail;
 
 public class AssetPage extends FieldIDPage {
 
@@ -170,8 +168,6 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public void setAssetForm(Asset p) {
-        MiscDriver misc = new MiscDriver((FieldIdSelenium) selenium);
-
 		if (p.getPublished() == true) {
 			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Publish Over Safety Network");
 		} else {
@@ -187,15 +183,16 @@ public class AssetPage extends FieldIDPage {
 			selenium.type(editAssetReferenceNumberTextFieldLocator, p.getReferenceNumber());
 		}
 		if (p.getOwner() != null) {
-			misc.gotoChooseOwner();
-			misc.setOwner(p.getOwner());
-			misc.gotoSelectOwner();
+            OrgPicker orgPicker = new OrgPicker(selenium);
+            orgPicker.clickCancelOwner();
+            orgPicker.setOwner(p.getOwner());
+            orgPicker.clickSelectOwner();
 		}
 		if (p.getLocation() != null) {
 			selenium.type(this.editAssetLocationTextFieldLocator, p.getLocation());
 		}
 		if (p.getAssetStatus() != null) {
-			if (misc.isOptionPresent(editAssetAssetStatusSelectListLocator, p.getAssetStatus())) {
+			if (isOptionPresent(editAssetAssetStatusSelectListLocator, p.getAssetStatus())) {
 				selenium.select(this.editAssetAssetStatusSelectListLocator, p.getAssetStatus());
 			} else {
 				fail("Could not find the asset status '" + p.getAssetStatus() + "'");
@@ -249,7 +246,7 @@ public class AssetPage extends FieldIDPage {
     }
 
     public void selectAttributeValue(String attrName, String value) {
-        selenium.select("//div[@infofieldname='"+attrName+"']//select", value);
+        selenium.select("//div[@infofieldname='" + attrName + "']//select", value);
     }
 
     public boolean wasMergeSuccessful(String firstSerialNumber, String mergeSerialNumber) {

@@ -3,8 +3,9 @@ package com.n4systems.fieldid.selenium;
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.mail.MailServer;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
+import com.n4systems.fieldid.selenium.pages.ChooseCompanyPage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
 import com.thoughtworks.selenium.DefaultSelenium;
@@ -29,16 +30,10 @@ public abstract class FieldIDTestCase extends DBTestCase {
     private static final int SHUTDOWN_RETRY_INTERVAL_MS = 5000;
 
     public static FieldIdSelenium selenium;
-	protected MiscDriver misc;
 	protected Properties p;
 	public static final String badProperty = "INVALID";
-	public SystemDriverFactory systemDriverFactory;
     protected MailServer mailServer;
 	
-	protected void setInitialCompany(String initCompany) {
-		getSeleniumConfig().setInitCompany(initCompany);
-	}
-
     @Before
     public void startMailServer() {
         mailServer = new MailServer(getSeleniumConfig());
@@ -59,7 +54,6 @@ public abstract class FieldIDTestCase extends DBTestCase {
 		}
 		openBaseSite(selenium);
 		setWebBrowserSpeed();
-		initializeSystemDrivers();
 	}
 
 	private void openBaseSite(Selenium selenium) {
@@ -111,11 +105,6 @@ public abstract class FieldIDTestCase extends DBTestCase {
 	protected static void shutDownSelenium(FieldIdSelenium selenium) {
 		selenium.close();
 		selenium.stop();
-	}
-
-	private void initializeSystemDrivers() {
-		systemDriverFactory = new SystemDriverFactory(selenium);
-		misc = systemDriverFactory.createMiscDriver();
 	}
 
 	private void setWebBrowserSpeed() {
@@ -185,21 +174,38 @@ public abstract class FieldIDTestCase extends DBTestCase {
 	}
 
 	protected LoginPage startAsCompany(String companyID, Selenium selenium) {
-		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
-		selenium.deleteAllVisibleCookies();
-		selenium.open(url);
-        selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
+        doStart(companyID, selenium);
 		return new LoginPage(selenium);
 	}
 
-	protected LoginPage startAsCompany(String companyID) {
+	protected ChooseCompanyPage startAsCompanyExpectingChoose(String companyID) {
+        doStart(companyID, selenium);
+		return new ChooseCompanyPage(selenium);
+	}
+
+    protected ChooseCompanyPage startAtChooseCompany() {
+        String url = getFieldIDProtocol() + "://www." + getFieldIDDomain() + getFieldIDContextRoot() +"/chooseCompany.action";
+        startAtUrl(selenium, url);
+        return new ChooseCompanyPage(selenium);
+    }
+
+    private void doStart(String companyID, Selenium selenium) {
+        String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() + getFieldIDContextRoot();
+        startAtUrl(selenium, url);
+    }
+
+    private void startAtUrl(Selenium selenium, String url) {
+        selenium.deleteAllVisibleCookies();
+        selenium.open(url);
+    }
+
+    protected LoginPage startAsCompany(String companyID) {
         return startAsCompany(companyID, selenium);
 	}
 
     protected AdminLoginPage startAdmin() {
         String url = getFieldIDProtocol() + "://n4." + getFieldIDDomain() + getFieldIDContextRoot() + "/admin/";
-        selenium.deleteAllVisibleCookies();
-        selenium.open(url);
+        startAtUrl(selenium, url);
         return new AdminLoginPage(selenium);
     }
 	
@@ -207,16 +213,20 @@ public abstract class FieldIDTestCase extends DBTestCase {
 		return startAsCompany("n4");
 	}
 	
-	protected void gotoReferralLink(String companyID, String referralCode) {
+	protected SelectPackagePage gotoReferralLink(String companyID, String referralCode) {
 		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() +  "/signup/" + referralCode;
 		selenium.open(url);
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
+		return new SelectPackagePage(selenium);
 	}
 
     protected <K> Set<K> setOf(K... items) {
         Set<K> set = new HashSet<K>();
         set.addAll(Arrays.asList(items));
         return set;
+    }
+
+    protected void killSession() {
+        selenium.deleteAllVisibleCookies();
     }
 
 }

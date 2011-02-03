@@ -91,54 +91,9 @@ public class SignUpPage extends WebPage {
 		}
 		
 		String paymentType = t.getPaymentType();
-		if(paymentType.equals(TenantInfo.PAY_BY_CREDIT_CARD)) {
-			selectPayByCreditCard();
-			String cardType = t.getCreditCardType();
-			if(cardType != null) {
-				if(isOptionPresent(creditCardTypeSelectListLocator, cardType)) {
-					selenium.select(creditCardTypeSelectListLocator, cardType);
-				} else {
-					fail("Could not find '" + cardType + "' in the Credit Card list");
-				}
-			}
-			if(t.getNameOnCard() != null)	selenium.type(creditCardNameTextFieldLocator, t.getNameOnCard());
-			if(t.getCardNumber() != null) 	selenium.type(creditCardNumberTextFieldLocator, t.getCardNumber());
-			if(t.getExpiryMonth() != null) {
-				
-			}
-			String expiryMonth = t.getExpiryMonth();
-			if(expiryMonth != null) {
-				if(isOptionPresent(creditCardExpiryMonthSelectListLocator, expiryMonth)) {
-					selenium.select(creditCardExpiryMonthSelectListLocator, expiryMonth);
-				} else {
-					fail("Could not find the month '" + expiryMonth + "' on the Expiry Date");
-				}
-			} else {
-				fail("Could not find the month for the credit card expiry date");
-			}
-			String expiryYear = t.getExpiryYear();
-			if(expiryYear != null) {
-				if(isOptionPresent(creditCardExpiryYearSelectListLocator, expiryYear)) {
-					selenium.select(creditCardExpiryYearSelectListLocator, expiryYear);
-				} else {
-					fail("Could not find the year '" + expiryYear + "' on the Expiry Date");
-				}
-			} else {
-				fail("Could not find the year for the credit card expiry date");
-			}
-		} else if(paymentType.equals(TenantInfo.payByPurchaseOrder)){
+		if(paymentType.equals(TenantInfo.payByPurchaseOrder)){
 			selectPayByPurchaseOrder();
 			if(t.getPurchaseOrderNumber() != null)	selenium.type(purchaseOrderNumberTextFieldLocator, t.getPurchaseOrderNumber());
-		} // else assume a free account and do nothing
-	}
-	
-	public void selectPayByCreditCard() {
-		//TODO: uhhhh..????
-		fail("Do not use credit card until Shaun clears up problems with billing company");
-		if(selenium.isElementPresent(payByCreditCardLinkLocator)) {
-			selenium.click(payByCreditCardLinkLocator);
-		} else {
-			fail("Could not find the link to pay by credit card");
 		}
 	}
 	
@@ -146,9 +101,13 @@ public class SignUpPage extends WebPage {
 		selenium.click(payByPurchaseOrderLinkLocator);
 	}
 
-	public SignUpCompletePage submitCreateYourAccountForm() {
+	public SignUpCompletePage submitCreateAccountForm() {
 		selenium.click(createMyAccountButtonLocator);
 		return new SignUpCompletePage(selenium);
 	}
+
+    public String getRefCode() {
+        return selenium.getValue("css=#refCode");
+    }
 
 }

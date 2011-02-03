@@ -16,8 +16,6 @@ import com.thoughtworks.selenium.Selenium;
 
 public class FieldIDPage extends WebPage {
 
-	private static final String ERROR_MESSAGE_COUNT_XPATH = "//*[@class='errorMessage' and not(contains(@style,'display: none'))]";
-
 	public FieldIDPage(Selenium selenium) {
 		super(selenium);
 	}
@@ -67,8 +65,13 @@ public class FieldIDPage extends WebPage {
     }
     
     public ReportingPage clickReportingLink(){
-    	  selenium.click("//div[@id='pageNavigation']//a[contains(.,'Reporting')]");
-    	  return new ReportingPage(selenium);
+        selenium.click("//div[@id='pageNavigation']//a[contains(.,'Reporting')]");
+        return new ReportingPage(selenium);
+    }
+
+    public MyAccountPage clickMyAccount() {
+        selenium.click("//div[@id='pageActions']//a[.='My Account']");
+        return new MyAccountPage(selenium);
     }
 	
 	public void gotoNextPage() {
@@ -177,47 +180,6 @@ public class FieldIDPage extends WebPage {
 		selenium.waitForCondition("var value = selenium.isElementPresent( '" + locator.replace("'", "\\'") + "'); value == true", timeout);
 	}
 
-	protected void checkForErrorMessages(String png) {
-		List<String> errors = getFormErrorMessages();
-		int otherErrors = countNonFormErrorMessages();
-		if(isOopsPage()) {
-			fail("Got the Oops page. Check the fieldid.log.");
-		} else if(errors.size() > 0) {
-			fail("There were errors on the page: " + errors);
-		} else if(otherErrors > 0) {
-			fail("There were non-form errors on the page");
-		}
-	}
-	
-	private int countNonFormErrorMessages() {
-		return selenium.getXpathCount(ERROR_MESSAGE_COUNT_XPATH).intValue();
-	}
-	
-	public List<String> getFormErrorMessages() {	// gets class="errorMessage"
-		List<String> result = new ArrayList<String>();
-		
-		int maxIndex = selenium.getXpathCount(ERROR_MESSAGE_COUNT_XPATH).intValue();
-		for(int i = 1; i <= maxIndex; i++) {
-			String iterableErrorMessageLocator = "//ul/li["+i+"]/*[@class='errorMessage' and not(contains(@style,'display: none'))]";
-			String s = selenium.getText(iterableErrorMessageLocator);
-			result.add(s);
-		}
-		return result;
-	}
-	
-	public List<String> getActionMessages() {
-		List<String> result = new ArrayList<String>();
-		
-		int maxIndex = selenium.getXpathCount("//*[@class='actionMessage']").intValue();
-		for(int i = 1; i <= maxIndex; i++) {
-			String iterableActionMessageLocator = "//ul/li["+i+"]/*[@class='actionMessage']";
-			String s = selenium.getText(iterableActionMessageLocator);
-			result.add(s);
-		}
-
-		return result;
-	}
-	
 	public String getValidationErrorFor(String fieldInputId) {
 		String fieldErrorLocator = "css=*[errorfor='" + fieldInputId + "']";
 		assertThat("there is no error message for field " + fieldInputId, selenium.isElementPresent(fieldErrorLocator), is(true));

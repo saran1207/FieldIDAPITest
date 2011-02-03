@@ -2,13 +2,17 @@ package com.n4systems.fieldid.selenium.testcase.menus;
 
 import static org.junit.Assert.assertEquals;
 
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
+public class AssetStatusMenuTest extends PageNavigatingTestCase<HomePage> {
 
-public class AssetStatusMenuTest extends LoggedInTestCase {
+    @Override
+    protected HomePage navigateToPage() {
+        return start().login();
+    }
 
 	@Test
 	public void should_be_able_to_go_back_to_the_list_of_asset_status_from_the_view_all_link_on_the_menu() throws Exception {

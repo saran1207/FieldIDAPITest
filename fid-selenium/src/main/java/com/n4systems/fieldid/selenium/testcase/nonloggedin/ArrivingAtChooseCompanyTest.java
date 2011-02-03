@@ -1,56 +1,27 @@
 package com.n4systems.fieldid.selenium.testcase.nonloggedin;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.login.page.Choose;
-import com.n4systems.fieldid.selenium.pages.WebEntity;
-import org.junit.Before;
+import com.n4systems.fieldid.selenium.pages.ChooseCompanyPage;
 import org.junit.Test;
 
 import static com.n4systems.fieldid.selenium.asserts.FieldIdAssert.assertSystemLogoIsUsed;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ArrivingAtChooseCompanyTest extends FieldIDTestCase {
 
-	private Choose choosePage;
-	
-	@Before
-	public void setUp() throws Exception {
-		choosePage = new Choose(selenium, misc);
-	}
-	
 	@Test
 	public void should_not_show_warning_message_when_a_user_just_arrives_at_the_main_choose_company_page() throws Exception {
-		gotoChooseCompanyPage();
-		
-		choosePage.verifyChooseCompany();
-		assertTrue("No error messages should be present", !selenium.isVisible("css=#error"));
+        ChooseCompanyPage chooseCompanyPage = startAtChooseCompany();
+        assertSystemLogoIsUsed(selenium);
+        assertFalse("No error messages should be present", chooseCompanyPage.isUnableToDetermineCompanyErrorDisplayed());
 	}
 
-	private void gotoChooseCompanyPage() {
-		startAsCompany("www");
-		selenium.open("/fieldid/chooseCompany.action");
-	}
-	
-	@Test
-	public void should_forward_to_choose_company_page_from_root_of_www_domain() throws Exception {
-		String url = getFieldIDProtocol() + "://www." + getFieldIDDomain() + getFieldIDContextRoot();
-		selenium.open(url);
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-		
-		choosePage.verifyChooseCompany();
-	}
-	
 	@Test
 	public void should_show_warning_message_when_a_user_is_redirected_to_choose_company_page_when_they_enter_an_incorrect_tenant() throws Exception {
-		startAsCompany("some-tenant-not-registered");
-		
-		assertTrue("error messages should be present", selenium.isVisible("css=#error"));
+        ChooseCompanyPage chooseCompanyPage = startAsCompanyExpectingChoose("some-tenant-not-registered");
+
+        assertTrue("error messages should be present", chooseCompanyPage.isUnableToDetermineCompanyErrorDisplayed());
 	}
-	
-	@Test
-	public void should_display_the_system_logo_not_a_branded_logo() throws Exception {
-		gotoChooseCompanyPage();
-		
-		assertSystemLogoIsUsed(selenium);
-	}
+
 }

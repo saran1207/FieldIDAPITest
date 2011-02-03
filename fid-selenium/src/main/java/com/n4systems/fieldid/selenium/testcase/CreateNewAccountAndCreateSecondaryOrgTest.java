@@ -78,7 +78,7 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 		t.setPurchaseOrderNumber("88888");
 
 		signUpPage.enterCreateAccountForm(t);
-        signUpPage.submitCreateYourAccountForm();
+        signUpPage.submitCreateAccountForm();
 
         mailServer.waitForMessages(1);
         MailMessage activationMessage = mailServer.getAndClearMessages().get(0);

@@ -1,118 +1,83 @@
 package com.n4systems.fieldid.selenium.testcase.referrer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.regex.Pattern;
-
-import com.n4systems.fieldid.selenium.pages.WebEntity;
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
-import com.n4systems.fieldid.selenium.login.page.CreateAccount;
-import com.n4systems.fieldid.selenium.login.page.Login;
-import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
+import com.n4systems.fieldid.selenium.pages.MyAccountPage;
+import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
+import com.n4systems.fieldid.selenium.pages.SignUpPage;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ReferrerTrackingTest extends FieldIDTestCase {
 	
 	@Test
 	public void should_find_users_referral_link_on_refer_fieldid_tab_of_my_account() throws Exception {
-		goToReferFieldId();
-		String referralLink = getReferralLink();
+        MyAccountPage myAccountPage = goToReferFieldId();
+        String referralLink = myAccountPage.getReferralLink();
 		
 		assertReferrerLinkIsInTheCorrectForm(referralLink);
 	}
 	
 	@Test
-	public void should_send_us_to_plans_and_pricing_when_we_go_to_the_sign_up_link() throws Exception {
-		selenium.open("/signup/somerefcode");
-	}
-	
-	@Test
-	public void should_allow_user_to_see_that_a_tenant_has_just_siged_up_through_their_referral() throws Exception {
-		goToReferFieldId();
-		
-		String referralLink = getReferralLink();
-		int rowCount = getNumberOfRowsInReferrerTable();
-		
-		signOutAndGoToReferalLink(referralLink);
-		
-		createANewUnlimitedTenant("admin", "password");
+	public void should_allow_user_to_see_that_a_tenant_has_just_signed_up_through_their_referral() throws Exception {
+        MyAccountPage myAccountPage = goToReferFieldId();
 
+        String referralCode = myAccountPage.getReferralCode();
+		int rowCount = myAccountPage.getNumberOfRowsInReferrerTable();
 
-		goToReferFieldId();
-		
-		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
-		assertEquals(rowCount + 1, getNumberOfRowsInReferrerTable());
+        SelectPackagePage packagesPage = gotoReferralLink("test1", referralCode);
+
+        createANewUnlimitedTenant(packagesPage, "admin", "password");
+
+        myAccountPage = goToReferFieldId();
+
+		assertEquals(rowCount + 1, myAccountPage.getNumberOfRowsInReferrerTable());
 	}
 
 	@Test
 	public void should_find_new_companies_name_in_the_list_of_referred_accounts() throws Exception {
-		goToReferFieldId();
-		
-		String referralLink = getReferralLink();
-		
-		signOutAndGoToReferalLink(referralLink);
-		
-		TenantInfo t = createANewUnlimitedTenant("admin", "password");
+        MyAccountPage myAccountPage = goToReferFieldId();
 
-		goToReferFieldId();
+        String referralCode = myAccountPage.getReferralCode();
 		
-		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
-		assertTrue(selenium.isTextPresent(t.getCompanyName()));
+		SelectPackagePage packagesPage = gotoReferralLink("test1", referralCode);
+		
+		createANewUnlimitedTenant(packagesPage, "admin", "password");
+
+		myAccountPage = goToReferFieldId();
+
+        List<String> companyNamesInReferralTable = myAccountPage.getCompanyNamesInReferralTable();
+        assertTrue(companyNamesInReferralTable.contains(TEST_CREATED_TENANT_NAMES[0]));
 	}
 
-	private String getReferralLink() {
-		return selenium.getText("css=#referralLinkBox p");
-	}
-
-	private void signOutAndGoToReferalLink(String referralLink) {
-		selenium.open("/fieldid/logout.action");
-		misc.waitForPageToLoadAndCheckForOopsPage();
-		selenium.open(referralLink);
-		misc.waitForPageToLoadAndCheckForOopsPage();
-	}
-	
 	@Test
 	public void should_not_count_referral_if_it_is_done_under_a_tenant_that_is_not_the_same_as_the_refering_user() throws Exception {
-		goToReferFieldId();
+        MyAccountPage myAccountPage = goToReferFieldId();
+
+        String referralLink = myAccountPage.getReferralLink();
+		int rowCount = myAccountPage.getNumberOfRowsInReferrerTable();
+        killSession();
 		
-		String referralLink = getReferralLink();
-		int rowCount = getNumberOfRowsInReferrerTable();
+		String aCompanyThatTheReferrerIsNotPartOf = "test2";
+		SelectPackagePage packagesPage = gotoReferralLink(aCompanyThatTheReferrerIsNotPartOf, extractReferrerCodeFromUrl(referralLink));
+
+		createANewUnlimitedTenant(packagesPage, "admin", "password");
 		
-		selenium.open("/fieldid/logout.action");
-		misc.waitForPageToLoadAndCheckForOopsPage();
-		selenium.deleteAllVisibleCookies();
+		myAccountPage = goToReferFieldId();
 		
-		String aCompanyThatTheReferrerIsNotPartOf = "msa";
-		gotoReferralLink(aCompanyThatTheReferrerIsNotPartOf, extractReferrerCodeFromUrl(referralLink));
-		Thread.sleep(10000);
-		
-		createANewUnlimitedTenant("admin", "password");
-		
-		goToReferFieldId();
-		
-		assertTrue(selenium.isElementPresent("css=#referralsBottom table"));
-		assertEquals(rowCount, getNumberOfRowsInReferrerTable());
+		assertEquals(rowCount, myAccountPage.getNumberOfRowsInReferrerTable());
 	}
 	
-	private int getNumberOfRowsInReferrerTable() {
-		return selenium.getXpathCount("//div[@id='referralsBottom']/table//tr").intValue();
-	}
-	
-	private TenantInfo createANewUnlimitedTenant(String username, String password) {
+	private TenantInfo createANewUnlimitedTenant(SelectPackagePage selectPackagePage, String username, String password) {
         String tenantName = TEST_CREATED_TENANT_NAMES[0];
 		String tenantID = tenantName.toLowerCase();
 
-		CreateAccount create = new CreateAccount(selenium, misc);
-
-		SignUpPackages sup = new SignUpPackages(selenium, misc);
-		
-		String packageName = "Unlimited";	// must be unlimited
-		sup.gotoSignUpNow(packageName);
-		
-		create.verifyCreateAccountPage(packageName);
+        SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink("Unlimited");
 
 		TenantInfo t = new TenantInfo(username, password, tenantName, tenantID);
 		
@@ -120,8 +85,8 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 		t.setPaymentType(TenantInfo.payByPurchaseOrder);
 		t.setPurchaseOrderNumber("88888");
 		
-		create.setCreateYourAccountForm(t);
-		create.submitCreateYourAccountForm();
+		signUpPage.enterCreateAccountForm(t);
+		signUpPage.submitCreateAccountForm();
 		
 		return t;
 	}
@@ -129,20 +94,15 @@ public class ReferrerTrackingTest extends FieldIDTestCase {
 	@Test
 	public void should_hold_ref_code_to_sign_up_form_from_plans_and_pricing() throws Exception {
 		String refcode = "somerefcode";
-		selenium.open("/fieldid/public/signUpPackages.action?refCode=" + refcode);
-		misc.waitForPageToLoadAndCheckForOopsPage();
-		new SignUpPackages(selenium, misc).gotoSignUpNow("Free");
-		assertEquals(refcode, selenium.getValue("css=#refCode"));
+        SelectPackagePage packagePage = gotoReferralLink("test1", refcode);
+        SignUpPage signUpPage = packagePage.clickSignUpNowLink("Free");
+		assertEquals(refcode, signUpPage.getRefCode());
 	}
 	
-	private void goToReferFieldId() {
-		selenium.open("/fieldid/login.action");
-		Login loginPage = new Login(selenium, misc);
-		
-		loginPage.signInWithSystemAccount();
-		
-		selenium.open("/fieldid/refer.action");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
+	private MyAccountPage goToReferFieldId() {
+        MyAccountPage myAccountPage = startAsCompany("test1").login().clickMyAccount();
+        myAccountPage.clickReferFieldID();
+        return myAccountPage;
 	}
 
 	private void assertReferrerLinkIsInTheCorrectForm(String referralLink) {

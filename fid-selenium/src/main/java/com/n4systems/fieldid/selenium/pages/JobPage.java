@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.selenium.jobs.page;
+package com.n4systems.fieldid.selenium.pages;
 
 import static org.junit.Assert.fail;
 

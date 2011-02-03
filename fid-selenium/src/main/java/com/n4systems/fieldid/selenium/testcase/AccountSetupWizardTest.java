@@ -3,7 +3,6 @@ package com.n4systems.fieldid.selenium.testcase;
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.SystemSettings;
 import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
-import com.n4systems.fieldid.selenium.login.page.SignUpPackages;
 import com.n4systems.fieldid.selenium.mail.MailMessage;
 import com.n4systems.fieldid.selenium.pages.AccountSetupWizardPage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
@@ -53,7 +52,7 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 
 	private LoginPage createNewBasicTenant(String referrer) {
         SelectPackagePage selectPackagePage = startAsCompany(referrer).clickPlansAndPricingLink();
-        String packageName = SignUpPackages.packageTypePlus;	// must be unlimited
+        String packageName = "Plus";	// must be unlimited
         SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink(packageName);
 
         TenantInfo t = new TenantInfo(TEST_USER_NAME, TEST_PASSWORD, TENANT_TO_CREATE, TENANT_TO_CREATE);
@@ -65,7 +64,7 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
         t.setPurchaseOrderNumber("88888");
 
         signUpPage.enterCreateAccountForm(t);
-        signUpPage.submitCreateYourAccountForm();
+        signUpPage.submitCreateAccountForm();
 
         mailServer.waitForMessages(1);
         MailMessage activationMessage = mailServer.getAndClearMessages().get(0);

@@ -5,25 +5,29 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.n4systems.fieldid.selenium.lib.LoggedInTestCase;
-import com.n4systems.fieldid.selenium.misc.MiscDriver;
-
 @RunWith(Parameterized.class)
-public class FilterByResultTest extends LoggedInTestCase {
+public class FilterByResultTest extends PageNavigatingTestCase<HomePage> {
 
 	private String resultName;
 
 	public FilterByResultTest(String resultName) {
 		this.resultName = resultName;
 	}
-	
-	@Parameters
+
+    @Override
+    protected HomePage navigateToPage() {
+        return start().login();
+    }
+
+    @Parameters
 	public static Collection<String[]> data() {
 		ArrayList<String[]> dataList = new ArrayList<String[]>();
 		dataList.add(new String[]{"Pass"});
@@ -34,8 +38,8 @@ public class FilterByResultTest extends LoggedInTestCase {
 	
 	@Test
 	public void show_just_events_that_passed_when_pass_selected_in_the_result_filter() throws Exception {
-		goToReporting();
-		
+        page.clickReportingLink();
+
 		selenium.select("css=#reportForm_criteria_status", resultName);
 		
 		submitForm();
@@ -43,10 +47,6 @@ public class FilterByResultTest extends LoggedInTestCase {
 		verifyEventResultsAreCorrectOnThisPage();
 		goToLastPage();
 		verifyEventResultsAreCorrectOnThisPage();
-	}
-
-	private void goToReporting() {
-		selenium.open("/fieldid/report.action");
 	}
 
 	private void submitForm() {
