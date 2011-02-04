@@ -161,13 +161,15 @@ public class TenantCleaner {
     }
 
     private void cleanUpModifiedOrCreatedReferencesForTenant(EntityManager em, List<Long> tenantIds, Class<? extends BaseOrg>... entityClasses) {
+        long startTime = System.currentTimeMillis();
         for (Long tenantId : tenantIds) {
             for (Class entityClass : entityClasses) {
-                // TODO: This runs extremely slow. Fix soon.
-                Query query1 = em.createQuery("update " + entityClass.getName() + " set modifiedBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
-                Query query2 = em.createQuery("update " + entityClass.getName() + " set createdBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
-                query1.executeUpdate();
-                query2.executeUpdate();
+//                METHOD1: (verrry slow)
+//                Query query1 = em.createQuery("update " + entityClass.getName() + " set modifiedBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
+//                Query query2 = em.createQuery("update " + entityClass.getName() + " set createdBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
+//                query1.executeUpdate();
+//                query2.executeUpdate();
+//                METHOD2: (fast, maybe doesn't work..)
 //                Query query = em.createQuery("from " + entityClass.getName() + " where tenant.id = :tenantId").setParameter("tenantId", tenantId);
 //                List<BaseOrg> orgs = query.getResultList();
 //                for (BaseOrg org : orgs) {
@@ -177,6 +179,7 @@ public class TenantCleaner {
 //                }
             }
         }
+        System.out.println("Time cleaning modified/created references: " + (System.currentTimeMillis() - startTime));
     }
 
     private void removeAllWhereModifiedOrCreatedByUsersFromTenant(EntityManager em, List tenantIds, Class... entityClasses) {
