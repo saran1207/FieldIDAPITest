@@ -1004,15 +1004,20 @@ public class DataServiceImpl implements DataService {
 
 		AssetManager assetManager = ServiceLocator.getAssetManager();
 		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-
+		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
+		
 		for (SubProductMapServiceDTO subProductMap : subProductMaps) {
-			ProductServiceDTO subProductDTO = subProductMap.getNewProduct();
+			Asset asset = assetManager.findAssetByGUID(subProductMap.getSubAssetGuid(), filter);
+			
+			// the following lookups are legacy as of 1.26
+			if (asset == null) {
+				ProductServiceDTO subProductDTO = subProductMap.getNewProduct();
 
-			Asset asset = assetManager.findAssetByGUID(subProductDTO.getMobileGuid(), new TenantOnlySecurityFilter(tenantId));
-
-			// Try by id
-			if (asset == null && subProductDTO.getId() != null && subProductDTO.getId() > 0) {
-				asset = persistenceManager.find(Asset.class, subProductDTO.getId());
+				asset = assetManager.findAssetByGUID(subProductDTO.getMobileGuid(), filter);
+				
+				if (asset == null && subProductDTO.getId() != null && subProductDTO.getId() > 0) {
+					asset = persistenceManager.find(Asset.class, subProductDTO.getId());
+				}
 			}
 			
 			if (asset != null) {

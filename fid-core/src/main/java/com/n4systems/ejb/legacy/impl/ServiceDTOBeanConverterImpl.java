@@ -296,7 +296,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 				subProductMap = new SubProductMapServiceDTO();
 				subProductMap.setName(subAsset.getLabel());
 				subProductMap.setSubProductId(subAsset.getAsset().getId());
+				subProductMap.setSubAssetGuid(subAsset.getAsset().getMobileGUID());
 				subProductMap.setProductId(asset.getId());
+				subProductMap.setMasterAssetGuid(subAsset.getMasterAsset().getMobileGUID());
 				productDTO.getSubProducts().add(subProductMap);
 			}
 		}

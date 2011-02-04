@@ -3,12 +3,12 @@ package com.n4systems.webservice.server;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
+import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.SubProductMapServiceDTO;
@@ -66,16 +66,18 @@ public class UpdateSubProducts {
 	}
 	
 	private List<SubAsset> detachExistingSubProduct(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Asset masterAsset) {
-		
+		SecurityFilter filter = new TenantOnlySecurityFilter( tenantId );
 		List<SubAsset> detachingSubAssets = new ArrayList<SubAsset>();
 		
 		for (SubProductMapServiceDTO subProductDTO : subProductMaps) {
-			Asset asset = assetManager.findAsset(subProductDTO.getSubProductId(), new TenantOnlySecurityFilter( tenantId ) );
+			Asset asset = assetManager.findAssetByGUID(subProductDTO.getSubAssetGuid(), filter);
 			
-			// Try by mobileGuid in case the asset is created locally in the mobile
-			if (asset == null) {
-				asset = assetManager.findAssetByGUID(subProductDTO.getNewProduct().getMobileGuid(), new TenantOnlySecurityFilter( tenantId ) );
-			}				
+			// the following 2 lookups are legacy as of 1.26
+			if (asset == null)
+				asset = assetManager.findAsset(subProductDTO.getSubProductId(), filter);
+			
+			if (asset == null)
+				asset = assetManager.findAssetByGUID(subProductDTO.getNewProduct().getMobileGuid(), filter);
 			
 			SubAsset subAsset = new SubAsset();
 			subAsset.setAsset(asset);
