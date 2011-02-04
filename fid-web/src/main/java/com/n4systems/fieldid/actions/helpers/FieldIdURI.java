@@ -55,7 +55,7 @@ public class FieldIdURI {
 	}
 
     private String getProtocol() {
-        return ConfigContext.getCurrentContext().getEntry(ConfigEntry.SYSTEM_PROTOCOL).getValue() + "://";
+        return ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://";
     }
 	
 }
