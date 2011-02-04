@@ -1,15 +1,5 @@
 package com.n4systems.fieldid.selenium.testcase.users;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
@@ -17,6 +7,12 @@ import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantLimit;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 public class UpgradeUsersTest extends FieldIDTestCase {
 	
@@ -28,13 +24,9 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 
 	@Override
 	public void setupScenario(Scenario scenario) {
-		
-		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(
-				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
-		
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor(COMPANY);
 		
-		defaultPrimaryOrg.setExtendedFeatures(extendedFeatures);
+		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
 				
 		scenario.updatePrimaryOrg(defaultPrimaryOrg);		
 		

@@ -31,12 +31,13 @@ public class LoginPage extends WebPage {
 	}
 
 	public AccountSetupWizardPage signInAllTheWayToWizard(String userName, String password) {
-		return signInAllTheWayToWizard(userName, password);
+        signIn(userName, password);
+		return new AccountSetupWizardPage(selenium, false);
 	}
 
 	public SessionBumpPage signInToSessionBump(String userName, String password) {
 		enterCredentialsAndSubmit(userName, password);
-        return new SessionBumpPage(selenium);
+        return new SessionBumpPage(selenium, false);
 	}
 
 	public boolean isPlansAndPricingAvailable() {
@@ -54,7 +55,7 @@ public class LoginPage extends WebPage {
 
 	public EULAPage loginToEula(String username, String password) {
         enterCredentialsAndSubmit(username, password);
-		return new EULAPage(selenium);
+		return new EULAPage(selenium, false);
 	}
 
     private void enterCredentialsAndSubmit(String userName, String password) {
@@ -87,23 +88,16 @@ public class LoginPage extends WebPage {
 	}
 
 	private void acceptEULAIfNeed() {
-		if (isEULA()) {
-			scrollToBottomOfEULA();
-			gotoAcceptEULA();
-		}
+		if (onEULAPage()) {
+			selenium.runScript("toggleEula();");
+            selenium.click("//input[@id='acceptEula']");
+            waitForPageToLoad();
+        }
 	}
 
-    public boolean isEULA() {
+    private boolean onEULAPage() {
         return selenium.isElementPresent("//h1[contains(text(),'Field ID End User Licence Agreement')]");
     }
-
-	public void scrollToBottomOfEULA() {
-        selenium.runScript("toggleEula();");
-	}
-
-	public void gotoAcceptEULA() {
-        selenium.click("//input[@id='acceptEula']");
-	}
 
     private HomePage signInAllTheWayToHome(String username, String password) {
 		signIn(username, password);

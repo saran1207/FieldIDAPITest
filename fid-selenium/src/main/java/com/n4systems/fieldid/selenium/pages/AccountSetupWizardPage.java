@@ -25,6 +25,10 @@ public class AccountSetupWizardPage extends FieldIDPage {
 		super(selenium);
 	}
 
+    public AccountSetupWizardPage(Selenium selenium, boolean waitForPageToLoad) {
+        super(selenium, waitForPageToLoad);
+    }
+
 	public void verifyQuickSetupWizardPageHeader() {
 		assertTrue("Could not find the header for the Quick Setup Wizard page", selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Setup Wizard')]"));
 		checkForErrorMessages(null);

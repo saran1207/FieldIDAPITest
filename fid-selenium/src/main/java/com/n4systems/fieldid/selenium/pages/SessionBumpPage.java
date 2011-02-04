@@ -7,7 +7,11 @@ import static org.junit.Assert.assertTrue;
 public class SessionBumpPage extends FieldIDPage {
 
     public SessionBumpPage(Selenium selenium) {
-        super(selenium);
+        this(selenium, true);
+    }
+
+    public SessionBumpPage(Selenium selenium, boolean waitForPageToLoad) {
+        super(selenium, waitForPageToLoad);
         assertTrue("not confirm page.", selenium.isElementPresent("css=#signInConfirm"));
     }
 

@@ -33,13 +33,9 @@ public class ManageUsersTest extends FieldIDTestCase {
 	
 	@Override
 	public void setupScenario(Scenario scenario) {
-		
-		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(
-				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
-			
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY);
 				
-		primaryOrg.setExtendedFeatures(extendedFeatures);
+		primaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
 		
 		scenario.updatePrimaryOrg(primaryOrg);
 		
