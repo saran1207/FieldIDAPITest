@@ -21,19 +21,12 @@ public class ManageAssetStatusTest extends FieldIDTestCase {
 	public void setUp() {
 		page = startAsCompany("test1").systemLogin().clickSetupLink().clickManageAssetStatuses();
 	}
-	
+
 	@Override
 	public void setupScenario(Scenario scenario) {
-		scenario.anAssetStatus()
-		        .forTenant(scenario.defaultTenant())
-		        .named(STATUS1)
-		        .build();
-		
-		scenario.anAssetStatus()
-        .forTenant(scenario.defaultTenant())
-        .named(STATUS2)
-        .withState(EntityState.ARCHIVED)
-        .build();
+		scenario.anAssetStatus().forTenant(scenario.defaultTenant()).named(STATUS1).build();
+
+		scenario.anAssetStatus().forTenant(scenario.defaultTenant()).named(STATUS2).withState(EntityState.ARCHIVED).build();
 	}
 
 	@Test
@@ -41,20 +34,20 @@ public class ManageAssetStatusTest extends FieldIDTestCase {
 		page.clickAddTab();
 		page.enterAssetStatusName(TEST_NAME);
 		page.clickSave();
-		
+
 		assertTrue(page.getFormErrorMessages().isEmpty());
 		assertTrue(page.getAssetStatuses().contains(TEST_NAME));
 	}
-	
+
 	@Test
 	public void test_add_asset_status_with_error() throws Exception {
 		page.clickAddTab();
 		page.clickSave();
-		
+
 		assertFalse(page.getFormErrorMessages().isEmpty());
 		assertFalse(page.getAssetStatuses().contains(TEST_NAME));
 	}
-	
+
 	@Test
 	public void test_archive_asset_status() throws Exception {
 		page.archive(STATUS1);
@@ -63,14 +56,26 @@ public class ManageAssetStatusTest extends FieldIDTestCase {
 		assertFalse(page.getAssetStatuses().contains(STATUS1));
 	}
 
-	
 	@Test
 	public void test_unarchive_asset_status() throws Exception {
 		page.clickViewArchivedTab();
 		page.unarchive(STATUS2);
-		
+
 		assertTrue(page.getFormErrorMessages().isEmpty());
 		assertTrue(page.getAssetStatuses().contains(STATUS2));
+	}
+
+	@Test
+	public void test_asset_status_names_are_unique() throws Exception {
+		page.clickAddTab();
+		page.enterAssetStatusName(TEST_NAME);
+		page.clickSave();
+
+		page.clickAddTab();
+		page.enterAssetStatusName(TEST_NAME + "         ");
+		page.clickSave();
+
+		assertFalse(page.getFormErrorMessages().isEmpty());
 	}
 
 }
