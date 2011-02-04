@@ -25,6 +25,10 @@ public class MyAccountPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
+	public EmailNotificationsListPage clickEmailNotifications(){
+		selenium.click("//div[@id='contentHeader']/ul/li[2]/a");
+		return new EmailNotificationsListPage(selenium);
+	}
 
     // Refer Field ID Tab
     public void clickReferFieldID() {
