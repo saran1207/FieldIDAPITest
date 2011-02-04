@@ -66,9 +66,8 @@ public class TenantCleaner {
         if (tenantIds.isEmpty())
             return;
 
-        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id in (:tenantIds) and linked_id is null").setParameter("tenantIds", tenantIds);
+        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
-        List<Asset> assets = assetsQuery.getResultList();
 
         removeAllConfigsForTenants(em, tenantIds);
         removeAllForTenants(em, AssetCodeMapping.class, tenantIds);
@@ -91,6 +90,7 @@ public class TenantCleaner {
             safeRemoveAsset(em, asset);
         }
 
+        List<Asset> assets = assetsQuery.getResultList();
         for (Asset asset : assets) {
             safeRemoveAsset(em, asset);
         }
