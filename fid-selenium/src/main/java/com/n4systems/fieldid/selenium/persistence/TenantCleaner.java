@@ -35,6 +35,7 @@ import com.n4systems.model.LineItem;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
+import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
@@ -81,6 +82,7 @@ public class TenantCleaner {
         removeAllForTenants(em, EventTypeGroup.class, tenantIds);
         removeAllForTenants(em, CriteriaSection.class, tenantIds);
         removeAllForTenants(em, OneClickCriteria.class, tenantIds);
+        
 //        removeAllForTenants(em, TextFieldCriteria.class, tenantIds);
 //        removeAllForTenants(em, SelectCriteria.class, tenantIds);
 
@@ -126,6 +128,8 @@ public class TenantCleaner {
         removeAllForTenants(em, LineItem.class, tenantIds);
         removeAllForTenants(em, Order.class, tenantIds);
 
+        removeAllForTenants(em, StateSet.class, tenantIds);
+        
         removeAllExternalOrgsPointingToTenants(em, tenantIds);
 
         cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, CustomerOrg.class, DivisionOrg.class, SecondaryOrg.class, PrimaryOrg.class);

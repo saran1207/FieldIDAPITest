@@ -5,6 +5,7 @@ import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
 import com.n4systems.fieldid.selenium.datatypes.EventFormObservations;
 import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
 import com.n4systems.fieldid.selenium.datatypes.EventType;
+import com.n4systems.fieldid.selenium.pages.ButtonGroupPage;
 import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -252,6 +253,11 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Your Event Type has been copied and will appear below with the name - " + eventName, actionMessages.get(0).trim());
+	}
+	
+	public ButtonGroupPage clickButtonGroups(){
+		selenium.click("//div[@id='contentHeader']/ul/li[2]/a");
+		return new ButtonGroupPage(selenium);
 	}
 	
 }
