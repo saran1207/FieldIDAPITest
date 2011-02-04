@@ -63,7 +63,9 @@ public abstract class DBTestCase {
                     ThreadLocalUserContext.getInstance().setCurrentUser(null);
                     MinimalTenantDataSetup dataSetup  = new MinimalTenantDataSetup(transaction, tenantName);
                     dataSetup.setupMinimalData();
-                    ThreadLocalUserContext.getInstance().setCurrentUser(dataSetup.getCreatedUser());
+                    // TODO: Testing whether we need a current user set for these items, might make tenant cleaner easier
+                    ThreadLocalUserContext.getInstance().setCurrentUser(null);
+//                    ThreadLocalUserContext.getInstance().setCurrentUser(dataSetup.getCreatedUser());
                     dataSetup.createTestAssetTypes(TEST_ASSET_TYPES);
                 }
             }
