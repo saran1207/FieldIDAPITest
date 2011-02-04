@@ -14,31 +14,34 @@ import static org.junit.Assert.assertEquals;
 
 public class TestDisableSearchableHidesFromResults extends PageNavigatingTestCase<SafetyNetworkPage> {
 
+	private static String COMPANY1 = "test1";
+	private static String COMPANY2 = "test2";
+	
     @Override
     protected SafetyNetworkPage navigateToPage() {
-        return startAsCompany("allway").login().clickSafetyNetworkLink();
+        return startAsCompany(COMPANY1).login().clickSafetyNetworkLink();
     }
 
     @Test
     public void should_find_company_when_searchable_is_on() throws Exception {
         ensureVisibilityIsSetTo(true, page);
 
-        page = startAsCompany("n4").login().clickSafetyNetworkLink();
+        page = startAsCompany(COMPANY2).login().clickSafetyNetworkLink();
 
-        FindConnectionResultsPage resultsPage = page.findConnections("all-way");
+        FindConnectionResultsPage resultsPage = page.findConnections(COMPANY1);
 
         List<Organization> matchingOrgs = resultsPage.getOrganizationSearchResults();
         assertEquals(1, matchingOrgs.size());
-        assertEquals("All-Way Wire Rope and Splicing Inc.", matchingOrgs.get(0).getName());
+        assertEquals(COMPANY1, matchingOrgs.get(0).getName());
     }
 
     @Test
     public void should_not_find_company_when_searchable_is_off() throws Exception {
         ensureVisibilityIsSetTo(false, page);
 
-        page = startAsCompany("n4").login().clickSafetyNetworkLink();
+        page = startAsCompany(COMPANY2).login().clickSafetyNetworkLink();
 
-        FindConnectionResultsPage resultsPage = page.findConnections("all-way");
+        FindConnectionResultsPage resultsPage = page.findConnections(COMPANY1);
 
         List<Organization> matchingOrgs = resultsPage.getOrganizationSearchResults();
         assertEquals(0, matchingOrgs.size());

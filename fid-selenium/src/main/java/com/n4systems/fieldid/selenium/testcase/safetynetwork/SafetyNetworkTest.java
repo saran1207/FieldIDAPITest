@@ -1,6 +1,10 @@
 package com.n4systems.fieldid.selenium.testcase.safetynetwork;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -11,6 +15,11 @@ import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogIm
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkCatalogPage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkInvitePage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkSettingsPage;
+import com.n4systems.fieldid.selenium.pages.safetynetwork.VendorConnectionProfilePage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.catalog.Catalog;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
 
 public class SafetyNetworkTest extends FieldIDTestCase {
 
@@ -21,20 +30,35 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 	private String safetyNetworkSettingsLocator = "//a[@id='privacySettings']";
 	private String safetyNetworkOverviewLocator = "//a[@id='help_link']";
 	private String safetyNetworkVideoLocator = "//a[@id='video_link']";
-	private String connectionProfileName = "//p[.='Sea-Fit']";
 
 	// Asset Types
-	private static final String ASSET_TYPE_CHECKBOX_NAME_1 = "Gravity Harness";
+	private static final String ASSET_TYPE_CHECKBOX_NAME_1 = "TestType1";
 
 	// Connection names
-	private static final String CONNECTION_NAME_1 = "Sea-Fit";
-	private static final String CONNECTION_NAME_2 = "N4 Systems";
-	private static final String CONNECTION_NAME_3 = "NIS Chain";
-	private static final String ASSET_SERIAL_1 = "A09";
+	private static String COMPANY1 = "test1";
+	private static String COMPANY2 = "test2";
+	
+	@Override
+	public void setupScenario(Scenario scenario) {
+        scenario.aSafetyNetworkConnection()
+        		.from(scenario.primaryOrgFor(COMPANY1))
+        		.to(scenario.primaryOrgFor(COMPANY2))
+        		.type(TypedOrgConnection.ConnectionType.VENDOR)
+        		.build();
+		
+		Catalog catalog = new Catalog(scenario.tenant(COMPANY1));
+		
+		Set<AssetType> assetTypes = new HashSet<AssetType>();
+		assetTypes.add(scenario.assetType(COMPANY1, "TestType1"));
+		assetTypes.add(scenario.assetType(COMPANY1, "TestType2"));
+		catalog.setPublishedAssetTypes(assetTypes);
+		
+		scenario.save(catalog);		
+	}
 
 	@Test
 	public void test_invite_page() {
-		SafetyNetworkPage safetyNetworkPage = startAsCompany("cglift").login().clickSafetyNetworkLink();
+		SafetyNetworkPage safetyNetworkPage = startAsCompany(COMPANY1).login().clickSafetyNetworkLink();
 		SafetyNetworkInvitePage invitePage = safetyNetworkPage.clickInvite();
 		invitePage.sendEmail();
 		assertTrue("Could not open Invitation page", invitePage != null);
@@ -43,7 +67,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 	@Test
 	public void test_static_page_contents() {
-		SafetyNetworkPage safetyNetworkPage = startAsCompany("msa").login().clickSafetyNetworkLink();
+		SafetyNetworkPage safetyNetworkPage = startAsCompany(COMPANY1).login().clickSafetyNetworkLink();
 		assertTrue(safetyNetworkPage != null);
 		assertTrue("Could not find the Safety Network main page", selenium.isElementPresent(safetyNetworkPageHeaderLocator));
 		assertTrue("Could not find the link for Inbox", selenium.isElementPresent(safetyNetworkInboxLocator));
@@ -55,22 +79,22 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 	@Test
 	public void test_select_vendor() {
-		SafetyNetworkPage safetyNetworkPage = startAsCompany("halo").login().clickSafetyNetworkLink();
-		safetyNetworkPage.selectVendorConnection(CONNECTION_NAME_1);
-		assertTrue("Could open vendor connection profile", selenium.isElementPresent(connectionProfileName));
+		SafetyNetworkPage safetyNetworkPage = startAsCompany(COMPANY1).login().clickSafetyNetworkLink();
+		VendorConnectionProfilePage profile = safetyNetworkPage.selectVendorConnection(COMPANY2);
+		assertEquals("Could open vendor connection profile", profile.getHeaderText(), COMPANY2);
 	}
 
 	@Test
 	public void test_select_customer() {
-		SafetyNetworkPage safetyNetworkPage = startAsCompany("cglift").login().clickSafetyNetworkLink();
-		CustomerConnectionProfilePage safetyNetworkCustomerPage = safetyNetworkPage.selectCustomerConnection(CONNECTION_NAME_2);
+		SafetyNetworkPage safetyNetworkPage = startAsCompany(COMPANY2).login().clickSafetyNetworkLink();
+		CustomerConnectionProfilePage safetyNetworkCustomerPage = safetyNetworkPage.selectCustomerConnection(COMPANY1);
 		assertTrue("Could open customer connection profile", safetyNetworkCustomerPage != null);
 	}
 
 	@Test
 	public void test_view_catalog_and_import() {
-		SafetyNetworkPage safetyNetworkPage = startAsCompany("seafit").login().clickSafetyNetworkLink();
-		CustomerConnectionProfilePage safetyNetworkCustomerPage = safetyNetworkPage.selectCustomerConnection(CONNECTION_NAME_3);
+		SafetyNetworkPage safetyNetworkPage = startAsCompany(COMPANY2).login().clickSafetyNetworkLink();
+		CustomerConnectionProfilePage safetyNetworkCustomerPage = safetyNetworkPage.selectCustomerConnection(COMPANY1);
 
 		SafetyNetworkCatalogImportPage safetyNetworkCatalogImportPage = safetyNetworkCustomerPage.clickViewCatalog();
 		
@@ -88,7 +112,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 	@Test
 	public void test_publish_catalog() {
-		SafetyNetworkCatalogPage safetyNetworkCatalogPage = startAsCompany("msa").login().clickSafetyNetworkLink().goToCatalog();
+		SafetyNetworkCatalogPage safetyNetworkCatalogPage = startAsCompany(COMPANY2).login().clickSafetyNetworkLink().goToCatalog();
 
 		safetyNetworkCatalogPage.checkAssetTypeCheckBox(ASSET_TYPE_CHECKBOX_NAME_1);
 
@@ -102,7 +126,7 @@ public class SafetyNetworkTest extends FieldIDTestCase {
 
 	@Test
 	public void test_settings_and_privacy() {
-		SafetyNetworkSettingsPage safetyNetworkSettingsPage = startAsCompany("msa").login().clickSafetyNetworkLink().clickSettings();
+		SafetyNetworkSettingsPage safetyNetworkSettingsPage = startAsCompany(COMPANY1).login().clickSafetyNetworkLink().clickSettings();
 
 		// Starts out checked, so uncheck for testing.
 		safetyNetworkSettingsPage.unCheckAutoAcceptCheckBox();

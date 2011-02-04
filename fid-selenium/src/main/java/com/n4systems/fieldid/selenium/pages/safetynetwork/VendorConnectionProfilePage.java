@@ -28,4 +28,8 @@ public class VendorConnectionProfilePage extends FieldIDPage {
 		return new AssetPage(selenium);
 	}
 	
+	public String getHeaderText() {
+		return selenium.getText("//h1[@class='safetyNetworkHeadings']");
+	}
+	
 }

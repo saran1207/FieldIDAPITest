@@ -17,6 +17,8 @@ import com.n4systems.model.Order;
 import com.n4systems.model.OrderSaver;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
+import com.n4systems.model.catalog.Catalog;
+import com.n4systems.model.catalog.CatalogSaver;
 import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
@@ -38,7 +40,8 @@ import java.util.HashMap;
 
 public class SaverMap {
 
-    private static HashMap<Class<? extends Saveable>, Saver> classToSaverMap = new HashMap<Class<? extends Saveable>, Saver>();
+    @SuppressWarnings("unchecked")
+	private static HashMap<Class<? extends Saveable>, Saver> classToSaverMap = new HashMap<Class<? extends Saveable>, Saver>();
 
     static {
         classToSaverMap.put(Asset.class, new SeleniumAssetSaver());
@@ -57,9 +60,11 @@ public class SaverMap {
         classToSaverMap.put(PrimaryOrg.class, new OrgSaver());
         classToSaverMap.put(Order.class, new OrderSaver());
         classToSaverMap.put(LineItem.class, new LineItemSaver());
+        classToSaverMap.put(Catalog.class, new CatalogSaver());
     }
 
-    public static Saver makeSaverFor(Class<? extends Saveable> clazz) {
+    @SuppressWarnings("unchecked")
+	public static Saver makeSaverFor(Class<? extends Saveable> clazz) {
         Saver saver = classToSaverMap.get(clazz);
         if (saver == null) {
             throw new RuntimeException("No saver registered for class: " + clazz + "! Do so in " + SaverMap.class.getName());

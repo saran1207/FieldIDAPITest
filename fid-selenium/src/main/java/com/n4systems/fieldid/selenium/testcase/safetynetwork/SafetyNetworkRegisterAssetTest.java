@@ -13,9 +13,7 @@ import com.n4systems.fieldid.selenium.pages.SafetyNetworkPage;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkRegisterAssetForm;
 import com.n4systems.fieldid.selenium.pages.safetynetwork.SafetyNetworkVendorAssetListPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.safetynetwork.OrgConnection;
+import com.n4systems.model.safetynetwork.TypedOrgConnection;
 
 public class SafetyNetworkRegisterAssetTest extends PageNavigatingTestCase<SafetyNetworkPage> {
 	
@@ -31,19 +29,18 @@ public class SafetyNetworkRegisterAssetTest extends PageNavigatingTestCase<Safet
     }
 	
 	@Override
-	public void setupScenario(Scenario scenario) {
-		PrimaryOrg customer = scenario.primaryOrgFor(COMPANY1);
-		PrimaryOrg vendor = scenario.primaryOrgFor(COMPANY2);
-		OrgConnection connection = new OrgConnection(vendor, customer);
-		scenario.save(connection);
+	public void setupScenario(Scenario scenario) {	
+        scenario.aSafetyNetworkConnection()
+				.from(scenario.primaryOrgFor(COMPANY1))
+				.to(scenario.primaryOrgFor(COMPANY2))
+				.type(TypedOrgConnection.ConnectionType.VENDOR)
+				.build();
 	
-        AssetType type = scenario.assetType(COMPANY2, ASSET_TYPE);
-
         scenario.anAsset()
                 .forTenant(scenario.tenant(COMPANY2))
-                .withOwner(vendor)
+                .withOwner(scenario.primaryOrgFor(COMPANY2))
                 .withSerialNumber(SERIAL_NUMBER)
-                .ofType(type)
+                .ofType(scenario.assetType(COMPANY2, ASSET_TYPE))
                 .published(true)
                 .build();
         
