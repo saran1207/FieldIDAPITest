@@ -5,6 +5,8 @@ import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetTypeSaver;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventForm;
@@ -13,12 +15,15 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.LineItemSaver;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderSaver;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.catalog.CatalogSaver;
+import com.n4systems.model.criteria.CriteriaSaver;
+import com.n4systems.model.criteria.CriteriaSectionSaver;
 import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
@@ -61,6 +66,8 @@ public class SaverMap {
         classToSaverMap.put(Order.class, new OrderSaver());
         classToSaverMap.put(LineItem.class, new LineItemSaver());
         classToSaverMap.put(Catalog.class, new CatalogSaver());
+        classToSaverMap.put(CriteriaSection.class, new CriteriaSectionSaver());
+        classToSaverMap.put(OneClickCriteria.class, new CriteriaSaver());
     }
 
     @SuppressWarnings("unchecked")

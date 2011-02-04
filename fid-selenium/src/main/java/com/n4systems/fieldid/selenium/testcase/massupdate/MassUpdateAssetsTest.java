@@ -53,7 +53,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 			.havingStatus(status1);
 			
 		SubAssetBuilder subBuilder = new SubAssetBuilder(aSubAsset.build(), masterAsset);
-		subBuilder.createObject();
+		subBuilder.build();
 	}
 
 	@Before

@@ -20,11 +20,11 @@ public class SubAssetBuilder extends BaseBuilder<SubAsset> {
 	}
 	
 	public SubAssetBuilder withMasterAsset(Asset masterAsset) {
-		return new SubAssetBuilder(asset, masterAsset);
+		return makeBuilder(new SubAssetBuilder(asset, masterAsset));
 	}
 	
 	public SubAssetBuilder containingAsset(Asset asset) {
-		return new SubAssetBuilder(asset, masterAsset);
+		return makeBuilder(new SubAssetBuilder(asset, masterAsset));
 	}
 	
 	@Override

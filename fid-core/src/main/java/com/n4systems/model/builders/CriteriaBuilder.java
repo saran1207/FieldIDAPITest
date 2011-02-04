@@ -5,7 +5,7 @@ import com.n4systems.model.Criteria;
 public abstract class CriteriaBuilder<K extends Criteria> extends EntityWithTenantBuilder<K> {
 
     protected final String text;
-    protected final boolean retired;
+    protected boolean retired;
 
     public CriteriaBuilder(String text, boolean retired) {
         this.text = text;

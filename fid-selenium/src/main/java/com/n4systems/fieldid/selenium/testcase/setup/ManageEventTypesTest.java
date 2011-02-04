@@ -30,7 +30,6 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 	
 	@Override
 	public void setupScenario(Scenario scenario) {
-		
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor("test1");
 		
 		defaultPrimaryOrg.setExtendedFeatures(new HashSet<ExtendedFeature>(
@@ -43,7 +42,7 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		    .withName("Maintenance")
 		    .build();
 		
-		SimpleEventBuilder.aSimpleEvent(scenario).createObject();
+		SimpleEventBuilder.aSimpleEvent(scenario).build();
 	}
 	
 	@Before
@@ -156,28 +155,6 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 	}
 	
 	@Test
-    @Ignore //TODO: Validation workflow for event form to be decided
-	public void test_add_event_form_with_errors() throws Exception {
-		deleteTestEvent(TEST_EVENT_NAME);
-
-		manageEventTypesPage.clickAddTab();
-		assertEquals("Add", manageEventTypesPage.getCurrentTab());
-		EventType eventType = getEventType();
-		manageEventTypesPage.setFormFields(eventType);
-		manageEventTypesPage.clickSaveAndAdd();
-		manageEventTypesPage.verifyEventTypeSaved();
-
-		assertEquals("Event Form", manageEventTypesPage.getCurrentTab());
-		EventForm badForm = new EventForm();
-		badForm.addSection(0, new EventFormSection(""));
-		manageEventTypesPage.setEventFormFields(badForm);
-		manageEventTypesPage.clickSaveEventForm();
-		assertEquals(3, manageEventTypesPage.getFormErrorMessages().size());
-		
-		deleteTestEvent(TEST_EVENT_NAME);
-	}
-	
-	@Test
 	public void test_copy_existing_event_type() throws Exception {
 		String eventName = manageEventTypesPage.clickFirstListItemCopy() + " - 1";
 		manageEventTypesPage.validateCopiedEvent(eventName);
@@ -221,7 +198,7 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		observation1.setDeficiencies(Arrays.asList("deficiency1", "deficiency2"));					
 		criteria1.setObservations(observation1);
 
-		OneClickEventFormCriteria criteria2 = new OneClickEventFormCriteria("Criteria2", "NA, Pass, Fail");
+		OneClickEventFormCriteria criteria2 = new OneClickEventFormCriteria("Criteria2", "Pass, Fail");
 		EventFormObservations observation2 = new EventFormObservations();
 		observation2.setRecommendations(Arrays.asList("recommendation3"));
 		observation2.setDeficiencies(Arrays.asList("deficiency3"));

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.model.Configuration;
+import com.n4systems.model.StateSet;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.OneClickCriteriaBuilder;
@@ -302,6 +303,13 @@ public class Scenario {
             Configuration config = new Configuration(entry, newValue, tenant.getId());
             trans.getEntityManager().persist(config);
         }
+    }
+
+    public StateSet buttonGroup(Tenant tenant, String name) {
+        Query query = trans.getEntityManager().createQuery("from " + StateSet.class.getName() + " where tenant.id = :tenantId and name = :name");
+        query.setParameter("tenantId", tenant.getId());
+        query.setParameter("name", name);
+        return (StateSet) query.getSingleResult();
     }
 
 }

@@ -165,10 +165,10 @@ public class TenantCleaner {
         for (Long tenantId : tenantIds) {
             for (Class entityClass : entityClasses) {
 //                METHOD1: (verrry slow)
-//                Query query1 = em.createQuery("update " + entityClass.getName() + " set modifiedBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
-//                Query query2 = em.createQuery("update " + entityClass.getName() + " set createdBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
-//                query1.executeUpdate();
-//                query2.executeUpdate();
+                Query query1 = em.createQuery("update " + entityClass.getName() + " set modifiedBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
+                Query query2 = em.createQuery("update " + entityClass.getName() + " set createdBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
+                query1.executeUpdate();
+                query2.executeUpdate();
 //                METHOD2: (fast, maybe doesn't work..)
 //                Query query = em.createQuery("from " + entityClass.getName() + " where tenant.id = :tenantId").setParameter("tenantId", tenantId);
 //                List<BaseOrg> orgs = query.getResultList();

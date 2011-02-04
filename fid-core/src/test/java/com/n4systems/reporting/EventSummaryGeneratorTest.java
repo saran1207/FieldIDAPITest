@@ -45,7 +45,7 @@ public class EventSummaryGeneratorTest {
 		reportDefiner = createMock(ReportDefiner.class);
 		persistenceManager = createMock(PersistenceManager.class);
 		eventManager = createMock(EventManager.class);
-		user = UserBuilder.aUser().createObject();
+		user = UserBuilder.aUser().build();
 		
 		TestConfigContext.newContext();
 	}

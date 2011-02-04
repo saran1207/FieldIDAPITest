@@ -9,6 +9,7 @@ import com.n4systems.fieldid.selenium.pages.ButtonGroupPage;
 import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -84,6 +85,11 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 		selenium.click(FIRST_LIST_ITEM);
 		waitForPageToLoad();
 		return eventName;
+	}
+
+	public void clickEditEventType(String eventTypeName) {
+        selenium.click("//table[@class='list']//tr//td[position()=1]//a[text()='"+eventTypeName+"']/../../td[6]//a[.='Edit']");
+		waitForPageToLoad();
 	}
 		
 	public String clickFirstListItemEdit() {
@@ -175,6 +181,41 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
         selenium.type("//div[@id='criteriaSectionsPanel']//input[@name='sectionNameField']", name);
         selenium.click("//div[@id='criteriaSectionsPanel']//button[.='Add']");
         waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
+    public List<String> getCriteriaNames() {
+        selenium.selectFrame("//iframe");
+
+        int numSections = selenium.getXpathCount("//div[@id='criteriaPanel']//div[contains(@class,'criteria')]").intValue();
+        List<String> sectionNames = new ArrayList<String>();
+        for (int i = 1; i <= numSections; i++) {
+            sectionNames.add(selenium.getText("//div[@id='criteriaPanel']//div[contains(@class,'criteria')]["+i+"]//div[@class='itemLinkTitle']//a//span"));
+        }
+
+        selenium.selectFrame("relative=up");
+        return sectionNames;
+    }
+
+    public List<String> getCriteriaSectionNames() {
+        selenium.selectFrame("//iframe");
+
+        int numSections = selenium.getXpathCount("//div[@id='criteriaSectionsPanel']//div[contains(@class,'criteriaSections')]").intValue();
+        List<String> sectionNames = new ArrayList<String>();
+        for (int i = 1; i <= numSections; i++) {
+            sectionNames.add(selenium.getText("//div[@id='criteriaSectionsPanel']//div[contains(@class,'criteriaSections')]["+i+"]//div[@class='itemLinkTitle']//a//span"));
+        }
+
+        selenium.selectFrame("relative=up");
+        return sectionNames;
+    }
+
+    public void clickCriteriaSection(String criteriaSectionName) {
+        selenium.selectFrame("//iframe");
+
+        selenium.click("//div[@id='criteriaSectionsPanel']//div[contains(@class,'criteriaSections')]//div[@class='itemLinkTitle']//a//span[text()='"+criteriaSectionName+"']");
+        waitForWicketAjax();
+
         selenium.selectFrame("relative=up");
     }
 

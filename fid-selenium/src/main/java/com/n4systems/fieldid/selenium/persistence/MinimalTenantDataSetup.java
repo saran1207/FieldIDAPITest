@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.n4systems.model.AssetType;
+import com.n4systems.model.State;
+import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.assettype.AssetTypeSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -34,6 +36,27 @@ public class MinimalTenantDataSetup {
     public void setupMinimalData() {
         PrimaryOrg org = createPrimaryOrgForTenant();
         createN4UserAccountForTenant(org);
+        createPassFailButtonGroup();
+    }
+
+    private void createPassFailButtonGroup() {
+        StateSet passFailButtonGroup = new StateSet();
+
+        State failState = new State();
+        failState.setButtonName("btn1");
+        failState.setDisplayText("Fail");
+
+        State passState = new State();
+        passState.setButtonName("btn0");
+        passState.setDisplayText("Pass");
+
+        passFailButtonGroup.setName("Pass, Fail");
+        passFailButtonGroup.getAvailableStates().add(failState);
+        passFailButtonGroup.getAvailableStates().add(passState);
+
+        passFailButtonGroup.setTenant(tenant);
+
+        em.persist(passFailButtonGroup);
     }
 
     private void createN4UserAccountForTenant(PrimaryOrg org) {
