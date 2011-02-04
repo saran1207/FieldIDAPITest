@@ -8,15 +8,14 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Test;
+
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.builders.SubAssetBuilder;
-import org.junit.Test;
-
-
-import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.test.helpers.FluentArrayList;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -74,14 +73,14 @@ public class UpdateSubProductsTest {
 		Asset masterAsset = anAsset().build();
 		
 		SubAsset subAssetToRemove = aSubAsset().build();
-		subAssetToRemove.getAsset().setId(1L);
+		subAssetToRemove.getAsset().setMobileGUID("mobileguid");
 
 		List<SubAsset> subAssets = new FluentArrayList<SubAsset>(subAssetToRemove, aSubAsset().build());
 		masterAsset.setSubAssets(subAssets);
 		
 		//2. creating InspectionServiceDTO with detaching sub products information
 		SubProductMapServiceDTO subProductMapServiceDTO = new SubProductMapServiceDTO();
-		subProductMapServiceDTO.setSubProductId(1L);
+		subProductMapServiceDTO.setSubAssetGuid(subAssetToRemove.getAsset().getMobileGUID());
 		
 		InspectionServiceDTO inspectionServiceDTO = new InspectionServiceDTO();
 		inspectionServiceDTO.getDetachSubProducts().add(subProductMapServiceDTO);
@@ -97,7 +96,7 @@ public class UpdateSubProductsTest {
 
 	private AssetManager lookUpProductById(SubAsset subAssetToRemove) {
 		AssetManager assetManager = createMock(AssetManager.class);
-		expect(assetManager.findAsset(same(subAssetToRemove.getAsset().getId()), (SecurityFilter)anyObject())).andReturn(subAssetToRemove.getAsset());
+		expect(assetManager.findAssetByGUID(same(subAssetToRemove.getAsset().getMobileGUID()), (SecurityFilter)anyObject())).andReturn(subAssetToRemove.getAsset());
 		replay(assetManager);
 		return assetManager;
 	}
