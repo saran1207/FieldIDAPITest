@@ -6,7 +6,8 @@ import com.thoughtworks.selenium.Selenium;
 public class AdminOrgsListPage extends FieldIDPage {
 
     public AdminOrgsListPage(Selenium selenium) {
-        super(selenium);
+        super(selenium, false);
+        waitForPageToLoad("30000");
     }
 
     public AdminOrgPage clickEditOrganization(String orgName) {
