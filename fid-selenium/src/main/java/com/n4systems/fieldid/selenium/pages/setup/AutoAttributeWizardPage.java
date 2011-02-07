@@ -34,10 +34,7 @@ public class AutoAttributeWizardPage extends FieldIDPage {
 	private void dragFieldFromTo(String fieldName, String fromListXpath, final String toListXpath) {
 		final String pathOfElementUnderList = "//div[starts-with(@id, 'field_')]/span[position() = 1 and .='"+fieldName+"']/.."; 
 		String downXpath = fromListXpath + pathOfElementUnderList;
-		selenium.mouseDownAt(downXpath, "1,1");
-		selenium.mouseMoveAt(toListXpath, "1,1");
-		selenium.mouseOver(toListXpath);
-		selenium.mouseUpAt(toListXpath, "1,1");
+        dragAndDropFromTo(downXpath, toListXpath);
 		new ConditionWaiter(new Predicate() {
 			@Override
 			public boolean evaluate() {

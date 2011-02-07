@@ -18,6 +18,8 @@ import com.n4systems.model.LineItemSaver;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderSaver;
+import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.catalog.Catalog;
@@ -68,6 +70,8 @@ public class SaverMap {
         classToSaverMap.put(Catalog.class, new CatalogSaver());
         classToSaverMap.put(CriteriaSection.class, new CriteriaSectionSaver());
         classToSaverMap.put(OneClickCriteria.class, new CriteriaSaver());
+        classToSaverMap.put(TextFieldCriteria.class, new CriteriaSaver());
+        classToSaverMap.put(SelectCriteria.class, new CriteriaSaver());
     }
 
     @SuppressWarnings("unchecked")

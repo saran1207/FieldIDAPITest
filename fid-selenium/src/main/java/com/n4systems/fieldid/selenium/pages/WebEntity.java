@@ -57,4 +57,11 @@ public class WebEntity {
 		selenium.waitForCondition("typeof(selenium.browserbot.getCurrentWindow().Ajax) == 'object' && selenium.browserbot.getCurrentWindow().Ajax.activeRequestCount == 0;", timeout);
 	}
 
+    protected void dragAndDropFromTo(String sourceXpath, String destXpath) {
+        selenium.mouseDownAt(sourceXpath, "1,1");
+        selenium.mouseMoveAt(destXpath, "1,1");
+        selenium.mouseOver(destXpath);
+        selenium.mouseUpAt(destXpath, "1,1");
+    }
+
 }

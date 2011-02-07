@@ -237,9 +237,13 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 	}
 
     private void addCriteriaNamed(String criteriaLabel) {
+        addCriteriaNamed(criteriaLabel, "One-Click Button");
+    }
+
+    private void addCriteriaNamed(String criteriaLabel, String type) {
         selenium.selectFrame("//iframe");
         selenium.type("//div[@id='criteriaPanel']//input[@name='criteriaName']", criteriaLabel);
-        selenium.select("//div[@id='criteriaPanel']//select[@name='criteriaType']", "One-Click Button");
+        selenium.select("//div[@id='criteriaPanel']//select[@name='criteriaType']", type);
         selenium.click("//div[@id='criteriaPanel']//button[.='Add']");
         waitForWicketAjax();
         selenium.selectFrame("relative=up");
@@ -300,5 +304,45 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 		selenium.click("//div[@id='contentHeader']/ul/li[2]/a");
 		return new ButtonGroupPage(selenium);
 	}
-	
+
+    public void clickReorderSections() {
+        selenium.selectFrame("//iframe");
+        selenium.click("//a[contains(.,'Reorder Sections')]");
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
+    public void dragSectionToPosition(String sectionName, int position) {
+        dragSortableItem(sectionName, position, "criteriaSectionsPanel", "criteriaSections");
+    }
+
+    public void dragCriteriaToPosition(String criteriaName, int position) {
+        dragSortableItem(criteriaName, position, "criteriaPanel", "criteria");
+    }
+
+    public void clickReorderCriteria() {
+        selenium.selectFrame("//iframe");
+        selenium.click("//a[contains(.,'Reorder Criteria')]");
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
+    private void dragSortableItem(String sectionName, int position, String containerXpath, String itemClass) {
+        selenium.selectFrame("//iframe");
+        String sectionXpath = "//div[@id='"+containerXpath+"']//div[contains(@class,'"+itemClass+"')]//div[@class='itemLinkTitle']//a//span[text()='"+sectionName+"']//ancestor::div[@class='"+itemClass+"']";
+        String toXpath = "//div[contains(@class,'sortableSectionContainer')]";
+        if (position > 1) {
+            toXpath += "//div[contains(@class,'"+itemClass+"')]["+position+"]";
+        }
+        dragAndDropFromTo(sectionXpath, toXpath);
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
+    public String getTypeForCriteria(String criteriaName) {
+        selenium.selectFrame("//iframe");
+        String type = selenium.getText("//div[@id='criteriaPanel']//div[contains(@class,'criteria')]//div[@class='itemLinkTitle']//span[.='"+criteriaName+"']/../div[@class='subTitle']");
+        selenium.selectFrame("relative=up");
+        return type;
+    }
 }

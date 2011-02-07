@@ -8,6 +8,14 @@ public class TextFieldCriteriaBuilder extends CriteriaBuilder<TextFieldCriteria>
         super(text, retired);
     }
 
+    public static TextFieldCriteriaBuilder aTextFieldCriteria() {
+        return new TextFieldCriteriaBuilder(null, false);
+    }
+
+    public TextFieldCriteriaBuilder withText(String text) {
+        return makeBuilder(new TextFieldCriteriaBuilder(text, retired));
+    }
+
     @Override
     public TextFieldCriteria createObject() {
         return super.assignAbstractFields(new TextFieldCriteria());

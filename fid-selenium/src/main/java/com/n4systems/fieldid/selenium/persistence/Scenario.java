@@ -10,6 +10,8 @@ import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EventFormBuilder;
+import com.n4systems.model.builders.SelectCriteriaBuilder;
+import com.n4systems.model.builders.TextFieldCriteriaBuilder;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -199,8 +201,18 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
-    public OneClickCriteriaBuilder aCriteria() {
+    public OneClickCriteriaBuilder aOneClickCriteria() {
         OneClickCriteriaBuilder builder = OneClickCriteriaBuilder.aCriteria();
+        return createPersistentBuilder(builder);
+    }
+
+    public TextFieldCriteriaBuilder aTextFieldCriteria() {
+        TextFieldCriteriaBuilder builder = TextFieldCriteriaBuilder.aTextFieldCriteria();
+        return createPersistentBuilder(builder);
+    }
+
+    public SelectCriteriaBuilder aSelectCriteria() {
+        SelectCriteriaBuilder builder = SelectCriteriaBuilder.aSelectCriteria();
         return createPersistentBuilder(builder);
     }
 
