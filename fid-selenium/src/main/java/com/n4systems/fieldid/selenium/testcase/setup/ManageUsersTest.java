@@ -2,10 +2,7 @@ package com.n4systems.fieldid.selenium.testcase.setup;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;

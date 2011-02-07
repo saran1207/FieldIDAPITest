@@ -1,7 +1,12 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.fail;
+
+import java.util.List;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.Organization;
 import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.mail.MailMessage;
 import com.n4systems.fieldid.selenium.pages.EULAPage;
@@ -14,11 +19,6 @@ import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
 import com.n4systems.util.ConfigEntry;
-import org.junit.Test;
-
-import java.util.List;
-
-import static org.junit.Assert.fail;
 
 public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 
@@ -53,7 +53,6 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
 	private void addASecondaryOrganization(ManageOrganizationsPage orgsPage) {
 		orgsPage.clickAdd();
 		
-		Organization o = new Organization(NEW_ORG_NAME);
 		orgsPage.enterOrganizationName(NEW_ORG_NAME);
 		orgsPage.clickSave();
 	}

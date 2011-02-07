@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 
 import com.n4systems.fieldid.selenium.components.OrgPicker;
-import com.n4systems.fieldid.selenium.datatypes.EventBook;
+import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -89,19 +89,24 @@ public class ManageEventBooksPage extends FieldIDPage {
 		selenium.click("//input[@name='hbutton.save']");
 		waitForPageToLoad();
 	}
-
-	public void enterEventBookFormFields(EventBook book) {
-		if(book.name != null) {
-			selenium.type("//input[@name='name']", book.name);
-		}
-		if(book.owner != null) {
-			OrgPicker orgPicker = new OrgPicker(selenium);
-			orgPicker.clickChooseOwner();
-			orgPicker.setOwner(book.owner);
-			orgPicker.clickSelectOwner();
-		}
-		if(!book.status) {
+	
+	
+	public void setName(String name) {
+		selenium.type("//input[@name='name']", name);
+	}
+	
+	public void setOwner(Owner owner) {
+		OrgPicker orgPicker = new OrgPicker(selenium);
+		orgPicker.clickChooseOwner();
+		orgPicker.setOwner(owner);
+		orgPicker.clickSelectOwner();		
+	}
+	
+	public void setStatus(boolean status) {
+		if (status) {
 			selenium.check("//input[@name='open']");
+		}else{
+			selenium.uncheck("//input[@name='open']");
 		}
 	}
 
