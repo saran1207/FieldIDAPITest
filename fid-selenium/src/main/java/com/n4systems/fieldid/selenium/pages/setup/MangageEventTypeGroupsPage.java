@@ -6,7 +6,6 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.datatypes.EventTypeGroup;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
@@ -79,20 +78,21 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 		selenium.click("//input[@name='label.save']");
 		waitForPageToLoad();		
 	}
+	
+	public void setName(String name) {
+		selenium.type("//input[@id='eventTypeGroupCreate_name']", name);
+	}
 
-	public void setEventTypeGroupFormFields(EventTypeGroup eventTypeGroup) {
-		if (eventTypeGroup.getName() != null) {
-			selenium.type("//input[@id='eventTypeGroupCreate_name']", eventTypeGroup.getName());
-		}
-		if(eventTypeGroup.getReportName() != null){
-			selenium.type("//input[@id='eventTypeGroupCreate_reportTitle']", eventTypeGroup.getReportName());
-		}
-		if(eventTypeGroup.getPdfReportStyle() !=  null) {
-			selenium.check("//ul[@class='printOutSelection']//div[@class='printOutDetails' and contains(., '"+ eventTypeGroup.getPdfReportStyle() +"')]/input");
-		}
-		if(eventTypeGroup.getObservationReportStyle() !=  null) {
-			selenium.check("//ul[@class='printOutSelection']//div[@class='printOutDetails' and contains(., '"+ eventTypeGroup.getObservationReportStyle() +"')]/input");
-		}
+	public void setReportName(String reportName) {
+		selenium.type("//input[@id='eventTypeGroupCreate_reportTitle']", reportName);
+	}
+
+	public void setPdfReportStyle(String pdfReportStyle) {
+		selenium.check("//ul[@class='printOutSelection']//div[@class='printOutDetails' and contains(., '"+ pdfReportStyle +"')]/input");
+	}
+
+	public void setObservationGroupStyle(String observationReportStyle) {
+		selenium.check("//ul[@class='printOutSelection']//div[@class='printOutDetails' and contains(., '"+ observationReportStyle +"')]/input");
 	}
 	
 	public void deleteListItem(String name) {
@@ -115,5 +115,4 @@ public class MangageEventTypeGroupsPage extends FieldIDPage {
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Event Type Group deleted.", actionMessages.get(0).trim());
 	}
-
 }

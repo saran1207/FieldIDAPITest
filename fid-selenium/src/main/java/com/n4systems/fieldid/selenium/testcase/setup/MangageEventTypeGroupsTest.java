@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.EventTypeGroup;
 import com.n4systems.fieldid.selenium.pages.setup.MangageEventTypeGroupsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Tenant;
@@ -90,8 +89,10 @@ public class MangageEventTypeGroupsTest extends FieldIDTestCase {
 	public void test_add_event_type_group() throws Exception {
 		manageEventTypeGroupsPage.clickAddTab();
 		assertEquals("Add", manageEventTypeGroupsPage.getCurrentTab());
-		EventTypeGroup eventTypeGroup = new EventTypeGroup("Test", "Test", "Basic Visual Inspection", "Full Observation Report");
-		manageEventTypeGroupsPage.setEventTypeGroupFormFields(eventTypeGroup);
+		manageEventTypeGroupsPage.setName("Test");
+		manageEventTypeGroupsPage.setReportName("Test");
+		manageEventTypeGroupsPage.setPdfReportStyle("Basic Visual Inspection");
+		manageEventTypeGroupsPage.setObservationGroupStyle("Full Observation Report");
 		manageEventTypeGroupsPage.clickSaveButton();
 		manageEventTypeGroupsPage.verifyEventTypeSaved();
 	}	
