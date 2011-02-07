@@ -11,6 +11,7 @@ import java.io.StringReader;
 public class SignUpEmailLoginNavigator {
 
     public SetPasswordPage navigateToSignInPageSpecifiedIn(MailMessage message, Selenium selenium) {
+        selenium.deleteAllVisibleCookies();
         String url = extractSignInPageUrlFrom(message);
         selenium.open(url);
         return new SetPasswordPage(selenium);

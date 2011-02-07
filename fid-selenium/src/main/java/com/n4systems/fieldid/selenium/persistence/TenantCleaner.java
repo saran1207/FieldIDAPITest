@@ -132,18 +132,29 @@ public class TenantCleaner {
         
         removeAllExternalOrgsPointingToTenants(em, tenantIds);
 
-        cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, CustomerOrg.class, DivisionOrg.class, SecondaryOrg.class, PrimaryOrg.class);
+//        cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, CustomerOrg.class, DivisionOrg.class, SecondaryOrg.class, PrimaryOrg.class);
 
         cleanUpAddressInfo(em);
 
         removeAllWhereModifiedOrCreatedByUsersFromTenant(em, tenantIds, EventGroup.class, EventTypeGroup.class, SeenItStorageItem.class);
 
-        removeAllForTenants(em, User.class, tenantIds);
+        cleanUpOwnerForUsers(em, tenantIds);
 
         removeAllForTenants(em, CustomerOrg.class, tenantIds);
         removeAllForTenants(em, DivisionOrg.class, tenantIds);
         removeAllForTenants(em, SecondaryOrg.class, tenantIds);
         removeAllForTenants(em, PrimaryOrg.class, tenantIds);
+
+        removeAllForTenants(em, User.class, tenantIds);
+    }
+
+    private void cleanUpOwnerForUsers(EntityManager em, List<Long> tenantIds) {
+        long startTime = System.currentTimeMillis();
+        for (Long tenantId : tenantIds) {
+            Query q = em.createQuery("update " + User.class.getName() + " set owner = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
+            q.executeUpdate();
+        }
+        System.out.println("Finished nulling out owners in: " + (System.currentTimeMillis() - startTime));
     }
 
     private void removeAllConfigsForTenants(EntityManager em, List<Long> tenantIds) {
