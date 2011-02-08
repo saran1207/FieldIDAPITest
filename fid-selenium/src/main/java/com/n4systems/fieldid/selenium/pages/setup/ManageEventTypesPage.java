@@ -17,8 +17,9 @@ import static org.junit.Assert.*;
 public class ManageEventTypesPage extends WicketFieldIDPage {
 
 	final static String FIRST_LIST_ITEM = "//table[@class='list']//tr[3]/td[1]/a";
-	
-	public ManageEventTypesPage(Selenium selenium) {
+    private boolean selectedCriteriaResultSetting;
+
+    public ManageEventTypesPage(Selenium selenium) {
 		super(selenium);
 		if(!checkOnManageEventTypesPage()){
 			fail("Expected to be on Manage Event Types page!");
@@ -236,11 +237,11 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 		}
 	}
 
-    private void addCriteriaNamed(String criteriaLabel) {
+    public void addCriteriaNamed(String criteriaLabel) {
         addCriteriaNamed(criteriaLabel, "One-Click Button");
     }
 
-    private void addCriteriaNamed(String criteriaLabel, String type) {
+    public void addCriteriaNamed(String criteriaLabel, String type) {
         selenium.selectFrame("//iframe");
         selenium.type("//div[@id='criteriaPanel']//input[@name='criteriaName']", criteriaLabel);
         selenium.select("//div[@id='criteriaPanel']//select[@name='criteriaType']", type);
@@ -344,5 +345,87 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
         String type = selenium.getText("//div[@id='criteriaPanel']//div[contains(@class,'criteria')]//div[@class='itemLinkTitle']//span[.='"+criteriaName+"']/../div[@class='subTitle']");
         selenium.selectFrame("relative=up");
         return type;
+    }
+
+    public void clickCriteria(String criteriaName) {
+        selenium.selectFrame("//iframe");
+
+        selenium.click("//div[@id='criteriaPanel']//div[contains(@class,'criteria')]//div[@class='itemLinkTitle']//a//span[text()='"+criteriaName+"']");
+        waitForWicketAjax();
+
+        selenium.selectFrame("relative=up");
+    }
+
+    public List<String> getDropDownOptions() {
+        selenium.selectFrame("//iframe");
+        List<String> options = new ArrayList<String>();
+
+        int numItems = selenium.getXpathCount("//div[@id='criteriaEditor']//div[contains(@class,'stringListItem')]//div[@class='itemLinkTitle']//a//span").intValue();
+        for (int i = 1; i<= numItems; i++) {
+            options.add(selenium.getText("//div[@id='criteriaEditor']//div[contains(@class,'stringListItem')]//div[@class='itemLinkTitle']//a//span["+i+"]"));
+        }
+
+        selenium.selectFrame("relative=up");
+
+        return options;
+    }
+
+    public void addDropDownOption(String optionName) {
+        selenium.selectFrame("//iframe");
+
+        selenium.type("//div[@id='criteriaEditor']//div[contains(@class,'addItemTitle') and text() = 'Drop Down Options']/..//input[@type='text']", optionName);
+        selenium.click("//div[@id='criteriaEditor']//div[contains(@class,'addItemTitle') and text() = 'Drop Down Options']/..//button[@name='addButton']");
+        waitForWicketAjax();
+
+        selenium.selectFrame("relative=up");
+    }
+
+    public void clickSaveAndFinishEventForm() {
+        selenium.click("//div[@class='savePanel']//a[contains(., 'Save and Finish')]");
+        waitForPageToLoad();
+    }
+
+    public void deleteCriteriaSectionNamed(String sectionName) {
+        selenium.selectFrame("//iframe");
+
+        selenium.click("//div[@id='criteriaSectionsPanel']//div[contains(@class,'criteriaSections')]//div[@class='itemLinkTitle']//a//span[text()='"+sectionName+"']//ancestor::div[contains(@class, 'criteriaSections')]//div[@class='deleteLinkSection']//img");
+        waitForWicketAjax();
+
+        selenium.selectFrame("relative=up");
+    }
+
+    public void renameCriteriaSectionFromTo(String oldSectionName, String newSectionName) {
+        selenium.selectFrame("//iframe");
+
+        selenium.click("//div[@id='criteriaSectionsPanel']//div[contains(@class,'criteriaSections')]//div[@class='itemLinkTitle']//a//span[text()='"+oldSectionName+"']//ancestor::div[contains(@class, 'criteriaSections')]//div[@class='editCopyLinks']//a[.='Edit']");
+        waitForWicketAjax();
+
+        selenium.type("//div[@id='criteriaSectionsPanel']//input[@name='newText']", newSectionName);
+        selenium.click("//div[@id='criteriaSectionsPanel']//input[@name='newText']//ancestor::div[contains(@class, 'criteriaSections')]//div[@class='editCopyLinks']//a[.='Store']");
+        waitForWicketAjax();
+
+        selenium.selectFrame("relative=up");
+    }
+
+    public void copyCriteriaSectionNamed(String sectionNameToCopy) {
+        selenium.selectFrame("//iframe");
+
+        selenium.click("//div[@id='criteriaSectionsPanel']//div[contains(@class,'criteriaSections')]//div[@class='itemLinkTitle']//a//span[text()='"+sectionNameToCopy+"']//ancestor::div[contains(@class, 'criteriaSections')]//div[@class='editCopyLinks']//a[.='Copy']");
+        waitForWicketAjax();
+
+        selenium.selectFrame("relative=up");
+    }
+
+    public boolean isSelectedCriteriaResultSetting() {
+        return selenium.isChecked("//div[@id='criteriaEditor']//div[contains(@class,'buttonGroupConfiguration')]//input[@type='checkbox']");
+    }
+
+    public void setSelectedCriteriaResultSetting(boolean resultSetting) {
+        if (resultSetting) {
+            selenium.check("//div[@id='criteriaEditor']//div[contains(@class,'buttonGroupConfiguration')]//input[@type='checkbox']");
+        } else {
+            selenium.uncheck("//div[@id='criteriaEditor']//div[contains(@class,'buttonGroupConfiguration')]//input[@type='checkbox']");
+        }
+        waitForWicketAjax();
     }
 }

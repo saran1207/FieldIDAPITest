@@ -53,4 +53,28 @@ public class EventFormEditorTest_Select extends PageNavigatingTestCase<ManageEve
         assertEquals("Select Box", page.getTypeForCriteria("select3"));
     }
 
+    @Test
+    public void add_select_criteria_and_save_event_form() {
+        page.clickCriteriaSection("Main Section");
+        page.addCriteriaNamed("New Select Criteria", "Select Box");
+        page.clickCriteria("New Select Criteria");
+
+        assertEquals("Should be no options in new select criteria", 0, page.getDropDownOptions().size());
+
+        page.addDropDownOption("New option 1");
+        assertEquals("Should find new option", 1, page.getDropDownOptions().size());
+        assertEquals("Should find new option", "New option 1", page.getDropDownOptions().get(0));
+
+        page.clickSaveAndFinishEventForm();
+
+        assertEquals("Should see save success message", 1, page.getActionMessages().size());
+        assertEquals("Event Form saved.", page.getActionMessages().get(0));
+
+        page.clickEventFormTab();
+        page.clickCriteriaSection("Main Section");
+        page.clickCriteria("New Select Criteria");
+        assertEquals("Should find new option", 1, page.getDropDownOptions().size());
+        assertEquals("Should find new option", "New option 1", page.getDropDownOptions().get(0));
+    }
+
 }

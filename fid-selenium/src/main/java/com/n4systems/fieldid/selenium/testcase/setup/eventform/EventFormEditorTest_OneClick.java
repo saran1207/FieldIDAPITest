@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageEventTypesPage> {
 
@@ -27,7 +28,11 @@ public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageE
                 .withCriteria(oneClick1, oneClick2)
                 .build();
 
-        EventForm eventForm = scenario.anEventForm().withSections(mainSection).build();
+        CriteriaSection otherSection = scenario.aCriteriaSection()
+                .withTitle("Other section")
+                .build();
+
+        EventForm eventForm = scenario.anEventForm().withSections(mainSection, otherSection).build();
 
         scenario.anEventType()
                 .withEventForm(eventForm)
@@ -49,6 +54,18 @@ public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageE
 
         assertEquals("One-Click Button", page.getTypeForCriteria("oneclick1"));
         assertEquals("One-Click Button", page.getTypeForCriteria("oneclick2"));
+    }
+
+    @Test
+    public void add_one_click_criteria() {
+        page.clickCriteriaSection("Other section");
+        assertEquals(0, page.getCriteriaNames().size());
+
+        page.addCriteriaNamed("new one click", "One-Click Button");
+        assertEquals("One-Click Button", page.getTypeForCriteria("new one click"));
+
+        page.clickCriteria("new one click");
+        assertFalse(page.isSelectedCriteriaResultSetting());
     }
 
 }

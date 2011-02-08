@@ -24,7 +24,11 @@ public class EventFormEditorTest_TextFields extends PageNavigatingTestCase<Manag
                 .withCriteria(text1, text2)
                 .build();
 
-        EventForm eventForm = scenario.anEventForm().withSections(mainSection).build();
+        CriteriaSection otherSection = scenario.aCriteriaSection()
+                .withTitle("Other section")
+                .build();
+
+        EventForm eventForm = scenario.anEventForm().withSections(mainSection, otherSection).build();
 
         scenario.anEventType()
                 .withEventForm(eventForm)
@@ -37,6 +41,23 @@ public class EventFormEditorTest_TextFields extends PageNavigatingTestCase<Manag
         assertEquals(Arrays.asList("text1", "text2"), page.getCriteriaNames());
         assertEquals("Text Field", page.getTypeForCriteria("text1"));
         assertEquals("Text Field", page.getTypeForCriteria("text2"));
+    }
+
+    @Test
+    public void add_text_criteria() {
+        page.clickCriteriaSection("Other section");
+        assertEquals("Should start with no criteria in 'other' section", 0, page.getCriteriaNames().size());
+        page.addCriteriaNamed("Text field 1", "Text Field");
+        assertEquals("Should find new text criteria", 1, page.getCriteriaNames().size());
+        assertEquals("Should find new text criteria", "Text field 1", page.getCriteriaNames().get(0));
+
+        page.clickSaveAndFinishEventForm();
+        assertEquals("Event Form saved.", page.getActionMessages().get(0));
+
+        page.clickEventFormTab();
+        page.clickCriteriaSection("Other section");
+        assertEquals("Should find new text criteria", "Text field 1", page.getCriteriaNames().get(0));
+        assertEquals("Text Field", page.getTypeForCriteria("Text field 1"));
     }
 
     @Override
