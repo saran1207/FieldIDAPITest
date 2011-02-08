@@ -197,8 +197,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			inspectionDTO.getInfoOptions().add(convert(event.getId(), infoFieldName, infoOptionMap.get(infoFieldName)));
 		}
 
+		if (event.getEventForm() != null)
+			inspectionDTO.setFormId(event.getEventForm().getId());
+		
 		inspectionDTO.setEditable(event.isEditable());
-		inspectionDTO.setFormId(event.getEventForm().getId());
 		inspectionDTO.setInspectionTypeId(event.getType().getId());
 		inspectionDTO.setProductId(event.getAsset().getId());
 		inspectionDTO.setProductMobileGuid(event.getAsset().getMobileGUID());
