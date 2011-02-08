@@ -60,6 +60,13 @@ public class IdentifyPage extends FieldIDPage {
 		selenium.type("//form[@id='searchOrder']//input[@name='orderNumber']", orderNumber);
 	}
 	
+	public void setOwner(Owner owner) {
+		OrgPicker orgPicker = getOrgPicker();
+		orgPicker.clickChooseOwner();
+		orgPicker.setOwner(owner);
+		orgPicker.clickSelectOwner();
+	}
+
 	public void clickLoadOrderNumberButton() {
 		selenium.click("//form[@id='searchOrder']/input[@id='searchOrder_load']");
 		waitForPageToLoad("60000");

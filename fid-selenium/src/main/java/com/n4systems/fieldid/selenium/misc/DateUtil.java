@@ -2,9 +2,9 @@ package com.n4systems.fieldid.selenium.misc;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+
+import org.apache.commons.lang.time.DateUtils;
 
 public class DateUtil {
 
@@ -23,10 +23,10 @@ public class DateUtil {
     }
 
     public static Date theDayAfter(Date day) {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(day);
-        cal.add(Calendar.DATE, 1);
-        return cal.getTime();
+        return DateUtils.addDays(day, 1);
     }
 
+    public static Date addDays(Date date, int days) {
+    	return DateUtils.addDays(date, days);
+    }
 }

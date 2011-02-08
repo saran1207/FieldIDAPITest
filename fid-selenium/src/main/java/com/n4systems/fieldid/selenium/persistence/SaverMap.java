@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.selenium.persistence;
 
+import java.util.HashMap;
+
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetSaver;
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetTypeSaver;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.Criteria;
+import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
@@ -30,6 +32,7 @@ import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
+import com.n4systems.model.eventtype.AssociatedEventTypeSaver;
 import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -42,8 +45,6 @@ import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-
-import java.util.HashMap;
 
 public class SaverMap {
 
@@ -70,6 +71,7 @@ public class SaverMap {
         classToSaverMap.put(Catalog.class, new CatalogSaver());
         classToSaverMap.put(CriteriaSection.class, new CriteriaSectionSaver());
         classToSaverMap.put(OneClickCriteria.class, new CriteriaSaver());
+        classToSaverMap.put(AssociatedEventType.class, new AssociatedEventTypeSaver());
         classToSaverMap.put(TextFieldCriteria.class, new CriteriaSaver());
         classToSaverMap.put(SelectCriteria.class, new CriteriaSaver());
     }

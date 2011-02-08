@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.selenium.pages.schedules;
 
 import com.n4systems.fieldid.selenium.pages.AssetPage;
-import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.search.SearchResultsPage;
 import com.thoughtworks.selenium.Selenium;
