@@ -52,19 +52,24 @@ public class EmployeeCrud extends UserCrud {
 	@Override
 	@SkipValidation
 	public String doAdd() {
-		user.setUserType(UserType.FULL);
-		String result = super.doAdd();
-		setupPermissions();
-		isEmployeeLimitReached();
-		return result;
+		if (!isEmployeeLimitReached()) {
+			user.setUserType(UserType.FULL);
+			String result = super.doAdd();
+			setupPermissions();
+			return result;
+		}
+		return ERROR;
 	}
-	
+
 	@Override
-	public String doCreate(){
-		user.setUserType(UserType.FULL);
-		testRequiredEntities(false);
-		save();
-		return SUCCESS;
+	public String doCreate() {
+		if (!isEmployeeLimitReached()) {
+			user.setUserType(UserType.FULL);
+			testRequiredEntities(false);
+			save();
+			return SUCCESS;
+		}
+		return ERROR;
 	}
 	
 	@Override

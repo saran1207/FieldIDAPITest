@@ -666,7 +666,7 @@
 			<result name="success" type="freemarker">templates/html/userSelection/add.ftl</result>
 			<result name="input" type="freemarker">templates/html/userSelection/add.ftl</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">userlist</param>
+				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 			</result>
@@ -676,7 +676,7 @@
 			<result name="success" type="freemarker">templates/html/userCrud/addLite.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addLite.ftl</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">userlist</param>
+				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 			</result>
@@ -703,7 +703,7 @@
 			<result name="success" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">userlist</param>
+				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
 				<param name="listFilter">${listFilter}</param>
 			</result>

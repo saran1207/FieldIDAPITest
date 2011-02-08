@@ -27,23 +27,28 @@ public class LiteUserCrud extends UserCrud {
 	protected LiteUserCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
 	}
-	
+
 	@Override
 	@SkipValidation
-	public String doAdd(){
-		user.setUserType(UserType.LITE);
-		String result = super.doAdd();
-		setupPermissions();
-		isLiteUserLimitReached();
-		return result;
+	public String doAdd() {
+		if (!isLiteUserLimitReached()) {
+			user.setUserType(UserType.LITE);
+			String result = super.doAdd();
+			setupPermissions();
+			return result;
+		}
+		return ERROR;
 	}
-	
+
 	@Override
-	public String doCreate(){
-		testRequiredEntities(false);
-		user.setUserType(UserType.LITE);
-		save();
-		return SUCCESS;
+	public String doCreate() {
+		if (!isLiteUserLimitReached()) {
+			testRequiredEntities(false);
+			user.setUserType(UserType.LITE);
+			save();
+			return SUCCESS;
+		}
+		return ERROR;
 	}
 	
 	@Override
