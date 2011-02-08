@@ -136,6 +136,10 @@
 	padding-bottom: 10px;
 }
 
+.leftViewSection p {
+	overflow: hidden;
+}
+
 .leftViewSection p, .columnRight p{
 	line-height: 1.6em;
 	padding-left: 15px;
