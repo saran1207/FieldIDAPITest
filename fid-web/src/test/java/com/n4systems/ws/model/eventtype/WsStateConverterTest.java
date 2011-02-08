@@ -16,6 +16,7 @@ public class WsStateConverterTest {
 		model.setDisplayText("display text");
 		model.setButtonName("button name");
 		model.setStatus(Status.FAIL);
+		model.setRetired(false);
 		
 		WsState wsModel = new WsStateConverter().fromModel(model);
 		
@@ -23,6 +24,7 @@ public class WsStateConverterTest {
 		assertEquals(model.getDisplayText(), wsModel.getDisplayText());
 		assertEquals(model.getButtonName(), wsModel.getButtonName());
 		assertEquals(WsStatus.FAIL, wsModel.getStatus());
+		assertTrue(wsModel.isActive());
 	}
 	
 }

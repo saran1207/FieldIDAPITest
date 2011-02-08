@@ -12,6 +12,7 @@ public class WsStateConverter extends WsModelConverter<State, WsState> {
 		wsModel.setDisplayText(model.getDisplayText());
 		wsModel.setButtonName(model.getButtonName());
 		wsModel.setStatus(WsStatus.convert(model.getStatus()));
+		wsModel.setActive(!model.isRetired());
 		return wsModel;
 	}
 	

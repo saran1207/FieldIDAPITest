@@ -10,6 +10,7 @@ public class WsState extends WsModel {
 	private String displayText;
 	private String buttonName;
 	private WsStatus status;
+	private boolean active;
 	
 	@XmlElement(name="DisplayText")
 	public String getDisplayText() {
@@ -37,5 +38,13 @@ public class WsState extends WsModel {
 	public void setStatus(WsStatus status) {
 		this.status = status;
 	}
-	
+
+	@XmlElement(name="Active")
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }
