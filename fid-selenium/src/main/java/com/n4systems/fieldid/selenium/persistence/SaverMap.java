@@ -11,6 +11,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.LineItem;
@@ -32,6 +33,7 @@ import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
+import com.n4systems.model.eventschedule.EventScheduleSaver;
 import com.n4systems.model.eventtype.AssociatedEventTypeSaver;
 import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
@@ -78,6 +80,7 @@ public class SaverMap {
         classToSaverMap.put(AssociatedEventType.class, new AssociatedEventTypeSaver());
         classToSaverMap.put(TextFieldCriteria.class, new CriteriaSaver());
         classToSaverMap.put(SelectCriteria.class, new CriteriaSaver());
+        classToSaverMap.put(EventSchedule.class, new EventScheduleSaver());
         classToSaverMap.put(StateSet.class, new StateSetSaver());
         classToSaverMap.put(State.class, new StateSaver());
     }
