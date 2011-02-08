@@ -19,6 +19,7 @@ import com.n4systems.model.LineItemSaver;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderSaver;
+import com.n4systems.model.Project;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
@@ -40,6 +41,7 @@ import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.project.ProjectSaver;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.stateset.StateSaver;
@@ -83,6 +85,8 @@ public class SaverMap {
         classToSaverMap.put(EventSchedule.class, new EventScheduleSaver());
         classToSaverMap.put(StateSet.class, new StateSetSaver());
         classToSaverMap.put(State.class, new StateSaver());
+
+        classToSaverMap.put(Project.class, new ProjectSaver());
     }
 
     @SuppressWarnings("unchecked")

@@ -7,6 +7,7 @@ import com.n4systems.model.Configuration;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
+import com.n4systems.model.builders.JobBuilder;
 import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EventFormBuilder;
@@ -129,6 +130,11 @@ public class Scenario {
     public UserBuilder aReadOnlyUser() {
         UserBuilder builder = UserBuilder.aReadOnlyUser();
         builder = builder.withOwner(defaultPrimaryOrg);
+        return createPersistentBuilder(builder);
+    }
+
+    public JobBuilder aJob() {
+        JobBuilder builder = JobBuilder.aJob();
         return createPersistentBuilder(builder);
     }
 
@@ -263,10 +269,10 @@ public class Scenario {
     }
 
     public void onBeforeBuild(BaseBuilder builder) {
-        if (builder instanceof AbstractEntityBuilder) {
-            AbstractEntityBuilder entBuilder = (AbstractEntityBuilder) builder;
-            entBuilder.modifiedBy(createAppropriateUser(entBuilder));
-        }
+//        if (builder instanceof AbstractEntityBuilder) {
+//            AbstractEntityBuilder entBuilder = (AbstractEntityBuilder) builder;
+//            entBuilder.modifiedBy(createAppropriateUser(entBuilder));
+//        }
         if (builder instanceof EntityWithTenantBuilder) {
             EntityWithTenantBuilder withTenantBuilder = (EntityWithTenantBuilder) builder;
             if (withTenantBuilder.getTenant() == null) {

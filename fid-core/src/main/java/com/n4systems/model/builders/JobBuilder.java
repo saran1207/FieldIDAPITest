@@ -1,34 +1,26 @@
 package com.n4systems.model.builders;
 
-import static com.n4systems.model.builders.TenantBuilder.*;
-
-import java.util.Arrays;
-
-
 import com.n4systems.model.Project;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.user.User;
-import com.n4systems.util.RandomString;
 
-public class JobBuilder extends BaseBuilder<Project> {
+import java.util.Arrays;
 
-	private final Tenant tenantOrganization;
+public class JobBuilder extends EntityWithTenantBuilder<Project> {
+
 	private final boolean eventJob;
 	private final User[] employees;
 	private final String title;
 	private final String identifier;
-	
+    private final String status;
+
 	public static JobBuilder aJob() {
-		return new JobBuilder(aTenant().build());
+		return new JobBuilder(null, true, null, null, null, null);
 	}
 
-    private JobBuilder(Tenant tenant) {
-		this(tenant, true, null, RandomString.getString(10), RandomString.getString(10));
-	}
-	
-	private JobBuilder(Tenant tenant, boolean eventJob, User[] employees, String title, String identifier) {
+	private JobBuilder(Tenant tenant, boolean eventJob, User[] employees, String title, String identifier, String status) {
+        super(tenant);
 		this.eventJob = eventJob;
-		this.tenantOrganization = tenant;
 		this.title = title;
 		this.identifier = identifier;
 		if (employees == null) {
@@ -36,30 +28,35 @@ public class JobBuilder extends BaseBuilder<Project> {
 		} else {
 			this.employees = employees;
 		}
+        this.status = status;
 	}
 
 	public JobBuilder withTitle(String title) {
-		return new JobBuilder(tenantOrganization, eventJob, employees, title, identifier);
+		return makeBuilder(new JobBuilder(tenant, eventJob, employees, title, identifier, status));
 	}
 	
 	public JobBuilder withResources(User...employees) {
-		return new JobBuilder(tenantOrganization, eventJob, employees, title, identifier);
+		return makeBuilder(new JobBuilder(tenant, eventJob, employees, title, identifier, status));
 	}
 
 	public JobBuilder withProjectID(String identifier) {
-		return new JobBuilder(tenantOrganization, eventJob, employees, title, identifier);
+		return makeBuilder(new JobBuilder(tenant, eventJob, employees, title, identifier, status));
 	}
+
+    public JobBuilder status(String status) {
+        return makeBuilder(new JobBuilder(tenant, eventJob, employees, title, identifier, status));
+    }
 
 	@Override
 	public Project createObject() {
-		Project job = new Project();
+		Project job = assignAbstractFields(new Project());
 		job.setId(getId());
-		job.setTenant(tenantOrganization);
 		job.setOpen(true);
 		job.setName(title);
 		job.setProjectID(identifier);
 		job.setEventJob(eventJob);
 		job.getResources().addAll(Arrays.asList(employees));
+        job.setStatus(status);
 		return job;
 	}
 
