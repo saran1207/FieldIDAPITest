@@ -43,6 +43,7 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.eula.EulaAcceptance;
 import com.n4systems.model.messages.Message;
+import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -53,6 +54,8 @@ import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.user.User;
+import com.n4systems.notifiers.notifications.Notification;
+
 import rfid.ejb.entity.AssetCodeMapping;
 
 public class TenantCleaner {
@@ -129,6 +132,7 @@ public class TenantCleaner {
         removeAllForTenants(em, Order.class, tenantIds);
 
         removeAllForTenants(em, StateSet.class, tenantIds);
+        removeAllForTenants(em, NotificationSetting.class, tenantIds);
         
         removeAllExternalOrgsPointingToTenants(em, tenantIds);
 
