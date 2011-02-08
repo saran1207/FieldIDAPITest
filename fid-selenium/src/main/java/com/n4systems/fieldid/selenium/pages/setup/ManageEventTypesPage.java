@@ -417,15 +417,33 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
     }
 
     public boolean isSelectedCriteriaResultSetting() {
-        return selenium.isChecked("//div[@id='criteriaEditor']//div[contains(@class,'buttonGroupConfiguration')]//input[@type='checkbox']");
+        selenium.selectFrame("//iframe");
+        boolean resultSetting = selenium.isChecked("//div[@id='criteriaEditor']//div[contains(@class,'buttonGroupConfiguration')]//input[@type='checkbox']");
+        selenium.selectFrame("relative=up");
+        return resultSetting;
     }
 
     public void setSelectedCriteriaResultSetting(boolean resultSetting) {
+        selenium.selectFrame("//iframe");
         if (resultSetting) {
             selenium.check("//div[@id='criteriaEditor']//div[contains(@class,'buttonGroupConfiguration')]//input[@type='checkbox']");
         } else {
             selenium.uncheck("//div[@id='criteriaEditor']//div[contains(@class,'buttonGroupConfiguration')]//input[@type='checkbox']");
         }
+        selenium.fireEvent("//div[@id='criteriaEditor']//div[contains(@class,'buttonGroupConfiguration')]//input[@type='checkbox']", "click");
         waitForWicketAjax();
+        selenium.selectFrame("relative=up");
     }
+
+    public String getSelectedButtonGroup() {
+        return selenium.getSelectedLabel("//div[@id='criteriaEditor']//select[@name='stateSetSelect']");
+    }
+
+    public void selectButtonGroup(String buttonGroupName) {
+        selenium.selectFrame("//iframe");
+        selenium.select("//div[@id='criteriaEditor']//select[@name='stateSetSelect']", buttonGroupName);
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
 }

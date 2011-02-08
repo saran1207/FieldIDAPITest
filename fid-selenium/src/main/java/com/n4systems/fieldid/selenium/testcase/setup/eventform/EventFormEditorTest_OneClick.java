@@ -13,12 +13,15 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageEventTypesPage> {
 
     @Override
     public void setupScenario(Scenario scenario) {
         StateSet passFail = scenario.buttonGroup(scenario.defaultTenant(), "Pass, Fail");
+        scenario.aStateSet().named("Button Group 1").states(scenario.failState().build(), scenario.passState().build()).build();
+        scenario.aStateSet().named("Button Group 2").states(scenario.naState().build(), scenario.failState().build()).build();
 
         Criteria oneClick1 = scenario.aOneClickCriteria().withText("oneclick1").withStateSet(passFail).build();
         Criteria oneClick2 = scenario.aOneClickCriteria().withText("oneclick2").withStateSet(passFail).build();
@@ -65,7 +68,40 @@ public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageE
         assertEquals("One-Click Button", page.getTypeForCriteria("new one click"));
 
         page.clickCriteria("new one click");
+        assertFalse("Default one click criteria should not be result setting", page.isSelectedCriteriaResultSetting());
+    }
+
+    @Test
+    public void changing_button_group_should_succeed_and_persist() {
+        page.clickCriteriaSection("Main section");
+        page.clickCriteria("oneclick1");
+        page.selectButtonGroup("Button Group 1");
+        page.clickCriteria("oneclick2");
+        page.selectButtonGroup("Button Group 2");
+
+        page.clickSaveAndFinishEventForm();
+        page.clickEventFormTab();
+        page.clickCriteriaSection("Main section");
+        page.clickCriteria("oneclick1");
+        assertEquals("Button Group 1", page.getSelectedButtonGroup());
+        page.clickCriteria("oneclick2");
+        assertEquals("Button Group 2", page.getSelectedButtonGroup());
+    }
+
+    @Test
+    public void changing_result_setting_should_succeed_and_persist() throws Exception {
+        page.clickCriteriaSection("Main section");
+        page.clickCriteria("oneclick1");
         assertFalse(page.isSelectedCriteriaResultSetting());
+        page.setSelectedCriteriaResultSetting(true);
+        assertTrue(page.isSelectedCriteriaResultSetting());
+
+        // Save and return to event form
+        page.clickSaveAndFinishEventForm();
+        page.clickEventFormTab();
+        page.clickCriteriaSection("Main section");
+        page.clickCriteria("oneclick1");
+        assertTrue(page.isSelectedCriteriaResultSetting());
     }
 
 }

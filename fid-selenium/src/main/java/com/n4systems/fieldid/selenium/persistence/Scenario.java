@@ -11,6 +11,8 @@ import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EventFormBuilder;
 import com.n4systems.model.builders.SelectCriteriaBuilder;
+import com.n4systems.model.builders.StateBuilder;
+import com.n4systems.model.builders.StateSetBuilder;
 import com.n4systems.model.builders.TextFieldCriteriaBuilder;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -46,7 +48,6 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
-import rfid.ejb.entity.InfoFieldBean;
 
 import javax.persistence.Query;
 
@@ -79,7 +80,7 @@ public class Scenario {
         Tenant tenant = tenant(tenantName);
         return new PrimaryOrgByTenantLoader().setTenantId(tenant.getId()).load(trans);
     }
-    
+
     public void updatePrimaryOrg(PrimaryOrg primaryOrg) {
     	save(primaryOrg);
     }
@@ -117,20 +118,20 @@ public class Scenario {
         builder = builder.withUserId("test_user"+(++nextUserId));
         return createPersistentBuilder(builder);
     }
-    
+
     public UserBuilder aLiteUser() {
         UserBuilder builder = UserBuilder.anLiteUser();
         builder = builder.withOwner(defaultPrimaryOrg);
         builder = builder.withUserId("test_user"+(++nextUserId));
         return createPersistentBuilder(builder);
     }
-    
+
     public UserBuilder aReadOnlyUser() {
         UserBuilder builder = UserBuilder.aReadOnlyUser();
         builder = builder.withOwner(defaultPrimaryOrg);
         return createPersistentBuilder(builder);
     }
-    
+
     public AssetBuilder anAsset() {
         AssetBuilder builder = AssetBuilder.anAsset();
         return createPersistentBuilder(builder);
@@ -213,6 +214,11 @@ public class Scenario {
 
     public SelectCriteriaBuilder aSelectCriteria() {
         SelectCriteriaBuilder builder = SelectCriteriaBuilder.aSelectCriteria();
+        return createPersistentBuilder(builder);
+    }
+
+    public StateSetBuilder aStateSet() {
+        StateSetBuilder builder = StateSetBuilder.aStateSet();
         return createPersistentBuilder(builder);
     }
 
@@ -322,6 +328,18 @@ public class Scenario {
         query.setParameter("tenantId", tenant.getId());
         query.setParameter("name", name);
         return (StateSet) query.getSingleResult();
+    }
+
+    public StateBuilder failState() {
+        return createPersistentBuilder(StateBuilder.failState());
+    }
+
+    public StateBuilder passState() {
+        return createPersistentBuilder(StateBuilder.passState());
+    }
+
+    public StateBuilder naState() {
+        return createPersistentBuilder(StateBuilder.naState());
     }
 
 }

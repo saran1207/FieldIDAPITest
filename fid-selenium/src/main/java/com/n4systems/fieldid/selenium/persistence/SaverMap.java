@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.selenium.persistence;
 
-import java.util.HashMap;
-
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetSaver;
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetTypeSaver;
 import com.n4systems.model.Asset;
@@ -21,6 +19,8 @@ import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Order;
 import com.n4systems.model.OrderSaver;
 import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.State;
+import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
@@ -40,11 +40,15 @@ import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
+import com.n4systems.model.stateset.StateSaver;
+import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+
+import java.util.HashMap;
 
 public class SaverMap {
 
@@ -74,6 +78,8 @@ public class SaverMap {
         classToSaverMap.put(AssociatedEventType.class, new AssociatedEventTypeSaver());
         classToSaverMap.put(TextFieldCriteria.class, new CriteriaSaver());
         classToSaverMap.put(SelectCriteria.class, new CriteriaSaver());
+        classToSaverMap.put(StateSet.class, new StateSetSaver());
+        classToSaverMap.put(State.class, new StateSaver());
     }
 
     @SuppressWarnings("unchecked")
