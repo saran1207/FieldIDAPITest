@@ -2,56 +2,88 @@ package com.n4systems.fieldid.selenium.testcase.schedules;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.schedules.SchedulesSearchResultsPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssociatedEventType;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 
 public class ScheduleSearchResultsTest extends FieldIDTestCase {
 
-	private String serialNumberToVerify;
-	private static String FIRST_ELEMENT_LOCATOR = "//tr[2]/td/a";
-	private SchedulesSearchResultsPage schedulesSearchResultsPage;
+	private SchedulesSearchResultsPage resultsPage;
+	
+	private static String COMPANY = "test1";
+	private static final String TEST_EVENT_TYPE1 = "Event Type 1";
+	private static final String SERIAL_NUMBER = "11111111";
+
+	@Override
+	public void setupScenario(Scenario scenario) {
+
+		EventTypeGroup group = scenario.anEventTypeGroup()
+									   .forTenant(scenario.tenant(COMPANY))
+								       .withName("Test Event Type Group")
+								 	   .build();
+
+        EventType eventType1 = scenario.anEventType()
+                                      .named(TEST_EVENT_TYPE1)
+                                      .withGroup(group)
+                                      .build();
+        
+        AssetType assetType = scenario.assetType(COMPANY, TEST_ASSET_TYPE_1);
+                
+        scenario.save(new AssociatedEventType(eventType1, assetType));    
+        
+        Asset asset = scenario.anAsset()
+                              .withOwner(scenario.primaryOrgFor(COMPANY))
+                              .withSerialNumber(SERIAL_NUMBER)
+                              .ofType(assetType)
+                              .build();      
+        
+        scenario.save(new EventSchedule(asset, eventType1, new Date()));
+     }
 
 	@Before
 	public void setUp() {
-		schedulesSearchResultsPage = startAsCompany("illinois").login().clickSchedulesLink().clickRunSearchButton();
+		resultsPage = startAsCompany(COMPANY).login().clickSchedulesLink().clickRunSearchButton();
 	}
 
 	@Test
 	public void start_event_link() {
-		serialNumberToVerify = selenium.getText(FIRST_ELEMENT_LOCATOR);
-		schedulesSearchResultsPage.clickStartEventLink();
-		assertEquals("Event - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		resultsPage.clickStartEventLink();
+		assertEquals(TEST_EVENT_TYPE1 + " on " + SERIAL_NUMBER, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 
 	@Test
 	public void view_schedules_test() {
-		serialNumberToVerify = selenium.getText(FIRST_ELEMENT_LOCATOR);
-		schedulesSearchResultsPage.clickViewSchedulesLink();
-		assertEquals("Asset - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		resultsPage.clickViewSchedulesLink();
+		assertEquals("Asset - " + SERIAL_NUMBER, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 
 	@Test
 	public void edit_schedules(){
-		serialNumberToVerify = selenium.getText(FIRST_ELEMENT_LOCATOR);
-		schedulesSearchResultsPage.clickEditSchedulesLink();
-		assertEquals("Asset - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		resultsPage.clickEditSchedulesLink();
+		assertEquals("Asset - " + SERIAL_NUMBER, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 	
 	@Test
 	public void view_asset_link(){
-		serialNumberToVerify = selenium.getText(FIRST_ELEMENT_LOCATOR);
-		schedulesSearchResultsPage.clickViewAssetLink();
-		assertEquals("Asset - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		resultsPage.clickViewAssetLink();
+		assertEquals("Asset - " + SERIAL_NUMBER, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 	
 	@Test
 	public void edit_asset_link(){
-		serialNumberToVerify = selenium.getText(FIRST_ELEMENT_LOCATOR);
-		schedulesSearchResultsPage.clickEditAssetLink();
-		assertEquals("Asset - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		resultsPage.clickEditAssetLink();
+		assertEquals("Asset - " + SERIAL_NUMBER, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 	
 }
