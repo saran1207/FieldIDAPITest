@@ -79,25 +79,27 @@ public class ManageAssetTypeGroupsTest extends FieldIDTestCase {
 		assertEquals("Save should have succeeded", 0, typeGroupsPage.getFormErrorMessages().size());
 		assertTrue(typeGroupsPage.getAssetTypeGroups().contains(TEST_GROUP_NAME));
 		
-		deleteAssetTypeIfExists(TEST_GROUP_NAME);
+		boolean deleted = deleteAssetTypeGroup(TEST_GROUP_NAME);
+        assertTrue("Delete should have succeeded", deleted);
 		assertEquals("Delete should have succeeded", 0, typeGroupsPage.getFormErrorMessages().size());
 		assertFalse(typeGroupsPage.getAssetTypeGroups().contains(TEST_GROUP_NAME));
 	}
-	
 
 	private void addTestGroup(String groupName) {
 		typeGroupsPage.clickAddTab();
-		typeGroupsPage.enterName(TEST_GROUP_NAME);
+		typeGroupsPage.enterName(groupName);
 		typeGroupsPage.clickSave();
 		typeGroupsPage.clickViewAllTab();
 	}
 
-	private void deleteAssetTypeIfExists(String typeName) {
+	private boolean deleteAssetTypeGroup(String typeName) {
 		for (String assetType : typeGroupsPage.getAssetTypeGroups()) {
 			if (assetType.equals(typeName)) {
 				typeGroupsPage.deleteAssetTypeGroup(assetType);
+                return true;
 			}
 		}
-	}
+        return false;
+    }
 
 }

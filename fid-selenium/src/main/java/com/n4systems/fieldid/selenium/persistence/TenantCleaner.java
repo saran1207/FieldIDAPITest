@@ -1,19 +1,6 @@
 package com.n4systems.fieldid.selenium.persistence;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.n4systems.model.AddressInfo;
-import com.n4systems.model.Configuration;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.ui.seenit.SeenItStorageItem;
-import rfid.ejb.entity.AddAssetHistory;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
@@ -22,6 +9,7 @@ import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.Configuration;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
@@ -36,6 +24,7 @@ import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
 import com.n4systems.model.StateSet;
+import com.n4systems.model.SubAsset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
@@ -53,10 +42,18 @@ import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
+import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import com.n4systems.model.user.User;
-import com.n4systems.notifiers.notifications.Notification;
-
+import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetCodeMapping;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 public class TenantCleaner {
 
@@ -75,9 +72,9 @@ public class TenantCleaner {
         removeAllConfigsForTenants(em, tenantIds);
         removeAllForTenants(em, AssetCodeMapping.class, tenantIds);
         removeAllForTenants(em, Catalog.class, tenantIds);
+        removeAllForTenants(em, EventSchedule.class, tenantIds);
         removeAllForTenants(em, Event.class, tenantIds);
         removeAllForTenants(em, AssociatedEventType.class, tenantIds);
-        removeAllForTenants(em, EventSchedule.class, tenantIds);
         removeAllForTenants(em, AssetTypeSchedule.class, tenantIds);
         removeAllForTenants(em, EventType.class, tenantIds);
         removeAllForTenants(em, EventForm.class, tenantIds);
@@ -131,16 +128,13 @@ public class TenantCleaner {
         removeAllForTenants(em, LineItem.class, tenantIds);
         removeAllForTenants(em, Order.class, tenantIds);
 
-        removeAllForTenants(em, StateSet.class, tenantIds);
-        removeAllForTenants(em, NotificationSetting.class, tenantIds);
+        removeAllForTenants(em, StateSet.class, tenantIds);removeAllForTenants(em, NotificationSetting.class, tenantIds);
         
         removeAllExternalOrgsPointingToTenants(em, tenantIds);
 
-//        cleanUpModifiedOrCreatedReferencesForTenant(em, tenantIds, CustomerOrg.class, DivisionOrg.class, SecondaryOrg.class, PrimaryOrg.class);
-
         cleanUpAddressInfo(em);
 
-        removeAllWhereModifiedOrCreatedByUsersFromTenant(em, tenantIds, EventGroup.class, EventTypeGroup.class, SeenItStorageItem.class);
+        removeAllWhereModifiedOrCreatedByUsersFromTenant(em, tenantIds, AssetType.class, EventGroup.class, EventTypeGroup.class, SeenItStorageItem.class);
 
         cleanUpOwnerForUsers(em, tenantIds);
 
@@ -175,28 +169,6 @@ public class TenantCleaner {
         query.executeUpdate();
     }
 
-    private void cleanUpModifiedOrCreatedReferencesForTenant(EntityManager em, List<Long> tenantIds, Class<? extends BaseOrg>... entityClasses) {
-        long startTime = System.currentTimeMillis();
-        for (Long tenantId : tenantIds) {
-            for (Class entityClass : entityClasses) {
-//                METHOD1: (verrry slow)
-                Query query1 = em.createQuery("update " + entityClass.getName() + " set modifiedBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
-                Query query2 = em.createQuery("update " + entityClass.getName() + " set createdBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
-                query1.executeUpdate();
-                query2.executeUpdate();
-//                METHOD2: (fast, maybe doesn't work..)
-//                Query query = em.createQuery("from " + entityClass.getName() + " where tenant.id = :tenantId").setParameter("tenantId", tenantId);
-//                List<BaseOrg> orgs = query.getResultList();
-//                for (BaseOrg org : orgs) {
-//                    org.setCreatedBy(null);
-//                    org.setModifiedBy(null);
-//                    em.merge(org);
-//                }
-            }
-        }
-        System.out.println("Time cleaning modified/created references: " + (System.currentTimeMillis() - startTime));
-    }
-
     private void removeAllWhereModifiedOrCreatedByUsersFromTenant(EntityManager em, List tenantIds, Class... entityClasses) {
         for (Class c : entityClasses) {
             Query query = em.createQuery("from " + c.getName() + " where createdBy in (from "+User.class.getName()+" where tenant.id in (:tenantIds1)) "+
@@ -229,6 +201,9 @@ public class TenantCleaner {
             cleanOwnedEntities(em, Event.class, org);
             cleanOwnedEntities(em, EventSchedule.class, org);
             cleanOwnedEntities(em, AddAssetHistory.class, org);
+            cleanOwnedEntities(em, User.class, org);
+            Query divisionQuery = em.createQuery("from " + DivisionOrg.class.getName() + " where parent.id = " + org.getId());
+            removeAllFromQuery(em, divisionQuery);
             Query assetQuery = em.createQuery("from " + Asset.class.getName() + " where owner.id = " + org.getId());
             List<Asset> assets = assetQuery.getResultList();
             for (Asset asset : assets) {
@@ -245,7 +220,7 @@ public class TenantCleaner {
     }
 
     private void cleanUpOrgConnections(EntityManager em, List tenantIds) {
-        Query typedQuery = em.createQuery("from " + TypedOrgConnection.class.getName() + " where tenant.id in (:tenantIds1) or connectedOrg.tenant.id in (:tenantIds2)").setParameter("tenantIds1", tenantIds).setParameter("tenantIds2", tenantIds);
+        Query typedQuery = em.createQuery("from " + TypedOrgConnection.class.getName() + " where tenant.id in (:tenantIds1) or connectedOrg.tenant.id in (:tenantIds2) or owner.tenant.id in (:tenantIds3)").setParameter("tenantIds1", tenantIds).setParameter("tenantIds2", tenantIds).setParameter("tenantIds3", tenantIds);
         Query query = em.createQuery("from " + OrgConnection.class.getName() + " where vendor.tenant.id in (:tenantIds1)  or customer.tenant.id in (:tenantIds2)").setParameter("tenantIds1", tenantIds).setParameter("tenantIds2", tenantIds);
 
         removeAllFromQuery(em, typedQuery);
