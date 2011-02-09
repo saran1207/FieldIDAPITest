@@ -4,10 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.HashSet;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -32,8 +30,7 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 	public void setupScenario(Scenario scenario) {
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor("test1");
 		
-		defaultPrimaryOrg.setExtendedFeatures(new HashSet<ExtendedFeature>(
-				Arrays.asList(ExtendedFeature.AssignedTo)));
+		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.AssignedTo));
 		
 		scenario.save(defaultPrimaryOrg);
 		

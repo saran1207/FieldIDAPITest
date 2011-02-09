@@ -2,10 +2,6 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,13 +19,10 @@ public class ChangePasswordTest extends FieldIDTestCase {
 	
 	@Override
 	public void setupScenario(Scenario scenario) {
-		
-		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(
-				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
-		
+				
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor(COMPANY);
 		
-		defaultPrimaryOrg.setExtendedFeatures(extendedFeatures);
+		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
 		
 		scenario.save(defaultPrimaryOrg);
 	}

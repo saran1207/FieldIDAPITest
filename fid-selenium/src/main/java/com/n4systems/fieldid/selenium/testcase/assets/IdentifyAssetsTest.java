@@ -3,12 +3,9 @@ package com.n4systems.fieldid.selenium.testcase.assets;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 
@@ -35,9 +32,8 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 	@Override
 	public void setupScenario(Scenario scenario) {
 		
-		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(Arrays.asList(ExtendedFeature.Integration));
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY1);
-		primaryOrg.setExtendedFeatures(extendedFeatures);
+		primaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Integration));
 		scenario.save(primaryOrg);
 		
 		Order order = new Order(OrderType.SHOP, ORDER_NUMBER);

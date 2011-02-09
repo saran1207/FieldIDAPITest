@@ -2,10 +2,6 @@ package com.n4systems.fieldid.selenium.testcase.users;
 
 import static org.junit.Assert.assertFalse;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,14 +23,11 @@ public class UserLimitTest extends FieldIDTestCase {
 
 	@Override
 	public void setupScenario(Scenario scenario) {
-		
-		Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>(
-				Arrays.asList(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
-		
+				
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor(COMPANY);
 		
-		defaultPrimaryOrg.setExtendedFeatures(extendedFeatures);
-				
+		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
+
 		scenario.updatePrimaryOrg(defaultPrimaryOrg);
 		
 		scenario.aReadOnlyUser()
