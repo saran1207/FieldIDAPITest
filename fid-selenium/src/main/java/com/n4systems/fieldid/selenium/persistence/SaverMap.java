@@ -39,6 +39,7 @@ import com.n4systems.model.eventtype.AssociatedEventTypeSaver;
 import com.n4systems.model.eventtype.EventTypeSaver;
 import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.project.ProjectSaver;
@@ -74,6 +75,7 @@ public class SaverMap {
 
         classToSaverMap.put(CustomerOrg.class, new OrgSaver());
         classToSaverMap.put(PrimaryOrg.class, new OrgSaver());
+        classToSaverMap.put(DivisionOrg.class, new OrgSaver());
         classToSaverMap.put(Order.class, new OrderSaver());
         classToSaverMap.put(LineItem.class, new LineItemSaver());
         classToSaverMap.put(Catalog.class, new CatalogSaver());

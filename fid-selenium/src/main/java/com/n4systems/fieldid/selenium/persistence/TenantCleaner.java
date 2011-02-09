@@ -1,5 +1,16 @@
 package com.n4systems.fieldid.selenium.persistence;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetCodeMapping;
+
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
@@ -44,16 +55,6 @@ import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import com.n4systems.model.user.User;
-import rfid.ejb.entity.AddAssetHistory;
-import rfid.ejb.entity.AssetCodeMapping;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 public class TenantCleaner {
 
@@ -138,8 +139,8 @@ public class TenantCleaner {
 
         cleanUpOwnerForUsers(em, tenantIds);
 
-        removeAllForTenants(em, CustomerOrg.class, tenantIds);
         removeAllForTenants(em, DivisionOrg.class, tenantIds);
+        removeAllForTenants(em, CustomerOrg.class, tenantIds);
         removeAllForTenants(em, SecondaryOrg.class, tenantIds);
         removeAllForTenants(em, PrimaryOrg.class, tenantIds);
 

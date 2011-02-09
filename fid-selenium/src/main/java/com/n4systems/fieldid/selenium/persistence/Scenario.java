@@ -3,25 +3,17 @@ package com.n4systems.fieldid.selenium.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.model.Configuration;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.UnitOfMeasure;
-import com.n4systems.model.builders.InfoFieldBeanBuilder;
-import com.n4systems.model.builders.JobBuilder;
-import com.n4systems.model.builders.OneClickCriteriaBuilder;
-import com.n4systems.model.builders.CriteriaSectionBuilder;
-import com.n4systems.model.builders.EventFormBuilder;
-import com.n4systems.model.builders.SelectCriteriaBuilder;
-import com.n4systems.model.builders.StateBuilder;
-import com.n4systems.model.builders.StateSetBuilder;
-import com.n4systems.model.builders.TextFieldCriteriaBuilder;
-import com.n4systems.util.ConfigEntry;
+import javax.persistence.Query;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectionBuilder;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Configuration;
+import com.n4systems.model.StateSet;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assettype.AssetTypeByNameLoader;
 import com.n4systems.model.builders.AbstractEntityBuilder;
@@ -29,16 +21,24 @@ import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.AssetStatusBuilder;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.BaseBuilder;
+import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EntityWithOwnerBuilder;
 import com.n4systems.model.builders.EntityWithTenantBuilder;
 import com.n4systems.model.builders.EventBookBuilder;
 import com.n4systems.model.builders.EventBuilder;
+import com.n4systems.model.builders.EventFormBuilder;
 import com.n4systems.model.builders.EventGroupBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.EventTypeGroupBuilder;
 import com.n4systems.model.builders.InfoFieldBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
+import com.n4systems.model.builders.JobBuilder;
+import com.n4systems.model.builders.OneClickCriteriaBuilder;
 import com.n4systems.model.builders.OrgBuilder;
+import com.n4systems.model.builders.SelectCriteriaBuilder;
+import com.n4systems.model.builders.StateBuilder;
+import com.n4systems.model.builders.StateSetBuilder;
+import com.n4systems.model.builders.TextFieldCriteriaBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -49,8 +49,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantByNameLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
-
-import javax.persistence.Query;
+import com.n4systems.util.ConfigEntry;
 
 public class Scenario {
 
@@ -200,6 +199,11 @@ public class Scenario {
 
     public OrgBuilder aCustomerOrg() {
         OrgBuilder builder = OrgBuilder.aCustomerOrg();
+        return createPersistentBuilder(builder);
+    }
+    
+    public OrgBuilder aDivisionOrg() {
+        OrgBuilder builder = OrgBuilder.aDivisionOrg();
         return createPersistentBuilder(builder);
     }
 
