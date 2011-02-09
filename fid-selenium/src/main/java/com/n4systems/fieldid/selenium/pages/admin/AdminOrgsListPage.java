@@ -7,7 +7,7 @@ public class AdminOrgsListPage extends FieldIDPage {
 
     public AdminOrgsListPage(Selenium selenium) {
         super(selenium, false);
-        waitForPageToLoad("40000");
+        waitForPageToLoad("50000");
     }
 
     public AdminOrgPage clickEditOrganization(String orgName) {
