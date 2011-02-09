@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.selenium.testcase.events;
 
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage> {
 
@@ -52,12 +52,11 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
         performMandatoryEvent(eventPage);
 
 		eventPage.clickSave();
-
-		selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]");
+		
+		assertTrue(eventPage.confirmMasterEventSaved());
 	}
 
     @Test
-    @Ignore("Timing out?")
 	public void create_master_with_sub_event() {
 		page.clickSubComponentsTab();
 		page.addNewSubcomponent(TEST_SUB_SERIAL_NUMBER);
@@ -69,7 +68,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 
 		eventPage.clickSave();
 
-		assertTrue(selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]"));
+		assertTrue(eventPage.confirmMasterEventSaved());
 	}
 
 	private void performMandatoryEvent(EventPage eventPage) {
@@ -78,7 +77,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 	}
 
 	private void performSubEvent(EventPage eventPage) {
-		eventPage.clickSubStartEventLink();
+		eventPage.clickSubStartEventLink("Master Event Type");
 		eventPage.clickStore();
 	}
 

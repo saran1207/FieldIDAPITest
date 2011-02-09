@@ -39,9 +39,13 @@ public class EventPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	public void clickSubStartEventLink() {
-		selenium.click("//a[contains(.,'Start Event')]");
-		selenium.click("//a[contains(.,'Bridge - Short')]");
+	public void clickSubStartEventLink(String eventType) {
+		selenium.click("//a[contains(.,'"+ eventType+"')]");
+		waitForPageToLoad();
+	}
+
+	public boolean confirmMasterEventSaved() {
+		return selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]");
 	}
 
 }
