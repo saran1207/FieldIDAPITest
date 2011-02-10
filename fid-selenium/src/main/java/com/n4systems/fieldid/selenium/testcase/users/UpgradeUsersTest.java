@@ -55,7 +55,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		manageUsersPage.clickChangeAccountType();
 		assertTrue(manageUsersPage.canChangeToLiteUser());
 		manageUsersPage.clickChangeToLiteUser();
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		
 		verifyUserTypeChange(ManageUsersPage.USER_TYPE_LITE, READ_ONLY_USER);
 	}
@@ -66,7 +66,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		manageUsersPage.clickChangeAccountType();
 		assertTrue(manageUsersPage.canChangeToFullUser());
 		manageUsersPage.clickChangeToFullUser();
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		
 		verifyUserTypeChange(ManageUsersPage.USER_TYPE_FULL, READ_ONLY_USER);
 	}
@@ -77,7 +77,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		manageUsersPage.clickChangeAccountType();
 		assertTrue(manageUsersPage.canChangeToFullUser());
 		manageUsersPage.clickChangeToFullUser();
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		
 		verifyUserTypeChange(ManageUsersPage.USER_TYPE_FULL, LITE_USER);
 	}
@@ -87,7 +87,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		manageUsersPage.clickUserID(LITE_USER);
 		manageUsersPage.clickChangeAccountType();
 		manageUsersPage.clickChangeToReadOnlyUser();
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		
 		verifyUserTypeChange(ManageUsersPage.USER_TYPE_READONLY, LITE_USER);
 	}
@@ -97,7 +97,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		manageUsersPage.clickUserID(FULL_USER);
 		manageUsersPage.clickChangeAccountType();
 		manageUsersPage.clickChangeToReadOnlyUser();
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		
 		verifyUserTypeChange(ManageUsersPage.USER_TYPE_READONLY, FULL_USER);
 	}
@@ -108,7 +108,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 		manageUsersPage.clickChangeAccountType();
 		assertTrue(manageUsersPage.canChangeToLiteUser());
 		manageUsersPage.clickChangeToLiteUser();
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		
 		verifyUserTypeChange(ManageUsersPage.USER_TYPE_LITE, FULL_USER);
 	}

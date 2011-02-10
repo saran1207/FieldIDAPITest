@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -116,14 +118,48 @@ public class ManageUsersTest extends FieldIDTestCase {
 		assertTrue(users.size() == 0);
 		assertTrue(!users.contains(READ_ONLY_USER));
 	}
+	
+	@Test
+	public void add_user_with_existing_userid_should_fail() throws Exception {
+		manageUsersPage.clickAddUserTab();
+		manageUsersPage.clickAddReadOnlyUser();
+		CustomerUser user = addAReadonlyUser(manageUsersPage);
+		verifyUserWasAdded(manageUsersPage, user);
 
+		manageUsersPage.clickAddUserTab();
+		manageUsersPage.clickAddReadOnlyUser();
+		addAReadonlyUser(manageUsersPage);
+		assertFalse(manageUsersPage.getFormErrorMessages().isEmpty());
+	}
+	
+	@Test
+	public void edit_user_with_sucessful_update() throws Exception {
+		manageUsersPage.clickUserID("test_user1");
+		manageUsersPage.clickEditTab();
+		manageUsersPage.enterName("new name");
+		manageUsersPage.clickSave();
+		
+		assertEquals("User Saved", manageUsersPage.getActionMessages().get(0));
+	}
+
+	@Test
+	public void edit_user_fail_update_with_missing_required_field() throws Exception {
+		manageUsersPage.clickUserID("test_user1");
+		manageUsersPage.clickEditTab();
+		manageUsersPage.enterName("");
+		manageUsersPage.clickSave();
+		
+		assertEquals("First Name is a required field.", manageUsersPage.getFormErrorMessages().get(0));
+	}
+
+	
 	private EmployeeUser addAnEmployeeUser(ManageUsersPage manageUsersPage) {
 		EmployeeUser employeeUser = new EmployeeUser("TestFullUser", "selenium@fieldid.com", PASSWORD, PASSWORD, new Owner(COMPANY), "Full", "User");
 		employeeUser.addPermission(EmployeeUser.create);
 		employeeUser.addPermission(EmployeeUser.safety);
 		employeeUser.addPermission(EmployeeUser.tag);
 		manageUsersPage.setFullUserFormFields(employeeUser);
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		return employeeUser;
 	}
 	
@@ -132,14 +168,14 @@ public class ManageUsersTest extends FieldIDTestCase {
 		user.addPermission(EmployeeUser.create);
 		user.addPermission(EmployeeUser.edit);
 		manageUsersPage.setLiteUserFormFields(user);
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		return user;
 	}
 	
 	private CustomerUser addAReadonlyUser(ManageUsersPage manageUsersPage) {
 		CustomerUser user = new CustomerUser("TestReadOnly", "selenium@fieldid.com", PASSWORD, PASSWORD, new Owner(COMPANY), "ReadOnly", "User");
 		manageUsersPage.setReadOnlyUserFormFields(user);
-		manageUsersPage.clickSaveUser();
+		manageUsersPage.clickSave();
 		return user;
 	}	
 

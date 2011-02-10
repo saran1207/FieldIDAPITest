@@ -138,13 +138,8 @@ public class ManageUsersPage extends FieldIDPage {
 		}
 	}
 
-	public void clickSaveUser() {
-		selenium.click("//INPUT[@name='save']");
-		waitForPageToLoad();
-	}
-	
-	public void clickSaveUserEdit() {
-		selenium.click("//INPUT[@id='employeeUserUpdate_save']");
+	public void clickSave() {
+		selenium.click("//INPUT[@value='Save']");
 		waitForPageToLoad();
 	}
 
@@ -249,6 +244,18 @@ public class ManageUsersPage extends FieldIDPage {
 		confirmNextDialog(confirm);
 		selenium.click("//a[contains(text(),'" + userid + "')]/../..//a[text()='Remove']");
 		selenium.getConfirmation();
+	}
+
+	public void enterNewPassword(String password) {
+		selenium.type("//input[@name='newPassword']", password);
+	}
+
+	public void confirmPassword(String password) {
+		selenium.type("//input[@name='confirmPassword']", password);		
+	}
+	
+	public void enterName(String name) {
+		selenium.type("//INPUT[@id='firstname']", name);
 	}
 
 }
