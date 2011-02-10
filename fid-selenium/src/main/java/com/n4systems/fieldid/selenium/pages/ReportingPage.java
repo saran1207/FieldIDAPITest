@@ -5,7 +5,7 @@ import java.util.List;
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.reporting.ReportingSearchResultsPage;
-import com.n4systems.fieldid.selenium.testcase.SaveReportForm;
+import com.n4systems.fieldid.selenium.pages.search.SaveReportForm;
 import com.thoughtworks.selenium.Selenium;
 
 public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> {

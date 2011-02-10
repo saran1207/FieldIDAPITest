@@ -13,7 +13,7 @@ import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.MyAccountPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
-import com.n4systems.fieldid.selenium.testcase.SaveReportForm;
+import com.n4systems.fieldid.selenium.pages.search.SaveReportForm;
 
 public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 

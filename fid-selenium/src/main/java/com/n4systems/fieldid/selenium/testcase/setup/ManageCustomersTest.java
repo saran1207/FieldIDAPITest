@@ -13,7 +13,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 
-public class ManageCustomers_ArchiveCustomerTest extends PageNavigatingTestCase<ManageCustomersPage> {
+public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersPage> {
 	
 	private static final String TEST_USER_ID = "test123";
 	private static String COMPANY = "test1";
@@ -56,6 +56,29 @@ public class ManageCustomers_ArchiveCustomerTest extends PageNavigatingTestCase<
 
 	
 	@Test
+	public void filter_customer_by_name() throws Exception {
+		page.filterByName(TEST_CUSTOMER_ORG1);
+		assertEquals(1, page.getNumberOfCustomersOnPage());		
+		assertTrue(page.getOrgNames().contains(TEST_CUSTOMER_ORG1));
+
+		page.filterByName("test");
+		assertEquals(0, page.getNumberOfCustomersOnPage());		
+		assertFalse(page.getOrgNames().contains("test"));
+
+	}
+
+	@Test
+	public void add_customer_test() throws Exception {
+		page.clickAdd();
+		page.enterCustomerID("Customer3");
+		page.selectOrganizationalUnit(COMPANY);
+		page.enterCustomerName("Customer3");
+		page.clickSave();
+		
+		assertEquals("Data Saved.", page.getActionMessages().get(0));	
+	}
+	
+	@Test
 	public void archiving_customer_should_remove_it_from_list() throws Exception {	
 		page.filterByName(TEST_CUSTOMER_ORG1);
 		assertEquals(1, page.getNumberOfCustomersOnPage());
@@ -83,7 +106,7 @@ public class ManageCustomers_ArchiveCustomerTest extends PageNavigatingTestCase<
 	@Test
 	public void unarchiving_a_customer_with_divisions_should_unarchive_divisions() throws Exception {
 		page.clickCustomer(TEST_CUSTOMER_ORG2).clickDivisionsTab();
-		assertTrue(page.getDivisionNames().contains(TEST_DIVISION_ORG));
+		assertTrue(page.getOrgNames().contains(TEST_DIVISION_ORG));
 		
 		page.clickViewAllTab();
 		page.archiveCustomerNamed(TEST_CUSTOMER_ORG2, true);
@@ -91,7 +114,7 @@ public class ManageCustomers_ArchiveCustomerTest extends PageNavigatingTestCase<
 		page.unarchiveCustomerNamed(TEST_CUSTOMER_ORG2);
 		page.clickCustomer(TEST_CUSTOMER_ORG2).clickDivisionsTab();
 		
-		assertTrue(page.getDivisionNames().contains(TEST_DIVISION_ORG));
+		assertTrue(page.getOrgNames().contains(TEST_DIVISION_ORG));
 	}
 	
 	@Test

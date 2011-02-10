@@ -21,6 +21,11 @@ public class ManageCustomersPage extends FieldIDPage {
 		return this;
 	}
 	
+	public void clickAdd() {
+		clickNavOption("Add");	
+	}
+
+	
 	public void clickUsersTab() {
 		clickNavOption("Users");
 	}
@@ -64,7 +69,7 @@ public class ManageCustomersPage extends FieldIDPage {
 		return this;
 	}
 	
-	public List<String> getDivisionNames() {
+	public List<String> getOrgNames() {
 		return getColumnFromTableStartingAtRow("//div[@id='pageContent']//table[@class='list']", 1, 2);
 	}
 
@@ -89,8 +94,8 @@ public class ManageCustomersPage extends FieldIDPage {
 		selenium.type("//form[@id='customersUserCreate']//input[@name='passwordEntry.passwordVerify']", password);
 	}
 
-	public void clickSaveUser() {
-		selenium.click("//form[@id='customersUserCreate']//input[@type='submit' and @value='Save']");
+	public void clickSave() {
+		selenium.click("//input[@type='submit' and @value='Save']");
 		waitForPageToLoad();
 	}
 
@@ -108,4 +113,16 @@ public class ManageCustomersPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
+	public void enterCustomerID(String id) {
+		selenium.type("//input[@name='customerId']", id);
+	}
+	
+	public void selectOrganizationalUnit(String option) {
+		selenium.select("//select[@name='parentOrgId']", option);
+	}
+	
+	public void enterCustomerName(String name) {
+		selenium.type("//input[@name='customerName']", name);
+	}
+	
 }

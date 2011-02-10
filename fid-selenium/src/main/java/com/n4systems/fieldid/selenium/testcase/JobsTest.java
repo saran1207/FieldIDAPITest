@@ -1,32 +1,38 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static org.junit.Assert.assertTrue;
-
+import org.junit.Ignore;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.JobsListPage;
 
-public class JobsTest extends FieldIDTestCase {
+//Jobs page to be redone in the next iteration
 
-	   private static final String JOB_ID_1= "17702";
-	   private static final String JOB_ID_1_TITLE_LOCATION= "//h1[contains(text(),'Job - KEMLITE')]";
-	
+@Ignore
+public class JobsTest extends PageNavigatingTestCase<JobsListPage> {
+
+	private static final String JOB_ID_1 = "17702";
+
+	@Override
+	protected JobsListPage navigateToPage() {
+		return startAsCompany("test1").login().clickJobsLink();
+	}
+
+	@Ignore
 	@Test
 	public void test_search() {
-		JobsListPage jobsListPage = startAsCompany("sievert").login().clickJobsLink();
-		jobsListPage.searchForJobById(JOB_ID_1);
-		assertTrue("Could not open the job page", selenium.isElementPresent(JOB_ID_1_TITLE_LOCATION));
+		page.searchForJobById(JOB_ID_1);
 	}
-	
+
+	@Ignore
 	@Test
-	public void test_add(){
-		
+	public void test_add() {
+
 	}
-	
+
+	@Ignore
 	@Test
-	public void test_delete(){
-		
+	public void test_delete() {
+
 	}
-	
 }
