@@ -425,6 +425,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * @param inspectionDTO
 	 */
 	private void populate(AbstractEvent event, AbstractInspectionServiceDTO inspectionServiceDTO, Tenant tenant) {
+		event.setComments(inspectionServiceDTO.getComments());
+
+		// Required object lookups
+		event.setTenant(tenant);
+		event.setType(persistenceManager.find(EventType.class, inspectionServiceDTO.getInspectionTypeId(), new TenantOnlySecurityFilter(tenant.getId())));
+		event.setAsset((Asset) em.find(Asset.class, inspectionServiceDTO.getProductId()));
+
 		// Mobile prior to 1.26 will send formVersion.
 		if (inspectionServiceDTO.getFormId() != null) {
 			event.setEventForm(persistenceManager.find(EventForm.class, inspectionServiceDTO.getFormId()));
@@ -436,13 +443,6 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			event.setEditable(eventEditable);
 		}
 		
-		event.setComments(inspectionServiceDTO.getComments());
-
-		// Required object lookups
-		event.setTenant(tenant);
-		event.setType(persistenceManager.find(EventType.class, inspectionServiceDTO.getInspectionTypeId(), new TenantOnlySecurityFilter(tenant.getId())));
-		event.setAsset((Asset) em.find(Asset.class, inspectionServiceDTO.getProductId()));
-
 		// Optional object lookups
 		if (inspectionServiceDTO.getResults() != null) {
 			event.setResults(convert(inspectionServiceDTO.getResults(), tenant, event));
