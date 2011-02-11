@@ -112,382 +112,397 @@ import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.tools.Pager;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * Provides simple access to creation of loaders.
  */
 public class LoaderFactory implements Serializable {
-	private final SecurityFilter filter;
 
-	/*
-	 * NOTE: this factory is not singleton(or thread local even) as it holds a
-	 * SecurityFilter and should be explicitly constructed/destroyed. Anything
-	 * else would be insecure.
-	 * 
-	 * NOTE: Please do a Source -> Sort Members in Eclipse after adding methods
-	 * to this factory.
-	 */
-	public LoaderFactory(SecurityFilter filter) {
-		this.filter = filter;
-	}
-	
+	private SecurityFilter filter;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public LoaderFactory() {
+
+    }
+
+    /*
+      * NOTE: this factory is not singleton(or thread local even) as it holds a
+      * SecurityFilter and should be explicitly constructed/destroyed. Anything
+      * else would be insecure.
+      *
+      * NOTE: Please do a Source -> Sort Members in Eclipse after adding methods
+      * to this factory.
+      */
+    public LoaderFactory(SecurityFilter filter) {
+        this.filter = filter;
+    }
+
 	public SecurityFilter getSecurityFilter() {
 		return filter;
 	}
 
+    public void setSecurityFilter(SecurityFilter filter) {
+        this.filter = filter;
+    }
+
 	public <T> AllEntityListLoader<T> createAllEntityListLoader(Class<T> clazz) {
-		return new AllEntityListLoader<T>(clazz);
+		return injectLoader(new AllEntityListLoader<T>(clazz));
 	}
 
 	public AllEventBookListLoader createAllEventBookListLoader() {
-		return new AllEventBookListLoader(filter);
+		return injectLoader(new AllEventBookListLoader(filter));
 	}
 
 	public AllOrgsWithArchivedListLoader createAllOrgsWithArchivedListLoader() {
-		return new AllOrgsWithArchivedListLoader(new TenantOnlySecurityFilter(filter));
+		return injectLoader(new AllOrgsWithArchivedListLoader(new TenantOnlySecurityFilter(filter)));
 	}
 
 	public AllPredefinedLocationsPaginatedLoader createAllPredefinedLocationsPaginatedLoader() {
-		return new AllPredefinedLocationsPaginatedLoader(filter);
+		return injectLoader(new AllPredefinedLocationsPaginatedLoader(filter));
 	}
 
 	public AssetAlreadyRegisteredLoader createAssetAlreadyRegisteredLoader() {
-		return new AssetAlreadyRegisteredLoader(filter);
+		return injectLoader(new AssetAlreadyRegisteredLoader(filter));
 	}
 
 	public AssetAttachmentListLoader createAssetAttachmentListLoader() {
-		return new AssetAttachmentListLoader(filter);
+		return injectLoader(new AssetAttachmentListLoader(filter));
 	}
 
 	public AssetExtensionListLoader createAssetExtensionListLoader() {
-		return new AssetExtensionListLoader(filter);
+		return injectLoader(new AssetExtensionListLoader(filter));
 	}
 
 	public SyncAssetListLoader createAssetIdSearchListLoader() {
-		return new SyncAssetListLoader(filter);
+		return injectLoader(new SyncAssetListLoader(filter));
 	}
 
 	public AssetsByNetworkIdLoader createAssetsByNetworkIdLoader() {
-		return new AssetsByNetworkIdLoader(filter);
+		return injectLoader(new AssetsByNetworkIdLoader(filter));
 	}
 
 	public AssetStatusByNameLoader createAssetStatusByNameLoader() {
-		return new AssetStatusByNameLoader(filter);
+		return injectLoader(new AssetStatusByNameLoader(filter));
 	}
 
 	public AssetStatusFilteredLoader createAssetStatusFilteredLoader() {
-		return new AssetStatusFilteredLoader(filter);
+		return injectLoader(new AssetStatusFilteredLoader(filter));
 	}
 
 	public AssetStatusForNameExistsLoader createAssetStatusForNameExistsLoader() {
-		return new AssetStatusForNameExistsLoader(filter);
+		return injectLoader(new AssetStatusForNameExistsLoader(filter));
 	}
 
 	public AssetStatusListLoader createAssetStatusListLoader() {
-		return new AssetStatusListLoader(filter);
+		return injectLoader(new AssetStatusListLoader(filter));
 	}
 
 	public AssetTypeByAttachmentLoader createAssetTypeByAttachmentLoader() {
-		return new AssetTypeByAttachmentLoader();
+		return injectLoader(new AssetTypeByAttachmentLoader());
 	}
 
 	public AssetTypeGroupsLoader createAssetTypeGroupsLoader() {
-		return new AssetTypeGroupsLoader(filter);
+		return injectLoader(new AssetTypeGroupsLoader(filter));
 	}
 
 	public AssetTypeListableLoader createAssetTypeListableLoader() {
-		return new AssetTypeListableLoader(filter);
+		return injectLoader(new AssetTypeListableLoader(filter));
 	}
 	
 	public AssetTypeListLoader createAssetTypeListLoader() {
-		return new AssetTypeListLoader(filter);
+		return injectLoader(new AssetTypeListLoader(filter));
 	}
 
 	public AssetTypeLoader createAssetTypeLoader() {
-		return new AssetTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId()));
+		return injectLoader(new AssetTypeLoader(new TenantOnlySecurityFilter(filter.getTenantId())));
 	}
 
 	public AssetTypesByAssetGroupIdLoader createAssetTypesByGroupListLoader() {
-		return new AssetTypesByAssetGroupIdLoader(filter);
+		return injectLoader(new AssetTypesByAssetGroupIdLoader(filter));
 	}
 
 	public AssociatedEventTypesLoader createAssociatedEventTypesLoader() {
-		return new AssociatedEventTypesLoader(filter);
+		return injectLoader(new AssociatedEventTypesLoader(filter));
 	}
 
 	public AutoAttributeCriteriaByAssetTypeIdLoader createAutoAttributeCriteriaByAssetTypeIdLoader() {
-		return new AutoAttributeCriteriaByAssetTypeIdLoader(filter);
+		return injectLoader(new AutoAttributeCriteriaByAssetTypeIdLoader(filter));
 	}
 
 	public AutoAttributeCriteriaListLoader createAutoAttributeCriteriaListLoader() {
-		return new AutoAttributeCriteriaListLoader(filter);
+		return injectLoader(new AutoAttributeCriteriaListLoader(filter));
 	}
 
 	public AutoAttributeDefinitionListLoader createAutoAttributeDefinitionListLoader() {
-		return new AutoAttributeDefinitionListLoader(filter);
+		return injectLoader(new AutoAttributeDefinitionListLoader(filter));
 	}
 
 	public BaseOrgParentFilterListLoader createBaseParentFilterLoader() {
-		return new BaseOrgParentFilterListLoader(filter);
+		return injectLoader(new BaseOrgParentFilterListLoader(filter));
 	}
 
 	public CatalogLoader createCatalogLoader() {
-		return new CatalogLoader();
+		return injectLoader(new CatalogLoader());
 	}
 
 	public UserListableLoader createCombinedUserListableLoader() {
-		return createUserListableLoader().setNoDeleted(true);
+		return injectLoader(createUserListableLoader().setNoDeleted(true));
 	}
 
 	public CommentTemplateIdLoader createCommentTemplateIdLoader() {
-		return new CommentTemplateIdLoader(filter);
+		return injectLoader(new CommentTemplateIdLoader(filter));
 	}
 
 	public CommentTemplateListableLoader createCommentTemplateListableLoader() {
-		return new CommentTemplateListableLoader(filter);
+		return injectLoader(new CommentTemplateListableLoader(filter));
 	}
 
 	public CommentTemplateListLoader createCommentTemplateListLoader() {
-		return new CommentTemplateListLoader(filter);
+		return injectLoader(new CommentTemplateListLoader(filter));
 	}
 
 	public UserListableLoader createCurrentCombinedUserListableLoader() {
-		return createHistoricalCombinedUserListableLoader().setNoDeleted(true);
+		return injectLoader(createHistoricalCombinedUserListableLoader().setNoDeleted(true));
 	}
 
 	public UserListableLoader createCurrentEmployeesListableLoader() {
-		return createHistoricalEmployeesListableLoader().setNoDeleted(true);
+		return injectLoader(createHistoricalEmployeesListableLoader().setNoDeleted(true));
 	}
 
 	public CurrentEulaLoader createCurrentEulaLoader() {
-		return new CurrentEulaLoader();
+		return injectLoader(new CurrentEulaLoader());
 	}
 
 	public CustomerLinkedOrgListLoader createCustomerLinkedOrgListLoader() {
-		return new CustomerLinkedOrgListLoader(filter);
+		return injectLoader(new CustomerLinkedOrgListLoader(filter));
 	}
 
 	public CustomerLinkedOrgLoader createCustomerLinkedOrgLoader() {
-		return new CustomerLinkedOrgLoader(filter);
+		return injectLoader(new CustomerLinkedOrgLoader(filter));
 	}
 
 	public CustomerOrgConnectionLoader createCustomerOrgConnectionLoader() {
-		return new CustomerOrgConnectionLoader(filter);
+		return injectLoader(new CustomerOrgConnectionLoader(filter));
 	}
 
 	public CustomerOrgConnectionsListLoader createCustomerOrgConnectionsListLoader() {
-		return new CustomerOrgConnectionsListLoader(filter);
+		return injectLoader(new CustomerOrgConnectionsListLoader(filter));
 	}
 
 	public CustomerOrgListLoader createCustomerOrgListLoader() {
-		return new CustomerOrgListLoader(filter);
+		return injectLoader(new CustomerOrgListLoader(filter));
 	}
 
 	public CustomerOrgPaginatedLoader createCustomerOrgPaginatedLoader() {
-		return new CustomerOrgPaginatedLoader(filter);
+		return injectLoader(new CustomerOrgPaginatedLoader(filter));
 	}
 
 	public CustomerOrgWithArchivedPaginatedLoader createCustomerOrgWithArchivedPaginatedLoader() {
-		return new CustomerOrgWithArchivedPaginatedLoader(filter);
+		return injectLoader(new CustomerOrgWithArchivedPaginatedLoader(filter));
 	}
 
 	public DivisionOrgByCustomerListLoader createDivisionOrgByCustomerListLoader() {
-		return new DivisionOrgByCustomerListLoader(filter);
+		return injectLoader(new DivisionOrgByCustomerListLoader(filter));
 	}
 
 	public DivisionOrgPaginatedLoader createDivisionOrgPaginatedLoader() {
-		return new DivisionOrgPaginatedLoader(filter);
+		return injectLoader(new DivisionOrgPaginatedLoader(filter));
 	}
 
 	public DownloadLinkListLoader createDownloadLinkListLoader() {
-		return new DownloadLinkListLoader(filter);
+		return injectLoader(new DownloadLinkListLoader(filter));
 	}
 
 	public TypedOrgConnectionListLoader createdTypedOrgConnectionListLoader() {
-		return new TypedOrgConnectionListLoader(filter);
+		return injectLoader(new TypedOrgConnectionListLoader(filter));
 	}
 
 	public EmployeePaginatedLoader createEmployeePaginatedLoader() {
-		return new EmployeePaginatedLoader(filter);
+		return injectLoader(new EmployeePaginatedLoader(filter));
 	}
 
 	public <T extends AbstractEntity> EntityByIdIncludingArchivedLoader<T> createEntityByIdLoader(Class<T> clazz) {
-		return new EntityByIdIncludingArchivedLoader<T>(filter, clazz);
+		return injectLoader(new EntityByIdIncludingArchivedLoader<T>(filter, clazz));
 	}
 
 	public EventBookByNameLoader createEventBookByNameLoader() {
-		return new EventBookByNameLoader(filter);
+		return injectLoader(new EventBookByNameLoader(filter));
 	}
 
 	public EventBookFindOrCreateLoader createEventBookFindOrCreateLoader() {
-		return new EventBookFindOrCreateLoader(filter);
+		return injectLoader(new EventBookFindOrCreateLoader(filter));
 	}
 
 	public EventBookListLoader createEventBookListLoader() {
-		return new EventBookListLoader(filter);
+		return injectLoader(new EventBookListLoader(filter));
 	}
 
 	public EventFrequencyListLoader createEventFrequenciesListLoader() {
-		return new EventFrequencyListLoader(filter);
+		return injectLoader(new EventFrequencyListLoader(filter));
 	}
 
 	public EventJobListableLoader createEventJobListableLoader() {
-		return new EventJobListableLoader(filter);
+		return injectLoader(new EventJobListableLoader(filter));
 	}
 
 	public EventsByAssetIdLoader createEventsByAssetIdLoader() {
-		return new EventsByAssetIdLoader(filter);
+		return injectLoader(new EventsByAssetIdLoader(filter));
 	}
 
 	public EventTypeListableLoader createEventTypeListableLoader() {
-		return new EventTypeListableLoader(filter);
+		return injectLoader(new EventTypeListableLoader(filter));
 	}
 
 	public EventTypeListLoader createEventTypeListLoader() {
-		return new EventTypeListLoader(filter);
+		return injectLoader(new EventTypeListLoader(filter));
 	}
 
 	public EventTypesByEventGroupIdLoader createEventTypesByGroupListLoader() {
-		return new EventTypesByEventGroupIdLoader(filter);
+		return injectLoader(new EventTypesByEventGroupIdLoader(filter));
 	}
 
 	public FileAttachmentLoader createFileAttachmentLoader() {
-		return new FileAttachmentLoader(filter);
+		return injectLoader(new FileAttachmentLoader(filter));
 	}
 
 	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {
-		return new FilteredIdLoader<T>(filter, clazz);
+		return injectLoader(new FilteredIdLoader<T>(filter, clazz));
 	}
 
 	public <T> FilteredInListLoader<T> createFilteredInListLoader(Class<T> clazz) {
-		return new FilteredInListLoader<T>(filter, clazz);
+		return injectLoader(new FilteredInListLoader<T>(filter, clazz));
 	}
 
 	public FilteredListableLoader createFilteredListableLoader(Class<? extends NamedEntity> clazz) {
-		return new FilteredListableLoader(filter, clazz);
+		return injectLoader(new FilteredListableLoader(filter, clazz));
 	}
 	
 	public <T extends Exportable> GlobalIdLoader<T> createGlobalIdLoader(Class<T> clazz) {
-		return new GlobalIdLoader<T>(filter, clazz);
+		return injectLoader(new GlobalIdLoader<T>(filter, clazz));
 	}
 
 	public HasLinkedAssetsLoader createHasLinkedAssetsLoader() {
-		return new HasLinkedAssetsLoader(filter);
+		return injectLoader(new HasLinkedAssetsLoader(filter));
 	}
 
 	public UserListableLoader createHistoricalCombinedUserListableLoader() {
-		return createUserListableLoader();
+		return injectLoader(createUserListableLoader());
 	}
 
 	public UserListableLoader createHistoricalEmployeesListableLoader() {
-		return createUserListableLoader().employeesOnly();
+		return injectLoader(createUserListableLoader().employeesOnly());
 	}
 
 	public IncompleteEventSchedulesListLoader createIncompleteEventSchedulesListLoader() {
-		return new IncompleteEventSchedulesListLoader(filter);
+		return injectLoader(new IncompleteEventSchedulesListLoader(filter));
 	}
 
 	public InternalOrgByNameLoader createInternalOrgByNameLoader() {
-		return new InternalOrgByNameLoader(filter);
+		return injectLoader(new InternalOrgByNameLoader(filter));
 	}
 
 	public InternalOrgListableLoader createInternalOrgListableLoader() {
-		return new InternalOrgListableLoader(filter);
+		return injectLoader(new InternalOrgListableLoader(filter));
 	}
 
 	public LastEventLoader createLastEventLoader() {
-		return new LastEventLoader(filter);
+		return injectLoader(new LastEventLoader(filter));
 	}
 
 	public LastModifiedListLoader createLastModifiedListLoader(Class<? extends AbstractEntity> clazz) { 
-		return new LastModifiedListLoader(filter, clazz);
+		return injectLoader(new LastModifiedListLoader(filter, clazz));
 	}
 
 	public LatestEulaAcceptanceLoader createLatestEulaAcceptanceLoader() {
-		return new LatestEulaAcceptanceLoader(filter);
+		return injectLoader(new LatestEulaAcceptanceLoader(filter));
 	}
 
 	public <T extends LegacyEntityCreateModifyDate> LegacyLastModifiedListLoader<T> createLegacyLastModifiedListLoader(Class<T> clazz) {
-		return new LegacyLastModifiedListLoader<T>(filter, clazz);
+		return injectLoader(new LegacyLastModifiedListLoader<T>(filter, clazz));
 	}
 
 	public NextEventDateByEventLoader createNextEventDateByEventLoader() {
-		return new NextEventDateByEventLoader(filter);
+		return injectLoader(new NextEventDateByEventLoader(filter));
 	}
 
 	public NotificationSettingByUserListLoader createNotificationSettingByUserListLoader() {
-		return new NotificationSettingByUserListLoader(filter);
+		return injectLoader(new NotificationSettingByUserListLoader(filter));
 	}
 
 	public OrgByNameLoader createOrgByNameLoader() {
-		return new OrgByNameLoader(filter);
+		return injectLoader(new OrgByNameLoader(filter));
 	}
 
 	public Loader<Pager<TypedOrgConnection>> createPaginatedConnectionListLoader() {
-		return new PaginatedConnectionListLoader(filter);
+		return injectLoader(new PaginatedConnectionListLoader(filter));
 	}
 
 	public PaginatedMessageLoader createPaginatedMessageLoader() {
-		return new PaginatedMessageLoader(filter);
+		return injectLoader(new PaginatedMessageLoader(filter));
 	}
 
 	public <T> PassthruListLoader<T> createPassthruListLoader(List<T> entities) {
-		return new PassthruListLoader<T>(entities);
+		return injectLoader(new PassthruListLoader<T>(entities));
 	}
 
 	public PredefinedLocationByIdLoader createPredefinedLocationByIdLoader() {
-		return new PredefinedLocationByIdLoader(filter);
+		return injectLoader(new PredefinedLocationByIdLoader(filter));
 	}
 
 	public PredefinedLocationLevelsLoader createPredefinedLocationLevelsLoader() {
-		return new PredefinedLocationLevelsLoader(filter);
+		return injectLoader(new PredefinedLocationLevelsLoader(filter));
 	}
 
 	public PredefinedLocationListLoader createPredefinedLocationListLoader() {
-		return new PredefinedLocationListLoader(filter);
+		return injectLoader(new PredefinedLocationListLoader(filter));
 	}
 
 	public PredefinedLocationTreeLoader createPredefinedLocationTreeLoader() {
-		return new PredefinedLocationTreeLoader(createPredefinedLocationListLoader());
+		return injectLoader(new PredefinedLocationTreeLoader(createPredefinedLocationListLoader()));
 	}
 
 	public PrimaryOrgByTenantLoader createPrimaryOrgByTenantLoader() {
-		return new PrimaryOrgByTenantLoader();
+		return injectLoader(new PrimaryOrgByTenantLoader());
 	}
 
 	public PrimaryOrgsWithNameLikeLoader createPrimaryOrgsWithNameLikeLoader() {
-		return new PrimaryOrgsWithNameLikeLoader(filter);
+		return injectLoader(new PrimaryOrgsWithNameLikeLoader(filter));
 	}
 
 	public SafetyNetworkRegisteredAssetCountLoader createRegisteredAssetCountLoader() {
-		return new SafetyNetworkRegisteredAssetCountLoader();
+		return injectLoader(new SafetyNetworkRegisteredAssetCountLoader());
 	}
 
 	public SafetyNetworkAssetAttachmentListLoader createSafetyNetworkAssetAttachmentListLoader() {
-		return new SafetyNetworkAssetAttachmentListLoader();
+		return injectLoader(new SafetyNetworkAssetAttachmentListLoader());
 	}
 
 	public SafetyNetworkAssetAttachmentLoader createSafetyNetworkAssetAttachmentLoader() {
-		return new SafetyNetworkAssetAttachmentLoader(filter);
+		return injectLoader(new SafetyNetworkAssetAttachmentLoader(filter));
 	}
 
 	public SafetyNetworkAssetLoader createSafetyNetworkAssetLoader() {
-		return new SafetyNetworkAssetLoader(filter);
+		return injectLoader(new SafetyNetworkAssetLoader(filter));
 	}
 
 	public SafetyNetworkAssetTypeLoader createSafetyNetworkAssetTypeLoader() {
-		return new SafetyNetworkAssetTypeLoader();
+		return injectLoader(new SafetyNetworkAssetTypeLoader());
 	}
 
 	public SafetyNetworkEventLoader createSafetyNetworkAssignedAssetEventLoader() {
-		return new SafetyNetworkAssignedAssetEventLoader(filter);
+		return injectLoader(new SafetyNetworkAssignedAssetEventLoader(filter));
 	}
 
 	public SafetyNetworkAttachmentLoader createSafetyNetworkAttachmentLoader() {
-		return new SafetyNetworkAttachmentLoader();
+		return injectLoader(new SafetyNetworkAttachmentLoader());
 	}
 
 	public SafetyNetworkBackgroundSearchLoader createSafetyNetworkBackgroundSearchLoader() {
-		return new SafetyNetworkBackgroundSearchLoader(filter);
+		return injectLoader(new SafetyNetworkBackgroundSearchLoader(filter));
 	}
 	
 	public SafetyNetworkEventLoader createSafetyNetworkEventLoader(boolean forAssignedAsset) {
@@ -495,90 +510,95 @@ public class LoaderFactory implements Serializable {
 	}
 
 	public SafetyNetworkRegisteredOrAssignedEventLoader createSafetyNetworkEventLoaderAssignedOrRegistered() {
-		return new SafetyNetworkRegisteredOrAssignedEventLoader(filter);
+		return injectLoader(new SafetyNetworkRegisteredOrAssignedEventLoader(filter));
 	}
 
 	public SafetyNetworkPreAssignedAssetLoader createSafetyNetworkPreAssignedAssetLoader() {
-		return new SafetyNetworkPreAssignedAssetLoader();
+		return injectLoader(new SafetyNetworkPreAssignedAssetLoader());
 	}
 
 	public SafetyNetworkEventLoader createSafetyNetworkRegisteredAssetEventLoader() {
-		return new SafetyNetworkRegisteredAssetEventLoader(filter);
+		return injectLoader(new SafetyNetworkRegisteredAssetEventLoader(filter));
 	}
 
 	public SafetyNetworkSmartSearchLoader createSafetyNetworkSmartSearchLoader() {
-		return new SafetyNetworkSmartSearchLoader(filter);
+		return injectLoader(new SafetyNetworkSmartSearchLoader(filter));
 	}
 
 	public SecondaryOrgByNameLoader createSecondaryOrgByNameLoader() {
-		return new SecondaryOrgByNameLoader(filter);
+		return injectLoader(new SecondaryOrgByNameLoader(filter));
 	}
 
 	public SecondaryOrgListableLoader createSecondaryOrgListableLoader() {
-		return new SecondaryOrgListableLoader(filter);
+		return injectLoader(new SecondaryOrgListableLoader(filter));
 	}
 
 	public SecondaryOrgPaginatedLoader createSecondaryOrgPaginatedLoader() {
-		return new SecondaryOrgPaginatedLoader(filter);
+		return injectLoader(new SecondaryOrgPaginatedLoader(filter));
 	}
 
 	public SetupDataLastModDatesLoader createSetupDataLastModDatesLoader() {
-		return new SetupDataLastModDatesLoader(filter);
+		return injectLoader(new SetupDataLastModDatesLoader(filter));
 	}
 
 	public SignupReferralListLoader createSignupReferralListLoader() {
-		return new SignupReferralListLoader(filter);
+		return injectLoader(new SignupReferralListLoader(filter));
 	}
 
 	public SmartSearchLoader createSmartSearchListLoader() {
-		return new SmartSearchLoader(filter);
+		return injectLoader(new SmartSearchLoader(filter));
 	}
 
 	public SmartSearchPagedLoader createSmartSearchPagedLoader(){
-		return new SmartSearchPagedLoader(filter);
+		return injectLoader(new SmartSearchPagedLoader(filter));
 	}
 
 	public TaskConfigLoader createTaskConfigLoader() {
-		return new TaskConfigLoader();
+		return injectLoader(new TaskConfigLoader());
 	}
 
 	public TenantWideVendorOrgConnPaginatedLoader createTenantWideVendorOrgConnPaginatedLoader() {
-		return new TenantWideVendorOrgConnPaginatedLoader(filter);
+		return injectLoader(new TenantWideVendorOrgConnPaginatedLoader(filter));
 	}
 
 	public UnreadMessageCountLoader createUnreadMessageCountLoader() {
-		return new UnreadMessageCountLoader(filter);
+		return injectLoader(new UnreadMessageCountLoader(filter));
 	}
 
 	public SafetyNetworkUnregisteredAssetCountLoader createUnregisteredAssetCountLoader() {
-		return new SafetyNetworkUnregisteredAssetCountLoader();
+		return injectLoader(new SafetyNetworkUnregisteredAssetCountLoader());
 	}
 
 	public UserByFullNameLoader createUserByFullNameLoader() {
-		return new UserByFullNameLoader(filter);
+		return injectLoader(new UserByFullNameLoader(filter));
 	}
 
 	public UserFilteredLoader createUserFilteredLoader() {
-		return new UserFilteredLoader(filter);
+		return injectLoader(new UserFilteredLoader(filter));
 	}
 	
 	public UserListableLoader createUserListableLoader() {
-		return new UserListableLoader(filter);
+		return injectLoader(new UserListableLoader(filter));
 	}
 	
 	public VendorLinkedOrgListLoader createVendorLinkedOrgListLoader() {
-		return new VendorLinkedOrgListLoader(filter);
+		return injectLoader(new VendorLinkedOrgListLoader(filter));
 	}
 	
 	public VendorLinkedOrgLoader createVendorLinkedOrgLoader() {
-		return new VendorLinkedOrgLoader(filter);
+		return injectLoader(new VendorLinkedOrgLoader(filter));
 	}
 	
 	public VendorOrgConnectionLoader createVendorOrgConnectionLoader() {
-		return new VendorOrgConnectionLoader(filter);
+		return injectLoader(new VendorOrgConnectionLoader(filter));
 	}
 	
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
-		return new VendorOrgConnectionsListLoader(filter);
+		return injectLoader(new VendorOrgConnectionsListLoader(filter));
 	}
+
+    private <T extends Loader> T injectLoader(T loader) {
+        loader.setEntityManager(entityManager);
+        return loader;
+    }
 }

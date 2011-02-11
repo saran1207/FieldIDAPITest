@@ -4,8 +4,11 @@ import java.util.List;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.persistence.loaders.Loader;
 
-public class SafetyNetworkBackgroundSearchLoader {
+import javax.persistence.EntityManager;
+
+public class SafetyNetworkBackgroundSearchLoader extends Loader<Asset> {
 	
 	private final SafetyNetworkSmartSearchLoader networkSmartSearchLoader;
 	private String serialNumber;
@@ -15,8 +18,13 @@ public class SafetyNetworkBackgroundSearchLoader {
 	public SafetyNetworkBackgroundSearchLoader(SecurityFilter filter) {
 		networkSmartSearchLoader = new SafetyNetworkSmartSearchLoader(filter);
 	}
-	
-	public Asset load() {
+
+    @Override
+    protected Asset load(EntityManager em) {
+        return load();
+    }
+
+    public Asset load() {
 		Asset asset = searchByRfidNumber();
 		
 		if (asset == null) {

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import rfid.web.helper.SessionUser;
 
 import com.google.gson.Gson;
@@ -77,8 +78,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private CreateHandlerFactory createHandlerFactory;
 	private DownloadCoordinator downloadCoordinator;
 	private boolean useContext = false;
-	
-	
+
+
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
 		helper = new BaseActionHelper();
@@ -325,14 +326,19 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public void setPageType(String pageType, String currentAction) {
 		navOptions = new NavOptionsController(getSessionUser(), getSecurityGuard(), pageType, currentAction);
 	}
-	
+
 	public LoaderFactory getLoaderFactory() {
-		if (loaderFactory == null) {
-			loaderFactory = new LoaderFactory(getSecurityFilter());
-		}
-		return loaderFactory;
+        if (loaderFactory.getSecurityFilter() == null) {
+            loaderFactory.setSecurityFilter(getSession().getSessionUser().getSecurityFilter());
+        }
+        return loaderFactory;
 	}
-	
+
+    @Autowired
+    public void setLoaderFactory(LoaderFactory loaderFactory) {
+        this.loaderFactory = loaderFactory;
+    }
+
 	public SaverFactory getSaverFactory() {
 		if (saverFactory == null) {
 			saverFactory = new SaverFactory();
