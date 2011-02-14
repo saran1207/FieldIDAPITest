@@ -1,6 +1,14 @@
 ${action.setPageType('customer', 'users')!}
-<#assign secondaryNavAction="list"/>
-<#include "_secondaryNav.ftl"/>
+
+<head>
+	<@n4.includeStyle href="user" type="page"/>
+</head>
+
+<#if securityGuard.readOnlyUserEnabled>
+	<div class="useractions addUser">
+		<p><a href="<@s.url action="customersUserAdd" uniqueID=""  customerId="${customer.id}"/>"><@s.text name="label.add_user"/></a></p>
+	</div>
+</#if>
 
 <#if  page.hasResults() && page.validPage() >
 	<#assign currentAction="customersUsers.action" />
@@ -18,7 +26,7 @@ ${action.setPageType('customer', 'users')!}
 		<#assign count=0 >
 		<#list userList as user >
 			<tr id="user_${user.id!}" >
-				<td><a href="<@s.url action="customersUserEdit" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
+				<td><a href="<@s.url action="viewUser" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
 				<td>${user.userLabel?html! }</td>
 				<td>${(user.owner.divisionOrg.name)!?html}</td>
 				<td>${user.emailAddress?html! } </td>

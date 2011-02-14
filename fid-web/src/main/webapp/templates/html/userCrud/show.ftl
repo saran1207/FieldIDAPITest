@@ -37,7 +37,11 @@ ${action.setPageType('user','view')!}
 		<h2><@s.text name="label.user_details"/></h2>
 		<p>
 			<label for="owner"><@s.text name="label.owner"/></label>
-			<span class="fieldValue">${owner.name}</span>
+			<span class="fieldValue">
+			
+			<a href="<@s.url action="customerShow" uniqueID="${owner.id}" includeParams="get"/>" >${owner.name?html!}</a> 
+			
+			</span>
 		</p>
 		<p>
 			<label for="email"><@s.text name="label.emailaddress"/></label>

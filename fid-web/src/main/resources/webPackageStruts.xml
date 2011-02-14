@@ -2009,11 +2009,6 @@
 			<result name="input" type="freemarker">/templates/html/customersUser/list.ftl</result>
 		</action>
 
-		<action name="customersUser" method="show" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
-			<result name="success" type="freemarker">/templates/html/customersUser/show.ftl</result>
-			<result name="input" type="freemarker">/templates/html/customersUser/show.ftl</result>
-		</action>
-
 		<action name="customersUserAdd" method="add" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="success" type="freemarker">/templates/html/customersUser/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/customersUser/add.ftl</result>
@@ -2026,11 +2021,6 @@
 				<param name="actionName">customersUsers</param>
 				<param name="customerId">${customerId}</param>
 			</result>
-		</action>
-
-		<action name="customersUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
-			<result name="success" type="freemarker">/templates/html/customersUser/edit.ftl</result>
-			<result name="input" type="freemarker">/templates/html/customersUser/edit.ftl</result>
 		</action>
 
 		<action name="customersUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
