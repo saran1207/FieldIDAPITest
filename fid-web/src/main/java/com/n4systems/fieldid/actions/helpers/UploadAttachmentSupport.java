@@ -61,7 +61,7 @@ abstract public class UploadAttachmentSupport extends AbstractCrud {
 	}
 	
 	public Integer getFileUploadMax() {
-		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.PRODUCT_FILE_UPLOAD_MAX);
+		return ConfigContext.getCurrentContext().getInteger(ConfigEntry.PRODUCT_FILE_UPLOAD_MAX, getTenantId());
 	}
 	
 	public String getFileName(String file) {
