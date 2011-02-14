@@ -116,7 +116,6 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 		}
 
 		List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
-
 		calculateEventRemovalSummary(ids);
 
 		return SUCCESS;
@@ -130,21 +129,21 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 			return ERROR;
 		}
 		
-		for (Long id  : criteria.getMultiIdSelection().getSelectedIds()) {
-			try {
-				Event event = eventManager.findAllFields(id, new OpenSecurityFilter());
-				
-				eventManager.retireEvent(event, getSessionUser().getUniqueID());
-				
-				criteria.getMultiIdSelection().clear();
-				
-			} catch (Exception e) {
-				addFlashErrorText("error.eventdeleting");
-				logger.error("event retire " + event.getAsset().getSerialNumber(), e);
-				return ERROR;
-			}
+		List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
+		calculateEventRemovalSummary(ids);
+
+		try {
+			findAndDeleteEvents(ids);
+		} catch (Exception e) {
+			addFlashErrorText("error.eventdeleting");
+			logger.error("event retire " + event.getAsset().getSerialNumber(), e);
+			return ERROR;
 		}
-		addFlashMessage(getText("message.eventdeleted"));
+		
+		List<String> messageArgs = new ArrayList<String>();
+		messageArgs.add(getMasterEventsToDelete() + getStandardEventsToDelete() + "");
+		addFlashMessage(getText("message.event_massdelete_successful", messageArgs));
+		
 		return SUCCESS;
 	}
 	
@@ -219,6 +218,17 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 				}
 				eventSchedulesToDelete += (event.getSchedule() == null) ? 0 : 1;
 			}
+		}
+	}
+	
+	private void findAndDeleteEvents(List<Long> ids){
+		for (Long id  : ids) {
+			
+			Event event = eventManager.findAllFields(id, new OpenSecurityFilter());
+			
+			eventManager.retireEvent(event, getSessionUser().getUniqueID());
+			
+			criteria.getMultiIdSelection().clear();
 		}
 	}
 
