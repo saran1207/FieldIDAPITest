@@ -1388,11 +1388,6 @@
 			<result name="success" type="freemarker">/templates/html/changePassword/form.ftl</result>
 		</action>
 
-		<action name="refer" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.ReferCrud">
-			<result name="success" type="freemarker">/templates/html/refer/show.ftl</result>
-			<result name="error" type="freemarker">/templates/html/refer/show.ftl</result>
-		</action>
-
 		<action name="updatePassword" method="update" class="com.n4systems.fieldid.actions.users.ChangePasswordCrud">
 			<result name="input" type="freemarker">/templates/html/changePassword/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changePassword/form.ftl</result>
