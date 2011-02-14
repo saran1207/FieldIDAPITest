@@ -655,9 +655,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return asset.getRfidNumber();
 	}
 
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.rfid_number_length", maxLength = "50")
 	public void setRfidNumber(String rfidNumber) {
 		asset.setRfidNumber(rfidNumber);
-	}
+	}	
 
 	@RequiredStringValidator(message = "", key = "error.identifiedrequired")
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
@@ -685,10 +686,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return asset.getComments();
 	}
 
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.comments_length", maxLength = "3000")
 	public void setComments(String comments) {
 		asset.setComments(comments);
 	}
 
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.customer_ref_number_length", maxLength = "300")
 	public String getCustomerRefNumber() {
 		return asset.getCustomerRefNumber();
 	}
