@@ -1,21 +1,6 @@
 <title><@s.text name="title.massupdateevents" /></title>
 <head>
 	<#include "/templates/html/common/_columnView.ftl"/>
-	<script type="text/javascript">
-		onDocumentLoad(function() {
-			$('owner').observe("owner:change", function() {
-				selectField('owner');
-			});
-			
-			$('location').observe("location:change", function() {
-				selectField('location');
-			});
-		});
-		function selectField( fieldType ) {
-			var field = $('check_' + fieldType );
-			field.checked = true;
-		}
-	</script>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 </head>
 
@@ -28,6 +13,8 @@
 </div>
 
 <@s.form action="massUpdateEventsSave" theme="fieldidSimple" cssClass="listForm">
+	<@s.url id="deleteUrl" action="massUpdateEventsConfirmDelete" namespace="/" />
+	<@s.url id="updateUrl" action="massUpdateEventsSave" namespace="/" />
 	<@s.hidden name="searchId" />
 	<@s.hidden name="currentPage" />
 	<table class="list">
@@ -87,11 +74,43 @@
 				</div>
 			</td>
 		</tr>
+		<tr>
+			<td><@s.checkbox name="select['delete']" id="check_delete"  onchange="changeAction();"/></td>
+			<td>
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.delete_selected_events"/></label>
+				</div>
+			</td>
+		</tr>
 	</table>	
 		
 	<div class="formAction">
+		<@s.submit key="label.update" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
+		<@s.text name="label.or"/>
 		<a href="<@s.url action="reportResults" includeParams="none" searchId="${searchId!1}"currentPager="${currentPage!1}"/>"><@s.text name="label.returntoreport"/></a>
-		<@s.submit key="hbutton.save" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
 	</div>
 
 </@s.form>
+	<script type="text/javascript">
+		onDocumentLoad(function() {
+			$('owner').observe("owner:change", function() {
+				selectField('owner');
+			});
+			
+			$('location').observe("location:change", function() {
+				selectField('location');
+			});
+		});
+		function selectField( fieldType ) {
+			var field = $('check_' + fieldType );
+			field.checked = true;
+		}
+		
+		function changeAction(){
+			if($('check_delete').checked ){
+				 $('massUpdateEventsSave').writeAttribute('action', '${deleteUrl}');
+			}else{
+				 $('massUpdateEventsSave').writeAttribute('action', '${updateUrl}');
+			}
+		}
+	</script>

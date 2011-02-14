@@ -917,6 +917,20 @@
 				<param name="searchId">${searchId}</param>
 			</result>
 		</action>
+		
+		<action name="massUpdateEventsConfirmDelete" method="confirmDelete" class="com.n4systems.fieldid.actions.EventMassUpdate">
+			<result name="error" type="redirectAction">report</result>
+			<result name="success" type="freemarker">/templates/html/massUpdate/event/confirmDelete.ftl</result>
+		</action>
+		
+		<action name="massUpdateEventsDelete" method="delete" class="com.n4systems.fieldid.actions.EventMassUpdate">
+			<result name="error" type="redirectAction">search</result>
+			<result name="input" type="freemarker">/templates/html/massUpdate/event/form.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">reportResults</param>
+				<param name="searchId">${searchId}</param>
+			</result>
+		</action>
 
 		<action name="massUpdateEventSchedule" method="edit" class="com.n4systems.fieldid.actions.EventScheduleMassUpdate">
 			<result name="error" type="redirectAction">schedule</result>
