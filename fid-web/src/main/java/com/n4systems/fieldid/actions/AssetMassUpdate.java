@@ -10,7 +10,6 @@ import com.n4systems.fieldid.actions.search.AssetSearchAction;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Order;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -58,7 +57,6 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 	private AssignedToUserGrouper userGrouper;
 	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
-	private OrderManager orderManager;
 
 	private String orderNumber;
 	
@@ -66,7 +64,6 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 			OrderManager orderManager) {
 		super(massUpdateManager, persistenceManager);
 		this.legacyAssetManager = assetManager;
-		this.orderManager = orderManager;
 	}
 
 	public void prepare() throws Exception {
@@ -328,5 +325,14 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
 		}
 		return userGrouper;
+	}
+	
+	public int getNumberSelected(){
+		if (!findCriteria()) {
+			addFlashErrorText("error.searchexpired");
+			return 0;
+		}
+		
+		return criteria.getMultiIdSelection().getSelectedIds().size();
 	}
 }

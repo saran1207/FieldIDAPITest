@@ -1,10 +1,14 @@
 
-td.labelContainer{
-	width: 80px;
-}
+.list td, .list th{
+	min-width: 0px;
+	}
 
 .infoSet{
 	min-height: 0;
+}
+
+td.labelContainer{
+	width: 80px;
 }
 
 .infoSet label{
@@ -38,5 +42,13 @@ td.labelContainer{
 }
 
 .checkboxRow td{
-	width: 10px;
+	width: 0px;
+}
+
+.list tr.selected{
+	background-color: #D2E5FF
+}
+
+tr td.check{
+	max-width: 5px;
 }

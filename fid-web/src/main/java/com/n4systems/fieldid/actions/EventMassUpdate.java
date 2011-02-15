@@ -243,4 +243,13 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 	public int getEventSchedulesToDelete() {
 		return eventSchedulesToDelete;
 	}
+	
+	public int getNumberSelected(){
+		if (!findCriteria()) {
+			addFlashErrorText("error.searchexpired");
+			return 0;
+		}
+		
+		return criteria.getMultiIdSelection().getSelectedIds().size();
+	}
 }

@@ -10,7 +10,7 @@
 </head>
 
 <div>
-	<p class="instructions"><@s.text name="instruction.massupdate" /></p> 
+	<p class="instructions"><@s.text name="instruction.massupdate"><@s.param >${numberSelected}</@s.param><@s.param ><@s.text name="label.assets"/></@s.param></@s.text></p> 
 </div>
 
 <@s.form action="massUpdateAssetsSave" id="massUpdateAssetsSave" theme="fieldidSimple" cssClass="listForm">
@@ -183,6 +183,16 @@
 		
 		field.checked = true;
 	}
+	
+	$$('input[type="checkbox"]').each(function(checkBox) {
+		checkBox.observe('click', function() {
+		 	if (!checkBox.checked){
+				checkBox.up(1).removeClassName('selected');	
+		 	}else{
+		 		checkBox.up(1).addClassName('selected');
+		 	}
+	 	}) 
+	});
 	
 	function changeAction(){
 		if($('check_delete').checked ){
