@@ -1,0 +1,42 @@
+
+td.labelContainer{
+	width: 80px;
+}
+
+.infoSet{
+	min-height: 0;
+}
+
+.infoSet label{
+	font-weight: normal;
+	font-size: 13px;
+}
+	
+.list{
+	border-bottom: 1px solid #CACACA;
+}
+
+.instructions{
+	font-size: 13px;
+	padding: 15px 0;
+}
+
+.infoSet input, .infoSet select{
+	padding: 4px;
+	border: 1px solid #9C9C9C;
+	color: #555;
+	width: 250px;
+	overflow: hidden;
+}
+
+ .infoSet select{
+ 	width: 240px;
+ }
+ 
+.formAction input{
+	padding: 5px;
+}
+
+.checkboxRow td{
+	width: 10px;
+}
