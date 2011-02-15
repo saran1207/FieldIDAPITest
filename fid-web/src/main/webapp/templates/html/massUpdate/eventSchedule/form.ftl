@@ -2,11 +2,9 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
 </head>
-<h4 >Instructions </h4>
-<div class="help">
-	<p>
-		<@s.text name="instruction.massupdate" /> 
-	</p>
+
+<div>
+	<p class="instructions"><@s.text name="instruction.massupdate"><@s.param >${numberSelected}</@s.param><@s.param ><@s.text name="label.events"/></@s.param></@s.text></p> 
 </div>
 
 <@s.form action="massUpdateEventScheduleSave" theme="simple" cssClass="listForm">
@@ -14,14 +12,19 @@
 	<@s.hidden name="currentPage" />
 	<table class="list">
 		<tr>
-			<th class="checkboxRow"><@s.text name="label.select"/></th>
-			<th><@s.text name="label.fieldstoupdate"/></th>
+			<th class="checkboxRow"></th>
+			<th><@s.text name="label.field"/></th>
+			<th><@s.text name="label.new_value"/></th>
 		</tr>
 		<tr>
 			<td><@s.checkbox name="select['nextDate']" id="check_nextDate"/></td>
 			<td>
-				<label class="label"><@s.text name="label.nexteventdate"/>:</label>
-				<span class="field">
+				<div class="infoSet">
+					<label class="label"><@s.text name="label.nexteventdate"/>:</label>
+				</div>
+			</td>
+			<td>
+				<div class="infoSet">
 					<@s.textfield id="input_nextDate" key="label.tdate" name="nextDate" size="10" labelposition="left" onchange="selectField('nextDate');" title="${Session.sessionUser.displayDateFormat}" />
 					<img src="images/calendar-icon.png" border="0" id="nextDateTrigger">
 					<script type="text/javascript">
@@ -36,15 +39,18 @@
 							<@s.param>nextDate</@s.param>				
 						</@s.fielderror>
 					</p>
-				</span>
+				</div>
 			</td>
 		</tr>
 		<tr>
 			<td><@s.checkbox name="select['removeIncomplete']" id="check_removeIncomplete" onchange="disableOtherFields(this.checked);" /></td>
 			<td>
-				<p>
+				<div class="infoSet">
 					<label class="label"><@s.text name="label.removeincompleteschedules"/></label> 
-				</p>
+				</div>
+			</td>
+			<td>
+				&nbsp;
 			</td>
 		</tr>
 	</table>	
@@ -71,4 +77,14 @@
 			$('input_nextDate').enable();
 		}
 	}
+	
+		$$('input[type="checkbox"]').each(function(checkBox) {
+			checkBox.observe('click', function() {
+			 	if (!checkBox.checked){
+					checkBox.up(1).removeClassName('selected');	
+			 	}else{
+			 		checkBox.up(1).addClassName('selected');
+			 	}
+		 	}) 
+		});
 </script>

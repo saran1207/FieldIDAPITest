@@ -103,4 +103,13 @@ public class EventScheduleMassUpdate extends MassUpdate {
 	public void setRemoveIncomplete(boolean removeIncomplete) {
 		this.removeIncomplete = removeIncomplete;
 	}
+	
+	public int getNumberSelected(){
+		if (!findCriteria()) {
+			addFlashErrorText("error.searchexpired");
+			return 0;
+		}
+		
+		return criteria.getMultiIdSelection().getSelectedIds().size();
+	}
 }
