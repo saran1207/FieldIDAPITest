@@ -4,8 +4,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.PaginatedLoader;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class CustomerOrgWithArchivedPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 

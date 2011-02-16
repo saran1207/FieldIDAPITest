@@ -2,7 +2,6 @@ package com.n4systems.model.user;
 
 import javax.persistence.EntityManager;
 
-
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.model.security.SecurityFilter;
@@ -41,6 +40,10 @@ public class UserSaver extends Saver<User> {
 	}
 	
 	private boolean userIdExists(EntityManager em, SecurityFilter filter, User user) {
+		if(user.getUserID() == null) {
+			return false;
+		}
+		
 		QueryBuilder<User> userCount = new QueryBuilder<User>(User.class, filter);
 		userCount.addWhere(Comparator.EQ, "userID", "userID", user.getUserID(), WhereParameter.IGNORE_CASE);
 		

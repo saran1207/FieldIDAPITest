@@ -1,6 +1,9 @@
 package com.n4systems.fieldid.actions.customers;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -14,7 +17,6 @@ import org.springframework.mock.web.MockHttpSession;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.UserBuilder;
@@ -26,7 +28,6 @@ import com.n4systems.tools.SillyPager;
 
 public class CustomerCrudTest {
 	
-	private UserManager userManager;
 	private PersistenceManager persistenceManager;
 	private LoaderFactory loaderFactory;
 	private CustomerOrgPaginatedLoader loader;
@@ -35,7 +36,6 @@ public class CustomerCrudTest {
 
 	@Before
 	public void setUp() {
-		userManager = createMock(UserManager.class);
 
 		persistenceManager = createMock(PersistenceManager.class);
 
@@ -48,7 +48,7 @@ public class CustomerCrudTest {
 		
 		loader = createMock(CustomerOrgPaginatedLoader.class);
 		
-		crud = new CustomerCrud(userManager, persistenceManager) {
+		crud = new CustomerCrud(persistenceManager) {
 
 			@Override
 			public WebSession getSession() {

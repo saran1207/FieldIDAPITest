@@ -47,7 +47,7 @@ public class CustomerOrgArchiverTest {
 		securityFilter = createMock(SecurityFilter.class);		
 		transaction = createMock(Transaction.class);
 		archiver = new CustomerOrgArchiver(){
-			@Override
+			@SuppressWarnings("unused")
 			protected DivisionOrgByCustomerListLoader createDivisionsLoader(SecurityFilter filter) {
 				return divisionLoader;
 			}
@@ -71,7 +71,7 @@ public class CustomerOrgArchiverTest {
 		
 		replayExpectations();
 		
-		archiver.doArchive(customer, userManager, orgSaver, userSaver, securityFilter, false, transaction );
+		archiver.doArchive(customer, orgSaver, userSaver, securityFilter, false, transaction );
 		
 		verifyExpectations();
 	}
@@ -88,7 +88,7 @@ public class CustomerOrgArchiverTest {
 		
 		replayExpectations();
 		
-		archiver.doArchive(customer, userManager, orgSaver, userSaver, securityFilter, true, transaction );
+		archiver.doArchive(customer, orgSaver, userSaver, securityFilter, true, transaction );
 		
 		verifyExpectations();
 	}

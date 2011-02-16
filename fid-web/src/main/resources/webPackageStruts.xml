@@ -1810,6 +1810,12 @@
 			<result name="error" type="freemarker">/templates/html/organization/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/organization/list.ftl</result>
 		</action>
+		
+		<action name="archivedOrganizations" method="archivedList" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="success" type="freemarker">/templates/html/organization/archived.ftl</result>
+			<result name="error" type="freemarker">/templates/html/organization/archived.ftl</result>
+			<result name="input" type="freemarker">/templates/html/organization/archived.ftl</result>
+		</action>
 
 
 		<action name="organizationAdd" method="add" class="com.n4systems.fieldid.actions.OrganizationalCrud">
@@ -1828,6 +1834,18 @@
 		<action name="organizationEdit" method="edit" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="freemarker">/templates/html/organization/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
+		</action>
+
+		<action name="organizationArchive" method="archive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">organizations</param>
+			</result>
+		</action>
+
+		<action name="organizationUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">organizations</param>
+			</result>
 		</action>
 
 		<action name="organizationUpdate" method="update" class="com.n4systems.fieldid.actions.OrganizationalCrud">

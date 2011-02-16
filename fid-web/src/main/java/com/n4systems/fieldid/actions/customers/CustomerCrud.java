@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AddressInfo;
@@ -36,7 +35,6 @@ public class CustomerCrud extends AbstractCrud {
 	private static final int CRUD_RESULTS_PER_PAGE = 20;
 	private static Logger logger = Logger.getLogger(CustomerCrud.class);
 	
-	private final UserManager userManager;
 	private final OrgSaver saver;
 	
 	private boolean archivedOnly;
@@ -46,9 +44,8 @@ public class CustomerCrud extends AbstractCrud {
 	private String listFilter;
 	private List<ListingPair> internalOrgList;
 	
-	public CustomerCrud(UserManager userManager, PersistenceManager persistenceManager) {
+	public CustomerCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.userManager = userManager;
 		this.saver = new OrgSaver();
 	}
 	
@@ -134,9 +131,8 @@ public class CustomerCrud extends AbstractCrud {
 
 		try {
 			
-			UserSaver userSaver = new UserSaver();
 			CustomerOrgArchiver archiver = new CustomerOrgArchiver();
-			archiver.archiveCustomer(customer, userManager, saver, userSaver, getLoaderFactory(), getSecurityFilter(), active);
+			archiver.archiveCustomer(customer, saver, new UserSaver(), getLoaderFactory(), getSecurityFilter(), active);
 			
 		} catch (Exception e) {
 			logger.error("Failed updating customer", e);

@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.user.DivisionUserListLoader;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserByOwnerListLoader;
+import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -20,14 +19,14 @@ public class DivisionOrgArchiver {
 	
 	private static final Logger logger = Logger.getLogger(DivisionOrgArchiver.class);
 			
-	public void archiveDivision(DivisionOrg division, UserManager userManager,
-			OrgSaver orgSaver, LoaderFactory loaderFactory, SecurityFilter securityFilter,
+	public void archiveDivision(DivisionOrg division, OrgSaver orgSaver, UserSaver userSaver,
+			LoaderFactory loaderFactory, SecurityFilter filter,
 			boolean active) {
 		
 		Transaction transaction = PersistenceManager.startTransaction();
 
 		try {
-			doArchive(division, userManager, orgSaver, securityFilter, active, transaction);
+			doArchive(division, orgSaver, userSaver, filter, active, transaction);
 			
 		} catch (RuntimeException e) {
 			logger.error("Error archiving customer", e);
@@ -38,8 +37,8 @@ public class DivisionOrgArchiver {
 		}
 	}
 
-	private void doArchive(DivisionOrg division, UserManager userManager,
-			OrgSaver orgSaver, SecurityFilter filter, boolean active,
+	public void doArchive(DivisionOrg division, OrgSaver orgSaver, UserSaver userSaver, 
+			SecurityFilter filter, boolean active,
 			Transaction transaction) {
 
 		EntityState newState = active ? EntityState.ACTIVE : EntityState.ARCHIVED;
@@ -48,16 +47,16 @@ public class DivisionOrgArchiver {
 			List<User> usersList = getUserList(filter,	division);
 			for (User user : usersList) {
 				user.archiveUser();
-				userManager.updateUser(user);
+				userSaver.update(transaction, user);
 			}
 		}
 		
 		division.setState(newState);
-		orgSaver.update(division);
+		orgSaver.update(transaction, division);
 	}
 
 	private List<User> getUserList(SecurityFilter filter, DivisionOrg division) {
-		return new DivisionUserListLoader(new TenantOnlySecurityFilter(filter).setShowArchived(true)).setDivision(division).load();
+		return new UserByOwnerListLoader(filter).owner(division).load();
 	}
 
 }

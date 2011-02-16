@@ -24,6 +24,9 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.orgs.secondaryorg.SecondaryOrgArchiver;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
@@ -51,6 +54,7 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	private boolean newImage = false;
 	private Country country;
 	private Region region;
+	private OrgSaver saver = new OrgSaver();
 	
 	public OrganizationalCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -75,7 +79,9 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			organization = primaryOrg;
 		} else {
 			// we arn't, load a secondary
-			FilteredIdLoader<SecondaryOrg> loader = new FilteredIdLoader<SecondaryOrg>(getSecurityFilter(), SecondaryOrg.class);
+			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(getSecurityFilter());
+			filter.enableShowArchived();
+			FilteredIdLoader<SecondaryOrg> loader = new FilteredIdLoader<SecondaryOrg>(filter, SecondaryOrg.class);
 			loader.setId(uniqueId);
 			organization = loader.load();
 		}
@@ -101,6 +107,16 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	}
 
 	@SkipValidation
+	public String doArchivedList() {
+		SecondaryOrgPaginatedLoader loader = getLoaderFactory().createSecondaryOrgPaginatedLoader().withArchivedState();
+		loader.setPage(getCurrentPage()).setPageSize(Constants.PAGE_SIZE);
+		page = loader.load();
+		
+		return SUCCESS;
+	}
+
+	
+	@SkipValidation
 	public String doAdd() {
 		testRequiredEntities(false);
 		return SUCCESS;
@@ -116,7 +132,6 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			secondaryOrg.setTenant(primaryOrg.getTenant());
 			secondaryOrg.setPrimaryOrg(primaryOrg);
 			
-			OrgSaver saver = new OrgSaver();
 			saver.save(secondaryOrg);
 
 			processImage();
@@ -126,6 +141,40 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			logger.error(getLogLinePrefix() + "could not create organization", e);
 			addActionErrorText("error.savingorganization");
 		}
+		return SUCCESS;
+	}
+	
+	public String doArchive() {
+		return activateSecondaryOrg(false);
+	}
+	
+	public String doUnarchive() {
+		return activateSecondaryOrg(true);
+	}
+	
+	public String activateSecondaryOrg(boolean active) {
+		if(organization == null) {
+			addFlashError("Organizational Units not found");
+			return ERROR;
+		}
+		
+		// if the address info was created by our loadMemberFields, 
+		// we need to nullify it or it'll screw with the delete process
+		if (organization.getAddressInfo().isNew()) {
+			organization.setAddressInfo(null);
+		}
+		
+		try {
+			
+			SecondaryOrgArchiver archiver = new SecondaryOrgArchiver();
+			archiver.archiveSecondaryOrg(organization, saver, new UserSaver(), getLoaderFactory(), getSecurityFilter(), active);
+			
+		} catch (Exception e) {
+			logger.error("Failed updating customer", e);
+			addFlashErrorText("error.updatingcustomer");
+			return ERROR;
+		}
+		
 		return SUCCESS;
 	}
 
@@ -171,7 +220,6 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	public String doUpdate() {
 		testRequiredEntities(true);
 		try {
-			OrgSaver saver = new OrgSaver();
 			saver.update(organization);
 			
 			processImage();

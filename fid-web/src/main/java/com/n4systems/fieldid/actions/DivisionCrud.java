@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -16,6 +15,7 @@ import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.DivisionOrgPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.division.DivisionOrgArchiver;
+import com.n4systems.model.user.UserSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
@@ -34,11 +34,8 @@ public class DivisionCrud extends AbstractCrud {
 	private Pager<DivisionOrg> page;
 	private Pager<DivisionOrg> archivedPage;
 	
-	private final UserManager userManager;
-	
-	public DivisionCrud(PersistenceManager persistenceManager, UserManager userManager) {
+	public DivisionCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.userManager = userManager;
 		saver = new OrgSaver();
 	}
 	
@@ -137,7 +134,7 @@ public class DivisionCrud extends AbstractCrud {
 		
 		try {
 			DivisionOrgArchiver archiver = new DivisionOrgArchiver();
-			archiver.archiveDivision(division, userManager, saver, getLoaderFactory(), getSecurityFilter(), active);
+			archiver.archiveDivision(division, saver, new UserSaver(), getLoaderFactory(), getSecurityFilter(), active);
 			
 		} catch (Exception e) {
 			logger.error("Failed updating division", e);
