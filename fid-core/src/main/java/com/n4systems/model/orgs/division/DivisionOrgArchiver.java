@@ -55,7 +55,7 @@ public class DivisionOrgArchiver {
 		orgSaver.update(transaction, division);
 	}
 
-	private List<User> getUserList(SecurityFilter filter, DivisionOrg division) {
+	protected List<User> getUserList(SecurityFilter filter, DivisionOrg division) {
 		return new UserByOwnerListLoader(filter).owner(division).load();
 	}
 

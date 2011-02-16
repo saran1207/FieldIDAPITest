@@ -22,7 +22,11 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 public class CustomerOrgArchiver {
 
 	private static final Logger logger = Logger.getLogger(CustomerOrgArchiver.class);
-	private DivisionOrgArchiver divisionOrgArchiver = new DivisionOrgArchiver();
+	private DivisionOrgArchiver divisionOrgArchiver;
+	
+	public CustomerOrgArchiver() {
+		divisionOrgArchiver = new DivisionOrgArchiver();
+	}
 
 	public void archiveCustomer(CustomerOrg customer, OrgSaver orgSaver, 
 			UserSaver userSaver, LoaderFactory loaderFactory,  SecurityFilter securityFilter, boolean active) {
@@ -64,11 +68,15 @@ public class CustomerOrgArchiver {
 		orgSaver.update(transaction, customer);
 	}
 
-	private List<User> getUserList(SecurityFilter filter, CustomerOrg customer) {
+	protected List<User> getUserList(SecurityFilter filter, CustomerOrg customer) {
 		return new UserByOwnerListLoader(filter).owner(customer).load();
 	}
 
-	private List<DivisionOrg> getDivisions(SecurityFilter filter, CustomerOrg customer) {
+	protected List<DivisionOrg> getDivisions(SecurityFilter filter, CustomerOrg customer) {
 		return new DivisionOrgByCustomerListLoader(new TenantOnlySecurityFilter(filter).setShowArchived(true)).setCustomer(customer).load();
+	}
+
+	public void setDivisionOrgArchiver(DivisionOrgArchiver divisionOrgArchiver) {
+		this.divisionOrgArchiver = divisionOrgArchiver;
 	}
 }
