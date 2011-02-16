@@ -121,6 +121,7 @@
 		function selectField( fieldType ) {
 			var field = $('check_' + fieldType );
 			field.checked = true;
+			field.up(1).addClassName('selected');
 		}
 		
 		$$('input[type="checkbox"]').each(function(checkBox) {

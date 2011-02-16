@@ -68,6 +68,7 @@
 		var field = $('check_' + fieldType );
 		
 		field.checked = true;
+		field.up(1).addClassName('selected');
 	}
 	
 	function disableOtherFields(disable) {
@@ -80,13 +81,13 @@
 		}
 	}
 	
-		$$('input[type="checkbox"]').each(function(checkBox) {
-			checkBox.observe('click', function() {
-			 	if (!checkBox.checked){
-					checkBox.up(1).removeClassName('selected');	
-			 	}else{
-			 		checkBox.up(1).addClassName('selected');
-			 	}
-		 	}) 
-		});
+	$$('input[type="checkbox"]').each(function(checkBox) {
+		checkBox.observe('click', function() {
+		 	if (!checkBox.checked){
+				checkBox.up(1).removeClassName('selected');	
+		 	}else{
+		 		checkBox.up(1).addClassName('selected');
+		 	}
+	 	}) 
+	});
 </script>
