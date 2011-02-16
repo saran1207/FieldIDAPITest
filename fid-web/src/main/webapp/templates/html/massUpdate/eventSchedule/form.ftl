@@ -1,10 +1,11 @@
 <title><@s.text name="title.massupdateeventschedules" /></title>
 <head>
+<@n4.includeStyle href="massUpdate" type="page"/>
 	<#include "/templates/html/common/_calendar.ftl"/>
 </head>
 
 <div>
-	<p class="instructions"><@s.text name="instruction.massupdate"><@s.param >${numberSelected}</@s.param><@s.param ><@s.text name="label.events"/></@s.param></@s.text></p> 
+	<p class="instructions"><@s.text name="instruction.massupdate"><@s.param >${numberSelected}</@s.param><@s.param ><@s.text name="label.schedules"/></@s.param></@s.text></p> 
 </div>
 
 <@s.form action="massUpdateEventScheduleSave" theme="simple" cssClass="listForm">
@@ -56,8 +57,9 @@
 	</table>	
 		
 	<div class="formAction">
+		<@s.submit key="label.perform_mass_update" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
+		<@s.text name="label.or"/>
 		<a href="<@s.url action="scheduleResults" includeParams="none" searchId="${searchId!1}"currentPager="${currentPage!1}"/>"><@s.text name="label.returntoschedules"/></a>
-		<@s.submit key="hbutton.save" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
 	</div>
 
 </@s.form>
