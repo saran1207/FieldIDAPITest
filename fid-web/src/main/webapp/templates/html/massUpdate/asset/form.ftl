@@ -23,7 +23,7 @@
 	<table class="list">
 		<tr>
 			<th class="checkboxRow"></th>
-			<th><@s.text name="label.field"/></th>
+			<th class="fieldColumn"><@s.text name="label.field"/></th>
 			<th><@s.text name="label.new_value"/></th>
 		</tr>
 		<#if securityGuard.assignedToEnabled>

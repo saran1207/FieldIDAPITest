@@ -1,14 +1,13 @@
+th.fieldColumn{
+	width: 20px;
+}
 
 .list td, .list th{
-	min-width: 0px;
-	}
+	overflow: hidden;
+}
 
 .infoSet{
 	min-height: 0;
-}
-
-td.labelContainer{
-	width: 80px;
 }
 
 .infoSet label{
@@ -33,16 +32,12 @@ td.labelContainer{
 	overflow: hidden;
 }
 
- .infoSet select{
+.infoSet select{
  	width: 240px;
  }
  
 .formAction input{
 	padding: 5px;
-}
-
-.checkboxRow td{
-	width: 0px;
 }
 
 .list tr.selected{

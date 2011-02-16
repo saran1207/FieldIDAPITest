@@ -1,6 +1,6 @@
 <title><@s.text name="title.massupdateeventschedules" /></title>
 <head>
-<@n4.includeStyle href="massUpdate" type="page"/>
+	<@n4.includeStyle href="massUpdate" type="page"/>
 	<#include "/templates/html/common/_calendar.ftl"/>
 </head>
 
@@ -14,7 +14,7 @@
 	<table class="list">
 		<tr>
 			<th class="checkboxRow"></th>
-			<th><@s.text name="label.field"/></th>
+			<th class="fieldColumn"><@s.text name="label.field"/></th>
 			<th><@s.text name="label.new_value"/></th>
 		</tr>
 		<tr>
