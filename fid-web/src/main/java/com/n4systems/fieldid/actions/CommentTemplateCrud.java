@@ -15,6 +15,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.security.Permissions;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
@@ -111,6 +112,7 @@ public class CommentTemplateCrud extends AbstractCrud implements HasDuplicateVal
 		commentTemplate.setTemplateID(name);
 	}
 	
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.comment_template_length", maxLength = "250")
 	public String getComment() {
 		return commentTemplate.getContents();
 	}
