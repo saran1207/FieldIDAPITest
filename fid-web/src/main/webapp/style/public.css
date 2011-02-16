@@ -14,7 +14,6 @@ a, a:hover, a:visited, a:active {
 	border-top: 1px dotted #999;
 }
 
-
 #page {
 	width: 900px;
 }
@@ -40,18 +39,26 @@ a, a:hover, a:visited, a:active {
 }
 
 #pageContent {
-	width: 888px;
+	width: 1000px;
 }
 
-#mainContent {
-	width: 564px;
+
+#searchById, #searchByEmail{
+	border:6px solid #BBB;
+	width: 450px;
 	float:left;
+	padding: 20px;
+	margin-top: 10px;
+}
+
+#searchByEmail{
+	border-left: none;	
 }
 
 #secondaryContent {
-	width: 264px;
-	float:right;
-	padding:15px;
+	width: 500px;
+	float: right;
+	clear: both;
 }
 .titleBlock {
 	margin-bottom: 20px;
@@ -126,4 +133,14 @@ div.oneLine {
 #plansPricingButton a {background-position: 0 0;}
 #plansPricingButton a:hover {background-position: 0 -62px;}
 #plansPricingButton a:active {background-position: 0 -124px;}
+
+#plansPricingButtonChooseCompany a {
+	display: block;
+	float: right;
+	width: 180px;
+	height: 30px;
+	background-image: url(../images/see-plans-pricing-button.png);
+	background-repeat: no-repeat;
+}
+
 
