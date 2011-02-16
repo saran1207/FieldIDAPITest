@@ -38,9 +38,11 @@ ${action.setPageType('user','view')!}
 		<p>
 			<label for="owner"><@s.text name="label.owner"/></label>
 			<span class="fieldValue">
-			
-			<a href="<@s.url action="customerShow" uniqueID="${owner.id}" includeParams="get"/>" >${owner.name?html!}</a> 
-			
+				<#if owner.customer>
+					<a href="<@s.url action="customerShow" uniqueID="${owner.id}" includeParams="get"/>" >${owner.name?html!}</a> 
+				<#else>
+					${owner.name?html!}
+				</#if>
 			</span>
 		</p>
 		<p>
