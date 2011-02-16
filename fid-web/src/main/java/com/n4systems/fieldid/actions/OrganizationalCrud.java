@@ -144,6 +144,10 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 		return SUCCESS;
 	}
 	
+	public String doConfirmArchive(){
+		return SUCCESS;
+	}
+	
 	public String doArchive() {
 		return activateSecondaryOrg(false);
 	}
@@ -261,6 +265,10 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 
 	public Pager<SecondaryOrg> getPage() {
 		return page;
+	}
+	
+	public InternalOrg getOrganization() {
+		return organization;
 	}
 
 	public File getCertImage() {

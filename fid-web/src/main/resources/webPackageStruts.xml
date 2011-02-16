@@ -1836,6 +1836,11 @@
 			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
 		</action>
 
+		<action name="organizationConfirmArchive" method="confirmArchive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+			<result name="success" type="freemarker">/templates/html/organization/confirmArchive.ftl</result>
+		</action>
+		
+
 		<action name="organizationArchive" method="archive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">organizations</param>

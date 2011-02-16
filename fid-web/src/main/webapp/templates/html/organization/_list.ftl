@@ -11,7 +11,7 @@
 				<td>
 					<a href="<@s.url action="organizationEdit" uniqueID="${organization.id}"/>"><@s.text name="label.edit"/></a>
 					<#if organization.active>
-						<a href="<@s.url action="organizationArchive" uniqueID="${organization.id}"/>"><@s.text name="label.archive"/></a>
+						<a href="<@s.url action="organizationConfirmArchive" uniqueID="${organization.id}"/>"><@s.text name="label.archive"/></a>
 					<#else>
 						<a href="<@s.url action="organizationUnarchive" uniqueID="${organization.id}"/>"><@s.text name="label.unarchive"/></a>
 					</#if>
