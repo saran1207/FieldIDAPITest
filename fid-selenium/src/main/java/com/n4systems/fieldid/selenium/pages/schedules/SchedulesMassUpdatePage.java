@@ -15,6 +15,6 @@ public class SchedulesMassUpdatePage extends MassUpdatePage<SchedulesSearchResul
 
     @Override
     protected String getSubmitButtonLabel() {
-        return "Save";
+        return "Perform Mass Update";
     }
 }

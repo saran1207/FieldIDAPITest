@@ -28,7 +28,7 @@ public abstract class MassUpdatePage<T extends WebPage> extends FieldIDPage {
     }
 
     protected String getSubmitButtonLabel() {
-        return "Update";
+        return "Perform Mass Update";
     }
 
 }
