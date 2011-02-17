@@ -354,11 +354,11 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	}
 
 	private List<Long> sortEventIdsByRowIndex(List<Long> eventIds) {
-		final TableView table = getSearchResults();
+        final List<Long> ids = new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableSearchDefiner<TableView>(this), getContainer().getSecurityFilter());
 
-		Collections.sort(eventIds, new Comparator<Long>() {
+        Collections.sort(eventIds, new Comparator<Long>() {
 			public int compare(Long o1, Long o2) {
-				return (table.getRowForId(o1).compareTo(table.getRowForId(o2)));
+				return (new Integer(ids.indexOf(o1)).compareTo(ids.indexOf(o2)));
 			}
 		});
 		return eventIds;
