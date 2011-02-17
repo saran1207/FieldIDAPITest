@@ -40,6 +40,7 @@ public class CriteriaPanel extends SortableListPanel {
     private boolean reorderState = false;
 
     private StateSet previouslySelectedStateSet;
+    private boolean previousSetsResultValue;
 
     public CriteriaPanel(String id) {
         super(id);
@@ -151,6 +152,7 @@ public class CriteriaPanel extends SortableListPanel {
                         } else {
                             oneClickCriteria.setStates(stateSetList.get(0));
                         }
+                        oneClickCriteria.setPrincipal(previousSetsResultValue);
                         criteria = oneClickCriteria;
                     } else if ("Text Field".equals(criteriaType)) {
                         criteria = new TextFieldCriteria();
@@ -215,5 +217,9 @@ public class CriteriaPanel extends SortableListPanel {
 
     public void setPreviouslySelectedStateSet(StateSet previouslySelectedStateSet) {
         this.previouslySelectedStateSet = previouslySelectedStateSet;
+    }
+
+    public void setPreviousSetsResultValue(boolean setsResultValue) {
+        this.previousSetsResultValue = setsResultValue;
     }
 }

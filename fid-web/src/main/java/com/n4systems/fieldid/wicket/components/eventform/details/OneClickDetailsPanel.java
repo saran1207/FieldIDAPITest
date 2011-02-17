@@ -52,7 +52,10 @@ public class OneClickDetailsPanel extends Panel {
                 }
             });
             add(new AjaxCheckBox("setsResultCheckbox", new PropertyModel<Boolean>(getCriteriaModel(), "principal")) {
-                @Override protected void onUpdate(AjaxRequestTarget target) {}});
+                @Override protected void onUpdate(AjaxRequestTarget target) {
+                    boolean setsResult = getCriteriaModel().getObject().isPrincipal();
+                    onSetsResultSelected(setsResult);
+                }});
         }
 
         private List<StateSet> getStateSetList() {
@@ -76,5 +79,7 @@ public class OneClickDetailsPanel extends Panel {
     }
 
     protected void onStateSetSelected(StateSet stateSet) { }
+
+    protected void onSetsResultSelected(boolean setsResult) { }
 
 }

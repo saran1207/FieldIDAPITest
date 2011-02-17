@@ -40,6 +40,11 @@ public class CriteriaDetailsPanel extends Panel {
                 protected void onStateSetSelected(StateSet stateSet) {
                     CriteriaDetailsPanel.this.onStateSetSelected(stateSet);
                 }
+
+                @Override
+                protected void onSetsResultSelected(boolean setsResult) {
+                    CriteriaDetailsPanel.this.onSetsResultSelected(setsResult);
+                }
             });
         } else if (criteria instanceof TextFieldCriteria) {
             add(new TextFieldDetailsPanel("specificDetailsPanel", new Model<TextFieldCriteria>((TextFieldCriteria) criteria)));
@@ -49,5 +54,7 @@ public class CriteriaDetailsPanel extends Panel {
     }
 
     protected void onStateSetSelected(StateSet stateSet) { }
+
+    protected void onSetsResultSelected(boolean setsResult) { }
 
 }

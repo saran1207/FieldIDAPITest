@@ -125,6 +125,11 @@ public class EventFormEditPage extends FieldIDWicketPage {
             protected void onStateSetSelected(StateSet stateSet) {
                 criteriaPanel.setPreviouslySelectedStateSet(stateSet);
             }
+
+            @Override
+            protected void onSetsResultSelected(boolean setsResult) {
+                criteriaPanel.setPreviousSetsResultValue(setsResult);
+            }
         });
         criteriaDetailsPanel.setVisible(false);
     }
