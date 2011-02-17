@@ -14,6 +14,19 @@ a, a:hover, a:visited, a:active {
 	border-top: 1px dotted #999;
 }
 
+#siteForm input[type="text"]{
+	width: 300px;
+	display: inline;
+	}
+
+#siteForm .prefix{
+	display: inline;
+	}
+
+p.actionInstructions{
+	min-height: 45px;
+}
+
 #page {
 	width: 900px;
 }
@@ -42,10 +55,21 @@ a, a:hover, a:visited, a:active {
 	width: 1000px;
 }
 
+#mainContent {
+	width: 564px;
+	float:left;
+}
+
+#secondaryContent {
+	width: 264px;
+	float:right;
+	padding:15px;
+}
 
 #searchById, #searchByEmail{
-	border:6px solid #BBB;
+	border:4px solid #BBB;
 	width: 450px;
+		height: 265px;
 	float:left;
 	padding: 20px;
 	margin-top: 10px;
@@ -55,8 +79,8 @@ a, a:hover, a:visited, a:active {
 	border-left: none;	
 }
 
-#secondaryContent {
-	width: 500px;
+#plansAndPricing {
+	width: 520px;
 	float: right;
 	clear: both;
 }

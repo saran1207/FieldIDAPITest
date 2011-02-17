@@ -1348,6 +1348,12 @@
 			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 		</action>
+		
+		<action name="findCompany" method="find" class="com.n4systems.fieldid.actions.SelectTenantAction">
+			<interceptor-ref name="nonBrandedFlashStack" />
+			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
+			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
+		</action>
 
 		<action name="forgotPassword" method="add" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
