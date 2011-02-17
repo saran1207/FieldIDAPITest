@@ -1,13 +1,18 @@
 package rfid.ejb.entity;
 
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
 @Entity
@@ -34,7 +39,9 @@ public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoO
 	@JoinColumn(name = "r_infofield")
 	private InfoFieldBean infoField;
 	
-	
+	@ManyToMany(targetEntity = AddAssetHistory.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "addassethistory_infooption", inverseJoinColumns = @JoinColumn(name = "r_addproducthistory", referencedColumnName = "uniqueid"), joinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
+	private Collection<AddAssetHistory> addAssetHistory;
 		
 	@PreUpdate
 	@PrePersist
