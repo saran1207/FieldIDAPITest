@@ -3,11 +3,17 @@ package com.n4systems.services;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.tenant.TenantByNameLoader;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserByEmailLoader;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
+import com.n4systems.persistence.loaders.TenantFilteredListLoader;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Simple finder for Tenants and PrimaryOrgs
@@ -30,6 +36,16 @@ public class TenantFinder {
     public Tenant findTenant(String name) {
         name = name != null ? name.toLowerCase() : null;
         return new TenantByNameLoader().setTenantName(name).load();
+    }
+    
+    public List<Tenant> findTenantsByEmail(String email){
+    	List<Tenant> tenants = new ArrayList<Tenant>();
+    	email = email != null ? email.toLowerCase() : null;
+    	List<User> users= new UserByEmailLoader(new OpenSecurityFilter()).setEmail(email).load();
+    	for (User user : users){
+    		tenants.add(user.getTenant());
+    	}
+    	return tenants;
     }
 
     public PrimaryOrg findPrimaryOrg(Long tenantId) {

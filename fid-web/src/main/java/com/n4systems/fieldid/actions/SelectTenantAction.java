@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -9,14 +11,17 @@ import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitiali
 import com.n4systems.fieldid.actions.helpers.TenantContextInitializer;
 import com.n4systems.fieldid.actions.helpers.UnbrandedDomainException;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.n4systems.model.Tenant;
+import com.n4systems.services.TenantFinder;
 
 public class SelectTenantAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(SelectTenantAction.class);
 	
 	private String companyID;
+	private String email;
 	private boolean tenantNotFound = false;
+	private List<Tenant> tenants;
 	
 	public SelectTenantAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -32,13 +37,19 @@ public class SelectTenantAction extends AbstractAction {
 	
 	public String doCreate() {
 		try {
-			loadCompany();
-			setRedirectUrl(getLoginUrl());
-			return REDIRECT_TO_URL;
+			if (!companyID.equals("")) {
+				loadCompany();
+				setRedirectUrl(getLoginUrl());
+				return REDIRECT_TO_URL;
+			} else if (email != null) {
+				loadTenantsByEmail();
+				return SUCCESS;
+			}
+
 		} catch (Exception e) {
 			logger.debug(getLogLinePrefix() + "Error loading the tenant company", e);
 		}
-		
+
 		addActionErrorText("error.company_does_not_exists");
 		return INPUT;
 	}
@@ -52,7 +63,6 @@ public class SelectTenantAction extends AbstractAction {
 		return companyID;
 	}
 		
-	@RequiredStringValidator(message="", key="error.company_id_required")
 	public void setCompanyID(String companyID) {
 		this.companyID = companyID;
 	}
@@ -64,9 +74,21 @@ public class SelectTenantAction extends AbstractAction {
 	public void setTenantNotFound(boolean tenantNotFound) {
 		this.tenantNotFound = tenantNotFound;
 	}
-	
-	
-	
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	private void loadTenantsByEmail() {
+		tenants = TenantFinder.getInstance().findTenantsByEmail(email);
+	}
+	
+	public List<Tenant> getTenants(){
+		return tenants;
+	}
 		
 }

@@ -107,6 +107,7 @@ import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.tenant.PrimaryOrgsWithNameLikeLoader;
 import com.n4systems.model.tenant.SetupDataLastModDatesLoader;
 import com.n4systems.model.user.EmployeePaginatedLoader;
+import com.n4systems.model.user.UserByEmailLoader;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.model.user.UserListableLoader;
@@ -571,6 +572,10 @@ public class LoaderFactory implements Serializable {
 
 	public UserByFullNameLoader createUserByFullNameLoader() {
 		return injectLoader(new UserByFullNameLoader(filter));
+	}
+	
+	public UserByEmailLoader createUserByEmailLoader(){
+		return injectLoader(new UserByEmailLoader(filter));
 	}
 
 	public UserFilteredLoader createUserFilteredLoader() {

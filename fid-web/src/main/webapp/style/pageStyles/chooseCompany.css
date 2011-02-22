@@ -1,0 +1,52 @@
+#pageContent{
+		border-style: none;
+		background: transparent !important;
+	}
+	
+#tenantsContainer{
+	border: 4px solid #BBB;
+	width: 750px;
+}
+
+.titleBlock p{
+	font-size: 14px;
+	}
+
+.labelRightMargin{
+	margin-right: 150px;
+	}
+
+
+#tenantList, .titleBlock{
+	padding: 15px;
+}
+
+#tenantList li{
+	height: 30px;
+	padding: 10px 0;
+	border-bottom: 1px solid #BBB;
+}
+
+#tenantList .headingLabels{
+	border-style: none;
+	height: 15px;
+	}
+
+#tenantList li label{
+	font-size: 13px;
+	}
+	
+div.linkContainer{
+	float:left;
+	clear: left;
+	font-size: 13px;
+	width: 250px;
+}
+
+li input{
+	float:left;
+	padding: 2.5px;
+	font-size: 13px;
+	clear: right;
+}
+
