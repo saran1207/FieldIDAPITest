@@ -26,7 +26,7 @@ ${action.setPageType('asset', 'show')!}
 		</#if>
 	</div>
 	<div class="viewSection">
-		<h2><@s.text name="label.activity"/></h2> 
+		<h2><@s.text name="label.activity_feed"/></h2> 
 	</div>
 	<div class="leftViewSection">
 		<h3 class="subheading"><@s.text name="label.lasteventperformed"/></h3>
