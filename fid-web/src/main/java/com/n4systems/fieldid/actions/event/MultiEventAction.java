@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.event;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -11,8 +12,12 @@ import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.CommonEventTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonEventTypeHandler;
 import com.n4systems.model.AssetStatus;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.Status;
 import com.n4systems.model.eventtype.CommonAssetTypeDatabaseLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -271,4 +276,23 @@ public class MultiEventAction extends AbstractCrud {
     public void setSearchContainerKey(String searchContainerKey) {
         this.searchContainerKey = searchContainerKey;
     }
+    
+    public boolean hasAtLeastOneResultSettingCriteria() {
+        if (event.getEventForm() == null)
+            return false;
+
+        for (CriteriaSection section : event.getEventForm().getSections()) {
+            for (Criteria criteria : section.getCriteria()) {
+                if (criteria instanceof OneClickCriteria && ((OneClickCriteria)criteria).isPrincipal()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    
+	public List<Status> getResults() {
+		return Arrays.asList(Status.values());
+	}
 }

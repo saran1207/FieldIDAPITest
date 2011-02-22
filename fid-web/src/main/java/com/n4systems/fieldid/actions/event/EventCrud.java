@@ -132,7 +132,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private User assignedTo;
 	private boolean assignToSomeone = false;
 
-    private String overrideResult;
 	private boolean isEditing;
 	
 	public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
@@ -411,7 +410,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 						.withUploadedImages(getUploadedFiles());
 				
 				createEventParameterBuilder.addSchedules(createEventScheduleBundles());
-                Status eventStatus = (overrideResult != null && !"auto".equals(overrideResult)) ? Status.valueOf(overrideResult) : null;
+                Status eventStatus = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? Status.valueOf(modifiableEvent.getOverrideResult()) : null;
                	event.setStatus(eventStatus);
 
 				event = eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());
@@ -1069,14 +1068,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
     }
 
     public String getOverrideResult() {
-        return overrideResult;
+        return modifiableEvent.getOverrideResult();
     }
 
     public void setOverrideResult(String overrideResult) {
-        this.overrideResult = overrideResult;
-    }
-
-    public void statusFor(String statusStr) {
-
+        this.modifiableEvent.setOverrideResult(overrideResult);
     }
 }

@@ -47,8 +47,8 @@
 	<#assign identifier="eventForm">
 	<#include "/templates/html/eventCrud/_event.ftl" />
 	
+	<#include "/templates/html/eventCrud/_result.ftl" />
 	
-
 	<h2><@s.text name="label.posteventinformation"/></h2>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.comments"/></label>

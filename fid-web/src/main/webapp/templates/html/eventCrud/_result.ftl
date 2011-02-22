@@ -2,7 +2,7 @@
 <div  class="infoSet">
 	<label class="label" for="overrideResult"><@s.text name="label.result"/></label>
 	<span class="fieldHolder">
-        <select id="overrideResult" name="overrideResult">
+        <select id="overrideResult" name="modifiableEvent.overrideResult">
             <#if action.hasAtLeastOneResultSettingCriteria()>
                 <option value="auto"><@s.text name="label.set_from_criteria"/></option>
             </#if>

@@ -24,6 +24,8 @@ public class EventWebModel implements UserDateFormatValidator {
 	private Date utcDatePerformed;
 	private String datePerformed;
 	
+	private String overrideResult;
+	
 	public EventWebModel(OwnerPicker ownerPicker, SessionUserDateConverter dateConverter, LoaderFactoryProvider loaderFactoryProvider) {
 		this.ownerPicker = ownerPicker;
 		this.dateConverter = dateConverter;
@@ -75,5 +77,13 @@ public class EventWebModel implements UserDateFormatValidator {
 
 	public boolean isValidDate(String date, boolean usingTime) {
 		return dateConverter.isValidDate(date, usingTime);
+	}
+
+	public String getOverrideResult() {
+		return overrideResult;
+	}
+
+	public void setOverrideResult(String overrideResult) {
+		this.overrideResult = overrideResult;
 	}
 }
