@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -18,19 +19,27 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
+import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
+import com.n4systems.model.orgs.secondaryorg.CustomerOrgByOwnerListLoader;
 import com.n4systems.model.orgs.secondaryorg.SecondaryOrgArchiver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserByOwnerListLoader;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.OrganizationalUnitRemovalSummary;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
@@ -45,7 +54,8 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	private static final Logger logger = Logger.getLogger(OrganizationalCrud.class);
 	private static final long serialVersionUID = 1L;
 	
-	private InternalOrg organization; 
+	private InternalOrg organization;
+	private OrganizationalUnitRemovalSummary removalSummary;
 	private Pager<SecondaryOrg> page;
 
 	private File certImage;
@@ -145,9 +155,33 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 	}
 	
 	public String doConfirmArchive(){
+		removalSummary = new OrganizationalUnitRemovalSummary(organization);
+		updateRemovalSummary();
 		return SUCCESS;
 	}
 	
+	private void updateRemovalSummary() {
+		removalSummary.addUsers(getUsersByOwner(organization).size());
+		
+		List<CustomerOrg> customers = new CustomerOrgByOwnerListLoader(getSecurityFilter()).setOwner(organization).load();
+		removalSummary.setCustomersToArchive(customers.size());
+		
+		for (CustomerOrg customer: customers) {
+			removalSummary.addUsers(getUsersByOwner(customer).size());
+		
+			List<DivisionOrg> divisions = new DivisionOrgByCustomerListLoader(getSecurityFilter()).setCustomer(customer).load();
+			removalSummary.addDivisions(divisions.size());
+
+			for (DivisionOrg division: divisions) {
+				removalSummary.addUsers(getUsersByOwner(division).size());
+			}
+		}
+	}
+
+	private List<User> getUsersByOwner(BaseOrg owner) {
+		return new UserByOwnerListLoader(getSecurityFilter()).owner(owner).load();
+	}
+
 	public String doArchive() {
 		return activateSecondaryOrg(false);
 	}
@@ -355,5 +389,9 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 			region = country.getRegionById(regionId);
 			organization.setDefaultTimeZone(country.getFullName(region));
 		}
+	}
+	
+	public OrganizationalUnitRemovalSummary getRemovalSummary() {
+		return removalSummary;
 	}
 }
