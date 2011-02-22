@@ -25,11 +25,12 @@ ${action.setPageType('organization','list')!}
 		</div>
 	</div>
 	<div class="formAction">
-		<@s.url id="cancelUrl" action="organizations"/>
-		<@s.submit key="label.cancel" onclick="return redirect('${cancelUrl}');" theme="fieldid"/>
-		
 		<@s.url id="archiveUrl" action="organizationArchive" uniqueID="${organization.id}"/>
+		<@s.url id="cancelUrl" action="organizations"/>
+		
 		<@s.submit key="label.archive" onclick="return redirect('${archiveUrl}');" theme="fieldid" />
+		<@s.text name="label.or"/>
+		<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
 	</div>
 </div>
 
