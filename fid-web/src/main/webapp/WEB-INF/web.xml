@@ -3,10 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<!-- Struts 2.0 -->
-    <filter>
-        <filter-name>session-in-view</filter-name>
-        <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
-    </filter>
 	<filter>
 		<filter-name>struts-cleanup</filter-name>
 		<filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
@@ -40,10 +36,6 @@
 		<url-pattern>*.action</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>session-in-view</filter-name>
-		<url-pattern>*.action</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>*.action</url-pattern>
 	</filter-mapping>
@@ -62,11 +54,6 @@
 	<listener>
 		<listener-class>com.n4systems.fieldid.servlets.UnexportRMIOnShutdownListener</listener-class>
 	</listener>
-    <listener>
-      <listener-class>
-          org.springframework.web.context.request.RequestContextListener
-      </listener-class>
-    </listener>
 	<!-- end:Struts 2.0 -->
 
 	<!-- end:Log4J -->

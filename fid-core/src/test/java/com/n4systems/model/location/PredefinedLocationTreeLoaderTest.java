@@ -29,7 +29,7 @@ public class PredefinedLocationTreeLoaderTest {
 		Transaction transaction = new TestingTransaction();
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load()).andReturn(EMPTY_LIST);
+		expect(loader.load(transaction)).andReturn(EMPTY_LIST);
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -45,7 +45,7 @@ public class PredefinedLocationTreeLoaderTest {
 		Transaction transaction = new TestingTransaction();
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load()).andReturn(ImmutableList.of(aLevelOneLocation(), aLevelOneLocation()));
+		expect(loader.load(transaction)).andReturn(ImmutableList.of(aLevelOneLocation(), aLevelOneLocation()));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -66,7 +66,7 @@ public class PredefinedLocationTreeLoaderTest {
 		
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load()).andReturn(ImmutableList.of(aLevelOneLocation, aLevelTwoLocation, aLevelThreeLocation));
+		expect(loader.load(transaction)).andReturn(ImmutableList.of(aLevelOneLocation, aLevelTwoLocation, aLevelThreeLocation));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -89,7 +89,7 @@ public class PredefinedLocationTreeLoaderTest {
 		PredefinedLocation aForthLevelTwoLocation = aLocationWithParent(aSecondeLevelOneLocation);
 		
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load()).andReturn(ImmutableList.of(aLevelOneLocation, aSecondeLevelOneLocation,  aLevelTwoLocation, aSecondLevelTwoLocation, aThirdLevelTwoLocation, aForthLevelTwoLocation));
+		expect(loader.load(transaction)).andReturn(ImmutableList.of(aLevelOneLocation, aSecondeLevelOneLocation,  aLevelTwoLocation, aSecondLevelTwoLocation, aThirdLevelTwoLocation, aForthLevelTwoLocation));
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);
@@ -104,7 +104,7 @@ public class PredefinedLocationTreeLoaderTest {
 	public void should_use_loader_to_get_list_of_predefined_locations_in_parent_first_order() throws Exception {
 		Transaction transaction = new TestingTransaction();
 		PredefinedLocationListLoader loader = createMock(PredefinedLocationListLoader.class);
-		expect(loader.load()).andReturn(EMPTY_LIST);
+		expect(loader.load(transaction)).andReturn(EMPTY_LIST);
 		replay(loader);
 		
 		PredefinedLocationTreeLoader sut = new PredefinedLocationTreeLoader(loader);

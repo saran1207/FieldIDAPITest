@@ -103,8 +103,11 @@ public abstract class FieldIDTestCase extends DBTestCase {
 	}
 
 	protected static void shutDownSelenium(FieldIdSelenium selenium) {
-		selenium.close();
-		selenium.stop();
+        try {
+		    selenium.close();
+        } finally {
+            selenium.stop();
+        }
 	}
 
 	private void setWebBrowserSpeed() {

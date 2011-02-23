@@ -9,6 +9,7 @@ import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.eventtype.EventFrequencySaver;
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
@@ -30,6 +31,8 @@ import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
 public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final long serialVersionUID = 1L;
+
+    private static final Logger logger = Logger.getLogger(AssetTypeScheduleCrud.class);
 
 	private Long assetTypeId;
 	private Long eventTypeId;
@@ -102,7 +105,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 
 			addFlashMessageText("message.schdeuledeleted");
 		} catch (Exception e) {
-
+            logger.error("Error deleting asset type schedule", e);
 			addActionErrorText("error.failedtodelete");
 			transaction.rollback();
 			return ERROR;
@@ -124,7 +127,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 			schedulesToRemove.addAll(getLoaderFactory().createEventFrequenciesListLoader().setEventTypeId(eventTypeId).setAssetTypeId(assetTypeId).load(transaction));
 		} else {
 			schedulesToRemove.add(new QueryBuilder<AssetTypeSchedule>(AssetTypeSchedule.class, new OpenSecurityFilter()).addSimpleWhere("id", schedule.getId()).getSingleResult(
-					transaction.getEntityManager()));
+                    transaction.getEntityManager()));
 		}
 
 		return schedulesToRemove;

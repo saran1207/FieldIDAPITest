@@ -2,85 +2,92 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.ButtonGroupPage;
 
-public class ButtonGroupTest extends FieldIDTestCase {
+import java.util.List;
 
-	ButtonGroupPage buttonGroupPage;
-	String BUTTON_NAME = "New Button";
-	String NEW_NAME = "New Name";
+public class ButtonGroupTest extends PageNavigatingTestCase<ButtonGroupPage> {
 
-	@Before
-	public void setup() {
-		buttonGroupPage = startAsCompany("test1").systemLogin().clickSetupLink().clickManageEventTypes().clickButtonGroups();
-	}
+    @Override
+    protected ButtonGroupPage navigateToPage() {
+        return startAsCompany("test1").systemLogin().clickSetupLink().clickManageEventTypes().clickButtonGroups();
+    }
 
-	@Test
+    @Test
 	public void can_add_new_button_group() {
-		addNewGroup();
-		buttonGroupPage.clickSave();
-		assertTrue("Couldn't add new group", selenium.isElementPresent("//form[@id='stateSet_0_form']"));
+		addNewGroupAndButton("Test Group", "New Button");
+		page.clickSave();
+        List<String> buttonGroupNames = page.getButtonGroupNames();
+        assertTrue("Should find newly added group in list", buttonGroupNames.contains("Test Group"));
 	}
 
 	@Test
 	public void can_rename_button_group() {
-		NEW_NAME = "New Group Name";
-		addNewGroup();
-		buttonGroupPage.renameFirstGroup(NEW_NAME);
-		buttonGroupPage.clickSave();
-		assertEquals(NEW_NAME, selenium.getValue("//input[@id='stateSet_0_form_name']"));
+		String groupName = "Test Group";
+		int addedGroupNumber = addNewGroupAndButton(groupName, "New Button");
+		page.renameGroup(addedGroupNumber, "New Test Group");
+		page.clickSave();
+        List<String> buttonGroupNames = page.getButtonGroupNames();
+        assertTrue("Should find newly renamed group in list", buttonGroupNames.contains("New Test Group"));
+        assertFalse("Should not find old named group in list", buttonGroupNames.contains("Test Group"));
 	}
 
 	@Test
 	public void can_retire_a_button() {
-		NEW_NAME = "New Button";
-		addNewGroup();
-		buttonGroupPage.addAButton(1, NEW_NAME);
-		buttonGroupPage.clickSave();
-		buttonGroupPage.retireFirstButton();
-		buttonGroupPage.clickSave();
-		assertTrue("Button wasn't retired properly", selenium.isElementPresent("//li[@id='buttonState__0_0']/div[2][.='" + NEW_NAME + "']"));
+        String buttonName = "New Button";
+		int newGroupIndex = addNewGroupAndButton("New Group", buttonName);
+		int newButtonIndex = page.addAButton(newGroupIndex, "Another new button");
+		page.clickSave();
+
+        assertTrue(page.getButtonNamesFromGroup(newGroupIndex).contains("Another new button"));
+        page.retireButton(newGroupIndex, newButtonIndex);
+		page.clickSave();
+        assertFalse(page.getButtonNamesFromGroup(newGroupIndex).contains("Another new button"));
 	}
 
 	@Test
 	public void can_change_button_indication() {
-		addNewGroup();
-		buttonGroupPage.changeButtonIndicationToFail(0);
-		buttonGroupPage.clickSave();
-		assertTrue("Button indication wasn't changed", selenium.isElementPresent("//li[@id='buttonState__0_0']/div[3][contains(text(), 'Fail')]"));
+		int newGroupIndex = addNewGroupAndButton("New Group", "New Button");
+		page.changeButtonIndicationToFail(newGroupIndex, 1);
+		page.clickSave();
+		assertEquals("Button indication wasn't changed", "Fail", page.getIndicationFor(newGroupIndex, 1));
 	}
 
 	@Test
 	public void should_not_allow_blank_name() {
-		addNewGroup();
-		buttonGroupPage.renameFirstGroup("");
-		buttonGroupPage.clickSave();
-		assertTrue("Error message did not appear.", selenium.isElementPresent("//div[@id='formErrors']/div/ul/li[1]/span[contains(text(), 'Name is a required field.')]"));
+		int addedGroupIndex = addNewGroupAndButton("New Group", "New Button");
+		page.renameGroup(addedGroupIndex, "");
+		page.clickSave();
+
+        assertTrue("Error message did not appear.", page.getFormErrorMessages().contains("Name is a required field."));
 	}
 
 	@Test
 	public void should_not_allow_blank_button_label() {
-		addNewGroup();
-		buttonGroupPage.addAButton(0, "");
-		buttonGroupPage.clickSave();
-		assertTrue("Error message did not appear.", selenium.isElementPresent("//div[@id='formErrors']/div/ul/li[1]/span[contains(text(), 'All buttons require a label.')]"));
+		int addedGroupIndex = addNewGroupAndButton("New Group", "New Button");
+		page.addAButton(addedGroupIndex, "");
+		page.clickSave();
+
+        List<String> formErrorMessages = page.getFormErrorMessages();
+        assertTrue("Should have a form error message!", formErrorMessages.size() > 0);
+        assertTrue("Should contain the correct error", formErrorMessages.contains("All buttons require a label."));
 	}
 
 	@Test
 	public void should_not_allow_empty_group() {
-		addNewGroup();
-		buttonGroupPage.clickSave();
-		buttonGroupPage.retireFirstButton();
-		buttonGroupPage.clickSave();
-		assertTrue("Error message did not appear.", selenium.isElementPresent("//div[@id='formErrors']/div/ul/li[1]/span[contains(text(), 'There must be at least one button in the button group.')]"));
+		int newGroupIndex = addNewGroupAndButton("New Group", "New Button");
+		page.clickSave();
+		page.retireButton(newGroupIndex, 1);
+		page.clickSave();
+        assertTrue("Should contain the correct error", page.getFormErrorMessages().contains("There must be at least one button in the button group."));
 	}
 
-	private void addNewGroup() {
-		buttonGroupPage.addNewButtonGroup();
-		buttonGroupPage.addAButton(0, BUTTON_NAME);
+	private int addNewGroupAndButton(String groupName, String buttonName) {
+		int newButtonGroupRow = page.addNewButtonGroup(groupName);
+		page.addAButton(newButtonGroupRow, buttonName);
+        return newButtonGroupRow;
 	}
 }

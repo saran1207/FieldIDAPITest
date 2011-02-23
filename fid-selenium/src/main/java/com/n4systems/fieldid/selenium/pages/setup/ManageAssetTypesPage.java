@@ -196,11 +196,6 @@ public class ManageAssetTypesPage extends FieldIDPage {
 	
 	public void removeEventFrequencyForType(String eventType) {
 		selenium.click("//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//a[.='Remove']");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         waitForAjax();
 	}
 	
