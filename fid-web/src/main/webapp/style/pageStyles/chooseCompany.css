@@ -1,6 +1,6 @@
 #pageContent{
-		border-style: none;
-		background: transparent !important;
+	border-style: none;
+	background: transparent !important;
 	}
 	
 #tenantsContainer{
@@ -8,23 +8,31 @@
 	width: 750px;
 }
 
+.titleBlock{
+	margin-bottom: 0;
+	}
+
 .titleBlock p{
 	font-size: 14px;
+	padding-top: 10px;
 	}
 
 .labelRightMargin{
 	margin-right: 150px;
+}
+
+ #tenantsContainer .titleBlock{
+	padding: 15px 15px 0 15px;	
 	}
 
-
-#tenantList, .titleBlock{
+#tenantList{
 	padding: 15px;
 }
 
 #tenantList li{
 	height: 30px;
 	padding: 10px 0;
-	border-bottom: 1px solid #BBB;
+	border-bottom: 1px solid #E2E2E2;
 }
 
 #tenantList .headingLabels{
@@ -43,10 +51,13 @@ div.linkContainer{
 	width: 250px;
 }
 
+.linkContainer a{
+	color: #00C;
+	}
+
 li input{
 	float:left;
 	padding: 2.5px;
 	font-size: 13px;
 	clear: right;
 }
-

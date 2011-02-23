@@ -43,7 +43,9 @@ public class TenantFinder {
     	email = email != null ? email.toLowerCase() : null;
     	List<User> users= new UserByEmailLoader(new OpenSecurityFilter()).setEmail(email).load();
     	for (User user : users){
-    		tenants.add(user.getTenant());
+    		if (!tenants.contains(user.getTenant())){
+    			tenants.add(user.getTenant());
+    		}
     	}
     	return tenants;
     }

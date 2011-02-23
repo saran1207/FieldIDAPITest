@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -21,7 +22,7 @@ public class SelectTenantAction extends AbstractAction {
 	private String companyID;
 	private String email;
 	private boolean tenantNotFound = false;
-	private List<Tenant> tenants;
+	private List<Tenant> tenants = new ArrayList<Tenant>();
 	
 	public SelectTenantAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -34,23 +35,29 @@ public class SelectTenantAction extends AbstractAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	public String doCreate() {
 		try {
 			if (!companyID.equals("")) {
 				loadCompany();
 				setRedirectUrl(getLoginUrl());
 				return REDIRECT_TO_URL;
-			} else if (email != null) {
+			} else if (!email.equals("")) {
 				loadTenantsByEmail();
-				return SUCCESS;
+				if (!tenants.isEmpty()){
+					return SUCCESS;
+				}
 			}
 
 		} catch (Exception e) {
 			logger.debug(getLogLinePrefix() + "Error loading the tenant company", e);
 		}
 
-		addActionErrorText("error.company_does_not_exists");
+		if (!email.equals("") && tenants.isEmpty()) {
+			addActionErrorText("error.company_does_with_email_does_not_exist");
+		} else {
+			addActionErrorText("error.company_does_not_exists");
+		}
 		return INPUT;
 	}
 
@@ -90,5 +97,4 @@ public class SelectTenantAction extends AbstractAction {
 	public List<Tenant> getTenants(){
 		return tenants;
 	}
-		
 }
