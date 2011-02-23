@@ -19,6 +19,10 @@ a, a:hover, a:visited, a:active {
 	display: inline;
 }
 
+#searchByEmail .label, #searchById .label{
+	margin-bottom: 5px;
+	}
+
 #searchById .prefix{
 	padding-right: 5px;
 	}
@@ -27,8 +31,7 @@ a, a:hover, a:visited, a:active {
 	padding-left: 5px;
 	}
 
-#searchById .fieldHolder{
-	padding-top: 5px;
+#searchByEmail .fieldHolder, #searchById .fieldHolder{
 	display: inline;
 	}
 

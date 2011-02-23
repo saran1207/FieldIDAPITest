@@ -38,27 +38,31 @@ public class SelectTenantAction extends AbstractAction {
 
 	public String doCreate() {
 		try {
-			if (!companyID.equals("")) {
-				loadCompany();
-				setRedirectUrl(getLoginUrl());
-				return REDIRECT_TO_URL;
-			} else if (!email.equals("")) {
-				loadTenantsByEmail();
-				if (!tenants.isEmpty()){
-					return SUCCESS;
-				}
-			}
-
+			loadCompany();
+			setRedirectUrl(getLoginUrl());
+			
+			return REDIRECT_TO_URL;
 		} catch (Exception e) {
 			logger.debug(getLogLinePrefix() + "Error loading the tenant company", e);
 		}
 
-		if (!email.equals("") && tenants.isEmpty()) {
-			addActionErrorText("error.company_does_with_email_does_not_exist");
-		} else {
-			addActionErrorText("error.company_does_not_exists");
-		}
+		addActionErrorText("error.company_does_not_exists");
 		return INPUT;
+	}
+
+	public String doFind() {
+		try {
+			loadTenantsByEmail();
+					
+		} catch (Exception e) {
+			logger.debug(getLogLinePrefix() + "Error loading the tenant company", e);
+		}
+
+		if (tenants.isEmpty()) {
+			addActionErrorText("error.company_does_with_email_does_not_exist");
+			return INPUT;
+		}
+		return SUCCESS;
 	}
 
 	private void loadCompany() throws NoValidTenantSelectedException, UnbrandedDomainException {

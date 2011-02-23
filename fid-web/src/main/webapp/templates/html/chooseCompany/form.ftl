@@ -20,7 +20,8 @@
 			<@s.submit key="label.login"/>
 		</div>
 	</div>
-	
+	</@s.form>
+	<@s.form id="emailForm" action="findCompany" theme="fieldid" cssClass="minForm" >
 	<div id="searchByEmail">
 		<div class="titleBlock">	
 			<h1><@s.text name="title.i_forgot_my_site"/></h1>
