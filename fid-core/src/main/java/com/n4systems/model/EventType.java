@@ -216,7 +216,6 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	private void archiveName() {
 		if (isArchived() && (archivedName == null || archivedName.length() == 0)) {
 			archivedName = name;
-			name = UUID.randomUUID().toString();
 		}
 	}
 
