@@ -13,6 +13,7 @@ import com.n4systems.model.TextFieldCriteriaResult;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
@@ -187,6 +188,9 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             stateView.setType("textfield");
                         } else if (result instanceof SelectCriteriaResult) {
                             stateView.setState(((SelectCriteriaResult) result).getValue());
+                            stateView.setType("select");
+                        } else if (result instanceof ComboBoxCriteriaResult) {
+                            stateView.setState(((ComboBoxCriteriaResult) result).getValue());
                             stateView.setType("select");
                         }
                         criteriaViews.add(stateView);

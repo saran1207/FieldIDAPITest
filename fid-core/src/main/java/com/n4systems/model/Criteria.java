@@ -101,5 +101,9 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
     public boolean isSelectCriteria() {
         return false;
     }
+    
+    public boolean isComboBoxCriteria() {
+    	return false;
+    }
 
 }

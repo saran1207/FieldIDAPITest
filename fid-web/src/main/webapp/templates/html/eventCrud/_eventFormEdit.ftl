@@ -31,6 +31,8 @@
                 <#include '_textFieldCriteriaResultEdit.ftl'>
             <#elseif criteria.selectCriteria>
                 <#include '_selectCriteriaResultEdit.ftl'>
+            <#elseif criteria.comboBoxCriteria>
+                <#include '_comboBoxCriteriaResultEdit.ftl'>
             </#if>
 
 			<span class="recDefButtons">

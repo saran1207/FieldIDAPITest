@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform.util;
 
+import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.SelectCriteria;
@@ -22,6 +23,8 @@ public class CriteriaCopyUtil {
             newCriteria = copyTextFieldCriteria((TextFieldCriteria) criteria);
         } else if (criteria instanceof SelectCriteria){
             newCriteria = copySelectCriteria((SelectCriteria) criteria);
+        } else if (criteria instanceof ComboBoxCriteria) {
+        	newCriteria = copyComboBoxCriteria((ComboBoxCriteria) criteria);
         }
         
         copyCommonFields(criteria, newCriteria, existingCriteria);
@@ -52,6 +55,13 @@ public class CriteriaCopyUtil {
 		selectCriteria.setOptions(new ArrayList<String>(criteria.getOptions()));
 		return selectCriteria;
 	}
+    
+	private Criteria copyComboBoxCriteria(ComboBoxCriteria criteria) {
+		ComboBoxCriteria comboBoxCriteria = new ComboBoxCriteria();
+		comboBoxCriteria.setOptions(new ArrayList<String>(criteria.getOptions()));
+		return comboBoxCriteria;
+	}
+
 
     private Criteria copyOneClickCriteria(OneClickCriteria oneClickCriteria) {
         OneClickCriteria criteria = new OneClickCriteria();

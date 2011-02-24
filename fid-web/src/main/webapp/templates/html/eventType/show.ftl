@@ -96,6 +96,9 @@ ${action.setPageType('event_type', 'show')!}
                                             <#if criteria.textFieldCriteria>
                                                 <@s.text name="label.textfield"/>
                                             </#if>
+                                            <#if criteria.comboBoxCriteria>
+                                                <@s.text name="label.combobox"/>
+                                            </#if>
                                         </td>
                                         <td>
                                             <#assign sectionIdx=section_index/>

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
@@ -80,6 +81,8 @@ public class EventFormHelper {
             return "textfield";
         } else if (criteria instanceof SelectCriteria) {
             return "select";
+        } else if (criteria instanceof ComboBoxCriteria) {
+            return "combobox";
         } else {
             throw new RuntimeException("Unknown criteria type: " + criteria.getClass());
         }

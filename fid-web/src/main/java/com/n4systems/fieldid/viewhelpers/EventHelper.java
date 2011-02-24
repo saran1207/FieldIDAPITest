@@ -11,6 +11,7 @@ import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
@@ -159,9 +160,14 @@ public class EventHelper {
                 ((TextFieldCriteriaResult)realResult).setValue(formResult.getTextValue());
             } else if (realResult instanceof SelectCriteriaResult) {
                 ((SelectCriteriaResult)realResult).setValue(formResult.getTextValue());
+            } else if (realResult instanceof ComboBoxCriteriaResult) {
+            	String textValue = formResult.getTextValue();
+            	if(textValue.startsWith("!")) {
+            		textValue = textValue.substring(1); 
+            	}           		
+            	((ComboBoxCriteriaResult)realResult).setValue(textValue);
             }
 
-			
 			// and attach back onto the event
 			event.getResults().add(realResult);
 		}

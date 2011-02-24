@@ -543,3 +543,13 @@ p.treeHeading{
     margin-top:6px;
     width: 150px;
 }
+
+.crudForm .infoSet select.comboBoxCriteria {
+    margin-top:6px;
+    width: 150px;
+}
+
+.crudForm .infoSet input.comboBoxCriteria {
+    margin-top:6px;
+    width: 150px;
+}

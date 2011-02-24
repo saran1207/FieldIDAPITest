@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.event.viewmodel;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
@@ -8,8 +9,6 @@ import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
-import com.n4systems.persistence.loaders.Loader;
 
 public class CriteriaResultWebModelConverter {
 
@@ -24,6 +23,9 @@ public class CriteriaResultWebModelConverter {
         } else if (result instanceof SelectCriteriaResult) {
             webModel.setType("select");
             webModel.setTextValue(((SelectCriteriaResult)result).getValue());
+        } else if (result instanceof ComboBoxCriteriaResult) {
+            webModel.setType("combobox");
+            webModel.setTextValue(((ComboBoxCriteriaResult)result).getValue());
         }
 
         webModel.setDeficiencies(result.getDeficiencies());
@@ -47,6 +49,14 @@ public class CriteriaResultWebModelConverter {
         } else if ("select".equals(webModel.getType())) {
             SelectCriteriaResult result = new SelectCriteriaResult();
             result.setValue(webModel.getTextValue());
+            criteriaResult = result;
+        } else if ("combobox".equals(webModel.getType())) {
+            ComboBoxCriteriaResult result = new ComboBoxCriteriaResult();
+            String textValue = webModel.getTextValue();
+            if(textValue.startsWith("!")) {
+            	textValue = textValue.substring(1);
+            } 
+            result.setValue(textValue);
             criteriaResult = result;
         } else {
             throw new RuntimeException("Bad type for web model: " + webModel.getType());

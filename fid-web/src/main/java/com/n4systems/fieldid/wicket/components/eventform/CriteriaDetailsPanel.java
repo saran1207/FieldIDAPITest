@@ -1,19 +1,22 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import com.n4systems.fieldid.wicket.components.eventform.details.OneClickDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.SelectDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.TextFieldDetailsPanel;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.TextFieldCriteria;
+import java.util.List;
+
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.List;
+import com.n4systems.fieldid.wicket.components.eventform.details.ComboBoxDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.OneClickDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.SelectDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.TextFieldDetailsPanel;
+import com.n4systems.model.ComboBoxCriteria;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.StateSet;
+import com.n4systems.model.TextFieldCriteria;
 
 public class CriteriaDetailsPanel extends Panel {
 
@@ -50,6 +53,8 @@ public class CriteriaDetailsPanel extends Panel {
             add(new TextFieldDetailsPanel("specificDetailsPanel", new Model<TextFieldCriteria>((TextFieldCriteria) criteria)));
         } else if (criteria instanceof SelectCriteria) {
         	add(new SelectDetailsPanel("specificDetailsPanel", new Model<SelectCriteria>((SelectCriteria) criteria)));
+        } else if (criteria instanceof ComboBoxCriteria) {
+        	add(new ComboBoxDetailsPanel("specificDetailsPanel", new Model<ComboBoxCriteria>((ComboBoxCriteria) criteria)));
         }
     }
 

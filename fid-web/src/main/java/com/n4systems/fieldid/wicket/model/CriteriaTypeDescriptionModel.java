@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.model;
 
+import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
@@ -23,6 +24,8 @@ public class CriteriaTypeDescriptionModel implements IModel<String> {
             return "One-Click Button";
         } else if (criteria instanceof SelectCriteria) {
             return "Select Box";
+        }else if (criteria instanceof ComboBoxCriteria) {
+            return "Combo Box";
         }
         return null;
     }

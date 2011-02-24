@@ -11,6 +11,8 @@
                 <#include '_textFieldCriteriaResultDisplay.ftl'>
             <#elseif criteriaResult.criteria.selectCriteria>
                 <#include '_selectCriteriaResultDisplay.ftl'>
+            <#elseif criteriaResult.criteria.comboBoxCriteria>
+                <#include '_comboBoxCriteriaResultDisplay.ftl'>
             </#if>
 
             <#include "../observationsCrud/observationsShow.ftl"/>

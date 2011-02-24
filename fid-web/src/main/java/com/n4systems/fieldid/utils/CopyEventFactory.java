@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
@@ -152,7 +153,11 @@ public class CopyEventFactory {
             SelectCriteriaResult selectResult = new SelectCriteriaResult();
             selectResult.setValue(((SelectCriteriaResult)oldResult).getValue());
             return selectResult;
-        } else {
+        } else if (oldResult instanceof ComboBoxCriteriaResult) {
+        	ComboBoxCriteriaResult comboboxResult = new ComboBoxCriteriaResult();
+            comboboxResult.setValue(((ComboBoxCriteriaResult)oldResult).getValue());
+            return comboboxResult;
+        }else {
             throw new RuntimeException("Don't know how to copy: " + oldResult);
         }
     }

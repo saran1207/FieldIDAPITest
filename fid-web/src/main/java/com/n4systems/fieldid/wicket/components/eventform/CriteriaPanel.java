@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
 import com.n4systems.fieldid.wicket.model.CriteriaTypeDescriptionModel;
+import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.OneClickCriteria;
@@ -123,7 +124,7 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     class CriteriaAddForm extends Form {
-        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box");
+        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box", "Combo Box");
         protected TextField<String> addTextField;
         private String criteriaName;
         private String criteriaType;
@@ -158,6 +159,8 @@ public class CriteriaPanel extends SortableListPanel {
                         criteria = new TextFieldCriteria();
                     } else if ("Select Box".equals(criteriaType)) {
                         criteria = new SelectCriteria();
+                    } else if ("Combo Box".equals(criteriaType)) {
+                        criteria = new ComboBoxCriteria();
                     }
                     
                     criteria.setDisplayText(criteriaName);
