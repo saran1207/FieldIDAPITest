@@ -336,3 +336,15 @@ input.newCriteriaSectionName {
 input.newCriteriaName {
     width: 250px;
 }
+
+div.unitOfMeasureConfiguration {
+    padding-left: 15px;
+    padding-top: 5px;
+}
+
+div.unitDescriptor {
+    padding-top: 3px;
+    display: block;
+    float: left;
+    width: 120px;
+}

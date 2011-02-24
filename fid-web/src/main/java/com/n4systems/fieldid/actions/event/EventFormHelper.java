@@ -14,6 +14,7 @@ import com.n4systems.model.EventForm;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.TextFieldCriteria;
+import com.n4systems.model.UnitOfMeasureCriteria;
 
 public class EventFormHelper {
 
@@ -83,6 +84,8 @@ public class EventFormHelper {
             return "select";
         } else if (criteria instanceof ComboBoxCriteria) {
             return "combobox";
+        } else if (criteria instanceof UnitOfMeasureCriteria) {
+            return "unitofmeasure";
         } else {
             throw new RuntimeException("Unknown criteria type: " + criteria.getClass());
         }

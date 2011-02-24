@@ -14,6 +14,9 @@ import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
+import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.UnitOfMeasureCriteria;
+import com.n4systems.model.UnitOfMeasureListLoader;
 import com.n4systems.model.stateset.StateSetLoader;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -124,7 +127,7 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     class CriteriaAddForm extends Form {
-        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box", "Combo Box");
+        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box", "Combo Box", "Unit of Measure");
         protected TextField<String> addTextField;
         private String criteriaName;
         private String criteriaType;
@@ -141,9 +144,8 @@ public class CriteriaPanel extends SortableListPanel {
                     Criteria criteria = null;
                     if ("One-Click Button".equals(criteriaType)) {
                         OneClickCriteria oneClickCriteria = new OneClickCriteria();
-                        StateSetLoader stateSetLoader = new StateSetLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
-                        List<StateSet> stateSetList =  stateSetLoader.load();
-                        if (stateSetList.isEmpty()) {
+                        StateSet stateSet = getDefaultStateSet();
+                        if (stateSet == null) {
                             error("You must configure at least one Button Group to use One-Click criteria");
                             target.addComponent(feedbackPanel);
                             return;
@@ -151,7 +153,7 @@ public class CriteriaPanel extends SortableListPanel {
                         if (previouslySelectedStateSet != null) {
                             oneClickCriteria.setStates(previouslySelectedStateSet);
                         } else {
-                            oneClickCriteria.setStates(stateSetList.get(0));
+                            oneClickCriteria.setStates(stateSet);
                         }
                         oneClickCriteria.setPrincipal(previousSetsResultValue);
                         criteria = oneClickCriteria;
@@ -161,6 +163,10 @@ public class CriteriaPanel extends SortableListPanel {
                         criteria = new SelectCriteria();
                     } else if ("Combo Box".equals(criteriaType)) {
                         criteria = new ComboBoxCriteria();
+                    } else if ("Unit of Measure".equals(criteriaType)) {
+                        UnitOfMeasureCriteria uomCriteria = new UnitOfMeasureCriteria();
+                        uomCriteria.setPrimaryUnit(getDefaultUnitOfMeasure());
+                        criteria = uomCriteria;
                     }
                     
                     criteria.setDisplayText(criteriaName);
@@ -224,5 +230,23 @@ public class CriteriaPanel extends SortableListPanel {
 
     public void setPreviousSetsResultValue(boolean setsResultValue) {
         this.previousSetsResultValue = setsResultValue;
+    }
+
+    private StateSet getDefaultStateSet() {
+        StateSetLoader stateSetLoader = new StateSetLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
+        List<StateSet> stateSetList =  stateSetLoader.load();
+        if (stateSetList.isEmpty()) {
+            return null;
+        }
+        return stateSetList.get(0);
+    }
+
+    private UnitOfMeasure getDefaultUnitOfMeasure() {
+        UnitOfMeasureListLoader uomListLoader = new UnitOfMeasureListLoader(FieldIDSession.get().getSessionUser().getSecurityFilter());
+        List<UnitOfMeasure> uoms = uomListLoader.load();
+        if (uoms.isEmpty()) {
+            return null;
+        }
+        return uoms.get(0);
     }
 }

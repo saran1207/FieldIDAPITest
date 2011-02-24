@@ -33,6 +33,8 @@
                 <#include '_selectCriteriaResultEdit.ftl'>
             <#elseif criteria.comboBoxCriteria>
                 <#include '_comboBoxCriteriaResultEdit.ftl'>
+            <#elseif criteria.unitOfMeasureCriteria>
+                <#include '_unitOfMeasureCriteriaResultEdit.ftl'>
             </#if>
 
 			<span class="recDefButtons">

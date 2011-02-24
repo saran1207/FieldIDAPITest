@@ -5,6 +5,7 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.TextFieldCriteria;
+import com.n4systems.model.UnitOfMeasureCriteria;
 import org.apache.wicket.model.IModel;
 
 public class CriteriaTypeDescriptionModel implements IModel<String> {
@@ -26,6 +27,8 @@ public class CriteriaTypeDescriptionModel implements IModel<String> {
             return "Select Box";
         }else if (criteria instanceof ComboBoxCriteria) {
             return "Combo Box";
+        } else if (criteria instanceof UnitOfMeasureCriteria) {
+            return "Unit of Measure";
         }
         return null;
     }

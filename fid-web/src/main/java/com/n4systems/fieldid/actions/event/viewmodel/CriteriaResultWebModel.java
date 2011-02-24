@@ -6,12 +6,12 @@ import com.n4systems.model.Recommendation;
 import java.util.List;
 
 public class CriteriaResultWebModel {
-
     private String type;
     private Long id;
     private Long criteriaId;
     private Long stateId;
     private String textValue;
+    private String secondaryTextValue;
     private List<Recommendation> recommendations;
     private List<Deficiency> deficiencies;
 
@@ -70,4 +70,13 @@ public class CriteriaResultWebModel {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getSecondaryTextValue() {
+        return secondaryTextValue;
+    }
+
+    public void setSecondaryTextValue(String secondaryTextValue) {
+        this.secondaryTextValue = secondaryTextValue;
+    }
+
 }

@@ -13,6 +13,8 @@
                 <#include '_selectCriteriaResultDisplay.ftl'>
             <#elseif criteriaResult.criteria.comboBoxCriteria>
                 <#include '_comboBoxCriteriaResultDisplay.ftl'>
+            <#elseif criteriaResult.criteria.unitOfMeasureCriteria>
+                <#include '_unitOfMeasureCriteriaResultDisplay.ftl'>
             </#if>
 
             <#include "../observationsCrud/observationsShow.ftl"/>

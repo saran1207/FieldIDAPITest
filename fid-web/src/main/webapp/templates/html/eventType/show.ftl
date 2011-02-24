@@ -99,6 +99,9 @@ ${action.setPageType('event_type', 'show')!}
                                             <#if criteria.comboBoxCriteria>
                                                 <@s.text name="label.combobox"/>
                                             </#if>
+                                            <#if criteria.unitOfMeasureCriteria>
+                                                <#include "_unitOfMeasureCriteria.ftl"/>
+                                            </#if>
                                         </td>
                                         <td>
                                             <#assign sectionIdx=section_index/>

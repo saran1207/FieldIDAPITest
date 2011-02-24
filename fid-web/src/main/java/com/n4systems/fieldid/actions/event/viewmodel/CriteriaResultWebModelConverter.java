@@ -9,6 +9,8 @@ import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.UnitOfMeasureCriteria;
+import com.n4systems.model.UnitOfMeasureCriteriaResult;
 
 public class CriteriaResultWebModelConverter {
 
@@ -26,6 +28,10 @@ public class CriteriaResultWebModelConverter {
         } else if (result instanceof ComboBoxCriteriaResult) {
             webModel.setType("combobox");
             webModel.setTextValue(((ComboBoxCriteriaResult)result).getValue());
+        } else if (result instanceof UnitOfMeasureCriteriaResult) {
+            webModel.setType("unitofmeasure");
+            webModel.setTextValue(((UnitOfMeasureCriteriaResult)result).getPrimaryValue());
+            webModel.setSecondaryTextValue(((UnitOfMeasureCriteriaResult)result).getSecondaryValue());
         }
 
         webModel.setDeficiencies(result.getDeficiencies());
@@ -57,6 +63,11 @@ public class CriteriaResultWebModelConverter {
             	textValue = textValue.substring(1);
             } 
             result.setValue(textValue);
+            criteriaResult = result;
+        } else if ("unitofmeasure".equals(webModel.getType())) {
+            UnitOfMeasureCriteriaResult result = new UnitOfMeasureCriteriaResult();
+            result.setPrimaryValue(webModel.getTextValue());
+            result.setSecondaryValue(webModel.getSecondaryTextValue());
             criteriaResult = result;
         } else {
             throw new RuntimeException("Bad type for web model: " + webModel.getType());

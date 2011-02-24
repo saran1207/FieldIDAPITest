@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.eventform;
 
 import java.util.List;
 
+import com.n4systems.fieldid.wicket.components.eventform.details.UnitOfMeasureDetailsPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -17,6 +18,7 @@ import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
+import com.n4systems.model.UnitOfMeasureCriteria;
 
 public class CriteriaDetailsPanel extends Panel {
 
@@ -55,6 +57,8 @@ public class CriteriaDetailsPanel extends Panel {
         	add(new SelectDetailsPanel("specificDetailsPanel", new Model<SelectCriteria>((SelectCriteria) criteria)));
         } else if (criteria instanceof ComboBoxCriteria) {
         	add(new ComboBoxDetailsPanel("specificDetailsPanel", new Model<ComboBoxCriteria>((ComboBoxCriteria) criteria)));
+        } else if (criteria instanceof UnitOfMeasureCriteria) {
+            add(new UnitOfMeasureDetailsPanel("specificDetailsPanel", new Model<UnitOfMeasureCriteria>((UnitOfMeasureCriteria) criteria)));
         }
     }
 

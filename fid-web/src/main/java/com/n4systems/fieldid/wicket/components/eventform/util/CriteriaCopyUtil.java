@@ -5,6 +5,8 @@ import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.TextFieldCriteria;
+import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.UnitOfMeasureCriteria;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +27,22 @@ public class CriteriaCopyUtil {
             newCriteria = copySelectCriteria((SelectCriteria) criteria);
         } else if (criteria instanceof ComboBoxCriteria) {
         	newCriteria = copyComboBoxCriteria((ComboBoxCriteria) criteria);
+        } else if (criteria instanceof UnitOfMeasureCriteria) {
+            newCriteria = copyUnitOfMeasureCriteria((UnitOfMeasureCriteria) criteria);
         }
-        
+
         copyCommonFields(criteria, newCriteria, existingCriteria);
         return newCriteria;
     }
 
-	private void copyCommonFields(Criteria criteria, Criteria newCriteria, List<Criteria> existingCriteria) {
+    private Criteria copyUnitOfMeasureCriteria(UnitOfMeasureCriteria criteria) {
+        UnitOfMeasureCriteria uomCriteria = new UnitOfMeasureCriteria();
+        uomCriteria.setPrimaryUnit(criteria.getPrimaryUnit());
+        uomCriteria.setSecondaryUnit(criteria.getSecondaryUnit());
+        return uomCriteria;
+    }
+
+    private void copyCommonFields(Criteria criteria, Criteria newCriteria, List<Criteria> existingCriteria) {
         newCriteria.setRetired(criteria.isRetired());
         newCriteria.setTenant(criteria.getTenant());
         newCriteria.setRecommendations(copyList(criteria.getRecommendations()));

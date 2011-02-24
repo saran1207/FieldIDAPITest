@@ -1,20 +1,19 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.IndexColumn;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.CollectionOfElements;
-import org.hibernate.annotations.IndexColumn;
-
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "criteria")
@@ -29,12 +28,12 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	private boolean retired = false;
 	
 	@Column(name="text", nullable=false, length=511)
-	@CollectionOfElements(fetch= FetchType.EAGER)
+	@ElementCollection(fetch= FetchType.EAGER)
 	@IndexColumn(name="orderidx")
 	private List<String> recommendations = new ArrayList<String>();
 	
 	@Column(name="text", nullable=false, length=511)
-	@CollectionOfElements(fetch= FetchType.EAGER)
+	@ElementCollection(fetch= FetchType.EAGER)
 	@IndexColumn(name="orderidx")
 	private List<String> deficiencies = new ArrayList<String>();
 	
@@ -104,6 +103,10 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
     
     public boolean isComboBoxCriteria() {
     	return false;
+    }
+
+    public boolean isUnitOfMeasureCriteria() {
+        return false;
     }
 
 }
