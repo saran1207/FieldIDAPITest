@@ -64,4 +64,12 @@ public class WebEntity {
         selenium.mouseUpAt(destXpath, "1,1");
     }
 
+	protected void waitForElementToBePresent(String locator)  {
+		waitForElementToBePresent(locator, DEFAULT_TIMEOUT);
+	}
+
+	protected void waitForElementToBePresent(String locator, String timeout)  {
+		selenium.waitForCondition("var value = selenium.isElementPresent( '" + locator.replace("'", "\\'") + "'); value == true", timeout);
+	}
+
 }

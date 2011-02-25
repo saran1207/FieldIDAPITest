@@ -20,9 +20,9 @@ public class EventFormEditorTest_Select extends PageNavigatingTestCase<ManageEve
     public void setupScenario(Scenario scenario) {
         SelectCriteriaBuilder critBuilder = scenario.aSelectCriteria();
 
-        SelectCriteria crit1 = critBuilder.withText("select1").build();
-        SelectCriteria crit2 = critBuilder.withText("select2").build();
-        SelectCriteria crit3 = critBuilder.withText("select3").build();
+        SelectCriteria crit1 = critBuilder.withDisplayText("select1").build();
+        SelectCriteria crit2 = critBuilder.withDisplayText("select2").build();
+        SelectCriteria crit3 = critBuilder.withDisplayText("select3").build();
 
         CriteriaSectionBuilder builder = scenario.aCriteriaSection();
 
@@ -44,7 +44,7 @@ public class EventFormEditorTest_Select extends PageNavigatingTestCase<ManageEve
     }
 
     @Test
-    public void view_select_criteria() {
+    public void view_existing_select_criteria_in_editor() {
         page.clickCriteriaSection("Main Section");
         assertEquals(Arrays.asList("select1", "select2", "select3"), page.getCriteriaNames());
 

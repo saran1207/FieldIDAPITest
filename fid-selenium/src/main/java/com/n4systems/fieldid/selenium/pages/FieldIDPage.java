@@ -157,28 +157,30 @@ public class FieldIDPage extends WebPage {
 	}
 	
 	protected void clickNavOption(String navOption) {
-        clickNavOption(navOption, DEFAULT_TIMEOUT);
+        clickNavOption(navOption, DEFAULT_TIMEOUT, true);
 	}
-	
-	protected void clickNavOption(String navOption, String timeout) {
+
+    protected void clickNavOption(String navOption, boolean waitForPageToLoad) {
+        clickNavOption(navOption, DEFAULT_TIMEOUT, waitForPageToLoad);
+    }
+
+    protected void clickNavOption(String navOption, String timeout) {
+        clickNavOption(navOption, timeout, true);
+    }
+
+	protected void clickNavOption(String navOption, String timeout, boolean waitForPageToLoad) {
         if (getActiveNavOption().equals(navOption)) {
             return;
         }
 		selenium.click("//ul[@class='options ']//a[contains(., '"+ navOption +"')]");
-		waitForPageToLoad(timeout);
+
+        if (waitForPageToLoad)
+		    waitForPageToLoad(timeout);
 	}
 
     protected String getActiveNavOption() {
         return selenium.getText("//ul[@class='options ']/li[contains(@class, 'selected')]").trim();
     }
-
-	protected void waitForElementToBePresent(String locator)  {
-		waitForElementToBePresent(locator, DEFAULT_TIMEOUT);
-	}
-
-	protected void waitForElementToBePresent(String locator, String timeout)  {
-		selenium.waitForCondition("var value = selenium.isElementPresent( '" + locator.replace("'", "\\'") + "'); value == true", timeout);
-	}
 
 	public String getValidationErrorFor(String fieldInputId) {
 		String fieldErrorLocator = "css=*[errorfor='" + fieldInputId + "']";

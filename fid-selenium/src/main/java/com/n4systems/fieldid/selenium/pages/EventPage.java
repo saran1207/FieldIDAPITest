@@ -20,8 +20,9 @@ public class EventPage extends FieldIDPage {
 			|| selenium.isElementPresent("//form[@id='eventUpdate']");
 	}
 
-	public void clickAssetInformationTab() {
-		clickNavOption("Asset Information");
+	public AssetPage clickAssetInformationTab() {
+		clickNavOption("Asset Information", false);
+        return new AssetPage(selenium);
 	}
 
 	public void clickMandatoryEventToPerformLink() {
@@ -34,8 +35,13 @@ public class EventPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	public void clickSave() {
+	public void clickSaveMasterEvent() {
 		selenium.click("//input[@id='subAssetForm_label_save']");
+		waitForPageToLoad();
+	}
+
+	public void clickSaveNormalEvent() {
+		selenium.click("//input[@type='submit' and @value='Save']");
 		waitForPageToLoad();
 	}
 
@@ -47,5 +53,18 @@ public class EventPage extends FieldIDPage {
 	public boolean confirmMasterEventSaved() {
 		return selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]");
 	}
+
+    public void enterTextCriteria(String criteriaName, String criteriaValue) {
+        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[@class='criteriaTextField']", criteriaValue);
+    }
+
+    public void enterPrimaryUnitOfMeasureValue(String criteriaName, String value) {
+        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[contains(@id,'textValue')]", value);
+    }
+
+    public void enterSecondaryUnitOfMeasureValue(String criteriaName, String value) {
+        selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[contains(@id,'secondaryTextValue')]", value);
+    }
+    
 
 }

@@ -12,7 +12,7 @@ public class SelectCriteriaBuilder extends CriteriaBuilder<SelectCriteria> {
         return new SelectCriteriaBuilder(null, false);
     }
 
-    public SelectCriteriaBuilder withText(String text) {
+    public SelectCriteriaBuilder withDisplayText(String text) {
         return makeBuilder(new SelectCriteriaBuilder(text, retired));
     }
 

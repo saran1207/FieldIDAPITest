@@ -38,4 +38,8 @@ public class SelectCriteria extends Criteria {
         return true;
     }
 
+    @Override
+    public CriteriaType getCriteriaType() {
+        return CriteriaType.SELECT;
+    }
 }

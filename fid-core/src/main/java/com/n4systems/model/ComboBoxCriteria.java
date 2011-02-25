@@ -38,4 +38,9 @@ public class ComboBoxCriteria extends Criteria {
         return true;
     }
 
+    @Override
+    public CriteriaType getCriteriaType() {
+        return CriteriaType.COMBO_BOX;
+    }
+
 }

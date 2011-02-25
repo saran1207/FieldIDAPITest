@@ -17,7 +17,7 @@ public class OneClickCriteriaBuilder extends CriteriaBuilder<OneClickCriteria> {
 		return new OneClickCriteriaBuilder("text", false, false, null);
 	}
 
-	public OneClickCriteriaBuilder withText(String text) {
+	public OneClickCriteriaBuilder withDisplayText(String text) {
 		return makeBuilder(new OneClickCriteriaBuilder(text, retired, principal, stateSet));
 	}
 

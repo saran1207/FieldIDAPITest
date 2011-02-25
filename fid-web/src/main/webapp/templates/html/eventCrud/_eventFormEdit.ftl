@@ -22,7 +22,7 @@
                 <@s.hidden id="criteriaResultId_${criteria.id}" name="criteriaResults[${criteriaCount}].id" value="${criteriaResult.id}" />
             </#if>
 
-            <@s.hidden id="criteriaResultType_${criteria.id}" name="criteriaResults[${criteriaCount}].type" value="${eventFormHelper.getTypeCodeFor(criteria)}" />
+            <@s.hidden id="criteriaResultType_${criteria.id}" name="criteriaResults[${criteriaCount}].type" value="${criteria.criteriaType.name()}" />
             <@s.hidden id="criteriaResultCriteria_${criteria.id}" name="criteriaResults[${criteriaCount}].criteriaId" value="${criteria.id}" />
 
             <#if criteria.oneClickCriteria>

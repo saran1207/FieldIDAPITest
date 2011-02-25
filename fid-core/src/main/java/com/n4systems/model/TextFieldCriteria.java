@@ -14,4 +14,9 @@ public class TextFieldCriteria extends Criteria {
         return true;
     }
 
+    @Override
+    public CriteriaType getCriteriaType() {
+        return CriteriaType.TEXT_FIELD;
+    }
+
 }

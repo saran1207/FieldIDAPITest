@@ -24,6 +24,7 @@ import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
+import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.catalog.Catalog;
@@ -83,6 +84,7 @@ public class SaverMap {
         classToSaverMap.put(OneClickCriteria.class, new CriteriaSaver());
         classToSaverMap.put(AssociatedEventType.class, new AssociatedEventTypeSaver());
         classToSaverMap.put(TextFieldCriteria.class, new CriteriaSaver());
+        classToSaverMap.put(UnitOfMeasureCriteria.class, new CriteriaSaver());
         classToSaverMap.put(SelectCriteria.class, new CriteriaSaver());
         classToSaverMap.put(EventSchedule.class, new EventScheduleSaver());
         classToSaverMap.put(StateSet.class, new StateSetSaver());

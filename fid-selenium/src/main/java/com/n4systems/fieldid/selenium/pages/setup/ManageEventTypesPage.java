@@ -446,4 +446,32 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
         selenium.selectFrame("relative=up");
     }
 
+    public void selectPrimaryUnitOfMeasure(String unitOfMeasureName) {
+        selenium.selectFrame("//iframe");
+        selenium.select("//div[@id='criteriaEditor']//select[@name='primaryUnitSelect']", unitOfMeasureName);
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
+    public void selectSecondaryUnitOfMeasure(String unitOfMeasureName) {
+        selenium.selectFrame("//iframe");
+        selenium.select("//div[@id='criteriaEditor']//select[@name='secondaryUnitSelect']", unitOfMeasureName);
+        waitForWicketAjax();
+        selenium.selectFrame("relative=up");
+    }
+
+    public String getSelectedPrimaryUnitOfMeasure() {
+        selenium.selectFrame("//iframe");
+        String primaryUnitOfMeasure = selenium.getSelectedLabel("//div[@id='criteriaEditor']//select[@name='primaryUnitSelect']");
+        selenium.selectFrame("relative=up");
+        return primaryUnitOfMeasure;
+    }
+
+    public String getSelectedSecondaryUnitOfMeasure() {
+        selenium.selectFrame("//iframe");
+        String secondaryUnitOfMeasure = selenium.getSelectedLabel("//div[@id='criteriaEditor']//select[@name='secondaryUnitSelect']");
+        selenium.selectFrame("relative=up");
+        return secondaryUnitOfMeasure;
+    }
+
 }

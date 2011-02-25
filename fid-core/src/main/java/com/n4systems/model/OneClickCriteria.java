@@ -38,4 +38,8 @@ public class OneClickCriteria extends Criteria {
 		this.principal = principal;
 	}
 
+    @Override
+    public CriteriaType getCriteriaType() {
+        return CriteriaType.ONE_CLICK;
+    }
 }

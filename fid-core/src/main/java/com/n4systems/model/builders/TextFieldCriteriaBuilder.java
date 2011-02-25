@@ -12,7 +12,7 @@ public class TextFieldCriteriaBuilder extends CriteriaBuilder<TextFieldCriteria>
         return new TextFieldCriteriaBuilder(null, false);
     }
 
-    public TextFieldCriteriaBuilder withText(String text) {
+    public TextFieldCriteriaBuilder withDisplayText(String text) {
         return makeBuilder(new TextFieldCriteriaBuilder(text, retired));
     }
 

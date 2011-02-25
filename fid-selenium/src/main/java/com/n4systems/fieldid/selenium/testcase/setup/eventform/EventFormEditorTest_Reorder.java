@@ -21,9 +21,9 @@ public class EventFormEditorTest_Reorder extends FieldIDTestCase {
     public void setupScenario(Scenario scenario) {
         OneClickCriteriaBuilder critBuilder = scenario.aOneClickCriteria().withStateSet(scenario.buttonGroup(scenario.defaultTenant(), "Pass, Fail"));
 
-        OneClickCriteria crit1 = critBuilder.withText("Criteria1").build();
-        OneClickCriteria crit2 = critBuilder.withText("Criteria2").build();
-        OneClickCriteria crit3 = critBuilder.withText("Criteria3").build();
+        OneClickCriteria crit1 = critBuilder.withDisplayText("Criteria1").build();
+        OneClickCriteria crit2 = critBuilder.withDisplayText("Criteria2").build();
+        OneClickCriteria crit3 = critBuilder.withDisplayText("Criteria3").build();
 
         CriteriaSectionBuilder builder = scenario.aCriteriaSection();
 

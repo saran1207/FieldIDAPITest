@@ -38,4 +38,8 @@ public class UnitOfMeasureCriteria extends Criteria {
         this.secondaryUnit = secondaryUnit;
     }
 
+    @Override
+    public CriteriaType getCriteriaType() {
+        return CriteriaType.UNIT_OF_MEASURE;
+    }
 }

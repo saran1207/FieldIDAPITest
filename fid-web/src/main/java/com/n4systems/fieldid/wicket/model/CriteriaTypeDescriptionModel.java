@@ -19,18 +19,7 @@ public class CriteriaTypeDescriptionModel implements IModel<String> {
     @Override
     public String getObject() {
         Criteria criteria = criteriaModel.getObject();
-        if (criteria instanceof TextFieldCriteria) {
-            return "Text Field";
-        } else if (criteria instanceof OneClickCriteria) {
-            return "One-Click Button";
-        } else if (criteria instanceof SelectCriteria) {
-            return "Select Box";
-        }else if (criteria instanceof ComboBoxCriteria) {
-            return "Combo Box";
-        } else if (criteria instanceof UnitOfMeasureCriteria) {
-            return "Unit of Measure";
-        }
-        return null;
+        return criteria.getCriteriaType().getDescription();
     }
 
     @Override

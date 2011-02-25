@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectionBuilder;
@@ -219,6 +220,11 @@ public class Scenario {
 
     public TextFieldCriteriaBuilder aTextFieldCriteria() {
         TextFieldCriteriaBuilder builder = TextFieldCriteriaBuilder.aTextFieldCriteria();
+        return createPersistentBuilder(builder);
+    }
+
+    public UnitOfMeasureCriteriaBuilder aUnitOfMeasureCriteria() {
+        UnitOfMeasureCriteriaBuilder builder = UnitOfMeasureCriteriaBuilder.aUnitOfMeasureCriteria();
         return createPersistentBuilder(builder);
     }
 

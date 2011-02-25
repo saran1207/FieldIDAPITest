@@ -19,6 +19,7 @@ import com.n4systems.model.Recommendation;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.UnitOfMeasureCriteriaResult;
 import com.n4systems.model.parents.EntityWithTenant;
 
 public class CopyEventFactory {
@@ -157,6 +158,11 @@ public class CopyEventFactory {
         	ComboBoxCriteriaResult comboboxResult = new ComboBoxCriteriaResult();
             comboboxResult.setValue(((ComboBoxCriteriaResult)oldResult).getValue());
             return comboboxResult;
+        } else if (oldResult instanceof UnitOfMeasureCriteriaResult) {
+        	UnitOfMeasureCriteriaResult uomResult = new UnitOfMeasureCriteriaResult();
+            uomResult.setPrimaryValue(((UnitOfMeasureCriteriaResult) oldResult).getPrimaryValue());
+            uomResult.setSecondaryValue(((UnitOfMeasureCriteriaResult) oldResult).getSecondaryValue());
+            return uomResult;
         }else {
             throw new RuntimeException("Don't know how to copy: " + oldResult);
         }

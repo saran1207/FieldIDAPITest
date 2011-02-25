@@ -23,8 +23,8 @@ public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageE
         scenario.aStateSet().named("Button Group 1").states(scenario.failState().build(), scenario.passState().build()).build();
         scenario.aStateSet().named("Button Group 2").states(scenario.naState().build(), scenario.failState().build()).build();
 
-        Criteria oneClick1 = scenario.aOneClickCriteria().withText("oneclick1").withStateSet(passFail).build();
-        Criteria oneClick2 = scenario.aOneClickCriteria().withText("oneclick2").withStateSet(passFail).build();
+        Criteria oneClick1 = scenario.aOneClickCriteria().withDisplayText("oneclick1").withStateSet(passFail).build();
+        Criteria oneClick2 = scenario.aOneClickCriteria().withDisplayText("oneclick2").withStateSet(passFail).build();
 
         CriteriaSection mainSection = scenario.aCriteriaSection()
                 .withTitle("Main section")

@@ -25,8 +25,8 @@ public class EventFormEditorTest_RetiredItems extends FieldIDTestCase {
 
         StateSet buttonGroup = scenario.buttonGroup(scenario.tenant("test1"), "Pass, Fail");
 
-        OneClickCriteria retiredCriteria = scenario.aOneClickCriteria().withText("Retired criteria").withRetired(true).withStateSet(buttonGroup).build();
-        OneClickCriteria activeCriteria = scenario.aOneClickCriteria().withText("Active criteria").withRetired(false).withStateSet(buttonGroup).build();
+        OneClickCriteria retiredCriteria = scenario.aOneClickCriteria().withDisplayText("Retired criteria").withRetired(true).withStateSet(buttonGroup).build();
+        OneClickCriteria activeCriteria = scenario.aOneClickCriteria().withDisplayText("Active criteria").withRetired(false).withStateSet(buttonGroup).build();
 
         CriteriaSection nonRetiredSection = scenario.aCriteriaSection()
                 .withTitle("Active section")

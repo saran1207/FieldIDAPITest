@@ -51,7 +51,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 
         performMandatoryEvent(eventPage);
 
-		eventPage.clickSave();
+		eventPage.clickSaveMasterEvent();
 		
 		assertTrue(eventPage.confirmMasterEventSaved());
 	}
@@ -66,7 +66,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 		performMandatoryEvent(eventPage);
 		performSubEvent(eventPage);
 
-		eventPage.clickSave();
+		eventPage.clickSaveMasterEvent();
 
 		assertTrue(eventPage.confirmMasterEventSaved());
 	}

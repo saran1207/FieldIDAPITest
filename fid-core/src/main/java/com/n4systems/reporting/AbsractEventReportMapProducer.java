@@ -10,6 +10,8 @@ import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.UnitOfMeasureCriteria;
+import com.n4systems.model.UnitOfMeasureCriteriaResult;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.n4systems.model.AbstractEvent;
@@ -182,17 +184,17 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                         CriteriaResult result = resultMap.get(criteria);
                         if (result instanceof OneClickCriteriaResult) {
                             stateView.setStateButtonGroup(((OneClickCriteriaResult)result).getState());
-                            stateView.setType("oneclick");
                         } else if (result instanceof TextFieldCriteriaResult) {
                             stateView.setState(((TextFieldCriteriaResult)result).getValue());
-                            stateView.setType("textfield");
                         } else if (result instanceof SelectCriteriaResult) {
                             stateView.setState(((SelectCriteriaResult) result).getValue());
-                            stateView.setType("select");
                         } else if (result instanceof ComboBoxCriteriaResult) {
                             stateView.setState(((ComboBoxCriteriaResult) result).getValue());
-                            stateView.setType("select");
+                        } else if (result instanceof UnitOfMeasureCriteriaResult) {
+                            String unitOfMeasureValueStr = getUnitOfMeasureStringValue((UnitOfMeasureCriteriaResult)result);
+                            stateView.setState(unitOfMeasureValueStr);
                         }
+                        stateView.setType(criteria.getCriteriaType().getReportIdentifier());
                         criteriaViews.add(stateView);
                     }
                 }
@@ -202,7 +204,19 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		return criteriaViews;
 	}
 
-	/**
+    private String getUnitOfMeasureStringValue(UnitOfMeasureCriteriaResult result) {
+        UnitOfMeasureCriteria criteria = (UnitOfMeasureCriteria) result.getCriteria();
+        String unitOfMeasureValue = "";
+        if (result.getPrimaryValue() != null) {
+            unitOfMeasureValue += result.getPrimaryValue() + " " + criteria.getPrimaryUnit().getName();
+        }
+        if (result.getSecondaryValue() != null) {
+            unitOfMeasureValue += " " + result.getSecondaryValue() + " " + criteria.getSecondaryUnit().getName();
+        }
+        return unitOfMeasureValue.trim();
+    }
+
+    /**
 	 * Given a list of CriteriaResults, returns a Map of the same results of
 	 * Criteria to Result
 	 * 

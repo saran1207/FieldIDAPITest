@@ -16,8 +16,8 @@ public class EventFormEditorTest_TextFields extends PageNavigatingTestCase<Manag
 
     @Override
     public void setupScenario(Scenario scenario) {
-        Criteria text1 = scenario.aTextFieldCriteria().withText("text1").build();
-        Criteria text2 = scenario.aTextFieldCriteria().withText("text2").build();
+        Criteria text1 = scenario.aTextFieldCriteria().withDisplayText("text1").build();
+        Criteria text2 = scenario.aTextFieldCriteria().withDisplayText("text2").build();
 
         CriteriaSection mainSection = scenario.aCriteriaSection()
                 .withTitle("Main section")
@@ -36,7 +36,7 @@ public class EventFormEditorTest_TextFields extends PageNavigatingTestCase<Manag
     }
 
     @Test
-    public void view_text_fields() {
+    public void view_existing_text_field_criteria_in_editor() {
         page.clickCriteriaSection("Main section");
         assertEquals(Arrays.asList("text1", "text2"), page.getCriteriaNames());
         assertEquals("Text Field", page.getTypeForCriteria("text1"));

@@ -75,20 +75,4 @@ public class EventFormHelper {
 		return sections.get(event);
 	}
 
-    public String getTypeCodeFor(Criteria criteria) {
-        if (criteria instanceof OneClickCriteria) {
-            return "oneclick";
-        } else if (criteria instanceof TextFieldCriteria) {
-            return "textfield";
-        } else if (criteria instanceof SelectCriteria) {
-            return "select";
-        } else if (criteria instanceof ComboBoxCriteria) {
-            return "combobox";
-        } else if (criteria instanceof UnitOfMeasureCriteria) {
-            return "unitofmeasure";
-        } else {
-            throw new RuntimeException("Unknown criteria type: " + criteria.getClass());
-        }
-    }
-
 }
