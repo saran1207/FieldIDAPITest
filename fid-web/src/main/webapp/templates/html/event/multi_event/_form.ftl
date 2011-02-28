@@ -16,9 +16,7 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="modifiableEvent.owner" required="true" id="ownerId" />
-		
 		<span class="fieldHolder setFromAssetCheckbox">
-			
 			<label class="checkBoxLabel"><@s.checkbox name="ownerSetFromAsset" onclick="toggleDisableOrgPicker();" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
 		</span>
 	</div>	
@@ -117,5 +115,6 @@
 			element.observe('change', updateAssignToSomone);
 			updateAssignToSomone();
 		});
+		
 		
 </@n4.includeScript>

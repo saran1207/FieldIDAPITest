@@ -10,7 +10,6 @@ import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.model.Event;
 import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidationParameter;
 
@@ -44,7 +43,6 @@ public class EventWebModel implements UserDateFormatValidator {
 		ownerPicker.setOwnerId(id);
 	}
 	
-	@RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner(){
 		return ownerPicker.getOwner();
 	}

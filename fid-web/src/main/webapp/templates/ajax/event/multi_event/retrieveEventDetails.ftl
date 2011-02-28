@@ -11,10 +11,14 @@ $('step2Loading').hide();
 $('step2').update('${html?js_string}');
 $('step2').show();
 $('continueButton').observe("click", function(){	
+	if (!$('ownerId').disabled && !$('ownerId').value){
+		alert("Please select an owner");
+	}else{	
 		var options = getStandardCallbacks();
 		options.parameters = $('eventCreate').serialize();
 		options.method =  "post";
 		new Ajax.Request('<@s.url action="eventCheck" namespace="ajax"/>', options);
+	}
 });
 						 
 attachOrgEvents("#step2");

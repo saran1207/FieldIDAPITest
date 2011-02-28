@@ -702,7 +702,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		} else if (event.getPerformedBy() == null || !performedBy.equals(event.getPerformedBy())) {
 			event.setPerformedBy(persistenceManager.find(User.class, performedBy, getTenantId()));
 		}
-
 	}
 
 	public Long getBook() {

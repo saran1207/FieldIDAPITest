@@ -65,8 +65,6 @@ public class MultiEventAction extends AbstractCrud {
 	private EventWebModel modifiableEvent;
 	private MultiEventGroupSorter multiEventGroupSorter;
 	private List<Listable<Long>> employees;
-
-	private boolean ownerSetFromAsset = false;
 	
     private String searchContainerKey;
     private String searchId;
