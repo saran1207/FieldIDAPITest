@@ -38,7 +38,7 @@ public class AssignedToHandlerTest {
 		
 		WebOutputHandler sut = new AssignedToHandler(UNUSED_ABSTRACT_ACTION);
 		
-		assertThat(sut.handleWeb(asset.getId(), asset.getAssignedUser()), containsString(asset.getAssignedUser().getUserLabel()));
+		assertThat(sut.handleWeb(asset.getId(), asset.getAssignedUser().getUserLabel()), containsString(asset.getAssignedUser().getUserLabel()));
 	}
 	
 	@Test
@@ -83,7 +83,7 @@ public class AssignedToHandlerTest {
 		
 		ExcelOutputHandler sut = new AssignedToHandler(UNUSED_ABSTRACT_ACTION);
 		
-		assertThat(sut.handleExcel(asset.getId(), asset.getAssignedUser()).toString(), containsString(asset.getAssignedUser().getUserLabel()));
+		assertThat(sut.handleExcel(asset.getId(), asset.getAssignedUser().getUserLabel()).toString(), containsString(asset.getAssignedUser().getUserLabel()));
 	}
 	
 	

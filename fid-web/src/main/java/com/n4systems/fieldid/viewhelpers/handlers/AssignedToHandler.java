@@ -28,7 +28,7 @@ public class AssignedToHandler extends WebOutputHandler {
 	}
 
 	private String renderUser(String assignedUser) {
-		if (assignedUser  == null) {
+		if (assignedUser == null || assignedUser.equals("")) {
 			return action.getText("label.unassigned");
 		}
 		
