@@ -71,7 +71,7 @@ public class MinimalTenantDataSetup {
 		user.setTenant(tenant);
 		user.setOwner(org);
 		user.setTimeZoneID("United States:New York - New York");
-		user.setActive(true);
+		user.setRegistered(true);
 		user.setPermissions(Permissions.SYSTEM);
 		user.setUserType(UserType.SYSTEM);
 		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));

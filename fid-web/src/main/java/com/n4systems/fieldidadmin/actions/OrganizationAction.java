@@ -158,7 +158,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		user.setTenant(tenant);
 		user.setOwner(primaryOrg);
 		user.setTimeZoneID("United States:New York - New York");
-		user.setActive(true);
+		user.setRegistered(true);
 		user.setPermissions(Permissions.SYSTEM);
 		user.setUserType(UserType.SYSTEM);
 		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));

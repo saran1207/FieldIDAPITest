@@ -127,7 +127,7 @@ public class UserBuilder extends BaseBuilder<User> {
 		user.setTenant(owner.getTenant());
 		user.setOwner(owner);
 		user.setTimeZoneID("Canada:Ontario - Toronto");
-		user.setActive(true);
+		user.setRegistered(true);
 		user.setUserType(userType);
 		
 		if (userType.equals(UserType.ADMIN)) {

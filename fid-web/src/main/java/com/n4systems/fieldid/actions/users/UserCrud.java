@@ -26,7 +26,9 @@ import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserPaginatedLoader;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
@@ -119,6 +121,11 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public String doList() {
 		return SUCCESS;
 	}
+	
+	@SkipValidation
+	public String doArchivedList() {
+		return SUCCESS;
+	}
 
 	protected void testRequiredEntities(boolean existing) {
 		testUserEntity(existing);
@@ -186,19 +193,24 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	@SkipValidation
-	public String doDelete() {
+	public String doArchive() {
 		testRequiredEntities(true);
 
 		try {
 			user.archiveUser();
-			userManager.updateUser(user); // TODO should use the saver like
-			// create and update do.
+			new UserSaver().update(user); 
 		} catch (Exception e) {
-			addFlashErrorText("error.failedtodelete");
-			logger.error("failed to remove user ", e);
+			addFlashErrorText("error.failedtoarchive");
+			logger.error("failed to archive user ", e);
 			return ERROR;
 		}
-		addFlashMessageText("message.userdeleted");
+		addFlashMessageText("message.userarchived");
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doUnarchive() {
+		testRequiredEntities(true);		
 		return SUCCESS;
 	}
 
@@ -208,7 +220,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		user.setPermissions(processPermissions());
 
 		user.setTenant(getTenant());
-		user.setActive(true);
+		user.setRegistered(true);
 		user.setModifiedBy(super.getUser());
 		user.setCreatedBy(super.getUser());
 
@@ -224,6 +236,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 				else
 					sendCreatePasswordEmail();
 			} else {
+				if(user.isArchived()) {
+					user.activateEntity();
+				}
 				new UserSaver().update(user);
 			}
 		} catch (Exception e) {
@@ -384,11 +399,24 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public Pager<User> getPage() {
 		if (page == null) {
 			UserType typeFilter = UserType.valueOf(userType);
-			page = userManager.getUsers(getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, listFilter, typeFilter);
+			page = new UserPaginatedLoader(getSecurityFilter())
+			               .withUserType(typeFilter)
+			               .withNameFilter(listFilter)
+			               .setPage(getCurrentPage().intValue())
+			               .setPageSize(Constants.PAGE_SIZE)
+			               .load();
 		}
 		return page;
 	}
-
+	
+	public Pager<User> getArchivedPage() {
+		return new UserPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
+		                   .withArchivedOnly()
+			               .setPage(getCurrentPage().intValue())
+			               .setPageSize(Constants.PAGE_SIZE)
+			               .load();
+	}
+	
 	public SortedSet<? extends Listable<String>> getCountries() {
 		return CountryList.getInstance().getCountries();
 	}

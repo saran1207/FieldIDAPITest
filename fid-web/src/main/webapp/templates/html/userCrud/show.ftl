@@ -8,16 +8,17 @@ ${action.setPageType('user','view')!}
 	<#if !user.admin>
 	
 		<#if user.fullUser>
-			<@s.url id="deleteUrl" action="employeeUserDelete" uniqueID="${(user.id)!}" />
+			<@s.url id="archiveUrl" action="employeeUserArchive" uniqueID="${(user.id)!}" />
 		<#elseif user.liteUser>
-			<@s.url id="deleteUrl" action="liteUserDelete" uniqueID="${(user.id)!}" />
+			<@s.url id="archiveUrl" action="liteUserArchive" uniqueID="${(user.id)!}" />
 		<#else>
-			<@s.url  id="deleteUrl"  action="readOnlyUserDelete" uniqueID="${(user.id)!}" />
+			<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
 		</#if>
 	<div class="useractions delete">
 		<p>
-			<a href="${deleteUrl}" 
-			onclick="return confirm('${action.getText( 'warning.deleteuser',"", user.userID )}');"><@s.text name="label.delete_account"/></a>
+			<a href="${archiveUrl}" onclick="return confirm('${action.getText( 'warning.archiveuser',"", user.userID )}');">
+				<@s.text name="label.archive_account"/>
+			</a>
 		<p>
 	</div>
 	</#if>

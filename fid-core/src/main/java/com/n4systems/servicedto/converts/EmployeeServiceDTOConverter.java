@@ -14,7 +14,7 @@ public class EmployeeServiceDTOConverter {
 		dto.setFirstName(user.getFirstName());
 		dto.setLastName(user.getLastName());
 
-		dto.setDeleted(user.isDeleted());
+		dto.setDeleted(user.isArchived());
 		
 		return dto;
 	}

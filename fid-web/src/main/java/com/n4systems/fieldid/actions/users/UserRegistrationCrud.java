@@ -73,7 +73,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 
 	public String doSave() {
 
-		userAccount.setActive(false);
+		userAccount.setRegistered(false);
 		userAccount.setTenant(getTenant());
 		userAccount.setOwner(getPrimaryOrg());
 		userAccount.assignPassword(password);

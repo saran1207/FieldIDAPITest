@@ -3,8 +3,6 @@
  */
 package com.n4systems.model.user;
 
-import java.util.Arrays;
-
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.Tenant;

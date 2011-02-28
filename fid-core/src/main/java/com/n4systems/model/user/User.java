@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
-import com.n4systems.model.parents.EntityWithOwner;
+import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
@@ -28,7 +28,7 @@ import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
-public class User extends EntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User> {
+public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User> {
 	private static final long serialVersionUID = 1L;
 	public static final int REFERRAL_KEY_LENGTH = 10;
 	
@@ -37,7 +37,6 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	}
 	
 	private String userID;
-	private String archivedUserID;
 	private String firstName;
 	private String lastName;
 	private String emailAddress;
@@ -53,8 +52,7 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 	@Column(nullable=false)
 	private UserType userType=UserType.ALL;
 	
-	private boolean active = false;
-	private boolean deleted = false;
+	private boolean registered = false;
 	
 	@Column(name="permissions", nullable=false)
 	private int permissions = Permissions.NO_PERMISSIONS;
@@ -142,20 +140,11 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 		return userType.equals(UserType.READONLY);
 	}
 
-	public boolean isDeleted() {
-		return deleted;
-	}
-
 	public void archiveUser() {
-		archivedName();
-		deleted = true;
+		userID = null;
+		archiveEntity();
 	}
 	
-	private void archivedName() {
-		archivedUserID = userID;
-		userID = null;
-	}
-
 	public boolean isSystem() {
 		return userType.equals(UserType.SYSTEM);
 	}
@@ -214,14 +203,14 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 		this.position = position;
 	}
 
-	public Boolean isActive() {
-		return active;
+	public void setRegistered(Boolean registered) {
+		this.registered = registered;
 	}
-
-	public void setActive(Boolean active) {
-		this.active = active;
+	
+	public boolean isRegistered() {
+		return registered;
 	}
-
+	
 	public String getInitials() {
 		return initials;
 	}
@@ -307,10 +296,6 @@ public class User extends EntityWithOwner implements Listable<Long>, Saveable, S
 
 	public TimeZone getTimeZone() { 
 		return CountryList.getInstance().getRegionByFullId(timeZoneID).getTimeZone();
-	}
-
-	public String getArchivedUserID() {
-		return archivedUserID;
 	}
 
 	public boolean isNew() {

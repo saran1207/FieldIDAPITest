@@ -175,7 +175,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	public Pager<User> getUsers(SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, CustomerOrg customer) {
-		String queryString = "from " + User.class.getName() + " ub where  " + filter.produceWhereClause(User.class, "ub") + " AND ub.active = true AND ub.userType != " + "'"
+		String queryString = "from " + User.class.getName() + " ub where  " + filter.produceWhereClause(User.class, "ub") + " AND ub.registered = true AND ub.userType != " + "'"
 				+ UserType.SYSTEM.toString() + "'";
 
 		if (onlyActive) {
@@ -237,7 +237,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	public List<ListingPair> getUserList(SecurityFilter filter) {
 
 		String queryString = "select new com.n4systems.util.ListingPair( ub.id, CONCAT(ub.firstName, ' ', ub.lastName ) ) from " + User.class.getName() + " ub where ub.userType !='"
-				+ UserType.SYSTEM.toString() + "' and ub.active = true and " + filter.produceWhereClause(User.class, "ub") + " ORDER BY ub.firstName, ub.lastName";
+				+ UserType.SYSTEM.toString() + "' and ub.registered = true and " + filter.produceWhereClause(User.class, "ub") + " ORDER BY ub.firstName, ub.lastName";
 
 		Query query = em.createQuery(queryString);
 		filter.applyParameters(query, User.class);
@@ -249,7 +249,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getExaminers(SecurityFilter filter) {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
-		String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.active = true and deleted = false and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
+		String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and deleted = false and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
 				+ filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )"
 				+ " ORDER BY ub.firstName, ub.lastName";
 		Query query = em.createQuery(queryString);
@@ -264,7 +264,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	public void saveUserRequest(UserRequest userRequest, User userAccount) throws DuplicateUserException, DuplicateRfidException {
-		userAccount.setActive(false);
+		userAccount.setRegistered(false);
 		createUser(userAccount);
 		persistenceManager.save(userRequest);
 		auditLogger.info("user request created for tenant " + userRequest.getTenant().getDisplayName() + " for user " + userRequest.getUserAccount().getUserID());
@@ -272,7 +272,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 	public void acceptRequest(UserRequest userRequest) {
 		UserRequest request = em.find(UserRequest.class, userRequest.getId());
-		userRequest.getUserAccount().setActive(true);
+		userRequest.getUserAccount().setRegistered(true);
 
 		em.merge(userRequest.getUserAccount());
 		em.remove(request);

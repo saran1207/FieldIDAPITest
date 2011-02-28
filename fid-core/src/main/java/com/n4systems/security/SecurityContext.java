@@ -30,7 +30,7 @@ public final class SecurityContext implements Serializable {
 		if (user == null) {
 			clear();
 			throw new SecurityException("Initialize SecurityContext called with invalid User [" + userId + "] and Tenant [" + tenantId + "]");
-		} else if(!user.isActive() || user.isDeleted()) {
+		} else if(!user.isRegistered() || user.isArchived()) {
 			clear();
 			throw new SecurityException("Initialize SecurityContext called for inactive or deleted User [" + userId + "] and Tenant [" + tenantId + "]");
 		}

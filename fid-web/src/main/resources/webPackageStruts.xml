@@ -603,7 +603,11 @@
 		<action name="userList" method="list" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/list.ftl</result>
 		</action>
-
+		
+		<action name="archivedUserList" method="archivedList" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
+		</action>
+		
 		<action name="viewUser" method="show" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/show.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/show.ftl</result>
@@ -777,7 +781,7 @@
 			</result>
 		</action>
 
-		<action name="employeeUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="employeeUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
 			</result>
@@ -787,7 +791,7 @@
 			</result>
 		</action>
 		
-		<action name="liteUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+		<action name="liteUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
 			</result>
@@ -797,7 +801,7 @@
 			</result>
 		</action>
 		
-		<action name="readOnlyUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+		<action name="readOnlyUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
 			</result>
@@ -806,6 +810,29 @@
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
+		
+		
+		<action name="employeeUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">employeeUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+		<action name="liteUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">liteUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
+		<action name="readOnlyUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+			<result name="success" type="redirectAction">
+				<param name="actionName">readOnlyUserEdit</param>
+				<param name="uniqueID">${uniqueID}</param>
+			</result>
+		</action>
+		
 
 		<action name="sendWelcomeEmail" method="sendWelcomeMessage" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="redirectAction">
