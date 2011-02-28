@@ -26,6 +26,10 @@ public class EventWebModel implements UserDateFormatValidator {
 	
 	private String overrideResult;
 	
+	private boolean locationSetFromAsset = false;
+	private boolean ownerSetFromAsset = false;
+	
+	
 	public EventWebModel(OwnerPicker ownerPicker, SessionUserDateConverter dateConverter, LoaderFactoryProvider loaderFactoryProvider) {
 		this.ownerPicker = ownerPicker;
 		this.dateConverter = dateConverter;
@@ -39,12 +43,12 @@ public class EventWebModel implements UserDateFormatValidator {
 	public void setOwnerId(Long id) {
 		ownerPicker.setOwnerId(id);
 	}
-
+	
 	@RequiredFieldValidator(message="", key="error.owner_required")
-	public BaseOrg getOwner() {
+	public BaseOrg getOwner(){
 		return ownerPicker.getOwner();
 	}
-
+	 
 	public LocationWebModel getLocation() {
 		return location;
 	}
@@ -56,8 +60,18 @@ public class EventWebModel implements UserDateFormatValidator {
 	}
 	
 	public void pushValuesTo(Event event) {
-		event.setAdvancedLocation(location.createLocation());
-		event.setOwner(ownerPicker.getOwner());
+		if (locationSetFromAsset){
+			event.setAdvancedLocation(event.getAsset().getAdvancedLocation());
+		}else{
+			event.setAdvancedLocation(location.createLocation());
+		}
+	
+		if (ownerSetFromAsset){
+			event.setOwner(event.getAsset().getOwner());
+		}else{
+			event.setOwner(ownerPicker.getOwner());
+		}
+		
 		event.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
 	}
 	
@@ -85,5 +99,13 @@ public class EventWebModel implements UserDateFormatValidator {
 
 	public void setOverrideResult(String overrideResult) {
 		this.overrideResult = overrideResult;
+	}
+
+	public void setLocationSetFromAsset(boolean isLocationSetFromAsset) {
+		this.locationSetFromAsset = isLocationSetFromAsset;
+	}
+
+	public void setOwnerSetFromAsset(boolean ownerSetFromAsset) {
+		this.ownerSetFromAsset = ownerSetFromAsset;
 	}
 }

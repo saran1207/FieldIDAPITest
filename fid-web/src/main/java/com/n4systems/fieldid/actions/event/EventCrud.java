@@ -133,6 +133,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private boolean assignToSomeone = false;
 
 	private boolean isEditing;
+	private boolean statusSetFromAsset;
+	private boolean ownerSetFromAsset;
 	
 	public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
@@ -192,7 +194,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			addActionError(getText("error.noevent"));
 			throw new MissingEntityException();
 		}
-		
+
 		if (asset == null) {
 			addActionError(getText("error.noasset"));
 			throw new MissingEntityException();
@@ -385,13 +387,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			
 			findEventBook();
 			
+			//Set asset on the event before pushing other details.
+			event.setAsset(asset);
 			modifiableEvent.pushValuesTo(event);
-
+		
 			event.setInfoOptionMap(decodeMapKeys(encodedInfoOptionMap));
 
 			event.setGroup(eventGroup);
 			event.setTenant(getTenant());
-			event.setAsset(asset);
 			
 			if (assignToSomeone) {
 				AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(assignedTo);
@@ -410,8 +413,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 						.withUploadedImages(getUploadedFiles());
 				
 				createEventParameterBuilder.addSchedules(createEventScheduleBundles());
-                Status eventStatus = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? Status.valueOf(modifiableEvent.getOverrideResult()) : null;
-               	event.setStatus(eventStatus);
+				Status eventStatus = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? Status.valueOf(modifiableEvent.getOverrideResult()) : null;
+                event.setStatus(eventStatus);
 
 				event = eventPersistenceFactory.createEventCreator().create(createEventParameterBuilder.build());
 				uniqueID = event.getId();
@@ -678,10 +681,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	public void setAssetStatus(Long assetStatus) {
-		if (assetStatus == null) {
-			event.setAssetStatus(null);
-		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getId())) {
-			event.setAssetStatus(legacyAssetManager.findAssetStatus(assetStatus, getTenantId()));
+		if(statusSetFromAsset){
+			event.setAssetStatus(event.getAsset().getAssetStatus());
+		}else{
+			if (assetStatus == null) {
+				event.setAssetStatus(null);
+			} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getId())) {
+				event.setAssetStatus(legacyAssetManager.findAssetStatus(assetStatus, getTenantId()));
+			} 
 		}
 	}
 
@@ -984,6 +991,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return modifiableEvent;
 	}
 	
+	
 	public BaseOrg getOwner() {
 		return modifiableEvent.getOwner();
 	}
@@ -1074,4 +1082,19 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
     public void setOverrideResult(String overrideResult) {
         this.modifiableEvent.setOverrideResult(overrideResult);
     }
+    public void setLocationSetFromAsset(boolean isLocationSetFromAsset) {
+		modifiableEvent.setLocationSetFromAsset(isLocationSetFromAsset);
+	}
+    
+    public void setOwnerSetFromAsset(boolean isOwnerSetFromAsset) {
+    	ownerSetFromAsset = isOwnerSetFromAsset;
+		modifiableEvent.setOwnerSetFromAsset(isOwnerSetFromAsset);
+		
+		//This is just a placeholder owner to get around the validation in EventWebModel.
+		modifiableEvent.setOwnerId(event.getOwner().getId());
+	}
+    
+    public void setStatusSetFromAsset(boolean isStatusSetFromAsset) {
+    	this.statusSetFromAsset=isStatusSetFromAsset;
+	}
 }

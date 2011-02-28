@@ -14,13 +14,25 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="modifiableEvent.owner" required="true" id="ownerId" />
+		<span class="fieldHolder">	
+			<label class="checkBoxLabel"><@s.checkbox name="ownerSetFromAsset" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
+		</span>
 	</div>	
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.location"/></label>
 		<div class="fieldHolder">
 			<@n4.location name="modifiableEvent.location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}"  theme="simple"/>
+			<span class="fieldHolder">	
+				<label class="checkBoxLabel"><@s.checkbox name="locationSetFromAsset" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
+			</span>
 		</div>
+	</div>
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.printable"/></label>
+		<span class="fieldHolder">	
+			<label class="checkBoxLabel"><@s.checkbox name="printable" theme="simple"/> <@s.text name="label.printableexplination"/></label>
+		</span>
 	</div>
 	
 	<h2>${event.type.name?html} <@s.text name="label.details"/></h2>
@@ -68,6 +80,9 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.assetstatus"/></label>
 			<@s.select name="assetStatus" list="assetStatuses" listKey="id" listValue="name" headerKey="" headerValue="" />
+			<span class="fieldHolder">	
+				<label class="checkBoxLabel"><@s.checkbox name="locationSetFromAsset" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
+			</span>
 	</div>
 	
 	<#if eventType.assignedToAvailable>

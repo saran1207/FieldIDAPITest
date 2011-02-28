@@ -66,9 +66,11 @@ public class MultiEventAction extends AbstractCrud {
 	private MultiEventGroupSorter multiEventGroupSorter;
 	private List<Listable<Long>> employees;
 
+	private boolean ownerSetFromAsset = false;
+	
     private String searchContainerKey;
     private String searchId;
-
+    
 	public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
@@ -120,7 +122,9 @@ public class MultiEventAction extends AbstractCrud {
 		testDependencies();
 		
 		commonAssetValues = new CommonAssetValuesFinder(getAssets()).findCommonValues();
-		event.setOwner(commonAssetValues.owner);
+					
+		event.setOwner(commonAssetValues.owner);	
+		
 		if (commonAssetValues.hasCommonLocation()) {
 			event.setAdvancedLocation(commonAssetValues.location);
 		}
