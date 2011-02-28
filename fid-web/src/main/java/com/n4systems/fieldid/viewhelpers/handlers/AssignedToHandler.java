@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
         
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.model.user.User;
 
 public class AssignedToHandler extends WebOutputHandler {
 
@@ -15,24 +14,24 @@ public class AssignedToHandler extends WebOutputHandler {
 
 	@Override
 	public String handleWeb(Long entityId, Object value) {
-		User assignedUser = translateValueToUser(value); 
+		String assignedUser = translateValueToUser(value); 
 		
 		return renderUser(assignedUser);
 	}
 
-	private User translateValueToUser(Object value) {
-		User assignedUser = null;
-		if (value instanceof User) {
-			assignedUser = (User)value;
+	private String translateValueToUser(Object value) {
+		String assignedUser = null;
+		if (value instanceof String) {
+			assignedUser = (String)value;
 		}
 		return assignedUser;
 	}
 
-	private String renderUser(User assignedUser) {
+	private String renderUser(String assignedUser) {
 		if (assignedUser  == null) {
 			return action.getText("label.unassigned");
 		}
 		
-		return assignedUser.getUserLabel();
+		return assignedUser;
 	}
 }
