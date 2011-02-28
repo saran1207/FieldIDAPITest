@@ -52,6 +52,11 @@
 	width: 320px;
 }
 
+.stepContent .infoSet .setFromAssetCheckbox{
+	margin-left: 179px;
+	width: 225px;
+}
+
 .stepContent .fieldHolder label.checkBoxLabel{
 	padding-top: 2px;
 }

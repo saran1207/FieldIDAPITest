@@ -1,4 +1,6 @@
-
+<script type="text/javascript">
+	
+</script>
 
 <@s.form action="eventCreate" namespace="/multiEvent/ajax" id="eventCreate" cssClass="fullForm fluidSets" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
@@ -14,17 +16,20 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="modifiableEvent.owner" required="true" id="ownerId" />
-		<span class="fieldHolder">	
-			<label class="checkBoxLabel"><@s.checkbox name="ownerSetFromAsset" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
+		
+		<span class="fieldHolder setFromAssetCheckbox">
+			
+			<label class="checkBoxLabel"><@s.checkbox name="ownerSetFromAsset" onclick="toggleDisableOrgPicker();" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
 		</span>
 	</div>	
+	
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.location"/></label>
 		<div class="fieldHolder">
-			<@n4.location name="modifiableEvent.location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}"  theme="simple"/>
+			<span class="multiEventLocation"><@n4.location name="modifiableEvent.location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}"  theme="simple"/></span>
 			<span class="fieldHolder">	
-				<label class="checkBoxLabel"><@s.checkbox name="locationSetFromAsset" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
+				<label class="checkBoxLabel"><@s.checkbox name="locationSetFromAsset" onclick="toggleDisableLocationPicker($$('.multiEventLocation input'),$$('.multiEventLocation a').first())" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
 			</span>
 		</div>
 	</div>
@@ -79,10 +84,10 @@
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.assetstatus"/></label>
-			<@s.select name="assetStatus" list="assetStatuses" listKey="id" listValue="name" headerKey="" headerValue="" />
-			<span class="fieldHolder">	
-				<label class="checkBoxLabel"><@s.checkbox name="locationSetFromAsset" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
-			</span>
+		<@s.select name="assetStatus" id="assetStatuses" list="assetStatuses" listKey="id" listValue="name" headerKey="" headerValue="" />
+		<span class="fieldHolder setFromAssetCheckbox">	
+			<label class="checkBoxLabel"><@s.checkbox name="statusSetFromAsset" onclick="toggleDisabled($(assetStatuses));" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
+		</span>
 	</div>
 	
 	<#if eventType.assignedToAvailable>
@@ -112,4 +117,5 @@
 			element.observe('change', updateAssignToSomone);
 			updateAssignToSomone();
 		});
+		
 </@n4.includeScript>

@@ -599,5 +599,26 @@ function positionDropDown(a, entityId){
 		return true;
 	}
 }
+ 
+ function toggleDisabled(element){
+	if (element.disabled){
+		element.disabled=false;
+	}else{
+		element.disabled=true;
+	}
+}
+ 
+ function toggleHidden(element){
+	if (element.visible()){
+		element.hide();
+	}else{
+		element.show();
+	}
+ }
 
-
+function toggleDisableLocationPicker(listOfInputElements, chooseButton){
+	listOfInputElements.each(function(element) {
+		toggleDisabled(element);
+	});
+		toggleHidden(chooseButton);
+	}

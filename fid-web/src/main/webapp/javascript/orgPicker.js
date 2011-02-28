@@ -217,3 +217,19 @@ document.observe("dom:loaded", function() {
 	attachOrgEvents("body");
 	
 });
+
+function toggleDisableOrgPicker(){
+	
+	$$(".orgPicker a").each(function(element) {
+		if(element.visible()){
+			element.hide();
+		}else{
+			element.show();
+		}
+	});
+	
+	$$(".orgPicker input").each(function(element) {
+		toggleDisabled(element);
+	});
+	
+}	
