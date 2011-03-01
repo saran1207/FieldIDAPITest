@@ -29,6 +29,7 @@
 	
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<@n4.includeScript src="commentTemplates"/>
+	<@n4.includeScript src="combobox"/>
 		
 	<@n4.includeScript>
 		changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>';
