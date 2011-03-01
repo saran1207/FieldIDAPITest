@@ -244,6 +244,8 @@
 
 .recDefButtons {
 	padding-left: 10px;
+	margin-right: 95px;
+	float:right;
 }
 
 .recDefButtons img {
