@@ -2116,7 +2116,7 @@
 		</action>
 
 
-		<action name="customersUserDelete" method="delete" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+		<action name="customersUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="input" type="redirectAction">
 				<param name="actionName">customersUsers</param>
 				<param name="customerId">${customerId}</param>

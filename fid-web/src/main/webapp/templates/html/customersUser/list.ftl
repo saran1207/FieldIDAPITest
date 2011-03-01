@@ -31,8 +31,9 @@ ${action.setPageType('customer', 'users')!}
 				<td>${(user.owner.divisionOrg.name)!?html}</td>
 				<td>${user.emailAddress?html! } </td>
 				<td>${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>		
-				
-				<td><div><a href="<@s.url action="customersUserDelete" uniqueID="${(user.id)!}" includeParams="get"/>"><@s.text name="label.remove" /></a></div></td>
+				<td>
+					<a href="<@s.url action="customersUserArchive" uniqueID="${(user.id)!}" includeParams="get"/>"><@s.text name="label.archive" /></a>
+				</td>
 			</tr>
 		</#list>
 </table>
