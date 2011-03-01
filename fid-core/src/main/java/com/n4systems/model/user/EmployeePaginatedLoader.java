@@ -18,7 +18,7 @@ public class EmployeePaginatedLoader extends PaginatedLoader<User> {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, filter);
 		
 		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.SYSTEM));
-		builder.addSimpleWhere("active", true);
+		UserQueryHelper.applyFullyActiveFilter(builder);
 		builder.addOrder("id");
 		
 		builder.addWhere(Comparator.NULL, "customerid", "owner.customerOrg", "");

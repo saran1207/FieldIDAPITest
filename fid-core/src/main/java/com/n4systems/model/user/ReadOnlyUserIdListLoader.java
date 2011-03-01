@@ -19,7 +19,7 @@ public class ReadOnlyUserIdListLoader extends ListLoader<Long> {
 	protected List<Long> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(User.class, filter);
 		builder.addSimpleWhere("userType", UserType.READONLY);
-		builder.addSimpleWhere("deleted", false);
+		UserQueryHelper.applyFullyActiveFilter(builder);
 		builder.setSimpleSelect("id", true);
 				
 		return builder.getResultList(em);

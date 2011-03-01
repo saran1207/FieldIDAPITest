@@ -22,8 +22,7 @@ public class UserByFullNameLoader extends ListLoader<User> {
 	@Override
 	protected List<User> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, filter, "u");
-		builder.addWhere(WhereClauseFactory.create("active", true));
-		builder.addWhere(WhereClauseFactory.create("deleted", false));
+		UserQueryHelper.applyFullyActiveFilter(builder);
 		
 		PassthruWhereClause clause = new PassthruWhereClause("full_name");
 		clause.setClause("lower(concat(u.firstName, u.lastName)) = :fullName");

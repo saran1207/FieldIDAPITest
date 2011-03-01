@@ -4,6 +4,7 @@ package com.n4systems.model.user;
 import java.util.Arrays;
 
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListableLoader;
 import com.n4systems.util.UserType;
@@ -30,11 +31,11 @@ public class UserListableLoader extends ListableLoader {
 		builder.setSelectArgument(new ListableSelect("id", "CONCAT(firstName, ' ', lastName)"));
 		
 		builder.addOrder("firstName", "lastName");
-		builder.addSimpleWhere("active", true);
+		builder.addSimpleWhere("registered", true);
 		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.SYSTEM));
 		
 		if (noDeleted) {
-			builder.addSimpleWhere("deleted", false);
+			builder.addSimpleWhere("state", EntityState.ACTIVE);
 		}
 		
 		if (employeesOnly) {
