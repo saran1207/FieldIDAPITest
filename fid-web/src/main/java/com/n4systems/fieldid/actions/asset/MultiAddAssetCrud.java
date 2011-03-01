@@ -32,6 +32,7 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetCleaner;
 import com.n4systems.model.assettype.AssetTypeLoader;
@@ -145,7 +146,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		assetView.setIdentified(DateHelper.getToday());
 
 		AddAssetHistory addAssetHistory = loadAddAssetHistory();
-		if (addAssetHistory != null) {
+		if (addAssetHistory != null && !addAssetHistory.getAssetType().getEntityState().equals(EntityState.ARCHIVED)) {
 			
 			setOwnerId(addAssetHistory.getOwner() != null ? addAssetHistory.getOwner().getId() : null);
 
