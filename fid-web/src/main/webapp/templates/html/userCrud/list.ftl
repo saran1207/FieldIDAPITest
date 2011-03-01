@@ -38,13 +38,10 @@ ${action.setPageType('user','list')!}
 		</p>
 	</div>
 <#else>
-	<div class="emptyList" >
-		<h2><@s.text name="label.invalidpage" /></h2>
-		<p>
-			<@s.text name="message.invalidpage" />
-			<a href="<@s.url  action="userList" currentPage="1"/>" ><@s.text name="message.backtopageone"/></a>
-		</p>
-	</div>
+	<script type="text/javascript">
+		<@s.url  action="userList" currentPage="1" id="url"/>
+		window.location.href = '${url}';
+	</script>
 </#if>
 
 <#include '../userCrud/_userGroupChangeScript.ftl'/>

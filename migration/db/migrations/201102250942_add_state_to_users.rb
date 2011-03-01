@@ -13,9 +13,10 @@ class AddStateToUsers < ActiveRecord::Migration
      end
 	
 	def self.down
-		remove_column(:users, :state)
 		add_column(:users, :archiveduserid, :string)
 		add_column(:users, :deleted, :boolean)
+		execute "UPDATE users SET deleted = true WHERE state='ARCHIVED'"
+		remove_column(:users, :state)
 		rename_column(:users, :registered, :active)
 	end
 
