@@ -110,7 +110,7 @@ public class ManageUsersTest extends FieldIDTestCase {
 	
 	@Test
 	public void remove_user_test() throws Exception {
-		manageUsersPage.removeUser(READ_ONLY_USER, true);
+		manageUsersPage.archiveUser(READ_ONLY_USER, true);
 		
 		manageUsersPage.selectSearchUserType(ManageUsersPage.USER_TYPE_READONLY);
 		manageUsersPage.clickSearchButton();

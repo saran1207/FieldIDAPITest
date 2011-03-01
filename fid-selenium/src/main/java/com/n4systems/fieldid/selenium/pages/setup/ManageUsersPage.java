@@ -240,9 +240,9 @@ public class ManageUsersPage extends FieldIDPage {
 		return selenium.isElementPresent("//input[@value='Change to a Full User']");
 	}
 
-	public void removeUser(String userid, boolean confirm) {
+	public void archiveUser(String userid, boolean confirm) {
 		confirmNextDialog(confirm);
-		selenium.click("//a[contains(text(),'" + userid + "')]/../..//a[text()='Remove']");
+		selenium.click("//a[contains(text(),'" + userid + "')]/../..//a[text()='Archive']");
 		selenium.getConfirmation();
 	}
 

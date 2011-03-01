@@ -59,6 +59,17 @@ public class LiteUserCrud extends UserCrud {
 		return result;
 	}
 	
+	
+	@SkipValidation
+	public String doUnarchive() {
+		if (!super.isLiteUserLimitReached()) {
+			testRequiredEntities(true);		
+			return SUCCESS;		
+		}
+		addActionError(getText("label.unarchive_lite_user_limit", new String[] { getLimits().getLiteUsersMax().toString() } ));
+		return ERROR;
+	}
+	
 	private void setupPermissions() {
 		userPermissions = new HashMap<String, Boolean>();
 		

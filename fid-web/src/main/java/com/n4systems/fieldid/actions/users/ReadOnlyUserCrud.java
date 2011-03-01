@@ -33,7 +33,7 @@ public class ReadOnlyUserCrud extends UserCrud {
 		save();
 		return SUCCESS;
 	}
-	
+		
 	@Override
 	protected int processPermissions() {
 		return Permissions.CUSTOMER;

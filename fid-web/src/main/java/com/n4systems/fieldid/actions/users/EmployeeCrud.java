@@ -85,6 +85,17 @@ public class EmployeeCrud extends UserCrud {
 		setupPermissions();
 		return super.doShow();
 	}
+	
+	@Override
+	@SkipValidation
+	public String doUnarchive() {
+		if(!super.isEmployeeLimitReached()) {
+			testRequiredEntities(true);		
+			return SUCCESS;
+		}
+		addActionError(getText("label.unarchive_employee_user_limit", new String[] { getLimits().getEmployeeUsersMax().toString() } ));
+		return ERROR;
+	}
 		
 	@SuppressWarnings("unchecked")
 	public Map getUserPermissions() {

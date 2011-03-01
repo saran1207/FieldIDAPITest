@@ -776,7 +776,7 @@
 		<action name="readOnlyUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="success" type="redirectAction">
-			<param name="actionName">viewUser</param>
+				<param name="actionName">viewUser</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
@@ -784,31 +784,40 @@
 		<action name="employeeUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
 			</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">viewUser</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>						
 		</action>
 		
 		<action name="liteUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
 			</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">viewUser</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>						
 		</action>
 		
 		<action name="readOnlyUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
 			</result>
 			<result name="error" type="redirectAction">
-				<param name="actionName">viewUser</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+				<param name="actionName">userList</param>
+				<param name="currentPage">${currentPage}</param>
+				<param name="listFilter">${listFilter}</param>
+			</result>						
 		</action>
 		
 		
@@ -817,6 +826,7 @@
 				<param name="actionName">employeeUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
+			<result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
 		</action>
 		
 		<action name="liteUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
@@ -824,6 +834,7 @@
 				<param name="actionName">liteUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
+			<result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
 		</action>
 		
 		<action name="readOnlyUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
