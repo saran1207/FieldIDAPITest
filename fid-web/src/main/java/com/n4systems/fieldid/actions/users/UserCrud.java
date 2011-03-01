@@ -167,7 +167,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public String doEdit() {
 		testRequiredEntities(true);
 		loadCurrentSignature();
-
+		if(user.getOwner().isArchived()) {
+			user.setOwner(null);			
+		}
 		return SUCCESS;
 	}
 
@@ -210,7 +212,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	
 	@SkipValidation
 	public String doUnarchive() {
-		testRequiredEntities(true);		
+		testRequiredEntities(true);
 		return SUCCESS;
 	}
 
