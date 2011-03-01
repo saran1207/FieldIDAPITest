@@ -9,21 +9,26 @@
 }
 
 .titleBlock{
-	margin-bottom: 0;
-	}
+	margin-bottom: 20px;
+}
 
-.titleBlock p{
-	font-size: 14px;
-	padding-top: 10px;
-	}
+.titleBlock h1{
+	font-weight: normal;
+	size: 20px;
+}
+	
+p.actionInstructions{
+	color: #555;
+	font-size: 13px;
+}
 
 .labelRightMargin{
 	margin-right: 150px;
 }
 
- #tenantsContainer .titleBlock{
+#tenantsContainer .titleBlock{
 	padding: 15px 15px 0 15px;	
-	}
+}
 
 #tenantList{
 	padding: 15px;
@@ -38,11 +43,11 @@
 #tenantList .headingLabels{
 	border-style: none;
 	height: 15px;
-	}
+}
 
 #tenantList li label{
 	font-size: 13px;
-	}
+}
 	
 div.linkContainer{
 	float:left;
@@ -53,11 +58,15 @@ div.linkContainer{
 
 .linkContainer a{
 	color: #00C;
-	}
+}
 
 li input{
 	float:left;
 	padding: 2.5px;
 	font-size: 13px;
 	clear: right;
+}
+
+div.actions{
+	margin-top: 20px;
 }
