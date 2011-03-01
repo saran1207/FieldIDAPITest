@@ -16,7 +16,8 @@
             <option ${selectedStr}>${option}</option>
         </#list>
         <#if (criteriaResult.id)?exists && !criteria.options.contains(criteriaResult.textValue)> 
-        	<option 'selected'>${criteriaResult.textValue}</option>
+            <#assign selectedStr = 'selected'/>
+        	<option ${selectedStr}>${criteriaResult.textValue}</option>
         </#if>
     </select>
     <script type="text/javascript">
