@@ -179,7 +179,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 				+ UserType.SYSTEM.toString() + "'";
 
 		if (onlyActive) {
-			queryString += " AND ub.deleted = false ";
+			queryString += " AND ub.state = 'ACTIVE' ";
 		}
 
 		if (nameFilter != null) {
@@ -249,7 +249,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getExaminers(SecurityFilter filter) {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
-		String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and deleted = false and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
+		String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
 				+ filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )"
 				+ " ORDER BY ub.firstName, ub.lastName";
 		Query query = em.createQuery(queryString);

@@ -30,7 +30,7 @@ public class ReadOnlyUserSwitch extends ExtendedFeatureSwitch {
 	
 	private void deleteAllReadOnlyUsers(Transaction transaction) {
 		ReadOnlyUserIdListLoader loader = new ReadOnlyUserIdListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant()));
-		String updateQuery = "UPDATE " + User.class.getName() + " SET modified = :now, deleted = true WHERE id in (:ids)";
+		String updateQuery = "UPDATE " + User.class.getName() + " SET modified = :now, state = 'ACTIVE' WHERE id in (:ids)";
 		Query query = transaction.getEntityManager().createQuery(updateQuery);
 		query.setParameter("now", new Date());
 		LargeInListQueryExecutor queryRunner = new LargeInListQueryExecutor();

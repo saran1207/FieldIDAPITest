@@ -1,6 +1,5 @@
 package com.n4systems.model.user;
 
-import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.PaginatedLoader;
@@ -27,7 +26,7 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 	protected QueryBuilder<User> createBuilder(SecurityFilter filter) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, filter);
 		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.SYSTEM));
-		builder.addSimpleWhere("registered", true);
+		UserQueryHelper.applyRegisteredFilter(builder);		
 		
 		if(owner != null) {
 			builder.addSimpleWhere("owner", owner);
@@ -46,7 +45,7 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		}
 		
 		if (archivedOnly) {
-			builder.addSimpleWhere("state", EntityState.ARCHIVED);
+			UserQueryHelper.applyArchivedFilter(builder);			
 		}
 		
 		builder.addOrder("firstName", "lastName");
