@@ -7,11 +7,13 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.StringValidator;
 
 public class EditCopyDeleteItemPanel extends Panel {
 
@@ -113,11 +115,19 @@ public class EditCopyDeleteItemPanel extends Panel {
         public EditForm(String id, IModel<String> model) {
             super(id);
             this.stringModel = model;
-            add(new TextField<String>("newText", stringModel));
+            TextField<String> criteriaName;
+            add(criteriaName = new RequiredTextField<String>("newText", stringModel));
+            criteriaName.add(new StringValidator.MaximumLengthValidator(1000));
+
             add(new AjaxSubmitLink("storeLink") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     setViewState(target);
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    onFormValidationError(target);
                 }
             });
             add(new AjaxLink("cancelLink") {
@@ -139,6 +149,8 @@ public class EditCopyDeleteItemPanel extends Panel {
     protected void onDeleteButtonClicked(AjaxRequestTarget target) { }
 
     protected void onCopyLinkClicked(AjaxRequestTarget target) { }
+
+    protected void onFormValidationError(AjaxRequestTarget target) { }
 
     private void setViewState(AjaxRequestTarget target) {
         editForm.setVisible(false);

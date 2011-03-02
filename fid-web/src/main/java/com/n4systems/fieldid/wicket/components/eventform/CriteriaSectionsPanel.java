@@ -81,6 +81,11 @@ public class CriteriaSectionsPanel extends SortableListPanel {
                         currentlySelectedIndex = getListModel().getObject().size() - 1;
                         onCriteriaSectionSelected(target, currentlySelectedIndex);
                     }
+                    
+                    @Override
+                    protected void onFormValidationError(AjaxRequestTarget target) {
+                        target.addComponent(feedbackPanel);
+                    }
 
                     @Override
                     protected boolean isReorderState() {
@@ -147,6 +152,12 @@ public class CriteriaSectionsPanel extends SortableListPanel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     CriteriaSection section = new CriteriaSection();
+                    
+                    if (sectionTitle.length() > 255){
+                        error("Name length cannot exceed 255 characters.");
+                        target.addComponent(feedbackPanel);
+                        return;
+                    }
                     section.setTitle(sectionTitle);
                     sectionTitle = null;
                     onCriteriaSectionAdded(target, section);

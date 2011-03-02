@@ -83,6 +83,11 @@ public class CriteriaPanel extends SortableListPanel {
                     }
 
                     @Override
+                    protected void onFormValidationError(AjaxRequestTarget target) {
+                        target.addComponent(feedbackPanel);
+                    }
+
+                    @Override
                     protected boolean isReorderState() {
                         return reorderState;
                     }
@@ -168,7 +173,11 @@ public class CriteriaPanel extends SortableListPanel {
                         uomCriteria.setPrimaryUnit(getDefaultUnitOfMeasure());
                         criteria = uomCriteria;
                     }
-                    
+                    if (criteriaName.length()>1000){
+                        error("Name length cannot exceed 100 characters.");
+                        target.addComponent(feedbackPanel);
+                        return;
+                    }
                     criteria.setDisplayText(criteriaName);
                     criteriaName = null;
                     getCriteriaSection().getCriteria().add(criteria);
