@@ -1,6 +1,8 @@
 <table class="list" id="userList">
 	<tr>
-		<th ><@s.text name="label.username"/></th>
+		<#if !isArchivedPage>
+			<th ><@s.text name="label.username"/></th>
+		</#if>
     	<th ><@s.text name="label.name"/></th>
     	<th ><@s.text name="label.organization"/></th>
     	<#if userType?exists && userType != "EMPLOYEES"  >
@@ -14,9 +16,11 @@
 	<#assign count=0 >
 	<#list userList as user >
 		<tr id="user_${user.id!}" >
-			<td>
-				<a href="<@s.url action="viewUser" uniqueID="${user.id!}" />" >${(user.userID?html)! }</a>
-			</td>
+			<#if !isArchivedPage>
+				<td>
+					<a href="<@s.url action="viewUser" uniqueID="${user.id!}" />" >${(user.userID?html)! }</a>
+				</td>
+			</#if>
 			<td>${user.userLabel?html! }</td>
 			<td>${(user.owner.getInternalOrg().name?html)!}</td>
 			<#if userType?exists && userType != "EMPLOYEES" >

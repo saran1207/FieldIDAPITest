@@ -61,6 +61,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private PasswordEntry passwordEntry = new PasswordEntry();
 	private boolean assignPassword = true;
 	protected Pager<User> page;
+	protected Pager<User> archivedPage;
 
 	private String listFilter;
 
@@ -400,9 +401,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	public Pager<User> getPage() {
 		if (page == null) {
-			UserType typeFilter = UserType.valueOf(userType);
 			page = new UserPaginatedLoader(getSecurityFilter())
-			               .withUserType(typeFilter)
+			               .withUserType(UserType.valueOf(userType))
 			               .withNameFilter(listFilter)
 			               .setPage(getCurrentPage().intValue())
 			               .setPageSize(Constants.PAGE_SIZE)
@@ -412,11 +412,16 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 	
 	public Pager<User> getArchivedPage() {
-		return new UserPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
-		                   .withArchivedOnly()
-			               .setPage(getCurrentPage().intValue())
-			               .setPageSize(Constants.PAGE_SIZE)
-			               .load();
+		if(archivedPage == null) {
+			archivedPage =  new UserPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
+			                   .withArchivedOnly()
+				               .withUserType(UserType.valueOf(userType))
+				               .withNameFilter(listFilter)
+				               .setPage(getCurrentPage().intValue())
+				               .setPageSize(Constants.PAGE_SIZE)
+				               .load();
+		}
+		return archivedPage;
 	}
 	
 	public SortedSet<? extends Listable<String>> getCountries() {
