@@ -122,6 +122,7 @@
 	padding-top: 5px;
 	padding-bottom: 5px;
 	font-size: 1.0em;	
+	color: #222;
 }
 
 .columnCenter{
@@ -134,6 +135,7 @@
 
 .leftViewSection, .rightViewSection {
 	padding-bottom: 10px;
+	color: #555;
 }
 
 .leftViewSection p {
@@ -177,6 +179,15 @@
 	padding-left: 0;
 }
 
+.smallBr{
+	font-size: 1px; 
+	line-height: 0; 
+}
+
+#attachedfiles .fileUploadShow{
+	clear:left;
+	}
+
 .fileUploadShow {
 	padding-top: 5px;
 	padding-bottom: 5px;
@@ -209,3 +220,21 @@
 .viewSection {
 	margin: 0;
 }
+
+.viewSection p label{
+	text-align:right;
+	color: #222;
+	width: 155px;
+}
+
+.viewSection p {
+	padding: 7px;
+	}
+
+.viewSection p span{
+	color: #555;
+	text-align: left;
+	margin-left: 18px;
+}
+
+

@@ -1,6 +1,7 @@
 <#escape x as x?html >
 	<div id="attachedfiles" >
 		<#list attachments as attachedFile >
+		
 			<p id="attached_${attachedFile_index}" class="fileUploadShow">
 				<#noescape>
 				<label id="attached_${attachedFile_index}_label">
@@ -12,11 +13,11 @@
 					</#if>
 				</label>
 				
-				<div>
+				<div class="details">
 					<p>
 						<a href="${attachment_url}" target="_blank">${attachedFile.fileName}</a>
 					</p>
-					<p>
+					<p class="attachmentComments">
 						${(attachedFile.comments)!}
 					</p>
 				</div>

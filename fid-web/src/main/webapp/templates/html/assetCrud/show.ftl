@@ -121,7 +121,7 @@ ${action.setPageType('asset', 'show')!}
 
 <div class="columnCenter">
 	<div class="viewSection smallViewSection" >
-		<h2><@s.text name="label.assetsummary"/></h2>
+		<h2>${asset.type.name} <@s.text name="label.summary"/></h2>
 		<p>
 			<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
 			<span class="fieldValue serialNumber">${asset.serialNumber}</span>
