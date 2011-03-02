@@ -1,7 +1,7 @@
 <#escape x as x?html >
 	<div id="attachedfiles" >
 		<#list attachments as attachedFile >
-		
+			<br class="smallBr"/>
 			<p id="attached_${attachedFile_index}" class="fileUploadShow">
 				<#noescape>
 				<label id="attached_${attachedFile_index}_label">
