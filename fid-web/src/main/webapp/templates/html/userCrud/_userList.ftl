@@ -32,20 +32,33 @@
 			
 			<td>${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>		
 			<td>
-				<#if user.id != sessionUser.id && !user.admin >
-					<#if user.fullUser>
-						<@s.url id="archiveUrl" action="employeeUserArchive" uniqueID="${(user.id)!}" />
-					<#elseif user.liteUser>
-						<@s.url id="archiveUrl" action="liteUserArchive" uniqueID="${(user.id)!}" />
+				<div>
+					<#if isArchivedPage>
+						<#if user.id != sessionUser.id && !user.admin >
+							<#if user.fullUser>
+								<@s.url id="unarchiveUrl" action="employeeUserUnarchive" uniqueID="${(user.id)!}" />
+							<#elseif user.liteUser>
+								<@s.url id="unarchiveUrl" action="liteUserUnarchive" uniqueID="${(user.id)!}" />
+							<#else>
+								<@s.url  id="unarchiveUrl" action="readOnlyUserUnarchive" uniqueID="${(user.id)!}" />
+							</#if>
+							<a href="${unarchiveUrl}"/><@s.text name="label.unarchive"/></a>
+						</#if>				
 					<#else>
-						<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
+						<#if user.id != sessionUser.id && !user.admin >
+							<#if user.fullUser>
+								<@s.url id="archiveUrl" action="employeeUserArchive" uniqueID="${(user.id)!}" />
+							<#elseif user.liteUser>
+								<@s.url id="archiveUrl" action="liteUserArchive" uniqueID="${(user.id)!}" />
+							<#else>
+								<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
+							</#if>
+							<a href="${archiveUrl}" onclick="return confirm('${action.getText( 'warning.archiveuser',"", (user.userID)! )}');">
+								<@s.text name="label.archive" />
+							</a>
+						</#if>
 					</#if>
-					<div>
-						<a href="${archiveUrl}" onclick="return confirm('${action.getText( 'warning.archiveuser',"", (user.userID)! )}');">
-							<@s.text name="label.archive" />
-						</a>
-					</div>
-				</#if>
+				</div>
 			</td>
 		</tr>
 	</#list>
