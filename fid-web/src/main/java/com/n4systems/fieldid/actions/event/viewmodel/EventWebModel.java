@@ -27,6 +27,7 @@ public class EventWebModel implements UserDateFormatValidator {
 	
 	private boolean locationSetFromAsset = false;
 	private boolean ownerSetFromAsset = false;
+	private boolean assetStatusSetFromAsset = false;
 	
 	
 	public EventWebModel(OwnerPicker ownerPicker, SessionUserDateConverter dateConverter, LoaderFactoryProvider loaderFactoryProvider) {
@@ -70,6 +71,10 @@ public class EventWebModel implements UserDateFormatValidator {
 			event.setOwner(ownerPicker.getOwner());
 		}
 		
+		if(assetStatusSetFromAsset){
+			event.setAssetStatus(event.getAsset().getAssetStatus());
+		}
+		
 		event.setDate(datePerformed != null ? dateConverter.convertDateTime(datePerformed) : null);
 	}
 	
@@ -105,5 +110,9 @@ public class EventWebModel implements UserDateFormatValidator {
 
 	public void setOwnerSetFromAsset(boolean ownerSetFromAsset) {
 		this.ownerSetFromAsset = ownerSetFromAsset;
+	}
+
+	public void setStatusSetFromAsset(boolean isStatusSetFromAsset) {
+		this.assetStatusSetFromAsset  = isStatusSetFromAsset;
 	}
 }

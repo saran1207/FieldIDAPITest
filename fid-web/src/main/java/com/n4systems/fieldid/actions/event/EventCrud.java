@@ -133,8 +133,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private boolean assignToSomeone = false;
 
 	private boolean isEditing;
-	private boolean statusSetFromAsset;
-	private boolean ownerSetFromAsset;
 	
 	public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager) {
@@ -681,15 +679,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	public void setAssetStatus(Long assetStatus) {
-		if(statusSetFromAsset){
-			event.setAssetStatus(event.getAsset().getAssetStatus());
-		}else{
-			if (assetStatus == null) {
-				event.setAssetStatus(null);
-			} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getId())) {
-				event.setAssetStatus(legacyAssetManager.findAssetStatus(assetStatus, getTenantId()));
-			} 
-		}
+		if (assetStatus == null) {
+			event.setAssetStatus(null);
+		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getId())) {
+			event.setAssetStatus(legacyAssetManager.findAssetStatus(assetStatus, getTenantId()));
+		} 
 	}
 
 	public Long getperformedBy() {
@@ -1086,7 +1080,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
     
     public void setOwnerSetFromAsset(boolean isOwnerSetFromAsset) {
-    	ownerSetFromAsset = isOwnerSetFromAsset;
 		modifiableEvent.setOwnerSetFromAsset(isOwnerSetFromAsset);
 		
 		//This is just a placeholder owner to get around the validation in EventWebModel.
@@ -1094,6 +1087,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
     
     public void setStatusSetFromAsset(boolean isStatusSetFromAsset) {
-    	this.statusSetFromAsset=isStatusSetFromAsset;
-	}
+    	modifiableEvent.setStatusSetFromAsset(isStatusSetFromAsset);
+    }
 }
