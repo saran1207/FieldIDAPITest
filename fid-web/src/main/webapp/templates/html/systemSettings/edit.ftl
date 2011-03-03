@@ -35,7 +35,24 @@ ${action.setPageType('account_settings', 'list')!}
 					<@s.checkbox name="assignedTo" /> 
 				</span>
 			</div>
-		
+			<div class="infoSet">
+				<label>
+					<@s.text name="label.enable_proof_test_integration"/>
+					<a href="javascript:void(0);" id="whatsThis_proofTest_button" >?</a>
+					<div id="whatsThis_proofTest" class="hidden" style="border :1px solid black">
+						<h4><@s.text name="label.proof_test_integration"/></h4>
+						<p>
+							<@s.text name="label.proof_test_integration_tooltip1"/>
+						</p>
+					</div>
+					<script type="text/javascript">
+						$("whatsThis_proofTest_button").observe( 'click', function(event) { showQuickView('whatsThis_proofTest', event); } );
+					</script>
+				</label>
+				<span class="fieldHolder">
+					<@s.checkbox name="proofTestIntegration" /> 
+				</span>
+			</div>
 			<div class="infoSet">
 				<label for="dateFormat">
 					<@s.text name="label.preferred_date_format" />

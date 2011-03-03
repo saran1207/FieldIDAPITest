@@ -43,7 +43,8 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private boolean removeImage = false;
 	private boolean newImage = false;
 	private boolean assignedTo = false;
-
+	private boolean proofTestIntegration=false;
+	
 	private TransactionManager transactionManager;
 
 	public SystemSettingsCrud(PersistenceManager persistenceManager) {
@@ -54,6 +55,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	protected void initMemberFields() {
 		primaryOrg = getPrimaryOrg();
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
+		proofTestIntegration = primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
 	}
 
 	@Override
@@ -71,6 +73,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public String doEdit() {
 		dateFormat = primaryOrg.getDateFormat();
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
+		proofTestIntegration = primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
 		webSite = primaryOrg.getWebSite();
 
 		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
@@ -97,7 +100,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 		Transaction transaction = transactionManager().startTransaction();
 
 		try {
-			updateAssignedToFeature(transaction);
+			updateExtendedFeatures(transaction);
 			updateDateFormat(transaction);
 			save(transaction);
 			transactionManager().finishTransaction(transaction);
@@ -154,10 +157,10 @@ public class SystemSettingsCrud extends AbstractCrud {
 		new OrgSaver().update(transaction, getPrimaryOrg());
 	}
 	
-	private void updateAssignedToFeature(Transaction transaction) throws Exception {
+	private void updateExtendedFeatures(Transaction transaction) throws Exception {
 		PrimaryOrg primaryOrg = getPrimaryOrg();
+		new ToggleExendedFeatureMethod(ExtendedFeature.ProofTestIntegration, proofTestIntegration).applyTo(primaryOrg, transaction);
 		new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, assignedTo).applyTo(primaryOrg, transaction);
-	
 	}
 
 	private void updateDateFormat(Transaction transaction) throws Exception {
@@ -285,5 +288,13 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	public UpgradePackageFilter currentPackageFilter() {
 		return accountHelper.currentPackageFilter();
+	}
+
+	public boolean isProofTestIntegration() {
+		return proofTestIntegration;
+	}
+
+	public void setProofTestIntegration(boolean proofTestIntegration) {
+		this.proofTestIntegration = proofTestIntegration;
 	}
 }

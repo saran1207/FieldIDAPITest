@@ -26,7 +26,8 @@ public enum ExtendedFeature {
 	MultiLocation("feature.multi_location", "allows the tenant to create as many secondary orgs."), 
 	AllowIntegration("feature.allow_integration", "Says that someone could have integration turned on."),
 	AdvancedLocation("feature.advanced_location", "Allows for a location hierarchy."),
-	UnlimitedLinkedAssets("feature.unlimited_linked_assets", "Assets registered against this Tenant will not count towards their asset limit");
+	UnlimitedLinkedAssets("feature.unlimited_linked_assets", "Assets registered against this Tenant will not count towards their asset limit"),
+	ProofTestIntegration("feature.proof_test_integration", "Allows you to conduct Proof Tests on your equipment with your Test Bed using Field ID. Currently, Field ID integrates with Roberts, Chant, Wirop, and National Automation");
 	
 	private String label;
 	private String description;
