@@ -898,6 +898,13 @@
 			<result name="error" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
 		</action>
+		
+		<action name="selectAssetTypes" method="list"
+			class="com.n4systems.fieldid.actions.asset.AssociatedEventTypeCrud">
+			<result name="error" type="freemarker">/templates/html/eventTypeAssetTypeCrud/list.ftl</result>
+			<result name="success" type="freemarker">/templates/html/eventTypeAssetTypeCrud/list.ftl</result>
+		</action>
+		
 		<action name="assetTypeEventTypesSave" method="save"
 			class="com.n4systems.fieldid.actions.asset.AssociatedEventTypeCrud">
 			<result name="error" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
@@ -905,6 +912,16 @@
 			<result name="success" type="redirectAction">
 				<param name="actionName">selectEventTypes</param>
 				<param name="assetTypeId">${assetTypeId}</param>
+			</result>
+		</action>
+		
+		<action name="eventTypeAssetTypesSave" method="saveAssetTypes"
+			class="com.n4systems.fieldid.actions.asset.AssociatedEventTypeCrud">
+			<result name="error" type="freemarker">/templates/html/eventTypeAssetTypeCrud/list.ftl</result>
+			<result name="input" type="freemarker">/templates/html/eventTypeAssetTypeCrud/list.ftl</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">selectAssetTypes</param>
+				<param name="eventTypeId">${eventTypeId}</param>
 			</result>
 		</action>
 

@@ -37,8 +37,6 @@ ${action.setPageType('asset_type', 'select_event_types')!}
 			<tr>
 				<th class="checkboxRow"><@s.text name="label.selected"/></th>
 				<th ><@s.text name="label.eventtype"/></th>
-				
-				
 			</tr>
 			
 			<#list eventTypes as eventType>
