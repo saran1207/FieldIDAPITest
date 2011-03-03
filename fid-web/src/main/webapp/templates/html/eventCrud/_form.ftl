@@ -58,7 +58,7 @@
         <#include "_result.ftl" />
     </#if>
 	
-	<#if action.isParentAsset() && !eventType.supportedProofTests.isEmpty() >
+	<#if action.isParentAsset() && !eventType.supportedProofTests.isEmpty() && securityGuard.proofTestIntegrationEnabled >
 		<#include "_proofTest.ftl"/>
 	</#if>
 	

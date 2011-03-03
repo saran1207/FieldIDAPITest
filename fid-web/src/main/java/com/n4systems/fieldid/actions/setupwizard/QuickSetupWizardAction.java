@@ -18,7 +18,8 @@ public class QuickSetupWizardAction extends AbstractAction {
 
 	private boolean turnOnJobSites;
 	private boolean turnOnAssignedTo=false;
-
+	private boolean turnOnProofTests = false;
+	
 	private TransactionManager transactionManager;
 	
 	
@@ -35,6 +36,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 	public String doStep1() {
 		turnOnJobSites = getPrimaryOrg().hasExtendedFeature(ExtendedFeature.JobSites);
 		turnOnAssignedTo=getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AssignedTo);
+		turnOnProofTests=getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
 		return SUCCESS;
 	}
 	
@@ -42,8 +44,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 		Transaction transaction = transactionManager().startTransaction();
 		
 		try {
-			updateJobFeature(transaction);
-			updateAssignedToFeature(transaction);
+			updateExtendedFeatures(transaction);
 			save(transaction);
 			transactionManager().finishTransaction(transaction);
 		
@@ -75,13 +76,10 @@ public class QuickSetupWizardAction extends AbstractAction {
 		new OrgSaver().update(transaction, getPrimaryOrg());
 	}
 
-	private void updateJobFeature(Transaction transaction) throws Exception {
+	private void updateExtendedFeatures(Transaction transaction) throws Exception{
 		new ToggleExendedFeatureMethod(ExtendedFeature.JobSites, turnOnJobSites).applyTo(getPrimaryOrg(), transaction);
-	
-	}
-
-	private void updateAssignedToFeature(Transaction transaction) throws Exception {
-		 new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, turnOnAssignedTo).applyTo(getPrimaryOrg(), transaction);
+		new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, turnOnAssignedTo).applyTo(getPrimaryOrg(), transaction);
+		new ToggleExendedFeatureMethod(ExtendedFeature.ProofTestIntegration, turnOnProofTests).applyTo(getPrimaryOrg(), transaction);
 	}
 
 	private void clearCachedValues() {
@@ -106,6 +104,14 @@ public class QuickSetupWizardAction extends AbstractAction {
 
 	public String getLoginUrl(){
 		return getBaseBrandedNonFieldIDUrl(getTenant().getName());
+	}
+
+	public boolean isTurnOnProofTests() {
+		return turnOnProofTests;
+	}
+
+	public void setTurnOnProofTests(boolean turnOnProofTests) {
+		this.turnOnProofTests = turnOnProofTests;
 	}
 	
 }

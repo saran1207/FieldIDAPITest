@@ -51,21 +51,22 @@
 		</span>
 	</p>
 </#if>
-<table class="list">
-	<tr>
-		<th><@s.text name="label.supportedprooftesttype"/></th>
-		<th class="setting"><@s.text name="label.on"/></th>
-		<th class="setting"><@s.text name="label.off"/></th>
-	</tr>
-	<#list proofTestTypes as proofTestType >
+<#if securityGuard.proofTestIntegrationEnabled>
+	<table class="list">
 		<tr>
-			<td><@s.text name="${proofTestType.displayName!}" /></td>
-			<td><@s.radio name="supportedProofTestTypes['${proofTestType.name()}']" list="on" /></td>
-			<td><@s.radio name="supportedProofTestTypes['${proofTestType.name()}']" list="off"  /></td>
+			<th><@s.text name="label.supportedprooftesttype"/></th>
+			<th class="setting"><@s.text name="label.on"/></th>
+			<th class="setting"><@s.text name="label.off"/></th>
 		</tr>
-	</#list>
-</table>
-
+		<#list proofTestTypes as proofTestType >
+			<tr>
+				<td><@s.text name="${proofTestType.displayName!}" /></td>
+				<td><@s.radio name="supportedProofTestTypes['${proofTestType.name()}']" list="on" /></td>
+				<td><@s.radio name="supportedProofTestTypes['${proofTestType.name()}']" list="off"  /></td>
+			</tr>
+		</#list>
+	</table>
+</#if>
 <div >
 	<h2><@s.text name="label.eventattributes"/></h2>
 	<div id="infoFields">

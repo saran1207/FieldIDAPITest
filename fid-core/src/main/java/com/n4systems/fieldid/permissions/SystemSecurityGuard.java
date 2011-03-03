@@ -24,6 +24,6 @@ public interface SystemSecurityGuard {
 	public boolean isAssignedToEnabled();
 	public boolean isUnlimitedLinkedAssetsEnabled();
 	public boolean isAdvancedLocationEnabled();
-	
+	public boolean isProofTestIntegrationEnabled();
 	public boolean isPlansAndPricingAvailable();
 }

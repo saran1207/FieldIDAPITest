@@ -41,6 +41,20 @@
 			</div>
 		</div>
 		
+		<div class="setupWizardContent">
+			<h2><@s.text name="label.enable_proof_test_integration"/></h2>
+			<p><@s.text name="label.proof_test_field_description"/></p>
+			<br/>
+			<div class="infoSet weak">
+				<span class="fieldHolder">
+				
+					<@s.checkbox name="turnOnProofTests" theme="fieldidSimple"/>
+					<span class="description checkBoxLabel"><@s.text name="label.yes_i_want_to_enable_proof_test_integration"/></span>
+				</span>
+			</div>
+		</div>
+		
+		
 		<div class="prominent">
 			<@s.url id="cancelUrl" action="startWizard"/>
 			<@s.submit key="label.next" />

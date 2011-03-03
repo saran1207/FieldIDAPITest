@@ -107,5 +107,10 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	public boolean isAdvancedLocationEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation);
 	}
+
+	@Override
+	public boolean isProofTestIntegrationEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
+	}
 	
 }

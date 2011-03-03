@@ -49,15 +49,17 @@ ${action.setPageType('event_type', 'show')!}
 			<span class="fieldValue">${eventType.assignedToAvailable?string(action.getText('label.yes'), action.getText('label.no'))}</span>
 		</p>	
 	</#if>
-	<h2><@s.text name="label.supportedprooftesttypes"/></h2>
-	<#if eventType.supportedProofTests?size != 0 >
-		<#list eventType.supportedProofTests as proofTestType >
-			<p class="fieldValue">${ action.getText( proofTestType.displayName! ) }</p>
-		</#list>
-	<#else>
-		<p class="fieldValue"><@s.text name="label.noprooftestavailable"/></p>
+	
+	<#if securityGuard.proofTestIntegrationEnabled>
+		<h2><@s.text name="label.supportedprooftesttypes"/></h2>
+		<#if eventType.supportedProofTests?size != 0 >
+			<#list eventType.supportedProofTests as proofTestType >
+				<p class="fieldValue">${ action.getText( proofTestType.displayName! ) }</p>
+			</#list>
+		<#else>
+			<p class="fieldValue"><@s.text name="label.noprooftestavailable"/></p>
+		</#if>
 	</#if>
-
 
 	<#if eventType.infoFieldNames?exists && !eventType.infoFieldNames.isEmpty()>
 		<div >
