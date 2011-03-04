@@ -33,7 +33,9 @@ fieldset p {
 	padding: 6px 0 6px 11px; 
 }
 
-legend h2{
+legend .heading{
+	font-size: 1.2em;
+	font-weight: bold;
 	position: relative;
 	top: 5px;
 }

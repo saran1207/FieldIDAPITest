@@ -6,7 +6,7 @@
 <div class="eventList">
 	<fieldset>
 		<legend id="singleEvent">
-			<h2 class="clean"><@s.text name="label.perform_event_single_asset"/></h2>
+			<span class="heading"><@s.text name="label.perform_event_single_asset"/></span>
 		</legend>
 		<p><@s.text name="label.perform_event_single_asset.full"/></p>
 		<div class="searchAction">
@@ -16,7 +16,7 @@
 	
 	<#if sessionUser.hasAccess("createevent") == true >
 		<fieldset>
-			<legend id="multipleEvents"><h2 class="clean"><@s.text name="label.multi_event"/></h2></legend>
+			<legend id="multipleEvents"><span class="heading"><@s.text name="label.multi_event"/></span></legend>
 			<p>
 				<@s.text name="label.multi_event.full"><@s.param>${maxAssetsFromMassEvent!250}</@s.param></@s.text><br/><br/>
 				<button onclick="redirect('<@s.url action="assetSelection"/>')" ><@s.text name="label.select_your_assets_now"/></button>
@@ -24,7 +24,7 @@
 		</fieldset>
 		<#if securityGuard.proofTestIntegrationEnabled>
 			<fieldset>
-				<legend id="multipleProofTests"><h2 class="clean"><@s.text name="label.multi_proof_test"/></h2></legend>
+				<legend id="multipleProofTests"><span class="heading"><@s.text name="label.multi_proof_test"/></span></legend>
 				<p>
 					<@s.text name="label.multi_proof_test.full"><@s.param>${maxAssetsFromMassEvent!250}</@s.param></@s.text><br/><br/>
 					<button onclick="redirect('<@s.url action="multiProofTest"/>')"><@s.text name="label.start_now"/></button>
