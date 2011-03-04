@@ -97,6 +97,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		
 		AvailableReportColumns reportColumns = new AvailableReportColumns(new SharedColumnFactory(implementingClass, getTenant()), new CustomizableSearchActionDynamicColumnProvider(this));
 		reportColumns.setFilter(new AssignedToReportColumnFilter(getSecurityGuard().isAssignedToEnabled()));
+		reportColumns.setFilter(new ProofTestIntegrationReportColumnFilter(getSecurityGuard().isProofTestIntegrationEnabled()));
 		
 		mappingGroups.addAll(reportColumns.getMappingGroups());
 		

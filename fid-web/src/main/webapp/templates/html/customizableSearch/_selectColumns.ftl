@@ -7,7 +7,9 @@
 	</h2>
 	<div id="selectColumnForm" class="sectionContent" style="display:none;">
 		<#list mappingGroups as group>
-			<#include "_columnGroup.ftl"/>
+			<#if !group.staticGroupEmpty>
+				<#include "_columnGroup.ftl"/>
+			</#if>
 		</#list>
 	</div>
 </div>

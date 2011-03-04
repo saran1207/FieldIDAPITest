@@ -71,4 +71,8 @@ public class ColumnMappingGroup implements Serializable, Comparable<ColumnMappin
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
+	
+	public boolean isStaticGroupEmpty(){
+		return !dynamic && getMappings().isEmpty();
+	}
 }
