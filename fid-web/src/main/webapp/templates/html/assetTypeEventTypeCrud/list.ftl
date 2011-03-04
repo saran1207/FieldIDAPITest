@@ -1,4 +1,18 @@
 <script type="text/javascript">
+	function selectAll(){
+		$$('input[type="checkbox"]').each(function(checkBox){
+			checkBox.checked=true;
+			changeSelection(checkBox);
+		});
+	}
+	
+	function selectNone(){
+		$$('input[type="checkbox"]').each(function(checkBox){
+			checkBox.checked=false;
+			changeSelection(checkBox);
+		});
+	}
+
 	function changeSelection( checkbox ) {
 		var row = $( 'event_' + checkbox.id );
 		
@@ -28,14 +42,22 @@
 	
 		
 </script>
+<style>
+.list th{
+	min-width: 65px;
+}
 
+.list th.checkboxRow a{
+	color: #356CA2;
+}
+</style>
 ${action.setPageType('asset_type', 'select_event_types')!}
 <#if ! eventTypes.isEmpty() >
 	<@s.form action="assetTypeEventTypesSave" id="assetTypeEventTypesSave" theme="simple">
 		<@s.hidden name="assetTypeId" />
 		<table class="list" >
 			<tr>
-				<th class="checkboxRow"><@s.text name="label.selected"/></th>
+				<th class="checkboxRow"><a href="#" onclick="selectAll();"><@s.text name="label.all"/></a> | <a href="#" onclick="selectNone();"><@s.text name="label.none"/></a></th>
 				<th ><@s.text name="label.eventtype"/></th>
 			</tr>
 			
