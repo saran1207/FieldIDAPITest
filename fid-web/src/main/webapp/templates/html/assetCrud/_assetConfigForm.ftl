@@ -21,11 +21,11 @@
 	<div class="infoSet">
 		<label class="label" for="owner"><@s.text name="label.owner"/></label>
 		<#if !parentAsset?exists >
-			<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
+			<@n4.orgPicker name="owner" theme="fieldid" required="true" id="ownerId"/>
 		<#else>
 			<span class="fieldHolder" id="owner">${(asset.owner.name?html)!}</span>
 		</#if>
-	</div>
+			</div>
 
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
@@ -91,6 +91,9 @@
 		</div>
 	</#if>
 </div>
-
+<div class="assetFormGroup">
+	<h2><@s.text name="label.eventschedule"/></h2>
+	<#include "_assetEventSchedules.ftl"/>
+</div>
 <#include "_fileAttachment.ftl"/>
 

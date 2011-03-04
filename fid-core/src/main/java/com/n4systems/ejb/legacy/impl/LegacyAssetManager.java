@@ -11,37 +11,35 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.impl.AssetManagerImpl;
-import com.n4systems.ejb.impl.EventScheduleManagerImpl;
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.asset.AssetSaver;
-import com.n4systems.model.utils.FindSubAssets;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.InfoOptionBean;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.impl.AssetManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
+import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.SubAsset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.util.TransactionSupervisor;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -53,7 +51,6 @@ public class LegacyAssetManager implements LegacyAsset {
 	
 	protected final EntityManager em;
 	private final PersistenceManager persistenceManager;
-	private final EventScheduleManager eventScheduleManager;
 	private final AssetManager assetManager;
 	
 	private Logger auditLogger = Logger.getLogger("AuditLog");
@@ -61,7 +58,6 @@ public class LegacyAssetManager implements LegacyAsset {
 	public LegacyAssetManager(EntityManager em) {
 		this.em = em;
 		persistenceManager = new PersistenceManagerImpl(em);
-		eventScheduleManager =  new EventScheduleManagerImpl(em);
 		assetManager =  new AssetManagerImpl(em);
 	}
 
@@ -135,8 +131,7 @@ public class LegacyAssetManager implements LegacyAsset {
 		asset = saver.update(em, asset);
 
 		saveSubAssets(asset);
-		// XXX not sure if this should be here.
-		eventScheduleManager.autoSchedule(asset);
+
 		return new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		
 	}

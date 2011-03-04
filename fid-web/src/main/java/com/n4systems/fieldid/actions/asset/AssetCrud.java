@@ -27,6 +27,9 @@ import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
+import com.n4systems.fieldid.actions.event.WebEventSchedule;
+import com.n4systems.fieldid.actions.event.viewmodel.ScheduleToWebEventScheduleConverter;
+import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleConverter;
 import com.n4systems.fieldid.actions.helpers.AllEventHelper;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
@@ -136,6 +139,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	protected List<Asset> linkedAssets;
 	protected Map<Long, List<AssetAttachment>> linkedAssetAttachments;
+	private List<WebEventSchedule> webEventSchedules;
 
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
 
@@ -162,6 +166,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		asset = new Asset();
 		isEditing = false;
 		asset.setPublished(getPrimaryOrg().isAutoPublish());
+		webEventSchedules = new ArrayList<WebEventSchedule>();
 	}
 
 	@Override
@@ -217,8 +222,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 			setOwnerId(getSessionUser().getOwner().getId());
 		}
 
-		assetWebModel.match(asset);
-
+		assetWebModel.match(asset);		
+		setAutoEventSchedules(getAutoEventSchedules());
 	}
 
 	private void convertInputsToInfoOptions() {
@@ -398,6 +403,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 			asset = saver.create();
 
+			scheduleEvents(asset);
+			
 			uniqueID = asset.getId();
 			addFlashMessageText("message.assetcreated");
 
@@ -432,6 +439,34 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return "saved";
 	}
 
+	private void scheduleEvents(Asset asset) {
+		WebEventScheduleToScheduleConverter converter = new WebEventScheduleToScheduleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
+		
+		for (WebEventSchedule schedule: getWebEventSchedules()) {
+			EventSchedule eventSchedule = converter.convert(schedule, asset);
+			eventScheduleManager.update( eventSchedule );
+		}
+	}
+
+	public List<WebEventSchedule> getWebEventSchedules() {
+		return webEventSchedules;
+	}
+	
+	public void setWebEventSchedules(List<WebEventSchedule> eventSchedules) {
+		this.webEventSchedules = eventSchedules;
+	}
+	
+	public void setAutoEventSchedules(List<EventSchedule> eventSchedules) {
+		ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
+		for (EventSchedule schedule: eventSchedules) {
+			webEventSchedules.add(converter.convert(schedule)); 
+		}
+	}
+	
+	public List<EventSchedule> getAutoEventSchedules() {
+		return eventScheduleManager.getAutoEventSchedules(asset);
+	}
+	
 	private void prepareAssetToBeSaved() {
 		asset.setTenant(getTenant());
 		asset.setIdentified(convertDate(identified));
@@ -586,6 +621,15 @@ public class AssetCrud extends UploadAttachmentSupport {
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf = { Permissions.Tag })
 	public String doAssetTypeChange() {
+		webEventSchedules.clear();
+		setAutoEventSchedules(getAutoEventSchedules());		
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doOwnerChange() {
+		webEventSchedules.clear();
+		setAutoEventSchedules(getAutoEventSchedules());		
 		return SUCCESS;
 	}
 
@@ -983,8 +1027,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return ownerPicker.getOwnerId();
 	}
 
-	public void setOwnerId(Long id) {
-		ownerPicker.setOwnerId(id);
+	public void setOwnerId(Long ownerId) {
+		ownerPicker.setOwnerId(ownerId);
 	}
 
 	@RequiredFieldValidator(message = "", key = "error.owner_required")

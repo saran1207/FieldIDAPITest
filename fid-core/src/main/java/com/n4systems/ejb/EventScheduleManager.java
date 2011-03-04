@@ -21,6 +21,8 @@ public interface EventScheduleManager {
 	
 	public List<EventSchedule> getAvailableSchedulesFor(Asset asset);
 	
+	public List<EventSchedule> getAutoEventSchedules(Asset asset);
+	
 	public boolean schedulePastDue(Long scheduleId);
 	public Long getAssetIdForSchedule(Long scheduleId);
 	public Long getEventTypeIdForSchedule(Long scheduleId);

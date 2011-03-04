@@ -3,6 +3,10 @@
 		<#include "/templates/html/assetCrud/_infoOptions.ftl">
 	</#assign>
 
+	<#assign assetEventSchedules>	
+		<#include "/templates/html/assetCrud/_assetEventSchedules.ftl">
+	</#assign>
+	
 	<#assign componentTypes>
 		<ul>
 			<#list assetType.subTypes as type >
@@ -21,6 +25,7 @@
 		</#if>
 	}
 	updatingAssetComplete();
-	replacedAssetType( "${options}" )
+	replaceInfoOptions( "${options}" ) ;
+	replaceEventSchedules( "${assetEventSchedules}" );
 	
 </#escape>

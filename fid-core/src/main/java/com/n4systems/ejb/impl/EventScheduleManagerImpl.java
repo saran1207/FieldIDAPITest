@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.services.EventScheduleService;
@@ -31,12 +32,14 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	
 	private PersistenceManager persistenceManager;
 	
+	private EventScheduleService eventScheduleService;
 	
 	protected EntityManager em;
 
 	public EventScheduleManagerImpl(EntityManager em) {
 		this.em = em;
 		persistenceManager = new PersistenceManagerImpl(em);
+		eventScheduleService = new EventScheduleServiceImpl(persistenceManager);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -51,7 +54,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 					EventSchedule eventSchedule = new EventSchedule(asset, type);
 					eventSchedule.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
 					schedules.add(eventSchedule);
-					new EventScheduleServiceImpl(persistenceManager).updateSchedule(eventSchedule);
+					update(eventSchedule);
 				}
 			}
 		}
@@ -59,16 +62,34 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		return schedules;
 	}
 	
+	
+	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
+		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
+		
+		AssetType assetType = persistenceManager.find(AssetType.class, asset.getType().getId());
+		if (assetType != null) {
+			for (AssociatedEventType type : assetType.getAssociatedEventTypes()) {
+				AssetTypeSchedule schedule = assetType.getSchedule(type.getEventType(), asset.getOwner());
+				if (schedule != null && schedule.isAutoSchedule()) {
+					EventSchedule eventSchedule = new EventSchedule(asset, type.getEventType());
+					eventSchedule.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type.getEventType(), asset.getOwner()));
+					schedules.add(eventSchedule);
+				}
+			}
+		}
+		return schedules;
+	}
+	
+	
 	public EventSchedule update(EventSchedule schedule) {
-		EventScheduleService service = new EventScheduleServiceImpl(persistenceManager);
-		return service.updateSchedule(schedule);
+		return eventScheduleService.updateSchedule(schedule);
 	}
 	
 	public void restoreScheduleForEvent(Event event) {
 		EventSchedule schedule = event.getSchedule();
 		if (schedule != null) {
 			schedule.removeEvent();
-			new EventScheduleServiceImpl(persistenceManager).updateSchedule(schedule);
+			update(schedule);
 		}
 		
 	}

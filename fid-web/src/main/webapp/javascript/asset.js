@@ -1,15 +1,29 @@
 var updateAssetTypeUrl = '';
-		
+var updateOwnerUrl= '';		
+
 function updateAssetType( assetTypeSelect ) {
 	if( assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value != "" ) {
 		updatingAsset();
 		var assetTypeSelectId = assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value;
-		var url = updateAssetTypeUrl + '?assetTypeId='+ assetTypeSelectId;
+		var url = updateAssetTypeUrl + '?assetTypeId='+ assetTypeSelectId + "&ownerId=" + $('ownerId').value;
 		getResponse( url, "get" );
 	} else {
-		replacedAssetType( null, null );
+		replaceInfoOptions( null, null );
+		replaceEventSchedules( null );
 	}
 }
+
+function updateOwner ( event ) {
+	var ownerId = Event.element(event).getValue();
+	if ( ownerId != "" ) {
+		var url = updateOwnerUrl + '?assetTypeId='+ $('assetType').value + "&ownerId=" + ownerId;
+		getResponse( url, "get" );
+	} else {
+		replaceEventSchedules( null );
+	}
+}
+
+Element.extend(document).observe("owner:change", updateOwner);
 
 function updatingAsset() {
 	var assetTypeIndicator = $('assetTypeIndicator');
@@ -22,7 +36,7 @@ function updatingAssetComplete() {
 }
 
 
-function replacedAssetType( infoOptions, subTypes ) {
+function replaceInfoOptions( infoOptions, subTypes ) {
 	var infoOptionSet = $('infoOptions');
 	if( infoOptions == null || infoOptions == "" ) {
 		infoOptionSet.update();
@@ -31,6 +45,14 @@ function replacedAssetType( infoOptions, subTypes ) {
 	}
 }
 
+function replaceEventSchedules( assetEventSchedules ) {
+	var eventScheduleList = $('eventSchedules');
+	if( assetEventSchedules == null || assetEventSchedules == "" ) {
+		eventScheduleList.update();
+	} else { 
+		eventScheduleList.replace( assetEventSchedules );
+	}
+}
 
 var originalAssetType = 0;
 var assetTypeChangeWarning = "";

@@ -163,4 +163,19 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+		Transaction transaction = transactionManager.startTransaction();
+				try {
+					return createManager(transaction.getEntityManager()).getAutoEventSchedules(asset);
+
+				} catch (RuntimeException e) {
+					transactionManager.rollbackTransaction(transaction);
+
+					throw e;
+				} finally {
+					transactionManager.finishTransaction(transaction);
+				}
+	}
+
 }
