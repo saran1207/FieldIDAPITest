@@ -270,44 +270,6 @@ em {
 .twoColumSubSystem {
 	width:600px;
 }
-.subSystemList {
-	overflow:hidden;
-	width: 450px; 
-	margin-left: auto;
-	margin-right: auto;	
-}
-
-.subSystemList li { 
-	margin: 10px;
-	float:left;
-	width: 420px;
-	border:1px solid #9c9c9c;
-}
-
-.subSystemList li div{
-	padding: 20px 10px 0 90px;
-	}
-
-.subSystemList li p {
-	margin-top: 5px;
-	min-height:40px;
-}
-
-.subSystemList li p a {
-	color: #000;
-	text-decoration: none;
-	display: block;
-}
-
-.subSystemList li h2 a {
-	color: #000;
-	text-decoration: none;
-	font-size: 1.5em;
-}
-
-.subSystemList li:hover h2 a {
-	text-decoration: underline;
-}
 
 .separated {
 	margin-top: 5px;
