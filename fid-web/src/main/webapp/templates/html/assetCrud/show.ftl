@@ -228,7 +228,7 @@ ${action.setPageType('asset', 'show')!}
 	</#if>	
 	
 	<#if asset.comments?exists && asset.comments?length gt 0 >
-		<div class="viewSection smallViewSection">
+		<div class="viewSection smallViewSection assetComments">
 			<h2><@s.text name="label.comments"/></h2>
 			<p class="fieldValue">
 				${asset.comments!}
