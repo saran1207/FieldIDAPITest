@@ -889,8 +889,12 @@ table.legend td,table.legend th {
 	width: 50px
 }
 
-.selectedEvent {
-	background-color: #eee;
+.selectedEvent, .selectedAsset {
+	background-color: #D2E5FF;
+}
+
+tr.selectedEvent:hover, tr.selectedAsset:hover{
+	background-color: #D2E5FF;
 }
 
 #compliancePassed {
