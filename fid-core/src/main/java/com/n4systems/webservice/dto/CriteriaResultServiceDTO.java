@@ -7,6 +7,8 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	public static final String TYPE_ONE_CLICK = "ONE_CLICK";
 	public static final String TYPE_TEXT_FIELD = "TEXT_FIELD";
 	public static final String TYPE_SELECT_FIELD = "SELECT_FIELD";
+	public static final String TYPE_COMBO_BOX = "COMBO_BOX";
+	public static final String TYPE_UNIT_OF_MEASURE = "UNIT_OF_MEASURE";
 	
 	private long criteriaId;
 	private long stateId;
@@ -16,6 +18,9 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	private String type;
 	private String textFieldValue;
 	private String selectFieldValue;
+	private String comboBoxFieldValue;
+	private String unitOfMeasurePrimaryFieldValue;
+	private String unitOfMeasureSecondaryFieldValue;
 	
 	public long getCriteriaId() {
 		return criteriaId;
@@ -80,4 +85,29 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	public void setSelectFieldValue(String selectFieldValue) {
 		this.selectFieldValue = selectFieldValue;
 	}
+
+	public String getComboBoxFieldValue() {
+		return comboBoxFieldValue;
+	}
+
+	public void setComboBoxFieldValue(String comboBoxFieldValue) {
+		this.comboBoxFieldValue = comboBoxFieldValue;
+	}
+
+	public String getUnitOfMeasurePrimaryFieldValue() {
+		return unitOfMeasurePrimaryFieldValue;
+	}
+
+	public void setUnitOfMeasurePrimaryFieldValue(String unitOfMeasurePrimaryFieldValue) {
+		this.unitOfMeasurePrimaryFieldValue = unitOfMeasurePrimaryFieldValue;
+	}
+
+	public String getUnitOfMeasureSecondaryFieldValue() {
+		return unitOfMeasureSecondaryFieldValue;
+	}
+
+	public void setUnitOfMeasureSecondaryFieldValue(String unitOfMeasureSecondaryFieldValue) {
+		this.unitOfMeasureSecondaryFieldValue = unitOfMeasureSecondaryFieldValue;
+	}
+	
 }

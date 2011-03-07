@@ -36,6 +36,7 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Deficiency;
@@ -57,6 +58,7 @@ import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.UnitOfMeasureCriteriaResult;
 import com.n4systems.model.eventbook.EventBookByMobileIdLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.location.Location;
@@ -633,6 +635,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_SELECT_FIELD)) {
 				result = new SelectCriteriaResult();
 				((SelectCriteriaResult)result).setValue(resultDTO.getSelectFieldValue());
+			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_COMBO_BOX)) {
+				result = new ComboBoxCriteriaResult();
+				((ComboBoxCriteriaResult)result).setValue(resultDTO.getComboBoxFieldValue());
+			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_UNIT_OF_MEASURE)) {
+				result = new UnitOfMeasureCriteriaResult();
+				((UnitOfMeasureCriteriaResult)result).setPrimaryValue(resultDTO.getUnitOfMeasurePrimaryFieldValue());
+				((UnitOfMeasureCriteriaResult)result).setSecondaryValue(resultDTO.getUnitOfMeasureSecondaryFieldValue());
 			} else {
 				throw new NotImplementedException("Conversion of CriteriaResultServiceDTO [" + resultDTO.getType() + "] not implemented");
 			}

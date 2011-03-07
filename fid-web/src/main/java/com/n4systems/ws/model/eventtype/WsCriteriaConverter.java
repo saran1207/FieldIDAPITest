@@ -1,11 +1,13 @@
 package com.n4systems.ws.model.eventtype;
 
 import com.n4systems.exceptions.NotImplementedException;
+import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.State;
 import com.n4systems.model.TextFieldCriteria;
+import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.ws.model.WsModelConverter;
 
 public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> {
@@ -28,6 +30,10 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 			wsModel = convertTextFieldCriteria((TextFieldCriteria)model);
 		} else if (model.isSelectCriteria()) {
 			wsModel = convertSelectCriteria((SelectCriteria)model);
+		} else if (model.isUnitOfMeasureCriteria()) {
+			wsModel = convertUnitOfMeasureCriteria((UnitOfMeasureCriteria)model);
+		} else if (model.isComboBoxCriteria()) {
+			wsModel = convertComboBoxCriteria((ComboBoxCriteria)model);
 		} else {
 			throw new NotImplementedException("Conversion not implemented for Criteria type: " + model.getClass().getName());
 		}
@@ -56,6 +62,21 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 
 	private WsSelectCriteria convertSelectCriteria(SelectCriteria model) {
 		WsSelectCriteria wsModel = new WsSelectCriteria();
+		wsModel.setOptions(model.getOptions());
+		return wsModel;
+	}
+	
+	private WsUnitOfMeasureCriteria convertUnitOfMeasureCriteria(UnitOfMeasureCriteria model) {
+		WsUnitOfMeasureCriteria wsModel = new WsUnitOfMeasureCriteria();
+		wsModel.setPrimaryUnitId(model.getPrimaryUnit().getId());
+		if (model.getSecondaryUnit() != null) {
+			wsModel.setSecondaryUnitId(model.getSecondaryUnit().getId());
+		}
+		return wsModel;
+	}
+	
+	private WsComboBoxCriteria convertComboBoxCriteria(ComboBoxCriteria model) {
+		WsComboBoxCriteria wsModel = new WsComboBoxCriteria();
 		wsModel.setOptions(model.getOptions());
 		return wsModel;
 	}
