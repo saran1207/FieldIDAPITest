@@ -439,7 +439,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			event.setEventForm(persistenceManager.find(EventForm.class, inspectionServiceDTO.getFormId()));
 			event.setEditable(true);
 		} else {
-			event.setEventForm(event.getType().getEventForm());
+			// When event forms were split out from event types in 1.26, the forms were assigned the same id's as their event types.
+			event.setEventForm(persistenceManager.find(EventForm.class, event.getType().getId(), new TenantOnlySecurityFilter(tenant.getId())));
 			
 			boolean eventEditable = inspectionServiceDTO.getFormVersion() == event.getType().getFormVersion();
 			event.setEditable(eventEditable);
