@@ -349,7 +349,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	@SkipValidation
 	public String doShow() {
-		testExistingAsset();
+		try {
+			testExistingAsset();
+		}catch (MissingEntityException e){
+			addActionErrorText("error.noasset");
+			return ERROR;
+		}
 
 		loadAttachments();
 		return SUCCESS;
@@ -544,7 +549,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	protected void testAsset() {
 		if (asset == null) {
-			addActionErrorText("error.noasset");
 			throw new MissingEntityException();
 		}
 	}
@@ -552,7 +556,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 	protected void testExistingAsset() {
 		testAsset();
 		if (asset.isNew()) {
-			addActionErrorText("error.noasset");
 			throw new MissingEntityException();
 		}
 	}
