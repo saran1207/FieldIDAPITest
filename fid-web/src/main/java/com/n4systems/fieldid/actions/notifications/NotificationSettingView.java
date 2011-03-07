@@ -27,6 +27,7 @@ public class NotificationSettingView implements Serializable {
 	private Long assetTypeId;
 	private Long assetStatus;
 	private Long eventTypeId;
+	private Long eventTypeGroupId;
 	private Boolean includeOverdue = false;
 	private List<String> addresses = new ArrayList<String>();
 	private Boolean includeFailed = false;
@@ -176,6 +177,14 @@ public class NotificationSettingView implements Serializable {
 
 	public void setAssetStatus(Long assetStatus) {
 		this.assetStatus = assetStatus;
+	}
+
+	public Long getEventTypeGroupId() {
+		return eventTypeGroupId;
+	}
+
+	public void setEventTypeGroupId(Long eventTypeGroupId) {
+		this.eventTypeGroupId = eventTypeGroupId;
 	}
 	
 }

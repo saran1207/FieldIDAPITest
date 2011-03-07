@@ -481,6 +481,9 @@
             <result name="success" type="freemarker">/templates/ajax/assetType/updateForNotificationsGroupChanged.ftl</result>
         </action>
 
+        <action name="retrieveNotificationEventTypes" method="list" class="com.n4systems.fieldid.actions.event.EventTypesInEventTypeGroupAction">
+            <result name="success" type="freemarker">/templates/ajax/eventType/updateForNotificationsEventTypeGroupChanged.ftl</result>
+        </action>
 
 	</package>
 </struts>

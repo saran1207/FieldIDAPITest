@@ -18,6 +18,7 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
@@ -26,6 +27,7 @@ import com.n4systems.model.notificationsettings.NotificationSettingByUserListLoa
 import com.n4systems.model.notificationsettings.NotificationSettingSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
@@ -49,6 +51,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	private List<NotificationSetting> settingsList;
 	private NotificationSettingViewModelConverter converter;
 	private NotificationSettingView view = new NotificationSettingView();
+	private List<ListingPair>  eventTypeGroups;
 	
 	
 	public NotificationSettingsCrud(PersistenceManager persistenceManager) {
@@ -224,6 +227,13 @@ public class NotificationSettingsCrud extends AbstractCrud {
 		}
     	return eventTypes;
     }
+	
+	public List<ListingPair> getEventTypeGroups() {
+		if (eventTypeGroups == null) {
+			eventTypeGroups = persistenceManager.findAllLP( EventTypeGroup.class, getTenantId(), "name" );
+		}
+		return eventTypeGroups;
+	}
 
 	public List<AssetType> getAssetTypes() {
 		if (assetTypes == null) {

@@ -7,10 +7,8 @@
 ${action.setPageType('my_account', 'notification_settings')!}
 
 <#include "/templates/html/common/_formErrors.ftl" />
-
-
-
 <#include "/templates/html/common/_orgPicker.ftl"/>
+<#include "_eventTypeScript.ftl">
 
 <@s.hidden name="uniqueID"/>
 <@s.hidden name="view.ID"/>
@@ -96,8 +94,13 @@ ${action.setPageType('my_account', 'notification_settings')!}
 	</div>
 
 	<div class="infoSet fullInfoSet">
+		<label for="criteria.eventTypeGroup"><@s.text name="label.eventtypegroup"/></label>
+		<@s.select id="eventTypeGroup" name="view.eventTypeGroupId" list="eventTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="${action.getText('label.all')}" onchange="updateEventTypes(this)"/>
+	</div>
+
+	<div class="infoSet fullInfoSet">
 		<label for="view.eventTypeId"><@s.text name="label.event_type"/></label>
-		<@s.select name="view.eventTypeId" emptyOption="true" list="eventTypes" listKey="id" listValue="name" />
+		<@s.select cssClass="eventTypeSelect"  name="view.eventTypeId" emptyOption="true" list="eventTypes" listKey="id" listValue="name" />
 	</div>
 	
 </div>
