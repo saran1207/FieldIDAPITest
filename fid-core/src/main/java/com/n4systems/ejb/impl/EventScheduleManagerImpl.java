@@ -66,7 +66,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		
-		if(asset == null) {
+		if(asset.getType() == null) {
 			return schedules;
 		}
 		
