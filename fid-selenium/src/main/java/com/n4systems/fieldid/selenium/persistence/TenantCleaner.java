@@ -103,7 +103,7 @@ public class TenantCleaner {
             }
         });
 
-        cleanNullTenantEntities(em, AddAssetHistory.class);
+        //cleanNullTenantEntities(em, AddAssetHistory.class);
 
         removeAllActiveSessionsForTenant(em, tenantIds);
         cleanUpOrgConnections(em, tenantIds);
