@@ -66,6 +66,10 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
 		
+		if(asset == null) {
+			return schedules;
+		}
+		
 		AssetType assetType = persistenceManager.find(AssetType.class, asset.getType().getId());
 		if (assetType != null) {
 			for (AssociatedEventType type : assetType.getAssociatedEventTypes()) {
