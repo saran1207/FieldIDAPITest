@@ -25,7 +25,7 @@
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
-			<@s.text name="label.emptyorganizationlist" /> <@s.text name="label.emptyorganizationlistinstruction" />
+			<@s.text name="label.emptyorganizationlist" /> <#if !archivedList><@s.text name="label.emptyorganizationlistinstruction" /></#if>
 		</p>
 	</div>
 <#else>
