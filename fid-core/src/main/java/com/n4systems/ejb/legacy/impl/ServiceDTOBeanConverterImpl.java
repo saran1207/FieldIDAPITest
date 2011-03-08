@@ -756,6 +756,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		} else if (criteriaResult instanceof SelectCriteriaResult) {
 			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_SELECT_FIELD);
 			criteriaResultServiceDTO.setSelectFieldValue(((SelectCriteriaResult)criteriaResult).getValue());
+		} else if (criteriaResult instanceof ComboBoxCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_COMBO_BOX);
+			criteriaResultServiceDTO.setComboBoxFieldValue(((ComboBoxCriteriaResult)criteriaResult).getValue());
+		} else if (criteriaResult instanceof UnitOfMeasureCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_UNIT_OF_MEASURE);
+			criteriaResultServiceDTO.setUnitOfMeasurePrimaryFieldValue(((UnitOfMeasureCriteriaResult)criteriaResult).getPrimaryValue());
+			criteriaResultServiceDTO.setUnitOfMeasureSecondaryFieldValue(((UnitOfMeasureCriteriaResult)criteriaResult).getSecondaryValue());
 		} else {
 			throw new NotImplementedException("Conversion of CriteriaResult [" + criteriaResult.getClass() + "] not implemented");
 		}
