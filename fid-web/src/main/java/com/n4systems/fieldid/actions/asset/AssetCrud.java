@@ -183,6 +183,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			logger.error("Unable to load asset", e);
 		}
 		assetWebModel.match(asset);
+		webEventSchedules = new ArrayList<WebEventSchedule>();
 
 	}
 
