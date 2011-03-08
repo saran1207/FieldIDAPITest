@@ -13,11 +13,13 @@ import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.InfoFieldBean;
 
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
+import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleConverter;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
@@ -30,6 +32,8 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
@@ -64,7 +68,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private AssetTypeLister assetTypeLister;
 	private AutoAttributeCriteria autoAttributeCriteria;
 	private AssignedToUserGrouper userGrouper;
-	
+	private EventScheduleManager eventScheduleManager;
 	// form inputs
 	private List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>();
 	private AssetView assetView = new AssetView();
@@ -79,11 +83,12 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
 	
 	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, 
-			LegacyAsset legacyAssetManager, AssetCodeMappingService assetCodeMappingServiceManager) {
+			LegacyAsset legacyAssetManager, AssetCodeMappingService assetCodeMappingServiceManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.orderManager = orderManager;
 		this.legacyAssetManager = legacyAssetManager;
 		this.assetCodeMappingServiceManager = assetCodeMappingServiceManager;
+		this.eventScheduleManager = eventScheduleManager;
 	}
 	
 	@Override
@@ -178,6 +183,10 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		return new AssetTypeLoader(getSecurityFilter()).setId(id).setStandardPostFetches().load();
 	}
 	
+	public List<EventType> getEventTypes(){
+		return new ArrayList<EventType>(getAssetType(getAssetTypeId()).getEventTypes());
+	}
+	
 	private AddAssetHistory loadAddAssetHistory() {
 		return legacyAssetManager.getAddAssetHistory(getSessionUser().getUniqueID());
 	}
@@ -206,14 +215,19 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 				saver.setAsset(asset);
 				saver.setUploadedAttachments(copyUploadedFiles());
 				
-				listOfIds.add(saver.create().getId());
 				
+				Asset savedAsset = saver.create();
+				listOfIds.add(savedAsset.getId());
+				
+				scheduleEvents(savedAsset);
 				saver.clear();
 			
 				// make sure all persistence fields have been wiped
 				cleaner.clean(asset);
 				
 				i++;
+				
+			
 			}
 			
 			addFlashMessage(getText("message.assetscreated", new String[] {String.valueOf(identifiers.size())}));
@@ -450,6 +464,16 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		
 	public void setNextSchedules(List<WebEventSchedule> eventSchedules) {
 		this.webEventSchedules = eventSchedules;
+	}
+	
+	private void scheduleEvents(Asset asset) {
+		WebEventScheduleToScheduleConverter converter = new WebEventScheduleToScheduleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
+		for (WebEventSchedule schedule: getNextSchedules()) {
+			if(schedule != null) {
+				EventSchedule eventSchedule = converter.convert(schedule, asset);
+				eventScheduleManager.update( eventSchedule );
+			}
+		}
 	}
 	
 }

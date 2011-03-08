@@ -6,6 +6,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/asset.js" />" ></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/event.js" />" ></script>
 	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/multiAddAsset.js" />"></script>
 	<@n4.includeStyle type="page" href="asset"/>
