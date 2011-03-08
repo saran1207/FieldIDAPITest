@@ -39,7 +39,7 @@
 			<button onclick="return addSchedule();"><@s.text name="label.add"/></button> <@s.text name="label.or"/> <a href="#" onclick="$('newScheduleForm').hide(); return false;"><@s.text name="label.cancel"/></a>
 		</div>
 	</div>
-<div id="schedulesForm">
+</div>
 
 <@n4.includeScript>
 	index = ${nextSchedules.size()};
