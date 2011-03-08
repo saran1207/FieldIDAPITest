@@ -31,13 +31,7 @@
 			</span>
 		</div>
 	</div>
-	<div class="infoSet">
-		<label class="label"><@s.text name="label.printable"/></label>
-		<span class="fieldHolder">	
-			<label class="checkBoxLabel"><@s.checkbox name="printable" theme="simple"/> <@s.text name="label.printableexplination"/></label>
-		</span>
-	</div>
-	
+		
 	<h2>${event.type.name?html} <@s.text name="label.details"/></h2>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.performed_by"/></label>
