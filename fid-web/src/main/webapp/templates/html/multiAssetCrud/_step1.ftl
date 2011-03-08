@@ -4,6 +4,7 @@
 		<@s.text name="error.attributesrequired"/>
 	</div>
 	
+	<#assign isAddForm=true>
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<#include "/templates/html/assetCrud/_assetTypeForm.ftl"/>
 	<#include "/templates/html/assetCrud/_assetConfigForm.ftl"/>
