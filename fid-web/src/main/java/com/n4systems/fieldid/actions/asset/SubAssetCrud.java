@@ -216,6 +216,9 @@ public class SubAssetCrud extends AbstractCrud implements HasDuplicateValueValid
 			assetManager.update(asset, getUser());
 
 			MasterEvent masterEvent = (MasterEvent) getSession().get("masterEvent");
+			
+			masterEvent.setCleanToEventsToMatchConfiguration(true);
+			
 			if (MasterEvent.matchingMasterEvent(masterEvent, token)) {
 				masterEvent.removeEventsForAsset(subAsset.getAsset());
 			}

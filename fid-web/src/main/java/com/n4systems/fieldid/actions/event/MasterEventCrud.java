@@ -209,7 +209,7 @@ public class MasterEventCrud extends AbstractCrud {
 
 		try {
 			if (uniqueID == null) {
-				if (cleanToEventsToMatchConfiguration) {
+				if (masterEvent.isCleanToEventsToMatchConfiguration()) {
 					masterEvent.cleanSubEventsForNonValidSubAssets(asset);
 				}
 				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());

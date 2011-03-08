@@ -56,6 +56,8 @@ public class MasterEvent {
 
     private String overrideResult;
 	
+    private boolean cleanToEventsToMatchConfiguration = false;
+    
 	public MasterEvent() {
 		token = String.valueOf(Math.abs(new Random().nextLong()));
 		subEventUploadedFiles = new HashMap<SubEvent, List<FileAttachment>>();
@@ -365,4 +367,12 @@ public class MasterEvent {
     public void setOverrideResult(String overrideResult) {
         this.overrideResult = overrideResult;
     }
+
+	public boolean isCleanToEventsToMatchConfiguration() {
+		return cleanToEventsToMatchConfiguration;
+	}
+
+	public void setCleanToEventsToMatchConfiguration(boolean cleanToEventsToMatchConfiguration) {
+		this.cleanToEventsToMatchConfiguration = cleanToEventsToMatchConfiguration;
+	}
 }
