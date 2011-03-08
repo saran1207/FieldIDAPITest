@@ -1,6 +1,7 @@
 
 ${action.setPageType('asset', 'edit')!}
 <@s.form action="assetUpdate" cssClass="fullForm fluidSets" theme="fieldid" id="assetUpdate" >
+	<#assign isAddForm=false>
 	<#include "_assetForm.ftl"/>
 	<@s.hidden name="customerOrderId" />
 	<@s.hidden name="tagOptionId" />

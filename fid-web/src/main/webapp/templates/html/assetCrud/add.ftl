@@ -24,6 +24,7 @@
 	<@s.form action="assetCreate" cssClass="fullForm fluidSets" theme="fieldid" id="assetCreate" >
 		<@s.hidden name="lineItemId" />
 		<@s.hidden name="tagOptionId" />
+		<#assign isAddForm=true>
 		<#include "_assetForm.ftl" />
 		
 		<div class="actions">
