@@ -46,7 +46,7 @@ function replaceInfoOptions( infoOptions, subTypes ) {
 }
 
 function replaceEventSchedules( assetEventSchedules ) {
-	var eventScheduleList = $('schedules');
+	var eventScheduleList = $('schedulesForm');
 	if( assetEventSchedules == null || assetEventSchedules == "" ) {
 		eventScheduleList.update();
 	} else { 

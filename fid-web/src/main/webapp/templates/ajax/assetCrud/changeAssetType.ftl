@@ -4,7 +4,7 @@
 	</#assign>
 
 	<#assign assetEventSchedules>	
-		<#include "/templates/html/eventCrud/_schedulesList.ftl" />
+		<#include "/templates/html/eventCrud/_schedules.ftl" />
 	</#assign>
 	
 	<#assign componentTypes>
