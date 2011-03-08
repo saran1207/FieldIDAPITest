@@ -35,17 +35,14 @@
 			<span id="saveAndPrintAction">
 				| <@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
 			</span>
-			<#if Session.sessionUser.hasAccess("createevent")>
-				| <@s.submit id="saveAndScheduleButton" cssClass="save"  name="saveAndSchedule" key="hbutton.saveandschedule"  />
-			</#if>
 		</div>
 	</@s.form>
 </#if>
 
 <script type="text/javascript" >
-	var buttons = new Array( 'saveButton', 'saveAndStartEventButton', 'saveAndPrintButton','saveAndScheduleButton');
-	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />' );
-	var buttonMessages = new Array( '<@s.text name="hbutton.save" />', '<@s.text name="hbutton.saveandstartevent" />', '<@s.text name="hbutton.saveandprint" />', '<@s.text name="hbutton.saveandschedule" />' );
+	var buttons = new Array( 'saveButton', 'saveAndStartEventButton', 'saveAndPrintButton');
+	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />', '<@s.text name="hbutton.pleasewait" />');
+	var buttonMessages = new Array( '<@s.text name="hbutton.save" />', '<@s.text name="hbutton.saveandstartevent" />', '<@s.text name="hbutton.saveandprint" />');
 	
 	$$('#assetCreate .save').each(function(element) {
 			element.observe('click', function(event) {
@@ -54,5 +51,4 @@
 				checkDuplicateRfids('rfidNumber', element);
 			});
 		});
-	
 </script>
