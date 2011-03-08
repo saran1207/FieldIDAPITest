@@ -46,6 +46,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
@@ -447,17 +448,17 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private void scheduleEvents(Asset asset) {
 		WebEventScheduleToScheduleConverter converter = new WebEventScheduleToScheduleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
 		
-		for (WebEventSchedule schedule: getWebEventSchedules()) {
+		for (WebEventSchedule schedule: getNextSchedules()) {
 			EventSchedule eventSchedule = converter.convert(schedule, asset);
 			eventScheduleManager.update( eventSchedule );
 		}
 	}
 
-	public List<WebEventSchedule> getWebEventSchedules() {
+	public List<WebEventSchedule> getNextSchedules() {
 		return webEventSchedules;
 	}
-	
-	public void setWebEventSchedules(List<WebEventSchedule> eventSchedules) {
+		
+	public void setNextSchedules(List<WebEventSchedule> eventSchedules) {
 		this.webEventSchedules = eventSchedules;
 	}
 	
@@ -992,6 +993,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return getAllEventHelper().getEvents();
 	}
 
+	public List<EventType> getEventTypes() {
+		return new ArrayList<EventType>(assetType.getEventTypes());
+	}
+	
 	public Event getLastEvent() {
 		return getAllEventHelper().getLastEvent();
 	}
@@ -1110,4 +1115,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return usePagination;
 	}
 
+	public List<Listable<Long>> getJobs() {
+		return getLoaderFactory().createEventJobListableLoader().orderByName().load();
+	}	
 }

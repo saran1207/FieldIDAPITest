@@ -46,12 +46,13 @@ function replaceInfoOptions( infoOptions, subTypes ) {
 }
 
 function replaceEventSchedules( assetEventSchedules ) {
-	var eventScheduleList = $('eventSchedules');
+	var eventScheduleList = $('schedules');
 	if( assetEventSchedules == null || assetEventSchedules == "" ) {
 		eventScheduleList.update();
 	} else { 
 		eventScheduleList.replace( assetEventSchedules );
 	}
+	scheduleListUpdated();
 }
 
 var originalAssetType = 0;

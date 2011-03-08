@@ -1,20 +1,7 @@
 
 <h2><@s.text name="label.schedules"/></h2>
-<div id="schedules">
-	<#if nextSchedules?exists && !nextSchedules.empty>
-		<#list nextSchedules as nextSchedule>
-			<#if nextSchedule?exists>
-				<#assign index=nextSchedule_index/>
-				<#include "_singleSchedule.ftl"/>
-			</#if>
-		</#list>
-	</#if>
-</div>
-<div id="emptySchedules">
-	<div class="fieldHolder">
-		<@s.text name="label.no_schedules_have_been_created"/>
-	</div>
-</div>
+
+<#include "_schedulesList.ftl"/>
 
 <div class="blockSeparated"><button id="addNewSchedule" onclick="$('newScheduleForm').show(); $('newScheduleForm').absolutize();  return false;" ><@s.text name="label.add_a_schedule"/></button></div>
 <div class="fluentSets schedulesAdd" id="newScheduleForm" style="display:none" >

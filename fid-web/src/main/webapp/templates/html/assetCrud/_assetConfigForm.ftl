@@ -91,9 +91,8 @@
 		</div>
 	</#if>
 </div>
-<div class="assetFormGroup">
-	<h2><@s.text name="label.eventschedule"/></h2>
-	<#include "_assetEventSchedules.ftl"/>
-</div>
+
+<#include "/templates/html/eventCrud/_schedules.ftl" />
+
 <#include "_fileAttachment.ftl"/>
 
