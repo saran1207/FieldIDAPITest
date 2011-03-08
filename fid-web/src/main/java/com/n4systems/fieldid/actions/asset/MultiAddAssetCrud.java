@@ -17,6 +17,7 @@ import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
@@ -68,7 +69,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>();
 	private AssetView assetView = new AssetView();
 	private LineItem lineItem;
-	
+	private List<WebEventSchedule> webEventSchedules;
+
 	private OwnerPicker ownerPicker;
 	private String saveAndStartEvent;
 	private Integer maxAssets;
@@ -86,6 +88,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	@Override
 	protected void initMemberFields() {
+		webEventSchedules = new ArrayList<WebEventSchedule>();
 	}
 
 	@Override
@@ -440,5 +443,13 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	public LineItem getLineItem() {
 		return lineItem;
 	}	
+	
+	public List<WebEventSchedule> getNextSchedules() {
+		return webEventSchedules;
+	}
+		
+	public void setNextSchedules(List<WebEventSchedule> eventSchedules) {
+		this.webEventSchedules = eventSchedules;
+	}
 	
 }
