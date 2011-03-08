@@ -449,8 +449,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 		WebEventScheduleToScheduleConverter converter = new WebEventScheduleToScheduleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
 		
 		for (WebEventSchedule schedule: getNextSchedules()) {
-			EventSchedule eventSchedule = converter.convert(schedule, asset);
-			eventScheduleManager.update( eventSchedule );
+			if(schedule != null) {
+				EventSchedule eventSchedule = converter.convert(schedule, asset);
+				eventScheduleManager.update( eventSchedule );
+			}
 		}
 	}
 
