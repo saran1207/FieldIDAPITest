@@ -242,4 +242,6 @@
 	color: #555;
 	}
 
-
+.details{
+	min-height: 65px;
+	}
