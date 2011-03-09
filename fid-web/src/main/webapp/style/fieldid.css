@@ -1950,3 +1950,24 @@ div.unitOfMeasureName {
 #newScheduleForm .infoSet .fieldHolder{
 	width: 295px;
 }
+
+#startEvent{
+	background-image: url(../images/quick-event-plus-icon.png);
+}
+	
+#manageEvent{
+	background-image: url(../images/calendar-icon.png);
+	margin-left: 20px;
+}
+
+.headerActions{
+	margin: 10px;
+}
+
+#startEvent, #manageEvent{
+	font-size: 13px;
+	padding-left: 22px;
+	padding-bottom: 10px;
+	padding-top: 2px;
+	background-repeat: no-repeat;
+}
