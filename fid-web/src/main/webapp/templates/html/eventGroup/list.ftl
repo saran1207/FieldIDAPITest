@@ -12,9 +12,9 @@ ${action.setPageType('event', 'select_asset')!}
 			element.observe('click', goToAssetListener);
 		});
 	function goToAssetListener(event) {
-		var url = '<@s.url action="eventGroups"/>';
+		var url = '<@s.url action="quickEvent"/>';
 		
 		event.stop();
-		redirect( url + "?uniqueID=" + Event.element( event ).getAttribute( 'assetId' ) );
+		redirect( url + "?assetId=" + Event.element( event ).getAttribute( 'assetId' ) );
 	}
 </script>
