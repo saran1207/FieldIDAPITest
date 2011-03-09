@@ -7,14 +7,9 @@ ${action.setPageType('event', 'list')!}
 <#include "_eventSearchForm.ftl" />
 
 
-<div class="formAction container" style="text-align:right;">
+<div class="formAction container" >
 	<#if Session.sessionUser.hasAccess("createevent") >
-		<span class="eventTypes eventTypesRelative" ><a href="javascript:void(0);" id="startNewEvent" onmouseover="positionDropdown(this);"><@s.text name="label.newevent"/></a>
-			<ul id="startNewEvent_list">
-				<#include "_eventSelect.ftl" />
-			</ul>
-		</span>
-
+		<a id="startEvent" href="#" onclick="return redirect('<@s.url action="quickEvent" assetId="${uniqueID}" includeParams="none" />');"><@s.text name="label.newevent"/></a>		
 	</#if>
 	
 </div>
