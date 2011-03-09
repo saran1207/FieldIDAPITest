@@ -17,5 +17,5 @@ ${action.setPageType('organization','list')!}
 		</span>
 	</div>
 </div>
-	
+<#assign archivedList=false>	
 <#include '_list.ftl' />	
