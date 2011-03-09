@@ -19,6 +19,7 @@
 	    assetTypeChangeWarning = '<@s.text name="warning.assettypechange"/>';
 	    originalAssetType = ${assetTypeId!0};
 	    updateAssetTypeUrl = '<@s.url action="assetTypeChange" namespace="/ajax" />';
+	    updateOwnerUrl = '<@s.url action="ownerChange" namespace="/ajax"/>';
 	    
 	    function moveToStep4() {
 	    	
