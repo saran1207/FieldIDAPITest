@@ -11,7 +11,7 @@
 	
 	
 	
-	<h2><@s.text name="label.customerinformation"/></h2>
+	<h2><@s.text name="label.owner"/></h2>
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.owner"/></label>
