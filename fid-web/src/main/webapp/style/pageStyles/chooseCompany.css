@@ -5,16 +5,15 @@
 	
 #tenantsContainer{
 	border: 4px solid #BBB;
-	width: 750px;
 }
 
 .titleBlock{
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 
 .titleBlock h1{
-	font-weight: normal;
-	size: 22px;
+	font-weight: bold;
+	size: 19px;
 }
 	
 p.actionInstructions{
@@ -31,7 +30,7 @@ p.actionInstructions{
 }
 
 #tenantList{
-	padding: 15px;
+	padding: 0 15px 15px 15px;
 }
 
 #tenantList li{
@@ -53,7 +52,7 @@ div.linkContainer{
 	float:left;
 	clear: left;
 	font-size: 13px;
-	width: 250px;
+	width: 350px;
 }
 
 .linkContainer a{

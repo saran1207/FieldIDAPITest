@@ -5,9 +5,9 @@
 	<div class="titleBlock">	
 		<h1><@s.text name="title.site_address_found"/></h1>
 		<#if tenants.size() gt 1 >
-			<p><@s.text name="instructions.found_multiple_site_addresses"/></p>
+			<p class="actionInstructions"><@s.text name="instructions.found_multiple_site_addresses"/></p>
 		<#else>
-			<p><@s.text name="instructions.found_one_site_address"/></p>
+			<p class="actionInstructions"><@s.text name="instructions.found_one_site_address"/></p>
 		</#if>
 	</div>
 	<ul id="tenantList">
