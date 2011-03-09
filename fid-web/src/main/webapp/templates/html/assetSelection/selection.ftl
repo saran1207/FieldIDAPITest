@@ -161,6 +161,8 @@
 				event.stop();
 				$('assetSearchForm').request(getStandardCallbacks());
 			});
+			
+			$('assetSearchForm_search').focus();
 		});
 		
 	</@n4.includeScript>

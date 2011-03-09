@@ -2,6 +2,11 @@
 <head>
 	<@n4.includeStyle type="page" href="events"/>
 </head>
+<script>
+	document.observe("dom:loaded", function(){
+		$('assetSearchForm_search').focus();
+	});
+</script>
 <#assign multiEventaction= '<@s.url action="assetSelection"/>'/>
 <div class="eventList">
 	<fieldset>
