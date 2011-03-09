@@ -44,6 +44,7 @@ public class NotificationSettingViewModelConverter {
 		}
 		
 		view.setAssetTypeGroupId(model.getAssetTypeGroup());
+		view.setEventTypeGroupId(model.getEventTypeGroup());
 		
 		if (!model.getAssetTypes().isEmpty()) {
 			// we only support a single asset type right now
@@ -86,6 +87,8 @@ public class NotificationSettingViewModelConverter {
 		}
 		
 		model.setAssetTypeGroup(view.getAssetTypeGroupId());
+
+		model.setEventTypeGroup(view.getEventTypeGroupId());
 		
 		if (view.getAssetTypeId() != null) {
 			model.getAssetTypes().add(view.getAssetTypeId());
@@ -96,6 +99,8 @@ public class NotificationSettingViewModelConverter {
 		if (view.getEventTypeId() != null) {
 			model.getEventTypes().add(view.getEventTypeId());
 		}
+		
+		
 		
 		model.getAddresses().addAll(view.getAddresses());
 	}

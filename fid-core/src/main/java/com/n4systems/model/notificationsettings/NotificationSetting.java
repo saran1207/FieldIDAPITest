@@ -72,6 +72,8 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
     
     private Long assetTypeGroup;
 
+    private Long eventTypeGroup;
+    
 	public NotificationSetting() {}
 	
 	public NotificationSetting(Tenant tenant, BaseOrg owner) {
@@ -182,5 +184,13 @@ public class NotificationSetting extends EntityWithOwner implements HasUser, Sav
 
 	public void setAssetStatus(Long assetStatus) {
 		this.assetStatus = assetStatus;
+	}
+
+	public Long getEventTypeGroup() {
+		return eventTypeGroup;
+	}
+
+	public void setEventTypeGroup(Long eventTypeGroup) {
+		this.eventTypeGroup = eventTypeGroup;
 	}
 }
