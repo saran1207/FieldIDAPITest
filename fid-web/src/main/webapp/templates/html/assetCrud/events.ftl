@@ -21,8 +21,10 @@
 					<#assign user=event.performedBy />
 					<#include "../eventCrud/_userName.ftl"/>
 				</td>
-				<td><@s.text name="${(event.status.label?html)!}"/></td>
-				<td><@s.text name="${(event.assetStatus.name?html)!}"/></td>
+				
+				
+				<td <#if event.status.displayName== "Pass" >class="passColor"<#elseif event.status.displayName == "Fail">class="failColor"<#else>class="naColor"</#if>><p class="coloredBackground"><@s.text name="${(event.status.label?html)!}"/></p></td>
+				<td><@s.text name="${(event.assetStatus.name?html)!}"/>&nbsp;</td>
 				<td>
 					<#if useContext>
 						<#assign additionsToQueryString="&useContext=true"/>
@@ -42,11 +44,5 @@
 		<p>
 			<@s.text name="label.emptyeventlist" />
 		</p>
-	</div>
-</#if>
-
-<#if !inVendorContext >
-	<div class="formAction">
-		<button onclick="window.location = '<@s.url action="eventGroups" uniqueID="${uniqueID}"/>'; return false;" ><@s.text name="label.manageevents"/> </button>
 	</div>
 </#if>
