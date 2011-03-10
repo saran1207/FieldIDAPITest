@@ -57,6 +57,10 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		if (setting.getAssetTypes().isEmpty() && setting.getAssetTypeGroup() != null) {
 			builder.addSimpleWhere("asset.type.group.id", setting.getAssetTypeGroup());
 		}
+		
+		if(setting.getEventTypes().isEmpty() && setting.getEventTypeGroup() !=null){
+			builder.addSimpleWhere("event.type.group.id", setting.getEventTypeGroup());
+		}
 
 		if (setting.getAssetStatus() != null) {
 			builder.addSimpleWhere("asset.assetStatus.id", setting.getAssetStatus());
