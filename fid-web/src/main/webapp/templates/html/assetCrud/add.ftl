@@ -30,11 +30,14 @@
 		<div class="actions">
 			<@s.submit id="saveButton" name="save" cssClass="save" key="hbutton.save" />
 			<#if Session.sessionUser.hasAccess("createevent") >
-				| <@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndStartEvent" key="hbutton.saveandstartevent" />
+				<@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndStartEvent" key="hbutton.saveandstartevent" />
 			</#if>
 			<span id="saveAndPrintAction">
-				| <@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
+				<@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
 			</span>
+			<@s.text name="label.or"/>
+			<a href="<@s.url action="home"/>"><@s.text name="label.cancel"/></a>
+			
 		</div>
 	</@s.form>
 </#if>
