@@ -57,7 +57,8 @@ ${action.setPageType('customer','show')!}
 		</p>
 		<p>
 			<label for="contactEmail"><@s.text name="label.email_address"/></label>
-			<span class="fieldValue">${accountManagerEmail!}</span>
+			<span class="fieldValue"><a href="mailto:${accountManagerEmail!}">${accountManagerEmail!}</a></span>
+			
 		</p>
 		<p>
 			<label for="streetAddress"><@s.text name="label.streetaddress"/></label>

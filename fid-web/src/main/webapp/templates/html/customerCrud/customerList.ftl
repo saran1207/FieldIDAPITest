@@ -18,8 +18,8 @@
 	<#include '../common/_pagination.ftl' />
 	<table class="list" id="customerTable">
 		<tr>
-			<th><@s.text name="label.customername" /></th>
-			<th><@s.text name="label.customerid" /></th>
+			<th><@s.text name="label.name" /></th>
+			<th><@s.text name="label.id" /></th>
 			<th><@s.text name="label.organization" /></th>
 			<th><@s.text name="label.created" /></th>
 			<th><@s.text name="label.last_modified" /></th>					
