@@ -1,3 +1,4 @@
+${action.setPageType('event', 'quickEvent')!}
 <title>
 	<@s.text name="label.perform_an_event_on">
 		<@s.param>${asset.serialNumber}</@s.param>
