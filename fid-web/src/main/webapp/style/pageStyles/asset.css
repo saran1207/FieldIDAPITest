@@ -229,7 +229,7 @@
 
 .viewSection p {
 	padding: 7px;
-	}
+}
 
 .viewSection p span{
 	color: #555;
@@ -244,4 +244,15 @@
 
 .details{
 	min-height: 65px;
-	}
+}
+
+#schedules, #emptySchedules {
+	padding-left: 10px;
+}
+
+#addNewSchedule {
+	margin-left: 10px;
+	margin-bottom: 5px;
+	font-size: 11px; 
+	
+}
