@@ -64,3 +64,7 @@
 .infoSet .textCriteriaContainer .fieldHolder input[type="text"] {
     width: 250px;
 }
+
+.infoSet .assignToMeLink{
+	margin-left: 179px;
+}

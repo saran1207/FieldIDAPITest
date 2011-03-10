@@ -1993,3 +1993,10 @@ div.unitOfMeasureName {
 	width: 25px;
 	text-align: center;
 }
+
+.assignToMeLink{
+	float: left;
+	clear: left;
+	margin-left: 129px;
+	width: 70px;
+}

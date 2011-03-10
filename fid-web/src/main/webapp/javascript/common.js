@@ -621,4 +621,13 @@ function toggleDisableLocationPicker(listOfInputElements, chooseButton){
 		toggleDisabled(element);
 	});
 		toggleHidden(chooseButton);
-	}
+}
+
+function setAssignedToAsCurrentUser(thisUserId){
+	$$('select#assignedToSelectBox option').each(function(option){
+		if (option.value==thisUserId){
+			option.selected=true;
+		}
+	});
+}
+

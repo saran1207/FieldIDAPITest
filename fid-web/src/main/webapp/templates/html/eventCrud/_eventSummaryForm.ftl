@@ -68,9 +68,11 @@
 		<div  class="infoSet">
 			<label class="label"><@s.text name="label.assign_asset_to"/></label>
 			<span class="fieldHolder">
-				<@s.select name="assignedToId"  headerKey="0" headerValue="${action.getText('label.unassigned')}" >
+				<@s.select id="assignedToSelectBox" name="assignedToId"  headerKey="0" headerValue="${action.getText('label.unassigned')}" >
 					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
 				</@s.select>
+				<br/>
+				<a href="#" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
 				<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
 			</span>
 		</div>

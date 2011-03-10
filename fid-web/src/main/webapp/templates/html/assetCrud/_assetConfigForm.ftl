@@ -2,19 +2,20 @@
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 </head>
-
 <div class="assetFormGroup">
 	<h2><@s.text name="label.owner"/></h2>
 	<#if securityGuard.assignedToEnabled >
 		<div class="infoSet reducedPaddingInfoSet">
 			<label class="label" for="assigneduser"><@s.text name="label.assignedto"/></label>
 			<#if !parentAsset?exists>
-				<@s.select name="assignedUser" headerKey="0" headerValue="${action.getText('label.unassigned')}" >
+				<@s.select id="assignedToSelectBox" name="assignedUser" headerKey="0" headerValue="${action.getText('label.unassigned')}" >
 					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
 				</@s.select>
+				<a href="#" class="assignToMeLink" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
 			<#else>
 				<span class="fieldHolder" id="assignedUser">${(asset.assignedUser.userLabel)!}</span>
 			</#if>
+			
 		</div>
 	</#if>
 	
@@ -25,7 +26,7 @@
 		<#else>
 			<span class="fieldHolder" id="owner">${(asset.owner.name?html)!}</span>
 		</#if>
-			</div>
+	</div>
 
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>

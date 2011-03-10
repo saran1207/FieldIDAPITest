@@ -85,7 +85,8 @@
 	<#if eventType.assignedToAvailable>
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.assign_asset_to"/></label>
-			<@s.select id="assignedToId" name="assignedToId" list="employees" listKey="id" listValue="displayName" headerKey="-1" headerValue="${action.getText('label.keep_the_same')}" />
+			<@s.select id="assignedToSelectBox" name="assignedToId" list="employees" listKey="id" listValue="displayName" headerKey="-1" headerValue="${action.getText('label.keep_the_same')}" />
+			<a href="#" class="assignToMeLink" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
 			<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
 		</div>
 	</#if>
@@ -95,20 +96,18 @@
 	
 </@s.form>
 
-
 <@n4.includeScript>
 	function updateAssignToSomone() {
-		var value = $('assignedToId').getValue();
+		var value = $('assignedToSelectBox').getValue();
 		if (value == '-1') {
 			$('assignToSomeone').value = 'false';
 		} else {
 			$('assignToSomeone').value = 'true';
 		}
 	}
-	$$('#assignedToId').each(function(element) {
-			element.observe('change', updateAssignToSomone);
-			updateAssignToSomone();
-		});
-		
-		
+	
+	$$('#assignedToSelectBox').each(function(element) {
+		element.observe('change', updateAssignToSomone);
+		updateAssignToSomone();
+	});
 </@n4.includeScript>

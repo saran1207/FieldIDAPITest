@@ -99,8 +99,6 @@
 	padding-left: 60px;
 }
 
-
-
 #form1required {
 	border:1px solid;
 	padding:10px 0;
@@ -109,4 +107,8 @@
 
 #step4Actions {
 	margin-bottom:20px;
+}
+
+ .assignToMeLink{
+	margin-left: 125px;
 }
