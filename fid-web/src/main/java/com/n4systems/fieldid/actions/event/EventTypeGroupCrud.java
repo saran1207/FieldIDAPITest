@@ -72,6 +72,7 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 		try {
 			QueryBuilder<EventTypeGroup> query = new QueryBuilder<EventTypeGroup>(EventTypeGroup.class, getSecurityFilter());
 			query.addOrder("name");
+			query.addPostFetchPaths("modifiedBy", "createdBy");
 			page = persistenceManager.findAllPaged(query, getCurrentPage(), Constants.PAGE_SIZE);
 		} catch (Exception e) {
 			logger.error("Could not load the list of event types", e);
@@ -90,7 +91,7 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 		testRequiredEntities(false);
 		eventTypeGroup.setTenant(getTenant());
 		try {
-			uniqueID = persistenceManager.save(eventTypeGroup);
+			uniqueID = persistenceManager.save(eventTypeGroup, getSessionUserId());
 			addFlashMessageText("message.eventtypegroupsaved");
 			return SUCCESS;
 		} catch (Exception e) {

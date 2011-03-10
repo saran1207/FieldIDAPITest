@@ -6,14 +6,17 @@ ${action.setPageType('event_type_group', 'list')!}
 		<tr>
 			<th><@s.text name="label.name" /></th>
 			<th><@s.text name="label.reporttitle" /></th>
-			<th><@s.text name="label.datecreated" /></th>
+			<th><@s.text name="label.created" /></th>
+			<th><@s.text name="label.last_modified" /></th>		
 			<th></th>
 		</tr>
 		<#list page.getList() as group > 
 			<tr id="group_${group.id}" >
 				<td><a href="<@s.url action="eventTypeGroup" uniqueID="${group.id}"/>" >${group.name?html}</a></td>
-				<td>${(group.reportTitle)!}</td>
-				<td>${action.formatDate(group.created, true)}</td>
+				<td>${(group.reportTitle)!}</td>			
+				<td><#if group.createdBy?exists>${group.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(group.created)}</td>
+				<td><#if group.modifiedBy?exists>${group.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(group.modified)}</td>
+				
 				<td>
 					<a id="edit_${group.id}" href="<@s.url action="eventTypeGroupEdit" uniqueID="${group.id}"/>"><@s.text name="label.edit"/></a>
 					<#if action.canBeDeleted(group)>
