@@ -8,6 +8,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 
 <#include "/templates/html/common/_formErrors.ftl" />
 <#include "/templates/html/common/_orgPicker.ftl"/>
+<#include '_assetTypeScript.ftl'/>
 <#include "_eventTypeScript.ftl">
 
 <@s.hidden name="uniqueID"/>
@@ -138,8 +139,6 @@ ${action.setPageType('my_account', 'notification_settings')!}
 	</div>
 </div>
 
-<#include '_assetTypeScript.ftl'/>
-
 <script type="text/javascript">
 	retireImageSrc = "<@s.url value="/images/retire.gif" />";
 	addressCount = ${view.addresses.size()};
@@ -160,5 +159,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 
 	document.observe("dom:loaded", function() {
 		updateUpcomingOptions();
+		updateAssetTypes($('assetTypeGroup'));
+		updateEventTypes($('eventTypeGroup'));
 	});
 </script>
