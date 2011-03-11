@@ -11,9 +11,6 @@ ${action.setPageType('saved_reports', 'saved_reports')!}
 			<p class="footnoteText">
 				
 				<@s.text name="label.saved_report_explanation"/>
-				<a href="<@s.url action="userList" namespace="/" />">
-					<@s.text name="label.add_new_user"/>
-				</a>
 			</p>
 		</div>
 	</div>
