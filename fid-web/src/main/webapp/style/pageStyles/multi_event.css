@@ -71,3 +71,13 @@
 	top: 10px;
 	right: 185px;
 }
+
+.eventForm div.unitOfMeasureName{
+	margin-top: 7.5px;
+	position: relative;
+	right: 55px;
+}
+
+.eventForm div.textCriteriaContainer{
+	width: 400px;
+}
