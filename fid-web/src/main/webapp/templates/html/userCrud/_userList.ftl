@@ -14,7 +14,7 @@
 		<th></th>
 	<tr>
 	<#assign count=0 >
-	<#list userList as user >
+	<#list page.list as user>
 		<tr id="user_${user.id!}" >
 			<#if !isArchivedPage>
 				<td>

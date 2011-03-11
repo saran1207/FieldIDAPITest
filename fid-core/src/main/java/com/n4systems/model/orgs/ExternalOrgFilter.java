@@ -16,8 +16,11 @@ public class ExternalOrgFilter implements QueryFilter {
 	}
 	
 	public void applyFilter(QueryBuilder<?> builder) {
-		String prefix = (pathPrefix == null) ? "" : pathPrefix + "." ;
-		builder.addWhere(Comparator.NOTNULL, prefix + "customerOrg", "customerOrg", "");
+		String customerOrgField = "customerOrg";
+		String path = String.format("%s%s", (pathPrefix == null) ? "" : pathPrefix + ".", customerOrgField);
+		String name = String.format("%s%s", (pathPrefix == null) ? "" : pathPrefix + "_", customerOrgField);
+		
+		builder.addWhere(Comparator.NOTNULL, name, path, "");
 	}
 
 }

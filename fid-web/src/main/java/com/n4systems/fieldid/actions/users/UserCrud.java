@@ -68,7 +68,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private UserType userType = UserType.ALL;
 	private UserGroup userGroup = UserGroup.ALL;
 	private ArrayList<StringListingPair> userTypes;
-	private List<User> userList = new ArrayList<User>();
 	private String securityCardNumber;
 	private Country country;
 	private Region region;
@@ -400,6 +399,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	public Pager<User> getPage() {
+		try {
 		if (page == null) {
 			page = new UserPaginatedLoader(getSecurityFilter())
 			               .withUserType(userType)
@@ -409,6 +409,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			               .setPageSize(Constants.PAGE_SIZE)
 			               .load();
 		}
+		}catch (Exception e){
+			logger.error("Failed to load users.", e);
+		}
+		
 		return page;
 	}
 	
@@ -549,26 +553,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return getLimits().isLiteUsersMaxed();
 	}
 
-	public List<User> getUserList() {
-		for (User user : getPage().getList()) {
-			switch (userGroup) {
-				case CUSTOMER:
-					if (user.getOwner().isCustomer()) {
-						userList.add(user);
-					}
-					break;
-				case EMPLOYEE:	
-					if (!user.getOwner().isCustomer()) {
-						userList.add(user);
-					}
-					break;
-				default:
-					userList.add(user);
-					break;
-			}
-		}
-		return userList;
-	}
+	
 
 	public String getUserGroup() {
 		return userGroup.name();
