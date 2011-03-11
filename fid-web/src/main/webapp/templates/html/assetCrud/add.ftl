@@ -35,9 +35,10 @@
 			<span id="saveAndPrintAction">
 				<@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
 			</span>
-			<@s.text name="label.or"/>
-			<a href="<@s.url action="home"/>"><@s.text name="label.cancel"/></a>
-			
+			<span id="cancelAction">
+				<@s.text name="label.or"/>
+				<a href="<@s.url action="home"/>"><@s.text name="label.cancel"/></a>
+			</span>			
 		</div>
 	</@s.form>
 </#if>
