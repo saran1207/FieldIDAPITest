@@ -13,6 +13,15 @@
 	
 	<h2><@s.text name="label.owner"/></h2>
 	
+	<#if eventType.assignedToAvailable>
+		<div class="infoSet">
+			<label class="label"><@s.text name="label.assigned_to"/></label>
+			<@s.select id="assignedToSelectBox" name="assignedToId" list="employees" listKey="id" listValue="displayName" headerKey="-1" headerValue="${action.getText('label.keep_the_same')}" />
+			<a href="#" class="assignToMeLink" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
+			<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
+		</div>
+	</#if>
+	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="modifiableEvent.owner" required="true" id="ownerId" />
@@ -81,16 +90,6 @@
 			<label class="checkBoxLabel"><@s.checkbox name="statusSetFromAsset" onclick="toggleDisabled($(assetStatuses));" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
 		</span>
 	</div>
-	
-	<#if eventType.assignedToAvailable>
-		<div class="infoSet">
-			<label class="label"><@s.text name="label.assign_asset_to"/></label>
-			<@s.select id="assignedToSelectBox" name="assignedToId" list="employees" listKey="id" listValue="displayName" headerKey="-1" headerValue="${action.getText('label.keep_the_same')}" />
-			<a href="#" class="assignToMeLink" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
-			<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
-		</div>
-	</#if>
-	
 	
 	<#include "/templates/html/eventCrud/_schedules.ftl" />
 	

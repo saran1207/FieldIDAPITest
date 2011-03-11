@@ -30,6 +30,23 @@
 </div>
 <#if action.isParentAsset() >
 	<h2><@s.text name="label.owner"/></h2>
+		
+	<#if eventType.assignedToAvailable && form_action="ADD">
+		<div  class="infoSet">
+			<label class="label"><@s.text name="label.assigned_to"/></label>
+			<span class="fieldHolder">
+				<@s.select id="assignedToSelectBox" name="assignedToId"  headerKey="0" headerValue="${action.getText('label.unassigned')}" >
+					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
+				</@s.select>
+				<br/>
+				<a href="#" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
+				<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
+			</span>
+		</div>
+	<#elseif form_action="EDIT">
+		<#include "_assigned_to.ftl"/>
+	</#if>
+	
 	
 	<div class="infoSet">
 		<label class="label" ><@s.text name="label.owner"/></label>
@@ -40,8 +57,6 @@
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
 		<span class="fieldHolder locationFieldHolder"><@n4.location name="modifiableEvent.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(modifiableEvent.location)}" theme="simple"/></span>
 	</div>
-
-
 
 </#if>
 
@@ -63,23 +78,7 @@
 		</#if>
 		
 	</div>
-	
-	<#if eventType.assignedToAvailable && form_action="ADD">
-		<div  class="infoSet">
-			<label class="label"><@s.text name="label.assign_asset_to"/></label>
-			<span class="fieldHolder">
-				<@s.select id="assignedToSelectBox" name="assignedToId"  headerKey="0" headerValue="${action.getText('label.unassigned')}" >
-					<#include "/templates/html/common/_assignedToDropDown.ftl"/>
-				</@s.select>
-				<br/>
-				<a href="#" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
-				<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
-			</span>
-		</div>
-	<#elseif form_action="EDIT">
-		<#include "_assigned_to.ftl"/>
-	</#if>
-	
+
 	<#if eventScheduleOnEvent>
 		<div class="infoSet"> 
 			<label class="label"><@s.text name="label.scheduledon"/></label>
