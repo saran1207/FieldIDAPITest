@@ -399,7 +399,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	public Pager<User> getPage() {
-		try {
 		if (page == null) {
 			page = new UserPaginatedLoader(getSecurityFilter())
 			               .withUserType(userType)
@@ -409,10 +408,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			               .setPageSize(Constants.PAGE_SIZE)
 			               .load();
 		}
-		}catch (Exception e){
-			logger.error("Failed to load users.", e);
-		}
-		
 		return page;
 	}
 	
