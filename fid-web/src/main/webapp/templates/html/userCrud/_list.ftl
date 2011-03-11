@@ -24,7 +24,11 @@
 </div>
 
 <#if page.hasResults() && page.validPage()>
-	<#assign currentAction="userList.action" />
+	<#if isArchivedPage>
+		<#assign currentAction="archivedUserList.action" />
+	<#else>
+		<#assign currentAction="userList.action" />
+	</#if>
 	<#include '../common/_pagination.ftl' />
 	<#include "_userList.ftl" />
 	<#include '../common/_pagination.ftl' />
