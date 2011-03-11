@@ -1,10 +1,10 @@
 <div class="textCriteriaDisplayContainer">
 
     <#if criteriaResult.primaryValue?exists>
-        ${criteriaResult.primaryValue} ${criteriaResult.criteria.primaryUnit.name}
+        ${criteriaResult.primaryValue} ${criteriaResult.criteria.primaryUnit.shortName}
     </#if>
     <#if criteriaResult.secondaryValue?exists>
-        ${criteriaResult.secondaryValue} ${criteriaResult.criteria.secondaryUnit.name}
+        ${criteriaResult.secondaryValue} ${criteriaResult.criteria.secondaryUnit.shortName}
     </#if>
 
 </div>
