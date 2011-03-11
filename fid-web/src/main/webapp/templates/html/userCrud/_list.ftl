@@ -26,7 +26,6 @@
 <#if page.hasResults() && page.validPage()>
 	<#assign currentAction="userList.action" />
 	<#include '../common/_pagination.ftl' />
-	<#assign userList=userList />
 	<#include "_userList.ftl" />
 	<#include '../common/_pagination.ftl' />
 <#elseif !page.hasResults()>
