@@ -59,7 +59,7 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		}
 		
 		if(setting.getEventTypes().isEmpty() && setting.getEventTypeGroup() !=null){
-			builder.addSimpleWhere("event.type.group.id", setting.getEventTypeGroup());
+			builder.addSimpleWhere("type.group.id", setting.getEventTypeGroup());
 		}
 
 		if (setting.getAssetStatus() != null) {
@@ -67,7 +67,7 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		}		
 		
 		if(!setting.getEventTypes().isEmpty()) {
-			builder.addSimpleWhere("eventType.id", setting.getEventTypes().get(0));
+			builder.addSimpleWhere("type.id", setting.getEventTypes().get(0));
 		}
 	}
 
