@@ -19,6 +19,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
+import com.n4systems.fieldid.actions.event.viewmodel.ScheduleToWebEventScheduleConverter;
 import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleConverter;
 import com.n4systems.fieldid.actions.helpers.AssetTypeLister;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
@@ -81,6 +82,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private List<Long> listOfIds = new ArrayList<Long>();
 	
 	private AssetWebModel assetWebModel = new AssetWebModel(this);
+	private AssetViewModeConverter converter;
+
 	
 	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, 
 			LegacyAsset legacyAssetManager, AssetCodeMappingService assetCodeMappingServiceManager, EventScheduleManager eventScheduleManager) {
@@ -94,6 +97,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	@Override
 	protected void initMemberFields() {
 		webEventSchedules = new ArrayList<WebEventSchedule>();
+		converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getUser());
 	}
 
 	@Override
@@ -177,6 +181,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			setAssetTypeId(assetTypeId);
 			setOwnerId(getSessionUser().getOwner().getId());
 		}
+		setAutoEventSchedules(getAutoEventSchedules(converter.viewToModel(assetView)));
+		
 	}
 	
 	private AssetType getAssetType(Long id) {
@@ -197,7 +203,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		logger.info("Asset Multi-Add saving " + identifiers.size() + " assets");
 		
 		logger.info("Resolving fields on base asset");
-		AssetViewModeConverter converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getUser());
 		
 		try {
 			AssetSaveService saver = new AssetSaveService(legacyAssetManager, fetchCurrentUser());
@@ -474,6 +479,17 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 				eventScheduleManager.update( eventSchedule );
 			}
 		}
+	}
+	
+	public void setAutoEventSchedules(List<EventSchedule> eventSchedules) {
+		ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
+		for (EventSchedule schedule: eventSchedules) {
+			webEventSchedules.add(converter.convert(schedule)); 
+		}
+	}
+	
+	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
+		return eventScheduleManager.getAutoEventSchedules(asset);
 	}
 	
 }
