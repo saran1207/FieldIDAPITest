@@ -5,10 +5,19 @@ import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class ExternalOrgFilter implements QueryFilter {
-
+	private final String pathPrefix;
+	
+	public ExternalOrgFilter(String prefix) {
+		this.pathPrefix = prefix;
+	}
+	
+	public ExternalOrgFilter() {
+		this(null);
+	}
+	
 	public void applyFilter(QueryBuilder<?> builder) {
-		builder.addWhere(Comparator.NOTNULL, "customerOrg", "customerOrg", "");
-		
+		String prefix = (pathPrefix == null) ? "" : pathPrefix + "." ;
+		builder.addWhere(Comparator.NOTNULL, prefix + "customerOrg", "customerOrg", "");
 	}
 
 }

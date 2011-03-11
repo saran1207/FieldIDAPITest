@@ -65,8 +65,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	private String listFilter;
 
-	private String userType = UserType.ALL.name();
-	private String userGroup = UserGroup.ALL.name();
+	private UserType userType = UserType.ALL;
+	private UserGroup userGroup = UserGroup.ALL;
 	private ArrayList<StringListingPair> userTypes;
 	private List<User> userList = new ArrayList<User>();
 	private String securityCardNumber;
@@ -402,7 +402,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public Pager<User> getPage() {
 		if (page == null) {
 			page = new UserPaginatedLoader(getSecurityFilter())
-			               .withUserType(UserType.valueOf(userType))
+			               .withUserType(userType)
+			               .withUserGroup(userGroup)
 			               .withNameFilter(listFilter)
 			               .setPage(getCurrentPage().intValue())
 			               .setPageSize(Constants.PAGE_SIZE)
@@ -415,7 +416,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		if(archivedPage == null) {
 			archivedPage =  new UserPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
 			                   .withArchivedOnly()
-				               .withUserType(UserType.valueOf(userType))
+				               .withUserType(userType)
+				               .withUserGroup(userGroup)
 				               .withNameFilter(listFilter)
 				               .setPage(getCurrentPage().intValue())
 				               .setPageSize(Constants.PAGE_SIZE)
@@ -465,9 +467,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	public List<StringListingPair> getUserGroups() {
-		ArrayList<StringListingPair> userGroups = new ArrayList<StringListingPair>();
-		for (int i = 0; i < UserGroup.values().length; i++) {
-			userGroups.add(new StringListingPair(UserGroup.values()[i].name(), UserGroup.values()[i].getLabel()));
+		List<StringListingPair> userGroups = new ArrayList<StringListingPair>();
+		for (UserGroup group: UserGroup.values()) {
+			userGroups.add(new StringListingPair(group.name(), group.getLabel()));
 		}
 		return userGroups;
 	}
@@ -481,11 +483,11 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	public String getUserType() {
-		return userType;
+		return userType.name();
 	}
 
 	public void setUserType(String userType) {
-		this.userType = userType;
+		this.userType = UserType.valueOf(userType);
 	}
 
 	public User getUser() {
@@ -548,35 +550,32 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	public List<User> getUserList() {
-
-		if (userGroup.equals(UserGroup.CUSTOMER.toString())) {
-			for (User user : getPage().getList()) {
-				if (user != null && user.getOwner().isCustomer()) {
+		for (User user : getPage().getList()) {
+			switch (userGroup) {
+				case CUSTOMER:
+					if (user.getOwner().isCustomer()) {
+						userList.add(user);
+					}
+					break;
+				case EMPLOYEE:	
+					if (!user.getOwner().isCustomer()) {
+						userList.add(user);
+					}
+					break;
+				default:
 					userList.add(user);
-				}
-			}
-		} else if (userGroup.equals(UserGroup.EMPLOYEE.toString())) {
-			for (User user : getPage().getList()) {
-				if (user != null && !user.getOwner().isCustomer()) {
-					userList.add(user);
-				}
-			}
-		} else {
-			for (User user : getPage().getList()) {
-				if (user != null) {
-					userList.add(user);
-				}
+					break;
 			}
 		}
 		return userList;
 	}
 
 	public String getUserGroup() {
-		return userGroup;
+		return userGroup.name();
 	}
 
 	public void setUserGroup(String userGroup) {
-		this.userGroup = userGroup;
+		this.userGroup = UserGroup.valueOf(userGroup);
 	}
 
 	public void setUserTypes(ArrayList<StringListingPair> userTypes) {
