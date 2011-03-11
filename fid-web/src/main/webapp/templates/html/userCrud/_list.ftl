@@ -23,13 +23,13 @@
 	</@s.form>
 </div>
 
-<#if page.hasResults() && page.validPage() >
+<#if page.hasResults() && page.validPage() && !userList.empty>
 	<#assign currentAction="userList.action" />
 	<#include '../common/_pagination.ftl' />
 	<#assign userList=userList />
 	<#include "_userList.ftl" />
 	<#include '../common/_pagination.ftl' />
-<#elseif !page.hasResults() >
+<#elseif !page.hasResults() || userList.empty>
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
 		<p>
