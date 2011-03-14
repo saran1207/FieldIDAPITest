@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.selenium.testcase.events;
 
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.components.EventInfoPopup;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
@@ -11,9 +15,6 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTestCase<EventPage> {
 
@@ -49,8 +50,11 @@ public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTes
 
     @Override
     protected EventPage navigateToPage() {
-        return startAsCompany("test1").login().search(TEST_SERIAL_NUMBER)
-                .clickEventsTab().clickManageEvents().clickStartNewEvent("Test Event Type");
+        return startAsCompany("test1")
+        		.login()
+        		.search(TEST_SERIAL_NUMBER)
+                .clickEventsTab()
+                .clickStartEventWithOnlyOneEventType();
     }
 
     @Test
@@ -65,7 +69,7 @@ public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTes
         EventInfoPopup popup = eventsPerformedPage.clickViewLatestEvent();
 
         assertEquals("My event value", popup.getTextValueForCriteria("Text Crit"));
-        assertEquals("5 Feet", popup.getTextValueForCriteria("Unit Crit"));
+        assertEquals("5 ft", popup.getTextValueForCriteria("Unit Crit"));
     }
 
 }

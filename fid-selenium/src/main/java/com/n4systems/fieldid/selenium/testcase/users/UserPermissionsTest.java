@@ -96,7 +96,7 @@ public class UserPermissionsTest extends FieldIDTestCase {
 
 		assertFalse("Shouldn't be able to see edit link next to view", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 
-		ManageEventsPage manageEventsPage = resultsPage.clickReportLinkForResult(1).clickEventsTab().clickManageEvents();
+		ManageEventsPage manageEventsPage = resultsPage.clickReportLinkForResult(1).clickEventsTab().clickViewEventsByDateGroup();
 
 		assertFalse("Shouldn't be able to see edit link", selenium.isElementPresent("//a[contains(., 'Edit')]"));
 

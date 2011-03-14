@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import com.thoughtworks.selenium.Selenium;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.fail;
+import com.thoughtworks.selenium.Selenium;
 
 public class QuickEventPage extends FieldIDPage {
 
@@ -17,6 +17,10 @@ public class QuickEventPage extends FieldIDPage {
             fail("Expected to be on quick event page");
         }
     }
-
+    
+    public EventPage clickAdHocEventType(String eventTypeName) {
+    	selenium.click("//a[contains(., '" + eventTypeName + "')]");
+    	return new EventPage(selenium);
+    }
 
 }

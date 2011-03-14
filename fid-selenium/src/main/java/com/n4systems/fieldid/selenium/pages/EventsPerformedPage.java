@@ -8,9 +8,19 @@ public class EventsPerformedPage extends FieldIDPage {
 	public EventsPerformedPage(Selenium selenium) {
 		super(selenium);
 	}
+	
+	public EventPage clickStartEventWithOnlyOneEventType() {
+		selenium.click("//a[@id='startEvent']");
+		return new EventPage(selenium);
+	}
+	
+	public QuickEventPage clickStartEventWithMultipleEventTypes() {
+		selenium.click("//a[@id='startEvent']");
+		return new QuickEventPage(selenium);
+	}
 
-	public ManageEventsPage clickManageEvents() {
-		selenium.click("//button[contains(.,'manage events')]");
+	public ManageEventsPage clickViewEventsByDateGroup() {
+		selenium.click("//a[@id='manageEvent']");
 		return new ManageEventsPage(selenium);
 	}
 
@@ -19,7 +29,7 @@ public class EventsPerformedPage extends FieldIDPage {
     }
 
     public EventInfoPopup clickViewEventNumber(int eventIndex) {
-        selenium.click("//table[@class='list']/tbody/tr["+(eventIndex+1)+"]//a[contains(.,'view')]");
+        selenium.click("//table[@class='list']/tbody/tr["+(eventIndex+1)+"]//a[contains(.,'View')]");
         return new EventInfoPopup(selenium);
     }
 
