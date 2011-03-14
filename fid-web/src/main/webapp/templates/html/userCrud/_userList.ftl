@@ -45,18 +45,20 @@
 							<a href="${unarchiveUrl}"/><@s.text name="label.unarchive"/></a>
 						</#if>				
 					<#else>
-						<#if user.id != sessionUser.id && !user.admin >
-							<#if user.fullUser>
-								<@s.url id="archiveUrl" action="employeeUserArchive" uniqueID="${(user.id)!}" />
-								<@s.url id="editUrl" action="employeeUserEdit" uniqueID="${(user.id)!}" />
-							<#elseif user.liteUser>
-								<@s.url id="archiveUrl" action="liteUserArchive" uniqueID="${(user.id)!}" />
-								<@s.url id="editUrl" action="liteUserEdit" uniqueID="${(user.id)!}" />
-							<#else>
-								<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
-								<@s.url  id="editUrl" action="readOnlyUserEdit" uniqueID="${(user.id)!}" />
-							</#if>
+						<#if user.fullUser || user.admin>
+							<@s.url id="archiveUrl" action="employeeUserArchive" uniqueID="${(user.id)!}" />
+							<@s.url id="editUrl" action="employeeUserEdit" uniqueID="${(user.id)!}" />
+						<#elseif user.liteUser>
+							<@s.url id="archiveUrl" action="liteUserArchive" uniqueID="${(user.id)!}" />
+							<@s.url id="editUrl" action="liteUserEdit" uniqueID="${(user.id)!}" />
+						<#else>
+							<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
+							<@s.url  id="editUrl" action="readOnlyUserEdit" uniqueID="${(user.id)!}" />
+						</#if>
+						<#if user.id != sessionUser.id>
 							<a href="${editUrl}"/><@s.text name="label.edit"/></a>
+						</#if>
+						<#if user.id != sessionUser.id && !user.admin >
 							|
 							<a href="${archiveUrl}" onclick="return confirm('${action.getText( 'warning.archiveuser',"", (user.userID)! )}');">
 								<@s.text name="label.archive" />
