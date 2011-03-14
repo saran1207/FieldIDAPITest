@@ -1,6 +1,6 @@
 <div class="viewSection smallViewSection" id="customerInformation" >
 	
-	<h2><@s.text name="label.owner"/><#if sessionUser.anEndUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${asset.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
+	<h2><@s.text name="label.owner"/><#if sessionUser.anEndUser || sessionUser.liteUser> <a href="<@s.url action="customerInformationEdit" uniqueID="${asset.id}"/>"><@s.text name="label.littleedit"/></a></#if></h2>
 	
 	<#if securityGuard.assignedToEnabled>
 		<p>
