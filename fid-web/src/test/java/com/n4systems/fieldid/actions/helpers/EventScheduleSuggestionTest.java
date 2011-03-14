@@ -1,18 +1,33 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
-import com.n4systems.model.EventSchedule;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.model.EventSchedule;
 import com.n4systems.util.DateHelper;
 
 
 public class EventScheduleSuggestionTest {
+	private TimeZone originalZone;
+	
+	@Before
+	public void setDefaultTimeZoneUTC() {
+		originalZone = TimeZone.getDefault();
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	}
+	
+	@After
+	public void resetDefaultTimeZone() {
+		TimeZone.setDefault(originalZone);
+	}
 	
 	@Test public void should_suggested_schedule_with_no_schedulesid() {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
