@@ -269,9 +269,10 @@ public class SubEventCrud extends EventCrud {
 			findEventBook();
 			processProofTestFile();
 			getModifiableEvent().pushValuesTo(event);
+            setOverrideResult(getModifiableEvent().getOverrideResult());
 			masterEventHelper.setProofTestFile(fileData);
 			masterEventHelper.setAssignToUpdate(getAssignedTo(), isAssignToSomeone());
-            masterEventHelper.setOverrideResult(overrideResult);
+            masterEventHelper.setOverrideResult(getOverrideResult());
 
 			if (masterEventHelper.getEvent().isNew()) {
 				event.setTenant(getTenant());
