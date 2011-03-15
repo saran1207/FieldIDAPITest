@@ -216,7 +216,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 
 	public AssignedToUserGrouper getUserGrouper() {
 		if (userGrouper == null) {
-			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true), getEmployees(), getSessionUser());
 		}
 		return userGrouper;
 	}

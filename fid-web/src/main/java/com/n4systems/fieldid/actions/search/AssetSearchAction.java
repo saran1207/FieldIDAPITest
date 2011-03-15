@@ -152,7 +152,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	
 	public AssignedToUserGrouper getUserGrouper() {
 		if (userGrouper == null){
-			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true), getEmployees(), getSessionUser());
 		}
 		return userGrouper;
 	}

@@ -31,10 +31,11 @@ public class AssignedToUserGrouper {
 		List<BaseOrg> owners = new ArrayList<BaseOrg>();
 
 		for (Listable<Long> user : employees) {
-
-			if (user.getId() != 0) {
-				
-				userLoader.setId(user.getId());
+			
+			userLoader.setId(user.getId());
+			
+			if (user.getId() != 0 && userLoader.load() != null) {
+		
 				baseOrg = userLoader.load().getOwner();
 
 				// If user is read-only customer, check that this baseOrg is the customer org

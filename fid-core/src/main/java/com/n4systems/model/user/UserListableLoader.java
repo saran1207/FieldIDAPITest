@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.ListableLoader;
 import com.n4systems.util.UserType;
 import com.n4systems.util.persistence.ListableSelect;
@@ -26,7 +27,7 @@ public class UserListableLoader extends ListableLoader {
 		/*
 		 * We're currently only filtering by tenant, this comes from the original UserManager method.  Not sure if it should be changed.
 		 */
-		QueryBuilder<Listable<Long>> builder = new QueryBuilder<Listable<Long>>(User.class, filter);
+		QueryBuilder<Listable<Long>> builder = new QueryBuilder<Listable<Long>>(User.class, new TenantOnlySecurityFilter(filter).setShowArchived(!noDeleted));
 		builder.setSelectArgument(new ListableSelect("id", "CONCAT(firstName, ' ', lastName)"));
 		
 		builder.addOrder("firstName", "lastName");
