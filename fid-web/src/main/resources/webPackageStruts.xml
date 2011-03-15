@@ -2368,6 +2368,21 @@
 			<result name="success" type="freemarker">/templates/html/networkAsset/schedules.ftl</result>
 		</action>
 
+		<action name="editAssetColumnLayout" method="edit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+			<result name="success" type="freemarker">/templates/html/columnLayout/layout.ftl</result>
+            <param name="layoutType">ASSET</param>
+		</action>
+
+        <action name="editEventColumnLayout" method="edit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+            <result name="success" type="freemarker">/templates/html/columnLayout/layout.ftl</result>
+            <param name="layoutType">EVENT</param>
+        </action>
+
+        <action name="editScheduleColumnLayout" method="edit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+            <result name="success" type="freemarker">/templates/html/columnLayout/layout.ftl</result>
+            <param name="layoutType">SCHEDULE</param>
+        </action>
+
 	</package>
 
 	<include file="locationPackageStruts.xml"/>

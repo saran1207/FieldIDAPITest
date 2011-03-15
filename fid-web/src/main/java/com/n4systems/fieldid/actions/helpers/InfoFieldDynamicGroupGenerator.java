@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 
 public class InfoFieldDynamicGroupGenerator {
 	
@@ -16,7 +16,7 @@ public class InfoFieldDynamicGroupGenerator {
 	private final CommonAssetAttributeFinder commonAttributeFinder;
 	private final String idPrefix;
 	
-	private List<ColumnMappingGroup> dynamigGroups;
+	private List<ColumnMappingGroupView> dynamigGroups;
 	private final String pathPrefix;
 	
 	
@@ -32,7 +32,7 @@ public class InfoFieldDynamicGroupGenerator {
 	}
 
 
-	public List<ColumnMappingGroup> getDynamicGroups(Long assetTypeId, List<Long> assetTypeIds) {
+	public List<ColumnMappingGroupView> getDynamicGroups(Long assetTypeId, List<Long> assetTypeIds) {
 		if (dynamigGroups == null) {
 			List<Long> consolidateAssetTypeIds = consolidateAssetTypeIds(assetTypeId, assetTypeIds);
 			createDynamicGroups(consolidateAssetTypeIds);
@@ -42,10 +42,10 @@ public class InfoFieldDynamicGroupGenerator {
 
 	
 	private void createDynamicGroups(List<Long> assetTypeIds) {
-		dynamigGroups = new ArrayList<ColumnMappingGroup>();
+		dynamigGroups = new ArrayList<ColumnMappingGroupView>();
 		
 		SortedSet<String> infoFieldNames = getCommonInfoFields(assetTypeIds);
-		ColumnMappingGroup infoFieldGroup = convertInfoFiledsToColumnMappings(infoFieldNames);
+		ColumnMappingGroupView infoFieldGroup = convertInfoFiledsToColumnMappings(infoFieldNames);
 		
 		dynamigGroups.add(infoFieldGroup);
 	}
@@ -63,10 +63,10 @@ public class InfoFieldDynamicGroupGenerator {
 	}
 
 	
-	private ColumnMappingGroup convertInfoFiledsToColumnMappings(SortedSet<String> infoFieldNames) {
+	private ColumnMappingGroupView convertInfoFiledsToColumnMappings(SortedSet<String> infoFieldNames) {
 		
 		int order = STARTING_ORDER_INDEX_FOR_INFO_FIELDS;
-		ColumnMappingGroup infoFieldGroup = createColumnMappingGroup();
+		ColumnMappingGroupView infoFieldGroup = createColumnMappingGroup();
 		for (String fieldName: infoFieldNames) {
 			infoFieldGroup.getMappings().add(createInfoFieldMapping(fieldName, order));
 			order++;
@@ -76,8 +76,8 @@ public class InfoFieldDynamicGroupGenerator {
 	}
 
 	
-	private ColumnMappingGroup createColumnMappingGroup() {
-		ColumnMappingGroup infoFieldGroup = new ColumnMappingGroup(idPrefix + "_asset_info_options", "label.assetattributes", LARGE_ORDER_NUMBER_TO_PLACE_GROUP_AT_THE_END_OF_COLUMN_SELECTION);
+	private ColumnMappingGroupView createColumnMappingGroup() {
+		ColumnMappingGroupView infoFieldGroup = new ColumnMappingGroupView(idPrefix + "_asset_info_options", "label.assetattributes", LARGE_ORDER_NUMBER_TO_PLACE_GROUP_AT_THE_END_OF_COLUMN_SELECTION, null);
 		infoFieldGroup.setDynamic(true);
 		return infoFieldGroup;
 	}
@@ -91,12 +91,12 @@ public class InfoFieldDynamicGroupGenerator {
 	}
 
 	
-	private ColumnMapping createInfoFieldMapping(String fieldName, int order) {
+	private ColumnMappingView createInfoFieldMapping(String fieldName, int order) {
 		String id = idPrefix + "_infooption_" + fieldName.toLowerCase().replaceAll(" ", "_");
 		
 		String path = (pathPrefix != null) ? pathPrefix + "." : "";
 		path +=  "infoOptions{infoField.name=" + fieldName + "}.name";
 		
-		return new ColumnMapping(id, fieldName, path, null, null, false, false, order, null);
+		return new ColumnMappingView(id, fieldName, path, null, null, false, false, order, null, null);
 	}
 }

@@ -11,6 +11,7 @@ import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.reporting.ReportDefiner;
+import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 
 
@@ -127,8 +128,8 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	}
 	
 	@Override
-	protected SortTerm.Direction defaultSortDirection() {
-		return SortTerm.Direction.DESC;
+	protected SortDirection defaultSortDirection() {
+		return SortDirection.DESC;
 	}
 	
 	public String getRfidNumber() {

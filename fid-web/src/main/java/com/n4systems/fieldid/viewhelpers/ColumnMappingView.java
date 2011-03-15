@@ -4,21 +4,22 @@ import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
+public class ColumnMappingView implements Comparable<ColumnMappingView>, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private final String id;
-	private final String label;
-	private final String pathExpression;
-	private final String sortExpression;
-	private final String outputHandler;
-	private final boolean sortable;
-	private final boolean onByDefault;
-	private final int order;
-	private final String requiredExtendedFeature;
+	private String id;
+	private String label;
+	private String pathExpression;
+	private String sortExpression;
+	private String outputHandler;
+	private boolean sortable;
+	private boolean onByDefault;
+	private int order;
+	private String requiredExtendedFeature;
+    private String groupKey;
 	
 	
-	public ColumnMapping(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order, String requiredExtendedFeature) {
+	public ColumnMappingView(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order, String requiredExtendedFeature, String groupKey) {
 		this.id = id;
 		this.label = label;
 		this.pathExpression = pathExpression;
@@ -28,9 +29,10 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 		this.onByDefault = onByDefault;
 		this.order = order;
 		this.requiredExtendedFeature = requiredExtendedFeature;
+        this.groupKey = groupKey;
 	}
 	
-	public int compareTo(ColumnMapping mapping) {
+	public int compareTo(ColumnMappingView mapping) {
 		// compare by order, only if orders are equal, fall back to the id
 		return (order < mapping.order ? -1 : (order == mapping.order ? id.compareTo(mapping.id) : 1));
 	}
@@ -76,11 +78,11 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ColumnMapping)) {
+		if (!(obj instanceof ColumnMappingView)) {
 			return false;
 		}
 		
-		ColumnMapping other = (ColumnMapping)obj;
+		ColumnMappingView other = (ColumnMappingView)obj;
 		return (id == other.id);
 	}
 
@@ -101,7 +103,16 @@ public class ColumnMapping implements Comparable<ColumnMapping>, Serializable {
 	public String getRequiredExtendedFeature() {
 		return requiredExtendedFeature;
 	}
-	
-	
-	
+
+    public String getGroupKey() {
+        return groupKey;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public void setOnByDefault(boolean onByDefault) {
+        this.onByDefault = onByDefault;
+    }
 }

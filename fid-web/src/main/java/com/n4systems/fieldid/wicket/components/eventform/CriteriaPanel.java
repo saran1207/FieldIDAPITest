@@ -6,7 +6,7 @@ import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressed
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
-import com.n4systems.fieldid.wicket.model.CriteriaTypeDescriptionModel;
+import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;

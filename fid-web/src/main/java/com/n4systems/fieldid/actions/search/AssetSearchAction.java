@@ -3,17 +3,19 @@ package com.n4systems.fieldid.actions.search;
 import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 
+import com.n4systems.fieldid.reporting.service.AssetColumnsService;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
@@ -26,7 +28,6 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.SimpleListable;
-import com.n4systems.util.persistence.search.ImmutableBaseSearchDefiner;
 import com.opensymphony.xwork2.Preparable;
 
 public class AssetSearchAction extends CustomizableSearchAction<AssetSearchContainer> implements Preparable {
@@ -43,7 +44,12 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 		super(AssetSearchAction.class, SEARCH_CRITERIA, "Asset Report", persistenceManager, new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "asset_search"));
 	}
 
-	public void prepare() throws Exception {
+    @Override
+    protected ReportConfiguration loadReportConfiguration() {
+        return new AssetColumnsService().getReportConfiguration(getSecurityFilter());
+    }
+
+    public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
 		

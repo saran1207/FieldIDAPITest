@@ -69,8 +69,10 @@ public class EventScheduleSuggestionTest {
 	
 	@Test public void should_suggested_schedule_with_today_vs_yesterday() {
 		List<EventSchedule> schedules = new ArrayList<EventSchedule>();
-		schedules.add(createSchedule(DateHelper.getToday(), 1L));
-		schedules.add(createSchedule(DateHelper.getYesterday(), 2L));
+        Date today = DateHelper.getToday();
+        Date yesterday = DateHelper.getYesterday();
+        schedules.add(createSchedule(today, 1L));
+        schedules.add(createSchedule(yesterday, 2L));
 		EventScheduleSuggestion suggestion = new EventScheduleSuggestion(schedules);
 		assertEquals(new Long(1), suggestion.getSuggestedScheduleId());
 	}

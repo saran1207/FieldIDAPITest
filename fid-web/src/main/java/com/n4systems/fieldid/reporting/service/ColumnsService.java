@@ -1,0 +1,88 @@
+package com.n4systems.fieldid.reporting.service;
+
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
+import com.n4systems.model.columns.ActiveColumnMapping;
+import com.n4systems.model.columns.ColumnLayout;
+import com.n4systems.model.columns.ColumnMapping;
+import com.n4systems.model.columns.ColumnMappingGroup;
+import com.n4systems.model.columns.ReportType;
+import com.n4systems.model.columns.loader.ColumnLayoutLoader;
+import com.n4systems.model.columns.loader.ColumnMappingGroupLoader;
+import com.n4systems.model.columns.loader.CustomColumnsLoader;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.SecurityFilter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class ColumnsService {
+
+    protected abstract ReportType getReportType();
+
+    public ReportConfiguration getReportConfiguration(SecurityFilter filter) {
+        List<ColumnMappingGroupView> groupViews = new ArrayList<ColumnMappingGroupView>();
+
+        PrimaryOrg primaryOrg = filter.getOwner().getPrimaryOrg();
+        List<ColumnMappingGroup> loadedGroups = new ColumnMappingGroupLoader(primaryOrg).reportType(getReportType()).load();
+        List<ColumnMappingGroup> groupsIncludingCustom = new ArrayList<ColumnMappingGroup>();
+        groupsIncludingCustom.addAll(loadedGroups);
+        if (includeCustom())
+            groupsIncludingCustom.add(createCustomGroup(filter));
+
+        ColumnLayout layout = new ColumnLayoutLoader(filter).reportType(getReportType()).load();
+
+        for (ColumnMappingGroup mappingGroup : groupsIncludingCustom) {
+            String groupKey = mappingGroup.getGroupKey();
+            ColumnMappingGroupView groupView = new ColumnMappingGroupView(mappingGroup.getLabel(), mappingGroup.getLabel(), mappingGroup.getOrder(), groupKey);
+            for (ColumnMapping column : mappingGroup.getColumnMappings()) {
+                processColumn(layout, groupView, column);
+            }
+            groupViews.add(groupView);
+        }
+
+        return new ReportConfiguration(groupViews, convertColumn(layout.getSortColumn()), layout.getSortDirection());
+    }
+
+    private ColumnMappingGroup createCustomGroup(SecurityFilter filter) {
+        List<ColumnMapping> customColumns = new CustomColumnsLoader(filter).reportType(getReportType()).load();
+        ColumnMappingGroup fakeCustomGroup = new ColumnMappingGroup();
+        fakeCustomGroup.setOrder(5000);
+        fakeCustomGroup.setType(getReportType());
+        fakeCustomGroup.setLabel("label.customattributes");
+        fakeCustomGroup.getColumnMappings().addAll(customColumns);
+        fakeCustomGroup.setGroupKey("custom_created_columns");
+
+        for (ColumnMapping customColumn : customColumns) {
+            customColumn.setGroup(fakeCustomGroup);
+        }
+
+        return fakeCustomGroup;
+    }
+
+    private void processColumn(ColumnLayout layout, ColumnMappingGroupView groupView, ColumnMapping mapping) {
+        ColumnMappingView convertedView = convertColumn(mapping);
+        ActiveColumnMapping activeConfig = layout.getActiveConfigurationFor(mapping);
+        if (activeConfig != null) {
+            convertedView.setOrder(activeConfig.getOrder());
+            convertedView.setOnByDefault(true);
+        } else {
+            convertedView.setOnByDefault(false);
+        }
+        groupView.getMappings().add(convertedView);
+    }
+
+    private ColumnMappingView convertColumn(ColumnMapping systemMapping) {
+        String id = systemMapping.getName();
+        if (id == null) {
+            id = systemMapping.getGroup().getGroupKey() + systemMapping.getLabel();
+        }
+        return new ColumnMappingView(id, systemMapping.getLabel(), systemMapping.getPathExpression(), systemMapping.getSortExpression(), systemMapping.getOutputHandler(), systemMapping.isSortable(), true, systemMapping.getDefaultOrder(), null, systemMapping.getGroup().getGroupKey());
+    }
+
+    protected boolean includeCustom() {
+        return true;
+    }
+
+}

@@ -16,7 +16,7 @@ import com.n4systems.util.properties.HierarchicalProperties;
 import com.n4systems.util.properties.HirarchicalPropertiesLoader;
 
 public class ColumnMappingFactory {
-	private static final ConcurrentMap<Class<?>, SortedSet<ColumnMappingGroup>> classDataMap = new ConcurrentHashMap<Class<?>, SortedSet<ColumnMappingGroup>>();
+	private static final ConcurrentMap<Class<?>, SortedSet<ColumnMappingGroupView>> classDataMap = new ConcurrentHashMap<Class<?>, SortedSet<ColumnMappingGroupView>>();
 	private static final Logger logger = Logger.getLogger(ColumnMappingFactory.class);
 	
 	// all methods static, hide constructor
@@ -29,7 +29,7 @@ public class ColumnMappingFactory {
 	 * @param clazz			The class to load properties from
 	 * @return				A list of ColumnMappingGroups populated with ColumnMappings
 	 */
-	public static SortedSet<ColumnMappingGroup> getMappings(Class<?> clazz, Tenant tenant) {
+	public static SortedSet<ColumnMappingGroupView> getMappings(Class<?> clazz, Tenant tenant) {
 		return getMappings(clazz, tenant, true);
 	}
 	
@@ -41,9 +41,9 @@ public class ColumnMappingFactory {
 	 * @param forceReload	Forces a reload from the properties file
 	 * @return				A list of ColumnMappingGroups populated with ColumnMappings
 	 */
-	public static SortedSet<ColumnMappingGroup> getMappings(Class<?> clazz, Tenant tenant, boolean forceReload) {
+	public static SortedSet<ColumnMappingGroupView> getMappings(Class<?> clazz, Tenant tenant, boolean forceReload) {
 		
-		SortedSet<ColumnMappingGroup> mappings = classDataMap.get(clazz);
+		SortedSet<ColumnMappingGroupView> mappings = classDataMap.get(clazz);
 		if(mappings == null || forceReload) {
 			mappings = loadMappings(clazz, tenant);
 			classDataMap.put(clazz, mappings);
@@ -59,14 +59,14 @@ public class ColumnMappingFactory {
 	 * @param clazz		The class to load properties from
 	 * @return			A SortedSet of ColumnMappingGroups populated with ColumnMappings
 	 */
-	private static SortedSet<ColumnMappingGroup> loadMappings(Class<?> clazz, Tenant tenant) {
+	private static SortedSet<ColumnMappingGroupView> loadMappings(Class<?> clazz, Tenant tenant) {
 		HierarchicalProperties properties = HirarchicalPropertiesLoader.load(clazz, tenant);
 		
 		// we'll start by populating a map as it'll make it easier to add the mappings later
-		Map<String, ColumnMappingGroup> groups = new HashMap<String, ColumnMappingGroup>();
+		Map<String, ColumnMappingGroupView> groups = new HashMap<String, ColumnMappingGroupView>();
 	
 		for(HierarchicalProperties props: properties.getPropertiesList("group")) {
-			groups.put(props.getParent(), new ColumnMappingGroup(props.getParent(), props.getString("label"), props.getInteger("order")));
+			groups.put(props.getParent(), new ColumnMappingGroupView(props.getParent(), props.getString("label"), props.getInteger("order"), null));
 		}
 		
 		String groupId;
@@ -74,7 +74,7 @@ public class ColumnMappingFactory {
 			groupId = props.getString("group");
 			try {
 				groups.get(groupId).getMappings().add(
-					new ColumnMapping(
+					new ColumnMappingView(
 						props.getParent(), 
 						props.getString("label"), 
 						props.getString("pathExpression"),
@@ -83,8 +83,8 @@ public class ColumnMappingFactory {
 						props.getBoolean("sortable"), 
 						props.getBoolean("onByDefault"), 
 						props.getInteger("order"), 
-						props.getString("requiredExtendedFeature")
-					)
+						props.getString("requiredExtendedFeature"),
+                            null)
 				);
 			} catch (NullPointerException e) {
 				logger.error(String.format("Unable to create column mapping: group=%s, properties=%s", groupId, props), e);
@@ -92,12 +92,12 @@ public class ColumnMappingFactory {
 		}
 		
 		// convert the values of our map into a treeset
-		return new TreeSet<ColumnMappingGroup>(groups.values());
+		return new TreeSet<ColumnMappingGroupView>(groups.values());
 	}
 	
-	public static List<String> covertToStorageList(SortedSet<ColumnMapping> mappings) {
+	public static List<String> covertToStorageList(SortedSet<ColumnMappingView> mappings) {
 		List<String> list = new ArrayList<String>();
-		for (ColumnMapping mapping : mappings) {
+		for (ColumnMappingView mapping : mappings) {
 			list.add(mapping.getId());
 		}
 		

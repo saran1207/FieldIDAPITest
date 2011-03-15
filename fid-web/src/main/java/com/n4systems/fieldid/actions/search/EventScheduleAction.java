@@ -3,11 +3,14 @@ package com.n4systems.fieldid.actions.search;
 import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.fieldid.reporting.service.ScheduleColumnsService;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
@@ -21,7 +24,7 @@ import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.AssetStatus;
@@ -69,7 +72,12 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 
 	}
 
-	public void prepare() throws Exception {
+    @Override
+    protected ReportConfiguration loadReportConfiguration() {
+        return new ScheduleColumnsService().getReportConfiguration(getSecurityFilter());
+    }
+
+    public void prepare() throws Exception {
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), new DummyOwnerHolder());
 		ownerPicker.setOwnerId(getContainer().getOwnerId());
 
@@ -206,8 +214,8 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	}
 
 	@Override
-	public List<ColumnMappingGroup> getDynamicGroups() {
-		List<ColumnMappingGroup> dynamicGroups = super.getDynamicGroups();
+	public List<ColumnMappingGroupView> getDynamicGroups() {
+		List<ColumnMappingGroupView> dynamicGroups = super.getDynamicGroups();
 		if (getSession().getScheduleCriteria() != null){
 			dynamicGroups.addAll(attribGroupGen.getDynamicGroups(getSession().getScheduleCriteria().getEventType(), getEventTypeIds(),getTenantId(), "event_schedule_search", "event", getSecurityFilter()));
 		}

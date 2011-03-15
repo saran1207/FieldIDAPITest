@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
@@ -21,11 +24,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
-import com.n4systems.fieldid.reporting.helpers.AvailableReportColumns;
 import com.n4systems.fieldid.reporting.helpers.DynamicColumnProvider;
-import com.n4systems.fieldid.reporting.helpers.SharedColumnFactory;
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
@@ -53,8 +52,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 			this.action = action;
 		}
 
-		public SortedSet<ColumnMappingGroup> getDynamicGroups() {
-			return new TreeSet<ColumnMappingGroup>(action.getDynamicGroups());
+		public SortedSet<ColumnMappingGroupView> getDynamicGroups() {
+			return new TreeSet<ColumnMappingGroupView>(action.getDynamicGroups());
 		}
 	}
 
@@ -65,12 +64,13 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private final String containerSessionKey;
 	private final String excelReportFileName;
 	private String searchId;
-	private SortedSet<ColumnMappingGroup> mappingGroups;
+	private SortedSet<ColumnMappingGroupView> mappingGroups;
 	private Map<String, WebOutputHandler> cellHandlers = new HashMap<String, WebOutputHandler>();
 	private TableView resultsTable;
 	private List<AssetType> assetTypes;
     private List<AssetTypeGroup> assetTypeGroups;
 	protected final InfoFieldDynamicGroupGenerator infoGroupGen;
+    private ReportConfiguration reportConfiguration;
 	
 	public CustomizableSearchAction(
 			final Class<? extends CustomizableSearchAction<T>> implementingClass, 
@@ -86,7 +86,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		this.infoGroupGen = infoGroupGen;
 	}
 
-	public List<ColumnMappingGroup> getDynamicGroups() {
+	public List<ColumnMappingGroupView> getDynamicGroups() {
 		return infoGroupGen.getDynamicGroups(getContainer().getAssetType(), getAssetTypeIds());
 	}
 
@@ -95,22 +95,29 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private void initializeColumnMappings() {
 		initializeAValueInMappingGroupsSoCallToGetContainerInGetDynamicGroupsDontStartLoopOfCallsThatResultInAStackOverflow();
 		
-		AvailableReportColumns reportColumns = new AvailableReportColumns(new SharedColumnFactory(implementingClass, getTenant()), new CustomizableSearchActionDynamicColumnProvider(this));
-		reportColumns.setFilter(new AssignedToReportColumnFilter(getSecurityGuard().isAssignedToEnabled()));
-		reportColumns.setFilter(new ProofTestIntegrationReportColumnFilter(getSecurityGuard().isProofTestIntegrationEnabled()));
-		
-		mappingGroups.addAll(reportColumns.getMappingGroups());
-		
+        ReportConfiguration reportConfig = getReportConfiguration();
+        mappingGroups.addAll(reportConfig.getColumnGroups());
+        mappingGroups.addAll(getDynamicGroups());
+
 		// initialize the output handlers 
-		for (ColumnMappingGroup group: mappingGroups) {
-			for (ColumnMapping mapping: group.getMappings()) {
+		for (ColumnMappingGroupView group: mappingGroups) {
+			for (ColumnMappingView mapping: group.getMappings()) {
 				registerCellHandler(mapping.getId(), mapping.getOutputHandler());
 			}
 		}
 	}
 
+    private ReportConfiguration getReportConfiguration() {
+        if (reportConfiguration == null) {
+            reportConfiguration = loadReportConfiguration();
+        }
+        return reportConfiguration;
+    }
+
+    protected abstract ReportConfiguration loadReportConfiguration();
+
 	private void initializeAValueInMappingGroupsSoCallToGetContainerInGetDynamicGroupsDontStartLoopOfCallsThatResultInAStackOverflow() {
-		mappingGroups = new TreeSet<ColumnMappingGroup>();
+		mappingGroups = new TreeSet<ColumnMappingGroupView>();
 	}
 	
 	private void registerCellHandler(String columnId, String className) {
@@ -123,8 +130,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	private List<String> getDefaultSelectedColumns() {
 		// setup the default selected columns
 		List<String> defaultColumns = new ArrayList<String>();
-		for (ColumnMappingGroup group: getMappingGroups()) {
-			for (ColumnMapping mapping: group.getMappings()) {
+		for (ColumnMappingGroupView group: getMappingGroups()) {
+			for (ColumnMappingView mapping: group.getMappings()) {
 				if(mapping.isOnByDefault()) {
 					defaultColumns.add(mapping.getId());
 				}
@@ -204,16 +211,16 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 
 	private List<String> buildExcelColumnTitles() {
 		List<String> titles = new ArrayList<String>();
-		for(ColumnMapping mapping: getSelectedMappings()) {
+		for(ColumnMappingView mapping: getSelectedMappings()) {
 			titles.add(getText(mapping.getLabel()));
 		}
 		return titles;
 	}
 	
-	private ColumnMapping findMapping(String id) {
-		ColumnMapping colMapping = null;
-		for (ColumnMappingGroup group: getMappingGroups()) {
-			for (ColumnMapping mapping: group.getMappings()) {
+	private ColumnMappingView findMapping(String id) {
+		ColumnMappingView colMapping = null;
+		for (ColumnMappingGroupView group: getMappingGroups()) {
+			for (ColumnMappingView mapping: group.getMappings()) {
 				if(mapping.getId().equals(id)) {
 					colMapping = mapping;
 					break;
@@ -223,7 +230,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return colMapping;
 	}
 	
-	public SortedSet<ColumnMappingGroup> getMappingGroups() {
+	public SortedSet<ColumnMappingGroupView> getMappingGroups() {
 		if (mappingGroups == null) {
 			initializeColumnMappings();
 		}
@@ -231,8 +238,8 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		return mappingGroups;
 	}
 	
-	protected List<ColumnMapping> getSelectedMappings() {
-		List<ColumnMapping> mappings = new ArrayList<ColumnMapping>();
+	protected List<ColumnMappingView> getSelectedMappings() {
+		List<ColumnMappingView> mappings = new ArrayList<ColumnMappingView>();
 		for(String mappingId: getContainer().getSelectedColumns()) {
 			mappings.add(findMapping(mappingId));
 		}
@@ -257,7 +264,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 
 	public ResultTransformer<TableView> getTransformer() {
 		List<String> columns = new ArrayList<String>();
-		for(ColumnMapping mapping: getSelectedMappings()) {
+		for(ColumnMappingView mapping: getSelectedMappings()) {
 			if (mapping != null) {
 				columns.add(mapping.getPathExpression());
 			}
@@ -356,7 +363,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	 * @param columnId	Uniqueid of the column
 	 * @return			A ColumnMapping
 	 */
-	public ColumnMapping getColumnMapping(String columnId) {
+	public ColumnMappingView getColumnMapping(String columnId) {
 		return findMapping(columnId);
 	}
 	

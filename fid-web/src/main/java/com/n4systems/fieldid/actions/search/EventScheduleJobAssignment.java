@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.actions.search;
 
 import com.n4systems.ejb.EventManager;
+import com.n4systems.fieldid.reporting.service.EventToJobColumnsService;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.EventScheduleManager;
@@ -25,6 +27,11 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 		super(SCHEDULE_CRITERIA, EventScheduleJobAssignment.class, persistenceManager, eventManager, assetManager, eventScheduleManager);
 	}
 
+    @Override
+    protected ReportConfiguration loadReportConfiguration() {
+        return new EventToJobColumnsService().getReportConfiguration(getSecurityFilter());
+    }
+
 	private void testRequiredEntities() {
 		if (job == null && getContainer().getJobAndNullId() == null) {
 			addFlashErrorText("error.nojob");
@@ -32,21 +39,21 @@ public class EventScheduleJobAssignment extends EventScheduleAction {
 			throw new MissingEntityException();
 		} 
 	}
-	
+
 	public String doStartSearch() {
 		testRequiredEntities();
 		getContainer().setJobAndNullId(job.getId());
 		getContainer().setOwner(job.getOwner());
 		return doCreateSearch();
 	}
-	
+
 	public String doCreateSearch() {
 		testRequiredEntities();
 		setJobId(getContainer().getJobAndNullId());
 		return super.doCreateSearch();
 	}
 	
-	
+
 	public String doSearch() {
 		testRequiredEntities();
 		setJobId(getContainer().getJobAndNullId());

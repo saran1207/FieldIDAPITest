@@ -4,7 +4,7 @@
 package com.n4systems.fieldid.actions.search;
 
 import com.n4systems.fieldid.reporting.helpers.ReportColumnFilter;
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.model.ExtendedFeature;
 
 final class AssignedToReportColumnFilter implements ReportColumnFilter {
@@ -14,7 +14,7 @@ final class AssignedToReportColumnFilter implements ReportColumnFilter {
 		this.assignedToEnabled = assignedToEnabled;
 	}
 
-	public boolean available(ColumnMapping columnMapping) {
+	public boolean available(ColumnMappingView columnMapping) {
 		if (assignedToEnabled) {
 			return true;
 		}
@@ -25,7 +25,7 @@ final class AssignedToReportColumnFilter implements ReportColumnFilter {
 		return requiredExtendedFeatureIsNotAssignedTo(columnMapping);
 	}
 
-	private boolean requiredExtendedFeatureIsNotAssignedTo(ColumnMapping columnMapping) {
+	private boolean requiredExtendedFeatureIsNotAssignedTo(ColumnMappingView columnMapping) {
 		return ExtendedFeature.valueOf(columnMapping.getRequiredExtendedFeature()) != ExtendedFeature.AssignedTo;
 	}
 }

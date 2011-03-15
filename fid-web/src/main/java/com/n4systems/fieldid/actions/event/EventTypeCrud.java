@@ -306,7 +306,7 @@ public class EventTypeCrud extends AbstractCrud {
 		Set<ProofTestType> supportedTypes = eventType.getSupportedProofTests();
 		supportedTypes.clear();
 		// convert the map of types back to a list of prooftestTypes
-		if (!types.isEmpty()) {
+		if (types != null && !types.isEmpty()) {
 			for (String typeKey : types.keySet()) {
 				if (types.get(typeKey) != null && types.get(typeKey) == true) {
 					supportedTypes.add(ProofTestType.valueOf(typeKey));

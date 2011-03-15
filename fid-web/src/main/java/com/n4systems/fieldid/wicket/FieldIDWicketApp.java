@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.eventform.EventFormEditPage;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
@@ -14,6 +15,7 @@ public class FieldIDWicketApp extends WebApplication {
     @Override
     protected void init() {
         mountBookmarkablePage("eventFormEdit", EventFormEditPage.class);
+        mountBookmarkablePage("columnsLayout", ColumnsLayoutPage.class);
     }
 
     @Override

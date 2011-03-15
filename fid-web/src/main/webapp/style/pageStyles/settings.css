@@ -62,6 +62,18 @@
 	background-image: url(../../images/templates-comment-templates-icon.png);
 }
 
+.assetColumnsLayout{
+	background-image: url(../../images/asset-column-icon.png);
+}
+
+.eventColumnsLayout{
+	background-image: url(../../images/reporting-column-icon.png);
+}
+
+.scheduleColumnsLayout{
+	background-image: url(../../images/schedules-column-icon.png);
+}
+
 .assetCodeMapping{
 	background-image: url(../../images/templates-product-code-mappings-icon.png);
 }

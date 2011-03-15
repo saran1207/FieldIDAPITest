@@ -1,0 +1,53 @@
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+
+    <head>
+        <title>Report Designer</title>
+    </head>
+
+    <body>
+
+        <div style="clear:both;"></div>
+
+        <div class="leftBar">
+
+            <div wicket:id="availableColumns"></div>
+
+        </div>
+
+        <div class="mainArea">
+
+            <div class="columnsLayoutFeedbackPanel" wicket:id="feedbackPanel">This is a stupid error message foo</div>
+
+                <form wicket:id="sortAndSaveForm">
+
+                <div class="currentLayoutDescription">
+                    <h2>Current Report Layout</h2>
+                    <h3>Hold and drag to re-order columns</h3>
+                </div>
+
+                <div class="sortDescription">
+                    <h2>Default Sorting</h2>
+                </div>
+
+                <div style="clear:both;"></div>
+
+                <div class="selectedColumnsContainer">
+                    <div wicket:id="selectedReportColumnsPanel">
+                    </div>
+                </div>
+
+                <div class="sortSelectorContainer">
+                    <select wicket:id="sortColumnSelect"></select> <select wicket:id="directionSelect"></select>
+                </div>
+
+                <div style="clear:both;"></div>
+
+                <div class="buttonsContainer">
+                    <button wicket:id="saveButton">Save</button> <a wicket:id="cancelLink">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+
+    </body>
+</html>

@@ -2,12 +2,12 @@ package com.n4systems.fieldid.reporting.helpers;
 
 import java.util.Random;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.builders.Builder;
 import com.n4systems.util.RandomString;
 
-public class ColumnMappingBuilder implements Builder<ColumnMapping> {
+public class ColumnMappingBuilder implements Builder<ColumnMappingView> {
 
 	private final String id;
 	private final String label;
@@ -46,8 +46,8 @@ public class ColumnMappingBuilder implements Builder<ColumnMapping> {
 		return new ColumnMappingBuilder(id, label, pathExpression, sortExpression, outputHandler, sortable, onByDefault, order, null);
 	}
 	
-	public ColumnMapping build() {
-		return new ColumnMapping(id, label, pathExpression, sortExpression, outputHandler, sortable, onByDefault, order, requiredExtendedFeature);
+	public ColumnMappingView build() {
+		return new ColumnMappingView(id, label, pathExpression, sortExpression, outputHandler, sortable, onByDefault, order, requiredExtendedFeature, null);
 	}
 
 	

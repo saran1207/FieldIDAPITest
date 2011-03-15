@@ -10,6 +10,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 
 public class EventScheduleSearchContainer extends SearchContainer {
@@ -97,8 +98,8 @@ public class EventScheduleSearchContainer extends SearchContainer {
 	}
 	
 	@Override
-	protected SortTerm.Direction defaultSortDirection() {
-		return SortTerm.Direction.ASC;
+	protected SortDirection defaultSortDirection() {
+		return SortDirection.ASC;
 	}
 
 	public String getRfidNumber() {

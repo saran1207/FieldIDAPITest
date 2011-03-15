@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.actions.search;
 
 import com.n4systems.fieldid.reporting.helpers.ReportColumnFilter;
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.model.ExtendedFeature;
 
 public class ProofTestIntegrationReportColumnFilter implements ReportColumnFilter {
@@ -14,7 +14,7 @@ public class ProofTestIntegrationReportColumnFilter implements ReportColumnFilte
 	}
 	
 	@Override
-	public boolean available(ColumnMapping columnMapping) {
+	public boolean available(ColumnMappingView columnMapping) {
 		if (proofTestIntegrationEnabled) {
 			return true;
 		}
@@ -25,7 +25,7 @@ public class ProofTestIntegrationReportColumnFilter implements ReportColumnFilte
 		return requiredExtendedFeatureIsProofTestIntegration(columnMapping);
 	}
 	
-	private boolean requiredExtendedFeatureIsProofTestIntegration(ColumnMapping columnMapping) {
+	private boolean requiredExtendedFeatureIsProofTestIntegration(ColumnMappingView columnMapping) {
 		return ExtendedFeature.valueOf(columnMapping.getRequiredExtendedFeature()) != ExtendedFeature.ProofTestIntegration;
 	}
 

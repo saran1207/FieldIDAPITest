@@ -5,13 +5,13 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 
 public class AvailableReportColumns {
 
 	private final StaticColumnProvider staticColumnProvider;
-	private SortedSet<ColumnMappingGroup> groups;
+	private SortedSet<ColumnMappingGroupView> groups;
 	private final DynamicColumnProvider dynamicColumnProvider;
 	private ReportColumnFilter reportColumnFilter;
 
@@ -21,11 +21,11 @@ public class AvailableReportColumns {
 		this.reportColumnFilter = new NoFilterReportColumnFilter();
 	}
 
-	public SortedSet<ColumnMappingGroup> getMappingGroups() {
+	public SortedSet<ColumnMappingGroupView> getMappingGroups() {
 		return getGroups();
 	}
 
-	private SortedSet<ColumnMappingGroup> getGroups() {
+	private SortedSet<ColumnMappingGroupView> getGroups() {
 		if (groups == null) {
 			initalizeGroups();
 			filterGroups();
@@ -35,9 +35,9 @@ public class AvailableReportColumns {
 	}
 
 	private void filterGroups() {
-		for (ColumnMappingGroup columnMappingGroup : groups) {
-			Collection<ColumnMapping> mappingsToRemove = new ArrayList<ColumnMapping>();
-			for (ColumnMapping columnMapping : columnMappingGroup.getMappings()) {
+		for (ColumnMappingGroupView columnMappingGroup : groups) {
+			Collection<ColumnMappingView> mappingsToRemove = new ArrayList<ColumnMappingView>();
+			for (ColumnMappingView columnMapping : columnMappingGroup.getMappings()) {
 				if (!reportColumnFilter.available(columnMapping)) {
 					mappingsToRemove.add(columnMapping);
 				}
@@ -48,7 +48,7 @@ public class AvailableReportColumns {
 	}
 
 	private void initalizeGroups() {
-		groups = new TreeSet<ColumnMappingGroup>();
+		groups = new TreeSet<ColumnMappingGroupView>();
 		groups.addAll(staticColumnProvider.getMappings());
 		groups.addAll(dynamicColumnProvider.getDynamicGroups());
 	}

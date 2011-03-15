@@ -3,7 +3,7 @@ package com.n4systems.fieldid.reporting.helpers;
 import java.util.SortedSet;
 
 import com.n4systems.fieldid.viewhelpers.ColumnMappingFactory;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.model.Tenant;
 
 public class SharedColumnFactory implements StaticColumnProvider {
@@ -16,7 +16,7 @@ public class SharedColumnFactory implements StaticColumnProvider {
 		this.tenant = tenant;
 	}
 
-	public SortedSet<ColumnMappingGroup> getMappings() {
+	public SortedSet<ColumnMappingGroupView> getMappings() {
 		return ColumnMappingFactory.getMappings(implementingClass, tenant);
 	}
 

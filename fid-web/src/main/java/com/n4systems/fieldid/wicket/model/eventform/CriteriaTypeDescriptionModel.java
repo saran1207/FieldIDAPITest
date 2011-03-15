@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.model;
+package com.n4systems.fieldid.wicket.model.eventform;
 
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;

@@ -1,0 +1,302 @@
+body {
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+}
+
+div.leftBar {
+    display: block;
+    float: left;
+    width: 210px;
+    min-height: 400px;
+    border-right: 1px solid #888;
+}
+
+div.mainArea {
+    display:block;
+    float:left;
+    min-height: 400px;
+    padding-left: 20px;
+    padding-top: 15px;
+}
+
+.selectedColumnsContainer {
+    display:block;
+    background: #eee;
+    border: 1px solid #ddd;
+    padding-top: 15px;
+    padding-bottom:15px;
+    padding-left: 35px;
+    margin-left:10px;
+    min-height:400px;
+    width:230px;
+    display:block;
+    float:left;
+    height:auto;
+}
+
+.sortSelectorContainer {
+    display:block;
+    background: #eee;
+    border: 1px solid #ddd;
+    padding-top: 15px;
+    padding-bottom:15px;
+    padding-left: 25px;
+    min-height:150px;
+    width:200px;
+    display:block;
+    float:left;
+    margin-left:15px;
+}
+
+.selectedColumn {
+    display:block;
+    margin-right: 5px;
+}
+
+div.selectedColumn div.reportColumn {
+    margin-bottom: 3px;
+}
+
+.availableColumns {
+    display:block;
+    float:left;
+    padding-bottom: 3px;
+}
+
+.dragContainer {
+    display:block;
+    float:left;
+    margin:0;
+    padding:0 0 0 0;
+}
+
+.column_box_event_details {
+    background-color: #5581A2;
+}
+
+.column_body_event_details {
+    background-color: #99B3C7;
+}
+
+.column_box_identifiers {
+    background-color: #4BA578;
+}
+
+.column_body_identifiers {
+    background-color: #93C9AE;
+}
+
+.column_box_ownership {
+    background-color: #D2781E;
+}
+
+.column_body_ownership {
+    background-color: #E4AE78;
+}
+
+.column_box_order_details {
+    background-color: #496565;
+}
+
+.column_body_order_details {
+    background-color: #899B9B;
+}
+
+.column_box_asset_details {
+    background-color: #787878;
+}
+
+.column_body_asset_details {
+    background-color: #AEAEAE;
+}
+
+.column_box_proof_test_details {
+    background-color: #AB5882;
+}
+
+.column_body_proof_test_details {
+    background-color: #C993AE;
+}
+
+.column_box_date_identified {
+    background-color: #262626;
+}
+
+.column_body_date_identified {
+    background-color: #5E5E5E;
+}
+
+.column_box_custom_fields {
+    background-color: #A51E1E;
+}
+
+.column_body_custom_fields {
+    background-color: #C97878;
+}
+
+.column_box_schedule_details {
+    background-color: #003366;
+}
+
+.column_body_schedule_details {
+    background-color: #2E5882;
+}
+
+.leftBox {
+    width: 32px;
+    display:block;
+    float:left;
+    height: 22px;
+    padding-top: 8px;
+    padding-left:1px;
+}
+
+.reportColumn {
+    width: 200px;
+    height: 30px;
+    display: block;
+    /*float:left;*/
+    text-align: center;
+}
+
+.reportColumnTitle {
+    display:block;
+    float:left;
+    padding-top: 8px;
+    padding-left: 5px;
+    color: #ffffff;
+    font-size: 10px;
+    text-align:left;
+}
+
+.collapseExpandLink {
+    display:block;
+    text-decoration:none;
+    color:#000000;
+    font-size: 12px;
+    padding-bottom: 5px;
+}
+
+.deleteColumnImageContainer {
+    display:block;
+    float:right;
+    padding-top: 10px;
+    padding-right: 7px;
+}
+
+div.availableSectionTitle {
+    display:block;
+    padding-top :10px;
+    font-weight :bold;
+    font-size: 12px;
+}
+
+.createCustomColumnPanel a {
+    font-size: 10px;
+}
+
+.createCustomColumnPanel input[type='text'] {
+    width: 100px;
+    display:block;
+    float:left;
+}
+
+.addNewCustomAttributeContainer {
+    display: block;
+    float:left;
+    padding-bottom:5px;
+}
+
+.saveCancelLinks {
+    display:block;
+    float:left;
+    font-size:10px;
+    padding-top:5px;
+    padding-left:4px;
+}
+
+.newColumnForm {
+    padding:0 0 0 0;
+    margin:0 0 0 0;
+}
+
+.areaClickableForAdd {
+    display:block;
+    float:left;
+    width:90%;
+    height:100%;
+}
+
+.collapseExpandLink img {
+    border-style:none;
+}
+
+.buttonsContainer {
+    display:block;
+    float:left;
+    padding-top: 4px;
+    padding-left: 10px;
+}
+
+.buttonsContainer a {
+    font-size:10px;
+    color:#0000ff;
+}
+
+.buttonsContainer a:visited {
+    font-size:10px;
+    color:#0000ff;
+}
+
+.sectionSubTitle {
+    display:block;float:left;
+    color: #666;
+    font-size: 11px;
+    line-height:15px;
+    padding-bottom:3px;
+}
+
+.currentLayoutDescription {
+    padding-left: 10px;
+    width:230px;
+    display:block;
+    float:left;
+    height:40px;
+    font-size:11px;
+}
+
+.mainArea h2 {
+    font-weight:bold;
+    font-size:12px;
+    padding:0 0 0 0;
+    margin:0 0 0 0;
+}
+
+.mainArea h3 {
+    font-weight:normal;
+    font-size:11px;
+    line-height:15px;
+    color:#666;
+    padding:0 0 0 0;
+    margin:0 0 0 0;
+}
+
+.sortDescription {
+    padding-left: 40px;
+    width:200px;
+    display:block;
+    float:left;
+    margin-left:15px;
+    height:40px;
+}
+
+.columnsLayoutFeedbackPanel ul {
+    background-color: #fdd;
+    border: 1px solid #faa;
+    color: #a00;
+    font-size:12px;
+    margin-left:10px;
+    margin-bottom:2px;
+    margin-top:0;
+    padding: 2px 6px 2px 6px;
+    list-style-type: none;
+}

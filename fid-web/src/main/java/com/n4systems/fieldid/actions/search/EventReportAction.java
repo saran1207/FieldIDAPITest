@@ -14,6 +14,9 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
+import com.n4systems.fieldid.reporting.service.EventColumnsService;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
@@ -30,7 +33,6 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.WebSession;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
@@ -89,10 +91,15 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		
 		overrideHelper(new SearchHelper(getLoaderFactory()));
 	}
-	
-	@Override
-	public List<ColumnMappingGroup> getDynamicGroups() {
-		List<ColumnMappingGroup> dynamicGroups = super.getDynamicGroups();
+
+    @Override
+    protected ReportConfiguration loadReportConfiguration() {
+        return new EventColumnsService().getReportConfiguration(getSecurityFilter());
+    }
+
+    @Override
+	public List<ColumnMappingGroupView> getDynamicGroups() {
+		List<ColumnMappingGroupView> dynamicGroups = super.getDynamicGroups();
 	
 		dynamicGroups.addAll(attribGroupGen.getDynamicGroups(getSession().getReportCriteria().getEventType(), getEventTypeIds(), getTenantId(),"event_search", getSecurityFilter()));
 		

@@ -1,0 +1,30 @@
+<wicket:panel>
+
+
+    <script language="javascript">
+        function fireEvent(id, evt){
+            var obj = document.getElementById(id);
+            if( document.createEvent ) {
+              var evObj = document.createEvent('MouseEvents');
+              evObj.initEvent( evt, true, false );
+              obj.dispatchEvent(evObj);
+            } else if( document.createEventObject ) {
+              obj.fireEvent('on'+evt);
+            }
+        }
+    </script>
+    <div class="createCustomColumnPanel">
+
+        <div class="addNewCustomAttributeContainer">
+            <a wicket:id="addNewLink">add new</a>
+        </div>
+
+        <form wicket:id="newColumnForm" class="newColumnForm">
+
+            <input type="text" wicket:id="newColumnName"/> <div class="saveCancelLinks"><a wicket:id="saveLink">Save</a> | <a wicket:id="cancelLink">Cancel</a></div>
+
+        </form>
+
+    </div>
+
+</wicket:panel>

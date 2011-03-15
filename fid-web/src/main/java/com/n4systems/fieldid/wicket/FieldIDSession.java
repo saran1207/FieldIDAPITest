@@ -10,6 +10,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import rfid.web.helper.SessionUser;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -36,6 +37,10 @@ public class FieldIDSession extends WebSession {
 
     public SessionUser getSessionUser() {
         return (SessionUser) session.getAttribute(com.n4systems.fieldid.actions.utils.WebSession.KEY_SESSION_USER);
+    }
+
+    public Map<String, String> getTenantLangOverrides() {
+        return (Map<String, String>) session.getAttribute(com.n4systems.fieldid.actions.utils.WebSession.KEY_TENANT_LANG_OVERRIDES);
     }
 
     public void storeInfoMessageForStruts(String message) {

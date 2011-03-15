@@ -15,6 +15,7 @@ import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.JoinTerm;
+import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.JoinTerm.JoinTermType;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
@@ -58,7 +59,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	abstract protected void evalSearchFilters();
 	abstract protected void evalJoinTerms();
 	abstract protected String defaultSortColumn();
-	abstract protected SortTerm.Direction defaultSortDirection();
+	abstract protected SortDirection defaultSortDirection();
 	
 	abstract public Long getAssetType();
 	abstract public Long getAssetTypeGroup();
@@ -114,14 +115,14 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 		sortTerms.clear();
 		
 		// this persistence manager can take a list of sort terms but we currently only support one
-		SortTerm.Direction dir = defaultSortDirection();
+		SortDirection dir = defaultSortDirection();
 		if(sortColumn != null && sortDirection != null) {
 			
 			
-			if(sortDirection.equals(SortTerm.Direction.ASC.getDisplayName())) {
-				dir = SortTerm.Direction.ASC;
-			} else if (sortDirection.equals(SortTerm.Direction.DESC.getDisplayName())) {
-				dir = SortTerm.Direction.DESC;
+			if(sortDirection.equals(SortDirection.ASC.getDisplayName())) {
+				dir = SortDirection.ASC;
+			} else if (sortDirection.equals(SortDirection.DESC.getDisplayName())) {
+				dir = SortDirection.DESC;
 			}
 			
 			// since the sort column is a path expression, it is possible for it to have meta tags used in filtering.

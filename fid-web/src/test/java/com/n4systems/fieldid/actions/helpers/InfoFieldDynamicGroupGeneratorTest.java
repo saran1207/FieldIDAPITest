@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableSortedSet;
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
 import com.n4systems.test.helpers.FluentArrayList;
 
 
@@ -96,7 +96,7 @@ public class InfoFieldDynamicGroupGeneratorTest {
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(NOT_TO_BE_USED_FINDER , "pre");
 		
 		
-		List<ColumnMappingGroup> actualDynamicGroup = sut.getDynamicGroups(null, new ArrayList<Long>());
+		List<ColumnMappingGroupView> actualDynamicGroup = sut.getDynamicGroups(null, new ArrayList<Long>());
 		
 		
 		assertThat(actualDynamicGroup.size(), equalTo(1));
@@ -113,10 +113,10 @@ public class InfoFieldDynamicGroupGeneratorTest {
 		
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(commonAttributeFinder, "pre");
 		
-		List<ColumnMappingGroup> actualColumnMappings = sut.getDynamicGroups(null, new ArrayList<Long>());
+		List<ColumnMappingGroupView> actualColumnMappings = sut.getDynamicGroups(null, new ArrayList<Long>());
 		
-		for (ColumnMappingGroup columnMappingGroup : actualColumnMappings) {
-			for (ColumnMapping columnMapping : columnMappingGroup.getMappings()) {
+		for (ColumnMappingGroupView columnMappingGroup : actualColumnMappings) {
+			for (ColumnMappingView columnMapping : columnMappingGroup.getMappings()) {
 				assertThat(columnMapping, 
 						hasProperty("label", anyOf(equalTo("field1"), equalTo("field3"), equalTo("field4"))));
 			}
@@ -130,10 +130,10 @@ public class InfoFieldDynamicGroupGeneratorTest {
 		
 		InfoFieldDynamicGroupGenerator sut = new InfoFieldDynamicGroupGenerator(commonAttributeFinder, "pre");
 		
-		List<ColumnMappingGroup> actualColumnMappings = sut.getDynamicGroups(null, new ArrayList<Long>());
+		List<ColumnMappingGroupView> actualColumnMappings = sut.getDynamicGroups(null, new ArrayList<Long>());
 		
-		for (ColumnMappingGroup columnMappingGroup : actualColumnMappings) {
-			for (ColumnMapping columnMapping : columnMappingGroup.getMappings()) {
+		for (ColumnMappingGroupView columnMappingGroup : actualColumnMappings) {
+			for (ColumnMappingView columnMapping : columnMappingGroup.getMappings()) {
 				assertThat(columnMapping, 
 						hasProperty("id", Matchers.startsWith("pre" + "_infooption_")));
 			}

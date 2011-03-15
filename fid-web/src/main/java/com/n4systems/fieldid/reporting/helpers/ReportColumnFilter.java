@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.reporting.helpers;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 
 public interface ReportColumnFilter {
 
-	public boolean available(ColumnMapping columnMapping);
+	public boolean available(ColumnMappingView columnMapping);
 
 }

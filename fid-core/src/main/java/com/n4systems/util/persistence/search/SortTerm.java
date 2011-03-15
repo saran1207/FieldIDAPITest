@@ -5,28 +5,9 @@ import com.n4systems.util.persistence.OrderClause;
 import java.io.Serializable;
 
 public class SortTerm implements Serializable {
-	public enum Direction { 
-		ASC(true, "asc"), DESC(false, "desc");
-		
-		private boolean ascending;
-		private String displayName;
-		
-		Direction(boolean reverse, String externalName) {
-			this.ascending = reverse;
-			this.displayName = externalName;
-		}
-		
-		public boolean isAscending() {
-			return ascending;
-		}
-		
-		public String getDisplayName() {
-			return displayName;
-		}
-	}
-	
+
 	private String path;
-	private Direction direction = Direction.DESC;
+	private SortDirection direction = SortDirection.DESC;
 	
 	public SortTerm() {}
 	
@@ -34,7 +15,7 @@ public class SortTerm implements Serializable {
 		this(path, null);
 	}
 	
-	public SortTerm(String path, Direction direction) {
+	public SortTerm(String path, SortDirection direction) {
 		this.path = path;
 		this.direction = direction;
 	}
@@ -47,11 +28,11 @@ public class SortTerm implements Serializable {
 		this.path = path;
 	}
 
-	public Direction getDirection() {
+	public SortDirection getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Direction direction) {
+	public void setDirection(SortDirection direction) {
 		this.direction = direction;
 	}
 	

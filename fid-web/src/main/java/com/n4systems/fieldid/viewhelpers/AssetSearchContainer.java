@@ -8,6 +8,7 @@ import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 
 public class AssetSearchContainer extends SearchContainer {
@@ -85,8 +86,8 @@ public class AssetSearchContainer extends SearchContainer {
 	}
 	
 	@Override
-	protected SortTerm.Direction defaultSortDirection() {
-		return SortTerm.Direction.DESC;
+	protected SortDirection defaultSortDirection() {
+		return SortDirection.DESC;
 	}
 	
 	public String getRfidNumber() {

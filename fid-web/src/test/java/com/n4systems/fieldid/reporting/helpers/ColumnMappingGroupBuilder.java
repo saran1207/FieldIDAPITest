@@ -5,19 +5,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMapping;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroup;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.model.builders.Builder;
 import com.n4systems.util.RandomString;
 
-public class ColumnMappingGroupBuilder implements Builder<ColumnMappingGroup> {
-	private static final ArrayList<ColumnMapping> EMPTY_MAPPINGS = new ArrayList<ColumnMapping>();
+public class ColumnMappingGroupBuilder implements Builder<ColumnMappingGroupView> {
+	private static final ArrayList<ColumnMappingView> EMPTY_MAPPINGS = new ArrayList<ColumnMappingView>();
 
 	private final String id;
 	private final String label;
 	private final int order;
 	private final boolean dynamic;
-	private final List<ColumnMapping> mappings = new ArrayList<ColumnMapping>();
+	private final List<ColumnMappingView> mappings = new ArrayList<ColumnMappingView>();
 
 	public static ColumnMappingGroupBuilder aColumnMappingGroup() {
 		return aStaticColumnMappingGroup();
@@ -44,12 +44,12 @@ public class ColumnMappingGroupBuilder implements Builder<ColumnMappingGroup> {
 		return new Random().nextInt();
 	}
 	
-	public ColumnMappingGroupBuilder withMappings(ColumnMapping...mappings) {
+	public ColumnMappingGroupBuilder withMappings(ColumnMappingView...mappings) {
 		return new ColumnMappingGroupBuilder(id, label, order, true, Arrays.asList(mappings));
 	}
 	
 		
-	private ColumnMappingGroupBuilder(String id, String label, int order, boolean dynamic, List<ColumnMapping> mappings) {
+	private ColumnMappingGroupBuilder(String id, String label, int order, boolean dynamic, List<ColumnMappingView> mappings) {
 		super();
 		this.id = id;
 		this.label = label;
@@ -59,8 +59,8 @@ public class ColumnMappingGroupBuilder implements Builder<ColumnMappingGroup> {
 	}
 	
 	
-	public ColumnMappingGroup build() {
-		ColumnMappingGroup columnMappingGroup = new ColumnMappingGroup(id, label, order);
+	public ColumnMappingGroupView build() {
+		ColumnMappingGroupView columnMappingGroup = new ColumnMappingGroupView(id, label, order, null);
 		columnMappingGroup.setDynamic(dynamic);
 		columnMappingGroup.getMappings().addAll(mappings);
 		return columnMappingGroup;
