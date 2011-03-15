@@ -1123,16 +1123,6 @@
 
 		<action name="quickEvent" method="quickEvent" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/html/eventCrud/quickEvent.ftl</result>
-			<result name="oneFound" type="redirectAction">
-				<param name="actionName">eventAdd</param>
-				<param name="assetId">${assetId}</param>
-				<param name="type">${type}</param>
-			</result>
-			<result name="oneFoundMaster" type="redirectAction">
-				<param name="actionName">masterEventAdd</param>
-				<param name="assetId">${assetId}</param>
-				<param name="type">${type}</param>
-			</result>
 		</action>
 
 		<action name="selectEventAdd" method="select" class="com.n4systems.fieldid.actions.event.EventCrud">
