@@ -28,7 +28,7 @@ value="${(parameters.nameValue.displayName)?default('')?html}"<#rt/>
 </#if>
 />
 <#if !(parameters.required?exists) || !parameters.required>
-<a href="#" class="clearSearchOwner" <#if !parameters.idNameValue?exists>style="display:none"</#if> ><@s.text name="label.clear"/></a>
+<a href="#" class="clearSearchOwner" <#if !parameters.idNameValue?exists || parameters.nameValue.displayName?exists >style="display:none"</#if> ><@s.text name="label.clear"/></a>
 </#if>	
 
 <a href="#" class="searchOwner" orgFilter="${orgType}" orgId="${parameters.id?html}"><@s.text name="label.choose"/></a>

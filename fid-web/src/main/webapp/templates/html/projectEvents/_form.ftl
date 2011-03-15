@@ -1,5 +1,6 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
+	<#include "/templates/html/common/_columnView.ftl"/>
 	<@n4.includeStyle type="page" href="search" />
 	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
 	<script type="text/javascript">
@@ -42,8 +43,14 @@
 			
 			<div class="fieldGroup">
 				<h2><@s.text name="label.ownership"/></h2>
+				<div class="infoSet">
+					<label for="criteria.location"><@s.text name="label.location"/></label>
+					<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
+				</div>	
+				
 				<#include "../schedule/_ownershipFilters.ftl"/>
 			</div>
+		
 	
 			<div class="fieldGroup ">	
 				<h2><@s.text name="label.asset_details"/></h2>
