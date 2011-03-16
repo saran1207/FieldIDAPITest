@@ -43,7 +43,7 @@ public class ManageAssetTypesPage extends FieldIDPage {
 	}
 
 	public ManageAssetTypesPage clickEventTypesTab() {
-		clickNavOption("Event Types");
+		clickNavOption("Event Type Associations");
 		return this;
 	}
 	
