@@ -13,10 +13,13 @@ import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 
+import java.util.Arrays;
+import java.util.List;
 
 
 public class SaveReportSearchCriteriaConverterTest {
 
+    private static final List<String> ALL_COLUMN_IDS = Arrays.asList("column1", "column2", "column3");
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -33,7 +36,12 @@ public class SaveReportSearchCriteriaConverterTest {
 		expect(loaderFactory.createEntityByIdLoader(BaseOrg.class)).andReturn(mockLoader);
 		replay(loaderFactory);
 		
-		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null);
+		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null) {
+            @Override
+            protected List<String> getListOfAllColumnIds() {
+                return ALL_COLUMN_IDS;
+            }
+        };
 		
 		EventSearchContainer actualContainer = sut.convert(savedReport);
 		
@@ -52,7 +60,12 @@ public class SaveReportSearchCriteriaConverterTest {
 		expect(loaderFactory.createFilteredIdLoader(BaseOrg.class)).andReturn(mockLoader);
 		replay(loaderFactory);
 		
-		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null);
+		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null) {
+            @Override
+            protected List<String> getListOfAllColumnIds() {
+                return ALL_COLUMN_IDS;
+            }
+        };
 		
 		EventSearchContainer actualContainer = sut.convert(savedReport);
 		

@@ -110,7 +110,7 @@ public class SavedReportSearchCriteriaConverter {
         }
     }
 
-    private List<String> getListOfAllColumnIds() {
+    protected List<String> getListOfAllColumnIds() {
         List<String> allColumnIds = new ArrayList<String>();
         List<ColumnMappingGroup> groups = new ColumnMappingGroupLoader(loaderFactory.getSecurityFilter().getOwner().getPrimaryOrg()).load();
         for (ColumnMappingGroup group : groups) {

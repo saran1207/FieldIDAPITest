@@ -5,6 +5,7 @@ package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.event.AssignedToUpdate;
+import com.n4systems.model.user.User;
 
 public class AssignedToUpdateHandler extends WebOutputHandler {
 	private static final String NO_ASSIGNMENT = "";
@@ -28,7 +29,8 @@ public class AssignedToUpdateHandler extends WebOutputHandler {
 	public String handleWeb(Long entityId, Object value) {
 		if (value instanceof AssignedToUpdate) {
 			AssignedToUpdate update = (AssignedToUpdate)value;
-			return assignedToHandler.handleWeb(entityId, update.getAssignedUser().getDisplayName());
+            User assignedUser = update.getAssignedUser();
+            return assignedToHandler.handleWeb(entityId, assignedUser == null ? null : assignedUser.getDisplayName());
 		}
 		return NO_ASSIGNMENT;
 	}
