@@ -45,7 +45,7 @@ public class ColumnsLayoutPage extends WebPage {
 
     private List<ColumnMappingGroup> groups;
 
-    private List<ColumnMapping> allColumns = new ArrayList<ColumnMapping>();
+    private List<ColumnMapping> sortableColumns = new ArrayList<ColumnMapping>();
     private List<ColumnMapping> inUseColumns = new ArrayList<ColumnMapping>();
     private SortDirection sortDirection = SortDirection.ASC;
     private ColumnMapping sortColumn;
@@ -65,7 +65,7 @@ public class ColumnsLayoutPage extends WebPage {
         feedbackPanel.setOutputMarkupPlaceholderTag(true);
 
         groups = new ColumnMappingGroupLoader(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner().getPrimaryOrg()).reportType(reportType).load();
-        storeAndSortAllColumns();
+        storeAndSortSortableColumns();
         loadCurrentLayout();
         filterAvailableColumns();
 
@@ -102,7 +102,7 @@ public class ColumnsLayoutPage extends WebPage {
         });
 
         Form form;
-        add(form = new SortAndSaveForm("sortAndSaveForm", new PropertyModel<List<ColumnMapping>>(this, "allColumns")));
+        add(form = new SortAndSaveForm("sortAndSaveForm", new PropertyModel<List<ColumnMapping>>(this, "sortableColumns")));
 
         form.add(selectedReportColumnsPanel = new SelectedReportColumnsPanel("selectedReportColumnsPanel", inUseColumnsModel) {
             @Override
@@ -119,13 +119,14 @@ public class ColumnsLayoutPage extends WebPage {
         });
     }
 
-    private void storeAndSortAllColumns() {
+    private void storeAndSortSortableColumns() {
         for (ColumnMappingGroup group : groups) {
             for (ColumnMapping columnMapping : group.getColumnMappings()) {
-                allColumns.add(columnMapping);
+                if (columnMapping.isSortable())
+                    sortableColumns.add(columnMapping);
             }
         }
-        Collections.sort(allColumns, new Comparator<ColumnMapping>() {
+        Collections.sort(sortableColumns, new Comparator<ColumnMapping>() {
             @Override
             public int compare(ColumnMapping c1, ColumnMapping c2) {
                 String label1Value = new FIDLabelModel(c1.getLabel()).getObject();
