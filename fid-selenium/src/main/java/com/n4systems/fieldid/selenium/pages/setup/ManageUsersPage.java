@@ -242,7 +242,7 @@ public class ManageUsersPage extends FieldIDPage {
 
 	public void archiveUser(String userid, boolean confirm) {
 		confirmNextDialog(confirm);
-		selenium.click("//a[contains(text(),'" + userid + "')]/../..//a[text()='Archive']");
+		selenium.click("//a[contains(text(),'" + userid + "')]/../..//a[contains(text(),'Archive')]");
 		selenium.getConfirmation();
 	}
 
