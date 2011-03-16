@@ -103,7 +103,7 @@ public class IdentifyPage extends FieldIDPage {
 	
 	public Asset setAddAssetForm(Asset p, boolean generate) {
 		if(generate) {
-			selenium.click("//a[contains(text(),'generate')]");
+			selenium.click("//a[contains(text(),'Generate')]");
 		}
 		if(p.getSerialNumber() != null) {
 			selenium.type("//input[@id='serialNumberText']", p.getSerialNumber());
