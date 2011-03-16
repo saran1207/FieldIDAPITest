@@ -7,7 +7,6 @@ import com.n4systems.model.columns.ColumnMappingGroup;
 import com.n4systems.model.columns.CustomColumnCategory;
 import com.n4systems.model.columns.CustomColumnMapping;
 import com.n4systems.model.columns.ReportType;
-import com.n4systems.model.columns.saver.CustomColumnMappingSaver;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
