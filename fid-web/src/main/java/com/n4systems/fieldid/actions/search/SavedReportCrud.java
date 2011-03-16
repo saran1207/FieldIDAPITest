@@ -65,8 +65,14 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	public String doLoad() {
 		testRequiredEntities(true);
 		SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter());
-		
-		EventSearchContainer container = converter.convert(report);
+        EventSearchContainer container = null;
+
+        try {
+		    container = converter.convert(report);
+        } catch(MissingEntityException e) {
+            addFlashErrorText("error.missingcolumn");
+            return ERROR;
+        }
 		
 		searchId = container.getSearchId();
 		getSession().setReportCriteria(container); 

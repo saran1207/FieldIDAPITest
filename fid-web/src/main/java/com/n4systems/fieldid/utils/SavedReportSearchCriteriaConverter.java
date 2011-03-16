@@ -1,11 +1,18 @@
 package com.n4systems.fieldid.utils;
 
+import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.model.columns.ColumnMapping;
+import com.n4systems.model.columns.ColumnMappingGroup;
+import com.n4systems.model.columns.loader.ColumnMappingGroupLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.DateHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SavedReportSearchCriteriaConverter {
 
@@ -19,6 +26,7 @@ public class SavedReportSearchCriteriaConverter {
 	 
 	public EventSearchContainer convert(SavedReport savedReport) {
 		EventSearchContainer container = new EventSearchContainer(filter, loaderFactory);
+        verifySavedColumnsAreAllStillPresent(savedReport.getColumns());
 		container.setSelectedColumns(savedReport.getColumns());
 		container.setSortColumn(savedReport.getSortColumn());
 		container.setSortDirection(savedReport.getSortDirection());
@@ -92,5 +100,25 @@ public class SavedReportSearchCriteriaConverter {
 
 		return report;
 	}
+
+    private void verifySavedColumnsAreAllStillPresent(List<String> columnIds) {
+        List<String> allColumnIds = getListOfAllColumnIds();
+        for (String columnId : columnIds) {
+            if (!allColumnIds.contains(columnId)) {
+                throw new MissingEntityException("Column from saved report was missing, must have been deleted. ID: " + columnId);
+            }
+        }
+    }
+
+    private List<String> getListOfAllColumnIds() {
+        List<String> allColumnIds = new ArrayList<String>();
+        List<ColumnMappingGroup> groups = new ColumnMappingGroupLoader(loaderFactory.getSecurityFilter().getOwner().getPrimaryOrg()).load();
+        for (ColumnMappingGroup group : groups) {
+            for (ColumnMapping columnMapping : group.getColumnMappings()) {
+                allColumnIds.add(columnMapping.getName());
+            }
+        }
+        return allColumnIds;
+    }
 
 }

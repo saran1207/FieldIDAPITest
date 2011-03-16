@@ -28,7 +28,7 @@ public class AssignedToUpdateHandler extends WebOutputHandler {
 	public String handleWeb(Long entityId, Object value) {
 		if (value instanceof AssignedToUpdate) {
 			AssignedToUpdate update = (AssignedToUpdate)value;
-			return assignedToHandler.handleWeb(entityId, update.getAssignedUser());
+			return assignedToHandler.handleWeb(entityId, update.getAssignedUser().getDisplayName());
 		}
 		return NO_ASSIGNMENT;
 	}

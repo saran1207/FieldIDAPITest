@@ -1693,6 +1693,9 @@
 				<param name="actionName">reportResults</param>
 				<param name="searchId">${searchId}</param>
 			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">savedReports</param>
+			</result>
 		</action>
 
 		<action name="savedReportAdd" method="add" class="com.n4systems.fieldid.actions.search.SavedReportCrud">
