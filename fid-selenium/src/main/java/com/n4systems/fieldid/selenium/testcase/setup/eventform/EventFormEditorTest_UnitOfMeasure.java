@@ -1,18 +1,19 @@
 package com.n4systems.fieldid.selenium.testcase.setup.eventform;
 
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
-import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeFormPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
-import org.junit.Test;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
-
-public class EventFormEditorTest_UnitOfMeasure extends PageNavigatingTestCase<ManageEventTypesPage> {
+public class EventFormEditorTest_UnitOfMeasure extends PageNavigatingTestCase<EventTypeFormPage> {
 
     @Override
     public void setupScenario(Scenario scenario) {
@@ -45,11 +46,8 @@ public class EventFormEditorTest_UnitOfMeasure extends PageNavigatingTestCase<Ma
     }
 
     @Override
-    protected ManageEventTypesPage navigateToPage() {
-        ManageEventTypesPage page = startAsCompany("test1").login().clickSetupLink().clickManageEventTypes();
-        page.clickEditEventType("Test type");
-        page.clickEventFormTab();
-        return page;
+    protected EventTypeFormPage navigateToPage() {
+    	return startAsCompany("test1").login().clickSetupLink().clickManageEventTypes().clickEventTypeName("Test type").clickEventFormTab();
     }
 
     @Test
@@ -76,13 +74,12 @@ public class EventFormEditorTest_UnitOfMeasure extends PageNavigatingTestCase<Ma
         page.selectPrimaryUnitOfMeasure("Feet");
         page.selectSecondaryUnitOfMeasure("Inches");
 
-        page.clickSaveAndFinishEventForm();
-        page.clickEventFormTab();
-        page.clickCriteriaSection("Other section");
-        page.clickCriteria("Height");
+        EventTypeFormPage newFormPage = page.clickSaveAndFinishEventForm().clickEventFormTab();
+        newFormPage.clickCriteriaSection("Other section");
+        newFormPage.clickCriteria("Height");
 
-        assertEquals("Feet", page.getSelectedPrimaryUnitOfMeasure());
-        assertEquals("Inches", page.getSelectedSecondaryUnitOfMeasure());
+        assertEquals("Feet", newFormPage.getSelectedPrimaryUnitOfMeasure());
+        assertEquals("Inches", newFormPage.getSelectedSecondaryUnitOfMeasure());
     }
 
 }

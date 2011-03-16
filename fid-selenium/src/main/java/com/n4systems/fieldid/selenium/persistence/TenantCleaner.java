@@ -8,9 +8,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetCodeMapping;
 
+import com.n4systems.fieldid.selenium.util.TimeLogger;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
@@ -57,232 +60,293 @@ import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import com.n4systems.model.user.User;
 
 public class TenantCleaner {
-
+	private static final Logger logger = Logger.getLogger(TenantCleaner.class);
+	
+	private final EntityManager em;
+	
+	public TenantCleaner(EntityManager em) {
+		this.em = em;
+	}
+	
+	private void remove(Object entity) {
+		em.remove(entity);
+		em.flush();
+	}
+	
     @SuppressWarnings("unchecked")
-	public void cleanTenants(EntityManager em, String[] tenants) {
+	public void cleanTenants(String[] tenants) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "cleanTenants(%s)", (Object)tenants);
+    	
         Query tenantQuery = em.createQuery("select id from "+ Tenant.class.getName()+" where name in (:tenantNames)");
         tenantQuery.setParameter("tenantNames", Arrays.asList(tenants));
-        List tenantIds = tenantQuery.getResultList();
+        List<Long> tenantIds = tenantQuery.getResultList();
 
         if (tenantIds.isEmpty())
             return;
 
-        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
-        Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
-
-        removeAllConfigsForTenants(em, tenantIds);
-        removeAllForTenants(em, AssetCodeMapping.class, tenantIds);
-        removeAllForTenants(em, Catalog.class, tenantIds);
-        removeAllForTenants(em, EventSchedule.class, tenantIds);
-        removeAllForTenants(em, Event.class, tenantIds);
-        removeAllForTenants(em, AssociatedEventType.class, tenantIds);
-        removeAllForTenants(em, AssetTypeSchedule.class, tenantIds);
-        removeAllForTenants(em, EventType.class, tenantIds);
-        removeAllForTenants(em, EventForm.class, tenantIds);
-        removeAllForTenants(em, EventTypeGroup.class, tenantIds);
-        removeAllForTenants(em, CriteriaSection.class, tenantIds);
-        removeAllForTenants(em, OneClickCriteria.class, tenantIds);
+        removeAllConfigsForTenants(tenantIds);
+        removeAddAssetHistory(tenantIds);
+        removeAllForTenants(AssetCodeMapping.class, tenantIds);
+        removeAllForTenants(Catalog.class, tenantIds);
+        removeAllForTenants(EventSchedule.class, tenantIds);
+        removeAllForTenants(Event.class, tenantIds);
+        removeAllForTenants(AssociatedEventType.class, tenantIds);
+        removeAllForTenants(AssetTypeSchedule.class, tenantIds);
+        removeAllForTenants(EventType.class, tenantIds);
+        removeAllForTenants(EventForm.class, tenantIds);
+        removeAllForTenants(EventTypeGroup.class, tenantIds);
+        removeAllForTenants(CriteriaSection.class, tenantIds);
+        removeAllForTenants(OneClickCriteria.class, tenantIds);
         
-//        removeAllForTenants(em, TextFieldCriteria.class, tenantIds);
-//        removeAllForTenants(em, SelectCriteria.class, tenantIds);
+//        removeAllForTenants(TextFieldCriteria.class, tenantIds);
+//        removeAllForTenants(SelectCriteria.class, tenantIds);
 
+        Query networkRegisteredAssetsQuery = em.createQuery("select p1 from " + Asset.class.getName() + " p1, " + Asset.class.getName() + " p2 where p1.linkedAsset.id = p2.id and p2.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         List<Asset> networkRegisteredAssets = networkRegisteredAssetsQuery.getResultList();
         for (Asset asset : networkRegisteredAssets) {
-            safeRemoveAsset(em, asset);
+            safeRemoveAsset(asset);
         }
 
+        Query assetsQuery = em.createQuery("from " + Asset.class.getName() + " where tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         List<Asset> assets = assetsQuery.getResultList();
         for (Asset asset : assets) {
-            safeRemoveAsset(em, asset);
+            safeRemoveAsset(asset);
         }
 
-        removeAllForTenants(em, AddAssetHistory.class, tenantIds, new Callback<AddAssetHistory>() {
-            @Override
-            public void callback(AddAssetHistory entity) {
-                entity.getInfoOptions().clear();
-            }
-        });
+        removeAllActiveSessionsForTenant(tenantIds);
+        cleanUpOrgConnections(tenantIds);
+        cleanUpSignUpReferrals(tenantIds);
+        removeAllForTenants(EventGroup.class, tenantIds);
+        removeAllForTenants(EventBook.class, tenantIds);
+        removeAllForTenants(AutoAttributeCriteria.class, tenantIds);
+        removeAllForTenants(AutoAttributeDefinition.class, tenantIds);
+        removeAllForTenants(AssetType.class, tenantIds);
+        removeAllForTenants(AssetTypeGroup.class, tenantIds);
+        removeAllForTenants(AssetStatus.class, tenantIds);
+        removeAllForTenants(FileAttachment.class, tenantIds);
+        removeAllForTenants(UserRequest.class, tenantIds);
+        removeAllForTenants(AutoAttributeCriteria.class, tenantIds);
+        removeAllForTenants(Message.class, tenantIds);
+        removeAllForTenants(EulaAcceptance.class, tenantIds);
+        removeAllForTenants(Project.class, tenantIds);
+        removeAllForTenants(LineItem.class, tenantIds);
+        removeAllForTenants(Order.class, tenantIds);
+        removeAllForTenants(StateSet.class, tenantIds);
+        removeAllForTenants(NotificationSetting.class, tenantIds);
+        removeAllExternalOrgsPointingToTenants(tenantIds);
+        removeAllForTenants(AssetType.class, tenantIds);
+        removeAllForTenants(EventGroup.class, tenantIds);
+        removeAllForTenants(EventTypeGroup.class, tenantIds);
+        removeAllSeenItStorageItems(tenantIds);
+        cleanUpForeignFieldsOnUsers(tenantIds);
 
-        //cleanNullTenantEntities(em, AddAssetHistory.class);
+        removeAllForTenants(DivisionOrg.class, tenantIds);
+        removeAllForTenants(CustomerOrg.class, tenantIds);
+        removeAllForTenants(SecondaryOrg.class, tenantIds);
+        removeAllForTenants(PrimaryOrg.class, tenantIds);
 
-        removeAllActiveSessionsForTenant(em, tenantIds);
-        cleanUpOrgConnections(em, tenantIds);
-        cleanUpSignUpReferrals(em, tenantIds);
-        removeAllForTenants(em, EventGroup.class, tenantIds);
-        removeAllForTenants(em, EventBook.class, tenantIds);
-        removeAllForTenants(em, AutoAttributeCriteria.class, tenantIds);
-        removeAllForTenants(em, AutoAttributeDefinition.class, tenantIds);
-        removeAllForTenants(em, AssetType.class, tenantIds, new Callback<AssetType>() {
-            @Override
-            public void callback(AssetType entity) {
-                entity.getSchedules().clear();
-            }
-        });
-        removeAllForTenants(em, AssetTypeGroup.class, tenantIds);
-        removeAllForTenants(em, AssetStatus.class, tenantIds);
-        removeAllForTenants(em, FileAttachment.class, tenantIds);
-        removeAllForTenants(em, UserRequest.class, tenantIds);
-        removeAllForTenants(em, AutoAttributeCriteria.class, tenantIds);
-        removeAllForTenants(em, Message.class, tenantIds);
-        removeAllForTenants(em, EulaAcceptance.class, tenantIds);
-        removeAllForTenants(em, Project.class, tenantIds);
-        removeAllForTenants(em, LineItem.class, tenantIds);
-        removeAllForTenants(em, Order.class, tenantIds);
-
-        removeAllForTenants(em, StateSet.class, tenantIds);removeAllForTenants(em, NotificationSetting.class, tenantIds);
+        removeAllForTenants(User.class, tenantIds);
         
-        removeAllExternalOrgsPointingToTenants(em, tenantIds);
+        timeLogger.stop();
+    }
+    
+    private void removeAddAssetHistory(List<Long> tenantIds) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "removeAddAssetHistory(%s)", tenantIds);
+    	
+    	for (Long tenantId: tenantIds) {
+    		Query query = em.createNativeQuery("DELETE FROM addassethistory_infooption WHERE r_addproducthistory in (SELECT uniqueid FROM addassethistory WHERE tenant_id = ?)");
+        	logger.error("Delete addassethistory_infooption: " + query.setParameter(1, tenantId).executeUpdate());
+        	
+        	query = em.createNativeQuery("DELETE FROM addassethistory WHERE tenant_id = ?");
+        	logger.error("Delete addassethistory: " + query.setParameter(1, tenantId).executeUpdate());
+    	}
+    	em.flush();
+    	
+        timeLogger.stop();
+    }
+    
+    private void removeAllSeenItStorageItems(List<Long> tenantIds) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "removeAllSeenItStorageItems(%s)", tenantIds);
+    	
+    	String jpql = String.format("from %s where userId in (select id from %s where tenant.id in (:tenantIds))", SeenItStorageItem.class.getName(), User.class.getName());
+        Query query = em.createQuery(jpql).setParameter("tenantIds", tenantIds);
+        removeAllFromQuery(query);
 
-        cleanUpAddressInfo(em);
-
-        removeAllWhereModifiedOrCreatedByUsersFromTenant(em, tenantIds, AssetType.class, EventGroup.class, EventTypeGroup.class, SeenItStorageItem.class);
-
-        cleanUpOwnerForUsers(em, tenantIds);
-
-        removeAllForTenants(em, DivisionOrg.class, tenantIds);
-        removeAllForTenants(em, CustomerOrg.class, tenantIds);
-        removeAllForTenants(em, SecondaryOrg.class, tenantIds);
-        removeAllForTenants(em, PrimaryOrg.class, tenantIds);
-
-        removeAllForTenants(em, User.class, tenantIds);
+        timeLogger.stop();
     }
 
-    private void cleanUpOwnerForUsers(EntityManager em, List<Long> tenantIds) {
-        long startTime = System.currentTimeMillis();
+    private void cleanUpForeignFieldsOnUsers(List<Long> tenantIds) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "cleanUpOwnerForUsers(%s)", tenantIds);
+    	
         for (Long tenantId : tenantIds) {
-            Query q = em.createQuery("update " + User.class.getName() + " set owner = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
+            Query q = em.createQuery("update " + User.class.getName() + " set owner = null, createdBy = null, modifiedBy = null where tenant.id = :tenantId").setParameter("tenantId", tenantId);
             q.executeUpdate();
         }
-        System.out.println("Finished nulling out owners in: " + (System.currentTimeMillis() - startTime));
+        
+        timeLogger.stop();
     }
 
-    private void removeAllConfigsForTenants(EntityManager em, List<Long> tenantIds) {
-        for (Long tenantId : tenantIds) {
+    private void removeAllConfigsForTenants(List<Long> tenantIds) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "removeAllConfigsForTenants(%s)", tenantIds.toArray());
+        
+    	for (Long tenantId : tenantIds) {
             Query query = em.createQuery("from " + Configuration.class.getName() + " where tenantId = " + tenantId);
-            removeAllFromQuery(em, query);
+            removeAllFromQuery(query);
         }
+        
+        timeLogger.stop();
     }
 
-    private void cleanUpAddressInfo(EntityManager em) {
-        Query query = em.createQuery("update " + AddressInfo.class.getName() + " set createdby = null ");
+    private void cleanUpAddressInfo() {
+    	TimeLogger timeLogger = new TimeLogger(logger, "cleanUpAddressInfo(em)");
+    	
+        Query query = em.createQuery("update " + AddressInfo.class.getName() + " set createdby = null, modifiedby = null");
         query.executeUpdate();
-        query = em.createQuery("update " + AddressInfo.class.getName() + " set modifiedby = null ");
-        query.executeUpdate();
+        
+        timeLogger.stop();
     }
 
-    private void removeAllWhereModifiedOrCreatedByUsersFromTenant(EntityManager em, List tenantIds, Class... entityClasses) {
+    private void removeAllWhereModifiedOrCreatedByUsersFromTenant(List<Long> tenantIds, Class<?> ... entityClasses) {
         for (Class c : entityClasses) {
-            Query query = em.createQuery("from " + c.getName() + " where createdBy in (from "+User.class.getName()+" where tenant.id in (:tenantIds1)) "+
+        	TimeLogger timeLogger = new TimeLogger(logger, "removeAllWhereModifiedOrCreatedByUsersFromTenant(%s, %s)", tenantIds.toArray(), c.getSimpleName());
+            
+        	Query query = em.createQuery("from " + c.getName() + " where createdBy in (from "+User.class.getName()+" where tenant.id in (:tenantIds1)) "+
                     " or modifiedBy in (from "+User.class.getName()+" where tenant.id in (:tenantIds2))");
             query.setParameter("tenantIds1", tenantIds);
             query.setParameter("tenantIds2", tenantIds);
-            removeAllFromQuery(em, query);
+            removeAllFromQuery(query);
+            
+            timeLogger.stop();
         }
     }
 
-    private void removeAllActiveSessionsForTenant(EntityManager em, List tenantIds) {
+    private void removeAllActiveSessionsForTenant(List<Long> tenantIds) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "removeAllActiveSessionsForTenant(%s)", tenantIds.toArray());
+    	
         Query query = em.createQuery("from " + ActiveSession.class.getName() + " where user.tenant.id in (:tenantIds)");
         query.setParameter("tenantIds", tenantIds);
-        removeAllFromQuery(em, query);
+        removeAllFromQuery(query);
+        
+        timeLogger.stop();
     }
 
-    private void cleanNullTenantEntities(EntityManager em, Class c) {
+    private void cleanNullTenantEntities(Class<?> c) {
         Query query = em.createQuery("from " + c.getName() + " where tenant is null ");
         List<Object> results = query.getResultList();
         for (Object o : results) {
             clearInfoOptionsIfNecessary(o);
         }
-        removeAllFromQuery(em, query);
+        removeAllFromQuery(query);
     }
 
-    private void removeAllExternalOrgsPointingToTenants(EntityManager em, List tenantIds) {
+    private void removeAllExternalOrgsPointingToTenants(List<Long> tenantIds) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "removeAllExternalOrgsPointingToTenants(%s)", tenantIds.toArray());
+    	
         Query query = em.createQuery("from " + ExternalOrg.class.getName() + " where linkedOrg.tenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
         List<ExternalOrg> orgs = query.getResultList();
         for (ExternalOrg org : orgs) {
-            cleanOwnedEntities(em, Event.class, org);
-            cleanOwnedEntities(em, EventSchedule.class, org);
-            cleanOwnedEntities(em, AddAssetHistory.class, org);
-            cleanOwnedEntities(em, User.class, org);
+            cleanOwnedEntities(Event.class, org);
+            cleanOwnedEntities(EventSchedule.class, org);
+            cleanOwnedEntities(AddAssetHistory.class, org);
+            cleanOwnedEntities(User.class, org);
             Query divisionQuery = em.createQuery("from " + DivisionOrg.class.getName() + " where parent.id = " + org.getId());
-            removeAllFromQuery(em, divisionQuery);
+            removeAllFromQuery(divisionQuery);
             Query assetQuery = em.createQuery("from " + Asset.class.getName() + " where owner.id = " + org.getId());
             List<Asset> assets = assetQuery.getResultList();
             for (Asset asset : assets) {
-                safeRemoveAsset(em, asset);
+                safeRemoveAsset(asset);
             }
         }
 
-        removeAllFromQuery(em, query);
+        removeAllFromQuery(query);
+        timeLogger.stop();
     }
 
-    private void cleanUpSignUpReferrals(EntityManager em, List tenantIds) {
+    private void cleanUpSignUpReferrals(List<Long> tenantIds) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "cleanUpSignUpReferrals(%s)", tenantIds.toArray());
+    	
         Query query = em.createQuery("from " + SignupReferral.class.getName() + " where referredTenant.id in (:tenantIds) or referralTenant.id in (:tenantIds)").setParameter("tenantIds", tenantIds);
-        removeAllFromQuery(em, query);
+        removeAllFromQuery(query);
+        
+        timeLogger.stop();
     }
 
-    private void cleanUpOrgConnections(EntityManager em, List tenantIds) {
+    private void cleanUpOrgConnections(List<Long> tenantIds) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "cleanUpOrgConnections(%s)", tenantIds.toArray());
+    	
         Query typedQuery = em.createQuery("from " + TypedOrgConnection.class.getName() + " where tenant.id in (:tenantIds1) or connectedOrg.tenant.id in (:tenantIds2) or owner.tenant.id in (:tenantIds3)").setParameter("tenantIds1", tenantIds).setParameter("tenantIds2", tenantIds).setParameter("tenantIds3", tenantIds);
         Query query = em.createQuery("from " + OrgConnection.class.getName() + " where vendor.tenant.id in (:tenantIds1)  or customer.tenant.id in (:tenantIds2)").setParameter("tenantIds1", tenantIds).setParameter("tenantIds2", tenantIds);
 
-        removeAllFromQuery(em, typedQuery);
-        removeAllFromQuery(em, query);
+        removeAllFromQuery(typedQuery);
+        removeAllFromQuery(query);
+        
+        timeLogger.stop();
     }
 
-    private <T> void removeAllForTenants(EntityManager em, Class<T> entityToRemove, List tenantIds) {
-        removeAllForTenants(em, entityToRemove, tenantIds, new Callback<T>() {
+    private <T> void removeAllForTenants(Class<T> entityToRemove, List<Long> tenantIds) {
+        removeAllForTenants(entityToRemove, tenantIds, new Callback<T>() {
             @Override
-            public void callback(T entity) {
-            }
+            public void callback(T entity) {}
         });
     }
 
-    private <T> void removeAllForTenants(EntityManager em, Class<T> entityToRemove, List<Long> tenantIds, Callback<T> callback) {
-        System.out.println("Removing all: " + entityToRemove);
-        for (Long tenantId : tenantIds) {
-            removeAllForTenant(em, entityToRemove, tenantId, callback);
+    private <T> void removeAllForTenants(Class<T> entityToRemove, List<Long> tenantIds, Callback<T> callback) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "removeAllForTenants(%s, %s, callback)", entityToRemove.getSimpleName(), tenantIds);
+        
+    	for (Long tenantId : tenantIds) {
+            removeAllForTenant(entityToRemove, tenantId, callback);
         }
+    	
+        timeLogger.stop();
     }
 
-    private <T> void removeAllForTenant(EntityManager em, Class<T> entityToRemove, Long tenantId, Callback<T> callback) {
+    private <T> void removeAllForTenant(Class<T> entityToRemove, Long tenantId, Callback<T> callback) {
         Query query = em.createQuery("from " + entityToRemove.getName() + " where tenant.id = :tenantId ").setParameter("tenantId", tenantId);
         List<T> results = query.getResultList();
         for (T entity : results) {
             callback.callback(entity);
-            em.remove(entity);
+            remove(entity);
         }
     }
 
-    private <T> void removeAll(EntityManager em, Class<T> entityToRemove) {
+    private <T> void removeAll(Class<T> entityToRemove) {
         Query query = em.createQuery("from " + entityToRemove.getName());
-        removeAllFromQuery(em, query);
+        removeAllFromQuery(query);
     }
 
-    private void removeAllFromQuery(EntityManager em, Query q) {
+    private void removeAllFromQuery(Query q) {
         for (Object o : q.getResultList()) {
-            em.remove(o);
+        	remove(o);
         }
     }
 
-    private void cleanOwnedEntities(EntityManager em, Class c, BaseOrg owner) {
+    private void cleanOwnedEntities(Class<?> c, BaseOrg owner) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "cleanOwnedEntities(%s, %s)", c.getSimpleName(), owner.getName());
+    	
         Query query = em.createQuery("from " + c.getName() + " where owner.id = " + owner.getId());
-        removeAllFromQuery(em, query);
+        removeAllFromQuery(query);
+        
+        timeLogger.stop();
     }
 
-    private void safeRemoveAsset(EntityManager em, Asset asset) {
-        System.out.println("Removing asset id: " + asset.getId());
+    private void safeRemoveAsset(Asset asset) {
+    	TimeLogger timeLogger = new TimeLogger(logger, "safeRemoveAsset(%d)", asset.getId());
+    	
         Query scheduleQuery =  em.createQuery("from " + EventSchedule.class.getName() + " where asset.id = " + asset.getId());
         Query attachmentQuery = em.createQuery("from " + AssetAttachment.class.getName() + " where asset.id = " + asset.getId());
         Query inspQuery = em.createQuery("from " + Event.class.getName() + " where asset.id = " + asset.getId());
         Query subAssetQuery = em.createQuery("from " + SubAsset.class.getName() + " where masterAsset.id = " + asset.getId());
 
-        removeAllFromQuery(em, scheduleQuery);
-        removeAllFromQuery(em, attachmentQuery);
-        removeAllFromQuery(em, inspQuery);
-        removeAllFromQuery(em, subAssetQuery);
+        removeAllFromQuery(scheduleQuery);
+        removeAllFromQuery(attachmentQuery);
+        removeAllFromQuery(inspQuery);
+        removeAllFromQuery(subAssetQuery);
 
         asset.getInfoOptions().clear();
         em.merge(asset);
-        em.remove(asset);
+        remove(asset);
+        
+        timeLogger.stop();
     }
 
     private static interface Callback<T> {
@@ -291,12 +355,12 @@ public class TenantCleaner {
 
     private void clearInfoOptionsIfNecessary(Object o) {
         try {
-            Class c = o.getClass();
+            Class<?> c = o.getClass();
             Method method = c.getMethod("getInfoOptions");
-            Collection coll = (Collection) method.invoke(o);
+            Collection<?> coll = (Collection<?>) method.invoke(o);
             coll.clear();
         } catch (Exception e) {
-            System.out.println("Error executing method");
+        	logger.info("Error executing method");
         }
     }
 

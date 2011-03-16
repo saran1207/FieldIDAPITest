@@ -1,5 +1,17 @@
 package com.n4systems.fieldid.selenium;
 
+import static org.junit.Assert.*;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+
 import com.n4systems.fieldid.selenium.lib.DefaultFieldIdSelenium;
 import com.n4systems.fieldid.selenium.lib.FieldIdSelenium;
 import com.n4systems.fieldid.selenium.mail.MailServer;
@@ -8,21 +20,13 @@ import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
+import com.n4systems.fieldid.selenium.util.TimeLogger;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.SeleniumException;
-import org.junit.After;
-import org.junit.Before;
-
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-
-import static org.junit.Assert.fail;
 
 public abstract class FieldIDTestCase extends DBTestCase {
+	private static final Logger logger = Logger.getLogger(FieldIDTestCase.class);
 	
 	public static boolean runningInsideSuite = false;
 
@@ -36,24 +40,36 @@ public abstract class FieldIDTestCase extends DBTestCase {
 	
     @Before
     public void startMailServer() {
+    	TimeLogger timeLogger = new TimeLogger(logger, "startMailServer()");
+    	
         mailServer = new MailServer(getSeleniumConfig());
         mailServer.start();
+        
+        timeLogger.stop();
     }
 
     @After
     public void shutdownMailServer() {
+    	TimeLogger timeLogger = new TimeLogger(logger, "shutdownMailServer()");
+    	
         if (mailServer != null)
             mailServer.stop();
+        
+        timeLogger.stop();
     }
     	
 	@Before
 	public final void setupSelenium() throws Exception {
+		TimeLogger timeLogger = new TimeLogger(logger, "setupSelenium()");
+		
 		loadProperties();
 		if (!runningInsideSuite || selenium == null) {
 			selenium = createWebBrowser();
 		}
 		openBaseSite(selenium);
 		setWebBrowserSpeed();
+		
+		timeLogger.stop();
 	}
 
 	private void openBaseSite(Selenium selenium) {
@@ -72,6 +88,8 @@ public abstract class FieldIDTestCase extends DBTestCase {
 
 	@After
 	public final void tearDownSelenium() throws Exception {
+		TimeLogger timeLogger = new TimeLogger(logger, "tearDownSelenium()");
+		
         if (selenium == null)
             return;
 
@@ -81,6 +99,8 @@ public abstract class FieldIDTestCase extends DBTestCase {
 		} else {
 			selenium.deleteAllVisibleCookies();
 		}
+		
+		timeLogger.stop();
 	}
 	
 	public static void shutDownAllSeleniums() {
@@ -91,8 +111,7 @@ public abstract class FieldIDTestCase extends DBTestCase {
                 shutdownSuccess = true;
                 break;
             } catch (SeleniumException e) {
-                System.out.println("Exception shutting down selenium on attempt " + (i+1));
-                e.printStackTrace();
+            	logger.info("Exception shutting down selenium on attempt " + (i+1), e);
                 try { Thread.sleep(SHUTDOWN_RETRY_INTERVAL_MS); } catch (InterruptedException e1) { }
             }
         }

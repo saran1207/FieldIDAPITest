@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.log4j.Logger;
 
 import com.n4systems.fieldid.selenium.persistence.builder.SafetyNetworkConnectionBuilder;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
@@ -40,6 +40,7 @@ import com.n4systems.model.builders.SelectCriteriaBuilder;
 import com.n4systems.model.builders.StateBuilder;
 import com.n4systems.model.builders.StateSetBuilder;
 import com.n4systems.model.builders.TextFieldCriteriaBuilder;
+import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -53,7 +54,7 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.util.ConfigEntry;
 
 public class Scenario {
-
+	private static final Logger logger = Logger.getLogger(Scenario.class);
     private Transaction trans;
 
     private Tenant defaultTenant;
@@ -239,7 +240,7 @@ public class Scenario {
     }
 
     public void save(Object entity) {
-        System.out.println("Save: " + ToStringBuilder.reflectionToString(entity));
+    	logger.info("Save: " + ToStringBuilder.reflectionToString(entity));
         if (entity instanceof Saveable) {
             Saveable saveable = (Saveable) entity;
             SaverMap.makeSaverFor(saveable.getClass()).save(trans, saveable);
@@ -258,7 +259,7 @@ public class Scenario {
 
     public void persistAllBuiltObjects() {
         for (Object o : builtObjects) {
-            System.out.println("Final persist on: " + ToStringBuilder.reflectionToString(o));
+        	logger.info("Final persist on: " + ToStringBuilder.reflectionToString(o));
             trans.getEntityManager().merge(o);
         }
     }

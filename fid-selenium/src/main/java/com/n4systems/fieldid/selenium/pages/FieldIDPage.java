@@ -1,21 +1,23 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
+import com.n4systems.fieldid.selenium.lib.PageErrorException;
 import com.n4systems.fieldid.selenium.util.ConditionWaiter;
 import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
 
 public class FieldIDPage extends WebPage {
-
+	private static final Logger logger = Logger.getLogger(FieldIDPage.class);
+	
 	public FieldIDPage(Selenium selenium) {
 		super(selenium);
 	}
@@ -258,5 +260,27 @@ public class FieldIDPage extends WebPage {
 		String sessionExpiredLightboxLocator = "xpath=//DIV[@class='lv_Title' and contains(text(),'Session Expired')]";
 		return selenium.isElementPresent(sessionExpiredLightboxLocator) && selenium.isVisible(sessionExpiredLightboxLocator);
 	}
-
+	
+	public String getPageTitleText() {
+		return selenium.getText("//div[@id='contentTitle']/h1");
+	}
+	
+	protected void assertTitleAndTab(String expectedTitle, String expectedTab) {
+		String currentTitle = getPageTitleText();
+		assertThat(String.format("Expected title [%s], Current title [%s]", expectedTitle, currentTitle), currentTitle, containsString(expectedTitle));
+		
+		
+		String currentTab = getCurrentTab();
+		assertEquals(String.format("Expected tab [%s], Current tab [%s]", expectedTab, currentTab), expectedTab, currentTab);
+	}
+	
+	protected void throwExceptionOnFormError(boolean waitForPageToLoad) {
+		if (waitForPageToLoad)
+			waitForPageToLoad();
+		
+		List<String> formErrors = getFormErrorMessages();
+		if (!formErrors.isEmpty()) {
+			throw new PageErrorException(formErrors);
+		}
+	}
 }

@@ -1,179 +1,122 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Arrays;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.datatypes.EventForm;
 import com.n4systems.fieldid.selenium.datatypes.EventFormObservations;
 import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
-import com.n4systems.fieldid.selenium.datatypes.EventType;
 import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
-import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
+import com.n4systems.fieldid.selenium.lib.PageErrorException;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeAddEditPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeFormPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeViewAllPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeViewPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.builder.SimpleEventBuilder;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 
-public class ManageEventTypesTest extends FieldIDTestCase {
-	
-	private static final String TEST_EVENT_NAME = "Selenium Test";
-	
-	ManageEventTypesPage manageEventTypesPage;
+public class ManageEventTypesTest extends PageNavigatingTestCase<EventTypeViewAllPage> {
 	
 	@Override
 	public void setupScenario(Scenario scenario) {
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor("test1");
 		
-		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.AssignedTo));
-		
+		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.AssignedTo, ExtendedFeature.ProofTestIntegration));
 		scenario.save(defaultPrimaryOrg);
 		
-		scenario.anEventTypeGroup()
+		EventTypeGroup maintenanceGroup = scenario.anEventTypeGroup()
 		    .forTenant(scenario.defaultTenant())
 		    .withName("Maintenance")
 		    .build();
 		
 		SimpleEventBuilder.aSimpleEvent(scenario).build();
+		
+		scenario.anEventType()
+					.named("Simple Event Type")
+					.withGroup(maintenanceGroup)
+					.build();
 	}
 	
-	@Before
-	public void setUp() {
-		manageEventTypesPage = startAsCompany("test1").systemLogin().clickSetupLink().clickManageEventTypes();
-	}
-	
-	@Test
-	public void test_view_all_event_types() throws Exception {
-		assertEquals("View All", manageEventTypesPage.getCurrentTab());
-	}
-	
-	@Test
-	public void test_view_event_type() throws Exception {
-		String eventName = manageEventTypesPage.clickFirstListItem();
-		assertEquals("View", manageEventTypesPage.getCurrentTab());
-		assertTrue(manageEventTypesPage.checkPageHeaderText(eventName));
+	@Override
+	protected EventTypeViewAllPage navigateToPage() {
+		return startAsCompany("test1").systemLogin().clickSetupLink().clickManageEventTypes();
 	}
 	
 	@Test
-	public void test_edit_event_type_from_list() throws Exception {
-		String eventName = manageEventTypesPage.clickFirstListItemEdit();
-		assertEquals("Edit", manageEventTypesPage.getCurrentTab());
-		assertTrue(manageEventTypesPage.checkPageHeaderText(eventName));
+	public void test_view_event_type_loads() throws Exception {
+		page.clickEventTypeName("Simple Event Type");
+	}
+	
+	@Test
+	public void test_edit_event_type_from_list_loads() throws Exception {
+		page.clickEventTypeEdit("Simple Event Type");
 	}
 
 	@Test
-	public void test_edit_event_type_from_tab() throws Exception {
-		String eventName = manageEventTypesPage.clickFirstListItem();
-		assertEquals("View", manageEventTypesPage.getCurrentTab());
-		manageEventTypesPage.clickEditTab();
-		assertEquals("Edit", manageEventTypesPage.getCurrentTab());
-		assertTrue(manageEventTypesPage.checkPageHeaderText(eventName));
+	public void test_edit_event_type_tab_loads() throws Exception {
+		page.clickEventTypeName("Simple Event Type").clickEditTab();
 	}
 	
 	@Test
-	public void test_view_event_form() throws Exception {
-		String eventName = manageEventTypesPage.clickFirstListItem();
-		assertEquals("View", manageEventTypesPage.getCurrentTab());
-		manageEventTypesPage.clickEventFormTab();
-		assertEquals("Event Form", manageEventTypesPage.getCurrentTab());
-		assertTrue(manageEventTypesPage.checkPageHeaderText(eventName));
+	public void test_view_event_form_loads() throws Exception {
+		page.clickEventTypeName("Simple Event Type").clickEventFormTab();
 	}
 
 	@Test
-	public void test_import_event_type() throws Exception {
-		String eventName = manageEventTypesPage.clickFirstListItem();
-		assertEquals("View", manageEventTypesPage.getCurrentTab());
-		manageEventTypesPage.clickImportTab();
-		assertEquals("Import", manageEventTypesPage.getCurrentTab());
-		assertTrue(manageEventTypesPage.checkPageHeaderText(eventName));
+	public void test_import_event_type_loads() throws Exception {
+		page.clickEventTypeName("Simple Event Type").clickImportTab();
 	}
 	
-	@Test
-	public void test_add_event_type_save_with_error() throws Exception {
-		manageEventTypesPage.clickAddTab();
-		assertEquals("Add", manageEventTypesPage.getCurrentTab());
-		manageEventTypesPage.clickSave();
-		assertEquals(1, manageEventTypesPage.getFormErrorMessages().size());
+	@Test(expected=PageErrorException.class)
+	public void test_add_fails_with_empty_name_field() throws Exception {
+		page.clickAddTab().clickSave();
 	}
 	
-	@Test
-	public void test_add_event_type_save_and_add_with_error() throws Exception {
-		manageEventTypesPage.clickAddTab();
-		assertEquals("Add", manageEventTypesPage.getCurrentTab());
-		manageEventTypesPage.clickSaveAndAdd();
-		assertEquals(1, manageEventTypesPage.getFormErrorMessages().size());
+	@Test(expected=PageErrorException.class)
+	public void test_add_save_and_add_fails_with_empty_name_field() throws Exception {
+		page.clickAddTab().clickSaveAndAdd();
 	}
 	
 	@Test
 	public void test_add_event_type_cancel() throws Exception {
-		manageEventTypesPage.clickAddTab();
-		assertEquals("Add", manageEventTypesPage.getCurrentTab());
-		manageEventTypesPage.clickCancel();
-		assertEquals("View All", manageEventTypesPage.getCurrentTab());
+		page.clickAddTab().clickCancel();
 	}
 
 	@Test
 	public void test_add_and_delete_event_type() throws Exception {
-		deleteTestEvent(TEST_EVENT_NAME);
+		EventTypeAddEditPage addPage = page.clickAddTab();
+		addPage.setFormFields(getEventType("test_add_and_delete_event_type"));
 		
-		manageEventTypesPage.clickAddTab();
-		assertEquals("Add", manageEventTypesPage.getCurrentTab());
-		EventType eventType = getEventType();
-		manageEventTypesPage.setFormFields(eventType);
-		manageEventTypesPage.clickSave();
-		manageEventTypesPage.verifyEventTypeSaved();
-		assertEquals("View", manageEventTypesPage.getCurrentTab());
+		EventTypeViewPage viewPage = addPage.clickSave();
+		viewPage.verifyEventTypeSaved();
 		
-		deleteTestEvent(TEST_EVENT_NAME);
+		EventTypeViewAllPage viewAllPage = viewPage.clickEditTab().clickDelete().clickConfirmDelete();
+		viewAllPage.verifyTypeDeleted();
 	}
 
 	@Test
 	public void test_add_event_type_and_event_form() throws Exception {
-		deleteTestEvent(TEST_EVENT_NAME);
-
-		manageEventTypesPage.clickAddTab();
-		assertEquals("Add", manageEventTypesPage.getCurrentTab());
-		EventType eventType = getEventType();
-		manageEventTypesPage.setFormFields(eventType);
-		manageEventTypesPage.clickSaveAndAdd();
-		manageEventTypesPage.verifyEventTypeSaved();
-
-		assertEquals("Event Form", manageEventTypesPage.getCurrentTab());
-		manageEventTypesPage.setEventFormFields(createTestEventForm());
-		manageEventTypesPage.clickSaveEventForm();
-		manageEventTypesPage.verifyEventFormSaved();
-
-		deleteTestEvent(TEST_EVENT_NAME);
+		EventTypeAddEditPage addEdit = page.clickAddTab();
+		addEdit.setFormFields(getEventType("test_add_event_type_and_event_form"));
+		EventTypeFormPage formPage = addEdit.clickSaveAndAdd();
+		formPage.verifyEventTypeSaved();
+		formPage.setEventFormFields(createTestEventForm());
+		formPage.clickSaveEventForm();
+		formPage.verifyEventFormSaved();
 	}
 	
 	@Test
 	public void test_copy_existing_event_type() throws Exception {
-		String eventName = manageEventTypesPage.clickFirstListItemCopy() + " - 1";
-		manageEventTypesPage.validateCopiedEvent(eventName);
-		
-		deleteTestEvent(eventName);
-	}
-	
-	private void deleteTestEvent(String name) {
-		if(manageEventTypesPage.listItemExists(name)) {
-			manageEventTypesPage.clickListItem(name);
-			manageEventTypesPage.clickEditTab();
-			assertEquals("Edit", manageEventTypesPage.getCurrentTab());
-			manageEventTypesPage.clickDelete();
-			manageEventTypesPage.clickConfirmDelete();
-			assertEquals("View All", manageEventTypesPage.getCurrentTab());
-			manageEventTypesPage.verifyEventFormDeleted();
-		}
-
+		page.clickEventTypeCopy("Simple Event Type").validateCopiedEvent("Simple Event Type - 1");
 	}
 
-	private EventType getEventType() {
-		EventType eventType = new EventType(TEST_EVENT_NAME);
+	private com.n4systems.fieldid.selenium.datatypes.EventType getEventType(String name) {
+		com.n4systems.fieldid.selenium.datatypes.EventType eventType = new com.n4systems.fieldid.selenium.datatypes.EventType(name);
 		eventType.setGroup("Maintenance");
 		eventType.setPrintable(true);
 		eventType.setMasterEvent(false);
@@ -211,5 +154,4 @@ public class ManageEventTypesTest extends FieldIDTestCase {
 		
 		return form;
 	}
-
 }

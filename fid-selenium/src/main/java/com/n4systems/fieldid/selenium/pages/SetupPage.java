@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
 import com.n4systems.fieldid.selenium.pages.setup.BrandingPage;
@@ -11,11 +11,11 @@ import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCommentTemplatesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageEventBooksPage;
-import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.pages.setup.MangageEventTypeGroupsPage;
 import com.n4systems.fieldid.selenium.pages.setup.SystemSettingsPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeViewAllPage;
 import com.thoughtworks.selenium.Selenium;
 
 public class SetupPage extends FieldIDPage {
@@ -99,10 +99,10 @@ public class SetupPage extends FieldIDPage {
 		return new ManageAssetStatusPage(selenium);
 	}
 
-	public ManageEventTypesPage clickManageEventTypes() {
+	public EventTypeViewAllPage clickManageEventTypes() {
         clickAssetsAndEventsTab();
 		selenium.click("//a[.='Event Types']");
-		return new ManageEventTypesPage(selenium);
+		return new EventTypeViewAllPage(selenium);
 	}
 
 	public ManageEventBooksPage clickManageEventBooks() {

@@ -1,20 +1,22 @@
 package com.n4systems.fieldid.selenium.testcase.setup.eventform;
 
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
-import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeFormPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeViewPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.SelectCriteriaBuilder;
-import org.junit.Test;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
-
-public class EventFormEditorTest_Select extends PageNavigatingTestCase<ManageEventTypesPage> {
+public class EventFormEditorTest_Select extends PageNavigatingTestCase<EventTypeFormPage> {
 
     @Override
     public void setupScenario(Scenario scenario) {
@@ -36,10 +38,8 @@ public class EventFormEditorTest_Select extends PageNavigatingTestCase<ManageEve
     }
 
     @Override
-    protected ManageEventTypesPage navigateToPage() {
-        ManageEventTypesPage typesPage = startAsCompany("test1").login().clickSetupLink().clickManageEventTypes();
-        typesPage.clickEditEventType("Test type");
-        typesPage.clickEventFormTab();
+    protected EventTypeFormPage navigateToPage() {
+        EventTypeFormPage typesPage = startAsCompany("test1").login().clickSetupLink().clickManageEventTypes().clickEventTypeName("Test type").clickEventFormTab();
         return typesPage;
     }
 
@@ -65,16 +65,16 @@ public class EventFormEditorTest_Select extends PageNavigatingTestCase<ManageEve
         assertEquals("Should find new option", 1, page.getDropDownOptions().size());
         assertEquals("Should find new option", "New option 1", page.getDropDownOptions().get(0));
 
-        page.clickSaveAndFinishEventForm();
+        EventTypeViewPage viewPage = page.clickSaveAndFinishEventForm();
 
-        assertEquals("Should see save success message", 1, page.getActionMessages().size());
-        assertEquals("Event Form saved.", page.getActionMessages().get(0));
+        assertEquals("Should see save success message", 1, viewPage.getActionMessages().size());
+        assertEquals("Event Form saved.", viewPage.getActionMessages().get(0));
 
-        page.clickEventFormTab();
-        page.clickCriteriaSection("Main Section");
-        page.clickCriteria("New Select Criteria");
-        assertEquals("Should find new option", 1, page.getDropDownOptions().size());
-        assertEquals("Should find new option", "New option 1", page.getDropDownOptions().get(0));
+        EventTypeFormPage newFormPage = viewPage.clickEventFormTab();
+        newFormPage.clickCriteriaSection("Main Section");
+        newFormPage.clickCriteria("New Select Criteria");
+        assertEquals("Should find new option", 1, newFormPage.getDropDownOptions().size());
+        assertEquals("Should find new option", "New option 1", newFormPage.getDropDownOptions().get(0));
     }
 
 }

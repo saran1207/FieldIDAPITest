@@ -1,18 +1,18 @@
 package com.n4systems.fieldid.selenium.testcase.setup.eventform;
 
+import static org.junit.Assert.*;
+
+import java.util.List;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeFormPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.StateSet;
-import org.junit.Test;
-
-import java.util.List;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class EventFormEditorTest_RetiredItems extends FieldIDTestCase {
 
@@ -43,9 +43,7 @@ public class EventFormEditorTest_RetiredItems extends FieldIDTestCase {
 
     @Test
     public void event_form_editor_should_not_display_retired_sections_or_criteria() {
-        ManageEventTypesPage eventTypesPage = startAsCompany("test1").login().clickSetupLink().clickManageEventTypes();
-        eventTypesPage.clickEditEventType("Test type");
-        eventTypesPage.clickEventFormTab();
+        EventTypeFormPage eventTypesPage = startAsCompany("test1").login().clickSetupLink().clickManageEventTypes().clickEventTypeName("Test type").clickEventFormTab();
         List<String> sectionNames = eventTypesPage.getCriteriaSectionNames();
 
         assertTrue(sectionNames.contains("Active section"));

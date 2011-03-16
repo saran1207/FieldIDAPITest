@@ -1,22 +1,25 @@
 package com.n4systems.fieldid.selenium.mail;
 
-import com.n4systems.fieldid.selenium.SeleniumConfig;
-import com.n4systems.fieldid.selenium.util.ConditionWaiter;
-import com.n4systems.fieldid.selenium.util.Predicate;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.log4j.Logger;
 import org.subethamail.smtp.MessageContext;
 import org.subethamail.smtp.MessageHandler;
 import org.subethamail.smtp.MessageHandlerFactory;
 import org.subethamail.smtp.RejectException;
 import org.subethamail.smtp.server.SMTPServer;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import com.n4systems.fieldid.selenium.SeleniumConfig;
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
 
 public class MailServer implements MessageHandlerFactory {
-
+	private static final Logger logger = Logger.getLogger(MailServer.class);
+	
     private SMTPServer server;
     private List<MailMessage> messages;
 
@@ -108,7 +111,7 @@ public class MailServer implements MessageHandlerFactory {
             server.waitForMessages(1, 60*60, 1000);
 
             MailMessage mailMessage = server.getAndClearMessages().get(0);
-            System.out.println(ToStringBuilder.reflectionToString(mailMessage));
+            logger.info(ToStringBuilder.reflectionToString(mailMessage));
         } finally {
             server.stop();
         }

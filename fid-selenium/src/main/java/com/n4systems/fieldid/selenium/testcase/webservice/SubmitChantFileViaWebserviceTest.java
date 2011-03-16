@@ -1,5 +1,14 @@
 package com.n4systems.fieldid.selenium.testcase.webservice;
 
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URI;
+
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.DBTestCase;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fileprocessing.ProofTestType;
@@ -12,16 +21,9 @@ import com.n4systems.webservice.server.bundles.ArrayOfProofTestBundle;
 import com.n4systems.webservice.server.bundles.ArrayOfProofTestStatusBundle;
 import com.n4systems.webservice.server.bundles.AuthBundle;
 import com.n4systems.webservice.server.bundles.ProofTestBundle;
-import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URI;
-
-import static org.junit.Assert.assertEquals;
 
 public class SubmitChantFileViaWebserviceTest extends DBTestCase {
-
+	private static final Logger logger = Logger.getLogger(SubmitChantFileViaWebserviceTest.class);
     private static final String INSPECTION_SERVICE_PATH = "services/InspectionService";
     private static final String TEST_TENANT_NAME = TEST_TENANT_NAMES[0];
 
@@ -87,7 +89,7 @@ public class SubmitChantFileViaWebserviceTest extends DBTestCase {
         InspectionServiceClient inspectionServiceClient = new InspectionServiceClient();
 
         URI theUri = new URI("http://"+getSeleniumConfig().getTestServerDomain()+getSeleniumConfig().getTestServerContextRoot()+INSPECTION_SERVICE_PATH);
-        System.out.println("Going to URI: " + theUri);
+        logger.info("Going to URI: " + theUri);
         return inspectionServiceClient.getInspectionServiceHttpPort(theUri.toString());
     }
 

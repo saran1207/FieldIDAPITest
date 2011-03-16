@@ -2,12 +2,12 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.*;
 
-import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import java.util.List;
+
 import org.junit.Test;
 
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.ButtonGroupPage;
-
-import java.util.List;
 
 public class ButtonGroupTest extends PageNavigatingTestCase<ButtonGroupPage> {
 

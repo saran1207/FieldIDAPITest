@@ -4,11 +4,14 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.persistence.Scenario;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
-public class ManageAssetTypes_SubComponentsTest extends ManageAssetTypesTestCase {
+import com.n4systems.fieldid.selenium.persistence.Scenario;
 
+public class ManageAssetTypes_SubComponentsTest extends ManageAssetTypesTestCase {
+	private static final Logger logger = Logger.getLogger(ManageAssetTypes_SubComponentsTest.class);
+	
     @Override
     public void setupScenario(Scenario scenario) {
         super.setupScenario(scenario);
@@ -36,7 +39,7 @@ public class ManageAssetTypes_SubComponentsTest extends ManageAssetTypesTestCase
 		
 		subComponents = page.getSubComponents();
 		assertEquals(2, subComponents.size());
-		System.out.println(subComponents);
+		logger.info(subComponents);
 		assertTrue(subComponents.contains("Mobile Crane"));
 		assertTrue(subComponents.contains("Shackle"));
 	}

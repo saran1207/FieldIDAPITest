@@ -1,14 +1,15 @@
 package com.n4systems.fieldid.selenium;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class SeleniumConfigLoader {
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.log4j.Logger;
 
+public class SeleniumConfigLoader {
+	private static final Logger logger = Logger.getLogger(SeleniumConfigLoader.class);
     private static final String OVERRIDE_CONFIG_FILE_LOCATION = "/var/fieldid/selenium.properties";
     private static final String DEFAULT_CONFIG_RESOURCE_PATH = "/default-selenium.properties";
 
@@ -49,8 +50,7 @@ public class SeleniumConfigLoader {
 
     public static void main(String[] args) throws Exception {
         SeleniumConfig config = new SeleniumConfigLoader().loadConfig();
-
-        System.out.println(ToStringBuilder.reflectionToString(config));
+        logger.info(ToStringBuilder.reflectionToString(config));
     }
 
 }

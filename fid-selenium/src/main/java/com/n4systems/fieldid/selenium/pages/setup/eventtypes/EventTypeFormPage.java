@@ -1,145 +1,47 @@
-package com.n4systems.fieldid.selenium.pages.setup;
+package com.n4systems.fieldid.selenium.pages.setup.eventtypes;
 
-import com.n4systems.fieldid.selenium.datatypes.EventForm;
-import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
-import com.n4systems.fieldid.selenium.datatypes.EventFormObservations;
-import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
-import com.n4systems.fieldid.selenium.datatypes.EventType;
-import com.n4systems.fieldid.selenium.pages.ButtonGroupPage;
-import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
-import com.thoughtworks.selenium.Selenium;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import com.n4systems.fieldid.selenium.datatypes.EventForm;
+import com.n4systems.fieldid.selenium.datatypes.EventFormObservations;
+import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
+import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
+import com.n4systems.fieldid.selenium.pages.ButtonGroupPage;
+import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
+import com.thoughtworks.selenium.Selenium;
 
-public class ManageEventTypesPage extends WicketFieldIDPage {
+public class EventTypeFormPage extends WicketFieldIDPage {
 
-	final static String FIRST_LIST_ITEM = "//table[@class='list']//tr[3]/td[1]/a";
-    private boolean selectedCriteriaResultSetting;
-
-    public ManageEventTypesPage(Selenium selenium) {
-		super(selenium);
-		if(!checkOnManageEventTypesPage()){
-			fail("Expected to be on Manage Event Types page!");
-		}
+    public EventTypeFormPage(Selenium selenium) {
+		this(selenium, true);
 	}
+    
+    public EventTypeFormPage(Selenium selenium, boolean waitForLoad) {
+		super(selenium, waitForLoad);
+		
+		assertTitleAndTab("Manage Event Type", "Event Form");
+		disableTheWarningThatPromptsWhenYouLeavePage();
+	}
+    
+    private void disableTheWarningThatPromptsWhenYouLeavePage() {
+        selenium.runScript("promptBeforeLeaving = false;");
+    }
 	
 	public boolean checkOnManageEventTypesPage() {
 		checkForErrorMessages(null);
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event Types')]");
-	}
-	
-	public void clickViewAllTab() {
-		clickNavOption("View All");
-	}
-
-	public void clickEditTab() {
-		clickNavOption("Edit");
-	}
-	
-	public void clickAddTab() {
-		clickNavOption("Add");
-	}
-
-	public void clickEventFormTab() {
-		clickNavOption("Event Form");
-        disableTheWarningThatPromptsWhenYouLeavePage();
-	}
-
-	public void clickImportTab() {
-		clickNavOption("Import");
-	}
-
-	public void clickSave(){
-		selenium.click("//input[@name='save']");
-		waitForPageToLoad();
-	}
-
-	public void clickSaveAndAdd(){
-		selenium.click("//input[@name='saveAndAdd']");
-		waitForPageToLoad();
-        disableTheWarningThatPromptsWhenYouLeavePage();
-	}
-
-    private void disableTheWarningThatPromptsWhenYouLeavePage() {
-        selenium.runScript("promptBeforeLeaving = false;");
-    }
-
-	public void clickCancel(){
-		selenium.click("//a[text()='Cancel']");
-		waitForPageToLoad();
-	}
-
-	public void clickAddAttribute() {
-		selenium.click("//button[text()='Add Attribute']");
-		waitForAjax();
-	}
-	
-	public String getFirstListItemName() {
-		return selenium.getText(FIRST_LIST_ITEM);
-	}
-
-	public String clickFirstListItem() {
-		String eventName = getFirstListItemName();
-		selenium.click(FIRST_LIST_ITEM);
-		waitForPageToLoad();
-		return eventName;
 	}
 
 	public void clickEditEventType(String eventTypeName) {
         selenium.click("//table[@class='list']//tr//td[position()=1]//a[text()='"+eventTypeName+"']/../../td[6]//a[.='Edit']");
 		waitForPageToLoad();
 	}
-		
-	public String clickFirstListItemEdit() {
-		String eventName = getFirstListItemName();		
-		selenium.click("//table[@class='list']//tr[3]//a[text()='Edit']");
-		waitForPageToLoad();
-		return eventName;
-	}
-	
-	public String clickFirstListItemCopy() {
-		String eventName = getFirstListItemName();		
-		selenium.click("//table[@class='list']//tr[3]//a[text()='Copy']");
-		waitForPageToLoad();
-		return eventName;
-	}
 	
 	public boolean checkPageHeaderText(String eventName) {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + eventName + "')]");
-	}
-
-	public void setFormFields(EventType eventType) {
-		if(eventType.getName() != null) {
-			selenium.type("//input[@name='name']", eventType.getName());
-		}
-		if(eventType.getGroup() != null) {
-			selenium.select("//select[@name='group']", eventType.getGroup());
-		}
-		if (eventType.isPrintable()) {
-			selenium.check("//input[@name='printable']");
-		}
-		if(eventType.isMasterEvent()) {
-			selenium.check("//input[@name='master']");
-		}
-		if (eventType.isAssignedToAvailable()) {
-			selenium.check("//input[@name='assignedToAvailable']");
-		}
-		if(eventType.getSupportedProofTestTypes() != null) {
-			for (String proofType : eventType.getSupportedProofTestTypes()) {
-				selenium.check("//input[contains(@name,'" + proofType + "') and @value='true']");
-			}
-		}
-		if(eventType.getEventAttributes() != null) {
-			int attributeCount = 0;
-			for (String attribute : eventType.getEventAttributes()) {
-				clickAddAttribute();
-				selenium.type("//input[@name='infoFields[" + attributeCount + "]']", attribute);
-				attributeCount++;
-			}
-		}
 	}
 
 	public boolean listItemExists(String name) {
@@ -148,16 +50,6 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
 	
 	public void clickListItem(String name) {
 		selenium.click("//table[@class='list']//a[text()='" + name + "']");
-		waitForPageToLoad();
-	}
-
-	public void clickDelete() {
-		selenium.click("//a[contains(.,'Delete')]");
-		waitForPageToLoad();
-	}
-	
-	public void clickConfirmDelete() {
-		selenium.click("//input[@name='label.delete']");
 		waitForPageToLoad();
 	}
 	
@@ -277,33 +169,15 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
         waitForPageToLoad();
 	}
 
-	public void verifyEventTypeSaved() {
-		List <String> actionMessages = getActionMessages();
-		assertFalse(actionMessages.isEmpty());
-		assertEquals("Event Type Saved", actionMessages.get(0).trim());
-	}
-
 	public void verifyEventFormSaved() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());
 		assertEquals("Event Form saved.", actionMessages.get(0).trim());
 	}
 	
-	public void verifyEventFormDeleted() {
-		List <String> actionMessages = getActionMessages();
-		assertFalse(actionMessages.isEmpty());
-		assertEquals("Event Type is currently being deleted for you. This may take some time for the process to complete.", actionMessages.get(0).trim());
-	}
-
-	public void validateCopiedEvent(String eventName) {
-		List <String> actionMessages = getActionMessages();
-		assertFalse(actionMessages.isEmpty());
-		assertEquals("Your Event Type has been copied and will appear below with the name - " + eventName, actionMessages.get(0).trim());
-	}
-	
 	public ButtonGroupPage clickButtonGroups(){
-		selenium.click("//div[@id='contentHeader']/ul/li[2]/a");
-		return new ButtonGroupPage(selenium);
+		clickNavOption("Button Groups");
+		return new ButtonGroupPage(selenium, false);
 	}
 
     public void clickReorderSections() {
@@ -380,9 +254,9 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
         selenium.selectFrame("relative=up");
     }
 
-    public void clickSaveAndFinishEventForm() {
+    public EventTypeViewPage clickSaveAndFinishEventForm() {
         selenium.click("//div[@class='savePanel']//a[contains(., 'Save and Finish')]");
-        waitForPageToLoad();
+        return new EventTypeViewPage(selenium);
     }
 
     public void deleteCriteriaSectionNamed(String sectionName) {
@@ -474,4 +348,9 @@ public class ManageEventTypesPage extends WicketFieldIDPage {
         return secondaryUnitOfMeasure;
     }
 
+    public void verifyEventTypeSaved() {
+		List <String> actionMessages = getActionMessages();
+		assertFalse(actionMessages.isEmpty());
+		assertEquals("Event Type Saved", actionMessages.get(0).trim());
+	}
 }

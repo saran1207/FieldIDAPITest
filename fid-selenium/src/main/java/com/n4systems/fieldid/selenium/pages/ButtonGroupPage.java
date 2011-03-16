@@ -1,16 +1,19 @@
 package com.n4systems.fieldid.selenium.pages;
 
-import static org.junit.Assert.fail;
-
-import com.thoughtworks.selenium.Selenium;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ButtonGroupPage extends FieldIDPage {
+import org.apache.log4j.Logger;
 
-	public ButtonGroupPage(Selenium selenium) {
-		super(selenium);
+import com.thoughtworks.selenium.Selenium;
+
+public class ButtonGroupPage extends FieldIDPage {
+	private static final Logger logger = Logger.getLogger(FieldIDPage.class);
+	
+	public ButtonGroupPage(Selenium selenium, boolean waitForLoad) {
+		super(selenium, waitForLoad);
 		if (!checkOnButtonGroupsPage()) {
 			fail("Expected to be on Button Groups Page!");
 		}
@@ -64,7 +67,7 @@ public class ButtonGroupPage extends FieldIDPage {
     private int getNumButtonsInRow(int rowNum) {
         int numListElements = selenium.getXpathCount("(//table[@id='buttonGroups']/tbody/tr)["+rowNum+"]//ul[@class='buttonGroup']//li").intValue();
         int numAddLinks = selenium.getXpathCount("(//table[@id='buttonGroups']/tbody/tr)["+rowNum+"]//ul[@class='buttonGroup']//li//span[not(contains(@style,'none'))]//a[.='Add']").intValue();
-        System.out.println("List elements: " + numListElements + " add linx: " + numAddLinks);
+        logger.info("List elements: " + numListElements + " add linx: " + numAddLinks);
         // The number of available slots is the number of add links.
         return (numListElements - numAddLinks) - 1;
     }

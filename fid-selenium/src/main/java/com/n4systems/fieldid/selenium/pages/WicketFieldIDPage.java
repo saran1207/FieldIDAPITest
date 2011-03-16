@@ -7,6 +7,10 @@ public class WicketFieldIDPage extends FieldIDPage {
     public WicketFieldIDPage(Selenium selenium) {
         super(selenium);
     }
+    
+    public WicketFieldIDPage(Selenium selenium, boolean waitForLoad) {
+        super(selenium, waitForLoad);
+    }
 
     protected void waitForWicketAjax() {
         waitForWicketAjax(DEFAULT_TIMEOUT);

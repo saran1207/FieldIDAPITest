@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.setup.eventform;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeFormPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
@@ -40,7 +40,7 @@ public class EventFormEditorTest_Reorder extends FieldIDTestCase {
 
     @Test
     public void reorder_criteria_section_to_top() {
-        ManageEventTypesPage eventTypesPage = navigateToEventForm();
+        EventTypeFormPage eventTypesPage = navigateToEventForm();
 
         eventTypesPage.clickReorderSections();
         eventTypesPage.dragSectionToPosition("Section3", 1);
@@ -52,7 +52,7 @@ public class EventFormEditorTest_Reorder extends FieldIDTestCase {
 
     @Test
     public void reorder_criteria_section_to_middle() {
-        ManageEventTypesPage eventTypesPage = navigateToEventForm();
+        EventTypeFormPage eventTypesPage = navigateToEventForm();
 
         eventTypesPage.clickReorderSections();
         eventTypesPage.dragSectionToPosition("Section3", 2);
@@ -64,7 +64,7 @@ public class EventFormEditorTest_Reorder extends FieldIDTestCase {
 
     @Test
     public void reorder_criteria_to_top() {
-        ManageEventTypesPage eventTypesPage = navigateToEventForm();
+        EventTypeFormPage eventTypesPage = navigateToEventForm();
         eventTypesPage.clickCriteriaSection("Section1");
         eventTypesPage.clickReorderCriteria();
 
@@ -74,11 +74,8 @@ public class EventFormEditorTest_Reorder extends FieldIDTestCase {
         assertEquals(Arrays.asList("Criteria2", "Criteria1", "Criteria3"), criteriaNames);
     }
 
-    private ManageEventTypesPage navigateToEventForm() {
-        ManageEventTypesPage eventTypesPage = startAsCompany("test1").login().clickSetupLink().clickManageEventTypes();
-        eventTypesPage.clickEditEventType("Test type");
-        eventTypesPage.clickEventFormTab();
-        return eventTypesPage;
+    private EventTypeFormPage navigateToEventForm() {
+        return startAsCompany("test1").login().clickSetupLink().clickManageEventTypes().clickEventTypeName("Test type").clickEventFormTab();
     }
 
 }

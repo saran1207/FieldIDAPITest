@@ -1,23 +1,27 @@
 package com.n4systems.fieldid.selenium;
 
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.Query;
+
+import org.apache.log4j.Logger;
+import org.junit.Before;
+
 import com.n4systems.fieldid.context.ThreadLocalUserContext;
 import com.n4systems.fieldid.selenium.persistence.MinimalTenantDataSetup;
 import com.n4systems.fieldid.selenium.persistence.PersistenceCallback;
 import com.n4systems.fieldid.selenium.persistence.PersistenceTemplate;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.persistence.TenantCleaner;
+import com.n4systems.fieldid.selenium.util.TimeLogger;
 import com.n4systems.model.Tenant;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
-import org.junit.Before;
-
-import java.util.Arrays;
-import java.util.List;
-
-import javax.persistence.Query;
 
 public abstract class DBTestCase {
-
+	private static final Logger logger = Logger.getLogger(DBTestCase.class);
+	
     public static final String TEST_ASSET_TYPE_1 = "TestType1";
     public static final String TEST_ASSET_TYPE_2 = "TestType2";
 
@@ -37,6 +41,8 @@ public abstract class DBTestCase {
 
     @Before
     public void doDatabaseSetup() throws Exception {
+    	TimeLogger timeLogger = new TimeLogger(logger, "doDatabaseSetup()");
+    	
         PersistenceManager.persistenceUnit = PersistenceManager.TESTING_PERSISTENCE_UNIT;
         PersistenceManager.testProperties.put("hibernate.connection.url", getSeleniumConfig().getDatabaseUrl());
         PersistenceManager.testProperties.put("hibernate.connection.username", getSeleniumConfig().getDatabaseUser());
@@ -45,9 +51,10 @@ public abstract class DBTestCase {
         new PersistenceTemplate(new PersistenceCallback() {
             @Override
             public void doInTransaction(Transaction transaction) throws Exception {
-                TenantCleaner cleaner = new TenantCleaner();
-                cleaner.cleanTenants(transaction.getEntityManager(), TEST_TENANT_NAMES);
-                cleaner.cleanTenants(transaction.getEntityManager(), TEST_CREATED_TENANT_NAMES);
+                TenantCleaner cleaner = new TenantCleaner(transaction.getEntityManager());
+                cleaner.cleanTenants(TEST_TENANT_NAMES);
+                cleaner.cleanTenants(TEST_CREATED_TENANT_NAMES);
+                
                 Query q = transaction.getEntityManager().createQuery("from " + Tenant.class.getName() + " where name in (:tenantNames)");
                 q.setParameter("tenantNames", Arrays.asList(TEST_CREATED_TENANT_NAMES));
                 for (Tenant t : (List<Tenant>)q.getResultList()) {
@@ -79,6 +86,8 @@ public abstract class DBTestCase {
                 scenario.persistAllBuiltObjects();
             }
         }).execute();
+        
+        timeLogger.stop();
     }
 
     public void setupScenario(Scenario scenario) {}

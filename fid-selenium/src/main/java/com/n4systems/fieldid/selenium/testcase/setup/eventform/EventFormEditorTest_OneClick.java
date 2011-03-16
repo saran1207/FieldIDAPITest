@@ -1,21 +1,20 @@
 package com.n4systems.fieldid.selenium.testcase.setup.eventform;
 
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
-import com.n4systems.fieldid.selenium.pages.setup.ManageEventTypesPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeFormPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.StateSet;
-import org.junit.Test;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageEventTypesPage> {
+public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<EventTypeFormPage> {
 
     @Override
     public void setupScenario(Scenario scenario) {
@@ -43,11 +42,8 @@ public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageE
     }
 
     @Override
-    protected ManageEventTypesPage navigateToPage() {
-        ManageEventTypesPage eventTypesPage = startAsCompany("test1").login().clickSetupLink().clickManageEventTypes();
-        eventTypesPage.clickEditEventType("Test type");
-        eventTypesPage.clickEventFormTab();
-        return eventTypesPage;
+    protected EventTypeFormPage navigateToPage() {
+        return startAsCompany("test1").login().clickSetupLink().clickManageEventTypes().clickEventTypeName("Test type").clickEventFormTab();
     }
 
     @Test
@@ -79,13 +75,12 @@ public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageE
         page.clickCriteria("oneclick2");
         page.selectButtonGroup("Button Group 2");
 
-        page.clickSaveAndFinishEventForm();
-        page.clickEventFormTab();
-        page.clickCriteriaSection("Main section");
-        page.clickCriteria("oneclick1");
-        assertEquals("Button Group 1", page.getSelectedButtonGroup());
+        EventTypeFormPage newFormPage = page.clickSaveAndFinishEventForm().clickEventFormTab();
+        newFormPage.clickCriteriaSection("Main section");
+        newFormPage.clickCriteria("oneclick1");
+        assertEquals("Button Group 1", newFormPage.getSelectedButtonGroup());
         page.clickCriteria("oneclick2");
-        assertEquals("Button Group 2", page.getSelectedButtonGroup());
+        assertEquals("Button Group 2", newFormPage.getSelectedButtonGroup());
     }
 
     @Test
@@ -97,11 +92,10 @@ public class EventFormEditorTest_OneClick extends PageNavigatingTestCase<ManageE
         assertTrue(page.isSelectedCriteriaResultSetting());
 
         // Save and return to event form
-        page.clickSaveAndFinishEventForm();
-        page.clickEventFormTab();
-        page.clickCriteriaSection("Main section");
-        page.clickCriteria("oneclick1");
-        assertTrue(page.isSelectedCriteriaResultSetting());
+        EventTypeFormPage newFormPage = page.clickSaveAndFinishEventForm().clickEventFormTab();
+        newFormPage.clickCriteriaSection("Main section");
+        newFormPage.clickCriteria("oneclick1");
+        assertTrue(newFormPage.isSelectedCriteriaResultSetting());
     }
 
 }
