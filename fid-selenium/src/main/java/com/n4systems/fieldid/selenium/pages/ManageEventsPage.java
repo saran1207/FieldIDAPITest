@@ -15,6 +15,7 @@ public class ManageEventsPage extends FieldIDPage {
 
 	public EventPage clickStartNewEvent(String eventType) {
 		selenium.click("//a[contains(., 'Start New Event')]");
+		waitForPageToLoad();
 		selenium.click("//a[contains(., '" + eventType + "')]");
 		return new EventPage(selenium);
 	}
