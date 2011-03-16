@@ -6,8 +6,8 @@ class AddJobColumnsToReporting < ActiveRecord::Migration
   def self.up
     group = ColumnMappingGroup.find(:first, :conditions => {:group_key => 'event_details', :report_type => "EVENT"})
 
-    job_name_column = create_column_mapping({ :label => "label.projectid", :path_expression => "schedule.project.projectID", :sortable => true, :default_order => 100, :group => group, :name => "event_job_id" })
-    job_id_column = create_column_mapping({ :label => "label.projectname", :path_expression => "schedule.project.name", :sortable => true, :default_order => 101, :group => group, :name => "event_job_name" })
+    job_name_column = create_column_mapping({ :label => "label.projectid", :path_expression => "schedule.project.projectID", :sortable => true, :default_order => 100, :group => group, :name => "event_job_id", :required_extended_feature => "Projects" })
+    job_id_column = create_column_mapping({ :label => "label.projectname", :path_expression => "schedule.project.name", :sortable => true, :default_order => 101, :group => group, :name => "event_job_name", :required_extended_feature => "Projects" })
 
     job_name_column.save
     job_id_column.save
