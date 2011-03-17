@@ -38,12 +38,12 @@ div.mainArea {
     background: #eee;
     border: 1px solid #ddd;
     padding-top: 15px;
-    padding-bottom:15px;
-    padding-left: 25px;
-    min-height:150px;
-    width:200px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    height:80px;
+    width:400px;
     display:block;
-    float:left;
+    float:right;
     margin-left:15px;
 }
 
@@ -186,6 +186,7 @@ div.selectedColumn div.reportColumn {
 div.availableSectionTitle {
     display:block;
     padding-top :10px;
+    padding-bottom:5px;
     font-weight :bold;
     font-size: 12px;
 }
@@ -282,7 +283,7 @@ div.availableSectionTitle {
 
 .sortDescription {
     padding-left: 40px;
-    width:200px;
+    width:400px;
     display:block;
     float:left;
     margin-left:15px;
@@ -299,4 +300,16 @@ div.availableSectionTitle {
     margin-top:0;
     padding: 2px 6px 2px 6px;
     list-style-type: none;
+}
+
+.columnLayoutInstructions {
+    font-size: 11px;
+    background: #eee;
+    border: 1px solid #ddd;
+    display:block;
+    float:right;
+    height: 278px;
+    width:400px;
+    margin-top: 10px;
+    padding: 15px 0 15px 15px;
 }
