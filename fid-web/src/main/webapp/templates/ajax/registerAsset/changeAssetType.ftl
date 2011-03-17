@@ -14,6 +14,6 @@
 	</#assign>
 	
 	updatingAssetComplete();
-	replacedAssetType( "${options}" )
+	replaceInfoOptions( "${options}" );
 	
 </#escape>
