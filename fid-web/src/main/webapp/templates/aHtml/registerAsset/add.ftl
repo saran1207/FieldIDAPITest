@@ -15,12 +15,14 @@
 	    
 	    function showSuggestedAttributes() {
 	    	var suggestedAttributes = $('suggestedAttributes');
-	    	var infoOptions = $('infoOptions');
-	    	if(infoOptions.empty()) {
-	    		suggestedAttributes.style.display = "";
-	    	}else {
-	    		suggestedAttributes.style.display = "none";
-	    	}
+	    	
+	    	if(suggestedAttributes != null) {	    	
+		    	if($('infoOptions').empty()) {
+		    		suggestedAttributes.style.display = "";
+		    	}else {
+		    		suggestedAttributes.style.display = "none";
+		    	}
+		    }
 	    }
 	</script>
 </head>
