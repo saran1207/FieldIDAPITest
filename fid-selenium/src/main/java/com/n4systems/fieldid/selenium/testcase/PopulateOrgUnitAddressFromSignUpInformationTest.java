@@ -42,7 +42,7 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
         HomePage homePage = logIntoNewTenant();
 
         ManageOrganizationsPage orgsPage = homePage.clickSetupLink().clickManageOrganizations();
-        orgsPage.clickEditPrimaryOrg();
+        orgsPage.clickEditPrimaryOrganization();
 
         assertEquals(TEST_ADDRESS, orgsPage.getCompanyAddress());
 		assertEquals(TEST_CITY, orgsPage.getCompanyCity());

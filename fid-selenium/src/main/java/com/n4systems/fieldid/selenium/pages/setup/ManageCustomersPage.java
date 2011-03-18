@@ -68,7 +68,13 @@ public class ManageCustomersPage extends FieldIDPage {
 		waitForPageToLoad();
 		return this;
 	}
-	
+
+	public ManageCustomersPage editCustomer(String customerName) {
+		selenium.click("//table[@id='customerTable']//td/a[.='" + customerName + "']//..//..//a[.='Edit']");
+		waitForPageToLoad();
+		return this;
+	}
+
 	public List<String> getOrgNames() {
 		return getColumnFromTableStartingAtRow("//div[@id='pageContent']//table[@class='list']", 1, 2);
 	}

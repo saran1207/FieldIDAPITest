@@ -115,6 +115,7 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		build(org);
 		org.setPrimaryOrg((PrimaryOrg)parent);
 		org.setTenant(parent.getTenant());
+		org.setDefaultTimeZone("United States:New York - New York");
 		return org;
 	}
 	

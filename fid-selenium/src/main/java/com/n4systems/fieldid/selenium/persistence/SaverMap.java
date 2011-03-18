@@ -43,6 +43,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.project.ProjectSaver;
 import com.n4systems.model.safetynetwork.OrgConnection;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
@@ -76,6 +77,7 @@ public class SaverMap {
 
         classToSaverMap.put(CustomerOrg.class, new OrgSaver());
         classToSaverMap.put(PrimaryOrg.class, new OrgSaver());
+        classToSaverMap.put(SecondaryOrg.class, new OrgSaver());
         classToSaverMap.put(DivisionOrg.class, new OrgSaver());
         classToSaverMap.put(Order.class, new OrderSaver());
         classToSaverMap.put(LineItem.class, new LineItemSaver());

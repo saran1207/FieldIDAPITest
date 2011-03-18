@@ -198,6 +198,11 @@ public class Scenario {
         EventTypeGroupBuilder builder = EventTypeGroupBuilder.anEventTypeGroup();
         return createPersistentBuilder(builder);
     }
+    
+    public OrgBuilder aSecondaryOrg() {
+    	OrgBuilder builder = OrgBuilder.aSecondaryOrg();
+    	return createPersistentBuilder(builder);
+    }
 
     public OrgBuilder aCustomerOrg() {
         OrgBuilder builder = OrgBuilder.aCustomerOrg();

@@ -5,10 +5,7 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.datatypes.Organization;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.n4systems.fieldid.selenium.util.ConditionWaiter;
-import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
 
 public class ManageOrganizationsPage extends FieldIDPage {
@@ -24,17 +21,17 @@ public class ManageOrganizationsPage extends FieldIDPage {
 		clickNavOption("Add");
 	}
 
-    public void clickEditPrimaryOrg() {
+    public void clickEditPrimaryOrganization() {
         selenium.click("//h2[contains(text(), 'Primary Organization')]//a[.='Edit']");
         waitForPageToLoad();
     }
 
     public void enterOrganizationName(String name) {
-        selenium.type("//input[@id='organizationCreate_displayName']", name);
+        selenium.type("//input[@name='displayName']", name);
     }
 
 	public void clickSave() {
-		selenium.click("//input[@id='organizationCreate_label_save']");
+		selenium.click("//input[@value='Save']");
 		waitForPageToLoad();
 	}
 
@@ -49,6 +46,37 @@ public class ManageOrganizationsPage extends FieldIDPage {
 			result.add(orgName.trim());
 		}
 		return result;
+	}	
+	
+	public void clickEditOrganization(String name) {
+		selenium.click("//table[@class='list']//td[.='" + name + "']//..//a[.='Edit']");
+		waitForPageToLoad();
+	}
+	
+	public void clickArchiveOrganization(String name) {
+		selenium.click("//table[@class='list']//td[.='" + name + "']//..//a[.='Archive']");
+		waitForPageToLoad();
+	}
+	
+	public int getCustomersToBeArchived() {
+		return Integer.parseInt(selenium.getText("//label[@for='customersToArchive']"));
+	}
+
+	public int getDivisonsToBeArchived() {
+		return Integer.parseInt(selenium.getText("//label[@for='divisionsToArchive']"));
+	}
+
+	public int getUsersToBeArchived() {
+		return Integer.parseInt(selenium.getText("//label[@for='usersToArchive']"));
+	}
+
+	public void confirmArchive(boolean confirm) {
+		if(confirm) {
+			selenium.click("//input[@value='Archive']");
+		}else {
+			selenium.click("//a[.='Cancel']");
+		}
+		waitForPageToLoad();
 	}
 
     // Edit Page
