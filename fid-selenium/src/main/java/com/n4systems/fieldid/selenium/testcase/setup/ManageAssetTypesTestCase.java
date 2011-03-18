@@ -12,7 +12,8 @@ public abstract class ManageAssetTypesTestCase extends PageNavigatingTestCase<Ma
 	protected static final String TEST_ASSET_TYPE_CAUTIONS_URL = "http://cautions.url.com/";
 	protected static final String TEST_ASSET_TYPE_MANUFACTURER_CERTIFICATE_TEXT = "Test Manufacturer Certificate Text";
 	protected static final String TEST_ASSET_TYPE_ASSET_DESCRIPTION_TEMPLATE = "Test Asset Description Template";
-
+	
+	protected static final String TEST_EVENT_TYPE_NAME = "Simple Event Type";
     @Override
 	protected ManageAssetTypesPage navigateToPage() {
 		return startAsCompany("test1").login().clickSetupLink().clickAssetTypes();
@@ -29,6 +30,10 @@ public abstract class ManageAssetTypesTestCase extends PageNavigatingTestCase<Ma
                 .manufactureCertificateText(TEST_ASSET_TYPE_MANUFACTURER_CERTIFICATE_TEXT)
                 .descriptionTemplate(TEST_ASSET_TYPE_ASSET_DESCRIPTION_TEMPLATE)
                 .build();
+        
+        scenario.anEventType()
+        		.named(TEST_EVENT_TYPE_NAME)
+        		.build();
     }
 
 }

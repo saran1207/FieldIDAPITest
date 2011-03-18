@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.setup;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -11,6 +13,7 @@ import com.n4systems.fieldid.selenium.datatypes.EventFormSection;
 import com.n4systems.fieldid.selenium.datatypes.OneClickEventFormCriteria;
 import com.n4systems.fieldid.selenium.lib.PageErrorException;
 import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeAddEditPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeAssetTypeAssociationsPage;
 import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeFormPage;
 import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeViewAllPage;
 import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeViewPage;
@@ -21,6 +24,9 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 
 public class ManageEventTypesTest extends PageNavigatingTestCase<EventTypeViewAllPage> {
+	
+	protected static final String TEST_ASSET_TYPE_NAME = "TestAssetType";
+	protected static final String TEST_EVENT_TYPE_NAME = "Simple Event Type";
 	
 	@Override
 	public void setupScenario(Scenario scenario) {
@@ -37,9 +43,13 @@ public class ManageEventTypesTest extends PageNavigatingTestCase<EventTypeViewAl
 		SimpleEventBuilder.aSimpleEvent(scenario).build();
 		
 		scenario.anEventType()
-					.named("Simple Event Type")
+					.named(TEST_EVENT_TYPE_NAME)
 					.withGroup(maintenanceGroup)
 					.build();
+		
+	    scenario.anAssetType()
+           .named(TEST_ASSET_TYPE_NAME)
+           .build();
 	}
 	
 	@Override
@@ -49,27 +59,27 @@ public class ManageEventTypesTest extends PageNavigatingTestCase<EventTypeViewAl
 	
 	@Test
 	public void test_view_event_type_loads() throws Exception {
-		page.clickEventTypeName("Simple Event Type");
+		page.clickEventTypeName(TEST_EVENT_TYPE_NAME);
 	}
 	
 	@Test
 	public void test_edit_event_type_from_list_loads() throws Exception {
-		page.clickEventTypeEdit("Simple Event Type");
+		page.clickEventTypeEdit(TEST_EVENT_TYPE_NAME);
 	}
 
 	@Test
 	public void test_edit_event_type_tab_loads() throws Exception {
-		page.clickEventTypeName("Simple Event Type").clickEditTab();
+		page.clickEventTypeName(TEST_EVENT_TYPE_NAME).clickEditTab();
 	}
 	
 	@Test
 	public void test_view_event_form_loads() throws Exception {
-		page.clickEventTypeName("Simple Event Type").clickEventFormTab();
+		page.clickEventTypeName(TEST_EVENT_TYPE_NAME).clickEventFormTab();
 	}
 
 	@Test
 	public void test_import_event_type_loads() throws Exception {
-		page.clickEventTypeName("Simple Event Type").clickImportTab();
+		page.clickEventTypeName(TEST_EVENT_TYPE_NAME).clickImportTab();
 	}
 	
 	@Test(expected=PageErrorException.class)
@@ -112,7 +122,16 @@ public class ManageEventTypesTest extends PageNavigatingTestCase<EventTypeViewAl
 	
 	@Test
 	public void test_copy_existing_event_type() throws Exception {
-		page.clickEventTypeCopy("Simple Event Type").validateCopiedEvent("Simple Event Type - 1");
+		page.clickEventTypeCopy(TEST_EVENT_TYPE_NAME).validateCopiedEvent("Simple Event Type - 1");
+	}
+
+	@Test
+	public void test_asset_type_associations() throws Exception {
+		EventTypeAssetTypeAssociationsPage associationsPage = page.clickEventTypeName(TEST_EVENT_TYPE_NAME).clickAssetTypeAssociationsTab();
+		associationsPage.selectAllAssetTypes();
+		associationsPage.clickSave();
+		associationsPage.clickSetupLink().clickAssetTypes().clickAssetType(TEST_ASSET_TYPE_NAME).clickEventTypeAssociationsTab();
+		assertTrue("Event Type wasn't properly associated to Asset Type", selenium.isElementPresent("//tr[@class='selectedEvent']/td[contains(text(),'" + TEST_EVENT_TYPE_NAME + "')]"));
 	}
 
 	private com.n4systems.fieldid.selenium.datatypes.EventType getEventType(String name) {

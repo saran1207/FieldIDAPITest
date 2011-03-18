@@ -37,6 +37,12 @@ public class EventTypeViewPage extends FieldIDPage {
 		return new EventTypeImportPage(selenium);
 	}
 	
+	public EventTypeAssetTypeAssociationsPage clickAssetTypeAssociationsTab(){
+		clickNavOption("Asset Type Associations", false);
+		return new EventTypeAssetTypeAssociationsPage(selenium, true);
+		
+	}
+	
 	public void verifyEventTypeSaved() {
 		List <String> actionMessages = getActionMessages();
 		assertFalse(actionMessages.isEmpty());

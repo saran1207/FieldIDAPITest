@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
+import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeAssetTypeAssociationsPage;
 import com.n4systems.fieldid.selenium.util.ConditionWaiter;
 import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
@@ -18,6 +19,10 @@ public class ManageAssetTypesPage extends FieldIDPage {
 
 	public ManageAssetTypesPage(Selenium selenium) {
 		super(selenium);
+	}
+	
+	public ManageAssetTypesPage(Selenium selenium, boolean waitForPageToLoad) {
+		super(selenium,waitForPageToLoad);
 	}
 	
 	public List<String> getAssetTypes() {
@@ -42,7 +47,7 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		return this;
 	}
 
-	public ManageAssetTypesPage clickEventTypesTab() {
+	public ManageAssetTypesPage clickEventTypeAssociationsTab() {
 		clickNavOption("Event Type Associations");
 		return this;
 	}
@@ -92,6 +97,11 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		return this;
 	}
 
+	public void selectAllEventTypes(){
+		selenium.click("//tr[1]/th[1]/a[1]");
+		waitForAjax();
+	}
+	
 	public void enterName(String name) {
 		selenium.type("//form[@id='assetTypeUpdate']//input[@name='name']", name);
 	}
@@ -305,5 +315,11 @@ public class ManageAssetTypesPage extends FieldIDPage {
     private void clickAttributeLink(String attributeName, String linkText) {
         selenium.click("//div[@id='infoFields']//input[@class = 'name' and @value= '"+attributeName+"']/../..//div[contains(@class,'linkCol')]//a[.='"+linkText+"']");
     }
+    
+	public ManageAssetTypesPage clickSave(){
+		selenium.click("//input[@name='hbutton.save']");
+		throwExceptionOnFormError(true);
+		return new ManageAssetTypesPage(selenium, false);
+	}
 
 }

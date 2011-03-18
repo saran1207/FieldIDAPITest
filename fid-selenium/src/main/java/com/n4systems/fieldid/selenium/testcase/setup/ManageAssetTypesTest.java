@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
+
 public class ManageAssetTypesTest extends ManageAssetTypesTestCase {
 	
 	@Test
@@ -43,6 +45,15 @@ public class ManageAssetTypesTest extends ManageAssetTypesTestCase {
 		assertTrue(page.getEditHasManufacturerCertificate());
 		assertEquals(TEST_ASSET_TYPE_MANUFACTURER_CERTIFICATE_TEXT, page.getEditManufacturerCertificateText());
 		assertEquals(TEST_ASSET_TYPE_ASSET_DESCRIPTION_TEMPLATE, page.getEditAssetDescriptionTemplate());
+	}
+	
+	@Test
+	public void test_event_type_associations() throws Exception {
+		ManageAssetTypesPage associationsPage = page.clickAssetType(TEST_ASSET_TYPE_NAME).clickEventTypeAssociationsTab();
+		associationsPage.selectAllEventTypes();
+		associationsPage.clickSave();
+		associationsPage.clickSetupLink().clickManageEventTypes().clickEventTypeName(TEST_EVENT_TYPE_NAME).clickAssetTypeAssociationsTab();
+		assertTrue("Asset Type wasn't properly associated to an Event Type", selenium.isElementPresent("//tr[@class='selectedAsset']/td[contains(.,'"+TEST_ASSET_TYPE_NAME+"')]"));
 	}
 
 }

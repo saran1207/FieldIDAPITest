@@ -61,7 +61,7 @@ public class ManageAssetTypes_EventFrequenciesTest extends ManageAssetTypesTestC
 	
 	private void addEventTypeToTestAsset(String eventType) {
 		page.clickAssetType(TEST_ASSET_TYPE_NAME);
-		page.clickEventTypesTab();
+		page.clickEventTypeAssociationsTab();
 		page.selectEventType(eventType);
 		page.saveEventTypes();
 	}
