@@ -6,14 +6,14 @@ div.leftBar {
     display: block;
     float: left;
     width: 210px;
-    min-height: 400px;
+    height: 500px;
     border-right: 1px solid #888;
 }
 
 div.mainArea {
     display:block;
     float:left;
-    min-height: 400px;
+    width:720px;
     padding-left: 20px;
     padding-top: 15px;
 }
@@ -22,15 +22,11 @@ div.mainArea {
     display:block;
     background: #eee;
     border: 1px solid #ddd;
-    padding-top: 15px;
-    padding-bottom:15px;
-    padding-left: 35px;
+    padding: 15px 35px 15px 35px;
     margin-left:10px;
-    min-height:400px;
-    width:230px;
+    height:400px;
     display:block;
     float:left;
-    height:auto;
 }
 
 .sortSelectorContainer {
@@ -142,19 +138,22 @@ div.selectedColumn div.reportColumn {
 }
 
 .leftBox {
-    width: 32px;
     display:block;
     float:left;
-    height: 22px;
-    padding-top: 8px;
-    padding-left:1px;
+    padding: 8px 8px 8px 8px;
+    margin:0 0 0 0;
+}
+
+.leftBox img {
+    margin:0 0 0 0;
+    padding: 0 0 0 0;
+    display: block;
 }
 
 .reportColumn {
     width: 200px;
     height: 30px;
     display: block;
-    /*float:left;*/
     text-align: center;
 }
 
@@ -176,11 +175,15 @@ div.selectedColumn div.reportColumn {
     padding-bottom: 5px;
 }
 
-.deleteColumnImageContainer {
+div.deleteColumnImageContainer {
     display:block;
     float:right;
-    padding-top: 10px;
-    padding-right: 7px;
+    margin: 0 0 0 0;
+    padding: 10px 7px 0 0;
+}
+
+.deleteColumnImageContainer img {
+    display:block;
 }
 
 div.availableSectionTitle {
@@ -282,8 +285,8 @@ div.availableSectionTitle {
 }
 
 .sortDescription {
-    padding-left: 40px;
-    width:400px;
+    padding-left: 50px;
+    width:300px;
     display:block;
     float:left;
     margin-left:15px;
@@ -309,7 +312,7 @@ div.availableSectionTitle {
     display:block;
     float:right;
     height: 278px;
-    width:400px;
-    margin-top: 10px;
-    padding: 15px 0 15px 15px;
+    width:385px;
+    margin: 10px 0 0 0;
+    padding: 15px 15px 15px 15px;
 }

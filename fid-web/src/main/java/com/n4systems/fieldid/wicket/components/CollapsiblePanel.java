@@ -4,10 +4,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.resource.ContextRelativeResource;
 
 public class CollapsiblePanel extends Panel {
 
@@ -15,8 +13,9 @@ public class CollapsiblePanel extends Panel {
 
     private AjaxLink collapseExpandLink;
     private WebMarkupContainer containedPanel;
-    private Image collapseImage;
-    private Image expandImage;
+
+    private WebMarkupContainer collapseImage;
+    private WebMarkupContainer expandImage;
     private boolean expanded = false;
 
     public CollapsiblePanel(String id, final IModel<String> titleModel) {
@@ -32,8 +31,8 @@ public class CollapsiblePanel extends Panel {
             }
         });
         collapseExpandLink.add(new Label("collapseExpandLinkLabel", titleModel));
-        collapseExpandLink.add(expandImage = new Image("collapseImage", new ContextRelativeResource("/images/columnlayout/arrow-over.png")));
-        collapseExpandLink.add(collapseImage = new Image("expandImage", new ContextRelativeResource("/images/columnlayout/arrow-down.png")));
+        collapseExpandLink.add(expandImage = new WebMarkupContainer("expandImage"));
+        collapseExpandLink.add(collapseImage = new WebMarkupContainer("collapseImage"));
         collapseImage.setVisible(false);
         expandImage.setOutputMarkupPlaceholderTag(true);
         collapseImage.setOutputMarkupPlaceholderTag(true);

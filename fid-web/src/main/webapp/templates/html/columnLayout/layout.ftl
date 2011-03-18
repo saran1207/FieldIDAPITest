@@ -8,6 +8,11 @@
     function goBackToTemplates() {
         window.location = templatesUrl;
     }
+
+    function onSuccessfulSessionRefresh() {
+        window.location.reload();
+    }
+
 </script>
 
 <#assign columnLayoutUrl>/fieldid/w/columnsLayout?type=${action.layoutType}</#assign>
