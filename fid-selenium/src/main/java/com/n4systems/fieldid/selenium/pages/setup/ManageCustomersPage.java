@@ -50,11 +50,24 @@ public class ManageCustomersPage extends FieldIDPage {
 		}
 	}
 	
+	public void archiveDivision(String name) {
+		selenium.click("//table[@class='list']//td/a[.='" + name + "']//..//..//a[.='Archive']");
+		waitForPageToLoad();
+	}
+	
 	public int getNumberOfCustomersOnPage() {
-		if (!selenium.isElementPresent("//table[@id='customerTable']")) {
+		return getNumberOfItemsInTableList("customerTable");
+	}
+	
+	public int getNumberOfDivisionsOnPage() {
+		return getNumberOfItemsInTableList("divisionList");
+	}
+	
+	public int getNumberOfItemsInTableList(String tableId) {
+		if (!selenium.isElementPresent("//table[@id='"+ tableId +"']")) {
 			return 0;
 		}
-		return selenium.getXpathCount("//table[@id='customerTable']//tr").intValue() - 1;
+		return selenium.getXpathCount("//table[@id='"+ tableId +"']//tr").intValue() - 1;
 	}
 
 	public ManageCustomersPage unarchiveCustomerNamed(String name) {
@@ -71,6 +84,12 @@ public class ManageCustomersPage extends FieldIDPage {
 
 	public ManageCustomersPage editCustomer(String customerName) {
 		selenium.click("//table[@id='customerTable']//td/a[.='" + customerName + "']//..//..//a[.='Edit']");
+		waitForPageToLoad();
+		return this;
+	}
+	
+	public ManageCustomersPage clickAddDivision() {
+		selenium.click("//a[.='Add Division']");
 		waitForPageToLoad();
 		return this;
 	}
@@ -129,6 +148,14 @@ public class ManageCustomersPage extends FieldIDPage {
 	
 	public void enterCustomerName(String name) {
 		selenium.type("//input[@name='customerName']", name);
+	}
+
+	public void enterDivisionId(String divisionID) {
+		selenium.type("//input[@name='divisionID']", divisionID);
+	}
+
+	public void enterDivisionName(String name) {
+		selenium.type("//input[@name='name']", name);		
 	}
 	
 }

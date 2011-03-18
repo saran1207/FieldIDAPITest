@@ -15,7 +15,7 @@ ${action.setPageType('customer', 'divisions')!}
 <#if page.hasResults() && page.validPage() >
 	<#assign currentAction="divisions.action" />
 	<#include '../common/_pagination.ftl' />
-	<table class="list">
+	<table id="divisionList" class="list">
 		<tr>
 			<th><@s.text name="label.name" /></th>
 			<th><@s.text name="label.division_id" /></th>
@@ -61,7 +61,7 @@ ${action.setPageType('customer', 'divisions')!}
 
 	<div id="archivedList" style="display:none">
 		<#include '../common/_pagination.ftl' />
-		<table class="list">
+		<table id="archivedDivisionList" class="list">
 			<tr>
 				<th><@s.text name="label.name" /></th>
 				<th><@s.text name="label.division_id" /></th>

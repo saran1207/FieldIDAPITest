@@ -19,7 +19,8 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	private static String COMPANY = "test1";
     private static final String TEST_CUSTOMER_ORG1 = "CustomerOrg1";
     private static final String TEST_CUSTOMER_ORG2 = "CustomerOrg2";
-	private static final String TEST_DIVISION_ORG = "DivisionOrg";
+	private static final String TEST_DIVISION_ORG1 = "DivisionOrg1";
+	private static final String TEST_DIVISION_ORG2 = "DivisionOrg2";
 	private static final String TEST_USER = "User";
     
 	@Override
@@ -40,7 +41,7 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
         
         BaseOrg divisionOrg = scenario.aDivisionOrg()
         		.withParent(custOrg)
-        		.withName(TEST_DIVISION_ORG)
+        		.withName(TEST_DIVISION_ORG1)
         		.build();
         
         scenario.aReadOnlyUser()
@@ -79,6 +80,35 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	}
 	
 	@Test
+	public void add_division_to_customer_with_errors() throws Exception {
+		page.clickCustomer(TEST_CUSTOMER_ORG1).clickDivisionsTab().clickAddDivision();
+		page.clickSave();
+		assertFalse(page.getFormErrorMessages().isEmpty());
+	}
+
+	@Test
+	public void add_division_to_customer_sucessfully() throws Exception {
+		page.clickCustomer(TEST_CUSTOMER_ORG1).clickDivisionsTab().clickAddDivision();
+		page.enterDivisionId(TEST_DIVISION_ORG2);
+		page.enterDivisionName(TEST_DIVISION_ORG2);
+		page.clickSave();
+		assertTrue(page.getFormErrorMessages().isEmpty());		
+	}
+	
+	@Test
+	public void archive_division_and_associated_users() throws Exception {
+		page.clickCustomer(TEST_CUSTOMER_ORG2).clickDivisionsTab();
+		page.archiveDivision(TEST_DIVISION_ORG1);
+		assertEquals(0, page.getNumberOfDivisionsOnPage());
+		
+	}
+	
+	@Test
+	public void add_customer_users() throws Exception {
+		//TODO 
+	}
+
+	@Test
 	public void archiving_customer_should_remove_it_from_list() throws Exception {	
 		page.filterByName(TEST_CUSTOMER_ORG1);
 		assertEquals(1, page.getNumberOfCustomersOnPage());
@@ -106,7 +136,7 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	@Test
 	public void unarchiving_a_customer_with_divisions_should_unarchive_divisions() throws Exception {
 		page.clickCustomer(TEST_CUSTOMER_ORG2).clickDivisionsTab();
-		assertTrue(page.getOrgNames().contains(TEST_DIVISION_ORG));
+		assertTrue(page.getOrgNames().contains(TEST_DIVISION_ORG1));
 		
 		page.clickViewAllTab();
 		page.archiveCustomerNamed(TEST_CUSTOMER_ORG2, true);
@@ -114,7 +144,7 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 		page.unarchiveCustomerNamed(TEST_CUSTOMER_ORG2);
 		page.clickCustomer(TEST_CUSTOMER_ORG2).clickDivisionsTab();
 		
-		assertTrue(page.getOrgNames().contains(TEST_DIVISION_ORG));
+		assertTrue(page.getOrgNames().contains(TEST_DIVISION_ORG1));
 	}
 	
 	@Test
