@@ -41,11 +41,11 @@ public class WebEntity {
 	
 	protected boolean isOptionPresent(String locator, String option) {
 		String options[] = selenium.getSelectOptions(locator);
-		for(int i = 0; i < options.length; i++) {
-			if(options[i].equals(option)) {
-				return true;
-			}
-		}
+        for (String availableOption : options) {
+            if (availableOption.equals(option)) {
+                return true;
+            }
+        }
 		return false;
 	}
 	

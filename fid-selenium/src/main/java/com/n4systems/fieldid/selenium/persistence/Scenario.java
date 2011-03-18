@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import com.n4systems.model.builders.ActiveColumnMappingBuilder;
+import com.n4systems.model.builders.ColumnLayoutBuilder;
+import com.n4systems.model.columns.ActiveColumnMapping;
+import com.n4systems.model.columns.SystemColumnMapping;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
@@ -81,6 +85,11 @@ public class Scenario {
     public PrimaryOrg primaryOrgFor(String tenantName) {
         Tenant tenant = tenant(tenantName);
         return new PrimaryOrgByTenantLoader().setTenantId(tenant.getId()).load(trans);
+    }
+
+    public SystemColumnMapping systemColumnMapping(String name) {
+        Query query = trans.getEntityManager().createQuery("from " + SystemColumnMapping.class.getName() + " where name = '" + name + "'");
+        return (SystemColumnMapping) query.getSingleResult();
     }
 
     public void updatePrimaryOrg(PrimaryOrg primaryOrg) {
@@ -236,6 +245,16 @@ public class Scenario {
 
     public SelectCriteriaBuilder aSelectCriteria() {
         SelectCriteriaBuilder builder = SelectCriteriaBuilder.aSelectCriteria();
+        return createPersistentBuilder(builder);
+    }
+
+    public ColumnLayoutBuilder aColumnLayout() {
+        ColumnLayoutBuilder builder = ColumnLayoutBuilder.aColumnLayout();
+        return createPersistentBuilder(builder);
+    }
+
+    public ActiveColumnMappingBuilder anActiveColumnMapping() {
+        ActiveColumnMappingBuilder builder = ActiveColumnMappingBuilder.anActiveColumnMapping();
         return createPersistentBuilder(builder);
     }
 

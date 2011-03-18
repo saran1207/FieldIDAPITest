@@ -8,6 +8,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.n4systems.model.columns.ActiveColumnMapping;
+import com.n4systems.model.columns.ColumnLayout;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddAssetHistory;
@@ -97,7 +99,9 @@ public class TenantCleaner {
         removeAllForTenants(EventTypeGroup.class, tenantIds);
         removeAllForTenants(CriteriaSection.class, tenantIds);
         removeAllForTenants(OneClickCriteria.class, tenantIds);
-        
+        removeAllForTenants(ActiveColumnMapping.class, tenantIds);
+        removeAllForTenants(ColumnLayout.class, tenantIds);
+
 //        removeAllForTenants(TextFieldCriteria.class, tenantIds);
 //        removeAllForTenants(SelectCriteria.class, tenantIds);
 

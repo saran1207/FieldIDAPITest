@@ -29,6 +29,10 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.catalog.CatalogSaver;
+import com.n4systems.model.columns.ActiveColumnMapping;
+import com.n4systems.model.columns.ColumnLayout;
+import com.n4systems.model.columns.saver.ActiveColumnMappingSaver;
+import com.n4systems.model.columns.saver.ColumnLayoutSaver;
 import com.n4systems.model.criteria.CriteriaSaver;
 import com.n4systems.model.criteria.CriteriaSectionSaver;
 import com.n4systems.model.event.EventFormSaver;
@@ -93,6 +97,8 @@ public class SaverMap {
         classToSaverMap.put(State.class, new StateSaver());
 
         classToSaverMap.put(Project.class, new ProjectSaver());
+        classToSaverMap.put(ColumnLayout.class, new ColumnLayoutSaver());
+        classToSaverMap.put(ActiveColumnMapping.class, new ActiveColumnMappingSaver());
     }
 
     @SuppressWarnings("unchecked")

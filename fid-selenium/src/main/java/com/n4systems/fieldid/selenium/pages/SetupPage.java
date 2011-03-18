@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import com.n4systems.fieldid.selenium.pages.setup.AutoAttributeWizardPage;
 import com.n4systems.fieldid.selenium.pages.setup.BrandingPage;
+import com.n4systems.fieldid.selenium.pages.setup.ColumnLayoutPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetCodeMappingsPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetStatusPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypeGroupsPage;
@@ -81,6 +82,24 @@ public class SetupPage extends FieldIDPage {
 		return new ManageCommentTemplatesPage(selenium);
 	}
 	
+    public ColumnLayoutPage clickEditAssetColumnLayout() {
+        clickTemplatesTab();
+        selenium.click("//a[.='Asset Search Column Layout']");
+        return new ColumnLayoutPage(selenium);
+    }
+
+    public ColumnLayoutPage clickEditReportingColumnLayout() {
+        clickTemplatesTab();
+        selenium.click("//a[.='Reporting Column Layout']");
+        return new ColumnLayoutPage(selenium);
+    }
+
+    public ColumnLayoutPage clickEditScheduleColumnLayout() {
+        clickTemplatesTab();
+        selenium.click("//a[.='Schedule Column Layout']");
+        return new ColumnLayoutPage(selenium);
+    }
+
 	public ManageAssetTypeGroupsPage clickAssetTypeGroups() {
         clickAssetsAndEventsTab();
 		selenium.click("//a[.='Asset Type Groups']");
@@ -126,7 +145,7 @@ public class SetupPage extends FieldIDPage {
     }
 
     protected void clickTemplatesTab() {
-        clickNavOption("Template");
+        clickNavOption("Templates");
     }
 
     protected void clickAssetsAndEventsTab() {

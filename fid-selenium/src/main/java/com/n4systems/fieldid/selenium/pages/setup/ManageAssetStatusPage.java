@@ -4,10 +4,11 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.pages.FieldIDPage;
 import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
 import com.thoughtworks.selenium.Selenium;
 
-public class ManageAssetStatusPage extends WicketFieldIDPage {
+public class ManageAssetStatusPage extends FieldIDPage {
 
 	public ManageAssetStatusPage(Selenium selenium) {
 		super(selenium);
