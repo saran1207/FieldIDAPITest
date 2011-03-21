@@ -43,6 +43,7 @@ import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.SelectCriteriaBuilder;
 import com.n4systems.model.builders.StateBuilder;
 import com.n4systems.model.builders.StateSetBuilder;
+import com.n4systems.model.builders.SubEventBuilder;
 import com.n4systems.model.builders.TextFieldCriteriaBuilder;
 import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
 import com.n4systems.model.builders.UserBuilder;
@@ -182,6 +183,12 @@ public class Scenario {
         EventBuilder builder = EventBuilder.anEvent(anEventType(), anEventGroup());
         return createPersistentBuilder(builder);
     }
+
+    public SubEventBuilder aSubEvent() {
+        SubEventBuilder builder = SubEventBuilder.aSubEvent("hurf");
+        return createPersistentBuilder(builder);
+    }
+    
 
     public EventGroupBuilder anEventGroup() {
         EventGroupBuilder builder = EventGroupBuilder.anEventGroup();

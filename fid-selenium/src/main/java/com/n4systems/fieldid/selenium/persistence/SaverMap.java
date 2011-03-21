@@ -23,6 +23,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.api.Saveable;
@@ -71,6 +72,7 @@ public class SaverMap {
         classToSaverMap.put(AssetStatus.class, new AssetStatusSaver());
         classToSaverMap.put(AssetType.class, new SeleniumAssetTypeSaver());
         classToSaverMap.put(Event.class, new SimpleEventSaver());
+        classToSaverMap.put(SubEvent.class, new SimpleEventSaver());
         classToSaverMap.put(User.class, new UserSaver());
         classToSaverMap.put(EventType.class, new EventTypeSaver());
         classToSaverMap.put(EventGroup.class, new EventGroupSaver());
