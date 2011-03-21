@@ -34,6 +34,7 @@ import com.n4systems.model.builders.EventBookBuilder;
 import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventFormBuilder;
 import com.n4systems.model.builders.EventGroupBuilder;
+import com.n4systems.model.builders.EventScheduleBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.EventTypeGroupBuilder;
 import com.n4systems.model.builders.InfoFieldBuilder;
@@ -180,6 +181,11 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
+    public EventScheduleBuilder anEventSchedule(){
+    	EventScheduleBuilder builder = EventScheduleBuilder.aScheduledEventSchedule();
+        return createPersistentBuilder(builder);
+    }
+    
     public EventBuilder anEvent() {
         EventBuilder builder = EventBuilder.anEvent(anEventType(), anEventGroup());
         return createPersistentBuilder(builder);
