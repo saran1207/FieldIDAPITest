@@ -104,10 +104,28 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	}
 	
 	@Test
-	public void add_customer_users() throws Exception {
-		//TODO 
+	public void add_customer_user_sucessfully() throws Exception {
+		page.clickCustomer(TEST_CUSTOMER_ORG2).clickUsersTab();
+		assertEquals(1, page.getNumberOfUsersOnPage());
+		page.clickAddUser();
+		page.enterUserEmailAddress("test@test.com");
+		page.enterUserFirstName("firstname");
+		page.enterUserLastName("lastName");
+		page.enterUserUserID("userid");
+		page.enterAndConfirmUserPassword("password");
+		page.clickSave();
+		assertEquals(2, page.getNumberOfUsersOnPage());
 	}
 
+	@Test
+	public void add_customer_user_with_errors() throws Exception {
+		page.clickCustomer(TEST_CUSTOMER_ORG2).clickUsersTab();
+		assertEquals(1, page.getNumberOfUsersOnPage());
+		page.clickAddUser();
+		page.clickSave();
+		assertFalse(page.getFormErrorMessages().isEmpty());
+	}
+	
 	@Test
 	public void archiving_customer_should_remove_it_from_list() throws Exception {	
 		page.filterByName(TEST_CUSTOMER_ORG1);

@@ -22,7 +22,7 @@ ${action.setPageType('customer', 'users')!}
 	  		<th ><@s.text name="label.emailaddress"/></th>
 	  		<th ><@s.text name="label.lastlogin"/></th>
 			<th></th>
-		<tr>
+		</tr>
 		<#assign count=0 >
 		<#list userList as user >
 			<tr id="user_${user.id!}" >

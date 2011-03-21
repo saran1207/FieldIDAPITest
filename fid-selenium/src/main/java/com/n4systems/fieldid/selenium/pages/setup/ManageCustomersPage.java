@@ -63,6 +63,10 @@ public class ManageCustomersPage extends FieldIDPage {
 		return getNumberOfItemsInTableList("divisionList");
 	}
 	
+	public int getNumberOfUsersOnPage() {
+		return getNumberOfItemsInTableList("userList");
+	}
+	
 	public int getNumberOfItemsInTableList(String tableId) {
 		if (!selenium.isElementPresent("//table[@id='"+ tableId +"']")) {
 			return 0;
@@ -125,7 +129,7 @@ public class ManageCustomersPage extends FieldIDPage {
 	}
 
 	public List<String> getUserIds() {
-		return getColumnFromTableStartingAtRow("//div[@id='pageContent']//table[@id='userList']", 1, 3);
+		return getColumnFromTableStartingAtRow("//table[@id='userList']", 1, 2);
 	}
 
 	public void clickDeleteUser(String userId) {
@@ -134,7 +138,7 @@ public class ManageCustomersPage extends FieldIDPage {
 	}
 
 	public void clickAddUser() {
-		selenium.click("//ul[@class='secondaryNav']//a[.='Add User']");
+		selenium.click("//a[.='Add User']");
 		waitForPageToLoad();
 	}
 
