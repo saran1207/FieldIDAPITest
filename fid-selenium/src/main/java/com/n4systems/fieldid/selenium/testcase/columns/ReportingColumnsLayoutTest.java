@@ -17,10 +17,28 @@ public class ReportingColumnsLayoutTest extends PageNavigatingTestCase<ColumnLay
     }
 
     @Test
-    public void test_default_reporting_columns() {
+    public void test_default_reporting_columns() throws Exception {
         List<String> currentColumns = page.getCurrentColumns();
         List<String> expectedDefaultColumns = Arrays.asList("Event Type", "Result", "Serial Number", "Customer Name", "Asset Type", "Asset Status");
         assertEquals(expectedDefaultColumns, currentColumns);
+    }
+
+    @Test
+    public void test_reorder_reporting_columns_and_save() throws Exception {
+        page.clearLayout();
+        page.expandColumnGroup("Event Information");
+        page.clickAddColumn("Date Performed");
+        page.clickAddColumn("Event Book");
+        page.clickAddColumn("Performed By");
+
+        assertEquals(Arrays.asList("Performed By", "Event Book", "Date Performed"), page.getCurrentColumns());
+
+        page.moveColumnToPosition("Date Performed", 1);
+
+        assertEquals(Arrays.asList("Date Performed", "Performed By", "Event Book"), page.getCurrentColumns());
+
+        page = page.clickSave().clickEditReportingColumnLayout();
+        assertEquals(Arrays.asList("Date Performed", "Performed By", "Event Book"), page.getCurrentColumns());
     }
 
 }

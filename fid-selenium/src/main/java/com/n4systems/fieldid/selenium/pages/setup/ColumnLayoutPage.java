@@ -2,6 +2,8 @@ package com.n4systems.fieldid.selenium.pages.setup;
 
 import com.n4systems.fieldid.selenium.pages.SetupPage;
 import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.thoughtworks.selenium.Selenium;
 
@@ -16,23 +18,27 @@ public class ColumnLayoutPage extends WicketFieldIDPage {
 
     public List<String> getCurrentColumns() {
         selenium.selectFrame("//iframe");
+        List<String> currentColumns = internalGetCurrentColumns();
+        selenium.selectFrame("relative=up");
+        return currentColumns;
+    }
 
+    private List<String> internalGetCurrentColumns() {
         List<String> currentColumns = new ArrayList<String>();
-        int currentColumnCount = selenium.getXpathCount("//div[contains(@class,'reportColumnTitle')]").intValue();
+        int currentColumnCount = selenium.getXpathCount("//div[@class='selectedColumnsContainer']//div[contains(@class,'reportColumnTitle')]").intValue();
 
         for (int i = 1; i <= currentColumnCount; i++) {
-            String columnTitle = selenium.getText("xpath=(//div[contains(@class,'reportColumnTitle')])[" + i + "]");
+            String columnTitle = selenium.getText("xpath=(//div[@class='selectedColumnsContainer']//div[contains(@class,'reportColumnTitle')])[" + i + "]");
             currentColumns.add(columnTitle);
         }
 
-        selenium.selectFrame("relative=up");
         return currentColumns;
     }
 
     public void clickRemoveSelectedColumn(String columnName) {
         selenium.selectFrame("//iframe");
 
-        selenium.click("//div[contains(@class,'reportColumnTitle') and .='" + columnName + "']/../../div[@class='deleteColumnImageContainer']//img");
+        selenium.click("//div[@class='selectedColumnsContainer']//div[contains(@class,'reportColumnTitle') and .='" + columnName + "']/../../div[@class='deleteColumnImageContainer']//img");
         waitForWicketAjax();
 
         selenium.selectFrame("relative=up");
@@ -59,12 +65,10 @@ public class ColumnLayoutPage extends WicketFieldIDPage {
     }
 
     public void clearLayout() {
-        selenium.selectFrame("//iframe");
         for (String column : getCurrentColumns()) {
+            System.out.println("Removing selected column: " + column);
             clickRemoveSelectedColumn(column);
-            waitForWicketAjax();
         }
-        selenium.selectFrame("relative=up");
     }
 
     public SortDirection getSortDirection() {
@@ -102,6 +106,28 @@ public class ColumnLayoutPage extends WicketFieldIDPage {
         if (sortDirection == SortDirection.DESC)
             sortDirectionStr = "Descending";
         selenium.select("//select[@name='directionSelect']", sortDirectionStr);
+        selenium.selectFrame("relative=up");
+    }
+
+    // Warning: This is a little finicky. Only works with specific values, but it's worth testing some
+    // dragging and dropping.
+    public void moveColumnToPosition(final String columnName, final int position) {
+        selenium.selectFrame("//iframe");
+
+        String originXpath = "//div[@class='selectedColumnsContainer']//div[contains(@class,'reportColumnTitle') and text()='"+columnName+"']";
+        String destXpath = "xpath=(//div[@class='selectedColumnsContainer']//div[contains(@class,'reportColumnTitle')])[" + position + "]";
+
+        dragAndDropFromTo(originXpath, destXpath);
+        waitForWicketAjax();
+        new ConditionWaiter(new Predicate() {
+            @Override
+            public boolean evaluate() {
+                List<String> cols = internalGetCurrentColumns();
+                System.out.println("The current columns are: " + cols);
+                return columnName.equals(cols.get(position-1));
+            }
+        }).run("Column should move to its destination");
+
         selenium.selectFrame("relative=up");
     }
 
