@@ -8,11 +8,16 @@ public class EventPage extends FieldIDPage {
 
 	public EventPage(Selenium selenium) {
 		super(selenium);
-		if (!checkOnEventPage()) {
+		if (!checkOnEventPage() && !checkOnQuickEventPage()) {
 			fail("Expected to be on event page!");
 		}
 	}
 
+	public boolean checkOnQuickEventPage(){
+		checkForErrorMessages(null);
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Perform an Event on ')]");
+	}
+	
 	public boolean checkOnEventPage() {
 		checkForErrorMessages(null);
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Event -')]") 
@@ -49,7 +54,12 @@ public class EventPage extends FieldIDPage {
 		selenium.click("//a[contains(.,'"+ eventType+"')]");
 		waitForPageToLoad();
 	}
-
+	  
+    public EventPage clickFirstAdHocEventType(){
+    	selenium.click("//fieldset[2]/p/a");
+		return new EventPage(selenium);
+    }
+	
 	public boolean confirmMasterEventSaved() {
 		return selenium.isElementPresent("//span[contains(.,'Master Event Saved.')]");
 	}
@@ -66,5 +76,5 @@ public class EventPage extends FieldIDPage {
         selenium.type("//label[contains(@class,'eventFormLabel') and .='"+criteriaName+"']/..//input[contains(@id,'secondaryTextValue')]", value);
     }
     
-
+  
 }

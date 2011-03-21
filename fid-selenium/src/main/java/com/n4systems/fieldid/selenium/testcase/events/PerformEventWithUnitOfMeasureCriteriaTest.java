@@ -54,7 +54,8 @@ public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTes
         		.login()
         		.search(TEST_SERIAL_NUMBER)
                 .clickEventsTab()
-                .clickStartEventWithOnlyOneEventType();
+                .clickStartEventWithOnlyOneEventType()
+                .clickFirstAdHocEventType();
     }
 
     @Test
