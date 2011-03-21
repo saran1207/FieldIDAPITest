@@ -59,6 +59,10 @@ public class ManageAssetTypes_EventFrequenciesTest extends ManageAssetTypesTestC
 		assertEquals(1, overrides.size());
 		assertEquals(5, overrides.get(0).frequency);
 		assertEquals(TEST_CUSTOMER_ORG, overrides.get(0).customer);
+		
+		page.removeEventFrequencyForType(TEST_EVENT_TYPE, true);
+		assertFalse("Should have removed scheduled event for type: " + TEST_EVENT_TYPE,
+				page.isEventFrequencyScheduledForType(TEST_EVENT_TYPE));
 	}
 	
 	@Test
