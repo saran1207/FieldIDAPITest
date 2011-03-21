@@ -99,7 +99,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
         mappingGroups.addAll(reportConfig.getColumnGroups());
         mappingGroups.addAll(getDynamicGroups());
         if (getSortDirection() == null) setSortDirection(reportConfig.getSortDirection().getDisplayName());
-        if (getSortColumn() == null) setSortColumn(reportConfig.getSortColumn().getPathExpression());
+        if (getSortColumn() == null) setSortColumn(reportConfig.getSortColumn().getSortExpression());
 
 		// initialize the output handlers 
 		for (ColumnMappingGroupView group: mappingGroups) {
