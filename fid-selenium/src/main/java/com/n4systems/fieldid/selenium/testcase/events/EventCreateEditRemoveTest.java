@@ -18,7 +18,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 
     @Override
     public void setupScenario(Scenario scenario) {
-        EventType eventType = scenario.anEventType()
+/*        EventType eventType = scenario.anEventType()
                 .withMaster(true)
                 .named("Master Event Type").build();
 
@@ -38,6 +38,13 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
                 .withSerialNumber(TEST_SERIAL_NUMBER)
                 .ofType(masterType)
                 .build();
+
+        scenario.anAsset()
+                .purchaseOrder("PO 3")
+                .withSerialNumber(TEST_SUB_SERIAL_NUMBER)
+                .ofType(subType)
+                .build();
+                */
     }
 
     @Override
@@ -45,7 +52,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
         return startAsCompany("test1").login().search(TEST_SERIAL_NUMBER);
     }
 
-	@Test
+	//@Test
 	public void create_master_event_no_sub_events() {
         EventPage eventPage = page.clickEventsTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
 
@@ -56,7 +63,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 		assertTrue(eventPage.confirmMasterEventSaved());
 	}
 
-    @Test
+    //@Test
 	public void create_master_with_sub_event() {
 		page.clickSubComponentsTab();
 		page.addNewSubcomponent(TEST_SUB_SERIAL_NUMBER);
@@ -70,6 +77,39 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 
 		assertTrue(eventPage.confirmMasterEventSaved());
 	}
+    
+   // @Test
+    public void create_master_with_sub_event_from_existing_sub_component(){
+    	page.clickSubComponentsTab();
+    	page.attachExistingSubcomponent(TEST_SUB_SERIAL_NUMBER);
+    	
+    	EventPage eventPage = page.clickEventsTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+
+		performMandatoryEvent(eventPage);
+		performSubEvent(eventPage);
+
+		eventPage.clickSaveMasterEvent();
+
+		assertTrue(eventPage.confirmMasterEventSaved());
+    }
+    
+    //@Test
+    public void create_master_with_sub_event_and_then_remove_the_sub_component(){
+    	page.clickSubComponentsTab();
+		page.addNewSubcomponent(TEST_SUB_SERIAL_NUMBER);
+		
+		EventPage eventPage = page.clickEventsTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+
+		performMandatoryEvent(eventPage);
+		performSubEvent(eventPage);
+		
+		page.clickRemoveSubComponent();
+		
+		eventPage.clickSaveMasterEvent();
+
+		assertTrue(eventPage.confirmMasterEventSaved());
+		
+    }
 
 	private void performMandatoryEvent(EventPage eventPage) {
 		eventPage.clickMandatoryEventToPerformLink();
