@@ -26,6 +26,7 @@ import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.AssetStatusBuilder;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.BaseBuilder;
+import com.n4systems.model.builders.ComboBoxCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.EntityWithOwnerBuilder;
 import com.n4systems.model.builders.EntityWithTenantBuilder;
@@ -250,6 +251,11 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
+    public ComboBoxCriteriaBuilder aComboBoxCriteria() {
+    	ComboBoxCriteriaBuilder builder = ComboBoxCriteriaBuilder.aComboBoxCriteria();
+        return createPersistentBuilder(builder);
+    }
+    
     public SelectCriteriaBuilder aSelectCriteria() {
         SelectCriteriaBuilder builder = SelectCriteriaBuilder.aSelectCriteria();
         return createPersistentBuilder(builder);

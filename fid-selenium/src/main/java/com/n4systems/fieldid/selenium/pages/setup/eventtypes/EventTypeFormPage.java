@@ -253,6 +253,16 @@ public class EventTypeFormPage extends WicketFieldIDPage {
 
         selenium.selectFrame("relative=up");
     }
+    
+    public void addComboBoxOption(String optionName) {
+        selenium.selectFrame("//iframe");
+
+        selenium.type("//div[@id='criteriaEditor']//div[contains(@class,'addItemTitle') and text() = 'Combo Box Options']/..//input[@type='text']", optionName);
+        selenium.click("//div[@id='criteriaEditor']//div[contains(@class,'addItemTitle') and text() = 'Combo Box Options']/..//button[@name='addButton']");
+        waitForWicketAjax();
+
+        selenium.selectFrame("relative=up");
+    }
 
     public EventTypeViewPage clickSaveAndFinishEventForm() {
         selenium.click("//div[@class='savePanel']//a[contains(., 'Save and Finish')]");
