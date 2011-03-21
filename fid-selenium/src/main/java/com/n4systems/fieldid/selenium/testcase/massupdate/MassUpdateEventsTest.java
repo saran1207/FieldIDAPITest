@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
@@ -8,6 +10,7 @@ import com.n4systems.fieldid.selenium.pages.reporting.ReportingSearchResultsPage
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventType;
@@ -48,8 +51,9 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 			.forTenant(scenario.defaultTenant())
 	        .build();
 		
-		for (int i=0; i< 50; i++){
-			scenario.anEvent().on(asset)
+		for (int i=0; i< 5; i++){
+			
+			Event event1 = scenario.anEvent().on(asset)
 		        .ofType(eventType)
 		        .withPerformedBy(scenario.defaultUser())
 		        .withOwner(scenario.defaultPrimaryOrg())
@@ -57,13 +61,17 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 		        .withGroup(group)
 		        .build();
 			
-			scenario.anEvent().on(asset2)
+			scenario.anEventSchedule().completedDoing(event1).asset(asset).build();
+			
+			Event event2 = scenario.anEvent().on(asset2)
 		        .ofType(eventType)
 		        .withPerformedBy(scenario.defaultUser())
 		        .withOwner(scenario.defaultPrimaryOrg())
 		        .withTenant(scenario.defaultTenant())
 		        .withGroup(group)
 		        .build();
+			
+			scenario.anEventSchedule().completedDoing(event2).asset(asset2).build();
 		}
      }
 	
@@ -75,6 +83,30 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 		   EventMassUpdatePage massUpdatePage = resultsPage.clickEventMassUpdate();
 		   massUpdatePage.checkMassDelete();
 		   massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+		   assertTrue("Not all Events were properly removed", verifyAllEventsAreRemoved());
+	}
+	
+	@Test
+	public void test_remove_all_schedules_for_multiple_assets(){
+		   page.enterSerialNumber(SERIAL_NUMBER);
+		   ReportingSearchResultsPage resultsPage = page.clickRunSearchButton();
+		   resultsPage.selectAllItemsOnPage();
+		   EventMassUpdatePage massUpdatePage = resultsPage.clickEventMassUpdate();
+		   massUpdatePage.checkMassDelete();
+		   massUpdatePage.clickSaveButtonAndConfirmMassDelete();
+		   assertTrue("Not all Schedules were properly removed", verifyAllSchedulesAreRemoved());
+	}
+	
+	private boolean verifyAllSchedulesAreRemoved() {
+		page.clickSchedulesLink();
+		page.clickRunSearchButton();
+		return selenium.isElementPresent("//div[@class='emptyList']");
+	}
+
+	private boolean verifyAllEventsAreRemoved(){
+		page.clickReportingLink();
+		page.clickRunSearchButton();
+		return selenium.isElementPresent("//div[@class='emptyList']");
 	}
 	
 	  @Override
