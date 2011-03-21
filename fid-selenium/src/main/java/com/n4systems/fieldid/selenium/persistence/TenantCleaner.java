@@ -138,7 +138,6 @@ public class TenantCleaner {
         removeAllForTenants(StateSet.class, tenantIds);
         removeAllForTenants(NotificationSetting.class, tenantIds);
         removeAllExternalOrgsPointingToTenants(tenantIds);
-        removeAllForTenants(AssetType.class, tenantIds);
         removeAllForTenants(EventGroup.class, tenantIds);
         removeAllForTenants(EventTypeGroup.class, tenantIds);
         removeAllSeenItStorageItems(tenantIds);
