@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.testcase.setup;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import com.n4systems.fieldid.selenium.persistence.Scenario;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.datatypes.Owner;
+import com.n4systems.fieldid.selenium.pages.IdentifyPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage.EventFrequencyOverride;
 
 public class ManageAssetTypes_EventFrequenciesTest extends ManageAssetTypesTestCase {
@@ -57,6 +59,33 @@ public class ManageAssetTypes_EventFrequenciesTest extends ManageAssetTypesTestC
 		assertEquals(1, overrides.size());
 		assertEquals(5, overrides.get(0).frequency);
 		assertEquals(TEST_CUSTOMER_ORG, overrides.get(0).customer);
+	}
+	
+	@Test
+	public void test_auto_schedule_on_identify(){
+		addEventTypeToTestAsset(TEST_EVENT_TYPE);
+		
+		page.clickEventFrequenciesTab();
+		page.scheduleEventFrequencyForType(TEST_EVENT_TYPE, 14);
+		
+		IdentifyPage identPage = page.clickIdentifyLink();
+		identPage.selectAssetType(TEST_ASSET_TYPE_NAME);
+		
+		assertTrue("Auto schedule for :"+TEST_EVENT_TYPE+" wasn't successfully added.", selenium.isElementPresent("//div[@id='schedule_0']/label[contains(.,'"+TEST_EVENT_TYPE+"')]"));
+	}
+	
+	@Test
+	public void test_auto_schedule_on_multi_add(){
+		addEventTypeToTestAsset(TEST_EVENT_TYPE);
+		
+		page.clickEventFrequenciesTab();
+		page.scheduleEventFrequencyForType(TEST_EVENT_TYPE, 14);
+		
+		IdentifyPage massIdentPage = page.clickIdentifyLink().clickMultiAdd();
+		
+		massIdentPage.selectAssetType(TEST_ASSET_TYPE_NAME);
+		
+		assertTrue("Auto schedule for :"+TEST_EVENT_TYPE+" wasn't successfully added.", selenium.isElementPresent("//div[@id='schedule_0']/label[contains(.,'"+TEST_EVENT_TYPE+"')]"));
 	}
 	
 	private void addEventTypeToTestAsset(String eventType) {

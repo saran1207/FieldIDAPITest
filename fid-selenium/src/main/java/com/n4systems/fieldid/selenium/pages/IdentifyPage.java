@@ -296,8 +296,9 @@ public class IdentifyPage extends FieldIDPage {
 		clickNavOption("Add");
 	}
 
-	public void clickMultiAdd() {
+	public IdentifyPage clickMultiAdd() {
 		clickNavOption("Multi Add", "60000");
+		return new IdentifyPage(selenium);
 	}
 	
 	public List<String> getAssetStatusesFromMultiAddForm() {
