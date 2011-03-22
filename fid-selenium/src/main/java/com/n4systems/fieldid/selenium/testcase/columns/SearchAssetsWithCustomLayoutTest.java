@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
-public class SearchAssetsWithCustomLayout extends FieldIDTestCase {
+public class SearchAssetsWithCustomLayoutTest extends FieldIDTestCase {
 
     @Override
     public void setupScenario(Scenario scenario) {
