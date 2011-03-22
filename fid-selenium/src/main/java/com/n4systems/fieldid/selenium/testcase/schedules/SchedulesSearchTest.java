@@ -27,8 +27,7 @@ public class SchedulesSearchTest extends PageNavigatingTestCase<SchedulesSearchP
 	}
 	
 	private List<String> getDefaultColumnHeaders() {
-		return Arrays.asList("Serial Number", "Reference Number", "Asset Type",
-				"Event Type", "Last Event Date", "Customer Name",
-				"Scheduled Date", "Status", "Days Past Due", "");
+		return Arrays.asList("Scheduled Date", "Status", "Days Past Due", "Serial Number", 
+				"Reference Number", "Customer Name", "Event Type", "Last Event Date", "Asset Type", "");
 	}
 }
