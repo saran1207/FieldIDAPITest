@@ -76,6 +76,11 @@ public class ManageAssetTypes_EventFrequenciesTest extends ManageAssetTypesTestC
 		identPage.selectAssetType(TEST_ASSET_TYPE_NAME);
 		
 		assertTrue("Auto schedule for :"+TEST_EVENT_TYPE+" wasn't successfully added.", selenium.isElementPresent("//div[@id='schedule_0']/label[contains(.,'"+TEST_EVENT_TYPE+"')]"));
+		
+		page = identPage.clickSetupLink().clickAssetTypes().clickAssetType(TEST_ASSET_TYPE_NAME).clickEventFrequenciesTab();
+		page.removeEventFrequencyForType(TEST_EVENT_TYPE);
+		assertFalse("Should have removed scheduled event for type: " + TEST_EVENT_TYPE,
+				page.isEventFrequencyScheduledForType(TEST_EVENT_TYPE));
 	}
 	
 	@Test
@@ -90,6 +95,12 @@ public class ManageAssetTypes_EventFrequenciesTest extends ManageAssetTypesTestC
 		massIdentPage.selectAssetType(TEST_ASSET_TYPE_NAME);
 		
 		assertTrue("Auto schedule for :"+TEST_EVENT_TYPE+" wasn't successfully added.", selenium.isElementPresent("//div[@id='schedule_0']/label[contains(.,'"+TEST_EVENT_TYPE+"')]"));
+		
+		page = massIdentPage.clickSetupLink().clickAssetTypes().clickAssetType(TEST_ASSET_TYPE_NAME).clickEventFrequenciesTab();
+		page.removeEventFrequencyForType(TEST_EVENT_TYPE);
+		assertFalse("Should have removed scheduled event for type: " + TEST_EVENT_TYPE,
+				page.isEventFrequencyScheduledForType(TEST_EVENT_TYPE));
+
 	}
 	
 	private void addEventTypeToTestAsset(String eventType) {

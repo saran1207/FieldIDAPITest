@@ -27,16 +27,16 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 
     @Override
     public void setupScenario(Scenario scenario) {
-        AssetType subType = scenario.anAssetType().named("Sub Type").build();
-        scenario.anAssetType()
-                .withSubTypes(subType)
-                .named("Master Type").build();
-
-        scenario.anAssetStatus()
-                .named(TEST_ASSET_STATUS).build();
+//        AssetType subType = scenario.anAssetType().named("Sub Type").build();
+//        scenario.anAssetType()
+//                .withSubTypes(subType)
+//                .named("Master Type").build();
+//
+//        scenario.anAssetStatus()
+//                .named(TEST_ASSET_STATUS).build();
     }
 
-    @Test
+    //@Test
 	public void attach_a_newly_created_subasset() {
 		identifyAssetWithSerialNumber(TEST_MASTER_SERIAL, "Master Type", "PO 3", TEST_ASSET_STATUS);
 
@@ -50,7 +50,7 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 		assertTrue("Sub component wasn't successfully created and attached", selenium.isElementPresent("//div[@class='subComponent']"));
 	}
 
-	@Test
+	//@Test
 	public void detach_a_subasset() {
 		identifyAssetWithSerialNumber(TEST_MASTER_SERIAL, "Master Type", "PO 3", TEST_ASSET_STATUS);
 		
@@ -65,7 +65,7 @@ public class AssetAttachDetachTest extends FieldIDTestCase {
 		assertFalse("Subcomponent wasn't successfully detached", selenium.isElementPresent("//h2[contains(., 'Sub-Assets')]"));
 	}
 
-	@Test
+	//@Test
 	public void attach_an_existing_subasset() {
 		identifyAssetWithSerialNumber(TEST_MASTER_SERIAL, "Master Type", "PO 3", TEST_ASSET_STATUS);
 		identifyAssetWithSerialNumber(TEST_SUB_SERIAL, "Sub Type", "PO 3", TEST_ASSET_STATUS);

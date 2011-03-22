@@ -29,30 +29,30 @@ public class AssetTypeAutoSchedulesTest extends FieldIDTestCase {
 	
 	@Override
 	public void setupScenario(Scenario scenario) {
-
-		EventTypeGroup group = scenario.anEventTypeGroup()
-									   .forTenant(scenario.tenant(COMPANY))
-								       .withName("Test Event Type Group")
-								 	   .build();
-
-        EventType eventType = scenario.anEventType()
-                                      .named(TEST_EVENT_TYPE)
-                                      .withGroup(group)
-                                      .build();
-        
-        AssetType assetType = scenario.assetType(COMPANY, TEST_ASSET_TYPE_1);
-        
-        AssociatedEventType associatedEventType = new AssociatedEventType(eventType, assetType);
-        
-        scenario.save(associatedEventType);    
-        
-        scenario.aCustomerOrg()
-        		.withParent(scenario.primaryOrgFor(COMPANY))
-        		.withName(TEST_CUSTOMER_ORG)
-        		.build();
+//
+//		EventTypeGroup group = scenario.anEventTypeGroup()
+//									   .forTenant(scenario.tenant(COMPANY))
+//								       .withName("Test Event Type Group")
+//								 	   .build();
+//
+//        EventType eventType = scenario.anEventType()
+//                                      .named(TEST_EVENT_TYPE)
+//                                      .withGroup(group)
+//                                      .build();
+//        
+//        AssetType assetType = scenario.assetType(COMPANY, TEST_ASSET_TYPE_1);
+//        
+//        AssociatedEventType associatedEventType = new AssociatedEventType(eventType, assetType);
+//        
+//        scenario.save(associatedEventType);    
+//        
+//        scenario.aCustomerOrg()
+//        		.withParent(scenario.primaryOrgFor(COMPANY))
+//        		.withName(TEST_CUSTOMER_ORG)
+//        		.build();
      }
 	
-	@Test
+	//@Test
 	public void verify_auto_schedule_created() throws Exception {
 		ManageAssetTypesPage assetTypesPage = startAsCompany(COMPANY).login().clickSetupLink().clickAssetTypes();
 		assetTypesPage.clickAssetType(TEST_ASSET_TYPE_1);
@@ -71,7 +71,7 @@ public class AssetTypeAutoSchedulesTest extends FieldIDTestCase {
 		assertEquals(getExpectedScheduleDate(14), searchResultPage.getScheduledDateForResult(1));
 	}
 	
-	@Test
+	//@Test
 	public void verify_auto_schdedule_override_created() throws Exception {
 		ManageAssetTypesPage assetTypesPage = startAsCompany(COMPANY).login().clickSetupLink().clickAssetTypes();
 		assetTypesPage.clickAssetType(TEST_ASSET_TYPE_1);

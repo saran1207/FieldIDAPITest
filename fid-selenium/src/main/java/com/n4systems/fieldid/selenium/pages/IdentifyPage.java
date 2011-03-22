@@ -297,7 +297,7 @@ public class IdentifyPage extends FieldIDPage {
 	}
 
 	public IdentifyPage clickMultiAdd() {
-		clickNavOption("Multi Add", "60000");
+		clickNavOption("Multi Add", false);
 		return new IdentifyPage(selenium);
 	}
 	
