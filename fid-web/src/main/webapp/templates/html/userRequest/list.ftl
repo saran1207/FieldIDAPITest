@@ -14,15 +14,16 @@ ${action.setPageType('user_registration', 'list')!}
 		</tr>
 		
 		<#list userRequests as userRequest >
-			<tr id="${userRequest.userAccount.userID!}">
+			<if
+			<tr id="${userRequest.userAccount.userID?html}">
 				<td>${userRequest.companyName}</td>
-				<td>${userRequest.userAccount.userID}</td>
+				<td>${userRequest.userAccount.userID?html}</td>
 				<td>${userRequest.userAccount.firstName!}</td>
 				<td>${userRequest.userAccount.lastName!}</td>
 				<td>${userRequest.comment!}</td>
 				<td>${action.formatDateTime(userRequest.created)}</td>
 				<td>
-					<a href="<@s.url value="userRequestView.action" uniqueID="${userRequest.id}" />" id="viewRequest_${userRequest.userAccount.userID!}" ><@s.text name="link.view" /></a>
+					<a href="<@s.url value="userRequestView.action" uniqueID="${userRequest.id}" />" id="viewRequest_${userRequest.userAccount.userID?html}" ><@s.text name="link.view" /></a>
 				</td>
 			</tr>
 		</#list>
