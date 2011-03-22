@@ -65,14 +65,14 @@ public class SafetyNetworkRegisterAssetForm extends FieldIDPage{
 	}
 	
 	public void setAssetStatus(String value) {
-		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+		if(!selenium.isVisible("//div[@id='extraDetails']")) {
 			openDetailedForm();
 		}
 		selenium.select("//select[@name='assetStatus']", value);
 	}
 	
 	public void setOwner(Owner owner) {
-		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+		if(!selenium.isVisible("//div[@id='extraDetails']")) {
 			openDetailedForm();
 		}
 		OrgPicker orgPicker = getOrgPicker();
@@ -82,28 +82,28 @@ public class SafetyNetworkRegisterAssetForm extends FieldIDPage{
 	}
 	
 	public void setPurchaseOrder(String value) {
-		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+		if(!selenium.isVisible("//div[@id='extraDetails']")) {
 			openDetailedForm();
 		}
 		selenium.type("//input[contains(@id, 'purchaseOrder')]", value);
 	}
 
 	public void setNonIntegrationOrderNumber(String value) {
-		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+		if(!selenium.isVisible("//div[@id='extraDetails']")) {
 			openDetailedForm();
 		}
 		selenium.type("//input[contains(@id, 'nonIntegrationOrderNumber')]", value);
 	}
 	
 	public void selectComments(String value) {
-		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+		if(!selenium.isVisible("//div[@id='extraDetails']")) {
 			openDetailedForm();
 		}
 		selenium.select("//select[@id='commentTemplateSelection']", value);
 	}
 	
 	public void enterComments(String value) {
-		if(!selenium.isElementPresent("//div[@id='extraDetails']")) {
+		if(!selenium.isVisible("//div[@id='extraDetails']")) {
 			openDetailedForm();
 		}
 		selenium.type("//textarea[@id='comments']", value);

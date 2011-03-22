@@ -10,6 +10,7 @@
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<script type="text/javascript">
 	    updateAssetTypeUrl = '<@s.url action="regAssetTypeChange" namespace="/ajax"/>';
+	    updateOwnerUrl = '<@s.url action="regOwnerChange" namespace="/ajax"/>';
 	    changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="/ajax"/>'; 
 	    autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 	    
