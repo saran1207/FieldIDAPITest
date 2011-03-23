@@ -6,9 +6,13 @@ import java.io.IOException;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.opensymphony.xwork2.Preparable;
+import org.apache.log4j.Logger;
 
 @SuppressWarnings("serial")
 abstract public class AbstractCrud extends AbstractAction implements Preparable {
+
+    private static final Logger logger = Logger.getLogger(AbstractCrud.class);
+
 	protected Long uniqueID;
 	private Integer currentPage;
 	
@@ -25,12 +29,19 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
 	}
 	
 	public void prepare() throws Exception {
-		if(getUniqueID() != null) {
-			loadMemberFields(getUniqueID());
-		} else {
-			initMemberFields();
-		}
-		postInit();
+        try {
+            if(getUniqueID() != null) {
+                loadMemberFields(getUniqueID());
+            } else {
+                initMemberFields();
+            }
+            postInit();
+        } catch (Exception e) {
+            // If we let an exception escape here without logging, nobody
+            // else (looking at you struts) will log it.
+            logger.error("Error in prepare", e);
+            throw e;
+        }
 	}
 	
 	/**
