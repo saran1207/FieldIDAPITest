@@ -1606,6 +1606,11 @@ input.description {
 	padding:5px 5px;
 }
 
+.groupEventTypeList li a{
+	font-size: 12px;
+	margin: 13px;
+}
+
 .assignToBox {
 	background-color:#EAEAEA;
 	padding: 10px 10px 10px 0

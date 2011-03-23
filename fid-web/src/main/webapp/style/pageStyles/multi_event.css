@@ -32,10 +32,9 @@
 }
 
 .multiEventInstructions {
-	border: 1px solid #B5BACC;
-	background-color:#E8EDFF;
 	margin:5px 0;
 	padding: 0px 5px;
+	font-size: 12px;
 }
 
 .multiEventLightBox {
@@ -43,6 +42,10 @@
 	width: 240px;
 	margin: 10px 0;
 }
+
+.stepContent{
+	margin-right: 15px;
+	}
 
 .stepContent .infoSet .fieldHolder input[type="checkbox"]{
 	margin-top:4px;
@@ -54,15 +57,10 @@
 
 .stepContent .infoSet .setFromAssetCheckbox{
 	margin-left: 179px;
-	width: 225px;
 }
 
 .stepContent .fieldHolder label.checkBoxLabel{
 	padding-top: 2px;
-}
-
-.infoSet .textCriteriaContainer .fieldHolder input[type="text"] {
-    width: 250px;
 }
 
 .infoSet .assignToMeLink{
@@ -78,6 +76,26 @@
 	right: 55px;
 }
 
+.eventForm .infoSet label.eventFormLabel {
+	width: 50%;
+	}
+
 .eventForm div.textCriteriaContainer{
 	width: 400px;
+}
+
+.eventForm div.textCriteriaContainer .fieldHolder{
+	padding-left: 0;
+}
+
+#steps{
+	width: 100%;
+}
+
+h3{
+	font-size: 12px;
+}
+
+.boldedAssetNumber{
+	font-weight: bold;
 }

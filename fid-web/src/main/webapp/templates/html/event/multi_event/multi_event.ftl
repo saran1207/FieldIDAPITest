@@ -55,7 +55,7 @@
 		
 		<div class="stepContent" id="step1">
 			<div class="multiEventInstructions">
-				<p><@s.text name="label.multi_event_instructions"/></p>	
+				<p><@s.text name="label.multi_event_instructions"><@s.param>${assets.size()}</@s.param></@s.text></p>	
 			</div>
 			<#include "_selectEventType.ftl" />
 		</div>
@@ -76,7 +76,7 @@
 		<h2>3. <@s.text name="label.confirm"/></h2>
 		<div class="stepContent"  id="step3">
 			
-			<p><@s.text name="label.you_are_about_to_perform_mass_event_on"><@s.param><span id="eventTypeToReplace"></span></@s.param><@s.param>${assets.size()}</@s.param></@s.text></p>
+			<p class="multiEventInstructions"><@s.text name="label.you_are_about_to_perform_mass_event_on"><@s.param><span id="eventTypeToReplace">&nbsp;</span></@s.param><@s.param><span class="boldedAssetNumber">${assets.size()}</span></@s.param></@s.text></p>
 			<div class="stepAction">
 				<input type="button" id="saveEvents" value="<@s.text name="label.save_all"/>" />
 				<@s.text name="label.or"/> <a href="#" onclick="backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
@@ -134,8 +134,4 @@
 		</div>
 		
 	</div>
-</div>
-
-<div class="multiEventLightBox">
-		<a class="lightview" id="showVideo" title="<@s.text name="label.instructional_video"/> ::  :: width: 900, height: 570"rel="iframe" href='/videos/instructions/multi-event-video/index.html'><img src="<@s.url value="/images/multi-event-video-small.jpg"/>" alt="<@s.text name="label.multi_event_video"/>"/></a>
 </div>
