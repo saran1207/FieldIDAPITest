@@ -157,7 +157,7 @@ public class ImportManagerImpl implements ImportManager {
 		} catch(FileImportException e) {
 			// set the line number and rethrow
 			e.setLineNumber(lineNumber);
-			logger.error(e);
+			logger.error("Error importing observations", e);
 			
 			// also need to roll back the transaction
 			
@@ -166,7 +166,7 @@ public class ImportManagerImpl implements ImportManager {
 		} catch(Exception e) {
 			
 			// wrap anything else and throw it
-			logger.error(e);
+			logger.error("Error importing observations", e);
 			// also need to roll back the transaction
 			throw new FileImportException("Failed observation import", e, lineNumber);
 			

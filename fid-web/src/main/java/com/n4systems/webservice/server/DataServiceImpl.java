@@ -517,7 +517,7 @@ public class DataServiceImpl implements DataService {
 			saver.setAsset(asset).update();
 
 		} catch (Exception e) {
-			logger.error("Exception occured while doing a limited asset update");
+			logger.error("Exception occured while doing a limited asset update", e);
 			throw new ServiceException();
 		} finally {
 			uc.setCurrentUser(null);
@@ -551,7 +551,7 @@ public class DataServiceImpl implements DataService {
 			saver.setAsset(asset).update();
 
 		} catch (Exception e) {
-			logger.error("Exception occured while doing asset update by customer");
+			logger.error("Exception occured while doing asset update by customer", e);
 			throw new ServiceException();
 		} finally {
 			uc.setCurrentUser(null);
@@ -572,7 +572,7 @@ public class DataServiceImpl implements DataService {
 					.createNewInspectionSchedule(eventSchedule, request.getScheduleService());
 
 		} catch (Exception e) {
-			logger.error("Exception occured while saving inspection schedule");
+			logger.error("Exception occured while saving inspection schedule", e);
 			throw new ServiceException();
 		}
 
@@ -587,7 +587,7 @@ public class DataServiceImpl implements DataService {
 					new EventScheduleSaver()).updateInspectionSchedule(request.getScheduleService());
 
 		} catch (Exception e) {
-			logger.error("Exception occured while updating inspection schedule");
+			logger.error("Exception occured while updating inspection schedule", e);
 			throw new ServiceException();
 		}
 
@@ -604,7 +604,7 @@ public class DataServiceImpl implements DataService {
 					new EventScheduleSaver()).removeInspectionSchedule(request.getScheduleService());
 
 		} catch (Exception e) {
-			logger.error("Exception occured while removing inspection schedule");
+			logger.error("Exception occured while removing inspection schedule", e);
 			throw new ServiceException();
 		}
 
