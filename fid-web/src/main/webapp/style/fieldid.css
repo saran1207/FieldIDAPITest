@@ -2005,3 +2005,40 @@ div.unitOfMeasureName {
 	margin-left: 129px;
 	width: 75px;
 }
+
+#errorContainer {
+	background-color: #F5F5F5;	
+	border-style: solid;
+	border-width: 1px;
+	border-color: #E2E2E2;
+	width: 460px;
+	margin-left:auto;
+	margin-right:auto;
+	padding: 20px;
+}
+
+#errorList {
+	background: no-repeat url(../images/caution.png) 10px center;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #FFD700;
+	padding: 25px;	
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#errorList .errorMessage{
+	color: black;
+	margin-left: 50px;
+	font-size: 14px;
+}
+#errorContainer h2 {
+	font-size: 20px;
+	padding : 10px 0;
+}
+
+#errorContainer p {
+	font-size: 14px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
