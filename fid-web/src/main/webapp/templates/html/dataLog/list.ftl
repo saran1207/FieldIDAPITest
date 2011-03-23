@@ -1,3 +1,4 @@
+${action.setPageType('setup','dataLog')!}
 <#include "_form.ftl"/>
 <#if page?exists >
 	<#if page.hasResults() && page.validPage() >
