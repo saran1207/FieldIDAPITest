@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.selenium.testcase.userregistration;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.WebEntity;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.RegistrationRequestPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.ExtendedFeature;
+
 import org.junit.Test;
 
 import java.util.Date;
@@ -10,32 +14,22 @@ import static org.junit.Assert.assertTrue;
 
 public class UserRegistrationTest extends FieldIDTestCase {
 
+	private static String USER_ID= "u_" + new Date().getTime();
+	
+    @Override
+    public void setupScenario(Scenario scenario) {
+    	scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.ReadOnlyUser));
+    }
+	
 	@Test
-	public void should_show_all_values_entered_on_the_registration_form_when_viewing_request_in_the_system() throws Exception {
-		String userId = "u_" + new Date().getTime();
-		registerUser(userId);
-		
-		goToUserRequests();
-		openRequestFromUser(userId);
-		
-		verifyRegistrationInformationIsShown(userId);
-	}
+	public void should_show_all_values_entered_on_the_registration_form_when_viewing_request_in_the_system(){
 
-	private void openRequestFromUser(String userId) {
-		selenium.click("css=#viewRequest_" + userId);
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-	}
-
-	private void goToUserRequests() {
-		start().login();
+    	RegistrationRequestPage requestPage = startAsCompany("test1").clickRequestAnAccount(); 
+    	LoginPage loginPage = requestPage.registerUser(USER_ID);
 		
-		selenium.openAndWaitForPageLoad("/fieldid/setup.action");
-        selenium.clickAndWaitForPageLoad("//ul[@class='options ']//a[contains(., 'Owners, Users & Locations')]");
-		selenium.clickAndWaitForPageLoad("link=User Registrations");
-	}
-
-	private void verifyRegistrationInformationIsShown(String userId) {
-		assertTrue(selenium.isTextPresent(userId));
+    	loginPage.login().clickSetupLink().clickRegistrationRequests().openRequestFromUser(USER_ID);
+		
+		assertTrue(selenium.isTextPresent(USER_ID));
 		assertTrue(selenium.isTextPresent("dev@fieldid.com"));
 		assertTrue(selenium.isTextPresent("Test"));
 		assertTrue(selenium.isTextPresent("User"));
@@ -47,25 +41,5 @@ public class UserRegistrationTest extends FieldIDTestCase {
 		assertTrue(selenium.isTextPresent("This is a comment"));
 	}
 
-	private void registerUser(String userId) throws InterruptedException {
-		selenium.open("/fieldid/registerUser.action");
-		selenium.type("companyName", "company_name");
-		selenium.type("registerUserCreate_firstName", "Our test user");
-		selenium.type("registerUserCreate_firstName", "Test");
-		selenium.type("registerUserCreate_lastName", "User");
-		selenium.type("registerUserCreate_emailAddress", "dev@fieldid.com");
-		selenium.type("registerUserCreate_city", "Toronto");
-		selenium.select("countryId", "value=CA");
-		selenium.waitForAjax(WebEntity.DEFAULT_TIMEOUT);
-		selenium.select("tzlist", "label=Ontario - Toronto");
-		selenium.type("registerUserCreate_position", "some position");
-		selenium.type("registerUserCreate_phoneNumber", "647-202-2789");
-		selenium.type("registerUserCreate_comment", "This is a comment");
-		
-		selenium.type("registerUserCreate_userId", userId);
-		selenium.type("registerUserCreate_password", "makemore$");
-		selenium.type("registerUserCreate_passwordConfirmation", "makemore$");
-		selenium.click("registerUserCreate_save");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-	}
+
 }

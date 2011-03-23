@@ -135,6 +135,13 @@ public class SetupPage extends FieldIDPage {
         selenium.click("//a[.='Manage Asset Code Mappings']");
         return new ManageAssetCodeMappingsPage(selenium);
     }
+    
+	
+	public RegistrationRequestPage clickRegistrationRequests(){
+		clickOwnersUsersAndLocationsTab();
+		selenium.click("link=User Registrations");
+		return new RegistrationRequestPage(selenium);
+	}
 
     protected void clickOwnersUsersAndLocationsTab() {
         clickNavOption("Owners, Users & Locations");

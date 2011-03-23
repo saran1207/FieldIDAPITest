@@ -48,6 +48,11 @@ public class LoginPage extends WebPage {
 		return selenium.isElementPresent("xpath=//DIV[@id='requestAccountButton']/A");
 	}
 	
+	public RegistrationRequestPage clickRequestAnAccount(){
+		selenium.click("//div[@id='requestAccountButton']/a");
+		return new RegistrationRequestPage(selenium);
+	}
+	
 	public SelectPackagePage clickPlansAndPricingLink() {
 		selenium.click("//div[@id='plansPricingButton']/a");
 		return new SelectPackagePage(selenium);
