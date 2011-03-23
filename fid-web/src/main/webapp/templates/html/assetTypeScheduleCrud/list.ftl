@@ -52,7 +52,7 @@ ${action.setPageType('asset_type', 'schedule_frequencies')!}
 								<#if overrideSchedules[eventType.name]?exists >
 									<#list overrideSchedules[eventType.name] as schedule >
 										<div id="eventFrequencyOverride_${eventType.id}_${schedule.owner.id}" class="override customerOverride">
-											<#include "_show.ftl"/>
+											<#include "_showOverrides.ftl"/>
 										</div>
 									</#list>
 								</#if>

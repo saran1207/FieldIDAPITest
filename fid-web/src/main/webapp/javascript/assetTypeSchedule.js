@@ -15,10 +15,10 @@ function cancelSchedule( eventTypeId, assetTypeId, uniqueId ) {
 	getResponse(cancelScheduleUrl, "get", makeEventFrequencyParams(eventTypeId, assetTypeId, uniqueId));
 }
 
-function removeSchedule( eventTypeId, assetTypeId, uniqueId, tryConfirm ) {
+function removeSchedule( eventTypeId, assetTypeId, uniqueId, showConfirmWarning ) {
 	var doRemove = true;
 	
-	if( tryConfirm && ( $('eventFrequencyOverrides_' + eventTypeId + '_container' ).getElementsByClassName( 'customerOverride' ).length != 0 )) {
+	if( showConfirmWarning) {
 		doRemove = confirm( removeWarning );
 	}
 	 
