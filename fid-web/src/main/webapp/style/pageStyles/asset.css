@@ -138,10 +138,14 @@
 	color: #555;
 }
 
-.leftViewSection , .columnRight{
+.leftViewSection{
 	padding-left: 15px;
 }
 
+.columnRight p, .columnRight h3{
+	padding-left: 15px;
+}
+	
 .leftViewSection p {
 	overflow: hidden;
 }
