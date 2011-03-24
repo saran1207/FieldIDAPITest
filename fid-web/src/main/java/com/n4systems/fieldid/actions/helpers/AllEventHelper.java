@@ -37,6 +37,7 @@ public class AllEventHelper {
 		if (events == null) {
 			EventsByNetworkIdLoader loader = new EventsByNetworkIdLoader(filter);
 			events = loader.setNetworkId(asset.getNetworkId()).load();
+			Collections.sort(events);
 			Collections.reverse(events);
 		}
 		return events;
