@@ -158,25 +158,6 @@
 			<result name="success" type="freemarker">/templates/ajax/buttonGroupCrud/addButton.ftl</result>
 		</action>
 
-		<action name="sectionAdd" method="add"
-			class="com.n4systems.fieldid.actions.event.EventFormSection">
-			<result name="success" type="freemarker">/templates/ajax/eventForm/addSection.ftl</result>
-		</action>
-
-		<action name="criteriaAdd" method="add"
-			class="com.n4systems.fieldid.actions.event.EventFormSection">
-			<result name="success" type="freemarker">/templates/ajax/eventForm/addCriteria.ftl</result>
-		</action>
-
-		<action name="observationAdd" method="add"
-			class="com.n4systems.fieldid.actions.event.EventFormSection">
-			<result name="success" type="freemarker">/templates/ajax/observationsCrud/addObservation.ftl</result>
-		</action>
-
-		
-
-		
-
 		<action name="eventBookOpen" method="open"
 			class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/ajax/eventBook/open.ftl</result>
