@@ -138,17 +138,16 @@
 	color: #555;
 }
 
+.leftViewSection , .columnRight{
+	padding-left: 15px;
+}
+
 .leftViewSection p {
 	overflow: hidden;
 }
 
 .leftViewSection p, .columnRight p{
 	line-height: 1.6em;
-	padding-left: 15px;
-}
-
-.leftViewSection h3, .columnRight h3{
-	padding-left: 15px;
 }
 
 #assetComponents{
@@ -259,4 +258,12 @@
 
 #cancelAction {
 	padding-left: 5px;
+}
+
+#lastEvent, #nextEvent {
+	line-height: 2.2em;
+}
+
+#nextEvent .failColor p, #nextEvent .passColor p{
+	padding: 5px 10px;
 }

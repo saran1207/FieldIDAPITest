@@ -33,44 +33,62 @@ ${action.setPageType('asset', 'show')!}
 		<#if eventCount gt 0 >
 			<#assign event=lastEvent/>
 			<#assign urlLabel="label.view_this_event" />
-			<p>
+			
+			<p id="lastEvent">
+				<span 
+				<#if lastEvent.status.displayName== "Pass" >
+					class="passColor"
+				<#elseif lastEvent.status.displayName == "Fail">
+					class="failColor"
+				<#else>
+					class="naColor"
+				</#if>>
+					<p class="inline"><@s.text name="${(lastEvent.status.label?html)!}"/></p> 
+				</span>
+	
 				<@s.text name="label.lasteventdate_msg">
 					<@s.param>${lastEvent.type.name!}</@s.param>
 					<@s.param>${action.formatDateTime(lastEvent.date)}</@s.param>
-					<@s.param><@s.text name="${(lastEvent.status.label?html)!}"/></@s.param>
-					
 				</@s.text>
-			</p>		
+			</p>
 			<p>
 				<#include "../eventCrud/_viewEventLink.ftl"/> |
 				
-				<a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageEvents"><@s.text name="label.manage_all_events"/></a> 
+				<a href="<@s.url action="quickEvent" assetId="${uniqueID}" />"><@s.text name="label.newevent"/></a> 
 			
 			</p>		
 		<#else>	
 			<p><@s.text name="label.nolastevents"/></p>
-			<p><a href="<@s.url action="eventGroups" uniqueID="${uniqueID}" />" id="manageEvents"><@s.text name="label.manage_all_events"/></a></p>	
+			<p><a href="<@s.url action="quickEvent" assetId="${uniqueID}" />"><@s.text name="label.newevent"/></a></p>	
 		</#if>
 	</div>
 
 	<div class="leftViewSection topBorder">
 		<h3 class="subheading"><@s.text name="label.nextevent"/></h3>
 		<#if nextEvent?exists >
-			<p>
+			<p id="nextEvent">
 				<#if nextEvent.pastDue>
+					<span class="failColor">
+						<p class="inline"><@s.text name="label.overdue"/></p> 
+					</span>
 					<@s.text name="label.nexteventdate_pastdue">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
 						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
 					</@s.text>
 				<#elseif nextEvent.daysToDue == 0>
+					<span class="passColor">
+						<p class="inline"><@s.text name="label.today"/></p> 
+					</span>
 					<@s.text name="label.nexteventdate_due_today">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
 						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
 					</@s.text>					
 				<#else>
+					<span class="passColor">
+						<p class="inline"><@s.text name="label.in_x_days"><@s.param>${nextEvent.daysToDue!}</@s.param></@s.text></p> 
+					</span>
 					<@s.text name="label.nexteventdate_msg">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
-						<@s.param>${nextEvent.daysToDue!}</@s.param>
 						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
 					</@s.text>
 				</#if>
