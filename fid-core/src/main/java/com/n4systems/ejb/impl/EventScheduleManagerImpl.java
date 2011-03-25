@@ -116,13 +116,6 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		return persistenceManager.findAll(query);
 	}
 	
-	public EventSchedule getEventScheduleById(Long scheduleId){
-		QueryBuilder<EventSchedule> query = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());
-		query.addSimpleWhere("id", scheduleId);
-		
-		return persistenceManager.find(query);
-	}
-	
 	public boolean schedulePastDue(Long scheduleId) {
 		// here we'll select the next date off the schedule and see if it's after today
 		QueryBuilder<Date> builder = new QueryBuilder<Date>(EventSchedule.class, new OpenSecurityFilter());

@@ -178,20 +178,5 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	@Override
-	public EventSchedule getEventScheduleById(Long scheduleId) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).getEventScheduleById(scheduleId);
-
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
 
 }

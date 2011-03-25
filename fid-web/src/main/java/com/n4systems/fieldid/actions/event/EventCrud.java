@@ -418,12 +418,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 				updateAttachmentList(event, modifiedBy);
 				event = eventManager.updateEvent(event, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
 			}
-			
-			if(modifiableEvent.isEventScheduleBeingCompleted()){
-				EventSchedule schedule = modifiableEvent.getEventSchedule();
-				setEventSchedule(modifiableEvent.getEventSchedule());
-			}
-			
+				
 			completeSchedule();
 			
 		} catch (ProcessingProofTestException e) {
@@ -1086,8 +1081,5 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
     public void setStatusSetFromAsset(boolean isStatusSetFromAsset) {
     	modifiableEvent.setStatusSetFromAsset(isStatusSetFromAsset);
     }
-    
-    public void setEventSchedule(EventSchedule eventSchedule){
-    	this.eventSchedule=eventSchedule;
-    }
+
 }

@@ -1,11 +1,18 @@
 var assets = new Array();
+var schedules = new Array();
+
 function sendRequests() {
-	var eventCreator = new EventCreator(assets);
+	var eventCreator = new EventCreator(assets, schedules);
 	eventCreator.start();
+	
 }
 
-function sendRequest(asset, eventCreator) {
+function sendRequest(asset, schedule, eventCreator) {
 	$('assetId').value= asset.id;
+	if (schedule==undefined){
+		schedule=0;
+	}
+	$('scheduleId').value=schedule
 	$('eventCreate').request({
 		onSuccess: contentCallback,
 		onComplete: function(){	
@@ -14,12 +21,13 @@ function sendRequest(asset, eventCreator) {
 	});
 }
 
-function EventCreator(assets) {
+function EventCreator(assets, schedules) {
 	this.totalAssets = assets.length;
 	this.assets = assets;
+	this.schedules = schedules;
 	this.completed = 0;
 	this.start = function () {
-		sendRequest(assets[this.completed], this);
+		sendRequest(assets[this.completed],this.schedules[this.completed] , this);
 	};
 	
 	this.completedCreation = function() {
@@ -35,7 +43,7 @@ function EventCreator(assets) {
 		if (this.completed == this.totalAssets) {
 			toStep(5);
 		} else {
-			sendRequest(assets[this.completed], this);
+			sendRequest(assets[this.completed], schedules[this.completed],this);
 		}
 	};
 	
@@ -47,7 +55,6 @@ function EventCreator(assets) {
 	};
 }
 
-
 onDocumentLoad(function() {
 	$('saveEvents').observe('click', function(event) {
 		event.stop();
@@ -57,3 +64,8 @@ onDocumentLoad(function() {
 		sendRequests();
 	});
 });
+
+function pushScheduleIdIntoHiddenVariable(index, scheduleSelectBox){
+	schedules.push(scheduleSelectBox.value);
+}
+

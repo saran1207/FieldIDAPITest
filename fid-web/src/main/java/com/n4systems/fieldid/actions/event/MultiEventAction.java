@@ -74,8 +74,6 @@ public class MultiEventAction extends AbstractCrud {
     
     private EventScheduleManager eventScheduleManager;
     
-    private Set<Long> eventScheduleIdsToComplete = new HashSet<Long>();
-    
 	public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
@@ -136,7 +134,7 @@ public class MultiEventAction extends AbstractCrud {
 			event.setAdvancedLocation(commonAssetValues.location);
 		}
 		modifiableEvent.updateValuesToMatch(event);
-		modifiableEvent.setEventSchedule(getMultiEventScheduleListHelper().getEventScheduleById(eventScheduleIdsToComplete.iterator().next()));
+		//modifiableEvent.setEventSchedule(getMultiEventScheduleListHelper().getEventScheduleById(eventScheduleIdsToComplete.iterator().next()));
 		return SUCCESS;
 	}
 	
@@ -308,9 +306,6 @@ public class MultiEventAction extends AbstractCrud {
         return false;
     }
      
-    public void setEventScheduleIdToComplete(Long id){
-    	eventScheduleIdsToComplete.add(id);
-    }
     
     public MultiEventScheduleListHelper getMultiEventScheduleListHelper() {
     	return new MultiEventScheduleListHelper(eventScheduleManager);
@@ -319,4 +314,5 @@ public class MultiEventAction extends AbstractCrud {
 	public List<Status> getResults() {
 		return Arrays.asList(Status.values());
 	}
+	
 }

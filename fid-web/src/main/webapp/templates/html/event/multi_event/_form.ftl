@@ -1,15 +1,8 @@
-<script type="text/javascript">
-	
-</script>
-
 <@s.form action="eventCreate" namespace="/multiEvent/ajax" id="eventCreate" cssClass="fullForm fluidSets" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="type"/>
-	<@s.hidden name="scheduleId" value="0"/>
-
+	<@s.hidden name="scheduleId" id="scheduleId" value="0"/>
 	<@s.hidden name="assetId" id="assetId"/>
-	
-	
 	
 	<h2><@s.text name="label.owner"/></h2>
 	
