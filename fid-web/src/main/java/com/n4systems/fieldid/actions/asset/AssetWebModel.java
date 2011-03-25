@@ -22,7 +22,7 @@ public class AssetWebModel {
 	
 	public Asset fillInAsset(Asset asset) {
 		if(!asset.getAdvancedLocation().getFreeformLocation().equals(location.getFreeformLocation())
-				&& location.getPredefinedLocation().isArchived()) {
+				&& (location.getPredefinedLocation() == null || location.getPredefinedLocation().isArchived())) {
 			location.setPredefinedLocationId(null);
 		}
 
