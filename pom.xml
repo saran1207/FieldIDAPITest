@@ -10,6 +10,7 @@
 		<module>fid-test-utils</module>
 		<module>fid-cert-data</module>
 		<module>fid-web</module>
+		<module>fid-exporter</module>
 	</modules>
 	<repositories>
         <repository>
