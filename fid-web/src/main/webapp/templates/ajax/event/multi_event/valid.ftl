@@ -1,1 +1,1 @@
-toStep(3); $("eventTypeToReplace").update("${eventType.name?html?js_string}");  
+toStep(4); $("eventTypeToReplace").update("${eventType.name?html?js_string}");  

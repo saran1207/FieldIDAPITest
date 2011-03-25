@@ -33,6 +33,11 @@
 			</result>
 			
 		</global-results>
+		
+		<action name="retrieveEventSchedules" method="performSchedule" class="com.n4systems.fieldid.actions.event.MultiEventAction">
+			<result name="success" type="freemarker">/templates/ajax/event/multi_event/retrieveEventSchedules.ftl</result>
+		</action>
+		
 		<action name="retrieveEventDetails" method="performEvent" class="com.n4systems.fieldid.actions.event.MultiEventAction">
 			<result name="success" type="freemarker">/templates/ajax/event/multi_event/retrieveEventDetails.ftl</result>
 		</action>

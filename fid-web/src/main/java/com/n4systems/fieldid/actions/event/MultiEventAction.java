@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Status;
@@ -22,6 +24,7 @@ import com.n4systems.model.eventtype.CommonAssetTypeDatabaseLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
@@ -69,10 +72,15 @@ public class MultiEventAction extends AbstractCrud {
     private String searchContainerKey;
     private String searchId;
     
-	public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager) {
+    private EventScheduleManager eventScheduleManager;
+    
+    private Set<Long> eventScheduleIdsToComplete = new HashSet<Long>();
+    
+	public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 		this.eventFormHelper = new EventFormHelper();
+		this.eventScheduleManager=eventScheduleManager;
 	}
 	
 	@Override
@@ -123,11 +131,17 @@ public class MultiEventAction extends AbstractCrud {
 					
 		event.setOwner(commonAssetValues.owner);	
 		
+		
 		if (commonAssetValues.hasCommonLocation()) {
 			event.setAdvancedLocation(commonAssetValues.location);
 		}
 		modifiableEvent.updateValuesToMatch(event);
-		
+		modifiableEvent.setEventSchedule(getMultiEventScheduleListHelper().getEventScheduleById(eventScheduleIdsToComplete.iterator().next()));
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doPerformSchedule(){
 		return SUCCESS;
 	}
 	
@@ -293,6 +307,14 @@ public class MultiEventAction extends AbstractCrud {
 
         return false;
     }
+     
+    public void setEventScheduleIdToComplete(Long id){
+    	eventScheduleIdsToComplete.add(id);
+    }
+    
+    public MultiEventScheduleListHelper getMultiEventScheduleListHelper() {
+    	return new MultiEventScheduleListHelper(eventScheduleManager);
+	}
     
 	public List<Status> getResults() {
 		return Arrays.asList(Status.values());

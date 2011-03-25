@@ -33,7 +33,7 @@ function EventCreator(assets) {
 	
 	this.sendNextEvent = function() {
 		if (this.completed == this.totalAssets) {
-			toStep(4);
+			toStep(5);
 		} else {
 			sendRequest(assets[this.completed], this);
 		}
@@ -42,7 +42,7 @@ function EventCreator(assets) {
 	this.updateProgress = function() {
 		var percentComplete = (this.completed/this.totalAssets) * 100;
 		
-		$$('#step3 .percentBarUsed').first().setStyle({width: percentComplete + "%"});
+		$$('#step4 .percentBarUsed').first().setStyle({width: percentComplete + "%"});
 		$$('#completedEvents').first().update(this.completed);
 	};
 }
@@ -52,8 +52,8 @@ onDocumentLoad(function() {
 	$('saveEvents').observe('click', function(event) {
 		event.stop();
 		$('saveEvents').disable();
-		$$("#step3 .stepAction").invoke("hide");
-		$$("#step3 .progress").invoke("show");
+		$$("#step4 .stepAction").invoke("hide");
+		$$("#step4 .progress").invoke("show");
 		sendRequests();
 	});
 });

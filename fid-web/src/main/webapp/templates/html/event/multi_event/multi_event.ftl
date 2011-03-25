@@ -14,11 +14,9 @@
 </tr>
 </#assign>
 
-
 <head>
 	<@n4.includeStyle href="steps"/>
 	<@n4.includeScript src="steps"/>
-	
 	<@n4.includeScript src="event" />
 	<@n4.includeScript src="multi_inspect" />
 	<@n4.includeStyle href="multi_event" type="page" />
@@ -26,8 +24,8 @@
 
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
-	
 	<#include "/templates/html/common/_columnView.ftl"/>
+	
 	<@n4.includeScript src="commentTemplates"/>
 	<@n4.includeScript src="combobox"/>
 		
@@ -48,24 +46,39 @@
 </head>
 
 <div id="steps">
-
 	<div class="step">
 		<h2>1. <@s.text name="label.select_event"/></h2>
-	
-		
 		<div class="stepContent" id="step1">
 			<div class="multiEventInstructions">
 				<p><@s.text name="label.multi_event_instructions"><@s.param>${assets.size()}</@s.param></@s.text></p>	
 			</div>
 			<#include "_selectEventType.ftl" />
-		</div>
-	</div>
-	<div class="step">
-		<h2>2. <@s.text name="label.perform_the_event"/></h2>
-		<div class="stepContent"  id="step2">
 			
 		</div>
+	</div>
+	
+	<div class="step">
+		<h2>2. <@s.text name="label.scheduled_events"/></h2>
+		
+		<div class="stepContent" id="step2">
+		
+		</div>
+		
 		<div class="stepContent loader hide" id="step2Loading" >
+			${loaderDiv}
+			<p>
+				<@s.text name="label.retrieving_event_schedules" />
+			</p>
+		</div>
+		
+	</div>
+	
+	<div class="step">
+		<h2>3. <@s.text name="label.perform_the_event"/></h2>
+		<div class="stepContent"  id="step3">
+			
+		</div>
+		<div class="stepContent loader hide" id="step3Loading" >
 			${loaderDiv}
 			<p>
 				<@s.text name="label.retrieving_event_info" />
@@ -73,13 +86,13 @@
 		</div>
 	</div>
 	<div class="step">
-		<h2>3. <@s.text name="label.confirm"/></h2>
-		<div class="stepContent"  id="step3">
+		<h2>4. <@s.text name="label.confirm"/></h2>
+		<div class="stepContent"  id="step4">
 			
 			<p class="multiEventInstructions"><@s.text name="label.you_are_about_to_perform_mass_event_on"><@s.param><span id="eventTypeToReplace">&nbsp;</span></@s.param><@s.param><span class="boldedAssetNumber">${assets.size()}</span></@s.param></@s.text></p>
 			<div class="stepAction">
 				<input type="button" id="saveEvents" value="<@s.text name="label.save_all"/>" />
-				<@s.text name="label.or"/> <a href="#" onclick="backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
+				<@s.text name="label.or"/> <a href="#" onclick="backToStep(3)"><@s.text name="label.back_to_step"/> 3</a>
 			</div>
 			
 			<div style="overflow:hidden text-align:center" class="progress hide stepAction">
@@ -108,8 +121,8 @@
 		</div>	
 	</div>
 	<div class="step">
-		<h2>4. <@s.text name="label.complete"/></h2>
-		<div class="stepContent"  id="step4">
+		<h2>5. <@s.text name="label.complete"/></h2>
+		<div class="stepContent"  id="step5">
 			<table id="listComplete" class="list">
 				<tr class="header">
 					<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>

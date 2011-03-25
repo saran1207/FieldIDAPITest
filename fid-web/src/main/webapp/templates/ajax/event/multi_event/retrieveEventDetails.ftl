@@ -1,16 +1,18 @@
 <#assign html>
 	<#include "/templates/html/event/multi_event/_form.ftl" />
 	<div class="stepAction">
-		<button id="continueButton"><@s.text name="label.continue"/></button>
-		<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(1)"><@s.text name="label.back_to_step"/> 1</a>
+		<button id="continueButtonStep3"><@s.text name="label.continue"/></button>
+		<@s.text name="label.or"/> <a href="javascript:void(0);" onclick="backToStep(2)"><@s.text name="label.back_to_step"/> 2</a>
 	</div>	
 </#assign>
 
 
-$('step2Loading').hide();
-$('step2').update('${html?js_string}');
-$('step2').show();
-$('continueButton').observe("click", function(){	
+$('step3Loading').hide();
+$('step3').update('${html?js_string}');
+$('step3').show();
+
+$('continueButtonStep3').observe("click", function(){	
+	
 	if (!$('ownerId').disabled && !$('ownerId').value){
 		alert("Please select an owner");
 	}else{	
@@ -21,5 +23,5 @@ $('continueButton').observe("click", function(){
 	}
 });
 						 
-attachOrgEvents("#step2");
+attachOrgEvents("#step3");
 

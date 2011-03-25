@@ -8,6 +8,7 @@ import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
 import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -28,7 +29,8 @@ public class EventWebModel implements UserDateFormatValidator {
 	private boolean locationSetFromAsset = false;
 	private boolean ownerSetFromAsset = false;
 	private boolean assetStatusSetFromAsset = false;
-	
+
+	private EventSchedule eventSchedule;
 	
 	public EventWebModel(OwnerPicker ownerPicker, SessionUserDateConverter dateConverter, LoaderFactoryProvider loaderFactoryProvider) {
 		this.ownerPicker = ownerPicker;
@@ -114,5 +116,17 @@ public class EventWebModel implements UserDateFormatValidator {
 
 	public void setStatusSetFromAsset(boolean isStatusSetFromAsset) {
 		this.assetStatusSetFromAsset  = isStatusSetFromAsset;
+	}
+
+	public boolean isEventScheduleBeingCompleted(){
+		return eventSchedule!=null;
+	}
+	
+	public EventSchedule getEventSchedule() {
+		return eventSchedule;
+	}
+
+	public void setEventSchedule(EventSchedule eventSchedule) {
+		this.eventSchedule = eventSchedule;
 	}
 }

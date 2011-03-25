@@ -150,7 +150,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public EventSchedule update(EventSchedule schedule) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).update(schedule);
 
@@ -166,16 +166,32 @@ Transaction transaction = transactionManager.startTransaction();
 	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
-				try {
-					return createManager(transaction.getEntityManager()).getAutoEventSchedules(asset);
+		try {
+			return createManager(transaction.getEntityManager()).getAutoEventSchedules(asset);
 
-				} catch (RuntimeException e) {
-					transactionManager.rollbackTransaction(transaction);
+		} catch (RuntimeException e) {
+			transactionManager.rollbackTransaction(transaction);
 
-					throw e;
-				} finally {
-					transactionManager.finishTransaction(transaction);
-				}
+			throw e;
+		} finally {
+			transactionManager.finishTransaction(transaction);
+		}
+	}
+
+	@Override
+	public EventSchedule getEventScheduleById(Long scheduleId) {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+		Transaction transaction = transactionManager.startTransaction();
+		try {
+			return createManager(transaction.getEntityManager()).getEventScheduleById(scheduleId);
+
+		} catch (RuntimeException e) {
+			transactionManager.rollbackTransaction(transaction);
+
+			throw e;
+		} finally {
+			transactionManager.finishTransaction(transaction);
+		}
 	}
 
 }

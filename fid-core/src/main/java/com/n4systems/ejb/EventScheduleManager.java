@@ -18,7 +18,7 @@ public interface EventScheduleManager {
 	public void removeAllSchedulesFor(Asset asset);
 	
 	
-	
+	public EventSchedule getEventScheduleById(Long scheduleId);
 	public List<EventSchedule> getAvailableSchedulesFor(Asset asset);
 	
 	public List<EventSchedule> getAutoEventSchedules(Asset asset);
