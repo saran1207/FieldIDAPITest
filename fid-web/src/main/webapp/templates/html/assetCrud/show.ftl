@@ -34,23 +34,16 @@ ${action.setPageType('asset', 'show')!}
 			<#assign event=lastEvent/>
 			<#assign urlLabel="label.view_this_event" />
 			
-			<p id="lastEvent">
-				<span 
-				<#if lastEvent.status.displayName== "Pass" >
-					class="passColor"
-				<#elseif lastEvent.status.displayName == "Fail">
-					class="failColor"
-				<#else>
-					class="naColor"
-				</#if>>
+			<div id="lastEvent">
+				<div <#if lastEvent.status.displayName== "Pass" > class="passColor inline" <#elseif lastEvent.status.displayName == "Fail"> class="failColor inline" <#else> class="naColor inline" </#if>>
 					<p class="inline"><@s.text name="${(lastEvent.status.label?html)!}"/></p> 
-				</span>
+				</div>
 	
 				<@s.text name="label.lasteventdate_msg">
 					<@s.param>${lastEvent.type.name!}</@s.param>
 					<@s.param>${action.formatDateTime(lastEvent.date)}</@s.param>
 				</@s.text>
-			</p>
+			</div>
 			<p>
 				<#include "../eventCrud/_viewEventLink.ftl"/> |
 				
@@ -66,33 +59,33 @@ ${action.setPageType('asset', 'show')!}
 	<div class="leftViewSection topBorder">
 		<h3 class="subheading"><@s.text name="label.nextevent"/></h3>
 		<#if nextEvent?exists >
-			<p id="nextEvent">
+			<div id="nextEvent">
 				<#if nextEvent.pastDue>
-					<span class="failColor">
+					<div class="failColor inline">
 						<p class="inline"><@s.text name="label.overdue"/></p> 
-					</span>
+					</div>
 					<@s.text name="label.nexteventdate_pastdue">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
 						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
 					</@s.text>
 				<#elseif nextEvent.daysToDue == 0>
-					<span class="passColor">
+					<div class="passColor inline">
 						<p class="inline"><@s.text name="label.today"/></p> 
-					</span>
+					</div>
 					<@s.text name="label.nexteventdate_due_today">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
 						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
 					</@s.text>					
 				<#else>
-					<span class="passColor">
+					<div class="passColor inline">
 						<p class="inline"><@s.text name="label.in_x_days"><@s.param>${nextEvent.daysToDue!}</@s.param></@s.text></p> 
-					</span>
+					</div>
 					<@s.text name="label.nexteventdate_msg">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
 						<@s.param>${action.formatDate(nextEvent.nextDate, false)}</@s.param>
 					</@s.text>
 				</#if>
-			</p>				
+			</div>				
 		<#else>	
 			<p>
 				<@s.text name="label.nonextevents"/>

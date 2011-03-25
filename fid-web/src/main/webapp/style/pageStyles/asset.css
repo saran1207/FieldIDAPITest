@@ -142,6 +142,9 @@
 	padding-left: 15px;
 }
 
+.leftViewSection h3{
+	font-size: 12px; 
+}
 .columnRight p, .columnRight h3{
 	padding-left: 15px;
 }
