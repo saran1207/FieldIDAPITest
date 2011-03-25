@@ -3,7 +3,7 @@
 	<@s.hidden name="type"/>
 	<@s.hidden name="scheduleId" id="scheduleId" value="0"/>
 	<@s.hidden name="assetId" id="assetId"/>
-	
+
 	<h2><@s.text name="label.owner"/></h2>
 	
 	<#if eventType.assignedToAvailable>
@@ -81,6 +81,15 @@
 		<@s.select name="assetStatus" id="assetStatuses" list="assetStatuses" listKey="id" listValue="name" headerKey="" headerValue="" />
 		<span class="fieldHolder setFromAssetCheckbox">	
 			<label class="checkBoxLabel"><@s.checkbox name="statusSetFromAsset" onclick="toggleDisabled($(assetStatuses));" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>
+		</span>
+	</div>
+
+	<h2><@s.text name="label.autoschedules"/></h2>
+
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.autoschedule"/></label>
+		<span class="fieldHolder">
+			<label class="checkBoxLabel"><@s.checkbox name="refreshAutoSchedules" theme="simple"/> <@s.text name="label.autoscheduleexplanation"/></label>
 		</span>
 	</div>
 	

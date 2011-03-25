@@ -117,6 +117,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private List<EventSchedule> availableSchedules;
 	private List<ListingPair> eventJobs;
 	private AssignedToUserGrouper userGrouper;
+    private boolean refreshAutoSchedules = false;
 	
 	private EventWebModel modifiableEvent;
 
@@ -287,14 +288,18 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
 	private void autoSchedule() {
-		AssetTypeSchedule schedule = asset.getType().getSchedule(event.getType(), asset.getOwner());
-		if (schedule != null) {
-			ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
-			WebEventSchedule nextSchedule = converter.convert(schedule, event.getDate());
-			nextSchedule.setAutoScheduled(true);
-			nextSchedules.add(nextSchedule);
-		}
+        autoSchedule(asset.getOwner());
 	}
+
+    private void autoSchedule(BaseOrg owner) {
+        AssetTypeSchedule schedule = asset.getType().getSchedule(event.getType(), owner);
+        if (schedule != null) {
+            ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
+            WebEventSchedule nextSchedule = converter.convert(schedule, event.getDate());
+            nextSchedule.setAutoScheduled(true);
+            nextSchedules.add(0, nextSchedule);
+        }
+    }
 
 	private void suggestSchedule() {
 		if (eventScheduleOnEvent == false && eventSchedule == null) {
@@ -401,6 +406,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 				CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, getSessionUserId())
 						.withProofTestFile(fileData)
 						.withUploadedImages(getUploadedFiles());
+
+                if (refreshAutoSchedules) {
+                    autoSchedule(modifiableEvent.isOwnerSetFromAsset() ? asset.getOwner() : modifiableEvent.getOwner());
+                }
 				
 				createEventParameterBuilder.addSchedules(createEventScheduleBundles());
 				Status eventStatus = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? Status.valueOf(modifiableEvent.getOverrideResult()) : null;
@@ -450,7 +459,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			scheduleBundles.add(bundle );
 		}
 	
-		
 		return scheduleBundles;
 	}
 
@@ -992,7 +1000,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	public EventFormHelper getEventFormHelper() {
 		return eventFormHelper;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public List<EventType> getEventTypes() {
 		return new ArrayList<EventType>(asset.getType().getEventTypes());
@@ -1082,4 +1090,12 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
     	modifiableEvent.setStatusSetFromAsset(isStatusSetFromAsset);
     }
 
+
+    public boolean isRefreshAutoSchedules() {
+        return refreshAutoSchedules;
+    }
+
+    public void setRefreshAutoSchedules(boolean refreshAutoSchedules) {
+        this.refreshAutoSchedules = refreshAutoSchedules;
+    }
 }

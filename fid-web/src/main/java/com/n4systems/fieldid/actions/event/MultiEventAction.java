@@ -74,6 +74,8 @@ public class MultiEventAction extends AbstractCrud {
     
     private EventScheduleManager eventScheduleManager;
     
+    private Set<Long> eventScheduleIdsToComplete = new HashSet<Long>();
+    
 	public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
@@ -306,6 +308,9 @@ public class MultiEventAction extends AbstractCrud {
         return false;
     }
      
+    public void setEventScheduleIdToComplete(Long id){
+    	eventScheduleIdsToComplete.add(id);
+    }
     
     public MultiEventScheduleListHelper getMultiEventScheduleListHelper() {
     	return new MultiEventScheduleListHelper(eventScheduleManager);
@@ -314,5 +319,8 @@ public class MultiEventAction extends AbstractCrud {
 	public List<Status> getResults() {
 		return Arrays.asList(Status.values());
 	}
-	
+
+    public boolean isRefreshAutoSchedules() {
+        return true;
+    }
 }

@@ -112,6 +112,10 @@ public class EventWebModel implements UserDateFormatValidator {
 		this.ownerSetFromAsset = ownerSetFromAsset;
 	}
 
+    public boolean isOwnerSetFromAsset() {
+        return ownerSetFromAsset;
+    }
+
 	public void setStatusSetFromAsset(boolean isStatusSetFromAsset) {
 		this.assetStatusSetFromAsset  = isStatusSetFromAsset;
 	}
