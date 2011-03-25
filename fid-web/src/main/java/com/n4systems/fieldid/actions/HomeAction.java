@@ -71,5 +71,15 @@ public class HomeAction extends AbstractAction {
 		return currentReleaseNotes;
 	}
 	
+	public String doError() {
+		return ERROR;
+	}
 	
+	public String doPageNotFound() {
+		return ERROR;
+	}
+	
+	public String doRestricted() {
+		return ERROR;
+	}
 }

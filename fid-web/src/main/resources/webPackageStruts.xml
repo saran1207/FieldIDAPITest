@@ -1379,6 +1379,17 @@
 			<result name="success" type="freemarker">/templates/html/home/show.ftl</result>
 		</action>
 
+		<action name="error" method="error" class="com.n4systems.fieldid.actions.HomeAction">
+			<result name="error" type="freemarker">/templates/html/home/error.ftl</result>
+		</action>
+
+		<action name="pageNotFound" method="pageNotFound" class="com.n4systems.fieldid.actions.HomeAction">
+			<result name="error" type="freemarker">/templates/html/home/pageNotFound.ftl</result>
+		</action>
+
+		<action name="restricted" method="restricted" class="com.n4systems.fieldid.actions.HomeAction">
+			<result name="error" type="freemarker">/templates/html/home/restricted.ftl</result>
+		</action>
 
 		<action name="chooseCompany" method="add" class="com.n4systems.fieldid.actions.SelectTenantAction">
 			<interceptor-ref name="nonBrandedFlashStack" />

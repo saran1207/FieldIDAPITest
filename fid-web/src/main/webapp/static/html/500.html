@@ -2,30 +2,8 @@
 <html>
 	<head>
 		<title>Oops!</title>
-		<link rel="StyleSheet" href="/static/css/errorpage.css" type="text/css"/>
 	</head>
 	<body>
-		<div class="messageBox">
-			<h2 class="messageTitle">Oops - Field ID encountered an error.</h2>
-			<div class="messageBody">
-				<div class="messageBodyText">A problem has occurred in Field ID.</div>
-				<div class="messageBodyText">We apologize for any inconvenience.</div>
-				<div class="messageBodyLinks">
-					<div>
-						<a href ="/fieldid/home.action" >
-							Go back Home
-						</a>
-					</div>
-					<div>
-						<a href="http://n4systems.helpserve.com/index.php?_m=tickets&_a=submit" target="_blank" >
-							Tell us what happened
-						</a>
-					</div>
-	 			</div>
-			</div>
-		</div>
-		
-				
 		<script src="https://ssl.google-analytics.com/ga.js" type="text/javascript"></script>
 		<script type="text/javascript">
 		if (location.href.indexOf("fieldid.com") != -1) {
@@ -33,6 +11,7 @@
 			    pageTracker._initData();
 			    pageTracker._trackPageview('/static/html/500.html');
 		}	
+		location.href = location.href.substr(0, location.href.lastIndexOf('fieldid/')) + 'fieldid/error.action';
 		</script>
 	</body>
 </html>
