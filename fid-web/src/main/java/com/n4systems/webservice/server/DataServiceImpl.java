@@ -721,6 +721,9 @@ public class DataServiceImpl implements DataService {
 			// create the asset with attached sub asset transactionally
 			asset = productManager.createAssetWithServiceTransaction(requestInformation.getMobileGuid(), asset, asset.getModifiedBy());
 
+			// createAssetWithServiceTransaction no longer auto-schedules as of 2011.2
+			ServiceLocator.getEventScheduleManager().autoSchedule(asset);
+			
 			// create any new subproducts (this is not currently used by mobile
 			// (sub products come up attached to inspections))
 			if (productDTO.getSubProducts() != null && productDTO.getSubProducts().size() > 0) {
