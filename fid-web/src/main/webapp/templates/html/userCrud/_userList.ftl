@@ -3,7 +3,7 @@
 		<#if !isArchivedPage>
 			<th ><@s.text name="label.username"/></th>
 		</#if>
-    	<th ><@s.text name="label.name"/></th>
+    	<th ><@s.text name="label.name_first_last"/></th>
     	<th ><@s.text name="label.organization"/></th>
     	<#if userType?exists && userType != "EMPLOYEES"  >
     		<th ><@s.text name="label.customer"/></th>
