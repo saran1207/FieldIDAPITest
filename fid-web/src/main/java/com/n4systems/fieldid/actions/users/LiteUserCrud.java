@@ -15,7 +15,6 @@ import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.UserType;
-import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 
 public class LiteUserCrud extends UserCrud {
 
@@ -158,7 +157,6 @@ public class LiteUserCrud extends UserCrud {
 	}
 
 	@Override
-	@FieldExpressionValidator(message="", key="error.owner_must_be_an_organization", expression="owner.internal == true")
 	public BaseOrg getOwner() {
 		return super.getOwner();
 	}

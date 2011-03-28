@@ -21,7 +21,7 @@
 			
 			<div class="infoSet">
 				 <label class="label" for="owner"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
-				<@n4.orgPicker name="owner" required="true" orgType="${(readOnlyUser)?string('readonly','internal')}"/>
+				<@n4.orgPicker name="owner" required="true" orgType="all"/>
 			</div>
 			
 			<div class="infoSet">
