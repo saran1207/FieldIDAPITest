@@ -38,9 +38,9 @@ ${action.setPageType('my_account', 'downloads')!}
 		</#list>
 	</table>
 <#else>
-	<div class="emptyList" >
-		<div class="emptyMessage" >
-			<h3><@s.text name="label.nodownloads" /></h3>
+	<div class="initialMessage" >
+		<div class="textContainer" >
+			<h1><@s.text name="label.nodownloads" /></h1>
 			<p><@s.text name="message.nodownloads" /></p>
 		</div>
 	</div>
