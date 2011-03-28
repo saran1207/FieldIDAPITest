@@ -1,0 +1,20 @@
+.emptyList h3{
+	padding : 10px 0 10px 60px; 
+	font-size : 1.5em;
+}
+
+.emptyList p{
+	text-align: left;
+	padding : 0 0 10px 60px;
+	font-size : 1.2em; 
+}
+
+.emptyMessage{
+		background-image: url(../../images/download-icon.png);
+		background-repeat: no-repeat;
+		background-position: left;	
+		width: 550px;
+		margin-left:auto;
+		margin-right:auto;
+		padding : 20px;
+}

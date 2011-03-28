@@ -4,7 +4,9 @@ ${action.setPageType('my_account', 'downloads')!}
 	<#if fileId?exists>
 		<meta http-equiv="refresh" content="0;url=<@s.url action="downloadFile" includeParams="get" />"></meta>
 	</#if>
+	<@n4.includeStyle href="downloads" type="page"/>
 </head>
+
 
 <#if !downloads.empty>
 	<table class="list">
@@ -37,7 +39,10 @@ ${action.setPageType('my_account', 'downloads')!}
 	</table>
 <#else>
 	<div class="emptyList" >
-		<p><@s.text name="label.nodownloads" /></p>
+		<div class="emptyMessage" >
+			<h3><@s.text name="label.nodownloads" /></h3>
+			<p><@s.text name="message.nodownloads" /></p>
+		</div>
 	</div>
 </#if>
 
