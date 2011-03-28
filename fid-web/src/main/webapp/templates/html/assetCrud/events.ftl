@@ -6,13 +6,30 @@
 </div>
 
 <#if !events.isEmpty() >
+	
 	<table class="list">
 		<tr>
-			<th><@s.text name="label.date_performed"/></th>
-			<th><@s.text name="label.eventtype"/></th>
-			<th><@s.text name="label.performed_by"/></th>
-			<th><@s.text name="label.result"/></th>
-			<th><@s.text name="label.assetstatus"/></th>
+			<@s.text id="dateLabel" name="label.date_performed"/>
+			<@s.text id="typeLabel" name="label.eventtype"/>
+			<@s.text id="performedByLabel" name="label.performed_by"/>
+			<@s.text id="resultLabel" name="label.result"/>
+			<@s.text id="assetStatusLabel" name="label.assetstatus"/>
+		
+			<#assign columns = [ "date", "type.name", "performedBy.userID", "status", "assetStatus.name" ] >		
+			<#assign labels = [ "${dateLabel}", "${typeLabel}", "${performedByLabel}", "${resultLabel}", "${assetStatusLabel}"]>
+			<#assign x=0>
+			
+			<#list columns as column>
+				<#if !sortColumn?exists && column == "date">
+					<#assign selected = true>
+				<#elseif sortColumn?exists && column == sortColumn>
+					<#assign selected = true>
+				<#else>
+					<#assign selected = false>		
+				</#if>				
+				<#include "_eventColumnHeader.ftl">
+				<#assign x=x+1>
+			</#list>
 			<th>&nbsp;</th>
 		</tr>
 		<#list events as event >

@@ -147,6 +147,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private Pager<Asset> page;
 	private List<Asset> assets;
 	private boolean isEditing;
+	
+	private String sortColumn;
+	private String sortDirection;
 
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager, AssetCodeMappingService assetCodeMappingServiceManager,
@@ -994,7 +997,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	public List<Event> getEvents() {
-		return getAllEventHelper().getEvents();
+		if(sortColumn != null) {
+			return getAllEventHelper().getEvents(sortColumn, sortDirection.equals("asc"));
+		}else {
+			return getAllEventHelper().getEvents();
+		}
 	}
 
 	public List<EventType> getEventTypes() {
@@ -1121,5 +1128,21 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public List<Listable<Long>> getJobs() {
 		return getLoaderFactory().createEventJobListableLoader().orderByName().load();
+	}
+
+	public String getSortColumn() {
+		return sortColumn;
+	}
+
+	public void setSortColumn(String sortColumn) {
+		this.sortColumn = sortColumn;
+	}
+
+	public String getSortDirection() {
+		return sortDirection;
+	}
+
+	public void setSortDirection(String sortDirection) {
+		this.sortDirection = sortDirection;
 	}	
 }

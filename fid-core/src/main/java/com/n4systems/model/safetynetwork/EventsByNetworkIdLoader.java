@@ -22,6 +22,10 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
 
 	private Long networkId;
 	
+	private String order;
+	
+	private boolean ascending;
+	
 	public EventsByNetworkIdLoader(SecurityFilter filter) {
 		super(filter);
 	}
@@ -40,7 +44,10 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
 		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));
         builder.addWhere(wpg);
-
+        
+        if (order != null) {
+        	builder.addOrder(order, ascending);
+        }
 		List<Event> unsecuredEvents = builder.getResultList(em);
 		
 		PersistenceManager.setSessionReadOnly(em);
@@ -52,6 +59,12 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
 
 	public EventsByNetworkIdLoader setNetworkId(Long networkId) {
 		this.networkId = networkId;
+		return this;
+	}
+	
+	public EventsByNetworkIdLoader setOrder(String order, boolean ascending) {
+		this.order = order;
+		this.ascending = ascending;
 		return this;
 	}
 }

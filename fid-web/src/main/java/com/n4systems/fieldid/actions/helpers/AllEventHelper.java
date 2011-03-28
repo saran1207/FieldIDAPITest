@@ -42,6 +42,14 @@ public class AllEventHelper {
 		}
 		return events;
 	}
+	
+	public List<Event> getEvents(String order, boolean ascending) {
+		if (events == null) {
+			EventsByNetworkIdLoader loader = new EventsByNetworkIdLoader(filter);
+			events = loader.setNetworkId(asset.getNetworkId()).setOrder(order, ascending).load();
+		}
+		return events;
+	}
 
 	public Event getLastEvent() {
 		if (lastEvent == null) {
