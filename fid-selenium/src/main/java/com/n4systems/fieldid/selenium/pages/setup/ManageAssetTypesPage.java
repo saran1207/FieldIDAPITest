@@ -206,15 +206,11 @@ public class ManageAssetTypesPage extends FieldIDPage {
 	
 	public void removeEventFrequencyForType(String eventType, boolean confirm) {
 		confirmNextDialog(confirm);
-		removeEventFrequencyForType(eventType);
-		selenium.getConfirmation();
-	}
-	
-	public void removeEventFrequencyForType(String eventType) {
 		selenium.click("//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[2]//a[.='Remove']");
         waitForAjax();
+		selenium.getConfirmation();
 	}
-	
+		
 	public boolean isEventFrequencyScheduledForType(String eventType) {
 		return !selenium.isElementPresent("//table[@id='eventListTable']//td[position()=1 and contains(.,'"+eventType+"')]//parent::tr/td[position() = 2 and contains(., 'Not Scheduled')]");
 	}
