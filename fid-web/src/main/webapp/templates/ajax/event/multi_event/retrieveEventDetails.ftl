@@ -16,6 +16,7 @@ $('continueButtonStep3').observe("click", function(){
 	if (!$('ownerId').disabled && !$('ownerId').value){
 		alert("Please select an owner");
 	}else{	
+		$('continueButtonStep3').disabled=true;
 		var options = getStandardCallbacks();
 		options.parameters = $('eventCreate').serialize();
 		options.method =  "post";

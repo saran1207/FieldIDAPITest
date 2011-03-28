@@ -19,6 +19,19 @@ public class EventScheduleSuggestion {
 	
 	public Long getSuggestedScheduleId() {
 		
+		EventSchedule suggestedSchedule = selectAScheduleWithinATimeFrame();
+		
+		return (suggestedSchedule != null) ? suggestedSchedule.getId() : NO_SCHEDULE;
+	}
+	
+	public EventSchedule getSuggestedSchedule(){
+		
+		EventSchedule suggestedSchedule = selectAScheduleWithinATimeFrame();
+		
+		return suggestedSchedule;
+	}
+	
+	public EventSchedule selectAScheduleWithinATimeFrame(){
 		EventSchedule suggestedSchedule = null;
 		Long currentDaysFromToday = SUGGESTED_SCHEDULE_DATE_LIMIT;
 		for (EventSchedule schedule : schedules) {
@@ -31,10 +44,6 @@ public class EventScheduleSuggestion {
 				} 
 			}
 		}
-		
-		return (suggestedSchedule != null) ? suggestedSchedule.getId() : NO_SCHEDULE;
+		return suggestedSchedule;
 	}
-	
-	
-	
 }

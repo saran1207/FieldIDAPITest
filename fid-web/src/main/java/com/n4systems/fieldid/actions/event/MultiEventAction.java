@@ -16,7 +16,6 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Event;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Status;
@@ -73,8 +72,6 @@ public class MultiEventAction extends AbstractCrud {
     private String searchId;
     
     private EventScheduleManager eventScheduleManager;
-    
-    private Set<Long> eventScheduleIdsToComplete = new HashSet<Long>();
     
 	public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
@@ -307,13 +304,9 @@ public class MultiEventAction extends AbstractCrud {
 
         return false;
     }
-     
-    public void setEventScheduleIdToComplete(Long id){
-    	eventScheduleIdsToComplete.add(id);
-    }
     
     public MultiEventScheduleListHelper getMultiEventScheduleListHelper() {
-    	return new MultiEventScheduleListHelper(eventScheduleManager);
+    	return new MultiEventScheduleListHelper(eventScheduleManager, getEventType());
 	}
     
 	public List<Status> getResults() {
@@ -323,4 +316,5 @@ public class MultiEventAction extends AbstractCrud {
     public boolean isRefreshAutoSchedules() {
         return true;
     }
+	
 }

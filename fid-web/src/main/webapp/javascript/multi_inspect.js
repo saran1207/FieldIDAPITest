@@ -4,22 +4,18 @@ var schedules = new Array();
 function sendRequests() {
 	var eventCreator = new EventCreator(assets, schedules);
 	eventCreator.start();
-	
 }
 
 function sendRequest(asset, schedule, eventCreator) {
 	$('assetId').value= asset.id;
-	if (schedule==undefined){
-		schedule=0;
-	}
-	$('scheduleId').value=schedule
+	$('scheduleId').value=schedule;
 	$('eventCreate').request({
 		onSuccess: contentCallback,
 		onComplete: function(){	
 			eventCreator.completedCreation();
 		}
 	});
-}
+} 
 
 function EventCreator(assets, schedules) {
 	this.totalAssets = assets.length;
@@ -65,7 +61,7 @@ onDocumentLoad(function() {
 	});
 });
 
-function pushScheduleIdIntoHiddenVariable(index, scheduleSelectBox){
-	schedules.push(scheduleSelectBox.value);
+function storeScheduleId(index, scheduleSelectBox){
+	schedules[index]=scheduleSelectBox.value;
 }
 

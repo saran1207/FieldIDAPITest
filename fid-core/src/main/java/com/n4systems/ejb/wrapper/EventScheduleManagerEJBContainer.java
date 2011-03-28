@@ -9,6 +9,7 @@ import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventType;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -178,5 +179,19 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	public List<EventSchedule> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+		Transaction transaction = transactionManager.startTransaction();
+		try {
+			return createManager(transaction.getEntityManager()).getAvailableSchedulesForAssetFilteredByEventType(asset, eventType);
+
+		} catch (RuntimeException e) {
+			transactionManager.rollbackTransaction(transaction);
+
+			throw e;
+		} finally {
+			transactionManager.finishTransaction(transaction);
+		}
+	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 
 public interface EventScheduleManager {
 	
@@ -19,6 +20,8 @@ public interface EventScheduleManager {
 	
 	
 	public List<EventSchedule> getAvailableSchedulesFor(Asset asset);
+	
+	public List<EventSchedule> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType);
 	
 	public List<EventSchedule> getAutoEventSchedules(Asset asset);
 	
