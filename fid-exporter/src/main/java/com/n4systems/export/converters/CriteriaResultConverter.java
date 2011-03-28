@@ -41,9 +41,9 @@ public class CriteriaResultConverter extends ExportConverter {
 			value = ((ComboBoxCriteriaResult) result).getValue();
 		}
 		writer.addAttribute("Value", StringUtils.stripToEmpty(value));
-		
-		writeIterable(writer, context, "Recommendations", result.getRecommendations());
-		writeIterable(writer, context, "Deficiencies", result.getDeficiencies());
+
+		writeIterable(writer, context, "Recommendations", result.getRecommendations(), new RecommendationConverter());
+		writeIterable(writer, context, "Deficiencies", result.getDeficiencies(), new DeficiencyConverter());
 		
 		writer.endNode();
 	}

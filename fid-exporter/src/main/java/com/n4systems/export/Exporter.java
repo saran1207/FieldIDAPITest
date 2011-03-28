@@ -86,7 +86,8 @@ public class Exporter {
         	String outFile = createFileName(tenantName);
         	System.out.println("Exporting to: " + outFile);
         	out = new FileOutputStream(outFile);
-        	ReadonlyTransactionExecutor.execute(new ExportTask(tenant.getId(), out));
+        	ExportTask export = new ExportTask(tenant.getId(), out);
+        	export.doExport();
         } finally {
         	IOUtils.closeQuietly(out);
         }

@@ -4,34 +4,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.export.EventsForAssetLoader;
-import com.n4systems.export.SubAssetsForMasterLoader;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
-import com.n4systems.model.SubAsset;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class AssetConverter extends EntityWithOwnerConverter<Asset> {
-	private final SubAssetsForMasterLoader subAssetLoader;
-	private final EventsForAssetLoader eventLoader;
+	protected final EntityManager em;
 	
-	public AssetConverter(SubAssetsForMasterLoader subAssetLoader, EventsForAssetLoader eventLoader) {
-		this.subAssetLoader = subAssetLoader;
-		this.eventLoader = eventLoader;
+	public AssetConverter(EntityManager em) {
+		this.em = em;
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean canConvert(Class type) {
-		return type.equals(Asset.class);
+		return Asset.class.isAssignableFrom(type);
 	}
 	
 	@Override
 	protected void marshalEntity(Asset asset, HierarchicalStreamWriter writer, MarshallingContext context) {
-		System.out.println("Converting: " + asset);	
 		writeNode(writer, context, "AssetId",				asset.getMobileGUID());
 		writeNode(writer, context, "ActiveState",			asset.getEntityState());
 		writeNode(writer, context, "AssetType",				asset.getType());
@@ -53,16 +50,19 @@ public class AssetConverter extends EntityWithOwnerConverter<Asset> {
 		
 		List<InfoOptionBean> infoOptions = new ArrayList<InfoOptionBean>(asset.getInfoOptions());
 		Collections.sort(infoOptions);
-		writeIterable(writer, context, "Attributes", infoOptions);
+		writeIterable(writer, context, "Attributes", infoOptions, new InfoOptionConverter());
 		
-		List<SubAsset> subAssets = subAssetLoader.loadSubAssets(asset);
-		System.out.println("\tFound " + subAssets.size() + " sub assets");
-		writeIterable(writer, context, "Components", subAssets);
-		
-		
-		List<Event> events = eventLoader.loadEvents(asset);
+		List<Event> events = loadEvents(asset);
 		System.out.println("\tFound " + events.size() + " events");
-		writeIterable(writer, context, "Events", events);
+		writeIterable(writer, context, "Events", events, new EventConverter());
 	}
 
+	protected List<Event> loadEvents(Asset asset) {
+		String jpql = String.format("FROM %s e WHERE e.asset.id = :assetId ORDER BY e.date", Event.class.getName());
+		TypedQuery<Event> query = em.createQuery(jpql, Event.class);
+		query.setParameter("assetId", asset.getId());
+
+		List<Event> events = query.getResultList();
+		return events;
+	}
 }

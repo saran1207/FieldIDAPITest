@@ -24,11 +24,11 @@ public abstract class ExportConverter implements Converter {
 		writer.endNode();
 	}
 	
-	protected void writeIterable(HierarchicalStreamWriter writer, MarshallingContext context, String name, Iterable<?> value) {
+	protected void writeIterable(HierarchicalStreamWriter writer, MarshallingContext context, String name, Iterable<?> value, Converter converter) {
 		writer.startNode(name);
 		if (value != null) {
 			for (Iterator<?> iter = value.iterator(); iter.hasNext();) {
-				context.convertAnother(iter.next());
+				context.convertAnother(iter.next(), converter);
 			}
 		}
 		writer.endNode();
