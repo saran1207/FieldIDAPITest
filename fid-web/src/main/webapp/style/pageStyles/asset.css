@@ -273,4 +273,5 @@
 
 #nextEvent .failColor p, #nextEvent .passColor p{
 	padding: 5px 10px;
+	margin-right: 5px;
 }
