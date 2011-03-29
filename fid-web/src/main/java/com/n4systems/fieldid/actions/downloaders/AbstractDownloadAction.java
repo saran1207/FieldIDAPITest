@@ -7,6 +7,8 @@ import java.io.InputStream;
 
 import javax.activation.FileTypeMap;
 
+import org.apache.struts2.interceptor.validation.SkipValidation;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 
@@ -46,6 +48,7 @@ public abstract class AbstractDownloadAction extends AbstractAction {
 	/** @return File path to the download file */
 	public abstract File getFile();
 	
+	@SkipValidation
 	public String doDownload() {
 		/*
 		 * this should be called asap to ensure the implemented methods
