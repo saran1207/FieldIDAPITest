@@ -5,6 +5,11 @@ ${action.setPageType('my_account', 'downloads')!}
 		<meta http-equiv="refresh" content="0;url=<@s.url action="downloadFile" includeParams="get" />"></meta>
 	</#if>
 	<@n4.includeStyle href="downloads" type="page"/>
+	<@n4.includeScript src="downloads.js" />
+	<script type="text/javascript">
+		editDownloadNameUrl = '<@s.url action="editDownloadName" namespace="/ajax"/>'
+		cancelDownloadNameUrl = '<@s.url action="cancelDownloadName" namespace="/ajax"/>'
+	</script>
 </head>
 
 
@@ -20,7 +25,10 @@ ${action.setPageType('my_account', 'downloads')!}
 		<#list downloads as download>
 			<tr>
 				<td>${action.formatDateTime(download.created)}</td>
-				<td>${download.name}</td>
+				<td id="download_${download.id}">
+					${download.name} |
+					<a href="javascript:void(0);" onClick="editDownloadName(${download.id});"><@s.text name="label.edit" /></a>
+				</td>
 				<td><@s.text name="${download.state.label}"/></td>
 				<td>
 					&nbsp;
@@ -32,6 +40,8 @@ ${action.setPageType('my_account', 'downloads')!}
 					&nbsp;
 					<#if download.state.ready>
 						<a href="<@s.url action="downloadFile" includeParams="get" fileId="${download.id}" />"><@s.text name="label.download"/></a>
+						|
+						<a href="<@s.url action="deleteDownload" fileId="${download.id}" />"><@s.text name="label.delete"/></a>
 					</#if>
 				</td>
 			</tr>	

@@ -1,3 +1,7 @@
 .textContainer{
-		background-image: url(../../images/download-icon.png);
+	background-image: url(../../images/download-icon.png);
+}
+
+.textbox{
+	width : 250px;
 }

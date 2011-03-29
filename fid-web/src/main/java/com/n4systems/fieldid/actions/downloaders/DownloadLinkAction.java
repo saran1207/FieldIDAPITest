@@ -6,13 +6,17 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class DownloadLinkAction extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
@@ -21,6 +25,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	private Long fileId;
 	private DownloadLink downloadLink;
 	private List<DownloadLink> downloads;
+	private String downloadLinkName;
 	
 	public DownloadLinkAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -76,7 +81,32 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return linkLoader.load();
 	}
 	
+	@SkipValidation
 	public String doShow() {
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doEdit() {
+		return SUCCESS;		
+	}
+	
+	@SkipValidation
+	public String doCancel() {
+		return SUCCESS;	
+	}
+	
+	public String doSave() {
+		downloadLink = loadDownloadLink();
+		downloadLink.setName(downloadLinkName);
+		new DownloadLinkSaver().update(downloadLink); 
+		return SUCCESS;	
+	}
+	
+	@SkipValidation
+	public String doDelete() {
+		new DownloadLinkSaver().remove(loadDownloadLink());
+		fileId = null;
 		return SUCCESS;
 	}
 
@@ -123,6 +153,23 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 				break;
 		}
 		return expiresText;
+	}
+
+	public DownloadLink getDownloadLink() {
+		if(downloadLink == null) {
+			downloadLink = loadDownloadLink();
+		}
+		return downloadLink;
+	}
+	
+	
+	public String getDownloadLinkName() {
+		return downloadLinkName;
+	}
+
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.required")
+	public void setDownloadLinkName(String name) {
+		this.downloadLinkName = name;
 	}
 
 }
