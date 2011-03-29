@@ -167,7 +167,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return downloadLinkName;
 	}
 
-	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.required")
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.reporttitlerequired")
 	public void setDownloadLinkName(String name) {
 		this.downloadLinkName = name;
 	}
