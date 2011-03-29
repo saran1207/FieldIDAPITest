@@ -133,7 +133,7 @@ public class MultiEventAction extends AbstractCrud {
 			event.setAdvancedLocation(commonAssetValues.location);
 		}
 		modifiableEvent.updateValuesToMatch(event);
-		//modifiableEvent.setEventSchedule(getMultiEventScheduleListHelper().getEventScheduleById(eventScheduleIdsToComplete.iterator().next()));
+		
 		return SUCCESS;
 	}
 	
@@ -142,6 +142,17 @@ public class MultiEventAction extends AbstractCrud {
 		return SUCCESS;
 	}
 	
+	public boolean isOneScheduleAvailable() {
+		boolean oneAvailable=false;
+		for (Asset asset : getAssets()){
+			if (!getMultiEventScheduleListHelper().getEventSchedulesForAsset(asset).isEmpty()){
+				oneAvailable=true;
+				break;
+			}
+		}
+		return oneAvailable;
+	}
+
 	public String doEventCheck() {
 		return SUCCESS;
 	}

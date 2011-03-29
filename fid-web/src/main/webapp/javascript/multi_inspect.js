@@ -7,6 +7,10 @@ function sendRequests() {
 }
 
 function sendRequest(asset, schedule, eventCreator) {
+	if (schedule == undefined){
+		schedule = 0;
+	}
+	
 	$('assetId').value= asset.id;
 	$('scheduleId').value=schedule;
 	$('eventCreate').request({
@@ -22,6 +26,7 @@ function EventCreator(assets, schedules) {
 	this.assets = assets;
 	this.schedules = schedules;
 	this.completed = 0;
+	
 	this.start = function () {
 		sendRequest(assets[this.completed],this.schedules[this.completed] , this);
 	};
@@ -65,3 +70,8 @@ function storeScheduleId(index, scheduleSelectBox){
 	schedules[index]=scheduleSelectBox.value;
 }
 
+function selectUnscheduledForAllDropDowns(){
+	$$('.eventSchedules').each(function(selectBox) {
+		selectBox[0].selected=true;
+	});	
+}

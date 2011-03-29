@@ -45,7 +45,7 @@
 
 .stepContent{
 	margin-right: 15px;
-	}
+}
 
 .stepContent .infoSet .fieldHolder input[type="checkbox"]{
 	margin-top:4px;
@@ -98,4 +98,35 @@ h3{
 
 .boldedAssetNumber{
 	font-weight: bold;
+}
+
+.fluidSets .infoSet{
+	border-style: none;
+}
+
+.scheduleContainer div{
+	padding: 0;
+}
+
+.scheduleContainer .unweighted{
+	font-weight: normal;
+	}
+
+.eventSchedules{
+	margin-left:5px;
+}
+
+.schedulesHeading{
+	min-height:0;
+}
+
+.schedulesBorder{
+	padding-top: 10px;
+	border-top:  1px solid #D0DAFA;
+}
+
+.fluidSets .infoSet .widenedLabel{
+	text-align: left;
+	margin-right: 100px;	
+	width: 280px;
 }
