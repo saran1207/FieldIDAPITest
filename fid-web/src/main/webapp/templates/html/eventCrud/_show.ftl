@@ -32,7 +32,7 @@
 				<#elseif event.observationCertPrintable>
 					<div class="print">
 						<img src="<@s.url value="/images/pdf_small.gif"/>" />
-						<a class="print" href="${observationCertUrl}" target="_blank" ><@s.text name="label.print"/></a>	
+						<a href="${observationCertUrl}" target="_blank" ><@s.text name="label.print"/></a>	
 					</div>
 				</#if>
 			</#if>
