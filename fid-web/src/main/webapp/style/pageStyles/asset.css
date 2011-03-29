@@ -271,7 +271,10 @@
 	line-height: 2.2em;
 }
 
+.failColor p, .passColor p, .naColor p{
+	margin-right: 5px;
+}
+
 #nextEvent .failColor p, #nextEvent .passColor p{
 	padding: 5px 10px;
-	margin-right: 5px;
 }
