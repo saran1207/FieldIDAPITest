@@ -2,8 +2,10 @@ package com.n4systems.model.user;
 
 
 
-import javax.persistence.EntityManager;
 import java.util.Arrays;
+
+import javax.persistence.EntityManager;
+
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -14,7 +16,6 @@ import com.n4systems.services.limiters.LimitType;
 import com.n4systems.util.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class EmployeeUserCountLoader extends Loader<Long> implements LimitLoader {
@@ -30,7 +31,6 @@ public class EmployeeUserCountLoader extends Loader<Long> implements LimitLoader
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(User.class, filter);
 		builder.addWhere(WhereClauseFactory.create(Comparator.IN, "userType", Arrays.asList(UserType.ADMIN, UserType.FULL)));
 		UserQueryHelper.applyFullyActiveFilter(builder);
-		builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "owner.customerOrg"));
 
 		Long userCount = builder.getCount(em);
 		return userCount;

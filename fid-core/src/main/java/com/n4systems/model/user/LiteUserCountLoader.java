@@ -15,8 +15,6 @@ import com.n4systems.services.limiters.LimitType;
 import com.n4systems.util.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class LiteUserCountLoader extends Loader<Long> implements LimitLoader {
 	private Long tenantId;
@@ -30,7 +28,6 @@ public class LiteUserCountLoader extends Loader<Long> implements LimitLoader {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(User.class, filter);
 		builder.addWhere(WhereClauseFactory.create("userType", UserType.LITE));
 		UserQueryHelper.applyFullyActiveFilter(builder);
-		builder.addWhere(new WhereParameter<Long>(Comparator.NULL, "owner.customerOrg"));
 
 		Long userCount = builder.getCount(em);
 		return userCount;
