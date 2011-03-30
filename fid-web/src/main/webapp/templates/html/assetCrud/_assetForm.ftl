@@ -2,6 +2,7 @@
 	<@n4.includeScript src="commentTemplates.js" />
 	<@n4.includeScript src="asset.js" />
 	<@n4.includeScript src="event.js" />
+    <@n4.includeScript src="autoschedule.js" />
 	<@n4.includeScript src="updateAttributes.js"/>
 	<@n4.includeScript src="assetRfidHandler.js"/>
 	<@n4.includeScript src="generateSerialNumber.js"/>

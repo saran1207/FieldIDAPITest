@@ -35,6 +35,11 @@
 			class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="success" type="freemarker">/templates/ajax/assetCrud/changeOwner.ftl</result>
 		</action>
+
+		<action name="eventOwnerChange" method="ownerChange"
+			class="com.n4systems.fieldid.actions.event.EventCrud">
+			<result name="success" type="freemarker">/templates/ajax/assetCrud/changeOwner.ftl</result>
+		</action>
 		
 		<action name="regAssetTypeChange" method="assetTypeChange"
 			class="com.n4systems.fieldid.actions.asset.AssetCrud">

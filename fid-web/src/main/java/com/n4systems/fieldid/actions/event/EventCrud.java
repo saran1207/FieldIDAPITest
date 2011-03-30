@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.n4systems.model.AssetType;
+import com.n4systems.model.assettype.AssetTypeLoader;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -118,6 +120,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private List<ListingPair> eventJobs;
 	private AssignedToUserGrouper userGrouper;
     private boolean refreshAutoSchedules = false;
+    private AssetType assetType;
 	
 	private EventWebModel modifiableEvent;
 
@@ -292,7 +295,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	}
 
     private void autoSchedule(BaseOrg owner) {
-        AssetTypeSchedule schedule = asset.getType().getSchedule(event.getType(), owner);
+        autoSchedule(owner, asset.getType());
+    }
+
+    private void autoSchedule(BaseOrg owner, AssetType assetType) {
+        AssetTypeSchedule schedule = assetType.getSchedule(event.getType(), owner);
         if (schedule != null) {
             ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
             WebEventSchedule nextSchedule = converter.convert(schedule, event.getDate());
@@ -346,6 +353,13 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		modifiableEvent.updateValuesToMatch(event);
 		return SUCCESS;
 	}
+
+    @SkipValidation
+    public String doOwnerChange() {
+        nextSchedules.clear();
+        autoSchedule(modifiableEvent.getOwner(), assetType);
+        return SUCCESS;
+    }
 
 	protected void encodeInfoOptionMapForUseInForm() {
 		encodedInfoOptionMap = encodeMapKeys(event.getInfoOptionMap());
@@ -1097,5 +1111,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 
     public void setRefreshAutoSchedules(boolean refreshAutoSchedules) {
         this.refreshAutoSchedules = refreshAutoSchedules;
+    }
+
+    public void setAssetTypeId(Long assetTypeId) {
+        assetType = new AssetTypeLoader(getSecurityFilter()).setId(assetTypeId).load();
     }
 }

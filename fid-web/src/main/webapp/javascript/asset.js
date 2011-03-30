@@ -1,5 +1,4 @@
 var updateAssetTypeUrl = '';
-var updateOwnerUrl= '';		
 
 function updateAssetType( assetTypeSelect ) {
 	if( assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value != "" ) {
@@ -9,21 +8,11 @@ function updateAssetType( assetTypeSelect ) {
 		getResponse( url, "get" );
 	} else {
 		replaceInfoOptions( null, null );
+        //into autoschedule.js
 		replaceEventSchedules( null );
 	}
 }
 
-function updateOwner ( event ) {
-	var ownerId = Event.element(event).getValue();
-	if ( ownerId != "" ) {
-		var url = updateOwnerUrl + '?assetTypeId='+ $('assetType').value + "&ownerId=" + ownerId;
-		getResponse( url, "get" );
-	} else {
-		replaceEventSchedules( null );
-	}
-}
-
-Element.extend(document).observe("owner:change", updateOwner);
 
 function updatingAsset() {
 	var assetTypeIndicator = $('assetTypeIndicator');
@@ -42,20 +31,6 @@ function replaceInfoOptions( infoOptions, subTypes ) {
 		infoOptionSet.update();
 	} else { 
 		infoOptionSet.replace( infoOptions );
-	}
-}
-
-function replaceEventSchedules( assetEventSchedules ) {
-	var eventScheduleList = $('schedulesForm');
-	
-	if (eventScheduleList != null) {
-	
-		if( assetEventSchedules == null || assetEventSchedules == "" ) {
-			eventScheduleList.update();
-		} else { 
-			eventScheduleList.replace( assetEventSchedules );
-		}
-		scheduleListUpdated();
 	}
 }
 

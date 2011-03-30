@@ -1,10 +1,12 @@
 	<head>
 		<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
 		<script type="text/javascript" src="<@s.url value="/javascript/event.js" />" ></script>
+        <script type="text/javascript" src="<@s.url value="/javascript/autoschedule.js" />" ></script>
 		<script type="text/javascript" src="<@s.url value="/javascript/eventBook.js"/>" ></script>
 		<script type="text/javascript">
 			changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="ajax"   />';
 			updateEventBooksUrl = '<@s.url action="eventBooks" namespace="ajax"   />';
+	        updateOwnerUrl = '<@s.url action="eventOwnerChange" namespace="/ajax"/>';
 			assetTypeId = ${asset.type.id}
 			var proofTestTypes = ${json.toJson( proofTestTypesUpload )}
 		</script>
@@ -33,6 +35,7 @@
 		<#include "/templates/html/common/_calendar.ftl"/>
 	</head>
 	<title>${(eventType.name)!} <@s.text name="label.on"/> ${asset.serialNumber}</title>
+    <input type="hidden" name="assetType" id="assetType" value="${asset.type.id}">
 	
 	<#include "/templates/html/common/_formErrors.ftl" />
 	

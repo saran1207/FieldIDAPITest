@@ -1,6 +1,7 @@
 <head>
 	<@n4.includeStyle href="regNetworkAsset" type="page"/>
 	<@n4.includeScript src="asset.js" />
+    <@n4.includeScript src="autoschedule.js" />
 	<@n4.includeScript src="commentTemplates.js" />
 	<@n4.includeScript src="updateAttributes.js"/>
 	
