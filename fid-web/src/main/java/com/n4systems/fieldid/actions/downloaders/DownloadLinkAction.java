@@ -27,11 +27,12 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	private DownloadLink downloadLink;
 	private List<DownloadLink> downloads;
 	private String downloadLinkName;
-	private DownloadLinkSaver downloadLinkSaver = new DownloadLinkSaver();
+	private DownloadLinkSaver downloadLinkSaver;
 
 	
 	public DownloadLinkAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
+		downloadLinkSaver = new DownloadLinkSaver();
 	}
 
 	public static String buildDownloadUrl(AbstractAction action) {
@@ -185,6 +186,10 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.reporttitlerequired")
 	public void setDownloadLinkName(String name) {
 		this.downloadLinkName = name;
+	}
+
+	public void setDownloadLinkSaver(DownloadLinkSaver downloadLinkSaver) {
+		this.downloadLinkSaver = downloadLinkSaver;
 	}
 
 }

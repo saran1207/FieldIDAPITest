@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import static org.junit.Assert.*;
+import static org.easymock.EasyMock.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.test.helpers.TempFile;
 
 public class DownloadLinkActionTest {
@@ -40,7 +42,10 @@ public class DownloadLinkActionTest {
 	public void setupDownloadLink() {
 		link.setContentType(contextType);
 		link.setName("download_link");
-		
+
+		DownloadLinkSaver downloadLinkSaver = createMock(DownloadLinkSaver.class);
+		expect(downloadLinkSaver.update(link)).andReturn(link);
+
 		action = new DownloadLinkAction(null) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -50,6 +55,7 @@ public class DownloadLinkActionTest {
 		};
 		
 		action.setFileId(100L);
+		action.setDownloadLinkSaver(downloadLinkSaver );
 	}
 	
 	@After
