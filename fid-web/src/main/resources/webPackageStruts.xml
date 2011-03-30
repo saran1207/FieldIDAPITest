@@ -2403,6 +2403,12 @@
             <param name="layoutType">SCHEDULE</param>
         </action>
 
+		<action name="saveDownloadName" method="confirmDownloadName" class="com.n4systems.fieldid.actions.search.EventReportAction">
+			<result name="success" type="redirectAction">
+				<param name="actionName">showDownloads</param>
+			</result>
+		</action>
+
 	</package>
 
 	<include file="locationPackageStruts.xml"/>

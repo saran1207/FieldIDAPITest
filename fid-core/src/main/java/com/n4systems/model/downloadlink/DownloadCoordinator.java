@@ -51,32 +51,36 @@ public class DownloadCoordinator {
 		return link;
 	}
 	
-	public void generateExcel(String name, String downloadUrl, SearchDefiner<TableView> searchDefiner, List<String> columnTitles, ExcelOutputHandler[] outputHandlers) {
+	public DownloadLink generateExcel(String name, String downloadUrl, SearchDefiner<TableView> searchDefiner, List<String> columnTitles, ExcelOutputHandler[] outputHandlers) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
 		ExcelReportExportTask task = taskFactory.createExcelTask(link, downloadUrl, searchDefiner, columnTitles, outputHandlers);
 		
 		executor.execute(task);
+		return link;
 	}
 	
-	public void generateAllEventCertificates(String name, String downloadUrl, EventReportType type, List<Long> eventIds) {
+	public DownloadLink generateAllEventCertificates(String name, String downloadUrl, EventReportType type, List<Long> eventIds) {
 		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
 		PrintAllEventCertificatesTask task = taskFactory.createPrintAllEventCertificatesTask(link, downloadUrl, type, eventIds);
 		
 		executor.execute(task);
+		return link;
 	}
 	
-	public void generateAllAssetCertificates(String name, String downloadUrl, List<Long> assetIds) {
+	public DownloadLink generateAllAssetCertificates(String name, String downloadUrl, List<Long> assetIds) {
 		DownloadLink link = createDownloadLink(name, ContentType.ZIP);
 		PrintAllAssetCertificatesTask task = taskFactory.createPrintAllAssetCertificatesTask(link, downloadUrl, assetIds);
 		
 		executor.execute(task);
+		return link;
 	}
 	
-	public void generateEventSummaryReport(String name, String downloadUrl, ReportDefiner reportDefiner) {
+	public DownloadLink generateEventSummaryReport(String name, String downloadUrl, ReportDefiner reportDefiner) {
 		DownloadLink link = createDownloadLink(name, ContentType.PDF);
 		PrintEventSummaryReportTask task = taskFactory.createPrintEventSummaryReportTask(link, downloadUrl, reportDefiner);
 		
 		executor.execute(task);
+		return link;
 	}
 	
 	public void generateCustomerExport(String name, String downloadUrl, ListLoader<CustomerOrg> customerLoader, SecurityFilter filter) {

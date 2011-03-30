@@ -10,13 +10,6 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
-import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
-import com.n4systems.util.persistence.search.terms.SimpleInTerm;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PageHolder;
@@ -25,9 +18,18 @@ import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.reporting.helpers.DynamicColumnProvider;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
+import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.downloadlink.DownloadLinkSaver;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryFilter;
@@ -38,6 +40,7 @@ import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.TableViewTransformer;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+import com.n4systems.util.persistence.search.terms.SimpleInTerm;
 import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -71,6 +74,9 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
     private List<AssetTypeGroup> assetTypeGroups;
 	protected final InfoFieldDynamicGroupGenerator infoGroupGen;
     private ReportConfiguration reportConfiguration;
+	protected String reportName;
+	private Long fileId;
+	protected DownloadLink downloadLink;
 	
 	public CustomizableSearchAction(
 			final Class<? extends CustomizableSearchAction<T>> implementingClass, 
@@ -194,14 +200,14 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 			addFlashErrorText("error.searchexpired");
 			return INPUT;
 		}
-		String reportName = String.format("%s - %s", excelReportFileName, DateHelper.getFormattedCurrentDate(getUser()));
+		reportName = String.format("%s - %s", excelReportFileName, DateHelper.getFormattedCurrentDate(getUser()));
 		
 		try {
             List<Long> selectedIds = getContainer().getMultiIdSelection().getSelectedIds();
             ImmutableSearchDefiner<TableView> searchDefiner = immutableSearchDefiner();
             searchDefiner.getSearchTerms().add(new SimpleInTerm<Long>("id", selectedIds));
 
-            getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), searchDefiner, buildExcelColumnTitles(), prepareExcelHandlers());
+            downloadLink = getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), searchDefiner, buildExcelColumnTitles(), prepareExcelHandlers());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute ExcelExportTask", e);
 			addActionErrorText("error.cannotschedule");
@@ -505,5 +511,48 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
     public int getNumSelectedItems() {
         return getContainer().getMultiIdSelection().getNumSelectedIds();
     }
+
+	protected DownloadLink loadDownloadLink() {
+		FilteredIdLoader<DownloadLink> linkLoader = getLoaderFactory().createFilteredIdLoader(DownloadLink.class);
+		linkLoader.setId(fileId);
+		
+		return linkLoader.load();
+	}
+
+	public String getReportName() {
+		return reportName;
+	}
+
+	public void setReportName(String reportName) {
+		this.reportName = reportName;
+	}
+
+	public DownloadLink getDownloadLink() {
+		return downloadLink;
+	}
+
+	public void setDownloadLink(DownloadLink downloadLink) {
+		this.downloadLink = downloadLink;
+	}
+
+	public Long getFileId() {
+		return fileId;
+	}
+
+	public void setFileId(Long fileId) {
+		this.fileId = fileId;
+	}
+
+	public String doConfirmDownloadName() {
+		
+		downloadLink = loadDownloadLink();
+	
+		if(!reportName.equals(downloadLink.getName()) && !reportName.isEmpty()) {
+			downloadLink.setName(reportName);
+			new DownloadLinkSaver().update(downloadLink);
+		}
+		
+		return SUCCESS;
+	}
 	
 }

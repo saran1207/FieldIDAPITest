@@ -1,19 +1,23 @@
-<div style="width: 500px; text-align: center;">
-	<h2 class="modalHeader"><@s.text name="label.messagetitle" /></h2>
-	<div id="modalBox_message">
-		<#if actionErrors.isEmpty() >
-			<p><@s.text name="message.downloadbeinggenerated" /></p>
-			<p><@s.text name="message.emailpending" /></p>
-			<p><@s.text name="message.seedownloadstatus" /></p>
-		<#else>
-			<#list actionErrors as error >
-				${error}<br/>
-			</#list>
-		</#if>
-	</div>
-	<div style="text-align:center">
-		<button style="padding: 2px 5px;" onclick="window.location.href='<@s.url namespace="/" action="showDownloads"/>'"><@s.text name="hbutton.tomydownloads" /></button>
-		&nbsp;<@s.text name="label.or" />&nbsp;
+<div id="modalBox_message">
+	<#if actionErrors.isEmpty() >
+		<h3><@s.text name="message.downloadbeinggenerated" /></h3>
+		<p><@s.text name="message.download_change_name" /></p>
+		<p><span id="label"><@s.text name="label.downloadname"/></span>&nbsp;<span class="egColor"><@s.text name="message.downloadname" /></span></p>
+		
+		<@s.form id="download_name" action="saveDownloadName" namespace="/" theme="fieldidSimple">	
+			<@s.hidden name="fileId" value="${downloadLink.id}"/>		
+			<@s.textfield id="reportName" name="reportName" maxlength="255"/>
+					
+			<div class="formActions">
+				<@s.submit id="saveDownload" onClick="Lightview.hide();" key="hbutton.savetomydownloads" style="text-align:left"/>
+				&nbsp;<@s.text name="label.or" />&nbsp;
+				<a href="javascript:void(0);" onClick="Lightview.hide();"><@s.text name="hbutton.saveclosemessage" /></button>
+			</div>
+		</@s.form>
+	<#else>
+		<#list actionErrors as error >
+			${error}<br/>
+		</#list>
 		<button style="padding: 2px 5px;" onclick="Lightview.hide();"><@s.text name="hbutton.closemessage" /></button>
-	</div>
+	</#if>
 </div>

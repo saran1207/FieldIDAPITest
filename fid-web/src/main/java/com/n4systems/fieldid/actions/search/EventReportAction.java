@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.actions.search;
 
-import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.*;
+import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,39 +10,38 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
-import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
-import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
-import com.n4systems.fieldid.reporting.service.EventColumnsService;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
-import com.n4systems.reporting.EventReportType;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
+import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.reporting.service.EventColumnsService;
+import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
+import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -71,6 +70,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	private List<ListingPair> eventJobs;
 	private AssignedToUserGrouper userGrouper;
 	private TableView table;
+	
 	public EventReportAction(
 			final PersistenceManager persistenceManager,
 			final UserManager userManager, 
@@ -137,19 +137,18 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		storedPageNumber();
 		return returnValue;
 	}
-
 	
 	public String doPrintAllCerts() {
 		if (!isSearchIdValid()) {
 			addFlashErrorText("error.reportexpired");
 			return INPUT;
 		}
-		String reportName = String.format("%s Report - %s", reportType.getDisplayName(), DateHelper.getFormattedCurrentDate(getUser()));
+		reportName = String.format("%s Report - %s", reportType.getDisplayName(), DateHelper.getFormattedCurrentDate(getUser()));
 
 		try {
 			List<Long> eventIds = sortEventIdsByRowIndex(getContainer().getMultiIdSelection().getSelectedIds());
 			
-			getDownloadCoordinator().generateAllEventCertificates(reportName, getDownloadLinkUrl(), reportType, eventIds);
+			downloadLink = getDownloadCoordinator().generateAllEventCertificates(reportName, getDownloadLinkUrl(), reportType, eventIds);
 		} catch(RuntimeException e) {
 			logger.error("Failed to print all event certs", e);
 			addFlashErrorText("error.reportgeneration");
@@ -169,10 +168,10 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 			addFlashErrorText("error.reportexpired");
 			return INPUT;
 		}
-		String reportName = String.format("Event Summary Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
+		reportName = String.format("Event Summary Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
 		
 		try {
-			getDownloadCoordinator().generateEventSummaryReport(reportName, getDownloadLinkUrl(), getContainer());
+			downloadLink = getDownloadCoordinator().generateEventSummaryReport(reportName, getDownloadLinkUrl(), getContainer());
 		} catch(RuntimeException e) {
 			logger.error("Failed to print event report summary", e);
 			addFlashErrorText("error.reportgeneration");
