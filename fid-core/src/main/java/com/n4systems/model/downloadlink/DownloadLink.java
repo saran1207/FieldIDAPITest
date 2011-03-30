@@ -126,4 +126,8 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 	public MailMessage generateMailMessage(String body) {
 		return new MailMessage(getName(), body, getUser().getEmailAddress());
 	}
+	
+	public boolean isDownloaded(){
+		return state.equals(DownloadState.DOWNLOADED);
+	}
 }

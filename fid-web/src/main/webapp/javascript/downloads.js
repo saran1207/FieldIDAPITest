@@ -16,3 +16,7 @@ function cancelDownloadName( fileId ) {
 	params.fileId = fileId;
 	getResponse(cancelDownloadNameUrl, "get", params);
 }
+
+function markDownloaded ( row ) {
+	$(row).removeClassName('strong');
+}

@@ -4,6 +4,8 @@ public enum DownloadState {
 	REQUESTED	("label.requested",		false, 	false), 
 	INPROGRESS	("label.inprogress",	false, 	false),
 	COMPLETED	("label.completed",		true, 	true),
+	DOWNLOADED	("label.completed",		true, 	true),
+	DELETED		("label.deleted",		true, 	true),
 	FAILED		("label.failed",		false, 	true);
 	
 	private final String label;
@@ -27,4 +29,5 @@ public enum DownloadState {
 	public boolean isWillExpire() {
 		return willExpire;
 	}
+	
 }

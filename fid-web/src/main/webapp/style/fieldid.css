@@ -35,10 +35,13 @@ body {
 	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
 }
 
-strong {
+.strong {
 	font-weight: bold;
 }
 
+.normal {
+	font-weight: normal;
+}
 a,a:hover,a:visited,a:active {
 	color: #356CA2;
 }

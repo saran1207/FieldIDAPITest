@@ -23,23 +23,31 @@ ${action.setPageType('my_account', 'downloads')!}
 			<th></th>
 		</tr>
 		<#list downloads as download>
-			<tr>
-				<td>${action.formatDateTime(download.created)}</td>
+		
+			<#if !download.downloaded>
+				<#assign style="strong">
+			<#else>
+				<#assign style="">
+			</#if>
+			<tr id="dl_${download.id}" class="${style}">
+				<td >${action.formatDateTime(download.created)}</td>
 				<td id="download_${download.id}">
 					${download.name} |
-					<a href="javascript:void(0);" onClick="editDownloadName(${download.id});"><@s.text name="label.edit" /></a>
+					<a class="normal" href="javascript:void(0);" onClick="editDownloadName(${download.id});"><@s.text name="label.edit" /></a>
 				</td>
-				<td><@s.text name="${download.state.label}"/></td>
-				<td>
+				<td >
+					<@s.text name="${download.state.label}"/>
+				</td>
+				<td >
 					&nbsp;
 					<#if download.state.willExpire>
 						${action.getExpiresText(download.created)}
 					</#if>
 				</td>
-				<td>
+				<td class="normal" > 
 					&nbsp;
 					<#if download.state.ready>
-						<a href="<@s.url action="downloadFile" includeParams="get" fileId="${download.id}" />"><@s.text name="label.download"/></a>
+						<a href="<@s.url action="downloadFile" includeParams="get" fileId="${download.id}" />" onClick="markDownloaded('dl_${download.id}');" ><@s.text name="label.download"/></a>
 						|
 						<a href="<@s.url action="deleteDownload" fileId="${download.id}" />"><@s.text name="label.delete"/></a>
 					</#if>

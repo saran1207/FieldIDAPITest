@@ -12,6 +12,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
+import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -26,6 +27,8 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	private DownloadLink downloadLink;
 	private List<DownloadLink> downloads;
 	private String downloadLinkName;
+	private DownloadLinkSaver downloadLinkSaver = new DownloadLinkSaver();
+
 	
 	public DownloadLinkAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -74,6 +77,16 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return downloadLink.getFile();
 	}
 	
+	@SkipValidation
+	public String doDownload() {
+		downloadLink = loadDownloadLink();
+		if (!downloadLink.getState().equals(DownloadState.DOWNLOADED)) {
+			downloadLink.setState(DownloadState.DOWNLOADED);
+			downloadLinkSaver.update(downloadLink); 
+		}
+		return super.doDownload();
+	}
+	
 	protected DownloadLink loadDownloadLink() {
 		FilteredIdLoader<DownloadLink> linkLoader = getLoaderFactory().createFilteredIdLoader(DownloadLink.class);
 		linkLoader.setId(fileId);
@@ -99,13 +112,15 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	public String doSave() {
 		downloadLink = loadDownloadLink();
 		downloadLink.setName(downloadLinkName);
-		new DownloadLinkSaver().update(downloadLink); 
+		downloadLinkSaver.update(downloadLink); 
 		return SUCCESS;	
 	}
 	
 	@SkipValidation
 	public String doDelete() {
-		new DownloadLinkSaver().remove(loadDownloadLink());
+		downloadLink = loadDownloadLink();
+		downloadLink.setState(DownloadState.DELETED);
+		downloadLinkSaver.update(downloadLink);
 		fileId = null;
 		return SUCCESS;
 	}
