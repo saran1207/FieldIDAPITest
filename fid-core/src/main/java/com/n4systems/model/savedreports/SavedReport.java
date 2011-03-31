@@ -78,6 +78,9 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
     @Column(name="element")
 	private Map<String, String> criteria = new HashMap<String, String>();
 
+    @Column(name="sort_column_id")
+    private Long sortColumnId;
+
 	public SavedReport() {}
 	
 	@Override
@@ -184,4 +187,11 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
     	this.sharedByName = sharedByName;
     }
 
+    public Long getSortColumnId() {
+        return sortColumnId;
+    }
+
+    public void setSortColumnId(Long sortColumnId) {
+        this.sortColumnId = sortColumnId;
+    }
 }

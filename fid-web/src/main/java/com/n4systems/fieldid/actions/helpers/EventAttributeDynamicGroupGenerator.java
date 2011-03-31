@@ -72,6 +72,6 @@ public class EventAttributeDynamicGroupGenerator {
 		String path = (pathPrefix != null) ? pathPrefix + "." : "";
 		path += "infoOptionMap['" + fieldName + "']";
 
-		return new ColumnMappingView(id, fieldName, path, null, null, false, false, order, null, null);
+		return new ColumnMappingView(id, fieldName, path, null, null, false, false, order, null, null, null, null);
 	}
 }

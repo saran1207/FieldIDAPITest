@@ -8,6 +8,7 @@ public class SortTerm implements Serializable {
 
 	private String path;
 	private SortDirection direction = SortDirection.DESC;
+    private boolean alwaysDropAlias = false;
 	
 	public SortTerm() {}
 	
@@ -37,6 +38,12 @@ public class SortTerm implements Serializable {
 	}
 	
 	public OrderClause toSortField() {
-		return new OrderClause(path, direction.isAscending());
+        OrderClause orderClause = new OrderClause(path, direction.isAscending());
+        orderClause.setAlwaysDropAlias(alwaysDropAlias);
+        return orderClause;
 	}
+
+    public void setAlwaysDropAlias(boolean alwaysDropAlias) {
+        this.alwaysDropAlias = alwaysDropAlias;
+    }
 }

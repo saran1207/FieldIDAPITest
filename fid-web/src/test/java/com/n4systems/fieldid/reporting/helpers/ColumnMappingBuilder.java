@@ -47,7 +47,7 @@ public class ColumnMappingBuilder implements Builder<ColumnMappingView> {
 	}
 	
 	public ColumnMappingView build() {
-		return new ColumnMappingView(id, label, pathExpression, sortExpression, outputHandler, sortable, onByDefault, order, requiredExtendedFeature, null);
+		return new ColumnMappingView(id, label, pathExpression, sortExpression, outputHandler, sortable, onByDefault, order, requiredExtendedFeature, null, null, null);
 	}
 
 	

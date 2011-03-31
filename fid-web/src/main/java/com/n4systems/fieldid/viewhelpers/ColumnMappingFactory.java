@@ -84,7 +84,7 @@ public class ColumnMappingFactory {
 						props.getBoolean("onByDefault"), 
 						props.getInteger("order"), 
 						props.getString("requiredExtendedFeature"),
-                            null)
+                            null, null, null)
 				);
 			} catch (NullPointerException e) {
 				logger.error(String.format("Unable to create column mapping: group=%s, properties=%s", groupId, props), e);

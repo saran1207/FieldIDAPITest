@@ -6,6 +6,8 @@ import com.n4systems.util.persistence.JoinClause.JoinType;
 import java.io.Serializable;
 
 public class JoinTerm implements Serializable {
+    public static final String DEFAULT_SORT_JOIN_ALIAS = "sort";
+
 	public enum JoinTermType { LEFT, RIGHT, INNER }
 	
 	private final JoinTermType type;

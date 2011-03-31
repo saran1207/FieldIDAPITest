@@ -74,11 +74,7 @@ public abstract class ColumnsService {
     }
 
     private ColumnMappingView convertColumn(ColumnMapping systemMapping) {
-        String id = systemMapping.getName();
-        if (id == null) {
-            id = systemMapping.getGroup().getGroupKey() + systemMapping.getLabel();
-        }
-        return new ColumnMappingView(id, systemMapping.getLabel(), systemMapping.getPathExpression(), systemMapping.getSortExpression(), systemMapping.getOutputHandler(), systemMapping.isSortable(), true, systemMapping.getDefaultOrder(), null, systemMapping.getGroup().getGroupKey());
+        return new ColumnMappingConverter().convert(systemMapping);
     }
 
     protected boolean includeCustom() {

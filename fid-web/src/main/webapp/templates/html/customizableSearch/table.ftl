@@ -16,7 +16,7 @@
 		
 		<#list selectedColumns as columnId >
 			<#assign column_class="" />
-			<#assign columnPath="${action.getColumnMapping(columnId).sortExpression}" />
+			<#assign columnPath=action.getColumnMapping(columnId).dbColumnId />
 			<#assign columnLabel="${action.getColumnMapping(columnId).label}" />
 			
 			<#if sortColumn?exists && columnPath == sortColumn>

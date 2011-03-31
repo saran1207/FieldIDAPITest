@@ -11,7 +11,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.persistence.search.SortDirection;
-import com.n4systems.util.persistence.search.SortTerm;
 
 public class EventScheduleSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
@@ -41,7 +40,6 @@ public class EventScheduleSearchContainer extends SearchContainer {
 
 	@Override
 	protected void evalJoinTerms() {
-		addLeftJoinTerms("asset.shopOrder.order", "asset.assetStatus", "asset.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "asset.type.group");
 		addPredefinedLocationJoin();
 	}
 	

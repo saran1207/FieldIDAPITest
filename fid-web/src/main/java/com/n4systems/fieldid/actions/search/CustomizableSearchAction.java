@@ -1,23 +1,12 @@
 package com.n4systems.fieldid.actions.search;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.fieldid.actions.api.AbstractPaginatedAction;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.reporting.helpers.DynamicColumnProvider;
+import com.n4systems.fieldid.reporting.service.ColumnMappingConverter;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
@@ -27,6 +16,8 @@ import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.assettype.AssetTypesByAssetGroupIdLoader;
+import com.n4systems.model.columns.SystemColumnMapping;
+import com.n4systems.model.columns.loader.SystemColumnMappingLoader;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
@@ -45,6 +36,17 @@ import com.n4systems.util.views.ExcelOutputHandler;
 import com.n4systems.util.views.TableView;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
+import org.apache.log4j.Logger;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Validation
 public abstract class CustomizableSearchAction<T extends SearchContainer> extends AbstractPaginatedAction implements SearchDefiner<TableView> {
@@ -77,7 +79,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	protected String reportName;
 	private Long fileId;
 	protected DownloadLink downloadLink;
-	
+
 	public CustomizableSearchAction(
 			final Class<? extends CustomizableSearchAction<T>> implementingClass, 
 			final String sessionKey, 
@@ -105,7 +107,11 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
         mappingGroups.addAll(reportConfig.getColumnGroups());
         mappingGroups.addAll(getDynamicGroups());
         if (getSortDirection() == null) setSortDirection(reportConfig.getSortDirection().getDisplayName());
-        if (getSortColumn() == null) setSortColumn(reportConfig.getSortColumn().getSortExpression());
+        if (getSortColumn() == null) {
+            getContainer().setSortColumn(reportConfig.getSortColumn().getSortExpression());
+            getContainer().setSortColumnId(reportConfig.getSortColumn().getDbColumnId());
+//            setSortColumn(reportConfig.getSortColumn().getSortExpression());
+        }
 
 		// initialize the output handlers 
 		for (ColumnMappingGroupView group: mappingGroups) {
@@ -200,14 +206,14 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 			addFlashErrorText("error.searchexpired");
 			return INPUT;
 		}
-		reportName = String.format("%s - %s", excelReportFileName, DateHelper.getFormattedCurrentDate(getUser()));
+		String reportName = String.format("%s - %s", excelReportFileName, DateHelper.getFormattedCurrentDate(getUser()));
 		
 		try {
             List<Long> selectedIds = getContainer().getMultiIdSelection().getSelectedIds();
             ImmutableSearchDefiner<TableView> searchDefiner = immutableSearchDefiner();
             searchDefiner.getSearchTerms().add(new SimpleInTerm<Long>("id", selectedIds));
 
-            downloadLink = getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), searchDefiner, buildExcelColumnTitles(), prepareExcelHandlers());
+            getDownloadCoordinator().generateExcel(reportName, getDownloadLinkUrl(), searchDefiner, buildExcelColumnTitles(), prepareExcelHandlers());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute ExcelExportTask", e);
 			addActionErrorText("error.cannotschedule");
@@ -316,14 +322,21 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		getContainer().setSelectedColumns(getDefaultSelectedColumns());
 	}
 	
-	public String getSortColumn() {
-		return getContainer().getSortColumn();
+	public Long getSortColumn() {
+		return getContainer().getSortColumnId();
 	}
 	
-	public void setSortColumn(String column) {
-		getContainer().setSortColumn(column);
+	public void setSortColumn(Long column) {
+        Long currentSortColumnId = getContainer().getSortColumnId();
+        if (currentSortColumnId != null && !currentSortColumnId.equals(column)) {
+            SystemColumnMapping mapping = new SystemColumnMappingLoader().id(column).load();
+            ColumnMappingView mappingView = new ColumnMappingConverter().convert(mapping);
+            getContainer().setSortColumn(mappingView.getSortExpression());
+            getContainer().setSortColumnId(mappingView.getDbColumnId());
+            getContainer().setSortJoinExpression(mappingView.getJoinExpression());
+        }
 	}
-	
+
 	public String getSortDirection() {
 		return getContainer().getSortDirection();
 	}
@@ -515,7 +528,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	protected DownloadLink loadDownloadLink() {
 		FilteredIdLoader<DownloadLink> linkLoader = getLoaderFactory().createFilteredIdLoader(DownloadLink.class);
 		linkLoader.setId(fileId);
-		
+
 		return linkLoader.load();
 	}
 
@@ -544,15 +557,15 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 	}
 
 	public String doConfirmDownloadName() {
-		
+
 		downloadLink = loadDownloadLink();
-	
+
 		if(!reportName.equals(downloadLink.getName()) && !reportName.isEmpty()) {
 			downloadLink.setName(reportName);
 			new DownloadLinkSaver().update(downloadLink);
 		}
-		
+
 		return SUCCESS;
 	}
-	
+
 }

@@ -97,6 +97,6 @@ public class InfoFieldDynamicGroupGenerator {
 		String path = (pathPrefix != null) ? pathPrefix + "." : "";
 		path +=  "infoOptions{infoField.name=" + fieldName + "}.name";
 		
-		return new ColumnMappingView(id, fieldName, path, null, null, false, false, order, null, null);
+		return new ColumnMappingView(id, fieldName, path, null, null, false, false, order, null, null, null, null);
 	}
 }

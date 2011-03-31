@@ -9,7 +9,6 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.persistence.search.SortDirection;
-import com.n4systems.util.persistence.search.SortTerm;
 
 public class AssetSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +32,6 @@ public class AssetSearchContainer extends SearchContainer {
 
 	@Override
 	protected void evalJoinTerms() {
-		addLeftJoinTerms("shopOrder.order", "assetStatus", "identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg", "type.group");
 		addPredefinedLocationJoin();
 	}
 	

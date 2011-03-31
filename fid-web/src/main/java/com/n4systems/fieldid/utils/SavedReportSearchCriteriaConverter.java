@@ -4,7 +4,9 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.ColumnMappingGroup;
+import com.n4systems.model.columns.SystemColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingGroupLoader;
+import com.n4systems.model.columns.loader.SystemColumnMappingLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.SecurityFilter;
@@ -29,8 +31,14 @@ public class SavedReportSearchCriteriaConverter {
         verifySavedColumnsAreAllStillPresent(savedReport.getColumns());
 		container.setSelectedColumns(savedReport.getColumns());
 		container.setSortColumn(savedReport.getSortColumn());
+        container.setSortColumnId(savedReport.getSortColumnId());
 		container.setSortDirection(savedReport.getSortDirection());
-		
+
+        if (savedReport.getSortColumnId() != null) {
+            SystemColumnMapping mapping = new SystemColumnMappingLoader().id(savedReport.getSortColumnId()).load();
+            container.setSortJoinExpression(mapping.getJoinExpression());
+        }
+
 		container.setPurchaseOrder(savedReport.getStringCriteria(SavedReport.PURCHASE_ORDER_NUMBER));
 		container.setOrderNumber(savedReport.getStringCriteria(SavedReport.ORDER_NUMBER));
 		container.setRfidNumber(savedReport.getStringCriteria(SavedReport.RFID_NUMBER));
@@ -66,6 +74,7 @@ public class SavedReportSearchCriteriaConverter {
 		
 		
 		report.setSortColumn(container.getSortColumn());
+        report.setSortColumnId(container.getSortColumnId());
 		report.setSortDirection(container.getSortDirection());
 		report.setColumns(container.getSelectedColumns());
 			

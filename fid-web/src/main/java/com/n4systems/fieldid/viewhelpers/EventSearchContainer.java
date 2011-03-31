@@ -12,7 +12,6 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.reporting.ReportDefiner;
 import com.n4systems.util.persistence.search.SortDirection;
-import com.n4systems.util.persistence.search.SortTerm;
 
 
 public class EventSearchContainer extends SearchContainer implements ReportDefiner {
@@ -50,7 +49,6 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	
 	@Override
 	protected void evalJoinTerms() {
-		addLeftJoinTerms("book", "asset.shopOrder.order", "asset.identifiedBy", "owner.customerOrg", "owner.secondaryOrg", "owner.divisionOrg",  "asset.type.group", "assetStatus");
 		addPredefinedLocationJoin();
 	}
 	

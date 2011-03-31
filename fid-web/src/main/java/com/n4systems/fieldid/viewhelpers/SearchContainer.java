@@ -44,6 +44,8 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	private List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
 	private String sortColumn;
 	private String sortDirection;
+    private Long sortColumnId;
+    private String sortJoinExpression;
 
     private MultiIdSelection multiIdSelection = new MultiIdSelection();
 	
@@ -117,8 +119,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 		// this persistence manager can take a list of sort terms but we currently only support one
 		SortDirection dir = defaultSortDirection();
 		if(sortColumn != null && sortDirection != null) {
-			
-			
+
 			if(sortDirection.equals(SortDirection.ASC.getDisplayName())) {
 				dir = SortDirection.ASC;
 			} else if (sortDirection.equals(SortDirection.DESC.getDisplayName())) {
@@ -127,9 +128,15 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 			
 			// since the sort column is a path expression, it is possible for it to have meta tags used in filtering.
 			// we need to remove those before sending it to hibernate search
-			
-			sortTerms.add(new SortTerm(sortColumn.replaceAll("\\{.*\\}", ""), dir));
-		
+
+            if (sortJoinExpression == null) {
+                sortTerms.add(new SortTerm(sortColumn.replaceAll("\\{.*\\}", ""), dir));
+            } else {
+                SortTerm sortTerm = new SortTerm(JoinTerm.DEFAULT_SORT_JOIN_ALIAS, dir);
+                sortTerm.setAlwaysDropAlias(true);
+                sortTerms.add(sortTerm);
+            }
+
 		} else {	
 			sortTerms.add(new SortTerm(defaultSortColumn(), dir));
 			sortColumn = defaultSortColumn();
@@ -150,6 +157,9 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	public List<JoinTerm> getJoinTerms() {
 		joinTerms.clear();
 		evalJoinTerms();
+        if (sortJoinExpression != null) {
+            addRequiredLeftJoin(sortJoinExpression, JoinTerm.DEFAULT_SORT_JOIN_ALIAS);
+        }
 		return joinTerms;
 	}
 	
@@ -240,4 +250,19 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
         return multiIdSelection;
     }
 
+    public Long getSortColumnId() {
+        return sortColumnId;
+    }
+
+    public void setSortColumnId(Long sortColumnId) {
+        this.sortColumnId = sortColumnId;
+    }
+
+    public String getSortJoinExpression() {
+        return sortJoinExpression;
+    }
+
+    public void setSortJoinExpression(String sortJoinExpression) {
+        this.sortJoinExpression = sortJoinExpression;
+    }
 }

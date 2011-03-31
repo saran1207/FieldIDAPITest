@@ -28,6 +28,9 @@ public abstract class ColumnMapping extends AbstractEntity {
     @Column(name="sortable")
     private boolean sortable;
 
+    @Column(name="join_expression")
+    private String joinExpression;
+
     @Column(name="output_handler")
     private String outputHandler;
 
@@ -114,5 +117,13 @@ public abstract class ColumnMapping extends AbstractEntity {
 
     public void setRequiredExtendedFeature(ExtendedFeature requiredExtendedFeature) {
         this.requiredExtendedFeature = requiredExtendedFeature;
+    }
+
+    public String getJoinExpression() {
+        return joinExpression;
+    }
+
+    public void setJoinExpression(String joinExpression) {
+        this.joinExpression = joinExpression;
     }
 }

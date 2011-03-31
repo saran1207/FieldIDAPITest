@@ -17,9 +17,11 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
 	private int order;
 	private String requiredExtendedFeature;
     private String groupKey;
+    private Long dbColumnId;
+    private String joinExpression;
 	
 	
-	public ColumnMappingView(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order, String requiredExtendedFeature, String groupKey) {
+	public ColumnMappingView(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order, String requiredExtendedFeature, String groupKey, Long dbColumnId, String joinExpression) {
 		this.id = id;
 		this.label = label;
 		this.pathExpression = pathExpression;
@@ -30,6 +32,8 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
 		this.order = order;
 		this.requiredExtendedFeature = requiredExtendedFeature;
         this.groupKey = groupKey;
+        this.dbColumnId = dbColumnId;
+        this.joinExpression = joinExpression;
 	}
 	
 	public int compareTo(ColumnMappingView mapping) {
@@ -114,5 +118,21 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
 
     public void setOnByDefault(boolean onByDefault) {
         this.onByDefault = onByDefault;
+    }
+
+    public Long getDbColumnId() {
+        return dbColumnId;
+    }
+
+    public void setDbColumnId(Long dbColumnId) {
+        this.dbColumnId = dbColumnId;
+    }
+
+    public String getJoinExpression() {
+        return joinExpression;
+    }
+
+    public void setJoinExpression(String joinExpression) {
+        this.joinExpression = joinExpression;
     }
 }
