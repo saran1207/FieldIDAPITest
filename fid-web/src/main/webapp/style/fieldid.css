@@ -273,7 +273,6 @@ h2 a {
 	width: 100%;
 	margin: 5px 0px;
 	border-collapse: separate;
-	border-spacing: 2px 0;
 	border-bottom: 1px solid #CACACA;
 	emtpty-cells: show;
 }
@@ -644,14 +643,9 @@ div.formAction {
 	padding-right: 10px;
 }
 
-#archivedCustomerList .formAction div, #customerList .formAction div{
-	padding: 0;
-}
-
 #archivedCustomerList div.formAction ,#customerList div.formAction{
 	clear: none;
-	padding: 5px 0;
-	}
+}
 
 .formAction a {
 	font-size: 1.2em;

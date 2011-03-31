@@ -2,8 +2,6 @@
 	<@n4.includeStyle href="customerList" type="page"/>
 </head>
 
-
-
 <#if page.hasResults() && page.validPage() >
 	
 	<#include "_listFilter.ftl">

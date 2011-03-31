@@ -1,6 +1,7 @@
 <div class="listFilter quickForm" >
 	<div id="listFilterHeader">
 		<h2><@s.text name="hbutton.filter"/></h2>
+		&nbsp;
 		<span class="egColor"><@s.text name="message.filter_customers"/></span>
 	</div>
 	<@s.form action="${filterAction}" method="get">
