@@ -28,7 +28,8 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	private List<DownloadLink> downloads;
 	private String downloadLinkName;
 	private DownloadLinkSaver downloadLinkSaver;
-
+	private String recipients;
+	private String message;
 	
 	public DownloadLinkAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -88,8 +89,25 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return super.doDownload();
 	}
 	
+	@SkipValidation
+	public String doDownloadPublicFile() {
+		downloadLink = loadPublicDownloadLink();
+		if (!downloadLink.getState().equals(DownloadState.DOWNLOADED)) {
+			downloadLink.setState(DownloadState.DOWNLOADED);
+			downloadLinkSaver.update(downloadLink); 
+		}
+		return super.doDownload();
+	}
+	
 	protected DownloadLink loadDownloadLink() {
 		FilteredIdLoader<DownloadLink> linkLoader = getLoaderFactory().createFilteredIdLoader(DownloadLink.class);
+		linkLoader.setId(fileId);
+		
+		return linkLoader.load();
+	}
+	
+	protected DownloadLink loadPublicDownloadLink(){
+		FilteredIdLoader<DownloadLink> linkLoader = getOpenSecurityFilteredLoaderFactory().createFilteredIdLoader(DownloadLink.class);
 		linkLoader.setId(fileId);
 		
 		return linkLoader.load();
@@ -110,6 +128,11 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return SUCCESS;	
 	}
 	
+	@SkipValidation
+	public String doPublicDownload() {
+		return SUCCESS;
+	}
+	
 	public String doSave() {
 		downloadLink = loadDownloadLink();
 		downloadLink.setName(downloadLinkName);
@@ -123,6 +146,14 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		downloadLink.setState(DownloadState.DELETED);
 		downloadLinkSaver.update(downloadLink);
 		fileId = null;
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doEmail() {
+		//generatePublicDownload();
+		//emailTheLink();
+		
 		return SUCCESS;
 	}
 
@@ -178,6 +209,12 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return downloadLink;
 	}
 	
+	public DownloadLink getPublicDownloadLink() {
+		if(downloadLink == null) {
+			downloadLink = loadPublicDownloadLink();
+		}
+		return downloadLink;
+	}
 	
 	public String getDownloadLinkName() {
 		return downloadLinkName;
@@ -190,6 +227,22 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 
 	public void setDownloadLinkSaver(DownloadLinkSaver downloadLinkSaver) {
 		this.downloadLinkSaver = downloadLinkSaver;
+	}
+
+	public String getRecipients() {
+		return recipients;
+	}
+
+	public void setRecipients(String recipients) {
+		this.recipients = recipients;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

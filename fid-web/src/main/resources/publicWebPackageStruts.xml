@@ -31,6 +31,25 @@
 			<result name="error" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/subscriptions/signUp/list.ftl</result>
 		</action>
+		
+		<action name="publicDownload" method="publicDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+			<result name="error" type="freemarker">/templates/html/downloads/publicDownload.ftl</result>
+			<result name="input" type="freemarker">/templates/html/downloads/publicDownload.ftl</result>
+			<result name="success" type="freemarker">/templates/html/downloads/publicDownload.ftl</result>
+		</action>	
+		
+		<action name="downloadFile" method="downloadPublicFile" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+			<result name="success" type="stream">
+				<param name="contentType">${contentType}</param>
+				<param name="inputName">fileStream</param>
+				<param name="contentLength">${fileSize}</param>
+				<param name="contentDisposition">inline; filename="${fileName}"</param>
+			</result>
+			<result name="error" type="redirectAction">
+					<param name="actionName">publicDownload</param>
+					<param name="fileId">${fileId}</param>
+			</result>
+		</action>
 
 		<action name="signUpAdd" method="add" class="com.n4systems.fieldid.actions.subscriptions.SignUpCrud">
 			<result name="missing" type="redirectAction">signUpPackages</result>

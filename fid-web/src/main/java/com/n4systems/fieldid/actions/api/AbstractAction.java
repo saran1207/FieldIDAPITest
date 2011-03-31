@@ -347,7 +347,12 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return nonSecureLoaderFactory;
 	}
 	
-	
+	public LoaderFactory getOpenSecurityFilteredLoaderFactory() {
+		if (loaderFactory == null) {
+			loaderFactory = new LoaderFactory(new OpenSecurityFilter());
+		}
+		return loaderFactory;
+	}
 	
 	protected RemovalHandlerFactory getRemovalHandlerFactory() {
 		if (rhFactory == null) {
