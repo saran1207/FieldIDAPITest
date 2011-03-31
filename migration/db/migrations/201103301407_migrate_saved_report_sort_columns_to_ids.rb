@@ -18,7 +18,7 @@ class MigrateSavedReportSortColumnsToIds < ActiveRecord::Migration
     saved_reports.each do |report|
       sort_expr = report.sortcolumn
       mapping = ColumnMapping.find_by_sql("select c.* from system_column_mappings s, column_mappings c where s.column_id = c.id and c.group_id in (#{event_column_groups.join(',')}) and (c.sort_expression='#{sort_expr}' or (c.sort_expression is null and c.path_expression='#{sort_expr}'))").first
-      if mapping.nil
+      if mapping.nil?
         report.sort_column_id = default_sort_column.id
       else
         report.sort_column_id = mapping.id
