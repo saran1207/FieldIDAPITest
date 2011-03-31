@@ -95,6 +95,8 @@ public class CustomerCrudTest {
 		expect(loader.setPage(1)).andReturn(loader);
 		expect(loader.setPageSize(20)).andReturn(loader);
 		expect(loader.setNameFilter(null)).andReturn(loader);
+		expect(loader.setIdFilter(null)).andReturn(loader);
+		expect(loader.setOrgFilter(null)).andReturn(loader);
 	}
 
 }

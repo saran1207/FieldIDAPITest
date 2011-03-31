@@ -41,7 +41,9 @@ public class CustomerCrud extends AbstractCrud {
 	
 	private CustomerOrg customer;
 	private Pager<CustomerOrg> customerPage;
-	private String listFilter;
+	private String nameFilter;
+	private String idFilter;
+	private Long orgFilter;
 	private List<ListingPair> internalOrgList;
 	
 	public CustomerCrud(PersistenceManager persistenceManager) {
@@ -182,13 +184,21 @@ public class CustomerCrud extends AbstractCrud {
 	}
 	
 	public Pager<CustomerOrg> getPage() {
+		
+		
 		if (customerPage == null) {
 			CustomerOrgPaginatedLoader loader = getLoaderFactory().createCustomerOrgPaginatedLoader();
 			loader.setPostFetchFields("modifiedBy", "createdBy");
 			loader.setPage(getCurrentPage()).setPageSize(CRUD_RESULTS_PER_PAGE);
-			loader.setNameFilter(listFilter);
+			loader.setNameFilter(nameFilter);
+			loader.setIdFilter(idFilter);
+			loader.setOrgFilter(orgFilter);
 			loader.setArchivedOnly(archivedOnly);
+			try{
 			customerPage = loader.load();
+			} catch (Exception e) {
+				logger.error("error loading customers", e);
+			}
 		}
 		
 		return customerPage;
@@ -245,12 +255,12 @@ public class CustomerCrud extends AbstractCrud {
 		return customer.getParent().getId();
 	}
 	
-	public String getListFilter() {
-		return listFilter;
+	public String getNameFilter() {
+		return nameFilter;
 	}
 
-	public void setListFilter(String listFilter) {
-		this.listFilter = listFilter;
+	public void setNameFilter(String nameFilter) {
+		this.nameFilter = nameFilter;
 	}
 	
 	public List<ListingPair> getParentOrgs() {
@@ -275,6 +285,22 @@ public class CustomerCrud extends AbstractCrud {
 	
 	public void setArchivedOnly(boolean archivedOnly) {
 		this.archivedOnly = archivedOnly;
+	}
+
+	public String getIdFilter() {
+		return idFilter;
+	}
+
+	public void setIdFilter(String idFilter) {
+		this.idFilter = idFilter;
+	}
+
+	public Long getOrgFilter() {
+		return orgFilter;
+	}
+
+	public void setOrgFilter(Long orgFilter) {
+		this.orgFilter = orgFilter;
 	}
 
 }

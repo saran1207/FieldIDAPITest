@@ -11,6 +11,8 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 
 	private String nameFilter;
+	private String idFilter;
+	private Long orgFilter;
 	private boolean withLinkedCustomers = true;
 	private boolean archivedOnly;
 	private String[] postFetchFields = new String[0];
@@ -24,10 +26,18 @@ public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 		QueryBuilder<CustomerOrg> builder = new QueryBuilder<CustomerOrg>(CustomerOrg.class, new TenantOnlySecurityFilter(filter).setShowArchived(archivedOnly));
 		builder.addOrder("name");
 		
-		if (nameFilter != null) {
+		if (nameFilter!=null && !nameFilter.isEmpty()) {
 			builder.addWhere(Comparator.LIKE, "nameFilter", "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH);
 		}
+
+		if (idFilter!=null && !idFilter.isEmpty()) {
+			builder.addWhere(Comparator.LIKE, "idFilter", "code", idFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH);
+		}
 		
+		if (orgFilter != null) {
+			builder.addSimpleWhere("parent.id", orgFilter);
+		}
+
 		if (!withLinkedCustomers) {
 			builder.addWhere(new WhereParameter<Object>(Comparator.NULL, "linkedOrg"));
 		}
@@ -41,11 +51,21 @@ public class CustomerOrgPaginatedLoader extends PaginatedLoader<CustomerOrg> {
 		return builder;
 	}
 
-	public CustomerOrgPaginatedLoader setNameFilter(String nameCodeFilter) {
-		this.nameFilter = nameCodeFilter;
+	public CustomerOrgPaginatedLoader setNameFilter(String nameFilter) {
+		this.nameFilter = nameFilter;
+		return this;
+	}
+
+	public CustomerOrgPaginatedLoader setIdFilter(String idFilter) {
+		this.idFilter = idFilter;
 		return this;
 	}
 	
+	public CustomerOrgPaginatedLoader setOrgFilter(Long orgFilter) {
+		this.orgFilter = orgFilter;
+		return this;
+	}
+
 	public CustomerOrgPaginatedLoader setWithLinkedCustomers(boolean withLinkedCustomers) {
 		this.withLinkedCustomers = withLinkedCustomers;
 		return this;

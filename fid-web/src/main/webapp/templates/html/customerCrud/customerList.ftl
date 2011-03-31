@@ -5,14 +5,8 @@
 
 
 <#if page.hasResults() && page.validPage() >
-	<div class="listFilter quickForm" >
-		<@s.form action="${filterAction}" method="get">
-			<@s.textfield key="label.filtername" name="listFilter" id="listFilter" labelposition="left" />
-			<div class="formAction">
-				<@s.submit key="hbutton.filter" />
-			</div>
-		</@s.form>
-	</div>
+	
+	<#include "_listFilter.ftl">
 
 	<#assign currentAction="customerList.action" />
 	<#include '../common/_pagination.ftl' />
@@ -54,7 +48,7 @@
 	</#list>
 	</table>
 	<#include '../common/_pagination.ftl' />
-<#elseif !page.hasResults() && !listFilter??>
+<#elseif !page.hasResults() && !nameFilter??>
 	<@s.url id="addCustomerUrl" action="customerEdit"/>
 	
 	<div class="initialMessage">
@@ -64,15 +58,9 @@
 		</div>
 			<input type="submit" value="<@s.text name="label.create_owner_now"/>"onclick="return redirect('${addCustomerUrl}');"/>
 	</div>
-<#elseif !page.hasResults() && listFilter??>
-	<div class="listFilter quickForm" >
-		<@s.form action="${filterAction}" method="get">
-			<@s.textfield key="label.filtername" name="listFilter" id="listFilter" labelposition="left" />
-			<div class="formAction">
-				<@s.submit key="hbutton.filter" />
-			</div>
-		</@s.form>
-	</div>
+<#elseif !page.hasResults() && nameFilter??>
+	
+	<#include "_listFilter.ftl">	
 	
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults"/></h2>
