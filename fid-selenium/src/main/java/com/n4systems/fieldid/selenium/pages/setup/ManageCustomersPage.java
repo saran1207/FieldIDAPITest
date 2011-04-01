@@ -36,7 +36,7 @@ public class ManageCustomersPage extends FieldIDPage {
 	}
 	
 	public void filterByName(String name) {
-		selenium.type("//div[contains(@class, 'listFilter')]//form//input[@id='listFilter']", name);
+		selenium.type("//div[contains(@class, 'listFilter')]//form//input[@id='nameFilter']", name);
 		selenium.click("//div[contains(@class, 'listFilter')]//form//input[@type='submit']");
 		waitForPageToLoad();
 	}
