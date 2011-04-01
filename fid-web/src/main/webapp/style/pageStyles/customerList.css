@@ -32,14 +32,26 @@
 }
 
 .wwctrl input {
-    border: 1px solid #9C9C9C;
-    color: #555555;
-    overflow: hidden;
-    padding: 4px;
+    border : 1px solid #9C9C9C;
+    color : #555555;
+    overflow : hidden;
+    padding : 4px;
 }
 
 .wwctrl select {
-	border: 1px solid #9C9C9C;
-    color: #555555;
-    padding: 4px;
+	border : 1px solid #9C9C9C;
+    color : #555555;
+    padding : 4px;
+}
+
+.formAction div {
+	padding : 0;
+}
+
+.formAction a , .formAction input, .formAction span{
+	vertical-align: middle;
+}
+
+div.formAction {
+	clear : none;
 }
