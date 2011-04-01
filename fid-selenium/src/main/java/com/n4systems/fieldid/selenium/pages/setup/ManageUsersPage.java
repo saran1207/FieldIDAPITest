@@ -152,7 +152,7 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 
 	public void clickSearchButton() {
-		selenium.click("//INPUT[@id='userList_search']");
+		selenium.click("//INPUT[@id='listFilterForm_search']");
 		waitForPageToLoad();
 	}
 
