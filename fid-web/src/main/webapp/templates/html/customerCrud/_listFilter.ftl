@@ -1,6 +1,6 @@
 <div class="listFilter quickForm" >
 	<div id="listFilterHeader">
-		<h2><@s.text name="hbutton.filter"/></h2>
+		<h2><@s.text name="label.filter"/></h2>
 		&nbsp;
 		<span class="egColor"><@s.text name="message.filter_customers"/></span>
 	</div>
@@ -11,7 +11,7 @@
 		<div class="formAction">
 			<@s.submit key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
-			<a href="javascript:void(0);" onClick="$('listFilterForm').reset();"> <@s.text name="hbutton.clear"/></a>
+			<a href="javascript:void(0);" onClick="$('listFilterForm').reset();$('orgFilter').selectedIndex = 0;"> <@s.text name="hbutton.clear"/></a>
 		</div>
 	</@s.form>
 </div>
