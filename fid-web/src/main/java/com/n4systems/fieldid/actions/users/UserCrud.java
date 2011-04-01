@@ -64,6 +64,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	protected Pager<User> archivedPage;
 
 	private String listFilter;
+	private Long orgFilter;
 
 	private UserType userType = UserType.ALL;
 	private UserGroup userGroup = UserGroup.ALL;
@@ -76,6 +77,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private UploadedImage signature = new UploadedImage();
 
 	protected List<ListingPair> litePermissions;
+	protected List<ListingPair> internalOrgList;
 
 	protected UserCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -400,30 +402,44 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	public Pager<User> getPage() {
 		if (page == null) {
-			page = new UserPaginatedLoader(getSecurityFilter())
-			               .withUserType(userType)
-			               .withUserGroup(userGroup)
-			               .withNameFilter(listFilter)
-			               .setPage(getCurrentPage().intValue())
-			               .setPageSize(Constants.PAGE_SIZE)
-			               .load();
+			UserPaginatedLoader loader = new UserPaginatedLoader(getSecurityFilter())
+							               .withUserType(userType)
+							               .withUserGroup(userGroup)
+							               .withNameFilter(listFilter);
+			
+			setOrgFilter(loader);
+			page = loader.setPage(getCurrentPage().intValue())
+            			 .setPageSize(Constants.PAGE_SIZE)
+                         .load();
 		}
 		return page;
 	}
-	
+
 	public Pager<User> getArchivedPage() {
 		if(archivedPage == null) {
-			archivedPage =  new UserPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
-			                   .withArchivedOnly()
-				               .withUserType(userType)
-				               .withUserGroup(userGroup)
-				               .withNameFilter(listFilter)
-				               .setPage(getCurrentPage().intValue())
-				               .setPageSize(Constants.PAGE_SIZE)
-				               .load();
+			UserPaginatedLoader loader =  new UserPaginatedLoader(new TenantOnlySecurityFilter(getSecurityFilter()).setShowArchived(true))
+						                   .withArchivedOnly()
+							               .withUserType(userType)
+							               .withUserGroup(userGroup)
+							               .withNameFilter(listFilter);
+			setOrgFilter(loader);
+			archivedPage = loader.setPage(getCurrentPage().intValue())
+            			 .setPageSize(Constants.PAGE_SIZE)
+                         .load();
 		}
 		return archivedPage;
 	}
+
+	private void setOrgFilter(UserPaginatedLoader loader) {
+		if(orgFilter != null) {
+			if(getPrimaryOrg().getId().equals(orgFilter)) {
+				loader.filterOnPrimaryOrg();
+			}else {
+				loader.filterOnSecondaryOrg().withOrgFilter(orgFilter);
+			}
+		}
+	}
+
 	
 	public SortedSet<? extends Listable<String>> getCountries() {
 		return CountryList.getInstance().getCountries();
@@ -548,8 +564,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return getLimits().isLiteUsersMaxed();
 	}
 
-	
-
 	public String getUserGroup() {
 		return userGroup.name();
 	}
@@ -562,4 +576,19 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		this.userTypes = userTypes;
 	}
 
+	public List<ListingPair> getParentOrgs() {
+		if( internalOrgList == null ) {
+			List<Listable<Long>> orgListables = getLoaderFactory().createInternalOrgListableLoader().load();
+			internalOrgList = ListHelper.longListableToListingPair(orgListables);
+		}
+		return internalOrgList;
+	}
+	
+	public Long getOrgFilter() {
+		return orgFilter;
+	}
+
+	public void setOrgFilter(Long orgFilter) {
+		this.orgFilter = orgFilter;
+	}
 }

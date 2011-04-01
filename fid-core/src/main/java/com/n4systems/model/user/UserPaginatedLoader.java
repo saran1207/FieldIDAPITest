@@ -17,10 +17,13 @@ import com.n4systems.util.persistence.WhereParameterGroup;
 public class UserPaginatedLoader extends PaginatedLoader<User> {
 
 	private BaseOrg owner;
+	private Long orgFilter;
 	private UserType userType;
 	private UserGroup userGroup = UserGroup.ALL;
 	private String nameFilter;
 	private boolean archivedOnly = false;
+	private boolean filterOnPrimaryOrg;
+	private boolean filterOnSecondaryOrg;
 
 	public UserPaginatedLoader(SecurityFilter filter) {
 		super(filter);
@@ -34,6 +37,14 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 
 		if (owner != null) {
 			builder.addSimpleWhere("owner", owner);
+		}
+		
+		if(filterOnPrimaryOrg) {
+			builder.addWhere(WhereClauseFactory.createIsNull("owner.secondaryOrg"));
+		}
+					
+		if(filterOnSecondaryOrg) {
+			builder.addSimpleWhere("owner.secondaryOrg.id", orgFilter);
 		}
 
 		if (userType != null && userType != UserType.ALL) {
@@ -70,7 +81,22 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		this.owner = owner;
 		return this;
 	}
+	
+	public UserPaginatedLoader withOrgFilter(Long orgFilter) {
+		this.orgFilter = orgFilter;
+		return this;
+	}
 
+	public UserPaginatedLoader filterOnPrimaryOrg() {
+		this.filterOnPrimaryOrg = true;
+		return this;
+	}
+
+	public UserPaginatedLoader filterOnSecondaryOrg() {
+		this.filterOnSecondaryOrg = true;
+		return this;
+	}
+	
 	public UserPaginatedLoader withUserType(UserType userType) {
 		this.userType = userType;
 		return this;

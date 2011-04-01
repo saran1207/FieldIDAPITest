@@ -282,4 +282,57 @@ div.userLimitWarning{
 
 #mainContent{
 	padding: 0px;
-	}
+}
+
+.listFilter { 
+	background-color: #EEEEEE;
+	padding: 10px;
+}
+
+#listFilterHeader h2{
+	padding: 0;
+}
+
+#listFilterHeader h2, #listFilterHeader span{
+	display: inline;
+}
+
+.wwlbl{
+	margin-top: 5px;
+}
+
+.wwctrl input {
+    border : 1px solid #9C9C9C;
+    color : #555555;
+    overflow : hidden;
+    padding : 4px;
+	clear: both;    
+}
+
+.wwctrl select {
+	border : 1px solid #9C9C9C;
+    color : #555555;
+    padding : 4px;
+}
+
+.formAction div {
+	padding : 0;
+}
+
+.formAction a , .formAction input, .formAction span{
+	vertical-align: middle;
+}
+
+div.formAction {
+	clear : none;
+	float: left;
+}
+
+#nameFilter{
+	width: 450px;
+}
+
+#wwgrp_nameFilter{
+	width: 100%;
+}
+

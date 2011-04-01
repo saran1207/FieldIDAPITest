@@ -1,24 +1,41 @@
 <head>
+	<@n4.includeStyle href="user" type="page"/>
+	
 	<script type="text/javascript">
 		document.observe("dom:loaded", function() {
 			updateUserTypes($('userGroup'));
 		});
+		
+		function resetDropDowns() {
+			$('userGroup').selectedIndex = 0;	
+			$('userType').selectedIndex = 0;	
+			$('orgFilter').selectedIndex = 0;	
+		}
 	</script>
 </head>
-<div class="quickForm">
-	<h3><@s.text name="label.filter" /></h3>
-	<@s.form method="GET" cssClass="simpleInputForm" theme="css_xhtml" > 
+<div class="listFilter quickForm">
+	<div id="listFilterHeader">
+		<h2><@s.text name="label.filter" /></h2>
+		&nbsp;
+		<span class="egColor"><@s.text name="message.filter_customers"/></span>
+	</div>
+	<@s.form id="listFilterForm" method="get"> 
 		<@s.hidden name="currentPage" value="1"/>
+
 		<@s.textfield id="nameFilter" name="listFilter" key="label.name" labelposition="left"/>
-		
+
 		<@s.select id="userGroup" name="userGroup" list="userGroups" listKey="id" listValue="name" key="label.usergroup" labelposition="left"/>
+		
 		<#if securityGuard.readOnlyUserEnabled>
 			<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
 		</#if>
 		
-		<div class="filterActions">
-			<@s.submit name="search" key="hbutton.search" />
-			<@s.submit name="clear" key="hbutton.clear" onclick="$('nameFilter').value='';"/>
+		<@s.select key="label.organization" name="orgFilter" id="orgFilter" list="parentOrgs" listKey="id" listValue="name" emptyOption="true" labelposition="left"/>
+		
+		<div class="formAction">
+			<@s.submit name="search" key="hbutton.filter" />
+			<span><@s.text name="label.or" /></span>
+			<a href="javascript:void(0);" onClick="$('listFilterForm').reset();resetDropDowns();"> <@s.text name="hbutton.clear"/></a>
 		</div>
 	</@s.form>
 </div>
