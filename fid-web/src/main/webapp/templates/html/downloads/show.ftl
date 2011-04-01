@@ -8,6 +8,7 @@ ${action.setPageType('my_account', 'downloads')!}
 	<@n4.includeScript src="downloads.js" />
 	<script type="text/javascript">
 		editDownloadNameUrl = '<@s.url action="editDownloadName" namespace="/ajax"/>'
+		saveDownloadNameUrl = '<@s.url action="saveDownloadName" namespace="/ajax"/>'
 		cancelDownloadNameUrl = '<@s.url action="cancelDownloadName" namespace="/ajax"/>'
 	</script>
 </head>
@@ -32,8 +33,10 @@ ${action.setPageType('my_account', 'downloads')!}
 			<tr id="dl_${download.id}" class="${style}">
 				<td >${action.formatDateTime(download.created)}</td>
 				<td id="download_${download.id}">
-					${download.name} |
-					<a class="normal" href="javascript:void(0);" onClick="editDownloadName(${download.id});"><@s.text name="label.edit" /></a>
+					${download.name} 
+					<span class="normal"> |
+						<a href="javascript:void(0);" onClick="editDownloadName(${download.id});"><@s.text name="label.edit" /></a>
+					</span>
 				</td>
 				<td >
 					<@s.text name="${download.state.label}"/>

@@ -1,4 +1,5 @@
 var editDownloadNameUrl="";
+var saveDownloadNameUrl="";
 var cancelDownloadNameUrl="";
 
 function editDownloadName( fileId ) {
@@ -19,4 +20,11 @@ function cancelDownloadName( fileId ) {
 
 function markDownloaded ( row ) {
 	$(row).removeClassName('strong');
+}
+
+function doSubmit(event, fileId) { 
+	if (event.keyCode == 13) { 
+		updateDownloadName( fileId );
+		return false; 
+	}
 }
