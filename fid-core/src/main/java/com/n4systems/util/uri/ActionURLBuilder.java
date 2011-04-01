@@ -9,6 +9,7 @@ import com.n4systems.util.StringUtils;
 public class ActionURLBuilder extends InternalUrlBuilder {
 	private String action;
 	private BaseEntity entity;
+	private String parameters;
 	
 	
 	public ActionURLBuilder(URI baseUri, ConfigContext configContext) {
@@ -26,6 +27,11 @@ public class ActionURLBuilder extends InternalUrlBuilder {
 
 	private String getActionPath() {
 		String path = action + ".action";
+		
+		if (parameters != null){
+			path += "?"+parameters;
+		}
+		
 		if (entity != null && !entity.isNew()) {
 			addParameter("uniqueID", entity.getId());
 		}
@@ -41,6 +47,13 @@ public class ActionURLBuilder extends InternalUrlBuilder {
 		this.action = action;
 		return this;
 	}
+	
+
+	public ActionURLBuilder setParameters(String parameters) {
+		this.parameters = parameters;
+		return this;
+	}
+	
 
 	public ActionURLBuilder setEntity(BaseEntity entity) {
 		this.entity = entity;

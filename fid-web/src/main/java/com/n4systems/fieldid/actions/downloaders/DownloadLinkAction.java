@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -16,6 +18,8 @@ import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.mail.TemplateMailMessage;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
@@ -25,11 +29,13 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	
 	private Long fileId;
 	private DownloadLink downloadLink;
+	private DownloadLink publicDownloadLink;
 	private List<DownloadLink> downloads;
 	private String downloadLinkName;
 	private DownloadLinkSaver downloadLinkSaver;
 	private String recipients;
-	private String message;
+	private String subject;
+	private String body;
 	
 	public DownloadLinkAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -91,10 +97,10 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	
 	@SkipValidation
 	public String doDownloadPublicFile() {
-		downloadLink = loadPublicDownloadLink();
-		if (!downloadLink.getState().equals(DownloadState.DOWNLOADED)) {
-			downloadLink.setState(DownloadState.DOWNLOADED);
-			downloadLinkSaver.update(downloadLink); 
+		publicDownloadLink = loadPublicDownloadLink();
+		if (!publicDownloadLink.getState().equals(DownloadState.DOWNLOADED)) {
+			publicDownloadLink.setState(DownloadState.DOWNLOADED);
+			downloadLinkSaver.update(publicDownloadLink); 
 		}
 		return super.doDownload();
 	}
@@ -151,10 +157,42 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	
 	@SkipValidation
 	public String doEmail() {
-		//generatePublicDownload();
-		//emailTheLink();
 		
+		boolean success = true;
+		for (String email : parseRecipients(recipients)){
+			try {
+				TemplateMailMessage downloadMessage = buildDownloadMessage(email);
+				ServiceLocator.getMailManager().sendMessage(downloadMessage);
+				
+				} catch (MessagingException e) {
+					logger.error("Could not send download message", e);
+					addFlashErrorText("error.problem_sending_email");
+					success=false;
+				} catch (RuntimeException e) {
+					logger.error("Could not send download message", e);
+					addFlashErrorText("error.problem_sending_email");
+					success=false;
+				}
+				
+				if (success) {
+					addFlashMessageText("label.invitation_sent");
+			}
+		}
 		return SUCCESS;
+	}
+
+	private TemplateMailMessage buildDownloadMessage(String email) {
+		subject = getText("label.you_have_received_a_file_from") +" "+ getSessionUser().getName() + " " + getText("label.via_fieldid");
+		body = getText("label.download_link_message1") + "\n\n" + getDownloadUrl() + "\n\n" + getText("label.this_link_will_expire") + "SOME DATE" + "\n\n" + getText("label.regards") + "\n"
+				+ getSessionUser().getName();
+		
+		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "downloadLink");
+		invitationMessage.getToAddresses().add(email);
+		invitationMessage.getTemplateMap().put("downloadUrl", getDownloadUrl());
+		invitationMessage.getTemplateMap().put("expiryDate", getExpiresText(getPublicDownloadLink().getCreated()));
+		invitationMessage.getTemplateMap().put("senderName", getSessionUser().getName());
+		
+		return invitationMessage;
 	}
 
 	public void setFileId(Long fileId) {
@@ -232,17 +270,26 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	public String getRecipients() {
 		return recipients;
 	}
-
+	
+	@RequiredStringValidator(type = ValidatorType.FIELD, key="label.email_required", message="")
 	public void setRecipients(String recipients) {
 		this.recipients = recipients;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getBody() {
+		return body;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setBody(String body) {
+		this.body = body;
+	}
+	
+	public String getDownloadUrl(){
+		return createActionURIWithParameters(getPrimaryOrg().getTenant(), "public/publicDownload", "fileId="+getFileId());
+	}
+	
+	private String[] parseRecipients(String recipients){
+		return recipients.split(",");
 	}
 
 }

@@ -418,6 +418,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return createActionUrlBuilder().setAction(action).setCompany(tenant).build();
 	}
 	
+	public String createActionURIWithParameters(Tenant tenant, String action, String parameters) {
+		return createActionUrlBuilder().setAction(action).setParameters(parameters).setCompany(tenant).build();
+	}
+	
 	public String createNonFieldIDActionURI(Tenant tenant, String action) {
 		return createNonFieldIDActionUrlBuilder().setAction(action).setCompany(tenant).build();
 	}

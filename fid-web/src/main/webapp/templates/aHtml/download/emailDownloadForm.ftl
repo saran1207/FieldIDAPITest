@@ -13,10 +13,12 @@
 	<h1><@s.text name="message.email_download_link_heading" ><@s.param>download name</@s.param></@s.text> </h1>
 	<p><@s.text name="message.download_link_description" /><@s.text name="message.download_link_warning" /></p>
 	
-	
 	<label><@s.text name="label.emailaddresses" /></label><br/>
 	<@s.textfield name="recipients" /><br/><br/>
+	
 	<label><@s.text name="label.message" /></label><br/>
-	<@s.textarea name="message" /><br/>
+	<@s.textarea name="body" /><br/>
+	
+	
 	<input type="submit" onclick="return redirectToDownloads('<@s.url namespace="/" action="showDownloads"/>'); return false;" value="<@s.text name="label.submit"/>" />
 </@s.form>

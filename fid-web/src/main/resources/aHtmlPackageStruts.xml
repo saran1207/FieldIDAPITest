@@ -115,6 +115,11 @@
 			<result name="success" type="freemarker">/templates/aHtml/registerAsset/save.ftl</result>
 		</action>
 		
+		
+		<action name="downloadLinkOptions" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadLinkOptions.ftl</result>
+		</action>
+		
 		<action name="emailDownload" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/emailDownloadForm.ftl</result>
 		</action>
