@@ -4,24 +4,24 @@ ${action.setPageType('event_type', 'list')!}
 	<@n4.includeStyle href="listFilter" type="page"/>
 </head>
 
-<#if eventTypes?exists && !eventTypes.isEmpty() >
-
-	<div class="listFilter quickForm" >
-		<div id="listFilterHeader">
-			<h2><@s.text name="label.filter"/></h2>
-			&nbsp;
-			<span class="egColor"><@s.text name="message.filter_event_types"/></span>
-		</div>
-		<@s.form id="listFilterForm" method="get">
-			<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
-			<@s.select key="label.eventtypegroup" name="groupFilter" id="groupFilter" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" labelposition="left"/>
-			<div class="formAction">
-				<@s.submit key="hbutton.filter" />
-				<span><@s.text name="label.or" /></span>
-				<a href="javascript:void(0);" onClick="$('nameFilter').value = '';$('groupFilter').selectedIndex = 0;"> <@s.text name="hbutton.clear"/></a>
-			</div>
-		</@s.form>
+<div class="listFilter quickForm" >
+	<div id="listFilterHeader">
+		<h2><@s.text name="label.filter"/></h2>
+		&nbsp;
+		<span class="egColor"><@s.text name="message.filter_event_types"/></span>
 	</div>
+	<@s.form id="listFilterForm" method="get">
+		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
+		<@s.select key="label.eventtypegroup" name="groupFilter" id="groupFilter" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" labelposition="left"/>
+		<div class="formAction">
+			<@s.submit key="hbutton.filter" />
+			<span><@s.text name="label.or" /></span>
+			<a href="javascript:void(0);" onClick="$('nameFilter').value = '';$('groupFilter').selectedIndex = 0;$('listFilterForm').submit();"> <@s.text name="hbutton.clear"/></a>
+		</div>
+	</@s.form>
+</div>
+
+<#if eventTypes?exists && !eventTypes.isEmpty() >
 
 	<table class="list">
 		<tr>

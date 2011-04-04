@@ -6,10 +6,12 @@
 			updateUserTypes($('userGroup'));
 		});
 		
-		function resetDropDowns() {
+		function clearForm() {
+			$('nameFilter').value = ''
 			$('userGroup').selectedIndex = 0;	
 			$('userType').selectedIndex = 0;	
-			$('orgFilter').selectedIndex = 0;	
+			$('orgFilter').selectedIndex = 0;
+			$('listFilterForm').submit();	
 		}
 	</script>
 </head>
@@ -35,7 +37,7 @@
 		<div class="formAction">
 			<@s.submit name="search" key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
-			<a href="javascript:void(0);" onClick="$('listFilterForm').reset();resetDropDowns();"> <@s.text name="hbutton.clear"/></a>
+			<a href="javascript:void(0);" onClick="clearForm();"> <@s.text name="hbutton.clear"/></a>
 		</div>
 	</@s.form>
 </div>
