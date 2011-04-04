@@ -2238,16 +2238,6 @@
 			</result>
 			<result name="error" type="redirectAction">showDownloads</result>
 		</action>
-		
-		<action name="downloadPublicFile" method="downloadPublicFile" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
-			<result name="success" type="stream">
-				<param name="contentType">${contentType}</param>
-				<param name="inputName">fileStream</param>
-				<param name="contentLength">${fileSize}</param>
-				<param name="contentDisposition">inline; filename="${fileName}"</param>
-			</result>
-			<result name="error" type="redirectAction">showDownloads</result>
-		</action>
 
 		<action name="showDownloads" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="input" type="freemarker">/templates/html/downloads/show.ftl</result>

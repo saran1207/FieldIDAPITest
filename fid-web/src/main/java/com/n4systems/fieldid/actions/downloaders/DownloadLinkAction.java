@@ -253,7 +253,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		}
 		return expiresText;
 	}
-
+	
 	public DownloadLink getDownloadLink() {
 		if(downloadLink == null) {
 			downloadLink = loadDownloadLink();

@@ -10,30 +10,60 @@
 	padding: 20px;
 }
 
+.downloadActions{
+	margin-top: 10px;
+	}
+
 .description{
 	margin: 10px 0;
 	font-size:14px;
 	color: #666;
-	}
+}
+
+.warningInformation{
+	float:left;
+	margin-top: 10px;
+	padding-top: 5px;
+	border-top: 1px solid #CACACA;
+	font-size: 12px;
+	line-height: 15px;
+	color: #666;
+}
+
+#copiedConfirmation{
+	background-color: #E5EFEA;
+	font-size: 14px;
+	padding: 10px;
+	margin: 10px;
+}
 
 .urlContainer{
-	padding: 15px 0 0 15px;
+	padding: 10px 0 0 55px;
 	color: #666;
 	font-size:14px;
-	height: 62px;
+	margin: 5px;
 	background-image: url(../../images/link-box.png);
 	background-repeat: no-repeat;
 	}
 
 #copyLinkButton a {
 	display: block;
-	width: 252px;
-	height: 62px;
-	background-image: url(../images/request_account_button.png);
+	float:left;
+	width: 220px;
+	height: 50px;
+	background-image: url(../../images/copy-link-button.png);
+	background-repeat: no-repeat;
+}
+
+#emailLinkButton a {
+	display: block;
+	float: left;
+	clear:right;
+	width: 220px;
+	height: 50px;
+	background-image: url(../../images/share-email-button.png);
 	background-repeat: no-repeat;
 }
 
 
 #copyLinkButton a {background-position: 0 0;}
-#copyLinkButton a:hover {background-position: 0 -62px;}
-#copyLinkButton a:active {background-position: 0 -124px;}
