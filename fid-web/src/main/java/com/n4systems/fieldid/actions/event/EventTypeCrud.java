@@ -49,6 +49,9 @@ public class EventTypeCrud extends AbstractCrud {
 	
 	private boolean assignedToAvailable = false;
 	
+	private String nameFilter;
+	private Long groupFilter;
+	
 	public EventTypeCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		
@@ -237,7 +240,11 @@ public class EventTypeCrud extends AbstractCrud {
 
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-			eventTypes = getLoaderFactory().createEventTypeListLoader().setPostFetchFields("modifiedBy", "createdBy").load();
+			eventTypes = getLoaderFactory().createEventTypeListLoader()
+			                               .setNameFilter(nameFilter)
+			                               .setGroupFilter(groupFilter)
+			                               .setPostFetchFields("modifiedBy", "createdBy")
+			                               .load();
 		}
 
 		return eventTypes;
@@ -364,6 +371,26 @@ public class EventTypeCrud extends AbstractCrud {
 
 	public void setAssignedToAvailable(boolean assignedToAvailable) {
 		this.assignedToAvailable = assignedToAvailable;
+	}
+
+	public Long getGroupFilter() {
+		return groupFilter;
+	}
+
+	public void setGroupFilter(Long groupFilter) {
+		this.groupFilter = groupFilter;
+	}
+
+	public void setEventTypes(List<EventType> eventTypes) {
+		this.eventTypes = eventTypes;
+	}
+
+	public String getNameFilter() {
+		return nameFilter;
+	}
+
+	public void setNameFilter(String nameFilter) {
+		this.nameFilter = nameFilter;
 	}
 	
 }

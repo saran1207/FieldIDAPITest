@@ -1,7 +1,7 @@
 ${action.setPageType('asset_type', 'list')!}
 
 <head>
-	<@n4.includeStyle href="assetTypeList" type="page"/>
+	<@n4.includeStyle href="listFilter" type="page"/>
 </head>
 
 <#if assetTypes?exists && !assetTypes.isEmpty() >
