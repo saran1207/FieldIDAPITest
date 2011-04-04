@@ -1,6 +1,7 @@
 package com.n4systems.model.downloadlink;
 
 import java.io.File;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,13 +25,15 @@ import com.n4systems.util.mail.MailMessage;
 public class DownloadLink extends EntityWithTenant implements HasUser, Saveable {
 	private static final long serialVersionUID = 1L;
 	private static final String DOWNLOAD_FILE_EXT = "dl";
-	
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(DownloadLink.class);
 	}
 	
 	@Column(nullable = false)
 	private String name;
+
+	@Column(nullable = true, unique = true)
+	private String downloadId;
 	
 	@Column(name="contenttype", nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -44,8 +47,24 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 	
-	public DownloadLink() {}
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		generateDownloadId();
+	}
 
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		generateDownloadId();
+	}
+	
+	private void generateDownloadId() {
+		if (downloadId == null) {
+			downloadId = UUID.randomUUID().toString();
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("%s (%d) {%s}", name, getId(), user);
@@ -130,4 +149,9 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 	public boolean isDownloaded(){
 		return state.equals(DownloadState.DOWNLOADED);
 	}
+
+	public String getDownloadId() {
+		return downloadId;
+	}
+
 }

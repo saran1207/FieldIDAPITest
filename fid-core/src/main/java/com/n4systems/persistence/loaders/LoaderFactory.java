@@ -29,6 +29,7 @@ import com.n4systems.model.commenttemplate.CommentTemplateIdLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListLoader;
 import com.n4systems.model.commenttemplate.CommentTemplateListableLoader;
 import com.n4systems.model.downloadlink.DownloadLinkListLoader;
+import com.n4systems.model.downloadlink.DownloadsByDownloadIdLoader;
 import com.n4systems.model.eula.CurrentEulaLoader;
 import com.n4systems.model.eula.LatestEulaAcceptanceLoader;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
@@ -353,6 +354,10 @@ public class LoaderFactory implements Serializable {
 
 	public FileAttachmentLoader createFileAttachmentLoader() {
 		return new FileAttachmentLoader(filter);
+	}
+	
+	public DownloadsByDownloadIdLoader createPublicDownloadLinkLoader(){
+		return new DownloadsByDownloadIdLoader(filter);
 	}
 
 	public <T extends AbstractEntity> FilteredIdLoader<T> createFilteredIdLoader(Class<T> clazz) {

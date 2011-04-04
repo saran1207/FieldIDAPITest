@@ -5,3 +5,35 @@
 .textbox{
 	width : 250px;
 }
+
+.optionsContainer{
+	padding: 20px;
+}
+
+.description{
+	margin: 10px 0;
+	font-size:14px;
+	color: #666;
+	}
+
+.urlContainer{
+	padding: 15px 0 0 15px;
+	color: #666;
+	font-size:14px;
+	height: 62px;
+	background-image: url(../../images/link-box.png);
+	background-repeat: no-repeat;
+	}
+
+#copyLinkButton a {
+	display: block;
+	width: 252px;
+	height: 62px;
+	background-image: url(../images/request_account_button.png);
+	background-repeat: no-repeat;
+}
+
+
+#copyLinkButton a {background-position: 0 0;}
+#copyLinkButton a:hover {background-position: 0 -62px;}
+#copyLinkButton a:active {background-position: 0 -124px;}

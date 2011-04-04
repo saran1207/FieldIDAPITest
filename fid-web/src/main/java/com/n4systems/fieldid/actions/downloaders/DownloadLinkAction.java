@@ -15,6 +15,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.downloadlink.DownloadState;
+import com.n4systems.model.downloadlink.DownloadsByDownloadIdLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -36,6 +37,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	private String recipients;
 	private String subject;
 	private String body;
+	private String downloadId;
 	
 	public DownloadLinkAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -48,19 +50,29 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 
 	@Override
 	protected boolean initializeDownload() {
-		if (fileId == null) {
-			return false;
+		if (fileId != null) {
+			downloadLink = loadDownloadLink();
+			
+			if (downloadLink == null) {
+				logger.warn(String.format("Download requested for non-existant, expired or unloadable link [%d]", fileId));
+				addFlashErrorText("error.download_failed");
+				return false;
+			}
+			
+			return true;
+		}else if (downloadId!=null){
+			downloadLink = loadPublicDownloadLink();
+			
+			if (downloadLink == null) {
+				logger.warn(String.format("Download requested for non-existant, expired or unloadable link [%d]", fileId));
+				addFlashErrorText("error.download_failed");
+				return false;
+			}
+			
+			return true;
 		}
-		
-		downloadLink = loadDownloadLink();
-		
-		if (downloadLink == null) {
-			logger.warn(String.format("Download requested for non-existant, expired or unloadable link [%d]", fileId));
-			addFlashErrorText("error.download_failed");
-			return false;
-		}
-		
-		return true;
+		return false;
+	
 	}
 
 	@Override
@@ -113,10 +125,12 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	}
 	
 	protected DownloadLink loadPublicDownloadLink(){
-		FilteredIdLoader<DownloadLink> linkLoader = getOpenSecurityFilteredLoaderFactory().createFilteredIdLoader(DownloadLink.class);
-		linkLoader.setId(fileId);
+		//FilteredIdLoader<DownloadLink> linkLoader = getOpenSecurityFilteredLoaderFactory().createFilteredIdLoader(DownloadLink.class);
+		//linkLoader.setId(fileId);
+		DownloadsByDownloadIdLoader publicDownloadLinkLoader = getOpenSecurityFilteredLoaderFactory().createPublicDownloadLinkLoader();
+		publicDownloadLinkLoader.setDownloadId(getDownloadId());
 		
-		return linkLoader.load();
+		return publicDownloadLinkLoader.load();
 	}
 	
 	@SkipValidation
@@ -189,7 +203,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "downloadLink");
 		invitationMessage.getToAddresses().add(email);
 		invitationMessage.getTemplateMap().put("downloadUrl", getDownloadUrl());
-		invitationMessage.getTemplateMap().put("expiryDate", getExpiresText(getPublicDownloadLink().getCreated()));
+		invitationMessage.getTemplateMap().put("expiryDate", getExpiresText(getDownloadLink().getCreated()));
 		invitationMessage.getTemplateMap().put("senderName", getSessionUser().getName());
 		
 		return invitationMessage;
@@ -285,11 +299,19 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	}
 	
 	public String getDownloadUrl(){
-		return createActionURIWithParameters(getPrimaryOrg().getTenant(), "public/publicDownload", "fileId="+getFileId());
+		return createActionURIWithParameters(getPrimaryOrg().getTenant(), "public/publicDownload", "downloadId="+getDownloadLink().getDownloadId());
 	}
 	
 	private String[] parseRecipients(String recipients){
 		return recipients.split(",");
+	}
+
+	public String getDownloadId() {
+		return downloadId;
+	}
+
+	public void setDownloadId(String downloadId) {
+		this.downloadId = downloadId;
 	}
 
 }
