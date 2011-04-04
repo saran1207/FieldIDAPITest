@@ -12,20 +12,15 @@ import java.util.Map;
 
 import javax.activation.FileTypeMap;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.legacy.LegacyAssetType;
-import com.n4systems.fieldid.validators.HasAssetDescriptionTemplateValidator;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.utils.CleanAssetTypeFactory;
-import com.n4systems.util.AssetTypeRemovalSummary;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.MissingEntityException;
@@ -34,12 +29,16 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.validators.HasAssetDescriptionTemplateValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.utils.CleanAssetTypeFactory;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.ListingPair;
+import com.n4systems.util.AssetTypeRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -77,6 +76,9 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	private String assetImageDirectory;
 	private boolean removeImage = false;
 	private boolean newImage = false;
+	
+	private String nameFilter;
+	private Long groupFilter;
 
 	public AssetTypeCrud(PersistenceManager persistenceManager, LegacyAssetType assetTypeManager, AssetManager assetManager) {
 		super(persistenceManager);
@@ -421,7 +423,11 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 
 	public List<AssetType> getAssetTypes() {
 		if (assetTypes == null) {
-			assetTypes = getLoaderFactory().createAssetTypeListLoader().setPostFetchFields("modifiedBy", "createdBy").load();
+			assetTypes = getLoaderFactory().createAssetTypeListLoader()
+			                               .setNameFilter(nameFilter)
+			                               .setGroupFilter(groupFilter)
+			                               .setPostFetchFields("modifiedBy", "createdBy")
+			                               .load();
 		}
 		return assetTypes;
 	}
@@ -547,6 +553,22 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 			assetTypeGroups = persistenceManager.findAll(new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, getSecurityFilter()).addOrder("orderIdx"));
 		}
 		return assetTypeGroups;
+	}
+
+	public String getNameFilter() {
+		return nameFilter;
+	}
+
+	public void setNameFilter(String nameFilter) {
+		this.nameFilter = nameFilter;
+	}
+
+	public Long getGroupFilter() {
+		return groupFilter;
+	}
+
+	public void setGroupFilter(Long groupFilter) {
+		this.groupFilter = groupFilter;
 	}
 	
 	

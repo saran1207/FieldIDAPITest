@@ -1,6 +1,28 @@
 ${action.setPageType('asset_type', 'list')!}
 
-<#if !assetTypes.isEmpty() >
+<head>
+	<@n4.includeStyle href="assetTypeList" type="page"/>
+</head>
+
+<#if assetTypes?exists && !assetTypes.isEmpty() >
+
+	<div class="listFilter quickForm" >
+		<div id="listFilterHeader">
+			<h2><@s.text name="label.filter"/></h2>
+			&nbsp;
+			<span class="egColor"><@s.text name="message.filter_asset_types"/></span>
+		</div>
+		<@s.form id="listFilterForm" method="get">
+			<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
+			<@s.select key="label.asset_type_group" name="groupFilter" id="groupFilter" list="assetTypeGroups" listKey="id" listValue="name" emptyOption="true" labelposition="left"/>
+			<div class="formAction">
+				<@s.submit key="hbutton.filter" />
+				<span><@s.text name="label.or" /></span>
+				<a href="javascript:void(0);" onClick="$('listFilterForm').reset();$('groupFilter').selectedIndex = 0;"> <@s.text name="hbutton.clear"/></a>
+			</div>
+		</@s.form>
+	</div>
+
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.assettype"/></th>
