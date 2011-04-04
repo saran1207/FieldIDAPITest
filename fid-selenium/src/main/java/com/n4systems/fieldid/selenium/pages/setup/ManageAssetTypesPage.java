@@ -30,13 +30,13 @@ public class ManageAssetTypesPage extends FieldIDPage {
 	}
 	
 	public ManageAssetTypesPage clickEditAssetType(String assetType) {
-		selenium.click("//div[@id='pageContent']//table[@class='list']//td[position()=1 and .='"+assetType+"']/../td[4]/a[.='Edit']");
+		selenium.click("//table[@class='list']//a[.='"+assetType+"']//..//..//a[.='Edit']");
 		waitForPageToLoad();
 		return this;
 	}
 
 	public ManageAssetTypesPage clickCopyAssetType(String assetType) {
-		selenium.click("//div[@id='pageContent']//table[@class='list']//td[position()=1 and .='"+assetType+"']/../td[4]/a[.='Copy']");
+		selenium.click("//table[@class='list']//a[.='"+assetType+"']//..//..//a[.='Copy']");
 		waitForPageToLoad();
 		return this;
 	}
