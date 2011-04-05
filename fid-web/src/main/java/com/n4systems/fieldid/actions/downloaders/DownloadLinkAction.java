@@ -203,9 +203,9 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	private TemplateMailMessage buildDownloadMessage(String email) {
 		subject = getText("label.you_have_received_a_file_from") +" "+ getSessionUser().getName() + " " + getText("label.via_fieldid");
 		
-		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "downloadLink");
+		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "injectBody");
 		invitationMessage.getToAddresses().add(email);
-		invitationMessage.getTemplateMap().put("message", getMessage());
+		invitationMessage.getTemplateMap().put("content", getMessage());
 		invitationMessage.getTemplateMap().put("downloadUrl", getDownloadUrl());
 		invitationMessage.getTemplateMap().put("expiryDate", getExpiresText(getPublicDownloadLink().getCreated()));
 		invitationMessage.getTemplateMap().put("senderName", getSessionUser().getName());
@@ -300,17 +300,9 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	public void setRecipients(String recipients) {
 		this.recipients = recipients;
 	}
-
-	public String getBody() {
-		return message;
-	}
-
-	public void setBody(String body) {
-		this.message = body;
-	}
 	
-	public String getDownloadUrl(){
-		return createActionURIWithParameters(getPrimaryOrg().getTenant(), "public/publicDownload", "downloadId="+getDownloadLink().getDownloadId());
+	public String getDownloadUrl() {
+		return getBaseURI().toString() + "d/" + getDownloadLink().getDownloadId();
 	}
 	
 	private List<String> parseRecipients(String recipients){
