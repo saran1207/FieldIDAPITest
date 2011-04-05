@@ -17,7 +17,7 @@ public class RegistrationRequestPage extends FieldIDPage {
 		selenium.type("registerUserCreate_emailAddress", "dev@fieldid.com");
 		selenium.type("registerUserCreate_city", "Toronto");
 		selenium.select("countryId", "value=CA");
-		//selenium.waitForAjax(WebEntity.DEFAULT_TIMEOUT);
+		waitForAjax(WebEntity.DEFAULT_TIMEOUT);
 		selenium.select("tzlist", "label=Ontario - Toronto");
 		selenium.type("registerUserCreate_position", "some position");
 		selenium.type("registerUserCreate_phoneNumber", "647-202-2789");
@@ -27,7 +27,7 @@ public class RegistrationRequestPage extends FieldIDPage {
 		selenium.type("registerUserCreate_password", "makemore$");
 		selenium.type("registerUserCreate_passwordConfirmation", "makemore$");
 		selenium.click("registerUserCreate_save");
-		//selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
+		waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
 		selenium.click("//input");
 		
 		return new LoginPage(selenium);
