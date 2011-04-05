@@ -14,17 +14,14 @@
 	font-size: 14px;
 }
 
-#emailDownloadLink input[type="text"]{
+#emailDownloadLink input[type="text"], #emailDownloadLink textarea{
 	width: 350px;
 	margin: 10px 0;
-	paddging: 10px;
-	}
+}
 
 #emailDownloadLink textarea{
-	width: 350px;
 	height: 200px;
-	margin: 10px 0;
-	}
+}
 	
 .textbox{
 	width : 250px;
@@ -36,7 +33,7 @@
 
 .downloadActions{
 	margin-top: 10px;
-	}
+}
 
 .description{
 	margin: 10px 0;
@@ -98,9 +95,10 @@
 .downloadContainer{
 	border-top: 2px solid #CACACA;
 	padding: 25px;
+	margin-bottom: 250px;
 }
 .downloadContainer h1{
-	width: 700px;
+	width: 650px;
 	margin-left: auto;
 	margin-right: auto;
 	}
@@ -109,24 +107,28 @@
 	margin: 15px;
 	margin-left:auto;
 	margin-right: auto;
-	width: 700px;
-	height: 105px;
+	width: 650px;
+	height: 80px;
 	border: 1px solid #CACACA;
 
 }
-.downloadBox .boxContent{
+.downloadBox .boxContent, .downloadBox .expiredBoxContent{
 	float:left;
 	width: 300px;
 	height: 55px;
 	border-style: none;
 	background-image: url(../../images/file-icon.png);
 	background-repeat: no-repeat;
-	margin-left: 25px;
-	margin-top: 25px;
+	margin-left: 15px;
+	margin-top: 15px;
 	padding-left: 65px;
 }
+.downloadBox .expiredBoxContent{
+	background-image: url(../../images/download-icon-invalid.png);
+}
+
 #downloadButton{
-	margin-top: 35px;
+	margin-top: 25px;
 }
 
 #downloadButton a{
@@ -138,12 +140,19 @@
 	background-repeat: no-repeat;	
 }
 
-.boxContent h2{
+.boxContent h2, .expiredBoxContent h1, .textLink .coloredLink{
 	color: #356CA2;
 }
 
+.expiredBoxContent h1{
+	margin-top: 15px;
+	margin-left: 10px;
+}
+
 .textLink {
+	line-height: 18px;
 	margin-left:auto;
 	margin-right:auto;
-	width: 700px;
-	}
+	width: 650px;
+}
+

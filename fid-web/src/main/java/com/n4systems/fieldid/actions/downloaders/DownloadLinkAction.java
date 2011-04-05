@@ -150,6 +150,10 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	
 	@SkipValidation
 	public String doPublicDownload() {
+		if(loadPublicDownloadLink()==null){
+			return ERROR;
+		}
+		
 		return SUCCESS;
 	}
 	
