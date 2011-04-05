@@ -14,8 +14,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "column_mappings")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class ColumnMapping extends AbstractEntity {
-
+public abstract class ColumnMapping extends AbstractEntity implements Comparable<ColumnMapping>{
+	
     @Column(name="label")
     private String label;
 
@@ -125,5 +125,9 @@ public abstract class ColumnMapping extends AbstractEntity {
 
     public void setJoinExpression(String joinExpression) {
         this.joinExpression = joinExpression;
+    }
+    
+    public int compareTo(ColumnMapping other) {
+		return (defaultOrder < other.defaultOrder ? -1 : (defaultOrder == other.defaultOrder ? id.compareTo(other.id) : 1));
     }
 }

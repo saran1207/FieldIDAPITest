@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.reporting.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
@@ -13,9 +17,6 @@ import com.n4systems.model.columns.loader.ColumnMappingGroupLoader;
 import com.n4systems.model.columns.loader.CustomColumnsLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.SecurityFilter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class ColumnsService {
 
@@ -36,7 +37,10 @@ public abstract class ColumnsService {
         for (ColumnMappingGroup mappingGroup : groupsIncludingCustom) {
             String groupKey = mappingGroup.getGroupKey();
             ColumnMappingGroupView groupView = new ColumnMappingGroupView(mappingGroup.getLabel(), mappingGroup.getLabel(), mappingGroup.getOrder(), groupKey);
-            for (ColumnMapping column : mappingGroup.getColumnMappings()) {
+            
+            List<ColumnMapping> columnMappings = new ArrayList<ColumnMapping>(mappingGroup.getColumnMappings());
+            Collections.sort(columnMappings);
+			for (ColumnMapping column : columnMappings) {
                 processColumn(layout, groupView, column);
             }
             groupViews.add(groupView);
