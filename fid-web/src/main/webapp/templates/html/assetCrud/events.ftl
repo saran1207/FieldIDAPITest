@@ -1,3 +1,12 @@
+<head>
+	<style>
+		.textContainer {
+			background-image: url(images/events-blank-slate.png);
+		}
+	</style>
+</head>
+
+
 <div class="headerActions">
 	<#if sessionUser.hasAccess("createevent")>
 		<a id="startEvent" href="#" onclick="return redirect('<@s.url action="quickEvent" assetId="${uniqueID}" includeParams="none" />');"><@s.text name="label.start_event"/></a>
@@ -58,10 +67,14 @@
 		</#list>
 	</table>
 <#else>
-	<div class="emptyList">
-		<h2><@s.text name="label.noresults"/></h2>
-		<p>
-			<@s.text name="label.emptyeventlist" />
-		</p>
+	<div class="initialMessage" >
+		<div class="textContainer">
+			<h1><@s.text name="label.emptyeventlist"/></h1>
+			<p>
+				<@s.text name="label.emptyeventlist_message">
+					<@s.param>${asset.type.name}</@s.param>
+				</@s.text>
+			</p>
+		</div>
 	</div>
 </#if>
