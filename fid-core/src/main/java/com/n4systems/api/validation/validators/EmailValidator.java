@@ -23,5 +23,9 @@ public class EmailValidator implements FieldValidator {
 			return ValidationResult.fail(EmailValidatorFail, fieldName, address);
 		}
 	}
+	
+	public boolean validEmail(String address){
+		return address.matches(validatorRegex);
+	}
 
 }

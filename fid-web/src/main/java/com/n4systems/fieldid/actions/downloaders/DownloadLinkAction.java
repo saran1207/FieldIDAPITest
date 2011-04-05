@@ -2,6 +2,8 @@ package com.n4systems.fieldid.actions.downloaders;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import javax.mail.MessagingException;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
+import com.n4systems.api.validation.validators.EmailValidator;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.downloadlink.DownloadLink;
@@ -125,8 +128,6 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	}
 	
 	protected DownloadLink loadPublicDownloadLink(){
-		//FilteredIdLoader<DownloadLink> linkLoader = getOpenSecurityFilteredLoaderFactory().createFilteredIdLoader(DownloadLink.class);
-		//linkLoader.setId(fileId);
 		DownloadsByDownloadIdLoader publicDownloadLinkLoader = getOpenSecurityFilteredLoaderFactory().createPublicDownloadLinkLoader();
 		publicDownloadLinkLoader.setDownloadId(getDownloadId());
 		
@@ -194,7 +195,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 				
 				if (success) {
 					addFlashMessageText("label.invitation_sent");
-			}
+				}
 		}
 		return SUCCESS;
 	}
@@ -292,11 +293,9 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		this.downloadLinkSaver = downloadLinkSaver;
 	}
 
-	@RequiredStringValidator(type = ValidatorType.FIELD, key="label.email_required", message="")
 	public String getRecipients() {
 		return recipients;
 	}
-	
 	
 	public void setRecipients(String recipients) {
 		this.recipients = recipients;
@@ -314,8 +313,16 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return createActionURIWithParameters(getPrimaryOrg().getTenant(), "public/publicDownload", "downloadId="+getDownloadLink().getDownloadId());
 	}
 	
-	private String[] parseRecipients(String recipients){
-		return recipients.split(",");
+	private List<String> parseRecipients(String recipients){
+		EmailValidator validator = new EmailValidator();
+		List<String> validEmails = new ArrayList<String>(); ;
+		
+		for (String recipient : recipients.split(",")){
+			if (validator.validEmail(recipient)){
+				validEmails.add(recipient);
+			}
+		}
+		return validEmails;
 	}
 
 	public String getDownloadId() {
