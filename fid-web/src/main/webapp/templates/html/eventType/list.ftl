@@ -12,7 +12,7 @@ ${action.setPageType('event_type', 'list')!}
 	</div>
 	<@s.form id="listFilterForm" method="get">
 		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
-		<@s.select key="label.eventtypegroup" name="groupFilter" id="groupFilter" list="eventTypeGroups" listKey="id" listValue="name" emptyOption="true" labelposition="left"/>
+		<@s.select key="label.eventtypegroup" name="groupFilter" id="groupFilter" list="eventTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
 		<div class="formAction">
 			<@s.submit key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
@@ -27,7 +27,7 @@ ${action.setPageType('event_type', 'list')!}
 		<tr>
 			<th><@s.text name="label.name" /></th>
 			<th><@s.text name="label.type"/></th>
-			<th><@s.text name="label.group"/></th>
+			<th><@s.text name="label.eventtypegroup"/></th>
 			<th><@s.text name="label.created" /></th>
 			<th><@s.text name="label.last_modified" /></th>		
 			<th></th>
@@ -39,7 +39,7 @@ ${action.setPageType('event_type', 'list')!}
 				<td>
 					<#if eventType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
 				</td>
-				<td><#if eventType.group?exists>${eventType.group.name!}</#if></td>
+				<td><#if eventType.group?exists><a href="<@s.url action="eventTypeGroup" uniqueID="${eventType.group.id}" />">${eventType.group.name!}</a></#if></td>
 				<td><#if eventType.createdBy?exists>${eventType.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.created)}</td>
 				<td><#if eventType.modifiedBy?exists>${eventType.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.modified)}</td>
 				<td>
