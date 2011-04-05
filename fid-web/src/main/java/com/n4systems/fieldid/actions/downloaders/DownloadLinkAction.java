@@ -3,7 +3,6 @@ package com.n4systems.fieldid.actions.downloaders;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -286,7 +285,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.reporttitlerequired")
 	public void setDownloadLinkName(String name) {
-		this.downloadLinkName = name;
+		this.downloadLinkName = name.trim();
 	}
 
 	public void setDownloadLinkSaver(DownloadLinkSaver downloadLinkSaver) {
