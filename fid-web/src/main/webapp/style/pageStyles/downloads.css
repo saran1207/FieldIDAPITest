@@ -10,6 +10,10 @@
 	padding: 20px;
 }
 
+.bold{
+	font-weight:bold;
+	}
+
 .label{
 	font-size: 14px;
 }
@@ -31,10 +35,6 @@
 	padding: 20px;
 }
 
-.downloadActions{
-	margin-top: 10px;
-}
-
 .description{
 	margin: 10px 0;
 	font-size:14px;
@@ -51,15 +51,8 @@
 	color: #666;
 }
 
-#copiedConfirmation{
-	background-color: #E5EFEA;
-	font-size: 14px;
-	padding: 10px;
-	margin: 10px;
-}
-
 .urlContainer{
-	padding: 10px 0 0 55px;
+	padding: 10px 0 10px 55px;
 	color: #666;
 	font-size:14px;
 	margin: 5px;
@@ -67,18 +60,9 @@
 	background-repeat: no-repeat;
 	}
 
-#copyLinkButton a {
-	display: block;
-	float:left;
-	width: 220px;
-	height: 50px;
-	background-image: url(../../images/copy-link-button.png);
-	background-repeat: no-repeat;
-}
-
 #emailLinkButton a {
+	margin: 10px auto 0 auto;
 	display: block;
-	float: left;
 	clear:right;
 	width: 220px;
 	height: 50px;
@@ -86,7 +70,6 @@
 	background-repeat: no-repeat;
 }
 
-#copyLinkButton a {background-position: 0 0;}
 
 #pageContent{
 	border-style: none;

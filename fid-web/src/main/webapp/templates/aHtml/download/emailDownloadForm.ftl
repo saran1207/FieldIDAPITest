@@ -24,15 +24,16 @@
 	
 	<input type="submit" value="<@s.text name="label.submit"/>" />
 </@s.form>
-	<script type="text/javascript">
-		Event.observe('emailDownloadLink','submit', function(event){
-			if ($('recipients').value==''){
-        		alert('Please enter one or more email addresses');
-        		Event.stop(event);
-        	}else{
-        		Lightview.hide();
-	        	window.parent.location.reload(true);
-        	}
-		})
 
-	</script>
+<script type="text/javascript">
+	Event.observe('emailDownloadLink','submit', function(event){
+		if ($('recipients').value==''){
+    		alert('Please enter one or more email addresses');
+    		Event.stop(event);
+    	}else{
+    		Lightview.hide();
+        	window.parent.location.reload(true);
+    	}
+	})
+
+</script>
