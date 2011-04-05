@@ -22,7 +22,7 @@ public class AssignedToUpdateHandler extends WebOutputHandler {
 	}
 
 	public Object handleExcel(Long entityId, Object value) {
-		return null;
+		return handleWeb(entityId, value);
 	}
 
 	@Override
