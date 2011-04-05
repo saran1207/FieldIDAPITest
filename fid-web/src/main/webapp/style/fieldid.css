@@ -169,6 +169,22 @@ h2 a {
 	width: 215px;
 }
 
+#systemLogo {
+	width: 615px;
+}
+
+#systemLogo a{
+	padding: 10px;
+	color: #656565;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+.publicLinkContainer{
+	display: inline;
+	margin-left: 20px;
+}
+
 #pageHeader #pageNavigation {
 	float: right;
 	text-align: left;
@@ -2044,3 +2060,4 @@ div.unitOfMeasureName {
 .egColor {
 	color: #999999;
 }
+

@@ -36,7 +36,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 	private DownloadLinkSaver downloadLinkSaver;
 	private String recipients;
 	private String subject;
-	private String body;
+	private String message;
 	private String downloadId;
 	
 	public DownloadLinkAction(PersistenceManager persistenceManager) {
@@ -197,13 +197,12 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 
 	private TemplateMailMessage buildDownloadMessage(String email) {
 		subject = getText("label.you_have_received_a_file_from") +" "+ getSessionUser().getName() + " " + getText("label.via_fieldid");
-		body = getText("label.download_link_message1") + "\n\n" + getDownloadUrl() + "\n\n" + getText("label.this_link_will_expire") + "SOME DATE" + "\n\n" + getText("label.regards") + "\n"
-				+ getSessionUser().getName();
 		
 		TemplateMailMessage invitationMessage = new TemplateMailMessage(subject, "downloadLink");
 		invitationMessage.getToAddresses().add(email);
+		invitationMessage.getTemplateMap().put("message", getMessage());
 		invitationMessage.getTemplateMap().put("downloadUrl", getDownloadUrl());
-		invitationMessage.getTemplateMap().put("expiryDate", getExpiresText(getDownloadLink().getCreated()));
+		invitationMessage.getTemplateMap().put("expiryDate", getExpiresText(getPublicDownloadLink().getCreated()));
 		invitationMessage.getTemplateMap().put("senderName", getSessionUser().getName());
 		
 		return invitationMessage;
@@ -254,6 +253,14 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		return expiresText;
 	}
 	
+	public Date getExpiryDate(Date created){
+		Integer expireTTL = getConfigContext().getInteger(ConfigEntry.DOWNLOAD_TTL_DAYS);
+
+		// add the TTL and truncate back to midnight
+		return DateHelper.truncate(DateHelper.addDaysToDate(created, expireTTL.longValue()), DateHelper.DAY);
+
+	}
+	
 	public DownloadLink getDownloadLink() {
 		if(downloadLink == null) {
 			downloadLink = loadDownloadLink();
@@ -281,21 +288,22 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		this.downloadLinkSaver = downloadLinkSaver;
 	}
 
+	@RequiredStringValidator(type = ValidatorType.FIELD, key="label.email_required", message="")
 	public String getRecipients() {
 		return recipients;
 	}
 	
-	@RequiredStringValidator(type = ValidatorType.FIELD, key="label.email_required", message="")
+	
 	public void setRecipients(String recipients) {
 		this.recipients = recipients;
 	}
 
 	public String getBody() {
-		return body;
+		return message;
 	}
 
 	public void setBody(String body) {
-		this.body = body;
+		this.message = body;
 	}
 	
 	public String getDownloadUrl(){
@@ -312,6 +320,18 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 
 	public void setDownloadId(String downloadId) {
 		this.downloadId = downloadId;
+	}
+
+	public String getMessage() {
+		if (message==null){
+			message = getText("label.download_link_message1") + "\n\n" + getDownloadUrl() + "\n\n" + getText("label.this_link_will_expire") + getExpiresText(getDownloadLink().getCreated()) + "\n\n" + getText("label.regards") + "\n"
+			+ getSessionUser().getName();
+		}
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }
