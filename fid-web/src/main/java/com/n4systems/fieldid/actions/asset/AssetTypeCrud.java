@@ -554,6 +554,16 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 		}
 		return assetTypeGroups;
 	}
+	
+	public List<AssetTypeGroup> getFilteringAssetTypeGroups() {
+		List<AssetTypeGroup> filteringGroups = getAssetTypeGroups();
+		AssetTypeGroup noGroupOption = new AssetTypeGroup();
+		noGroupOption.setID(-1L);
+		noGroupOption.setName("Not in a Group");
+		filteringGroups.add(0, noGroupOption);
+		
+		return filteringGroups;
+	}
 
 	public String getNameFilter() {
 		return nameFilter;

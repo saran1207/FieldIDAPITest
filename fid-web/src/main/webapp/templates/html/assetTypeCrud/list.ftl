@@ -12,7 +12,7 @@ ${action.setPageType('asset_type', 'list')!}
 	</div>
 	<@s.form id="listFilterForm" method="get">
 		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
-		<@s.select key="label.asset_type_group" name="groupFilter" id="groupFilter" list="assetTypeGroups" listKey="id" listValue="name" emptyOption="true" labelposition="left"/>
+		<@s.select key="label.asset_type_group" name="groupFilter" id="groupFilter" list="filteringAssetTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
 		<div class="formAction">
 			<@s.submit key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
@@ -25,7 +25,7 @@ ${action.setPageType('asset_type', 'list')!}
 
 	<table class="list">
 		<tr>
-			<th><@s.text name="label.assettype"/></th>
+			<th><@s.text name="label.name"/></th>
 			<th><@s.text name="label.asset_type_group"/></th>
 			<th><@s.text name="label.created"/></th>
 			<th><@s.text name="label.last_modified"/></th>		

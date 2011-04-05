@@ -8,6 +8,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
@@ -30,7 +31,11 @@ public class AssetTypeListLoader extends ListLoader<AssetType> {
 		}
 		
 		if(groupFilter != null) {
-			builder.addSimpleWhere("group.id", groupFilter);
+			if (groupFilter == -1)
+				builder.addWhere(WhereClauseFactory.createIsNull("group.id"));
+			else {
+				builder.addSimpleWhere("group.id", groupFilter);
+			}
 		}
 		
 		builder.addOrder("name");
