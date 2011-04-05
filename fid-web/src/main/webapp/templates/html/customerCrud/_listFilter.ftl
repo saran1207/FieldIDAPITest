@@ -7,7 +7,7 @@
 	<@s.form id="listFilterForm" action="${filterAction}" method="get">
 		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
 		<@s.textfield key="label.id" name="idFilter" id="idFilter" labelposition="left" />
-		<@s.select key="label.organization" name="orgFilter" id="orgFilter" list="parentOrgs" listKey="id" listValue="name" emptyOption="true" labelposition="left"/>
+		<@s.select key="label.organization" name="orgFilter" id="orgFilter" list="parentOrgs" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
 		<div class="formAction">
 			<@s.submit key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>

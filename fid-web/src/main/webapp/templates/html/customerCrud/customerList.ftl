@@ -46,6 +46,7 @@
 	</#list>
 	</table>
 	<#include '../common/_pagination.ftl' />
+	<div class="total"><@s.text name="label.total"/>:&nbsp;${page.totalResults}</div>
 <#elseif !page.hasResults() && !nameFilter??>
 	<@s.url id="addCustomerUrl" action="customerEdit"/>
 	
