@@ -32,7 +32,7 @@
 			<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
 		</#if>
 		
-		<@s.select key="label.organization" name="orgFilter" id="orgFilter" list="parentOrgs" listKey="id" listValue="name" emptyOption="true" labelposition="left"/>
+		<@s.select key="label.organization" name="orgFilter" id="orgFilter" list="parentOrgs" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
 		
 		<div class="formAction">
 			<@s.submit name="search" key="hbutton.filter" />
@@ -51,6 +51,7 @@
 	<#include '../common/_pagination.ftl' />
 	<#include "_userList.ftl" />
 	<#include '../common/_pagination.ftl' />
+	<div class="total"><@s.text name="label.total"/>:&nbsp;${page.totalResults}</div>
 <#elseif !page.hasResults()>
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
