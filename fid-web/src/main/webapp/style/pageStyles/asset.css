@@ -278,3 +278,7 @@
 #nextEvent .failColor p, #nextEvent .passColor p{
 	padding: 5px 10px;
 }
+
+#nextEvent .passColor p{
+	width: 60px;
+}
