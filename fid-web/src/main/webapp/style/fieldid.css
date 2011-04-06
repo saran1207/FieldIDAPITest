@@ -1994,25 +1994,22 @@ div.unitOfMeasureName {
 	background-repeat: no-repeat;
 }
 
+.passColor p, .failColor p, .naColor p{
+	padding: 5px 15px;
+	width: 70px;
+	text-align: center;
+}
+
 .naColor p{
 	background-color: #E3E3E3;
-	padding: 5px 20px;
-	width: 60px;
-	text-align: center;
 }
 
 .failColor p{
 	background-color: #E9BDBD;
-	padding: 5px 20px;
-	width: 60px;
-	text-align: center;
 }
 
 .passColor p{
 	background-color:#DBF1BA;
-	padding: 5px 20px;
-	text-align: center;
-	width: 60px;
 }
 
 #scheduleList th{
