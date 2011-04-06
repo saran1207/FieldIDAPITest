@@ -1,14 +1,15 @@
-
-<span >${action.formatDate(eventSchedule.nextDate, false)}</span>
-<#if securityGuard.projectsEnabled>
-	<span >${(eventSchedule.project.name)!action.getText('label.nojob')}</span>
+<#if eventSchedule.pastDue>
+	<div class="failColor floatLeft inline">
+		<p><@s.text name="label.overdue"/></p> 
+	</div>
+<#elseif eventSchedule.daysToDue == 0>
+	<div class="passColor floatLeft inline">
+		<p><@s.text name="label.today"/></p> 
+	</div>
+<#else>
+	<div class="passColor floatLeft inline">
+		<p><@s.text name="label.in_x_days"><@s.param>${eventSchedule.daysToDue!}</@s.param></@s.text></p>
+	</div>
 </#if>
-<#if sessionUser.hasAccess( "createevent" ) && !inVendorContext>
-	<span>
-		<a id="edit_${eventSchedule.id}" href="javascript:void(0);" onclick="editSchedule( ${eventSchedule.eventType.id}, ${assetId}, ${(eventSchedule.id)!"null"}); return false;" ><@s.text name="label.edit" /></a> |
-		<a id="delete_${eventSchedule.id}" href="javascript:void(0);" onclick="removeSchedule( ${eventSchedule.eventType.id}, ${assetId}, ${(eventSchedule.id)!"null"}); return false; " ><@s.text name="label.remove" /></a> |
-		<a id="startEventNow_${eventSchedule.id}" <#if eventSchedule.status.getName() == "IN_PROGRESS">style="display:none"</#if> href='<@s.url action="selectEventAdd" namespace="/" assetId="${assetId}" type="${eventSchedule.eventType.id}" scheduleId="${eventSchedule.id}" />'><@s.text name="label.starteventnow"/></a>
-		<a id="stopProgress_${eventSchedule.id}" <#if eventSchedule.status.getName() == "SCHEDULED">style="display:none"</#if> href='javascript:void(0);' onclick="getResponse('<@s.url action="eventScheduleStopProgress" namespace="/ajax" assetId="${assetId}" uniqueID="${eventSchedule.id}" />'); return false"><@s.text name="label.stopprogress"/></a>
-	</span>
-</#if>	
 
+<div class="scheduleDate">${action.formatDate(eventSchedule.nextDate, false)}</div>
