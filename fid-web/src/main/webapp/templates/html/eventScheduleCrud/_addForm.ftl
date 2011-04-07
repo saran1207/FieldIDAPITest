@@ -1,12 +1,13 @@
 <@s.form id="newSchedule" action="eventScheduleCreate" cssClass="crudForm pageSection" namespace="/ajax" theme="fieldid" >
-	<#include "../common/_formErrors.ftl"/>		
 	<div id="schedulesForm">
 		<div class="headerActions">
 			<#if sessionUser.hasAccess("createevent")>
 				<a id="newScheduleButton" href="#" onclick="$('newScheduleForm').show(); $('newScheduleForm').absolutize();  return false;"><@s.text name="label.addschedule"/></a>
 			</#if>
 		</div>
-
+		
+		<#include "../common/_formErrors.ftl"/>
+		
 		<div class="fluentSets schedulesAdd" id="newScheduleForm" style="display:none" >
 			<h2><@s.text name="label.add_a_schedule"/></h2>
 			<@s.hidden name="assetId"  />
@@ -41,6 +42,7 @@
 		function(event) {
 			event.stop();
 			$('newScheduleForm').hide();
+			$('schedulesBlankSlate').hide();
 			$('newSchedule').request( getStandardCallbacks() );
 			
 		});

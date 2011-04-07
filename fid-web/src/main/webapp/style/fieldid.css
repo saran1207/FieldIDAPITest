@@ -1809,6 +1809,13 @@ input.description {
 	margin-left: 183px;
 }
 
+.schedulesTextContainer{
+	background-image: url(../images/schedules-blank-slate-icon.png);
+	background-repeat: no-repeat;
+	margin-left: 240px;
+	padding-left: 75px;
+	}
+
 .textContainer{
 	background-image: url(../images/reporting-bs-icon.png);
 	background-repeat: no-repeat;
@@ -1817,12 +1824,13 @@ input.description {
 	padding-left: 90px;
 }
 
-.textContainer p{
+.textContainer p, .schedulesTextContainer p{
 	font-size: 14px;	
 	line-height: 20px;
+	padding: 5px;
 }
 
-.textContainer h1, .textContainer p{
+.textContainer h1{
 	padding: 5px;
 }
 
