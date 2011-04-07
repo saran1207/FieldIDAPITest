@@ -61,7 +61,8 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable 
 	
 	private void generateDownloadId() {
 		if (downloadId == null) {
-			downloadId = UUID.randomUUID().toString();
+			String randomUuid= UUID.randomUUID().toString();
+			downloadId = randomUuid.substring(0,randomUuid.indexOf("-", 10));
 		}
 	}
 	

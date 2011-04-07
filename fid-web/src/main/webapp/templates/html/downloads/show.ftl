@@ -52,7 +52,7 @@ ${action.setPageType('my_account', 'downloads')!}
 					<#if download.state.ready>
 						<a href="<@s.url action="downloadFile" includeParams="get" fileId="${download.id}" />" onClick="markDownloaded('dl_${download.id}');" ><@s.text name="label.download"/></a>
 						|
-						<a href='<@s.url action="emailDownload" namespace="/aHtml/iframe" fileId="${download.id}"/>' class='lightview' rel='iframe' title=" :: :: scrolling:true, width: 600, height: 550" ><@s.text name="label.email_download" /></a>
+						<a href='<@s.url action="emailDownload" namespace="/aHtml/iframe" fileId="${download.id}"/>' class='lightview' rel='iframe' title=" :: :: autosize: true, scrolling:true, width: 750, height: 275" ><@s.text name="label.share" /></a>
 						|
 						<a href="<@s.url action="deleteDownload" fileId="${download.id}" />"><@s.text name="label.delete"/></a>
 					</#if>

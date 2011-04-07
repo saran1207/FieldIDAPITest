@@ -6,15 +6,13 @@
 
 <@s.form action="emailDownloadLink" id="emailDownloadLink" cssClass="searchForm" theme="fieldid" cssStyle="fullForm fluidSets" >
 	<@s.hidden name="fileId" value="${fileId}" />
-	<h1><@s.text name="message.email_download_link_heading" ><@s.param>${downloadLink.name}</@s.param></@s.text> </h1>
+	<h1><@s.text name="message.email_download_link_heading" ><@s.param>"${downloadLink.name}"</@s.param></@s.text> </h1>
 	<p class="description"><@s.text name="message.download_link_description" /></p>
-	<br/>
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.emailaddresses" /></label><br/>
 		<@s.textfield id="recipients" name="recipients" /><br/><br/>
 	</div>
-	<br/>
 	
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.message" /></label><br/>
