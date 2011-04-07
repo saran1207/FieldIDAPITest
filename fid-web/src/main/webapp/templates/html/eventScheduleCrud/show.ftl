@@ -5,7 +5,7 @@
 		
 	</td>
 
-	<td class="name">${eventSchedule.eventType.name}</td>
+	<td>${eventSchedule.eventType.name}</td>
 	
 	<td class="name">
 		<#if eventSchedule.project?exists>

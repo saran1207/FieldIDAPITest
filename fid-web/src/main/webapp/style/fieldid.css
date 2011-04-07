@@ -2004,7 +2004,7 @@ div.unitOfMeasureName {
 
 .passColor p, .failColor p, .naColor p{
 	padding: 5px 15px;
-	width: 70px;
+	width: 95px;
 	text-align: center;
 }
 
@@ -2022,6 +2022,15 @@ div.unitOfMeasureName {
 
 #scheduleList th{
 	width: 200px;
+}
+
+.editEventSchedule{
+	width: 320px;
+	}
+
+.eventScheduleEditActions{
+	margin-top: 3.5px;
+	float:right;
 }
 
 #scheduleList .reducedWidthTableHeading{
