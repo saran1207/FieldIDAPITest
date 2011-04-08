@@ -20,7 +20,7 @@
 			<@s.textarea name="message" /><br/>
 		</div>
 		
-		<input type="submit" value="<@s.text name="label.submit"/>" />
+		<input type="submit" value="<@s.text name="label.send_email_now"/>" />&nbsp;<@s.text name="label.or"/>&nbsp;<a href="#" id="cancelLink" ><@s.text name="label.cancel"/></a>
 		
 	</div>
 	
@@ -38,6 +38,11 @@
 </@s.form>
 
 <script type="text/javascript">
+	$('cancelLink').observe('click', function(){
+			Lightview.hide();
+			window.parent.location.reload(true);
+	});
+	
 	Event.observe('emailDownloadLink','submit', function(event){
 		if ($('recipients').value==''){
     		alert('Please enter one or more email addresses');

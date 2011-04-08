@@ -13,7 +13,8 @@
 #emailDownloadLink{
 	background-color: #EEE;
 	height: 350px;
-	}
+	margin-top: 15px;
+}
 
 #emailDownloadLink input[type="text"], #emailDownloadLink textarea{
 	width: 350px;
@@ -62,7 +63,7 @@
 	}
 
 #emailLinkButton a {
-	margin-top: 5px;
+	margin-top: 10px;
 	display: block;
 	width: 220px;
 	height: 50px;
@@ -89,7 +90,7 @@
 }
 
 .emailInstructions{
-	margin-top: 10px;
+	margin-top: 20px;
 	float:left;
 	display:block;
 }
@@ -103,6 +104,7 @@
 	float:left;
 	display:block;
 	width: 400px;
+	margin-top: 10px;
 }
 
 .lightColored{

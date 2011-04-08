@@ -24,7 +24,7 @@
 	<h1><@s.text name="label.your_download_link"/></h1>	
 	<div class="downloadBox">
 		<div class="boxContent">
-			<h2>${publicDownloadLink.name}</h2>
+			<h2><a href="<@s.url action="downloadFile" includeParams="get" downloadId="${downloadId}" />" >${publicDownloadLink.name}</a></h2>
 			<p><@s.text name="label.expires"/>:&nbsp;${action.getExpiryDate(publicDownloadLink.created)?datetime}</p>
 		</div>
 		<div id="downloadButton"><a href="<@s.url action="downloadFile" includeParams="get" downloadId="${downloadId}" />" ></a></div>
