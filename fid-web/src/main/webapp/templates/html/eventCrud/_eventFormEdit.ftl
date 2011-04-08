@@ -38,7 +38,7 @@
         var signatureParams = {
             pngData: data,
             criteriaId: currentSignatureCriteriaId,
-            criteriaCount: currentSignatureCriteriaCount,
+            criteriaCount: currentSignatureCriteriaCount
         };
 
         getResponse(submitSignatureUrl, "post", signatureParams);
@@ -88,7 +88,6 @@
                 <#include '_unitOfMeasureCriteriaResultEdit.ftl'>
             <#elseif criteria.signatureCriteria>
                 <#assign criteriaId = criteria.id />
-                <#--<#assign temporarySignatureFile = false />-->
                 <#include '_signatureCriteriaResultEdit.ftl'>
             </#if>
 

@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name="signature_criteriaresults")
@@ -20,17 +19,6 @@ public class SignatureCriteriaResult extends CriteriaResult {
 
     public void setSigned(boolean signed) {
         this.signed = signed;
-    }
-
-    @Transient
-    private String temporaryFileId;
-
-    public String getTemporaryFileId() {
-        return temporaryFileId;
-    }
-
-    public void setTemporaryFileId(String temporaryFileId) {
-        this.temporaryFileId = temporaryFileId;
     }
 
 }

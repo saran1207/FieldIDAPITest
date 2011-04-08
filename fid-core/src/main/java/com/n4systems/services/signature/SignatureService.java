@@ -38,16 +38,15 @@ public class SignatureService {
         return new File(signatureDirectory, criteriaId + ".png");
     }
 
-    public void copySignatureFilesForCriteriaResult(Tenant tenant, Long eventId, SignatureCriteriaResult result) {
-        if (result.getTemporaryFileId() != null) {
-            File temporarySignatureFile = getTemporarySignatureFile(tenant.getId(), result.getTemporaryFileId());
-            File destinationFile = getSignatureFileFor(tenant, eventId, result.getCriteria().getId());
+    public void copySignatureFilesForCriteriaResult(Tenant tenant, Long eventId, Long criteriaId, String temporaryFileId) {
+        if (temporaryFileId != null) {
+            File temporarySignatureFile = getTemporarySignatureFile(tenant.getId(), temporaryFileId);
+            File destinationFile = getSignatureFileFor(tenant, eventId, criteriaId);
             try {
                 FileUtils.copyFile(temporarySignatureFile, destinationFile);
             } catch (IOException e) {
                 throw new RuntimeException("Unable to copy temporary signature file to permanent storage", e);
             }
-            result.setSigned(true);
         }
     }
 }

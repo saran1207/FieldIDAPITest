@@ -415,11 +415,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			
 			
 			processProofTestFile();
-			
+
 			if (event.isNew()) {
 				// the criteriaResults from the form must be processed before setting them on the event
 				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
-				
+
 				CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, getSessionUserId())
 						.withProofTestFile(fileData)
 						.withUploadedImages(getUploadedFiles());
@@ -469,10 +469,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 
     private void processSignatures(Event event) {
         SignatureService signatureService = new SignatureService();
-        for (CriteriaResult result : event.getResults()) {
-            if (result instanceof SignatureCriteriaResult) {
-                signatureService.copySignatureFilesForCriteriaResult(getTenant(), event.getId(), (SignatureCriteriaResult) result);
-                persistenceManager.update(result);
+
+        for (CriteriaResultWebModel model : criteriaResults) {
+            if (model.getSignatureFileId() != null) {
+                signatureService.copySignatureFilesForCriteriaResult(getTenant(), event.getId(), model.getCriteriaId(), model.getSignatureFileId());
             }
         }
     }

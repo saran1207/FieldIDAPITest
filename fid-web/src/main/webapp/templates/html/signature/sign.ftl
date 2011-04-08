@@ -61,7 +61,7 @@
         display:block;
         position:absolute;
         left: 10px;
-        top: 220px;
+        top: 263px;
     }
 </style>
 <script type="text/javascript">
@@ -96,8 +96,8 @@
 </script>
 &nbsp;
 
-<canvas id="canvas" width="750" height="200" onselectstart="return false;"></canvas>
-<canvas id="canvasInterface" width="750" height="200" onselectstart="return false;"></canvas>
+<canvas id="canvas" width="750" height="250" onselectstart="return false;"></canvas>
+<canvas id="canvasInterface" width="750" height="250" onselectstart="return false;"></canvas>
 
 <div class="bottomButtons">
     <button onclick="doClear()">Clear</button> <button onclick="doStore()">Store</button>

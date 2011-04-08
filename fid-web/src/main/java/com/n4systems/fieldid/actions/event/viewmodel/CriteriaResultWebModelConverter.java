@@ -71,7 +71,6 @@ public class CriteriaResultWebModelConverter {
             criteriaResult = result;
         } else if (CriteriaType.SIGNATURE.equals(type)) {
             SignatureCriteriaResult result = new SignatureCriteriaResult();
-            result.setTemporaryFileId(webModel.getSignatureFileId());
             criteriaResult = result;
         } else {
             throw new RuntimeException("Unkown type for web model: " + webModel.getType());
