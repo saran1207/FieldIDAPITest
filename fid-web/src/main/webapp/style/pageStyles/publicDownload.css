@@ -1,0 +1,120 @@
+#page{
+	width:100%;	
+}
+
+#pageHeader{
+	padding: 0;
+}
+
+#pageContent.publicContainer{
+	background-image: url(../../images/bg-download.png);
+	background-repeat:repeat-x;
+	background-position: center top;
+	border-style: none;
+}
+
+#systemLogo {
+	width: 100%;
+	background-color: #F7F7F7;
+	padding: 0;
+}
+
+.systemLogoContainer{
+	position: relative;
+	width: 900px;
+	margin: 0px auto;
+}
+
+#systemLogo a{
+	line-height: 1.25;
+	color: #656565;
+	margin-left:12px;
+	margin-top: 12px;
+	font-size: 13px;
+	font-weight: bold;
+	text-decoration: none;
+	font-family: 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, Geneva, 'Lucida Sans', Verdana, sans-serif;
+}
+
+#systemLogo a:hover{
+	color: #E28500;
+}
+
+#systemLogo img{
+	position: relative;
+	top: 13px;
+	left: 10px;
+}
+
+#systemLogo img, .publicLinkContainer{
+	float:left;
+	display:block;
+}
+
+.publicLinkContainer{
+	margin: 35px 0 0 35px;
+}
+
+.downloadContainer{
+	border-top: 1px solid #E4E4E4;
+	padding: 25px;
+	margin-bottom: 250px;
+}
+.downloadContainer h1{
+	width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.textLink {
+	line-height: 18px;
+	margin-left:auto;
+	margin-right:auto;
+	width: 650px;
+}
+	
+.downloadBox{
+	margin: 15px;
+	margin-left:auto;
+	margin-right: auto;
+	width: 650px;
+	height: 80px;
+	border: 1px solid #CACACA;
+
+}
+.downloadBox .boxContent, .downloadBox .expiredBoxContent{
+	float:left;
+	width: 300px;
+	height: 55px;
+	border-style: none;
+	background-image: url(../../images/file-icon.png);
+	background-repeat: no-repeat;
+	margin-left: 15px;
+	margin-top: 15px;
+	padding-left: 65px;
+}
+.downloadBox .expiredBoxContent{
+	background-image: url(../../images/download-icon-invalid.png);
+}
+
+.boxContent h2, .expiredBoxContent h1, .textLink .coloredLink{
+	color: #356CA2;
+}
+
+#downloadButton{
+	margin-top: 25px;
+}
+
+.expiredBoxContent h1{
+	margin-top: 15px;
+	margin-left: 10px;
+}
+
+#downloadButton a{
+	display: block;
+	float:right;
+	width: 220px;
+	height: 50px;
+	background-image: url(../../images/download-button.png);
+	background-repeat: no-repeat;	
+}
