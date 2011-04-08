@@ -2,8 +2,9 @@
 	<title><@s.text name="label.file_download"/></title>
 	<@n4.includeStyle href="downloads" type="page"/>
 </head>
-
 <div class="downloadContainer">
+<div class="background">
+
 	<h1><@s.text name="label.your_download_link"/></h1>	
 	<div class="downloadBox">
 		<div class="boxContent">
@@ -16,5 +17,6 @@
 		<p><@s.text name="label.if_the_link_above"/></p>
 		<p class="coloredLink">${downloadUrl}</p>
 	</div>
+</div>
 </div>
 

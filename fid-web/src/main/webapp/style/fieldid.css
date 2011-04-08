@@ -170,20 +170,26 @@ h2 a {
 }
 
 #systemLogo {
-	width: 615px;
+	width: 100%;
 }
 
 #systemLogo a{
 	padding: 10px;
 	color: #656565;
 	font-size: 14px;
+	font-weight: bold;
 	text-decoration: none;
+	font-family: 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, Geneva, 'Lucida Sans', Verdana, sans-serif;
+}
+
+#systemLogo img, .publicLinkContainer{
+	float:left;
+	display:block;
 }
 
 .publicLinkContainer{
-	display: inline;
-	margin-left: 20px;
-}
+	margin: 15px 0 0 20px;
+	}
 
 #pageHeader #pageNavigation {
 	float: right;

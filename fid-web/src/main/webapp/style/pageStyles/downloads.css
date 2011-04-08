@@ -1,6 +1,17 @@
-#pageContent.public{
-	background: none;
+#pageHeader{
+	padding: 0;
 }
+
+#pageContent.publicContainer{
+	height: 100%;
+	background-image: url(../../images/bg-download.png);
+	background-repeat:repeat-x;
+	background-position: center top;
+}
+
+#systemLogo{
+	background-color: #F7F7F7;
+	}
 
 .textContainer{
 	background-image: url(../../images/download-icon.png);
@@ -74,13 +85,12 @@
 	background-repeat: no-repeat;
 }
 
-
 #pageContent{
 	border-style: none;
 }
 
 .downloadContainer{
-	border-top: 2px solid #CACACA;
+	border-top: 1px solid #CACACA;
 	padding: 25px;
 	margin-bottom: 250px;
 }
@@ -180,4 +190,5 @@
 
 .lightColored{
 	color: #666;
-	}
+}
+
