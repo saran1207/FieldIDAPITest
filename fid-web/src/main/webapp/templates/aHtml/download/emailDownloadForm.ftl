@@ -9,18 +9,32 @@
 	<h1><@s.text name="message.email_download_link_heading" ><@s.param>"${downloadLink.name}"</@s.param></@s.text> </h1>
 	<p class="description"><@s.text name="message.download_link_description" /></p>
 	
-	<div class="infoSet">
-		<label class="label"><@s.text name="label.emailaddresses" /></label><br/>
-		<@s.textfield id="recipients" name="recipients" /><br/><br/>
+	<div class="inputContainer">
+		<div class="infoSet">
+			<label class="label"><@s.text name="label.emailaddresses" /></label><br/>
+			<@s.textfield id="recipients" name="recipients" /><br/><br/>
+		</div>
+		
+		<div class="infoSet">
+			<label class="label"><@s.text name="label.message" /></label><br/>
+			<@s.textarea name="message" /><br/>
+		</div>
+		
+		<input type="submit" value="<@s.text name="label.submit"/>" />
+		
 	</div>
 	
-	<div class="infoSet">
-		<label class="label"><@s.text name="label.message" /></label><br/>
-		<@s.textarea name="message" /><br/>
+	<div class="emailInstructions">
+		<h3><@s.text name="label.correct_formats" /><h3>
+		<p class="correctExample"><@s.text name="label.correct_example1" /></p>
+		<p class="correctExample"><@s.text name="label.correct_example2" /></p>
+		<br/>
+		<h3><@s.text name="label.incorrect_formats" /><h3>
+		<p class="incorrectExample"><@s.text name="label.incorrect_example1" /><span class="lightColored"><@s.text name="label.incorrect_example_description1" /></span></p>
+		<p class="incorrectExample"><@s.text name="label.incorrect_example2" /><span class="lightColored"><@s.text name="label.incorrect_example_description2" /></span></p>
+		<p class="incorrectExample"><@s.text name="label.incorrect_example3" /><span class="lightColored"><@s.text name="label.incorrect_example_description3" /></span></p>
 	</div>
-	
-	
-	<input type="submit" value="<@s.text name="label.submit"/>" />
+
 </@s.form>
 
 <script type="text/javascript">

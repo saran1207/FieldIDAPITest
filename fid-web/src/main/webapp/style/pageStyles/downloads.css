@@ -14,6 +14,11 @@
 	font-size: 14px;
 }
 
+#emailDownloadLink{
+	background-color: #EEE;
+	height: 350px;
+	}
+
 #emailDownloadLink input[type="text"], #emailDownloadLink textarea{
 	width: 350px;
 	margin: 10px 0;
@@ -32,7 +37,7 @@
 }
 
 #emailDownloadLink, .optionsContainer{
-	padding: 0 20px;
+	padding: 20px
 }
 
 .description{
@@ -138,3 +143,41 @@
 	width: 650px;
 }
 
+.emailInstructions h3{
+	margin-bottom: 5px;
+}
+
+.correctExample{
+	background-image: url(../../images/checkmark-icon.png);
+	background-position: left center;
+	background-repeat: no-repeat;	
+	padding-left: 15px;
+}
+
+.incorrectExample{
+	background-image: url(../../images/dash-icon.png);
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 15px;
+}
+
+.emailInstructions{
+	margin-top: 10px;
+	float:left;
+	display:block;
+}
+
+.emailInstructions p{
+	margin: 5px 0;
+	font-weight: normal;
+}
+
+.inputContainer{
+	float:left;
+	display:block;
+	width: 400px;
+}
+
+.lightColored{
+	color: #666;
+	}
