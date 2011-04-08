@@ -19,6 +19,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
@@ -166,6 +167,8 @@ public class EventHelper {
             		textValue = textValue.substring(1); 
             	}           		
             	((ComboBoxCriteriaResult)realResult).setValue(textValue);
+            } else if (realResult instanceof SignatureCriteriaResult) {
+                ((SignatureCriteriaResult)realResult).setSigned(formResult.isSigned());
             }
 
 			// and attach back onto the event

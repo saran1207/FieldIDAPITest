@@ -490,6 +490,13 @@
         	<result name="success" type="freemarker">/templates/ajax/downloads/show.ftl</result>
         </action>
 
+        <action name="storeSignature" method="storeSignature" class="com.n4systems.fieldid.actions.signature.SignatureAction">
+            <result name="success" type="freemarker">/templates/html/signature/thumbnail_refresh.ftl</result>
+        </action>
+
+        <action name="clearSignature" method="clearSignature" class="com.n4systems.fieldid.actions.signature.SignatureAction">
+            <result name="success" type="freemarker">/templates/html/signature/thumbnail_refresh.ftl</result>
+        </action>
 
 	</package>
 </struts>

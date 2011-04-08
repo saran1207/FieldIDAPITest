@@ -49,6 +49,7 @@ public class PathHandler {
 	private static final String ATTACHMENT_PATH_BASE = EVENT_PATH_BASE + "/attachments";
 	private static final String PROOF_TEST_PATH_BASE = EVENT_PATH_BASE + "/prooftests";
 	private static final String CHART_IMAGE_PATH_BASE = EVENT_PATH_BASE + "/chartimages";
+    private static final String EVENT_SIGNATURE_PATH_BASE = EVENT_PATH_BASE + "/signatures";
 	private static final String REPORT_PATH_BASE = PRIVATE_PATH_BASE + "/reports";
 	private static final String ALL_TENANT_REPORT_PATH = REPORT_PATH_BASE + "/all_tenants";
 	private static final String DEFAULT_EVENT_REPORTNAME = "default_inspection_cert" + REPORT_FILE_EXT;
@@ -145,6 +146,10 @@ public class PathHandler {
 	 */
 	public static File getTempFile() {
 		return parentize(getTempRoot(), getTempFileName());
+	}
+
+	public static File getTempFileInRoot(String tempFileName) {
+		return parentize(getTempRoot(), tempFileName);
 	}
 	
 	/**
@@ -468,6 +473,10 @@ public class PathHandler {
 	private static String getAssetTypeAttachmentBasePath(Tenant tenant) {
 		return mergePaths(ASSET_TYPE_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
+
+	private static String getEventSignatureBasePath(Tenant tenant) {
+		return mergePaths(EVENT_SIGNATURE_PATH_BASE, getTenantPathPart(tenant));
+	}
 	
 	public static File getAssetTypeAttachmentBaseFile(Tenant tenant) {
 		return absolutize(getAssetTypeAttachmentBasePath(tenant));
@@ -476,6 +485,10 @@ public class PathHandler {
 	public static File getAssetTypeImageFile(AssetType assetType) {
 		return absolutize(mergePaths(getAssetTypeImageBasePath(assetType.getTenant()), getAssetTypePath(assetType)));
 	}
+
+    public static File getEventSignatureDirectory(Tenant tenant, Long eventId) {
+        return absolutize(mergePaths(getEventSignatureBasePath(tenant), eventId.toString()));
+    }
 	
 	public static File getAssetTypeImageBaseFile(Tenant tenant) {
 		return absolutize(getAssetTypeImageBasePath(tenant));

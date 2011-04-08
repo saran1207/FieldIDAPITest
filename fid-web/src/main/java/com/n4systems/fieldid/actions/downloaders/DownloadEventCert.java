@@ -29,9 +29,7 @@ public class DownloadEventCert extends DownloadAction {
 		super(persistenceManager);
 	}
 
-	@Override
 	public String doDownload() {
-		
 		// if we're in a vendor context we need to look events for assigned assets rather than registered assets
 		Event event = getLoaderFactory().createSafetyNetworkEventLoaderAssignedOrRegistered().setId(uniqueID).load();
 		

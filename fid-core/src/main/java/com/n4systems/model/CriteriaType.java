@@ -6,13 +6,15 @@ public enum CriteriaType {
     TEXT_FIELD("Text Field", "textfield"),
     COMBO_BOX("Combo Box", "select"),
     SELECT("Select Box", "select"),
-    UNIT_OF_MEASURE("Unit of Measure", "unitofmeasure");
+    UNIT_OF_MEASURE("Unit of Measure", "unitofmeasure"),
+    SIGNATURE("Signature", "signature");
 
     private String description;
     private String reportIdentifier;
 
     CriteriaType(String description, String reportIdentifier) {
         this.description = description;
+        this.reportIdentifier = reportIdentifier;
     }
 
     public String getDescription() {

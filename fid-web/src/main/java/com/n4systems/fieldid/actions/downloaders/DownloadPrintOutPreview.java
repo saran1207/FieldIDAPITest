@@ -21,7 +21,6 @@ public class DownloadPrintOutPreview extends DownloadAction {
 		super(persistenceManager);
 	}
 
-	@Override
 	public String doDownload() {
 		getPrintOut();
 

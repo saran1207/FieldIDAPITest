@@ -128,6 +128,10 @@
 			<result name="success" type="freemarker">/templates/html/downloads/show.ftl</result>
 			<result name="error" type="freemarker">/templates/html/downloads/show.ftl</result>
 		</action>
+
+        <action name="sign" method="sign" class="com.n4systems.fieldid.actions.signature.SignatureAction">
+            <result name="success" type="freemarker">/templates/html/signature/sign.ftl</result>
+        </action>
 	</package>
 	
 	<package name="iframeHtml" extends="ajaxHTMLAction" namespace="/aHtml/iframe" />

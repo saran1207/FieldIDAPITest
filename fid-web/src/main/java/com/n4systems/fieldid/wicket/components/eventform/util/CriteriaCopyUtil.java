@@ -4,6 +4,7 @@ import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.UnitOfMeasureCriteria;
@@ -29,10 +30,16 @@ public class CriteriaCopyUtil {
         	newCriteria = copyComboBoxCriteria((ComboBoxCriteria) criteria);
         } else if (criteria instanceof UnitOfMeasureCriteria) {
             newCriteria = copyUnitOfMeasureCriteria((UnitOfMeasureCriteria) criteria);
+        } else if (criteria instanceof SignatureCriteria) {
+            newCriteria = copySignatureCriteria((SignatureCriteria) criteria);
         }
 
         copyCommonFields(criteria, newCriteria, existingCriteria);
         return newCriteria;
+    }
+
+    private Criteria copySignatureCriteria(SignatureCriteria criteria) {
+        return new SignatureCriteria();
     }
 
     private Criteria copyUnitOfMeasureCriteria(UnitOfMeasureCriteria criteria) {

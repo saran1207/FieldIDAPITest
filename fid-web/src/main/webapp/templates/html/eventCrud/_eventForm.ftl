@@ -15,6 +15,8 @@
                 <#include '_comboBoxCriteriaResultDisplay.ftl'>
             <#elseif criteriaResult.criteria.unitOfMeasureCriteria>
                 <#include '_unitOfMeasureCriteriaResultDisplay.ftl'>
+            <#elseif criteriaResult.criteria.signatureCriteria>
+                <#include '_signatureCriteriaResultDisplay.ftl'>
             </#if>
 
             <#include "../observationsCrud/observationsShow.ftl"/>

@@ -12,6 +12,7 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasure;
@@ -132,7 +133,7 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     class CriteriaAddForm extends Form {
-        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box", "Combo Box", "Unit of Measure");
+        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box", "Combo Box", "Unit of Measure", "Signature");
         protected TextField<String> addTextField;
         private String criteriaName;
         private String criteriaType;
@@ -172,6 +173,8 @@ public class CriteriaPanel extends SortableListPanel {
                         UnitOfMeasureCriteria uomCriteria = new UnitOfMeasureCriteria();
                         uomCriteria.setPrimaryUnit(getDefaultUnitOfMeasure());
                         criteria = uomCriteria;
+                    } else if ("Signature".equals(criteriaType)) {
+                        criteria = new SignatureCriteria();
                     }
                     if (criteriaName.length()>1000){
                         error("Name length cannot exceed 100 characters.");

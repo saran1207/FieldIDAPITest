@@ -7,10 +7,10 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaType;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
-import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
 
 public class CriteriaResultWebModelConverter {
@@ -28,9 +28,12 @@ public class CriteriaResultWebModelConverter {
         } else if (result instanceof UnitOfMeasureCriteriaResult) {
             webModel.setTextValue(((UnitOfMeasureCriteriaResult)result).getPrimaryValue());
             webModel.setSecondaryTextValue(((UnitOfMeasureCriteriaResult)result).getSecondaryValue());
+        } else if (result instanceof SignatureCriteriaResult) {
+            webModel.setSigned(((SignatureCriteriaResult) result).isSigned());
         }
 
         webModel.setType(result.getCriteria().getCriteriaType().name());
+        webModel.setCriteriaId(result.getCriteria().getId());
         webModel.setDeficiencies(result.getDeficiencies());
         webModel.setRecommendations(result.getRecommendations());
         webModel.setId(result.getId());
@@ -65,6 +68,10 @@ public class CriteriaResultWebModelConverter {
             UnitOfMeasureCriteriaResult result = new UnitOfMeasureCriteriaResult();
             result.setPrimaryValue(webModel.getTextValue());
             result.setSecondaryValue(webModel.getSecondaryTextValue());
+            criteriaResult = result;
+        } else if (CriteriaType.SIGNATURE.equals(type)) {
+            SignatureCriteriaResult result = new SignatureCriteriaResult();
+            result.setTemporaryFileId(webModel.getSignatureFileId());
             criteriaResult = result;
         } else {
             throw new RuntimeException("Unkown type for web model: " + webModel.getType());

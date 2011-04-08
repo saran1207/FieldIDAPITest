@@ -7,6 +7,57 @@
 	defSelectImageUrl = '<@s.url value="/images/def-plus.png"/>';
 </script>
 
+<script src="/fieldid/javascript/lightview.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var currentSignatureCriteriaId = 0;
+    var currentSignatureCriteriaCount = 0;
+    var signatureClearUrl = '<@s.url action="clearSignature.action" namespace="/ajax"/>';
+    var submitSignatureUrl = '<@s.url action="storeSignature.action" namespace="/ajax"/>';
+
+    function initializeSignatureWindowOpenedHook() {
+        document.observe('lightview:opened', storeCriteriaId);
+    }
+
+    function getCurrentSignatureCriteriaId() {
+        return currentSignatureCriteriaId;
+    }
+
+    function storeCriteriaId(e) {
+        var attrs = e.target.attributes;
+        for (var i =0; i < attrs.length; i++) {
+            if (attrs[i].name == "criteriaid") {
+                currentSignatureCriteriaId = attrs[i].value;
+            }
+            if (attrs[i].name == "criteriacount") {
+                currentSignatureCriteriaCount = attrs[i].value;
+            }
+        }
+    }
+
+    function storeSignature(data) {
+        var signatureParams = {
+            pngData: data,
+            criteriaId: currentSignatureCriteriaId,
+            criteriaCount: currentSignatureCriteriaCount,
+        };
+
+        getResponse(submitSignatureUrl, "post", signatureParams);
+    }
+
+    function clearSignature(criteriaId, criteriaCount) {
+        currentSignatureCriteriaId = criteriaId;
+        getResponse(signatureClearUrl, "post", { criteriaId: criteriaId, criteriaCount: criteriaCount });
+    }
+
+    function performThumbnailRefresh(newThumbnailSection) {
+        Lightview.hide();
+        $('signatureCriteria'+currentSignatureCriteriaId).replace(newThumbnailSection);
+    }
+
+    Event.observe(window, 'load', initializeSignatureWindowOpenedHook);
+</script>
+
+
 <#list section.criteria as criteria >
 	<#if !criteria.retired >				
 
@@ -35,6 +86,10 @@
                 <#include '_comboBoxCriteriaResultEdit.ftl'>
             <#elseif criteria.unitOfMeasureCriteria>
                 <#include '_unitOfMeasureCriteriaResultEdit.ftl'>
+            <#elseif criteria.signatureCriteria>
+                <#assign criteriaId = criteria.id />
+                <#--<#assign temporarySignatureFile = false />-->
+                <#include '_signatureCriteriaResultEdit.ftl'>
             </#if>
 
 			<span class="recDefButtons">

@@ -2409,6 +2409,14 @@
 			</result>
 		</action>
 
+        <action name="sign" method="sign" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+            <result name="success" type="freemarker">/templates/html/signature/sign2.ftl</result>
+        </action>
+
+        <action name="submitSignature" method="submitSignature" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+            <result name="success" type="freemarker">/templates/html/signature/sign2.ftl</result>
+        </action>
+
 	</package>
 
 	<include file="locationPackageStruts.xml"/>

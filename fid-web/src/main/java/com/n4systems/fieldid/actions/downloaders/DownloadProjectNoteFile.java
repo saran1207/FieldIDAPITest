@@ -22,9 +22,6 @@ public class DownloadProjectNoteFile extends DownloadAction {
 		super(persistenceManager);
 	}
 
-	
-
-	@Override
 	public String doDownload() {
 		
 		if( project == null ) {

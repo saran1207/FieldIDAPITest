@@ -6,14 +6,17 @@ import com.n4systems.model.Recommendation;
 import java.util.List;
 
 public class CriteriaResultWebModel {
+
     private String type;
     private Long id;
     private Long criteriaId;
     private Long stateId;
     private String textValue;
     private String secondaryTextValue;
+    private String signatureFileId;
     private List<Recommendation> recommendations;
     private List<Deficiency> deficiencies;
+    private boolean signed;
 
     public String getType() {
         return type;
@@ -79,4 +82,19 @@ public class CriteriaResultWebModel {
         this.secondaryTextValue = secondaryTextValue;
     }
 
+    public String getSignatureFileId() {
+        return signatureFileId;
+    }
+
+    public void setSignatureFileId(String signatureFileId) {
+        this.signatureFileId = signatureFileId;
+    }
+
+    public boolean isSigned() {
+        return signed;
+    }
+
+    public void setSigned(boolean signed) {
+        this.signed = signed;
+    }
 }

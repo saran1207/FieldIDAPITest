@@ -67,7 +67,6 @@ public class DownloadManufacturerCert extends DownloadAction {
         return generateCertificate();
     }
 
-	@Override
 	public String doDownload() {
 		asset = assetManager.findAssetAllFields(uniqueID, getSecurityFilter());
 

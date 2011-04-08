@@ -187,8 +187,11 @@
 		<action name="downloadExampleAssetExport" method="downloadExample" class="com.n4systems.fieldid.actions.asset.AssetImportAction" />
 		<action name="downloadExampleEventExport" method="downloadExample" class="com.n4systems.fieldid.actions.event.EventImportAction" />
 		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
-		
-		<action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
+
+        <action name="downloadTemporarySignature" method="downloadTemporary" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
+        <action name="downloadSignature" method="download" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
+
+        <action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
 			<result name="cantprint" type="httpheader"><param name="error">404</param></result>
 		</action>
 		<action name="downloadLinkedManufacturerCert" method="downloadLinked" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >

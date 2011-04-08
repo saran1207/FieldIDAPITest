@@ -2,7 +2,9 @@ package com.n4systems.fieldid.wicket.components.eventform;
 
 import java.util.List;
 
+import com.n4systems.fieldid.wicket.components.eventform.details.SignatureDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.UnitOfMeasureDetailsPanel;
+import com.n4systems.model.SignatureCriteria;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -59,6 +61,8 @@ public class CriteriaDetailsPanel extends Panel {
         	add(new ComboBoxDetailsPanel("specificDetailsPanel", new Model<ComboBoxCriteria>((ComboBoxCriteria) criteria)));
         } else if (criteria instanceof UnitOfMeasureCriteria) {
             add(new UnitOfMeasureDetailsPanel("specificDetailsPanel", new Model<UnitOfMeasureCriteria>((UnitOfMeasureCriteria) criteria)));
+        } else if (criteria instanceof SignatureCriteria) {
+            add(new SignatureDetailsPanel("specificDetailsPanel", new Model<SignatureCriteria>((SignatureCriteria) criteria)));
         }
     }
 

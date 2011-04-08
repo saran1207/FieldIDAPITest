@@ -11,7 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 import com.n4systems.model.AssetType;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.assettype.AssetTypeLoader;
+import com.n4systems.services.signature.SignatureService;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -441,6 +444,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 				updateAttachmentList(event, modifiedBy);
 				event = eventManager.updateEvent(event, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
 			}
+
+            processSignatures(event);
 				
 			completeSchedule();
 			
@@ -462,7 +467,17 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return SUCCESS;
 	}
 
-	protected List<EventScheduleBundle> createEventScheduleBundles() {
+    private void processSignatures(Event event) {
+        SignatureService signatureService = new SignatureService();
+        for (CriteriaResult result : event.getResults()) {
+            if (result instanceof SignatureCriteriaResult) {
+                signatureService.copySignatureFilesForCriteriaResult(getTenant(), event.getId(), (SignatureCriteriaResult) result);
+                persistenceManager.update(result);
+            }
+        }
+    }
+
+    protected List<EventScheduleBundle> createEventScheduleBundles() {
 		List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
 		StrutsListHelper.clearNulls(nextSchedules);
 		

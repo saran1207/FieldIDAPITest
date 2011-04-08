@@ -16,7 +16,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 @SuppressWarnings("serial")
 public abstract class DownloadAction extends AbstractAction {
 
-	private static Logger logger = Logger.getLogger(DownloadAttachedEventFile.class);
+	private static Logger logger = Logger.getLogger(DownloadAction.class);
 	protected Long uniqueID;
 	protected String fileName;
 	protected Integer fileSize;
@@ -25,8 +25,6 @@ public abstract class DownloadAction extends AbstractAction {
 	public DownloadAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
-
-	public abstract String doDownload();
 
 	protected String sendFile(InputStream stream) throws IOException {
 		HttpServletResponse response = getServletResponse();

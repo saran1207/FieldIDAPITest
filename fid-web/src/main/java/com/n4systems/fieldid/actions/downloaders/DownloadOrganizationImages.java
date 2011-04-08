@@ -30,7 +30,6 @@ public class DownloadOrganizationImages extends DownloadAction {
 		super(persistenceManager);
 	}
 
-	@Override
 	public String doDownload() {
 		if( uniqueID != null ) {
 			tenant = TenantFinder.getInstance().findTenant(uniqueID);
