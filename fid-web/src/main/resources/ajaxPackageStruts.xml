@@ -498,5 +498,8 @@
             <result name="success" type="freemarker">/templates/html/signature/thumbnail_refresh.ftl</result>
         </action>
 
+		<action name="mergeFindCustomer" method="list" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
+			<result name="success" type="freemarker">/templates/ajax/customerMerge/list.ftl</result>
+		</action>
 	</package>
 </struts>

@@ -2408,14 +2408,24 @@
 				<param name="actionName">showDownloads</param>
 			</result>
 		</action>
-
-        <action name="sign" method="sign" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+		
+		<action name="sign" method="sign" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
             <result name="success" type="freemarker">/templates/html/signature/sign2.ftl</result>
         </action>
 
         <action name="submitSignature" method="submitSignature" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
             <result name="success" type="freemarker">/templates/html/signature/sign2.ftl</result>
         </action>
+		
+		
+		<action name="mergeCustomers" method="show" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
+			<result name="success" type="freemarker">/templates/html/customerMerge/add.ftl</result>
+		</action>
+		
+		<action name="customerMergeCreate" method="create" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
+			<result name="success" type="freemarker">/templates/html/customerMerge/create.ftl</result>
+			<result name="input" type="freemarker">/templates/html/customerMerge/add.ftl</result>
+		</action>		
 
 	</package>
 
