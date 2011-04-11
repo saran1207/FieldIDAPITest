@@ -34,6 +34,7 @@
 			<td><#if customer.modifiedBy?exists>${customer.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(customer.modified)}</td>
 			<td>
 				<#if customer.linked >
+				<a href="<@s.url value="customerEdit.action" uniqueID="${customer.id}" />" ><@s.text name="label.edit" /></a> | 
 					<@s.text name="label.linked_customer" />
 				<#elseif customer.archived>
 					<a href="<@s.url value="customerUnarchive.action" uniqueID="${customer.id}" />" ><@s.text name="label.unarchive" /></a>
