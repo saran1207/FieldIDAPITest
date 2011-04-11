@@ -52,21 +52,4 @@
 			</#list>
 		</#if>
 	</ul>
-
-	<ul id="safetyNetworkCatalogOnlyList" class="safetyNetworkCustomerList">
-		<@s.text name="label.catalog_only"/>
-		<#if !catalogOnlyConnections?has_content>
-			<li id="emptyCatalogOnly" class="emptyLi">
-				<@s.text name="label.none"/>
-			</li>
-		<#else>
-			<#list catalogOnlyConnections as connection>
-				<#if connection.catalogOnlyConnection>
-					<li>
-						<a href="<@s.url action="publishedCatalog" uniqueID="${connection.connectedOrg.tenant.id}"/>">${(connection.connectedOrg.primaryOrg.name?html)!}</a>
-					</li>
-				</#if>
-			</#list>
-		</#if>
-	</ul>
 </div>
