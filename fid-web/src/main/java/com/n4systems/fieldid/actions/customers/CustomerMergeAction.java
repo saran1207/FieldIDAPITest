@@ -8,6 +8,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.CustomerMergeTask;
 
 public class CustomerMergeAction extends AbstractCrud {
 	
@@ -49,13 +51,13 @@ public class CustomerMergeAction extends AbstractCrud {
 			addActionErrorText("error.you_must_choose_a_valid_customer_to_merge_into");
 			return INPUT;
 		}
-		
-//		AssetMergeTask task = new AssetMergeTask(winningAsset, losingAsset, fetchCurrentUser());
-//		TaskExecutor.getInstance().execute(task);
+
+		CustomerMergeTask task = new CustomerMergeTask(winningCustomer, losingCustomer, getUser());
+		TaskExecutor.getInstance().execute(task);
 		
 		return SUCCESS;
 	}
-	
+
 	public String doList(){
 		testRequiredEntities();
 		return SUCCESS;

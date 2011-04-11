@@ -2,9 +2,10 @@ package com.n4systems.services.customer;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exceptions.DuplicateCustomerException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.TenantNotValidForActionException;
@@ -13,6 +14,7 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.Project;
+import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.notificationsettings.NotificationSettingSaver;
@@ -26,19 +28,19 @@ import com.n4systems.model.savedreports.SavedReportSaver;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
-import com.n4systems.services.EventScheduleService;
+import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.util.persistence.QueryBuilder;
 
 public class CustomerMerger {
 	
-	private final PersistenceManager persistenceManager;
+	private static final Logger logger = Logger.getLogger(CustomerMerger.class);
 	
-	private final LegacyAsset legacyAsset;
 	private final EventManager eventManager;
 	private final User user;
 
-	private final EventScheduleService scheduleService;
+	private final EventScheduleManager scheduleManager;
 	
+	private AssetSaver assetSaver = new AssetSaver();
 	private OrgSaver orgSaver = new OrgSaver();
 	private EventBookSaver eventBookSaver = new EventBookSaver();
 	private ProjectSaver projectSaver = new ProjectSaver();
@@ -47,38 +49,39 @@ public class CustomerMerger {
 	private NotificationSettingSaver notificationSaver = new NotificationSettingSaver();
 
 
-	public CustomerMerger(PersistenceManager persistenceManager, LegacyAsset legacyAsset, EventManager eventManger,
-			EventScheduleService eventScheduleService, User user) {
-		this.persistenceManager = persistenceManager;
-		this.legacyAsset = legacyAsset;
-		this.eventManager = eventManger;
+	public CustomerMerger(EventManager eventManager,EventScheduleManager scheduleManager, User user) {
+		this.eventManager = eventManager;
 		this.user = user;
-		this.scheduleService = eventScheduleService;
+		this.scheduleManager = scheduleManager;
 
 	}
 	
 	public CustomerOrg merge(CustomerOrg winningCustomer, CustomerOrg losingCustomer) {
 		
-		validateMerge(winningCustomer, losingCustomer);
-		
-		moveDivisions(winningCustomer, losingCustomer);
-		moveAssets(winningCustomer, losingCustomer);
-		moveEventBooks(winningCustomer, losingCustomer);
-		moveJobs(winningCustomer, losingCustomer);
-		moveUsers(winningCustomer, losingCustomer);
-
-		moveSavedReports(winningCustomer, losingCustomer);
-		moveEmailNotifications(winningCustomer, losingCustomer);
-		
-		losingCustomer.archiveEntity();
-		orgSaver.update(losingCustomer);
-		
+		try{
+			validateMerge(winningCustomer, losingCustomer);
+			
+			moveDivisions(winningCustomer, losingCustomer);
+			moveAssets(winningCustomer, losingCustomer);
+			moveEventBooks(winningCustomer, losingCustomer);
+			moveJobs(winningCustomer, losingCustomer);
+			moveUsers(winningCustomer, losingCustomer);
+	
+			moveSavedReports(winningCustomer, losingCustomer);
+			moveEmailNotifications(winningCustomer, losingCustomer);
+			
+			losingCustomer.archiveEntity();
+			orgSaver.update( losingCustomer);
+		} catch (Exception e) {
+			logger.error("Error merging customer", e);
+			
+		}
 		return winningCustomer;
 	}
 
 	private void moveEmailNotifications(BaseOrg winningOrg, BaseOrg losingOrg) {
 		QueryBuilder<NotificationSetting> notificationQuery = new QueryBuilder<NotificationSetting>(NotificationSetting.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingOrg);
-		List<NotificationSetting> notifications = persistenceManager.findAll(notificationQuery);
+		List<NotificationSetting> notifications = PersistenceManager.findAll(notificationQuery);
 		
 		for (NotificationSetting notification: notifications) {
 			notification.setOwner(winningOrg);
@@ -88,7 +91,7 @@ public class CustomerMerger {
 
 	private void moveSavedReports(BaseOrg winningOrg, BaseOrg losingOrg) {
 		QueryBuilder<SavedReport> reportQuery = new QueryBuilder<SavedReport>(SavedReport.class, new OpenSecurityFilter()).addSimpleWhere("tenant", losingOrg.getTenant());
-		List<SavedReport> reports = persistenceManager.findAll(reportQuery);
+		List<SavedReport> reports = PersistenceManager.findAll(reportQuery);
 		
 		for (SavedReport report : reports) {
 			if(report.getCriteria().containsKey("ownerId")) {
@@ -100,7 +103,7 @@ public class CustomerMerger {
 
 	private void moveUsers(BaseOrg winningOrg, BaseOrg losingOrg) {
 		QueryBuilder<User> userQuery = new QueryBuilder<User>(User.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingOrg);
-		List<User> users = persistenceManager.findAll(userQuery);
+		List<User> users = PersistenceManager.findAll(userQuery);
 
 		for (User user: users) {
 			user.setOwner(winningOrg);
@@ -110,7 +113,7 @@ public class CustomerMerger {
 
 	private void moveJobs(BaseOrg winningOrg, BaseOrg losingOrg) {
 		QueryBuilder<Project> jobQuery = new QueryBuilder<Project>(Project.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingOrg);
-		List<Project> jobs = persistenceManager.findAll(jobQuery);
+		List<Project> jobs = PersistenceManager.findAll(jobQuery);
 		
 		for (Project job: jobs) {
 			job.setOwner(winningOrg);
@@ -120,7 +123,7 @@ public class CustomerMerger {
 
 	private void moveEventBooks(CustomerOrg winningCustomer, CustomerOrg losingCustomer) {
 		QueryBuilder<EventBook> eventBookQuery = new QueryBuilder<EventBook>(EventBook.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingCustomer);
-		List<EventBook> eventBooks = persistenceManager.findAll(eventBookQuery);
+		List<EventBook> eventBooks = PersistenceManager.findAll(eventBookQuery);
 		
 		for (EventBook eventBook: eventBooks) {
 			eventBook.setOwner(winningCustomer);
@@ -157,7 +160,6 @@ public class CustomerMerger {
 
 			}else {
 				divisonToMove.setParent(winningCustomer);
-				//TODO Set division customer?
 			}
 			orgSaver.update(divisonToMove);
 		}
@@ -165,7 +167,7 @@ public class CustomerMerger {
 
 	private DivisionOrg divisionNameExists(String name,	List<DivisionOrg> winningDivisions) {
 		for (DivisionOrg division : winningDivisions) {
-			if(division.getName().equalsIgnoreCase(name)) {
+			if(division.getName().replaceAll(" ", "").equalsIgnoreCase(name.replaceAll(" ", ""))) {
 				return division;
 			}
 		}
@@ -174,32 +176,25 @@ public class CustomerMerger {
 
 	private List<DivisionOrg> getCustomerDivisions(CustomerOrg customer) {
 		QueryBuilder<DivisionOrg> divisionQuery = new QueryBuilder<DivisionOrg>(DivisionOrg.class, new OpenSecurityFilter()).addSimpleWhere("parent", customer);
-		return persistenceManager.findAll(divisionQuery);
+		return PersistenceManager.findAll(divisionQuery);
 	}
 
 	private void moveAssets(BaseOrg winningOrg, BaseOrg losingOrg) {
 
 		QueryBuilder<Asset> assetQuery = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter()).addSimpleWhere("owner", losingOrg);
-		List<Asset> assetsToMove = persistenceManager.findAll(assetQuery);
+		List<Asset> assetsToMove = PersistenceManager.findAll(assetQuery);
 		
 		for (Asset assetToMove : assetsToMove) {
 			moveEvents(assetToMove, winningOrg);
 			assetToMove.setOwner(winningOrg);
-			updateAsset(assetToMove);
-		}
-	}
-
-	private void updateAsset(Asset asset) {
-		try {
-			legacyAsset.update(asset, user);
-		} catch (Exception e) {
-			throw new ProcessFailureException("could not update asset to new owner", e);
+			assetSaver.update(assetToMove);
 		}
 	}
 
 	private void moveEvents(Asset asset, BaseOrg winningOrg) {
 		QueryBuilder<Event> eventsQuery = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter()).addSimpleWhere("asset", asset);
-		List<Event> eventsToMove = persistenceManager.findAll(eventsQuery);
+		eventsQuery.addPostFetchPaths("subEvents", "results");
+		List<Event> eventsToMove = PersistenceManager.findAll(eventsQuery);
 
 		for (Event eventToMove : eventsToMove) {
 			eventToMove.setOwner(winningOrg);
@@ -211,7 +206,7 @@ public class CustomerMerger {
 	private void updateSchedule(BaseOrg winningOrg, EventSchedule schedule) {
 		if (schedule != null) {
 			schedule.setOwner(winningOrg);
-			scheduleService.updateSchedule(schedule);
+			scheduleManager.update(schedule);
 		}		
 	}
 

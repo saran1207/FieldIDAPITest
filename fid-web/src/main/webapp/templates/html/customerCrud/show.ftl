@@ -22,6 +22,10 @@ ${action.setPageType('customer','show')!}
 			<p><a href="<@s.url action="notificationSettings"/>"><@s.text name="label.setup_email_settings"/></a></p>
 		</div>
 	</#if>
+	
+	<div class="useractions merge">
+		<p><a href="<@s.url action="mergeCustomers" uniqueID="${customer.id}"/>"><@s.text name="label.merge"/></a></p>
+	</div>
 </div>
 
 <div class="viewRow" >

@@ -3,6 +3,15 @@ ${action.setPageType('customer','edit')!}
 	<@n4.includeStyle href="steps" />
 	<@n4.includeScript src="steps.js" />
 	<@n4.includeScript src="mergeCustomer.js" />
+	
+	<script type="text/javascript">
+	function doSubmit(event) { 
+		if (event.keyCode == 13) { 
+			$('customerSearchForm').request(getStandardCallbacks());
+			return false; 
+		}
+	}	
+	</script>
 </head>
 
 <#assign loaderDiv>
@@ -40,7 +49,7 @@ ${action.setPageType('customer','edit')!}
 			<@s.form id="customerSearchForm" namespace="/ajax" action="mergeFindCustomer" cssClass="simpleInputForm" theme="simple">
 				<@s.hidden name="uniqueID" />
 				<label class="label"><@s.text name="label.name"/></label>
-				<span><@s.textfield name="search" /></span>
+				<span><@s.textfield id="search" name="search" onkeypress="return doSubmit(event);" /></span>
 				<input type="button" value='<@s.text name="hbutton.search"/>' id="search" onclick="$( 'customerSearchForm' ).request(getStandardCallbacks()); return false;" />
 			</@s.form>
 			
