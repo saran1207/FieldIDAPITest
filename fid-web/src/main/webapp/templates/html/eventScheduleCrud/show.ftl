@@ -7,10 +7,8 @@
 
 	<td>${eventSchedule.eventType.name}</td>
 	
-	<td class="name">
-		<#if eventSchedule.project?exists>
-			<a href="<@s.url action="job" uniqueID="${eventSchedule.project.projectID}" />"><@s.text name="${eventSchedule.project.name}" /></a>
-		</#if>
+	<td id="jobName">
+		<#include "_showJob.ftl"/>
 	</td>
 	
 	<td>

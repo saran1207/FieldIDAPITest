@@ -1798,6 +1798,7 @@ input.description {
 	background-repeat: no-repeat;
 	margin-left: 240px;
 	padding-left: 75px;
+	padding-bottom: 10px;
 	}
 
 .textContainer{
@@ -1811,6 +1812,10 @@ input.description {
 .textContainer p, .schedulesTextContainer p{
 	font-size: 14px;	
 	line-height: 20px;
+	padding: 5px 5px 5px 0;
+}
+
+.textContainer p{
 	padding: 5px;
 }
 
