@@ -1976,6 +1976,7 @@ div.unitOfMeasureName {
 }
 
 #manageEvent{
+	background-image: url(../images/calendar-icon.png);
 	margin-left: 20px;
 }
 
