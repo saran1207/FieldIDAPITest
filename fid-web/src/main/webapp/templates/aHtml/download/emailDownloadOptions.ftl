@@ -3,7 +3,7 @@
 </head>
 
 <div class="optionsContainer">
-	<h1><@s.text name="label.share" />"${downloadLink.name}"</h1>
+	<h1><@s.text name="label.share" /> "${downloadLink.name}"</h1>
 	<p class="description"><@s.text name="label.share_this_download" /></p>
 	
 	<div class="urlContainer">

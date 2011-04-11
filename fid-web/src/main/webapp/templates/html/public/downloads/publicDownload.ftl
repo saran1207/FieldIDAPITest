@@ -22,16 +22,17 @@
 </head>
 <div class="downloadContainer">
 	<h1><@s.text name="label.your_download_link"/></h1>	
+	<@s.url id="actionUrl" action="downloadFile" includeParams="get" downloadId="${downloadId}" />
 	<div class="downloadBox">
 		<div class="boxContent">
-			<h2><a href="<@s.url action="downloadFile" includeParams="get" downloadId="${downloadId}" />" >${publicDownloadLink.name}</a></h2>
+			<h2><a href="${actionUrl}" >${publicDownloadLink.name}</a></h2>
 			<p><@s.text name="label.expires"/>:&nbsp;${action.getExpiryDate(publicDownloadLink.created)?datetime}</p>
 		</div>
-		<div id="downloadButton"><a href="<@s.url action="downloadFile" includeParams="get" downloadId="${downloadId}" />" ></a></div>
+		<div id="downloadButton"><a href="${actionUrl}" ></a></div>
 	</div>
 	<div class="textLink">
 		<p><@s.text name="label.if_the_link_above"/></p>
-		<p class="coloredLink">${downloadUrl}</p>
+		<p class="coloredLink">${baseNonFieldIdURI}${actionUrl?substring(1)}</p>
 	</div>
 </div>
 
