@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.orgs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -62,7 +63,10 @@ public class OrgListAction extends AbstractAction implements Preparable {
 			orgList.add(new SimpleListable<Long>(getOwner().getSecondaryOrg()));
 		}
 		
-		return ListHelper.longListableToListingPair(orgList);
+		List<ListingPair> result = ListHelper.longListableToListingPair(orgList);
+		Collections.sort(result);
+		
+		return result;
 	}
 	
 	public List<ListingPair> getCustomers() {
