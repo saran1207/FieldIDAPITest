@@ -12,6 +12,9 @@ ${action.setPageType('customer','show')!}
 			<p>
 		</div>
 	</#if>
+	<div class="useractions merge">
+		<p><a href="<@s.url action="mergeCustomers" uniqueID="${customer.id}"/>"><@s.text name="label.merge"/></a></p>
+	</div>
 	<#if securityGuard.readOnlyUserEnabled>
 		<div class="useractions addUser">
 			<p><a href="<@s.url action="customersUserAdd" uniqueID=""  customerId="${customer.id}"/>"><@s.text name="label.add_user"/></a></p>
@@ -23,9 +26,7 @@ ${action.setPageType('customer','show')!}
 		</div>
 	</#if>
 	
-	<div class="useractions merge">
-		<p><a href="<@s.url action="mergeCustomers" uniqueID="${customer.id}"/>"><@s.text name="label.merge"/></a></p>
-	</div>
+
 </div>
 
 <div class="viewRow" >
