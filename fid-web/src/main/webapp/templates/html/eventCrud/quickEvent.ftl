@@ -17,9 +17,28 @@ ${action.setPageType('event', 'quickEvent')!}
 	<#else>
 		<#list eventSchedules as schedule>
 			<#if schedule.isPastDue()>
+				<div class="failColor floatLeft inline">
+					<#if schedule.daysPastDue! == 1>
+						<p><@s.text name="label.yesterday"/></p>
+					<#else>
+						<p><@s.text name="label.x_days_ago"><@s.param>${schedule.daysPastDue!}</@s.param></@s.text></p>
+					</#if>
+				</div>
+			
 				<p class="red">
+			<#elseif schedule.daysToDue == 0>
+				<div class="passColor floatLeft inline">
+					<p><@s.text name="label.due_today"/></p> 
+				</div>
 			<#else>
-				<p>
+			<div class="passColor floatLeft inline">
+				<#if schedule.daysToDue == 1>
+					<p><@s.text name="label.tomorrow"/></p>
+				<#else>
+					<p><@s.text name="label.x_days_away"><@s.param>${schedule.daysToDue!}</@s.param></@s.text></p>
+				</#if>
+			</div>
+			<p>
 			</#if>
 				<label>${schedule.nextDate?string("MM/dd/yy")}</label>  
 				<span>

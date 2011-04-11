@@ -26,7 +26,7 @@
 	<div class="downloadBox">
 		<div class="boxContent">
 			<h2><a href="${actionUrl}" >${publicDownloadLink.name}</a></h2>
-			<p><@s.text name="label.expires"/>:&nbsp;${action.getExpiryDate(publicDownloadLink.created)?datetime}</p>
+			<p><@s.text name="label.expires"/>:&nbsp;${action.getExpiryDate(publicDownloadLink.created)?date}&nbsp;<@s.text name="label.download_expiry_time"/></p>
 		</div>
 		<div id="downloadButton"><a href="${actionUrl}" ></a></div>
 	</div>

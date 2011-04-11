@@ -2010,7 +2010,11 @@ div.unitOfMeasureName {
 
 .editEventSchedule{
 	width: 380px;
-	}
+}
+
+.editEventSchedule select, .editEventSchedule input{
+	width: 125px;
+}
 
 .eventScheduleEditActions{
 	margin-top: 3.5px;
