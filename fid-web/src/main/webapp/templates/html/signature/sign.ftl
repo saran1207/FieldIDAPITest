@@ -48,6 +48,7 @@
 		position: absolute;
 		left: 10px;
 		top: 10px;
+        background: url("/fieldid/images/signature-line.png") no-repeat;
 	}
 	#canvasInterface {
 		position: absolute;
