@@ -20,7 +20,6 @@ public class SignatureAction extends DownloadAction {
     private Long criteriaId;
     private Long eventId;
     private Integer criteriaCount;
-//    private boolean temporarySignatureFile = false;
 
     public SignatureAction(PersistenceManager persistenceManager) {
         super(persistenceManager);
@@ -46,7 +45,7 @@ public class SignatureAction extends DownloadAction {
             if (inputStream != null)
                 IOUtils.closeQuietly(inputStream);
         }
-        return SUCCESS;
+        return null;
     }
 
     public String doSign() {
@@ -57,7 +56,6 @@ public class SignatureAction extends DownloadAction {
         String pngBase64Data = pngData.substring(pngData.lastIndexOf(",") + 1);
         byte[] decodedBytes = new Base64().decode(pngBase64Data.getBytes());
         signatureFileId = new SignatureService().storeSignature(getTenantId(), decodedBytes);
-//        temporarySignatureFile = true;
         return SUCCESS;
     }
 
@@ -96,14 +94,6 @@ public class SignatureAction extends DownloadAction {
     public void setCriteriaCount(Integer criteriaCount) {
         this.criteriaCount = criteriaCount;
     }
-
-//    public boolean isTemporarySignatureFile() {
-//        return temporarySignatureFile;
-//    }
-//
-//    public void setTemporarySignatureFile(boolean temporarySignatureFile) {
-//        this.temporarySignatureFile = temporarySignatureFile;
-//    }
 
     public Long getEventId() {
         return eventId;

@@ -1,4 +1,4 @@
-<div class="recDefButtons simpleContainer">
+<div class="recDefButtons">
 	
 	<#if (criteriaResult.recommendations.size() > 0) >
 		<a id='rec_${criteriaResult.id}_button' href="javascript:void(0);">

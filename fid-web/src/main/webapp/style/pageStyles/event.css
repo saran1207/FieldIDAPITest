@@ -87,7 +87,7 @@
 .eventForm div.criteriaEditContainer {
     display: block;
     float: left;
-    width:30%;
+    width: 20%;
 }
 
 .eventForm div.textCriteriaContainer {
@@ -243,13 +243,18 @@
 }
 
 .recDefButtons {
+    display:block;
+    float:right;
 	padding-left: 10px;
-	margin-right: 95px;
-	float:right;
+    margin-right: 95px;
 }
 
 .recDefButtons img {
 	padding-left: 5px;
+}
+
+div.eventInIframe .recDefButtons {
+    margin-right:5px;
 }
 
 .observationsShow p.observationTextShow   {

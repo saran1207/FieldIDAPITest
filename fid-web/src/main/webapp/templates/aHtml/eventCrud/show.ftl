@@ -4,7 +4,7 @@
 </head>
 
 <div id="pageContent">
-	<div class="crudForm">
+	<div class="crudForm eventInIframe">
 		<#assign form_action="SHOW" /> 
 		<#assign current_action="eventInformation"/>
 		<#include "/templates/html/eventCrud/_show.ftl" >

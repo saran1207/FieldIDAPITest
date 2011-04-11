@@ -18,6 +18,8 @@
 	<@n4.includeStyle href="steps"/>
 	<@n4.includeScript src="steps"/>
 	<@n4.includeScript src="event" />
+    <@n4.includeScript src="lightview"/>
+    <@n4.includeScript src="signatures" />
 	<@n4.includeScript src="multi_inspect" />
 	<@n4.includeStyle href="multi_event" type="page" />
 	<@n4.includeStyle type="page" href="event" />

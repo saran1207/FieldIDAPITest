@@ -8,53 +8,10 @@
 </script>
 
 <script src="/fieldid/javascript/lightview.js" type="text/javascript"></script>
+<script src="/fieldid/javascript/signatures.js" type="text/javascript"></script>
 <script type="text/javascript">
-    var currentSignatureCriteriaId = 0;
-    var currentSignatureCriteriaCount = 0;
-    var signatureClearUrl = '<@s.url action="clearSignature.action" namespace="/ajax"/>';
-    var submitSignatureUrl = '<@s.url action="storeSignature.action" namespace="/ajax"/>';
-
-    function initializeSignatureWindowOpenedHook() {
-        document.observe('lightview:opened', storeCriteriaId);
-    }
-
-    function getCurrentSignatureCriteriaId() {
-        return currentSignatureCriteriaId;
-    }
-
-    function storeCriteriaId(e) {
-        var attrs = e.target.attributes;
-        for (var i =0; i < attrs.length; i++) {
-            if (attrs[i].name == "criteriaid") {
-                currentSignatureCriteriaId = attrs[i].value;
-            }
-            if (attrs[i].name == "criteriacount") {
-                currentSignatureCriteriaCount = attrs[i].value;
-            }
-        }
-    }
-
-    function storeSignature(data) {
-        var signatureParams = {
-            pngData: data,
-            criteriaId: currentSignatureCriteriaId,
-            criteriaCount: currentSignatureCriteriaCount
-        };
-
-        getResponse(submitSignatureUrl, "post", signatureParams);
-    }
-
-    function clearSignature(criteriaId, criteriaCount) {
-        currentSignatureCriteriaId = criteriaId;
-        getResponse(signatureClearUrl, "post", { criteriaId: criteriaId, criteriaCount: criteriaCount });
-    }
-
-    function performThumbnailRefresh(newThumbnailSection) {
-        Lightview.hide();
-        $('signatureCriteria'+currentSignatureCriteriaId).replace(newThumbnailSection);
-    }
-
-    Event.observe(window, 'load', initializeSignatureWindowOpenedHook);
+    signatureClearUrl = '<@s.url action="clearSignature.action" namespace="/ajax"/>';
+    submitSignatureUrl = '<@s.url action="storeSignature.action" namespace="/ajax"/>';
 </script>
 
 
@@ -91,7 +48,7 @@
                 <#include '_signatureCriteriaResultEdit.ftl'>
             </#if>
 
-			<span class="recDefButtons">
+			<div class="recDefButtons">
 				<#assign recCount=(action.countRecommendations(criteriaCount))!0 />
 				<#assign defCount=(action.countDeficiencies(criteriaCount))!0 />
 
@@ -102,7 +59,7 @@
 				<a id='defButton_${criteria.id}' href='#def_${criteria.id}' title='<@s.text name="label.deficiencies"/>${lightBoxProperties}' class='lightview' >
 					<img id='defImage_${criteria.id}' src="<@s.url value="/images/def.png"/>" />
 				</a>
-			</span>
+			</div>
 			<#include "../observationsCrud/_recSelect.ftl"/>
 			<#include "../observationsCrud/_defSelect.ftl"/>
 
