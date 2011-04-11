@@ -78,7 +78,7 @@ ${action.setPageType('asset', 'show')!}
 					</@s.text>					
 				<#else>
 					<div class="passColor inline">
-						<p class="inline"><@s.text name="label.in_x_days"><@s.param>${nextEvent.daysToDue!}</@s.param></@s.text></p> 
+						<p class="inline"><@s.text name="label.x_days_away"><@s.param>${nextEvent.daysToDue!}</@s.param></@s.text></p> 
 					</div>
 					<@s.text name="label.nexteventdate_msg">
 						<@s.param>${nextEvent.eventType.name!}</@s.param>
