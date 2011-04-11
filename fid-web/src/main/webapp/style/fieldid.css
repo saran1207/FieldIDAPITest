@@ -2009,12 +2009,14 @@ div.unitOfMeasureName {
 }
 
 .editEventSchedule{
-	width: 370px;
+	width: 380px;
 	}
 
 .eventScheduleEditActions{
 	margin-top: 3.5px;
-	float:right;
+	margin-left: 5px;
+	width: 70px;
+	display: inline;
 }
 
 #scheduleList .reducedWidthTableHeading{
