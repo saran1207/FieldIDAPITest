@@ -16,7 +16,7 @@
 <script type="text/javascript" src="/fieldid/javascript/prototype.js"></script>
 <script type="text/javascript" src="/fieldid/javascript/common.js"></script>
 <script type="text/javascript" src="/fieldid/javascript/canvas/cp_depends.js"></script>
-<!--[if lt IE 9]>
+<!--[if IE]>
 <script type="text/javascript" src="/fieldid/javascript/canvas/flashcanvas.js"></script>
 <![endif]-->
 <script src="/fieldid/javascript/canvas/CanvasWidget.js" type="text/javascript"></script>
