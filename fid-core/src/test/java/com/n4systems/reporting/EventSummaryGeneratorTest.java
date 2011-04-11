@@ -1,22 +1,5 @@
 package com.n4systems.reporting;
 
-import static com.n4systems.model.builders.EventBuilder.*;
-import static com.n4systems.model.builders.OrgBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-
-import net.sf.jasperreports.engine.JasperPrint;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Event;
@@ -31,6 +14,20 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.testutils.TestConfigContext;
+import net.sf.jasperreports.engine.JasperPrint;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
+
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static com.n4systems.model.builders.OrgBuilder.aPrimaryOrg;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertNotNull;
 
 public class EventSummaryGeneratorTest {
 	
@@ -63,18 +60,12 @@ public class EventSummaryGeneratorTest {
 		
 		EventSummaryGenerator generator = new EventSummaryGenerator(dateDefiner, persistenceManager, eventManager) {
 			@Override
-			protected List<Long> getSearchIds(ReportDefiner reportDefiner,
-					User user) {
-				return Arrays.asList(printableEvent.getId());
-			}
-
-			@Override
 			protected PrimaryOrg getTenant(User user, Long tenantId) {
 				return (PrimaryOrg) aPrimaryOrg().build();
 			}
 		};
 		
-		JasperPrint jp = generator.generate(reportDefiner, user);
+		JasperPrint jp = generator.generate(reportDefiner, Arrays.asList(printableEvent.getId()), user);
 		assertNotNull(jp);
 		verify(reportDefiner);
 		verify(eventManager);

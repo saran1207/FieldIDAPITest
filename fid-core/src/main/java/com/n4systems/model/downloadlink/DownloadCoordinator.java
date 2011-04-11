@@ -75,9 +75,9 @@ public class DownloadCoordinator {
 		return link;
 	}
 	
-	public DownloadLink generateEventSummaryReport(String name, String downloadUrl, ReportDefiner reportDefiner) {
+	public DownloadLink generateEventSummaryReport(String name, String downloadUrl, ReportDefiner reportDefiner, List<Long> eventIds) {
 		DownloadLink link = createDownloadLink(name, ContentType.PDF);
-		PrintEventSummaryReportTask task = taskFactory.createPrintEventSummaryReportTask(link, downloadUrl, reportDefiner);
+		PrintEventSummaryReportTask task = taskFactory.createPrintEventSummaryReportTask(link, downloadUrl, reportDefiner, eventIds);
 		
 		executor.execute(task);
 		return link;

@@ -59,7 +59,7 @@ public class EventSummaryGenerator {
 		this(dateDefiner, ServiceLocator.getPersistenceManager(), ServiceLocator.getEventManager());
 	}
 	
-	public JasperPrint generate(ReportDefiner reportDefiner, User user) throws ReportException {
+	public JasperPrint generate(ReportDefiner reportDefiner, List<Long> eventIds, User user) throws ReportException {
 		File jasperFile = PathHandler.getSummaryReportFile(user.getTenant());
 
 		// check to see if the report exists
@@ -67,7 +67,7 @@ public class EventSummaryGenerator {
 			throw new ReportException("Could not access Jasper File " + jasperFile);
 		}
 
-		List<Long> inspectionIds = getSearchIds(reportDefiner, user);
+		//List<Long> eventIds = getSearchIds(reportDefiner, user);
 
 		ReportMap<Object> reportMap = criteriaMap(reportDefiner, user.getOwner().getPrimaryOrg(), jasperFile);
 		List<ReportMap<Object>> collection = new ArrayList<ReportMap<Object>>();
@@ -81,7 +81,7 @@ public class EventSummaryGenerator {
 			Integer totalNAEvents = 0;
 			
 			Event event;
-			for (Long inspectionId : inspectionIds) {
+			for (Long inspectionId : eventIds) {
 				
 				event = eventManager.findAllFields(inspectionId, user.getSecurityFilter());
 

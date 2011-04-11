@@ -59,9 +59,10 @@ public class DownloadTaskFactory {
 		return task;
 	}
 	
-	public PrintEventSummaryReportTask createPrintEventSummaryReportTask(DownloadLink link, String downloadUrl, ReportDefiner reportDefiner) {
+	public PrintEventSummaryReportTask createPrintEventSummaryReportTask(DownloadLink link, String downloadUrl, ReportDefiner reportDefiner, List<Long> eventIds) {
 		PrintEventSummaryReportTask task = new PrintEventSummaryReportTask(link, downloadUrl);
 		task.setReportDefiner(reportDefiner);
+        task.setEventIds(eventIds);
 		
 		return task;
 	}

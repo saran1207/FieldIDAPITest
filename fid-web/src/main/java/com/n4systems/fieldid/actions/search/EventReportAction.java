@@ -169,9 +169,11 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 			return INPUT;
 		}
 		reportName = String.format("Event Summary Report - %s", DateHelper.getFormattedCurrentDate(getUser()));
+
+        List<Long> eventIds = sortEventIdsByRowIndex(getContainer().getMultiIdSelection().getSelectedIds());
 		
 		try {
-			downloadLink = getDownloadCoordinator().generateEventSummaryReport(reportName, getDownloadLinkUrl(), getContainer());
+			downloadLink = getDownloadCoordinator().generateEventSummaryReport(reportName, getDownloadLinkUrl(), getContainer(), eventIds);
 		} catch(RuntimeException e) {
 			logger.error("Failed to print event report summary", e);
 			addFlashErrorText("error.reportgeneration");

@@ -1,6 +1,7 @@
 package com.n4systems.taskscheduling.task;
 
 import java.io.File;
+import java.util.List;
 
 
 import com.n4systems.model.downloadlink.DownloadLink;
@@ -14,6 +15,7 @@ public class PrintEventSummaryReportTask extends DownloadTask {
 	private final EventSummaryGenerator reportGen;
 	
 	private ReportDefiner reportDefiner;
+    private List<Long> eventIds;
 
 	public PrintEventSummaryReportTask(DownloadLink downloadLink, String downloadUrl, EventSummaryGenerator reportGen) {
 		super(downloadLink, downloadUrl, "eventSummaryCert");
@@ -26,10 +28,14 @@ public class PrintEventSummaryReportTask extends DownloadTask {
 
 	@Override
 	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
-		new CertificatePrinter().printToPDF(reportGen.generate(reportDefiner, user), downloadFile);			
+		new CertificatePrinter().printToPDF(reportGen.generate(reportDefiner, eventIds, user), downloadFile);
 	}
 
 	public void setReportDefiner(ReportDefiner reportDefiner) {
 		this.reportDefiner = reportDefiner;
+	}
+
+	public void setEventIds(List<Long> eventIds) {
+		this.eventIds = eventIds;
 	}
 }
