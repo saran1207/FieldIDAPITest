@@ -16,6 +16,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
@@ -81,6 +82,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	
 	public String doUpdate() throws Exception {
 		OrgSaver orgSaver = new OrgSaver();
+		TenantSaver tenantSaver = new TenantSaver();
 		
 		Transaction transaction = PersistenceManager.startTransaction();
 		
@@ -90,7 +92,7 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 			}
 			
 			orgSaver.update(transaction, primaryOrg);
-			
+			tenantSaver.update(transaction, tenant);
 			
 			PersistenceManager.finishTransaction(transaction);
 			
@@ -297,5 +299,13 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	
 	public void setSecondaryOrgs(Long secondaryOrgs) {
 		primaryOrg.getLimits().setSecondaryOrgs(secondaryOrgs);
+	}
+	
+	public void setDisabled(boolean disabled){
+		tenant.setDisabled(disabled);
+	}
+	
+	public boolean isDisabled(){
+		return tenant.isDisabled();
 	}
 }

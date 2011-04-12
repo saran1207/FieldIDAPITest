@@ -13,7 +13,7 @@
 	<@s.textfield name="users" label="User limit (-1 for unlimited)" />
 	<@s.textfield name="liteUsers" label="Lite User limit (-1 for unlimited)" />
 	<@s.textfield name="secondaryOrgs" label="Secondary Orgs limit (-1 for unlimited)" />
-
+	
 	
 	<@s.label name="extendedFeaturesLabel" label="Extended features (if you change any, add a note below)" />
 	
@@ -22,6 +22,9 @@
 			<@s.param name="label"><@s.property value="name"/></@s.param>
 		</@s.checkbox> 
 	</@s.iterator>	
+	
+	<@s.checkbox name="disabled" label="Disable Tenant">
+	</@s.checkbox>
 	
 	<@s.label label="Extras" />
 	<@s.checkbox name="primaryOrg.plansAndPricingAvailable" label="Show Plans and pricing when Read Only Users enabled" labelposition="left" />

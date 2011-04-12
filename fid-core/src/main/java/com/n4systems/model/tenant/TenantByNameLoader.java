@@ -18,7 +18,8 @@ public class TenantByNameLoader extends Loader<Tenant> {
 	protected Tenant load(EntityManager em) {
 		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("name", tenantName);
-		
+		builder.addSimpleWhere("disabled", false);
+
 		Tenant tenant = builder.getSingleResult(em);
 		return tenant;
 	}

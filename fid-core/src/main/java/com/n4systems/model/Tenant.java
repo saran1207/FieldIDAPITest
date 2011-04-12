@@ -25,6 +25,9 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 	@Column(nullable=false)
 	private String name;
 	
+	@Column(nullable=false)
+	private boolean disabled;
+	
 	public Tenant() {}
 	
 	public Tenant(Long id, String name) {
@@ -65,6 +68,14 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 
 	public int compareTo(Tenant other) {
 		return name.compareToIgnoreCase(other.getName());
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 	
 }
