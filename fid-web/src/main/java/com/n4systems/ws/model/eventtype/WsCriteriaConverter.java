@@ -5,6 +5,7 @@ import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.State;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasureCriteria;
@@ -34,6 +35,8 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 			wsModel = convertUnitOfMeasureCriteria((UnitOfMeasureCriteria)model);
 		} else if (model.isComboBoxCriteria()) {
 			wsModel = convertComboBoxCriteria((ComboBoxCriteria)model);
+		} else if (model.isSignatureCriteria()) {
+			wsModel = convertSignatureCriteria((SignatureCriteria)model);
 		} else {
 			throw new NotImplementedException("Conversion not implemented for Criteria type: " + model.getClass().getName());
 		}
@@ -47,6 +50,10 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 		wsModel.setRecommendations(model.getRecommendations());
 		wsModel.setDeficiencies(model.getDeficiencies());
 		wsModel.setRetired(model.isRetired());
+	}
+	
+	private WsSignatureCriteria convertSignatureCriteria(SignatureCriteria model) {
+		return new WsSignatureCriteria();
 	}
 	
 	private WsOneClickCriteria convertOneClickCriteria(OneClickCriteria model) {

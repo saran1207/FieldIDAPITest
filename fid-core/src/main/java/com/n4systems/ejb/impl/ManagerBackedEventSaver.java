@@ -9,31 +9,33 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.exceptions.UnknownSubAsset;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventGroup;
-import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.utils.FindSubAssets;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
+import com.n4systems.exceptions.UnknownSubAsset;
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Asset;
 import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.FileAttachment;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.ProofTestInfo;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.Status;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.EventScheduleServiceImpl;
+import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
 
 public class ManagerBackedEventSaver implements EventSaver {
@@ -76,20 +78,41 @@ public class ManagerBackedEventSaver implements EventSaver {
 		persistenceManager.save(parameterObject.event, parameterObject.userId);
 	
 		updateAsset(parameterObject.event, parameterObject.userId);
-	
-	
+		
+		// writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an 
+		// event id is required to build the save path
+		writeSignatureImagesToDisk(parameterObject.event);
+			
 		saveProofTestFiles(parameterObject.event, parameterObject.fileData);
 	
 		processUploadedFiles(parameterObject.event, parameterObject.uploadedFiles);
 	
 		return parameterObject.event;
 	}
+	
+	private void writeSignatureImagesToDisk(Event event) {
+		SignatureService sigService = new SignatureService();
+		
+		for (CriteriaResult result: event.getResults()) {
+			if (result.getCriteria().isSignatureCriteria() && ((SignatureCriteriaResult)result).getImage() != null) {
+				try {
+					sigService.storeSignatureFileFor((SignatureCriteriaResult)result);
+				} catch (IOException e) {
+					throw new FileAttachmentException("Unable to store signature image for result [" + result + "]", e);
+				}
+			}
+		}
+	}
 
 	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		setProofTestData(event, fileData);
 		updateDeficiencies(event.getResults());
-		event = persistenceManager.update(event, userId);
 		
+		// writeSignatureImagesToDisk MUST be called prior persistenceManager.update(event, userId) as the image data in the 
+		// signatures is transient and won't be there afterwards
+		writeSignatureImagesToDisk(event);
+		
+		event = persistenceManager.update(event, userId);
 		updateAssetLastEventDate(event.getAsset());
 		event.setAsset(persistenceManager.update(event.getAsset()));
 		saveProofTestFiles(event, fileData);

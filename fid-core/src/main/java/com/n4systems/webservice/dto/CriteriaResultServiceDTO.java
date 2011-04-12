@@ -9,6 +9,7 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	public static final String TYPE_SELECT_FIELD = "SELECT_FIELD";
 	public static final String TYPE_COMBO_BOX = "COMBO_BOX";
 	public static final String TYPE_UNIT_OF_MEASURE = "UNIT_OF_MEASURE";
+	public static final String SIGNATURE = "SIGNATURE";
 	
 	private long criteriaId;
 	private long stateId;
@@ -21,6 +22,7 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	private String comboBoxFieldValue;
 	private String unitOfMeasurePrimaryFieldValue;
 	private String unitOfMeasureSecondaryFieldValue;
+	private byte[] signatureImage;
 	
 	public long getCriteriaId() {
 		return criteriaId;
@@ -108,6 +110,14 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 
 	public void setUnitOfMeasureSecondaryFieldValue(String unitOfMeasureSecondaryFieldValue) {
 		this.unitOfMeasureSecondaryFieldValue = unitOfMeasureSecondaryFieldValue;
+	}
+
+	public byte[] getSignatureImage() {
+		return signatureImage;
+	}
+
+	public void setSignatureImage(byte[] signatureImage) {
+		this.signatureImage = signatureImage;
 	}
 	
 }

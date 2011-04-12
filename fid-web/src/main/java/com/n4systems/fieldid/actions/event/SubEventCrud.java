@@ -5,33 +5,32 @@ import static com.n4systems.fieldid.utils.CopyEventFactory.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.ejb.EventManager;
-import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
-import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
-import com.n4systems.fieldid.actions.helpers.MasterEvent;
-import com.n4systems.fieldid.utils.CopyEventFactory;
-import com.n4systems.model.Status;
-import com.n4systems.model.SubEvent;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventManager;
+import com.n4systems.ejb.EventScheduleManager;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.ProcessingProofTestException;
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
 import com.n4systems.fieldid.actions.exceptions.PersistenceException;
 import com.n4systems.fieldid.actions.exceptions.ValidationException;
+import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.utils.CopyEventFactory;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
-import com.n4systems.model.Asset;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ProofTestInfo;
+import com.n4systems.model.Status;
+import com.n4systems.model.SubEvent;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
 
@@ -191,17 +190,17 @@ public class SubEventCrud extends EventCrud {
 
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
-	public String doStoreNewSubEvent() {
+	public String doStoreNewSubEvent() throws Exception {
 		return storeSubEvent();
 	}
 	
 	@SkipValidation
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
-	public String doStoreExistingSubEvent() {
+	public String doStoreExistingSubEvent() throws Exception {
 		return storeSubEvent();
 	}
 	
-	public String storeSubEvent() {
+	public String storeSubEvent() throws Exception {
 		if (masterEventHelper == null) {
 			addActionErrorText("error.nomasterevent");
 			return MISSING;
@@ -242,21 +241,20 @@ public class SubEventCrud extends EventCrud {
 		masterEventHelper.getSubEventUploadedFiles().put(subEvent, getUploadedFiles());
 
 		addFlashMessageText("message.eventstored");
-
 		return SUCCESS;
 	}
 
 	@UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
-	public String doStoreNewMasterEvent() {
+	public String doStoreNewMasterEvent() throws Exception {
 		return storeMasterEvent();
 	}
 	
 	@UserPermissionFilter(userRequiresOneOf={Permissions.EditEvent})
-	public String doStoreExistingMasterEvent() {
+	public String doStoreExistingMasterEvent() throws Exception {
 		return storeMasterEvent();
 	}
 	
-	public String storeMasterEvent() {
+	public String storeMasterEvent() throws Exception {
 		if (masterEventHelper == null) {
 			addActionErrorText("error.nomasterevent");
 			return MISSING;

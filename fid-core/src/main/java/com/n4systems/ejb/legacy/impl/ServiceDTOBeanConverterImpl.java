@@ -52,6 +52,7 @@ import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.Project;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.SelectCriteriaResult;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubAsset;
@@ -81,6 +82,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.servicedto.converts.PrimaryOrgToServiceDTOConverter;
 import com.n4systems.servicedto.converts.util.DtoDateConverter;
 import com.n4systems.services.TenantFinder;
+import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.BitField;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -643,6 +645,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 				result = new UnitOfMeasureCriteriaResult();
 				((UnitOfMeasureCriteriaResult)result).setPrimaryValue(resultDTO.getUnitOfMeasurePrimaryFieldValue());
 				((UnitOfMeasureCriteriaResult)result).setSecondaryValue(resultDTO.getUnitOfMeasureSecondaryFieldValue());
+			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.SIGNATURE)) {
+				result = new SignatureCriteriaResult();
+				((SignatureCriteriaResult)result).setSigned(resultDTO.getSignatureImage() != null);
+				((SignatureCriteriaResult)result).setImage(resultDTO.getSignatureImage());
 			} else {
 				throw new NotImplementedException("Conversion of CriteriaResultServiceDTO [" + resultDTO.getType() + "] not implemented");
 			}
@@ -763,6 +769,19 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_UNIT_OF_MEASURE);
 			criteriaResultServiceDTO.setUnitOfMeasurePrimaryFieldValue(((UnitOfMeasureCriteriaResult)criteriaResult).getPrimaryValue());
 			criteriaResultServiceDTO.setUnitOfMeasureSecondaryFieldValue(((UnitOfMeasureCriteriaResult)criteriaResult).getSecondaryValue());
+		} else if (criteriaResult instanceof SignatureCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.SIGNATURE);
+			
+			SignatureCriteriaResult sigCriteria = (SignatureCriteriaResult) criteriaResult;
+			if (sigCriteria.isSigned()) {
+				byte[] signatureImage;
+				try {
+					signatureImage = new SignatureService().loadSignatureImage(criteriaResult.getTenant(), criteriaResult.getEvent().getId(), criteriaResult.getCriteria().getId());
+					criteriaResultServiceDTO.setSignatureImage(signatureImage);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
 		} else {
 			throw new NotImplementedException("Conversion of CriteriaResult [" + criteriaResult.getClass() + "] not implemented");
 		}

@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.viewhelpers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
@@ -24,6 +24,7 @@ import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.user.User;
+import com.n4systems.services.signature.SignatureService;
 
 /**
  * A helper class for the EventCrud and SubEventCrud.  Consolidates form processing, 
@@ -119,8 +120,9 @@ public class EventHelper {
 	 * @param event			An AbstractEvent (sub or master)
 	 * @param formCriteriaResults	CriteriaResults input from a form.
 	 * @param modifiedBy			A modifiedBy user to set on the Observations
+	 * @throws IOException 
 	 */
-	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResultWebModel> formCriteriaResults, User modifiedBy) {
+	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResultWebModel> formCriteriaResults, User modifiedBy) throws IOException {
 		// if our forms criteria results are null (as is the case with a repair), just stop.  
 		if (formCriteriaResults == null) {
 			return;
@@ -169,6 +171,10 @@ public class EventHelper {
             	((ComboBoxCriteriaResult)realResult).setValue(textValue);
             } else if (realResult instanceof SignatureCriteriaResult) {
                 ((SignatureCriteriaResult)realResult).setSigned(formResult.isSigned());
+                
+                if (formResult.getSignatureFileId() != null) {
+                	((SignatureCriteriaResult)realResult).setImage(new SignatureService().loadSignatureImage(event.getTenant().getId(), formResult.getSignatureFileId()));
+                }
             }
 
 			// and attach back onto the event

@@ -10,11 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.n4systems.model.AssetType;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.assettype.AssetTypeLoader;
-import com.n4systems.services.signature.SignatureService;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -50,6 +45,7 @@ import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.Criteria;
@@ -66,6 +62,7 @@ import com.n4systems.model.Recommendation;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
@@ -444,15 +441,15 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 				updateAttachmentList(event, modifiedBy);
 				event = eventManager.updateEvent(event, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
 			}
-
-            processSignatures(event);
 				
 			completeSchedule();
 			
 		} catch (ProcessingProofTestException e) {
+			logger.error("event save failed processing prooftest", e);
 			addActionErrorText("error.processingprooftest");
 			return INPUT;
 		} catch (FileAttachmentException e) {
+			logger.error("event save failed attaching file", e);
 			addActionErrorText("error.attachingfile");
 			return INPUT;
 		} catch (ValidationException e) {
@@ -466,16 +463,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		addFlashMessageText("message.eventsaved");
 		return SUCCESS;
 	}
-
-    private void processSignatures(Event event) {
-        SignatureService signatureService = new SignatureService();
-
-        for (CriteriaResultWebModel model : criteriaResults) {
-            if (model.getSignatureFileId() != null) {
-                signatureService.copySignatureFilesForCriteriaResult(getTenant(), event.getId(), model.getCriteriaId(), model.getSignatureFileId());
-            }
-        }
-    }
 
     protected List<EventScheduleBundle> createEventScheduleBundles() {
 		List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();

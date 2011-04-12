@@ -12,6 +12,7 @@ import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
@@ -76,6 +77,23 @@ public class WsCriteriaConverterTest {
 		
 		verifyBaseCriteriaFields(model, wsModel);
 		assertEquals(WsTextFieldCriteria.class, wsModel.getClass());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void from_model_converts_all_fields_on_signature_criteria() {
+		SignatureCriteria model = new SignatureCriteria();
+		populateBaseCriteriaFields(model);
+
+		WsModelConverter<State, WsState> stateConverter = EasyMock.createMock(WsModelConverter.class);
+		EasyMock.replay(stateConverter);
+		
+		WsCriteria wsModel = new WsCriteriaConverter(stateConverter).fromModel(model);
+		
+		EasyMock.verify(stateConverter);
+		
+		verifyBaseCriteriaFields(model, wsModel);
+		assertEquals(WsSignatureCriteria.class, wsModel.getClass());
 	}
 	
 	@SuppressWarnings("unchecked")
