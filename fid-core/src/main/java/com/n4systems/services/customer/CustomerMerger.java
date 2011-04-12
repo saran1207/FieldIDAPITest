@@ -94,7 +94,8 @@ public class CustomerMerger {
 		List<SavedReport> reports = PersistenceManager.findAll(reportQuery);
 		
 		for (SavedReport report : reports) {
-			if(report.getCriteria().containsKey("ownerId")) {
+			if(report.getCriteria().containsKey("ownerId") 
+					&& report.getCriteria().get("ownerId").equals(losingOrg.getId().toString())) {
 				report.getCriteria().put("ownerId", winningOrg.getId().toString());
 				reportSaver.update(report);
 			}
@@ -186,6 +187,7 @@ public class CustomerMerger {
 		
 		for (Asset assetToMove : assetsToMove) {
 			moveEvents(assetToMove, winningOrg);
+			moveSchedules(assetToMove, winningOrg);
 			assetToMove.setOwner(winningOrg);
 			assetSaver.update(assetToMove);
 		}
@@ -199,12 +201,13 @@ public class CustomerMerger {
 		for (Event eventToMove : eventsToMove) {
 			eventToMove.setOwner(winningOrg);
 			updateEvent(eventToMove);
-			updateSchedule(winningOrg, eventToMove.getSchedule());
 		}
 	}
 
-	private void updateSchedule(BaseOrg winningOrg, EventSchedule schedule) {
-		if (schedule != null) {
+	private void moveSchedules(Asset asset, BaseOrg winningOrg) {
+		List<EventSchedule> schedules = scheduleManager.getAvailableSchedulesFor(asset);
+		
+		for (EventSchedule schedule: schedules) {
 			schedule.setOwner(winningOrg);
 			scheduleManager.update(schedule);
 		}		
