@@ -81,3 +81,7 @@ a.red:visited {
 a.red:hover {
 	color: red;
 }
+
+p.emptyScheduleList{
+	padding-left: 30px;
+}

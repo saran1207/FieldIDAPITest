@@ -13,7 +13,7 @@ ${action.setPageType('event', 'quickEvent')!}
 	</legend>
 	
 	<#if eventSchedules.isEmpty() >
-		<p><@s.text name="label.no_schedules"/></p>
+		<p class="emptyScheduleList"><@s.text name="label.no_schedules"/></p>
 	<#else>
 		<#list eventSchedules as schedule>
 			<#if schedule.isPastDue()>
