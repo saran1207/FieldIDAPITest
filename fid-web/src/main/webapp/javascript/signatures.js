@@ -39,7 +39,9 @@ function clearSignature(criteriaId, criteriaCount) {
 }
 
 function performThumbnailRefresh(newThumbnailSection) {
-    Lightview.hide();
+    try {
+        Lightview.hide();
+    } catch(err) {}
     $('signatureCriteria'+currentSignatureCriteriaId).replace(newThumbnailSection);
 }
 
