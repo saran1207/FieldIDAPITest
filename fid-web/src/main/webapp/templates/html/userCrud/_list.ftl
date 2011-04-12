@@ -1,5 +1,6 @@
 <head>
 	<@n4.includeStyle href="user" type="page"/>
+	<@n4.includeStyle href="listFilter" type="page"/>
 	
 	<script type="text/javascript">
 		document.observe("dom:loaded", function() {

@@ -2,11 +2,6 @@
 	background-image: url(../../images/owner-bs-icon.png);
 }
 
-.listFilter { 
-	background-color: #EEEEEE;
-	padding: 10px;
-}
-
 #nameFilter {
 	width: 250px;
 }
@@ -17,41 +12,4 @@
 
 #orgFilter {
 	width: 200px;
-}
-
-#listFilterHeader h2{
-	padding: 0;
-}
-
-#listFilterHeader h2, #listFilterHeader span{
-	display: inline;
-}
-
-.wwlbl{
-	margin-top: 5px;
-}
-
-.wwctrl input {
-    border : 1px solid #9C9C9C;
-    color : #555555;
-    overflow : hidden;
-    padding : 4px;
-}
-
-.wwctrl select {
-	border : 1px solid #9C9C9C;
-    color : #555555;
-    padding : 4px;
-}
-
-.formAction div {
-	padding : 0;
-}
-
-.formAction a , .formAction input, .formAction span{
-	vertical-align: middle;
-}
-
-div.formAction {
-	clear : none;
 }

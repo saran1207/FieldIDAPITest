@@ -1,3 +1,7 @@
+<head>
+	<@n4.includeStyle href="listFilter" type="page"/>
+</head>
+
 <div class="listFilter quickForm" >
 	<div id="listFilterHeader">
 		<h2><@s.text name="label.filter"/></h2>
