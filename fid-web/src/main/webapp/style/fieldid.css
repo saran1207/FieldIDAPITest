@@ -2087,3 +2087,48 @@ div.unitOfMeasureName {
 	color: #999999;
 }
 
+.useractions{
+	background-repeat: no-repeat;
+	background-position: left 1px;
+	padding-left: 25px;
+	padding-right: 40px;
+	margin-top: 10px;
+	float: left;
+	padding-bottom: 10px;
+}
+
+.viewactions {
+	display: block;
+	width: 100%;
+	padding: 0;
+	float: left;
+	height: 40px;
+}
+
+.useractions p {
+	line-height: 24px;
+}
+
+.delete{
+	background-image: url(../images/delete-icon.png);
+}
+
+.changeaccount{
+	background-image: url(../images/upgrade-icon.png);
+}
+
+.email{
+	background-image: url(../images/welcome-email-icon.png);
+}
+
+.addUser{
+	background-image: url(../images/add-user.png);
+}
+
+.merge {
+	background-image: url(../images/merge-icon.png);
+}
+
+.addicon {
+	background-image: url(../images/add-division-icon.png);
+}
