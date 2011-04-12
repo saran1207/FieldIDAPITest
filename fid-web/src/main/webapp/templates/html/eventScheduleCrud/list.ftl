@@ -1,5 +1,6 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
+	<@n4.includeStyle href="schedules" type="page"/>
 	<script type="text/javascript" src="javascript/eventSchedule.js"></script>
 </head>
 
