@@ -471,6 +471,7 @@ div.eventInIframe .recDefButtons {
 	width:auto;
 }
 
+
 .crudForm .infoSet{
 	border-bottom: none;
 }
@@ -511,9 +512,8 @@ div.eventInIframe .recDefButtons {
 	width: 180px;
 }
 
-.fileUpload div {
-	float:left;
- 	clear: left;
+.crudForm{
+	width:auto;
 }
 
 p.treeHeading{
@@ -545,16 +545,24 @@ p.treeHeading{
     width: 150px;
 }
 
-.crudForm p label{
+.crudForm h2{
+	margin-top: 20px;
+	}
+
+.crudForm p label, .resultContainer label{
 	text-align:right;
 	color: #222;
-	width: 155px;
 }
 
 .largeForm p span{
 	color: #555;
 	text-align: left;
 }
+
 #event{
 	clear:both;
-	}
+}
+
+.resultContainer div{
+	margin-top: 4px;
+}

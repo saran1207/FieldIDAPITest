@@ -82,3 +82,18 @@ div.uploadAction{
 	background-repeat: no-repeat;
 	background-position: left -7px;
 	}
+
+.fileUploadShow{
+	width: auto;
+	}
+
+p.fileUploadShow label{
+	padding-right: 0; 
+	width: auto;
+	padding: 5px;
+	}
+
+
+.fileUploadShow a{
+	margin-top: 10px;
+}

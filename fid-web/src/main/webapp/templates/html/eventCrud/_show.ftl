@@ -129,10 +129,13 @@
 	<#include "_event.ftl" />
 
     <h2><@s.text name="label.result"/></h2>
-    <p>
+    <div class="resultContainer">
         <label><@s.text name="label.result"/></label>
-        <span><@s.text name="${(event.status.label?html)!}"/></span>
-    </p>
+		<div <#if event.status.displayName== "Pass" > class="passColor" <#elseif event.status.displayName == "Fail"> class="failColor" <#else> class="naColor" </#if>>
+			<p class="inline"><@s.text name="${(event.status.label?html)!}"/></p> 
+		</div>
+
+    </div>
 
 	
 	<#if event.proofTestInfo?exists >

@@ -1138,13 +1138,13 @@ li.buttonGroupLabels {
 	width: 850px;
 }
 
-.crudForm p {
+.crudForm p, .resultContainer {
 	overflow: hidden;
 	padding: 5px 0px;
 	border-bottom: 1px solid #E2E2E2;
 }
 
-.crudForm p label {
+.crudForm p label, .resultContainer label{
 	float: left;
 	display: block;
 	width: 150px;
