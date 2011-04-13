@@ -9,7 +9,6 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exceptions.DuplicateCustomerException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.TenantNotValidForActionException;
-import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
