@@ -65,7 +65,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	private String listFilter;
 	private Long orgFilter;
-
+	private String sortColumn;
+	private String sortDirection;
+	
 	private UserType userType = UserType.ALL;
 	private UserGroup userGroup = UserGroup.ALL;
 	private ArrayList<StringListingPair> userTypes;
@@ -78,6 +80,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	protected List<ListingPair> litePermissions;
 	protected List<ListingPair> internalOrgList;
+	
 
 	protected UserCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -401,12 +404,13 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	public Pager<User> getPage() {
+
 		if (page == null) {
 			UserPaginatedLoader loader = new UserPaginatedLoader(getSecurityFilter())
 							               .withUserType(userType)
 							               .withUserGroup(userGroup)
-							               .withNameFilter(listFilter);
-			
+							               .withNameFilter(listFilter)
+										   .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : false);
 			setOrgFilter(loader);
 			page = loader.setPage(getCurrentPage().intValue())
             			 .setPageSize(Constants.PAGE_SIZE)
@@ -421,7 +425,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 						                   .withArchivedOnly()
 							               .withUserType(userType)
 							               .withUserGroup(userGroup)
-							               .withNameFilter(listFilter);
+							               .withNameFilter(listFilter)
+							               .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : false);
 			setOrgFilter(loader);
 			archivedPage = loader.setPage(getCurrentPage().intValue())
             			 .setPageSize(Constants.PAGE_SIZE)
@@ -591,4 +596,21 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public void setOrgFilter(Long orgFilter) {
 		this.orgFilter = orgFilter;
 	}
+
+	public String getSortColumn() {
+		return sortColumn;
+	}
+
+	public void setSortColumn(String sortColumn) {
+		this.sortColumn = sortColumn;
+	}
+
+	public String getSortDirection() {
+		return sortDirection;
+	}
+
+	public void setSortDirection(String sortDirection) {
+		this.sortDirection = sortDirection;
+	}
+	
 }

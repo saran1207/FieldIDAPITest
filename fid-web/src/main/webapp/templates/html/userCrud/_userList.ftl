@@ -1,18 +1,36 @@
 <table class="list" id="userList">
 	<tr>
+		<@s.text id="usernamelabel" name="label.username"/>
+    	<@s.text id="namelabel" name="label.name_first_last"/>
+    	<@s.text id="orglabel" name="label.organization"/>
+		<@s.text id="customerlabel" name="label.customer"/>
+		<@s.text id="divisionlabel" name="label.division"/>
+  		<@s.text id="emaillabel" name="label.emailaddress"/>
+
 		<#if !isArchivedPage>
-			<th ><@s.text name="label.username"/></th>
+			<#assign columns = ["userID", "", "owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
+			<#assign labels = ["${usernamelabel}", "${namelabel}", "${orglabel}", "${customerlabel}", "${divisionlabel}", "${emaillabel}"]>
+			<#assign sortAction = "userList" >
+		<#else>
+			<#assign columns = ["","owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
+			<#assign labels = ["${namelabel}", "${orglabel}", "${customerlabel}", "${divisionlabel}", "${emaillabel}"]>
+			<#assign sortAction = "archivedUserList" >			
 		</#if>
-    	<th ><@s.text name="label.name_first_last"/></th>
-    	<th ><@s.text name="label.organization"/></th>
-    	<#if userType?exists && userType != "EMPLOYEES"  >
-    		<th ><@s.text name="label.customer"/></th>
-    		<th ><@s.text name="label.division"/></th>
-    	</#if>
-  		<th ><@s.text name="label.emailaddress"/></th>
+		<#assign x=0>
+		<#list columns as column>
+			<#if !sortColumn?exists && column == "">
+				<#assign selected = true>
+			<#elseif sortColumn?exists && column == sortColumn>
+				<#assign selected = true>
+			<#else>
+				<#assign selected = false>		
+			</#if>	
+			<#include "_listHeader.ftl">
+			<#assign x=x+1>
+		</#list>
 		<th><@s.text name="label.lastlogin"/></th>
 		<th></th>
-	<tr>
+	</tr>
 	<#assign count=0 >
 	<#list page.list as user>
 		<tr id="user_${user.id!}" >
@@ -23,11 +41,8 @@
 			</#if>
 			<td>${user.userLabel?html! }</td>
 			<td>${(user.owner.getInternalOrg().name?html)!}</td>
-			<#if userType?exists && userType != "EMPLOYEES" >
-				<td>${(user.owner.customerOrg.name?html)!}&nbsp;</td>
-				<td>${(user.owner.divisionOrg.name?html)!}&nbsp;</td>
-			</#if>
-			
+			<td>${(user.owner.customerOrg.name?html)!}&nbsp;</td>
+			<td>${(user.owner.divisionOrg.name?html)!}&nbsp;</td>			
 			<td>${user.emailAddress?html! } </td>
 			
 			<td>${(action.dateCreated(user)??)?string(action.formatDateTime(action.dateCreated(user)), "--")}</td>		

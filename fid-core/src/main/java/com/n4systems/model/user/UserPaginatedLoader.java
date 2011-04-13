@@ -8,7 +8,10 @@ import com.n4systems.persistence.loaders.PaginatedLoader;
 import com.n4systems.util.UserGroup;
 import com.n4systems.util.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.JoinClause.JoinType;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
+import com.n4systems.util.persistence.JoinClause;
+import com.n4systems.util.persistence.OrderClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -24,6 +27,10 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 	private boolean archivedOnly = false;
 	private boolean filterOnPrimaryOrg;
 	private boolean filterOnSecondaryOrg;
+	private String order;
+	private boolean ascending;
+
+	private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
 	public UserPaginatedLoader(SecurityFilter filter) {
 		super(filter);
@@ -72,7 +79,20 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 			UserQueryHelper.applyArchivedFilter(builder);
 		}
 
-		builder.addOrder("firstName", "lastName");
+		if(order != null && !order.isEmpty()) {
+			if(order.startsWith("owner")) { 
+				builder.addJoin(new JoinClause(JoinType.LEFT, order, "sort", true));
+				
+		        OrderClause orderClause1 = new OrderClause("sort", ascending);
+		        orderClause1.setAlwaysDropAlias(true);
+		        		        
+				builder.getOrderArguments().add(orderClause1);
+				builder.getOrderArguments().add(new OrderClause("id", ascending););
+			} else
+				builder.setOrder(order, ascending);
+		} else {
+			builder.setOrder(DEFAULT_ORDER);
+		}
 
 		return builder;
 	}
@@ -117,4 +137,9 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		return this;
 	}
 
+	public UserPaginatedLoader withOrder(String order, boolean ascending) {
+		this.order = order;
+		this.ascending = ascending;
+		return this;
+	}
 }
