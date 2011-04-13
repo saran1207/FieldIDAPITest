@@ -327,5 +327,9 @@ public class MultiEventAction extends AbstractCrud {
     public boolean isRefreshAutoSchedules() {
         return true;
     }
+
+    public String getTemporarySignatureFileId(Long criteriaId) {
+        return null;
+    }
 	
 }
