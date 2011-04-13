@@ -87,7 +87,7 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 		        orderClause1.setAlwaysDropAlias(true);
 		        		        
 				builder.getOrderArguments().add(orderClause1);
-				builder.getOrderArguments().add(new OrderClause("id", ascending););
+				builder.getOrderArguments().add(new OrderClause("id", ascending));
 			} else
 				builder.setOrder(order, ascending);
 		} else {
