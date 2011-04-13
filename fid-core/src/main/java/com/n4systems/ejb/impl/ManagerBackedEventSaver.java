@@ -92,8 +92,15 @@ public class ManagerBackedEventSaver implements EventSaver {
 	
 	private void writeSignatureImagesToDisk(Event event) {
 		SignatureService sigService = new SignatureService();
-		
-		for (CriteriaResult result: event.getResults()) {
+
+        writeSignatureImagesFor(sigService, event.getResults());
+        for (SubEvent subEvent : event.getSubEvents()) {
+            writeSignatureImagesFor(sigService, subEvent.getResults());
+        }
+	}
+
+    private void writeSignatureImagesFor(SignatureService sigService, Set<CriteriaResult> results) {
+		for (CriteriaResult result : results) {
 			if (result.getCriteria().isSignatureCriteria() && ((SignatureCriteriaResult)result).getImage() != null) {
 				try {
 					sigService.storeSignatureFileFor((SignatureCriteriaResult)result);
@@ -102,7 +109,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 				}
 			}
 		}
-	}
+    }
 
 	public Event updateEvent(Event event, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		setProofTestData(event, fileData);

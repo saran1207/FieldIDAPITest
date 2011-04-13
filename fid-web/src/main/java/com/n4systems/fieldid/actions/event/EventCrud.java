@@ -1118,4 +1118,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
     public void setAssetTypeId(Long assetTypeId) {
         assetType = new AssetTypeLoader(getSecurityFilter()).setId(assetTypeId).load();
     }
+
+    public String getTemporarySignatureFileId(Long criteriaId) {
+        return null;
+    }
+
 }

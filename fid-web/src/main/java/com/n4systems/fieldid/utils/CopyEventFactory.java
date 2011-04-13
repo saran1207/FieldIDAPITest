@@ -17,6 +17,7 @@ import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
 import com.n4systems.model.SelectCriteriaResult;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
@@ -163,7 +164,12 @@ public class CopyEventFactory {
             uomResult.setPrimaryValue(((UnitOfMeasureCriteriaResult) oldResult).getPrimaryValue());
             uomResult.setSecondaryValue(((UnitOfMeasureCriteriaResult) oldResult).getSecondaryValue());
             return uomResult;
-        }else {
+        } else if (oldResult instanceof SignatureCriteriaResult) {
+            SignatureCriteriaResult signatureResult = new SignatureCriteriaResult();
+            signatureResult.setSigned(((SignatureCriteriaResult) oldResult).isSigned());
+            signatureResult.setImage(((SignatureCriteriaResult) oldResult).getImage());
+            return signatureResult;
+        } else {
             throw new RuntimeException("Don't know how to copy: " + oldResult);
         }
     }

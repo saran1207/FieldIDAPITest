@@ -45,6 +45,7 @@
                 <#include '_unitOfMeasureCriteriaResultEdit.ftl'>
             <#elseif criteria.signatureCriteria>
                 <#assign criteriaId = criteria.id />
+                <#assign signatureFileId = action.getTemporarySignatureFileId(criteriaId)!"" />
                 <#include '_signatureCriteriaResultEdit.ftl'>
             </#if>
 

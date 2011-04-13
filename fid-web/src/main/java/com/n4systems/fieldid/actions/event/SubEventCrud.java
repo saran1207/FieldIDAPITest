@@ -225,6 +225,7 @@ public class SubEventCrud extends EventCrud {
 		if (uniqueID == null) {
 			if (subEvent.isEditable()) {
 				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
+                masterEventHelper.storeTemporaryFileIds(criteriaResults);
 			}
 
 			masterEventHelper.addSubEvent(subEvent);
@@ -233,6 +234,7 @@ public class SubEventCrud extends EventCrud {
 
 			if (subEvent.isEditable()) {
 				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
+                masterEventHelper.storeTemporaryFileIds(criteriaResults);
 			}
 
 			masterEventHelper.replaceSubEvent(subEvent);
@@ -280,6 +282,7 @@ public class SubEventCrud extends EventCrud {
 
 				if (event.isEditable()) {
 					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+                    masterEventHelper.storeTemporaryFileIds(0L, criteriaResults);
 				}
 					
 				masterEventHelper.setNextSchedules(getNextSchedules());
@@ -287,6 +290,7 @@ public class SubEventCrud extends EventCrud {
 			} else {
 				if (event.isEditable()) {
 					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+                    masterEventHelper.storeTemporaryFileIds(0L, criteriaResults);
 				}
 
 				updateAttachmentList(event, modifiedBy);
@@ -379,5 +383,10 @@ public class SubEventCrud extends EventCrud {
 
     public void setOverrideResult(String overrideResult) {
         this.overrideResult = overrideResult;
+    }
+
+    @Override
+    public String getTemporarySignatureFileId(Long criteriaId) {
+        return masterEventHelper.getTemporarySignatureFileId(uniqueID, criteriaId);
     }
 }

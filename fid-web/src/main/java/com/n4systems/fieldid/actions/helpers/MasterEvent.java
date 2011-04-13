@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.n4systems.fieldid.actions.event.WebEventSchedule;
+import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
@@ -34,6 +37,7 @@ public class MasterEvent {
 	private AssetStatus assetStatus;
 
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
+    private Map<Long, Map<Long, String>> subEventTemporarySignatureFileIdMap = new HashMap<Long, Map<Long,String>>();
 
 	private Long currentId = -1L;
 
@@ -222,12 +226,21 @@ public class MasterEvent {
 		StrutsListHelper.clearNulls(subEvents);
 		for (SubEvent subEvent : subEvents) {
 			SubEvent s = createSubEventFromEvent(createEventFromSubEvent(subEvent));
+            storeTemporarySignatureFilesInMemory(s.getResults());
 			s.setId((subEvent.getId() < 0) ? null : subEvent.getId());
 			s.setResults(subEvent.getResults());
 			processResults(s);
 			event.getSubEvents().add(s);
 		}
 	}
+
+    private void storeTemporarySignatureFilesInMemory(Set<CriteriaResult> results) {
+        for (CriteriaResult result : results) {
+            if (result instanceof SignatureCriteriaResult) {
+
+            }
+        }
+    }
 
 	private void processResults(SubEvent s) {
 		for (CriteriaResult criteria : s.getResults()) {
@@ -375,4 +388,29 @@ public class MasterEvent {
 	public void setCleanToEventsToMatchConfiguration(boolean cleanToEventsToMatchConfiguration) {
 		this.cleanToEventsToMatchConfiguration = cleanToEventsToMatchConfiguration;
 	}
+
+    public void storeTemporaryFileIds(List<CriteriaResultWebModel> criteriaResults) {
+        storeTemporaryFileIds(currentId, criteriaResults);
+    }
+
+    public void storeTemporaryFileIds(Long eventId, List<CriteriaResultWebModel> criteriaResults) {
+        for (CriteriaResultWebModel criteriaResult : criteriaResults) {
+            storeTemporaryFileId(eventId, criteriaResult.getCriteriaId(), criteriaResult.getSignatureFileId());
+        }
+    }
+
+    private void storeTemporaryFileId(Long eventId, Long criteriaId, String fileId) {
+        if (subEventTemporarySignatureFileIdMap.get(eventId) == null) {
+            subEventTemporarySignatureFileIdMap.put(eventId, new HashMap<Long, String>());
+        }
+        subEventTemporarySignatureFileIdMap.get(eventId).put(criteriaId, fileId);
+    }
+
+    public String getTemporarySignatureFileId(Long eventId, Long criteriaId) {
+        if (subEventTemporarySignatureFileIdMap.get(eventId) == null) {
+            return null;
+        }
+        return subEventTemporarySignatureFileIdMap.get(eventId).get(criteriaId);
+    }
+
 }
