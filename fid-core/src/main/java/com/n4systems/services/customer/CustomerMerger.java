@@ -207,7 +207,7 @@ public class CustomerMerger {
 
 	private void moveEvents(Asset asset, BaseOrg winningOrg) {
 		QueryBuilder<Event> eventsQuery = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter()).addSimpleWhere("asset", asset);
-		eventsQuery.addPostFetchPaths("subEvents", "results");
+		eventsQuery.addPostFetchPaths("subEvents", "subEvents.results", "subEvents.asset", "results", "asset");
 		List<Event> eventsToMove = PersistenceManager.findAll(eventsQuery);
 
 		for (Event eventToMove : eventsToMove) {
