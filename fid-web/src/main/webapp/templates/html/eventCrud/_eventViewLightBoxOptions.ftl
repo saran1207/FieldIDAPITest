@@ -1,3 +1,3 @@
 <#assign eventLightViewOptions>
-class='lightview' rel='iframe' title="<@s.text name="title.viewevent"/> :: :: scrolling:true, width: 530, height: 490"
+class='lightview' rel='iframe' title=":: :: scrolling:true, width: 650, height: 550"
 </#assign>

@@ -380,6 +380,7 @@ div.eventInIframe .recDefButtons {
 
 .print {
 	float: right;
+	margin: 10px;
 }
 
 .print ul {
@@ -466,6 +467,10 @@ div.eventInIframe .recDefButtons {
 	text-align:left;
 }
 
+.largeForm{
+	width:auto;
+}
+
 .crudForm .infoSet{
 	border-bottom: none;
 }
@@ -539,3 +544,17 @@ p.treeHeading{
     margin-top:6px;
     width: 150px;
 }
+
+.crudForm p label{
+	text-align:right;
+	color: #222;
+	width: 155px;
+}
+
+.largeForm p span{
+	color: #555;
+	text-align: left;
+}
+#event{
+	clear:both;
+	}
