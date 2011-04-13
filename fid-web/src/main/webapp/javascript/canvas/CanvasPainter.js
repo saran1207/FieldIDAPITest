@@ -10,9 +10,6 @@
 	Additional Contributions by: Morris Johns
 ****************************************************************************************************/
 
-function getParentContext() {
-    return parent.getActiveSignatureCanvas();
-}
 
 var CanvasPainter = CanvasWidget.extend({
 	canvasInterface: "",
@@ -97,6 +94,7 @@ var CanvasPainter = CanvasWidget.extend({
 		this.mouseMoveTrigger = function(e) {
 			this.cpMouseMove(e);
 		};
+        this.cpMouseDownState = true;
     },
 	
 	cpMouseMove: function(e) {
@@ -128,9 +126,9 @@ var CanvasPainter = CanvasWidget.extend({
 	mouseUpActionPerformed: function(e) {
 		if(!this.cpMouseDownState) return;
 		this.curPos = this.getCanvasMousePos(e, this.position);
-		if(this.curDrawAction > 1) {
+		if(this.curDrawAction > 0) {
 			this.setColor(this.drawColor);
-			this.drawActions[this.curDrawAction](this.startPos, this.curPos, this.context, false);
+			this.drawActions[this.curDrawAction](this.startPos, this.curPos, this.context);
 			this.clearInterface();
 			this.callWidgetListeners();
 		}
@@ -165,7 +163,13 @@ var CanvasPainter = CanvasWidget.extend({
 		context.beginPath();
 		context.lineCap = "round";
 		context.moveTo(pntFrom.x,pntFrom.y);
-		context.lineTo(pntTo.x,pntTo.y);
+        if ((pntFrom.x == pntTo.x) && (pntFrom.y == pntTo.y)) {
+            var correctedPt = { x: pntTo.x, y: pntTo.y + 1 };
+            context.lineTo(correctedPt.x, correctedPt.y);
+
+        } else {
+            context.lineTo(pntTo.x,pntTo.y);
+        }
 		context.stroke();
 		context.closePath();
 		context.restore();
