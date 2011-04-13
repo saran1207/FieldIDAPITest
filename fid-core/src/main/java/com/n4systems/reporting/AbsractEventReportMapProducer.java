@@ -9,9 +9,11 @@ import java.util.Map;
 import com.n4systems.fieldid.certificate.model.InspectionImage;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.services.signature.SignatureService;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.n4systems.model.AbstractEvent;
@@ -193,6 +195,10 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                         } else if (result instanceof UnitOfMeasureCriteriaResult) {
                             String unitOfMeasureValueStr = getUnitOfMeasureStringValue((UnitOfMeasureCriteriaResult)result);
                             stateView.setState(unitOfMeasureValueStr);
+                        } else if (result instanceof SignatureCriteriaResult) {
+                            if (((SignatureCriteriaResult) result).isSigned()) {
+                                stateView.setStateImage(new SignatureService().getSignatureFileFor(getEvent().getTenant(), getEvent().getId(), result.getId()));
+                            }
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
                         criteriaViews.add(stateView);
