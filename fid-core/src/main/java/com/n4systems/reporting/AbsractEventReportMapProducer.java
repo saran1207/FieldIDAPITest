@@ -197,7 +197,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             stateView.setState(unitOfMeasureValueStr);
                         } else if (result instanceof SignatureCriteriaResult) {
                             if (((SignatureCriteriaResult) result).isSigned()) {
-                                stateView.setStateImage(new SignatureService().getSignatureFileFor(getEvent().getTenant(), getEvent().getId(), result.getId()));
+                                stateView.setStateImage(new SignatureService().getSignatureFileFor(getEvent().getTenant(), getEvent().getId(), result.getCriteria().getId()));
                             }
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
