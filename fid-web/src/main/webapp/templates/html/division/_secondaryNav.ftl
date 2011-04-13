@@ -1,9 +1,3 @@
-<style type="text/css">
-	.useractions{
-		padding-bottom: 0;
-	}
-</style>
-
 <#if !secondaryNavAction?exists || secondaryNavAction != "list">
 	<div class="secondaryNav">
 		<a href="<@s.url action="divisions"  customerId="${customerId}"/>">&#171; <@s.text name="label.view_all_divisions"/></a>

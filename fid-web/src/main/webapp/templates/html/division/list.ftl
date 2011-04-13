@@ -14,7 +14,9 @@ ${action.setPageType('customer', 'divisions')!}
 
 <#if page.hasResults() && page.validPage() >
 	<#assign currentAction="divisions.action" />
-	<#include '../common/_pagination.ftl' />
+	<#if (page.totalPages > 1 ) >
+		<#include '../common/_pagination.ftl' />
+	</#if>
 	<table id="divisionList" class="list">
 		<tr>
 			<th><@s.text name="label.name" /></th>
@@ -35,7 +37,9 @@ ${action.setPageType('customer', 'divisions')!}
 		</#list>
 	</table>
 	
-	<#include '../common/_pagination.ftl' />
+	<#if (page.totalPages > 1 ) >
+		<#include '../common/_pagination.ftl' />
+	</#if>
 <#elseif !page.hasResults() >
 	<div class="emptyList" >
 		<h2><@s.text name="label.noresults" /></h2>
