@@ -9,6 +9,7 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exceptions.DuplicateCustomerException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.TenantNotValidForActionException;
+import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
@@ -154,16 +155,28 @@ public class CustomerMerger {
 				moveAssets(matchedDivision, divisonToMove);
 				moveJobs(matchedDivision, divisonToMove);
 				moveUsers(matchedDivision, divisonToMove);
-				
 				moveSavedReports(matchedDivision, divisonToMove);
 				moveEmailNotifications(matchedDivision, divisonToMove);
+				
+				updateWinningDivisionInfo(divisonToMove, matchedDivision);
+				
 				divisonToMove.archiveEntity();
-
 			}else {
 				divisonToMove.setParent(winningCustomer);
 			}
 			orgSaver.update(divisonToMove);
 		}
+	}
+
+	private void updateWinningDivisionInfo(DivisionOrg divisonToMove, DivisionOrg matchedDivision) {			
+		matchedDivision.setCode(divisonToMove.getCode());		
+		
+		matchedDivision.getContact().setName(divisonToMove.getContact().getName());
+		matchedDivision.getContact().setEmail(divisonToMove.getContact().getEmail());
+		
+		divisonToMove.getAddressInfo().copyFieldsTo(matchedDivision.getAddressInfo());
+		
+		orgSaver.update(matchedDivision);
 	}
 
 	private DivisionOrg divisionNameExists(String name,	List<DivisionOrg> winningDivisions) {
@@ -176,7 +189,7 @@ public class CustomerMerger {
 	}
 
 	private List<DivisionOrg> getCustomerDivisions(CustomerOrg customer) {
-		QueryBuilder<DivisionOrg> divisionQuery = new QueryBuilder<DivisionOrg>(DivisionOrg.class, new OpenSecurityFilter()).addSimpleWhere("parent", customer);
+		QueryBuilder<DivisionOrg> divisionQuery = new QueryBuilder<DivisionOrg>(DivisionOrg.class, new OpenSecurityFilter()).addSimpleWhere("parent", customer).addPostFetchPaths("addressInfo");
 		return PersistenceManager.findAll(divisionQuery);
 	}
 
