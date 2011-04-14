@@ -2,7 +2,7 @@
     <select name="criteriaResults[${criteriaCount}].textValue" class="selectCriteria">
         <option></option>
         <#list criteria.options as option>
-            <#if (criteriaResult.id)?exists && criteriaResult.textValue == option>
+            <#if (criteriaResult.id)?exists || (criteriaResult?exists && criteriaResult.textValue?exists && criteriaResult.textValue == option)>
                 <#assign selectedStr = 'selected'/>
             <#else>
                 <#assign selectedStr = ''/>

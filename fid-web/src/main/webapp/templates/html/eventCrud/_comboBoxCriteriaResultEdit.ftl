@@ -7,7 +7,7 @@
     <select name="criteriaResults[${criteriaCount}].textValue" class="comboBoxCriteria" headerKey="-1">
         <option></option>
         <#list criteria.options as option>
-            <#if (criteriaResult.id)?exists && criteriaResult.textValue == option>
+            <#if (criteriaResult.textValue)?exists && criteriaResult.textValue == option>
                 <#assign selectedStr = 'selected'/>
             <#else>
                 <#assign selectedStr = ''/>
@@ -15,7 +15,7 @@
 
             <option ${selectedStr}>${option}</option>
         </#list>
-        <#if (criteriaResult.id)?exists && !criteria.options.contains(criteriaResult.textValue)> 
+        <#if (criteriaResult.textValue)?exists && !criteria.options.contains(criteriaResult.textValue)>
             <#assign selectedStr = 'selected'/>
         	<option ${selectedStr}>${criteriaResult.textValue}</option>
         </#if>

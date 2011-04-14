@@ -209,7 +209,7 @@ public class SubEventCrud extends EventCrud {
 		event.setTenant(getTenant());
 		event.setAsset(asset);
 		getModifiableEvent().pushValuesTo(event);
-        if (overrideResult != null) {
+        if (overrideResult != null && !"auto".equals(overrideResult)) {
             event.setStatus(Status.valueOf(overrideResult));
         }
 
