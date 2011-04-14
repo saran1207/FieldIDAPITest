@@ -24,6 +24,7 @@
 <script src="/fieldid/javascript/canvas/CPWidgets.js" type="text/javascript"></script>
 <script src="/fieldid/javascript/canvas/CPAnimator.js" type="text/javascript"></script>
 <script src="/fieldid/javascript/canvas/CPDrawing.js" type="text/javascript"></script>
+<@n4.includeStyle href="fieldid"/>
 
 <style type="text/css">
 	body {
@@ -37,13 +38,13 @@
 		font-style: italic;
 		margin-bottom: 8px;
 	}
-	a {
-		text-decoration: none;
-		color: black;
-	}
 	canvas {
 		border: 1px solid #AAAAAA;
 	}
+    a.clearLink {
+        font-size: 12px;
+        cursor: pointer;
+    }
 	#canvas {
 		position: absolute;
 		left: 10px;
@@ -64,6 +65,7 @@
         left: 10px;
         top: 263px;
     }
+
 </style>
 <script type="text/javascript">
 	var canvasPainter;
@@ -101,7 +103,7 @@
 <canvas id="canvasInterface" width="750" height="250" onselectstart="return false;"></canvas>
 
 <div class="bottomButtons">
-    <button onclick="doClear()">Clear</button> <button onclick="doStore()">Store</button>
+    <button onclick="doStore()"><@s.text name="label.store"/></button> <@s.text name="label.or"/> <a class="clearLink"  onclick="doClear()"><@s.text name="label.clear"/></a>
 </div>
 
 </body></html>

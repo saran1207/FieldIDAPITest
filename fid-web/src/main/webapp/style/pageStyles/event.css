@@ -567,3 +567,13 @@ p.treeHeading{
 	margin-top: 4px;
 }
 
+a.signLink {
+    display:block;
+    padding-top: 10px;
+    padding-left: 2px;
+}
+
+a.clearSignatureLink {
+    text-decoration: underline;
+    cursor: pointer;
+}
