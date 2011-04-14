@@ -165,21 +165,17 @@ public class ManageUsersPage extends FieldIDPage {
 	}
 
 	public List<String> getListOfUserIDsOnCurrentPage() {
-		List<String> result = new ArrayList<String>();
-		Number n = selenium.getXpathCount("//table[@id='userList']/tbody/tr/td/a");
-		int numberOfUserIDs = n.intValue();
-		int row = 2; // first user id starts on row 2 of table, zero-index
-		String userIDCellLocator = "//table[@id='userList']" + "." + row + ".0";
-		for (int i = 0; i < numberOfUserIDs; i++, row++) {
-			String permission = selenium.getTable(userIDCellLocator);
-			result.add(permission.trim());
-			userIDCellLocator = userIDCellLocator.replaceFirst("\\." + row, "." + (row + 1));
+		List<String> userIds = new ArrayList<String>();
+		int numRows = selenium.getXpathCount("//table[@id='userList']/tbody/tr").intValue();
+		for (int i = 2; i <= numRows; i++ ) {
+            String userID = selenium.getText("//table[@id='userList']/tbody/tr[" + i + "]/td[1]//a");
+            userIds.add(userID.trim());
 		}
-		return result;
+		return userIds;
 	}
 
 	public String clickFirstSearchResult() {
-		String locator = "xpath=//table[@id='userList']/tbody/tr[3]/td[1]/a";
+		String locator = "xpath=//table[@id='userList']/tbody/tr[2]/td[1]/a";
 		String userName = selenium.getText(locator);
 		selenium.click(locator);
 		waitForPageToLoad();
