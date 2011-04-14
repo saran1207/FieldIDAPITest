@@ -16,42 +16,43 @@ ${action.setPageType('event', 'quickEvent')!}
 		<p class="emptyScheduleList"><@s.text name="label.no_schedules"/></p>
 	<#else>
 		<#list eventSchedules as schedule>
+			<table>
+				<tbody>
+					<tr>
+						<td>
 			<#if schedule.isPastDue()>
-				<div class="failColor floatLeft inline">
+				<div class="failColor">
 					<#if schedule.daysPastDue! == 1>
 						<p><@s.text name="label.yesterday"/></p>
 					<#else>
 						<p><@s.text name="label.x_days_ago"><@s.param>${schedule.daysPastDue!}</@s.param></@s.text></p>
 					</#if>
 				</div>
-			
-				<p class="red">
 			<#elseif schedule.daysToDue == 0>
-				<div class="passColor floatLeft inline">
+				<div class="passColor">
 					<p><@s.text name="label.due_today"/></p> 
 				</div>
 			<#else>
-			<div class="passColor floatLeft inline">
-				<#if schedule.daysToDue == 1>
-					<p><@s.text name="label.tomorrow"/></p>
-				<#else>
-					<p><@s.text name="label.x_days_away"><@s.param>${schedule.daysToDue!}</@s.param></@s.text></p>
-				</#if>
-			</div>
-			<p>
+				<div class="passColor">
+					<#if schedule.daysToDue == 1>
+						<p><@s.text name="label.tomorrow"/></p>
+					<#else>
+						<p><@s.text name="label.x_days_away"><@s.param>${schedule.daysToDue!}</@s.param></@s.text></p>
+					</#if>
+				</div>
 			</#if>
+				</td>
+				<td>
+			
 				<label>${schedule.nextDate?string("MM/dd/yy")}</label>  
-				<span>
+				</td>
+				<td>
 					<@s.url id="performSchedule" action="selectEventAdd" assetId="${schedule.asset.id}" type="${schedule.eventType.id}" scheduleId="${schedule.id}"/>
 					<#if schedule.project?exists>
 						<@s.text name="label.quickEventSchedule">
 							<@s.param>
-								<#if schedule.isPastDue()>
-									<a class="red" href="${performSchedule}">
-								<#else>
-									<a href="${performSchedule}">
-								</#if>
-								${schedule.eventType.name}</a></@s.param>
+								<a href="${performSchedule}">${schedule.eventType.name}</a>
+							</@s.param>
 							<@s.param>${schedule.project.name}</@s.param>
 						</@s.text>
 					<#else>
@@ -62,9 +63,11 @@ ${action.setPageType('event', 'quickEvent')!}
 						</#if>
 						${schedule.eventType.name}</a>
 					</#if>
-				</span>
-			</p>	
+				</td>
+			</tr>
 		</#list>
+		</tbody>
+	</table>
 	</#if>
 
 	<p class="footer"> 

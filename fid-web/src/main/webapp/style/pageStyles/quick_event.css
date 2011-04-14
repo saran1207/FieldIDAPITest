@@ -14,8 +14,9 @@ fieldset legend {
 	margin-left: 5px;
 }
 
-fieldset label{
+fieldset td{
 	margin-left: 10px;
+	padding : 5px;
 }
 
 .labeltext {
@@ -61,26 +62,6 @@ fieldset p {
 
 fieldset span {
 	margin-left: 5px;
-}
-
-.red {
-	color: red;
-}
-
-a.red:link {
-	color: red;
-}
-
-a.red:active {
-	color: red;
-}
-
-a.red:visited {
-	color: red;
-}
-
-a.red:hover {
-	color: red;
 }
 
 p.emptyScheduleList{
