@@ -8,6 +8,10 @@ ${action.setPageType('customer', 'divisions')!}
 			vertical-align: -30%;
 			padding-right: 2px;
 		}
+		
+		.emptyList {
+			margin-top: 0;
+		}
 	</style>
 </head>
 
