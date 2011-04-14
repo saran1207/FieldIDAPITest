@@ -20,7 +20,7 @@
 	<div id="listFilterHeader">
 		<h2><@s.text name="label.filter" /></h2>
 		&nbsp;
-		<span class="egColor"><@s.text name="message.filter_customers"/></span>
+		<span class="egColor"><@s.text name="message.filter_users"/></span>
 	</div>
 	<@s.form id="listFilterForm" method="get"> 
 		<@s.hidden name="currentPage" value="1"/>
