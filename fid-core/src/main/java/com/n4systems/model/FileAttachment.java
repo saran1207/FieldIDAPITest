@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
+import com.n4systems.util.ContentTypeUtil;
 
 @Entity
 @Table(name = "fileattachments")
@@ -61,7 +62,7 @@ public class FileAttachment extends EntityWithTenant implements Attachment {
 	}
 
 	protected String getContentType(String fileName) {
-		return FileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
+		return ContentTypeUtil.getContentType(fileName);
 	}
 
 	public boolean hasAttachedFile() {

@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletResponse;
 
+import com.n4systems.util.ContentTypeUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -28,7 +29,7 @@ public abstract class DownloadAction extends AbstractAction {
 
 	protected String sendFile(InputStream stream) throws IOException {
 		HttpServletResponse response = getServletResponse();
-		response.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(fileName));
+		response.setContentType(ContentTypeUtil.getContentType(fileName));
 		response.addHeader("Content-Disposition:", "attachment; filename=\"" + fileName + "\"");
 		
 		if (fileSize != null) {

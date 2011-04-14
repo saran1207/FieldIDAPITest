@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.activation.FileTypeMap;
 
+import com.n4systems.util.ContentTypeUtil;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -326,7 +327,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	@CustomValidator(type = "imageUploadContentType", message = "", key = "errors.filemustbeanimage")
 	public String getUploadedImageContentType() {
 		if (newImage == true) {
-			return FileTypeMap.getDefaultFileTypeMap().getContentType(new File(assetImageDirectory).getName());
+            return ContentTypeUtil.getContentType(new File(assetImageDirectory).getName());
 		}
 		return null;
 	}

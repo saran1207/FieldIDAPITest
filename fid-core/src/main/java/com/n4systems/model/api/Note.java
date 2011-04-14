@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import com.n4systems.model.Attachment;
+import com.n4systems.util.ContentTypeUtil;
 
 
 @Embeddable
@@ -57,7 +58,7 @@ public class Note implements Attachment {
 	}
 
 	protected String getContentType(String fileName) {
-		return FileTypeMap.getDefaultFileTypeMap().getContentType(fileName);
+		return ContentTypeUtil.getContentType(fileName);
 	}
 
 	public boolean hasAttachedFile() {

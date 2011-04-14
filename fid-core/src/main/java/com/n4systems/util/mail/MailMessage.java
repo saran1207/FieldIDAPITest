@@ -23,6 +23,7 @@ import javax.mail.util.ByteArrayDataSource;
 
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.StringUtils;
 
 public class MailMessage implements Serializable {
@@ -200,7 +201,7 @@ public class MailMessage implements Serializable {
 	
 	private BodyPart createAttachmentPart(byte[] data, String name) throws MessagingException {
 		MimeBodyPart part = new MimeBodyPart();
-		String fileType = FileTypeMap.getDefaultFileTypeMap().getContentType(name);
+		String fileType = ContentTypeUtil.getContentType(name);
 	    ByteArrayDataSource source = new ByteArrayDataSource(data, fileType);
 	    source.setName(name);
 	    

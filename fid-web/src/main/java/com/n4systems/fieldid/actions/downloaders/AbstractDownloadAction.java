@@ -7,6 +7,7 @@ import java.io.InputStream;
 
 import javax.activation.FileTypeMap;
 
+import com.n4systems.util.ContentTypeUtil;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -83,7 +84,7 @@ public abstract class AbstractDownloadAction extends AbstractAction {
 	}
 
 	public String getContentType() {
-		return FileTypeMap.getDefaultFileTypeMap().getContentType(getFileName());
+        return ContentTypeUtil.getContentType(getFileName());
 	}
 	
 	public InputStream getFileStream() {
