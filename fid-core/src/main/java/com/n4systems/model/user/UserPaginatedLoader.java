@@ -91,7 +91,9 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 			} else
 				builder.setOrder(order, ascending);
 		} else {
-			builder.setOrder(DEFAULT_ORDER);
+			for (String order : DEFAULT_ORDER) {
+				builder.setOrder(order, ascending);				
+			}
 		}
 
 		return builder;
