@@ -65,18 +65,18 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public boolean checkScheduleExists(String date, String eventType, String job) {
-		return selenium.isElementPresent("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job) + "']");
+		return selenium.isElementPresent("//tbody[@id='schedules']/tr/td[text()='"+eventType+"']/..//div[text()='"+date+"']/../..//td[@id='jobName']//a[.='"+ (job.isEmpty() ? "no job" : job)+"']");
 	}
 
 	public void clickRemoveSchdeule(String date, String eventType, String job) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
-				+ "']/..//a[text()='Remove']");
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//div[text()='" + date + "']/../..//td[@id='jobName']//a[text()='" + (job.isEmpty() ? "no job" : job)
+				+ "']/../..//a[text()='Remove']");
 		waitForAjax();
 	}
 
 	public void clickEditSchedule(String date, String eventType, String job) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
-				+ "']/..//a[text()='Edit']");
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//div[text()='" + date + "']/../..//td[@id='jobName']//a[text()='" + (job.isEmpty() ? "no job" : job)
+				+ "']/../..//a[text()='Edit']");
 		waitForAjax();
 	}
 
@@ -106,14 +106,14 @@ public class AssetPage extends FieldIDPage {
 	}
 
 	public EventPage clickInpectNow(String date, String eventType, String job) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
-				+ "']/..//a[text()='Start event now']");
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + eventType + "']/..//div[text()='" + date + "']/../..//td[@id='jobName']//a[text()='" + (job.isEmpty() ? "no job" : job)
+				+ "']/../..//a[text()='Start This Event']");
 		return new EventPage(selenium);
 	}
 
 	public void clickStopProgress(String date, String event, String job) {
-		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + event + "']/..//span[text()='" + date + "']/..//span[text()='" + (job.isEmpty() ? "no job" : job)
-				+ "']/..//a[text()='Stop Progress']");
+		selenium.click("//tbody[@id='schedules']/tr/td[text()='" + event + "']/..//div[text()='" + date + "']/../..//td[@id='jobName']//a[text()='" + (job.isEmpty() ? "no job" : job)
+				+ "']/../..//a[text()='Stop Progress']");
 	}
 
 	public EventsPerformedPage clickEventsTab() {
