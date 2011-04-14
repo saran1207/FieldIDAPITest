@@ -1,42 +1,42 @@
 <@s.bean id="moneyUtil" name="com.n4systems.tools.MoneyUtils"/>
-<@s.url id="eventCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
-<@s.url id="observationCertUrl" action="downloadEventCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
-				
-<#if event.anyCertPrintable>
-	<#if event.eventCertPrintable && event.observationCertPrintable>
-		<div id="cert_links" class="print" onmouseover="repositionCertLinks('cert_list', 'cert_links');" >
-			<ul id="cert_list">
-				<#if event.eventCertPrintable>
-					<li><a href="${eventCertUrl}" target="_blank" >${event.type.group.reportTitle?html} (<@s.text name="label.pdfreport"/>)</a></li>
-				</#if>
-				<#if event.observationCertPrintable>
-					<li><a href="${observationCertUrl}" target="_blank" ><@s.text name="label.printobservationcertificate"/></a></li>
-				</#if>
-			</ul>
-			<img src="<@s.url value="/images/pdf_small.gif"/>" /> 
-			<a href="javascript:void(0);" >
-				<@s.text name="label.print"/>					
-			</a>
-		</div>					
-	<#elseif event.eventCertPrintable>
-		<div class="print">
-			<img src="<@s.url value="/images/pdf_small.gif"/>" />
-			<a href="${eventCertUrl}" target="_blank" ><@s.text name="label.print"/></a>
-		</div>
-	<#elseif event.observationCertPrintable>
-		<div class="print">
-			<img src="<@s.url value="/images/pdf_small.gif"/>" />
-			<a href="${observationCertUrl}" target="_blank" ><@s.text name="label.print"/></a>	
-		</div>
-	</#if>
-</#if>
-			
 
 <div id="event" >
 	<div id="assetSummary">
 		<h2>
 			<span>${asset.type.name!""?html} <@s.text name="label.summary"/></span>
+			<@s.url id="eventCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
+			<@s.url id="observationCertUrl" action="downloadEventCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
+							
+			<#if event.anyCertPrintable>
+				<#if event.eventCertPrintable && event.observationCertPrintable>
+					<div id="cert_links" class="print" onmouseover="repositionCertLinks('cert_list', 'cert_links');" >
+						<ul id="cert_list">
+							<#if event.eventCertPrintable>
+								<li><a href="${eventCertUrl}" target="_blank" >${event.type.group.reportTitle?html} (<@s.text name="label.pdfreport"/>)</a></li>
+							</#if>
+							<#if event.observationCertPrintable>
+								<li><a href="${observationCertUrl}" target="_blank" ><@s.text name="label.printobservationcertificate"/></a></li>
+							</#if>
+						</ul>
+						<img src="<@s.url value="/images/pdf_small.gif"/>" /> 
+						<a href="javascript:void(0);" >
+							<@s.text name="label.print"/>					
+						</a>
+					</div>					
+				<#elseif event.eventCertPrintable>
+					<div class="print">
+						<img src="<@s.url value="/images/pdf_small.gif"/>" />
+						<a href="${eventCertUrl}" target="_blank" ><@s.text name="label.print"/></a>
+					</div>
+				<#elseif event.observationCertPrintable>
+					<div class="print">
+						<img src="<@s.url value="/images/pdf_small.gif"/>" />
+						<a href="${observationCertUrl}" target="_blank" ><@s.text name="label.print"/></a>	
+					</div>
+				</#if>
+			</#if>
 		</h2>
+		
 		<p>
 			<label><@s.text name="${Session.sessionUser.serialNumberLabel}"/></label>
 			<span>

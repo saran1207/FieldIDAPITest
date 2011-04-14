@@ -380,7 +380,6 @@ div.eventInIframe .recDefButtons {
 
 .print {
 	float: right;
-	margin: 10px;
 }
 
 .print ul {
@@ -552,6 +551,7 @@ p.treeHeading{
 .crudForm p label, .resultContainer label{
 	text-align:right;
 	color: #222;
+	font-weight:bold;
 }
 
 .largeForm p span{
@@ -566,3 +566,4 @@ p.treeHeading{
 .resultContainer div{
 	margin-top: 4px;
 }
+
