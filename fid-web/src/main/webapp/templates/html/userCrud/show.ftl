@@ -22,7 +22,7 @@ ${action.setPageType('user','view')!}
 		<p>
 	</div>
 	</#if>
-	<#if owner.internal && !user.admin>
+	<#if !user.admin>
 	<div class="useractions changeaccount">
 		<p><a href="<@s.url action="upgradeUser" uniqueID="${user.id!}" />"><@s.text name="label.change_account_type"/></a></p>
 		
