@@ -100,4 +100,8 @@ public class CustomerMergeAction extends AbstractCrud {
 	public void setSearch(String search) {
 		this.search = search;
 	}
+	
+	public CustomerOrg getCustomer() {
+		return losingCustomer;
+	}
 }
