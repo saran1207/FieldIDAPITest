@@ -13,6 +13,7 @@
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.emailaddresses" /></label><br/>
 			<@s.textfield id="recipients" name="recipients" /><br/><br/>
+			<p class="lightColored positioned"><@s.text name="label.separate_emails_by_commas" /></p>	
 		</div>
 		
 		<div class="infoSet">

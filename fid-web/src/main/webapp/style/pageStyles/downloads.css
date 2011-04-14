@@ -57,7 +57,7 @@
 	padding: 15px 0 15px 55px;
 	color: #666;
 	font-size:14px;
-	margin: 5px;
+	margin: 5px 5px 5px 0;
 	background-image: url(../../images/link-box.png);
 	background-repeat: no-repeat;
 	}
@@ -111,3 +111,7 @@
 	color: #666;
 }
 
+.positioned{
+	position: relative;
+	top: -20px;
+	}
