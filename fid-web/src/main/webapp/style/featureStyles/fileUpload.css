@@ -93,10 +93,6 @@ p.fileUploadShow label{
 	padding: 5px;
 }
 
-.fileUploadShow a{
-	margin-top: 10px;
-}
-
 .crudForm label.defaultImage {
 	padding: 20px 0;
 	width: 60px;

@@ -258,6 +258,10 @@ div.eventInIframe .recDefButtons {
     margin-right:5px;
 }
 
+div.eventInIframe{
+	padding: 0 10px;
+}
+
 .observationsShow p.observationTextShow   {
 	border: 2px solid #E8EDFF;
 	padding: 10px 0 10px 40px;
