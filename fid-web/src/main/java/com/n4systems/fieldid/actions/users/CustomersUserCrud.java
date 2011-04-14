@@ -13,9 +13,9 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserPaginatedLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
@@ -57,7 +57,13 @@ public class CustomersUserCrud extends ReadOnlyUserCrud {
 	
 	public Pager<User> getPage() {
 		if( page == null ) {
-			page = userManager.getUsers( getSecurityFilter(), true, getCurrentPage().intValue(), Constants.PAGE_SIZE, "", UserType.READONLY, customer);
+		
+			page = new UserPaginatedLoader(getSecurityFilter())
+							.withCustomer(customer)
+							.setPage(getCurrentPage().intValue())
+							.setPageSize(Constants.PAGE_SIZE)
+							.load();
+
 		}
 		return page;
 	}

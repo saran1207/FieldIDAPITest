@@ -1,6 +1,7 @@
 package com.n4systems.model.user;
 
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.ExternalOrgFilter;
 import com.n4systems.model.orgs.InternalOrgFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -20,6 +21,7 @@ import com.n4systems.util.persistence.WhereParameterGroup;
 public class UserPaginatedLoader extends PaginatedLoader<User> {
 
 	private BaseOrg owner;
+	private CustomerOrg customer;
 	private Long orgFilter;
 	private UserType userType;
 	private UserGroup userGroup = UserGroup.ALL;
@@ -44,6 +46,10 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 
 		if (owner != null) {
 			builder.addSimpleWhere("owner", owner);
+		}
+		
+		if (customer != null) {
+			builder.addSimpleWhere("owner.customerOrg", customer);
 		}
 		
 		if(filterOnPrimaryOrg) {
@@ -142,6 +148,11 @@ public class UserPaginatedLoader extends PaginatedLoader<User> {
 	public UserPaginatedLoader withOrder(String order, boolean ascending) {
 		this.order = order;
 		this.ascending = ascending;
+		return this;
+	}
+
+	public UserPaginatedLoader withCustomer(CustomerOrg customer) {
+		this.customer = customer;
 		return this;
 	}
 }
