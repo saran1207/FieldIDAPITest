@@ -37,6 +37,8 @@ import com.n4systems.model.columns.saver.ActiveColumnMappingSaver;
 import com.n4systems.model.columns.saver.ColumnLayoutSaver;
 import com.n4systems.model.criteria.CriteriaSaver;
 import com.n4systems.model.criteria.CriteriaSectionSaver;
+import com.n4systems.model.downloadlink.DownloadLink;
+import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.event.EventFormSaver;
 import com.n4systems.model.event.EventGroupSaver;
 import com.n4systems.model.event.SimpleEventSaver;
@@ -103,6 +105,7 @@ public class SaverMap {
         classToSaverMap.put(Project.class, new ProjectSaver());
         classToSaverMap.put(ColumnLayout.class, new ColumnLayoutSaver());
         classToSaverMap.put(ActiveColumnMapping.class, new ActiveColumnMappingSaver());
+        classToSaverMap.put(DownloadLink.class, new DownloadLinkSaver());
     }
 
     @SuppressWarnings("unchecked")

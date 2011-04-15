@@ -62,4 +62,43 @@ public class MyAccountPage extends FieldIDPage {
         return companyNames;
     }
 
+	public void clickDownloads() {
+		clickNavOption("Downloads");
+		
+	}
+	
+	public int getNumberOfItemsInDownloadList() {
+		if (!selenium.isElementPresent("//table[@class='list']")) {
+			return 0;
+		}
+		return selenium.getXpathCount("//table[@class='list']//tr").intValue() - 1;
+	}
+
+	public void editDownLoadName(int rowNum) {
+		selenium.click("//tr[" + (rowNum + 1) + "]//a[.='Edit']");
+		waitForAjax();
+	}
+	
+	public void enterName(String name) {
+		selenium.type("//input[@id='downloadLinkName']", name);
+	}
+	
+	public void clickSave() {
+		selenium.click("//a[.='Save']");
+		waitForAjax();
+	}
+
+	public List<String> getDownloadNames() {
+		return collectTableValuesUnderCellForCurrentPage(2, 2, "span");
+	}
+
+	public void clickCancel() {
+		selenium.click("//a[.='Cancel']");
+		waitForAjax();
+	}
+
+	public void clickDelete(int rowNum) {
+		selenium.click("//tr[" + (rowNum + 1) + "]//a[.='Delete']");
+		waitForPageToLoad();
+	}
 }

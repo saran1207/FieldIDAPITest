@@ -46,6 +46,7 @@ import com.n4systems.model.UserRequest;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.catalog.Catalog;
+import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.eula.EulaAcceptance;
 import com.n4systems.model.messages.Message;
 import com.n4systems.model.notificationsettings.NotificationSetting;
@@ -88,6 +89,7 @@ public class TenantCleaner {
 
         removeAllConfigsForTenants(tenantIds);
         removeAddAssetHistory(tenantIds);
+        removeAllForTenants(DownloadLink.class, tenantIds);
         removeAllForTenants(AssetCodeMapping.class, tenantIds);
         removeAllForTenants(Catalog.class, tenantIds);
         removeAllForTenants(EventSchedule.class, tenantIds);

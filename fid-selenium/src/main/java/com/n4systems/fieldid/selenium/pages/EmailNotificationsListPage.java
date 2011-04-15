@@ -2,7 +2,6 @@ package com.n4systems.fieldid.selenium.pages;
 
 import static org.junit.Assert.fail;
 
-import com.n4systems.fieldid.selenium.testcase.EmailNotificationPage;
 import com.thoughtworks.selenium.Selenium;
 
 public class EmailNotificationsListPage extends FieldIDPage {

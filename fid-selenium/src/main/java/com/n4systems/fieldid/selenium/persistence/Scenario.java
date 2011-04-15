@@ -28,6 +28,7 @@ import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.BaseBuilder;
 import com.n4systems.model.builders.ComboBoxCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
+import com.n4systems.model.builders.DownloadLinkBuilder;
 import com.n4systems.model.builders.EntityWithOwnerBuilder;
 import com.n4systems.model.builders.EntityWithTenantBuilder;
 import com.n4systems.model.builders.EventBookBuilder;
@@ -282,6 +283,10 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
+    public DownloadLinkBuilder aDownloadLink() {
+    	DownloadLinkBuilder builder = DownloadLinkBuilder.aDownloadLink();
+    	return createPersistentBuilder(builder);
+    }
     public void save(Object entity) {
     	logger.info("Save: " + ToStringBuilder.reflectionToString(entity));
         if (entity instanceof Saveable) {
