@@ -21,6 +21,7 @@ public class ManageCustomersPage extends FieldIDPage {
 		return this;
 	}
 	
+	
 	public void clickAdd() {
 		clickNavOption("Add");	
 	}
@@ -55,6 +56,7 @@ public class ManageCustomersPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 	
+	
 	public int getNumberOfCustomersOnPage() {
 		return getNumberOfItemsInTableList("customerTable");
 	}
@@ -84,6 +86,25 @@ public class ManageCustomersPage extends FieldIDPage {
 		selenium.click("//table[@id='customerTable']//td/a[.='" + customerName + "']");
 		waitForPageToLoad();
 		return this;
+	}
+	
+	public ManageCustomersPage clickViewTab(){
+		clickNavOption("View");
+		return this;
+	}
+	
+	public ManageCustomersPage clickMerge(){
+		selenium.click("//a[.='Merge']");
+		waitForPageToLoad();
+		return this;
+	}
+	
+	public void mergeWithCustomer(String customerName){
+		selenium.click("//input[@id='label_confirm_as_losing_customer']");
+		selenium.type("//input[@id='search']", customerName);
+		selenium.click("//input[@type='button']");
+		selenium.click("//input[@type='button']");
+		
 	}
 
 	public ManageCustomersPage editCustomer(String customerName) {

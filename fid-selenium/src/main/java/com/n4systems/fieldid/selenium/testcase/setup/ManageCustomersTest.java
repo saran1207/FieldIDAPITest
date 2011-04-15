@@ -9,9 +9,15 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
 
 public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersPage> {
 	
@@ -19,9 +25,11 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	private static String COMPANY = "test1";
     private static final String TEST_CUSTOMER_ORG1 = "CustomerOrg1";
     private static final String TEST_CUSTOMER_ORG2 = "CustomerOrg2";
+    private static final String TEST_CUSTOMER_ORG_TO_MERGE_INTO = "CustomerOrg3";
 	private static final String TEST_DIVISION_ORG1 = "DivisionOrg1";
 	private static final String TEST_DIVISION_ORG2 = "DivisionOrg2";
 	private static final String TEST_USER = "User";
+	private static final String ASSET_TRANSFER_SERIAL="Asset To Transfer";
     
 	@Override
 	public void setupScenario(Scenario scenario) {     
@@ -38,11 +46,38 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 								  .withParent(scenario.primaryOrgFor(COMPANY))
 				                  .withName(TEST_CUSTOMER_ORG2)
 				                  .build();
+       
+        BaseOrg custOrgToMergeInto = scenario.aCustomerOrg()
+        					.withParent(scenario.primaryOrgFor(COMPANY))
+        					.withName(TEST_CUSTOMER_ORG_TO_MERGE_INTO)
+        					.build();
         
         BaseOrg divisionOrg = scenario.aDivisionOrg()
         		.withParent(custOrg)
         		.withName(TEST_DIVISION_ORG1)
         		.build();
+        
+        User transferredUser = scenario.aUser()
+					        			.withOwner(custOrg)
+					        			.withUserId("Some User")
+					        			.build();
+        
+        AssetType type = scenario.anAssetType()
+        				.named("Gantry Crane - Cab Controlled")
+        				.build();
+        
+        AssetBuilder builder = scenario.anAsset().ofType(type);
+        Asset transferredAsset =  builder.withSerialNumber(ASSET_TRANSFER_SERIAL).withOwner(custOrg).build();
+        
+        EventType eventType = scenario.anEventType().named("hurf").build();
+        
+        Event event = scenario.anEvent()
+        					.withOwner(custOrg)
+        					.ofType(eventType)
+        					.on(transferredAsset)
+        					.withPerformedBy(transferredUser)
+        					.build();
+        	
         
         scenario.aReadOnlyUser()
                 .withOwner(divisionOrg)
@@ -176,6 +211,24 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 		page.clickCustomer(TEST_CUSTOMER_ORG2).clickUsersTab();
 		
 		assertFalse(page.getUserIds().contains(TEST_USER_ID));
+	}
+	
+	@Test
+	public void merging_two_customers_transfers_assets_to_the_winner(){
+		page.clickCustomer(TEST_CUSTOMER_ORG1).clickViewTab().clickMerge().mergeWithCustomer(TEST_CUSTOMER_ORG_TO_MERGE_INTO);
+		
+		page.search(ASSET_TRANSFER_SERIAL);
+		
+		assertTrue("Ownership of the asset wasn't successfully changed!", selenium.isElementPresent("//span[contains(., "+TEST_CUSTOMER_ORG_TO_MERGE_INTO+")]"));
+		
+	}
+	
+	@Test
+	public void merge_two_customers_transfers_events_to_the_winner(){
+		page.clickCustomer(TEST_CUSTOMER_ORG1).clickViewTab().clickMerge().mergeWithCustomer(TEST_CUSTOMER_ORG_TO_MERGE_INTO);
+		//page.clickReportingLink().clickRunSearchButton();
+		//page.search(ASSET_TRANSFER_SERIAL).clickEventsTab();
+		//assertTrue("Ownership of the event wasn't successfully changed!", selenium.isElementPresent("//td[contains(., "+TEST_CUSTOMER_ORG_TO_MERGE_INTO+")]"));
 	}
 
 }
