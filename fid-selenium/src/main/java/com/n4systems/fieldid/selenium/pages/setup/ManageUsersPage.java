@@ -253,5 +253,10 @@ public class ManageUsersPage extends FieldIDPage {
 	public void enterName(String name) {
 		selenium.type("//INPUT[@id='firstname']", name);
 	}
+	
+	public void clickSortColumn(String name) {
+		selenium.click("//a[contains(.,'" + name + "')]");
+		waitForPageToLoad();
+	}
 
 }

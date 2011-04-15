@@ -18,6 +18,7 @@ import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageUsersPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantLimit;
 
@@ -29,7 +30,9 @@ public class ManageUsersTest extends FieldIDTestCase {
 	private static String READ_ONLY_USER = "aReadOnlyUser";
 	private static String LITE_USER = "aLiteUser";
 	private static String PASSWORD = "password";
-	
+    private static final String TEST_CUSTOMER_ORG1 = "CustomerOrg1";
+    private static final String TEST_CUSTOMER_ORG2 = "CustomerOrg2";
+
 	@Override
 	public void setupScenario(Scenario scenario) {
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY);
@@ -38,12 +41,28 @@ public class ManageUsersTest extends FieldIDTestCase {
 		
 		scenario.updatePrimaryOrg(primaryOrg);
 		
+        BaseOrg custOrg1 = scenario.aCustomerOrg()
+  		                          .withParent(scenario.primaryOrgFor(COMPANY))
+		                          .withName(TEST_CUSTOMER_ORG1)
+		                          .build();
+        
+        BaseOrg custOrg2 = scenario.aCustomerOrg()
+                                   .withParent(scenario.primaryOrgFor(COMPANY))
+                                   .withName(TEST_CUSTOMER_ORG2)
+                                   .build();
+
 		scenario.aReadOnlyUser()
+				.withFirstName("a")
+				.withLastName("a")
+				.withOwner(custOrg1)
         	 	.withUserId(READ_ONLY_USER)
         	 	.withPassword(READ_ONLY_USER)
         	 	.build();
 
 		scenario.aLiteUser()
+				.withFirstName("a")
+        		.withLastName("b")
+				.withOwner(custOrg2)
         		.withUserId(LITE_USER)
         		.withPassword(LITE_USER)
         		.build();	
@@ -152,6 +171,35 @@ public class ManageUsersTest extends FieldIDTestCase {
 		assertEquals("First Name is a required field.", manageUsersPage.getFormErrorMessages().get(0));
 	}
 
+	@Test
+	public void sort_user_list_by_user_name() {
+		manageUsersPage.clickSortColumn("User Name");
+		List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
+		assertEquals(LITE_USER, users.get(0));
+		manageUsersPage.clickSortColumn("User Name");
+		users = manageUsersPage.getListOfUserIDsOnCurrentPage();
+		assertEquals(LITE_USER, users.get(users.size()-1));
+	}
+	
+	@Test
+	public void sort_user_list_by_name() {
+		manageUsersPage.clickSortColumn("Name (First, Last)");
+		List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
+		assertEquals(READ_ONLY_USER, users.get(users.size()-1));
+		manageUsersPage.clickSortColumn("Name (First, Last)");
+		users = manageUsersPage.getListOfUserIDsOnCurrentPage();
+		assertEquals(READ_ONLY_USER, users.get(0));
+	}
+	
+	@Test
+	public void sort_user_list_by_customer() {
+		manageUsersPage.clickSortColumn("Customer");
+		List<String> users = manageUsersPage.getListOfUserIDsOnCurrentPage();
+		assertEquals(LITE_USER, users.get(users.size()-1));
+		manageUsersPage.clickSortColumn("Customer");
+		users = manageUsersPage.getListOfUserIDsOnCurrentPage();
+		assertEquals(LITE_USER, users.get(0));
+	}
 	
 	private EmployeeUser addAnEmployeeUser(ManageUsersPage manageUsersPage) {
 		EmployeeUser employeeUser = new EmployeeUser("TestFullUser", "selenium@fieldid.com", PASSWORD, PASSWORD, new Owner(COMPANY), "Full", "User");
