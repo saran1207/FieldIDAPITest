@@ -1,13 +1,8 @@
 <head>
 	<@n4.includeStyle href="user" type="page"/>
 	<@n4.includeStyle href="listFilter" type="page"/>
-	
 	<script type="text/javascript">
-		document.observe("dom:loaded", function() {
-			updateUserTypes($('userGroup'));
-		});
-		
-		function clearForm() {
+			function clearForm() {
 			$('nameFilter').value = ''
 			$('userGroup').selectedIndex = 0;	
 			$('userType').selectedIndex = 0;	
