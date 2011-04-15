@@ -410,7 +410,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 							               .withUserType(userType)
 							               .withUserGroup(userGroup)
 							               .withNameFilter(listFilter)
-										   .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : false);
+										   .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : true);
 			setOrgFilter(loader);
 			page = loader.setPage(getCurrentPage().intValue())
             			 .setPageSize(Constants.PAGE_SIZE)
@@ -426,7 +426,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 							               .withUserType(userType)
 							               .withUserGroup(userGroup)
 							               .withNameFilter(listFilter)
-							               .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : false);
+							               .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : true);
 			setOrgFilter(loader);
 			archivedPage = loader.setPage(getCurrentPage().intValue())
             			 .setPageSize(Constants.PAGE_SIZE)

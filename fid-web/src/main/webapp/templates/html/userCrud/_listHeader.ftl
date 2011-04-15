@@ -9,7 +9,7 @@
 </#if> 
 
 <#if selected && !sortDirection?exists>
-	<#assign direction = "asc"/>			
+	<#assign direction = "desc"/>			
 <#elseif selected && sortDirection = "asc">			
 	<#assign direction = "desc"/>
 <#elseif (selected && sortDirection = "desc") || !selected>
