@@ -53,6 +53,8 @@
 			$( "imageUploadField" ).insert( { top: iframe } );
 			$("imageUploaded").removeClassName( "inputError" );
 			$("imageUploaded").title = "";
+            $("imageDirectory").value = "";
+            $("newImage").value = "false";
 		}
 		
 	</script>
