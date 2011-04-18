@@ -7,7 +7,7 @@
     <select name="criteriaResults[${criteriaCount}].textValue" class="comboBoxCriteria" headerKey="-1">
         <option></option>
         <#list criteria.options as option>
-            <#if criteriaResult?exists (criteriaResult.textValue)?exists && criteriaResult.textValue == option>
+            <#if criteriaResult?exists && (criteriaResult.textValue)?exists && criteriaResult.textValue == option>
                 <#assign selectedStr = 'selected'/>
             <#else>
                 <#assign selectedStr = ''/>

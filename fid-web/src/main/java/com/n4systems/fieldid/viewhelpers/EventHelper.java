@@ -23,6 +23,7 @@ import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.UnitOfMeasureCriteriaResult;
 import com.n4systems.model.user.User;
 import com.n4systems.services.signature.SignatureService;
 
@@ -169,6 +170,9 @@ public class EventHelper {
             		textValue = textValue.substring(1); 
             	}           		
             	((ComboBoxCriteriaResult)realResult).setValue(textValue);
+            } else if (realResult instanceof UnitOfMeasureCriteriaResult) {
+                ((UnitOfMeasureCriteriaResult)realResult).setPrimaryValue(formResult.getTextValue());
+                ((UnitOfMeasureCriteriaResult)realResult).setSecondaryValue(formResult.getSecondaryTextValue());
             } else if (realResult instanceof SignatureCriteriaResult) {
                 ((SignatureCriteriaResult)realResult).setSigned(formResult.isSigned());
                 
