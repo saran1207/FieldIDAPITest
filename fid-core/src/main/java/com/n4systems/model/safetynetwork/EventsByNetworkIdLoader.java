@@ -46,8 +46,14 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
         builder.addWhere(wpg);
         
         if (order != null) {
-        	builder.addOrder(order, ascending);
+        	if(order.equalsIgnoreCase("performedByFullName")) {
+        		builder.addOrder("performedBy.firstName", ascending);
+        		builder.addOrder("performedBy.lastName", ascending);
+        	}else {
+        		builder.addOrder(order, ascending);
+        	}
         }
+
 		List<Event> unsecuredEvents = builder.getResultList(em);
 		
 		PersistenceManager.setSessionReadOnly(em);

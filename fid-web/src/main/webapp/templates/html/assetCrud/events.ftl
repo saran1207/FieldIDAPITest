@@ -24,7 +24,7 @@
 			<@s.text id="resultLabel" name="label.result"/>
 			<@s.text id="assetStatusLabel" name="label.assetstatus"/>
 		
-			<#assign columns = [ "date", "type.name", "performedBy.userID", "status", "assetStatus.name" ] >		
+			<#assign columns = [ "date", "type.name", "performedByFullName", "status", "assetStatus.name" ] >		
 			<#assign labels = [ "${dateLabel}", "${typeLabel}", "${performedByLabel}", "${resultLabel}", "${assetStatusLabel}"]>
 			<#assign x=0>
 			
