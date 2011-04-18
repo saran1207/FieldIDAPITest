@@ -103,8 +103,9 @@ public class ManageCustomersPage extends FieldIDPage {
 		selenium.click("//input[@id='label_confirm_as_losing_customer']");
 		selenium.type("//input[@id='search']", customerName);
 		selenium.click("//input[@type='button']");
-		selenium.click("//input[@type='button']");
-		
+		selenium.click("//td/button");
+		selenium.click("//input[@id='merge']");
+		waitForAjax();
 	}
 
 	public ManageCustomersPage editCustomer(String customerName) {
