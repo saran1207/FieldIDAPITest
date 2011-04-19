@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.pages;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Asset;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
+import com.n4systems.fieldid.selenium.pages.schedules.EventSchedulePage;
 import com.thoughtworks.selenium.Selenium;
 
 import static org.junit.Assert.fail;
@@ -43,8 +44,10 @@ public class AssetPage extends FieldIDPage {
 		return selenium.isElementPresent("//div[@class='columnCenter']/div[1]/p[2]/span[contains(text(),'" + rfidNumber + "')]");
 	}
 
-	public void clickSchedulesTab() {
-		clickNavOption("Schedules");
+	public EventSchedulePage clickSchedulesTab() {
+		//clickNavOption("Schedules");
+		selenium.click("//div[@id='contentHeader']/ul/li[4]/a[contains(.,'Schedules')]");
+		return new EventSchedulePage(selenium);
 	}
 
 	public void clickSaveSchedule() {
