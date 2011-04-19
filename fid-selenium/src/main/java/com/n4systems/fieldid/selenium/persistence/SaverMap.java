@@ -5,6 +5,7 @@ import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetTypeSaver;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.CriteriaSection;
@@ -29,6 +30,7 @@ import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
+import com.n4systems.model.assettype.AssetTypeGroupSaver;
 import com.n4systems.model.catalog.Catalog;
 import com.n4systems.model.catalog.CatalogSaver;
 import com.n4systems.model.columns.ActiveColumnMapping;
@@ -101,6 +103,7 @@ public class SaverMap {
         classToSaverMap.put(EventSchedule.class, new EventScheduleSaver());
         classToSaverMap.put(StateSet.class, new StateSetSaver());
         classToSaverMap.put(State.class, new StateSaver());
+        classToSaverMap.put(AssetTypeGroup.class, new AssetTypeGroupSaver());
 
         classToSaverMap.put(Project.class, new ProjectSaver());
         classToSaverMap.put(ColumnLayout.class, new ColumnLayoutSaver());

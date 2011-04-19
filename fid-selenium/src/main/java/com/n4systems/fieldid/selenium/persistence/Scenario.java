@@ -5,10 +5,6 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import com.n4systems.model.builders.ActiveColumnMappingBuilder;
-import com.n4systems.model.builders.ColumnLayoutBuilder;
-import com.n4systems.model.columns.ActiveColumnMapping;
-import com.n4systems.model.columns.SystemColumnMapping;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 
@@ -22,10 +18,13 @@ import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.assettype.AssetTypeByNameLoader;
 import com.n4systems.model.builders.AbstractEntityBuilder;
+import com.n4systems.model.builders.ActiveColumnMappingBuilder;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.AssetStatusBuilder;
 import com.n4systems.model.builders.AssetTypeBuilder;
+import com.n4systems.model.builders.AssetTypeGroupBuilder;
 import com.n4systems.model.builders.BaseBuilder;
+import com.n4systems.model.builders.ColumnLayoutBuilder;
 import com.n4systems.model.builders.ComboBoxCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
 import com.n4systems.model.builders.DownloadLinkBuilder;
@@ -50,6 +49,7 @@ import com.n4systems.model.builders.SubEventBuilder;
 import com.n4systems.model.builders.TextFieldCriteriaBuilder;
 import com.n4systems.model.builders.UnitOfMeasureCriteriaBuilder;
 import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.columns.SystemColumnMapping;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -162,6 +162,12 @@ public class Scenario {
         return createPersistentBuilder(builder);
     }
 
+    public AssetTypeGroupBuilder anAssetTypeGroup() {
+    	AssetTypeGroupBuilder builder = AssetTypeGroupBuilder.anAssetTypeGroup()
+    	                                                     .withTenant(defaultTenant);
+    	return createPersistentBuilder(builder);
+    }
+    
     public AssetStatusBuilder anAssetStatus() {
         AssetStatusBuilder builder = AssetStatusBuilder.anAssetStatus();
         return createPersistentBuilder(builder);

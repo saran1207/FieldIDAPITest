@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
 import com.n4systems.fieldid.selenium.datatypes.Owner;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.n4systems.fieldid.selenium.pages.setup.eventtypes.EventTypeAssetTypeAssociationsPage;
 import com.n4systems.fieldid.selenium.util.ConditionWaiter;
 import com.n4systems.fieldid.selenium.util.Predicate;
 import com.thoughtworks.selenium.Selenium;
@@ -322,6 +321,24 @@ public class ManageAssetTypesPage extends FieldIDPage {
 		selenium.click("//input[@name='hbutton.save']");
 		throwExceptionOnFormError(true);
 		return new ManageAssetTypesPage(selenium, false);
+	}
+
+	public void enterNameFilter(String name) {
+		selenium.type("//input[@id='nameFilter']", name);
+	}
+
+	public void clickFilter() {
+		selenium.click("//input[@name='hbutton.filter']");
+		waitForPageToLoad();
+	}
+
+	public void selectFilterGroup(String group) {
+		selenium.select("//select[@id='groupFilter']", group);
+	}
+
+	public void clickClearFilter() {
+		selenium.click("//a[contains(.,'Clear')]");
+		waitForPageToLoad();
 	}
 
 }

@@ -109,7 +109,7 @@ public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 		assetType.setCautionUrl(cautionsURL);
         assetType.setTenant(tenant);
         assetType.setManufactureCertificateText(manufactureCertificateText);
-		
+		assetType.setGroup(group);
 		for (InfoFieldBean infoField : infoFields) {
 			infoField.setAssetInfo(assetType);
 		}
