@@ -234,7 +234,7 @@ public class SubEventCrud extends EventCrud {
 
 			if (subEvent.isEditable()) {
 				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
-                masterEventHelper.storeTemporaryFileIds(criteriaResults);
+                masterEventHelper.storeTemporaryFileIds(uniqueID, criteriaResults);
 			}
 
 			masterEventHelper.replaceSubEvent(subEvent);

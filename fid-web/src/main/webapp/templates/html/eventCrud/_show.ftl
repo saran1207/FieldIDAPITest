@@ -40,7 +40,11 @@
 		<p>
 			<label><@s.text name="${Session.sessionUser.serialNumberLabel}"/></label>
 			<span>
-				<a href="<@s.url value="asset.action" uniqueID="${asset.id}" />">${asset.serialNumber?html}</a>
+                <#if inside_iframe?exists>
+                    <a href="#" onclick="parent.window.location='<@s.url namespace="/" action="asset" uniqueID="${asset.id}" />'"">${asset.serialNumber?html}</a>
+                <#else>
+                    <a href="<@s.url namespace="/" action="asset" uniqueID="${asset.id}" />">${asset.serialNumber?html}</a>
+                </#if>
 			</span>
 		</p>
 		<p>

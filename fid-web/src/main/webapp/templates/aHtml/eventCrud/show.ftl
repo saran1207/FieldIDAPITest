@@ -5,7 +5,8 @@
 
 <div id="pageContent">
 	<div class="crudForm eventInIframe">
-		<#assign form_action="SHOW" /> 
+		<#assign form_action="SHOW" />
+		<#assign inside_iframe=true />
 		<#assign current_action="eventInformation"/>
 		<#include "/templates/html/eventCrud/_show.ftl" >
 	</div>

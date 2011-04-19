@@ -395,15 +395,15 @@ public class MasterEvent {
 
     public void storeTemporaryFileIds(Long eventId, List<CriteriaResultWebModel> criteriaResults) {
         for (CriteriaResultWebModel criteriaResult : criteriaResults) {
-            storeTemporaryFileId(eventId, criteriaResult.getCriteriaId(), criteriaResult.getSignatureFileId());
+            storeTemporaryFileId(eventId, criteriaResult.getCriteriaId(), criteriaResult.isSigned(), criteriaResult.getSignatureFileId());
         }
     }
 
-    private void storeTemporaryFileId(Long eventId, Long criteriaId, String fileId) {
+    private void storeTemporaryFileId(Long eventId, Long criteriaId, boolean signed, String fileId) {
         if (subEventTemporarySignatureFileIdMap.get(eventId) == null) {
             subEventTemporarySignatureFileIdMap.put(eventId, new HashMap<Long, String>());
         }
-        subEventTemporarySignatureFileIdMap.get(eventId).put(criteriaId, fileId);
+        subEventTemporarySignatureFileIdMap.get(eventId).put(criteriaId, signed ? fileId : null);
     }
 
     public String getTemporarySignatureFileId(Long eventId, Long criteriaId) {
