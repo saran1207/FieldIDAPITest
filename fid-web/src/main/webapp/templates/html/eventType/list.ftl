@@ -55,7 +55,7 @@ ${action.setPageType('event_type', 'list')!}
 		<#if eventTypeGroups.empty>
 			<p>
 				<@s.text name="label.emptyeventtypelist" />
-				<a href="<@s.url action="eventTypeGroupAdd"/>"><@s.text name="label.addthefirsteventtypegroup"/></a>
+				<a href="<@s.url action="eventTypeGroupAdd"/>"><@s.text name="label.addthefirsteventtype"/></a>
 			</p>
 		<#else>
 			<p>
