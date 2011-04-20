@@ -247,7 +247,7 @@ ${action.setPageType('job', 'show')!}
 		</#if>
 		<div id="noResources" <#if !jobResources.resources.isEmpty()> style="display:none" </#if> >
 			<div class="emptyResources">
-				<label><@s.text name="label.emptyresourceslist"/><#if sessionUser.hasAccess( "managejobs" )><@s.text name="label.emptyresourceslistinstruction"/></#if></label>
+				<label><@s.text name="label.emptyresourceslist"/> <#if sessionUser.hasAccess( "managejobs" )><@s.text name="label.emptyresourceslistinstruction"/></#if></label>
 			</div>
 		</div>
 		
