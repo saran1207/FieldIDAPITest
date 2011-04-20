@@ -107,6 +107,7 @@ public class ManageCustomersPage extends FieldIDPage {
 		selenium.click("//td/button");
 		selenium.click("//input[@id='merge']");
 		waitForAjax();
+        waitForPageToLoad();
 	}
 
 	public ManageCustomersPage editCustomer(String customerName) {
