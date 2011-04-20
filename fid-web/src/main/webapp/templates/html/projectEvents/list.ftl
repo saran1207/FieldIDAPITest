@@ -1,5 +1,6 @@
 <head>
 	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projectEvents.css"/>"/>
+    <@n4.includeScript src="eventSchedule"/>
 </head>
 ${action.setPageType('job','events')!}
 <#assign secondaryNavAction="list"/>
