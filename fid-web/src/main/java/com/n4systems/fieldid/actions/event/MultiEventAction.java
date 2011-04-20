@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.fieldid.actions.event.viewmodel.EventWebModel;
+import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.CommonEventTypeHandler;
 import com.n4systems.handlers.LoaderBackedCommonEventTypeHandler;
@@ -20,6 +21,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Status;
 import com.n4systems.model.eventtype.CommonAssetTypeDatabaseLoader;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 
@@ -72,8 +74,9 @@ public class MultiEventAction extends AbstractCrud {
     private String searchId;
     
     private EventScheduleManager eventScheduleManager;
-    
-	public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
+    private AssignedToUserGrouper userGrouper;
+
+    public MultiEventAction(PersistenceManager persistenceManager, UserManager userManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
 		this.eventFormHelper = new EventFormHelper();
@@ -246,8 +249,8 @@ public class MultiEventAction extends AbstractCrud {
 	}
 	
 	public Long getAssignedToId() {
-		if (commonAssetValues.hasCommonAssignment()) { 
-			return commonAssetValues.assignment.assignTo != null ? commonAssetValues.assignment.assignTo.getId() : UNASSIGNED_OPTION_VALUE; 
+		if (commonAssetValues.hasCommonAssignment()) {
+			return commonAssetValues.assignment.assignTo != null ? commonAssetValues.assignment.assignTo.getId() : UNASSIGNED_OPTION_VALUE;
 		}
 		
 		return KEEP_THE_SAME_OPTION;
@@ -276,7 +279,7 @@ public class MultiEventAction extends AbstractCrud {
 		if (employees == null) {
 			employees = new ArrayList<Listable<Long>>();
 			employees.add(new SimpleListable<Long>(0L, getText("label.unassigned")));
-			employees.addAll(getLoaderFactory().createCurrentEmployeesListableLoader().load());
+			employees.addAll(getLoaderFactory().createCombinedUserListableLoader().load());
 		}
 		return employees;
 	}
@@ -331,5 +334,12 @@ public class MultiEventAction extends AbstractCrud {
     public String getTemporarySignatureFileId(Long criteriaId) {
         return null;
     }
+
+	public AssignedToUserGrouper getUserGrouper() {
+		if (userGrouper == null){
+			userGrouper = new AssignedToUserGrouper(new TenantOnlySecurityFilter(getSecurityFilter()), getEmployees(), getSessionUser());
+		}
+		return userGrouper;
+	}
 	
 }
