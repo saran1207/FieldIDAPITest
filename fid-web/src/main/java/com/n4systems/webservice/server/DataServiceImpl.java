@@ -57,7 +57,6 @@ import com.n4systems.model.event.EventBySubEventLoader;
 import com.n4systems.model.event.NewestEventsForAssetIdLoader;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
 import com.n4systems.model.eventschedule.EventScheduleSaver;
-import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgWithArchivedPaginatedLoader;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -543,7 +542,10 @@ public class DataServiceImpl implements DataService {
 
 			Asset asset = lookupProduct(lookupInformation, request.getTenantId());
 			asset.setOwner(converter.convert(request.getOwnerId(), request.getTenantId()));
-			asset.setAdvancedLocation(Location.onlyFreeformLocation(request.getLocation()));
+			
+			LocationConverter locationConverter = new LocationServiceToContainerConverter(createLoaderFactory(request));
+			locationConverter.convert(request, asset);
+
 			asset.setCustomerRefNumber(request.getCustomerRefNumber());
 			asset.setPurchaseOrder(request.getPurchaseOrder());
 
