@@ -3,25 +3,25 @@ var cancelScheduleUrl = '';
 var removeScheduleUrl = '';
 
 function editSchedule( inspTypeId, assetId, uniqueId ) {
-	hideScheduleActionLinks();
+	hideScheduleActionLinks( uniqueId );
 	var url = editScheduleUrl + '?type=' + inspTypeId + '&assetId=' + assetId +'&uniqueID=' + uniqueId;
 	getResponse(url, "get"); 
 }
 
-function saveSchedule( scheudleId ) {
-	showScheduleActionLinks();
-	$( 'schedule_' + scheudleId ).request( { onComplete: function( transport ) { contentResponse( transport.responseText ) } } );
+function saveSchedule( scheduleId ) {
+	showScheduleActionLinks( scheduleId );
+	$( 'schedule_' + scheduleId ).request( { onComplete: function( transport ) { contentResponse( transport.responseText ) } } );
 }
 
 function cancelSchedule( inspTypeId, assetId, uniqueId ) {
-	showScheduleActionLinks();
+	showScheduleActionLinks( uniqueId );
 	var url = cancelScheduleUrl + '?type=' + inspTypeId + '&assetId=' + assetId +'&uniqueID=' + uniqueId;
 	getResponse(url, "get");  
 }
 
 function removeSchedule( inspTypeId, assetId, uniqueId ) {
 	var url = removeScheduleUrl + '?type=' + inspTypeId + '&assetId=' + assetId +'&uniqueID=' + uniqueId ;
-	
+	 
 	getResponse(url, "get");  
 }
 
@@ -32,12 +32,12 @@ function progressStopped(uniqueId) {
 }
 
 
-function hideScheduleActionLinks(){
-	$('scheduleActions').hide();
+function hideScheduleActionLinks( scheduleId ){
+	$('scheduleActions_' + scheduleId ).hide();
 }
 
-function showScheduleActionLinks(){
-	$('scheduleActions').show();
+function showScheduleActionLinks( scheduleId ){
+	$('scheduleActions_' + scheduleId ).show();
 }
 
 function doSubmit(event, uniqueId){

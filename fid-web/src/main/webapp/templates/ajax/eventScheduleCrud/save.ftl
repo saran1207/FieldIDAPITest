@@ -7,6 +7,6 @@
 </#assign>
 
 	$('nextDate_${uniqueID}').update("${html}");
-	$('jobName').update("${jobNameHtml}")
+	$('jobName_${uniqueID}').update("${jobNameHtml}")
 
 </#escape>
