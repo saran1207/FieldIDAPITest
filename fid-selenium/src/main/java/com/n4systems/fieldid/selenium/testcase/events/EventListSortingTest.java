@@ -56,6 +56,7 @@ public class EventListSortingTest extends
 
 		AssetStatus assetStatus1 = scenario.anAssetStatus().named("AssetStatus1").build();
 		AssetStatus assetStatus2 = scenario.anAssetStatus().named("AssetStatus2").build();
+		AssetStatus assetStatus3 = scenario.anAssetStatus().named("AssetStatus3").build();
 		
 		Asset asset1 = scenario.anAsset()
 				              .withOwner(primaryOrg)
@@ -121,7 +122,7 @@ public class EventListSortingTest extends
 					           .withTenant(tenant)
 					           .withGroup(group)		                      
 					           .withResult(Status.NA)
-		                       .withAssetStatus(assetStatus1)
+		                       .withAssetStatus(assetStatus3)
 					           .build();
 		
 		TreeSet<Event> events = new TreeSet<Event>();
@@ -176,7 +177,7 @@ public class EventListSortingTest extends
 		page.clickSortColumn("Asset Status");
 		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 		page.clickSortColumn("Asset Status");
-		assertEquals(TEST_EVENT_TYPE2, page.getEventTypes().get(0));
+		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
 	}
 	
 }
