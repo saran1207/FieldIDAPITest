@@ -1,13 +1,8 @@
-<#assign form>
-	<#include "/templates/html/eventScheduleCrud/_addForm.ftl" >
-</#assign>
-<#assign html>
-	<#include "/templates/html/eventScheduleCrud/show.ftl" >
+<#assign list>
+	<#include "/templates/html/eventScheduleCrud/_list.ftl" >
 </#assign>
 
 <#escape x as x?j_string >
-	$('scheduleList').show();
-	$('schedules').insert({top: "${html}"});
-	$('newSchedule').replace("${form}");
+	$('scheduleList').replace("${list}");
 	$('type_${eventSchedule.id}').highlight();
 </#escape>
