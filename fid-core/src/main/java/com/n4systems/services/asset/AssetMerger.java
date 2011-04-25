@@ -16,6 +16,7 @@ import com.n4systems.exceptions.asset.DuplicateAssetException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -71,7 +72,15 @@ public class AssetMerger {
 
 	private void archiveLosingAsset(Asset losingAsset) {
 		try {
+			List<SubAsset> subAssets = assetManager.findSubAssetsForAsset(losingAsset);
+					
 			assetManager.archive(losingAsset, user);
+			
+			if(subAssets != null) {
+				for(SubAsset subAsset: subAssets) {
+					assetManager.archive(subAsset.getAsset(), user);
+				}
+			}
 		} catch (UsedOnMasterEventException e) {
 			throw new ProcessFailureException("could not archive the asset. still on a master", e);
 		}
