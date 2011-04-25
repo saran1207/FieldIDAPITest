@@ -1,36 +1,44 @@
 package com.n4systems.services.asset;
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.contains;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isNull;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.exceptions.asset.AssetTypeMissMatchException;
 import com.n4systems.exceptions.asset.DuplicateAssetException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventSchedule;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
-import com.n4systems.services.EventScheduleService;
-import org.junit.Before;
-import org.junit.Test;
-
-
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.TenantNotValidForActionException;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.EventSchedule;
 import com.n4systems.model.builders.SubEventBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.user.User;
+import com.n4systems.services.EventScheduleService;
 import com.n4systems.tools.FileDataContainer;
 import com.n4systems.util.persistence.QueryBuilder;
 
@@ -218,6 +226,7 @@ public class AssetMergerTest {
 	
 	private void mockArchiveOfLosingProduct() {
 		try {
+			expect(mockAssetManager.findSubAssetsForAsset(losingAsset)).andReturn(new ArrayList<SubAsset>());
 			expect(mockAssetManager.archive((Asset)eq(losingAsset), (User)anyObject())).andReturn(losingAsset);
 		} catch (UsedOnMasterEventException e) {
 			fail("mock should not throw exception");
