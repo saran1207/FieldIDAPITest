@@ -174,7 +174,7 @@ public class EventListSortingTest extends
 	public void sort_by_asset_status() throws Exception {
 		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
 		page.clickSortColumn("Asset Status");
-		assertEquals(TEST_EVENT_TYPE3, page.getEventTypes().get(0));
+		assertEquals(TEST_EVENT_TYPE1, page.getEventTypes().get(0));
 		page.clickSortColumn("Asset Status");
 		assertEquals(TEST_EVENT_TYPE2, page.getEventTypes().get(0));
 	}
