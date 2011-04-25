@@ -2,6 +2,8 @@ package com.n4systems.model.orgs.secondaryorg;
 
 import java.util.List;
 
+import com.n4systems.services.limiters.ResourceLimit;
+import com.n4systems.services.limiters.TenantLimitService;
 import org.apache.log4j.Logger;
 
 import com.n4systems.model.api.Archivable.EntityState;
@@ -23,7 +25,7 @@ public class SecondaryOrgArchiver {
 	private static final Logger logger = Logger.getLogger(SecondaryOrgArchiver.class);
 	private CustomerOrgArchiver customerOrgArchiver = new CustomerOrgArchiver();
 
-	public void archiveSecondaryOrg(InternalOrg org, OrgSaver orgSaver, UserSaver userSaver, 
+	public void archiveSecondaryOrg(InternalOrg org, OrgSaver orgSaver, UserSaver userSaver,
 			LoaderFactory loaderFactory,  SecurityFilter securityFilter, boolean active) {
 		Transaction transaction = PersistenceManager.startTransaction();
 
@@ -43,8 +45,14 @@ public class SecondaryOrgArchiver {
 			SecurityFilter filter, boolean active,Transaction transaction) {
 
 		EntityState newState = active ? EntityState.ACTIVE : EntityState.ARCHIVED;
-		
-		if (!active) {
+
+        if (active) {
+            TenantLimitService tenantLimitService = TenantLimitService.getInstance();
+            ResourceLimit orgLimit = tenantLimitService.getSecondaryOrgs(filter.getTenantId());
+            if (!orgLimit.isUnlimited() && orgLimit.getMaximum() < orgLimit.getUsed() + 1) {
+                throw new SecondaryOrgLimitExceededException();
+            }
+        } else {
 			List<User> usersList = getUserList(filter,	secondaryOrg);
 			for (User user : usersList) {
 				user.archiveUser();

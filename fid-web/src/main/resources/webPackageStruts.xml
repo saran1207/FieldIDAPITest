@@ -1918,6 +1918,9 @@
 			<result name="success" type="redirectAction">
 				<param name="actionName">organizations</param>
 			</result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">organizations</param>
+            </result>
 		</action>
 
 		<action name="organizationUpdate" method="update" class="com.n4systems.fieldid.actions.OrganizationalCrud">
