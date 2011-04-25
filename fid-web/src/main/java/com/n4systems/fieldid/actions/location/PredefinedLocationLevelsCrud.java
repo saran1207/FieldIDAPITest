@@ -42,6 +42,13 @@ public class PredefinedLocationLevelsCrud extends AbstractCrud {
 
 	public String doCreate() {
 		PredefinedLocationLevels locationLevels = getPredefinedLocationLevels();
+		
+		if(locationLevels.getLevels().size() < levelName.getIndex()) {
+			for (int i = locationLevels.getLevels().size(); i < levelName.getIndex(); i++) {
+				locationLevels.getLevels().add(i, new LevelName());
+			}
+		}
+		
 		locationLevels.getLevels().add(levelName.getIndex(), new LevelName(levelName.getName().getTrimmedString()));
 
 		updateLevels(locationLevels);
