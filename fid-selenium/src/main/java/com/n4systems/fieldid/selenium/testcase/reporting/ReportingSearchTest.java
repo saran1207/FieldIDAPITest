@@ -14,12 +14,18 @@ import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.MyAccountPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.pages.search.SaveReportForm;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
 
 public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
+	
+	@Override
+	public void setupScenario(Scenario scenario) {
+		scenario.aSimpleEvent().build();
+	}
 
 	@Override
 	protected ReportingPage navigateToPage() {
-		return start().login().clickReportingLink();
+		return startAsCompany("test1").login().clickReportingLink();
 	}
 	
 	@Test
@@ -32,7 +38,7 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	@Test
 	public void search_with_report_specific_criteria() throws Exception {
 		ReportSearchCriteria criteria = new ReportSearchCriteria();
-		criteria.setSerialNumber("1*");
+		criteria.setSerialNumber("9*");
 		criteria.setResult("Pass");
 		page.setSearchCriteria(criteria);
 		
