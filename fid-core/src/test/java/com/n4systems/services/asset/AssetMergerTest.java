@@ -1,5 +1,6 @@
 package com.n4systems.services.asset;
 import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.SubAssetBuilder.aSubAsset;
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.contains;
 import static org.easymock.EasyMock.createMock;
@@ -12,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +50,7 @@ public class AssetMergerTest {
 	private User user = UserBuilder.aUser().build();
 	private Asset winningAsset;
 	private Asset losingAsset;
+	private SubAsset losingSubAsset;
 	private PersistenceManager mockPersistenceManager;
 	private EventManager mockEventManager;
 	private AssetManager mockAssetManager;
@@ -59,6 +62,8 @@ public class AssetMergerTest {
 		// default assets to merge same tenant and same type, no events.
 		winningAsset = anAsset().forTenant(TenantBuilder.n4()).build();
 		losingAsset = anAsset().forTenant(TenantBuilder.n4()).ofType(winningAsset.getType()).build();
+		
+		losingSubAsset = aSubAsset().withMasterAsset(losingAsset).build();
 		
 		
 		// managers mocks  each test is required to put them into reply mode.
@@ -72,7 +77,7 @@ public class AssetMergerTest {
 	public void should_merge_products_together_with_no_events() {
 		
 		mockEmptyEventList();
-		mockArchiveOfLosingProduct();
+		mockArchiveOfLosingAsset();
 		replayMocks();
 		
 		
@@ -121,7 +126,7 @@ public class AssetMergerTest {
 			fail("should not throw exception");
 		} 
 		
-		mockArchiveOfLosingProduct();
+		mockArchiveOfLosingAsset();
 		
 		replayMocks();
 		
@@ -150,7 +155,7 @@ public class AssetMergerTest {
 			fail("should not throw exception");
 		} 
 		
-		mockArchiveOfLosingProduct();
+		mockArchiveOfLosingAsset();
 		
 		replayMocks();
 		
@@ -173,7 +178,7 @@ public class AssetMergerTest {
 		masterEvents.add(EventBuilder.anEvent().withSubEvents(subEvents).build());
 	
 		mockEventLists(new ArrayList<Event>(), masterEvents);
-		mockArchiveOfLosingProduct();
+		mockArchiveOfLosingAsset();
 		
 		
 		try {
@@ -202,6 +207,24 @@ public class AssetMergerTest {
 		verifyMocks();
 	}
 	
+	@Test
+	public void should_merge_master_asset_with_sub_assets() throws Exception {
+		
+		losingAsset.getSubAssets().add(losingSubAsset);
+		
+		mockEmptyEventList();
+		mockArchiveOfLosingAssetWithSubAsset();
+		replayMocks();
+		
+		
+		AssetMerger assetMerger = createSystemUnderTest();
+		Asset mergedAsset = assetMerger.merge(winningAsset, losingAsset);
+		
+		assertEquals(winningAsset, mergedAsset);
+		verifyMocks();
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void mockEventLists(List<Event> events, List<Event> masterEvents) {
 		expect(mockPersistenceManager.findAll((QueryBuilder<Event>)anyObject())).andReturn(events);
@@ -224,10 +247,20 @@ public class AssetMergerTest {
 	}
 
 	
-	private void mockArchiveOfLosingProduct() {
+	private void mockArchiveOfLosingAsset() {
 		try {
 			expect(mockAssetManager.findSubAssetsForAsset(losingAsset)).andReturn(new ArrayList<SubAsset>());
 			expect(mockAssetManager.archive((Asset)eq(losingAsset), (User)anyObject())).andReturn(losingAsset);
+		} catch (UsedOnMasterEventException e) {
+			fail("mock should not throw exception");
+		}
+	}
+	
+	private void mockArchiveOfLosingAssetWithSubAsset() {
+		try {
+			expect(mockAssetManager.findSubAssetsForAsset(losingAsset)).andReturn(Collections.singletonList(losingSubAsset));
+			expect(mockAssetManager.archive((Asset)eq(losingAsset), (User)anyObject())).andReturn(losingAsset);
+			expect(mockAssetManager.archive((Asset)eq(losingSubAsset.getAsset()), (User)anyObject())).andReturn(losingSubAsset.getAsset());
 		} catch (UsedOnMasterEventException e) {
 			fail("mock should not throw exception");
 		}
