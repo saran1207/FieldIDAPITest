@@ -1,5 +1,9 @@
 package com.n4systems.services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
@@ -9,11 +13,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByEmailLoader;
 import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
-import com.n4systems.persistence.loaders.TenantFilteredListLoader;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Simple finder for Tenants and PrimaryOrgs

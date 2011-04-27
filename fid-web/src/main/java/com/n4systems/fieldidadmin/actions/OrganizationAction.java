@@ -7,13 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.n4systems.services.TenantFinder;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-
+import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.activesession.ActiveSession;
+import com.n4systems.model.activesession.LastActiveSessionLoader;
+import com.n4systems.model.asset.AssetCountLoader;
+import com.n4systems.model.event.EventCountLoader;
+import com.n4systems.model.orgs.AllPrimaryOrgsPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.TenantSaver;
@@ -23,8 +27,10 @@ import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
+import com.n4systems.services.TenantFinder;
 import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.SubscriptionAgent;
+import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -34,10 +40,16 @@ import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @Validations
-public class OrganizationAction extends AbstractAdminAction implements Preparable {
+public class OrganizationAction extends AbstractCrud implements Preparable {
+
+	public OrganizationAction(com.n4systems.ejb.PersistenceManager persistenceManager) {
+		super(persistenceManager);
+	}
+
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(OrganizationAction.class);
-	
+	private static final int RESULTS_PER_PAGE = 20;
+
 	private Long id;
 	private Tenant tenant;
 	private PrimaryOrg primaryOrg;
@@ -47,6 +59,28 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	private String note;
 	private Map<String, Boolean> extendedFeatures = new HashMap<String, Boolean>();	
 
+	private AssetCountLoader assetCountLoader = new AssetCountLoader();
+	private EventCountLoader eventCountLoader = new EventCountLoader();
+	private LastActiveSessionLoader lastActiveSessionLoader = new LastActiveSessionLoader();
+
+	Collection<PrimaryOrg> primaryOrgs = null;
+	private Map<Long, Long> totalAssets = new HashMap<Long, Long>();
+	private Map<Long, Long> total30DayAssets = new HashMap<Long, Long>();
+	private Map<Long, Long> totalEvents = new HashMap<Long, Long>();
+	private Map<Long, Long> total30DayEvents = new HashMap<Long, Long>();
+	private Map<Long, ActiveSession> lastActiveSessions = new HashMap<Long, ActiveSession>();
+	
+	private String sortColumn;
+	private String sortDirection;
+	
+	@Override
+	protected void initMemberFields() {
+	}
+
+	@Override
+	protected void loadMemberFields(Long uniqueId) {
+	}	
+	
 	public void prepare() throws Exception {
 		if (id != null) {
 			tenant = TenantFinder.getInstance().findTenant(id);
@@ -54,7 +88,15 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
 				extendedFeatures.put(feature.name(), true);
 			}			
-		} 
+		} else {
+			for (PrimaryOrg org: getPage().getList()) {
+				totalAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), false));
+				total30DayAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), true));
+				totalEvents.put(org.getId(), loadTotalEvents(org.getTenant().getId(), false));
+				total30DayEvents.put(org.getId(), loadTotalEvents(org.getTenant().getId(), true));
+				lastActiveSessions.put(org.getId(), loadLastActiveSession(org.getTenant().getId()));
+			}
+		}
 	}
 
 	@SkipValidation
@@ -153,8 +195,6 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		return SUCCESS;
 	}
 
-
-	
 	private void createSystemAccount(Transaction transaction) {
 		User user = new User();
 		user.setTenant(tenant);
@@ -218,10 +258,12 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 		this.primaryOrg = primaryOrg;
 	}
 
-	public Collection<PrimaryOrg> getPrimaryOrgs() {
-		return TenantFinder.getInstance().findAllPrimaryOrgs();
+	public Pager<PrimaryOrg> getPage() {
+		return new AllPrimaryOrgsPaginatedLoader().setPage(getCurrentPage())
+		                                          .setPageSize(RESULTS_PER_PAGE)
+		                                          .setOrder(sortColumn, sortDirection!=null? sortDirection.equalsIgnoreCase("asc") : true)
+		                                          .load();
 	}
-
 
 	public String getOtherDateFormat() {
 		return (primaryOrg.getDateFormat() != null) ? DateHelper.java2Unix(primaryOrg.getDateFormat()) : "";
@@ -307,5 +349,53 @@ public class OrganizationAction extends AbstractAdminAction implements Preparabl
 	
 	public boolean isDisabled(){
 		return tenant.isDisabled();
+	}
+	
+	private Long loadTotalAssets(Long tenantId, boolean limit30Days) {
+		return assetCountLoader.setTenantId(tenantId).setLimit30Days(limit30Days).load();
+	}
+
+	private Long loadTotalEvents(Long tenantId, boolean limit30Days) {
+		return eventCountLoader.setTenantId(tenantId).setLimit30Days(limit30Days).load();
+	}
+	
+	private ActiveSession loadLastActiveSession(Long tenantId) {
+		return lastActiveSessionLoader.setTenant(tenantId).load();
+	}
+	
+	public Long getTotalAssets(Long orgId) {
+			return totalAssets.get(orgId);
+	}
+
+	public Long getTotal30DayAssets(Long orgId) {
+		return total30DayAssets.get(orgId);
+	}
+
+	public Long getTotalEvents(Long orgId) {
+			return totalEvents.get(orgId);
+	}
+	
+	public Long getTotal30DayEvents(Long orgId) {
+		return total30DayEvents.get(orgId);
+	}
+
+	public ActiveSession getLastActiveSession(Long orgId) {
+		return lastActiveSessions.get(orgId);
+	}
+
+	public void setSortColumn(String sortColumn) {
+		this.sortColumn = sortColumn;
+	}
+
+	public void setSortDirection(String sortDirection) {
+		this.sortDirection = sortDirection;
+	}
+
+	public String getSortColumn() {
+		return sortColumn;
+	}
+
+	public String getSortDirection() {
+		return sortDirection;
 	}
 }

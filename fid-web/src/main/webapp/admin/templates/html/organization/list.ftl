@@ -25,25 +25,53 @@
 	
 	</script>
 </head>
-<table>
-Total Tenants: ${primaryOrgs?size}
-<#list primaryOrgs as primaryOrg>
-<tr>
-	<td>${primaryOrg.displayName?html}</td>
-	<td>${primaryOrg.tenant.name?html}</td>
-	<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${primaryOrg.tenant.id}">Edit</a></td>
-	<td>
-		<a href="#" onclick="createSuper('${primaryOrg.tenant.id}'); return false;">Create Super User</a> 
-		<div id="superUser_${primaryOrg.tenant.id}" class="superUserForm" style="display:none">
-			<@s.form action="createSuperUser" namespace="/adminAjax" method="post" theme="xhtml">
-				<input type="hidden" name="id" value="${primaryOrg.tenant.id}" />
-				<@s.textfield name="userName" label="Default User Name" />
-				<@s.password name="password" label="Default User Password" />
-				<@s.submit name="save" onclick="submitSuperUser(this); return false;" />
-			</@s.form>
-		</div>
-	</td>
-</tr>
-</#list>
+<p>
+	Total Tenants: ${page.totalResults}
+</p>
+<#include "../../../../templates/html/common/_pagination.ftl">
+<table class="orgList">
+	<tr>
+		<#assign columns = ["tenant.disabled", "name", "tenant.name", "", "", "", "", "", "", "created"] >
+		<#assign labels = ["Active", "Company Name", "Tenant Name", "Total Assets", "Assets Last 30 Days", "Total Events", "Events Last 30 Days", "Last Login Date", "Last Login User", "Created"] >
+		<#assign sortAction = "organizations" >
+		<#assign x=0>
+		<#list columns as column>
+			<#if !sortColumn?exists>
+				<#assign selected = true>
+			<#elseif sortColumn?exists && column == sortColumn>
+				<#assign selected = true>
+			<#else>
+				<#assign selected = false>		
+			</#if>	
+			
+			<#if column == "">
+				<th>${labels[x]}</th>
+			<#else>
+				<#include "_listHeader.ftl">
+			</#if>
+			<#assign x=x+1>
+		</#list>
+		<th></th>
+	</tr>
+	<#list page.list as primaryOrg>
+		<tr>
+			<td>${primaryOrg.tenant.disabled?string("Disabled", "Enabled")}</td>
+			<td>${primaryOrg.displayName?html}</td>
+			<td><a href='${action.getLoginUrlForTenant(primaryOrg.tenant)}' target='_blank'>${primaryOrg.tenant.name!}</a></td>
+			<td>${action.getTotalAssets(primaryOrg.id)}</td>
+			<td>${action.getTotal30DayAssets(primaryOrg.id)}</td>
+			<td>${action.getTotalEvents(primaryOrg.id)}</td>
+			<td>${action.getTotal30DayEvents(primaryOrg.id)}</td>	
+			<#if action.getLastActiveSession(primaryOrg.id)?exists && action.getLastActiveSession(primaryOrg.id).user.userID != 'n4systems'>
+				<td>${action.getLastActiveSession(primaryOrg.id).lastTouched?datetime}</td>
+				<td>${action.getLastActiveSession(primaryOrg.id).user.userID}</td>
+			<#else>
+				<td>--</td>
+				<td>--</td>
+			</#if>
+			<td>${primaryOrg.created?date}</td>
+			<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${primaryOrg.tenant.id}">Edit</a></td>
+		</tr>
+	</#list>
 </table>
-
+<#include "../../../../templates/html/common/_pagination.ftl">

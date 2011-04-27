@@ -52,7 +52,7 @@ body {
 
 #content {
 	margin: 0;
-	padding: 40px;
+	padding: 20px;
 	
 }
 
@@ -115,4 +115,21 @@ h2 {
 	padding: 4px 0;
 	width: 6em;
 	font-size: 1.2em;
+}
+
+.orgList {
+	font-size: 0.9em;
+}
+
+.table {
+	border: 1px solid black;
+	border-collapse:collapse;	
+}
+
+.limitWidth {
+	max-width: 200px;
+}
+
+.pagination li {
+	list-style: none outside none;
 }
