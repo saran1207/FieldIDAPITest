@@ -7,12 +7,18 @@ public class AdminOrgsListPage extends FieldIDPage {
 
     public AdminOrgsListPage(Selenium selenium) {
         super(selenium, false);
-        waitForPageToLoad("50000");
+        waitForPageToLoad("60000");
     }
 
     public AdminOrgPage clickEditOrganization(String orgName) {
-        selenium.click("//div[@id='content']//table//td[position() = 2 and text() ='"+orgName+"']/..//a[.='Edit']");
+        selenium.click("//table//a[contains(.,'"+orgName+"')]/../..//a[.='Edit']");
         return new AdminOrgPage(selenium);
+    }
+    
+    public AdminOrgsListPage clickLastPage() {
+    	selenium.click("//a[.='Last']");
+        waitForPageToLoad("60000");    
+        return this;
     }
 
 }
