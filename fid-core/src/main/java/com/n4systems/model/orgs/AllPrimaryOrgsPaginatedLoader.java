@@ -6,6 +6,9 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
 	
@@ -13,12 +16,17 @@ public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
 	private int page = FIRST_PAGE;
 	private int pageSize = 10;
 	
+	private String nameFilter;
 	private String order;
 	private boolean ascending;
 
 	@Override
 	protected Pager<PrimaryOrg> load(EntityManager em) {
 		QueryBuilder<PrimaryOrg> builder  =  new QueryBuilder<PrimaryOrg>(PrimaryOrg.class, new OpenSecurityFilter());
+		
+		if(nameFilter != null && !nameFilter.isEmpty()) {
+			builder.addWhere(WhereClauseFactory.create(Comparator.LIKE, "name", nameFilter, WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH, null));
+		}
 		
 		if(order != null && !order.isEmpty()) {
 			builder.addOrder(order, ascending);
@@ -55,6 +63,12 @@ public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
 	public AllPrimaryOrgsPaginatedLoader setOrder(String order, boolean ascending) {
 		this.order = order;
 		this.ascending = ascending;		
+		return this;
+	}
+
+
+	public AllPrimaryOrgsPaginatedLoader setNameFilter(String nameFilter) {
+		this.nameFilter = nameFilter;
 		return this;
 	}
 

@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div id="header">
-		<h1>Field ID Admin Console</h1>
+		 <img src="../images/admin/admin-logo.png"/>
 	</div>
 	
 	<div id="nav">

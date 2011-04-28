@@ -1,9 +1,8 @@
 body {
-	background: #FFF url('../../images/admin/thefett.jpg') no-repeat -225px 30px fixed;
 	margin: 0 0 20px 0;
 	padding: 0;
-	font-family: Verdana, sans-serif;
-	font-size: 0.95em;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size: 12px;
 	color: #000;
 	line-height: 1.5em;
 }
@@ -12,25 +11,16 @@ body {
  width: 80%;
  background:transparent;
  margin: 0 auto;
- padding: 0;
+ padding: 20px 0 0;
  height: 101px;
  
 }
 
-#header h1 {
-	padding: 30px 0;
-	color: #999;
-	font-size: 1.4em;
-	letter-spacing: 3px;
-	margin: 0;
-	text-align: right;
-}
-
 #nav {
-	background: transparent url('../../images/admin/trans8.png') repeat;
-	border-bottom: 1px solid;
+	border-bottom: 1px solid #CACACA;
 	margin: 0 auto;
-	width: 80%
+	width: 80%;
+	padding-bottom: 10px;
 }
 
 #nav label {
@@ -44,16 +34,9 @@ body {
 }
 
 #container {
-	background: transparent url('../../images/admin/trans8.png') repeat;
 	width: 80%;
 	margin: 0 auto;
 	padding: 0;
-}
-
-#content {
-	margin: 0;
-	padding: 20px;
-	
 }
 
 #footer {
@@ -67,15 +50,14 @@ body {
 
 a, a:visited {
 	background: transparent;
-	color: #333;
-	border-bottom: 1px solid #333;
+	color: #356CA2;
+	border-bottom: 1px solid #356CA2;
 	text-decoration: none;
-	font-weight: bold;
 }
 
 a:hover, a:active {
 	background: transparent;
-	color: #666;
+	color: #356CA2;
 }
 
 h2 {
@@ -117,13 +99,29 @@ h2 {
 	font-size: 1.2em;
 }
 
-.orgList {
-	font-size: 0.9em;
-}
-
 .table {
 	border: 1px solid black;
 	border-collapse:collapse;	
+}
+.orgList {
+	border-spacing: 0;
+	width: 100%;
+}
+
+th a, th a:visited, th a:hover, th a:active {
+	color: #333;	
+}
+
+.orgList th, .orgList td {
+	padding: 15px 5px 15px 10px;
+}
+
+.orgList th {
+	text-align: left;
+}
+
+.orgList td {
+	border-bottom: 1px solid #CACACA;
 }
 
 .limitWidth {
@@ -132,4 +130,34 @@ h2 {
 
 .pagination li {
 	list-style: none outside none;
+}
+
+.onIcon {
+	background-repeat: no-repeat;	
+	background-position: center;
+	background-image: url('../../images/admin/on-icon.png');
+}
+
+.offIcon {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url('../../images/admin/off-icon.png');	
+}
+
+input[type="text"] {
+    border: 1px solid #9C9C9C;
+    color: #555555;
+    overflow: hidden;
+    padding: 4px;
+    margin: 0 5px;
+}
+
+#nameFilter {
+	width : 700px;
+}
+
+#orgListFilter {
+	border-bottom: 1px solid #CACACA;
+	margin: 0 0 15px;
+	padding: 20px 10px;
 }

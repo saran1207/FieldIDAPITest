@@ -20,5 +20,11 @@ public class AdminOrgsListPage extends FieldIDPage {
         waitForPageToLoad("60000");    
         return this;
     }
-
+    
+    public AdminOrgsListPage filterByCompanyName(String name) {
+    	selenium.type("//input[@id='nameFilter']", name);
+    	selenium.click("//input[@name='search']");
+        waitForPageToLoad();    
+        return this;
+    }
 }

@@ -48,7 +48,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(OrganizationAction.class);
-	private static final int RESULTS_PER_PAGE = 20;
+	private static final int RESULTS_PER_PAGE = 15;
 
 	private Long id;
 	private Tenant tenant;
@@ -70,6 +70,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	private Map<Long, Long> total30DayEvents = new HashMap<Long, Long>();
 	private Map<Long, ActiveSession> lastActiveSessions = new HashMap<Long, ActiveSession>();
 	
+	private String nameFilter;
 	private String sortColumn;
 	private String sortDirection;
 	
@@ -261,6 +262,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	public Pager<PrimaryOrg> getPage() {
 		return new AllPrimaryOrgsPaginatedLoader().setPage(getCurrentPage())
 		                                          .setPageSize(RESULTS_PER_PAGE)
+		                                          .setNameFilter(nameFilter)
 		                                          .setOrder(sortColumn, sortDirection!=null? sortDirection.equalsIgnoreCase("asc") : true)
 		                                          .load();
 	}
@@ -397,5 +399,13 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 
 	public String getSortDirection() {
 		return sortDirection;
+	}
+
+	public String getNameFilter() {
+		return nameFilter;
+	}
+
+	public void setNameFilter(String nameFilter) {
+		this.nameFilter = nameFilter;
 	}
 }

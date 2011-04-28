@@ -50,7 +50,7 @@ public class TurnOnPlansAndPricingWithReadOnlyUserTest extends FieldIDTestCase {
 	private void setTenantFeatures(boolean readOnlyUser, boolean showPlansAndPricing) {
         AdminLoginPage adminLoginPage = startAdmin();
         AdminOrgsListPage login = adminLoginPage.login();
-        AdminOrgPage orgPage = login.clickLastPage().clickEditOrganization("test1");
+        AdminOrgPage orgPage = login.filterByCompanyName("test1").clickEditOrganization("test1");
         orgPage.enterReadOnlyUser(readOnlyUser);
         orgPage.enterShowPlansAndPricing(showPlansAndPricing);
         orgPage.submitOrganizationChanges();

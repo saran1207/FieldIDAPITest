@@ -22,17 +22,29 @@
 			} );
 		}
 		
+		function clearForm() {
+			$('nameFilter').value = ''
+			$('listFilterForm').submit();	
+		}
 	
 	</script>
 </head>
-<p>
-	Total Tenants: ${page.totalResults}
-</p>
+<div id="orgListFilter">
+	<@s.form id="listFilterForm" method="get" theme="simple"> 
+		<@s.hidden name="currentPage" value="1"/>
+		<label>Filter by Company Name</label>
+		<@s.textfield id="nameFilter" name="nameFilter"/>
+		<@s.submit name="search" key="hbutton.filter" />
+		<span><@s.text name="label.or" /></span>
+		<a href="javascript:void(0);" onClick="clearForm();"> <@s.text name="hbutton.clear"/></a>
+	</@s.form>
+</div>
+
 <#include "../../../../templates/html/common/_pagination.ftl">
 <table class="orgList">
 	<tr>
 		<#assign columns = ["tenant.disabled", "name", "tenant.name", "", "", "", "", "", "", "created"] >
-		<#assign labels = ["Active", "Company Name", "Tenant Name", "Total Assets", "Assets Last 30 Days", "Total Events", "Events Last 30 Days", "Last Login Date", "Last Login User", "Created"] >
+		<#assign labels = ["Active", "Company Name", "Company ID", "Total Assets", "Assets Last 30 Days", "Total Events", "Events Last 30 Days", "Last Login Date", "Last Login User", "Created"] >
 		<#assign sortAction = "organizations" >
 		<#assign x=0>
 		<#list columns as column>
@@ -55,13 +67,13 @@
 	</tr>
 	<#list page.list as primaryOrg>
 		<tr>
-			<td>${primaryOrg.tenant.disabled?string("Disabled", "Enabled")}</td>
+			<td <#if primaryOrg.tenant.disabled> class='offIcon' <#else> class='onIcon'</#if>></td>
 			<td>${primaryOrg.displayName?html}</td>
 			<td><a href='${action.getLoginUrlForTenant(primaryOrg.tenant)}' target='_blank'>${primaryOrg.tenant.name!}</a></td>
-			<td>${action.getTotalAssets(primaryOrg.id)}</td>
-			<td>${action.getTotal30DayAssets(primaryOrg.id)}</td>
-			<td>${action.getTotalEvents(primaryOrg.id)}</td>
-			<td>${action.getTotal30DayEvents(primaryOrg.id)}</td>	
+			<td>${action.getTotalAssets(primaryOrg.id)?string.number}</td>
+			<td>${action.getTotal30DayAssets(primaryOrg.id)?string.number}</td>
+			<td>${action.getTotalEvents(primaryOrg.id)?string.number}</td>
+			<td>${action.getTotal30DayEvents(primaryOrg.id)?string.number}</td>	
 			<#if action.getLastActiveSession(primaryOrg.id)?exists && action.getLastActiveSession(primaryOrg.id).user.userID != 'n4systems'>
 				<td>${action.getLastActiveSession(primaryOrg.id).lastTouched?datetime}</td>
 				<td>${action.getLastActiveSession(primaryOrg.id).user.userID}</td>
@@ -75,3 +87,6 @@
 	</#list>
 </table>
 <#include "../../../../templates/html/common/_pagination.ftl">
+<p>
+	Total Tenants: ${page.totalResults}
+</p>
