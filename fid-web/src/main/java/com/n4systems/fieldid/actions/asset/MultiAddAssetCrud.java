@@ -57,8 +57,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(MultiAddAssetCrud.class);
 	
-	private final LegacyAsset legacyAssetManager;
-	private final OrderManager orderManager;
+	protected final LegacyAsset legacyAssetManager;
+	protected final OrderManager orderManager;
 	private AssetCodeMappingService assetCodeMappingServiceManager;
 	
 	// drop down lists
@@ -71,8 +71,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private AssignedToUserGrouper userGrouper;
 	private EventScheduleManager eventScheduleManager;
 	// form inputs
-	private List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>();
-	private AssetView assetView = new AssetView();
+	protected List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>();
+	protected AssetView assetView = new AssetView();
 	private LineItem lineItem;
 	private List<WebEventSchedule> webEventSchedules;
 
@@ -81,10 +81,12 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	private Integer maxAssets;
 	private List<Long> listOfIds = new ArrayList<Long>();
 	
-	private AssetWebModel assetWebModel = new AssetWebModel(this);
+	protected AssetWebModel assetWebModel = new AssetWebModel(this);
 	private AssetViewModeConverter converter;
 
-	
+    private Long networkAssetTypeId;
+    private Long vendorId;
+
 	public MultiAddAssetCrud(PersistenceManager persistenceManager, OrderManager orderManager, 
 			LegacyAsset legacyAssetManager, AssetCodeMappingService assetCodeMappingServiceManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
@@ -182,7 +184,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			setOwnerId(getSessionUser().getOwner().getId());
 		}
 		setAutoEventSchedules(getAutoEventSchedules(converter.viewToModel(assetView)));
-		
 	}
 	
 	private AssetType getAssetType(Long id) {
@@ -231,8 +232,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 				cleaner.clean(asset);
 				
 				i++;
-				
-			
 			}
 			
 			addFlashMessage(getText("message.assetscreated", new String[] {String.valueOf(identifiers.size())}));
@@ -254,10 +253,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		logger.info("Asset Multi-Add Complete");
 		return SUCCESS;
 	}
-	
-	
-	
-	private List<AssetAttachment> copyUploadedFiles() {
+
+	protected List<AssetAttachment> copyUploadedFiles() {
 		List<AssetAttachment> copiedUploadedFiles = new ArrayList<AssetAttachment>();
 		for (AssetAttachment uploadedFile : getUploadedFiles()) {
 			AssetAttachment copiedUploadedFile = new AssetAttachment(new Note(uploadedFile.getNote()));
@@ -399,8 +396,12 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	public List<AssetIdentifierView> getIdentifiers() {
 		return identifiers;
 	}
-	
-	@RequiredFieldValidator(message="", key="error.owner_required")
+
+    public void setIdentifiers(List<AssetIdentifierView> identifiers) {
+        this.identifiers = identifiers;
+    }
+
+    @RequiredFieldValidator(message="", key="error.owner_required")
 	public BaseOrg getOwner() {
 		return ownerPicker.getOwner();
 	}
@@ -471,7 +472,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		this.webEventSchedules = eventSchedules;
 	}
 	
-	private void scheduleEvents(Asset asset) {
+	protected void scheduleEvents(Asset asset) {
 		WebEventScheduleToScheduleConverter converter = new WebEventScheduleToScheduleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
 		for (WebEventSchedule schedule: getNextSchedules()) {
 			if(schedule != null) {
@@ -491,5 +492,20 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
 		return eventScheduleManager.getAutoEventSchedules(asset);
 	}
-	
+
+    public Long getNetworkAssetTypeId() {
+        return networkAssetTypeId;
+    }
+
+    public void setNetworkAssetTypeId(Long networkAssetTypeId) {
+        this.networkAssetTypeId = networkAssetTypeId;
+    }
+
+    public Long getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(Long vendorId) {
+        this.vendorId = vendorId;
+    }
 }

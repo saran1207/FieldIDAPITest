@@ -2,6 +2,9 @@ package com.n4systems.fieldid.actions.safetyNetwork;
 
 import java.util.List;
 
+import com.n4systems.model.safetynetwork.AllPreAssignedAssetsLoader;
+import com.n4systems.model.safetynetwork.BulkRegisterData;
+import com.n4systems.model.safetynetwork.BulkRegisterHelper;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -24,8 +27,10 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 	private String searchText;
 	private int pageSize = 10;
 	private Long assetID;
+    private Long assetTypeId;
+    private BulkRegisterData bulkRegisterData;
 
-	public SafetyNetworkVendor(PersistenceManager persistenceManager) {
+    public SafetyNetworkVendor(PersistenceManager persistenceManager) {
 		super(persistenceManager);
 	}
 
@@ -42,6 +47,20 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 	public String doListPreAssigned() {
 		page = getLoaderFactory().createSafetyNetworkPreAssignedAssetLoader().setVendor(vendor).setCustomer(getPrimaryOrg()).setPage(getCurrentPage()).load();
 		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doBulkRegister() {
+        return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doBulkRegisterList() {
+        AllPreAssignedAssetsLoader safetyNetworkPreAssignedAssetLoader = getLoaderFactory().createAllPreAssignedAssetsLoader().setVendor(vendor).setCustomer(getPrimaryOrg());
+        BulkRegisterHelper helper = new BulkRegisterHelper(safetyNetworkPreAssignedAssetLoader);
+        bulkRegisterData = helper.calculateBulkRegisterAssetTypeCounts();
+
+        return SUCCESS;
 	}
 
 	public String doSearch() {
@@ -107,5 +126,19 @@ public class SafetyNetworkVendor extends SafetyNetwork {
 		return assetID;
 	}
 
-	
+    public BulkRegisterData getBulkRegisterData() {
+        return bulkRegisterData;
+    }
+
+    public void setBulkRegisterData(BulkRegisterData bulkRegisterData) {
+        this.bulkRegisterData = bulkRegisterData;
+    }
+
+    public Long getAssetTypeId() {
+        return assetTypeId;
+    }
+
+    public void setAssetTypeId(Long assetTypeId) {
+        this.assetTypeId = assetTypeId;
+    }
 }

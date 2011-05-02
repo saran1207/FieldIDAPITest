@@ -18,4 +18,5 @@
     <#assign org = vendor/>
     <#include "_orgAddressInfo.ftl"/>
 </#if>
+
 </div>

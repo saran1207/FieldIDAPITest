@@ -46,6 +46,11 @@
 			<result name="success" type="freemarker">/templates/ajax/registerAsset/changeAssetType.ftl</result>
 		</action>
 
+        <action name="bulkRegAssetTypeChange" method="assetTypeChange"
+            class="com.n4systems.fieldid.actions.asset.AssetCrud">
+            <result name="success" type="freemarker">/templates/ajax/bulkRegister/changeAssetType.ftl</result>
+        </action>
+
 		<action name="regOwnerChange" method="ownerChange"
 			class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="success" type="freemarker">/templates/ajax/registerAsset/changeOwner.ftl</result>

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class AssetIdentifierView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+    private Long assetId;
 	private String serialNumber;
 	private String rfidNumber;
 	private String referenceNumber;
@@ -38,5 +39,12 @@ public class AssetIdentifierView implements Serializable {
 	public void setReferenceNumber(String referenceNumber) {
 		this.referenceNumber = referenceNumber;
 	}
-	
+
+    public Long getAssetId() {
+        return assetId;
+    }
+
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
+    }
 }

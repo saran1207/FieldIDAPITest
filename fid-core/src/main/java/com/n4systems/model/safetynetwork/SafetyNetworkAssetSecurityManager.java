@@ -28,11 +28,11 @@ public class SafetyNetworkAssetSecurityManager {
 		BaseOrg assetOwner = asset.getOwner();
 		
 		// if the asset's owner is not linked, it couldn't be assigned
-		if (!assetOwner.isLinked()) {
+		if (!assetOwner.isExternal() || !assetOwner.getCustomerOrg().isLinked()) {
 			return false;
 		}
 		
-		InternalOrg assetLinkedOrg = ((ExternalOrg)assetOwner).getLinkedOrg();
+		InternalOrg assetLinkedOrg = assetOwner.getCustomerOrg().getLinkedOrg();
 		
 		// now test if the owner that the asset is linked to is one I can see
 		return myOrg.canAccess(assetLinkedOrg);

@@ -14,13 +14,22 @@ function mergeAndSubmit(form1id, form2id, masterFormId) {
 }
 
 function convertInputToHidden(input) {
-	return new Element("input", {'type': 'hidden', 'name': input.name, 'value': input.getValue()});
+    var value = input.getValue();
+
+    if (input.type == "checkbox") {
+        value = (value == "on") ? "true" : "false";
+    }
+
+	return new Element("input", {'type': 'hidden', 'name': input.name, 'value': value});
 }
 
 function convertAndAppendInputsToForm(form, inputs) {
 	
 	inputs.each(function(input) {
 		form.appendChild(convertInputToHidden(input));
+        if (input.type == "checkbox") {
+            form.appendChild(new Element("input", {'type': 'hidden', 'name': +"__checkbox_"+input.name, 'value': 'true'}));
+        }
 	});
 	
 }

@@ -2353,6 +2353,14 @@
 			<result name="success" type="freemarker">/templates/html/vendor/listPreAssigned.ftl</result>		
 		</action>
 
+        <action name="bulkReg" method="bulkRegister" class="com.n4systems.fieldid.actions.asset.BulkRegisterSafetyNetwork">
+            <result name="success" type="freemarker">/templates/html/bulkRegister/bulkRegister.ftl</result>
+        </action>
+
+        <action name="bulkRegList" method="bulkRegisterList" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
+            <result name="success" type="freemarker">/templates/html/vendor/bulkRegisterList.ftl</result>
+        </action>
+
 		<action name="searchNetworkAsset" method="search" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
 			<result name="input" type="freemarker">/templates/html/vendor/show.ftl</result>
 			<result name="success" type="freemarker">/templates/html/vendor/listSearchResult.ftl</result>
@@ -2428,7 +2436,14 @@
 		<action name="customerMergeCreate" method="create" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
 			<result name="success" type="freemarker">/templates/html/customerMerge/create.ftl</result>
 			<result name="input" type="freemarker">/templates/html/customerMerge/add.ftl</result>
-		</action>		
+		</action>
+
+		<action name="bulkRegFinalize" method="register" class="com.n4systems.fieldid.actions.asset.BulkRegisterSafetyNetwork">
+            <result name="success" type="redirectAction">
+                <param name="actionName">showVendor</param>
+                <param name="vendorId">${vendorId}</param>
+            </result>
+		</action>
 
 	</package>
 

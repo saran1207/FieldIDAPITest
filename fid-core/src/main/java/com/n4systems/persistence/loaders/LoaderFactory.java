@@ -67,10 +67,12 @@ import com.n4systems.model.orgs.SecondaryOrgByNameLoader;
 import com.n4systems.model.orgs.SecondaryOrgListableLoader;
 import com.n4systems.model.orgs.SecondaryOrgPaginatedLoader;
 import com.n4systems.model.orgs.customer.CustomerOrgListLoader;
+import com.n4systems.model.orgs.customer.CustomerOrgsWithNameLoader;
 import com.n4systems.model.orgs.division.DivisionOrgByCustomerListLoader;
 import com.n4systems.model.orgs.internal.InternalOrgByNameLoader;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.legacy.LegacyEntityCreateModifyDate;
+import com.n4systems.model.safetynetwork.AllPreAssignedAssetsLoader;
 import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
 import com.n4systems.model.safetynetwork.AssetsByNetworkIdLoader;
 import com.n4systems.model.safetynetwork.CustomerLinkedOrgListLoader;
@@ -508,6 +510,10 @@ public class LoaderFactory implements Serializable {
 		return new SafetyNetworkPreAssignedAssetLoader();
 	}
 
+    public AllPreAssignedAssetsLoader createAllPreAssignedAssetsLoader() {
+        return new AllPreAssignedAssetsLoader(filter);
+    }
+
 	public SafetyNetworkEventLoader createSafetyNetworkRegisteredAssetEventLoader() {
 		return new SafetyNetworkRegisteredAssetEventLoader(filter);
 	}
@@ -591,4 +597,9 @@ public class LoaderFactory implements Serializable {
 	public VendorOrgConnectionsListLoader createVendorOrgConnectionsListLoader() {
 		return new VendorOrgConnectionsListLoader(filter);
 	}
+
+    public CustomerOrgsWithNameLoader createCustomerOrgWithNameLoader() {
+        return new CustomerOrgsWithNameLoader(filter);
+    }
+
 }

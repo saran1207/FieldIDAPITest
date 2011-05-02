@@ -21,6 +21,11 @@
 	
 	<div class="infoSet">
 		<label class="label" for="owner"><@s.text name="label.owner"/></label>
+        <#if bulkRegister?exists>
+            <div style="display:block;">
+                <input type="checkbox" name="useOwnerFromAssets" onchange="$('ownerId_orgName').disabled = this.checked;"/> <@s.text name="label.create_owners_from_assets"/>
+            </div>
+        </#if>
 		<#if !parentAsset?exists >
 			<@n4.orgPicker name="owner" theme="fieldid" required="true" id="ownerId"/>
 		<#else>
@@ -28,16 +33,18 @@
 		</#if>
 	</div>
 
-	<div class="infoSet">
-		<label class="label" for="asset.location"><@s.text name="label.location"/></label>
-		<#if !parentAsset?exists >
-			<span class="locationTree">
-				<@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="simple"/>
-			</span>
-		<#else>
-			<span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(assetWebModel.location))?html}</span>
-		</#if>
-	</div>
+    <#if !bulkRegister?exists>
+        <div class="infoSet">
+            <label class="label" for="asset.location"><@s.text name="label.location"/></label>
+            <#if !parentAsset?exists >
+                <span class="locationTree">
+                    <@n4.location name="assetWebModel.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(assetWebModel.location)}"  theme="simple"/>
+                </span>
+            <#else>
+                <span class="fieldHolder" id="advancedLocation">${(helper.getFullNameOfLocation(assetWebModel.location))?html}</span>
+            </#if>
+        </div>
+    </#if>
 </div>
 
 <div class="assetFormGroup">
@@ -60,6 +67,11 @@
 	<h2><@s.text name="label.identifieddate"/></h2>
 	<div class="infoSet increasedWidthFieldHolder">
 		<label for="" class="label"><#include "../common/_requiredMarker.ftl"/><@s.text name="label.identified"/></label>
+        <#if bulkRegister?exists>
+            <div style="display:block;">
+                <input type="checkbox" name="useDatesFromAssets" onchange="$('identified').disabled = this.checked;"/> <@s.text name="label.use_dates_from_assets"/>
+            </div>
+        </#if>
 		<@s.datetimepicker id="identified" name="identified" type="dateTime"/>
 	</div>
 </div>
