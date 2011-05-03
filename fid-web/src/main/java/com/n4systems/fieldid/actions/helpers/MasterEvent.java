@@ -394,8 +394,10 @@ public class MasterEvent {
     }
 
     public void storeTemporaryFileIds(Long eventId, List<CriteriaResultWebModel> criteriaResults) {
-        for (CriteriaResultWebModel criteriaResult : criteriaResults) {
-            storeTemporaryFileId(eventId, criteriaResult.getCriteriaId(), criteriaResult.isSigned(), criteriaResult.getSignatureFileId());
+    	if(criteriaResults != null) {
+	        for (CriteriaResultWebModel criteriaResult : criteriaResults) {
+	            storeTemporaryFileId(eventId, criteriaResult.getCriteriaId(), criteriaResult.isSigned(), criteriaResult.getSignatureFileId());
+	        }
         }
     }
 
