@@ -1,60 +1,59 @@
- <p> you can only have integration or job sites selected as extended features.</p>
-<@s.form action="organizationUpdate" namespace="/admin" method="post" theme="xhtml">
-	<@s.hidden name="id" value="%{id}" /> 
-	<@s.fielderror/>
+<head>
+	<@n4.includeStyle href="admin/editOrg"/>	
+	<@n4.includeScript src="organizationEdit.js" />		
+	<script type="text/javascript">
+		editNoteUrl = '<@s.url action="editNote" namespace="/adminAjax"/>'
+		cancelNoteUrl = '<@s.url action="cancelNote" namespace="/adminAjax"/>'
+		editPlanUrl = '<@s.url action="editPlan" namespace="/adminAjax"/>'
+		cancelPlanUrl = '<@s.url action="cancelPlan" namespace="/adminAjax"/>'
+	</script>
+</head>
+
+<div id="orgInfo">
+	<#assign tenant = primaryOrg.tenant>
+    <img class="logo" alt="${(tenant.displayName?html)!}" src='<@s.url action="downloadTenantLogo" namespace="/file" uniqueID="${tenant.id}" />'/>
+	<h3>${primaryOrg.displayName}</h3>	
+	<a href='${action.getLoginUrlForTenant(tenant)}' target='_blank' >${tenant.name}.fieldid.com</a>
 	
+	<div id="address">
+		<#if primaryOrg.addressInfo??>
+		    <label>${primaryOrg.addressInfo.streetAddress!""}</label>
+		    <label>
+		    	<#if primaryOrg.addressInfo.city??>${primaryOrg.addressInfo.city}</#if><#if primaryOrg.addressInfo.state??>, ${primaryOrg.addressInfo.state}</#if><#if primaryOrg.addressInfo.country??>, ${primaryOrg.addressInfo.country}</#if>
+		    </label>
+		    <label>${primaryOrg.addressInfo.zip!""}</label>
+		    <label>${primaryOrg.addressInfo.phone1!""}</label>
+		</#if>	
+	</div>
 	
-	<@s.textfield name="primaryOrg.serialNumberFormat"  label="Serial Number Format" />
-	<@s.textfield name="primaryOrg.dateFormat" label="Date Format" />
-	<@s.label name="otherDateFormat" label="Other Date Format" />
-	<@s.label name="formattedDate" label="Example Date" />
-	<@s.textfield name="diskSpace" label="Disk space limit in bytes (-1 for unlimited)" />
-	<@s.textfield name="assets" label="Asset limit (-1 for unlimited)" />
-	<@s.textfield name="users" label="User limit (-1 for unlimited)" />
-	<@s.textfield name="liteUsers" label="Lite User limit (-1 for unlimited)" />
-	<@s.textfield name="secondaryOrgs" label="Secondary Orgs limit (-1 for unlimited)" />
-	
-	
-	<@s.label name="extendedFeaturesLabel" label="Extended features (if you change any, add a note below)" />
-	
-	<@s.iterator  value="availableExtendedFeatures" >
-		<@s.checkbox name="extendedFeatures['%{name}']" >
-			<@s.param name="label"><@s.property value="name"/></@s.param>
-		</@s.checkbox> 
-	</@s.iterator>	
-	
-	<@s.checkbox name="disabled" label="Disable Tenant">
-	</@s.checkbox>
-	
-	<@s.label label="Extras" />
-	<@s.checkbox name="primaryOrg.plansAndPricingAvailable" label="Show Plans and pricing when Read Only Users enabled" labelposition="left" />
-	
-	
-	<@s.submit />
-	<@s.submit value="Cancel" name="redirectAction:organizations" />
-</@s.form>
-<pre>
-Serial Number Format Options.
-%m = Month as a 2 digit number
-%d = Day of month as a 2 digit number
-%Y = 4 digit year
-%y = 2 digit year
-%H = Hour of day
-%M = Minute of day
-%S = Second of day
-%L = Millisecond of day
-%j = Jergen's style date code
-%g = Autoincrementing counter (defaults to 6 digits, reset every year)
-</pre>
-<br />
-<#if id?exists>
-<@s.form action="organizationNote" namespace="/admin" method="post">
-	<@s.hidden name="id" value="${id}" />
-	<@s.actionmessage />
-	<@s.actionerror />
-	
-	<@s.textfield name="title" label="Title" />
-	<@s.textarea name="note" label="Note" cols="50" rows="10" />
-	<@s.submit />
-</@s.form>
-</#if>
+	<div id="orgStatus">
+		<#include "_status.ftl"/>
+	</div>
+</div>
+
+<div id="orgPlan">
+	<div id="orgLimits">
+		<#include "_planDisplay.ftl"/>
+	</div>
+	<div id="activity">
+		<h3>Activity</h3>
+		<div class="infoSet"><label>Total Assets:</label><span>${limits.assetsUsed?string.number}</span></div>
+		<div class="infoSet"><label>Assets Last 30 Days:</label><span>${action.getTotal30DayAssets(id)?string.number}</span></div>
+		<div class="infoSet"><label>Total Events</label> <span>${action.getTotalEvents(id)?string.number}</span></div>
+		<div class="infoSet"><label>Events Last 30 Days:</label><span>${action.getTotal30DayEvents(id)?string.number}</span></div>
+		<#if action.getLastActiveSession(tenant.id)?exists && action.getLastActiveSession(tenant.id).user.userID != 'n4systems'>
+			<div class="infoSet"><label>Last Login Date:</label><span>${action.getLastActiveSession(tenant.id).lastTouched?datetime}</span></div>
+			<div class="infoSet"><label>Last Login User:</label><span>${action.getLastActiveSession(tenant.id).user.userID}</span></div>
+		<#else>
+			<div class="infoSet"><label>Last Login Date:</label><span>--</span></div>
+			<div class="infoSet"><label>Last Login User:</label><span>--</span></div>
+		</#if>	
+	</div>
+	<div id="notes">
+		<#include "_noteDisplay.ftl"/>
+	</div>
+</div>
+
+<div id="extendedFeatures">
+	<#include "_extendedFeatures.ftl"/>
+</div>

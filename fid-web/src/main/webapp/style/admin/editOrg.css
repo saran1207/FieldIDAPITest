@@ -1,0 +1,135 @@
+#orgInfo, #orgPlan, #extendedFeatures {
+	float: left;
+}
+
+#orgInfo, #extendedFeatures {
+	width: 20%;
+}
+
+#orgPlan {
+	width: 50%;
+	border-left: 1px solid #CACACA;
+	border-right: 1px solid #CACACA;	
+	padding: 0 30px;
+}
+
+#extendedFeatures {
+	padding-left: 30px;
+}
+.limit {
+	height : 30px;
+	padding: 10px;
+}
+
+.limitLabel {
+	width : 150px;
+	text-align : right;
+	padding : 0 10px;
+}
+
+ .limitInfo {
+	width: 150px;
+	padding-left: 10px;
+ }
+
+#orgLimits, .limit, .limit div{
+	float: left;
+}
+
+#orgLimits {
+	padding-bottom: 30px;
+	padding-top: 10px;
+}
+
+#address {
+	margin: 20px 0;
+}
+
+
+#address label {
+	display: block;
+}
+
+#orgInfo h3 {
+	margin-bottom: 0;
+}
+
+.logo {
+	margin-top: 10px;
+}
+
+#addFullUsers {
+	width: 100%;
+	padding: 5px 20px 5px; 0;
+}
+
+.editHeader{
+	height: 20px;
+}
+
+.editHeader h3, .editHeader p{
+	display : inline;
+}
+
+#activity, #notes {
+	clear : both;
+	padding-bottom: 30px;
+}
+
+.infoSet {
+	overflow: hidden;
+	padding: 5px 0px;
+}
+
+.infoSet label {
+	float : left;
+	display : block;
+	text-align : right;
+	width : 150px;
+	padding : 5px 15px;
+	padding-left : 20px;
+	color : #333;
+}
+
+.infoSet span {
+	float : left;
+	display : block;
+	padding : 5px 0px;
+	width : 305px;
+	line-height : 18px;
+}
+
+.planFormActions {
+	clear : both;
+	padding-top : 10px;
+	padding-left : 190px;
+}
+
+.loading {
+	visibility: hidden;
+}
+
+.planFormActions img{
+	padding-left : 20px;
+}
+
+.noteFormActions {
+	padding-top : 10px;
+}
+
+.noteFormActions img{
+	padding-left : 20px;
+}
+
+.featureLabel {
+   padding-left : 30px;
+}
+
+#extendedFeaturesList td {
+	padding-bottom : 10px;
+	border-bottom: 1px dashed #C0C0C0;
+}
+
+.onIcon, .offIcon {
+	background-position: center top;
+}

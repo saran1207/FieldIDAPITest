@@ -5,12 +5,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
+import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.activesession.ActiveSession;
@@ -20,6 +21,7 @@ import com.n4systems.model.event.EventCountLoader;
 import com.n4systems.model.orgs.AllPrimaryOrgsPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
 import com.n4systems.model.user.User;
@@ -53,6 +55,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	private Long id;
 	private Tenant tenant;
 	private PrimaryOrg primaryOrg;
+	private AccountHelper accountHelper;
+	private TenantLimitProxy limitProxy;
 
 	private User adminUser = new User();
 	private String title;
@@ -73,6 +77,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	private String nameFilter;
 	private String sortColumn;
 	private String sortDirection;
+	private String featureName;
+	private boolean featureOn;
 	
 	@Override
 	protected void initMemberFields() {
@@ -89,6 +95,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
 				extendedFeatures.put(feature.name(), true);
 			}			
+			accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(), getNonSecureLoaderFactory().createSignUpPackageListLoader());
 		} else {
 			for (PrimaryOrg org: getPage().getList()) {
 				totalAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), false));
@@ -123,24 +130,20 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 		return SUCCESS;
 	}
 	
-	public String doUpdate() throws Exception {
+	public String doUpdateExtendedFeature() throws Exception {
 		OrgSaver orgSaver = new OrgSaver();
-		TenantSaver tenantSaver = new TenantSaver();
 		
 		Transaction transaction = PersistenceManager.startTransaction();
 		
 		try {
 			if (primaryOrg.getId() != null) {
-				processExtendedFeatures(transaction);
+				processFeature(featureName, featureOn, transaction);
+				extendedFeatures.put(featureName, featureOn);
 			}
 			
 			orgSaver.update(transaction, primaryOrg);
-			tenantSaver.update(transaction, tenant);
 			
 			PersistenceManager.finishTransaction(transaction);
-			
-			TenantLimitService.getInstance().updateAll();
-			
 			
 		} catch (Exception e) {
 			PersistenceManager.rollbackTransaction(transaction);
@@ -152,12 +155,52 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 		}
 		
 		return SUCCESS;
+	}	
+	@SkipValidation
+	public String doEditNote() {
+		return SUCCESS;
 	}
 	
-	private void processExtendedFeatures(Transaction transaction) {
-		for (Entry<String, Boolean> inputFeature : extendedFeatures.entrySet()) {
-			processFeature(inputFeature.getKey(), inputFeature.getValue(), transaction);
-		}
+	@SkipValidation
+	public String doCancelNote() {
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doUpdateOrg() {
+		updatePrimaryOrg();
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doUpdateTenant() {
+		updateTenant();
+		return SUCCESS;
+	}
+
+		@SkipValidation
+	public String doEditPlan() {
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doCancelPlan() {
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doSavePlan() {
+		updatePrimaryOrg();
+		TenantLimitService.getInstance().updateAll();
+		return SUCCESS;
+	}
+
+	private void updatePrimaryOrg() {
+		new OrgSaver().update(primaryOrg);
+	}
+	
+	private void updateTenant() {
+		new TenantSaver().update(tenant);
 	}
 
 	private void processFeature(String featureName, boolean featureOn, Transaction transaction) {
@@ -291,13 +334,15 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 		this.note = note;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Map getExtendedFeatures() {
+	public Map<String, Boolean> getExtendedFeatures() {
 		return extendedFeatures;
 	}
+	
+	public Boolean getExtendedFeature(String key) {
+		return extendedFeatures.get(key) == null ? false : extendedFeatures.get(key);
+	}
 
-	@SuppressWarnings("unchecked")
-	public void setExtendedFeatures(Map extendedFeatures) {
+	public void setExtendedFeatures(Map<String, Boolean> extendedFeatures) {
 		this.extendedFeatures = extendedFeatures;
 	}
 
@@ -370,19 +415,35 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	}
 
 	public Long getTotal30DayAssets(Long orgId) {
-		return total30DayAssets.get(orgId);
+		Long total = total30DayAssets.get(orgId);
+		if (total == null)
+			return loadTotalAssets(orgId, true);
+		else
+			return total30DayAssets.get(orgId);
 	}
 
 	public Long getTotalEvents(Long orgId) {
-			return totalEvents.get(orgId);
+		Long total = totalEvents.get(orgId);
+		if (total == null)
+			return loadTotalEvents(orgId, false);
+		else
+			return total;
 	}
 	
 	public Long getTotal30DayEvents(Long orgId) {
-		return total30DayEvents.get(orgId);
+		Long total = total30DayEvents.get(orgId);
+		if (total == null)
+			return loadTotalEvents(orgId, true);
+		else
+			return total;
 	}
 
 	public ActiveSession getLastActiveSession(Long orgId) {
-		return lastActiveSessions.get(orgId);
+		ActiveSession activeSession = lastActiveSessions.get(orgId);
+		if (activeSession == null)
+			return loadLastActiveSession(orgId);
+		else
+			return activeSession;
 	}
 
 	public void setSortColumn(String sortColumn) {
@@ -407,5 +468,32 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 
 	public void setNameFilter(String nameFilter) {
 		this.nameFilter = nameFilter;
+	}
+	
+	public UpgradePackageFilter currentPackageFilter() {
+		return accountHelper.currentPackageFilter();
+	}
+	
+	public TenantLimitProxy getLimits() {
+		if (limitProxy == null) { 
+			limitProxy = new TenantLimitProxy(primaryOrg.getTenant().getId());
+		}
+		return limitProxy;
+	}
+
+	public String getFeatureName() {
+		return featureName;
+	}
+
+	public void setFeatureName(String featureName) {
+		this.featureName = featureName;
+	}
+
+	public boolean isFeatureOn() {
+		return featureOn;
+	}
+
+	public void setFeatureOn(boolean featureOn) {
+		this.featureOn = featureOn;
 	}
 }

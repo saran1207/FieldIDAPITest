@@ -7,7 +7,7 @@
 
 	<@n4.includeScript src="prototype"/>
 	<@n4.includeScript src="scriptaculous"/>
-    <@n4.includeScript src="common"/>
+	<@n4.includeScript src="common"/>
 	<@n4.includeStyle href="admin/style"/>	
 	${head!}
 </head>

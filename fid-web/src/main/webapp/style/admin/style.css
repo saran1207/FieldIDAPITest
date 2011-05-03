@@ -136,12 +136,14 @@ th a, th a:visited, th a:hover, th a:active {
 	background-repeat: no-repeat;	
 	background-position: center;
 	background-image: url('../../images/admin/on-icon.png');
+	min-width : 15px;
 }
 
 .offIcon {
 	background-repeat: no-repeat;
 	background-position: center;
-	background-image: url('../../images/admin/off-icon.png');	
+	background-image: url('../../images/admin/off-icon.png');
+	min-width : 15px;	
 }
 
 input[type="text"] {
@@ -160,4 +162,21 @@ input[type="text"] {
 	border-bottom: 1px solid #CACACA;
 	margin: 0 0 15px;
 	padding: 20px 10px;
+}
+
+.bold{
+	font-weight: bold;
+}
+
+.percentBarUsed {
+	background: #79c5e5 url(../../images/barForeground.png) repeat-x;
+}
+.percentBar {
+	border: 2px solid #79c5e5;
+	background: url(../../images/barBackground.png) repeat-x;
+	width : 300px;
+}
+
+.percentBarUsed, .percentBar {
+	height:18px;
 }

@@ -540,5 +540,46 @@
 			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/createUser.ftl</result>
 		</action>
 
+		<action name="editNote" method="editNote"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/editNote.ftl</result>
+		</action>
+
+		<action name="updateOrg" method="updateOrg"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/displayNote.ftl</result>
+		</action>
+
+		<action name="updateTenant" method="updateTenant"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/updateStatus.ftl</result>
+		</action>
+
+
+		<action name="cancelNote" method="cancelNote"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/displayNote.ftl</result>
+		</action>
+
+		<action name="editPlan" method="editPlan"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/editPlan.ftl</result>
+		</action>
+
+		<action name="savePlan" method="savePlan"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/displayPlan.ftl</result>
+		</action>
+
+		<action name="cancelPlan" method="cancelPlan"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/displayPlan.ftl</result>
+		</action>
+
+		<action name="updateExtendedFeature" method="updateExtendedFeature"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/updateExtendedFeature.ftl</result>
+		</action>
+
 	</package>
 </struts>
