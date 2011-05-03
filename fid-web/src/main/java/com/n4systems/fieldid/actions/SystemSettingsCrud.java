@@ -36,6 +36,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private PrimaryOrg primaryOrg;
 
 	private String dateFormat;
+    private String serialNumberFormat;
 
 	private String webSite;
 	private File uploadedImage;
@@ -73,6 +74,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public String doEdit() {
 		dateFormat = primaryOrg.getDateFormat();
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
+        serialNumberFormat = primaryOrg.getSerialNumberFormat();
 		proofTestIntegration = primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
 		webSite = primaryOrg.getWebSite();
 
@@ -101,7 +103,8 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 		try {
 			updateExtendedFeatures(transaction);
-			updateDateFormat(transaction);
+			updateDateFormat();
+            updateSerialNumberFormat();
 			save(transaction);
 			transactionManager().finishTransaction(transaction);
 			addFlashMessageText("message.system_settings_updated");
@@ -113,14 +116,14 @@ public class SystemSettingsCrud extends AbstractCrud {
 		}
 		return SUCCESS;
 	}
-	
-	@SkipValidation
+
+    @SkipValidation
 	public String doUpdateBranding() {
 
 		Transaction transaction = transactionManager().startTransaction();
 
 		try {
-			updateBranding(transaction);
+			updateBranding();
 			save(transaction);
 			transactionManager().finishTransaction(transaction);
 			addFlashMessageText("message.system_settings_updated");
@@ -139,8 +142,8 @@ public class SystemSettingsCrud extends AbstractCrud {
 		Transaction transaction = transactionManager().startTransaction();
 
 		try {
-			updateDateFormat(transaction);
-			updateBranding(transaction);
+			updateDateFormat();
+			updateBranding();
 			save(transaction);
 			transactionManager().finishTransaction(transaction);
 			addFlashMessageText("message.system_settings_updated");
@@ -163,17 +166,19 @@ public class SystemSettingsCrud extends AbstractCrud {
 		new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, assignedTo).applyTo(primaryOrg, transaction);
 	}
 
-	private void updateDateFormat(Transaction transaction) throws Exception {
+	private void updateDateFormat() throws Exception {
 		getPrimaryOrg().setDateFormat(dateFormat);
 	}
 
-	private void updateBranding(Transaction transaction) throws Exception {
-		
+    private void updateSerialNumberFormat() {
+        getPrimaryOrg().setSerialNumberFormat(serialNumberFormat);
+    }
+
+	private void updateBranding() throws Exception {
 		if (getSecurityGuard().isBrandingEnabled()) {
 			processLogo();
 			getPrimaryOrg().setWebSite(webSite);
 		}
-		
 	}
 	
 	private TransactionManager transactionManager() {
@@ -189,7 +194,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	private void processLogo() throws IOException {
 		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
-		if (newImage == true && imageDirectory != null && imageDirectory.length() != 0) {
+		if (newImage && imageDirectory != null && imageDirectory.length() != 0) {
 			if (!privateLogoPath.getParentFile().exists()) {
 				privateLogoPath.getParentFile().mkdirs();
 			}
@@ -297,4 +302,12 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public void setProofTestIntegration(boolean proofTestIntegration) {
 		this.proofTestIntegration = proofTestIntegration;
 	}
+
+    public String getSerialNumberFormat() {
+        return serialNumberFormat;
+    }
+
+    public void setSerialNumberFormat(String serialNumberFormat) {
+        this.serialNumberFormat = serialNumberFormat;
+    }
 }

@@ -59,6 +59,23 @@ ${action.setPageType('account_settings', 'list')!}
 				</label>
 				<@s.select name="dateFormat" list="dateFormats" listKey="id" listValue="name"/>
 			</div>
+            <div class="infoSet">
+                <label for="serialNumberFormat">
+                    <@s.text name="label.serial_number_format" />
+					<a href="javascript:void(0);" id="whatsThis_serialNumberFormat_button" >?</a>
+					<div id="whatsThis_serialNumberFormat" class="hidden" style="border :1px solid black">
+						<h4><@s.text name="label.serial_number_format" /></h4>
+						<p>
+							<@s.text name="label.serial_number_format_tooltip1" />
+						</p>
+					</div>
+					<script type="text/javascript">
+						$("whatsThis_serialNumberFormat_button").observe( 'click', function(event) { showQuickView('whatsThis_serialNumberFormat', event); } );
+					</script>
+                </label>
+                <@s.textfield name="serialNumberFormat" />
+
+            </div>
 		<div class="formAction">
 			<@s.submit key="label.save"/> <@s.text name="label.or"/> <a href="<@s.url action="settings"/>"><@s.text name="label.cancel"/></a>
 		</div>
