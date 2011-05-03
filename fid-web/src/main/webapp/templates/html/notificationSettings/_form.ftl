@@ -107,7 +107,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 </div>
 	
 <h2><@s.text name="label.who_should_get_the_notification"/></h2>
-<div class="sectionContent email">	
+<div class="sectionContent emails">	
 	<div id="emailAddresses" class="infoSet fullInfoSet">
 		<label><@s.text name="label.emailaddresses"/></label>	
 		<div id="addressList">
