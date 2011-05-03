@@ -55,5 +55,11 @@
 </div>
 
 <div id="extendedFeatures">
-	<#include "_extendedFeatures.ftl"/>
-</div>
+<h3>Extended Features</h3>
+<table id="extendedFeaturesList">
+	<#list availableExtendedFeatures as feature>
+		<tr id="extendedFeatureRow_${feature}">
+			<#include "_extendedFeatures.ftl"/>
+		</tr>
+	</#list>				
+<table>	</div>
