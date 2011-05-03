@@ -7,7 +7,6 @@
 	defSelectImageUrl = '<@s.url value="/images/def-plus.png"/>';
 </script>
 
-<script src="/fieldid/javascript/lightview.js" type="text/javascript"></script>
 <script src="/fieldid/javascript/signatures.js" type="text/javascript"></script>
 <script type="text/javascript">
     signatureClearUrl = '<@s.url action="clearSignature.action" namespace="/ajax"/>';
