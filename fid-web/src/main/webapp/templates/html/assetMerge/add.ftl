@@ -1,6 +1,11 @@
 ${action.setPageType('asset', 'edit')!}
 <head>
 	<@n4.includeStyle href="steps" />
+    <style>
+        .emptyList h2 {
+            color: #333;
+        }
+    </style>
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/pagination.js"/>"></script>
 	<script type="text/javascript">
