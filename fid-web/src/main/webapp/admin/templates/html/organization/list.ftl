@@ -1,27 +1,5 @@
 <head>
 	<script type="text/javascript" >
-		function createSuper( id ) {
-			var div = $( "superUser_" + id );
-			div.style.display = "block";
-			return false;
-		}
-		function submitSuperUser( button ) {
-			button.form.request( { 
-				onComplete: 
-					function( response ) {
-						try { 
-							var forms = document.getElementsByClassName( "superUserForm" );
-							for( var i = 0; i < forms.length; i++ ) {
-								forms[i].style.display = "none";
-								
-							}
-						} catch( e ) {
-							alert( e );
-						}
-					}
-			} );
-		}
-		
 		function clearForm() {
 			$('nameFilter').value = ''
 			$('listFilterForm').submit();	
@@ -69,7 +47,7 @@
 		<tr>
 			<td <#if primaryOrg.tenant.disabled> class='offIcon' <#else> class='onIcon'</#if>></td>
 			<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${primaryOrg.tenant.id}">${primaryOrg.displayName?html}</a></td>
-			<td><a href='${action.getLoginUrlForTenant(primaryOrg.tenant)}' target='_blank'>${primaryOrg.tenant.name!}</a></td>
+			<td>${primaryOrg.tenant.name!}</td>
 			<td>${action.getTotalAssets(primaryOrg.id)?string.number}</td>
 			<td>${action.getTotal30DayAssets(primaryOrg.id)?string.number}</td>
 			<td>${action.getTotalEvents(primaryOrg.id)?string.number}</td>
