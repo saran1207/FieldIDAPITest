@@ -68,7 +68,7 @@
 	<#list page.list as primaryOrg>
 		<tr>
 			<td <#if primaryOrg.tenant.disabled> class='offIcon' <#else> class='onIcon'</#if>></td>
-			<td>${primaryOrg.displayName?html}</td>
+			<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${primaryOrg.tenant.id}">${primaryOrg.displayName?html}</a></td>
 			<td><a href='${action.getLoginUrlForTenant(primaryOrg.tenant)}' target='_blank'>${primaryOrg.tenant.name!}</a></td>
 			<td>${action.getTotalAssets(primaryOrg.id)?string.number}</td>
 			<td>${action.getTotal30DayAssets(primaryOrg.id)?string.number}</td>
@@ -82,7 +82,6 @@
 				<td>--</td>
 			</#if>
 			<td>${primaryOrg.created?date}</td>
-			<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${primaryOrg.tenant.id}">Edit</a></td>
 		</tr>
 	</#list>
 </table>
