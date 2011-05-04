@@ -14,5 +14,5 @@
 		</a>
 	</@s.form>
 </td>
-<td class="featureLabel">${feature}</td>
+<td class="featureLabel"><@s.text name="${feature.label}"/></td>
 <td> <img id="loading_${feature}" class="loading" src="<@s.url value="../images/loading-small.gif"/>" /><td>

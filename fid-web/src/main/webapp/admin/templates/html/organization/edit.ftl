@@ -58,8 +58,15 @@
 <h3>Extended Features</h3>
 <table id="extendedFeaturesList">
 	<#list availableExtendedFeatures as feature>
+		<#if feature == "JobSites">
+			<tr><td colspan = "4">&nbsp;</td></td>
+		</#if> 		
 		<tr id="extendedFeatureRow_${feature}">
 			<#include "_extendedFeatures.ftl"/>
 		</tr>
-	</#list>				
+	</#list>	
+	<tr><td colspan = "4">&nbsp;</td></td>	
+	<tr id="plansAndPricingRow">
+		<#include "_plansAndPricing.ftl"/>		
+	</tr>
 <table>	</div>

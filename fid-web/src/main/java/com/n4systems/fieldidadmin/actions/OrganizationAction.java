@@ -1,9 +1,12 @@
 package com.n4systems.fieldidadmin.actions;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -168,6 +171,12 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 
 	@SkipValidation
 	public String doUpdateOrg() {
+		updatePrimaryOrg();
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doUpdatePlansAndPricing() {
 		updatePrimaryOrg();
 		return SUCCESS;
 	}
@@ -346,8 +355,17 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 		this.extendedFeatures = extendedFeatures;
 	}
 
-	public ExtendedFeature[] getAvailableExtendedFeatures() {
-		return ExtendedFeature.values();
+	public List<ExtendedFeature> getAvailableExtendedFeatures() {
+		List<ExtendedFeature> availableFeatures = new ArrayList<ExtendedFeature>();
+		List<ExtendedFeature> removedFeatures = Arrays.asList(ExtendedFeature.CustomCert, 
+				                                              ExtendedFeature.DedicatedProgramManager, 
+				                                              ExtendedFeature.AllowIntegration);
+		for (ExtendedFeature feature: ExtendedFeature.values()) {
+			if(!removedFeatures.contains(feature)) {
+				availableFeatures.add(feature);
+			}
+		}			
+		return availableFeatures;
 	}
 	
 	public Long getDiskSpace() {

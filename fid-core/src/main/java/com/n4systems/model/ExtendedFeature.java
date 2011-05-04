@@ -15,19 +15,19 @@ package com.n4systems.model;
 
 public enum ExtendedFeature {
 	Integration("feature.integration", "allows access to orders."),
-	JobSites("feature.job_sites", "allows the use of jobsites to control the assignment of assets and events."),
-	AssignedTo("feature.assigned_to", "allows users to be assigned to assets."),
 	Projects("feature.jobs", "allows the use of projects to track larger safety systems."),
 	Branding("feature.branding", "allows the user to up load their own image for the tenant logo."),
-	ReadOnlyUser("feature.partner_center", "allows the tenant to add customer users"),
 	EmailAlerts("feature.email_alerts", "allows the tenant to use Notifications"),
+	ReadOnlyUser("feature.partner_center", "allows the tenant to add customer users"),
+	MultiLocation("feature.multi_location", "allows the tenant to create as many secondary orgs."), 
+	UnlimitedLinkedAssets("feature.unlimited_linked_assets", "Assets registered against this Tenant will not count towards their asset limit"),
+	JobSites("feature.job_sites", "allows the use of jobsites to control the assignment of assets and events."),
+	AssignedTo("feature.assigned_to", "allows users to be assigned to assets."),
+	AdvancedLocation("feature.advanced_location", "Allows for a location hierarchy."),
+	ProofTestIntegration("feature.proof_test_integration", "Allows you to conduct Proof Tests on your equipment with your Test Bed using Field ID. Currently, Field ID integrates with Roberts, Chant, Wirop, and National Automation"),
 	CustomCert("feature.cust_cert", "This tenant gets a custom cert creation included"), 
 	DedicatedProgramManager("feature.dedicated_program_manager", "Some individual will be assigned to this tenant."), 
-	MultiLocation("feature.multi_location", "allows the tenant to create as many secondary orgs."), 
-	AllowIntegration("feature.allow_integration", "Says that someone could have integration turned on."),
-	AdvancedLocation("feature.advanced_location", "Allows for a location hierarchy."),
-	UnlimitedLinkedAssets("feature.unlimited_linked_assets", "Assets registered against this Tenant will not count towards their asset limit"),
-	ProofTestIntegration("feature.proof_test_integration", "Allows you to conduct Proof Tests on your equipment with your Test Bed using Field ID. Currently, Field ID integrates with Roberts, Chant, Wirop, and National Automation");
+	AllowIntegration("feature.allow_integration", "Says that someone could have integration turned on.");
 	
 	private String label;
 	private String description;

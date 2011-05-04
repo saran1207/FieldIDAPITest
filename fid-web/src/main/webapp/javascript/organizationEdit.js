@@ -50,6 +50,11 @@ function saveExtendedFeature( feature ) {
 	$( 'extendedFeature_' + feature ).request(getStandardCallbacks());
 }
 
+function savePlansAndPricing() {
+	$( 'loading_plansAndPricing' ).style.visibility = "visible"; 
+	$( 'plansAndPricingForm' ).request(getStandardCallbacks());
+}
+
 function updateStatus() {
 	$( 'statusForm' ).request(getStandardCallbacks());
 }

@@ -581,5 +581,10 @@
 			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/updateExtendedFeature.ftl</result>
 		</action>
 
+		<action name="updatePlansAndPricing" method="updatePlansAndPricing"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/updatePlansAndPricing.ftl</result>
+		</action>
+
 	</package>
 </struts>
