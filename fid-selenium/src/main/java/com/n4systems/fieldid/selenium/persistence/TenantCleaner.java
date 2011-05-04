@@ -126,6 +126,7 @@ public class TenantCleaner {
         removeAllForTenants(EventBook.class, tenantIds);
         removeAllForTenants(AutoAttributeCriteria.class, tenantIds);
         removeAllForTenants(AutoAttributeDefinition.class, tenantIds);
+        clearAllSubAssetTypes(tenantIds);
         removeAllForTenants(AssetType.class, tenantIds);
         removeAllForTenants(AssetTypeGroup.class, tenantIds);
         removeAllForTenants(AssetStatus.class, tenantIds);
@@ -154,7 +155,18 @@ public class TenantCleaner {
         
         timeLogger.stop();
     }
-    
+
+    private void clearAllSubAssetTypes(List<Long> tenantIds) {
+        for (Long tenantId: tenantIds) {
+            Query query = em.createQuery("from " + AssetType.class.getName() + " where tenant.id = ?");
+            List resultList = query.setParameter(1, tenantId).getResultList();
+            for (Object o : resultList) {
+                ((AssetType)o).getSubTypes().clear();
+                em.merge(o);
+            }
+        }
+    }
+
     private void removeAddAssetHistory(List<Long> tenantIds) {
     	TimeLogger timeLogger = new TimeLogger(logger, "removeAddAssetHistory(%s)", tenantIds);
     	
