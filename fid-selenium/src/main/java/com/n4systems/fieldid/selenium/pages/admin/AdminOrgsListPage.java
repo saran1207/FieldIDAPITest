@@ -11,7 +11,7 @@ public class AdminOrgsListPage extends FieldIDPage {
     }
 
     public AdminOrgPage clickEditOrganization(String orgName) {
-        selenium.click("//table//a[contains(.,'"+orgName+"')]/../..//a[.='Edit']");
+        selenium.click("//table//a[.='"+orgName+"']");
         return new AdminOrgPage(selenium);
     }
     

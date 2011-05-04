@@ -53,7 +53,6 @@ public class TurnOnPlansAndPricingWithReadOnlyUserTest extends FieldIDTestCase {
         AdminOrgPage orgPage = login.filterByCompanyName("test1").clickEditOrganization("test1");
         orgPage.enterReadOnlyUser(readOnlyUser);
         orgPage.enterShowPlansAndPricing(showPlansAndPricing);
-        orgPage.submitOrganizationChanges();
 	}
 
 }

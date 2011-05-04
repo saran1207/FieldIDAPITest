@@ -72,7 +72,6 @@ public class ManageUsersTest extends FieldIDTestCase {
 	public void setUp() throws Exception {
 		AdminOrgPage adminPage = startAdmin().login().filterByCompanyName(COMPANY).clickEditOrganization(COMPANY);
 		adminPage.enterTenantLimits(new TenantLimit(-1L, -1L, -1L, -1L, -1L));
-		adminPage.submitOrganizationChanges();
 		manageUsersPage = startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageUsers();
 	}
 	
