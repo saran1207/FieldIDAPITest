@@ -429,7 +429,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	}
 	
 	private ActiveSession loadLastActiveSession(Long tenantId) {
-		return lastActiveSessionLoader.setTenant(tenantId).load();
+		return lastActiveSessionLoader.setTenant(tenantId).excludeN4User().load();
 	}
 	
 	public Long getTotalAssets(Long orgId) {
