@@ -62,6 +62,7 @@
 			<tr><td colspan = "4">&nbsp;</td></td>
 		</#if> 		
 		<tr id="extendedFeatureRow_${feature}">
+			<#assign featureLabel="${feature.label}">
 			<#include "_extendedFeatures.ftl"/>
 		</tr>
 	</#list>	

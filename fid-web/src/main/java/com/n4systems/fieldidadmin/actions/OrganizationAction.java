@@ -347,7 +347,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 		return extendedFeatures;
 	}
 	
-	public Boolean getExtendedFeature(String key) {
+	public String getExtendedFeatureLabel(String name) {
+		return ExtendedFeature.valueOf(name).getLabel();
+	}
+	
+	public Boolean getExtendedFeatureState(String key) {
 		return extendedFeatures.get(key) == null ? false : extendedFeatures.get(key);
 	}
 
