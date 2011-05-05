@@ -94,7 +94,7 @@ public class OrgPicker extends WebEntity {
 	}
 
 	public void clickCancelOwner() {
-		selenium.click("//input[@id='cancelOrgSelect']");
+		selenium.click("//a[@id='cancelOrgSelect']");
 	}
 
 }
