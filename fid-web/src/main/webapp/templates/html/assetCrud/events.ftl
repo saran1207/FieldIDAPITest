@@ -58,7 +58,7 @@
 						<#assign additionsToQueryString="&useContext=true"/>
 					</#if>
 					<#include "../eventCrud/_viewEventLink.ftl"/> 
-					<#if sessionUser.hasAccess("editevent") && asset.owner = event.owner >
+					<#if sessionUser.hasAccess("editevent") && asset.owner.tenant = event.owner.tenant >
 						|
 						<a href="#" onclick="return redirect('<@s.url action="selectEventEdit" uniqueID="${event.id}" includeParams="none" />');" ><@s.text name="label.edit"/></a>
 					</#if>
