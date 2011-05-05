@@ -36,7 +36,9 @@
 					<@s.select name="division" id="divisionList"/>
 				</div>
 				<div class="actions">
-					<@s.submit key="label.select" id="selectOrg"/> <@s.submit key="label.cancel" id="cancelOrgSelect"/>
+					<@s.submit key="label.select" id="selectOrg"/>
+					<@s.text name="label.or"/>
+					<a id="cancelOrgSelect" href="javascript:void(0);"><@s.text name="label.cancel"/></a>
 				</div>	
 			</@s.form>
 			<div id="orgBrowserLoading" style="display:none">
