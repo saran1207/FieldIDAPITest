@@ -26,6 +26,11 @@ public class AuthenticationAction extends AbstractAdminAction {
 		
 		return SUCCESS;
 	}
+	
+	public String doDelete() {
+		getSession().clear();
+		return SUCCESS;
+	}
 
 	public String getPassword() {
 		return password;

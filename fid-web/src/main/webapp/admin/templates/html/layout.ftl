@@ -13,6 +13,7 @@
 </head>
 <body>
 	<div id="header">
+		 <a href="<@s.url namespace="/admin" action="signOut"/>"><@s.text name="label.logout" /></a>
 		 <img src="../images/admin/admin-logo.png"/>
 	</div>
 	
