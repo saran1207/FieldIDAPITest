@@ -1,5 +1,5 @@
-
-<h1>Instrunctional Videos</h1>
+<h1>Instructional Videos</h1>
+${action.setPageName('instructionalVideos')!}
 
 <a href='<@s.url action="instructionalVideoAdd" namespace="/admin" includeParams="none"/>'>add video</a>
 

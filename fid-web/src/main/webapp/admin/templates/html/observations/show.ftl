@@ -1,4 +1,4 @@
-
+${action.setPageName('importObservations')!}
 
 <h2>Import Observations</h2>
 

@@ -1,4 +1,4 @@
-
+${action.setPageName('unitOfMeasure')!}
 <table>
 <tr><th>Name</th><th>Type</th><th>&nbsp;</th></tr>
 <@s.iterator id="unitOfMeasure" value="unitOfMeasures">

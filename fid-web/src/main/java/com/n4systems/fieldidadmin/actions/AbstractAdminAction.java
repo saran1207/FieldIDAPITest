@@ -16,11 +16,11 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 	
 	private Map<String, Object> session;
 	private CreateHandlerFactory createHandlerFactory;
-	
+    private String pageName;
+
 	@SuppressWarnings("unchecked")
 	public void setSession(Map session) {
 		this.session = session;
-		
 	}
 
 	protected Map<String, Object> getSession() {
@@ -38,4 +38,12 @@ public class AbstractAdminAction extends ActionSupport implements SessionAware {
 		
 		return createHandlerFactory;
 	}
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
+    }
+
+    public boolean isPageName(String pageName) {
+        return pageName.equals(this.pageName);
+    }
 }

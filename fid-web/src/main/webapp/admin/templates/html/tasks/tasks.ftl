@@ -1,4 +1,4 @@
-
+${action.setPageName('tasks')!}
 
 <@s.actionerror />
 <@s.actionmessage />

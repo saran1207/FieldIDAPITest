@@ -1,5 +1,7 @@
 <h1>EULAS</h1>
 
+${action.setPageName('eulas')!}
+
 <a href='<@s.url action="eulaAdd" namespace="/admin" />'>add eula</a>
 
 <@s.if  test="%{page.hasResults() && page.validPage()}" >

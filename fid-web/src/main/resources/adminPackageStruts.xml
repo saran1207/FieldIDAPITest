@@ -276,8 +276,6 @@
 			</result>
 		</action>
 
-
-
 		<action name="defaultPrintOutUpdate" method="update"
 			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
 			<result name="error" type="freemarker">/admin/templates/html/defaultPrintOuts/edit.ftl
@@ -332,8 +330,6 @@
 				<param name="actionName">customPrintOuts</param>
 			</result>
 		</action>
-
-
 
 		<action name="customPrintOutUpdate" method="update"
 			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
@@ -475,41 +471,6 @@
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
 				<param name="actionName">eulas</param>
-			</result>
-		</action>
-
-		<action name="promoCodes" method="list"
-			class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
-			<result name="success" type="freemarker">/admin/templates/html/promocodes/list.ftl
-			</result>
-		</action>
-
-		<action name="promoCodeEdit" method="showForm"
-			class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
-			<result name="input" type="freemarker">/admin/templates/html/promocodes/edit.ftl
-			</result>
-		</action>
-
-		<action name="promoCodeSave" method="save"
-			class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
-			<result name="success" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">promoCodes</param>
-			</result>
-		</action>
-		<action name="promoCodeDelete" method="delete"
-			class="com.n4systems.fieldidadmin.actions.PromoCodeAction">
-			<result name="error" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">promoCodes</param>
-			</result>
-			<result name="input" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">promoCodes</param>
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">promoCodes</param>
 			</result>
 		</action>
 

@@ -8,34 +8,21 @@
 	<@n4.includeScript src="prototype"/>
 	<@n4.includeScript src="scriptaculous"/>
 	<@n4.includeScript src="common"/>
+    <@n4.includeStyle href="reset"/>
+    <@n4.includeStyle href="fieldid"/>
 	<@n4.includeStyle href="admin/style"/>	
 	${head!}
 </head>
 <body>
 	<div id="header">
-		 <a href="<@s.url namespace="/admin" action="signOut"/>"><@s.text name="label.logout" /></a>
-		 <img src="../images/admin/admin-logo.png"/>
+        <a href="<@s.url namespace="/admin" action="signOut"/>"><@s.text name="label.logout" /></a>
+		 <a href="/fieldid/admin/organizations.action" style="border:0;">
+             <img src="../images/admin/admin-logo.png"/>
+         </a>
+
+         <#include '_navigation.ftl'/>
 	</div>
-	
-	<div id="nav">
-		<label for="navSelect">Action: </label>
-		<select id="navSelect" onchange="window.location = this.options[this.selectedIndex].value;">
-			<option value="organizations.action">Organizations</option>
-			<option value="eulas.action">EULA</option>
-			<option value="releaseNotes.action">Release Notes</option>
-			<option value="instructionalVideos.action">Instructional Videos</option>
-			<option value="unitOfMeasureList.action">Unit of Measures</option>
-			<option value="orderMappingList.action">Order Mappings</option>
-			<option value="importObservations.action">Observation Importer</option>
-			<option value="mailTest.action">Mail</option>
-			<option value="configCrud.action">Configuration</option>
-			<option value="certSelection.action">Certs</option>
-			<option value="taskCrud.action">Tasks</option>
-			<option value="changeAdminPass.action">Change System Pass</option>
-			<option value="promoCodes.action">Promo Codes</option>
-		</select>
-	</div>
-	
+
 	<script type="text/javascript">
 		var currentUrl = window.location.href;
 		var navSelect = $('navSelect');

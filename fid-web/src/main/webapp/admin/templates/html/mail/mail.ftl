@@ -1,4 +1,4 @@
-
+${action.setPageName('mail')!}
 
 <h2>Mail Test</h2>
 

@@ -1,3 +1,4 @@
+${action.setPageName('config')!}
 <head>
 	<script src="javascripts/json2.js" type="text/javascript"></script>
 	<script type="text/javascript">

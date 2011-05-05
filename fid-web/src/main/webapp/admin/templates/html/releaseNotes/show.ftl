@@ -1,5 +1,5 @@
 <h1>release notes <a href="<@s.url namespace="/admin" action="releaseNotesEdit"/>">Edit</a></h1>
-
+${action.setPageName('releaseNotes')!}
 <div>
 	<label>Title:</label>
 	<span>${model.title?html}</span>

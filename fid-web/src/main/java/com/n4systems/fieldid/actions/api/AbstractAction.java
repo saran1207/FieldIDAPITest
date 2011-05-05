@@ -77,6 +77,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private CreateHandlerFactory createHandlerFactory;
 	private DownloadCoordinator downloadCoordinator;
 	private boolean useContext = false;
+    private String pageName;
 	
 	
 	public AbstractAction(PersistenceManager persistenceManager) {
@@ -579,4 +580,12 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	protected CookieFactory createCookieFactory() {
 		return new CookieFactory(getServletRequest(), getServletResponse());
 	}
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
+    }
+
+    public boolean isPageName(String pageName) {
+        return pageName.equals(this.pageName);
+    }
 }

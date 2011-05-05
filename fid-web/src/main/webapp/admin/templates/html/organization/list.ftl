@@ -1,4 +1,5 @@
 <head>
+    ${action.setPageName('tenants')!}
 	<script type="text/javascript" >
 		function clearForm() {
 			$('nameFilter').value = ''

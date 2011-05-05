@@ -1,4 +1,4 @@
-<title><@s.text name="title.instrunctionalvideos"/></title>
+<title><@s.text name="title.instructionalvideos"/></title>
 
 
 <#include "_watchIntroVideo.ftl"/>

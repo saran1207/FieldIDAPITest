@@ -1,5 +1,5 @@
 <h2>System Password Change</h2>
-
+${action.setPageName('systemPass')!}
 <@s.actionerror />
 <@s.actionmessage />
 <@s.form action="changeAdminPass!save" namespace="/admin" method="post" theme="xhtml">
