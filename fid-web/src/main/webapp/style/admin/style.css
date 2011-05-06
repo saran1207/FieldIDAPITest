@@ -228,3 +228,11 @@ input[type="text"] {
 .formErrors {
     margin: 10px 5px 10px 0;
 }
+
+ul.options a, ul.options a:visited {
+    border-bottom: none;
+}
+
+ul.options {
+    margin-bottom:20px;
+}
