@@ -183,3 +183,48 @@ input[type="text"] {
 .percentBarUsed, .percentBar {
 	height:18px;
 }
+
+#formErrors {
+	width: 100%;
+}
+
+.formErrors {
+	margin: 10px;
+	border: 2px solid #FF3030;
+	background-color: #ffebeb;
+	padding: 10px;
+}
+
+.formErrors ul li span {
+	width: auto;
+}
+
+#formErrors ul {
+	margin: 0;
+	padding: 0;
+}
+
+#formErrors li {
+	list-style : none outside none;
+}
+#formErrors h2 {
+	background-color: transparent;
+	color : black;
+	padding: 0px;
+	margin: 0px;
+	border:none;
+	font-size: 1.2em;
+    line-height: 21px;
+}
+
+#formErrors * {
+	float: none;
+}
+
+.errorMessage, .error {
+    color: #FF0000;
+}
+
+.formErrors {
+    margin: 10px 5px 10px 0;
+}

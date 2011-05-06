@@ -512,48 +512,64 @@
 
 		<action name="editNote" method="editNote"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/editNote.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/editNote.ftl</result>
 		</action>
 
 		<action name="updateOrg" method="updateOrg"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/displayNote.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayNote.ftl</result>
 		</action>
 
-		<action name="updateTenant" method="updateTenant"
+		<action name="updateTenantStatus" method="updateTenantStatus"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/updateStatus.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/updateStatus.ftl</result>
 		</action>
 
+		<action name="editTenantName" method="editTenantName"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
+		</action>
+
+		<action name="cancelTenantName" method="cancelTenantName"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
+		</action>
+
+		<action name="updateTenantName" method="updateTenantName"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
+			<result name="input" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
+			<result name="error" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
+		</action>
 
 		<action name="cancelNote" method="cancelNote"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/displayNote.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayNote.ftl</result>
 		</action>
 
 		<action name="editPlan" method="editPlan"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/editPlan.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/editPlan.ftl</result>
 		</action>
 
 		<action name="savePlan" method="savePlan"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/displayPlan.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayPlan.ftl</result>
 		</action>
 
 		<action name="cancelPlan" method="cancelPlan"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/displayPlan.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayPlan.ftl</result>
 		</action>
 
 		<action name="updateExtendedFeature" method="updateExtendedFeature"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/updateExtendedFeature.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/updateExtendedFeature.ftl</result>
 		</action>
 
 		<action name="updatePlansAndPricing" method="updatePlansAndPricing"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/updatePlansAndPricing.ftl</result>
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/updatePlansAndPricing.ftl</result>
 		</action>
 
 	</package>

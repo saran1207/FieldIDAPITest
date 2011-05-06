@@ -15,6 +15,8 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
 import com.n4systems.fieldid.security.TenantLimitProxy;
+import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
+import com.n4systems.fieldidadmin.utils.TenantPathUpdater;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.activesession.ActiveSession;
@@ -25,6 +27,7 @@ import com.n4systems.model.orgs.AllPrimaryOrgsPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
+import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
 import com.n4systems.model.user.User;
@@ -41,11 +44,14 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.Preparable;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @Validations
-public class OrganizationAction extends AbstractCrud implements Preparable {
+public class OrganizationAction extends AbstractCrud implements Preparable, HasDuplicateValueValidator {
 
 	public OrganizationAction(com.n4systems.ejb.PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -60,7 +66,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	private PrimaryOrg primaryOrg;
 	private AccountHelper accountHelper;
 	private TenantLimitProxy limitProxy;
-
+	private TenantNameAvailabilityChecker tenantNameAvailablityChecker = new TenantNameAvailabilityChecker(); 
+	
 	private User adminUser = new User();
 	private String title;
 	private String note;
@@ -82,7 +89,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	private String sortDirection;
 	private String featureName;
 	private boolean featureOn;
-	
+		
 	@Override
 	protected void initMemberFields() {
 	}
@@ -182,8 +189,30 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	}
 	
 	@SkipValidation
-	public String doUpdateTenant() {
+	public String doUpdateTenantStatus() {
 		updateTenant();
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doEditTenantName() {
+		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doCancelTenantName() {
+		return SUCCESS;
+	}
+	
+	public String doUpdateTenantName() {
+		try {
+			updateTenant();
+			TenantPathUpdater tenantPathUpdater = new TenantPathUpdater();
+			tenantPathUpdater.renameTenantPaths(primaryOrg.getTenant(), tenant.getName());
+			primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
+		} catch (Exception e) {
+			return ERROR;
+		}
 		return SUCCESS;
 	}
 
@@ -303,6 +332,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 	public Tenant getTenant() {
 		return tenant;
 	}
+	
+	public void setTenant(Tenant tenant) {
+		this.tenant = tenant;
+	}
+	
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}
@@ -517,5 +551,26 @@ public class OrganizationAction extends AbstractCrud implements Preparable {
 
 	public void setFeatureOn(boolean featureOn) {
 		this.featureOn = featureOn;
+	}
+
+	public String getTenantName() {
+		return tenant.getName();
+	}
+
+	@RequiredStringValidator(message="", key="error.tenant_name_required", shortCircuit=true)
+	@StringLengthFieldValidator(message="", key="error.tenant_name_length", minLength="3", maxLength="255")
+	@FieldExpressionValidator(expression="validTenantName", message = "", key="error.tenant_name_format")
+	@CustomValidator(type="uniqueValue", message = "", key="error.name_already_used")
+	public void setTenantName(String name) {
+		tenant.setName(name);
+	}
+	
+	public boolean isValidTenantName() {
+		String regex = "^[A-Za-z0-9][A-Za-z0-9\\-]+[A-Za-z0-9]$";
+		return getTenantName().matches(regex);
+	}
+
+	public boolean duplicateValueExists(String formValue) {
+		return !tenantNameAvailablityChecker.isAvailable(formValue);
 	}
 }

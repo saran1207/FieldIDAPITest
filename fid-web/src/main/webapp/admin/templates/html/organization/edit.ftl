@@ -6,6 +6,8 @@
 		cancelNoteUrl = '<@s.url action="cancelNote" namespace="/adminAjax"/>'
 		editPlanUrl = '<@s.url action="editPlan" namespace="/adminAjax"/>'
 		cancelPlanUrl = '<@s.url action="cancelPlan" namespace="/adminAjax"/>'
+		editNameUrl = '<@s.url action="editTenantName" namespace="/adminAjax"/>'
+		cancelNameUrl = '<@s.url action="cancelTenantName" namespace="/adminAjax"/>'
 	</script>
 </head>
 
@@ -13,7 +15,9 @@
 	<#assign tenant = primaryOrg.tenant>
     <img class="logo" alt="${(tenant.displayName?html)!}" src='<@s.url action="downloadTenantLogo" namespace="/file" uniqueID="${tenant.id}" />'/>
 	<h3>${primaryOrg.displayName}</h3>	
-	<a href='${action.getLoginUrlForTenant(tenant)}' target='_blank' >${tenant.name}.fieldid.com</a>
+	<div id="loginUrl">
+		<#include "_loginUrl.ftl"/>	
+	</div>
 	
 	<div id="address">
 		<#if primaryOrg.addressInfo??>
@@ -24,6 +28,14 @@
 		    <label>${primaryOrg.addressInfo.zip!""}</label>
 		    <label>${primaryOrg.addressInfo.phone1!""}</label>
 		</#if>	
+	</div>
+	
+	<div id="createDate">
+		<label class="bold">Customer Since: </label>${primaryOrg.created?date}
+	</div>
+	
+	<div id="tenantName">
+		<#include "_nameDisplay.ftl"/>
 	</div>
 	
 	<div id="orgStatus">

@@ -486,6 +486,10 @@ public class PathHandler {
 		return absolutize(mergePaths(getAssetTypeImageBasePath(assetType.getTenant()), getAssetTypePath(assetType)));
 	}
 
+    public static File getEventSignatureBaseFile(Tenant tenant) {
+        return absolutize(getEventSignatureBasePath(tenant));
+    }
+
     public static File getEventSignatureDirectory(Tenant tenant, Long eventId) {
         return absolutize(mergePaths(getEventSignatureBasePath(tenant), eventId.toString()));
     }

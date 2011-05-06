@@ -1,0 +1,1 @@
+<a href='${action.getLoginUrlForTenant(tenant)}' target='_blank' >${tenant.name}.fieldid.com</a>

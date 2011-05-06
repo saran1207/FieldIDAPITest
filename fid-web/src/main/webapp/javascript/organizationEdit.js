@@ -2,6 +2,9 @@ var editNoteUrl = "";
 var cancelNoteUrl = "";
 var editPlanUrl = "";
 var cancelPlanUrl = "";
+var editNameUrl = "";
+var cancelNameUrl = "";
+
 
 function editNote( id ) {
 	var params = new Object();
@@ -27,7 +30,6 @@ function editPlan( id ) {
 	var params = new Object();
 	params.id = id;
 	getResponse(editPlanUrl, "get", params);
-
 }
 
 function updatePlan() {
@@ -59,4 +61,19 @@ function updateStatus() {
 	$( 'statusForm' ).request(getStandardCallbacks());
 }
 
+function editName( id ) {
+	var params = new Object();
+	params.id = id;
+	getResponse(editNameUrl, "get", params);
+}
+
+function cancelName( id ) {
+	var params = new Object();
+	params.id = id;
+	getResponse(cancelNameUrl, "get", params);
+}
+
+function updateName() {
+	$( 'nameForm' ).request(getStandardCallbacks());
+}
 
