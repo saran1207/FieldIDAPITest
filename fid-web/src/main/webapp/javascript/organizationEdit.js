@@ -75,5 +75,7 @@ function cancelName( id ) {
 
 function updateName() {
 	$( 'nameForm' ).request(getStandardCallbacks());
+	if( $('formErrors') == undefined)
+		alert("Reminder: Update the reports directory in SVN!");
 }
 
