@@ -89,6 +89,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private String sortDirection;
 	private String featureName;
 	private boolean featureOn;
+	private boolean showReminder = false;
 		
 	@Override
 	protected void initMemberFields() {
@@ -197,11 +198,13 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	@SkipValidation
 	public String doEditTenantName() {
+		setShowReminder(false);
 		return SUCCESS;
 	}
 	
 	@SkipValidation
 	public String doCancelTenantName() {
+		setShowReminder(false);
 		return SUCCESS;
 	}
 	
@@ -211,6 +214,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			TenantPathUpdater tenantPathUpdater = new TenantPathUpdater();
 			tenantPathUpdater.renameTenantPaths(primaryOrg.getTenant(), tenant.getName());
 			primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
+			setShowReminder(true);
 		} catch (Exception e) {
 			return ERROR;
 		}
@@ -573,5 +577,13 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	public boolean duplicateValueExists(String formValue) {
 		return !tenantNameAvailablityChecker.isAvailable(formValue);
+	}
+
+	public boolean isShowReminder() {
+		return showReminder;
+	}
+
+	public void setShowReminder(boolean showReminder) {
+		this.showReminder = showReminder;
 	}
 }

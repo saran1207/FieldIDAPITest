@@ -7,4 +7,8 @@
 </#assign>
 	$('tenantName').update("${html}");
 	$('loginUrl').update("${loginUrl}");
+	if(${showReminder?string}) {
+		alert("Reminder: Update the reports directory in SVN!");
+	}
+	
 </#escape>

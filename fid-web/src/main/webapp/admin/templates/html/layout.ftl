@@ -15,24 +15,13 @@
 </head>
 <body>
 	<div id="header">
-        <a href="<@s.url namespace="/admin" action="signOut"/>"><@s.text name="label.logout" /></a>
+        <a class="floatRight" href="<@s.url namespace="/admin" action="signOut"/>"><@s.text name="label.logout" /></a>
 		 <a href="/fieldid/admin/organizations.action" style="border:0;">
              <img src="../images/admin/admin-logo.png"/>
          </a>
 
          <#include '_navigation.ftl'/>
 	</div>
-
-	<script type="text/javascript">
-		var currentUrl = window.location.href;
-		var navSelect = $('navSelect');
-		for (var i = 0; i < navSelect.length; i++) {
-			if (currentUrl.indexOf(navSelect.options[i].value) != -1) {
-				navSelect.selectedIndex = i;
-				break;
-			}	
-		}
-	</script>
 	
 	<div id="container">
 		<div id="content">

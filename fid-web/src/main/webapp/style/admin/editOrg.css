@@ -51,6 +51,7 @@
 }
 
 #orgInfo h3 {
+	padding: 5px 0;
 	margin-bottom: 0;
 }
 
@@ -127,13 +128,13 @@
    padding-left : 30px;
 }
 
-#extendedFeaturesList td {
-	padding-bottom : 10px;
-	border-bottom: 1px dashed #C0C0C0;
+#extendedFeatures h3 {
+	padding: 5px 0;
 }
 
-.onIcon, .offIcon {
-	background-position: center top;
+#extendedFeaturesList td {
+	padding : 5px;
+	border-bottom: 1px dashed #C0C0C0;
 }
 
 #nameForm input[type="text"] {

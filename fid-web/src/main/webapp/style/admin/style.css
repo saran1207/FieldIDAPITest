@@ -15,10 +15,6 @@ body {
  height: 101px;
 }
 
-#header a {
-	float: right;
-}
-
 #nav {
 	border-bottom: 1px solid #CACACA;
 	margin: 0 auto;
@@ -235,4 +231,8 @@ ul.options a, ul.options a:visited {
 
 ul.options {
     margin-bottom:20px;
+}
+
+floatRight {
+	float: right;
 }
