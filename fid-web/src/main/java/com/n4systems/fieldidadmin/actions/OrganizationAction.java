@@ -140,6 +140,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		return SUCCESS;
 	}
 	
+	@SkipValidation
 	public String doUpdateExtendedFeature() throws Exception {
 		OrgSaver orgSaver = new OrgSaver();
 		
