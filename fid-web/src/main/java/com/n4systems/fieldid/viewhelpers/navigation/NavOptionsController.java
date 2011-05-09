@@ -94,7 +94,8 @@ public class NavOptionsController {
 											props.getString("type"), 
 											urlParams, 
 											props.getString("conditionalView"), 
-											props.getBoolean("useEntityTitle")));
+											props.getBoolean("useEntityTitle"),
+                                            props.getBoolean("wicket")));
 			}
 
 			Collections.sort(navOptions, new Comparator<NavOption>() {

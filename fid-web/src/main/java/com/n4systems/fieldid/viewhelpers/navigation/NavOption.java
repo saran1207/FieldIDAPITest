@@ -19,9 +19,9 @@ public class NavOption {
 	private Integer order;
 	private boolean useEntityTitle;
 	private Map<String,String> urlParams;
+    private boolean wicket;
 		
-	public NavOption(String label, String name, String action, int order, String permissionRequired, String extendedFeatureRequired, String type, Map<String, String> urlParams, String conditionalView, boolean useEntityTitle) {
-		super();
+	public NavOption(String label, String name, String action, int order, String permissionRequired, String extendedFeatureRequired, String type, Map<String, String> urlParams, String conditionalView, boolean useEntityTitle, boolean wicket) {
 		this.label = label;
 		this.name = name;
 		this.order = order;
@@ -32,6 +32,7 @@ public class NavOption {
 		this.conditionalView = conditionalView;
 		this.urlParams = urlParams;
 		this.useEntityTitle = useEntityTitle;
+        this.wicket = wicket;
 	}
 	
 	public String getLabel() {
@@ -94,4 +95,12 @@ public class NavOption {
 	public boolean isRightJustified() {
 		return type.equals(TYPE_ADD) || type.equals(TYPE_ENTITYRIGHT);
 	}
+
+    public boolean isWicket() {
+        return wicket;
+    }
+
+    public void setWicket(boolean wicket) {
+        this.wicket = wicket;
+    }
 }

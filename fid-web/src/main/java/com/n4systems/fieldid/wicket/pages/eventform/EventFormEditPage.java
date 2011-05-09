@@ -21,6 +21,7 @@ import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -44,6 +45,9 @@ public class EventFormEditPage extends FieldIDWicketPage {
 
     public EventFormEditPage(PageParameters params) {
         super(params);
+
+        add(CSSPackageResource.getHeaderContribution("style/fieldid.css"));
+        add(CSSPackageResource.getHeaderContribution("style/eventFormEdit.css"));
 
         add(topSavePanel = createSavePanel("topSavePanel"));
         add(bottomSavePanel = createSavePanel("bottomSavePanel"));

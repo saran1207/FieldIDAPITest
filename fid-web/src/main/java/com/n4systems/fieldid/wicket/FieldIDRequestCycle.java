@@ -19,9 +19,11 @@ public class FieldIDRequestCycle extends WebRequestCycle {
     @Override
     protected void onBeginRequest() {
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
-        FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
-        User user = userLoader.setId(sessionUser.getId()).load();
-        ThreadLocalUserContext.getInstance().setCurrentUser(user);
+        if (sessionUser != null) {
+            FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
+            User user = userLoader.setId(sessionUser.getId()).load();
+            ThreadLocalUserContext.getInstance().setCurrentUser(user);
+        }
     }
 
     @Override

@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+        <title>Field ID : Safety Management - 	Setup
+        </title>
+        <link type="text/css" href="/fieldid/style/reset.css" rel="stylesheet" media="all"/><link type="text/css" href="/fieldid/style/fieldid.css" rel="stylesheet" media="all"/><!--[if IE 6]>
+        <link type="text/css" href="/fieldid/style/fieldid-ie6.css" rel="stylesheet" media="all"/><![endif]-->
+        <!--[if IE 7]>
+        <link type="text/css" href="/fieldid/style/fieldid-ie7.css" rel="stylesheet" media="all"/><![endif]-->
+        <link type="text/css" href="/fieldid/style/site_wide.css" rel="stylesheet" media="all"/><link type="text/css" href="/fieldid/style/branding/default.css" rel="stylesheet" media="all"/><link rel="shortcut icon" href="/fieldid/images/favicon.ico" type="image/x-icon" />
+        <script type="text/javascript" src="/fieldid/javascript/prototype.js"></script><script type="text/javascript" src="/fieldid/javascript/scriptaculous.js"></script><script type="text/javascript" src="/fieldid/javascript/json2.js"></script><script type="text/javascript" src="/fieldid/javascript/common.js"></script><!--[if IE 6]>
+        <script type="text/javascript" src="/fieldid/javascript/common-ie6.js"></script><![endif]-->
+                    <link type="text/css" href="/fieldid/style/pageStyles/settings.css" rel="stylesheet" media="all"/>
+        <link type="text/css" href="/fieldid/style/lightview/lightview.css" rel="stylesheet" media="all"/><script type="text/javascript" src="/fieldid/javascript/lightview.js"></script><script type="text/javascript" >	function closeLightBox() {
+                Lightview.hide();
+            }
+        </script>
+    </head>
+
+    <body id="fieldidBody">
+        <div id="systemNotices">
+        </div>
+        <div id="page">
+
+<div id="pageHeader">
+
+        <div id="pageActions" style="float:none;">
+        <div id="listContainer">
+            <ul class="listOfLinks">
+                <li class="first">
+                    Welcome, <span wicket:id="loggedInUsernameLabel"></span>
+                </li>
+                <li>
+                      <a href="/fieldid/myAccount.action"><wicket:message key="label.myaccount"/></a>
+                </li>
+                <li wicket:id="topInviteLinkContainer">
+                    <a href="/fieldid/invite.action" onclick:target="_blank"><wicket:message key="label.invite"/></a>
+                </li>
+                <li wicket:id="topUpgradeLinkContainer">
+                    <a href="http://www.fieldid.com/upgrade" target="_blank"><wicket:message key="label.upgrade"/></a>
+                </li>
+                <li>
+                      <a href="http://www.n4systems.com/support" target="_blank"><wicket:message key="label.support"/></a>
+                </li>
+                <li wicket:id="topFieldIDStoreLink">
+                      <a href="/fieldid/redirectToWebStore.action" target="_blank" ><wicket:message key="label.fieldid_webstore"/></a>
+                </li>
+                <li>
+                      <a href="http://blog.fieldid.com/" target="_blank" ><wicket:message key="label.blog"/></a>
+                  </li>
+                  <li>
+                    <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
+                </li>
+              </ul>
+          </div>
+      </div>
+
+<div id="companyLogo">
+    <img width="215" height="61" src="/fieldid/file/downloadTenantLogo.action?uniqueID=15511493"/>
+</div>
+    <div id="pageNavigation">
+        <ul>
+            <li>
+                <a href="/fieldid/home.action" class="speedLink" id="menuHome"><wicket:message key="speed.home"/></a>
+            </li>
+            <div wicket:id="identifyLinksContainer">
+                <li wicket:id="identifyLinkContainer">
+                    <a href="/fieldid/identify.action" class="speedLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
+                </li>
+                <li wicket:id="addAssetLinkContainer">
+                    <a href="/fieldid/assetAdd.action" class="speedLink" id="menuIdentify"><wicket:message key="speed.identify"/></a>
+                </li>
+            </div>
+            <li wicket:id="startEventLinkContainer">
+                <a href="/fieldid/startEvent.action" class="speedLink" id="menuEvent"><wicket:message key="speed.event"/></a>
+            </li>
+            <li>
+                <a href="/fieldid/search.action" class="speedLink" id="menuAssets"><wicket:message key="speed.assets"/></a>
+            </li>
+            <li>
+                <a href="/fieldid/report.action" class="speedLink" id="menuReport"><wicket:message key="speed.reporting"/></a>
+            </li>
+            <li>
+                <a href="/fieldid/schedule.action" class="speedLink" id="menuSchedule"><wicket:message key="speed.schedules"/></a>
+            </li>
+            <li wicket:id="safetyNetworkLinkContainer">
+                <a href="/fieldid/safetyNetwork.action" class="speedLink" id="menuSafetyNetwork"><wicket:message key="speed.event"/></a>
+            </li>
+            <li wicket:id="jobsLinkContainer">
+                <a href="/fieldid/jobs.action" class="speedLink" id="menuProject"><wicket:message key="speed.projects"/></a>
+            </li>
+            <li wicket:id="setupLinkContainer">
+                <a wicket:id="setupLink" class="speedLink" id="menuSetup"><wicket:message key="label.setup"/></a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<div id="contentHeader">
+    <div id="notifications" >
+  <div class="message" id="message"  style="display:none">
+  </div>
+  <div id="error" class="error" style="display:none">
+  </div>
+</div>    <div id="contentTitle">
+        <h1>
+    Setup
+        </h1>
+
+
+        <div class="backToLink">
+        </div>
+
+        <div id="smartSearchContainer">
+
+<form id="smartSearch" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">				<label for="search">Find:</label>
+<input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/><input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
+
+<input type="text" name="search" value="Serial, RFID or Reference Number" id="searchText" class="description"/></span><input type="submit" id="smartSearchButton" name="load" value="Load"/>
+</form>
+
+
+
+        </div>
+    </div>
+
+    <div wicket:id="navBar"></div>
+
+</div>
+
+<script type="text/javascript">
+    document.observe("dom:loaded", function() {
+        $('searchText').observe('focus', clearDescription);
+        $('searchText').observe('blur', replaceDescription);
+        $('smartSearch').observe('submit', submitSmartSearch);
+    });
+</script>
+            <div id="pageContent">
+
+                <wicket:child></wicket:child>
+
+            </div>
+
+    <div id="pageFooter">
+        <div>
+            <p><span wicket:id="versionLabel"></span></p>
+        </div>
+<div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/images/poweredByFieldID.jpg" border="0"/></a></div>	</div>
+        </div>
+
+</body>
+
+</html>
