@@ -2,7 +2,9 @@
 	<tr>
 		<th><@s.text name="label.schedule_date"/></th>
 		<th><@s.text name="label.eventtype"/></th>
-		<th><@s.text name="label.job"/></th>
+		<#if securityGuard.projectsEnabled>
+			<th><@s.text name="label.job"/></th>
+		</#if>
 		<th></th>
 	</tr>
 	<tbody id="schedules">

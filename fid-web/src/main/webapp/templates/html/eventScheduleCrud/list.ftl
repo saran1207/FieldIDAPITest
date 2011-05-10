@@ -1,7 +1,12 @@
 <head>
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<@n4.includeStyle href="schedules" type="page"/>
-	<script type="text/javascript" src="javascript/eventSchedule.js"></script>
+	<@n4.includeScript src="eventSchedule.js"/>
+	<script type="text/javascript" >
+		editScheduleUrl =  '<@s.url action="eventScheduleEdit" namespace="/ajax" />';
+		cancelScheduleUrl = '<@s.url action="eventScheduleShow" namespace="/ajax"/>';
+		removeScheduleUrl = '<@s.url action="eventScheduleDelete" namespace="/ajax"/>';
+	</script>
 </head>
 
 <#if action.sessionUser.hasAccess("createevent")>
@@ -22,8 +27,3 @@
 
 <#include "_list.ftl"/>
 
-<script type="text/javascript" >
-	editScheduleUrl =  '<@s.url action="eventScheduleEdit" namespace="/ajax" />';
-	cancelScheduleUrl = '<@s.url action="eventScheduleShow" namespace="/ajax"/>';
-	removeScheduleUrl = '<@s.url action="eventScheduleDelete" namespace="/ajax"/>';
-</script>

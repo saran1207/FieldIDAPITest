@@ -6,11 +6,13 @@
 	</td>
 
 	<td>${eventSchedule.eventType.name}</td>
-	
-	<td id="jobName_${eventSchedule.id}">
-		<#include "_showJob.ftl"/>
-	</td>
-	
+
+	<#if securityGuard.projectsEnabled>
+		<td id="jobName_${eventSchedule.id}">
+			<#include "_showJob.ftl"/>
+		</td>
+	</#if>
+		
 	<td>
 		<#if sessionUser.hasAccess( "createevent" )>
 			<span id="scheduleActions_${eventSchedule.id}">
