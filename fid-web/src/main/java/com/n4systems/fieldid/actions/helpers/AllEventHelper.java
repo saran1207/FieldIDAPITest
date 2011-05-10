@@ -6,8 +6,10 @@ import java.util.List;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.event.EventsByNetworkIdPaginatedLoader;
 import com.n4systems.model.safetynetwork.EventsByNetworkIdLoader;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.tools.Pager;
 
 public class AllEventHelper {
 	
@@ -43,12 +45,9 @@ public class AllEventHelper {
 		return events;
 	}
 	
-	public List<Event> getEvents(String order, boolean ascending) {
-		if (events == null) {
-			EventsByNetworkIdLoader loader = new EventsByNetworkIdLoader(filter);
-			events = loader.setNetworkId(asset.getNetworkId()).setOrder(order, ascending).load();
-		}
-		return events;
+	public Pager<Event> getPaginatedEvents(Integer page, String order, boolean ascending) {
+		EventsByNetworkIdPaginatedLoader loader = new EventsByNetworkIdPaginatedLoader(filter);
+		return loader.setNetworkId(asset.getNetworkId()).setOrder(order, ascending).setPage(page).load();
 	}
 
 	public Event getLastEvent() {

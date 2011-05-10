@@ -14,8 +14,11 @@
 	<a id="manageEvent" href="#" onclick="return redirect('<@s.url action="eventGroups" uniqueID="${uniqueID}"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
 </div>
 
-<#if !events.isEmpty() >
+<#if !pagedEvents.list.isEmpty() >
 	
+	<#assign page = pagedEvents/>
+	
+	<#include '../common/_pagination.ftl' />
 	<table class="list">
 		<tr>
 			<@s.text id="dateLabel" name="label.date_performed"/>
@@ -41,7 +44,7 @@
 			</#list>
 			<th>&nbsp;</th>
 		</tr>
-		<#list events as event >
+		<#list page.list as event >
 			<tr>
 				<td>${action.formatDateTime(event.date)}</td>
 				<td>${event.type.name}</td>
@@ -66,6 +69,7 @@
 			</tr>
 		</#list>
 	</table>
+	<#include '../common/_pagination.ftl' />	
 <#else>
 	<div class="initialMessage" >
 		<div class="textContainer">
