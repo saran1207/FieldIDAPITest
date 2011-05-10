@@ -113,10 +113,14 @@ public class SavedReportSearchCriteriaConverter {
     private void verifySavedColumnsAreAllStillPresent(List<String> columnIds) {
         List<String> allColumnIds = getListOfAllColumnIds();
         for (String columnId : columnIds) {
-            if (!allColumnIds.contains(columnId)) {
+            if (!isDyanmic(columnId) && !allColumnIds.contains(columnId)) {
                 throw new MissingEntityException("Column from saved report was missing, must have been deleted. ID: " + columnId);
             }
         }
+    }
+
+    private boolean isDyanmic(String columnId) {
+        return columnId.startsWith("event_search_infooption_") || columnId.startsWith("event_search_insattribute_test");
     }
 
     protected List<String> getListOfAllColumnIds() {
