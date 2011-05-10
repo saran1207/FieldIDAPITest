@@ -3,10 +3,16 @@ package com.n4systems.fieldid.wicket.pages.setup;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.CSSPackageResource;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public abstract class SetupPage extends FieldIDLoggedInPage {
+
+    protected SetupPage() {
+        add(CSSPackageResource.getHeaderContribution("style/pageStyles/settings.css"));
+    }
 
     @Override
     protected void addNavBar(String navBarId) {

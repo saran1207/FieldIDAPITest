@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
+import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -27,6 +28,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/templates", TemplatesPage.class);
 
         getMarkupSettings().setStripWicketTags(true);
+        getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());
     }
 
     @Override

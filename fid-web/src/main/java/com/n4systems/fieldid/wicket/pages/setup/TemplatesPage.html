@@ -2,29 +2,34 @@
 
 <div class="setupList">
 		<div class="setupOption autoAttributeCriteria">
-			<h1><a href="/fieldid/autoAttributeCriteriaList.action" >Auto Attribute Wizard</a></h1>
-			<p>Easily map variables to pre-defined values for assets</p>
+			<h1><a href="/fieldid/autoAttributeCriteriaList.action" ><wicket:message key="title.auto_attribute_wizard.plural" /></a></h1>
+			<p><wicket:message key="label.manage_auto_attirbute_criteria_msg" /></p>
 		</div>
 
 		<div class="setupOption commentTemplate">
-			<h1><a href="/fieldid/commentTemplateList.action" >Manage Comment Templates</a></h1>
-			<p>Speed up the entry of comments by creating frequently used templates</p>
+			<h1><a href="/fieldid/commentTemplateList.action" ><wicket:message key="title.manage_comment_templates.plural" /></a></h1>
+			<p><wicket:message key="label.manage_comment_template_msg" /></p>
 		</div>
 
 		<div class="setupOption assetColumnsLayout">
-			<h1><a href="/fieldid/editAssetColumnLayout.action" >Asset Search Column Layout</a></h1>
-			<p>Change the default display, order and sort of your asset search</p>
+			<h1><a href="/fieldid/editAssetColumnLayout.action" ><wicket:message key="title.column_layout_asset" /></a></h1>
+			<p><wicket:message key="label.column_layout_asset" /></p>
 		</div>
 
 		<div class="setupOption eventColumnsLayout">
-			<h1><a href="/fieldid/editEventColumnLayout.action" >Reporting Column Layout</a></h1>
-			<p>Change the default display, order and sort of your reporting search</p>
+			<h1><a href="/fieldid/editEventColumnLayout.action" ><wicket:message key="title.column_layout_event" /></a></h1>
+			<p><wicket:message key="label.column_layout_event" /></p>
 		</div>
 
 		<div class="setupOption scheduleColumnsLayout">
-			<h1><a href="/fieldid/editScheduleColumnLayout.action" >Schedule Column Layout</a></h1>
-			<p>Change the default display, order and sort of your schedule search</p>
+			<h1><a href="/fieldid/editScheduleColumnLayout.action" ><wicket:message key="title.column_layout_schedule" /></a></h1>
+			<p><wicket:message key="label.column_layout_schedule" /></p>
 		</div>
+
+        <div wicket:id="assetCodeMappingContainer" class="setupOption assetCodeMapping">
+            <h1><a href="/fieldid/assetCodeMappingList.action" ><wicket:message key="title.manage_asset_code_mappings.plural" /></a></h1>
+            <p><wicket:message key="label.manage_asset_code_mapping_msg" /></p>
+        </div>
 </div>
 
 </wicket:extend>
