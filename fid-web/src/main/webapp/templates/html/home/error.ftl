@@ -6,6 +6,8 @@
 		<span class="errorMessage"><@s.text name="message.problem_has_occured"/></span>
 	</div>
 	<p>
-		<@s.text name="message.help_fix_issue"/>
+		<@s.text name="message.help_fix_issue">
+			<@s.param>${helpUrl}</@s.param>
+		</@s.text>
 	</p>
 </div>

@@ -10,7 +10,9 @@
 			</#if>
 		</div>
 	<p>
-		<@s.text name="message.cannotloaddata_support"/>
+		<@s.text name="message.cannotloaddata_support">
+			<@s.param>${helpUrl}</@s.param>
+		</@s.text>
 	</p>
 </div>
 

@@ -21,6 +21,7 @@ import com.n4systems.model.Order.OrderType;
 import com.n4systems.plugins.PluginFactory;
 import com.n4systems.plugins.integration.OrderResolver;
 import com.n4systems.security.Permissions;
+import com.n4systems.util.ConfigEntry;
 
 @ExtendedFeatureFilter(requiredFeature=ExtendedFeature.Integration)
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
@@ -139,6 +140,10 @@ public class IdentifyCrud extends AbstractCrud {
 	
 	public int getIdentifiedAssetCount(LineItem lineItem) {
 		return orderManager.countAssetsTagged(lineItem);
+	}
+	
+	public String getHelpUrl(){
+		return getConfigContext().getString(ConfigEntry.HELP_SYSTEM_URL);
 	}
 	
 }

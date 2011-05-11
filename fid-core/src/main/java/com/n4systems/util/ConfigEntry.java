@@ -77,7 +77,8 @@ public enum ConfigEntry {
 	EXTERNAL_PLANS_AND_PRICING_ENABLED			(	"true" 					),
 	EXTERNAL_PLANS_AND_PRICING_URL				(	"http://www.n4systems.com/pricing/"	),
 	MAX_SERIALS_PER_PROOFTEST					(	"50"					),
-    HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS       (	"0"	);
+    HOUR_TO_RUN_EVENT_SCHED_NOTIFICATIONS       (	"0"	),
+	HELP_SYSTEM_URL                             (   "http://n4systems.helpserve.com/index.php?/Tickets/Submit/");
 	
 	private String defaultValue;
 	

@@ -17,6 +17,7 @@ import com.n4systems.model.ui.releasenotes.ReleaseNotes;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.JobListService;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.ConfigEntry;
 
 public class HomeAction extends AbstractAction {
 	private static final Logger logger = Logger.getLogger(HomeAction.class);
@@ -81,5 +82,9 @@ public class HomeAction extends AbstractAction {
 	
 	public String doRestricted() {
 		return ERROR;
+	}
+	
+	public String getHelpUrl(){
+		return getConfigContext().getString(ConfigEntry.HELP_SYSTEM_URL);
 	}
 }
