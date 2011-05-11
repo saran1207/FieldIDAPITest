@@ -4,8 +4,10 @@ import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.ColumnMappingGroup;
+import com.n4systems.model.columns.ReportType;
 import com.n4systems.model.columns.SystemColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingGroupLoader;
+import com.n4systems.model.columns.loader.CustomColumnsLoader;
 import com.n4systems.model.columns.loader.SystemColumnMappingLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.savedreports.SavedReport;
@@ -120,7 +122,7 @@ public class SavedReportSearchCriteriaConverter {
     }
 
     private boolean isDyanmic(String columnId) {
-        return columnId.startsWith("event_search_infooption_") || columnId.startsWith("event_search_insattribute_test");
+        return columnId.startsWith("event_search_infooption_") || columnId.startsWith("event_search_insattribute_");
     }
 
     protected List<String> getListOfAllColumnIds() {
@@ -130,6 +132,10 @@ public class SavedReportSearchCriteriaConverter {
             for (ColumnMapping columnMapping : group.getColumnMappings()) {
                 allColumnIds.add(columnMapping.getName());
             }
+        }
+        CustomColumnsLoader customColumnsLoader = new CustomColumnsLoader(loaderFactory.getSecurityFilter()).reportType(ReportType.EVENT);
+        for (ColumnMapping mapping : customColumnsLoader.load()) {
+            allColumnIds.add(mapping.getName());
         }
         return allColumnIds;
     }
