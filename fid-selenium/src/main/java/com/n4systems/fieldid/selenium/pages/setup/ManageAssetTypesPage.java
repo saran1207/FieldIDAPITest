@@ -138,7 +138,7 @@ public class ManageAssetTypesPage extends FieldIDPage {
 	}
 
 	public String getViewInstructions() {
-		return selenium.getText("//div[@class='viewSection']//label[.='Instructions']/../span");
+		return selenium.getText("//div[@class='viewSection']//label[.='More Information']/../span");
 	}
 
 	public String getViewHasManufacturerCertificate() {
