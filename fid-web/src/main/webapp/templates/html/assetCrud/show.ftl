@@ -264,7 +264,7 @@ ${action.setPageType('asset', 'show')!}
 	
 	<#if asset.type.instructions?exists && asset.type.instructions?length gt 0 >
 		<div class="rightViewSection topBorder">
-			<h3 class="subheading"><@s.text name="label.instructions"/></h3>
+			<h3 class="subheading"><@s.text name="label.more_information"/></h3>
 			<p>
 				${asset.type.instructions!}
 			</p>

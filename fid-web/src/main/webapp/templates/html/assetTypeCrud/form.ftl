@@ -83,7 +83,7 @@
 		</span>
 	</p>
 	<p>
-		<label><@s.text name="label.instructions" /></label>
+		<label><@s.text name="label.more_information" /></label>
 		<span>	
 			<@s.textarea name="instructions"  rows="3" cols="50" />
 		</span>

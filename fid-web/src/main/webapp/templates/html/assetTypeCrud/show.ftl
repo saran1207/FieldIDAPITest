@@ -18,7 +18,7 @@ ${action.setPageType('asset_type', 'show')!}
 	</p>
 	
 	<p>
-		<label><@s.text name="label.instructions"/></label>
+		<label><@s.text name="label.more_information"/></label>
 		<span class="fieldValue">${assetType.instructions!}</span>
 	</p>
 	
