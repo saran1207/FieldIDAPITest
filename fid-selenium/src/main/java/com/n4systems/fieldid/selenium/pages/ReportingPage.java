@@ -70,12 +70,12 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 	}
 	
 	public void clickViewEvent(String serialNumber){
-		selenium.click("//table[@class='list']//td[4]//a[.='" +serialNumber+"']/../..//a[.='View']");	
+		selenium.click("//table[@class='list']//td//a[.='" +serialNumber+"']/../..//a[.='View']");	
 		waitForElementToBePresent("//iframe[@id='lightviewContent']");
 	}
 	
 	public EventPage clickEditEvent(String serialNumber) {
-		selenium.click("//table[@class='list']//td[4]//a[.='" +serialNumber+"']/../..//a[.='Edit']");		
+		selenium.click("//table[@class='list']//td//a[.='" +serialNumber+"']/../..//a[.='Edit']");		
 		return new EventPage(selenium);
 	}
 	
@@ -117,6 +117,6 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
     
     @Override
 	public List<String> getResultSerialNumbers() {
-		return collectTableValuesUnderCellForCurrentPage(2, 4, "a");
+		return collectTableValuesUnderCellForCurrentPage(2, 3, "a");
 	}
 }

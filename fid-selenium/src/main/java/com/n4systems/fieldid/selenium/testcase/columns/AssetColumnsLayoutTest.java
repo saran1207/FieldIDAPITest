@@ -29,12 +29,12 @@ public class AssetColumnsLayoutTest extends PageNavigatingTestCase<ColumnLayoutP
     @Test
     public void test_remove_some_columns_from_default_layout_and_save() {
         page.clickRemoveSelectedColumn("Serial Number");
-        page.clickRemoveSelectedColumn("Reference Number");
-        page.clickRemoveSelectedColumn("Customer Name");
-        page.clickRemoveSelectedColumn("Location");
         page.clickRemoveSelectedColumn("Asset Type");
         page.clickRemoveSelectedColumn("Asset Status");
+        page.clickRemoveSelectedColumn("Customer Name");
+        page.clickRemoveSelectedColumn("Location");
         page.clickRemoveSelectedColumn("Last Event Date");
+        page.clickRemoveSelectedColumn("Next Scheduled Date");
 
         assertEquals(Arrays.asList("Date Identified"), page.getCurrentColumns());
 
