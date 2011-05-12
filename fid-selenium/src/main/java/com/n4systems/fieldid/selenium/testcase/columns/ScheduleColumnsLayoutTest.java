@@ -19,7 +19,7 @@ public class ScheduleColumnsLayoutTest extends PageNavigatingTestCase<ColumnLayo
     @Test
     public void test_default_reporting_columns() {
         List<String> currentColumns = page.getCurrentColumns();
-        List<String> expectedDefaultColumns = Arrays.asList("Scheduled Date", "Status", "Days Past Due", "Serial Number", "Reference Number", "Customer Name", "Event Type", "Last Event Date", "Asset Type");
+        List<String> expectedDefaultColumns = Arrays.asList("Scheduled Date", "Status", "Days Past Due", "Serial Number", "Asset Type", "Customer Name", "Location", "Event Type", "Last Event Date");
         assertEquals(expectedDefaultColumns, currentColumns);
     }
 

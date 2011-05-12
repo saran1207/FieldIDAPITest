@@ -22,7 +22,7 @@ public class AssetColumnsLayoutTest extends PageNavigatingTestCase<ColumnLayoutP
     @Test
     public void test_view_default_layout() {
         List<String> currentColumns = page.getCurrentColumns();
-        List<String> expectedDefaultColumns = Arrays.asList("Serial Number", "Reference Number", "Customer Name", "Location", "Asset Type", "Asset Status", "Last Event Date", "Date Identified");
+        List<String> expectedDefaultColumns = Arrays.asList("Serial Number", "Asset Type", "Asset Status", "Customer Name", "Location",  "Date Identified", "Last Event Date", "Next Scheduled Date");
         assertEquals(expectedDefaultColumns, currentColumns);
     }
 

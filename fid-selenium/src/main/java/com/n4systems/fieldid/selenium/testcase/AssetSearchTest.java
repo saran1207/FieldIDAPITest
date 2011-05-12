@@ -7,10 +7,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import com.n4systems.fieldid.selenium.pages.QuickEventPage;
-import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.ExtendedFeature;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
@@ -18,6 +14,9 @@ import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.ExtendedFeature;
 
 public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 
@@ -155,12 +154,11 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		
 		String serialNumber = page.getResultSerialNumbers().get(0);
 
-        QuickEventPage quickEventPage = page.clickResultStartEvent(serialNumber);
+        page.clickResultStartEvent(serialNumber);
     }
 	
 	private List<String> getDefaultColumnHeaders() {
-		return Arrays.asList("Serial Number", "Reference Number", "Customer Name", "Location", 
-				"Asset Type", "Asset Status", "Last Event Date", "Date Identified", "");
+		return Arrays.asList("Serial Number", "Asset Type", "Asset Status", "Customer Name", "Location",  "Date Identified", "Last Event Date", "Next Scheduled Date", "");
 	}
 
 }
