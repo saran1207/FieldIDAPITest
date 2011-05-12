@@ -12,7 +12,7 @@
 </head>
 
 <span style="display:none">
-	<@s.form action="step3ImportCatalogOnlyImport" id="confirmForm" theme="fieldid">
+	<@s.form action="step4ImportCatalogOnlyImport" id="confirmForm" theme="fieldid">
 	
 		<@s.hidden name="quickSetupWizardCatalogImport" value="true"/>
 		<@s.hidden name="uniqueID"/>

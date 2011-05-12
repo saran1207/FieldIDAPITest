@@ -1,42 +1,50 @@
-<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.done"/></title>
+<title><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>4</@s.param><@s.param>5</@s.param></@s.text> - <@s.text name="label.importing"/></title>
+
 <head>
 	<@n4.includeStyle type="page" href="quick_setup_wizard"/>
+	<script type="text/javascript">
+		document.observe("dom:loaded", function() {
+			Event.observe('importForm', 'submit', function(){
+					$('formActions').hide();
+					$('loadingWheel').show();
+			});
+		});
+	</script>
 </head>
 
-<div class="setupContainer">
-	<div id="allDone" class="quickSetupHeader">
-		<h2><@s.text name="label.all_done"/> - <@s.text name="label.next_steps"/></h2>
-	</div>
+<@s.form action="step4ImportCatalogOnlyConfirm" id="importForm" theme="fieldid">
+	<div class="setupContainer">
+		<div class="quickSetupHeader">
+			<h2><@s.text name="label.quick_setup_wizard"/> - <@s.text name="label.step_x_of_y"><@s.param>4</@s.param><@s.param>5</@s.param></@s.text></h2>
+		</div>
 		
-	<div class="setupWizardContent">
-		<h2><@s.text name="label.bookmark_your_fieldid_login_page"/></h2>
-		<div class="contentIndentation prominent">
-			<p><@s.text name="label.bookmark_your_fieldid_login_page.description"/></p>
+		<div class="setupWizardContent">
+			<h2><@s.text name="label.import_common_templates"/></h2>
+			<p><@s.text name="label.setup_wizard_catalog_description"/></p>
 			<br/>
-			<label class="urlLabel">${loginUrl}</label>
-			<button onclick="createBookmark('${loginUrl}', '<@s.text name="label.field_id"/>');"><@s.text name="label.click_to_bookmark"/></button>
+			
+			<div class="selectOptions">
+				<@s.text name="label.select"/>: <a href="javascript:void(0);" onclick="selectAll('importForm');"><@s.text name="label.all"/></a>, <a href="javascript:void(0);" onclick="selectNone('importForm')"><@s.text name="label.none"/></a>
+			</div>
+			
+			<@s.hidden name="quickSetupWizardCatalogImport" value="true"/>
+			<@s.hidden name="uniqueID"/>
+			<@s.hidden name="usingPackage" value="true"/>	
+			
+			<div class="importSelection">
+					<#include "../publishedCatalog/_importByPackageGrouped.ftl"/>
+			</div>
+		
 		</div>
-	</div>
-	<div class="setupWizardContent">
-		<h2><@s.text name="label.setup_your_mobile_device"/></h2>
-		<div class="contentIndentation prominent">
-			<p><@s.text name="label.setup_your_mobile_device.description"/></p>
-			<br/>
-			<button onclick="return openNewWindow('<@s.text name="label.hardware_wizard_url"/>');"><@s.text name="label.start_the_hardware_wizard"/></button>
-		</div>
-	</div>
-	<div class="setupWizardContent">
-		<h2><@s.text name="label.identify_your_first_asset"/></h2>
-		<div class="contentIndentation prominent">
-			<p><@s.text name="label.identify_your_first_asset.description"/></p>
-			<br/>
-			<button onclick="return redirect('<@s.url namespace="/" action="assetAdd"/>');"><@s.text name="label.identify_your_first_asset_now"/></button>
-		</div>
-	</div>
-		<div class="contentIndentation prominent">
-			<@s.url id="cancelUrl" action="step3" quickSetupWizardCatalogImport="true"/>
-			<input type="button" onclick="return redirect('<@s.url namespace="/" action="home"/>');" value="<@s.text name="label.proceed_to_my_fieldid_account"/>"/>
+		<div id="formActions" class="prominent">
+			<@s.url id="cancelUrl" action="step2"/>
+			<@s.submit key="label.next" id="continue" />
 			<@s.text name="label.or"/>
 			<a href="#" onclick="return redirect( '${cancelUrl}' );" ><@s.text name="label.back"/></a>
+		</div>	
+		<div id="loadingWheel" class="prominent centerWheel" style="display:none">
+			<img src="<@s.url value="/images/loader.gif"/>"/>
 		</div>
-</div>
+	</div>
+	
+</@s.form>

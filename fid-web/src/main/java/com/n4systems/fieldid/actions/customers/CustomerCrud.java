@@ -93,7 +93,26 @@ public class CustomerCrud extends AbstractCrud {
 
 		return INPUT;
 	}
+	
+	@SkipValidation
+	public String doEditQuickSetupWizard() {
+		if (customer == null) {
+			addActionError("Customer not found");
+			return ERROR;
+		}
 
+		return INPUT;
+	}
+	
+	@SkipValidation
+	public String doSaveQuickSetupWizard() {
+		if(customer.getName() != null && !customer.getName().isEmpty()) {
+			return doSave();
+		} else {
+			return SUCCESS;
+			}
+	}
+	
 	@SkipValidation
 	public String doShow() {
 		if (customer == null || customer.getId() == null) {
