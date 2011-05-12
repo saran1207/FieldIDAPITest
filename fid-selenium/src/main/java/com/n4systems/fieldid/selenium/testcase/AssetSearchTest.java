@@ -111,10 +111,10 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		page.setDisplayColumns(displayColumns);
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());		
-		List<String> expectedColumns = Arrays.asList("Serial Number", "Reference Number", "Customer Name", "Location",
-                "Asset Type", "Asset Status", "Last Event Date", "Date Identified", "RFID Number", "Assigned To",
-                "Division", "Organization", "Order Description", "Order Number", "Purchase Order", "Asset Type Group",
-                "Network Last Event Date", "Identified By", "Modified By", "Comments", "Description", "Safety Network", "");
+		List<String> expectedColumns = Arrays.asList("Serial Number",  "Asset Type",  "Asset Status",  "Customer Name",  "Location",  
+				"Date Identified",  "Last Event Date",  "RFID Number",  "Reference Number",  "Assigned To",  "Division",  "Organization",  
+				"Order Description",  "Order Number",  "Purchase Order",  "Asset Type Group",  "Network Last Event Date",  "Identified By",  
+				"Modified By",  "Comments",  "Description",  "Safety Network", "");
 		assertEquals(expectedColumns, page.getResultColumnHeaders());
 	}
 	

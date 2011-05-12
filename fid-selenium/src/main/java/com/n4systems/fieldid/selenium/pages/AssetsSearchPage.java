@@ -32,6 +32,7 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 		setCheckBoxValue("//input[@id='chk_asset_search_comments']", displayColumns.isComments());
 		setCheckBoxValue("//input[@id='chk_asset_search_description']", displayColumns.isDescription());
 		setCheckBoxValue("//input[@id='chk_asset_search_published']", displayColumns.isSafetyNetwork());
+		setCheckBoxValue("//input[@id='chk_asset_next_scheduled_date']", displayColumns.isScheduledDate());
 		
 		setCheckBoxValue("//input[@id='chk_asset_search_order_description']", displayColumns.isOrderDescription());
 		setCheckBoxValue("//input[@id='chk_asset_search_order_number']", displayColumns.isOrderNumber());
