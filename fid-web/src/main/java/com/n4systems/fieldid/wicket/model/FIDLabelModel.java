@@ -6,6 +6,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
+import java.text.MessageFormat;
+
 public class FIDLabelModel implements IModel<String> {
 
     private IModel<String> propertyKeyModel;
@@ -34,11 +36,18 @@ public class FIDLabelModel implements IModel<String> {
         Localizer localizer = Application.get().getResourceSettings().getLocalizer();
         String label =  localizer.getString(propertyKey, null);
         if (label != null && parameters != null ) {
-            label = String.format(label, parameters);
+            label = formatString(label, parameters);
         } else if (label == null) {
             label = propertyKey;
         }
         return label;
+    }
+
+    private String formatString(String label, Object[] parameters) {
+        MessageFormat format = new MessageFormat(label);
+        format.applyPattern(label);
+
+        return format.format(parameters);
     }
 
     @Override

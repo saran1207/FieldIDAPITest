@@ -19,12 +19,7 @@ public class TenantOverridesResourceLoader implements IStringResourceLoader {
     }
 
     private String loadTenantOverride(String key) {
-        if ("label.serialnumber".equals(key) || "label.reelid".equals(key)) {
-            System.out.println("I was asked for something interesting...");
-        }
-        String s = FieldIDSession.get().getTenantLangOverrides().get(key);
-        System.out.println("Asked tenant override for: " + key + " and got: " + s);
-        return s;
+        return FieldIDSession.get().getTenantLangOverrides().get(key);
     }
 
 }

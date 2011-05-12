@@ -33,6 +33,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,15 +55,21 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
 
     private SavePanel topSavePanel;
     private SavePanel bottomSavePanel;
+    // TODO: Use model
+    private transient EventType eventType;
 
     @Override
     protected void storePageParameters(PageParameters params) {
         eventTypeId = params.getAsLong("uniqueID");
+        FilteredIdLoader<EventType> idLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
+        idLoader.setPostFetchFields("eventForm.sections");
+        idLoader.setId(eventTypeId);
+        eventType = idLoader.load();
     }
 
     @Override
     protected void addTitleLabel(String labelId) {
-        add(new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventTypeId)));
+        add(new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventType.getName())));
     }
 
     @Override
@@ -85,11 +92,6 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
 
         add(topSavePanel = createSavePanel("topSavePanel"));
         add(bottomSavePanel = createSavePanel("bottomSavePanel"));
-
-        FilteredIdLoader<EventType> idLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
-        idLoader.setPostFetchFields("eventForm.sections");
-        idLoader.setId(eventTypeId);
-        EventType eventType = idLoader.load();
 
         criteriaSections = new ArrayList<CriteriaSection>();
         if (eventType.getEventForm() != null) {
@@ -184,7 +186,7 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
             protected void onSaveAndFinishClicked(AjaxRequestTarget target) {
                 saveEventForm();
                 FieldIDSession.get().storeInfoMessageForStruts("Event Form saved.");
-                target.appendJavascript("parent.navigateBackToEvenTypeView();");
+                getRequestCycle().setRequestTarget(new RedirectRequestTarget("/eventType.action?uniqueID="+eventTypeId));
             }
         };
     }
