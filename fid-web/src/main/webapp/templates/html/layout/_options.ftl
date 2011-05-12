@@ -5,7 +5,11 @@
 				<li class="<#if option.rightJustified >add</#if> <#if option.name == navOptions.currentAction>selected</#if>">
 					<#if option.name != navOptions.currentAction>
                         <#if option.wicket>
-                            <@s.url id="url" value="/w/${option.name}"></@s.url>
+                            <@s.url id="url" value="/w/${option.action}">
+                                <#list option.urlParams?keys as param>
+                                    <@s.param name="${param}">${("("+option.urlParams[param]+")!")?eval}</@s.param>
+                                </#list>
+                            </@s.url>
                         <#else>
                             <@s.url id="url" action="${option.action}" namespace="/">
                                 <#list option.urlParams?keys as param>

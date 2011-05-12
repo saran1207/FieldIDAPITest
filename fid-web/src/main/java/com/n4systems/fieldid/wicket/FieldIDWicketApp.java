@@ -1,12 +1,14 @@
 package com.n4systems.fieldid.wicket;
 
-import com.n4systems.fieldid.wicket.pages.columnlayout.ColumnsLayoutPage;
-import com.n4systems.fieldid.wicket.pages.eventform.EventFormEditPage;
+import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
+import com.n4systems.fieldid.wicket.resources.CachePerTenantLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
+import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -19,8 +21,8 @@ public class FieldIDWicketApp extends WebApplication {
 
     @Override
     protected void init() {
-        mountBookmarkablePage("eventFormEdit", EventFormEditPage.class);
-        mountBookmarkablePage("columnsLayout", ColumnsLayoutPage.class);
+        mountBookmarkablePage("setup/eventFormEdit", EventFormEditPage.class);
+        mountBookmarkablePage("setup/columnsLayout", ColumnsLayoutPage.class);
 
         mountBookmarkablePage("setup/settings", SettingsPage.class);
         mountBookmarkablePage("setup/ownersUsersLocations", OwnersUsersLocationsPage.class);
@@ -29,6 +31,8 @@ public class FieldIDWicketApp extends WebApplication {
 
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());
+        getResourceSettings().addStringResourceLoader(0, new TenantOverridesResourceLoader());
+        getResourceSettings().setLocalizer(new CachePerTenantLocalizer());
     }
 
     @Override

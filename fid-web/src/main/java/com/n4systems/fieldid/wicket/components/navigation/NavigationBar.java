@@ -2,6 +2,8 @@ package com.n4systems.fieldid.wicket.components.navigation;
 
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
 import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -11,6 +13,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 
 import java.util.ArrayList;
@@ -23,8 +26,12 @@ public class NavigationBar extends Panel {
         super(id);
 
         List<NavigationItem> navItemsList = filterVisibleItems(Arrays.asList(items));
+        WebMarkupContainer optionsList = new WebMarkupContainer("optionsList");
+        if (items.length == 0) {
+            optionsList.add(new AttributeAppender("class", true, new Model<String>("emptyOptions"), " "));
+        }
 
-        add(new ListView<NavigationItem>("navItems", navItemsList) {
+        optionsList.add(new ListView<NavigationItem>("navItems", navItemsList) {
             @Override
             protected void populateItem(ListItem<NavigationItem> listItem) {
                 final NavigationItem navItem = listItem.getModelObject();
@@ -37,12 +44,15 @@ public class NavigationBar extends Panel {
                 };
                 linkContainer.setRenderBodyOnly(true);
 
-                listItem.add(createAttributeModifier(navItem));
+                listItem.add(createSelectedAttributeModifier(navItem));
+                if (navItem.isOnRight())
+                    listItem.add(new SimpleAttributeModifier("class", "add"));
+
                 Link link;
                 if (navItem.getNonWicketUrl() != null) {
-                    link = createExternalLinkTo("link", navItem.getNonWicketUrl());
+                    link = createExternalLinkTo("link", navItem.getNonWicketUrl(), navItem.getParameters());
                 } else {
-                    link = new BookmarkablePageLink<WebPage>("link", navItem.getPageClass());
+                    link = new BookmarkablePageLink<WebPage>("link", navItem.getPageClass(), navItem.getParameters());
                 }
 
                 linkContainer.add(link);
@@ -57,6 +67,8 @@ public class NavigationBar extends Panel {
                 });
             }
         });
+
+        add(optionsList);
     }
 
     private List<NavigationItem> filterVisibleItems(List<NavigationItem> navigationItems) {
@@ -69,16 +81,30 @@ public class NavigationBar extends Panel {
         return visibleItems;
     }
 
-    private Link createExternalLinkTo(String linkId, final String nonWicketUrl) {
+    private Link createExternalLinkTo(String linkId, final String nonWicketUrl, PageParameters parameters) {
+        final String queryString = getQueryString(parameters);
         return new Link(linkId){
             @Override
             public void onClick() {
-                getRequestCycle().setRequestTarget(new RedirectRequestTarget(nonWicketUrl));
+                getRequestCycle().setRequestTarget(new RedirectRequestTarget(nonWicketUrl + queryString));
             }
         };
     }
 
-    private SimpleAttributeModifier createAttributeModifier(final NavigationItem navItem) {
+    private String getQueryString(PageParameters parameters) {
+        StringBuffer queryString = new StringBuffer();
+        for (String key : parameters.keySet()) {
+            if (queryString.length() == 0) {
+                queryString.append("?");
+            } else {
+                queryString.append("&");
+            }
+            queryString.append(key).append("=").append(parameters.get(key));
+        }
+        return queryString.toString();
+    }
+
+    private SimpleAttributeModifier createSelectedAttributeModifier(final NavigationItem navItem) {
         return new SimpleAttributeModifier("class", "selected") {
             @Override
             public boolean isEnabled(Component component) {

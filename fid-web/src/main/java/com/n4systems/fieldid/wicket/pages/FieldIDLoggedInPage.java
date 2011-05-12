@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.n4systems.fieldid.utils.UrlArchive;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.util.ConfigContext;
@@ -44,12 +45,21 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
         addSpeedIdentifyLinks();
 
+        storePageParameters(params);
+        addTitleLabel("titleLabel");
         addNavBar("navBar");
         add(new Label("loggedInUsernameLabel", sessionUser.getUserName()));
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent") || sessionUser.hasAccess("editevent")));
         add(createSetupLinkContainer(sessionUser));
         add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
         add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork()));
+    }
+
+    protected void storePageParameters(PageParameters params) {
+    }
+
+    protected void addTitleLabel(String labelId) {
+        add(new Label(labelId, "Field ID"));
     }
 
     private void addSpeedIdentifyLinks() {
@@ -73,7 +83,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     }
 
     protected void addNavBar(String navBarId) {
-        add(new WebMarkupContainer(navBarId));
+        add(new NavigationBar(navBarId));
     }
 
     public FieldIDLoggedInPage() {

@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.model.navigation;
 
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -7,9 +9,11 @@ import org.apache.wicket.model.Model;
 public class NavigationItemBuilder {
 
     private Class<? extends WebPage> pageClass;
+    private PageParameters parameters = new PageParameters();
     private IModel<String> label;
     private String nonWicketUrl;
     private boolean display = true;
+    private boolean onRight = false;
 
     public static NavigationItemBuilder aNavItem() {
         return new NavigationItemBuilder();
@@ -26,7 +30,7 @@ public class NavigationItemBuilder {
     }
 
     public NavigationItemBuilder label(String label) {
-        this.label = new Model<String>(label);
+        this.label = new FIDLabelModel(label);
         return this;
     }
 
@@ -40,6 +44,16 @@ public class NavigationItemBuilder {
         return this;
     }
 
+    public NavigationItemBuilder params(PageParameters params) {
+        this.parameters = params;
+        return this;
+    }
+
+    public NavigationItemBuilder onRight() {
+        onRight = true;
+        return this;
+    }
+
     public NavigationItem build() {
         NavigationItem item;
         if (nonWicketUrl != null) {
@@ -48,6 +62,8 @@ public class NavigationItemBuilder {
             item = new NavigationItem(label, pageClass);
         }
         item.setDisplay(display);
+        item.setParameters(parameters);
+        item.setOnRight(onRight);
         return item;
     }
 

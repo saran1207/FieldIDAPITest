@@ -1,10 +1,11 @@
-package com.n4systems.fieldid.wicket.pages.columnlayout;
+package com.n4systems.fieldid.wicket.pages.setup.columnlayout;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.columnlayout.AvailableReportColumnsPanel;
 import com.n4systems.fieldid.wicket.components.columnlayout.SelectedReportColumnsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.columnlayout.CustomColumnsModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.model.columns.ActiveColumnMapping;
 import com.n4systems.model.columns.ColumnLayout;
 import com.n4systems.model.columns.ColumnMapping;
@@ -24,6 +25,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -39,7 +41,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class ColumnsLayoutPage extends WebPage {
+public class ColumnsLayoutPage extends FieldIDLoggedInPage {
 
     private ReportType reportType;
 
@@ -55,7 +57,13 @@ public class ColumnsLayoutPage extends WebPage {
 
     private FeedbackPanel feedbackPanel;
 
+    @Override
+    protected void addTitleLabel(String labelId) {
+        add(new Label(labelId, new FIDLabelModel("title.column_layout")));
+    }
+
     public ColumnsLayoutPage(PageParameters pageParams) {
+        super(pageParams);
         reportType = pageParams.getAsEnum("type", ReportType.class);
         if (reportType == null)
             reportType = ReportType.EVENT;

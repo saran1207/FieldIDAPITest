@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.eventform;
+package com.n4systems.fieldid.wicket.pages.setup.eventform;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaDetailsPanel;
@@ -6,7 +6,14 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
-import com.n4systems.fieldid.wicket.pages.FieldIDWicketPage;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
+import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
+import com.n4systems.fieldid.wicket.pages.setup.SetupPage;
+import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
@@ -22,6 +29,7 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -29,7 +37,11 @@ import org.apache.wicket.model.PropertyModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventFormEditPage extends FieldIDWicketPage {
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
+
+public class EventFormEditPage extends FieldIDLoggedInPage {
 
     private List<CriteriaSection> criteriaSections;
 
@@ -43,6 +55,28 @@ public class EventFormEditPage extends FieldIDWicketPage {
     private SavePanel topSavePanel;
     private SavePanel bottomSavePanel;
 
+    @Override
+    protected void storePageParameters(PageParameters params) {
+        eventTypeId = params.getAsLong("uniqueID");
+    }
+
+    @Override
+    protected void addTitleLabel(String labelId) {
+        add(new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventTypeId)));
+    }
+
+    @Override
+    protected void addNavBar(String navBarId) {
+        add(new NavigationBar(navBarId,
+                aNavItem().label("nav.view_all").page("/eventTypes.action").build(),
+                aNavItem().label("nav.view").page("/eventType.action").params(uniqueId(eventTypeId)).build(),
+                aNavItem().label("nav.edit").page("/eventTypeEdit.action").params(uniqueId(eventTypeId)).build(),
+                aNavItem().label("nav.event_form").page(EventFormEditPage.class).build(),
+                aNavItem().label("nav.asset_type_associations").page("/selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).build(),
+                aNavItem().label("nav.add").page("/eventTypeAdd.action").onRight().build(),
+                aNavItem().label("nav.import").page("/eventImportExport.action").params(uniqueId(eventTypeId)).onRight().build()));
+    }
+
     public EventFormEditPage(PageParameters params) {
         super(params);
 
@@ -51,7 +85,6 @@ public class EventFormEditPage extends FieldIDWicketPage {
 
         add(topSavePanel = createSavePanel("topSavePanel"));
         add(bottomSavePanel = createSavePanel("bottomSavePanel"));
-        eventTypeId = params.getAsLong("id");
 
         FilteredIdLoader<EventType> idLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
         idLoader.setPostFetchFields("eventForm.sections");
