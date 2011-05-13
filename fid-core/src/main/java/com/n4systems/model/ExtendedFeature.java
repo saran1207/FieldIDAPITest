@@ -21,6 +21,7 @@ public enum ExtendedFeature {
 	ReadOnlyUser("feature.partner_center", "allows the tenant to add customer users"),
 	MultiLocation("feature.multi_location", "allows the tenant to create as many secondary orgs."), 
 	UnlimitedLinkedAssets("feature.unlimited_linked_assets", "Assets registered against this Tenant will not count towards their asset limit"),
+	ManufacturerCertificate("feature.manufacturer_certificate", "allows the use of manufacturer certificates"),
 	JobSites("feature.job_sites", "allows the use of jobsites to control the assignment of assets and events."),
 	AssignedTo("feature.assigned_to", "allows users to be assigned to assets."),
 	AdvancedLocation("feature.advanced_location", "Allows for a location hierarchy."),

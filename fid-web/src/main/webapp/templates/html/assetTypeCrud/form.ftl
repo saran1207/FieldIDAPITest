@@ -94,18 +94,20 @@
 			<@s.textfield name="cautionsUrl" />
 		</span>
 	</p>
-	<p>
-		<label><@s.text name="label.hasmanufacturercertificate" /></label>
-		<span>
-			<@s.checkbox name="hasManufacturerCertificate" />
-		</span>
-	</p>
-	<p>
-		<label><@s.text name="label.manufacturercertificatetext" /></label>
-		<span>
-			<@s.textarea  name="manufacturerCertificateText" rows="5" cols="50" />
-		</span>
-	</p>
+	<#if securityGuard.manufacturerCertificateEnabled>
+		<p>
+			<label><@s.text name="label.hasmanufacturercertificate" /></label>
+			<span>
+				<@s.checkbox name="hasManufacturerCertificate" />
+			</span>
+		</p>
+		<p>
+			<label><@s.text name="label.manufacturercertificatetext" /></label>
+			<span>
+				<@s.textarea  name="manufacturerCertificateText" rows="5" cols="50" />
+			</span>
+		</p>
+	</#if>
 	<p>
 		<label><@s.text name="label.assetdescription" /></label>
 		<span>

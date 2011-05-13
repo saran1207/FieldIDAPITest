@@ -26,4 +26,5 @@ public interface SystemSecurityGuard {
 	public boolean isAdvancedLocationEnabled();
 	public boolean isProofTestIntegrationEnabled();
 	public boolean isPlansAndPricingAvailable();
+	public boolean isManufacturerCertificateEnabled();
 }

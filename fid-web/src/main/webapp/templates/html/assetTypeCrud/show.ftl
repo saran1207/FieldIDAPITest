@@ -21,16 +21,16 @@ ${action.setPageType('asset_type', 'show')!}
 		<label><@s.text name="label.more_information"/></label>
 		<span class="fieldValue">${assetType.instructions!}</span>
 	</p>
-	
-	<p>
-		<label><@s.text name="label.hasmanufacturercertificate"/></label>
-		<span class="fieldValue">${assetType.hasManufactureCertificate?string( action.getText("value.yes"), action.getText("value.no") )}</span>
-	</p>
-	<p>
-		<label><@s.text name="label.manufacturercertificatetext"/></label>
-		<span class="fieldValue">${assetType.manufactureCertificateText!}</span>
-	</p>
-	
+	<#if securityGuard.manufacturerCertificateEnabled>
+		<p>
+			<label><@s.text name="label.hasmanufacturercertificate"/></label>
+			<span class="fieldValue">${assetType.hasManufactureCertificate?string( action.getText("value.yes"), action.getText("value.no") )}</span>
+		</p>
+		<p>
+			<label><@s.text name="label.manufacturercertificatetext"/></label>
+			<span class="fieldValue">${assetType.manufactureCertificateText!}</span>
+		</p>
+	</#if>	
 	<p>
 		<label><@s.text name="label.assetdescription"/></label>
 		<span class="fieldValue">${assetType.descriptionTemplate!}</span>

@@ -2,8 +2,12 @@
 	float: left;
 }
 
-#orgInfo, #extendedFeatures {
+#orgInfo {
 	width: 20%;
+}
+
+#extendedFeatures {
+	width: 21%;
 }
 
 #orgPlan {

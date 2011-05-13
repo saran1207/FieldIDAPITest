@@ -112,5 +112,10 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	public boolean isProofTestIntegrationEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
 	}
+
+	@Override
+	public boolean isManufacturerCertificateEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
+	}
 	
 }

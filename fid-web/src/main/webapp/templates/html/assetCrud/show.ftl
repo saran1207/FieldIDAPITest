@@ -172,17 +172,19 @@ ${action.setPageType('asset', 'show')!}
 		</p>
 		</#if>
 		
-		<#if asset.type.hasManufactureCertificate >
-			<p>
-				<label><@s.text name="label.manufacturecertificate"/></label>
-				<span class="fieldValue">
-					<img src="<@s.url value="/images/pdf_small.gif"/>"/>
-					<a href="<@s.url action="downloadManufacturerCert" namespace="/file" uniqueID="${asset.uniqueID}" />" target="_blank" >
-						<@s.text name="label.downloadnow"/>
-					</a>
-				</span>
-			</p>			
-		</#if>	
+		<#if securityGuard.manufacturerCertificateEnabled>
+			<#if asset.type.hasManufactureCertificate >
+				<p>
+					<label><@s.text name="label.manufacturecertificate"/></label>
+					<span class="fieldValue">
+						<img src="<@s.url value="/images/pdf_small.gif"/>"/>
+						<a href="<@s.url action="downloadManufacturerCert" namespace="/file" uniqueID="${asset.uniqueID}" />" target="_blank" >
+							<@s.text name="label.downloadnow"/>
+						</a>
+					</span>
+				</p>			
+			</#if>	
+		</#if>
 	</div>
 	
 	<#include "_customerInformation.ftl"/>

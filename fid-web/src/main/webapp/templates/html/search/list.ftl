@@ -12,8 +12,10 @@
 			<span class="total"><@s.text name="label.totalassets"/> ${totalResults}</span> (<span id="numSelectedItems">${numSelectedItems}</span> selected)
 		</div>
 		<div class="adminLink alternateActions">
-			<a href="<@s.url action="searchPrintAllCerts" namespace="/aHtml" searchId="${searchId}"/>" class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.printselectedmanufacturercertificate"/></a>
-			| 		
+			<#if securityGuard.manufacturerCertificateEnabled>
+				<a href="<@s.url action="searchPrintAllCerts" namespace="/aHtml" searchId="${searchId}"/>" class='lightview printAllPDFs' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><img src="<@s.url value="/images/pdf_small.gif"/>" /> <@s.text name="label.printselectedmanufacturercertificate"/></a>
+				| 		
+			</#if>
 			<a href='<@s.url action="searchResults" namespace="/aHtml" searchId="${searchId}"/>'  class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.exporttoexcel" /></a> 
 			<#if sessionUser.hasAccess('tag') >
 				| <a href="<@s.url action="massUpdateAssets" searchId="${searchId}" currentPage="${currentPage!}"/>" class="massUpdate"><@s.text name="label.massupdate" /></a>
