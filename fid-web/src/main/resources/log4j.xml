@@ -122,6 +122,9 @@
 		<priority value="INFO" />
 		<appender-ref ref="CACHE_LOG" />
 	</category>
+	<category name="com.n4systems.persistence.utils.DefaultEntityModifiedCreatedHandler" additivity="false">
+		<priority value="ERROR" />
+	</category>
 	
 	<root>
 		<priority value="info" />
