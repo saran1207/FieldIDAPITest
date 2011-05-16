@@ -588,4 +588,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     public boolean isPageName(String pageName) {
         return pageName.equals(this.pageName);
     }
+
+	public String getHelpUrl() {
+		return getConfigContext().getString(ConfigEntry.HELP_SYSTEM_URL);
+	}
 }

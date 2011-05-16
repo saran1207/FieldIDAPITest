@@ -142,8 +142,4 @@ public class IdentifyCrud extends AbstractCrud {
 		return orderManager.countAssetsTagged(lineItem);
 	}
 	
-	public String getHelpUrl(){
-		return getConfigContext().getString(ConfigEntry.HELP_SYSTEM_URL);
-	}
-	
 }

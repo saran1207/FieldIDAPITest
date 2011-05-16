@@ -55,7 +55,8 @@ public class SafetyNetwork extends AbstractCrud {
 	public String doShow() {
 		return SUCCESS;
 	}
-
+	
+	@Override
 	public String getHelpUrl() {
 		return getConfigContext().getString(ConfigEntry.SAFETY_NETWORK_HELP_URL);
 	}
