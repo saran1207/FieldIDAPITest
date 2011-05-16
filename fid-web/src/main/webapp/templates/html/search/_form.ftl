@@ -2,6 +2,8 @@
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
 	<@n4.includeStyle type="page" href="search" />
+	<@n4.includeStyle type="page" href="downloads" />
+	
 	<script type="text/javascript" src="<@s.url value="/javascript/search.js"/>"></script>
 	<script type="text/javascript">
 		updatingColumnText = '<@s.text name="label.availablecolumnsupdating"/>'; 

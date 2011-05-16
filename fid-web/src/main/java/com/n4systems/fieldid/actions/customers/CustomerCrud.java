@@ -11,6 +11,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgPaginatedLoader;
@@ -45,6 +46,8 @@ public class CustomerCrud extends AbstractCrud {
 	private String idFilter;
 	private Long orgFilter;
 	private List<ListingPair> internalOrgList;
+	private DownloadLink downloadLink;
+	private String reportName;
 	
 	public CustomerCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -189,7 +192,8 @@ public class CustomerCrud extends AbstractCrud {
 	@SkipValidation
 	public String doExport() {
 		try {
-			getDownloadCoordinator().generateCustomerExport(getText("label.export_file.customer"), getDownloadLinkUrl(), createCustomerOrgListLoader(), getSecurityFilter());
+			reportName = getText("label.export_file.customer");
+			downloadLink = getDownloadCoordinator().generateCustomerExport(reportName, getDownloadLinkUrl(), createCustomerOrgListLoader(), getSecurityFilter());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute customer export", e);
 			addFlashMessage(getText("error.export_failed.customer"));
@@ -320,6 +324,14 @@ public class CustomerCrud extends AbstractCrud {
 
 	public void setOrgFilter(Long orgFilter) {
 		this.orgFilter = orgFilter;
+	}
+
+	public DownloadLink getDownloadLink() {
+		return downloadLink;
+	}
+
+	public String getReportName() {
+		return reportName;
 	}
 
 }

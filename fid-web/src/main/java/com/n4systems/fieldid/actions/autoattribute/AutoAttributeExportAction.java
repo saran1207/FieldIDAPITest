@@ -21,6 +21,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.notifiers.notifications.AutoAttributeImportFailureNotification;
 import com.n4systems.notifiers.notifications.AutoAttributeImportSuccessNotification;
@@ -39,6 +40,9 @@ public class AutoAttributeExportAction extends AbstractImportAction {
     
 	private InputStream exampleExportFileStream;
 	private String exampleExportFileSize;
+
+	private DownloadLink downloadLink;
+	private String reportName;
 	
 	public AutoAttributeExportAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -63,7 +67,8 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 		try {
 			ListLoader<AutoAttributeDefinition> attribLoader = getLoaderFactory().createPassthruListLoader(autoAttributeCriteria.getDefinitions());
 			
-			getDownloadCoordinator().generateAutoAttributeExport(getExportFileName(), getDownloadLinkUrl(), attribLoader);
+			reportName = getExportFileName();
+			downloadLink = getDownloadCoordinator().generateAutoAttributeExport(reportName, getDownloadLinkUrl(), attribLoader);
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute auto attribute export", e);
 			addFlashMessage(getText("error.export_failed.autoattrib"));
@@ -160,5 +165,13 @@ public class AutoAttributeExportAction extends AbstractImportAction {
 	
 	public InputStream getFileStream() {
 		return exampleExportFileStream;
+	}
+
+	public DownloadLink getDownloadLink() {
+		return downloadLink;
+	}
+
+	public String getReportName() {
+		return reportName;
 	}
 }

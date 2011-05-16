@@ -83,18 +83,20 @@ public class DownloadCoordinator {
 		return link;
 	}
 	
-	public void generateCustomerExport(String name, String downloadUrl, ListLoader<CustomerOrg> customerLoader, SecurityFilter filter) {
+	public DownloadLink generateCustomerExport(String name, String downloadUrl, ListLoader<CustomerOrg> customerLoader, SecurityFilter filter) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
 		CustomerExportTask task = taskFactory.createCustomerExportTask(link, downloadUrl, customerLoader, filter);
 		
 		executor.execute(task);
+		return link;
 	}
 	
-	public void generateAutoAttributeExport(String name, String downloadUrl, ListLoader<AutoAttributeDefinition> attribLoader) {
+	public DownloadLink generateAutoAttributeExport(String name, String downloadUrl, ListLoader<AutoAttributeDefinition> attribLoader) {
 		DownloadLink link = createDownloadLink(name, ContentType.EXCEL);
 		AutoAttributeExportTask task = taskFactory.createAutoAttributeExportTask(link, downloadUrl, attribLoader);
 		
 		executor.execute(task);
+		return link;
 	}
 	
 	public void generateAssetExport(String name, String downloadUrl, ListLoader<Asset> assetLoader) {
