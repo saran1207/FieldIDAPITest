@@ -3,7 +3,7 @@
 	<@s.hidden name="id"/>
 	<label class="bold">Company ID: </label>
 	<span>
-	<@s.textfield name="tenantName"/>
+	<@s.textfield name="tenantName" onkeypress="return doSubmit(event);"/>
 	</span>
 	<div id="nameFormActions">
 		<input id="updateNameButton" type="button" onClick="updateName();" value="<@s.text name='label.save'/>"/>

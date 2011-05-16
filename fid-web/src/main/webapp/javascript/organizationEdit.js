@@ -77,3 +77,9 @@ function updateName() {
 	$( 'nameForm' ).request(getStandardCallbacks());
 }
 
+function doSubmit(event) { 
+	if (event.keyCode == 13) { 
+		updateName();
+		return false; 
+	}
+}
