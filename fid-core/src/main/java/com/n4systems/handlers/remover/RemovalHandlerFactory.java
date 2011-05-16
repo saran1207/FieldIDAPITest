@@ -20,7 +20,8 @@ public class RemovalHandlerFactory {
 													new EventListArchiveHandlerImp(getScheduleDeleter()),
 													getAssociatedEventTypeListDeleter(),
 													getCatalogElementRemovalHandler(), 
-													new NotificationSettingDeleteHandlerImpl());
+													new NotificationSettingDeleteHandlerImpl(),
+													new SavedReportDeleteHandlerImpl());
 	}
 
 

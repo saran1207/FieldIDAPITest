@@ -1,11 +1,11 @@
 package com.n4systems.handlers.remover.summary;
 
-
 public class EventTypeArchiveSummary extends RemovalSummary {
 
 	private AssociatedEventTypeDeleteSummary associatedEventTypeDeleteSummary = new AssociatedEventTypeDeleteSummary();
 	private EventArchiveSummary eventArchiveSummary = new EventArchiveSummary();
 	private NotificationSettingDeleteSummary notificationSettingDeleteSummary = new NotificationSettingDeleteSummary();
+	private SavedReportDeleteSummary savedReportDeleteSummary = new SavedReportDeleteSummary();
 	
 	public EventTypeArchiveSummary() {
 	}
@@ -66,6 +66,14 @@ public class EventTypeArchiveSummary extends RemovalSummary {
 	
 	public Long getNotificationsToDelete() {
 		return notificationSettingDeleteSummary.getNotificationsToDelete();
+	}
+
+	public Long getSavedReportsToDelete() {
+		return savedReportDeleteSummary.getSavedReportsToDelete();
+	}
+
+	public void setSavedReportDeleteSummary(SavedReportDeleteSummary savedReportDeleteSummary) {
+		this.savedReportDeleteSummary = savedReportDeleteSummary;
 	}
 	
 }

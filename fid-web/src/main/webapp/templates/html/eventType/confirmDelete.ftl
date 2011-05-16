@@ -29,6 +29,10 @@ ${action.setPageType('event_type', 'edit')!}
 				<label class="label"><@s.text name="label.delete_notifcation_settings"/></label>
 				<span class="fieldHolder">${archiveSummary.notificationsToDelete}</span>
 			</div>
+			<div class="infoSet">
+				<label class="label"><@s.text name="label.savedreports"/></label>
+				<span class="fieldHolder">${archiveSummary.savedReportsToDelete}</span>
+			</div>
 		</div>
 		<div class="infoBlock">
 			<div class="infoSet <#if !archiveSummary.canBeRemoved()>error</#if>">

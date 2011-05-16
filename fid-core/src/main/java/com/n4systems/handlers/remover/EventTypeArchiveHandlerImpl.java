@@ -8,22 +8,27 @@ import com.n4systems.persistence.Transaction;
 public class EventTypeArchiveHandlerImpl implements EventTypeArchiveHandler {
 
 	private final EventTypeSaver eventTypeSaver;
+
 	private final CatalogElementRemovalHandler catalogElementRemovalHandler;
 	private final EventTypeListArchiveHandler eventDeleter;
 	private final AssociatedEventTypeListDeleteHandler associatedEventTypesDeleteHandler;
 	private final NotificationSettingDeleteHandler notificationSettingDeleteHandler;
+	private final SavedReportDeleteHandler savedReportDeleteHandler;
 	
 	private EventType eventType;
 	private Transaction transaction;
 	private EventTypeArchiveSummary summary;
 	
-	public EventTypeArchiveHandlerImpl(EventTypeSaver eventTypeSaver, EventTypeListArchiveHandler eventListDeleter, AssociatedEventTypeListDeleteHandler associatedEventTypesDeleteHandler, CatalogElementRemovalHandler catalogElementRemovalHandler, NotificationSettingDeleteHandler notificationSettingDeleteHandler) {
+	public EventTypeArchiveHandlerImpl(EventTypeSaver eventTypeSaver, EventTypeListArchiveHandler eventListDeleter, 
+			AssociatedEventTypeListDeleteHandler associatedEventTypesDeleteHandler, CatalogElementRemovalHandler catalogElementRemovalHandler, 
+			NotificationSettingDeleteHandler notificationSettingDeleteHandler, SavedReportDeleteHandler savedReportDeleteHandler) {
 		super();
 		this.eventTypeSaver = eventTypeSaver;
 		this.eventDeleter = eventListDeleter;
 		this.associatedEventTypesDeleteHandler = associatedEventTypesDeleteHandler;
 		this.catalogElementRemovalHandler = catalogElementRemovalHandler;
 		this.notificationSettingDeleteHandler = notificationSettingDeleteHandler;
+		this.savedReportDeleteHandler = savedReportDeleteHandler;
 	}
 
 
@@ -34,9 +39,15 @@ public class EventTypeArchiveHandlerImpl implements EventTypeArchiveHandler {
 		archiveEventsOfType();
 		removeEventTypeFromCatalog();
 		deleteNotificationSettingsUsing();
+		deleteSavedReportsWithEventTypeCriteria();
 		archiveEventType();
 		
 		this.transaction = null;
+	}
+
+
+	private void deleteSavedReportsWithEventTypeCriteria() {
+		savedReportDeleteHandler.forEventType(eventType).remove(transaction);
 	}
 
 
@@ -70,7 +81,7 @@ public class EventTypeArchiveHandlerImpl implements EventTypeArchiveHandler {
 		summary.setAssociatedEventTypeDeleteSummary(associatedEventTypesDeleteHandler.setEventType(eventType).summary(transaction));
 		summary.setEventArchiveSummary(eventDeleter.setEventType(eventType).summary(transaction));
 		summary.setNotificationSettingDeleteSummary(notificationSettingDeleteHandler.forEventType(eventType).summary(transaction));
-		
+		summary.setSavedReportDeleteSummary(savedReportDeleteHandler.forEventType(eventType).summary(transaction));
 		return summary;
 	}
 	

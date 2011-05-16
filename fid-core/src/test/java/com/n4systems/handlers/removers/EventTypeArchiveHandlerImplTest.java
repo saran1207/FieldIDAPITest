@@ -8,8 +8,10 @@ import com.n4systems.handlers.remover.AssociatedEventTypeListDeleteHandler;
 import com.n4systems.handlers.remover.EventListArchiveHandlerImp;
 import com.n4systems.handlers.remover.EventTypeArchiveHandler;
 import com.n4systems.handlers.remover.EventTypeArchiveHandlerImpl;
+import com.n4systems.handlers.remover.SavedReportDeleteHandler;
 import com.n4systems.handlers.remover.summary.EventArchiveSummary;
 import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
+import com.n4systems.handlers.remover.summary.SavedReportDeleteSummary;
 import com.n4systems.model.EventType;
 import com.n4systems.model.eventtype.EventTypeSaver;
 import org.junit.Before;
@@ -54,7 +56,12 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 		expect(mockNotificationSettingDeleteHandler.summary(mockTransaction)).andReturn(new NotificationSettingDeleteSummary());
 		replay(mockNotificationSettingDeleteHandler);
 		
-		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(null, mockListDeleter, mockAssociatedEventTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler);
+		SavedReportDeleteHandler mockSavedReportDeleteHandler = createMock(SavedReportDeleteHandler.class);
+		expect(mockSavedReportDeleteHandler.forEventType(eventTypeToDelete)).andReturn(mockSavedReportDeleteHandler);		
+		expect(mockSavedReportDeleteHandler.summary(mockTransaction)).andReturn(new SavedReportDeleteSummary());
+		replay(mockSavedReportDeleteHandler);
+		
+		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(null, mockListDeleter, mockAssociatedEventTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler, mockSavedReportDeleteHandler);
 		
 		
 		EventTypeArchiveSummary summary = sut.forEventType(eventTypeToDelete).summary(mockTransaction);
@@ -96,8 +103,14 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 		mockNotificationSettingDeleteHandler.remove(mockTransaction);
 		replay(mockNotificationSettingDeleteHandler);
 		
-		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(mockEventTypeSaver, mockListDeleter, mockAssociatedEventTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler);
+		SavedReportDeleteHandler mockSavedReportDeleteHandler = createMock(SavedReportDeleteHandler.class);
+		expect(mockSavedReportDeleteHandler.forEventType(eventTypeToDelete)).andReturn(mockSavedReportDeleteHandler);		
+		expect(mockSavedReportDeleteHandler.summary(mockTransaction)).andReturn(new SavedReportDeleteSummary());
+		expect(mockSavedReportDeleteHandler.forEventType(eventTypeToDelete)).andReturn(mockSavedReportDeleteHandler);		
+		mockSavedReportDeleteHandler.remove(mockTransaction);
+		replay(mockSavedReportDeleteHandler);
 		
+		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(mockEventTypeSaver, mockListDeleter, mockAssociatedEventTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler, mockSavedReportDeleteHandler);
 		
 		sut.forEventType(eventTypeToDelete).remove(mockTransaction);
 		
@@ -131,7 +144,12 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 		expect(mockNotificationSettingDeleteHandler.summary(mockTransaction)).andReturn(new NotificationSettingDeleteSummary());
 		replay(mockNotificationSettingDeleteHandler);
 		
-		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(null, mockEventListDeleter, mockAssociatedEventTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler);
+		SavedReportDeleteHandler mockSavedReportDeleteHandler = createMock(SavedReportDeleteHandler.class);
+		expect(mockSavedReportDeleteHandler.forEventType(eventTypeToDelete)).andReturn(mockSavedReportDeleteHandler);		
+		expect(mockSavedReportDeleteHandler.summary(mockTransaction)).andReturn(new SavedReportDeleteSummary());
+		replay(mockSavedReportDeleteHandler);
+				
+		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(null, mockEventListDeleter, mockAssociatedEventTypeListDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler, mockSavedReportDeleteHandler);
 		
 		EventTypeArchiveSummary summary = sut.forEventType(eventTypeToDelete).summary(mockTransaction);
 		
@@ -173,7 +191,14 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 		mockNotificationSettingDeleteHandler.remove(mockTransaction);
 		replay(mockNotificationSettingDeleteHandler);
 		
-		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(mockEventTypeSaver, mockListDeleter, mockAssociatedEventListTypeDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler);
+		SavedReportDeleteHandler mockSavedReportDeleteHandler = createMock(SavedReportDeleteHandler.class);
+		expect(mockSavedReportDeleteHandler.forEventType(eventTypeToDelete)).andReturn(mockSavedReportDeleteHandler);		
+		expect(mockSavedReportDeleteHandler.summary(mockTransaction)).andReturn(new SavedReportDeleteSummary());
+		expect(mockSavedReportDeleteHandler.forEventType(eventTypeToDelete)).andReturn(mockSavedReportDeleteHandler);		
+		mockSavedReportDeleteHandler.remove(mockTransaction);
+		replay(mockSavedReportDeleteHandler);
+		
+		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(mockEventTypeSaver, mockListDeleter, mockAssociatedEventListTypeDeleteHandler, mockCatalogElementRemovalHandler, mockNotificationSettingDeleteHandler, mockSavedReportDeleteHandler);
 		
 		sut.forEventType(eventTypeToDelete).remove(mockTransaction);
 		
@@ -203,8 +228,13 @@ public class EventTypeArchiveHandlerImplTest extends TestUsesTransactionBase {
 		expect(mockNotificationSettingDeleteHandler.forEventType(eventTypeToDelete)).andReturn(mockNotificationSettingDeleteHandler);
 		expect(mockNotificationSettingDeleteHandler.summary(mockTransaction)).andReturn(new NotificationSettingDeleteSummary());
 		replay(mockNotificationSettingDeleteHandler);
+
+		SavedReportDeleteHandler mockSavedReportDeleteHandler = createMock(SavedReportDeleteHandler.class);
+		expect(mockSavedReportDeleteHandler.forEventType(eventTypeToDelete)).andReturn(mockSavedReportDeleteHandler);		
+		expect(mockSavedReportDeleteHandler.summary(mockTransaction)).andReturn(new SavedReportDeleteSummary());
+		replay(mockSavedReportDeleteHandler);
 		
-		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(null, mockListDeleter, mockAssociatedEventListTypeDeleteHandler, null, mockNotificationSettingDeleteHandler);
+		EventTypeArchiveHandler sut = new EventTypeArchiveHandlerImpl(null, mockListDeleter, mockAssociatedEventListTypeDeleteHandler, null, mockNotificationSettingDeleteHandler, mockSavedReportDeleteHandler);
 		
 		EventTypeArchiveSummary summary = sut.forEventType(eventTypeToDelete).summary(mockTransaction);
 		
