@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.wicket;
 
-import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
+import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.resources.CachePerTenantLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -14,8 +15,10 @@ import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
+import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.spring.injection.annot.AnnotSpringInjector;
 
 public class FieldIDWicketApp extends WebApplication {
 
@@ -28,11 +31,13 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/ownersUsersLocations", OwnersUsersLocationsPage.class);
         mountBookmarkablePage("setup/assetsEvents", AssetsAndEventsPage.class);
         mountBookmarkablePage("setup/templates", TemplatesPage.class);
+        mountBookmarkablePage("setup/import", ImportPage.class);
 
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());
         getResourceSettings().addStringResourceLoader(0, new TenantOverridesResourceLoader());
         getResourceSettings().setLocalizer(new CachePerTenantLocalizer());
+        InjectorHolder.setInjector(new AnnotSpringInjector(new SpringContextLocator(getServletContext())));
     }
 
     @Override

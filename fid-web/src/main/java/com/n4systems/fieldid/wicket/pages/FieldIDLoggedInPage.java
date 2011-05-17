@@ -9,9 +9,11 @@ import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RedirectToUrlException;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import rfid.web.helper.SessionUser;
 
@@ -53,6 +55,8 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         add(createSetupLinkContainer(sessionUser));
         add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
         add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork()));
+
+        add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout.js"));
     }
 
     protected void storePageParameters(PageParameters params) {
@@ -123,5 +127,24 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 	protected ConfigContext getConfigContext() {
 		return ConfigContext.getCurrentContext();
 	}
+
+    @Override
+    public void renderHead(HtmlHeaderContainer container) {
+        super.renderHead(container);
+
+        StringBuffer javascriptBuffer = new StringBuffer();
+        Integer timeoutTime = ConfigContext.getCurrentContext().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
+        String loginLightboxTitle = getApplication().getResourceSettings().getLocalizer().getString("title.sessionexpired", null);
+        javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
+        javascriptBuffer.append("tenantName = '").append(getSessionUser().getTenant().getName()).append("';\n");
+        javascriptBuffer.append("sessionTimeOut = ").append(timeoutTime).append(";\n");
+        javascriptBuffer.append("loginWindowTitle = '").append(loginLightboxTitle).append("';\n");
+
+        container.getHeaderResponse().renderJavascript(javascriptBuffer.toString(), null);
+    }
+
+    protected Long getTenantId() {
+        return getSessionUser().getTenant().getId();
+    }
 
 }

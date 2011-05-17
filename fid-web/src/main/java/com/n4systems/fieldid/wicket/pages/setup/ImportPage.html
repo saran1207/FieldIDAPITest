@@ -1,0 +1,76 @@
+<wicket:extend>
+
+<div class="setupList">
+
+	<div class="importInfo">
+		<div class="setupOption import">
+			<h1><wicket:message key="label.import_your_data" /></h1>
+		</div>
+		<p><wicket:message key="label.import_your_data_msg1" /></p>
+		<p><wicket:message key="label.import_your_data_msg2" /></p>
+	</div>
+
+	<fieldset>
+		<legend><wicket:message key="label.import_owners" /></legend>
+		<p><wicket:message key="label.import_owners_msg" /></p>
+        <form wicket:id="importOwnersForm">
+            <div class="importAction">
+                <button wicket:id="importOwnersButton"><wicket:message key="label.start_import"/></button>
+            </div>
+        </form>
+	</fieldset>
+
+	<fieldset>
+		<legend><wicket:message key="label.import_assets" /></legend>
+		<p><wicket:message key="label.import_assets_msg" /></p>
+
+        <form wicket:id="importAssetsForm">
+            <div class="importAction">
+                <div wicket:id="addAssetTypeLinkContainer">
+                    <a wicket:id="addAssetTypeLink"><wicket:message key="label.import_assets_empty" /></a>
+                </div>
+                <div wicket:id="assetTypeSelectContainer">
+                    <select wicket:id="assetTypeSelect"/>
+                    <button wicket:id="startImportButton"><wicket:message key="label.start_import" /></button>
+                </div>
+            </div>
+        </form>
+	</fieldset>
+
+	<fieldset>
+		<legend><wicket:message key="label.import_events" /></legend>
+		<p><wicket:message key="label.import_events_msg" /></p>
+
+        <form wicket:id="importEventsForm">
+            <div class="importAction">
+                <div wicket:id="addEventTypeLinkContainer">
+                    <a wicket:id="addEventTypeLink"><wicket:message key="label.import_events_empty" /></a>
+                </div>
+                <div wicket:id="eventTypeSelectContainer">
+                    <select wicket:id="eventTypeSelect"/>
+                    <button wicket:id="startImportButton"><wicket:message key="label.start_import" /></button>
+                </div>
+            </div>
+        </form>
+	</fieldset>
+
+	<fieldset>
+		<legend><wicket:message key="label.import_auto_attributes" /></legend>
+		<p><wicket:message key="label.import_auto_attributes_msg" /></p>
+
+        <form wicket:id="importAutoAttributesForm">
+            <div class="importAction">
+                <div wicket:id="addAutoAttributeLinkContainer">
+                    <a wicket:id="addAutoAttributeCriteriaLink"><wicket:message key="label.import_auto_attributes_empty" /></a>
+                </div>
+                <div wicket:id="autoAttributeSelectContainer">
+                    <select wicket:id="assetTypeSelect"/>
+                    <button wicket:id="startImportButton"><wicket:message key="label.start_import" /></button>
+                </div>
+            </div>
+        </form>
+	</fieldset>
+
+</div>
+
+</wicket:extend>

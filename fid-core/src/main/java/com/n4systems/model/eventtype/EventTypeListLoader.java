@@ -16,6 +16,7 @@ public class EventTypeListLoader extends ListLoader<EventType> {
 	private String[] postFetchFields = new String[0];
 	private String nameFilter;
 	private Long groupFilter;
+    private boolean doPostFetches = true;
 
 
 	public EventTypeListLoader(SecurityFilter filter) {
@@ -35,8 +36,10 @@ public class EventTypeListLoader extends ListLoader<EventType> {
 		}
 		
 		builder.addOrder("name");
-		builder.addPostFetchPaths("eventForm.sections", "infoFieldNames");
-		builder.addPostFetchPaths(postFetchFields);
+        if (doPostFetches) {
+            builder.addPostFetchPaths("eventForm.sections", "infoFieldNames");
+            builder.addPostFetchPaths(postFetchFields);
+        }
 		return builder.getResultList(em);
 	}
 	
@@ -55,5 +58,9 @@ public class EventTypeListLoader extends ListLoader<EventType> {
 		return this;
 	}
 
-	
+    public EventTypeListLoader doPostFetches(boolean doPostFetches) {
+        this.doPostFetches = doPostFetches;
+        return this;
+    }
+
 }

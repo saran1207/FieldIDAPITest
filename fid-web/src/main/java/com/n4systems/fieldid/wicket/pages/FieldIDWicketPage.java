@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.model.security.SecurityFilter;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 import rfid.web.helper.SessionUser;
@@ -27,6 +28,10 @@ public class FieldIDWicketPage extends WebPage {
 
     protected SessionUser getSessionUser() {
         return FieldIDSession.get().getSessionUser();
+    }
+
+    protected SecurityFilter getSecurityFilter() {
+        return getSessionUser().getSecurityFilter();
     }
 
 }
