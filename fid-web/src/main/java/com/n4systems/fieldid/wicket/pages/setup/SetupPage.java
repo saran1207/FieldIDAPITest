@@ -2,9 +2,11 @@ package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.basic.Label;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
@@ -17,6 +19,11 @@ public abstract class SetupPage extends FieldIDLoggedInPage {
 
     protected SetupPage() {
         this(new PageParameters());
+    }
+
+    @Override
+    protected void addTitleLabel(String labelId) {
+        add(new Label(labelId, new FIDLabelModel("label.setup")));
     }
 
     @Override
