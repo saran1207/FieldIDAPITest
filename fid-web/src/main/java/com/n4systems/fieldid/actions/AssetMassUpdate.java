@@ -3,28 +3,25 @@ package com.n4systems.fieldid.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.fieldid.actions.asset.AssetWebModel;
-import com.n4systems.fieldid.actions.asset.PublishedState;
-import com.n4systems.fieldid.actions.search.AssetSearchAction;
-import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.UpdateConatraintViolationException;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.fieldid.actions.asset.AssetWebModel;
+import com.n4systems.fieldid.actions.asset.PublishedState;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.MassUpdateAssetHelper;
+import com.n4systems.fieldid.actions.search.AssetSearchAction;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -32,6 +29,8 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.security.Permissions;
+import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.MassUpdateAssetsTask;
 import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
@@ -109,27 +108,15 @@ public class AssetMassUpdate extends MassUpdate implements Preparable {
 			}
 		}
 
-		try {
-			asset.setIdentified(convertDate(identified));
-			assetWebModel.fillInAsset(asset);
-			List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
-			Long results = massUpdateManager.updateAssets(ids, asset, select, fetchCurrentUser(), getNonIntegrationOrderNumber());
-			List<String> messageArgs = new ArrayList<String>();
-			messageArgs.add(results.toString());
-			addFlashMessage(getText("message.assetmassupdatesuccessful", messageArgs));
+		asset.setIdentified(convertDate(identified));
+		assetWebModel.fillInAsset(asset);
+		List<Long> ids = criteria.getMultiIdSelection().getSelectedIds();
+		
+		MassUpdateAssetsTask task = new MassUpdateAssetsTask(massUpdateManager, ids, asset, select, fetchCurrentUser(), getNonIntegrationOrderNumber());
+		TaskExecutor.getInstance().execute(task);
+		addFlashMessage(getText("message.assetmassupdating"));
 
-			return SUCCESS;
-		} catch (UpdateFailureException ufe) {
-			logger.error("failed to run a mass update on assets", ufe);
-		} catch (UpdateConatraintViolationException ucve) {
-			addActionError(getText("error.massupdateassetconstriantviolation"));
-			return INPUT;
-		} catch (Exception e) {
-			logger.error("failed to run a mass update on assets", e);
-
-		}
-		addActionError(getText("error.failedtomassupdate"));
-		return INPUT;
+		return SUCCESS;
 	}
 
 	@SkipValidation

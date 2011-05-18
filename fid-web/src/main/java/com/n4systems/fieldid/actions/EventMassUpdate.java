@@ -4,27 +4,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.fieldid.actions.asset.LocationWebModel;
-import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-
 
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.ejb.legacy.LegacyAsset;
+import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.actions.helpers.MassUpdateEventHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.security.Permissions;
+import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.MassUpdateEventsTask;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.ServiceLocator;
 import com.opensymphony.xwork2.Preparable;
@@ -88,23 +88,13 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 			return ERROR;
 		}
 
-		try {
-			event.setAdvancedLocation(location.createLocation());
-			List<Long> eventIds = criteria.getMultiIdSelection().getSelectedIds();
-			Long results = massUpdateManager.updateEvents(eventIds, event, select, getSessionUser().getUniqueID());
-			List<String> messageArgs = new ArrayList<String>();
-			messageArgs.add(results.toString());
-			addFlashMessage(getText("message.eventmassupdatesuccessful", messageArgs));
+		event.setAdvancedLocation(location.createLocation());
+		List<Long> eventIds = criteria.getMultiIdSelection().getSelectedIds();
+		MassUpdateEventsTask task = new MassUpdateEventsTask(massUpdateManager, eventIds, event, select, fetchCurrentUser());
+		TaskExecutor.getInstance().execute(task);
+		addFlashMessage(getText("message.eventmassupdating"));
 
-			return SUCCESS;
-		} catch (UpdateFailureException ufe) {
-			logger.error("failed to run a mass update on events", ufe);
-		} catch (Exception e) {
-			logger.error("failed to run a mass update on events", e);
-		}
-
-		addActionError(getText("error.failedtomassupdate"));
-		return INPUT;
+		return SUCCESS;
 	}
 
 	@SkipValidation

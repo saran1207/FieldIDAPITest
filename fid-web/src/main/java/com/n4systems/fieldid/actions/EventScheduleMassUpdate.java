@@ -2,16 +2,18 @@ package com.n4systems.fieldid.actions;
 
 import java.util.Set;
 
-import com.n4systems.fieldid.actions.search.EventScheduleAction;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.search.EventScheduleAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.security.Permissions;
+import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.MassUpdateEventSchedulesTask;
 import com.n4systems.util.ListHelper;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 
@@ -51,21 +53,15 @@ public class EventScheduleMassUpdate extends MassUpdate {
 		try {
 			Set<Long> scheduleIds = ListHelper.toSet(criteria.getMultiIdSelection().getSelectedIds());
 			
-			Long results;
-			String messageKey;
-			if (select.get("removeIncomplete") == true) {
-				messageKey = "message.eventschedulemassremovesuccessful";
-				
-				results = massUpdateManager.deleteEventSchedules(scheduleIds);
+			if (select.get("removeIncomplete") == true) {				
+				Long results = massUpdateManager.deleteEventSchedules(scheduleIds);
+				addFlashMessage(getText("message.eventschedulemassremovesuccessful", new String[] {results.toString()}));
 			} else {
-				messageKey = "message.eventschedulemassupdatesuccessful";
-				
 				schedule.setNextDate(convertDate(nextDate));
-				results = massUpdateManager.updateEventSchedules(scheduleIds, schedule, select);
+				MassUpdateEventSchedulesTask task = new MassUpdateEventSchedulesTask(massUpdateManager, scheduleIds, schedule, select, fetchCurrentUser());
+				TaskExecutor.getInstance().execute(task);
+				addFlashMessage(getText("message.eventschedulemassupdating"));
 			}
-			
-			addFlashMessage(getText(messageKey, new String[] {results.toString()}));	
-			
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error("failed to run a mass update on event schedules", e);
