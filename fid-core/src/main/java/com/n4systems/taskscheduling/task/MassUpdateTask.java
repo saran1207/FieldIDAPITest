@@ -1,7 +1,5 @@
 package com.n4systems.taskscheduling.task;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.MassUpdateManager;
@@ -27,9 +25,7 @@ public abstract class MassUpdateTask implements Runnable {
 	public void run() {
 		try {
 			setup();
-			logger.info("start time: " + new Date());
 			executeMassUpdate();
-			logger.info("end time: " + new Date());
 			sendSuccessEmailResponse();
 			transaction.commit();
 		} catch (Exception e) {
