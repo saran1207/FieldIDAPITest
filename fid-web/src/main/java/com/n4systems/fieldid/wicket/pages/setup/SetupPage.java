@@ -22,8 +22,8 @@ public abstract class SetupPage extends FieldIDLoggedInPage {
     }
 
     @Override
-    protected void addTitleLabel(String labelId) {
-        add(new Label(labelId, new FIDLabelModel("label.setup")));
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.setup"));
     }
 
     @Override

@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
     private static String versionString;
+    private Label titleLabel;
 
     public FieldIDLoggedInPage(PageParameters params) {
         super(params);
@@ -48,7 +49,8 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         addSpeedIdentifyLinks();
 
         storePageParameters(params);
-        addTitleLabel("titleLabel");
+        add(titleLabel = createTitleLabel("titleLabel"));
+        titleLabel.setRenderBodyOnly(true);
         addNavBar("navBar");
         add(new Label("loggedInUsernameLabel", sessionUser.getUserName()));
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent") || sessionUser.hasAccess("editevent")));
@@ -62,8 +64,8 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     protected void storePageParameters(PageParameters params) {
     }
 
-    protected void addTitleLabel(String labelId) {
-        add(new Label(labelId, "Field ID"));
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, "Field ID");
     }
 
     private void addSpeedIdentifyLinks() {

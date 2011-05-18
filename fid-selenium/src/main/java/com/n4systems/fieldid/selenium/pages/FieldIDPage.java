@@ -174,14 +174,14 @@ public class FieldIDPage extends WebPage {
         if (getActiveNavOption().equals(navOption)) {
             return;
         }
-		selenium.click("//ul[@class='options ']//a[contains(., '"+ navOption +"')]");
+		selenium.click("//ul[contains(@class,'options')]//a[contains(., '"+ navOption +"')]");
 
         if (waitForPageToLoad)
 		    waitForPageToLoad(timeout);
 	}
 
     protected String getActiveNavOption() {
-        return selenium.getText("//ul[@class='options ']/li[contains(@class, 'selected')]").trim();
+        return selenium.getText("//ul[contains(@class,'options')]/li[contains(@class, 'selected')]").trim();
     }
 
 	public String getValidationErrorFor(String fieldInputId) {
@@ -209,7 +209,7 @@ public class FieldIDPage extends WebPage {
 	}
 
 	public String getCurrentTab() {
-		return selenium.getText("//ul[@class='options ']/li[@class[contains(.,' selected')]]").trim();
+		return selenium.getText("//ul[contains(@class,'options')]/li[@class[contains(.,' selected')]]").trim();
 	}
 
 	public OrgPicker getOrgPicker() {

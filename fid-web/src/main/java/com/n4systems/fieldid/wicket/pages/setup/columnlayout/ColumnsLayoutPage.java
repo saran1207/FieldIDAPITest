@@ -24,7 +24,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -58,8 +57,8 @@ public class ColumnsLayoutPage extends FieldIDLoggedInPage {
     private FeedbackPanel feedbackPanel;
 
     @Override
-    protected void addTitleLabel(String labelId) {
-        add(new Label(labelId, new FIDLabelModel("title.column_layout")));
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.column_layout"));
     }
 
     public ColumnsLayoutPage(PageParameters pageParams) {

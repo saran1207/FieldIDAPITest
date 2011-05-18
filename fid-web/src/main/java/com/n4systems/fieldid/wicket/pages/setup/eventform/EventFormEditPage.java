@@ -9,11 +9,6 @@ import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCop
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
-import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
-import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
-import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
-import com.n4systems.fieldid.wicket.pages.setup.SetupPage;
-import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
@@ -68,8 +63,8 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
     }
 
     @Override
-    protected void addTitleLabel(String labelId) {
-        add(new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventType.getName())));
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventType.getName()));
     }
 
     @Override
@@ -186,7 +181,7 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
             protected void onSaveAndFinishClicked(AjaxRequestTarget target) {
                 saveEventForm();
                 FieldIDSession.get().storeInfoMessageForStruts("Event Form saved.");
-                getRequestCycle().setRequestTarget(new RedirectRequestTarget("/eventType.action?uniqueID="+eventTypeId));
+                getRequestCycle().setRequestTarget(new RedirectRequestTarget("/eventType.action?uniqueID=" + eventTypeId));
             }
         };
     }
