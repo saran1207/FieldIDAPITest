@@ -296,6 +296,7 @@
 
 		<action name="search" method="searchCriteria" class="com.n4systems.fieldid.actions.search.AssetSearchAction">
 			<result name="input" type="freemarker">/templates/html/search/form.ftl</result>
+			<result name="blankslate" type="freemarker">/templates/html/search/blankslate.ftl</result>
 			<result name="error" type="freemarker">/templates/html/search/form.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">searchResults</param>
@@ -312,6 +313,7 @@
 
 		<action name="report" method="reportCriteria" class="com.n4systems.fieldid.actions.search.EventReportAction">
 			<result name="input" type="freemarker">/templates/html/report/form.ftl</result>
+			<result name="blankslate" type="freemarker">/templates/html/report/blankslate.ftl</result>
 			<result name="error" type="freemarker">/templates/html/report/form.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">reportResults</param>
@@ -858,6 +860,7 @@
 
 		<action name="schedule" method="searchCriteria" class="com.n4systems.fieldid.actions.search.EventScheduleAction">
 			<result name="input" type="freemarker">/templates/html/schedule/form.ftl</result>
+			<result name="blankslate" type="freemarker">/templates/html/schedule/blankslate.ftl</result>
 			<result name="error" type="freemarker">/templates/html/schedule/form.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">scheduleResults</param>

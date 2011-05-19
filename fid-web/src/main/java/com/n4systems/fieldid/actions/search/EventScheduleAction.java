@@ -3,16 +3,12 @@ package com.n4systems.fieldid.actions.search;
 import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_USER;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.fieldid.reporting.service.ScheduleColumnsService;
-import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
@@ -24,8 +20,10 @@ import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.reporting.service.ScheduleColumnsService;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
+import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventSchedule;
@@ -34,6 +32,7 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
+import com.n4systems.model.eventschedule.EventScheduleCountLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.utils.CompressedScheduleStatus;
@@ -105,7 +104,15 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 	@SkipValidation
 	public String doSearchCriteria() {
 		clearContainer();
-		return INPUT;
+		if(tenantHasEventSchedules()) {
+			return INPUT;
+		} else {
+			return "blankslate";
+		}	
+	}
+
+	private boolean tenantHasEventSchedules() {
+		return new EventScheduleCountLoader().setTenantId(getTenantId()).load() > 0;
 	}
 
 	@Override

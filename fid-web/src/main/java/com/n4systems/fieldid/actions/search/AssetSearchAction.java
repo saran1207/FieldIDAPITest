@@ -20,6 +20,7 @@ import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.asset.AssetCountLoader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -61,7 +62,15 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	@SkipValidation
 	public String doSearchCriteria() {
 		clearContainer();
-		return INPUT;
+		if(tenantHasAssets()) {
+			return INPUT;
+		} else {
+			return "blankslate";
+		}
+	}
+
+	private boolean tenantHasAssets() {
+		return new AssetCountLoader().setTenantId(getTenantId()).load() > 0;
 	}
 
 	@Override

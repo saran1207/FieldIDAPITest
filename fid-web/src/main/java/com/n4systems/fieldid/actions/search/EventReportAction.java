@@ -36,6 +36,7 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.event.EventCountLoader;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.orgs.BaseOrg;
@@ -69,7 +70,6 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	private List<AssetStatus> statuses;
 	private List<ListingPair> eventJobs;
 	private AssignedToUserGrouper userGrouper;
-	private TableView table;
 	
 	public EventReportAction(
 			final PersistenceManager persistenceManager,
@@ -115,9 +115,17 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 	@SkipValidation
 	public String doReportCriteria() {
 		clearContainer();
-		return INPUT;
+		if(tenantHasEvents()) {
+			return INPUT;
+		} else {
+			return "blankslate";
+		}	
 	}
 	
+	private boolean tenantHasEvents() {
+		return new EventCountLoader().setTenantId(getTenantId()).load() > 0;
+	}
+
 	@Override
 	protected void clearContainer() {
 		super.clearContainer();
@@ -158,11 +166,6 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 		return SUCCESS;
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<Long> getSearchIds() {
-		return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(new ImmutableSearchDefiner(this), getContainer().getSecurityFilter());
-	}
-	
 	public String doPrint() {
 		if (!isSearchIdValid()) {
 			addFlashErrorText("error.reportexpired");
