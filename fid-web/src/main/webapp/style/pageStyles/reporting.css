@@ -49,3 +49,7 @@
 	display:block;
 	border:5px solid #333;
 }
+
+.textContainer h2 {
+	padding: 5px;
+}

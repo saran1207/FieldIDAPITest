@@ -1,10 +1,13 @@
 <title><@s.text name="title.schedulesearch"/> <@s.text name="title.results"/></title>
+<head>
+	<@n4.includeStyle href="pageStyles/schedules"/>
+</head>
 
 <#assign listPage=true/>
-<#include '_form.ftl' >
 
 <#if validPage >
 	<#if hasResults >
+		<#include '_form.ftl' >
 		<#assign postRowHeaderTemplate="../schedule/_postRowHeader.ftl" />
 		<#assign postRowTemplate="../schedule/_postRow.ftl" />
 		<#include '../customizableSearch/table.ftl'>
@@ -23,12 +26,18 @@
 			</#if>
 		</div>
 	<#else>
-		<div class="emptyList" >
-			<h2><@s.text name="label.noresults" /></h2>
-			<p><@s.text name="message.emptysearch" /></p>
+		<div class="initialMessage" >
+			<div class="textContainer">
+				<h2><@s.text name="label.no_schedules" /></h2>
+				<p><@s.text name="message.no_schedules" /></p>
+			</div>
+			<div class="identifyActions">
+				<input type="button" onClick="location.href='<@s.url action="assetAdd"/>'" value="<@s.text name='label.identify_an_asset' />" />
+			</div>
 		</div>
 	</#if>
 <#else>
+	<#include '_form.ftl' >
 	<div class="emptyList" >
 		<h2><@s.text name="label.invalidpage" /></h2>
 		<p>

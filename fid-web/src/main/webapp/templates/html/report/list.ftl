@@ -8,7 +8,7 @@
 	 
 </title>
 <head>
-	<link rel="stylesheet" type="text/css" href="style/pageStyles/reporting.css" />
+	<@n4.includeStyle href="pageStyles/reporting"/>
 </head>
 <#assign reportActions>
 	<ul class="listOfLinks">
@@ -30,12 +30,13 @@
 		</#if>
 	</ul>
 </#assign>	
-${reportActions}
 <#assign listPage=true/>
-<#include "_form.ftl"/>
 
 <#if validPage >
 	<#if hasResults >
+		${reportActions}
+		<#include "_form.ftl"/>
+	
 		<#assign postRowHeaderTemplate="../report/_postRowHeader.ftl" />
 		<#assign postRowTemplate="../report/_postRow.ftl" />
 		<#include '../customizableSearch/table.ftl'>
@@ -71,15 +72,26 @@ ${reportActions}
 			</#if>
 			
 		</div>
+		${reportActions}
 	<#else>
-		<div class="emptyList" >
-			<h2><@s.text name="label.noresults"/></h2>
-			<p>
-				<@s.text name="message.emptyreport" />
-			</p>
+		<div class="initialMessage" >
+			<div class="textContainer">
+				<h2><@s.text name="label.no_events" /></h2>
+				<p><@s.text name="message.no_events" /></p>
+			</div>
+			<div class="eventActions">
+				<input type="button" onClick="location.href='<@s.url action="startEvent"/>'" value="<@s.text name='label.perform_first_event' />" />
+				<@s.text name="label.or" />
+				<a href="<@s.url action="assetSelection"/>"><@s.text name="label.mass_perform_first_event" /></a>
+				<@s.text name="label.or" />
+				<a href="<@s.url value="w/setup/import"/>"><@s.text name="label.import_from_excel" /></a>
+			</div>
 		</div>
 	</#if>
 <#else>
+	${reportActions}
+	<#include "_form.ftl"/>
+	
 	<div class="emptyList" >
 		<h2><@s.text name="label.invalidpage"/></h2>
 		<p>
@@ -87,8 +99,8 @@ ${reportActions}
 			<a href="<@s.url action="reportResults" searchId="${searchId!0}"/>" ><@s.text name="message.backtopageone"/></a>
 		</p>
 	</div>
+	${reportActions}
 </#if>
-${reportActions}
 
 <script type="text/javascript">
 function repositionPrintList(list, link) {
