@@ -102,7 +102,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		schedulesSearchPage.enterSerialNumber("123456");
 		schedulesSearchPage.clickRunSearchButton();
 
-		assertTrue("Schedule wasn't successfully deleted", selenium.isElementPresent("//div[@class='emptyList']"));
+		assertTrue("Schedule wasn't successfully deleted", verifyAllSchedulesAreRemoved());
 	}
 
 	@Test
@@ -116,7 +116,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		reportingSearchPage.enterSerialNumber("123456");
 		reportingSearchPage.clickRunSearchButton();
 
-		assertTrue("Event wasn't successfully deleted", selenium.isElementPresent("//div[@class='emptyList']"));
+		assertTrue("Event wasn't successfully deleted", verifyAllSchedulesAreRemoved());
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		assetsSearchPage.enterSerialNumber("123456sub");
 		assetsSearchPage.clickRunSearchButton();
 		
-		assertTrue("Sub asset was incorrectly removed!", !selenium.isElementPresent("//div[@class='emptyList']"));
+		assertTrue("Sub asset was incorrectly removed!", !verifyAllSchedulesAreRemoved());
 	}
 	
 	@Test
@@ -142,7 +142,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		assetsSearchPage.enterSerialNumber("123456");
 		assetsSearchPage.clickRunSearchButton();
 		
-		assertTrue("Master asset was incorrectly removed!", !selenium.isElementPresent("//div[@class='emptyList']"));
+		assertTrue("Master asset was incorrectly removed!", !verifyAllSchedulesAreRemoved());
 	}
 	
 	public void doDelete(String serialNumber){
@@ -158,5 +158,9 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 		massUpdatePage.clickSaveButtonAndConfirmMassDelete();
 	
+	}
+	
+	private boolean verifyAllSchedulesAreRemoved() {
+		return selenium.isElementPresent("//div[@class='initialMessage']");
 	}
 }

@@ -100,13 +100,13 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	private boolean verifyAllSchedulesAreRemoved() {
 		page.clickSchedulesLink();
 		page.clickRunSearchButton();
-		return selenium.isElementPresent("//div[@class='emptyList']");
+		return selenium.isElementPresent("//div[@class='initialMessage']");
 	}
 
 	private boolean verifyAllEventsAreRemoved(){
 		page.clickReportingLink();
 		page.clickRunSearchButton();
-		return selenium.isElementPresent("//div[@class='emptyList']");
+		return selenium.isElementPresent("//div[@class='initialMessage']");
 	}
 	
 	  @Override
