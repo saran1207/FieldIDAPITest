@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket;
 
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.DataLogPage;
 import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
@@ -32,17 +33,18 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/assetsEvents", AssetsAndEventsPage.class);
         mountBookmarkablePage("setup/templates", TemplatesPage.class);
         mountBookmarkablePage("setup/import", ImportPage.class);
+        mountBookmarkablePage("setup/dataLog", DataLogPage.class);
 
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());
         getResourceSettings().addStringResourceLoader(0, new TenantOverridesResourceLoader());
         getResourceSettings().setLocalizer(new CachePerTenantLocalizer());
-        InjectorHolder.setInjector(new AnnotSpringInjector(new SpringContextLocator(getServletContext())));
+        InjectorHolder.setInjector(new AnnotSpringInjector(new SpringContextLocator()));
     }
 
     @Override
     public Class<? extends Page> getHomePage() {
-        return EventFormEditPage.class;
+        return SettingsPage.class;
     }
 
     @Override
