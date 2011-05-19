@@ -3,10 +3,10 @@
 	<@n4.includeStyle href="pageStyles/search"/>
 </head>
 <#assign listPage=true/>
+<#include '_form.ftl' >
 
 <#if validPage >
 	<#if hasResults >
-		<#include '_form.ftl' >
 		<#assign postRowHeaderTemplate="../search/_postRowHeader.ftl" />
 		<#assign postRowTemplate="../search/_postRow.ftl" />
 		<#include '../customizableSearch/table.ftl'>
@@ -28,22 +28,12 @@
 			</#if>
 		</div>
 	<#else>
-		<div class="initialMessage" >
-			<div class="textContainer">
-				<h2><@s.text name="label.no_assets" /></h2>
-				<p><@s.text name="message.no_assets" /></p>
-			</div>
-			<div class="identifyActions">
-				<input type="button" onClick="location.href='<@s.url action="assetAdd"/>'" value="<@s.text name='label.identify_first_asset' />" />
-				<@s.text name="label.or" />
-				<a href="<@s.url action="assetMultiAdd"/>"><@s.text name="label.mass_identify_first_asset" /></a>
-				<@s.text name="label.or" />
-				<a href="<@s.url value="w/setup/import"/>"><@s.text name="label.import_from_excel" /></a>
-			</div>
+		<div class="emptyList" >
+			<h2><@s.text name="label.noresults" /></h2>
+			<p><@s.text name="message.emptysearch" /></p>
 		</div>
 	</#if>
 <#else>
-	<#include '_form.ftl' >
 	<div class="emptyList" >
 		<h2><@s.text name="label.invalidpage" /></h2>
 		<p>
