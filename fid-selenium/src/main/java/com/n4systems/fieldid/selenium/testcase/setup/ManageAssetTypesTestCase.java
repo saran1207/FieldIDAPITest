@@ -3,6 +3,8 @@ package com.n4systems.fieldid.selenium.testcase.setup;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.setup.ManageAssetTypesPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public abstract class ManageAssetTypesTestCase extends PageNavigatingTestCase<ManageAssetTypesPage> {
 	
@@ -21,6 +23,12 @@ public abstract class ManageAssetTypesTestCase extends PageNavigatingTestCase<Ma
 
     @Override
     public void setupScenario(Scenario scenario) {
+		PrimaryOrg primaryOrg = scenario.primaryOrgFor("test1");
+		
+		primaryOrg.setExtendedFeatures(setOf(ExtendedFeature.ManufacturerCertificate));
+		
+		scenario.updatePrimaryOrg(primaryOrg);
+
         scenario.anAssetType()
                 .named(TEST_ASSET_TYPE_NAME)
                 .warnings(TEST_ASSET_TYPE_WARNINGS)
