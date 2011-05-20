@@ -10,6 +10,7 @@ import org.apache.wicket.protocol.http.WebSession;
 import rfid.web.helper.SessionUser;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -45,6 +46,14 @@ public class FieldIDSession extends WebSession {
 
     public void storeInfoMessageForStruts(String message) {
         session.setAttribute(FlashScopeMarshaller.FLASH_MESSAGES, Arrays.asList(message));
+    }
+
+    public Collection<String> getFlashMessages() {
+        return (Collection<String>) session.getAttribute(FlashScopeMarshaller.FLASH_MESSAGES);
+    }
+
+    public Collection<String> getFlashErrors() {
+        return (Collection<String>) session.getAttribute(FlashScopeMarshaller.FLASH_ERRORS);
     }
 
 }

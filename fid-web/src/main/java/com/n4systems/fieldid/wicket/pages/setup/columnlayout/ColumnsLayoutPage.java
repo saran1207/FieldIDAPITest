@@ -167,13 +167,13 @@ public class ColumnsLayoutPage extends FieldIDLoggedInPage {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     saveColumnLayout();
-                    target.appendJavascript("parent.goBackToTemplates();");
+                    getResponse().redirect("/fieldid/w/setup/templates");
                 }
             });
             add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    target.appendJavascript("parent.goBackToTemplates();");
+                    getResponse().redirect("/fieldid/w/setup/templates");
                 }
             });
         }
@@ -241,7 +241,7 @@ public class ColumnsLayoutPage extends FieldIDLoggedInPage {
         cl.setSortDirection(sortDirection);
         cl.setSortColumn(sortColumn);
         new ColumnLayoutService().saveLayout(FieldIDSession.get().getSessionUser().getSecurityFilter(), cl);
-        FieldIDSession.get().storeInfoMessageForStruts("Layout successfully saved");
+        FieldIDSession.get().info("Layout successfully saved");
     }
 
     private void saveNewCustomColumn(AjaxRequestTarget target, String value, CustomColumnCategory category) {

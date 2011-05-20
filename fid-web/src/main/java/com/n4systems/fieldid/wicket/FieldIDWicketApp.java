@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
+import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.resources.CachePerTenantLocalizer;
@@ -31,8 +32,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/settings", SettingsPage.class);
         mountBookmarkablePage("setup/ownersUsersLocations", OwnersUsersLocationsPage.class);
         mountBookmarkablePage("setup/assetsEvents", AssetsAndEventsPage.class);
-        mountBookmarkablePage("setup/templates", TemplatesPage.class);
         mountBookmarkablePage("setup/import", ImportPage.class);
+        mountBookmarkablePage("setup/templates", TemplatesPage.class);
+        mountBookmarkablePage("setup/widgets", WidgetsPage.class);
         mountBookmarkablePage("setup/dataLog", DataLogPage.class);
 
         getMarkupSettings().setStripWicketTags(true);

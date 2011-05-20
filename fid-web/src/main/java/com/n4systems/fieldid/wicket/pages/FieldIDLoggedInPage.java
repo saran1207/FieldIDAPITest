@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.n4systems.fieldid.utils.UrlArchive;
+import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
+import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import org.apache.wicket.Component;
@@ -37,6 +39,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
             throw new RedirectToUrlException("/login.action");
         }
 
+        add(new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", getVersionString(getServletRequest())));
 
         boolean displayInvite = sessionUser.isEmployeeUser() && getUserSecurityGuard().isAllowedManageSafetyNetwork();
@@ -96,7 +99,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         this(null);
     }
 
-    private HttpServletRequest getServletRequest() {
+    protected HttpServletRequest getServletRequest() {
         return getWebRequestCycle().getWebRequest().getHttpServletRequest();
     }
 
@@ -146,7 +149,11 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     }
 
     protected Long getTenantId() {
-        return getSessionUser().getTenant().getId();
+        return getTenant().getId();
+    }
+
+    protected Tenant getTenant() {
+        return getSessionUser().getTenant();
     }
 
 }

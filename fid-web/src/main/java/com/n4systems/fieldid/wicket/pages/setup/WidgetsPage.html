@@ -1,0 +1,23 @@
+<wicket:extend>
+
+<div class="setupList">
+	<div class="setupOption signIn">
+		<h1><wicket:message key="label.login_url"/></h1>
+		<p><wicket:message key="label.login_url_msg"/></p>
+		<div class="widget">
+			<p><span wicket:id="loginUrl"></span></p>
+		</div>
+	</div>
+
+	<div class="setupOption embeddedCode">
+		<h1><wicket:message key="label.embedded_login_snipit"/></h1>
+		<p><wicket:message key="label.embedded_login_snipit_msg"/></p>
+		<div class="widget">
+			<p>
+                &lt;iframe src=&quot;<span wicket:id="embeddedLoginUrl"/>&quot; scrolling=&quot;no&quot; scrollbar=&quot;no&quot; style=&quot;overflow:hidden;&quot; frameborder=&quot;0&quot; width=&quot;500&quot; height=&quot;300&quot; &gt;&lt;/iframe&gt;
+			</p>
+		</div>
+	</div>
+</div>
+
+</wicket:extend>

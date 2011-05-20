@@ -11,16 +11,16 @@
 				<a href="<@s.url action="setup" namespace="/"/>">&#171; <@s.text name="label.back_to_setup"/></a>
 			</#if>
 			<#if navOptions.onSetupSettings>
-				<a href="<@s.url action="settings" namespace="/"/>">&#171; <@s.text name="label.back_to_setup"/></a>
+				<a href="/fieldid/w/setup/settings">&#171; <@s.text name="label.back_to_setup"/></a>
 			</#if>
 			<#if navOptions.onSetupOwners>
-				<a href="<@s.url action="ownersUsersLocations" namespace="/"/>">&#171; <@s.text name="label.back_to_setup"/></a>
+				<a href="/fieldid/w/setup/ownersUsersLocations">&#171; <@s.text name="label.back_to_setup"/></a>
 			</#if>
 			<#if navOptions.onSetupAssets>
-				<a href="<@s.url action="assetsAndEvents" namespace="/"/>">&#171; <@s.text name="label.back_to_setup"/></a>
+				<a href="/fieldid/w/setup/assetsEvents">&#171; <@s.text name="label.back_to_setup"/></a>
 			</#if>
 			<#if navOptions.onSetupTemplate>
-				<a href="<@s.url action="templates" namespace="/"/>">&#171; <@s.text name="label.back_to_setup"/></a>
+				<a href="/fieldid/w/setup/templates">&#171; <@s.text name="label.back_to_setup"/></a>
 			</#if>
 			<#if navOptions.returnToReport && reportActive>
 				<a href="<@s.url action="returnToReport" namespace="/"/>">&#171; <@s.text name="label.return_to_report"/></a>
