@@ -19,6 +19,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 	private boolean turnOnJobSites;
 	private boolean turnOnAssignedTo=false;
 	private boolean turnOnProofTests = false;
+	private boolean turnOnManufacturerCertificates = false;
 	
 	private TransactionManager transactionManager;
 	
@@ -37,6 +38,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 		turnOnJobSites = getPrimaryOrg().hasExtendedFeature(ExtendedFeature.JobSites);
 		turnOnAssignedTo=getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AssignedTo);
 		turnOnProofTests=getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
+		turnOnManufacturerCertificates=getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
 		return SUCCESS;
 	}
 	
@@ -80,6 +82,7 @@ public class QuickSetupWizardAction extends AbstractAction {
 		new ToggleExendedFeatureMethod(ExtendedFeature.JobSites, turnOnJobSites).applyTo(getPrimaryOrg(), transaction);
 		new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, turnOnAssignedTo).applyTo(getPrimaryOrg(), transaction);
 		new ToggleExendedFeatureMethod(ExtendedFeature.ProofTestIntegration, turnOnProofTests).applyTo(getPrimaryOrg(), transaction);
+		new ToggleExendedFeatureMethod(ExtendedFeature.ManufacturerCertificate, turnOnManufacturerCertificates).applyTo(getPrimaryOrg(), transaction);
 	}
 
 	private void clearCachedValues() {
@@ -112,6 +115,14 @@ public class QuickSetupWizardAction extends AbstractAction {
 
 	public void setTurnOnProofTests(boolean turnOnProofTests) {
 		this.turnOnProofTests = turnOnProofTests;
+	}
+
+	public boolean isTurnOnManufacturerCertificates() {
+		return turnOnManufacturerCertificates;
+	}
+
+	public void setTurnOnManufacturerCertificates(boolean turnOnManufacturerCertificate) {
+		this.turnOnManufacturerCertificates = turnOnManufacturerCertificate;
 	}
 	
 }

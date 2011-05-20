@@ -54,6 +54,19 @@
 			</div>
 		</div>
 		
+		<div class="setupWizardContent">
+			<h2><@s.text name="label.enable_manufacturer_certificate"/></h2>
+			<p><@s.text name="label.manufacturer_certificate_field_description"/></p>
+			<br/>
+			<div class="infoSet weak">
+				<span class="fieldHolder">
+				
+					<@s.checkbox name="turnOnManufacturerCertificates" theme="fieldidSimple"/>
+					<span class="description checkBoxLabel"><@s.text name="label.yes_i_want_to_enable_manufacturer_certificates"/></span>
+				</span>
+			</div>
+		</div>
+		
 		
 		<div class="prominent">
 			<@s.url id="cancelUrl" action="startWizard"/>
