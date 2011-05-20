@@ -4,7 +4,7 @@
 </head>
 <div class="initialMessage" >
 	<div class="textContainer">
-		<h2><@s.text name="label.no_schedules" /></h2>
+		<h1><@s.text name="label.no_schedules" /></h1>
 		<p><@s.text name="message.no_schedules" /></p>
 	</div>
 	<div class="identifyActions">

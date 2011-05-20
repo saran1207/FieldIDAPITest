@@ -13,7 +13,7 @@
 
 <div class="initialMessage" >
 	<div class="textContainer">
-		<h2><@s.text name="label.no_events" /></h2>
+		<h1><@s.text name="label.no_events" /></h1>
 		<p><@s.text name="message.no_events" /></p>
 	</div>
 	<div class="eventActions">
