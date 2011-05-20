@@ -1,11 +1,15 @@
 package com.n4systems.fieldid.selenium.testcase.massupdate;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.ReportingPage;
-import com.n4systems.fieldid.selenium.pages.SchedulesSearchPage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
@@ -16,12 +20,6 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.EventScheduleBuilder;
 import com.n4systems.model.builders.SubAssetBuilder;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class MassUpdateAssetsTest extends FieldIDTestCase {
 
@@ -98,9 +96,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 
 		assertTrue("Assets weren't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 3 assets removed.')]"));
 
-		SchedulesSearchPage schedulesSearchPage = page.clickSchedulesLink();
-		schedulesSearchPage.enterSerialNumber("123456");
-		schedulesSearchPage.clickRunSearchButton();
+		page.clickSchedulesLink();
 
 		assertTrue("Schedule wasn't successfully deleted", verifyAllSchedulesAreRemoved());
 	}
@@ -112,9 +108,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		
 		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 1 assets removed.')]"));
 	
-		ReportingPage reportingSearchPage = page.clickReportingLink();
-		reportingSearchPage.enterSerialNumber("123456");
-		reportingSearchPage.clickRunSearchButton();
+		page.clickReportingLink();
 
 		assertTrue("Event wasn't successfully deleted", verifyAllSchedulesAreRemoved());
 	}
