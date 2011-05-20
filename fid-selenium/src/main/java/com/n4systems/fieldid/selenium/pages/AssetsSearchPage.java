@@ -54,4 +54,22 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 		return collectTableValuesUnderCellForCurrentPage(2, 2, "a");
 	}
 
+    public boolean isBlankSlate() {
+    	return selenium.isElementPresent("//div[@class='initialMessage']");
+    }
+
+    public IdentifyPage clickIdentifyFirstAsset() {
+    	selenium.click("//input[contains(@value, 'Identify your first asset now')]");
+    	return new IdentifyPage(selenium);
+    }
+    
+    public IdentifyPage clickIdentifyUpTo250Assets() {
+    	selenium.click("//a[contains(., 'Identify up to 250 at once')]");
+    	return new IdentifyPage(selenium);
+    }
+    
+    public ImportPage clickImportFromExcel() {
+    	selenium.click("//a[contains(., 'Import from Excel')]");
+    	return new ImportPage(selenium);
+    }
 }

@@ -159,4 +159,9 @@ public class SetupPage extends FieldIDPage {
         clickNavOption("Assets & Events");
     }
 
+    protected ImportPage clickImport() {
+        clickNavOption("Import");
+        return new ImportPage(selenium);
+    }
+
 }

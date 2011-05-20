@@ -60,5 +60,14 @@ public class SchedulesSearchPage extends EntitySearchPage<SchedulesSearchResults
 	public List<String> getResultSerialNumbers() {
 		return collectTableValuesUnderCellForCurrentPage(2, 1, "a");
 	}
+    
+    public boolean isBlankSlate() {
+    	return selenium.isElementPresent("//div[@class='initialMessage']");
+    }
+    
+    public IdentifyPage clickIdentifyAnAssetNow() {
+    	selenium.click("//input[contains(@value, 'Identify an asset now')]");
+    	return new IdentifyPage(selenium);
+    }
 
 }

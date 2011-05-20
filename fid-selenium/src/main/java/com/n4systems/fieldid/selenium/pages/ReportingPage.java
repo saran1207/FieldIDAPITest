@@ -119,4 +119,23 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 	public List<String> getResultSerialNumbers() {
 		return collectTableValuesUnderCellForCurrentPage(2, 3, "a");
 	}
+    
+    public boolean isBlankSlate() {
+    	return selenium.isElementPresent("//div[@class='initialMessage']");
+    }
+    
+    public EventPage clickPerformFirstEventPage() {
+    	selenium.click("//input[contains(@value, 'Perform your first event now')]");
+    	return new EventPage(selenium);
+    }
+    
+    public EventPage clickPerformMultiEventPage() {
+    	selenium.click("//input[contains(@value, 'Perform an event on up to 250 assets')]");
+    	return new EventPage(selenium);
+    }
+    
+    public ImportPage clickImportFromExcel() {
+    	selenium.click("//a[contains(., 'Import from Excel')]");
+    	return new ImportPage(selenium);
+    }
 }
