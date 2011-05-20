@@ -1,19 +1,17 @@
 package com.n4systems.fieldid.wicket.components;
 
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.border.Border;
 
-public class NonWicketLink extends Link {
-
-    private String path;
+public class NonWicketLink extends Border {
 
     public NonWicketLink(String id, String path) {
         super(id);
-        this.path = path;
-    }
 
-    @Override
-    public void onClick() {
-        getResponse().redirect("/fieldid/"+path);
+        WebMarkupContainer linkContainer = new WebMarkupContainer("link");
+        linkContainer.add(new SimpleAttributeModifier("href", "/fieldid/"+path));
+        add(linkContainer);
     }
 
 }
