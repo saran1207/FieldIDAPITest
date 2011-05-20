@@ -209,7 +209,7 @@ public class FieldIDPage extends WebPage {
 	}
 
 	public String getCurrentTab() {
-		return selenium.getText("//ul[contains(@class,'options')]/li[@class[contains(.,' selected')]]").trim();
+		return selenium.getText("//ul[contains(@class,'options')]/li[contains(@class,'selected')]").trim();
 	}
 
 	public OrgPicker getOrgPicker() {
