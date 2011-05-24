@@ -46,6 +46,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
+import com.n4systems.model.EventType;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
@@ -999,6 +1000,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return getAllEventHelper().getPaginatedEvents(getCurrentPage(), sortColumn, sortDirection!=null ? sortDirection.equals("asc") : true);
 	}
 
+	public List<EventType> getEventTypes() {
+		return new ArrayList<EventType>(assetType.getEventTypes());
+	}
+	
 	public Event getLastEvent() {
 		return getAllEventHelper().getLastEvent();
 	}
