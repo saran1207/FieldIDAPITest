@@ -129,9 +129,9 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
     	return new EventPage(selenium);
     }
     
-    public ManageEventsPage clickPerformMultiEventPage() {
+    public EventPage clickPerformMultiEventPage() {
     	selenium.click("//a[contains(., 'Perform an event on up to 250 assets')]");
-    	return new ManageEventsPage(selenium);
+    	return new EventPage(selenium);
     }
     
     public ImportPage clickImportFromExcel() {

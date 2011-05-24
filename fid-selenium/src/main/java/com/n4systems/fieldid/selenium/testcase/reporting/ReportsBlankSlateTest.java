@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.selenium.testcase.reporting;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.ImportPage;
-import com.n4systems.fieldid.selenium.pages.ManageEventsPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 
 public class ReportsBlankSlateTest extends PageNavigatingTestCase<ReportingPage> {
@@ -32,7 +32,7 @@ public class ReportsBlankSlateTest extends PageNavigatingTestCase<ReportingPage>
 	@Test
 	public void choose_perform_multi_events() throws Exception {
 		assertTrue(page.isBlankSlate());
-		ManageEventsPage eventPage = page.clickPerformMultiEventPage();
+		EventPage eventPage = page.clickPerformMultiEventPage();
 		assertTrue(eventPage.checkOnMassEventPage());
 	}
 
