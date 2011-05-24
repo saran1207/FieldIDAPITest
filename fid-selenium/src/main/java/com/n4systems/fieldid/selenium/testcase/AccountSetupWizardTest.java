@@ -1,12 +1,15 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.SystemSettings;
 import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.mail.MailMessage;
 import com.n4systems.fieldid.selenium.pages.AccountSetupWizardPage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
-import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
 import com.n4systems.fieldid.selenium.pages.SetPasswordPage;
 import com.n4systems.fieldid.selenium.pages.SignUpPage;
 import com.n4systems.fieldid.selenium.pages.setup.BrandingPage;
@@ -14,9 +17,6 @@ import com.n4systems.fieldid.selenium.pages.setup.SystemSettingsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
 import com.n4systems.util.ConfigEntry;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class AccountSetupWizardTest extends FieldIDTestCase {
 
@@ -51,9 +51,8 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	}
 
 	private LoginPage createNewBasicTenant(String referrer) {
-        SelectPackagePage selectPackagePage = startAsCompany(referrer).clickPlansAndPricingLink();
         String packageName = "Plus";	// must be unlimited
-        SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink(packageName);
+        SignUpPage signUpPage = gotoSignUpPage(referrer, packageName, "");
 
         TenantInfo t = new TenantInfo(TEST_USER_NAME, TEST_PASSWORD, TENANT_TO_CREATE, TENANT_TO_CREATE);
         t.setNumberOfUsers(2);

@@ -18,6 +18,7 @@ import com.n4systems.fieldid.selenium.mail.MailServer;
 import com.n4systems.fieldid.selenium.pages.ChooseCompanyPage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
+import com.n4systems.fieldid.selenium.pages.SignUpPage;
 import com.n4systems.fieldid.selenium.pages.WebEntity;
 import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
 import com.n4systems.fieldid.selenium.util.TimeLogger;
@@ -241,6 +242,13 @@ public abstract class FieldIDTestCase extends DBTestCase {
 		return new SelectPackagePage(selenium);
 	}
 
+	protected SignUpPage gotoSignUpPage(String companyID, String pakageId, String referralCode) {
+		String url = getFieldIDProtocol() + "://" + companyID + "." + getFieldIDDomain() +  "/fieldid/public/signUpAdd.action?packageId=" + pakageId  + "&refCode=" + referralCode;
+		
+		selenium.open(url);
+		return new SignUpPage(selenium);
+	}
+	
     protected <K> Set<K> setOf(K... items) {
         Set<K> set = new HashSet<K>();
         set.addAll(Arrays.asList(items));
