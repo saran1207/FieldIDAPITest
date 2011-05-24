@@ -76,6 +76,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     private void addSpeedIdentifyLinks() {
         boolean integration = getSecurityGuard().isIntegrationEnabled();
         WebMarkupContainer identifySectionContainer = new WebMarkupContainer("identifyLinksContainer");
+        identifySectionContainer.setRenderBodyOnly(true);
         identifySectionContainer.setVisible(getSessionUser().hasAccess("tag"));
         identifySectionContainer.add(new WebMarkupContainer("identifyLinkContainer").setVisible(integration));
         identifySectionContainer.add(new WebMarkupContainer("addAssetLinkContainer").setVisible(!integration));
