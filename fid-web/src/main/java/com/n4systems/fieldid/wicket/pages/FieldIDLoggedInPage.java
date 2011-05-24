@@ -39,6 +39,8 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
             throw new RedirectToUrlException("/login.action");
         }
 
+        addClickTaleScripts();
+
         add(new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", getVersionString(getServletRequest())));
 
@@ -154,6 +156,11 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
     protected Tenant getTenant() {
         return getSessionUser().getTenant();
+    }
+
+    private void addClickTaleScripts() {
+        add(new Label("clickTaleStart", ConfigContext.getCurrentContext().getString(ConfigEntry.CLICKTALE_START)).setEscapeModelStrings(false));
+        add(new Label("clickTaleEnd", ConfigContext.getCurrentContext().getString(ConfigEntry.CLICKTALE_END)).setEscapeModelStrings(false));
     }
 
 }
