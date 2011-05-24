@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.assertEquals;
 
+import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -51,8 +52,9 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 	}
 
 	private LoginPage createNewBasicTenant(String referrer) {
+        SelectPackagePage selectPackagePage = startAsCompany(referrer).clickPlansAndPricingLink();
         String packageName = "Plus";	// must be unlimited
-        SignUpPage signUpPage = gotoSignUpPage(referrer, packageName, "");
+        SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink(packageName);
 
         TenantInfo t = new TenantInfo(TEST_USER_NAME, TEST_PASSWORD, TENANT_TO_CREATE, TENANT_TO_CREATE);
         t.setNumberOfUsers(2);
@@ -87,14 +89,19 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		page.gotoQuickSetupWizardStep2();
 		page.verifyCompanyProfileSetup();
 		page.verifyQuickSetupWizardStep2PageHeader();
+
+        page.verifyAddFirstCustomerPage();
+        page.gotoQuickSetupWizardStep3();
+
 		page.verifyQuickSetupWizardSystemSettingsPage(referrer);
 		String prefDateFormat = page.getPreferredDateFormat();
 		systemSettings.setPreferredDateFormat(prefDateFormat);
 		String wsa = page.getWebSiteAddress();
 		systemSettings.setWebSiteAddress(wsa);
-		page.gotoQuickSetupWizardStep3();
+        page.gotoQuickSetupWizardStep4();
+
 		page.verifySystemSettingsUpdated();
-		page.verifyQuickSetupWizardStep3PageHeader();
+		page.verifyQuickSetupWizardStep4PageHeader();
 		page.verifyQuickSetupWizardImportTemplatesPage();
 		page.gotoSkipImport();
 		page.verifyQuickSetupWizardDonePage();

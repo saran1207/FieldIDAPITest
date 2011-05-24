@@ -24,7 +24,7 @@ public class SignUpPage extends WebPage {
 	private String companyZipCodeTextFieldLocator = "xpath=//INPUT[@id='mainContent_address_postal']";
 	private String companyPhoneNumberTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_phoneNumber']";
 	private String siteAddressTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_tenantName']";
-	private String numberOfUsersTextFieldLocator = "xpath=//INPUT[@id='mainContent_signUp_numberOfUsers']";
+	private String numberOfUsersTextFieldLocator = "//input[@id='mainContent_signUp_numberOfUsers']";
 	private String promoCodeTextFieldLocator = "xpath=//INPUT[@id='promoCode']";
 	private String payByCreditCardLinkLocator = "xpath=//A[@id='payCreditCard']";
 	private String payByPurchaseOrderLinkLocator = "xpath=//A[@id='payPurchaseOrder']";

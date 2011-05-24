@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import com.n4systems.model.columns.ActiveColumnMapping;
 import com.n4systems.model.columns.ColumnLayout;
+import com.n4systems.model.tenant.SetupDataLastModDates;
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.AddAssetHistory;
@@ -61,6 +62,7 @@ import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import com.n4systems.model.user.User;
+import rfid.ejb.entity.SerialNumberCounterBean;
 
 public class TenantCleaner {
 	private static final Logger logger = Logger.getLogger(TenantCleaner.class);
@@ -103,6 +105,8 @@ public class TenantCleaner {
         removeAllForTenants(OneClickCriteria.class, tenantIds);
         removeAllForTenants(ActiveColumnMapping.class, tenantIds);
         removeAllForTenants(ColumnLayout.class, tenantIds);
+        removeAllForTenants(SetupDataLastModDates.class, tenantIds);
+        removeAllForTenants(SerialNumberCounterBean.class, tenantIds);
 
 //        removeAllForTenants(TextFieldCriteria.class, tenantIds);
 //        removeAllForTenants(SelectCriteria.class, tenantIds);

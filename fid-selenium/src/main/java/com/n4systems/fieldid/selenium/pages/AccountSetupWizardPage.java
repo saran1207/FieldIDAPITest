@@ -12,13 +12,13 @@ public class AccountSetupWizardPage extends FieldIDPage {
 	private static final String STEP_1_COMPLETE_XPATH = "//input[@id='step1Complete_label_next']";
 	private static final String STEP_1_PAGE_HEADER_XPATH = "//div[@id='contentTitle']/H1[contains(text(),'Setup Wizard - Step 1')]";
 	private static final String STEP_2_PAGE_HEADER_XPATH = "//div[@id='contentTitle']/H1[contains(text(),'Setup Wizard - Step 2')]";
-	private static final String PREFERRED_DATE_FORMAT_SELECT_LIST_XPATH = "//select[@id='step2Complete_dateFormat']";
+	private static final String PREFERRED_DATE_FORMAT_SELECT_LIST_XPATH = "//select[@id='step3Complete_dateFormat']";
 	private static final String DEFAULT_VENDOR_CONTEXT_SELECT_LIST_XPATH = "//select[@id='step2Complete_defaultVendorContext']";
-	private static final String WEBSITE_ADDRESS_TEXT_FIELD_XPATH = "//input[@id='step2Complete_webSite']";
+	private static final String WEBSITE_ADDRESS_TEXT_FIELD_XPATH = "//input[@id='step3Complete_webSite']";
 	private static final String STEP_2_COMPLETE_BUTTON_XPATH = "//input[@id='step2Complete_label_next']";
-	private static final String STEP_3_PAGE_HEADER_XPATH = "//div[@id='contentTitle']/H1[contains(text(),'Setup Wizard - Step 3')]";
+	private static final String STEP_4_PAGE_HEADER_XPATH = "//div[@id='contentTitle']/H1[contains(text(),'Setup Wizard - Step 4')]";
 	private static final String IMPORT_FORM = "//form[@id='importForm']";
-	private static final String STEP_3_COMPLETE_LINK_XPATH = "//input[@id='continue']";
+	private static final String STEP_4_COMPLETE_LINK_XPATH = "//input[@id='continue']";
 	private static final String WIZARD_DONE_PAGE_HEADER_XPATH = "xpath=//DIV[@id='contentTitle']/H1[contains(text(),'Setup Wizard - Done')]";
 	
 	public AccountSetupWizardPage(Selenium selenium) {
@@ -66,6 +66,10 @@ public class AccountSetupWizardPage extends FieldIDPage {
 		checkForErrorMessages(null);
 	}
 
+    public void verifyAddFirstCustomerPage() {
+        assertTrue("Could not find the customer name input", selenium.isElementPresent("//input[@name='customerName']"));
+    }
+
 	public void verifyQuickSetupWizardSystemSettingsPage(boolean referrer) {
 		assertTrue("Could not find the Preferred Date Format select list", selenium.isElementPresent(PREFERRED_DATE_FORMAT_SELECT_LIST_XPATH));
 		if(referrer) {
@@ -90,6 +94,11 @@ public class AccountSetupWizardPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
+    public void gotoQuickSetupWizardStep4() {
+        selenium.click("//input[@id='step3Complete_label_next']");
+        waitForPageToLoad();
+    }
+
 	public void verifySystemSettingsUpdated() {
 		List<String> successMsgs = getActionMessages();
 		List<String> errorMsgs = getFormErrorMessages();
@@ -97,8 +106,8 @@ public class AccountSetupWizardPage extends FieldIDPage {
 		assertTrue("There were errors on the page: " + errorMsgs, errorMsgs.size() == 0);
 	}
 
-	public void verifyQuickSetupWizardStep3PageHeader() {
-		assertTrue("Could not find the header for the Quick Setup Wizard Step 3", selenium.isElementPresent(STEP_3_PAGE_HEADER_XPATH));
+	public void verifyQuickSetupWizardStep4PageHeader() {
+		assertTrue("Could not find the header for the Quick Setup Wizard Step 4", selenium.isElementPresent(STEP_4_PAGE_HEADER_XPATH));
 		checkForErrorMessages(null);
 	}
 
@@ -107,7 +116,7 @@ public class AccountSetupWizardPage extends FieldIDPage {
 	}
 
 	public void gotoSkipImport() {
-		selenium.click(STEP_3_COMPLETE_LINK_XPATH);
+		selenium.click(STEP_4_COMPLETE_LINK_XPATH);
 		waitForPageToLoad();
 	}
 

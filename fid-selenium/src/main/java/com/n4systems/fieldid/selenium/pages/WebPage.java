@@ -73,7 +73,7 @@ public class WebPage extends WebEntity {
 
         int maxIndex = selenium.getXpathCount("//span[@class='actionMessage']").intValue();
         for(int i = 1; i <= maxIndex; i++) {
-            String iterableActionMessageLocator = "//ul/li["+i+"]/*[@class='actionMessage']";
+            String iterableActionMessageLocator = "//ul/li["+i+"]/span[@class='actionMessage']";
             String s = selenium.getText(iterableActionMessageLocator);
             result.add(s);
         }
