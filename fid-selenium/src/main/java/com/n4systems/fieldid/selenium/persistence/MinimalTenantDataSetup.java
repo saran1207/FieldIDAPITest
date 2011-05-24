@@ -18,6 +18,7 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.UserType;
+import rfid.ejb.entity.SerialNumberCounterBean;
 
 public class MinimalTenantDataSetup {
 
@@ -38,6 +39,17 @@ public class MinimalTenantDataSetup {
         PrimaryOrg org = createPrimaryOrgForTenant();
         createN4UserAccountForTenant(org);
         createPassFailButtonGroup();
+        createSerialNumberFormat();
+    }
+
+    private void createSerialNumberFormat() {
+        SerialNumberCounterBean serialNumberCounterBean = new SerialNumberCounterBean();
+        serialNumberCounterBean.setTenant(tenant);
+        serialNumberCounterBean.setDecimalFormat("000000");
+        serialNumberCounterBean.setCounter(1L);
+        serialNumberCounterBean.setDaysToReset(366L);
+        serialNumberCounterBean.setLastReset(new Date());
+        em.persist(serialNumberCounterBean);
     }
 
     private void createPassFailButtonGroup() {
