@@ -1,6 +1,6 @@
 class IncreaseConfigValueSize < ActiveRecord::Migration
   def self.up
-  		change_column(:configurations, :value, :string, {:limit => 512})
+  		change_column(:configurations, :value, :string, {:limit => 1000})
   end
   
   def self.down
