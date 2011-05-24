@@ -10,7 +10,7 @@
 		
 	</head>
 	<body id="fieldidBody">
-		${clickTailStart}
+		${clickTaleStart}
 		<div id="systemNotices">
 		</div>
 		<div id="page">
@@ -24,6 +24,6 @@
 		</div>
 		
 		<#include "googleAnalytics.ftl"/>
-		${clickTailEnd}
+		${clickTaleEnd}
 	</body>
 </html>

@@ -593,11 +593,11 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return getConfigContext().getString(ConfigEntry.HELP_SYSTEM_URL);
 	}
 	
-	public String getClickTailStart() {
-		return getConfigContext().getString(ConfigEntry.CLICKTAIL_START);
+	public String getClickTaleStart() {
+		return getConfigContext().getString(ConfigEntry.CLICKTALE_START);
 	}
 
-	public String getClickTailEnd() {
-		return getConfigContext().getString(ConfigEntry.CLICKTAIL_END);
+	public String getClickTaleEnd() {
+		return getConfigContext().getString(ConfigEntry.CLICKTALE_END);
 	}
 }
