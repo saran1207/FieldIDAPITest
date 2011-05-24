@@ -32,9 +32,11 @@
 			<#if Session.sessionUser.hasAccess("createevent") >
 				<@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndStartEvent" key="hbutton.saveandstartevent" />
 			</#if>
-			<span id="saveAndPrintAction">
-				<@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
-			</span>
+			<#if securityGuard.manufacturerCertificateEnabled>    
+				<span id="saveAndPrintAction">
+					<@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
+				</span>
+			</#if>
 			<span id="cancelAction">
 				<@s.text name="label.or"/>
 				<a href="<@s.url action="home"/>"><@s.text name="label.cancel"/></a>
