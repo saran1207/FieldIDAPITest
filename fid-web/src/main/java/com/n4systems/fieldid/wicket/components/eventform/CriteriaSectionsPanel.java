@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressed
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
+import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 import com.n4systems.model.CriteriaSection;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -106,7 +107,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
         EnclosureContainer addFormContainer = new EnclosureContainer("addCriteriaSectionFormContainer", addForm);
         addFormContainer.add(addForm);
         add(addFormContainer);
-        add(feedbackPanel = new FeedbackPanel("feedbackPanel"));
+        add(feedbackPanel = new ContainerFeedbackPanel("feedbackPanel", this));
         feedbackPanel.setOutputMarkupId(true);
     }
 

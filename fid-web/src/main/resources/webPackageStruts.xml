@@ -1060,10 +1060,7 @@
 				<param name="actionName">eventType</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="createEventForm" type="redirectAction">
-				<param name="actionName">eventTypeForm</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+			<result name="createEventForm" type="redirect">/w/setup/eventFormEdit?uniqueID=${uniqueID}</result>
 
 			<result name="error" type="freemarker">/templates/html/eventType/add.ftl</result>
 		</action>

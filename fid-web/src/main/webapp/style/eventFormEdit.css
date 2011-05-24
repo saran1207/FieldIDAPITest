@@ -253,7 +253,7 @@ div.detailsHeader {
     padding-bottom: 13px;
 }
 
-ul.feedbackPanel {
+.verticalEditPanel .feedbackPanel {
     border: 1px #ff0000 solid;
     background-color: #ffdddd;
     margin: 2px 2px 2px 2px;

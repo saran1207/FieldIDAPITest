@@ -40,7 +40,7 @@ public class FlashScopeMarshaller {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Collection<String> getMessageCollectionFromSession(String key) {
+	public Collection<String> getMessageCollectionFromSession(String key) {
 		Collection<String> sessionMessages = (Collection<String>) session.getAttribute(key);
 		return sessionMessages != null ? sessionMessages : new ArrayList<String>();
 	}
