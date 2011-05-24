@@ -8,7 +8,7 @@ public class EventPage extends FieldIDPage {
 
 	public EventPage(Selenium selenium) {
 		super(selenium);
-		if (!checkOnEventPage() && !checkOnQuickEventPage()) {
+		if (!checkOnEventPage() && !checkOnQuickEventPage() && !checkOnStartEventPage()) {
 			fail("Expected to be on event page!");
 		}
 	}
@@ -16,6 +16,11 @@ public class EventPage extends FieldIDPage {
 	public boolean checkOnQuickEventPage(){
 		checkForErrorMessages(null);
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Perform an Event on ')]");
+	}
+
+	public boolean checkOnStartEventPage(){
+		checkForErrorMessages(null);
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Start Event')]");
 	}
 	
 	public boolean checkOnEventPage() {

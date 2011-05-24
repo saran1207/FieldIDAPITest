@@ -7,6 +7,7 @@ import org.junit.Test;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.ImportPage;
+import com.n4systems.fieldid.selenium.pages.ManageEventsPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 
 public class ReportsBlankSlateTest extends PageNavigatingTestCase<ReportingPage> {
@@ -25,14 +26,14 @@ public class ReportsBlankSlateTest extends PageNavigatingTestCase<ReportingPage>
 	public void choose_perform_first_event() throws Exception {
 		assertTrue(page.isBlankSlate());
 		EventPage eventPage = page.clickPerformFirstEventPage();
-		assertTrue(eventPage.checkOnEventPage());
+		assertTrue(eventPage.checkOnStartEventPage());
 	}
 	
 	@Test
 	public void choose_perform_multi_events() throws Exception {
 		assertTrue(page.isBlankSlate());
-		EventPage eventPage = page.clickPerformMultiEventPage();
-		assertTrue(eventPage.checkOnEventPage());
+		ManageEventsPage eventPage = page.clickPerformMultiEventPage();
+		assertTrue(eventPage.checkOnMassEventPage());
 	}
 
 	@Test
