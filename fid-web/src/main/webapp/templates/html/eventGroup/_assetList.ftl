@@ -33,7 +33,11 @@
 			<div class="emptyList" >
 				<h2><@s.text name="label.noresults"/></h2>
 				<p>
-					<@s.text name="message.emptyassetlist" />
+                    <#if lookingForAssetsOfType?exists>
+                        <@s.text name="message.emptyassetlistoftype" />
+                    <#else>
+					    <@s.text name="message.emptyassetlist" />
+                    </#if>
 				</p>
 			</div>
 		</#if>

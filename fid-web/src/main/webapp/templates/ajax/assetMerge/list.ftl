@@ -1,5 +1,6 @@
 <#assign html >
 	<#assign actionTarget="asset"/>
+    <#assign lookingForAssetsOfType=true>
 	<#include "/templates/html/eventGroup/_assetList.ftl"/>
 </#assign>
 
