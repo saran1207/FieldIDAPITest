@@ -7,6 +7,8 @@
 </#assign>
 
 	$('nextDate_${uniqueID}').update("${html}");
-	$('jobName_${uniqueID}').update("${jobNameHtml}")
+	if($('jobName_${uniqueID}') != undefined) {
+		$('jobName_${uniqueID}').update("${jobNameHtml}")
+	}
 
 </#escape>
