@@ -1,1 +1,1 @@
-$('sampleMessage').update('${messageBody?js_string}');
+$('sampleMessage').update('${messageBody?html?js_string}');
