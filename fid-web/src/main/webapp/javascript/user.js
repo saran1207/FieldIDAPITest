@@ -117,6 +117,6 @@ onDocumentLoad(injectUploadFrameIfVisible);
 onDocumentLoad(updatePasswordInputs);
 onDocumentLoad(function() { 
 		$$('#assignPassword').each(function(element) {
-			element.observe("change", updatePasswordInputs);
+			element.observe("click", updatePasswordInputs);
 		});
 	});
