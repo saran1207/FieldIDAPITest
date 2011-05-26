@@ -197,12 +197,12 @@ public class MultiEventAction extends AbstractCrud {
             if (searchContainerKey != null && getSession().get(searchContainerKey) != null) {
                 SearchContainer container = (SearchContainer) getSession().get(searchContainerKey);
                 if (container.getSearchId().equals(searchId)) {
-                    assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", container.getMultiIdSelection().getSelectedIds()));
+                    assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", container.getMultiIdSelection().getSelectedIds()).addPostFetchPaths("infoOptions"));
                     this.assetIds = new ArrayList<Long>();
                     this.assetIds.addAll(container.getMultiIdSelection().getSelectedIds());
                 }
             } else if (!assetIds.isEmpty()) {
-				assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds));
+				assets = persistenceManager.findAll(new QueryBuilder<Asset>(Asset.class, getSecurityFilter()).addWhere(Comparator.IN, "assetIds", "id", assetIds).addPostFetchPaths("infoOptions"));
 			} else {
 				assets = new ArrayList<Asset>();
 			}
