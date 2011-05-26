@@ -348,3 +348,7 @@ div.unitDescriptor {
     float: left;
     width: 120px;
 }
+
+div.verticalEditPanel * {
+    zoom: 0;
+}
