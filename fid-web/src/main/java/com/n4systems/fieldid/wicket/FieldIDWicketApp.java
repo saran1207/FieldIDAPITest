@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket;
 
+import com.n4systems.fieldid.wicket.pages.HomePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.DataLogPage;
 import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
@@ -42,11 +43,13 @@ public class FieldIDWicketApp extends WebApplication {
         getResourceSettings().addStringResourceLoader(0, new TenantOverridesResourceLoader());
         getResourceSettings().setLocalizer(new CachePerTenantLocalizer());
         InjectorHolder.setInjector(new AnnotSpringInjector(new SpringContextLocator()));
+
+        getApplicationSettings().setPageExpiredErrorPage(HomePage.class);
     }
 
     @Override
     public Class<? extends Page> getHomePage() {
-        return SettingsPage.class;
+        return HomePage.class;
     }
 
     @Override
