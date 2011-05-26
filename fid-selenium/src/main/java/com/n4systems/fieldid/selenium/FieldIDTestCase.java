@@ -227,7 +227,7 @@ public abstract class FieldIDTestCase extends DBTestCase {
 	}
 
     protected AdminLoginPage startAdmin() {
-        String url = getFieldIDProtocol() + "://n4." + getFieldIDDomain() + getFieldIDContextRoot() + "/admin/";
+        String url = getFieldIDProtocol() + "://n4." + getFieldIDDomain() + getFieldIDContextRoot() + "admin/signIn.action";
         startAtUrl(selenium, url);
         return new AdminLoginPage(selenium);
     }
