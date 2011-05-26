@@ -27,6 +27,7 @@ div.mainArea {
     height:400px;
     display:block;
     float:left;
+    overflow:auto;
 }
 
 .sortSelectorContainer {
