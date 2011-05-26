@@ -93,6 +93,7 @@
 	margin-top: 20px;
 	float:left;
 	display:block;
+    width: 460px;
 }
 
 .emailInstructions p{
@@ -103,7 +104,7 @@
 .inputContainer{
 	float:left;
 	display:block;
-	width: 400px;
+	width: 380px;
 	margin-top: 10px;
 }
 
