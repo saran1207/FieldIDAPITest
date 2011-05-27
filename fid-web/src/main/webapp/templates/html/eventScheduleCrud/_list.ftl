@@ -7,9 +7,9 @@
 		</#if>
 		<th></th>
 	</tr>
-	<tbody id="schedules">
+	<span id="schedules">
 		<#list eventSchedules as eventSchedule>
 			<#include "show.ftl"/>
 		</#list>
-	</tbody>
+	</span>
 </table>

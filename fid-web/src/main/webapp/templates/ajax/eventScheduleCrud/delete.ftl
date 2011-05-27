@@ -1,6 +1,6 @@
 <#escape x as x?j_string >
 	$('type_${uniqueID}').remove();
-	if ($$('#schedules tr').size() == 0) {
+	if ($$('#scheduleList tr').size() == 1) {
 		$('scheduleList').hide();
 		$('schedulesBlankSlate').show();
 	}
