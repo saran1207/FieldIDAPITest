@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-		<version>2011.4.0-SNAPSHOT</version>
+		<version>2011.5.0-SNAPSHOT</version>
 	</parent>
 	<groupId>com.fieldid</groupId>
 	<artifactId>fid-selenium</artifactId>

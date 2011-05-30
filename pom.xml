@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fieldid</groupId>
 	<artifactId>fieldid-root</artifactId>
-	<version>2011.4.0-SNAPSHOT</version>
+	<version>2011.5.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Field ID Parent POM</name>
 	<modules>
@@ -12,38 +12,6 @@
 		<module>fid-web</module>
 		<module>fid-exporter</module>
 	</modules>
-	<repositories>
-        <repository>
-            <id>N4Int</id>
-            <name>N4 Internal</name>
-            <layout>default</layout>
-            <url>http://archiva.n4systems.net/archiva/repository/internal/</url>
-        </repository>
-        <repository>
-            <id>N4Snap</id>
-            <name>N4 Snapshots</name>
-            <layout>default</layout>
-            <url>http://archiva.n4systems.net/archiva/repository/snapshots/</url>
-        </repository>
-		<repository>
-			<id>JavaNet</id>
-			<name>Java Net Repository</name>
-			<layout>default</layout>
-			<url>http://download.java.net/maven/2/com/sun/jersey/</url>
-		</repository>
-		<repository>
-			<id>JBoss</id>
-			<name>JBoss Repsitory</name>
-			<layout>default</layout>
-			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>EHCache</id>
-			<name>EHCache Release Repsitory</name>
-			<layout>default</layout>
-			<url>http://oss.sonatype.org/content/repositories/sourceforge-releases/net/sf/ehcache/</url>
-		</repository>
-	</repositories>
 	<build>
 		<pluginManagement>
 			<plugins>
