@@ -13,11 +13,10 @@ public class PopulatorLogBeanDataProvider extends PagerAdapterDataProvider<Popul
     @SpringBean
     private PopulatorLog populatorLog;
 
-    private Pager<PopulatorLogBean> populatorLogs;
     private Long tenantId;
     private PopulatorCriteria criteria;
 
-    public PopulatorLogBeanDataProvider(Long tenantId, Date fromDate, Date toDate, PopulatorLog.logStatus logStatus, PopulatorLog.logType logType) {
+    public void setCriteria(Long tenantId, Date fromDate, Date toDate, PopulatorLog.logStatus logStatus, PopulatorLog.logType logType) {
         this.tenantId = tenantId;
         criteria = new PopulatorCriteria();
         criteria.setFromDate(fromDate);
@@ -28,6 +27,9 @@ public class PopulatorLogBeanDataProvider extends PagerAdapterDataProvider<Popul
 
     @Override
     protected Pager<PopulatorLogBean> getPager(int pageNumber, int pageSize) {
+        if (criteria == null) {
+            throw new IllegalStateException("criteria not initialized");
+        }
         return populatorLog.findPopulatorLogBySearch(tenantId, criteria, pageNumber, pageSize);
     }
 

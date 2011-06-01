@@ -1,18 +1,16 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.ejb.legacy.PopulatorLog;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.PopulatorLogBeanDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
@@ -25,14 +23,19 @@ import java.util.List;
 
 public class DataLogPage extends SetupPage {
 
-    PopulatorLogBeanDataProvider dataProvider;
+    PopulatorLogBeanDataProvider provider;
+    SimpleDataTable resultsTable;
 
     public DataLogPage(PageParameters params) {
         super(params);
 
         add(new SearchForm("searchForm"));
 
-        add(new WebMarkupContainer("dataLogResultsTable").setVisible(false));
+        provider = new PopulatorLogBeanDataProvider();
+        resultsTable = new SimpleDataTable<PopulatorLogBean>("dataLogResultsTable", createColumns(),
+                provider, Constants.PAGE_SIZE, "label.noresults", "label.emptydatalogentrylist");
+        resultsTable.setVisible(false).setOutputMarkupPlaceholderTag(true);
+        add(resultsTable);
     }
 
     class SearchForm extends Form {
@@ -54,21 +57,22 @@ public class DataLogPage extends SetupPage {
             add(new DropDownChoice<PopulatorLog.logType>("logType", new PropertyModel<PopulatorLog.logType>(this, "type"), logTypes).setNullValid(true));
             add(new DateTimePicker("fromDate", new PropertyModel<Date>(this, "fromDate")));
             add(new DateTimePicker("toDate", new PropertyModel<Date>(this, "toDate")));
-            add(new Button("runButton"));
+            add(new AjaxButton("runButton") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    updateDataProviderAndShowTable(fromDate, toDate, status, type);
+                    target.addComponent(resultsTable);
+                }
+            });
+
         }
 
-        @Override
-        protected void onSubmit() {
-            addDataTable(fromDate, toDate, status, type);
-        }
     }
 
-    protected void addDataTable(Date fromDate, Date toDate, PopulatorLog.logStatus status, PopulatorLog.logType type) {
-        Long tenantId = FieldIDSession.get().getSessionUser().getTenant().getId();
-        ISortableDataProvider<PopulatorLogBean> provider = new PopulatorLogBeanDataProvider(tenantId, fromDate,toDate,status,type);
-        remove("dataLogResultsTable");
-        add(new SimpleDataTable<PopulatorLogBean>("dataLogResultsTable", createColumns(),
-                provider, Constants.PAGE_SIZE, "label.noresults", "label.emptydatalogentrylist"));
+    protected void updateDataProviderAndShowTable(Date fromDate, Date toDate, PopulatorLog.logStatus status, PopulatorLog.logType type) {
+        resultsTable.setVisible(true);
+        resultsTable.reset();
+        provider.setCriteria(getTenantId(), fromDate, toDate, status, type);
     }
 
     @SuppressWarnings("unchecked")

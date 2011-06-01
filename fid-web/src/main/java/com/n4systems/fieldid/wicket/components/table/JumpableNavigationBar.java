@@ -2,7 +2,8 @@ package com.n4systems.fieldid.wicket.components.table;
 
 import com.n4systems.fieldid.utils.Predicate;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.CSSPackageResource;
@@ -10,7 +11,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -21,10 +21,12 @@ public class JumpableNavigationBar extends Panel {
 
     WebMarkupContainer paginationContainer;
     protected final DataTable<?> table;
+    protected final SimpleDataTable<?> simpleDataTable;
 
-	public JumpableNavigationBar(String id, DataTable<?> table) {
+	public JumpableNavigationBar(String id, SimpleDataTable<?> simpleDataTable) {
 		super(id);
-        this.table = table;
+        this.simpleDataTable = simpleDataTable;
+        this.table = simpleDataTable.getTable();
         add(CSSPackageResource.getHeaderContribution("style/featureStyles/pagination.css"));
 
         paginationContainer = new WebMarkupContainer("paginationContainer") {
@@ -47,7 +49,7 @@ public class JumpableNavigationBar extends Panel {
 
     private void addNextLinks(WebMarkupContainer pagerContainer) {
         pagerContainer.add(createGotoRelativePageLink("nextLink", 1, ifNotOnLastPage()));
-        pagerContainer.add(createGotoPageLink("lastLink", getTable().getPageCount(), ifNotOnLastPage()));
+        pagerContainer.add(createGotoLastPageLink("lastLink", ifNotOnLastPage()));
     }
 
     private void addPreviousLinks(WebMarkupContainer pagerContainer) {
@@ -64,7 +66,7 @@ public class JumpableNavigationBar extends Panel {
                 if (isCurrentPage) {
                     item.add(new SimpleAttributeModifier("class", "currentPage"));
                 }
-                Link pageLink;
+                AjaxLink pageLink;
                 item.add(pageLink = createGotoPageLink("pageLink", item.getModelObject(), new Predicate() {
                     @Override
                     public boolean evaluate() {
@@ -81,7 +83,7 @@ public class JumpableNavigationBar extends Panel {
         public JumpForm(String id) {
             super(id);
 
-            add(new Label("numPages", getTable().getPageCount()+"").setRenderBodyOnly(true));
+            add(new Label("numPages", new PropertyModel<String>(getTable(), "pageCount")).setRenderBodyOnly(true));
             add(new TextField<Integer>("jumpPage", new PropertyModel<Integer>(this, "jumpPage")));
         }
 
@@ -94,11 +96,12 @@ public class JumpableNavigationBar extends Panel {
         }
     }
 
-    protected Link createGotoPageLink(String linkId, final int pageNumber, final Predicate visiblePredicate) {
-        return new Link(linkId) {
+    protected AjaxLink createGotoPageLink(String linkId, final int pageNumber, final Predicate visiblePredicate) {
+        return new AjaxLink(linkId) {
             @Override
-            public void onClick() {
+            public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(pageNumber - 1);
+                target.addComponent(simpleDataTable);
             }
 
             @Override
@@ -108,11 +111,27 @@ public class JumpableNavigationBar extends Panel {
         };
     }
 
-    private Component createGotoRelativePageLink(String linkId, final int offset, final Predicate visiblePredicate) {
-        return new Link(linkId) {
+    private AjaxLink createGotoRelativePageLink(String linkId, final int offset, final Predicate visiblePredicate) {
+        return new AjaxLink(linkId) {
             @Override
-            public void onClick() {
+            public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(getTable().getCurrentPage() + offset);
+                target.addComponent(simpleDataTable);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return visiblePredicate.evaluate();
+            }
+        };
+    }
+
+    private AjaxLink createGotoLastPageLink(String linkId, final Predicate visiblePredicate) {
+        return new AjaxLink(linkId) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                getTable().setCurrentPage(getTable().getPageCount() - 1);
+                target.addComponent(simpleDataTable);
             }
 
             @Override

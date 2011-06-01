@@ -11,6 +11,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 public class SimpleDataTable<T> extends Panel {
 
+    private DataTable<T> table;
+
     public SimpleDataTable(String id, final IColumn<T>[] columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
         this(id, columns, dataProvider, rowsPerPage, "label.noresults", "message.emptysearch");
@@ -21,13 +23,15 @@ public class SimpleDataTable<T> extends Panel {
         String emptyResultsTitleKey, String emptyResultsMessageKey) {
 		super(id);
 
-        DataTable<T> table = new DataTable<T>("table", columns, dataProvider, rowsPerPage);
+        setOutputMarkupId(true);
+
+        table = new DataTable<T>("table", columns, dataProvider, rowsPerPage);
 		table.addTopToolbar(new HeadersToolbar(table, dataProvider));
 
         add(table);
 
-        add(new JumpableNavigationBar("topPagination", table));
-        add(new JumpableNavigationBar("bottomPagination", table));
+        add(new JumpableNavigationBar("topPagination", this));
+        add(new JumpableNavigationBar("bottomPagination", this));
 
         addEmptyResultsDisplay(emptyResultsTitleKey, emptyResultsMessageKey, table);
 	}
@@ -43,6 +47,14 @@ public class SimpleDataTable<T> extends Panel {
         emptyResultsContainer.add(new Label("emptyResultsTitle", new FIDLabelModel(emptyResultsTitleKey)));
         emptyResultsContainer.add(new Label("emptyResultsMessage", new FIDLabelModel(emptyResultsMessageKey)));
         add(emptyResultsContainer);
+    }
+
+    public void reset() {
+        table.setCurrentPage(0);
+    }
+
+    public DataTable<T> getTable() {
+        return table;
     }
 
 }
