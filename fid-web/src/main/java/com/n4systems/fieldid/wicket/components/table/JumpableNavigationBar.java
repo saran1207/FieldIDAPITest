@@ -1,9 +1,12 @@
 package com.n4systems.fieldid.wicket.components.table;
 
 import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.CSSPackageResource;
@@ -83,8 +86,19 @@ public class JumpableNavigationBar extends Panel {
         public JumpForm(String id) {
             super(id);
 
+            AjaxButton hiddenSubmitButton;
+            TextField<Integer> jumpPageField;
+
             add(new Label("numPages", new PropertyModel<String>(getTable(), "pageCount")).setRenderBodyOnly(true));
-            add(new TextField<Integer>("jumpPage", new PropertyModel<Integer>(this, "jumpPage")));
+            add(jumpPageField = new TextField<Integer>("jumpPage", new PropertyModel<Integer>(this, "jumpPage")));
+            add(hiddenSubmitButton = new AjaxButton("hiddenJumpButton") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    target.addComponent(simpleDataTable);
+                }
+            });
+
+            jumpPageField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(hiddenSubmitButton));
         }
 
         public Integer getJumpPage() {
@@ -92,7 +106,7 @@ public class JumpableNavigationBar extends Panel {
         }
 
         public void setJumpPage(Integer page) {
-            getTable().setCurrentPage(page - 1);
+            getTable().setCurrentPage(Math.max(0, page - 1));
         }
     }
 
