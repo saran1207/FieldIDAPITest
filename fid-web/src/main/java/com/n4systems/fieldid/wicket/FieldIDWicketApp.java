@@ -41,7 +41,7 @@ public class FieldIDWicketApp extends WebApplication {
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());
         getResourceSettings().addStringResourceLoader(0, new TenantOverridesResourceLoader());
-        getResourceSettings().setLocalizer(new CachePerTenantLocalizer());
+        getResourceSettings().setLocalizer(CachePerTenantLocalizer.getInstance());
         InjectorHolder.setInjector(new AnnotSpringInjector(new SpringContextLocator()));
 
         getApplicationSettings().setPageExpiredErrorPage(HomePage.class);

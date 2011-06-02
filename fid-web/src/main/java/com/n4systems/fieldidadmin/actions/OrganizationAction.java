@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.fieldid.wicket.resources.CachePerTenantLocalizer;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -157,6 +158,10 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			
 			PersistenceManager.finishTransaction(transaction);
 			
+            if (ExtendedFeature.valueOf(featureName).equals(ExtendedFeature.JobSites)) {
+                CachePerTenantLocalizer.getInstance().clearCache();
+            }
+
 		} catch (Exception e) {
 			PersistenceManager.rollbackTransaction(transaction);
 			
@@ -165,7 +170,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			return INPUT;
 			
 		}
-		
+
 		return SUCCESS;
 	}	
 	@SkipValidation

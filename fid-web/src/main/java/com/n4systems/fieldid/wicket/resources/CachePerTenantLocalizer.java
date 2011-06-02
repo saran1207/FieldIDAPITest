@@ -7,6 +7,12 @@ import rfid.web.helper.SessionUser;
 
 public class CachePerTenantLocalizer extends Localizer {
 
+    private static final CachePerTenantLocalizer instance = new CachePerTenantLocalizer();
+
+    public static CachePerTenantLocalizer getInstance() {
+        return instance;
+    }
+
     @Override
     protected String getCacheKey(String key, Component component) {
         String keyPrepend = "";
