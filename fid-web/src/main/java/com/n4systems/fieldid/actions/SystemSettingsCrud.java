@@ -45,6 +45,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private boolean newImage = false;
 	private boolean assignedTo = false;
 	private boolean proofTestIntegration=false;
+	private boolean manufacturerCertificate=false;
 	
 	private TransactionManager transactionManager;
 
@@ -57,6 +58,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 		primaryOrg = getPrimaryOrg();
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
 		proofTestIntegration = primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
+		manufacturerCertificate = primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
 	}
 
 	@Override
@@ -76,6 +78,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
         serialNumberFormat = primaryOrg.getSerialNumberFormat();
 		proofTestIntegration = primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
+		manufacturerCertificate = primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);		
 		webSite = primaryOrg.getWebSite();
 
 		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
@@ -164,6 +167,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 		PrimaryOrg primaryOrg = getPrimaryOrg();
 		new ToggleExendedFeatureMethod(ExtendedFeature.ProofTestIntegration, proofTestIntegration).applyTo(primaryOrg, transaction);
 		new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, assignedTo).applyTo(primaryOrg, transaction);
+		new ToggleExendedFeatureMethod(ExtendedFeature.ManufacturerCertificate, manufacturerCertificate).applyTo(primaryOrg, transaction);
 	}
 
 	private void updateDateFormat() throws Exception {
@@ -310,4 +314,12 @@ public class SystemSettingsCrud extends AbstractCrud {
     public void setSerialNumberFormat(String serialNumberFormat) {
         this.serialNumberFormat = serialNumberFormat;
     }
+
+	public boolean isManufacturerCertificate() {
+		return manufacturerCertificate;
+	}
+
+	public void setManufacturerCertificate(boolean manufacturerCertificate) {
+		this.manufacturerCertificate = manufacturerCertificate;
+	}
 }

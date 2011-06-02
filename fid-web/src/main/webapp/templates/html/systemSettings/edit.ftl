@@ -54,6 +54,24 @@ ${action.setPageType('account_settings', 'list')!}
 				</span>
 			</div>
 			<div class="infoSet">
+				<label>
+					<@s.text name="label.enable_manufacturer_certificate"/>
+					<a href="javascript:void(0);" id="whatsThis_manufacturerCert_button" >?</a>
+					<div id="whatsThis_manufacturerCert" class="hidden" style="border :1px solid black">
+						<h4><@s.text name="label.manufacturer_certificate"/></h4>
+						<p>
+							<@s.text name="label.manufacturer_certificate_field_description"/>
+						</p>
+					</div>
+					<script type="text/javascript">
+						$("whatsThis_manufacturerCert_button").observe( 'click', function(event) { showQuickView('whatsThis_manufacturerCert', event); } );
+					</script>
+				</label>
+				<span class="fieldHolder">
+					<@s.checkbox name="manufacturerCertificate" /> 
+				</span>
+			</div>
+			<div class="infoSet">
 				<label for="dateFormat">
 					<@s.text name="label.preferred_date_format" />
 				</label>
