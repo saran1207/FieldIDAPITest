@@ -1,5 +1,26 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import java.io.InputStream;
+import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.RedirectToUrlException;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
+import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+
+import rfid.web.helper.SessionUser;
+
 import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -8,26 +29,32 @@ import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RedirectToUrlException;
-import org.apache.wicket.markup.html.JavascriptPackageResource;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import rfid.web.helper.SessionUser;
-
-import java.io.InputStream;
-import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
     private static String versionString;
     private Label titleLabel;
+    
+    
+    public class StaticImage extends WebComponent
+    {
+      /**
+      * @param id wicket id on the page
+      * @param model reference the external URL from which the image is gotten
+      *          for ex.: "http://images.google.com/img/10293.gif"
+      */
+      public StaticImage(String id, IModel<String> urlModel)
+      {
+        super( id, urlModel );
+      }
+
+      protected void onComponentTag(ComponentTag tag)
+      {
+        super.onComponentTag( tag );
+        checkComponentTag( tag, "img" );
+        tag.put( "src", getDefaultModelObjectAsString() );
+      }
+    }
 
     public FieldIDLoggedInPage(PageParameters params) {
         super(params);
@@ -64,6 +91,9 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork()));
 
         add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout.js"));
+        
+        add(new StaticImage("tenantLogo", new Model<String>( "/fieldid/file/downloadTenantLogo.action?uniqueID=" + getSessionUser().getTenant().getId() ) ) );
+        
     }
 
     protected void storePageParameters(PageParameters params) {
