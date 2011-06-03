@@ -77,8 +77,6 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
     @Column(name="searchable_on_safety_network", nullable=false)
     private boolean searchableOnSafetyNetwork;
     
-    private String notes;
-	
 	public PrimaryOrg() {}
 	
 	@Override
@@ -245,12 +243,4 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
     public boolean isReadOnlyUsersEnabled(){
     	return hasExtendedFeature(ExtendedFeature.ReadOnlyUser);
     }
-
-	public String getNotes() {
-		return notes;
-	}
-
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
 }

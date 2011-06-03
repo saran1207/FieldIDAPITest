@@ -26,6 +26,7 @@ import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
@@ -333,5 +334,13 @@ public class CustomerCrud extends AbstractCrud {
 	public String getReportName() {
 		return reportName;
 	}
+	
+	public String getCustomerNotes() {
+		return customer.getNotes();
+	}
 
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.notes_length", maxLength = "1000")
+	public void setCustomerNotes(String notes) {
+		customer.setNotes(notes);
+	}
 }

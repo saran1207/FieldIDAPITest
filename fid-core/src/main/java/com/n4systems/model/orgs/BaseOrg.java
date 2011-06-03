@@ -63,6 +63,8 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	@Column(name="global_id", nullable=false, unique=true)
 	private String globalId;
 	
+	private String notes;
+	
 	public BaseOrg() {}
 	
 	@Override
@@ -241,6 +243,14 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
 		return SecurityLevel.calculateSecurityLevel(fromOrg, this);
+	}
+	
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 	
 }

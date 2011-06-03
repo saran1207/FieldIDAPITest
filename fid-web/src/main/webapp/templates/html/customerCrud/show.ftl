@@ -52,6 +52,10 @@ ${action.setPageType('customer','show')!}
 			<label for="lastModified"><@s.text name="label.last_modified" /></label>
 			<span class="fieldValue"><#if customer.modifiedBy?exists>${customer.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(customer.modified)}</span>
 		</p>
+		<p>
+			<label for="lastModified"><@s.text name="label.notes" /></label>
+			<span class="fieldValue">${customer.notes!}</span>
+		</p>
 	</div>
 	
 	<div class="userDetails viewSection smallViewSection">

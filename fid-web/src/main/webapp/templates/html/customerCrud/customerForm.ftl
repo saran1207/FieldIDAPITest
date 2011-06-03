@@ -32,6 +32,10 @@
 				<label class="label" for="customerName"><@s.text name="label.name"/> <#include "../common/_requiredMarker.ftl"/></label>
 				<@s.textfield name="customerName" size="50" cssClass="linkedCustomerControlled" />
 			</div>
+			<div class="infoSet">
+				<label class="label" for="customerNotes"><@s.text name="label.notes"/></label>
+				<@s.textarea  name="customerNotes" />
+			</div>
 		</div>
 		<div class="fieldGroup">
 			<h2><@s.text name="label.contact_information"/></h2>
