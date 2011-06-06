@@ -3,7 +3,7 @@
 	<#assign schedule=action.newSchedule() />
 </#if>
 <#assign html>
-	<#include "/templates/html/assetTypeScheduleCrud/_show.ftl" >
+	<#include "/templates/html/assetTypeScheduleCrud/_showOverrides.ftl" >
 </#assign>
 var container = null;
 <#if !schedule.new && schedule.override>
@@ -30,7 +30,6 @@ var container = null;
 		removeChildren( $('eventFrequencyOverrides_${eventTypeId}') );
 	</#if>
 </#if>
-
 	
 	container.update("${html}");
 </#escape>
