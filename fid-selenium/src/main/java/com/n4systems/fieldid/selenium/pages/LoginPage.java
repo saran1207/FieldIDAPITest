@@ -8,7 +8,7 @@ import static org.junit.Assert.fail;
 public class LoginPage extends WebPage {
 	
 	public static final String SYSTEM_USER_NAME = "n4systems";
-	public static final String SYSTEM_USER_PASSWORD = "TheD1zb0t!";
+	public static final String SYSTEM_USER_PASSWORD = "f0rM@t!!";
 	
 	public LoginPage(Selenium selenium) {
 		this(selenium, true);
