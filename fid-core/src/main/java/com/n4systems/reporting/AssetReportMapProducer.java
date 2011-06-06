@@ -35,6 +35,7 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("reelId", asset.getSerialNumber());
 		add("poNumber", asset.getPurchaseOrder());
 		add("customerRefNumber", asset.getCustomerRefNumber());
+		add("orderNumber", asset.getShopOrder().getOrder().getOrderNumber());
 		add("dateOfIssue", formatDate(asset.getCreated(), false));
 		add("productComment", asset.getComments());
 		add("productLocation", asset.getAdvancedLocation().getFreeformLocation());
@@ -46,7 +47,6 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add("infoOptionBeanList", asset.getOrderedInfoOptionList());
 		add("infoOptionDataSource", new JRBeanCollectionDataSource(asset.getOrderedInfoOptionList()));
 		add(ReportField.ASSIGNED_USER.getParamKey(), assignedUserName());
-		
 	}
 
 	
