@@ -97,7 +97,7 @@ public class SubmitChantFileViaWebserviceTest extends DBTestCase {
         AuthBundle authBundle = new AuthBundle();
         authBundle.setTenantName(TEST_TENANT_NAME);
         authBundle.setUserName("n4systems");
-        authBundle.setPassword("TheD1zb0t!");
+        authBundle.setPassword("f0rM@t!!!");
         return authBundle;
     }
 
