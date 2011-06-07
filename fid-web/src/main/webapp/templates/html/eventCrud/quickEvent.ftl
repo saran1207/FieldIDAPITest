@@ -78,7 +78,7 @@ ${action.setPageType('event', 'quickEvent')!}
 
 <fieldset>
 	<legend class="adhoc">
-		<span class="labeltext"><@s.text name="label.perform_ad_hoc_event"/></span>
+		<span class="labeltext"><@s.text name="label.start_unscheduled_event"/></span>
 	</legend>
 	
 	<#if associatedEventTypes.isEmpty()>
