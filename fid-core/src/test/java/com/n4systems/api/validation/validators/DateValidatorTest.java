@@ -12,21 +12,21 @@ public class DateValidatorTest {
 	
 	@Test
 	public void validation_passes_when_date_is_null() {
-		assertTrue(validator.validate(null, null, "", null, null).isPassed());
+		assertTrue(validator.validate(null, null, "", null, null, null).isPassed());
 	}
 	
 	@Test
 	public void validation_passes_when_date_is_a_date() {
-		assertTrue(validator.validate(new Date(), null, "", null, null).isPassed());
+		assertTrue(validator.validate(new Date(), null, "", null, null, null).isPassed());
 	}
 	
 	@Test
 	public void validation_passes_when_date_is_subclass_of_date() {
-		assertTrue(validator.validate(new PlainDate(), null, "", null, null).isPassed());
+		assertTrue(validator.validate(new PlainDate(), null, "", null, null, null).isPassed());
 	}
 	
 	@Test
 	public void validation_fails_when_date_is_not_a_date() {
-		assertFalse(validator.validate("", null, "", null, null).isPassed());
+		assertFalse(validator.validate("", null, "", null, null, null).isPassed());
 	}
 }

@@ -28,7 +28,7 @@ public class AssetTypeExistsValidatorTest {
 		
 		replay(nameExistsLoader);
 		
-		assertTrue(validator.validate(name, null, "Field Name", null, null).isPassed());
+		assertTrue(validator.validate(name, null, "Field Name", null, null, null).isPassed());
 		
 		verify(nameExistsLoader);
 	}
@@ -51,7 +51,7 @@ public class AssetTypeExistsValidatorTest {
 		
 		replay(nameExistsLoader);
 		
-		assertTrue(validator.validate(name, null, "Field Name", null, null).isFailed());
+		assertTrue(validator.validate(name, null, "Field Name", null, null, null).isFailed());
 		
 		verify(nameExistsLoader);
 	}

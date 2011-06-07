@@ -76,7 +76,7 @@ public class ViewValidator implements Validator<ExternalModelView> {
 			validator = validatorFactory.create(validatorClass);
 			
 			fieldValue = getFieldValue(view, field);
-			result = validator.validate(fieldValue, view, exportField.title(), filter, validationContext);
+			result = validator.validate(fieldValue, view, exportField.title(), filter, exportField, validationContext);
 			
 			// any failure will stop us from running the rest of the validators
 			// see javadocs at the top of this method

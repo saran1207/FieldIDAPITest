@@ -46,7 +46,7 @@ public class AssetIdentifierValidatorTest {
         AssociatedEventTypeExistsLoader associateDoesExistLoader = createMockAssociatedEventTypeExistsLoaderReturning(true);
         AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, associateDoesExistLoader);
 		
-		assertTrue(validator.validate(null, null, null, null, validationContext).isPassed());
+		assertTrue(validator.validate(null, null, null, null, null, validationContext).isPassed());
     }
 
 	@Test
@@ -59,7 +59,7 @@ public class AssetIdentifierValidatorTest {
 
 		AssetIdentifierValidator validator = createTestIdentifierValidator(loader, existsLoader);
 
-		assertTrue(validator.validate(TEST_SEARCH_TEXT, null, null, null, validationContext).isPassed());
+		assertTrue(validator.validate(TEST_SEARCH_TEXT, null, null, null, null, validationContext).isPassed());
 		verify(loader);
         verify(existsLoader);
 	}
@@ -74,7 +74,7 @@ public class AssetIdentifierValidatorTest {
 
         AssetIdentifierValidator validator = createTestIdentifierValidator(loader, existsLoader);
 
-        assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, validationContext).isPassed());
+        assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, null, validationContext).isPassed());
         verify(loader);
         verify(existsLoader);
     }
@@ -86,7 +86,7 @@ public class AssetIdentifierValidatorTest {
         replay(smartSearchLoader);
         AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, null);
 
-		assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, validationContext).isPassed());
+		assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, null, validationContext).isPassed());
 		verify(smartSearchLoader);
 	}
 	
@@ -96,7 +96,7 @@ public class AssetIdentifierValidatorTest {
         replay(smartSearchLoader);
         AssetIdentifierValidator validator = createTestIdentifierValidator(smartSearchLoader, null);
 
-		assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, validationContext).isPassed());
+		assertFalse(validator.validate(TEST_SEARCH_TEXT, null, null, null, null, validationContext).isPassed());
 		verify(smartSearchLoader);
 	}
 

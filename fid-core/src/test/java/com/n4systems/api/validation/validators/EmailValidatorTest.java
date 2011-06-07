@@ -8,11 +8,11 @@ public class EmailValidatorTest {
 	private EmailValidator validator = new EmailValidator();
 	
 	private void testEmailPasses(String email) {
-		assertTrue("[" + email + "] should have passed validation", validator.validate(email, null, null, null, null).isPassed());
+		assertTrue("[" + email + "] should have passed validation", validator.validate(email, null, null, null, null, null).isPassed());
 	}
 	
 	private void testEmailFails(String email) {
-		assertTrue("[" + email + "] should have failed validation", validator.validate(email, null, null, null, null).isFailed());
+		assertTrue("[" + email + "] should have failed validation", validator.validate(email, null, null, null, null, null).isFailed());
 	}
 	
 	@Test

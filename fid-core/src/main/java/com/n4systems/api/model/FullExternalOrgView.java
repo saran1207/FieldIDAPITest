@@ -3,6 +3,7 @@ package com.n4systems.api.model;
 import com.n4systems.api.validation.validators.EmailValidator;
 import com.n4systems.api.validation.validators.ExternalOrgGlobalIdValidator;
 import com.n4systems.api.validation.validators.ExternalOrgTypeValidator;
+import com.n4systems.api.validation.validators.StringLengthValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.ParentOrgResolutionValidator;
 import com.n4systems.exporting.beanutils.ExportField;
@@ -64,7 +65,7 @@ public class FullExternalOrgView extends ExternalModelView {
 	@ExportField(title="Fax", order = 1000)
 	private String fax1;
 
-	@ExportField(title="Notes", order = 1100)
+	@ExportField(title="Notes", order = 1100, maxLength = 1000, validators = {StringLengthValidator.class})
 	private String notes;
 	
 	@ExportField(title="System ID", order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})

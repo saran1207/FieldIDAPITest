@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
+import com.n4systems.exporting.beanutils.ExportField;
 import com.n4systems.model.security.SecurityFilter;
 
 public interface FieldValidator {
@@ -16,7 +17,7 @@ public interface FieldValidator {
 	public static final String ExternalOrgGlobalIdValidatorFail = "Could not find %s '%s'";
 	public static final String ExternalOrgTypeValidatorFail = "%s must be either 'C' or 'D'";
 	public static final String NotNullValidatorFail = "%s must not be blank";
-	public static final String AssetViewStringLengthValidatorFail = "%s cannot exceed %d characters";
+	public static final String StringLengthValidatorFail = "%s cannot exceed %d characters";
 	public static final String NamedFieldNotFoundValidatorFail = "Could not find an %s named '%s'";
 	public static final String AssetTypeExistsValidatorFail = "Could not find an Asset Type named '%s'";
 	public static final String InputInfoFieldNotFoundValidatorFail = "The input field '%1$s' could not be found.  Please add the column 'I:%1$s'.";
@@ -34,5 +35,5 @@ public interface FieldValidator {
 	public static final String MultipleAssetFoundValidationFail = "Multiple assets have been found matching the identifier '%s' for the field '%s'.";
 	public static final String AssociatedEventTypeValidationFail = "The event type '%s' is not allowed for the asset type '%s'.";
 	
-	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, Map<String, Object> validationContext);
+	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, ExportField field, Map<String, Object> validationContext);
 }

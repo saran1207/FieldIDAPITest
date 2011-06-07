@@ -63,6 +63,7 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	@Column(name="global_id", nullable=false, unique=true)
 	private String globalId;
 	
+	@Column(name="notes", length = 1000)
 	private String notes;
 	
 	public BaseOrg() {}

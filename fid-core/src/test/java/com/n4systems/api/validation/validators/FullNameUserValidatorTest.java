@@ -19,7 +19,7 @@ public class FullNameUserValidatorTest {
 	public void validate_passes_on_null_value() { 
 		FullNameUserValidator validator = new FullNameUserValidator();
 		
-		assertTrue(validator.validate(null, null, null, null, null).isPassed());
+		assertTrue(validator.validate(null, null, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -37,7 +37,7 @@ public class FullNameUserValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(fullName, null, null, null, null).isPassed());
+		assertTrue(validator.validate(fullName, null, null, null, null, null).isPassed());
 		verify(loader);
 	}
 	
@@ -56,7 +56,7 @@ public class FullNameUserValidatorTest {
 			}
 		};
 		
-		assertFalse(validator.validate(fullName, null, null, null, null).isPassed());
+		assertFalse(validator.validate(fullName, null, null, null, null, null).isPassed());
 		verify(loader);
 	}
 	
@@ -75,7 +75,7 @@ public class FullNameUserValidatorTest {
 			}
 		};
 		
-		assertFalse(validator.validate(fullName, null, null, null, null).isPassed());
+		assertFalse(validator.validate(fullName, null, null, null, null, null).isPassed());
 		verify(loader);
 	}
 	

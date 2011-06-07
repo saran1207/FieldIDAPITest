@@ -12,7 +12,7 @@ public class AssetStatusExistsValidatorTest {
 	@Test
 	public void test_validate_passes_on_null_value() {
 		AssetStatusExistsValidator validator = new AssetStatusExistsValidator();
-		assertTrue(validator.validate(null, null, null, null, null).isPassed());
+		assertTrue(validator.validate(null, null, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -30,7 +30,7 @@ public class AssetStatusExistsValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(assetStatus, null, null, null, null).isPassed());
+		assertTrue(validator.validate(assetStatus, null, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -48,6 +48,6 @@ public class AssetStatusExistsValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(assetStatus, null, null, null, null).isFailed());
+		assertTrue(validator.validate(assetStatus, null, null, null, null, null).isFailed());
 	}
 }

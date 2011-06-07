@@ -8,12 +8,12 @@ public class NotNullValidatorTest {
 	
 	@Test
 	public void validation_passes_when_value_not_null() {
-		assertTrue(validator.validate(new Object(), null, null, null, null).isPassed());
+		assertTrue(validator.validate(new Object(), null, null, null, null, null).isPassed());
 	}
 	
 	@Test
 	public void validation_fails_when_value_null() {
-		assertTrue(validator.validate(null, null, null, null, null).isFailed());
+		assertTrue(validator.validate(null, null, null, null, null, null).isFailed());
 	}
 	
 }

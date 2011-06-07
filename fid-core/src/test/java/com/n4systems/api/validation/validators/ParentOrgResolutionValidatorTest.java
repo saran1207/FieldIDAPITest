@@ -14,14 +14,14 @@ public class ParentOrgResolutionValidatorTest {
 	public void test_validation_passes_when_view_is_a_division() {
 		ParentOrgResolutionValidator validator = new ParentOrgResolutionValidator();
 		
-		assertTrue(validator.validate(null, FullExternalOrgView.newDivision(), null, null, null).isPassed());
+		assertTrue(validator.validate(null, FullExternalOrgView.newDivision(), null, null, null, null).isPassed());
 	}
 	
 	@Test
 	public void test_validation_fails_when_view_is_a_customer_and_parent_org_is_null() {
 		ParentOrgResolutionValidator validator = new ParentOrgResolutionValidator();
 		
-		assertTrue(validator.validate(null, FullExternalOrgView.newCustomer(), null, null, null).isFailed());
+		assertTrue(validator.validate(null, FullExternalOrgView.newCustomer(), null, null, null, null).isFailed());
 	}
 	
 	@Test
@@ -43,7 +43,7 @@ public class ParentOrgResolutionValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(null, view, null, null, null).isPassed());
+		assertTrue(validator.validate(null, view, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -65,6 +65,6 @@ public class ParentOrgResolutionValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(null, view, null, null, null).isFailed());
+		assertTrue(validator.validate(null, view, null, null, null, null).isFailed());
 	}
 }

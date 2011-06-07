@@ -35,8 +35,8 @@ public class AssetViewStringFieldLengthValidatorTest {
 			}
 		};
 		
-		assertTrue(sut.validate("12", null, null, null, null).isFailed());
-		assertTrue(sut.validate("1", null, null, null, null).isPassed());
+		assertTrue(sut.validate("12", null, null, null, null, null).isFailed());
+		assertTrue(sut.validate("1", null, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -49,9 +49,9 @@ public class AssetViewStringFieldLengthValidatorTest {
 		
 		int defaultLength = 255;
 		
-		assertTrue(sut.validate(bigString(defaultLength + 1), null, null, null, null).isFailed());
-		assertTrue(sut.validate(bigString(defaultLength), null, null, null, null).isPassed());
-		assertTrue(sut.validate(bigString(defaultLength - 1), null, null, null, null).isPassed());
+		assertTrue(sut.validate(bigString(defaultLength + 1), null, null, null, null, null).isFailed());
+		assertTrue(sut.validate(bigString(defaultLength), null, null, null, null, null).isPassed());
+		assertTrue(sut.validate(bigString(defaultLength - 1), null, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -61,8 +61,8 @@ public class AssetViewStringFieldLengthValidatorTest {
 				return Reflector.findField(TestModel.class, "valueWithNoColumnAnnotation"); 
 			}
 		};
-		assertTrue(sut.validate(bigString(256), null, null, null, null).isFailed());
-		assertTrue(sut.validate(bigString(254), null, null, null, null).isPassed());
+		assertTrue(sut.validate(bigString(256), null, null, null, null, null).isFailed());
+		assertTrue(sut.validate(bigString(254), null, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -73,8 +73,8 @@ public class AssetViewStringFieldLengthValidatorTest {
 			}
 		};
 		
-		assertTrue(sut.validate(bigString(256), null, null, null, null).isFailed());
-		assertTrue(sut.validate(bigString(254), null, null, null, null).isPassed());
+		assertTrue(sut.validate(bigString(256), null, null, null, null, null).isFailed());
+		assertTrue(sut.validate(bigString(254), null, null, null, null, null).isPassed());
 	}
 	
 	@Test(expected=Defect.class)
@@ -85,7 +85,7 @@ public class AssetViewStringFieldLengthValidatorTest {
 				return Reflector.findField(TestModel.class, "valueWithNoColumnAnnotation"); 
 			}
 		};
-		assertTrue(sut.validate(1L, null, null, null, null).isFailed());
+		assertTrue(sut.validate(1L, null, null, null, null, null).isFailed());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -96,7 +96,7 @@ public class AssetViewStringFieldLengthValidatorTest {
 				return Reflector.findField(TestModel.class, "defaultLengthField"); 
 			}
 		};
-		ValidationResult validationResult = sut.validate(bigString(256), null, "the_field", null, null);
+		ValidationResult validationResult = sut.validate(bigString(256), null, "the_field", null, null, null);
 		
 		assertThat(validationResult.getMessage(), allOf(containsString("the_field"), containsString("255")));
 	}
@@ -111,7 +111,7 @@ public class AssetViewStringFieldLengthValidatorTest {
 		};
 		
 		String emptyCell = null;
-		assertTrue(sut.validate(emptyCell, null, null, null, null).isPassed());
+		assertTrue(sut.validate(emptyCell, null, null, null, null, null).isPassed());
 	}
 	
 	

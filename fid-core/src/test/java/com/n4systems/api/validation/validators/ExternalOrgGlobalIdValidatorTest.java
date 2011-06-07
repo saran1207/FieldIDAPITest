@@ -16,7 +16,7 @@ public class ExternalOrgGlobalIdValidatorTest {
 	public void test_validate_passes_when_global_id_is_null() {
 		ExternalOrgGlobalIdValidator validator = new ExternalOrgGlobalIdValidator();
 		
-		assertTrue(validator.validate(null, null, null, null, null).isPassed());
+		assertTrue(validator.validate(null, null, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -26,7 +26,7 @@ public class ExternalOrgGlobalIdValidatorTest {
 		FullExternalOrgView view = new FullExternalOrgView();
 		view.setType("Z");
 		
-		assertTrue(validator.validate(null, view, null, null, null).isPassed());
+		assertTrue(validator.validate(null, view, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ public class ExternalOrgGlobalIdValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(globalId, FullExternalOrgView.newCustomer(), null, null, null).isPassed());
+		assertTrue(validator.validate(globalId, FullExternalOrgView.newCustomer(), null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -66,7 +66,7 @@ public class ExternalOrgGlobalIdValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(globalId, FullExternalOrgView.newDivision(), null, null, null).isPassed());
+		assertTrue(validator.validate(globalId, FullExternalOrgView.newDivision(), null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -86,7 +86,7 @@ public class ExternalOrgGlobalIdValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(globalId, FullExternalOrgView.newCustomer(), null, null, null).isFailed());
+		assertTrue(validator.validate(globalId, FullExternalOrgView.newCustomer(), null, null, null, null).isFailed());
 	}
 	
 	@Test
@@ -106,6 +106,6 @@ public class ExternalOrgGlobalIdValidatorTest {
 			}
 		};
 		
-		assertTrue(validator.validate(globalId, FullExternalOrgView.newDivision(), null, null, null).isFailed());
+		assertTrue(validator.validate(globalId, FullExternalOrgView.newDivision(), null, null, null, null).isFailed());
 	}
 }

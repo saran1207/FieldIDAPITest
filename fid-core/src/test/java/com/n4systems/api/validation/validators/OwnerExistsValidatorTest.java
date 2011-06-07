@@ -14,7 +14,7 @@ public class OwnerExistsValidatorTest {
 	public void test_validation_passes_when_value_is_null() {
 		OwnerExistsValidator validator = new OwnerExistsValidator();
 		
-		assertTrue(validator.validate(null, null, null, null, null).isPassed());
+		assertTrue(validator.validate(null, null, null, null, null, null).isPassed());
 	}
 	
 	@Test
@@ -36,7 +36,7 @@ public class OwnerExistsValidatorTest {
 		expect(orgLoader.load()).andReturn(new PrimaryOrg());
 		replay(orgLoader);
 		
-		assertTrue(validator.validate(names, null, null, null, null).isPassed());
+		assertTrue(validator.validate(names, null, null, null, null, null).isPassed());
 		verify(orgLoader);
 	}
 	
@@ -59,7 +59,7 @@ public class OwnerExistsValidatorTest {
 		expect(orgLoader.load()).andReturn(null);
 		replay(orgLoader);
 		
-		assertTrue(validator.validate(names, null, null, null, null).isFailed());
+		assertTrue(validator.validate(names, null, null, null, null, null).isFailed());
 		verify(orgLoader);
 	}
 	

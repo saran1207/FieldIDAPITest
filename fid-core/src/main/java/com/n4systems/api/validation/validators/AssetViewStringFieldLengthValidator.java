@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exceptions.Defect;
+import com.n4systems.exporting.beanutils.ExportField;
 import com.n4systems.model.security.SecurityFilter;
 
 public abstract class AssetViewStringFieldLengthValidator implements FieldValidator  {
@@ -44,14 +45,14 @@ public abstract class AssetViewStringFieldLengthValidator implements FieldValida
 	}
 
 	@Override
-	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, Map<String, Object> validationContext) {
+	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, ExportField field, Map<String, Object> validationContext) {
 		gaurd(fieldValue);
 		
 		
 		if (fieldValue == null ||	((String) fieldValue).length() <= maxLength) {
 			return ValidationResult.pass();
 		} else {
-			return ValidationResult.fail(AssetViewStringLengthValidatorFail, fieldName, maxLength);
+			return ValidationResult.fail(StringLengthValidatorFail, fieldName, maxLength);
 		}
 	}
 

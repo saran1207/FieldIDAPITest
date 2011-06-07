@@ -5,13 +5,14 @@ import java.util.Map;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.api.validation.ValidationResult;
+import com.n4systems.exporting.beanutils.ExportField;
 import com.n4systems.model.orgs.internal.InternalOrgWithNameExistsLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 public class ParentOrgResolutionValidator implements FieldValidator {
 
 	@Override
-	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, Map<String, Object> validationContext) {
+	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, ExportField field, Map<String, Object> validationContext) {
 		FullExternalOrgView orgView = (FullExternalOrgView)view;
 		if (!orgView.isCustomer()) {
 			// this validation only applies to the customer
