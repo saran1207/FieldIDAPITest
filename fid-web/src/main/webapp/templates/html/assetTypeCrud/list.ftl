@@ -35,7 +35,7 @@ ${action.setPageType('asset_type', 'list')!}
 		<#list assetTypes as assetType>
 			<tr>
 				<td><a href="<@s.url action="assetType" uniqueID="${assetType.id}" />">${assetType.name?html}</a></td>
-				<td><#if assetType.group?exists><a href="<@s.url action="assetTypeGroup" uniqueID="${assetType.group.id}" />">${assetType.group.name!}</a></#if></td>
+				<td><#if assetType.group?exists><a href="<@s.url action="assetTypeGroup" uniqueID="${assetType.group.id}" />">${assetType.group.name!}</a><#else>&nbsp;</#if></td>
 				<td><#if assetType.createdBy?exists>${assetType.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(assetType.created)}</td>
 				<td><#if assetType.modifiedBy?exists>${assetType.modifiedBy.fullName!},&nbsp;</#if>${action.formatDateTime(assetType.modified)}</td>
 				
