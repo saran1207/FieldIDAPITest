@@ -43,6 +43,7 @@ public class ExampleCustomerExportAction extends AbstractDownloadAction {
 		view.setPhone1(getText("example.customer.phone1"));
 		view.setPhone2(getText("example.customer.phone2"));
 		view.setFax1(getText("example.customer.fax"));
+		view.setNotes(getText("example.customer.notes"));
 		
 		return view;
 	}
@@ -63,6 +64,7 @@ public class ExampleCustomerExportAction extends AbstractDownloadAction {
 		view.setPhone1(getText("example.division.phone1"));
 		view.setPhone2(getText("example.division.phone2"));
 		view.setFax1(getText("example.division.fax"));
+		view.setNotes(getText("example.division.notes"));
 		
 		return view;
 	}

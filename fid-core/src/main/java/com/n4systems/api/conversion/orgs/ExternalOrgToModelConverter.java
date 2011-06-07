@@ -21,6 +21,7 @@ public abstract class ExternalOrgToModelConverter<M extends ExternalOrg> extends
 		
 		copyContact(from, to);
 		copyAddressInfo(from, to);
+		to.setNotes(from.getNotes());
 	}
 
 	private void copyAddressInfo(FullExternalOrgView from, M to) {

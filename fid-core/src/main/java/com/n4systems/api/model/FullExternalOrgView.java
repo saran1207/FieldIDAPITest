@@ -63,6 +63,9 @@ public class FullExternalOrgView extends ExternalModelView {
 	
 	@ExportField(title="Fax", order = 1000)
 	private String fax1;
+
+	@ExportField(title="Notes", order = 1100)
+	private String notes;
 	
 	@ExportField(title="System ID", order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
 	private String globalId;
@@ -205,6 +208,14 @@ public class FullExternalOrgView extends ExternalModelView {
 	@Override
 	public void setGlobalId(String globalId) {
 		this.globalId = globalId;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
 }
