@@ -2,9 +2,15 @@
 <#if schedule.new>
 	<#assign schedule=action.newSchedule() />
 </#if>
+
 <#assign html>
-	<#include "/templates/html/assetTypeScheduleCrud/_showOverrides.ftl" >
+		<#if schedule.override>
+			<#include "/templates/html/assetTypeScheduleCrud/_showOverrides.ftl" >
+		<#else>
+			<#include "/templates/html/assetTypeScheduleCrud/_show.ftl" >
+		</#if>
 </#assign>
+
 var container = null;
 <#if !schedule.new && schedule.override>
 	<#assign containerId="eventFrequencyOverride_${eventTypeId}_${schedule.owner.id}"/>
