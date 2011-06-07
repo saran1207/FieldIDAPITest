@@ -81,7 +81,7 @@ ${action.setPageType('event', 'quickEvent')!}
 		<span class="labeltext"><@s.text name="label.perform_ad_hoc_event"/></span>
 	</legend>
 	
-	<#if asset.type.eventTypes.isEmpty()>
+	<#if associatedEventTypes.isEmpty()>
 		<p>
 			<@s.text name="label.no_events">
 				<@s.param>${asset.type.name}</@s.param>
@@ -94,10 +94,10 @@ ${action.setPageType('event', 'quickEvent')!}
 			</@s.text>
 		</p>
 	<#else>
-		<#list asset.type.eventTypes as eventType>
+		<#list associatedEventTypes as associatedEventType>
 			<p>
-				<@s.url id="performEvent" action="selectEventAdd" assetId="${asset.id}" type="${eventType.id}"/>
-				<a href="${performEvent}">${eventType.name}</a>
+				<@s.url id="performEvent" action="selectEventAdd" assetId="${asset.id}" type="${associatedEventType.eventType.id}"/>
+				<a href="${performEvent}">${associatedEventType.eventType.name}</a>
 			</p>
 		</#list>
 	</#if>

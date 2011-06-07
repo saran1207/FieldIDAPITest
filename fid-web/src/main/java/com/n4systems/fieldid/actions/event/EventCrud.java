@@ -225,7 +225,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return SUCCESS;
 	}
 
-	private List<AssociatedEventType> getAssociatedEventTypes() {
+	public List<AssociatedEventType> getAssociatedEventTypes() {
 		return getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(asset.getType()).load();
 	}
 	
