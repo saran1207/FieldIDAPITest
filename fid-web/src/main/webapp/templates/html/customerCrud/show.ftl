@@ -54,7 +54,7 @@ ${action.setPageType('customer','show')!}
 		</p>
 		<p>
 			<label for="lastModified"><@s.text name="label.notes" /></label>
-			<span class="fieldValue">${customer.notes!}</span>
+			<span class="fieldValue"><pre>${customer.notes!}</pre></span>
 		</p>
 	</div>
 	

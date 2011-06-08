@@ -17,6 +17,10 @@
 			<label class="label" for="name"><@s.text name="label.name"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 			<@s.textfield  name="name" />
 		</div>
+		<div class="infoSet">
+				<label class="label" for="divisionNotes"><@s.text name="label.notes"/></label>
+				<@s.textarea  name="divisionNotes" />
+		</div>
 	</div>
 	<div class="fieldGroup">
 		<h2><@s.text name="label.contact_information"/></h2>

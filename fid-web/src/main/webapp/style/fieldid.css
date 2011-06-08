@@ -1886,6 +1886,9 @@ ul.borderLess{
 	border: 1px solid #9C9C9C;
 	color: #555555;
 	width: 250px;
+}
+
+.infoSet .fieldHolder input[type="text"], .infoSet .fieldHolder input[type="password"]{
 	overflow: hidden;
 }
 

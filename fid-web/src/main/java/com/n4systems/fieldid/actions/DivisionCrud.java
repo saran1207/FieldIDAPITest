@@ -20,7 +20,9 @@ import com.n4systems.security.Permissions;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 @Validation
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageEndUsers})
@@ -243,5 +245,14 @@ public class DivisionCrud extends AbstractCrud {
 	
 	public CustomerOrg getCustomer() {
 		return customer;
+	}
+	
+	public String getDivisionNotes() {
+		return division.getNotes();	
+	}
+	
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.notes_length", maxLength = "1000")
+	public void setDivisionNotes(String notes) {
+		division.setNotes(notes);
 	}
 }
