@@ -569,6 +569,10 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return getLimits().isLiteUsersMaxed();
 	}
 
+	public boolean isReadonlyUserLimitReached() {
+		return getLimits().isReadonlyUsersMaxed();
+	}
+
 	public String getUserGroup() {
 		return userGroup.name();
 	}

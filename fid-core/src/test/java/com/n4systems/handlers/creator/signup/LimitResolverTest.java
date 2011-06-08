@@ -33,7 +33,7 @@ public class LimitResolverTest extends TestUsesTransactionBase {
 		
 		TenantLimit expectedTenantLimit = new TenantLimit(DataUnit.MEBIBYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getDiskSpaceInMB(), DataUnit.BYTES), 
 															SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getAssets(), 
-															DEFAULT_USER_LIMIT, SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getSecondaryOrgs(), 0L);
+															DEFAULT_USER_LIMIT, SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getSecondaryOrgs(), 0L, 0L);
 		
 		LimitResolver sut = new LimitResolver(mockPromoByCodeLoader);
 		sut.withPromoCode(NO_PROMO_CODE).withSignUpPackageDetails(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED);
@@ -51,7 +51,7 @@ public class LimitResolverTest extends TestUsesTransactionBase {
 		
 		TenantLimit expectedTenantLimit = new TenantLimit(DataUnit.MEBIBYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getDiskSpaceInMB(), DataUnit.BYTES), 
 															SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getAssets(), 
-															DEFAULT_USER_LIMIT, SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getSecondaryOrgs(), 0L);
+															DEFAULT_USER_LIMIT, SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getSecondaryOrgs(), 0L, 0L);
 		
 		LimitResolver sut = new LimitResolver(mockPromoByCodeLoader);
 		sut.withPromoCode(PROMO_CODE_THAT_DOES_NOT_EXIST).withSignUpPackageDetails(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED);
@@ -70,7 +70,7 @@ public class LimitResolverTest extends TestUsesTransactionBase {
 		
 		TenantLimit expectedTenantLimit = new TenantLimit(DataUnit.MEBIBYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getDiskSpaceInMB(), DataUnit.BYTES), 
 															SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getAssets(), 
-															DEFAULT_USER_LIMIT, SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getSecondaryOrgs(), 0L);
+															DEFAULT_USER_LIMIT, SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getSecondaryOrgs(), 0L, 0L);
 		
 		LimitResolver sut = new LimitResolver(mockPromoByCodeLoader);
 		sut.withPromoCode(PROMO_CODE_THAT_EXISTS).withSignUpPackageDetails(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED);
@@ -91,7 +91,7 @@ public class LimitResolverTest extends TestUsesTransactionBase {
 		
 		long totalDiskSpace = DataUnit.MEBIBYTES.convertTo(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getDiskSpaceInMB(), DataUnit.BYTES) + 20L;
 		long totalAssets = SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getAssets() + 10L;
-		TenantLimit expectedTenantLimit = new TenantLimit(totalDiskSpace, totalAssets, DEFAULT_USER_LIMIT, SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getSecondaryOrgs(), 0L);
+		TenantLimit expectedTenantLimit = new TenantLimit(totalDiskSpace, totalAssets, DEFAULT_USER_LIMIT, SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED.getSecondaryOrgs(), 0L, 0L);
 		
 		LimitResolver sut = new LimitResolver(mockPromoByCodeLoader);
 		sut.withPromoCode(PROMO_CODE_THAT_EXISTS).withSignUpPackageDetails(SIGN_UP_PACKAGE_BEING_USED_NO_LIMIT_SET_UNLIMITED);

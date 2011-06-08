@@ -22,6 +22,11 @@
 	<@n4.percentbar progress="${limits.liteUsersUsed}" total="${limits.liteUsersMax}"/>
 	<div class="limitInfo"> ${limits.liteUsersUsed} <@s.text name="label.of"/> <#if limits.liteUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.liteUsersMax}</#if></div>
 </div>
+<div id="readonlyUserAccounts" class="limit">
+	<div class="limitLabel"><@s.text name="label.readonly_user_accounts"/></div>				
+	<@n4.percentbar progress="${limits.readonlyUsersUsed}" total="${limits.readonlyUsersMax}"/>
+	<div class="limitInfo"> ${limits.readonlyUsersUsed} <@s.text name="label.of"/> <#if limits.readonlyUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.readonlyUsersMax}</#if></div>
+</div>
 <div id="assets" class="limit">
 	<div class="limitLabel"><@s.text name="label.assets"/></div>			
 	<@n4.percentbar progress="${limits.assetsUsed}" total="${limits.assetsMax}"/>

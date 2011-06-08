@@ -436,6 +436,9 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		return primaryOrg.getLimits().getLiteUsers();
 	}
 	
+	public Long getReadonlyUsers() {
+		return primaryOrg.getLimits().getReadonlyUsers();
+	}
 	public Long getUsers() {
 		return primaryOrg.getLimits().getUsers();
 	}
@@ -448,6 +451,10 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		primaryOrg.getLimits().setLiteUsers(users);
 	}
 	
+	public void setReadonlyUsers(Long users){
+		primaryOrg.getLimits().setReadonlyUsers(users);
+	}
+
 	public Long getSecondaryOrgs() {
 		return primaryOrg.getLimits().getSecondaryOrgs();
 	}

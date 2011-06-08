@@ -13,6 +13,7 @@ import com.n4systems.model.orgs.SecondaryOrgCountLoader;
 import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.EmployeeUserCountLoader;
 import com.n4systems.model.user.LiteUserCountLoader;
+import com.n4systems.model.user.ReadOnlyUserCountLoader;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.usage.TenantDiskUsageCalculator;
@@ -30,12 +31,14 @@ public class TenantLimitService implements Serializable {
 	private final Map<Long, ResourceLimit> diskSpace = new ResourceLimitConcurrentHashMap();
 	private final Map<Long, ResourceLimit> employeeUsers = new ResourceLimitConcurrentHashMap();
 	private final Map<Long, ResourceLimit> liteUsers = new ResourceLimitConcurrentHashMap();
+	private final Map<Long, ResourceLimit> readonlyUsers = new ResourceLimitConcurrentHashMap();
 	private final Map<Long, ResourceLimit> assets = new ResourceLimitConcurrentHashMap();
 	private final Map<Long, ResourceLimit> secondaryOrgs = new ResourceLimitConcurrentHashMap();
 	
 	private final AssetLimitCountLoader assetCountLoader = new AssetLimitCountLoader();
 	private final EmployeeUserCountLoader employeeCountLoader = new EmployeeUserCountLoader();
 	private final LiteUserCountLoader liteUserCountLoader = new LiteUserCountLoader();
+	private final ReadOnlyUserCountLoader readonlyUserCountLoader = new ReadOnlyUserCountLoader();
 	private final SecondaryOrgCountLoader secondaryOrgCountLoader = new SecondaryOrgCountLoader();
 	
 	private final LimitUpdater[] limitUpdaters = {
@@ -43,6 +46,7 @@ public class TenantLimitService implements Serializable {
 			new LimitUpdater(assetCountLoader, assets),
 			new LimitUpdater(employeeCountLoader, employeeUsers),
 			new LimitUpdater(liteUserCountLoader, liteUsers),
+			new LimitUpdater(readonlyUserCountLoader, readonlyUsers),
 			new LimitUpdater(secondaryOrgCountLoader, secondaryOrgs),
 	};
 	
@@ -63,7 +67,10 @@ public class TenantLimitService implements Serializable {
 		return liteUsers.get(tenantId);
 	}
 	
-	
+	public ResourceLimit getReadonlyUsers(Long tenantId){
+		refreshReadOnlyUserCount(tenantId);
+		return readonlyUsers.get(tenantId);
+	}
 	
 	public ResourceLimit getAssets(Long tenantId) {
 		// asset counts are refreshed in real-time
@@ -94,6 +101,12 @@ public class TenantLimitService implements Serializable {
 				break;
 			case SECONDARY_ORGS:
 				limits = secondaryOrgs;
+				break;
+			case LITE_USERS:
+				limits = liteUsers;
+				break;
+			case READONLY_USERS:
+				limits = readonlyUsers;
 				break;
 		}
 		
@@ -136,12 +149,24 @@ public class TenantLimitService implements Serializable {
 		employeeUsers.get(tenantId).setUsed(employeeCountLoader.load());
 	}
 	
+	/**
+	 * Updates the lite user count but does not reload the tenant limit.
+	 */
 	private void refreshLiteUserCount(Long tenantId){
 		liteUserCountLoader.setTenantId(tenantId);
 		
 		liteUsers.get(tenantId).setUsed(liteUserCountLoader.load());
 	}
 	
+	/**
+	 * Updates the readonly user count but does not reload the tenant limit.
+	 */
+	private void refreshReadOnlyUserCount(Long tenantId){
+		readonlyUserCountLoader.setTenantId(tenantId);
+		
+		readonlyUsers.get(tenantId).setUsed(readonlyUserCountLoader.load());
+	}
+
 	/**
 	 * Updates the asset count but does not reload the tenant limit.
 	 */

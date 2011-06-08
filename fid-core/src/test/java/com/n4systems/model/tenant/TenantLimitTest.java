@@ -11,15 +11,16 @@ public class TenantLimitTest {
 
 	@Test
 	public void should_add_limits_together() {
-		TenantLimit expectedTenantLimit = new TenantLimit(10L, 20L, 30L, 40L, 50L);
+		TenantLimit expectedTenantLimit = new TenantLimit(10L, 20L, 30L, 40L, 50L, 50L);
 		
-		TenantLimit sut = new TenantLimit(1L, 2L, 3L, 4L, 5L);
+		TenantLimit sut = new TenantLimit(1L, 2L, 3L, 4L, 5L, 5L);
 		
 		// exercise
 		sut.addDiskSpace(9L);
 		sut.addAssets(18L);
 		sut.addUsers(27L);
 		sut.addLiteUsers(45L);
+		sut.addReadonlyUsers(45L);
 		sut.addSecondaryOrgs(36L);
 		
 		// verify
@@ -29,9 +30,9 @@ public class TenantLimitTest {
 	
 	@Test
 	public void should_add_limits_with_original_having_all_limits_set_to_unlimited() {
-		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
-		TenantLimit sut = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit sut = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
 		// exercise
 		sut.addDiskSpace(9L);
@@ -47,9 +48,9 @@ public class TenantLimitTest {
 	
 	@Test
 	public void should_add_limits_with_limit_being_added_on_has_all_limits_set_to_unlimited() {
-		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
-		TenantLimit sut = new TenantLimit(1L, 3L, 2L, 4L, 5L);
+		TenantLimit sut = new TenantLimit(1L, 3L, 2L, 4L, 5L, 5L);
 		
 		// exercise
 		sut.addDiskSpace(TenantLimit.UNLIMITED);
@@ -64,9 +65,9 @@ public class TenantLimitTest {
 	
 	@Test
 	public void should_add_limits_with_both_limits_having_all_limits_set_to_unlimited() {
-		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit expectedTenantLimit = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
-		TenantLimit sut = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
+		TenantLimit sut = new TenantLimit(TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED);
 		
 		// exercise
 		sut.addDiskSpace(TenantLimit.UNLIMITED);

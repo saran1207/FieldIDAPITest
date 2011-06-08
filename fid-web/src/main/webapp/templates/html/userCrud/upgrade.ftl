@@ -83,14 +83,21 @@ ${action.setPageType('user','change')!}
 					<li><label><@s.text name="label.run_searches" /></label></li>
 				</ul>
 			</div>
-			<div class="upgradeUserAction center">
-				<#if readOnlyUser >
+			<#if readOnlyUser >
+				<div class="upgradeUserAction center">
 					<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
-				<#else>
-					<@s.url id="changeToReadOnly" action="changeToReadOnly" uniqueID="${uniqueID}"/>
-					<input type="button" value="<@s.text name='hbutton.change_to_readonly'/>" onclick="return redirect('${changeToReadOnly}');"/>
+				</div>
+			<#else>
+				<#if readonlyUserLimitReached>
+					<div class="userLimitWarning">
+						<@s.text name="label.readonly_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
+					</div>
+				<#else>	
+					<div class="upgradeUserAction center">
+						<@s.url id="changeToReadOnly" action="changeToReadOnly" uniqueID="${uniqueID}"/>
+						<input type="button" value="<@s.text name='hbutton.change_to_readonly'/>" onclick="return redirect('${changeToReadOnly}');"/>
+					</div>
 				</#if>
-			</div>
-		</div>
+			</#if>
 	</#if>
 </div>	

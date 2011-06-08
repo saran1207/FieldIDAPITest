@@ -6,7 +6,8 @@ public enum LimitType {
 	ASSETS			("Warning: Asset Limit", "assetLimitAlert", 90, 95, 99),
 	SECONDARY_ORGS	("Warning: Organization Limit", "secondaryOrgLimitAlert", 90, 95, 99),
 	LITE_USERS,
-	EMPLOYEE_USERS;
+	EMPLOYEE_USERS,
+	READONLY_USERS;
 	
 	private boolean alertByEmail;
 	private int[] alertThresholds;

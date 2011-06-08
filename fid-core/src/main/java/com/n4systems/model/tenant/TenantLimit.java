@@ -28,17 +28,21 @@ public class TenantLimit implements Serializable {
 	
 	@Column(name="lite_user_limit", nullable = false)
 	private Long liteUsers;
-	
+
+	@Column(name="readonly_user_limit", nullable = false)
+	private Long readonlyUsers;
+
 	public TenantLimit() {
-		this(0L, 0L, 0L, 0L, 0L);
+		this(0L, 0L, 0L, 0L, 0L, 0L);
 	}
 	
-	public TenantLimit(long diskSpace, long assets, long users, long secondaryOrgs, long liteUsers) {
+	public TenantLimit(long diskSpace, long assets, long users, long secondaryOrgs, long liteUsers, long readonlyUsers) {
 		this.diskSpace = diskSpace;
 		this.assets = assets;
 		this.users = users;
 		this.secondaryOrgs = secondaryOrgs;
-		this.liteUsers=liteUsers;
+		this.liteUsers = liteUsers;
+		this.readonlyUsers = readonlyUsers;
 	}
 
 	public Long getLimitForType(LimitType type) {
@@ -55,6 +59,9 @@ public class TenantLimit implements Serializable {
 				break;
 			case LITE_USERS:
 				limit = liteUsers;
+				break;
+			case READONLY_USERS:
+				limit = readonlyUsers;
 				break;
 			case SECONDARY_ORGS:
 				limit = secondaryOrgs;
@@ -165,7 +172,11 @@ public class TenantLimit implements Serializable {
 	public void addLiteUsers(Long additionalUsers){
 		liteUsers = addLimits(liteUsers, additionalUsers);
 	}
-	
+
+	public void addReadonlyUsers(Long additionalUsers) {
+		readonlyUsers = addLimits(readonlyUsers, additionalUsers);
+	}
+
 	public void addDiskSpace(Long additionalDiskSpace) {
 		diskSpace = addLimits(diskSpace, additionalDiskSpace);
 	}
@@ -214,6 +225,14 @@ public class TenantLimit implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TenantLimit [assets=" + assets + ", diskSpace=" + diskSpace + ", secondaryOrgs=" + secondaryOrgs + ", users=" + users + ", liteUsers=" + liteUsers + "]";
+		return "TenantLimit [assets=" + assets + ", diskSpace=" + diskSpace + ", secondaryOrgs=" + secondaryOrgs + ", users=" + users + ", liteUsers=" + liteUsers + ", readonlyUsers=" + readonlyUsers +"]";
+	}
+
+	public Long getReadonlyUsers() {
+		return readonlyUsers;
+	}
+
+	public void setReadonlyUsers(Long readonlyUsers) {
+		this.readonlyUsers = readonlyUsers;
 	}
 }

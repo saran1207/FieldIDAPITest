@@ -74,9 +74,15 @@ ${action.setPageType('user','adduser')!}
 					<li><label><@s.text name="label.run_searches" /></label></li>
 				</ul>
 			</div>	
-			<div class="addUserAction">
-				<input id="addReadOnlyUser" type="button" value="<@s.text name="label.add_new_read_only_user" />" onclick="return redirect('${addReadOnlyUserUrl}');"/>
-			</div>
+			<#if readonlyUserLimitReached>
+				<div class="userLimitWarning">
+					<@s.text name="label.readonly_user_limit_reached"/>	
+				</div>		
+			<#else>
+				<div class="addUserAction">
+					<input id="addReadOnlyUser" type="button" value="<@s.text name="label.add_new_read_only_user" />" onclick="return redirect('${addReadOnlyUserUrl}');"/>
+				</div>
+			</#if>
 		</div>
 	</#if>
 </div>

@@ -39,6 +39,14 @@ public class TenantLimitProxy {
 		return limitService.getLiteUsers(tenantId).isMaxed();
 	}
 	
+	public Long getReadonlyUsersUsed(){
+		return limitService.getReadonlyUsers(tenantId).getUsed();
+	}
+	
+	public boolean isReadonlyUsersMaxed(){
+		return limitService.getReadonlyUsers(tenantId).isMaxed();
+	}
+
 	public Long getEmployeeUsersUsed() {
 		return limitService.getEmployeeUsers(tenantId).getUsed();
 	}
@@ -51,12 +59,20 @@ public class TenantLimitProxy {
 		return limitService.getLiteUsers(tenantId).getMaximum();
 	}
 	
+	public Long getReadonlyUsersMax(){
+		return limitService.getReadonlyUsers(tenantId).getMaximum();
+	}
+
 	public boolean isEmployeeUsersUnlimited() {
 		return limitService.getEmployeeUsers(tenantId).isUnlimited();
 	}
 	
 	public boolean isLiteUsersUnlimited() {
 		return limitService.getLiteUsers(tenantId).isUnlimited();
+	}
+
+	public boolean isReadonlyUsersUnlimited() {
+		return limitService.getReadonlyUsers(tenantId).isUnlimited();
 	}
 
 	public boolean isAssetsMaxed() {

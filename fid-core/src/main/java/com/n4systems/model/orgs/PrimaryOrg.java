@@ -241,6 +241,7 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
     }
     
     public boolean isReadOnlyUsersEnabled(){
-    	return hasExtendedFeature(ExtendedFeature.ReadOnlyUser);
+//    	return hasExtendedFeature(ExtendedFeature.ReadOnlyUser);
+    	return getLimits().getLimitForType(LimitType.READONLY_USERS) != 0;
     }
 }

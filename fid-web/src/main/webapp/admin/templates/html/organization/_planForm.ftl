@@ -14,6 +14,10 @@
 	</div>
 	
 	<div class="infoSet">
+		<label><@s.text name="label.readonly_user_accounts"/></label><span><@s.textfield name="readonlyUsers"/></span>
+	</div>
+
+	<div class="infoSet">
 		<label><@s.text name="label.assets"/></label><span><@s.textfield name="assets"/></span>
 	</div>
 		

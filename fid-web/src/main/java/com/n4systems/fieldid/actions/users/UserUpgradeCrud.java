@@ -34,9 +34,14 @@ public class UserUpgradeCrud extends UserCrud{
 	}
 	
 	public String doChangeToReadOnly() {
-		user.setUserType(UserType.READONLY);
-		save();
-		return SUCCESS;
+		if(!isReadonlyUserLimitReached()) {
+			user.setUserType(UserType.READONLY);
+			save();
+			return SUCCESS;
+		}else {
+			addActionErrorText("label.readonly_user_limit_reached");
+			return ERROR;
+		}
 	}
 
 	@Override
