@@ -110,7 +110,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
         if (getSortColumn() == null) {
             getContainer().setSortColumn(reportConfig.getSortColumn().getSortExpression());
             getContainer().setSortColumnId(reportConfig.getSortColumn().getDbColumnId());
-//            setSortColumn(reportConfig.getSortColumn().getSortExpression());
+            getContainer().setSortJoinExpression(reportConfig.getSortColumn().getJoinExpression());
         }
 
 		// initialize the output handlers 
