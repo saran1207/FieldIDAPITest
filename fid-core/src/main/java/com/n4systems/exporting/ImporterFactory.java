@@ -1,11 +1,11 @@
 package com.n4systems.exporting;
 
 
+import com.n4systems.api.conversion.asset.AssetToModelConverter;
 import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
 import com.n4systems.api.conversion.event.EventToModelConverter;
 import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
-import com.n4systems.api.conversion.asset.AssetToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exporting.io.MapReader;
@@ -99,6 +99,11 @@ public class ImporterFactory {
 		return new AutoAttributeImporter(reader, createViewValidator(), saverFactory.createAutoAttributeDefinitionSaver(), createAutoAttributeToModelConverter(criteria));
 	}
 
+	public UserImporter createUserImporter(MapReader reader) {
+		// FIXME DD : need to create proper parameters for importer = validator, saver, validator. 
+		return new UserImporter(reader, createViewValidator(), saverFactory.createUserSaver(), null /*do we need converter?*/);	
+	}
+	
 	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {
 		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
 	}

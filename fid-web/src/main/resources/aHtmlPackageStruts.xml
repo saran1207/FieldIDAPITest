@@ -37,6 +37,11 @@
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 		</action>
 
+		<action name="userExport" method="export" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
+		</action>
+
 		<action name="autoAttributeExport" method="export" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>

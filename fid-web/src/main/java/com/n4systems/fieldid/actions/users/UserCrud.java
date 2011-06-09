@@ -58,7 +58,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 	protected UserManager userManager;
 
-	private PasswordEntry passwordEntry = new PasswordEntry();
+	private final PasswordEntry passwordEntry = new PasswordEntry();
 	private boolean assignPassword = true;
 	protected Pager<User> page;
 	protected Pager<User> archivedPage;
@@ -75,8 +75,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private Country country;
 	private Region region;
 
-	private WelcomeMessage welcomeMessage = new WelcomeMessage();
+	private final WelcomeMessage welcomeMessage = new WelcomeMessage();
 	private UploadedImage signature = new UploadedImage();
+	
 
 	protected List<ListingPair> litePermissions;
 	protected List<ListingPair> internalOrgList;
@@ -177,7 +178,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		}
 		return SUCCESS;
 	}
-
+	
 	@SkipValidation
 	public String doSendWelcomeMessage() {
 		testUserEntity(true);
@@ -454,10 +455,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return (country != null) ? country.getRegions() : new TreeSet<Listable<String>>();
 	}
 
+	@Override
 	public boolean duplicateValueExists(String formValue) {
 		return !userManager.userIdIsUnique(getTenantId(), formValue, uniqueID);
 	}
 
+	@Override
 	public boolean validateRfid(String formValue) {
 		return !userManager.userRfidIsUnique(getTenantId(), formValue, uniqueID);
 	}
@@ -510,6 +513,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		this.userType = UserType.valueOf(userType);
 	}
 
+	@Override
 	public User getUser() {
 		return user;
 	}

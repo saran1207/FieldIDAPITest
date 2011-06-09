@@ -188,6 +188,11 @@
 		<action name="downloadExampleEventExport" method="downloadExample" class="com.n4systems.fieldid.actions.event.EventImportAction" />
 		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
 
+		
+		<action name="downloadExampleUserExport" method="download" class="com.n4systems.fieldid.actions.users.ExampleUserExportAction" />
+
+
+
         <action name="downloadTemporarySignature" method="downloadTemporary" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
         <action name="downloadSignature" method="download" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
 

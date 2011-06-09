@@ -69,7 +69,7 @@ public class FullExternalOrgView extends ExternalModelView {
 	private String notes;
 	
 	@ExportField(title="System ID", order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
-	private String globalId;
+	private String globalId; 
 	
 	public FullExternalOrgView() {}
 	

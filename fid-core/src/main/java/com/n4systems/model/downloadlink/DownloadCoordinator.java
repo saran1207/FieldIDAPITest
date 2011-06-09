@@ -9,7 +9,9 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserFilteredLoader;
 import com.n4systems.persistence.loaders.ListLoader;
+import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.reporting.ReportDefiner;
@@ -104,5 +106,9 @@ public class DownloadCoordinator {
 		AssetExportTask task = taskFactory.createAssetExportTask(link, downloadUrl, assetLoader);
 		
 		executor.execute(task);
+	}
+
+	public DownloadLink generateUserExport(String reportName, String downloadLinkUrl, Loader<User> userListLoader, SecurityFilter securityFilter) {
+		throw new UnsupportedOperationException("FIXME DD : not implemented yet..."); 
 	}
 }

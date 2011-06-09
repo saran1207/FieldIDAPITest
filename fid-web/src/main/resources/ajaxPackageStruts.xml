@@ -410,6 +410,10 @@
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>
 		
+		<action name="userImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.users.UserImportAction">
+			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
+		</action>		
+		
 		<action name="autoAttributeImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>
 		</action>

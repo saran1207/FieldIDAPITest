@@ -5,6 +5,7 @@ import com.n4systems.model.downloadlink.DownloadLinkSaver;
 import com.n4systems.model.orders.NonIntegrationLineItemSaver;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.signuppackage.ContractPricingSaver;
+import com.n4systems.model.user.UserSaver;
 
 public class SaverFactory {
 
@@ -32,5 +33,9 @@ public class SaverFactory {
 	
 	public OrgSaver createOrgSaver() {
 		return new OrgSaver();
+	}
+
+	public UserSaver createUserSaver() {
+		return new UserSaver();
 	}
 }

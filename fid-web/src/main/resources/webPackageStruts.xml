@@ -221,7 +221,11 @@
 		<action name="customerImportExport" method="showImportExport" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="freemarker">/templates/html/customerCrud/importExport.ftl</result>
 		</action>
-
+		
+		<action name="userImportExport" method="show" class="com.n4systems.fieldid.actions.users.UserImportAction">
+			<result name="success" type="freemarker">/templates/html/userCrud/importExport.ftl</result>
+		</action>
+				
 		<action name="assetStatusEdit" method="loadEdit" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
 			<result name="input" type="freemarker">/templates/html/assetStatusCrud/assetStatusForm.ftl</result>
 			<result name="success" type="redirectAction">assetStatusList</result>
@@ -2290,11 +2294,22 @@
 			<result name="success" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 		</action>
 
+		<action name="showImportUsers" method="show" class="com.n4systems.fieldid.actions.users.UserImportAction">
+			<result name="success" type="freemarker">/templates/html/userCrud/import.ftl</result>
+		</action>
+
 		<action name="importCustomers" method="import" class="com.n4systems.fieldid.actions.customers.CustomerImportAction">
 			<result name="input" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 			<result name="error" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 			<result name="success" type="freemarker">/templates/html/customerCrud/import.ftl</result>
+		</action>
+		
+		<action name="importUsers" method="import" class="com.n4systems.fieldid.actions.users.UserImportAction">
+			<result name="input" type="freemarker">/templates/html/userCrud/import.ftl</result>
+			<result name="missing" type="freemarker">/templates/html/userCrud/import.ftl</result>
+			<result name="error" type="freemarker">/templates/html/userCrud/import.ftl</result>
+			<result name="success" type="freemarker">/templates/html/userCrud/import.ftl</result>
 		</action>
 		
 		<action name="autoAttributeImportExport" method="show" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
