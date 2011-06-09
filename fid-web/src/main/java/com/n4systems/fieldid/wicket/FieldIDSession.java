@@ -3,6 +3,8 @@ package com.n4systems.fieldid.wicket;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 import org.apache.wicket.Request;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebRequest;
@@ -12,12 +14,14 @@ import rfid.web.helper.SessionUser;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
 public class FieldIDSession extends WebSession {
 
     private HttpSession session;
+    private ConcurrentHashMap<String, String> localizationCache = new ConcurrentHashMap<String,String>();
 
     public FieldIDSession(Request request) {
         super(request);
@@ -56,4 +60,19 @@ public class FieldIDSession extends WebSession {
         return (Collection<String>) session.getAttribute(FlashScopeMarshaller.FLASH_ERRORS);
     }
 
+    public Tenant getTenant() {
+        return getSecurityGuard().getTenant();
+    }
+
+    public PrimaryOrg getPrimaryOrg() {
+        return getSecurityGuard().getPrimaryOrg();
+    }
+
+    public void clearCache() {
+        localizationCache.clear();
+    }
+
+    public Map<String, String> getCache() {
+        return localizationCache;
+    }
 }

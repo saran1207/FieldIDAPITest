@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
 import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
-import com.n4systems.fieldid.wicket.resources.CachePerTenantLocalizer;
+import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import org.apache.wicket.Page;
@@ -41,7 +41,7 @@ public class FieldIDWicketApp extends WebApplication {
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());
         getResourceSettings().addStringResourceLoader(0, new TenantOverridesResourceLoader());
-        getResourceSettings().setLocalizer(CachePerTenantLocalizer.getInstance());
+        getResourceSettings().setLocalizer(new CacheInSessionLocalizer());
         InjectorHolder.setInjector(new AnnotSpringInjector(new SpringContextLocator()));
 
         getApplicationSettings().setPageExpiredErrorPage(HomePage.class);
