@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageCustomersPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.Asset;
@@ -17,6 +18,7 @@ import com.n4systems.model.Project;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.User;
 
 public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersPage> {
@@ -36,7 +38,7 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	public void setupScenario(Scenario scenario) {     
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY);
 		
-		primaryOrg.setExtendedFeatures(setOf(ExtendedFeature.ReadOnlyUser, ExtendedFeature.Projects));
+		primaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects));
 		
         scenario.aCustomerOrg()
         		.withParent(scenario.primaryOrgFor(COMPANY))
@@ -148,6 +150,9 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	
 	@Test
 	public void add_customer_user_sucessfully() throws Exception {
+		
+		page = updateTenantLimits();
+		
 		page.clickCustomer(TEST_CUSTOMER_ORG_2).clickUsersTab();
 		assertEquals(2, page.getNumberOfUsersOnPage());
 		page.clickAddUser();
@@ -162,6 +167,9 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 
 	@Test
 	public void add_customer_user_with_errors() throws Exception {
+		
+		page = updateTenantLimits();
+		
 		page.clickCustomer(TEST_CUSTOMER_ORG_2).clickUsersTab();
 		assertEquals(2, page.getNumberOfUsersOnPage());
 		page.clickAddUser();
@@ -260,4 +268,11 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 		
 		assertTrue("Job wasn't successfully copied over.",  selenium.isElementPresent("//td[contains(.,"+TEST_CUSTOMER_ORG_1+")]"));
 	}
+	
+	private ManageCustomersPage updateTenantLimits() {
+		AdminOrgPage adminPage = startAdmin().login().filterByCompanyName(COMPANY).clickEditOrganization(COMPANY);
+		adminPage.enterTenantLimits(new TenantLimit(-1L, -1L, -1L, -1L, -1L, -1L));
+		return startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageCustomers();
+	}
+
 }

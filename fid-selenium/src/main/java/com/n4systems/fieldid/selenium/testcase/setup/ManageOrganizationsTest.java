@@ -28,8 +28,6 @@ public class ManageOrganizationsTest extends PageNavigatingTestCase<ManageOrgani
 	public void setupScenario(Scenario scenario) {     
 		PrimaryOrg primaryOrg = scenario.primaryOrgFor(COMPANY);
 		
-		primaryOrg.setExtendedFeatures(setOf(ExtendedFeature.ReadOnlyUser));
-
 		SecondaryOrg secondaryOrg = (SecondaryOrg) scenario.aSecondaryOrg()
 		  	    .withParent(primaryOrg)
 		        .withName(SECONDARY_ORG1)

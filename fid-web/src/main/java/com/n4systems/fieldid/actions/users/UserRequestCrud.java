@@ -8,16 +8,12 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.user.UserWelcomeNotificationProducer;
-import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
@@ -29,7 +25,6 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class UserRequestCrud extends AbstractCrud {
 

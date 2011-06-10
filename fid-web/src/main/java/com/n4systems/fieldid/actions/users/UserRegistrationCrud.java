@@ -5,14 +5,11 @@ import java.util.SortedSet;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -32,7 +29,6 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private static final long serialVersionUID = 1L;

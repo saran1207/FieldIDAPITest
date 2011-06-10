@@ -49,6 +49,7 @@ public class EventSchedulePage extends FieldIDPage{
 	
 	public void removeSchedule(String scheduleDate) {
 		selenium.click("//div[.='"+ scheduleDate + "']/../..//a[.='Remove']");
+		waitForAjax();
 	}
 	
 	public String getScheduleJob(String scheduleDate) {

@@ -18,7 +18,6 @@ public enum ExtendedFeature {
 	Projects("feature.jobs", "allows the use of projects to track larger safety systems."),
 	Branding("feature.branding", "allows the user to up load their own image for the tenant logo."),
 	EmailAlerts("feature.email_alerts", "allows the tenant to use Notifications"),
-	ReadOnlyUser("feature.partner_center", "allows the tenant to add customer users"),
 	MultiLocation("feature.multi_location", "allows the tenant to create as many secondary orgs."), 
 	UnlimitedLinkedAssets("feature.unlimited_linked_assets", "Assets registered against this Tenant will not count towards their asset limit"),
 	ManufacturerCertificate("feature.manufacturer_certificate", "allows the use of manufacturer certificates"),

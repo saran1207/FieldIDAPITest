@@ -7,16 +7,13 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
-import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.UserType;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class ReadOnlyUserCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;

@@ -26,7 +26,7 @@ public class UserLimitTest extends FieldIDTestCase {
 				
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor(COMPANY);
 		
-		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
+		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects));
 
 		scenario.updatePrimaryOrg(defaultPrimaryOrg);
 		

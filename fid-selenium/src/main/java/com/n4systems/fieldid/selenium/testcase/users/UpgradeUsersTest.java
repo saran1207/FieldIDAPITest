@@ -26,7 +26,7 @@ public class UpgradeUsersTest extends FieldIDTestCase {
 	public void setupScenario(Scenario scenario) {
 		PrimaryOrg defaultPrimaryOrg = scenario.primaryOrgFor(COMPANY);
 		
-		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects, ExtendedFeature.ReadOnlyUser));
+		defaultPrimaryOrg.setExtendedFeatures(setOf(ExtendedFeature.Projects));
 				
 		scenario.updatePrimaryOrg(defaultPrimaryOrg);		
 		

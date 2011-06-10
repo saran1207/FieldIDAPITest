@@ -1,25 +1,27 @@
 package com.n4systems.fieldid.selenium.testcase.userregistration;
 
-import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.pages.LoginPage;
-import com.n4systems.fieldid.selenium.pages.RegistrationRequestPage;
-import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.model.ExtendedFeature;
-
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.n4systems.fieldid.selenium.FieldIDTestCase;
+import com.n4systems.fieldid.selenium.pages.LoginPage;
+import com.n4systems.fieldid.selenium.pages.RegistrationRequestPage;
+import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
+import com.n4systems.model.tenant.TenantLimit;
 
 public class UserRegistrationTest extends FieldIDTestCase {
 
 	private static String USER_ID= "u_" + new Date().getTime();
-	
-    @Override
-    public void setupScenario(Scenario scenario) {
-    	scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.ReadOnlyUser));
-    }
+	   
+	@Before
+	public void setUp() throws Exception {
+		AdminOrgPage adminPage = startAdmin().login().filterByCompanyName("test1").clickEditOrganization("test1");
+		adminPage.enterTenantLimits(new TenantLimit(-1L, -1L, -1L, -1L, -1L, -1L));
+	}
 	
 	@Test
 	public void should_show_all_values_entered_on_the_registration_form_when_viewing_request_in_the_system(){

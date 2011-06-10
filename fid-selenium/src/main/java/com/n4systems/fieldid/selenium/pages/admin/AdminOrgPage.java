@@ -38,6 +38,9 @@ public class AdminOrgPage extends FieldIDPage {
     	if(limits.getLiteUsers() != null) {
     		selenium.type("//input[@id='planForm_liteUsers']", limits.getLiteUsers().toString());
     	}
+    	if(limits.getReadonlyUsers() != null) {
+    		selenium.type("//input[@id='planForm_readonlyUsers']", limits.getReadonlyUsers().toString());
+    	}
     	if(limits.getSecondaryOrgs() != null) {
     		selenium.type("//input[@id='planForm_secondaryOrgs']", limits.getSecondaryOrgs().toString());
     	}

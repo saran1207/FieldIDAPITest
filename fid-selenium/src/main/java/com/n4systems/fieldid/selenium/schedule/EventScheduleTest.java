@@ -28,7 +28,7 @@ public class EventScheduleTest extends PageNavigatingTestCase<EventSchedulePage>
 	@Override
 	public void setupScenario(Scenario scenario) {
 
-		scenario.primaryOrgFor(COMPANY).setExtendedFeatures(setOf(ExtendedFeature.ReadOnlyUser, ExtendedFeature.Projects));
+		scenario.primaryOrgFor(COMPANY).setExtendedFeatures(setOf(ExtendedFeature.Projects));
 		
 		EventType evenType = scenario.anEventType().build();
 		

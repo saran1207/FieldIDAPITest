@@ -42,7 +42,7 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	}
 
 	public boolean isReadOnlyUserEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.ReadOnlyUser);
+		return primaryOrg.isReadOnlyUsersEnabled();
 	}
 
 	public boolean isProjectsEnabled() {

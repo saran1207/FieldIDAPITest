@@ -2,26 +2,22 @@ package com.n4systems.fieldid.actions.asset;
 
 import java.util.List;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.legacy.LegacyAsset;
-import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
-import com.n4systems.model.Asset;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-
+import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.permissions.ExtendedFeatureFilter;
-import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
-@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.ReadOnlyUser)
 public class CustomerInformationCrud extends AbstractCrud {
 
 	private static final long serialVersionUID = 1L;
