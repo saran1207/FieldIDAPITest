@@ -7,19 +7,19 @@ import com.n4systems.util.DataUnit;
 
 
 public enum SignUpPackageDetails {
+		
+	Free("FIDFREE", "Free", 1000L, 1L, 0L, 25L, TenantLimit.NONE),
 	
-	Free("FIDFREE", "Free", 1000L, 1L, 25L, TenantLimit.NONE),
+	Basic("FIDBASIC", "Basic", 1000L, 5L, 0L, 250L, TenantLimit.NONE, ExtendedFeature.EmailAlerts),
 	
-	Basic("FIDBASIC", "Basic", 1000L, 5L, 250L, TenantLimit.NONE, ExtendedFeature.EmailAlerts),
-	
-	Plus("FIDPLUS", "Plus", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.NONE, ExtendedFeature.Branding, ExtendedFeature.EmailAlerts, 
+	Plus("FIDPLUS", "Plus", 1000L, TenantLimit.UNLIMITED, 0L, TenantLimit.UNLIMITED, TenantLimit.NONE, ExtendedFeature.Branding, ExtendedFeature.EmailAlerts, 
 				ExtendedFeature.Projects),
 																	
-	Enterprise("FIDENTERPRISE", "Enterprise", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
+	Enterprise("FIDENTERPRISE", "Enterprise", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
 				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.MultiLocation,
 				ExtendedFeature.AllowIntegration),
 				
-	Unlimited("FIDUNLIMITED", "Unlimited", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
+	Unlimited("FIDUNLIMITED", "Unlimited", 1000L, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, TenantLimit.UNLIMITED, ExtendedFeature.EmailAlerts, 
 				ExtendedFeature.Projects, ExtendedFeature.Branding, ExtendedFeature.AllowIntegration, ExtendedFeature.MultiLocation, ExtendedFeature.CustomCert, 
 				ExtendedFeature.DedicatedProgramManager);
 	
@@ -49,15 +49,17 @@ public enum SignUpPackageDetails {
 	private Long assets;
 	private Long diskSpace;
 	private Long users;
+	private Long readonlyUsers;
 	private Long secondaryOrgs;
 	
 	private ExtendedFeature[] extendedFeatures;
 	
-	private SignUpPackageDetails(String syncId, String name, Long diskSpace, Long users, Long assets, Long secondaryOrgs, ExtendedFeature...extendedFeatures) {
+	private SignUpPackageDetails(String syncId, String name, Long diskSpace, Long users, Long readonlyUsers, Long assets, Long secondaryOrgs, ExtendedFeature...extendedFeatures) {
 		this.syncId = syncId;
 		this.name = name;
 		this.diskSpace = diskSpace;
 		this.users = users;
+		this.readonlyUsers = readonlyUsers;
 		this.assets = assets;
 		this.secondaryOrgs = secondaryOrgs;
 		this.extendedFeatures = extendedFeatures;	
@@ -74,6 +76,9 @@ public enum SignUpPackageDetails {
 	}
 	public Long getUsers() {
 		return users;
+	}
+	public Long getReadonlyUsers() {
+		return readonlyUsers;
 	}
 	public Long getAssets() {
 		return assets;

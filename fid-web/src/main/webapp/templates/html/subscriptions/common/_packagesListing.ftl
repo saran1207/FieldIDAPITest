@@ -135,10 +135,10 @@
 		</tr>
 		
 		<tr>
-			<td class="description"><@s.text name="label.partner_center"/></td>
+			<td class="description"><@s.text name="label.read_only_users"/></td>
 			<#list packages as package>
 				<td <@columnClass package/>>
-					<#if package.includes('ReadOnlyUser') >
+					<#if package.readonlyUsers == -1 >
 						<img src="<@s.url value="/images/icon_check.gif"/>" alt="<@s.text name="label.x"/>"/>
 					</#if>
 				</td>

@@ -68,6 +68,10 @@ public class SignUpPackage {
 	public Long getUsers() {
 		return signPackageDetails.getUsers();
 	}
+
+	public Long getReadonlyUsers() {
+		return signPackageDetails.getReadonlyUsers();
+	}
 	
 	public boolean isPreferred() {
 		return signPackageDetails.isPreferred();

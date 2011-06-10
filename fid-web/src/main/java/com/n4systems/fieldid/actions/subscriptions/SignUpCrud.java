@@ -3,7 +3,6 @@ package com.n4systems.fieldid.actions.subscriptions;
 import java.util.List;
 import java.util.SortedSet;
 
-import com.n4systems.services.limiters.TenantLimitService;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -23,9 +22,9 @@ import com.n4systems.model.signuppackage.SignUpPackage;
 import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
-import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIDMultiTransactionManager;
 import com.n4systems.persistence.MultiTransactionManager;
+import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PriceCheckResponse;

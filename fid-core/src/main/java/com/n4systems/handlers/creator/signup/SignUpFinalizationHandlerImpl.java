@@ -2,7 +2,6 @@ package com.n4systems.handlers.creator.signup;
 
 import java.util.Set;
 
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
@@ -16,8 +15,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.subscription.SignUpTenantResponse;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 
 public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler {
 
@@ -43,14 +40,12 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 		
 	}
 
-	
 	public void finalizeSignUp(Transaction transaction) {
 		guards();
 		
 		linkTenants(transaction);
 		applyChangesToPlaceHolders(transaction);
 	}
-
 
 	private void applyChangesToPlaceHolders(Transaction transaction) {
 		processExtendedFeatures(transaction);
@@ -59,11 +54,6 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 		saveChanges(transaction);
 	}
 
-	private ConfigContext getConfigContext() {
-		return ConfigContext.getCurrentContext();
-	}
-
-
 	private void processLimits(Transaction transaction) {
 		
 		limitResolver.withPromoCode(accountInformation.getPromoCode())
@@ -71,6 +61,7 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 		TenantLimit limits = limitResolver.resolve(transaction);
 		
 		limits.setUsers(new Long(accountInformation.getNumberOfUsers()));
+		limits.setReadonlyUsers(accountInformation.getSignUpPackage().getReadonlyUsers());
 		getPrimaryOrg().setLimits(limits);
 	}
 	
