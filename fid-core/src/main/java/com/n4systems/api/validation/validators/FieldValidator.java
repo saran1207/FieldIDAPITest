@@ -34,6 +34,7 @@ public interface FieldValidator {
 	public static final String NoAssetFoundValidationFail = "Could not find an asset matching the identifier '%s' for the field '%s'.";
 	public static final String MultipleAssetFoundValidationFail = "Multiple assets have been found matching the identifier '%s' for the field '%s'.";
 	public static final String AssociatedEventTypeValidationFail = "The event type '%s' is not allowed for the asset type '%s'.";
+	public static final String OrgWithNameNotFoundValidationFail = "The organization with name '%s' was not found.";
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, ExportField field, Map<String, Object> validationContext);
 }

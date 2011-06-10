@@ -10,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
@@ -19,6 +20,7 @@ import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.security.UserSecurityFilter;
+import com.n4systems.model.utils.GlobalID;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.EncryptionUtility;
@@ -28,7 +30,7 @@ import com.n4systems.util.timezone.CountryList;
 
 @Entity
 @Table(name = "users")
-public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User> {
+public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User>, Exportable {
 	private static final long serialVersionUID = 1L;
 	public static final int REFERRAL_KEY_LENGTH = 10;
 	
@@ -36,6 +38,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		return new SecurityDefiner(User.class);
 	}
 	
+	private String globalId;
 	private String userID;
 	private String firstName;
 	private String lastName;
@@ -47,7 +50,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private String referralKey;
 	private String resetPasswordKey;
 	private String hashSecurityCardNumber;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private UserType userType=UserType.ALL;
@@ -71,11 +74,18 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		onChange();
 	}
 
+	protected void generateGlobalIdIfNull() {
+		if (globalId == null) {
+			globalId = GlobalID.getId();
+		}
+	}
+	
 	private void onChange() {
 		trimNames();
 		generateReferralKeyIfNull();
-	}
-
+		generateGlobalIdIfNull();		
+	}		
+	
 	private void trimNames() {
 		this.userID = (userID != null) ? userID.trim() : null;
 		this.firstName = (firstName != null) ? firstName.trim() : null;
@@ -248,6 +258,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		return (this.hashSecurityCardNumber.equals(hashSecurityCardNumber(rfidNumber)));
 	}
 
+	@Override
 	public String getDisplayName() {
 		return getUserLabel();
 	}
@@ -269,6 +280,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		return EncryptionUtility.getSHA1HexHash(plainTextPassword);
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof User) {
 			return equals((User) obj);
@@ -298,6 +310,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		return CountryList.getInstance().getRegionByFullId(timeZoneID).getTimeZone();
 	}
 
+	@Override
 	public boolean isNew() {
 		return (getId() == null);
 	}
@@ -325,6 +338,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	}
 	
 	
+	@Override
 	public User enhance(SecurityLevel level) {
 		User enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		return enhanced;
@@ -340,6 +354,16 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
 	public UserType getUserType() {
 		return userType;
+	}
+
+	@Override
+	public void setGlobalId(String globalId) {
+		this.globalId = globalId;
+	}
+
+	@Override
+	public String getGlobalId() {
+		return globalId;
 	}
 
 }

@@ -13,6 +13,7 @@ import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
 import com.n4systems.model.downloadlink.ContentType;
+import com.n4systems.model.utils.GlobalID;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
 
@@ -32,7 +33,10 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 		view.setFirstName(getText("example.customer.first.name"));
 		view.setLastName(getText("example.customer.last.name"));
 		view.setOrganization(getUser().getOwner().getName());
-		view.setUserName(getUser().getUserLabel());  // FIXME DD : which field should this be? ask matt/mark 
+		view.setPassword("pw"+GlobalID.getId());
+		view.setUserName(getUser().getUserID());
+		
+		// note : only populate required fields...leave the other ones blank.
 		
 		return view;
 	}

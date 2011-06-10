@@ -120,6 +120,8 @@ import com.n4systems.tools.Pager;
  * Provides simple access to creation of loaders.
  */
 public class LoaderFactory implements Serializable {
+	private static final long serialVersionUID = 5454994648412210255L;
+	
 	private final SecurityFilter filter;
 
 	/*

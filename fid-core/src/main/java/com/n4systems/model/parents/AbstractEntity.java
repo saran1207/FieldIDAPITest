@@ -11,7 +11,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.HasModifiedBy;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -78,11 +77,13 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		this.modified = dateModified;
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public User getModifiedBy() {
 		return modifiedBy;
 	}
 
+	@Override
 	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
@@ -98,5 +99,6 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
-    }
+    }    
+    
 }
