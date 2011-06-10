@@ -98,9 +98,12 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	}
 
 	public boolean isPlansAndPricingAvailable() {
-		return primaryOrg.isPlansAndPricingAvailable();
+		if (!isReadOnlyUserEnabled() || primaryOrg.isPlansAndPricingAvailable()) {
+			return true;
+		}
+		return false;
 	}
-
+	
 	public boolean isAdvancedLocationEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation);
 	}

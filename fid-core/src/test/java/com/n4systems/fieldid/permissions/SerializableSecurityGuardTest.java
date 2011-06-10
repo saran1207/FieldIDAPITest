@@ -98,7 +98,7 @@ public class SerializableSecurityGuardTest {
 	@Test
 	public void should_show_that_plans_and_pricing_is_not_available_when_the_primary_org_does_has_the_partner_center() throws Exception {
 		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().build();
-		
+		primaryOrg.getLimits().setReadonlyUsers(-1L);
 		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
 		
 		assertTrue(!sut.isPlansAndPricingAvailable());
