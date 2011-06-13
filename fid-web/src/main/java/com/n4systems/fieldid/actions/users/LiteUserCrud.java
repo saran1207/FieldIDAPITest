@@ -11,10 +11,10 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.security.Permissions;
+import com.n4systems.security.UserType;
 import com.n4systems.util.BitField;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.UserType;
 
 public class LiteUserCrud extends UserCrud {
 

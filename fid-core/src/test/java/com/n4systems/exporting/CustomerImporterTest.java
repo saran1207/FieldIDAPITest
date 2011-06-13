@@ -1,7 +1,12 @@
 package com.n4systems.exporting;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.anyInt;
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -132,7 +137,7 @@ public class CustomerImporterTest {
 		
 		CustomerImporter importer = new CustomerImporter(null, null, orgSaver, custConverter, divConverter) {
 			@Override
-			protected List<ValidationResult> validateAllViews() {
+			protected List<ValidationResult> validateAllViewFields() {
 				return Collections.EMPTY_LIST;
 			}
 

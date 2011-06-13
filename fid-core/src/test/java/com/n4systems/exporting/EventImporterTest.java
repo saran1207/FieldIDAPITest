@@ -91,7 +91,7 @@ public class EventImporterTest {
 				return null;
 			}
 			
-			protected List<ValidationResult> validateAllViews() {
+			protected List<ValidationResult> validateAllViewFields() {
 				return new ArrayList<ValidationResult>();
 			}
 		};

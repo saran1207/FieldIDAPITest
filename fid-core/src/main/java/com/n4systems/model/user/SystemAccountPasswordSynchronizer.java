@@ -7,8 +7,8 @@ import com.n4systems.ejb.ConfigManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.security.PasswordComplexityChecker;
 import com.n4systems.security.PasswordValidator;
+import com.n4systems.security.UserType;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.UserType;
 
 public class SystemAccountPasswordSynchronizer {
 	private final PersistenceManager pm;

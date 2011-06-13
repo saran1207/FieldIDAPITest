@@ -19,9 +19,9 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
+import com.n4systems.security.UserType;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.UserType;
 
 public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implements UserManager {
 

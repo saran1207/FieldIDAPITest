@@ -12,7 +12,7 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.UserType;
+import com.n4systems.security.UserType;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class ReadOnlyUserCrud extends UserCrud {

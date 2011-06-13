@@ -4,7 +4,7 @@ package com.n4systems.model.builders;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.UserType;
+import com.n4systems.security.UserType;
 
 public class UserBuilder extends BaseBuilder<User> {
 

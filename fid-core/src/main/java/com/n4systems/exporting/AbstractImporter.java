@@ -43,10 +43,17 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 	public List<ValidationResult> readAndValidate() throws IOException, ParseException, MarshalingException {
 		if (views == null) {
 			views = readAllViews();
-		} 
-		return validateAllViews();
+		}
+		List<ValidationResult> results = validateAllViews(views);
+		results.addAll(validateAllViewFields());
+		return results;
 	}
 	
+	protected List<ValidationResult> validateAllViews(List<V> views) {
+		// your chance here to check the collection at a higher level...field level will be done in validateAllViewFields().
+		return new ArrayList<ValidationResult>();
+	}
+
 	@Override
 	public int runImport(Transaction transaction) throws ImportException {
 		if (views == null) {
@@ -75,7 +82,7 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 		return currentRow;
 	}
 	
-	protected List<ValidationResult> validateAllViews() {
+	protected List<ValidationResult> validateAllViewFields() {
 		List<ValidationResult> failedValidationResults = new ArrayList<ValidationResult>();
 		for (int i = 0; i < views.size(); i++) {
 			failedValidationResults.addAll(validator.validate(views.get(i), i + FIRST_DATA_ROW));

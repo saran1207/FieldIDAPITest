@@ -14,7 +14,7 @@ import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
 import com.n4systems.fieldid.utils.SetupWizardFirstTimeInterceptor;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.model.user.User;
-import com.n4systems.util.UserType;
+import com.n4systems.security.UserType;
 
 public class SetupWizardFirstTimeInterceptorTest {
 

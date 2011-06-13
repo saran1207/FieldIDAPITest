@@ -11,9 +11,9 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
+import com.n4systems.security.UserType;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.UserType;
 
 public class AccountPlaceHolderCreateHandlerImpl implements AccountPlaceHolderCreateHandler {
 

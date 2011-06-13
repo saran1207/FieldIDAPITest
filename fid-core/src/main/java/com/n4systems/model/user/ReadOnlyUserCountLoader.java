@@ -10,9 +10,9 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.Loader;
+import com.n4systems.security.UserType;
 import com.n4systems.services.limiters.LimitLoader;
 import com.n4systems.services.limiters.LimitType;
-import com.n4systems.util.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 

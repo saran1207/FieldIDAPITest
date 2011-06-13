@@ -23,9 +23,9 @@ import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.utils.GlobalID;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
+import com.n4systems.security.UserType;
 import com.n4systems.tools.EncryptionUtility;
 import com.n4systems.util.RandomString;
-import com.n4systems.util.UserType;
 import com.n4systems.util.timezone.CountryList;
 
 @Entity
@@ -57,6 +57,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	
 	private boolean registered = false;
 	
+	// TODO DD : refactor this to use PermissionType.
 	@Column(name="permissions", nullable=false)
 	private int permissions = Permissions.NO_PERMISSIONS;
 	

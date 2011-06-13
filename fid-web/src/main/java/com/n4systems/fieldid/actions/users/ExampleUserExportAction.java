@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import org.apache.log4j.Logger;
 
 import com.n4systems.api.model.UserView;
+import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
 import com.n4systems.exporting.io.ExcelMapWriter;
@@ -16,6 +17,7 @@ import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.utils.GlobalID;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.UserType;
 
 @SuppressWarnings("serial")
 public class ExampleUserExportAction extends AbstractDownloadAction {
@@ -33,9 +35,11 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 		view.setFirstName(getText("example.customer.first.name"));
 		view.setLastName(getText("example.customer.last.name"));
 		view.setOrganization(getUser().getOwner().getName());
-		view.setPassword("pw"+GlobalID.getId());
+		view.setAssignPassword(YNField.Y.toString());
+		view.setPassword("PW-"+GlobalID.getId());
 		view.setUserName(getUser().getUserID());
-		
+		// TODO DD : need to use consistent terms....one of AccountType or UserType. not sure which one is "gooder".
+		view.setAccountType(UserType.FULL.getLabel());
 		// note : only populate required fields...leave the other ones blank.
 		
 		return view;

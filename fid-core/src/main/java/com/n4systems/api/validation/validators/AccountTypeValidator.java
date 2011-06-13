@@ -6,6 +6,7 @@ import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.exporting.beanutils.ExportField;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.security.UserType;
 
 public class AccountTypeValidator implements FieldValidator {
 
@@ -16,36 +17,8 @@ public class AccountTypeValidator implements FieldValidator {
 			return ValidationResult.pass();
 		}
 				
-		AccountType type = AccountType.valueFromName(typeString);
+		UserType type = UserType.valueFromLabel(typeString);  
 		return type==null ? ValidationResult.fail("invalid account type " + fieldValue) : ValidationResult.pass();				
 	}
-		
-	
-	// TODO DD : where should this enum live?   is it ok to have inner class? probably not. 
-	enum AccountType {
-		Full("Full"), Lite("Lite"), ReadOnly("Read-Only");
-		
-		private final String name;
-
-		 AccountType(String name) { 
-			this.name=name;
-		}
-	
-		public String getName() {
-			return name;
-		}
-		
-		public static AccountType valueFromName(String name) {
-			if (name==null) { 
-				return null;
-			}
-			for (AccountType type:values()) { 
-				if(name.equals(type.getName())) {
-					return type;
-				}
-			}
-			return null;
-		}
-	}	
 
 }

@@ -3,7 +3,7 @@ package com.n4systems.fieldid.actions.users;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.security.Permissions;
-import com.n4systems.util.UserType;
+import com.n4systems.security.UserType;
 
 public class UserUpgradeCrud extends UserCrud{
 

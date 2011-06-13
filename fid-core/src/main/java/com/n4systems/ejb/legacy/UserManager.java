@@ -12,9 +12,9 @@ import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.security.UserType;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.UserType;
 
 public interface UserManager {
 	

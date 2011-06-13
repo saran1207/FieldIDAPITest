@@ -3,7 +3,6 @@ package com.n4systems.security;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.user.User;
 import com.n4systems.util.BitField;
@@ -11,20 +10,17 @@ import com.n4systems.util.persistence.SimpleListable;
 
 
 public class Permissions {
-	
-	
-	
+			
 	// Primary permissions
-	public static final int Tag 				= 1 << 0;
-	public static final int ManageSystemConfig	= 1 << 1;
-	public static final int ManageSystemUsers	= 1 << 2;
-	public static final int ManageEndUsers		= 1 << 3;
-	public static final int CreateEvent         = 1 << 4;
-	public static final int EditEvent           = 1 << 5;
-	public static final int ManageJobs			= 1 << 6;
-	public static final int ManageSafetyNetwork = 1 << 7;
-	public static final int AccessWebStore		= 1 << 8;
-	// NOTE: We can have a most 30 permissions (1 << 30) since we're using ints
+	public static final int Tag 				= 1<<0;
+	public static final int ManageSystemConfig	= 1<<1;
+	public static final int ManageSystemUsers	= 1<<2;
+	public static final int ManageEndUsers		= 1<<3;
+	public static final int CreateEvent         = 1<<4;
+	public static final int EditEvent           = 1<<5;
+	public static final int ManageJobs			= 1<<6;
+	public static final int ManageSafetyNetwork = 1<<7;
+	public static final int AccessWebStore		= 1<<8;
 	
 	// Composite permissions
 	public static final int NO_PERMISSIONS 		= 0;
@@ -40,44 +36,16 @@ public class Permissions {
 	private static final int[] visibleSytemUserPermissions = { Tag, ManageSystemConfig, ManageSystemUsers, ManageEndUsers, CreateEvent, EditEvent, ManageJobs, ManageSafetyNetwork, AccessWebStore };
 
 	private static final int[] visibleLiteUserPermissions = { CreateEvent, EditEvent };
+	
+	private static final int[] visibleReadOnlyPermissions = {};
 
 	
 	/**
 	 * @param permission a Primary permission (ie not composite)
 	 * @return The label for a primary permission
 	 */
-	public static String getLabel(int permission) {
-		String label = null;
-		switch (permission) {
-			case Tag:
-				label = "label.identify_permission";
-				break;
-			case ManageSystemConfig:
-				label = "label.managesystemconfig_permission";;
-				break;
-			case ManageSystemUsers:
-				label = "label.managesystemusers_permission";;
-				break;
-			case ManageEndUsers:
-				label = "label.managecustomers_permission";;
-				break;
-			case CreateEvent:
-				label = "label.createevent_permission";;
-				break;
-			case EditEvent:
-				label = "label.editevent_permission";;
-				break;
-			case ManageJobs:
-				label = "label.managejobs_permission";;
-				break;
-			case ManageSafetyNetwork:
-				label = "label.managesafetynetwork_permission";
-				break;
-			case AccessWebStore:
-				label = "label.accesswebstore_permission";
-				break;
-		}
-		return label;
+	public static String getLabel(int permissionValue) {
+		return PermissionType.getLabelForPermissionValue(permissionValue);
 	}
 	
 	/**
@@ -122,6 +90,14 @@ public class Permissions {
 	
 	public static int[] getVisibleSystemUserPermissions() {
 		return visibleSytemUserPermissions;
+	}
+	
+	public static int[] getVisibleLiteUserPermissions() {
+		return visibleLiteUserPermissions;
+	}
+	
+	public static int[] getVisibleReadOnlyPermissions() {
+		return visibleReadOnlyPermissions;
 	}
 	
 	private static List<Listable<Integer>> createPermissionDisplayList(int ... perms) {
@@ -191,4 +167,5 @@ public class Permissions {
 		}
 		return filteredUsers;
 	}
+
 }

@@ -23,7 +23,6 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setFirstName(from.getLastName());
 		BaseOrg baseOrg = orgLoader.setOrganizationName(from.getOrganization()).load();
 		to.setOwner(baseOrg);
-		// FIXME DD : need to add permissions etc... here.
 	}
 
 	@Override

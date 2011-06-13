@@ -11,7 +11,7 @@ import com.n4systems.fieldid.selenium.datatypes.CustomerUser;
 import com.n4systems.fieldid.selenium.datatypes.EmployeeUser;
 import com.n4systems.fieldid.selenium.datatypes.SystemUser;
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.n4systems.util.UserType;
+import com.n4systems.security.UserType;
 import com.thoughtworks.selenium.Selenium;
 
 public class ManageUsersPage extends FieldIDPage {

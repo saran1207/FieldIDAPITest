@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.security.UserType;
 import com.n4systems.util.StringListingPair;
 import com.n4systems.util.UserGroup;
-import com.n4systems.util.UserType;
 
 public class FilterUserTypesByGroupAction extends AbstractAction {
 

@@ -13,7 +13,7 @@ import com.n4systems.exceptions.EmployeeAlreadyAttachedException;
 import com.n4systems.exceptions.NonEmployeeUserException;
 import com.n4systems.model.Project;
 import com.n4systems.model.user.User;
-import com.n4systems.util.UserType;
+import com.n4systems.security.UserType;
 
 public class JobResourceServiceTest {
 	private final User modifier = aUser().build();

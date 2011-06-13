@@ -15,7 +15,7 @@ public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
 	protected String customerName;
 	protected String divisionName;
 	
-	public OrgByNameLoader(SecurityFilter filter, TenantFinder tenantFinder) {
+	private OrgByNameLoader(SecurityFilter filter, TenantFinder tenantFinder) {
 		super(filter);
 		this.tenantFinder = tenantFinder;
 	}

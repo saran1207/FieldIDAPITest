@@ -105,7 +105,7 @@ public class ImporterFactory {
 	}
 
 	public UserImporter createUserImporter(MapReader reader) {
-		return new UserImporter(reader, createViewValidator(), saverFactory.createUserSaver(), createUserToModelConverter());	
+		return new UserImporter(reader, createViewValidator(), saverFactory.createUserSaver(), createUserToModelConverter(), loaderFactory.createOrgByNameLoader());	
 	}
 	
 	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {

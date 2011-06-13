@@ -19,10 +19,10 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.security.Permissions;
+import com.n4systems.security.UserType;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
-import com.n4systems.util.UserType;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})

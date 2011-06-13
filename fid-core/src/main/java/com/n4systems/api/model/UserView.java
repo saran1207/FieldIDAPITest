@@ -6,91 +6,119 @@ import com.n4systems.api.validation.validators.ExternalOrgGlobalIdValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OrgNameValidator;
 import com.n4systems.api.validation.validators.PasswordValidator;
+import com.n4systems.api.validation.validators.PermissionValidator;
+import com.n4systems.api.validation.validators.YNValidator;
 import com.n4systems.exporting.beanutils.ExportField;
 
 public class UserView extends ExternalModelView {
-	private static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 1L;
+
+	public static final String USER_NAME_FIELD = "User Name";
+	public static final String MANAGE_JOBS_FIELD = "Manage Jobs (Y/N)";
+	public static final String MANAGE_SAFETY_NETWORK_FIELD = "Manage Safety Network (Y/N)";
+	public static final String ACCESS_WEB_STORE_FIELD = "Access Web Store (Y/N)";
+	public static final String SYSTEM_ID_FIELD = "System ID";
+	public static final String EDIT_EVENTS_FIELD = "Edit Events (Y/N)";
+	public static final String CREATE_EVENTS_FIELD = "Create Events (Y/N)";
+	public static final String MANAGE_JOB_SITES_FIELD = "Manage Job Sites (Y/N)";
+	public static final String MANAGE_SYSTEM_USERS_FIELD = "Manage System Users (Y/N)";
+	public static final String MANAGE_SYSTEM_CONFIGURATION_FIELD = "Manage System Configuration (Y/N)";
+	public static final String IDENTIFY_ASSETS_FIELD = "Identify Assets";
+	public static final String TIME_ZONE_FIELD = "Time Zone";
+	public static final String COUNTRY_FIELD = "Country";
+	public static final String SEND_WELCOME_EMAIL_FIELD = "Send Welcome Email (Y/N)";
+	public static final String SECURITY_RFID_NUMBER_FIELD = "Security RFID Number";
+	public static final String POSTITION_FIELD = "Postition";
+	public static final String INITIALS_FIELD = "Initials";
+	public static final String DIVISION_FIELD = "Division";
+	public static final String ACCOUNT_TYPE_FIELD = "Account Type";
+	public static final String PASSWORD_FIELD = "Password";
+	public static final String ASSIGN_PASSWORD_FIELD = "Assign Password";
+	public static final String LAST_NAME_FIELD = "Last Name";
+	public static final String FIRST_NAME_FIELD = "First Name";
+	public static final String EMAIL_ADDRESS_FIELD = "Email Address";
+	public static final String ORGANIZATION_FIELD = "Organization";
+
+	
 	
 	public static UserView newUser() {
 		UserView view = new UserView();		
 		return view;
 	}	
 	
-	@ExportField(title="Organization", order = 0, validators = {OrgNameValidator.class}) 
+	@ExportField(title=ORGANIZATION_FIELD, order = 0, validators = {OrgNameValidator.class}) 
 	private String organization;
 	
-	@ExportField(title="Email Address", order = 100, validators = {EmailValidator.class})
+	@ExportField(title=EMAIL_ADDRESS_FIELD, order = 100, validators = {NotNullValidator.class, EmailValidator.class})
 	private String contactEmail;
 	
-	@ExportField(title="First Name", order = 200, validators = {NotNullValidator.class})
+	@ExportField(title=FIRST_NAME_FIELD, order = 200, validators = {NotNullValidator.class})
 	private String firstName;
 
-	@ExportField(title="Last Name", order = 250, validators = {NotNullValidator.class})
+	@ExportField(title=LAST_NAME_FIELD, order = 250, validators = {NotNullValidator.class})
 	private String lastName;
 
-	@ExportField(title="Assign Password", order = 300, validators = {})
+	@ExportField(title=ASSIGN_PASSWORD_FIELD, order = 300, validators = {YNValidator.class})
 	private String assignPassword;
 	
-	@ExportField(title="Password", order = 310, validators = {PasswordValidator.class})  
+	@ExportField(title=PASSWORD_FIELD, order = 305, validators = {PasswordValidator.class})
+	private String password;
+	
+	@ExportField(title=USER_NAME_FIELD, order = 325, validators = {NotNullValidator.class})  
 	private String userName;
 
-	// FIXME DD : need to provide permission validation...not sure what that entails... 
-	
-	@ExportField(title="Account Type", order = 350, validators = {AccountTypeValidator.class})
+	@ExportField(title=ACCOUNT_TYPE_FIELD, order = 350, validators = {NotNullValidator.class, AccountTypeValidator.class})
 	private String accountType;
 	
-	@ExportField(title="Division", order = 400, validators = {})
+	@ExportField(title=DIVISION_FIELD, order = 400, validators = {})
 	private String division;
 	
-	@ExportField(title="Initials", order = 410, validators = {})
+	@ExportField(title=INITIALS_FIELD, order = 410, validators = {})
 	private String initials;
 	
-	@ExportField(title="Postition", order = 450, validators = {})
+	@ExportField(title=POSTITION_FIELD, order = 450, validators = {})
 	private String position;
-	
-	@ExportField(title="Password", order = 470, validators = {})
-	private String password;
 
-	@ExportField(title="Security RFID Number", order = 500, validators = {})
+	@ExportField(title=SECURITY_RFID_NUMBER_FIELD, order = 500, validators = {})
 	private String securityRfidNumber;
 	
-	@ExportField(title="Send Welcome Email (Y/N)", order = 520, validators = {})		
+	@ExportField(title=SEND_WELCOME_EMAIL_FIELD, order = 520, validators = {YNValidator.class})		
 	private String sendWelcomeEmail;
 	
-	@ExportField(title="Country", order = 530, validators = {})
+	@ExportField(title=COUNTRY_FIELD, order = 530, validators = {})
 	private String country;
 	
-	@ExportField(title="Time Zone", order = 550, validators = {})
+	@ExportField(title=TIME_ZONE_FIELD, order = 550, validators = {})
 	private String timeZone;
 	
-	@ExportField(title="Identify Assets", order = 560, validators = {})
+	@ExportField(title=IDENTIFY_ASSETS_FIELD, order = 560, validators = {})
 	private String identifyAssets;
 	
-	@ExportField(title="Manage System Configuration (Y/N)", order = 570, validators = {})
+	@ExportField(title=MANAGE_SYSTEM_CONFIGURATION_FIELD, order = 570, validators = {PermissionValidator.class})
 	private String manageSystemConfiguration;
 	
-	@ExportField(title="Manage System Users (Y/N)", order = 580, validators = {})
+	@ExportField(title=MANAGE_SYSTEM_USERS_FIELD, order = 580, validators = {PermissionValidator.class})
 	private String manageSystemUsers;
 	
-	@ExportField(title="Manage Job Sites (Y/N)", order = 590, validators = {})
+	@ExportField(title=MANAGE_JOB_SITES_FIELD, order = 590, validators = {PermissionValidator.class})
 	private String manageJobSites;
 	
-	@ExportField(title=" Create Events (Y/N)", order = 600, validators = {})
+	@ExportField(title=CREATE_EVENTS_FIELD, order = 600, validators = {PermissionValidator.class})
 	private String createEvents;
 	
-	@ExportField(title="Edit Events (Y/N)", order = 610, validators = {})
+	@ExportField(title=EDIT_EVENTS_FIELD, order = 610, validators = {PermissionValidator.class})
 	private String editEvents;
 	
-	@ExportField(title="Manage Jobs (Y/N)", order = 620, validators = {})
+	@ExportField(title=MANAGE_JOBS_FIELD, order = 620, validators = {PermissionValidator.class})
 	private String manageJobs;
 	
-	@ExportField(title="Manage Safety Network (Y/N)", order = 630, validators = {})
+	@ExportField(title=MANAGE_SAFETY_NETWORK_FIELD, order = 630, validators = {PermissionValidator.class})
 	private String manageSafetyNetwork;
 	
-	@ExportField(title="Access Web Store (Y/N)", order = 640, validators = {})
+	@ExportField(title=ACCESS_WEB_STORE_FIELD, order = 640, validators = {PermissionValidator.class})
 	private String accessWebStore;
 	
-	@ExportField(title="System ID", order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
+	@ExportField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
 	private String globalId;	
 	
 	public String getOrganization() {

@@ -12,6 +12,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UserPermissionFilter {
+	// TODO DD : use PermissionType enum instead of ints  (part of large PermissionType refactoring). 
 	int[] userRequiresOneOf() default {};
 
 	boolean open() default false;

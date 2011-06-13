@@ -39,8 +39,9 @@ public class ValidationResult {
 		return row;
 	}
 
-	public void setRow(int row) {
+	public ValidationResult setRow(int row) {
 		this.row = row;
+		return this;
 	}
 	
 }
