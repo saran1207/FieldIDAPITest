@@ -5,6 +5,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -28,7 +29,7 @@ public class AssetsByNetworkIdLoader extends ListLoader<Asset> {
 	
 	@Override
 	public List<Asset> load(EntityManager em, SecurityFilter filter) {
-        QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, filter);
+        QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, new TenantOnlySecurityFilter(filter));
 		connectedTenantsQuery.setSimpleSelect("connectedOrg.tenant", true);
 
         SubSelectInClause insideSafetyNetworkSubClause = new SubSelectInClause("owner.tenant", connectedTenantsQuery);
