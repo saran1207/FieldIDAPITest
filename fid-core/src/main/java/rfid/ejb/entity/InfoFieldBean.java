@@ -29,7 +29,11 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	private static final long serialVersionUID = 1L;
 	private static final Long DEFUALT_WEIGHT = 0L;
 	public enum InfoFieldType { 
-		TextField( "Text Field" ), SelectBox( "Select Box" ), ComboBox( "Combo Box" ),	UnitOfMeasure( "Unit Of Measure" );
+		TextField( "Text Field" ), 
+		SelectBox( "Select Box" ), 
+		ComboBox( "Combo Box" ),	
+		UnitOfMeasure( "Unit Of Measure" ),
+		DateField( "Date Field");
 		
 		private String label;
 		
@@ -50,6 +54,7 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	public final static String SELECTBOX_FIELD_TYPE = "selectbox";
 	public final static String COMBOBOX_FIELD_TYPE = "combobox";
 	public final static String UNIT_OF_MEASURE = "unitofmeasure";
+	public final static String DATEFIELD_FIELD_TYPE = "datefield";
 
 	@Column( nullable=false )
 	private String name;

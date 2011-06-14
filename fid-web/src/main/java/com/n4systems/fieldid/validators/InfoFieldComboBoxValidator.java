@@ -22,7 +22,8 @@ public class InfoFieldComboBoxValidator extends FieldValidatorSupport {
 				
 				if( ( infoField != null ) && 
 						!( infoField.getFieldType().equals(InfoFieldBean.InfoFieldType.TextField.name() ) 
-								||	infoField.getFieldType().equals(InfoFieldBean.InfoFieldType.UnitOfMeasure.name() ) ) 
+								||	infoField.getFieldType().equals(InfoFieldBean.InfoFieldType.UnitOfMeasure.name() )
+								||	infoField.getFieldType().equals(InfoFieldBean.InfoFieldType.DateField.name() ) ) 
 						&& !infoField.isDeleted() ) {
 					
 					int infoOptionsOnThisInfoField = 0;

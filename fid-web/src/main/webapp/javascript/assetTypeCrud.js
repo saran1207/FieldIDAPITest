@@ -29,7 +29,9 @@ function openOptions( id ) {
 
 
 function changeFieldType( select ) {
-	if( select.options[ select.selectedIndex ].value == "TextField" || select.options[ select.selectedIndex ].value == "UnitOfMeasure" ) {
+	if( select.options[ select.selectedIndex ].value == "TextField" 
+		|| select.options[ select.selectedIndex ].value == "UnitOfMeasure"
+		|| select.options[ select.selectedIndex ].value == "DateField" ) {
 		showOptionalElements(select.parentNode.parentNode);
 		hideInfoOptions( select.parentNode.parentNode );
 	} else {

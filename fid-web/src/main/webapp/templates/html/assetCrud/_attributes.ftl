@@ -37,7 +37,7 @@
 		</@s.else>
 		
 		<#if !infoField.retired || infoOptionIsNull == false>
-			<div class="infoSet" infoFieldName="${infoField.name?j_string}">		
+			<div class="infoSet" infoFieldName="${infoField.name?j_string}" <#if infoField.fieldType == "datefield"> id="dateAttribute"</#if> >		
 				<@s.hidden name="${prefix}InfoOptions[${stat.index}].infoFieldId"  value="${infoField.uniqueID}"/>
 				
 				<#if infoField.retired >
@@ -92,6 +92,10 @@
 								</div>
 							</div>
 						</#if>
+					</#if>
+					
+					<#if infoField.fieldType == "datefield" >
+						<@s.datetimepicker theme="fieldid" id="${infoField.uniqueID}" name="${prefix}InfoOptions[${stat.index}].name" type="date"/>
 					</#if>
 				</#if>
 			</div>

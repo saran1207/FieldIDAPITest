@@ -43,6 +43,8 @@ public class InfoFieldInput {
 			} else {
 				fieldType = InfoFieldBean.InfoFieldType.TextField.name();
 			}
+		} else if( infoField.getFieldType().equals( InfoFieldBean.DATEFIELD_FIELD_TYPE  ) ){
+			fieldType = InfoFieldBean.InfoFieldType.DateField.name(); 
 		} 
 		required = infoField.isRequired();
 		deleted = false;
@@ -136,6 +138,10 @@ public class InfoFieldInput {
 				break;
 			case TextField:
 				field.setFieldType( InfoFieldBean.TEXTFIELD_FIELD_TYPE );
+				field.setUsingUnitOfMeasure( false );
+				break;
+			case DateField:
+				field.setFieldType( InfoFieldBean.DATEFIELD_FIELD_TYPE );
 				field.setUsingUnitOfMeasure( false );
 				break;
 		}

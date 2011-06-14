@@ -65,6 +65,9 @@ ${action.setPageType('asset_type', 'show')!}
 						<#case 'selectbox'>
 							<@s.text name="label.selectbox"/>
 						<#break >
+						<#case 'datefield'>
+							<@s.text name="label.datefield"/>
+						<#break >
 					</#switch>
 					
 				</label>
