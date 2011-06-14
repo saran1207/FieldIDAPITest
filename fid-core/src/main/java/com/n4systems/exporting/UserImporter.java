@@ -53,11 +53,11 @@ public class UserImporter extends AbstractImporter<UserView> {
 		Set<UserView> fullUsers = new HashSet<UserView>();
 		Set<UserView> readOnlyUsers = new HashSet<UserView>();		
 		
-		String orgName = null;
 		for (UserView userView:views) {
-			orgName = userView.getOrganization();
 			switch (UserType.valueFromLabel(userView.getAccountType())) {
 			case FULL:
+			case SYSTEM:
+			case ADMIN:
 				fullUsers.add(userView);
 				break;
 			case LITE:
@@ -66,6 +66,7 @@ public class UserImporter extends AbstractImporter<UserView> {
 			case READONLY:
 				readOnlyUsers.add(userView);
 				break;
+				
 			default: 
 				throw new IllegalStateException("unsupported user type being added");
 			}

@@ -17,6 +17,7 @@ public class PermissionValidator implements FieldValidator {
 	public static final Map<String, PermissionType> permissionsMap = new HashMap<String, PermissionType>();
 
 	static { 
+		permissionsMap.put(UserView.IDENTIFY_ASSETS_FIELD, PermissionType.Tag);
 		permissionsMap.put(UserView.MANAGE_SYSTEM_CONFIGURATION_FIELD, PermissionType.ManageSystemConfig);
 		permissionsMap.put(UserView.MANAGE_SYSTEM_USERS_FIELD, PermissionType.ManageSystemUsers);
 		permissionsMap.put(UserView.MANAGE_JOB_SITES_FIELD, PermissionType.ManageEndUsers);

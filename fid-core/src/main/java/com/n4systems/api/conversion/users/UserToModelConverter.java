@@ -22,7 +22,6 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		BaseOrg baseOrg = orgLoader.setOrganizationName(from.getOrganization()).load();
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
-		// FIXME DD : do i really need globalId & ExternalId???		
 		to.setGlobalId(from.getGlobalId());
 		to.setInitials(from.getInitials());
 		// FIMXE DD : implement permission setting...

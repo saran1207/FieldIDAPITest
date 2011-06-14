@@ -22,7 +22,7 @@ public class OrgNameValidator implements FieldValidator {
 			System.out.println(org.getDisplayName() + " " + org.getID());
 			return ValidationResult.pass();
 		} else {
-			System.out.println("org not found " + fieldName);
+			System.out.println("org not found " + fieldValue);
 			return ValidationResult.fail(OrgWithNameNotFoundValidationFail, fieldName);
 		}
 

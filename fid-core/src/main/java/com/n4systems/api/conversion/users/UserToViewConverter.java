@@ -18,7 +18,8 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 	public UserView toView(User model) throws ConversionException {
 		UserView view = new UserView();
 	
-		// TODO DD : ask what to do with securityRFID number & sendWelcomeEmail???
+		// TODO DD : ask what to do with sendWelcomeEmail???
+		view.setSecurityRfidNumber(model.getHashSecurityCardNumber());
 		view.setAccountType(model.getUserType().getLabel());
 		view.setContactEmail(model.getEmailAddress());
 		view.setOrganization(model.getOwner().getDisplayName());

@@ -93,7 +93,7 @@ public class UserView extends ExternalModelView {
 	@ExportField(title=TIME_ZONE_FIELD, order = 550, validators = {})
 	private String timeZone;
 	
-	@ExportField(title=IDENTIFY_ASSETS_FIELD, order = 560, validators = {})
+	@ExportField(title=IDENTIFY_ASSETS_FIELD, order = 560, validators = {PermissionValidator.class})
 	private String identifyAssets;
 	
 	@ExportField(title=MANAGE_SYSTEM_CONFIGURATION_FIELD, order = 570, validators = {PermissionValidator.class})
