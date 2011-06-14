@@ -22,7 +22,7 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setSecurityRfidNumber(model.getHashSecurityCardNumber());
 		view.setAccountType(model.getUserType().getLabel());
 		view.setContactEmail(model.getEmailAddress());
-		view.setOrganization(model.getOwner().getDisplayName());
+		view.setOrganization(model.getOwner().getPrimaryOrg().getDisplayName());
 		view.setDivision(model.getOwner().getDivisionOrg() == null ? "" : model.getOwner().getDivisionOrg().getDisplayName());
 		view.setFirstName(model.getFirstName());
 		view.setLastName(model.getLastName());

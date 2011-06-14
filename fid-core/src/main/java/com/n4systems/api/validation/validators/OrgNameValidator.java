@@ -23,7 +23,7 @@ public class OrgNameValidator implements FieldValidator {
 			return ValidationResult.pass();
 		} else {
 			System.out.println("org not found " + fieldValue);
-			return ValidationResult.fail(OrgWithNameNotFoundValidationFail, fieldName);
+			return ValidationResult.fail(OrgWithNameNotFoundValidationFail, fieldValue);
 		}
 
 	}

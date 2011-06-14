@@ -2,7 +2,7 @@ package com.n4systems.api.model;
 
 import com.n4systems.api.validation.validators.AccountTypeValidator;
 import com.n4systems.api.validation.validators.EmailValidator;
-import com.n4systems.api.validation.validators.ExternalOrgGlobalIdValidator;
+import com.n4systems.api.validation.validators.ExternalUserGlobalIdValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OrgNameValidator;
 import com.n4systems.api.validation.validators.PasswordValidator;
@@ -120,7 +120,7 @@ public class UserView extends ExternalModelView {
 	@ExportField(title=ACCESS_WEB_STORE_FIELD, order = 640, validators = {PermissionValidator.class})
 	private String accessWebStore;
 	
-	@ExportField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
+	@ExportField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})
 	private String globalId;	
 	
 	public String getOrganization() {

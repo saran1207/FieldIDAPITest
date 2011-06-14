@@ -104,7 +104,7 @@ public class UserImporter extends AbstractImporter<UserView> {
 
 	@Override
 	protected void importView(Transaction transaction, UserView view) throws ConversionException {
-		saver.save(converter.toModel(view, transaction));
+		saver.saveOrUpdate(converter.toModel(view, transaction));
 	}
 
 }
