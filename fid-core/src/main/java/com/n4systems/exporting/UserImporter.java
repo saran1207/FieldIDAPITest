@@ -11,13 +11,12 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.orgs.UserToModelConverter;
+import com.n4systems.api.conversion.users.UserToModelConverter;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.exporting.io.MapReader;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
@@ -71,19 +70,16 @@ public class UserImporter extends AbstractImporter<UserView> {
 				throw new IllegalStateException("unsupported user type being added");
 			}
 		}
-		BaseOrg org = orgByNameLoader.setOrganizationName(orgName).load();
-		if (org==null) { 
-			throw new IllegalStateException("organization not found when trying to import users : " + orgName ); 
-		}
-		ResourceLimit liteUsersLimit = TenantLimitService.getInstance().getLiteUsers(org.getTenant().getId());		
+		Long tenantId = orgByNameLoader.getTenantId();
+		ResourceLimit liteUsersLimit = TenantLimitService.getInstance().getLiteUsers(tenantId);		
 		if ( liteUsersLimit.getAvailable() < liteUsers.size() && liteUsers.size() > 0 ) {
 			results.add(ValidationResult.fail("You can not import more than " + liteUsersLimit.getAvailable() + " lite users. (Attempted to import " + liteUsers.size()+ ")").setRow(-1));
 		}
-		ResourceLimit readOnlyUsersLimit = TenantLimitService.getInstance().getReadonlyUsers(org.getTenant().getId());
+		ResourceLimit readOnlyUsersLimit = TenantLimitService.getInstance().getReadonlyUsers(tenantId);
 		if ( readOnlyUsersLimit.getAvailable() < readOnlyUsers.size() && readOnlyUsers.size() > 0 ) { 
 			results.add(ValidationResult.fail("you can not import more than " + readOnlyUsersLimit.getAvailable() + " read only users. (Attempted to import " + readOnlyUsers.size()+ ")").setRow(-1));
 		}
-		ResourceLimit fullUsersLimit = TenantLimitService.getInstance().getEmployeeUsers(org.getTenant().getId());
+		ResourceLimit fullUsersLimit = TenantLimitService.getInstance().getEmployeeUsers(tenantId);
 		if ( fullUsersLimit.getAvailable() < fullUsers.size() && fullUsers.size() > 0) { 
 			results.add(ValidationResult.fail("you can not import more than " + fullUsersLimit.getAvailable() + " employee (full) users. (Attempted to import " + fullUsers.size()+ ")").setRow(-1));
 		}

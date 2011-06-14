@@ -8,7 +8,9 @@ import com.n4systems.api.validation.validators.OrgNameValidator;
 import com.n4systems.api.validation.validators.PasswordValidator;
 import com.n4systems.api.validation.validators.PermissionValidator;
 import com.n4systems.api.validation.validators.YNValidator;
+import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.security.Permissions;
 
 public class UserView extends ExternalModelView {
 	public static final long serialVersionUID = 1L;
@@ -324,5 +326,18 @@ public class UserView extends ExternalModelView {
 		this.globalId = globalId;
 	}
 
+	public int getPermissions() {
+		// CAVEAT : this defines the permissions as defined in the excel columns but they aren't validated. 
+		int permissions = 0;
+		if (isManageSystemConfiguration()) {
+			permissions |= Permissions.ManageSystemConfig;		
+		}
+		// FIXME DD : do rest of permissions....
+		return permissions;
+	}
+
+	private boolean isManageSystemConfiguration() {
+		return YNField.Y.toString().equals(getManageSystemConfiguration());
+	}
 
 }

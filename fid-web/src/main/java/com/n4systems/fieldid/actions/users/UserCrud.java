@@ -25,11 +25,13 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserPaginatedLoader;
 import com.n4systems.model.user.UserSaver;
+import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
@@ -78,9 +80,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private final WelcomeMessage welcomeMessage = new WelcomeMessage();
 	private UploadedImage signature = new UploadedImage();
 	
-
 	protected List<ListingPair> litePermissions;
 	protected List<ListingPair> internalOrgList;
+
+	private String reportName;
+	private DownloadLink downloadLink;
+	
 	
 
 	protected UserCrud(UserManager userManager, PersistenceManager persistenceManager) {
@@ -179,6 +184,24 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return SUCCESS;
 	}
 	
+	@SkipValidation
+	public String doExport() {
+		try {
+			// FIXME DD : get proper report name.
+			reportName = getText("label.export_file.user");
+			downloadLink = getDownloadCoordinator().generateUserExport("userExport", getDownloadLinkUrl(), createUserListLoader(), getSecurityFilter());
+		} catch (RuntimeException e) {
+			logger.error("Unable to execute user export", e);
+			addFlashMessage(getText("error.export_failed.user"));
+			return ERROR;
+		}
+		return SUCCESS;
+	}
+	
+	private ListLoader<User> createUserListLoader() {
+		return getLoaderFactory().createUserListLoader();
+	}		
+
 	@SkipValidation
 	public String doSendWelcomeMessage() {
 		testUserEntity(true);
@@ -620,5 +643,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public void setSortDirection(String sortDirection) {
 		this.sortDirection = sortDirection;
 	}
-	
+
+	public DownloadLink getDownloadLink() {
+		return downloadLink;
+	}
+
+	public String getReportName() {
+		return reportName;
+	}		
 }

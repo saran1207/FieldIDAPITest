@@ -1,11 +1,12 @@
 package com.n4systems.exporting;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Event;
-import com.n4systems.model.Asset;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 
 public class ExporterFactory {
@@ -26,6 +27,10 @@ public class ExporterFactory {
 	
 	public EventExporter createEventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader) {
 		return new EventExporter(eventLoader, nextDateLoader);
+	}
+
+	public Exporter createUserExporter(ListLoader<User> userListLoader) {		 
+		return new UserExporter(userListLoader);
 	}
 	
 }

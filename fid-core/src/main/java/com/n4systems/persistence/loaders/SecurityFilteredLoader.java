@@ -18,4 +18,8 @@ abstract public class SecurityFilteredLoader<T> extends Loader<T> {
 	protected T load(EntityManager em) {
 		return load(em, filter);
 	}
+	
+	public Long getTenantId() { 
+		return filter.getTenantId();
+	}
 }

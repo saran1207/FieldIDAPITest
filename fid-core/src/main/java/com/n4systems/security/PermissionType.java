@@ -24,7 +24,7 @@ public enum PermissionType {
 	ALLEVENT(CreateEvent.getValue(), EditEvent.getValue() ),
 	;		
 		
-	private final int value;
+	private int value;
 	private String label;
 	
 	PermissionType(int...values) { 
@@ -32,10 +32,9 @@ public enum PermissionType {
 	}
 	
 	PermissionType(String label, int... values) {
-//		for (int value:values) { 
-//			this.value = this.value | (value);			
-//		}
-		this.value = 17;
+		for (int value:values) { 
+			this.value = this.value | (value);			
+		}
 		this.label = label;
 	}
 

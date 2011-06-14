@@ -110,9 +110,11 @@ import com.n4systems.model.taskconfig.TaskConfigLoader;
 import com.n4systems.model.tenant.PrimaryOrgsWithNameLikeLoader;
 import com.n4systems.model.tenant.SetupDataLastModDatesLoader;
 import com.n4systems.model.user.EmployeePaginatedLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByEmailLoader;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.model.user.UserFilteredLoader;
+import com.n4systems.model.user.UserListLoader;
 import com.n4systems.model.user.UserListableLoader;
 import com.n4systems.tools.Pager;
 
@@ -603,5 +605,9 @@ public class LoaderFactory implements Serializable {
     public CustomerOrgsWithNameLoader createCustomerOrgWithNameLoader() {
         return new CustomerOrgsWithNameLoader(filter);
     }
+
+	public ListLoader<User> createUserListLoader() {
+		return new UserListLoader(filter);
+	}
 
 }

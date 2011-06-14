@@ -9,6 +9,7 @@ import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.reporting.EventReportType;
@@ -79,6 +80,11 @@ public class DownloadTaskFactory {
 	
 	public AssetExportTask createAssetExportTask(DownloadLink link, String downloadUrl, ListLoader<Asset> productLoader) {
 		AssetExportTask task = new AssetExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createAssetExporter(productLoader));
+		return task;
+	}
+
+	public UserExportTask createUserExportTask(DownloadLink link, String downloadUrl, ListLoader<User> userListLoader) {
+		UserExportTask task = new UserExportTask(link, downloadUrl, linkSaver, createMailManager(), exporterFactory.createUserExporter(userListLoader));
 		return task;
 	}
 }

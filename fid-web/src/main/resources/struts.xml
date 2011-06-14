@@ -186,9 +186,7 @@
 		<action name="downloadExampleAutoAttributeExport" method="downloadExample" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction" />
 		<action name="downloadExampleAssetExport" method="downloadExample" class="com.n4systems.fieldid.actions.asset.AssetImportAction" />
 		<action name="downloadExampleEventExport" method="downloadExample" class="com.n4systems.fieldid.actions.event.EventImportAction" />
-		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
-
-		
+		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />		
 		<action name="downloadExampleUserExport" method="download" class="com.n4systems.fieldid.actions.users.ExampleUserExportAction" />
 
 

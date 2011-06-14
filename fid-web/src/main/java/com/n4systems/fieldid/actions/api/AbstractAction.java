@@ -63,8 +63,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	protected final PersistenceManager persistenceManager;
 	protected BaseActionHelper helper;
 	
-	private Collection<String> flashMessages = new ArrayList<String>();
-	private Collection<String> flashErrors = new ArrayList<String>();
+	private final Collection<String> flashMessages = new ArrayList<String>();
+	private final Collection<String> flashErrors = new ArrayList<String>();
 	private LoaderFactory loaderFactory;
 	private SaverFactory saverFactory;
 	private Gson json;
@@ -98,8 +98,13 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return getSession().getSecurityGuard();
 	}
 	
+	@Deprecated // use getCurrentUser...only here to avoid struts refactoring.
 	protected User getUser() {
-		return persistenceManager.find(User.class, getSessionUser().getUniqueID());
+		return getCurrentUser();
+	}
+	
+	protected User getCurrentUser() { 
+		return persistenceManager.find(User.class, getSessionUser().getUniqueID());		
 	}
 	
 	protected boolean isLoggedIn() {
@@ -154,6 +159,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return ( searchContainer != null && searchContainer.getSearchId() != null );
 	}
 	
+	@Override
 	public void addFlashMessage( String message ) {
 		flashMessages.add( message );
 		addActionMessage( message );
@@ -167,15 +173,18 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		addActionMessage( getText( message ) );
 	}
 	
+	@Override
 	public void clearFlashScope() {
 		clearFlashMessages();
 		clearFlashErrors();
 	}
 	
+	@Override
 	public void clearFlashMessages( ) {
 		flashMessages.clear();
 	}
 	
+	@Override
 	public void addFlashError( String error ) {
 		flashErrors.add( error );
 		addActionError( error );
@@ -189,14 +198,17 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		addActionError( getText( error  ) );
 	}
 	
+	@Override
 	public void clearFlashErrors( ) {
 		flashErrors.clear();
 	}
 	
+	@Override
 	public Collection<String> getFlashMessages(){
 		return flashMessages;
 	}
 	
+	@Override
 	public Collection<String> getFlashErrors(){
 		return flashErrors;
 	}
@@ -235,6 +247,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return getSessionUser().createUserDateConverter().convertDateTime(date);
 	}
 	
+	@Override
 	public boolean isValidDate(String date, boolean usingTime) {
 		return getSessionUser().createUserDateConverter().isValidDate(date, usingTime);
 	}
@@ -327,6 +340,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		navOptions = new NavOptionsController(getSessionUser(), getSecurityGuard(), pageType, currentAction);
 	}
 	
+	@Override
 	public LoaderFactory getLoaderFactory() {
 		if (loaderFactory == null) {
 			loaderFactory = new LoaderFactory(getSecurityFilter());
@@ -479,7 +493,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	
 	public DownloadCoordinator getDownloadCoordinator() {
 		if (downloadCoordinator == null) {
-			downloadCoordinator = new DownloadCoordinator(getUser(), getSaverFactory().createDownloadLinkSaver());
+			downloadCoordinator = new DownloadCoordinator(getCurrentUser(), getSaverFactory().createDownloadLinkSaver());
 		}
 		return downloadCoordinator;
 	}

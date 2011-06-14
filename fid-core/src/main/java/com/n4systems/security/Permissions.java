@@ -12,7 +12,7 @@ import com.n4systems.util.persistence.SimpleListable;
 public class Permissions {
 			
 	// Primary permissions
-	public static final int Tag 				= 1<<0;
+	public static final int Tag 				= 1<<0;  // aka IdentifyAssets
 	public static final int ManageSystemConfig	= 1<<1;
 	public static final int ManageSystemUsers	= 1<<2;
 	public static final int ManageEndUsers		= 1<<3;

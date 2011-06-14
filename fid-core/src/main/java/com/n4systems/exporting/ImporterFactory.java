@@ -6,7 +6,7 @@ import com.n4systems.api.conversion.autoattribute.AutoAttributeToModelConverter;
 import com.n4systems.api.conversion.event.EventToModelConverter;
 import com.n4systems.api.conversion.orgs.CustomerOrgToModelConverter;
 import com.n4systems.api.conversion.orgs.DivisionOrgToModelConverter;
-import com.n4systems.api.conversion.orgs.UserToModelConverter;
+import com.n4systems.api.conversion.users.UserToModelConverter;
 import com.n4systems.api.validation.ViewValidator;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exporting.io.MapReader;
