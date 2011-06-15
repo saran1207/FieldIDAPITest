@@ -10,7 +10,7 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.validation.validators.FieldValidator;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.reflection.Reflector;
 
@@ -38,7 +38,7 @@ public class ViewValidator implements Validator<ExternalModelView> {
 		List<ValidationResult> failedResults = new ArrayList<ValidationResult>();
 		
 		ValidationResult failedResult;
-		Field[] fields = Reflector.findAllFieldsWithAnnotation(view.getClass(), ExportField.class);
+		Field[] fields = Reflector.findAllFieldsWithAnnotation(view.getClass(), SerializableField.class);
 		for (Field field: fields) {
 			failedResult = validateField(view, field);
 			
@@ -66,7 +66,7 @@ public class ViewValidator implements Validator<ExternalModelView> {
 	private ValidationResult validateField(ExternalModelView view, Field field) {
 		ValidationResult firstFailedResult = null;
 		
-		ExportField exportField = field.getAnnotation(ExportField.class);
+		SerializableField exportField = field.getAnnotation(SerializableField.class);
 		
 		Object fieldValue;
 		FieldValidator validator;

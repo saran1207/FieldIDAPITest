@@ -10,47 +10,47 @@ import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
 import com.n4systems.api.validation.validators.AssetViewToAssetRfidLengthValidator;
 import com.n4systems.api.validation.validators.AssetViewToAssetSerialLengthValidator;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.exporting.beanutils.MapSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 
 @SuppressWarnings("serial")
 public class AssetView extends ExternalModelView {
 	
-	@ExportField(title = "Serial Number", order = 100, validators = { NotNullValidator.class, AssetViewToAssetSerialLengthValidator.class })
+	@SerializableField(title = "Serial Number", order = 100, validators = { NotNullValidator.class, AssetViewToAssetSerialLengthValidator.class })
 	private String serialNumber;
 
-	@ExportField(title = "RFID Number", order = 200, validators = {AssetViewToAssetRfidLengthValidator.class})
+	@SerializableField(title = "RFID Number", order = 200, validators = {AssetViewToAssetRfidLengthValidator.class})
 	private String rfidNumber;
 
-	@ExportField(title = "Reference Number", order = 300)
+	@SerializableField(title = "Reference Number", order = 300)
 	private String customerRefNumber;
 
-	@ExportField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
+	@SerializableField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
 	private final String[] owners = new String[3];
 
-	@ExportField(title = "Location", order = 600)
+	@SerializableField(title = "Location", order = 600)
 	private String location;
 
-	@ExportField(title = "Asset Status", order = 700, validators = { AssetStatusExistsValidator.class })
+	@SerializableField(title = "Asset Status", order = 700, validators = { AssetStatusExistsValidator.class })
 	private String status;
 
-	@ExportField(title = "Purchase Order", order = 800)
+	@SerializableField(title = "Purchase Order", order = 800)
 	private String purchaseOrder;
 
-	@ExportField(title = "Order Number", order = 900)
+	@SerializableField(title = "Order Number", order = 900)
 	private String shopOrder;
 
-	@ExportField(title = "Comments", order = 1000)
+	@SerializableField(title = "Comments", order = 1000)
 	private String comments;
 
 	// this field is an object since it is hard to know exactly what is going to come back from excel
 	// if the date is formatted incorrectly, excel will return a String.  We let the date validator ensure we 
 	// actually have a date here.
-	@ExportField(title = "Identified", order = 1100, validators = { DateValidator.class })
+	@SerializableField(title = "Identified", order = 1100, validators = { DateValidator.class })
 	private Object identified;
 
-	@ExportField(title = "A:", order = 1200, handler = MapSerializationHandler.class, validators = { NotNullValidator.class, AssetViewAttributesValidator.class })
+	@SerializableField(title = "A:", order = 1200, handler = MapSerializationHandler.class, validators = { NotNullValidator.class, AssetViewAttributesValidator.class })
 	private Map<String, String> attributes = new LinkedHashMap<String, String>();
 
 	public AssetView() {}

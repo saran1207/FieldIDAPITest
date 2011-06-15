@@ -7,22 +7,22 @@ import java.util.Map;
 import com.n4systems.api.validation.validators.NotNullValidator;
 
 public class TestExportBean {
-	@ExportField(title = "Type", order = 0, validators = {NotNullValidator.class})
+	@SerializableField(title = "Type", order = 0, validators = {NotNullValidator.class})
 	private String type;
 
-	@ExportField(title="Name", order = 10)
+	@SerializableField(title="Name", order = 10)
 	private String name;
 
-	@ExportField(title="Age", order = 30)
+	@SerializableField(title="Age", order = 30)
 	private Integer age;
 	
-	@ExportField(title="Other", order = 40, handler = DummySerializationHandler.class)
+	@SerializableField(title="Other", order = 40, handler = DummySerializationHandler.class)
 	private Integer other;
 	
-	@ExportField(title="Date", order = 45)
+	@SerializableField(title="Date", order = 45)
 	private Date date;	
 	
-	@ExportField(title="M:", order = 50, handler = MapSerializationHandler.class)
+	@SerializableField(title="M:", order = 50, handler = MapSerializationHandler.class)
 	private Map<String, String> map = new HashMap<String, String>();
 	
 	public TestExportBean() {}

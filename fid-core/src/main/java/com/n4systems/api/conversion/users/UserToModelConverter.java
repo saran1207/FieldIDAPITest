@@ -23,18 +23,23 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
 		to.setGlobalId(from.getGlobalId());
-		to.setInitials(from.getInitials());
-		// FIMXE DD : implement permission setting...
+		to.setInitials(from.getInitials());		
 		to.setPermissions(from.getPermissions());
 		to.setPosition(from.getPosition());
 		to.setTenant(baseOrg.getTenant());
 		to.setUserType(UserType.valueFromLabel(from.getAccountType()));
-		to.setUserID(from.getUserName());
-		to.setEmailAddress(from.getContactEmail());
-		to.setLastName(from.getLastName());
-		to.setFirstName(from.getLastName());
+		to.setUserID(from.getUserID());
+		to.setEmailAddress(from.getEmailAddress());
 		to.setOwner(baseOrg);
+		// FIXME DD : need to implement setting of password here...how to handle crypto.
+			//to.setPassword(getPassword(from, to));		
 	}
+
+//	private String getPassword(UserView from, User to) {
+//		if (from.isAssignPassword()) {
+//			return from.getPassword();
+//		}
+//	}
 
 	@Override
 	protected User createModelBean() {

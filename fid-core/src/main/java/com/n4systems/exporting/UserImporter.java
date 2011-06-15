@@ -92,7 +92,7 @@ public class UserImporter extends AbstractImporter<UserView> {
 		Map<String, UserView> map = new HashMap<String, UserView>();
 		int row = FIRST_DATA_ROW;
 		for (UserView userView:views) { 
-			String userName = userView.getUserName();
+			String userName = userView.getUserID();
 			if (map.containsKey(userName)) { 
 				results.add(ValidationResult.fail("Username %s is duplicated" , userName).setRow(row));
 			}

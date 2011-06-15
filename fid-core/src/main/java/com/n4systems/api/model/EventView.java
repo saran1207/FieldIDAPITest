@@ -10,43 +10,43 @@ import com.n4systems.api.validation.validators.FullNameUserValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.YNValidator;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 
 public class EventView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
 
-	@ExportField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, AssetIdentifierValidator.class })
+	@SerializableField(title = "Asset Identifier", order = 100, validators = { NotNullValidator.class, AssetIdentifierValidator.class })
 	private String identifier;
 
-	@ExportField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
+	@SerializableField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
 	private Object datePerformed;
 
-	@ExportField(title = "Event Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, EventStatusValidator.class })
+	@SerializableField(title = "Event Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, EventStatusValidator.class })
 	private String status;
 
-	@ExportField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
+	@SerializableField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
 	private final String[] owners = new String[3];
 
-	@ExportField(title = "Performed By", order = 500, validators = { NotNullValidator.class, FullNameUserValidator.class })
+	@SerializableField(title = "Performed By", order = 500, validators = { NotNullValidator.class, FullNameUserValidator.class })
 	private String performedBy;
 
-	@ExportField(title = "Event Book", order = 600)
+	@SerializableField(title = "Event Book", order = 600)
 	private String eventBook;
 
-	@ExportField(title = "Printable (Y/N)", order = 700, validators = { YNValidator.class })
+	@SerializableField(title = "Printable (Y/N)", order = 700, validators = { YNValidator.class })
 	private String printable;
 
-	@ExportField(title = "Asset Status", order = 800, validators = { AssetStatusExistsValidator.class })
+	@SerializableField(title = "Asset Status", order = 800, validators = { AssetStatusExistsValidator.class })
 	private String assetStatus;
 
-	@ExportField(title = "Next Event Date", order = 900, validators = { DateValidator.class })
+	@SerializableField(title = "Next Event Date", order = 900, validators = { DateValidator.class })
 	private Object nextEventDate;
 
-	@ExportField(title = "Location", order = 1000)
+	@SerializableField(title = "Location", order = 1000)
 	private String location;	
 	
-	@ExportField(title = "Comments", order = 1100)
+	@SerializableField(title = "Comments", order = 1100)
 	private String comments;
 
 	public EventView() {}

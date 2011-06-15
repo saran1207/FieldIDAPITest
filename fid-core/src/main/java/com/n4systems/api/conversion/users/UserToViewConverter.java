@@ -23,6 +23,7 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setAccountType(model.getUserType().getLabel());
 		view.setContactEmail(model.getEmailAddress());
 		view.setOrganization(model.getOwner().getPrimaryOrg().getDisplayName());
+		view.setCustomer(model.getOwner().getCustomerOrg() == null ? "" : model.getOwner().getCustomerOrg().getDisplayName());
 		view.setDivision(model.getOwner().getDivisionOrg() == null ? "" : model.getOwner().getDivisionOrg().getDisplayName());
 		view.setFirstName(model.getFirstName());
 		view.setLastName(model.getLastName());
@@ -30,8 +31,6 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setPosition(model.getPosition());
 		view.setUserName(model.getUserID());
 		view.setGlobalId(model.getGlobalId());
-		view.setCountry(model.getOwner().getAddressInfo().getCountry());
-		view.setTimeZone(model.getTimeZone().getDisplayName());
 		// permissions...
 		view.setIdentifyAssets(getPermissionYNString(model, Permissions.Tag));
 		view.setManageSystemConfiguration(getPermissionYNString(model, Permissions.ManageSystemConfig));

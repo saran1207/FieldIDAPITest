@@ -9,7 +9,7 @@ import com.n4systems.api.validation.validators.PasswordValidator;
 import com.n4systems.api.validation.validators.PermissionValidator;
 import com.n4systems.api.validation.validators.YNValidator;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.security.Permissions;
 
 public class UserView extends ExternalModelView {
@@ -26,8 +26,6 @@ public class UserView extends ExternalModelView {
 	public static final String MANAGE_SYSTEM_USERS_FIELD = "Manage System Users (Y/N)";
 	public static final String MANAGE_SYSTEM_CONFIGURATION_FIELD = "Manage System Configuration (Y/N)";
 	public static final String IDENTIFY_ASSETS_FIELD = "Identify Assets";
-	public static final String TIME_ZONE_FIELD = "Time Zone";
-	public static final String COUNTRY_FIELD = "Country";
 	public static final String SEND_WELCOME_EMAIL_FIELD = "Send Welcome Email (Y/N)";
 	public static final String SECURITY_RFID_NUMBER_FIELD = "Security RFID Number";
 	public static final String POSTITION_FIELD = "Postition";
@@ -40,87 +38,98 @@ public class UserView extends ExternalModelView {
 	public static final String FIRST_NAME_FIELD = "First Name";
 	public static final String EMAIL_ADDRESS_FIELD = "Email Address";
 	public static final String ORGANIZATION_FIELD = "Organization";
-
-	
+	public static final String CUSTOMER_FIELD = "Customer/Job Site";
+		
 	
 	public static UserView newUser() {
 		UserView view = new UserView();		
 		return view;
 	}	
+
+	public UserView() { }
 	
-	@ExportField(title=ORGANIZATION_FIELD, order = 0, validators = {OrgNameValidator.class}) 
+	@Deprecated // used for testing only. 
+	UserView(String organization, String email, String firstName, String lastName, String assignPassword, String password, String userId, String guid) {
+		this.organization = organization;
+		this.contactEmail = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.assignPassword = assignPassword;
+		this.password = password;
+		this.userName = userId;
+		this.globalId = guid;
+	}
+	
+	@SerializableField(title=ORGANIZATION_FIELD, order = 0, validators = {OrgNameValidator.class}) 
 	private String organization;
 	
-	@ExportField(title=EMAIL_ADDRESS_FIELD, order = 100, validators = {NotNullValidator.class, EmailValidator.class})
-	private String contactEmail;
+	@SerializableField(title=CUSTOMER_FIELD, order = 30, validators = {OrgNameValidator.class}) 
+	private String customer; //aka jobsite.
 	
-	@ExportField(title=FIRST_NAME_FIELD, order = 200, validators = {NotNullValidator.class})
-	private String firstName;
-
-	@ExportField(title=LAST_NAME_FIELD, order = 250, validators = {NotNullValidator.class})
-	private String lastName;
-
-	@ExportField(title=ASSIGN_PASSWORD_FIELD, order = 300, validators = {YNValidator.class})
-	private String assignPassword;
-	
-	@ExportField(title=PASSWORD_FIELD, order = 305, validators = {PasswordValidator.class})
-	private String password;
-	
-	@ExportField(title=USER_NAME_FIELD, order = 325, validators = {NotNullValidator.class})  
-	private String userName;
-
-	@ExportField(title=ACCOUNT_TYPE_FIELD, order = 350, validators = {NotNullValidator.class, AccountTypeValidator.class})
-	private String accountType;
-	
-	@ExportField(title=DIVISION_FIELD, order = 400, validators = {})
+	@SerializableField(title=DIVISION_FIELD, order = 60, validators = {})
 	private String division;
 	
-	@ExportField(title=INITIALS_FIELD, order = 410, validators = {})
+	@SerializableField(title=EMAIL_ADDRESS_FIELD, order = 100, validators = {NotNullValidator.class, EmailValidator.class})
+	private String contactEmail;
+	
+	@SerializableField(title=FIRST_NAME_FIELD, order = 200, validators = {NotNullValidator.class})
+	private String firstName;
+
+	@SerializableField(title=LAST_NAME_FIELD, order = 250, validators = {NotNullValidator.class})
+	private String lastName;
+
+	@SerializableField(title=INITIALS_FIELD, order = 310, validators = {})
 	private String initials;
 	
-	@ExportField(title=POSTITION_FIELD, order = 450, validators = {})
+	@SerializableField(title=POSTITION_FIELD, order = 350, validators = {})
 	private String position;
 
-	@ExportField(title=SECURITY_RFID_NUMBER_FIELD, order = 500, validators = {})
-	private String securityRfidNumber;
+	@SerializableField(title=USER_NAME_FIELD, order = 425, validators = {NotNullValidator.class})  
+	private String userName;
+
+	@SerializableField(title=ACCOUNT_TYPE_FIELD, order = 450, validators = {NotNullValidator.class, AccountTypeValidator.class})
+	private String accountType;
 	
-	@ExportField(title=SEND_WELCOME_EMAIL_FIELD, order = 520, validators = {YNValidator.class})		
+	@SerializableField(title=SEND_WELCOME_EMAIL_FIELD, order = 520, validators = {YNValidator.class})		
 	private String sendWelcomeEmail;
 	
-	@ExportField(title=COUNTRY_FIELD, order = 530, validators = {})
-	private String country;
-	
-	@ExportField(title=TIME_ZONE_FIELD, order = 550, validators = {})
-	private String timeZone;
-	
-	@ExportField(title=IDENTIFY_ASSETS_FIELD, order = 560, validators = {PermissionValidator.class})
+	@SerializableField(title=IDENTIFY_ASSETS_FIELD, order = 560, validators = {PermissionValidator.class})
 	private String identifyAssets;
 	
-	@ExportField(title=MANAGE_SYSTEM_CONFIGURATION_FIELD, order = 570, validators = {PermissionValidator.class})
+	@SerializableField(title=MANAGE_SYSTEM_CONFIGURATION_FIELD, order = 570, validators = {PermissionValidator.class})
 	private String manageSystemConfiguration;
 	
-	@ExportField(title=MANAGE_SYSTEM_USERS_FIELD, order = 580, validators = {PermissionValidator.class})
+	@SerializableField(title=MANAGE_SYSTEM_USERS_FIELD, order = 580, validators = {PermissionValidator.class})
 	private String manageSystemUsers;
 	
-	@ExportField(title=MANAGE_JOB_SITES_FIELD, order = 590, validators = {PermissionValidator.class})
+	@SerializableField(title=MANAGE_JOB_SITES_FIELD, order = 590, validators = {PermissionValidator.class})
 	private String manageJobSites;
 	
-	@ExportField(title=CREATE_EVENTS_FIELD, order = 600, validators = {PermissionValidator.class})
+	@SerializableField(title=CREATE_EVENTS_FIELD, order = 600, validators = {PermissionValidator.class})
 	private String createEvents;
 	
-	@ExportField(title=EDIT_EVENTS_FIELD, order = 610, validators = {PermissionValidator.class})
+	@SerializableField(title=EDIT_EVENTS_FIELD, order = 610, validators = {PermissionValidator.class})
 	private String editEvents;
 	
-	@ExportField(title=MANAGE_JOBS_FIELD, order = 620, validators = {PermissionValidator.class})
+	@SerializableField(title=MANAGE_JOBS_FIELD, order = 620, validators = {PermissionValidator.class})
 	private String manageJobs;
 	
-	@ExportField(title=MANAGE_SAFETY_NETWORK_FIELD, order = 630, validators = {PermissionValidator.class})
+	@SerializableField(title=MANAGE_SAFETY_NETWORK_FIELD, order = 630, validators = {PermissionValidator.class})
 	private String manageSafetyNetwork;
 	
-	@ExportField(title=ACCESS_WEB_STORE_FIELD, order = 640, validators = {PermissionValidator.class})
+	@SerializableField(title=ACCESS_WEB_STORE_FIELD, order = 640, validators = {PermissionValidator.class})
 	private String accessWebStore;
 	
-	@ExportField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})
+	@SerializableField(title=SECURITY_RFID_NUMBER_FIELD, order = 680, validators = {}, importOnly = true)
+	private String securityRfidNumber;
+	
+	@SerializableField(title=ASSIGN_PASSWORD_FIELD, order = 700, validators = {YNValidator.class}, importOnly = true)
+	private String assignPassword;
+	
+	@SerializableField(title=PASSWORD_FIELD, order = 705, validators = {PasswordValidator.class}, importOnly = true)
+	private String password;
+	
+	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})
 	private String globalId;	
 	
 	public String getOrganization() {
@@ -131,7 +140,7 @@ public class UserView extends ExternalModelView {
 		this.organization = organization;
 	}
 
-	public String getContactEmail() {
+	public String getEmailAddress() {
 		return contactEmail;
 	}
 
@@ -155,7 +164,7 @@ public class UserView extends ExternalModelView {
 		this.lastName = lastName;
 	}
 
-	public String getUserName() {
+	public String getUserID() {
 		return userName;
 	}
 
@@ -163,6 +172,21 @@ public class UserView extends ExternalModelView {
 		this.userName = userName;
 	} 
 	
+	public String getAssignPassword() {
+		return assignPassword;
+	}
+
+	public void setAssignPassword(String assignPassword) {
+		this.assignPassword = assignPassword;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}	
 	
 	public String getAccountType() {
 		return accountType;
@@ -196,30 +220,6 @@ public class UserView extends ExternalModelView {
 		this.position = position;
 	}
 
-	public String getAssignPassword() {
-		return assignPassword;
-	}
-
-	public void setAssignPassword(String assignPassword) {
-		this.assignPassword = assignPassword;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getSecurityRfidNumber() {
-		return securityRfidNumber;
-	}
-
-	public void setSecurityRfidNumber(String securityRfidNumber) {
-		this.securityRfidNumber = securityRfidNumber;
-	}
-
 	public String getSendWelcomeEmail() {
 		return sendWelcomeEmail;
 	}
@@ -228,26 +228,10 @@ public class UserView extends ExternalModelView {
 		this.sendWelcomeEmail = sendWelcomeEmail;
 	}
 
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getTimeZone() {
-		return timeZone;
-	}
-
-	public void setTimeZone(String timeZone) {
-		this.timeZone = timeZone;
-	}
-
 	public String getIdentifyAssets() {
 		return identifyAssets;
 	}
-
+	
 	public void setIdentifyAssets(String identifyAssets) {
 		this.identifyAssets = identifyAssets;
 	}
@@ -316,6 +300,19 @@ public class UserView extends ExternalModelView {
 		this.accessWebStore = accessWebStore;
 	}
 
+
+	private boolean isPermission(String yOrN) {
+		return YNField.Y.toString().equals(yOrN);
+	}
+
+	public void setCustomer(String customer) {
+		this.customer = customer;
+	}
+
+	public String getCustomer() {
+		return customer;
+	}
+	
 	@Override
 	public String getGlobalId() {		
 		return globalId;
@@ -326,6 +323,21 @@ public class UserView extends ExternalModelView {
 		this.globalId = globalId;
 	}
 
+	public void setSecurityRfidNumber(String securityRfidNumber) {
+		this.securityRfidNumber = securityRfidNumber;
+	}
+
+	public String getSecurityRfidNumber() {
+		return securityRfidNumber;
+	}
+
+	public boolean isAssignPassword() {
+		return YNField.Y.toString().equals(getAssignPassword());
+	}
+
+	
+	// TODO DD : refactor this permission related stuff into testable class.
+	
 	public int getPermissions() {
 		// CAVEAT : this defines the permissions as defined in the excel columns but they aren't validated.		
 		int permissions = Permissions.NO_PERMISSIONS;
@@ -357,10 +369,6 @@ public class UserView extends ExternalModelView {
 			permissions |= Permissions.AccessWebStore;					
 		}
 		return permissions;
-	}
-
-	private boolean isPermission(String yOrN) {
-		return YNField.Y.toString().equals(yOrN);
 	}
 
 }

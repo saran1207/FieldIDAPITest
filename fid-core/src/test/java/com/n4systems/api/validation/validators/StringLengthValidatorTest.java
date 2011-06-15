@@ -6,18 +6,18 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 
 public class StringLengthValidatorTest {
-	@ExportField(title="1", order = 1, maxLength = 10)
+	@SerializableField(title="1", order = 1, maxLength = 10)
 	public final Object dummy1 = null;
-	private ExportField dummy1Field; 
+	private SerializableField dummy1Field; 
 	
 	private StringLengthValidator validator = new StringLengthValidator();
 	
 	@Before
 	public void setup_export_fields() throws SecurityException, NoSuchFieldException {
-		dummy1Field = getClass().getField("dummy1").getAnnotation(ExportField.class);
+		dummy1Field = getClass().getField("dummy1").getAnnotation(SerializableField.class);
 	}
 	
 	@Test

@@ -5,14 +5,14 @@ import java.util.Map;
 import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.FullExternalOrgView;
 import com.n4systems.api.validation.ValidationResult;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.orgs.internal.InternalOrgWithNameExistsLoader;
 import com.n4systems.model.security.SecurityFilter;
 
 public class ParentOrgResolutionValidator implements FieldValidator {
 
 	@Override
-	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, ExportField field, Map<String, Object> validationContext) {
+	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext) {
 		
 		// TODO DD : make a "HasParentOrg" interface to avoid this casting...also used by user import so this code needs to be shared among views.
 		

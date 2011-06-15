@@ -9,10 +9,11 @@ import com.n4systems.api.validation.validators.FieldValidator;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ExportField {
+public @interface SerializableField {
 	String title();
 	int order();
 	int maxLength() default 255;
 	Class<? extends SerializationHandler> handler() default SimpleSerializationHandler.class;
 	Class<? extends FieldValidator>[] validators() default {};
+	boolean importOnly() default false;
 }

@@ -6,14 +6,14 @@ import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.security.PasswordComplexityChecker;
 
 public class PasswordValidator implements FieldValidator {
 		
 	@Override
-	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, ExportField field, Map<String, Object> validationContext) {
+	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext) {
 		String password = (String) fieldValue;
 
 		// CAVEAT : this assumes UserView.   reasonable assumption since it's dealing with passwords.  if required by other views then suggest making

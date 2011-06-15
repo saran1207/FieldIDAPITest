@@ -8,19 +8,19 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 
 public abstract class SerializationHandler {
 	private final Field field;
-	private final ExportField exportField;
+	private final SerializableField exportField;
 	private final PropertyUtilsBean propertyUtils = new PropertyUtilsBean();
 	
 	public SerializationHandler(Field field) {
 		this.field = field;
-		this.exportField = field.getAnnotation(ExportField.class);
+		this.exportField = field.getAnnotation(SerializableField.class);
 	}
 	
 	public Field getField() {
 		return field;
 	}
 
-	public ExportField getExportField() {
+	public SerializableField getExportField() {
 		return exportField;
 	}
 

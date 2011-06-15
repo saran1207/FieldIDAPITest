@@ -7,7 +7,7 @@ import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.security.PermissionType;
 import com.n4systems.security.UserType;
@@ -29,7 +29,7 @@ public class PermissionValidator implements FieldValidator {
 	}
 		
 	@Override
-	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, ExportField field, Map<String, Object> validationContext) {
+	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext) {
 		// make sure it's a Y/N value first.
 		if (fieldValue==null) { 
 			return ValidationResult.pass();

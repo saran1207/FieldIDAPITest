@@ -7,16 +7,16 @@ import com.n4systems.api.validation.validators.AutoAttributeInputsValidator;
 import com.n4systems.api.validation.validators.AutoAttributeOutputsValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.exporting.beanutils.MapSerializationHandler;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 
 
 public class AutoAttributeView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
 	
-	@ExportField(title = "I:", order = 10, handler = MapSerializationHandler.class, validators = {NotNullValidator.class, AutoAttributeInputsValidator.class})
+	@SerializableField(title = "I:", order = 10, handler = MapSerializationHandler.class, validators = {NotNullValidator.class, AutoAttributeInputsValidator.class})
 	private Map<String, String> inputs = new LinkedHashMap<String, String>();
 
-	@ExportField(title = "O:", order = 20, handler = MapSerializationHandler.class, validators = {NotNullValidator.class, AutoAttributeOutputsValidator.class})
+	@SerializableField(title = "O:", order = 20, handler = MapSerializationHandler.class, validators = {NotNullValidator.class, AutoAttributeOutputsValidator.class})
 	private Map<String, String> outputs = new LinkedHashMap<String, String>();
 	
 	public AutoAttributeView() {}

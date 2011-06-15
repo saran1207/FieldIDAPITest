@@ -575,4 +575,5 @@ public class Reflector {
 		// if the next super class is Object, then return our field array, otherwise recurse into that super class
 		return (clazz.getSuperclass().equals(Object.class)) ? allFields : findAllFields(clazz.getSuperclass(), allFields);
 	}
+
 }

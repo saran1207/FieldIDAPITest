@@ -6,7 +6,7 @@ import com.n4systems.api.validation.validators.ExternalOrgTypeValidator;
 import com.n4systems.api.validation.validators.StringLengthValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.ParentOrgResolutionValidator;
-import com.n4systems.exporting.beanutils.ExportField;
+import com.n4systems.exporting.beanutils.SerializableField;
 
 public class FullExternalOrgView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
@@ -23,52 +23,52 @@ public class FullExternalOrgView extends ExternalModelView {
 		return view;
 	}
 	
-	@ExportField(title = "Type", order = 0, validators = {NotNullValidator.class, ExternalOrgTypeValidator.class})
+	@SerializableField(title = "Type", order = 0, validators = {NotNullValidator.class, ExternalOrgTypeValidator.class})
 	private String type;
 
-	@ExportField(title="Name", order = 100, validators = {NotNullValidator.class})
+	@SerializableField(title="Name", order = 100, validators = {NotNullValidator.class})
 	private String name;
 
-	@ExportField(title="Code", order = 150, validators = {NotNullValidator.class})
+	@SerializableField(title="Code", order = 150, validators = {NotNullValidator.class})
 	private String code;
 
-	@ExportField(title="Organization", order = 200, validators = {ParentOrgResolutionValidator.class})
+	@SerializableField(title="Organization", order = 200, validators = {ParentOrgResolutionValidator.class})
 	private String parentOrg;
 	
-	@ExportField(title="Contact Name", order = 225)
+	@SerializableField(title="Contact Name", order = 225)
 	private String contactName;
 	
-	@ExportField(title="Contact Email", order = 275, validators = {EmailValidator.class})
+	@SerializableField(title="Contact Email", order = 275, validators = {EmailValidator.class})
 	private String contactEmail;
 	
-	@ExportField(title="Address", order = 300)
+	@SerializableField(title="Address", order = 300)
 	private String streetAddress;
 	
-	@ExportField(title="City", order = 400)
+	@SerializableField(title="City", order = 400)
 	private String city;
 	
-	@ExportField(title="State", order = 500)
+	@SerializableField(title="State", order = 500)
 	private String state;
 	
-	@ExportField(title="Country", order = 600)
+	@SerializableField(title="Country", order = 600)
 	private String country;
 	
-	@ExportField(title="Postal/Zip Code", order = 700)
+	@SerializableField(title="Postal/Zip Code", order = 700)
 	private String zip;
 	
-	@ExportField(title="Phone 1", order = 800)
+	@SerializableField(title="Phone 1", order = 800)
 	private String phone1;
 	
-	@ExportField(title="Phone 2", order = 900)
+	@SerializableField(title="Phone 2", order = 900)
 	private String phone2;
 	
-	@ExportField(title="Fax", order = 1000)
+	@SerializableField(title="Fax", order = 1000)
 	private String fax1;
 
-	@ExportField(title="Notes", order = 1100, maxLength = 1000, validators = {StringLengthValidator.class})
+	@SerializableField(title="Notes", order = 1100, maxLength = 1000, validators = {StringLengthValidator.class})
 	private String notes;
 	
-	@ExportField(title="System ID", order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
+	@SerializableField(title="System ID", order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
 	private String globalId; 
 	
 	public FullExternalOrgView() {}
