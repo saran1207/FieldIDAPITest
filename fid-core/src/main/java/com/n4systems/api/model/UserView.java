@@ -327,17 +327,40 @@ public class UserView extends ExternalModelView {
 	}
 
 	public int getPermissions() {
-		// CAVEAT : this defines the permissions as defined in the excel columns but they aren't validated. 
-		int permissions = 0;
-		if (isManageSystemConfiguration()) {
+		// CAVEAT : this defines the permissions as defined in the excel columns but they aren't validated.		
+		int permissions = Permissions.NO_PERMISSIONS;
+		if (isPermission(getManageSystemConfiguration())) {
 			permissions |= Permissions.ManageSystemConfig;		
 		}
-		// FIXME DD : do rest of permissions....
+		if (isPermission(getManageSystemUsers())) {
+			permissions |= Permissions.ManageSystemUsers;		
+		}
+		if (isPermission(getManageJobs())) {
+			permissions |= Permissions.ManageJobs;		
+		}
+		if (isPermission(getManageJobSites())) {
+			permissions |= Permissions.ManageEndUsers;		
+		}
+		if (isPermission(getManageSafetyNetwork())) {
+			permissions |= Permissions.ManageSafetyNetwork;		
+		}
+		if (isPermission(getIdentifyAssets())) {
+			permissions |= Permissions.Tag;					
+		}
+		if (isPermission(getCreateEvents())) {
+			permissions |= Permissions.CreateEvent;		
+		}
+		if (isPermission(getEditEvents())) {
+			permissions |= Permissions.EditEvent;		
+		}
+		if (isPermission(getAccessWebStore())) {
+			permissions |= Permissions.AccessWebStore;					
+		}
 		return permissions;
 	}
 
-	private boolean isManageSystemConfiguration() {
-		return YNField.Y.toString().equals(getManageSystemConfiguration());
+	private boolean isPermission(String yOrN) {
+		return YNField.Y.toString().equals(yOrN);
 	}
 
 }

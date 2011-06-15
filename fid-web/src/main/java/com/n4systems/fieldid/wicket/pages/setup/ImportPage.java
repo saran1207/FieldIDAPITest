@@ -1,13 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.components.renderer.AssetTypeChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
-import com.n4systems.fieldid.wicket.model.AssetTypesWithAutoAttributeCriteria;
-import com.n4systems.fieldid.wicket.model.EventTypesForTenantModel;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
@@ -16,7 +10,14 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.List;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.components.renderer.AssetTypeChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
+import com.n4systems.fieldid.wicket.model.AssetTypesWithAutoAttributeCriteria;
+import com.n4systems.fieldid.wicket.model.EventTypesForTenantModel;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
 
 public class ImportPage extends SetupPage {
 
@@ -29,6 +30,7 @@ public class ImportPage extends SetupPage {
         add(new ImportAssetsForm("importAssetsForm", assetTypeListModel));
         add(new ImportEventsForm("importEventsForm", eventTypeListModel));
         add(new ImportAutoAttributesForm("importAutoAttributesForm", assetTypesWithCriteriaModel));
+        add(new ImportUsersForm("importUsersForm"));
     }
 
     class ImportOwnersForm extends Form {
@@ -45,7 +47,7 @@ public class ImportPage extends SetupPage {
 
     class ImportAssetsForm extends Form {
 
-        private AssetType assetType;
+        private final AssetType assetType;
 
         ImportAssetsForm(String id, IModel<List<AssetType>> assetTypeListModel) {
             super(id);
@@ -77,7 +79,7 @@ public class ImportPage extends SetupPage {
 
     class ImportEventsForm extends Form {
 
-        private EventType eventType;
+        private final EventType eventType;
 
         ImportEventsForm(String id, IModel<List<EventType>> eventTypeListModel) {
             super(id);
@@ -109,7 +111,7 @@ public class ImportPage extends SetupPage {
 
     class ImportAutoAttributesForm extends Form {
 
-        private AssetType assetType;
+        private final AssetType assetType;
 
         public ImportAutoAttributesForm(String id, IModel<List<AssetType>> assetTypesWithCriteriaModel) {
             super(id);
@@ -139,5 +141,19 @@ public class ImportPage extends SetupPage {
         }
 
     }
+    
+    class ImportUsersForm extends Form {
+        public ImportUsersForm(String id) {
+            super(id);
+            add(new AjaxButton("importUsersButton") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    getResponse().redirect("/fieldid/userImportExport.action");
+                }
+            });
+        }
+    }
+    
+    
 
 }

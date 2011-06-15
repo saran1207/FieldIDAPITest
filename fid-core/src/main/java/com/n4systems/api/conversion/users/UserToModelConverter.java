@@ -25,7 +25,7 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setGlobalId(from.getGlobalId());
 		to.setInitials(from.getInitials());
 		// FIMXE DD : implement permission setting...
-		//to.setPermissions();
+		to.setPermissions(from.getPermissions());
 		to.setPosition(from.getPosition());
 		to.setTenant(baseOrg.getTenant());
 		to.setUserType(UserType.valueFromLabel(from.getAccountType()));
