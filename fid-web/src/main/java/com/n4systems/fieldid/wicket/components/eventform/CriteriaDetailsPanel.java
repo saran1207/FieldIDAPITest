@@ -2,22 +2,24 @@ package com.n4systems.fieldid.wicket.components.eventform;
 
 import java.util.List;
 
-import com.n4systems.fieldid.wicket.components.eventform.details.SignatureDetailsPanel;
-import com.n4systems.fieldid.wicket.components.eventform.details.UnitOfMeasureDetailsPanel;
-import com.n4systems.model.SignatureCriteria;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import com.n4systems.fieldid.wicket.components.eventform.details.ComboBoxDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.DateFieldDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.OneClickDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.SelectDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.SignatureDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.TextFieldDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.UnitOfMeasureDetailsPanel;
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
+import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasureCriteria;
@@ -63,6 +65,8 @@ public class CriteriaDetailsPanel extends Panel {
             add(new UnitOfMeasureDetailsPanel("specificDetailsPanel", new Model<UnitOfMeasureCriteria>((UnitOfMeasureCriteria) criteria)));
         } else if (criteria instanceof SignatureCriteria) {
             add(new SignatureDetailsPanel("specificDetailsPanel", new Model<SignatureCriteria>((SignatureCriteria) criteria)));
+        } else if (criteria instanceof DateFieldCriteria) {
+            add(new DateFieldDetailsPanel("specificDetailsPanel", new Model<DateFieldCriteria>((DateFieldCriteria) criteria)));
         }
     }
 

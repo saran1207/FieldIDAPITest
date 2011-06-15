@@ -5,6 +5,7 @@ import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaType;
+import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
@@ -30,6 +31,8 @@ public class CriteriaResultWebModelConverter {
             webModel.setSecondaryTextValue(((UnitOfMeasureCriteriaResult)result).getSecondaryValue());
         } else if (result instanceof SignatureCriteriaResult) {
             webModel.setSigned(((SignatureCriteriaResult) result).isSigned());
+        } else if (result instanceof DateFieldCriteriaResult) {
+            webModel.setTextValue(((DateFieldCriteriaResult)result).getValue());
         }
 
         webModel.setType(result.getCriteria().getCriteriaType().name());
@@ -71,6 +74,10 @@ public class CriteriaResultWebModelConverter {
             criteriaResult = result;
         } else if (CriteriaType.SIGNATURE.equals(type)) {
             SignatureCriteriaResult result = new SignatureCriteriaResult();
+            criteriaResult = result;
+        } else if (CriteriaType.DATE_FIELD.equals(type)) {
+            DateFieldCriteriaResult result = new DateFieldCriteriaResult();
+            result.setValue(webModel.getTextValue());
             criteriaResult = result;
         } else {
             throw new RuntimeException("Unkown type for web model: " + webModel.getType());

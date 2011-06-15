@@ -104,6 +104,9 @@ ${action.setPageType('event_type', 'show')!}
                                             <#if criteria.unitOfMeasureCriteria>
                                                 <#include "_unitOfMeasureCriteria.ftl"/>
                                             </#if>
+                                            <#if criteria.dateFieldCriteria>
+                                                <@s.text name="label.datefield"/>
+                                            </#if>
                                         </td>
                                         <td>
                                             <#assign sectionIdx=section_index/>

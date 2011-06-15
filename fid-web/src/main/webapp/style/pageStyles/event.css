@@ -548,6 +548,14 @@ p.treeHeading{
     width: 150px;
 }
 
+.crudForm .infoSet input.dateCriteria {
+    width: 165px;
+}
+
+.crudForm .infoSet span input.dateTime {
+    width: 139px;
+}
+
 .crudForm h2{
 	margin-top: 20px;
 	}

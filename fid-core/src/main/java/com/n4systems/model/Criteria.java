@@ -112,6 +112,10 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
     public boolean isSignatureCriteria() {
         return false;
     }
+    
+    public boolean isDateFieldCriteria() {
+        return false;
+    }
 
     public abstract CriteriaType getCriteriaType();
 

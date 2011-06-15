@@ -17,6 +17,8 @@
                 <#include '_unitOfMeasureCriteriaResultDisplay.ftl'>
             <#elseif criteriaResult.criteria.signatureCriteria>
                 <#include '_signatureCriteriaResultDisplay.ftl'>
+            <#elseif criteriaResult.criteria.dateFieldCriteria>
+                <#include '_dateFieldCriteriaResultDisplay.ftl'>
             </#if>
 
             <#include "../observationsCrud/observationsShow.ftl"/>

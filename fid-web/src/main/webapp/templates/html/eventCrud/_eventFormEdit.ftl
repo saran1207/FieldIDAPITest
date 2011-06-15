@@ -46,6 +46,8 @@
                 <#assign criteriaId = criteria.id />
                 <#assign signatureFileId = action.getTemporarySignatureFileId(criteriaId)!"" />
                 <#include '_signatureCriteriaResultEdit.ftl'>
+            <#elseif criteria.dateFieldCriteria>
+                <#include '_dateFieldCriteriaResultEdit.ftl'>
             </#if>
 
 			<div class="recDefButtons">

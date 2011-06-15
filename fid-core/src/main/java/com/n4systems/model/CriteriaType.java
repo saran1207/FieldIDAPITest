@@ -7,7 +7,8 @@ public enum CriteriaType {
     COMBO_BOX("Combo Box", "select"),
     SELECT("Select Box", "select"),
     UNIT_OF_MEASURE("Unit of Measure", "unitofmeasure"),
-    SIGNATURE("Signature", "signature");
+    SIGNATURE("Signature", "signature"),
+    DATE_FIELD("Date Field", "textfield");
 
     private String description;
     private String reportIdentifier;

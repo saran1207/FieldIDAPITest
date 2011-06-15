@@ -1,16 +1,16 @@
 package com.n4systems.fieldid.wicket.components.eventform.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.Criteria;
+import com.n4systems.model.DateFieldCriteria;
+import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.UnitOfMeasureCriteria;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CriteriaCopyUtil {
 
@@ -32,13 +32,21 @@ public class CriteriaCopyUtil {
             newCriteria = copyUnitOfMeasureCriteria((UnitOfMeasureCriteria) criteria);
         } else if (criteria instanceof SignatureCriteria) {
             newCriteria = copySignatureCriteria((SignatureCriteria) criteria);
-        }
+	    } else if (criteria instanceof DateFieldCriteria) {
+	        newCriteria = copyDateFieldCriteria((DateFieldCriteria) criteria);
+	    }
 
         copyCommonFields(criteria, newCriteria, existingCriteria);
         return newCriteria;
     }
 
-    private Criteria copySignatureCriteria(SignatureCriteria criteria) {
+    private Criteria copyDateFieldCriteria(DateFieldCriteria criteria) {
+		DateFieldCriteria newCriteria = new DateFieldCriteria();
+		newCriteria.setIncludeTime(criteria.isIncludeTime());
+		return newCriteria;
+	}
+
+	private Criteria copySignatureCriteria(SignatureCriteria criteria) {
         return new SignatureCriteria();
     }
 

@@ -349,6 +349,26 @@ div.unitDescriptor {
     width: 120px;
 }
 
+.dateFieldConfiguration {
+	padding : 20px 10px;
+	clear: both;
+	float: none;
+}
+
+.dateFieldConfiguration input {
+	clear: left;
+	display: block;
+	float: left;
+	text-align: right;
+}
+
+.dateFieldConfiguration label {
+	clear: right;
+	float: left;
+	margin-left: 10px;
+}
+
+
 div.verticalEditPanel * {
     zoom: 0;
 }

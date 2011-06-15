@@ -10,6 +10,7 @@ import java.util.Set;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
@@ -169,6 +170,10 @@ public class CopyEventFactory {
             signatureResult.setSigned(((SignatureCriteriaResult) oldResult).isSigned());
             signatureResult.setImage(((SignatureCriteriaResult) oldResult).getImage());
             return signatureResult;
+        } else if (oldResult instanceof DateFieldCriteriaResult) {
+        	DateFieldCriteriaResult dateFieldResult = new DateFieldCriteriaResult();
+            dateFieldResult.setValue(((DateFieldCriteriaResult)oldResult).getValue());
+            return dateFieldResult;
         } else {
             throw new RuntimeException("Don't know how to copy: " + oldResult);
         }

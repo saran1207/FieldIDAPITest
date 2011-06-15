@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
@@ -134,7 +135,7 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     class CriteriaAddForm extends Form {
-        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box", "Combo Box", "Unit of Measure", "Signature");
+        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box", "Combo Box", "Unit of Measure", "Signature", "Date Field");
         protected TextField<String> addTextField;
         private String criteriaName;
         private String criteriaType;
@@ -176,7 +177,9 @@ public class CriteriaPanel extends SortableListPanel {
                         criteria = uomCriteria;
                     } else if ("Signature".equals(criteriaType)) {
                         criteria = new SignatureCriteria();
-                    }
+                    } else if ("Date Field".equals(criteriaType)) {
+                        criteria = new DateFieldCriteria();
+                    }                    
                     if (criteriaName.length()>1000){
                         error("Name length cannot exceed 100 characters.");
                         target.addComponent(feedbackPanel);
