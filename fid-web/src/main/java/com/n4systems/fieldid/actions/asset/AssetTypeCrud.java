@@ -206,6 +206,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 					addedInfoField.setName(input.getName().trim());
 					addedInfoField.setWeight(input.getWeight());
 					addedInfoField.setRequired(input.isRequired());
+					addedInfoField.setIncludeTime(input.isIncludeTime());
 
 					input.setInfoFieldFieldType(addedInfoField);
 					addedInfoField.setUnfilteredInfoOptions(new HashSet<InfoOptionBean>());
@@ -233,6 +234,7 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 							infoField.setName(input.getName().trim());
 							infoField.setWeight(input.getWeight());
 							infoField.setRequired(input.isRequired());
+							infoField.setIncludeTime(input.isIncludeTime());
 							input.setInfoFieldFieldType(infoField);
 
 							infoField.setRetired(input.isRetired());

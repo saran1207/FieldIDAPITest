@@ -66,6 +66,7 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	private boolean required;
 	private boolean usingUnitOfMeasure;
 	private boolean retired;
+	private boolean includeTime;
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "r_productinfo")
@@ -297,6 +298,14 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	@Override
 	public String toString() {
 		return "InfoFieldBean [fieldType=" + fieldType + ", name=" + name + ", uniqueId=" + getUniqueID() + "]";
+	}
+
+	public boolean isIncludeTime() {
+		return includeTime;
+	}
+
+	public void setIncludeTime(boolean includeTime) {
+		this.includeTime = includeTime;
 	}
 	
 }

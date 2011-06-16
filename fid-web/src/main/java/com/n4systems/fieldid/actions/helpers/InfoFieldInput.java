@@ -18,6 +18,7 @@ public class InfoFieldInput {
 	private boolean required;
 	private boolean deleted;
 	private boolean retired;
+	private boolean includeTime;
 	
 	private Long defaultUnitOfMeasure; 
 	
@@ -49,6 +50,7 @@ public class InfoFieldInput {
 		required = infoField.isRequired();
 		deleted = false;
 		retired = infoField.isRetired();
+		includeTime = infoField.isIncludeTime();
 		this.infoField = infoField;
 		defaultUnitOfMeasure = ( infoField.getUnitOfMeasure() != null ) ? infoField.getUnitOfMeasure().getId() : null;
 		
@@ -142,7 +144,6 @@ public class InfoFieldInput {
 				break;
 			case DateField:
 				field.setFieldType( InfoFieldBean.DATEFIELD_FIELD_TYPE );
-				field.setUsingUnitOfMeasure( false );
 				break;
 		}
 	}
@@ -174,6 +175,14 @@ public class InfoFieldInput {
 		setInfoFieldFieldType(infoFieldBean);
 		
 		return infoFieldBean.hasStaticInfoOption();
+	}
+
+	public boolean isIncludeTime() {
+		return includeTime;
+	}
+
+	public void setIncludeTime(boolean includeTime) {
+		this.includeTime = includeTime;
 	}
 	
 }

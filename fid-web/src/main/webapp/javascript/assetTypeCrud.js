@@ -25,9 +25,6 @@ function openOptions( id ) {
 	container.style.display = "block";
 }
 
-
-
-
 function changeFieldType( select ) {
 	if( select.options[ select.selectedIndex ].value == "TextField" 
 		|| select.options[ select.selectedIndex ].value == "UnitOfMeasure"
@@ -44,19 +41,43 @@ function changeFieldType( select ) {
 	} else {
 		hideDefaultUnitOfMeasure( select.parentNode.parentNode );
 	}
+	
+	if( select.options[ select.selectedIndex ].value == "DateField" ) {
+		showDefaultIncludeTime( select.parentNode.parentNode );
+	} else {
+		hideDefaultIncludeTime( select.parentNode.parentNode );
+	}
+
 }
 
-
 function showDefaultUnitOfMeasure( target ) {
-	var unitOfMeasure = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__defaultUnitOfMeasure" )
+	var unitOfMeasure = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__defaultUnitOfMeasure" );
 	if( unitOfMeasure != null ) 
 		unitOfMeasure.show();
 }
 
 function hideDefaultUnitOfMeasure( target ) {
-	var unitOfMeasure = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__defaultUnitOfMeasure" )
+	var unitOfMeasure = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__defaultUnitOfMeasure" );
 	if( unitOfMeasure != null ) 
 		unitOfMeasure.hide();
+}
+
+function showDefaultIncludeTime ( target ) {
+	var includeTime = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__includeTime" );
+	var includeTimeLabel = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__includeTimeLabel" );
+	if ( includeTime != null ) {
+		includeTime.show();
+		includeTimeLabel.show();
+	}
+}
+
+function hideDefaultIncludeTime ( target ) {
+	var includeTime = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__includeTime" );
+	var includeTimeLabel = $( "assetTypeUpdate_infoFields_" + findFieldIndex( target.id ) + "__includeTimeLabel" );
+	if ( includeTime != null ) {
+		includeTime.hide();
+		includeTimeLabel.hide();
+	}
 }
 
 function showOptionalElements( field ) {
@@ -115,6 +136,7 @@ function createField() {
 }
 
 function renameElement( node, old_id_prefix, old_name_prefix, element_id_prefix, element_name_prefix, name  ) {
+		
 	if( node.id == old_id_prefix + name ) {
 		node.id = element_id_prefix + name;
 		node.name = element_name_prefix + name;
@@ -140,7 +162,8 @@ function renameElements(newDiv, old_id_prefix, old_name_prefix, element_id_prefi
 			renameElement(secondNode, old_id_prefix, old_name_prefix, element_id_prefix, element_name_prefix, "fieldType" );
 			renameElement(secondNode, old_id_prefix, old_name_prefix, element_id_prefix, element_name_prefix, "defaultUnitOfMeasure" );
 			renameElement(secondNode, old_id_prefix, old_name_prefix, element_id_prefix, element_name_prefix, "required" );
-			
+			renameElement(secondNode, old_id_prefix, old_name_prefix, element_id_prefix, element_name_prefix, "includeTime" );
+			renameElement(secondNode, old_id_prefix, old_name_prefix, element_id_prefix, element_name_prefix, "includeTimeLabel" );			
 		}
 	}
 }
@@ -353,10 +376,6 @@ function prepInterface() {
 		}
 	}
 }
-
-
-
-
 
 function setupRemoved(){
 	var infoFieldContainer = $('infoFields');

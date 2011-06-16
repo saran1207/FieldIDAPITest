@@ -24,10 +24,20 @@
 				<@s.hidden name="infoFields[${stat.index}].weight" />
 				<@s.hidden name="infoFields[${stat.index}].deleted" />
 				<@s.hidden name="infoFields[${stat.index}].retired" />
-				<div class="infoFieldCol"><@s.textfield   name="infoFields[${stat.index}].name" size="30" disabled="${infoField.retired ? string}" cssClass="name"/> </div>
-				<div class="infoFieldCol selectBoxCol"><@s.select list="infoFieldTypes" listKey="name" listValue="label" name="infoFields[${stat.index}].fieldType" onchange="changeFieldType(this)" disabled="${infoField.retired ? string}" cssClass="fieldType" /></div>
-				<div class="infoFieldCol selectBoxCol"><@s.select list="unitsOfMeasure" listKey="id" listValue="name"  name="infoFields[${stat.index}].defaultUnitOfMeasure" disabled="${infoField.retired ? string}" /></div> 
-				<div class="infoFieldCol checkboxCol"><@s.checkbox name="infoFields[${stat.index}].required" disabled="${infoField.retired ? string}"/></div>
+				<div class="infoFieldCol">
+					<@s.textfield   name="infoFields[${stat.index}].name" size="30" disabled="${infoField.retired ? string}" cssClass="name"/> 
+				</div>
+				<div class="infoFieldCol selectBoxCol">
+					<@s.select list="infoFieldTypes" listKey="name" listValue="label" name="infoFields[${stat.index}].fieldType" onchange="changeFieldType(this)" disabled="${infoField.retired ? string}" cssClass="fieldType" />
+				</div>
+				<div class="infoFieldCol selectBoxCol">
+					<@s.select list="unitsOfMeasure" listKey="id" listValue="name"  name="infoFields[${stat.index}].defaultUnitOfMeasure" disabled="${infoField.retired ? string}" />
+					<@s.checkbox name="infoFields[${stat.index}].includeTime"/>
+					<label id="assetTypeUpdate_infoFields_${stat.index}__includeTimeLabel"><@s.text name="label.include_time" /></label>
+				</div> 
+				<div class="infoFieldCol checkboxCol">
+					<@s.checkbox name="infoFields[${stat.index}].required" disabled="${infoField.retired ? string}"/>
+					</div>
 				
 				
 				<div class="infoFieldCol linkCol">
@@ -79,7 +89,11 @@
 		<@s.hidden name="infodeleted" />
 		<div class="infoFieldCol"><@s.textfield name="infoname" size="30" cssClass="name"/></div>
 		<div class="infoFieldCol selectBoxCol"><@s.select list="infoFieldTypes" listKey="name" listValue="label" cssClass="fieldType" name="infofieldType" onchange="changeFieldType(this)" /></div>
-		<div class="infoFieldCol selectBoxCol"><@s.select list="unitsOfMeasure" listKey="id" listValue="name"  name="infodefaultUnitOfMeasure" cssStyle="display:none"/></div>
+		<div class="infoFieldCol selectBoxCol">
+			<@s.select list="unitsOfMeasure" listKey="id" listValue="name"  name="infodefaultUnitOfMeasure" cssStyle="display:none"/>
+			<@s.checkbox name="infoincludeTime" disabled="false" cssStyle="display:none"/>
+			<label id="assetTypeUpdate_infoincludeTimeLabel" style="display:none"><@s.text name="label.include_time"/></label>
+		</div>
 		<div class="infoFieldCol checkboxCol"><@s.checkbox name="inforequired"/></div>
 		
 		
