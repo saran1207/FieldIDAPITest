@@ -228,7 +228,8 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 
 	public boolean acceptsDyanmicInfoOption() {
 		if (COMBOBOX_FIELD_TYPE.equals(fieldType)
-				|| TEXTFIELD_FIELD_TYPE.equals(fieldType)) {
+				|| TEXTFIELD_FIELD_TYPE.equals(fieldType)
+				|| DATEFIELD_FIELD_TYPE.equals(fieldType)) {
 			return true;
 		}
 		return false;
