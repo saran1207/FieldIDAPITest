@@ -33,7 +33,7 @@ public class UserToModelConverterTest {
 		GlobalIdLoader<User> globalIdLoader = createMock(GlobalIdLoader.class);
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
 		
-		UserView view = new UserViewBuilder().withDefaultInformation().withGuid(null).build();
+		UserView view = new UserViewBuilder().withDefaultValues().withGuid(null).build();
 		
 		UserToModelConverter converter = new UserToModelConverter(globalIdLoader, orgLoader);
 
@@ -63,7 +63,7 @@ public class UserToModelConverterTest {
 
 		String password = "somePassword";
 		// leave GUID on so will try to find & update user 
-		UserView user = new UserViewBuilder().withDefaultInformation().withAssignPassword("N").withPassword(null).build();
+		UserView user = new UserViewBuilder().withDefaultValues().withAssignPassword("N").withPassword(null).build();
 		User userToBeUpdated = UserBuilder.aFullUser().withFirstName("OLD"+user.getFirstName()).withLastName("OLD"+user.getLastName()).withPassword(password).build();
 
 		UserToModelConverter converter = new UserToModelConverter(globalIdLoader, orgLoader);

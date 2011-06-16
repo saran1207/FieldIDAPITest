@@ -31,13 +31,18 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 	
 	protected UserView createExampleUser() {
 		UserView view = new UserView();
+		String Y = YNField.Y.toString();
 		view.setEmailAddress(getText("example.customer.contact.email"));
 		view.setFirstName(getText("example.customer.first.name"));
 		view.setLastName(getText("example.customer.last.name"));
 		view.setOrganization(getCurrentUser().getOwner().getName());
-		view.setAssignPassword(YNField.Y.toString());
+		view.setAssignPassword(Y);
 		view.setPassword(PasswordComplexityChecker.createDefault().generatePassword());
 		view.setUserID(getCurrentUser().getUserID());
+		view.setSendWelcomeEmail(Y);
+		view.setIdentifyAssets(Y);
+		view.setEditEvents(Y);
+		view.setCreateEvents(Y);
 		// TODO DD : need to use consistent terms....one of AccountType or UserType. not sure which one is "gooder".
 		view.setAccountType(UserType.FULL.getLabel());
 		// note : only populate required fields...leave the other ones blank.

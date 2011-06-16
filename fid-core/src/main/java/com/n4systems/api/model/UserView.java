@@ -49,7 +49,7 @@ public class UserView extends ExternalModelView {
 	public UserView() { }
 	
 	@Deprecated // used for testing only. 
-	UserView(String organization, String email, String firstName, String lastName, String assignPassword, String password, String userId, String guid) {
+	UserView(String organization, String email, String firstName, String lastName, String assignPassword, String password, String userId, String sendWelcomeEmail, String guid) {
 		this.organization = organization;
 		this.emailAddress = email;
 		this.firstName = firstName;
@@ -58,6 +58,7 @@ public class UserView extends ExternalModelView {
 		this.password = password;
 		this.userID = userId;
 		this.globalId = guid;
+		this.sendWelcomeEmail = sendWelcomeEmail;		
 	}
 	
 	@SerializableField(title=ORGANIZATION_FIELD, order = 0, validators = {NotNullValidator.class, OrgNameValidator.class}) 

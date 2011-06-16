@@ -5,23 +5,29 @@ import com.n4systems.security.Permissions;
 
 public class UserViewBuilder extends BaseBuilder<UserView> {
 
-	private String organization = "N4";
-	private String firstName = "john";
-	private String lastName = "smith";
-	private String email = "john@smith.com";
-	private String assignPassword = "Y";
-	private String password = "JOHNPASSWORD";
-	private String userId = "JohnUserId";
-	private String guid = "JohnGUID";
+	private String organization;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String assignPassword;
+	private String password;
+	private String userId;
+	private String guid;
+	private String sendWelcomeEmail = "N";
 	private int permissions = Permissions.ALL;
-	
-	private boolean useDefaultValues = false;
 	
 	public UserViewBuilder() { 		
 	}
 	
-	public UserViewBuilder withDefaultInformation() {
-		useDefaultValues = true;
+	public UserViewBuilder withDefaultValues() {
+		organization = "N4";
+		firstName = "john";
+		lastName = "smith";
+		email = "john@smith.com";
+		assignPassword = "Y";
+		password = "JOHNPASSWORD";
+		userId = "JohnUserId";
+		guid = "JohnGUID";
 		return this;
 	}
 	
@@ -35,13 +41,19 @@ public class UserViewBuilder extends BaseBuilder<UserView> {
 		return this;
 	}	
 
+	public UserViewBuilder withFirstName(String firstName) { 
+		this.firstName = firstName;
+		return this;
+	}
+	
+	public UserViewBuilder withLastName(String firstName) { 
+		this.lastName = firstName;
+		return this;
+	}
+	
 	@Override
 	public UserView createObject() {
-		if (!useDefaultValues) {
-			return new UserView();
-		} else { 
-			return new UserView(organization, email, firstName, lastName, password, password, userId, guid );
-		}
+		return new UserView(organization, email, firstName, lastName, assignPassword, password, userId, sendWelcomeEmail, guid );
 	}
 
 	public BaseBuilder<UserView> withGuid(Object object) {
@@ -56,6 +68,11 @@ public class UserViewBuilder extends BaseBuilder<UserView> {
 
 	public UserViewBuilder withPassword(String pw) {
 		this.password = pw;
+		return this;
+	}
+
+	public UserViewBuilder withSendWelcomeEmail(String sendWelcomeEmail ) {
+		this.sendWelcomeEmail = sendWelcomeEmail;
 		return this;
 	}
 	

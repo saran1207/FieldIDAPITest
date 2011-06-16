@@ -33,9 +33,6 @@ public class UserWelcomeNotificationProducer implements WelcomeNotifier {
 		notifier.notify(notification );
 	}
 	
-	
-
-
 	@Override
 	public void sendPersonalizedWelcomeNotificationTo(User user, String personalMessage) {
 		sendNotification(user, personalMessage);

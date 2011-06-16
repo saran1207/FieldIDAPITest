@@ -41,10 +41,10 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 	
 	@Override
 	public List<ValidationResult> readAndValidate() throws IOException, ParseException, MarshalingException {
-		if (views == null) {
-			views = readAllViews();
+		if (getViews() == null) {
+			setViews(readAllViews());
 		}
-		List<ValidationResult> results = validateAllViews(views);
+		List<ValidationResult> results = validateAllViews(getViews());
 		results.addAll(validateAllViewFields());
 		return results;
 	}
@@ -56,17 +56,17 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 
 	@Override
 	public int runImport(Transaction transaction) throws ImportException {
-		if (views == null) {
+		if (getViews() == null) {
 			throw new IllegalStateException("runImport() called before validate()");
 		}
 		
 		try {
 			preImport(transaction);
 			
-			totalRows = views.size();
+			totalRows = getViews().size();
 			currentRow = 0;
 						
-			for (V view: views) {
+			for (V view: getViews()) {
 				currentRow++;
 				importView(transaction, view);	
 			}
@@ -75,7 +75,7 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 			throw new ImportException("Failed to import view", e, currentRow);
 		} finally {
 			// clean up resources since this object could be holding a lot of them
-			views = null;
+			setViews(null);
 			StreamUtils.close(mapReader);
 		}
 		
@@ -84,8 +84,8 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 	
 	protected List<ValidationResult> validateAllViewFields() {
 		List<ValidationResult> failedValidationResults = new ArrayList<ValidationResult>();
-		for (int i = 0; i < views.size(); i++) {
-			failedValidationResults.addAll(validator.validate(views.get(i), i + FIRST_DATA_ROW));
+		for (int i = 0; i < getViews().size(); i++) {
+			failedValidationResults.addAll(validator.validate(getViews().get(i), i + FIRST_DATA_ROW));
 		}
 		return failedValidationResults;
 	}
@@ -114,5 +114,13 @@ public abstract class AbstractImporter<V extends ExternalModelView> implements I
 	@Override
 	public int getTotalRows() {
 		return totalRows;
+	}
+
+	void setViews(List<V> views) {
+		this.views = views;
+	}
+
+	List<V> getViews() {
+		return views;
 	}
 }
