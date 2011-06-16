@@ -21,7 +21,6 @@ public class SerializationHandlerFactory {
 	
 	public SerializationHandlerFactory() {}
 
-	// TODO DD : have static make method for these objects. e.g. makeExportingSerializationFactory();
 	public SerializationHandlerFactory(boolean skipImportOnlyFields) {
 		this.skipImportOnlyFields = skipImportOnlyFields;	// if true, skip fields that are marked importOnly 
 	}

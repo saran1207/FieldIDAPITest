@@ -31,15 +31,10 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setUserID(from.getUserID());
 		to.setEmailAddress(from.getEmailAddress());
 		to.setOwner(baseOrg);
-		// FIXME DD : need to implement setting of password here...how to handle crypto.
-			//to.setPassword(getPassword(from, to));		
+		if (from.isAssignPassword()) { 
+			to.assignPassword(from.getPassword());
+		}
 	}
-
-//	private String getPassword(UserView from, User to) {
-//		if (from.isAssignPassword()) {
-//			return from.getPassword();
-//		}
-//	}
 
 	@Override
 	protected User createModelBean() {

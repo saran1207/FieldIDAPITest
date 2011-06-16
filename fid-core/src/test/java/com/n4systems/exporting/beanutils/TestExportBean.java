@@ -19,11 +19,15 @@ public class TestExportBean {
 	@SerializableField(title="Other", order = 40, handler = DummySerializationHandler.class)
 	private Integer other;
 	
+	@SerializableField(title="ImportOnlyText", order = 42, importOnly = true)
+	private String importOnlyText;  
+	
 	@SerializableField(title="Date", order = 45)
 	private Date date;	
 	
 	@SerializableField(title="M:", order = 50, handler = MapSerializationHandler.class)
 	private Map<String, String> map = new HashMap<String, String>();
+
 	
 	public TestExportBean() {}
 
@@ -80,5 +84,13 @@ public class TestExportBean {
 
 	public void setMap(Map<String, String> map) {
 		this.map = map;
+	}
+
+	public void setImportOnlyText(String importOnlyText) {
+		this.importOnlyText = importOnlyText;
+	}
+
+	public String getImportOnlyText() {
+		return importOnlyText;
 	}
 }

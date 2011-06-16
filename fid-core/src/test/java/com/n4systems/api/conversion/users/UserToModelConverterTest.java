@@ -61,9 +61,10 @@ public class UserToModelConverterTest {
 		GlobalIdLoader<User> globalIdLoader = createMock(GlobalIdLoader.class);
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
 
+		String password = "somePassword";
 		// leave GUID on so will try to find & update user 
 		UserView user = new UserViewBuilder().withDefaultInformation().withAssignPassword("N").withPassword(null).build();
-		User userToBeUpdated = UserBuilder.aFullUser().withFirstName("OLD"+user.getFirstName()).withLastName("OLD"+user.getLastName()).build();
+		User userToBeUpdated = UserBuilder.aFullUser().withFirstName("OLD"+user.getFirstName()).withLastName("OLD"+user.getLastName()).withPassword(password).build();
 
 		UserToModelConverter converter = new UserToModelConverter(globalIdLoader, orgLoader);
 
@@ -84,6 +85,7 @@ public class UserToModelConverterTest {
 		assertFalse(model.getLastName().startsWith("OLD"));
 		assertSame(user.getFirstName(), model.getFirstName() );
 		assertSame(user.getLastName(), model.getLastName() );
+		assertNotNull(model.getHashPassword());  // should still exist from loaded user. 
 		
 		verify(globalIdLoader);
 		verify(orgLoader);
