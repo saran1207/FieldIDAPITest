@@ -16,26 +16,31 @@ import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
+import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.UserType;
 import com.n4systems.services.limiters.ResourceLimit;
 import com.n4systems.services.limiters.TenantLimitService;
+import com.n4systems.utils.email.WelcomeNotifier;
 
 public class UserImporter extends AbstractImporter<UserView> {
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(UserImporter.class);
 	private final UserSaver saver;
 	private final UserToModelConverter converter;
-	private final OrgByNameLoader orgByNameLoader;	
+	private final OrgByNameLoader orgByNameLoader;
+	private WelcomeNotifier emailNotifier;	
 	
-	public UserImporter(MapReader mapReader, Validator<ExternalModelView> validator, UserSaver saver, UserToModelConverter converter, OrgByNameLoader orgByNameLoader) {
+	public UserImporter(MapReader mapReader, Validator<ExternalModelView> validator, UserSaver saver, UserToModelConverter converter, OrgByNameLoader orgByNameLoader, WelcomeNotifier emailNotifier) {
 		super(UserView.class, mapReader, validator);
 		this.saver = saver;
 		this.converter = converter;
 		this.orgByNameLoader = orgByNameLoader;
+		this.emailNotifier = emailNotifier;
 	}
 
 	@Override
@@ -104,7 +109,15 @@ public class UserImporter extends AbstractImporter<UserView> {
 
 	@Override
 	protected void importView(Transaction transaction, UserView view) throws ConversionException {
-		saver.saveOrUpdate(converter.toModel(view, transaction));
+		User user = converter.toModel(view, transaction);
+		saver.saveOrUpdate(user);		
+		maybeSendWelcomeEmail(user, view);
+	}
+
+	private void maybeSendWelcomeEmail(User user, UserView view) {
+		if (YNField.isYes(view.getSendWelcomeEmail())) { 
+			emailNotifier.sendWelcomeNotificationTo(user);
+		}
 	}
 
 }

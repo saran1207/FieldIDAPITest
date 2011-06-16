@@ -5,8 +5,9 @@ import com.n4systems.model.user.User;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.notifiers.notifications.UserWelcomeEmail;
 import com.n4systems.util.uri.ActionURLBuilder;
+import com.n4systems.utils.email.WelcomeNotifier;
 
-public class UserWelcomeNotificationProducer {
+public class UserWelcomeNotificationProducer implements WelcomeNotifier {
 
 	private final Notifier notifier;
 	private final String loginUrl;
@@ -20,6 +21,7 @@ public class UserWelcomeNotificationProducer {
 	}
 
 	
+	@Override
 	public void sendWelcomeNotificationTo(User user) {
 		sendNotification(user, null);
 	}
@@ -34,6 +36,7 @@ public class UserWelcomeNotificationProducer {
 	
 
 
+	@Override
 	public void sendPersonalizedWelcomeNotificationTo(User user, String personalMessage) {
 		sendNotification(user, personalMessage);
 	}

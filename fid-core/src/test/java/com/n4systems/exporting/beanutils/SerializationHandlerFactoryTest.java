@@ -33,8 +33,7 @@ public class SerializationHandlerFactoryTest {
 		
 		assertTrue(handlers[6] instanceof MapSerializationHandler);		
 		assertEquals("map", handlers[6].getField().getName());
-	}
-	
+	}	
 	
 	@Test
 	public void test_get_sorted_handlers_skip_import_only_fields() throws InstantiationException {

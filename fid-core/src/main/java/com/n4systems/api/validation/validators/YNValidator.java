@@ -27,5 +27,9 @@ public class YNValidator implements FieldValidator {
 	
 	public enum YNField { 
 		Y,N;
+
+		public static boolean isYes(String value) {
+			return Y.toString().equalsIgnoreCase(value);
+		}
 	}
 }

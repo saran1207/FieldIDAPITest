@@ -43,6 +43,7 @@ import com.n4systems.util.UserGroup;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
+import com.n4systems.utils.email.WelcomeNotifier;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
@@ -187,9 +188,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	@SkipValidation
 	public String doExport() {
 		try {
-			// FIXME DD : get proper report name.
 			reportName = getText("label.export_file.user");
-			downloadLink = getDownloadCoordinator().generateUserExport("userExport", getDownloadLinkUrl(), createUserListLoader(), getSecurityFilter());
+			downloadLink = getDownloadCoordinator().generateUserExport(reportName, getDownloadLinkUrl(), createUserListLoader(), getSecurityFilter());
 		} catch (RuntimeException e) {
 			logger.error("Unable to execute user export", e);
 			addFlashMessage(getText("error.export_failed.user"));
@@ -206,7 +206,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public String doSendWelcomeMessage() {
 		testUserEntity(true);
 		welcomeMessage.setSendEmail(true);
-		sendWelcomeEmail();
+		sendWelcomeEmail(getWelcomeNotifier());
 		return SUCCESS;
 	}
 
@@ -261,11 +261,13 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 				user.assignPassword(passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
 				new UserSaver().save(user);
-				uniqueID = user.getId();
-				if(isAssignPassword())
-					sendWelcomeEmail();
-				else
-					sendCreatePasswordEmail();
+				uniqueID = user.getId();				
+				if(!isAssignPassword()) {			
+					createAndAssignPassword();
+					sendWelcomeEmail(getPasswordWelcomeNotifier());
+				} else {
+					sendWelcomeEmail(getWelcomeNotifier());
+				}
 			} else {
 				if(user.isArchived()) {
 					user.activateEntity();
@@ -286,6 +288,11 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return "saved";
 	}
 
+	private void createAndAssignPassword() {
+		user.createResetPasswordKey();
+		new UserSaver().update(user);
+	}
+
 	private void processSignature() {
 		try {
 			signatureFileProcess();
@@ -300,25 +307,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		new FileSystemUserSignatureFileProcessor(PathHandler.getSignatureImage(user)).process(signature);
 	}
 
-	protected void sendWelcomeEmail() {
+	protected void sendWelcomeEmail(WelcomeNotifier notifier) {
 		if (welcomeMessage.isSendEmail()) {
 			if (welcomeMessage.isPersonalMessageProvided()) {
-				getWelcomeNotifier().sendPersonalizedWelcomeNotificationTo(user, welcomeMessage.getPersonalMessage());
+				notifier.sendPersonalizedWelcomeNotificationTo(user, welcomeMessage.getPersonalMessage());
 			} else {
-				getWelcomeNotifier().sendWelcomeNotificationTo(user);
-			}
-			addFlashMessageText("label.welcome_message_sent");
-		}
-	}
-
-	private void sendCreatePasswordEmail() {
-		user.createResetPasswordKey();
-		new UserSaver().update(user);
-		if (welcomeMessage.isSendEmail()) {
-			if (welcomeMessage.isPersonalMessageProvided()) {
-				getPasswordWelcomeNotifier().sendPersonalizedWelcomeNotificationTo(user, welcomeMessage.getPersonalMessage());
-			} else {
-				getPasswordWelcomeNotifier().sendWelcomeNotificationTo(user);
+				notifier.sendWelcomeNotificationTo(user);
 			}
 			addFlashMessageText("label.welcome_message_sent");
 		}
@@ -329,8 +323,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return userWelcomeNotificationProducer;
 	}
 
-	private UserPasswordWelcomeNotificationProducer getPasswordWelcomeNotifier() {
-		UserPasswordWelcomeNotificationProducer userWelcomeNotificationProducer = new UserPasswordWelcomeNotificationProducer(getDefaultNotifier(), createActionUrlBuilder());
+	private WelcomeNotifier getPasswordWelcomeNotifier() {
+		WelcomeNotifier userWelcomeNotificationProducer = new UserPasswordWelcomeNotificationProducer(getDefaultNotifier(), createActionUrlBuilder());
 		return userWelcomeNotificationProducer;
 	}
 	

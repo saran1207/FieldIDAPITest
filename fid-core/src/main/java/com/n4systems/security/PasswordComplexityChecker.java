@@ -1,5 +1,7 @@
 package com.n4systems.security;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 public class PasswordComplexityChecker implements PasswordValidator {
 	private final int minLength;
 	private final int minLowerAlpha;
@@ -21,6 +23,7 @@ public class PasswordComplexityChecker implements PasswordValidator {
 		this.minPunctuation = minPunctuation;
 	}
 	
+	@Override
 	public boolean isValid(String pass) {
 		boolean valid = false;
 		
@@ -82,6 +85,19 @@ public class PasswordComplexityChecker implements PasswordValidator {
 
 	public static PasswordComplexityChecker createDefault() {
 		return new PasswordComplexityChecker(8, 1, 1, 1, 1);
+	}
+
+	public String generatePassword() {
+		char[] punctuation = {'.','_','!','@','#','$','%','&','*','(',')','"',';',':'};  // not complete list but good enough to generate pw.
+		StringBuffer pw = new StringBuffer();
+		pw.append(RandomStringUtils.randomAlphabetic(minLowerAlpha).toLowerCase());
+		pw.append(RandomStringUtils.randomAlphabetic(minUpperAlpha).toUpperCase());
+		pw.append(RandomStringUtils.randomNumeric(minNumeric));
+		pw.append(RandomStringUtils.random(minPunctuation, punctuation));
+		if (pw.length()<minLength) { 
+			pw.append(RandomStringUtils.randomAlphabetic(minLength-pw.length()).toLowerCase());
+		}		
+		return pw.toString();
 	}
 	
 }

@@ -21,7 +21,7 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		// TODO DD : ask what to do with sendWelcomeEmail???
 		view.setSecurityRfidNumber(model.getHashSecurityCardNumber());
 		view.setAccountType(model.getUserType().getLabel());
-		view.setContactEmail(model.getEmailAddress());
+		view.setEmailAddress(model.getEmailAddress());
 		view.setOrganization(model.getOwner().getPrimaryOrg().getDisplayName());
 		view.setCustomer(model.getOwner().getCustomerOrg() == null ? "" : model.getOwner().getCustomerOrg().getDisplayName());
 		view.setDivision(model.getOwner().getDivisionOrg() == null ? "" : model.getOwner().getDivisionOrg().getDisplayName());
@@ -29,7 +29,7 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setLastName(model.getLastName());
 		view.setInitials(model.getInitials());
 		view.setPosition(model.getPosition());
-		view.setUserName(model.getUserID());
+		view.setUserID(model.getUserID());
 		view.setGlobalId(model.getGlobalId());
 		// permissions...
 		view.setIdentifyAssets(getPermissionYNString(model, Permissions.Tag));

@@ -3,6 +3,7 @@ package com.n4systems.api.conversion.users;
 import com.n4systems.api.conversion.AbstractViewToModelConverter;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.UserView;
+import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.user.User;
@@ -31,7 +32,7 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setUserID(from.getUserID());
 		to.setEmailAddress(from.getEmailAddress());
 		to.setOwner(baseOrg);
-		if (from.isAssignPassword()) { 
+		if (YNField.isYes(from.getAssignPassword())) { 
 			to.assignPassword(from.getPassword());
 		}
 	}

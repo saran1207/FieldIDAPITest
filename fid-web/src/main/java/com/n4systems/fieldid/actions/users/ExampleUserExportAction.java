@@ -14,9 +14,9 @@ import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.downloaders.AbstractDownloadAction;
 import com.n4systems.model.downloadlink.ContentType;
-import com.n4systems.model.utils.GlobalID;
 import com.n4systems.model.utils.StreamUtils;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.security.PasswordComplexityChecker;
 import com.n4systems.security.UserType;
 
 @SuppressWarnings("serial")
@@ -31,13 +31,13 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 	
 	protected UserView createExampleUser() {
 		UserView view = new UserView();
-		view.setContactEmail(getText("example.customer.contact.email"));
+		view.setEmailAddress(getText("example.customer.contact.email"));
 		view.setFirstName(getText("example.customer.first.name"));
 		view.setLastName(getText("example.customer.last.name"));
-		view.setOrganization(getUser().getOwner().getName());
+		view.setOrganization(getCurrentUser().getOwner().getName());
 		view.setAssignPassword(YNField.Y.toString());
-		view.setPassword("PW-"+GlobalID.getId());
-		view.setUserName(getUser().getUserID());
+		view.setPassword(PasswordComplexityChecker.createDefault().generatePassword());
+		view.setUserID(getCurrentUser().getUserID());
 		// TODO DD : need to use consistent terms....one of AccountType or UserType. not sure which one is "gooder".
 		view.setAccountType(UserType.FULL.getLabel());
 		// note : only populate required fields...leave the other ones blank.

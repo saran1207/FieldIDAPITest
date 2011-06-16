@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.services.TenantFinder;
+import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
@@ -62,8 +63,8 @@ public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
 		}
 	}
 
-	public OrgByNameLoader setOrganizationName(String organizationName) {
-		this.organizationName = organizationName;
+	public OrgByNameLoader setOrganizationName(String organizationName) {		
+		this.organizationName = StringUtils.clean(organizationName);
 		return this;
 	}
 	

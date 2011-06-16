@@ -14,7 +14,7 @@ import com.n4systems.security.Permissions;
 
 public class UserView extends ExternalModelView {
 	public static final long serialVersionUID = 1L;
-
+	
 	public static final String USER_NAME_FIELD = "User Name";
 	public static final String MANAGE_JOBS_FIELD = "Manage Jobs (Y/N)";
 	public static final String MANAGE_SAFETY_NETWORK_FIELD = "Manage Safety Network (Y/N)";
@@ -51,26 +51,26 @@ public class UserView extends ExternalModelView {
 	@Deprecated // used for testing only. 
 	UserView(String organization, String email, String firstName, String lastName, String assignPassword, String password, String userId, String guid) {
 		this.organization = organization;
-		this.contactEmail = email;
+		this.emailAddress = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.assignPassword = assignPassword;
 		this.password = password;
-		this.userName = userId;
+		this.userID = userId;
 		this.globalId = guid;
 	}
 	
-	@SerializableField(title=ORGANIZATION_FIELD, order = 0, validators = {OrgNameValidator.class}) 
+	@SerializableField(title=ORGANIZATION_FIELD, order = 0, validators = {NotNullValidator.class, OrgNameValidator.class}) 
 	private String organization;
 	
 	@SerializableField(title=CUSTOMER_FIELD, order = 30, validators = {OrgNameValidator.class}) 
 	private String customer; //aka jobsite.
 	
-	@SerializableField(title=DIVISION_FIELD, order = 60, validators = {})
+	@SerializableField(title=DIVISION_FIELD, order = 60, validators = {OrgNameValidator.class})
 	private String division;
 	
 	@SerializableField(title=EMAIL_ADDRESS_FIELD, order = 100, validators = {NotNullValidator.class, EmailValidator.class})
-	private String contactEmail;
+	private String emailAddress;
 	
 	@SerializableField(title=FIRST_NAME_FIELD, order = 200, validators = {NotNullValidator.class})
 	private String firstName;
@@ -84,14 +84,12 @@ public class UserView extends ExternalModelView {
 	@SerializableField(title=POSTITION_FIELD, order = 350, validators = {})
 	private String position;
 
+	// NOTE : this field is also tested in conjunction with GlobalId.  (ie. if globalId=null, userId must not exist in DB and vice versa).
 	@SerializableField(title=USER_NAME_FIELD, order = 425, validators = {NotNullValidator.class})  
-	private String userName;
+	private String userID;
 
 	@SerializableField(title=ACCOUNT_TYPE_FIELD, order = 450, validators = {NotNullValidator.class, AccountTypeValidator.class})
-	private String accountType;
-	
-	@SerializableField(title=SEND_WELCOME_EMAIL_FIELD, order = 520, validators = {YNValidator.class})		
-	private String sendWelcomeEmail;
+	private String accountType;	
 	
 	@SerializableField(title=IDENTIFY_ASSETS_FIELD, order = 560, validators = {PermissionValidator.class})
 	private String identifyAssets;
@@ -129,6 +127,9 @@ public class UserView extends ExternalModelView {
 	@SerializableField(title=PASSWORD_FIELD, order = 705, validators = {PasswordValidator.class}, importOnly = true)
 	private String password;
 	
+	@SerializableField(title=SEND_WELCOME_EMAIL_FIELD, order = 750, validators = {YNValidator.class}, importOnly=true)		
+	private String sendWelcomeEmail;
+	
 	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})
 	private String globalId;	
 	
@@ -141,11 +142,11 @@ public class UserView extends ExternalModelView {
 	}
 
 	public String getEmailAddress() {
-		return contactEmail;
+		return emailAddress;
 	}
 
-	public void setContactEmail(String contactEmail) {
-		this.contactEmail = contactEmail;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
 	public String getFirstName() {
@@ -165,11 +166,11 @@ public class UserView extends ExternalModelView {
 	}
 
 	public String getUserID() {
-		return userName;
+		return userID;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserID(String userID) {
+		this.userID = userID;
 	} 
 	
 	public String getAssignPassword() {
@@ -330,11 +331,7 @@ public class UserView extends ExternalModelView {
 	public String getSecurityRfidNumber() {
 		return securityRfidNumber;
 	}
-
-	public boolean isAssignPassword() {
-		return YNField.Y.toString().equals(getAssignPassword());
-	}
-
+	
 	
 	// TODO DD : refactor this permission related stuff into testable class.
 	

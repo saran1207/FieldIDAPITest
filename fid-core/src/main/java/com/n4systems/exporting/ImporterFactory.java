@@ -25,6 +25,7 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.utils.email.WelcomeNotifier;
 
 public class ImporterFactory {
 	private final SecurityFilter filter;
@@ -104,8 +105,9 @@ public class ImporterFactory {
 		return new AutoAttributeImporter(reader, createViewValidator(), saverFactory.createAutoAttributeDefinitionSaver(), createAutoAttributeToModelConverter(criteria));
 	}
 
-	public UserImporter createUserImporter(MapReader reader) {
-		return new UserImporter(reader, createViewValidator(), saverFactory.createUserSaver(), createUserToModelConverter(), loaderFactory.createOrgByNameLoader());	
+
+	public UserImporter createUserImporter(MapReader reader, WelcomeNotifier emailNotifier) {
+		return new UserImporter(reader, createViewValidator(), saverFactory.createUserSaver(), createUserToModelConverter(), loaderFactory.createOrgByNameLoader(), emailNotifier);	
 	}
 	
 	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {
