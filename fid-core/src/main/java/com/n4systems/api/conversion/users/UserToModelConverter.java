@@ -36,10 +36,13 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setOwner(baseOrg);
 		to.setRegistered(true);
 		to.setCreated(new Date());
-		// TODO DD : setCreatedBy();
+		if(from.getSecurityRfidNumber()!=null) { 
+			to.assignSecruityCardNumber(from.getSecurityRfidNumber());
+		}
 		if (YNField.isYes(from.getAssignPassword())) { 
 			to.assignPassword(from.getPassword());
 		}
+		// TODO DD : setCreatedBy(theUser);
 	}
 
 	@Override
