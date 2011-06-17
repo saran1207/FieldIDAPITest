@@ -50,9 +50,7 @@ public class SerializationHandlerFactory {
 		Class<?> handlerClass = exportField.handler();
 		try {
 			Constructor<?> constructor = handlerClass.getConstructor(Field.class);
-
-			handler = (SerializationHandler)constructor.newInstance(field);
-			
+			handler = (SerializationHandler)constructor.newInstance(field);			
 		} catch (InstantiationException e) {
 			throw e;
 		} catch (NoSuchMethodException e) {
@@ -71,11 +69,7 @@ public class SerializationHandlerFactory {
 		Predicate<Field> exportFieldPredicate = new Predicate<Field>() {
 			@Override
 			public boolean apply(Field field) {
-				SerializableField annotation = field.getAnnotation(SerializableField.class);						
-				if (annotation != null) { 
-					return annotation.importOnly()==false || skipImportOnlyFields==false;
-				}
-				return false;
+				return field.getAnnotation(SerializableField.class) != null;						
 			}			
 		};
 		Collection<Field> exportedFields = Collections2.filter(Arrays.asList(fields), exportFieldPredicate);

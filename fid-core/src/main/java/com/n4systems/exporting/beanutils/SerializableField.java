@@ -15,5 +15,4 @@ public @interface SerializableField {
 	int maxLength() default 255;
 	Class<? extends SerializationHandler> handler() default SimpleSerializationHandler.class;
 	Class<? extends FieldValidator>[] validators() default {};
-	boolean importOnly() default false;
 }

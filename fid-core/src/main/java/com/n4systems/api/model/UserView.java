@@ -9,6 +9,7 @@ import com.n4systems.api.validation.validators.PasswordValidator;
 import com.n4systems.api.validation.validators.PermissionValidator;
 import com.n4systems.api.validation.validators.YNValidator;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
+import com.n4systems.exporting.beanutils.MaskedSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.security.Permissions;
 
@@ -119,16 +120,16 @@ public class UserView extends ExternalModelView {
 	@SerializableField(title=ACCESS_WEB_STORE_FIELD, order = 640, validators = {PermissionValidator.class})
 	private String accessWebStore;
 	
-	@SerializableField(title=SECURITY_RFID_NUMBER_FIELD, order = 680, validators = {}, importOnly = true)
+	@SerializableField(title=SECURITY_RFID_NUMBER_FIELD, order = 680, validators = {}, handler=MaskedSerializationHandler.class)
 	private String securityRfidNumber;
 	
-	@SerializableField(title=ASSIGN_PASSWORD_FIELD, order = 700, validators = {YNValidator.class}, importOnly = true)
-	private String assignPassword;
+	@SerializableField(title=ASSIGN_PASSWORD_FIELD, order = 700, validators = {YNValidator.class})
+	private String assignPassword = "N";
 	
-	@SerializableField(title=PASSWORD_FIELD, order = 705, validators = {PasswordValidator.class}, importOnly = true)
+	@SerializableField(title=PASSWORD_FIELD, order = 705, validators = {PasswordValidator.class}, handler=MaskedSerializationHandler.class)
 	private String password;
 	
-	@SerializableField(title=SEND_WELCOME_EMAIL_FIELD, order = 750, validators = {YNValidator.class}, importOnly=true)		
+	@SerializableField(title=SEND_WELCOME_EMAIL_FIELD, order = 750, validators = {YNValidator.class})		
 	private String sendWelcomeEmail;
 	
 	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})

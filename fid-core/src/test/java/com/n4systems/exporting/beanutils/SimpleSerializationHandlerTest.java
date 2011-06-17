@@ -1,6 +1,7 @@
 package com.n4systems.exporting.beanutils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Date;
 import java.util.Map;
@@ -95,4 +96,16 @@ public class SimpleSerializationHandlerTest {
 		assertEquals(1, values.size());
 		assertEquals(testDate, values.get("Date"));
 	}
+	
+	@Test
+	public void test_masked_serialization() throws Exception {
+		SimpleSerializationHandler testHandler = new MaskedSerializationHandler(TestExportBean.class.getDeclaredField("name"));
+		
+		Map<String, Object> values = testHandler.marshal(bean);
+		
+		assertEquals(1, values.size());
+		assertEquals("", values.get("Name"));
+	}
+	
+	
 }

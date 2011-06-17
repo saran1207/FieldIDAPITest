@@ -19,7 +19,7 @@ public class TestExportBean {
 	@SerializableField(title="Other", order = 40, handler = DummySerializationHandler.class)
 	private Integer other;
 	
-	@SerializableField(title="ImportOnlyText", order = 42, importOnly = true)
+	@SerializableField(title="ImportOnlyText", order = 42)
 	private String importOnlyText;  
 	
 	@SerializableField(title="Date", order = 45)
