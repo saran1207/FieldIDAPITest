@@ -1,5 +1,7 @@
 package com.n4systems.api.conversion.users;
 
+import java.util.Date;
+
 import com.n4systems.api.conversion.AbstractViewToModelConverter;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.UserView;
@@ -32,6 +34,9 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setUserID(from.getUserID());
 		to.setEmailAddress(from.getEmailAddress());
 		to.setOwner(baseOrg);
+		to.setRegistered(true);
+		to.setCreated(new Date());
+		// TODO DD : setCreatedBy();
 		if (YNField.isYes(from.getAssignPassword())) { 
 			to.assignPassword(from.getPassword());
 		}

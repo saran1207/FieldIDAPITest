@@ -302,9 +302,8 @@ public class UserView extends ExternalModelView {
 		this.accessWebStore = accessWebStore;
 	}
 
-
 	private boolean isPermission(String yOrN) {
-		return YNField.Y.toString().equals(yOrN);
+		return YNField.isYes(yOrN);
 	}
 
 	public void setCustomer(String customer) {
@@ -337,7 +336,8 @@ public class UserView extends ExternalModelView {
 	// TODO DD : refactor this permission related stuff into testable class.
 	
 	public int getPermissions() {
-		// CAVEAT : this defines the permissions as defined in the excel columns but they aren't validated.		
+		// CAVEAT : this defines the permissions as defined in the excel columns but they aren't validated.
+		// ie. it doesn't check to see if the account type actually allows for these permissions.
 		int permissions = Permissions.NO_PERMISSIONS;
 		if (isPermission(getManageSystemConfiguration())) {
 			permissions |= Permissions.ManageSystemConfig;		
