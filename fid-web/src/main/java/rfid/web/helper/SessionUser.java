@@ -120,6 +120,14 @@ public class SessionUser implements DateTimeDefinition {
 		return convertJavaDateFormatToHumanDisplay(getDateTimeFormat());
 	}
 	
+	public String getJqueryDateFormat() {
+		return convertJaveDateFormatToJQueryFormat(getDateFormat());
+	}
+	
+	private String convertJaveDateFormatToJQueryFormat(String format) {		
+		return format.replace("MM", "mm").replace("yy", "y");
+	}
+
 	private String convertJavaDateFormatToHumanDisplay(String format) {
 		format = format.replace("a", "AM/PM");
 		format = format.replace("h", "HH");

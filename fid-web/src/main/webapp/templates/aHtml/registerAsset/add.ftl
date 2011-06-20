@@ -9,6 +9,7 @@
 	<#include "/templates/html/common/_lightView.ftl"/>
 	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 	<script type="text/javascript">
 	    updateAssetTypeUrl = '<@s.url action="regAssetTypeChange" namespace="/ajax"/>';
 	    updateOwnerUrl = '<@s.url action="regOwnerChange" namespace="/ajax"/>';

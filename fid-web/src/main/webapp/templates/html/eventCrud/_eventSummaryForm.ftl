@@ -1,6 +1,7 @@
 <head>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 </head>
 <@s.hidden name="uniqueID" id="uniqueID"/>
 <@s.hidden name="assetId"/>
@@ -72,11 +73,13 @@
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.date_performed"/></label>
 		<#if form_action="ADD">		
-			<@s.datetimepicker theme="fieldid" id="datePerformed" onchange="updateAutoSuggest();" name="modifiableEvent.datePerformed"  type="dateTime"/>
+			<@s.textfield theme="fieldid" id="datePerformed" onchange="updateAutoSuggest();" name="modifiableEvent.datePerformed" cssClass="datetimepicker"/>
 		<#else>
-			<@s.datetimepicker theme="fieldid" id="datePerformed" name="modifiableEvent.datePerformed"  type="dateTime"/>
+			<@s.textfield theme="fieldid" id="datePerformed" name="modifiableEvent.datePerformed" cssClass="datetimepicker"/>
 		</#if>
-		
+		<script type="text/javascript">
+			initDatePicker();
+		</script>	
 	</div>
 
 	<#if eventScheduleOnEvent>

@@ -4,7 +4,7 @@
 	</div>
 	<div class="infoSet">
 		<label for="identified" class="label"><@s.text name="label.identifieddate"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-		<@s.datetimepicker id="identified" name="identified" type="dateTime"/>
+		<@s.textfield id="identified" name="identified" cssClass="datetimepicker"/>
 	</div>
 	
 	<div class="infoSet">

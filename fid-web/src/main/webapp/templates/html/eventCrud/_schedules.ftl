@@ -27,7 +27,9 @@
 		
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.for_date"/></label>
-			<@s.datetimepicker id="nextDate" name="newScheduleDate" theme="fieldid"/>
+			<span class="fieldHolder">
+				<@s.textfield id="nextDate" name="newScheduleDate" cssClass="datepicker"/>
+			</span>
 		</div>
 		<#if securityGuard.projectsEnabled>
 			<div class="infoSet">

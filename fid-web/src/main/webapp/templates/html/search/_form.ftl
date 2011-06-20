@@ -1,6 +1,6 @@
 <head>
-	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>	
 	<@n4.includeStyle type="page" href="search" />
 	<@n4.includeStyle type="page" href="downloads" />
 	
@@ -103,11 +103,11 @@
 			<div class="container">
 				<div class="infoSet">
 					<label for="fromDate"><@s.text name="label.fdate"/></label>
-					<@s.datetimepicker  name="fromDate" />
+					<@s.textfield  name="fromDate" cssClass="datepicker"/>
 				</div>
 				<div class="infoSet">
 					<label for="toDate"><@s.text name="label.tdate"/></label>
-					<@s.datetimepicker  name="toDate" />
+					<@s.textfield  name="toDate" cssClass="datepicker"/>
 				</div>
 			</div>
 		</div>

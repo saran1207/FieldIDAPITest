@@ -24,9 +24,9 @@
 	<@n4.includeStyle href="multi_event" type="page" />
 	<@n4.includeStyle type="page" href="event" />
 
-	<#include "/templates/html/common/_calendar.ftl"/>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 	
 	<@n4.includeScript src="commentTemplates"/>
 	<@n4.includeScript src="combobox"/>

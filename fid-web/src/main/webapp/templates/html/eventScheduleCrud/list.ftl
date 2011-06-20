@@ -1,5 +1,5 @@
 <head>
-	<#include "/templates/html/common/_calendar.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 	<@n4.includeStyle href="schedules" type="page"/>
 	<@n4.includeScript src="eventSchedule.js"/>
 	<script type="text/javascript" >

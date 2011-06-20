@@ -26,14 +26,9 @@
 			</td>
 			<td>
 				<div class="infoSet">
-					<@s.textfield id="input_nextDate" key="label.tdate" name="nextDate" size="10" labelposition="left" onchange="selectField('nextDate');" title="${Session.sessionUser.displayDateFormat}" />
-					<img src="images/calendar-icon.png" border="0" id="nextDateTrigger">
+					<@s.textfield id="input_nextDate" key="label.tdate" name="nextDate" size="10" labelposition="left" onchange="selectField('nextDate');" title="${Session.sessionUser.displayDateFormat}" cssClass="datepicker"/>
 					<script type="text/javascript">
-						Calendar.setup({
-							inputField  : "input_nextDate",
-							ifFormat    : "${Session.sessionUser.otherDateFormat}",
-							button      : "nextDateTrigger"
-						});
+						initDatePicker();
 					</script>
 					<p>
 						<@s.fielderror>

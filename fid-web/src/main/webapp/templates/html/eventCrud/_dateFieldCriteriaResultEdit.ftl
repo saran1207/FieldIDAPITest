@@ -1,9 +1,12 @@
 <div class="criteriaEditContainer">
     <div class="textCriteriaContainer">
     	<#if criteria.includeTime>
-    		<@s.datetimepicker theme="fieldid" name="criteriaResults[${criteriaCount}].textValue" cssClass="dateCriteria" type="datetime"/>
+    		<@s.textfield theme="fieldid" name="criteriaResults[${criteriaCount}].textValue" cssClass="dateCriteria datetimepicker" />
         <#else>
-        	<@s.datetimepicker theme="fieldid" name="criteriaResults[${criteriaCount}].textValue" cssClass="dateCriteria" type="date"/>
+        	<@s.textfield theme="fieldid" name="criteriaResults[${criteriaCount}].textValue" cssClass="dateCriteria datepicker" />
         </#if>
+        <script type="text/javascript">
+			initDatePicker();
+		</script>
     </div>
 </div>

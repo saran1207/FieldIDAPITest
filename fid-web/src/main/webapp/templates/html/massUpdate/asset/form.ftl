@@ -1,9 +1,9 @@
 <title><@s.text name="title.massupdateassets" /></title>
 <head>
 	<@n4.includeStyle href="massUpdate" type="page"/>
-	<#include "/templates/html/common/_calendar.ftl"/>	
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 	<style type="text/css">
 	
 	</style>
@@ -127,7 +127,7 @@
 			</td>
 			<td>
 				<div class="infoSet">
-					<span class="field"><@s.datetimepicker id="identified" name="identified" type="dateTime" onchange="selectField('identified');"/></span>
+					<span class="field"><@s.textfield id="identified" name="identified" cssClass="datepicker" onchange="selectField('identified');"/></span>
 				</div>
 			</td>
 		</tr>

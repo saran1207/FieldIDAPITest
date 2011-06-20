@@ -4,7 +4,10 @@
 		<@s.hidden name="assetId"  />
 		<@s.hidden name="uniqueID" />
 		
-		<@s.datetimepicker name="nextDate" onkeypress="return doSubmit(event,  ${uniqueID});"/>
+		<@s.textfield name="nextDate" onkeypress="return doSubmit(event,  ${uniqueID});" cssClass="datepicker"/>
+		<script type="text/javascript">
+			initDatePicker();
+		</script>
 		<#if securityGuard.projectsEnabled>
 			<@s.select name="project" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
 		</#if>

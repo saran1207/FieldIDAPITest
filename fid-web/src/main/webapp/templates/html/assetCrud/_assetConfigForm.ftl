@@ -1,6 +1,7 @@
 <head>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 </head>
 <div class="assetFormGroup">
 	<h2><@s.text name="label.owner"/></h2>
@@ -72,7 +73,7 @@
                 <input type="checkbox" name="useDatesFromAssets" onchange="$('identified').disabled = this.checked;"/> <@s.text name="label.use_dates_from_assets"/>
             </div>
         </#if>
-		<@s.datetimepicker id="identified" name="identified" type="dateTime"/>
+		<@s.textfield id="identified" name="identified" cssClass="datepicker"/>
 	</div>
 </div>
 

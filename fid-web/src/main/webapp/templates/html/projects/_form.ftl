@@ -1,7 +1,6 @@
 <head>
-	<#include "/templates/html/common/_calendar.ftl"/>
-	
-	<link type="text/css" rel="stylesheet" href="<@s.url value="/style/pageStyles/projects.css"/>"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
+	<@n4.includeStyle href="projects" type="page"/>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	
 </head>
@@ -48,17 +47,17 @@
 	</div>
 	<div class="infoSet">
 		<label for="started"><@s.text name="label.datestarted"/></label>
-		<@s.datetimepicker name="started" type="dateTime"/>
+		<@s.textfield name="started" cssClass="datetimepicker"/>
 	</div>
 	
 	<div class="infoSet">
 		<label for="estimatedCompletion"><@s.text name="label.estimatedcompletion"/> </label>
-		<@s.datetimepicker name="estimatedCompletion" type="dateTime"/>
+		<@s.textfield name="estimatedCompletion" cssClass="datetimepicker"/>
 	</div>
 	
 	<div class="infoSet">
 		<label for="acutalCompletion"><@s.text name="label.actualcompletion"/> </label>
-		<@s.datetimepicker name="actualCompletion" type="dateTime"/>
+		<@s.textfield name="actualCompletion" cssClass="datetimepicker"/>
 	</div>
 		
 	<div class="infoSet">

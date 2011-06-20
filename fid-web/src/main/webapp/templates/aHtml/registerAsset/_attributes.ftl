@@ -90,10 +90,13 @@
 					
 					<#if infoField.fieldType == "datefield" >
 						<#if infoField.includeTime>
-							<@s.datetimepicker theme="fieldid" id="${infoField.uniqueID}" name="assetInfoOptions[${stat.index}].name" type="datetime"/>
+							<@s.textfield theme="fieldid" id="${infoField.uniqueID}" name="assetInfoOptions[${stat.index}].name" cssClass="datetimepicker"/>
 						<#else>
-							<@s.datetimepicker theme="fieldid" id="${infoField.uniqueID}" name="assetInfoOptions[${stat.index}].name" type="date"/>
+							<@s.textfield theme="fieldid" id="${infoField.uniqueID}" name="assetInfoOptions[${stat.index}].name" cssClass="datepicker"/>
 						</#if>
+						<script type="text/javascript">
+							initDatePicker();
+						</script>
 					</#if>
 					
 				</#if>

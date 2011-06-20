@@ -18,7 +18,7 @@
 			
 			<div class="infoSet">
 				<label for="type"><@s.text name="label.scheduledate"/></label>
-				<@s.datetimepicker name="nextDate" />
+				<@s.textfield name="nextDate" cssClass="datepicker" />
 			</div>	
 			
 			<#if securityGuard.projectsEnabled>

@@ -44,7 +44,10 @@
 	</div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="label.date_performed"/></label>
-		<@s.datetimepicker id="datePerformed" name="modifiableEvent.datePerformed"  type="dateTime"/>
+		<@s.textfield id="datePerformed" name="modifiableEvent.datePerformed" cssClass="datetimepicker"/>
+		<script type="text/javascript">
+			initDatePicker();
+		</script>
 	</div>
 	
 	

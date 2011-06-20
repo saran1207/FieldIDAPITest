@@ -1,5 +1,4 @@
 <head>
-	<#include "/templates/html/common/_calendar.ftl"/>
 	<@n4.includeStyle type="page" href="search" />
 	<@n4.includeStyle type="page" href="downloads" />
 	
@@ -10,6 +9,7 @@
 	</script>
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 </head>
 
 <div class="pageSection searchPageSection" id="criteriaForm">
