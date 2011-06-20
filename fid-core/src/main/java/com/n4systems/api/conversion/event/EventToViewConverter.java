@@ -1,10 +1,15 @@
 package com.n4systems.api.conversion.event;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ModelToViewConverter;
+import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.model.EventView;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.orgs.BaseOrg;
@@ -28,8 +33,34 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		convertBook(model, view);
 		convertAssetStatus(model, view);
 		convertNextDate(model, view);
+		convertCriteriaResults(model, view);
 		
 		return view;
+	}
+
+	private void convertCriteriaResults(Event model, EventView view) {
+		view.setCriteriaResults(convertCriteriaResults(model));
+	}
+
+	private List<CriteriaResultView> convertCriteriaResults(Event model) {
+		List<CriteriaResultView> results = new ArrayList<CriteriaResultView>();
+		for (CriteriaResult result:model.getResults()) { 
+			results.add(convertCriteriaResult(model, result));
+		}
+		return results;
+	}
+
+	private CriteriaResultView convertCriteriaResult(Event model, CriteriaResult result) {
+		CriteriaResultView resultView = new CriteriaResultView();		
+		Criteria criteria = result.getCriteria();
+		
+		resultView.setSection(model.findSection(criteria).getDisplayName());
+		resultView.setDisplayText(result.getCriteria().getDisplayText());
+		// NOTE : for exporting, we leave these fields blank.
+		resultView.setRecommendation("");		
+		resultView.setDeficiency("");
+		resultView.setResult("");
+		return resultView;
 	}
 
 	protected void convertDirectFields(Event model, EventView view) {

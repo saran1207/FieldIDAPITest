@@ -9,7 +9,7 @@ public class ExportMapMarshaler<T> {
 	
 	// initialize the handlers lazily so we don't have to throw
 	// exceptions out of the constructor
-	private SerializationHandler[] handlers;
+	private SerializationHandler<?>[] handlers;
 	
 	public ExportMapMarshaler(Class<T> beanClass) {
 		this(beanClass, new SerializationHandlerFactory());
@@ -35,7 +35,7 @@ public class ExportMapMarshaler<T> {
 		
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		
-		for (SerializationHandler handler: handlers) {
+		for (SerializationHandler<?> handler: handlers) {
 			map.putAll(handler.marshal(bean));
 		}
 		

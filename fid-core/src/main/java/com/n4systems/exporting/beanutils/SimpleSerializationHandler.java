@@ -2,30 +2,22 @@ package com.n4systems.exporting.beanutils;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Map;
 
 import com.n4systems.util.StringUtils;
 
-public class SimpleSerializationHandler extends SerializationHandler {
+public class SimpleSerializationHandler<T> extends SerializationHandler<T> {
 
 	public SimpleSerializationHandler(Field field) {
-		super(field);
+		super(field);		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> marshal(Object bean) throws MarshalingException {
 		Object value = getFieldValue(bean);
-		
-		// let dates pass through 
-		Object cleanValue;
-		if (value instanceof Date) {
-			cleanValue = value;
-		} else {
-			cleanValue = (value != null) ? value.toString() : new String();
-		}
-	
-		return Collections.singletonMap(getExportField().title(), cleanValue);
+
+		return Collections.singletonMap(getExportField().title(), cleanValue(value));
 	}
 	
 	@Override

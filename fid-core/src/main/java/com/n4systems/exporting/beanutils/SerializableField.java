@@ -9,6 +9,7 @@ import com.n4systems.api.validation.validators.FieldValidator;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
+@SuppressWarnings("rawtypes")
 public @interface SerializableField {
 	String title();
 	int order();

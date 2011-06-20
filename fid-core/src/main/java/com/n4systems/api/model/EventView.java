@@ -1,5 +1,6 @@
 package com.n4systems.api.model;
 
+import java.util.Collection;
 import java.util.Date;
 
 import com.n4systems.api.validation.validators.AssetIdentifierValidator;
@@ -10,8 +11,9 @@ import com.n4systems.api.validation.validators.FullNameUserValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.YNValidator;
-import com.n4systems.exporting.beanutils.SerializableField;
+import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
+import com.n4systems.exporting.beanutils.SerializableField;
 
 public class EventView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
@@ -48,6 +50,10 @@ public class EventView extends ExternalModelView {
 	
 	@SerializableField(title = "Comments", order = 1100)
 	private String comments;
+
+	@SerializableField(title = "Criteria", order = 1100, handler=CriteriaResultSerializationHandler.class)
+	private Collection<CriteriaResultView> criteriaResults;
+
 
 	public EventView() {}
 
@@ -190,11 +196,19 @@ public class EventView extends ExternalModelView {
 	}
 
 	@Override
-	public String getGlobalId() {
+	public String getGlobalId() {   // DD : hmmm...why is this null? can they be edited on import?
 		return null;
 	}
 
 	@Override
 	public void setGlobalId(String globalId) {}
+
+	public void setCriteriaResults(Collection<CriteriaResultView> criteriaResults) {
+		this.criteriaResults = criteriaResults;
+	}
+
+	public Collection<CriteriaResultView> getCriteriaResults() {
+		return criteriaResults;
+	}
 
 }

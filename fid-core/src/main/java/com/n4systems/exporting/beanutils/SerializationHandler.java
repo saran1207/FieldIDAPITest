@@ -1,38 +1,69 @@
 package com.n4systems.exporting.beanutils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
-public abstract class SerializationHandler {
+// TODO DD : make this generic so getFieldValue returns <T>
+public abstract class SerializationHandler<T> {
 	private final Field field;
 	private final SerializableField exportField;
 	private final PropertyUtilsBean propertyUtils = new PropertyUtilsBean();
 	
 	public SerializationHandler(Field field) {
 		this.field = field;
-		this.exportField = field.getAnnotation(SerializableField.class);
+		this.exportField = field.getAnnotation(SerializableField.class);		
 	}
 	
 	public Field getField() {
 		return field;
 	}
-
+	
+	protected Object cleanValue(Object value) {
+		Object cleanValue;
+		if (value instanceof Date) {
+			cleanValue = value;
+		} else {
+			cleanValue = (value != null) ? value.toString() : new String();
+		}
+		return cleanValue;
+	}
+	
+	// refactor this into lower level--into SimpleSerializationHandler??
+	public Type[] getCollectionFieldTypes() { 
+		Type genericType = field.getGenericType();
+		if (genericType instanceof ParameterizedType) { 
+			ParameterizedType parameterizedType = (ParameterizedType) genericType;
+			return parameterizedType.getActualTypeArguments();			 
+		}
+		throw new IllegalStateException("can't get collection types on non collection field " + field.getClass().getSimpleName());
+	}
+	
 	public SerializableField getExportField() {
 		return exportField;
 	}
 
-	protected Object getFieldValue(Object bean) throws MarshalingException {
+	@SuppressWarnings("unchecked")
+	protected T getFieldValue(Object bean) throws MarshalingException {
+		T property = null;
+		
 		try {
-			Object property = propertyUtils.getProperty(bean, getField().getName());
-			return property;
+			return (T) propertyUtils.getProperty(bean, getField().getName());
+		} catch (ClassCastException e) {
+			// TODO DD : print out expected class type.
+			String msg = String.format("Class cast exception getting field.  Property was of type " + property.getClass().getSimpleName(), 
+					getField().getName(), 
+					bean.getClass().getName());
+			throw new MarshalingException(msg, e);			
 		} catch (Exception e) {
 			String msg = String.format("Failed getting field [%s] on class [%s]", 
 					getField().getName(), 
-					bean.getClass().getName());
-			
+					bean.getClass().getName());		
 			throw new MarshalingException(msg, e);
 		}
 	}
@@ -44,8 +75,7 @@ public abstract class SerializationHandler {
 			String msg = String.format("Failed setting field [%s] on class [%s] with value [%s]", 
 					getField().getName(), 
 					bean.getClass().getName(), 
-					String.valueOf(value));
-			
+					String.valueOf(value));			
 			throw new MarshalingException(msg, e);
 		}
 	}

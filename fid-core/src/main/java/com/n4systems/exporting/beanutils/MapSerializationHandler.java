@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MapSerializationHandler extends SerializationHandler {
+public class MapSerializationHandler extends SerializationHandler<Map<String, String>> {
 	
 	public MapSerializationHandler(Field field) {
 		super(field);
@@ -15,7 +15,6 @@ public class MapSerializationHandler extends SerializationHandler {
 		return title.startsWith(getExportField().title());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> marshal(Object bean) throws MarshalingException {
 		Map<String, Object> outputMap = new LinkedHashMap<String, Object>();
@@ -23,7 +22,7 @@ public class MapSerializationHandler extends SerializationHandler {
 		// prepend the keys with our field title prefix
 		String prefix = getExportField().title();
 		
-		Map<String, String> mapFromBean = (Map<String, String>)getFieldValue(bean);
+		Map<String, String> mapFromBean = getFieldValue(bean);
 		for (Map.Entry<String, String> entry: mapFromBean.entrySet()) {
 			outputMap.put(prefix + entry.getKey(), entry.getValue());
 		}	
@@ -34,7 +33,7 @@ public class MapSerializationHandler extends SerializationHandler {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
-		Map<String, String> mapFromBean = (Map<String, String>)getFieldValue(bean);
+		Map<String, String> mapFromBean = getFieldValue(bean);
 		
 		// remove the title prefix from the field key
 		String fieldKey = title.substring(getExportField().title().length());

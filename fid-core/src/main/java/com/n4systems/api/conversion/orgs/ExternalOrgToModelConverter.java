@@ -18,7 +18,6 @@ public abstract class ExternalOrgToModelConverter<M extends ExternalOrg> extends
 	public void copyProperties(FullExternalOrgView from, M to, boolean isEdit) throws ConversionException {
 		to.setName(from.getName());
 		to.setCode(from.getCode());
-		
 		copyContact(from, to);
 		copyAddressInfo(from, to);
 		to.setNotes(from.getNotes());

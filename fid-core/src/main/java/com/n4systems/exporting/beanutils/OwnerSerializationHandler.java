@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.n4systems.util.StringUtils;
 
-public class OwnerSerializationHandler extends SerializationHandler {
+public class OwnerSerializationHandler extends SerializationHandler<String[]> {
 	public static final int OWNER_ORGANIZATION = 0;
 	public static final int OWNER_CUSTOMER = 1;
 	public static final int OWNER_DIVISION = 2;
@@ -27,7 +27,7 @@ public class OwnerSerializationHandler extends SerializationHandler {
 	public Map<String, Object> marshal(Object bean) throws MarshalingException {
 		Map<String, Object> outputMap = new LinkedHashMap<String, Object>();
 		
-		String[] ownerArray = (String[])getFieldValue(bean);;
+		String[] ownerArray = getFieldValue(bean);;
 		outputMap.put(ORGANIZATION_MAP_KEY, ownerArray[OWNER_ORGANIZATION]);
 		outputMap.put(CUSTOMER_MAP_KEY, ownerArray[OWNER_CUSTOMER]);
 		outputMap.put(DIVISION_MAP_KEY, ownerArray[OWNER_DIVISION]);
@@ -37,7 +37,7 @@ public class OwnerSerializationHandler extends SerializationHandler {
 
 	@Override
 	public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
-		String[] ownerArray = (String[])getFieldValue(bean);
+		String[] ownerArray = getFieldValue(bean);
 		
 		String cleanName = StringUtils.clean((String)value);
 		
