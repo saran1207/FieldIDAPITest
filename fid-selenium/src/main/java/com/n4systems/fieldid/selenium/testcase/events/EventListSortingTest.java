@@ -136,7 +136,7 @@ public class EventListSortingTest extends
 
 	@Override
 	protected EventsPerformedPage navigateToPage() {
-		return startAsCompany(TEST_TENANT).login().search(ASSET_SERIAL1).clickEventsTab();
+		return startAsCompany(TEST_TENANT).login().search(ASSET_SERIAL1).clickEventHistoryTab();
 	}
 	
 	@Test

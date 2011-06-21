@@ -119,8 +119,8 @@ public class AssetPage extends FieldIDPage {
 				+ "']/../..//a[text()='Stop Progress']");
 	}
 
-	public EventsPerformedPage clickEventsTab() {
-		selenium.click("//a[contains(.,'Events')]");
+	public EventsPerformedPage clickEventHistoryTab() {
+		selenium.click("//a[contains(.,'Event History')]");
 		return new EventsPerformedPage(selenium);
 	}
 

@@ -53,7 +53,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 
 	@Test
 	public void create_master_event_no_sub_events() {
-        EventPage eventPage = page.clickEventsTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+        EventPage eventPage = page.clickEventHistoryTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
 
         performMandatoryEvent(eventPage);
 
@@ -67,7 +67,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
 		page.clickSubComponentsTab();
 		page.addNewSubcomponent(TEST_SUB_SERIAL_NUMBER);
 		
-		EventPage eventPage = page.clickEventsTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+		EventPage eventPage = page.clickEventHistoryTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
 
 		performMandatoryEvent(eventPage);
 		performSubEvent(eventPage);
@@ -82,7 +82,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
     	page.clickSubComponentsTab();
     	page.attachExistingSubcomponent(TEST_SUB_SERIAL_NUMBER);
     	
-    	EventPage eventPage = page.clickEventsTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+    	EventPage eventPage = page.clickEventHistoryTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
 
 		performMandatoryEvent(eventPage);
 		performSubEvent(eventPage);
@@ -97,7 +97,7 @@ public class EventCreateEditRemoveTest extends PageNavigatingTestCase<AssetPage>
     	page.clickSubComponentsTab();
 		page.addNewSubcomponent(TEST_SUB_SERIAL_NUMBER);
 		
-		EventPage eventPage = page.clickEventsTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
+		EventPage eventPage = page.clickEventHistoryTab().clickViewEventsByDateGroup().clickStartNewEvent("Master Event Type");
 
 		performMandatoryEvent(eventPage);
 		performSubEvent(eventPage);

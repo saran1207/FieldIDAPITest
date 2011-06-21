@@ -53,7 +53,7 @@ public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTes
         return startAsCompany("test1")
         		.login()
         		.search(TEST_SERIAL_NUMBER)
-                .clickEventsTab()
+                .clickEventHistoryTab()
                 .clickStartEventWithOnlyOneEventType()
                 .clickFirstAdHocEventType();
     }
@@ -66,7 +66,7 @@ public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTes
         page.clickSaveNormalEvent();
         AssetPage assetPage = page.clickAssetInformationTab();
 
-        EventsPerformedPage eventsPerformedPage = assetPage.clickEventsTab();
+        EventsPerformedPage eventsPerformedPage = assetPage.clickEventHistoryTab();
         EventInfoPopup popup = eventsPerformedPage.clickViewLatestEvent();
 
         assertEquals("My event value", popup.getTextValueForCriteria("Text Crit"));
