@@ -22,7 +22,7 @@
 	<div class="infoSet">
 		<label for="owner" class="label"><@s.text name="label.owner"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 		<#if !parentAsset?exists >
-			<@n4.orgPicker name="owner" theme="fieldid" required="true" id="ownerId"/>
+			<@n4.orgPicker name="owner" theme="fieldid" id="ownerId"/>
 		<#else>
 			<span class="fieldHolder" id="owner">${(asset.owner.name?html)!}</span>
 		</#if>

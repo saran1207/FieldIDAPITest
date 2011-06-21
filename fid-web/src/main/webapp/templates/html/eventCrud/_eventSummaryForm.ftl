@@ -50,9 +50,9 @@
 	
 	
 	<div class="infoSet">
-		<label class="label" ><@s.text name="label.owner"/></label>
-		<span class="fieldHolder"><@n4.orgPicker name="modifiableEvent.owner" required="true" id="ownerId" /></span>
-	</div>	
+		<label class="label" ><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
+		<span class="fieldHolder"><@n4.orgPicker name="modifiableEvent.owner" id="ownerId" /></span>
+	</div>
 	
 	<div class="infoSet">
 		<label class="label" for="asset.location"><@s.text name="label.location"/></label>

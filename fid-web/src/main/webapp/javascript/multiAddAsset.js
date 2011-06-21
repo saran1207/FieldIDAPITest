@@ -75,6 +75,16 @@ function serialIsValid(idx) {
 	}
 }
 
+function validateOwner() {
+	var owner = $('ownerId').getValue();
+	
+	if (notNullOrBlank(owner)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function validateIdentified() {
 	var identDate = $('identified').getValue();
 	
@@ -103,7 +113,7 @@ function validateInfoOptions() {
 }
 
 function validateForm1() {
-	if (validateIdentified() && validateInfoOptions()) {
+	if (validateOwner() && validateIdentified() && validateInfoOptions()) {
 		$('form1required').hide();
 		
 		$('step1').hide();

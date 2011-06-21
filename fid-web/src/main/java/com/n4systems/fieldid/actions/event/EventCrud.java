@@ -1000,7 +1000,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return modifiableEvent;
 	}
 	
-	
+	@RequiredFieldValidator(message = "", key = "error.owner_required")
 	public BaseOrg getOwner() {
 		return modifiableEvent.getOwner();
 	}

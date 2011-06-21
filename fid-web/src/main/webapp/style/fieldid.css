@@ -2135,3 +2135,8 @@ div.unitOfMeasureName {
 .addicon {
 	background-image: url(../images/add-division-icon.png);
 }
+
+.crudForm .infoSet label .required {
+	display: inline;
+	float: none;
+}

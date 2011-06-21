@@ -1,7 +1,4 @@
 ${action.setPageType('asset', 'customer_edit')!}
-<head>
-	<#include "/templates/html/common/_orgPicker.ftl"/>
-</head>
 <@s.form action="customerInformationUpdate" cssClass="crudForm" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
@@ -16,8 +13,8 @@ ${action.setPageType('asset', 'customer_edit')!}
 	
 	<#if !subAsset>
 		<div class="infoSet">
-			<label><@s.text name="label.owner"/></label>
-			<@n4.orgPicker name="owner" required="true"/>
+			<label><#include "../common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
+			<@n4.orgPicker name="owner"/>
 		</div>
 		<div class="infoSet">
 			<label><@s.text name="label.location"/></label>

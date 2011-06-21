@@ -21,14 +21,14 @@
 	</#if>
 	
 	<div class="infoSet">
-		<label class="label" for="owner"><@s.text name="label.owner"/></label>
+		<label class="label" for="owner"><#include "../common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
         <#if bulkRegister?exists>
             <div style="display:block;">
                 <input type="checkbox" name="useOwnerFromAssets" onchange="$('ownerId_orgName').disabled = this.checked;"/> <@s.text name="label.create_owners_from_assets"/>
             </div>
         </#if>
 		<#if !parentAsset?exists >
-			<@n4.orgPicker name="owner" theme="fieldid" required="true" id="ownerId"/>
+			<@n4.orgPicker name="owner" theme="fieldid" id="ownerId"/>
 		<#else>
 			<span class="fieldHolder" id="owner">${(asset.owner.name?html)!}</span>
 		</#if>

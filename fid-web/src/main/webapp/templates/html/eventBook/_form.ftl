@@ -4,8 +4,8 @@
 <#include "/templates/html/common/_formErrors.ftl"/>
 <@s.hidden name="currentPage"/>
 <@s.hidden name="uniqueID"/>
-<p>
-	<label><@s.text name="label.title"/></label>
+<div class="infoSet">
+	<label><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.title"/></label>
 	<span>
 		<@s.textfield name="name" >
 			<#if (action.fieldErrors['name'])?exists> 
@@ -14,18 +14,18 @@
 			</#if>  
 		</@s.textfield>
 	</span>
-</p>
-<p>
-	<label for="owner"><@s.text name="label.owner"/></label>
-	<@n4.orgPicker name="owner" theme="fieldid" required="true"/>
-</p>
+</div>
+<div class="infoSet">
+	<label for="owner"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
+	<@n4.orgPicker name="owner" theme="fieldid"/>
+</div>
 
-<p>
+<div class="infoSet">
 	<label><@s.text name="label.open"/></label>
 	<span>
 		<@s.checkbox name="open" />
 	</span>
-</p>
+</div>
 <div class="formAction borderLessFormAction">
 	<@s.submit key="hbutton.save" />
 	<@s.text name="label.or"/>
