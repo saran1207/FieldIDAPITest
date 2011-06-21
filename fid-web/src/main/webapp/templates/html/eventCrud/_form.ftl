@@ -6,7 +6,7 @@
 		<script type="text/javascript">
 			changeCommentUrl = '<@s.url action="commentTemplateShow" namespace="ajax"   />';
 			updateEventBooksUrl = '<@s.url action="eventBooks" namespace="ajax"   />';
-	        updateOwnerUrl = '<@s.url action="eventOwnerChange" namespace="/ajax"/>';
+		    updateAutoScheduleUrl = '<@s.url action="eventOwnerChange" namespace="/ajax"/>';
 			assetTypeId = ${asset.type.id}
 			var proofTestTypes = ${json.toJson( proofTestTypesUpload )}
 		</script>

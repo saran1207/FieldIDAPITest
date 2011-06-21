@@ -73,7 +73,7 @@
                 <input type="checkbox" name="useDatesFromAssets" onchange="$('identified').disabled = this.checked;"/> <@s.text name="label.use_dates_from_assets"/>
             </div>
         </#if>
-		<@s.textfield id="identified" name="identified" cssClass="datepicker"/>
+		<@s.textfield id="identified" name="identified" cssClass="datepicker" onchange="updateIdentified(event);"/>
 	</div>
 </div>
 

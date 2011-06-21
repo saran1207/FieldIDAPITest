@@ -76,7 +76,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 				AssetTypeSchedule schedule = assetType.getSchedule(type.getEventType(), asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
 					EventSchedule eventSchedule = new EventSchedule(asset, type.getEventType());
-					eventSchedule.setNextDate(assetType.getSuggestedNextEventDate(new Date(), type.getEventType(), asset.getOwner()));
+					eventSchedule.setNextDate(assetType.getSuggestedNextEventDate(asset.getIdentified(), type.getEventType(), asset.getOwner()));
 					schedules.add(eventSchedule);
 				}
 			}

@@ -4,7 +4,7 @@ function updateAssetType( assetTypeSelect ) {
 	if( assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value != "" ) {
 		updatingAsset();
 		var assetTypeSelectId = assetTypeSelect.options[ assetTypeSelect.selectedIndex ].value;
-		var url = updateAssetTypeUrl + '?assetTypeId='+ assetTypeSelectId + "&ownerId=" + $('ownerId').value;
+		var url = updateAssetTypeUrl + '?assetTypeId='+ assetTypeSelectId + "&ownerId=" + $('ownerId').value + "&identified=" + encodeURIComponent($('identified').value);
 		getResponse( url, "get" );
 	} else {
 		replaceInfoOptions( null, null );

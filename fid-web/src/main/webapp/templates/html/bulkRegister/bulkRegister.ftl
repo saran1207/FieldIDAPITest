@@ -31,7 +31,7 @@
 	    assetTypeChangeWarning = '<@s.text name="warning.assettypechange"/>';
 	    originalAssetType = ${assetTypeId!0};
 	    updateAssetTypeUrl = '<@s.url action="bulkRegAssetTypeChange" namespace="/ajax" />';
-	    updateOwnerUrl = '<@s.url action="ownerChange" namespace="/ajax"/>';
+	    updateAutoScheduleUrl = '<@s.url action="updateAutoSchedule" namespace="/ajax"/>';
 
 	    function moveToStep4() {
 

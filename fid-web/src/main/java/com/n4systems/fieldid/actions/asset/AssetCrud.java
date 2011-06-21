@@ -91,7 +91,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 	protected Asset asset;
 	private AddAssetHistory addAssetHistory;
 	private String search;
-	private String identified;
 	private LineItem lineItem;
 	private OwnerPicker ownerPicker;
 
@@ -482,7 +481,6 @@ public class AssetCrud extends UploadAttachmentSupport {
 	
 	private void prepareAssetToBeSaved() {
 		asset.setTenant(getTenant());
-		asset.setIdentified(convertDate(identified));
 
 		convertInputsToInfoOptions();
 		processOrderMasters();
@@ -636,9 +634,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 		setAutoEventSchedules(getAutoEventSchedules());		
 		return SUCCESS;
 	}
-	
+		
 	@SkipValidation
-	public String doOwnerChange() {
+	public String doUpdateAutoSchedule() {
 		webEventSchedules.clear();
 		setAutoEventSchedules(getAutoEventSchedules());		
 		return SUCCESS;
@@ -718,15 +716,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 	@RequiredStringValidator(message = "", key = "error.identifiedrequired")
 	@CustomValidator(type = "n4systemsDateValidator", message = "", key = "error.mustbeadate")
 	public void setIdentified(String identified) {
-		this.identified = identified;
+		asset.setIdentified(convertDate(identified));
 	}
 
 	public String getIdentified() {
-		if (identified == null) {
-			return convertDate(asset.getIdentified());
-		}
-
-		return identified;
+		return convertDate(asset.getIdentified());
 	}
 
 	public String getPurchaseOrder() {

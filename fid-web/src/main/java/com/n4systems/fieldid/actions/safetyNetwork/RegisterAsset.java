@@ -115,7 +115,7 @@ public class RegisterAsset extends AbstractCrud{
 
 	public String doSave(){
 		
-		AssetViewModeConverter converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getUser());
+		AssetViewModeConverter converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getCurrentUser());
 		
 		Asset assetToSave = converter.viewToModel(assetView);
 		assetToSave.setSerialNumber(identifiers.getSerialNumber());

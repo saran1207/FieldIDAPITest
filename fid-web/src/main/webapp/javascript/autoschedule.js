@@ -1,12 +1,25 @@
-var updateOwnerUrl= '';
+var updateAutoScheduleUrl='';
 
 function updateOwner ( event ) {
 	var ownerId = Event.element(event).getValue();
 	if ( ownerId != "" ) {
-		var url = updateOwnerUrl + '?assetTypeId='+ $('assetType').value + "&ownerId=" + ownerId;
+		var url = updateAutoScheduleUrl + '?assetTypeId='+ $('assetType').value + "&ownerId=" + ownerId;
+		if ($('identified') != null) {
+			url += "&identified=" + encodeURIComponent($('identified').value);
+		}
         if ($('eventTypeId') != null) {
             url += "&type=" + $('eventTypeId').value;
         }
+		getResponse( url, "get" );
+	} else {
+		replaceEventSchedules( null );
+	}
+}
+
+function updateIdentified ( event ) {
+	var identified = Event.element(event).getValue();
+	if ( identified != "" ) {
+		var url = updateAutoScheduleUrl + '?assetTypeId='+ $('assetType').value + "&ownerId=" + $('ownerId').value + "&identified=" + encodeURIComponent(identified);
 		getResponse( url, "get" );
 	} else {
 		replaceEventSchedules( null );
