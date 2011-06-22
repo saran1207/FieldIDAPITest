@@ -109,9 +109,11 @@ public class AssetTypeCrud extends UploadFileSupport implements HasDuplicateValu
 	@SkipValidation
 	public String doLoadCopy() {
 		testForAssetType();
+		Long groupId = getGroup();
 		new CleanAssetTypeFactory(assetType, getTenant()).clean();
 		setUniqueID(null);
-		assetType.setName(null);
+		setName(null);
+		setGroup(groupId);
 		return INPUT;
 	}
 
