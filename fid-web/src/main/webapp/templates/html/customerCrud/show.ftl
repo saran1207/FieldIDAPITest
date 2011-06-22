@@ -54,7 +54,7 @@ ${action.setPageType('customer','show')!}
 		</p>
 		<p>
 			<label for="lastModified"><@s.text name="label.notes" /></label>
-			<span class="fieldValue"><pre>${customer.notes!}</pre></span>
+			<span class="fieldValue">${action.replaceCR((customer.notes?html)!"")}</span>
 		</p>
 	</div>
 	
