@@ -155,7 +155,7 @@ public class MasterEvent {
 		event.setTenant(subEvent.getTenant());
 		event.setType(subEvent.getType());
 		event.setComments(subEvent.getComments());
-		event.setResults(subEvent.getResults());
+		event.setCriteriaResults(subEvent.getResults());
 		event.setInfoOptionMap(subEvent.getInfoOptionMap());
 		event.setAttachments(subEvent.getAttachments());
 		event.setCreated(subEvent.getCreated());
@@ -228,7 +228,7 @@ public class MasterEvent {
 			SubEvent s = createSubEventFromEvent(createEventFromSubEvent(subEvent));
             storeTemporarySignatureFilesInMemory(s.getResults());
 			s.setId((subEvent.getId() < 0) ? null : subEvent.getId());
-			s.setResults(subEvent.getResults());
+			s.setCriteriaResults(subEvent.getResults());
 			processResults(s);
 			event.getSubEvents().add(s);
 		}

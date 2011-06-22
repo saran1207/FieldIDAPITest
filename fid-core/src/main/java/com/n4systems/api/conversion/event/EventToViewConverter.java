@@ -58,8 +58,8 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		resultView.setDisplayText(result.getCriteria().getDisplayText());
 		// NOTE : for exporting, we leave these fields blank.
 		resultView.setRecommendation("");		
-		resultView.setDeficiency("");
-		resultView.setResult("");
+		resultView.setDeficiencyString("");
+		resultView.setResultString("");
 		return resultView;
 	}
 

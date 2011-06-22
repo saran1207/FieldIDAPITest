@@ -97,7 +97,7 @@ public class CopyEventFactory {
 		newEvent.setAttachments( copyFileAttachments( originalEvent.getAttachments() ) );
 		newEvent.setInfoOptionMap( new HashMap<String, String>( originalEvent.getInfoOptionMap() ) );
 		
-		newEvent.setResults( copyCriteriaResults( originalEvent.getResults(), newEvent) );
+		newEvent.setCriteriaResults( copyCriteriaResults( originalEvent.getResults(), newEvent) );
 	}
 	
 	protected static List<FileAttachment> copyFileAttachments( List<FileAttachment> oldFileAttachments ) {

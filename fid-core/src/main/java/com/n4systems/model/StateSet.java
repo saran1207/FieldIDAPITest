@@ -51,10 +51,12 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
 		name = (name != null) ? name.trim() : null;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
 	
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -75,6 +77,7 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
 		this.retired = retired;
 	}
 	
+	@Override
 	public String getDisplayName() {
 		return getName();
 	}
@@ -94,6 +97,7 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
 	}
 	
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || this.getId() == null || !(obj instanceof StateSet)) {
 			return super.equals(obj);
@@ -111,5 +115,14 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
     public int hashCode() {
         return id == null ? 0 : id.intValue();
     }
+
+	public State getState(String stateName) {
+		for (State state:getAvailableStates() ) {
+			if (state.getDisplayName().equalsIgnoreCase(stateName)) {
+				return state;
+			}
+		}
+		return null;
+	}
 }
 

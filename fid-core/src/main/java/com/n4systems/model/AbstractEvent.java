@@ -155,7 +155,7 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 		return results;
 	}
 
-	public void setResults(Set<CriteriaResult> results) {
+	public void setCriteriaResults(Set<CriteriaResult> results) {
 		this.results = results;
 	}
 

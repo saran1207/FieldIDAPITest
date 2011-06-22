@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.n4systems.util.StringUtils;
+public abstract class CollectionSerializationHandler<T> extends SerializationHandler<Collection<T>> {
 
-public class CollectionSerializationHandler<T> extends SerializationHandler<Collection<T>> {
+	private Collection<T> collection;
 
 	public CollectionSerializationHandler(Field field) {
 		super(field);		
@@ -30,29 +30,29 @@ public class CollectionSerializationHandler<T> extends SerializationHandler<Coll
 		return result;
 	}
 
-	private Object getValue(Object value) {
-		return cleanValue(value);
+	protected Object getValue(Object value) {
+		return cleanExportValue(value);
 	}
 
-	private String generateKeyForValue(Object value) {
+	protected String generateKeyForValue(Object value) {
 		return getExportField().title();
 	}
 	
 	@Override
-	public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
-		// FIXME DD : make this handle collections  (i.e. do invert of marshallCollection()		
+	public final void unmarshal(Object bean, String title, Object value) throws MarshalingException {
+		getCollection().add(unmarshalObject(bean, title, value));
+		setFieldValue(bean,getCollection());
+	}
+
+	protected abstract T unmarshalObject(Object bean, String title, Object value);
 		
-		Object cleanValue = null;
-		if (value != null) {
-			// only strings need to be cleaned for now.  All others will passthrough un modified
-			if (value instanceof String) {
-				cleanValue = (value != null) ? StringUtils.clean((String)value) : null;
-			} else {
-				cleanValue = value;
-			}
+	protected abstract Collection<T> createCollection();
+	
+	protected final Collection<T> getCollection() { 
+		if (collection == null) {
+			collection = createCollection();
 		}
-		
-		setFieldValue(bean, cleanValue);
+		return collection;
 	}
 
 	@Override

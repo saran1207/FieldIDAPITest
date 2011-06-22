@@ -9,7 +9,8 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
-// TODO DD : make this generic so getFieldValue returns <T>
+import com.n4systems.util.StringUtils;
+
 public abstract class SerializationHandler<T> {
 	private final Field field;
 	private final SerializableField exportField;
@@ -24,14 +25,18 @@ public abstract class SerializationHandler<T> {
 		return field;
 	}
 	
-	protected Object cleanValue(Object value) {
+	protected Object cleanExportValue(Object value) {
 		Object cleanValue;
 		if (value instanceof Date) {
 			cleanValue = value;
 		} else {
-			cleanValue = (value != null) ? value.toString() : new String();
+			cleanValue = cleanString(value);
 		}
 		return cleanValue;
+	}
+	
+	protected String cleanString(Object value) { 
+		return (value != null) ? StringUtils.clean(value.toString()) : new String();		
 	}
 	
 	// refactor this into lower level--into SimpleSerializationHandler??
@@ -105,4 +110,17 @@ public abstract class SerializationHandler<T> {
 	 * @return true if this title belongs to this handler.  False otherwise.
 	 */
 	public abstract boolean handlesField(String title);
+
+	protected Object cleanImportValue(Object value) {
+		Object cleanValue = null;
+		if (value != null) {
+			// only strings need to be cleaned for now.  All others will passthrough un modified
+			if (value instanceof String) {
+				cleanValue = (value != null) ? StringUtils.clean((String)value) : null;
+			} else {
+				cleanValue = value;
+			}
+		}
+		return cleanValue;
+	}
 }

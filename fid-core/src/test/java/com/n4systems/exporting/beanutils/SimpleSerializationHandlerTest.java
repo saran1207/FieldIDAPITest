@@ -13,7 +13,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_get_string_value() throws MarshalingException, SecurityException, NoSuchFieldException {
-		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("type"));
+		SerializationHandler<String> testHandler = new SimpleSerializationHandler<String>(TestExportBean.class.getDeclaredField("type"));
 		
 		Map<String, Object> values = testHandler.marshal(bean);
 		
@@ -23,7 +23,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_get_null_value() throws MarshalingException, SecurityException, NoSuchFieldException {
-		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("name"));
+		SerializationHandler<String> testHandler = new SimpleSerializationHandler<String>(TestExportBean.class.getDeclaredField("name"));
 		
 		Map<String, Object> values = testHandler.marshal(bean);
 		
@@ -33,7 +33,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_get_int_value() throws MarshalingException, SecurityException, NoSuchFieldException {
-		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("age"));
+		SerializationHandler<String> testHandler = new SimpleSerializationHandler<String>(TestExportBean.class.getDeclaredField("age"));
 		
 		Map<String, Object> values = testHandler.marshal(bean);
 		
@@ -43,7 +43,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_set_string_value() throws MarshalingException, SecurityException, NoSuchFieldException {
-		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("type"));
+		SerializationHandler<String> testHandler = new SimpleSerializationHandler<String>(TestExportBean.class.getDeclaredField("type"));
 		
 		TestExportBean test = new TestExportBean();
 		
@@ -54,7 +54,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_set_null_value() throws MarshalingException, SecurityException, NoSuchFieldException {
-		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("name"));
+		SerializationHandler<String> testHandler = new SimpleSerializationHandler<String>(TestExportBean.class.getDeclaredField("name"));
 		
 		TestExportBean test = new TestExportBean();
 		
@@ -65,7 +65,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_set_int_value() throws MarshalingException, SecurityException, NoSuchFieldException {
-		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("age"));
+		SerializationHandler<String> testHandler = new SimpleSerializationHandler<String>(TestExportBean.class.getDeclaredField("age"));
 		
 		TestExportBean test = new TestExportBean();
 		
@@ -76,7 +76,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_set_date_value() throws MarshalingException, SecurityException, NoSuchFieldException {
-		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("date"));
+		SerializationHandler<String> testHandler = new SimpleSerializationHandler<String>(TestExportBean.class.getDeclaredField("date"));
 		
 		Date expected = new Date();
 		
@@ -89,7 +89,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_get_date_value() throws MarshalingException, SecurityException, NoSuchFieldException {
-		SimpleSerializationHandler testHandler = new SimpleSerializationHandler(TestExportBean.class.getDeclaredField("date"));
+		SerializationHandler<String> testHandler = new SimpleSerializationHandler<String>(TestExportBean.class.getDeclaredField("date"));
 		
 		Map<String, Object> values = testHandler.marshal(bean);
 		
@@ -99,7 +99,7 @@ public class SimpleSerializationHandlerTest {
 	
 	@Test
 	public void test_masked_serialization() throws Exception {
-		SimpleSerializationHandler testHandler = new MaskedSerializationHandler(TestExportBean.class.getDeclaredField("name"));
+		SerializationHandler<String> testHandler = new MaskedSerializationHandler(TestExportBean.class.getDeclaredField("name"));
 		
 		Map<String, Object> values = testHandler.marshal(bean);
 		

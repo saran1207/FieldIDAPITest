@@ -1,21 +1,44 @@
 package com.n4systems.api.conversion.event;
 
-import com.n4systems.api.model.EventView;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.lang.Validate;
+
+import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
+import com.n4systems.api.model.CriteriaResultView;
+import com.n4systems.api.model.EventView;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.ComboBoxCriteriaResult;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.DateFieldCriteriaResult;
+import com.n4systems.model.Deficiency;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
+import com.n4systems.model.EventForm;
+import com.n4systems.model.EventType;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.OneClickCriteriaResult;
+import com.n4systems.model.Recommendation;
+import com.n4systems.model.SelectCriteria;
+import com.n4systems.model.SelectCriteriaResult;
+import com.n4systems.model.SignatureCriteriaResult;
+import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
+import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.asset.SmartSearchLoader;
+import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
-import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
@@ -56,7 +79,104 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		
 		resolveAssetStatus(view, model, transaction);
 		
+		resolveCriteriaResults(view, model, transaction);
+		
 		return model;
+	}
+
+	
+	private void resolveCriteriaResults(EventView view, final Event event, Transaction transaction) {
+		Set<CriteriaResult> results  = new HashSet<CriteriaResult>();
+		if (view.getCriteriaResults()==null) {
+			return;
+		}
+		for (final CriteriaResultView criteriaResultView:view.getCriteriaResults()) {		
+			final Criteria criteria = getCriteria(type.getEventForm(), criteriaResultView);
+			
+			CriteriaResultFactory criteriaResultFactory = new CriteriaResultFactory(new CriteriaResultPopulator() {				
+				@Override
+				public CriteriaResult populate(CriteriaResult criteriaResult) {
+					criteriaResult.setDeficiencies(getDeficiencies(criteriaResultView));
+					criteriaResult.setRecommendations(getRecommendations(criteriaResultView));
+					criteriaResult.setCriteria(criteria);
+					criteriaResult.setEvent(event);					
+					criteriaResult.setTenant(type.getTenant());
+					return criteriaResult;
+				}
+
+				@Override public CriteriaResult populate(OneClickCriteriaResult result) {
+					Validate.isTrue(criteria.isOneClickCriteria());
+					StateSet states = ((OneClickCriteria)criteria).getStates();
+					result.setState(states.getState(criteriaResultView.getResultString()));	
+					return result;
+				}
+
+				@Override public CriteriaResult populate(ComboBoxCriteriaResult result) {
+					result.setValue(criteriaResultView.getResultString());
+					return result;					
+				}
+
+				@Override public CriteriaResult populate(DateFieldCriteriaResult result) {
+					// TODO DD : should prolly format & validate string here???
+					result.setValue(criteriaResultView.getResultString());
+					return result;
+				}
+
+				@Override public CriteriaResult populate(SelectCriteriaResult result) {
+					Validate.isTrue(criteria instanceof SelectCriteria);
+					String option = criteriaResultView.getResultString();
+					int index = ((SelectCriteria)criteria).getOptions().indexOf(option);
+					Validate.isTrue(index>=0, "can't find option '" + option + "' for criteria " + criteria.getDisplayName());
+					System.out.println("options = "  + ((SelectCriteria)criteria).getOptions());
+					result.setValue(option);
+					return result;					
+				}
+
+				@Override public CriteriaResult populate(UnitOfMeasureCriteriaResult result) {
+					result.setPrimaryValue(criteriaResultView.getResultString());
+					return result;
+				}
+
+				@Override public CriteriaResult populate(TextFieldCriteriaResult result) {
+					result.setValue(criteriaResultView.getResultString());				
+					return result;
+				}
+
+				@Override public CriteriaResult populate(SignatureCriteriaResult result) {
+					throw new UnsupportedOperationException("importing signatures is not supported");
+				}
+				
+			});
+			
+			CriteriaResult criteriaResult = criteriaResultFactory.createCriteriaResult(criteria.getCriteriaType());
+			results.add(criteriaResult);		
+		}
+		event.setCriteriaResults(results);
+	}
+	
+	public List<Recommendation> getRecommendations(CriteriaResultView criteriaResultView) {
+		Recommendation result = new Recommendation();
+		result.setText(criteriaResultView.getRecommendationString());
+		result.setState(com.n4systems.model.Observation.State.COMMENT);
+		return Lists.newArrayList(result);		
+	}
+	
+	public List<Deficiency> getDeficiencies(CriteriaResultView criteriaResultView) {
+		Deficiency result = new Deficiency();
+		result.setText(criteriaResultView.getDeficiencyString());
+		result.setState(com.n4systems.model.Observation.State.COMMENT);
+		return Lists.newArrayList(result);		
+	}
+
+	private Criteria getCriteria(EventForm eventForm, CriteriaResultView criteriaResultView) {
+		for (CriteriaSection section:eventForm.getAvailableSections()) {
+			for (Criteria criteria:section.getAvailableCriteria()) {
+				if (criteria.getDisplayName().equals(criteriaResultView.getDisplayText())) {
+					return criteria;
+				}
+			}
+		}
+		throw new IllegalStateException("can't find criteria '" + criteriaResultView.getDisplayText() + "'");
 	}
 
 	protected void resolveType(Event model) {
@@ -129,4 +249,5 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	public EventType getType() {
 		return type;
 	}
+
 }

@@ -121,7 +121,7 @@ public class EventImportAction extends AbstractImportAction {
 		
 		example.setAssetStatus(getExampleAssetStatus());
 		
-		example.setResults(createExampleResults());
+		example.setCriteriaResults(createExampleResults());
 		
 		
 		return example;

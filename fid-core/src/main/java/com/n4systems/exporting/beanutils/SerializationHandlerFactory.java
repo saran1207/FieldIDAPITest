@@ -32,8 +32,7 @@ public class SerializationHandlerFactory {
 
 		int i = 0;
 		for (Field sortedField:sortedFields) {
-			handlers[i] = createSerializationHandler(sortedField);
-			i++;
+			handlers[i++] = createSerializationHandler(sortedField);
 		}
 
 		return handlers;

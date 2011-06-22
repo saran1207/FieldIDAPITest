@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.selenium.persistence;
 
+import java.util.HashMap;
+
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetSaver;
 import com.n4systems.fieldid.selenium.persistence.saver.SeleniumAssetTypeSaver;
 import com.n4systems.model.Asset;
@@ -65,11 +67,9 @@ import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 
-import java.util.HashMap;
-
 public class SaverMap {
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private static HashMap<Class<? extends Saveable>, Saver> classToSaverMap = new HashMap<Class<? extends Saveable>, Saver>();
 
     static {
@@ -111,7 +111,7 @@ public class SaverMap {
         classToSaverMap.put(DownloadLink.class, new DownloadLinkSaver());
     }
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public static Saver makeSaverFor(Class<? extends Saveable> clazz) {
         Saver saver = classToSaverMap.get(clazz);
         if (saver == null) {

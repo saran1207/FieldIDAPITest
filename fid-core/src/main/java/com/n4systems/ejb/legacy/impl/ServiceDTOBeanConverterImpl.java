@@ -450,7 +450,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		// Optional object lookups
 		if (inspectionServiceDTO.getResults() != null) {
-			event.setResults(convert(inspectionServiceDTO.getResults(), tenant, event));
+			event.setCriteriaResults(convert(inspectionServiceDTO.getResults(), tenant, event));
 		}
 
 		if (inspectionServiceDTO.getInfoOptions() != null) {
