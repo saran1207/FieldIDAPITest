@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.n4systems.api.validation.validators.AssetIdentifierValidator;
 import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
+import com.n4systems.api.validation.validators.CriteriaResultValidator;
 import com.n4systems.api.validation.validators.DateValidator;
 import com.n4systems.api.validation.validators.EventStatusValidator;
 import com.n4systems.api.validation.validators.FullNameUserValidator;
@@ -51,7 +52,7 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Comments", order = 1100)
 	private String comments;
 
-	@SerializableField(title = "Criteria", order = 1100, handler=CriteriaResultSerializationHandler.class)
+	@SerializableField(title = "Criteria", order = 1100, handler=CriteriaResultSerializationHandler.class, validators = {CriteriaResultValidator.class})
 	private Collection<CriteriaResultView> criteriaResults;
 
 

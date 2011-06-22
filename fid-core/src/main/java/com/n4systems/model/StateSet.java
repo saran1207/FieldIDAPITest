@@ -86,6 +86,14 @@ public class StateSet extends EntityWithTenant implements NamedEntity, Listable<
 		return getAvailableStates().size();
 	}
 	
+	public List<String> getAvailableStateStrings() {
+		List<String> result = new ArrayList<String>();
+		for (State state:getAvailableStates()) { 
+			result.add(state.getDisplayText());
+		}
+		return result;
+	}
+	
 	public List<State> getAvailableStates() {
 		List<State> availableState = new ArrayList<State>();
 		for( State state : states ) {

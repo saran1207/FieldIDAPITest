@@ -4,8 +4,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
@@ -29,6 +32,7 @@ import com.n4systems.model.Recommendation;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
+import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.Status;
 import com.n4systems.model.TextFieldCriteriaResult;
@@ -44,6 +48,9 @@ import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 
 public class EventToModelConverter implements ViewToModelConverter<Event, EventView> {
+	public static final String UNIT_OF_MEASURE_SEPARATOR = "|";
+	private static final String UNIT_OF_MEASURE_SEPARATOR_REGEX = "\\|";
+	
 	private final OrgByNameLoader orgLoader;
 	private final SmartSearchLoader assetLoader;
 	private final AssetStatusByNameLoader assetStatusLoader;
@@ -81,6 +88,10 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		
 		resolveCriteriaResults(view, model, transaction);
 		
+		if (type != null) { 
+			model.setEventForm(type.getEventForm());
+		}
+		
 		return model;
 	}
 
@@ -107,7 +118,9 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 				@Override public CriteriaResult populate(OneClickCriteriaResult result) {
 					Validate.isTrue(criteria.isOneClickCriteria());
 					StateSet states = ((OneClickCriteria)criteria).getStates();
-					result.setState(states.getState(criteriaResultView.getResultString()));	
+					State state = states.getState(criteriaResultView.getResultString());
+					Validate.notNull(state, "can't find state " + criteriaResultView.getResultString() + " for criteria " + criteria.getDisplayName() + ".  expected one of " + states.getAvailableStates());
+					result.setState(state);	
 					return result;
 				}
 
@@ -118,22 +131,32 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 
 				@Override public CriteriaResult populate(DateFieldCriteriaResult result) {
 					// TODO DD : should prolly format & validate string here???
+					
 					result.setValue(criteriaResultView.getResultString());
 					return result;
 				}
 
 				@Override public CriteriaResult populate(SelectCriteriaResult result) {
 					Validate.isTrue(criteria instanceof SelectCriteria);
-					String option = criteriaResultView.getResultString();
-					int index = ((SelectCriteria)criteria).getOptions().indexOf(option);
-					Validate.isTrue(index>=0, "can't find option '" + option + "' for criteria " + criteria.getDisplayName());
-					System.out.println("options = "  + ((SelectCriteria)criteria).getOptions());
-					result.setValue(option);
+					List<String> options = ((SelectCriteria)criteria).getOptions();
+					final String option = criteriaResultView.getResultString();
+					int index = Iterators.indexOf(options.iterator(), new Predicate<String>() {
+						@Override public boolean apply(String value) {
+							return StringUtils.equalsIgnoreCase(value,option);
+						}			
+					});							
+					Validate.isTrue(index>=0, "can't find option '" + option + "' for criteria " + criteria.getDisplayName());  // this case should have already been handled by validator.  just in case.
+					result.setValue(options.get(index));
 					return result;					
 				}
 
 				@Override public CriteriaResult populate(UnitOfMeasureCriteriaResult result) {
-					result.setPrimaryValue(criteriaResultView.getResultString());
+					// recall : value in form of "123|456"   or   "123"  (no secondary specified).
+					String[] tokens = criteriaResultView.getResultString().split(UNIT_OF_MEASURE_SEPARATOR_REGEX);
+					result.setPrimaryValue(tokens[0]);
+					if (tokens.length>1) {
+						result.setSecondaryValue(tokens[2]);
+					}
 					return result;
 				}
 
@@ -143,7 +166,7 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 				}
 
 				@Override public CriteriaResult populate(SignatureCriteriaResult result) {
-					throw new UnsupportedOperationException("importing signatures is not supported");
+					throw new UnsupportedOperationException("Importing signatures is not supported.");
 				}
 				
 			});
