@@ -55,7 +55,6 @@ function updateOrgBrowser(orgLists) {
 	resultsReturned();
 }
 
-
 function updateOwner(event) {
 	event.stop();
 	var element = Event.element(event);
@@ -71,12 +70,6 @@ function updateOwner(event) {
 	setOwner(containerId,  element.getAttribute("org"), element.getAttribute("orgName"));
 
 	closeOrgPicker();
-	
-	var clearOrg = $$(containerId + " .clearSearchOwner");
-	
-	if (clearOrg.size() >= 1) {
-		clearOrg.first().show();
-	}
 }
 
 function closeOrgPicker() {
@@ -111,15 +104,6 @@ function setOwner(containerId, ownerId, ownerName) {
 	orgInputs.first().value=ownerId;
 	orgInputs.first().next('input').value=ownerName; 
 	orgInputs.first().fire('owner:change');
-	
-	var clearOrg = $$(containerId + " .clearSearchOwner");
-	var searchOrg = $$(containerId + " .searchOwner");
-	
-	if (clearOrg.size() >= 1) {
-		clearOrg.first().show();
-		searchOrg.first().hide();
-	}
-	
 }
 
 function clearOrgSearch(event) {
@@ -127,9 +111,6 @@ function clearOrgSearch(event) {
 	event.stop();
 	element.up(".orgPicker").down(".orgSelected").value = "";
 	element.up(".orgPicker").down(".orgSelected").next('input').value = "";
-	element.hide();
-	
-	showSelect();
 }
 
 function selectOrg(event) {
@@ -196,11 +177,6 @@ function searchForOrgs(event) {
 	$('orgPickerLoading').show();
 	$('orgPickerResults').update("");
 	ajaxFormEvent(event);
-}
-
-function showSelect(){
-	var searchOrg = $$(".searchOwner");
-	searchOrg.first().show();
 }
 
 function attachOrgEvents(containerCssRule) {
