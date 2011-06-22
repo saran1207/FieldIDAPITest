@@ -195,7 +195,13 @@ ${action.setPageType('asset', 'show')!}
 			<#list asset.orderedInfoOptionList as infoOption >
 				<p>
 					<label>${infoOption.infoField.name} <#if infoOption.infoField.retired >(<@s.text name="label.retired"/>)</#if> </label>
-					<span class="fieldValue" infoFieldName="${infoOption.infoField.name?j_string}">${infoOption.name}</span>
+					<span class="fieldValue" infoFieldName="${infoOption.infoField.name?j_string}">
+						<#if infoOption.infoField.fieldType = 'datefield'>
+							${action.convertTimestamp(infoOption.name, infoOption.infoField.includeTime)}
+						<#else>
+							${infoOption.name}
+						</#if>
+					</span>
 				</p>
 			</#list>
 		</div>

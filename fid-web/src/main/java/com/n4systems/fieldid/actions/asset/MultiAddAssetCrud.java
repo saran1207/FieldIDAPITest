@@ -141,7 +141,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
 
 			if (assetCodeMapping.getInfoOptions() != null) {
-				List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields());
+				List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser().getDateFormat());
 				assetView.setAssetInfoOptions(assetInfoOptions);
 			}
 		}
@@ -173,7 +173,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			
 			AssetType assetType = getAssetType(addAssetHistory.getAssetType().getId());
 			
-			List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(addAssetHistory.getInfoOptions(), assetType.getInfoFields());
+			List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(addAssetHistory.getInfoOptions(), assetType.getInfoFields(), getSessionUser().getDateFormat());
 			assetView.setAssetInfoOptions(assetInfoOptions);			
 			
 		} else {

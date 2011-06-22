@@ -99,7 +99,7 @@ public class AssetCodeMappingCrud extends AbstractCrud {
 	}
 	
 	private void convertInputsToInfoOptions() {
-		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, assetCodeMapping.getAssetInfo().getInfoFields() );
+		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser().getDateTimeFormat() );
 		assetCodeMapping.setInfoOptions( options );
 	}
 	
@@ -196,7 +196,7 @@ public class AssetCodeMappingCrud extends AbstractCrud {
 		if( assetInfoOptions == null ) {
 			assetInfoOptions = new ArrayList<InfoOptionInput>();
 			if( assetCodeMapping.getAssetInfo() != null ) {
-				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields() );
+				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser().getDateFormat() );
 			}
 		}
 		return assetInfoOptions;

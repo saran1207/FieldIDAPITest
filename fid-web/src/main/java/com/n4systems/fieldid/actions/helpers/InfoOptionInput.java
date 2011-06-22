@@ -1,8 +1,14 @@
 package com.n4systems.fieldid.actions.helpers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.apache.struts2.components.If;
 
 import com.n4systems.util.StringListingPair;
 
@@ -25,7 +31,7 @@ public class InfoOptionInput {
 	
 	private String uniqueIDString;
 	
-	
+	private static Logger logger = Logger.getLogger(InfoOptionInput.class);
 	
 	public InfoOptionInput() {
 		this( null, null );
@@ -44,7 +50,8 @@ public class InfoOptionInput {
 			if( infoOption.isStaticData() ) {
 				setUniqueID(infoOption.getUniqueID());
 			} else {
-				if( infoField.getFieldType().equals( InfoFieldBean.COMBOBOX_FIELD_TYPE ) || infoField.getFieldType().equals( InfoFieldBean.SELECTBOX_FIELD_TYPE ) ) {
+				if( infoField.getFieldType().equals( InfoFieldBean.COMBOBOX_FIELD_TYPE ) 
+						|| infoField.getFieldType().equals( InfoFieldBean.SELECTBOX_FIELD_TYPE ) ) {
 					setUniqueIDString( COMBOBOX_DYNAMIC_VALUE_MARKER + infoOption.getName() );
 				}
 			}
@@ -62,7 +69,7 @@ public class InfoOptionInput {
 		return (  ( name == null || name.equals("") ) && ( uniqueIDString == null || uniqueIDString.equals("0") || uniqueIDString.equals("!") ) ) ;
 	}
 	
-	public InfoOptionBean convertToInfoOptionBean( InfoFieldBean field ) {
+	public InfoOptionBean convertToInfoOptionBean( InfoFieldBean field, String dateFormat ) {
 		// blank options arn't saved.
 		if( isBlank() ) {
 			return null;
@@ -83,6 +90,13 @@ public class InfoOptionInput {
 		if( field.getFieldType().equals( InfoFieldBean.COMBOBOX_FIELD_TYPE )  || 
 				field.getFieldType().equals( InfoFieldBean.SELECTBOX_FIELD_TYPE ) ) {
 			infoOption.setName( uniqueIDString.substring( 1 ) );
+		}else if (field.getFieldType().equals( InfoFieldBean.DATEFIELD_FIELD_TYPE) ){ 
+			try {
+				Date date = new SimpleDateFormat(dateFormat).parse(name);
+				infoOption.setName( Long.toString(date.getTime()) );
+			} catch (ParseException e) {
+				logger.error("Invalid date:" + name + " for infoField: " + field.getIdentifier(), e);
+			}
 		} else {
 			infoOption.setName( name );
 		}
@@ -162,7 +176,7 @@ public class InfoOptionInput {
 	}
 
 
-	public static List<InfoOptionBean> convertInputInfoOptionsToInfoOptions( List<InfoOptionInput> inputs, Collection<InfoFieldBean> fieldsToLookFor ) {
+	public static List<InfoOptionBean> convertInputInfoOptionsToInfoOptions( List<InfoOptionInput> inputs, Collection<InfoFieldBean> fieldsToLookFor, String dateFormat ) {
 		List<InfoOptionBean> newInfoOptions = new ArrayList<InfoOptionBean>();
 		if( fieldsToLookFor == null || inputs == null ){ return newInfoOptions; }
 		for( InfoOptionInput input : inputs ) {
@@ -170,7 +184,7 @@ public class InfoOptionInput {
 				
 				for( InfoFieldBean field : fieldsToLookFor ) {
 					if( field.getUniqueID().equals( input.getInfoFieldId() ) ) {
-						InfoOptionBean option = input.convertToInfoOptionBean( field );
+						InfoOptionBean option = input.convertToInfoOptionBean( field, dateFormat );
 						if( option != null ) {
 							newInfoOptions.add( option );
 						}
@@ -181,7 +195,7 @@ public class InfoOptionInput {
 		return newInfoOptions;
 	}
 	
-	public static List<InfoOptionInput> convertInfoOptionsToInputInfoOptions( List<InfoOptionBean> options, Collection<InfoFieldBean> fieldsToLookFor  ) {
+	public static List<InfoOptionInput> convertInfoOptionsToInputInfoOptions( List<InfoOptionBean> options, Collection<InfoFieldBean> fieldsToLookFor, String dateFormat ) {
 		List<InfoOptionInput> inputs = new ArrayList<InfoOptionInput>();
 		if( fieldsToLookFor == null ){ return inputs; }
 		for( InfoFieldBean field : fieldsToLookFor ) {
@@ -190,6 +204,14 @@ public class InfoOptionInput {
 				for( InfoOptionBean option : options ) {
 					if( option.getInfoField().getUniqueID().equals( field.getUniqueID() ) ) {
 						input = new InfoOptionInput( option, field );
+						
+						if(option.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
+							if(option.getInfoField().isIncludeTime()) {
+								dateFormat += " h:mm a"; 
+							}
+							String date = new SimpleDateFormat(dateFormat).format(new Date(Long.parseLong(input.getName())));
+							input.setName(date);
+						}
 						break;
 					}
 				}

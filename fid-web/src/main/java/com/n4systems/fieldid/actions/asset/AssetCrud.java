@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.asset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -232,7 +233,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	private void convertInputsToInfoOptions() {
-		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, asset.getType().getInfoFields());
+		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, asset.getType().getInfoFields(), getSessionUser().getDateTimeFormat());
 
 		asset.setInfoOptions(new TreeSet<InfoOptionBean>(options));
 	}
@@ -660,7 +661,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 				if (asset.getInfoOptions() != null) {
 					tmpOptions.addAll(asset.getInfoOptions());
 				}
-				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getAssetInfoFields());
+				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getAssetInfoFields(), getSessionUser().getDateFormat());
 			}
 		}
 		return assetInfoOptions;
@@ -1135,4 +1136,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public void setSortDirection(String sortDirection) {
 		this.sortDirection = sortDirection;
 	}	
+	
+	public String convertTimestamp(String timestamp, boolean includeTime) {
+		Date date = new Date(Long.parseLong(timestamp));
+		if(includeTime)
+			return convertDateTime(date);
+		else
+			return convertDate(date);
+	}
 }

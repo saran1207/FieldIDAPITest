@@ -153,11 +153,11 @@ private static final long serialVersionUID = 1L;
 	
 	
 	private void convertOutputsToInfoOptions() {
-		autoAttributeDefinition.setOutputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( outputInfoOptions, autoAttributeCriteria.getOutputs() ) );
+		autoAttributeDefinition.setOutputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( outputInfoOptions, autoAttributeCriteria.getOutputs(), getSessionUser().getDateTimeFormat() ) );
 	}
 	
 	private void convertInputsToInfoOptions() {
-		autoAttributeDefinition.setInputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( inputInfoOptions, autoAttributeCriteria.getInputs() ) );
+		autoAttributeDefinition.setInputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( inputInfoOptions, autoAttributeCriteria.getInputs(), getSessionUser().getDateTimeFormat() ) );
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -207,7 +207,7 @@ private static final long serialVersionUID = 1L;
 		if( outputInfoOptions == null ) {
 			outputInfoOptions = new ArrayList<InfoOptionInput>();
 			if( autoAttributeCriteria.getOutputs() != null ) {
-				outputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( autoAttributeDefinition.getOutputs(), autoAttributeCriteria.getOutputs() );
+				outputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( autoAttributeDefinition.getOutputs(), autoAttributeCriteria.getOutputs(), getSessionUser().getDateFormat());
 			}
 		}
 		return outputInfoOptions;
@@ -223,7 +223,7 @@ private static final long serialVersionUID = 1L;
 			
 			inputInfoOptions = new ArrayList<InfoOptionInput>();
 			if( autoAttributeCriteria.getInputs() != null ) {
-				inputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( autoAttributeDefinition.getInputs(), autoAttributeCriteria.getInputs() );
+				inputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( autoAttributeDefinition.getInputs(), autoAttributeCriteria.getInputs(), getSessionUser().getDateFormat() );
 			}
 		}
 		return inputInfoOptions;
