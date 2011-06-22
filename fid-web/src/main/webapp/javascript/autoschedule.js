@@ -16,8 +16,8 @@ function updateOwner ( event ) {
 	}
 }
 
-function updateIdentified ( event ) {
-	var identified = Event.element(event).getValue();
+function updateIdentified () {
+	var identified = $('identified').value
 	if ( identified != "" ) {
 		var url = updateAutoScheduleUrl + '?assetTypeId='+ $('assetType').value + "&ownerId=" + $('ownerId').value + "&identified=" + encodeURIComponent(identified);
 		getResponse( url, "get" );
