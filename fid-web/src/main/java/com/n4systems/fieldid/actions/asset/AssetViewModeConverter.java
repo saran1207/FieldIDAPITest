@@ -55,7 +55,7 @@ public class AssetViewModeConverter {
 			
 			model.setPublished(primaryOrg.isAutoPublish());
 			
-			List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getAssetInfoOptions(), model.getType().getInfoFields(), primaryOrg.getDateFormat() + " h:mm a");
+			List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getAssetInfoOptions(), model.getType().getInfoFields(), primaryOrg.getDateFormat());
 			model.setInfoOptions(new TreeSet<InfoOptionBean>(infoOptions));
 			
 			if (view.getLineItemId() != null && primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {

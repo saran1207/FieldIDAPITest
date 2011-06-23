@@ -184,6 +184,10 @@ public class InfoOptionInput {
 				
 				for( InfoFieldBean field : fieldsToLookFor ) {
 					if( field.getUniqueID().equals( input.getInfoFieldId() ) ) {
+						
+						if(field.isIncludeTime()) {
+							dateFormat += " h:mm a";
+						}
 						InfoOptionBean option = input.convertToInfoOptionBean( field, dateFormat );
 						if( option != null ) {
 							newInfoOptions.add( option );
