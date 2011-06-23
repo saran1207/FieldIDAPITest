@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.actions.event.viewmodel;
 
+import java.util.List;
+
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Recommendation;
-
-import java.util.List;
 
 public class CriteriaResultWebModel {
 
@@ -97,4 +97,5 @@ public class CriteriaResultWebModel {
     public void setSigned(boolean signed) {
         this.signed = signed;
     }
+
 }

@@ -1,6 +1,9 @@
 package com.n4systems.fieldid.viewhelpers;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +18,8 @@ import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.DateFieldCriteria;
+import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.Observation;
 import com.n4systems.model.OneClickCriteriaResult;
@@ -24,6 +29,7 @@ import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.services.signature.SignatureService;
 
@@ -122,8 +128,9 @@ public class EventHelper {
 	 * @param formCriteriaResults	CriteriaResults input from a form.
 	 * @param modifiedBy			A modifiedBy user to set on the Observations
 	 * @throws IOException 
+	 * @throws ParseException 
 	 */
-	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResultWebModel> formCriteriaResults, User modifiedBy) throws IOException {
+	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResultWebModel> formCriteriaResults, User modifiedBy) throws IOException, ParseException {
 		// if our forms criteria results are null (as is the case with a repair), just stop.  
 		if (formCriteriaResults == null) {
 			return;
@@ -179,12 +186,23 @@ public class EventHelper {
                 if (formResult.getSignatureFileId() != null) {
                 	((SignatureCriteriaResult)realResult).setImage(new SignatureService().loadSignatureImage(event.getTenant().getId(), formResult.getSignatureFileId()));
                 }
+            } else if(realResult instanceof DateFieldCriteriaResult) {
+            	DateFormat dateFormat = getDateFormat(event.getTenant().getId(), ((DateFieldCriteria)realResult.getCriteria()).isIncludeTime());
+            	((DateFieldCriteriaResult)realResult).setValue(dateFormat.parse(formResult.getTextValue()));
             }
 
 			// and attach back onto the event
 			event.getResults().add(realResult);
 		}
 	}
+	
+    private DateFormat getDateFormat(Long tenantId, boolean isIncudeTime) {
+    	String dateFormat = new PrimaryOrgByTenantLoader().setTenantId(tenantId).load().getDateFormat();
+    	if(isIncudeTime) {
+    		dateFormat += " h:mm a";
+    	}
+    	return new SimpleDateFormat(dateFormat);
+    }
 
     /**
 	 * Ensures nulls have been removed from the lists, sets security information

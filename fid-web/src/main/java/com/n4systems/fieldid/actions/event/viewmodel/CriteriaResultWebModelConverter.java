@@ -1,10 +1,15 @@
 package com.n4systems.fieldid.actions.event.viewmodel;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaType;
+import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
@@ -13,6 +18,7 @@ import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
+import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 
 public class CriteriaResultWebModelConverter {
 
@@ -32,7 +38,8 @@ public class CriteriaResultWebModelConverter {
         } else if (result instanceof SignatureCriteriaResult) {
             webModel.setSigned(((SignatureCriteriaResult) result).isSigned());
         } else if (result instanceof DateFieldCriteriaResult) {
-            webModel.setTextValue(((DateFieldCriteriaResult)result).getValue());
+            DateFormat dateFormat = getDateFormat(result.getTenant().getId(), ((DateFieldCriteria)result.getCriteria()).isIncludeTime());
+			webModel.setTextValue(dateFormat.format(((DateFieldCriteriaResult)result).getValue()));
         }
 
         webModel.setType(result.getCriteria().getCriteriaType().name());
@@ -43,8 +50,16 @@ public class CriteriaResultWebModelConverter {
 
         return webModel;
     }
-
-    public CriteriaResult convertFromWebModel(CriteriaResultWebModel webModel, PersistenceManager pm, Tenant tenant) {
+    
+    private DateFormat getDateFormat(Long tenantId, boolean isIncudeTime) {
+    	String dateFormat = new PrimaryOrgByTenantLoader().setTenantId(tenantId).load().getDateFormat();
+    	if(isIncudeTime) {
+    		dateFormat += " h:mm a";
+    	}
+    	return new SimpleDateFormat(dateFormat);
+    }
+    
+    public CriteriaResult convertFromWebModel(CriteriaResultWebModel webModel, PersistenceManager pm, Tenant tenant) throws ParseException {
         CriteriaResult criteriaResult;
         CriteriaType type = CriteriaType.valueOf(webModel.getType());
         if (CriteriaType.ONE_CLICK.equals(type)) {
@@ -76,8 +91,11 @@ public class CriteriaResultWebModelConverter {
             SignatureCriteriaResult result = new SignatureCriteriaResult();
             criteriaResult = result;
         } else if (CriteriaType.DATE_FIELD.equals(type)) {
-            DateFieldCriteriaResult result = new DateFieldCriteriaResult();
-            result.setValue(webModel.getTextValue());
+            DateFieldCriteria critera = (DateFieldCriteria) pm.find(Criteria.class, webModel.getCriteriaId(), tenant);
+            DateFormat dateFormat = getDateFormat(tenant.getId(), critera.isIncludeTime());
+
+        	DateFieldCriteriaResult result = new DateFieldCriteriaResult();
+            result.setValue(dateFormat.parse(webModel.getTextValue()));
             criteriaResult = result;
         } else {
             throw new RuntimeException("Unkown type for web model: " + webModel.getType());
