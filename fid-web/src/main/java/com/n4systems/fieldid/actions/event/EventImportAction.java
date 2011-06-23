@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.event;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -12,9 +13,16 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import com.n4systems.api.model.EventView;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exporting.EventExporter;
 import com.n4systems.exporting.Importer;
+import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
+import com.n4systems.exporting.beanutils.ExportMapMarshaler;
+import com.n4systems.exporting.beanutils.FilteredCriteriaResultSerializationHandler;
+import com.n4systems.exporting.beanutils.SerializableField;
+import com.n4systems.exporting.beanutils.SerializationHandler;
+import com.n4systems.exporting.beanutils.SerializationHandlerFactory;
 import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
@@ -53,6 +61,7 @@ public class EventImportAction extends AbstractImportAction {
 	private EventType type;
 	private InputStream exampleExportFileStream;
 	private String exampleExportFileSize;
+	private boolean includeRecommendationsAndDeficiencies;
 	
 	public EventImportAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -73,14 +82,26 @@ public class EventImportAction extends AbstractImportAction {
 		return new EventImportFailureNotification(getCurrentUser());
 	}
 	
-	public String doDownloadExample() {
+	@SuppressWarnings("rawtypes")
+	public String doDownloadExample() {		
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
 			ListLoader<Event> eventLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleEvent()));
 			NextEventDateByEventLoader nextDateLoader = new NextEventDateByEventPassthruLoader(createExampleNextDate());
 			
-			EventExporter exporter = new EventExporter(eventLoader, nextDateLoader);
+			// override the serialization handler factory so we can control which fields are output.  (i.e. use different handlers
+			//  depending on the "isInclude..." state of the action.
+			SerializationHandlerFactory handlerFactory = new SerializationHandlerFactory() {
+				@Override
+				protected Class<? extends SerializationHandler> getSerializationHandlerForField(Field field, SerializableField annotation) {
+					if (annotation.handler().equals(CriteriaResultSerializationHandler.class) && !isIncludeRecommendationsAndDeficiencies() ) {
+						return FilteredCriteriaResultSerializationHandler.class;
+					}
+					return super.getSerializationHandlerForField(field, annotation);
+				}
+			};
+			EventExporter exporter = new EventExporter(eventLoader, nextDateLoader, new ExportMapMarshaler<EventView>(EventView.class, handlerFactory));
 			
 			writer = new ExcelMapWriter(byteOut, getPrimaryOrg().getDateFormat());
 			exporter.export(writer);
@@ -121,8 +142,7 @@ public class EventImportAction extends AbstractImportAction {
 		
 		example.setAssetStatus(getExampleAssetStatus());
 		
-		example.setCriteriaResults(createExampleResults());
-		
+		example.setCriteriaResults(createExampleResults());		
 		
 		return example;
 	}
@@ -132,14 +152,16 @@ public class EventImportAction extends AbstractImportAction {
 		
 		List<CriteriaSection> availableSections = type.getEventForm().getAvailableSections();
 		for (CriteriaSection section:availableSections) { 
-			for (Criteria criterion:section.getAvailableCriteria()) {				
-				Class<? extends CriteriaResult> resultClass = criterion.getCriteriaType().getResultClass();
-				CriteriaResult result = resultClass.newInstance();
-				result.setCriteria(criterion);
-				result.setDeficiencies(new ArrayList<Deficiency>());   // FIXME DD : how to convert these types to and from Strings
-				result.setRecommendations(new ArrayList<Recommendation>());	// TODO : populate these with defaults.  need someway to generically get default value...doesn't currently allow that easily. hmmmmm...
-				result.setTenant(criterion.getTenant());
-				results.add(result);
+			for (Criteria criterion:section.getAvailableCriteria()) {
+				if (!criterion.isSignatureCriteria()) {		// skip signature because we don't support import/export of those fields.  
+					Class<? extends CriteriaResult> resultClass = criterion.getCriteriaType().getResultClass();
+					CriteriaResult result = resultClass.newInstance();
+					result.setCriteria(criterion);				
+					result.setDeficiencies(new ArrayList<Deficiency>()); 
+					result.setRecommendations(new ArrayList<Recommendation>());
+					result.setTenant(criterion.getTenant());
+					results.add(result);
+				}
 			}
 		}		
 		
@@ -159,7 +181,7 @@ public class EventImportAction extends AbstractImportAction {
 	public EventType getEventType() {
 		return type;
 	}
-
+	
 	public Long getUniqueID() {
 		return (type != null) ? type.getId() : null;
 	}
@@ -192,5 +214,13 @@ public class EventImportAction extends AbstractImportAction {
 	
 	public InputStream getFileStream() {
 		return exampleExportFileStream;
+	}
+
+	public void setIncludeRecommendationsAndDeficiencies(boolean include) {
+		this.includeRecommendationsAndDeficiencies = include;
+	}
+
+	public boolean isIncludeRecommendationsAndDeficiencies() {
+		return includeRecommendationsAndDeficiencies;
 	}
 }

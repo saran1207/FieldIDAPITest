@@ -17,18 +17,12 @@ public class SerializationHandlerFactory {
 	private static final long serialVersionUID = 1L;
 	private static final Class<SerializableField> EXPORT_FIELD = SerializableField.class;
 
-	private boolean skipImportOnlyFields = false;
-	
 	public SerializationHandlerFactory() {}
 
-	public SerializationHandlerFactory(boolean skipImportOnlyFields) {
-		this.skipImportOnlyFields = skipImportOnlyFields;	// if true, skip fields that are marked importOnly 
-	}
-			
-	public SerializationHandler[] createSortedSerializationHandlers(Class<?> beanClass) throws InstantiationException {
+	public SerializationHandler<?>[] createSortedSerializationHandlers(Class<?> beanClass) throws InstantiationException {
 		List<Field> sortedFields = getSortedExportFields(beanClass);
 		
-		SerializationHandler[] handlers = new SerializationHandler[sortedFields.size()];
+		SerializationHandler<?>[] handlers = new SerializationHandler[sortedFields.size()];
 
 		int i = 0;
 		for (Field sortedField:sortedFields) {
@@ -38,18 +32,16 @@ public class SerializationHandlerFactory {
 		return handlers;
 	}
 	
-	public SerializationHandler createSerializationHandler(Field field) throws InstantiationException {
-		SerializableField exportField = field.getAnnotation(SerializableField.class);
-
-		if (exportField == null) {
-			return null;
+	public SerializationHandler<?> createSerializationHandler(Field field) throws InstantiationException {
+		SerializableField serializableField = field.getAnnotation(SerializableField.class);
+		if (serializableField==null) { 
+			return null; 
 		}
-		
-		SerializationHandler handler;
-		Class<?> handlerClass = exportField.handler();
+		Class<?> handlerClass = getSerializationHandlerForField(field, serializableField);
+		SerializationHandler<?> handler;		
 		try {
 			Constructor<?> constructor = handlerClass.getConstructor(Field.class);
-			handler = (SerializationHandler)constructor.newInstance(field);			
+			handler = (SerializationHandler<?>)constructor.newInstance(field);			
 		} catch (InstantiationException e) {
 			throw e;
 		} catch (NoSuchMethodException e) {
@@ -59,6 +51,11 @@ public class SerializationHandlerFactory {
 		}
 		
 		return handler;
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected Class<? extends SerializationHandler> getSerializationHandlerForField(Field field, SerializableField serializableField) {
+		return (serializableField == null) ? null : serializableField.handler();
 	}
 	
 	private List<Field> getSortedExportFields(Class<?> clazz) {		

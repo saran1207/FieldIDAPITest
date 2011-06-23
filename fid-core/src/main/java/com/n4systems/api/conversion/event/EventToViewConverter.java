@@ -20,7 +20,7 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 	public EventToViewConverter(NextEventDateByEventLoader nextDateLoader) {
 		this.nextDateLoader = nextDateLoader;
 	}
-	
+
 	@Override
 	public EventView toView(Event model) throws ConversionException {
 		EventView view = new EventView();

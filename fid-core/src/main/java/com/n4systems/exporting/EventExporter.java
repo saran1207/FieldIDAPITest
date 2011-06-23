@@ -24,6 +24,10 @@ public class EventExporter implements Exporter {
 		this(eventLoader, new ExportMapMarshaler<EventView>(EventView.class), new EventToViewConverter(nextDateLoader));
 	}
 
+	public EventExporter(ListLoader<Event> eventLoader, NextEventDateByEventLoader nextDateLoader, ExportMapMarshaler<EventView> exportMapMarshaler) {
+		this(eventLoader, exportMapMarshaler, new EventToViewConverter(nextDateLoader));
+	}
+
 	@Override
 	public void export(MapWriter mapWriter) throws ExportException {
 		EventView view;

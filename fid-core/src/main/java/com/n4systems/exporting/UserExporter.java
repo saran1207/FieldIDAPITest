@@ -4,7 +4,6 @@ import com.n4systems.api.conversion.ModelToViewConverter;
 import com.n4systems.api.conversion.users.UserToViewConverter;
 import com.n4systems.api.model.UserView;
 import com.n4systems.exporting.beanutils.ExportMapMarshaler;
-import com.n4systems.exporting.beanutils.SerializationHandlerFactory;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.ListLoader;
@@ -21,7 +20,7 @@ public class UserExporter implements Exporter {
 	}
 	
 	public UserExporter(ListLoader<User> userListLoader) {
-		this(userListLoader, new ExportMapMarshaler<UserView>(UserView.class,new SerializationHandlerFactory(true)), new UserToViewConverter());
+		this(userListLoader, new ExportMapMarshaler<UserView>(UserView.class), new UserToViewConverter());
 	}
 
 	@Override

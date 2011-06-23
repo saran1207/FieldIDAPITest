@@ -102,6 +102,7 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 	}
 
 	private ValidationResult validateDateField(DateFieldCriteria criteria, CriteriaSection section, CriteriaResultView value) {
+		// FIXME DD : deal with dates....either don't convert them to strings on way in or validate the string is a valid date.
 		return ValidationResult.pass();
 	}
 

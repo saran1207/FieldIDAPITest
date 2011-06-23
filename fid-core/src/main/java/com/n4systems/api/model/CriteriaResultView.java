@@ -1,9 +1,11 @@
 package com.n4systems.api.model;
 
+import com.google.common.base.Objects;
+
 
 
 public class CriteriaResultView {
-
+	
 	private String displayText;
 	private String section;
 	private String result = ""; 	
@@ -47,10 +49,8 @@ public class CriteriaResultView {
 		return displayText;
 	}
 	@Override
-	public String toString() {
-		//FIXME DD: need proper implementation. 
-		return displayText; 
-		//return Objects.toStringHelper(getClass()).toString();
+	public String toString() {		
+		return Objects.toStringHelper(getClass()).toString();
 	}
 	public void setSection(String section) {
 		this.section = section;

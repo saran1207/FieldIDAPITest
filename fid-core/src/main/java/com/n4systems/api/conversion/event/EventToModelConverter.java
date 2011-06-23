@@ -136,12 +136,11 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 				}
 
 				@Override public CriteriaResult populate(DateFieldCriteriaResult result) {
-					// TODO DD : should prolly format & validate string here???
 					DateFormat dateFormat = getDateFormat(type.getTenant().getId(), ((DateFieldCriteria)result.getCriteria()).isIncludeTime() );
 					try {
 						result.setValue(dateFormat.parse(criteriaResultView.getResultString()));
 					} catch (ParseException e) {
-						e.printStackTrace();
+						throw new IllegalStateException(e);
 					}
 					return result;
 				}
@@ -200,14 +199,14 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	
 	public List<Recommendation> getRecommendations(CriteriaResultView criteriaResultView) {
 		Recommendation result = new Recommendation();
-		result.setText(criteriaResultView.getRecommendationString());
+		result.setText(StringUtils.trimToEmpty(criteriaResultView.getRecommendationString()));
 		result.setState(com.n4systems.model.Observation.State.COMMENT);
 		return Lists.newArrayList(result);		
 	}
 	
 	public List<Deficiency> getDeficiencies(CriteriaResultView criteriaResultView) {
 		Deficiency result = new Deficiency();
-		result.setText(criteriaResultView.getDeficiencyString());
+		result.setText(StringUtils.trimToEmpty(criteriaResultView.getDeficiencyString()));
 		result.setState(com.n4systems.model.Observation.State.COMMENT);
 		return Lists.newArrayList(result);		
 	}

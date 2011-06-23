@@ -55,7 +55,6 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Criteria", order = 1100, handler=CriteriaResultSerializationHandler.class, validators = {CriteriaResultValidator.class})
 	private Collection<CriteriaResultView> criteriaResults;
 
-
 	public EventView() {}
 
 	public String getIdentifier() {
@@ -211,5 +210,6 @@ public class EventView extends ExternalModelView {
 	public Collection<CriteriaResultView> getCriteriaResults() {
 		return criteriaResults;
 	}
+
 
 }

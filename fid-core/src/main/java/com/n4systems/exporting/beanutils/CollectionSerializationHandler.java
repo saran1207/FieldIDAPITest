@@ -9,8 +9,8 @@ import java.util.TreeMap;
 
 public class CollectionSerializationHandler<T> extends SerializationHandler<Collection<T>> {
 
-	private Collection<T> collection;
-	private int index = 0;;
+	private Collection<T> collection = null;
+	private int index = 0;
 	
 	public CollectionSerializationHandler(Field field) {
 		super(field);		

@@ -11,9 +11,12 @@
 		<h3><@s.text name="label.import.${labelTarget}" /></h3>
 		<a href='${importUrl}'><@s.text name="label.upload_excel" /></a>
 		<a href='${exportExample}'><@s.text name="label.download_excel_template" /></a>
+		<#if exportExampleMinimal?exists>
+			<a href='${exportExampleMinimal}'><@s.text name="label.download_excel_template_minimal" /></a>
+		</#if>
 	</div>
 	
-	<#if exportExcel?exists>
+	<#if exportExcel?exists>	
 		<div id="exportBox">
 			<h3><@s.text name="label.export.${labelTarget}" /></h3>
 				<a href='${exportExcel}' class='lightview' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><@s.text name="label.excel_file" /></a>
