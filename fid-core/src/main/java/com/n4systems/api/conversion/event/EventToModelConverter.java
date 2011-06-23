@@ -1,5 +1,8 @@
 package com.n4systems.api.conversion.event;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +23,7 @@ import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
@@ -43,6 +47,7 @@ import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
@@ -58,6 +63,7 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	private final UserByFullNameLoader userLoader;
 	
 	private EventType type;
+	private DateFormat dateFormat;
 	
 	public EventToModelConverter(OrgByNameLoader orgLoader, SmartSearchLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader) {
 		this.orgLoader = orgLoader;
@@ -131,8 +137,12 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 
 				@Override public CriteriaResult populate(DateFieldCriteriaResult result) {
 					// TODO DD : should prolly format & validate string here???
-					
-					result.setValue(criteriaResultView.getResultString());
+					DateFormat dateFormat = getDateFormat(type.getTenant().getId(), ((DateFieldCriteria)result.getCriteria()).isIncludeTime() );
+					try {
+						result.setValue(dateFormat.parse(criteriaResultView.getResultString()));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
 					return result;
 				}
 
@@ -176,6 +186,17 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		}
 		event.setCriteriaResults(results);
 	}
+	
+    private DateFormat getDateFormat(Long tenantId, boolean isIncudeTime) {
+    	if(dateFormat == null) {
+	    	String dateFormatStr = new PrimaryOrgByTenantLoader().setTenantId(tenantId).load().getDateFormat();
+	    	if(isIncudeTime) {
+	    		dateFormatStr += " h:mm a";
+	    	}
+	    	dateFormat = new SimpleDateFormat(dateFormatStr);
+    	}
+    	return dateFormat;
+    }
 	
 	public List<Recommendation> getRecommendations(CriteriaResultView criteriaResultView) {
 		Recommendation result = new Recommendation();
