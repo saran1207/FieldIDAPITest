@@ -10,6 +10,18 @@ public class CriteriaResultView {
 	private String recommendation;	// NOTE : only support single free form recommendation & deficiency.
 	private String deficiency;
 	
+	@Deprecated // for testing purposes only.
+	public CriteriaResultView(String displayText, String section, String result, String recommendation, String deficiency) {
+		this.displayText = displayText;
+		this.section = section;
+		this.result = result; 	
+		this.recommendation = recommendation;
+		this.deficiency = deficiency;
+	}
+	
+	public CriteriaResultView() {
+	}
+
 	public String getResultString() {
 		return result;
 	}

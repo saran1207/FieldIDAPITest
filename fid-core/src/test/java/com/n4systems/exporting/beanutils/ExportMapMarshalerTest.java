@@ -1,7 +1,11 @@
 package com.n4systems.exporting.beanutils;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -44,7 +48,7 @@ public class ExportMapMarshalerTest {
 	public void test_full_conversion() throws MarshalingException, InstantiationException {
 		ExportMapMarshaler<TestExportBean> marshaler = new  ExportMapMarshaler<TestExportBean>(TestExportBean.class);
 		
-		Map<String, Object> beanMap = marshaler.toBeanMap(new TestExportBean("mytype", null, 42, new Date()));
+		Map<String, Object> beanMap = marshaler.toBeanMap(new TestExportBean("mytype", null, 42, new Date(), new ArrayList<Integer>()));
 		
 		assertEquals("mytype", beanMap.get("Type"));
 		assertEquals("", beanMap.get("Name"));

@@ -2,8 +2,10 @@ package com.n4systems.exporting.beanutils;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.n4systems.api.model.CriteriaResultView;
 import com.n4systems.api.validation.validators.NotNullValidator;
 
 public class TestExportBean {
@@ -27,15 +29,23 @@ public class TestExportBean {
 	
 	@SerializableField(title="M:", order = 50, handler = MapSerializationHandler.class)
 	private Map<String, String> map = new HashMap<String, String>();
+	
+	@SerializableField(title="numbers", order = 100, handler = CollectionSerializationHandler.class)
+	private List<Integer> numbers;
+	
+	@SerializableField(title="results", order = 100, handler = CriteriaResultSerializationHandler.class)
+	private List<CriteriaResultView> results;
+	
 
 	
 	public TestExportBean() {}
 
-	public TestExportBean(String type, String name, Integer age, Date date) {
+	public TestExportBean(String type, String name, Integer age, Date date, List<Integer> numbers) {
 		this.type = type;
-		this.name = name;
+		this.name = name;   
 		this.age = age;
 		this.date = date;
+		this.numbers = numbers;
 	}
 	
 	public String getType() {
@@ -93,4 +103,21 @@ public class TestExportBean {
 	public String getImportOnlyText() {
 		return importOnlyText;
 	}
+
+	public void setNumbers(List<Integer> numbers) {
+		this.numbers = numbers;
+	}
+
+	public List<Integer> getNumbers() {
+		return numbers;
+	}
+
+	public void setResults(List<CriteriaResultView> results) {
+		this.results = results;
+	}
+
+	public List<CriteriaResultView> getResults() {
+		return results;
+	}
+
 }

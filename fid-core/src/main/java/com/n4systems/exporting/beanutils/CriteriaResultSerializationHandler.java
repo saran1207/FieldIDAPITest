@@ -39,13 +39,17 @@ public class CriteriaResultSerializationHandler extends CollectionSerializationH
 	}
 
 	@Override
-	protected CriteriaResultView unmarshalObject(Object bean, String title, Object value) {
-		ParsedCriteria parsedCriteria = new ParsedCriteria(title);
-		CriteriaResultView result = getCriteriaResultView(parsedCriteria);
-		populate(parsedCriteria, result, value);
-		result.setSection(parsedCriteria.section);
-		result.setDisplayText(parsedCriteria.criteria);
-		return result;
+	protected CriteriaResultView unmarshalObject(Object bean, String title, Object value) throws MarshalingException {
+		try {
+			ParsedCriteria parsedCriteria = new ParsedCriteria(title);
+			CriteriaResultView result = getCriteriaResultView(parsedCriteria);
+			populate(parsedCriteria, result, value);
+			result.setSection(parsedCriteria.section);
+			result.setDisplayText(parsedCriteria.criteria);
+			return result;
+		} catch (Exception e) { 
+			throw new MarshalingException(e);
+		}
 	}
 
 	private CriteriaResultView getCriteriaResultView(ParsedCriteria parsedCriteria) {

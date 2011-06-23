@@ -1,15 +1,17 @@
 package com.n4systems.exporting.beanutils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public abstract class CollectionSerializationHandler<T> extends SerializationHandler<Collection<T>> {
+public class CollectionSerializationHandler<T> extends SerializationHandler<Collection<T>> {
 
 	private Collection<T> collection;
-
+	private int index = 0;;
+	
 	public CollectionSerializationHandler(Field field) {
 		super(field);		
 	}
@@ -18,9 +20,11 @@ public abstract class CollectionSerializationHandler<T> extends SerializationHan
 	public final Map<String, Object> marshal(Object bean) throws MarshalingException {
 		Collection<T> values = getFieldValue(bean);		
 		Map<String, Object> map = new TreeMap<String, Object>();
-		for (T value: values) {
-			map.putAll(marshalObject(value));
-		}		
+		if (values!=null) { 
+			for (T value: values) {
+				map.putAll(marshalObject(value));
+			}
+		}
 		return map;
 	}
 
@@ -35,18 +39,26 @@ public abstract class CollectionSerializationHandler<T> extends SerializationHan
 	}
 
 	protected String generateKeyForValue(Object value) {
-		return getExportField().title();
+		return getExportField().title() + ":" + index++;
 	}
 	
 	@Override
 	public final void unmarshal(Object bean, String title, Object value) throws MarshalingException {
-		getCollection().add(unmarshalObject(bean, title, value));
+		T object = unmarshalObject(bean, title, value);
+		if (!getCollection().contains(object)) {
+			getCollection().add(object);
+		}
 		setFieldValue(bean,getCollection());
 	}
 
-	protected abstract T unmarshalObject(Object bean, String title, Object value);
+	@SuppressWarnings("unchecked")
+	protected T unmarshalObject(Object bean, String title, Object value) throws MarshalingException {
+		return (T) value;
+	}
 		
-	protected abstract Collection<T> createCollection();
+	protected Collection<T> createCollection() {
+		return new ArrayList<T>();
+	}
 	
 	protected final Collection<T> getCollection() { 
 		if (collection == null) {

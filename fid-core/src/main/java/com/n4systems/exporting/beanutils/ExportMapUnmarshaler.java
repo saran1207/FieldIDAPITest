@@ -59,7 +59,7 @@ public class ExportMapUnmarshaler<T> {
 		T bean = newBean();
 		
 		Object value;
-		SerializationHandler handler;
+		SerializationHandler<?> handler;
 		for (String title: titleHandlerMap.keySet()) {
 			value = row.get(title);
 			handler = titleHandlerMap.get(title);
