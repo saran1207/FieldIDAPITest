@@ -1,6 +1,7 @@
 <#assign html>
-	<div style="width:500px; text-align: center; font-weight: bold;">
-		<@s.text name="label.import_status" />: <@s.text name="${task.status.label}" />
+	<div style="width:500px; text-align: center; font-weight: bold; padding-bottom: 10px;">
+		<h2><@s.text name="label.import_status" /></h2>
+		<@s.text name="${task.status.label}" />
 	</div>
 	
 	<div style="width:500px; float:left;">
@@ -12,8 +13,12 @@
 $('importStatus').update('${html?js_string}');
 
 <#if importRunning>
-	$('uploadForm').disable();
-	updateTimer = setTimeout("updateStatus()", 5000);
+	if( $('uploadForm') != null) {
+		$('uploadForm').disable();
+		updateTimer = setTimeout("updateStatus()", 5000);
+	}
 <#else>
-	$('uploadForm').enable();
+	if( $('uploadForm') != null) {
+		$('uploadForm').enable();
+	}
 </#if>

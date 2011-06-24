@@ -27,7 +27,7 @@ public class ImportPage extends SetupPage {
         IModel<List<AssetType>> assetTypesWithCriteriaModel = new AssetTypesWithAutoAttributeCriteria(assetTypeListModel);
 
         add(new ImportOwnersForm("importOwnersForm"));
-        add(new ImportAssetsForm("importAssetsForm", assetTypeListModel));
+        add(new ImportAssetsForm("importAssetsForm"));
         add(new ImportEventsForm("importEventsForm", eventTypeListModel));
         add(new ImportAutoAttributesForm("importAutoAttributesForm", assetTypesWithCriteriaModel));
         add(new ImportUsersForm("importUsersForm"));
@@ -47,34 +47,15 @@ public class ImportPage extends SetupPage {
 
     class ImportAssetsForm extends Form {
 
-        private final AssetType assetType;
-
-        ImportAssetsForm(String id, IModel<List<AssetType>> assetTypeListModel) {
+        public ImportAssetsForm(String id) {
             super(id);
-            boolean emptyAssetList = assetTypeListModel.getObject().isEmpty();
-            assetType = emptyAssetList ? null : assetTypeListModel.getObject().get(0);
-
-            DropDownChoice<AssetType> assetTypeChoice = new DropDownChoice<AssetType>("assetTypeSelect", new PropertyModel<AssetType>(this, "assetType"), assetTypeListModel, new AssetTypeChoiceRenderer());
-            assetTypeChoice.setNullValid(false).setVisible(!emptyAssetList);
-
-            NonWicketLink addAssetTypeLink = new NonWicketLink("addAssetTypeLink", "assetTypeEdit.action");
-            addAssetTypeLink.setVisible(emptyAssetList);
-
-            EnclosureContainer selectContainer = new EnclosureContainer("assetTypeSelectContainer", assetTypeChoice);
-            selectContainer.add(assetTypeChoice);
-            selectContainer.add(new AjaxButton("startImportButton") {
+            add(new AjaxButton("importAssetsButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    getResponse().redirect("/fieldid/assetImportExport.action?assetTypeId=" + assetType.getId());
+                    getResponse().redirect("/fieldid/assetImportExport.action");
                 }
             });
-            add(selectContainer);
-
-            EnclosureContainer linkContainer = new EnclosureContainer("addAssetTypeLinkContainer", addAssetTypeLink);
-            linkContainer.add(addAssetTypeLink);
-            add(linkContainer);
         }
-
     }
 
     class ImportEventsForm extends Form {

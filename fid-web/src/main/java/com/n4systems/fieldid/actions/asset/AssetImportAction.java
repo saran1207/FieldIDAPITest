@@ -7,30 +7,29 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.n4systems.exporting.AssetExporter;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-
 import org.apache.log4j.Logger;
 
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exporting.AssetExporter;
 import com.n4systems.exporting.Importer;
 import com.n4systems.exporting.io.ExcelMapWriter;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.exporting.io.MapWriter;
 import com.n4systems.fieldid.actions.importexport.AbstractImportAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.utils.StreamUtils;
-import com.n4systems.notifiers.notifications.ImportFailureNotification;
-import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.notifiers.notifications.AssetImportFailureNotification;
 import com.n4systems.notifiers.notifications.AssetImportSuccessNotification;
+import com.n4systems.notifiers.notifications.ImportFailureNotification;
+import com.n4systems.notifiers.notifications.ImportSuccessNotification;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
 
@@ -40,6 +39,7 @@ public class AssetImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(AssetImportAction.class);
 	
 	private AssetType type;
+	private List<AssetType> assetTypes;
 	private InputStream exampleExportFileStream;
 	private String exampleExportFileSize;
 	
@@ -49,17 +49,17 @@ public class AssetImportAction extends AbstractImportAction {
 
 	@Override
 	protected Importer createImporter(MapReader reader) {
-		return getImporterFactory().createAssetImporter(reader, getUser(), type);
+		return getImporterFactory().createAssetImporter(reader, getCurrentUser(), type);
 	}
 	
 	@Override
 	protected ImportSuccessNotification createSuccessNotification() {
-		return new AssetImportSuccessNotification(getUser());
+		return new AssetImportSuccessNotification(getCurrentUser());
 	}
 	
 	@Override
 	protected ImportFailureNotification createFailureNotification() {
-		return new AssetImportFailureNotification(getUser());
+		return new AssetImportFailureNotification(getCurrentUser());
 	}
 	
 	public String doDownloadExample() {
@@ -91,7 +91,7 @@ public class AssetImportAction extends AbstractImportAction {
 		example.setSerialNumber(getText("example.asset.serialNumber"));
 		example.setRfidNumber(getText("example.asset.rfidNumber"));
 		example.setCustomerRefNumber(getText("example.asset.customerRefNumber"));
-		example.setOwner(getUser().getOwner());
+		example.setOwner(getCurrentUser().getOwner());
 		example.setAdvancedLocation(Location.onlyFreeformLocation(getText("example.asset.location")));
 		example.setPurchaseOrder(getText("example.asset.purchaseOrder"));
 		example.setComments(getText("example.asset.comments"));
@@ -158,4 +158,12 @@ public class AssetImportAction extends AbstractImportAction {
 	public InputStream getFileStream() {
 		return exampleExportFileStream;
 	}
+	
+	public List<AssetType> getAssetTypes() {
+		if (assetTypes == null) {
+			assetTypes = getLoaderFactory().createAssetTypeListLoader().load();
+		}
+		return assetTypes;
+	}
+
 }

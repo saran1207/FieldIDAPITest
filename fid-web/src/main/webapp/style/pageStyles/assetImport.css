@@ -1,0 +1,69 @@
+.leftBox, rightBox{
+	float: left;
+}
+
+.leftBox {
+	width: 70%;
+	display: block;
+}
+
+.rightBox {
+	width: 30%;
+}
+
+.infoSet {
+	width: 95%;
+	padding-bottom: 20px;
+}
+
+.infoSet p, .infoSet div, .infoSet form{
+	margin-left: 5px;
+}
+.fieldHolder select{
+	margin-top: 10px;
+	border: 1px solid #9C9C9C;
+	padding: 4px;
+}
+
+.fieldHolder input{
+	margin: 10px 0;
+	border: 1px solid #9C9C9C;
+	padding: 4px;
+}
+
+
+.infoSet h2 {
+    background-color: #EEEEEE;
+    border-bottom: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    margin: 5px 0;
+}
+
+#templateLink{
+	background-image: url(../../images/large-xls-icon.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 35px;
+	margin-top: 10px;
+	height: 40px;
+}
+
+#templateLink p{
+	padding-top: 10px;
+}
+
+.faq, .faq h4 {
+	padding-bottom: 5px;
+}
+
+.validationErrors h2, .validationErrors p{
+	padding: 5px;
+}
+
+.errorActions {
+	padding: 5px 0;
+}
+
+.errorActions input[type="button"] {
+	padding: 5px;
+}
