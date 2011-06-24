@@ -252,8 +252,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
 		user.setTenant(getTenant());
 		user.setRegistered(true);
-		user.setModifiedBy(super.getUser());
-		user.setCreatedBy(super.getUser());
+		user.setModifiedBy(super.getCurrentUser());
+		user.setCreatedBy(super.getCurrentUser());
 
 		try {
 

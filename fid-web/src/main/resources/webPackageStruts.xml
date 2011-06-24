@@ -848,6 +848,7 @@
 				<param name="actionName">readOnlyUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
+			<result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
 		</action>
 		
 

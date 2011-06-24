@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.actions.users;
 
 
-import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
@@ -13,8 +13,6 @@ import com.n4systems.security.UserType;
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
 public class ReadOnlyUserCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger logger = Logger.getLogger(ReadOnlyUserCrud.class);
 	
 	public ReadOnlyUserCrud( UserManager userManager, PersistenceManager persistenceManager ) {
 		super(userManager, persistenceManager);
@@ -34,6 +32,16 @@ public class ReadOnlyUserCrud extends UserCrud {
 		user.setUserType(UserType.READONLY);
 		save();
 		return SUCCESS;
+	}
+	
+	@SkipValidation
+	public String doUnarchive() {
+		if (!super.isReadonlyUserLimitReached()) {
+			testRequiredEntities(true);		
+			return SUCCESS;		
+		}
+		addActionError(getText("label.unarchive_readonly_user_limit", new String[] { getLimits().getReadonlyUsersMax().toString() } ));
+		return ERROR;
 	}
 
 	@Override
