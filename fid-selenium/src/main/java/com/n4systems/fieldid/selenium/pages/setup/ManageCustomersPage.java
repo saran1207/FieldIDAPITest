@@ -186,4 +186,8 @@ public class ManageCustomersPage extends FieldIDPage {
 		selenium.type("//input[@name='name']", name);		
 	}
 	
+	public void enterNotes(String notes) { 
+		selenium.type("//textarea[@name='customerNotes']", notes);
+	}
+	
 }

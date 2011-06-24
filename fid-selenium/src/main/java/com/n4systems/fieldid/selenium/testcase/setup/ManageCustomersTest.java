@@ -119,6 +119,7 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 		page.enterCustomerID("Customer3");
 		page.selectOrganizationalUnit(COMPANY);
 		page.enterCustomerName("Customer3");
+		page.enterNotes("notes");
 		page.clickSave();
 		
 		assertEquals("Data Saved.", page.getActionMessages().get(0));	
