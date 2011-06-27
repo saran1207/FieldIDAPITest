@@ -31,12 +31,15 @@
 	padding: 4px;
 }
 
-
 .infoSet h2 {
     background-color: #EEEEEE;
     border-bottom: 1px solid #CCCCCC;
     border-top: 1px solid #CCCCCC;
     margin: 5px 0;
+}
+
+.infoSet p, .faqSection span, .formatDate span{
+	line-height: 18px;
 }
 
 #templateLink{
@@ -52,8 +55,18 @@
 	padding-top: 10px;
 }
 
-.faq, .faq h4 {
+.faqSection h4, .formatDate h4 {
 	padding-bottom: 5px;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.faq {
+	padding: 15px;
+}
+
+.faqSection {
+	padding-bottom: 15px;
 }
 
 .validationErrors h2, .validationErrors p{
@@ -66,4 +79,11 @@
 
 .errorActions input[type="button"] {
 	padding: 5px;
+}
+
+.formatDate {
+	margin-top: 5px;
+	padding: 15px;
+	background-color: #EEEEEE;
+	border: 1px solid #CCCCCC;
 }

@@ -49,11 +49,11 @@
 	background:no-repeat url(../../images/green-arrow-left.png);
 }
 
-.faq {
+.faqSection {
 	padding-top: 10px;
 }
 
-.faq span {
+.faqSection span {
 	display: block;
 	padding-top: 5px;
 }

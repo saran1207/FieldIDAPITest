@@ -7,7 +7,7 @@ ${action.setPageType('asset', 'import')!}
 
 <div class="leftBox">
 	<div class="infoSet">
-		<h2><@s.text name="label.select_asset_type"/></h2>
+		<h2>1. <@s.text name="label.select_asset_type"/></h2>
 		<p>
 			<@s.text name="message.select_asset_type"/>
 			<@s.select theme="fieldid" id="assetTypeSelect" list="assetTypes" name="assetTypeId" listValue="name" listKey="id" onchange="updateUploadForm();" />
@@ -15,7 +15,7 @@ ${action.setPageType('asset', 'import')!}
 	</div> 
 
 	<div class="infoSet">
-		<h2><@s.text name="label.download_template"/></h2>
+		<h2>2. <@s.text name="label.download_template"/></h2>
 		<p>
 			<@s.text name="message.download_template"/>
 		</p>
@@ -28,7 +28,7 @@ ${action.setPageType('asset', 'import')!}
 	</div>
 
 	<div class="infoSet">
-		<h2><@s.text name="label.upload"/></h2>
+		<h2>3. <@s.text name="label.upload"/></h2>
 		<p><@s.text name="message.upload"/></p>
 		
 		<@s.form id="uploadForm" action="importAssets" cssClass="fullForm fluentSets" theme="fieldid" method="POST" enctype="multipart/form-data">
@@ -44,24 +44,22 @@ ${action.setPageType('asset', 'import')!}
 </div>
 
 <div class="rightBox">
-	<div class="faq">
-		<h4><@s.text name="label.import_export_question.1" /></h4>
-		<span><@s.text name="label.import_export_answer.1" /></span>
+	<div class="formatDate">
+		<h4><@s.text name="label.formatting_dates" /></h4>
+		<span><@s.text name="message.formatting_dates" /></span>
 	</div>
 	<div class="faq">
-		<h4><@s.text name="label.import_export_question.2" /></h4>
-		<span><@s.text name="label.import_export_answer.2" /></span>
-	</div>
-	<div class="faq">
-		<h4><@s.text name="label.import_export_question.3" /></h4>
-		<span><@s.text name="label.import_export_answer.3" /></span>
-	</div>
-	<div class="faq">
-		<h4><@s.text name="label.import_export_question.4" /></h4>
-		<span><@s.text name="label.import_export_answer.4" /></span>
-	</div>
-	<div class="faq">
-		<h4><@s.text name="label.import_export_question.5" /></h4>
-		<span><@s.text name="label.import_export_answer.5" /></span>
+		<div class="faqSection">
+			<h4><@s.text name="label.import_export_question.1" /></h4>
+			<span><@s.text name="label.import_export_answer.1" /></span>
+		</div>
+		<div class="faqSection">
+			<h4><@s.text name="label.import_export_question.2" /></h4>
+			<span><@s.text name="label.import_export_answer.2" /></span>
+		</div>
+		<div class="faqSection">
+			<h4><@s.text name="label.import_export_question.3" /></h4>
+			<span><@s.text name="label.import_export_answer.3" /></span>
+		</div>
 	</div>
 </div>
