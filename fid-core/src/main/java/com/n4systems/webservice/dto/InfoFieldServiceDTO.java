@@ -6,6 +6,7 @@ public class InfoFieldServiceDTO extends AbstractBaseServiceDTO {
 
 	private String name;
 	private String fieldType;
+	private boolean includeTime;
 	private Long weight;
 	private boolean required;
 	private boolean usingUnitOfMeasure;
@@ -60,6 +61,12 @@ public class InfoFieldServiceDTO extends AbstractBaseServiceDTO {
 	}
 	public void setDefaultUnitOfMeasureId(Long defaultUnitOfMeasureId) {
 		this.defaultUnitOfMeasureId = defaultUnitOfMeasureId;
+	}
+	public void setIncludeTime(boolean includeTime) {
+		this.includeTime = includeTime;
+	}
+	public boolean isIncludeTime() {
+		return includeTime;
 	}
 	
 	

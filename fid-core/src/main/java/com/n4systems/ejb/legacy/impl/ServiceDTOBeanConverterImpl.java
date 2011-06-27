@@ -867,6 +867,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		infoFieldDTO.setDtoVersion(InfoFieldServiceDTO.CURRENT_DTO_VERSION);
 		infoFieldDTO.setId(infoField.getUniqueID());
 		infoFieldDTO.setFieldType(infoField.getFieldType());
+		infoFieldDTO.setIncludeTime(infoField.isIncludeTime());
 		infoFieldDTO.setName(infoField.getName());
 		infoFieldDTO.setRequired(infoField.isRequired());
 		infoFieldDTO.setUsingUnitOfMeasure(infoField.isUsingUnitOfMeasure());
