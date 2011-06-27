@@ -26,6 +26,8 @@ import com.n4systems.utils.email.WelcomeNotifier;
 
 public class UserImporterTest {
 	
+	private static final String TIME_ZONE_ID = "timeZoneId";
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_import_collaboration() throws Exception {
@@ -43,7 +45,7 @@ public class UserImporterTest {
 		Transaction transaction = new DummyTransaction();
 		User user = UserBuilder.anEmployee().build();
 		
-		UserImporter importer = new UserImporter(reader, validator, saver, converter,  loader, notifier) { 
+		UserImporter importer = new UserImporter(reader, validator, saver, converter,  loader, notifier, TIME_ZONE_ID) { 
 			@Override
 			List<UserView> getViews() {
 				return userViews;
@@ -84,7 +86,7 @@ public class UserImporterTest {
 		Transaction transaction = new DummyTransaction();
 		User user = UserBuilder.anEmployee().build();
 		
-		UserImporter importer = new UserImporter(reader, validator, saver, converter,  loader, notifier) { 
+		UserImporter importer = new UserImporter(reader, validator, saver, converter,  loader, notifier, TIME_ZONE_ID) { 
 			@Override
 			List<UserView> getViews() {
 				return userViews;

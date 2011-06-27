@@ -26,7 +26,7 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
 		to.setGlobalId(from.getGlobalId());
-		to.setInitials(from.getInitials());		
+		to.setInitials(from.getInitials());
 		to.setPermissions(from.getPermissions());
 		to.setPosition(from.getPosition());
 		to.setTenant(baseOrg.getTenant());

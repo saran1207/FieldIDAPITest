@@ -35,12 +35,15 @@ public class UserImporter extends AbstractImporter<UserView> {
 	private final OrgByNameLoader orgByNameLoader;
 	private WelcomeNotifier emailNotifier;	
 	
-	public UserImporter(MapReader mapReader, Validator<ExternalModelView> validator, UserSaver saver, UserToModelConverter converter, OrgByNameLoader orgByNameLoader, WelcomeNotifier emailNotifier) {
+	private String timeZoneId;
+	
+	public UserImporter(MapReader mapReader, Validator<ExternalModelView> validator, UserSaver saver, UserToModelConverter converter, OrgByNameLoader orgByNameLoader, WelcomeNotifier emailNotifier, String timeZoneId) {
 		super(UserView.class, mapReader, validator);
 		this.saver = saver;
 		this.converter = converter;
 		this.orgByNameLoader = orgByNameLoader;
 		this.emailNotifier = emailNotifier;
+		this.timeZoneId = timeZoneId;
 	}
 
 	@Override
@@ -110,6 +113,9 @@ public class UserImporter extends AbstractImporter<UserView> {
 	@Override
 	protected void importView(Transaction transaction, UserView view) throws ConversionException {
 		User user = converter.toModel(view, transaction);
+		if (user.getTimeZoneID()==null) {  // TODO DD: this responsibility should be in converter? 
+			user.setTimeZoneID(timeZoneId);
+		}
 		saver.saveOrUpdate(user);		
 		maybeSendWelcomeEmail(user, view);
 	}

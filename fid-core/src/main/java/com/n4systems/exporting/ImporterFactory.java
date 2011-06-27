@@ -106,8 +106,8 @@ public class ImporterFactory {
 	}
 
 
-	public UserImporter createUserImporter(MapReader reader, WelcomeNotifier emailNotifier) {
-		return new UserImporter(reader, createViewValidator(), saverFactory.createUserSaver(), createUserToModelConverter(), loaderFactory.createOrgByNameLoader(), emailNotifier);	
+	public UserImporter createUserImporter(MapReader reader, WelcomeNotifier emailNotifier, String timeZoneId) {
+		return new UserImporter(reader, createViewValidator(), saverFactory.createUserSaver(), createUserToModelConverter(), loaderFactory.createOrgByNameLoader(), emailNotifier, timeZoneId);	
 	}
 	
 	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {
