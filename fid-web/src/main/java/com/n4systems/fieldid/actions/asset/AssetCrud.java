@@ -233,7 +233,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 
 	private void convertInputsToInfoOptions() {
-		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, asset.getType().getInfoFields(), getSessionUser().getDateFormat());
+		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, asset.getType().getInfoFields(), getSessionUser());
 
 		asset.setInfoOptions(new TreeSet<InfoOptionBean>(options));
 	}

@@ -1,19 +1,17 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.apache.struts2.components.If;
-
-import com.n4systems.util.StringListingPair;
-
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
+import rfid.web.helper.SessionUser;
+
+import com.n4systems.util.DateHelper;
+import com.n4systems.util.StringListingPair;
 
 public class InfoOptionInput {
 	public static String COMBOBOX_DYNAMIC_VALUE_MARKER = "!";
@@ -30,9 +28,7 @@ public class InfoOptionInput {
 	private Long infoFieldId;
 	
 	private String uniqueIDString;
-	
-	private static Logger logger = Logger.getLogger(InfoOptionInput.class);
-	
+		
 	public InfoOptionInput() {
 		this( null, null );
 	}
@@ -69,7 +65,7 @@ public class InfoOptionInput {
 		return (  ( name == null || name.equals("") ) && ( uniqueIDString == null || uniqueIDString.equals("0") || uniqueIDString.equals("!") ) ) ;
 	}
 	
-	public InfoOptionBean convertToInfoOptionBean( InfoFieldBean field, String dateFormat ) {
+	public InfoOptionBean convertToInfoOptionBean( InfoFieldBean field, SessionUser user ) {
 		// blank options arn't saved.
 		if( isBlank() ) {
 			return null;
@@ -91,12 +87,9 @@ public class InfoOptionInput {
 				field.getFieldType().equals( InfoFieldBean.SELECTBOX_FIELD_TYPE ) ) {
 			infoOption.setName( uniqueIDString.substring( 1 ) );
 		}else if (field.getFieldType().equals( InfoFieldBean.DATEFIELD_FIELD_TYPE) ){ 
-			try {
-				Date date = new SimpleDateFormat(dateFormat).parse(name);
+				String dateFormatStr = field.isIncludeTime() ? user.getDateTimeFormat() : user.getDateFormat();
+				Date date = DateHelper.string2DateTime(dateFormatStr, name, user.getTimeZone());
 				infoOption.setName( Long.toString(date.getTime()) );
-			} catch (ParseException e) {
-				logger.error("Invalid date:" + name + " for infoField: " + field.getIdentifier(), e);
-			}
 		} else {
 			infoOption.setName( name );
 		}
@@ -105,7 +98,6 @@ public class InfoOptionInput {
 		
 		return infoOption;
 	}
-	
 	
 	public Long getUniqueID() {
 		return uniqueID;
@@ -176,7 +168,7 @@ public class InfoOptionInput {
 	}
 
 
-	public static List<InfoOptionBean> convertInputInfoOptionsToInfoOptions( List<InfoOptionInput> inputs, Collection<InfoFieldBean> fieldsToLookFor, String dateFormat ) {
+	public static List<InfoOptionBean> convertInputInfoOptionsToInfoOptions( List<InfoOptionInput> inputs, Collection<InfoFieldBean> fieldsToLookFor, SessionUser user ) {
 		List<InfoOptionBean> newInfoOptions = new ArrayList<InfoOptionBean>();
 		if( fieldsToLookFor == null || inputs == null ){ return newInfoOptions; }
 		for( InfoOptionInput input : inputs ) {
@@ -185,10 +177,7 @@ public class InfoOptionInput {
 				for( InfoFieldBean field : fieldsToLookFor ) {
 					if( field.getUniqueID().equals( input.getInfoFieldId() ) ) {
 						
-						if(field.isIncludeTime()) {
-							dateFormat += " h:mm a";
-						}
-						InfoOptionBean option = input.convertToInfoOptionBean( field, dateFormat );
+						InfoOptionBean option = input.convertToInfoOptionBean( field, user );
 						if( option != null ) {
 							newInfoOptions.add( option );
 						}

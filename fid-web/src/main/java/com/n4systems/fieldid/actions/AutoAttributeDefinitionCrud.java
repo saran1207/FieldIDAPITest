@@ -153,11 +153,11 @@ private static final long serialVersionUID = 1L;
 	
 	
 	private void convertOutputsToInfoOptions() {
-		autoAttributeDefinition.setOutputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( outputInfoOptions, autoAttributeCriteria.getOutputs(), getSessionUser().getDateFormat() ) );
+		autoAttributeDefinition.setOutputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( outputInfoOptions, autoAttributeCriteria.getOutputs(), getSessionUser() ) );
 	}
 	
 	private void convertInputsToInfoOptions() {
-		autoAttributeDefinition.setInputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( inputInfoOptions, autoAttributeCriteria.getInputs(), getSessionUser().getDateFormat() ) );
+		autoAttributeDefinition.setInputs( InfoOptionInput.convertInputInfoOptionsToInfoOptions( inputInfoOptions, autoAttributeCriteria.getInputs(), getSessionUser() ) );
 	}
 	
 	@SuppressWarnings("unchecked")

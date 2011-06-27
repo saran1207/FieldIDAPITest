@@ -151,7 +151,7 @@ public class InfoFieldInput {
 	public static List<StringListingPair> getComboBoxInfoOptions( InfoFieldBean field, InfoOptionInput inputOption ) {
 		List<StringListingPair> comboBoxInfoOptions = new ArrayList<StringListingPair>();
 		if( inputOption != null ) {
-			field.createComboBoxInfoOptions( inputOption.convertToInfoOptionBean( field, "" ) );
+			field.createComboBoxInfoOptions( inputOption.convertToInfoOptionBean( field, null ) );
 		}
 		
 		for( InfoOptionBean option : field.getComboBoxInfoOptions() ) {

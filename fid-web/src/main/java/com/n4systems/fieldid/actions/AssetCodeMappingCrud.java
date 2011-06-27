@@ -99,7 +99,7 @@ public class AssetCodeMappingCrud extends AbstractCrud {
 	}
 	
 	private void convertInputsToInfoOptions() {
-		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser().getDateTimeFormat() );
+		List<InfoOptionBean> options = InfoOptionInput.convertInputInfoOptionsToInfoOptions(assetInfoOptions, assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser() );
 		assetCodeMapping.setInfoOptions( options );
 	}
 	

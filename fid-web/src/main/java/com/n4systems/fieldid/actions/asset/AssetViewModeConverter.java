@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import rfid.ejb.entity.InfoOptionBean;
+import rfid.web.helper.SessionUser;
 
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
@@ -55,7 +56,7 @@ public class AssetViewModeConverter {
 			
 			model.setPublished(primaryOrg.isAutoPublish());
 			
-			List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getAssetInfoOptions(), model.getType().getInfoFields(), primaryOrg.getDateFormat());
+			List<InfoOptionBean> infoOptions = InfoOptionInput.convertInputInfoOptionsToInfoOptions(view.getAssetInfoOptions(), model.getType().getInfoFields(), new SessionUser(identifier));
 			model.setInfoOptions(new TreeSet<InfoOptionBean>(infoOptions));
 			
 			if (view.getLineItemId() != null && primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {
