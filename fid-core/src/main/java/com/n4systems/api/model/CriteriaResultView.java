@@ -1,14 +1,15 @@
 package com.n4systems.api.model;
 
-import com.google.common.base.Objects;
+import org.apache.commons.lang.StringUtils;
 
+import com.google.common.base.Objects;
 
 
 public class CriteriaResultView {
 	
 	private String displayText;
 	private String section;
-	private String result = ""; 	
+	private Object result; 	
 	private String recommendation;	// NOTE : only support single free form recommendation & deficiency.
 	private String deficiency;
 	
@@ -25,10 +26,16 @@ public class CriteriaResultView {
 	}
 
 	public String getResultString() {
-		return result;
+		return result==null ? "" : StringUtils.trimToEmpty(result.toString());
 	}
 	public void setResultString(String result) {
 		this.result = result;
+	}
+	public void setResult(Object result) {
+		this.result = result;		
+	}	
+	public Object getResult() { 
+		return result;
 	}
 	public String getRecommendationString() {
 		return recommendation;
@@ -58,5 +65,6 @@ public class CriteriaResultView {
 	public String getSection() {
 		return section;
 	}
+
 	
 }

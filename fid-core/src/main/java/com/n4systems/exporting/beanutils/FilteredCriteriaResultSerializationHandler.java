@@ -61,7 +61,7 @@ public class FilteredCriteriaResultSerializationHandler extends CollectionSerial
 			criteriaResultView.setRecommendation(cleanString(value));
 			break;
 		case RESULT:
-			criteriaResultView.setResultString(cleanString(value));
+			criteriaResultView.setResult(cleanImportValue(value));  // this might be Date or String while other values are known to be only strings.
 		}
 		return criteriaResultView;
 	}

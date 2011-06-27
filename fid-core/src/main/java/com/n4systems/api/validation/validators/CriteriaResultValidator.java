@@ -1,6 +1,7 @@
 package com.n4systems.api.validation.validators;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -102,8 +103,10 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 	}
 
 	private ValidationResult validateDateField(DateFieldCriteria criteria, CriteriaSection section, CriteriaResultView value) {
-		// FIXME DD : deal with dates....either don't convert them to strings on way in or validate the string is a valid date.
-		return ValidationResult.pass();
+		// TODO DD : should i allow null dates to pass? 
+		return (value.getResult()==null || value.getResult() instanceof Date ) ? 
+				ValidationResult.pass() : 
+				ValidationResult.fail("The value '" + value.getResult() + "' is not a valid date string required by the criteria '" + criteria.getDisplayName() + "' .");
 	}
 
 	private ValidationResult validateComboBox(ComboBoxCriteria criteria, CriteriaSection section, CriteriaResultView value) {

@@ -1,6 +1,7 @@
 package com.n4systems.api.conversion.event;
 
-import org.apache.commons.lang.Validate;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
@@ -14,14 +15,14 @@ import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
 
 
-// FIXME DD : what package should this live in. 
-//  also, need to refactor all code that creates criteria results to use this common code. 
+// TODO DD : what package should this live in? 
+//  also, need to refactor all code that creates criteria results to use this common code.
 public class CriteriaResultFactory {
 	
 	private CriteriaResultPopulator populator;
 	
 	public CriteriaResultFactory(CriteriaResultPopulator populator) {
-		Validate.notNull(populator);
+		checkArgument(populator!=null);
 		this.populator = populator;
 	}
 	
@@ -61,6 +62,5 @@ public class CriteriaResultFactory {
 			throw new IllegalStateException("can't create criteria result for type '" + criteriaType == null ? "NULL Type" : criteriaType +"'"); 
 		}
 	}
-
 	
 }

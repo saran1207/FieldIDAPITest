@@ -52,8 +52,6 @@ public class EventCreator extends BasicTransactionManagement {
 		audit(parameter, auditLogger, null);
 	}
 
-
-
 	@Override
 	protected void doProcess(Transaction transaction) {
 		createTransactionDependentServices(transaction);
