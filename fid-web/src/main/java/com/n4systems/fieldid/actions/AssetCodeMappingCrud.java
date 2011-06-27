@@ -196,7 +196,7 @@ public class AssetCodeMappingCrud extends AbstractCrud {
 		if( assetInfoOptions == null ) {
 			assetInfoOptions = new ArrayList<InfoOptionInput>();
 			if( assetCodeMapping.getAssetInfo() != null ) {
-				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser().getDateFormat() );
+				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser() );
 			}
 		}
 		return assetInfoOptions;

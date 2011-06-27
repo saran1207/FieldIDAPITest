@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -188,7 +187,7 @@ public class InfoOptionInput {
 		return newInfoOptions;
 	}
 	
-	public static List<InfoOptionInput> convertInfoOptionsToInputInfoOptions( List<InfoOptionBean> options, Collection<InfoFieldBean> fieldsToLookFor, String dateFormat ) {
+	public static List<InfoOptionInput> convertInfoOptionsToInputInfoOptions( List<InfoOptionBean> options, Collection<InfoFieldBean> fieldsToLookFor, SessionUser user ) {
 		List<InfoOptionInput> inputs = new ArrayList<InfoOptionInput>();
 		if( fieldsToLookFor == null ){ return inputs; }
 		for( InfoFieldBean field : fieldsToLookFor ) {
@@ -199,11 +198,14 @@ public class InfoOptionInput {
 						input = new InfoOptionInput( option, field );
 						
 						if(option.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
-							if(option.getInfoField().isIncludeTime()) {
-								dateFormat += " h:mm a"; 
+							Date utcDate = new Date(Long.parseLong(input.getName()));
+							SessionUserDateConverter dateConverter = user.createUserDateConverter();
+							
+							if (option.getInfoField().isIncludeTime()) {
+								input.setName( dateConverter.convertDateTime(utcDate) );
+							} else {
+								input.setName( dateConverter.convertDate(utcDate) );
 							}
-							String date = new SimpleDateFormat(dateFormat).format(new Date(Long.parseLong(input.getName())));
-							input.setName(date);
 						}
 						break;
 					}

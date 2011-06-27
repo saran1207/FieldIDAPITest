@@ -661,7 +661,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 				if (asset.getInfoOptions() != null) {
 					tmpOptions.addAll(asset.getInfoOptions());
 				}
-				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getAssetInfoFields(), getSessionUser().getDateFormat());
+				assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(tmpOptions, getAssetInfoFields(), getSessionUser());
 			}
 		}
 		return assetInfoOptions;

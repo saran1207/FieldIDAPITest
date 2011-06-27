@@ -207,7 +207,7 @@ private static final long serialVersionUID = 1L;
 		if( outputInfoOptions == null ) {
 			outputInfoOptions = new ArrayList<InfoOptionInput>();
 			if( autoAttributeCriteria.getOutputs() != null ) {
-				outputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( autoAttributeDefinition.getOutputs(), autoAttributeCriteria.getOutputs(), getSessionUser().getDateFormat());
+				outputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( autoAttributeDefinition.getOutputs(), autoAttributeCriteria.getOutputs(), getSessionUser());
 			}
 		}
 		return outputInfoOptions;
@@ -223,7 +223,7 @@ private static final long serialVersionUID = 1L;
 			
 			inputInfoOptions = new ArrayList<InfoOptionInput>();
 			if( autoAttributeCriteria.getInputs() != null ) {
-				inputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( autoAttributeDefinition.getInputs(), autoAttributeCriteria.getInputs(), getSessionUser().getDateFormat() );
+				inputInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions( autoAttributeDefinition.getInputs(), autoAttributeCriteria.getInputs(), getSessionUser() );
 			}
 		}
 		return inputInfoOptions;

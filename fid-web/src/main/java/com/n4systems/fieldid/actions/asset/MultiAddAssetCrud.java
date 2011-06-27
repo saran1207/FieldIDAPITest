@@ -99,7 +99,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	@Override
 	protected void initMemberFields() {
 		webEventSchedules = new ArrayList<WebEventSchedule>();
-		converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getUser());
+		converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getCurrentUser());
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			setAssetTypeId(assetCodeMapping.getAssetInfo().getId());
 
 			if (assetCodeMapping.getInfoOptions() != null) {
-				List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser().getDateFormat());
+				List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(assetCodeMapping.getInfoOptions(), assetCodeMapping.getAssetInfo().getInfoFields(), getSessionUser());
 				assetView.setAssetInfoOptions(assetInfoOptions);
 			}
 		}
@@ -173,7 +173,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 			
 			AssetType assetType = getAssetType(addAssetHistory.getAssetType().getId());
 			
-			List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(addAssetHistory.getInfoOptions(), assetType.getInfoFields(), getSessionUser().getDateFormat());
+			List<InfoOptionInput> assetInfoOptions = InfoOptionInput.convertInfoOptionsToInputInfoOptions(addAssetHistory.getInfoOptions(), assetType.getInfoFields(), getSessionUser());
 			assetView.setAssetInfoOptions(assetInfoOptions);			
 			
 		} else {
