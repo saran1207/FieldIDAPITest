@@ -23,7 +23,7 @@ public class MapUtilsTest {
 		from.put("two", 2);
 		from.put("three", 3);
 		
-		MapUtils.swapKeyVales(from, to);
+		MapUtils.swapKeyValues(from, to);
 		
 		assertEquals(3, to.size());
 		assertEquals(to.get(1), "one");

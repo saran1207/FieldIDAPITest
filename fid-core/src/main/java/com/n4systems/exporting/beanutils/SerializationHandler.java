@@ -8,8 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtilsBean;
-
-import com.n4systems.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 public abstract class SerializationHandler<T> {
 	private final Field field;
@@ -36,7 +35,7 @@ public abstract class SerializationHandler<T> {
 	}
 	
 	protected String cleanString(Object value) { 
-		return (value != null) ? StringUtils.clean(value.toString()) : new String();		
+		return (value != null) ? StringUtils.trimToEmpty(value.toString()) : new String();		
 	}
 	
 	// refactor this into lower level--into SimpleSerializationHandler??
@@ -113,13 +112,23 @@ public abstract class SerializationHandler<T> {
 	protected Object cleanImportValue(Object value) {
 		Object cleanValue = null;
 		if (value != null) {
-			// only strings need to be cleaned for now.  All others will passthrough un modified
+			// only strings need to be cleaned for now.  All others will passthrough un-modified
 			if (value instanceof String) {
-				cleanValue = (value != null) ? StringUtils.clean((String)value) : null;
+				cleanValue = StringUtils.trimToNull((String)value);
 			} else {
 				cleanValue = value;
 			}
 		}
 		return cleanValue;
+	}
+	
+	// TODO DD: this is just short term hack. really, a long term solution would be to register converters for map serialization handler
+	//  so it would know how to handle many different types of objects.
+	protected String cleanStringForMap(Object value) {
+		if (value instanceof Date) { 
+			return Long.toString(((Date)value).getTime());
+		} else { 
+			return value==null ? null : StringUtils.trimToNull(value.toString());
+		}
 	}
 }

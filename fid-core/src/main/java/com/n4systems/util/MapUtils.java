@@ -22,7 +22,7 @@ public class MapUtils {
 			to = new HashMap<V, K>();
 		}
 		
-		swapKeyVales(map, to);
+		swapKeyValues(map, to);
 		
 		return to;
 	}
@@ -33,7 +33,7 @@ public class MapUtils {
 	 * @param from
 	 * @param to
 	 */
-	public static <K, V> void swapKeyVales(Map<K, V> from, Map<V, K> to) {
+	public static <K, V> void swapKeyValues(Map<K, V> from, Map<V, K> to) {
 		for (Map.Entry<K, V> entry: from.entrySet()) {
 			to.put(entry.getValue(), entry.getKey());
 		}

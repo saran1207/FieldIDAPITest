@@ -30,7 +30,6 @@ public class MapSerializationHandler extends SerializationHandler<Map<String, St
 		return outputMap;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void unmarshal(Object bean, String title, Object value) throws MarshalingException {
 		Map<String, String> mapFromBean = getFieldValue(bean);
@@ -38,7 +37,7 @@ public class MapSerializationHandler extends SerializationHandler<Map<String, St
 		// remove the title prefix from the field key
 		String fieldKey = title.substring(getExportField().title().length());
 		
-		mapFromBean.put(fieldKey, (String)value);
+		mapFromBean.put(fieldKey, cleanStringForMap(value));
 	}
 
 }
