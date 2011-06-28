@@ -112,4 +112,54 @@ public class UserImporterTest {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void test_import_invalid_account() throws Exception {
+		MapReader reader = createMock(MapReader.class);
+		UserSaver saver = createMock(UserSaver.class);
+		OrgByNameLoader loader = createMock(OrgByNameLoader.class);
+		WelcomeNotifier notifier = createMock(WelcomeNotifier.class);
+		Validator<ExternalModelView> validator = createMock(Validator.class);
+		UserToModelConverter converter = createMock(UserToModelConverter.class);
+
+		// should let this pass thru...responsiblity of accountTypeValidator to catch this. 
+		final List<UserView> userViews = Lists.newArrayList(
+				new UserViewBuilder().withDefaultValues().withAccountType("badAccountType").build()
+				);
+		
+		Transaction transaction = new DummyTransaction();
+		User user = UserBuilder.anEmployee().build();
+		
+		UserImporter importer = new UserImporter(reader, validator, saver, converter,  loader, notifier, TIME_ZONE_ID) { 
+			@Override
+			List<UserView> getViews() {
+				return userViews;
+			};
+		};
+		
+		expect(converter.toModel(userViews.get(0), transaction)).andReturn(user);
+		expect(saver.saveOrUpdate(user)).andReturn(user);
+		notifier.sendWelcomeNotificationTo(user);
+		reader.close();
+		
+		replay(reader);
+		replay(saver);
+		replay(loader);
+		replay(notifier);
+		replay(validator);
+		replay(converter);
+		
+		importer.runImport(transaction);
+		
+		verify(validator);
+		verify(converter);
+	}
+
+	
+	// TODO DD : test importer validation.  very difficult to do with static instance of TenantService.  need to either refactor it or encapsulate code 
+	//   that uses it. 
+	
+		
+		
+	
 }

@@ -69,12 +69,12 @@ public class OrgByNameLoader extends SecurityFilteredLoader<BaseOrg> {
 	}
 	
 	public OrgByNameLoader setCustomerName(String customerName) {
-		this.customerName = customerName;
+		this.customerName = StringUtils.clean(customerName);
 		return this;
 	}
 	
 	public OrgByNameLoader setDivision(String divisionName) {
-		this.divisionName = divisionName;
+		this.divisionName = StringUtils.clean(divisionName);
 		return this;
 	}
 }

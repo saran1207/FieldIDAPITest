@@ -62,21 +62,23 @@ public class UserImporter extends AbstractImporter<UserView> {
 		Set<UserView> readOnlyUsers = new HashSet<UserView>();		
 		
 		for (UserView userView:views) {
-			switch (UserType.valueFromLabel(userView.getAccountType())) {
-			case FULL:
-			case SYSTEM:
-			case ADMIN:
-				fullUsers.add(userView);
-				break;
-			case LITE:
-				liteUsers.add(userView);
-				break;
-			case READONLY:
-				readOnlyUsers.add(userView);
-				break;
-				
-			default: 
-				throw new IllegalStateException("unsupported user type being added");
+			UserType userType = UserType.valueFromLabel(userView.getAccountType());
+			if (userType!=null) { 
+				switch (userType) {
+				case FULL:
+				case SYSTEM:
+				case ADMIN:
+					fullUsers.add(userView);
+					break;
+				case LITE:
+					liteUsers.add(userView);
+					break;
+				case READONLY:
+					readOnlyUsers.add(userView);
+					break;				
+				default: 
+					throw new IllegalStateException("illegal user account type '" + userView.getAccountType() + "' ");
+				}
 			}
 		}
 		Long tenantId = orgByNameLoader.getTenantId();

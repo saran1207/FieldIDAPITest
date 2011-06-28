@@ -4,12 +4,13 @@ import com.n4systems.api.validation.validators.AccountTypeValidator;
 import com.n4systems.api.validation.validators.EmailValidator;
 import com.n4systems.api.validation.validators.ExternalUserGlobalIdValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
-import com.n4systems.api.validation.validators.OrgNameValidator;
+import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.PasswordValidator;
 import com.n4systems.api.validation.validators.PermissionValidator;
 import com.n4systems.api.validation.validators.YNValidator;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.exporting.beanutils.MaskedSerializationHandler;
+import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.security.Permissions;
 
@@ -40,7 +41,6 @@ public class UserView extends ExternalModelView {
 	public static final String EMAIL_ADDRESS_FIELD = "Email Address";
 	public static final String ORGANIZATION_FIELD = "Organization";
 	public static final String CUSTOMER_FIELD = "Customer/Job Site";
-		
 	
 	public static UserView newUser() {
 		UserView view = new UserView();		
@@ -51,7 +51,6 @@ public class UserView extends ExternalModelView {
 	
 	@Deprecated // used for testing only. 
 	UserView(String organization, String email, String firstName, String lastName, String assignPassword, String password, String userId, String sendWelcomeEmail, String guid) {
-		this.organization = organization;
 		this.emailAddress = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -60,16 +59,13 @@ public class UserView extends ExternalModelView {
 		this.userID = userId;
 		this.globalId = guid;
 		this.sendWelcomeEmail = sendWelcomeEmail;		
+		setOrganization(organization);
+		setCustomer("customer"); 
+		setDivision("division");
 	}
-	
-	@SerializableField(title=ORGANIZATION_FIELD, order = 0, validators = {NotNullValidator.class, OrgNameValidator.class}) 
-	private String organization;
-	
-	@SerializableField(title=CUSTOMER_FIELD, order = 30, validators = {OrgNameValidator.class}) 
-	private String customer; //aka jobsite.
-	
-	@SerializableField(title=DIVISION_FIELD, order = 60, validators = {OrgNameValidator.class})
-	private String division;
+
+	@SerializableField(title = "", order = 0, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
+	private final String[] owners = new String[3];
 	
 	@SerializableField(title=EMAIL_ADDRESS_FIELD, order = 100, validators = {NotNullValidator.class, EmailValidator.class})
 	private String emailAddress;
@@ -135,14 +131,6 @@ public class UserView extends ExternalModelView {
 	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})
 	private String globalId;	
 	
-	public String getOrganization() {
-		return organization;
-	}
-
-	public void setOrganization(String organization) {
-		this.organization = organization;
-	}
-
 	public String getEmailAddress() {
 		return emailAddress;
 	}
@@ -198,15 +186,31 @@ public class UserView extends ExternalModelView {
 	public void setAccountType(String accountType) {
 		this.accountType = accountType;
 	}
-
+	
 	public String getDivision() {
-		return division;
+		return getOwners()[OwnerSerializationHandler.DIVISION_INDEX];
 	}
 
 	public void setDivision(String division) {
-		this.division = division;
+		this.getOwners()[OwnerSerializationHandler.DIVISION_INDEX]= division;
 	}
 
+	public String getOrganization() {
+		return getOwners()[OwnerSerializationHandler.ORGANIZATION_INDEX];
+	}
+
+	public void setOrganization(String organization) {
+		this.getOwners()[OwnerSerializationHandler.ORGANIZATION_INDEX] = organization;
+	}
+
+	public void setCustomer(String customer) {
+		this.getOwners()[OwnerSerializationHandler.CUSTOMER_ID] = customer;
+	}
+
+	public String getCustomer() {
+		return getOwners()[OwnerSerializationHandler.CUSTOMER_ID];
+	}
+	
 	public String getInitials() {
 		return initials;
 	}
@@ -307,14 +311,6 @@ public class UserView extends ExternalModelView {
 		return YNField.isYes(yOrN);
 	}
 
-	public void setCustomer(String customer) {
-		this.customer = customer;
-	}
-
-	public String getCustomer() {
-		return customer;
-	}
-	
 	@Override
 	public String getGlobalId() {		
 		return globalId;
@@ -368,6 +364,10 @@ public class UserView extends ExternalModelView {
 			permissions |= Permissions.AccessWebStore;					
 		}
 		return permissions;
+	}
+
+	public String[] getOwners() {
+		return owners;
 	}
 
 }

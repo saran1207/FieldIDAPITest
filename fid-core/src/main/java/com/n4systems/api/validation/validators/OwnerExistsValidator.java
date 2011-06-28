@@ -22,9 +22,9 @@ public class OwnerExistsValidator implements FieldValidator {
 		}
 		
 		String[] orgNames = (String[])fieldValue;
-		String organization = orgNames[OwnerSerializationHandler.OWNER_ORGANIZATION]; 
-		String customer = orgNames[OwnerSerializationHandler.OWNER_CUSTOMER];
-		String division = orgNames[OwnerSerializationHandler.OWNER_DIVISION];
+		String organization = orgNames[OwnerSerializationHandler.ORGANIZATION_INDEX]; 
+		String customer = orgNames[OwnerSerializationHandler.CUSTOMER_ID];
+		String division = orgNames[OwnerSerializationHandler.DIVISION_INDEX];
 		
 		OrgByNameLoader orgExistsLoader = createOrgExistsLoader(filter);
 		orgExistsLoader.setOrganizationName(organization);

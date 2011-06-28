@@ -1,9 +1,13 @@
 package com.n4systems.security;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 
 
 public enum UserType {
@@ -28,18 +32,14 @@ public enum UserType {
 	}
 
 	public static UserType valueFromLabel(String name) {
-		if (name==null) { 
-			return null;
-		}
-		name = name.trim();
+		String label = StringUtils.trimToEmpty(name); 
 		for (UserType type:values()) { 
-			if(name.equalsIgnoreCase(type.getLabel())) {
+			if(label.equalsIgnoreCase(type.getLabel())) {
 				return type;
 			}
 		}
 		return null;
-	}
-	
+	}	
 
 	public boolean hasPermission(PermissionType permission) { 
 		return permissionSet.contains(permission);
@@ -53,6 +53,15 @@ public enum UserType {
 			}
 		}
 		return false;
+	}
+
+	public static List<String> labelValues() {
+		List<String> result = new ArrayList<String>();
+		for (UserType type:values()) { 
+			result.add(type.getLabel());
+		}
+		return result;
+		
 	}
 		
 }

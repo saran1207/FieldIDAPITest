@@ -84,27 +84,27 @@ public class AssetView extends ExternalModelView {
 	}
 	
 	public void setOrganization(String organization) {
-		owners[OwnerSerializationHandler.OWNER_ORGANIZATION] = organization;
+		owners[OwnerSerializationHandler.ORGANIZATION_INDEX] = organization;
 	}
 	
 	public String getOrganization() {
-		return owners[OwnerSerializationHandler.OWNER_ORGANIZATION];
+		return owners[OwnerSerializationHandler.ORGANIZATION_INDEX];
 	}
 	
 	public void setCustomer(String customer) {
-		owners[OwnerSerializationHandler.OWNER_CUSTOMER] = customer;
+		owners[OwnerSerializationHandler.CUSTOMER_ID] = customer;
 	}
 	
 	public String getCustomer() {
-		return owners[OwnerSerializationHandler.OWNER_CUSTOMER];
+		return owners[OwnerSerializationHandler.CUSTOMER_ID];
 	}
 	
 	public void setDivision(String division) {
-		owners[OwnerSerializationHandler.OWNER_DIVISION] = division;
+		owners[OwnerSerializationHandler.DIVISION_INDEX] = division;
 	}
 	
 	public String getDivision() {
-		return owners[OwnerSerializationHandler.OWNER_DIVISION];
+		return owners[OwnerSerializationHandler.DIVISION_INDEX];
 	}
 	
 	public String getLocation() {

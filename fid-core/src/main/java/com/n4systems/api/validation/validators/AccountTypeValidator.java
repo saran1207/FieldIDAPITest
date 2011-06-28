@@ -18,7 +18,9 @@ public class AccountTypeValidator implements FieldValidator {
 		}
 				
 		UserType type = UserType.valueFromLabel(typeString);  
-		return type==null ? ValidationResult.fail("invalid account type " + fieldValue) : ValidationResult.pass();				
+		return type==null ? 
+					ValidationResult.fail("Invalid account type '" + fieldValue + "'. Expecting one of " + UserType.labelValues()) :
+					ValidationResult.pass();				
 	}
 
 }

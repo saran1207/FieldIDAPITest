@@ -7,9 +7,9 @@ import java.util.Map;
 import com.n4systems.util.StringUtils;
 
 public class OwnerSerializationHandler extends SerializationHandler<String[]> {
-	public static final int OWNER_ORGANIZATION = 0;
-	public static final int OWNER_CUSTOMER = 1;
-	public static final int OWNER_DIVISION = 2;
+	public static final int ORGANIZATION_INDEX = 0;
+	public static final int CUSTOMER_ID = 1;
+	public static final int DIVISION_INDEX = 2;
 	public static final String ORGANIZATION_MAP_KEY = "Organization";
 	public static final String CUSTOMER_MAP_KEY = "Customer/Job Site";
 	public static final String DIVISION_MAP_KEY = "Division";
@@ -27,10 +27,10 @@ public class OwnerSerializationHandler extends SerializationHandler<String[]> {
 	public Map<String, Object> marshal(Object bean) throws MarshalingException {
 		Map<String, Object> outputMap = new LinkedHashMap<String, Object>();
 		
-		String[] ownerArray = getFieldValue(bean);;
-		outputMap.put(ORGANIZATION_MAP_KEY, ownerArray[OWNER_ORGANIZATION]);
-		outputMap.put(CUSTOMER_MAP_KEY, ownerArray[OWNER_CUSTOMER]);
-		outputMap.put(DIVISION_MAP_KEY, ownerArray[OWNER_DIVISION]);
+		String[] ownerArray = getFieldValue(bean);
+		outputMap.put(ORGANIZATION_MAP_KEY, ownerArray[ORGANIZATION_INDEX]);
+		outputMap.put(CUSTOMER_MAP_KEY, ownerArray[CUSTOMER_ID]);
+		outputMap.put(DIVISION_MAP_KEY, ownerArray[DIVISION_INDEX]);
 		
 		return outputMap;
 	}
@@ -42,11 +42,11 @@ public class OwnerSerializationHandler extends SerializationHandler<String[]> {
 		String cleanName = StringUtils.clean((String)value);
 		
 		if (title.equals(ORGANIZATION_MAP_KEY)) {
-			ownerArray[OWNER_ORGANIZATION] = cleanName;
+			ownerArray[ORGANIZATION_INDEX] = cleanName;
 		} else if (title.equals(CUSTOMER_MAP_KEY)) {
-			ownerArray[OWNER_CUSTOMER] = cleanName;
+			ownerArray[CUSTOMER_ID] = cleanName;
 		} else if (title.equals(DIVISION_MAP_KEY)) {
-			ownerArray[OWNER_DIVISION] = cleanName;
+			ownerArray[DIVISION_INDEX] = cleanName;
 		}
 	}
 	
