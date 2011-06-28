@@ -59,6 +59,7 @@ public class EventImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(EventImportAction.class);
 	
 	private EventType type;
+	private List<EventType> eventTypes;
 	private InputStream exampleExportFileStream;
 	private String exampleExportFileSize;
 	private boolean includeRecommendationsAndDeficiencies;
@@ -74,7 +75,7 @@ public class EventImportAction extends AbstractImportAction {
 	
 	@Override
 	protected ImportSuccessNotification createSuccessNotification() {
-		return new EventImportSuccessNotification(getUser());
+		return new EventImportSuccessNotification(getCurrentUser());
 	}
 	
 	@Override
@@ -82,7 +83,6 @@ public class EventImportAction extends AbstractImportAction {
 		return new EventImportFailureNotification(getCurrentUser());
 	}
 	
-	@SuppressWarnings("rawtypes")
 	public String doDownloadExample() {		
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
@@ -222,5 +222,12 @@ public class EventImportAction extends AbstractImportAction {
 
 	public boolean isIncludeRecommendationsAndDeficiencies() {
 		return includeRecommendationsAndDeficiencies;
+	}
+	
+	public List<EventType> getEventTypes() {
+		if (eventTypes == null) {
+			eventTypes = getLoaderFactory().createEventTypeListLoader().load();
+		}
+		return eventTypes;
 	}
 }

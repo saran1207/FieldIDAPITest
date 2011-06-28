@@ -24,7 +24,7 @@
 		<legend><wicket:message key="label.import_assets" /></legend>
 		<p><wicket:message key="label.import_assets_msg" /></p>
 		
-		        <form wicket:id="importAssetsForm">
+		<form wicket:id="importAssetsForm">
             <div class="importAction">
                 <button wicket:id="importAssetsButton"><wicket:message key="label.start_import"/></button>
             </div>
@@ -37,13 +37,7 @@
 
         <form wicket:id="importEventsForm">
             <div class="importAction">
-                <div wicket:id="addEventTypeLinkContainer">
-                    <a wicket:id="addEventTypeLink"><wicket:message key="label.import_events_empty" /></a>
-                </div>
-                <div wicket:id="eventTypeSelectContainer">
-                    <select wicket:id="eventTypeSelect"/>
-                    <button wicket:id="startImportButton"><wicket:message key="label.start_import" /></button>
-                </div>
+                <button wicket:id="importEventsButton"><wicket:message key="label.start_import"/></button>
             </div>
         </form>
 	</fieldset>

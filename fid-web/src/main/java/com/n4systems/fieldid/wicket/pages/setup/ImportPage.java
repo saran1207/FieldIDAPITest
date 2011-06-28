@@ -28,7 +28,7 @@ public class ImportPage extends SetupPage {
 
         add(new ImportOwnersForm("importOwnersForm"));
         add(new ImportAssetsForm("importAssetsForm"));
-        add(new ImportEventsForm("importEventsForm", eventTypeListModel));
+        add(new ImportEventsForm("importEventsForm"));
         add(new ImportAutoAttributesForm("importAutoAttributesForm", assetTypesWithCriteriaModel));
         add(new ImportUsersForm("importUsersForm"));
     }
@@ -59,33 +59,15 @@ public class ImportPage extends SetupPage {
     }
 
     class ImportEventsForm extends Form {
-
-        private final EventType eventType;
-
-        ImportEventsForm(String id, IModel<List<EventType>> eventTypeListModel) {
+    	
+        public ImportEventsForm(String id) {
             super(id);
-            boolean emptyEventList = eventTypeListModel.getObject().isEmpty();
-            eventType = emptyEventList ? null : eventTypeListModel.getObject().get(0);
-
-            DropDownChoice<EventType> eventTypeChoice = new DropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(this, "eventType"), eventTypeListModel, new EventTypeChoiceRenderer());
-            eventTypeChoice.setNullValid(false).setVisible(!emptyEventList);
-
-            NonWicketLink addEventTypeLink = new NonWicketLink("addEventTypeLink", "eventTypeAdd.action");
-            addEventTypeLink.setVisible(emptyEventList);
-
-            EnclosureContainer selectContainer = new EnclosureContainer("eventTypeSelectContainer", eventTypeChoice);
-            selectContainer.add(eventTypeChoice);
-            selectContainer.add(new AjaxButton("startImportButton") {
+            add(new AjaxButton("importEventsButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    getResponse().redirect("/fieldid/eventImportExport.action?uniqueID=" + eventType.getId());
+                    getResponse().redirect("/fieldid/eventImportExport.action");
                 }
             });
-            add(selectContainer);
-
-            EnclosureContainer linkContainer = new EnclosureContainer("addEventTypeLinkContainer", addEventTypeLink);
-            linkContainer.add(addEventTypeLink);
-            add(linkContainer);
         }
 
     }

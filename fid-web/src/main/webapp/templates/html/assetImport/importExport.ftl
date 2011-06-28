@@ -1,27 +1,27 @@
 ${action.setPageType('asset', 'import')!}
 <head>
 	<@n4.includeScript src="assetImport"/>
-	<@n4.includeStyle type="page" href="assetImport"/>
+	<@n4.includeStyle type="page" href="import"/>
 </head>
 <@s.url id="exportExample" action="downloadExampleAssetExport" namespace="/file"/>
 
 <div class="leftBox">
 	<div class="infoSet">
-		<h2>1. <@s.text name="label.select_asset_type"/></h2>
+		<h2>1. <@s.text name="label.select_import_type"><@s.param><@s.text name="label.assettype"/></@s.param></@s.text></h2>
 		<p>
-			<@s.text name="message.select_asset_type"/>
-			<@s.select theme="fieldid" id="assetTypeSelect" list="assetTypes" name="assetTypeId" listValue="name" listKey="id" onchange="updateUploadForm();" />
+			<@s.text name="message.select_import_type"><@s.param><@s.text name="label.assettype"/></@s.param></@s.text>
+			<@s.select theme="fieldid" id="assetTypeSelect" list="assetTypes" name="assetTypeId" listValue="name" listKey="id" onchange="updateUploadForm()" />
 		</p>
 	</div> 
 
 	<div class="infoSet">
 		<h2>2. <@s.text name="label.download_template"/></h2>
 		<p>
-			<@s.text name="message.download_template"/>
+			<@s.text name="message.download_template"><@s.param><@s.text name="label.assettype"/></@s.param></@s.text>
 		</p>
 		<div id="templateLink">
 			<input id="templateUrl" type="hidden" value="${exportExample}" />
-			<p>
+			<p id="assetTemplate">
 				<a id="downloadTemplate"><@s.text name="label_download_excel"/></a>
 			</p>
 		</div>
@@ -29,7 +29,7 @@ ${action.setPageType('asset', 'import')!}
 
 	<div class="infoSet">
 		<h2>3. <@s.text name="label.upload"/></h2>
-		<p><@s.text name="message.upload"/></p>
+		<p><@s.text name="message.upload"><@s.param><@s.text name="label.assettype"/></@s.param></@s.text></p>
 		
 		<@s.form id="uploadForm" action="importAssets" cssClass="fullForm fluentSets" theme="fieldid" method="POST" enctype="multipart/form-data">
 			<@s.hidden id="uploadAssetTypeId" name="assetTypeId" value=""/>
@@ -46,7 +46,7 @@ ${action.setPageType('asset', 'import')!}
 <div class="rightBox">
 	<div class="formatDate">
 		<h4><@s.text name="label.formatting_dates" /></h4>
-		<span><@s.text name="message.formatting_dates" /></span>
+		<span><@s.text name="message.formatting_dates"><@s.param><@s.text name="label.asset_type_date_fields"/></@s.param></@s.text></span>
 	</div>
 	<div class="faq">
 		<div class="faqSection">
