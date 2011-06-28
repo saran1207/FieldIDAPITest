@@ -11,6 +11,7 @@ import com.n4systems.ws.model.commenttemplate.WsCommentTemplate;
 import com.n4systems.ws.model.eventbook.WsEventBook;
 import com.n4systems.ws.model.eventtype.WsComboBoxCriteria;
 import com.n4systems.ws.model.eventtype.WsCriteria;
+import com.n4systems.ws.model.eventtype.WsDateFieldCriteria;
 import com.n4systems.ws.model.eventtype.WsEventForm;
 import com.n4systems.ws.model.eventtype.WsEventType;
 import com.n4systems.ws.model.eventtype.WsOneClickCriteria;
@@ -49,7 +50,8 @@ public class JAXBContextResolver implements ContextResolver<JAXBContext> {
 		WsTextFieldCriteria.class,
 		WsUnitOfMeasureCriteria.class,
 		WsComboBoxCriteria.class,
-		WsSignatureCriteria.class
+		WsSignatureCriteria.class,
+		WsDateFieldCriteria.class
 	};
 	
 	private final JAXBContext context;

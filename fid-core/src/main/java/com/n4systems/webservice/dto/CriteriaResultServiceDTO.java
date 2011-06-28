@@ -1,6 +1,7 @@
 package com.n4systems.webservice.dto;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
@@ -10,6 +11,7 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	public static final String TYPE_COMBO_BOX = "COMBO_BOX";
 	public static final String TYPE_UNIT_OF_MEASURE = "UNIT_OF_MEASURE";
 	public static final String SIGNATURE = "SIGNATURE";
+	public static final String TYPE_DATE_FIELD = "DATE_FIELD";
 	
 	private long criteriaId;
 	private long stateId;
@@ -23,6 +25,7 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	private String unitOfMeasurePrimaryFieldValue;
 	private String unitOfMeasureSecondaryFieldValue;
 	private byte[] signatureImage;
+	private Date dateFieldValue;
 	
 	public long getCriteriaId() {
 		return criteriaId;
@@ -118,6 +121,14 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 
 	public void setSignatureImage(byte[] signatureImage) {
 		this.signatureImage = signatureImage;
+	}
+
+	public void setDateFieldValue(Date dateFieldValue) {
+		this.dateFieldValue = dateFieldValue;
+	}
+
+	public Date getDateFieldValue() {
+		return dateFieldValue;
 	}
 	
 }

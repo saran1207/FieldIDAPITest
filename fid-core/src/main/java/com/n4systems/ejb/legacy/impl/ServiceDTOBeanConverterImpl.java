@@ -39,6 +39,7 @@ import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
@@ -649,6 +650,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 				result = new SignatureCriteriaResult();
 				((SignatureCriteriaResult)result).setSigned(resultDTO.getSignatureImage() != null);
 				((SignatureCriteriaResult)result).setImage(resultDTO.getSignatureImage());
+			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_DATE_FIELD)) {
+				result = new DateFieldCriteriaResult();
+				((DateFieldCriteriaResult)result).setValue(resultDTO.getDateFieldValue());
 			} else {
 				throw new NotImplementedException("Conversion of CriteriaResultServiceDTO [" + resultDTO.getType() + "] not implemented");
 			}
@@ -782,7 +786,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 					throw new RuntimeException(e);
 				}
 			}
-		} else {
+		} else if(criteriaResult instanceof DateFieldCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_DATE_FIELD);
+			criteriaResultServiceDTO.setDateFieldValue(((DateFieldCriteriaResult)criteriaResult).getValue());
+		}
+		else {
 			throw new NotImplementedException("Conversion of CriteriaResult [" + criteriaResult.getClass() + "] not implemented");
 		}
 
