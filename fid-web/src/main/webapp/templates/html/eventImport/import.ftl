@@ -1,3 +1,4 @@
+<title><@s.text name="label.startevent"/></title>
 <head>
 	<@n4.includeStyle type="page" href="assetImport"/>
 </head>
