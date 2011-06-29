@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.event.viewmodel;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ComboBoxCriteriaResult;
@@ -39,7 +40,10 @@ public class CriteriaResultWebModelConverter {
             webModel.setSigned(((SignatureCriteriaResult) result).isSigned());
         } else if (result instanceof DateFieldCriteriaResult) {
             DateFormat dateFormat = getDateFormat(result.getTenant().getId(), ((DateFieldCriteria)result.getCriteria()).isIncludeTime());
-			webModel.setTextValue(dateFormat.format(((DateFieldCriteriaResult)result).getValue()));
+            Date dateResult = ((DateFieldCriteriaResult)result).getValue();
+            if (dateResult != null) {
+            	webModel.setTextValue(dateFormat.format(dateResult));
+            }
         }
 
         webModel.setType(result.getCriteria().getCriteriaType().name());
