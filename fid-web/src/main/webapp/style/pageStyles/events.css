@@ -1,64 +1,71 @@
-#multipleEvents{
+.multipleEvents{
 	background: no-repeat url(../../images/multiple-event-small.png) 5px 0;
-	min-width: 135px;
 }
 
-#singleEvent{
+.singleEvent{
 	background: no-repeat url(../../images/single-event.png) 5px 0;
-	min-width: 110px;
+}
+
+.multipleProofTests{
+	background: no-repeat url(../../images/multi-proof-icon-small.png) 5px 0;
+}
+
+.import{
+	background: no-repeat url(../../images/small-xls-icon.png) 5px 0;
+}
+
+.import img {
+
+}
+
+.heading h2{
+	padding-left: 40px;
+}
+
+.heading{
+	padding-bottom: 5px;
 }
 
 #assetSearchForm label{
 	display: none;
-	}
-
-#multipleProofTests{
-	background: no-repeat url(../../images/multi-proof-icon-small.png) 5px 0;
-	min-width: 205px;
-}
-
-fieldset {
-	border: 1px solid #CACACA;
-	padding: 10px;
-	font-size: 13px;
-	margin-top: 15px;
-}
-
-fieldset legend {
-	padding-left: 39px;
-	min-height: 30px;
-}
-
-fieldset p {
-	padding: 6px 0 6px 11px; 
-}
-
-legend .heading{
-	font-size: 1.2em;
-	font-weight: bold;
-	position: relative;
-	top: 5px;
 }
 
 #assetSearch{
 	border-style: none;
-	padding: 5px 0 0 5px;
-	}
+	padding-top: 10px;
+}
 
-fieldset #assetSearch input[type="text"]{
+#assetSearch input[type="text"]{
 	width: 205px;
 	margin-bottom: 5px;
 }
 
-fieldset button, input{
-	overflow: visible;
-	padding: 5px;
-	}
-
-.eventList {
-	overflow:hidden;
-	width: 450px; 
-	margin-left: auto;
-	margin-right: auto;	
+.eventRow{
+	margin-left: 20px;
 }
 
+.eventOption {
+	float: left;
+	border: 1px solid #CCCCCC;
+	width: 445px;
+	margin: 15px;
+	height: 105px;
+	overflow: hidden;
+}
+
+.optionContent {
+	padding: 10px;
+}
+
+.eventAction, #assetSearch {
+	background-color: #EEEEEE;
+	min-height: 30px;
+}
+
+.eventAction {
+	padding: 5px;
+}
+
+button {
+	margin: 5px;
+}

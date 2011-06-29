@@ -8,33 +8,53 @@
 	});
 </script>
 <#assign multiEventaction= '<@s.url action="assetSelection"/>'/>
-<div class="eventList">
-	<fieldset>
-		<legend id="singleEvent">
-			<span class="heading"><@s.text name="label.perform_event_single_asset"/></span>
-		</legend>
-		<p><@s.text name="label.perform_event_single_asset.full"/></p>
+<div class="eventRow">
+	<div class="eventOption">
+		<div class="optionContent">		
+			<div class="heading singleEvent"><h2><@s.text name="label.perform_event_single_asset"/></h2></div>
+			<p><@s.text name="label.perform_event_single_asset.full"/></p>
+		</div>
 		<div class="searchAction">
 			<#include "../eventGroup/_eventSearchForm.ftl"/>
 		</div>
-	</fieldset>
+	</div>
 	
-	<#if sessionUser.hasAccess("createevent") == true >
-		<fieldset>
-			<legend id="multipleEvents"><span class="heading"><@s.text name="label.multi_event"/></span></legend>
+	<div class="eventOption">
+		<div class="optionContent">
+			<div class="heading multipleEvents"><h2><@s.text name="label.multi_event"/></h2></div>
 			<p>
-				<@s.text name="label.multi_event.full"><@s.param>${maxAssetsFromMassEvent!250}</@s.param></@s.text><br/><br/>
-				<button onclick="redirect('<@s.url action="assetSelection"/>')" ><@s.text name="label.select_your_assets_now"/></button>
+				<@s.text name="label.multi_event.full"><@s.param>${maxAssetsFromMassEvent!250}</@s.param></@s.text>
 			</p>
-		</fieldset>
-		<#if securityGuard.proofTestIntegrationEnabled>
-			<fieldset>
-				<legend id="multipleProofTests"><span class="heading"><@s.text name="label.multi_proof_test"/></span></legend>
+		</div>
+		<div class="eventAction">	
+			<button onclick="redirect('<@s.url action="assetSelection"/>')" ><@s.text name="label.select_your_assets_now"/></button>
+		</div>
+	</div>
+</div>
+<div class="eventRow">
+	<div class="eventOption">
+		<div class="optionContent">
+			<div class="heading import"><h2><@s.text name="label.import"/></h2></div>
+			<p>
+				<@s.text name="message.import_events"/>
+			</p>			
+		</div>
+		<div class="eventAction">	
+			<button onclick="redirect('<@s.url action="eventImportExport"/>')" ><@s.text name="label.start_now"/></button>
+		</div>
+	</div>
+
+	<#if securityGuard.proofTestIntegrationEnabled>
+		<div class="eventOption">
+			<div class="optionContent">
+				<div class="heading multipleProofTests"><h2><@s.text name="label.multi_proof_test"/></div>
 				<p>
-					<@s.text name="label.multi_proof_test.full"><@s.param>${maxAssetsFromMassEvent!250}</@s.param></@s.text><br/><br/>
-					<button onclick="redirect('<@s.url action="multiProofTest"/>')"><@s.text name="label.start_now"/></button>
+					<@s.text name="label.multi_proof_test.full"><@s.param>${maxAssetsFromMassEvent!250}</@s.param></@s.text>
 				</p>
-			</fieldset>
-		</#if>
+			</div>
+			<div class="eventAction">	
+				<button onclick="redirect('<@s.url action="multiProofTest"/>')"><@s.text name="label.start_now"/></button>
+			</div>
+		</div>
 	</#if>
 </div>
