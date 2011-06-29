@@ -55,16 +55,16 @@
 	</div>
 	<div class="faq">
 		<div class="faqSection">
-			<h4><@s.text name="label.import_export_question.1" /></h4>
-			<span><@s.text name="label.import_export_answer.1" /></span>
+			<h4><@s.text name="label.import_export_question.6" /></h4>
+			<span><@s.text name="label.import_export_answer.6" /></span>
+		</div>
+		<div class="faqSection">
+			<h4><@s.text name="label.import_export_question.7" /></h4>
+			<span><@s.text name="label.import_export_answer.7" /></span>
 		</div>
 		<div class="faqSection">
 			<h4><@s.text name="label.import_export_question.2" /></h4>
 			<span><@s.text name="label.import_export_answer.2" /></span>
-		</div>
-		<div class="faqSection">
-			<h4><@s.text name="label.import_export_question.3" /></h4>
-			<span><@s.text name="label.import_export_answer.3" /></span>
 		</div>
 	</div>
 </div>
