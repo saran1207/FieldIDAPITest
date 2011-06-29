@@ -33,22 +33,24 @@ public class UserToModelConverterTest {
 		GlobalIdLoader<User> globalIdLoader = createMock(GlobalIdLoader.class);
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
 		
-		UserView view = new UserViewBuilder().withDefaultValues().withGuid(null).build();
+		UserView user = new UserViewBuilder().withDefaultValues().withGuid(null).build();
 		
 		UserToModelConverter converter = new UserToModelConverter(globalIdLoader, orgLoader);
 
 		BaseOrg parentOrg = new PrimaryOrg();
 		parentOrg.setName("resultOf<N4>search");
 			
-		expect(orgLoader.setOrganizationName(view.getOrganization())).andReturn(orgLoader);
+		expect(orgLoader.setOrganizationName(user.getOrganization())).andReturn(orgLoader);
+		expect(orgLoader.setCustomerName(user.getCustomer())).andReturn(orgLoader);
+		expect(orgLoader.setDivision(user.getDivision())).andReturn(orgLoader);
 		expect(orgLoader.load()).andReturn(parentOrg);
 		
 		replay(globalIdLoader);
 		replay(orgLoader);
 		
-		User model = converter.toModel(view, trans);
+		User model = converter.toModel(user, trans);
 		
-		verifyModel(model, view, parentOrg);
+		verifyModel(model, user, parentOrg);
 		
 		verify(globalIdLoader);
 		verify(orgLoader);
@@ -72,6 +74,8 @@ public class UserToModelConverterTest {
 		parentOrg.setName("resultOf<N4>search");
 			
 		expect(orgLoader.setOrganizationName(user.getOrganization())).andReturn(orgLoader);
+		expect(orgLoader.setCustomerName(user.getCustomer())).andReturn(orgLoader);
+		expect(orgLoader.setDivision(user.getDivision())).andReturn(orgLoader);
 		expect(orgLoader.load()).andReturn(parentOrg);
 		expect(globalIdLoader.setGlobalId(user.getGlobalId())).andReturn(globalIdLoader);
 		expect(globalIdLoader.load(trans)).andReturn(userToBeUpdated);

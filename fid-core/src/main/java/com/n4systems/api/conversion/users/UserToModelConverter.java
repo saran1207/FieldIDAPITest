@@ -22,7 +22,10 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 
 	@Override
 	public void copyProperties(UserView from, User to, boolean isEdit) throws ConversionException {
-		BaseOrg baseOrg = orgLoader.setOrganizationName(from.getOrganization()).load();
+		BaseOrg baseOrg = orgLoader.setOrganizationName(from.getOrganization()).
+							setCustomerName(from.getCustomer()).
+							setDivision(from.getDivision()).
+							load();
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
 		to.setGlobalId(from.getGlobalId());
@@ -36,6 +39,7 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		to.setOwner(baseOrg);
 		to.setRegistered(true);
 		to.setCreated(new Date());
+		
 		if(from.getSecurityRfidNumber()!=null) { 
 			to.assignSecruityCardNumber(from.getSecurityRfidNumber());
 		}
