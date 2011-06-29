@@ -36,8 +36,8 @@ public class PermissionValidator implements FieldValidator {
 		}
 		String yn = ((String) (fieldValue)).trim().toUpperCase();
 		if ( YNField.Y.equals(YNField.valueOf(yn))) { 			
-			UserType userType = getUserTypeFromView(view);  // CAVEAT : this validator is tied to UserView...can't be shared among different views.  yuuuck.			
-			if ( userType.hasPermission(getPermissionFromViewName(fieldName)) ) { 
+			UserType userType = getUserTypeFromView(view);  // CAVEAT : this validator is tied to UserView...can't be shared among different views.			
+			if ( UserType.hasPermission(userType, getPermissionFromViewName(fieldName)) ) { 
 				return ValidationResult.pass(); 
 			} else { 
 				 ValidationResult.fail("permission " + fieldValue + " not allowed for account type " + userType);

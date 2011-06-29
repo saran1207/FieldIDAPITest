@@ -54,6 +54,23 @@ public class UserImporter extends AbstractImporter<UserView> {
 		return results;
 	}
 
+	private ArrayList<ValidationResult> checkForDuplicateUsers(List<UserView> views) {
+		ArrayList<ValidationResult> results = new ArrayList<ValidationResult>();
+		Map<String, UserView> map = new HashMap<String, UserView>();
+		int row = FIRST_DATA_ROW;
+		for (UserView userView:views) { 
+			String userName = userView.getUserID();
+//			if (userName!=null) { 
+				if (map.containsKey(userName)) { 
+					results.add(ValidationResult.fail("Username %s is duplicated" , userName).setRow(row));
+				}
+				map.put(userName, userView);
+	//		}
+			row++;
+		}
+		return results;
+	}
+	
 	private Collection<? extends ValidationResult> checkForUserLimits(List<UserView> views) {
 		ArrayList<ValidationResult> results = new ArrayList<ValidationResult>();
 		
@@ -107,21 +124,6 @@ public class UserImporter extends AbstractImporter<UserView> {
 
 	ResourceLimit getLiteUsersLimit(Long tenantId) {
 		return TenantLimitService.getInstance().getLiteUsers(tenantId);
-	}
-
-	private ArrayList<ValidationResult> checkForDuplicateUsers(List<UserView> views) {
-		ArrayList<ValidationResult> results = new ArrayList<ValidationResult>();
-		Map<String, UserView> map = new HashMap<String, UserView>();
-		int row = FIRST_DATA_ROW;
-		for (UserView userView:views) { 
-			String userName = userView.getUserID();
-			if (map.containsKey(userName)) { 
-				results.add(ValidationResult.fail("Username %s is duplicated" , userName).setRow(row));
-			}
-			map.put(userName, userView);
-			row++;
-		}
-		return results;
 	}
 
 	@Override

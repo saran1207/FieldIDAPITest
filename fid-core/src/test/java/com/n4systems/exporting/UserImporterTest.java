@@ -250,6 +250,7 @@ public class UserImporterTest {
 	}
 
 
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_import_duplicate() throws Exception {
@@ -286,6 +287,43 @@ public class UserImporterTest {
 		
 		assertEquals(1,results.size());
 		assertEquals("Username SAMEUSERID is duplicated", results.get(0).getMessage());
+		
+		verify(loader);
+		verify(validator);
+		verify(converter);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void test_import_null_userid() throws Exception {
+		MapReader reader = createMock(MapReader.class);
+		UserSaver saver = createMock(UserSaver.class);
+		OrgByNameLoader loader = createMock(OrgByNameLoader.class);
+		WelcomeNotifier notifier = createMock(WelcomeNotifier.class);
+		Validator<ExternalModelView> validator = createMock(Validator.class);
+		UserToModelConverter converter = createMock(UserToModelConverter.class);
+
+		final List<UserView> userViews = Lists.newArrayList(
+				new UserViewBuilder().withDefaultValues().withUserId(null).build()
+				);
+		
+		User user = UserBuilder.anEmployee().build();
+		
+		UserImporter importer = createImporter(reader, saver, loader, notifier, validator, converter, userViews, -1,-1,-1);
+				
+		expect(validator.validate(userViews.get(0),2)).andReturn(new ArrayList<ValidationResult>());
+		expect(loader.getTenantId()).andReturn(33L);
+		notifier.sendWelcomeNotificationTo(user);
+		reader.close();
+		
+		replay(reader);
+		replay(saver);
+		replay(loader);
+		replay(notifier);
+		replay(validator);
+		replay(converter);
+		
+		List<ValidationResult> results = importer.readAndValidate();
 		
 		verify(loader);
 		verify(validator);

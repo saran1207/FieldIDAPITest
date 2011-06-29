@@ -41,12 +41,15 @@ public enum UserType {
 		return null;
 	}	
 
-	public boolean hasPermission(PermissionType permission) { 
-		return permissionSet.contains(permission);
+	public static boolean hasPermission(UserType userType, PermissionType permission) { 
+		return userType != null && userType.permissionSet.contains(permission);
 	}		
 	
-	public boolean hasPermission(int permission) {
-		for (Iterator<PermissionType> iterator = permissionSet.iterator(); iterator.hasNext(); ) {
+	public static boolean hasPermission(UserType userType, int permission) {
+		if (userType==null) { 
+			return false;
+		}
+		for (Iterator<PermissionType> iterator = userType.permissionSet.iterator(); iterator.hasNext(); ) {
 			PermissionType permissionType = iterator.next();
 			if (permissionType.getValue()==permission) {
 				return true;

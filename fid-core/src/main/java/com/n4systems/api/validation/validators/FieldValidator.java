@@ -14,6 +14,9 @@ public interface FieldValidator {
 	 * TODO: Move the FieldValidator messages out to a language file
 	 */
 	public static final String EmailValidatorFail = "%s '%s' is not a valid Email address";
+	public static final String ExternalUserIdMissingValidatorFail = "You must specify the userid for user %s %s";
+	public static final String ExternalUserExistsValidationFail = "A user with id %s already exists";
+	public static final String ExternalUserGlobalIdValidatorFail = "Could not find user %s %s with global id %s";
 	public static final String ExternalOrgGlobalIdValidatorFail = "Could not find %s '%s'";
 	public static final String ExternalOrgTypeValidatorFail = "%s must be either 'C' or 'D'";
 	public static final String NotNullValidatorFail = "%s must not be blank";
