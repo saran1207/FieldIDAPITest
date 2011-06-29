@@ -1,5 +1,3 @@
-${action.setPageType('event_type', 'import_export')!}
-
 <head>
 	<@n4.includeStyle type="page" href="assetImport"/>
 </head>
