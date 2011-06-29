@@ -44,6 +44,11 @@ public class UserViewBuilder extends BaseBuilder<UserView> {
 		return this;
 	}
 	
+	public UserViewBuilder withAccountType(UserType accountType) { 
+		this.accountType = accountType.getLabel();
+		return this;
+	}
+	
 	public UserViewBuilder withPermissions(int permissions) {
 		this.permissions = permissions;
 		return this;
@@ -59,10 +64,15 @@ public class UserViewBuilder extends BaseBuilder<UserView> {
 		return this;
 	}
 	
+	public UserViewBuilder withUserId(String userId) { 
+		this.userId = userId;
+		return this;
+	}	
+	
 	@Override
 	public UserView createObject() {
 		// TODO : note this builder doesn't set customer/division.  not needed right now.
-		return new UserView(organization, email, firstName, lastName, assignPassword, password, userId, sendWelcomeEmail, guid );
+		return new UserView(organization, email, firstName, lastName, assignPassword, password, userId, sendWelcomeEmail, guid, accountType );
 	}
 
 	public BaseBuilder<UserView> withGuid(Object object) {

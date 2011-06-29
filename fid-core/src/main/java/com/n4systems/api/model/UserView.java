@@ -50,7 +50,7 @@ public class UserView extends ExternalModelView {
 	public UserView() { }
 	
 	@Deprecated // used for testing only. 
-	UserView(String organization, String email, String firstName, String lastName, String assignPassword, String password, String userId, String sendWelcomeEmail, String guid) {
+	UserView(String organization, String email, String firstName, String lastName, String assignPassword, String password, String userId, String sendWelcomeEmail, String guid, String accountType) {
 		this.emailAddress = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -58,7 +58,8 @@ public class UserView extends ExternalModelView {
 		this.password = password;
 		this.userID = userId;
 		this.globalId = guid;
-		this.sendWelcomeEmail = sendWelcomeEmail;		
+		this.sendWelcomeEmail = sendWelcomeEmail;
+		this.accountType = accountType;
 		setOrganization(organization);
 		setCustomer("customer"); 
 		setDivision("division");

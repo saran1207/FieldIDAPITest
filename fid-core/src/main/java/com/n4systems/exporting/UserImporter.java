@@ -82,19 +82,31 @@ public class UserImporter extends AbstractImporter<UserView> {
 			}
 		}
 		Long tenantId = orgByNameLoader.getTenantId();
-		ResourceLimit liteUsersLimit = TenantLimitService.getInstance().getLiteUsers(tenantId);		
-		if ( liteUsersLimit.getAvailable() < liteUsers.size() && liteUsers.size() > 0 ) {
+		ResourceLimit liteUsersLimit = getLiteUsersLimit(tenantId);		
+		if ( liteUsersLimit.getAvailable()!=-1 && liteUsersLimit.getAvailable() < liteUsers.size() ) {
 			results.add(ValidationResult.fail("You can not import more than " + liteUsersLimit.getAvailable() + " lite users. (Attempted to import " + liteUsers.size()+ ")").setRow(-1));
 		}
-		ResourceLimit readOnlyUsersLimit = TenantLimitService.getInstance().getReadonlyUsers(tenantId);
-		if ( readOnlyUsersLimit.getAvailable() < readOnlyUsers.size() && readOnlyUsers.size() > 0 ) { 
-			results.add(ValidationResult.fail("you can not import more than " + readOnlyUsersLimit.getAvailable() + " read only users. (Attempted to import " + readOnlyUsers.size()+ ")").setRow(-1));
+		ResourceLimit readOnlyUsersLimit = getReadOnlyUsersLimit(tenantId);
+		if ( readOnlyUsersLimit.getAvailable()!=-1 && readOnlyUsersLimit.getAvailable() < readOnlyUsers.size() ) { 
+			results.add(ValidationResult.fail("You can not import more than " + readOnlyUsersLimit.getAvailable() + " read only users. (Attempted to import " + readOnlyUsers.size()+ ")").setRow(-1));
 		}
-		ResourceLimit fullUsersLimit = TenantLimitService.getInstance().getEmployeeUsers(tenantId);
-		if ( fullUsersLimit.getAvailable() < fullUsers.size() && fullUsers.size() > 0) { 
-			results.add(ValidationResult.fail("you can not import more than " + fullUsersLimit.getAvailable() + " employee (full) users. (Attempted to import " + fullUsers.size()+ ")").setRow(-1));
+		ResourceLimit fullUsersLimit = getEmployeeUsersLimit(tenantId);
+		if ( fullUsersLimit.getAvailable()!=-1 && fullUsersLimit.getAvailable() < fullUsers.size() ) { 
+			results.add(ValidationResult.fail("You can not import more than " + fullUsersLimit.getAvailable() + " employee (full) users. (Attempted to import " + fullUsers.size()+ ")").setRow(-1));
 		}
 		return results;
+	}
+
+	ResourceLimit getEmployeeUsersLimit(Long tenantId) {
+		return TenantLimitService.getInstance().getEmployeeUsers(tenantId);
+	}
+
+	ResourceLimit getReadOnlyUsersLimit(Long tenantId) {
+		return TenantLimitService.getInstance().getReadonlyUsers(tenantId);
+	}
+
+	ResourceLimit getLiteUsersLimit(Long tenantId) {
+		return TenantLimitService.getInstance().getLiteUsers(tenantId);
 	}
 
 	private ArrayList<ValidationResult> checkForDuplicateUsers(List<UserView> views) {
