@@ -11,6 +11,7 @@ public class EventScheduleServiceImpl implements EventScheduleService {
 		this.persistenceManager = persistenceManager;
 	}
 	
+	@Override
 	public Long createSchedule(EventSchedule schedule) {
 		Long id = persistenceManager.save(schedule);
 		schedule.getAsset().touch();
@@ -18,8 +19,11 @@ public class EventScheduleServiceImpl implements EventScheduleService {
 		return id;
 	}
 	
+	@Override
 	public EventSchedule updateSchedule(EventSchedule schedule) {
 		EventSchedule updatedSchedule = persistenceManager.update(schedule);
+		// TODO DD WEB-2157 : when doing multi-add, the touch part is not required (and adds to already long running times). 
+		//    refactor into separate methods for different use cases.
 		updatedSchedule.getAsset().touch();
 		persistenceManager.update(updatedSchedule.getAsset());
 		return updatedSchedule;
