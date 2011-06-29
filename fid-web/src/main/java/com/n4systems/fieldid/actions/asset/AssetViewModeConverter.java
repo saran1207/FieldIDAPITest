@@ -38,8 +38,10 @@ public class AssetViewModeConverter {
 	public Asset viewToModel(AssetView view) {
 		Asset model = new Asset();
 
+		// TODO DD WEB-2157 : cache this result for reuse within same multi-add transaction.
 		PrimaryOrg primaryOrg = TenantFinder.getInstance().findPrimaryOrg(identifier.getTenant().getId());
-		
+
+		// TODO DD WEB-2157 : having multiple transactions for multi-add seems slow and dangerous.  ask mark.
 		transaction = PersistenceManager.startTransaction();
 		
 		try {

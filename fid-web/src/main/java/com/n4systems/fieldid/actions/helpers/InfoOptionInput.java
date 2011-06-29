@@ -172,6 +172,9 @@ public class InfoOptionInput {
 		if( fieldsToLookFor == null || inputs == null ){ return newInfoOptions; }
 		for( InfoOptionInput input : inputs ) {
 			if( input != null ) {  // some of the inputs can be null due to the retired info fields.
+
+				// TODO DD WEB-2157 : this method is very slow.  turn the largest collection into a set/map. 
+				//  and use contains(?)
 				
 				for( InfoFieldBean field : fieldsToLookFor ) {
 					if( field.getUniqueID().equals( input.getInfoFieldId() ) ) {
