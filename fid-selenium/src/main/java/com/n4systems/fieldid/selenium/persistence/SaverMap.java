@@ -11,6 +11,7 @@ import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventForm;
@@ -100,6 +101,7 @@ public class SaverMap {
         classToSaverMap.put(UnitOfMeasureCriteria.class, new CriteriaSaver());
         classToSaverMap.put(SelectCriteria.class, new CriteriaSaver());
         classToSaverMap.put(ComboBoxCriteria.class, new CriteriaSaver());
+        classToSaverMap.put(DateFieldCriteria.class, new CriteriaSaver());
         classToSaverMap.put(EventSchedule.class, new EventScheduleSaver());
         classToSaverMap.put(StateSet.class, new StateSetSaver());
         classToSaverMap.put(State.class, new StateSaver());

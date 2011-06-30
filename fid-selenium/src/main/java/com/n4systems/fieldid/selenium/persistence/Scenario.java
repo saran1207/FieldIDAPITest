@@ -27,6 +27,7 @@ import com.n4systems.model.builders.BaseBuilder;
 import com.n4systems.model.builders.ColumnLayoutBuilder;
 import com.n4systems.model.builders.ComboBoxCriteriaBuilder;
 import com.n4systems.model.builders.CriteriaSectionBuilder;
+import com.n4systems.model.builders.DateFieldCriteriaBuilder;
 import com.n4systems.model.builders.DownloadLinkBuilder;
 import com.n4systems.model.builders.EntityWithOwnerBuilder;
 import com.n4systems.model.builders.EntityWithTenantBuilder;
@@ -273,6 +274,12 @@ public class Scenario {
         SelectCriteriaBuilder builder = SelectCriteriaBuilder.aSelectCriteria();
         return createPersistentBuilder(builder);
     }
+    
+	public DateFieldCriteriaBuilder aDateFieldCriteria() {
+		DateFieldCriteriaBuilder builder = DateFieldCriteriaBuilder.aDateFieldCriteria();
+		return createPersistentBuilder(builder);
+	}
+
 
     public ColumnLayoutBuilder aColumnLayout() {
         ColumnLayoutBuilder builder = ColumnLayoutBuilder.aColumnLayout();

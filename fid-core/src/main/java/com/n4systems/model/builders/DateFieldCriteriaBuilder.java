@@ -23,4 +23,12 @@ public class DateFieldCriteriaBuilder extends CriteriaBuilder<DateFieldCriteria>
 		return criteria;
 	}
 
+	public static DateFieldCriteriaBuilder aDateFieldCriteria() {
+		return new DateFieldCriteriaBuilder(null, false);
+	}
+	
+	public DateFieldCriteriaBuilder withDisplayText(String text) {
+		return makeBuilder(new DateFieldCriteriaBuilder(text, retired));
+	}
+
 }
