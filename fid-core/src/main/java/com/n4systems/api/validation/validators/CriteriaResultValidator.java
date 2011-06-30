@@ -28,7 +28,6 @@ import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.security.SecurityFilter;
 
 
-// TODO DD : write unit tests for this.
 public class CriteriaResultValidator extends CollectionValidator<CriteriaResultView, Collection<CriteriaResultView>> {
 
 	@Override
@@ -37,16 +36,18 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 			SecurityFilter filter, SerializableField field,
 			Map<String, Object> validationContext) {
 		
-		EventType eventType = (EventType) validationContext.get(EventViewValidator.EVENT_TYPE_KEY);
-		eventType.getEventForm().getAvailableSections();
+		if (validationContext==null || validationContext.get(EventViewValidator.EVENT_TYPE_KEY)==null) { 
+			throw new IllegalStateException("you must put the EventType instance in the validation context");
+		}
+		EventType eventType = (EventType) validationContext.get(EventViewValidator.EVENT_TYPE_KEY);		
 		CriteriaSection section = getSection(value.getSection(), eventType.getEventForm().getAvailableSections());
 		Criteria criteria = getCriteria(value.getDisplayText(), section);
 		return validateCriteria(section, criteria, value);
 	}
 
 	private ValidationResult validateCriteria(CriteriaSection section, Criteria criteria, CriteriaResultView value) {
-		if (section==null || criteria==null) { 
-			return null;
+		if (section==null || criteria==null || criteria.getCriteriaType()==null) { 
+			return ValidationResult.fail(FieldValidator.CriteriaValidatorNoSectionCriteriaFail, value.getDisplayText());
 		}
 		switch (criteria.getCriteriaType()) {
 		case COMBO_BOX:
@@ -62,7 +63,7 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 		case TEXT_FIELD:
 			return validateTextField((TextFieldCriteria) criteria, section, value);
 		case UNIT_OF_MEASURE:
-			return validateUnitOfMeasure((UnitOfMeasureCriteria) criteria, section, value);			
+			return validateUnitOfMeasure((UnitOfMeasureCriteria) criteria, section, value);
 		}
 		return ValidationResult.pass();
 	}
@@ -71,7 +72,7 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 		// NOTE : we allow anything to pass here...pipe delimited text to separate the primary & secondary. 
 		return StringUtils.countMatches(value.getResultString(), EventToModelConverter.UNIT_OF_MEASURE_SEPARATOR)<2  ? 
 				ValidationResult.pass() : 
-				ValidationResult.fail("Only two '|' delimited values are allowed when specifying unit of measure values --> " + value.getResultString());
+				ValidationResult.fail(CriteriaValidatorUnitOfMeasureFail, value.getResultString());
 	}
 
 	private ValidationResult validateTextField(TextFieldCriteria criteria, CriteriaSection section, CriteriaResultView value) {
@@ -79,7 +80,7 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 	}
 
 	private ValidationResult validateSignature(SignatureCriteria criteria, CriteriaSection section, CriteriaResultView value) {
-		return ValidationResult.fail("Importing of signatures not supported");
+		return ValidationResult.fail(FieldValidator.CriteriaValidatorSignatureFail);
 	}
 
 	private ValidationResult validateSelect(SelectCriteria criteria, CriteriaSection section, CriteriaResultView value) {
@@ -91,14 +92,14 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 			}			
 		});		
 		return index < 0 ?  
-			ValidationResult.fail("Can't find option '" + value.getResultString() + "' for select criteria " + criteria.getDisplayName() + ". Expecting one of " + options) : 
+			ValidationResult.fail(FieldValidator.CriteriaValidatorSelectFail, value.getResultString(), criteria.getDisplayName(), options) :
 			ValidationResult.pass();		
 	}
 
 	private ValidationResult validateOneClick(OneClickCriteria criteria, CriteriaSection section, CriteriaResultView value) {
 		StateSet states = criteria.getStates();
 		return states.getState(value.getResultString()) == null ?  
-			ValidationResult.fail("Can't find option '" + value.getResultString() + "' for one click criteria " + criteria.getDisplayName() + ". Expecting one of " + states.getAvailableStateStrings()) : 
+			ValidationResult.fail(FieldValidator.CriteriaOneClickFail, value.getResultString(),criteria.getDisplayName(),states.getAvailableStateStrings()) :
 			ValidationResult.pass();		
 	}
 
@@ -106,7 +107,7 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 		// TODO DD : should i allow null dates to pass? 
 		return (value.getResult()==null || value.getResult() instanceof Date ) ? 
 				ValidationResult.pass() : 
-				ValidationResult.fail("The value '" + value.getResult() + "' is not a valid date string required by the criteria '" + criteria.getDisplayName() + "' .");
+				ValidationResult.fail(FieldValidator.CriteriaValidatorDateFail, value.getResult(), criteria.getDisplayName());
 	}
 
 	private ValidationResult validateComboBox(ComboBoxCriteria criteria, CriteriaSection section, CriteriaResultView value) {

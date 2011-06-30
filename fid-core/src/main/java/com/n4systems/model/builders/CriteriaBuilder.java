@@ -19,5 +19,5 @@ public abstract class CriteriaBuilder<K extends Criteria> extends EntityWithTena
         crit.setRetired(retired);
         return crit;
     }
-
+    
 }

@@ -6,9 +6,9 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
-import com.n4systems.model.Asset;
 import com.n4systems.model.EventType;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -16,13 +16,15 @@ import com.n4systems.persistence.TransactionManager;
 
 public class EventScheduleManagerEJBContainer extends EJBTransactionEmulator<EventScheduleManager> implements EventScheduleManager {
 
+	@Override
 	protected EventScheduleManager createManager(EntityManager em) {
 		return new EventScheduleManagerImpl(em);
 	}
 
+	@Override
 	public List<EventSchedule> autoSchedule(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).autoSchedule(asset);
 
@@ -35,9 +37,10 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public List<EventSchedule> getAvailableSchedulesFor(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getAvailableSchedulesFor(asset);
 
@@ -50,9 +53,10 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public Long getEventIdForSchedule(Long scheduleId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getEventIdForSchedule(scheduleId);
 
@@ -68,9 +72,10 @@ Transaction transaction = transactionManager.startTransaction();
 	
 
 
+	@Override
 	public Long getEventTypeIdForSchedule(Long scheduleId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getEventTypeIdForSchedule(scheduleId);
 
@@ -83,9 +88,10 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public Long getAssetIdForSchedule(Long scheduleId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getAssetIdForSchedule(scheduleId);
 
@@ -102,9 +108,10 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
+	@Override
 	public void removeAllSchedulesFor(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			createManager(transaction.getEntityManager()).removeAllSchedulesFor(asset);
 
@@ -119,9 +126,10 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
+	@Override
 	public void restoreScheduleForEvent(Event event) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			createManager(transaction.getEntityManager()).restoreScheduleForEvent(event);
 
@@ -134,9 +142,10 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public boolean schedulePastDue(Long scheduleId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).schedulePastDue(scheduleId);
 
@@ -149,6 +158,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public EventSchedule update(EventSchedule schedule) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
@@ -164,21 +174,21 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public List<EventSchedule> getAutoEventSchedules(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getAutoEventSchedules(asset);
-
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
 		}
 	}
 
+	@Override
 	public List<EventSchedule> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();

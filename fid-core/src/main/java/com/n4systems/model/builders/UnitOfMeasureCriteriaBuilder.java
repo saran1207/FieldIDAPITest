@@ -14,7 +14,11 @@ public class UnitOfMeasureCriteriaBuilder extends CriteriaBuilder<UnitOfMeasureC
         this.secondaryUnit = secondaryUnit;
     }
 
-    public static UnitOfMeasureCriteriaBuilder aUnitOfMeasureCriteria() {
+    public UnitOfMeasureCriteriaBuilder(String text) {
+    	this(text, false, null, null);
+	}
+
+	public static UnitOfMeasureCriteriaBuilder aUnitOfMeasureCriteria() {
         return new UnitOfMeasureCriteriaBuilder(null, false, null, null);
     }
 

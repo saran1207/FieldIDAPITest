@@ -13,6 +13,7 @@ public interface FieldValidator {
 	 * At some point they should be moved out and possibly shared with web language files
 	 * TODO: Move the FieldValidator messages out to a language file
 	 */
+	public static final String CriteriaValidatorUnitOfMeasureFail = "Only two '|' delimited values are allowed when specifying unit of measure values --> ";
 	public static final String EmailValidatorFail = "%s '%s' is not a valid Email address";
 	public static final String ExternalUserIdMissingValidatorFail = "You must specify the userid for user %s %s";
 	public static final String ExternalUserExistsValidationFail = "A user with id %s already exists";
@@ -38,6 +39,14 @@ public interface FieldValidator {
 	public static final String MultipleAssetFoundValidationFail = "Multiple assets have been found matching the identifier '%s' for the field '%s'.";
 	public static final String AssociatedEventTypeValidationFail = "The event type '%s' is not allowed for the asset type '%s'.";
 	public static final String OrgWithNameNotFoundValidationFail = "The %s with name '%s' was not found.";
+	public static final String CriteriaValidatorNoSectionCriteriaFail = "Section and criteria must be specified for criteria '%s'";
+	public static final String CriteriaValidatorDateFail = "The value '%s' is not a valid date string required by the criteria '%s'";
+	public static final String CriteriaValidatorSignatureFail = "Importing of signatures not supported";
+	public static final String CriteriaValidatorSelectFail = "Can't find option '%s' for select criteria %s. Expecting one of %s.";
+	public static final String CriteriaOneClickFail = "Can't find option '%s' for one click criteria %s. Expecting one of %s.";				
+				
+						
+	
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext);
 }

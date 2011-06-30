@@ -8,7 +8,11 @@ public class TextFieldCriteriaBuilder extends CriteriaBuilder<TextFieldCriteria>
         super(text, retired);
     }
 
-    public static TextFieldCriteriaBuilder aTextFieldCriteria() {
+    public TextFieldCriteriaBuilder(String text) {
+    	this(text,false);
+	}
+
+	public static TextFieldCriteriaBuilder aTextFieldCriteria() {
         return new TextFieldCriteriaBuilder(null, false);
     }
 

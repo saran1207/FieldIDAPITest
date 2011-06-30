@@ -9,7 +9,7 @@ public class ComboBoxCriteriaBuilder extends CriteriaBuilder<ComboBoxCriteria> {
     }
 
     public static ComboBoxCriteriaBuilder aComboBoxCriteria() {
-        return new ComboBoxCriteriaBuilder(null, false);
+        return new ComboBoxCriteriaBuilder("aComboBox", false);
     }
 
     public ComboBoxCriteriaBuilder withDisplayText(String text) {

@@ -23,8 +23,8 @@ public class UserToViewConverter implements ModelToViewConverter<User, UserView>
 		view.setAccountType(model.getUserType().getLabel());
 		view.setEmailAddress(model.getEmailAddress());
 		view.setOrganization(model.getOwner().getPrimaryOrg().getDisplayName());
-		view.setCustomer(model.getOwner().getCustomerOrg() == null ? "" : model.getOwner().getCustomerOrg().getDisplayName());
-		view.setDivision(model.getOwner().getDivisionOrg() == null ? "" : model.getOwner().getDivisionOrg().getDisplayName());
+		view.setCustomer(model.getOwner().getCustomerOrg() == null ? "" : model.getOwner().getCustomerOrg().getName());
+		view.setDivision(model.getOwner().getDivisionOrg() == null ? "" : model.getOwner().getDivisionOrg().getName());
 		view.setFirstName(model.getFirstName());
 		view.setLastName(model.getLastName());
 		view.setInitials(model.getInitials());

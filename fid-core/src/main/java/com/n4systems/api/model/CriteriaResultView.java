@@ -14,7 +14,7 @@ public class CriteriaResultView {
 	private String deficiency;
 	
 	@Deprecated // for testing purposes only.
-	public CriteriaResultView(String displayText, String section, String result, String recommendation, String deficiency) {
+	public CriteriaResultView(String displayText, String section, Object result, String recommendation, String deficiency) {
 		this.displayText = displayText;
 		this.section = section;
 		this.result = result; 	

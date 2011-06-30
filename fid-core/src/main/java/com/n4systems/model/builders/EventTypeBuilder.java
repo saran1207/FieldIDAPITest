@@ -1,6 +1,6 @@
 package com.n4systems.model.builders;
 
-import static com.n4systems.model.builders.EventTypeGroupBuilder.*;
+import static com.n4systems.model.builders.EventTypeGroupBuilder.anEventTypeGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;

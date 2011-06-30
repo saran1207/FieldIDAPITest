@@ -7,7 +7,7 @@ public class CriteriaResultViewBuilder extends BaseBuilder<CriteriaResultView> {
 
 	private String displayText;
 	private String section;
-	private String result = ""; 	
+	private Object result = ""; 	
 	private String recommendation;
 	private String deficiency;
 		
@@ -24,10 +24,26 @@ public class CriteriaResultViewBuilder extends BaseBuilder<CriteriaResultView> {
 		this.deficiency = "deficiency";
 		return this;
 	}	
-
+	
+	public CriteriaResultViewBuilder withSection(String section) { 
+		this.section = section;
+		return this;
+	}
+	
+	public CriteriaResultViewBuilder withDisplayText(String text) { 
+		this.displayText = text;
+		return this;
+	}
+	
 	@Override
 	public CriteriaResultView createObject() {		
-		return new CriteriaResultView(displayText, section, result, recommendation, deficiency);
+		CriteriaResultView crv = new CriteriaResultView(displayText, section, result, recommendation, deficiency);
+		return crv;
+	}
+
+	public CriteriaResultViewBuilder withResult(Object result) {
+		this.result = result; 
+		return this;
 	}
 	
 	
