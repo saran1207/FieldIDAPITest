@@ -31,7 +31,7 @@ public class SelectCriteriaBuilder extends CriteriaBuilder<SelectCriteria> {
     @Override
     public SelectCriteria createObject() {
         SelectCriteria selectCriteria = super.assignAbstractFields(new SelectCriteria());
-        selectCriteria.setOptions(Lists.newArrayList(options));
+        selectCriteria.setOptions(options != null ? Lists.newArrayList(options) : null);
         return selectCriteria;
     }
 
