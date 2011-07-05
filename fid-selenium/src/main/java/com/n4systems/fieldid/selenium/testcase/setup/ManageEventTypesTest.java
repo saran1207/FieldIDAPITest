@@ -76,11 +76,6 @@ public class ManageEventTypesTest extends PageNavigatingTestCase<EventTypeViewAl
 	public void test_view_event_form_loads() throws Exception {
 		page.clickEventTypeName(TEST_EVENT_TYPE_NAME).clickEventFormTab();
 	}
-
-	@Test
-	public void test_import_event_type_loads() throws Exception {
-		page.clickEventTypeName(TEST_EVENT_TYPE_NAME).clickImportTab();
-	}
 	
 	@Test(expected=PageErrorException.class)
 	public void test_add_fails_with_empty_name_field() throws Exception {
