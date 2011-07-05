@@ -121,6 +121,7 @@ public class SignUpCrud extends AbstractCrud {
 			
 		} catch (TenantNameUsedException e) {
 			addFieldError("signUp.tenant_name", getText("error.name_already_used"));
+            logger.error(signUpLogLine("tenant name used?"), e);
 			
 			result = INPUT;
 			
