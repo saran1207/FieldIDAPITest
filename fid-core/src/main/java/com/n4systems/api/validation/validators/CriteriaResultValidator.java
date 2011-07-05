@@ -47,7 +47,7 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 
 	private ValidationResult validateCriteria(CriteriaSection section, Criteria criteria, CriteriaResultView value) {
 		if (section==null || criteria==null || criteria.getCriteriaType()==null) { 
-			return ValidationResult.fail(FieldValidator.CriteriaValidatorNoSectionCriteriaFail, value.getDisplayText());
+			return ValidationResult.fail(FieldValidator.CriteriaValidatorNoSectionCriteriaFail, value.getSection(), value.getDisplayText());
 		}
 		switch (criteria.getCriteriaType()) {
 		case COMBO_BOX:

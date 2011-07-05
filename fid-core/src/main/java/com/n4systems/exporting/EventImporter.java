@@ -17,8 +17,7 @@ public class EventImporter extends AbstractImporter<EventView> {
 	private final EventPersistenceFactory eventPersistenceFactory;
 	
 	private Long modifiedBy;
-	
-	
+		
 	public EventImporter(MapReader mapReader, Validator<ExternalModelView> validator, EventPersistenceFactory eventPersistenceFactory, EventToModelConverter converter) {
 		super(EventView.class, mapReader, validator);
 		this.eventPersistenceFactory = eventPersistenceFactory;

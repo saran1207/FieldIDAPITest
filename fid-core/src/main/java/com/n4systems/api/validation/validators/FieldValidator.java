@@ -39,7 +39,7 @@ public interface FieldValidator {
 	public static final String MultipleAssetFoundValidationFail = "Multiple assets have been found matching the identifier '%s' for the field '%s'.";
 	public static final String AssociatedEventTypeValidationFail = "The event type '%s' is not allowed for the asset type '%s'.";
 	public static final String OrgWithNameNotFoundValidationFail = "The %s with name '%s' was not found.";
-	public static final String CriteriaValidatorNoSectionCriteriaFail = "Section and criteria must be specified for criteria '%s'";
+	public static final String CriteriaValidatorNoSectionCriteriaFail = "The column '%s:%s' does not specify a valid section and criteria";
 	public static final String CriteriaValidatorDateFail = "The value '%s' is not a valid date string required by the criteria '%s'";
 	public static final String CriteriaValidatorSignatureFail = "Importing of signatures not supported";
 	public static final String CriteriaValidatorSelectFail = "Can't find option '%s' for select criteria %s. Expecting one of %s.";

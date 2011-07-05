@@ -1,6 +1,11 @@
 package com.n4systems.exporting;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -40,8 +45,7 @@ public class EventImporterTest {
 	
 	@Test
 	public void test_constructor_sets_event_type_into_validator() {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null);
-		converter.setType(EventTypeBuilder.anEventType().build());
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, EventTypeBuilder.anEventType().build());
 		
 		Validator<ExternalModelView> validator = new ViewValidator(null);
 		
@@ -83,14 +87,17 @@ public class EventImporterTest {
 		eventPersistenceFactory.eventCreator = creator;
 		
 		EventImporter importer = new EventImporter(null, validator, eventPersistenceFactory, converter) {
+			@Override
 			protected List<EventView> readAllViews() throws IOException, ParseException, MarshalingException {
 				return Arrays.asList(view);
 			}
 			
+			@Override
 			protected ExportMapUnmarshaler<EventView> createMapUnmarshaler() throws IOException, ParseException {
 				return null;
 			}
 			
+			@Override
 			protected List<ValidationResult> validateAllViewFields() {
 				return new ArrayList<ValidationResult>();
 			}

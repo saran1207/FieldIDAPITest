@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.event.CriteriaResultViewBuilder;
-public class CritieriaResultSerializationHandlerTest {
+public class CriteriaResultSerializationHandlerTest {
 	private final Date testDate = new Date();
 	private TestExportBean bean = new TestExportBean("mytype", null, 42, testDate, Lists.newArrayList(new Integer(123), new Integer(456)));
 	

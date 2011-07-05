@@ -93,7 +93,7 @@ public class CriteriaResult extends EntityWithTenant {
 			defString += "\n" + observation;
 		}
 		
-	    return "Result: " + getId() + ", " + getCriteria() + " = " + StringUtils.indent(recString, 1) + StringUtils.indent(defString, 1);
+	    return "Result [" + getId() + "] :, " + getCriteria() + " = " + StringUtils.indent(recString, 1) + StringUtils.indent(defString, 1);
     }
 
     public Status getResult() {

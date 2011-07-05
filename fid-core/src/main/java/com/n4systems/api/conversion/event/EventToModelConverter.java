@@ -1,16 +1,17 @@
 package com.n4systems.api.conversion.event;
 
+import static com.google.common.base.Preconditions.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.conversion.ViewToModelConverter;
 import com.n4systems.api.model.CriteriaResultView;
@@ -25,7 +26,6 @@ import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
-import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.OneClickCriteriaResult;
@@ -60,17 +60,18 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	
 	private EventType type;
 	
-	public EventToModelConverter(OrgByNameLoader orgLoader, SmartSearchLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader) {
+	public EventToModelConverter(OrgByNameLoader orgLoader, SmartSearchLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, EventType type) {
 		this.orgLoader = orgLoader;
 		this.assetLoader = assetLoader;
 		this.assetStatusLoader = assetStatusLoader;
 		this.eventBookLoader = eventBookLoader;
 		this.userLoader = userLoader;
+		this.type = type;
 	}
 
 	@Override
 	public Event toModel(EventView view, Transaction transaction) throws ConversionException {
-		Event model = new Event();
+		Event model = new Event(); 	
 		
 		resolveType(model);
 		resolveOwner(view, model, transaction);
@@ -85,118 +86,142 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		resolvePerformedBy(view, model, transaction);
 		resolveEventBook(view, model, transaction);
 		
-		resolveAssetStatus(view, model, transaction);
+		resolveAssetStatus(view, model, transaction);		
 		
-		resolveCriteriaResults(view, model);
-		
+		// practically speaking, the type should not be null.  it can happen in test classes tho. 
 		if (type != null) { 
+			// note : it is imperative that *all* criteria have a result.  
+			// we can *not* assume that the view will have all the required data so we 
+			//  must iterate through the eventForm and check to see if any haven't been populated afterwards. 
+			//  they will be set to default/empty values.		
+			resolveCriteriaResults(view, model);     
 			model.setEventForm(type.getEventForm());
 		}
 		
 		return model;
 	}
 	
-	private void resolveCriteriaResults(EventView view, final Event event) {
+	private void resolveCriteriaResults(EventView view, Event event) {
 		Set<CriteriaResult> results  = new HashSet<CriteriaResult>();
-		if (view.getCriteriaResults()==null) {
-			return;
+		if (type.getEventForm()==null || type.getEventForm().getAvailableSections()==null) {
+			return;		// nothing to resolve because there are no criteria. 
 		}
-		for (final CriteriaResultView criteriaResultView:view.getCriteriaResults()) {		
-			final Criteria criteria = getCriteria(type.getEventForm(), criteriaResultView);
-			
-			CriteriaResultFactory criteriaResultFactory = new CriteriaResultFactory(new CriteriaResultPopulator() {				
-				@Override
-				public CriteriaResult populate(CriteriaResult criteriaResult) {
-					criteriaResult.setDeficiencies(getDeficiencies(criteriaResultView));
-					criteriaResult.setRecommendations(getRecommendations(criteriaResultView));
-					criteriaResult.setCriteria(criteria);
-					criteriaResult.setEvent(event);					
-					criteriaResult.setTenant(type.getTenant());
-					return criteriaResult;
-				}
-
-				@Override public CriteriaResult populate(OneClickCriteriaResult result) {
-					Validate.isTrue(criteria.isOneClickCriteria());
-					StateSet states = ((OneClickCriteria)criteria).getStates();
-					State state = states.getState(criteriaResultView.getResultString());
-					Validate.notNull(state, "can't find state " + criteriaResultView.getResultString() + " for criteria " + criteria.getDisplayName() + ".  expected one of " + states.getAvailableStates());
-					result.setState(state);	
-					return result;
-				}
-
-				@Override public CriteriaResult populate(ComboBoxCriteriaResult result) {
-					result.setValue(criteriaResultView.getResultString());
-					return result;					
-				}
-
-				@Override public CriteriaResult populate(DateFieldCriteriaResult result) {
-					Validate.isTrue(criteriaResultView.getResult()==null ||  criteriaResultView.getResult() instanceof Date); 
-					result.setValue((Date)criteriaResultView.getResult());						
-					return result;
-				}
-
-				@Override public CriteriaResult populate(SelectCriteriaResult result) {
-					Validate.isTrue(criteria instanceof SelectCriteria);
-					List<String> options = ((SelectCriteria)criteria).getOptions();
-					final String option = criteriaResultView.getResultString();
-					int index = Iterators.indexOf(options.iterator(), new Predicate<String>() {
-						@Override public boolean apply(String value) {
-							return StringUtils.equalsIgnoreCase(value,option);
-						}			
-					});							
-					Validate.isTrue(index>=0, "can't find option '" + option + "' for criteria " + criteria.getDisplayName());  // this case should have already been handled by validator.  just in case.
-					result.setValue(options.get(index));
-					return result;					
-				}
-
-				@Override public CriteriaResult populate(UnitOfMeasureCriteriaResult result) {
-					// recall : value in form of "123|456"   or   "123"  (no secondary specified).
-					String[] tokens = criteriaResultView.getResultString().split(UNIT_OF_MEASURE_SEPARATOR_REGEX);					
-					result.setPrimaryValue(tokens.length >= 1 ? tokens[0] : null);					
-					result.setSecondaryValue(tokens.length >=2 ? tokens[1] : null);					
-					return result;
-				}
-
-				@Override public CriteriaResult populate(TextFieldCriteriaResult result) {
-					result.setValue(criteriaResultView.getResultString());				
-					return result;
-				}
-
-				@Override public CriteriaResult populate(SignatureCriteriaResult result) {
-					throw new UnsupportedOperationException("Importing signatures is not supported.");
-				}
-				
-			});
-			
-			CriteriaResult criteriaResult = criteriaResultFactory.createCriteriaResult(criteria.getCriteriaType());
-			results.add(criteriaResult);		
+		for (CriteriaSection section:type.getEventForm().getAvailableSections()) {
+			for (Criteria criteria:section.getAvailableCriteria()) {
+				CriteriaResult criteriaResult = getCriteriaResultForCriteria(section, criteria, view);
+				criteriaResult.setEvent(event);		
+				criteriaResult.setCriteria(criteria);
+				criteriaResult.setTenant(type.getTenant());
+				results.add(criteriaResult);
+			}
 		}
 		event.setCriteriaResults(results);
+	}
+
+	private CriteriaResult getCriteriaResultForCriteria(CriteriaSection section, Criteria criteria, EventView view) {
+		for (final CriteriaResultView criteriaResultView:view.getCriteriaResults()) {
+			if (isSameSectionAndCriteria(section, criteria, criteriaResultView)) { 
+				CriteriaResultFactory criteriaResultFactory = createCriteriaFactory(criteriaResultView, criteria);			
+				CriteriaResult criteriaResult = criteriaResultFactory.createCriteriaResult(criteria.getCriteriaType());
+				return criteriaResult;
+			}
+		}
+		// not found, create a default one. 
+		return new CriteriaResultFactory().createCriteriaResult(criteria.getCriteriaType());
+	}
+
+	private boolean isSameSectionAndCriteria(CriteriaSection section, Criteria criteria, CriteriaResultView criteriaResultView) {
+		checkArgument(criteriaResultView != null && criteria !=null);
+		return StringUtils.equalsIgnoreCase(criteriaResultView.getSection(), section.getDisplayName()) && 
+				StringUtils.equalsIgnoreCase(criteriaResultView.getDisplayText(), criteria.getDisplayText());
+	}
+
+	private CriteriaResultFactory createCriteriaFactory(final CriteriaResultView criteriaResultView, final Criteria criteria) {
+		return new CriteriaResultFactory(new CriteriaResultPopulator() {				
+			@Override
+			public CriteriaResult populate(CriteriaResult criteriaResult) {
+				criteriaResult.setDeficiencies(getDeficiencies(criteriaResultView));
+				criteriaResult.setRecommendations(getRecommendations(criteriaResultView));
+				return criteriaResult;
+			}
+
+			@Override public CriteriaResult populate(OneClickCriteriaResult result) {
+				checkArgument(criteria.isOneClickCriteria());
+				StateSet states = ((OneClickCriteria)criteria).getStates();
+				State state = states.getState(criteriaResultView.getResultString());
+				checkNotNull(state, "Can't find state " + criteriaResultView.getResultString() + " for criteria " + criteria.getDisplayName() + ".  expected one of " + states.getAvailableStates());
+				result.setState(state);	
+				return result;
+			}
+
+			@Override public CriteriaResult populate(ComboBoxCriteriaResult result) {
+				result.setValue(criteriaResultView.getResultString());
+				return result;					
+			}
+
+			@Override public CriteriaResult populate(DateFieldCriteriaResult result) {
+				checkArgument(criteriaResultView.getResult()==null ||  criteriaResultView.getResult() instanceof Date); 
+				result.setValue((Date)criteriaResultView.getResult());						
+				return result;
+			}
+
+			@Override public CriteriaResult populate(SelectCriteriaResult result) {
+				checkArgument(criteria instanceof SelectCriteria);
+				List<String> options = ((SelectCriteria)criteria).getOptions();
+				final String option = criteriaResultView.getResultString();
+				int index = Iterators.indexOf(options.iterator(), new Predicate<String>() {
+					@Override public boolean apply(String value) {
+						return StringUtils.equalsIgnoreCase(value,option);
+					}			
+				});							
+				checkState(index>=0, "can't find option '" + option + "' for criteria " + criteria.getDisplayName());  // this case should have already been handled by validator.  just in case.
+				result.setValue(options.get(index));
+				return result;					
+			}
+
+			@Override public CriteriaResult populate(UnitOfMeasureCriteriaResult result) {
+				// recall : value in form of "123|456" =    or   "123"  (<--no secondary specified).
+				String[] tokens = criteriaResultView.getResultString().split(UNIT_OF_MEASURE_SEPARATOR_REGEX);					
+				checkState(tokens.length<=2, "can't specify more than 2 values in '|' delimited Unit Of Measure field : '" + criteriaResultView.getResultString()); 
+				result.setPrimaryValue(tokens.length >= 1 ? tokens[0] : null);					
+				result.setSecondaryValue(tokens.length >=2 ? tokens[1] : null);					
+				return result;
+			}
+
+			@Override public CriteriaResult populate(TextFieldCriteriaResult result) {
+				result.setValue(criteriaResultView.getResultString());				
+				return result;
+			}
+
+			@Override public CriteriaResult populate(SignatureCriteriaResult result) {
+				throw new UnsupportedOperationException("Importing signatures is not supported.");
+			}
+			
+		});
 	} 
 	
 	public List<Recommendation> getRecommendations(CriteriaResultView criteriaResultView) {
-		Recommendation result = new Recommendation();
-		result.setText(StringUtils.trimToEmpty(criteriaResultView.getRecommendationString()));
-		result.setState(com.n4systems.model.Observation.State.COMMENT);
-		return Lists.newArrayList(result);		
+		List<Recommendation> result = new ArrayList<Recommendation>();
+		String text = StringUtils.trimToEmpty(criteriaResultView.getRecommendationString());
+		if (StringUtils.isNotEmpty(text)) { 
+			Recommendation recommendation = new Recommendation();
+			recommendation.setText(text);
+			recommendation.setState(com.n4systems.model.Observation.State.COMMENT);
+			result.add(recommendation);
+		} 
+		return result;		
 	}
 	
 	public List<Deficiency> getDeficiencies(CriteriaResultView criteriaResultView) {
-		Deficiency result = new Deficiency();
-		result.setText(StringUtils.trimToEmpty(criteriaResultView.getDeficiencyString()));
-		result.setState(com.n4systems.model.Observation.State.COMMENT);
-		return Lists.newArrayList(result);		
-	}
-
-	private Criteria getCriteria(EventForm eventForm, CriteriaResultView criteriaResultView) {
-		for (CriteriaSection section:eventForm.getAvailableSections()) {
-			for (Criteria criteria:section.getAvailableCriteria()) {
-				if (criteria.getDisplayName().equals(criteriaResultView.getDisplayText())) {
-					return criteria;
-				}
-			}
+		List<Deficiency> result = new ArrayList<Deficiency>();
+		String text = StringUtils.trimToEmpty(criteriaResultView.getDeficiencyString());
+		if (StringUtils.isNotEmpty(text)) { 
+			Deficiency deficiency = new Deficiency();
+			deficiency.setText(StringUtils.trimToEmpty(criteriaResultView.getDeficiencyString()));
+			deficiency.setState(com.n4systems.model.Observation.State.COMMENT);
+			result.add(deficiency);
 		}
-		throw new IllegalStateException("can't find criteria '" + criteriaResultView.getDisplayText() + "'");
+		return result;
 	}
 
 	protected void resolveType(Event model) {
@@ -260,10 +285,6 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		
 		BaseOrg owner = orgLoader.load(transaction);
 		model.setOwner(owner);
-	}
-
-	public void setType(EventType type) {
-		this.type = type;
 	}
 	
 	public EventType getType() {

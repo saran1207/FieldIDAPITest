@@ -1005,6 +1005,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return modifiableEvent.getOwner();
 	}
 	
+	@Override
 	public void setAllowNetworkResults(boolean allow) {
 		this.allowNetworkResults = allow;
 	}

@@ -12,6 +12,7 @@ public class CriteriaSectionBuilder extends EntityWithTenantBuilder<CriteriaSect
 	private String title;
 	private boolean retired;
 	private List<Criteria> criteria;
+	
 		
 	public CriteriaSectionBuilder(String title, boolean retired, List<Criteria> criteria) {
 		this.title = title;
@@ -25,6 +26,10 @@ public class CriteriaSectionBuilder extends EntityWithTenantBuilder<CriteriaSect
 	
 	public CriteriaSectionBuilder withTitle(String title) {
 		return makeBuilder(new CriteriaSectionBuilder(title, retired, criteria));
+	}
+		
+	public CriteriaSectionBuilder withDisplayText(String title) {
+		return withTitle(title);
 	}
 		
 	public CriteriaSectionBuilder withRetired(boolean retired) {

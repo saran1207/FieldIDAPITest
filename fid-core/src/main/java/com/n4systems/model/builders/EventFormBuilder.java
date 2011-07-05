@@ -1,12 +1,11 @@
 package com.n4systems.model.builders;
 
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.EventForm;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+
+import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.EventForm;
 
 public class EventFormBuilder extends EntityWithTenantBuilder<EventForm> {
 
@@ -26,7 +25,7 @@ public class EventFormBuilder extends EntityWithTenantBuilder<EventForm> {
         return makeBuilder(new EventFormBuilder(newSectionsList));
     }
 
-    @Override
+    @Override 
     public EventForm createObject() {
         EventForm eventForm = new EventForm();
 

@@ -91,9 +91,9 @@ public class ImporterFactory {
 				loaderFactory.createSmartSearchListLoader(), 
 				loaderFactory.createAssetStatusByNameLoader(), 
 				loaderFactory.createEventBookFindOrCreateLoader(),
-				loaderFactory.createUserByFullNameLoader());
+				loaderFactory.createUserByFullNameLoader(), 
+				type);
 		
-		converter.setType(type);
 		return converter;
 	}
 

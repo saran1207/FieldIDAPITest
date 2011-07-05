@@ -1,15 +1,7 @@
 package com.n4systems.api.conversion.event;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +48,7 @@ import com.n4systems.testutils.DummyTransaction;
 public class EventToModelConverterTest {
 	private final class EventToModelConverterWithAllButConvertPerformedByEmptied extends EventToModelConverter {
 		private EventToModelConverterWithAllButConvertPerformedByEmptied(UserByFullNameLoader userLoader) {
-			super(null, null, null, null, userLoader);
+			super(null, null, null, null, userLoader, null);
 		}
 
 		@Override
@@ -86,7 +78,10 @@ public class EventToModelConverterTest {
 		
 	@Test
 	public void to_model_sets_type_form_version_and_tenant_from_type() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null) {
+		EventType type = EventTypeBuilder.anEventType().build();
+		type.setTenant(TenantBuilder.aTenant().build());
+		
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, type) {
 			@Override
 			protected void resolveStatus(String statusName, Event model) {}
 			@Override
@@ -103,10 +98,7 @@ public class EventToModelConverterTest {
 			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
 		};
 		
-		EventType type = EventTypeBuilder.anEventType().build();
-		type.setTenant(TenantBuilder.aTenant().build());
-		
-		converter.setType(type);
+	
 		
 		Event event = converter.toModel(new EventView(), transaction);
 		
@@ -130,7 +122,7 @@ public class EventToModelConverterTest {
 		expect(orgLoader.load(transaction)).andReturn(org);
 		replay(orgLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(orgLoader, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(orgLoader, null, null, null, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -153,7 +145,7 @@ public class EventToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_status_ignoring_case() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -184,7 +176,7 @@ public class EventToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_status_defaulting_to_na() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -219,7 +211,7 @@ public class EventToModelConverterTest {
 		expect(smartSearchLoader.load(transaction)).andReturn(Arrays.asList(asset));
 		replay(smartSearchLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, smartSearchLoader, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, smartSearchLoader, null, null, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -260,7 +252,7 @@ public class EventToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_printable() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -300,7 +292,7 @@ public class EventToModelConverterTest {
 		expect(bookLoader.load(transaction)).andReturn(book);
 		replay(bookLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -328,7 +320,7 @@ public class EventToModelConverterTest {
 		EventBookFindOrCreateLoader bookLoader = createMock(EventBookFindOrCreateLoader.class);
 		replay(bookLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -361,7 +353,7 @@ public class EventToModelConverterTest {
 		expect(psLoader.load(transaction)).andReturn(ps);
 		replay(psLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -387,7 +379,7 @@ public class EventToModelConverterTest {
 		AssetStatusByNameLoader psLoader = createMock(AssetStatusByNameLoader.class);
 		replay(psLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -412,8 +404,27 @@ public class EventToModelConverterTest {
 	public void to_model_criteria_results() throws ConversionException {
 		AssetStatusByNameLoader psLoader = createMock(AssetStatusByNameLoader.class);
 		replay(psLoader);
+
+		EventView eventView = new EventView();
+		CriteriaResultView criteriaResultView = new CriteriaResultViewBuilder().aCriteriaResultView().build();
+		Collection<CriteriaResultView> criteriaResults = Lists.newArrayList(criteriaResultView);
+		eventView.setCriteriaResults(criteriaResults);
+
+		EventForm eventForm = new EventForm();
+		StateSet stateSet = StateSetBuilder.aStateSet().states(new State("Pass", Status.PASS, "Pass")).build();
+		OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withStateSet(stateSet).build();
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null) {
+		CriteriaSection section = CriteriaSectionBuilder.aCriteriaSection().
+										withCriteria(criteria).
+										withDisplayText(criteriaResultView.getSection()).
+										build();
+		ArrayList<CriteriaSection> sections = Lists.newArrayList(section);
+		eventForm.setSections(sections);
+				
+		EventType type = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
+		type.setTenant(TenantBuilder.aTenant().build());
+		
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, type) {
 			@Override
 			protected void resolveType(Event model) {}
 			@Override
@@ -430,23 +441,7 @@ public class EventToModelConverterTest {
 			protected void resolveOwner(EventView view, Event model, Transaction transaction) {}
 		};
 
-		EventForm eventForm = new EventForm();
-		StateSet stateSet = StateSetBuilder.aStateSet().states(new State("Pass", Status.PASS, "Pass")).build();
-		OneClickCriteria criteria = OneClickCriteriaBuilder.aCriteria().withStateSet(stateSet).build();
-		
-		CriteriaSection section = CriteriaSectionBuilder.aCriteriaSection().withCriteria(criteria).build();
-		ArrayList<CriteriaSection> sections = Lists.newArrayList(section);
-		eventForm.setSections(sections);
-		
-		EventType type = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
-		type.setTenant(TenantBuilder.aTenant().build());
-		
-		EventView eventView = new EventView();
-		Collection<CriteriaResultView> criteriaResults = Lists.newArrayList(new CriteriaResultViewBuilder().aCriteriaResultView().build());
-		eventView.setCriteriaResults(criteriaResults);
-		
-		converter.setType(type);
-
+	
 		Set<CriteriaResult> results = converter.toModel(eventView, transaction).getResults();
 		assertNotNull(results);
 		assertEquals(1, results.size());	
