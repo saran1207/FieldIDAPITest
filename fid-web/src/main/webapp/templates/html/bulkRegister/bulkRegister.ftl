@@ -37,7 +37,6 @@
 
 	    }
 	</script>
-	<#include "/templates/html/common/_calendar.ftl"/>
 </head>
 
 <#assign bulkRegister = true>

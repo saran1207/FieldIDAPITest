@@ -15,9 +15,7 @@
 	<@n4.includeStyle type="page" href="subAsset" />
 	<@n4.includeStyle type="page" href="event" />
 	<@n4.includeStyle type="page" href="masterEvent" />
-	
-	<#include "/templates/html/common/_calendar.ftl"/>
-	
+		
 	<script type="text/javascript">
 		lookupAssetUrl = "<@s.url action="assets" namespace="/aHtml"/>";
 		assetLookupTitle = "<@s.text name="title.assetlookup"/>";

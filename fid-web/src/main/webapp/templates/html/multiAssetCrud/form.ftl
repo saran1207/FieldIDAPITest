@@ -26,7 +26,6 @@
 	    	
 	    }
 	</script>
-	<#include "/templates/html/common/_calendar.ftl"/>
 </head>
 <#if lineItem?exists>
 	${action.setPageType('asset', 'add_with_order')!}

@@ -1,7 +1,7 @@
 <title><@s.text name="title.massupdateeventschedules" /></title>
 <head>
 	<@n4.includeStyle href="massUpdate" type="page"/>
-	<#include "/templates/html/common/_calendar.ftl"/>
+	<#include "/templates/html/common/_datetimepicker.ftl"/>
 </head>
 
 <div>

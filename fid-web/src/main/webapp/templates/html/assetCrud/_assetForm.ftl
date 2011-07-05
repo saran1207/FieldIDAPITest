@@ -22,7 +22,6 @@
 	    updateAutoScheduleUrl = '<@s.url action="updateAutoSchedule" namespace="/ajax"/>';
 	    checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax"/>';
 	</script>
-	<#include "/templates/html/common/_calendar.ftl"/>	
 </head>
 
 <#include "../common/_formErrors.ftl"/>
