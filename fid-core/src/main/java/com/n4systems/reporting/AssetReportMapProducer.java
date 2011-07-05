@@ -1,10 +1,12 @@
 package com.n4systems.reporting;
 
 import java.io.File;
+import java.sql.Date;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.reporting.mapbuilders.ReportField;
@@ -80,9 +82,18 @@ public class AssetReportMapProducer extends ReportMapProducer {
 	private ReportMap<String> produceInfoOptionMap() {
 		ReportMap<String> infoOptions = new ReportMap<String>(asset.getOrderedInfoOptionList().size());
 		for (InfoOptionBean option : asset.getOrderedInfoOptionList()) {
-			infoOptions.put(normalizeString(option.getInfoField().getName()), option.getName());
+			if(option.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
+				infoOptions.put(normalizeString(option.getInfoField().getName()), formatDate(option));
+			}else {
+				infoOptions.put(normalizeString(option.getInfoField().getName()), option.getName());
+			}
 		}
 		return infoOptions;
+	}
+
+	private String formatDate(InfoOptionBean option) {
+		Date date = new Date(Long.parseLong(option.getName()));
+		return formatDate(date, option.getInfoField().isIncludeTime());
 	}
 
 	private String assetStatusName() {
