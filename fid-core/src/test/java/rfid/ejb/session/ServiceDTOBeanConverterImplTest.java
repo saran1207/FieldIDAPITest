@@ -213,6 +213,7 @@ public class ServiceDTOBeanConverterImplTest {
 		
 		InfoFieldBean foundInfoField = new InfoFieldBean();
 		foundInfoField.setUniqueID( 4L );
+		foundInfoField.setFieldType(InfoFieldBean.TEXTFIELD_FIELD_TYPE);
 		
 		EntityManager mockEntityManager = createMock( EntityManager.class );
 		expect( mockEntityManager.find( InfoFieldBean.class, foundInfoField.getUniqueID() ) ).andReturn( foundInfoField );

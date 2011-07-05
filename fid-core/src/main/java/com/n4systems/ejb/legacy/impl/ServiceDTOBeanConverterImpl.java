@@ -387,11 +387,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 	public Set<InfoOptionBean> convertInfoOptions(ProductServiceDTO productServiceDTO) {
 		Set<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();
+		
+		InfoOptionBean infoOption;
 		for (com.n4systems.webservice.dto.InfoOptionServiceDTO infoOptionServiceDTO : productServiceDTO.getInfoOptions()) {
 			try {
-				infoOptions.add(convert(infoOptionServiceDTO));
+				infoOption = convert(infoOptionServiceDTO);
+				if (infoOption != null) {
+					infoOptions.add(infoOption);
+				}
 			} catch (MissingEntityException e) {
-
+				logger.warn(e);
 			}
 		}
 		return infoOptions;
@@ -406,7 +411,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		if (infoOption == null) {
 			infoOption = new InfoOptionBean();
-			infoOption.setInfoField(findInfoField(infoOptionServiceDTO));
+			
+			InfoFieldBean infoField = findInfoField(infoOptionServiceDTO);
+			if (infoField.isDateField() && infoOptionServiceDTO.getName() == null) {
+				return null;
+			}
+			
+			infoOption.setInfoField(infoField);
 			infoOption.setName(infoOptionServiceDTO.getName());
 		}
 

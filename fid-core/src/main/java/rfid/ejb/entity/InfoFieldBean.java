@@ -17,9 +17,9 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.n4systems.model.AssetType;
 import org.hibernate.annotations.Where;
 
+import com.n4systems.model.AssetType;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 
@@ -307,6 +307,26 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 
 	public void setIncludeTime(boolean includeTime) {
 		this.includeTime = includeTime;
+	}
+	
+	public boolean isTextField() {
+		return fieldType.equals(TEXTFIELD_FIELD_TYPE);
+	}
+	
+	public boolean isSelectBox() {
+		return fieldType.equals(SELECTBOX_FIELD_TYPE);
+	}
+	
+	public boolean isComboBox() {
+		return fieldType.equals(COMBOBOX_FIELD_TYPE);
+	}
+	
+	public boolean isUnitOfMeasure() {
+		return fieldType.equals(UNIT_OF_MEASURE);
+	}
+	
+	public boolean isDateField() {
+		return fieldType.equals(DATEFIELD_FIELD_TYPE);
 	}
 	
 }
