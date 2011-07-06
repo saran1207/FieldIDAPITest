@@ -14,6 +14,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.security.SecurityLevel;
 import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
@@ -83,9 +85,15 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return em.find(entityClass, entityId);
 	}
 
+    @Override
+    public <T extends NetworkEntity<T>> T findAndEnhance(Class<T> entityClass, Long entityId, SecurityFilter securityFilter, String... postFetchPaths) {
+        T t = em.find(entityClass, entityId);
+        SecurityLevel securityLevel = t.getSecurityLevel(securityFilter.getOwner());
+        return postFetchFields(t.enhance(securityLevel), postFetchPaths);
+    }
 
-	
-	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId, SecurityFilter filter) {
+
+    public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId, SecurityFilter filter) {
 		QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass, filter);
 		queryBuilder.addSimpleWhere("uniqueID", entityId);
 		

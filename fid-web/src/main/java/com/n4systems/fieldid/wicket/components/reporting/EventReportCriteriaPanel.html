@@ -1,0 +1,183 @@
+<wicket:panel>
+
+    <div class="pageSection searchPageSection" id="criteriaForm">
+        <div class="headerWithFootnote">
+            <div class="tipContainer">
+                <img wicket:id="tipIcon"/>
+                <p class="footnoteText">
+                    <wicket:message key="label.wildcard_explanation"/>
+                </p>
+            </div>
+        </div>
+
+        <form class="crudForm searchForm" wicket:id="reportCriteriaForm">
+
+            <div class="fieldGroup floatLeft fieldGroupGap">
+                <h2><wicket:message key="label.event_details"/></h2>
+                <div class="infoSet">
+                    <label for="criteria.eventTypeGroup"><wicket:message key="label.eventtypegroup"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="eventTypeGroup"></select>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.eventType"><wicket:message key="label.eventtype"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="eventType"></select>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.performedBy"><wicket:message key="label.performed_by"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="performedBy"></select>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.eventBook"><wicket:message key="label.eventbook"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="eventBook"></select>
+                    </span>
+                </div>
+
+                <div wicket:id="jobContainer" class="infoSet">
+                    <label for="criteria.job"><wicket:message key="label.job"/></label>
+                    <span class="fieldHolder">
+                        <select></select>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.status"><wicket:message key="label.result"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="result"></select>
+                    </span>
+                </div>
+                <div wicket:id="includeNetworkResultsContainer" class="infoSet">
+                    <label id="reducedLineHeightLabel" for="criteria.includeNetworkResults">
+                        <wicket:message key="label.includesafetynetworkresults"/>
+                    </label>
+                    <input wicket:id="includeSafetyNetwork" type="checkbox"/>
+                </div>
+                <div wicket:id="includeNetworkResultsContainerAlt" class="infoSet">
+                    &nbsp;
+                </div>
+                <div wicket:id="noJobsButAssignedToContainer" class="infoSet">
+                    &nbsp;
+                </div>
+            </div>
+
+            <div class="fieldGroup floatRight">
+                <h2><wicket:message key="label.asset_details"/></h2>
+                <div class="infoSet">
+                    <label for="criteria.assetStatus"><wicket:message key="label.assetstatus"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="assetStatus"></select>
+                    </span>
+                </div>
+
+                <div class="infoSet">
+                    <label for="criteria.assetTypeGroup"><wicket:message key="label.asset_type_group"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="assetTypeGroup"></select>
+                    </span>
+                </div>
+
+                <div class="infoSet">
+                    <label for="criteria.assetType"><wicket:message key="label.assettype"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="assetType"></select>
+                    </span>
+                </div>
+            </div>
+
+            <div class="fieldGroup floatRight">
+                <h2><wicket:message key="label.ownership"/></h2>
+                <div wicket:id="assignedUserContainer" class="infoSet">
+                    <label for="criteria.assignedUser"><wicket:message key="label.assignedto"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="assignedTo"></select>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.location"><wicket:message key="label.location"/></label>
+                    <div wicket:id="location"></div>
+                </div>
+                <div class="infoSet">
+                    <label for="owner"><wicket:message key="label.owner"/></label>
+                    <div wicket:id="owner"></div>
+                </div>
+                <div wicket:id="noAssignedToButJobsContainer" class="infoSet">
+                    &nbsp;
+                </div>
+            </div>
+
+            <div class="fieldGroup fieldGroupGap floatLeft">
+                <h2><wicket:message key="label.eventdate"/></h2>
+                <div class="container">
+                    <div class="infoSet">
+                        <label for="fromDate"><wicket:message key="label.fdate"/></label>
+                        <div wicket:id="fromDate"></div>
+                    </div>
+                    <div class="infoSet">
+                        <label for="toDate"><wicket:message key="label.tdate"/></label>
+                        <div wicket:id="toDate"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fieldGroup floatRight">
+                <h2><wicket:message key="label.identifiers"/></h2>
+                <div class="infoSet">
+                    <label for="criteria.rfidNumber"><wicket:message key="label.rfidnumber"/></label>
+                    <span class="fieldHolder">
+                        <input wicket:id="rfidNumber" type="text" class="textbox"/>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.serialNumber"><span wicket:id="serialNumberLabel"></span></label>
+                    <span class="fieldHolder">
+                        <input wicket:id="serialNumber" type="text" class="textbox"/>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.referenceNumber"><wicket:message key="label.referencenumber"/></label>
+                    <span class="fieldHolder">
+                        <input wicket:id="referenceNumber" type="text" class="textbox"/>
+                    </span>
+                </div>
+            </div>
+
+            <div class="fieldGroup fieldGroupGap floatLeft">
+                <h2><wicket:message key="label.orderdetails"/></h2>
+                <div class="infoSet">
+                    <label for="criteria.orderNumber"><wicket:message key="label.onumber"/></label>
+                    <span class="fieldHolder">
+                        <input wicket:id="orderNumber" type="text" class="textbox"/>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label for="criteria.purchaseorder"><wicket:message key="label.purchaseorder"/></label>
+                    <span class="fieldHolder">
+                        <input wicket:id="purchaseOrder" type="text" class="textbox"/>
+                    </span>
+                </div>
+                <div wicket:id="assignedToContainer" class="infoSet">
+                    <label>&nbsp;</label>
+                </div>
+            </div>
+
+            <div wicket:id="displayColumnsContainer">
+                <div wicket:id="selectDisplayColumnsPanel"></div>
+            </div>
+
+            <div class="formAction enlargedInput">
+                <div class="centerContents">
+                    <input wicket:id="submitButton" type="submit" wicket:message="value:label.Run"/>
+                    <wicket:message key="label.or"/>
+                    <a wicket:id="clearFormLink"><wicket:message key="label.clearform"/></a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</wicket:panel>

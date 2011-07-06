@@ -30,8 +30,9 @@ public class EventTypesByEventGroupIdLoader extends ListLoader<EventType> {
         return builder.getResultList(em);
     }
 
-    public void setEventTypeGroupId(Long eventTypeGroupId) {
+    public EventTypesByEventGroupIdLoader setEventTypeGroupId(Long eventTypeGroupId) {
         this.eventTypeGroupId = eventTypeGroupId;
+        return this;
     }
 
 }

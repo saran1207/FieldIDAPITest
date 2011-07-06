@@ -9,8 +9,10 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.io.Serializable;
+
 @Embeddable
-public class Location {
+public class Location implements Serializable {
 
 	private static final PredefinedLocation noPredefinedLocation = null;
 
@@ -38,13 +40,17 @@ public class Location {
 	public PredefinedLocation getPredefinedLocation() {
 		return predefinedLocation;
 	}
+
+    public void setPredefinedLocation(PredefinedLocation predefinedLocation) {
+        this.predefinedLocation = predefinedLocation;
+    }
 	
 	@AllowSafetyNetworkAccess
 	public String getFreeformLocation() {
 		return freeformLocation;
 	}
 
-	protected void setFreeformLocation(String freeformLocation) {
+	public void setFreeformLocation(String freeformLocation) {
 		this.freeformLocation = (freeformLocation == null) ? "" : freeformLocation;
 	}
 	

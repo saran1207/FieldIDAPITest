@@ -1,0 +1,86 @@
+package com.n4systems.fieldid.wicket.pages.reporting;
+
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
+import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCollapseContainer;
+import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
+import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+
+public class ReportingResultsPage extends FieldIDLoggedInPage {
+
+    private EventReportCriteriaModel reportCriteriaModel;
+    private String savedReportName;
+
+    public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel) {
+        this(reportCriteriaModel, null);
+    }
+
+    public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel, String savedReportName) {
+        this.reportCriteriaModel = reportCriteriaModel;
+        this.savedReportName = savedReportName;
+        PropertyModel<EventReportCriteriaModel> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteriaModel>(this, "reportCriteriaModel");
+
+        add(CSSPackageResource.getHeaderContribution("style/pageStyles/reporting.css"));
+
+        add(new ReportResultsPanel("resultsPanel", reportCriteriaPropertyModel));
+
+        add(new BookmarkablePageLink<Void>("startNewReportLink", ReportingPage.class));
+        add(createSaveReportLink("saveReportLink", true));
+        add(createSaveReportLink("saveReportLinkAs", false));
+
+        add(new BookmarkablePageLink<Void>("startNewReportLink2", ReportingPage.class));
+        add(createSaveReportLink("saveReportLink2", true));
+        add(createSaveReportLink("saveReportLinkAs2", false));
+
+        SlidingReportSectionCollapseContainer criteriaExpandContainer = new SlidingReportSectionCollapseContainer("criteriaExpandContainer", new FIDLabelModel("label.reportcriteria"));
+        criteriaExpandContainer.addContainedPanel(new EventReportCriteriaPanel("criteriaPanel", reportCriteriaPropertyModel));
+
+        add(criteriaExpandContainer);
+        add(new MassActionPanel("massActionPanel", reportCriteriaPropertyModel));
+    }
+
+    private Link createSaveReportLink(String linkId, final boolean overwrite) {
+        Link link = new Link(linkId) {
+            @Override
+            public void onClick() {
+                setResponsePage(new SaveReportPage(reportCriteriaModel, ReportingResultsPage.this, overwrite));
+            }
+        };
+        if (!overwrite) {
+            // If this is not overwrite (ie the Save As link), it should be invisible if this isn't an existing saved report
+            link.setVisible(reportCriteriaModel.getSavedReportId() != null);
+        }
+        return link;
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new PropertyModel<String>(this, "pageLabel"));
+    }
+
+    public String getPageLabel() {
+        IModel<String> pageLabelModel = new FIDLabelModel("label.reporting_results");
+        if (savedReportName != null) {
+            pageLabelModel = new Model<String>(pageLabelModel.getObject() + " for - " + savedReportName);
+        }
+        return pageLabelModel.getObject();
+    }
+
+    @Override
+    protected void addNavBar(String navBarId) {
+        add(new NavigationBar(navBarId,
+                NavigationItemBuilder.aNavItem().label("nav.new_report").page(ReportingResultsPage.class).build(),
+                NavigationItemBuilder.aNavItem().label("nav.saved_reports").page("/savedReports.action").build()));
+    }
+
+}

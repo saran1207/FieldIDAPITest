@@ -1,0 +1,33 @@
+<wicket:panel>
+    <div class="orgBrowser" >
+        <form wicket:id="orgForm">
+            <div class="fullForm orgBrowserForm">
+                <div class="infoSet">
+                    <label class="label" for="org"><wicket:message key="label.org"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="orgSelect" name="org" id="orgList"/>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" for="customer"><wicket:message key="label.customer"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="customerSelect" name="customer" id="customerList"/>
+                    </span>
+                </div>
+                <div class="infoSet">
+                    <label class="label" for="division"><wicket:message key="label.division"/></label>
+                    <span class="fieldHolder">
+                        <select wicket:id="divisionSelect" name="division" id="divisionList"/>
+                    </span>
+                </div>
+                <div class="actions">
+                    <button wicket:id="selectButton">
+                        <wicket:message key="label.select"/>
+                    </button>
+                    <wicket:message key="label.or"/>
+                    <a id="cancelOrgSelect" wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</wicket:panel>

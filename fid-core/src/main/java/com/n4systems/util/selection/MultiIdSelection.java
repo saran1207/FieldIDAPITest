@@ -1,5 +1,6 @@
 package com.n4systems.util.selection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -7,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MultiIdSelection {
+public class MultiIdSelection implements Serializable {
 
     private Set<Long> ids = new HashSet<Long>();
 
@@ -38,4 +39,5 @@ public class MultiIdSelection {
     public void clear() {
         ids.clear();
     }
+
 }

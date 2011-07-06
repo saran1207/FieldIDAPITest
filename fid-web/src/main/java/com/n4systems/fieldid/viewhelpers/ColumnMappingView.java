@@ -13,7 +13,7 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
 	private String sortExpression;
 	private String outputHandler;
 	private boolean sortable;
-	private boolean onByDefault;
+	private boolean enabled;
 	private int order;
 	private String requiredExtendedFeature;
     private String groupKey;
@@ -21,14 +21,14 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
     private String joinExpression;
 	
 	
-	public ColumnMappingView(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean onByDefault, int order, String requiredExtendedFeature, String groupKey, Long dbColumnId, String joinExpression) {
+	public ColumnMappingView(String id, String label, String pathExpression, String sortExpression, String outputHandler, boolean sortable, boolean enabled, int order, String requiredExtendedFeature, String groupKey, Long dbColumnId, String joinExpression) {
 		this.id = id;
 		this.label = label;
 		this.pathExpression = pathExpression;
 		this.sortExpression = sortExpression;
 		this.outputHandler = outputHandler;
 		this.sortable = sortable;
-		this.onByDefault = onByDefault;
+		this.enabled = enabled;
 		this.order = order;
 		this.requiredExtendedFeature = requiredExtendedFeature;
         this.groupKey = groupKey;
@@ -72,8 +72,8 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
 	}
 
 
-	public boolean isOnByDefault() {
-		return onByDefault;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
 	public int getOrder() {
@@ -116,8 +116,8 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
         this.order = order;
     }
 
-    public void setOnByDefault(boolean onByDefault) {
-        this.onByDefault = onByDefault;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Long getDbColumnId() {

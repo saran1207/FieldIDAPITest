@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.api.NetworkEntity;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.stat.Statistics;
 
@@ -31,6 +32,8 @@ public interface PersistenceManager {
 	public EntityManager getEntityManager();
 
 	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId);
+
+    public <T extends NetworkEntity<T>> T findAndEnhance(Class<T> entityClass, Long entityId, SecurityFilter securityFilter, String... postFetchFields);
 	
 
 	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId, String... postFetchFields);

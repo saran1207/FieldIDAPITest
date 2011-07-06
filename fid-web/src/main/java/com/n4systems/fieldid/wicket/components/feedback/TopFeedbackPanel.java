@@ -12,7 +12,12 @@ public class TopFeedbackPanel extends Panel {
     public TopFeedbackPanel(String id) {
         super(id);
 
-        final ErrorLevelFeedbackMessageFilter filter = new ErrorLevelFeedbackMessageFilter(FeedbackMessage.INFO);
+        final ErrorLevelFeedbackMessageFilter filter = new ErrorLevelFeedbackMessageFilter(FeedbackMessage.INFO) {
+            @Override
+            public boolean accept(FeedbackMessage message) {
+                return message.getLevel() == FeedbackMessage.INFO;
+            }
+        };
 
         WebMarkupContainer feedbackPanelContainer = new WebMarkupContainer("feedbackPanelContainer") {
             @Override

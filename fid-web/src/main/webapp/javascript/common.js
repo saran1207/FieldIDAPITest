@@ -228,7 +228,7 @@ function openSection(idToOpen, openLinkId, closeLinkId, afterEvent) {
 	openLink.hide();
 	closeLink.show();
 	
-	closeLink.suspendedOnClick = closeLink.onclick
+	closeLink.suspendedOnClick = closeLink.onclick;
 	closeLink.onclick = null;
 	
 	Effect.BlindDown(idToOpen, {
@@ -587,6 +587,15 @@ function positionDropDown(a, entityId){
 		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - actionsContainer.offsetHeight)+ "px"});
 	}
 	list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
+}
+
+function positionDropDownForElements(a, list, actionsContainer) {
+    var coordinates = findPos(actionsContainer);
+
+    if(Prototype.Browser.IE){
+        list.setStyle({	'top': coordinates[1] - (a.offsetHeight - actionsContainer.offsetHeight)+ "px"});
+    }
+    list.setStyle({	'left': coordinates[0] - (130 - actionsContainer.offsetWidth) + "px"});
 }
 
  function createBookmark(url, title) {

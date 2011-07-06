@@ -8,15 +8,9 @@ import java.util.List;
 
 public class EventTypesForTenantModel extends FieldIDSpringModel<List<EventType>> {
 
-    private SecurityFilter securityFilter;
-
-    public EventTypesForTenantModel(SecurityFilter securityFilter) {
-        this.securityFilter = securityFilter;
-    }
-
     @Override
     protected List<EventType> load() {
-        return new EventTypeListLoader(securityFilter).doPostFetches(false).load();
+        return new EventTypeListLoader(getSecurityFilter()).doPostFetches(false).load();
     }
 
 }

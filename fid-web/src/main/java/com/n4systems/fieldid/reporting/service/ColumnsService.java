@@ -70,9 +70,9 @@ public abstract class ColumnsService {
         ActiveColumnMapping activeConfig = layout.getActiveConfigurationFor(mapping);
         if (activeConfig != null) {
             convertedView.setOrder(activeConfig.getOrder());
-            convertedView.setOnByDefault(true);
+            convertedView.setEnabled(true);
         } else {
-            convertedView.setOnByDefault(false);
+            convertedView.setEnabled(false);
         }
         groupView.getMappings().add(convertedView);
     }

@@ -1,6 +1,14 @@
 package com.n4systems.fieldid.wicket.components.table;
 
+import com.n4systems.fieldid.wicket.components.reporting.results.SelectionStatusPanel;
+import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.selection.MultiIdSelection;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -8,30 +16,97 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDat
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IModel;
 
 public class SimpleDataTable<T> extends Panel {
 
     private DataTable<T> table;
+    private MultiIdSelection multiIdSelection;
+    private SelectionStatusPanel selectionStatusPanel;
 
     public SimpleDataTable(String id, final IColumn<T>[] columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
-        this(id, columns, dataProvider, rowsPerPage, "label.noresults", "message.emptysearch");
+        this(id, columns, dataProvider, rowsPerPage, new MultiIdSelection());
     }
 
-	public SimpleDataTable(String id, final IColumn<T>[] columns,
+    public SimpleDataTable(String id, final IColumn<T>[] columns,
+        ISortableDataProvider<T> dataProvider, int rowsPerPage, MultiIdSelection selection) {
+        this(id, columns, dataProvider, rowsPerPage, "label.noresults", "message.emptysearch", selection);
+    }
+
+    public SimpleDataTable(String id, final IColumn<T>[] columns,
 		ISortableDataProvider<T> dataProvider, int rowsPerPage,
         String emptyResultsTitleKey, String emptyResultsMessageKey) {
+        this(id, columns, dataProvider, rowsPerPage, emptyResultsTitleKey, emptyResultsMessageKey, new MultiIdSelection());
+    }
+
+    public SimpleDataTable(String id, final IColumn<T>[] columns,
+		final ISortableDataProvider<T> dataProvider, int rowsPerPage,
+        String emptyResultsTitleKey, String emptyResultsMessageKey, MultiIdSelection selection) {
 		super(id);
+
+        multiIdSelection = selection;
 
         setOutputMarkupId(true);
 
-        table = new DataTable<T>("table", columns, dataProvider, rowsPerPage);
-		table.addTopToolbar(new HeadersToolbar(table, dataProvider));
+        if (dataProvider instanceof ListableSortableDataProvider) {
+            add(selectionStatusPanel = new SelectionStatusPanel("selectionStatus", selection, (ListableSortableDataProvider)dataProvider) {
+                @Override
+                protected void onSelectionChanged(AjaxRequestTarget target) {
+                    target.addComponent(SimpleDataTable.this);
+                    SimpleDataTable.this.onSelectionChanged(target);
+                }
+            });
+        } else {
+            add(new WebMarkupContainer("selectionStatus").setVisible(false));
+        }
+
+
+        table = new DataTable<T>("table", columns, dataProvider, rowsPerPage) {
+            @Override
+            protected Item<T> newRowItem(String id, int index, IModel<T> rowModel) {
+                Item<T> rowItem = super.newRowItem(id, index, rowModel);
+                rowItem.setOutputMarkupId(true);
+                rowItem.add(new HighlightIfSelectedBehavior<T>(rowModel, multiIdSelection));
+                return rowItem;
+            }
+
+            @Override
+            protected Item<T> newCellItem(String id, int index, IModel<T> tiModel) {
+                Item<T> cellItem = super.newCellItem(id, index, tiModel);
+                cellItem.setOutputMarkupId(true);
+                return cellItem;
+            }
+        };
+
+		table.addTopToolbar(new HeadersToolbar(table, dataProvider) {
+            @Override
+            public boolean isVisible() {
+                return table.getRowCount() > 0;
+            }
+
+            @Override
+            protected WebMarkupContainer newSortableHeader(String headerId, final String property, ISortStateLocator locator) {
+                return new OrderByBorder(headerId, property, locator) {
+                    @Override
+                    protected void onSortChanged() {
+                        getTable().setCurrentPage(0);
+
+                        ISortState sortState = dataProvider.getSortState();
+                        int propertySortOrder = sortState.getPropertySortOrder(property);
+                        SortDirection sortDirection = propertySortOrder == ISortState.ASCENDING ? SortDirection.ASC : SortDirection.DESC;
+
+                        SimpleDataTable.this.onSortChanged(property, sortDirection);
+                    }
+        		};
+            }
+        });
 
         add(table);
 
-        add(new JumpableNavigationBar("topPagination", this));
-        add(new JumpableNavigationBar("bottomPagination", this));
+        add(createPaginationBar("topPagination"));
+        add(createPaginationBar("bottomPagination"));
 
         addEmptyResultsDisplay(emptyResultsTitleKey, emptyResultsMessageKey, table);
 	}
@@ -56,5 +131,24 @@ public class SimpleDataTable<T> extends Panel {
     public DataTable<T> getTable() {
         return table;
     }
+
+    public void justSelectedPageWithElements(int itemsJustSelected) {
+        selectionStatusPanel.justSelectedPageWithElements(itemsJustSelected);
+    }
+
+    private JumpableNavigationBar createPaginationBar(String id) {
+        return new JumpableNavigationBar(id, this) {
+            @Override
+            protected void onPageChanged(AjaxRequestTarget target) {
+                SimpleDataTable.this.onPageChanged(target);
+            }
+        };
+    }
+
+    protected void onPageChanged(AjaxRequestTarget target) { }
+
+    protected void onSelectionChanged(AjaxRequestTarget target) { }
+
+    protected void onSortChanged(String sortProperty, SortDirection sortDirection) {}
 
 }

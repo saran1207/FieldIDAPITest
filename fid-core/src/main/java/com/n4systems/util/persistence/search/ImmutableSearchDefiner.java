@@ -16,6 +16,14 @@ public class ImmutableSearchDefiner<K> extends ImmutableBaseSearchDefiner implem
 		pageSize = definer.getPageSize();
 	}
 
+	public ImmutableSearchDefiner(BaseSearchDefiner definer, ResultTransformer<K> transformer, int page, int pageSize) {
+		super(definer);
+
+		this.transformer = transformer;
+		this.page = page;
+		this.pageSize = pageSize;
+	}
+
 	public ResultTransformer<K> getTransformer() {
 		return transformer;
 	}
@@ -27,6 +35,5 @@ public class ImmutableSearchDefiner<K> extends ImmutableBaseSearchDefiner implem
 	public int getPageSize() {
 		return pageSize;
 	}
-
 
 }

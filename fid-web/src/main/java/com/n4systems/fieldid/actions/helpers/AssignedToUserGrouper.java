@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.actions.helpers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -60,7 +62,7 @@ public class AssignedToUserGrouper {
 				}
 			}
 		}
-		return sortByPrimaryOrgFirst(owners, new ArrayList<String>());
+		return sortByPrimaryOrgFirst(owners);
 	}
 
 	private void addToMap(BaseOrg baseOrg, Listable<Long> user) {
@@ -81,23 +83,28 @@ public class AssignedToUserGrouper {
 		return ownerToUserMap.get(owner);
 	}
 
-	public List<String> sortByPrimaryOrgFirst(List<BaseOrg> orgs, ArrayList<String> resultSet) {
-		ListIterator<BaseOrg> it = orgs.listIterator();
-		BaseOrg org;
+	public List<BaseOrg> sortByPrimaryOrgsFirstObj(List<BaseOrg> orgs) {
+        List<BaseOrg> sortedOrgs = new ArrayList<BaseOrg>();
+        sortedOrgs.addAll(orgs);
+        Collections.sort(sortedOrgs, new Comparator<BaseOrg>() {
+            @Override
+            public int compare(BaseOrg org1, BaseOrg org2) {
+                Long org1Value = org1.isPrimary() ? 0L : 1L;
+                Long org2Value = org2.isPrimary() ? 0L : 1L;
+                return org1Value.compareTo(org2Value);
+            }
+        });
+        return sortedOrgs;
+	}
 
-		if (!it.hasNext()) {
-			return resultSet;
-		} else {
-			org = it.next();
-			orgs.remove(org);
+	public List<String> sortByPrimaryOrgFirst(List<BaseOrg> orgs) {
+        orgs = sortByPrimaryOrgsFirstObj(orgs);
+        List<String> orgNames = new ArrayList<String>();
 
-			// Group primaryOrgs toward the top of the list.
-			if (org.isPrimary()) {
-				resultSet.add(0, org.getDisplayName());
-			} else {
-				resultSet.add(org.getDisplayName());
-			}
-			return sortByPrimaryOrgFirst(orgs, resultSet);
-		}
+        for (BaseOrg org : orgs) {
+            orgNames.add(org.getDisplayName());
+        }
+
+        return orgNames;
 	}
 }

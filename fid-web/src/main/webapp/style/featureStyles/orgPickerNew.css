@@ -1,0 +1,119 @@
+.orgSelector {
+	border: 3px solid #999;
+	background-color: white;
+}
+
+.orgSelector .selections {
+	background-color:#ddd;
+	overflow:hidden;
+	border-bottom: 1px solid #000;
+	margin-bottom:5px;
+}
+
+.orgSelector .selections .selected a {
+	background-color:white;
+	border-left:1px solid #000;
+	border-right:1px solid #000;
+
+}
+
+.selections li.last {
+    float:right;
+    padding:0;
+    float:right;
+    clear:right;
+    background-color:#fff;
+}
+
+.selections li.last a {
+    padding-right:0;
+}
+
+.orgSelector .selections a {
+	display:block;
+	float:left;
+    padding: 0 5px;
+    margin-right: 5px;
+}
+
+span.closeImage {
+}
+
+span.closeImage a {
+	float:right;
+	clear:right;
+	margin-right:0;
+	background-color:#fff;
+}
+
+.orgBrowser, .orgSearch {
+	padding:5px;
+}
+
+.orgSelector .searchedName {
+	font-size:1.2em;
+}
+.orgSelector .orgSearchResult {
+	padding: 5px 0;
+	border-bottom: 1px solid #999;
+}
+
+.orgSelector .hierarchy {
+	color: #999;
+    line-height: normal;
+}
+
+.orgSelector .resultCount {
+	padding:5px 0;
+}
+
+.orgSelector {
+	width: 450px;
+}
+
+
+.orgBrowser {
+	overflow:hidden;
+}
+
+.orgBrowserForm {
+	float:left;
+	width:300px;
+}
+
+.orgBrowserLoading {
+	float:right;
+	margin-right:50px;
+	margin-top: 60px;
+}
+
+.orgPickerLoading {
+	padding-left: 5px;
+}
+
+.orgBrowserForm {
+	float:left;
+	width:300px;
+}
+
+#pageContent .orgBrowserForm .infoSet label {
+    padding-top:0;
+    padding-bottom:0;
+    padding-left:0;
+    padding-right:0;
+}
+
+#pageContent .orgBrowserForm .infoSet {
+    padding-top:0;
+    padding-bottom:0;
+    padding-left:0;
+    padding-right:0;
+}
+
+#pageContent .selections li span {
+    width: auto;
+}
+
+.selections li {
+    display: block;
+}

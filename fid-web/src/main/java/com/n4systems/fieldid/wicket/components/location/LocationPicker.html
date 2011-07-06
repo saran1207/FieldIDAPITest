@@ -1,0 +1,42 @@
+<wicket:panel>
+
+    <span class="fieldHolder">
+
+        <div wicket:id="predefinedEnabledContainer">
+            <input wicket:id="locationNameInput" type="text" readonly="readonly">
+
+            <a wicket:id="chooseLink" class="searchOwner"><wicket:message key="label.choose"/></a>
+        </div>
+
+        <div wicket:id="predefinedDisabledContainer">
+            <input wicket:id="freeformLocation" type="text">
+        </div>
+
+        <div wicket:id="locationPickerContainer" style="position:absolute;" class="locationSelection">
+
+            <form wicket:id="locationForm">
+
+                <label id="freeFormLabel" for="predefinedLocation" class="label"><wicket:message key="label.predefined_location"/></label>
+
+                <br/>
+
+                <div wicket:id="predefinedLocationPanel" class="containerobj"></div>
+
+                <label id="freeFormLabel" for="predefinedLocation" class="label"><wicket:message key="label.freeform_location"/></label>
+
+                <br/>
+
+                <input type="text" wicket:id="predefFreeformLocation">
+
+                <div class="actions">
+                    <button wicket:id="selectLocationButton" class="selectLocationButton"><wicket:message key="label.select_location"/></button>
+                    <wicket:message key="label.or"/>
+                    <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                </div>
+
+            </form>
+
+        </div>
+    </span>
+
+</wicket:panel>

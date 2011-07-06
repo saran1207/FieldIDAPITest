@@ -121,12 +121,12 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	}
 	
 	@Override
-	protected String defaultSortColumn() {
+	public String defaultSortColumn() {
 		return "date";
 	}
 	
 	@Override
-	protected SortDirection defaultSortDirection() {
+	public SortDirection defaultSortDirection() {
 		return SortDirection.DESC;
 	}
 	

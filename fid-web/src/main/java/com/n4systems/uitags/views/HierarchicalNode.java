@@ -1,11 +1,12 @@
 package com.n4systems.uitags.views;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class HierarchicalNode {
+public class HierarchicalNode implements Serializable {
 	private String name;
 	private Long id;
 	private String levelName;

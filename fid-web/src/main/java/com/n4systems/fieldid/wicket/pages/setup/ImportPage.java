@@ -22,8 +22,8 @@ import com.n4systems.model.EventType;
 public class ImportPage extends SetupPage {
 
     public ImportPage() {
-        IModel<List<AssetType>> assetTypeListModel = new AssetTypesForTenantModel(getSecurityFilter()).postFetchFields("autoAttributeCriteria");
-        IModel<List<EventType>> eventTypeListModel = new EventTypesForTenantModel(getSecurityFilter());
+        IModel<List<AssetType>> assetTypeListModel = new AssetTypesForTenantModel().postFetchFields("autoAttributeCriteria");
+        IModel<List<EventType>> eventTypeListModel = new EventTypesForTenantModel();
         IModel<List<AssetType>> assetTypesWithCriteriaModel = new AssetTypesWithAutoAttributeCriteria(assetTypeListModel);
 
         add(new ImportOwnersForm("importOwnersForm"));

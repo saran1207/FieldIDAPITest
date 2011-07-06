@@ -1,0 +1,40 @@
+<wicket:extend>
+
+    <ul class="listOfLinks">
+        <li class="first">
+            <a wicket:id="startNewReportLink"><wicket:message key="label.newreport"/></a>
+        </li>
+        <li>
+            <a wicket:id="saveReportLink" class="saveLink" onclick="if(formChanged) {return false;}" ><wicket:message key="label.savereport"/></a>
+        </li>
+        <wicket:enclosure>
+            <li>
+                <a wicket:id="saveReportLinkAs" class="saveLink" onclick="if(formChanged) {return false;}" ><wicket:message key="label.savereportas"/></a>
+            </li>
+        </wicket:enclosure>
+    </ul>
+
+    <div wicket:id="criteriaExpandContainer">
+        <div wicket:id="criteriaPanel">
+        </div>
+    </div>
+
+    <div wicket:id="resultsPanel"></div>
+
+    <div wicket:id="massActionPanel"></div>
+
+    <ul class="listOfLinks">
+        <li class="first">
+            <a wicket:id="startNewReportLink2"><wicket:message key="label.newreport"/></a>
+        </li>
+        <li>
+            <a wicket:id="saveReportLink2" class="saveLink" onclick="if(formChanged) {return false;}" ><wicket:message key="label.savereport"/></a>
+        </li>
+        <wicket:enclosure>
+            <li>
+                <a wicket:id="saveReportLinkAs2" class="saveLink" onclick="if(formChanged) {return false;}" ><wicket:message key="label.savereportas"/></a>
+            </li>
+        </wicket:enclosure>
+    </ul>
+
+</wicket:extend>

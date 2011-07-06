@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.table;
 
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -76,7 +77,7 @@ public class JumpableNavigationBar extends Panel {
                         return !isCurrentPage;
                     }
                 }));
-                pageLink.add(new Label("pageLabel", item.getModelObject()+"").setRenderBodyOnly(true));
+                pageLink.add(new FlatLabel("pageLabel", item.getModelObject()+""));
                 item.add(new Label("pageLabel", item.getModelObject()+"").setVisible(isCurrentPage));
             }
         });
@@ -89,12 +90,13 @@ public class JumpableNavigationBar extends Panel {
             AjaxButton hiddenSubmitButton;
             TextField<Integer> jumpPageField;
 
-            add(new Label("numPages", new PropertyModel<String>(getTable(), "pageCount")).setRenderBodyOnly(true));
+            add(new FlatLabel("numPages", new PropertyModel<String>(getTable(), "pageCount")));
             add(jumpPageField = new TextField<Integer>("jumpPage", new PropertyModel<Integer>(this, "jumpPage")));
             add(hiddenSubmitButton = new AjaxButton("hiddenJumpButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     target.addComponent(simpleDataTable);
+                    onPageChanged(target);
                 }
             });
 
@@ -116,6 +118,7 @@ public class JumpableNavigationBar extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(pageNumber - 1);
                 target.addComponent(simpleDataTable);
+                onPageChanged(target);
             }
 
             @Override
@@ -131,6 +134,7 @@ public class JumpableNavigationBar extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(getTable().getCurrentPage() + offset);
                 target.addComponent(simpleDataTable);
+                onPageChanged(target);
             }
 
             @Override
@@ -146,6 +150,7 @@ public class JumpableNavigationBar extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 getTable().setCurrentPage(getTable().getPageCount() - 1);
                 target.addComponent(simpleDataTable);
+                onPageChanged(target);
             }
 
             @Override
@@ -176,5 +181,7 @@ public class JumpableNavigationBar extends Panel {
     protected DataTable<?> getTable() {
         return table;
     }
+
+    protected void onPageChanged(AjaxRequestTarget target) { }
 
 }

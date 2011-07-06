@@ -1,16 +1,16 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.uri.ActionURLBuilder;
-import org.apache.wicket.markup.html.basic.Label;
 
 import java.net.URI;
 
 public class WidgetsPage extends SetupPage {
 
     public WidgetsPage() {
-        add(new Label("loginUrl", getLoginUrl()).setRenderBodyOnly(true));
-        add(new Label("embeddedLoginUrl", getEmbeddedLoginUrl()).setRenderBodyOnly(true));
+        add(new FlatLabel("loginUrl", getLoginUrl()));
+        add(new FlatLabel("embeddedLoginUrl", getEmbeddedLoginUrl()));
     }
 
     public String getLoginUrl() {

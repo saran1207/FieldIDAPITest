@@ -1,0 +1,37 @@
+<wicket:panel>
+
+    <div class="orgSearch">
+
+        <form wicket:id="searchForm">
+
+            <input type="text" wicket:id="searchText"> <button wicket:id="searchButton"><wicket:message key="label.search"/></button>
+
+        </form>
+
+        <div class="orgPickerResults">
+    
+            <div class="noResults" wicket:id="noResultsContainer">
+                <wicket:message key="label.search_found_no_orgs"></wicket:message>
+            </div>
+
+            <div class="orgSearchResult" wicket:id="results">
+                <div class="searchedName">
+                    <a wicket:id="pickLink" href="javascript:void(0);">
+                        <span wicket:id="orgNameLabel"></span>
+                    </a>
+                </div>
+                <div class="hierarchy" wicket:id="hierarchy">
+                </div>
+            </div>
+
+            <div class="resultCount" wicket:id="resultCountContainer">
+                <wicket:message key="label.showing"/> <span wicket:id="displayingResults"></span> <wicket:message key="label.of"/> <span wicket:id="totalResults"></span>
+                <div wicket:id="refineContainer">
+                    <wicket:message key="label.refine_your_search_if_organization_is_not_on_the_list"></wicket:message>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</wicket:panel>

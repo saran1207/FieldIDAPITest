@@ -20,6 +20,7 @@ import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 import com.n4systems.util.persistence.search.JoinTerm;
+import com.n4systems.util.persistence.search.PostfetchingDefiner;
 import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
@@ -44,6 +45,8 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 		
 		// now we can add in our sort terms
 		addSortTermsToBuilder(searchBuilder, definer.getSortTerms());
+
+        addPostFetchesToBuilder(searchBuilder, definer);
 		
 		// get the paged result list of entities, also set the select now since findCount() would have set it to a count select
 		// note the generics have been left off NetworkEntity since they'll just get in the way
@@ -58,7 +61,14 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 		return new PageHolder(pageResults, totalResultCount);
 	}
 
-	@SuppressWarnings("unchecked")
+    private <K> void addPostFetchesToBuilder(QueryBuilder<?> searchBuilder, SearchDefiner<K> definer) {
+        if (definer instanceof PostfetchingDefiner) {
+            List<String> postFetchFields = ((PostfetchingDefiner) definer).getPostFetchFields();
+            searchBuilder.addPostFetchPaths(postFetchFields.toArray(new String[postFetchFields.size()]));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
 	protected List<NetworkEntity> enhanceEntityList(SecurityFilter filter, List<NetworkEntity> entities) {
 		return EntitySecurityEnhancer.enhanceList(entities, filter);
 	}

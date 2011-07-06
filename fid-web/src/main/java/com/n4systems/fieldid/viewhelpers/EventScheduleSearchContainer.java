@@ -91,12 +91,12 @@ public class EventScheduleSearchContainer extends SearchContainer {
 	}
 	
 	@Override
-	protected String defaultSortColumn() {
+	public String defaultSortColumn() {
 		return "nextDate";
 	}
 	
 	@Override
-	protected SortDirection defaultSortDirection() {
+	public SortDirection defaultSortDirection() {
 		return SortDirection.ASC;
 	}
 

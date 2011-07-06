@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.api.NetworkEntity;
 import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.stat.Statistics;
 
@@ -218,7 +219,24 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public <T> T find(QueryBuilder<T> queryBuilder) throws InvalidQueryException {
+    @Override
+    public <T extends NetworkEntity<T>> T findAndEnhance(Class<T> entityClass, Long entityId, SecurityFilter securityFilter, String... postFetchPaths) {
+		TransactionManager transactionManager = new FieldIdTransactionManager();
+Transaction transaction = transactionManager.startTransaction();
+		try {
+            com.n4systems.persistence.PersistenceManager.setSessionReadOnly(transaction.getEntityManager());
+			return createManager(transaction.getEntityManager()).findAndEnhance(entityClass, entityId, securityFilter, postFetchPaths);
+
+		} catch (RuntimeException e) {
+			transactionManager.rollbackTransaction(transaction);
+
+			throw e;
+		} finally {
+			transactionManager.finishTransaction(transaction);
+		}
+    }
+
+    public <T> T find(QueryBuilder<T> queryBuilder) throws InvalidQueryException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

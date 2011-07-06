@@ -60,8 +60,8 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	abstract protected void evalSearchTerms();
 	abstract protected void evalSearchFilters();
 	abstract protected void evalJoinTerms();
-	abstract protected String defaultSortColumn();
-	abstract protected SortDirection defaultSortDirection();
+	abstract public String defaultSortColumn();
+	abstract public SortDirection defaultSortDirection();
 	
 	abstract public Long getAssetType();
 	abstract public Long getAssetTypeGroup();
@@ -248,6 +248,10 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 
     public MultiIdSelection getMultiIdSelection() {
         return multiIdSelection;
+    }
+
+    public void setMultiIdSelection(MultiIdSelection multiIdSelection) {
+        this.multiIdSelection = multiIdSelection;
     }
 
     public Long getSortColumnId() {

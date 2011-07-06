@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.navigation;
 
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
@@ -45,18 +46,19 @@ public class NavigationBar extends Panel {
                 linkContainer.setRenderBodyOnly(true);
 
                 listItem.add(createSelectedAttributeModifier(navItem));
-                if (navItem.isOnRight())
+                if (navItem.isOnRight()) {
                     listItem.add(new SimpleAttributeModifier("class", "add"));
-
-                Link link;
-                if (navItem.getNonWicketUrl() != null) {
-                    link = createExternalLinkTo("link", navItem.getNonWicketUrl(), navItem.getParameters());
-                } else {
-                    link = new BookmarkablePageLink<WebPage>("link", navItem.getPageClass(), navItem.getParameters());
                 }
 
-                linkContainer.add(link);
-                link.add(new Label("linkLabel", navItem.getLabelModel()));
+                if (navItem.getNonWicketUrl() != null) {
+                    NonWicketLink link = createExternalLinkTo("link", navItem.getNonWicketUrl(), navItem.getParameters());
+                    link.getBodyContainer().add(new Label("linkLabel", navItem.getLabelModel()));
+                    linkContainer.add(link);
+                } else {
+                    Link link = new BookmarkablePageLink<WebPage>("link", navItem.getPageClass(), navItem.getParameters());
+                    link.add(new Label("linkLabel", navItem.getLabelModel()));
+                    linkContainer.add(link);
+                }
 
                 listItem.add(linkContainer);
                 listItem.add(new Label("currentPageLabel", navItem.getLabelModel()) {
@@ -81,14 +83,9 @@ public class NavigationBar extends Panel {
         return visibleItems;
     }
 
-    private Link createExternalLinkTo(String linkId, final String nonWicketUrl, PageParameters parameters) {
+    private NonWicketLink createExternalLinkTo(String linkId, final String nonWicketUrl, PageParameters parameters) {
         final String queryString = getQueryString(parameters);
-        return new Link(linkId){
-            @Override
-            public void onClick() {
-                getRequestCycle().setRequestTarget(new RedirectRequestTarget(nonWicketUrl + queryString));
-            }
-        };
+        return new NonWicketLink(linkId, nonWicketUrl + queryString);
     }
 
     private String getQueryString(PageParameters parameters) {

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.columnlayout;
 
+import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.model.columns.ColumnMapping;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -41,15 +42,7 @@ public class SelectedReportColumnsPanel extends Panel {
     }
 
     protected SortableAjaxBehavior makeSortableBehavior() {
-        SortableAjaxBehavior sortable = new SortableAjaxBehavior() {
-            @Override
-            public void onReceive(Component sortedComponent, int index, Component parentSortedComponent, AjaxRequestTarget ajaxRequestTarget) {
-            }
-
-            @Override
-            public void onRemove(Component sortedComponent, AjaxRequestTarget ajaxRequestTarget) {
-            }
-
+        SortableAjaxBehavior sortable = new SimpleSortableAjaxBehavior() {
             @Override
             public void onUpdate(Component component, int newIndexOfMovingItem, AjaxRequestTarget target) {
                 if (component == null) return;

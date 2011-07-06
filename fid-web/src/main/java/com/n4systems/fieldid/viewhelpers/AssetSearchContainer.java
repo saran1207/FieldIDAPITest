@@ -79,12 +79,12 @@ public class AssetSearchContainer extends SearchContainer {
 
 	
 	@Override
-	protected String defaultSortColumn() {
+	public String defaultSortColumn() {
 		return "identified";
 	}
 	
 	@Override
-	protected SortDirection defaultSortDirection() {
+	public SortDirection defaultSortDirection() {
 		return SortDirection.DESC;
 	}
 	

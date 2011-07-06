@@ -7,6 +7,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import java.text.MessageFormat;
+import java.util.MissingResourceException;
 
 public class FIDLabelModel implements IModel<String> {
 
@@ -34,7 +35,12 @@ public class FIDLabelModel implements IModel<String> {
     public String getObject() {
         String propertyKey = propertyKeyModel.getObject();
         Localizer localizer = Application.get().getResourceSettings().getLocalizer();
-        String label =  localizer.getString(propertyKey, null);
+
+        String label = null;
+        try {
+            label = localizer.getString(propertyKey, null);
+        } catch(MissingResourceException e) { }
+
         if (label != null && parameters != null ) {
             label = formatString(label, parameters);
         } else if (label == null) {

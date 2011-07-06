@@ -1,0 +1,32 @@
+<wicket:extend>
+
+    <form wicket:id="saveReportForm" class="crudForm bigForm pageSection">
+
+        <div wicket:id="feedbackPanel"></div>
+
+        <h2><wicket:message key="label.savedreportdetails"/></h2>
+
+        <div class="contentSection">
+            <div class="infoSet">
+
+                <label for="name">Name *</label>
+
+                <span class="fieldHolder">
+
+                    <input type="text" wicket:id="name">
+
+                </span>
+
+            </div>
+
+            <div class="formAction">
+                <input wicket:id="submitButton" type="submit" wicket:message="value:label.save"/>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
+
+        </div>
+
+    </form>
+
+</wicket:extend>

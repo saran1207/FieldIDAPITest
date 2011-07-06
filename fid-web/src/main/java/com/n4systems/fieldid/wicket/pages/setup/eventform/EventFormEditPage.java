@@ -70,13 +70,13 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page("/eventTypes.action").build(),
-                aNavItem().label("nav.view").page("/eventType.action").params(uniqueId(eventTypeId)).build(),
-                aNavItem().label("nav.edit").page("/eventTypeEdit.action").params(uniqueId(eventTypeId)).build(),
+                aNavItem().label("nav.view_all").page("eventTypes.action").build(),
+                aNavItem().label("nav.view").page("eventType.action").params(uniqueId(eventTypeId)).build(),
+                aNavItem().label("nav.edit").page("eventTypeEdit.action").params(uniqueId(eventTypeId)).build(),
                 aNavItem().label("nav.event_form").page(EventFormEditPage.class).build(),
-                aNavItem().label("nav.asset_type_associations").page("/selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).build(),
-                aNavItem().label("nav.add").page("/eventTypeAdd.action").onRight().build(),
-                aNavItem().label("nav.import").page("/eventImportExport.action").params(uniqueId(eventTypeId)).onRight().build()));
+                aNavItem().label("nav.asset_type_associations").page("selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).build(),
+                aNavItem().label("nav.add").page("eventTypeAdd.action").onRight().build(),
+                aNavItem().label("nav.import").page("eventImportExport.action").params(uniqueId(eventTypeId)).onRight().build()));
     }
 
     public EventFormEditPage(PageParameters params) {

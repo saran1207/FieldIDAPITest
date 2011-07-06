@@ -146,7 +146,7 @@ public abstract class CustomizableSearchAction<T extends SearchContainer> extend
 		List<String> defaultColumns = new ArrayList<String>();
 		for (ColumnMappingGroupView group: getMappingGroups()) {
 			for (ColumnMappingView mapping: group.getMappings()) {
-				if(mapping.isOnByDefault()) {
+				if(mapping.isEnabled()) {
 					defaultColumns.add(mapping.getId());
 				}
 			}
