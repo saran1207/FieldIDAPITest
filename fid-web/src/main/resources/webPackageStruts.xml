@@ -1628,22 +1628,22 @@
 			<result name="error" type="freemarker">/templates/html/projectAssets/add.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">jobAssets</param>
-				<param name="projectId">${projectId}</param>
+				<param name="projectId">${action.getProjectId()}</param>
 			</result>
 		</action>
 
 		<action name="jobAssetDelete" method="delete" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
 			<result name="input" type="redirectAction">
 				<param name="actionName">jobAssets</param>
-				<param name="projectId">${projectId}</param>
+				<param name="projectId">${action.getProjectId()}</param>
 			</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">jobAssets</param>
-				<param name="projectId">${projectId}</param>
+				<param name="projectId">${action.getProjectId()}</param>
 			</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">jobAssets</param>
-				<param name="projectId">${projectId}</param>
+				<param name="projectId">${action.getProjectId()}</param>
 			</result>
 		</action>
 
