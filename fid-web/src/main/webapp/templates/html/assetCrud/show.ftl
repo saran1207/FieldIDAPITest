@@ -45,10 +45,11 @@ ${action.setPageType('asset', 'show')!}
 				</@s.text>
 			</div>
 			<p>
-				<#include "../eventCrud/_viewEventLink.ftl"/> |
-				
-				<a href="<@s.url action="quickEvent" assetId="${uniqueID}" />"><@s.text name="label.newevent"/></a> 
-			
+				<#include "../eventCrud/_viewEventLink.ftl"/>
+				<#if sessionUser.hasAccess("createevent")>
+					|
+					<a href="<@s.url action="quickEvent" assetId="${uniqueID}" />"><@s.text name="label.newevent"/></a> 
+				</#if>
 			</p>		
 		<#else>	
 			<p><@s.text name="label.nolastevents"/></p>
