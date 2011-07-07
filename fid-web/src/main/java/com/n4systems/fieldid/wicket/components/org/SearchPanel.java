@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.org;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.BaseOrgListLoader;
@@ -82,8 +83,10 @@ public class SearchPanel extends Panel {
         public SearchForm(String id) {
             super(id);
 
-            add(new TextField<String>("searchText", new PropertyModel<String>(this, "searchText")));
-            add(new AjaxButton("searchButton") {
+            TextField<String> searchTextField;
+            AjaxButton searchButton;
+            add(searchTextField = new TextField<String>("searchText", new PropertyModel<String>(this, "searchText")));
+            add(searchButton = new AjaxButton("searchButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     alreadySearched = true;
@@ -102,6 +105,8 @@ public class SearchPanel extends Panel {
                     target.addComponent(SearchPanel.this);
                 }
             });
+
+            searchTextField.add(new ClickOnComponentWhenEnterKeyPressedBehavior(searchButton));
         }
 
     }

@@ -9,6 +9,7 @@ import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
@@ -89,6 +90,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
 
     public EventReportCriteriaPanel(String id, IModel<EventReportCriteriaModel> criteriaModel) {
         super(id);
+        add(new FIDFeedbackPanel("feedbackPanel"));
         setOutputMarkupId(true);
 
         add(JavascriptPackageResource.getHeaderContribution("javascript/reportingForm.js"));
@@ -222,11 +224,22 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
 
         @Override
         protected void onSubmit() {
+            if (getModelObject().getSortedStaticAndDynamicColumns().isEmpty()) {
+                error(new FIDLabelModel("error.nocolumnsselected").getObject());
+                return;
+            }
             HttpSession session = ((WebRequest) getRequest()).getHttpServletRequest().getSession();
             getModelObject().setReportAlreadyRun(true);
             new LegacyReportCriteriaStorage().storeCriteria(getModelObject(), session);
             setResponsePage(new ReportingResultsPage(getModelObject()));
         }
+
+        @Override
+        protected void onError() {
+            System.out.println("There seems to have been an error.....");
+        }
+
+
     }
 
     private void updateDynamicEventColumns(PersistenceManager persistenceManager, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, IModel<EventType> eventTypeModel, EventTypesForTenantModel availableEventTypesModel) {
