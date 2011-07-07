@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RedirectToUrlException;
@@ -67,6 +68,8 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         }
 
         addClickTaleScripts();
+
+        add(new BookmarkablePageLink<Void>("reportingLink", ReportingPage.class));
 
         add(new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", getVersionString(getServletRequest())));

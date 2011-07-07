@@ -7,7 +7,7 @@
 		<h2 class="decoratedHeader"><@s.text name="label.you_might_want_to"/></h2>
 		<ul class="bulletList quickLinkList">
 			<li><a href="<@s.url action="schedule!createSearch"/>?criteria.status=INCOMPLETE"><@s.text name="label.viewupcomingevents"/></a></li>
- 			<li><a href="<@s.url action="report"/>"><@s.text name="label.vieweventhistory"/></a></li>
+ 			<li><a href="/fieldid/w/reporting"><@s.text name="label.vieweventhistory"/></a></li>
 			<li><a href="<@s.url action="search"/>"><@s.text name="label.findanasset"/></a></li>
 			<#if securityGuard.brandingEnabled && primaryOrg.webSite?exists >
 				<li><a href="${primaryOrg.webSite?html}" target="_blank"><@s.text name="label.web_site"><@s.param>${primaryOrg.name?html}</@s.param></@s.text></a></li>

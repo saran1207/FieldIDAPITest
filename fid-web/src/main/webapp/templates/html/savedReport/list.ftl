@@ -40,14 +40,13 @@ ${action.setPageType('saved_reports', 'saved_reports')!}
 	
 	<#include '../common/_pagination.ftl' />
 <#elseif !page.hasResults() >
-	<@s.url id="reportUrl" action="report"/>
 
 	<div class="initialMessage">
 		<div class="textContainer">
 			<h1><@s.text name="label.create_first_report" /></h1>
 			<p><@s.text name="label.create_first_report_description" /></p>
 		</div>
-		<input type="submit" value="<@s.text name="label.run_a_new_report_now"/>"onclick="return redirect('${reportUrl}');"/>
+		<input type="submit" value="<@s.text name="label.run_a_new_report_now"/>"onclick="return redirect('/fieldid/w/reporting');"/>
 	</div>
 <#else>
 	<div class="emptyList" >
