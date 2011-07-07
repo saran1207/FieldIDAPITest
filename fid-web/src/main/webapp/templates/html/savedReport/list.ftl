@@ -26,11 +26,11 @@ ${action.setPageType('saved_reports', 'saved_reports')!}
 		</tr>
 		<#list page.getList() as report > 
 			<tr id="report_${report.id}" >
-				<td><a href="<@s.url action="savedReportLoad" uniqueID="${report.id}" namespace="/" />">${report.name?html}</a></td>
+				<td><a href="/fieldid/w/savedReport/id/${report.id}">${report.name?html}</a></td>
 				<td>${report.sharedByName!}&nbsp;</td>
 				<td>${action.formatDateTime(report.modified)}</td>
 				<td>
-		     		<a href="<@s.url action="savedReportLoad" uniqueID="${report.id}" namespace="/" />"><@s.text name="label.Run"/></a> |
+		     		<a href="/fieldid/w/savedReport/id/${report.id}"><@s.text name="label.Run"/></a> |
 					<a id="shareReport_${report.id}" class="savedReportShareLink" href="<@s.url action="savedReportShare" uniqueID="${report.id}" />"><@s.text name="label.share"/></a> |
 					<a id="deleteReport_${report.id}" class="savedReportDeleteLink" href="<@s.url action="savedReportDelete" uniqueID="${report.id}" />"><@s.text name="label.delete"/></a> 
 				</td>

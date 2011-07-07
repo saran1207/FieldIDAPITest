@@ -71,6 +71,8 @@ public class EventReportCriteriaModel implements IClusterable {
     private ColumnMappingView sortColumn;
     private SortDirection sortDirection;
 
+    private boolean reportAlreadyRun;
+
     public BaseOrg getOwner() {
         return owner;
     }
@@ -296,9 +298,8 @@ public class EventReportCriteriaModel implements IClusterable {
         List<String> selectedColumns = eventSearchContainer.getSelectedColumns();
         List<ColumnMappingView> sortedStaticAndDynamicColumns = getSortedStaticAndDynamicColumns(false);
         for (ColumnMappingView column : sortedStaticAndDynamicColumns) {
-            if (selectedColumns.contains(column.getId())) {
-                column.setEnabled(true);
-            }
+            boolean savedReportContainsColumn = selectedColumns.contains(column.getId());
+            column.setEnabled(savedReportContainsColumn);
         }
     }
 
@@ -340,6 +341,14 @@ public class EventReportCriteriaModel implements IClusterable {
 
     public void setSortDirection(SortDirection sortDirection) {
         this.sortDirection = sortDirection;
+    }
+
+    public boolean isReportAlreadyRun() {
+        return reportAlreadyRun;
+    }
+
+    public void setReportAlreadyRun(boolean reportAlreadyRun) {
+        this.reportAlreadyRun = reportAlreadyRun;
     }
 
     public void setSortColumnFromContainer(EventSearchContainer container) {

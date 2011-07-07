@@ -214,13 +214,16 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
         }
 
         private void initializeConfiguredColumns() {
-            ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
-            getModelObject().setColumnGroups(reportConfiguration.getColumnGroups());
+            if (!getModelObject().isReportAlreadyRun()) {
+                ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
+                getModelObject().setColumnGroups(reportConfiguration.getColumnGroups());
+            }
         }
 
         @Override
         protected void onSubmit() {
             HttpSession session = ((WebRequest) getRequest()).getHttpServletRequest().getSession();
+            getModelObject().setReportAlreadyRun(true);
             new LegacyReportCriteriaStorage().storeCriteria(getModelObject(), session);
             setResponsePage(new ReportingResultsPage(getModelObject()));
         }

@@ -39,7 +39,7 @@ public class RunSavedReportPage extends FieldIDLoggedInPage {
         criteriaModel.setSavedReportName(report.getName());
 
         setRedirect(true);
-        setResponsePage(new ReportingResultsPage(criteriaModel, report.getName()));
+        setResponsePage(new ReportingResultsPage(criteriaModel));
     }
 
 }

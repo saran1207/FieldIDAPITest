@@ -19,15 +19,9 @@ import org.apache.wicket.model.PropertyModel;
 public class ReportingResultsPage extends FieldIDLoggedInPage {
 
     private EventReportCriteriaModel reportCriteriaModel;
-    private String savedReportName;
 
     public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel) {
-        this(reportCriteriaModel, null);
-    }
-
-    public ReportingResultsPage(EventReportCriteriaModel reportCriteriaModel, String savedReportName) {
         this.reportCriteriaModel = reportCriteriaModel;
-        this.savedReportName = savedReportName;
         PropertyModel<EventReportCriteriaModel> reportCriteriaPropertyModel = new PropertyModel<EventReportCriteriaModel>(this, "reportCriteriaModel");
 
         add(CSSPackageResource.getHeaderContribution("style/pageStyles/reporting.css"));
@@ -70,8 +64,8 @@ public class ReportingResultsPage extends FieldIDLoggedInPage {
 
     public String getPageLabel() {
         IModel<String> pageLabelModel = new FIDLabelModel("label.reporting_results");
-        if (savedReportName != null) {
-            pageLabelModel = new Model<String>(pageLabelModel.getObject() + " for - " + savedReportName);
+        if (reportCriteriaModel.getSavedReportName() != null) {
+            pageLabelModel = new Model<String>(pageLabelModel.getObject() + " for - " + reportCriteriaModel.getSavedReportName());
         }
         return pageLabelModel.getObject();
     }
