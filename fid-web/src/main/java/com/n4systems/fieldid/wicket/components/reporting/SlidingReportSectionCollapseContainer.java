@@ -2,12 +2,12 @@ package com.n4systems.fieldid.wicket.components.reporting;
 
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.DisplayNoneIfCondition;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.border.Border;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
@@ -15,7 +15,6 @@ import org.apache.wicket.model.IModel;
 public class SlidingReportSectionCollapseContainer extends Border {
 
     private Component component;
-    private WebMarkupContainer linksContainer;
 
     private boolean expanded;
 
@@ -25,9 +24,6 @@ public class SlidingReportSectionCollapseContainer extends Border {
     public SlidingReportSectionCollapseContainer(String id, IModel<String> titleModel) {
         super(id);
         setOutputMarkupId(true);
-
-        linksContainer = new WebMarkupContainer("linksContainer");
-        linksContainer.setOutputMarkupId(true);
 
         expandLink = new AjaxLink("expandLink") {
             @Override
@@ -50,12 +46,10 @@ public class SlidingReportSectionCollapseContainer extends Border {
         ContextImage collapseImage = new ContextImage("collapseImage", "images/collapseLarge.gif");
         collapseLink.add(collapseImage);
 
-        linksContainer.add(expandLink);
-        linksContainer.add(collapseLink);
+        add(expandLink);
+        add(collapseLink);
 
-        add(linksContainer);
-
-        add(new Label("titleLabel", titleModel));
+        add(new FlatLabel("titleLabel", titleModel));
 
         add(getBodyContainer());
     }

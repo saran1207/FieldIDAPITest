@@ -2,29 +2,17 @@
 
     <div class="pageSection">
 
-        <div class="headerWithFootnote">
+        <h2>
 
-            <h2 class="decoratedHeaderAlternative">
+            <a wicket:id="expandLink"><img wicket:id="expandImage"/></a>
 
-                <div wicket:id="linksContainer">
+            <a wicket:id="collapseLink"><img wicket:id="collapseImage"/></a>
 
-                    <a wicket:id="expandLink">
-                        <img wicket:id="expandImage"/>
-                    </a>
+            <span wicket:id="titleLabel"></span>
 
-                    <a wicket:id="collapseLink">
-                        <img wicket:id="collapseImage"/>
-                    </a>
+        </h2>
 
-                </div>
-
-                <span wicket:id="titleLabel" class="headerText"></span>
-
-            </h2>
-
-            <wicket:body/>
-
-        </div>
+        <wicket:body/>
 
     </div>
 
