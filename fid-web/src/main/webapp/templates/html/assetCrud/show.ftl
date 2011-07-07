@@ -51,9 +51,11 @@ ${action.setPageType('asset', 'show')!}
 					<a href="<@s.url action="quickEvent" assetId="${uniqueID}" />"><@s.text name="label.newevent"/></a> 
 				</#if>
 			</p>		
-		<#else>	
+		<#else >	
 			<p><@s.text name="label.nolastevents"/></p>
-			<p><a href="<@s.url action="quickEvent" assetId="${uniqueID}" />"><@s.text name="label.newevent"/></a></p>	
+			<#if sessionUser.hasAccess("createevent")>
+				<p><a href="<@s.url action="quickEvent" assetId="${uniqueID}" />"><@s.text name="label.newevent"/></a></p>
+			</#if>	
 		</#if>
 	</div>
 
