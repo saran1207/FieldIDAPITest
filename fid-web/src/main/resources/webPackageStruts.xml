@@ -975,9 +975,8 @@
 		<action name="massUpdateEventsSave" method="save" class="com.n4systems.fieldid.actions.EventMassUpdate">
 			<result name="error" type="redirectAction">search</result>
 			<result name="input" type="freemarker">/templates/html/massUpdate/event/form.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">reportResults</param>
-				<param name="searchId">${searchId}</param>
+			<result name="success" type="redirect">
+				<param name="location">w/returnToReport</param>
 			</result>
 		</action>
 		
@@ -989,9 +988,8 @@
 		<action name="massUpdateEventsDelete" method="delete" class="com.n4systems.fieldid.actions.EventMassUpdate">
 			<result name="error" type="redirectAction">search</result>
 			<result name="input" type="freemarker">/templates/html/massUpdate/event/form.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">reportResults</param>
-				<param name="searchId">${searchId}</param>
+			<result name="success" type="redirect">
+				<param name="location">w/returnToReport</param>
 			</result>
 		</action>
 
@@ -1032,9 +1030,8 @@
 		<action name="assignEventsToJob" method="saveEvents" class="com.n4systems.fieldid.actions.AssignScheduleToJobMassUpdate">
 			<result name="error" type="redirectAction">report</result>
 			<result name="input" type="freemarker">/templates/html/assignToJob/formEvents.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">reportResults</param>
-				<param name="searchId">${searchId}</param>
+			<result name="success" type="redirect">
+				<param name="location">w/returnToReport</param>
 			</result>
 		</action>
 

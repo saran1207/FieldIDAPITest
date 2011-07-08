@@ -4,7 +4,7 @@
 	<@n4.includeStyle type="page" href="aggregateReport"/>
 </head>
 <div class="adminLink">	
-	<a href="<@s.url action="reportResults"  searchId="${searchId!1}" currentPage="${currentPage!1}"/>"><@s.text name="label.returntoreport"/></a>
+	<a href="/fieldid/w/returnToReport"><@s.text name="label.returntoreport"/></a>
 </div>
 
 <div class="crudForm largeForm">
@@ -91,7 +91,7 @@
 	
 	
 	<div class="adminLink">	
-		<a href="<@s.url action="reportResults" searchId="${searchId!1}" currentPage="${currentPage!1}"/>"><@s.text name="label.returntoreport"/></a>
+		<a href="/fieldid/w/returnToReport"><@s.text name="label.returntoreport"/></a>
 	</div>
 </div>
 

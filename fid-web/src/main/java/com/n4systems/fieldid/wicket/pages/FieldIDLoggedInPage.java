@@ -36,27 +36,6 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     private static String versionString;
     private Label titleLabel;
     
-    
-    public class StaticImage extends WebComponent
-    {
-      /**
-      * @param id wicket id on the page
-      * @param model reference the external URL from which the image is gotten
-      *          for ex.: "http://images.google.com/img/10293.gif"
-      */
-      public StaticImage(String id, IModel<String> urlModel)
-      {
-        super( id, urlModel );
-      }
-
-      protected void onComponentTag(ComponentTag tag)
-      {
-        super.onComponentTag( tag );
-        checkComponentTag( tag, "img" );
-        tag.put( "src", getDefaultModelObjectAsString() );
-      }
-    }
-
     public FieldIDLoggedInPage(PageParameters params) {
         super(params);
 
@@ -96,7 +75,6 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         add(JavascriptPackageResource.getHeaderContribution("javascript/sessionTimeout.js"));
         
         add(new StaticImage("tenantLogo", new Model<String>( "/fieldid/file/downloadTenantLogo.action?uniqueID=" + getSessionUser().getTenant().getId() ) ) );
-        
     }
 
     protected void storePageParameters(PageParameters params) {
@@ -117,12 +95,15 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     }
 
     private Component createSetupLinkContainer(SessionUser sessionUser) {
+        boolean hasSetupAccess = sessionUser.hasSetupAccess();
         boolean manageSystemConfig = sessionUser.hasAccess("managesystemconfig");
         WebMarkupContainer container = new WebMarkupContainer("setupLinkContainer");
-        if (manageSystemConfig) {
+        if (hasSetupAccess && manageSystemConfig) {
             container.add(new BookmarkablePageLink<WebPage>("setupLink", SettingsPage.class));
-        } else {
+        } else if (hasSetupAccess) {
             container.add(new BookmarkablePageLink<WebPage>("setupLink", OwnersUsersLocationsPage.class));
+        } else {
+            container.setVisible(false);
         }
         return container;
     }
@@ -195,6 +176,18 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     private void addClickTaleScripts() {
         add(new Label("clickTaleStart", ConfigContext.getCurrentContext().getString(ConfigEntry.CLICKTALE_START)).setEscapeModelStrings(false));
         add(new Label("clickTaleEnd", ConfigContext.getCurrentContext().getString(ConfigEntry.CLICKTALE_END)).setEscapeModelStrings(false));
+    }
+
+    static class StaticImage extends WebComponent {
+        public StaticImage(String id, IModel<String> urlModel) {
+            super( id, urlModel );
+        }
+
+        protected void onComponentTag(ComponentTag tag) {
+            super.onComponentTag( tag );
+            checkComponentTag( tag, "img" );
+            tag.put( "src", getDefaultModelObjectAsString() );
+        }
     }
 
 }

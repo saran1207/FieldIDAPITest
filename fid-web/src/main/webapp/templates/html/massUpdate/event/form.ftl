@@ -103,7 +103,7 @@
 	<div class="formAction">
 		<@s.submit key="label.perform_mass_update" onclick="if( !confirm( '${action.getText( 'warning.massupdate' )}' ) ) { return false; }"/>
 		<@s.text name="label.or"/>
-		<a href="<@s.url action="reportResults" includeParams="none" searchId="${searchId!1}"currentPager="${currentPage!1}"/>"><@s.text name="label.returntoreport"/></a>
+		<a href="/fieldid/w/returnToReport"><@s.text name="label.returntoreport"/></a>
 	</div>
 
 </@s.form>

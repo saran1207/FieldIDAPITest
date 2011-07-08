@@ -155,13 +155,16 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
                     target.addComponent(selectDisplayColumnsPanel);
                 }
             });
+            groupedAssetTypePicker.setNullValid(true);
             // Initially, update the dynamic columns causing an empty list to be put into our model, unless it's already set
             if (assetTypeModel.getObject() == null && assetTypeGroupModel.getObject() == null) {
                 updateDynamicAssetColumns(assetManager, dynamicAssetColumnsModel, assetTypeModel, availableAssetTypesModel);
             }
             groupedAssetTypePicker.setOutputMarkupId(true);
-            
-            assignedUserContainer.add(new GroupedUserPicker("assignedTo", new PropertyModel<User>(getModel(), "assignedTo"), new GroupedUsersForTenantModel()));
+
+            GroupedUserPicker groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(getModel(), "assignedTo"), new GroupedUsersForTenantModel());
+            groupedUserPicker.setNullValid(true);
+            assignedUserContainer.add(groupedUserPicker);
 
             final IModel<EventTypeGroup> eventTypeGroupModel = new PropertyModel<EventTypeGroup>(getModel(), "eventTypeGroup");
             final IModel<EventType> eventTypeModel = new PropertyModel<EventType>(getModel(), "eventType");
@@ -174,6 +177,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
                     target.addComponent(selectDisplayColumnsPanel);
                 }
             });
+            eventTypeSelect.setNullValid(true);
             // Initially, update the dynamic columns causing an empty list to be put into our model
             if (eventTypeModel.getObject() == null && eventTypeGroupModel.getObject() == null) {
                 updateDynamicEventColumns(persistenceManager, dynamicEventColumnsModel, eventTypeModel, availableEventTypesModel);
@@ -182,10 +186,10 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
 
             add(createEventTypeGroupChoice(eventTypeGroupModel, dynamicEventColumnsModel, eventTypeModel, availableEventTypesModel));
 
-            add(new DropDownChoice<AssetStatus>("assetStatus", new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()));
-            add(new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()));
-            add(new DropDownChoice<Status>("result", Arrays.asList(Status.values()), new StatusChoiceRenderer()));
-            add(new DropDownChoice<User>("performedBy", new UsersForTenantModel(), new ListableChoiceRenderer<User>()));
+            add(new DropDownChoice<AssetStatus>("assetStatus", new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
+            add(new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
+            add(new DropDownChoice<Status>("result", Arrays.asList(Status.values()), new StatusChoiceRenderer()).setNullValid(true));
+            add(new DropDownChoice<User>("performedBy", new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true));
 
             add(new TextField<String>("rfidNumber"));
             add(new TextField<String>("serialNumber"));
@@ -239,7 +243,6 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             System.out.println("There seems to have been an error.....");
         }
 
-
     }
 
     private void updateDynamicEventColumns(PersistenceManager persistenceManager, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, IModel<EventType> eventTypeModel, EventTypesForTenantModel availableEventTypesModel) {
@@ -261,6 +264,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
                 target.addComponent(groupedAssetTypePicker);
             }
         });
+        assetTypeGroupDropDownChoice.setNullValid(true);
         return assetTypeGroupDropDownChoice;
     }
 
@@ -275,6 +279,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
                 target.addComponent(eventTypeSelect);
             }
         });
+        eventTypeGroupDropDownChoice.setNullValid(true);
         return eventTypeGroupDropDownChoice;
     }
 

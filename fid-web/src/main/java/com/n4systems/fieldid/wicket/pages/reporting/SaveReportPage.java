@@ -114,6 +114,8 @@ public class SaveReportPage extends FieldIDLoggedInPage {
             persistenceManager.save(savedReport, user);
         }
 
+        criteriaModel.setSavedReportId(savedReport.getId());
+        criteriaModel.setSavedReportName(savedReport.getName());
     }
 
     protected User fetchUser(Long userId) {

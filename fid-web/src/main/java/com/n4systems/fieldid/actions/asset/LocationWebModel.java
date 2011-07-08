@@ -41,6 +41,10 @@ public class LocationWebModel implements Serializable {
 		
 	}
 
+    public void setPredefinedLocation(PredefinedLocation location) {
+        this.predefinedLocation = location;
+    }
+
 	public String getFreeformLocation() {
 		return freeformLocation;
 	}

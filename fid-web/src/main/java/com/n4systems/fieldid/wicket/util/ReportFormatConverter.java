@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.util;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.reporting.service.EventColumnsService;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
@@ -31,6 +32,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
+import com.n4systems.model.location.Location;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -109,8 +111,9 @@ public class ReportFormatConverter {
         container.setRfidNumber(criteriaModel.getRfidNumber());
         container.setStatus(criteriaModel.getResult() == null ? null : criteriaModel.getResult().name());
         container.setSelectedColumns(convertSelectedColumns(criteriaModel));
-
         container.setMultiIdSelection(criteriaModel.getSelection());
+        container.getLocation().setFreeformLocation(criteriaModel.getLocation().getFreeformLocation());
+        container.getLocation().setPredefinedLocation(criteriaModel.getLocation().getPredefinedLocation());
 
         return container;
     }
@@ -146,6 +149,10 @@ public class ReportFormatConverter {
         criteriaModel.setReferenceNumber(container.getReferenceNumber());
         criteriaModel.setRfidNumber(container.getRfidNumber());
         criteriaModel.setResult(container.getStatus() == null ? null : Status.valueOf(container.getStatus()));
+
+        LocationWebModel locationWebModel = container.getLocation();
+        Location location = new Location(locationWebModel.getPredefinedLocation(),  locationWebModel.getFreeformLocation());
+        criteriaModel.setLocation(location);
 
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
         criteriaModel.setColumnGroups(reportConfiguration.getColumnGroups());

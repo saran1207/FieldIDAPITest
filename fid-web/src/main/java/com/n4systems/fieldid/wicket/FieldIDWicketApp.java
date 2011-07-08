@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.wicket;
 
 import com.n4systems.fieldid.wicket.pages.HomePage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
+import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
+import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.DataLogPage;
@@ -54,6 +55,7 @@ public class FieldIDWicketApp extends WebApplication {
         addComponentInstantiationListener(new SpringComponentInjector(this));
 
         getApplicationSettings().setPageExpiredErrorPage(HomePage.class);
+        getApplicationSettings().setInternalErrorPage(OopsPage.class);
     }
 
     @Override
