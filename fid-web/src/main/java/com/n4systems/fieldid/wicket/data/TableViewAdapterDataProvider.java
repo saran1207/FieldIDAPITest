@@ -100,7 +100,15 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     @Override
     public void detach() {
         super.detach();
-        results = null;
+        //results = null;
+        //size = null;
+    }
+    
+    /*
+	 * TODO: Change the row selection back to client side javascript and clear results/size in detach(). - mf
+	 */
+    public void clearResultCache() {
+    	results = null;
         size = null;
     }
 

@@ -67,6 +67,12 @@ public class ReportResultsPanel extends Panel {
         add(dataTable = new SimpleDataTable<Event>("resultsTable", convertedColumns.toArray(new IColumn[convertedColumns.size()]), provider, 20, selectedRows) {
             @Override
             protected void onPageChanged(AjaxRequestTarget target) {
+            	/*
+            	 * TODO: TableViewAdapterDataProvider caches the results.  This MUST be called when the selection or
+            	 * sort changes.  This is a part of a temporary fix to avoid going back to the database when rows
+            	 * are selected - mf
+            	 */
+            	provider.clearResultCache();
                 WebRequest request = (WebRequest) getRequest();
                 new LegacyReportCriteriaStorage().storePageNumber(request.getHttpServletRequest().getSession(), dataTable.getTable().getCurrentPage());
                 target.addComponent(totalResultsLabel);
@@ -79,6 +85,12 @@ public class ReportResultsPanel extends Panel {
 
             @Override
             protected void onSortChanged(String sortProperty, SortDirection sortDirection) {
+            	/*
+            	 * TODO: TableViewAdapterDataProvider caches the results.  This MUST be called when the selection or
+            	 * sort changes.  This is a part of a temporary fix to avoid going back to the database when rows
+            	 * are selected - mf
+            	 */
+            	provider.clearResultCache();
                 Long id = Long.parseLong(sortProperty);
                 ColumnMapping column = new ColumnMappingLoader(FieldIDSession.get().getSessionUser().getSecurityFilter()).id(id).load();
                 ColumnMappingView columnView = new ColumnMappingConverter().convert(column);
