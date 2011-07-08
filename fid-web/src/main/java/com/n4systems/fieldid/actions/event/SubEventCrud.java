@@ -147,7 +147,7 @@ public class SubEventCrud extends EventCrud {
 				boolean found = false;
 				for (CriteriaResult result : event.getResults()) {
 					if (result.getCriteria().equals(criteria)) {
-						criteriaResults.add(converter.convertToWebModel(result));
+						criteriaResults.add(converter.convertToWebModel(result, getSessionUser()));
 						found = true;
 						break;
 					}

@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import rfid.web.helper.SessionUser;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
@@ -20,10 +22,11 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
 import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
+import com.n4systems.util.FieldidDateFormatter;
 
 public class CriteriaResultWebModelConverter {
 
-    public CriteriaResultWebModel convertToWebModel(CriteriaResult result) {
+    public CriteriaResultWebModel convertToWebModel(CriteriaResult result, SessionUser user) {
         CriteriaResultWebModel webModel = new CriteriaResultWebModel();
         if (result instanceof OneClickCriteriaResult) {
             webModel.setStateId(((OneClickCriteriaResult) result).getState().getId());
@@ -39,10 +42,9 @@ public class CriteriaResultWebModelConverter {
         } else if (result instanceof SignatureCriteriaResult) {
             webModel.setSigned(((SignatureCriteriaResult) result).isSigned());
         } else if (result instanceof DateFieldCriteriaResult) {
-            DateFormat dateFormat = getDateFormat(result.getTenant().getId(), ((DateFieldCriteria)result.getCriteria()).isIncludeTime());
             Date dateResult = ((DateFieldCriteriaResult)result).getValue();
             if (dateResult != null) {
-            	webModel.setTextValue(dateFormat.format(dateResult));
+            	webModel.setTextValue(new FieldidDateFormatter(dateResult, user, true, ((DateFieldCriteria)result.getCriteria()).isIncludeTime()).format());
             }
         }
 

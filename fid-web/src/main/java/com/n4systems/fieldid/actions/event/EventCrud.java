@@ -738,7 +738,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		if (criteriaResults == null) {
 			// criteria results need to be placed back in the order that they appear on the form
 			// so that the states and button images line up correctly.
-            criteriaResults = eventHelper.orderCriteriaResults(event);
+            criteriaResults = eventHelper.orderCriteriaResults(event, getSessionUser());
 		}
 
 		return criteriaResults;

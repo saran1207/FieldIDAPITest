@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rfid.web.helper.SessionUser;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
@@ -48,9 +50,10 @@ public class EventHelper {
 	 * Converts the CriteriaResult Set on an Event into a List in the
 	 * order it would appear on a form (by CriteriaSection, then Criteria).
 	 * @param event	The event to find CriteriaResults from
+	 * @param user 
 	 * @return				A List of ordered CriteriaResults.  Returns an empty List if the event's results are empty.
 	 */
-	public List<CriteriaResultWebModel> orderCriteriaResults(AbstractEvent event) {
+	public List<CriteriaResultWebModel> orderCriteriaResults(AbstractEvent event, SessionUser user) {
 		List<CriteriaResult> orderedResults = new ArrayList<CriteriaResult>();
 		
 		// don't go through all the trouble if the event has no results.
@@ -70,14 +73,14 @@ public class EventHelper {
 			}
 		}
 		
-		return convertAll(orderedResults);
+		return convertAll(orderedResults, user);
 	}
 
-    private List<CriteriaResultWebModel> convertAll(List<CriteriaResult> results) {
+    private List<CriteriaResultWebModel> convertAll(List<CriteriaResult> results, SessionUser user) {
         List<CriteriaResultWebModel> resultWebModels = new ArrayList<CriteriaResultWebModel>(results.size());
         CriteriaResultWebModelConverter converter = new CriteriaResultWebModelConverter();
         for (CriteriaResult result : results) {
-            resultWebModels.add(converter.convertToWebModel(result));
+            resultWebModels.add(converter.convertToWebModel(result, user));
         }
         return resultWebModels;
     }
