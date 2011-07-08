@@ -11,9 +11,6 @@ public class InternalOrgsModel extends LoadableDetachableModel<List<InternalOrg>
 
     @Override
     protected List<InternalOrg> load() {
-//        List<BaseOrg> internalOrgs = new ArrayList<BaseOrg>();
-//        internalOrgs.addAll(new InternalOrgsLoader(FieldIDSession.get().getSessionUser().getSecurityFilter()).load());
-//        return internalOrgs;
         return new InternalOrgsLoader(FieldIDSession.get().getSessionUser().getSecurityFilter()).load();
     }
 

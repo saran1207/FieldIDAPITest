@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import rfid.web.helper.SessionUser;
 
 public class MassActionPanel extends Panel implements IHeaderContributor {
 
@@ -31,12 +32,23 @@ public class MassActionPanel extends Panel implements IHeaderContributor {
 
         variableAssignmentScriptBuffer.append("addLimitGuards();");
 
+        LegacyReportMassActionLink massUpdateLink;
+        LegacyReportMassActionLink assignEventsToJobsLink;
+
         add(new LegacyReportMassActionLink("exportToExcelLink", "/aHtml/reportResults.action?searchId=%s", reportCriteriaModel));
-        add(new LegacyReportMassActionLink("massUpdateLink", "/massUpdateEvents.action?searchId=%s", reportCriteriaModel));
         add(new LegacyReportMassActionLink("summaryReportLink", "/summaryReport.action?searchId=%s", reportCriteriaModel));
         add(new LegacyReportMassActionLink("printThisReportLink", "/aHtml/printReport.action?searchId=%s", reportCriteriaModel));
         add(new LegacyReportMassActionLink("printSelectedPdfReportsLink", "/aHtml/reportPrintAllCerts.action?searchId=%s&reportType=INSPECTION_CERT", reportCriteriaModel));
         add(new LegacyReportMassActionLink("printSelectedObservationReportsLink", "/aHtml/printReport.action?searchId=%s&reportType=OBSERVATION_CERT", reportCriteriaModel));
+
+        SessionUser sessionUser = FieldIDSession.get().getSessionUser();
+        boolean searchIncludesSafetyNetwork = reportCriteriaModel.getObject().isIncludeSafetyNetwork();
+
+        add(massUpdateLink = new LegacyReportMassActionLink("massUpdateLink", "/massUpdateEvents.action?searchId=%s", reportCriteriaModel));
+        massUpdateLink.setVisible(sessionUser.hasAccess("editevent") && !searchIncludesSafetyNetwork);
+
+        add(assignEventsToJobsLink = new LegacyReportMassActionLink("assignToJobsLink", "/selectJobToAssignEventsTo.action?searchId=%s&reportType=OBSERVATION_CERT", reportCriteriaModel));
+        assignEventsToJobsLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
     }
 
     private void addSizeParameterLabel(String labelKey, Integer size) {

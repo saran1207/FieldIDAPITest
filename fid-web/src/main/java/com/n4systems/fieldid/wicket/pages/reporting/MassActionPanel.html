@@ -30,8 +30,17 @@
     </div>
 
     | <a wicket:id="exportToExcelLink" class='lightview exportToExcel' rel='ajax' title=' :: :: scrolling:true, autosize: true' ><wicket:message key="label.exporttoexcel"/></a>
-    | <a wicket:id="massUpdateLink" ><wicket:message key="label.massupdate"/></a>
-    | <a wicket:id="summaryReportLink" ><wicket:message key="label.summary_report"/></a>
+
+    <wicket:enclosure>
+        | <a wicket:id="massUpdateLink" class="massUpdate"><wicket:message key="label.massupdate"/></a>
+    </wicket:enclosure>
+
+    | <a wicket:id="summaryReportLink" class="summaryReport"><wicket:message key="label.summary_report"/></a>
+
+    <wicket:enclosure>
+        | <a wicket:id="assignToJobsLink" class="assignEventsToJobs"><wicket:message key="label.assigntojob" /></a>
+    </wicket:enclosure>
+
 </div>
 
 
@@ -79,14 +88,6 @@
         addGuardForTooManySelectedToElements(".multiEvent", maxSizeForMultiEvent, 'warning_multi_event');
         addGuardForTooManySelectedToElements(".assignEventsToJob", maxSizeForAssigningEventsToJobs, 'warning_assignEventsToJob');
         addGuardForTooManySelectedToElements(".summaryReport", maxSizeForSummaryReport, 'warning_summaryReport');
-    }
-
-    if (totalResults > maxSizeForSummaryReport) {
-        $$(".summaryReport").each(function(element) {
-            element.observe('click', function(event) {
-                Event.stop(event); showQuickView('warning_summaryReport', event);
-            });
-        });
     }
 
     function repositionPrintList(list, link) {
