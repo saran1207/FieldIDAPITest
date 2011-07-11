@@ -1,6 +1,6 @@
 <@s.hidden name="${parameters.name}.predefinedLocationId" id="${parameters.id}_predefinedLocationId"/>
 
-<#if !nodesList?exists || nodesList.empty>
+<#if !locationHeirarchyFeatureEnabled || !nodesList?exists || nodesList.empty>
 	<@s.textfield id="${parameters.id}_freeformLocation" name="${parameters.name}.freeformLocation" theme="fieldidSimple"/>
 <#else>
 	<@s.hidden id="${parameters.id}" name="${parameters.name}.freeformLocation" />
