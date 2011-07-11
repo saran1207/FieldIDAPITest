@@ -189,9 +189,15 @@ public class EventHelper {
                 if (formResult.getSignatureFileId() != null) {
                 	((SignatureCriteriaResult)realResult).setImage(new SignatureService().loadSignatureImage(event.getTenant().getId(), formResult.getSignatureFileId()));
                 }
-            } else if(realResult instanceof DateFieldCriteriaResult) {
+            } else if(realResult instanceof DateFieldCriteriaResult) {            	
             	DateFormat dateFormat = getDateFormat(event.getTenant().getId(), ((DateFieldCriteria)realResult.getCriteria()).isIncludeTime());
-            	((DateFieldCriteriaResult)realResult).setValue(dateFormat.parse(formResult.getTextValue()));
+            	
+            	//This logic was already in the CriteriaResultWebModelConverter.convert that we called earlier.
+            	//It seems to be redone for the EDIT case. May be we can consolidate. - Kumana
+            	String textValue = formResult.getTextValue();
+            	if(textValue != null && textValue.length() > 0) {
+            		((DateFieldCriteriaResult)realResult).setValue(dateFormat.parse(textValue));
+            	}
             }
 
 			// and attach back onto the event

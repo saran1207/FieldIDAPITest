@@ -98,10 +98,16 @@ public class CriteriaResultWebModelConverter {
             criteriaResult = result;
         } else if (CriteriaType.DATE_FIELD.equals(type)) {
             DateFieldCriteria critera = (DateFieldCriteria) pm.find(Criteria.class, webModel.getCriteriaId(), tenant);
-            DateFormat dateFormat = getDateFormat(tenant.getId(), critera.isIncludeTime());
-
+            DateFormat dateFormat = getDateFormat(tenant.getId(), critera.isIncludeTime());  //TODO we could add a function criteria.getDateFormat() and abstract isIncludeTime() within it. - Kumana        
         	DateFieldCriteriaResult result = new DateFieldCriteriaResult();
-            result.setValue(dateFormat.parse(webModel.getTextValue()));
+        	
+        	String textValue = webModel.getTextValue();        	
+        	if(textValue != null && textValue.length() > 0) {
+        		result.setValue(dateFormat.parse(textValue));
+        	}
+        	
+        	//TODO Some of the logic above here of setting values from text field is repeated in the caller processFormCriteriaResults. - Kumana
+        	
             criteriaResult = result;
         } else {
             throw new RuntimeException("Unkown type for web model: " + webModel.getType());
