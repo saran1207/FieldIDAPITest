@@ -35,9 +35,9 @@ public class DateTimePicker extends Panel {
 
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
 
-        String dateFormat = includeTime ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
+        String javaDateFormat = includeTime ? sessionUser.getDateTimeFormat() : sessionUser.getDateFormat();
 
-        add(dateTextField = new DateTextField("dateField", dateModel, dateFormat));
+        add(dateTextField = new DateTextField("dateField", dateModel, javaDateFormat));
 
         dateTextField.setOutputMarkupId(true);
 
@@ -69,26 +69,28 @@ public class DateTimePicker extends Panel {
         container.getHeaderResponse().renderJavascript("jQuery.noConflict();", null);
         container.getHeaderResponse().renderOnDomReadyJavascript(createSetupCalendarJavascript());
     }
-    
-    
 
     private String createSetupCalendarJavascript() {
         StringBuffer jsBuffer = new StringBuffer();
 
+        String jqueryDateFormat = FieldIDSession.get().getSessionUser().getJqueryDateFormat();
+        
         jsBuffer.append("function initDatePicker(){");
         jsBuffer.append("jQuery('.datetimepicker').datetimepicker({");
         jsBuffer.append("showOn:'button',");
         jsBuffer.append("buttonImage:'/fieldid/images/calendar-icon.png',");
         jsBuffer.append("buttonImageOnly:true,");
         jsBuffer.append("numberOfMonths:3,");
-        jsBuffer.append("showButtonPanel:true");
+        jsBuffer.append("showButtonPanel:true,");
+        jsBuffer.append("dateFormat:\"").append(jqueryDateFormat).append("\"");
         jsBuffer.append("});");
         jsBuffer.append("jQuery('.datepicker').datepicker({");
         jsBuffer.append("showOn:'button',");
         jsBuffer.append("buttonImage:'/fieldid/images/calendar-icon.png',");
         jsBuffer.append("buttonImageOnly:true,");
         jsBuffer.append("numberOfMonths:3,");
-        jsBuffer.append("showButtonPanel:true");
+        jsBuffer.append("showButtonPanel:true,");
+        jsBuffer.append("dateFormat:\"").append(jqueryDateFormat).append("\"");
         jsBuffer.append("});");
         jsBuffer.append("}");
         jsBuffer.append("initDatePicker();");
