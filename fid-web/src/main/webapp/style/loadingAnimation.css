@@ -1,0 +1,19 @@
+#modalLoadingPanel {
+	position: absolute;
+	background-color: #F9F9F9;
+	filter: alpha(opacity=60);	/* IE */
+    opacity: 0.6;				/* Safari, Opera */
+    -moz-opacity:0.60;			/* FireFox */
+    z-index: 100;
+}
+
+.loadingAnimationImage {
+	z-index: 200;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 100px;
+	height: 100px;
+	margin-left: -50px;
+	margin-top: -50px;
+}
