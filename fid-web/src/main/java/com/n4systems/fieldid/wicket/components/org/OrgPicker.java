@@ -96,7 +96,9 @@ public class OrgPicker extends Panel {
                 if ("CLOSE".equals(titleModel.getObject())) {
                     return new CloseImagePanel(titleId);
                 }
-                return super.newTitle(titleId, titleModel, index);
+                Component title = super.newTitle(titleId, titleModel, index);
+                title.setRenderBodyOnly(true);
+                return title;
             }
 
             @Override

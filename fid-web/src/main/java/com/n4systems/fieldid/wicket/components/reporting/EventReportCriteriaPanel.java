@@ -25,6 +25,7 @@ import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantMo
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
+import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
@@ -37,7 +38,9 @@ import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.Project;
 import com.n4systems.model.Status;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -126,7 +129,8 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
 
             add(new Label("serialNumberLabel", new FIDLabelModel(sessionUser.getSerialNumberLabel())));
 
-            add(new WebMarkupContainer("jobContainer").setVisible(securityGuard.isProjectsEnabled()));
+            WebMarkupContainer jobContainer = new WebMarkupContainer("jobContainer");
+            add(jobContainer.setVisible(securityGuard.isProjectsEnabled()));
             add(new WebMarkupContainer("assignedToContainer").setVisible(securityGuard.isAssignedToEnabled()));
 
             WebMarkupContainer includeNetworkResultsContainer = new WebMarkupContainer("includeNetworkResultsContainer");
@@ -190,6 +194,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             add(new DropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
             add(new DropDownChoice<Status>("result", Arrays.asList(Status.values()), new StatusChoiceRenderer()).setNullValid(true));
             add(new DropDownChoice<User>("performedBy", new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true));
+            jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
             add(new TextField<String>("rfidNumber"));
             add(new TextField<String>("serialNumber"));

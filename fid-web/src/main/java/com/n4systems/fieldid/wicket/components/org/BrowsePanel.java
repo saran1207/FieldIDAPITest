@@ -6,6 +6,9 @@ import com.n4systems.fieldid.wicket.model.orgs.CustomersUnderInternalOrgModel;
 import com.n4systems.fieldid.wicket.model.orgs.DivisionsUnderCustomerOrgModel;
 import com.n4systems.fieldid.wicket.model.orgs.InternalOrgsModel;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -31,6 +34,29 @@ public class BrowsePanel extends Panel {
         setOutputMarkupPlaceholderTag(true);
 
         add(new OrgForm("orgForm"));
+
+        BaseOrg selectedOrg = orgModel.getObject();
+
+        if (selectedOrg != null) {
+            initializeOrg(selectedOrg);
+        } else {
+            initializeOrg(FieldIDSession.get().getSessionUser().getOwner());
+        }
+    }
+
+    private void initializeOrg(BaseOrg selectedOrg) {
+        if (selectedOrg instanceof DivisionOrg) {
+            DivisionOrg divisionOrg = (DivisionOrg) selectedOrg;
+            selectedDivisionOrg = selectedOrg;
+            selectedCustomerOrg = divisionOrg.getCustomerOrg();
+            selectedInternalOrg = divisionOrg.getInternalOrg();
+        } else if (selectedOrg instanceof CustomerOrg) {
+            CustomerOrg customerOrg = (CustomerOrg) selectedOrg;
+            selectedCustomerOrg = customerOrg;
+            selectedInternalOrg = customerOrg.getInternalOrg();
+        } else if (selectedOrg instanceof InternalOrg) {
+            selectedInternalOrg = selectedOrg;
+        }
     }
 
     class OrgForm extends Form {

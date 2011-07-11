@@ -14,12 +14,14 @@
 	background-color:white;
 	border-left:1px solid #000;
 	border-right:1px solid #000;
+}
 
+.selections ul {
+    display:inline;
 }
 
 .selections li.last {
-    float:right;
-    padding:0;
+    padding:0 0 0 0;
     float:right;
     clear:right;
     background-color:#fff;
@@ -32,11 +34,8 @@
 .orgSelector .selections a {
 	display:block;
 	float:left;
-    padding: 0 5px;
-    margin-right: 5px;
-}
-
-span.closeImage {
+    padding: 2px 6px 2px 6px;
+    margin-right: 3px;
 }
 
 span.closeImage a {
@@ -44,6 +43,10 @@ span.closeImage a {
 	clear:right;
 	margin-right:0;
 	background-color:#fff;
+}
+
+.crudForm .infoSet span.closeImage {
+    padding:0;
 }
 
 .orgBrowser, .orgSearch {
@@ -116,4 +119,7 @@ span.closeImage a {
 
 .selections li {
     display: block;
+    float:left;
+    margin:0;
+    padding:0;
 }

@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.CustomerOrgsForInternalOrgLoader;
+import com.n4systems.model.security.SecurityFilter;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
@@ -12,20 +13,30 @@ import java.util.List;
 
 public class CustomersUnderInternalOrgModel extends LoadableDetachableModel<List<CustomerOrg>> {
 
-    private IModel<BaseOrg> internalOrgIModel;
+    private IModel<BaseOrg> internalOrgModel;
 
-    public CustomersUnderInternalOrgModel(IModel<BaseOrg> internalOrgIModel) {
-        this.internalOrgIModel = internalOrgIModel;
+    public CustomersUnderInternalOrgModel(IModel<BaseOrg> internalOrgModel) {
+        this.internalOrgModel = internalOrgModel;
     }
 
     @Override
     protected List<CustomerOrg> load() {
-        if (internalOrgIModel.getObject() == null) {
+        if (internalOrgModel.getObject() == null) {
             return Collections.emptyList();
         }
-        return new CustomerOrgsForInternalOrgLoader(FieldIDSession.get().getSessionUser().getSecurityFilter())
-                .parent(internalOrgIModel.getObject())
+
+        SecurityFilter securityFilter = FieldIDSession.get().getSessionUser().getSecurityFilter();
+
+        List<CustomerOrg> customerOrgs = new CustomerOrgsForInternalOrgLoader(securityFilter)
+                .parent(internalOrgModel.getObject())
                 .load();
+
+        CustomerOrg customerOrg = securityFilter.getOwner().getCustomerOrg();
+        if (customerOrg != null && customerOrgs.isEmpty()) {
+            customerOrgs.add(customerOrg);
+        }
+
+        return customerOrgs;
     }
 
 }
