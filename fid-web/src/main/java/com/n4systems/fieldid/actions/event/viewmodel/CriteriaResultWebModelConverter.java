@@ -1,13 +1,12 @@
 package com.n4systems.fieldid.actions.event.viewmodel;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
+import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
@@ -21,12 +20,12 @@ import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
-import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
-import com.n4systems.util.FieldidDateFormatter;
 
 public class CriteriaResultWebModelConverter {
 
     public CriteriaResultWebModel convertToWebModel(CriteriaResult result, SessionUser user) {
+    	UserDateConverter dateConverter = new SessionUserDateConverter(user);
+    	
         CriteriaResultWebModel webModel = new CriteriaResultWebModel();
         if (result instanceof OneClickCriteriaResult) {
             webModel.setStateId(((OneClickCriteriaResult) result).getState().getId());
@@ -42,10 +41,9 @@ public class CriteriaResultWebModelConverter {
         } else if (result instanceof SignatureCriteriaResult) {
             webModel.setSigned(((SignatureCriteriaResult) result).isSigned());
         } else if (result instanceof DateFieldCriteriaResult) {
-            Date dateResult = ((DateFieldCriteriaResult)result).getValue();
-            if (dateResult != null) {
-            	webModel.setTextValue(new FieldidDateFormatter(dateResult, user, true, ((DateFieldCriteria)result.getCriteria()).isIncludeTime()).format());
-            }
+        	String dateStr = dateConverter.convertDate(((DateFieldCriteriaResult)result).getValue(), 
+        			((DateFieldCriteria)result.getCriteria()).isIncludeTime());
+        	webModel.setTextValue(dateStr);
         }
 
         webModel.setType(result.getCriteria().getCriteriaType().name());
@@ -55,14 +53,6 @@ public class CriteriaResultWebModelConverter {
         webModel.setId(result.getId());
 
         return webModel;
-    }
-    
-    private DateFormat getDateFormat(Long tenantId, boolean isIncudeTime) {
-    	String dateFormat = new PrimaryOrgByTenantLoader().setTenantId(tenantId).load().getDateFormat();
-    	if(isIncudeTime) {
-    		dateFormat += " h:mm a";
-    	}
-    	return new SimpleDateFormat(dateFormat);
     }
     
     public CriteriaResult convertFromWebModel(CriteriaResultWebModel webModel, PersistenceManager pm, Tenant tenant) throws ParseException {
@@ -97,18 +87,7 @@ public class CriteriaResultWebModelConverter {
             SignatureCriteriaResult result = new SignatureCriteriaResult();
             criteriaResult = result;
         } else if (CriteriaType.DATE_FIELD.equals(type)) {
-            DateFieldCriteria critera = (DateFieldCriteria) pm.find(Criteria.class, webModel.getCriteriaId(), tenant);
-            DateFormat dateFormat = getDateFormat(tenant.getId(), critera.isIncludeTime());  //TODO we could add a function criteria.getDateFormat() and abstract isIncludeTime() within it. - Kumana        
-        	DateFieldCriteriaResult result = new DateFieldCriteriaResult();
-        	
-        	String textValue = webModel.getTextValue();        	
-        	if(textValue != null && textValue.length() > 0) {
-        		result.setValue(dateFormat.parse(textValue));
-        	}
-        	
-        	//TODO Some of the logic above here of setting values from text field is repeated in the caller processFormCriteriaResults. - Kumana
-        	
-            criteriaResult = result;
+            criteriaResult =  new DateFieldCriteriaResult();
         } else {
             throw new RuntimeException("Unkown type for web model: " + webModel.getType());
         }

@@ -15,5 +15,9 @@ public interface UserDateConverter {
 	public Date convertDateTime(String date);
 
 	public boolean isValidDate(String date, boolean usingTime);
+	
+	public String convertDate(Date date, boolean includeTime);
+	
+	public Date convertDate(String date, boolean includeTime);
 
 }

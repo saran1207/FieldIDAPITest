@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.viewhelpers;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,8 @@ import rfid.web.helper.SessionUser;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModel;
 import com.n4systems.fieldid.actions.event.viewmodel.CriteriaResultWebModelConverter;
+import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
+import com.n4systems.fieldid.actions.helpers.UserDateConverter;
 import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.ComboBoxCriteriaResult;
@@ -31,7 +32,6 @@ import com.n4systems.model.State;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
 import com.n4systems.model.UnitOfMeasureCriteriaResult;
-import com.n4systems.model.orgs.PrimaryOrgByTenantLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.services.signature.SignatureService;
 
@@ -133,11 +133,13 @@ public class EventHelper {
 	 * @throws IOException 
 	 * @throws ParseException 
 	 */
-	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResultWebModel> formCriteriaResults, User modifiedBy) throws IOException, ParseException {
+	public void processFormCriteriaResults(AbstractEvent event, List<CriteriaResultWebModel> formCriteriaResults, User modifiedBy, SessionUser sessionUser) throws IOException, ParseException {
 		// if our forms criteria results are null (as is the case with a repair), just stop.  
 		if (formCriteriaResults == null) {
 			return;
 		}
+		
+		UserDateConverter dateConverter = new SessionUserDateConverter(sessionUser);
 		
 		// since we'll add later, this list should be empty
 		event.getResults().clear();
@@ -189,29 +191,15 @@ public class EventHelper {
                 if (formResult.getSignatureFileId() != null) {
                 	((SignatureCriteriaResult)realResult).setImage(new SignatureService().loadSignatureImage(event.getTenant().getId(), formResult.getSignatureFileId()));
                 }
-            } else if(realResult instanceof DateFieldCriteriaResult) {            	
-            	DateFormat dateFormat = getDateFormat(event.getTenant().getId(), ((DateFieldCriteria)realResult.getCriteria()).isIncludeTime());
-            	
-            	//This logic was already in the CriteriaResultWebModelConverter.convert that we called earlier.
-            	//It seems to be redone for the EDIT case. May be we can consolidate. - Kumana
-            	String textValue = formResult.getTextValue();
-            	if(textValue != null && textValue.length() > 0) {
-            		((DateFieldCriteriaResult)realResult).setValue(dateFormat.parse(textValue));
-            	}
+            } else if(realResult instanceof DateFieldCriteriaResult) {
+            	Date dateResult = dateConverter.convertDate(formResult.getTextValue(), ((DateFieldCriteria)realResult.getCriteria()).isIncludeTime());
+            	((DateFieldCriteriaResult) realResult).setValue(dateResult);
             }
 
 			// and attach back onto the event
 			event.getResults().add(realResult);
 		}
 	}
-	
-    private DateFormat getDateFormat(Long tenantId, boolean isIncudeTime) {
-    	String dateFormat = new PrimaryOrgByTenantLoader().setTenantId(tenantId).load().getDateFormat();
-    	if(isIncudeTime) {
-    		dateFormat += " h:mm a";
-    	}
-    	return new SimpleDateFormat(dateFormat);
-    }
 
     /**
 	 * Ensures nulls have been removed from the lists, sets security information

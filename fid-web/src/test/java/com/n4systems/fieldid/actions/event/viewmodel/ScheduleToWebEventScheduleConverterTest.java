@@ -1,16 +1,19 @@
 package com.n4systems.fieldid.actions.event.viewmodel;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import java.util.Date;
 
-import com.n4systems.fieldid.actions.event.WebEventSchedule;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.builders.AssetTypeScheduleBuilder;
 import org.junit.Test;
 
+import com.n4systems.fieldid.actions.event.WebEventSchedule;
 import com.n4systems.fieldid.actions.helpers.UserDateConverter;
+import com.n4systems.model.AssetTypeSchedule;
+import com.n4systems.model.builders.AssetTypeScheduleBuilder;
 
 public class ScheduleToWebEventScheduleConverterTest {
 
@@ -38,6 +41,16 @@ public class ScheduleToWebEventScheduleConverterTest {
 
 		public boolean isValidDate(String date, boolean usingTime) {
 			return true;
+		}
+
+		@Override
+		public String convertDate(Date date, boolean includeTime) {
+			return "";
+		}
+
+		@Override
+		public Date convertDate(String date, boolean includeTime) {
+			return new Date();
 		}
 
 	}

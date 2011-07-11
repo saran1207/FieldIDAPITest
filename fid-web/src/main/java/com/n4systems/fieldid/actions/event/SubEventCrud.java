@@ -224,7 +224,7 @@ public class SubEventCrud extends EventCrud {
 
 		if (uniqueID == null) {
 			if (subEvent.isEditable()) {
-				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
+				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy, getSessionUser());
                 masterEventHelper.storeTemporaryFileIds(criteriaResults);
 			}
 
@@ -233,7 +233,7 @@ public class SubEventCrud extends EventCrud {
 			subEvent.setId(uniqueID);
 
 			if (subEvent.isEditable()) {
-				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy);
+				eventHelper.processFormCriteriaResults(subEvent, criteriaResults, modifiedBy, getSessionUser());
                 masterEventHelper.storeTemporaryFileIds(uniqueID, criteriaResults);
 			}
 
@@ -281,7 +281,7 @@ public class SubEventCrud extends EventCrud {
 				masterEventHelper.setAssetStatus(event.getAssetStatus());
 
 				if (event.isEditable()) {
-					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
                     masterEventHelper.storeTemporaryFileIds(0L, criteriaResults);
 				}
 					
@@ -289,7 +289,7 @@ public class SubEventCrud extends EventCrud {
 				
 			} else {
 				if (event.isEditable()) {
-					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
                     masterEventHelper.storeTemporaryFileIds(0L, criteriaResults);
 				}
 

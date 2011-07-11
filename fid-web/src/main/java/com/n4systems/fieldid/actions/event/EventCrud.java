@@ -415,7 +415,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 
 			if (event.isNew()) {
 				// the criteriaResults from the form must be processed before setting them on the event
-				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+				eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
 
 				CreateEventParameterBuilder createEventParameterBuilder = new CreateEventParameterBuilder(event, getSessionUserId())
 						.withProofTestFile(fileData)
@@ -435,7 +435,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			} else {
 				// only process criteria results if form editing is allowed
 				if (event.isEditable()) {
-					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy);
+					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
 				}
 				// when updating, we need to remove any files that should no longer be attached
 				updateAttachmentList(event, modifiedBy);

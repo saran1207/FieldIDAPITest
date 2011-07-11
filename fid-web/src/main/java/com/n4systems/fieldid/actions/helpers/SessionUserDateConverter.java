@@ -58,4 +58,14 @@ public class SessionUserDateConverter implements UserDateConverter {
 	private TimeZone getTimeZone() {
 		return sessionUser.getTimeZone();
 	}
+
+	@Override
+	public String convertDate(Date date, boolean includeTime) {
+		return includeTime ? convertDateTime(date) : convertDate(date);
+	}
+
+	@Override
+	public Date convertDate(String date, boolean includeTime) {
+		return includeTime ? convertDateTime(date) : convertDate(date);
+	}
 }
