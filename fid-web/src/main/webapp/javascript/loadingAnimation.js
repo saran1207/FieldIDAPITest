@@ -1,6 +1,6 @@
 function positionModalContainer() {
 	var modelPanel = $('modalLoadingPanel');
-	var parentContainer = modelPanel.parentNode.parentNode;
+	var parentContainer = $(modelPanel.parentNode.parentNode);
 	
 	translate(modelPanel, parentContainer, 0, 0);
 	modelPanel.setStyle({
