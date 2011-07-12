@@ -47,7 +47,7 @@
 	<#if securityGuard.proofTestIntegrationEnabled>
 		<div class="eventOption">
 			<div class="optionContent">
-				<div class="heading multipleProofTests"><h2><@s.text name="label.multi_proof_test"/></div>
+				<div class="heading multipleProofTests"><h2><@s.text name="label.multi_proof_test"/></h2></div>
 				<p>
 					<@s.text name="label.multi_proof_test.full"><@s.param>${maxAssetsFromMassEvent!250}</@s.param></@s.text>
 				</p>
