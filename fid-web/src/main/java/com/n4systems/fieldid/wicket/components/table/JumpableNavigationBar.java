@@ -1,13 +1,10 @@
 package com.n4systems.fieldid.wicket.components.table;
 
-import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.CSSPackageResource;
@@ -21,12 +18,18 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-public class JumpableNavigationBar extends Panel {
+import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.ModalLoadingPanel;
+
+public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware {
 
     WebMarkupContainer paginationContainer;
     protected final DataTable<?> table;
     protected final SimpleDataTable<?> simpleDataTable;
-
+    protected final ModalLoadingPanel loadingPanel;
+    
 	public JumpableNavigationBar(String id, SimpleDataTable<?> simpleDataTable) {
 		super(id);
         this.simpleDataTable = simpleDataTable;
@@ -49,6 +52,9 @@ public class JumpableNavigationBar extends Panel {
 
         paginationContainer.add(new JumpForm("jumpForm"));
         add(paginationContainer);
+        
+        loadingPanel = new ModalLoadingPanel("loadingAnim", table);
+        add(loadingPanel);
 	}
 
     private void addNextLinks(WebMarkupContainer pagerContainer) {
@@ -181,7 +187,12 @@ public class JumpableNavigationBar extends Panel {
     protected DataTable<?> getTable() {
         return table;
     }
-
+    
+    @Override
+	public String getAjaxIndicatorMarkupId() {
+		return loadingPanel.getMarkupId();
+	}
+    
     protected void onPageChanged(AjaxRequestTarget target) { }
 
 }

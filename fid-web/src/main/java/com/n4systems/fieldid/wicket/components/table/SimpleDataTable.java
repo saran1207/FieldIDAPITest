@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.table;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
@@ -15,19 +14,17 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
-import com.n4systems.fieldid.wicket.components.ModalLoadingPanel;
 import com.n4systems.fieldid.wicket.components.reporting.results.SelectionStatusPanel;
 import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 
-public class SimpleDataTable<T> extends Panel implements IAjaxIndicatorAware {
+public class SimpleDataTable<T> extends Panel {
 	
     private DataTable<T> table;
     private MultiIdSelection multiIdSelection;
     private SelectionStatusPanel selectionStatusPanel;
-    private ModalLoadingPanel loadingPanel = new ModalLoadingPanel("loadingAnim");
 
     public SimpleDataTable(String id, final IColumn<T>[] columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
@@ -65,8 +62,7 @@ public class SimpleDataTable<T> extends Panel implements IAjaxIndicatorAware {
         } else {
             add(new WebMarkupContainer("selectionStatus").setVisible(false));
         }
-
-
+        
         table = new DataTable<T>("table", columns, dataProvider, rowsPerPage) {
             @Override
             protected Item<T> newRowItem(String id, int index, IModel<T> rowModel) {
@@ -111,7 +107,6 @@ public class SimpleDataTable<T> extends Panel implements IAjaxIndicatorAware {
 
         add(createPaginationBar("topPagination"));
         add(createPaginationBar("bottomPagination"));
-        add(loadingPanel);
         
         addEmptyResultsDisplay(emptyResultsTitleKey, emptyResultsMessageKey, table);
 	}
@@ -155,10 +150,5 @@ public class SimpleDataTable<T> extends Panel implements IAjaxIndicatorAware {
     protected void onSelectionChanged(AjaxRequestTarget target) { }
 
     protected void onSortChanged(String sortProperty, SortDirection sortDirection) {}
-
-	@Override
-	public String getAjaxIndicatorMarkupId() {
-		return loadingPanel.getMarkupId();
-	}
 
 }
