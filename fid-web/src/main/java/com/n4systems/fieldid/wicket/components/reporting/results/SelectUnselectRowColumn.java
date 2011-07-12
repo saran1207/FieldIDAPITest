@@ -4,8 +4,10 @@ import com.n4systems.model.BaseEntity;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -15,6 +17,7 @@ public class SelectUnselectRowColumn<T extends BaseEntity> extends AbstractColum
 
     private MultiIdSelection multiIdSelection;
     private PropertyModel<Boolean> pageSelectedModel;
+    private DataTable dataTable;
 
     public SelectUnselectRowColumn(MultiIdSelection multiIdSelection, PropertyModel<Boolean> pageSelectedModel) {
         super(new Model<String>(""));
@@ -24,12 +27,17 @@ public class SelectUnselectRowColumn<T extends BaseEntity> extends AbstractColum
 
     @Override
     public void populateItem(final Item<ICellPopulator<T>> item, String componentId, final IModel<T> rowModel) {
-        item.add(new SelectUnselectCell(componentId, new ItemIsSelectedModel(rowModel)) {
+        final String rowId = item.getParent().getParent().getMarkupId();
+        SelectUnselectCell selectUnselectCell = new SelectUnselectCell(componentId, new ItemIsSelectedModel(rowModel)) {
             @Override
             protected void onSelectUnselect(AjaxRequestTarget target) {
                 onSelectUnselectRow(target);
             }
-        });
+        };
+        item.add(selectUnselectCell);
+
+        selectUnselectCell.getSelectCheckbox().add(new AttributeAppender("onchange", true,
+                new Model<String>("showRowSelectionStatus(this, '"+rowId+"', '"+dataTable.getMarkupId()+"');"), "; "));
     }
 
     @Override
@@ -40,6 +48,10 @@ public class SelectUnselectRowColumn<T extends BaseEntity> extends AbstractColum
                 onSelectUnselectPage(target);
             }
         };
+    }
+
+    public void setDataTable(DataTable dataTable) {
+        this.dataTable = dataTable;
     }
 
     protected void onSelectUnselectRow(AjaxRequestTarget target) { }

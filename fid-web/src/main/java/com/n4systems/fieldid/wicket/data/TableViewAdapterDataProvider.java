@@ -87,7 +87,7 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     @Override
     public int size() {
         if (size == null) {
-            size = new SearchPerformerWithReadOnlyTransactionManagement().countPages(searchContainer, getSecurityFilter(), 1);
+            size = new SearchPerformerWithReadOnlyTransactionManagement().countPages(searchContainer, searchContainer.getSecurityFilter(), 1);
         }
         return size;
     }
@@ -100,18 +100,10 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     @Override
     public void detach() {
         super.detach();
-        //results = null;
-        //size = null;
-    }
-    
-    /*
-	 * TODO: Change the row selection back to client side javascript and clear results/size in detach(). - mf
-	 */
-    public void clearResultCache() {
-    	results = null;
+        results = null;
         size = null;
     }
-
+    
     private List<T> getResults(int first) {
         if (results == null) {
             int pageSize = 20;
@@ -140,12 +132,12 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
             searchContainer.setSortJoinExpression(columnMapping.getJoinExpression());
         }
 
-        return new SearchPerformerWithReadOnlyTransactionManagement().search(new ImmutablePostfetchingSearchDefiner<List<T>>(searchContainer, new IdentityTransformer<T>(), page, pageSize, postFetchFields), getSecurityFilter());
+        return new SearchPerformerWithReadOnlyTransactionManagement().search(new ImmutablePostfetchingSearchDefiner<List<T>>(searchContainer, new IdentityTransformer<T>(), page, pageSize, postFetchFields), searchContainer.getSecurityFilter());
     }
 
     @Override
     public List<Long> getIdList() {
-        return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(searchContainer, getSecurityFilter());
+        return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(searchContainer, searchContainer.getSecurityFilter());
     }
 
     private ColumnMapping loadMapping(Long id) {

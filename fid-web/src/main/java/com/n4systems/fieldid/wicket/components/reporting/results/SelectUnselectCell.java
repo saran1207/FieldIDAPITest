@@ -7,17 +7,24 @@ import org.apache.wicket.model.IModel;
 
 public class SelectUnselectCell extends Panel {
 
+    AjaxCheckBox selectCheckbox;
+
     public SelectUnselectCell(String id, final IModel<Boolean> selectedModel) {
         super(id);
 
-        add(new AjaxCheckBox("checkbox", selectedModel) {
+        selectCheckbox = new AjaxCheckBox("checkbox", selectedModel) {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 onSelectUnselect(target);
             }
-        });
+        };
+        add(selectCheckbox);
     }
 
     protected void onSelectUnselect(AjaxRequestTarget target) { }
+
+    public AjaxCheckBox getSelectCheckbox() {
+        return selectCheckbox;
+    }
 
 }

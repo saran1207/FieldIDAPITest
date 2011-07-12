@@ -46,17 +46,17 @@ public class ReportResultsPanel extends Panel {
         SelectUnselectRowColumn selectUnselectRowColumn = new SelectUnselectRowColumn(selectedRows, new PropertyModel<Boolean>(this, "currentPageSelected")) {
             @Override
             protected void onSelectUnselectPage(AjaxRequestTarget target) {
-                target.addComponent(dataTable);
-                if (isCurrentPageSelected()) {
+                boolean selected = isCurrentPageSelected();
+                if (selected) {
                     dataTable.justSelectedPageWithElements(getItemsOnCurrentPage());
                 }
-                target.addComponent(numSelectedLabel);
+                target.appendJavascript("setTableSelected('"+dataTable.getTable().getMarkupId()+"', "+selected+");");
+                updateSelectionStatus(target);
             }
 
             @Override
             protected void onSelectUnselectRow(AjaxRequestTarget target) {
-                target.addComponent(dataTable);
-                target.addComponent(numSelectedLabel);
+                updateSelectionStatus(target);
             }
         };
         convertedColumns.add(0, selectUnselectRowColumn);
@@ -67,12 +67,6 @@ public class ReportResultsPanel extends Panel {
         add(dataTable = new SimpleDataTable<Event>("resultsTable", convertedColumns.toArray(new IColumn[convertedColumns.size()]), provider, 20, selectedRows) {
             @Override
             protected void onPageChanged(AjaxRequestTarget target) {
-            	/*
-            	 * TODO: TableViewAdapterDataProvider caches the results.  This MUST be called when the selection or
-            	 * sort changes.  This is a part of a temporary fix to avoid going back to the database when rows
-            	 * are selected - mf
-            	 */
-            	provider.clearResultCache();
                 WebRequest request = (WebRequest) getRequest();
                 new LegacyReportCriteriaStorage().storePageNumber(request.getHttpServletRequest().getSession(), dataTable.getTable().getCurrentPage());
                 target.addComponent(totalResultsLabel);
@@ -85,12 +79,6 @@ public class ReportResultsPanel extends Panel {
 
             @Override
             protected void onSortChanged(String sortProperty, SortDirection sortDirection) {
-            	/*
-            	 * TODO: TableViewAdapterDataProvider caches the results.  This MUST be called when the selection or
-            	 * sort changes.  This is a part of a temporary fix to avoid going back to the database when rows
-            	 * are selected - mf
-            	 */
-            	provider.clearResultCache();
                 Long id = Long.parseLong(sortProperty);
                 ColumnMapping column = new ColumnMappingLoader(FieldIDSession.get().getSessionUser().getSecurityFilter()).id(id).load();
                 ColumnMappingView columnView = new ColumnMappingConverter().convert(column);
@@ -100,11 +88,17 @@ public class ReportResultsPanel extends Panel {
         });
 
         dataTable.getTable().setCurrentPage(criteriaModel.getObject().getPageNumber());
+        selectUnselectRowColumn.setDataTable(dataTable.getTable());
 
         add(totalResultsLabel = new Label("totalResults", new PropertyModel<Integer>(this, "totalResults")));
         add(numSelectedLabel = new Label("numSelected", new PropertyModel<Integer>(selectedRows, "numSelectedIds")));
         totalResultsLabel.setOutputMarkupId(true);
         numSelectedLabel.setOutputMarkupId(true);
+    }
+
+    protected void updateSelectionStatus(AjaxRequestTarget target) {
+        target.addComponent(numSelectedLabel);
+        dataTable.updateSelectionStatus(target);
     }
 
     public boolean isCurrentPageSelected() {

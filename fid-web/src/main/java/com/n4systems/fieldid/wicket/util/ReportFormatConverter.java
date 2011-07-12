@@ -9,12 +9,14 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.handlers.AssetLinkHandler;
+import com.n4systems.fieldid.viewhelpers.handlers.AssignedToUpdateHandler;
 import com.n4systems.fieldid.viewhelpers.handlers.DateTimeHandler;
 import com.n4systems.fieldid.viewhelpers.handlers.EnumHandler;
 import com.n4systems.fieldid.viewhelpers.handlers.EventRfidNumberHandler;
 import com.n4systems.fieldid.viewhelpers.handlers.EventSerialNumberHandler;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.AssetLinkPropertyColumn;
+import com.n4systems.fieldid.wicket.components.reporting.columns.display.AssignedToUpdatePropertyColumn;
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.DateTimePropertyColumn;
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.EventRfidNumberPropertyColumn;
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.EventSerialNumberPropertyColumn;
@@ -72,6 +74,8 @@ public class ReportFormatConverter {
                 convertedColumns.add(new EventRfidNumberPropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
             } else if (EnumHandler.class.getName().equals(columnOutputHandler)) {
                 convertedColumns.add(new EventRfidNumberPropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
+            } else if (AssignedToUpdateHandler.class.getName().equals(columnOutputHandler)) {
+                convertedColumns.add(new AssignedToUpdatePropertyColumn(columnLabelModel, pathExpression));
             } else {
                 if (enabledColumn.isSortable()) {
 

@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -16,13 +17,15 @@ import java.util.List;
 
 public class SelectionStatusPanel extends Panel {
 
+    private DataTable dataTable;
     private MultiIdSelection selection;
     private ISortableDataProvider dataProvider;
     private boolean justSelectedPage;
     private Integer numJustSelected;
 
-    public SelectionStatusPanel(String id, MultiIdSelection multiSelection, final ListableSortableDataProvider dataProvider) {
+    public SelectionStatusPanel(String id, DataTable table, MultiIdSelection multiSelection, final ListableSortableDataProvider dataProvider) {
         super(id);
+        this.dataTable = table;
         this.selection = multiSelection;
         this.dataProvider = dataProvider;
 
@@ -49,23 +52,28 @@ public class SelectionStatusPanel extends Panel {
 
         justSelectedPageContainer.add(new FlatLabel("numJustSelected", new PropertyModel<Integer>(this, "numJustSelected")));
 
-        regularStateContainer.add(new AjaxLink("clearSelectionLink") {
+        AjaxLink clearSelectionLink = new AjaxLink("clearSelectionLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 selection.clear();
+                target.addComponent(SelectionStatusPanel.this);
+                target.appendJavascript("setTableSelected('"+dataTable.getMarkupId()+"', false);");
                 onSelectionChanged(target);
             }
-        });
+        };
+        regularStateContainer.add(clearSelectionLink);
 
         AjaxLink selectAllLink = null;
         justSelectedPageContainer.add(selectAllLink = new AjaxLink("selectAllLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 selection.clear();
+                target.appendJavascript("setTableSelected('"+dataTable.getMarkupId()+"', true);");
                 List<Long> idList = dataProvider.getIdList();
                 for (Long id : idList) {
                     selection.addId(id);
                 }
+                target.addComponent(SelectionStatusPanel.this);
                 onSelectionChanged(target);
             }
         });

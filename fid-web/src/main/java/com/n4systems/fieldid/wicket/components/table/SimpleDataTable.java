@@ -8,6 +8,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.apache.wicket.markup.html.JavascriptPackageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -51,18 +52,8 @@ public class SimpleDataTable<T> extends Panel {
 
         setOutputMarkupId(true);
 
-        if (dataProvider instanceof ListableSortableDataProvider) {
-            add(selectionStatusPanel = new SelectionStatusPanel("selectionStatus", selection, (ListableSortableDataProvider)dataProvider) {
-                @Override
-                protected void onSelectionChanged(AjaxRequestTarget target) {
-                    target.addComponent(SimpleDataTable.this);
-                    SimpleDataTable.this.onSelectionChanged(target);
-                }
-            });
-        } else {
-            add(new WebMarkupContainer("selectionStatus").setVisible(false));
-        }
-        
+        add(JavascriptPackageResource.getHeaderContribution("javascript/selectionNew.js"));
+
         table = new DataTable<T>("table", columns, dataProvider, rowsPerPage) {
             @Override
             protected Item<T> newRowItem(String id, int index, IModel<T> rowModel) {
@@ -79,6 +70,7 @@ public class SimpleDataTable<T> extends Panel {
                 return cellItem;
             }
         };
+        table.setOutputMarkupPlaceholderTag(true);
 
 		table.addTopToolbar(new HeadersToolbar(table, dataProvider) {
             @Override
@@ -102,6 +94,18 @@ public class SimpleDataTable<T> extends Panel {
         		};
             }
         });
+
+        if (dataProvider instanceof ListableSortableDataProvider) {
+            add(selectionStatusPanel = new SelectionStatusPanel("selectionStatus", table, selection, (ListableSortableDataProvider)dataProvider) {
+                @Override
+                protected void onSelectionChanged(AjaxRequestTarget target) {
+                    SimpleDataTable.this.onSelectionChanged(target);
+                }
+            });
+        } else {
+            add(new WebMarkupContainer("selectionStatus").setVisible(false));
+        }
+
 
         add(table);
 
@@ -150,5 +154,9 @@ public class SimpleDataTable<T> extends Panel {
     protected void onSelectionChanged(AjaxRequestTarget target) { }
 
     protected void onSortChanged(String sortProperty, SortDirection sortDirection) {}
+
+    public void updateSelectionStatus(AjaxRequestTarget target) {
+        target.addComponent(selectionStatusPanel);
+    }
 
 }
