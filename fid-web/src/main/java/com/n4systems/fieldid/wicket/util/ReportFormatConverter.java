@@ -1,5 +1,12 @@
 package com.n4systems.fieldid.wicket.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
@@ -21,6 +28,7 @@ import com.n4systems.fieldid.wicket.components.reporting.columns.display.DateTim
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.EventRfidNumberPropertyColumn;
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.EventSerialNumberPropertyColumn;
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.ReflectorPropertyColumn;
+import com.n4systems.fieldid.wicket.components.reporting.columns.display.StringOrDatePropertyColumn;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
@@ -38,13 +46,6 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReportFormatConverter {
 
@@ -78,10 +79,9 @@ public class ReportFormatConverter {
                 convertedColumns.add(new AssignedToUpdatePropertyColumn(columnLabelModel, pathExpression));
             } else {
                 if (enabledColumn.isSortable()) {
-
-                    convertedColumns.add(new PropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
+                    convertedColumns.add(new StringOrDatePropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
                 } else {
-                    convertedColumns.add(new PropertyColumn(columnLabelModel, pathExpression));
+                    convertedColumns.add(new StringOrDatePropertyColumn(columnLabelModel, pathExpression));
                 }
 
             }
