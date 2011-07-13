@@ -30,7 +30,7 @@ public class EventActionsCell extends Panel {
         NonWicketLink printReportLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID="+eventModel.getObject().getId() + "&reportType=INSPECTION_CERT");
         NonWicketLink startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId="+eventModel.getObject().getAsset().getId());
         NonWicketLink viewAssetLink = new NonWicketLink("viewAssetLink", "asset.action?uniqueID="+eventModel.getObject().getAsset().getId());
-        NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "selectEventEdit.action?uniqueID="+eventModel.getObject().getAsset().getId());
+        NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+eventModel.getObject().getAsset().getId());
 
         Event event = eventModel.getObject();
 
