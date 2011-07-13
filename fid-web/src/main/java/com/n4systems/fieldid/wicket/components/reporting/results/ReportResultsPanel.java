@@ -31,13 +31,15 @@ public class ReportResultsPanel extends Panel {
     MultiIdSelection selectedRows;
     Label numSelectedLabel;
     Label totalResultsLabel;
+    IModel<EventReportCriteriaModel> criteriaModel;
 
     public ReportResultsPanel(String id, final IModel<EventReportCriteriaModel> criteriaModel) {
         super(id);
+        this.criteriaModel = criteriaModel;
 
         selectedRows = criteriaModel.getObject().getSelection();
 
-        EventReportCriteriaModel reportCriteria = criteriaModel.getObject();
+        final EventReportCriteriaModel reportCriteria = criteriaModel.getObject();
         ReportFormatConverter converter = new ReportFormatConverter();
 
         List<IColumn> convertedColumns = converter.convertColumns(reportCriteria);
@@ -73,6 +75,7 @@ public class ReportResultsPanel extends Panel {
 
             @Override
             protected void onSelectionChanged(AjaxRequestTarget target) {
+                new LegacyReportCriteriaStorage().storeCriteria(reportCriteria, ((WebRequest) getRequest()).getHttpServletRequest().getSession());
                 target.addComponent(numSelectedLabel);
             }
 
@@ -83,6 +86,7 @@ public class ReportResultsPanel extends Panel {
                 ColumnMappingView columnView = new ColumnMappingConverter().convert(column);
                 criteriaModel.getObject().setSortColumn(columnView);
                 criteriaModel.getObject().setSortDirection(sortDirection);
+                new LegacyReportCriteriaStorage().storeCriteria(reportCriteria, ((WebRequest) getRequest()).getHttpServletRequest().getSession());
             }
         });
 
@@ -98,6 +102,7 @@ public class ReportResultsPanel extends Panel {
     protected void updateSelectionStatus(AjaxRequestTarget target) {
         target.addComponent(numSelectedLabel);
         dataTable.updateSelectionStatus(target);
+        new LegacyReportCriteriaStorage().storeCriteria(criteriaModel.getObject(), ((WebRequest) getRequest()).getHttpServletRequest().getSession());
     }
 
     public boolean isCurrentPageSelected() {

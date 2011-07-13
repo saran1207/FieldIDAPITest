@@ -149,8 +149,9 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
                 public void setObject(Date date) {
                     if (date == null) {
                         super.setObject(date);
+                    } else {
+                        super.setObject(DateHelper.convertToUTC(DateHelper.getEndOfDay(date), FieldIDSession.get().getSessionUser().getTimeZone()));
                     }
-                    super.setObject(DateHelper.convertToUTC(DateHelper.getEndOfDay(date), FieldIDSession.get().getSessionUser().getTimeZone()));
                 }
             }));
             add(new LocationPicker("location", new PropertyModel<Location>(getModel(), "location")));

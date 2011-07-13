@@ -119,6 +119,9 @@ public class ReportFormatConverter {
         container.getLocation().setFreeformLocation(criteriaModel.getLocation().getFreeformLocation());
         container.getLocation().setPredefinedLocation(criteriaModel.getLocation().getPredefinedLocation());
 
+        container.setSortColumn(criteriaModel.getSortColumn() == null ? null : criteriaModel.getSortColumn().getSortExpression());
+        container.setSortDirection(criteriaModel.getSortDirection() == null ? null : criteriaModel.getSortDirection().getDisplayName());
+
         return container;
     }
 
@@ -153,6 +156,7 @@ public class ReportFormatConverter {
         criteriaModel.setReferenceNumber(container.getReferenceNumber());
         criteriaModel.setRfidNumber(container.getRfidNumber());
         criteriaModel.setResult(container.getStatus() == null ? null : Status.valueOf(container.getStatus()));
+        criteriaModel.setSelection(container.getMultiIdSelection());
 
         LocationWebModel locationWebModel = container.getLocation();
         Location location = new Location(locationWebModel.getPredefinedLocation(),  locationWebModel.getFreeformLocation());
