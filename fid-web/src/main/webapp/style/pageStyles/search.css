@@ -3,6 +3,10 @@
 	overflow:hidden;	
 }
 
+.columnGroupWrapper {
+	float: left;
+}
+	
 .columnGroup {
 	float: left;
 	margin: 10px 15px;
