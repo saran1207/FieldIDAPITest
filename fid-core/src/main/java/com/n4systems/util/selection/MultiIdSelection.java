@@ -20,6 +20,10 @@ public class MultiIdSelection implements Serializable {
         ids.addAll(idsToAdd);
     }
 
+    public void removeAllIds(Collection<Long> idsToRemove) {
+        ids.removeAll(idsToRemove);
+    }
+
     public void removeId(Long id) {
         ids.remove(id);
     }

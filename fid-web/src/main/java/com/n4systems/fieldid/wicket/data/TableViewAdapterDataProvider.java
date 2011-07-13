@@ -25,6 +25,7 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     private List<T> results;
     private Class<T> clazz;
     private Integer size;
+    private List<Long> currentPageIdList = new ArrayList<Long>();
 
     private SearchContainer searchContainer;
     private EventReportCriteriaModel reportCriteria;
@@ -110,8 +111,16 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
             int page = first / pageSize;
             PageHolder<List<T>> pageHolder = runSearch(page, pageSize);
             results = pageHolder.getPageResults();
+            storeIdList();
         }
         return results;
+    }
+
+    private void storeIdList() {
+        currentPageIdList = new ArrayList<Long>(results.size());
+        for (T result : results) {
+            currentPageIdList.add(result.getId());
+        }
     }
 
     protected PageHolder<List<T>> runSearch(int page, int pageSize) {
@@ -142,6 +151,10 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
 
     private ColumnMapping loadMapping(Long id) {
         return new ColumnMappingLoader(getSecurityFilter()).id(id).load();
+    }
+
+    public List<Long> getCurrentPageIdList() {
+        return currentPageIdList;
     }
 
 }

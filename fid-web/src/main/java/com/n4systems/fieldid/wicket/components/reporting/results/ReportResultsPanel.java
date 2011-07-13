@@ -22,7 +22,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebRequest;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class ReportResultsPanel extends Panel {
@@ -48,7 +47,7 @@ public class ReportResultsPanel extends Panel {
             protected void onSelectUnselectPage(AjaxRequestTarget target) {
                 boolean selected = isCurrentPageSelected();
                 if (selected) {
-                    dataTable.justSelectedPageWithElements(getItemsOnCurrentPage());
+                    dataTable.justSelectedPageWithElements(countItemsOnCurrentPage());
                 }
                 target.appendJavascript("setTableSelected('"+dataTable.getTable().getMarkupId()+"', "+selected+");");
                 updateSelectionStatus(target);
@@ -102,10 +101,8 @@ public class ReportResultsPanel extends Panel {
     }
 
     public boolean isCurrentPageSelected() {
-        Iterator<? extends Event> iterator = provider.iterator(20 * dataTable.getTable().getCurrentPage(), 20);
-        while (iterator.hasNext()) {
-            Event event = iterator.next();
-            if (!selectedRows.containsId(event.getId())) {
+        for (Long id : provider.getCurrentPageIdList()) {
+            if (!selectedRows.containsId(id)) {
                 return false;
             }
         }
@@ -113,25 +110,15 @@ public class ReportResultsPanel extends Panel {
     }
 
     public void setCurrentPageSelected(boolean selected) {
-        Iterator<? extends Event> iterator = provider.iterator(20 * dataTable.getTable().getCurrentPage(), 20);
-        while (iterator.hasNext()) {
-            Event event = iterator.next();
-            if (selected) {
-                selectedRows.addId(event.getId());
-            } else {
-                selectedRows.removeId(event.getId());
-            }
+        if (selected) {
+            selectedRows.addAllIds(provider.getCurrentPageIdList());
+        } else {
+            selectedRows.removeAllIds(provider.getCurrentPageIdList());
         }
     }
 
-    protected int getItemsOnCurrentPage() {
-        Iterator<? extends Event> iterator = provider.iterator(20 * dataTable.getTable().getCurrentPage(), 20);
-        int count = 0;
-        while(iterator.hasNext()) {
-            iterator.next();
-            count++;
-        }
-        return count;
+    protected int countItemsOnCurrentPage() {
+        return provider.getCurrentPageIdList().size();
     }
 
     public int getTotalResults() {
