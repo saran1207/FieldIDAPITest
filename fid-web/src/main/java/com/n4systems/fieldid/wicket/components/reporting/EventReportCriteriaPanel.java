@@ -40,10 +40,10 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
-import com.n4systems.model.api.Listable;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.util.DateHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -144,7 +144,15 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
 
             add(new OrgPicker("owner", new PropertyModel<BaseOrg>(getModel(), "owner")));
             add(new DateTimePicker("fromDate", new PropertyModel<Date>(getModel(), "fromDate")));
-            add(new DateTimePicker("toDate", new PropertyModel<Date>(getModel(), "toDate")));
+            add(new DateTimePicker("toDate", new PropertyModel<Date>(getModel(), "toDate") {
+                @Override
+                public void setObject(Date date) {
+                    if (date == null) {
+                        super.setObject(date);
+                    }
+                    super.setObject(DateHelper.convertToUTC(DateHelper.getEndOfDay(date), FieldIDSession.get().getSessionUser().getTimeZone()));
+                }
+            }));
             add(new LocationPicker("location", new PropertyModel<Location>(getModel(), "location")));
 
             final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getModel(), "assetTypeGroup");

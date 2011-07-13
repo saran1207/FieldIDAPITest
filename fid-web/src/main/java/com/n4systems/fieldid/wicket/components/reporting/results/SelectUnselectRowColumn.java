@@ -4,10 +4,12 @@ import com.n4systems.model.BaseEntity;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -36,8 +38,16 @@ public class SelectUnselectRowColumn<T extends BaseEntity> extends AbstractColum
         };
         item.add(selectUnselectCell);
 
-        selectUnselectCell.getSelectCheckbox().add(new AttributeAppender("onchange", true,
-                new Model<String>("showRowSelectionStatus(this, '"+rowId+"', '"+dataTable.getMarkupId()+"');"), "; "));
+        final AjaxCheckBox selectCheckbox = selectUnselectCell.getSelectCheckbox();
+
+        selectUnselectCell.getSelectCheckbox().add(new AbstractBehavior() {
+            @Override
+            public void renderHead(IHeaderResponse response) {
+                super.renderHead(response);
+                String checkboxSelector = "$('" + selectCheckbox.getMarkupId() + "')";
+                response.renderOnDomReadyJavascript(checkboxSelector + ".observe('click', function() {  showRowSelectionStatus(" + checkboxSelector + ", '" + rowId + "', '" + dataTable.getMarkupId() + "') } )");
+            }
+        });
     }
 
     @Override
