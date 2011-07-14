@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.eventform;
 
+import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
@@ -7,6 +8,7 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaSectionCopyUtil;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.model.Criteria;
@@ -14,13 +16,6 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
 import com.n4systems.model.EventType;
 import com.n4systems.model.StateSet;
-import com.n4systems.model.api.Archivable;
-import com.n4systems.model.event.EventFormSaver;
-import com.n4systems.model.eventtype.EventTypeSaver;
-import com.n4systems.persistence.PersistenceManager;
-import com.n4systems.persistence.Transaction;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
-import com.n4systems.persistence.loaders.LoaderFactory;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.CSSPackageResource;
@@ -29,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +35,12 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 
 public class EventFormEditPage extends FieldIDLoggedInPage {
 
+    @SpringBean
+    private EventFormService eventFormService;
+
     private List<CriteriaSection> criteriaSections;
 
     private Long eventTypeId;
-    private Long oldEventFormId;
 
     private CriteriaSectionsPanel criteriaSectionsPanel;
     private CriteriaPanel criteriaPanel;
@@ -50,21 +48,18 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
 
     private SavePanel topSavePanel;
     private SavePanel bottomSavePanel;
-    // TODO: Use model
-    private transient EventType eventType;
+
+    private IModel<EventType> eventTypeModel;
 
     @Override
     protected void storePageParameters(PageParameters params) {
         eventTypeId = params.getAsLong("uniqueID");
-        FilteredIdLoader<EventType> idLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
-        idLoader.setPostFetchFields("eventForm.sections");
-        idLoader.setId(eventTypeId);
-        eventType = idLoader.load();
+        eventTypeModel = new EntityModel<EventType>(EventType.class, eventTypeId);
     }
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventType.getName()));
+        return new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventTypeModel.getObject().getName()));
     }
 
     @Override
@@ -89,9 +84,8 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
         add(bottomSavePanel = createSavePanel("bottomSavePanel"));
 
         criteriaSections = new ArrayList<CriteriaSection>();
-        if (eventType.getEventForm() != null) {
-            oldEventFormId = eventType.getEventForm().getId();
-            criteriaSections.addAll(eventType.getEventForm().getAvailableSections());
+        if (eventTypeModel.getObject().getEventForm() != null) {
+            criteriaSections.addAll(eventTypeModel.getObject().getEventForm().getAvailableSections());
         }
 
         add(criteriaSectionsPanel = new CriteriaSectionsPanel("criteriaSectionsPanel", new PropertyModel<List<CriteriaSection>>(this, "criteriaSections"))
@@ -202,31 +196,11 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
     }
 
     private void saveEventForm() {
-        Transaction tx = PersistenceManager.startTransaction();
-
-        FilteredIdLoader<EventForm> eventFormLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventForm.class);
-        if (oldEventFormId != null) {
-            EventForm oldEventForm = eventFormLoader.setId(oldEventFormId).load(tx);
-            oldEventForm.setState(Archivable.EntityState.RETIRED);
-            new EventFormSaver().update(tx, oldEventForm);
-        }
-
-        FilteredIdLoader<EventType> eventTypeLoader = new LoaderFactory(FieldIDSession.get().getSessionUser().getSecurityFilter()).createFilteredIdLoader(EventType.class);
-
-        EventType eventType = eventTypeLoader.setId(eventTypeId).setPostFetchFields("eventForm.sections").load(tx);
-
         EventForm eventForm = new EventForm();
         eventForm.setSections(createCopiesOf(criteriaSections));
         eventForm.setTenant(FieldIDSession.get().getSessionUser().getTenant());
-        eventType.setEventForm(eventForm);
-        eventType.incrementFormVersion();
 
-        new EventFormSaver().save(tx, eventForm);
-        new EventTypeSaver().update(tx, eventType);
-
-        tx.commit();
-
-        oldEventFormId = eventForm.getId();
+        eventFormService.saveNewEventForm(eventTypeId, eventForm);
     }
 
     private List<CriteriaSection> createCopiesOf(List<CriteriaSection> criteriaSections) {

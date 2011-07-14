@@ -147,11 +147,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             add(new DateTimePicker("toDate", new PropertyModel<Date>(getModel(), "toDate") {
                 @Override
                 public void setObject(Date date) {
-                    if (date == null) {
-                        super.setObject(date);
-                    } else {
-                        super.setObject(DateHelper.convertToUTC(DateHelper.getEndOfDay(date), FieldIDSession.get().getSessionUser().getTimeZone()));
-                    }
+                    super.setObject(date == null ? null : DateHelper.convertToUTC(DateHelper.getEndOfDay(date), FieldIDSession.get().getSessionUser().getTimeZone()));
                 }
             }));
             add(new LocationPicker("location", new PropertyModel<Location>(getModel(), "location")));
@@ -250,11 +246,6 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             getModelObject().setReportAlreadyRun(true);
             new LegacyReportCriteriaStorage().storeCriteria(getModelObject(), session);
             setResponsePage(new ReportingResultsPage(getModelObject()));
-        }
-
-        @Override
-        protected void onError() {
-            System.out.println("There seems to have been an error.....");
         }
 
     }

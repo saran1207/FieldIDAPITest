@@ -22,7 +22,7 @@ import com.n4systems.model.EventType;
 public class ImportPage extends SetupPage {
 
     public ImportPage() {
-        IModel<List<AssetType>> assetTypeListModel = new AssetTypesForTenantModel().postFetchFields("autoAttributeCriteria");
+        IModel<List<AssetType>> assetTypeListModel = new AssetTypesForTenantModel();
         IModel<List<EventType>> eventTypeListModel = new EventTypesForTenantModel();
         IModel<List<AssetType>> assetTypesWithCriteriaModel = new AssetTypesWithAutoAttributeCriteria(assetTypeListModel);
 

@@ -24,9 +24,10 @@ public class AssetStatusListLoader extends ListLoader<AssetStatus> {
 	protected List<AssetStatus> load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<AssetStatus> builder = new QueryBuilder<AssetStatus>(AssetStatus.class, new TenantOnlySecurityFilter(filter).setShowArchived(archivedOnly));
 		builder.addOrder("name");
-		if(archivedOnly) {
+
+		if (archivedOnly) {
 			builder.addSimpleWhere("state", EntityState.ARCHIVED);
-		}else {
+		} else {
 			builder.addSimpleWhere("state", EntityState.ACTIVE);
 		}
 		

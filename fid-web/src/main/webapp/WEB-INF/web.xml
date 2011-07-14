@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<!-- Struts 2.0 -->
     <filter>
+        <filter-name>session-in-view</filter-name>
+        <filter-class>com.n4systems.fieldid.filter.SessionInViewFilter</filter-class>
+    </filter>
+    <filter>
         <filter-name>log-exceptions</filter-name>
         <filter-class>com.n4systems.fieldid.web.filter.ExceptionLoggingFilter</filter-class>
     </filter>
@@ -36,6 +40,10 @@
         </init-param>
  	</filter>
     <filter-mapping>
+        <filter-name>session-in-view</filter-name>
+        <url-pattern>/w/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
         <filter-name>log-exceptions</filter-name>
         <url-pattern>*</url-pattern>
     </filter-mapping>
@@ -56,12 +64,15 @@
 	   <url-pattern>/w/*</url-pattern>
     </filter-mapping>
 	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener
-		</listener-class>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 	<listener>
 		<listener-class>com.n4systems.fieldid.servlets.UnexportRMIOnShutdownListener</listener-class>
 	</listener>
+
 	<!-- end:Struts 2.0 -->
 
 	<!-- end:Log4J -->

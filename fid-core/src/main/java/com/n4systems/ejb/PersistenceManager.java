@@ -27,9 +27,12 @@ import com.n4systems.model.user.User;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public interface PersistenceManager {
 	public EntityManager getEntityManager();
+
 
 	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId);
 
@@ -42,7 +45,7 @@ public interface PersistenceManager {
 
 
 	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId, SecurityFilter filter);
-	
+
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Tenant tenant);
 
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Long tenantId);

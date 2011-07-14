@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.wicket.model.user;
 
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.viewhelpers.NaturalOrderSort;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserListLoader;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
 
 import java.util.ArrayList;
@@ -14,14 +14,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class GroupedUsersForTenantModel extends LoadableDetachableModel<List<User>> {
+public class GroupedUsersForTenantModel extends FieldIDSpringModel<List<User>> {
+
+    @SpringBean
+    private UserService userService;
 
     @Override
     protected List<User> load() {
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
 
-        List<User> users = new UserListLoader(new TenantOnlySecurityFilter(sessionUser.getSecurityFilter()).setShowArchived(true))
-                .includeSystemUser(false).registered(true).load();
+        List<User> users = userService.getUsers(true, false);
 
         List<User> filteredUsers = new ArrayList<User>();
 

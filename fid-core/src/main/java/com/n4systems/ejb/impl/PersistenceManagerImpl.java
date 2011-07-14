@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.n4systems.model.api.NetworkEntity;
@@ -50,16 +51,11 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SelectClause;
 import com.n4systems.util.persistence.search.BaseSearchDefiner;
 
-	
-
-
-
 public class PersistenceManagerImpl implements PersistenceManager {
 	private Logger logger = Logger.getLogger(PersistenceManagerImpl.class);
 	private static final String defaultTableAlias = "e";
 
-	
-	
+    @PersistenceContext
 	private EntityManager em;
 
 	public PersistenceManagerImpl() {
@@ -68,13 +64,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	public PersistenceManagerImpl(EntityManager em) {
 		this.em = em;
 	}
-	
-	
-	
+
 	private Session getHibernateSession() {
 		return (Session) em.getDelegate();
 	}
-
 	
 	public EntityManager getEntityManager() {
 		return em;
