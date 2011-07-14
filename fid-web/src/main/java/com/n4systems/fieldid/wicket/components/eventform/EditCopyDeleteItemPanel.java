@@ -15,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
 
+
 public class EditCopyDeleteItemPanel extends Panel {
 
     private static final String DELETE_IMAGE = "images/small-x.png";
@@ -36,9 +37,9 @@ public class EditCopyDeleteItemPanel extends Panel {
     }
 
     public EditCopyDeleteItemPanel(String id, IModel<String> titleModel, IModel<String> subTitleModel, final boolean displayCopyLink) {
-        super(id, titleModel);
+        super(id, titleModel);        
         setOutputMarkupPlaceholderTag(true);
-
+        
         ContextImage deleteImage = new ContextImage("deleteImage", new PropertyModel<String>(this, "deleteImage")) {
             @Override
             public boolean isVisible() {
@@ -71,7 +72,7 @@ public class EditCopyDeleteItemPanel extends Panel {
                     onViewLinkClicked(target);
             }
         });
-        viewLink.add(new Label("linkLabel", titleModel));
+        viewLink.add(new Label("linkLabel", new TrimmedModel(titleModel,23))); 
         if (subTitleModel != null) {
             viewLink.add(new Label("subTitle", subTitleModel));
         } else {
@@ -108,7 +109,39 @@ public class EditCopyDeleteItemPanel extends Panel {
         add(editForm.setVisible(false));
     }
 
-    class EditForm extends Form {
+    protected String getTrimmedString(String str, int limit) {
+		return str != null && str.length() > limit ? str.substring(0,limit)+"..." : str;
+	}	
+    
+    // TODO DD : if this class is reused, should put in wicket util pkg somewhere. 
+    class TrimmedModel implements IModel<String> { 
+    	private IModel<String> model;
+		private int limit;
+
+		public TrimmedModel(IModel<String> model, int limit) { 
+    		this.model = model;
+    		this.limit = limit;
+    	}
+
+		@Override public void detach() {}
+
+		@Override
+		public String getObject() {
+			return getTrimmedString(model.getObject());
+		}
+
+		@Override
+		public void setObject(String object) {
+			model.setObject(object);
+		}
+
+		protected String getTrimmedString(String str) {
+			return str != null && str.length() > limit ? str.substring(0,limit)+"..." : str;
+		}	
+		
+    }
+    
+	class EditForm extends Form {
 
         private IModel<String> stringModel;
 
@@ -117,7 +150,7 @@ public class EditCopyDeleteItemPanel extends Panel {
             this.stringModel = model;
             TextField<String> criteriaName;
             add(criteriaName = new RequiredTextField<String>("newText", stringModel));
-            criteriaName.add(new StringValidator.MaximumLengthValidator(1000));
+            criteriaName.add(new StringValidator.MaximumLengthValidator(2000));
 
             add(new AjaxSubmitLink("storeLink") {
                 @Override

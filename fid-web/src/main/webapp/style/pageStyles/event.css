@@ -120,9 +120,16 @@
 	display:block;
 }
 
-.youAreOn, .eventSectionIndex, .eventSectionTitle {
+.youAreOn, .eventSectionIndex {
+	display: block;
+	float:left;	
+}
+	
+.eventSectionTitle {
 	display: block;
 	float:left;
+	width:750px;
+	word-wrap:break-word;		
 }
 
 .youAreOn, .eventSectionIndex {
