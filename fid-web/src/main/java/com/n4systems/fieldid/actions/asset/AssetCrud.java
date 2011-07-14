@@ -51,8 +51,8 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
-import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import com.n4systems.model.orgs.BaseOrg;
@@ -417,7 +417,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			scheduleEvents(asset);
 			
 			uniqueID = asset.getId();
-			addFlashMessageText("message.assetcreated");
+			addFlashMessageText("message.assetcreated", Long.toString(uniqueID), createLinkToAsset(uniqueID));
 
 		} catch (Exception e) {
 			addActionErrorText("error.assetsave");
@@ -448,6 +448,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 		}
 
 		return "saved";
+	}
+
+	private String createLinkToAsset(Long uniqueID) {
+		return "<a href='asset.action?uniqueID="+uniqueID+"'>" + getText("message.view.this.asset") + "</a>";
 	}
 
 	private void scheduleEvents(Asset asset) {

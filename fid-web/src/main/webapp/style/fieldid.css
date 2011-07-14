@@ -260,9 +260,11 @@ h2 a {
 }
 
 .message ul {
-	background-color: #CDEB8B;
-	border: 1px solid #008C00;
+	background-color: #EBF8CD;
+	border: 1px solid #CCCCCC;
 	font-weight: bold;
+	padding-top:10px;
+	padding-bottom:10px;	
 }
 
 .largeText * {

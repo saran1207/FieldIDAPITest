@@ -169,6 +169,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		addFlashMessage( getText( message ) );
 	}
 	
+	public void addFlashMessageText( String message, String...args ) {
+		addFlashMessage( getText(message,args) );
+	}
+	
 	public void addActionMessageText( String message ) {
 		addActionMessage( getText( message ) );
 	}
