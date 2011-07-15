@@ -1,0 +1,32 @@
+<wicket:extend>
+
+    <form wicket:id=accountPolicyForm class="crudForm pageSection">
+
+        <div id="formErrors" wicket:id="feedbackPanel"></div>
+
+        <h2><wicket:message key="label.account_policy"/></h2>
+
+        <div class="sectionContent">
+			
+			<div class="infoSet">
+			    <label for="maxAttempts"><wicket:message key="label.max_attempts"/></label>
+			    <input type="text" wicket:id="maxAttempts"></input>
+			</div>
+			
+			<div class="infoSet">
+			    <label for="lockoutDuration"><wicket:message key="label.lockout_duration"/></label>
+			    <input type="text" wicket:id="lockoutDuration"></input>
+			</div>
+
+        </div>
+
+        <div class="formAction">
+            <input wicket:id="runButton" type="submit" wicket:message="value:label.save" />
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>            
+        </div>
+
+    </form>
+
+
+</wicket:extend>

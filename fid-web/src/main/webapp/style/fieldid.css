@@ -1162,6 +1162,24 @@ li.buttonGroupLabels {
 	width: 305px;
 }
 
+/* FIXME DD : need to properly style security forms.  placeholder style left in for now */
+.XXX {
+	padding : 15px;	 
+}
+
+.XXX dt label {
+}
+
+.XXX dt p {
+	font-weight:lighter;
+	color:#888;
+	border-bottom: none;
+}
+
+.XXX dd input {
+}
+
+
 .crudForm p span.unitOfMeasure,.crudForm p span.date {
 	width: 200px;
 }

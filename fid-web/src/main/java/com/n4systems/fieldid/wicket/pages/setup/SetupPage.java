@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
+
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.CSSPackageResource;
+import org.apache.wicket.markup.html.basic.Label;
+
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.CSSPackageResource;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.Model;
-
-import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public abstract class SetupPage extends FieldIDLoggedInPage {
 
@@ -36,6 +36,7 @@ public abstract class SetupPage extends FieldIDLoggedInPage {
                 aNavItem().label("nav.import").page(ImportPage.class).cond(hasManageSystemConfig()).build(),
                 aNavItem().label("nav.templates").page(TemplatesPage.class).cond(hasManageSystemConfig()).build(),
                 aNavItem().label("nav.widgets").page(WidgetsPage.class).cond(hasManageSystemConfig()).build(),
+                aNavItem().label("nav.security").page(SecurityPage.class).cond(hasManageSystemConfig()).build(),
                 aNavItem().label("nav.data_log").page(DataLogPage.class).cond(hasManageSystemConfig()).build()));
     }
 

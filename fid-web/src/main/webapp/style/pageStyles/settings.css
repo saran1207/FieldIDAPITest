@@ -66,6 +66,14 @@
 	background-image: url(../../images/asset-column-icon.png);
 }
 
+.passwordPolicyLayout{
+	background-image: url(../../images/password-policy.png);
+}
+
+.accountPolicyLayout{
+	background-image: url(../../images/account-policy.png);  
+}
+
 .eventColumnsLayout{
 	background-image: url(../../images/reporting-column-icon.png);
 }
