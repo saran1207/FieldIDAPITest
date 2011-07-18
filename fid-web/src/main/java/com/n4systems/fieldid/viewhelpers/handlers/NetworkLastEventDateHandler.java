@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import java.util.Date;
-
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.model.asset.LastEventDateLoader;
+
+import java.util.Date;
 
 public class NetworkLastEventDateHandler extends DateTimeHandler {
 
 	private LastEventDateLoader lastDateLoader = new LastEventDateLoader();
 	
-	public NetworkLastEventDateHandler(AbstractAction action) {
+	public NetworkLastEventDateHandler(WebContextProvider action) {
 		super(action);
 	}
 	

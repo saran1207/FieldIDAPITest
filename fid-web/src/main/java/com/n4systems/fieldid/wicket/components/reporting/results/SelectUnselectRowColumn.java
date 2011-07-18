@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
-import com.n4systems.model.BaseEntity;
 import com.n4systems.util.selection.MultiIdSelection;
+import com.n4systems.util.views.RowView;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -15,7 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-public class SelectUnselectRowColumn<T extends BaseEntity> extends AbstractColumn<T> {
+public class SelectUnselectRowColumn extends AbstractColumn<RowView> {
 
     private MultiIdSelection multiIdSelection;
     private PropertyModel<Boolean> pageSelectedModel;
@@ -28,7 +28,7 @@ public class SelectUnselectRowColumn<T extends BaseEntity> extends AbstractColum
     }
 
     @Override
-    public void populateItem(final Item<ICellPopulator<T>> item, String componentId, final IModel<T> rowModel) {
+    public void populateItem(final Item<ICellPopulator<RowView>> item, String componentId, final IModel<RowView> rowModel) {
         final String rowId = item.getParent().getParent().getMarkupId();
         SelectUnselectCell selectUnselectCell = new SelectUnselectCell(componentId, new ItemIsSelectedModel(rowModel)) {
             @Override
@@ -68,9 +68,9 @@ public class SelectUnselectRowColumn<T extends BaseEntity> extends AbstractColum
     protected void onSelectUnselectPage(AjaxRequestTarget target) { }
 
     class ItemIsSelectedModel implements IModel<Boolean> {
-        private IModel<T> model;
+        private IModel<RowView> model;
     
-        public ItemIsSelectedModel(IModel<T> model) {
+        public ItemIsSelectedModel(IModel<RowView> model) {
             this.model = model;
         }
 

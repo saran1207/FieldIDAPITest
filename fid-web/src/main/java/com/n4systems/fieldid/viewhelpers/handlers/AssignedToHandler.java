@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
-        
-import com.n4systems.fieldid.actions.api.AbstractAction;
+
+import com.n4systems.fieldid.utils.WebContextProvider;
 
 public class AssignedToHandler extends WebOutputHandler {
 
-	public AssignedToHandler(AbstractAction action) {
+	public AssignedToHandler(WebContextProvider action) {
 		super(action);
 	}
 
@@ -29,7 +29,7 @@ public class AssignedToHandler extends WebOutputHandler {
 
 	private String renderUser(String assignedUser) {
 		if (assignedUser == null || assignedUser.equals("")) {
-			return action.getText("label.unassigned");
+			return contextProvider.getText("label.unassigned");
 		}
 		
 		return assignedUser;

@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.actions.search.AssetSearchAction;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import org.apache.log4j.Logger;
-
-import com.n4systems.fieldid.actions.api.AbstractAction;
 
 /**
  * Factory for creating cell OutputHandlers.
@@ -11,14 +10,14 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 public class CellHandlerFactory {
 	private Logger logger = Logger.getLogger(AssetSearchAction.class);
 
-	private final AbstractAction action;
+	private final WebContextProvider contextProvider;
 	private final WebOutputHandler defaultHandler;
 	
-	public CellHandlerFactory(AbstractAction action) {
-		this.action = action;
+	public CellHandlerFactory(WebContextProvider contextProvider) {
+		this.contextProvider = contextProvider;
 		
 		// we register the default handler here so that multiple invocations of getHandler will receive the same instance 
-		this.defaultHandler = new DefaultHandler(action);
+		this.defaultHandler = new DefaultHandler(contextProvider);
 	}
 	
 	/**
@@ -32,7 +31,7 @@ public class CellHandlerFactory {
 		WebOutputHandler handler;
 		if(className != null && className.length() != 0) {
 			try {
-				handler = (WebOutputHandler)Class.forName(className).getDeclaredConstructor(AbstractAction.class).newInstance(action);
+				handler = (WebOutputHandler)Class.forName(className).getDeclaredConstructor(WebContextProvider.class).newInstance(contextProvider);
 			} catch(Exception e) {
 				// if newInstance of the custom handler fails, use the default
 				logger.error("Unable to register custom handler for class [" + className + "]", e);

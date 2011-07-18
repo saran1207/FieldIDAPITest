@@ -1,12 +1,5 @@
 package com.n4systems.fieldid.wicket.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
@@ -15,20 +8,8 @@ import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
-import com.n4systems.fieldid.viewhelpers.handlers.AssetLinkHandler;
-import com.n4systems.fieldid.viewhelpers.handlers.AssignedToUpdateHandler;
-import com.n4systems.fieldid.viewhelpers.handlers.DateTimeHandler;
-import com.n4systems.fieldid.viewhelpers.handlers.EnumHandler;
-import com.n4systems.fieldid.viewhelpers.handlers.EventRfidNumberHandler;
-import com.n4systems.fieldid.viewhelpers.handlers.EventSerialNumberHandler;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.reporting.columns.display.AssetLinkPropertyColumn;
-import com.n4systems.fieldid.wicket.components.reporting.columns.display.AssignedToUpdatePropertyColumn;
-import com.n4systems.fieldid.wicket.components.reporting.columns.display.DateTimePropertyColumn;
-import com.n4systems.fieldid.wicket.components.reporting.columns.display.EventRfidNumberPropertyColumn;
-import com.n4systems.fieldid.wicket.components.reporting.columns.display.EventSerialNumberPropertyColumn;
-import com.n4systems.fieldid.wicket.components.reporting.columns.display.ReflectorPropertyColumn;
-import com.n4systems.fieldid.wicket.components.reporting.columns.display.StringOrDatePropertyColumn;
+import com.n4systems.fieldid.wicket.components.reporting.columns.display.FieldIdPropertyColumn;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
@@ -46,6 +27,12 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReportFormatConverter {
 
@@ -53,6 +40,7 @@ public class ReportFormatConverter {
         List<IColumn> convertedColumns = new ArrayList<IColumn>();
         List<ColumnMappingView> enabledColumns = criteriaModel.getSortedStaticAndDynamicColumns();
 
+        int index = 0;
         for (ColumnMappingView enabledColumn : enabledColumns) {
             String columnOutputHandler = enabledColumn.getOutputHandler();
             String pathExpression = enabledColumn.getPathExpression();
@@ -62,30 +50,13 @@ public class ReportFormatConverter {
             // but we'll need more info than that to actually sort our search (sort join, sort expr).
             String dbColumnIdStr = enabledColumn.getDbColumnId() == null ? null : enabledColumn.getDbColumnId().toString();
 
-            if (dbColumnIdStr == null || "custom_created_columns".equals(enabledColumn.getGroupKey())) {
-                convertedColumns.add(new ReflectorPropertyColumn(columnLabelModel, pathExpression));
-            } else if (AssetLinkHandler.class.getName().equals(columnOutputHandler)) {
-                AssetLinkPropertyColumn assetLinkPropertyColumn = new AssetLinkPropertyColumn(columnLabelModel, pathExpression);
-                convertedColumns.add(assetLinkPropertyColumn);
-            } else if (EventSerialNumberHandler.class.getName().equals(columnOutputHandler)) {
-                convertedColumns.add(new EventSerialNumberPropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
-            } else if (DateTimeHandler.class.getName().equals(columnOutputHandler)) {
-                convertedColumns.add(new DateTimePropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
-            } else if (EventRfidNumberHandler.class.getName().equals(columnOutputHandler)) {
-                convertedColumns.add(new EventRfidNumberPropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
-            } else if (EnumHandler.class.getName().equals(columnOutputHandler)) {
-                convertedColumns.add(new EventRfidNumberPropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
-            } else if (AssignedToUpdateHandler.class.getName().equals(columnOutputHandler)) {
-                convertedColumns.add(new AssignedToUpdatePropertyColumn(columnLabelModel, pathExpression));
+            if (enabledColumn.isSortable()) {
+                convertedColumns.add(new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index, true));
             } else {
-                if (enabledColumn.isSortable()) {
-                    convertedColumns.add(new StringOrDatePropertyColumn(columnLabelModel, dbColumnIdStr, pathExpression));
-                } else {
-                    convertedColumns.add(new StringOrDatePropertyColumn(columnLabelModel, pathExpression));
-                }
-
+                convertedColumns.add(new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index));
             }
 
+            index++;
         }
 
         return convertedColumns;

@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.search.CustomizableSearchAction;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.util.views.ExcelOutputHandler;
 
 /**
@@ -14,13 +14,12 @@ import com.n4systems.util.views.ExcelOutputHandler;
  */
 public abstract class WebOutputHandler implements ExcelOutputHandler {
 	
-	protected final AbstractAction action;
+	protected final WebContextProvider contextProvider;
 	
-	protected WebOutputHandler(AbstractAction action) {
-		this.action = action;
+	protected WebOutputHandler(WebContextProvider contextProvider) {
+		this.contextProvider = contextProvider;
 	}
 	
 	public abstract String handleWeb(Long entityId, Object value);
 
-	
 }

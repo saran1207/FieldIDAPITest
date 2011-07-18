@@ -3,7 +3,7 @@
  */
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 
@@ -11,7 +11,7 @@ public class AssignedToUpdateHandler extends WebOutputHandler {
 	private static final String NO_ASSIGNMENT = "";
 	private WebOutputHandler assignedToHandler;
 
-	public AssignedToUpdateHandler(AbstractAction action) {
+	public AssignedToUpdateHandler(WebContextProvider action) {
 		super(action);
 		assignedToHandler = new AssignedToHandler(action);
 	}

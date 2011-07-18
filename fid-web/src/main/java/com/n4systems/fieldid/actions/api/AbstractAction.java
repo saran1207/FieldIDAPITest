@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.n4systems.fieldid.utils.WebContextProvider;
 import org.apache.commons.io.FileUtils;
 
 import rfid.web.helper.SessionUser;
@@ -55,7 +56,7 @@ import com.n4systems.util.uri.ActionURLBuilder;
 import freemarker.template.utility.StringUtil;
 
 @SuppressWarnings("serial")
-abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator, LoaderFactoryProvider  {
+abstract public class AbstractAction extends ExtendedTextProviderAction implements FlashScopeAware, UserDateFormatValidator, LoaderFactoryProvider, WebContextProvider {
 	public static final String MISSING = "missing";
 	public static final String INVALID_SECURITY = "invalid_security";
 	public static final String REDIRECT_TO_URL = "redirect_to_url";

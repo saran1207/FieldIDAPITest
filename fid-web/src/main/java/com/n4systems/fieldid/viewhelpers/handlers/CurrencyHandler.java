@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.tools.MoneyUtils;
 
 public class CurrencyHandler extends WebOutputHandler {
 	
-	public CurrencyHandler(AbstractAction action) {
+	public CurrencyHandler(WebContextProvider action) {
 		super(action);
 	}
 

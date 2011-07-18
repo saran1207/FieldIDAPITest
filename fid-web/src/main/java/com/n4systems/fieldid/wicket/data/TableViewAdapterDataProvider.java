@@ -2,55 +2,50 @@ package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
-import com.n4systems.fieldid.wicket.model.NetworkEntityModel;
+import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
+import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.RowModel;
 import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingLoader;
-import com.n4systems.util.persistence.search.ImmutablePostfetchingSearchDefiner;
+import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
+import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.TableViewTransformer;
+import com.n4systems.util.views.RowView;
+import com.n4systems.util.views.TableView;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.model.IModel;
+import rfid.web.helper.SessionUser;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T>> extends FieldIDDataProvider<T> implements ListableSortableDataProvider<T> {
+public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T>> extends FieldIDDataProvider<RowView> implements ListableSortableDataProvider<RowView>, WebContextProvider {
 
-    private List<T> results;
+    private List<RowView> results;
     private Class<T> clazz;
     private Integer size;
     private List<Long> currentPageIdList = new ArrayList<Long>();
 
     private SearchContainer searchContainer;
     private EventReportCriteriaModel reportCriteria;
-    private List<String> postFetchFields = new ArrayList<String>();
 
     public TableViewAdapterDataProvider(Class<T> clazz, SearchContainer searchContainer, EventReportCriteriaModel reportCriteria) {
         this.clazz = clazz;
         this.searchContainer = searchContainer;
         this.reportCriteria = reportCriteria;
         setInitialSort(searchContainer, reportCriteria);
-        storePostfetchFields(reportCriteria.getColumnGroups());
-        //TODO: This will be different for the different types of things we might be providing data for.
-        //Needs refactoring...
-        postFetchFields.add("infoOptionMap");
-        postFetchFields.add("asset.infoOptions");
-    }
-
-    private void storePostfetchFields(List<ColumnMappingGroupView> groups) {
-        for (ColumnMappingGroupView group : groups) {
-            for (ColumnMappingView column : group.getMappings()) {
-                if (!"custom_created_columns".equals(column.getGroupKey()) && column.isEnabled()) {
-                    postFetchFields.add(column.getPathExpression());
-                }
-            }
-        }
     }
 
     private void setInitialSort(SearchContainer searchContainer, EventReportCriteriaModel reportCriteria) {
@@ -81,7 +76,7 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     }
 
     @Override
-    public Iterator<? extends T> iterator(int first, int count) {
+    public Iterator<? extends RowView> iterator(int first, int count) {
         return getResults(first).iterator();
     }
 
@@ -94,8 +89,23 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     }
 
     @Override
-    public IModel<T> model(T object) {
-        return new NetworkEntityModel<T>(clazz, object);
+    public IModel<RowView> model(RowView row) {
+        fillInStringValues(row);
+        return new RowModel(row);
+    }
+
+    private void fillInStringValues(RowView row) {
+        CellHandlerFactory cellHandlerFactory = new CellHandlerFactory(this);
+        reportCriteria.getSortedStaticAndDynamicColumns();
+        List<String> rowValues = new ArrayList<String>();
+        int index = 0;
+        for (ColumnMappingView column : reportCriteria.getSortedStaticAndDynamicColumns()) {
+            WebOutputHandler handler = cellHandlerFactory.getHandler(column.getOutputHandler());
+            String cellValue = handler.handleWeb(row.getId(), row.getValues().get(index));
+            rowValues.add(cellValue);
+            index++;
+        }
+        row.setStringValues(rowValues);
     }
 
     @Override
@@ -105,12 +115,12 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
         size = null;
     }
     
-    private List<T> getResults(int first) {
+    private List<RowView> getResults(int first) {
         if (results == null) {
             int pageSize = 20;
             int page = first / pageSize;
-            PageHolder<List<T>> pageHolder = runSearch(page, pageSize);
-            results = pageHolder.getPageResults();
+            PageHolder<TableView> pageHolder = runSearch(page, pageSize);
+            results = pageHolder.getPageResults().getRows();
             storeIdList();
         }
         return results;
@@ -118,12 +128,12 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
 
     private void storeIdList() {
         currentPageIdList = new ArrayList<Long>(results.size());
-        for (T result : results) {
+        for (RowView result : results) {
             currentPageIdList.add(result.getId());
         }
     }
 
-    protected PageHolder<List<T>> runSearch(int page, int pageSize) {
+    protected PageHolder<TableView> runSearch(int page, int pageSize) {
         SortParam sortParam = getSort();
         searchContainer.setSortColumn(null);
         searchContainer.setSortColumnId(null);
@@ -141,7 +151,25 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
             searchContainer.setSortJoinExpression(columnMapping.getJoinExpression());
         }
 
-        return new SearchPerformerWithReadOnlyTransactionManagement().search(new ImmutablePostfetchingSearchDefiner<List<T>>(searchContainer, new IdentityTransformer<T>(), page, pageSize, postFetchFields), searchContainer.getSecurityFilter());
+        return new SearchPerformerWithReadOnlyTransactionManagement().search(new ImmutableSearchDefiner<TableView>(searchContainer, createResultTransformer(), page, pageSize), searchContainer.getSecurityFilter());
+    }
+
+    private ResultTransformer<TableView> createResultTransformer() {
+		List<String> columns = new ArrayList<String>();
+		for(ColumnMappingView mapping: reportCriteria.getSortedStaticAndDynamicColumns()) {
+			if (mapping != null) {
+				columns.add(mapping.getPathExpression());
+			}
+		}
+
+		ResultTransformer<TableView> transformer = null;
+		try {
+			transformer = new TableViewTransformer("id", columns);
+		} catch (ParseException e) {
+            throw new RuntimeException(e);
+		}
+
+		return transformer;
     }
 
     @Override
@@ -157,4 +185,13 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
         return currentPageIdList;
     }
 
+    @Override
+    public String getText(String key) {
+        return new FIDLabelModel(key).getObject();
+    }
+
+    @Override
+    public SessionUser getSessionUser() {
+        return FieldIDSession.get().getSessionUser();
+    }
 }

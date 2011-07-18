@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityLevel;
 
 public class EventRfidNumberHandler extends WebOutputHandler {
 
-	public EventRfidNumberHandler(AbstractAction action) {
+	public EventRfidNumberHandler(WebContextProvider action) {
 		super(action);
 	}
 	
@@ -18,7 +18,7 @@ public class EventRfidNumberHandler extends WebOutputHandler {
 			return "";
 		}
 		
-		SecurityLevel level = asset.getSecurityLevel(action.getSecurityFilter().getOwner());
+		SecurityLevel level = asset.getSecurityLevel(contextProvider.getSecurityFilter().getOwner());
 		
 		// build the asset info link for local assets, just show the serial for network assets
 		String rfidNumber;

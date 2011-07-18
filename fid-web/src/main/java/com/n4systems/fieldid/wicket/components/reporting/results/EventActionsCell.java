@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Event;
+import com.n4systems.util.views.RowView;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -13,7 +14,7 @@ import org.apache.wicket.model.IModel;
 
 public class EventActionsCell extends Panel {
 
-    public EventActionsCell(String id, IModel<Event> eventModel, String cellMarkupId) {
+    public EventActionsCell(String id, IModel<RowView> rowModel, String cellMarkupId) {
         super(id);
 
         WebMarkupContainer actionsLink = new WebMarkupContainer("actionsLink");
@@ -25,14 +26,14 @@ public class EventActionsCell extends Panel {
         WebMarkupContainer actionsList = new WebMarkupContainer("actionsList");
         actionsList.setOutputMarkupId(true);
 
-        NonWicketLink viewLink = new NonWicketIframeLink("viewLink", "aHtml/iframe/event.action?uniqueID="+eventModel.getObject().getId(), true, 650, 600);
-        NonWicketLink editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID="+eventModel.getObject().getId());
-        NonWicketLink printReportLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID="+eventModel.getObject().getId() + "&reportType=INSPECTION_CERT");
-        NonWicketLink startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId="+eventModel.getObject().getAsset().getId());
-        NonWicketLink viewAssetLink = new NonWicketLink("viewAssetLink", "asset.action?uniqueID="+eventModel.getObject().getAsset().getId());
-        NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+eventModel.getObject().getAsset().getId());
+        Event event = (Event) rowModel.getObject().getEntity();
 
-        Event event = eventModel.getObject();
+        NonWicketLink viewLink = new NonWicketIframeLink("viewLink", "aHtml/iframe/event.action?uniqueID="+rowModel.getObject().getId(), true, 650, 600);
+        NonWicketLink editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID="+rowModel.getObject().getId());
+        NonWicketLink printReportLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID="+rowModel.getObject().getId() + "&reportType=INSPECTION_CERT");
+        NonWicketLink startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId="+event.getAsset().getId());
+        NonWicketLink viewAssetLink = new NonWicketLink("viewAssetLink", "asset.action?uniqueID="+event.getId());
+        NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getId());
 
         boolean localEvent = event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()).isLocal();
         boolean printable = event.isEventCertPrintable();

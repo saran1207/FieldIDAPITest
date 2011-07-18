@@ -11,7 +11,7 @@ public abstract class FieldIDDataProvider<T> extends SortableDataProvider<T> {
         InjectorHolder.getInjector().inject(this);
     }
 
-    protected SecurityFilter getSecurityFilter() {
+    public SecurityFilter getSecurityFilter() {
         return FieldIDSession.get().getSessionUser().getSecurityFilter();
     }
 

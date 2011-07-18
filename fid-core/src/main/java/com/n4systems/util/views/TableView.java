@@ -114,4 +114,25 @@ public class TableView extends AbstractCollection<List<Object>> {
 	public int getColumnSize() {
 		return columns;
 	}
+
+    public List<RowView> getRows() {
+        List<RowView> rows = new ArrayList<RowView>(table.size());
+
+        Iterator<List<Object>> tableIterator = table.iterator();
+        Iterator<Object> entityIterator = entityList.iterator();
+        Iterator<Long> idListIterator = idList.iterator();
+
+        while (idListIterator.hasNext()) {
+            RowView row = new RowView();
+
+            row.setEntity(entityIterator.next());
+            row.setValues(tableIterator.next());
+            row.setId(idListIterator.next());
+
+            rows.add(row);
+        }
+
+        return rows;
+    }
+
 }

@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.utils.WebContextProvider;
 
 
 public class AssetLinkHandler extends WebOutputHandler {
 	
-	protected AssetLinkHandler(AbstractAction action) {
+	protected AssetLinkHandler(WebContextProvider action) {
 		super(action);
 	}
 

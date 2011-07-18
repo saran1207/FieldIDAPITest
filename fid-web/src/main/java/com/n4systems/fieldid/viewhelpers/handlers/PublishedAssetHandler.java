@@ -1,16 +1,16 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.asset.PublishedState;
+import com.n4systems.fieldid.utils.WebContextProvider;
 
 public class PublishedAssetHandler extends WebOutputHandler {
 
-	protected PublishedAssetHandler(AbstractAction action) {
+	protected PublishedAssetHandler(WebContextProvider action) {
 		super(action);
 	}
 
 	public String handleWeb(Long entityId, Object value) {
-		return action.getText(PublishedState.resolvePublishedState((Boolean)value).getPastTenseLabel());
+		return contextProvider.getText(PublishedState.resolvePublishedState((Boolean)value).getPastTenseLabel());
 	}
 
 	public Object handleExcel(Long entityId, Object value) {

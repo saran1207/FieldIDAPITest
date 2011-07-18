@@ -1,16 +1,16 @@
 package com.n4systems.fieldid.viewhelpers.handlers;
 
-import java.util.Date;
-
 import com.n4systems.ejb.EventManager;
-import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.util.ServiceLocator;
+
+import java.util.Date;
 
 public class LastEventDateHandler extends DateTimeHandler {
 
 	private final EventManager eventManager;
 		
-	public LastEventDateHandler(AbstractAction action) {
+	public LastEventDateHandler(WebContextProvider action) {
 		super(action);
 		eventManager = ServiceLocator.getEventManager();
 	}

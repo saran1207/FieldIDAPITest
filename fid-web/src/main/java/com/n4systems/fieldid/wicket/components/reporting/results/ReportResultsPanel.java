@@ -14,6 +14,7 @@ import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingLoader;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
+import com.n4systems.util.views.RowView;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,7 +27,7 @@ import java.util.List;
 
 public class ReportResultsPanel extends Panel {
 
-    SimpleDataTable<Event> dataTable;
+    SimpleDataTable<RowView> dataTable;
     TableViewAdapterDataProvider<Event> provider;
     MultiIdSelection selectedRows;
     Label numSelectedLabel;
@@ -65,7 +66,7 @@ public class ReportResultsPanel extends Panel {
 
         EventSearchContainer searchContainer = converter.convertCriteria(reportCriteria);
         provider = new TableViewAdapterDataProvider<Event>(Event.class, searchContainer, reportCriteria);
-        add(dataTable = new SimpleDataTable<Event>("resultsTable", convertedColumns.toArray(new IColumn[convertedColumns.size()]), provider, 20, selectedRows) {
+        add(dataTable = new SimpleDataTable<RowView>("resultsTable", convertedColumns.toArray(new IColumn[convertedColumns.size()]), provider, 20, selectedRows) {
             @Override
             protected void onPageChanged(AjaxRequestTarget target) {
                 WebRequest request = (WebRequest) getRequest();
