@@ -13,7 +13,14 @@
 				</tr>
 			</#list>
 			<tr>
-				<td colspan="2"><@s.submit key="hbutton.submit"/></td>
+				<td>&nbsp;</td>
+				<td>
+					<@s.submit key="hbutton.submit"/>
+					<@s.text name="label.or"/>
+					<a href="javascript:void(0);" onClick="$('unitSelectorDiv_${infoFieldId}').hide();">
+						<@s.text name="label.cancel" />
+					</a>
+				</td>
 			</tr>
 		</table>
 	</@s.form>

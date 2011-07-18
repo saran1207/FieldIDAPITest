@@ -97,8 +97,8 @@
 }
 
 .unitMeasureDiv input[type="submit"]{
-	float:right;
-	width: 260px;
+	margin-left: 100px;
+	width: 100px;
 }
 
 .columnLeft, .columnCenter, .colummRight {
