@@ -10,13 +10,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
-import com.n4systems.fieldid.wicket.data.PopulatorLogBeanDataProvider;
 
 public class PasswordPolicyPage extends SetupPage {
-
-    PopulatorLogBeanDataProvider provider;
-    SimpleDataTable resultsTable;
 
 
     public PasswordPolicyPage(PageParameters params) {
@@ -46,11 +41,11 @@ public class PasswordPolicyPage extends SetupPage {
             add(addTextField("minCapitals",0,100));
             add(addTextField("expiryDays",0,Integer.MAX_VALUE));
             
-            add(new AjaxButton("runButton") {
+            add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;
-				@Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(this);
+				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    target.addComponent(PasswordPolicyPage.this); 
+                    // where to go after this???
                 }
             });
             
