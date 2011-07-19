@@ -78,7 +78,7 @@ public class FieldIdAppConfig {
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setPersistenceUnitName("fieldid");
-        factoryBean.setLoadTimeWeaver(new ReflectiveLoadTimeWeaver());
+//        factoryBean.setLoadTimeWeaver(new ReflectiveLoadTimeWeaver());
         return factoryBean;
     }
 
