@@ -27,7 +27,7 @@ public enum ConfigEntry {
 	MOBILE_PAGESIZE_PRODUCTS					(	"500"					),
 	MOBILE_PAGESIZE_INSPECTIONS					(	"500"					),
 	MOBLIE_PAGESIZE_SETUPDATA					(	"500"					),
-	WEB_TOTAL_INSPECTION_BUTTONS				(	"3"						),
+	WEB_TOTAL_INSPECTION_BUTTONS				(	"14"					),
 	WEB_FILE_UPLOAD_MAX							(	"50"					),
 	PRODUCT_FILE_UPLOAD_MAX						(	"2"						),
 	WEB_PAGINATION_PAGE_SIZE					(	"20"					),

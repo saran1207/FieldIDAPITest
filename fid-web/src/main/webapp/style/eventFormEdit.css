@@ -125,6 +125,7 @@ div.criteria {
 .buttonImage {
     display: block;
     float: left;
+    padding: 1px 3px 0 0;
 }
 
 .buttonLabel {
