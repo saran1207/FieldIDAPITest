@@ -35,7 +35,7 @@ public class EventWebModel implements UserDateFormatValidator {
 		this.location = new LocationWebModel(loaderFactoryProvider);
 	}
 
-	public Long getOwnerId() {
+	public Long getOwnerId() {		
 		return ownerPicker.getOwnerId();
 	}
 
@@ -91,6 +91,7 @@ public class EventWebModel implements UserDateFormatValidator {
 	}
 
 
+	@Override
 	public boolean isValidDate(String date, boolean usingTime) {
 		return dateConverter.isValidDate(date, usingTime);
 	}

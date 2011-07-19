@@ -19,7 +19,7 @@
 	</#if>
 	
 	<div class="infoSet">
-		<label class="label"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
+		<label class="label"><@s.text name="label.owner"/></label>
 		<@n4.orgPicker name="modifiableEvent.owner" id="ownerId" />
 		<span class="fieldHolder setFromAssetCheckbox">
 			<label class="checkBoxLabel"><@s.checkbox name="ownerSetFromAsset" onclick="toggleDisableOrgPicker();" theme="simple"/> <@s.text name="label.use_existing_values_from_assets"/></label>

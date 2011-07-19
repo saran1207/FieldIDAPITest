@@ -77,6 +77,7 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
@@ -1000,8 +1001,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return modifiableEvent;
 	}
 	
-	@RequiredFieldValidator(message = "", key = "error.owner_required")
-	public BaseOrg getOwner() {
+	@CustomValidator(type = "requiredOwnerMassEvent", message = "", key = "error.owner.required")
+	public BaseOrg getOwner() {		
 		return modifiableEvent.getOwner();
 	}
 	

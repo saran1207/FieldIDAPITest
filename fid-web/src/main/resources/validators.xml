@@ -12,6 +12,7 @@
  <validator name="listNotEmptyValidator" class="com.n4systems.fieldid.validators.ListNotEmptyValidator" />
  <validator name="uniqueValue" class="com.n4systems.fieldid.validators.UniqueValueValidator" />
  <validator name="requiredInfoFields" class="com.n4systems.fieldid.validators.RequiredInfoFieldsValidator" />
+ <validator name="requiredOwnerMassEvent" class="com.n4systems.fieldid.validators.RequiredOwnerMassEventValidator" />
  <validator name="assetDescriptionTemplate" class="com.n4systems.fieldid.validators.AssetDescriptionTemplateValidator" />
  <validator name="duplicateRfidValidator" class="com.n4systems.fieldid.validators.DuplicateRfidValidator" />
  <validator name="selectCheckListValidator" class="com.n4systems.fieldid.validators.SelectCheckListValidator" />
