@@ -4,6 +4,8 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.wrapper.UserEJBContainer;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
@@ -29,37 +31,37 @@ public class FieldIdAppConfig {
 
     @Bean
     public AssetStatusService assetStatusService() {
-        return new AssetStatusService();
+        return injectPersistentService(new AssetStatusService());
     }
 
     @Bean
     public AssetTypeService assetTypeService() {
-        return new AssetTypeService();
+        return injectPersistentService(new AssetTypeService());
     }
 
     @Bean
     public OrgService orgService() {
-        return new OrgService();
+        return injectPersistentService(new OrgService());
     }
 
     @Bean
     public JobService jobService() {
-        return new JobService();
+        return injectPersistentService(new JobService());
     }
 
     @Bean
     public UserService userService() {
-        return new UserService();
+        return injectPersistentService(new UserService());
     }
 
     @Bean
     public EventTypeService eventTypeService() {
-        return new EventTypeService();
+        return injectPersistentService(new EventTypeService());
     }
 
     @Bean
     public EventFormService eventFormService() {
-        return new EventFormService();
+        return injectPersistentService(new EventFormService());
     }
 
     @Bean
@@ -87,13 +89,25 @@ public class FieldIdAppConfig {
 
     @Bean
     @Scope(value="session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public SecurityFilter getUserSecurityFilter() {
+    public SecurityFilter userSecurityFilter() {
         return FieldIDSession.get().getSessionUser().getSecurityFilter();
     }
 
     @Bean
     public PersistenceService persistenceService() {
-        return new PersistenceService();
+        return injectService(new PersistenceService());
+    }
+
+
+    private <T extends FieldIdService> T injectService(T service) {
+        service.setUserSecurityFilter(userSecurityFilter());
+        return service;
+    }
+
+    private <T extends FieldIdPersistenceService> T injectPersistentService(T service) {
+        injectService(service);
+        service.setPersistenceService(persistenceService());
+        return service;
     }
 
 }

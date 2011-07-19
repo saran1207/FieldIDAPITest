@@ -1,4 +1,6 @@
 package com.n4systems.fieldid.service.event;
 
-public class EventTypeService {
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+
+public class EventTypeService extends FieldIdPersistenceService {
 }

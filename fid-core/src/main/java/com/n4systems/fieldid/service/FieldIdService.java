@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FieldIdService {
 
-    @Autowired
+//    @Autowired
     protected SecurityFilter userSecurityFilter;
 
     public SecurityFilter getUserSecurityFilter() {

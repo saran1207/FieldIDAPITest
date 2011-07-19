@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FieldIdPersistenceService extends FieldIdService {
 
-    @Autowired
+//    @Autowired
     protected PersistenceService persistenceService;
 
     public PersistenceService getPersistenceService() {

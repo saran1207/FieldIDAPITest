@@ -61,4 +61,7 @@ public class PersistenceService extends FieldIdService {
 		return em.merge(entity);
 	}
 
+    public Long count(QueryBuilder<?> searchBuilder) {
+        return (Long) searchBuilder.setCountSelect().createQuery(em).getSingleResult();
+    }
 }
