@@ -76,6 +76,18 @@
 	padding:5px 15px 5px 30px;
 }
 
+.jumpto select {
+	overflow:hidden;
+	max-width:25em;	
+	width:15em;         
+}
+
+.jumpto select option {
+	overflow:hidden;
+	max-width:25em;	
+	width:15em;         
+}
+
 .eventForm div.infoSet {
 	border: none;
 	display: block;

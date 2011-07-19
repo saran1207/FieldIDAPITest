@@ -7,7 +7,7 @@
 			
 		<h2>
 			<span id="formTitle"><@s.text name="label.eventform"/></span> 
-			<span id="jumpToSection"><@s.text name="label.jumpto"/>: <@s.select name="jumpToSections" id="jumpTo_${identifier}" headerKey="" headerValue="" list="eventFormHelper.currentCriteriaSections" listKey="id" listValue="name" theme="simple"/></span>
+			<span class="jumpto" id="jumpToSection"><@s.text name="label.jumpto"/>: <@s.select name="jumpToSections" id="jumpTo_${identifier}" headerKey="" headerValue="" list="eventFormHelper.currentCriteriaSections" listKey="id" listValue="name" theme="simple"/></span>
 		</h2>
 		
 		<#if form_action="EDIT" && !formEvent.editable>
