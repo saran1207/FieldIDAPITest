@@ -1,11 +1,8 @@
 package com.n4systems.fieldid.servlets;
 
-import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import com.n4systems.fieldid.filter.SessionInViewFilter;
-import com.n4systems.persistence.context.ThreadLocalPersistenceContext;
 import org.apache.log4j.Logger;
 
 import com.n4systems.services.Initializer;
@@ -28,8 +25,6 @@ public class ApplicationBootstrap extends HttpServlet {
 	private static Logger logger = Logger.getLogger(ApplicationBootstrap.class);
 	
 	public void init() throws ServletException {
-        setEntityManagerInThreadLocal();
-
 		for (Initializer init: initializers) {
 			try {
 				init.initialize();
@@ -38,12 +33,5 @@ public class ApplicationBootstrap extends HttpServlet {
 			}
 		}
 	}
-
-    private void setEntityManagerInThreadLocal() {
-        SessionInViewFilter filter = new SessionInViewFilter();
-        EntityManagerFactory emf = filter.lookupEntityManagerFactory();
-        filter.createEntityManager(emf);
-    }
-
 
 }
