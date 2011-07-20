@@ -91,7 +91,7 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     @Override
     public IModel<RowView> model(RowView row) {
         fillInStringValues(row);
-        return new RowModel(row);
+        return new RowModel(row, clazz);
     }
 
     private void fillInStringValues(RowView row) {

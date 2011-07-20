@@ -1,28 +1,31 @@
 package com.n4systems.fieldid.wicket.model;
 
-import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.util.views.RowView;
+import org.apache.wicket.injection.web.InjectorHolder;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RowModel implements IModel<RowView> {
 
     @SpringBean
-    private PersistenceManager pm;
+    private PersistenceService persistenceService;
 
     private RowView rowView;
     private Class entityClass;
 
-    public RowModel(RowView rowView) {
+    public RowModel(RowView rowView, Class<?> entityClass) {
+        // Needed to retrieve the persistence manager
+        InjectorHolder.getInjector().inject(this);
         this.rowView = rowView;
-        this.entityClass = rowView.getEntity().getClass();
+        this.entityClass = entityClass;
     }
 
     @Override
     public RowView getObject() {
         if (rowView.getEntity() == null) {
-            rowView.setEntity(pm.findAndEnhance(entityClass, rowView.getId(), FieldIDSession.get().getSessionUser().getSecurityFilter()));
+            rowView.setEntity(persistenceService.findAndEnhance(entityClass, rowView.getId(), FieldIDSession.get().getSessionUser().getSecurityFilter()));
         }
         return rowView;
     }
