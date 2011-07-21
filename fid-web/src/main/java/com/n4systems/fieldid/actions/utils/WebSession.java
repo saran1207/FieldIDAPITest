@@ -12,20 +12,21 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
-import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.util.selection.MultiIdSelection;
 import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
+import com.n4systems.fieldid.actions.helpers.FailedLogin;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
+import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.util.HashCode;
+import com.n4systems.util.selection.MultiIdSelection;
 
 @SuppressWarnings("unchecked")
 public class WebSession extends AbstractMap<String, Object> implements Serializable {
@@ -41,6 +42,7 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	public static final String VENDOR_CONTEXT = "vendor_context";
 	public static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
 	public static final String IMPORT_TASK_ID = "import_task_id";
+	public static final String FAILED_LOGIN = "failed_login";
 	
 	private final HttpSession session;
 	public static final String REPORT_CRITERIA = "reportCriteria";
@@ -183,18 +185,22 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 				
 				entrySet.add(new Map.Entry<String, Object>() {
 					
+					@Override
 					public String getKey() {
 						return key;
 					}
 
+					@Override
 					public Object getValue() {
 						return get(key);
 					}
 
+					@Override
 					public Object setValue(Object value) {
 						return put(key, value);
 					}
 					
+					@Override
 					public boolean equals(Object obj) {
 						if (obj == null) {
 							return false;
@@ -209,7 +215,8 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 						return (myKey == null) ? (otherKey == null) : myKey.equals(otherKey) && (myValue == null) ? (otherValue == null) : myValue.equals(otherValue);
                     }
 
-                    public int hashCode() {
+                    @Override
+					public int hashCode() {
                         return HashCode.newHash().add(key).add(getValue()).toHash();
                     }
 				});
@@ -395,5 +402,13 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	
 	public Long getUserAuthHolder() {
 		return (Long)get("userAthHolder");
+	}
+
+	public void setFailedLogin(FailedLogin failedLogin) {
+		put(FAILED_LOGIN, failedLogin);
+	}
+	
+	public FailedLogin getFailedLogin() { 
+		return get(FAILED_LOGIN, FailedLogin.class);
 	}
 }

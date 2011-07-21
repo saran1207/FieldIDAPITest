@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.feedback;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import org.apache.wicket.feedback.ErrorLevelFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
@@ -8,11 +7,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
+
 public class FIDFeedbackPanel extends Panel {
 
     public FIDFeedbackPanel(String id) {
         super(id);
-
+        setOutputMarkupId(true);
         final IFeedbackMessageFilter filter = new ErrorLevelFeedbackMessageFilter(FeedbackMessage.ERROR);
         WebMarkupContainer feedbackPanelContainer = new WebMarkupContainer("feedbackPanelContainer") {
             @Override

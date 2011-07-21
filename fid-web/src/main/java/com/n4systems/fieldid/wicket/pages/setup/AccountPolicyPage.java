@@ -12,6 +12,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 
 public class AccountPolicyPage extends SetupPage {
+	private FIDFeedbackPanel feedback;
 
     public AccountPolicyPage(PageParameters params) {
         super(params);
@@ -25,17 +26,19 @@ public class AccountPolicyPage extends SetupPage {
             super(id);
             setDefaultModel(new CompoundPropertyModel<AccountPolicyForm>(new AccountPolicy()));
 
-            add(new FIDFeedbackPanel("feedbackPanel"));
+            add(feedback = new FIDFeedbackPanel("feedbackPanel"));
 
             add(addIntegerRangeTextField("maxAttempts",1,10));
             add(addTextField("lockoutDuration",0));
             
             add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;
-				@Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     target.addComponent(this);
                 }
+				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+					target.addComponent(feedback);
+				}
             });
             
             add(new AjaxLink<String>("cancelLink") {
@@ -55,6 +58,7 @@ public class AccountPolicyPage extends SetupPage {
 		private TextField<Integer> addIntegerRangeTextField(String id, int min, int max) {
 			TextField<Integer> textField = new TextField<Integer>(id, Integer.class);
 			textField.add(new RangeValidator<Integer>(min,max));
+			textField.setRequired(true);
 			return textField;
 		}
 

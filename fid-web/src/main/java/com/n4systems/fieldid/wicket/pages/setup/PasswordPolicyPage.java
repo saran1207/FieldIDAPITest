@@ -13,8 +13,12 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 
 public class PasswordPolicyPage extends SetupPage {
 
-    public PasswordPolicyPage(PageParameters params) {
+	
+    private FIDFeedbackPanel feedbackPanel;
+
+	public PasswordPolicyPage(PageParameters params) {
         super(params);
+        setOutputMarkupId(true);
         add(new PasswordPolicyForm("passwordForm"));
     }
 
@@ -26,14 +30,14 @@ public class PasswordPolicyPage extends SetupPage {
             super(id);
             setDefaultModel(new CompoundPropertyModel<PasswordPolicyForm>(new PasswordPolicy()));
 
-            add(new FIDFeedbackPanel("feedbackPanel"));
+            add(feedbackPanel=new FIDFeedbackPanel("feedbackPanel"));
 
             add(addIntegerRangeTextField("minLength",0,100));
             add(addIntegerRangeTextField("minNumbers",0,100));
             add(addIntegerRangeTextField("minSymbols",0,100));
             add(addIntegerRangeTextField("minCapitals",0,100));
             add(addIntegerRangeTextField("expiryDays",0,Integer.MAX_VALUE));
-            add(addIntegerRangeTextField("uniqueness",0,Integer.MAX_VALUE));
+            add(addIntegerRangeTextField("uniqueness",0,100));
             
             add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;
@@ -42,6 +46,9 @@ public class PasswordPolicyPage extends SetupPage {
                     System.out.println(form.getModel().getObject());	
                     // where to go after this???
                 }
+				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+					target.addComponent(feedbackPanel);
+				}
             });
             
             add(new AjaxLink<String>("cancelLink") {
@@ -57,6 +64,7 @@ public class PasswordPolicyPage extends SetupPage {
 		private TextField<Integer> addIntegerRangeTextField(String id, int min, int max) {
 			TextField<Integer> textField = new TextField<Integer>(id, Integer.class);
 			textField.add(new RangeValidator<Integer>(min,max));
+			textField.setRequired(true);
 			return textField;
 		}
 

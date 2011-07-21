@@ -55,4 +55,15 @@ public class PasswordPolicy implements Serializable {
 	public String toString() { 
 		return Objects.toStringHelper(this).toString();
 	}
+	
+	@Deprecated //only for development use until persistence is implemented
+	public static PasswordPolicy makeDummyPasswordPolicy() {
+		PasswordPolicy passwordPolicy = new PasswordPolicy();
+		passwordPolicy.setMinCapitals(1);
+		passwordPolicy.setMinLength(6);
+		passwordPolicy.setMinNumbers(1);
+		passwordPolicy.setMinSymbols(0);
+		passwordPolicy.setUniqueness(3);
+		return passwordPolicy;
+	}
 }

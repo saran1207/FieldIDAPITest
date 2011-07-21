@@ -14,6 +14,7 @@ import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
+import com.n4systems.exceptions.LoginException;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -53,18 +54,49 @@ public class EntityManagerBackedUserManager implements UserManager {
 		this.persistenceManager = new PersistenceManagerImpl(em);
 	}
 
+	@Override
 	public User findUser(String tenantName, String userID, String plainTextPassword) {
+		try {
+			return findUserByPw(tenantName, userID, plainTextPassword);			
+		} catch (LoginException e) { 
+			return null;
+		}
+	}
+
+	@Override
+	public User findUserByPw(String tenantName, String userID, String plainTextPassword) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
 
-		builder.addSimpleWhere("hashPassword", User.hashPassword(plainTextPassword));
 		builder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE);
 		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
+			
+		User user = builder.getSingleResult(em);
 
-		return builder.getSingleResult(em);
+		if (user != null && user.getHashPassword().equals(User.hashPassword(plainTextPassword))) {
+			return user;
+		} else { 
+			throw new LoginException(user);
+		}
 
 	}
 
+	@Override
+	public void lockUser(String tenantName, String userID, Integer duration, Integer failedLoginAttempts) {
+		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
+		UserQueryHelper.applyFullyActiveFilter(builder);
+
+		builder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE);
+		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
+			
+		User user = builder.getSingleResult(em);
+
+		user.setLocked(true);
+		user.setFailedLoginAttempts(failedLoginAttempts);
+		updateUser(user);		
+	}
+
+	@Override
 	public User findUser(String tenantName, String rfidNumber) {
 		// do not allow empty rfidNumbers
 		if (rfidNumber.trim().length() == 0) {
@@ -86,10 +118,12 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 	}
 
+	@Override
 	public boolean userIdIsUnique(Long tenantId, String userId) {
 		return userIdIsUnique(tenantId, userId, null);
 	}
 
+	@Override
 	public boolean userIdIsUnique(Long tenantId, String userId, Long currentUserId) {
 		if (userId == null) {
 			return true;
@@ -102,13 +136,14 @@ public class EntityManagerBackedUserManager implements UserManager {
 			queryBuilder.addWhere(Comparator.NE, "id", "id", currentUserId);
 		}
 
-		return ((Long) queryBuilder.getSingleResult(em) > 0) ? false : true;
+		return (queryBuilder.getSingleResult(em) > 0) ? false : true;
 	}
 
 	public boolean userRfidIsUnique(Long tenantId, String userRfid) {
 		return userRfidIsUnique(tenantId, userRfid, null);
 	}
 
+	@Override
 	public boolean userRfidIsUnique(Long tenantId, String userRfid, Long currentUserId) {
 
 		if (userRfid == null || userRfid.length() == 0) {
@@ -123,9 +158,10 @@ public class EntityManagerBackedUserManager implements UserManager {
 			queryBuilder.addWhere(Comparator.NE, "id", "id", currentUserId);
 		}
 
-		return ((Long) queryBuilder.getSingleResult(em) > 0) ? false : true;
+		return (queryBuilder.getSingleResult(em) > 0) ? false : true;
 	}
 
+	@Override
 	public User findUserBeanByID(String tenantName, String userID) {
 
 		QueryBuilder<User> query = new QueryBuilder<User>(User.class, new OpenSecurityFilter()).addSimpleWhere("tenant.name", tenantName).addSimpleWhere("userID", userID);
@@ -134,6 +170,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		return query.getSingleResult(em);
 	}
 
+	@Override
 	public void updateUser(User user) throws DuplicateUserException {
 		if (!userIdIsUnique(user.getTenant().getId(), user.getUserID(), user.getId())) {
 			throw new DuplicateUserException("Account with userId " + user.getUserID() + " already exists for Tenant " + user.getTenant().getName(), user.getUserID());
@@ -142,11 +179,13 @@ public class EntityManagerBackedUserManager implements UserManager {
 		em.merge(user);
 	}
 
+	@Override
 	public void updatePassword(Long rUser, String newPlainTextPassword) {
 		User obj = em.find(User.class, rUser);
 		obj.assignPassword(newPlainTextPassword);
 	}
 
+	@Override
 	public Long createUser(User userBean) throws DuplicateUserException, DuplicateRfidException {
 		long res = 0;
 		if (userBean != null) {
@@ -165,15 +204,18 @@ public class EntityManagerBackedUserManager implements UserManager {
 		return res;
 	}
 
+	@Override
 	public void removeUser(Long id) {
 		User obj = em.find(User.class, id);
 		em.remove(obj);
 	}
 
+	@Override
 	public Pager<User> getUsers(SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType) {
 		return getUsers(filter, onlyActive, pageNumber, pageSize, nameFilter, userType, null);
 	}
 
+	@Override
 	public Pager<User> getUsers(SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, CustomerOrg customer) {
 		String queryString = "from " + User.class.getName() + " ub where  " + filter.produceWhereClause(User.class, "ub") + " AND ub.registered = true AND ub.userType != " + "'"
 				+ UserType.SYSTEM.toString() + "'";
@@ -233,6 +275,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	 * @param endUserID
 	 *            optional argument to filter the list to a particular end user
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getUserList(SecurityFilter filter) {
 
@@ -242,10 +285,11 @@ public class EntityManagerBackedUserManager implements UserManager {
 		Query query = em.createQuery(queryString);
 		filter.applyParameters(query, User.class);
 
-		return (List<ListingPair>) query.getResultList();
+		return query.getResultList();
 	}
 
 	// TODO extract to a loader it is only used by one call on event crud.
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<ListingPair> getExaminers(SecurityFilter filter) {
 		SecurityFilter justTenantFilter = new TenantOnlySecurityFilter(filter.getTenantId());
@@ -263,6 +307,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		return ListHelper.longListableToListingPair(users);
 	}
 
+	@Override
 	public void saveUserRequest(UserRequest userRequest, User userAccount) throws DuplicateUserException, DuplicateRfidException {
 		userAccount.setRegistered(false);
 		createUser(userAccount);
@@ -270,6 +315,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		auditLogger.info("user request created for tenant " + userRequest.getTenant().getDisplayName() + " for user " + userRequest.getUserAccount().getUserID());
 	}
 
+	@Override
 	public void acceptRequest(UserRequest userRequest) {
 		UserRequest request = em.find(UserRequest.class, userRequest.getId());
 		userRequest.getUserAccount().setRegistered(true);
@@ -279,6 +325,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		auditLogger.info("user request accepted for tenant " + userRequest.getTenant().getDisplayName() + " for user " + userRequest.getUserAccount().getUserID());
 	}
 
+	@Override
 	public void denyRequest(UserRequest userRequest) {
 		UserRequest request = em.find(UserRequest.class, userRequest.getId());
 		User user = request.getUserAccount();
@@ -287,6 +334,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		auditLogger.info("user request denied for tenant " + userRequest.getTenant().getDisplayName() + " for user " + userRequest.getUserAccount().getUserID());
 	}
 
+	@Override
 	public void createAndEmailLoginKey(User user, URI baseUri) throws MessagingException {
 
 		user.createResetPasswordKey();
@@ -306,6 +354,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		MailManagerFactory.defaultMailManager(ConfigContext.getCurrentContext()).sendMessage(message);
 	}
 
+	@Override
 	public User findAndClearResetKey(String tenantName, String userName, String resetPasswordKey) {
 		if (resetPasswordKey != null) {
 			User user = findUserBeanByID(tenantName, userName);
@@ -318,7 +367,8 @@ public class EntityManagerBackedUserManager implements UserManager {
 		return null;
 	}
 
-    public boolean resetKeyIsValid(String tenantName, String userName, String resetPasswordKey) {
+    @Override
+	public boolean resetKeyIsValid(String tenantName, String userName, String resetPasswordKey) {
         if (resetPasswordKey != null) {
             User user = findUserBeanByID(tenantName, userName);
             return resetKeyValid(resetPasswordKey, user);

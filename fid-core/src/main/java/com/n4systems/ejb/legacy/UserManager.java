@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
-
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
+import com.n4systems.exceptions.LoginException;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -18,6 +18,7 @@ import com.n4systems.util.ListingPair;
 
 public interface UserManager {
 	
+	public User findUserByPw(String tenantName, String userID, String plainTextPassword) throws LoginException;
 	public User findUser(String tenantName, String userID, String plainTextPassword);
 	public User findUser(String tenantName, String rfidNumber);
 
@@ -50,5 +51,6 @@ public interface UserManager {
 	public User findAndClearResetKey(String tenantName, String userName, String resetPasswordKey);
 
     public boolean resetKeyIsValid(String tenantName, String userName, String resetPasswordKey);
+	public void lockUser(String tenantName, String userID, Integer duration, Integer failedLoginAttempts);
 	
 }

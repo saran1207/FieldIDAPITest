@@ -49,8 +49,10 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private String initials;
 	private String referralKey;
 	private String resetPasswordKey;
+	private int failedLoginAttempts;
 	private String hashSecurityCardNumber;
-
+	private Boolean locked;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private UserType userType=UserType.ALL;
@@ -365,6 +367,22 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	@Override
 	public String getGlobalId() {
 		return globalId;
+	}
+
+	public void setFailedLoginAttempts(Integer failedLoginAttempts) {
+		this.failedLoginAttempts = failedLoginAttempts;
+	}
+
+	public Integer getFailedLoginAttempts() {
+		return failedLoginAttempts;
+	}
+
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
+	}
+
+	public Boolean getLocked() {
+		return locked;
 	}
 
 }

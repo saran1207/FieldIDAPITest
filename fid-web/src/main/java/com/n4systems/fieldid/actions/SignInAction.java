@@ -7,7 +7,9 @@ import rfid.web.helper.SessionEulaAcceptance;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.exceptions.LoginException;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.actions.helpers.FailedLogin;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.utils.UrlArchive;
@@ -59,7 +61,7 @@ public class SignInAction extends AbstractAction {
 	public String doCreate() {
 		User loginUser = null;
 
-		if (signIn.isValid(this)) {
+		if (signIn.isValid(this)) { 
 			loginUser = findUser();
 			if (loginUser != null) {
 				if (signInWillKickAnotherSessionOut(loginUser)) {
@@ -68,7 +70,6 @@ public class SignInAction extends AbstractAction {
 				}
 				return signIn(loginUser);
 			}
-			addActionError(getText("error.loginfailure"));
 		}
 		return INPUT;
 	}
@@ -78,14 +79,30 @@ public class SignInAction extends AbstractAction {
 	}
 
 	private User findUser() {
-		User loginUser;
-		if (signIn.isNormalLogin()) {
-			loginUser = userManager.findUser(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
-		} else {
-			//Being uppercased since that's what happens on the user before we hash the rfid value. 
-			loginUser = userManager.findUser(getSecurityGuard().getTenantName(), signIn.getSecureRfid().toUpperCase());
+		return signIn.isNormalLogin() ? findUserByPw() : findUserByRfid();
+	}
+
+	private User findUserByRfid() {
+		//Being uppercased since that's what happens on the user before we hash the rfid value. 
+		return userManager.findUser(getSecurityGuard().getTenantName(), signIn.getSecureRfid().toUpperCase());
+	}
+
+	private User findUserByPw() {	
+		try { 
+			return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
+		} catch (LoginException e) {
+			handleFailedLoginAttempt(e);
+			return null;
 		}
-		return loginUser;
+	}
+
+	private void handleFailedLoginAttempt(LoginException e) {
+		FailedLogin failedLogin = new FailedLogin(e).merge(getSession().getFailedLogin());
+		getSession().setFailedLogin(failedLogin);		
+		addActionError(getText(failedLogin.getTextLabel(), failedLogin.getTextArgs()));
+		if (failedLogin.isNowLocked()) { 
+			userManager.lockUser(getSecurityGuard().getTenantName(), failedLogin.getUserId(), failedLogin.getDuration(), failedLogin.getMaxAttempts());
+		}
 	}
 
 	private boolean signInWillKickAnotherSessionOut(User loginUser) {
@@ -94,8 +111,7 @@ public class SignInAction extends AbstractAction {
 	}
 
 	private String signIn(User loginUser) {
-		logUserIn(loginUser);
-		
+		logUserIn(loginUser);	
 		
 		if (previousUrl != null) {
 			return "redirect";
@@ -182,8 +198,6 @@ public class SignInAction extends AbstractAction {
 	public String getPreviousUrl() {
 		return previousUrl;
 	}
-
-	
 	
 	@Deprecated()
 	public boolean isRememberMe() {
@@ -231,5 +245,7 @@ public class SignInAction extends AbstractAction {
 	public SignIn getSignIn() {
 		return signIn;
 	}
+
+	
 	
 }

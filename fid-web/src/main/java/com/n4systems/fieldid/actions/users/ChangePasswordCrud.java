@@ -99,12 +99,7 @@ public class ChangePasswordCrud extends AbstractCrud {
 	}	
 	
 	private PasswordPolicy getPasswordPolicy() {
-		PasswordPolicy passwordPolicy = new PasswordPolicy();
-		passwordPolicy.setMinCapitals(1);
-		passwordPolicy.setMinLength(6);
-		passwordPolicy.setMinNumbers(1);
-		passwordPolicy.setMinSymbols(0);		
-		return passwordPolicy;
+		return PasswordPolicy.makeDummyPasswordPolicy();
 	}
 
 	public void setOriginalPassword( String originalPassword ) {

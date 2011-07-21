@@ -6,7 +6,6 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 
-
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.impl.EntityManagerBackedUserManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
@@ -25,10 +24,42 @@ import com.n4systems.util.ListingPair;
 
 public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implements UserManager {
 
+	// TODO DD : refactor this out.  make generic so works for all managers.
+	class TransactionalTask<T> {
+
+		private TransactionalCallback<T> callback;
+
+		public TransactionalTask(TransactionalCallback<T> callback) {
+			this.callback = callback;
+		}
+		
+		public T run() {
+			TransactionManager transactionManager = new FieldIdTransactionManager();
+			Transaction transaction = transactionManager.startTransaction();
+			try {
+				return callback.invoke(createManager(transaction.getEntityManager()));
+			} catch (RuntimeException e) {
+				transactionManager.rollbackTransaction(transaction);
+				throw e;
+			} finally {
+				transactionManager.finishTransaction(transaction);
+			}
+		}		
+		
+	};
+	
+
+	public interface TransactionalCallback<T> { 
+		public T invoke(UserManager userManager); 
+	}
+	
+	
+	@Override
 	protected UserManager createManager(EntityManager em) {
 		return new EntityManagerBackedUserManager(em);
 	}
 
+	@Override
 	public void acceptRequest(UserRequest userRequest) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -44,6 +75,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public void createAndEmailLoginKey(User user, URI baseURI) throws MessagingException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -59,6 +91,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public Long createUser(User userBean) throws DuplicateUserException, DuplicateRfidException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -74,6 +107,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public void denyRequest(UserRequest userRequest) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -91,6 +125,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	
 
+	@Override
 	public User findUser(String tenantName, String userID, String plainTextPassword) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -106,6 +141,28 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
+	public void lockUser(final String tenantName, final String userID, final Integer duration, final Integer failedLoginAttempts) {
+		TransactionalTask<Void> task = new TransactionalTask<Void>(new TransactionalCallback<Void>() {
+			@Override public Void invoke(UserManager userManager) {
+				userManager.lockUser(tenantName, userID, duration, failedLoginAttempts);
+				return null;				
+			} 			
+		});
+		task.run();
+	}
+	
+	@Override
+	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword) {
+		TransactionalTask<User> task = new TransactionalTask<User>(new TransactionalCallback<User>() {
+			@Override public User invoke(UserManager userManager) {
+				return userManager.findUserByPw(tenantName, userID, plainTextPassword);
+			} 			
+		});
+		return task.run();
+	}
+
+	@Override
 	public User findUser(String tenantName, String rfidNumber) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -123,6 +180,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 
 
+	@Override
 	public User findUserBeanByID(String tenantName, String userID) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -139,6 +197,7 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
 
+	@Override
 	public User findAndClearResetKey(String tenantName, String userName, String resetPasswordKey) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -154,7 +213,8 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-    public boolean resetKeyIsValid(String tenantName, String userName, String resetPasswordKey) {
+    @Override
+	public boolean resetKeyIsValid(String tenantName, String userName, String resetPasswordKey) {
         TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
         try {
@@ -169,7 +229,8 @@ Transaction transaction = transactionManager.startTransaction();
         }
     }
 
-    public List<ListingPair> getExaminers(SecurityFilter filter) {
+    @Override
+	public List<ListingPair> getExaminers(SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -185,6 +246,7 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
 	
+	@Override
 	public List<ListingPair> getUserList(SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -200,6 +262,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public Pager<User> getUsers(SecurityFilter filter, boolean onlyActive, int pageNumber, int pageSize, String nameFilter, UserType userType, CustomerOrg customer) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -215,6 +278,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public Pager<User> getUsers(SecurityFilter filter, boolean activeOnly, int pageNumber, int pageSize, String nameFilter, UserType userType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -232,6 +296,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 
 
+	@Override
 	public void removeUser(Long uniqueID) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -247,6 +312,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public void saveUserRequest(UserRequest userRequest, User userAccount) throws DuplicateUserException, DuplicateRfidException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -262,6 +328,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public void updatePassword(Long rUser, String newPassword) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -277,6 +344,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public void updateUser(User dto) throws DuplicateUserException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -292,6 +360,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public boolean userIdIsUnique(Long tenantId, String userId, Long currentUserId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -307,6 +376,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public boolean userIdIsUnique(Long tenantId, String userId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
@@ -322,6 +392,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
+	@Override
 	public boolean userRfidIsUnique(Long tenantId, String rfidNumber, Long currentUserId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
