@@ -54,41 +54,50 @@ public abstract class ExtendedTextProviderAction extends ActionSupport implement
 		return langOverrides;
 	}
 	
+	@Override
 	public String getText(String key) {
 		return (hasTenantOverride(key)) ? getMessage(key, null, (Object[])null) : super.getText(key);
 	}
 	
+	@Override
 	public String getText(String key, String defaultValue) {
 		return (hasTenantOverride(key)) ? getMessage(key, null, (Object[])null) : super.getText(key, defaultValue);
 	}
 	
+	@Override
 	public String getText(String key, String defaultValue, String obj) {
 		return (hasTenantOverride(key)) ? getMessage(key, null, new Object[] {obj}) : super.getText(key, defaultValue, obj);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public String getText(String key, List args) {
 		return (hasTenantOverride(key)) ? getMessage(key, null, args) : super.getText(key, args);
 	}
 	
+	@Override
 	public String getText(String key, String[] args) {
 		return (hasTenantOverride(key)) ? getMessage(key, null, args) : super.getText(key, args);
 	}
-	
+		
+	@Override
 	@SuppressWarnings("unchecked")
 	public String getText(String key, String defaultValue, List args) {
 		return (hasTenantOverride(key)) ? getMessage(key, null, args) : super.getText(key, defaultValue, args);
 	}
 	
+	@Override
 	public String getText(String key, String defaultValue, String[] args) {
 		return (hasTenantOverride(key)) ? getMessage(key, null, args) : super.getText(key, defaultValue, args);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public String getText(String key, String defaultValue, List args, ValueStack stack) {
 		return (hasTenantOverride(key)) ? getMessage(key, stack, args) : super.getText(key, defaultValue, args, stack);
 	}
 	
+	@Override
 	public String getText(String key, String defaultValue, String[] args, ValueStack stack) {
 		return (hasTenantOverride(key)) ? getMessage(key, stack, args) : super.getText(key, defaultValue, args, stack);
 	}

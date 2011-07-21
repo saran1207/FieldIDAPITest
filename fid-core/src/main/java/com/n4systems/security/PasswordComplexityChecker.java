@@ -1,17 +1,22 @@
 package com.n4systems.security;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 
 public class PasswordComplexityChecker implements PasswordValidator {
-	private final int minLength;
-	private final int minLowerAlpha;
-	private final int minUpperAlpha;
-	private final int minNumeric;
-	private final int minPunctuation;
+	private final Integer minLength;
+	private final Integer minLowerAlpha;
+	private final Integer minUpperAlpha;
+	private final Integer minNumeric;
+	private final Integer minPunctuation;
 
 	private int length;
 	private int lowerAlpha;
 	private int upperAlpha;
+	
 	private int numeric;
 	private int punctuation;
 	
@@ -24,15 +29,24 @@ public class PasswordComplexityChecker implements PasswordValidator {
 	}
 	
 	@Override
-	public boolean isValid(String pass) {
-		boolean valid = false;
+	public boolean isValid(String pass) {		
+		Set<PasswordComplexityStatus> statusSet = checkPasswordComplexityStatus(pass);
+		return statusSet.size()==0;	//ONLY contains errors. size 0 if valid 
+	}
+	
+	public Set<PasswordComplexityStatus> checkPasswordComplexityStatus(String pass) {
+		Set<PasswordComplexityStatus> statusSet = new HashSet<PasswordComplexityStatus>();
+
+		String pw = StringUtils.trimToEmpty(pass);
+		computeCounts(pw);			
+		statusSet.add(checkLength());
+		statusSet.add(checkLowerAlpha());
+		statusSet.add(checkUpperAlpha());
+		statusSet.add(checkNumeric());
+		statusSet.add(checkPunctuation());
+		statusSet.remove(PasswordComplexityStatus.VALID);		// remove VALID...leave only errors in set.
 		
-		if (pass != null) {
-			computeCounts(pass);
-			valid = checkLength() && checkLowerAlpha() && checkUpperAlpha() && checkNumeric() && checkPunctuation();
-		}
-		
-		return valid;
+		return statusSet; 
 	}
 	
 	private void computeCounts(String pass) {
@@ -63,24 +77,24 @@ public class PasswordComplexityChecker implements PasswordValidator {
 		}
 	}
 	
-	private boolean checkLength() {
-		return (length >= minLength);
+	private PasswordComplexityStatus checkLength() {
+		return (length >= minLength) ? PasswordComplexityStatus.VALID : PasswordComplexityStatus.MIN_LENGTH;
 	}
 	
-	private boolean checkLowerAlpha() {
-		return (lowerAlpha >= minLowerAlpha);
+	private PasswordComplexityStatus checkLowerAlpha() {
+		return (lowerAlpha >= minLowerAlpha)  ? PasswordComplexityStatus.VALID : PasswordComplexityStatus.MIN_LOWER;
 	}
 
-	private boolean checkUpperAlpha() {
-		return (upperAlpha >= minUpperAlpha);
+	private PasswordComplexityStatus checkUpperAlpha() {
+		return (upperAlpha >= minUpperAlpha) ? PasswordComplexityStatus.VALID : PasswordComplexityStatus.MIN_UPPER;
 	}
 
-	private boolean checkNumeric() {
-		return (numeric >= minNumeric);
+	private PasswordComplexityStatus checkNumeric() {
+		return (numeric >= minNumeric) ? PasswordComplexityStatus.VALID : PasswordComplexityStatus.MIN_NUMERIC;
 	}
 
-	private boolean checkPunctuation() {
-		return (punctuation >= minPunctuation);
+	private PasswordComplexityStatus checkPunctuation() {
+		return (punctuation >= minPunctuation) ? PasswordComplexityStatus.VALID : PasswordComplexityStatus.MIN_PUNCTUATION;
 	}
 
 	public static PasswordComplexityChecker createDefault() {
@@ -98,6 +112,38 @@ public class PasswordComplexityChecker implements PasswordValidator {
 			pw.append(RandomStringUtils.randomAlphabetic(minLength-pw.length()).toLowerCase());
 		}		
 		return pw.toString();
+	}
+	
+	public int getMinLength() {
+		return minLength;
+	}
+
+	public int getMinLowerAlpha() {
+		return minLowerAlpha;
+	}
+
+	public int getMinUpperAlpha() {
+		return minUpperAlpha;
+	}
+
+	public int getMinNumeric() {
+		return minNumeric;
+	}
+
+	public int getMinPunctuation() {
+		return minPunctuation;
+	}
+
+	
+	
+	public enum PasswordComplexityStatus { 
+		VALID, 
+		MIN_LENGTH, 
+		MIN_UPPER,
+		MIN_LOWER, 
+		MIN_NUMERIC,
+		MIN_PUNCTUATION, 
+		NULL_PASSWORD
 	}
 	
 }

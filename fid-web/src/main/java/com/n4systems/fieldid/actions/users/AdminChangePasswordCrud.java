@@ -2,7 +2,6 @@ package com.n4systems.fieldid.actions.users;
 
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -32,6 +31,7 @@ public class AdminChangePasswordCrud extends ChangePasswordCrud {
 
 	
 
+	@Override
 	@SkipValidation
 	public String doEdit() {
 		if (getSessionUser().hasAccess("managesystemusers")) {
@@ -39,19 +39,19 @@ public class AdminChangePasswordCrud extends ChangePasswordCrud {
 		}
 		addActionErrorText("error.not_an_administrator");
 		return ERROR;
-	}
+	}	
 	
-	
+	@Override
 	public String doUpdate() {
-		if (getSessionUser().hasAccess("managesystemusers")) {
-			updatePassword();
-			addFlashMessageText( "message.users_password_updated" );
-			return SUCCESS;
+		if (!getSessionUser().hasAccess("managesystemusers")) {
+			addActionErrorText("error.not_an_administrator");
+			return ERROR;			
 		}
-		addActionErrorText("error.not_an_administrator");
-		return ERROR;
+		
+		return updatePassword(); 
 	}
 
+	@Override
 	public User getUser() {
 		return user;
 	}

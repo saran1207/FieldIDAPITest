@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.n4systems.fieldid.utils.WebContextProvider;
 import org.apache.commons.io.FileUtils;
 
 import rfid.web.helper.SessionUser;
@@ -24,6 +23,7 @@ import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.fieldid.utils.SessionUserInUse;
+import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
@@ -87,6 +87,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 	
 	
+	@Override
 	public SessionUser getSessionUser() {
 		return getSession().getSessionUser();
 	}
@@ -151,6 +152,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return getSessionUser().getOwner();
 	}
 	
+	@Override
 	public SecurityFilter getSecurityFilter() {
 		return getSessionUser().getSecurityFilter();
 	}
@@ -196,11 +198,15 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 	
 	public void addFlashErrorText( String error ) {
-		addFlashError( getText( error  ) );
+		addFlashError( getText(error) );
 	}
 	
 	public void addActionErrorText( String error ) {
-		addActionError( getText( error  ) );
+		addActionError( getText(error) );
+	}
+	
+	public void addActionErrorText(String error, String...args) {
+		addActionError( getText(error,args) );
 	}
 	
 	@Override

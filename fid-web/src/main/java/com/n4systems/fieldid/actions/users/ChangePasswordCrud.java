@@ -6,7 +6,9 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.wicket.pages.setup.PasswordPolicy;
 import com.n4systems.model.user.User;
+import com.n4systems.security.PasswordComplexityChecker;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
@@ -62,22 +64,49 @@ public class ChangePasswordCrud extends AbstractCrud {
 			}
 		}
 		
-		updatePassword();
+		String status = updatePassword();
 		refreshSessionUser();
-		addFlashMessageText( "message.passwordupdated" );
-		return SUCCESS;
+		return status;
 	}
 
-	protected void updatePassword() {
-		if( user != null ) {
+	protected final String updatePassword() {
+		if( user == null ) {
+			return SUCCESS;
+		}
+			
+		// FIXME DD : add password checking here.  refactor use of PasswordPolicy object - merge with mark's config modeling changes. 
+		PasswordPolicy passwordPolicy = getPasswordPolicy();
+		PasswordComplexityChecker passwordChecker = new PasswordComplexityChecker(passwordPolicy.getMinLength(),
+															0, 
+															passwordPolicy.getMinCapitals(),
+															passwordPolicy.getMinNumbers(), 
+															passwordPolicy.getMinSymbols());
+		if ( passwordChecker.isValid(newPassword) ) { 
 			userManager.updatePassword( user.getId(), newPassword );
 			logger.info( "password updated for " + getSessionUser().getUserID() );
-			
+			addFlashMessageText( "message.passwordupdated" );			
 			getSession().remove( "passwordReset" );
+			return SUCCESS;
+		} else {		
+			addActionErrorText("error.password_policy", passwordChecker.getMinLength()+"",
+					passwordChecker.getMinUpperAlpha()+"",
+					passwordChecker.getMinLowerAlpha()+"", 
+					passwordChecker.getMinNumeric()+"",
+					passwordChecker.getMinPunctuation()+"" );										
+			return ERROR;
 		}
+			
+	}	
+	
+	private PasswordPolicy getPasswordPolicy() {
+		PasswordPolicy passwordPolicy = new PasswordPolicy();
+		passwordPolicy.setMinCapitals(1);
+		passwordPolicy.setMinLength(6);
+		passwordPolicy.setMinNumbers(1);
+		passwordPolicy.setMinSymbols(0);		
+		return passwordPolicy;
 	}
-	
-	
+
 	public void setOriginalPassword( String originalPassword ) {
 		this.originalPassword = originalPassword;
 	}

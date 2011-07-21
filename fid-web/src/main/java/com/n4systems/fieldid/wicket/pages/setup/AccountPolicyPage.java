@@ -15,23 +15,19 @@ public class AccountPolicyPage extends SetupPage {
 
     public AccountPolicyPage(PageParameters params) {
         super(params);
-
         add(new AccountPolicyForm("accountPolicyForm"));
     }
 
     class AccountPolicyForm extends Form<AccountPolicyForm> {
 		private static final long serialVersionUID = 3819792960628089473L;
 		
-		private String maxAttempts;
-		private String lockoutDuration;
-    	
         public AccountPolicyForm(String id) {
             super(id);
-            setDefaultModel(new CompoundPropertyModel<AccountPolicyForm>(this));
+            setDefaultModel(new CompoundPropertyModel<AccountPolicyForm>(new AccountPolicy()));
 
             add(new FIDFeedbackPanel("feedbackPanel"));
 
-            add(addTextField("maxAttempts",1,10));
+            add(addIntegerRangeTextField("maxAttempts",1,10));
             add(addTextField("lockoutDuration",0));
             
             add(new AjaxButton("saveButton") {
@@ -53,10 +49,10 @@ public class AccountPolicyPage extends SetupPage {
         }
 
 		private TextField<Integer> addTextField(String id, int min) {
-			return addTextField(id, min, Integer.MAX_VALUE);
+			return addIntegerRangeTextField(id, min, Integer.MAX_VALUE);
 		}
 		
-		private TextField<Integer> addTextField(String id, int min, int max) {
+		private TextField<Integer> addIntegerRangeTextField(String id, int min, int max) {
 			TextField<Integer> textField = new TextField<Integer>(id, Integer.class);
 			textField.add(new RangeValidator<Integer>(min,max));
 			return textField;
