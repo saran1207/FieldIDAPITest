@@ -82,7 +82,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
 	private AssetViewModeConverter converter;
-
+	private Integer maxAssets;
     private Long networkAssetTypeId;
     private Long vendorId;
 
@@ -488,4 +488,11 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
     public void setVendorId(Long vendorId) {
         this.vendorId = vendorId;
     }
+    
+    public Integer getMaxAssets() {
+    	if (maxAssets == null) {
+    		maxAssets = getConfigContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
+    	}
+		return maxAssets;
+	}
 }
