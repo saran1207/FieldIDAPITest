@@ -619,6 +619,11 @@
 			<result name="input" type="freemarker">templates/html/userCrud/show.ftl</result>
 		</action>
 
+		<action name="unlockUser" method="unlock" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+			<result name="success" type="freemarker">templates/html/userCrud/show.ftl</result>
+			<result name="input" type="freemarker">templates/html/userCrud/show.ftl</result>
+		</action>
+
 		<action name="upgradeUser" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/upgrade.ftl</result>
 		</action>

@@ -86,6 +86,23 @@ ${action.setPageType('user','view')!}
 			<label for="username"><@s.text name="label.username"/></label>
 			<span class="fieldValue username">${userId}</span>
 		</p>
+		<p>
+			<label for="failedLoginAttempts"><@s.text name="label.failedLoginAttempts"/></label>
+			<span class="fieldValue">${user.failedLoginAttempts}</span>
+		</p>
+		<p>
+			<label for="status"><@s.text name="label.status"/></label>
+			<#if user.isLocked()>
+				<span class="fieldValue">
+					<@s.text name="label.locked"/>
+					<a href="<@s.url action="unlockUser" uniqueID="${user.id}"/>"><@s.text name="label.unlock_user"/></a>
+				</span>				
+			<#else>
+				<span class="fieldValue"><@s.text name="label.unlocked"/></span> 
+			</#if>
+		</p>
+		
+		
 	</div>
 
 </div>

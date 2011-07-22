@@ -11,6 +11,7 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.user.UserSaver;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.util.BitField;
@@ -82,6 +83,19 @@ public class EmployeeCrud extends UserCrud {
 	public String doShow() {
 		setupPermissions();
 		return super.doShow();
+	}
+	
+	public String doUnlock() {
+		try { 
+			user.setLocked(false);
+			user.setFailedLoginAttempts(0);
+			new UserSaver().update(user);
+		} catch (Exception e) {
+			addActionErrorText("error.saving_user");
+			return ERROR;
+		}
+		addFlashMessageText("message.user_unlocked");		
+		return SUCCESS;
 	}
 	
 	@Override
