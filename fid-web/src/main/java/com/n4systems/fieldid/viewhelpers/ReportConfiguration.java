@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.viewhelpers;
 
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.util.persistence.search.SortDirection;
 
 import java.util.List;

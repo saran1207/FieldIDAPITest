@@ -1,22 +1,21 @@
 package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.ejb.PageHolder;
-import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
+import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.utils.WebContextProvider;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.SearchContainer;
 import com.n4systems.fieldid.viewhelpers.handlers.CellHandlerFactory;
 import com.n4systems.fieldid.viewhelpers.handlers.WebOutputHandler;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.RowModel;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingLoader;
-import com.n4systems.util.persistence.search.ImmutableSearchDefiner;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.TableViewTransformer;
@@ -24,6 +23,7 @@ import com.n4systems.util.views.RowView;
 import com.n4systems.util.views.TableView;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
 
 import java.text.ParseException;
@@ -32,6 +32,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T>> extends FieldIDDataProvider<RowView> implements ListableSortableDataProvider<RowView>, WebContextProvider {
+
+    @SpringBean
+    private ReportService reportService;
 
     private List<RowView> results;
     private Class<T> clazz;
@@ -83,7 +86,7 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     @Override
     public int size() {
         if (size == null) {
-            size = new SearchPerformerWithReadOnlyTransactionManagement().countPages(searchContainer, searchContainer.getSecurityFilter(), 1);
+            size = reportService.countPages(reportCriteria, 1L);
         }
         return size;
     }
@@ -91,7 +94,7 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     @Override
     public IModel<RowView> model(RowView row) {
         fillInStringValues(row);
-        return new RowModel(row, clazz);
+        return new RowModel(row);
     }
 
     private void fillInStringValues(RowView row) {
@@ -134,24 +137,24 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     }
 
     protected PageHolder<TableView> runSearch(int page, int pageSize) {
-        SortParam sortParam = getSort();
-        searchContainer.setSortColumn(null);
-        searchContainer.setSortColumnId(null);
-        searchContainer.setSortDirection(null);
-        searchContainer.setSortJoinExpression(null);
+//        SortParam sortParam = getSort();
+//        searchContainer.setSortColumn(null);
+//        searchContainer.setSortColumnId(null);
+//        searchContainer.setSortDirection(null);
+//        searchContainer.setSortJoinExpression(null);
+//
+//        if (sortParam != null) {
+//            String sort = sortParam.getProperty();
+//            Long sortColumnId = Long.valueOf(sort);
+//            ColumnMapping columnMapping = loadMapping(sortColumnId);
+//            String sortExpression = columnMapping.getSortExpression();
+//            searchContainer.setSortColumn(sortExpression != null ? sortExpression : columnMapping.getPathExpression());
+//            searchContainer.setSortColumnId(sortColumnId);
+//            searchContainer.setSortDirection(sortParam.isAscending() ? SortDirection.ASC.getDisplayName() : SortDirection.DESC.getDisplayName());
+//            searchContainer.setSortJoinExpression(columnMapping.getJoinExpression());
+//        }
 
-        if (sortParam != null) {
-            String sort = sortParam.getProperty();
-            Long sortColumnId = Long.valueOf(sort);
-            ColumnMapping columnMapping = loadMapping(sortColumnId);
-            String sortExpression = columnMapping.getSortExpression();
-            searchContainer.setSortColumn(sortExpression != null ? sortExpression : columnMapping.getPathExpression());
-            searchContainer.setSortColumnId(sortColumnId);
-            searchContainer.setSortDirection(sortParam.isAscending() ? SortDirection.ASC.getDisplayName() : SortDirection.DESC.getDisplayName());
-            searchContainer.setSortJoinExpression(columnMapping.getJoinExpression());
-        }
-
-        return new SearchPerformerWithReadOnlyTransactionManagement().search(new ImmutableSearchDefiner<TableView>(searchContainer, createResultTransformer(), page, pageSize), searchContainer.getSecurityFilter());
+        return reportService.eventReport(reportCriteria, createResultTransformer(), page, pageSize);
     }
 
     private ResultTransformer<TableView> createResultTransformer() {
@@ -174,7 +177,7 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
 
     @Override
     public List<Long> getIdList() {
-        return new SearchPerformerWithReadOnlyTransactionManagement().idSearch(searchContainer, searchContainer.getSecurityFilter());
+        return reportService.idSearch(reportCriteria);
     }
 
     private ColumnMapping loadMapping(Long id) {
@@ -194,4 +197,5 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     public SessionUser getSessionUser() {
         return FieldIDSession.get().getSessionUser();
     }
+
 }

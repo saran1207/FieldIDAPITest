@@ -4,8 +4,6 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.reporting.service.EventColumnsService;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -13,7 +11,6 @@ import com.n4systems.fieldid.wicket.components.reporting.columns.display.FieldId
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -24,9 +21,13 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.util.persistence.search.SortDirection;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -150,11 +151,32 @@ public class ReportFormatConverter {
 
         DynamicColumnsConverter.updateDynamicEventColumns(pm, dynamicEventColumns, eventTypeModel, availableEventTypesModel);
 
-        criteriaModel.enableSelectedColumns(container);
-        criteriaModel.setSortColumnFromContainer(container);
+        enableSelectedColumns(container, criteriaModel);
+        setSortColumnFromContainer(container, criteriaModel);
 
         return criteriaModel;
     }
+
+    private void enableSelectedColumns(EventSearchContainer eventSearchContainer, EventReportCriteriaModel criteriaModel) {
+        List<String> selectedColumns = eventSearchContainer.getSelectedColumns();
+        List<ColumnMappingView> sortedStaticAndDynamicColumns = criteriaModel.getSortedStaticAndDynamicColumns(false);
+        for (ColumnMappingView column : sortedStaticAndDynamicColumns) {
+            boolean savedReportContainsColumn = selectedColumns.contains(column.getId());
+            column.setEnabled(savedReportContainsColumn);
+        }
+    }
+
+    private void setSortColumnFromContainer(EventSearchContainer eventSearchContainer, EventReportCriteriaModel criteriaModel) {
+        List<ColumnMappingView> sortedStaticAndDynamicColumns = criteriaModel.getSortedStaticAndDynamicColumns(true);
+        for (ColumnMappingView column : sortedStaticAndDynamicColumns) {
+            String sortExpression = column.getSortExpression();
+            if (sortExpression != null && sortExpression.equals(eventSearchContainer.getSortColumn())) {
+                criteriaModel.setSortColumn(column);
+                criteriaModel.setSortDirection(SortDirection.ASC.getDisplayName().equals(eventSearchContainer.getSortDirection()) ? SortDirection.ASC : SortDirection.DESC);
+            }
+        }
+    }
+
 
     protected Long getId(BaseEntity entity) {
         if (entity == null) {

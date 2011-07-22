@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.EventType;
 import com.n4systems.model.security.SecurityFilter;
 

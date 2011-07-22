@@ -4,7 +4,7 @@ import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteriaModel;
 
 import javax.servlet.http.HttpSession;
 

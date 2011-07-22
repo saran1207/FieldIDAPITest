@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.model.columns.ActiveColumnMapping;
 import com.n4systems.model.columns.ColumnLayout;

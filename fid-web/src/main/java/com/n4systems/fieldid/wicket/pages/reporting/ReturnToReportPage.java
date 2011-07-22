@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.fieldid.wicket.pages.HomePage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;

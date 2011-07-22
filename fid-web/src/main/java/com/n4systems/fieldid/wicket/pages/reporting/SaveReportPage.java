@@ -2,12 +2,12 @@ package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
 import com.n4systems.model.savedreports.SavedReport;

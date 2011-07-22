@@ -10,6 +10,7 @@ import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import com.n4systems.model.api.Copyable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -19,7 +20,7 @@ import com.n4systems.model.security.SecurityLevel;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
-abstract public class BaseEntity implements Saveable, Serializable {
+abstract public class BaseEntity implements Saveable, Serializable, Copyable {
 
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(BaseEntity.class);
@@ -118,4 +119,9 @@ abstract public class BaseEntity implements Saveable, Serializable {
 	protected <T> T enhance(SecurityEnhanced<T> entity, SecurityLevel level) {
 		return EntitySecurityEnhancer.enhance(entity, level);
 	}
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

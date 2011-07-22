@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.reporting.action;
 
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;

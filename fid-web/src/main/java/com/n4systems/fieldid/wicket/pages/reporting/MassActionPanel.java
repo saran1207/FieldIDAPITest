@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.fieldid.wicket.pages.reporting.action.LegacyReportMassActionLink;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;

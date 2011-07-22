@@ -12,7 +12,7 @@ public class AssetLinkHandler extends WebOutputHandler {
 
 	public String handleWeb(Long entityId, Object value) {
 		// create a link to the asset
-		return "<a href=\"asset.action?uniqueID=" + entityId + "\" >" + (String)value + "</a>";
+		return "<a href=\"/fieldid/asset.action?uniqueID=" + entityId + "\" >" + (String)value + "</a>";
 	}
 
 	public Object handleExcel(Long entityId, Object value) {

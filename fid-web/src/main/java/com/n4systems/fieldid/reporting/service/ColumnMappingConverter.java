@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.reporting.service;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.columns.ColumnMapping;
 
 public class ColumnMappingConverter {

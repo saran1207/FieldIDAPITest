@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.table;
 
+import com.n4systems.util.views.RowView;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
@@ -59,7 +60,7 @@ public class SimpleDataTable<T> extends Panel {
             protected Item<T> newRowItem(String id, int index, IModel<T> rowModel) {
                 Item<T> rowItem = super.newRowItem(id, index, rowModel);
                 rowItem.setOutputMarkupId(true);
-                rowItem.add(new HighlightIfSelectedBehavior<T>(rowModel, multiIdSelection));
+                rowItem.add(new HighlightIfSelectedBehavior(rowModel, multiIdSelection));
                 return rowItem;
             }
 

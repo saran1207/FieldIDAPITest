@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
 import com.n4systems.fieldid.reporting.service.ColumnMappingConverter;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.TableViewAdapterDataProvider;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
 import com.n4systems.model.Event;

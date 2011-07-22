@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.reporting.helpers;
 
 import com.google.common.collect.ImmutableSortedSet;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
 import org.hamcrest.Description;
 import org.junit.Test;
 import org.junit.internal.matchers.TypeSafeMatcher;

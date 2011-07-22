@@ -2,6 +2,8 @@ package com.n4systems.fieldid.config;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.n4systems.fieldid.service.search.ReportService;
+import com.n4systems.fieldid.service.search.SearchService;
 import org.apache.struts2.ServletActionContext;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.WebRequestCycle;
@@ -39,6 +41,16 @@ import com.n4systems.util.HostNameParser;
 
 @Configuration
 public class FieldIdAppConfig {
+    
+    @Bean
+    public SearchService searchService() {
+        return new SearchService();
+    }
+
+    @Bean
+    public ReportService reportService() {
+        return new ReportService(searchService());
+    }
 
     @Bean
     public AssetStatusService assetStatusService() {
@@ -100,7 +112,6 @@ public class FieldIdAppConfig {
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setPersistenceUnitName("fieldid");
-//        factoryBean.setLoadTimeWeaver(new ReflectiveLoadTimeWeaver());
         return factoryBean;
     }
 
@@ -124,7 +135,7 @@ public class FieldIdAppConfig {
     	
     	return new TenantSecurityFilterDelegate(tenantName);
     }
-    
+
     @Bean
     public PersistenceService persistenceService() {
         return new PersistenceService();

@@ -6,7 +6,7 @@ import com.n4systems.fieldid.wicket.components.reporting.SlidingReportSectionCol
 import com.n4systems.fieldid.wicket.components.reporting.results.ReportResultsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
-import com.n4systems.fieldid.wicket.model.reporting.EventReportCriteriaModel;
+import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.basic.Label;

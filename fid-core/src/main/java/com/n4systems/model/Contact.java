@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 
+import com.n4systems.model.api.Copyable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyReadOnlyUsersAccess;
@@ -14,7 +15,7 @@ import com.n4systems.model.security.SecurityLevel;
  * A simple embeddable entity representing a contact.
  */
 @Embeddable
-public class Contact implements Serializable, SecurityEnhanced<Contact> {
+public class Contact implements Serializable, SecurityEnhanced<Contact>, Copyable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
@@ -51,4 +52,9 @@ public class Contact implements Serializable, SecurityEnhanced<Contact> {
 		Contact enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		return enhanced;
 	}
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

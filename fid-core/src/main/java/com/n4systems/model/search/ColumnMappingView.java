@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.viewhelpers;
+package com.n4systems.model.search;
 
 import java.io.Serializable;
 

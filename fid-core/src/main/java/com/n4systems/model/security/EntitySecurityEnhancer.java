@@ -1,13 +1,13 @@
 package com.n4systems.model.security;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.sf.cglib.proxy.Enhancer;
-
+import com.n4systems.model.api.Copyable;
 import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.api.SecurityEnhanced;
+import net.sf.cglib.proxy.Enhancer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntitySecurityEnhancer {
 	
@@ -33,7 +33,15 @@ public class EntitySecurityEnhancer {
 		Enhancer e = new Enhancer();
 		
 		e.setSuperclass(entity.getClass());
-		e.setCallback(createMethodInterceptor(entity, level));
+        if (entity instanceof Copyable) {
+            try {
+                entity = (T) ((Copyable)entity).clone();
+            } catch (CloneNotSupportedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        e.setCallback(createMethodInterceptor(entity, level));
+
 		e.setInterfaces(new Class<?>[] {RuntimeEnhanced.class});
 		
 		T enhancedEntity = (T)e.create();

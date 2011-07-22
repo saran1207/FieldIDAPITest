@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
 
 public class InfoFieldDynamicGroupGenerator {
 	

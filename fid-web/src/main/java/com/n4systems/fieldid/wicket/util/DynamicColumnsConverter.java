@@ -5,7 +5,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.EventAttributeDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.BaseEntity;

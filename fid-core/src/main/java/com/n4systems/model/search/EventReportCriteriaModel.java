@@ -1,8 +1,5 @@
-package com.n4systems.fieldid.wicket.model.reporting;
+package com.n4systems.model.search;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
-import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -11,21 +8,20 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.Project;
 import com.n4systems.model.Status;
-import com.n4systems.model.columns.ColumnMappingGroup;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
-import org.apache.wicket.IClusterable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class EventReportCriteriaModel implements IClusterable {
+public class EventReportCriteriaModel implements Serializable {
 
     private BaseOrg owner;
     private Location location = new Location();
@@ -294,15 +290,6 @@ public class EventReportCriteriaModel implements IClusterable {
         return enabledColumns;
     }
 
-    public void enableSelectedColumns(EventSearchContainer eventSearchContainer) {
-        List<String> selectedColumns = eventSearchContainer.getSelectedColumns();
-        List<ColumnMappingView> sortedStaticAndDynamicColumns = getSortedStaticAndDynamicColumns(false);
-        for (ColumnMappingView column : sortedStaticAndDynamicColumns) {
-            boolean savedReportContainsColumn = selectedColumns.contains(column.getId());
-            column.setEnabled(savedReportContainsColumn);
-        }
-    }
-
     public MultiIdSelection getSelection() {
         return selection;
     }
@@ -351,14 +338,4 @@ public class EventReportCriteriaModel implements IClusterable {
         this.reportAlreadyRun = reportAlreadyRun;
     }
 
-    public void setSortColumnFromContainer(EventSearchContainer container) {
-        List<ColumnMappingView> sortedStaticAndDynamicColumns = getSortedStaticAndDynamicColumns(true);
-        for (ColumnMappingView column : sortedStaticAndDynamicColumns) {
-            String sortExpression = column.getSortExpression();
-            if (sortExpression != null && sortExpression.equals(container.getSortColumn())) {
-                setSortColumn(column);
-                setSortDirection(SortDirection.ASC.getDisplayName().equals(container.getSortDirection()) ? SortDirection.ASC : SortDirection.DESC);
-            }
-        }
-    }
 }

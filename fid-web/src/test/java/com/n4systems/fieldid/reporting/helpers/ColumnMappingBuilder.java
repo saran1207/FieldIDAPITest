@@ -2,7 +2,7 @@ package com.n4systems.fieldid.reporting.helpers;
 
 import java.util.Random;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.builders.Builder;
 import com.n4systems.util.RandomString;

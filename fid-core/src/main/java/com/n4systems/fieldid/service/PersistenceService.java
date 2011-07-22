@@ -2,19 +2,13 @@ package com.n4systems.fieldid.service;
 
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
-import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.persistence.QueryBuilder;
-import org.hibernate.FlushMode;
-import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -60,6 +54,12 @@ public class PersistenceService extends FieldIdService {
         return (List<T>) query.getResultList();
     }
 
+    @Transactional(readOnly = true)
+	public <T> List<T> findAll(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException {
+        Query query = queryBuilder.createQuery(em).setFirstResult(page*pageSize).setMaxResults(pageSize);
+        return (List<T>) query.getResultList();
+    }
+
     @Transactional
     public <T extends BaseEntity> Long save(T entity) {
         em.persist(entity);
@@ -74,15 +74,6 @@ public class PersistenceService extends FieldIdService {
     @Transactional
     public Long count(QueryBuilder<?> searchBuilder) {
         return (Long) searchBuilder.setCountSelect().createQuery(em).getSingleResult();
-    }
-
-    @Transactional(readOnly = true)
-    public <T extends NetworkEntity<T>> T findAndEnhance(Class<T> entityClass, Long entityId, SecurityFilter securityFilter) {
-        // TODO: Figure out why readonly=true doesn't properly set underlying hibernate flush mode.
-        ((Session)em.getDelegate()).setFlushMode(FlushMode.MANUAL);
-        T t = em.find(entityClass, entityId);
-        SecurityLevel securityLevel = t.getSecurityLevel(securityFilter.getOwner());
-        return t.enhance(securityLevel);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.reporting.columns.display;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
@@ -15,7 +15,7 @@ public class FieldIdPropertyColumn extends PropertyColumn<RowView> {
     private int index;
 
     public FieldIdPropertyColumn(IModel<String> displayModel, ColumnMappingView column, int index, boolean sortable) {
-        super(displayModel, column.getSortExpression(), column.getPathExpression());
+        super(displayModel, column.getDbColumnId().toString(), column.getPathExpression());
         this.column = column;
         this.index = index;
     }

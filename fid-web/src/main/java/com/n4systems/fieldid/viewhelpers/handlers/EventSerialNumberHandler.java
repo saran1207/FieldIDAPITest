@@ -18,7 +18,7 @@ public class EventSerialNumberHandler extends WebOutputHandler {
 		// build the asset info link for local assets, just show the serial for network assets
 		String serialNumber;
 		if (level.isLocal()) { 
-			serialNumber = String.format("<a href='asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getSerialNumber());
+			serialNumber = String.format("<a href='/fieldid/asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getSerialNumber());
 		} else {
 			serialNumber = asset.getSerialNumber();
 		}

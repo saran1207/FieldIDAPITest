@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.search.ColumnMappingGroupView;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.AssetManager;
@@ -21,7 +22,6 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.reporting.service.ScheduleColumnsService;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
 import com.n4systems.fieldid.viewhelpers.EventScheduleSearchContainer;
 import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;

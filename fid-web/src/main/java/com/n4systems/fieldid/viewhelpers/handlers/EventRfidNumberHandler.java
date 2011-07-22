@@ -23,7 +23,7 @@ public class EventRfidNumberHandler extends WebOutputHandler {
 		// build the asset info link for local assets, just show the serial for network assets
 		String rfidNumber;
 		if (level.isLocal()) { 
-			rfidNumber = String.format("<a href='asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getRfidNumber());
+			rfidNumber = String.format("<a href='/fieldid/asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getRfidNumber());
 		} else {
 			rfidNumber = asset.getRfidNumber();
 		}

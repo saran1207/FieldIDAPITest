@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components.reporting.columns;
 
-import com.n4systems.fieldid.viewhelpers.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ColumnMappingView;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
