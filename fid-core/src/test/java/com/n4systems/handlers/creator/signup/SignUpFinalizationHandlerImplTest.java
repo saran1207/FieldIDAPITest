@@ -60,7 +60,7 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 
 		PrimaryOrg referrerOrg = aPrimaryOrg().build();
 
-		Set<ExtendedFeature> featuresThatShouldBeAddedToPrimaryOrg = new FluentHashSet<ExtendedFeature>(ExtendedFeature.Integration);
+		Set<ExtendedFeature> featuresThatShouldBeAddedToPrimaryOrg = new FluentHashSet<ExtendedFeature>(ExtendedFeature.EmailAlerts);
 
 		OrgSaver mockOrganizationSaver = createSuccessfulOrgSaver(accountPlaceHolder);
 

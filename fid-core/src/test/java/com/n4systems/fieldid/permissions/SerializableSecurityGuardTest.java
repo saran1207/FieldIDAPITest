@@ -69,26 +69,6 @@ public class SerializableSecurityGuardTest {
 		}
 	}
 	
-	
-
-	@Test
-	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_not_have_the_partner_center() throws Exception {
-		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withNoExtendedFeatures().build();
-		
-		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
-		
-		assertTrue(sut.isPlansAndPricingAvailable());
-	}
-	
-	@Test
-	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_not_have_the_partner_center_and_plans_and_pricing_not_available() throws Exception {
-		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withNoExtendedFeatures().withPlansAndPricingNotAvailable().build();
-		
-		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
-		
-		assertTrue(sut.isPlansAndPricingAvailable());
-	}
-	
 	@Test
 	public void should_show_that_plans_and_pricing_is_available_when_the_primary_org_does_has_the_partner_center_and_plans_and_pricing_available_set_to_true() throws Exception {
 		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().withPlansAndPricingAvailable().build();
