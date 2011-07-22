@@ -53,6 +53,17 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private String hashSecurityCardNumber;
 	private Boolean locked;
 	
+	
+//	@ElementCollection(fetch = FetchType.EAGER)
+//	@Enumerated(EnumType.STRING)
+//	@JoinTable(
+//            name = "org_extendedfeatures",
+//            joinColumns = @JoinColumn(name="user_id")
+//    )
+//    @MapKeyColumn(name = "date")
+//    @Column(name="password", nullable=false)
+//	private Map<Date,String> previousPasswords = new TreeMap<Date,String>();
+	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
 	private UserType userType=UserType.ALL;
@@ -198,7 +209,28 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	 */
 	public void assignPassword(String plainTextPassword) {
 		this.hashPassword = hashPassword(plainTextPassword);
+		setLocked(false);
 	}
+
+//	public void addPreviousPassword(String hashPassword, int max) {
+//		previousPasswords.put(new Date(), hashPassword);
+//		int removeCount = Math.max(0,previousPasswords.size() - max);
+//		// Note : it's possible we could have more than one to remove.
+//		for (Date key:previousPasswords.keySet()) { 
+//			if (removeCount>0) { 
+//				previousPasswords.remove(key);
+//				removeCount--;
+//			} else {
+//				return;
+//			}
+//		}
+////		Preconditions.checkState(previousPasswords.size()<=max);		
+//	}
+
+
+//	public void setPreviousPasswords(Map<Date,String> previousPasswords) {
+//		this.previousPasswords = new TreeMap<Date,String>(previousPasswords);
+//	}
 
 	public void assignSecruityCardNumber(String rfidNumber) {
 		this.hashSecurityCardNumber = (rfidNumber == null || rfidNumber.length() == 0) ? null : hashSecurityCardNumber(rfidNumber);
@@ -381,8 +413,8 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		this.locked = locked;
 	}
 
-	public Boolean getLocked() {
+	public Boolean isLocked() {
 		return locked;
 	}
-
+	
 }

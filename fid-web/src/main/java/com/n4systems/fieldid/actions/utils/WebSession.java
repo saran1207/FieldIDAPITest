@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.fieldid.actions.helpers.FailedLogin;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
@@ -42,7 +41,6 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	public static final String VENDOR_CONTEXT = "vendor_context";
 	public static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
 	public static final String IMPORT_TASK_ID = "import_task_id";
-	public static final String FAILED_LOGIN = "failed_login";
 	
 	private final HttpSession session;
 	public static final String REPORT_CRITERIA = "reportCriteria";
@@ -404,11 +402,4 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 		return (Long)get("userAthHolder");
 	}
 
-	public void setFailedLogin(FailedLogin failedLogin) {
-		put(FAILED_LOGIN, failedLogin);
-	}
-	
-	public FailedLogin getFailedLogin() { 
-		return get(FAILED_LOGIN, FailedLogin.class);
-	}
 }

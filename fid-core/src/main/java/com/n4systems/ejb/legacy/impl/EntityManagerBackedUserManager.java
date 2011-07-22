@@ -44,7 +44,8 @@ public class EntityManagerBackedUserManager implements UserManager {
 	protected EntityManager em;
 
 	private PersistenceManager persistenceManager;
-
+	   
+		
 	public EntityManagerBackedUserManager() {
 	}
 
@@ -73,12 +74,16 @@ public class EntityManagerBackedUserManager implements UserManager {
 			
 		User user = builder.getSingleResult(em);
 
-		if (user != null && user.getHashPassword().equals(User.hashPassword(plainTextPassword))) {
+		if (user != null && user.getHashPassword().equals(User.hashPassword(plainTextPassword)) && !user.isLocked()) {
 			return user;
 		} else { 
-			throw new LoginException(user);
+			throw createLoginException(user, userID);
 		}
+	}
 
+	private LoginException createLoginException(User user, String userId) {
+		/*need access to max attempts here...read from DB*/		
+		return new LoginException(user, userId, 5, 20);
 	}
 
 	@Override
@@ -181,8 +186,9 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 	@Override
 	public void updatePassword(Long rUser, String newPlainTextPassword) {
-		User obj = em.find(User.class, rUser);
-		obj.assignPassword(newPlainTextPassword);
+		User user = em.find(User.class, rUser);
+		// FIXME DD : need to know size of pw history.  read this from tenant config and restrict.
+		user.assignPassword(newPlainTextPassword);		
 	}
 
 	@Override

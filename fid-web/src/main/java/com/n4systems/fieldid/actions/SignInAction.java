@@ -9,7 +9,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.LoginException;
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.actions.helpers.FailedLogin;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.utils.UrlArchive;
@@ -96,12 +95,24 @@ public class SignInAction extends AbstractAction {
 		}
 	}
 
+	private String getFailedLoginText(LoginException e) {
+		String key;
+		String[] args;
+		if (e.isLocked() || e.requiresLocking()) {			
+			key = e.getDuration() !=null ? "error.accountlocked_duration" : "error.accountlocked_contact";
+			args = new String[]{e.getDuration()+""};
+		} else {		
+			key = "error.loginfailure";
+			args = new String[]{e.getAttempts()+"", e.getMaxAttempts()+""};
+		}		
+		return getText(key, args);
+	}
+
 	private void handleFailedLoginAttempt(LoginException e) {
-		FailedLogin failedLogin = new FailedLogin(e).merge(getSession().getFailedLogin());
-		getSession().setFailedLogin(failedLogin);		
-		addActionError(getText(failedLogin.getTextLabel(), failedLogin.getTextArgs()));
-		if (failedLogin.isNowLocked()) { 
-			userManager.lockUser(getSecurityGuard().getTenantName(), failedLogin.getUserId(), failedLogin.getDuration(), failedLogin.getMaxAttempts());
+		addActionError(getFailedLoginText(e));
+		//if we find out user has tried N of N times, then lets go back to DB and lock him out.
+		if (e.requiresLocking()) { 
+			userManager.lockUser(getSecurityGuard().getTenantName(), e.getUserId(), e.getDuration(), e.getMaxAttempts());
 		}
 	}
 
