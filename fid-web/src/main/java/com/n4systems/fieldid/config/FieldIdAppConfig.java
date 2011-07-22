@@ -29,6 +29,7 @@ import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -81,8 +82,13 @@ public class FieldIdAppConfig {
 
     @Bean
     public UserManager userEJBContainer() {
-        return new UserEJBContainer();
+        return new UserEJBContainer(loginService());
     }
+    
+    @Bean 
+    public LoginService loginService() { 
+    	return new LoginService();
+    }    
     
     @Bean
     @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)

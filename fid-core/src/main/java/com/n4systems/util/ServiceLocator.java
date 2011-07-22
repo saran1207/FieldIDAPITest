@@ -30,6 +30,7 @@ import com.n4systems.ejb.wrapper.EventScheduleManagerEJBContainer;
 import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
 import com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
+import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.notifiers.EmailNotifier;
@@ -54,7 +55,7 @@ public class ServiceLocator {
 	}
 
 	public static final UserManager getUser() {
-		return new UserEJBContainer();
+		return new UserEJBContainer(new LoginService());
 	}
 
 	public static final LegacyAssetType getAssetType() {

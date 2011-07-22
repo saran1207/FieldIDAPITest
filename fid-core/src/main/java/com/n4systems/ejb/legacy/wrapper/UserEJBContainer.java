@@ -2,19 +2,17 @@ package com.n4systems.ejb.legacy.wrapper;
 
 import java.net.URI;
 import java.util.List;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 
-import com.google.common.collect.MapMaker;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.impl.EntityManagerBackedUserManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.exceptions.LoginException;
+import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.SecurityFilter;
@@ -28,15 +26,13 @@ import com.n4systems.util.ListingPair;
 
 public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implements UserManager {
 
-	// TODO DD : convert this map into spring bean and inject.
 	
-	// dangerous architecture if you ever have to cluster...this is used to keep track of failed logins in memory.
-	// using DB has its own problems but this technique will falter if multiple JVM's are used
-	private static ConcurrentMap<String, LoginException> failedLogins = new MapMaker()	   
-																		   .maximumSize(10000)
-																		   .expireAfterWrite(30, TimeUnit.MINUTES)
-																		   .makeMap();
-		
+	private LoginService loginService;
+	
+	public UserEJBContainer(LoginService loginService) {
+		this.loginService = loginService;
+	}
+
 	@Override
 	protected UserManager createManager(EntityManager em) {
 		return new EntityManagerBackedUserManager(em);
@@ -136,18 +132,13 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword);		  
 		} catch (RuntimeException e) {
 			if (e instanceof LoginException) { 
-				trackFailedLoginAttempts((LoginException)e);
+				loginService.trackFailedLoginAttempts((LoginException)e);
 			}
 			transactionManager.rollbackTransaction(transaction);
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
 		}		
-	}
-
-	private void trackFailedLoginAttempts(LoginException e) {
-		LoginException previousException = failedLogins.get(e.getUserId());		
-		failedLogins.put(e.getUserId(), previousException==null ? e : e.merge(previousException));		
 	}
 
 	@Override
