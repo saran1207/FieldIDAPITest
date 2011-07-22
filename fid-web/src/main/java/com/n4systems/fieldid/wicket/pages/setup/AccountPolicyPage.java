@@ -7,12 +7,18 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
 
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.model.security.AccountPolicy;
 
 public class AccountPolicyPage extends SetupPage {
 	private FIDFeedbackPanel feedback;
+	
+	@SpringBean
+	private TenantSettingsService tenantSettingsService;
 
     public AccountPolicyPage(PageParameters params) {
         super(params);
@@ -24,7 +30,9 @@ public class AccountPolicyPage extends SetupPage {
 		
         public AccountPolicyForm(String id) {
             super(id);
-            setDefaultModel(new CompoundPropertyModel<AccountPolicyForm>(new AccountPolicy()));
+            setOutputMarkupId(true);
+            AccountPolicy accountPolicy = tenantSettingsService.getTenantSettings().getAccountPolicy();
+            setDefaultModel(new CompoundPropertyModel<AccountPolicyForm>(accountPolicy));
 
             add(feedback = new FIDFeedbackPanel("feedbackPanel"));
 
@@ -34,7 +42,8 @@ public class AccountPolicyPage extends SetupPage {
             add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;
 				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(this);
+					udpateAccountPolicy((AccountPolicy) form.getModelObject());
+                    target.addComponent(AccountPolicyForm.this);
                 }
 				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
 					target.addComponent(feedback);
@@ -50,6 +59,10 @@ public class AccountPolicyPage extends SetupPage {
             });
             
         }
+
+		protected void udpateAccountPolicy(AccountPolicy accountPolicy) {			
+			tenantSettingsService.updateTenantAccountPolicySettings(accountPolicy);
+		}
 
 		private TextField<Integer> addTextField(String id, int min) {
 			return addIntegerRangeTextField(id, min, Integer.MAX_VALUE);

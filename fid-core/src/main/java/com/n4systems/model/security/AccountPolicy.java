@@ -1,12 +1,15 @@
-package com.n4systems.fieldid.wicket.pages.setup;
+package com.n4systems.model.security;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class AccountPolicy implements Serializable {
 	private static final long serialVersionUID = -8015854089001738209L;
 	
 	private Integer maxAttempts;
-	private Integer lockoutDurationInMinutes;
+	private Integer lockoutDuration;
 
 	@Deprecated //only for dev use until persistence is implemented.
 	public static AccountPolicy makeDummyAccountPolicy() { 
@@ -23,10 +26,10 @@ public class AccountPolicy implements Serializable {
 		this.maxAttempts = maxAttempts;
 	}
 	public Integer getLockoutDuration() {
-		return lockoutDurationInMinutes;
+		return lockoutDuration;
 	}
 	public void setLockoutDuration(Integer lockoutDuration) {
-		this.lockoutDurationInMinutes = lockoutDuration;
+		this.lockoutDuration = lockoutDuration;
 	}
 	
 }

@@ -7,15 +7,20 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
 
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.model.security.PasswordPolicy;
 
 public class PasswordPolicyPage extends SetupPage {
 
+	@SpringBean 
+	private TenantSettingsService tenantSettingsService;
 	
     private FIDFeedbackPanel feedbackPanel;
-
+    
 	public PasswordPolicyPage(PageParameters params) {
         super(params);
         setOutputMarkupId(true);
@@ -24,11 +29,11 @@ public class PasswordPolicyPage extends SetupPage {
 
     class PasswordPolicyForm extends Form<PasswordPolicyForm> {
 		private static final long serialVersionUID = 3819792960628089473L;
-		
-    	
+		    	
         public PasswordPolicyForm(String id) {
             super(id);
-            setDefaultModel(new CompoundPropertyModel<PasswordPolicyForm>(new PasswordPolicy()));
+            PasswordPolicy passwordPolicy = tenantSettingsService.getTenantSettings().getPasswordPolicy();           
+            setDefaultModel(new CompoundPropertyModel<PasswordPolicyForm>(passwordPolicy));
 
             add(feedbackPanel=new FIDFeedbackPanel("feedbackPanel"));
 
@@ -43,8 +48,8 @@ public class PasswordPolicyPage extends SetupPage {
 				private static final long serialVersionUID = 1L;
 				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     target.addComponent(PasswordPolicyPage.this);
-                    System.out.println(form.getModel().getObject());	
-                    // where to go after this???
+                    tenantSettingsService.updateTenantPasswordPolicySettings((PasswordPolicy) form.getModelObject());
+                    // TODO DD : add "updated" message.
                 }
 				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
 					target.addComponent(feedbackPanel);

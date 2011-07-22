@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
@@ -16,16 +17,21 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 @Transactional
 public class UserLimitService extends FieldIdPersistenceService {
 
-	private TenantSettings tenantSettings;
+	
 	private Integer employeeUserCount;
 	private Integer liteUserCount;
 	private Integer readOnlyUserCount;
+	private TenantSettingsService tenantSettingsService;
+	
+	public UserLimitService() {
+	}	
+
+	public void setTenantSettingsService(TenantSettingsService tenantService) {
+		this.tenantSettingsService = tenantService;
+	}
 
 	public TenantSettings getTenantSettings() {
-		if (tenantSettings == null) {
-			tenantSettings = persistenceService.find(createTenantSecurityBuilder(TenantSettings.class));
-		}
-		return tenantSettings;
+		return tenantSettingsService.getTenantSettings();
 	}
 	
 	private Integer countActiveUsers(WhereClause<?> filter) {
@@ -116,6 +122,7 @@ public class UserLimitService extends FieldIdPersistenceService {
 		return atMax;
 	}
 
+	// TODO DD : refactor this into tenant service??
 	public void updateLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers) {
 		TenantSettings tenantSettings = getTenantSettings();
 		tenantSettings.setMaxEmployeeUsers(maxEmployeeUsers);

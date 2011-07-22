@@ -31,6 +31,7 @@ import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
@@ -100,15 +101,22 @@ public class FieldIdAppConfig {
     @Bean 
     public LoginService loginService() { 
     	return new LoginService();
-    }    
-    
+    }
+        
     @Bean
     @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UserLimitService userLimitService() {
-    	return new UserLimitService();
+    	UserLimitService userLimitService = new UserLimitService();
+    	userLimitService.setTenantSettingsService(tenantSettingsService());
+    	return userLimitService;
     }
 
-    @Bean
+    @Bean 
+    public TenantSettingsService tenantSettingsService() {
+		return new TenantSettingsService();
+	}
+
+	@Bean
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setPersistenceUnitName("fieldid");

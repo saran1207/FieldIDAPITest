@@ -6,7 +6,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.wicket.pages.setup.PasswordPolicy;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
 import com.n4systems.security.PasswordComplexityChecker;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;

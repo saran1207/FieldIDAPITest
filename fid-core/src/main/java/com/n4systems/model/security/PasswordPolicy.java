@@ -1,9 +1,12 @@
-package com.n4systems.fieldid.wicket.pages.setup;
+package com.n4systems.model.security;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+
 import com.google.common.base.Objects;
 
+@Embeddable
 public class PasswordPolicy implements Serializable {
 	private static final long serialVersionUID = 1948224580850349962L;
 	
