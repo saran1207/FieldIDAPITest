@@ -206,16 +206,9 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 	}
 
 	private void setOrderNumber(Asset asset, String orderNumber) {
-		//If no order exists, create one.
-		if (asset.getShopOrder() == null) {
-			asset.setShopOrder(ServiceLocator.getOrderManager().createNonIntegrationShopOrder(orderNumber, asset.getTenant().getId()));
-		} else {
-			// otherwise we'll just change the order number
-			Order order = asset.getShopOrder().getOrder();
-			order.setOrderNumber(orderNumber);
-			persistenceManager.update(order);
+		if (orderNumber != null) {
+			asset.setNonIntergrationOrderNumber(orderNumber.trim());
 		}
-		
 	}
 
 	public Long deleteAssets(List<Long> ids, User modifiedBy) throws UpdateFailureException {

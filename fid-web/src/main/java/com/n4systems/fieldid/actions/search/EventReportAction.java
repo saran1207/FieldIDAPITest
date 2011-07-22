@@ -109,7 +109,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 
 	@Override
 	protected EventSearchContainer createSearchContainer() {
-		return new EventSearchContainer(getSecurityFilter(), getLoaderFactory());
+		return new EventSearchContainer(getSecurityFilter(), getLoaderFactory(), getSecurityGuard());
 	}
 	
 	@SkipValidation
@@ -306,7 +306,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 			query.addSimpleWhere("user.id", getSessionUser().getId()).addSimpleWhere("id", getContainer().getSavedReportId());
 			
 			SavedReport savedReport = persistenceManager.find(query);  
-			return SavedReportHelper.isModified(getContainer(), savedReport, getSecurityFilter(), getLoaderFactory());
+			return SavedReportHelper.isModified(getContainer(), savedReport, getSecurityFilter(), getLoaderFactory(), getSecurityGuard());
 		} else {
 			return false;
 		} 

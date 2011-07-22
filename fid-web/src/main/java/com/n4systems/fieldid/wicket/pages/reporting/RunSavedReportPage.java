@@ -31,7 +31,7 @@ public class RunSavedReportPage extends FieldIDLoggedInPage {
 
         SavedReport report = persistenceManager.find(query);
 
-        SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(new LoaderFactory(securityFilter), securityFilter);
+        SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(new LoaderFactory(securityFilter), securityFilter, getSecurityGuard());
         EventSearchContainer container = converter.convert(report);
 
         EventReportCriteriaModel criteriaModel = new ReportFormatConverter().convertCriteria(container, persistenceManager, assetManager);

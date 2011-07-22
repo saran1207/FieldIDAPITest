@@ -43,6 +43,9 @@ public abstract class ColumnMapping extends AbstractEntity implements Comparable
     @Column(name="required_extended_feature")
     private ExtendedFeature requiredExtendedFeature;
 
+    @Column(name="excluded_by_extended_feature")
+    private ExtendedFeature excludedByExtendedFeature;
+
     @ManyToOne
     @JoinColumn(name="group_id")
     private ColumnMappingGroup group;
@@ -130,4 +133,13 @@ public abstract class ColumnMapping extends AbstractEntity implements Comparable
     public int compareTo(ColumnMapping other) {
 		return (defaultOrder < other.defaultOrder ? -1 : (defaultOrder == other.defaultOrder ? id.compareTo(other.id) : 1));
     }
+    
+	public ExtendedFeature getExcludedByExtendedFeature() {
+		return excludedByExtendedFeature;
+	}
+
+	public void setExcludedByExtendedFeature(
+			ExtendedFeature excludedByExtendedFeature) {
+		this.excludedByExtendedFeature = excludedByExtendedFeature;
+	}
 }

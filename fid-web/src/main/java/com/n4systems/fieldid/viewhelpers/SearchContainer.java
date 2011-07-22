@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.n4systems.fieldid.actions.api.LoaderFactoryProvider;
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -36,6 +37,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 	private final String searchClassIdField;
 	private final Class<?> searchClass;
 	private final SecurityFilter securityFilter;
+	protected final SystemSecurityGuard systemSecurityGuard;
 	private String searchId = String.valueOf(Math.abs((new Random()).nextLong()));
 	private List<String> selectedColumns = new ArrayList<String>();
 	private List<SortTerm> sortTerms = new ArrayList<SortTerm>();
@@ -49,11 +51,12 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
 
     private MultiIdSelection multiIdSelection = new MultiIdSelection();
 	
-	public SearchContainer(Class<?> searchClass, String searchClassIdField, SecurityFilter securityFilter, LoaderFactory loaderFactory) {
+	public SearchContainer(Class<?> searchClass, String searchClassIdField, SecurityFilter securityFilter, LoaderFactory loaderFactory, SystemSecurityGuard systemSecurityGuard) {
 		this.searchClass = searchClass;
 		this.searchClassIdField = searchClassIdField;
 		this.securityFilter = securityFilter;
 		this.loaderFactory = loaderFactory;
+		this.systemSecurityGuard = systemSecurityGuard;
 	}
 	
 	// XXX - I don't like this system ... need to find something better which actually requires you to setup the search/sort terms

@@ -85,7 +85,7 @@ public class EventScheduleAction extends CustomizableSearchAction<EventScheduleS
 
 	@Override
 	protected EventScheduleSearchContainer createSearchContainer() {
-		return new EventScheduleSearchContainer(getSecurityFilter(), getLoaderFactory());
+		return new EventScheduleSearchContainer(getSecurityFilter(), getLoaderFactory(), getSecurityGuard());
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.viewhelpers;
 
 
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
 import com.n4systems.model.savedreports.SavedReport;
 import com.n4systems.model.security.SecurityFilter;
@@ -9,8 +10,8 @@ import com.n4systems.persistence.loaders.LoaderFactory;
 
 public class SavedReportHelper {
 
-	public static boolean isModified(EventSearchContainer eventSearchContainer, SavedReport originalReport, SecurityFilter filter, LoaderFactory loaderFactory) {
-		SavedReport report = new SavedReportSearchCriteriaConverter(loaderFactory, filter).convertInto(eventSearchContainer, new SavedReport());
+	public static boolean isModified(EventSearchContainer eventSearchContainer, SavedReport originalReport, SecurityFilter filter, LoaderFactory loaderFactory, SystemSecurityGuard securityGuard) {
+		SavedReport report = new SavedReportSearchCriteriaConverter(loaderFactory, filter, securityGuard).convertInto(eventSearchContainer, new SavedReport());
 		return areReportsDifferent(originalReport, report);
 	}
 	

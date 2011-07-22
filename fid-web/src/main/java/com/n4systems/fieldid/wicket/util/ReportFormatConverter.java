@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.util;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
+import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.reporting.service.EventColumnsService;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
@@ -65,7 +66,7 @@ public class ReportFormatConverter {
 
     public EventSearchContainer convertCriteria(EventReportCriteriaModel criteriaModel) {
         SecurityFilter securityFilter = FieldIDSession.get().getSessionUser().getSecurityFilter();
-        EventSearchContainer container = new EventSearchContainer(securityFilter, new LoaderFactory(securityFilter));
+        EventSearchContainer container = new EventSearchContainer(securityFilter, new LoaderFactory(securityFilter), new SerializableSecurityGuard(FieldIDSession.get().getTenant()));
 
         container.setSerialNumber(criteriaModel.getSerialNumber());
         container.setAssetStatus(getId(criteriaModel.getAssetStatus()));

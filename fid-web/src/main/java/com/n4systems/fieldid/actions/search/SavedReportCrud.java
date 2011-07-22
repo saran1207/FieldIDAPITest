@@ -64,7 +64,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	@SkipValidation
 	public String doLoad() {
 		testRequiredEntities(true);
-		SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter());
+		SavedReportSearchCriteriaConverter converter = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter(), getSecurityGuard());
         EventSearchContainer container = null;
 
         try {
@@ -125,7 +125,7 @@ public class SavedReportCrud extends AbstractPaginatedCrud<SavedReport> {
 	}
 
 	private void convertReport(EventSearchContainer eventSearchContainer) {
-		report = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter()).convertInto(eventSearchContainer, report);
+		report = new SavedReportSearchCriteriaConverter(getLoaderFactory(), getSecurityFilter(), getSecurityGuard()).convertInto(eventSearchContainer, report);
 	}
 
 	@SkipValidation

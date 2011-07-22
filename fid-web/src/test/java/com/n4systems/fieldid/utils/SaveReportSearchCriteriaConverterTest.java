@@ -4,6 +4,7 @@ import static com.n4systems.model.builders.OrgBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import com.n4systems.fieldid.permissions.AlwaysOffSystemSecurityGuardTestDouble;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class SaveReportSearchCriteriaConverterTest {
 		expect(loaderFactory.createEntityByIdLoader(BaseOrg.class)).andReturn(mockLoader);
 		replay(loaderFactory);
 		
-		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null) {
+		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null, new AlwaysOffSystemSecurityGuardTestDouble()) {
             @Override
             protected List<String> getListOfAllColumnIds() {
                 return ALL_COLUMN_IDS;
@@ -60,7 +61,7 @@ public class SaveReportSearchCriteriaConverterTest {
 		expect(loaderFactory.createFilteredIdLoader(BaseOrg.class)).andReturn(mockLoader);
 		replay(loaderFactory);
 		
-		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null) {
+		SavedReportSearchCriteriaConverter sut = new SavedReportSearchCriteriaConverter(loaderFactory, null, new AlwaysOffSystemSecurityGuardTestDouble()) {
             @Override
             protected List<String> getListOfAllColumnIds() {
                 return ALL_COLUMN_IDS;

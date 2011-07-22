@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.utils;
 
 import com.n4systems.exceptions.MissingEntityException;
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.ColumnMappingGroup;
@@ -22,14 +23,16 @@ public class SavedReportSearchCriteriaConverter {
 
 	private final LoaderFactory loaderFactory;
 	private final SecurityFilter filter;
+	private final SystemSecurityGuard systemSecurityGuard;
 		
-	public SavedReportSearchCriteriaConverter(LoaderFactory loaderFactory, SecurityFilter filter) {
+	public SavedReportSearchCriteriaConverter(LoaderFactory loaderFactory, SecurityFilter filter, SystemSecurityGuard systemSecurityGuard) {
 		this.loaderFactory = loaderFactory;
 		this.filter = filter;
+		this.systemSecurityGuard = systemSecurityGuard;
 	}
 	 
 	public EventSearchContainer convert(SavedReport savedReport) {
-		EventSearchContainer container = new EventSearchContainer(filter, loaderFactory);
+		EventSearchContainer container = new EventSearchContainer(filter, loaderFactory, systemSecurityGuard);
         verifySavedColumnsAreAllStillPresent(savedReport.getColumns());
 		container.setSelectedColumns(savedReport.getColumns());
 		container.setSortColumn(savedReport.getSortColumn());

@@ -56,7 +56,7 @@ public class AssetSearchAction extends CustomizableSearchAction<AssetSearchConta
 	
 	@Override
 	protected AssetSearchContainer createSearchContainer() {
-		return new AssetSearchContainer(getSecurityFilter(), getLoaderFactory());
+		return new AssetSearchContainer(getSecurityFilter(), getLoaderFactory(), getSecurityGuard());
 	}
 
 	@SkipValidation

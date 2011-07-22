@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Event;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
@@ -43,8 +44,8 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	
 	private Status status;
 	
-	public EventSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory) {
-		super(Event.class, "id", filter, loaderFactory);
+	public EventSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory, SystemSecurityGuard systemSecurityGuard) {
+		super(Event.class, "id", filter, loaderFactory, systemSecurityGuard);
 	}
 	
 	@Override
@@ -56,7 +57,11 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	protected void evalSearchTerms() {
 		addWildcardOrStringTerm("asset.rfidNumber", rfidNumber);
 		addWildcardOrStringTerm("asset.serialNumber", serialNumber);
-		addWildcardOrStringTerm("asset.shopOrder.order.orderNumber", orderNumber);
+		if(systemSecurityGuard.isIntegrationEnabled()) {
+			addWildcardOrStringTerm("asset.shopOrder.order.orderNumber", orderNumber);
+		} else {
+			addWildcardOrStringTerm("asset.nonIntergrationOrderNumber", orderNumber);
+		}
 		addWildcardOrStringTerm("asset.purchaseOrder", purchaseOrder);
 		addWildcardOrStringTerm("asset.customerRefNumber", referenceNumber);
 		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());

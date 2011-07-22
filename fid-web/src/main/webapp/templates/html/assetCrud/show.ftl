@@ -171,7 +171,7 @@ ${action.setPageType('asset', 'show')!}
 		<#if !securityGuard.integrationEnabled >
 		<p>
 			<label><@s.text name="label.ordernumber"/></label>
-			<span class="fieldValue">${(asset.shopOrder.order.orderNumber)!}</span>
+			<span class="fieldValue">${(asset.nonIntergrationOrderNumber)!}</span>
 		</p>
 		</#if>
 		

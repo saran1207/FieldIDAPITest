@@ -37,11 +37,32 @@ public class ColumnMappingGroupLoader extends ListLoader<ColumnMappingGroup> {
         List<ColumnMappingGroup> groups = query.getResultList(em);
         if (primaryOrg != null) {
             groups = filterColumnsWeDontHaveRequiredFeatureFor(groups);
+            groups = filterColumnsExcludedByExtendedFeature(groups);
         }
         return groups;
     }
 
-    private List<ColumnMappingGroup> filterColumnsWeDontHaveRequiredFeatureFor(List<ColumnMappingGroup> groups) {
+    private List<ColumnMappingGroup> filterColumnsExcludedByExtendedFeature(List<ColumnMappingGroup> groups) {
+        List<ColumnMappingGroup> filteredGroups = new ArrayList<ColumnMappingGroup>();
+
+        for (ColumnMappingGroup group : groups) {
+            List<ColumnMapping> filteredMappings = new ArrayList<ColumnMapping>();
+            for (ColumnMapping mapping : group.getColumnMappings()) {
+                ExtendedFeature excludedFeature = mapping.getExcludedByExtendedFeature();
+                if (excludedFeature == null || !primaryOrg.getExtendedFeatures().contains(excludedFeature)) {
+                    filteredMappings.add(mapping);
+                }
+            }
+            group.setColumnMappings(filteredMappings);
+            if (!group.getColumnMappings().isEmpty()) {
+                filteredGroups.add(group);
+            }
+        }
+
+        return filteredGroups;
+    }
+
+	private List<ColumnMappingGroup> filterColumnsWeDontHaveRequiredFeatureFor(List<ColumnMappingGroup> groups) {
         List<ColumnMappingGroup> filteredGroups = new ArrayList<ColumnMappingGroup>();
 
         for (ColumnMappingGroup group : groups) {

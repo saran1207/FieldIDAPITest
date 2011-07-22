@@ -117,6 +117,8 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @Transient
     private Long last_linked_id;
     
+    private String nonIntergrationOrderNumber;
+    
 	public Asset() {
 		this.identified = new PlainDate();
 	}
@@ -494,6 +496,14 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
 	public void setAdvancedLocation(Location advancedLocation) {
 		this.advancedLocation = advancedLocation;
+	}
+
+	public String getNonIntergrationOrderNumber() {
+		return nonIntergrationOrderNumber;
+	}
+
+	public void setNonIntergrationOrderNumber(String nonIntegrationOrderNumber) {
+		this.nonIntergrationOrderNumber = nonIntegrationOrderNumber;
 	}
 	
 }

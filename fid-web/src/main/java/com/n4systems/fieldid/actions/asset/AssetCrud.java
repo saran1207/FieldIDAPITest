@@ -939,9 +939,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public String getNonIntegrationOrderNumber() {
 		if (!getSecurityGuard().isIntegrationEnabled()) {
-			if (asset.getShopOrder() != null) {
-				return asset.getShopOrder().getOrder().getOrderNumber();
-			}
+			return asset.getNonIntergrationOrderNumber();
 		}
 
 		return null;
@@ -949,19 +947,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public void setNonIntegrationOrderNumber(String nonIntegrationOrderNumber) {
 		if (nonIntegrationOrderNumber != null) {
-			String orderNumber = nonIntegrationOrderNumber.trim();
 			// only do this for customers without integration
 			if (!getSecurityGuard().isIntegrationEnabled()) {
-				// if the asset doesn't have a shop order, we need to create
-				// one
-				if (asset.getShopOrder() == null) {
-					asset.setShopOrder(orderManager.createNonIntegrationShopOrder(orderNumber, getTenantId()));
-				} else {
-					// otherwise we'll just change the order number
-					Order order = asset.getShopOrder().getOrder();
-					order.setOrderNumber(orderNumber);
-					persistenceManager.update(order);
-				}
+				asset.setNonIntergrationOrderNumber(nonIntegrationOrderNumber.trim());
 			}
 		}
 	}

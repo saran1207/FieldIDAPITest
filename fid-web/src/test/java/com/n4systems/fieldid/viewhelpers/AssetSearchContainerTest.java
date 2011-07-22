@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.fieldid.permissions.AlwaysOffSystemSecurityGuardTestDouble;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.testutils.TestDoubleLoaderFactory;
@@ -27,7 +28,7 @@ public class AssetSearchContainerTest extends SearchContainerTestCase {
 	@Before
 	public void setUp() {
 		SecurityFilter filter = new OpenSecurityFilter();
-		assetSearchContainer = new AssetSearchContainer(filter, new TestDoubleLoaderFactory(filter));
+		assetSearchContainer = new AssetSearchContainer(filter, new TestDoubleLoaderFactory(filter), new AlwaysOffSystemSecurityGuardTestDouble());
 	}
 
 	@Test

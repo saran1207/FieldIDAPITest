@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.fieldid.permissions.AlwaysOffSystemSecurityGuardTestDouble;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -24,7 +25,7 @@ public class EventScheduleSearchContainerTest extends SearchContainerTestCase {
 	@Before
 	public void setUp() {
 		SecurityFilter filter = new OpenSecurityFilter();
-		eventScheduleSearchContainer = new EventScheduleSearchContainer(filter, new TestDoubleLoaderFactory(filter));
+		eventScheduleSearchContainer = new EventScheduleSearchContainer(filter, new TestDoubleLoaderFactory(filter), new AlwaysOffSystemSecurityGuardTestDouble());
 	}
 	
 	@SuppressWarnings("unchecked")

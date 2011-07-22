@@ -12,7 +12,6 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.LineItem;
 import com.n4systems.model.assetstatus.AssetStatusFilteredLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
@@ -51,7 +50,6 @@ public class AssetViewModeConverter {
 			model.setType(resolveAssetType(view.getAssetTypeId()));
 			model.setAssignedUser(resolveUser(view.getAssignedUser()));
 			model.setAssetStatus(resolveAssetStatus(view.getAssetStatus()));
-			model.setShopOrder(createNonIntegrationOrder(view.getNonIntegrationOrderNumber(), primaryOrg));
 			model.setIdentified(view.getIdentified());
 			model.setPurchaseOrder(view.getPurchaseOrder());
 			model.setComments(view.getComments());
@@ -64,6 +62,10 @@ public class AssetViewModeConverter {
 			if (view.getLineItemId() != null && primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {
 				model.setShopOrder(orderManager.findLineItemById(view.getLineItemId()));
 			}
+			
+			if (view.getNonIntegrationOrderNumber() != null && !primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {
+				model.setNonIntergrationOrderNumber(view.getNonIntegrationOrderNumber());
+			}
 									
 		} finally {
 			transaction.commit();
@@ -71,17 +73,7 @@ public class AssetViewModeConverter {
 		
 		return model;
 	}
-	
-	private LineItem createNonIntegrationOrder(String orderNumber, PrimaryOrg primaryOrg) {
-		LineItem line = null;
-		// only do this if the order nuberm is not null and the tenant does not have Integration
-		if (orderNumber != null && !primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {
-			line = orderManager.createNonIntegrationShopOrder(orderNumber, primaryOrg.getTenant().getId());
-		}
-		return line;
-	}
-	
-		
+			
 	private AssetType resolveAssetType(Long assetTypeId) {
 		AssetType assetType = null;
 		if (assetTypeId != null) {

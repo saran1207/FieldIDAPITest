@@ -3,6 +3,7 @@ package com.n4systems.fieldid.viewhelpers;
 import java.util.Date;
 
 import com.n4systems.fieldid.actions.asset.LocationWebModel;
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Asset;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.orgs.BaseOrg;
@@ -26,8 +27,8 @@ public class AssetSearchContainer extends SearchContainer {
 	private Date fromDate;
 	private Date toDate;
 	
-	public AssetSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory) {
-		super(Asset.class, "id", filter, loaderFactory);
+	public AssetSearchContainer(SecurityFilter filter, LoaderFactory loaderFactory, SystemSecurityGuard systemSecurityGuard) {
+		super(Asset.class, "id", filter, loaderFactory, systemSecurityGuard);
 	}
 
 	@Override
@@ -40,7 +41,11 @@ public class AssetSearchContainer extends SearchContainer {
 		addWildcardOrStringTerm("rfidNumber", rfidNumber);
 		addWildcardOrStringTerm("serialNumber", serialNumber);
 		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
-		addWildcardOrStringTerm("shopOrder.order.orderNumber", orderNumber);
+		if(systemSecurityGuard.isIntegrationEnabled()) {
+			addWildcardOrStringTerm("shopOrder.order.orderNumber", orderNumber);
+		} else {
+			addWildcardOrStringTerm("nonIntergrationOrderNumber", orderNumber);
+		}
 		addWildcardOrStringTerm("customerRefNumber", referenceNumber);
 		addWildcardOrStringTerm("purchaseOrder", purchaseOrder);
 		addSimpleTerm("type.id", assetTypeId);

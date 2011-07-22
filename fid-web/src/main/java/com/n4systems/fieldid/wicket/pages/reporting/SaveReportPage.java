@@ -92,7 +92,7 @@ public class SaveReportPage extends FieldIDLoggedInPage {
         ReportFormatConverter reportFormatConverter = new ReportFormatConverter();
         EventSearchContainer searchContainer = reportFormatConverter.convertCriteria(criteriaModel);
         SecurityFilter securityFilter = getSecurityFilter();
-        SavedReportSearchCriteriaConverter savedReportSearchCriteriaConverter = new SavedReportSearchCriteriaConverter(new LoaderFactory(securityFilter), securityFilter);
+        SavedReportSearchCriteriaConverter savedReportSearchCriteriaConverter = new SavedReportSearchCriteriaConverter(new LoaderFactory(securityFilter), securityFilter, getSecurityGuard());
 
         savedReportSearchCriteriaConverter.convertInto(searchContainer, savedReport);
 

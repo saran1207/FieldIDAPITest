@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.n4systems.fieldid.permissions.AlwaysOffSystemSecurityGuardTestDouble;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.testutils.TestDoubleLoaderFactory;
@@ -21,7 +22,7 @@ public class EventSearchContainerTest extends SearchContainerTestCase {
 	@Before
 	public void setUp() {
 		SecurityFilter filter = new OpenSecurityFilter();
-		eventSearchContainer = new EventSearchContainer(filter, new TestDoubleLoaderFactory(filter));
+		eventSearchContainer = new EventSearchContainer(filter, new TestDoubleLoaderFactory(filter), new AlwaysOffSystemSecurityGuardTestDouble());
 	}
 	
 	@Test
