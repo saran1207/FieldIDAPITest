@@ -1,23 +1,15 @@
 package com.n4systems.fieldid.selenium.testcase.signup;
 
-import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
-import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
-import com.n4systems.fieldid.selenium.pages.SignUpPage;
-import com.n4systems.fieldid.selenium.persistence.Scenario;
-import com.n4systems.util.ConfigEntry;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
+import com.n4systems.fieldid.selenium.pages.SignUpPage;
 
 public class TenantNameValidationTest extends PageNavigatingTestCase<SignUpPage> {
 
 	private TenantInfo signUpForm;
-
-    @Override
-    public void setupScenario(Scenario scenario) {
-        scenario.updateConfigurationForTenant("test1", ConfigEntry.EXTERNAL_PLANS_AND_PRICING_ENABLED, "true");
-    }
 
     @Override
     protected SignUpPage navigateToPage() {

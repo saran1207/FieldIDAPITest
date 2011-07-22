@@ -11,7 +11,6 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.pages.RegistrationRequestPage;
 import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
-import com.n4systems.model.tenant.TenantLimit;
 
 public class UserRegistrationTest extends FieldIDTestCase {
 
@@ -20,7 +19,7 @@ public class UserRegistrationTest extends FieldIDTestCase {
 	@Before
 	public void setUp() throws Exception {
 		AdminOrgPage adminPage = startAdmin().login().filterByCompanyName("test1").clickEditOrganization("test1");
-		adminPage.enterTenantLimits(new TenantLimit(-1L, -1L, -1L, -1L, -1L, -1L));
+		adminPage.enterTenantLimits(-1, -1, -1);
 	}
 	
 	@Test

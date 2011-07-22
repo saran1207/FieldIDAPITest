@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.n4systems.model.orgs.secondaryorg.SecondaryOrgLimitExceededException;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
@@ -204,13 +203,8 @@ public class OrganizationalCrud extends AbstractCrud implements HasDuplicateValu
 		}
 		
 		try {
-			
 			SecondaryOrgArchiver archiver = new SecondaryOrgArchiver();
 			archiver.archiveSecondaryOrg(organization, saver, new UserSaver(), getLoaderFactory(), getSecurityFilter(), active);
-			
-		} catch (SecondaryOrgLimitExceededException e) {
-            addFlashError(getText("label.exceeded_your_org_limit", new String[]{getLimits().getSecondaryOrgsMax()+""}));
-            return ERROR;
         } catch (Exception e) {
 			logger.error("Failed updating customer", e);
 			addFlashErrorText("error.updatingcustomer");

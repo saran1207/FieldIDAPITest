@@ -36,9 +36,9 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.LineItem;
+import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Note;
-import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetCleaner;
 import com.n4systems.model.assettype.AssetTypeLoader;
@@ -78,7 +78,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 
 	private OwnerPicker ownerPicker;
 	private String saveAndStartEvent;
-	private Integer maxAssets;
 	private List<Long> listOfIds = new ArrayList<Long>();
 	
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
@@ -115,10 +114,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	}
 
 	public String doForm() {
-		if (getMaxAssets() == 0) {
-			addActionMessageText("error.you_can_not_add_anymore_assets");
-			return ERROR;
-		}
 		applyDefaults();
 		return SUCCESS;
 	}
@@ -313,21 +308,6 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 	
 	public String getIdentified() {
 		return convertDate(new Date());
-	}
-	
-	public Integer getMaxAssets() {
-		if (maxAssets == null) {
-			if (getLimits().isAssetsMaxed()) {
-				maxAssets = 0;
-			} else {
-				Integer configMax = getConfigContext().getInteger(ConfigEntry.MAX_MULTI_ADD_SIZE, getTenantId());
-				Integer limitMax = getLimits().getAssetsMax().intValue() - getLimits().getAssetsUsed().intValue();
-
-				maxAssets = (getLimits().isAssetsUnlimited() || configMax < limitMax) ? configMax : limitMax;
-			}
-		}
-
-		return maxAssets;
 	}
 	
 	/*************** Form input get/set's go below here **********************/

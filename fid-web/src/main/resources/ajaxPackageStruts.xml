@@ -397,13 +397,6 @@
 			<result name="success" type="freemarker">/templates/ajax/remoteOrg/found.ftl</result>
 			<result name="error" type="freemarker">/templates/ajax/remoteOrg/not_found.ftl</result>
 		</action>
-		<action name="upgradePlanPriceCheck" method="showCost" class="com.n4systems.fieldid.actions.subscriptions.UpgradePlanCrud">
-			<result name="success" type="freemarker">/templates/ajax/subscriptions/upgradePlan/showCost.ftl</result>
-		</action>
-		
-		<action name="increaseEmployeeLimitPriceCheck" method="showCost" class="com.n4systems.fieldid.actions.subscriptions.IncreaseEmployeeLimitCrud">
-			<result name="success" type="freemarker">/templates/ajax/subscriptions/upgradePlan/showCost.ftl</result>
-		</action>
 		
 		<action name="customerImportStatus" method="getStatus" class="com.n4systems.fieldid.actions.customers.CustomerImportAction">
 			<result name="success" type="freemarker">/templates/ajax/importExport/status.ftl</result>

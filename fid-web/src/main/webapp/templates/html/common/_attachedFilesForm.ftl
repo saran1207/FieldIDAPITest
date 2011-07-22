@@ -57,12 +57,6 @@
 	</div>
 </div>
 
-<#if limits.diskSpaceMaxed>
-	<div class="limitWarning">
-		<@s.text name="warning.disk_space_maxed"/>
-	</div>
-<#else>
-	<div class="uploadAction">
+<div class="uploadAction">
 	<a href="#" onclick="addUploadFile('${uploadFileType!}'); return false;" ><@s.text name="label.attachfile"/></a>
-	</div>
-</#if>
+</div>

@@ -1,4 +1,4 @@
-<#if securityGuard.readOnlyUserEnabled>
+<#if userLimitService.readOnlyUsersEnabled>
 	<div id="users_container" style="display:none" >
 		<#include "../userCrud/_userList.ftl" />
 		<div class="actions">

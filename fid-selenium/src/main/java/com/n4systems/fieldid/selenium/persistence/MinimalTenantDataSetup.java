@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import rfid.ejb.entity.SerialNumberCounterBean;
+
 import com.n4systems.model.AssetType;
 import com.n4systems.model.State;
 import com.n4systems.model.StateSet;
@@ -18,7 +20,6 @@ import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import rfid.ejb.entity.SerialNumberCounterBean;
 
 public class MinimalTenantDataSetup {
 
@@ -104,10 +105,6 @@ public class MinimalTenantDataSetup {
         org.setSearchableOnSafetyNetwork(true);
         org.setPlansAndPricingAvailable(true);
         org.setDefaultTimeZone("United States:New York - New York");
-        org.getLimits().setAssetsUnlimited();
-        org.getLimits().setDiskSpaceUnlimited();
-        org.getLimits().setSecondaryOrgsUnlimited();
-        org.getLimits().setUsersUnlimited();
         org.setModified(new Date());
 
         em.persist(org);

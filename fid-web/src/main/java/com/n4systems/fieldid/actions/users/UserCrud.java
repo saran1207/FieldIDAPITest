@@ -87,7 +87,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	private String reportName;
 	private DownloadLink downloadLink;
 	
-	
 
 	protected UserCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -496,7 +495,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 			for (int i = 0; i < allUserTypes.length; i++) {
 				if (!allUserTypes[i].equals(UserType.SYSTEM) && !allUserTypes[i].equals(UserType.ADMIN)) {	
 					
-					if(allUserTypes[i].equals(UserType.LITE) && getPrimaryOrg().isLiteUsersEnabled() 
+					if(allUserTypes[i].equals(UserType.LITE) && userLimitService.isLiteUsersEnabled()
 							|| !allUserTypes[i].equals(UserType.LITE)) {					
 						userTypes.add(new StringListingPair(allUserTypes[i].name(), allUserTypes[i].getLabel()));
 					}
@@ -580,18 +579,6 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	public Date dateCreated(User user) {
 		ActiveSession session = new ActiveSessionLoader().setId(user.getId()).load();
 		return (session != null) ? session.getDateCreated() : null;
-	}
-
-	public boolean isEmployeeLimitReached() {
-		return getLimits().isEmployeeUsersMaxed();
-	}
-
-	public boolean isLiteUserLimitReached() {
-		return getLimits().isLiteUsersMaxed();
-	}
-
-	public boolean isReadonlyUserLimitReached() {
-		return getLimits().isReadonlyUsersMaxed();
 	}
 
 	public String getUserGroup() {

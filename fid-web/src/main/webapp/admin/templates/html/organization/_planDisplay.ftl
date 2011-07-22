@@ -2,38 +2,18 @@
 	<h3>${(action.currentPackageFilter().packageName?html)!} Plan</h3>
 	<p> | <a href="javascript:void(0);" onClick="editPlan(${id});"><@s.text name="label.edit"/></a></p>
 </div>
-<div id="diskSpace" class="limit">			
-	<div class="limitLabel"><@s.text name="label.disk_space"/></div>
-	<@n4.percentbar progress="${limits.diskSpaceUsed}" total="${limits.diskSpaceMax}"/>
-	<div class="limitInfo">
-		${action.getHumanReadableFileSize(limits.diskSpaceUsed)} <@s.text name="label.of"/> <#if limits.diskSpaceUnlimited><@s.text name="label.unlimited"/><#else>${action.getHumanReadableFileSize(limits.diskSpaceMax)}</#if>
-	</div>
-</div>
 <div id="fullAccounts" class="limit">
 	<div class="limitLabel"><@s.text name="label.employee_accounts"/></div>
-	<@n4.percentbar progress="${limits.employeeUsersUsed}" total="${limits.employeeUsersMax}"/>
-	<div class="limitInfo">${limits.employeeUsersUsed} <@s.text name="label.of"/> <#if limits.employeeUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.employeeUsersMax}</#if></div>
-	<#if !action.currentPackageFilter().legacy && !limits.employeeUsersUnlimited>
-		<div id="addFullUsers"><a href="<@s.url action="increaseEmployeeLimit"/>"><@s.text name="label.i_want_more_employee_accounts"/></a></div>
-	</#if>				
+	<@n4.percentbar progress="${userLimitService.employeeUsersCount}" total="${userLimitService.maxEmployeeUsers}"/>
+	<div class="limitInfo">${userLimitService.employeeUsersCount} <@s.text name="label.of"/> <#if userLimitService.employeeUsersUnlimited><@s.text name="label.unlimited"/><#else>${userLimitService.maxEmployeeUsers}</#if></div>		
 </div>
 <div id="liteUserAccounts" class="limit">
 	<div class="limitLabel"><@s.text name="label.lite_user_accounts"/></div>				
-	<@n4.percentbar progress="${limits.liteUsersUsed}" total="${limits.liteUsersMax}"/>
-	<div class="limitInfo"> ${limits.liteUsersUsed} <@s.text name="label.of"/> <#if limits.liteUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.liteUsersMax}</#if></div>
+	<@n4.percentbar progress="${userLimitService.liteUsersCount}" total="${userLimitService.maxLiteUsers}"/>
+	<div class="limitInfo"> ${userLimitService.liteUsersCount} <@s.text name="label.of"/> <#if userLimitService.liteUsersUnlimited><@s.text name="label.unlimited"/><#else>${userLimitService.maxLiteUsers}</#if></div>
 </div>
 <div id="readonlyUserAccounts" class="limit">
 	<div class="limitLabel"><@s.text name="label.readonly_user_accounts"/></div>				
-	<@n4.percentbar progress="${limits.readonlyUsersUsed}" total="${limits.readonlyUsersMax}"/>
-	<div class="limitInfo"> ${limits.readonlyUsersUsed} <@s.text name="label.of"/> <#if limits.readonlyUsersUnlimited><@s.text name="label.unlimited"/><#else>${limits.readonlyUsersMax}</#if></div>
-</div>
-<div id="assets" class="limit">
-	<div class="limitLabel"><@s.text name="label.assets"/></div>			
-	<@n4.percentbar progress="${limits.assetsUsed}" total="${limits.assetsMax}"/>
-	<div class="limitInfo">${limits.assetsUsed} <@s.text name="label.of"/> <#if limits.assetsUnlimited><@s.text name="label.unlimited"/><#else>${limits.assetsMax}</#if></div>
-</div>	
-<div id="secondaryOrgs" class="limit">
-	<div class="limitLabel"><@s.text name="label.secondaryOrgs"/></div>			
-	<@n4.percentbar progress="${limits.secondaryOrgsUsed}" total="${limits.secondaryOrgsUsed}"/>
-	<div class="limitInfo">${limits.secondaryOrgsUsed} <@s.text name="label.of"/> <#if limits.secondaryOrgsUnlimited><@s.text name="label.unlimited"/><#else>${limits.secondaryOrgsUsed}</#if></div>
+	<@n4.percentbar progress="${userLimitService.readOnlyUserCount}" total="${userLimitService.maxReadOnlyUsers}"/>
+	<div class="limitInfo"> ${userLimitService.readOnlyUserCount} <@s.text name="label.of"/> <#if userLimitService.readOnlyUsersUnlimited><@s.text name="label.unlimited"/><#else>${userLimitService.maxReadOnlyUsers}</#if></div>
 </div>

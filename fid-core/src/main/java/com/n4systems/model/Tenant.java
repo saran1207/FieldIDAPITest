@@ -1,14 +1,18 @@
 package com.n4systems.model;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.util.HashCode;
 
 
@@ -27,6 +31,9 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 	
 	@Column(nullable=false)
 	private boolean disabled;
+	
+	@OneToOne(optional=false, mappedBy = "tenant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private TenantSettings settings = new TenantSettings();
 	
 	public Tenant() {}
 	
@@ -76,6 +83,14 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
+	}
+
+	public TenantSettings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(TenantSettings settings) {
+		this.settings = settings;
 	}
 	
 }

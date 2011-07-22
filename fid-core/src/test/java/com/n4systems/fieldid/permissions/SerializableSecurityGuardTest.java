@@ -1,19 +1,23 @@
 package com.n4systems.fieldid.permissions;
 
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 
-import com.n4systems.services.TenantFinder;
 import org.junit.Test;
 
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.services.TenantFinder;
 
 
 public class SerializableSecurityGuardTest {
@@ -98,7 +102,7 @@ public class SerializableSecurityGuardTest {
 	@Test
 	public void should_show_that_plans_and_pricing_is_not_available_when_the_primary_org_does_has_the_partner_center() throws Exception {
 		PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().build();
-		primaryOrg.getLimits().setReadonlyUsers(-1L);
+		primaryOrg.getTenant().getSettings().setMaxReadOnlyUsers(-1);
 		SerializableSecurityGuard sut = new SerializableSecurityGuard(primaryOrg.getTenant(), primaryOrg);
 		
 		assertTrue(!sut.isPlansAndPricingAvailable());

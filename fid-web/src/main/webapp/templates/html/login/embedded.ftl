@@ -22,7 +22,7 @@
 	<p>
 		<a href="<@s.url namespace="/" action="forgotPassword"/>" target="_parent"><@s.text name="link.emailpassword"/></a>
 	</p>
-	<#if securityGuard.readOnlyUserEnabled>
+	<#if userLimitService.readOnlyUsersEnabled>
 		<p>
 			<a href="<@s.url namespace="/" action="registerUser"/>" target="_parent"><@s.text name="label.requestanaccount"/></a>
 		</p>

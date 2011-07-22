@@ -4,7 +4,7 @@ ${action.setPageType('customer', 'users')!}
 	<@n4.includeStyle href="user" type="page"/>
 </head>
 
-<#if securityGuard.readOnlyUserEnabled>
+<#if userLimitService.readOnlyUsersEnabled>
 	<div class="useractions addUser">
 		<p><a href="<@s.url action="customersUserAdd" uniqueID=""  customerId="${customer.id}"/>"><@s.text name="label.add_user"/></a></p>
 	</div>

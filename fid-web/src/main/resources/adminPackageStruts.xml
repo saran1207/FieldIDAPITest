@@ -505,11 +505,6 @@
 			<result name="success" type="freemarker">/admin/templates/html/config/ajaxConfigValue.ftl</result>
 		</action>
 
-		<action name="createSuperUser" method="createUser"
-			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/ajax_pieces/createUser.ftl</result>
-		</action>
-
 		<action name="editNote" method="editNote"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/editNote.ftl</result>
@@ -572,5 +567,10 @@
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/updatePlansAndPricing.ftl</result>
 		</action>
 
+		<action name="updateSecondaryOrgs" method="updateSecondaryOrgs"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/updateSecondaryOrgsButton.ftl</result>
+		</action>
+		
 	</package>
 </struts>

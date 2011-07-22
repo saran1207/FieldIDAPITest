@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import rfid.web.helper.SessionUser;
 
@@ -20,7 +21,7 @@ import com.n4systems.fieldid.actions.downloaders.DownloadLinkAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
 import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.fieldid.security.TenantLimitProxy;
+import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.utils.WebContextProvider;
@@ -39,7 +40,6 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.User;
 import com.n4systems.notifiers.Notifier;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -69,7 +69,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private LoaderFactory loaderFactory;
 	private SaverFactory saverFactory;
 	private Gson json;
-	private TenantLimitProxy limitProxy;
 	private User user = null;
 	private NavOptionsController navOptions;
 	private String redirectUrl;
@@ -80,12 +79,13 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	private boolean useContext = false;
     private String pageName;
 	
+    @Autowired
+    protected UserLimitService userLimitService;
 	
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
 		helper = new BaseActionHelper();
 	}
-	
 	
 	@Override
 	public SessionUser getSessionUser() {
@@ -451,13 +451,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public String createNonFieldIDActionURI(Tenant tenant, String action) {
 		return createNonFieldIDActionUrlBuilder().setAction(action).setCompany(tenant).build();
 	}
-	
-	public TenantLimitProxy getLimits() {
-		if (limitProxy == null) { 
-			limitProxy = new TenantLimitProxy(getTenantId());
-		}
-		return limitProxy;
-	}
 
 	public String getRedirectUrl() {
 		return redirectUrl;
@@ -471,13 +464,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		String byteCountToDisplaySize = FileUtils.byteCountToDisplaySize(fileSize);
 		return byteCountToDisplaySize;
 	}
-	
-	public String labelForTenantLimit(Long limit) {
-		if (limit.equals(TenantLimit.UNLIMITED)) {
-			return "label.unlimited";
-		}
-		return limit.toString();
-	}
 
 	protected CreateHandlerFactory getCreateHandlerFactory() {
 		if (createHandlerFactory == null) {
@@ -486,8 +472,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		
 		return createHandlerFactory;
 	}
-	
-	
 	
 	public String getHouseAccountName() {
 		return getConfigContext().getString(ConfigEntry.HOUSE_ACCOUNT_NAME);
@@ -625,4 +609,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public String getClickTaleEnd() {
 		return getConfigContext().getString(ConfigEntry.CLICKTALE_END);
 	}
+
+	public UserLimitService getUserLimitService() {
+		return userLimitService;
+	}
+	
 }

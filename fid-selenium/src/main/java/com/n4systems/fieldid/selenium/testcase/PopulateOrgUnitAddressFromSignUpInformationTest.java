@@ -1,5 +1,9 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.mail.MailMessage;
@@ -10,12 +14,7 @@ import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
 import com.n4systems.fieldid.selenium.pages.SetPasswordPage;
 import com.n4systems.fieldid.selenium.pages.SignUpPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
-import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
-import com.n4systems.util.ConfigEntry;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTestCase {
 
@@ -30,11 +29,6 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
     private static final String TEST_COUNTRY = "United States";
     private static final String TEST_ZIP = "90210";
     private static final String TEST_PHONE = "555-OMG1";
-
-    @Override
-    public void setupScenario(Scenario scenario) {
-        scenario.updateConfigurationForTenant(REFERRING_TENANT_NAME, ConfigEntry.EXTERNAL_PLANS_AND_PRICING_ENABLED, "true");
-    }
 
     @Test
 	public void shouldBePopulatingPrimaryOrganizationAddressWithInformationGivenAtAccountSetUp() throws Exception {

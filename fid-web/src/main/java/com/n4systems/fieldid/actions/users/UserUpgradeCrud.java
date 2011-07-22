@@ -5,14 +5,14 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 
-public class UserUpgradeCrud extends UserCrud{
+public class UserUpgradeCrud extends UserCrud {
 
 	protected UserUpgradeCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
 	}
 	
 	public String doChangeToFull() {
-		if(!isEmployeeLimitReached()) {
+		if(!userLimitService.isEmployeeUsersAtMax()) {
 			user.setUserType(UserType.FULL);
 			save();
 			return SUCCESS;
@@ -23,7 +23,7 @@ public class UserUpgradeCrud extends UserCrud{
 	}
 	
 	public String doChangeToLite() {
-		if(!isLiteUserLimitReached()) {
+		if(!userLimitService.isLiteUsersAtMax()) {
 			user.setUserType(UserType.LITE);
 			save();
 			return SUCCESS;
@@ -34,7 +34,7 @@ public class UserUpgradeCrud extends UserCrud{
 	}
 	
 	public String doChangeToReadOnly() {
-		if(!isReadonlyUserLimitReached()) {
+		if(!userLimitService.isReadOnlyUsersAtMax()) {
 			user.setUserType(UserType.READONLY);
 			save();
 			return SUCCESS;

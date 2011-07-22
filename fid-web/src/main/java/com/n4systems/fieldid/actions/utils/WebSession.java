@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts2.ServletActionContext;
+
 import rfid.web.helper.SessionEulaAcceptance;
 import rfid.web.helper.SessionUser;
 
@@ -45,6 +47,11 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	private final HttpSession session;
 	public static final String REPORT_CRITERIA = "reportCriteria";
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
+	
+	
+	public WebSession() {
+		this(ServletActionContext.getRequest().getSession(false));
+	}
 	
 	public WebSession(HttpSession session) {
 		this.session = session;

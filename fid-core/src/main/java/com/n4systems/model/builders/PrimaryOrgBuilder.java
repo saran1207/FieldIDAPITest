@@ -1,5 +1,7 @@
 package com.n4systems.model.builders;
 
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,10 +11,7 @@ import java.util.Set;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.util.DataUnit;
-
-import static com.n4systems.model.builders.TenantBuilder.*;
 
 
 public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
@@ -89,8 +88,7 @@ public class PrimaryOrgBuilder extends BaseBuilder<PrimaryOrg> {
 		
 		primaryOrg.setExternalId(externalId);
 		primaryOrg.setPlansAndPricingAvailable(plansAndPricingAvailable);
-		
-		primaryOrg.setLimits(new TenantLimit(diskSpaceInBytes, assetLimit, employeeLimit, 0, 0L, 0L));
+
 		return primaryOrg;
 	}
 	

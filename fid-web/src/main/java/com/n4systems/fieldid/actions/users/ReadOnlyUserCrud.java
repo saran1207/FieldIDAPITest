@@ -36,11 +36,11 @@ public class ReadOnlyUserCrud extends UserCrud {
 	
 	@SkipValidation
 	public String doUnarchive() {
-		if (!super.isReadonlyUserLimitReached()) {
+		if (!userLimitService.isReadOnlyUsersAtMax()) {
 			testRequiredEntities(true);		
 			return SUCCESS;		
 		}
-		addActionError(getText("label.unarchive_readonly_user_limit", new String[] { getLimits().getReadonlyUsersMax().toString() } ));
+		addActionError(getText("label.unarchive_readonly_user_limit", new String[] { String.valueOf(getTenant().getSettings().getMaxReadOnlyUsers()) } ));
 		return ERROR;
 	}
 

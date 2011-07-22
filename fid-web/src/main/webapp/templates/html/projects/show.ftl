@@ -322,7 +322,7 @@ ${action.setPageType('job', 'show')!}
 		
 		document.observe("dom:loaded", 
 			function(event) {
-				addUploadFile(${limits.diskSpaceMaxed?string('true','false')}, '<span id="attachment" class="limitWarning"><@s.text name="warning.disk_space_maxed"/></span>');
+				addUploadFile();
 			}
 		);
 		

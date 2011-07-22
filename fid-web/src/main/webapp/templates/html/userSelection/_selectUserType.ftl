@@ -29,7 +29,7 @@ ${action.setPageType('user','adduser')!}
 				<li><label><@s.text name="label.run_searches" /></label></li>
 			</ul>
 		</div>
-		<#if employeeLimitReached>
+		<#if userLimitService.employeeUsersAtMax>
 			<div class="userLimitWarning">
 				<@s.text name="label.full_user_limit_reached" />	
 			</div>	
@@ -40,7 +40,7 @@ ${action.setPageType('user','adduser')!}
 		</#if>
 	</div>
 	
-	<#if primaryOrg.liteUsersEnabled>
+	<#if userLimitService.liteUsersEnabled>
 		<div class="horizontalGroup increasedMargins">
 			<div class="groupContents">
 				<h2><@s.text name="label.lite_user" /></h2>
@@ -52,7 +52,7 @@ ${action.setPageType('user','adduser')!}
 				</ul>
 			</div>
 	
-			<#if liteUserLimitReached>
+			<#if userLimitService.liteUsersAtMax>
 				<div class="userLimitWarning">
 					<@s.text name="label.lite_user_limit_reached"/>	
 				</div>		
@@ -63,7 +63,7 @@ ${action.setPageType('user','adduser')!}
 			</#if>
 		</div>
 	</#if>
-	<#if primaryOrg.readOnlyUsersEnabled>
+	<#if userLimitService.readOnlyUsersEnabled>
 		<div class="horizontalGroup increasedMargins ">
 			<div class="groupContents">
 				<h2><@s.text name="label.ready_only_user" /></h2>
@@ -74,7 +74,7 @@ ${action.setPageType('user','adduser')!}
 					<li><label><@s.text name="label.run_searches" /></label></li>
 				</ul>
 			</div>	
-			<#if readonlyUserLimitReached>
+			<#if userLimitService.readOnlyUsersAtMax>
 				<div class="userLimitWarning">
 					<@s.text name="label.readonly_user_limit_reached"/>	
 				</div>		

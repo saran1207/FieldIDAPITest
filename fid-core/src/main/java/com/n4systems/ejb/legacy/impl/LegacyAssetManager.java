@@ -29,12 +29,10 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventSchedule.ScheduleStatus;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.asset.AssetSaver;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -142,19 +140,9 @@ public class LegacyAssetManager implements LegacyAsset {
 		}
 		
 	}
-	
-	private void setCountsTowardsLimitFlagOnLinkedAssets(Asset asset) {
-		if (asset.isLinked()) {
-			// if the linked asset's primary org has the unlimited feature, it will not count
-			PrimaryOrg linkedPrimary = asset.getLinkedAsset().getOwner().getPrimaryOrg();
-			boolean hasUnlimitedFeature = linkedPrimary.hasExtendedFeature(ExtendedFeature.UnlimitedLinkedAssets);
-			asset.setCountsTowardsLimit(!hasUnlimitedFeature);
-		}
-	}
 
 	private void runAssetSavePreRecs(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
 		moveRfidFromAssets(asset, modifiedBy);
-		setCountsTowardsLimitFlagOnLinkedAssets(asset);
 		processSubAssets(asset, modifiedBy);
 	}
 

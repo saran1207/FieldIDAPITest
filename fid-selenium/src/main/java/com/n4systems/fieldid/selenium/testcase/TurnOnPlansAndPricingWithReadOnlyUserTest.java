@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
 import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
 import com.n4systems.fieldid.selenium.pages.admin.AdminOrgPage;
 import com.n4systems.fieldid.selenium.pages.admin.AdminOrgsListPage;
-import com.n4systems.model.tenant.TenantLimit;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
 
 public class TurnOnPlansAndPricingWithReadOnlyUserTest extends FieldIDTestCase {
 
@@ -55,7 +54,7 @@ public class TurnOnPlansAndPricingWithReadOnlyUserTest extends FieldIDTestCase {
         AdminOrgPage orgPage = login.filterByCompanyName("test1").clickEditOrganization("test1");
         orgPage.enterShowPlansAndPricing(showPlansAndPricing);
         if(readOnlyUser) {
-        	orgPage.enterTenantLimits(new TenantLimit(-1L, -1L, 1L, -1L, 1L, -1L));
+        	orgPage.enterTenantLimits(-1, -1, -1);
         }
 	}
 

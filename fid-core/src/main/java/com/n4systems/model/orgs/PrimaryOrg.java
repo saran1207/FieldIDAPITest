@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,24 +15,18 @@ import javax.persistence.JoinTable;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.ExternalCredentialProvider;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
-import com.n4systems.model.tenant.TenantLimit;
-import com.n4systems.services.limiters.LimitType;
 
 @Entity
 @Table(name = "org_primary")
 @PrimaryKeyJoinColumn(name="org_id")
 public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvider {
 	private static final long serialVersionUID = 1L;
-
-	@Embedded
-	private TenantLimit limits = new TenantLimit();
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
@@ -117,14 +110,6 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 	@Override
 	public BaseOrg getParent() {
 		return null;
-	}
-	
-	public TenantLimit getLimits() {
-		return limits;
-	}
-
-	public void setLimits(TenantLimit limits) {
-		this.limits = limits;
 	}
 
 	public Set<ExtendedFeature> getExtendedFeatures() {
@@ -236,11 +221,4 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
         this.searchableOnSafetyNetwork = searchableOnSafetyNetwork;
     }
     
-    public boolean isLiteUsersEnabled(){
-    	return getLimits().getLimitForType(LimitType.LITE_USERS) != 0;
-    }
-    
-    public boolean isReadOnlyUsersEnabled(){
-    	return getLimits().getLimitForType(LimitType.READONLY_USERS) != 0;
-    }
 }

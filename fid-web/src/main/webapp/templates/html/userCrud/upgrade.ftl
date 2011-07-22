@@ -12,7 +12,7 @@ ${action.setPageType('user','change')!}
 		</@s.text>
 	</h2>
 
-	<div class="horizontalGroup <#if !securityGuard.readOnlyUserEnabled> twoGroup </#if> ">
+	<div class="horizontalGroup <#if !userLimitService.readOnlyUsersEnabled> twoGroup </#if> ">
 		<div class="groupContents">
 			<h2><@s.text name="label.full_user" /></h2>
 			<p><@s.text name="label.employees_that_may" /></p>
@@ -30,7 +30,7 @@ ${action.setPageType('user','change')!}
 				<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
 			</div>
 		<#else>
-			<#if employeeLimitReached>
+			<#if userLimitService.employeeUsersAtMax>
 				<div class="userLimitWarning">
 					<@s.text name="label.full_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
 				</div>	
@@ -43,7 +43,7 @@ ${action.setPageType('user','change')!}
 		</#if>
 	</div>
 		
-	<div class="horizontalGroup <#if !securityGuard.readOnlyUserEnabled> increasedMargins <#else> leftRightMargins </#if> ">
+	<div class="horizontalGroup <#if !userLimitService.readOnlyUsersEnabled> increasedMargins <#else> leftRightMargins </#if> ">
 		<div class="groupContents">
 			<h2><@s.text name="label.lite_user" /></h2>
 			<p><@s.text name="label.employees_that_may" /></p>
@@ -59,7 +59,7 @@ ${action.setPageType('user','change')!}
 				<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
 			</div>
 		<#else>
-			<#if liteUserLimitReached>
+			<#if userLimitService.liteUsersAtMax>
 				<div class="userLimitWarning">
 					<@s.text name="label.lite_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
 				</div>
@@ -72,7 +72,7 @@ ${action.setPageType('user','change')!}
 		</#if>
 	</div>
 	
-	<#if securityGuard.readOnlyUserEnabled>
+	<#if userLimitService.readOnlyUsersEnabled>
 		<div class="horizontalGroup">
 			<div class="groupContents">
 				<h2><@s.text name="label.ready_only_user" /></h2>

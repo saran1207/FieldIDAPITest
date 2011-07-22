@@ -14,36 +14,28 @@
 	</#if>
 </title>
 
-<#if limits.assetsMaxed>
-	<div class="limitWarning">
-	<@s.text name="label.exceeded_your_asset_limit">
-		<@s.param>${limits.assetsMax}</@s.param>
-	</@s.text>
+<@s.form action="assetCreate" cssClass="fullForm fluidSets" theme="fieldid" id="assetCreate" >
+	<@s.hidden name="lineItemId" />
+	<@s.hidden name="tagOptionId" />
+	<#assign isAddForm=true>
+	<#include "_assetForm.ftl" />
+	
+	<div class="actions">
+		<@s.submit id="saveButton" name="save" cssClass="save" key="hbutton.save" />
+		<#if Session.sessionUser.hasAccess("createevent") >
+			<@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndStartEvent" key="hbutton.saveandstartevent" />
+		</#if>
+		<#if securityGuard.manufacturerCertificateEnabled>    
+			<span id="saveAndPrintAction">
+				<@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
+			</span>
+		</#if>
+		<span id="cancelAction">
+			<@s.text name="label.or"/>
+			<a href="<@s.url action="home"/>"><@s.text name="label.cancel"/></a>
+		</span>			
 	</div>
-<#else>
-	<@s.form action="assetCreate" cssClass="fullForm fluidSets" theme="fieldid" id="assetCreate" >
-		<@s.hidden name="lineItemId" />
-		<@s.hidden name="tagOptionId" />
-		<#assign isAddForm=true>
-		<#include "_assetForm.ftl" />
-		
-		<div class="actions">
-			<@s.submit id="saveButton" name="save" cssClass="save" key="hbutton.save" />
-			<#if Session.sessionUser.hasAccess("createevent") >
-				<@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndStartEvent" key="hbutton.saveandstartevent" />
-			</#if>
-			<#if securityGuard.manufacturerCertificateEnabled>    
-				<span id="saveAndPrintAction">
-					<@s.submit id="saveAndPrintButton" cssClass="save"  name="saveAndPrint" key="hbutton.saveandprint" />
-				</span>
-			</#if>
-			<span id="cancelAction">
-				<@s.text name="label.or"/>
-				<a href="<@s.url action="home"/>"><@s.text name="label.cancel"/></a>
-			</span>			
-		</div>
-	</@s.form>
-</#if>
+</@s.form>
 
 <script type="text/javascript" >
 	var buttons = new Array( 'saveButton', 'saveAndStartEventButton', 'saveAndPrintButton');

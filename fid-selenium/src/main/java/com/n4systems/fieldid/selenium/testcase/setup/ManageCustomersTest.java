@@ -18,7 +18,6 @@ import com.n4systems.model.Project;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.user.User;
 
 public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersPage> {
@@ -272,7 +271,7 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
 	
 	private ManageCustomersPage updateTenantLimits() {
 		AdminOrgPage adminPage = startAdmin().login().filterByCompanyName(COMPANY).clickEditOrganization(COMPANY);
-		adminPage.enterTenantLimits(new TenantLimit(-1L, -1L, -1L, -1L, -1L, -1L));
+		adminPage.enterTenantLimits(-1, -1, -1);
 		return startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageCustomers();
 	}
 

@@ -11,14 +11,12 @@ public interface SystemSecurityGuard {
 	public Tenant getTenant();
 	public PrimaryOrg getPrimaryOrg();
 	public boolean isExtendedFeatureEnabled(ExtendedFeature feature);
-	public boolean isReadOnlyUserEnabled();
 	public boolean isIntegrationEnabled();
 	public boolean isProjectsEnabled();
 	public boolean isBrandingEnabled();
 	public boolean isEmailAlertsEnabled();
 	public boolean isCustomCertEnabled(); 
-	public boolean isDedicatedProgramManagerEnabled(); 
-	public boolean isMultiLocationEnabled(); 
+	public boolean isDedicatedProgramManagerEnabled();
 	public boolean isAllowIntegrationEnabled();
 	public boolean isJobSitesEnabled();
 	public boolean isAssignedToEnabled();

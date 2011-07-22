@@ -24,7 +24,6 @@ import com.n4systems.model.signuppackage.SignUpPackageLoader;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.persistence.FieldIDMultiTransactionManager;
 import com.n4systems.persistence.MultiTransactionManager;
-import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CreditCard;
 import com.n4systems.subscription.PriceCheckResponse;
@@ -108,8 +107,6 @@ public class SignUpCrud extends AbstractCrud {
 			
 			addFlashMessageText("message.your_account_has_been_created");
 			logger.info(signUpLogLine("signed up"));
-
-            TenantLimitService.getInstance().updateAll();
 			
 			result = SUCCESS;
 			
@@ -228,13 +225,6 @@ public class SignUpCrud extends AbstractCrud {
 		}
 		return 0L;
 		
-	}
-	
-	public List<SignUpPackage> getPackages() {
-		if (packages == null) {
-			packages = getNonSecureLoaderFactory().createSignUpPackageListLoader().load();
-		}
-		return packages;
 	}
 
 	public String getRefCode() {

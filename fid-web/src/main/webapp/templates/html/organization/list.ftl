@@ -17,5 +17,8 @@ ${action.setPageType('organization','list')!}
 		</span>
 	</div>
 </div>
-<#assign archivedList=false>	
-<#include '_list.ftl' />	
+
+<#if tenant.settings.secondaryOrgsEnabled>
+	<#assign archivedList=false>	
+	<#include '_list.ftl' />
+</#if>	

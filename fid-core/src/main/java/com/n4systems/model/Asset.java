@@ -112,9 +112,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @Column(insertable=false, updatable=false)
     private Long linked_id;
     
-    @Column(name="countstowardslimit", nullable=false)
-    private boolean countsTowardsLimit = true;
-    
     private Location advancedLocation = new Location();
     
     @Transient
@@ -451,14 +448,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	@AllowSafetyNetworkAccess
 	public boolean isLinked() {
 		return (linkedAsset != null);
-	}
-
-	public boolean isCountsTowardsLimit() {
-		return countsTowardsLimit;
-	}
-
-	public void setCountsTowardsLimit(boolean countsTowardsLimit) {
-		this.countsTowardsLimit = countsTowardsLimit;
 	}
 
 	@AllowSafetyNetworkAccess

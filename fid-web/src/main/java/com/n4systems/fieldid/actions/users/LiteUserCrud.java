@@ -30,7 +30,7 @@ public class LiteUserCrud extends UserCrud {
 	@Override
 	@SkipValidation
 	public String doAdd() {
-		if (!isLiteUserLimitReached()) {
+		if (!userLimitService.isLiteUsersAtMax()) {
 			user.setUserType(UserType.LITE);
 			String result = super.doAdd();
 			setupPermissions();
@@ -41,7 +41,7 @@ public class LiteUserCrud extends UserCrud {
 
 	@Override
 	public String doCreate() {
-		if (!isLiteUserLimitReached()) {
+		if (!userLimitService.isLiteUsersAtMax()) {
 			testRequiredEntities(false);
 			user.setUserType(UserType.LITE);
 			save();
@@ -61,11 +61,11 @@ public class LiteUserCrud extends UserCrud {
 	
 	@SkipValidation
 	public String doUnarchive() {
-		if (!super.isLiteUserLimitReached()) {
+		if (!userLimitService.isLiteUsersAtMax()) {
 			testRequiredEntities(true);		
 			return SUCCESS;		
 		}
-		addActionError(getText("label.unarchive_lite_user_limit", new String[] { getLimits().getLiteUsersMax().toString() } ));
+		addActionError(getText("label.unarchive_lite_user_limit", new String[] { String.valueOf(userLimitService.getMaxLiteUsers()) } ));
 		return ERROR;
 	}
 	
@@ -105,15 +105,6 @@ public class LiteUserCrud extends UserCrud {
 		if (existing && !user.isLiteUser()) {
 			throw new MissingEntityException("Failed to load Lite user.");
 		}
-	}
-	
-	@Override
-	public boolean isLiteUserLimitReached() {
-		if (user.isNew() && getLimits().isLiteUsersMaxed()) {
-			addActionError(getText("label.exceeded_your_lite_user_limit", new String[] { getLimits().getLiteUsersMax().toString() } ));
-			return true;
-		}
-		return false;
 	}
 	
 	@Override

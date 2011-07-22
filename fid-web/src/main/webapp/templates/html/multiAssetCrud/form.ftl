@@ -33,40 +33,32 @@
 	${action.setPageType('asset', 'multi_add')!}
 </#if>
 
-<#if limits.assetsMaxed>
-	<div class="limitWarning">
-	<@s.text name="label.exceeded_your_asset_limit">
-		<@s.param>${limits.assetsMax}</@s.param>
-	</@s.text>
-	</div>
-<#else>
-	<div id="steps">
-		<div class="step">
-			<@s.form id="step1form" theme="fieldid" cssClass="fullForm fluidSets">
-				<#include "_step1.ftl" />
-			</@s.form>
-		</div>
-		
-		<@s.form action="generateSerials" id="step23Form" namespace="/ajax" theme="fieldidSimple">
-			<div class="step stepClosed">
-				<#include "_step2.ftl" />
-			</div>
-			
-			<div class="step stepClosed">
-				<#include "_step3.ftl" />
-			</div>
+<div id="steps">
+	<div class="step">
+		<@s.form id="step1form" theme="fieldid" cssClass="fullForm fluidSets">
+			<#include "_step1.ftl" />
 		</@s.form>
+	</div>
+	
+	<@s.form action="generateSerials" id="step23Form" namespace="/ajax" theme="fieldidSimple">
+		<div class="step stepClosed">
+			<#include "_step2.ftl" />
+		</div>
 		
 		<div class="step stepClosed">
-			
-			<#include "_step4.ftl" />
-			
+			<#include "_step3.ftl" />
 		</div>
+	</@s.form>
+	
+	<div class="step stepClosed">
 		
-		<div id="cancelButton" class="stepAction" >
-			<@s.url id="cancelUrl" action="home" />
-			<@s.submit key="label.cancel_multi_add" id="cancel" onclick="return redirect('${cancelUrl}');"/>
-		</div>
+		<#include "_step4.ftl" />
 		
 	</div>
-</#if>
+	
+	<div id="cancelButton" class="stepAction" >
+		<@s.url id="cancelUrl" action="home" />
+		<@s.submit key="label.cancel_multi_add" id="cancel" onclick="return redirect('${cancelUrl}');"/>
+	</div>
+	
+</div>

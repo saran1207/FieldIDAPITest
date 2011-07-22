@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.selenium.pages.admin;
 
 import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.n4systems.model.tenant.TenantLimit;
 import com.thoughtworks.selenium.Selenium;
 
 public class AdminOrgPage extends FieldIDPage {
@@ -24,25 +23,16 @@ public class AdminOrgPage extends FieldIDPage {
         waitForAjax();
     }
     
-    public void enterTenantLimits(TenantLimit limits) {
+    public void enterTenantLimits(Integer employeeUsers, Integer liteUsers, Integer readonlyUsers) {
         clickEditPlan();
-    	if(limits.getDiskSpaceInBytes() != null) {
-    		selenium.type("//input[@id='planForm_diskSpace']", limits.getDiskSpaceInBytes().toString());
+    	if(employeeUsers != null) {
+    		selenium.type("//input[@id='planForm_users']", employeeUsers.toString());
     	}
-    	if(limits.getAssets() != null) {
-    		selenium.type("//input[@id='planForm_assets']", limits.getAssets().toString());
+    	if(liteUsers != null) {
+    		selenium.type("//input[@id='planForm_liteUsers']", liteUsers.toString());
     	}
-    	if(limits.getUsers() != null) {
-    		selenium.type("//input[@id='planForm_users']", limits.getUsers().toString());
-    	}
-    	if(limits.getLiteUsers() != null) {
-    		selenium.type("//input[@id='planForm_liteUsers']", limits.getLiteUsers().toString());
-    	}
-    	if(limits.getReadonlyUsers() != null) {
-    		selenium.type("//input[@id='planForm_readonlyUsers']", limits.getReadonlyUsers().toString());
-    	}
-    	if(limits.getSecondaryOrgs() != null) {
-    		selenium.type("//input[@id='planForm_secondaryOrgs']", limits.getSecondaryOrgs().toString());
+    	if(readonlyUsers != null) {
+    		selenium.type("//input[@id='planForm_readonlyUsers']", readonlyUsers.toString());
     	}
         clickSavePlan();
     }

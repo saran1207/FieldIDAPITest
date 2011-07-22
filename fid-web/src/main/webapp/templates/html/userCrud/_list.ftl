@@ -24,7 +24,7 @@
 
 		<@s.select id="userGroup" name="userGroup" list="userGroups" listKey="id" listValue="name" key="label.usergroup" labelposition="left"/>
 		
-		<#if securityGuard.readOnlyUserEnabled>
+		<#if userLimitService.readOnlyUsersEnabled>
 			<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
 		</#if>
 		

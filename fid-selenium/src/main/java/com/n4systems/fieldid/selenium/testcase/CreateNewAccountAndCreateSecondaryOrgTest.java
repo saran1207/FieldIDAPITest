@@ -26,11 +26,6 @@ public class CreateNewAccountAndCreateSecondaryOrgTest extends FieldIDTestCase {
     private static final String NEW_ORG_NAME = "TestOrg";
     private static final String NEW_USER = "testuser";
     private static final String NEW_PASSWORD = "testuser";
-	
-    @Override
-    public void setupScenario(Scenario scenario) {
-        scenario.updateConfigurationForTenant("test1", ConfigEntry.EXTERNAL_PLANS_AND_PRICING_ENABLED, "true");
-    }
 
     @Test
 	public void create_unlimited_account_type_tenant_and_it_should_be_able_to_create_secondary_org() throws Exception {

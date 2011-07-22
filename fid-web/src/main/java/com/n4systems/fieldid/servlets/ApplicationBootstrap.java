@@ -5,9 +5,9 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 
+import com.n4systems.fieldid.filter.SessionInViewFilter;
 import com.n4systems.services.Initializer;
 import com.n4systems.services.RemoteOrderManagerServiceInitializer;
-import com.n4systems.services.TenantLimitServiceInitializer;
 import com.n4systems.taskscheduling.TaskSchedulerBootstraper;
 import com.n4systems.taskscheduling.task.SignUpPackageSyncTaskInitializer;
 
@@ -16,8 +16,7 @@ public class ApplicationBootstrap extends HttpServlet {
 	
 	/** Array of startup services. Will be initialized in order.*/
 	private static final Initializer[] initializers = {
-		new TaskSchedulerBootstraper(), 
-		new TenantLimitServiceInitializer(),
+		new TaskSchedulerBootstraper(),
 		new SignUpPackageSyncTaskInitializer(),
 		new RemoteOrderManagerServiceInitializer()
 	};

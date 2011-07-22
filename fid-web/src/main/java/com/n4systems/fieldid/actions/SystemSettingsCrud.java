@@ -46,7 +46,6 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private boolean assignedTo = false;
 	private boolean proofTestIntegration=false;
 	private boolean manufacturerCertificate=false;
-	
 	private TransactionManager transactionManager;
 
 	public SystemSettingsCrud(PersistenceManager persistenceManager) {

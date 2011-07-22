@@ -8,18 +8,16 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.subscription.PaymentOption;
 
 public class SignUpPackage {
-	
 	private SignUpPackageDetails signPackageDetails;
 	private List<ContractPricing> paymentOptions;
 
-	
 	public SignUpPackage(SignUpPackageDetails signPackageDetails, List<ContractPricing> paymentOptions) {
 		super();
 		this.signPackageDetails = signPackageDetails;
 		this.paymentOptions = paymentOptions;
 		Collections.sort(this.paymentOptions);
 	}
-	
+
 	public SignUpPackageDetails getSignPackageDetails() {
 		return signPackageDetails;
 	}
@@ -36,8 +34,7 @@ public class SignUpPackage {
 		}
 		throw new InvalidArgumentException("there is no contract that matches the default payment option.");
 	}
-	
-	
+
 	public ContractPricing getPaymentOptionWithType(String targetPaymentOption) {
 		PaymentOption option = PaymentOption.valueOf(targetPaymentOption);
 		for (ContractPricing paymentOption : paymentOptions) {
@@ -45,16 +42,7 @@ public class SignUpPackage {
 				return paymentOption;
 			}
 		}
-		throw new InvalidArgumentException("there is no contract that matches the payment option. "  + targetPaymentOption);
-	}
-	
-	
-	public Long getAssets() {
-		return signPackageDetails.getAssets();
-	}
-
-	public Long getDiskSpaceInMB() {
-		return signPackageDetails.getDiskSpaceInMB();
+		throw new InvalidArgumentException("there is no contract that matches the payment option. " + targetPaymentOption);
 	}
 
 	public ExtendedFeature[] getExtendedFeatures() {
@@ -65,14 +53,6 @@ public class SignUpPackage {
 		return signPackageDetails.getName();
 	}
 
-	public Long getUsers() {
-		return signPackageDetails.getUsers();
-	}
-
-	public Long getReadonlyUsers() {
-		return signPackageDetails.getReadonlyUsers();
-	}
-	
 	public boolean isPreferred() {
 		return signPackageDetails.isPreferred();
 	}
@@ -84,7 +64,7 @@ public class SignUpPackage {
 	public Long getContractId(PaymentOption paymentOption) {
 		return getContract(paymentOption).getExternalId();
 	}
-	
+
 	public ContractPricing getContract(PaymentOption paymentOption) {
 		for (ContractPricing contract : paymentOptions) {
 			if (contract.getPaymentOption() == paymentOption) {
@@ -93,12 +73,11 @@ public class SignUpPackage {
 		}
 		throw new InvalidArgumentException("there is no contract that matches the given payment option.");
 	}
-	
-	
+
 	public boolean isFree() {
-		return getDefaultPricePerUserPerMonth() == 0; 
+		return getDefaultPricePerUserPerMonth() == 0;
 	}
-	
+
 	public boolean includes(String feature) {
 		ExtendedFeature featureToLookUp = ExtendedFeature.valueOf(feature);
 		return signPackageDetails.includesFeature(featureToLookUp);
@@ -115,7 +94,7 @@ public class SignUpPackage {
 			return false;
 		if (obj instanceof SignUpPackage) {
 			SignUpPackage other = (SignUpPackage) obj;
-					
+
 			return (getSignPackageDetails().equals(other.getSignPackageDetails()));
 		}
 		return false;
@@ -130,9 +109,4 @@ public class SignUpPackage {
 		return false;
 	}
 
-	
-	
-	
-	
-	
 }

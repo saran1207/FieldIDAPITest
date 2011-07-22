@@ -20,6 +20,7 @@ import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
@@ -106,8 +107,8 @@ public class ImporterFactory {
 	}
 
 
-	public UserImporter createUserImporter(MapReader reader, WelcomeNotifier emailNotifier, String timeZoneId) {
-		return new UserImporter(reader, createViewValidator(), saverFactory.createUserSaver(), createUserToModelConverter(), loaderFactory.createOrgByNameLoader(), emailNotifier, timeZoneId);	
+	public UserImporter createUserImporter(MapReader reader, WelcomeNotifier emailNotifier, TenantSettings settings, String timeZoneId) {
+		return new UserImporter(reader, createViewValidator(), settings, saverFactory.createUserSaver(), createUserToModelConverter(), emailNotifier, timeZoneId);	
 	}
 	
 	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {

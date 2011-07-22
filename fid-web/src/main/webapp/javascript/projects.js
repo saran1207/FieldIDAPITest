@@ -104,14 +104,8 @@ function removeNote( event ) {
 	
 
 var uploadUrl = '';
-function addUploadFile(limitReached, limitReachedHTML) {
-	var iframe = '';
-	if (limitReached) {
-		iframe = limitReachedHTML;
-	} else {
-		iframe = '<iframe id="attachment" class="fileUpload" src="'+ uploadUrl + '?frameId=attachment&frameCount=1" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
-	}
-	$('attachment').replace( iframe );
+function addUploadFile() {
+	$('attachment').replace('<iframe id="attachment" class="fileUpload" src="'+ uploadUrl + '?frameId=attachment&frameCount=1" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>');
 }
 
 var removeText = '';

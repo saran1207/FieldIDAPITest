@@ -23,5 +23,5 @@ ${action.setPageType('job','notes')!}
 </@s.form>
 
 <script type="text/javascript">
-	addUploadFile(${limits.diskSpaceMaxed?string('true','false')}, '<span id="attachment" class="limitWarning"><@s.text name="warning.disk_space_maxed"/></span>');
+	addUploadFile(false, '<span id="attachment" class="limitWarning"><@s.text name="warning.disk_space_maxed"/></span>');
 </script>

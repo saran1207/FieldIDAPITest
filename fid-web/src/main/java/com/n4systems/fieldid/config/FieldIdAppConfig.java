@@ -1,11 +1,27 @@
 package com.n4systems.fieldid.config;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import rfid.web.helper.SessionUser;
+
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.wrapper.UserEJBContainer;
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.fieldid.service.FieldIdService;
+import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
@@ -13,55 +29,49 @@ import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.security.SecurityFilter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver;
-import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
+import com.n4systems.services.TenantSecurityFilterDelegate;
+import com.n4systems.util.HostNameParser;
 
 @Configuration
 public class FieldIdAppConfig {
 
     @Bean
     public AssetStatusService assetStatusService() {
-        return injectPersistentService(new AssetStatusService());
+        return new AssetStatusService();
     }
 
     @Bean
     public AssetTypeService assetTypeService() {
-        return injectPersistentService(new AssetTypeService());
+        return new AssetTypeService();
     }
 
     @Bean
     public OrgService orgService() {
-        return injectPersistentService(new OrgService());
+        return new OrgService();
     }
 
     @Bean
     public JobService jobService() {
-        return injectPersistentService(new JobService());
+        return new JobService();
     }
 
     @Bean
     public UserService userService() {
-        return injectPersistentService(new UserService());
+        return new UserService();
     }
 
     @Bean
     public EventTypeService eventTypeService() {
-        return injectPersistentService(new EventTypeService());
+        return new EventTypeService();
     }
 
     @Bean
     public EventFormService eventFormService() {
-        return injectPersistentService(new EventFormService());
+        return new EventFormService();
     }
 
     @Bean
@@ -72,6 +82,12 @@ public class FieldIdAppConfig {
     @Bean
     public UserManager userEJBContainer() {
         return new UserEJBContainer();
+    }
+    
+    @Bean
+    @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public UserLimitService userLimitService() {
+    	return new UserLimitService();
     }
 
     @Bean
@@ -90,24 +106,21 @@ public class FieldIdAppConfig {
     @Bean
     @Scope(value="session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public SecurityFilter userSecurityFilter() {
-        return FieldIDSession.get().getSessionUser().getSecurityFilter();
+    	SessionUser user = (RequestCycle.get() != null) ? FieldIDSession.get().getSessionUser() : new WebSession().getSessionUser();
+        return user.getSecurityFilter();
     }
-
+    
+    @Bean
+    @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public SecurityFilter tenantSecurityFilter() {
+    	HttpServletRequest request = (WebRequestCycle.get() != null) ? ((ServletWebRequest) WebRequestCycle.get().getRequest()).getHttpServletRequest() : ServletActionContext.getRequest();
+    	String tenantName = HostNameParser.create(request.getRequestURL().toString()).getFirstSubDomain();
+    	
+    	return new TenantSecurityFilterDelegate(tenantName);
+    }
+    
     @Bean
     public PersistenceService persistenceService() {
-        return injectService(new PersistenceService());
+        return new PersistenceService();
     }
-
-
-    private <T extends FieldIdService> T injectService(T service) {
-        service.setUserSecurityFilter(userSecurityFilter());
-        return service;
-    }
-
-    private <T extends FieldIdPersistenceService> T injectPersistentService(T service) {
-        injectService(service);
-        service.setPersistenceService(persistenceService());
-        return service;
-    }
-
 }

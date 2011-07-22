@@ -7,7 +7,6 @@ import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.model.signuppackage.ContractPricing;
 import com.n4systems.model.signuppackage.SignUpPackage;
-import com.n4systems.model.tenant.TenantLimit;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.subscription.AddressInfo;
 import com.n4systems.subscription.CommunicationException;
@@ -26,7 +25,6 @@ import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.IntRangeFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.RegexFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
@@ -171,12 +169,6 @@ public class SignUpRequestDecorator implements Subscription, AccountCreationInfo
 	public void setNumberOfUsers(Integer numberOfUsers) {
 		signUpRequest.setNumberOfUsers(numberOfUsers);
 	}
-	
-	public boolean isUsersBelowMax() {
-		if (getSignUpPackage().getUsers() == TenantLimit.UNLIMITED) return true;
-		return getUsers() <= getSignUpPackage().getUsers();
-	}
-	
 
 	public void setPassword(String password) {
 		signUpRequest.setPassword(password);

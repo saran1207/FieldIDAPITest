@@ -14,7 +14,6 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
-import com.n4systems.fieldid.security.TenantLimitProxy;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldidadmin.utils.TenantPathUpdater;
 import com.n4systems.model.ExtendedFeature;
@@ -26,22 +25,17 @@ import com.n4systems.model.event.EventCountLoader;
 import com.n4systems.model.orgs.AllPrimaryOrgsPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
-import com.n4systems.model.user.User;
-import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
-import com.n4systems.security.Permissions;
-import com.n4systems.security.UserType;
 import com.n4systems.services.TenantFinder;
-import com.n4systems.services.limiters.TenantLimitService;
 import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
@@ -65,14 +59,12 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private Tenant tenant;
 	private PrimaryOrg primaryOrg;
 	private AccountHelper accountHelper;
-	private TenantLimitProxy limitProxy;
-	private TenantNameAvailabilityChecker tenantNameAvailablityChecker = new TenantNameAvailabilityChecker(); 
-	
-	private User adminUser = new User();
+	private TenantNameAvailabilityChecker tenantNameAvailablityChecker = new TenantNameAvailabilityChecker();
+
 	private String title;
 	private String note;
-	private Map<String, Boolean> extendedFeatures = new HashMap<String, Boolean>();	
-
+	private Map<String, Boolean> extendedFeatures = new HashMap<String, Boolean>();
+	
 	private AssetCountLoader assetCountLoader = new AssetCountLoader();
 	private EventCountLoader eventCountLoader = new EventCountLoader();
 	private LastActiveSessionLoader lastActiveSessionLoader = new LastActiveSessionLoader();
@@ -83,32 +75,34 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private Map<Long, Long> totalEvents = new HashMap<Long, Long>();
 	private Map<Long, Long> total30DayEvents = new HashMap<Long, Long>();
 	private Map<Long, ActiveSession> lastActiveSessions = new HashMap<Long, ActiveSession>();
-	
+
 	private String nameFilter;
 	private String sortColumn;
 	private String sortDirection;
 	private String featureName;
 	private boolean featureOn;
 	private boolean showReminder = false;
-		
-	@Override
-	protected void initMemberFields() {
-	}
 
 	@Override
-	protected void loadMemberFields(Long uniqueId) {
-	}	
+	protected void loadMemberFields(Long uniqueId) {}
+
+	@Override
+	protected void initMemberFields() {}
 	
 	public void prepare() throws Exception {
 		if (id != null) {
 			tenant = TenantFinder.getInstance().findTenant(id);
+			
+			userLimitService.setTenantSecurityFilter(new TenantOnlySecurityFilter(id));
+			
 			primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
 			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
 				extendedFeatures.put(feature.name(), true);
-			}			
-			accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(), getNonSecureLoaderFactory().createSignUpPackageListLoader());
+			}
+			accountHelper = new AccountHelper(getCreateHandlerFactory().getSubscriptionAgent(), getPrimaryOrg(),
+					getNonSecureLoaderFactory().createSignUpPackageListLoader());
 		} else {
-			for (PrimaryOrg org: getPage().getList()) {
+			for (PrimaryOrg org : getPage().getList()) {
 				totalAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), false));
 				total30DayAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), true));
 				totalEvents.put(org.getId(), loadTotalEvents(org.getTenant().getId(), false));
@@ -122,7 +116,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public String doList() {
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
 	public String doShow() {
 		if (tenant == null) {
@@ -140,39 +134,40 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		}
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
 	public String doUpdateExtendedFeature() throws Exception {
 		OrgSaver orgSaver = new OrgSaver();
-		
+
 		Transaction transaction = PersistenceManager.startTransaction();
-		
+
 		try {
 			if (primaryOrg.getId() != null) {
 				processFeature(featureName, featureOn, transaction);
 				extendedFeatures.put(featureName, featureOn);
 			}
-			
+
 			orgSaver.update(transaction, primaryOrg);
-			
+
 			PersistenceManager.finishTransaction(transaction);
-			
+
 		} catch (Exception e) {
 			PersistenceManager.rollbackTransaction(transaction);
-			
+
 			logger.error("Failed creating tenant", e);
 			addActionError("Failed Creating Tenant: " + e.getMessage());
 			return INPUT;
-			
+
 		}
 
 		return SUCCESS;
-	}	
+	}
+
 	@SkipValidation
 	public String doEditNote() {
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
 	public String doCancelNote() {
 		return SUCCESS;
@@ -183,13 +178,19 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		updatePrimaryOrg();
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
 	public String doUpdatePlansAndPricing() {
 		updatePrimaryOrg();
 		return SUCCESS;
 	}
 	
+	@SkipValidation
+	public String doUpdateSecondaryOrgs() {
+		updateTenant();
+		return SUCCESS;
+	}
+
 	@SkipValidation
 	public String doUpdateTenantStatus() {
 		updateTenant();
@@ -201,13 +202,13 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		setShowReminder(false);
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
 	public String doCancelTenantName() {
 		setShowReminder(false);
 		return SUCCESS;
 	}
-	
+
 	public String doUpdateTenantName() {
 		try {
 			updateTenant();
@@ -221,11 +222,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		return SUCCESS;
 	}
 
-		@SkipValidation
+	@SkipValidation
 	public String doEditPlan() {
 		return SUCCESS;
 	}
-	
+
 	@SkipValidation
 	public String doCancelPlan() {
 		return SUCCESS;
@@ -233,38 +234,43 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	@SkipValidation
 	public String doSavePlan() {
-		updatePrimaryOrg();
-		TenantLimitService.getInstance().updateAll();
-		return SUCCESS;
+		try {
+			TenantSettings newSettings = tenant.getSettings();
+			userLimitService.updateLimits(newSettings.getMaxEmployeeUsers(), newSettings.getMaxLiteUsers(), newSettings.getMaxReadOnlyUsers());
+			return SUCCESS;
+		} catch (Exception e) {
+			logger.error("Failed to update user limits", e);
+			return ERROR;
+		}
 	}
 
 	private void updatePrimaryOrg() {
 		new OrgSaver().update(primaryOrg);
 	}
-	
+
 	private void updateTenant() {
 		new TenantSaver().update(tenant);
 	}
 
 	private void processFeature(String featureName, boolean featureOn, Transaction transaction) {
-		
+
 		try {
 			ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
-			
+
 			new ToggleExendedFeatureMethod(feature, featureOn).applyTo(primaryOrg, transaction);
-						
+
 		} catch (IllegalArgumentException e) {
 			addFieldError("extendedFeatures", "incorrect type of extended feature");
 		} catch (Exception e) {
 			addFieldError("extendedFeatures", "could not setup");
 			throw new RuntimeException("problem while switching on or off an extended feature", e);
 		}
-	}	
+	}
 
 	public String doNote() throws Exception {
 		SubscriptionAgent subscriptionAgent = getCreateHandlerFactory().getSubscriptionAgent();
-		
-		if (primaryOrg != null) {	
+
+		if (primaryOrg != null) {
 			if (primaryOrg.getExternalId() != null) {
 				subscriptionAgent.attachNote(primaryOrg.getExternalId(), title, note);
 				title = null;
@@ -273,43 +279,12 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			} else {
 				addActionError("This organization is not attached to a netsuite account.");
 				return INPUT;
-			} 
+			}
 		} else {
 			addActionError("You can only add a note to an organization that exists");
 			return INPUT;
 		}
-		
-		return SUCCESS;
-	}
 
-	private void createSystemAccount(Transaction transaction) {
-		User user = new User();
-		user.setTenant(tenant);
-		user.setOwner(primaryOrg);
-		user.setTimeZoneID("United States:New York - New York");
-		user.setRegistered(true);
-		user.setPermissions(Permissions.SYSTEM);
-		user.setUserType(UserType.SYSTEM);
-		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
-		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));
-		user.setEmailAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_ADDRESS));
-		user.setFirstName("N4");
-		user.setLastName("Admin");
-		
-		UserSaver saver = new UserSaver();
-		saver.save(transaction, user);
-	}
-
-	public String doCreateUser() {
-		Transaction transaction = null;
-		try {
-			transaction = PersistenceManager.startTransaction();
-			
-			createSystemAccount(transaction);
-		} finally {
-			PersistenceManager.finishTransaction(transaction);
-		}
-		
 		return SUCCESS;
 	}
 
@@ -321,41 +296,25 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		this.id = id;
 	}
 
-	public User getAdminUser() {
-		return adminUser;
-	}
-	
-	@FieldExpressionValidator(expression="(adminUser.userID != 'n4systems')", message = "Admin user cannot have a userid of n4systems.")
-	public void setAdminUser(User adminUser) {
-		this.adminUser = adminUser;
-	}
-	
-	public void setAdminUserPass(String pass) {
-		adminUser.assignPassword(pass);
-	}
-	
 	public Tenant getTenant() {
 		return tenant;
 	}
-	
+
 	public void setTenant(Tenant tenant) {
 		this.tenant = tenant;
 	}
-	
+
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}
-	
+
 	public void setPrimaryOrg(PrimaryOrg primaryOrg) {
 		this.primaryOrg = primaryOrg;
 	}
 
 	public Pager<PrimaryOrg> getPage() {
-		return new AllPrimaryOrgsPaginatedLoader().setPage(getCurrentPage())
-		                                          .setPageSize(RESULTS_PER_PAGE)
-		                                          .setNameFilter(nameFilter)
-		                                          .setOrder(sortColumn, sortDirection!=null? sortDirection.equalsIgnoreCase("asc") : true)
-		                                          .load();
+		return new AllPrimaryOrgsPaginatedLoader().setPage(getCurrentPage()).setPageSize(RESULTS_PER_PAGE).setNameFilter(nameFilter)
+				.setOrder(sortColumn, sortDirection != null ? sortDirection.equalsIgnoreCase("asc") : true).load();
 	}
 
 	public String getOtherDateFormat() {
@@ -385,11 +344,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public Map<String, Boolean> getExtendedFeatures() {
 		return extendedFeatures;
 	}
-	
+
 	public String getExtendedFeatureLabel(String name) {
 		return ExtendedFeature.valueOf(name).getLabel();
 	}
-	
+
 	public Boolean getExtendedFeatureState(String key) {
 		return extendedFeatures.get(key) == null ? false : extendedFeatures.get(key);
 	}
@@ -400,72 +359,28 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	public List<ExtendedFeature> getAvailableExtendedFeatures() {
 		List<ExtendedFeature> availableFeatures = new ArrayList<ExtendedFeature>();
-		List<ExtendedFeature> removedFeatures = Arrays.asList(ExtendedFeature.CustomCert, 
-				                                              ExtendedFeature.DedicatedProgramManager, 
-				                                              ExtendedFeature.AllowIntegration);
-		for (ExtendedFeature feature: ExtendedFeature.values()) {
-			if(!removedFeatures.contains(feature)) {
+		List<ExtendedFeature> removedFeatures = Arrays.asList(ExtendedFeature.CustomCert, ExtendedFeature.DedicatedProgramManager,
+				ExtendedFeature.AllowIntegration);
+		for (ExtendedFeature feature : ExtendedFeature.values()) {
+			if (!removedFeatures.contains(feature)) {
 				availableFeatures.add(feature);
 			}
-		}			
+		}
 		return availableFeatures;
 	}
-	
-	public Long getDiskSpace() {
-		return primaryOrg.getLimits().getDiskSpaceInBytes();
-	}
-	
-	public void setDiskSpace(Long diskSpace) {
-		primaryOrg.getLimits().setDiskSpaceInBytes(diskSpace);
-	}
-	
-	public Long getAssets() {
-		return primaryOrg.getLimits().getAssets();
-	}
-	
-	public void setAssets(Long assets) {
-		primaryOrg.getLimits().setAssets(assets);
-	}
-	
-	public Long getLiteUsers(){
-		return primaryOrg.getLimits().getLiteUsers();
-	}
-	
-	public Long getReadonlyUsers() {
-		return primaryOrg.getLimits().getReadonlyUsers();
-	}
-	public Long getUsers() {
-		return primaryOrg.getLimits().getUsers();
-	}
-	
-	public void setUsers(Long users) {
-		primaryOrg.getLimits().setUsers(users);
-	}
-	
-	public void setLiteUsers(Long users){
-		primaryOrg.getLimits().setLiteUsers(users);
-	}
-	
-	public void setReadonlyUsers(Long users){
-		primaryOrg.getLimits().setReadonlyUsers(users);
+
+	public boolean isSecondaryOrgsEnabled() {
+		return tenant.getSettings().isSecondaryOrgsEnabled();
 	}
 
-	public Long getSecondaryOrgs() {
-		return primaryOrg.getLimits().getSecondaryOrgs();
-	}
-	
-	public void setSecondaryOrgs(Long secondaryOrgs) {
-		primaryOrg.getLimits().setSecondaryOrgs(secondaryOrgs);
-	}
-	
-	public void setDisabled(boolean disabled){
+	public void setDisabled(boolean disabled) {
 		tenant.setDisabled(disabled);
 	}
-	
-	public boolean isDisabled(){
+
+	public boolean isDisabled() {
 		return tenant.isDisabled();
 	}
-	
+
 	private Long loadTotalAssets(Long tenantId, boolean limit30Days) {
 		return assetCountLoader.setTenantId(tenantId).setLimit30Days(limit30Days).load();
 	}
@@ -473,13 +388,17 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private Long loadTotalEvents(Long tenantId, boolean limit30Days) {
 		return eventCountLoader.setTenantId(tenantId).setLimit30Days(limit30Days).load();
 	}
-	
+
 	private ActiveSession loadLastActiveSession(Long tenantId) {
 		return lastActiveSessionLoader.setTenant(tenantId).excludeN4User().load();
 	}
-	
+
 	public Long getTotalAssets(Long orgId) {
-			return totalAssets.get(orgId);
+		Long total = totalAssets.get(orgId);
+		if (total == null)
+			return loadTotalAssets(orgId, false);
+		else
+			return total;
 	}
 
 	public Long getTotal30DayAssets(Long orgId) {
@@ -497,7 +416,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		else
 			return total;
 	}
-	
+
 	public Long getTotal30DayEvents(Long orgId) {
 		Long total = total30DayEvents.get(orgId);
 		if (total == null)
@@ -537,16 +456,9 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public void setNameFilter(String nameFilter) {
 		this.nameFilter = nameFilter;
 	}
-	
+
 	public UpgradePackageFilter currentPackageFilter() {
 		return accountHelper.currentPackageFilter();
-	}
-	
-	public TenantLimitProxy getLimits() {
-		if (limitProxy == null) { 
-			limitProxy = new TenantLimitProxy(primaryOrg.getTenant().getId());
-		}
-		return limitProxy;
 	}
 
 	public String getFeatureName() {
@@ -569,14 +481,14 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		return tenant.getName();
 	}
 
-	@RequiredStringValidator(message="", key="error.tenant_name_required", shortCircuit=true)
-	@StringLengthFieldValidator(message="", key="error.tenant_name_length", minLength="3", maxLength="255")
-	@FieldExpressionValidator(expression="validTenantName", message = "", key="error.tenant_name_format")
-	@CustomValidator(type="uniqueValue", message = "", key="error.name_already_used")
+	@RequiredStringValidator(message = "", key = "error.tenant_name_required", shortCircuit = true)
+	@StringLengthFieldValidator(message = "", key = "error.tenant_name_length", minLength = "3", maxLength = "255")
+	@FieldExpressionValidator(expression = "validTenantName", message = "", key = "error.tenant_name_format")
+	@CustomValidator(type = "uniqueValue", message = "", key = "error.name_already_used")
 	public void setTenantName(String name) {
 		tenant.setName(name);
 	}
-	
+
 	public boolean isValidTenantName() {
 		String regex = "^[A-Za-z0-9][A-Za-z0-9\\-]+[A-Za-z0-9]$";
 		return getTenantName().matches(regex);
@@ -593,4 +505,5 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public void setShowReminder(boolean showReminder) {
 		this.showReminder = showReminder;
 	}
+
 }

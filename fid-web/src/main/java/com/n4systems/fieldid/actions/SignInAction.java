@@ -17,6 +17,7 @@ import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.time.SystemClock;
 
 public class SignInAction extends AbstractAction {
@@ -122,42 +123,40 @@ public class SignInAction extends AbstractAction {
 	}
 
 	private String signIn(User loginUser) {
-		logUserIn(loginUser);	
+		logUserIn(loginUser);
 		
 		if (previousUrl != null) {
 			return "redirect";
 		}
 		return SUCCESS;
 	}
-	
+
 	public String doConfirmKick() {
 		Long userId = getSession().getUserAuthHolder();
 		if (userId == null) {
 			return ERROR;
 		}
-		
+
 		User loginUser = persistenceManager.find(User.class, userId);
 		if (loginUser != null) {
-			return signIn(loginUser); 
+			return signIn(loginUser);
 		}
 		return ERROR;
 	}
 
-	
 	@SkipValidation
 	public String doBooted() {
 		String result = doDelete();
 		addFlashErrorText("label.why_you_have_been_signed_out");
 		return result;
 	}
-	
+
 	@SkipValidation
 	public String doDelete() {
 		expireActiveSession();
 		clearSession();
 		return SUCCESS;
 	}
-
 
 	private void expireActiveSession() {
 		if (isLoggedIn()) {
@@ -171,12 +170,10 @@ public class SignInAction extends AbstractAction {
 		SystemSecurityGuard securityGuard = getSecurityGuard();
 		getSession().clear();
 		// if the security guard gets cleared here we will no longer know the tenant context.
-		
-		// restore securityGuard
-		getSession().setSecurityGuard(securityGuard);		
-	}
 
-	
+		// restore securityGuard
+		getSession().setSecurityGuard(securityGuard);
+	}
 
 	protected void logUserIn(User loginUser) {
 		fetchPerviousUrl();
@@ -197,9 +194,13 @@ public class SignInAction extends AbstractAction {
 	}
 
 	private void fetchPerviousUrl() {
-		UrlArchive urlArchive =  new UrlArchive("preLoginContext", getServletRequest(), getServletRequest().getSession());
+		UrlArchive urlArchive = new UrlArchive("preLoginContext", getServletRequest(), getServletRequest().getSession());
 		previousUrl = urlArchive.fetchUrl();
 		urlArchive.clearUrl();
+	}
+
+	public String getExternalPlansAndPricingUrl() {
+		return getConfigContext().getString(ConfigEntry.EXTERNAL_PLANS_AND_PRICING_URL);
 	}
 
 	private void rememberMe() {
@@ -209,7 +210,7 @@ public class SignInAction extends AbstractAction {
 	public String getPreviousUrl() {
 		return previousUrl;
 	}
-	
+
 	@Deprecated()
 	public boolean isRememberMe() {
 		return signIn.isRememberMe();

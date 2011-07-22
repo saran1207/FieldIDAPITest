@@ -41,10 +41,6 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Integration);
 	}
 
-	public boolean isReadOnlyUserEnabled() {
-		return primaryOrg.isReadOnlyUsersEnabled();
-	}
-
 	public boolean isProjectsEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Projects);
 	}
@@ -81,10 +77,6 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.DedicatedProgramManager);
 	}
 
-	public boolean isMultiLocationEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.MultiLocation);
-	}
-
 	public boolean isJobSitesEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites);
 	}
@@ -98,10 +90,7 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	}
 
 	public boolean isPlansAndPricingAvailable() {
-		if (!isReadOnlyUserEnabled() || primaryOrg.isPlansAndPricingAvailable()) {
-			return true;
-		}
-		return false;
+		return primaryOrg.isPlansAndPricingAvailable();
 	}
 	
 	public boolean isAdvancedLocationEnabled() {

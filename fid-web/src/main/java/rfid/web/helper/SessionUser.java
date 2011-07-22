@@ -6,7 +6,6 @@ import java.util.TimeZone;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
@@ -30,7 +29,7 @@ public class SessionUser implements DateTimeDefinition {
 	private String searchType;
 	private TimeZone timeZone;
 	private boolean fromQuickLogin;
-	private SecurityFilter securityFilter;
+	private UserSecurityFilter securityFilter;
 	private String externalAuthKey;
 	private boolean admin;
 	private boolean employee;
@@ -252,7 +251,7 @@ public class SessionUser implements DateTimeDefinition {
 		return getTenant().getName();
 	}
 	
-	public SecurityFilter getSecurityFilter() {
+	public UserSecurityFilter getSecurityFilter() {
 		return securityFilter;
 	}
 	

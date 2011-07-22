@@ -7,6 +7,10 @@ import java.net.URL;
 public class HostNameParser {
 	private String[] hostParts;
 	
+	public static HostNameParser create(String requestURL) {
+		return create(URI.create(requestURL));
+	}
+	
 	public static HostNameParser create(URI uri) {
 		return new HostNameParser(uri.getHost());
 	}

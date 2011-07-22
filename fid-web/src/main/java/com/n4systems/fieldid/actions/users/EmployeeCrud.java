@@ -87,11 +87,11 @@ public class EmployeeCrud extends UserCrud {
 	@Override
 	@SkipValidation
 	public String doUnarchive() {
-		if(!super.isEmployeeLimitReached()) {
+		if(!userLimitService.isEmployeeUsersAtMax()) {
 			testRequiredEntities(true);		
 			return SUCCESS;
 		}
-		addActionError(getText("label.unarchive_employee_user_limit", new String[] { getLimits().getEmployeeUsersMax().toString() } ));
+		addActionError(getText("label.unarchive_employee_user_limit", new String[] { String.valueOf(userLimitService.getMaxEmployeeUsers()) } ));
 		return ERROR;
 	}
 		
@@ -164,8 +164,8 @@ public class EmployeeCrud extends UserCrud {
 	
 	@RequiredFieldValidator(message="")
 	public boolean isEmployeeLimitReached() {
-		if (user.isNew() && getLimits().isEmployeeUsersMaxed()) {
-			addActionError(getText("label.exceeded_your_employee_user_limit", new String[] { getLimits().getEmployeeUsersMax().toString() } ));
+		if (user.isNew() && userLimitService.isEmployeeUsersAtMax()) {
+			addActionError(getText("label.exceeded_your_employee_user_limit", new String[] { String.valueOf(userLimitService.getMaxEmployeeUsers()) } ));
 			return true;
 		}
 		return false;

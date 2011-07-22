@@ -1,12 +1,14 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.WebPage;
+
+import rfid.web.helper.SessionUser;
+
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.security.SecurityFilter;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.WebPage;
-import rfid.web.helper.SessionUser;
 
 public class FieldIDWicketPage extends WebPage {
 
@@ -18,6 +20,16 @@ public class FieldIDWicketPage extends WebPage {
         this(null);
     }
 
+    protected void addComponents() {}
+    
+    @Override
+	protected void onBeforeRender() {
+		if (!hasBeenRendered()) {
+			addComponents();
+		}
+        super.onBeforeRender();
+	}   
+    
     protected UserSecurityGuard getUserSecurityGuard() {
         return FieldIDSession.get().getUserSecurityGuard();
     }

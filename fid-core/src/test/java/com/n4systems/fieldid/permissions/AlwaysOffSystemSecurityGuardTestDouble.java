@@ -80,7 +80,7 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 	}
 
 
-	public boolean isReadOnlyUserEnabled() {
+	public boolean isReadOnlyUsersEnabled() {
 		return false;
 	}
 

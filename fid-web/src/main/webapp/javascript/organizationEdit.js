@@ -57,6 +57,11 @@ function savePlansAndPricing() {
 	$( 'plansAndPricingForm' ).request(getStandardCallbacks());
 }
 
+function saveSecondaryOrgs() {
+	$( 'loading_secondaryOrgs' ).style.visibility = "visible"; 
+	$( 'secondaryOrgsForm' ).request(getStandardCallbacks());
+}
+
 function updateStatus() {
 	$( 'statusForm' ).request(getStandardCallbacks());
 }

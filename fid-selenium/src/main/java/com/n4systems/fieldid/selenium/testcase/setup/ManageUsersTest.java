@@ -20,7 +20,6 @@ import com.n4systems.fieldid.selenium.persistence.Scenario;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.TenantLimit;
 
 public class ManageUsersTest extends FieldIDTestCase {
 
@@ -71,7 +70,7 @@ public class ManageUsersTest extends FieldIDTestCase {
 	@Before
 	public void setUp() throws Exception {
 		AdminOrgPage adminPage = startAdmin().login().filterByCompanyName(COMPANY).clickEditOrganization(COMPANY);
-		adminPage.enterTenantLimits(new TenantLimit(-1L, -1L, -1L, -1L, -1L, -1L));
+		adminPage.enterTenantLimits(-1, -1, -1);
 		manageUsersPage = startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageUsers();
 	}
 	

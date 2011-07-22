@@ -49,7 +49,7 @@
 	</div>
 	<div id="activity">
 		<h3>Activity</h3>
-		<div class="infoSet"><label>Total Assets:</label><span>${limits.assetsUsed?string.number}</span></div>
+		<div class="infoSet"><label>Total Assets:</label><span>${action.getTotalAssets(id)?string.number}</span></div>
 		<div class="infoSet"><label>Assets Last 30 Days:</label><span>${action.getTotal30DayAssets(id)?string.number}</span></div>
 		<div class="infoSet"><label>Total Events</label> <span>${action.getTotalEvents(id)?string.number}</span></div>
 		<div class="infoSet"><label>Events Last 30 Days:</label><span>${action.getTotal30DayEvents(id)?string.number}</span></div>
@@ -81,5 +81,8 @@
 	<tr><td colspan = "4">&nbsp;</td></td>	
 	<tr id="plansAndPricingRow">
 		<#include "_plansAndPricing.ftl"/>		
+	</tr>
+	<tr id="secondaryOrgsRow">
+		<#include "_secondaryOrgsButton.ftl"/>		
 	</tr>
 <table>	</div>

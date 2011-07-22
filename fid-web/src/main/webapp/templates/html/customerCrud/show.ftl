@@ -15,7 +15,7 @@ ${action.setPageType('customer','show')!}
 	<div class="useractions merge">
 		<p><a href="<@s.url action="mergeCustomers" uniqueID="${customer.id}"/>"><@s.text name="label.merge"/></a></p>
 	</div>
-	<#if securityGuard.readOnlyUserEnabled>
+	<#if userLimitService.readOnlyUsersEnabled>
 		<div class="useractions addUser">
 			<p><a href="<@s.url action="customersUserAdd" uniqueID=""  customerId="${customer.id}"/>"><@s.text name="label.add_user"/></a></p>
 		</div>

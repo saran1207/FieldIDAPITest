@@ -23,7 +23,7 @@ ${action.setPageType('setup','ownersUsersLocations')!}
 			<p><@s.text name='label.manage_users_msg' /></p>
 		</div>
 		
-		<#if securityGuard.readOnlyUserEnabled>
+		<#if userLimitService.readOnlyUsersEnabled>
 			<div class="setupOption userRegistrations">
 				<h1><a href="<@s.url action="userRequestList"/>" ><@s.text name="title.manage_user_registrations.plural" /></a></h1>
 				<p>

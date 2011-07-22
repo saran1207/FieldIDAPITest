@@ -6,8 +6,6 @@ import com.n4systems.handlers.creator.signup.BaseSystemSetupDataCreateHandlerImp
 import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandler;
 import com.n4systems.handlers.creator.signup.BaseSystemStructureCreateHandlerImpl;
 import com.n4systems.handlers.creator.signup.BaseSystemTenantStructureCreateHandlerImpl;
-import com.n4systems.handlers.creator.signup.ExtendedFeatureListResolver;
-import com.n4systems.handlers.creator.signup.LimitResolver;
 import com.n4systems.handlers.creator.signup.LinkTenantHandler;
 import com.n4systems.handlers.creator.signup.LinkTenantHandlerImp;
 import com.n4systems.handlers.creator.signup.PrimaryOrgCreateHandler;
@@ -18,11 +16,10 @@ import com.n4systems.handlers.creator.signup.SignUpHandler;
 import com.n4systems.handlers.creator.signup.SignUpHandlerImpl;
 import com.n4systems.handlers.creator.signup.SignupReferralHandler;
 import com.n4systems.handlers.creator.signup.SignupReferralHandlerImpl;
-import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
-import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.assetstatus.AssetStatusSaver;
 import com.n4systems.model.assettype.AssetTypeSaver;
-import com.n4systems.model.promocode.PromoCodeByCodeLoader;
+import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
+import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.safetynetwork.CatalogOnlyConnectionSaver;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
 import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
@@ -44,20 +41,12 @@ public class CreateHandlerFactory {
 	}
 
 	private SignUpFinalizationHandler getSignUpFinalizationHandler() {
-		return new SignUpFinalizationHandlerImpl(getExtendedFeatureListResolver(), new OrgSaver(), new UserSaver(), getLimitResolver(), createLinkTenantHandler());
+		return new SignUpFinalizationHandlerImpl(new OrgSaver(), new UserSaver(), createLinkTenantHandler());
 	}
 
 	private LinkTenantHandler createLinkTenantHandler() {
 		Long houseAccountId = ConfigContext.getCurrentContext().getLong(ConfigEntry.HOUSE_ACCOUNT_PRIMARY_ORG_ID);
 		return new LinkTenantHandlerImp(new OrgConnectionSaver(houseAccountId), new CatalogOnlyConnectionSaver(houseAccountId));
-	}
-
-	private LimitResolver getLimitResolver() {
-		return new LimitResolver(new PromoCodeByCodeLoader());
-	}
-
-	private ExtendedFeatureListResolver getExtendedFeatureListResolver() {
-		return new ExtendedFeatureListResolver(new PromoCodeByCodeLoader());
 	}
 
 	private BaseSystemStructureCreateHandler getBaseSystemStructureCreateHandler() {
