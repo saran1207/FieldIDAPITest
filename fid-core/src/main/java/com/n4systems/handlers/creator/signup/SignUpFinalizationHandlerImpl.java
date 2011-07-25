@@ -48,7 +48,7 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	}
 
 	private void processLimits(Transaction transaction) {
-		accountPlaceHolder.getTenant().getSettings().setMaxEmployeeUsers(accountInformation.getNumberOfUsers());
+		accountPlaceHolder.getTenant().getSettings().getUserLimits().setMaxEmployeeUsers(accountInformation.getNumberOfUsers());
 	}
 
 	private void linkTenants(Transaction transaction) {

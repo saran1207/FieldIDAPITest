@@ -40,7 +40,7 @@ public class ReadOnlyUserCrud extends UserCrud {
 			testRequiredEntities(true);		
 			return SUCCESS;		
 		}
-		addActionError(getText("label.unarchive_readonly_user_limit", new String[] { String.valueOf(getTenant().getSettings().getMaxReadOnlyUsers()) } ));
+		addActionError(getText("label.unarchive_readonly_user_limit", new String[] { String.valueOf(getTenant().getSettings().getUserLimits().getMaxReadOnlyUsers()) } ));
 		return ERROR;
 	}
 

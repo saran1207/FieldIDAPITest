@@ -6,18 +6,23 @@ import org.apache.wicket.markup.html.border.Border;
 
 public class NonWicketLink extends Border {
 
-    protected WebMarkupContainer linkContainer;
+	protected WebMarkupContainer linkContainer;
 
-    public NonWicketLink(String id, String path) {
-        super(id);
+	public NonWicketLink(String id, String path) {
+		super(id);
 
-        setRenderBodyOnly(true);
+		setRenderBodyOnly(true);
 
-        linkContainer = new WebMarkupContainer("link");
-        linkContainer.add(new SimpleAttributeModifier("href", "/fieldid/"+path));
+		linkContainer = new WebMarkupContainer("link");
 
-        add(linkContainer);
-        linkContainer.add(getBodyContainer());
-    }
+		String contextRoot = "/fieldid";
+		if (!path.startsWith("/")) {
+			contextRoot += '/';
+		}
+		linkContainer.add(new SimpleAttributeModifier("href", contextRoot + path));
+
+		add(linkContainer);
+		linkContainer.add(getBodyContainer());
+	}
 
 }

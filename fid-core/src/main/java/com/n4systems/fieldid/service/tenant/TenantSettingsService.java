@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.tenant.TenantSettings;
+import com.n4systems.model.tenant.UserLimits;
 
 @Transactional
 public class TenantSettingsService extends FieldIdPersistenceService {
@@ -26,4 +27,9 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		persistenceService.update(tenantSettings);
 	}	
 	
+	public void updateUserLimits(UserLimits userLimits) {
+		TenantSettings tenantSettings = getTenantSettings();
+		tenantSettings.setUserLimits(userLimits);
+		persistenceService.update(tenantSettings);
+	}
 }

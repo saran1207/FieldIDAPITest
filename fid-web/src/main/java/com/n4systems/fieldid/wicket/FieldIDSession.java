@@ -1,22 +1,25 @@
 package com.n4systems.fieldid.wicket;
 
-import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.fieldid.permissions.UserSecurityGuard;
-import com.n4systems.fieldid.utils.FlashScopeMarshaller;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.PrimaryOrg;
-import org.apache.wicket.Request;
-import org.apache.wicket.Session;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.protocol.http.WebSession;
-import rfid.web.helper.SessionUser;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
+
+import org.apache.wicket.Request;
+import org.apache.wicket.Session;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.WebSession;
+
+import rfid.web.helper.SessionUser;
+
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.permissions.UserSecurityGuard;
+import com.n4systems.fieldid.utils.FlashScopeMarshaller;
+import com.n4systems.fieldidadmin.utils.Constants;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class FieldIDSession extends WebSession {
 
@@ -74,5 +77,9 @@ public class FieldIDSession extends WebSession {
 
     public Map<String, String> getCache() {
         return localizationCache;
+    }
+    
+    public boolean isAdminConsoleAuthenticated() {
+    	return (session.getAttribute(Constants.SESSION_USER) != null);
     }
 }

@@ -106,9 +106,7 @@ public class FieldIdAppConfig {
     @Bean
     @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UserLimitService userLimitService() {
-    	UserLimitService userLimitService = new UserLimitService();
-    	userLimitService.setTenantSettingsService(tenantSettingsService());   // use autowiring instead.
-    	return userLimitService;
+    	return new UserLimitService();
     }
 
     @Bean 

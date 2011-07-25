@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RedirectToUrlException;
@@ -25,6 +24,7 @@ import rfid.web.helper.SessionUser;
 import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.Tenant;
@@ -114,10 +114,6 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
     public FieldIDLoggedInPage() {
         this(null);
-    }
-
-    protected HttpServletRequest getServletRequest() {
-        return getWebRequestCycle().getWebRequest().getHttpServletRequest();
     }
 
     private String loadVersionNumber(boolean devMode) {

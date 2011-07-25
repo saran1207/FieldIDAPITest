@@ -16,7 +16,7 @@ import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.exporting.io.MapReader;
-import com.n4systems.model.tenant.TenantSettings;
+import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
@@ -24,16 +24,16 @@ import com.n4systems.security.UserType;
 import com.n4systems.utils.email.WelcomeNotifier;
 
 public class UserImporter extends AbstractImporter<UserView> {
-	private final TenantSettings tenantSettings;
+	private final UserLimits userLimits;
 	private final UserSaver saver;
 	private final UserToModelConverter converter;
 	private WelcomeNotifier emailNotifier;
 
 	private String timeZoneId;
 
-	public UserImporter(MapReader mapReader, Validator<ExternalModelView> validator, TenantSettings tenantSettings, UserSaver saver, UserToModelConverter converter, WelcomeNotifier emailNotifier, String timeZoneId) {
+	public UserImporter(MapReader mapReader, Validator<ExternalModelView> validator, UserLimits userLimits, UserSaver saver, UserToModelConverter converter, WelcomeNotifier emailNotifier, String timeZoneId) {
 		super(UserView.class, mapReader, validator);
-		this.tenantSettings = tenantSettings;
+		this.userLimits = userLimits;
 		this.saver = saver;
 		this.converter = converter;
 		this.emailNotifier = emailNotifier;
@@ -92,14 +92,14 @@ public class UserImporter extends AbstractImporter<UserView> {
 				}
 			}
 		}
-		if (tenantSettings.getMaxLiteUsers() != -1 && tenantSettings.getMaxLiteUsers() < liteUsers.size()) {
-			results.add(ValidationResult.fail("You can not import more than " + tenantSettings.getMaxLiteUsers() + " lite users. (Attempted to import " + liteUsers.size() + ")").setRow(-1));
+		if (userLimits.getMaxLiteUsers() != -1 && userLimits.getMaxLiteUsers() < liteUsers.size()) {
+			results.add(ValidationResult.fail("You can not import more than " + userLimits.getMaxLiteUsers() + " lite users. (Attempted to import " + liteUsers.size() + ")").setRow(-1));
 		}
-		if (tenantSettings.getMaxReadOnlyUsers() != -1 && tenantSettings.getMaxReadOnlyUsers() < readOnlyUsers.size()) {
-			results.add(ValidationResult.fail("You can not import more than " + tenantSettings.getMaxReadOnlyUsers() + " read only users. (Attempted to import " + readOnlyUsers.size() + ")").setRow(-1));
+		if (userLimits.getMaxReadOnlyUsers() != -1 && userLimits.getMaxReadOnlyUsers() < readOnlyUsers.size()) {
+			results.add(ValidationResult.fail("You can not import more than " + userLimits.getMaxReadOnlyUsers() + " read only users. (Attempted to import " + readOnlyUsers.size() + ")").setRow(-1));
 		}
-		if (tenantSettings.getMaxEmployeeUsers() != -1 && tenantSettings.getMaxEmployeeUsers() < fullUsers.size()) {
-			results.add(ValidationResult.fail("You can not import more than " + tenantSettings.getMaxEmployeeUsers() + " employee (full) users. (Attempted to import " + fullUsers.size() + ")").setRow(-1));
+		if (userLimits.getMaxEmployeeUsers() != -1 && userLimits.getMaxEmployeeUsers() < fullUsers.size()) {
+			results.add(ValidationResult.fail("You can not import more than " + userLimits.getMaxEmployeeUsers() + " employee (full) users. (Attempted to import " + fullUsers.size() + ")").setRow(-1));
 		}
 		return results;
 	}

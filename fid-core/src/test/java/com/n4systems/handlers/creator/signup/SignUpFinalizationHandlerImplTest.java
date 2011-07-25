@@ -86,7 +86,7 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		assertNotNull(accountPlaceHolder.getPrimaryOrg().getExternalId());
 		assertNotNull(accountPlaceHolder.getAdminUser().getExternalId());
 
-		assertEquals(100, accountPlaceHolder.getTenant().getSettings().getMaxEmployeeUsers());
+		assertEquals(100, accountPlaceHolder.getTenant().getSettings().getUserLimits().getMaxEmployeeUsers());
 	}
 
 	private LinkTenantHandler createSuccessfulLinkTenantHandler(AccountPlaceHolder accountPlaceHolder, PrimaryOrg referrerOrg) {

@@ -21,7 +21,7 @@ import com.n4systems.api.validation.Validator;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.OrgByNameLoader;
-import com.n4systems.model.tenant.TenantSettings;
+import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
@@ -295,11 +295,7 @@ public class UserImporterTest {
 			Validator<ExternalModelView> validator, UserToModelConverter converter, final List<UserView> userViews,
 			final int employeesLimit, final int liteUsersLimit, final int readOnlyUsersLimit) {
 
-		TenantSettings settings = new TenantSettings();
-		settings.setMaxEmployeeUsers(employeesLimit);
-		settings.setMaxLiteUsers(liteUsersLimit);
-		settings.setMaxReadOnlyUsers(readOnlyUsersLimit);
-		
+		UserLimits settings = new UserLimits(employeesLimit, liteUsersLimit, readOnlyUsersLimit);
 		UserImporter importer = new UserImporter(reader, validator, settings, saver, converter, notifier, TIME_ZONE_ID) {
 			@Override
 			List<UserView> getViews() {

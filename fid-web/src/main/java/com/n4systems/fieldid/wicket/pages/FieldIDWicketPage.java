@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 
@@ -46,4 +48,8 @@ public class FieldIDWicketPage extends WebPage {
         return getSessionUser().getSecurityFilter();
     }
 
+    protected HttpServletRequest getServletRequest() {
+        return getWebRequestCycle().getWebRequest().getHttpServletRequest();
+    }
+    
 }

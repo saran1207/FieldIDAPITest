@@ -11,14 +11,14 @@ import com.n4systems.model.security.PasswordPolicy;
 @Entity
 @Table(name = "tenant_settings")
 public class TenantSettings extends EntityWithTenant {
-	private static final long serialVersionUID = 5061168697784244073L;
-	
 	private boolean secondaryOrgsEnabled;
-	private int maxEmployeeUsers;
-	private int maxLiteUsers;
-	private int maxReadOnlyUsers;
+	
+	@Embedded
+	private UserLimits userLimits = new UserLimits();
+	
 	@Embedded
 	private AccountPolicy accountPolicy;
+	
 	@Embedded
 	private PasswordPolicy passwordPolicy;
 
@@ -30,28 +30,12 @@ public class TenantSettings extends EntityWithTenant {
 		this.secondaryOrgsEnabled = secondaryOrgsEnabled;
 	}
 
-	public int getMaxEmployeeUsers() {
-		return maxEmployeeUsers;
+	public UserLimits getUserLimits() {
+		return userLimits;
 	}
 
-	public void setMaxEmployeeUsers(int maxEmployeeUsers) {
-		this.maxEmployeeUsers = maxEmployeeUsers;
-	}
-
-	public int getMaxLiteUsers() {
-		return maxLiteUsers;
-	}
-
-	public void setMaxLiteUsers(int maxLiteUsers) {
-		this.maxLiteUsers = maxLiteUsers;
-	}
-
-	public int getMaxReadOnlyUsers() {
-		return maxReadOnlyUsers;
-	}
-
-	public void setMaxReadOnlyUsers(int maxReadonlyUsers) {
-		this.maxReadOnlyUsers = maxReadonlyUsers;
+	public void setUserLimits(UserLimits userLimits) {
+		this.userLimits = userLimits;
 	}
 
 	public void setAccountPolicy(AccountPolicy accountPolicy) {

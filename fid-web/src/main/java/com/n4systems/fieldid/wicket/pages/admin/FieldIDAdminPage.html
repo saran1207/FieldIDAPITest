@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<head>
+	<title>Field ID Administration</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<script type="text/javascript" src="/fieldid/javascript/prototype.js"></script>
+	<script type="text/javascript" src="/fieldid/javascript/scriptaculous.js"></script>
+	<script type="text/javascript" src="/fieldid/javascript/common.js"></script>
+	<link type="text/css" href="/fieldid/style/reset.css" rel="stylesheet" media="all"/>
+	<link type="text/css" href="/fieldid/style/fieldid.css" rel="stylesheet" media="all"/>
+	<link type="text/css" href="/fieldid/style/admin/style.css" rel="stylesheet" media="all"/>
+</head>
+<body>
+	<div id="header">
+		<a class="floatRight" href="/fieldid/admin/signOut.action"><wicket:message key="label.logout"/></a>
+		<a href="/fieldid/admin/organizations.action" style="border:0;">
+			<img src="/fieldid/images/admin/admin-logo.png"/>
+		</a>
+
+		<div wicket:id="navBar"></div>
+	</div>
+	
+	<div id="container">
+		<div id="content">
+			<wicket:child></wicket:child>
+		</div>
+	</div>
+</body>
+</html>

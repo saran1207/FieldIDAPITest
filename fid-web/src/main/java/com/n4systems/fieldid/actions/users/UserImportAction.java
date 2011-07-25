@@ -23,7 +23,7 @@ public class UserImportAction extends AbstractImportAction {
 	
 	@Override
 	protected Importer createImporter(MapReader reader) {
-		return getImporterFactory().createUserImporter(reader, createWelcomeNotifier(), getTenant().getSettings(), getCurrentUser().getTimeZoneID());
+		return getImporterFactory().createUserImporter(reader, createWelcomeNotifier(), getTenant().getSettings().getUserLimits(), getCurrentUser().getTimeZoneID());
 	}
 	
 	@Override

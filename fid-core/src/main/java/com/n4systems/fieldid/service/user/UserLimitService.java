@@ -2,11 +2,12 @@ package com.n4systems.fieldid.service.user;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
-import com.n4systems.model.tenant.TenantSettings;
+import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -16,22 +17,23 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 
 @Transactional
 public class UserLimitService extends FieldIdPersistenceService {
-
-	
 	private Integer employeeUserCount;
 	private Integer liteUserCount;
 	private Integer readOnlyUserCount;
-	private TenantSettingsService tenantSettingsService;
+	private UserLimits userLimits;
 	
-	public UserLimitService() {
-	}	
+	@Autowired
+	private TenantSettingsService tenantSettingsService;
 
-	public void setTenantSettingsService(TenantSettingsService tenantService) {
-		this.tenantSettingsService = tenantService;
+	public void setTenantSettingsService(TenantSettingsService tenantSettingsService) {
+		this.tenantSettingsService = tenantSettingsService;
 	}
-
-	public TenantSettings getTenantSettings() {
-		return tenantSettingsService.getTenantSettings();
+	
+	public UserLimits getUserLimits() {
+		if (userLimits == null) {
+			userLimits = tenantSettingsService.getTenantSettings().getUserLimits();
+		}
+		return userLimits;
 	}
 	
 	private Integer countActiveUsers(WhereClause<?> filter) {
@@ -73,17 +75,17 @@ public class UserLimitService extends FieldIdPersistenceService {
 	}
 
 	public int getMaxEmployeeUsers() {
-		int users = getTenantSettings().getMaxEmployeeUsers();
+		int users = getUserLimits().getMaxEmployeeUsers();
 		return users;
 	}
 
 	public int getMaxLiteUsers() {
-		int users = getTenantSettings().getMaxLiteUsers();
+		int users = getUserLimits().getMaxLiteUsers();
 		return users;
 	}
 
 	public int getMaxReadOnlyUsers() {
-		int users = getTenantSettings().getMaxReadOnlyUsers();
+		int users = getUserLimits().getMaxReadOnlyUsers();
 		return users;
 	}
 	
@@ -121,13 +123,9 @@ public class UserLimitService extends FieldIdPersistenceService {
 		boolean atMax = !isReadOnlyUsersUnlimited() && getReadOnlyUserCount() >= getMaxReadOnlyUsers();
 		return atMax;
 	}
-
-	// TODO DD : refactor this into tenant service??
-	public void updateLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers) {
-		TenantSettings tenantSettings = getTenantSettings();
-		tenantSettings.setMaxEmployeeUsers(maxEmployeeUsers);
-		tenantSettings.setMaxLiteUsers(maxLiteUsers);
-		tenantSettings.setMaxReadOnlyUsers(maxReadOnlyUsers);
-		persistenceService.update(tenantSettings);
+	
+	public void updateUserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers) {
+		tenantSettingsService.updateUserLimits(new UserLimits(maxEmployeeUsers, maxLiteUsers, maxReadOnlyUsers));
 	}
+	
 }

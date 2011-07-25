@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.resources;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
+import java.util.Locale;
+import java.util.Map;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.resource.loader.IStringResourceLoader;
 
-import java.util.Locale;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 
 public class TenantOverridesResourceLoader implements IStringResourceLoader {
 
@@ -19,7 +21,8 @@ public class TenantOverridesResourceLoader implements IStringResourceLoader {
     }
 
     private String loadTenantOverride(String key) {
-        return FieldIDSession.get().getTenantLangOverrides().get(key);
+    	Map<String, String> tenantOverrides = FieldIDSession.get().getTenantLangOverrides();
+        return (tenantOverrides != null) ? tenantOverrides.get(key) : null;
     }
 
 }

@@ -2,15 +2,15 @@
 <@s.form id="planForm" action="savePlan" namespace="/adminAjax" theme="fieldidSimple" >
 	<@s.hidden name="id"/>
 	<div class="infoSet">
-		<label><@s.text name="label.employee_accounts"/></label><span><@s.textfield name="tenant.settings.maxEmployeeUsers"/></span>
+		<label><@s.text name="label.employee_accounts"/></label><span><@s.textfield name="userLimits.maxEmployeeUsers"/></span>
 	</div>
 	
 	<div class="infoSet">
-		<label><@s.text name="label.lite_user_accounts"/></label><span><@s.textfield name="tenant.settings.maxLiteUsers"/></span>
+		<label><@s.text name="label.lite_user_accounts"/></label><span><@s.textfield name="userLimits.maxLiteUsers"/></span>
 	</div>
 	
 	<div class="infoSet">
-		<label><@s.text name="label.readonly_user_accounts"/></label><span><@s.textfield name="tenant.settings.maxReadOnlyUsers"/></span>
+		<label><@s.text name="label.readonly_user_accounts"/></label><span><@s.textfield name="userLimits.maxReadOnlyUsers"/></span>
 	</div>
 
 	<div class="planFormActions">

@@ -1,13 +1,15 @@
 package com.n4systems.fieldid.wicket.resources;
 
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import org.apache.wicket.Component;
-import org.apache.wicket.resource.loader.IStringResourceLoader;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Properties;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.resource.loader.IStringResourceLoader;
+
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 
 public class CustomerLanguageResourceLoader implements IStringResourceLoader {
 
@@ -30,7 +32,8 @@ public class CustomerLanguageResourceLoader implements IStringResourceLoader {
     }
 
     private String loadResource(String key) {
-        boolean useJobsites = FieldIDSession.get().getSecurityGuard().isJobSitesEnabled();
+    	SystemSecurityGuard securityGuard = FieldIDSession.get().getSecurityGuard();
+        boolean useJobsites = (securityGuard != null) ? securityGuard.isJobSitesEnabled() : false;
         if (useJobsites) {
             return jobsiteProperties.getProperty(key);
         } else {
