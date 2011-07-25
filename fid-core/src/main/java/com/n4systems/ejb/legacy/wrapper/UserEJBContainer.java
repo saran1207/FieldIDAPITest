@@ -15,6 +15,7 @@ import com.n4systems.exceptions.LoginException;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
@@ -96,19 +97,19 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 
 	
 
-	@Override
-	public User findUser(String tenantName, String userID, String plainTextPassword) {
-		TransactionManager transactionManager = new FieldIdTransactionManager();
-		Transaction transaction = transactionManager.startTransaction();
-		try {
-			return createManager(transaction.getEntityManager()).findUser(tenantName, userID, plainTextPassword);
-		} catch (RuntimeException e) {
-			transactionManager.rollbackTransaction(transaction);
-			throw e;
-		} finally {
-			transactionManager.finishTransaction(transaction);
-		}
-	}
+//	@Override
+//	public User findUser(String tenantName, String userID, String plainTextPassword, AccountPolicy accountPolicy) {
+//		TransactionManager transactionManager = new FieldIdTransactionManager();
+//		Transaction transaction = transactionManager.startTransaction();
+//		try {
+//			return createManager(transaction.getEntityManager()).findUser(tenantName, userID, plainTextPassword, tenantSettingsService.getTenantSettings().getAccountPolicy());
+//		} catch (RuntimeException e) {
+//			transactionManager.rollbackTransaction(transaction);
+//			throw e;
+//		} finally {
+//			transactionManager.finishTransaction(transaction);
+//		}
+//	}
 
 	@Override
 	public void lockUser(final String tenantName, final String userID, final Integer duration, final Integer failedLoginAttempts) {
@@ -125,11 +126,11 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 	}
 	
 	@Override
-	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword) {
+	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword, AccountPolicy accountPolicy) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword);		  
+			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword, accountPolicy);		  
 		} catch (RuntimeException e) {
 			if (e instanceof LoginException) { 
 				loginService.trackFailedLoginAttempts((LoginException)e);

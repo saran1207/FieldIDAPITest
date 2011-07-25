@@ -1,6 +1,7 @@
 package com.n4systems.model.user;
 
 import java.io.File;
+import java.util.Date;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -52,6 +53,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private int failedLoginAttempts;
 	private String hashSecurityCardNumber;
 	private Boolean locked;
+	private Date lockedUntil;
 	
 	
 //	@ElementCollection(fetch = FetchType.EAGER)
@@ -209,7 +211,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	 */
 	public void assignPassword(String plainTextPassword) {
 		this.hashPassword = hashPassword(plainTextPassword);
-		setLocked(false);
+		unlock();
 	}
 
 //	public void addPreviousPassword(String hashPassword, int max) {
@@ -370,8 +372,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	@Deprecated
 	public Long getCustomerId() {
 		return (getOwner().isExternal()) ? getOwner().getCustomerOrg().getId() : null;
-	}
-	
+	}	
 	
 	@Override
 	public User enhance(SecurityLevel level) {
@@ -416,5 +417,20 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	public Boolean isLocked() {
 		return locked;
 	}
+
+	public void setLockedUntil(Date lockedUntil) {
+		this.lockedUntil = lockedUntil;
+	}
+
+	public Date getLockedUntil() {
+		return lockedUntil;
+	}
+
+	public void unlock() {
+		setLocked(false);
+		setLockedUntil(null);
+		setFailedLoginAttempts(0);		
+	}
+
 	
 }

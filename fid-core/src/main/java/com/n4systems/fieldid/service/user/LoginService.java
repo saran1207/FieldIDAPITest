@@ -11,6 +11,8 @@ import com.n4systems.fieldid.service.FieldIdService;
 // *NOT* transactional...no DB required.
 public class LoginService extends FieldIdService {
 
+	// TODO DD : eventually move all of legacy login related code to here.  (findUser etc...)
+	
 	// dangerous architecture if you ever have to cluster!
 	// this map is used to keep track of failed logins in memory.
 	// using DB has its own problems but this technique will falter if multiple JVM's are used

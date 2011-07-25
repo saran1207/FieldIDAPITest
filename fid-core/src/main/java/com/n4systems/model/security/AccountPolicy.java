@@ -14,8 +14,8 @@ public class AccountPolicy implements Serializable {
 	@Deprecated //only for dev use until persistence is implemented.
 	public static AccountPolicy makeDummyAccountPolicy() { 
 		AccountPolicy policy = new AccountPolicy();
-		policy.setMaxAttempts(3);
-		policy.setLockoutDuration(1);
+		policy.setMaxAttempts(5);
+		policy.setLockoutDuration(20);
 		return policy;
 	}
 	

@@ -16,7 +16,7 @@ public class LoginException extends RuntimeException {
 				user.isLocked() ? "user is locked" : 
 									"incorrect password" );
 		attempts = 1;
-		this.duration = duration;
+		this.duration = (duration!=null && !duration.equals(0)) ? duration : null;  // recall : 0 treated as no duration. 
 		this.maxAttempts = maxAttempts;
 		this.userId = userId;
 		locked = user==null ? false : user.isLocked();

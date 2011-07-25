@@ -2,8 +2,6 @@ package com.n4systems.fieldid.config;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.n4systems.fieldid.service.search.ReportService;
-import com.n4systems.fieldid.service.search.SearchService;
 import org.apache.struts2.ServletActionContext;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.WebRequestCycle;
@@ -31,6 +29,8 @@ import com.n4systems.fieldid.service.event.EventFormService;
 import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.search.ReportService;
+import com.n4systems.fieldid.service.search.SearchService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
@@ -92,10 +92,10 @@ public class FieldIdAppConfig {
     public PersistenceManager persistenceEJBContainer() {
         return new PersistenceManagerImpl();
     }
-
+    
     @Bean
     public UserManager userEJBContainer() {
-        return new UserEJBContainer(loginService());
+        return new UserEJBContainer(loginService());		// return new service
     }
     
     @Bean 
@@ -107,7 +107,7 @@ public class FieldIdAppConfig {
     @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UserLimitService userLimitService() {
     	UserLimitService userLimitService = new UserLimitService();
-    	userLimitService.setTenantSettingsService(tenantSettingsService());
+    	userLimitService.setTenantSettingsService(tenantSettingsService());   // use autowiring instead.
     	return userLimitService;
     }
 

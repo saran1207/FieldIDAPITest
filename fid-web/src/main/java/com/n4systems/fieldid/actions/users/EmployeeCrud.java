@@ -87,8 +87,7 @@ public class EmployeeCrud extends UserCrud {
 	
 	public String doUnlock() {
 		try { 
-			user.setLocked(false);
-			user.setFailedLoginAttempts(0);
+			user.unlock();
 			new UserSaver().update(user);
 		} catch (Exception e) {
 			addActionErrorText("error.saving_user");

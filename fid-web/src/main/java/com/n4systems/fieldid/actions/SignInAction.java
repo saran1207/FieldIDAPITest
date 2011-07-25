@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import rfid.web.helper.SessionEulaAcceptance;
 
@@ -10,6 +11,7 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.LoginException;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.model.activesession.ActiveSession;
@@ -30,6 +32,9 @@ public class SignInAction extends AbstractAction {
 	private String previousUrl;
 
 	private SignIn signIn = new SignIn();
+	
+	@Autowired
+	private TenantSettingsService tenantSettingsService;
 
 	public SignInAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -89,7 +94,7 @@ public class SignInAction extends AbstractAction {
 
 	private User findUserByPw() {	
 		try { 
-			return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
+			return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword(), tenantSettingsService.getTenantSettings().getAccountPolicy());
 		} catch (LoginException e) {
 			handleFailedLoginAttempt(e);
 			return null;

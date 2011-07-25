@@ -47,9 +47,9 @@ public class PasswordPolicyPage extends SetupPage {
             add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;
 				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    target.addComponent(PasswordPolicyPage.this);
+                    target.addComponent(feedbackPanel);
                     tenantSettingsService.updateTenantPasswordPolicySettings((PasswordPolicy) form.getModelObject());
-                    // TODO DD : add "updated" message.
+                    // TODO DD : add update msg here...                    
                 }
 				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
 					target.addComponent(feedbackPanel);

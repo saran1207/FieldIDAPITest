@@ -1,10 +1,13 @@
 package com.n4systems.ejb.legacy.impl;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
@@ -18,6 +21,7 @@ import com.n4systems.exceptions.LoginException;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -50,22 +54,23 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	public EntityManagerBackedUserManager(EntityManager em) {
+		
 		super();
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 	}
 
-	@Override
-	public User findUser(String tenantName, String userID, String plainTextPassword) {
-		try {
-			return findUserByPw(tenantName, userID, plainTextPassword);			
-		} catch (LoginException e) { 
-			return null;
-		}
-	}
+//	@Override
+//	public User findUser(String tenantName, String userID, String plainTextPassword, AccountPolicy accountPolicy) {
+//		try {
+//			return findUserByPw(tenantName, userID, plainTextPassword, accountPolicy);			
+//		} catch (LoginException e) { 
+//			return null;
+//		}
+//	}
 
-	@Override
-	public User findUserByPw(String tenantName, String userID, String plainTextPassword) {
+	@Override	
+	public User findUserByPw(String tenantName, String userID, String plainTextPassword, AccountPolicy accountPolicy) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
 
@@ -74,20 +79,34 @@ public class EntityManagerBackedUserManager implements UserManager {
 			
 		User user = builder.getSingleResult(em);
 
-		if (user != null && user.getHashPassword().equals(User.hashPassword(plainTextPassword)) && !user.isLocked()) {
+		if (passwordMatches(plainTextPassword, user) && !isStillLocked(user)) {
 			return user;
 		} else { 
-			throw createLoginException(user, userID);
+			throw createLoginException(user, userID, accountPolicy);
 		}
 	}
 
-	private LoginException createLoginException(User user, String userId) {
-		/*need access to max attempts here...read from DB*/		
-		return new LoginException(user, userId, 5, 20);
+	private boolean passwordMatches(String plainTextPassword, User user) {
+		return user != null && user.getHashPassword().equals(User.hashPassword(plainTextPassword));
+	}
+
+	public boolean isStillLocked(User user) {
+		if (!user.isLocked()) {
+			return false;
+		}		
+		if (user.getLockedUntil()!=null && new Date().after(user.getLockedUntil())) {
+			user.unlock();
+			return false;
+		}
+		return true;
+	}
+
+	private LoginException createLoginException(User user, String userId, AccountPolicy accountPolicy) {
+		return new LoginException(user, userId, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration());
 	}
 
 	@Override
-	public void lockUser(String tenantName, String userID, Integer duration, Integer failedLoginAttempts) {
+	public void lockUser(String tenantName, String userID, Integer durationInMinutes, Integer failedLoginAttempts) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
 
@@ -96,9 +115,20 @@ public class EntityManagerBackedUserManager implements UserManager {
 			
 		User user = builder.getSingleResult(em);
 
-		user.setLocked(true);
+		user.setLocked(true);		
 		user.setFailedLoginAttempts(failedLoginAttempts);
+		setLockedUntil(durationInMinutes, user);
 		updateUser(user);		
+	}
+
+	private void setLockedUntil(Integer durationInMinutes, User user) {
+		Date time = null;
+		if (durationInMinutes!=null && !durationInMinutes.equals(0)) {   // recall : 0=no time limit.
+			long now = new Date().getTime();
+			long durationInMs = TimeUnit.MINUTES.toMillis(durationInMinutes.longValue());
+			time = new Date(now + durationInMs);
+		}
+		user.setLockedUntil(time);
 	}
 
 	@Override
