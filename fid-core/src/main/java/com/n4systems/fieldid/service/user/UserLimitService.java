@@ -24,10 +24,6 @@ public class UserLimitService extends FieldIdPersistenceService {
 	
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
-
-	public void setTenantSettingsService(TenantSettingsService tenantSettingsService) {
-		this.tenantSettingsService = tenantSettingsService;
-	}
 	
 	public UserLimits getUserLimits() {
 		if (userLimits == null) {

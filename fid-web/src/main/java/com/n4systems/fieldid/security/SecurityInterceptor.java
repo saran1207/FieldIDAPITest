@@ -7,7 +7,7 @@ import rfid.web.helper.SessionUser;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.utils.ActionInvocationWrapper;
-import com.n4systems.security.SecurityContext;
+import com.n4systems.security.AuditLoggingContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -29,7 +29,7 @@ public class SecurityInterceptor extends AbstractInterceptor implements StrutsSt
 		String actionResult;
 		try {
 			// initialize the context and invoke the action
-			SecurityContext.initialize(user.getUniqueID(), user.getTenant().getId(), sessionId);
+			AuditLoggingContext.initialize(user.getUniqueID(), user.getTenant().getId(), sessionId);
 			actionResult = action.invoke();
 			
 		} catch(SecurityException e) {
@@ -38,7 +38,7 @@ public class SecurityInterceptor extends AbstractInterceptor implements StrutsSt
 			actionResult = AbstractAction.INVALID_SECURITY;
 		} finally {
 			// reset the context after the action has run
-			SecurityContext.clear();
+			AuditLoggingContext.clear();
 		}
 		
 		return actionResult;

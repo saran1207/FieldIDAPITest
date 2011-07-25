@@ -11,11 +11,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
-import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldidadmin.utils.TenantPathUpdater;
 import com.n4systems.model.ExtendedFeature;
@@ -27,7 +25,6 @@ import com.n4systems.model.event.EventCountLoader;
 import com.n4systems.model.orgs.AllPrimaryOrgsPaginatedLoader;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
@@ -86,9 +83,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private boolean featureOn;
 	private boolean showReminder = false;
 	
-	@Autowired
-	private TenantSettingsService tenantSettingsService;
-	
 	@Override
 	protected void loadMemberFields(Long uniqueId) {}
 
@@ -99,11 +93,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		if (id != null) {
 			tenant = TenantFinder.getInstance().findTenant(id);
 			
-			// this overrides the security filtering as we are not in the main web context
-			SecurityFilter filter = new TenantOnlySecurityFilter(id);
-			tenantSettingsService.setTenantSecurityFilter(filter);
-			userLimitService.setTenantSecurityFilter(filter);
-			userLimitService.setTenantSettingsService(tenantSettingsService);
+			getSecurityContext().setTenantSecurityFilter(new TenantOnlySecurityFilter(id));
 			
 			primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
 			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {

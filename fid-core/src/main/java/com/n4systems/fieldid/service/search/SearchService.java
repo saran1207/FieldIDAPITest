@@ -1,5 +1,11 @@
 package com.n4systems.fieldid.service.search;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Event;
@@ -17,11 +23,6 @@ import com.n4systems.util.persistence.search.terms.NullTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.SimpleTerm;
 import com.n4systems.util.persistence.search.terms.WildcardTerm;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class SearchService extends FieldIdPersistenceService {
 
@@ -49,7 +50,7 @@ public class SearchService extends FieldIdPersistenceService {
 
     private QueryBuilder<?> createBaseSearchQueryBuilder(EventReportCriteriaModel criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
-		QueryBuilder<Event> searchBuilder = new QueryBuilder<Event>(Event.class, userSecurityFilter);
+		QueryBuilder<Event> searchBuilder = createUserSecurityBuilder(Event.class);
 
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
         if (sortColumn.getJoinExpression() != null) {

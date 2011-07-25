@@ -1,17 +1,18 @@
 package com.n4systems.fieldid.service;
 
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.BaseEntity;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.util.persistence.QueryBuilder;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.model.BaseEntity;
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.util.persistence.QueryBuilder;
 
 public class PersistenceService extends FieldIdService {
 
@@ -20,17 +21,13 @@ public class PersistenceService extends FieldIdService {
 
     @Transactional(readOnly = true)
     public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId) {
-        QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass, userSecurityFilter);
-        queryBuilder.setSimpleSelect();
-        queryBuilder.addSimpleWhere("id", entityId);
-        queryBuilder.applyFilter(userSecurityFilter);
+        QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass).addSimpleWhere("id", entityId);
         return find(queryBuilder);
     }
 
     @Transactional(readOnly = true)
     public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass) {
-        QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass, userSecurityFilter);
-        queryBuilder.applyFilter(userSecurityFilter);
+        QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass);
         return findAll(queryBuilder);
     }
 

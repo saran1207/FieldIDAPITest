@@ -107,7 +107,7 @@ public abstract class TenantContextInitializer {
 		return HostNameParser.create(getRequestURI()).getFirstSubDomain();
 	}
 
-	private SystemSecurityGuard getSecurityGuard() {
+	public SystemSecurityGuard getSecurityGuard() {
 		if (securityGuard == null) {
 			securityGuard = getSession().getSecurityGuard();
 		}

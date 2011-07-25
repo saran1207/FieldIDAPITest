@@ -1,14 +1,17 @@
 package com.n4systems.fieldid.utils;
 
+import org.apache.struts2.StrutsStatics;
+
+import rfid.web.helper.SessionUser;
+
 import com.n4systems.fieldid.context.ThreadLocalUserContext;
 import com.n4systems.fieldid.context.UserContext;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.services.SecurityContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
-import org.apache.struts2.StrutsStatics;
-import rfid.web.helper.SessionUser;
 
 public class SetCurrentUserInterceptor extends AbstractInterceptor implements StrutsStatics {
 
@@ -25,20 +28,25 @@ public class SetCurrentUserInterceptor extends AbstractInterceptor implements St
     @Override
     public String intercept(ActionInvocation invocation) throws Exception {
         ActionInvocationWrapper invocationWrapper = new ActionInvocationWrapper(invocation);
-        SessionUser sessionUser = invocationWrapper.getSessionUser();
+        SecurityContext securityContext = invocationWrapper.getAction().getSecurityContext();
+        
+        try {
+	        SessionUser sessionUser = invocationWrapper.getSessionUser();
+	        
+	        if (sessionUser != null) {
+	            Long userId = sessionUser.getId();
+	            FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
+	            User user = userLoader.setId(userId).load();
+	            userContext.setCurrentUser(user);
+	            
+	            securityContext.setUserSecurityFilter(sessionUser.getSecurityFilter());
+	        }
 
-        if (sessionUser != null) {
-            Long userId = sessionUser.getId();
-            FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
-            User user = userLoader.setId(userId).load();
-            userContext.setCurrentUser(user);
+	        return invocation.invoke();
+        } finally {
+        	securityContext.setUserSecurityFilter(null);
+            userContext.setCurrentUser(null);
         }
-
-        String result = invocation.invoke();
-
-        userContext.setCurrentUser(null);
-
-        return result;
     }
 
 }

@@ -1,17 +1,17 @@
 package com.n4systems.fieldid.service.asset;
 
+import java.util.List;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 
-import java.util.List;
-
 public class AssetTypeService extends FieldIdPersistenceService {
 
     public List<AssetTypeGroup> getAssetTypeGroupsByOrder() {
-        QueryBuilder<AssetTypeGroup> queryBuilder = new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, userSecurityFilter);
+        QueryBuilder<AssetTypeGroup> queryBuilder = createUserSecurityBuilder(AssetTypeGroup.class);
 
         queryBuilder.addOrder("orderIdx");
 
@@ -19,7 +19,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
     }
 
     public List<AssetType> getAssetTypes(Long assetTypeGroupId) {
-		QueryBuilder<AssetType> builder = new QueryBuilder<AssetType>(AssetType.class, userSecurityFilter);
+		QueryBuilder<AssetType> builder = createUserSecurityBuilder(AssetType.class);
 
 		if(assetTypeGroupId != null) {
 			if (assetTypeGroupId == -1)

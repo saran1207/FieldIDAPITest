@@ -45,6 +45,7 @@ import com.n4systems.notifiers.Notifier;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.FieldidDateFormatter;
@@ -82,6 +83,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     @Autowired
     protected UserLimitService userLimitService;
 	
+    @Autowired
+    protected SecurityContext securityContext;
+    
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
 		helper = new BaseActionHelper();
@@ -612,6 +616,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
 	public UserLimitService getUserLimitService() {
 		return userLimitService;
+	}
+
+	public SecurityContext getSecurityContext() {
+		return securityContext;
 	}
 	
 }

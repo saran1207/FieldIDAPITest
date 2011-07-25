@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.config;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts2.ServletActionContext;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -15,13 +9,10 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.wrapper.UserEJBContainer;
-import com.n4systems.fieldid.actions.utils.WebSession;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
@@ -35,10 +26,7 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.services.TenantSecurityFilterDelegate;
-import com.n4systems.util.HostNameParser;
+import com.n4systems.services.SecurityContext;
 
 @Configuration
 public class FieldIdAppConfig {
@@ -127,19 +115,9 @@ public class FieldIdAppConfig {
     }
 
     @Bean
-    @Scope(value="session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public SecurityFilter userSecurityFilter() {
-    	SessionUser user = (RequestCycle.get() != null) ? FieldIDSession.get().getSessionUser() : new WebSession().getSessionUser();
-        return user.getSecurityFilter();
-    }
-    
-    @Bean
     @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public SecurityFilter tenantSecurityFilter() {
-    	HttpServletRequest request = (WebRequestCycle.get() != null) ? ((ServletWebRequest) WebRequestCycle.get().getRequest()).getHttpServletRequest() : ServletActionContext.getRequest();
-    	String tenantName = HostNameParser.create(request.getRequestURL().toString()).getFirstSubDomain();
-    	
-    	return new TenantSecurityFilterDelegate(tenantName);
+    public SecurityContext securityContext() {
+    	return new SecurityContext();
     }
 
     @Bean
