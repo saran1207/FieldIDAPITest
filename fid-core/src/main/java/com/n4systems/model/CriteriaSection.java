@@ -68,22 +68,31 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 		this.criteria = criteria;
 	}
 
+	public String getShortName() { 
+		return getTitle().length() > 20 ? getTitle().substring(0, 20) + "..." : getTitle(); 
+	}
+	
+	@Override
 	public String getDisplayName() {
 		return getTitle();
 	}
 
+	@Override
 	public boolean isRetired() {
 		return retired;
 	}
 
+	@Override
 	public void setRetired(boolean retired) {
 		this.retired = retired;
 	}
 	
+	@Override
 	public String getName() {
 		return getTitle();
 	}
 	
+	@Override
 	public void setName( String name ) {
 		setTitle( name );
 	}
