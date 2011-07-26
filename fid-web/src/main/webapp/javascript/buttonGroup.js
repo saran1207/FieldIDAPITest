@@ -26,7 +26,7 @@ function saveAllChanges(){
 
 function changeButtonImage( link ) {
 	var hidden = link.getElementsByTagName( 'input' )[0];
-	var imageNumber = parseInt( hidden.value.slice(14) );
+	var imageNumber = parseInt( hidden.value.slice(3) );
 	var img = link.getElementsByTagName( 'img' )[0]; 
 	
 	// increase the number;
