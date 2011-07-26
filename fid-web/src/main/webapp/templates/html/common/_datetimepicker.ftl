@@ -20,7 +20,9 @@
 			showButtonPanel: true,
 			dateFormat: "${sessionUser.jqueryDateFormat}",
 			ampm: true,
-			timeFormat: "hh:mm TT"
+			timeFormat: "hh:mm TT",
+			changeMonth: true,
+			changeYear: true
 		});
 
 		jQuery( '.datepicker' ).datepicker({
@@ -29,7 +31,9 @@
 			buttonImageOnly: true,
 			numberOfMonths: 3,
 			showButtonPanel: true,
-			dateFormat: "${sessionUser.jqueryDateFormat}"
+			dateFormat: "${sessionUser.jqueryDateFormat}", 
+			changeMonth: true,
+			changeYear: true
 		});
 	}
 </script>
