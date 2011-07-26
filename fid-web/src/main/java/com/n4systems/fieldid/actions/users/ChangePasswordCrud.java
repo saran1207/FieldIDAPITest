@@ -13,8 +13,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.security.PasswordComplexityChecker;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 
 public class ChangePasswordCrud extends AbstractCrud {
@@ -56,9 +54,8 @@ public class ChangePasswordCrud extends AbstractCrud {
 	@SkipValidation
 	public String doEdit() {
 		return SUCCESS;
-	}
-	
-	
+	}	
+
 	public String doUpdate() {
 		user = persistenceManager.find(User.class, getSessionUserId(), getTenantId() );
 		if( getSession().get( "passwordReset" ) == null ) {
@@ -78,7 +75,6 @@ public class ChangePasswordCrud extends AbstractCrud {
 			return SUCCESS;
 		}
 			
-		// FIXME DD : add password checking here.  refactor use of PasswordPolicy object - merge with mark's config modeling changes. 
 		PasswordPolicy passwordPolicy = getPasswordPolicy();
 		PasswordComplexityChecker passwordChecker = new PasswordComplexityChecker(passwordPolicy.getMinLength(),
 															0, 
@@ -103,7 +99,7 @@ public class ChangePasswordCrud extends AbstractCrud {
 	}	
 	
 	private PasswordPolicy getPasswordPolicy() {
-		return PasswordPolicy.makeDummyPasswordPolicy();
+		return tenantSettingsService.getTenantSettings().getPasswordPolicy();
 	}
 
 	public void setOriginalPassword( String originalPassword ) {
@@ -111,7 +107,6 @@ public class ChangePasswordCrud extends AbstractCrud {
 	}
 
 	@RequiredStringValidator( message="", key="error.newpasswordrequired")
-	@StringLengthFieldValidator( type=ValidatorType.FIELD, message = "" , key = "errors.passwordlength", minLength="5")
 	public String getNewPassword() {
 		return newPassword;
 	}

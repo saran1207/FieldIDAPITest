@@ -32,7 +32,7 @@ public class ChangeSystemPasswordAction extends AbstractAdminAction {
 		
 		try {
 			
-			SystemAccountPasswordSynchronizer passSync = new SystemAccountPasswordSynchronizer(persistenceEJBContainer, configEJBContainer, new PasswordComplexityChecker(8, 1, 1, 1, 1));
+			SystemAccountPasswordSynchronizer passSync = new SystemAccountPasswordSynchronizer(persistenceEJBContainer, configEJBContainer, PasswordComplexityChecker.createDefault());
 			passSync.setNewPassword(pass1);
 			accountsUpdated = passSync.synchronize();
 			

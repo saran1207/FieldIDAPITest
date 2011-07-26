@@ -37,7 +37,7 @@ public class ExampleUserExportAction extends AbstractDownloadAction {
 		view.setLastName(getText("example.customer.last.name"));
 		view.setOrganization(getCurrentUser().getOwner().getName());
 		view.setAssignPassword(Y);
-		view.setPassword(PasswordComplexityChecker.createDefault().generatePassword());
+		view.setPassword(PasswordComplexityChecker.createDefault().generateValidPassword());
 		view.setUserID(getCurrentUser().getUserID());
 		view.setSendWelcomeEmail(Y);
 		view.setIdentifyAssets(Y);

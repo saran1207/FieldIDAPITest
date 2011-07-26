@@ -101,8 +101,8 @@ public class PasswordComplexityChecker implements PasswordValidator {
 		return new PasswordComplexityChecker(8, 1, 1, 1, 1);
 	}
 
-	public String generatePassword() {
-		char[] punctuation = {'.','_','!','@','#','$','%','&','*','(',')','"',';',':'};  // not complete list but good enough to generate pw.
+	public String generateValidPassword() {
+		char[] punctuation = {'.','_','!','@','#','$','%','&','*','(',')','"',';',':'};  // not complete list of chars, but good enough to generate pw.
 		StringBuffer pw = new StringBuffer();
 		pw.append(RandomStringUtils.randomAlphabetic(minLowerAlpha).toLowerCase());
 		pw.append(RandomStringUtils.randomAlphabetic(minUpperAlpha).toUpperCase());

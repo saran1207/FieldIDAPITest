@@ -1,6 +1,5 @@
 package com.n4systems.exceptions;
 
-import com.google.common.base.Objects;
 import com.n4systems.model.user.User;
 
 public class LoginException extends RuntimeException {
@@ -18,9 +17,7 @@ public class LoginException extends RuntimeException {
 		this.duration = (duration!=null && !duration.equals(0)) ? duration : null;  // recall : 0 treated as no duration. 
 		this.maxAttempts = maxAttempts;
 		this.userId = userId;
-		locked = user==null ? false : user.isLocked();
-		
-System.out.println(Objects.toStringHelper(this));
+		locked = user==null ? false : user.isLocked();		
 	}
 		
 	public int getAttempts() {
