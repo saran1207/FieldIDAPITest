@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.service.search;
 
-import java.util.List;
-
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.model.Event;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.util.persistence.search.ResultTransformer;
+
+import java.util.List;
 
 public class ReportService extends FieldIdService {
 
@@ -23,7 +23,6 @@ public class ReportService extends FieldIdService {
         SearchResult<Event> eventSearchResult = searchService.performEventSearch(criteriaModel, pageNumber, pageSize);
 
         List<Event> entities = eventSearchResult.getResults();
-        List<Event> oldEntities = entities;
 
         entities = EntitySecurityEnhancer.enhanceList(entities, securityContext.getUserSecurityFilter());
 

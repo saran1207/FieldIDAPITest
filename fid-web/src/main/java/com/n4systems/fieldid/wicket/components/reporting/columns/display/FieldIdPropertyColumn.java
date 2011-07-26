@@ -15,6 +15,9 @@ public class FieldIdPropertyColumn extends PropertyColumn<RowView> {
     private int index;
 
     public FieldIdPropertyColumn(IModel<String> displayModel, ColumnMappingView column, int index, boolean sortable) {
+        // For wicket's sort property, we'll use a String representation of the column ID
+        // Since this is the only information we'll get from wicket when the user clicks a sort link,
+        // but we'll need more info than that to actually sort our search (sort join, sort expr).
         super(displayModel, column.getDbColumnId().toString(), column.getPathExpression());
         this.column = column;
         this.index = index;

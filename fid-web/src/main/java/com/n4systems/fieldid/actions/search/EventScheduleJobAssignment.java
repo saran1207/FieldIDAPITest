@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.actions.search;
 
 import com.n4systems.ejb.EventManager;
-import com.n4systems.fieldid.reporting.service.EventToJobColumnsService;
-import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
+import com.n4systems.fieldid.service.search.columns.EventToJobColumnsService;
+import com.n4systems.model.search.ReportConfiguration;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.EventScheduleManager;

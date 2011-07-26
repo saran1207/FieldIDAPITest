@@ -1,12 +1,12 @@
-package com.n4systems.fieldid.reporting.service;
+package com.n4systems.fieldid.service.search.columns;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.n4systems.model.search.ColumnMappingConverter;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.model.columns.ActiveColumnMapping;
 import com.n4systems.model.columns.ColumnLayout;
 import com.n4systems.model.columns.ColumnMapping;
@@ -16,6 +16,7 @@ import com.n4systems.model.columns.loader.ColumnLayoutLoader;
 import com.n4systems.model.columns.loader.ColumnMappingGroupLoader;
 import com.n4systems.model.columns.loader.CustomColumnsLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.security.SecurityFilter;
 
 public abstract class ColumnsService {

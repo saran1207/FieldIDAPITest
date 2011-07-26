@@ -21,7 +21,9 @@ import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.search.ReportService;
+import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.SearchService;
+import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
@@ -30,6 +32,16 @@ import com.n4systems.services.SecurityContext;
 
 @Configuration
 public class FieldIdAppConfig {
+
+    @Bean
+    public SavedReportService savedReportService() {
+        return new SavedReportService();
+    }
+
+    @Bean
+    public DynamicColumnsService dynamicColumnsService() {
+        return new DynamicColumnsService();
+    }
     
     @Bean
     public SearchService searchService() {

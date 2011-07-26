@@ -5,18 +5,18 @@ import static com.n4systems.fieldid.viewhelpers.EventSearchContainer.UNASSIGNED_
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
+import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCommonAssetAttributeFinder;
+import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
+import com.n4systems.model.search.ReportConfiguration;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.helpers.AssetManagerBackedCommonAssetAttributeFinder;
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
-import com.n4systems.fieldid.actions.helpers.InfoFieldDynamicGroupGenerator;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.reporting.service.AssetColumnsService;
 import com.n4systems.fieldid.viewhelpers.AssetSearchContainer;
-import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.api.Listable;

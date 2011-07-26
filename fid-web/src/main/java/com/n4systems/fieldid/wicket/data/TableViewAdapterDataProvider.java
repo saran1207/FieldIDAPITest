@@ -99,7 +99,6 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
 
     private void fillInStringValues(RowView row) {
         CellHandlerFactory cellHandlerFactory = new CellHandlerFactory(this);
-        reportCriteria.getSortedStaticAndDynamicColumns();
         List<String> rowValues = new ArrayList<String>();
         int index = 0;
         for (ColumnMappingView column : reportCriteria.getSortedStaticAndDynamicColumns()) {
@@ -137,23 +136,6 @@ public class TableViewAdapterDataProvider<T extends BaseEntity & NetworkEntity<T
     }
 
     protected PageHolder<TableView> runSearch(int page, int pageSize) {
-//        SortParam sortParam = getSort();
-//        searchContainer.setSortColumn(null);
-//        searchContainer.setSortColumnId(null);
-//        searchContainer.setSortDirection(null);
-//        searchContainer.setSortJoinExpression(null);
-//
-//        if (sortParam != null) {
-//            String sort = sortParam.getProperty();
-//            Long sortColumnId = Long.valueOf(sort);
-//            ColumnMapping columnMapping = loadMapping(sortColumnId);
-//            String sortExpression = columnMapping.getSortExpression();
-//            searchContainer.setSortColumn(sortExpression != null ? sortExpression : columnMapping.getPathExpression());
-//            searchContainer.setSortColumnId(sortColumnId);
-//            searchContainer.setSortDirection(sortParam.isAscending() ? SortDirection.ASC.getDisplayName() : SortDirection.DESC.getDisplayName());
-//            searchContainer.setSortJoinExpression(columnMapping.getJoinExpression());
-//        }
-
         return reportService.eventReport(reportCriteria, createResultTransformer(), page, pageSize);
     }
 

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.helpers;
+package com.n4systems.fieldid.service.search.columns.dynamic;
 
 import java.util.List;
 import java.util.SortedSet;

@@ -73,8 +73,8 @@ public class SavedReportSearchCriteriaConverter {
 		
 		return container;
 	}
-	
-	
+
+
 	public SavedReport convertInto(EventSearchContainer container, SavedReport report) {
 		
 		

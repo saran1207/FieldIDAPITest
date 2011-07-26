@@ -1,18 +1,18 @@
 package com.n4systems.fieldid.service;
 
+import com.n4systems.exceptions.InvalidQueryException;
+import com.n4systems.model.BaseEntity;
+import com.n4systems.model.api.UnsecuredEntity;
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.transaction.annotation.Transactional;
-
-import com.n4systems.exceptions.InvalidQueryException;
-import com.n4systems.model.BaseEntity;
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.util.persistence.QueryBuilder;
 
 public class PersistenceService extends FieldIdService {
 
@@ -22,6 +22,14 @@ public class PersistenceService extends FieldIdService {
     @Transactional(readOnly = true)
     public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId) {
         QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass).addSimpleWhere("id", entityId);
+        return find(queryBuilder);
+    }
+
+    @Transactional(readOnly = true)
+    public <T extends BaseEntity & UnsecuredEntity> T findUnsecured(Class<T> entityClass, Long entityId) {
+        QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass);
+        queryBuilder.setSimpleSelect();
+        queryBuilder.addSimpleWhere("id", entityId);
         return find(queryBuilder);
     }
 

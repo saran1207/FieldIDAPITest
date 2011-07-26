@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.helpers;
+package com.n4systems.fieldid.service.search.columns.dynamic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.n4systems.model.security.SecurityFilter;
 public class EventAttributeDynamicGroupGenerator {
 
 	private final PersistenceManager persistenceManager;
-	private List<ColumnMappingGroupView> dynamigGroups;
+	private List<ColumnMappingGroupView> dynamicGroups;
 
 	public EventAttributeDynamicGroupGenerator(final PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -24,8 +24,8 @@ public class EventAttributeDynamicGroupGenerator {
 	}
 
 	public List<ColumnMappingGroupView> getDynamicGroups(Long eventTypeId, Set<Long> eventTypeIds, Long tenantId, String idPrefix, String pathPrefix, final SecurityFilter filter) {
-		if (dynamigGroups == null) {
-			dynamigGroups = new ArrayList<ColumnMappingGroupView>();
+		if (dynamicGroups == null) {
+			dynamicGroups = new ArrayList<ColumnMappingGroupView>();
 			ColumnMappingGroupView attributeGroup = new ColumnMappingGroupView(idPrefix + "_event_attributes", "label.eventattributes", 1024, null);
 			attributeGroup.setDynamic(true);
 			
@@ -61,9 +61,9 @@ public class EventAttributeDynamicGroupGenerator {
 				}
 			}
 
-			dynamigGroups.add(attributeGroup);
+			dynamicGroups.add(attributeGroup);
 		}
-		return dynamigGroups;
+		return dynamicGroups;
 	}
 
 	private ColumnMappingView createAttributeMapping(String fieldName, String idPrefix, String pathPrefix, int order) {

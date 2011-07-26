@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.actions.helpers;
+package com.n4systems.fieldid.service.search.columns.dynamic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class InfoFieldDynamicGroupGenerator {
 	private final CommonAssetAttributeFinder commonAttributeFinder;
 	private final String idPrefix;
 	
-	private List<ColumnMappingGroupView> dynamigGroups;
+	private List<ColumnMappingGroupView> dynamicGroups;
 	private final String pathPrefix;
 	
 	
@@ -33,21 +33,21 @@ public class InfoFieldDynamicGroupGenerator {
 
 
 	public List<ColumnMappingGroupView> getDynamicGroups(Long assetTypeId, List<Long> assetTypeIds) {
-		if (dynamigGroups == null) {
+		if (dynamicGroups == null) {
 			List<Long> consolidateAssetTypeIds = consolidateAssetTypeIds(assetTypeId, assetTypeIds);
 			createDynamicGroups(consolidateAssetTypeIds);
 		}
-		return dynamigGroups;
+		return dynamicGroups;
 	}
 
 	
 	private void createDynamicGroups(List<Long> assetTypeIds) {
-		dynamigGroups = new ArrayList<ColumnMappingGroupView>();
+		dynamicGroups = new ArrayList<ColumnMappingGroupView>();
 		
 		SortedSet<String> infoFieldNames = getCommonInfoFields(assetTypeIds);
 		ColumnMappingGroupView infoFieldGroup = convertInfoFiledsToColumnMappings(infoFieldNames);
 		
-		dynamigGroups.add(infoFieldGroup);
+		dynamicGroups.add(infoFieldGroup);
 	}
 	
 

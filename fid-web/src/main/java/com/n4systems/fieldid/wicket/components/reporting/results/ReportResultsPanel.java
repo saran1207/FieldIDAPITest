@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
-import com.n4systems.fieldid.reporting.service.ColumnMappingConverter;
+import com.n4systems.model.search.ColumnMappingConverter;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.wicket.FieldIDSession;

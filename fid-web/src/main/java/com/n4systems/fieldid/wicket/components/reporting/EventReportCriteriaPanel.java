@@ -1,11 +1,8 @@
 package com.n4systems.fieldid.wicket.components.reporting;
 
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.fieldid.reporting.service.EventColumnsService;
-import com.n4systems.model.search.ColumnMappingGroupView;
-import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
+import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
+import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
@@ -26,11 +23,9 @@ import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
-import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedUsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingResultsPage;
-import com.n4systems.fieldid.wicket.util.DynamicColumnsConverter;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
@@ -42,6 +37,9 @@ import com.n4systems.model.Project;
 import com.n4systems.model.Status;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.search.ColumnMappingGroupView;
+import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -76,10 +74,7 @@ import javax.servlet.http.HttpSession;
 
 public class EventReportCriteriaPanel extends Panel implements IHeaderContributor {
 
-    @SpringBean
-    private PersistenceManager persistenceManager;
-    @SpringBean
-    private AssetManager assetManager;
+    private @SpringBean DynamicColumnsService dynamicColumnsService;
 
     private SelectDisplayColumnsPanel selectDisplayColumnsPanel;
 
@@ -160,14 +155,14 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             groupedAssetTypePicker.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
-                    updateDynamicAssetColumns(assetManager, dynamicAssetColumnsModel, assetTypeModel, availableAssetTypesModel);
+                    updateDynamicAssetColumns(dynamicAssetColumnsModel, assetTypeModel, availableAssetTypesModel);
                     target.addComponent(selectDisplayColumnsPanel);
                 }
             });
             groupedAssetTypePicker.setNullValid(true);
             // Initially, update the dynamic columns causing an empty list to be put into our model, unless it's already set
-            if (assetTypeModel.getObject() == null && assetTypeGroupModel.getObject() == null) {
-                updateDynamicAssetColumns(assetManager, dynamicAssetColumnsModel, assetTypeModel, availableAssetTypesModel);
+            if (!criteriaModel.getObject().isReportAlreadyRun()) {
+                updateDynamicAssetColumns(dynamicAssetColumnsModel, assetTypeModel, availableAssetTypesModel);
             }
             groupedAssetTypePicker.setOutputMarkupId(true);
 
@@ -182,14 +177,14 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             eventTypeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
-                    updateDynamicEventColumns(persistenceManager, dynamicEventColumnsModel, eventTypeModel, availableEventTypesModel);
+                    updateDynamicEventColumns(dynamicEventColumnsModel, eventTypeModel, availableEventTypesModel);
                     target.addComponent(selectDisplayColumnsPanel);
                 }
             });
             eventTypeSelect.setNullValid(true);
             // Initially, update the dynamic columns causing an empty list to be put into our model
-            if (eventTypeModel.getObject() == null && eventTypeGroupModel.getObject() == null) {
-                updateDynamicEventColumns(persistenceManager, dynamicEventColumnsModel, eventTypeModel, availableEventTypesModel);
+            if (!criteriaModel.getObject().isReportAlreadyRun()) {
+                updateDynamicEventColumns(dynamicEventColumnsModel, eventTypeModel, availableEventTypesModel);
             }
             eventTypeSelect.setOutputMarkupId(true);
 
@@ -250,12 +245,14 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
 
     }
 
-    private void updateDynamicEventColumns(PersistenceManager persistenceManager, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, IModel<EventType> eventTypeModel, EventTypesForTenantModel availableEventTypesModel) {
-        DynamicColumnsConverter.updateDynamicEventColumns(persistenceManager, dynamicEventColumnsModel, eventTypeModel, availableEventTypesModel);
+    private void updateDynamicEventColumns(IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel, IModel<EventType> eventTypeModel, EventTypesForTenantModel availableEventTypesModel) {
+        List<ColumnMappingGroupView> dynamicColumns = dynamicColumnsService.getDynamicEventColumns(eventTypeModel.getObject(), availableEventTypesModel.getObject());
+        dynamicEventColumnsModel.setObject(dynamicColumns);
     }
 
-    private void updateDynamicAssetColumns(AssetManager assetManager, IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<AssetType> assetTypeModel, GroupedAssetTypesForTenantModel availableAssetTypesModel) {
-        DynamicColumnsConverter.updateDynamicAssetColumns(assetManager, dynamicAssetColumnsModel, assetTypeModel, availableAssetTypesModel);
+    private void updateDynamicAssetColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<AssetType> assetTypeModel, GroupedAssetTypesForTenantModel availableAssetTypesModel) {
+        List<ColumnMappingGroupView> dynamicColumns = dynamicColumnsService.getDynamicAssetColumns(assetTypeModel.getObject(), availableAssetTypesModel.getObject());
+        dynamicAssetColumnsModel.setObject(dynamicColumns);
     }
 
     private DropDownChoice<AssetTypeGroup> createAssetTypeGroupChoice(IModel<AssetTypeGroup> assetTypeGroupModel, final IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, final IModel<AssetType> assetTypeModel, final GroupedAssetTypesForTenantModel availableAssetTypesModel) {
@@ -264,7 +261,8 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
         assetTypeGroupDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                DynamicColumnsConverter.updateDynamicAssetColumns(assetManager, dynamicAssetColumnsModel, assetTypeModel, availableAssetTypesModel);
+                List<ColumnMappingGroupView> dynamicColumns = dynamicColumnsService.getDynamicAssetColumns(assetTypeModel.getObject(), availableAssetTypesModel.getObject());
+                dynamicAssetColumnsModel.setObject(dynamicColumns);
                 target.addComponent(selectDisplayColumnsPanel);
                 target.addComponent(groupedAssetTypePicker);
             }
@@ -279,7 +277,8 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
         eventTypeGroupDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                DynamicColumnsConverter.updateDynamicEventColumns(persistenceManager, dynamicEventColumnsModel, eventTypeModel, availableEventTypesModel);
+                List<ColumnMappingGroupView> dynamicColumns = dynamicColumnsService.getDynamicEventColumns(eventTypeModel.getObject(), availableEventTypesModel.getObject());
+                dynamicEventColumnsModel.setObject(dynamicColumns);
                 target.addComponent(selectDisplayColumnsPanel);
                 target.addComponent(eventTypeSelect);
             }

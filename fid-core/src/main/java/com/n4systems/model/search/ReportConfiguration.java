@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.viewhelpers;
+package com.n4systems.model.search;
 
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;

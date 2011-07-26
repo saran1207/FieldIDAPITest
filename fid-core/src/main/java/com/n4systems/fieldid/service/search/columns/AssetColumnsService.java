@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.reporting.service;
+package com.n4systems.fieldid.service.search.columns;
 
 import com.n4systems.model.columns.ReportType;
 

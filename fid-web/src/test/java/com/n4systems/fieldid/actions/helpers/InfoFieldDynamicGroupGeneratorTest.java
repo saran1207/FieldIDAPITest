@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.n4systems.fieldid.service.search.columns.dynamic.CommonAssetAttributeFinder;
+import com.n4systems.fieldid.service.search.columns.dynamic.InfoFieldDynamicGroupGenerator;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
 import org.hamcrest.Matchers;

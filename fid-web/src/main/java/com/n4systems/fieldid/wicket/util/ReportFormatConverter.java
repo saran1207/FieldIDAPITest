@@ -1,37 +1,17 @@
 package com.n4systems.fieldid.wicket.util;
 
-import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
-import com.n4systems.fieldid.reporting.service.EventColumnsService;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.fieldid.viewhelpers.ReportConfiguration;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.reporting.columns.display.FieldIdPropertyColumn;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
-import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.BaseEntity;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.Project;
-import com.n4systems.model.Status;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteriaModel;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.util.persistence.search.SortDirection;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +24,7 @@ public class ReportFormatConverter {
 
         int index = 0;
         for (ColumnMappingView enabledColumn : enabledColumns) {
-            String columnOutputHandler = enabledColumn.getOutputHandler();
-            String pathExpression = enabledColumn.getPathExpression();
             FIDLabelModel columnLabelModel = new FIDLabelModel(enabledColumn.getLabel());
-            // For wicket's sort property, we'll use a String representation of the column ID
-            // Since this is the only information we'll get from wicket when the user clicks a sort link,
-            // but we'll need more info than that to actually sort our search (sort join, sort expr).
-            String dbColumnIdStr = enabledColumn.getDbColumnId() == null ? null : enabledColumn.getDbColumnId().toString();
 
             if (enabledColumn.isSortable()) {
                 convertedColumns.add(new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index, true));
@@ -106,78 +80,6 @@ public class ReportFormatConverter {
         }
         return convertedColumns;
     }
-
-    public EventReportCriteriaModel convertCriteria(EventSearchContainer container, PersistenceManager pm, AssetManager assetManager) {
-        EventReportCriteriaModel criteriaModel = new EventReportCriteriaModel();
-
-        criteriaModel.setSerialNumber(container.getSerialNumber());
-        criteriaModel.setAssetStatus(find(pm, AssetStatus.class, container.getAssetStatus()));
-        criteriaModel.setAssetType(find(pm, AssetType.class, container.getAssetType()));
-        criteriaModel.setAssetTypeGroup(find(pm, AssetTypeGroup.class, container.getAssetTypeGroup()));
-        criteriaModel.setAssignedTo(find(pm, User.class, container.getAssignedUser()));
-        criteriaModel.setEventBook(find(pm, EventBook.class, container.getEventBook()));
-        criteriaModel.setEventType(find(pm, EventType.class, container.getEventType()));
-        criteriaModel.setEventTypeGroup(find(pm, EventTypeGroup.class, container.getEventTypeGroup()));
-        criteriaModel.setFromDate(container.getFromDate());
-        criteriaModel.setToDate(container.getToDate());
-        criteriaModel.setIncludeSafetyNetwork(container.isIncludeNetworkResults());
-        criteriaModel.setJob(find(pm, Project.class, container.getJob()));
-        criteriaModel.setOrderNumber(container.getOrderNumber());
-        criteriaModel.setOwner(container.getOwner());
-        criteriaModel.setPerformedBy(find(pm, User.class, container.getPerformedBy()));
-        criteriaModel.setPurchaseOrder(container.getPurchaseOrder());
-        criteriaModel.setReferenceNumber(container.getReferenceNumber());
-        criteriaModel.setRfidNumber(container.getRfidNumber());
-        criteriaModel.setResult(container.getStatus() == null ? null : Status.valueOf(container.getStatus()));
-        criteriaModel.setSelection(container.getMultiIdSelection());
-
-        LocationWebModel locationWebModel = container.getLocation();
-        Location location = new Location(locationWebModel.getPredefinedLocation(),  locationWebModel.getFreeformLocation());
-        criteriaModel.setLocation(location);
-
-        ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
-        criteriaModel.setColumnGroups(reportConfiguration.getColumnGroups());
-
-        final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(criteriaModel, "assetTypeGroup");
-        final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(criteriaModel, "assetType");
-        final IModel<List<AssetType>> availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
-        final IModel<List<ColumnMappingGroupView>> dynamicAssetColumns = new PropertyModel<List<ColumnMappingGroupView>>(criteriaModel, "dynamicAssetColumnGroups");
-
-        DynamicColumnsConverter.updateDynamicAssetColumns(assetManager, dynamicAssetColumns, assetTypeModel, availableAssetTypesModel);
-
-        final IModel<EventTypeGroup> eventTypeGroupModel = new PropertyModel<EventTypeGroup>(criteriaModel, "eventTypeGroup");
-        final IModel<EventType> eventTypeModel = new PropertyModel<EventType>(criteriaModel, "eventType");
-        final IModel<List<EventType>> availableEventTypesModel = new EventTypesForTenantModel(eventTypeGroupModel);
-        final IModel<List<ColumnMappingGroupView>> dynamicEventColumns = new PropertyModel<List<ColumnMappingGroupView>>(criteriaModel, "dynamicEventColumnGroups");
-
-        DynamicColumnsConverter.updateDynamicEventColumns(pm, dynamicEventColumns, eventTypeModel, availableEventTypesModel);
-
-        enableSelectedColumns(container, criteriaModel);
-        setSortColumnFromContainer(container, criteriaModel);
-
-        return criteriaModel;
-    }
-
-    private void enableSelectedColumns(EventSearchContainer eventSearchContainer, EventReportCriteriaModel criteriaModel) {
-        List<String> selectedColumns = eventSearchContainer.getSelectedColumns();
-        List<ColumnMappingView> sortedStaticAndDynamicColumns = criteriaModel.getSortedStaticAndDynamicColumns(false);
-        for (ColumnMappingView column : sortedStaticAndDynamicColumns) {
-            boolean savedReportContainsColumn = selectedColumns.contains(column.getId());
-            column.setEnabled(savedReportContainsColumn);
-        }
-    }
-
-    private void setSortColumnFromContainer(EventSearchContainer eventSearchContainer, EventReportCriteriaModel criteriaModel) {
-        List<ColumnMappingView> sortedStaticAndDynamicColumns = criteriaModel.getSortedStaticAndDynamicColumns(true);
-        for (ColumnMappingView column : sortedStaticAndDynamicColumns) {
-            String sortExpression = column.getSortExpression();
-            if (sortExpression != null && sortExpression.equals(eventSearchContainer.getSortColumn())) {
-                criteriaModel.setSortColumn(column);
-                criteriaModel.setSortDirection(SortDirection.ASC.getDisplayName().equals(eventSearchContainer.getSortDirection()) ? SortDirection.ASC : SortDirection.DESC);
-            }
-        }
-    }
-
 
     protected Long getId(BaseEntity entity) {
         if (entity == null) {

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.reporting.service;
+package com.n4systems.model.search;
 
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.columns.ColumnMapping;
