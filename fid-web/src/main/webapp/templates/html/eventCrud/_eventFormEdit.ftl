@@ -1,4 +1,4 @@
-<#assign lightBoxProperties=":: :: width: 470, height: 300, menubar: true, topclose: false, autosize: false, scrolling: true" />
+<#assign lightBoxProperties=":: :: width: 470, height: 320, autosize: false, scrolling: true" />
 
 <script type="text/javascript">
 	recImageUrl = '<@s.url value="/images/rec.png"/>';
@@ -53,8 +53,8 @@
 			<div class="recDefButtons">
 				<#assign recCount=(action.countRecommendations(criteriaCount))!0 />
 				<#assign defCount=(action.countDeficiencies(criteriaCount))!0 />
-				<a id='recButton_${criteria.id}' href='#rec_${criteria.id}' title='<@s.text name="label.recommendations"/>${lightBoxProperties}' class='lightview' ><img id='recImage_${criteria.id}' src="<@s.url value="/images/rec.png"/>" /></a>
-				<a id='defButton_${criteria.id}' href='#def_${criteria.id}' title='<@s.text name="label.deficiencies"/>${lightBoxProperties}' class='lightview' ><img id='defImage_${criteria.id}' src="<@s.url value="/images/def.png"/>" /></a>
+				<a id='recButton_${criteria.id}' href='#rec_${criteria.id}' title='${lightBoxProperties}' class='lightview' ><img id='recImage_${criteria.id}' src="<@s.url value="/images/rec.png"/>" /></a>
+				<a id='defButton_${criteria.id}' href='#def_${criteria.id}' title='${lightBoxProperties}' class='lightview' ><img id='defImage_${criteria.id}' src="<@s.url value="/images/def.png"/>" /></a>
 			</div>
 			<#include "../observationsCrud/_recSelect.ftl"/>
 			<#include "../observationsCrud/_defSelect.ftl"/>

@@ -358,6 +358,58 @@ function checkDefComment(criteriaId, observationText) {
 	updateDeficiencyImage(criteriaId);
 }
 
+function clearDeficiency(criteriaId, defSize) {
+	for(var i = 0; i < defSize; i++) {
+		var observation = $('def_' + criteriaId + "_" + i);
+		var observationId = $('def_' + criteriaId + "_" + i + '_id');
+		var observationText = $('def_' + criteriaId + "_" + i + '_text');
+		var observationState = $('def_' + criteriaId + "_" + i + '_state');
+		if(observationState.value != "NOTSELECTED") {
+			observation.removeClassName("defSelected");
+			observation.removeClassName("defRepairedOnSite");
+			observation.removeClassName("defRepaired");
+			
+			if (observationId != null) {
+				observationId.disable();
+			}	
+			observationText.disable();
+			observationState.disable();
+			observationState.value="NOTSELECTED";
+		}
+	}
+	$("def_" + criteriaId + "_" + defSize + "_text").value = "";
+	currentDefIsEmpty = true;
+	checkDefComment(criteriaId, "");
+	defCounts[criteriaId] = 0;
+	updateDeficiencyImage(criteriaId);
+	Lightview.hide();
+}
+
+function clearRecommendation(criteriaId, recSize) {
+	for(var i = 0; i < recSize; i++) {
+		var observation = $('rec_' + criteriaId + "_" + i);
+		var observationId = $('rec_' + criteriaId + "_" + i + '_id');
+		var observationText = $('rec_' + criteriaId + "_" + i + '_text');
+		var observationState = $('rec_' + criteriaId + "_" + i + '_state');
+		if(observationState.value !="NOTSELECTED") {
+			observation.toggleClassName("recSelected");
+	
+			if (observationId != null) {
+				observationId.disable();
+			}
+			observationText.disable();
+			observationState.disable();
+			observationState.value="NOTSELECTED";
+		}
+	}
+	
+	$("rec_" + criteriaId + "_" + recSize + "_text").value = "";
+	currentRecIsEmpty = true;
+	checkRecComment(criteriaId, "");
+	recCounts[criteriaId] = 0;
+	updateRecommendationImage(criteriaId);
+	Lightview.hide();
+}
 
 function changeToNewEventBook() {
 	$('eventBookSelect').hide();

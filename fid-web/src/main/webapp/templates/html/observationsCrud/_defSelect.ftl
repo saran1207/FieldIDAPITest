@@ -1,4 +1,5 @@
 <div class="observationBox" id="def_${criteria.id}" style="display: none;">
+	<h1><@s.text name="label.deficiencies"/></h1>
 	<#list criteria.deficiencies as deficiency >
 
 	  	<#assign notSelected=!(criteriaResults[criteriaCount].deficiencies[deficiency_index])?exists />
@@ -47,5 +48,9 @@
 		<span><@s.textarea  id="def_${criteria.id}_${criteria.deficiencies.size()}_text" name="criteriaResults[${criteriaCount}].deficiencies[${criteria.deficiencies.size()}].text" cols="53" rows="3" onfocus="captureDefCommentState(this.value);" onchange="checkDefComment(${criteria.id}, this.value);" value="${(criteriaResults[criteriaCount].deficiencies[criteria.deficiencies.size()].text)!}"/></span>
 		<@s.hidden id="def_${criteria.id}_${criteria.deficiencies.size()}_state" name="criteriaResults[${criteriaCount}].deficiencies[${criteria.deficiencies.size()}].stateString" value="COMMENT" />
 	</p>
-	
+	<p class="observationActions">
+		<button onclick="Lightview.hide(); return false;"><@s.text name="label.save"/></button>
+		<@s.text name="label.or"/>
+		<a href="javascript:void(0);" onclick="clearDeficiency( ${criteria.id}, ${criteria.deficiencies.size()})"><@s.text name="label.clear" /></a>
+	</p>
 </div>

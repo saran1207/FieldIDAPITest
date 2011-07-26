@@ -293,18 +293,21 @@ div.eventInIframe{
 	overflow: auto;
 	margin-left: auto;
 	margin-right: auto;
-	height: 300px;
+	height: 320px;
 	width: 470px;
 } 
 
-.observationBox p{
-	margin-left: auto;
-	margin-right: auto;
-	}
+.observationBox p, .observationActions{
+	margin-left: 10px;
+}
+
+.observationBox h1 {
+	padding-left: 10px;
+}
 
 .observationText {
 	margin-top: 5px;
-	width: 390px;
+	width: 380px;
 	border: 2px solid #E8EDFF;
 	padding: 10px 10px 10px 40px;
 	background-image: url(../../images/addObservation.gif);
@@ -352,12 +355,6 @@ div.eventInIframe{
 	background-image: url(../../images/observationComment.gif);
 }
 
-/*.observationCheck, .observationsShow p.observationTextShow span.observationCheck {
-	width: 20px;
-	height: 20px;
-	padding-right: 5px;
-}*/
-
 .observationsShow {
 	background-color: #fff;
 	padding: 5px 0 5px 10px;
@@ -382,7 +379,7 @@ div.eventInIframe{
 
 .observationComment {
 	padding-top: 10px;
-	width:425px;
+	width:440px;
 }
 
 .observationComment span textarea{
@@ -399,7 +396,11 @@ div.eventInIframe{
 	font-size: 1.2em;
 	font-weight: bold;
 	padding-bottom: 10px;
-	}
+}
+
+.observationActions {
+	padding: 10px;
+}
 
 .print {
 	float: right;

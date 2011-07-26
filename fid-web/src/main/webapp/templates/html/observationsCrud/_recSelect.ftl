@@ -1,4 +1,5 @@
 <div class="observationBox" id="rec_${criteria.id}" style="display: none;">
+	<h1><@s.text name="label.recommendations"/></h1>
 	<#list criteria.recommendations as recommendation >
 
 	  	<#assign notSelected=!(criteriaResults[criteriaCount].recommendations[recommendation_index])?exists />		
@@ -36,10 +37,13 @@
 		<#if (criteriaResults[criteriaCount].recommendations[criteria.recommendations.size()].id)?exists >
 			<@s.hidden id="rec_${criteria.id}_${criteria.recommendations.size()}_id" name="criteriaResults[${criteriaCount}].recommendations[${criteria.recommendations.size()}].iD" value="${criteriaResults[criteriaCount].recommendations[criteria.recommendations.size()].id}" />
 		</#if>
-		
 		<label><@s.text name="label.comments"/></label>
 		<span><@s.textarea  id="rec_${criteria.id}_${criteria.recommendations.size()}_text" name="criteriaResults[${criteriaCount}].recommendations[${criteria.recommendations.size()}].text" cols="53" rows="3" onfocus="captureRecCommentState(this.value);" onchange="checkRecComment(${criteria.id}, this.value);" value="${(criteriaResults[criteriaCount].recommendations[criteria.recommendations.size()].text)!}"/></span>
 		<@s.hidden id="rec_${criteria.id}_${criteria.recommendations.size()}_state" name="criteriaResults[${criteriaCount}].recommendations[${criteria.recommendations.size()}].stateString" value="COMMENT" />
 	</p>
-	
+	<p class="observationActions">
+		<button onclick="Lightview.hide(); return false;"><@s.text name="label.save"/></button>
+		<@s.text name="label.or"/>
+		<a href="javascript:void(0);" onclick="clearRecommendation( ${criteria.id}, ${criteria.recommendations.size()} );"><@s.text name="label.clear" /></a>
+	</p>
 </div>
