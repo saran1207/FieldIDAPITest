@@ -36,6 +36,11 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
 	
+	public UserEJBContainer(LoginService loginService, TenantSettingsService tenantSettingsService) {
+		this.loginService = loginService;
+		this.tenantSettingsService = tenantSettingsService;
+	}
+
 	public UserEJBContainer() {
 	}
 
