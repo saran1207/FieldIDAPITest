@@ -2,7 +2,6 @@ package com.n4systems.webservice.server;
 
 import org.apache.log4j.Logger;
 
-import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.webservice.server.bundles.AuthBundle;
@@ -12,7 +11,7 @@ public abstract class AbstractWebServiceImpl implements AbstractWebService {
 
 	protected User authenticateUser(AuthBundle authUser) throws WebserviceAuthenticationException {
 		// FIXME DD : need to figure out how to deal with account policy settings.   can web service allow infinite login attempts?		
-		User user = ServiceLocator.getUser().findUserByPw(authUser.getTenantName(), authUser.getUserName(), authUser.getPassword(), AccountPolicy.makeDummyAccountPolicy());
+		User user = ServiceLocator.getUser().findUserByPw(authUser.getTenantName(), authUser.getUserName(), authUser.getPassword(), null/*BOGUS VALUE TO BE OVERRIDDEN BY USERMANAGER*/);
 		
 		if(user == null) {
 			logger.warn("User failed authentication to the webservice: tenant [" + authUser.getTenantName() + "] username [" + authUser.getUserName() + "]");

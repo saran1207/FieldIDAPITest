@@ -1348,8 +1348,7 @@
 		<action name="login" method="add" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/login/form.ftl</result>
-			<result name="alreadyLoggedIn" type="redirectAction">home</result>
-			
+			<result name="alreadyLoggedIn" type="redirectAction">home</result>			
 		</action>
 		
 		<action name="confirmKick" method="confirmKick" class="com.n4systems.fieldid.actions.SignInAction">
@@ -1364,6 +1363,12 @@
 		<action name="logIntoSystem" method="create" class="com.n4systems.fieldid.actions.SignInAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="input" type="freemarker">/templates/html/login/form.ftl</result>
+			<result name="redirect_to_url" type="redirectAction">
+				<param name="actionName">resetPassword</param>
+				<param name="u">${userName}</param>
+				<param name="k">${key}</param>
+			</result>
+			
 			<result name="success" type="redirectAction">home</result>
 			<result name="redirect" type="redirect">
 				<param name="location">${previousUrl}</param>
@@ -1451,6 +1456,18 @@
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>
             <result name="success" type="freemarker">/templates/html/resetPassword/form.ftl</result>
+		</action>
+
+		<action name="expiredPasswordLogin" method="expiredPasswordPrepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>
+            <result name="success" type="freemarker">/templates/html/resetPassword/form.ftl</result>
+		</action>
+		
+		<action name="finalizeExpiredPassword" method="resetExpiredPassword" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+			<interceptor-ref name="brandedFlashPublicStack" />
+			<result name="input" type="freemarker">/templates/html/resetPassword/form.ftl</result>
+			<result name="success" type="redirectAction">login</result>
 		</action>
 
 		<action name="finalizeReset" method="reset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">

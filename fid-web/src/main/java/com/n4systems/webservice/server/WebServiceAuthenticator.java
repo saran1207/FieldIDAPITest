@@ -3,7 +3,6 @@ package com.n4systems.webservice.server;
 
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.UserManager;
-import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -57,7 +56,7 @@ public class WebServiceAuthenticator {
 		
 		if (authenticationRequest.getLoginType() == AuthenticationRequest.LoginType.USERNAME) {
 			// FIXME DD : need to figure out how to deal with account policy settings.   can web service allow infinite login attempts?
-			loginUser = userManager.findUserByPw(tenantName, userId, password, AccountPolicy.makeDummyAccountPolicy());				
+			loginUser = userManager.findUserByPw(tenantName, userId, password, null/*BOGUS VALUE TO BE OVERRIDDEN BY USERMANAGER*/);				
 		} else if (authenticationRequest.getLoginType() == AuthenticationRequest.LoginType.SECURITY) {
 			loginUser = userManager.findUser(tenantName, securityRfid);
 		}		

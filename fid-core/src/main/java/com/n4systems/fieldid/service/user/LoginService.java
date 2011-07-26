@@ -20,12 +20,16 @@ public class LoginService extends FieldIdService {
 																		   .maximumSize(10000)
 																		   .expireAfterWrite(30, TimeUnit.MINUTES)
 																		   .makeMap();
-			
+
 	public LoginException trackFailedLoginAttempts(LoginException e) {
 		LoginException previousException = failedLogins.get(e.getUserId());		
-		LoginException mergedException = previousException==null ? e : e.merge(previousException);
+		LoginException mergedException = e.merge(previousException);
 		failedLogins.put(e.getUserId(), mergedException);
 		return mergedException;
+	}
+
+	public void resetFailedLoginAttempts(String userID) {
+		failedLogins.remove(userID);
 	}
  
 }

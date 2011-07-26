@@ -10,8 +10,9 @@ import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.exceptions.LoginException;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.security.AccountPolicy;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
 import com.n4systems.tools.Pager;
@@ -19,7 +20,7 @@ import com.n4systems.util.ListingPair;
 
 public interface UserManager {
 	
-	public User findUserByPw(String tenantName, String userID, String plainTextPassword, AccountPolicy accountPolicy) throws LoginException;
+	public User findUserByPw(String tenantName, String userID, String plainTextPassword, TenantSettings tenantSettings) throws LoginException;
 	// FIXME DD : i may need another FindUserByPw() method that passes a null or empty AccountPolicy object.
 //	public User findUser(String tenantName, String userID, String plainTextPassword, AccountPolicy accountPolicy);
 	public User findUser(String tenantName, String rfidNumber);
@@ -33,7 +34,7 @@ public interface UserManager {
 	
 	public Long createUser(User userBean) throws DuplicateUserException, DuplicateRfidException;
 	public void updateUser(User dto) throws DuplicateUserException;
-	public void updatePassword(Long rUser, String newPassword);	
+	public void updatePassword(Long rUser, String newPlainTextPassword, PasswordPolicy passwordPolicy);
 	public void removeUser(Long uniqueID);
 	
 	

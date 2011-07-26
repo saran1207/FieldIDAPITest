@@ -2,7 +2,6 @@ package com.n4systems.fieldid.actions;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import rfid.web.helper.SessionEulaAcceptance;
 
@@ -11,7 +10,6 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.LoginException;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.model.activesession.ActiveSession;
@@ -24,6 +22,8 @@ import com.n4systems.util.time.SystemClock;
 
 public class SignInAction extends AbstractAction {
 
+	private static final String EXPIRE = "expire";
+	
 	private static final Logger logger = Logger.getLogger(SignInAction.class);
 	private static final long serialVersionUID = 1L;
 
@@ -32,10 +32,9 @@ public class SignInAction extends AbstractAction {
 	private String previousUrl;
 
 	private SignIn signIn = new SignIn();
-	
-	@Autowired
-	private TenantSettingsService tenantSettingsService;
 
+	private String resetPasswordKey;
+	
 	public SignInAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
@@ -66,17 +65,21 @@ public class SignInAction extends AbstractAction {
 	public String doCreate() {
 		User loginUser = null;
 
-		if (signIn.isValid(this)) { 
-			loginUser = findUser();
-			if (loginUser != null) {
-				if (signInWillKickAnotherSessionOut(loginUser)) {
-					storeUserAuthenticationForConfirmOfSessionKick(loginUser);
-					return "confirmKick";
-				}
-				return signIn(loginUser);
-			}
+		if (!signIn.isValid(this)) {
+			return INPUT;
 		}
-		return INPUT;
+		
+		try { 
+			loginUser = findUser();
+		} catch (LoginException e) {
+			handleFailedLoginAttempt(e);				
+			return INPUT;
+		}
+		if (signInWillKickAnotherSessionOut(loginUser)) {
+			storeUserAuthenticationForConfirmOfSessionKick(loginUser);
+			return "confirmKick";
+		}
+		return signIn(loginUser);
 	}
 
 	private void storeUserAuthenticationForConfirmOfSessionKick(User loginUser) {
@@ -93,12 +96,7 @@ public class SignInAction extends AbstractAction {
 	}
 
 	private User findUserByPw() {	
-		try { 
-			return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword(), tenantSettingsService.getTenantSettings().getAccountPolicy());
-		} catch (LoginException e) {
-			handleFailedLoginAttempt(e);
-			return null;
-		}
+		return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword(), null/*BOGUS VALUE TO BE OVERRIDDEN BY USERMANAGER*/);
 	}
 
 	private String getFailedLoginText(LoginException e) {
@@ -127,7 +125,14 @@ public class SignInAction extends AbstractAction {
 		return sessionUserInUse.isThereAnActiveSessionFor(loginUser.getId()) && !sessionUserInUse.doesActiveSessionBelongTo(loginUser.getId(), getSession().getId());
 	}
 
-	private String signIn(User loginUser) {
+	private String signIn(User loginUser) {		
+		// if password expired, jump to reset password page (which requires username & resetkey)
+		if (loginUser.isPasswordExpired()) {
+			resetPasswordKey = loginUser.createResetPasswordKey();	// need this in order to get to "reset password" screen.
+			userManager.updateUser(loginUser);
+			return REDIRECT_TO_URL;					
+		}
+		
 		logUserIn(loginUser);
 		
 		if (previousUrl != null) {
@@ -214,6 +219,10 @@ public class SignInAction extends AbstractAction {
 
 	public String getPreviousUrl() {
 		return previousUrl;
+	}
+	
+	public String getKey() { 
+		return resetPasswordKey;
 	}
 
 	@Deprecated()

@@ -6,17 +6,21 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.impl.EntityManagerBackedUserManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.exceptions.LoginException;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.security.AccountPolicy;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -27,11 +31,12 @@ import com.n4systems.util.ListingPair;
 
 public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implements UserManager {
 
-	
+	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private TenantSettingsService tenantSettingsService;
 	
-	public UserEJBContainer(LoginService loginService) {
-		this.loginService = loginService;
+	public UserEJBContainer() {
 	}
 
 	@Override
@@ -116,7 +121,8 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).lockUser(tenantName, userID, duration, failedLoginAttempts);
+			loginService.resetFailedLoginAttempts(userID);			
+			createManager(transaction.getEntityManager()).lockUser(tenantName, userID, duration, failedLoginAttempts);			
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
 			throw e;
@@ -126,11 +132,13 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 	}
 	
 	@Override
-	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword, AccountPolicy accountPolicy) {
+	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword, TenantSettings tenantSettings) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword, accountPolicy);		  
+			// KLUDGE : ignore and override accountPolicy to use tenantService.  this entire class will be refactored away when we move to spring. 
+			//  the next generation of UserManager impl will have the tenantSettingsService injected and the parameter will be removed from the IF. 
+			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword, tenantSettingsService.getTenantSettings());		  
 		} catch (RuntimeException e) {
 			if (e instanceof LoginException) { 
 				loginService.trackFailedLoginAttempts((LoginException)e);
@@ -306,12 +314,12 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 	}
 
 	@Override
-	public void updatePassword(Long rUser, String newPassword) {
+	public void updatePassword(Long rUser, String newPassword, PasswordPolicy passwordPolicy) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).updatePassword(rUser, newPassword);
-
+			// override passwordPolicy.  kludge while this EJB legacy code hasn't been springified.
+			createManager(transaction.getEntityManager()).updatePassword(rUser, newPassword, tenantSettingsService.getTenantSettings().getPasswordPolicy());
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
 

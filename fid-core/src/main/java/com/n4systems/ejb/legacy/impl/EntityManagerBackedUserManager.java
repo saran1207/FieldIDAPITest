@@ -22,8 +22,10 @@ import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
@@ -69,7 +71,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 //	}
 
 	@Override	
-	public User findUserByPw(String tenantName, String userID, String plainTextPassword, AccountPolicy accountPolicy) {
+	public User findUserByPw(String tenantName, String userID, String plainTextPassword, TenantSettings tenantSettings) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		UserQueryHelper.applyFullyActiveFilter(builder);
 
@@ -81,7 +83,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 		if (passwordMatches(plainTextPassword, user) && !isStillLocked(user)) {
 			return user;
 		} else { 
-			throw createLoginException(user, userID, accountPolicy);
+			throw createLoginException(user, userID, tenantSettings.getAccountPolicy());
 		}
 	}
 
@@ -214,10 +216,10 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	@Override
-	public void updatePassword(Long rUser, String newPlainTextPassword) {
+	public void updatePassword(Long rUser, String newPlainTextPassword, PasswordPolicy passwordPolicy) {
 		User user = em.find(User.class, rUser);
 		// FIXME DD : need to know size of pw history.  read this from tenant config and restrict.
-		user.assignPassword(newPlainTextPassword);		
+		user.assignPassword(newPlainTextPassword, passwordPolicy.getExpiryDays());
 	}
 
 	@Override

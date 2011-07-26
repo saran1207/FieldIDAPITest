@@ -83,7 +83,7 @@ public class FieldIdAppConfig {
     
     @Bean
     public UserManager userEJBContainer() {
-        return new UserEJBContainer(loginService());		// return new service
+        return new UserEJBContainer();
     }
     
     @Bean 

@@ -1,6 +1,7 @@
 package com.n4systems.model.user;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -54,6 +55,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private String hashSecurityCardNumber;
 	private Boolean locked;
 	private Date lockedUntil;
+	private Date passwordExpiry;
 	
 	
 //	@ElementCollection(fetch = FetchType.EAGER)
@@ -274,8 +276,8 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		this.referralKey = referralKey;
 	}
 
-	public void createResetPasswordKey() {
-		resetPasswordKey = EncryptionUtility.getSHA1HexHash( emailAddress + UUID.randomUUID().toString());
+	public String createResetPasswordKey() {
+		return resetPasswordKey = EncryptionUtility.getSHA1HexHash( emailAddress + UUID.randomUUID().toString());
 	}
 
 	public String getResetPasswordKey() {
@@ -432,5 +434,32 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		setFailedLoginAttempts(0);		
 	}
 
+	public void assignPassword(String newPlainTextPassword, Integer expiryDays) {
+		assignPassword(newPlainTextPassword);
+		setPasswordExpiryInDays(expiryDays);
+	}
+
+	private void setPasswordExpiryInDays(Integer expiryDays) {
+		if (expiryDays==null || expiryDays==0) {
+			setPasswordExpiry(null);
+		} else { 
+			Calendar now = Calendar.getInstance();
+			now.add(Calendar.DATE, expiryDays);
+			setPasswordExpiry(now.getTime());
+		}
+	}
+
+	public void setPasswordExpiry(Date passwordExpiry) {
+		this.passwordExpiry = passwordExpiry;
+	}
+
+	public Date getPasswordExpiry() {
+		return passwordExpiry;
+	}
+
+	public boolean isPasswordExpired() {
+		// CAVEAT : transient method!
+		return getPasswordExpiry()!=null && new Date().after(getPasswordExpiry());
+	}
 	
 }

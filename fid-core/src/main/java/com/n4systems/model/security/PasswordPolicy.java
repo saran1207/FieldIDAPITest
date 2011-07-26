@@ -45,7 +45,7 @@ public class PasswordPolicy implements Serializable {
 		return expiryDays;
 	}
 	public void setExpiryDays(Integer expiryDays) {
-		this.expiryDays = expiryDays;
+		this.expiryDays = expiryDays==null || expiryDays==0 ? null : expiryDays;
 	}
 	public void setUniqueness(Integer uniqueness) {
 		this.uniqueness = uniqueness;

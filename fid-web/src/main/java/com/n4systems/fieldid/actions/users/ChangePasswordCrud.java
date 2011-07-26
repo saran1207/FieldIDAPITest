@@ -2,10 +2,12 @@ package com.n4systems.fieldid.actions.users;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
 import com.n4systems.security.PasswordComplexityChecker;
@@ -24,6 +26,8 @@ public class ChangePasswordCrud extends AbstractCrud {
 	protected UserManager userManager;
 	protected User user;
 	
+	@Autowired
+	private TenantSettingsService tenantSettingsService;
 	
 	private String originalPassword;
 	private String newPassword;
@@ -82,7 +86,7 @@ public class ChangePasswordCrud extends AbstractCrud {
 															passwordPolicy.getMinNumbers(), 
 															passwordPolicy.getMinSymbols());
 		if ( passwordChecker.isValid(newPassword) ) { 
-			userManager.updatePassword( user.getId(), newPassword );
+			userManager.updatePassword( user.getId(), newPassword, null );
 			logger.info( "password updated for " + getSessionUser().getUserID() );
 			addFlashMessageText( "message.passwordupdated" );			
 			getSession().remove( "passwordReset" );

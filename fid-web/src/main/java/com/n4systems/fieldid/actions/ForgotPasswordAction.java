@@ -2,17 +2,16 @@ package com.n4systems.fieldid.actions;
 
 import javax.mail.MessagingException;
 
-import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import org.apache.log4j.Logger;
-
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.model.user.User;
-import org.apache.struts2.interceptor.validation.SkipValidation;
+import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
+import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
+import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 public class ForgotPasswordAction extends SignInAction {
 
@@ -24,17 +23,19 @@ public class ForgotPasswordAction extends SignInAction {
     private String newPassword;
     private String confirmPassword;
 	private Long uniqueID;
-
+	
 	public ForgotPasswordAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
 	}
 
-    @SkipValidation
+    @Override
+	@SkipValidation
 	public String doAdd() {
 		return SUCCESS;
 	}
 
-    @SkipValidation
+    @Override
+	@SkipValidation
 	public String doCreate() {
 		if (isBlank(userName)) {
 			addFieldError("userName", getText("error.usernamerequired"));
@@ -65,11 +66,21 @@ public class ForgotPasswordAction extends SignInAction {
             return MISSING;
         }
 
-        userManager.updatePassword( user.getId(), newPassword );
+        userManager.updatePassword( user.getId(), newPassword, null);
         addFlashMessageText("message.passwordresetsuccess");
         return SUCCESS;
 	}
 
+	@SkipValidation
+	public String doExpirePasswordReset() {
+        boolean resetKeyValid = userManager.resetKeyIsValid(getSecurityGuard().getTenantName(), userName, loginKey);
+
+        if (!resetKeyValid) {
+            return MISSING;
+        }		
+		return SUCCESS;
+	}
+	
     @SkipValidation
     public String doPrepare() {
         boolean resetKeyValid = userManager.resetKeyIsValid(getSecurityGuard().getTenantName(), userName, loginKey);
@@ -81,10 +92,12 @@ public class ForgotPasswordAction extends SignInAction {
         return SUCCESS;
     }
 
+	@Override
 	public String getUserName() {
 		return userName;
 	}
 
+	@Override
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
