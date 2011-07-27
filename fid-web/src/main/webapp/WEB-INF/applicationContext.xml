@@ -13,9 +13,13 @@
     <context:annotation-config/>
     <tx:annotation-driven transaction-manager="txManager"/>
 
+	<!--  moved to FieldIdAppConfig 
     <bean id="productTypeEJBContainer" class="com.n4systems.ejb.legacy.wrapper.LegacyAssetTypeEJBContainer"/>
-
+	-->
+	
+	<!--  moved to FieldIdAppConfig 
     <bean id="productSerialEJBContainer" class="com.n4systems.ejb.legacy.wrapper.LegacyAssetEJBContainer"/>
+    -->
 
     <bean id="optionEJBContainer" class="com.n4systems.ejb.legacy.wrapper.OptionEJBContainer"/>
 
@@ -35,21 +39,31 @@
 
     <bean id="autoAttributeEJBContainer" class="com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer"/>
 
+	
+	<!--  moved to FieldIdAppConfig 
     <bean id="scheduleEJBContainer" class="com.n4systems.ejb.wrapper.EventScheduleManagerEJBContainer"/>
-
+	-->
+	
     <bean id="massUpdateEJBContainer" class="com.n4systems.ejb.wrapper.MassUpdateManagerEJBContainer"/>
 
     <bean id="configEJBContainer" class="com.n4systems.ejb.wrapper.ConfigManagerEJBContainer"/>
 
     <bean id="inspectionEJBContainer" class="com.n4systems.ejb.wrapper.EventManagerEJBContainer"/>
 
+	<!--  moved to FieldIdAppConfig class
     <bean id="proofTestHandler" class="com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer"/>
-
+	-->
+	
     <bean id="aggregateReportEJBContainer" class="com.n4systems.ejb.wrapper.AggregateReportManagerEJBContainer"/>
 
+	<!--  moved to FieldIdAppConfig class
     <bean id="orderEJBContainer" class="com.n4systems.ejb.wrapper.OrderManagerEJBContainer"/>
+     -->
 
+	
+	<!--  moved to FieldIdAppConfig class
     <bean id="productEJBContainer" class="com.n4systems.ejb.wrapper.AssetManagerEJBContainer"/>
+	-->
 
     <bean id="projectEJBContainer" class="com.n4systems.ejb.wrapper.ProjectManagerEJBContainer"/>
 

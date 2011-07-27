@@ -12,7 +12,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
 import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.ejb.legacy.wrapper.LegacyAssetEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.LegacyAssetTypeEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.ServiceDTOBeanConverterEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.UserEJBContainer;
+import com.n4systems.ejb.wrapper.AssetManagerEJBContainer;
+import com.n4systems.ejb.wrapper.EventScheduleManagerEJBContainer;
+import com.n4systems.ejb.wrapper.OrderManagerEJBContainer;
+import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
@@ -29,10 +36,51 @@ import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.util.ServiceLocator;
 
 @Configuration
 public class FieldIdAppConfig {
 
+	@Bean
+	public ServiceLocator serviceLocator() { 
+		return new ServiceLocator();
+	}
+
+	@Bean 
+	public ServiceDTOBeanConverterEJBContainer serviceDTOBeanConverter() { 
+		return new ServiceDTOBeanConverterEJBContainer();
+	}
+	
+	@Bean 
+	public EventScheduleManagerEJBContainer scheduleEJBContainer() { 
+		return new EventScheduleManagerEJBContainer(); 
+	}
+	
+    @Bean 
+    public LegacyAssetEJBContainer productSerialEJBContainer() { 
+    	return new LegacyAssetEJBContainer();
+    }
+    
+    @Bean
+    public OrderManagerEJBContainer orderEJBContainer() { 
+    	return new OrderManagerEJBContainer();
+    }
+
+    @Bean 
+    public LegacyAssetTypeEJBContainer productTypeEJBContainer() {   
+    	return new LegacyAssetTypeEJBContainer();
+    }
+	
+	@Bean
+	public AssetManagerEJBContainer productEJBContainer() {
+		return new AssetManagerEJBContainer();
+	}
+	
+    @Bean 
+    public ProofTestHandlerEJBContainer proofTestHandler() {
+    	return new ProofTestHandlerEJBContainer(); 
+    }
+	
     @Bean
     public SavedReportService savedReportService() {
         return new SavedReportService();

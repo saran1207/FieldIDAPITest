@@ -84,4 +84,15 @@ public class StringUtils {
 	public static String stripWhitespace(String str) {
 		return str.replaceAll("\\s", "");
 	}
+	
+	public static String lowerCaseFirstLetter(String str) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) {
+            return str;
+        }
+        return new StringBuffer(strLen)
+            .append(Character.toLowerCase(str.charAt(0)))
+            .append(str.substring(1))
+            .toString();
+	}
 }

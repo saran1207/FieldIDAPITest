@@ -1,5 +1,10 @@
 package com.n4systems.util;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class LogUtils {
 	// these are static for for speed
@@ -24,4 +29,14 @@ public class LogUtils {
 		return prepMessage;
 	}
 	
+	
+	public static List<String> getClasspathEntries() { 
+		ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
+		URL[] urls = ((URLClassLoader)sysClassLoader).getURLs();
+		List<String> result = new ArrayList<String>();
+		for(int i=0; i< urls.length; i++) {
+			result.add(urls[i].getFile());
+		}
+		return result;
+	}
 }

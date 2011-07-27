@@ -15,8 +15,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.n4systems.model.api.NetworkEntity;
-import com.n4systems.model.security.SecurityLevel;
 import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
@@ -34,12 +32,14 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.model.parents.legacy.LegacyBeanTenantWithCreateModifyDate;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.PostFetcher;
@@ -69,11 +69,13 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return (Session) em.getDelegate();
 	}
 	
+	@Override
 	public EntityManager getEntityManager() {
 		return em;
 	}
 
 	
+	@Override
 	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId) {
 		return em.find(entityClass, entityId);
 	}
@@ -86,7 +88,8 @@ public class PersistenceManagerImpl implements PersistenceManager {
     }
 
 
-    public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId, SecurityFilter filter) {
+    @Override
+	public <T extends LegacyBaseEntity> T findLegacy(Class<T> entityClass, Long entityId, SecurityFilter filter) {
 		QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass, filter);
 		queryBuilder.addSimpleWhere("uniqueID", entityId);
 		
@@ -94,20 +97,24 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
+	@Override
 	public <T extends BaseEntity> T find(Class<T> entityClass, Long entityId, String... postFetchFields) {
 		return postFetchFields(find(entityClass, entityId), postFetchFields);
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Tenant tenant, String... postFetchFields) {
 		return postFetchFields(find(entityClass, entityId, tenant), postFetchFields);
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Tenant tenant) {
 		return find(entityClass, entityId, tenant.getId());
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Long tenantId) {
@@ -126,6 +133,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, SecurityFilter filter, String... postFetchFields) {
 		QueryBuilder<T> queryBuilder = new QueryBuilder<T>(entityClass, filter);
 		queryBuilder.setSimpleSelect();
@@ -141,10 +149,12 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant> T find(Class<T> entityClass, Long entityId, Long tenantId, String... postFetchFields) {
 		return postFetchFields(find(entityClass, entityId, tenantId), postFetchFields);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	
 	public <T extends BaseEntity & NamedEntity> T findByName(Class<T> entityClass, String entityName) {
@@ -162,6 +172,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return entity;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	
 	public <T extends EntityWithTenant & NamedEntity> T findByName(Class<T> entityClass, Long tenantId, String entityName) {
@@ -181,6 +192,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant & NamedEntity> String findName(Class<T> entityClass, Long id, SecurityFilter filter) {
 		QueryBuilder<String> builder = new QueryBuilder<String>(entityClass, filter);
 		
@@ -188,6 +200,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
+	@Override
 	public <T> int countAllPages(Class<T> entityClass, int pageSize, SecurityFilter filter) {
 		Long longPageSize = new Long(pageSize);
 		Long entityCount;
@@ -205,6 +218,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return pages;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> findAll(Class<T> entityClass, String jpqlQuery, Map<String, Object> parameters) {
 		Query query = getEntityManager().createQuery(jpqlQuery);
@@ -213,25 +227,29 @@ public class PersistenceManagerImpl implements PersistenceManager {
 			query.setParameter(key, parameters.get(key));
 		}
 		
-		return (List<T>) query.getResultList();
+		return query.getResultList();
 	}
 
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass) {
-		return (List<T>) em.createQuery(generateFromClause(defaultTableAlias, entityClass)).getResultList();
+		return em.createQuery(generateFromClause(defaultTableAlias, entityClass)).getResultList();
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, String orderBy) {
-		return (List<T>) em.createQuery(generateFromClause(defaultTableAlias, entityClass) + " ORDER BY " + orderBy + " ASC ").getResultList();
+		return em.createQuery(generateFromClause(defaultTableAlias, entityClass) + " ORDER BY " + orderBy + " ASC ").getResultList();
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Tenant tenant) {
 		return findAll(entityClass, tenant.getId());
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Tenant tenant, String... postFetchFields) {
 		Query query = em.createQuery(generateFromClause(defaultTableAlias, entityClass) + "where " + defaultTableAlias + ".tenant.id = :tenantId and " + defaultTableAlias + ".id in (:idlist)");
@@ -239,13 +257,14 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		query.setParameter("tenantId", tenant.getId());
 		query.setParameter("idlist", ids);
 
-		List<T> results = (List<T>) query.getResultList();
+		List<T> results = query.getResultList();
 		if (postFetchFields.length > 0) {
 			postFetchFields(results, postFetchFields);
 		}
 		return results;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Set<Long> ids, Long tenantId, String... postFetchFields) {
 		Query query = em.createQuery(generateFromClause(defaultTableAlias, entityClass) + "where " + defaultTableAlias + ".tenant.id = :tenantId and " + defaultTableAlias + ".id in (:idlist)");
@@ -253,13 +272,14 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		query.setParameter("tenantId", tenantId);
 		query.setParameter("idlist", ids);
 
-		List<T> results = (List<T>) query.getResultList();
+		List<T> results = query.getResultList();
 		if (postFetchFields.length > 0) {
 			postFetchFields(results, postFetchFields);
 		}
 		return results;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends EntityWithTenant> List<T> findAllByDate(Class<T> entityClass, Long tenantId, Date startDate, Date endDate, Long beginningId, Integer limit) {
 		Query query = em.createQuery(generateFromClause(defaultTableAlias, entityClass) + "where " + defaultTableAlias + ".tenant.id=:tenantId and "
@@ -273,15 +293,17 @@ public class PersistenceManagerImpl implements PersistenceManager {
 			query.setMaxResults(limit);
 		}
 
-		return (List<T>) query.getResultList();
+		return query.getResultList();
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Long tenantId) {
 		return findAll(entityClass, tenantId, null);
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant> List<T> findAll(Class<T> entityClass, Long tenantId, Map<String, Boolean> orderBy) {
 		Map<String, Object> whereClause = new HashMap<String, Object>();
 		whereClause.put("tenant.id", tenantId);
@@ -289,10 +311,12 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
+	@Override
 	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses) {
 		return findAll(entityClass, whereClauses, null);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends BaseEntity> List<T> findAll(Class<T> entityClass, Map<String, Object> whereClauses, Map<String, Boolean> orderBy) {
 		String paramPrefix = "param";
@@ -338,9 +362,10 @@ public class PersistenceManagerImpl implements PersistenceManager {
 			query.setParameter(paramPrefix + position, paramValues.get(position));
 		}
 
-		return (List<T>) query.getResultList();
+		return query.getResultList();
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T find(QueryBuilder<T> queryBuilder) throws InvalidQueryException {
 		T result;
@@ -354,20 +379,23 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return postFetchFields(result, queryBuilder.getPostFetchPaths());
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> findAll(QueryBuilder<T> queryBuilder) throws InvalidQueryException {
 		Query createQuery = queryBuilder.createQuery(em);
-		List<T> resultList = (List<T>) createQuery.getResultList();
+		List<T> resultList = createQuery.getResultList();
 		return postFetchFields(resultList, queryBuilder.getPostFetchPaths());
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> findAll(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException {
-		List<T> resultList = (List<T>) queryBuilder.createQuery(em).setFirstResult(pageSize * page).setMaxResults(pageSize).getResultList();
+		List<T> resultList = queryBuilder.createQuery(em).setFirstResult(pageSize * page).setMaxResults(pageSize).getResultList();
 		return postFetchFields(resultList, queryBuilder.getPostFetchPaths());
 	}
 
 	
+	@Override
 	public <T> Pager<T> findAllPaged(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException {
 		SelectClause backedUpSelectArgument = queryBuilder.getSelectArgument();
 		Pager<T> results = new Page<T>(queryBuilder.createQuery(em), queryBuilder.setCountSelect().createQuery(em), page, pageSize);
@@ -377,45 +405,55 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
+	@Override
 	public Long findCount(QueryBuilder<?> queryBuilder) throws InvalidQueryException {
 		return (Long) queryBuilder.setCountSelect().createQuery(em).getSingleResult();
 	}
 
+	@Override
 	public <T> void saveAny(T entity) {
 		em.persist(entity);
 	}
 	
+	@Override
 	public <T extends BaseEntity> Long save(T entity) {
 		em.persist(entity);
 		return entity.getId();
 	}
 
 	
+	@Override
 	public <T> T updateAny(T entity) {
 		return em.merge(entity);
 	}
 	
+	@Override
 	public <T extends BaseEntity> T update(T entity) {
 		return em.merge(entity);
 	}
 
 	
+	@Override
 	public <T extends AbstractEntity> Long save(T entity, User user) {
 		return save(updateCreatedAndModifiedBy(entity, user));
 	}
 
+	@Override
 	public <T extends AbstractEntity> T update(T entity, User user) {
 		return update(updateModifiedBy(entity, user));
 	}
 
+	@Override
 	public <T extends AbstractEntity> Long save(T entity, Long userId) {
 		return save(updateCreatedAndModifiedBy(entity, userId));
 	}
 
+	@Override
 	public <T extends AbstractEntity> T update(T entity, Long userId) {
 		return update(updateModifiedBy(entity, userId));
 	}
 	
+	@Override
 	public <T extends AbstractEntity> List<T> updateAll(List<T> entities, Long userId) {
 		List<T> updatedEntities = new ArrayList<T>();
 		
@@ -425,14 +463,17 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return updatedEntities;
 	}
 
+	@Override
 	public <T extends BaseEntity> void delete(T entity) {
 		em.remove(update(entity));
 	}
 	
+	@Override
 	public <T> void deleteAny(T entity) {
 		em.remove(updateAny(entity));
 	}
 	
+	@Override
 	public <T extends BaseEntity> void deleteSafe(T entity) throws EntityStillReferencedException {
 		try {
 			delete(entity);
@@ -499,40 +540,48 @@ public class PersistenceManagerImpl implements PersistenceManager {
 	}
 
 	
+	@Override
 	public <E extends Collection<T>, T> E postFetchFields(E entities, String... postFetchFields) {
 		return PostFetcher.postFetchFields(entities, postFetchFields);
 	}
 
 	
+	@Override
 	public <E extends Collection<T>, T> E postFetchFields(E entities, List<String> postFetchFields) {
 		return PostFetcher.postFetchFields(entities, postFetchFields);
 	}
 
 	
+	@Override
 	public <T> T postFetchFields(T entity, String... postFetchFields) {
 		return PostFetcher.postFetchFields(entity, postFetchFields);
 	}
 
 	
+	@Override
 	public <T> T postFetchFields(T entity, List<String> postFetchFields) {
 		return PostFetcher.postFetchFields(entity, postFetchFields);
 	}
 
 	
+	@Override
 	public <T extends EntityWithTenant> List<ListingPair> findAllLP(Class<T> entityClass, SecurityFilter filter) {
 		return findAllLP(entityClass, filter, "displayName");
 	}
 
+	@Override
 	public <T extends EntityWithTenant> List<ListingPair> findAllLP(Class<T> entityClass, Long tenantId) {
 		// Display Name is the default value for the nameField.
 
 		return findAllLP(entityClass, tenantId, "displayName");
 	}
 
+	@Override
 	public <T extends EntityWithTenant> List<ListingPair> findAllLP(Class<T> entityClass, Long tenantId, String nameField) {
 		return findAllLP(entityClass, new TenantOnlySecurityFilter(tenantId), nameField);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends EntityWithTenant> List<ListingPair> findAllLP(Class<T> entityClass, SecurityFilter filter, String nameField) {
 		String jpql = "SELECT new com.n4systems.util.ListingPair(id, " + nameField + " ) " + generateFromClause(defaultTableAlias, entityClass);
@@ -552,21 +601,24 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		if (Arrays.asList(entityClass.getInterfaces()).contains(Archivable.class)) {
 			query.setParameter("activeState", EntityState.ACTIVE);
 		}
-		return (List<ListingPair>) query.getResultList();
+		return query.getResultList();
 
 	}
 	
+	@Override
 	public List<ListingPair> findAllLP(QueryBuilder<ListingPair> query, String nameField) {
 		query.setSelectArgument(new NewObjectSelect(ListingPair.class, "id", nameField));
 		query.addOrder(nameField);
 		return findAll(query);
 	}
 
+	@Override
 	public <T extends EntityWithTenant & NamedEntity> boolean uniqueNameAvailable(Class<T> entityClass, String name, Long id, Long tenantId) {
 		return uniqueNameAvailable(entityClass, name, id, tenantId, null, false);
 
 	}
 
+	@Override
 	public <T extends LegacyBeanTenantWithCreateModifyDate> boolean uniqueAssetStatusNameAvailable(Class<T> entityClass, String name, Long id, Long tenantId){
 		String jpql = "SELECT id " + generateFromClause(defaultTableAlias, entityClass) + " WHERE tenant.id = :tenantId AND LOWER(name) = :name ";
 		
@@ -587,6 +639,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return (matchingNames.size() == 0);
 	}
 	
+	@Override
 	public <T extends EntityWithTenant & NamedEntity> boolean uniqueNameAvailableWithCustomer(Class<T> entityClass, String name, Long id, Long tenantId, Long customerId) {
 		return uniqueNameAvailable(entityClass, name, id, tenantId, customerId, true);
 	}
@@ -622,10 +675,12 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return (matchingNames.size() == 0);
 	}
 
+	@Override
 	public <T> T reattach(T entity) {
 		return reattach(entity, false);
 	}
 
+	@Override
 	public <T> T reattach(T entity, boolean refresh) {
 		getHibernateSession().lock(entity, LockMode.NONE);
 		if (refresh) {
@@ -634,10 +689,12 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return entity;
 	}
 
+	@Override
 	public <T> T reattchAndFetch(T entity, String... fetchFields) {
 		return postFetchFields(reattach(entity), fetchFields);
 	}
 
+	@Override
 	public <E extends Collection<T>, T> E reattchAndFetch(E entities, String... fetchFields) {
 		for (T entity : entities) {
 			postFetchFields(reattach(entity), fetchFields);
@@ -646,6 +703,7 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return entities;
 	}
 
+	@Override
 	public <T extends AbstractPersistentCollection & Iterable<?>> T reattchAndFetch(T persistentCollection) {
 		persistentCollection.setCurrentSession((SessionImpl) getHibernateSession());
 		persistentCollection.iterator().next().getClass();
@@ -683,12 +741,14 @@ public class PersistenceManagerImpl implements PersistenceManager {
 
 	
 		
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> passThroughFindAll(String queryStr, Map<String,Object> parameters) {
 		Query query = createQuery(queryStr, parameters);
-		return (List<T>)query.getResultList();
+		return query.getResultList();
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T passThroughFind(String queryStr, Map<String,Object> parameters) {
 		Query query = createQuery(queryStr, parameters);
@@ -703,11 +763,13 @@ public class PersistenceManagerImpl implements PersistenceManager {
 		return query;
 	}
 	
+	@Override
 	public int executeUpdate(String updateStr, Map<String,Object> parameters) {
 		Query updateStmt = createQuery(updateStr, parameters);
 		return updateStmt.executeUpdate();
 	}
 	
+	@Override
 	public Statistics getHibernateStats() {
 		Statistics stats = getHibernateSession().getSessionFactory().getStatistics();
 		return stats;

@@ -18,12 +18,11 @@ import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.time.SystemClock;
 
 public class SignInAction extends AbstractAction {
 
-	private static final String EXPIRE = "expire";
-	
 	private static final Logger logger = Logger.getLogger(SignInAction.class);
 	private static final long serialVersionUID = 1L;
 
@@ -63,6 +62,9 @@ public class SignInAction extends AbstractAction {
 	}
 
 	public String doCreate() {
+		
+		ServiceLocator.getPersistenceManager();
+		
 		User loginUser = null;
 
 		if (!signIn.isValid(this)) {

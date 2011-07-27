@@ -1,5 +1,12 @@
 package com.n4systems.fieldid.service.search.columns;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.service.FieldIdService;
@@ -10,12 +17,6 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.EventType;
 import com.n4systems.model.search.ColumnMappingGroupView;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class DynamicColumnsService extends FieldIdService {
 
