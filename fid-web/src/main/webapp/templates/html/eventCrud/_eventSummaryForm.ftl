@@ -8,12 +8,18 @@
 <@s.hidden name="eventGroupId"/>
 <@s.hidden id="eventTypeId" name="type"/>
 <div id="assetSummary">
-	<h2>${asset.type.name!?html} <@s.text name="label.summary"/></h2>
-	
+	<h2>${asset.type.name!?html}  <@s.text name="label.summary"/></h2>
+
+    <div class="infoSet">
+		<label class="label"><@s.text name="label.desc"/></label>
+		<span class="fieldHolder">
+			${asset.description?html}
+		</span>
+	</div>
 	<div class="infoSet">
 		<label class="label"><@s.text name="${Session.sessionUser.serialNumberLabel}"/></label>
 		<span class="fieldHolder">
-			${asset.serialNumber?html}
+            <a href="<@s.url action="asset" uniqueID="${asset.id}"/>">${asset.serialNumber?html}</a>
 		</span>
 	</div>
 	<div class="infoSet">
@@ -23,9 +29,9 @@
 		</span>
 	</div>
 	<div class="infoSet">
-		<label class="label"><@s.text name="label.desc"/></label>
+		<label class="label"><@s.text name="label.referencenumber"/></label>
 		<span class="fieldHolder">
-			${asset.description?html}
+			${asset.customerRefNumber!?html}
 		</span>
 	</div>
 </div>

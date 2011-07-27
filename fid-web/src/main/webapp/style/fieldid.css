@@ -2176,3 +2176,7 @@ th.wicket_orderDown {
 	overflow: hidden;
     background-image: url(../images/sort_arrow_up.gif);
 }
+
+#assetSummary .infoSet {
+    min-height:20px;
+}
