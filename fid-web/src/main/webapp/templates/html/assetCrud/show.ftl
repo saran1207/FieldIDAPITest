@@ -60,7 +60,7 @@ ${action.setPageType('asset', 'show')!}
 	</div>
 
 	<div class="leftViewSection topBorder">
-		<h3 class="subheading"><@s.text name="label.nextevent"/></h3>
+		<h3 class="subheading"><@s.text name="label.nextscheduledevent"/></h3>
 		<#if nextEvent?exists >
 			<div id="nextEvent">
 				<#if nextEvent.pastDue>
