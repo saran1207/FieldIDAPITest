@@ -32,4 +32,10 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		tenantSettings.setUserLimits(userLimits);
 		persistenceService.update(tenantSettings);
 	}
+	
+	public void updateGpsCapture(boolean gpsCapture) {
+		TenantSettings tenantSettings = getTenantSettings();
+		tenantSettings.setGpsCapture(gpsCapture);
+		persistenceService.update(tenantSettings);
+	}
 }

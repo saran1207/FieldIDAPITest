@@ -8,11 +8,13 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -46,7 +48,11 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private boolean assignedTo = false;
 	private boolean proofTestIntegration=false;
 	private boolean manufacturerCertificate=false;
+	private boolean gpsCapture = false;
 	private TransactionManager transactionManager;
+	
+	@Autowired
+	private TenantSettingsService tenantSettingsService;
 
 	public SystemSettingsCrud(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -77,7 +83,8 @@ public class SystemSettingsCrud extends AbstractCrud {
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
         serialNumberFormat = primaryOrg.getSerialNumberFormat();
 		proofTestIntegration = primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
-		manufacturerCertificate = primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);		
+		manufacturerCertificate = primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
+		gpsCapture = getTenant().getSettings().isGpsCapture();
 		webSite = primaryOrg.getWebSite();
 
 		File privateLogoPath = PathHandler.getTenantLogo(primaryOrg.getTenant());
@@ -107,6 +114,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 			updateExtendedFeatures(transaction);
 			updateDateFormat();
             updateSerialNumberFormat();
+            updateTenantSettings();
 			save(transaction);
 			transactionManager().finishTransaction(transaction);
 			addFlashMessageText("message.system_settings_updated");
@@ -119,7 +127,11 @@ public class SystemSettingsCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-    @SkipValidation
+    private void updateTenantSettings() {
+    	tenantSettingsService.updateGpsCapture(isGpsCapture());    	
+	}
+
+	@SkipValidation
 	public String doUpdateBranding() {
 
 		Transaction transaction = transactionManager().startTransaction();
@@ -320,5 +332,13 @@ public class SystemSettingsCrud extends AbstractCrud {
 
 	public void setManufacturerCertificate(boolean manufacturerCertificate) {
 		this.manufacturerCertificate = manufacturerCertificate;
+	}
+	
+	public boolean isGpsCapture() {
+		return gpsCapture;
+	}
+
+	public void setGpsCapture(boolean gpsCapture) {
+		this.gpsCapture = gpsCapture;
 	}
 }

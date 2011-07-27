@@ -92,8 +92,15 @@ ${action.setPageType('account_settings', 'list')!}
 					</script>
                 </label>
                 <@s.textfield name="serialNumberFormat" />
-
             </div>
+            
+            <div class="infoSet">
+				<label for="gpsCapture">
+					<@s.text name="label.gps_capture" />
+				</label>
+				<@s.checkbox name="gpsCapture"/>
+			</div>
+            
 		<div class="formAction">
 			<@s.submit key="label.save"/> <@s.text name="label.or"/> <a href="<@s.url action="settings"/>"><@s.text name="label.cancel"/></a>
 		</div>

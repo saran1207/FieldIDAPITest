@@ -21,6 +21,8 @@ public class TenantSettings extends EntityWithTenant {
 	
 	@Embedded
 	private PasswordPolicy passwordPolicy;
+	
+	private boolean gpsCapture;
 
 	public boolean isSecondaryOrgsEnabled() {
 		return secondaryOrgsEnabled;
@@ -52,6 +54,14 @@ public class TenantSettings extends EntityWithTenant {
 
 	public PasswordPolicy getPasswordPolicy() {
 		return passwordPolicy;
+	}
+
+	public boolean isGpsCapture() {
+		return gpsCapture;
+	}
+
+	public void setGpsCapture(boolean gpsCapture) {
+		this.gpsCapture = gpsCapture;
 	}
 
 }
