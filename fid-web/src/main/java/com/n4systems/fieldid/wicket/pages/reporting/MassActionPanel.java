@@ -39,7 +39,7 @@ public class MassActionPanel extends Panel implements IHeaderContributor {
         add(new LegacyReportMassActionLink("summaryReportLink", "/summaryReport.action?searchId=%s", reportCriteriaModel));
         add(new LegacyReportMassActionLink("printThisReportLink", "/aHtml/printReport.action?searchId=%s", reportCriteriaModel));
         add(new LegacyReportMassActionLink("printSelectedPdfReportsLink", "/aHtml/reportPrintAllCerts.action?searchId=%s&reportType=INSPECTION_CERT", reportCriteriaModel));
-        add(new LegacyReportMassActionLink("printSelectedObservationReportsLink", "/aHtml/printReport.action?searchId=%s&reportType=OBSERVATION_CERT", reportCriteriaModel));
+        add(new LegacyReportMassActionLink("printSelectedObservationReportsLink", "/aHtml/reportPrintAllCerts.action?searchId=%s&reportType=OBSERVATION_CERT", reportCriteriaModel));
 
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         boolean searchIncludesSafetyNetwork = reportCriteriaModel.getObject().isIncludeSafetyNetwork();
