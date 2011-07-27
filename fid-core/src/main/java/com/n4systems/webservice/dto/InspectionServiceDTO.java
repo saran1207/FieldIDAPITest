@@ -43,6 +43,10 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 	private String inspectionBookTitle;
 	private String eventBookId;
 	
+	//GPS Data used from version 1.31
+	private double longitude;
+	private double latitude;
+	
 	public List<SubProductMapServiceDTO> getNewSubProducts() {
 		return newSubProducts;
 	}
@@ -263,6 +267,22 @@ public class InspectionServiceDTO extends AbstractInspectionServiceDTO implement
 
 	public void setEventGroupId(String eventGroupId) {
 		this.eventGroupId = eventGroupId;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
 	}
 
 }

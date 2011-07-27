@@ -37,6 +37,10 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	// All of these are unused starting on mobile version 1.14
 	private long organizationId;
 	private long jobSiteId;
+	
+	//GPS Data used from version 1.31
+	private double longitude;
+	private double latitude;
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -281,5 +285,20 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	public void setLastInspections(List<InspectionServiceDTO> lastInspections) {
 		this.lastInspections = lastInspections;
 	}
+	
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
 }
