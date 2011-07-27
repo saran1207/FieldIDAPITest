@@ -12,7 +12,7 @@ import com.n4systems.services.Initializer;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.taskscheduling.SchedulingException;
 import com.n4systems.taskscheduling.TaskScheduler;
-import com.n4systems.taskscheduling.TaskSchedulerBootstraper;
+import com.n4systems.taskscheduling.TaskSchedulerBootstrapper;
 
 public class TaskAction extends AbstractAdminAction {
 	private static final long serialVersionUID = 1L;
@@ -90,7 +90,7 @@ public class TaskAction extends AbstractAdminAction {
 	}
 	
 	public String doReloadScheduler() {
-		Initializer taskInit = new TaskSchedulerBootstraper();
+		Initializer taskInit = new TaskSchedulerBootstrapper();
 		taskInit.uninitialize();
 		taskInit.initialize();
 		

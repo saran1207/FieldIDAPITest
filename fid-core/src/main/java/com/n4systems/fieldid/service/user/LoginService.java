@@ -16,7 +16,7 @@ public class LoginService extends FieldIdService {
 	// dangerous architecture if you ever have to cluster!
 	// this map is used to keep track of failed logins in memory.
 	// using DB has its own problems but this technique will falter if multiple JVM's are used
-	private ConcurrentMap<String, LoginException> failedLogins = new MapMaker()	   
+	private static ConcurrentMap<String, LoginException> failedLogins = new MapMaker()	   
 																		   .maximumSize(10000)
 																		   .expireAfterWrite(30, TimeUnit.MINUTES)
 																		   .makeMap();

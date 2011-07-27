@@ -29,7 +29,7 @@ public class AccountPolicy implements Serializable {
 		return lockoutDuration;
 	}
 	public void setLockoutDuration(Integer lockoutDuration) {
-		this.lockoutDuration = lockoutDuration;
+		this.lockoutDuration = lockoutDuration==0 ? null : lockoutDuration;
 	}
 	
 }

@@ -37,7 +37,7 @@ public class PasswordPolicyPage extends SetupPage {
 
             add(feedbackPanel=new FIDFeedbackPanel("feedbackPanel"));
 
-            add(addIntegerRangeTextField("minLength",0,100));
+            add(addIntegerRangeTextField("minLength",6,100));
             add(addIntegerRangeTextField("minNumbers",0,100));
             add(addIntegerRangeTextField("minSymbols",0,100));
             add(addIntegerRangeTextField("minCapitals",0,100));

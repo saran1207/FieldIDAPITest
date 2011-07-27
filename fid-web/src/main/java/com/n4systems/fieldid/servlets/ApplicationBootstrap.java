@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.n4systems.services.Initializer;
 import com.n4systems.services.RemoteOrderManagerServiceInitializer;
-import com.n4systems.taskscheduling.TaskSchedulerBootstraper;
+import com.n4systems.taskscheduling.TaskSchedulerBootstrapper;
 import com.n4systems.taskscheduling.task.SignUpPackageSyncTaskInitializer;
 
 public class ApplicationBootstrap extends HttpServlet {
@@ -26,7 +26,7 @@ public class ApplicationBootstrap extends HttpServlet {
 	//	 }
 	
 	private static final Initializer[] initializers = {
-		new TaskSchedulerBootstraper(),
+		new TaskSchedulerBootstrapper(),
 		new SignUpPackageSyncTaskInitializer(),
 		new RemoteOrderManagerServiceInitializer()
 	};

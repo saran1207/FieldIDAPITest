@@ -7,10 +7,10 @@ import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.services.Initializer;
 import com.n4systems.taskscheduling.task.WatcherTask;
 
-public class TaskSchedulerBootstraper implements Initializer {
-	private static Logger logger = Logger.getLogger(TaskSchedulerBootstraper.class);
+public class TaskSchedulerBootstrapper implements Initializer {
+	private static Logger logger = Logger.getLogger(TaskSchedulerBootstrapper.class);
 	
-	public TaskSchedulerBootstraper() {}
+	public TaskSchedulerBootstrapper() {}
 	
 	/**
 	 * Creates and starts the TaskScheduler.  Registers the WatcherTask and schedules all TaskConfigs from the database.
