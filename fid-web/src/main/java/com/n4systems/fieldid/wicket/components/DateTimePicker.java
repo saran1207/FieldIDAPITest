@@ -82,7 +82,12 @@ public class DateTimePicker extends Panel {
         jsBuffer.append("buttonImageOnly:true,");
         jsBuffer.append("numberOfMonths:3,");
         jsBuffer.append("showButtonPanel:true,");
-        jsBuffer.append("dateFormat:\"").append(jqueryDateFormat).append("\"");
+        jsBuffer.append("dateFormat:\"").append(jqueryDateFormat).append("\",");
+        jsBuffer.append("ampm: true,");
+        jsBuffer.append("timeFormat: \"hh:mm TT\",");
+        jsBuffer.append("changeMonth: true,");
+        jsBuffer.append("changeYear: true");
+        
         jsBuffer.append("});");
         jsBuffer.append("jQuery('.datepicker').datepicker({");
         jsBuffer.append("showOn:'button',");
@@ -90,7 +95,9 @@ public class DateTimePicker extends Panel {
         jsBuffer.append("buttonImageOnly:true,");
         jsBuffer.append("numberOfMonths:3,");
         jsBuffer.append("showButtonPanel:true,");
-        jsBuffer.append("dateFormat:\"").append(jqueryDateFormat).append("\"");
+        jsBuffer.append("dateFormat:\"").append(jqueryDateFormat).append("\",");
+        jsBuffer.append("changeMonth: true,");
+        jsBuffer.append("changeYear: true");
         jsBuffer.append("});");
         jsBuffer.append("}");
         jsBuffer.append("initDatePicker();");
