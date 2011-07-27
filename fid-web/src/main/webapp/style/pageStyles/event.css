@@ -60,7 +60,6 @@
 	font-weight: normal;
 	display:block;
 	float:right;
-	color:#333399;
 	font-size: 0.8em;
 }
 
@@ -69,11 +68,16 @@
 }
 
 .eventForm h3 {
-	border-top: 1px solid #E8EDFF;
-	border-bottom: 1px solid #E8EDFF;
-	overflow:hidden;
-	margin: 5px 0px;
-	padding:5px 15px 5px 30px;
+	border-bottom: 1px solid #dddddd;
+	overflow: hidden;
+	padding: 5px 15px;
+	font-size: 1.2em;
+	font-weight: normal;
+}
+
+.jumpto img {
+	padding-bottom: 2px;
+	padding-right: 2px;
 }
 
 .jumpto select {
@@ -133,11 +137,11 @@
 	display:block;
 }
 
-.youAreOn, .eventSectionIndex {
+.youAreOn{
 	display: block;
 	float:left;	
 }
-	
+
 .eventSectionTitle {
 	display: block;
 	float:left;
@@ -148,12 +152,16 @@
 .youAreOn, .eventSectionIndex {
 	padding-right: 5px;
 	font-weight: normal;
-	color:#333399;
 }
 
 .eventSectionIndex {
 	float:right;
-	font-size: 1.3em;
+	font-size: 1em;
+	vertical-align : middle;
+}
+
+.eventSectionIndex a img {
+	vertical-align:middle;
 }
 
 #orgBrowserForm label{

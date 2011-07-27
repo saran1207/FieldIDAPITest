@@ -7,7 +7,12 @@
 			
 		<h2>
 			<span id="formTitle"><@s.text name="label.eventform"/></span> 
-			<span class="jumpto" id="jumpToSection"><@s.text name="label.jumpto"/>: <@s.select name="jumpToSections" id="jumpTo_${identifier}" headerKey="" headerValue="" list="eventFormHelper.currentCriteriaSections" listKey="id" listValue="shortName" theme="simple"/></span>
+			<span class="jumpto" id="jumpToSection">
+				<img src="<@s.url value="/images/jump-to-icon.png"/>" />
+				<@s.text name="label.jumpto"/>
+				&nbsp;
+				<@s.select name="jumpToSections" id="jumpTo_${identifier}" headerKey="" headerValue="" list="eventFormHelper.currentCriteriaSections" listKey="id" listValue="shortName" theme="simple"/>
+			</span>
 		</h2>
 		
 		<#if form_action="EDIT" && !formEvent.editable>
@@ -18,14 +23,22 @@
 		<#list eventFormHelper.getAvailableSections( formEvent ) as section >
 			<div id="section_${identifier}_${section_index}" <#if section_index != 0 >style="display:none"</#if> >
 				<h3>
-					<span class="youAreOn"><@s.text name="label.youareon"/>: </span><span class="eventSectionTitle">${section.title}</span> 
-					<span class="eventSectionIndex"><a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}" selectedIndex="${section_index-1}"><img  width="17" src="<@s.url value="/images/nav_blue_left.png"/>" alt="&lt; "/></a> [ ${section_index +1} / ${eventFormHelper.getAvailableSections( formEvent )?size} ] <a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}" selectedIndex="${section_index+1}"><img width="17" src="<@s.url value="/images/nav_blue_right.png"/>" alt="&gt; "/></a></span>
+					<span class="eventSectionTitle">${section.title}</span> 
+					<span class="eventSectionIndex">
+						<label>${section_index +1} <@s.text name="label.of"/> ${eventFormHelper.getAvailableSections( formEvent )?size} <@s.text name="label.sections"/></label>
+						<a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}_top" selectedIndex="${section_index-1}">
+							<img src="<@s.url value="/images/prev-button.png"/>" alt="&lt; "/>
+						</a> 
+						<a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}_top" selectedIndex="${section_index+1}">
+							<img src="<@s.url value="/images/next-button.png"/>" alt="&gt; "/>
+						</a>
+					</span>
 				</h3>
 				<script type="text/javascript">
-					$( 'downIndex_${identifier}_${section_index}' ).observe( 'click', jumpLinkToSection );
-					$( 'downIndex_${identifier}_${section_index}' ).sectionRotator = sectionRotator;
-					$( 'upIndex_${identifier}_${section_index}' ).observe( 'click', jumpLinkToSection );
-					$( 'upIndex_${identifier}_${section_index}' ).sectionRotator = sectionRotator;
+					$( 'downIndex_${identifier}_${section_index}_top' ).observe( 'click', jumpLinkToSection );
+					$( 'downIndex_${identifier}_${section_index}_top' ).sectionRotator = sectionRotator;
+					$( 'upIndex_${identifier}_${section_index}_top' ).observe( 'click', jumpLinkToSection );
+					$( 'upIndex_${identifier}_${section_index}_top' ).sectionRotator = sectionRotator;
 				</script>
 				
 				<#if form_action="ADD">
@@ -35,7 +48,23 @@
 				<#else>
 					<#include "_eventForm.ftl"/>
 				</#if>
-				
+				<h3>
+					<span class="eventSectionIndex">
+						<label>${section_index +1} <@s.text name="label.of"/> ${eventFormHelper.getAvailableSections( formEvent )?size} <@s.text name="label.sections"/></label>
+						<a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}" selectedIndex="${section_index-1}">
+							<img src="<@s.url value="/images/prev-button.png"/>" alt="&lt; "/>
+						</a> 
+						<a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}" selectedIndex="${section_index+1}">
+							<img src="<@s.url value="/images/next-button.png"/>" alt="&gt; "/>
+						</a>
+					</span>
+				</h3>
+				<script type="text/javascript">
+					$( 'downIndex_${identifier}_${section_index}' ).observe( 'click', jumpLinkToSection );
+					$( 'downIndex_${identifier}_${section_index}' ).sectionRotator = sectionRotator;
+					$( 'upIndex_${identifier}_${section_index}' ).observe( 'click', jumpLinkToSection );
+					$( 'upIndex_${identifier}_${section_index}' ).sectionRotator = sectionRotator;
+				</script>
 			</div>
 		</#list>
 	</div>
