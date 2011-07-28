@@ -249,7 +249,7 @@ h2 a {
 	background-image: url(../images/menu/safety_network.png);
 }
 
-.errorMessage,.error {
+.error {
 	color: #F00;
 }
 
@@ -1021,14 +1021,23 @@ strong.fail {
 }
 
 .formErrors {
-	margin: 10px;
-	border: 2px solid #FF3030;
-	background-color: #ffebeb;
+	border:1px solid #FFC2C2;
+	background-color:#FFEBEB;
 	padding: 10px;
+	margin: 10px 0;
 }
 
 .formErrors ul li span {
 	width: auto;
+}
+
+.formErrors ul {
+	margin-left: 20px;
+}
+
+.formErrors ul li {
+	list-style-type: square;
+	padding: 5px;
 }
 
 #formErrors h2 {
