@@ -77,6 +77,11 @@ public class PersistenceService extends FieldIdService {
 	}
 
     @Transactional
+    public void remove(Object entity) {
+        em.remove(entity);
+    }
+
+    @Transactional
     public Long count(QueryBuilder<?> searchBuilder) {
         return (Long) searchBuilder.setCountSelect().createQuery(em).getSingleResult();
     }

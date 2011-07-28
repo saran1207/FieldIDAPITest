@@ -1,16 +1,5 @@
 package com.n4systems.fieldid.wicket;
 
-import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.Response;
-import org.apache.wicket.Session;
-import org.apache.wicket.injection.web.InjectorHolder;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.spring.injection.annot.AnnotSpringInjector;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-
 import com.n4systems.fieldid.wicket.pages.HomePage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
@@ -22,6 +11,7 @@ import com.n4systems.fieldid.wicket.pages.setup.DataLogPage;
 import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
+import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
 import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
@@ -29,6 +19,16 @@ import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
+import org.apache.wicket.Page;
+import org.apache.wicket.Request;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.Response;
+import org.apache.wicket.Session;
+import org.apache.wicket.injection.web.InjectorHolder;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.spring.injection.annot.AnnotSpringInjector;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 public class FieldIDWicketApp extends WebApplication {
 
@@ -44,6 +44,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/templates", TemplatesPage.class);
         mountBookmarkablePage("setup/widgets", WidgetsPage.class);
         mountBookmarkablePage("setup/dataLog", DataLogPage.class);
+        mountBookmarkablePage("setup/systemSettings", SystemSettingsPage.class);
 
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);

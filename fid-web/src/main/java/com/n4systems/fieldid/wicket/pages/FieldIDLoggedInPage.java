@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -65,6 +66,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         storePageParameters(params);
         add(titleLabel = createTitleLabel("titleLabel"));
         titleLabel.setRenderBodyOnly(true);
+        add(createBackToLink("backToLink", "backToLinkLabel"));
         addNavBar("navBar");
         add(new Label("loggedInUsernameLabel", sessionUser.getUserName()));
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent") || sessionUser.hasAccess("editevent")));
@@ -82,6 +84,10 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, "Field ID");
+    }
+
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        return new WebMarkupContainer(linkId).setVisible(false);
     }
 
     private void addSpeedIdentifyLinks() {

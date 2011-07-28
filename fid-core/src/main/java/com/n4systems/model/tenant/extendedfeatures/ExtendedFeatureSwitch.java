@@ -4,6 +4,8 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.Transaction;
 
+// Use ExtendedFeatureService
+@Deprecated
 public abstract class ExtendedFeatureSwitch {
 	
 	protected final PrimaryOrg primaryOrg;

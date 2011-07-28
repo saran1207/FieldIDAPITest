@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
+import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -45,6 +47,16 @@ public class FieldIdAppConfig {
 	public ServiceLocator serviceLocator() { 
 		return new ServiceLocator();
 	}
+
+    @Bean
+    public SystemSettingsService systemSettingsService() {
+        return new SystemSettingsService();
+    }
+
+    @Bean
+    public ExtendedFeatureService extendedFeatureService() {
+        return new ExtendedFeatureService();
+    }
 
 	@Bean 
 	public ServiceDTOBeanConverterEJBContainer serviceDTOBeanConverter() { 

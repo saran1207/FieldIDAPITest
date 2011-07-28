@@ -8,6 +8,8 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.Transaction;
 
+// Use ExtendedFeatureService
+@Deprecated
 public class EmailAlertsSwitch extends ExtendedFeatureSwitch {
 
 	protected EmailAlertsSwitch(PrimaryOrg primaryOrg) {

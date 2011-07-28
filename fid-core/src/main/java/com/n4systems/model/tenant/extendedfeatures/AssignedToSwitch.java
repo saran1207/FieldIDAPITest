@@ -14,6 +14,8 @@ import com.n4systems.model.savedreports.SavedReportSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.Transaction;
 
+// Use ExtendedFeatureService
+@Deprecated
 public class AssignedToSwitch extends ExtendedFeatureSwitch {
 
 	protected AssignedToSwitch(PrimaryOrg primaryOrg) {
