@@ -28,6 +28,10 @@
 <@s.hidden name="uniqueID" id="uniqueID"/>
 
 <#include "_assetTypeForm.ftl"/>
-<#include "_assetSerialAndRfidForm.ftl"/>
-<#include "_assetConfigForm.ftl"/>
-
+<div class="twoColumnLeft">
+	<#include "_assetSerialAndRfidForm.ftl"/>
+	<#include "_assetConfigForm.ftl"/>
+</div>
+<div class="twoColumnRight">
+	<#include "_fileAttachment.ftl"/>
+</div>

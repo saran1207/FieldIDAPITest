@@ -22,11 +22,10 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 	
 	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload infoSet'} 
 		).insert( new Element( 'input', { 'type':'hidden', 'name':'uploadedFiles[' + frameCount + '].fileName', value:directory } ) 
-		).insert( new Element( 'label', {'class':"commentsLabel"} ).update("Attachment")
-		).insert( fileName + " " 
+		).insert( new Element( 'img', {'alt':'fileName', 'src':'images/file-icon.png', 'width': '27px'} )
+		).insert( fileName + " | " 
 		).insert( new Element( 'a', { id: frameId + "_remove", href:"javascript:void(0)" } ).update( removeText )
 		).insert( new Element( 'div', {'class':'commentContainer'} 
-			).insert( new Element( 'label', {'class':"label"} ).update( commentsText ) 
 			).insert( new Element( 'span' , {'class':"fieldHolder"}
 				).insert( new Element( 'textarea', {id: 'uploadedFiles[' + frameCount + '].comments', 'rows': '3', 'cols': '50', 'name': 'uploadedFiles[' + frameCount + '].comments'} ) )
 			)
@@ -52,7 +51,7 @@ function addUploadFile(type) {
 	}
 	
 	var frameId = 'frame_'+ frameCount;
-	var iframe = '<iframe id="' + frameId +'" class="fileUpload" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="21" ></iframe>';
+	var iframe = '<iframe id="' + frameId +'" class="fileUpload" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="100" ></iframe>';
 	$('uploadedfiles').insert( { bottom: iframe } );
 	frameCount++;
 }

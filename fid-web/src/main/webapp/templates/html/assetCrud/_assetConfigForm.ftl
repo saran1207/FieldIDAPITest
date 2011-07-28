@@ -109,6 +109,3 @@
 <#if isAddForm>
 	<#include "/templates/html/eventCrud/_schedules.ftl" />
 </#if>
-
-<#include "_fileAttachment.ftl"/>
-

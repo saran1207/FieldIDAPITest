@@ -24,6 +24,11 @@
 	overflow: hidden;
 }
 
+.fileUpload img {
+	margin-right: 10px;
+}
+
+
 .fileUpload div label {
 	float:left;
 	width:150px;
@@ -45,10 +50,6 @@
 	font-weight: bold;
 }	
 
-.uploaded{
-	padding-top: 10px;
-}
-
 .commentsLabel{
 	font-weight: bold;
 	padding: 5px 99px 5px 5px;
@@ -57,6 +58,11 @@
 .commentContainer{
 	padding-top:5px;
 }
+
+.commentContainer span textarea{
+	margin-left: 30px;
+}
+
 
 .actions .uploadActions{
 	padding-left: 5px;
@@ -67,7 +73,7 @@ div.uploadAction, #uploadedfiles div{
 }
 
 div.uploadAction{
-	padding-top: 10px;
+	padding-top: 5px;
 }
 
 .uploadAction a{

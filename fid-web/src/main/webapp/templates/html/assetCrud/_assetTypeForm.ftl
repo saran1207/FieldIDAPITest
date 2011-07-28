@@ -1,4 +1,4 @@
-<div class="assetFormGroup">
+<div class="assetFormGroup assetTypeSelection">
 	<div class="infoSet enlarged">
 		<label for="assetTypeId" class="label"><@s.text name="label.assettype"/></label>
 		<@s.select id="assetType" name="assetTypeId" onchange="updateAssetType(this)">

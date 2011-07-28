@@ -3,12 +3,21 @@
 			body {
 				text-align: left;
 			}
+			.uploadFileForm {
+				padding: 20px 10px 0 10px;
+				background-color: #F0FFFF;
+				height: 80px;
+			}			
+			.uploadMessage{
+				margin-bottom: 5px;
+			}
+			
 		</style>
 </head>	
 <#if frameId?exists >
-	
-	<@s.form method="POST" action="uploadFile" namespace="/aHtml/fileUploads" theme="simple"  enctype="multipart/form-data" style="height:20px;">
-		<label><@s.text name="label.attachment"/>:&nbsp;<label>
+	<div class="uploadFileForm">
+	<@s.form method="POST" action="uploadFile" namespace="/aHtml/fileUploads" theme="simple"  enctype="multipart/form-data">
+		<p class="uploadMessage"><@s.text name="message.attachment"/><p>
 		<@s.file name="upload" onchange="$('progress').show(); parent.startFileUpload(); this.form.submit(); parent.completedFileUpload();" />
 		<@s.hidden name="frameId"/>
 		<@s.hidden name="frameCount"/>
@@ -19,6 +28,7 @@
 		<@s.fielderror > <@s.param>upload</@s.param></@s.fielderror>
 		
 	</@s.form>
+	</div>
 <#else>
 	<@s.fielderror > <@s.param>upload</@s.param></@s.fielderror>
 </#if>	

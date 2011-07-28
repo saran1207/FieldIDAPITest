@@ -259,7 +259,7 @@
 
 #addNewSchedule {
 	margin-left: 10px;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 	font-size: 11px; 
 	
 }
@@ -282,4 +282,33 @@
 
 #nextEvent .passColor p{
 	width: 60px;
+}
+.twoColumnLeft, .twoColumnRight {
+	float : left;
+}
+
+.twoColumnLeft {
+ 	width: 670px
+}
+
+.twoColumnRight{
+	padding-left: 10px;
+	width: 320px
+}
+
+.fullForm .actions {
+	clear: both;
+	background-color: #F8F8F8;
+	padding: 15px 10px;
+	border-bottom: 1px solid #E2E2E2;
+}
+
+#attachments h2 {
+	margin-bottom: 0;
+}
+
+.assetTypeSelection{
+	background-color: #F8F8F8;
+	margin: 5px 0;
+	padding: 5px 0;
 }
