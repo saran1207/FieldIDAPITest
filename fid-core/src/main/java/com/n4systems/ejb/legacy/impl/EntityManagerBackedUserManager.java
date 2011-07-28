@@ -61,15 +61,6 @@ public class EntityManagerBackedUserManager implements UserManager {
 		this.persistenceManager = new PersistenceManagerImpl(em);
 	}
 
-//	@Override
-//	public User findUser(String tenantName, String userID, String plainTextPassword, AccountPolicy accountPolicy) {
-//		try {
-//			return findUserByPw(tenantName, userID, plainTextPassword, accountPolicy);			
-//		} catch (LoginException e) { 
-//			return null;
-//		}
-//	}
-
 	@Override	
 	public User findUserByPw(String tenantName, String userID, String plainTextPassword, TenantSettings tenantSettings) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());

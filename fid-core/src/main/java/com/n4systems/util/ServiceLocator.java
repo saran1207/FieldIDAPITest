@@ -32,6 +32,7 @@ import com.n4systems.mail.MailManager;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.notifiers.EmailNotifier;
 import com.n4systems.notifiers.Notifier;
+import com.n4systems.services.SecurityContext;
 
 public class ServiceLocator implements ApplicationContextAware {
 
@@ -113,10 +114,15 @@ public class ServiceLocator implements ApplicationContextAware {
 		return new EmailNotifier(getMailManager());
 	}
 
+	public static SecurityContext getSecurityContext() {
+		return getBean(SecurityContext.class);
+	}
+
 	private static <T> T getBean(Class<T> clazz) {
 		Map<String, T> beans = applicationContext.getBeansOfType(clazz);		
 		if (beans.size()==1)  { 
-			return beans.values().iterator().next();
+			T bean = beans.values().iterator().next();			
+			return bean;
 		} else { 
 			throw new NoSuchBeanDefinitionException(clazz, "can't find bean instance of " + clazz.getSimpleName() + "  ("+beans.size()+")");			 
 		}
@@ -126,4 +132,5 @@ public class ServiceLocator implements ApplicationContextAware {
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		ServiceLocator.applicationContext = applicationContext; 
 	}
+
 }

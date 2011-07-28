@@ -7,6 +7,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
+import com.n4systems.util.WsServiceLocator;
 import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 
@@ -20,14 +21,11 @@ public class WebServiceAuthenticator {
 	}
 	
 	public AuthenticationResponse authenticate() {
-		
-		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-		
-		
 		if (passesMinimumMobileVersion()) {
 			User loginUser = getUserIfValid();
 			
 			if (loginUser != null) {
+				ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(loginUser.getTenant().getId());	
 				authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.SUCCESSFUL);
 				authenticationResponse.setUser(converter.convert(loginUser));
 				authenticationResponse.setTenant(converter.convert(loginUser.getOwner().getPrimaryOrg()));

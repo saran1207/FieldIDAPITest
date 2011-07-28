@@ -94,6 +94,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.TransactionSupervisor;
+import com.n4systems.util.WsServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.ModelToServiceConverterFactory;
@@ -157,7 +158,7 @@ public class DataServiceImpl implements DataService {
 
 	private RequestHandlerFactory createResponseHandlerFactory(RequestInformation request) {
 		LoaderFactory loaderFactory = createLoaderFactory(request);
-		ModelToServiceConverterFactory converterFactory = new ModelToServiceConverterFactory(loaderFactory, ServiceLocator.getServiceDTOBeanConverter());
+		ModelToServiceConverterFactory converterFactory = new ModelToServiceConverterFactory(loaderFactory, WsServiceLocator.getServiceDTOBeanConverter(request.getTenantId()));
 		RequestHandlerFactory handlerFactory = new RequestHandlerFactory(ConfigContext.getCurrentContext(), loaderFactory, converterFactory);
 		return handlerFactory;
 	}
@@ -207,10 +208,11 @@ public class DataServiceImpl implements DataService {
 		try {
 			InspectionBookListResponse response = new InspectionBookListResponse();
 
-			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			long tenantId = paginatedRequestInformation.getTenantId();
+			PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
 
-			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(tenantId);
 			QueryBuilder<EventBook> queryBuilder = new QueryBuilder<EventBook>(EventBook.class, securityFilter);
 			queryBuilder.setSimpleSelect();
 
@@ -239,10 +241,11 @@ public class DataServiceImpl implements DataService {
 		try {
 			ProductTypeListResponse response = new ProductTypeListResponse();
 
-			LegacyAssetType assetTypeManager = ServiceLocator.getAssetType();
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			long tenantId = paginatedRequestInformation.getTenantId();
+			LegacyAssetType assetTypeManager = WsServiceLocator.getAssetType(tenantId);
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
 
-			List<AssetType> assetTypes = assetTypeManager.getAssetTypesForTenant(paginatedRequestInformation.getTenantId());
+			List<AssetType> assetTypes = assetTypeManager.getAssetTypesForTenant(tenantId);
 
 			for (AssetType assetType : assetTypes) {
 				response.getProductTypes().add(converter.convert_new(assetType));
@@ -265,8 +268,9 @@ public class DataServiceImpl implements DataService {
 		try {
 			ProductTypeGroupListResponse response = new ProductTypeGroupListResponse();
 
-			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			Long tenantId = paginatedRequestInformation.getTenantId();
+			PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
 
 			SecurityFilter securityFilter = new TenantOnlySecurityFilter(paginatedRequestInformation.getTenantId());
 			QueryBuilder<AssetTypeGroup> queryBuilder = new QueryBuilder<AssetTypeGroup>(AssetTypeGroup.class, securityFilter);
@@ -296,14 +300,15 @@ public class DataServiceImpl implements DataService {
 		try {
 			JobListResponse response = new JobListResponse();
 
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+			long tenantId = request.getTenantId();
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
+			PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
 
 			int currentPage = request.getPageNumber().intValue();
 
 			Date modified = DtoDateConverter.convertStringToDate(request.getModified());
 
-			SecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(tenantId);
 			QueryBuilder<Project> jobBuilder = new QueryBuilder<Project>(Project.class, securityFilter);
 			jobBuilder.addWhere(Comparator.EQ, "eventjob", "eventJob", true);
 			jobBuilder.addWhere(Comparator.EQ, "open", "open", true);
@@ -377,9 +382,10 @@ public class DataServiceImpl implements DataService {
 	public CustomerOrgListResponse getAllCustomerOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
 		try {
 			int currentPage = requestInformation.getPageNumber().intValue();
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			long tenantId = requestInformation.getTenantId();
+			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(tenantId));
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
 
-			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
 			CustomerOrgWithArchivedPaginatedLoader loader = loaderFactory.createCustomerOrgWithArchivedPaginatedLoader();
 			loader.setPageSize(getSetupDataPageSize());
 			loader.setPage(currentPage);
@@ -405,9 +411,10 @@ public class DataServiceImpl implements DataService {
 	public DivisionOrgListResponse getAllDivisionOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
 		try {
 			int currentPage = requestInformation.getPageNumber().intValue();
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			long tenantId = requestInformation.getTenantId();
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
 
-			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
+			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(tenantId));
 			DivisionOrgPaginatedLoader loader = loaderFactory.createDivisionOrgPaginatedLoader();
 			loader.setPageSize(getSetupDataPageSize());
 			loader.setPage(currentPage);
@@ -432,7 +439,7 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public VendorListResponse getAllVendors(PaginatedRequestInformation requestInformation) throws ServiceException {
 		try {
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(requestInformation.getTenantId());
 
 			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
 			TenantWideVendorOrgConnPaginatedLoader connectionLoader = loaderFactory.createTenantWideVendorOrgConnPaginatedLoader();
@@ -458,9 +465,9 @@ public class DataServiceImpl implements DataService {
 	public InternalOrgListResponse getAllInternalOrgs(PaginatedRequestInformation requestInformation) throws ServiceException {
 		try {
 			int currentPage = requestInformation.getPageNumber().intValue();
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-
-			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(requestInformation.getTenantId()));
+			long tenantId = requestInformation.getTenantId();
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
+			LoaderFactory loaderFactory = new LoaderFactory(new TenantOnlySecurityFilter(tenantId));
 			SecondaryOrgPaginatedLoader secondaryLoader = loaderFactory.createSecondaryOrgPaginatedLoader();
 			secondaryLoader.setPageSize(getSetupDataPageSize());
 			secondaryLoader.setPage(currentPage);
@@ -481,7 +488,7 @@ public class DataServiceImpl implements DataService {
 
 			if (response.getCurrentPage() >= response.getTotalPages()) {
 				PrimaryOrgByTenantLoader primaryLoader = loaderFactory.createPrimaryOrgByTenantLoader();
-				primaryLoader.setTenantId(requestInformation.getTenantId());
+				primaryLoader.setTenantId(tenantId);
 				PrimaryOrg primaryOrg = primaryLoader.load();
 
 				response.getInternalOrgs().add(converter.convert((InternalOrg) primaryOrg));
@@ -496,7 +503,8 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public RequestResponse limitedProductUpdate(LimitedProductUpdateRequest request) throws ServiceException {
-		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+		Long tenantId = request.getTenantId();
+		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId );
 		ProductLookupInformation lookupInformation = request.getProductLookupInformation();
 		
 		UserContext uc = ThreadLocalUserContext.getInstance();
@@ -529,8 +537,9 @@ public class DataServiceImpl implements DataService {
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException {
 		UserContext uc = ThreadLocalUserContext.getInstance();
 		try {
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+			long tenantId = request.getTenantId();
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
+			PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
 			
 			User user = null;
 			if (request.modifiedByIdExists()) {
@@ -565,7 +574,7 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {
 		try {
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(request.getTenantId());
 			EventSchedule eventSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
 
 			new InspectionScheduleCreateHandler(new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())), new FilteredIdLoader<Asset>(
@@ -615,7 +624,7 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private Asset lookupProduct(ProductLookupable productLookupableDto, Long tenantId) {
-		AssetManager assetManager = ServiceLocator.getAssetManager();
+		AssetManager assetManager = WsServiceLocator.getAssetManager(tenantId);
 
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
@@ -636,9 +645,8 @@ public class DataServiceImpl implements DataService {
 			RequestResponse response = new RequestResponse();
 			response.setStatus(ResponseStatus.OK);
 
-			OrderManager orderManager = ServiceLocator.getOrderManager();
-
 			long tenantId = requestInformation.getTenantId();
+			OrderManager orderManager = WsServiceLocator.getOrderManager(tenantId);
 			Asset existingAsset = lookupProduct(productDTO, tenantId);
 
 			if (existingAsset == null) {
@@ -701,7 +709,7 @@ public class DataServiceImpl implements DataService {
 			}
 			
 			PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-			LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
+			LegacyAsset productManager = WsServiceLocator.getLegacyAssetManager(requestInformation.getTenantId());
 
 			if (isTransactionCompleted(requestInformation)) {
 				return response;
@@ -724,13 +732,12 @@ public class DataServiceImpl implements DataService {
 			asset = productManager.createAssetWithServiceTransaction(requestInformation.getMobileGuid(), asset, asset.getModifiedBy());
 
 			// createAssetWithServiceTransaction no longer auto-schedules as of 2011.2
-			ServiceLocator.getEventScheduleManager().autoSchedule(asset);
+			WsServiceLocator.getEventScheduleManager(requestInformation.getTenantId()).autoSchedule(asset);
 			
 			// create any new subproducts (this is not currently used by mobile
 			// (sub products come up attached to inspections))
 			if (productDTO.getSubProducts() != null && productDTO.getSubProducts().size() > 0) {
-				List<SubAsset> subAssets = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), asset,
-						requestInformation.getVersionNumber());
+				List<SubAsset> subAssets = lookupOrCreateSubProducts(requestInformation.getTenantId(), productDTO.getSubProducts(), asset);
 				if (subAssets.size() > 0) {
 					/*
 					 * Note: the list of SubProducts on Asset is marked as
@@ -771,7 +778,7 @@ public class DataServiceImpl implements DataService {
 		productDTO = fixModifyByFromOldVersionsOfMobile(productDTO);
 
 		Asset asset = new Asset();
-		OrderManager orderManager = ServiceLocator.getOrderManager();
+		OrderManager orderManager = WsServiceLocator.getOrderManager(tenantId);
 
 		ProductServiceDTOConverter converter = createProductServiceDTOConverter(tenantId);
 		asset = converter.convert(productDTO, asset);
@@ -801,7 +808,7 @@ public class DataServiceImpl implements DataService {
 
 	private Asset createProduct(ProductServiceDTO productDTO, Long tenantId) throws Exception {
 		PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
-		LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
+		LegacyAsset productManager = WsServiceLocator.getLegacyAssetManager(tenantId);
 
 		Asset asset = convertNewProduct(tenantId, productDTO);
 
@@ -840,8 +847,8 @@ public class DataServiceImpl implements DataService {
 				Long tenantId = requestInformation.getTenantId();
 				PopulatorLogger populatorLogger = PopulatorLogger.getInstance();
 				InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
-				LegacyAsset productManager = ServiceLocator.getLegacyAssetManager();
-				EventScheduleManager scheduleManager = ServiceLocator.getEventScheduleManager();
+				LegacyAsset productManager = WsServiceLocator.getLegacyAssetManager(tenantId);
+				EventScheduleManager scheduleManager = WsServiceLocator.getEventScheduleManager(tenantId);
 	
 				List<Event> events = new ArrayList<Event>();
 				Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
@@ -855,7 +862,7 @@ public class DataServiceImpl implements DataService {
 	
 					// lets look up or create all newly attached sub products and
 					// attach to asset
-					List<SubAsset> subAssets = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset, requestInformation.getVersionNumber());
+					List<SubAsset> subAssets = lookupOrCreateSubProducts(tenantId, inspectionServiceDTO.getNewSubProducts(), asset);
 					updateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets);
 	
 					// we also need to get the asset for any sub-inspections
@@ -940,7 +947,7 @@ public class DataServiceImpl implements DataService {
 	private void updateSubProducts(LegacyAsset productManager, Long tenantId, Asset asset, InspectionServiceDTO inspectionServiceDTO, List<SubAsset> subAssets)
 			throws SubAssetUniquenessException {
 
-		new UpdateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets, ServiceLocator.getAssetManager()).run();
+		new UpdateSubProducts(productManager, tenantId, asset, inspectionServiceDTO, subAssets, WsServiceLocator.getAssetManager(tenantId)).run();
 
 	}
 
@@ -951,8 +958,8 @@ public class DataServiceImpl implements DataService {
 
 		Long tenantId = requestInformation.getTenantId();
 
-		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+		ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
+		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
 
 		UserContext uc = ThreadLocalUserContext.getInstance();
 		try {
@@ -999,7 +1006,7 @@ public class DataServiceImpl implements DataService {
 		return response;
 	}
 
-	private List<SubAsset> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Asset masterAsset, long apiVersion)
+	private List<SubAsset> lookupOrCreateSubProducts(Long tenantId, List<SubProductMapServiceDTO> subProductMaps, Asset masterAsset)
 			throws Exception {
 
 		List<SubAsset> subAssets = new ArrayList<SubAsset>();
@@ -1007,8 +1014,8 @@ public class DataServiceImpl implements DataService {
 		if (subProductMaps == null)
 			return subAssets;
 
-		AssetManager assetManager = ServiceLocator.getAssetManager();
-		PersistenceManager persistenceManager = ServiceLocator.getPersistenceManager();
+		AssetManager assetManager = WsServiceLocator.getAssetManager(tenantId);
+		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 		
 		for (SubProductMapServiceDTO subProductMap : subProductMaps) {
@@ -1048,8 +1055,8 @@ public class DataServiceImpl implements DataService {
 		Asset asset = null;
 		if (inspectionServiceDTO.productIdExists()) {
 			try {
-				asset = ServiceLocator.getAssetManager().findAsset(inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter(tenantId));
-				asset = ServiceLocator.getAssetManager().fillInSubAssetsOnAsset(asset);
+				asset = WsServiceLocator.getAssetManager(tenantId).findAsset(inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter(tenantId));
+				asset = WsServiceLocator.getAssetManager(tenantId).fillInSubAssetsOnAsset(asset);
 			} catch (Exception e) {
 				logger.error("looking up asset with asset id " + inspectionServiceDTO.getProductId(), e);
 			}
@@ -1057,7 +1064,7 @@ public class DataServiceImpl implements DataService {
 		} else if (inspectionServiceDTO.productMobileGuidExists()) {
 			// Try looking up by GUID
 			try {
-				asset = ServiceLocator.getAssetManager().findAssetByGUID(inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter(tenantId));
+				asset = WsServiceLocator.getAssetManager(tenantId).findAssetByGUID(inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter(tenantId));
 			} catch (Exception e) {
 				logger.error("Looking up asset serial by GUID = " + inspectionServiceDTO.getProductMobileGuid(), e);
 			}
@@ -1084,8 +1091,9 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public FindProductResponse findProduct(FindProductRequestInformation requestInformation) throws ServiceException {
 		try {
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			SecurityFilter securityFilter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
+			long tenantId = requestInformation.getTenantId();
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
+			SecurityFilter securityFilter = new TenantOnlySecurityFilter(tenantId);
 			SmartSearchLoader smartSearchLoader = new SmartSearchLoader(securityFilter);
 			AssetSubAssetsLoader subAssetLoader = new AssetSubAssetsLoader(securityFilter);
 			RealTimeAssetLookupHandler realTimeAssetLookupHandler = new RealTimeAssetLookupHandler(smartSearchLoader, subAssetLoader);
@@ -1109,8 +1117,9 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public FindInspectionResponse findInspection(FindInspectionRequestInformation requestInformation) throws ServiceException {
 		try {
-			ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
-			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(requestInformation.getTenantId());
+			long tenantId = requestInformation.getTenantId();
+			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
+			TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 			NewestEventsForAssetIdLoader loader = new NewestEventsForAssetIdLoader(filter);
 			RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(loader);
 
@@ -1148,7 +1157,7 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public SetupDataLastModDatesServiceDTO getSetupDataLastModDates(RequestInformation requestInformation) throws ServiceException {
-		ServiceDTOBeanConverter converter = ServiceLocator.getServiceDTOBeanConverter();
+		ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(requestInformation.getTenantId());
 
 		SetupDataLastModDatesLoader loader = createLoaderFactory(requestInformation).createSetupDataLastModDatesLoader();
 
