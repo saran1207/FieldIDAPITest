@@ -311,7 +311,6 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);
@@ -323,11 +322,9 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			// override passwordPolicy.  kludge while this EJB legacy code hasn't been springified.
-			createManager(transaction.getEntityManager()).updatePassword(rUser, newPassword, tenantSettingsService.getTenantSettings().getPasswordPolicy());
+			createManager(transaction.getEntityManager()).updatePassword(rUser, newPassword, passwordPolicy);
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
-
 			throw e;
 		} finally {
 			transactionManager.finishTransaction(transaction);

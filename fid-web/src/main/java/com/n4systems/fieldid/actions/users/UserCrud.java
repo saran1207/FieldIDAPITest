@@ -257,7 +257,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		try {
 
 			if (user.getId() == null) {
-				user.assignPassword(passwordEntry.getPassword());
+				user.updatePassword(passwordEntry.getPassword());
 				user.assignSecruityCardNumber(securityCardNumber);
 				new UserSaver().save(user);
 				uniqueID = user.getId();				

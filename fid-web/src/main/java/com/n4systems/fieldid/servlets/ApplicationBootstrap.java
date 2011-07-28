@@ -6,9 +6,6 @@ import javax.servlet.http.HttpServlet;
 import org.apache.log4j.Logger;
 
 import com.n4systems.services.Initializer;
-import com.n4systems.services.RemoteOrderManagerServiceInitializer;
-import com.n4systems.taskscheduling.TaskSchedulerBootstrapper;
-import com.n4systems.taskscheduling.task.SignUpPackageSyncTaskInitializer;
 
 public class ApplicationBootstrap extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -26,9 +23,10 @@ public class ApplicationBootstrap extends HttpServlet {
 	//	 }
 	
 	private static final Initializer[] initializers = {
-		new TaskSchedulerBootstrapper(),
-		new SignUpPackageSyncTaskInitializer(),
-		new RemoteOrderManagerServiceInitializer()
+// DO NOT CHECKIN...just disabling because it screws up my local environment. DD		
+//		new TaskSchedulerBootstrapper(),
+//		new SignUpPackageSyncTaskInitializer(),		
+//		new RemoteOrderManagerServiceInitializer()
 	};
 	
 	private static Logger logger = Logger.getLogger(ApplicationBootstrap.class);

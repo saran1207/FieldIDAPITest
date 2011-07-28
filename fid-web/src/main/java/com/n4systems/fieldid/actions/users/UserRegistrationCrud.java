@@ -75,7 +75,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 		userAccount.assignPassword(password);
 		userRequest.setTenant(getTenant());
 		userRequest.setUserAccount(userAccount);
-
+		
 		try {
 			userManager.saveUserRequest(userRequest, userAccount);
 		} catch (DuplicateUserException duplicateUser) {
@@ -225,6 +225,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 		country = TimeZoneSelectionHelper.getCountryById(countryId);
 	}
 	
+	@Override
 	public boolean duplicateValueExists(String formValue) {
 		return !userManager.userIdIsUnique(getTenantId(), formValue);
 	}

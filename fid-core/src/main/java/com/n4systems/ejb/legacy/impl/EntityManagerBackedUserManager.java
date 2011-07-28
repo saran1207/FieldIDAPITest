@@ -49,7 +49,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	protected EntityManager em;
 
 	private PersistenceManager persistenceManager;
-	   
+		   
 		
 	public EntityManagerBackedUserManager() {
 	}
@@ -207,10 +207,10 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	@Override
-	public void updatePassword(Long rUser, String newPlainTextPassword, PasswordPolicy passwordPolicy) {
-		User user = em.find(User.class, rUser);
-		// FIXME DD : need to know size of pw history.  read this from tenant config and restrict.
-		user.assignPassword(newPlainTextPassword, passwordPolicy.getExpiryDays());
+	public void updatePassword(Long rUser, String newPlainTextPassword, PasswordPolicy passwordPolicy) {		
+		User user = em.find(User.class, rUser);		
+		user.updatePassword(newPlainTextPassword);
+		user.setPasswordExpiryInDays(passwordPolicy.getExpiryDays());		
 	}
 
 	@Override

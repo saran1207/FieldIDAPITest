@@ -45,7 +45,7 @@ public class UserToModelConverter extends AbstractViewToModelConverter<User, Use
 		}
 		if (YNField.isYes(from.getAssignPassword())) { 
 			to.assignPassword(from.getPassword());
-		}
+		}		
 		// TODO DD : setCreatedBy(theUser);
 	}
 

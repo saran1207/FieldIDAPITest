@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.MinimumValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
@@ -41,8 +42,8 @@ public class PasswordPolicyPage extends SetupPage {
             add(addIntegerRangeTextField("minNumbers",0,100));
             add(addIntegerRangeTextField("minSymbols",0,100));
             add(addIntegerRangeTextField("minCapitals",0,100));
-            add(addIntegerRangeTextField("expiryDays",0,Integer.MAX_VALUE));
-            add(addIntegerRangeTextField("uniqueness",0,100));
+            add(addIntegerRangeTextField("expiryDays",0));
+            add(addIntegerRangeTextField("uniqueness",0));
             
             add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;
@@ -65,10 +66,17 @@ public class PasswordPolicyPage extends SetupPage {
             });
             
         }
-
-		private TextField<Integer> addIntegerRangeTextField(String id, int min, int max) {
+		private TextField<Integer> addIntegerRangeTextField(String id, Integer min) {
+			return addIntegerRangeTextField(id, min, null);
+		}
+		
+		private TextField<Integer> addIntegerRangeTextField(String id, Integer min, Integer max) {
 			TextField<Integer> textField = new TextField<Integer>(id, Integer.class);
-			textField.add(new RangeValidator<Integer>(min,max));
+			if (max==null) { 
+				textField.add(new MinimumValidator<Integer>(min));
+			} else { 
+				textField.add(new RangeValidator<Integer>(min,max));
+			}
 			textField.setRequired(true);
 			return textField;
 		}

@@ -42,16 +42,16 @@ public class PasswordPolicy implements Serializable {
 		this.minCapitals = minCapitals;
 	}
 	public Integer getExpiryDays() {
-		return expiryDays;
+		return expiryDays == 0 ? null : expiryDays;
 	}
 	public void setExpiryDays(Integer expiryDays) {
-		this.expiryDays = expiryDays==null || expiryDays==0 ? null : expiryDays;
+		this.expiryDays = expiryDays;
 	}
 	public void setUniqueness(Integer uniqueness) {
 		this.uniqueness = uniqueness;
 	}
 	public Integer getUniqueness() {
-		return uniqueness;
+		return uniqueness == 0 ? null : uniqueness;
 	}
 	
 	@Override

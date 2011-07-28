@@ -18,7 +18,6 @@ import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.time.SystemClock;
 
 public class SignInAction extends AbstractAction {
@@ -61,10 +60,7 @@ public class SignInAction extends AbstractAction {
 		signIn.populateFromRememberMe(createCookieFactory());
 	}
 
-	public String doCreate() {
-		
-		ServiceLocator.getPersistenceManager();
-		
+	public String doCreate() {		
 		User loginUser = null;
 
 		if (!signIn.isValid(this)) {

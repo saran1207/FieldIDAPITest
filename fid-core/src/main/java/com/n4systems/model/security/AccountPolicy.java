@@ -26,10 +26,10 @@ public class AccountPolicy implements Serializable {
 		this.maxAttempts = maxAttempts;
 	}
 	public Integer getLockoutDuration() {
-		return lockoutDuration;
+		return lockoutDuration == 0 ? null : lockoutDuration;
 	}
 	public void setLockoutDuration(Integer lockoutDuration) {
-		this.lockoutDuration = lockoutDuration==0 ? null : lockoutDuration;
+		this.lockoutDuration = lockoutDuration;
 	}
 	
 }

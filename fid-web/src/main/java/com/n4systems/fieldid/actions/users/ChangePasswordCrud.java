@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.actions.users;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,11 @@ public class ChangePasswordCrud extends AbstractCrud {
 	
 	protected UserManager userManager;
 	protected User user;
-	
+
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
+	
+		
 	
 	private String originalPassword;
 	private String newPassword;
@@ -81,13 +85,12 @@ public class ChangePasswordCrud extends AbstractCrud {
 															passwordPolicy.getMinCapitals(),
 															passwordPolicy.getMinNumbers(), 
 															passwordPolicy.getMinSymbols());
-		if ( passwordChecker.isValid(newPassword) ) { 
-			userManager.updatePassword( user.getId(), newPassword, null );
-			logger.info( "password updated for " + getSessionUser().getUserID() );
-			addFlashMessageText( "message.passwordupdated" );			
-			getSession().remove( "passwordReset" );
-			return SUCCESS;
-		} else {		
+		
+		if (passwordUniquenessIsValid(user, newPassword, passwordPolicy)) {
+			addActionErrorText("error.password_unique", passwordPolicy.getUniqueness()+"" );										
+			return ERROR;			
+		}
+		if ( !passwordChecker.isValid(newPassword) ) { 
 			addActionErrorText("error.password_policy", passwordChecker.getMinLength()+"",
 					passwordChecker.getMinUpperAlpha()+"",
 					passwordChecker.getMinLowerAlpha()+"", 
@@ -95,9 +98,25 @@ public class ChangePasswordCrud extends AbstractCrud {
 					passwordChecker.getMinPunctuation()+"" );										
 			return ERROR;
 		}
-			
+		
+		userManager.updatePassword( user.getId(), newPassword, passwordPolicy);
+		logger.info( "password updated for " + getSessionUser().getUserID() );
+		addFlashMessageText( "message.passwordupdated" );			
+		getSession().remove( "passwordReset" );
+		return SUCCESS;			
 	}	
 	
+	private boolean passwordUniquenessIsValid(User user, String newPassword, PasswordPolicy passwordPolicy) {
+		if (passwordPolicy.getUniqueness()==null) { 
+			return true;
+		}
+		List<String> previousPasswords = user.getPreviousPasswords();
+		int start = Math.max(0, previousPasswords.size()-passwordPolicy.getUniqueness());
+		previousPasswords = previousPasswords.subList(start, previousPasswords.size());
+		
+		return previousPasswords.contains(User.hashPassword(newPassword));
+	}
+
 	private PasswordPolicy getPasswordPolicy() {
 		return tenantSettingsService.getTenantSettings().getPasswordPolicy();
 	}

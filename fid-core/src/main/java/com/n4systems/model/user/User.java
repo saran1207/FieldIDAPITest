@@ -1,16 +1,25 @@
 package com.n4systems.model.user;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
+
+import org.apache.commons.lang.time.DateUtils;
 
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
@@ -58,15 +67,12 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private Date passwordExpiry;
 	
 	
-//	@ElementCollection(fetch = FetchType.EAGER)
-//	@Enumerated(EnumType.STRING)
-//	@JoinTable(
-//            name = "org_extendedfeatures",
-//            joinColumns = @JoinColumn(name="user_id")
-//    )
-//    @MapKeyColumn(name = "date")
-//    @Column(name="password", nullable=false)
-//	private Map<Date,String> previousPasswords = new TreeMap<Date,String>();
+	
+	@Column(name="password", nullable=false)
+	@ElementCollection(fetch=FetchType.EAGER)
+	@JoinTable(name="user_previous_pw", joinColumns = @JoinColumn(name="userId"))
+	@OrderBy("id")
+	private List<String> previousPasswords = new ArrayList<String>();
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=false)
@@ -213,28 +219,17 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	 */
 	public void assignPassword(String plainTextPassword) {
 		this.hashPassword = hashPassword(plainTextPassword);
+	}
+	
+	/**
+	 * call this when you are giving the user a new password. (as opposed to just assigning it via some User creator for example).
+	 * it takes care of associated housekeeping. 
+	 */
+	public void updatePassword(String plainTextPassword) {
+		addPreviousPassword();
+		assignPassword(plainTextPassword);
 		unlock();
 	}
-
-//	public void addPreviousPassword(String hashPassword, int max) {
-//		previousPasswords.put(new Date(), hashPassword);
-//		int removeCount = Math.max(0,previousPasswords.size() - max);
-//		// Note : it's possible we could have more than one to remove.
-//		for (Date key:previousPasswords.keySet()) { 
-//			if (removeCount>0) { 
-//				previousPasswords.remove(key);
-//				removeCount--;
-//			} else {
-//				return;
-//			}
-//		}
-////		Preconditions.checkState(previousPasswords.size()<=max);		
-//	}
-
-
-//	public void setPreviousPasswords(Map<Date,String> previousPasswords) {
-//		this.previousPasswords = new TreeMap<Date,String>(previousPasswords);
-//	}
 
 	public void assignSecruityCardNumber(String rfidNumber) {
 		this.hashSecurityCardNumber = (rfidNumber == null || rfidNumber.length() == 0) ? null : hashSecurityCardNumber(rfidNumber);
@@ -434,18 +429,14 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		setFailedLoginAttempts(0);		
 	}
 
-	public void assignPassword(String newPlainTextPassword, Integer expiryDays) {
-		assignPassword(newPlainTextPassword);
-		setPasswordExpiryInDays(expiryDays);
-	}
-
-	private void setPasswordExpiryInDays(Integer expiryDays) {
-		if (expiryDays==null || expiryDays==0) {
+	public void setPasswordExpiryInDays(Integer expiryDays) {
+		if (expiryDays==null) {
 			setPasswordExpiry(null);
-		} else { 
-			Calendar now = Calendar.getInstance();
-			now.add(Calendar.DATE, expiryDays);
-			setPasswordExpiry(now.getTime());
+		} else {
+			Calendar expiry = Calendar.getInstance();
+			DateUtils.truncate(expiry, Calendar.DATE);
+			expiry.add(Calendar.DATE, expiryDays);
+			setPasswordExpiry(expiry.getTime());
 		}
 	}
 
@@ -461,5 +452,36 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		// CAVEAT : transient method!
 		return getPasswordExpiry()!=null && new Date().after(getPasswordExpiry());
 	}
+
+	public void setPreviousPasswords(List<String> previousPasswords) {
+		this.previousPasswords = previousPasswords;
+	}
+
+	public List<String> getPreviousPasswords() {
+		return previousPasswords;
+	}
+	
+	public void addPreviousPassword() {
+		if (hashPassword!=null) { 
+			previousPasswords.add(hashPassword);
+		}
+	}
+	
+//	public void trimPreviousPasswords(String hashPassword, int max) {
+//	previousPasswords.put(new Date(), hashPassword);
+//	int removeCount = Math.max(0,previousPasswords.size() - max);
+//	// Note : it's possible we could have more than one to remove.
+//	for (Date key:previousPasswords.keySet()) { 
+//		if (removeCount>0) { 
+//			previousPasswords.remove(key);
+//			removeCount--;
+//		} else {
+//			return;
+//		}
+//	}
+////	Preconditions.checkState(previousPasswords.size()<=max);		
+//}
+
+	
 	
 }

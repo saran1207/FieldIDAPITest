@@ -4,9 +4,11 @@ import javax.mail.MessagingException;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.user.User;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -23,6 +25,9 @@ public class ForgotPasswordAction extends SignInAction {
     private String newPassword;
     private String confirmPassword;
 	private Long uniqueID;
+	
+	@Autowired
+	TenantSettingsService tenantSettingsService;
 	
 	public ForgotPasswordAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
@@ -65,8 +70,10 @@ public class ForgotPasswordAction extends SignInAction {
         if (user == null) {
             return MISSING;
         }
+        
+        // FIXME DD : check for pw uniqueness here!
 
-        userManager.updatePassword( user.getId(), newPassword, null);
+        userManager.updatePassword( user.getId(), newPassword, tenantSettingsService.getTenantSettings().getPasswordPolicy());
         addFlashMessageText("message.passwordresetsuccess");
         return SUCCESS;
 	}
