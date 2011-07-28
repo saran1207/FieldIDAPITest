@@ -2,7 +2,6 @@ package com.n4systems.model.user;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -18,8 +17,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-
-import org.apache.commons.lang.time.DateUtils;
 
 import com.n4systems.model.api.Exportable;
 import com.n4systems.model.api.Listable;
@@ -64,7 +61,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private String hashSecurityCardNumber;
 	private Boolean locked;
 	private Date lockedUntil;
-	private Date passwordExpiry;
+	private Date passwordChanged;
 	
 	
 	
@@ -228,6 +225,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	public void updatePassword(String plainTextPassword) {
 		addPreviousPassword();
 		assignPassword(plainTextPassword);
+		setPasswordChanged(new Date());
 		unlock();
 	}
 
@@ -429,28 +427,12 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		setFailedLoginAttempts(0);		
 	}
 
-	public void setPasswordExpiryInDays(Integer expiryDays) {
-		if (expiryDays==null) {
-			setPasswordExpiry(null);
-		} else {
-			Calendar expiry = Calendar.getInstance();
-			DateUtils.truncate(expiry, Calendar.DATE);
-			expiry.add(Calendar.DATE, expiryDays);
-			setPasswordExpiry(expiry.getTime());
-		}
+	public void setPasswordChanged(Date passwordChanged) {
+		this.passwordChanged = passwordChanged;
 	}
 
-	public void setPasswordExpiry(Date passwordExpiry) {
-		this.passwordExpiry = passwordExpiry;
-	}
-
-	public Date getPasswordExpiry() {
-		return passwordExpiry;
-	}
-
-	public boolean isPasswordExpired() {
-		// CAVEAT : transient method!
-		return getPasswordExpiry()!=null && new Date().after(getPasswordExpiry());
+	public Date getPasswordChanged() {
+		return passwordChanged;
 	}
 
 	public void setPreviousPasswords(List<String> previousPasswords) {
@@ -466,22 +448,5 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 			previousPasswords.add(hashPassword);
 		}
 	}
-	
-//	public void trimPreviousPasswords(String hashPassword, int max) {
-//	previousPasswords.put(new Date(), hashPassword);
-//	int removeCount = Math.max(0,previousPasswords.size() - max);
-//	// Note : it's possible we could have more than one to remove.
-//	for (Date key:previousPasswords.keySet()) { 
-//		if (removeCount>0) { 
-//			previousPasswords.remove(key);
-//			removeCount--;
-//		} else {
-//			return;
-//		}
-//	}
-////	Preconditions.checkState(previousPasswords.size()<=max);		
-//}
-
-	
 	
 }

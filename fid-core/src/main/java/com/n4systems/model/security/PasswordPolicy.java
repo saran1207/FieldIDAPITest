@@ -42,7 +42,7 @@ public class PasswordPolicy implements Serializable {
 		this.minCapitals = minCapitals;
 	}
 	public Integer getExpiryDays() {
-		return expiryDays == 0 ? null : expiryDays;
+		return expiryDays;
 	}
 	public void setExpiryDays(Integer expiryDays) {
 		this.expiryDays = expiryDays;

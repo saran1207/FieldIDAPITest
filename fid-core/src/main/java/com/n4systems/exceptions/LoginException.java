@@ -14,7 +14,7 @@ public class LoginException extends RuntimeException {
 	public LoginException(User user, String userId, int maxAttempts, Integer duration) { 
 		super("user " + userId + " failed to log into system");
 		attempts = 1;
-		this.duration = (duration!=null && !duration.equals(0)) ? duration : null;  // recall : 0 treated as no duration. 
+		this.duration = duration==0 ? null : duration;  // recall : 0 treated as no duration. 
 		this.maxAttempts = maxAttempts;
 		this.userId = userId;
 		locked = user==null ? false : user.isLocked();		

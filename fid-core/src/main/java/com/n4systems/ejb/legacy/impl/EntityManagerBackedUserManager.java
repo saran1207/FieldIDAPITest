@@ -210,7 +210,6 @@ public class EntityManagerBackedUserManager implements UserManager {
 	public void updatePassword(Long rUser, String newPlainTextPassword, PasswordPolicy passwordPolicy) {		
 		User user = em.find(User.class, rUser);		
 		user.updatePassword(newPlainTextPassword);
-		user.setPasswordExpiryInDays(passwordPolicy.getExpiryDays());		
 	}
 
 	@Override
