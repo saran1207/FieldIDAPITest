@@ -3,7 +3,13 @@
 	<#if page?exists>
 		<#if page.validPage() && !page.list.isEmpty()  >
 			<#include '../common/_pagination.ftl' />
-			<h2 class="clean"><@s.text name="label.found_multiple_assets"/></h2>
+			<h2 class="clean">
+				<#if (page.totalResults > 1)>
+					<@s.text name="label.found_multiple_assets"/>
+				<#else>
+					&nbsp;
+				</#if>
+			</h2>
 			<div id="resultsTable">
 				<table class="list">
 					<tr>

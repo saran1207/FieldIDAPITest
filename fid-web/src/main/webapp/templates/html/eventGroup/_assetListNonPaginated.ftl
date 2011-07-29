@@ -3,7 +3,13 @@
 
 <#if assets?exists >
 	<#if !assets.isEmpty() >
-		<h2 class="clean"><@s.text name="label.found_multiple_assets"/></h2>
+		<h2 class="clean">
+			<#if (assets.size > 1)>
+				<@s.text name="label.found_multiple_assets"/>
+			<#else>
+				&nbsp;
+			</#if>
+		</h2>
 		<div id="resultsTable">
 			<table class="list">
 				<tr>
