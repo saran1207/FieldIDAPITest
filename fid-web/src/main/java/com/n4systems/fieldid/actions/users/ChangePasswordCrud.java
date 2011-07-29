@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
-import com.n4systems.security.PasswordComplexityChecker;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 
@@ -29,11 +27,10 @@ public class ChangePasswordCrud extends AbstractCrud {
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
 	
-		
-	
 	private String originalPassword;
 	private String newPassword;
 	private String confirmPassword;
+
 	
 	public ChangePasswordCrud( UserManager userManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
@@ -42,13 +39,10 @@ public class ChangePasswordCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		
-
 	}
 
 	@Override
 	protected void loadMemberFields( Long uniqueId ) {
-
 	}
 
 	public String getOriginalPassword() {
@@ -78,49 +72,37 @@ public class ChangePasswordCrud extends AbstractCrud {
 		if( user == null ) {
 			return SUCCESS;
 		}
-			
-		PasswordPolicy passwordPolicy = getPasswordPolicy();
-		PasswordComplexityChecker passwordChecker = new PasswordComplexityChecker(passwordPolicy.getMinLength(),
-															0, 
-															passwordPolicy.getMinCapitals(),
-															passwordPolicy.getMinNumbers(), 
-															passwordPolicy.getMinSymbols());
-		
-		if (passwordUniquenessIsValid(user, newPassword, passwordPolicy)) {
-			addActionErrorText("error.password_unique", passwordPolicy.getUniqueness()+"" );										
-			return ERROR;			
-		}
-		if ( !passwordChecker.isValid(newPassword) ) { 
-			addActionErrorText("error.password_policy", passwordChecker.getMinLength()+"",
-					passwordChecker.getMinUpperAlpha()+"",
-					passwordChecker.getMinLowerAlpha()+"", 
-					passwordChecker.getMinNumeric()+"",
-					passwordChecker.getMinPunctuation()+"" );										
+
+		if (!validateNewPassword(newPassword)) { 
 			return ERROR;
 		}
 		
-		userManager.updatePassword( user.getId(), newPassword, passwordPolicy);
+		userManager.updatePassword( user.getId(), newPassword, getPasswordPolicy());
+		
 		logger.info( "password updated for " + getSessionUser().getUserID() );
 		addFlashMessageText( "message.passwordupdated" );			
 		getSession().remove( "passwordReset" );
 		return SUCCESS;			
-	}	
-	
-	private boolean passwordUniquenessIsValid(User user, String newPassword, PasswordPolicy passwordPolicy) {
-		if (passwordPolicy.getUniqueness()==null) { 
-			return true;
+	}
+
+	private boolean validateNewPassword(String newPassword) {
+		PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
+		if (!passwordHelper.isValidPassword(newPassword)) {
+			PasswordPolicy policy = passwordHelper.getPasswordPolicy();
+			addActionErrorText("error.password_policy", policy.getMinLength()+"",
+					policy.getMinCapitals()+"",
+					policy.getMinNumbers()+"",
+					policy.getMinSymbols()+"" );
+			return false;
 		}
-		List<String> previousPasswords = user.getPreviousPasswords();
-		int start = Math.max(0, previousPasswords.size()-passwordPolicy.getUniqueness());
-		previousPasswords = previousPasswords.subList(start, previousPasswords.size());
-		
-		return previousPasswords.contains(User.hashPassword(newPassword));
+		return true;		
 	}
 
 	private PasswordPolicy getPasswordPolicy() {
+		// TODO DD : cache this? 
 		return tenantSettingsService.getTenantSettings().getPasswordPolicy();
-	}
-
+	}	
+	
 	public void setOriginalPassword( String originalPassword ) {
 		this.originalPassword = originalPassword;
 	}

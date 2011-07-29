@@ -4,14 +4,18 @@ import java.util.SortedSet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.handler.password.PasswordHelper;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.api.Listable;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.AdminUserListLoader;
 import com.n4systems.model.user.User;
@@ -43,6 +47,10 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	private Country country;
 	private Region region;
 
+	@Autowired
+	private TenantSettingsService tenantSettingsService;
+		
+	
 	public UserRegistrationCrud(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
 		this.userManager = userManager;
@@ -69,10 +77,20 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 
 	public String doSave() {
 
+		PasswordHelper passwordHelper = new PasswordHelper(tenantSettingsService.getTenantSettings().getPasswordPolicy());
+		if (!passwordHelper.isValidPassword(password)) {
+			PasswordPolicy policy = passwordHelper.getPasswordPolicy();
+			addFieldError("password", getText("error.password_policy", new String[]{policy.getMinLength()+"",
+					policy.getMinCapitals()+"",
+					policy.getMinNumbers()+"",
+					policy.getMinSymbols()+""}) );
+			return ERROR;
+		}
+		
 		userAccount.setRegistered(false);
 		userAccount.setTenant(getTenant());
 		userAccount.setOwner(getPrimaryOrg());
-		userAccount.assignPassword(password);
+		userAccount.assignPassword(password);		
 		userRequest.setTenant(getTenant());
 		userRequest.setUserAccount(userAccount);
 		
@@ -145,7 +163,6 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	}
 
 	@RequiredStringValidator(type=ValidatorType.FIELD, message="", key="error.passwordrequired")
-	@StringLengthFieldValidator(type=ValidatorType.FIELD, message="", key="errors.passwordlength", minLength="5")
 	public String getPassword() {
 		return password;
 	}

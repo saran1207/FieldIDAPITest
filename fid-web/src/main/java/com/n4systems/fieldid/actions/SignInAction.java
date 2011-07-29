@@ -1,8 +1,5 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.Date;
-
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.LoginException;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.utils.SessionUserInUse;
@@ -20,7 +18,6 @@ import com.n4systems.fieldid.utils.UrlArchive;
 import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
-import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -40,7 +37,7 @@ public class SignInAction extends AbstractAction {
 	private String resetPasswordKey;
 	
 	@Autowired
-	TenantSettingsService tenantSettingsService;
+	private TenantSettingsService tenantSettingsService;
 	
 	public SignInAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -134,7 +131,8 @@ public class SignInAction extends AbstractAction {
 
 	private String signIn(User loginUser) {		
 		// if password expired, jump to reset password page (which requires username & resetkey)
-		if (isPasswordExpired(loginUser)) {
+		PasswordHelper passwordHelper = new PasswordHelper(tenantSettingsService.getTenantSettings().getPasswordPolicy());
+		if (passwordHelper.isPasswordExpired(loginUser)) {
 			resetPasswordKey = loginUser.createResetPasswordKey();	// need this in order to get to "reset password" screen.
 			userManager.updateUser(loginUser);
 			return REDIRECT_TO_URL;					
@@ -146,17 +144,6 @@ public class SignInAction extends AbstractAction {
 			return "redirect";
 		}
 		return SUCCESS;
-	}
-
-	// TODO DD : refactor this into spring bean.  =   PasswordService.
-	private boolean isPasswordExpired(User loginUser) {
-		PasswordPolicy passwordPolicy = tenantSettingsService.getTenantSettings().getPasswordPolicy();
-		Integer expiryDays = passwordPolicy.getExpiryDays();
-		if (expiryDays==0 || expiryDays==null) {
-			return false;
-		}
-		Date expiry = DateUtils.addDays(loginUser.getPasswordChanged(), expiryDays);		
-		return expiry.before(new Date());
 	}
 
 	public String doConfirmKick() {

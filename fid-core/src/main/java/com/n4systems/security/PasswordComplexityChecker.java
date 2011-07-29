@@ -6,6 +6,8 @@ import java.util.Set;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.n4systems.model.security.PasswordPolicy;
+
 public class PasswordComplexityChecker implements PasswordValidator {
 	private final Integer minLength;
 	private final Integer minLowerAlpha;
@@ -15,10 +17,17 @@ public class PasswordComplexityChecker implements PasswordValidator {
 
 	private int length;
 	private int lowerAlpha;
-	private int upperAlpha;
-	
+	private int upperAlpha;	
 	private int numeric;
 	private int punctuation;
+
+	public PasswordComplexityChecker(PasswordPolicy passwordPolicy) {
+		this( passwordPolicy.getMinLength(), 
+				0, 
+				passwordPolicy.getMinCapitals(),
+				passwordPolicy.getMinNumbers(), 
+				passwordPolicy.getMinSymbols());
+	}
 	
 	public PasswordComplexityChecker(int minLength, int minLowerAlpha, int minUpperAlpha, int minNumeric, int minPunctuation) {
 		this.minLength = minLength;

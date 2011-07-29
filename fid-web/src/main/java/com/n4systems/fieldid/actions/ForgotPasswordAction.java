@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
+import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.User;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -27,7 +29,9 @@ public class ForgotPasswordAction extends SignInAction {
 	private Long uniqueID;
 	
 	@Autowired
-	TenantSettingsService tenantSettingsService;
+	private TenantSettingsService tenantSettingsService;
+	
+	private PasswordPolicy passwordPolicy;
 	
 	public ForgotPasswordAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(userManager, persistenceManager);
@@ -55,7 +59,6 @@ public class ForgotPasswordAction extends SignInAction {
 				logger.error("could not send reset email", e);
 				return ERROR;
 			}
-
 		}
 		
 		if (uniqueID != null) {
@@ -70,12 +73,23 @@ public class ForgotPasswordAction extends SignInAction {
         if (user == null) {
             return MISSING;
         }
-        
-        // FIXME DD : check for pw uniqueness here!
 
-        userManager.updatePassword( user.getId(), newPassword, tenantSettingsService.getTenantSettings().getPasswordPolicy());
+        PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
+        if (passwordHelper.isPasswordUnique(user, newPassword)) {
+        	addActionErrorText("error.password_unique", getPasswordPolicy().getUniqueness()+"" );
+        	return INPUT; 
+        }
+        
+        userManager.updatePassword( user.getId(), newPassword, getPasswordPolicy());
         addFlashMessageText("message.passwordresetsuccess");
         return SUCCESS;
+	}
+
+	private PasswordPolicy getPasswordPolicy() {
+		if (passwordPolicy==null) { 
+			passwordPolicy = tenantSettingsService.getTenantSettings().getPasswordPolicy(); 
+		}
+		return passwordPolicy; 
 	}
 
 	@SkipValidation
