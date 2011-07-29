@@ -32,7 +32,7 @@ public class PasswordHelper {
 	}
 	
 	public boolean isPasswordUnique(User user, String newPassword) {
-		if (passwordPolicy.getUniqueness()==null) { 
+		if (passwordPolicy.getUniqueness()==0) { 
 			return true;
 		}
 		List<String> previousPasswords = user.getPreviousPasswords();

@@ -16,6 +16,7 @@ public class UserBuilder extends BaseBuilder<User> {
 	private final String password;
 	private final boolean resetPasswordKey;
 	private final int permissions;
+	private final boolean locked;
 	private final UserType userType;
 	
 	public static UserBuilder aUser() {
@@ -27,15 +28,15 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 
 	public static UserBuilder aFullUser() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", null, false, null, 0, UserType.FULL);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL);
 	}
 
 	public static UserBuilder anLiteUser() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", null, false, null, 0, UserType.LITE);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.LITE);
 	}
 	
 	public static UserBuilder aSystemUser() {
-		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", null, false, null, 0, UserType.SYSTEM);
+		return new UserBuilder(OrgBuilder.aPrimaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.SYSTEM);
 	}
 	
 	public static UserBuilder anAdminUser() {
@@ -43,20 +44,26 @@ public class UserBuilder extends BaseBuilder<User> {
 	}
 	
 	public static UserBuilder aSecondaryUser() {
-		return new UserBuilder(OrgBuilder.aSecondaryOrg().build(), "some first", "last name", "user_id", "user@example.com", null, false, null, 0, UserType.FULL);
+		return new UserBuilder(OrgBuilder.aSecondaryOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL);
 	}
 	
 	public static UserBuilder aReadOnlyUser() {
-		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", "user@example.com", null, false, null, 0, UserType.READONLY);
+		return new UserBuilder(OrgBuilder.aCustomerOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.READONLY);
 	}
 	
 	public static UserBuilder aDivisionUser() {
-		return new UserBuilder(OrgBuilder.aDivisionOrg().build(), "some first", "last name", "user_id", "user@example.com", null, false, null, 0, UserType.FULL);
+		return new UserBuilder(OrgBuilder.aDivisionOrg().build(), "some first", "last name", "user_id", "user@example.com", "password", false, null, 0, UserType.FULL);
 	}
 
 	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, 
 			String emailAddress, String password, boolean resetPasswordKey, Long id, 
 			int permissions, UserType userType) {
+		this(owner, firstName, lastName, userId, emailAddress, password, resetPasswordKey, id, permissions, userType, false);		
+	}
+
+	private UserBuilder(BaseOrg owner, String firstName, String lastName, String userId, 
+			String emailAddress, String password, boolean resetPasswordKey, Long id, 
+			int permissions, UserType userType, boolean locked) {
 		super(id);
 		this.owner = owner;
 		this.firstName = firstName;
@@ -67,6 +74,7 @@ public class UserBuilder extends BaseBuilder<User> {
 		this.resetPasswordKey = resetPasswordKey;
 		this.permissions = permissions;
 		this.userType = userType;
+		this.locked = locked;
 	}
 	
 	public UserBuilder withOwner(BaseOrg owner) {
@@ -117,6 +125,10 @@ public class UserBuilder extends BaseBuilder<User> {
 		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType));
 	}
 	
+	public BaseBuilder<User> withLocked(boolean locked) {
+		return makeBuilder(new UserBuilder(owner, firstName, lastName, userId, emailAddress, password, false, getId(), permissions, userType, locked));
+	}
+	
 	@Override
 	public User createObject() {
 		User user = new User();
@@ -129,6 +141,7 @@ public class UserBuilder extends BaseBuilder<User> {
 		user.setTimeZoneID("Canada:Ontario - Toronto");
 		user.setRegistered(true);
 		user.setUserType(userType);
+		user.setLocked(locked);
 		
 		if (userType.equals(UserType.ADMIN)) {
 			user.setPermissions(Permissions.ADMIN);
@@ -152,4 +165,5 @@ public class UserBuilder extends BaseBuilder<User> {
 		
 		return user;
 	}
+
 }

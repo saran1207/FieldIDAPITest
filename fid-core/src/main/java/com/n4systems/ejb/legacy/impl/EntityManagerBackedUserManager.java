@@ -39,6 +39,7 @@ import com.n4systems.util.ListHelper;
 import com.n4systems.util.ListingPair;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 
@@ -63,7 +64,8 @@ public class EntityManagerBackedUserManager implements UserManager {
 
 	@Override	
 	public User findUserByPw(String tenantName, String userID, String plainTextPassword, TenantSettings tenantSettings) {
-		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
+		QueryBuilder<User> builder = getQueryBuilder(User.class, new OpenSecurityFilter());
+		
 		UserQueryHelper.applyFullyActiveFilter(builder);
 
 		builder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE);
@@ -74,8 +76,12 @@ public class EntityManagerBackedUserManager implements UserManager {
 		if (passwordMatches(plainTextPassword, user) && !isStillLocked(user)) {
 			return user;
 		} else { 
-			throw createLoginException(user, userID, tenantSettings.getAccountPolicy());
+			throw createLoginException(user, userID, tenantSettings.getAccountPolicy()); 
 		}
+	}
+
+	protected <T> QueryBuilder<T> getQueryBuilder(Class<T> clazz, QueryFilter filter) {
+		return new QueryBuilder<T>(clazz, filter);
 	}
 
 	private boolean passwordMatches(String plainTextPassword, User user) {
@@ -83,7 +89,7 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	public boolean isStillLocked(User user) {
-		if (!user.isLocked()) {
+		if (user==null || !user.isLocked()) {
 			return false;
 		}		
 		if (user.getLockedUntil()!=null && new Date().after(user.getLockedUntil())) {

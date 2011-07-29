@@ -1,0 +1,124 @@
+package com.n4systems.ejb.legacy.impl;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
+
+import javax.persistence.EntityManager;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.n4systems.exceptions.LoginException;
+import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.builders.UserBuilder;
+import com.n4systems.model.tenant.TenantSettings;
+import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.QueryFilter;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
+
+
+public class EntityManagerBackedUserManagerTest {
+
+	// TODO DD : add tests for all methods. currently only has tests for recently added method "findUserByPw()".
+	
+	
+	@SuppressWarnings("unchecked")
+	private QueryBuilder<User> queryBuilder = createMock(QueryBuilder.class);  
+	private EntityManager em = createMock(EntityManager.class);
+	private EntityManagerBackedUserManager fixture; 
+	private TenantSettings tenantSettings = new TenantSettings();
+	
+	@Before 
+	public void setup() { 
+		fixture = new EntityManagerBackedUserManager(em) { 
+			@Override
+			protected <T> QueryBuilder<T> getQueryBuilder(Class<T> clazz, QueryFilter filter) {
+				return (QueryBuilder<T>) queryBuilder;
+			};
+		};
+		tenantSettings = new TenantSettings();		
+	}
+	
+	@Test
+	public void testFindUserByPw_happyPath() {
+		String userID = "derek";
+		String tenantName = "n4systems";
+		
+		User user = UserBuilder.aFullUser().build();
+		
+		expect(queryBuilder.getSingleResult(em)).andReturn(user);
+		expect(queryBuilder.addSimpleWhere("registered", true)).andReturn(queryBuilder);
+		expect(queryBuilder.addSimpleWhere("state", EntityState.ACTIVE)).andReturn(queryBuilder);
+		expect(queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);
+		expect(queryBuilder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);			
+		
+		replay(queryBuilder);		
+		
+		User foundUser = fixture.findUserByPw(tenantName, userID, "password", tenantSettings);
+		
+		assertEquals(user, foundUser);
+	}
+	
+	
+	@Test(expected=LoginException.class)
+	public void testFindUserByPw_userNotFound() {
+		String userID = "derek";
+		String tenantName = "n4systems";
+		
+		User user = null; // i.e. user not found.
+		
+		expect(queryBuilder.getSingleResult(em)).andReturn(user);
+		expect(queryBuilder.addSimpleWhere("registered", true)).andReturn(queryBuilder);
+		expect(queryBuilder.addSimpleWhere("state", EntityState.ACTIVE)).andReturn(queryBuilder);
+		expect(queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);
+		expect(queryBuilder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);			
+		
+		replay(queryBuilder);		
+		
+		fixture.findUserByPw(tenantName, userID, "password", tenantSettings);		
+	}	
+	
+	@Test(expected=LoginException.class)
+	public void testFindUserByPw_userPasswordIncorrect() {
+		String userID = "derek";
+		String tenantName = "n4systems";
+		
+		User user = null; // i.e. user not found.
+		
+		expect(queryBuilder.getSingleResult(em)).andReturn(user);
+		expect(queryBuilder.addSimpleWhere("registered", true)).andReturn(queryBuilder);
+		expect(queryBuilder.addSimpleWhere("state", EntityState.ACTIVE)).andReturn(queryBuilder);
+		expect(queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);
+		expect(queryBuilder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);			
+		
+		replay(queryBuilder);
+		
+		fixture.findUserByPw(tenantName, userID, "INCORRECT_PASSWORD", tenantSettings);
+	}
+		
+	@Test
+	public void testFindUserByPw_userLocked() {
+		String userID = "derek";
+		String tenantName = "n4systems";
+		
+		User user = UserBuilder.aFullUser().withLocked(true).build();
+		
+		expect(queryBuilder.getSingleResult(em)).andReturn(user);
+		expect(queryBuilder.addSimpleWhere("registered", true)).andReturn(queryBuilder);
+		expect(queryBuilder.addSimpleWhere("state", EntityState.ACTIVE)).andReturn(queryBuilder);
+		expect(queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);
+		expect(queryBuilder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);			
+		
+		replay(queryBuilder);		
+
+		try {
+			fixture.findUserByPw(tenantName, userID, "password", tenantSettings);
+			fail("should throw an exception for locked user");
+		} catch (LoginException e) { 
+			assertTrue(e.isLocked());
+		}
+	}
+		
+}

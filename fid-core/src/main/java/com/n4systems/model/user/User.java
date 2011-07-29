@@ -59,7 +59,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private String resetPasswordKey;
 	private int failedLoginAttempts;
 	private String hashSecurityCardNumber;
-	private Boolean locked;
+	private boolean locked;
 	private Date lockedUntil;
 	private Date passwordChanged;
 	
@@ -405,11 +405,11 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		return failedLoginAttempts;
 	}
 
-	public void setLocked(Boolean locked) {
+	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
 
-	public Boolean isLocked() {
+	public boolean isLocked() {
 		return locked;
 	}
 

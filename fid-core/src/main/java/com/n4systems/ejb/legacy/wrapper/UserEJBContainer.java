@@ -105,22 +105,6 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 		}
 	}
 
-	
-
-//	@Override
-//	public User findUser(String tenantName, String userID, String plainTextPassword, AccountPolicy accountPolicy) {
-//		TransactionManager transactionManager = new FieldIdTransactionManager();
-//		Transaction transaction = transactionManager.startTransaction();
-//		try {
-//			return createManager(transaction.getEntityManager()).findUser(tenantName, userID, plainTextPassword, tenantSettingsService.getTenantSettings().getAccountPolicy());
-//		} catch (RuntimeException e) {
-//			transactionManager.rollbackTransaction(transaction);
-//			throw e;
-//		} finally {
-//			transactionManager.finishTransaction(transaction);
-//		}
-//	}
-
 	@Override
 	public void lockUser(final String tenantName, final String userID, final Integer duration, final Integer failedLoginAttempts) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

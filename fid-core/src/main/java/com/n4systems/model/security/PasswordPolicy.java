@@ -28,52 +28,52 @@ public class PasswordPolicy implements Serializable {
 		this.uniqueness = uniqueness;
 	}
 
-	public Integer getMinLength() {
+	public int getMinLength() {
 		return minLength;
 	}
 
-	public void setMinLength(Integer minLength) {
+	public void setMinLength(int minLength) {
 		this.minLength = minLength;
 	}
 
-	public Integer getMinNumbers() {
+	public int getMinNumbers() {
 		return minNumbers;
 	}
 
-	public void setMinNumbers(Integer minNumbers) {
+	public void setMinNumbers(int minNumbers) {
 		this.minNumbers = minNumbers;
 	}
 
-	public Integer getMinSymbols() {
+	public int getMinSymbols() {
 		return minSymbols;
 	}
 
-	public void setMinSymbols(Integer minSymbols) {
+	public void setMinSymbols(int minSymbols) {
 		this.minSymbols = minSymbols;
 	}
 
-	public Integer getMinCapitals() {
+	public int getMinCapitals() {
 		return minCapitals;
 	}
 
-	public void setMinCapitals(Integer minCapitals) {
+	public void setMinCapitals(int minCapitals) {
 		this.minCapitals = minCapitals;
 	}
 
-	public Integer getExpiryDays() {
+	public int getExpiryDays() {
 		return expiryDays;
 	}
 
-	public void setExpiryDays(Integer expiryDays) {
+	public void setExpiryDays(int expiryDays) {
 		this.expiryDays = expiryDays;
 	}
 
-	public void setUniqueness(Integer uniqueness) {
+	public void setUniqueness(int uniqueness) {
 		this.uniqueness = uniqueness;
 	}
 
-	public Integer getUniqueness() {
-		return uniqueness == 0 ? null : uniqueness;
+	public int getUniqueness() {
+		return uniqueness;
 	}
 
 	@Override
