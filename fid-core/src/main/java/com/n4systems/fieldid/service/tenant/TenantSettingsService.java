@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.PasswordPolicy;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.tenant.UserLimits;
 
@@ -17,6 +18,13 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 	
 	public void update(TenantSettings tenantSettings) {
 		persistenceService.update(tenantSettings);
+	}
+	
+	// uggh...this is used when the security context was initialized when the tenantId was not known, but later on during the request it is. 
+	//  .: it must be passed as a parameter
+	public TenantSettings getTenantSettings(Long tenantId) {
+		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(tenantId));
+		return getTenantSettings();
 	}
 	
 	public void updateTenantAccountPolicySettings(AccountPolicy accountPolicy) { 
@@ -42,4 +50,5 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		tenantSettings.setGpsCapture(gpsCapture);
 		persistenceService.update(tenantSettings);
 	}
+
 }

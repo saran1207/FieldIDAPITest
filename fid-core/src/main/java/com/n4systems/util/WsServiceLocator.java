@@ -11,6 +11,7 @@ import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.services.SecurityContext;
 
@@ -66,8 +67,12 @@ public class WsServiceLocator {
 	}
 
 	private static <T> T getWsBean(T bean, Long tenantId) {
-		SecurityContext context = ServiceLocator.getSecurityContext();
-		context.setTenantSecurityFilter(new TenantOnlySecurityFilter(tenantId));
+		SecurityContext context = ServiceLocator.getBean("securityContext", SecurityContext.class);
+		if (tenantId!=null) { 
+			context.setTenantSecurityFilter(new TenantOnlySecurityFilter(tenantId));			
+		} else { 
+			context.setTenantSecurityFilter(new OpenSecurityFilter());
+		}
 		return bean;
 	}
 

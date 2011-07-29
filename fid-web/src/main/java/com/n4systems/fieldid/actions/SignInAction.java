@@ -100,7 +100,7 @@ public class SignInAction extends AbstractAction {
 	}
 
 	private User findUserByPw() {	
-		return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword(), null/*BOGUS VALUE TO BE OVERRIDDEN BY USERMANAGER*/);
+		return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
 	}
 
 	private String getFailedLoginText(LoginException e) {

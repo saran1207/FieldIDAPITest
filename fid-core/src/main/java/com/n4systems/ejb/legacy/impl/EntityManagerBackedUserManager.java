@@ -17,6 +17,7 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.exceptions.LoginException;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -25,7 +26,6 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
@@ -48,22 +48,24 @@ public class EntityManagerBackedUserManager implements UserManager {
 	private static Logger auditLogger = Logger.getLogger("AuditLog");
 
 	protected EntityManager em;
-
+	
 	private PersistenceManager persistenceManager;
+	
+	private TenantSettingsService tenantSettingsService;
 		   
 		
 	public EntityManagerBackedUserManager() {
 	}
 
-	public EntityManagerBackedUserManager(EntityManager em) {
-		
+	public EntityManagerBackedUserManager(EntityManager em, TenantSettingsService tenantSettingsService) {		
 		super();
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
+		this.tenantSettingsService = tenantSettingsService;
 	}
-
+	
 	@Override	
-	public User findUserByPw(String tenantName, String userID, String plainTextPassword, TenantSettings tenantSettings) {
+	public User findUserByPw(String tenantName, String userID, String plainTextPassword) {
 		QueryBuilder<User> builder = getQueryBuilder(User.class, new OpenSecurityFilter());
 		
 		UserQueryHelper.applyFullyActiveFilter(builder);
@@ -72,12 +74,17 @@ public class EntityManagerBackedUserManager implements UserManager {
 		builder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE);
 			
 		User user = builder.getSingleResult(em);
-
-		if (passwordMatches(plainTextPassword, user) && !isStillLocked(user)) {
-			return user;
+		
+		if (user==null || !passwordMatches(plainTextPassword,user) || isStillLocked(user)) {
+			AccountPolicy accountPolicy = getAccountPolicyForUser(user);			
+			throw new LoginException(user, userID, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration());
 		} else { 
-			throw createLoginException(user, userID, tenantSettings.getAccountPolicy()); 
+			return user;
 		}
+	}
+
+	private AccountPolicy getAccountPolicyForUser(User user) {
+		return user==null ? new AccountPolicy() : tenantSettingsService.getTenantSettings(user.getTenant().getID()).getAccountPolicy();
 	}
 
 	protected <T> QueryBuilder<T> getQueryBuilder(Class<T> clazz, QueryFilter filter) {
@@ -97,10 +104,6 @@ public class EntityManagerBackedUserManager implements UserManager {
 			return false;
 		}
 		return true;
-	}
-
-	private LoginException createLoginException(User user, String userId, AccountPolicy accountPolicy) {
-		return new LoginException(user, userId, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration());
 	}
 
 	@Override

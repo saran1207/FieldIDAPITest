@@ -20,7 +20,6 @@ import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -33,12 +32,12 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 
 	@Autowired
 	private LoginService loginService;
+	
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
 	
-	public UserEJBContainer(LoginService loginService, TenantSettingsService tenantSettingsService) {
+	public UserEJBContainer(LoginService loginService) {
 		this.loginService = loginService;
-		this.tenantSettingsService = tenantSettingsService;
 	}
 
 	public UserEJBContainer() {
@@ -46,7 +45,7 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 
 	@Override
 	protected UserManager createManager(EntityManager em) {
-		return new EntityManagerBackedUserManager(em);
+		return new EntityManagerBackedUserManager(em, tenantSettingsService);
 	}
 
 	@Override
@@ -119,15 +118,15 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 			transactionManager.finishTransaction(transaction);
 		}		
 	}
-	
+
 	@Override
-	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword, TenantSettings tenantSettings) {
+	public User findUserByPw(final String tenantName, final String userID, final String plainTextPassword) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
 			// KLUDGE : ignore and override accountPolicy to use tenantService.  this entire class will be refactored away when we move to spring. 
 			//  the next generation of UserManager impl will have the tenantSettingsService injected and the parameter will be removed from the IF. 
-			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword, tenantSettingsService.getTenantSettings());		  
+			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword);		  
 		} catch (RuntimeException e) {
 			if (e instanceof LoginException) { 
 				loginService.trackFailedLoginAttempts((LoginException)e);

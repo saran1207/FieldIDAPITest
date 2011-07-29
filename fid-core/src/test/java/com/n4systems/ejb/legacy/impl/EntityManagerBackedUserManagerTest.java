@@ -9,7 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.exceptions.LoginException;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable.EntityState;
+import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
@@ -29,10 +32,11 @@ public class EntityManagerBackedUserManagerTest {
 	private EntityManager em = createMock(EntityManager.class);
 	private EntityManagerBackedUserManager fixture; 
 	private TenantSettings tenantSettings = new TenantSettings();
+	private TenantSettingsService tenantSettingsService = createMock(TenantSettingsService.class);
 	
 	@Before 
 	public void setup() { 
-		fixture = new EntityManagerBackedUserManager(em) { 
+		fixture = new EntityManagerBackedUserManager(em, tenantSettingsService) { 
 			@Override
 			protected <T> QueryBuilder<T> getQueryBuilder(Class<T> clazz, QueryFilter filter) {
 				return (QueryBuilder<T>) queryBuilder;
@@ -56,7 +60,7 @@ public class EntityManagerBackedUserManagerTest {
 		
 		replay(queryBuilder);		
 		
-		User foundUser = fixture.findUserByPw(tenantName, userID, "password", tenantSettings);
+		User foundUser = fixture.findUserByPw(tenantName, userID, "password");
 		
 		assertEquals(user, foundUser);
 	}
@@ -77,7 +81,7 @@ public class EntityManagerBackedUserManagerTest {
 		
 		replay(queryBuilder);		
 		
-		fixture.findUserByPw(tenantName, userID, "password", tenantSettings);		
+		fixture.findUserByPw(tenantName, userID, "password");		
 	}	
 	
 	@Test(expected=LoginException.class)
@@ -85,17 +89,21 @@ public class EntityManagerBackedUserManagerTest {
 		String userID = "derek";
 		String tenantName = "n4systems";
 		
-		User user = null; // i.e. user not found.
+		User user = UserBuilder.aFullUser().build();
+		Tenant tenant = TenantBuilder.aTenant().build();
+		user.setTenant(tenant);
 		
 		expect(queryBuilder.getSingleResult(em)).andReturn(user);
 		expect(queryBuilder.addSimpleWhere("registered", true)).andReturn(queryBuilder);
 		expect(queryBuilder.addSimpleWhere("state", EntityState.ACTIVE)).andReturn(queryBuilder);
 		expect(queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);
-		expect(queryBuilder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);			
-		
+		expect(queryBuilder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);					
 		replay(queryBuilder);
 		
-		fixture.findUserByPw(tenantName, userID, "INCORRECT_PASSWORD", tenantSettings);
+		expect(tenantSettingsService.getTenantSettings(tenant.getId())).andReturn(new TenantSettings());
+		replay(tenantSettingsService);
+	
+		fixture.findUserByPw(tenantName, userID, "INCORRECT_PASSWORD");
 	}
 		
 	@Test
@@ -104,17 +112,21 @@ public class EntityManagerBackedUserManagerTest {
 		String tenantName = "n4systems";
 		
 		User user = UserBuilder.aFullUser().withLocked(true).build();
+		Tenant tenant = TenantBuilder.aTenant().build();
+		user.setTenant(tenant);
 		
 		expect(queryBuilder.getSingleResult(em)).andReturn(user);
 		expect(queryBuilder.addSimpleWhere("registered", true)).andReturn(queryBuilder);
 		expect(queryBuilder.addSimpleWhere("state", EntityState.ACTIVE)).andReturn(queryBuilder);
 		expect(queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userID, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);
 		expect(queryBuilder.addWhere(Comparator.EQ, "tenantName", "tenant.name", tenantName, WhereParameter.IGNORE_CASE)).andReturn(queryBuilder);			
+		replay(queryBuilder);
 		
-		replay(queryBuilder);		
+		expect(tenantSettingsService.getTenantSettings(tenant.getId())).andReturn(new TenantSettings());
+		replay(tenantSettingsService);
 
 		try {
-			fixture.findUserByPw(tenantName, userID, "password", tenantSettings);
+			fixture.findUserByPw(tenantName, userID, "password");
 			fail("should throw an exception for locked user");
 		} catch (LoginException e) { 
 			assertTrue(e.isLocked());

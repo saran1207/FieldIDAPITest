@@ -114,6 +114,11 @@ public class ServiceLocator implements ApplicationContextAware {
 		return new EmailNotifier(getMailManager());
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <T> T getBean(String name, Class<T> type) {
+		return (T) applicationContext.getBean(name);
+	}
+
 	public static SecurityContext getSecurityContext() {
 		return getBean(SecurityContext.class);
 	}
@@ -123,7 +128,7 @@ public class ServiceLocator implements ApplicationContextAware {
 		if (beans.size()==1)  { 
 			T bean = beans.values().iterator().next();			
 			return bean;
-		} else { 
+		} else { 						
 			throw new NoSuchBeanDefinitionException(clazz, "can't find bean instance of " + clazz.getSimpleName() + "  ("+beans.size()+")");			 
 		}
 	}
