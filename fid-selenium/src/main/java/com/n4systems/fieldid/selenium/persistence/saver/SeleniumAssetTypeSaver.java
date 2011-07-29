@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 public class SeleniumAssetTypeSaver extends Saver<AssetType> {
 
     @Override
-    protected void save(EntityManager em, AssetType assetType) {
+	public void save(EntityManager em, AssetType assetType) {
         // This is required since associated event types must also be saved or hibernate
         // will be unhappy. We could explore cascade options but this an easy solution for now.
         super.save(em, assetType);

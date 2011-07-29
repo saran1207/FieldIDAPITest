@@ -4,7 +4,7 @@ import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.PaginatedLoader;
 import com.n4systems.tools.Pager;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.webservice.PaginatedModelToServiceConverter;
 import com.n4systems.webservice.PaginatedRequestHandler;
 import com.n4systems.webservice.exceptions.ServiceException;
@@ -12,7 +12,7 @@ import com.n4systems.webservice.exceptions.ServiceException;
 public class AllPredefinedLocationsRequestHandler extends PaginatedRequestHandler<PredefinedLocationListResponse> {
 	private final PaginatedModelToServiceConverter<PredefinedLocation, PredefinedLocationServiceDTO> converter;
 	
-	public AllPredefinedLocationsRequestHandler(ConfigContext configContext, LoaderFactory loaderFactory, PaginatedModelToServiceConverter<PredefinedLocation, PredefinedLocationServiceDTO> converter) {
+	public AllPredefinedLocationsRequestHandler(ConfigurationProvider configContext, LoaderFactory loaderFactory, PaginatedModelToServiceConverter<PredefinedLocation, PredefinedLocationServiceDTO> converter) {
 		super(configContext, loaderFactory);
 		this.converter = converter;
 	}

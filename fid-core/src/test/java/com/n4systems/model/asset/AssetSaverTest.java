@@ -92,7 +92,7 @@ public class AssetSaverTest {
 		
 		RecursiveLinkedChildAssetLoader loader = new RecursiveLinkedChildAssetLoader() {
 			@Override
-			protected List<Asset> load(EntityManager em) {
+			public List<Asset> load(EntityManager em) {
 				return linkedAssets;
 			}
 		};

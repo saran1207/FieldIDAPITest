@@ -21,7 +21,7 @@ public class AllPrimaryOrgsPaginatedLoader extends Loader<Pager<PrimaryOrg>> {
 	private boolean ascending;
 
 	@Override
-	protected Pager<PrimaryOrg> load(EntityManager em) {
+	public Pager<PrimaryOrg> load(EntityManager em) {
 		QueryBuilder<PrimaryOrg> builder  =  new QueryBuilder<PrimaryOrg>(PrimaryOrg.class, new OpenSecurityFilter());
 		
 		if(nameFilter != null && !nameFilter.isEmpty()) {

@@ -3,19 +3,27 @@ package com.n4systems.util.uri;
 import java.net.URI;
 
 import com.n4systems.model.BaseEntity;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.StringUtils;
 
 public class ActionURLBuilder extends InternalUrlBuilder {
+	
+	public static ActionURLBuilder newUrl(ConfigurationProvider configContext) {
+		String domain = configContext.getString(ConfigEntry.SYSTEM_DOMAIN);
+		String protocol = configContext.getString(ConfigEntry.SYSTEM_PROTOCOL);
+
+		String baseUrl = String.format("%s://www.%s/fieldid/", protocol, domain);
+		return new ActionURLBuilder(URI.create(baseUrl), configContext);
+	}
+	
 	private String action;
 	private BaseEntity entity;
 	private String parameters;
-	
-	
-	public ActionURLBuilder(URI baseUri, ConfigContext configContext) {
+
+	public ActionURLBuilder(URI baseUri, ConfigurationProvider configContext) {
 		super(baseUri, configContext);
 	}
-	
 
 	@Override
 	protected String path() {
@@ -27,17 +35,16 @@ public class ActionURLBuilder extends InternalUrlBuilder {
 
 	private String getActionPath() {
 		String path = action + ".action";
-		
-		if (parameters != null){
-			path += "?"+parameters;
+
+		if (parameters != null) {
+			path += "?" + parameters;
 		}
-		
+
 		if (entity != null && !entity.isNew()) {
 			addParameter("uniqueID", entity.getId());
 		}
 		return path;
 	}
-	
 
 	public String getAction() {
 		return action;
@@ -47,13 +54,11 @@ public class ActionURLBuilder extends InternalUrlBuilder {
 		this.action = action;
 		return this;
 	}
-	
 
 	public ActionURLBuilder setParameters(String parameters) {
 		this.parameters = parameters;
 		return this;
 	}
-	
 
 	public ActionURLBuilder setEntity(BaseEntity entity) {
 		this.entity = entity;
@@ -64,5 +69,4 @@ public class ActionURLBuilder extends InternalUrlBuilder {
 		return entity;
 	}
 
-	
 }

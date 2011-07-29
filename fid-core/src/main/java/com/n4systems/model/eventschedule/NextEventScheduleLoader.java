@@ -21,7 +21,7 @@ public class NextEventScheduleLoader extends Loader<EventSchedule> {
 	public NextEventScheduleLoader() {}
 
 	@Override
-	protected EventSchedule load(EntityManager em) {
+	public EventSchedule load(EntityManager em) {
 		EventSchedule schedule = null;
 		
 		QueryBuilder<EventSchedule> query = new QueryBuilder<EventSchedule>(EventSchedule.class, new OpenSecurityFilter());

@@ -12,7 +12,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class SignUpPackageListLoader extends NonSecuredListLoader<SignUpPackage>{
 
 	@Override
-	protected List<SignUpPackage> load(EntityManager em) {
+	public List<SignUpPackage> load(EntityManager em) {
 		List<ContractPricing> contracts = getContracts(em);
 		return produceSignUpPackages(contracts);
 	}

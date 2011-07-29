@@ -6,15 +6,15 @@ import java.net.URL;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Tenant;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.HostNameParser;
 
 public abstract class InternalUrlBuilder extends BaseUrlBuilder {
-	private final ConfigContext configContext;
+	private final ConfigurationProvider configContext;
 	private Tenant tenant;
 	
-	public InternalUrlBuilder(URI baseUri, ConfigContext configContext) {
+	public InternalUrlBuilder(URI baseUri, ConfigurationProvider configContext) {
 		super(baseUri);
 		this.configContext = configContext;
 	}
@@ -51,7 +51,7 @@ public abstract class InternalUrlBuilder extends BaseUrlBuilder {
 		return new URL(configContext.getString(ConfigEntry.SYSTEM_PROTOCOL), url.getHost(), url.getFile());
 	}
 
-	public ConfigContext getConfigContext() {
+	public ConfigurationProvider getConfigContext() {
 		return configContext;
 	}
 

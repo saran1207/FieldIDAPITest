@@ -13,9 +13,9 @@ import com.n4systems.exceptions.IdListTooBigException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.SimpleSelect;
 import com.n4systems.util.persistence.TestingQueryBuilder;
@@ -32,7 +32,7 @@ public class CommonAssetTypeLoaderTest {
 		private TestingQueryBuilder<AssetType> queryBuilder;
 
 		
-		private CommonAssetTypeLoaderExtension(SecurityFilter filter, ConfigContext configContext) {
+		private CommonAssetTypeLoaderExtension(SecurityFilter filter, ConfigurationProvider configContext) {
 			super(filter, configContext);
 		}
 

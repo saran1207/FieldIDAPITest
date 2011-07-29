@@ -10,7 +10,7 @@ import com.n4systems.persistence.savers.Saver;
 public class DummySaver<T extends Saveable> extends Saver<T> {
 
 	@Override
-	protected void remove(EntityManager em, T entity) {}
+	public void remove(EntityManager em, T entity) {}
 
 	@Override
 	public void remove(T entity) throws EntityStillReferencedException {}
@@ -19,7 +19,7 @@ public class DummySaver<T extends Saveable> extends Saver<T> {
 	public void remove(Transaction transaction, T entity) {}
 
 	@Override
-	protected void save(EntityManager em, T entity) {}
+	public void save(EntityManager em, T entity) {}
 
 	@Override
 	public void save(T entity) {}
@@ -38,7 +38,7 @@ public class DummySaver<T extends Saveable> extends Saver<T> {
 	}
 
 	@Override
-	protected T update(EntityManager em, T entity) {
+	public T update(EntityManager em, T entity) {
 		return entity;
 	}
 

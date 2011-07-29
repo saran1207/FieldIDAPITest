@@ -14,7 +14,7 @@ public class ContractPricingByExternalIdLoader extends Loader<ContractPricing> {
 	private PaymentOption paymentOption;
 	
 	@Override
-	protected ContractPricing load(EntityManager em) {
+	public ContractPricing load(EntityManager em) {
 		QueryBuilder<ContractPricing> builder = new QueryBuilder<ContractPricing>(ContractPricing.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("externalId", externalId);
 		builder.addSimpleWhere("signUpPackage", signUpPackage);

@@ -95,7 +95,7 @@ public class LazyLoadingListTest extends TestUsesTransactionBase {
 		}
 
 		@Override
-		protected Event load(EntityManager em) {
+		public Event load(EntityManager em) {
 			return null;
 		}
 

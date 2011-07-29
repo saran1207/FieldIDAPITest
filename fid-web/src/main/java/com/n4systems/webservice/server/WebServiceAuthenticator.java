@@ -6,6 +6,7 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.WsServiceLocator;
 import com.n4systems.webservice.dto.AuthenticationRequest;
@@ -62,7 +63,7 @@ public class WebServiceAuthenticator {
 	}
 	
 	public boolean passesMinimumMobileVersion() {
-		ConfigContext configContext = ConfigContext.getCurrentContext();
+		ConfigurationProvider configContext = ConfigContext.getCurrentContext();
 		
 		int minimumMajorVersion = configContext.getInteger(ConfigEntry.MINIMUM_MOBILE_MAJOR_VERSION);
 		int minimumMinorVersion = configContext.getInteger(ConfigEntry.MINIMUM_MOBILE_MINOR_VERSION);

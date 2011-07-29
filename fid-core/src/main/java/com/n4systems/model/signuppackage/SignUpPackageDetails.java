@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.api.Listable;
 
-public enum SignUpPackageDetails {
+public enum SignUpPackageDetails implements Listable<String> {
 
 	Free("FIDFREE", "Free"),
 
@@ -13,11 +14,9 @@ public enum SignUpPackageDetails {
 
 	Plus("FIDPLUS", "Plus", ExtendedFeature.Branding, ExtendedFeature.EmailAlerts, ExtendedFeature.Projects),
 
-	Enterprise("FIDENTERPRISE", "Enterprise", ExtendedFeature.EmailAlerts, ExtendedFeature.Projects, ExtendedFeature.Branding,
-			ExtendedFeature.AllowIntegration),
+	Enterprise("FIDENTERPRISE", "Enterprise", ExtendedFeature.EmailAlerts, ExtendedFeature.Projects, ExtendedFeature.Branding),
 
-	Unlimited("FIDUNLIMITED", "Unlimited", ExtendedFeature.EmailAlerts, ExtendedFeature.Projects, ExtendedFeature.Branding,
-			ExtendedFeature.AllowIntegration, ExtendedFeature.CustomCert, ExtendedFeature.DedicatedProgramManager);
+	Unlimited("FIDUNLIMITED", "Unlimited", ExtendedFeature.EmailAlerts, ExtendedFeature.Projects, ExtendedFeature.Branding);
 
 	public static SignUpPackageDetails retrieveBySyncId(String syncId) {
 		if (syncId == null) {
@@ -77,5 +76,15 @@ public enum SignUpPackageDetails {
 		}
 
 		return false;
+	}
+
+	@Override
+	public String getId() {
+		return name();
+	}
+
+	@Override
+	public String getDisplayName() {
+		return getName();
 	}
 }

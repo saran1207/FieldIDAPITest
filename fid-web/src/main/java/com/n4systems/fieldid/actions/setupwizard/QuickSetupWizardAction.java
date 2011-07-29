@@ -6,7 +6,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.OrgSaver;
-import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
+import com.n4systems.model.tenant.extendedfeatures.ExendedFeatureToggler;
 import com.n4systems.model.ui.seenit.SeenItItem;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -79,10 +79,10 @@ public class QuickSetupWizardAction extends AbstractAction {
 	}
 
 	private void updateExtendedFeatures(Transaction transaction) throws Exception{
-		new ToggleExendedFeatureMethod(ExtendedFeature.JobSites, turnOnJobSites).applyTo(getPrimaryOrg(), transaction);
-		new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, turnOnAssignedTo).applyTo(getPrimaryOrg(), transaction);
-		new ToggleExendedFeatureMethod(ExtendedFeature.ProofTestIntegration, turnOnProofTests).applyTo(getPrimaryOrg(), transaction);
-		new ToggleExendedFeatureMethod(ExtendedFeature.ManufacturerCertificate, turnOnManufacturerCertificates).applyTo(getPrimaryOrg(), transaction);
+		new ExendedFeatureToggler(ExtendedFeature.JobSites, turnOnJobSites).applyTo(getPrimaryOrg(), transaction);
+		new ExendedFeatureToggler(ExtendedFeature.AssignedTo, turnOnAssignedTo).applyTo(getPrimaryOrg(), transaction);
+		new ExendedFeatureToggler(ExtendedFeature.ProofTestIntegration, turnOnProofTests).applyTo(getPrimaryOrg(), transaction);
+		new ExendedFeatureToggler(ExtendedFeature.ManufacturerCertificate, turnOnManufacturerCertificates).applyTo(getPrimaryOrg(), transaction);
 	}
 
 	private void clearCachedValues() {

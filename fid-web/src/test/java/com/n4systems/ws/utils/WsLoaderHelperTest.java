@@ -1,6 +1,6 @@
 package com.n4systems.ws.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import javax.persistence.EntityManager;
 
@@ -22,7 +22,7 @@ public class WsLoaderHelperTest {
 				return entity;
 			}
 			@Override
-			protected String load(EntityManager em) {
+			public String load(EntityManager em) {
 				return entity;
 			}
 		});
@@ -38,7 +38,7 @@ public class WsLoaderHelperTest {
 				return null;
 			}
 			@Override
-			protected String load(EntityManager em) {
+			public String load(EntityManager em) {
 				return null;
 			}
 		});
@@ -52,7 +52,7 @@ public class WsLoaderHelperTest {
 				throw new RuntimeException();
 			}
 			@Override
-			protected String load(EntityManager em) {
+			public String load(EntityManager em) {
 				throw new RuntimeException();
 			}
 		});

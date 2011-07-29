@@ -59,15 +59,6 @@ a:hover, a:active {
 	color: #356CA2;
 }
 
-h2 {
-	color: #666;
-	border-bottom: 1px solid #666;
-	margin: 0;
-	padding: 10px 0 1px 0;
-	font-size: 1.2em;
-}	
-
-
 .fileList {
 	float: left;
 	margin-right: 10px;

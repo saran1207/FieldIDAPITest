@@ -15,22 +15,26 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		return persistenceService.find(createTenantSecurityBuilder(TenantSettings.class));
 	}
 	
+	public void update(TenantSettings tenantSettings) {
+		persistenceService.update(tenantSettings);
+	}
+	
 	public void updateTenantAccountPolicySettings(AccountPolicy accountPolicy) { 
 		TenantSettings tenantSettings = getTenantSettings();
 		tenantSettings.setAccountPolicy(accountPolicy);
-		persistenceService.update(tenantSettings);
+		update(tenantSettings);
 	}
 	
 	public void updateTenantPasswordPolicySettings(PasswordPolicy passwordPolicy) { 
 		TenantSettings tenantSettings = getTenantSettings();
 		tenantSettings.setPasswordPolicy(passwordPolicy);
-		persistenceService.update(tenantSettings);
+		update(tenantSettings);
 	}	
 	
 	public void updateUserLimits(UserLimits userLimits) {
 		TenantSettings tenantSettings = getTenantSettings();
 		tenantSettings.setUserLimits(userLimits);
-		persistenceService.update(tenantSettings);
+		update(tenantSettings);
 	}
 	
 	public void updateGpsCapture(boolean gpsCapture) {

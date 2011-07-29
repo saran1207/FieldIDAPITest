@@ -9,18 +9,18 @@ import com.n4systems.persistence.savers.Saver;
 public class AutoAttributeDefinitionSaver extends Saver<AutoAttributeDefinition> {
 
 	@Override
-	protected void remove(EntityManager em, AutoAttributeDefinition entity) {
+	public void remove(EntityManager em, AutoAttributeDefinition entity) {
 		super.remove(em, entity);
 		updateCriteria(em, entity);
 	}
 
 	@Override
-	protected void save(EntityManager em, AutoAttributeDefinition entity) {
+	public void save(EntityManager em, AutoAttributeDefinition entity) {
 		update(em, entity);
 	}
 
 	@Override
-	protected AutoAttributeDefinition update(EntityManager em, AutoAttributeDefinition entity) {
+	public AutoAttributeDefinition update(EntityManager em, AutoAttributeDefinition entity) {
 		/*
 		 * This save process comes directly from the old AutoAttributeManagerImpl.  Not sure if it's still required.
 		 * 1. Definitions are never persisted, only merged.  Notice, save just calls this.

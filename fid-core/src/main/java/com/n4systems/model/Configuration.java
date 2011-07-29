@@ -6,12 +6,13 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.util.ConfigEntry;
 
 @Entity
 @Table( name = "configurations" )
-public class Configuration extends AbstractEntity {
+public class Configuration extends AbstractEntity implements UnsecuredEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@Enumerated(EnumType.STRING)

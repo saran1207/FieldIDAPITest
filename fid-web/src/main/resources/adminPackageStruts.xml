@@ -94,14 +94,6 @@
 			</result>
 		</action>
 
-		<action name="organizationNote" method="note"
-			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/html/organization/edit.ftl
-			</result>
-			<result name="input" type="freemarker">/admin/templates/html/organization/edit.ftl
-			</result>
-		</action>
-
 		<action name="unitOfMeasureList" method="list"
 			class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
 			<result name="success" type="freemarker">/admin/templates/html/unitofmeasure/list.ftl

@@ -27,7 +27,7 @@ public class OrgConnectionSaver extends Saver<OrgConnection> {
 	}
 	
 	@Override
-	protected void save(EntityManager em, OrgConnection connection) {
+	public void save(EntityManager em, OrgConnection connection) {
 		if (isUsingHouseAccount(connection)) {
 			// you can never link to a house account we'll fail silently is this conn has one in it
 			return;

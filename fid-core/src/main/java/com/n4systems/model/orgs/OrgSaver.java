@@ -33,7 +33,7 @@ public class OrgSaver extends Saver<BaseOrg> {
 	}
 
 	@Override
-	protected BaseOrg update(EntityManager em, BaseOrg entity) {
+	public BaseOrg update(EntityManager em, BaseOrg entity) {
 		ensureAddressInfoIsNotNull(entity);
 		
 		if (entity.getAddressInfo().isNew()) {

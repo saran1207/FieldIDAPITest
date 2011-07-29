@@ -11,14 +11,14 @@ import com.n4systems.persistence.savers.Saver;
 public class PredefinedLocationSaver extends Saver<PredefinedLocation> {
 
 	@Override
-	protected void save(EntityManager em, PredefinedLocation entity) {
+	public void save(EntityManager em, PredefinedLocation entity) {
 		super.save(em, entity);
 		// See the PredefinedLocation entity for why this is here
 		entity.rebuildSearchIds(em);
 	}
 
 	@Override
-	protected void remove(EntityManager em, PredefinedLocation location) {
+	public void remove(EntityManager em, PredefinedLocation location) {
 		SecurityFilter tenantFilter = createTenantOnlySecurityFilter(location);
 		
 		location.archiveEntity();

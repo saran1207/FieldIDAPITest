@@ -14,7 +14,7 @@ public class SafetyNetworkAssetTypeLoader extends Loader<AssetType> {
 	private Long assetNetworkId;
 
 	@Override
-	protected AssetType load(EntityManager em) {
+	public AssetType load(EntityManager em) {
 		QueryBuilder<AssetType> builder = new QueryBuilder<AssetType>(Asset.class, new OpenSecurityFilter());
 		builder.setSimpleSelect("type", true);
 		builder.addWhere(WhereClauseFactory.create("type.id", assetTypeId));

@@ -8,13 +8,13 @@ import com.n4systems.persistence.savers.Saver;
 public class NonIntegrationLineItemSaver extends Saver<LineItem> {
 
 	@Override
-	protected void save(EntityManager em, LineItem entity) {
+	public void save(EntityManager em, LineItem entity) {
 		em.persist(entity.getOrder());
 		super.save(em, entity);
 	}
 
 	@Override
-	protected LineItem update(EntityManager em, LineItem entity) {
+	public LineItem update(EntityManager em, LineItem entity) {
 		entity.setOrder(em.merge(entity.getOrder()));
 		return super.update(em, entity);
 	}

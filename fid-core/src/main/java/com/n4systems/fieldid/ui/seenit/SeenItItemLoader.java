@@ -12,7 +12,7 @@ public class SeenItItemLoader extends Loader<SeenItStorageItem>{
 	protected Long userId;
 	
 	@Override
-	protected SeenItStorageItem load(EntityManager em) {
+	public SeenItStorageItem load(EntityManager em) {
 		guard();
 		
 		QueryBuilder<SeenItStorageItem> queryBuilder = new QueryBuilder<SeenItStorageItem>(SeenItStorageItem.class);

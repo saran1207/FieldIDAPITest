@@ -12,7 +12,7 @@ public class ActiveSessionLoader extends Loader<ActiveSession> implements IdLoad
 	private Long userIdentifier;
 
 	@Override
-	protected ActiveSession load(EntityManager em) {
+	public ActiveSession load(EntityManager em) {
 		gaurd();
 		return getQueryBuilder().addSimpleWhere("user.id", userIdentifier).getSingleResult(em);
 	}

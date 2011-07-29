@@ -19,7 +19,7 @@ public class SafetyNetworkAttachmentLoader extends Loader<FileAttachment> {
 	}
 
 	@Override
-	protected FileAttachment load(EntityManager em) {
+	public FileAttachment load(EntityManager em) {
 		canLoadAttachmentLoader.setAttachmentId(id);
 		canLoadAttachmentLoader.setNetworkId(assetNetworkId);
 		

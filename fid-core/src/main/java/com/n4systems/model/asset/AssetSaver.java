@@ -73,7 +73,7 @@ public class AssetSaver extends Saver<Asset> {
 	}
 
 	@Override
-	protected void remove(EntityManager em, Asset asset) {
+	public void remove(EntityManager em, Asset asset) {
 		throw new NotImplementedException();
 	}
 	

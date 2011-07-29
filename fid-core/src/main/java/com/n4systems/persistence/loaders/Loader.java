@@ -7,7 +7,7 @@ import com.n4systems.persistence.Transaction;
 
 
 abstract public class Loader<T> {
-	protected abstract T load(EntityManager em);
+	public abstract T load(EntityManager em);
 
 	public T load() {
 		return PersistenceManager.executeLoader(this);

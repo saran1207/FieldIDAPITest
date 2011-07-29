@@ -14,7 +14,7 @@ public class SignUpPackageLoader extends Loader<SignUpPackage> {
 	private SignUpPackageDetails signUpPackageTarget;
 	
 	@Override
-	protected SignUpPackage load(EntityManager em) {
+	public SignUpPackage load(EntityManager em) {
 		QueryBuilder<ContractPricing> query = new QueryBuilder<ContractPricing>(ContractPricing.class, new OpenSecurityFilter());
 		query.addSimpleWhere("signUpPackage", signUpPackageTarget);
 		List<ContractPricing> contracts = query.getResultList(em);

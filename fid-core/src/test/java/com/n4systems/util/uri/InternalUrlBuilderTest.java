@@ -9,16 +9,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.model.Tenant;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 
 
 public class InternalUrlBuilderTest {
 	private ConfigContextOverridableTestDouble configContext;
 
 	private final class BlankPathBaseUrlBuilder extends InternalUrlBuilder {
-		private BlankPathBaseUrlBuilder(URI baseUri, ConfigContext configContext) {
+		private BlankPathBaseUrlBuilder(URI baseUri, ConfigurationProvider configContext) {
 			super(baseUri, configContext);
 		}
 
@@ -31,7 +31,7 @@ public class InternalUrlBuilderTest {
 	private final class SuppliedPathBaseUrlBuilder extends InternalUrlBuilder {
 		private final String path;
 
-		private SuppliedPathBaseUrlBuilder(URI baseUri, ConfigContext configContext, String path) {
+		private SuppliedPathBaseUrlBuilder(URI baseUri, ConfigurationProvider configContext, String path) {
 			super(baseUri, configContext);
 			this.path = path;
 		}

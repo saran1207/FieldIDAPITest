@@ -1,7 +1,14 @@
 package com.n4systems.api.asset;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,11 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-import com.n4systems.api.conversion.asset.AssetToModelConverter;
-import com.n4systems.api.model.AssetView;
-import com.n4systems.model.Asset;
-import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
-import com.n4systems.model.builders.AssetTypeBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,11 +23,16 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.api.conversion.ConversionException;
+import com.n4systems.api.conversion.asset.AssetToModelConverter;
+import com.n4systems.api.model.AssetView;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AssetStatus;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.LineItem;
-import com.n4systems.model.AssetType;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
+import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.model.builders.OrgBuilder;
@@ -130,7 +137,7 @@ public class AssetToModelConverterTest {
 	public void to_model_creates_order_when_not_null() throws ConversionException {
 		AssetView view = createView("on1234", null);
 		LineItem line = new LineItem();
-		Tenant tenant = dummyOrgLoader.load(null).getTenant();
+		Tenant tenant = dummyOrgLoader.load((Transaction)null).getTenant();
 
 		NonIntegrationOrderManager orgLoader = createMock(NonIntegrationOrderManager.class);
 		AssetToModelConverter converter = new AssetToModelConverter(dummyOrgLoader, orgLoader, null, dummyOptionConverter);

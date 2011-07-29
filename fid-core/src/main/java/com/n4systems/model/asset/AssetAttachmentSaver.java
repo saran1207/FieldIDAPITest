@@ -30,20 +30,20 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	}
 
 	@Override
-	protected void save(EntityManager em, AssetAttachment entity) {
+	public void save(EntityManager em, AssetAttachment entity) {
 		fillInConnectionFields(entity);
 		entity = saveAttachment(em, entity);
 		moveAttachedFile(em, entity);
 	}
 	
 	@Override
-	protected AssetAttachment update(EntityManager em, AssetAttachment entity) {
+	public AssetAttachment update(EntityManager em, AssetAttachment entity) {
 		fillInConnectionFields(entity);
 		return em.merge(entity);
 	}
 
 	@Override
-	protected void remove(EntityManager em, AssetAttachment entity) {
+	public void remove(EntityManager em, AssetAttachment entity) {
 		if (entity == null || entity.isNew()) {
 			throw new InvalidArgumentException("you need an attachment that has been persisted.");
 		}

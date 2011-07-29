@@ -13,21 +13,21 @@ abstract public class Saver<T extends Saveable> implements Deleter<T> {
 	/**
 	 * Subclasses should override this method if a non-default persist is required. 
 	 */
-	protected void save(EntityManager em, T entity) {
+	public void save(EntityManager em, T entity) {
 		em.persist(entity);
 	}
 	
 	/**
 	 * Subclasses should override this method if a non-default update is required. 
 	 */
-	protected T update(EntityManager em, T entity) {
+	public T update(EntityManager em, T entity) {
 		return em.merge(entity);
 	}
 	
 	/**
 	 * Subclasses should override this method if a non-default remove is required. 
 	 */
-	protected void remove(EntityManager em, T entity) {
+	public void remove(EntityManager em, T entity) {
 		PersistenceManager.reattach(em, entity);
 		em.remove(entity);
 	}

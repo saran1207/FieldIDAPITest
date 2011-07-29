@@ -12,7 +12,7 @@ public class UserUnfilteredLoader extends Loader<User> {
 	public UserUnfilteredLoader() {}
 
 	@Override
-	protected User load(EntityManager em) {
+	public User load(EntityManager em) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("id", id);
 		

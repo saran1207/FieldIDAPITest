@@ -31,6 +31,7 @@ import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 
 public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
@@ -148,7 +149,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         return versionString;
     }
 
-	protected ConfigContext getConfigContext() {
+	protected ConfigurationProvider getConfigContext() {
 		return ConfigContext.getCurrentContext();
 	}
 

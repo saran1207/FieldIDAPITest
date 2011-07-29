@@ -1,1 +1,129 @@
-<wicket:extend></wicket:extend>
+<wicket:extend>
+	<div wicket:id="feedbackPanel"></div>
+
+	<form wicket:id="addTenantForm" class="fullForm fluidSets">
+		<div class="multiColumn clearBoth">
+			<div class="fieldGroup fieldGroupGap">
+				<h2>Tenant Information</h2>
+				<div class="infoSet">
+					<label class="label">Package</label>
+					<span class="fieldHolder">
+						<select wicket:id="signUpPackage"></select>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Name *</label>
+					<span class="fieldHolder">
+						<input wicket:id="tenant.name" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Employee Users *</label>
+					<span class="fieldHolder">
+						<input wicket:id="tenant.settings.userLimits.maxEmployeeUsers" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Lite Users *</label>
+					<span class="fieldHolder">
+						<input wicket:id="tenant.settings.userLimits.maxLiteUsers" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Read-Only Users *</label>
+					<span class="fieldHolder">
+						<input wicket:id="tenant.settings.userLimits.maxReadOnlyUsers" type="text" class="textbox"/>
+					</span>
+				</div>
+			</div>
+			<div class="fieldGroup">
+				<h2>Primary User Information</h2>
+				
+				<div class="infoSet">
+					<label class="label">User ID *</label>
+					<span class="fieldHolder">
+						<input wicket:id="adminUser.userID" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">First Name *</label>
+					<span class="fieldHolder">
+						<input wicket:id="adminUser.firstName" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Last Name *</label>
+					<span class="fieldHolder">
+						<input wicket:id="adminUser.lastName" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Email *</label>
+					<span class="fieldHolder">
+						<input wicket:id="adminUser.emailAddress" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div wicket:id="timeZoneContainer"></div>
+			</div>
+			<div class="fieldGroup fieldGroupGap clearLeft">
+				<h2>Extended Features</h2>
+			
+				<div class="infoSet">
+					<label class="label">Secondary Organizations</label>
+					<span class="fieldHolder">
+						<input wicket:id="tenant.settings.secondaryOrgsEnabled" type="checkbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Plans And Pricing Button</label>
+					<span class="fieldHolder">
+						<input wicket:id="primaryOrg.plansAndPricingAvailable" type="checkbox"/>
+					</span>
+				</div>
+				<fieldset>
+					<span wicket:id="extendedFeatures">
+						<div class="infoSet">
+							<label class="label" wicket:id="featureName"></label>
+							<span class="fieldHolder">
+								<input wicket:id="feature" type="checkbox"/>
+							</span>
+						</div>
+					</span>
+	  			</fieldset>
+			</div>
+			<div class="fieldGroup">
+				<h2>Primary Organization Information</h2>
+				<div class="infoSet">
+					<label class="label">Name *</label>
+					<span class="fieldHolder">
+						<input wicket:id="primaryOrg.name" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Netsuite User *</label>
+					<span class="fieldHolder">
+						<input wicket:id="primaryOrg.externalUserName" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div class="infoSet">
+					<label class="label">Netsuite Pass *</label>
+					<span class="fieldHolder">
+						<input wicket:id="primaryOrg.externalPassword" type="text" class="textbox"/>
+					</span>
+				</div>
+				<div wicket:id="addressInfoContainer"></div>
+				<div class="infoSet">
+					<label class="label">Notes</label>
+					<span class="fieldHolder">
+						<textarea wicket:id="primaryOrg.notes" rows="5" cols="120"></textarea>
+					</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="actions">
+			<input class="save" type="submit" value="Save">
+		</div>
+	</form>
+
+</wicket:extend>

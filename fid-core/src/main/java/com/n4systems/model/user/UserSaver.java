@@ -14,14 +14,14 @@ import com.n4systems.util.persistence.WhereParameter.Comparator;
 public class UserSaver extends Saver<User> {
 
 	@Override
-	protected void save(EntityManager em, User entity) {
+	public void save(EntityManager em, User entity) {
 		checkUnique(em, entity);
 		
 		super.save(em, entity);
 	}
 
 	@Override
-	protected User update(EntityManager em, User entity) {
+	public User update(EntityManager em, User entity) {
 		checkUnique(em, entity);
 		
 		return super.update(em, entity);

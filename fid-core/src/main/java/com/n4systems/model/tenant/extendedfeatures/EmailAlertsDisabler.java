@@ -8,20 +8,14 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.Transaction;
 
-// Use ExtendedFeatureService
-@Deprecated
-public class EmailAlertsSwitch extends ExtendedFeatureSwitch {
+public class EmailAlertsDisabler extends ExtendedFeatureDisabler {
 
-	protected EmailAlertsSwitch(PrimaryOrg primaryOrg) {
+	protected EmailAlertsDisabler(PrimaryOrg primaryOrg) {
 		super(primaryOrg, ExtendedFeature.EmailAlerts);
 	}
 
 	@Override
-	protected void featureSetup(Transaction transaction) {
-	}
-
-	@Override
-	protected void featureTearDown(Transaction transaction) {
+	protected void disableFeature(Transaction transaction) {
 		
 		NotificationSettingByTenantListLoader loader = new  NotificationSettingByTenantListLoader(new TenantOnlySecurityFilter(primaryOrg.getTenant().getId()));
 		

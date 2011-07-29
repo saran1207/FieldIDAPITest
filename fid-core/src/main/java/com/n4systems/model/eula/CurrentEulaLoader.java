@@ -14,7 +14,7 @@ public class CurrentEulaLoader  extends Loader<EULA>   {
 	public CurrentEulaLoader() {}
 	
 	@Override
-	protected EULA load(EntityManager em) {
+	public EULA load(EntityManager em) {
 		QueryBuilder<EULA> builder = new QueryBuilder<EULA>(EULA.class, new OpenSecurityFilter());
 		builder.addWhere(Comparator.LE, "effectiveDate", "effectiveDate", new Date());
 		builder.addOrder("effectiveDate", false);

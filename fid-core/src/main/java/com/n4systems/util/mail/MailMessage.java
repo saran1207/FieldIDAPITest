@@ -23,13 +23,14 @@ import javax.mail.util.ByteArrayDataSource;
 
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.StringUtils;
 
 public class MailMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private final ConfigContext config;
+	private final ConfigurationProvider config;
 	private final MessageType contentType;
 	
 	private String subject;
@@ -66,7 +67,7 @@ public class MailMessage implements Serializable {
 		}
 	}
 	
-	public MailMessage(MessageType type, ConfigContext config) {
+	public MailMessage(MessageType type, ConfigurationProvider config) {
 		this.contentType = type;
 		this.config = config;
 	}

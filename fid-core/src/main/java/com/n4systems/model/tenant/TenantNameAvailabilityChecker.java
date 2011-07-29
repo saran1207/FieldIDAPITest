@@ -18,11 +18,12 @@ import com.n4systems.persistence.loaders.AllEntityListLoader;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 
 public class TenantNameAvailabilityChecker {
 	private final Logger logger = Logger.getLogger(TenantNameAvailabilityChecker.class);
 	private final AllEntityListLoader<Tenant> tenantsLoader;
-	private final ConfigContext configContext;
+	private final ConfigurationProvider configContext;
 	private final File reservedTenantNamesFile;
 	
 	private Set<String> unavailableNames;
@@ -31,7 +32,7 @@ public class TenantNameAvailabilityChecker {
 		this(new AllEntityListLoader<Tenant>(Tenant.class), ConfigContext.getCurrentContext(), PathHandler.getReservedTenantNamesConfigFile());
 	}
 	
-	public TenantNameAvailabilityChecker(AllEntityListLoader<Tenant> tenantsLoader, ConfigContext configContext, File reservedTenantNamesFile) {
+	public TenantNameAvailabilityChecker(AllEntityListLoader<Tenant> tenantsLoader, ConfigurationProvider configContext, File reservedTenantNamesFile) {
 		this.tenantsLoader = tenantsLoader;
 		this.configContext = configContext;
 		this.reservedTenantNamesFile = reservedTenantNamesFile;

@@ -14,11 +14,11 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithOwner;
 
 @Entity
-@Table(name="typedorgconnections")
+@Table(name = "typedorgconnections")
 public class TypedOrgConnection extends EntityWithOwner {
 	public enum ConnectionType {
 		CUSTOMER("label.customer"), VENDOR("label.vendor"), CATALOG_ONLY("label.catalog_only");
-		
+
 		private String label;
 
 		private ConnectionType(String label) {
@@ -28,22 +28,21 @@ public class TypedOrgConnection extends EntityWithOwner {
 		public String getLabel() {
 			return label;
 		}
-		
-		
+
 	}
-	
-	@ManyToOne(fetch=FetchType.EAGER, optional=false)
-	@JoinColumn(name="connectedorg_id", nullable=false)
+
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "connectedorg_id", nullable = false)
 	private BaseOrg connectedOrg;
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private ConnectionType connectionType;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="orgconnection_id")
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "orgconnection_id")
 	private OrgConnection orgConnection;
-	
+
 	public TypedOrgConnection() {
 	}
 
@@ -51,13 +50,11 @@ public class TypedOrgConnection extends EntityWithOwner {
 		super(tenant, owner);
 	}
 
-
 	public BaseOrg getConnectedOrg() {
 		return connectedOrg;
 	}
 
-	// The saver will handle setting this value to the house account.
-	protected void setConnectedOrg(BaseOrg connectedOrg) {
+	public void setConnectedOrg(BaseOrg connectedOrg) {
 		this.connectedOrg = connectedOrg;
 	}
 
@@ -72,23 +69,21 @@ public class TypedOrgConnection extends EntityWithOwner {
 	public ConnectionType getConnectionType() {
 		return connectionType;
 	}
-	
-	public boolean isCustomerConnection(){
+
+	public boolean isCustomerConnection() {
 		return connectionType.equals(ConnectionType.CUSTOMER);
 	}
-	
-	public boolean isVendorConnection(){
+
+	public boolean isVendorConnection() {
 		return connectionType.equals(ConnectionType.VENDOR);
 	}
-	
-	public boolean isCatalogOnlyConnection(){
+
+	public boolean isCatalogOnlyConnection() {
 		return connectionType.equals(ConnectionType.CATALOG_ONLY);
 	}
-	
+
 	public void setConnectionType(ConnectionType connectionType) {
 		this.connectionType = connectionType;
 	}
-	
-
 
 }

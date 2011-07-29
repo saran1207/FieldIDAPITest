@@ -13,7 +13,7 @@ public class LinkedOrgListLoader extends NonSecuredListLoader<ExternalOrg> {
 	private Long internalOrgId;
 	
 	@Override
-	protected List<ExternalOrg> load(EntityManager em) {
+	public List<ExternalOrg> load(EntityManager em) {
 		QueryBuilder<ExternalOrg> builder = new QueryBuilder<ExternalOrg>(ExternalOrg.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("linkedOrg.id", internalOrgId);
 		

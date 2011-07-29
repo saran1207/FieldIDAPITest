@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 public class SeleniumAssetSaver extends Saver<Asset> {
 
     @Override
-    protected void save(EntityManager em, Asset asset) {
+	public void save(EntityManager em, Asset asset) {
         // Not sure why this is required. The normal AssetSaver somehow fails to
         // leave the asset in a state where the rest of the scenario can see it.
         // This has to do with the magical double saving and the use of the old asset manager

@@ -10,7 +10,7 @@ public class AssociatedEventTypeSaver extends Saver<AssociatedEventType> {
 
 	
 	@Override
-	protected AssociatedEventType update(EntityManager em, AssociatedEventType entity) {
+	public AssociatedEventType update(EntityManager em, AssociatedEventType entity) {
 		throw new NotImplementedException("update is not valid on this relationship");
 	}
 	

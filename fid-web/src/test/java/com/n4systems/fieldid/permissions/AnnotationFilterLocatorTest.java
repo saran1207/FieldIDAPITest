@@ -78,7 +78,7 @@ public class AnnotationFilterLocatorTest {
 		public void methodWithOutPermission() {
 		}
 		
-		@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.CustomCert)
+		@ExtendedFeatureFilter(requiredFeature=ExtendedFeature.AssignedTo)
 		public void methodWithPermissionToNotBeOverrided() {
 		}
 	}

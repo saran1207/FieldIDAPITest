@@ -19,7 +19,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.signuppackage.UpgradePackageFilter;
-import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
+import com.n4systems.model.tenant.extendedfeatures.ExendedFeatureToggler;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
@@ -176,9 +176,9 @@ public class SystemSettingsCrud extends AbstractCrud {
 	
 	private void updateExtendedFeatures(Transaction transaction) throws Exception {
 		PrimaryOrg primaryOrg = getPrimaryOrg();
-		new ToggleExendedFeatureMethod(ExtendedFeature.ProofTestIntegration, proofTestIntegration).applyTo(primaryOrg, transaction);
-		new ToggleExendedFeatureMethod(ExtendedFeature.AssignedTo, assignedTo).applyTo(primaryOrg, transaction);
-		new ToggleExendedFeatureMethod(ExtendedFeature.ManufacturerCertificate, manufacturerCertificate).applyTo(primaryOrg, transaction);
+		new ExendedFeatureToggler(ExtendedFeature.ProofTestIntegration, proofTestIntegration).applyTo(primaryOrg, transaction);
+		new ExendedFeatureToggler(ExtendedFeature.AssignedTo, assignedTo).applyTo(primaryOrg, transaction);
+		new ExendedFeatureToggler(ExtendedFeature.ManufacturerCertificate, manufacturerCertificate).applyTo(primaryOrg, transaction);
 	}
 
 	private void updateDateFormat() throws Exception {

@@ -11,7 +11,7 @@ public class TaskConfigLoader extends Loader<TaskConfig> {
 	
 	public TaskConfigLoader() {}
 	
-	protected TaskConfig load(EntityManager em) {
+	public TaskConfig load(EntityManager em) {
 		QueryBuilder<TaskConfig> builder = new QueryBuilder<TaskConfig>(TaskConfig.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("id", id);
 		

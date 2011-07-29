@@ -1,15 +1,10 @@
 package com.n4systems.handlers.creator.signup;
 
-import java.util.List;
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.creator.signup.model.AccountCreationInformation;
 import com.n4systems.handlers.creator.signup.model.AccountPlaceHolder;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureFactory;
-import com.n4systems.model.tenant.extendedfeatures.ExtendedFeatureSwitch;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
@@ -41,7 +36,6 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	}
 
 	private void applyChangesToPlaceHolders(Transaction transaction) {
-		processExtendedFeatures(transaction);
 		processLimits(transaction);
 		applyExternalIds();
 		saveChanges(transaction);
@@ -93,14 +87,6 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 		}
 	}
 
-	private void processExtendedFeatures(Transaction transaction) {
-		List<ExtendedFeature> extendedFeaturesToTurnOn = accountInformation.getSignUpPackage().getSignPackageDetails().getFeatureList();
-		for (ExtendedFeature feature : extendedFeaturesToTurnOn) {
-			ExtendedFeatureSwitch featureSwitch = getSwitchFor(feature);
-			featureSwitch.enableFeature(transaction);
-		}
-	}
-
 	public SignUpFinalizationHandler setAccountInformation(AccountCreationInformation accountInformation) {
 		this.accountInformation = accountInformation;
 		return this;
@@ -119,10 +105,6 @@ public class SignUpFinalizationHandlerImpl implements SignUpFinalizationHandler 
 	public SignUpFinalizationHandler setReferrerOrg(PrimaryOrg referrerOrg) {
 		this.referrerOrg = referrerOrg;
 		return this;
-	}
-
-	protected ExtendedFeatureSwitch getSwitchFor(ExtendedFeature feature) {
-		return ExtendedFeatureFactory.getSwitchFor(feature, getPrimaryOrg());
 	}
 
 }

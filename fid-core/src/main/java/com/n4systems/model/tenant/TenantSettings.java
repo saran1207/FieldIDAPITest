@@ -17,10 +17,10 @@ public class TenantSettings extends EntityWithTenant {
 	private UserLimits userLimits = new UserLimits();
 	
 	@Embedded
-	private AccountPolicy accountPolicy;
+	private AccountPolicy accountPolicy = new AccountPolicy();
 	
 	@Embedded
-	private PasswordPolicy passwordPolicy;
+	private PasswordPolicy passwordPolicy = new PasswordPolicy();
 	
 	private boolean gpsCapture;
 

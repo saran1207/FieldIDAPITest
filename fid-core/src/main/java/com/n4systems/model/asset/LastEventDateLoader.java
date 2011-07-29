@@ -17,7 +17,7 @@ public class LastEventDateLoader extends Loader<Date> {
 	public LastEventDateLoader() {}
 
 	@Override
-	protected Date load(EntityManager em) {
+	public Date load(EntityManager em) {
 		if (networkId == null) {
 			throw new SecurityException("networkId must be set");
 		}

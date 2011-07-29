@@ -28,7 +28,7 @@ public class EventAttachmentSaver extends Saver<FileAttachment> {
 	public EventAttachmentSaver() {}
 	
 	@Override
-	protected void save(EntityManager em, FileAttachment attachment) {
+	public void save(EntityManager em, FileAttachment attachment) {
 		writeFileToDisk(attachment);
 		
 		super.save(em, attachment);
@@ -69,12 +69,12 @@ public class EventAttachmentSaver extends Saver<FileAttachment> {
 	}
 
 	@Override
-	protected FileAttachment update(EntityManager em, FileAttachment entity) {
+	public FileAttachment update(EntityManager em, FileAttachment entity) {
 		throw new NotImplementedException();
 	}
 	
 	@Override
-	protected void remove(EntityManager em, FileAttachment entity) {
+	public void remove(EntityManager em, FileAttachment entity) {
 		throw new NotImplementedException();
 	}
 

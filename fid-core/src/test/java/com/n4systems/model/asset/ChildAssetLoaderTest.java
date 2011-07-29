@@ -95,7 +95,7 @@ public class ChildAssetLoaderTest {
 	@Test
 	public void load_child_tree_loads_all_children() {
 		LinkedChildAssetLoader childProdLoader = new LinkedChildAssetLoader() {
-			protected List<Asset> load(EntityManager em) {
+			public List<Asset> load(EntityManager em) {
 				Tree<Asset> assets = tree.find(asset);
 				return assets.values();
 			}

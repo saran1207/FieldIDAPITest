@@ -18,7 +18,7 @@ public class AssetIdListLoader extends Loader<List<IdWrapper>> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected List<IdWrapper> load(EntityManager em) {
+	public List<IdWrapper> load(EntityManager em) {
 		String jpql = String.format("SELECT new com.n4systems.export.IdWrapper(a.id) FROM %s a WHERE a.tenant.id = :tenantId AND a.id NOT IN (SELECT s.asset.id FROM %s s)", Asset.class.getName(), SubAsset.class.getName());
 		Query query = em.createQuery(jpql);
 		query.setParameter("tenantId", tenantId);

@@ -12,7 +12,7 @@ public class SystemColumnMappingLoader extends Loader<SystemColumnMapping> {
     private Long id;
 
     @Override
-    protected SystemColumnMapping load(EntityManager em) {
+	public SystemColumnMapping load(EntityManager em) {
         QueryBuilder<SystemColumnMapping> query = new QueryBuilder<SystemColumnMapping>(SystemColumnMapping.class, new OpenSecurityFilter());
 
         query.addSimpleWhere("id", id);

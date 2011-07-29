@@ -18,7 +18,7 @@ public class AllDownloadLinksByDateLoader extends NonSecuredListLoader<DownloadL
 	public AllDownloadLinksByDateLoader() {}
 	
 	@Override
-	protected List<DownloadLink> load(EntityManager em) {
+	public List<DownloadLink> load(EntityManager em) {
 		QueryBuilder<DownloadLink> builder = new QueryBuilder<DownloadLink>(DownloadLink.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create(Comparator.LT, "created", olderThanDate));
 		

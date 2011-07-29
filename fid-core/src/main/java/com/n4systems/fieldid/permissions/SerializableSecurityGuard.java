@@ -65,28 +65,12 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 		return primaryOrg;
 	}
 
-	public boolean isAllowIntegrationEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.AllowIntegration);
-	}
-
-	public boolean isCustomCertEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.CustomCert);
-	}
-
-	public boolean isDedicatedProgramManagerEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.DedicatedProgramManager);
-	}
-
 	public boolean isJobSitesEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites);
 	}
 	
 	public boolean isAssignedToEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
-	}
-
-	public boolean isUnlimitedLinkedAssetsEnabled() {
-		return primaryOrg.hasExtendedFeature(ExtendedFeature.UnlimitedLinkedAssets);
 	}
 
 	public boolean isPlansAndPricingAvailable() {

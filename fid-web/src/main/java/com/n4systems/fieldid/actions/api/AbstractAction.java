@@ -48,6 +48,7 @@ import com.n4systems.persistence.savers.SaverFactory;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.FieldidDateFormatter;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -576,7 +577,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return singleElementMap;
 	}
 
-	protected ConfigContext getConfigContext() {
+	protected ConfigurationProvider getConfigContext() {
 		return ConfigContext.getCurrentContext();
 	}
 

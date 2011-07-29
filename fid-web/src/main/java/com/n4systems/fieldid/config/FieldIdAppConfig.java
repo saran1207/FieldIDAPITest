@@ -37,11 +37,24 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ServiceLocator;
 
 @Configuration
 public class FieldIdAppConfig {
+	
+	@Bean
+	public TenantCreationService tenantCreationService() {
+		return new TenantCreationService();
+	}
+	
+	@Bean
+	@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
+	public ConfigService configService() {
+		return new ConfigService();
+	}
 
 	@Bean
 	public ServiceLocator serviceLocator() { 
@@ -102,7 +115,7 @@ public class FieldIdAppConfig {
     public DynamicColumnsService dynamicColumnsService() {
         return new DynamicColumnsService();
     }
-    
+
     @Bean
     public SearchService searchService() {
         return new SearchService();
@@ -162,7 +175,7 @@ public class FieldIdAppConfig {
     public LoginService loginService() { 
     	return new LoginService();
     }
-        
+    
     @Bean
     @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UserLimitService userLimitService() {

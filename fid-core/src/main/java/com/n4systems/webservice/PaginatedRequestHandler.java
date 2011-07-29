@@ -3,8 +3,8 @@ package com.n4systems.webservice;
 import org.apache.log4j.Logger;
 
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.webservice.dto.AbstractListResponse;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
 import com.n4systems.webservice.exceptions.ServiceException;
@@ -14,7 +14,7 @@ abstract public class PaginatedRequestHandler<R extends AbstractListResponse>  i
 	private final LoaderFactory loaderFactory;
 	private final int pageSize;
 	
-	public PaginatedRequestHandler(ConfigContext configContext, LoaderFactory loaderFactory) {
+	public PaginatedRequestHandler(ConfigurationProvider configContext, LoaderFactory loaderFactory) {
 		pageSize = configContext.getInteger(ConfigEntry.MOBLIE_PAGESIZE_SETUPDATA).intValue();
 		this.loaderFactory = loaderFactory;
 	}

@@ -17,7 +17,7 @@ public class LinkedChildAssetLoader extends NonSecuredListLoader<Asset> {
 	public LinkedChildAssetLoader() {}
 	
 	@Override
-	protected List<Asset> load(EntityManager em) {
+	public List<Asset> load(EntityManager em) {
 		if (asset == null) {
 			throw new SecurityException("asset must be set");
 		}

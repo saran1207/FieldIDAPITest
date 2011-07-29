@@ -1,14 +1,14 @@
 package com.n4systems.webservice.dto.hello;
 
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 
 public class HelloResponse {
 	private int majorVersion;
 	private int minorVersion;
 	private int buildVersion;
 
-	public HelloResponse(ConfigContext context) {
+	public HelloResponse(ConfigurationProvider context) {
 		majorVersion = context.getInteger(ConfigEntry.CURRENT_MOBILE_MAJOR_VERSION);
 		minorVersion = context.getInteger(ConfigEntry.CURRENT_MOBILE_MINOR_VERSION);
 		buildVersion = context.getInteger(ConfigEntry.CURRENT_MOBILE_BUILD_VERSION);		

@@ -29,7 +29,7 @@ abstract public class TenantFilteredLoader<T> extends Loader<T> {
 	abstract protected T load(EntityManager em, TenantOnlySecurityFilter filter);
 	
 	@Override
-	protected T load(EntityManager em) {
+	public T load(EntityManager em) {
 		return load(em, filter);
 	}
 

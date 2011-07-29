@@ -35,7 +35,7 @@ public class EventScheduleMapBuilderTest {
 		DateTimeDefiner dateDefiner = new DateTimeDefiner("dd-MM-yyyy", TimeZone.getDefault());
 		
 		NextEventScheduleLoader loader = new NextEventScheduleLoader() {
-			protected EventSchedule load(EntityManager em) {
+			public EventSchedule load(EntityManager em) {
 				return schedule;
 			}
 		};

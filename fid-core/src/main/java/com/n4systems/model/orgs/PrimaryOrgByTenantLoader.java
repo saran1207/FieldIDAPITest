@@ -10,7 +10,7 @@ public class PrimaryOrgByTenantLoader extends Loader<PrimaryOrg>  {
 	private Long tenantId;
 	
 	@Override
-	protected PrimaryOrg load(EntityManager em) {
+	public PrimaryOrg load(EntityManager em) {
 		QueryBuilder<PrimaryOrg> builder = new QueryBuilder<PrimaryOrg>(PrimaryOrg.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("tenant.id", tenantId);
 		

@@ -22,7 +22,7 @@ public class EventCountLoader extends Loader<Long> {
 	private boolean limit30Days = false;
 
 	@Override
-	protected Long load(EntityManager em) {
+	public Long load(EntityManager em) {
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Event.class, filter);
 		

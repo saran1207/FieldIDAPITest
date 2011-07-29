@@ -8,7 +8,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class ActiveSessionSaver extends Saver<ActiveSession>{
 
 	@Override
-	protected void save(EntityManager em, ActiveSession newActiveSession) {
+	public void save(EntityManager em, ActiveSession newActiveSession) {
 		removeExistingActiveSession(em, newActiveSession);
 		saveSession(em, newActiveSession);
 	}

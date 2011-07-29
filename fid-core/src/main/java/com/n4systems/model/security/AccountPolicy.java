@@ -6,30 +6,40 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class AccountPolicy implements Serializable {
-	private static final long serialVersionUID = -8015854089001738209L;
-	
-	private Integer maxAttempts;
-	private Integer lockoutDuration;
+	private int maxAttempts;
+	private int lockoutDuration;
 
-	@Deprecated //only for dev use until persistence is implemented.
-	public static AccountPolicy makeDummyAccountPolicy() { 
+	public AccountPolicy() {
+		this(5, 10);
+	}
+
+	public AccountPolicy(int maxAttempts, int lockoutDuration) {
+		this.maxAttempts = maxAttempts;
+		this.lockoutDuration = lockoutDuration;
+	}
+
+	public Integer getMaxAttempts() {
+		return maxAttempts;
+	}
+
+	public void setMaxAttempts(Integer maxAttempts) {
+		this.maxAttempts = maxAttempts;
+	}
+
+	public Integer getLockoutDuration() {
+		return lockoutDuration;
+	}
+
+	public void setLockoutDuration(Integer lockoutDuration) {
+		this.lockoutDuration = lockoutDuration;
+	}
+
+	@Deprecated
+	// only for dev use until persistence is implemented.
+	public static AccountPolicy makeDummyAccountPolicy() {
 		AccountPolicy policy = new AccountPolicy();
 		policy.setMaxAttempts(5);
 		policy.setLockoutDuration(20);
 		return policy;
 	}
-	
-	public Integer getMaxAttempts() {
-		return maxAttempts;
-	}
-	public void setMaxAttempts(Integer maxAttempts) {
-		this.maxAttempts = maxAttempts;
-	}
-	public Integer getLockoutDuration() {
-		return lockoutDuration;
-	}
-	public void setLockoutDuration(Integer lockoutDuration) {
-		this.lockoutDuration = lockoutDuration;
-	}
-	
 }

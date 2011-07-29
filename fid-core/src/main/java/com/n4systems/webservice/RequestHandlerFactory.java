@@ -2,7 +2,7 @@ package com.n4systems.webservice;
 
 import com.n4systems.model.Asset;
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.util.ConfigContext;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.webservice.assetdownload.AssetIdListResponse;
 import com.n4systems.webservice.assetdownload.AssetListResponse;
 import com.n4systems.webservice.assetdownload.AssetRequest;
@@ -14,11 +14,11 @@ import com.n4systems.webservice.predefinedlocation.PredefinedLocationListRespons
 import com.n4systems.webservice.productidsearch.AssetIdSearchRequestHandler;
 
 public class RequestHandlerFactory {
-	private final ConfigContext configContext;
+	private final ConfigurationProvider configContext;
 	private final LoaderFactory loaderFactory;
 	private final ModelToServiceConverterFactory converterFactory;
 	
-	public RequestHandlerFactory(ConfigContext configContext, LoaderFactory loaderFactory, ModelToServiceConverterFactory converterFactory) {
+	public RequestHandlerFactory(ConfigurationProvider configContext, LoaderFactory loaderFactory, ModelToServiceConverterFactory converterFactory) {
 		this.configContext = configContext;
 		this.loaderFactory = loaderFactory;
 		this.converterFactory = converterFactory;

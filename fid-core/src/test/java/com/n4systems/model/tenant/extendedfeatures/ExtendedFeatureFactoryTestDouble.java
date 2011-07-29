@@ -5,8 +5,8 @@ import com.n4systems.model.orgs.PrimaryOrg;
 
 public class ExtendedFeatureFactoryTestDouble {
 
-	public static ExtendedFeatureSwitchTestDouble getSwitchFor(ExtendedFeature feature, PrimaryOrg primaryOrg) {
-		return new ExtendedFeatureSwitchTestDouble(primaryOrg, feature);
+	public static ExtendedFeatureDisablerTestDouble getSwitchFor(ExtendedFeature feature, PrimaryOrg primaryOrg) {
+		return new ExtendedFeatureDisablerTestDouble(primaryOrg, feature);
 	}
 	
 }

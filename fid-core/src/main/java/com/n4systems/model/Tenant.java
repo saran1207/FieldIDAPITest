@@ -1,7 +1,6 @@
 package com.n4systems.model;
 
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,7 +31,7 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 	@Column(nullable=false)
 	private boolean disabled;
 	
-	@OneToOne(optional=false, mappedBy = "tenant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(optional=false, mappedBy = "tenant", fetch = FetchType.LAZY)
 	private TenantSettings settings = new TenantSettings();
 	
 	public Tenant() {}

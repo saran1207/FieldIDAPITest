@@ -15,7 +15,7 @@ public class TenantByNameLoader extends Loader<Tenant> {
 	}
 
 	@Override
-	protected Tenant load(EntityManager em) {
+	public Tenant load(EntityManager em) {
 		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("name", tenantName);
 		builder.addSimpleWhere("disabled", false);

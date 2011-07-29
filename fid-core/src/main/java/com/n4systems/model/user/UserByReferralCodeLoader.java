@@ -14,7 +14,7 @@ public class UserByReferralCodeLoader extends Loader<User> {
 	private String referralCode;
 	
 	@Override
-	protected User load(EntityManager em) {
+	public User load(EntityManager em) {
 		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new TenantOnlySecurityFilter(tenant));
 		builder.addWhere(WhereClauseFactory.create("referralKey", referralCode));
 		

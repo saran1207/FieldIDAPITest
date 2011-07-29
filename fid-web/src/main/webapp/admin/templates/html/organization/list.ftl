@@ -8,6 +8,9 @@
 	
 	</script>
 </head>
+
+<input class="floatRight" type="button" onClick="window.location='/fieldid/w/admin/addTenant'" value="Create a new Tenant" />
+
 <div id="orgListFilter">
 	<@s.form id="listFilterForm" method="get" theme="simple"> 
 		<@s.hidden name="currentPage" value="1"/>

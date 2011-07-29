@@ -99,6 +99,15 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
-    }    
+    }
+
+	@Override
+	public void reset() {
+		super.reset();
+		created = null;
+		modified = null;
+		createdBy = null;
+		modifiedBy = null;
+	}
     
 }

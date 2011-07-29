@@ -1,7 +1,6 @@
 package com.n4systems.fieldidadmin.actions;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -11,9 +10,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.subscriptions.AccountHelper;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldidadmin.utils.TenantPathUpdater;
 import com.n4systems.model.ExtendedFeature;
@@ -30,11 +31,10 @@ import com.n4systems.model.signuppackage.UpgradePackageFilter;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.UserLimits;
-import com.n4systems.model.tenant.extendedfeatures.ToggleExendedFeatureMethod;
+import com.n4systems.model.tenant.extendedfeatures.ExendedFeatureToggler;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.services.TenantFinder;
-import com.n4systems.subscription.SubscriptionAgent;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.DateHelper;
 import com.opensymphony.xwork2.Preparable;
@@ -82,6 +82,9 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private String featureName;
 	private boolean featureOn;
 	private boolean showReminder = false;
+	
+	@Autowired
+	private TenantSettingsService tenantSettingsService;
 	
 	@Override
 	protected void loadMemberFields(Long uniqueId) {}
@@ -187,7 +190,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	
 	@SkipValidation
 	public String doUpdateSecondaryOrgs() {
-		updateTenant();
+		tenantSettingsService.update(tenant.getSettings());
 		return SUCCESS;
 	}
 
@@ -257,7 +260,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		try {
 			ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
 
-			new ToggleExendedFeatureMethod(feature, featureOn).applyTo(primaryOrg, transaction);
+			new ExendedFeatureToggler(feature, featureOn).applyTo(primaryOrg, transaction);
 
 		} catch (IllegalArgumentException e) {
 			addFieldError("extendedFeatures", "incorrect type of extended feature");
@@ -265,27 +268,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			addFieldError("extendedFeatures", "could not setup");
 			throw new RuntimeException("problem while switching on or off an extended feature", e);
 		}
-	}
-
-	public String doNote() throws Exception {
-		SubscriptionAgent subscriptionAgent = getCreateHandlerFactory().getSubscriptionAgent();
-
-		if (primaryOrg != null) {
-			if (primaryOrg.getExternalId() != null) {
-				subscriptionAgent.attachNote(primaryOrg.getExternalId(), title, note);
-				title = null;
-				note = null;
-				addActionMessage("The note has been successfully attached");
-			} else {
-				addActionError("This organization is not attached to a netsuite account.");
-				return INPUT;
-			}
-		} else {
-			addActionError("You can only add a note to an organization that exists");
-			return INPUT;
-		}
-
-		return SUCCESS;
 	}
 
 	public Long getId() {
@@ -362,15 +344,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	}
 
 	public List<ExtendedFeature> getAvailableExtendedFeatures() {
-		List<ExtendedFeature> availableFeatures = new ArrayList<ExtendedFeature>();
-		List<ExtendedFeature> removedFeatures = Arrays.asList(ExtendedFeature.CustomCert, ExtendedFeature.DedicatedProgramManager,
-				ExtendedFeature.AllowIntegration);
-		for (ExtendedFeature feature : ExtendedFeature.values()) {
-			if (!removedFeatures.contains(feature)) {
-				availableFeatures.add(feature);
-			}
-		}
-		return availableFeatures;
+		return Arrays.asList(ExtendedFeature.values());
 	}
 
 	public boolean isSecondaryOrgsEnabled() {

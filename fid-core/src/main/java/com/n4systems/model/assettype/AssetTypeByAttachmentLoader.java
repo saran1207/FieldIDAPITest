@@ -14,7 +14,7 @@ public class AssetTypeByAttachmentLoader extends Loader<Long> {
 	private Long attachmentId;
 	
 	@Override
-	protected Long load(EntityManager em) {
+	public Long load(EntityManager em) {
 		StringBuilder jpql = new StringBuilder("SELECT DISTINCT pt.id FROM ").append(AssetType.class.getName()).append(" pt, IN (pt.attachments) a WHERE a.id = :attachmentId");
 		
 		Query query = em.createQuery(jpql.toString());

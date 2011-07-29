@@ -14,7 +14,7 @@ public class LastActiveSessionLoader extends Loader<ActiveSession> {
 	boolean excludeN4User = false;
 	
 	@Override
-	protected ActiveSession load(EntityManager em) {
+	public ActiveSession load(EntityManager em) {
 		QueryBuilder<ActiveSession> builder = new QueryBuilder<ActiveSession>(ActiveSession.class);
 		builder.addSimpleWhere("user.tenant.id", tenantId);
 		builder.addOrder("lastTouched", false);		

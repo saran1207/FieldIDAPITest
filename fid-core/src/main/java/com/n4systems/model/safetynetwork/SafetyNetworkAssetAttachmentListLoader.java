@@ -14,7 +14,7 @@ public class SafetyNetworkAssetAttachmentListLoader extends Loader<List<AssetAtt
 	private Long networkId;
 	
 	@Override
-	protected List<AssetAttachment> load(EntityManager em) {
+	public List<AssetAttachment> load(EntityManager em) {
 		QueryBuilder<AssetAttachment> builder = new QueryBuilder<AssetAttachment>(AssetAttachment.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("asset.id", assetId);
 		builder.addSimpleWhere("asset.networkId", networkId);

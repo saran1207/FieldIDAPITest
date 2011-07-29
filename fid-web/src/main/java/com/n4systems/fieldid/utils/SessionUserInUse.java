@@ -4,18 +4,18 @@ import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.persistence.loaders.Loader;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.time.Clock;
 
 public class SessionUserInUse {
 
 	private final IdLoader<Loader<ActiveSession>> loader;
-	private final ConfigContext configContext;
+	private final ConfigurationProvider configContext;
 	private final Clock clock;
 	private final ActiveSessionSaver saver;
 
-	public SessionUserInUse(IdLoader<Loader<ActiveSession>> activeSessionLoader, ConfigContext configContext, Clock clock, ActiveSessionSaver activeSessionSaver) {
+	public SessionUserInUse(IdLoader<Loader<ActiveSession>> activeSessionLoader, ConfigurationProvider configContext, Clock clock, ActiveSessionSaver activeSessionSaver) {
 		this.loader = activeSessionLoader;
 		this.configContext = configContext;
 		this.clock = clock;

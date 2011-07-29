@@ -1,6 +1,8 @@
 package com.n4systems.model.tenant.extendedfeatures;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 
 import org.junit.Test;
 
@@ -16,35 +18,15 @@ public class ToggleExendedFeatureMethodTest {
 	TestingTransaction transaction = new TestingTransaction();
 	PrimaryOrg primaryOrg = PrimaryOrgBuilder.aPrimaryOrg().build();
 	
-	final ExtendedFeatureSwitch featureSwitch = createMock(ExtendedFeatureSwitch.class);
-	
-	
-
-	@Test
-	public void should_enable_feature_when_flag_is_on() throws Exception {
-		
-		featureSwitch.enableFeature(transaction);
-		replay(featureSwitch);
-		
-		ToggleExendedFeatureMethod toggler = new ToggleExendedFeatureMethod(AN_EXTENDED_FEATURE, true) {
-			@Override
-			protected ExtendedFeatureSwitch switchFor(PrimaryOrg primaryOrg) {
-				return featureSwitch;
-			}
-		};
-		toggler.applyTo(primaryOrg, transaction);
-
-		
-		verify(featureSwitch);
-	}
+	final ExtendedFeatureDisabler featureSwitch = createMock(ExtendedFeatureDisabler.class);
 	
 	@Test
 	public void should_disable_feature_when_flag_is_off() throws Exception{
 		featureSwitch.disableFeature(transaction);
 		replay(featureSwitch);
-		ToggleExendedFeatureMethod toggler = new ToggleExendedFeatureMethod(AN_EXTENDED_FEATURE, false) {
+		ExendedFeatureToggler toggler = new ExendedFeatureToggler(AN_EXTENDED_FEATURE, false) {
 			@Override
-			protected ExtendedFeatureSwitch switchFor(PrimaryOrg primaryOrg) {
+			protected ExtendedFeatureDisabler getDisabler(PrimaryOrg primaryOrg) {
 				return featureSwitch;
 			}
 		};

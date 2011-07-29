@@ -124,4 +124,8 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+    
+    public void reset() {
+    	id = null;
+    }
 }

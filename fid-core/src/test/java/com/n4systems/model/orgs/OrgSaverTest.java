@@ -32,7 +32,7 @@ public class OrgSaverTest {
 			}
 			
 			@Override
-			protected BaseOrg update(EntityManager em, BaseOrg entity) {
+			public BaseOrg update(EntityManager em, BaseOrg entity) {
 				assertNull("BaseOrg was not touched before update", entity.getModified());
 				updateCalled = true;
 				return super.update(em, entity);
@@ -49,7 +49,7 @@ public class OrgSaverTest {
 		final List<ExternalOrg> linkedOrgs = Arrays.asList(OrgBuilder.aCustomerOrg().buildCustomerAsExternal(), OrgBuilder.aCustomerOrg().buildCustomerAsExternal());
 		
 		OrgSaver saver = new OrgSaver(new LinkedOrgListLoader() {
-			protected List<ExternalOrg> load(EntityManager em) {
+			public List<ExternalOrg> load(EntityManager em) {
 				return linkedOrgs;
 			}
 		});
@@ -83,7 +83,7 @@ public class OrgSaverTest {
 		
 		OrgSaver saver = new OrgSaver(new LinkedOrgListLoader() {
 			@SuppressWarnings("unchecked")
-			protected List<ExternalOrg> load(EntityManager em) {
+			public List<ExternalOrg> load(EntityManager em) {
 				return Collections.EMPTY_LIST;
 			}
 		});

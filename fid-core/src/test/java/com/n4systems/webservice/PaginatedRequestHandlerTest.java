@@ -7,9 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigContextOverridableTestDouble;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ConfigurationProvider;
 import com.n4systems.util.NonDataSourceBackedConfigContext;
 import com.n4systems.webservice.dto.AbstractListResponse;
 import com.n4systems.webservice.dto.PaginatedRequestInformation;
@@ -24,7 +24,7 @@ public class PaginatedRequestHandlerTest {
 	};
 	
 	private class TestPaginatedRequestHandler extends PaginatedRequestHandler<TestAbstractListResponse> {
-		public TestPaginatedRequestHandler(ConfigContext configContext, LoaderFactory loaderFactory) {
+		public TestPaginatedRequestHandler(ConfigurationProvider configContext, LoaderFactory loaderFactory) {
 			super(configContext, loaderFactory);
 		}
 

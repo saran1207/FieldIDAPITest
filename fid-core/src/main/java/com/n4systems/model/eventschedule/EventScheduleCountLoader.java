@@ -13,7 +13,7 @@ public class EventScheduleCountLoader extends Loader<Long> {
 	private Long tenantId;
 	
 	@Override
-	protected Long load(EntityManager em) {
+	public Long load(EntityManager em) {
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(EventSchedule.class, filter);
 		return builder.getCount(em);

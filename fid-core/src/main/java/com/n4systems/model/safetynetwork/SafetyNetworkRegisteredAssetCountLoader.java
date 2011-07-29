@@ -14,7 +14,7 @@ public class SafetyNetworkRegisteredAssetCountLoader extends Loader<Long> {
 	private PrimaryOrg customer;
 
     @Override
-    protected Long load(EntityManager em) {
+	public Long load(EntityManager em) {
 		QueryBuilder<Asset> queryBuilder = new QueryBuilder<Asset>(Asset.class, new OrgOnlySecurityFilter(customer));
 		queryBuilder.addSimpleWhere("linkedAsset.owner.tenant", vendor.getTenant());
         return queryBuilder.getCount(em);

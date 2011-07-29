@@ -14,7 +14,7 @@ public class OrgConnectionExistsLoader extends Loader<Boolean> {
 	private Long vendorId;
 
 	@Override
-	protected Boolean load(EntityManager em) {
+	public Boolean load(EntityManager em) {
 		QueryBuilder<OrgConnection> query = new QueryBuilder<OrgConnection>(OrgConnection.class, new OpenSecurityFilter());
 
 		query.addWhere(WhereClauseFactory.create("customer.id", customerId));

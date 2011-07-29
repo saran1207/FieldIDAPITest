@@ -26,7 +26,7 @@ public class SafetyNetworkPreAssignedAssetLoader extends Loader<Pager<Asset>> {
 	}
 
     @Override
-    protected Pager<Asset> load(EntityManager em) {
+	public Pager<Asset> load(EntityManager em) {
         UnregisteredAssetQueryHelper helper = new UnregisteredAssetQueryHelper(vendor, customer, true);
 
         return helper.getPager(em, page, pageSize, new String[] { "infoOptions" });

@@ -17,14 +17,14 @@ public class CatalogOnlyConnectionSaver extends Saver<TypedOrgConnection> {
 	}
 
 	@Override
-	protected void remove(EntityManager em, TypedOrgConnection entity) {
+	public void remove(EntityManager em, TypedOrgConnection entity) {
 		guard(entity);
 		super.remove(em, entity);
 	}
 
 
 	@Override
-	protected void save(EntityManager em, TypedOrgConnection entity) {
+	public void save(EntityManager em, TypedOrgConnection entity) {
 		guard(entity);
 		completeConnection(em, entity);
 		super.save(em, entity);
@@ -44,7 +44,7 @@ public class CatalogOnlyConnectionSaver extends Saver<TypedOrgConnection> {
 	}
 
 	@Override
-	protected TypedOrgConnection update(EntityManager em, TypedOrgConnection entity) {
+	public TypedOrgConnection update(EntityManager em, TypedOrgConnection entity) {
 		throw new NotImplementedException("you can not update this type of connection");
 	}
 

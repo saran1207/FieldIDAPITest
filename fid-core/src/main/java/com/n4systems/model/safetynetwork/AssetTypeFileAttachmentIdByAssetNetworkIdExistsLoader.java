@@ -16,7 +16,7 @@ public class AssetTypeFileAttachmentIdByAssetNetworkIdExistsLoader extends Loade
 	private Long attachmentId;
 	
 	@Override
-	protected Boolean load(EntityManager em) {
+	public Boolean load(EntityManager em) {
 		/*
 		 * The following query counts the number of attachments whose attachment id is equal
 		 * to attachmentId and who are attached to the asset types of assets with a

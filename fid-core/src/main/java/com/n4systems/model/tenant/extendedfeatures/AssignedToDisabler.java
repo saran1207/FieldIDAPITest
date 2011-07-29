@@ -14,21 +14,14 @@ import com.n4systems.model.savedreports.SavedReportSaver;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.Transaction;
 
-// Use ExtendedFeatureService
-@Deprecated
-public class AssignedToSwitch extends ExtendedFeatureSwitch {
+public class AssignedToDisabler extends ExtendedFeatureDisabler {
 
-	protected AssignedToSwitch(PrimaryOrg primaryOrg) {
+	protected AssignedToDisabler(PrimaryOrg primaryOrg) {
 		super(primaryOrg, ExtendedFeature.AssignedTo);
 	}
 
 	@Override
-	protected void featureSetup(Transaction transaction) {
-
-	}
-
-	@Override
-	protected void featureTearDown(Transaction transaction) {
+	protected void disableFeature(Transaction transaction) {
 		removeSavedReportsUsingAssignedTo(transaction);
 		disableAssignedToForAllEventTypes(transaction);
 	}

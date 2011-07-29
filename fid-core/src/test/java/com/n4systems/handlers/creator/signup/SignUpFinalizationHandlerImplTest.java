@@ -48,47 +48,6 @@ public class SignUpFinalizationHandlerImplTest extends TestUsesTransactionBase {
 		ConfigContext.setCurrentContext(oldContext);
 	}
 
-	@Test
-	public void should_find_tenant_list_from_list_resolver_and_have_them_turned_on() {
-		AccountCreationInformationStub accountCreationInformationStub = new AccountCreationInformationStub();
-		accountCreationInformationStub.setSignUpPackage(new SignUpPackage(SIGN_UP_PACKAGE_BEING_USED, new ArrayList<ContractPricing>()));
-		accountCreationInformationStub.setPromoCode(SOME_PROMO_CODE);
-		accountCreationInformationStub.setNumberOfUsers(100);
-		
-		AccountPlaceHolder accountPlaceHolder = anAccountPlaceHolder().build();
-		SignUpTenantResponseStub signUpTenantResponseStub = new SignUpTenantResponseStub();
-
-		PrimaryOrg referrerOrg = aPrimaryOrg().build();
-
-		Set<ExtendedFeature> featuresThatShouldBeAddedToPrimaryOrg = new FluentHashSet<ExtendedFeature>(ExtendedFeature.EmailAlerts);
-
-		OrgSaver mockOrganizationSaver = createSuccessfulOrgSaver(accountPlaceHolder);
-
-		UserSaver mockUserSaver = createSuccessfulUserSaver(accountPlaceHolder);
-
-		LinkTenantHandler mockLinkTenantHandler = createSuccessfulLinkTenantHandler(accountPlaceHolder, referrerOrg);
-
-		SignUpFinalizationHandler sut = new SignUpFinalizationHandlerImpl(mockOrganizationSaver, mockUserSaver, mockLinkTenantHandler);
-
-		sut.setAccountInformation(accountCreationInformationStub).setAccountPlaceHolder(accountPlaceHolder)
-				.setSubscriptionApproval(signUpTenantResponseStub).setReferrerOrg(referrerOrg);
-
-		// exercise
-		sut.finalizeSignUp(mockTransaction);
-
-		// verify
-		verify(mockOrganizationSaver);
-		verify(mockUserSaver);
-		verify(mockLinkTenantHandler);
-
-		assertEquals(featuresThatShouldBeAddedToPrimaryOrg, accountPlaceHolder.getPrimaryOrg().getExtendedFeatures());
-
-		assertNotNull(accountPlaceHolder.getPrimaryOrg().getExternalId());
-		assertNotNull(accountPlaceHolder.getAdminUser().getExternalId());
-
-		assertEquals(100, accountPlaceHolder.getTenant().getSettings().getUserLimits().getMaxEmployeeUsers());
-	}
-
 	private LinkTenantHandler createSuccessfulLinkTenantHandler(AccountPlaceHolder accountPlaceHolder, PrimaryOrg referrerOrg) {
 		LinkTenantHandler mockLinkTenantHandler = createMock(LinkTenantHandler.class);
 		expect(mockLinkTenantHandler.setAccountPlaceHolder(accountPlaceHolder)).andReturn(mockLinkTenantHandler);

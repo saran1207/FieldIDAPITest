@@ -15,12 +15,8 @@ public interface SystemSecurityGuard {
 	public boolean isProjectsEnabled();
 	public boolean isBrandingEnabled();
 	public boolean isEmailAlertsEnabled();
-	public boolean isCustomCertEnabled(); 
-	public boolean isDedicatedProgramManagerEnabled();
-	public boolean isAllowIntegrationEnabled();
 	public boolean isJobSitesEnabled();
 	public boolean isAssignedToEnabled();
-	public boolean isUnlimitedLinkedAssetsEnabled();
 	public boolean isAdvancedLocationEnabled();
 	public boolean isProofTestIntegrationEnabled();
 	public boolean isPlansAndPricingAvailable();
