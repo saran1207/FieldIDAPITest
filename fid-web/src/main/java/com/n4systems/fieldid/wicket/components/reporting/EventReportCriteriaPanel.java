@@ -122,8 +122,6 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
 
             initializeConfiguredColumns();
 
-            add(new Label("serialNumberLabel", new FIDLabelModel(sessionUser.getSerialNumberLabel())));
-
             WebMarkupContainer jobContainer = new WebMarkupContainer("jobContainer");
             add(jobContainer.setVisible(securityGuard.isProjectsEnabled()));
             add(new WebMarkupContainer("assignedToContainer").setVisible(securityGuard.isAssignedToEnabled()));

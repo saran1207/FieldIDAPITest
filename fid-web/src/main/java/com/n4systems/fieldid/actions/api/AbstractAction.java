@@ -622,5 +622,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	public SecurityContext getSecurityContext() {
 		return securityContext;
 	}
-	
+
+    public String getIdentifierLabel() {
+        return getPrimaryOrg().getIdentifierLabel();
+    }
+
 }

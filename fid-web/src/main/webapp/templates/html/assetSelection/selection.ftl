@@ -42,7 +42,7 @@
 	</div>
 	<table id="selectedAssets" class="list hide">
 		<tr class="header">
-			<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
+			<th>${identifierLabel}</th>
 			<th><@s.text name="label.rfidnumber"/></th>
 			<th><@s.text name="label.owner"/></th>
 			<th><@s.text name="label.assettype"/></th>

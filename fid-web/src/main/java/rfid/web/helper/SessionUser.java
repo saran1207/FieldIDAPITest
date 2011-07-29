@@ -1,8 +1,5 @@
 package rfid.web.helper;
 
-import java.util.Date;
-import java.util.TimeZone;
-
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
@@ -12,6 +9,9 @@ import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
+
+import java.util.Date;
+import java.util.TimeZone;
 
 public class SessionUser implements DateTimeDefinition {
 	private Tenant tenant;
@@ -257,13 +257,6 @@ public class SessionUser implements DateTimeDefinition {
 	
 	public boolean hasSetupAccess() {
 		return (!isReadOnlyUser() && ((hasAccess("manageendusers") || hasAccess("managesystemusers") || hasAccess("managesystemconfig"))));
-	}
-	
-	public String getSerialNumberLabel(){
-		if(owner.getPrimaryOrg().isUsingSerialNumber()) {
-			return "label.serialnumber";
-		}
-		return "label.reelid";
 	}
 	
 	public String getUserName() {

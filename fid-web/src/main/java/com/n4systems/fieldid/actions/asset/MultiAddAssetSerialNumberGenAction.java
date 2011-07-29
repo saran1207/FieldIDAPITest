@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
 
@@ -30,6 +31,9 @@ public class MultiAddAssetSerialNumberGenAction extends AbstractAction {
 	private String ident = "";
 	
 	private List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>();
+
+    private AssetType assetType;
+    private Long assetTypeId;
 	
 	public MultiAddAssetSerialNumberGenAction(PersistenceManager persistenceManager, SerialNumberCounter serialNumberCounter) {
 		super(persistenceManager);
@@ -84,7 +88,7 @@ public class MultiAddAssetSerialNumberGenAction extends AbstractAction {
 	}
 	
 	private String getNextAutoSerial() {
-		return serialNumberCounter.generateSerialNumber(getPrimaryOrg(), null);
+		return serialNumberCounter.generateSerialNumber(getPrimaryOrg(), assetType);
 	}
 
 	public Integer getQuantity() {
@@ -138,4 +142,16 @@ public class MultiAddAssetSerialNumberGenAction extends AbstractAction {
 	public List<AssetIdentifierView> getIdentifiers() {
 		return identifiers;
 	}
+
+    public Long getAssetTypeId() {
+        return assetTypeId;
+    }
+
+    public void setAssetTypeId(Long assetTypeId) {
+        this.assetTypeId = assetTypeId;
+        if (assetTypeId != null) {
+            this.assetType = persistenceManager.find(AssetType.class, assetTypeId, getTenantId());
+        }
+    }
+
 }

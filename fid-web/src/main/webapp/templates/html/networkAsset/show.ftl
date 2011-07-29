@@ -37,7 +37,7 @@
     <table class="assetInformation">
         <tr>
             <td>
-                <@s.text name="${sessionUser.serialNumberLabel}"/>
+                <@s.text name="label.id_number"/>
             </td>
             <td class="value">
                 ${asset.serialNumber}

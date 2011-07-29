@@ -4,7 +4,7 @@
             <label><@s.text name="label.number.short"/></label>
         </div>
         <div>
-            <label><@s.text name="label.serialnumber"/></label>
+            <label><@s.text name="label.id_number"/></label>
         </div>
         <div>
             <label><@s.text name="label.rfid_or_barcode"/></label>

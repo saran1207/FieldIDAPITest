@@ -74,7 +74,7 @@ ${action.setPageType('asset', 'edit')!}
 			</p>
 			<table class="list">
 				<tr>
-					<th><@s.text name="${sessionUser.serialNumberLabel}"/></th>
+					<th>${identifierLabel}</th>
 					<th><@s.text name="label.rfidnumber"/></th>
 					<th><@s.text name="label.customername"/></th>
 					<th><@s.text name="label.assettype"/></th>
@@ -142,7 +142,7 @@ ${action.setPageType('asset', 'edit')!}
 			<table id="mergeSummary" class="list">
 				<tr>
 					<th></th>
-					<th><@s.text name="${sessionUser.serialNumberLabel}"/></th>
+					<th>${identifierLabel}</th>
 					<th><@s.text name="label.rfidnumber"/></th>
 					<th><@s.text name="label.customername"/></th>
 					<th><@s.text name="label.assettype"/></th>

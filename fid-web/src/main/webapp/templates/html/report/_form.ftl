@@ -145,7 +145,7 @@ ${action.setPageType('report', 'show')!}
 				<@s.textfield name="criteria.rfidNumber"/>
 			</div>
 			<div class="infoSet">
-				<label for="criteria.serialNumber"><@s.text name="${sessionUser.serialNumberLabel}"/></label> 
+				<label for="criteria.serialNumber"><@s.text name="label.id_number"/></label>
 				<@s.textfield name="criteria.serialNumber"/>
 			</div>
 			<div class="infoSet">

@@ -110,7 +110,7 @@
 				</div>
 				<table id="creationError" class="list hide">
 					<tr class="header">
-						<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
+						<th>${identifierLabel}</th>
 						<th><@s.text name="label.rfidnumber"/></th>
 						<th><@s.text name="label.owner"/></th>
 						<th><@s.text name="label.assettype"/></th>
@@ -127,7 +127,7 @@
 		<div class="stepContent"  id="step5">
 			<table id="listComplete" class="list">
 				<tr class="header">
-					<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
+					<th>${identifierLabel}</th>
 					<th><@s.text name="label.rfidnumber"/></th>
 					<th><@s.text name="label.owner"/></th>
 					<th><@s.text name="label.assettype"/></th>

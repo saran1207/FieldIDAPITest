@@ -4,7 +4,7 @@
     <#include '_lightViewBoxOptions.ftl'>
 	<table class="list" id="assetTable">
 		<tr>
-			<th><@s.text name="label.serialnumber" /></th>
+			<th><@s.text name="label.id_number" /></th>
 			<th><@s.text name="label.rfidnumber" /></th>
 			<th><@s.text name="label.assettype" /></th>
 			<th><@s.text name="label.desc" /></th>

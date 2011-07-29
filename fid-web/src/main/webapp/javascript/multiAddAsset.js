@@ -159,7 +159,8 @@ function validateForm3() {
 		$('step3').hide(); 
 		$('step3').up(".step").addClassName("stepClosed");
 		$('step4Loading').up(".step").removeClassName("stepClosed");
-		$('step4Loading').show(); 
+		$('step4Loading').show();
+        $('step23AssetTypeId').value = $('assetType').value;
 		$('step23Form').request(getStandardCallbacks());
 		return true;
 	}

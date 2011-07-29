@@ -2,7 +2,7 @@
 <table class="list">
 	<tr>
 		<th></th>
-		<th><@s.text name="label.serialnumber"/></th>
+		<th><@s.text name="label.id_number"/></th>
 		<th><@s.text name="label.rfidnumber"/></th>
 		<th><@s.text name="label.reference_number"/></th>
 		<th><@s.text name="label.vendor"/></th>

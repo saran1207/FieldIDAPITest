@@ -17,7 +17,7 @@
 		</span>
 	</div>
 	<div class="infoSet">
-		<label class="label"><@s.text name="${Session.sessionUser.serialNumberLabel}"/></label>
+		<label class="label">${identifierLabel}</label>
 		<span class="fieldHolder">
             <a href="<@s.url action="asset" uniqueID="${asset.id}"/>">${asset.serialNumber?html}</a>
 		</span>

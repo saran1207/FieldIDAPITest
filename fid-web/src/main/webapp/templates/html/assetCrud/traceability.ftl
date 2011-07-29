@@ -41,7 +41,7 @@
 				<h2><@s.text name="label.assetsummary"/></h2>
 				<p>
 					
-					<label><@s.text name="${sessionUser.serialNumberLabel}"/></label>
+					<label>${identifierLabel}</label>
 					<span class="fieldValue">${linkedAsset.serialNumber?html}</span>
 				</p>
 				<p>

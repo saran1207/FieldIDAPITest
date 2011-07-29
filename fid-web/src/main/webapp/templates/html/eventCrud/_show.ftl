@@ -38,7 +38,7 @@
 		</h2>
 		
 		<p>
-			<label><@s.text name="${Session.sessionUser.serialNumberLabel}"/></label>
+			<label>${identifierLabel}</label>
 			<span>
                 <#if inside_iframe?exists>
                     <a href="#" onclick="parent.window.location='<@s.url namespace="/" action="asset" uniqueID="${asset.id}" />'"">${asset.serialNumber?html}</a>

@@ -14,7 +14,7 @@
 				<table class="list">
 					<tr>
 						<th>&nbsp;</th>
-						<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
+						<th>${identifierLabel}</th>
 						<th><@s.text name="label.rfidnumber"/></th>
 						<th><@s.text name="label.owner"/></th>
 						<th><@s.text name="label.assettype"/></th>

@@ -185,7 +185,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 		} catch (Exception e) {
 			logger.error("Unable to load asset", e);
 		}
-		if (asset!=null){
+		if (asset != null) {
+            assetType = asset.getType();
 			assetWebModel.match(asset);
 			webEventSchedules = new ArrayList<WebEventSchedule>();
 		}
@@ -1137,10 +1138,12 @@ public class AssetCrud extends UploadAttachmentSupport {
 			return convertDate(date);
 	}
 
+    @Override
     public String getIdentifierLabel() {
         if (assetType != null && assetType.isIdentifierOverridden()) {
             return assetType.getIdentifierLabel();
         }
-        return getPrimaryOrg().getIdentifierLabel();
+        return super.getIdentifierLabel();
     }
+
 }

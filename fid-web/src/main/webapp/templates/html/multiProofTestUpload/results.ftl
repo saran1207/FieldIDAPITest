@@ -16,7 +16,7 @@ ${action.setPageType('event', 'multi_proof_test')!}
 					<#else>
 						<#list eventProcessingFailureMap[key].keySet() as serialnumber >
 							<p>
-								<label><@s.text name="label.serialnumber"/>: ${serialnumber}</label>
+								<label><@s.text name="label.id_number"/>: ${serialnumber}</label>
 								<span>
 									<#if eventProcessingFailureMap[key][serialnumber]?exists>
 										<a href='<@s.url action="event" namespace="/aHtml/iframe"  assetId="${eventProcessingFailureMap[key][serialnumber].asset.uniqueID}" uniqueID="${eventProcessingFailureMap[key][serialnumber].id}"/>'  class='lightview' rel='iframe' title='<@s.text name="title.viewevent"/> :: :: scrolling:true, width: 520, height: 420' >

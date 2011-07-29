@@ -8,7 +8,7 @@
 			
 			<table class="list">
 				<tr>
-					<th><@s.text name="${Session.sessionUser.serialNumberLabel}"/></th>
+					<th>${identifierLabel}</th>
 					<th><@s.text name="label.customername"/></th>
 					<th><@s.text name="label.description"/></th>
 				</tr>
