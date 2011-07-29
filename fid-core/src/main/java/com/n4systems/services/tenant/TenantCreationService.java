@@ -56,7 +56,7 @@ public class TenantCreationService extends FieldIdPersistenceService {
 	private void createPrimaryOrg(Tenant tenant, PrimaryOrg primaryOrg, String timeZone) {
 		primaryOrg.setTenant(tenant);
 		primaryOrg.setUsingSerialNumber(true);
-		primaryOrg.setSerialNumberFormat("NSA%y-%g");
+		primaryOrg.setIdentifierFormat("NSA%y-%g");
 		primaryOrg.setDateFormat("MM/dd/yy");
 		primaryOrg.setDefaultTimeZone(timeZone);
 		persistenceService.save(orgSaver, primaryOrg);

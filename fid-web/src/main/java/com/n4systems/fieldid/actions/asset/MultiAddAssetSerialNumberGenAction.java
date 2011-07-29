@@ -84,7 +84,7 @@ public class MultiAddAssetSerialNumberGenAction extends AbstractAction {
 	}
 	
 	private String getNextAutoSerial() {
-		return serialNumberCounter.generateSerialNumber(getPrimaryOrg());
+		return serialNumberCounter.generateSerialNumber(getPrimaryOrg(), null);
 	}
 
 	public Integer getQuantity() {

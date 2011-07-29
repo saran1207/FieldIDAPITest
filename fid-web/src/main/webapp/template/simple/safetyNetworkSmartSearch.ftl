@@ -12,7 +12,7 @@
 				<@s.text name="label.registered_against"/> <span id="linkedAssetType"></span> <@s.text name="label.from"/> <span id="linkedAssetOwner"></span>
 			</h4>
 			<div  >
-				<label for="linkedAssetSerial"><@s.text name="label.serialnumber"/>: </label>
+				<label for="linkedAssetSerial"><@s.text name="label.id_number"/>: </label>
 				<span id="linkedAssetSerial"></span>
 			</div>
 			<div  >

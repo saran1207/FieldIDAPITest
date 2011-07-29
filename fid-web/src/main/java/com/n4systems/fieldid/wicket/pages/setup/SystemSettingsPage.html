@@ -1,13 +1,4 @@
 <wicket:extend>
-<head>
-	<style type="text/css">
-
-		#currentPlan {
-			margin-right:10px;
-		}
-	</style>
-
-</head>
 
 <form wicket:id="systemSettingsForm" class="crudForm pageSection largeForm">
     <div wicket:id="feedbackPanel">
@@ -79,30 +70,51 @@
 				    <select wicket:id="dateFormat"/>
                 </span>
 			</div>
-            <div class="infoSet">
-                <label for="serialNumberFormat">
-                    <wicket:message key="label.serial_number_format" />
-					<a href="javascript:void(0);" id="whatsThis_serialNumberFormat_button" >?</a>
-					<div id="whatsThis_serialNumberFormat" class="hidden" style="border :1px solid black">
-						<h4><wicket:message key="label.serial_number_format" /></h4>
-						<p>
-							<wicket:message key="label.serial_number_format_tooltip1" />
-						</p>
-					</div>
-					<script type="text/javascript">
-						$("whatsThis_serialNumberFormat_button").observe( 'click', function(event) { showQuickView('whatsThis_serialNumberFormat', event); } );
-					</script>
-                </label>
-                <span class="fieldHolder">
-                    <input type="text" wicket:id="serialNumberFormat" />
-                </span>
-            </div>
+
             <div class="infoSet">
 				<label for="gpsCapture">
 					<wicket:message key="label.gps_capture" />
 				</label>
 				<input wicket:id="gpsCapture" type="checkbox"/>
 			</div>
+
+            <h2><wicket:message key="label.global_id_settings"/></h2>
+
+            <div class="infoSet">
+                <label for="identifierLabel">
+                    <wicket:message key="label.label" />
+                </label>
+                <span class="fieldHolder">
+                    <input type="text" wicket:id="identifierLabel" />
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label for="identifierFormat">
+                    <wicket:message key="label.auto_generated_format" />
+                </label>
+                <span class="fieldHolder">
+                    <input type="text" wicket:id="identifierFormat" />
+                </span>
+            </div>
+
+            <div class="infoSet">
+            <table class="list">
+                <tr>
+                    <th><wicket:message key="label.override"/></th>
+                    <th><wicket:message key="label.assettype"/></th>
+                    <th><wicket:message key="label.label"/></th>
+                    <th><wicket:message key="label.auto_generated_format"/></th>
+                </tr>
+                <tr wicket:id="assetTypeOverrides">
+                    <td><input type="checkbox" wicket:id="override"/></td>
+                    <td><span wicket:id="assetTypeName"></span></td>
+                    <td><input type="text" wicket:id="identifierLabel"/></td>
+                    <td><input type="text" wicket:id="identifierFormat"/></td>
+                </tr>
+            </table>
+            </div>
+
 		<div class="formAction">
 			<input wicket:id="submitButton" type="submit" wicket:message="value:label.save"/> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
         </div>

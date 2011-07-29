@@ -342,16 +342,17 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		Tenant tenantOrganization = TenantFinder.getInstance().findTenant(tenantId);
 		PrimaryOrg primaryOrg = TenantFinder.getInstance().findPrimaryOrg(tenantOrganization.getId());
+        AssetType assetType = em.find(AssetType.class, productServiceDTO.getProductTypeId());
 
 		targetAsset.setComments(productServiceDTO.getComments());
 		targetAsset.setCustomerRefNumber(productServiceDTO.getCustomerRefNumber());
-		targetAsset.setType(em.find(AssetType.class, productServiceDTO.getProductTypeId()));
+        targetAsset.setType(assetType);
 		targetAsset.setPurchaseOrder(productServiceDTO.getPurchaseOrder());
 		targetAsset.setRfidNumber(productServiceDTO.getRfidNumber());
 		targetAsset.setTenant(tenantOrganization);
 
 		if (productServiceDTO.getSerialNumber().equals(GENERATE_SERIAL_NUMBER)) {
-			targetAsset.setSerialNumber(serialNumberCounter.generateSerialNumber(primaryOrg));
+			targetAsset.setSerialNumber(serialNumberCounter.generateSerialNumber(primaryOrg, assetType));
 		} else {
 			targetAsset.setSerialNumber(productServiceDTO.getSerialNumber());
 		}

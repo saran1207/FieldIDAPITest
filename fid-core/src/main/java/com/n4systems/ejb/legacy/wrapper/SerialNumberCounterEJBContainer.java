@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.SerialNumberCounterBean;
 
 import com.n4systems.ejb.legacy.SerialNumberCounter;
@@ -21,11 +22,11 @@ public class SerialNumberCounterEJBContainer extends EJBTransactionEmulator<Seri
 		return new SerialNumberCounterManager(em);
 	}
 
-	public String generateSerialNumber(PrimaryOrg primaryOrg) {
+	public String generateSerialNumber(PrimaryOrg primaryOrg, AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).generateSerialNumber(primaryOrg);
+			return createManager(transaction.getEntityManager()).generateSerialNumber(primaryOrg, assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

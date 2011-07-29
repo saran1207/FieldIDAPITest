@@ -2,6 +2,7 @@ package com.n4systems.ejb.legacy;
 
 import java.util.Collection;
 
+import com.n4systems.model.AssetType;
 import rfid.ejb.entity.SerialNumberCounterBean;
 
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -13,6 +14,6 @@ public interface SerialNumberCounter {
 	public Collection<SerialNumberCounterBean> getSerialNumberCounters();	
 	public SerialNumberCounterBean getSerialNumberCounter(Long tenantId);
 	public String getNextCounterValue(Long tenantId);
-	public String generateSerialNumber(PrimaryOrg primaryOrg);
+	public String generateSerialNumber(PrimaryOrg primaryOrg, AssetType assetType);
 	
 }

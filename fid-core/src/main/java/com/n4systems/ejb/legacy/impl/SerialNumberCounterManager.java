@@ -1,18 +1,16 @@
 package com.n4systems.ejb.legacy.impl;
 
+import com.n4systems.ejb.legacy.SerialNumberCounter;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.orgs.PrimaryOrg;
+import rfid.ejb.entity.SerialNumberCounterBean;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Collection;
 
-
 import javax.persistence.EntityManager;
-
 import javax.persistence.Query;
-
-import rfid.ejb.entity.SerialNumberCounterBean;
-
-import com.n4systems.ejb.legacy.SerialNumberCounter;
-import com.n4systems.model.orgs.PrimaryOrg;
 
 
 public class SerialNumberCounterManager implements SerialNumberCounter {
@@ -63,14 +61,18 @@ public class SerialNumberCounterManager implements SerialNumberCounter {
 		return counterValueString;
 	}
 	
-	public String generateSerialNumber(PrimaryOrg primaryOrg) {
+	public String generateSerialNumber(PrimaryOrg primaryOrg, AssetType assetType) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		
 		DecimalFormat padTwoSpaces = new DecimalFormat("00");
 		DecimalFormat padThreeSpaces = new DecimalFormat("000");
 		
-		String serialNumber = primaryOrg.getSerialNumberFormat();
+		String serialNumber = primaryOrg.getIdentifierFormat();
+
+        if (assetType != null && assetType.isIdentifierOverridden()) {
+            serialNumber = assetType.getIdentifierFormat();
+        }
 
 		// go through and replace the appropriate symbols with their meaning
 		serialNumber = serialNumber.replaceAll("%m", padTwoSpaces.format(calendar.get(Calendar.MONTH)+1));
@@ -87,7 +89,7 @@ public class SerialNumberCounterManager implements SerialNumberCounter {
 		if (serialNumber.indexOf("%g") >= 0) {
 			serialNumber = serialNumber.replaceAll("%g", getNextCounterValue(primaryOrg.getTenant().getId()));
 		}
-		
+
 		return serialNumber;
 	}
 	

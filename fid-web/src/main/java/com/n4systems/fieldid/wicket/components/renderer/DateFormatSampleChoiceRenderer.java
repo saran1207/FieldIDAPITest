@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateFormatChoiceRenderer implements IChoiceRenderer<String> {
+public class DateFormatSampleChoiceRenderer implements IChoiceRenderer<String> {
 
     static final Date SAMPLE_DATE;
 

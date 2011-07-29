@@ -40,8 +40,11 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 	@Column(name="usingserialnumber", nullable=false)
 	private boolean usingSerialNumber = true;
 	
-	@Column(name="serialnumberformat", nullable=false)
-	private String serialNumberFormat = "NSA%y-%g";
+	@Column(name="identifierFormat", nullable=false)
+	private String identifierFormat = "NSA%y-%g";
+
+	@Column(name="identifierLabel", nullable=false)
+	private String identifierLabel;
 
 	@Column(name="website", length = 2056)
 	private String webSite;
@@ -132,12 +135,12 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 		this.usingSerialNumber = usingSerialNumber;
 	}
 
-	public String getSerialNumberFormat() {
-		return serialNumberFormat;
+	public String getIdentifierFormat() {
+		return identifierFormat;
 	}
 
-	public void setSerialNumberFormat(String serialNumberFormat) {
-		this.serialNumberFormat = serialNumberFormat;
+	public void setIdentifierFormat(String identifierFormat) {
+		this.identifierFormat = identifierFormat;
 	}
 
 	public String getWebSite() {
@@ -220,5 +223,12 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
     public void setSearchableOnSafetyNetwork(boolean searchableOnSafetyNetwork) {
         this.searchableOnSafetyNetwork = searchableOnSafetyNetwork;
     }
-    
+
+    public String getIdentifierLabel() {
+        return identifierLabel;
+    }
+
+    public void setIdentifierLabel(String identifierLabel) {
+        this.identifierLabel = identifierLabel;
+    }
 }

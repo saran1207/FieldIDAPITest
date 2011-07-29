@@ -12,7 +12,8 @@ import com.n4systems.tools.EncryptionUtility;
 public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 	private static final String DEFAULT_DATE_FORMAT = "MM/dd/yy";
 
-	private static final String DEFAULT_SERIAL_NUMBER_FORMAT = "NSA%y-%g";
+	private static final String DEFAULT_IDENTIFIER_FORMAT = "NSA%y-%g";
+    private static final String DEFAULT_IDENTIFIER_LABEL = "Serial Number";
 
 	private final OrgSaver orgSaver;
 	
@@ -42,7 +43,8 @@ public class PrimaryOrgCreateHandlerImpl implements PrimaryOrgCreateHandler {
 		PrimaryOrg primaryOrg = new PrimaryOrg();
 		primaryOrg.setTenant(tenant);
 		primaryOrg.setUsingSerialNumber(true);
-		primaryOrg.setSerialNumberFormat(DEFAULT_SERIAL_NUMBER_FORMAT);
+		primaryOrg.setIdentifierFormat(DEFAULT_IDENTIFIER_FORMAT);
+        primaryOrg.setIdentifierLabel(DEFAULT_IDENTIFIER_LABEL);
 		primaryOrg.setDateFormat(DEFAULT_DATE_FORMAT);
 		primaryOrg.setName(accountInfo.getCompanyName());
 		primaryOrg.setCertificateName(accountInfo.getCompanyName());

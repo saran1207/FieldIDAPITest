@@ -2,12 +2,15 @@ package com.n4systems.fieldid.service.tenant;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.model.tenant.TenantSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public class SystemSettingsService extends FieldIdPersistenceService {
 
@@ -26,19 +29,21 @@ public class SystemSettingsService extends FieldIdPersistenceService {
         systemSettings.setAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
         systemSettings.setManufacturerCertificate(primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate));
         systemSettings.setProofTestIntegration(primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration));
-        systemSettings.setSerialNumberFormat(primaryOrg.getSerialNumberFormat());
+        systemSettings.setIdentifierFormat(primaryOrg.getIdentifierFormat());
+        systemSettings.setIdentifierLabel(primaryOrg.getIdentifierLabel());
         systemSettings.setDateFormat(primaryOrg.getDateFormat());
 
         return systemSettings;
     }
 
     @Transactional
-    public void saveSystemSettings(SystemSettings settings) {
+    public void saveSystemSettings(SystemSettings settings, List<AssetType> assetTypes) {
         tenantSettingsService.updateGpsCapture(settings.isGpsCapture());
 
         PrimaryOrg primaryOrg = getPrimaryOrg();
 
-        primaryOrg.setSerialNumberFormat(settings.getSerialNumberFormat());
+        primaryOrg.setIdentifierFormat(settings.getIdentifierFormat());
+        primaryOrg.setIdentifierLabel(settings.getIdentifierLabel());
         primaryOrg.setDateFormat(settings.getDateFormat());
 
         Long tenantId = securityContext.getUserSecurityFilter().getTenantId();
@@ -47,8 +52,8 @@ public class SystemSettingsService extends FieldIdPersistenceService {
         extendedFeatureService.setExtendedFeatureEnabled(tenantId, ExtendedFeature.ManufacturerCertificate, settings.isManufacturerCertificate());
         extendedFeatureService.setExtendedFeatureEnabled(tenantId, ExtendedFeature.ProofTestIntegration, settings.isProofTestIntegration());
 
-
-        persistenceService.save(primaryOrg);
+        persistenceService.update(primaryOrg);
+        persistenceService.update(assetTypes);
     }
 
     private PrimaryOrg getPrimaryOrg() {

@@ -97,6 +97,13 @@ public class PersistenceService extends FieldIdService {
 	}
 
     @Transactional
+	public <T extends BaseEntity> void update(List<T> entities) {
+        for (T entity : entities) {
+            update(entity);
+        }
+	}
+
+    @Transactional
     public void remove(Object entity) {
         em.remove(entity);
     }

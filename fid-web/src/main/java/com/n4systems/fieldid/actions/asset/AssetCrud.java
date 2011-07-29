@@ -1136,4 +1136,11 @@ public class AssetCrud extends UploadAttachmentSupport {
 		else
 			return convertDate(date);
 	}
+
+    public String getIdentifierLabel() {
+        if (assetType != null && assetType.isIdentifierOverridden()) {
+            return assetType.getIdentifierLabel();
+        }
+        return getPrimaryOrg().getIdentifierLabel();
+    }
 }

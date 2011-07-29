@@ -5,14 +5,14 @@
 		<@s.hidden name="assetTypeId" id="assetType"/>
 		<#include "/templates/html/common/_formErrors.ftl"/>
 		<div class="infoSet" id="serialNumberRow_${assetTypeId}">
-			<label for="serialNumber" class="label"><@s.text name="${Session.sessionUser.serialNumberLabel}"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+			<label for="serialNumber" class="label">${identifierLabel} <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 				
 			<span  class="fieldHolder">
 				<span class="serialNumber">
 					<@s.textfield name="serialNumber" id="subAssetSerialNumber_${assetTypeId}" onchange="checkSerialNumber('subAssetSerialNumber_${assetTypeId}', -${assetTypeId});" theme="fieldidSimple" />
 				
 					<span class="action">
-						<a href="generateSerialNumber" target="_blank" onclick="generateSerialNumber('subAssetSerialNumber_${assetTypeId}', -${assetTypeId}); return false;" ><@s.text name="label.generate"/></a>
+						<a href="generateSerialNumber" target="_blank" onclick="generateSerialNumber('subAssetSerialNumber_${assetTypeId}', -${assetTypeId}, ${assetTypeId}); return false;" ><@s.text name="label.generate"/></a>
 					</span>
 					
 					<br/><span class="serialNumberStatus"></span>

@@ -27,5 +27,8 @@
 	updatingAssetComplete();
 	replaceInfoOptions( "${options}" ) ;
 	replaceEventSchedules( "${assetEventSchedules}" );
+    $$('.identifierLabel').each(function(identifierElement) {
+        identifierElement.update("${identifierLabel}");
+    });
 	
 </#escape>

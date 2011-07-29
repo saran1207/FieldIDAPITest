@@ -3,10 +3,10 @@
 	<h2><@s.text name="label.identifiers"/></h2>
 	<div id="serialNumberRow_${uniqueID!}" class="assetFormGroup">
 		<div class="infoSet">
-			<label for="serialNumber" class="label"> <#include "../common/_requiredMarker.ftl"/><@s.text name="${action.getText( Session.sessionUser.serialNumberLabel )}"/></label>
+			<label for="serialNumber" class="label"> <#include "../common/_requiredMarker.ftl"/><span class="identifierLabel">${identifierLabel}</span></label>
 			<span class="fieldHolder withAdditionalContent">
 				<@s.textfield id="serialNumberText"  name="serialNumber" onchange="checkSerialNumber('serialNumberText', '${uniqueID?default('')}');"/>
-				<a href="#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''});return false;"><@s.text name="label.generate" /></a>
+				<a href="#" onclick="generateSerialNumber('serialNumberText', ${uniqueID!'\'\''}, $('assetType').value);return false;"><@s.text name="label.generate" /></a>
 			</span>
 			<span class="fieldHolder serialNumberStatus"></span>
 			

@@ -8,7 +8,8 @@ public class SystemSettings implements Serializable {
     public boolean proofTestIntegration;
     public boolean manufacturerCertificate;
     public String dateFormat;
-    public String serialNumberFormat;
+    public String identifierLabel;
+    public String identifierFormat;
     public boolean gpsCapture;
 
     public boolean isAssignedTo() {
@@ -43,12 +44,12 @@ public class SystemSettings implements Serializable {
         this.dateFormat = dateFormat;
     }
 
-    public String getSerialNumberFormat() {
-        return serialNumberFormat;
+    public String getIdentifierFormat() {
+        return identifierFormat;
     }
 
-    public void setSerialNumberFormat(String serialNumberFormat) {
-        this.serialNumberFormat = serialNumberFormat;
+    public void setIdentifierFormat(String identifierFormat) {
+        this.identifierFormat = identifierFormat;
     }
 
     public boolean isGpsCapture() {
@@ -57,5 +58,13 @@ public class SystemSettings implements Serializable {
 
     public void setGpsCapture(boolean gpsCapture) {
         this.gpsCapture = gpsCapture;
+    }
+
+    public String getIdentifierLabel() {
+        return identifierLabel;
+    }
+
+    public void setIdentifierLabel(String identifierLabel) {
+        this.identifierLabel = identifierLabel;
     }
 }

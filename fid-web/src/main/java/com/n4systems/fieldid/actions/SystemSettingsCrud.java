@@ -81,7 +81,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public String doEdit() {
 		dateFormat = primaryOrg.getDateFormat();
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
-        serialNumberFormat = primaryOrg.getSerialNumberFormat();
+        serialNumberFormat = primaryOrg.getIdentifierFormat();
 		proofTestIntegration = primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
 		manufacturerCertificate = primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
 		gpsCapture = getTenant().getSettings().isGpsCapture();
@@ -186,7 +186,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
     private void updateSerialNumberFormat() {
-        getPrimaryOrg().setSerialNumberFormat(serialNumberFormat);
+        getPrimaryOrg().setIdentifierFormat(serialNumberFormat);
     }
 
 	private void updateBranding() throws Exception {

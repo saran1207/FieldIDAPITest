@@ -1,7 +1,8 @@
 var serialNumberUrl = "";
-function generateSerialNumber(elementId, uniqueID) {
+function generateSerialNumber(elementId, uniqueID, assetTypeId) {
 	new Ajax.Request( serialNumberUrl, {
 		method: 'post',
+        parameters: { assetTypeId: assetTypeId },
 		onSuccess: function(transport) {
 			var element = $(elementId);
 			element.value = transport.responseText.strip();

@@ -94,6 +94,10 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private AssetTypeGroup group;
+
+    private String identifierFormat;
+    private String identifierLabel;
+    private boolean identifierOverridden;
 		
 	public AssetType() {
 		this(null);
@@ -481,4 +485,27 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
         return eventTypes;
     }
 
+    public String getIdentifierFormat() {
+        return identifierFormat;
+    }
+
+    public void setIdentifierFormat(String identifierFormat) {
+        this.identifierFormat = identifierFormat;
+    }
+
+    public String getIdentifierLabel() {
+        return identifierLabel;
+    }
+
+    public void setIdentifierLabel(String identifierLabel) {
+        this.identifierLabel = identifierLabel;
+    }
+
+    public boolean isIdentifierOverridden() {
+        return identifierOverridden;
+    }
+
+    public void setIdentifierOverridden(boolean identifierOverridden) {
+        this.identifierOverridden = identifierOverridden;
+    }
 }

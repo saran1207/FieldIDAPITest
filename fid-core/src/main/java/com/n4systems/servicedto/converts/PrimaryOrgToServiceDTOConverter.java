@@ -25,7 +25,7 @@ public class PrimaryOrgToServiceDTOConverter {
 		tenantService.setId(primaryOrg.getTenant().getId());
 		tenantService.setName(primaryOrg.getTenant().getName());
 		tenantService.setDisplayName(primaryOrg.getName());
-		tenantService.setSerialNumberFormat(primaryOrg.getSerialNumberFormat());
+		tenantService.setSerialNumberFormat(primaryOrg.getIdentifierFormat());
 		tenantService.setUsingSerialNumber(primaryOrg.isUsingSerialNumber());
 	}
 

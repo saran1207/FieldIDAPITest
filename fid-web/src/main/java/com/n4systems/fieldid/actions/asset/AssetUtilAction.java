@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
 
@@ -32,6 +33,9 @@ public class AssetUtilAction extends AbstractAction {
 	private Long uniqueId;
 	
 	private Collection<Asset> assets;
+
+    private AssetType assetType;
+    private Long assetTypeId;
 	
 	public AssetUtilAction(SerialNumberCounter serialNumberCounter, LegacyAsset legacyAssetManager, AssetManager assetManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
@@ -66,7 +70,7 @@ public class AssetUtilAction extends AbstractAction {
 	
 	public String doGenerateSerialNumber() {
 		try {
-			serialNumber = serialNumberCounter.generateSerialNumber(getPrimaryOrg());
+			serialNumber = serialNumberCounter.generateSerialNumber(getPrimaryOrg(), assetType);
 		} catch (Exception e) {
 			logger.error("Generating serial number", e);
 			return ERROR;
@@ -111,4 +115,16 @@ public class AssetUtilAction extends AbstractAction {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
+
+    public Long getAssetTypeId() {
+        return assetTypeId;
+    }
+
+    public void setAssetTypeId(Long assetTypeId) {
+        this.assetTypeId = assetTypeId;
+        if (assetTypeId != null) {
+            this.assetType = persistenceManager.find(AssetType.class, assetTypeId, getTenantId());
+        }
+    }
+
 }
