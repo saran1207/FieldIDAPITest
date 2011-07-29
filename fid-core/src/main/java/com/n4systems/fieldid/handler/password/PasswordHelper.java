@@ -38,7 +38,7 @@ public class PasswordHelper {
 		List<String> previousPasswords = user.getPreviousPasswords();
 		int start = Math.max(0, previousPasswords.size()-passwordPolicy.getUniqueness());
 		previousPasswords = previousPasswords.subList(start, previousPasswords.size());		
-		return previousPasswords.contains(User.hashPassword(newPassword));
+		return !previousPasswords.contains(User.hashPassword(newPassword));
 	}
 	
 	public PasswordPolicy getPasswordPolicy() {

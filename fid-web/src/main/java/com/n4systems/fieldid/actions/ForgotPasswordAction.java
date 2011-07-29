@@ -75,7 +75,7 @@ public class ForgotPasswordAction extends SignInAction {
         }
 
         PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
-        if (passwordHelper.isPasswordUnique(user, newPassword)) {
+        if (!passwordHelper.isPasswordUnique(user, newPassword)) {
         	addActionErrorText("error.password_unique", getPasswordPolicy().getUniqueness()+"" );
         	return INPUT; 
         }
