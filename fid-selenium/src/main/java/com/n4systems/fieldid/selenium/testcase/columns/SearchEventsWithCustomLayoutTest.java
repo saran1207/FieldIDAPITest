@@ -26,13 +26,13 @@ public class SearchEventsWithCustomLayoutTest extends FieldIDTestCase {
     public void setupScenario(Scenario scenario) {
         Tenant test1 = scenario.tenant("test1");
 
-        SystemColumnMapping serialNumberColumn = scenario.systemColumnMapping("event_search_serialnumber");
+        SystemColumnMapping identifierColumn = scenario.systemColumnMapping("event_search_identifier");
         SystemColumnMapping rfidNumberColumn = scenario.systemColumnMapping("event_search_rfidnumber");
 
         AssetType type = scenario.anAssetType().named("TestType").build();
 
-        Asset asset1 = scenario.anAsset().ofType(type).withSerialNumber("456999").rfidNumber("5678").build();
-        Asset asset2 = scenario.anAsset().ofType(type).withSerialNumber("456789").rfidNumber("9876").build();
+        Asset asset1 = scenario.anAsset().ofType(type).withIdentifier("456999").rfidNumber("5678").build();
+        Asset asset2 = scenario.anAsset().ofType(type).withIdentifier("456789").rfidNumber("9876").build();
 
         EventForm eventForm = scenario.anEventForm().build();
 
@@ -50,12 +50,12 @@ public class SearchEventsWithCustomLayoutTest extends FieldIDTestCase {
 
         ColumnLayout layout = scenario.aColumnLayout()
                 .reportType(ReportType.EVENT)
-                .sortColumn(serialNumberColumn)
+                .sortColumn(identifierColumn)
                 .sortDirection(SortDirection.ASC)
                 .tenant(test1)
                 .build();
 
-        scenario.anActiveColumnMapping().order(1).columnLayout(layout).columnMapping(serialNumberColumn).build();
+        scenario.anActiveColumnMapping().order(1).columnLayout(layout).columnMapping(identifierColumn).build();
         scenario.anActiveColumnMapping().order(2).columnLayout(layout).columnMapping(rfidNumberColumn).build();
     }
 

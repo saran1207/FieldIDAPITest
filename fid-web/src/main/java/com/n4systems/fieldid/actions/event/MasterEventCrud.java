@@ -265,7 +265,7 @@ public class MasterEventCrud extends AbstractCrud {
 			return INPUT;
 		} catch (Exception e) {
 			addActionError(getText("error.eventsavefailed"));
-			logger.error("event save failed serial number " + asset.getSerialNumber(), e);
+			logger.error("event save failed identifier " + asset.getIdentifier(), e);
 			return ERROR;
 		}
 	}

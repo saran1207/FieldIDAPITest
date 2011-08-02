@@ -210,11 +210,11 @@ Transaction transaction = transactionManager.startTransaction();
 
 	}
 
-	public Asset findAssetBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueAssetException {
+	public Asset findAssetByIdentifier(String identifier, Long tenantId, Long customerId) throws NonUniqueAssetException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findAssetBySerialNumber(rawSerialNumber, tenantId, customerId);
+			return createManager(transaction.getEntityManager()).findAssetByIdentifier(identifier, tenantId, customerId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

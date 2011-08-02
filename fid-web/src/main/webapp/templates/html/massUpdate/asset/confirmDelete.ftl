@@ -13,7 +13,7 @@
 			<li>&nbsp;</li>
 			<#list removalSummaries as removalSummary>
 				<#if !removalSummary.validToDelete()>
-					<li>${removalSummary.asset.serialNumber}</li>
+					<li>${removalSummary.asset.identifier}</li>
 				</#if>
 			</#list>
 		</ul>

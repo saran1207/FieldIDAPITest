@@ -8,15 +8,15 @@ import com.n4systems.util.persistence.WhereParameterGroup;
 public class SmartSearchWhereClause extends WhereParameterGroup {
 	public static final String CLAUSE_NAME = "smart_search_group"; 
 	
-	private final boolean useSerialNumber;
+	private final boolean useIdentifier;
 	private final boolean useRfidNumber;
 	private final boolean useRefNumber;
 	private final String searchText;
 	
-	public SmartSearchWhereClause(String searchText, boolean useSerialNumber, boolean useRfidNumber, boolean useRefNumber) {
+	public SmartSearchWhereClause(String searchText, boolean useIdentifier, boolean useRfidNumber, boolean useRefNumber) {
 		super(CLAUSE_NAME);
 		this.searchText = searchText;
-		this.useSerialNumber = useSerialNumber;
+		this.useIdentifier = useIdentifier;
 		this.useRfidNumber = useRfidNumber;
 		this.useRefNumber = useRefNumber;
 		
@@ -24,8 +24,8 @@ public class SmartSearchWhereClause extends WhereParameterGroup {
 	}
 	
 	private void init() {
-		if (useSerialNumber) {
-			addClause(WhereClauseFactory.create("serialNumber", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
+		if (useIdentifier) {
+			addClause(WhereClauseFactory.create("identifier", searchText, WhereParameter.IGNORE_CASE, ChainOp.OR));
 		}
 		
 		if (useRfidNumber) {

@@ -12,7 +12,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 public class SmartSearchLoader extends ListLoader<Asset> {
 
 	private String searchText;
-	private boolean useSerialNumber = true;
+	private boolean useIdentifier = true;
 	private boolean useRfidNumber = true;
 	private boolean useRefNumber = true;
     private Integer maxResults = null;
@@ -23,14 +23,14 @@ public class SmartSearchLoader extends ListLoader<Asset> {
 
 	protected QueryBuilder<Asset> createQuery(SecurityFilter filter) {
 		QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, filter);
-		builder.addWhere(new SmartSearchWhereClause(searchText, useSerialNumber, useRfidNumber, useRefNumber));
+		builder.addWhere(new SmartSearchWhereClause(searchText, useIdentifier, useRfidNumber, useRefNumber));
 		builder.addOrder("created");
 		
 		return builder;
 	}
 
-	public void setUseSerialNumber(boolean useSerialNumber) {
-		this.useSerialNumber = useSerialNumber;
+	public void setUseIdentifier(boolean useIdentifier) {
+		this.useIdentifier = useIdentifier;
 	}
 
 	public void setUseRfidNumber(boolean useRfidNumber) {

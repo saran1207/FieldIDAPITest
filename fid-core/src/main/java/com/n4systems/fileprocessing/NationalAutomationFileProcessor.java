@@ -34,8 +34,8 @@ public class NationalAutomationFileProcessor extends FileProcessor {
 	private final int TEST_DURATION_ROW = 18;
 	private final short TEST_DURATION_CELL = 1;
 	
-	private final int SERIAL_NUMBER_ROW = 8;
-	private final short SERIAL_NUMBER_CELL = 3;
+	private final int IDENTIFIER_ROW = 8;
+	private final short IDENTIFIER_CELL = 3;
 	
 	private final int DATE_PERFORMED_ROW = 17;
 	private final short DATE_PERFORMED_CELL = 1;
@@ -117,39 +117,39 @@ public class NationalAutomationFileProcessor extends FileProcessor {
 					}
 				}
 				
-				HSSFRow serialNumberRow = extraInfoSheet.getRow(SERIAL_NUMBER_ROW);
-				HSSFCell serialNumberCell = serialNumberRow.getCell(SERIAL_NUMBER_CELL);
+				HSSFRow identifierRow = extraInfoSheet.getRow(IDENTIFIER_ROW);
+				HSSFCell identifierCell = identifierRow.getCell(IDENTIFIER_CELL);
 				
-				if (serialNumberCell != null) {
+				if (identifierCell != null) {
 					
-					String serialNumberString = null;
+					String identifierString = null;
 					
-					switch( serialNumberCell.getCellType() ){
+					switch( identifierCell.getCellType() ){
 						case HSSFCell.CELL_TYPE_NUMERIC:
 							
-							serialNumberString = String.valueOf( serialNumberCell.getNumericCellValue() );
+							identifierString = String.valueOf( identifierCell.getNumericCellValue() );
 							// reading the numeric value returns a double and will add .0 to the end of the string.
 							// if we find a .0 at the end string remove it.
-							if( serialNumberString.endsWith( ".0" ) ) {
-								serialNumberString = serialNumberString.substring( 0, serialNumberString.length() - 2 );
-								logger.warn( "Trimmed .0 off serial number  original value = " + serialNumberCell.getNumericCellValue()
-										+ "  trimmed value " + serialNumberString );
+							if( identifierString.endsWith( ".0" ) ) {
+								identifierString = identifierString.substring( 0, identifierString.length() - 2 );
+								logger.warn( "Trimmed .0 off serial number  original value = " + identifierCell.getNumericCellValue()
+										+ "  trimmed value " + identifierString );
 							}
 						
 							break;
 						case HSSFCell.CELL_TYPE_STRING:
 						default:
-							if (serialNumberCell.getRichStringCellValue() != null) {
-								serialNumberString = serialNumberCell.getRichStringCellValue().getString();
+							if (identifierCell.getRichStringCellValue() != null) {
+								identifierString = identifierCell.getRichStringCellValue().getString();
 							}
 							break;
 					}
 					// Replace new line characters with commas for multiple serial numbers...
-					if (serialNumberString != null) {
-						serialNumberString = serialNumberString.replace('\n', ',');
+					if (identifierString != null) {
+						identifierString = identifierString.replace('\n', ',');
 					}
 					
-					fileDataContainer.setSerialNumbers(serialNumberString);
+					fileDataContainer.setIdentifiers(identifierString);
 			
 				}
 				

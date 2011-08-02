@@ -59,16 +59,16 @@ public class SafetyNetworkRegisteredAssetsCountTest extends PageNavigatingTestCa
         assertEquals("Should have same number of preassigned assets that we started with", originalPreassignedAssets, afterPreassignedAssets);
     }
 
-    private IdentifyPage identifyAsset(FieldIDPage profilePage, boolean published, String serialNumber) {
+    private IdentifyPage identifyAsset(FieldIDPage profilePage, boolean published, String identifier) {
         IdentifyPage identifyPage = profilePage.clickIdentifyLink();
         Asset p = new Asset();
         p.setPublished(published);
-        p.setSerialNumber(serialNumber);
+        p.setIdentifier(identifier);
         p.setOwner(new Owner(COMPANY2, COMPANY1));
 
-        boolean generateSerialNumber = serialNumber == null;
+        boolean generateIdentifier = identifier == null;
 
-        identifyPage.setAddAssetForm(p, generateSerialNumber);
+        identifyPage.setAddAssetForm(p, generateIdentifier);
         identifyPage.saveNewAsset();
         return identifyPage;
     }

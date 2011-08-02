@@ -93,7 +93,7 @@
 	margin: 0;
 }
 
-.identifierErrorRow .invalidSerial {
+.identifierErrorRow .invalidIdentifier {
 	float: none;
 	clear: both;
 	padding-left: 60px;

@@ -41,9 +41,9 @@
 			<label>${identifierLabel}</label>
 			<span>
                 <#if inside_iframe?exists>
-                    <a href="#" onclick="parent.window.location='<@s.url namespace="/" action="asset" uniqueID="${asset.id}" />'"">${asset.serialNumber?html}</a>
+                    <a href="#" onclick="parent.window.location='<@s.url namespace="/" action="asset" uniqueID="${asset.id}" />'"">${asset.identifier?html}</a>
                 <#else>
-                    <a href="<@s.url namespace="/" action="asset" uniqueID="${asset.id}" />">${asset.serialNumber?html}</a>
+                    <a href="<@s.url namespace="/" action="asset" uniqueID="${asset.id}" />">${asset.identifier?html}</a>
                 </#if>
 			</span>
 		</p>

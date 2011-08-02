@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import rfid.ejb.entity.SerialNumberCounterBean;
+import rfid.ejb.entity.IdentifierCounterBean;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.State;
@@ -40,17 +40,17 @@ public class MinimalTenantDataSetup {
         PrimaryOrg org = createPrimaryOrgForTenant();
         createN4UserAccountForTenant(org);
         createPassFailButtonGroup();
-        createSerialNumberFormat();
+        createIdentifierFormat();
     }
 
-    private void createSerialNumberFormat() {
-        SerialNumberCounterBean serialNumberCounterBean = new SerialNumberCounterBean();
-        serialNumberCounterBean.setTenant(tenant);
-        serialNumberCounterBean.setDecimalFormat("000000");
-        serialNumberCounterBean.setCounter(1L);
-        serialNumberCounterBean.setDaysToReset(366L);
-        serialNumberCounterBean.setLastReset(new Date());
-        em.persist(serialNumberCounterBean);
+    private void createIdentifierFormat() {
+        IdentifierCounterBean identifierCounterBean = new IdentifierCounterBean();
+        identifierCounterBean.setTenant(tenant);
+        identifierCounterBean.setDecimalFormat("000000");
+        identifierCounterBean.setCounter(1L);
+        identifierCounterBean.setDaysToReset(366L);
+        identifierCounterBean.setLastReset(new Date());
+        em.persist(identifierCounterBean);
     }
 
     private void createPassFailButtonGroup() {

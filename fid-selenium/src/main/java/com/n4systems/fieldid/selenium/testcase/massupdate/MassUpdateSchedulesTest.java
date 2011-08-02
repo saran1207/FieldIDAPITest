@@ -24,7 +24,7 @@ public class MassUpdateSchedulesTest extends PageNavigatingTestCase<SchedulesSea
 	private static String COMPANY = "test1";
 	private static final String TEST_EVENT_TYPE1 = "Event Type 1";
 	private static final String TEST_EVENT_TYPE2 = "Event Type 2";
-	private static final String SERIAL_NUMBER = "11111111";
+	private static final String IDENTIFIER = "11111111";
 
 	@Override
 	public void setupScenario(Scenario scenario) {
@@ -52,7 +52,7 @@ public class MassUpdateSchedulesTest extends PageNavigatingTestCase<SchedulesSea
         
         Asset asset = scenario.anAsset()
                               .withOwner(scenario.primaryOrgFor(COMPANY))
-                              .withSerialNumber(SERIAL_NUMBER)
+                              .withIdentifier(IDENTIFIER)
                               .ofType(assetType)
                               .build();      
         
@@ -67,7 +67,7 @@ public class MassUpdateSchedulesTest extends PageNavigatingTestCase<SchedulesSea
 
     @Test
     public void test_mass_update_schedules_next_date() throws Exception {
-        page.enterSerialNumber(SERIAL_NUMBER);
+        page.enterIdentifier(IDENTIFIER);
         SchedulesSearchResultsPage resultsPage = page.clickRunSearchButton();
 
         assertEquals(2, resultsPage.getTotalResultsCount());

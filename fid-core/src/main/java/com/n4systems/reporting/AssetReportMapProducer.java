@@ -33,8 +33,8 @@ public class AssetReportMapProducer extends ReportMapProducer {
 	private void addAssetParams() {
 		add("productDesc", asset.getDescription());
 		add("rfidNumber", asset.getRfidNumber());
-		add("serialNumber", asset.getSerialNumber());
-		add("reelId", asset.getSerialNumber());
+		add("serialNumber", asset.getIdentifier());
+		add("reelId", asset.getIdentifier());
 		add("poNumber", asset.getPurchaseOrder());
 		add("customerRefNumber", asset.getCustomerRefNumber());
 		add("orderNumber", getOrderNumber());

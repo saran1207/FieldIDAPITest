@@ -71,8 +71,8 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 	public void identify_an_asset_using_add_with_order() throws Exception {
 		identifyPage = startAsCompany(COMPANY1).systemLogin().clickIdentifyLink();		
 
-		String serialNumber = identifyAssetWithOrderNumber(identifyPage, ORDER_NUMBER);
-		checkAssetIdentified(identifyPage, serialNumber);
+		String identifier = identifyAssetWithOrderNumber(identifyPage, ORDER_NUMBER);
+		checkAssetIdentified(identifyPage, identifier);
 	}
 	
 	@Test
@@ -87,16 +87,16 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 	public void identify_a_single_asset_non_integration_tenant() throws Exception {
 		identifyPage = startAsCompany(COMPANY2).systemLogin().clickIdentifyLink();		
 		
-		String serialNumber = identifyAsset(identifyPage);
-		checkAssetIdentified(identifyPage, serialNumber);
+		String identifier = identifyAsset(identifyPage);
+		checkAssetIdentified(identifyPage, identifier);
 	}
 	
 	@Test
 	public void identify_a_single_asset_integration_tenant() throws Exception {
 		identifyPage = startAsCompany(COMPANY1).systemLogin().clickIdentifyLink();		
 
-		String serialNumber = identifySingleAssetIntegrationTenant(identifyPage);
-		checkAssetIdentified(identifyPage,serialNumber);
+		String identifier = identifySingleAssetIntegrationTenant(identifyPage);
+		checkAssetIdentified(identifyPage, identifier);
 	}
 	
 	@Test
@@ -127,7 +127,7 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 	
 	private void verifyMultiAddWasSuccessful(IdentifyPage identifyPage, List<Identifier> identifiers) {
 		for(Identifier identifier : identifiers) {
-			checkAssetIdentified(identifyPage, identifier.getSerialNumber());
+			checkAssetIdentified(identifyPage, identifier.getIdentifier());
 		}
 	}
 
@@ -165,7 +165,7 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		asset = identifyPage.setAddAssetForm(asset, true);
 		identifyPage.saveNewAsset();
 
-		return asset.getSerialNumber();
+		return asset.getIdentifier();
 	}
 
 	private String identifySingleAssetIntegrationTenant(IdentifyPage identifyPage) throws Exception {
@@ -173,9 +173,9 @@ public class IdentifyAssetsTest extends FieldIDTestCase {
 		return identifyAsset(identifyPage);
 	}
 
-	private void checkAssetIdentified(IdentifyPage identifyPage, String serialNumber) {
-		AssetPage assetPage = identifyPage.search(serialNumber);
-		assertTrue(assetPage.checkHeader(serialNumber));
+	private void checkAssetIdentified(IdentifyPage identifyPage, String identifier) {
+		AssetPage assetPage = identifyPage.search(identifier);
+		assertTrue(assetPage.checkHeader(identifier));
 	}
 
 	private String identifyAssetWithOrderNumber(IdentifyPage identifyPage, String orderNumber) throws Exception {

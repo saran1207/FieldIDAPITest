@@ -14,12 +14,12 @@ ${action.setPageType('event', 'multi_proof_test')!}
 					<#if fileProcessingFailureMap[key]?exists >
 						<@s.text name="label.failedtoprocess"/>
 					<#else>
-						<#list eventProcessingFailureMap[key].keySet() as serialnumber >
+						<#list eventProcessingFailureMap[key].keySet() as identifier >
 							<p>
-								<label><@s.text name="label.id_number"/>: ${serialnumber}</label>
+								<label><@s.text name="label.id_number"/>: ${identifier}</label>
 								<span>
-									<#if eventProcessingFailureMap[key][serialnumber]?exists>
-										<a href='<@s.url action="event" namespace="/aHtml/iframe"  assetId="${eventProcessingFailureMap[key][serialnumber].asset.uniqueID}" uniqueID="${eventProcessingFailureMap[key][serialnumber].id}"/>'  class='lightview' rel='iframe' title='<@s.text name="title.viewevent"/> :: :: scrolling:true, width: 520, height: 420' >
+									<#if eventProcessingFailureMap[key][identifier]?exists>
+										<a href='<@s.url action="event" namespace="/aHtml/iframe"  assetId="${eventProcessingFailureMap[key][identifier].asset.uniqueID}" uniqueID="${eventProcessingFailureMap[key][identifier].id}"/>'  class='lightview' rel='iframe' title='<@s.text name="title.viewevent"/> :: :: scrolling:true, width: 520, height: 420' >
 							  				<@s.text name="link.view" />
 							  			</a>
 									<#else>

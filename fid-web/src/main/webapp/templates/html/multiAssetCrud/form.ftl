@@ -40,7 +40,7 @@
 		</@s.form>
 	</div>
 	
-	<@s.form action="generateSerials" id="step23Form" namespace="/ajax" theme="fieldidSimple">
+	<@s.form action="generateIdentifiers" id="step23Form" namespace="/ajax" theme="fieldidSimple">
         <input type="hidden" name="assetTypeId" id="step23AssetTypeId" value=""/>
 
 		<div class="step stepClosed">

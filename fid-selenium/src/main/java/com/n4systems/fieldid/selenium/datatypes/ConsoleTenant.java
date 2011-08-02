@@ -17,7 +17,7 @@ public class ConsoleTenant {
 	 * %j = Jergen's style date code
 	 * %g = Autoincrementing counter (defaults to 6 digits, reset every year)
 	 */
-	String serialNumberFormat = "NSA%y-%g";
+	String identifierFormat = "NSA%y-%g";
 	String dateFormat = "MM/dd/yy";
 	String diskSpaceLimit = "1048576000";
 	String assetLimit = "250";
@@ -40,12 +40,12 @@ public class ConsoleTenant {
 	public ConsoleTenant() {
 	}
 
-	public ConsoleTenant(String serialNumberFormat) {
-		this.serialNumberFormat = serialNumberFormat;
+	public ConsoleTenant(String identifierFormat) {
+		this.identifierFormat = identifierFormat;
 	}
 
-	public String getSerialNumberFormat() {
-		return this.serialNumberFormat;
+	public String getIdentifierFormat() {
+		return this.identifierFormat;
 	}
 
 	public String getDateFormat() {
@@ -120,8 +120,8 @@ public class ConsoleTenant {
 		return this.note;
 	}
 
-	public void setSerialNumberFormat(String s) {
-		this.serialNumberFormat = s;
+	public void setIdentifierFormat(String s) {
+		this.identifierFormat = s;
 	}
 
 	public void setDateFormat(String s) {

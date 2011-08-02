@@ -61,7 +61,7 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		model.setTenant(model.getOwner().getTenant());
 		model.setIdentifiedBy(identifiedBy);
 		model.setType(type);		
-		model.setSerialNumber(view.getSerialNumber());
+		model.setIdentifier(view.getIdentifier());
 		model.setRfidNumber(view.getRfidNumber());
 		model.setCustomerRefNumber(view.getCustomerRefNumber());
 		model.setAdvancedLocation(Location.onlyFreeformLocation(view.getLocation()));

@@ -30,8 +30,8 @@
 
     <bean id="orderMappingEJBContainer" class="com.n4systems.ejb.legacy.wrapper.OrderMappingEJBContainer"/>
 
-    <bean id="serialNumberCounterEJBContainer"
-          class="com.n4systems.ejb.legacy.wrapper.SerialNumberCounterEJBContainer"/>
+    <bean id="identifierCounterEJBContainer"
+          class="com.n4systems.ejb.legacy.wrapper.IdentifierCounterEJBContainer"/>
 
     <bean id="productCodeMappingEJBContainer" class="com.n4systems.ejb.legacy.wrapper.AssetCodeMappingEJBContainer"/>
 

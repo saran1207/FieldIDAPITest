@@ -1,12 +1,12 @@
 <head>
 	<script type="text/javascript" src="<@s.url value="/javascript/asset.js"/>" ></script>
 	<script type='text/javascript' src='<@s.url value="/javascript/assetRfidHandler.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/generateIdentifier.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/combobox.js"/>"></script>
 	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/generateSerialNumber.js"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/generateIdentifier.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/subAsset.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/event.js"/>"></script>
@@ -25,11 +25,11 @@
 		addAssetUrl = '<@s.url action="assetAdd" namespace="/ajax"/>';
 		createAssetUrl = "<@s.url action="assetCreate" namespace="/ajax" />";	
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"  />';
-		serialNumberUrl = '<@s.url action="generateSerialNumber" namespace="/aHtml"  />';
+		identifierUrl = '<@s.url action="generateIdentifier" namespace="/aHtml"  />';
 		checkRfidUrl = '<@s.url action="checkRFID" namespace="/ajax"  />';
 		removeSubAssetUrl = "<@s.url action="removeSubAsset" namespace="/ajax"/>";
 		unitOfMeasureUrl = '<@s.url action="unitOfMeasure" namespace="/ajax" />';
-		checkSerialNumberUrl = '<@s.url action="checkSerialNumber" namespace="/ajax" />';
+		checkIdentifierUrl = '<@s.url action="checkIdentifier" namespace="/ajax" />';
 		
 	</script>
 </head>

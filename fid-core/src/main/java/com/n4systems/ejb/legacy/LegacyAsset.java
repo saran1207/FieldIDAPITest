@@ -26,7 +26,7 @@ public interface LegacyAsset {
 	
 	public Asset createWithHistory( Asset asset, User modifiedBy ) throws SubAssetUniquenessException;
 	
-	public boolean duplicateSerialNumber( String serialNumber, Long uniqueID, Tenant tenant );
+	public boolean duplicateIdentifier(String identifier, Long uniqueID, Tenant tenant);
 	
 	public Event findLastEvents( Asset asset, SecurityFilter securityFilter );
 	

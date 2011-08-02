@@ -48,11 +48,11 @@ public class AssetSearchContainerTest extends SearchContainerTestCase {
 
 	@Test
 	public void single_search_term_no_asterisk_should_be_eq_comparator() throws Exception {
-		assetSearchContainer.setSerialNumber("12345");
+		assetSearchContainer.setIdentifier("12345");
 
 		WhereParameter<?> whereClause = getSingleWhereClause(assetSearchContainer);
 
-		assertEquals("serialNumber", whereClause.getName());
+		assertEquals("identifier", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.EQ);
@@ -85,11 +85,11 @@ public class AssetSearchContainerTest extends SearchContainerTestCase {
 	
 	@Test
 	public void test_search_with_wildcard() throws Exception {
-		assetSearchContainer.setSerialNumber("555*");
+		assetSearchContainer.setIdentifier("555*");
 		
 		WhereParameter<?> whereClause = getSingleWhereClause(assetSearchContainer);
 
-		assertEquals("serialNumber", whereClause.getName());
+		assertEquals("identifier", whereClause.getName());
 		assertEquals("555", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.LIKE);

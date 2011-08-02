@@ -22,7 +22,7 @@ public class SmartSearchTest extends FieldIDTestCase {
 
 		AssetType type = scenario.anAssetType().named("Cup Cake").build();
 		for (int i = 0; i < 50; i++) {
-			scenario.anAsset().ofType(type).rfidNumber("rfid-" + i).withSerialNumber(SERIAL_NUMBER).build();
+			scenario.anAsset().ofType(type).rfidNumber("rfid-" + i).withIdentifier(SERIAL_NUMBER).build();
 		}
 	}
 
@@ -33,7 +33,7 @@ public class SmartSearchTest extends FieldIDTestCase {
 	}
 
 	@Test
-	public void search_by_serialnumber_should_return_five_pages_of_results() {
+	public void search_by_identifier_should_return_five_pages_of_results() {
 		resultsPage = startAsCompany("test1").systemLogin().searchWithMultipleResults(SERIAL_NUMBER);
 		assertTrue("Did not return 5 pages of results", resultsPage.checkNumberOfPages(numberOfPages));
 	}

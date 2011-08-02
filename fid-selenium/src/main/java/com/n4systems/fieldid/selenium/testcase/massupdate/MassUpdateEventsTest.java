@@ -17,7 +17,7 @@ import com.n4systems.model.EventType;
 
 public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	
-	private static final String SERIAL_NUMBER = "9671111";
+	private static final String IDENTIFIER = "9671111";
 	private static String COMPANY = "test1";
 	
 	@Override
@@ -29,13 +29,13 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	
       Asset asset = scenario.anAsset()
 	        .withOwner(scenario.defaultPrimaryOrg())
-	        .withSerialNumber(SERIAL_NUMBER)
+	        .withIdentifier(IDENTIFIER)
 	        .ofType(type)
 	        .build();
       
       Asset asset2 = scenario.anAsset()
 	      .withOwner(scenario.defaultPrimaryOrg())
-	      .withSerialNumber(SERIAL_NUMBER)
+	      .withIdentifier(IDENTIFIER)
 	      .ofType(type)
 	      .build();
 	
@@ -77,7 +77,7 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	
 	@Test
 	public void test_remove_all_events_for_multiple_assets(){
-		   page.enterSerialNumber(SERIAL_NUMBER);
+		   page.enterIdentifier(IDENTIFIER);
 		   ReportingSearchResultsPage resultsPage = page.clickRunSearchButton();
 		   resultsPage.selectAllItemsOnPage();
 		   EventMassUpdatePage massUpdatePage = resultsPage.clickEventMassUpdate();
@@ -88,7 +88,7 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	
 	@Test
 	public void test_remove_all_schedules_for_multiple_assets(){
-		   page.enterSerialNumber(SERIAL_NUMBER);
+		   page.enterIdentifier(IDENTIFIER);
 		   ReportingSearchResultsPage resultsPage = page.clickRunSearchButton();
 		   resultsPage.selectAllItemsOnPage();
 		   EventMassUpdatePage massUpdatePage = resultsPage.clickEventMassUpdate();

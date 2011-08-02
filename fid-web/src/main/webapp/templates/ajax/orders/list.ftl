@@ -14,7 +14,7 @@
 				</tr>
 				<#list assets as asset >
 					<tr>
-						<td><a class="assetLink" assetId="${asset.id}" href="<@s.url action="${actionTarget}" namespace="${namespace}" uniqueID="${asset.id}" />" >${asset.serialNumber}</a></td>
+						<td><a class="assetLink" assetId="${asset.id}" href="<@s.url action="${actionTarget}" namespace="${namespace}" uniqueID="${asset.id}" />" >${asset.identifier}</a></td>
 						<td>${asset.rfidNumber!}</td>
 						<td>${(asset.owner.name)!}</td>
 						<td>${asset.type.name}</td>

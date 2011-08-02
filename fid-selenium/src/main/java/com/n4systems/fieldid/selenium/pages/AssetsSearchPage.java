@@ -13,7 +13,7 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 	}
 
 	public void setDisplayColumns(SearchDisplayColumns displayColumns) {
-		setCheckBoxValue("//input[@id='chk_asset_search_serialnumber']", displayColumns.isSerialNumber());
+		setCheckBoxValue("//input[@id='chk_asset_search_identifier']", displayColumns.isIdentifier());
 		setCheckBoxValue("//input[@id='chk_asset_search_referencenumber']", displayColumns.isReferenceNumber());
 		setCheckBoxValue("//input[@id='chk_asset_search_rfidnumber']", displayColumns.isRfidNumber());
 		setCheckBoxValue("//input[@id='chk_asset_search_customer']", displayColumns.isJobSiteName());
@@ -39,18 +39,18 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 		setCheckBoxValue("//input[@id='chk_asset_search_purchaseorder']", displayColumns.isPurchaseOrder());
 	}
 
-	public AssetPage clickResultInfo(String serialNumber) {
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'View Asset')]");		
+	public AssetPage clickResultInfo(String identifier) {
+		selenium.click("//table[@class='list']//a[text()='" +identifier+"']/../..//a[contains(text(), 'View Asset')]");
 		return new AssetPage(selenium);
 	}
 
-	public QuickEventPage clickResultStartEvent(String serialNumber) {
-		selenium.click("//table[@class='list']//a[text()='" +serialNumber+"']/../..//a[contains(text(), 'Start Event')]");
+	public QuickEventPage clickResultStartEvent(String identifier) {
+		selenium.click("//table[@class='list']//a[text()='" +identifier+"']/../..//a[contains(text(), 'Start Event')]");
 		return new QuickEventPage(selenium);
 	}
 
     @Override
-	public List<String> getResultSerialNumbers() {
+	public List<String> getResultIdentifiers() {
 		return collectTableValuesUnderCellForCurrentPage(2, 2, "a");
 	}
 

@@ -22,7 +22,7 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 
 	private AssetType type;
 
-	private String serialNumber;
+	private String identifier;
     private String rfidNumber;
 	private Date modified;
 	
@@ -40,10 +40,10 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 
     public AssetBuilder(){}
 
-	private AssetBuilder(Tenant tenant, BaseOrg owner, AssetType type, String serialNumber, Date modified, Location location, AssetStatus assetStatus, User assignedTo, boolean published, String purchaseOrder, User identifiedBy, List<SubAsset> subAssets, String rfidNumber) {
+	private AssetBuilder(Tenant tenant, BaseOrg owner, AssetType type, String identifier, Date modified, Location location, AssetStatus assetStatus, User assignedTo, boolean published, String purchaseOrder, User identifiedBy, List<SubAsset> subAssets, String rfidNumber) {
         super(tenant, owner);
 		this.type = type;
-		this.serialNumber = serialNumber;
+		this.identifier = identifier;
 		this.modified = modified;
 		this.location = location;
 		this.assetStatus = assetStatus;
@@ -56,35 +56,35 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 	}
 
     public AssetBuilder identifiedBy(User identifiedBy) {
-        return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+        return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
     }
 
 	public AssetBuilder ofType(AssetType type) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 	
 	public AssetBuilder forTenant(Tenant tenant) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 	
 	public AssetBuilder withOwner(BaseOrg owner) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 	
-	public AssetBuilder withSerialNumber(String serialNumber) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+	public AssetBuilder withIdentifier(String identifier) {
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 	
 	public AssetBuilder withModifiedDate(Date modified) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 	
 	public AssetBuilder withOneSubAsset() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, Arrays.asList(aSubAsset().build()), rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, Arrays.asList(aSubAsset().build()), rfidNumber));
 	}
 	
 	public AssetBuilder withTwoSubAssets() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, Arrays.asList(aSubAsset().build(), aSubAsset().build()), rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, Arrays.asList(aSubAsset().build(), aSubAsset().build()), rfidNumber));
 	}
 	
 	public AssetBuilder inFreeformLocation(String location) {
@@ -92,31 +92,31 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 	}
 	
 	public AssetBuilder withAdvancedLocation(Location location) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 	
 	public AssetBuilder havingStatus(AssetStatus assetStatus) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, assignedTo, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 	
 	public AssetBuilder assignedTo(User employee) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, employee, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, employee, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 	
 	public AssetBuilder unassigned() {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 
     public AssetBuilder published(boolean published) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 
     public AssetBuilder purchaseOrder(String purchaseOrder) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 
     public AssetBuilder rfidNumber(String rfidNumber) {
-		return makeBuilder(new AssetBuilder(tenant, owner, type, serialNumber, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
+		return makeBuilder(new AssetBuilder(tenant, owner, type, identifier, modified, location, assetStatus, null, published, purchaseOrder, identifiedBy, subAssets, rfidNumber));
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class AssetBuilder extends EntityWithOwnerBuilder<Asset> {
 		Asset asset = super.assignAbstractFields(new Asset());
 
 		asset.setType(type);
-		asset.setSerialNumber(serialNumber);
+		asset.setIdentifier(identifier);
 		asset.setModified(modified);
 		asset.setAssetStatus(assetStatus);
 		asset.setAssignedUser(assignedTo);

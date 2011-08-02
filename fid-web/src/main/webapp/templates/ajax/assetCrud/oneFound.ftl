@@ -4,4 +4,4 @@ var asset = null;
 $$('input[name="search"]')[1].clear();
 $$('input[name="search"]')[1].focus();
 
-assetFound('${asset.serialNumber?html?js_string}', ${asset.id}, asset);
+assetFound('${asset.identifier?html?js_string}', ${asset.id}, asset);

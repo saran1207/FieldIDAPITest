@@ -1,4 +1,4 @@
-<title><@s.text name="title.merge_assets"/> - ${losingAsset.serialNumber?html} <@s.text name="label.into"/> ${winningAsset.serialNumber?html}</title>
+<title><@s.text name="title.merge_assets"/> - ${losingAsset.identifier?html} <@s.text name="label.into"/> ${winningAsset.identifier?html}</title>
 <head>
 	<link rel="stylesheet" type="text/css" href="<@s.url value="/style/steps.css"/>" />
 </head>
@@ -10,7 +10,7 @@
 			<@s.text name="message.assets_being_merged"/>
 		</p>
 		<p>
-			<@s.text name="label.go_to_winning_asset_page"/> <a href="<@s.url action="asset" uniqueID="${winningAsset.id}"/>">${winningAsset.serialNumber?html}</a>
+			<@s.text name="label.go_to_winning_asset_page"/> <a href="<@s.url action="asset" uniqueID="${winningAsset.id}"/>">${winningAsset.identifier?html}</a>
 		</p>	
 	</div>
 </div>

@@ -57,7 +57,7 @@ public class WiropFileProcessor extends FileProcessor {
 			
 			
 			// populate the data container with our header info
-			fileDataContainer.setSerialNumbers(headers[SERIAL_NUMBER].trim());
+			fileDataContainer.setIdentifiers(headers[SERIAL_NUMBER].trim());
 			logger.info("Wirop log serial number [" + headers[SERIAL_NUMBER] + "]");
 			
 			// parse the date ... this step is so stupid ... 

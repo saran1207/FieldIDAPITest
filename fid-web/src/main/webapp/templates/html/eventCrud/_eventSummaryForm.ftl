@@ -19,7 +19,7 @@
 	<div class="infoSet">
 		<label class="label">${identifierLabel}</label>
 		<span class="fieldHolder">
-            <a href="<@s.url action="asset" uniqueID="${asset.id}"/>">${asset.serialNumber?html}</a>
+            <a href="<@s.url action="asset" uniqueID="${asset.id}"/>">${asset.identifier?html}</a>
 		</span>
 	</div>
 	<div class="infoSet">

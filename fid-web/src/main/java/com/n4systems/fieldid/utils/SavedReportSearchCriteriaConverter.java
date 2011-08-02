@@ -47,7 +47,7 @@ public class SavedReportSearchCriteriaConverter {
 		container.setPurchaseOrder(savedReport.getStringCriteria(SavedReport.PURCHASE_ORDER_NUMBER));
 		container.setOrderNumber(savedReport.getStringCriteria(SavedReport.ORDER_NUMBER));
 		container.setRfidNumber(savedReport.getStringCriteria(SavedReport.RFID_NUMBER));
-		container.setSerialNumber(savedReport.getStringCriteria(SavedReport.SERIAL_NUMBER));
+		container.setIdentifier(savedReport.getStringCriteria(SavedReport.SERIAL_NUMBER));
 		container.setReferenceNumber(savedReport.getStringCriteria(SavedReport.REFERENCE_NUMBER));
 		container.getLocation().setFreeformLocation(savedReport.getStringCriteria(SavedReport.LOCATION));
 		container.getLocation().setPredefinedLocationId(savedReport.getLongCriteria(SavedReport.PREDEFINED_LOCATION_ID));
@@ -88,7 +88,7 @@ public class SavedReportSearchCriteriaConverter {
 		report.setInCriteria(SavedReport.PURCHASE_ORDER_NUMBER, container.getPurchaseOrder());
 		report.setInCriteria(SavedReport.ORDER_NUMBER, container.getOrderNumber());
 		report.setInCriteria(SavedReport.RFID_NUMBER, container.getRfidNumber());
-		report.setInCriteria(SavedReport.SERIAL_NUMBER, container.getSerialNumber());
+		report.setInCriteria(SavedReport.SERIAL_NUMBER, container.getIdentifier());
 		report.setInCriteria(SavedReport.OWNER_ID, container.getOwnerId());
 		report.setInCriteria(SavedReport.REFERENCE_NUMBER, container.getReferenceNumber());
 		report.setInCriteria(SavedReport.EVENT_BOOK, container.getEventBook());

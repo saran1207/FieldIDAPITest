@@ -34,7 +34,7 @@ public class AddScheduleTest extends PageNavigatingTestCase<AssetPage> {
 
         scenario.anAsset()
                 .ofType(assetType)
-                .withSerialNumber(TEST_SERIAL_NUMBER)
+                .withIdentifier(TEST_SERIAL_NUMBER)
                 .build();
     }
 

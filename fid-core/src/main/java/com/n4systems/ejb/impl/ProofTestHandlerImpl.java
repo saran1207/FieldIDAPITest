@@ -28,7 +28,7 @@ import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.exceptions.TooManySerialsException;
+import com.n4systems.exceptions.TooManyIdentifiersException;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -123,9 +123,9 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		logger.info("Started processing of file [" + fileData.getFileName() + "]");
 		
-		int maxSerials = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SERIALS_PER_PROOFTEST);
-		if (fileData.getSerialNumbers().size() > maxSerials){
-			throw new TooManySerialsException("Max number of serials exceeded.  Size was " + fileData.getSerialNumbers().size() + " max allowed is " + maxSerials);
+		int maxIdentifiers = ConfigContext.getCurrentContext().getInteger(ConfigEntry.MAX_SERIALS_PER_PROOFTEST);
+		if (fileData.getIdentifiers().size() > maxIdentifiers){
+			throw new TooManyIdentifiersException("Max number of identifiers exceeded.  Size was " + fileData.getIdentifiers().size() + " max allowed is " + maxIdentifiers);
 		}
 		
 		Tenant tenant = performedBy.getTenant();
@@ -155,21 +155,21 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		List<Event> events;
 		Event event;
 		// since proof tests may have multiple serial numbers, we'll need to do this process for each
-		for (String serialNumber : fileData.getSerialNumbers()) {
+		for (String identifier : fileData.getIdentifiers()) {
 			event = null;
 			try {
 				// find an asset for this tenant, serial and customer
-				asset = findOrCreateAsset(primaryOrg, performedBy, serialNumber, customer, fileData);
+				asset = findOrCreateAsset(primaryOrg, performedBy, identifier, customer, fileData);
 			} catch (NonUniqueAssetException e) {
-				writeLogMessage(tenant, "There are multiple Asset with serial number[" + serialNumber + "] in file [" + fileData.getFileName() + "]", false, null);
-				eventMap.put(serialNumber, null);
+				writeLogMessage(tenant, "There are multiple Asset with identifier number[" + identifier + "] in file [" + fileData.getFileName() + "]", false, null);
+				eventMap.put(identifier, null);
 				continue;
 			}
 			
 			// if the asset is null, log it and move on to the next serial
 			if (asset == null) {
-				writeLogMessage(tenant, "Could not find/create Asset [" + serialNumber + "] referenced in file [" + fileData.getFileName() + "]", false, null);
-				eventMap.put(serialNumber, null);
+				writeLogMessage(tenant, "Could not find/create Asset [" + identifier + "] referenced in file [" + fileData.getFileName() + "]", false, null);
+				eventMap.put(identifier, null);
 				continue;
 			}
 			
@@ -205,17 +205,17 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 				try {
 					// we have a valid event, now we can update it
 					eventManager.updateEvent(event, performedBy.getId(), fileData, null);
-					writeLogMessage(tenant, "Updated Event for Asset with serial [" + serialNumber + "] and date performed [" + event.getDate() + "]");
+					writeLogMessage(tenant, "Updated Event for Asset with identifier [" + identifier + "] and date performed [" + event.getDate() + "]");
 				} catch(Exception e) {
 					// we don't want a failure in one event to cause the others to fail, so we will simply log these expections and move on
-					writeLogMessage(tenant, "Failed to update Event for Asset with serial [" + serialNumber + "] and date performed [" + event.getDate() + "]", false, e);
-					eventMap.put(serialNumber, null);
+					writeLogMessage(tenant, "Failed to update Event for Asset with identifier [" + identifier + "] and date performed [" + event.getDate() + "]", false, e);
+					eventMap.put(identifier, null);
 					continue;
 				}
 			}
 
 			// update our map with the serial and event
-			eventMap.put(serialNumber, event);
+			eventMap.put(identifier, event);
 		}
 		
 		logger.info("Completed processing of file [" + fileData.getFileName() + "]");
@@ -269,7 +269,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		}
 		
 		// find an asset for this tenant, serial and customer
-		Asset asset = assetManager.findAssetBySerialNumber(serial, primaryOrg.getTenant().getId(), customerId);
+		Asset asset = assetManager.findAssetByIdentifier(serial, primaryOrg.getTenant().getId(), customerId);
 		
 		if(asset == null) {
 			if(!fileData.isCreateAsset()) {
@@ -284,11 +284,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return asset;
 	}
 
-	private Asset createAsset(PrimaryOrg primaryOrg, User user, BaseOrg owner, String serialNumber, Map<String, String> assetOptions) {
+	private Asset createAsset(PrimaryOrg primaryOrg, User user, BaseOrg owner, String identifier, Map<String, String> assetOptions) {
 		Asset asset = new Asset();
 		
 		asset.setTenant(primaryOrg.getTenant());
-		asset.setSerialNumber(serialNumber);
+		asset.setIdentifier(identifier);
 		
 		AssetType assetType = assetTypeManager.findDefaultAssetType(primaryOrg.getTenant().getId());
 		asset.setType(assetType);
@@ -435,10 +435,10 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 					new CreateEventParameterBuilder(event,performedBy.getId())
 					.withProofTestFile(fileData).build());
 			
-			writeLogMessage(tenant, "Created Event for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]");
+			writeLogMessage(tenant, "Created Event for Asset with serial [" + asset.getIdentifier() + "] and date performed [" + event.getDate() + "]");
 		} catch(Exception e) {
 			// we failed to create an event, log the failure
-			writeLogMessage(tenant, "Failed to create Event for Asset with serial [" + asset.getSerialNumber() + "] and date performed [" + event.getDate() + "]", false, e);
+			writeLogMessage(tenant, "Failed to create Event for Asset with serial [" + asset.getIdentifier() + "] and date performed [" + event.getDate() + "]", false, e);
 			return null;
 		}
 		

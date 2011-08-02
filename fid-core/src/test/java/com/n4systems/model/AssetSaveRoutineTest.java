@@ -9,43 +9,43 @@ public class AssetSaveRoutineTest {
 
 	
 	@Test
-	public void should_null_blank_string_serial_number() {
+	public void should_null_blank_string_identifier() {
 		Asset sut = new Asset();
-		sut.setSerialNumber(" ");
+		sut.setIdentifier(" ");
 		
 		sut.onCreate();
 		
-		assertNull(sut.getSerialNumber());
+		assertNull(sut.getIdentifier());
 	}
 	
 	@Test
-	public void should_handle_null_serial_number() {
+	public void should_handle_null_identifier() {
 		Asset sut = new Asset();
-		sut.setSerialNumber(null);
+		sut.setIdentifier(null);
 		
 		sut.onCreate();
 		
-		assertNull(sut.getSerialNumber());
+		assertNull(sut.getIdentifier());
 	}
 	
 	@Test
-	public void should_trim_serial_number() {
+	public void should_trim_identifier() {
 		Asset sut = new Asset();
-		sut.setSerialNumber(" some serial number  ");
+		sut.setIdentifier(" some identifier  ");
 		
 		sut.onCreate();
 		
-		assertEquals("some serial number", sut.getSerialNumber());
+		assertEquals("some identifier", sut.getIdentifier());
 	}
 	
 	@Test
-	public void should_leave_serial_number_as_is() {
+	public void should_leave_identifier_as_is() {
 		Asset sut = new Asset();
-		sut.setSerialNumber("some serial number");
+		sut.setIdentifier("some identifier");
 		
 		sut.onCreate();
 		
-		assertEquals("some serial number", sut.getSerialNumber());
+		assertEquals("some identifier", sut.getIdentifier());
 	}
 	
 	@Test

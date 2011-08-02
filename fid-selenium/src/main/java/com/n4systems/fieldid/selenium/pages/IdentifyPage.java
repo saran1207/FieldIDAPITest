@@ -106,8 +106,8 @@ public class IdentifyPage extends FieldIDPage {
 			selenium.click("//a[contains(text(),'Generate')]");
             waitForAjax();
 		}
-		if(p.getSerialNumber() != null) {
-			selenium.type("//input[@id='serialNumberText']", p.getSerialNumber());
+		if(p.getIdentifier() != null) {
+			selenium.type("//input[@id='identifierText']", p.getIdentifier());
 		}
 		if(p.getRFIDNumber() != null) {
 			selenium.type("//input[@id='rfidNumber']", p.getRFIDNumber());
@@ -159,12 +159,12 @@ public class IdentifyPage extends FieldIDPage {
 		return p;
 	}
 
-    public void clickGenerateSerialNumber() {
+    public void clickGenerateIdentifiers() {
         selenium.click("//a[contains(text(),'generate')]");
     }
 
-    public void enterSerialNumber(String serialNumber) {
-        selenium.type("//input[@id='serialNumberText']", serialNumber);
+    public void enterIdentifier(String identifier) {
+        selenium.type("//input[@id='identifierText']", identifier);
     }
 
     public void enterPurchaseOrder(String purchaseOrder) {
@@ -254,7 +254,7 @@ public class IdentifyPage extends FieldIDPage {
 	
 	public Asset getAddAssetForm() {
 		Asset p = new Asset();
-		p.setSerialNumber(selenium.getValue("//input[@id='serialNumberText']"));
+		p.setIdentifier(selenium.getValue("//input[@id='identifierText']"));
 		p.setRFIDNumber(selenium.getValue("//input[@id='rfidNumber']"));
 		p.setReferenceNumber(selenium.getValue("//input[@id='customerRefNumber']"));
 		p.setSafetyNetworkRegistration(null);
@@ -406,15 +406,15 @@ public class IdentifyPage extends FieldIDPage {
 		Number n = selenium.getXpathCount("//div[@class='identifierRow']/div/input[contains(@id,'serial_')]");
 		int numRows = n.intValue();
 		int currentRow = 0;
-		String serialNumberLocator = "//input[@id='serial_" + currentRow + "']";
+		String identifierLocator = "//input[@id='identifier_" + currentRow + "']";
 		String rfidNumberLocator = "//input[@id='step4form_identifiers_" + currentRow + "__rfidNumber']";
 		String referenceNumberLocator = "//input[@id='step4form_identifiers_" + currentRow + "__referenceNumber']";
 
 		for(int i = 0; i < numRows; i++, currentRow++) {
 			if(set && identifiers.size() > i) {
 				Identifier in = identifiers.get(i);
-				if(in.getSerialNumber() != null) {
-					selenium.type(serialNumberLocator, in.getSerialNumber());
+				if(in.getIdentifier() != null) {
+					selenium.type(identifierLocator, in.getIdentifier());
 				}
 				if(in.getRfidNumber() != null) {
 					selenium.type(rfidNumberLocator, in.getRfidNumber());
@@ -423,12 +423,12 @@ public class IdentifyPage extends FieldIDPage {
 					selenium.type(referenceNumberLocator, in.getReferenceNumber());
 				}
 			}
-			String serial = selenium.getValue(serialNumberLocator);
+			String identifier = selenium.getValue(identifierLocator);
 			String rfid = selenium.getValue(rfidNumberLocator);
 			String ref = selenium.getValue(referenceNumberLocator);
-			Identifier out = new Identifier(serial, rfid, ref);
+			Identifier out = new Identifier(identifier, rfid, ref);
 			results.add(out);
-			serialNumberLocator = serialNumberLocator.replaceFirst("_" + currentRow, "_" + (currentRow+1));
+			identifierLocator = identifierLocator.replaceFirst("_" + currentRow, "_" + (currentRow+1));
 			rfidNumberLocator = rfidNumberLocator.replaceFirst("_" + currentRow, "_" + (currentRow+1));
 			referenceNumberLocator = referenceNumberLocator.replaceFirst("_" + currentRow, "_" + (currentRow+1));
 		}

@@ -5,12 +5,11 @@ import java.lang.reflect.Field;
 import com.n4systems.model.Asset;
 import com.n4systems.util.reflection.Reflector;
 
-public class AssetViewToAssetSerialLengthValidator extends AssetViewStringFieldLengthValidator {
+public class AssetViewToAssetIdentifierLengthValidator extends AssetViewStringFieldLengthValidator {
 
 	@Override
 	protected Field getField() {
-		return  Reflector.findField(Asset.class, "serialNumber");
+		return Reflector.findField(Asset.class, "identifier");
 	}
-
 
 }

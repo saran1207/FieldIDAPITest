@@ -457,7 +457,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			return INPUT;
 		} catch (Exception e) {
 			addActionErrorText("error.eventsavefailed");
-			logger.error("event save failed serial number " + asset.getSerialNumber(), e);
+			logger.error("event save failed identifier " + asset.getIdentifier(), e);
 			return ERROR;
 		}
 
@@ -579,7 +579,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 			eventManager.retireEvent(event, getSessionUser().getUniqueID());
 		} catch (Exception e) {
 			addFlashErrorText("error.eventdeleting");
-			logger.error("event retire " + asset.getSerialNumber(), e);
+			logger.error("event retire " + asset.getIdentifier(), e);
 			return ERROR;
 		}
 

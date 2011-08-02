@@ -68,7 +68,7 @@ public class SafetyNetworkSmartSearchComponent extends UIBean {
 			if (linkedAsset != null) {
 				editMode = true;
 				addParameter("linkedAsset_Id", linkedAsset.getId());
-				addParameter("linkedAsset_SerialNumber", linkedAsset.getSerialNumber());
+				addParameter("linkedAsset_Identifier", linkedAsset.getIdentifier());
 				addParameter("linkedAsset_RfidNumber", linkedAsset.getRfidNumber());
 				addParameter("linkedAsset_OwnerName", linkedAsset.getOwner().getDisplayName());
 				addParameter("linkedAsset_TypeName", linkedAsset.getType().getDisplayName());

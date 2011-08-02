@@ -63,8 +63,8 @@
 			<result name="input" type="freemarker">/templates/aHtml/report/expired.ftl</result>
 		</action>
 		
-		<action name="generateSerialNumber" method="generateSerialNumber" class="com.n4systems.fieldid.actions.asset.AssetUtilAction">
-			<result name="success" type="freemarker">/templates/aHtml/assetUtil/generateSerialNumber.ftl</result>
+		<action name="generateIdentifier" method="generateIdentifier" class="com.n4systems.fieldid.actions.asset.AssetUtilAction">
+			<result name="success" type="freemarker">/templates/aHtml/assetUtil/generateIdentifier.ftl</result>
 		</action>
 		
 		<action name="event" method="show" class="com.n4systems.fieldid.actions.event.EventCrud">

@@ -30,7 +30,7 @@ public class EventListSortingTest extends
 	private static final String TEST_EVENT_TYPE2 = "TestEventType2";
 	private static final String TEST_EVENT_TYPE1 = "TestEventType1";
 	private static final String TEST_TENANT = "test1";
-	private static final String ASSET_SERIAL1 = "12345";
+	private static final String ASSET_IDENTIFIER1 = "12345";
 	private static final String USERID1 = "userid1";
 	private static final String USERID2 = "userid3";
 
@@ -60,7 +60,7 @@ public class EventListSortingTest extends
 		
 		Asset asset1 = scenario.anAsset()
 				              .withOwner(primaryOrg)
-				              .withSerialNumber(ASSET_SERIAL1)
+				              .withIdentifier(ASSET_IDENTIFIER1)
 				              .havingStatus(assetStatus1)
 				              .ofType(type)
 				              .build();
@@ -136,7 +136,7 @@ public class EventListSortingTest extends
 
 	@Override
 	protected EventsPerformedPage navigateToPage() {
-		return startAsCompany(TEST_TENANT).login().search(ASSET_SERIAL1).clickEventHistoryTab();
+		return startAsCompany(TEST_TENANT).login().search(ASSET_IDENTIFIER1).clickEventHistoryTab();
 	}
 	
 	@Test

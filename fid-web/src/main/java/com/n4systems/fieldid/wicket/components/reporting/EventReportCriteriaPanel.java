@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.IdentifierLabel;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
@@ -195,11 +196,13 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             jobContainer.add(new DropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
             add(new TextField<String>("rfidNumber"));
-            add(new TextField<String>("serialNumber"));
+            add(new TextField<String>("identifier"));
             add(new TextField<String>("referenceNumber"));
 
             add(new TextField<String>("purchaseOrder"));
             add(new TextField<String>("orderNumber"));
+
+            add(new IdentifierLabel("identifierLabel"));
 
             includeNetworkResultsContainer.add(new CheckBox("includeSafetyNetwork"));
 

@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.datatypes;
 
 public class AssetSearchCriteria {
 	private String rfidNumber;
-	private String serialNumber;
+	private String identifier;
 	private String orderNumber;
 	private String purchaseOrder;
 	private String assignedTo;
@@ -22,8 +22,8 @@ public class AssetSearchCriteria {
 		return this.rfidNumber;
 	}
 
-	public String getSerialNumber() {
-		return this.serialNumber;
+	public String getIdentifier() {
+		return this.identifier;
 	}
 	
 	public String getOrderNumber() {
@@ -70,8 +70,8 @@ public class AssetSearchCriteria {
 		this.rfidNumber = s;
 	}
 
-	public void setSerialNumber(String s) {
-		this.serialNumber = s;
+	public void setIdentifier(String s) {
+		this.identifier = s;
 	}
 	
 	public void setOrderNumber(String s) {

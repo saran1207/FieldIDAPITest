@@ -6,12 +6,12 @@ import static org.easymock.EasyMock.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import rfid.ejb.entity.SerialNumberCounterBean;
+import rfid.ejb.entity.IdentifierCounterBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.handlers.TestUsesTransactionBase;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
+import com.n4systems.model.serialnumbercounter.IdentifierCounterSaver;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
 
@@ -40,15 +40,15 @@ public class BaseSystemTenantStructureCreateHandlerImplTest extends TestUsesTran
 		mockModDateSaver.save(same(mockTransaction), isA(SetupDataLastModDates.class));
 		replay(mockModDateSaver);
 		
-		SerialNumberCounterSaver mockSerialNumberSaver = createMock(SerialNumberCounterSaver.class);
-		mockSerialNumberSaver.save(same(mockTransaction), isA(SerialNumberCounterBean.class));
-		replay(mockSerialNumberSaver);
+		IdentifierCounterSaver mockIdentifierSaver = createMock(IdentifierCounterSaver.class);
+		mockIdentifierSaver.save(same(mockTransaction), isA(IdentifierCounterBean.class));
+		replay(mockIdentifierSaver);
 		
-		BaseSystemTenantStructureCreateHandler sut = new BaseSystemTenantStructureCreateHandlerImpl(mockModDateSaver, mockSerialNumberSaver);
+		BaseSystemTenantStructureCreateHandler sut = new BaseSystemTenantStructureCreateHandlerImpl(mockModDateSaver, mockIdentifierSaver);
 		sut.forTenant(tenant).create(mockTransaction);
 		
 		verify(mockModDateSaver);
-		verify(mockSerialNumberSaver);
+		verify(mockIdentifierSaver);
 	}
 	
 	

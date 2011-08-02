@@ -31,13 +31,13 @@ public abstract class AssetViewStringFieldLengthValidator implements FieldValida
 	
 	private int retrieveMaxLengthFromField(Field field) {
 		if (field == null) {
-			logger.warn("Serial/Rfid number length validator could not find field");
+			logger.warn("Identifier/Rfid number length validator could not find field");
 			return DEFAULT_MAX_LENGTH;
 		} 
 		
 		Column col = field.getAnnotation(Column.class);
 		if (col == null) {
-			logger.warn("Serial/Rfid number length validator could not find column annotation");
+			logger.warn("Identifier/Rfid number length validator could not find column annotation");
 			return DEFAULT_MAX_LENGTH;
 		} 
 			

@@ -12,8 +12,8 @@
 				<@s.text name="label.registered_against"/> <span id="linkedAssetType"></span> <@s.text name="label.from"/> <span id="linkedAssetOwner"></span>
 			</h4>
 			<div  >
-				<label for="linkedAssetSerial"><@s.text name="label.id_number"/>: </label>
-				<span id="linkedAssetSerial"></span>
+				<label for="linkedAssetIdentifier"><@s.text name="label.id_number"/>: </label>
+				<span id="linkedAssetIdentifier"></span>
 			</div>
 			<div  >
 				<label  for="linkedAssetRfid"><@s.text name="label.rfidnumber"/>: </label>
@@ -54,7 +54,7 @@
 				var asset = new Object();
 			
 				asset.id = ${parameters.linkedAsset_Id};
-				asset.serialNumber = "${(parameters.linkedAsset_SerialNumber)?default("")?js_string}";
+				asset.identifier = "${(parameters.linkedAsset_Identifier)?default("")?js_string}";
 				asset.rfidNumber = "${(parameters.linkedAsset_RfidNumber)?default("")?js_string}";
 				asset.owner = "${(parameters.linkedAsset_OwnerName)?default("")?js_string}";
 				asset.type = "${(parameters.linkedAsset_TypeName)?default("")?js_string}";

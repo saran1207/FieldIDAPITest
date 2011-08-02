@@ -4,22 +4,22 @@ package com.n4systems.fieldid.selenium.datatypes;
  * This is used in Multi Add and can be used for Smart Search
  */
 public class Identifier {
-	private String serialNumber;
+	private String identifier;
 	private String rfidNumber;
 	private String referenceNumber;
 	
-	public Identifier(String serialNumber, String rfidNumber, String referenceNumber) {
-		this.serialNumber = serialNumber;
+	public Identifier(String identifier, String rfidNumber, String referenceNumber) {
+		this.identifier = identifier;
 		this.rfidNumber = rfidNumber;
 		this.referenceNumber = referenceNumber;
 	}
 	
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 	
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 	
 	public String getRfidNumber() {

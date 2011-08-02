@@ -33,7 +33,7 @@ public interface AssetManager {
 
 	public Asset findAssetByGUID(String mobileGUID, SecurityFilter filter);
 
-	public Asset findAssetBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueAssetException;
+	public Asset findAssetByIdentifier(String identifier, Long tenantId, Long customerId) throws NonUniqueAssetException;
 
 	public List<Asset> findAssetsByRfidNumber(String rfidNumber, SecurityFilter filter, String... postFetchFields);
 

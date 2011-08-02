@@ -84,7 +84,7 @@ public class ManageCustomersTest extends PageNavigatingTestCase<ManageCustomersP
         						.anAsset().withOwner(custOrg)
         						.ofType(type);
         
-        Asset transferredAsset =  builder.withSerialNumber(ASSET_TRANSFER_SERIAL)
+        Asset transferredAsset =  builder.withIdentifier(ASSET_TRANSFER_SERIAL)
         								.withOwner(custOrg)
         								.build();
 

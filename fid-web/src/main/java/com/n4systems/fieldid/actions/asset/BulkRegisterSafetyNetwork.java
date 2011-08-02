@@ -64,7 +64,7 @@ public class BulkRegisterSafetyNetwork extends MultiAddAssetCrud {
 
             Asset linkedAsset = persistenceManager.find(Asset.class, assetIdentifier.getAssetId());
 
-            assetToSave.setSerialNumber(assetIdentifier.getSerialNumber());
+            assetToSave.setIdentifier(assetIdentifier.getIdentifier());
             assetToSave.setCustomerRefNumber(assetIdentifier.getReferenceNumber());
             assetToSave.setRfidNumber(assetIdentifier.getRfidNumber());
 
@@ -128,7 +128,7 @@ public class BulkRegisterSafetyNetwork extends MultiAddAssetCrud {
         List<AssetIdentifierView> identifiers = new ArrayList<AssetIdentifierView>(items.size());
         for (Asset item : items) {
             AssetIdentifierView identifier = new AssetIdentifierView();
-            identifier.setSerialNumber(item.getSerialNumber());
+            identifier.setIdentifier(item.getIdentifier());
             identifier.setRfidNumber(item.getRfidNumber());
             identifier.setAssetId(item.getId());
             identifiers.add(identifier);

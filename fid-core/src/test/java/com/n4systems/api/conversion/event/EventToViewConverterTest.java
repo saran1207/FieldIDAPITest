@@ -71,7 +71,7 @@ public class EventToViewConverterTest {
 	}
 	
 	@Test
-	public void to_view_copies_serialnumber_to_identifier() throws ConversionException {
+	public void to_view_copies_identifier_to_identifier() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
 			protected void convertDirectFields(Event model, EventView view) {}
 			protected void convertEventStatus(Event model, EventView view) {}
@@ -83,11 +83,11 @@ public class EventToViewConverterTest {
 		};
 		
 		Event model = new Event();
-		model.setAsset(AssetBuilder.anAsset().withSerialNumber("serial").build());
+		model.setAsset(AssetBuilder.anAsset().withIdentifier("serial").build());
 		
 		EventView view = converter.toView(model);
 		
-		assertEquals(model.getAsset().getSerialNumber(), view.getIdentifier());
+		assertEquals(model.getAsset().getIdentifier(), view.getIdentifier());
 	}
 	
 	@Test

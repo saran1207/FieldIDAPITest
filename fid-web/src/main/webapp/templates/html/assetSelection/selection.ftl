@@ -57,7 +57,7 @@
 <#assign row>
 <tr id="asset_%%ID%%"> 
 	<td>
-		%%SERIAL_NUMBER%%
+		%%IDENTIFIER%%
 		<@s.hidden name="assetIds[%%INDEX%%]" value="%%ID%%"/>
 	</td>
 	<td>%%RFID%%</td>
@@ -76,12 +76,12 @@
 		function selectAsset(event) {
 			event.stop();
 			var element = Event.element(event);
-			assetFound('serial', element.readAttribute('assetId'), element.asset);
+			assetFound('identifier', element.readAttribute('assetId'), element.asset);
 		}
 	
 		var selectionIndex = 0;
 		
-		function assetFound(serialNumber, id, asset) {
+		function assetFound(identifier, id, asset) {
 			if ($("asset_"+id) != null) {
 				updateResults('${repeatedAssetHtml?js_string}');
 				return;
@@ -94,7 +94,7 @@
 			
 			var valueSubsitutedHtml = html.replace(/%%INDEX%%/g, selectionIndex)
 							.replace(/%%ID%%/g, id)
-							.replace(/%%SERIAL_NUMBER%%/g, asset.serialNumber)
+							.replace(/%%IDENTIFIER%%/g, asset.identifier)
 							.replace(/%%RFID%%/g, asset.rfidNumber)
 							.replace(/%%OWNER%%/g, asset.owner)
 							.replace(/%%TYPE%%/g, asset.type)

@@ -7,7 +7,7 @@ import com.n4systems.util.persistence.search.BaseSearchDefiner;
 
 public interface ReportDefiner extends BaseSearchDefiner {
 
-	public String getSerialNumber();
+	public String getIdentifier();
 	public String getRfidNumber();
 	public String getOrderNumber();
 	public String getPurchaseOrder();

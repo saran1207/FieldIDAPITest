@@ -4,9 +4,9 @@ import com.n4systems.fieldid.utils.WebContextProvider;
 import com.n4systems.model.Asset;
 import com.n4systems.model.security.SecurityLevel;
 
-public class EventSerialNumberHandler extends WebOutputHandler {
+public class EventIdentifierHandler extends WebOutputHandler {
 
-	public EventSerialNumberHandler(WebContextProvider action) {
+	public EventIdentifierHandler(WebContextProvider action) {
 		super(action);
 	}
 	
@@ -15,21 +15,21 @@ public class EventSerialNumberHandler extends WebOutputHandler {
 		
 		SecurityLevel level = asset.getSecurityLevel(contextProvider.getSecurityFilter().getOwner());
 		
-		// build the asset info link for local assets, just show the serial for network assets
-		String serialNumber;
+		// build the asset info link for local assets, just show the identifier for network assets
+		String identifier;
 		if (level.isLocal()) { 
-			serialNumber = String.format("<a href='/fieldid/asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getSerialNumber());
+			identifier = String.format("<a href='/fieldid/asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getIdentifier());
 		} else {
-			serialNumber = asset.getSerialNumber();
+			identifier = asset.getIdentifier();
 		}
 		
-		return serialNumber;
+		return identifier;
 	}
 
 	public Object handleExcel(Long entityId, Object value) {
 		Asset asset = (Asset)value;
 		
-		return asset.getSerialNumber();
+		return asset.getIdentifier();
 	}
 	
 }

@@ -3,7 +3,7 @@ package com.n4systems.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import rfid.ejb.entity.SerialNumberCounterBean;
+import rfid.ejb.entity.IdentifierCounterBean;
 
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.util.DateHelper;
@@ -19,14 +19,14 @@ public class BaseSetupDataFactory {
 		return new SetupDataLastModDates(tenant);
 	}
 	
-	public SerialNumberCounterBean createSerialNumberCounterBean() {
-		SerialNumberCounterBean serialNumberCounter = new SerialNumberCounterBean();
-		serialNumberCounter.setTenant(tenant);
-		serialNumberCounter.setCounter(1L);
-		serialNumberCounter.setDecimalFormat("000000");
-		serialNumberCounter.setDaysToReset(365L);
-		serialNumberCounter.setLastReset(DateHelper.getFirstDayOfThisYear());
-		return serialNumberCounter;
+	public IdentifierCounterBean createSerialNumberCounterBean() {
+		IdentifierCounterBean identifierCounter = new IdentifierCounterBean();
+		identifierCounter.setTenant(tenant);
+		identifierCounter.setCounter(1L);
+		identifierCounter.setDecimalFormat("000000");
+		identifierCounter.setDaysToReset(365L);
+		identifierCounter.setLastReset(DateHelper.getFirstDayOfThisYear());
+		return identifierCounter;
 	}
 	
 	public TagOption createTagOption() {

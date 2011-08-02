@@ -16,8 +16,8 @@ public class AssetMergeTask implements Runnable {
 	private final Asset losingAsset;
 	private final User user;
 	
-	private final String serialNumberOfLoser;
-	private final String serialNumberOfWinner;
+	private final String identifierOfLoser;
+	private final String identifierOfWinner;
 	
 	private AssetManager assetManager;
 	private boolean error = false;
@@ -28,8 +28,8 @@ public class AssetMergeTask implements Runnable {
 		this.losingAsset = losingProduct;
 		this.user = user;
 		
-		serialNumberOfLoser = losingProduct.getSerialNumber();
-		serialNumberOfWinner = winningProduct.getSerialNumber();
+		identifierOfLoser = losingProduct.getIdentifier();
+		identifierOfWinner = winningProduct.getIdentifier();
 	}
 
 
@@ -57,10 +57,10 @@ public class AssetMergeTask implements Runnable {
 		String body = "<h2>Asset merge</h2>";
 		if (error) {
 			
-			body += "<p>An error occured while merging the products " + serialNumberOfLoser + " and " + serialNumberOfWinner +
+			body += "<p>An error occured while merging the products " + identifierOfLoser + " and " + identifierOfWinner +
 				 " please contact support and we will be able to help get this problem resolved.</p>";
 		} else {
-			body += "<p>All events from asset " + serialNumberOfLoser + " have been moved to asset " + serialNumberOfWinner + "</p>";
+			body += "<p>All events from asset " + identifierOfLoser + " have been moved to asset " + identifierOfWinner + "</p>";
 		}
 		
 		logger.info("Sending email [" + user.getEmailAddress() + "]");

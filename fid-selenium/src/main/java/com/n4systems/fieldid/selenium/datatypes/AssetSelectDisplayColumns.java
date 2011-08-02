@@ -28,7 +28,7 @@ public class AssetSelectDisplayColumns {
 		
 		s.append("Asset Information\n");
 		s.append("-------------------\n");
-		s.append("               Serial Number: ").append(serialNumber).append("\n");
+		s.append("                  Identifier: ").append(serialNumber).append("\n");
 		s.append("                 RFID Number: ").append(rfidNumber).append("\n");
 		s.append("               Customer Name: ").append(customerName).append("\n");
 		s.append("                    Division: ").append(division).append("\n");
@@ -55,7 +55,7 @@ public class AssetSelectDisplayColumns {
 		return s.toString();
 	}
 
-	public void setSerialNumber(boolean b) {
+	public void setIdentifier(boolean b) {
 		serialNumber = b;
 	}
 	

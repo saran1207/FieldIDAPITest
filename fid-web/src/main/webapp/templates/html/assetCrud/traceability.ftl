@@ -42,7 +42,7 @@
 				<p>
 					
 					<label>${identifierLabel}</label>
-					<span class="fieldValue">${linkedAsset.serialNumber?html}</span>
+					<span class="fieldValue">${linkedAsset.identifier?html}</span>
 				</p>
 				<p>
 					<label><@s.text name="label.rfidnumber"/></label>

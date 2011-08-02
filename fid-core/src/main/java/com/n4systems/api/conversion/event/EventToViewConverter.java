@@ -75,7 +75,7 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 	}
 
 	protected void convertAssetIdentifier(Event model, EventView view) {
-		view.setIdentifier(model.getAsset().getSerialNumber());
+		view.setIdentifier(model.getAsset().getIdentifier());
 	}
 
 	protected void converterPerformedBy(Event model, EventView view) {

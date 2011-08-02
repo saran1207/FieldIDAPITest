@@ -239,9 +239,9 @@
 
 		
 		
-		<action name="checkSerialNumber" method="checkSerialNumber" class="com.n4systems.fieldid.actions.asset.AssetUtilAction">
-			<result name="available" type="freemarker">/templates/ajax/assetUtil/serialNumberAvailable.ftl</result>
-			<result name="used" type="freemarker">/templates/ajax/assetUtil/serialNumberUsed.ftl</result>
+		<action name="checkIdentifier" method="checkIdentifier" class="com.n4systems.fieldid.actions.asset.AssetUtilAction">
+			<result name="available" type="freemarker">/templates/ajax/assetUtil/identifierAvailable.ftl</result>
+			<result name="used" type="freemarker">/templates/ajax/assetUtil/identifierUsed.ftl</result>
 		</action>
 
 		<action name="checkRFID" method="checkDuplicateRfid"
@@ -364,14 +364,14 @@
 			<result name="oneFound" type="freemarker">/templates/ajax/assetMerge/list.ftl</result>
 		</action>
 		
-		<action name="generateSerials" method="generate" class="com.n4systems.fieldid.actions.asset.MultiAddAssetSerialNumberGenAction">
+		<action name="generateIdentifiers" method="generate" class="com.n4systems.fieldid.actions.asset.MultiAddAssetIdentifierGenAction">
 			<result name="error" type="freemarker">/templates/ajax/multiAssetCrud/otherIdentifiersForm.ftl</result>
 			<result name="success" type="freemarker">/templates/ajax/multiAssetCrud/otherIdentifiersForm.ftl</result>
 		</action>
 		
-	
-		
-		
+
+
+
 		<action name="orgs" method="list" class="com.n4systems.fieldid.actions.BaseOrgCrud" >
 			<result name="success" type="freemarker">/templates/ajax/baseOrg/list.ftl</result>
 		</action>

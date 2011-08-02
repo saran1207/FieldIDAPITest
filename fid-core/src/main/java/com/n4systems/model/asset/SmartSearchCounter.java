@@ -9,7 +9,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 
 public class SmartSearchCounter extends SecurityFilteredLoader<Long> {
 	private String searchText;
-	private boolean useSerialNumber = true;
+	private boolean useIdentifier = true;
 	private boolean useRfidNumber = true;
 	private boolean useRefNumber = true;
 	
@@ -20,14 +20,14 @@ public class SmartSearchCounter extends SecurityFilteredLoader<Long> {
 	@Override
 	protected Long load(EntityManager em, SecurityFilter filter) {
 		QueryBuilder<Long> builder = new QueryBuilder<Long>(Asset.class, filter);
-		builder.addWhere(new SmartSearchWhereClause(searchText, useSerialNumber, useRfidNumber, useRefNumber));
+		builder.addWhere(new SmartSearchWhereClause(searchText, useIdentifier, useRfidNumber, useRefNumber));
 		
 		Long count = builder.getCount(em);
 		return count;
 	}
 
-	public void setUseSerialNumber(boolean useSerialNumber) {
-		this.useSerialNumber = useSerialNumber;
+	public void setUseIdentifier(boolean useIdentifier) {
+		this.useIdentifier = useIdentifier;
 	}
 
 	public void setUseRfidNumber(boolean useRfidNumber) {

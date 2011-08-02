@@ -13,7 +13,7 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 public class SmartSearchWhereClauseTest {
 
 	@Test
-	public void test_use_serial_number() {
+	public void test_use_identifier() {
 		String searchText = "search text";
 		
 		SmartSearchWhereClause ssClause = new SmartSearchWhereClause(searchText, true, false, false);
@@ -21,7 +21,7 @@ public class SmartSearchWhereClauseTest {
 		assertEquals(1, ssClause.getClauses().size());
 		assertEquals(searchText, ssClause.getClauses().get(0).getValue());
 		assertEquals(ChainOp.OR, ssClause.getClauses().get(0).getChainOperator());
-		assertEquals("serialNumber", ssClause.getClauses().get(0).getName());	
+		assertEquals("identifier", ssClause.getClauses().get(0).getName());
 	}
 	
 	@Test
@@ -54,7 +54,7 @@ public class SmartSearchWhereClauseTest {
 		
 		SmartSearchWhereClause ssClause = new SmartSearchWhereClause(searchText, true, true, true);
 		
-		Set<String> paramNames = new HashSet<String>(Arrays.asList("serialNumber", "rfidNumber", "customerRefNumber")); 
+		Set<String> paramNames = new HashSet<String>(Arrays.asList("identifier", "rfidNumber", "customerRefNumber"));
 		
 		for (WhereClause<?> clause: ssClause.getClauses()) {
 			assertTrue(paramNames.contains(clause.getName()));

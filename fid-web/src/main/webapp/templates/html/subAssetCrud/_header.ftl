@@ -28,7 +28,7 @@
 	<@s.form action="${updateSubAssetAction!'updateSubAsset'}" id="subAssetForm_${subAsset.asset.id}" namespace="/ajax" theme="fieldid">
 		<@s.hidden name="subAsset.asset.type.name" value="${subAsset.asset.type.name!}" />
 		<@s.hidden name="subAsset.asset.iD" value="${subAsset.asset.id}"/>
-		<@s.hidden name="subAsset.asset.serialNumber" value="${subAsset.asset.serialNumber!}"/>
+		<@s.hidden name="subAsset.asset.identifier" value="${subAsset.asset.identifier!}"/>
 		<@s.hidden name="uniqueID" value="${uniqueID}"/>
 		<@s.hidden name="token"/>
 		<label for="label"><@s.text name="label.label"/></label>  

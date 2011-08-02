@@ -40,7 +40,7 @@ public class EventReportCriteriaModel implements Serializable {
     private Project job;
 
     private String rfidNumber;
-    private String serialNumber;
+    private String identifier;
     private String referenceNumber;
 
     private String orderNumber;
@@ -173,12 +173,12 @@ public class EventReportCriteriaModel implements Serializable {
         this.rfidNumber = rfidNumber;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public String getReferenceNumber() {

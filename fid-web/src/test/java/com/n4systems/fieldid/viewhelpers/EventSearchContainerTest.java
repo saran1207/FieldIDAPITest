@@ -27,11 +27,11 @@ public class EventSearchContainerTest extends SearchContainerTestCase {
 	
 	@Test
 	public void single_search_term_no_asterisk_should_be_eq_comparator() throws Exception {
-		eventSearchContainer.setSerialNumber("12345");
+		eventSearchContainer.setIdentifier("12345");
 
 		WhereParameter<?> whereClause = getSingleWhereClause(eventSearchContainer);
 
-		assertEquals("asset_serialNumber", whereClause.getName());
+		assertEquals("asset_identifier", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.EQ);
@@ -42,11 +42,11 @@ public class EventSearchContainerTest extends SearchContainerTestCase {
 	
 	@Test
 	public void single_search_term_with_right_asterisk() throws Exception {
-		eventSearchContainer.setSerialNumber("12345*");
+		eventSearchContainer.setIdentifier("12345*");
 
 		WhereParameter<?> whereClause = getSingleWhereClause(eventSearchContainer);
 
-		assertEquals("asset_serialNumber", whereClause.getName());
+		assertEquals("asset_identifier", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.LIKE);
@@ -57,11 +57,11 @@ public class EventSearchContainerTest extends SearchContainerTestCase {
 	
 	@Test
 	public void single_search_term_with_left_asterisk() throws Exception {
-		eventSearchContainer.setSerialNumber("*12345");
+		eventSearchContainer.setIdentifier("*12345");
 
 		WhereParameter<?> whereClause = getSingleWhereClause(eventSearchContainer);
 
-		assertEquals("asset_serialNumber", whereClause.getName());
+		assertEquals("asset_identifier", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.LIKE);

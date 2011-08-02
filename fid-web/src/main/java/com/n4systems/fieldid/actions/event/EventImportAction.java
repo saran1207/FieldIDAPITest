@@ -138,7 +138,7 @@ public class EventImportAction extends AbstractImportAction {
 		example.getBook().setName(getText("example.event.book"));
 		
 		example.setAsset(new Asset());
-		example.getAsset().setSerialNumber(getText("example.event.serialnumber"));
+		example.getAsset().setIdentifier(getText("example.event.identifier"));
 		
 		example.setAssetStatus(getExampleAssetStatus());
 		

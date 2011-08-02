@@ -34,10 +34,10 @@
 	width: auto;
 }
 
-.componentTypes p span.serialNumber, .componentTypes p span.serialNumber {
+.componentTypes p span.identifier, .componentTypes p span.identifier {
 	width: 200px;
 }
-.componentTypes p span.serailNumber input, .componentTypes p span.serialNumber input {
+.componentTypes p span.identifier input, .componentTypes p span.identifier input {
 	width: 190px;
 }
 

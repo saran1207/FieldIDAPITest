@@ -39,7 +39,7 @@ public class SafetyNetworkRegisterAssetTest extends PageNavigatingTestCase<Safet
         scenario.anAsset()
                 .forTenant(scenario.tenant(COMPANY2))
                 .withOwner(scenario.primaryOrgFor(COMPANY2))
-                .withSerialNumber(SERIAL_NUMBER)
+                .withIdentifier(SERIAL_NUMBER)
                 .ofType(scenario.assetType(COMPANY2, ASSET_TYPE))
                 .published(true)
                 .build();
@@ -115,14 +115,14 @@ public class SafetyNetworkRegisterAssetTest extends PageNavigatingTestCase<Safet
 		
 		SafetyNetworkRegisterAssetForm registerPage = assetListPage.clickRegister(assetListPage.getAssetList().size());
 		
-		String serialNumber = registerPage.getSerialNumber();
+		String identifier = registerPage.getIdentifier();
 		
-		registerPage.enterSerialNumber("");
+		registerPage.enterIdentifier("");
 		registerPage.clickRegisterAsset();
 		
 		assertFalse(registerPage.isConfirmPage());
 		
-		registerPage.enterSerialNumber(serialNumber);
+		registerPage.enterIdentifier(identifier);
 		registerPage.clickRegisterAsset();
 
 		assetListPage = registerPage.clickOk();

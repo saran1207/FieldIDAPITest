@@ -475,7 +475,7 @@ function replaceDescription(event) {
 function submitSmartSearch(event) {
 	var element = $('searchText');
 	if (element.value.strip().empty() || element.hasClassName("description")) {
-		alert("You cannot search for a blank serial number or rfid number");
+		alert("You cannot search for a blank identifier or rfid number");
 		event.stop();
 	}
 }

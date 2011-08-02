@@ -86,7 +86,7 @@ public class RegisterAsset extends AbstractCrud{
 		linkedAsset = lookUpLinkedAsset(uniqueId);
 		ownerPicker = new OwnerPicker(getLoaderFactory().createFilteredIdLoader(BaseOrg.class), assetView);
 		if(linkedAsset != null) {
-			identifiers.setSerialNumber(linkedAsset.getSerialNumber());
+			identifiers.setIdentifier(linkedAsset.getIdentifier());
 			identifiers.setRfidNumber(linkedAsset.getRfidNumber());
 			// set the default asset id.
 			getAssetTypes();
@@ -118,7 +118,7 @@ public class RegisterAsset extends AbstractCrud{
 		AssetViewModeConverter converter = new AssetViewModeConverter(getLoaderFactory(), orderManager, getCurrentUser());
 		
 		Asset assetToSave = converter.viewToModel(assetView);
-		assetToSave.setSerialNumber(identifiers.getSerialNumber());
+		assetToSave.setIdentifier(identifiers.getIdentifier());
 		assetToSave.setCustomerRefNumber(identifiers.getReferenceNumber());
 		assetToSave.setRfidNumber(identifiers.getRfidNumber());
 		assetToSave.setLinkedAsset(linkedAsset);
@@ -260,13 +260,13 @@ public class RegisterAsset extends AbstractCrud{
 	}
 
 	public void setSerialNumber(String serialNumber) {
-		identifiers.setSerialNumber(serialNumber);
+		identifiers.setIdentifier(serialNumber);
 	}
 
-	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.serialnumberrequired")
-	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.serial_number_length", maxLength = "50")
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.identifierrequired")
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.identifier_length", maxLength = "50")
 	public String getSerialNumber() {
-		return identifiers.getSerialNumber();
+		return identifiers.getIdentifier();
 	}
 
 	public void setRfidNumber(String rfidNumber) {

@@ -44,7 +44,7 @@ public class ScheduleSearchResultsTest extends FieldIDTestCase {
         
         Asset asset = scenario.anAsset()
                               .withOwner(scenario.primaryOrgFor(COMPANY))
-                              .withSerialNumber(SERIAL_NUMBER)
+                              .withIdentifier(SERIAL_NUMBER)
                               .ofType(assetType)
                               .build();      
         

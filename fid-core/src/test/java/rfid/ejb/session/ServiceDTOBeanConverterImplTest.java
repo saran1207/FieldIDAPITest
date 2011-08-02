@@ -91,7 +91,7 @@ public class ServiceDTOBeanConverterImplTest {
 		asset.setIdentified(identifiedDate);
 		asset.setPurchaseOrder( "0987654321" );
 		asset.setRfidNumber( "rfid" );
-		asset.setSerialNumber( "someserialnumber" );
+		asset.setIdentifier("someserialnumber");
 		
 		ProductServiceDTO serviceDTO = new ProductServiceDTO();
 		populateServiceDTO(serviceDTO);
@@ -289,7 +289,7 @@ public class ServiceDTOBeanConverterImplTest {
 		assertEquals( productServiceDTO.getCustomerRefNumber(), asset.getCustomerRefNumber() );
 		assertEquals( productServiceDTO.getPurchaseOrder(), asset.getPurchaseOrder() );
 		assertEquals( productServiceDTO.getRfidNumber(), asset.getRfidNumber() );
-		assertEquals( productServiceDTO.getSerialNumber(), asset.getSerialNumber() );
+		assertEquals( productServiceDTO.getSerialNumber(), asset.getIdentifier() );
 		
 		if( productServiceDTO.customerExists() && !productServiceDTO.divisionExists()) {
 			assertEquals( new Long( productServiceDTO.getCustomerId() ), asset.getOwner().getId() );

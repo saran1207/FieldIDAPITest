@@ -100,7 +100,7 @@ public class ArchiveAssetTypeTask implements Runnable {
 			}
 
 			for (Entry<Asset, Exception> failure : failedAssets.entrySet()) {
-				body += "<li>Asset " + failure.getKey().getArchivedSerialNumber() + " failed to delete</li>";
+				body += "<li>Asset " + failure.getKey().getArchivedIdentifier() + " failed to delete</li>";
 			}
 			body += "</ul>";
 		} else {

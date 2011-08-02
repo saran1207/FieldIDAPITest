@@ -34,7 +34,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		scenario.anAssetStatus().named("Out of Service").build();
 		
 		AssetBuilder anAsset = scenario.anAsset()
-			.withSerialNumber("123456")
+			.withIdentifier("123456")
 			.ofType(type)
 			.havingStatus(status1);
 
@@ -46,7 +46,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		
 		
 		AssetBuilder aSubAsset = scenario.anAsset()
-			.withSerialNumber("123456sub")
+			.withIdentifier("123456sub")
 			.ofType(type)
 			.havingStatus(status1);
 			
@@ -63,7 +63,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 	public void test_mass_update_asset() throws Exception {
 		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
-		assetsSearchPage.enterSerialNumber("123456");
+		assetsSearchPage.enterIdentifier("123456");
 		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
 
 		assertEquals(3, resultsPage.getTotalResultsCount());
@@ -120,7 +120,7 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		
 		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
-		assetsSearchPage.enterSerialNumber("123456sub");
+		assetsSearchPage.enterIdentifier("123456sub");
 		assetsSearchPage.clickRunSearchButton();
 		
 		assertTrue("Sub asset was incorrectly removed!", !verifyAllSchedulesAreRemoved());
@@ -133,16 +133,16 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		
 		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
-		assetsSearchPage.enterSerialNumber("123456");
+		assetsSearchPage.enterIdentifier("123456");
 		assetsSearchPage.clickRunSearchButton();
 		
 		assertTrue("Master asset was incorrectly removed!", !verifyAllSchedulesAreRemoved());
 	}
 	
-	public void doDelete(String serialNumber){
+	public void doDelete(String identifier){
 		AssetsSearchPage assetsSearchPage = page.clickAssetsLink();
 
-		assetsSearchPage.enterSerialNumber(serialNumber);
+		assetsSearchPage.enterIdentifier(identifier);
 		AssetsSearchResultsPage resultsPage = assetsSearchPage.clickRunSearchButton();
 
 		resultsPage.selectAllItemsOnPage();

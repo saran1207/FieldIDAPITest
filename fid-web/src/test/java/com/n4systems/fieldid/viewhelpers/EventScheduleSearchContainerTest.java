@@ -44,11 +44,11 @@ public class EventScheduleSearchContainerTest extends SearchContainerTestCase {
 
 	@Test
 	public void single_search_term_no_asterisk_should_be_eq_comparator() throws Exception {
-		eventScheduleSearchContainer.setSerialNumber("12345");
+		eventScheduleSearchContainer.setIdentifier("12345");
 		
-		WhereParameter<?> whereClause = getWhereClauseNamed(eventScheduleSearchContainer, "asset_serialNumber");
+		WhereParameter<?> whereClause = getWhereClauseNamed(eventScheduleSearchContainer, "asset_identifier");
 
-		assertEquals("asset_serialNumber", whereClause.getName());
+		assertEquals("asset_identifier", whereClause.getName());
 		assertEquals("12345", whereClause.getValue());
 
 		assertEquals(whereClause.getComparator(), Comparator.EQ);

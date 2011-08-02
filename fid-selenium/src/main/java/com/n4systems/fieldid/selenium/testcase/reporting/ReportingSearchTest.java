@@ -1,12 +1,5 @@
 package com.n4systems.fieldid.selenium.testcase.reporting;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
@@ -15,6 +8,12 @@ import com.n4systems.fieldid.selenium.pages.MyAccountPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.pages.search.SaveReportForm;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	
@@ -38,7 +37,7 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	@Test
 	public void search_with_report_specific_criteria() throws Exception {
 		ReportSearchCriteria criteria = new ReportSearchCriteria();
-		criteria.setSerialNumber("9*");
+		criteria.setIdentifier("9*");
 		criteria.setResult("Pass");
 		page.setSearchCriteria(criteria);
 		
@@ -48,15 +47,15 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	}
 	
 	@Test
-	public void search_results_serial_number_link() throws Exception {
+	public void search_results_identifier_link() throws Exception {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
-		String serialNumber = page.getResultSerialNumbers().get(0);
+		String identifier = page.getResultIdentifiers().get(0);
 		
-		AssetPage assetPage = page.clickResultSerialNumber(serialNumber);
-		assertTrue(assetPage.checkHeader(serialNumber));
+		AssetPage assetPage = page.clickResultIdentifier(identifier);
+		assertTrue(assetPage.checkHeader(identifier));
 	}
 	
 	@Test
@@ -65,9 +64,9 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
-		String serialNumber = page.getResultSerialNumbers().get(0);
+		String identifier = page.getResultIdentifiers().get(0);
 
-		page.clickViewEvent(serialNumber);
+		page.clickViewEvent(identifier);
 	}
 	
 	@Test
@@ -76,9 +75,9 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
-		String serialNumber = page.getResultSerialNumbers().get(0);
+		String identifier = page.getResultIdentifiers().get(0);
 
-		EventPage eventPage = page.clickEditEvent(serialNumber);
+		EventPage eventPage = page.clickEditEvent(identifier);
 		assertEquals("Edit", eventPage.getCurrentTab());
 	}
 	
@@ -91,15 +90,15 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 		assertTrue(selenium.isElementPresent("//p[contains(.,'Your download is being generated.')]"));
 	}
 	
-	//Failing...
-	public void search_results_start_event(){
+    @Test
+	public void search_results_start_event() {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());
-		String serialNumberToVerify = selenium.getText("//tr[2]/td/a");
+		String identifierToVerify = selenium.getText("//tr[2]/td/a");
 		
 		page.clickStartEventLink();
 		
-		assertEquals("Event - " + serialNumberToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		assertEquals("Event - " + identifierToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 	
 	

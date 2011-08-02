@@ -19,12 +19,12 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.ejb.legacy.Option;
 import com.n4systems.ejb.legacy.PopulatorLog;
-import com.n4systems.ejb.legacy.SerialNumberCounter;
+import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.ejb.legacy.wrapper.OptionEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
-import com.n4systems.ejb.legacy.wrapper.SerialNumberCounterEJBContainer;
+import com.n4systems.ejb.legacy.wrapper.IdentifierCounterEJBContainer;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
@@ -58,8 +58,8 @@ public class ServiceLocator implements ApplicationContextAware {
 		return new PopulatorLogEJBContainer();
 	}
 
-	public static final SerialNumberCounter getSerialNumberCounter() {
-		return new SerialNumberCounterEJBContainer();
+	public static final IdentifierCounter getIdentifierCounter() {
+		return new IdentifierCounterEJBContainer();
 	}	
 	
 	public static final UserManager getUser() {	

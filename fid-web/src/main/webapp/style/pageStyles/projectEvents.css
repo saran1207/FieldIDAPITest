@@ -14,14 +14,13 @@
 	background-color: #D0DAFD;
 }
 
-.projectEventSerial, .projectEventType, .projectEventRemove {
+.projectEventIdentifier, .projectEventType, .projectEventRemove {
 	float:left;
 	width:200px;
 	padding:5px 0 5px 5px;
 }
 
-.projectEventSerial {
-	
+.projectEventIdentifier {
 	padding-left:15px;
 	padding-right:10px;
 	width:170px;

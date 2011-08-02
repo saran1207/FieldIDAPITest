@@ -31,7 +31,7 @@
 		
 		<@n4.includeStyle type="page" href="event" />		
 	</head>
-	<title>${(eventType.name)!} <@s.text name="label.on"/> ${asset.serialNumber}</title>
+	<title>${(eventType.name)!} <@s.text name="label.on"/> ${asset.identifier}</title>
     <input type="hidden" name="assetType" id="assetType" value="${asset.type.id}">
 	
 	<#include "/templates/html/common/_formErrors.ftl" />

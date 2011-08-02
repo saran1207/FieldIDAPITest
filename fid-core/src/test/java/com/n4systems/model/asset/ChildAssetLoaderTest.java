@@ -76,20 +76,20 @@ public class ChildAssetLoaderTest {
 	public void createAssetTree() {
 		tree = new Tree<Asset>(anAsset().build());
 		
-		tree.add(new Tree<Asset>(anAsset().withSerialNumber("0").build()));
-		tree.add(new Tree<Asset>(anAsset().withSerialNumber("1").build()));
-		tree.add(new Tree<Asset>(anAsset().withSerialNumber("2").build()));
+		tree.add(new Tree<Asset>(anAsset().withIdentifier("0").build()));
+		tree.add(new Tree<Asset>(anAsset().withIdentifier("1").build()));
+		tree.add(new Tree<Asset>(anAsset().withIdentifier("2").build()));
 		
-		tree.get(0).add(new Tree<Asset>(anAsset().withSerialNumber("3").build()));
-		tree.get(0).add(new Tree<Asset>(anAsset().withSerialNumber("4").build()));
-		tree.get(0).add(new Tree<Asset>(anAsset().withSerialNumber("5").build()));
+		tree.get(0).add(new Tree<Asset>(anAsset().withIdentifier("3").build()));
+		tree.get(0).add(new Tree<Asset>(anAsset().withIdentifier("4").build()));
+		tree.get(0).add(new Tree<Asset>(anAsset().withIdentifier("5").build()));
 		
-		tree.get(1).add(new Tree<Asset>(anAsset().withSerialNumber("6").build()));
+		tree.get(1).add(new Tree<Asset>(anAsset().withIdentifier("6").build()));
 		
-		tree.get(1).get(0).add(new Tree<Asset>(anAsset().withSerialNumber("7").build()));
+		tree.get(1).get(0).add(new Tree<Asset>(anAsset().withIdentifier("7").build()));
 		
-		tree.get(2).add(new Tree<Asset>(anAsset().withSerialNumber("8").build()));
-		tree.get(2).add(new Tree<Asset>(anAsset().withSerialNumber("9").build()));
+		tree.get(2).add(new Tree<Asset>(anAsset().withIdentifier("8").build()));
+		tree.get(2).add(new Tree<Asset>(anAsset().withIdentifier("9").build()));
 	}
 	
 	@Test
@@ -106,7 +106,7 @@ public class ChildAssetLoaderTest {
 		List<Asset> assets = loader.setAsset(tree.getValue()).load(new DummyEntityManager());
 		
 		for (int i = 0; i < 10; i++) {
-			assertEquals(String.valueOf(i), assets.get(i).getSerialNumber());
+			assertEquals(String.valueOf(i), assets.get(i).getIdentifier());
 		}
 	}
 	

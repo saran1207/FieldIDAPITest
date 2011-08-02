@@ -4,7 +4,7 @@
 </#assign>
 <#assign row>
 <tr class="%%EXTRA_CLASS%%"> 
-	<td>%%SERIAL_NUMBER%%</td>
+	<td>%%IDENTIFIER%%</td>
 	<td>%%RFID%%</td>
 	<td>%%OWNER%%</td>
 	<td>%%TYPE%%</td>

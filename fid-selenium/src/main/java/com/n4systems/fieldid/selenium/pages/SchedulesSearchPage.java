@@ -26,7 +26,7 @@ public class SchedulesSearchPage extends EntitySearchPage<SchedulesSearchResults
 		setCheckBoxValue("//input[@id='chk_event_schedule_eventtype']", displayColumns.isEventType());
 		setCheckBoxValue("//input[@id='chk_event_schedule_lastdate']", displayColumns.isLastEventDate());
 		
-		setCheckBoxValue("//input[@id='chk_event_schedule_serialnumber']", displayColumns.isSerialNumber());
+		setCheckBoxValue("//input[@id='chk_event_schedule_identifier']", displayColumns.isIdentifier());
 		setCheckBoxValue("//input[@id='chk_event_schedule_rfidnumber']", displayColumns.isRfidNumber());
 		setCheckBoxValue("//input[@id='chk_event_schedule_referencenumber']", displayColumns.isReferenceNumber());
 		setCheckBoxValue("//input[@id='chk_event_schedule_assettypegroup']", displayColumns.isAssetTypeGroup());
@@ -57,7 +57,7 @@ public class SchedulesSearchPage extends EntitySearchPage<SchedulesSearchResults
 	}
 
     @Override
-	public List<String> getResultSerialNumbers() {
+	public List<String> getResultIdentifiers() {
 		return collectTableValuesUnderCellForCurrentPage(2, 1, "a");
 	}
     

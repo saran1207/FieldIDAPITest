@@ -723,7 +723,7 @@ public class DataServiceImpl implements DataService {
 			if (productDTO.vendorIdExists()) {
 				LoaderFactory loaderFactory = new LoaderFactory(new OrgOnlySecurityFilter(asset.getOwner().getInternalOrg()));
 				SafetyNetworkBackgroundSearchLoader networkLoader = loaderFactory.createSafetyNetworkBackgroundSearchLoader();
-				Asset linkedAsset = networkLoader.setSerialNumber(productDTO.getSerialNumber()).setRfidNumber(productDTO.getRfidNumber())
+				Asset linkedAsset = networkLoader.setIdentifier(productDTO.getSerialNumber()).setRfidNumber(productDTO.getRfidNumber())
 						.setRefNumber(productDTO.getCustomerRefNumber()).setVendorOrgId(productDTO.getVendorId()).load();
 				asset.setLinkedAsset(linkedAsset);
 			}
@@ -752,7 +752,7 @@ public class DataServiceImpl implements DataService {
 
 			logSuccessfulProductCreate(requestInformation.getTenantId(), populatorLogger, asset);
 		} catch (TransactionAlreadyProcessedException e) {
-			logger.info("transaction already processed for asset  " + asset.getSerialNumber());
+			logger.info("transaction already processed for asset  " + asset.getIdentifier());
 			return response;
 		} catch (Exception e) {
 			logger.error("failed while processing asset", e);
@@ -820,7 +820,7 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private void logSuccessfulProductCreate(Long tenantId, PopulatorLogger populatorLogger, Asset asset) {
-		populatorLogger.logMessage(tenantId, "Successfully created asset with serial number " + asset.getSerialNumber(), PopulatorLog.logType.mobile,
+		populatorLogger.logMessage(tenantId, "Successfully created asset with identifier " + asset.getIdentifier(), PopulatorLog.logType.mobile,
 				PopulatorLog.logStatus.success);
 	}
 
@@ -888,10 +888,10 @@ public class DataServiceImpl implements DataService {
 					EventsInAGroupCreator eventsInAGroupCreator = eventPersistenceFactory.createEventsInAGroupCreator();
 	
 					savedEvents = eventsInAGroupCreator.create(requestInformation.getMobileGuid(), events, nextInspectionDates);
-					logger.info("save inspections on asset " + asset.getSerialNumber());
-					populatorLogger.logMessage(tenantId, "Created inspection for asset with serial number " + asset.getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
+					logger.info("save inspections on asset " + asset.getIdentifier());
+					populatorLogger.logMessage(tenantId, "Created inspection for asset with identifier " + asset.getIdentifier(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.success);
 				} catch (TransactionAlreadyProcessedException e) {
-					logger.info("Transaction already processed for inspections on asset  " + asset.getSerialNumber());
+					logger.info("Transaction already processed for inspections on asset  " + asset.getIdentifier());
 				} catch (Exception e) {
 					logger.error("failed to save inspections", e);
 					throw new InspectionException("Failed to save inspections");
@@ -909,12 +909,12 @@ public class DataServiceImpl implements DataService {
 									}
 								} catch (InvalidScheduleStateException e) {
 									logger.warn("the state of the schedule is not valid to be completed.");
-									populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "
-											+ savedEvent.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+									populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with identifier "
+											+ savedEvent.getAsset().getIdentifier(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
 								} catch (Exception e) {
 									logger.error("failed to attach schedule to inspection", e);
-									populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with serial number "
-											+ savedEvent.getAsset().getSerialNumber(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
+									populatorLogger.logMessage(tenantId, "Could not attach inspection schedule to inspection on asset with identifier "
+											+ savedEvent.getAsset().getIdentifier(), PopulatorLog.logType.mobile, PopulatorLog.logStatus.error);
 									// We allow the inspection to still go through
 									// even if this happens
 								}
@@ -1066,7 +1066,7 @@ public class DataServiceImpl implements DataService {
 			try {
 				asset = WsServiceLocator.getAssetManager(tenantId).findAssetByGUID(inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter(tenantId));
 			} catch (Exception e) {
-				logger.error("Looking up asset serial by GUID = " + inspectionServiceDTO.getProductMobileGuid(), e);
+				logger.error("Looking up asset by GUID = " + inspectionServiceDTO.getProductMobileGuid(), e);
 			}
 
 			// If still null, lets tag it

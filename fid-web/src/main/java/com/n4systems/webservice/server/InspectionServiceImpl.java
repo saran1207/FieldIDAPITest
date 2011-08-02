@@ -91,28 +91,28 @@ public class InspectionServiceImpl extends AbstractWebServiceImpl implements Ins
 	 * For simplicity, we're going to assume there was only one asset serial in the file and thus only have a single entry in our inspectionMap
 	 */
 	protected void applyProcessingResults(List<ProofTestStatusBundle> statusListCollector, Map<String, Event> inspectionMap, ProofTestBundle bundle) throws NoSerialNumbersException {
-		String serial;
+		String identifier;
 		String message;
 		WebServiceStatus status;
 		
 		if (inspectionMap.isEmpty()) {
-			throw new NoSerialNumbersException("File had no serail numbers defined.");
+			throw new NoSerialNumbersException("File had no identifiers defined.");
 		}
 		
-		serial = getSerialNumber(inspectionMap);
+		identifier = getIdentifier(inspectionMap);
 		
-		if(inspectionMap.get(serial) != null) {
+		if(inspectionMap.get(identifier) != null) {
 			status = WebServiceStatus.SUCCESSFUL;
-			message = "Created or updated an inspection for serial number: " + serial;
+			message = "Created or updated an inspection for identifier: " + identifier;
 		} else {
 			status = WebServiceStatus.FAILED;
-			message = "Unable to create or update an inspection for serial number: " + serial;
+			message = "Unable to create or update an inspection for identifier: " + identifier;
 		}
 		// construct the status message
 		statusListCollector.add(new ProofTestStatusBundle(bundle.getFileName(), status, message));
 	}
 
-	private String getSerialNumber(Map<String, Event> inspectionMap) {
+	private String getIdentifier(Map<String, Event> inspectionMap) {
 		return inspectionMap.keySet().iterator().next();
 	}
 

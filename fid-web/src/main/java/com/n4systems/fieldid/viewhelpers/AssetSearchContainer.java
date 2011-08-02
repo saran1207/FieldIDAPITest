@@ -14,7 +14,7 @@ import com.n4systems.util.persistence.search.SortDirection;
 public class AssetSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
 	private String rfidNumber;
-	private String serialNumber;
+	private String identifier;
 	private LocationWebModel location = new LocationWebModel(this);
 	private String orderNumber;
 	private String referenceNumber;
@@ -39,7 +39,7 @@ public class AssetSearchContainer extends SearchContainer {
 	@Override
 	protected void evalSearchTerms() {
 		addWildcardOrStringTerm("rfidNumber", rfidNumber);
-		addWildcardOrStringTerm("serialNumber", serialNumber);
+		addWildcardOrStringTerm("identifier", identifier);
 		addWildcardOrStringTerm("advancedLocation.freeformLocation", location.getFreeformLocation());
 		if(systemSecurityGuard.isIntegrationEnabled()) {
 			addWildcardOrStringTerm("shopOrder.order.orderNumber", orderNumber);
@@ -101,12 +101,12 @@ public class AssetSearchContainer extends SearchContainer {
 		this.rfidNumber = rfidNumber;
 	}
 
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 	
 	public LocationWebModel getLocation() {

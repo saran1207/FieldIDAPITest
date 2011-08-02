@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.datatypes;
 
 public class SearchDisplayColumns {
 	
-	private boolean serialNumber;
+	private boolean identifier;
 	
 	private boolean referenceNumber;
 	
@@ -70,12 +70,12 @@ public class SearchDisplayColumns {
 	
 	private boolean daysPastDue;
 
-	public boolean isSerialNumber() {
-		return serialNumber;
+	public boolean isIdentifier() {
+		return identifier;
 	}
 
-	public void setSerialNumber(boolean serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(boolean identifier) {
+		this.identifier = identifier;
 	}
 
 	public boolean isReferenceNumber() {
@@ -319,7 +319,7 @@ public class SearchDisplayColumns {
 	}
 	
 	public void selectAllColumns() {
-		serialNumber = true;	
+		identifier = true;
 		referenceNumber = true;	
 		rfidNumber = true;	
 		jobSiteName = true;	

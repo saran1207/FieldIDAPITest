@@ -32,7 +32,7 @@ public class AssetConverter extends EntityWithOwnerConverter<Asset> {
 		writeNode(writer, context, "AssetId",				asset.getMobileGUID());
 		writeNode(writer, context, "ActiveState",			asset.getEntityState());
 		writeNode(writer, context, "AssetType",				asset.getType());
-		writeNode(writer, context, "SerialNumber",			asset.isActive() ? asset.getSerialNumber() : asset.getArchivedSerialNumber());
+		writeNode(writer, context, "SerialNumber",			asset.isActive() ? asset.getIdentifier() : asset.getArchivedIdentifier());
 		writeNode(writer, context, "RFID",					asset.getRfidNumber());
 		writeNode(writer, context, "ReferenceNumber",		asset.getCustomerRefNumber());
 		writeNode(writer, context, "Location",				asset.getAdvancedLocation());

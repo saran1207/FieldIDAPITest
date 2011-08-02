@@ -289,8 +289,8 @@ public class LegacyAssetManager implements LegacyAsset {
 					
 					saver.update(em, duplicateRfidAsset);
 
-					String auditMessage = "Moving RFID [" + asset.getRfidNumber() + "] from Asset [" + duplicateRfidAsset.getId() + ":" + duplicateRfidAsset.getSerialNumber() + "] to [" + asset.getId() + ":"
-							+ asset.getSerialNumber() + "]";
+					String auditMessage = "Moving RFID [" + asset.getRfidNumber() + "] from Asset [" + duplicateRfidAsset.getId() + ":" + duplicateRfidAsset.getIdentifier() + "] to [" + asset.getId() + ":"
+							+ asset.getIdentifier() + "]";
 					auditLogger.info(auditMessage);
 				}
 			}
@@ -324,14 +324,14 @@ public class LegacyAssetManager implements LegacyAsset {
 
 	
 
-	public boolean duplicateSerialNumber(String serialNumber, Long uniqueID, Tenant tenant) {
-		String queryString = "select count(a.id) from Asset a where a.tenant = :tenant " + " and lower(a.serialNumber) = :serialNumber";
+	public boolean duplicateIdentifier(String identifier, Long uniqueID, Tenant tenant) {
+		String queryString = "select count(a.id) from Asset a where a.tenant = :tenant " + " and lower(a.identifier) = :identifier";
 		
 		if (uniqueID != null) {
 			queryString += " AND a.id <> :uniqueId ";
 		}
 
-		Query query = em.createQuery(queryString).setParameter("tenant", tenant).setParameter("serialNumber", serialNumber.trim().toLowerCase());
+		Query query = em.createQuery(queryString).setParameter("tenant", tenant).setParameter("identifier", identifier.trim().toLowerCase());
 
 		if (uniqueID != null) {
 			query.setParameter("uniqueId", uniqueID);

@@ -114,11 +114,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public boolean duplicateSerialNumber(String serialNumber, Long uniqueID, Tenant tenant) {
+	public boolean duplicateIdentifier(String identifier, Long uniqueID, Tenant tenant) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).duplicateSerialNumber(serialNumber, uniqueID, tenant);
+			return createManager(transaction.getEntityManager()).duplicateIdentifier(identifier, uniqueID, tenant);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

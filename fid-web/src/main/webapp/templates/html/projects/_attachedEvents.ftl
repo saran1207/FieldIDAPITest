@@ -1,5 +1,5 @@
 <div class="event " id="event_${event.id}">
-	<span class="projectEventSerial"><a href="<@s.url action="asset" namespace="/" uniqueID="${event.asset.id}"/>">${event.asset.serialNumber?html}</a></span>
+	<span class="projectEventIdentifier"><a href="<@s.url action="asset" namespace="/" uniqueID="${event.asset.id}"/>">${event.asset.identifier?html}</a></span>
 	<span class="projectEventType">${(event.asset.type.name?html)!}</span>
 	<span class="projectEventType">${(event.eventType.name?html)!}</span>
 	<span class="projectEventType">

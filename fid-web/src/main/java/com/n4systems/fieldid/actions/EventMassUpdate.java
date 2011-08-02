@@ -126,7 +126,7 @@ public class EventMassUpdate extends MassUpdate implements Preparable {
 			findAndDeleteEvents(ids);
 		} catch (Exception e) {
 			addFlashErrorText("error.eventdeleting");
-			logger.error("event retire " + event.getAsset().getSerialNumber(), e);
+			logger.error("event retire " + event.getAsset().getIdentifier(), e);
 			return ERROR;
 		}
 		

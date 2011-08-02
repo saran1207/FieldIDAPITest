@@ -13,7 +13,7 @@ import com.n4systems.persistence.utils.PostFetcher;
 public class SafetyNetworkSmartSearchLoader extends ListLoader<Asset> {
 	private final VendorLinkedOrgLoader linkedOrgLoader;
 	private String searchText;
-	private boolean useSerialNumber = true;
+	private boolean useIdentifier = true;
 	private boolean useRfidNumber = true;
 	private boolean useRefNumber = true;
 	private PrimaryOrg customer;
@@ -46,7 +46,7 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Asset> {
 
 	private void createUnregisteredAssetLoader() {
 		unregisteredAssetQueryHelper = new UnregisteredAssetQueryHelper(vendor, customer, false);
-		unregisteredAssetQueryHelper.setSmartSearchParameters(new SmartSearchWhereClause(searchText, useSerialNumber, useRfidNumber, useRefNumber));
+		unregisteredAssetQueryHelper.setSmartSearchParameters(new SmartSearchWhereClause(searchText, useIdentifier, useRfidNumber, useRefNumber));
 	}
 	
 	public SafetyNetworkSmartSearchLoader setVendorOrgId(Long vendorOrgId) {
@@ -59,8 +59,8 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Asset> {
 		return this;
 	}
 
-	public SafetyNetworkSmartSearchLoader useOnlySerialNumber() {
-		setUseSerialNumber(true);
+	public SafetyNetworkSmartSearchLoader useOnlyIdentifier() {
+		setUseIdentifier(true);
 		setUseRfidNumber(false);
 		setUseRefNumber(false);
 		return this;
@@ -68,7 +68,7 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Asset> {
 
 	public SafetyNetworkSmartSearchLoader useOnlyRfidNumber() {
 		setUseRfidNumber(true);
-		setUseSerialNumber(false);
+		setUseIdentifier(false);
 		setUseRefNumber(false);
 		return this;
 	}
@@ -76,12 +76,12 @@ public class SafetyNetworkSmartSearchLoader extends ListLoader<Asset> {
 	public SafetyNetworkSmartSearchLoader useOnlyRefNumber() {
 		setUseRefNumber(true);
 		setUseRfidNumber(false);
-		setUseSerialNumber(false);
+		setUseIdentifier(false);
 		return this;
 	}
 
-	private void setUseSerialNumber(boolean useSerialNumber) {
-		this.useSerialNumber = useSerialNumber;
+	private void setUseIdentifier(boolean useIdentifier) {
+		this.useIdentifier = useIdentifier;
 	}
 
 	private void setUseRfidNumber(boolean useRfidNumber) {

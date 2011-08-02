@@ -36,17 +36,17 @@ public class TestVendorSearchAsset extends PageNavigatingTestCase<VendorConnecti
 
         builder.published(true)
                 .withOwner(scenario.customerOrg(COMPANY2, COMPANY1))
-                .withSerialNumber(PREASSIGNED_ASSET)
+                .withIdentifier(PREASSIGNED_ASSET)
                 .build();
 
         builder.published(true)
                 .withOwner(scenario.primaryOrgFor(COMPANY2))
-                .withSerialNumber(NON_PREASSIGNED_ASSET)
+                .withIdentifier(NON_PREASSIGNED_ASSET)
                 .build();
 
         builder.published(false)
                 .withOwner(scenario.customerOrg(COMPANY2, COMPANY1))
-                .withSerialNumber(NON_PUBLISHED_ASSET)
+                .withIdentifier(NON_PUBLISHED_ASSET)
                 .build();
     }
 

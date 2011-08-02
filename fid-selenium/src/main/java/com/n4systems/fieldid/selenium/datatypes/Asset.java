@@ -2,7 +2,7 @@ package com.n4systems.fieldid.selenium.datatypes;
 
 
 public class Asset {
-	String serialNumber;
+	String identifier;
 	String rfidNumber;
 	String referenceNumber;
 	SafetyNetworkRegistration registration;
@@ -17,8 +17,8 @@ public class Asset {
 	
 	String comments;
 	
-	public void setSerialNumber(String s) {
-		this.serialNumber = s;
+	public void setIdentifier(String s) {
+		this.identifier = s;
 	}
 	
 	public void setRFIDNumber(String s) {
@@ -66,8 +66,8 @@ public class Asset {
 	}
 
 
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 	
 	public String getRFIDNumber() {

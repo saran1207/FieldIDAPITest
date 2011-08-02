@@ -1,4 +1,4 @@
-<h2>3. <@s.text name="label.select_serial_number_format"/></h2>
+<h2>3. <@s.text name="label.select_identifier_format"/></h2>
 <div class="stepContent" id="step3" style="display:none">
 	<@s.hidden id="rangeType" name="type" value="RANGE" />
 	<div class="formRowHolder">

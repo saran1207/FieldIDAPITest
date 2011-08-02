@@ -63,7 +63,7 @@ public class SavedReportService extends FieldIdPersistenceService {
 		criteriaModel.setPurchaseOrder(savedReport.getStringCriteria(SavedReport.PURCHASE_ORDER_NUMBER));
 		criteriaModel.setOrderNumber(savedReport.getStringCriteria(SavedReport.ORDER_NUMBER));
 		criteriaModel.setRfidNumber(savedReport.getStringCriteria(SavedReport.RFID_NUMBER));
-		criteriaModel.setSerialNumber(savedReport.getStringCriteria(SavedReport.SERIAL_NUMBER));
+		criteriaModel.setIdentifier(savedReport.getStringCriteria(SavedReport.SERIAL_NUMBER));
 		criteriaModel.setReferenceNumber(savedReport.getStringCriteria(SavedReport.REFERENCE_NUMBER));
 
 		criteriaModel.getLocation().setFreeformLocation(savedReport.getStringCriteria(SavedReport.LOCATION));

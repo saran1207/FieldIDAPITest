@@ -153,7 +153,7 @@ public class ChantFileProcessor extends FileProcessor {
 		fileDataContainer.setTestDuration(duration);
 		
 		String serialNumber = getChildNodeText(fixDataNode, "Serial_x0020_Number");
-		fileDataContainer.setSerialNumbers(serialNumber);
+		fileDataContainer.setIdentifiers(serialNumber);
 
         String companyId = getChildNodeText(fixDataNode, "Customer_x0020_ID");
         @SuppressWarnings("unchecked")

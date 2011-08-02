@@ -31,7 +31,7 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		setCheckBoxValue("//input[@id='chk_event_search_testduration']", displayColumns.isTestDuration());
 		setCheckBoxValue("//input[@id='chk_event_search_peakloadduration']", displayColumns.isPeakLoadDuration());
 		
-		setCheckBoxValue("//input[@id='chk_event_search_serialnumber']", displayColumns.isSerialNumber());
+		setCheckBoxValue("//input[@id='chk_event_search_identifier']", displayColumns.isIdentifier());
 		setCheckBoxValue("//input[@id='chk_event_search_rfidnumber']", displayColumns.isRfidNumber());
 		setCheckBoxValue("//input[@id='chk_event_search_referencenumber']", displayColumns.isReferenceNumber());
 		setCheckBoxValue("//input[@id='chk_event_search_assettypegroup']", displayColumns.isAssetTypeGroup());
@@ -69,13 +69,13 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		}
 	}
 	
-	public void clickViewEvent(String serialNumber){
-		selenium.click("//table[@class='list']//td//a[.='" +serialNumber+"']/../..//a[.='View']");	
+	public void clickViewEvent(String identifier){
+		selenium.click("//table[@class='list']//td//a[.='" +identifier+"']/../..//a[.='View']");
 		waitForElementToBePresent("//iframe[@id='lightviewContent']");
 	}
 	
-	public EventPage clickEditEvent(String serialNumber) {
-		selenium.click("//table[@class='list']//td//a[.='" +serialNumber+"']/../..//a[.='Edit']");		
+	public EventPage clickEditEvent(String identifier) {
+		selenium.click("//table[@class='list']//td//a[.='" +identifier+"']/../..//a[.='Edit']");
 		return new EventPage(selenium);
 	}
 	
@@ -116,7 +116,7 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 	}
     
     @Override
-	public List<String> getResultSerialNumbers() {
+	public List<String> getResultIdentifiers() {
 		return collectTableValuesUnderCellForCurrentPage(2, 3, "a");
 	}
     

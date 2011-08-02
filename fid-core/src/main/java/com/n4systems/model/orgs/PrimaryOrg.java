@@ -37,6 +37,7 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
     @Column(name="feature", nullable=false)
 	private Set<ExtendedFeature> extendedFeatures = new HashSet<ExtendedFeature>();
 
+    @Deprecated // Use identifer format on PrimaryOrg and AssetTypes -- TODO remove from DTOs
 	@Column(name="usingserialnumber", nullable=false)
 	private boolean usingSerialNumber = true;
 	
@@ -127,10 +128,12 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 		return extendedFeatures.contains(feature);
 	}
 
+    @Deprecated
 	public boolean isUsingSerialNumber() {
 		return usingSerialNumber;
 	}
 
+    @Deprecated
 	public void setUsingSerialNumber(boolean usingSerialNumber) {
 		this.usingSerialNumber = usingSerialNumber;
 	}

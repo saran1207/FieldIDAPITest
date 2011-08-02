@@ -26,7 +26,7 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
-import com.n4systems.ejb.legacy.SerialNumberCounter;
+import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NotImplementedException;
@@ -127,7 +127,7 @@ import com.n4systems.webservice.dto.VendorServiceDTO;
 public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	private static final Logger logger = Logger.getLogger(ServiceDTOBeanConverter.class);
 	public static final long NULL_ID = -1024L;
-	public static final String GENERATE_SERIAL_NUMBER = "[[GENERATE]]";
+	private static final String GENERATE_IDENTIFIER = "[[GENERATE]]";
 
 	
 	protected EntityManager em;
@@ -137,7 +137,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 	private EventScheduleManager eventScheduleManager;
 	
-	private SerialNumberCounter serialNumberCounter;
+	private IdentifierCounter identifierCounter;
 
 	
 	
@@ -148,7 +148,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.eventScheduleManager = new EventScheduleManagerImpl(em);
-		this.serialNumberCounter = new SerialNumberCounterManager(em);
+		this.identifierCounter = new IdentifierCounterManager(em);
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setProductTypeId(asset.getType().getId());
 		productDTO.setPurchaseOrder(asset.getPurchaseOrder());
 		productDTO.setRfidNumber(asset.getRfidNumber() == null ? null : asset.getRfidNumber().toUpperCase());
-		productDTO.setSerialNumber(asset.getSerialNumber());
+		productDTO.setSerialNumber(asset.getIdentifier());
 		productDTO.setComments(asset.getComments());
 		productDTO.setIdentifiedById(asset.getIdentifiedBy() != null ? asset.getIdentifiedBy().getId() : 0);
 		productDTO.setModifiedById(asset.getModifiedBy() != null ? asset.getModifiedBy().getId() : 0);
@@ -351,10 +351,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		targetAsset.setRfidNumber(productServiceDTO.getRfidNumber());
 		targetAsset.setTenant(tenantOrganization);
 
-		if (productServiceDTO.getSerialNumber().equals(GENERATE_SERIAL_NUMBER)) {
-			targetAsset.setSerialNumber(serialNumberCounter.generateSerialNumber(primaryOrg, assetType));
+		if (productServiceDTO.getSerialNumber().equals(GENERATE_IDENTIFIER)) {
+			targetAsset.setIdentifier(identifierCounter.generateIdentifier(primaryOrg, assetType));
 		} else {
-			targetAsset.setSerialNumber(productServiceDTO.getSerialNumber());
+			targetAsset.setIdentifier(productServiceDTO.getSerialNumber());
 		}
 		
 		targetAsset.setOwner(em.find(BaseOrg.class, productServiceDTO.getOwnerId()));

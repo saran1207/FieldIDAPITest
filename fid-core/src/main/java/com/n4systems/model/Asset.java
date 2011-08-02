@@ -41,15 +41,15 @@ import com.n4systems.model.utils.PlainDate;
 public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer {
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
-	
+
 	@Column(name="network_id", nullable=true)
 	private Long networkId;
 	
 	@Column(nullable=false, length=50)
-	private String serialNumber;
+	private String identifier;
 	
-	@Column(length=50)
-	private String archivedSerialNumber;
+	@Column(length=50, name="archivedIdentifier")
+	private String archivedIdentifier;
 	
 	@Column(length=46)
 	private String rfidNumber;
@@ -169,7 +169,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	}
 	
 	private void trimSerialNumber() {
-		serialNumber = trimIdentifier(serialNumber);
+		identifier = trimIdentifier(identifier);
 	}
 	
 	private void trimRfidNumber() {
@@ -209,12 +209,12 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	}
 
 	@AllowSafetyNetworkAccess
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -382,7 +382,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	
 	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
-		return getSerialNumber();
+		return getIdentifier();
 	}
 	
 	@AllowSafetyNetworkAccess
@@ -400,13 +400,13 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		return highestWeight + 1;
 	}
 	
-	public void archiveSerialNumber() {
-		archivedSerialNumber = serialNumber;
-		serialNumber = UUID.randomUUID().toString();
+	public void archiveIdentifier() {
+		archivedIdentifier = identifier;
+		identifier = UUID.randomUUID().toString();
 	}
 
-	public String getArchivedSerialNumber() {
-		return archivedSerialNumber;
+	public String getArchivedIdentifier() {
+		return archivedIdentifier;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -417,7 +417,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	@Override
     public String toString() {
 		String tenantName = (getTenant() != null) ? getTenant().getName() : "null";
-	    return String.format("%s (%d) tenant %s", getSerialNumber(), getId(), tenantName);
+	    return String.format("%s (%d) tenant %s", getIdentifier(), getId(), tenantName);
     }
 
 	@AllowSafetyNetworkAccess

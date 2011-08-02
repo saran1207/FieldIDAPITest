@@ -63,14 +63,14 @@ function notTooLong(field, maxLength) {
 }
 
 
-function serialIsValid(idx) {
-	var serial = $('serial_' + idx).getValue();
+function identifierIsValid(idx) {
+	var identifier = $('identifier_' + idx).getValue();
 	
-	if (notNullOrBlank(serial) && notTooLong(serial, 50)) {
-		$('serialNumberInvalid_' + idx).hide();
+	if (notNullOrBlank(identifier) && notTooLong(identifier, 50)) {
+		$('identifierInvalid_' + idx).hide();
 		return true;
 	} else {
-		$('serialNumberInvalid_' + idx).show();
+		$('identifierInvalid_' + idx).show();
 		return false;
 	}
 }
@@ -170,11 +170,11 @@ function validateForm3() {
 }
 
 function validateForm4() {
-	var serialNumberFields = $$('.serialNumber');
+	var identifierFields = $$('.identifier');
 	
 	var valid = true;
-	for (var i = 0; i < serialNumberFields.length; i++) {
-		if (!serialIsValid(i)) {
+	for (var i = 0; i < identifierFields.length; i++) {
+		if (!identifierIsValid(i)) {
 			valid = false;
 		}
 	}

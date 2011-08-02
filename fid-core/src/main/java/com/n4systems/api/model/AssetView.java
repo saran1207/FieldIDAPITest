@@ -4,12 +4,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.n4systems.api.validation.validators.AssetViewAttributesValidator;
+import com.n4systems.api.validation.validators.AssetViewToAssetIdentifierLengthValidator;
 import com.n4systems.api.validation.validators.DateValidator;
 import com.n4systems.api.validation.validators.NotNullValidator;
 import com.n4systems.api.validation.validators.OwnerExistsValidator;
 import com.n4systems.api.validation.validators.AssetStatusExistsValidator;
 import com.n4systems.api.validation.validators.AssetViewToAssetRfidLengthValidator;
-import com.n4systems.api.validation.validators.AssetViewToAssetSerialLengthValidator;
 import com.n4systems.exporting.beanutils.SerializableField;
 import com.n4systems.exporting.beanutils.MapSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
@@ -17,8 +17,8 @@ import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
 @SuppressWarnings("serial")
 public class AssetView extends ExternalModelView {
 	
-	@SerializableField(title = "Serial Number", order = 100, validators = { NotNullValidator.class, AssetViewToAssetSerialLengthValidator.class })
-	private String serialNumber;
+	@SerializableField(title = "ID Number", order = 100, validators = { NotNullValidator.class, AssetViewToAssetIdentifierLengthValidator.class })
+	private String identifier;
 
 	@SerializableField(title = "RFID Number", order = 200, validators = {AssetViewToAssetRfidLengthValidator.class})
 	private String rfidNumber;
@@ -55,12 +55,12 @@ public class AssetView extends ExternalModelView {
 
 	public AssetView() {}
 
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public String getRfidNumber() {

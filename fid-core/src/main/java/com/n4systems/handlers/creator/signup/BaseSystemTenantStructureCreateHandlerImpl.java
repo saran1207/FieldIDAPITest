@@ -2,11 +2,11 @@ package com.n4systems.handlers.creator.signup;
 
 
 
-import rfid.ejb.entity.SerialNumberCounterBean;
+import com.n4systems.model.serialnumbercounter.IdentifierCounterSaver;
+import rfid.ejb.entity.IdentifierCounterBean;
 
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
 import com.n4systems.persistence.Transaction;
@@ -17,13 +17,13 @@ public class BaseSystemTenantStructureCreateHandlerImpl implements BaseSystemTen
 	private static final long YEAR_IN_DAYS = 365L;
 	
 	private final SetupDataLastModDatesSaver lastModDateSaver;
-	private final SerialNumberCounterSaver serialNumberCountSaver;
+	private final IdentifierCounterSaver identifierCountSaver;
 	
 	private Tenant tenant;
 	
-	public BaseSystemTenantStructureCreateHandlerImpl(SetupDataLastModDatesSaver lastModDateSaver, SerialNumberCounterSaver serialNumberCountSaver) {
+	public BaseSystemTenantStructureCreateHandlerImpl(SetupDataLastModDatesSaver lastModDateSaver, IdentifierCounterSaver identifierCountSaver) {
 		this.lastModDateSaver = lastModDateSaver;
-		this.serialNumberCountSaver = serialNumberCountSaver;
+		this.identifierCountSaver = identifierCountSaver;
 	}
 	
 
@@ -46,15 +46,15 @@ public class BaseSystemTenantStructureCreateHandlerImpl implements BaseSystemTen
 	}
 	
 	private void createDefaultSerialNumberCounter(Transaction transaction) {
-		SerialNumberCounterBean serialNumberCounter = new SerialNumberCounterBean();
+		IdentifierCounterBean identifierCounter = new IdentifierCounterBean();
 		
-		serialNumberCounter.setTenant(tenant);
-		serialNumberCounter.setCounter(DEFAULT_COUNTER_START_VALUE);
-		serialNumberCounter.setDecimalFormat("000000");
-		serialNumberCounter.setDaysToReset(YEAR_IN_DAYS);
-		serialNumberCounter.setLastReset(DateHelper.getFirstDayOfThisYear());
+		identifierCounter.setTenant(tenant);
+		identifierCounter.setCounter(DEFAULT_COUNTER_START_VALUE);
+		identifierCounter.setDecimalFormat("000000");
+		identifierCounter.setDaysToReset(YEAR_IN_DAYS);
+		identifierCounter.setLastReset(DateHelper.getFirstDayOfThisYear());
 		
-		serialNumberCountSaver.save(transaction, serialNumberCounter);
+		identifierCountSaver.save(transaction, identifierCounter);
 	}
 	
 	

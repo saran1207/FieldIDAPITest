@@ -14,7 +14,7 @@
 				</tr>
 				<#list assets as asset >
 					<tr>
-						<td>${asset.serialNumber}</td>
+						<td>${asset.identifier}</td>
 						<td>${(asset.owner.name)!}</td>
 						<td>${asset.description}</td>
 					</tr>

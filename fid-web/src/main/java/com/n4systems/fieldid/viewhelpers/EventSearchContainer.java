@@ -23,7 +23,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	private boolean savedReportModified;
 	private boolean includeNetworkResults = false;
 	private String rfidNumber;
-	private String serialNumber;
+	private String identifier;
 	private String orderNumber;
 	private String purchaseOrder;
 	private String referenceNumber;
@@ -56,7 +56,7 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 	@Override
 	protected void evalSearchTerms() {
 		addWildcardOrStringTerm("asset.rfidNumber", rfidNumber);
-		addWildcardOrStringTerm("asset.serialNumber", serialNumber);
+		addWildcardOrStringTerm("asset.identifier", identifier);
 		if(systemSecurityGuard.isIntegrationEnabled()) {
 			addWildcardOrStringTerm("asset.shopOrder.order.orderNumber", orderNumber);
 		} else {
@@ -143,12 +143,12 @@ public class EventSearchContainer extends SearchContainer implements ReportDefin
 		this.rfidNumber = rfidNumber;
 	}
 
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 	
 	public String getOrderNumber() {

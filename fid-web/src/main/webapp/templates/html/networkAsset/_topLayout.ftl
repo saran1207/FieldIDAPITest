@@ -1,4 +1,4 @@
-<h1>Asset - ${asset.serialNumber}</h1>
+<h1>Asset - ${asset.identifier}</h1>
 
 <#include "../common/_lightView.ftl" />
 <#include '_lightViewBoxOptions.ftl'>

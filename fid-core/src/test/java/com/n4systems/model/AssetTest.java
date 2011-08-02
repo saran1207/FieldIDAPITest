@@ -20,15 +20,15 @@ public class AssetTest {
 	}
 
 	@Test
-	public void testArchiveSerialNumber() {
-		String serialNumber = "my-good-serial-number";
-		asset.setSerialNumber( serialNumber );
+	public void testArchiveIdentifier() {
+		String identifier = "my-good-identifier";
+		asset.setIdentifier(identifier);
 		
-		asset.archiveSerialNumber();
+		asset.archiveIdentifier();
 		
-		assertEquals( serialNumber, asset.getArchivedSerialNumber() );
-		assertNotSame( serialNumber, asset.getSerialNumber() );
-		assertNotNull( asset.getSerialNumber() );
+		assertEquals( identifier, asset.getArchivedIdentifier() );
+		assertNotSame( identifier, asset.getIdentifier() );
+		assertNotNull( asset.getIdentifier() );
 	}
 	
 	@Test

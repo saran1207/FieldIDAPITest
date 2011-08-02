@@ -4,29 +4,29 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.ejb.legacy.IdentifierCounter;
+import com.n4systems.ejb.legacy.impl.IdentifierCounterManager;
 import com.n4systems.model.AssetType;
-import rfid.ejb.entity.SerialNumberCounterBean;
+import rfid.ejb.entity.IdentifierCounterBean;
 
-import com.n4systems.ejb.legacy.SerialNumberCounter;
-import com.n4systems.ejb.legacy.impl.SerialNumberCounterManager;
 import com.n4systems.ejb.wrapper.EJBTransactionEmulator;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 
-public class SerialNumberCounterEJBContainer extends EJBTransactionEmulator<SerialNumberCounter> implements SerialNumberCounter {
+public class IdentifierCounterEJBContainer extends EJBTransactionEmulator<IdentifierCounter> implements IdentifierCounter {
 
 	@Override
-	protected SerialNumberCounter createManager(EntityManager em) {
-		return new SerialNumberCounterManager(em);
+	protected IdentifierCounter createManager(EntityManager em) {
+		return new IdentifierCounterManager(em);
 	}
 
-	public String generateSerialNumber(PrimaryOrg primaryOrg, AssetType assetType) {
+	public String generateIdentifier(PrimaryOrg primaryOrg, AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).generateSerialNumber(primaryOrg, assetType);
+			return createManager(transaction.getEntityManager()).generateIdentifier(primaryOrg, assetType);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -54,11 +54,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public SerialNumberCounterBean getSerialNumberCounter(Long tenantId) {
+	public IdentifierCounterBean getIdentifierCounter(Long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getSerialNumberCounter(tenantId);
+			return createManager(transaction.getEntityManager()).getIdentifierCounter(tenantId);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -70,11 +70,11 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Collection<SerialNumberCounterBean> getSerialNumberCounters() {
+	public Collection<IdentifierCounterBean> getIdentifierCounters() {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).getSerialNumberCounters();
+			return createManager(transaction.getEntityManager()).getIdentifierCounters();
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
@@ -87,11 +87,11 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
 
-	public void updateSerialNumberCounter(SerialNumberCounterBean serialNumberCounter) {
+	public void updateIdentifierCounter(IdentifierCounterBean identifierCounter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
-			createManager(transaction.getEntityManager()).updateSerialNumberCounter(serialNumberCounter);
+			createManager(transaction.getEntityManager()).updateIdentifierCounter(identifierCounter);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);

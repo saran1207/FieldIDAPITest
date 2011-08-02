@@ -72,7 +72,7 @@ public class EventSummaryGeneratorTest {
 	}
 
 	private void setReportDefinerExpectations(Event event) {
-		expect(reportDefiner.getSerialNumber()).andReturn("");
+		expect(reportDefiner.getIdentifier()).andReturn("");
 		expect(reportDefiner.getRfidNumber()).andReturn("");
 		expect(reportDefiner.getOrderNumber()).andReturn("");
 		expect(reportDefiner.getPurchaseOrder()).andReturn("");

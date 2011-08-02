@@ -89,7 +89,7 @@ public class EventSummaryGenerator {
 				eventMap.put("date", event.getDate());
 				eventMap.put("referenceNumber", event.getAsset().getCustomerRefNumber());
 				eventMap.put("productType", event.getAsset().getType().getName());
-				eventMap.put("serialNumber", event.getAsset().getSerialNumber());
+				eventMap.put("serialNumber", event.getAsset().getIdentifier());
 				eventMap.put("description", event.getAsset().getDescription());
 				eventMap.put("organization", event.getOwner().getInternalOrg().getName());
 				eventMap.put("inspectionType", event.getType().getName());
@@ -187,7 +187,7 @@ public class EventSummaryGenerator {
 		ReportMap<Object> reportMap = new ReportMap<Object>();
 
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
-		reportMap.put("serialNumber", reportDefiner.getSerialNumber());
+		reportMap.put("serialNumber", reportDefiner.getIdentifier());
 		reportMap.put("rfidNumber", reportDefiner.getRfidNumber());
 		reportMap.put("orderNumber", reportDefiner.getOrderNumber());
 		reportMap.put("purchaseOrder", reportDefiner.getPurchaseOrder());

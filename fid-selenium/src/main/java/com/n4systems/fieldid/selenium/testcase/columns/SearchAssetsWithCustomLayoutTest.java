@@ -23,21 +23,21 @@ public class SearchAssetsWithCustomLayoutTest extends FieldIDTestCase {
     public void setupScenario(Scenario scenario) {
         Tenant test1 = scenario.tenant("test1");
 
-        SystemColumnMapping serialNumberColumn = scenario.systemColumnMapping("asset_search_serialnumber");
+        SystemColumnMapping identifierColumn = scenario.systemColumnMapping("asset_search_identifier");
         SystemColumnMapping rfidNumberColumn = scenario.systemColumnMapping("asset_search_rfidnumber");
 
         AssetType type = scenario.anAssetType().named("TestType").build();
 
-        scenario.anAsset().ofType(type).withSerialNumber("456999").rfidNumber("5678").build();
-        scenario.anAsset().ofType(type).withSerialNumber("456789").rfidNumber("9876").build();
+        scenario.anAsset().ofType(type).withIdentifier("456999").rfidNumber("5678").build();
+        scenario.anAsset().ofType(type).withIdentifier("456789").rfidNumber("9876").build();
         ColumnLayout layout = scenario.aColumnLayout()
                 .reportType(ReportType.ASSET)
-                .sortColumn(serialNumberColumn)
+                .sortColumn(identifierColumn)
                 .sortDirection(SortDirection.ASC)
                 .tenant(test1)
                 .build();
 
-        scenario.anActiveColumnMapping().order(1).columnLayout(layout).columnMapping(serialNumberColumn).build();
+        scenario.anActiveColumnMapping().order(1).columnLayout(layout).columnMapping(identifierColumn).build();
         scenario.anActiveColumnMapping().order(2).columnLayout(layout).columnMapping(rfidNumberColumn).build();
     }
 

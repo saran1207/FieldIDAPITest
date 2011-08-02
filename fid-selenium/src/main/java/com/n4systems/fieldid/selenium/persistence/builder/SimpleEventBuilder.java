@@ -32,7 +32,7 @@ public class SimpleEventBuilder extends BaseBuilder<Event> {
 
         Asset asset = scenario.anAsset()
                 .withOwner(scenario.defaultPrimaryOrg())
-                .withSerialNumber("9671111")
+                .withIdentifier("9671111")
                 .ofType(type)
                 .build();
 

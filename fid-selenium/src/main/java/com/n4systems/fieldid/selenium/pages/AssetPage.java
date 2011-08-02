@@ -11,7 +11,7 @@ import static org.junit.Assert.fail;
 public class AssetPage extends FieldIDPage {
 
 	// Locators
-	private String editAssetSerialNumberTextFieldLocator = "xpath=//INPUT[@id='serialNumberText']";
+	private String editAssetIdentifierTextFieldLocator = "xpath=//INPUT[@id='identifierText']";
 	private String editAssetRFIDNumberTextFieldLocator = "xpath=//INPUT[@id='rfidNumber']";
 	private String editAssetReferenceNumberTextFieldLocator = "xpath=//INPUT[@id='customerRefNumber']";
 	private String editAssetLocationTextFieldLocator = "xpath=//INPUT[@id='location_freeformLocation']";
@@ -34,9 +34,9 @@ public class AssetPage extends FieldIDPage {
 		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Asset')]");
 	}
 
-	public boolean checkHeader(String serialNumber) {
+	public boolean checkHeader(String identifier) {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + serialNumber + "')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'" + identifier + "')]");
 	}
 	
 	public boolean checkRfidNumber(String rfidNumber){
@@ -96,7 +96,7 @@ public class AssetPage extends FieldIDPage {
 		return selenium.getText("//label[.='Asset Status']/../span");
 	}
 
-	public String getSerialNumber() {
+	public String getIdentifier() {
 		return selenium.getText("//label[.='Serial Number']/../span");
 	}
 
@@ -141,18 +141,18 @@ public class AssetPage extends FieldIDPage {
 		waitForPageToLoad();
 	}
 
-	public void addNewSubcomponent(String serialNumber) {
+	public void addNewSubcomponent(String identifier) {
 		selenium.click("//a[contains(.,'Add New')]");
 		waitForAjax();
-		selenium.type("//input[@name='serialNumber']", serialNumber);
+		selenium.type("//input[@name='identifier']", identifier);
 		selenium.click("//input[@value='Save']");
 		waitForAjax();
 	}
 
-	public void attachExistingSubcomponent(String serialNumber) {
+	public void attachExistingSubcomponent(String identifier) {
 		selenium.click("//a[contains(.,'Find Existing')]");
 		waitForElementToBePresent("//form[@id='subAssetSearchForm']");
-		selenium.type("//input[@id='subAssetSearchForm_search']", serialNumber);
+		selenium.type("//input[@id='subAssetSearchForm_search']", identifier);
 		selenium.click("//input[@id='subAssetSearchForm_load']");
 		waitForElementToBePresent("//div[@id='resultsTable']");
 		selenium.click("//button[@class='assetLink']");
@@ -176,8 +176,8 @@ public class AssetPage extends FieldIDPage {
 		} else {
 			selenium.select(editAssetPublishOverSafetyNetworkSelectListLocator, "Do Not Publish Over Safety Network");
 		}
-		if (p.getSerialNumber() != null) {
-			selenium.type(editAssetSerialNumberTextFieldLocator, p.getSerialNumber());
+		if (p.getIdentifier() != null) {
+			selenium.type(editAssetIdentifierTextFieldLocator, p.getIdentifier());
 		}
 		if (p.getRFIDNumber() != null) {
 			selenium.type(editAssetRFIDNumberTextFieldLocator, p.getRFIDNumber());
@@ -235,8 +235,8 @@ public class AssetPage extends FieldIDPage {
 		selenium.click("//input[@id='label_confirm_as_losing_asset']");
 	}
 	
-	public void loadAssetToMergeIntoAndSubmit(String serialNumber){
-		selenium.type("//input[@id='mergeSmartSearch_search']", serialNumber);
+	public void loadAssetToMergeIntoAndSubmit(String identifier){
+		selenium.type("//input[@id='mergeSmartSearch_search']", identifier);
 		selenium.click("//input[@id='mergeSmartSearch_load']");
 		waitForAjax();
 		selenium.click("//button[@class='assetLink']");
@@ -252,8 +252,8 @@ public class AssetPage extends FieldIDPage {
         selenium.select("//div[@infofieldname='" + attrName + "']//select", value);
     }
 
-    public boolean wasMergeSuccessful(String firstSerialNumber, String mergeSerialNumber) {
-        return selenium.isElementPresent("//h1[contains(.,'Merge Assets - " + firstSerialNumber + " into " + mergeSerialNumber + "')]");
+    public boolean wasMergeSuccessful(String firstIdentifier, String mergeIdentifier) {
+        return selenium.isElementPresent("//h1[contains(.,'Merge Assets - " + firstIdentifier + " into " + mergeIdentifier + "')]");
     }
     
 	public void setOwner(Owner owner) {

@@ -3,8 +3,8 @@
 		<h3><@s.text name="nav.asset_information" /></h3>
 	</div>
 	<div class="infoSet">
-		<label for="serialNumber" class="label"><@s.text name="label.id_number"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
-		<@s.textfield name="serialNumber"/>
+		<label for="identifier" class="label"><@s.text name="label.id_number"/> <#include "/templates/html/common/_requiredMarker.ftl"/></label>
+		<@s.textfield name="identifier"/>
 	</div>
 	<div class="infoSet">
 		<label for="rfidNumber" class="label"><@s.text name="label.rfidnumber"/></label>

@@ -93,7 +93,7 @@ body {
 					<th>Date Performed</th>
 					<th>Organization</th>
 					<th>Owner</th>
-					<th>Serial #</th>
+					<th>ID Number</th>
 					<th>Asset Type</th>
 					<th>Location</th>
 					<th>Event Type</th>
@@ -112,7 +112,7 @@ body {
 								&nbsp;>&nbsp;${event.owner.divisionOrg.name!}
 							</#if>
 						</td>
-						<td>${event.asset.serialNumber}</td>
+						<td>${event.asset.identifier}</td>
 						<td>${event.asset.type.name}</td>
 						<td>${event.asset.advancedLocation.freeformLocation}</td>
 						<td>${event.type}</td>

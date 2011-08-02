@@ -43,7 +43,7 @@ public class PerformEventWithUnitOfMeasureCriteriaTest extends PageNavigatingTes
                 .build();
 
         scenario.anAsset()
-                .withSerialNumber(TEST_SERIAL_NUMBER)
+                .withIdentifier(TEST_SERIAL_NUMBER)
                 .ofType(assetType)
                 .build();
     }

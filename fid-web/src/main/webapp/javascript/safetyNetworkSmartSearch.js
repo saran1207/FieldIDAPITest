@@ -42,7 +42,7 @@ function updateLinkedAssetInfo(asset) {
 	
 function populateLinkedAssetInfo(asset) {
 	$('linkedAssetId').setValue(asset.id);
-	$('linkedAssetSerial').update(asset.serialNumber);
+	$('linkedAssetIdentifier').update(asset.identifier);
 	$('linkedAssetRfid').update(asset.rfidNumber);
 	$('linkedAssetOwner').update(asset.owner);
 	$('linkedAssetType').update(asset.type);
@@ -55,7 +55,7 @@ function updateLinkedAssetFromMultipleResults(event) {
 	var asset = new Object();
 	
 	asset.id = result.getAttribute("assetId");
-	asset.serialNumber = result.getAttribute("serialNumber");
+	asset.identifier = result.getAttribute("identifier");
 	asset.rfidNumber = result.getAttribute("rfidNumber");
 	asset.owner = result.getAttribute("owner");
 	asset.type = result.getAttribute("assetType");
@@ -66,7 +66,7 @@ function updateLinkedAssetFromMultipleResults(event) {
 
 function pushRegisteredAssetInformationToLocalAsset(asset) {
 	if ($('uniqueID') != null && $('uniqueID').getValue() == "") {
-		$("serialNumberText").value = asset.serialNumber;
+		$("identifierText").value = asset.identifier;
 		$("rfidNumber").value = asset.rfidNumber;
 		$("customerRefNumber").value = asset.referenceNumber;
 	}

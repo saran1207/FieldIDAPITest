@@ -15,14 +15,13 @@
 	background-color: #D0DAFD
 }
 
-.projectAssetSerial, .projectAssetType, .projectAssetRemove {
+.projectAssetIdentifier, .projectAssetType, .projectAssetRemove {
 	float:left;
 	width:200px;
 	padding:5px 0 5px 5px;
 }
 
-.projectAssetSerial {
-	
+.projectAssetIdentifier {
 	padding-left:15px;
 	padding-right:10px;
 	width:170px;

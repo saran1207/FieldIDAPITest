@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.asset;
 import java.util.Collection;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
@@ -10,7 +11,6 @@ import org.apache.log4j.Logger;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -23,11 +23,11 @@ public class AssetUtilAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger( AssetUtilAction.class );
 	
-	private SerialNumberCounter serialNumberCounter;
+	private IdentifierCounter identifierCounter;
 	private LegacyAsset legacyAssetManager;
 	private AssetManager assetManager;
 	
-	private String serialNumber;
+	private String identifier;
 	
 	private String rfidString;
 	private Long uniqueId;
@@ -37,9 +37,9 @@ public class AssetUtilAction extends AbstractAction {
     private AssetType assetType;
     private Long assetTypeId;
 	
-	public AssetUtilAction(SerialNumberCounter serialNumberCounter, LegacyAsset legacyAssetManager, AssetManager assetManager, PersistenceManager persistenceManager ) {
+	public AssetUtilAction(IdentifierCounter identifierCounter, LegacyAsset legacyAssetManager, AssetManager assetManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
-		this.serialNumberCounter = serialNumberCounter;
+		this.identifierCounter = identifierCounter;
 		this.legacyAssetManager = legacyAssetManager;
 		this.assetManager = assetManager;
 	}
@@ -59,8 +59,8 @@ public class AssetUtilAction extends AbstractAction {
 	}
 	
 	
-	public String doCheckSerialNumber() {
-		if (legacyAssetManager.duplicateSerialNumber(serialNumber, uniqueId, getTenant())) {
+	public String doCheckIdentifier() {
+		if (legacyAssetManager.duplicateIdentifier(identifier, uniqueId, getTenant())) {
 			return "used";
 		} else {
 			return "available";
@@ -68,19 +68,19 @@ public class AssetUtilAction extends AbstractAction {
 	}
 	
 	
-	public String doGenerateSerialNumber() {
+	public String doGenerateIdentifier() {
 		try {
-			serialNumber = serialNumberCounter.generateSerialNumber(getPrimaryOrg(), assetType);
+			identifier = identifierCounter.generateIdentifier(getPrimaryOrg(), assetType);
 		} catch (Exception e) {
-			logger.error("Generating serial number", e);
+			logger.error("Generating identifier", e);
 			return ERROR;
 		}
 		return SUCCESS;
 	}
 
 
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 
 
@@ -112,8 +112,8 @@ public class AssetUtilAction extends AbstractAction {
 	}
 
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
     public Long getAssetTypeId() {

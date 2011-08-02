@@ -80,7 +80,7 @@ public class ProjectAssetCrud extends AbstractCrud {
 
 		try {
 			projectManager.attachAsset(asset, project, getSessionUser().getUniqueID());
-			logger.info(getLogLinePrefix() + "asset " + asset.getSerialNumber() + " attached to " + project.getProjectID());
+			logger.info(getLogLinePrefix() + "asset " + asset.getIdentifier() + " attached to " + project.getProjectID());
 			addFlashMessageText("message.assetattachedtoproject");
 			return SUCCESS;
 		} catch (AssetAlreadyAttachedException e) {
@@ -107,7 +107,7 @@ public class ProjectAssetCrud extends AbstractCrud {
 
 		try {
 			projectManager.detachAsset(asset, project, getSessionUser().getUniqueID());
-			logger.info(getLogLinePrefix() + "asset " + asset.getSerialNumber() + " detached from " + project.getProjectID());
+			logger.info(getLogLinePrefix() + "asset " + asset.getIdentifier() + " detached from " + project.getProjectID());
 			addFlashMessageText("message.assetdetachedfromproject");
 			return SUCCESS;
 		} catch (Exception e) {

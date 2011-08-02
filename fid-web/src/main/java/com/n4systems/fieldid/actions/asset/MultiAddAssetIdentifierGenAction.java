@@ -4,24 +4,24 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.SerialNumberCounter;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.security.Permissions;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
-public class MultiAddAssetSerialNumberGenAction extends AbstractAction {
+public class MultiAddAssetIdentifierGenAction extends AbstractAction {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(MultiAddAssetSerialNumberGenAction.class);
+	private static Logger logger = Logger.getLogger(MultiAddAssetIdentifierGenAction.class);
 	
 	public enum SerialNumberGenType { RANGE, AUTO, BATCH, MANUAL }
 	
-	private final SerialNumberCounter serialNumberCounter;
+	private final IdentifierCounter identifierCounter;
 	
 	private Integer quantity = 1;
 	private String type = SerialNumberGenType.RANGE.name();
@@ -35,9 +35,9 @@ public class MultiAddAssetSerialNumberGenAction extends AbstractAction {
     private AssetType assetType;
     private Long assetTypeId;
 	
-	public MultiAddAssetSerialNumberGenAction(PersistenceManager persistenceManager, SerialNumberCounter serialNumberCounter) {
+	public MultiAddAssetIdentifierGenAction(PersistenceManager persistenceManager, IdentifierCounter identifierCounter) {
 		super(persistenceManager);
-		this.serialNumberCounter = serialNumberCounter;
+		this.identifierCounter = identifierCounter;
 	}
 
 	public String doGenerate() {
@@ -88,7 +88,7 @@ public class MultiAddAssetSerialNumberGenAction extends AbstractAction {
 	}
 	
 	private String getNextAutoSerial() {
-		return serialNumberCounter.generateSerialNumber(getPrimaryOrg(), assetType);
+		return identifierCounter.generateIdentifier(getPrimaryOrg(), assetType);
 	}
 
 	public Integer getQuantity() {
@@ -152,6 +152,14 @@ public class MultiAddAssetSerialNumberGenAction extends AbstractAction {
         if (assetTypeId != null) {
             this.assetType = persistenceManager.find(AssetType.class, assetTypeId, getTenantId());
         }
+    }
+
+    @Override
+    public String getIdentifierLabel() {
+        if (assetType != null && assetType.isIdentifierOverridden()) {
+            return assetType.getIdentifierLabel();
+        }
+        return super.getIdentifierLabel();
     }
 
 }

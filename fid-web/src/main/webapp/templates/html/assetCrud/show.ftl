@@ -103,7 +103,7 @@ ${action.setPageType('asset', 'show')!}
 				<p>
 					<label>${subAsset.asset.type.name!}</label>
 					<span>
-						<a href="<@s.url action="asset"  uniqueID="${subAsset.asset.id}"/>">${subAsset.asset.serialNumber}</a>
+						<a href="<@s.url action="asset"  uniqueID="${subAsset.asset.id}"/>">${subAsset.asset.identifier}</a>
 					</span>  
 				</p>
 			</#list>
@@ -115,7 +115,7 @@ ${action.setPageType('asset', 'show')!}
 			<p>
 				<label>${parentAsset.type.name!}</label> 
 				<span>
-					<a href="<@s.url action="asset"  uniqueID="${parentAsset.id}"/>">${parentAsset.serialNumber}</a>
+					<a href="<@s.url action="asset"  uniqueID="${parentAsset.id}"/>">${parentAsset.identifier}</a>
 				</span>  
 			</p>
 		</div>		
@@ -138,7 +138,7 @@ ${action.setPageType('asset', 'show')!}
 		<h2>${asset.type.name} <@s.text name="label.summary"/></h2>
 		<p>
 			<label>${identifierLabel}</label>
-			<span class="fieldValue serialNumber">${asset.serialNumber}</span>
+			<span class="fieldValue identifier">${asset.identifier}</span>
 		</p>
 		<p>
 			<label><@s.text name="label.rfidnumber"/></label>

@@ -238,7 +238,7 @@ public class AssetToModelConverterTest {
 		AssetView view = createView(null, null);
 		Asset model =  converter.toModel(view, null);
 		
-		Asserts.assertMethodReturnValuesEqual(view, model, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
+		Asserts.assertMethodReturnValuesEqual(view, model, "getIdentifier", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
 	}
 	
 	@Test
@@ -287,7 +287,7 @@ public class AssetToModelConverterTest {
 		view.setOrganization("My Org");
 		view.setCustomer("My Customer");
 		view.setDivision("My Division");
-		view.setSerialNumber("sn1234");
+		view.setIdentifier("sn1234");
 		view.setRfidNumber("rf1234");
 		view.setCustomerRefNumber("cr12345");
 		view.setLocation("loc123");

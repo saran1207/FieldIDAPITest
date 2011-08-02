@@ -40,7 +40,7 @@
                 <@s.text name="label.id_number"/>
             </td>
             <td class="value">
-                ${asset.serialNumber}
+                ${asset.identifier}
             </td>
         </tr>
         <tr>

@@ -4,7 +4,7 @@
             <label><@s.text name="label.number.short"/></label>
         </div>
         <div>
-            <label><@s.text name="label.id_number"/></label>
+            <label>${identifierLabel}</label>
         </div>
         <div>
             <label><@s.text name="label.rfid_or_barcode"/></label>
@@ -16,8 +16,8 @@
     <@s.iterator value="identifiers" id="identifier" status="ident_stat" >
         <@s.hidden id="id_${ident_stat.index}" name="identifiers[${ident_stat.index}].assetId"/>
         <div class="identifierErrorRow">
-            <div id="serialNumberInvalid_${ident_stat.index}" style="display: none;" class="errorMessage invalidSerial">
-                <@s.text name="error.serial_number_format"/>
+            <div id="identifierInvalid_${ident_stat.index}" style="display: none;" class="errorMessage invalidIdentifier">
+                <@s.text name="error.identifier_format"/>
             </div>
         </div>
         <div class="identifierRow">
@@ -25,7 +25,7 @@
                 <label>${ident_stat.index+1}.</label>
             </div>
             <div>
-                <@s.textfield id="serial_${ident_stat.index}" cssClass="identifierInput serialNumber" name="identifiers[${ident_stat.index}].serialNumber" onkeyup="serialIsValid(${ident_stat.index});" />
+                <@s.textfield id="identifier_${ident_stat.index}" cssClass="identifierInput identifier" name="identifiers[${ident_stat.index}].identifier" onkeyup="identifierIsValid(${ident_stat.index});" />
             </div>
             <div>
                 <@s.textfield cssClass="identifierInput" name="identifiers[${ident_stat.index}].rfidNumber" size="50" />

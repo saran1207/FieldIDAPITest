@@ -6,22 +6,22 @@ public class AssetIdentifierView implements Serializable {
 	private static final long serialVersionUID = 1L;
 
     private Long assetId;
-	private String serialNumber;
+	private String identifier;
 	private String rfidNumber;
 	private String referenceNumber;
 	
 	public AssetIdentifierView() {}
 	
-	public AssetIdentifierView(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public AssetIdentifierView(String identifier) {
+		this.identifier = identifier;
 	}
 
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public String getRfidNumber() {

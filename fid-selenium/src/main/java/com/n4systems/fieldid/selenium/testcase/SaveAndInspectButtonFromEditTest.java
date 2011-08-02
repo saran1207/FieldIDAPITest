@@ -10,7 +10,7 @@ public class SaveAndInspectButtonFromEditTest extends PageNavigatingTestCase<Ass
     @Override
     public void setupScenario(Scenario scenario) {
         scenario.anAsset()
-                .withSerialNumber("424242QQ")
+                .withIdentifier("424242QQ")
                 .ofType(scenario.assetType("test1", TEST_ASSET_TYPE_1))
                 .build();
     }

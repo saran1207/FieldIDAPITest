@@ -31,7 +31,7 @@ public class AssetToViewConverterTest {
 	
 	private Asset createAsset() {
 		Asset model = anAsset().ofType(AssetTypeBuilder.anAssetType().build())
-			.withOwner(OrgBuilder.aCustomerOrg().build()).withSerialNumber("12345")
+			.withOwner(OrgBuilder.aCustomerOrg().build()).withIdentifier("12345")
 			.withAdvancedLocation(onlyFreeformLocation("loc123")).build();
 		model.setRfidNumber("rf1234");
 		model.setCustomerRefNumber("cr12345");
@@ -69,7 +69,7 @@ public class AssetToViewConverterTest {
 		
 		AssetView view = converter.toView(model);
 		
-		Asserts.assertMethodReturnValuesEqual(model, view, "getSerialNumber", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
+		Asserts.assertMethodReturnValuesEqual(model, view, "getIdentifier", "getRfidNumber", "getCustomerRefNumber", "getPurchaseOrder", "getComments", "getIdentified");
 
 		assertEquals(model.getAssetStatus().getName(), view.getStatus());
 		assertEquals(model.getShopOrder().getOrder().getOrderNumber(), view.getShopOrder());

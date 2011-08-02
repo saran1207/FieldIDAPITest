@@ -90,7 +90,7 @@ public class RobertsFileProcessorTest {
 		assertEquals("164.0", dataContainer.getTestDuration());
 		assertEquals("121350.0", dataContainer.getPeakLoad());
 		assertEquals("<COMMENTS GO HERE>", dataContainer.getComments());
-		assertEquals(Arrays.asList("SERIALNUMBER"), dataContainer.getSerialNumbers());
+		assertEquals(Arrays.asList("SERIALNUMBER"), dataContainer.getIdentifiers());
 		assertEquals("<CUSTOMER NAME>", dataContainer.getCustomerName());
 		assertEquals(datePerformed, dataContainer.getDatePerformed());
 		assertTrue(dataContainer.getChart().length > 0);

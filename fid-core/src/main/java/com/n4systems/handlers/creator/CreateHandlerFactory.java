@@ -22,7 +22,7 @@ import com.n4systems.model.eventtypegroup.EventTypeGroupSaver;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.safetynetwork.CatalogOnlyConnectionSaver;
 import com.n4systems.model.safetynetwork.OrgConnectionSaver;
-import com.n4systems.model.serialnumbercounter.SerialNumberCounterSaver;
+import com.n4systems.model.serialnumbercounter.IdentifierCounterSaver;
 import com.n4systems.model.stateset.StateSetSaver;
 import com.n4systems.model.tagoption.TagOptionSaver;
 import com.n4systems.model.tenant.SetupDataLastModDatesSaver;
@@ -51,7 +51,7 @@ public class CreateHandlerFactory {
 
 	private BaseSystemStructureCreateHandler getBaseSystemStructureCreateHandler() {
 		return new BaseSystemStructureCreateHandlerImpl(new BaseSystemTenantStructureCreateHandlerImpl(new SetupDataLastModDatesSaver(),
-				new SerialNumberCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new AssetTypeSaver(), new EventTypeGroupSaver(), new StateSetSaver(), new AssetStatusSaver()));
+				new IdentifierCounterSaver()), new BaseSystemSetupDataCreateHandlerImpl(new TagOptionSaver(), new AssetTypeSaver(), new EventTypeGroupSaver(), new StateSetSaver(), new AssetStatusSaver()));
 	}
 	
 	private AccountPlaceHolderCreateHandler getAccountPlaceHolderCreateHandler() {

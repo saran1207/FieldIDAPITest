@@ -14,7 +14,7 @@
 		<#list page.list as asset>
 		<tr>
 			<td>
-				<a href='<@s.url value="showNetworkAsset.action" uniqueID="${asset.id}"/>' >${asset.serialNumber}</a>
+				<a href='<@s.url value="showNetworkAsset.action" uniqueID="${asset.id}"/>' >${asset.identifier}</a>
 			</td>
 			<#if asset.rfidNumber??>
 				<td>${asset.rfidNumber}</td>

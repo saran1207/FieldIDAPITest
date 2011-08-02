@@ -17,7 +17,7 @@ public class EventScheduleSearchContainer extends SearchContainer {
 	private static final long serialVersionUID = 1L;
 
 	private String rfidNumber;
-	private String serialNumber;
+	private String identifier;
 	private String orderNumber;
 	private String purchaseOrder;
 	private LocationWebModel location = new LocationWebModel(this);
@@ -47,7 +47,7 @@ public class EventScheduleSearchContainer extends SearchContainer {
 	@Override
 	protected void evalSearchTerms() {
 		addWildcardOrStringTerm("asset.rfidNumber", rfidNumber);
-		addWildcardOrStringTerm("asset.serialNumber", serialNumber);
+		addWildcardOrStringTerm("asset.identifier", identifier);
 		if(systemSecurityGuard.isIntegrationEnabled()) {
 			addWildcardOrStringTerm("asset.shopOrder.order.orderNumber", orderNumber);
 		}else {
@@ -113,12 +113,12 @@ public class EventScheduleSearchContainer extends SearchContainer {
 		this.rfidNumber = rfidNumber;
 	}
 
-	public String getSerialNumber() {
-		return serialNumber;
+	public String getIdentifier() {
+		return identifier;
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public String getOrderNumber() {

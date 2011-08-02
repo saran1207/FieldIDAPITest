@@ -42,7 +42,7 @@ public class ReportFormatConverter {
         SecurityFilter securityFilter = FieldIDSession.get().getSessionUser().getSecurityFilter();
         EventSearchContainer container = new EventSearchContainer(securityFilter, new LoaderFactory(securityFilter), new SerializableSecurityGuard(FieldIDSession.get().getTenant()));
 
-        container.setSerialNumber(criteriaModel.getSerialNumber());
+        container.setIdentifier(criteriaModel.getIdentifier());
         container.setAssetStatus(getId(criteriaModel.getAssetStatus()));
         container.setAssetType(getId(criteriaModel.getAssetType()));
         container.setAssetTypeGroup(getId(criteriaModel.getAssetTypeGroup()));

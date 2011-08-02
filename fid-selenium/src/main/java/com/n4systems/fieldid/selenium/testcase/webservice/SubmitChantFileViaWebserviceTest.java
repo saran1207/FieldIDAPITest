@@ -43,7 +43,7 @@ public class SubmitChantFileViaWebserviceTest extends DBTestCase {
 
         scenario.anAsset()
             .ofType(assetType)
-            .withSerialNumber("AA2DD")
+            .withIdentifier("AA2DD")
             .withOwner(custOrg)
             .identifiedBy(scenario.defaultUser())
             .build();

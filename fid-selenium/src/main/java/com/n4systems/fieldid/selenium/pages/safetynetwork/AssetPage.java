@@ -16,16 +16,16 @@ public class AssetPage extends FieldIDPage {
 	
 	public boolean checkOnAssetPage() {
 		checkForErrorMessages(null);
-		if(selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Safety Network')]")) {
+		if (selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Safety Network')]")) {
 			return selenium.isElementPresent("//div[@id='mainContent']/h1[contains(text(),'Asset')]");
-		}else {
+		} else {
 			return false;
 		}
 	}
 
-	public boolean checkHeader(String serialNumber) {
+	public boolean checkHeader(String identifier) {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='mainContent']/h1[contains(text(),'" + serialNumber + "')]");		
+		return selenium.isElementPresent("//div[@id='mainContent']/h1[contains(text(),'" + identifier + "')]");
 	}
 
 }

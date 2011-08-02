@@ -209,7 +209,7 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 				Asset asset = converter.viewToModel(assetView);
 				this.assetWebModel.fillInAsset(asset);
 				
-				asset.setSerialNumber(assetIdent.getSerialNumber());
+				asset.setIdentifier(assetIdent.getIdentifier());
 				asset.setCustomerRefNumber(assetIdent.getReferenceNumber());
 				asset.setRfidNumber(assetIdent.getRfidNumber());
 				

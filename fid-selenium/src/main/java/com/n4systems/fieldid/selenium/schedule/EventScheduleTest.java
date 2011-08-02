@@ -37,7 +37,7 @@ public class EventScheduleTest extends PageNavigatingTestCase<EventSchedulePage>
         				.withEventTypes(evenType)
         				.build();
 
-    	scenario.anAsset().ofType(type).withSerialNumber(ASSET).build();
+    	scenario.anAsset().ofType(type).withIdentifier(ASSET).build();
         
         BaseOrg custOrg = scenario.aCustomerOrg()
 						    .withParent(scenario.primaryOrgFor(COMPANY))

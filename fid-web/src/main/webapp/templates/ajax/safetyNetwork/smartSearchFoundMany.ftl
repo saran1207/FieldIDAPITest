@@ -12,14 +12,14 @@
 		<tr>
 			<td>
 				<button class="selectAsset" name="select_${asset.id}" assetId="${asset.id}"
-					serialNumber="${asset.serialNumber?default('')?html}"
+					identifier="${asset.identifier?default('')?html}"
 					rfidNumber="${asset.rfidNumber?default('')?html}"
 					owner="${asset.owner.internalOrg.name?html}"
 					assetType="${asset.type.name?html}"
 					referenceNumber="${asset.customerRefNumber?default('')?html}"
 					><@s.text name="label.select"/></button>
 			</td>
-			<td>${asset.serialNumber?html}</td>
+			<td>${asset.identifier?html}</td>
 			<td>${(asset.rfidNumber?html)!} </td>
 			<td>${(asset.customerRefNumber?html)!} </td>
 			<td>${asset.owner.internalOrg.name?html}</td>

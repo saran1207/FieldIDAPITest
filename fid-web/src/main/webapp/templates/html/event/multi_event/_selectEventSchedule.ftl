@@ -11,7 +11,7 @@
 		<#list assets as asset>
 			<#assign eventSchedules = multiEventScheduleListHelper.getEventSchedulesForAsset(asset)/>
 			<div class="infoSet scheduleContainer">
-				<label class="label widenedLabel unweighted">${asset_index + 1}. ${asset.serialNumber?html} ${asset.type.displayName?html} <br/>&nbsp;&nbsp;&nbsp; ${asset.description?html} </label>
+				<label class="label widenedLabel unweighted">${asset_index + 1}. ${asset.identifier?html} ${asset.type.displayName?html} <br/>&nbsp;&nbsp;&nbsp; ${asset.description?html} </label>
 				<@s.select id="eventScheduleSelectBox_${asset_index}" cssClass="eventSchedules" headerKey="0" headerValue="${action.getText('label.notscheduled')}" list=eventSchedules listKey="id" listValue="nextDate" value=multiEventScheduleListHelper.getSuggestedEventScheduleIdForAsset(asset) onchange="storeScheduleId(${asset_index},this)"/>
 			</div>
 		</#list>

@@ -21,7 +21,7 @@ public class AssetsSearchResultsPage extends SearchResultsPage {
 
     public AssetPage clickAssetLinkForResult(int resultNumber) {
         int rowNumber = resultNumber + 1;
-        selenium.click("//table[@id='resultsTable']//tr["+rowNumber+"]/td[contains(@id, 'serialnumber')]//a");
+        selenium.click("//table[@id='resultsTable']//tr["+rowNumber+"]/td[contains(@id, 'identifier')]//a");
         return new AssetPage(selenium);
     }
 

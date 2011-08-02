@@ -4,5 +4,5 @@
 </div>
 <div class="stepContent loader" id="step4Loading" style="display: none">
 	${loaderDiv}
-	<p><@s.text name="label.generating_serial_numbers" /></p>
+	<p><@s.text name="label.generating_identifiers" /></p>
 </div>

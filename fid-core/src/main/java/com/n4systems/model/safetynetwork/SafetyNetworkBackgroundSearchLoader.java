@@ -8,7 +8,7 @@ import com.n4systems.model.security.SecurityFilter;
 public class SafetyNetworkBackgroundSearchLoader {
 	
 	private final SafetyNetworkSmartSearchLoader networkSmartSearchLoader;
-	private String serialNumber;
+	private String identifier;
 	private String rfidNumber;
 	private String refNumber;
 	
@@ -20,7 +20,7 @@ public class SafetyNetworkBackgroundSearchLoader {
 		Asset asset = searchByRfidNumber();
 		
 		if (asset == null) {
-			asset = searchBySerialNumber();
+			asset = searchByIdentifier();
 		}
 		
 		if (asset == null) {
@@ -39,10 +39,10 @@ public class SafetyNetworkBackgroundSearchLoader {
 		return asset;
 	}
 	
-	private Asset searchBySerialNumber() {
+	private Asset searchByIdentifier() {
 		Asset asset = null;
-		if (serialNumber != null && serialNumber.length() > 0) {
-			List<Asset> assets = networkSmartSearchLoader.useOnlySerialNumber().setSearchText(serialNumber).load();
+		if (identifier != null && identifier.length() > 0) {
+			List<Asset> assets = networkSmartSearchLoader.useOnlyIdentifier().setSearchText(identifier).load();
 			asset = pullAssetFromList(assets);
 		}
 		return asset;
@@ -72,8 +72,8 @@ public class SafetyNetworkBackgroundSearchLoader {
 		return this;
 	}
 
-	public SafetyNetworkBackgroundSearchLoader setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
+	public SafetyNetworkBackgroundSearchLoader setIdentifier(String identifier) {
+		this.identifier = identifier;
 		return this;
 	}
 

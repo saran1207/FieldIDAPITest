@@ -19,8 +19,8 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
 
     public abstract void setDisplayColumns(SearchDisplayColumns displayColumns);
     
-    public void enterSerialNumber(String serialNumber) {
-        selenium.type("//input[@id='reportForm_criteria_serialNumber']", serialNumber);
+    public void enterIdentifier(String identifier) {
+        selenium.type("//input[@id='reportForm_criteria_identifier']", identifier);
     }
 
     public T clickRunSearchButton() {
@@ -49,8 +49,8 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
 		if (criteria.getRFIDNumber() != null) {
 			selenium.type("//input[@id='reportForm_criteria_rfidNumber']", criteria.getRFIDNumber());
 		}
-		if (criteria.getSerialNumber() != null) {
-			selenium.type("//input[@id='reportForm_criteria_serialNumber']", criteria.getSerialNumber());
+		if (criteria.getIdentifier() != null) {
+			selenium.type("//input[@id='reportForm_criteria_identifier']", criteria.getIdentifier());
 		}
 		if (criteria.getOrderNumber() != null) {
 			selenium.type("//input[@id='reportForm_criteria_orderNumber']", criteria.getOrderNumber());
@@ -98,10 +98,10 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
 		return collectTableHeaders();
 	}
 	
-	public abstract List<String> getResultSerialNumbers();
+	public abstract List<String> getResultIdentifiers();
 
-	public AssetPage clickResultSerialNumber(String serialNumber) {
-		selenium.click("//a[text()='" +serialNumber+"']");
+	public AssetPage clickResultIdentifier(String identifier) {
+		selenium.click("//a[text()='" +identifier+"']");
 		return new AssetPage(selenium);
 	}
 

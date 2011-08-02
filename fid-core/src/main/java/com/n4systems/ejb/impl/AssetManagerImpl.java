@@ -84,7 +84,7 @@ public class AssetManagerImpl implements AssetManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Asset> findAssetByIdentifiers(SecurityFilter filter, String searchValue, AssetType assetType) {
-		String queryString = "FROM Asset p WHERE ( UPPER( p.serialNumber ) = :searchValue OR UPPER( p.rfidNumber ) = :searchValue OR UPPER(p.customerRefNumber) = :searchValue ) AND " + filter.produceWhereClause(Asset.class, "p");
+		String queryString = "FROM Asset p WHERE ( UPPER( p.identifier ) = :searchValue OR UPPER( p.rfidNumber ) = :searchValue OR UPPER(p.customerRefNumber) = :searchValue ) AND " + filter.produceWhereClause(Asset.class, "p");
 
 		if (assetType != null) {
 			queryString += " AND p.type = :assetType ";
@@ -148,13 +148,13 @@ public class AssetManagerImpl implements AssetManager {
 	 * Notice that the customer id passed in is not the "security filter"
 	 * customer id
 	 */
-	public Asset findAssetBySerialNumber(String rawSerialNumber, Long tenantId, Long customerId) throws NonUniqueAssetException {
+	public Asset findAssetByIdentifier(String identifier, Long tenantId, Long customerId) throws NonUniqueAssetException {
 		Asset asset = null;
 		SecurityFilter filter = new TenantOnlySecurityFilter(tenantId);
 
 		try {
 			QueryBuilder<Asset> qBuilder = basicAssetQuery(filter);
-			qBuilder.addWhere(Comparator.EQ, "serialNumber", "serialNumber", rawSerialNumber.trim(), WhereParameter.IGNORE_CASE);
+			qBuilder.addWhere(Comparator.EQ, "identifier", "identifier", identifier.trim(), WhereParameter.IGNORE_CASE);
 			
 			if (customerId == null) {
 				qBuilder.addWhere(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "owner.customerOrg"));
@@ -164,8 +164,8 @@ public class AssetManagerImpl implements AssetManager {
 
 			
 			int firstPage = 0;
-			int pageSizeToFindIfThisIsANonUniqueSerialNumber = 2;
-			List<Asset> assets = persistenceManager.findAll(qBuilder, firstPage, pageSizeToFindIfThisIsANonUniqueSerialNumber);
+			int pageSizeToFindIfThisIsANonUniqueIdentifier = 2;
+			List<Asset> assets = persistenceManager.findAll(qBuilder, firstPage, pageSizeToFindIfThisIsANonUniqueIdentifier);
 			switch (assets.size()) {
 				case 0: 
 					asset = null;
@@ -174,7 +174,7 @@ public class AssetManagerImpl implements AssetManager {
 					asset = assets.get(0);
 					break;
 				default:
-					throw new NonUniqueAssetException("there is more than one asset with the same customer and serial number [" + rawSerialNumber + "]");
+					throw new NonUniqueAssetException("there is more than one asset with the same customer and identifier [" + identifier + "]");
 			} 
 		} catch (InvalidQueryException e) {
 			logger.error("query was wrong", e);
@@ -316,7 +316,7 @@ public class AssetManagerImpl implements AssetManager {
 		}
 
 		asset.archiveEntity();
-		asset.archiveSerialNumber();
+		asset.archiveIdentifier();
 
 		archiveEvents(asset, archivedBy);
 		archiveSchedules(asset, archivedBy);

@@ -41,7 +41,7 @@ abstract public class LegacyRobertsParser implements RobertsParser {
 		fileDataContainer.setFileType(ProofTestType.ROBERTS);
 		fileDataContainer.setCustomerName(lines.get(CUSTOMER_LINE));
 		fileDataContainer.setComments(lines.get(COMMENT_LINE));
-		fileDataContainer.setSerialNumbers(serialConverter.toCSV(lines.get(SERIAL_NUMBER_LINE)));
+		fileDataContainer.setIdentifiers(serialConverter.toCSV(lines.get(SERIAL_NUMBER_LINE)));
 		fileDataContainer.setDatePerformed(parseDate(lines.get(DATE_PERFORMED_LINE)));
 	}
 

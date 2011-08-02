@@ -38,12 +38,12 @@ public class SafetyNetworkRegisterAssetForm extends FieldIDPage{
 		return new AssetPage(selenium);
 	}
 
-	public void enterSerialNumber(String value) {
-		selenium.type("//input[contains(@id, 'serialNumber')]", value);
+	public void enterIdentifier(String value) {
+		selenium.type("//input[contains(@id, 'identifier')]", value);
 	}
 
-	public String getSerialNumber() {
-		return selenium.getValue("//input[contains(@id, 'serialNumber')]");
+	public String getIdentifier() {
+		return selenium.getValue("//input[contains(@id, 'identifier')]");
 	}
 	
 	public void openDetailedForm() {

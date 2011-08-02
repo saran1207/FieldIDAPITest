@@ -82,7 +82,7 @@ public class SearchService extends FieldIdPersistenceService {
 
     private void addSearchTerms(EventReportCriteriaModel criteriaModel, List<SearchTermDefiner> searchTerms) {
         addWildcardOrStringTerm(searchTerms, "asset.rfidNumber", criteriaModel.getRfidNumber());
-        addWildcardOrStringTerm(searchTerms, "asset.serialNumber", criteriaModel.getSerialNumber());
+        addWildcardOrStringTerm(searchTerms, "asset.identifier", criteriaModel.getIdentifier());
         addWildcardOrStringTerm(searchTerms, "asset.shopOrder.order.orderNumber", criteriaModel.getOrderNumber());
         addWildcardOrStringTerm(searchTerms, "asset.purchaseOrder", criteriaModel.getPurchaseOrder());
         addWildcardOrStringTerm(searchTerms, "asset.customerRefNumber", criteriaModel.getReferenceNumber());

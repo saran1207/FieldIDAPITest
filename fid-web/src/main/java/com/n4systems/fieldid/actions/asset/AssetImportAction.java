@@ -88,7 +88,7 @@ public class AssetImportAction extends AbstractImportAction {
 	private Asset createExampleAsset() {
 		Asset example = new Asset();
 		
-		example.setSerialNumber(getText("example.asset.serialNumber"));
+		example.setIdentifier(getText("example.asset.identifier"));
 		example.setRfidNumber(getText("example.asset.rfidNumber"));
 		example.setCustomerRefNumber(getText("example.asset.customerRefNumber"));
 		example.setOwner(getCurrentUser().getOwner());

@@ -23,8 +23,8 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 				selenium.isElementPresent("//div[@class='emptyList']"));
 	}
 
-	public SafetyNetworkVendorPage clickAsset(String serialNumber){
-		selenium.click("//a[.='" + serialNumber + "']");
+	public SafetyNetworkVendorPage clickAsset(String identifier){
+		selenium.click("//a[.='" + identifier + "']");
 		return new SafetyNetworkVendorPage(selenium);
 	}
 	
@@ -35,11 +35,11 @@ public class SafetyNetworkVendorAssetListPage extends FieldIDPage {
 	public List<Asset> getAssetList() {
 		List<Asset> results = new ArrayList<Asset>();
 		
-		List<String> serialNumbers = collectTableValuesUnderCellForCurrentPage(2, 1, "a");
+		List<String> identifiers = collectTableValuesUnderCellForCurrentPage(2, 1, "a");
 		
-		for(String serialNumber: serialNumbers) {
+		for(String identifier : identifiers) {
 			Asset asset = new Asset();
-			asset.setSerialNumber(serialNumber);
+			asset.setIdentifier(identifier);
 			results.add(asset);
 		}
 		

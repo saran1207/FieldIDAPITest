@@ -58,8 +58,8 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
         AssetBuilder builder = scenario.anAsset().ofType(type).purchaseOrder("PO 3");
 
-        builder.withSerialNumber(TEST_SERIAL_NUMBER).build();
-        builder.withSerialNumber(MERGE_SERIAL_NUMBER).build();
+        builder.withIdentifier(TEST_SERIAL_NUMBER).build();
+        builder.withIdentifier(MERGE_SERIAL_NUMBER).build();
     }
 
     @Before
@@ -83,7 +83,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
         assetPage.setAssetForm(asset);
 		assetPage.clickSave();
 
-		assertTrue("Serial unsuccessfully edited", assetPage.getSerialNumber().equals(NEW_SERIAL));
+		assertTrue("Identifier unsuccessfully edited", assetPage.getIdentifier().equals(NEW_SERIAL));
 
 		AssetPage masterAssetPage = page.search(NEW_SERIAL);
 		masterAssetPage.clickEditTab().clickDelete();
@@ -118,7 +118,7 @@ public class AssetEditDeleteTest extends FieldIDTestCase {
 
 	private Asset createNewAssetData() {
 		Asset asset = new Asset();
-		asset.setSerialNumber(NEW_SERIAL);
+		asset.setIdentifier(NEW_SERIAL);
 		asset.setAssetType(NEW_ASSET_TYPE);
 		asset.setPurchaseOrder(NEW_PURCHASE_ORDER);
 		asset.setAssetStatus(NEW_STATUS);

@@ -62,7 +62,7 @@ import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.signup.SignupReferral;
 import com.n4systems.model.ui.seenit.SeenItStorageItem;
 import com.n4systems.model.user.User;
-import rfid.ejb.entity.SerialNumberCounterBean;
+import rfid.ejb.entity.IdentifierCounterBean;
 
 public class TenantCleaner {
 	private static final Logger logger = Logger.getLogger(TenantCleaner.class);
@@ -106,7 +106,7 @@ public class TenantCleaner {
         removeAllForTenants(ActiveColumnMapping.class, tenantIds);
         removeAllForTenants(ColumnLayout.class, tenantIds);
         removeAllForTenants(SetupDataLastModDates.class, tenantIds);
-        removeAllForTenants(SerialNumberCounterBean.class, tenantIds);
+        removeAllForTenants(IdentifierCounterBean.class, tenantIds);
 
 //        removeAllForTenants(TextFieldCriteria.class, tenantIds);
 //        removeAllForTenants(SelectCriteria.class, tenantIds);

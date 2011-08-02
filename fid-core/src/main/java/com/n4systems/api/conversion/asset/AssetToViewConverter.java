@@ -27,7 +27,7 @@ public class AssetToViewConverter implements ModelToViewConverter<Asset, AssetVi
 		
 		PrimaryOrg primaryOrg = model.getOwner().getPrimaryOrg();
 		
-		view.setSerialNumber(model.getSerialNumber());
+		view.setIdentifier(model.getIdentifier());
 		view.setRfidNumber(model.getRfidNumber());
 		view.setCustomerRefNumber(model.getCustomerRefNumber());
 		view.setLocation(model.getAdvancedLocation().getFreeformLocation());

@@ -591,7 +591,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		// update the asset
 		try {
 			getAssetSaveService().setAsset(asset).update();
-			String updateMessage = getText("message.assetupdated.customer", Arrays.asList(asset.getSerialNumber(), asset.getOwner().getName()));
+			String updateMessage = getText("message.assetupdated.customer", Arrays.asList(asset.getIdentifier(), asset.getOwner().getName()));
 			addFlashMessage(updateMessage);
 
 		} catch (Exception e) {
@@ -700,14 +700,14 @@ public class AssetCrud extends UploadAttachmentSupport {
 		return asset;
 	}
 
-	public String getSerialNumber() {
-		return asset.getSerialNumber();
+	public String getIdentifier() {
+		return asset.getIdentifier();
 	}
 
-	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.serialnumberrequired")
-	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.serial_number_length", maxLength = "50")
-	public void setSerialNumber(String serialNumber) {
-		asset.setSerialNumber(serialNumber);
+	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.identifierrequired")
+	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.identifier_length", maxLength = "50")
+	public void setIdentifier(String identifier) {
+		asset.setIdentifier(identifier);
 	}
 
 	public String getRfidNumber() {

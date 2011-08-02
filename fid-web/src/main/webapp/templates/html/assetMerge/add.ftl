@@ -81,7 +81,7 @@ ${action.setPageType('asset', 'edit')!}
 					<th><@s.text name="label.identifieddate"/></th>
 				</tr>
 				<tr>
-					<td>${losingAsset.serialNumber?html}</td>
+					<td>${losingAsset.identifier?html}</td>
 					<td>${(losingAsset.rfidNumber?html)!}</td>
 					<td>${(losingAsset.owner.name?html)!}</td>
 					<td>${losingAsset.type.name?html}</td>
@@ -122,7 +122,7 @@ ${action.setPageType('asset', 'edit')!}
 				function( event ) {
 					event.stop();
 					if ($$('#mergeSmartSearch input').first().value.strip().empty()){
-						alert("You cannot search for a blank serial number or rfid number");
+						alert("You cannot search for a blank identifier or rfid number");
 					}else{
 						var element = Event.element( event ); 
 						element.request( getStandardCallbacks() );
@@ -150,7 +150,7 @@ ${action.setPageType('asset', 'edit')!}
 				</tr>
 				<tr>
 					<td><@s.text name="label.loser"/></td>
-					<td>${losingAsset.serialNumber?html}</td>
+					<td>${losingAsset.identifier?html}</td>
 					<td>${(losingAsset.rfidNumber?html)!}</td>
 					<td>${(losingAsset.owner.name?html)!}</td>
 					<td>${losingAsset.type.name?html}</td>

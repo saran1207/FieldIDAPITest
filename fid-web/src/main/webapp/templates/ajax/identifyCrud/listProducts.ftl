@@ -20,7 +20,7 @@
 									<@s.text name="label.connectorder" />
 								</a>
 							</td>
-							<td>${asset.serialNumber?html}</td>
+							<td>${asset.identifier?html}</td>
 							<td>${(asset.rfidNumber?html)!}</td>
 							<td>${(asset.owner.name?html)!}</td>
 							<td>${asset.type.name?html}</td>

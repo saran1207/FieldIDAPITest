@@ -31,7 +31,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
         scenario.anAsset()
                 .ofType(type)
                 .rfidNumber("123456")
-                .withSerialNumber("10105")
+                .withIdentifier("10105")
                 .build();
     }
 
@@ -66,7 +66,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		assertTrue(page.hasSearchResults());
 		
 		page.expandSearchCriteria();
-		criteria.setSerialNumber("10*");
+		criteria.setIdentifier("10*");
 		page.setSearchCriteria(criteria);
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());		
@@ -119,15 +119,15 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 	}
 	
 	@Test
-	public void search_results_serial_number_link() throws Exception {
+	public void search_results_identifier_link() throws Exception {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
-		String serialNumber = page.getResultSerialNumbers().get(0);
+		String identifier = page.getResultIdentifiers().get(0);
 		
-		AssetPage assetPage = page.clickResultSerialNumber(serialNumber);
-		assertTrue(assetPage.checkHeader(serialNumber));
+		AssetPage assetPage = page.clickResultIdentifier(identifier);
+		assertTrue(assetPage.checkHeader(identifier));
 	}
 	
 	@Test
@@ -136,10 +136,10 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
-		String serialNumber = page.getResultSerialNumbers().get(0);
+		String identifier = page.getResultIdentifiers().get(0);
 		
-		AssetPage assetPage = page.clickResultInfo(serialNumber);
-		assertTrue(assetPage.checkHeader(serialNumber));
+		AssetPage assetPage = page.clickResultInfo(identifier);
+		assertTrue(assetPage.checkHeader(identifier));
 	}
 	
 	@Test
@@ -152,9 +152,9 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		assertTrue(page.hasSearchResults());
 		assertEquals(getDefaultColumnHeaders(), page.getResultColumnHeaders());
 		
-		String serialNumber = page.getResultSerialNumbers().get(0);
+		String identifier = page.getResultIdentifiers().get(0);
 
-        page.clickResultStartEvent(serialNumber);
+        page.clickResultStartEvent(identifier);
     }
 	
 	private List<String> getDefaultColumnHeaders() {

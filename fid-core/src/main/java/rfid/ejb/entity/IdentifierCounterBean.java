@@ -12,7 +12,7 @@ import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 
 @Entity
 @Table(name = "serialnumbercounter")
-public class SerialNumberCounterBean extends LegacyBeanTenant implements Saveable {
+public class IdentifierCounterBean extends LegacyBeanTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long counter;

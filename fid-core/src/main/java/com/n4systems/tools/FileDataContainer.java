@@ -1,6 +1,7 @@
 package com.n4systems.tools;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,7 @@ public class FileDataContainer {
 	
 	private String fileName;
 	
-	private List<String> serialNumbers = new ArrayList<String>();
+	private List<String> identifiers = new ArrayList<String>();
 	private String peakLoad;
 	private Date datePerformed;
 	private String testDuration;
@@ -71,33 +72,20 @@ public class FileDataContainer {
 		this.chartData = chartData;
 	}
 
-	public List<String> getSerialNumbers() {
-		return serialNumbers;
+	public List<String> getIdentifiers() {
+		return identifiers;
 	}
 
-	public void setSerialNumbers(List<String> serialNumbers) {
-		this.serialNumbers = serialNumbers;
+	public void setIdentifiers(List<String> identifiers) {
+		this.identifiers = identifiers;
 	}
 
-	public void setSerialNumbers(String serialNumbers) {
-		this.serialNumbers = new ArrayList<String>();
+	public void setIdentifiers(String identifiersString) {
+		this.identifiers = new ArrayList<String>();
 		
-		if(serialNumbers != null) {
-			for(String serialNumber: serialNumbers.split(",")) {
-				this.serialNumbers.add(serialNumber);
-			}
+		if(identifiersString != null) {
+            this.identifiers.addAll(Arrays.asList(identifiersString.split(",")));
 		}
-	}
-	
-	public boolean hasSerialNumber(String serialNo) {
-		boolean found = false;
-		for(String serialNumber: serialNumbers) {
-			if(serialNumber.equalsIgnoreCase(serialNo)) {
-				found = true;
-				break;
-			}
-		}
-		return found;
 	}
 	
 	public String getPeakLoad() {

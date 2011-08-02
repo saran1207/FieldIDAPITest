@@ -38,7 +38,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	private PrimaryOrg primaryOrg;
 
 	private String dateFormat;
-    private String serialNumberFormat;
+    private String identifierFormat;
 
 	private String webSite;
 	private File uploadedImage;
@@ -81,7 +81,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	public String doEdit() {
 		dateFormat = primaryOrg.getDateFormat();
 		assignedTo = primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
-        serialNumberFormat = primaryOrg.getIdentifierFormat();
+        identifierFormat = primaryOrg.getIdentifierFormat();
 		proofTestIntegration = primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
 		manufacturerCertificate = primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
 		gpsCapture = getTenant().getSettings().isGpsCapture();
@@ -186,7 +186,7 @@ public class SystemSettingsCrud extends AbstractCrud {
 	}
 
     private void updateSerialNumberFormat() {
-        getPrimaryOrg().setIdentifierFormat(serialNumberFormat);
+        getPrimaryOrg().setIdentifierFormat(identifierFormat);
     }
 
 	private void updateBranding() throws Exception {
@@ -318,12 +318,12 @@ public class SystemSettingsCrud extends AbstractCrud {
 		this.proofTestIntegration = proofTestIntegration;
 	}
 
-    public String getSerialNumberFormat() {
-        return serialNumberFormat;
+    public String getIdentifierFormat() {
+        return identifierFormat;
     }
 
-    public void setSerialNumberFormat(String serialNumberFormat) {
-        this.serialNumberFormat = serialNumberFormat;
+    public void setIdentifierFormat(String identifierFormat) {
+        this.identifierFormat = identifierFormat;
     }
 
 	public boolean isManufacturerCertificate() {

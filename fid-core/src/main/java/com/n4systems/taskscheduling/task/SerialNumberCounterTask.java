@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import rfid.ejb.entity.SerialNumberCounterBean;
+import rfid.ejb.entity.IdentifierCounterBean;
 
-import com.n4systems.ejb.legacy.SerialNumberCounter;
+import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 
@@ -25,28 +25,28 @@ public class SerialNumberCounterTask extends ScheduledTask {
 
 	@Override
     protected void runTask() throws Exception {
-		Collection<SerialNumberCounterBean> serialNumberCounters = null;
-		SerialNumberCounter serialNumberCounterManager = ServiceLocator.getSerialNumberCounter();
+		Collection<IdentifierCounterBean> identifierCounters = null;
+		IdentifierCounter identifierCounterManager = ServiceLocator.getIdentifierCounter();
 
-		serialNumberCounters = serialNumberCounterManager.getSerialNumberCounters();
+		identifierCounters = identifierCounterManager.getIdentifierCounters();
 
-		if (serialNumberCounters != null) {
-			for (SerialNumberCounterBean serialNumberCounter : serialNumberCounters) {
+		if (identifierCounters != null) {
+			for (IdentifierCounterBean identifierCounter : identifierCounters) {
 
 				// Check each serial number counter to see if its reset time has
 				// passed.
 				Calendar nextReset = Calendar.getInstance();
-				nextReset.setTime(serialNumberCounter.getLastReset());
-				nextReset.add(Calendar.DATE, serialNumberCounter.getDaysToReset().intValue());
+				nextReset.setTime(identifierCounter.getLastReset());
+				nextReset.add(Calendar.DATE, identifierCounter.getDaysToReset().intValue());
 
 				Calendar today = Calendar.getInstance();
 				if (today.after(nextReset) || today.equals(nextReset)) {
 					// if the reset time has passed or is now, we set the last
 					// reset to when it was
 					// supposed to have been reset. and set the counter to 1
-					serialNumberCounter.setLastReset(new Date(nextReset.getTimeInMillis()));
-					serialNumberCounter.setCounter(1L);
-					serialNumberCounterManager.updateSerialNumberCounter(serialNumberCounter);
+					identifierCounter.setLastReset(new Date(nextReset.getTimeInMillis()));
+					identifierCounter.setCounter(1L);
+					identifierCounterManager.updateIdentifierCounter(identifierCounter);
 				}
 			}
 		}
