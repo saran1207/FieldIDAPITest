@@ -22,30 +22,38 @@ public class WebServiceAuthenticator {
 	}
 	
 	public AuthenticationResponse authenticate() {
-		if (passesMinimumMobileVersion()) {
-			User loginUser = getUserIfValid();
+		if (passesMinimumMobileVersion()) {			
+			authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.NOT_SUCCESSFUL);
+			UserManager userManager = WsServiceLocator.getUser(null);
 			
-			if (loginUser != null) {
-				ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(loginUser.getTenant().getId());	
-				authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.SUCCESSFUL);
-				authenticationResponse.setUser(converter.convert(loginUser));
-				authenticationResponse.setTenant(converter.convert(loginUser.getOwner().getPrimaryOrg()));
-			} else {
-				authenticationResponse.setAuthenticationMessage("Authentication failed");
-				authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.NOT_SUCCESSFUL);
-			}			
+			try {				
+				User loginUser = getUserIfValid(userManager);
+				
+				if (loginUser != null) {
+					ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(loginUser.getTenant().getId());	
+					authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.SUCCESSFUL);
+					authenticationResponse.setUser(converter.convert(loginUser));
+					authenticationResponse.setTenant(converter.convert(loginUser.getOwner().getPrimaryOrg()));
+				} else {
+					authenticationResponse.setAuthenticationMessage("Authentication failed.");
+				}
+			}
+			catch(LoginException e) {
+				if (e.requiresLocking()) { 
+					userManager.lockUser(authenticationRequest.getTenantName(), e.getUserId(), e.getDuration(), e.getMaxAttempts());
+				}
+				
+				authenticationResponse.setAuthenticationMessage("We're sorry, this account is locked.");
+			}
 		} else {
-			authenticationResponse.setAuthenticationMessage("Your mobile version is too old. Please upgrade your mobile.");
-			authenticationResponse.setAuthenticationResult(AuthenticationResponse.AuthenticationResult.NOT_SUCCESSFUL);			
+			authenticationResponse.setAuthenticationMessage("Your mobile version is too old. Please upgrade your mobile.");		
 		}
 		
 		
 		return authenticationResponse;		
 	}
 	
-	private User getUserIfValid() {
-		UserManager userManager = WsServiceLocator.getUser(null);
-		
+	private User getUserIfValid(UserManager userManager) {
 		String tenantName = authenticationRequest.getTenantName();		
 		String userId = authenticationRequest.getUserId();
 		String password = authenticationRequest.getPassword();
@@ -53,15 +61,12 @@ public class WebServiceAuthenticator {
 		
 		User loginUser = null;
 		
-		try {
-			if (authenticationRequest.getLoginType() == AuthenticationRequest.LoginType.USERNAME) {
-				loginUser = userManager.findUserByPw(tenantName, userId, password);
-			} else if (authenticationRequest.getLoginType() == AuthenticationRequest.LoginType.SECURITY) {
-				loginUser = userManager.findUser(tenantName, securityRfid);
-			}
-		} catch (LoginException e) { 
-			loginUser = null;		// couldn't login.  (don't want an exception thrown here...just return null value).
+		if (authenticationRequest.getLoginType() == AuthenticationRequest.LoginType.USERNAME) {
+			loginUser = userManager.findUserByPw(tenantName, userId, password);
+		} else if (authenticationRequest.getLoginType() == AuthenticationRequest.LoginType.SECURITY) {
+			loginUser = userManager.findUser(tenantName, securityRfid);
 		}
+			
 		return loginUser;
 	}
 	
