@@ -741,6 +741,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productTypeDTO.setDtoVersion(ProductTypeServiceDTO.CURRENT_DTO_VERSION);
 		productTypeDTO.setId(assetType.getId());
 		productTypeDTO.setName(assetType.getName());
+		productTypeDTO.setIdentifierFormat(assetType.getIdentifierFormat());
+		productTypeDTO.setIdentifierLabel(assetType.getIdentifierLabel());
+		productTypeDTO.setIdentifierOverridden(assetType.isIdentifierOverridden());
 
 		for (InfoFieldBean infoField : assetType.getInfoFields()) {
 			if (!infoField.isRetired()) {

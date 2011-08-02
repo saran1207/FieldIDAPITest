@@ -12,6 +12,9 @@ public class ProductTypeServiceDTO extends AbstractBaseServiceDTO {
 	private List<Long> subTypes = new ArrayList<Long>();
 	private long groupId;
 	private boolean master;
+	private String identifierFormat;
+	private String identifierLabel;
+	private boolean identifierOverridden;
 
 	public String getName() {
 		return name;
@@ -67,5 +70,29 @@ public class ProductTypeServiceDTO extends AbstractBaseServiceDTO {
 
 	public void setMaster(boolean master) {
 		this.master = master;
+	}
+
+	public void setIdentifierLabel(String identifierLabel) {
+		this.identifierLabel = identifierLabel;
+	}
+
+	public String getIdentifierLabel() {
+		return identifierLabel;
+	}
+
+	public void setIdentifierFormat(String identifierFormat) {
+		this.identifierFormat = identifierFormat;
+	}
+
+	public String getIdentifierFormat() {
+		return identifierFormat;
+	}
+
+	public void setIdentifierOverridden(boolean identifierOverridden) {
+		this.identifierOverridden = identifierOverridden;
+	}
+
+	public boolean isIdentifierOverridden() {
+		return identifierOverridden;
 	}
 }
