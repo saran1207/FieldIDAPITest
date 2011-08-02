@@ -1,5 +1,36 @@
 <#escape x as action.replaceCR(x?html) >
 <head>
+
+<!-- TODO DD : refactor this google maps stuff into common file -->
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<script type="text/javascript">
+
+	var map;
+	var infowindow = new google.maps.InfoWindow();	  
+	var toronto = new google.maps.LatLng(43.636883, -79.424200);
+   
+	function initialize() {
+ 			var myOptions = {
+   	 		zoom: 14,
+  	  		mapTypeId: google.maps.MapTypeId.ROADMAP
+  		};
+  		map = new google.maps.Map(document.getElementById("map"), myOptions);  
+  		map.setCenter(toronto);
+  		infowindow.setPosition(toronto);
+		infowindow.open(map);
+  
+		var marker1 = new google.maps.Marker({
+	    	position: toronto,
+    		map: map
+		});	  
+	}
+	
+	Event.observe(window, 'load', initialize);
+
+</script>
+
 	
 	<script language="Javascript" src="javascript/marryOrder.js"></script>
 	<script language="javascript">
@@ -12,7 +43,8 @@
 	
 	<@n4.includeStyle href="asset" type="page"/>
 </head>
-
+	
+	
 
 ${action.setPageType('asset', 'show')!}
 
@@ -314,5 +346,13 @@ ${action.setPageType('asset', 'show')!}
 			</div>
 		</#if>
 	</#if>
+	
+	<!-- TODO DD : only do this if there is a gps location otherwise show no map? -->
+	<div class="viewSection">
+		<h2><@s.text name="label.gpslocation"/></h2> 
+	</div>
+	
+	<div id="map" class="eventMap"></div>
+	
 </div>
 </#escape>

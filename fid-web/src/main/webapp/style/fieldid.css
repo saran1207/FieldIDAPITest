@@ -2012,6 +2012,7 @@ div.unitOfMeasureName {
 	text-align: center;
 }
 
+
 .naColor p{
 	background-color: #E3E3E3;
 }
@@ -2194,9 +2195,10 @@ th.wicket_orderDown {
 	color:#888;
 }
 
-
-
-
+.eventMap {
+	height: 300px;
+	border: 2px;
+}
 
 #assetSummary .infoSet {
     min-height:20px;
