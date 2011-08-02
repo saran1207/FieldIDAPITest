@@ -60,7 +60,7 @@ ${action.setPageType('event', 'add')!}
 		</div>
 	</div>
 
-	<div id="assetComponents">
+	<div>
 		<#list asset.subAssets as subAsset >
 			<#include "_subAssetEvent.ftl" />
 		</#list>
