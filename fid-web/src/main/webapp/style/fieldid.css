@@ -1038,6 +1038,8 @@ strong.fail {
 .formErrors ul li {
 	list-style-type: square;
 	padding: 5px;
+	vertical-align:middle;
+	margin-left:2em;
 }
 
 #formErrors h2 {
