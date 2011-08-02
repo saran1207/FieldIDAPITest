@@ -39,7 +39,7 @@ public class WebServiceAuthenticator {
 				}
 			}
 			catch(LoginException e) {
-				if (e.requiresLocking()) { 
+				if (e.getLoginFailureInfo().requiresLocking()) { 
 					userManager.lockUser(authenticationRequest.getTenantName(), e.getUserId(), e.getDuration(), e.getMaxAttempts());
 				}
 				
