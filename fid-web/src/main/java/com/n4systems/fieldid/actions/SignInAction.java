@@ -9,6 +9,7 @@ import rfid.web.helper.SessionEulaAcceptance;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.LoginException;
+import com.n4systems.exceptions.LoginFailureInfo;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
@@ -103,23 +104,24 @@ public class SignInAction extends AbstractAction {
 		return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
 	}
 
-	private String getFailedLoginText(LoginException e) {
+	private String getFailedLoginText(LoginFailureInfo info) {
 		String key;
 		String[] args;
-		if (e.isLocked() || e.requiresLocking()) {			
-			key = e.getDuration() !=null ? "error.accountlocked_duration" : "error.accountlocked_contact";
-			args = new String[]{e.getDuration()+""};
+		
+		if (info.isLocked() || info.requiresLocking()) {			
+			key = info.getDuration()!=0 ? "error.accountlocked_duration" : "error.accountlocked_contact";
+			args = new String[]{info.getDuration()+""};
 		} else {		
 			key = "error.loginfailure";
-			args = new String[]{e.getAttempts()+"", e.getMaxAttempts()+""};
+			args = new String[]{info.getAttempts()+"", info.getMaxAttempts()+""};
 		}		
 		return getText(key, args);
 	}
 
 	private void handleFailedLoginAttempt(LoginException e) {
-		addActionError(getFailedLoginText(e));
+		addActionError(getFailedLoginText(e.getLoginFailureInfo()));
 		//if we find out user has tried N of N times, then lets go back to DB and lock him out.
-		if (e.requiresLocking()) { 
+		if (e.getLoginFailureInfo().requiresLocking()) { 
 			userManager.lockUser(getSecurityGuard().getTenantName(), e.getUserId(), e.getDuration(), e.getMaxAttempts());
 		}
 	}

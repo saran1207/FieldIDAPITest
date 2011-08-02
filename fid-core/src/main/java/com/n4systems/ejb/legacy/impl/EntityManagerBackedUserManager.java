@@ -17,6 +17,7 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.DuplicateRfidException;
 import com.n4systems.exceptions.DuplicateUserException;
 import com.n4systems.exceptions.LoginException;
+import com.n4systems.exceptions.LoginFailureInfo;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.mail.MailManagerFactory;
 import com.n4systems.model.UserRequest;
@@ -75,9 +76,11 @@ public class EntityManagerBackedUserManager implements UserManager {
 			
 		User user = builder.getSingleResult(em);
 		
-		if (user==null || !passwordMatches(plainTextPassword,user) || isStillLocked(user)) {
+		if (user==null) { 
+			throw new LoginException(new LoginFailureInfo(userID));
+		} else if (!passwordMatches(plainTextPassword,user) || isStillLocked(user)) {
 			AccountPolicy accountPolicy = getAccountPolicyForUser(user);			
-			throw new LoginException(user, userID, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration());
+			throw new LoginException(new LoginFailureInfo(user, accountPolicy.getMaxAttempts(), accountPolicy.getLockoutDuration()));			
 		} else { 
 			return user;
 		}

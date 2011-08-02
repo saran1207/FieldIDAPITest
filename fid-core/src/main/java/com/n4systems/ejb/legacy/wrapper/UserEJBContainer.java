@@ -124,12 +124,10 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			// KLUDGE : ignore and override accountPolicy to use tenantService.  this entire class will be refactored away when we move to spring. 
-			//  the next generation of UserManager impl will have the tenantSettingsService injected and the parameter will be removed from the IF. 
 			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword);		  
 		} catch (RuntimeException e) {
 			if (e instanceof LoginException) { 
-				loginService.trackFailedLoginAttempts((LoginException)e);
+				e = loginService.trackLoginFailure(((LoginException)e).getLoginFailureInfo());
 			}
 			transactionManager.rollbackTransaction(transaction);
 			throw e;

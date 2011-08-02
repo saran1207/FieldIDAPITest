@@ -1,54 +1,40 @@
 package com.n4systems.exceptions;
 
-import com.n4systems.model.user.User;
 
+@SuppressWarnings("serial")
 public class LoginException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
-	private boolean locked = false;
-	private String userId;
-	private int attempts;
-	private int maxAttempts;
-	private Integer duration;
 	
-	
-	public LoginException(User user, String userId, int maxAttempts, Integer duration) { 
-		super("user " + userId + " failed to log into system");
-		attempts = 1;
-		this.duration = duration==0 ? null : duration;  // recall : 0 treated as no duration. 
-		this.maxAttempts = maxAttempts;
-		this.userId = userId;
-		locked = user==null ? false : user.isLocked();		
-	}
-		
-	public int getAttempts() {
-		return attempts;
-	}
-	
-	public boolean requiresLocking() { 
-		return attempts>=maxAttempts && !isLocked();		// if already locked, skip update.
+	private LoginFailureInfo failureInfo;
+
+	public LoginException(LoginFailureInfo failureInfo) {		
+		super("user " + failureInfo.getUserId() + " failed to log into system");
+		this.failureInfo = failureInfo;
 	}
 	
 	public boolean isLocked() {
-		return locked;
+		return failureInfo.isLocked();
+	}
+		
+	public int getAttempts() {
+		return failureInfo.getAttempts();
 	}
 
 	public String getUserId() {
-		return userId;
+		return failureInfo.getUserId();
 	}
 
 	public Integer getDuration() {
-		return duration;
+		return failureInfo.getDuration();
 	}
 
 	public int getMaxAttempts() {
-		return maxAttempts;
+		return failureInfo.getMaxAttempts();
 	}
 
-	public LoginException merge(LoginException e) {
-		if (e!=null) { 
-			attempts = e.getAttempts()+1;
-		}
-		return this;
+
+	public LoginFailureInfo getLoginFailureInfo() {
+		return failureInfo;
 	}
 
+	
 }
