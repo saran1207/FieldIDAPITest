@@ -15,7 +15,7 @@ class ChangeSerialNumberColumnToIdentifier < ActiveRecord::Migration
     ColumnMapping.update_all( { :name => 'asset_search_identifier' }, { :name => 'asset_search_serialnumber' } )
     ColumnMapping.update_all( { :name => 'schedule_to_job_identifier' }, { :name => 'schedule_to_job_serialnumber' } )
 
-    ColumnMapping.update_all( { :output_handler => 'com.n4systems.fieldid.viewhelpers.handlers.EventIdentifierHandler' }, { :name => 'com.n4systems.fieldid.viewhelpers.handlers.EventSerialNumberHandler' } )
+    ColumnMapping.update_all( { :output_handler => 'com.n4systems.fieldid.viewhelpers.handlers.EventIdentifierHandler' }, { :output_handler => 'com.n4systems.fieldid.viewhelpers.handlers.EventSerialNumberHandler' } )
   end
 
 
@@ -32,7 +32,7 @@ class ChangeSerialNumberColumnToIdentifier < ActiveRecord::Migration
     ColumnMapping.update_all( { :name => 'asset_search_serialnumber' }, { :name => 'asset_search_identifier' } )
     ColumnMapping.update_all( { :name => 'schedule_to_job_serialnumber' }, { :name => 'schedule_to_job_identifier' } )
 
-    ColumnMapping.update_all( { :name => 'com.n4systems.fieldid.viewhelpers.handlers.EventSerialNumberHandler' }, { :output_handler => 'com.n4systems.fieldid.viewhelpers.handlers.EventIdentifierHandler' } )
+    ColumnMapping.update_all( { :output_handler => 'com.n4systems.fieldid.viewhelpers.handlers.EventSerialNumberHandler' }, { :output_handler => 'com.n4systems.fieldid.viewhelpers.handlers.EventIdentifierHandler' } )
   end
 
 end
