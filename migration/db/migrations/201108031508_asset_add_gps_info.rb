@@ -2,7 +2,7 @@ require 'column_mapping'
 
 class AssetAddGpsInfo < ActiveRecord::Migration
 
-  def self.up1
+  def self.up
   	add_column :assets, :latitude, :decimal, :precision=>15, :scale=>10
   	add_column :assets, :longitude, :decimal, :precision=>15, :scale=>10
   end
