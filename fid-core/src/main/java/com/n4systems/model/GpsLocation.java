@@ -7,8 +7,8 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class GpsLocation {
 
-	private BigDecimal latitude = new BigDecimal(333);    
-	private BigDecimal longitude = new BigDecimal(444);
+	private BigDecimal latitude;    
+	private BigDecimal longitude;
 
     public BigDecimal getLatitude() {
 		return latitude;
