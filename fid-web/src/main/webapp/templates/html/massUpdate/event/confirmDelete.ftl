@@ -19,7 +19,7 @@
 		</div>
 	
 		<div class="formAction">
-		<@s.url id="cancelUrl" action="massUpdateEvents" searchId="${searchId}" currentPage="${currentPage}"/>
+		<@s.url id="cancelUrl" action="massUpdateEvents" searchId="${searchId}"/>
 		<@s.url id="deleteUrl" action="massUpdateEventsDelete" searchId="${searchId}"/>
 		
 		<@s.submit key="label.delete" onclick="return redirect('${deleteUrl}');" theme="fieldid" />
