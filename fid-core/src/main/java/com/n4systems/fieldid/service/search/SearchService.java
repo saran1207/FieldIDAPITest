@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.SortTerm;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
@@ -36,7 +38,6 @@ public class SearchService extends FieldIdPersistenceService {
 
 		// now we can add in our sort terms
 		addSortTermsToBuilder(searchBuilder, criteriaModel);
-
 
         SearchResult<Event> searchResult = new SearchResult<Event>();
         searchResult.setTotalResultCount(totalResultCount);
@@ -116,7 +117,19 @@ public class SearchService extends FieldIdPersistenceService {
     }
 
     private void addSortTermsToBuilder(QueryBuilder<?> searchBuilder, EventReportCriteriaModel criteriaModel) {
+        ColumnMappingView sortColumn = criteriaModel.getSortColumn();
+        SortDirection sortDirection = criteriaModel.getSortDirection();
+        if (sortColumn != null) {
+            if (sortColumn.getJoinExpression() == null) {
+                searchBuilder.getOrderArguments().add(new SortTerm(sortColumn.getSortExpression().replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
+            } else {
+                SortTerm sortTerm = new SortTerm(JoinTerm.DEFAULT_SORT_JOIN_ALIAS, sortDirection);
+                sortTerm.setAlwaysDropAlias(true);
+                searchBuilder.getOrderArguments().add(sortTerm.toSortField());
+            }
+        }
 
+        searchBuilder.getOrderArguments().add(new SortTerm("id", sortDirection).toSortField());
     }
 
 	protected void addOwnerFilter(List<QueryFilter> searchFilters, BaseOrg owner) {
@@ -160,6 +173,10 @@ public class SearchService extends FieldIdPersistenceService {
             terms.add(new SimpleTerm<T>(field, value));
         }
     }
+
+	protected void addRequiredLeftJoin(List<JoinTerm> joinTerms, String path, String alias) {
+		joinTerms.add(new JoinTerm(JoinTerm.JoinTermType.LEFT, path, alias, true));
+	}
 
     protected boolean isWildcard(String value) {
         return value.startsWith("*") || value.endsWith("*");
