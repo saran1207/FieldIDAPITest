@@ -1147,11 +1147,11 @@ public class AssetCrud extends UploadAttachmentSupport {
     }
     
     public String getLatitude() { 
-    	return formatBigDecimal(getAsset().getGpsInfo().getLatitude());
+    	return getAsset().getGpsLocation() != null ? formatBigDecimal(getAsset().getGpsLocation().getLatitude()) : "";
     }
 
-    public String getLongitude() { 
-    	return formatBigDecimal(getAsset().getGpsInfo().getLongitude());
+    public String getLongitude() {    	
+    	return getAsset().getGpsLocation() != null ? formatBigDecimal(getAsset().getGpsLocation().getLongitude()) : "";
     }
 
 }

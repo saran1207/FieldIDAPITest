@@ -520,7 +520,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		this.gpsInfo = gpsInfo;
 	}
 
-	public GpsLocation getGpsInfo() {
+	public GpsLocation getGpsLocation() {
 		return gpsInfo;
 	}
 	
