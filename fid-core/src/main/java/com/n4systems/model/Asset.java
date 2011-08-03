@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -112,6 +113,9 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     @Column(insertable=false, updatable=false)
     private Long linked_id;
     
+    @Embedded
+    private GpsInfo gpsInfo = new GpsInfo(); 
+    
     private Location advancedLocation = new Location();
     
     @Transient
@@ -208,6 +212,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		this.rfidNumber = rfidNumber;
 	}
 
+	@Override
 	@AllowSafetyNetworkAccess
 	public String getIdentifier() {
 		return identifier;
@@ -380,6 +385,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		return !subAssets.isEmpty();
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
 		return getIdentifier();
@@ -465,11 +471,13 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		return (last_linked_id != linked_id);
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
 		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
+	@Override
 	public Asset enhance(SecurityLevel level) {
 		Asset enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setType(enhance(type, level));
@@ -489,11 +497,13 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	@Override
 	public void setGlobalId(String globalId) {}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public Location getAdvancedLocation() {
 		return advancedLocation;
 	}
 
+	@Override
 	public void setAdvancedLocation(Location advancedLocation) {
 		this.advancedLocation = advancedLocation;
 	}
@@ -504,6 +514,14 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 
 	public void setNonIntergrationOrderNumber(String nonIntegrationOrderNumber) {
 		this.nonIntergrationOrderNumber = nonIntegrationOrderNumber;
+	}
+
+	public void setGpsInfo(GpsInfo gpsInfo) {
+		this.gpsInfo = gpsInfo;
+	}
+
+	public GpsInfo getGpsInfo() {
+		return gpsInfo;
 	}
 	
 }

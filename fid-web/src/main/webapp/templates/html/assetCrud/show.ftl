@@ -4,31 +4,37 @@
 <!-- TODO DD : refactor this google maps stuff into common file -->
 
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
 <script type="text/javascript">
 
 	var map;
-	var infowindow = new google.maps.InfoWindow();	  
-	var toronto = new google.maps.LatLng(43.636883, -79.424200);
-   
+	   
 	function initialize() {
- 			var myOptions = {
-   	 		zoom: 14,
+		var latitude = ${action.latitude};
+		var longitude = ${action.longitude};
+		var loc = new google.maps.LatLng(latitude, longitude);	
+ 		var myOptions = {
+   	 		zoom: 15,
   	  		mapTypeId: google.maps.MapTypeId.ROADMAP
   		};
-  		map = new google.maps.Map(document.getElementById("map"), myOptions);  
-  		map.setCenter(toronto);
-  		infowindow.setPosition(toronto);
-		infowindow.open(map);
-  
-		var marker1 = new google.maps.Marker({
-	    	position: toronto,
-    		map: map
-		});	  
-	}
-	
-	Event.observe(window, 'load', initialize);
+  		var map = new google.maps.Map(document.getElementById("map"), myOptions);  
+  		map.setCenter(loc);  
+		
+ 		var infowindow = new google.maps.InfoWindow({
+        	maxWidth: 135	    	
+    	});		
+    	
+		var marker = new google.maps.Marker({
+		    position: loc,
+		    map: map,
+		    title: 'Asset Location:  ' + latitude + ',' + longitude 
+		});
 
+		google.maps.event.addListener(marker, 'click', function() {
+  			infowindow.open(map,marker);
+		});			  
+	}
+	Event.observe(window, 'load', initialize);
+	
 </script>
 
 	
@@ -43,7 +49,7 @@
 	
 	<@n4.includeStyle href="asset" type="page"/>
 </head>
-	
+		
 	
 
 ${action.setPageType('asset', 'show')!}
@@ -346,13 +352,13 @@ ${action.setPageType('asset', 'show')!}
 			</div>
 		</#if>
 	</#if>
-	
-	<!-- TODO DD : only do this if there is a gps location otherwise show no map? -->
-	<div class="viewSection">
-		<h2><@s.text name="label.gpslocation"/></h2> 
-	</div>
-	
-	<div id="map" class="eventMap"></div>
+
+	<#if (asset.gpsInfo?exists) >
+		<div class="viewSection">
+			<h2><@s.text name="label.gpslocation"/></h2> 
+		</div>	
+		<div id="map" class="eventMap"></div>
+	</#if>
 	
 </div>
 </#escape>

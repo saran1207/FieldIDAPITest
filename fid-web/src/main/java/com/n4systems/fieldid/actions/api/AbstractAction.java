@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.api;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -275,6 +276,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	
 	public String formatDate(Date date, boolean convertTimeZone) {
 		return formatAnyDate(date, convertTimeZone, false);
+	}
+	
+	public String formatBigDecimal(BigDecimal d) { 
+		return d.toPlainString();
 	}
 	
 	protected String formatAnyDate(Date date, boolean convertTimeZone, boolean showTime) {

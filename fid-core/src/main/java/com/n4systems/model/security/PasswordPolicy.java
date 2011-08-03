@@ -7,6 +7,7 @@ import javax.persistence.Embeddable;
 import com.google.common.base.Objects;
 
 @Embeddable
+@SuppressWarnings("serial")
 public class PasswordPolicy implements Serializable {
 	private int minLength;
 	private int minNumbers;
@@ -81,15 +82,4 @@ public class PasswordPolicy implements Serializable {
 		return Objects.toStringHelper(this).toString();
 	}
 
-	@Deprecated
-	// only for development use until persistence is implemented
-	public static PasswordPolicy makeDummyPasswordPolicy() {
-		PasswordPolicy passwordPolicy = new PasswordPolicy();
-		passwordPolicy.setMinCapitals(1);
-		passwordPolicy.setMinLength(6);
-		passwordPolicy.setMinNumbers(1);
-		passwordPolicy.setMinSymbols(0);
-		passwordPolicy.setUniqueness(3);
-		return passwordPolicy;
-	}
 }
