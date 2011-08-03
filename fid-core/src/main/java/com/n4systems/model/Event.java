@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -91,8 +92,8 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	@OneToOne(mappedBy="event")
 	private EventSchedule schedule;
 	
-//	@Embedded 
-//	private GpsLocation gpsInfo = new GpsLocation();
+	@Embedded 
+	private GpsLocation gpsLocation = new GpsLocation();
 	
 	private AssignedToUpdate assignedTo;
 	
@@ -387,12 +388,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		this.advancedLocation = advancedLocation;
 	}
 
-//	public void setGpsInfo(GpsLocation gpsInfo) {
-//		this.gpsInfo = gpsInfo;
-//	}
-//
-//	public GpsLocation getGpsInfo() {
-//		return gpsInfo;
-//	}
+	public void setGpsLocation(GpsLocation gpsLocation) {
+		this.gpsLocation = gpsLocation;
+	}
+
+	public GpsLocation getGpsLocation() {
+		return gpsLocation;
+	}
 	
 }
