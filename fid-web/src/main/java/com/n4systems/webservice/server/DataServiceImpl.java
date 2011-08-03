@@ -106,6 +106,7 @@ import com.n4systems.webservice.assetdownload.AssetSearchRequest;
 import com.n4systems.webservice.dto.AbstractInspectionServiceDTO;
 import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationRequest.LoginType;
+import com.n4systems.webservice.dto.AssetImageServiceDTO;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.CompletedJobScheduleRequest;
 import com.n4systems.webservice.dto.CustomerOrgListResponse;
@@ -1003,6 +1004,36 @@ public class DataServiceImpl implements DataService {
 			uc.setCurrentUser(null);
 		}
 
+		return response;
+	}
+	
+	@Override
+	public RequestResponse UpdateAssetImage(RequestInformation requestInformation, AssetImageServiceDTO assetImageServiceDTO)
+			throws ServiceException	{
+		RequestResponse response = new RequestResponse();
+		
+		Long tenantId = requestInformation.getTenantId();
+		
+		ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
+		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
+
+		UserContext uc = ThreadLocalUserContext.getInstance();
+		
+		try {
+			User modifiedBy = persistenceManager.find(User.class, assetImageServiceDTO.getModifiedById());
+			uc.setCurrentUser(modifiedBy);
+			
+			AssetByMobileGuidLoader loader = new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(tenantId));
+			Asset asset = loader.setMobileGuid(assetImageServiceDTO.getAssetMobileGuid()).load();
+			
+		} catch(Exception e) {
+			logger.error("failed while processing asset image", e);
+			throw new ServiceException("Problem processing inspection image");
+		}
+		finally {
+			uc.setCurrentUser(null);
+		}
+		
 		return response;
 	}
 

@@ -6,6 +6,7 @@ import com.n4systems.webservice.assetdownload.AssetIdListResponse;
 import com.n4systems.webservice.assetdownload.AssetListResponse;
 import com.n4systems.webservice.assetdownload.AssetRequest;
 import com.n4systems.webservice.assetdownload.AssetSearchRequest;
+import com.n4systems.webservice.dto.AssetImageServiceDTO;
 import com.n4systems.webservice.dto.AuthenticationRequest;
 import com.n4systems.webservice.dto.AuthenticationResponse;
 import com.n4systems.webservice.dto.CompletedJobScheduleRequest;
@@ -58,6 +59,7 @@ public interface DataService {
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException;		
 	public RequestResponse createInspections( RequestInformation requestInformation, List<InspectionServiceDTO> inspectionDTOs ) throws ServiceException, ProductException, InspectionException;
 	public RequestResponse createInspectionImage(RequestInformation requestInformation, InspectionImageServiceDTO inspectionImageServiceDTO ) throws ServiceException, ProductException, InspectionException;
+	public RequestResponse UpdateAssetImage(RequestInformation requestInformation, AssetImageServiceDTO assetImageServiceDTO) throws ServiceException;
 	
 	public FindProductResponse findProduct(FindProductRequestInformation requestInformation) throws ServiceException;
 	public FindInspectionResponse findInspection(FindInspectionRequestInformation requestInformation) throws ServiceException;
