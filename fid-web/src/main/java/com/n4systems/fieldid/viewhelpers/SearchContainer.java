@@ -137,6 +137,7 @@ abstract public class SearchContainer implements BaseSearchDefiner, Serializable
             } else {
                 SortTerm sortTerm = new SortTerm(JoinTerm.DEFAULT_SORT_JOIN_ALIAS, dir);
                 sortTerm.setAlwaysDropAlias(true);
+                sortTerm.setFieldAfterAlias(sortColumn.substring(sortColumn.lastIndexOf(".") + 1));
                 sortTerms.add(sortTerm);
             }
 

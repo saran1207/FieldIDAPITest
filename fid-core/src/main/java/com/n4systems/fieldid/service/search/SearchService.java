@@ -123,8 +123,15 @@ public class SearchService extends FieldIdPersistenceService {
             if (sortColumn.getJoinExpression() == null) {
                 searchBuilder.getOrderArguments().add(new SortTerm(sortColumn.getSortExpression().replaceAll("\\{.*\\}", ""), sortDirection).toSortField());
             } else {
+                String pathExpression = sortColumn.getPathExpression();
+
+                // This is working around an issue caused when we upgraded hibernate versions. It requires us
+                // to join on a column we want to sort by when we're looking at a property Y some entity X, when
+                // X may be null (eg the name of an Event Book, event.book.name). If this join is omitted, events with a null event
+                // book will be excluded from our results.
                 SortTerm sortTerm = new SortTerm(JoinTerm.DEFAULT_SORT_JOIN_ALIAS, sortDirection);
                 sortTerm.setAlwaysDropAlias(true);
+                sortTerm.setFieldAfterAlias(pathExpression.substring(pathExpression.lastIndexOf(".") + 1));
                 searchBuilder.getOrderArguments().add(sortTerm.toSortField());
             }
         }

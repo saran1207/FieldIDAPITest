@@ -8,6 +8,7 @@ public class OrderClause implements ClauseArgument {
 	private String param;
 	private boolean ascending = true;
     private boolean alwaysDropAlias = false;
+    private String fieldAfterAlias;
 	
 	public OrderClause() {}
 	
@@ -43,7 +44,11 @@ public class OrderClause implements ClauseArgument {
 		}
 
         if (alwaysDropAlias) {
-            return table.prepareField(param, true) + " " + direction;
+            String alias = table.prepareField(param, true);
+            if (fieldAfterAlias != null) {
+                alias += "." + fieldAfterAlias;
+            }
+            return alias + " " + direction;
         } else {
             return table.prepareField(param) + " " + direction;
         }
@@ -75,5 +80,9 @@ public class OrderClause implements ClauseArgument {
 
     public void setAlwaysDropAlias(boolean alwaysDropAlias) {
         this.alwaysDropAlias = alwaysDropAlias;
+    }
+
+    public void setFieldAfterAlias(String fieldAfterAlias) {
+        this.fieldAfterAlias = fieldAfterAlias;
     }
 }
