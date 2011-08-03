@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,7 +22,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.n4systems.reporting.EventReportType;
 import org.hibernate.annotations.IndexColumn;
 
 import com.n4systems.model.api.Archivable;
@@ -37,6 +37,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
+import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
 
@@ -90,6 +91,9 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	
 	@OneToOne(mappedBy="event")
 	private EventSchedule schedule;
+	
+	@Embedded 
+	private GpsLocation gpsInfo;
 	
 	private AssignedToUpdate assignedTo;
 	
@@ -151,11 +155,13 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		this.book = book;
 	}
 
+	@Override
 	@AllowSafetyNetworkAccess
 	public BaseOrg getOwner() {
 		return owner;
 	}
 	
+	@Override
 	public void setOwner(BaseOrg owner) {
 		this.owner = owner;
 	}
@@ -178,6 +184,7 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		this.status = status;
 	}
 	
+	@Override
 	public int compareTo( Event event) {
 		if( event == null ) {
 			return -1;
@@ -196,23 +203,28 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		this.subEvents = subEvents;
 	}
 
+	@Override
 	public void activateEntity() {
 		state = EntityState.ACTIVE;
 	}
 
+	@Override
 	public void archiveEntity() {
 		state = EntityState.ARCHIVED;
 	}
 
+	@Override
 	@AllowSafetyNetworkAccess
 	public EntityState getEntityState() {
 		return state;
 	}
 
+	@Override
 	public void retireEntity() {
 		state = EntityState.RETIRED;
 	}
 	
+	@Override
 	public void setRetired( boolean retired ) {
 		if( retired ) {
 			retireEntity();
@@ -221,16 +233,19 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		}
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public boolean isRetired() {
 		return state == EntityState.RETIRED;
 	}
 
+	@Override
 	@AllowSafetyNetworkAccess
 	public boolean isActive() {
 		return state == EntityState.ACTIVE;
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public boolean isArchived() {
 		return state == EntityState.ARCHIVED;
@@ -291,11 +306,13 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		return schedule;
 	}
 	
+	@Override
 	@AllowSafetyNetworkAccess
 	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
 		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
+	@Override
 	public Event enhance(SecurityLevel level) {
 		Event enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		enhanced.setBook(enhance(book, level));
@@ -357,11 +374,13 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		normalizeAssignmentForPersistence();
 	}
 
+	@Override
 	@AllowSafetyNetworkAccess
 	public Location getAdvancedLocation() {
 		return advancedLocation;
 	}
 
+	@Override
 	public void setAdvancedLocation(Location advancedLocation) {
 		if (advancedLocation == null) {
 			advancedLocation = new Location();
@@ -369,5 +388,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		this.advancedLocation = advancedLocation;
 	}
 
+	public void setGpsInfo(GpsLocation gpsInfo) {
+		this.gpsInfo = gpsInfo;
+	}
+
+	public GpsLocation getGpsInfo() {
+		return gpsInfo;
+	}
 	
 }

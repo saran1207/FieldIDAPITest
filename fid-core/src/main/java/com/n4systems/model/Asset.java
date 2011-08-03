@@ -114,7 +114,7 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     private Long linked_id;
     
     @Embedded
-    private GpsInfo gpsInfo = new GpsInfo(); 
+    private GpsLocation gpsInfo = new GpsLocation(); 
     
     private Location advancedLocation = new Location();
     
@@ -516,11 +516,11 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		this.nonIntergrationOrderNumber = nonIntegrationOrderNumber;
 	}
 
-	public void setGpsInfo(GpsInfo gpsInfo) {
+	public void setGpsInfo(GpsLocation gpsInfo) {
 		this.gpsInfo = gpsInfo;
 	}
 
-	public GpsInfo getGpsInfo() {
+	public GpsLocation getGpsInfo() {
 		return gpsInfo;
 	}
 	

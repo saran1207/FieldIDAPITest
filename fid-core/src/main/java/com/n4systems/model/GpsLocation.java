@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class GpsInfo {
+public class GpsLocation {
 
 	private BigDecimal latitude = new BigDecimal(333);    
 	private BigDecimal longitude = new BigDecimal(444);
