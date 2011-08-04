@@ -1169,7 +1169,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			asset.setImageName(null);
 		}
 
-		if (newImage == true && (imageDirectory != null  || !imageDirectory.isEmpty())) {
+		if (newImage == true && (imageDirectory != null  && !imageDirectory.isEmpty())) {
 			File tmpDirectory = PathHandler.getTempRoot();
 			new File(tmpDirectory.getAbsolutePath() + '/' + imageDirectory);
 			asset.setImageName(imageDirectory);
