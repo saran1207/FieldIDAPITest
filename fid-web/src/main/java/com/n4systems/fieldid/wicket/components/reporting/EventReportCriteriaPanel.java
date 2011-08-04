@@ -240,6 +240,7 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             }
             HttpSession session = ((WebRequest) getRequest()).getHttpServletRequest().getSession();
             getModelObject().setReportAlreadyRun(true);
+            getModelObject().getSelection().clear();
             new LegacyReportCriteriaStorage().storeCriteria(getModelObject(), session);
             setResponsePage(new ReportingResultsPage(getModelObject()));
         }

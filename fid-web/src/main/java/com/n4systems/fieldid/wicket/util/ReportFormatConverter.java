@@ -68,6 +68,7 @@ public class ReportFormatConverter {
 
         container.setSortColumn(criteriaModel.getSortColumn() == null ? null : criteriaModel.getSortColumn().getSortExpression());
         container.setSortDirection(criteriaModel.getSortDirection() == null ? null : criteriaModel.getSortDirection().getDisplayName());
+        container.setSortJoinExpression(criteriaModel.getSortColumn() == null ? null : criteriaModel.getSortColumn().getJoinExpression());
 
         return container;
     }
