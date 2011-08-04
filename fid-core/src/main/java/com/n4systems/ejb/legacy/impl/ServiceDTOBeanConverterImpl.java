@@ -236,6 +236,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		for (SubEvent subEvent : event.getSubEvents()) {
 			inspectionDTO.getSubInspections().add(convert(subEvent));
 		}
+		
+		inspectionDTO.setLatitude(event.getGpsLocation().getLatitude().doubleValue());
+		inspectionDTO.setLongitude(event.getGpsLocation().getLongitude().doubleValue());
+		
 		return inspectionDTO;
 
 	}
@@ -286,6 +290,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setModified(asset.getModified());
 		productDTO.setAssignedUserId(asset.getAssignedUser() != null ? asset.getAssignedUser().getId() : 0);
 		productDTO.setImageName(asset.getImageName());
+		productDTO.setLatitude(asset.getGpsLocation().getLatitude().doubleValue());
+		productDTO.setLongitude(asset.getGpsLocation().getLongitude().doubleValue());
 
 		if (asset.getDescription() != null && asset.getDescription().length() >= 255) {
 			productDTO.setDescription(asset.getDescription().substring(0, 255));
@@ -384,7 +390,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			targetAsset.setMobileGUID(productServiceDTO.getMobileGuid());
 		}
 		
-		targetAsset.setImageName(productServiceDTO.getImageName());
+		targetAsset.setImageName(productServiceDTO.getImageName());		
+		targetAsset.getGpsLocation().setLatitude(productServiceDTO.getLatitude());
+		targetAsset.getGpsLocation().setLongitude(productServiceDTO.getLongitude());
 		
 		return targetAsset;
 	}
@@ -529,6 +537,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 		event.setAssetStatus(convertProductStatus(inspectionServiceDTO));
 		event.getAttachments().addAll(convertToFileAttachmentsAndWriteToTemp(inspectionServiceDTO.getImages(), tenant, performedBy));
+		
+		event.getGpsLocation().setLatitude(inspectionServiceDTO.getLatitude());
+		event.getGpsLocation().setLongitude(inspectionServiceDTO.getLongitude());
 
 		return event;
 	}
