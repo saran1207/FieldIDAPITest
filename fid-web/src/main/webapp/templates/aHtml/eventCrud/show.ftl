@@ -10,14 +10,14 @@
 
 <div id="pageContent">
 	<div class="crudForm eventInIframe">
-		<#assign form_action="SHOW" />
-		<#assign inside_iframe=true />
+		<#assign form_action="SHOW"/>
+		<#assign inside_iframe=true/>
 		<#assign current_action="eventInformation"/>
-		<#include "/templates/html/eventCrud/_show.ftl" >
+		<#include "/templates/html/eventCrud/_show.ftl">
 		<#if (event.gpsLocation?exists) >
 			<script type="text/javascript">
 				Event.observe(window, 'load', function() { 
-					initializeGoogleMap('mapCanvas', ${action.latitude}, ${action.longitude})
+					googleMap.initialize('mapCanvas', ${action.latitude}, ${action.longitude})
 				});		
 			</script>						
 			<#include "/templates/html/common/googleMap.ftl">

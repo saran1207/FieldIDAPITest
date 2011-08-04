@@ -1,37 +1,8 @@
 <#escape x as action.replaceCR(x?html) >
 <head>
 
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript">
-
-	var map;
-	   
-	function initialize(id, title) {
-		var latitude = ${action.latitude};
-		var longitude = ${action.longitude};
-		var loc = new google.maps.LatLng(latitude, longitude);	
- 		var myOptions = {
-   	 		zoom: 15,
-  	  		mapTypeId: google.maps.MapTypeId.ROADMAP
-  		};
-  		var map = new google.maps.Map(document.getElementById("map"), myOptions);  
-  		map.setCenter(loc);  
-		
- 		var infowindow = new google.maps.InfoWindow();		
-    	
-		var marker = new google.maps.Marker({
-		    position: loc,
-		    map: map,
-		    title: title 
-		});
-
-	}
-	Event.observe(window, 'load', function() { 
-		initialize('map', 'Asset Location');
-	});
-	
-</script>
-
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<@n4.includeScript src="googleMaps.js"/>
 	
 	<script language="Javascript" src="javascript/marryOrder.js"></script>
 	<script type="text/javascript">
@@ -351,10 +322,14 @@ ${action.setPageType('asset', 'show')!}
 		</#if>
 	</#if>
 
-		<div class="viewSection">
-			<h2><@s.text name="label.gpslocation"/></h2> 
-		</div>	
-		<div id="map" class="eventMap"></div>
-	
+	<#if (asset.gpsLocation?exists) >
+		<script type="text/javascript">
+			Event.observe(window, 'load', function() { 
+				googleMap.initialize('mapCanvas', ${action.latitude}, ${action.longitude})
+			});		
+		</script>						
+		<#include "/templates/html/common/googleMap.ftl">
+	</#if>
+			
 </div>
 </#escape>
