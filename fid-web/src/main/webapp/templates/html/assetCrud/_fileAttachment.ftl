@@ -5,7 +5,6 @@
 			$("imageUpload").remove();
 			$("imageUploaded").show();
 			$("removeImage").value = "false";
-			$("previewImage").hide();
 			$("newImage").value = "true";
 			$("imageDirectory").value = directory;
 		}
