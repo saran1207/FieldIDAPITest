@@ -25,7 +25,7 @@
 </head>
 
 <div class="assetFormGroup">
-	<h2><@s.text name="label.assetimage"/></h2>
+	<h2 style="margin-bottom:0;"><@s.text name="label.assetimage"/></h2>
 	<div class="uploadFileForm">
 		<p><@s.text name="message.asset_image"/></p>
 		<span id="imageUploadField"  >
