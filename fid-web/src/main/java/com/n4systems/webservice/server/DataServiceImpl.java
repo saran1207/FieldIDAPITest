@@ -1026,6 +1026,7 @@ public class DataServiceImpl implements DataService {
 			Asset asset = loader.setMobileGuid(assetImageServiceDTO.getAssetMobileGuid()).load();
 			
 			AssetImageFileSaver assetImageFileSaver = new AssetImageFileSaver(asset);
+			assetImageFileSaver.setData(assetImageServiceDTO.getImage().getImage());
 			assetImageFileSaver.save();
 			
 		} catch(Exception e) {
