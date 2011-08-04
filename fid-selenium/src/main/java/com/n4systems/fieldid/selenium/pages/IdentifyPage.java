@@ -28,7 +28,7 @@ public class IdentifyPage extends FieldIDPage {
 	
 	public boolean checkOnIdentifyPage() {
 		checkForErrorMessages(null);
-		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'Identify')]");
+		return selenium.isElementPresent("//div[@id='contentTitle']/h1[contains(text(),'New Asset')]");
 	}
 	
 	public void selectAssetType(String assetType) {

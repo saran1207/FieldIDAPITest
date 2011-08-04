@@ -87,9 +87,9 @@ public class MinimalTenantDataSetup {
 		user.setRegistered(true);
 		user.setPermissions(Permissions.SYSTEM);
 		user.setUserType(UserType.SYSTEM);
-		user.setUserID(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_USERNAME));
-		user.setHashPassword(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_PASSWORD));
-		user.setEmailAddress(ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_USER_ADDRESS));
+		user.setUserID("n4ystems");
+		user.setHashPassword("6e900ce5b6400c175a30f9f75987c95c4161608a"); //f0rM@t!!
+		user.setEmailAddress("at@dot.com");
 		user.setFirstName("N4");
 		user.setLastName("Admin");
         em.persist(user);
@@ -106,6 +106,7 @@ public class MinimalTenantDataSetup {
         org.setPlansAndPricingAvailable(true);
         org.setDefaultTimeZone("United States:New York - New York");
         org.setModified(new Date());
+        org.setIdentifierLabel("Serial Number");
 
         em.persist(org);
         return org;

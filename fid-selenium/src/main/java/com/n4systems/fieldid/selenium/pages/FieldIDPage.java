@@ -57,7 +57,7 @@ public class FieldIDPage extends WebPage {
 	}
 	
 	public IdentifyPage clickIdentifyLink() {
-		selenium.click("//div[@id='pageNavigation']//a[contains(.,'Identify')]");
+		selenium.click("//div[@id='pageNavigation']//a[contains(.,'New Asset')]");
 		return new IdentifyPage(selenium);
 	}
 
