@@ -278,8 +278,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 		return formatAnyDate(date, convertTimeZone, false);
 	}
 	
-	public String formatBigDecimal(BigDecimal d) { 
-		return d.toPlainString();
+	public String formatBigDecimal(BigDecimal d) {		
+		return d!=null ? d.toPlainString() : "";
 	}
 	
 	protected String formatAnyDate(Date date, boolean convertTimeZone, boolean showTime) {

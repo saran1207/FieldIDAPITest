@@ -1,14 +1,12 @@
 <#escape x as action.replaceCR(x?html) >
 <head>
 
-<!-- TODO DD : refactor this google maps stuff into common file -->
-
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
 
 	var map;
 	   
-	function initialize() {
+	function initialize(id, title) {
 		var latitude = ${action.latitude};
 		var longitude = ${action.longitude};
 		var loc = new google.maps.LatLng(latitude, longitude);	
@@ -19,21 +17,18 @@
   		var map = new google.maps.Map(document.getElementById("map"), myOptions);  
   		map.setCenter(loc);  
 		
- 		var infowindow = new google.maps.InfoWindow({
-        	maxWidth: 135	    	
-    	});		
+ 		var infowindow = new google.maps.InfoWindow();		
     	
 		var marker = new google.maps.Marker({
 		    position: loc,
 		    map: map,
-		    title: 'Asset Location:  ' + latitude + ',' + longitude 
+		    title: title 
 		});
 
-		google.maps.event.addListener(marker, 'click', function() {
-  			infowindow.open(map,marker);
-		});			  
 	}
-	Event.observe(window, 'load', initialize);
+	Event.observe(window, 'load', function() { 
+		initialize('map', 'Asset Location');
+	});
 	
 </script>
 
@@ -356,12 +351,10 @@ ${action.setPageType('asset', 'show')!}
 		</#if>
 	</#if>
 
-	<#if (asset.gpsInfo?exists) >
 		<div class="viewSection">
 			<h2><@s.text name="label.gpslocation"/></h2> 
 		</div>	
 		<div id="map" class="eventMap"></div>
-	</#if>
 	
 </div>
 </#escape>

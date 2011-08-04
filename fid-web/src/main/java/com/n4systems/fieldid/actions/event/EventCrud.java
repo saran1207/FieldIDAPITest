@@ -1124,5 +1124,13 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
     public String getTemporarySignatureFileId(Long criteriaId) {
         return null;
     }
+    
+    public String getLatitude() { 
+    	return getEvent().getGpsLocation() != null ? formatBigDecimal(getEvent().getGpsLocation().getLatitude()) : "";
+    }
+
+    public String getLongitude() { 
+    	return getEvent().getGpsLocation() != null ? formatBigDecimal(getEvent().getGpsLocation().getLongitude()) : "";
+    }
 
 }
