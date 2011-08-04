@@ -1028,6 +1028,7 @@ public class DataServiceImpl implements DataService {
 			AssetImageFileSaver assetImageFileSaver = new AssetImageFileSaver(asset);
 			assetImageFileSaver.setData(assetImageServiceDTO.getImage().getImage());
 			assetImageFileSaver.save();
+			logger.info("Asset Image updated for " + asset.getIdentifier() + " by " + modifiedBy.getDisplayName());
 			
 		} catch(Exception e) {
 			logger.error("failed while processing asset image", e);
