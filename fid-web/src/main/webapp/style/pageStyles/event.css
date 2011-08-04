@@ -146,7 +146,10 @@
 	display: block;
 	float:left;
 	width:750px;
-	word-wrap:break-word;		
+	word-wrap:break-word;
+	font-weight : bold;
+	font-size : 11px;
+	padding-left:4px;		
 }
 
 .youAreOn, .eventSectionIndex {
@@ -158,6 +161,8 @@
 	float:right;
 	font-size: 1em;
 	vertical-align : middle;
+	font-size : 11px;
+	color : #666666;
 }
 
 .eventSectionIndex a img {
