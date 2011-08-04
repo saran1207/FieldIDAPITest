@@ -58,5 +58,7 @@
 </div>
 
 <div class="uploadAction">
-	<a href="#" onclick="addUploadFile('${uploadFileType!}'); return false;" ><@s.text name="label.attachfile"/></a>
+	<script type="text/javascript">
+		addUploadFile('${uploadFileType!}');
+	</script>
 </div>

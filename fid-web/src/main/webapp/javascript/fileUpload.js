@@ -4,6 +4,7 @@ function startFileUpload() {
 
 function completedFileUpload() {
 	activeFileUploads--;
+	addUploadFile('${uploadFileType!}');
 }
 
 var uploadWarning = "";
@@ -18,7 +19,7 @@ function checkForUploads() {
 var removeText = '';
 function fileUploaded( frameId, frameCount, fileName, directory ){
 
-	eval( "var func =  function() { $('"+frameId+"').remove(); };" );
+	eval( "var func =  function() {$('"+frameId+"').remove();addUploadFile('${uploadFileType!}');};" );
 	
 	var div = new Element( 'div', { 'id':frameId, 'class':'fileUpload infoSet'} 
 		).insert( new Element( 'input', { 'type':'hidden', 'name':'uploadedFiles[' + frameCount + '].fileName', value:directory } ) 
@@ -46,12 +47,11 @@ function addUploadFile(type) {
 	}
 	
 	if ($$('.fileUpload').size() >= uploadFileLimit) {
-		alert(tooManyFileMessage);
 		return;
 	}
 	
 	var frameId = 'frame_'+ frameCount;
-	var iframe = '<iframe id="' + frameId +'" class="fileUpload" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="100" ></iframe>';
+	var iframe = '<iframe id="' + frameId +'" class="fileUpload form" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="100" ></iframe>';
 	$('uploadedfiles').insert( { bottom: iframe } );
 	frameCount++;
 }
