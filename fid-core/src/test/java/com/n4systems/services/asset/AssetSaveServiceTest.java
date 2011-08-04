@@ -1,12 +1,15 @@
 package com.n4systems.services.asset;
 
 import static com.n4systems.model.builders.AssetBuilder.*;
+import static com.n4systems.model.builders.TenantBuilder.*;
 import static com.n4systems.model.builders.UserBuilder.*;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Tenant;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,12 +42,14 @@ public class AssetSaveServiceTest {
 	
 	@Test
 	public void should_create_asset_with_history_no_files() {
-		Asset asset = anAsset().generate();
-		Asset expectedAsset = anAsset().build();
+		Tenant tenant = n4();
+		Asset asset = anAsset().forTenant(tenant).generate();
+		Asset expectedAsset = anAsset().forTenant(tenant).build();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
 		try {
-			expect(mockAssetManager.createWithHistory(asset, user)).andReturn(expectedAsset);
+			expect(mockAssetManager.createWithHistory(asset, user)).andReturn(asset);
+			expect(mockAssetManager.update(asset, user)).andReturn(expectedAsset);
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -82,11 +87,14 @@ public class AssetSaveServiceTest {
 	
 	@Test
 	public void should_update_asset_no_files() {
-		Asset asset = anAsset().build();
+		Tenant tenant = n4();
+		Asset asset = anAsset().forTenant(tenant).generate();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
 		try {
 			expect(mockAssetManager.update(asset, user)).andReturn(asset);
+			expect(mockAssetManager.update(asset, user)).andReturn(asset);
+
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -122,11 +130,14 @@ public class AssetSaveServiceTest {
 	
 	@Test
 	public void save_without_history_does_not_create_history() throws SubAssetUniquenessException {
-		Asset asset = anAsset().build();
+	
+		Tenant tenant = n4();
+		Asset asset = anAsset().forTenant(tenant).generate();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
-		
 		expect(mockAssetManager.create(asset, user)).andReturn(asset);
+		expect(mockAssetManager.update(asset, user)).andReturn(asset);
+		
 		replay(mockAssetManager);
 		
 		AssetSaveService sut = new AssetSaveService(mockAssetManager, user);

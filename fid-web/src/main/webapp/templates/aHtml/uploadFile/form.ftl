@@ -5,7 +5,7 @@
 			}
 			.uploadFileForm {
 				padding: 20px 10px 0 10px;
-				background-color: #F0FFFF;
+				background-color: #F5FBFF;
 				height: 80px;
 			}			
 			.uploadMessage{

@@ -46,6 +46,7 @@ public class PathHandler {
 	private static final String ASSET_TYPE_IMAGE_PATH_BASE = ASSET_TYPE_PATH_BASE + "/images";
 	private static final String PROJECT_ATTACHMENT_PATH_BASE = PROJECT_PATH_BASE + "/attachments";
 	private static final String ASSET_ATTACHMENT_PATH_BASE = ASSET_PATH_BASE + "/attachments";
+	private static final String ASSET_IMAGE_PATH_BASE = ASSET_PATH_BASE + "/images";
 	private static final String ATTACHMENT_PATH_BASE = EVENT_PATH_BASE + "/attachments";
 	private static final String PROOF_TEST_PATH_BASE = EVENT_PATH_BASE + "/prooftests";
 	private static final String CHART_IMAGE_PATH_BASE = EVENT_PATH_BASE + "/chartimages";
@@ -418,6 +419,18 @@ public class PathHandler {
 		return mergePaths(ASSET_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
 	
+	public static File getAssetImageFile(Asset asset) {
+		return absolutize(mergePaths(getAssetImageBasePath(asset.getTenant()), getAssetPath(asset), asset.getImageName()));
+	}
+
+	private static String getAssetImageBasePath(Tenant tenant) {
+		return mergePaths(ASSET_IMAGE_PATH_BASE, getTenantPathPart(tenant));
+	}
+	
+	public static File getAssetImageDir(Asset asset) {
+		return absolutize(mergePaths(getAssetImageBasePath(asset.getTenant()), getAssetPath(asset)));
+	}
+
 	public static File getChartImageFile(Event event) {
 		return absolutize(mergePaths(getEventChartImageBasePath(event.getTenant()), getEventPath(event), CHART_FILE_NAME));
 	}

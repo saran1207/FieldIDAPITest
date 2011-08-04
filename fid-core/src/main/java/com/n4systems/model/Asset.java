@@ -123,6 +123,8 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
     
     private String nonIntergrationOrderNumber;
     
+    private String imageName;
+    
 	public Asset() {
 		this.identified = new PlainDate();
 	}
@@ -516,6 +518,15 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		this.nonIntergrationOrderNumber = nonIntegrationOrderNumber;
 	}
 
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+	
+	
 	public void setGpsInfo(GpsLocation gpsInfo) {
 		this.gpsInfo = gpsInfo;
 	}

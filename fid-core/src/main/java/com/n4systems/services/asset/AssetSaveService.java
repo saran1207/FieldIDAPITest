@@ -8,6 +8,8 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetAttachmentListLoader;
 import com.n4systems.model.asset.AssetAttachmentSaver;
+import com.n4systems.model.asset.AssetImageFileSaver;
+
 import org.apache.log4j.Logger;
 
 
@@ -47,6 +49,7 @@ public class AssetSaveService {
 		try {
 			createAsset(withHistory);
 			saveUploadedAttachments();
+			saveAssetImage();
 			return asset;
 		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
@@ -58,6 +61,7 @@ public class AssetSaveService {
 			updateAsset();
 			updateExistingAttachments();
 			saveUploadedAttachments();
+			saveAssetImage();
 			return asset;
 		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
@@ -138,6 +142,19 @@ public class AssetSaveService {
 			}
 		}
 	}
+	
+	private void saveAssetImage() throws SubAssetUniquenessException {
+		AssetImageFileSaver saver = new AssetImageFileSaver(asset);
+		
+		if(asset.getImageName() != null) {
+			saver.save();
+		} else {
+			saver.remove();
+		}
+		asset.setImageName(saver.getImageFileName());
+		updateAsset();
+	}
+
 	
 	public Asset getAsset() {
 		return asset;

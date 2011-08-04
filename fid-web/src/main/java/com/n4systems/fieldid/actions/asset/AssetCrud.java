@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.asset;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,6 +60,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.tools.Pager;
@@ -94,6 +96,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private String search;
 	private LineItem lineItem;
 	private OwnerPicker ownerPicker;
+	
+	private String imageDirectory;
+	private boolean removeImage = false;
+	private boolean newImage = true;
 
 	private AssignedToUserGrouper userGrouper;
 
@@ -189,6 +195,8 @@ public class AssetCrud extends UploadAttachmentSupport {
             assetType = asset.getType();
 			assetWebModel.match(asset);
 			webEventSchedules = new ArrayList<WebEventSchedule>();
+			imageDirectory = asset.getImageName();
+			newImage = asset.getImageName() == null;
 		}
 	}
 
@@ -405,7 +413,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 		try {
 
 			prepareAssetToBeSaved();
-
+			processUploadedImage();
+			
 			// we only set identified by on save
 			asset.setIdentifiedBy(fetchCurrentUser());
 
@@ -501,6 +510,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 		try {
 			prepareAssetToBeSaved();
+			processUploadedImage();
 
 			// on edit, we need to know if the asset type has changed
 			AssetType oldType = assetTypeManager.findAssetTypeForAsset(asset.getId());
@@ -1137,7 +1147,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		else
 			return convertDate(date);
 	}
-
+	
     @Override
     public String getIdentifierLabel() {
         if (assetType != null && assetType.isIdentifierOverridden()) {
@@ -1146,6 +1156,43 @@ public class AssetCrud extends UploadAttachmentSupport {
         return super.getIdentifierLabel();
     }
     
+	public String getImageDirectory() {
+		return imageDirectory;
+	}
+
+	public void setImageDirectory(String imageDirectory) {
+		this.imageDirectory = imageDirectory;
+	}
+
+	private void processUploadedImage() {
+		if (removeImage == true) {
+			asset.setImageName(null);
+		}
+
+		if (newImage == true && (imageDirectory != null  || !imageDirectory.isEmpty())) {
+			File tmpDirectory = PathHandler.getTempRoot();
+			new File(tmpDirectory.getAbsolutePath() + '/' + imageDirectory);
+			asset.setImageName(imageDirectory);
+		}
+	}
+
+	public boolean isRemoveImage() {
+		return removeImage;
+	}
+
+	public void setRemoveImage(boolean removeImage) {
+		this.removeImage = removeImage;
+	}
+	
+	public boolean isNewImage() {
+		return newImage;
+	}
+
+	public void setNewImage(boolean newImage) {
+		this.newImage = newImage;
+	}
+	
+	    
     public String getLatitude() { 
     	return getAsset().getGpsLocation() != null ? formatBigDecimal(getAsset().getGpsLocation().getLatitude()) : "";
     }
@@ -1153,5 +1200,4 @@ public class AssetCrud extends UploadAttachmentSupport {
     public String getLongitude() {    	
     	return getAsset().getGpsLocation() != null ? formatBigDecimal(getAsset().getGpsLocation().getLongitude()) : "";
     }
-
 }

@@ -39,12 +39,11 @@
 
 	
 	<script language="Javascript" src="javascript/marryOrder.js"></script>
-	<script language="javascript">
+	<script type="text/javascript">
 	
 		ordersUrl = "<@s.url action="orders" namespace="/aHtml"  />";
 		marryOrderUrl = "<@s.url action="marryOrder" namespace="/ajax"  />";
 		marryOrderTitle = '<@s.text name="label.connectorder" />';
-		
 	</script>
 	
 	<@n4.includeStyle href="asset" type="page"/>
@@ -57,7 +56,11 @@ ${action.setPageType('asset', 'show')!}
 
 <div class="columnLeft">
 	<div>	
-		<#if asset.type.imageName?exists >
+		<#if asset.imageName?exists >
+			<p>
+				<img src="<@s.url action="downloadAssetImage" namespace="/file" uniqueID="${asset.uniqueID}"  />" alt="<@s.text name="label.assetimage"/>" width="264"/>
+			</p>
+		<#elseif asset.type.imageName?exists >
 			<p>
 				<img src="<@s.url action="downloadAssetTypeImage" namespace="/file" uniqueID="${asset.type.uniqueID}"  />" alt="<@s.text name="label.assetimage"/>" width="264"/>
 			</p>

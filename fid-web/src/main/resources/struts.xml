@@ -181,6 +181,7 @@
 		<action name="downloadPrintOutPreview" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadPrintOutThumb" method="downloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
 		<action name="downloadAssetAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetAttachmentFile" />
+		<action name="downloadAssetImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetImage" />
 		<action name="downloadAssetAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetAttachmentFile" />
 		<action name="downloadExampleCustomerExport" method="download" class="com.n4systems.fieldid.actions.customers.ExampleCustomerExportAction" />
 		<action name="downloadExampleAutoAttributeExport" method="downloadExample" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction" />
