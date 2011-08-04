@@ -285,6 +285,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setOrderNumber(asset.getShopOrder() != null ? asset.getShopOrder().getOrder().getOrderNumber() : "");
 		productDTO.setModified(asset.getModified());
 		productDTO.setAssignedUserId(asset.getAssignedUser() != null ? asset.getAssignedUser().getId() : 0);
+		productDTO.setImageName(asset.getImageName());
 
 		if (asset.getDescription() != null && asset.getDescription().length() >= 255) {
 			productDTO.setDescription(asset.getDescription().substring(0, 255));
@@ -382,6 +383,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		if (targetAsset.isNew()) {
 			targetAsset.setMobileGUID(productServiceDTO.getMobileGuid());
 		}
+		
+		targetAsset.setImageName(productServiceDTO.getImageName());
 		
 		return targetAsset;
 	}

@@ -48,7 +48,10 @@ import com.n4systems.model.LineItem;
 import com.n4systems.model.Project;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
+import com.n4systems.model.asset.AssetImageFileSaver;
 import com.n4systems.model.asset.AssetSubAssetsLoader;
 import com.n4systems.model.asset.SmartSearchLoader;
 import com.n4systems.model.event.EventAttachmentSaver;
@@ -1008,15 +1011,11 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	@Override
-	public RequestResponse UpdateAssetImage(RequestInformation requestInformation, AssetImageServiceDTO assetImageServiceDTO)
+	public RequestResponse updateAssetImage(RequestInformation requestInformation, AssetImageServiceDTO assetImageServiceDTO)
 			throws ServiceException	{
-		RequestResponse response = new RequestResponse();
-		
+		RequestResponse response = new RequestResponse();		
 		Long tenantId = requestInformation.getTenantId();
-		
-		ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(tenantId);
 		PersistenceManager persistenceManager = WsServiceLocator.getPersistenceManager(tenantId);
-
 		UserContext uc = ThreadLocalUserContext.getInstance();
 		
 		try {
@@ -1025,6 +1024,9 @@ public class DataServiceImpl implements DataService {
 			
 			AssetByMobileGuidLoader loader = new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(tenantId));
 			Asset asset = loader.setMobileGuid(assetImageServiceDTO.getAssetMobileGuid()).load();
+			
+			AssetImageFileSaver assetImageFileSaver = new AssetImageFileSaver(asset);
+			assetImageFileSaver.save();
 			
 		} catch(Exception e) {
 			logger.error("failed while processing asset image", e);

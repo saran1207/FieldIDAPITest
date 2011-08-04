@@ -59,7 +59,7 @@ public interface DataService {
 	public RequestResponse updateProductByCustomer(UpdateProductByCustomerRequest request) throws ServiceException;		
 	public RequestResponse createInspections( RequestInformation requestInformation, List<InspectionServiceDTO> inspectionDTOs ) throws ServiceException, ProductException, InspectionException;
 	public RequestResponse createInspectionImage(RequestInformation requestInformation, InspectionImageServiceDTO inspectionImageServiceDTO ) throws ServiceException, ProductException, InspectionException;
-	public RequestResponse UpdateAssetImage(RequestInformation requestInformation, AssetImageServiceDTO assetImageServiceDTO) throws ServiceException;
+	public RequestResponse updateAssetImage(RequestInformation requestInformation, AssetImageServiceDTO assetImageServiceDTO) throws ServiceException;
 	
 	public FindProductResponse findProduct(FindProductRequestInformation requestInformation) throws ServiceException;
 	public FindInspectionResponse findInspection(FindInspectionRequestInformation requestInformation) throws ServiceException;

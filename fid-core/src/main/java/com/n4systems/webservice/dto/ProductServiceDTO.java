@@ -38,9 +38,12 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 	private long organizationId;
 	private long jobSiteId;
 	
-	//GPS Data used from version 1.31
+	// GPS Data used from version 1.31
 	private double longitude;
 	private double latitude;
+	
+	// Profile image
+	private String imageName;
 
 	public String getSerialNumber() {
 		return serialNumber;
@@ -300,5 +303,13 @@ public class ProductServiceDTO extends AbstractBaseDTOWithOwner implements Produ
 
 	public double getLatitude() {
 		return latitude;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	public String getImageName() {
+		return imageName;
 	}
 }

@@ -1,9 +1,13 @@
 package com.n4systems.model.asset;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.n4systems.exceptions.FileAttachmentException;
@@ -16,6 +20,7 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 
 	private final static Logger logger = Logger.getLogger(AssetImageFileSaver.class);
 	private Asset asset;
+	private byte[] data;
 	
 	public AssetImageFileSaver(Asset asset) {
 		this.asset = asset;
@@ -50,8 +55,14 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 			throw new InvalidArgumentException("you must give an asset");
 		}
 		
-		File tmpFile = copyFile();
-		updateFileName(tmpFile);
+		if(data == null) {
+			// Web Site call
+			File tmpFile = copyFile();
+			updateFileName(tmpFile);
+		} else {
+			// Web Service Call
+			writeFile();
+		}
 	}
 	
 	private void updateFileName(File tmpFile) {
@@ -71,7 +82,37 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 		return tmpFile;
 	}
 	
+	// Write to the disk from the data. (During Web Service Call)
+	private void writeFile() throws IOException {
+		File attachmentDir = PathHandler.getAssetImageDir(asset);
+		
+		if(attachmentDir.exists()) {
+			FileUtils.cleanDirectory(attachmentDir);
+		}
+		
+		File imageFile = new File(attachmentDir, asset.getImageName());
+
+		OutputStream out = null;
+		
+		try {
+			out = new BufferedOutputStream(new FileOutputStream(imageFile));
+			out.write(data);
+		} catch(IOException e) {
+			throw new FileAttachmentException("Failed to write attachment data [" + imageFile + "]", e);
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+	}
+	
 	public String getImageFileName() {
 		return asset.getImageName();
+	}
+
+	public void setData(byte[] data) {
+		this.data = data;
+	}
+
+	public byte[] getData() {
+		return data;
 	}
 }
