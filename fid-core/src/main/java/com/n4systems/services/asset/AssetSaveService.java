@@ -49,7 +49,7 @@ public class AssetSaveService {
 		try {
 			createAsset(withHistory);
 			saveUploadedAttachments();
-			saveAssetImage();
+			saveAssetImage(true);
 			return asset;
 		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
@@ -61,7 +61,7 @@ public class AssetSaveService {
 			updateAsset();
 			updateExistingAttachments();
 			saveUploadedAttachments();
-			saveAssetImage();
+			saveAssetImage(false);
 			return asset;
 		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
@@ -143,12 +143,12 @@ public class AssetSaveService {
 		}
 	}
 	
-	private void saveAssetImage() throws SubAssetUniquenessException {
+	private void saveAssetImage(boolean isNew) throws SubAssetUniquenessException {
 		AssetImageFileSaver saver = new AssetImageFileSaver(asset);
 		
 		if(asset.getImageName() != null) {
 			saver.save();
-		} else {
+		} else if(!isNew){
 			saver.remove();
 		}
 		asset.setImageName(saver.getImageFileName());
