@@ -9,6 +9,14 @@ public class GpsLocation {
 
 	private BigDecimal latitude;    
 	private BigDecimal longitude;
+	
+	public GpsLocation(){}
+	
+	public GpsLocation(Number latitude, Number longitude)
+	{
+		setLatitude(latitude);
+		setLongitude(longitude);
+	}
 
     public BigDecimal getLatitude() {
 		return latitude;

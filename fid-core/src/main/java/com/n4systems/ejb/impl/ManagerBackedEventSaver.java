@@ -223,6 +223,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 	
 	private void gpsUpdates(Event event, Asset asset) {
 		if(event.getGpsLocation().isValid()) {
+			logger.info("Valid GPS recieved during inspection. Updating Asset " + asset.getIdentifier());
 			asset.setGpsInfo(event.getGpsLocation());
 		}
 	}

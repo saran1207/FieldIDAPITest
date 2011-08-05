@@ -48,6 +48,7 @@ import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.FileAttachment;
+import com.n4systems.model.GpsLocation;
 import com.n4systems.model.Observation;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.Project;
@@ -390,9 +391,14 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			targetAsset.setMobileGUID(productServiceDTO.getMobileGuid());
 		}
 		
-		targetAsset.setImageName(productServiceDTO.getImageName());		
-		targetAsset.getGpsLocation().setLatitude(productServiceDTO.getLatitude());
-		targetAsset.getGpsLocation().setLongitude(productServiceDTO.getLongitude());
+		targetAsset.setImageName(productServiceDTO.getImageName());
+		
+		GpsLocation gpsLocation = new GpsLocation(productServiceDTO.getLatitude(), productServiceDTO.getLongitude());
+		
+		if(gpsLocation.isValid())
+		{
+			targetAsset.setGpsInfo(gpsLocation);
+		}
 		
 		return targetAsset;
 	}
