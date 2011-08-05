@@ -50,7 +50,7 @@ public class PasswordPolicyPage extends SetupPage {
 				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     target.addComponent(feedbackPanel);
                     tenantSettingsService.updateTenantPasswordPolicySettings((PasswordPolicy) form.getModelObject());
-                    // TODO DD : add update msg here...                    
+                	setResponsePage(SecurityPage.class);                    
                 }
 				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
 					target.addComponent(feedbackPanel);

@@ -45,6 +45,7 @@ public class AccountPolicyPage extends SetupPage {
 				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 					udpateAccountPolicy((AccountPolicy) form.getModelObject());
                     target.addComponent(AccountPolicyForm.this);
+                	setResponsePage(SecurityPage.class);
                 }
 				@Override protected void onError(AjaxRequestTarget target, Form<?> form) {
 					target.addComponent(feedback);
