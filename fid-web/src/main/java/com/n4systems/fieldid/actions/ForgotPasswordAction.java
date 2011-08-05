@@ -71,7 +71,7 @@ public class ForgotPasswordAction extends SignInAction {
 		User user = userManager.findUserToReset(getSecurityGuard().getTenantName(), userName, loginKey);
 
         if (user == null) {
-            return MISSING;	// FIXME DD : what is this supposed to do...i don't see anything in struts config to handle this?
+            return MISSING;	
         }
 
         PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
