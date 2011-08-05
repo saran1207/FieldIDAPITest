@@ -4,9 +4,7 @@
 				text-align: left;
 			}
 			.uploadFileForm {
-				padding-top: 10px;
 				background-color: #F5FBFF;
-				height: 80px;
 			}	
 		</style>
 </head>	
