@@ -194,7 +194,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		ownershipUpdates(event, asset);
 		statusUpdates(event, asset);
 		assignedToUpdates(event, asset);
-		
+		gpsUpdates(event, asset);
 		
 		try {
 			legacyAssetManager.update(asset, modifiedBy);
@@ -219,6 +219,12 @@ public class ManagerBackedEventSaver implements EventSaver {
 	private void ownershipUpdates(Event event, Asset asset) {
 		asset.setOwner(event.getOwner());
 		asset.setAdvancedLocation(event.getAdvancedLocation());
+	}
+	
+	private void gpsUpdates(Event event, Asset asset) {
+		if(event.getGpsLocation().isValid()) {
+			asset.setGpsInfo(event.getGpsLocation());
+		}
 	}
 
 	private void updateScheduleOwnerShip(Event event, Long userId) {

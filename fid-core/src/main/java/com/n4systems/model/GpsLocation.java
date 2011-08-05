@@ -33,6 +33,11 @@ public class GpsLocation {
 	public void setLongitude(Number longitude) { 
 		setLongitude(new BigDecimal(longitude.floatValue()));
 	}
-
 	
+	public boolean isValid() {
+		return latitude != null && 
+			   longitude != null &&
+			   latitude.floatValue() != 0 &&
+			   longitude.floatValue() != 0;
+	}
 }
