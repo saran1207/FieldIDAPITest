@@ -63,6 +63,12 @@ public class ChangePasswordCrud extends AbstractCrud {
 			}
 		}
 		
+        PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
+        if (!passwordHelper.isPasswordUnique(user, newPassword)) {
+        	addActionErrorText("error.password_unique", getPasswordPolicy().getUniqueness()+"" );
+        	return INPUT; 
+        }
+		
 		String status = updatePassword();
 		refreshSessionUser();
 		return status;
