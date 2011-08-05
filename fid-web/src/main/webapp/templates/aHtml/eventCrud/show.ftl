@@ -14,13 +14,5 @@
 		<#assign inside_iframe=true/>
 		<#assign current_action="eventInformation"/>
 		<#include "/templates/html/eventCrud/_show.ftl">
-		<#if (event.gpsLocation?exists) >
-			<script type="text/javascript">
-				Event.observe(window, 'load', function() { 
-					googleMap.initialize('mapCanvas', ${action.latitude}, ${action.longitude})
-				});		
-			</script>						
-			<#include "/templates/html/common/googleMap.ftl">
-		</#if>	
 	</div>
 </div>
