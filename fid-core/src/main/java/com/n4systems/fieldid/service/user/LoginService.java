@@ -30,18 +30,18 @@ public class LoginService extends FieldIdService {
 		return new LoginException(newFailure);
 	}
 
-	@Deprecated // only for testing purposes...extract and override this 
+	public void resetFailedLoginAttempts(String userID) {
+		failedLogins.remove(userID.toLowerCase());
+	}
+ 
+	@Deprecated // only to make unit testing possible via extract/override 
 	TimeUnit getTimeUnits() {
 		return TimeUnit.MINUTES;
 	}
 	
-	@Deprecated // only for testing purposes...extract and override this 
+	@Deprecated // only to make unit testing possible via extract/override
 	long getExpiryTime() {
 		return 30;
 	}
-
-	public void resetFailedLoginAttempts(String userID) {
-		failedLogins.remove(userID);
-	}
- 
+	
 }

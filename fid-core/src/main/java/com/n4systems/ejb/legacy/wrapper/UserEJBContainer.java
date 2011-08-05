@@ -124,7 +124,9 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword);		  
+			User user = createManager(transaction.getEntityManager()).findUserByPw(tenantName, userID, plainTextPassword);
+			loginService.resetFailedLoginAttempts(userID);
+			return user;
 		} catch (RuntimeException e) {
 			if (e instanceof LoginException) { 
 				e = loginService.trackLoginFailure(((LoginException)e).getLoginFailureInfo());

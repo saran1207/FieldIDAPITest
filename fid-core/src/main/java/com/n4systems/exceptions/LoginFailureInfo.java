@@ -13,11 +13,11 @@ public class LoginFailureInfo {
 	private int duration;
 	
 	public LoginFailureInfo(User user, int maxAttempts, int duration) {
-		this(user.getUserID(), maxAttempts, user.isLocked(), duration);
+		this(user.getUserID().toLowerCase(), maxAttempts, user.isLocked(), duration);
 	}
 
 	public LoginFailureInfo(String userId) {
-		this(userId, AccountPolicy.DEFAULT_ACCOUNT_POLICY.getMaxAttempts(), false, AccountPolicy.DEFAULT_ACCOUNT_POLICY.getLockoutDuration());
+		this(userId.toLowerCase(), AccountPolicy.DEFAULT_ACCOUNT_POLICY.getMaxAttempts(), false, AccountPolicy.DEFAULT_ACCOUNT_POLICY.getLockoutDuration());
 	}
 	
 	private LoginFailureInfo(String userId, int maxAttempts, boolean locked, int duration) {
