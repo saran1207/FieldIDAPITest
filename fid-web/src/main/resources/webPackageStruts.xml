@@ -1471,8 +1471,12 @@
 		</action>
 
 		<action name="finalizeReset" method="reset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
-			<interceptor-ref name="brandedFlashPublicStack" />
-			<result name="input" type="freemarker">/templates/html/resetPassword/form.ftl</result>
+			<interceptor-ref name="brandedFlashPublicStack" />			
+			<result name="input" type="redirectAction">
+				<param name="actionName">resetPassword</param>
+				<param name="u">${userName}</param>
+				<param name="k">${loginKey}</param>
+			</result>						
 			<result name="success" type="redirectAction">login</result>
 		</action>
 

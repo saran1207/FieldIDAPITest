@@ -68,17 +68,27 @@ public class ForgotPasswordAction extends SignInAction {
 	}
 
 	public String doReset() {
-        User user = userManager.findAndClearResetKey(getSecurityGuard().getTenantName(), userName, loginKey);
+		User user = userManager.findUserToReset(getSecurityGuard().getTenantName(), userName, loginKey);
 
         if (user == null) {
-            return MISSING;
+            return MISSING;	// FIXME DD : what is this supposed to do...i don't see anything in struts config to handle this?
         }
 
         PasswordHelper passwordHelper = new PasswordHelper(getPasswordPolicy());
         if (!passwordHelper.isPasswordUnique(user, newPassword)) {
-        	addActionErrorText("error.password_unique", getPasswordPolicy().getUniqueness()+"" );
+        	addFlashError(getText("error.password_unique", new String[] {getPasswordPolicy().getUniqueness()+""}) );
         	return INPUT; 
         }
+        
+		if (!passwordHelper.isValidPassword(newPassword)) {
+			PasswordPolicy policy = passwordHelper.getPasswordPolicy();
+			addFlashError(getText("error.password_policy", new String[] { 
+					policy.getMinLength()+"",
+					policy.getMinCapitals()+"",
+					policy.getMinNumbers()+"",
+					policy.getMinSymbols()+""} ));
+			return INPUT;
+		}
         
         userManager.updatePassword( user.getId(), newPassword, getPasswordPolicy());
         addFlashMessageText("message.passwordresetsuccess");
