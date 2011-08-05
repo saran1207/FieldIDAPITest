@@ -394,14 +394,10 @@ public class EntityManagerBackedUserManager implements UserManager {
 	}
 
 	@Override
-	public User findAndClearResetKey(String tenantName, String userName, String resetPasswordKey) {
+	public User findUserToReset(String tenantName, String userName, String resetPasswordKey) {
 		if (resetPasswordKey != null) {
 			User user = findUserBeanByID(tenantName, userName);
-            if (resetKeyValid(resetPasswordKey, user)) {
-                user.clearResetPasswordKey();
-                em.merge(user);
-                return user;
-            }
+            return resetKeyValid(resetPasswordKey, user) ? user : null;
 		}
 		return null;
 	}

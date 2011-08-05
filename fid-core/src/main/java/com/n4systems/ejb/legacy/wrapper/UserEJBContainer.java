@@ -171,11 +171,11 @@ public class UserEJBContainer extends EJBTransactionEmulator<UserManager> implem
 
 
 	@Override
-	public User findAndClearResetKey(String tenantName, String userName, String resetPasswordKey) {
+	public User findUserToReset(String tenantName, String userName, String resetPasswordKey) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
-			return createManager(transaction.getEntityManager()).findAndClearResetKey(tenantName, userName, resetPasswordKey);
+			return createManager(transaction.getEntityManager()).findUserToReset(tenantName, userName, resetPasswordKey);
 
 		} catch (RuntimeException e) {
 			transactionManager.rollbackTransaction(transaction);
