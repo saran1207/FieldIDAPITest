@@ -238,11 +238,18 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			inspectionDTO.getSubInspections().add(convert(subEvent));
 		}
 		
-		inspectionDTO.setLatitude(event.getGpsLocation().getLatitude().doubleValue());
-		inspectionDTO.setLongitude(event.getGpsLocation().getLongitude().doubleValue());
+		convertGpsLocationForEvent(inspectionDTO, event);
 		
 		return inspectionDTO;
 
+	}
+	
+	private void convertGpsLocationForEvent(InspectionServiceDTO inspectionDTO, Event event) {
+		GpsLocation gpsLocation = event.getGpsLocation();
+		if(gpsLocation != null && gpsLocation.isValid()) {
+			inspectionDTO.setLatitude(event.getGpsLocation().getLatitude().doubleValue());
+			inspectionDTO.setLongitude(event.getGpsLocation().getLongitude().doubleValue());
+		}
 	}
 
 	public SubInspectionServiceDTO convert(SubEvent subEvent) {
@@ -290,9 +297,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		productDTO.setOrderNumber(asset.getShopOrder() != null ? asset.getShopOrder().getOrder().getOrderNumber() : "");
 		productDTO.setModified(asset.getModified());
 		productDTO.setAssignedUserId(asset.getAssignedUser() != null ? asset.getAssignedUser().getId() : 0);
-		productDTO.setImageName(asset.getImageName());
-		productDTO.setLatitude(asset.getGpsLocation().getLatitude().doubleValue());
-		productDTO.setLongitude(asset.getGpsLocation().getLongitude().doubleValue());
+		productDTO.setImageName(asset.getImageName());		
 
 		if (asset.getDescription() != null && asset.getDescription().length() >= 255) {
 			productDTO.setDescription(asset.getDescription().substring(0, 255));
@@ -324,10 +329,20 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		}
 
 		convertLocationToDTO(productDTO, asset);
+		convertGpsLocationForAsset(productDTO, asset);
 
 		return productDTO;
 	}
 	
+	private void convertGpsLocationForAsset(ProductServiceDTO productDTO, Asset asset) {
+		GpsLocation gpsLocation = asset.getGpsLocation();
+		if(gpsLocation != null && gpsLocation.isValid())
+		{
+			productDTO.setLatitude(asset.getGpsLocation().getLatitude().doubleValue());
+			productDTO.setLongitude(asset.getGpsLocation().getLongitude().doubleValue());
+		}
+	}
+
 	private void convertLocationToDTO(LocationServiceDTO locationDTO, LocationContainer locationContainer) {
 		Location location = locationContainer.getAdvancedLocation();
 		
@@ -397,7 +412,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		if(gpsLocation.isValid())
 		{
-			targetAsset.setGpsInfo(gpsLocation);
+			targetAsset.setGpsLocation(gpsLocation);
 		}
 		
 		return targetAsset;

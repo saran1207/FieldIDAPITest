@@ -387,13 +387,12 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		}
 		this.advancedLocation = advancedLocation;
 	}
+	
+	public GpsLocation getGpsLocation() {
+		return gpsLocation;
+	}
 
 	public void setGpsLocation(GpsLocation gpsLocation) {
 		this.gpsLocation = gpsLocation;
 	}
-
-	public GpsLocation getGpsLocation() {
-		return gpsLocation;
-	}
-	
 }
