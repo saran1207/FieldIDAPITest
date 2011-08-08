@@ -16,49 +16,43 @@
 			</div>
 
             <h2><wicket:message key="label.extendedOptions_heading"/></h2>
-			<div>
-				<span>
+			<div class="extendedOption">
+				<label>
 					<input type="checkbox" wicket:id="assignedTo" />
-				</span>
-				<label>
-					<wicket:message key="label.enable_asset_assignment"/>
+					<span><wicket:message key="label.enable_asset_assignment"/></span>
 				</label>
+				<div><wicket:message key="label.enable_asset_assignment_desc"/></div>
 			</div>
-			<wicket:message key="label.enable_asset_assignment_desc"/>
 
-			<div>
-				<span>
+			<div class="extendedOption">
+				<label>
 					<input type="checkbox" wicket:id="proofTestIntegration" />
-				</span>
-				<label>
-					<wicket:message key="label.enable_proof_test_integration"/>
+					<span><wicket:message key="label.enable_proof_test_integration"/></span>
 				</label>
+				<wicket:message key="label.enable_proof_test_integration_desc"/>				
 			</div>
-			<wicket:message key="label.enable_proof_test_integration_desc"/>
 
-			<div>
-				<span>
+			<div class="extendedOption">
+				<label>
 					<input type="checkbox" wicket:id="manufacturerCertificate"/>
-				</span>
-				<label>
-					<wicket:message key="label.enable_manufacturer_certificate"/>
+					<span><wicket:message key="label.enable_manufacturer_certificate"/></span>
 				</label>
+				<wicket:message key="label.manufacturer_certificate_field_description"/>
+				<br>
 			</div>
-			<wicket:message key="label.manufacturer_certificate_field_description"/>
-
 
             <h2><wicket:message key="label.captureGPS_heading"/></h2>
-            <div>            
+            <div class="checkboxWithImageAndText">            
 	            <img wicket:id="gpsLogo"/>
 	            <span><wicket:message key="label.captureGPS"/></span>
-				<input wicket:id="gpsCapture" type="checkbox"/>
 				<label for="gpsCapture">
 					<wicket:message key="label.gps_capture" />
+					<input wicket:id="gpsCapture" type="checkbox"/>
 				</label>
 			</div>
 
             <h2><wicket:message key="label.identifierFormat_heading"/></h2>
-            <div class="infoSet">
+            <div  class="extendedOption">
                 <label for="identifierLabel">
                     <wicket:message key="label.label" />
                 </label>
@@ -67,7 +61,7 @@
                 </span>
             </div>
 
-            <div class="infoSet">
+            <div  class="extendedOption">
                 <label for="identifierFormat">
                     <wicket:message key="label.auto_generated_format" />
                 </label>

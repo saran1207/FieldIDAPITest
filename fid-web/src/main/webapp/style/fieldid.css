@@ -2203,3 +2203,66 @@ th.wicket_orderDown {
 #assetSummary .infoSet {
     min-height:20px;
 }
+
+.extendedOption {
+	display : block;
+	overflow: hidden;
+	margin: 5px 5px 5px 5px;
+	border-bottom: 1px solid #e2e2e2;	
+	padding-bottom : 10px;
+	padding-top: 10px;
+}
+
+.extendedOption input {
+	float:left;
+	width:30px;
+	vertical-align: middle;	
+}
+
+.extendedOption label {
+	float : left;
+	display : block;
+	vertical-align: middle;
+}
+
+.extendedOption hr {
+	height: 1px;
+  	border-top: 1px solid #F3F3F3;
+  	margin-top: 13px;
+  	margin-bottom: 13px;
+  	margin-left: 10px;
+  	margin-right: 10px;
+}
+
+.extendedOption label span {
+	float : left;
+	display : block;
+	font-weight : bold;
+	text-align : left;
+	padding-right: 10px;
+	vertical-align: middle;	
+}
+
+.checkboxWithImageAndText img { 
+	float : left;
+	padding : 10px 10px 10px 10px;
+}
+
+.checkboxWithImageAndText span { 
+	padding-top : 5px;
+	color : #777;
+}
+
+.checkboxWithImageAndText label {
+	display : block;
+	padding-top: 11px;
+	padding-bottom: 11px;
+	vertical-align : middle;
+	line-height : 18px;
+} 
+
+.checkboxWithImageAndText label input {
+	float: left;
+	margin-right: 8px;
+} 
+
