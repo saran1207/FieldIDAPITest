@@ -1,5 +1,10 @@
 package com.n4systems.fieldid.service.tenant;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.AssetType;
@@ -7,10 +12,6 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.tenant.SystemSettings;
 import com.n4systems.model.tenant.TenantSettings;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 public class SystemSettingsService extends FieldIdPersistenceService {
 
@@ -37,7 +38,12 @@ public class SystemSettingsService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public void saveSystemSettings(SystemSettings settings, List<AssetType> assetTypes) {
+    public void saveSystemSettings(List<AssetType> assetTypes) {
+        persistenceService.update(assetTypes);
+    }
+
+    @Transactional
+    public void saveSystemSettings(SystemSettings settings) {
         tenantSettingsService.updateGpsCapture(settings.isGpsCapture());
 
         PrimaryOrg primaryOrg = getPrimaryOrg();
@@ -53,7 +59,6 @@ public class SystemSettingsService extends FieldIdPersistenceService {
         extendedFeatureService.setExtendedFeatureEnabled(tenantId, ExtendedFeature.ProofTestIntegration, settings.isProofTestIntegration());
 
         persistenceService.update(primaryOrg);
-        persistenceService.update(assetTypes);
     }
 
     private PrimaryOrg getPrimaryOrg() {
