@@ -4,65 +4,9 @@
     <div wicket:id="feedbackPanel">
     </div>
 		<div class="sectionContent">
-			<div class="infoSet">
-				<label>
-					<wicket:message key="label.enable_asset_assignment"/>
-					<a href="javascript:void(0);" id="whatsThis_assignedTo_button" >?</a>
-					<div id="whatsThis_embeddedCode" class="hidden" style="border :1px solid black">
-						<h4><wicket:message key="label.asset_assignment"/></h4>
-						<p>
-							<wicket:message key="label.asset_assignment_tooltip_1"/>
-							<br/>
-							<wicket:message key="label.asset_assignment_tooltip_2"/>
-							<b><wicket:message key="label.asset_assignment_tooltip_3"/></b>
-							<wicket:message key="label.asset_assignment_tooltip_4"/>
-						</p>
-					</div>
-					<script type="text/javascript">
-						$("whatsThis_assignedTo_button").observe( 'click', function(event) { showQuickView('whatsThis_embeddedCode', event); } );
-					</script>
-				</label>
-				<span class="fieldHolder">
-					<input type="checkbox" wicket:id="assignedTo" />
-				</span>
-			</div>
-			<div class="infoSet">
-				<label>
-					<wicket:message key="label.enable_proof_test_integration"/>
-					<a href="javascript:void(0);" id="whatsThis_proofTest_button" >?</a>
-					<div id="whatsThis_proofTest" class="hidden" style="border :1px solid black">
-						<h4><wicket:message key="label.proof_test_integration"/></h4>
-						<p>
-							<wicket:message key="label.proof_test_integration_tooltip1"/>
-						</p>
-					</div>
-					<script type="text/javascript">
-						$("whatsThis_proofTest_button").observe( 'click', function(event) { showQuickView('whatsThis_proofTest', event); } );
-					</script>
-				</label>
-				<span class="fieldHolder">
-					<input type="checkbox" wicket:id="proofTestIntegration" />
-				</span>
-			</div>
-			<div class="infoSet">
-				<label>
-					<wicket:message key="label.enable_manufacturer_certificate"/>
-					<a href="javascript:void(0);" id="whatsThis_manufacturerCert_button" >?</a>
-					<div id="whatsThis_manufacturerCert" class="hidden" style="border :1px solid black">
-						<h4><wicket:message key="label.manufacturer_certificate"/></h4>
-						<p>
-							<wicket:message key="label.manufacturer_certificate_field_description"/>
-						</p>
-					</div>
-					<script type="text/javascript">
-						$("whatsThis_manufacturerCert_button").observe( 'click', function(event) { showQuickView('whatsThis_manufacturerCert', event); } );
-					</script>
-				</label>
-				<span class="fieldHolder">
-					<input type="checkbox" wicket:id="manufacturerCertificate"/>
-				</span>
-			</div>
-			<div class="infoSet">
+		
+            <h2><wicket:message key="label.dateformat_heading"/></h2>
+			<div>
 				<label for="dateFormat">
 					<wicket:message key="label.preferred_date_format" />
 				</label>
@@ -71,15 +15,49 @@
                 </span>
 			</div>
 
-            <div class="infoSet">
+            <h2><wicket:message key="label.extendedOptions_heading"/></h2>
+			<div>
+				<span>
+					<input type="checkbox" wicket:id="assignedTo" />
+				</span>
+				<label>
+					<wicket:message key="label.enable_asset_assignment"/>
+				</label>
+			</div>
+			<wicket:message key="label.enable_asset_assignment_desc"/>
+
+			<div>
+				<span>
+					<input type="checkbox" wicket:id="proofTestIntegration" />
+				</span>
+				<label>
+					<wicket:message key="label.enable_proof_test_integration"/>
+				</label>
+			</div>
+			<wicket:message key="label.enable_proof_test_integration_desc"/>
+
+			<div>
+				<span>
+					<input type="checkbox" wicket:id="manufacturerCertificate"/>
+				</span>
+				<label>
+					<wicket:message key="label.enable_manufacturer_certificate"/>
+				</label>
+			</div>
+			<wicket:message key="label.manufacturer_certificate_field_description"/>
+
+
+            <h2><wicket:message key="label.captureGPS_heading"/></h2>
+            <div>            
+	            <img wicket:id="gpsLogo"/>
+	            <span><wicket:message key="label.captureGPS"/></span>
+				<input wicket:id="gpsCapture" type="checkbox"/>
 				<label for="gpsCapture">
 					<wicket:message key="label.gps_capture" />
 				</label>
-				<input wicket:id="gpsCapture" type="checkbox"/>
 			</div>
 
-            <h2><wicket:message key="label.global_id_settings"/></h2>
-
+            <h2><wicket:message key="label.identifierFormat_heading"/></h2>
             <div class="infoSet">
                 <label for="identifierLabel">
                     <wicket:message key="label.label" />
@@ -95,25 +73,9 @@
                 </label>
                 <span class="fieldHolder">
                     <input type="text" wicket:id="identifierFormat" />
-                </span>
+                </span>                                
             </div>
-
-            <div class="infoSet">
-            <table class="list">
-                <tr>
-                    <th><wicket:message key="label.override"/></th>
-                    <th><wicket:message key="label.assettype"/></th>
-                    <th><wicket:message key="label.label"/></th>
-                    <th><wicket:message key="label.auto_generated_format"/></th>
-                </tr>
-                <tr wicket:id="assetTypeOverrides">
-                    <td><input type="checkbox" wicket:id="override"/></td>
-                    <td><span wicket:id="assetTypeName"></span></td>
-                    <td><input type="text" wicket:id="identifierLabel"/></td>
-                    <td><input type="text" wicket:id="identifierFormat"/></td>
-                </tr>
-            </table>
-            </div>
+			<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>            
 
 		<div class="formAction">
 			<input wicket:id="submitButton" type="submit" wicket:message="value:label.save"/> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>

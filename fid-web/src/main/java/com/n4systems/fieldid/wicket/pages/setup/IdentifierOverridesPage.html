@@ -1,0 +1,32 @@
+<wicket:extend>
+
+<wicket:message key="label.identifier_overrides_desc"/>
+<form wicket:id="identifierOverridesForm" class="crudForm pageSection largeForm">
+    <div wicket:id="feedbackPanel">
+    </div>
+		<div class="sectionContent">
+		
+	        <div class="infoSet">
+	           <table class="list">
+	               <tr>
+	                   <th><wicket:message key="label.override"/></th>
+	                   <th><wicket:message key="label.assettype"/></th>
+	                   <th><wicket:message key="label.label"/></th>
+	                   <th><wicket:message key="label.auto_generated_format"/></th>
+	               </tr>
+	               <tr wicket:id="assetTypeOverrides">
+	                   <td><input type="checkbox" wicket:id="override"/></td>
+	                   <td><span wicket:id="assetTypeName"></span></td>
+	                   <td><input type="text" wicket:id="identifierLabel"/></td>
+	                   <td><input type="text" wicket:id="identifierFormat"/></td>
+	               </tr>
+	           </table>
+			</div>
+          
+		<div class="formAction">
+			<input wicket:id="submitButton" type="submit" wicket:message="value:label.save"/> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
+    </div>
+</form>
+
+</wicket:extend>
