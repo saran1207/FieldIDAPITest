@@ -2204,43 +2204,41 @@ th.wicket_orderDown {
     min-height:20px;
 }
 
+.separatedField { 
+	border-bottom: 1px solid #e2e2e2;	
+}	
+
 .extendedOption {
 	display : block;
 	overflow: hidden;
 	margin: 5px 5px 5px 5px;
-	border-bottom: 1px solid #e2e2e2;	
-	padding-bottom : 10px;
+	padding-bottom : 25px;
 	padding-top: 10px;
 }
 
-.extendedOption input {
+.extendedOption label input {
 	float:left;
 	width:30px;
 	vertical-align: middle;	
 }
 
 .extendedOption label {
+	color: #000;		
 	float : left;
-	display : block;
+	display : block;	
+	font-weight : bold;
 	vertical-align: middle;
 }
 
-.extendedOption hr {
-	height: 1px;
-  	border-top: 1px solid #F3F3F3;
-  	margin-top: 13px;
-  	margin-bottom: 13px;
-  	margin-left: 10px;
-  	margin-right: 10px;
+.extendedOption p {
+	clear: both;
+	border-bottom: 0px;
+	text-align : left;	
+	margin-left: 30px;	
 }
 
-.extendedOption label span {
-	float : left;
-	display : block;
-	font-weight : bold;
-	text-align : left;
-	padding-right: 10px;
-	vertical-align: middle;	
+.extendedOption div {
+	padding : 0px 0px 10px 10px;
 }
 
 .checkboxWithImageAndText img { 
@@ -2250,7 +2248,6 @@ th.wicket_orderDown {
 
 .checkboxWithImageAndText span { 
 	padding-top : 5px;
-	color : #777;
 }
 
 .checkboxWithImageAndText label {
@@ -2265,4 +2262,64 @@ th.wicket_orderDown {
 	float: left;
 	margin-right: 8px;
 } 
+
+.dateFormat select {
+	display:block;
+	margin-bottom: 10px; 
+	margin-top: 10px; 
+}
+
+.dateFormat {
+	margin: 10px 10px;
+	padding-bottom: 5px; 
+	padding-top: 5px; 
+}
+
+.labelledTextInput {
+	display : block;	
+	clear : both;
+	text-align : left;
+	margin-left: 30px;	
+}
+
+/* .labelledTextInput div {
+	color: #777;
+}
+
+.labelledTextInput label input {
+	margin-left : 10px; 
+}
+
+.labelledTextInput label {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-align : right; 
+	width : 15em;
+}
+
+ */
+ 
+ 
+.labelledTextInput div {
+	padding-bottom:10px;	 	 
+ }
+
+.labelledTextInput {
+	display : block;
+	overflow: hidden;
+	margin: 5px 5px 5px 5px;
+	padding-top:10px;	
+}
+
+.labelledTextInput label {
+	color: #000;
+	padding-right : 10px;
+	width : 12em;		
+	float : left;
+	display : block;	
+	font-weight : bold;
+	text-align: right;
+	padding-bottom:10px;	
+}
+
 

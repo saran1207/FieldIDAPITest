@@ -6,45 +6,42 @@
 		<div class="sectionContent">
 		
             <h2><wicket:message key="label.dateformat_heading"/></h2>
-			<div>
-				<label for="dateFormat">
+            <div class="dateFormat">
+				<label class="egColor" for="dateFormat">
 					<wicket:message key="label.preferred_date_format" />
 				</label>
-                <span class="fieldHolder">
-				    <select wicket:id="dateFormat"/>
-                </span>
-			</div>
+	    		<select wicket:id="dateFormat"/>
+			</div>			
 
             <h2><wicket:message key="label.extendedOptions_heading"/></h2>
-			<div class="extendedOption">
+			<div class="extendedOption separatedField egColor">
 				<label>
 					<input type="checkbox" wicket:id="assignedTo" />
-					<span><wicket:message key="label.enable_asset_assignment"/></span>
+					<wicket:message key="label.enable_asset_assignment"/>
 				</label>
-				<div><wicket:message key="label.enable_asset_assignment_desc"/></div>
+				<p><wicket:message key="label.enable_asset_assignment_desc"/></p>				
 			</div>
-
-			<div class="extendedOption">
+			
+			<div class="extendedOption separatedField egColor">
 				<label>
 					<input type="checkbox" wicket:id="proofTestIntegration" />
 					<span><wicket:message key="label.enable_proof_test_integration"/></span>
 				</label>
-				<wicket:message key="label.enable_proof_test_integration_desc"/>				
+				<p><wicket:message key="label.enable_proof_test_integration_desc"/></p>				
 			</div>
 
-			<div class="extendedOption">
+			<div class="extendedOption egColor">
 				<label>
 					<input type="checkbox" wicket:id="manufacturerCertificate"/>
 					<span><wicket:message key="label.enable_manufacturer_certificate"/></span>
 				</label>
-				<wicket:message key="label.manufacturer_certificate_field_description"/>
-				<br>
+				<p><wicket:message key="label.manufacturer_certificate_field_description"/></p>				
 			</div>
 
             <h2><wicket:message key="label.captureGPS_heading"/></h2>
             <div class="checkboxWithImageAndText">            
 	            <img wicket:id="gpsLogo"/>
-	            <span><wicket:message key="label.captureGPS"/></span>
+	            <span class="egColor"><wicket:message key="label.captureGPS"/></span>
 				<label for="gpsCapture">
 					<wicket:message key="label.gps_capture" />
 					<input wicket:id="gpsCapture" type="checkbox"/>
@@ -52,24 +49,24 @@
 			</div>
 
             <h2><wicket:message key="label.identifierFormat_heading"/></h2>
-            <div  class="extendedOption">
+            <div  class="labelledTextInput">
+	            <div class="egColor"><wicket:message key="label.identifierFormat_desc" /></div>
                 <label for="identifierLabel">
                     <wicket:message key="label.label" />
                 </label>
-                <span class="fieldHolder">
-                    <input type="text" wicket:id="identifierLabel" />
-                </span>
+           		<input type="text" wicket:id="identifierLabel" />
             </div>
 
-            <div  class="extendedOption">
+            <div  class="labelledTextInput">
                 <label for="identifierFormat">
                     <wicket:message key="label.auto_generated_format" />
                 </label>
-                <span class="fieldHolder">
-                    <input type="text" wicket:id="identifierFormat" />
-                </span>                                
+               	<input type="text" wicket:id="identifierFormat" />
             </div>
-			<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>            
+	
+			<div>
+				<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>
+			</div>
 
 		<div class="formAction">
 			<input wicket:id="submitButton" type="submit" wicket:message="value:label.save"/> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
