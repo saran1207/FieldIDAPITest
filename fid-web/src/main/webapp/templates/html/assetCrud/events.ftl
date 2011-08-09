@@ -1,9 +1,13 @@
 <head>
+	<#include "/templates/html/common/_tooltip.ftl"/>
 	<style>
 		.textContainer {
 			background-image: url(images/events-blank-slate.png);
 		}
-	</style>
+		.list .reducedWidth {
+			min-width: 10px;
+		}
+	</style> 
 </head>
 
 
@@ -18,8 +22,12 @@
 	
 	<#assign page = pagedEvents/>
 	
+	<div id="tooltip" class="tooltip" style="display:none">
+		<@s.text name="label.gps_location_recorded"/>
+	</div>
+	
 	<#include '../common/_pagination.ftl' />
-	<table class="list">
+	<table id="eventsList" class="list">
 		<tr>
 			<@s.text id="dateLabel" name="label.date_performed"/>
 			<@s.text id="typeLabel" name="label.eventtype"/>
@@ -43,6 +51,9 @@
 				<#assign x=x+1>
 			</#list>
 			<th>&nbsp;</th>
+			<#if tenant.settings.gpsCapture>
+				<th class="reducedWidth">&nbsp;</th> 
+			</#if>
 		</tr>
 		<#list page.list as event >
 			<tr>
@@ -66,10 +77,30 @@
 						<a href="#" onclick="return redirect('<@s.url action="selectEventEdit" uniqueID="${event.id}" includeParams="none" />');" ><@s.text name="label.edit"/></a>
 					</#if>
 				</td>
+				<#if (tenant.settings.gpsCapture && event.gpsLocation?exists) >
+					<td class="reducedWidth">
+						<img src="<@s.url value="/images/gps-icon-small.png"/>"/>
+					</td>
+				<#else>
+					<td class="reducedWidth">
+						&nbsp;
+					</td>
+				</#if>
 			</tr>
 		</#list>
 	</table>
 	<#include '../common/_pagination.ftl' />	
+	
+	<script type="text/javascript">
+		document.observe("dom:loaded", function() {
+			jQuery("#eventsList img").tooltip({
+				tip: '#tooltip',
+				position: 'center right',
+				offset: [0, 15],
+				delay: 0
+			});		
+		});
+	</script>
 <#else>
 	<div class="initialMessage" >
 		<div class="textContainer">
