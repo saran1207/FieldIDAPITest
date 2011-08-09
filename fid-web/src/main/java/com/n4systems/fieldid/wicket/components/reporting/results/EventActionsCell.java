@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Event;
+import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
@@ -36,6 +37,7 @@ public class EventActionsCell extends Panel {
         NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getId());
 
         boolean localEvent = event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()).isLocal();
+        boolean localEndUser = event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()) == SecurityLevel.LOCAL_ENDUSER;
         boolean printable = event.isEventCertPrintable();
         boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
@@ -44,7 +46,7 @@ public class EventActionsCell extends Panel {
         editLink.setVisible(hasEditEvent && localEvent);
         printReportLink.setVisible(printable);
         startEventLink.setVisible(hasCreateEvent && localEvent);
-        viewLink.setVisible(localEvent);
+        viewLink.setVisible(localEvent || localEndUser);
         editAssetLink.setVisible(hasTag && localEvent);
 
         actionsList.add(viewLink);
