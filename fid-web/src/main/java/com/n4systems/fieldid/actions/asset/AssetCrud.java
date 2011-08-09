@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -49,6 +51,7 @@ import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.GpsLocation;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
@@ -384,6 +387,19 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 		return SUCCESS;
 	}
+	
+    // TODO DD : same as above...this is event related code. but this will be refactored into wicket component soon enough...i hope.
+	public Set<GpsLocation> getEventLocations() {
+    	List<Event> events = getAllEventHelper().getEvents();
+    	Set<GpsLocation> locations = new HashSet<GpsLocation>();
+    	for (Event event:events) { 
+    		if (event.getGpsLocation()!=null) { 
+    			locations.add(event.getGpsLocation());
+    		}
+    	}
+    	return locations;
+    }    
+	
 
 	private void loadAttachments() {
 		setAttachments(getLoaderFactory().createAssetAttachmentListLoader().setAsset(asset).load());
@@ -1190,8 +1206,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 
 	public void setNewImage(boolean newImage) {
 		this.newImage = newImage;
-	}
-	
+	}	
 	    
     public String getLatitude() { 
     	return getAsset().getGpsLocation() != null ? formatBigDecimal(getAsset().getGpsLocation().getLatitude()) : "";
@@ -1200,4 +1215,5 @@ public class AssetCrud extends UploadAttachmentSupport {
     public String getLongitude() {    	
     	return getAsset().getGpsLocation() != null ? formatBigDecimal(getAsset().getGpsLocation().getLongitude()) : "";
     }
+    
 }

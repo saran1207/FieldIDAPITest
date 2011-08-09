@@ -8,6 +8,10 @@
 			min-width: 10px;
 		}
 	</style> 
+	
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<@n4.includeScript src="googleMaps.js"/>
+	
 </head>
 
 
@@ -113,3 +117,22 @@
 		</div>
 	</div>
 </#if>
+
+
+<script type="text/javascript">
+	Event.observe(window, 'load', function() { 
+		googleMap.initialize('mapCanvas');			
+	});				
+</script>
+<div id="mapCanvas" class="eventMap"></div>
+	
+	<!-- FIXME DD : hide if no locations? -->
+	<#assign locations = eventLocations/>	
+	<#list locations as location >
+		<script type="text/javascript">
+			Event.observe(window, 'load', function() { 
+				googleMap.addMarker(${location});
+			});			
+		</script>
+	</#list>
+

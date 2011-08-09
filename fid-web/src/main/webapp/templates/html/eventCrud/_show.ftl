@@ -252,7 +252,7 @@
 	<#if (event.gpsLocation?exists) >
 		<script type="text/javascript">
 			Event.observe(window, 'load', function() { 
-				googleMap.initialize('mapCanvas', ${action.latitude}, ${action.longitude})
+				googleMap.initializeWithMarker('mapCanvas', ${action.latitude}, ${action.longitude})
 			});		
 		</script>						
 		<#include "/templates/html/common/googleMap.ftl">
