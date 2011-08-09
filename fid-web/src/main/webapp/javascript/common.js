@@ -232,7 +232,7 @@ function openSection(idToOpen, openLinkId, closeLinkId, afterEvent) {
 	closeLink.onclick = null;
 	
 	Effect.BlindDown(idToOpen, {
-		duration : 0.75,
+		duration : 0.2,
 		afterFinish : function(effect) {
 			closeLink.onclick = closeLink.suspendedOnClick;
 			
@@ -256,7 +256,7 @@ function closeSection(idToClose, closeLinkId, openLinkId, afterEvent) {
 	openLink.onclick = null;
 	
 	Effect.BlindUp(idToClose, {
-		duration : 0.75,
+		duration : 0.2,
 		afterFinish : function(effect) {
 			openLink.onclick = openLink.suspendedOnClick;
 			

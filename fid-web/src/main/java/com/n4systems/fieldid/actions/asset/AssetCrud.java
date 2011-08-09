@@ -21,6 +21,7 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -49,6 +50,7 @@ import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.Event;
+import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.GpsLocation;
@@ -145,6 +147,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private ProjectManager projectManager;
 	private AssetTypeLister assetTypes;
 	private AssetSaveService assetSaverService;
+	private EventManager eventManager;
 	private Long excludeId;
 
 	protected List<Asset> linkedAssets;
@@ -161,8 +164,10 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private String sortDirection;
 
 	// XXX: this needs access to way to many managers to be healthy!!! AA
+	
+	// TODO DD : change this to use @Autowiring.
 	public AssetCrud(LegacyAssetType assetTypeManager, LegacyAsset legacyAssetManager, PersistenceManager persistenceManager, AssetCodeMappingService assetCodeMappingServiceManager,
-			AssetManager assetManager, OrderManager orderManager, ProjectManager projectManager, EventScheduleManager eventScheduleManager) {
+			AssetManager assetManager, OrderManager orderManager, ProjectManager projectManager, EventScheduleManager eventScheduleManager, EventManager eventManager) {
 		super(persistenceManager);
 		this.assetTypeManager = assetTypeManager;
 		this.legacyAssetManager = legacyAssetManager;
@@ -171,6 +176,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.orderManager = orderManager;
 		this.projectManager = projectManager;
 		this.eventScheduleManager = eventScheduleManager;
+		this.eventManager = eventManager;
 
 	}
 
@@ -1215,5 +1221,10 @@ public class AssetCrud extends UploadAttachmentSupport {
     public String getLongitude() {    	
     	return getAsset().getGpsLocation() != null ? formatBigDecimal(getAsset().getGpsLocation().getLongitude()) : "";
     }
+
+    public List<EventGroup> getEventGroups() {
+    	List<EventGroup> eventGroups = eventManager.findAllEventGroups(getSecurityFilter(), uniqueID, "events");
+    	return eventGroups;
+    }   
     
 }

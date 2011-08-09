@@ -2,11 +2,13 @@
 var googleMap = (function() {
 	 
 	var name = "FieldIdGoogleMaps";	
-	var map = '';
+	var map = '';  
+	var bounds = new google.maps.LatLngBounds();
+	var markerCount = 0;
 	
 	var initialize = function(id) {
 		var myOptions = {
-	 		zoom: 3,
+	 		zoom: 14,
 	  	  	mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 		map = new google.maps.Map(document.getElementById(id), myOptions);
@@ -29,8 +31,13 @@ var googleMap = (function() {
 			position: loc,
 			map: map,
 			title: coordinates
-		});
-		map.setZoom(14);
+		});		
+		bounds.extend(loc);
+		if (markerCount!=0) { 
+			map.fitBounds(bounds);   /*TODO DD : optimize??? leave this up to caller to do just once? */
+		}			
+		markerCount++;		
+		
 		
 		var geocoder = new google.maps.Geocoder();
 		geocoder.geocode( {'latLng': loc}, function(results, status) {
@@ -40,8 +47,19 @@ var googleMap = (function() {
 		});					
 	}
 
-	function formatAddressString(address) { 
-		return address.address_components[0].short_name + ' '  + address.address_components[1].short_name + ', ' + address.address_components[2].short_name;   
+	
+	function formatAddressString(address) {
+		var result = '';
+		if (address.address_components[0]) {
+			result += address.address_components[0].short_name;
+		}
+		if (address.address_components[1]) {
+			result += ',' + address.address_components[1].short_name;
+		}
+		if (address.address_components[2]) {
+			result += ',' + address.address_components[2].short_name;
+		}
+		return result;   
 	}
 	
 	return {
