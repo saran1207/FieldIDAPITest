@@ -22,10 +22,15 @@
 	<#if sessionUser.hasAccess("createevent")>
 		<a id="startEvent" href="#" onclick="return redirect('<@s.url action="quickEvent" assetId="${uniqueID}" includeParams="none" />');"><@s.text name="label.start_event"/></a>
 	</#if>
-	<a id="manageEvent" href="#" onclick="return redirect('<@s.url action="eventGroups" uniqueID="${uniqueID}"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
+	<div class="buttonBar"> 
+		<a class="left" id="manageEvent" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>
+		<a id="manageEvent" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
+		<a class="right" id="manageEvent" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
+	</div> 
 </div>
 
-<#if !pagedEvents.list.isEmpty() >
+<div class="assetEvents"> 
+<#if showList && !pagedEvents.list.isEmpty() >
 	
 	<#assign page = pagedEvents/>
 	
@@ -108,7 +113,7 @@
 			});		
 		});
 	</script>
-<#else>
+<#elseif showList>
 	<div class="initialMessage" >
 		<div class="textContainer">
 			<h1><@s.text name="label.emptyeventlist"/></h1>
@@ -121,29 +126,28 @@
 	</div>
 </#if>
 
-
 	
-	<!-- FIXME DD : hide if no locations? -->
+<#if showMap> 
 	<#assign locations = eventLocations/>
 		
+	<script type="text/javascript">
+		Event.observe(window, 'load', function() { 
+			googleMap.initialize('mapCanvas');			
+		});				
+	</script>
+	<div id="mapCanvas" class="googleMap"></div>
+	
+	<#list locations as location >
 		<script type="text/javascript">
 			Event.observe(window, 'load', function() { 
-				googleMap.initialize('mapCanvas');			
-			});				
+				googleMap.addMarker(${location});
+			});			
 		</script>
-		<div id="mapCanvas" class="eventMap"></div>
-		
-		<#list locations as location >
-			<script type="text/javascript">
-				Event.observe(window, 'load', function() { 
-					googleMap.addMarker(${location});
-				});			
-			</script>
-		</#list>
+	</#list>
+</#if>
 
 
-
-<#if eventGroups?exists >
+<#if showGroups && eventGroups?exists >
 	<#if !eventGroups.isEmpty() >
 		<table class="list" id="resultsTable" >
 			<tr>
@@ -228,10 +232,10 @@
 			</p>
 		</div>
 	</#if>
+	
 </#if>
 
 
-
-
+</div>
 
 

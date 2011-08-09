@@ -1998,6 +1998,11 @@ div.unitOfMeasureName {
 	margin: 10px;
 }
 
+
+.buttonBar a {
+	float:right;
+}
+
 #startEvent, #manageEvent, #newScheduleButton{
 	font-size: 12px;
 	padding-left: 22px;
@@ -2195,8 +2200,8 @@ th.wicket_orderDown {
 	color:#888;
 }
 
-.eventMap {
-	height: 300px;
+.googleMap {
+	height: 300px;	/* UGH : take this css hack out of here...sizing should be done in container of map */
 	border: 2px;
 }
 
@@ -2304,4 +2309,8 @@ th.wicket_orderDown {
 	padding-bottom:10px;	
 }
 
-
+.assetEvents {
+	clear:both;
+	float:none; 
+	width: 100%;
+}

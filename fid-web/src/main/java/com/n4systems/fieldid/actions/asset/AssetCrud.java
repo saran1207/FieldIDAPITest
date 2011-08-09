@@ -162,6 +162,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	
 	private String sortColumn;
 	private String sortDirection;
+	private String mode = "list";
 
 	// XXX: this needs access to way to many managers to be healthy!!! AA
 	
@@ -1225,6 +1226,26 @@ public class AssetCrud extends UploadAttachmentSupport {
     public List<EventGroup> getEventGroups() {
     	List<EventGroup> eventGroups = eventManager.findAllEventGroups(getSecurityFilter(), uniqueID, "events");
     	return eventGroups;
-    }   
+    }
+    
+    public void setMode(String mode) { 
+    	this.mode =mode;
+    }
+
+    public String getMode() { 
+    	return mode;
+    }
+    
+    public boolean isShowMap() { 
+    	return mode.equalsIgnoreCase("map");
+    }
+    
+    public boolean isShowList() { 
+    	return mode.equalsIgnoreCase("list");
+    }
+    
+    public boolean isShowGroups() { 
+    	return mode.equalsIgnoreCase("date");
+    }
     
 }
