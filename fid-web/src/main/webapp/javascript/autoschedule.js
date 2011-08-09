@@ -39,5 +39,6 @@ function replaceEventSchedules( assetEventSchedules ) {
 			eventScheduleList.replace( assetEventSchedules );
 		}
 		scheduleListUpdated();
+		initDatePicker();
 	}
 }
