@@ -255,7 +255,10 @@
 				googleMap.initializeWithMarker('mapCanvas', ${action.latitude}, ${action.longitude})
 			});		
 		</script>						
-		<#include "/templates/html/common/googleMap.ftl">
+		<div>
+			<h2><@s.text name="label.gpslocation"/></h2> 
+		</div>	
+		<div id="mapCanvas" class="googleMap eventMap"></div>
 	</#if>	
 
 </div>

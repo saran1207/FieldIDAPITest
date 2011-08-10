@@ -14,6 +14,9 @@
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<@n4.includeScript src="googleMaps.js"/>
 	<@n4.includeScript src="event.js"/>
+	<@n4.includeScript src="commonJquery.js"/>
+	
+		
 	
 </head>
 
@@ -22,12 +25,19 @@
 	<#if sessionUser.hasAccess("createevent")>
 		<a id="startEvent" href="#" onclick="return redirect('<@s.url action="quickEvent" assetId="${uniqueID}" includeParams="none" />');"><@s.text name="label.start_event"/></a>
 	</#if>
-	<div class="buttonBar"> 
-		<a class="left" id="manageEvent" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>
-		<a id="manageEvent" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
-		<a class="right" id="manageEvent" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
-	</div> 
+
+	<#assign page = pagedEvents/>
+	
+	<div class="buttonBar">
+		<a id="mapButton" class="${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>		
+		<a id="listButton" class="${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
+		<a id="groupByDateButton" class="${action.showGroups.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
+	</div>
 </div>
+
+<script type="text/javascript">
+	jQuery('.buttonBar .true').css({ opacity: 1.0 });
+</script> 
 
 <div class="assetEvents"> 
 <#if showList && !pagedEvents.list.isEmpty() >
@@ -135,7 +145,9 @@
 			googleMap.initialize('mapCanvas');			
 		});				
 	</script>
-	<div id="mapCanvas" class="googleMap"></div>
+	<div style="height:500px">
+		<div id="mapCanvas" class="googleMap"/>
+	</div>
 	
 	<#list locations as location >
 		<script type="text/javascript">

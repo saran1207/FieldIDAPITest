@@ -322,13 +322,17 @@ ${action.setPageType('asset', 'show')!}
 		</#if>
 	</#if>
 
-	<#if (asset.gpsLocation?exists) >
+	<#if (asset.gpsLocation?exists) >	 
 		<script type="text/javascript">
 			Event.observe(window, 'load', function() { 
 				googleMap.initializeWithMarker('mapCanvas',${action.latitude}, ${action.longitude})
 			});		
 		</script>						
-		<#include "/templates/html/common/googleMap.ftl">
+		<div>
+			<h2><@s.text name="label.gpslocation"/></h2> 
+		</div>			
+		<div id="mapCanvas" class="googleMap assetMap"></div>
+
 	</#if>
 			
 </div>

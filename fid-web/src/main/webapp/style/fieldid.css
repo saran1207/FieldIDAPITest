@@ -1975,7 +1975,7 @@ div.unitOfMeasureName {
 	background-image: url(../images/calendar-icon.png);
 }
 
-#manageEvent{
+#manageEvent {
 	background-image: url(../images/calendar-icon.png);
 	margin-left: 20px;
 }
@@ -1984,10 +1984,51 @@ div.unitOfMeasureName {
 	margin: 10px;
 }
 
-
-.buttonBar a {
-	float:right;
+#listButton { 
+	background: url(../images/eventList.png) left center no-repeat;				
 }
+
+#groupByDateButton { 
+	background: url(../images/eventGroup.png) left center no-repeat;		
+}
+
+#mapButton { 
+	background: url(../images/eventMap.png) left center no-repeat;
+}
+
+.buttonBar { 
+	float:right;  /* this should not be part of this style...style this in containing element */
+	background: -moz-linear-gradient(top,  #fff,  #ddd);
+ 	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));	
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');	
+ 	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border: 1px solid #eee;
+	color: #000;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-bottom: 10px;
+}
+
+.buttonBar  a {
+	margin:3px;	
+	text-decoration:none;
+	color:#000;
+	padding-left: 18px;
+	opacity:.40;
+	filter:alpha(opacity=40);	
+}
+
+.buttonBar a:hover {
+	
+}
+
+.buttonBar .true {
+	color:#006;
+}
+
 
 #startEvent, #manageEvent, #newScheduleButton{
 	font-size: 12px;
@@ -2187,8 +2228,12 @@ th.wicket_orderDown {
 }
 
 .googleMap {
-	height: 300px;	/* UGH : take this css hack out of here...sizing should be done in container of map */
-	border: 2px;
+	height:100%;	/*leave it up to parent to style height! */
+	border: 2px;	
+}
+
+.eventMap { 
+	height: 300px;
 }
 
 #assetSummary .infoSet {
@@ -2300,3 +2345,5 @@ th.wicket_orderDown {
 	float:none; 
 	width: 100%;
 }
+
+
