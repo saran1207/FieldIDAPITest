@@ -1,0 +1,81 @@
+div.steps {
+    width: 100%;
+}
+
+.step h2 {
+    margin:0;
+    border-top:none;
+}
+
+.multiEventInstructions {
+    padding: 0 5px;
+    font-size: 12px;
+}
+
+.steps .infoSet .widenedLabel {
+    text-align:left;
+    margin-right:100px;
+    width:280px;
+}
+
+.steps label.unweighted {
+    font-weight:normal;
+}
+
+select.eventSchedules {
+    width:260px;
+    padding:4px;
+}
+
+.groupEventTypeList {
+	float: left;
+	overflow:hidden;
+}
+
+.groupEventTypeList li {
+	padding:5px 5px;
+}
+
+.groupEventTypeList li a{
+	font-size: 12px;
+	margin: 3px 8px 13px 8px;
+}
+
+
+.stepContent .infoSet .setFromAssetCheckbox{
+	margin-left: 195px;
+}
+
+.stepContent .fieldHolder label.checkBoxLabel{
+	padding-top: 2px;
+}
+
+.infoSet .assignToMeLink{
+	clear: none;
+	position: relative;
+	top: 10px;
+	right: 185px;
+}
+
+.eventCreateForm h2 {
+    border-top: 1px solid #ccc;
+    clear:left;
+}
+
+.eventCreateForm label.label {
+    width:160px;
+}
+
+.eventForm label.eventFormLabel {
+    width:50%;
+}
+
+textarea[name="comments"] {
+    display:block;
+    margin-top:5px;
+    width:250px;
+    height:100px;
+    padding:4px;
+    border:1px solid #9c9c9c;
+    color:#555;
+}

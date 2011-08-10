@@ -1,7 +1,7 @@
 <@s.bean id="moneyUtil" name="com.n4systems.tools.MoneyUtils"/>
 
 <div id="event" >
-	<div id="assetSummary">
+	<div id="assetSummary" class="assetSummary">
 		<h2>
 			<span>${asset.type.name!""?html} <@s.text name="label.summary"/></span>
 			<@s.url id="eventCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />

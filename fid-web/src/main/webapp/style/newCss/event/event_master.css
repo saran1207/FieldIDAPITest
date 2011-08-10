@@ -1,0 +1,47 @@
+
+.eventTypes ul{
+	display:none;
+	position:absolute;
+	background-image: url(../../../images/dropdownArrow-top-left.gif);
+	padding-top:11px;
+	background-position:top center;
+	background-repeat: no-repeat;
+	width:200px;
+}
+.eventTypesLeft ul{
+	background-position:top left;
+	background-image: url(../../../images/dropdownArrow-left.gif);
+}
+
+.eventTypes ul li{
+	background-color: #333;
+	color:#cccccc;
+	padding: 10px;
+}
+
+.eventTypes ul li a, .eventTypes ul li a:visited {
+	color:#cccccc;
+}
+
+.eventTypes ul li:hover{
+	background: #1b5ccd;
+}
+
+.eventTypes ul li:hover a, .eventTypes ul li:hover, .eventTypes ul li:hover a:visited {
+	color:#fff;
+}
+
+.eventTypes:hover ul{
+	display:block;
+	text-align:left;
+	font-size:1em;
+}
+
+.eventTypesRelative:hover ul a{
+	font-size:1em;
+}
+
+.eventTypes:hover ul li, .eventTypes ul:hover li{
+	display:block;
+	border:5px solid #333;
+}

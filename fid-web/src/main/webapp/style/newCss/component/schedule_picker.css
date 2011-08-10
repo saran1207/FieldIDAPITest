@@ -1,0 +1,29 @@
+.newScheduleForm {
+	overflow:hidden;
+	width:500px;
+	border:solid 3px #999;
+	background-color:#fff;
+	z-index: 1;
+}
+
+.pageContent .newScheduleForm h2 {
+	margin: 0;
+}
+
+.newScheduleForm button{
+	padding: 4px;
+}
+
+.newScheduleForm .blockSeparated {
+	font-size: 1.1em;
+	padding: 5px;
+	border-top:1px solid #CCCCCC;
+}
+
+.newScheduleForm .infoSet .fieldHolder {
+	width: 295px;
+}
+
+.newScheduleButton{
+	background-image: url(../../../images/calendar-icon.png);
+}

@@ -18,7 +18,7 @@
 	</div>
 	
 	<div class="blockSeparated"><button id="addNewSchedule" onclick="$('newScheduleForm').show(); $('newScheduleForm').absolutize();  return false;" ><@s.text name="label.add_a_schedule"/></button></div>
-	<div class="fluentSets schedulesAdd" id="newScheduleForm" style="display:none" >
+	<div class="fluentSets schedulesAdd newScheduleForm" id="newScheduleForm" style="display:none" >
 		<h2><@s.text name="label.add_a_schedule"/></h2>
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.event_type"/></label>

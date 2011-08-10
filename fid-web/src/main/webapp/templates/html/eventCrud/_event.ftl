@@ -6,13 +6,14 @@
 	<div id="eventForm_${identifier}" class="eventForm">
 			
 		<h2>
-			<span id="formTitle"><@s.text name="label.eventform"/></span> 
+			<span id="formTitle" class="formTitle"><@s.text name="label.eventform"/></span>
 			<span class="jumpto" id="jumpToSection">
 				<img src="<@s.url value="/images/jump-to-icon.png"/>" />
 				<@s.text name="label.jumpto"/>
-				&nbsp;
-				<@s.select name="jumpToSections" id="jumpTo_${identifier}" headerKey="" headerValue="" list="eventFormHelper.currentCriteriaSections" listKey="id" listValue="shortName" theme="simple"/>
+                &nbsp;
+                <@s.select name="jumpToSections" id="jumpTo_${identifier}" headerKey="" headerValue="" list="eventFormHelper.currentCriteriaSections" listKey="id" listValue="shortName" theme="simple"/>
 			</span>
+            <div style="clear:both;width:0;height:0;"></div>
 		</h2>
 		
 		<#if form_action="EDIT" && !formEvent.editable>
@@ -26,12 +27,8 @@
 					<span class="eventSectionTitle">${section.title}</span> 
 					<span class="eventSectionIndex">
 						<label>${section_index +1} <@s.text name="label.of"/> ${eventFormHelper.getAvailableSections( formEvent )?size} <@s.text name="label.sections"/></label>
-						<a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}_top" selectedIndex="${section_index-1}">
-							<img src="<@s.url value="/images/prev-button.png"/>" alt="&lt; "/>
-						</a> 
-						<a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}_top" selectedIndex="${section_index+1}">
-							<img src="<@s.url value="/images/next-button.png"/>" alt="&gt; "/>
-						</a>
+						<a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}_top" selectedIndex="${section_index-1}"><img src="<@s.url value="/images/prev-button.png"/>" alt="&lt; "/></a>
+						<a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}_top" selectedIndex="${section_index+1}"><img src="<@s.url value="/images/next-button.png"/>" alt="&gt; "/></a>
 					</span>
 				</h3>
 				<script type="text/javascript">
@@ -51,12 +48,8 @@
 				<h3>
 					<span class="eventSectionIndex">
 						<label>${section_index +1} <@s.text name="label.of"/> ${eventFormHelper.getAvailableSections( formEvent )?size} <@s.text name="label.sections"/></label>
-						<a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}" selectedIndex="${section_index-1}">
-							<img src="<@s.url value="/images/prev-button.png"/>" alt="&lt; "/>
-						</a> 
-						<a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}" selectedIndex="${section_index+1}">
-							<img src="<@s.url value="/images/next-button.png"/>" alt="&gt; "/>
-						</a>
+						<a href="javascript:void(0);" id="downIndex_${identifier}_${section_index}" selectedIndex="${section_index-1}"><img src="<@s.url value="/images/prev-button.png"/>" alt="&lt; "/></a>
+						<a href="javascript:void(0);" id="upIndex_${identifier}_${section_index}" selectedIndex="${section_index+1}"><img src="<@s.url value="/images/next-button.png"/>" alt="&gt; "/></a>
 					</span>
 				</h3>
 				<script type="text/javascript">

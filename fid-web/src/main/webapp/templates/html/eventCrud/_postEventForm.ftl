@@ -4,7 +4,7 @@
 	<label class="label"><@s.text name="label.comments"/></label>
 	<span class="fieldHolder">
 		<@s.select name="commentTemplate" list="commentTemplates" listKey="id" listValue="displayName" emptyOption="true" onchange="changeComments(this)" theme="fieldidSimple"/> 
-		<@s.textarea name="comments" id="comments"  cols="50" rows="3" theme="fieldidSimple"/>
+		<@s.textarea name="comments" id="comments" cssClass="comments" cols="50" rows="3" theme="fieldidSimple"/>
 	</span>
 	
 </div>

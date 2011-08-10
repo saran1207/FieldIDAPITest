@@ -1,0 +1,416 @@
+.pageContent h2 {
+    background-color: #eee;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    margin: 20px 0 5px 0;
+    font-size: 1.2em;
+    padding: 5px 15px;
+    line-height: 21px;
+}
+
+label.label {
+    float: left;
+    display: block;
+    width: 150px;
+    padding: 5px 15px 5px 20px;
+    line-height: 18px;
+    text-align: right;
+    color: #555;
+    font-weight:bold;
+}
+
+.pageContent .fieldHolder {
+    display: block;
+    float: left;
+    padding: 5px 0;
+    width: 305px;
+    line-height: 18px;
+}
+
+.pageContent .infoSet {
+    display: block;
+    min-height: 40px;
+    clear:left;
+    padding: 5px 0 5px 0;
+}
+
+.assetSummary .infoSet {
+    min-height: 20px;
+}
+
+.pageContent .fieldHolder select {
+    border: 1px solid #9c9c9c;
+    color: #555;
+    width: 260px;
+    padding: 4px;
+}
+
+label.eventFormLabel {
+    width: 50%;
+    text-align: left;
+    padding-top:10px;
+}
+
+.recDefButtons {
+    display: block;
+    float: right;
+    padding-left:10px;
+    margin-right:95px;
+}
+
+.criteriaEditContainer {
+    width:20%;
+    display:block;
+    float:left;
+}
+
+.criteriaButton {
+    padding-top: 3px;
+    padding-bottom: 0;
+    padding-right: 5px;
+    float: left;
+    display: block;
+}
+
+.criteriaText {
+    float:left;
+    display:block;
+    padding-top: 10px;
+}
+
+.eventForm h3 {
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    padding: 5px 15px;
+    font-size: 1.2em;
+    font-weight: normal;
+}
+
+.eventSectionTitle {
+    display:block;
+    float:left;
+    width:750px;
+    word-wrap: break-word;
+    font-weight: bold;
+    font-size: 11px;
+    padding-left:4px;
+}
+
+.eventForm .infoSet {
+    border-bottom: 1px solid #ddd;
+    width:100%;
+}
+
+.criteriaTextField  {
+    width: 240px;
+}
+
+.criteriaUnitOfMeasureField  {
+    width: 90px;
+}
+
+textarea.comments {
+    display:block;
+    margin-top: 5px;
+    width: 250px;
+    border: 1px solid #9c9c9c;
+    padding:4px;
+    color:#555;
+}
+
+.jumpto {
+	font-weight: normal;
+	display:block;
+	float:right;
+	font-size: 0.8em;
+}
+
+.jumpto img {
+	padding-bottom: 2px;
+	padding-right: 2px;
+}
+
+.youAreOn, .eventSectionIndex {
+	padding-right: 5px;
+	font-weight: normal;
+}
+
+.eventSectionIndex {
+	float:right;
+	font-size: 1em;
+	vertical-align : middle;
+	font-size : 11px;
+	color : #666666;
+}
+
+.eventSectionIndex a img {
+	vertical-align:middle;
+}
+
+.eventForm .jumpto select {
+	overflow:hidden;
+	max-width:25em;
+	width:15em;
+    padding:0;
+    margin:0;
+}
+
+.eventForm .jumpto select option {
+	overflow:hidden;
+	max-width:25em;
+	width:15em;
+}
+
+.observationBox {
+	overflow: auto;
+	margin-left: auto;
+	margin-right: auto;
+	height: 320px;
+	width: 470px;
+}
+
+.observationBox p, .observationActions{
+	margin-left: 10px;
+}
+
+.observationBox h1 {
+	padding-left: 10px;
+}
+
+.observationText {
+	margin-top: 5px;
+	width: 380px;
+	border: 2px solid #E8EDFF;
+	padding: 10px 10px 10px 40px;
+	background-image: url(../../../images/addObservation.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
+.observationComment {
+	padding-top: 10px;
+	width:440px;
+}
+
+.observationComment span textarea{
+	width: 400px;
+	height: 200px;
+	padding: 4px;
+	font-size: 15px;
+	border:1px solid #9C9C9C;
+	color:#555555;
+}
+
+.observationComment label{
+	display: block;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding-bottom: 10px;
+}
+
+.observationActions {
+	padding: 10px;
+}
+
+.observationsShow p.defRepairedOnSite, .defRepairedOnSite {
+	border-color: #9fe8b7;
+	background-image: url(../../../images/repairedOnSite.gif);
+}
+
+.observationsShow p.defRepairedOnSite:hover, .defRepairedOnSite:hover {
+	border-color: #8dcda2;
+}
+
+.observationsShow p.defRepaired, .defRepaired  {
+	border-color: #9fb7e8;
+	background-image: url(../../../images/repaired.gif);
+}
+
+.observationsShow p.defRepaired:hover, .defRepaired:hover {
+	border-color: #8da2cd;
+}
+
+.observationsShow p.recSelected, .recSelected {
+	border-color: #ff9f40;
+	background-image: url(../../../images/recommendation.gif);
+}
+
+.observationsShow p.recSelected:hover, .recSelected:hover {
+	border-color: #e08c38;
+}
+
+.observationsShow p.defSelected, .defSelected {
+	border-color: #ff4f4f;
+	background-image: url(../../../images/deficient.gif);
+}
+
+.observationsShow p.defSelected:hover, .defSelected:hover  {
+	border-color: #de4545;
+}
+
+.pageContent input[type="text"] {
+	padding: 4px;
+	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 250px;
+}
+
+div.unitOfMeasureName {
+    font-weight: bold;
+    display:block;
+    float:left;
+    padding-left:5px;
+}
+
+.eventForm span.fieldHolder {
+    width:300px;
+}
+
+.eventForm input[type="text"] {
+    width: 230px;
+}
+
+.eventForm select {
+    border: 1px solid #9c9c9c;
+    color: #555;
+    width:240px;
+    padding:4px;
+    margin-top:7px;
+}
+
+.eventForm input.criteriaUnitOfMeasureField {
+    width: 90px;
+}
+
+a.signLink {
+    display:block;
+    padding-top: 11px;
+    padding-left: 2px;
+}
+
+a.clearSignatureLink {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.eventForm div.infoSet {
+	border: none;
+	display: block;
+	float: left;
+	width: 100%;
+    border-bottom: 1px solid #dddddd;
+}
+
+span.orgPicker {
+    width:260px;
+}
+
+div.unitOfMeasureCriteriaContainer span.fieldHolder {
+    width:auto;
+}
+
+div.unitOfMeasureName {
+    padding-top:11px;
+}
+
+.commentContainer textarea {
+    height:100px;
+    border:1px solid #9c9c9c;
+    width:260px;
+    margin-left: 30px;
+    color:#555;
+}
+
+div.textCriteriaContainer span.fieldHolder {
+    padding-top:7px;
+}
+
+.print {
+	float: right;
+}
+
+.print ul {
+	display: none;
+	position: absolute;
+	background-image: url(../../../images/dropdownArrow-top-right.gif);
+	padding-top: 11px;
+	background-position: top right;
+	background-repeat: no-repeat;
+	width:200px;
+}
+
+.print:hover ul {
+	display: block;
+	text-align: right;
+	font-size: 1em;
+}
+
+.print:hover ul li {
+	display: block;
+	border: 5px solid #333;
+}
+
+.print:hover ul a {
+	font-size: 1em;
+}
+
+.print ul li {
+	background-color: #333;
+	color: #cccccc;
+	padding: 10px;
+}
+
+.print ul li:hover {
+	background: #1b5ccd;
+}
+
+.print ul li:hover a, .print ul li:hover {
+	font-weight: normal;
+	color: #fff;
+}
+
+.print ul li a {
+	font-weight: normal;
+	color: #cccccc;
+}
+
+.assetSummary .print a {
+    font-weight:normal;
+}
+
+.formAction {
+    padding:10px 5px 10px 0;
+    margin:0;
+    border-top:1px solid #e2e2e2;
+    text-align:left;
+}
+
+.formAction input[type="submit"], .formAction button {
+    margin-left:10px;
+    margin-right:2.5px;
+    padding:2px 5px;
+}
+
+.formAction a {
+    margin-left:2.5px;
+    margin-right:2.5px;
+    font-size:1.2em;
+}
+
+.attachments h2 {
+    clear:left;
+}
+
+h2 span.formTitle {
+    display:block;
+    float:left;
+}
+
+.assetSummary h2 span {
+    display:block;
+    float:left;
+}
+
+.assetSummary h2 {
+    overflow:hidden;
+}

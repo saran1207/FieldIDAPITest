@@ -16,7 +16,7 @@
 				<#include "_notificationArea.ftl"/>
 		    </div>
 			
-			<div id="pageContent" class="brandedContainer public">
+			<div id="pageContent" class="brandedContainer public pageContent">
 				${body}
 			</div>
 			

@@ -2,7 +2,7 @@
 	<div id="schedulesForm">
 		<div class="headerActions">
 			<#if sessionUser.hasAccess("createevent")>
-				<a id="newScheduleButton" href="#" onclick="$('newScheduleForm').show(); $('newScheduleForm').absolutize();  return false;"><@s.text name="label.addschedule"/></a>
+				<a id="newScheduleButton" class="newScheduleButton" href="#" onclick="$('newScheduleForm').show(); $('newScheduleForm').absolutize();  return false;"><@s.text name="label.addschedule"/></a>
 			</#if>
 		</div>
 		

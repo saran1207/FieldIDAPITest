@@ -21,8 +21,8 @@
     <@n4.includeScript src="lightview"/>
     <@n4.includeScript src="signatures" />
 	<@n4.includeScript src="multi_inspect" />
-	<@n4.includeStyle href="multi_event" type="page" />
-	<@n4.includeStyle type="page" href="event" />
+	<@n4.includeStyle href="newCss/event/event_base" />
+    <@n4.includeStyle href="newCss/event/multi_event" />
 
 	<#include "/templates/html/common/_orgPicker.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
@@ -47,7 +47,7 @@
 
 </head>
 
-<div id="steps">
+<div class="steps">
 	<div class="step">
 		<h2>1. <@s.text name="label.select_event"/></h2>
 		<div class="stepContent" id="step1">

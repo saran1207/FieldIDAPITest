@@ -1,4 +1,4 @@
-<@s.form action="eventCreate" namespace="/multiEvent/ajax" id="eventCreate" cssClass="fullForm fluidSets" theme="fieldid">
+<@s.form action="eventCreate" namespace="/multiEvent/ajax" id="eventCreate" theme="fieldid" cssClass="eventCreateForm">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<@s.hidden name="type"/>
 	<@s.hidden name="scheduleId" id="scheduleId" value="0"/>

@@ -1133,4 +1133,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
     	return getEvent().getGpsLocation() != null ? formatBigDecimal(getEvent().getGpsLocation().getLongitude()) : "";
     }
 
+    @Override
+    public boolean isUseLegacyCss() {
+        return false;
+    }
 }

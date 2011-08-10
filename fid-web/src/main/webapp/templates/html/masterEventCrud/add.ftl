@@ -13,7 +13,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/masterEvent.js"/>"></script>
 	<@n4.includeStyle type="page" href="asset" />
 	<@n4.includeStyle type="page" href="subAsset" />
-	<@n4.includeStyle type="page" href="event" />
+    <@n4.includeStyle href="newCss/event/event_master" />
 	<@n4.includeStyle type="page" href="masterEvent" />
 		
 	<script type="text/javascript">

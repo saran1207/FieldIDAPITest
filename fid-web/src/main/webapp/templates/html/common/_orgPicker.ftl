@@ -1,7 +1,8 @@
 <@n4.includeScript src="orgPicker"/>
 <@n4.includeStyle href="orgPicker" type="feature"/>
+<@n4.includeStyle href="orgPickerNew" type="feature"/>
 <#assign name>
-	<div id="orgSelector" style="display:none" targetId="">
+	<div id="orgSelector" class="orgSelector" style="display:none" targetId="">
 		<div class="selections">
 			<a href="#" id="switchOrgBrowser"><@s.text name="label.browse"/></a>
 			<a href="#" id="switchOrgSearch"><@s.text name="label.search"/></a>
@@ -20,7 +21,7 @@
 			</div>
 		</div>
 		<div id="orgBrowser" >
-			<@s.form action="orgList" id="orgBrowserForm" name="orgBrowserForm" namespace="/ajax" theme="fieldid" cssClass="fullForm" >
+			<@s.form action="orgList" id="orgBrowserForm" name="orgBrowserForm" namespace="/ajax" theme="fieldid" cssClass="fullForm orgBrowserForm" >
 				<@s.hidden name="orgId" value="-1" id="orgPickerCurrentOrg"/>
 				<@s.hidden name="orgTypeFilter" id="orgFilter" cssClass="orgFilter"/>
 				<div class="infoSet">

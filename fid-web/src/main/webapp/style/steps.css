@@ -16,6 +16,11 @@
 	width:750px;
 }
 
+.steps {
+	float:left;
+	width:750px;
+}
+
 .step {
 	background-color:#fff;
 	border: 1px solid #B5BACC;

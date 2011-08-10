@@ -16,7 +16,7 @@
 		<div id="page">
 			<#include "header.ftl"/>
 			<#include "contentHeader.ftl"/>
-			<div id="pageContent">
+			<div id="pageContent" class="pageContent">
 				${body}
 			</div>
 			

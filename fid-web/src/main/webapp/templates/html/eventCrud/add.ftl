@@ -1,6 +1,6 @@
 ${action.setPageType('event', 'add')!}
 
-<@s.form action="eventCreate" cssClass="crudForm fullPageForm" theme="simple" method="post"  onsubmit="return checkForUploads();" >
+<@s.form action="eventCreate" theme="simple" method="post"  onsubmit="return checkForUploads();" >
 	<#assign form_action="ADD" />
 	<#include "_form.ftl"/>
 

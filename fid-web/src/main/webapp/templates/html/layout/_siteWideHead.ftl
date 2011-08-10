@@ -1,7 +1,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
 <title><@s.text name="app.title" /> - <#include "_title.ftl"/></title>
 <@n4.includeStyle href="reset" /> 
-<@n4.includeStyle href="fieldid"/>
+<#include "layoutCss.ftl">
 <!--[if IE 6]>
 <@n4.includeStyle href="fieldid-ie6" />
 <![endif]-->

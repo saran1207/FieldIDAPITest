@@ -632,4 +632,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
         return getPrimaryOrg().getIdentifierLabel();
     }
 
+    public boolean isUseLegacyCss() {
+        return true;
+    }
+
 }

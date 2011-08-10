@@ -1,0 +1,505 @@
+body {
+	text-align: left;
+	color: #333333;
+	background-color: #fff;
+	font-size: 11px;
+	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+}
+
+h1 {
+    font-size: 1.5em;
+}
+
+h1,h2,h3,h4 {
+	font-weight: bold;
+	color: #333;
+	text-align: left;
+}
+
+a,a:hover,a:visited,a:active {
+    color: #356CA2;
+}
+
+a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
+    color: #999;
+}
+
+#contentHeader {
+    margin-bottom:5px;
+    overflow:hidden;
+}
+
+#page, .systemNotice {
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0px;
+}
+
+#companyLogo, #systemLogo {
+	float: left;
+	padding-left: 20px;
+	width: 215px;
+}
+
+#pageHeader {
+	width: 100%;
+	overflow: hidden;
+}
+
+.pageContent {
+	width: 100%;
+	margin-bottom: 10px;
+	text-align: left;
+	overflow: hidden;
+}
+
+#pageHeader #pageNavigation {
+	float: right;
+	text-align: left;
+	width: 685px;
+	overflow: hidden;
+}
+
+#pageNavigation ul {
+	list-style: none;
+	display: inline;
+}
+
+#pageNavigation ul li {
+	text-align: center;
+	margin: 0px 10px;
+	float: left;
+}
+
+#pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited
+	{
+	color: #356CA2;
+}
+
+#pageNavigation ul li a {
+	display: block;
+	padding-top: 45px;
+	min-width: 40px;
+	background-position:top center;
+	background-repeat: no-repeat;
+
+}
+#pageNavigation ul li a:hover {
+	background-position: center -70px;
+}
+
+#menuHome {
+	background-image: url(../../../images/menu/home.png);
+}
+
+#menuIdentify {
+	background-image: url(../../../images/menu/identify.png);
+}
+
+#menuEvent {
+	background-image: url(../../../images/menu/inspect.png);
+}
+
+#menuAssets {
+	background-image: url(../../../images/menu/assets.png);
+}
+
+#menuReport {
+	background-image: url(../../../images/menu/reporting.png);
+}
+
+#menuSchedule {
+	background-image: url(../../../images/menu/schedule.png);
+}
+
+#menuSetup {
+	background-image: url(../../../images/menu/setup.png);
+}
+
+#menuProject {
+	background-image: url(../../../images/menu/project.png);
+}
+
+#menuSafetyNetwork {
+	background-image: url(../../../images/menu/safety_network.png);
+}
+
+#smartSearchContainer {
+	float:right;
+}
+
+#smartSearch {
+	clear:both;
+	float:right;
+}
+
+#smartSearch label {
+	font-size: 1.2em;
+	padding: 5px 0;
+}
+
+#smartSearch input {
+	font-size: 1.2em;
+	padding: 5px;
+}
+
+#smartSearch input[type="text"],#smartSearch input.textbox {
+	width: 230px;
+	border: 1px solid #999;
+}
+
+#smartSearchContainer input.description {
+    color: #666;
+}
+
+#smartSearch input[type="submit"] {
+	padding: 3px;
+}
+
+#pageHeader #pageActions {
+	float: none;
+	overflow: hidden;
+}
+
+#pageActions .listOfLinks {
+	margin-bottom: 15px;
+	text-align: right;
+}
+
+#pageActions .listOfLinks a,#pageActions .listOfLinks a:hover,#pageActions .listOfLinks a:visited,#pageActions .listOfLinks a:active
+	{
+	color: #333;
+}
+
+#listContainer {
+	float:right;
+    overflow: hidden;
+    display: inline-block;
+}
+
+#listContainer .listOfLinks {
+	background: url(../../../images/header-bg.png);
+	padding: 0.5em;
+	margin: 0 0 0.5em 0;
+	float:right;
+}
+
+#listContainer .listOfLinks a, #listContainer .listOfLinks a:visited {
+	color: #E28500;
+}
+
+#listContainer .listOfLinks a:hover {
+	color: #BC6F00;
+}
+
+#listContainer .listOfLinks li {
+	border:none;
+}
+
+.listOfLinks {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	/* clear: both; */
+	width: 100%;
+	text-align: right;
+}
+
+.listOfLinks {
+	text-align: left;
+
+}
+
+.listOfLinks li {
+	display: inline;
+	border-left: 1px solid black;
+	padding-right: .6em;
+	padding-left: .5em;
+}
+
+.listOfLinks li.first {
+	border-left: none;
+	padding-left: 0px;
+}
+
+.listOfLinks li.massUpdateIndicator {
+    border-left: none;
+}
+
+#contentTitle {
+	overflow: hidden;
+	margin-bottom:5px;
+}
+
+#contentHeader h1 {
+	float: left;
+	padding: 10px 15px 0px 0;
+	text-align: left;
+}
+
+#contentHeader #notifications {
+	padding: 15px 0 15px 0;
+	text-align: center;
+}
+
+#contentHeader #notifications span {
+	line-height: 30px;
+	padding: 0px 10px;
+}
+
+ul.options .selected {
+	font-weight: bold;
+}
+
+.options {
+	float: left; /* needed to create the tab effect */
+	width: 100%;
+	clear: both;
+	padding-top: 8px;
+	border-bottom: 1px solid #999999;
+}
+
+.options li {
+	float: left;
+	margin-left: 10px;
+	border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
+	border-top: 1px solid #999999;
+	font-size: 13px;
+	background-color: #eeeeee;
+}
+
+.options li.add {
+	float: right;
+	margin-left: 0px;
+	margin-right: 10px;
+}
+
+.options li a,.options li.selected {
+	padding: 5px 10px;
+	text-decoration: none;
+	display: block;
+}
+
+.options li a:hover {
+	text-decoration: underline;
+}
+
+.options li.selected,.options li:hover {
+	background-color: #fff;
+}
+
+.options li.selected {
+	position: relative;
+	bottom: -1px;
+	color:#333333;
+}
+
+.options a,.options a:hover,.options a:visited,.options a:active {
+	color: #333333;
+}
+
+#pageFooter {
+	margin-top: 10px;
+	border-top: 1px solid #999999;
+	padding-top: 5px;
+	width: 100%;
+	font-size: 10px;
+	overflow: hidden;
+	text-align: left;
+}
+
+#pageFooter div {
+	float: left;
+}
+
+#pageFooter .poweredBy {
+	float: right;
+}
+
+.disabledInput {
+    display: none;
+}
+
+.pageContent {
+    text-align:left;
+}
+
+.backToLink {
+	float: left;
+	margin-left: 5px;
+	margin-top: 1.2em;
+}
+
+/*TODO: THIS SHOULD NOT BE HERE, but there is no single contained CSS file for the location picker from the struts side*/
+/*LOCATION PICKER START*/
+
+.locationSelection label.freeFormLabel {
+    display:inline;
+    float:none;
+    text-align:left;
+    padding-left:0;
+    width:125px;
+    line-height:18px;
+    color:#333;
+    font-size:14px;
+    padding-right:10px;
+}
+
+/*LOCATION PICKER END*/
+
+/*Session timeout window*/
+
+form.quickLoginForm {
+    margin-left:auto;
+    margin-right:auto;
+    width:450px;
+    padding: 0 5px;
+}
+
+.instructions {
+	color: #666;
+	padding: 5px 0 5px 5px;
+	font-size: 1.5em;
+}
+
+.quickLoginForm .formAction {
+    padding: 5px 0 0 0;
+    overflow:hidden;
+    clear:both;
+}
+
+.quickLoginForm input[type="submit"], .quickLoginForm button {
+    padding:5px 5px;
+    font-size:1.2em;
+    margin-left:10px;
+    margin-right: 2.5px;
+}
+
+.quickLoginForm input[type="password"] {
+    width: 444px;
+    padding:5px 0;
+}
+
+.quickLoginForm label.label {
+    font-size:1.2em;
+    display:block;
+    font-weight:bold;
+    text-align:left;
+    color:#333;
+    padding:5px 0 0 0;
+}
+
+.quickLoginForm .fieldHolder {
+    display:block;
+    padding: 5px 0 0 0;
+    font-size:1.2em;
+}
+
+/*TABLE STUFF*/
+
+.list {
+	width: 100%;
+	margin: 5px 0px;
+	border-collapse: collapse;
+	border-bottom: 1px solid #CACACA;
+	emtpty-cells: show;
+}
+
+.list th,.list td {
+	min-width: 55px;
+	padding: 9px 5px 9px 10px;
+	empty-cells: show;
+}
+
+.list th {
+	background-color: #EEEEEE;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.list td {
+	border-top: 1px solid #CACACA;
+}
+
+table.list tr.multiSelected {
+    background-color: #D2E5FF;
+}
+
+.list tr:hover {
+	background-color: #EEEEEE;
+}
+
+.list tr:hover td {
+	color: #333;
+}
+
+.list td.name {
+	vertical-align: top;
+}
+
+.list th a,.list th a:visited,.list th a:hover {
+	color: #333333
+}
+
+.list th.checkBox, td.checkBox {
+    min-width: 0;
+}
+
+.list th.sorted {
+	padding-right: 17px;
+	background-repeat: no-repeat;
+	background-position: right;
+	background-color: #CCCCCC;
+	overflow: hidden;
+}
+
+.list th.down {
+	background-image: url(../../../images/sort_arrow_down.gif);
+}
+
+.list th.up {
+	background-image: url(../../../images/sort_arrow_up.gif);
+}
+
+
+/**OOPS/ERROR STUFF**/
+
+.errorContainer {
+	background-color: #F5F5F5;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #E2E2E2;
+	width: 470px;
+	margin-left:auto;
+	margin-right:auto;
+	padding: 20px;
+}
+
+.errorList {
+	background: no-repeat url(../../../images/caution.png) 10px center;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #FFD700;
+	padding: 25px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.errorList .errorMessage{
+	color: black;
+	margin-left: 50px;
+	font-size: 14px;
+	display: block;
+}
+
+.errorContainer h2 {
+	font-size: 20px;
+	padding : 10px 0;
+}
+
+.errorContainer p {
+	font-size: 14px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}

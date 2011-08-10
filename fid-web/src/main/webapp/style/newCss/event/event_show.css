@@ -1,0 +1,32 @@
+.eventView p, .resultContainer {
+	overflow: hidden;
+	padding: 5px 0px;
+	border-bottom: 1px solid #E2E2E2;
+}
+
+.eventView p label, .resultContainer label{
+	float: left;
+	display: block;
+	width: 150px;
+	padding: 5px 15px;
+	padding-left: 30px;
+	color: #333;
+}
+
+.passColor p, .failColor p, .naColor p{
+	padding: 5px 15px;
+	width: 45px;
+	text-align: center;
+}
+
+.naColor p {
+	background-color: #E3E3E3;
+}
+
+.failColor p {
+	background-color: #E9BDBD;
+}
+
+.passColor p{
+	background-color:#DBF1BA;
+}

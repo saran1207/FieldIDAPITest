@@ -1,7 +1,7 @@
 <#assign form_action="EDIT" /> 
 ${action.setPageType('event', 'edit')!}
 
-<@s.form action="eventUpdate" cssClass="crudForm fullPageForm" theme="simple" onsubmit="return checkForUploads()" >
+<@s.form action="eventUpdate" theme="simple" onsubmit="return checkForUploads()" >
 	<#include "_form.ftl"/>
 	<@s.url id="deleteUrl" action="eventDelete" uniqueID="${uniqueID}" assetId="${assetId}" />
 	<div class="actions">

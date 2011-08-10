@@ -341,5 +341,10 @@ public class MultiEventAction extends AbstractCrud {
 		}
 		return userGrouper;
 	}
-	
+
+    @Override
+    public boolean isUseLegacyCss() {
+        return false;
+    }
+
 }

@@ -9,7 +9,7 @@
 	<body>
 		
 		<div id="page">
-			<div id="pageContent">
+			<div id="pageContent"  class="pageContent">
 				${body}
 			</div>
 			

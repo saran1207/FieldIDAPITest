@@ -7,7 +7,7 @@
 <@s.hidden name="assetId"/>
 <@s.hidden name="eventGroupId"/>
 <@s.hidden id="eventTypeId" name="type"/>
-<div id="assetSummary">
+<div id="assetSummary" class="assetSummary">
 	<h2>${asset.type.name!?html}  <@s.text name="label.summary"/></h2>
 
     <div class="infoSet">

@@ -1,8 +1,8 @@
 <title>Oops!</title>
 
-<div id="errorContainer">
+<div id="errorContainer" class="errorContainer">
 	<h2><@s.text name="title.oops_access_restricted"/></h2>
-	<div id="errorList">
+	<div id="errorList" class="errorList"s>
 		<span class="errorMessage"><@s.text name="message.access_restricted"/><span>
 	</div>
 	<p>

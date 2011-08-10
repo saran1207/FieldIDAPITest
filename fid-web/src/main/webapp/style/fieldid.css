@@ -1607,20 +1607,6 @@ input.description {
 	margin-top: 1.2em;
 }
 
-.groupEventTypeList {
-	float: left;
-	overflow:hidden;
-}
-
-.groupEventTypeList li {
-	padding:5px 5px;
-}
-
-.groupEventTypeList li a{
-	font-size: 12px;
-	margin: 3px 8px 13px 8px;
-}
-
 .assignToBox {
 	background-color:#EAEAEA;
 	padding: 10px 10px 10px 0
