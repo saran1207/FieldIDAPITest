@@ -9,6 +9,7 @@
 		frameCount = ${(uploadedFiles?size)!0};
 		uploadFileLimit = ${fileUploadMax};
 		tooManyFileMessage = "<@s.text name="warning.max_files_uploaded"><@s.param>${fileUploadMax}</@s.param></@s.text>";
+		hasUploadForm = false;
 	</script>
 </head>
 
@@ -40,7 +41,6 @@
 				title="${action.fieldErrors['uploadedFiles']}"
 			</#if> 
 		>  
-		
 		<#list uploadedFiles as uploadedFile >
 			<#if uploadedFile?exists>
 				<div id="frame_${uploadedFile_index}" class="fileUpload infoSet">

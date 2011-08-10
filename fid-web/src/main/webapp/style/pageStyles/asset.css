@@ -300,7 +300,7 @@
 	width: 320px
 }
 
-.fullForm .actions {
+#assetCreate .actions {
 	clear: both;
 	background-color: #F8F8F8;
 	padding: 15px 10px;
@@ -321,6 +321,14 @@
 	padding: 20px 10px 0 10px;
 	background-color: #F5FBFF;
 	height: 80px;
+	margin-bottom: 15px;
+}
+
+.uploadedForm {
+	padding: 20px 10px 0 10px;
+	background-color: #FFFFFF;
+	height: 80px;
+	margin-bottom: 15px;
 }
 .uploadFileForm p {
 	padding-bottom: 10px;

@@ -1,5 +1,6 @@
 function startFileUpload() {
 	activeFileUploads++;	
+	hasUploadForm = false;
 }
 
 function completedFileUpload() {
@@ -33,7 +34,7 @@ function fileUploaded( frameId, frameCount, fileName, directory ){
 		);
 	
 	$(frameId).replace( div );
-	$(frameId + "_remove").onclick = func ;
+	$(frameId + "_remove").onclick = func;
 }
 
 var frameCount = 0;
@@ -50,8 +51,13 @@ function addUploadFile(type) {
 		return;
 	}
 	
+	if (hasUploadForm) {
+		return;
+	}
+	
 	var frameId = 'frame_'+ frameCount;
 	var iframe = '<iframe id="' + frameId +'" class="fileUpload form" src="'+ uploadUrl + '?frameId=' + frameId + '&frameCount=' + frameCount + '&typeOfUpload=' + type + '" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="100" ></iframe>';
 	$('uploadedfiles').insert( { bottom: iframe } );
 	frameCount++;
+	hasUploadForm = true;
 }
