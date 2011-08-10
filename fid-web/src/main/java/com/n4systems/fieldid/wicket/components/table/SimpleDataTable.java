@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.table;
 
 import com.n4systems.util.views.RowView;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
@@ -27,6 +28,7 @@ public class SimpleDataTable<T> extends Panel {
     private DataTable<T> table;
     private MultiIdSelection multiIdSelection;
     private SelectionStatusPanel selectionStatusPanel;
+    private Component topPaginationBar;
 
     public SimpleDataTable(String id, final IColumn<T>[] columns,
         ISortableDataProvider<T> dataProvider, int rowsPerPage) {
@@ -110,7 +112,7 @@ public class SimpleDataTable<T> extends Panel {
 
         add(table);
 
-        add(createPaginationBar("topPagination"));
+        add(topPaginationBar = createPaginationBar("topPagination"));
         add(createPaginationBar("bottomPagination"));
         
         addEmptyResultsDisplay(emptyResultsTitleKey, emptyResultsMessageKey, table);
@@ -145,9 +147,16 @@ public class SimpleDataTable<T> extends Panel {
         return new JumpableNavigationBar(id, this) {
             @Override
             protected void onPageChanged(AjaxRequestTarget target) {
+                scrollToTopPaginationBar(target);
                 SimpleDataTable.this.onPageChanged(target);
             }
         };
+    }
+
+    private void scrollToTopPaginationBar(AjaxRequestTarget target) {
+        String topPageBarId = topPaginationBar.getMarkupId();
+
+        target.appendJavascript("var currentScrollY = typeof(window.pageYOffset)=='number' ? window.pageYOffset : document.documentElement.scrollTop; var currentPaginationBarY = findPos($('"+topPageBarId+"'))[1]; if (currentPaginationBarY < currentScrollY) { window.scroll(0, currentPaginationBarY)}");
     }
 
     protected void onPageChanged(AjaxRequestTarget target) { }

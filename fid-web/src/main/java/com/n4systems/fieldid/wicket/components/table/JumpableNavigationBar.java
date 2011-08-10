@@ -34,6 +34,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
 		super(id);
         this.simpleDataTable = simpleDataTable;
         this.table = simpleDataTable.getTable();
+        setOutputMarkupId(true);
         add(CSSPackageResource.getHeaderContribution("style/featureStyles/pagination.css"));
 
         paginationContainer = new WebMarkupContainer("paginationContainer") {

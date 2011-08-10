@@ -170,7 +170,8 @@ function updateMessages(messages, errors, modifiedId) {
 }
 
 function findPos(obj) {
-	var curleft = curtop = 0;
+    var curtop = 0;
+	var curleft = 0;
 	if (obj.offsetParent) {
 		do {
 			curleft += obj.offsetLeft;
