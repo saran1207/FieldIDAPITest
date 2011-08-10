@@ -87,7 +87,7 @@ public class MinimalTenantDataSetup {
 		user.setRegistered(true);
 		user.setPermissions(Permissions.SYSTEM);
 		user.setUserType(UserType.SYSTEM);
-		user.setUserID("n4ystems");
+		user.setUserID("n4systems");
 		user.setHashPassword("6e900ce5b6400c175a30f9f75987c95c4161608a"); //f0rM@t!!
 		user.setEmailAddress("at@dot.com");
 		user.setFirstName("N4");
