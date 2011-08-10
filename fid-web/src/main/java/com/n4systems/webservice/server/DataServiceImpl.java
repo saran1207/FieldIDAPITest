@@ -581,9 +581,13 @@ public class DataServiceImpl implements DataService {
 			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(request.getTenantId());
 			EventSchedule eventSchedule = converter.convert(request.getScheduleService(), request.getTenantId());
 
-			new InspectionScheduleCreateHandler(new AssetByMobileGuidLoader(new TenantOnlySecurityFilter(request.getTenantId())), new FilteredIdLoader<Asset>(
-					new TenantOnlySecurityFilter(request.getTenantId()), Asset.class), new FilteredIdLoader<EventType>(new TenantOnlySecurityFilter(
-					request.getTenantId()), EventType.class), new EventScheduleSaver())
+			TenantOnlySecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
+			securityFilter.setShowArchived(true);
+			
+			new InspectionScheduleCreateHandler(new AssetByMobileGuidLoader(securityFilter), 
+					new FilteredIdLoader<Asset>(securityFilter, Asset.class), 
+					new FilteredIdLoader<EventType>(securityFilter, EventType.class), 
+					new EventScheduleSaver())
 					.createNewInspectionSchedule(eventSchedule, request.getScheduleService());
 
 		} catch (Exception e) {
@@ -1088,9 +1092,13 @@ public class DataServiceImpl implements DataService {
 	private Asset findOrTagProduct(Long tenantId, AbstractInspectionServiceDTO inspectionServiceDTO) throws FindAssetFailure {
 
 		Asset asset = null;
+		
+		TenantOnlySecurityFilter securityFilter = new TenantOnlySecurityFilter(tenantId);
+		securityFilter.setShowArchived(true);
+		
 		if (inspectionServiceDTO.productIdExists()) {
 			try {
-				asset = WsServiceLocator.getAssetManager(tenantId).findAsset(inspectionServiceDTO.getProductId(), new TenantOnlySecurityFilter(tenantId));
+				asset = WsServiceLocator.getAssetManager(tenantId).findAsset(inspectionServiceDTO.getProductId(), securityFilter);
 				asset = WsServiceLocator.getAssetManager(tenantId).fillInSubAssetsOnAsset(asset);
 			} catch (Exception e) {
 				logger.error("looking up asset with asset id " + inspectionServiceDTO.getProductId(), e);
@@ -1099,7 +1107,7 @@ public class DataServiceImpl implements DataService {
 		} else if (inspectionServiceDTO.productMobileGuidExists()) {
 			// Try looking up by GUID
 			try {
-				asset = WsServiceLocator.getAssetManager(tenantId).findAssetByGUID(inspectionServiceDTO.getProductMobileGuid(), new TenantOnlySecurityFilter(tenantId));
+				asset = WsServiceLocator.getAssetManager(tenantId).findAssetByGUID(inspectionServiceDTO.getProductMobileGuid(), securityFilter);
 			} catch (Exception e) {
 				logger.error("Looking up asset by GUID = " + inspectionServiceDTO.getProductMobileGuid(), e);
 			}
