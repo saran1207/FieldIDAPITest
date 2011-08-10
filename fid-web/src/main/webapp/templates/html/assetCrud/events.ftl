@@ -14,7 +14,6 @@
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<@n4.includeScript src="googleMaps.js"/>
 	<@n4.includeScript src="event.js"/>
-		
 	
 </head>
 
@@ -115,8 +114,8 @@
 		document.observe("dom:loaded", function() {
 			jQuery("#eventsList img").tooltip({
 				tip: '#tooltip',
-				position: 'center right',
-				offset: [0, 15],
+				position: 'center right',				
+				offset: [0, 15],				
 				delay: 0
 			});		
 		});
@@ -135,8 +134,8 @@
 </#if>
 
 	
-<#if showMap> 
-	<#assign locations = eventLocations/>
+<#if showMap>  <!-- TODO DD: what to show if no event locations exist? ask matt --> 
+	<#assign events = eventsWithLocation/>
 		
 	<script type="text/javascript">
 		Event.observe(window, 'load', function() { 
@@ -147,11 +146,10 @@
 		<div id="mapCanvas" class="googleMap"/>
 	</div>
 	
-	<#list locations as location >
+	<#list events as event>
+		<#assign content>${event.content}</#assign>	
 		<script type="text/javascript">
-			Event.observe(window, 'load', function() { 
-				googleMap.addMarker(${location});
-			});			
+			googleMap.addMarker(${event.gpsLocation}, '${content?j_string}');
 		</script>
 	</#list>
 </#if>

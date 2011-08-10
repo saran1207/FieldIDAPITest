@@ -53,7 +53,6 @@ import com.n4systems.model.Event;
 import com.n4systems.model.EventGroup;
 import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
-import com.n4systems.model.GpsLocation;
 import com.n4systems.model.LineItem;
 import com.n4systems.model.Order;
 import com.n4systems.model.Project;
@@ -396,18 +395,17 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 	
     // TODO DD : same as above...this is event related code. but this will be refactored into wicket component soon enough...i hope.
-	public Set<GpsLocation> getEventLocations() {
+	public Set<Event> getEventsWithLocation() {
     	List<Event> events = getAllEventHelper().getEvents();
-    	Set<GpsLocation> locations = new HashSet<GpsLocation>();
+    	Set<Event> result = new HashSet<Event>();
     	for (Event event:events) { 
     		if (event.getGpsLocation()!=null) { 
-    			locations.add(event.getGpsLocation());
+    			result.add(event);
     		}
     	}
-    	return locations;
+    	return result;
     }    
 	
-
 	private void loadAttachments() {
 		setAttachments(getLoaderFactory().createAssetAttachmentListLoader().setAsset(asset).load());
 	}
@@ -1247,5 +1245,14 @@ public class AssetCrud extends UploadAttachmentSupport {
     public boolean isShowGroups() { 
     	return mode.equalsIgnoreCase("date");
     }
+
+    public String getEventDescription(Event event) {
+    	// FIXME DD : use proper date formatter.
+    	return getText("asset.event_desc", new String[] {event.getDate().toString(), event.getStatus().toString(), createEventLink(event)});
+    }
+
+	private String createEventLink(Event event) {
+		return "http://www.google.com";
+	}
     
 }

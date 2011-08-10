@@ -3,50 +3,69 @@ var googleMap = (function() {
 	 
 	var name = "FieldIdGoogleMaps";	
 	var map = '';  
-	var bounds = new google.maps.LatLngBounds();
-	var markerCount = 0;
+	var locations = [];
+	var infowindow =  new google.maps.InfoWindow();	
 	
 	var initialize = function(id) {
 		var myOptions = {
-	 		zoom: 14,
+	 		zoom: 15,
 	  	  	mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
-		map = new google.maps.Map(document.getElementById(id), myOptions);
-		var loc = new google.maps.LatLng(42.130821,-97.998047);  /*default value is centered on north america */		
-		map.setCenter(loc);		
+		map = new google.maps.Map(document.getElementById(id), myOptions);		
+		addMarkers();
 		return map;		
 	};
 	
-	var initializeWithMarker = function(id, latitude, longitude) { 
+	var initializeWithMarker = function(id, latitude, longitude, content) { 
+		addMarker(latitude,longitude, content);		
 		initialize(id);
-		addMarker(latitude,longitude);		
+	};
+	
+	var addMarker = function(latitude,longitude,content) {
+		var location = new google.maps.LatLng(latitude, longitude);
+		location.content = content;
+		locations.push(location);
+	};
+	
+	function addMarkers() {
+		var bounds = new google.maps.LatLngBounds();				
+		var count = locations.length;
+		for (var i=0; i<count; i++) {
+			var loc = locations[i];
+			var marker = new google.maps.Marker({
+				position: loc,
+				map: map,
+				title: loc.toString()
+			});		
+			
+			bounds.extend(loc);					
+			marker.content = loc.content;
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.setContent(this.content);
+				infowindow.open(map,this);
+			});		
+		
+		}
+		if (count>1) { 
+			map.fitBounds(bounds);
+		} else if (count==1) { 
+			map.setCenter(locations[0]);
+		}			
+		
+	};
+	
+	function infoWindow(marker, content) { 
+		
 	}
 	
-	var addMarker = function(latitude,longitude) {	
-		var loc = new google.maps.LatLng(latitude, longitude);	
-		map.setCenter(loc);
-		var coordinates = '(' + latitude + ' , ' + longitude + ')';  /*default value just in case geocoder doesnt work */
-					
-		var marker = new google.maps.Marker({
-			position: loc,
-			map: map,
-			title: coordinates
-		});		
-		bounds.extend(loc);
-		if (markerCount!=0) { 
-			map.fitBounds(bounds);   /*TODO DD : optimize??? leave this up to caller to do just once? */
-		}			
-		markerCount++;		
-		
-		
+	var addGeoCoder = function(marker) { 
 		var geocoder = new google.maps.Geocoder();
 		geocoder.geocode( {'latLng': loc}, function(results, status) {
 			if (status== google.maps.GeocoderStatus.OK) {				        
 				marker.setTitle(formatAddressString(results[0]));				      
-		 	}
-		});					
+			}
+		});
 	}
-
 	
 	function formatAddressString(address) {
 		var result = '';
@@ -54,7 +73,7 @@ var googleMap = (function() {
 			result += address.address_components[0].short_name;
 		}
 		if (address.address_components[1]) {
-			result += ',' + address.address_components[1].short_name;
+			result += ' ' + address.address_components[1].short_name;
 		}
 		if (address.address_components[2]) {
 			result += ',' + address.address_components[2].short_name;
