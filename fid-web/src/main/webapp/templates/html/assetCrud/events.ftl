@@ -14,8 +14,6 @@
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<@n4.includeScript src="googleMaps.js"/>
 	<@n4.includeScript src="event.js"/>
-	<@n4.includeScript src="commonJquery.js"/>
-	
 		
 	
 </head>
