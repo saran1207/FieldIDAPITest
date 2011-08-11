@@ -88,7 +88,7 @@ ${action.setPageType('user','change')!}
 					<input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
 				</div>
 			<#else>
-				<#if readonlyUserLimitReached>
+				<#if userLimitService.readOnlyUsersAtMax>
 					<div class="userLimitWarning">
 						<@s.text name="label.readonly_user_limit_reached"><@s.param><a href="http://www.fieldid.com/contact"><@s.text name="label.contact_us"/></a></@s.param></@s.text>	
 					</div>
