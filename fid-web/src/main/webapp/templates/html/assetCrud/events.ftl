@@ -41,7 +41,7 @@
 	
 	<#assign page = pagedEvents/>
 	
-	<div id="tooltip" class="tooltip" style="display:none">
+	<div id="tooltip" class="tooltip">
 		<@s.text name="label.gps_location_recorded"/>
 	</div>
 	

@@ -11,6 +11,8 @@
 			color:#fff;
 			text-align:left;
 			font-size:12px;
+			width:250px;
+			display:none;
 
 			/* outline radius for mozilla/firefox only */
 			-moz-box-shadow:0 0 10px #000;
