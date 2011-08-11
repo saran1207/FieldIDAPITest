@@ -26,6 +26,7 @@
 	<#assign page = pagedEvents/>
 	
 	<div class="buttonBar">
+		<!-- TODO DD : should i show mapButton if GPS not enabled? or show it but display 'you must enable....' msg when they click on it? --> 
 		<a id="mapButton" class="${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>		
 		<a id="listButton" class="${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
 		<a id="groupByDateButton" class="${action.showGroups.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
@@ -147,9 +148,13 @@
 	</div>
 	
 	<#list events as event>
-		<#assign content>${event.content}</#assign>	
+		<#assign content>${action.getEventDescription(event)}</#assign>		
+		<#assign urlLabel>View Event Details</#assign>
+		<#assign url>
+			<#include "../eventCrud/_viewEventLink.ftl"/><br>
+		</#assign>
 		<script type="text/javascript">
-			googleMap.addMarker(${event.gpsLocation}, '${content?j_string}');
+			googleMap.addMarker(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}");
 		</script>
 	</#list>
 </#if>
@@ -245,5 +250,3 @@
 
 
 </div>
-
-

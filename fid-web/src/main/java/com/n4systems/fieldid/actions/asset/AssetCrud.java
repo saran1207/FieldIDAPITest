@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.asset;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1246,13 +1247,9 @@ public class AssetCrud extends UploadAttachmentSupport {
     	return mode.equalsIgnoreCase("date");
     }
 
-    public String getEventDescription(Event event) {
-    	// FIXME DD : use proper date formatter.
-    	return getText("asset.event_desc", new String[] {event.getDate().toString(), event.getStatus().toString(), createEventLink(event)});
+    public String getEventDescription(Event event) {	
+    	SimpleDateFormat dateFormatter = event.getOwner().getPrimaryOrg().getDateFormatter();
+    	String date = dateFormatter.format(event.getDate());    	
+    	return getText("asset.event_desc", new String[] {date, event.getStatus().toString() });
     }
-
-	private String createEventLink(Event event) {
-		return "http://www.google.com";
-	}
-    
 }

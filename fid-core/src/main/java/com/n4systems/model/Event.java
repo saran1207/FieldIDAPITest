@@ -396,9 +396,4 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		this.gpsLocation = gpsLocation;
 	}
 
-	// FIXME DD : temporary...this should be moved to action. closer to client side.  used to display info in google maps info window.
-	public String getContent() { 
-		return getDate().toString() + " , " + getStatus();
-	}
-	
 }
