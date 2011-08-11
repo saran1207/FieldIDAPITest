@@ -154,8 +154,8 @@
 		<#assign url>
 			<#include "../eventCrud/_viewEventLink.ftl"/><br>
 		</#assign>
-		<script type="text/javascript">
-			googleMap.addMarker(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}");
+		<script type="text/javascript">						
+			googleMap.addMarker(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}", markerImageForStatus("${event.status}"));
 		</script>
 	</#list>
 </#if>

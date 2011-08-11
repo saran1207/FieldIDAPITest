@@ -1,4 +1,15 @@
 
+/** TODO DD : refactor this.  doesn't really belong with google maps stuff */
+function markerImageForStatus(status) { 
+	if (!status) {
+		return '';
+	}
+	if (status.toLowerCase()=='fail') {		/** TODO DD : add other images for other status */
+		return 'images/def.png';
+	}
+	return '';	/* use default otherwise */
+}
+
 var googleMap = (function() {
 	 
 	var name = "FieldIdGoogleMaps";	
@@ -21,9 +32,10 @@ var googleMap = (function() {
 		initialize(id);
 	};
 	
-	var addMarker = function(latitude,longitude,content) {
+	var addMarker = function(latitude,longitude,content, image) {
 		var location = new google.maps.LatLng(latitude, longitude);
 		location.content = content;
+		location.image = image;
 		locations.push(location);
 	};
 	
@@ -32,10 +44,7 @@ var googleMap = (function() {
 		var count = locations.length;
 		for (var i=0; i<count; i++) {
 			var loc = locations[i];
-			var marker = new google.maps.Marker({
-				position: loc,
-				map: map				
-			});		
+			var marker = createMarker(loc);
 			
 			bounds.extend(loc);					
 			marker.content = loc.content;
@@ -53,9 +62,14 @@ var googleMap = (function() {
 		
 	};
 	
-	function infoWindow(marker, content) { 
-		
+	function createMarker(loc) {
+		return new google.maps.Marker({
+			position: loc,
+			icon: loc.image,
+			map: map				
+		});		
 	}
+				
 	
 	var addGeoCoder = function(marker) { 
 		var geocoder = new google.maps.Geocoder();
