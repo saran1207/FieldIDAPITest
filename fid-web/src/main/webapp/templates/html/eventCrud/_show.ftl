@@ -257,8 +257,10 @@
 		</script>						
 		<div>
 			<h2><@s.text name="label.gpslocation"/></h2> 
-		</div>	
-		<div id="mapCanvas" class="googleMap eventMap"></div>
+		</div>
+		<div style="height:300px;">	
+			<div id="mapCanvas" class="googleMap eventMap"></div>
+		</div>			
 	</#if>	
 
 </div>
