@@ -10,7 +10,7 @@ ${action.setPageType('your_account', 'list')!}
 		<div class="infoSet">
 			<label><@s.text name="label.your_current_plan"/></label>
 			<span class="fieldHolder">
-				<strong id="currentPlan">${(action.currentPackageFilter().packageName?html)!}</strong>
+				<strong id="currentPlan">${primaryOrg.signUpPackage.displayName}</strong>
 			</span>
 		</div>
 		

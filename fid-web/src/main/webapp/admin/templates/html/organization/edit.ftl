@@ -2,12 +2,14 @@
 	<@n4.includeStyle href="admin/editOrg"/>	
 	<@n4.includeScript src="organizationEdit.js" />		
 	<script type="text/javascript">
-		editNoteUrl = '<@s.url action="editNote" namespace="/adminAjax"/>'
-		cancelNoteUrl = '<@s.url action="cancelNote" namespace="/adminAjax"/>'
-		editPlanUrl = '<@s.url action="editPlan" namespace="/adminAjax"/>'
-		cancelPlanUrl = '<@s.url action="cancelPlan" namespace="/adminAjax"/>'
-		editNameUrl = '<@s.url action="editTenantName" namespace="/adminAjax"/>'
-		cancelNameUrl = '<@s.url action="cancelTenantName" namespace="/adminAjax"/>'
+		editNoteUrl = '<@s.url action="editNote" namespace="/adminAjax"/>';
+		cancelNoteUrl = '<@s.url action="cancelNote" namespace="/adminAjax"/>';
+		editPlanUrl = '<@s.url action="editPlan" namespace="/adminAjax"/>';
+		cancelPlanUrl = '<@s.url action="cancelPlan" namespace="/adminAjax"/>';
+		editNameUrl = '<@s.url action="editTenantName" namespace="/adminAjax"/>';
+		cancelNameUrl = '<@s.url action="cancelTenantName" namespace="/adminAjax"/>';
+        editSignUpUrl = '<@s.url action="editSignUp" namespace="/adminAjax"/>';
+        cancelSignUpUrl = '<@s.url action="cancelSignUp" namespace="/adminAjax"/>';
 	</script>
 </head>
 
@@ -41,6 +43,10 @@
 	<div id="orgStatus">
 		<#include "_status.ftl"/>
 	</div>
+
+    <div id="signUpDetails" style="padding-top:20px;">
+        <#include "_signUpDetails.ftl"/>
+    </div>
 </div>
 
 <div id="orgPlan">

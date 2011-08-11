@@ -21,6 +21,7 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.signuppackage.SignUpPackageDetails;
 
 @Entity
 @Table(name = "org_primary")
@@ -61,6 +62,10 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 
 	@Column(name="externalusername")
 	private String externalUserName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="signuppackage")
+    private SignUpPackageDetails signUpPackage = SignUpPackageDetails.Legacy;
 	
 	@Column(name="autopublish", nullable=false)
 	private boolean autoPublish;
@@ -233,5 +238,13 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 
     public void setIdentifierLabel(String identifierLabel) {
         this.identifierLabel = identifierLabel;
+    }
+
+    public SignUpPackageDetails getSignUpPackage() {
+        return signUpPackage;
+    }
+
+    public void setSignUpPackage(SignUpPackageDetails signUpPackage) {
+        this.signUpPackage = signUpPackage;
     }
 }

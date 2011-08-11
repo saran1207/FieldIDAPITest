@@ -8,7 +8,9 @@ import com.n4systems.model.api.Listable;
 
 public enum SignUpPackageDetails implements Listable<String> {
 
-	Free("FIDFREE", "Free"),
+    Legacy("FIDLEGACY", "Legacy"),
+
+    Free("FIDFREE", "Free"),
 
 	Basic("FIDBASIC", "Basic", ExtendedFeature.EmailAlerts),
 

@@ -4,7 +4,11 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.RedirectToUrlException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.model.AbstractCheckBoxModel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -47,45 +51,44 @@ public class AddTenantPage extends FieldIDAdminPage {
 	}
 	
 	private AddTenantModel getDefaultTenantModel() {
-		SignUpPackageDetails defaultPackage = SignUpPackageDetails.Basic;
-		
 		AddTenantModel model = new AddTenantModel();
-		model.setSignUpPackage(defaultPackage);
-		model.getPrimaryOrg().getExtendedFeatures().addAll(defaultPackage.getFeatureList());
+		model.getPrimaryOrg().getExtendedFeatures().addAll(model.getPrimaryOrg().getSignUpPackage().getFeatureList());
 		model.getAdminUser().setTimeZoneID(ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_TIMEZONE_ID));
 		
 		return model;
 	}
 
 	private class AddTenantForm extends Form<AddTenantModel> {
+        WebMarkupContainer extendedFeaturesContainer;
+
 		public AddTenantForm(String id, final IModel<AddTenantModel> addTenantModel) {
 			super(id, new CompoundPropertyModel<AddTenantModel>(addTenantModel));
 
-			add(new DropDownChoice<SignUpPackageDetails>("signUpPackage", 
-					new ArrayModel<SignUpPackageDetails>(SignUpPackageDetails.values()), 
-					new ListableChoiceRenderer<SignUpPackageDetails>()) {
+            final DropDownChoice<SignUpPackageDetails> signUpPackageSelect;
 
-				@Override
-				protected boolean wantOnSelectionChangedNotifications() {
-					return true;
-				}
-				
-				@Override
-				protected void onSelectionChanged(SignUpPackageDetails newSelection) {
+			add(signUpPackageSelect = new DropDownChoice<SignUpPackageDetails>("primaryOrg.signUpPackage",
+					new ArrayModel<SignUpPackageDetails>(SignUpPackageDetails.values()),
+					new ListableChoiceRenderer<SignUpPackageDetails>()));
+
+            signUpPackageSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
 					Set<ExtendedFeature> extendedFeatures = addTenantModel.getObject().getPrimaryOrg().getExtendedFeatures();
 					extendedFeatures.clear();
-					extendedFeatures.addAll(newSelection.getFeatureList());
-				}
-			});
+					extendedFeatures.addAll(signUpPackageSelect.getModelObject().getFeatureList());
+                    target.addComponent(extendedFeaturesContainer);
+                }
+            });
+            getMarkupId();
 
 			add(new RequiredTextField<String>("tenant.name"));
 			add(new RequiredTextField<Integer>("tenant.settings.userLimits.maxEmployeeUsers", Integer.class));
 			add(new RequiredTextField<Integer>("tenant.settings.userLimits.maxLiteUsers", Integer.class));
 			add(new RequiredTextField<Integer>("tenant.settings.userLimits.maxReadOnlyUsers", Integer.class));
-			add(new CheckBox("tenant.settings.secondaryOrgsEnabled"));
-			add(new CheckBox("primaryOrg.plansAndPricingAvailable"));
-			
-			add(new ListView<ExtendedFeature>("extendedFeatures", new ArrayModel<ExtendedFeature>(ExtendedFeature.values())) {
+
+            add(extendedFeaturesContainer = new WebMarkupContainer("extendedFeaturesContainer"));
+            extendedFeaturesContainer.setOutputMarkupId(true);
+			extendedFeaturesContainer.add(new ListView<ExtendedFeature>("extendedFeatures", new ArrayModel<ExtendedFeature>(ExtendedFeature.values())) {
 				@Override
 				protected void populateItem(ListItem<ExtendedFeature> item) {
 					ExtendedFeature feature = item.getModelObject();
@@ -93,7 +96,9 @@ public class AddTenantPage extends FieldIDAdminPage {
 					item.add(new CheckBox("feature", new ExtendedFeatureCheckBoxModel(feature, addTenantModel.getObject().getPrimaryOrg().getExtendedFeatures())));
 				}
 			});
-			
+            extendedFeaturesContainer.add(new CheckBox("tenant.settings.secondaryOrgsEnabled"));
+            extendedFeaturesContainer.add(new CheckBox("primaryOrg.plansAndPricingAvailable"));
+
 			add(new RequiredTextField<String>("adminUser.userID"));
 			add(new RequiredTextField<String>("adminUser.firstName"));
 			add(new RequiredTextField<String>("adminUser.lastName"));

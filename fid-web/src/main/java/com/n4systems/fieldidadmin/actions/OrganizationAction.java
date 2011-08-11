@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.signuppackage.SignUpPackageDetails;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @Validations
-public class OrganizationAction extends AbstractCrud implements Preparable, HasDuplicateValueValidator {
+public class OrganizationAction extends AbstractCrud implements Preparable/*, HasDuplicateValueValidator*/ {
 
 	public OrganizationAction(com.n4systems.ejb.PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -201,6 +202,12 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	}
 
 	@SkipValidation
+	public String doUpdateSignUp() {
+		updatePrimaryOrg();
+		return SUCCESS;
+	}
+
+	@SkipValidation
 	public String doEditTenantName() {
 		setShowReminder(false);
 		return SUCCESS;
@@ -209,6 +216,16 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	@SkipValidation
 	public String doCancelTenantName() {
 		setShowReminder(false);
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doEditSignUp() {
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doCancelSignUp() {
 		return SUCCESS;
 	}
 
@@ -483,5 +500,17 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public void setShowReminder(boolean showReminder) {
 		this.showReminder = showReminder;
 	}
+
+    public List<SignUpPackageDetails> getSignUpPackages() {
+        return Arrays.asList(SignUpPackageDetails.values());
+    }
+
+    public String getSignUpPlan() {
+        return primaryOrg.getSignUpPackage().getName();
+    }
+
+    public void setSignUpPlan(String signUpPlan) {
+        primaryOrg.setSignUpPackage(SignUpPackageDetails.valueOf(signUpPlan));
+    }
 
 }

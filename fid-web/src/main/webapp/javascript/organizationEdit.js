@@ -4,13 +4,19 @@ var editPlanUrl = "";
 var cancelPlanUrl = "";
 var editNameUrl = "";
 var cancelNameUrl = "";
-
+var editSignUpUrl = "";
+var cancelSignUpUrl = "";
 
 function editNote( id ) {
 	var params = new Object();
 	params.id = id;
 	getResponse(editNoteUrl, "get", params);
+}
 
+function editSignUp(id) {
+    var params = new Object();
+    params.id = id;
+    getResponse(editSignUpUrl, "get", params);
 }
 
 function updateNote() {
@@ -19,11 +25,22 @@ function updateNote() {
 	$( 'noteForm' ).request(getStandardCallbacks());
 }
 
+function updateSignUpFoo() {
+    $('updateSignUpButton').disable();
+    $('signUpFormLoading').style.visibility = "visible";
+    $( 'signUpDetailsForm' ).request(getStandardCallbacks());
+}
+
+function cancelSignUp( id ) {
+	var params = new Object();
+	params.id = id;
+	getResponse(cancelSignUpUrl, "get", params);
+}
+
 function cancelNote( id ) {
 	var params = new Object();
 	params.id = id;
 	getResponse(cancelNoteUrl, "get", params);
-
 }
 
 function editPlan( id ) {

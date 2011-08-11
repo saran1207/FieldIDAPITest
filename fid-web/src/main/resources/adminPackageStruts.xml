@@ -522,11 +522,26 @@
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
 		</action>
 
+		<action name="editSignUp" method="editSignUp"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/editSignUp.ftl</result>
+		</action>
+
+		<action name="cancelSignUp" method="cancelSignUp"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displaySignUp.ftl</result>
+		</action>
+
+		<action name="updateSignUp" method="updateSignUp"
+			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+			<result name="success" type="freemarker">/admin/templates/ajax/organization/displaySignUp.ftl</result>
+		</action>
+
 		<action name="updateTenantName" method="updateTenantName"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
-			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
-			<result name="input" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
-			<result name="error" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
+            <result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
+            <result name="input" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
+            <result name="error" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
 		</action>
 
 		<action name="cancelNote" method="cancelNote"
