@@ -34,8 +34,7 @@ var googleMap = (function() {
 			var loc = locations[i];
 			var marker = new google.maps.Marker({
 				position: loc,
-				map: map,
-				title: loc.toString()
+				map: map				
 			});		
 			
 			bounds.extend(loc);					

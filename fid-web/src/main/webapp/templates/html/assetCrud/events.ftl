@@ -17,7 +17,8 @@
 	
 </head>
 
-
+<#assign events = eventsWithLocation/>
+ 
 <div class="headerActions">
 	<#if sessionUser.hasAccess("createevent")>
 		<a id="startEvent" href="#" onclick="return redirect('<@s.url action="quickEvent" assetId="${uniqueID}" includeParams="none" />');"><@s.text name="label.start_event"/></a>
@@ -26,8 +27,9 @@
 	<#assign page = pagedEvents/>
 	
 	<div class="buttonBar">
-		<!-- TODO DD : should i show mapButton if GPS not enabled? or show it but display 'you must enable....' msg when they click on it? --> 
-		<a id="mapButton" class="${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>		
+		<#if !events.isEmpty()>		
+			<a id="mapButton" class="${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>
+		</#if>					
 		<a id="listButton" class="${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
 		<a id="groupByDateButton" class="${action.showGroups.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
 	</div>
@@ -135,8 +137,7 @@
 </#if>
 
 	
-<#if showMap>  <!-- TODO DD: what to show if no event locations exist? ask matt --> 
-	<#assign events = eventsWithLocation/>
+<#if showMap && !events.isEmpty()>  <!-- TODO DD: what to show if no event locations exist? ask matt --> 
 		
 	<script type="text/javascript">
 		Event.observe(window, 'load', function() { 

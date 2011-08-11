@@ -323,15 +323,15 @@ ${action.setPageType('asset', 'show')!}
 	</#if>
 
 	<#if (asset.gpsLocation?exists) >	 
+		<div class="viewSection">
+			<h2><@s.text name="label.gpslocation"/></h2> 
+		</div>			
+		<div id="mapCanvas" class="googleMap assetMap"></div>
 		<script type="text/javascript">
 			Event.observe(window, 'load', function() { 
 				googleMap.initializeWithMarker('mapCanvas',${action.latitude}, ${action.longitude})
 			});		
 		</script>						
-		<div>
-			<h2><@s.text name="label.gpslocation"/></h2> 
-		</div>			
-		<div id="mapCanvas" class="googleMap assetMap"></div>
 
 	</#if>
 			
