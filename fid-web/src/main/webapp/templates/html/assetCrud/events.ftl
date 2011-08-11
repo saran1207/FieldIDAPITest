@@ -144,9 +144,7 @@
 			googleMap.initialize('mapCanvas');			
 		});				
 	</script>
-	<div style="height:500px">
-		<div id="mapCanvas" class="googleMap"/>
-	</div>
+	<div id="mapCanvas" class="googleMap allEventsMap"/>
 	
 	<#list events as event>
 		<#assign content>${action.getEventDescription(event)}</#assign>		

@@ -1,14 +1,17 @@
 
-/** TODO DD : refactor this.  doesn't really belong with google maps stuff */
-function markerImageForStatus(status) { 
+/** TODO DD : refactor this.  events status stuff doesn't really belong with google maps stuff */
+function markerImageForStatus(status, prefix) { 
 	if (!status) {
 		return '';
 	}
 	if (status.toLowerCase()=='fail') {		/** TODO DD : add other images for other status */
-		return 'images/def.png';
+		var image = 'images/def.png'; 
+		return prefix ? prefix + image : image;
 	}
 	return '';	/* use default otherwise */
 }
+
+
 
 var googleMap = (function() {
 	 
@@ -27,13 +30,13 @@ var googleMap = (function() {
 		return map;		
 	};
 	
-	var initializeWithMarker = function(id, latitude, longitude, content) { 
-		addMarker(latitude,longitude, content);		
-		initialize(id);
+	var initializeWithMarker = function(id, latitude, longitude, content, image) { 
+		addMarker(latitude,longitude,content,image);		
+		return initialize(id);
 	};
 	
-	var addMarker = function(latitude,longitude,content, image) {
-		var location = new google.maps.LatLng(latitude, longitude);
+	var addMarker = function(latitude,longitude,content,image) {
+		var location = new google.maps.LatLng(latitude,longitude);
 		location.content = content;
 		location.image = image;
 		locations.push(location);

@@ -2000,8 +2000,8 @@ div.unitOfMeasureName {
 	float:right;  /* this should not be part of this style...style this in containing element */
 	background: -moz-linear-gradient(top,  #fff,  #ddd);
  	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));	
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');	
- 	-moz-border-radius: 8px;
+ 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');	
+	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	border: 1px solid #eee;
 	color: #000;
@@ -2018,7 +2018,7 @@ div.unitOfMeasureName {
 	color:#000;
 	padding-left: 18px;
 	opacity:.45;
-	filter:alpha(opacity=45);	
+ 	filter:alpha(opacity=45);	
 }
 
 .buttonBar a:hover {
@@ -2227,9 +2227,13 @@ th.wicket_orderDown {
 	color:#888;
 }
 
+
 .googleMap {
-	height:100%;	/*leave it up to parent to style height! */
 	border: 2px;	
+}
+
+.allEventsMap { 
+	height: 550px;
 }
 
 .eventMap { 
