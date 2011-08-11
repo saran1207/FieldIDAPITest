@@ -52,6 +52,7 @@ public class UpgradePackageFilterTest {
 		ContractPricing currentContract = createCurrentContract(SignUpPackageDetails.Free);
 		List<SignUpPackage> expectedPackages = new ArrayList<SignUpPackage>(allFullPackages);
 		expectedPackages.remove(0);
+        expectedPackages.remove(0);
 		
 		
 		List<SignUpPackage> actualPackages = UpgradePackageFilter.createUpgradePackageFilter(currentContract).reduceToAvailablePackages(allFullPackages);
