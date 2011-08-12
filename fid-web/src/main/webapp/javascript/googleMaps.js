@@ -1,22 +1,11 @@
 
-/** TODO DD : refactor this.  events status stuff doesn't really belong with google maps stuff */
-function markerImageForStatus(status, prefix) { 
-	if (!status) {
-		return '';
-	}
-	if (status.toLowerCase()=='fail') {		/** TODO DD : add other images for other status */
-		var image = 'images/def.png'; 
-		return prefix ? prefix + image : image;
-	}
-	return '';	/* use default otherwise */
-}
 
 
 
 var googleMap = (function() {
 	 
 	var name = "FieldIdGoogleMaps";	
-	var map = '';  
+	var map = '';  /* TODO DD : refactor this.  "map" is a singleton right now.  to handle multiple map instances i need to change this by either making a factory or making map into a collection.  */  
 	var locations = [];
 	var infowindow =  new google.maps.InfoWindow();	
 	
@@ -30,15 +19,15 @@ var googleMap = (function() {
 		return map;		
 	};
 	
-	var initializeWithMarker = function(id, latitude, longitude, content, image) { 
-		addMarker(latitude,longitude,content,image);		
+	var initializeWithMarker = function(id, latitude, longitude, content, marker) { 
+		addMarker(latitude,longitude,content,marker);		
 		return initialize(id);
 	};
 	
-	var addMarker = function(latitude,longitude,content,image) {
+	var addMarker = function(latitude,longitude,content,marker) {
 		var location = new google.maps.LatLng(latitude,longitude);
 		location.content = content;
-		location.image = image;
+		location.marker = marker;
 		locations.push(location);
 	};
 	
@@ -47,7 +36,7 @@ var googleMap = (function() {
 		var count = locations.length;
 		for (var i=0; i<count; i++) {
 			var loc = locations[i];
-			var marker = createMarker(loc);
+			var marker = getMarkerForLocation(loc);
 			
 			bounds.extend(loc);					
 			marker.content = loc.content;
@@ -65,15 +54,65 @@ var googleMap = (function() {
 		
 	};
 	
-	function createMarker(loc) {
-		return new google.maps.Marker({
-			position: loc,
-			icon: loc.image,
-			map: map				
-		});		
+	function prefixed(prefix, url) { 
+		return prefix ? prefix+url : url;
 	}
-				
 	
+	function getMarkerForLocation(loc) { 
+		if(loc.marker) {
+			loc.marker.setPosition(loc);
+			loc.marker.setMap(map);
+			return loc.marker;
+		} else {
+			return new google.maps.Marker({
+				position: loc,
+				map: map				
+			});					
+		}
+	} 	
+	
+	/** TODO DD : refactor this.  events status stuff doesn't really belong with google maps stuff */
+	var markerForStatus = function(status, prefix) { 
+		if (!status || status.toLowerCase()=='fail') {
+			return null;  /* note that red is default icon which is what we currently use for fail */
+		}
+		
+		var icon = '';
+		if (status.toLowerCase()=='pass') {
+			icon = prefixed(prefix, 'images/marker-images/greenMapIcon.png');
+		} else if (status.toLowerCase()=='na') {
+			icon =  prefixed(prefix,'images/marker-images/grayMapIcon.png');
+		}
+		var image = new google.maps.MarkerImage(
+				icon,
+				new google.maps.Size(32,32),
+				new google.maps.Point(0,0),
+				new google.maps.Point(16,32)
+		);		
+		
+		var shadow = new google.maps.MarkerImage(
+				  prefixed(prefix,'images/marker-images/mapIconShadow.png'),
+				  new google.maps.Size(52,32),
+				  new google.maps.Point(0,0),
+				  new google.maps.Point(16,32)
+				);
+		
+		var shape = {
+				  coord: [19,0,20,1,21,2,22,3,23,4,24,5,24,6,24,7,24,8,24,9,24,10,24,11,24,12,23,13,23,14,22,15,21,16,20,17,20,18,19,19,19,20,18,21,18,22,17,23,17,24,17,25,17,26,16,27,16,28,16,29,16,30,16,31,14,31,14,30,14,29,14,28,14,27,14,26,13,25,13,24,13,23,12,22,12,21,12,20,11,19,10,18,10,17,9,16,8,15,7,14,7,13,6,12,6,11,6,10,6,9,6,8,6,7,6,6,7,5,7,4,8,3,9,2,10,1,11,0,19,0],
+				  type: 'poly'
+				};
+		
+		return new google.maps.Marker({
+			  draggable: true,
+			  raiseOnDrag: false,
+			  icon: image,
+			  shadow: shadow,
+			  shape: shape
+			});	
+		
+	}
+	
+	/* currently not used...left in for future reference. turns latLng into human readable address. */
 	var addGeoCoder = function(marker) { 
 		var geocoder = new google.maps.Geocoder();
 		geocoder.geocode( {'latLng': loc}, function(results, status) {
@@ -100,7 +139,8 @@ var googleMap = (function() {
 	return {
 		initialize: initialize, 
 		initializeWithMarker : initializeWithMarker,
-		addMarker: addMarker
+		addMarker: addMarker, 
+		markerForStatus: markerForStatus
 	};
  
 })();

@@ -256,7 +256,7 @@
 		<div style="height:300px;" id="mapCanvas" class="googleMap eventMap"></div>				
 		<script type="text/javascript">
 			Event.observe(window, 'load', function() { 
-				googleMap.initializeWithMarker('mapCanvas', ${action.latitude}, ${action.longitude}, '', markerImageForStatus("${event.status}", "../../") )
+				googleMap.initializeWithMarker('mapCanvas', ${action.latitude}, ${action.longitude}, '', googleMap.markerForStatus("${event.status}", "../../") )
 			});		
 		</script>						
 	</#if>	
