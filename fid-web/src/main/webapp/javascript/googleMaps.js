@@ -40,9 +40,9 @@ var googleMap = (function() {
 			
 			bounds.extend(loc);					
 			marker.content = loc.content;
+			/** TODO DD : refactor this update address feature so it is an option.  note that it can affect performance */
 			google.maps.event.addListener(marker, 'click', function() {
-				infowindow.setContent(this.content);
-				infowindow.open(map,this);
+				updateInfoWindowWithAddress(this, map, loc);
 			});		
 		
 		}
@@ -53,6 +53,24 @@ var googleMap = (function() {
 		}			
 		
 	};
+	
+	function updateInfoWindowWithAddress(marker, map, loc) {
+		if (marker.address) {
+			infowindow.setContent(marker.content);	
+			infowindow.open(map,marker);	
+			return;
+		}
+		
+		var geocoder = new google.maps.Geocoder();
+		geocoder.geocode( {'latLng': loc}, function(results, status) {
+			if (status== google.maps.GeocoderStatus.OK) {
+				marker.address = formatAddressString(results[0]);
+				marker.content = marker.content+'<br>(' + marker.address+')'; 
+			}
+			infowindow.setContent(marker.content);
+			infowindow.open(map,marker);
+		});		
+	} 
 	
 	function prefixed(prefix, url) { 
 		return prefix ? prefix+url : url;
@@ -111,17 +129,7 @@ var googleMap = (function() {
 			});	
 		
 	}
-	
-	/* currently not used...left in for future reference. turns latLng into human readable address. */
-	var addGeoCoder = function(marker) { 
-		var geocoder = new google.maps.Geocoder();
-		geocoder.geocode( {'latLng': loc}, function(results, status) {
-			if (status== google.maps.GeocoderStatus.OK) {				        
-				marker.setTitle(formatAddressString(results[0]));				      
-			}
-		});
-	}
-	
+		
 	function formatAddressString(address) {
 		var result = '';
 		if (address.address_components[0]) {
