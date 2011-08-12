@@ -449,7 +449,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			scheduleEvents(asset);
 			
 			uniqueID = asset.getId();
-			addFlashMessageText("message.assetcreated", Long.toString(uniqueID), createLinkToAsset(uniqueID));
+			addFlashMessageText("message.assetcreated", asset.getIdentifier(), createLinkToAsset(uniqueID));
 
 		} catch (Exception e) {
 			addActionErrorText("error.assetsave");
