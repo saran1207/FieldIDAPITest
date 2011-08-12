@@ -416,6 +416,39 @@ h2 span.formTitle {
     overflow:hidden;
 }
 
+.proofTestManual{
+	padding: 0;
+}
+
+.proofTestManual label {
+	width:120px;
+	padding-left:0px;
+	clear:left;
+	text-align: left;
+}
+
+.proofTestUploadFile {
+	height:20px;
+}
+
+.proofTestManual input {
+	width:100px;
+}
+
+.proofTestUpload {
+    padding-top:4px;
+    width:800px;
+}
+
+.pageContent .fieldHolder select.proofTestType {
+	width:145px;
+	padding: 1px;
+}
+
+.suggested,.warning {
+	background-color: #FFFF66;
+}
+
 span.fieldHolder img {
 	vertical-align:text-bottom;
 }

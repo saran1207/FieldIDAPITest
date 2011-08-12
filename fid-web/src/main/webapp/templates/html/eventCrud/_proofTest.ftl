@@ -3,12 +3,12 @@
 		
 		
 			<div class="fieldHolder">
-			<label class="label"><@s.select id="proofTestType" theme="fieldidSimple" name="proofTestType" list="eventType.supportedProofTests" listKey="name()" listValue="%{ getText( label ) }" onchange="checkProofTestType( 'proofTestType' )"/></label>		
-				<div id="proofTestUpload" <#if proofTestTypeEnum?exists && !proofTestTypeEnum.uploadable >style="display:none"</#if> >
+			<label class="label"><@s.select cssClass="proofTestType" id="proofTestType" theme="fieldidSimple" name="proofTestType" list="eventType.supportedProofTests" listKey="name()" listValue="%{ getText( label ) }" onchange="checkProofTestType( 'proofTestType' )"/></label>
+				<div class="proofTestUpload" id="proofTestUpload" <#if proofTestTypeEnum?exists && !proofTestTypeEnum.uploadable >style="display:none"</#if> >
 					<#if !proofTestDirectory?exists || proofTestDirectory.length() == 0  >
-						<iframe id="singleFileUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="240" height="21" ></iframe>
+						<iframe id="singleFileUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" />" scrolling="no" scrollbar="no" style="overflow:hidden;" frameborder="0" width="500" height="20" ></iframe>
 					</#if>
-					<span id="proofTestUploadFile" <#if !proofTestDirectory?exists || proofTestDirectory.length()  == 0  >style="display:none;"</#if> >
+					<span class="proofTestUploadFile" id="proofTestUploadFile" <#if !proofTestDirectory?exists || proofTestDirectory.length()  == 0  >style="display:none;"</#if> >
 						<a href="uploadAgain"  onclick="uploadAnotherFile(); return false;"><@s.text name="label.uploaddifferentfile"/></a>
 						<@s.hidden name="newFile" id="newFile"/>
 						<@s.hidden name="proofTestDirectory" id="proofTestDirectory"/>

@@ -503,3 +503,15 @@ table.list tr.multiSelected {
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
+
+.hidden {
+	display: none;
+}
+
+.quickView {
+	border: 1px solid black;
+	background-color: #fff;
+	padding: 15px;
+	width: 300px;
+	height: auto;
+}
