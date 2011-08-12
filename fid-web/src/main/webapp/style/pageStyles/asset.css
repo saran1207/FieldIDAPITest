@@ -300,7 +300,7 @@
 	width: 320px
 }
 
-#assetCreate .actions {
+#assetCreate .actions, #assetUpdate .actions{
 	clear: both;
 	background-color: #F8F8F8;
 	padding: 15px 10px;
