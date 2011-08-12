@@ -99,15 +99,15 @@
 						<a href="#" onclick="return redirect('<@s.url action="selectEventEdit" uniqueID="${event.id}" includeParams="none" />');" ><@s.text name="label.edit"/></a>
 					</#if>
 				</td>
-				<#if (tenant.settings.gpsCapture && event.gpsLocation?exists) >
+				<#if tenant.settings.gpsCapture>
 					<td class="reducedWidth">
-						<img src="<@s.url value="/images/gps-icon-small.png"/>"/>
+                        <#if event.gpsLocation?exists>
+                            <img src="<@s.url value="/images/gps-icon-small.png"/>"/>
+                        <#else>
+						    &nbsp;
+                        </#if>
 					</td>
-				<#else>
-					<td class="reducedWidth">
-						&nbsp;
-					</td>
-				</#if>
+                </#if>
 			</tr>
 		</#list>
 	</table>
