@@ -28,10 +28,10 @@
 	
 	<div class="buttonBar">
 		<#if !events.isEmpty()>		
-			<a id="mapButton" class="${action.showMap.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>
+			<a id="mapButton" class="${action.showMap.toString()} mapButton" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>
 		</#if>					
-		<a id="listButton" class="${action.showList.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
-		<a id="groupByDateButton" class="${action.showGroups.toString()}" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
+		<a id="listButton" class="${action.showList.toString()} listButton" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
+		<a id="groupByDateButton" class="${action.showGroups.toString()} groupByDateButton" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="date"/>');" ><@s.text name="label.view_events_by_date_group"/></a>
 	</div>
 </div>
 

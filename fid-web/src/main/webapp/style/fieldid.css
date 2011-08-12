@@ -1984,51 +1984,48 @@ div.unitOfMeasureName {
 	margin: 10px;
 }
 
-#listButton { 
-	background: url(../images/eventList.png) left center no-repeat;				
+.listButton { 
+	background: rgb(252,252,252) url(../images/eventList.png) left center no-repeat;				
 }
 
-#groupByDateButton { 
-	background: url(../images/eventGroup.png) left center no-repeat;		
+.groupByDateButton { 
+	background: rgb(252,252,252) url(../images/eventGroup.png) left center no-repeat;		
 }
 
-#mapButton { 
-	background: url(../images/eventMap.png) left center no-repeat;
+.mapButton { 
+	background: rgb(252,252,252) url(../images/eventMap.png) left center no-repeat;	
 }
 
 .buttonBar { 
-	float:right;  /* this should not be part of this style...style this in containing element */
 	background: -moz-linear-gradient(top,  #fff,  #ddd);
- 	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));	
- 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');	
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	border: 1px solid #eee;
-	color: #000;
-	padding-top: 8px;
-	padding-bottom: 8px;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin-bottom: 10px;
+ 	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));		
+	float:right;  /* this should not be part of this style...style this in containing element */
+	height:33px;
+	line-height:33px;
 }
-
-.buttonBar  a {
-	margin:3px;	
+	
+.buttonBar a { 		
+ 	border: 1px solid #eee;
+ 	margin-left: -.30em;	
+	margin-right: 0px;
 	text-decoration:none;
 	color:#000;
-	padding-left: 18px;
-	opacity:.45;
- 	filter:alpha(opacity=45);	
+	padding-left: 24px;
+ 	padding-top: 10px;	
+	padding-bottom: 10px;	
+	padding-right: 5px;
+	height:18px; 
+	line-height:18px;
 }
 
 .buttonBar a:hover {
-	
 }
 
 .buttonBar .true {
-	color:#006;
+	border: 1px solid rgb(188,222,255);
+	background-color: rgb(246,246,252);
 }
-
+ 
 
 #startEvent, #manageEvent, #newScheduleButton{
 	font-size: 12px;
@@ -2234,6 +2231,7 @@ th.wicket_orderDown {
 
 .allEventsMap { 
 	height: 550px;
+	margin-top: 22px;
 }
 
 .eventMap { 
@@ -2345,6 +2343,7 @@ th.wicket_orderDown {
 }
 
 .assetEvents {
+	padding-top: 22px;
 	clear:both;
 	float:none; 
 	width: 100%;
