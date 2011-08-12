@@ -1,5 +1,5 @@
 <div class="editHeader">
-	<h3>${(action.currentPackageFilter().packageName?html)!} Plan</h3>
+	<h3><span class="currentPlanDisplay">${primaryOrg.signUpPackage.displayName}</span> Plan</h3>
 	<p> | <a href="javascript:void(0);" onClick="editPlan(${id});"><@s.text name="label.edit"/></a></p>
 </div>
 <div id="fullAccounts" class="limit">

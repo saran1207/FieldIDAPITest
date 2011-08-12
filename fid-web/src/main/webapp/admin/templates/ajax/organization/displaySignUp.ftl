@@ -3,4 +3,5 @@
 	<#include "../../html/organization/_signUpDetails.ftl" >
 </#assign>
 	$('signUpDetails').update("${html}");
+    $$('.currentPlanDisplay').each(function(element) { element.update("${primaryOrg.signUpPackage.displayName}"); } )
 </#escape>
