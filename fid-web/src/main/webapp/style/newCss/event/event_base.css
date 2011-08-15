@@ -12,11 +12,12 @@ label.label {
     float: left;
     display: block;
     width: 150px;
-    padding: 5px 15px 5px 20px;
+    padding: 5px 10px 5px 20px;
     line-height: 18px;
     text-align: right;
     color: #555;
     font-weight:bold;
+    overflow:hidden;
 }
 
 .pageContent .fieldHolder {
@@ -25,6 +26,7 @@ label.label {
     padding: 5px 0;
     width: 305px;
     line-height: 18px;
+    overflow:hidden;
 }
 
 .pageContent .infoSet {
@@ -32,6 +34,7 @@ label.label {
     min-height: 40px;
     clear:left;
     padding: 5px 0 5px 0;
+    overflow:hidden;
 }
 
 .assetSummary .infoSet {
@@ -416,23 +419,33 @@ h2 span.formTitle {
     overflow:hidden;
 }
 
-.proofTestManual{
-	padding: 0;
+.pageContent .proofTestManual{
+	padding: 0 0 0 180px;
+    float:left;
+    display:block;
+    overflow:hidden;
+    width:305px;
 }
 
-.proofTestManual label {
-	width:120px;
-	padding-left:0px;
-	clear:left;
+.pageContent .proofTestManual label {
+	width: 120px;
+	padding-left: 0;
 	text-align: left;
 }
 
 .proofTestUploadFile {
-	height:20px;
+	height: 20px;
 }
 
-.proofTestManual input {
-	width:100px;
+.pageContent .proofTestManual input {
+	width: 100px;
+    clear: both;
+    display:block;
+}
+
+.proofTestManual span {
+    display:block;
+    float:left;
 }
 
 .proofTestUpload {

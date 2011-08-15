@@ -15,19 +15,13 @@
 					</span>
 				</div>
 				
-				<span id="proofTestManual" <#if proofTestTypeEnum?exists && proofTestTypeEnum.uploadable >style="display:none"</#if> >
-					<div>
-						<label class="label"><@s.text name="label.peakload"/></label><br/>
-						<span><@s.textfield name="peakLoad" theme="fieldidSimple"/></span>
-					</div>
-					<div>
-						<label class="label"><@s.text name="label.duration"/></label><br/>
-						<span><@s.textfield name="testDuration" theme="fieldidSimple"/></span>
-					</div>
-					<div>
-						<label class="label"><@s.text name="label.peakloadduration"/></label><br/>
-						<span><@s.textfield name="peakLoadDuration" theme="fieldidSimple"/></span>
-					</div>
+				<span class="proofTestManual" id="proofTestManual" <#if proofTestTypeEnum?exists && proofTestTypeEnum.uploadable > style="display:none"</#if> >
+                    <label class="label"><@s.text name="label.peakload"/></label>
+                    <@s.textfield name="peakLoad" theme="fieldidSimple"/>
+                    <label class="label"><@s.text name="label.duration"/></label>
+                    <@s.textfield name="testDuration" theme="fieldidSimple"/>
+                    <label class="label"><@s.text name="label.peakloadduration"/></label>
+                    <@s.textfield name="peakLoadDuration" theme="fieldidSimple"/>
 				</span>
 			</div>
 		</div>
