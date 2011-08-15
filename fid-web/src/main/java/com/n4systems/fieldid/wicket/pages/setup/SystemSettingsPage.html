@@ -42,9 +42,9 @@
             <div class="checkboxWithImageAndText">            
 	            <img wicket:id="gpsLogo"/>
 	            <span class="labelDescription"><wicket:message key="label.captureGPS"/></span>
+				<input wicket:id="gpsCapture" type="checkbox"/>
 				<label for="gpsCapture">
 					<wicket:message key="label.gps_capture" />
-					<input wicket:id="gpsCapture" type="checkbox"/>
 				</label>
 			</div>
 
@@ -69,14 +69,14 @@
                	<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>
             </div>
 	
-
-		<div class="actions">
-	        <div class="formAction enlargedInput">
-				<input wicket:id="submitButton" type="submit" wicket:message="value:hbutton.apply_settings"/> 
-				<wicket:message key="label.or"/> 
-				<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-	        </div>
-		</div>	        
+			<div class="actions">
+		        <div class="formAction enlargedInput">
+					<input wicket:id="submitButton" type="submit" wicket:message="value:hbutton.apply_settings"/> 
+					<wicket:message key="label.or"/> 
+					<a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+		        </div>
+			</div>
+				        
     </div>
 </form>
 

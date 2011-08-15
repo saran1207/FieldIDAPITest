@@ -2286,25 +2286,29 @@ th.wicket_orderDown {
 	padding : 0px 0px 10px 10px;
 }
 
+.checkboxWithImageAndText { 
+	padding : 10px;
+}
+
 .checkboxWithImageAndText img { 
 	float : left;
-	padding : 10px 10px 10px 10px;
+	margin-right : 10px;
 }
 
 .checkboxWithImageAndText span { 
-	padding-top : 5px;
+	padding-bottom: 8px;	
+	display : block;
 }
 
 .checkboxWithImageAndText label {
 	display : block;
-	padding-top: 11px;
-	padding-bottom: 11px;
-	vertical-align : middle;
-	line-height : 18px;
+	margin-top: -4px;
+	line-height: 29px;
 } 
 
-.checkboxWithImageAndText label input {
+.checkboxWithImageAndText input {
 	float: left;
+	vertical-align: middle;
 	margin-right: 8px;
 } 
 
