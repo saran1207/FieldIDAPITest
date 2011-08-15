@@ -1212,9 +1212,15 @@ li.buttonGroupLabels {
 	height: 100px;
 }
 
+.crudForm .actions {
+	clear: both;
+	background-color: #EEE;
+}
+
 .crudForm .formAction {
 	margin: 0px;
 	padding-right: 5px;
+	font-size: 1.1em;	
 	border-top: 1px solid #E2E2E2;
 	text-align: left;
 }
@@ -2128,6 +2134,10 @@ div.unitOfMeasureName {
 	color: #999999;
 }
 
+.labelDescription {
+	color: #666;
+}
+
 .useractions{
 	background-repeat: no-repeat;
 	background-position: left 1px;
@@ -2310,25 +2320,25 @@ th.wicket_orderDown {
 	padding-top: 5px; 
 }
 
-.labelledTextInput {
+.labelledInput {
 	display : block;	
 	clear : both;
 	text-align : left;
 	margin-left: 30px;	
 }
  
-.labelledTextInput div {
+.labelledInput div {
 	padding-bottom:10px;	 	 
  }
 
-.labelledTextInput {
+.labelledInput {
 	display : block;
 	overflow: hidden;
 	margin: 5px 5px 5px 5px;
 	padding-top:10px;	
 }
 
-.labelledTextInput label {
+.labelledInput label {
 	color: #000;
 	padding-right : 10px;
 	width : 12em;		
@@ -2336,7 +2346,10 @@ th.wicket_orderDown {
 	display : block;	
 	font-weight : bold;
 	text-align: right;
-	padding-bottom:10px;	
+}
+
+.labelledInput input {
+	padding: 4px;
 }
 
 .assetEvents .list {
