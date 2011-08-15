@@ -12,9 +12,8 @@
 		marryOrderTitle = '<@s.text name="label.connectorder" />';
 	</script>
 	
-	<@n4.includeStyle href="asset" type="page"/>
+	<@n4.includeStyle href="asset" type="page"/>	
 </head>
-		
 	
 
 ${action.setPageType('asset', 'show')!}
@@ -322,7 +321,7 @@ ${action.setPageType('asset', 'show')!}
 		</#if>
 	</#if>
 
-	<#if (asset.gpsLocation?exists) >	 
+	<#if (asset.gpsLocation?exists)> 	
 		<div class="viewSection">
 			<h2><@s.text name="label.gpslocation"/></h2> 
 		</div>			
@@ -332,7 +331,7 @@ ${action.setPageType('asset', 'show')!}
 				googleMap.initializeWithMarker('mapCanvas',${action.latitude}, ${action.longitude})
 			});		
 		</script>						
-
+	
 	</#if>
 			
 </div>

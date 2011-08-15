@@ -249,7 +249,7 @@
 		</#list>
 	</#if>
 	
-	<#if (event.gpsLocation?exists) >
+	<#if (event.gpsLocation?exists) && tenant.settings.gpsCapture >
 		<div>
 			<h2><@s.text name="label.gpslocation"/></h2> 
 		</div>		

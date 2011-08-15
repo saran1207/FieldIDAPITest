@@ -27,7 +27,7 @@
 	<#assign page = pagedEvents/>
 	
 	<div class="buttonBar">
-		<#if !events.isEmpty()>		
+		<#if !events.isEmpty() && tenant.settings.gpsCapture>		
 			<a id="mapButton" class="${action.showMap.toString()} mapButton" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="map"/>');" ><@s.text name="label.view_events_by_map"/></a>
 		</#if>					
 		<a id="listButton" class="${action.showList.toString()} listButton" href="#" onclick="return redirect('<@s.url action="assetEvents" uniqueID="${uniqueID}" mode="list"/>' );" ><@s.text name="label.view_events_by_list"/></a>
@@ -128,7 +128,7 @@
 </#if>
 
 	
-<#if showMap && !events.isEmpty()>  <!-- TODO DD: what to show if no event locations exist? ask matt --> 
+<#if showMap && !events.isEmpty() && tenant.settings.gpsCapture>
 		
 	<script type="text/javascript">
 		Event.observe(window, 'load', function() { 
