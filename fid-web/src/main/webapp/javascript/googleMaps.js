@@ -29,6 +29,8 @@ var googleMap = (function() {
 		location.content = content;
 		location.marker = marker;
 		locations.push(location);
+		
+		/** TODO DD : why not just create marker here and deal with setting of map/image/shadow stuff later? */
 	};
 	
 	function addMarkers() {
@@ -40,9 +42,10 @@ var googleMap = (function() {
 			
 			bounds.extend(loc);					
 			marker.content = loc.content;
+			marker.loc = loc;
 			/** TODO DD : refactor this update address feature so it is an option.  note that it can affect performance */
 			google.maps.event.addListener(marker, 'click', function() {
-				updateInfoWindowWithAddress(this, map, loc);
+				updateInfoWindowWithAddress(this, map);
 			});		
 		
 		}
@@ -54,7 +57,7 @@ var googleMap = (function() {
 		
 	};
 	
-	function updateInfoWindowWithAddress(marker, map, loc) {
+	function updateInfoWindowWithAddress(marker, map) {
 		if (marker.address) {
 			infowindow.setContent(marker.content);	
 			infowindow.open(map,marker);	
@@ -62,7 +65,7 @@ var googleMap = (function() {
 		}
 		
 		var geocoder = new google.maps.Geocoder();
-		geocoder.geocode( {'latLng': loc}, function(results, status) {
+		geocoder.geocode( {'latLng': marker.loc}, function(results, status) {
 			if (status== google.maps.GeocoderStatus.OK) {
 				marker.address = formatAddressString(results[0]);
 				marker.content = marker.content+'<br>(' + marker.address+')'; 
@@ -121,8 +124,7 @@ var googleMap = (function() {
 				};
 		
 		return new google.maps.Marker({
-			  draggable: true,
-			  raiseOnDrag: false,
+			  draggable: false,
 			  icon: image,
 			  shadow: shadow,
 			  shape: shape
