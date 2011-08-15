@@ -44,12 +44,10 @@ public class AssetSaveServiceTest {
 	public void should_create_asset_with_history_no_files() {
 		Tenant tenant = n4();
 		Asset asset = anAsset().forTenant(tenant).generate();
-		Asset expectedAsset = anAsset().forTenant(tenant).build();
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
 		try {
 			expect(mockAssetManager.createWithHistory(asset, user)).andReturn(asset);
-			expect(mockAssetManager.update(asset, user)).andReturn(expectedAsset);
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -59,7 +57,7 @@ public class AssetSaveServiceTest {
 		
 		Asset actualAsset = sut.create();
 		
-		assertEquals(expectedAsset, actualAsset);
+		assertEquals(asset, actualAsset);
 		verify(mockAssetManager);
 	}
 	
@@ -93,8 +91,6 @@ public class AssetSaveServiceTest {
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
 		try {
 			expect(mockAssetManager.update(asset, user)).andReturn(asset);
-			expect(mockAssetManager.update(asset, user)).andReturn(asset);
-
 		} catch (Exception e) {
 			fail("should not have thrown exception.  " + e.getMessage());
 		}
@@ -136,7 +132,6 @@ public class AssetSaveServiceTest {
 		
 		LegacyAsset mockAssetManager = createMock(LegacyAsset.class);
 		expect(mockAssetManager.create(asset, user)).andReturn(asset);
-		expect(mockAssetManager.update(asset, user)).andReturn(asset);
 		
 		replay(mockAssetManager);
 		
