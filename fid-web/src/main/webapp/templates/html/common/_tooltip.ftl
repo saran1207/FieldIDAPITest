@@ -3,7 +3,7 @@
 <@n4.includeScript src="jquery.tools.min"/>	
 
 <style>	
-		#tooltip {
+		.tooltip {
 			padding:5px;		
 			background-color:#888888;
 			border:1px solid #fff;

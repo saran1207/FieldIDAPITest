@@ -35,18 +35,10 @@
 	</div>
 </div>
 
-<script type="text/javascript">
-	jQuery('.buttonBar .true').css({ opacity: 1.0 });
-</script> 
-
 <div class="assetEvents"> 
 <#if showList && !pagedEvents.list.isEmpty() >
 	
 	<#assign page = pagedEvents/>
-	
-	<div id="tooltip" class="tooltip">
-		<@s.text name="label.gps_location_recorded"/>
-	</div>
 	
 	<#include '../common/_pagination.ftl' />
 	<table id="eventsList" class="list">
@@ -102,7 +94,7 @@
 				<#if tenant.settings.gpsCapture>
 					<td class="reducedWidth">
                         <#if event.gpsLocation?exists>
-                            <img src="<@s.url value="/images/gps-icon-small.png"/>"/>
+                            <img src="<@s.url value="/images/gps-icon-small.png"/>" title="<@s.text name="label.gps_location_recorded"/>"/>
                         <#else>
 						    &nbsp;
                         </#if>
@@ -115,8 +107,7 @@
 	
 	<script type="text/javascript">
 		document.observe("dom:loaded", function() {
-			jQuery("#eventsList img").tooltip({
-				tip: '#tooltip',
+			jQuery("#eventsList img[title]").tooltip({
 				position: 'center right',				
 				offset: [0, 15],				
 				delay: 0
@@ -246,6 +237,5 @@
 	</#if>
 	
 </#if>
-
 
 </div>
