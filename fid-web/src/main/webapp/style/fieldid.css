@@ -2136,7 +2136,6 @@ div.unitOfMeasureName {
 
 .labelDescription {
 	color: #666;
-	width : 50%;
 }
 
 .useractions{
@@ -2369,7 +2368,7 @@ inputsWithLegend .legend span {
 .labelledInput label {
 	color: #000;
 	padding-right : 10px;
-	width : 15%;		
+	width : 150px;		
 	float : left;
 	font-weight : bold;
 	text-align: right;
@@ -2377,7 +2376,7 @@ inputsWithLegend .legend span {
 
 .labelledInput input {
 	padding: 4px;
-	width: 20%;
+	width: 150px;
 }
 
 .assetEvents .list {
