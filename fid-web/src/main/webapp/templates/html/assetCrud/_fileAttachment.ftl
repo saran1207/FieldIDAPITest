@@ -25,7 +25,7 @@
 			$("uploadFileForm").removeClassName("uploadedForm").addClassName("uploadFileForm");
 			$("assetImageMsg").show();
 		}
-		
+				
 	</script>
 </head>
 
@@ -47,6 +47,13 @@
 				<#else>
 					<img src="images/file-icon.png" width="27" id="previewImage" alt="uploadedFile"/>
 					<label id="newImageLabel"> </label>
+					
+					<script type="text/javascript">
+						if($("imageDirectory") != null) {
+							var directory = $("imageDirectory").value;
+							$("newImageLabel").update(directory.slice(directory.indexOf('/') + 1));
+						}
+					</script>
 					|
 				</#if>
 				<@s.hidden name="removeImage" id="removeImage"/> 
