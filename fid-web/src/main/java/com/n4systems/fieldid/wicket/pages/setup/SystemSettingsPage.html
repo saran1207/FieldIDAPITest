@@ -49,25 +49,54 @@
 			</div>
 
             <h2><wicket:message key="label.identifierFormat_heading"/></h2>
-            <div  class="labelledInput">
-	            <div class="labelDescription"><wicket:message key="label.identifierFormat_desc" /></div>
-                <label for="identifierLabel">
-                    <wicket:message key="label.label" />
-                </label>
-           		<input type="text" wicket:id="identifierLabel" />
-            </div>
-
-            <div  class="labelledInput">
-                <label for="identifierFormat">
-                    <wicket:message key="label.auto_generated_format" />
-                </label>
-               	<input type="text" wicket:id="identifierFormat" />
-            </div>
-
-            <div  class="labelledInput">
-                <label>&nbsp;</label>
-               	<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>
-            </div>
+            <div>
+            	<span class="inputsWithLegend"> 
+					<span class="legend"> 
+						<div> 
+							<b><wicket:message key="heading.auto_generated_format"/></b><br>
+							<wicket:message key="label.auto_generated_format1"/><br>
+							<wicket:message key="label.auto_generated_format2"/><br>
+							<wicket:message key="label.auto_generated_format3"/><br>
+							<wicket:message key="label.auto_generated_format4"/><br>
+							<wicket:message key="label.auto_generated_format5"/><br>
+							<wicket:message key="label.auto_generated_format6"/><br>
+							<wicket:message key="label.auto_generated_format7"/><br>
+							<wicket:message key="label.auto_generated_format8"/><br>
+							<wicket:message key="label.auto_generated_format9"/><br>
+						</div>      
+						<div> 
+							<b><wicket:message key="heading.auto_generated_format_examples"/></b><br>
+							<wicket:message key="label.auto_generated_format_example1"/><br>
+							<wicket:message key="label.auto_generated_format_example2"/><br>
+							<wicket:message key="label.auto_generated_format_example3"/><br>
+						</div>
+					</span>      	            	
+            	
+		            <div  class="labelledInput">
+			            <div class="labelDescription"><wicket:message key="label.identifierFormat_desc" /></div>
+		                <label for="identifierLabel">
+		                    <wicket:message key="label.label" />
+		                </label>
+		           		<input type="text" wicket:id="identifierLabel" />
+		            </div>
+		
+		            <div  class="labelledInput">
+		                <label for="identifierFormat">
+		                    <wicket:message key="label.auto_generated_format" />
+		                </label>
+		               	<input type="text" wicket:id="identifierFormat" />
+		            </div>
+				            
+		            <div  class="labelledInput">
+		                <label>&nbsp;</label>
+		               	<a wicket:id="overrides"><wicket:message key="label.identifier_overrides"/></a>
+		            </div>
+		            
+					            
+		            
+				</span>	      
+				            
+			</div>            
 	
 			<div class="actions">
 		        <div class="formAction enlargedInput">

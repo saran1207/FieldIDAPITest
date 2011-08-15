@@ -373,7 +373,7 @@ tr.pastDue:hover {
 }
 
 .actions {
-	margin: 5px 5px 5px 0px;
+	margin: 5px 0px 5px 0px;
 	font-size: 1.1em;
 }
 
@@ -2136,6 +2136,7 @@ div.unitOfMeasureName {
 
 .labelDescription {
 	color: #666;
+	width : 50%;
 }
 
 .useractions{
@@ -2317,6 +2318,8 @@ th.wicket_orderDown {
 	display:block;
 	margin-bottom: 10px; 
 	margin-top: 10px; 
+	padding-top:4px;
+	padding-bottom: 4px;
 }
 
 .dateFormat {
@@ -2325,11 +2328,33 @@ th.wicket_orderDown {
 	padding-top: 5px; 
 }
 
+.inputsWithLegend lablledInput {
+	 float: left;
+}
+
+.inputsWithLegend .legend div {
+	float: left;
+	display : block;
+	padding: 10px;
+}
+
+.inputsWithLegend .legend {
+	width : 50%;
+	float : right; 
+	display : block;
+	border: 1px solid #ccc;
+	background-color : #eee;
+	margin-top : 10px;
+	margin-bottom: 10px;
+}
+
+inputsWithLegend .legend span { 
+	
+}
+
 .labelledInput {
 	display : block;	
-	clear : both;
 	text-align : left;
-	margin-left: 30px;	
 }
  
 .labelledInput div {
@@ -2337,8 +2362,6 @@ th.wicket_orderDown {
  }
 
 .labelledInput {
-	display : block;
-	overflow: hidden;
 	margin: 5px 5px 5px 5px;
 	padding-top:10px;	
 }
@@ -2346,15 +2369,15 @@ th.wicket_orderDown {
 .labelledInput label {
 	color: #000;
 	padding-right : 10px;
-	width : 12em;		
+	width : 15%;		
 	float : left;
-	display : block;	
 	font-weight : bold;
 	text-align: right;
 }
 
 .labelledInput input {
 	padding: 4px;
+	width: 20%;
 }
 
 .assetEvents .list {
