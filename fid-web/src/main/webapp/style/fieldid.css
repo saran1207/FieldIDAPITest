@@ -2301,12 +2301,13 @@ th.wicket_orderDown {
 }
 
 .checkboxWithImageAndText label {
-	display : block;
-	margin-top: -4px;
-	line-height: 29px;
+	display : inline;
+	vertical-align:text-bottom;
+	line-height: 18px;
 } 
 
 .checkboxWithImageAndText input {
+	display: block;
 	float: left;
 	vertical-align: middle;
 	margin-right: 8px;
