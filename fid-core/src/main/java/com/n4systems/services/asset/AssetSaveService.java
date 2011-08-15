@@ -28,6 +28,8 @@ public class AssetSaveService {
 	private Asset asset;
 	private List<AssetAttachment> existingAttachments;
 	private List<AssetAttachment> uploadedAttachments;
+	private boolean newAssetImage;
+	private boolean removeAssetImage;
 
 	public AssetSaveService(LegacyAsset assetManager, User user) {
 		super();
@@ -49,7 +51,7 @@ public class AssetSaveService {
 		try {
 			createAsset(withHistory);
 			saveUploadedAttachments();
-			saveAssetImage(true);
+			saveAssetImage();
 			return asset;
 		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
@@ -61,7 +63,7 @@ public class AssetSaveService {
 			updateAsset();
 			updateExistingAttachments();
 			saveUploadedAttachments();
-			saveAssetImage(false);
+			saveAssetImage();
 			return asset;
 		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
@@ -143,16 +145,21 @@ public class AssetSaveService {
 		}
 	}
 	
-	private void saveAssetImage(boolean isNew) throws SubAssetUniquenessException {
+	private void saveAssetImage() throws SubAssetUniquenessException {
 		AssetImageFileSaver saver = new AssetImageFileSaver(asset);
-		
-		if(asset.getImageName() != null) {
-			saver.save();
-		} else if(!isNew){
-			saver.remove();
+		if(newAssetImage) {
+			if(asset.getImageName() != null) {
+				saver.save();
+			} 
+			asset.setImageName(saver.getImageFileName());
+			updateAsset();
 		}
-		asset.setImageName(saver.getImageFileName());
-		updateAsset();
+		
+		if(removeAssetImage) {
+			saver.remove();
+			asset.setImageName(saver.getImageFileName());
+			updateAsset();
+		}
 	}
 
 	
@@ -181,6 +188,22 @@ public class AssetSaveService {
 	public AssetSaveService setUploadedAttachments(List<AssetAttachment> uploadedAttachments) {
 		this.uploadedAttachments = uploadedAttachments;
 		return this;
+	}
+
+	public boolean isNewAssetImage() {
+		return newAssetImage;
+	}
+
+	public void setNewAssetImage(boolean newAssetImage) {
+		this.newAssetImage = newAssetImage;
+	}
+
+	public boolean isRemoveAssetImage() {
+		return removeAssetImage;
+	}
+
+	public void setRemoveAssetImage(boolean removeAssetImage) {
+		this.removeAssetImage = removeAssetImage;
 	}
 
 }

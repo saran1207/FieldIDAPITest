@@ -443,6 +443,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 			AssetSaveService saver = getAssetSaveService();
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setAsset(asset);
+			saver.setNewAssetImage(newImage);
 
 			asset = saver.create();
 
@@ -547,6 +548,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 			saver.setUploadedAttachments(getUploadedFiles());
 			saver.setExistingAttachments(getAttachments());
 			saver.setAsset(asset);
+			saver.setNewAssetImage(newImage);
+			saver.setRemoveAssetImage(removeImage);
 
 			asset = saver.update();
 
