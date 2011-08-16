@@ -11,6 +11,12 @@ public class ReportingSearchResultsPage extends SearchResultsPage {
         super(selenium);
     }
 
+    @Override
+    public void selectAllItemsOnPage() {
+        checkAndFireClick("//table[@class='list']//tr[1]//th[1]//input");
+        waitForWicketAjax();
+    }
+    
 	public AssetPage clickReportLinkForResult(int resultNumber) {
 		selenium.click("//table[@class='list']//tbody//tr[" + resultNumber + "]/td//a[@class='identifierLink']");
 		return new AssetPage(selenium);

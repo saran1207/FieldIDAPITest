@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.selenium.pages.search;
 
-import com.n4systems.fieldid.selenium.pages.FieldIDPage;
-import com.n4systems.util.persistence.search.SortDirection;
-import com.thoughtworks.selenium.Selenium;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResultsPage extends FieldIDPage {
+import com.n4systems.fieldid.selenium.pages.WicketFieldIDPage;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.thoughtworks.selenium.Selenium;
+
+public class SearchResultsPage extends WicketFieldIDPage {
 
     public SearchResultsPage(Selenium selenium) {
         super(selenium);

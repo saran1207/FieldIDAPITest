@@ -20,7 +20,7 @@ public abstract class EntitySearchPage<T extends WebPage> extends FieldIDPage {
     public abstract void setDisplayColumns(SearchDisplayColumns displayColumns);
     
     public void enterIdentifier(String identifier) {
-        selenium.type("//input[@id='reportForm_criteria_identifier']", identifier);
+        selenium.type("//input[@name='identifier']", identifier);
     }
 
     public T clickRunSearchButton() {

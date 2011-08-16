@@ -103,8 +103,7 @@ public class MassUpdateEventsTest extends PageNavigatingTestCase<ReportingPage>{
 	}
 
 	private boolean verifyAllEventsAreRemoved(){
-		page.clickReportingLink();
-		return selenium.isElementPresent("//div[@class='initialMessage']");
+		return selenium.isElementPresent("//div[@class='message']");
 	}
 	
 	  @Override
