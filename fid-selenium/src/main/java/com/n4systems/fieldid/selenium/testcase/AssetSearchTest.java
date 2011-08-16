@@ -22,7 +22,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 
     @Override
     public void setupScenario(Scenario scenario) {
-        scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.AssignedTo));
+        scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.AssignedTo, ExtendedFeature.Integration));
 
         AssetType type = scenario.anAssetType()
                 .named("Chain Sling")
@@ -111,7 +111,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
 		page.setDisplayColumns(displayColumns);
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());		
-		List<String> expectedColumns = Arrays.asList("Serial Number",  "Asset Type",  "Asset Status",  "Customer Name",  "Location",  
+		List<String> expectedColumns = Arrays.asList("ID Number",  "Asset Type",  "Asset Status",  "Customer Name",  "Location",
 				"Date Identified",  "Last Event Date",  "RFID Number",  "Reference Number",  "Assigned To",  "Division",  "Organization",  
 				"Order Description",  "Order Number",  "Purchase Order",  "Asset Type Group",  "Network Last Event Date",  "Identified By",  
 				"Modified By",  "Comments",  "Description",  "Safety Network", "");
@@ -158,7 +158,7 @@ public class AssetSearchTest extends PageNavigatingTestCase<AssetsSearchPage> {
     }
 	
 	private List<String> getDefaultColumnHeaders() {
-		return Arrays.asList("Serial Number", "Asset Type", "Asset Status", "Customer Name", "Location",  "Date Identified", "Last Event Date", "Next Scheduled Date", "");
+		return Arrays.asList("ID Number", "Asset Type", "Asset Status", "Customer Name", "Location",  "Date Identified", "Last Event Date", "Next Scheduled Date", "");
 	}
 
 }

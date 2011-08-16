@@ -55,10 +55,6 @@
             <property name="hibernate.connection.username" value="root" />
             <property name="hibernate.connection.password" value="" />
 
-			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
-			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
-			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
-
 		</properties>
 	</persistence-unit>
 </persistence>

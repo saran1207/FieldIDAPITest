@@ -231,8 +231,8 @@ public class FieldIDPage extends WebPage {
 		selenium.click("//input[@id='smartSearchButton']");
 		return new SmartSearchResultsPage(selenium);
 	}
-	
-	public void setCheckBoxValue(String locator, boolean checked) {
+
+	protected void setCheckBoxValue(String locator, boolean checked) {
 		if(checked){
 			selenium.check(locator);
 		} else {

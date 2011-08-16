@@ -26,13 +26,13 @@ public class AdminOrgPage extends FieldIDPage {
     public void enterTenantLimits(Integer employeeUsers, Integer liteUsers, Integer readonlyUsers) {
         clickEditPlan();
     	if(employeeUsers != null) {
-    		selenium.type("//input[@id='planForm_users']", employeeUsers.toString());
+    		selenium.type("//input[@id='planForm_userLimits_maxEmployeeUsers']", employeeUsers.toString());
     	}
     	if(liteUsers != null) {
-    		selenium.type("//input[@id='planForm_liteUsers']", liteUsers.toString());
+    		selenium.type("//input[@id='planForm_userLimits_maxLiteUsers']", liteUsers.toString());
     	}
     	if(readonlyUsers != null) {
-    		selenium.type("//input[@id='planForm_readonlyUsers']", readonlyUsers.toString());
+    		selenium.type("//input[@id='planForm_userLimits_maxReadOnlyUsers']", readonlyUsers.toString());
     	}
         clickSavePlan();
     }
