@@ -147,11 +147,11 @@ public class FieldIDPage extends WebPage {
     }
     
     protected List<String> collectTableHeaders() {
-    	int numColumns = selenium.getXpathCount("//table[@class='list']/tbody/tr/th").intValue();
+    	int numColumns = selenium.getXpathCount("//table[@class='list']/thead/tr/th").intValue();
 		List<String> headers = new ArrayList<String>(numColumns);
 		
 		for (int i = 2; i <= numColumns; i++) {
-			String headerXpath = "//table[@class='list']/tbody/tr/th[" + i + "]";
+			String headerXpath = "//table[@class='list']/thead/tr/th[" + i + "]";
 			headers.add(selenium.getText(headerXpath));
 		}
 		
