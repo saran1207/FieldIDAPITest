@@ -10,6 +10,7 @@ import com.n4systems.fieldid.selenium.FieldIDTestCase;
 import com.n4systems.fieldid.selenium.pages.AssetPage;
 import com.n4systems.fieldid.selenium.pages.AssetsSearchPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
+import com.n4systems.fieldid.selenium.pages.ReportingPage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsMassUpdatePage;
 import com.n4systems.fieldid.selenium.pages.assets.AssetsSearchResultsPage;
 import com.n4systems.fieldid.selenium.persistence.Scenario;
@@ -108,9 +109,11 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 		
 		assertTrue("Asset wasn't successfully deleted", selenium.isElementPresent("//span[contains(.,'Mass Delete Successful. 1 assets removed.')]"));
 	
-		page.clickReportingLink();
+		ReportingPage reportingPage = page.clickReportingLink();
+		reportingPage.enterIdentifier("9671111");
+		reportingPage.clickRunSearchButton();
 
-		assertTrue("Event wasn't successfully deleted", verifyAllSchedulesAreRemoved());
+		assertTrue("Event wasn't successfully deleted", verifyAllEventsAreRemoved());
 	}
 
 	@Test
@@ -156,5 +159,9 @@ public class MassUpdateAssetsTest extends FieldIDTestCase {
 	
 	private boolean verifyAllSchedulesAreRemoved() {
 		return selenium.isElementPresent("//div[@class='initialMessage']");
+	}
+	
+	private boolean verifyAllEventsAreRemoved(){
+		return selenium.isElementPresent("//div[@class='emptyList']");
 	}
 }

@@ -120,6 +120,11 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		return collectTableValuesUnderCellForCurrentPage(2, 3, "a");
 	}
     
+    @Override
+    public void enterIdentifier(String identifier) {
+        selenium.type("//input[@name='identifier']", identifier);
+    }
+    
     public boolean isBlankSlate() {
     	return selenium.isElementPresent("//div[@class='initialMessage']");
     }
