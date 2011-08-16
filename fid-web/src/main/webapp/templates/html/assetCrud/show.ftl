@@ -321,7 +321,7 @@ ${action.setPageType('asset', 'show')!}
 		</#if>
 	</#if>
 
-	<#if (asset.gpsLocation?exists)> 	
+	<#if (asset.gpsLocation?exists) && tenant.settings.gpsCapture> 	
 		<div class="viewSection">
 			<h2><@s.text name="label.gpslocation"/></h2> 
 		</div>			
