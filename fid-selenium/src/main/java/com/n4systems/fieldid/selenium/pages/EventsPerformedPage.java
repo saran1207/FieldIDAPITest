@@ -22,7 +22,7 @@ public class EventsPerformedPage extends FieldIDPage {
 	}
 
 	public ManageEventsPage clickViewEventsByDateGroup() {
-		selenium.click("//a[@id='manageEvent']");
+		selenium.click("//a[@id='groupByDateButton']");
 		return new ManageEventsPage(selenium);
 	}
 

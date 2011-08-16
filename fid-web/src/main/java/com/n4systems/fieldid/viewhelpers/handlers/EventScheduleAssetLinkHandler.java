@@ -19,7 +19,7 @@ public class EventScheduleAssetLinkHandler extends WebOutputHandler {
 	
 	public String handleWeb(Long entityId, Object value) {
 		// look up the id of the asset for this event, so that we can create the link
-		return "<a href=\"/fieldid/asset.action?uniqueID=" + getAssetId(entityId) + "\" >" + (String)value + "</a>";
+		return "<a class=\"identifierLink\" href=\"/fieldid/asset.action?uniqueID=" + getAssetId(entityId) + "\" >" + (String)value + "</a>";
 		
 	}
 	

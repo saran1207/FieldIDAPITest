@@ -12,8 +12,7 @@ public class ReportingSearchResultsPage extends SearchResultsPage {
     }
 
 	public AssetPage clickReportLinkForResult(int resultNumber) {
-		int rowNumber = resultNumber + 1;
-		selenium.click("//table[@id='resultsTable']//tr[" + rowNumber + "]/td[contains(@id, 'identifier')]//a");
+		selenium.click("//table[@class='list']//tbody//tr[" + resultNumber + "]/td//a[@class='identifierLink']");
 		return new AssetPage(selenium);
 	}
 

@@ -18,7 +18,7 @@ public class EventIdentifierHandler extends WebOutputHandler {
 		// build the asset info link for local assets, just show the identifier for network assets
 		String identifier;
 		if (level.isLocal()) { 
-			identifier = String.format("<a href='/fieldid/asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getIdentifier());
+			identifier = String.format("<a class=\"identifierLink\" href='/fieldid/asset.action?uniqueID=%d'>%s</a>", asset.getId(), asset.getIdentifier());
 		} else {
 			identifier = asset.getIdentifier();
 		}
