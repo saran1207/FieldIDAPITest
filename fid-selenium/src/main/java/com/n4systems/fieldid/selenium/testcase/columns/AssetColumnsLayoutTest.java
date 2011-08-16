@@ -3,6 +3,8 @@ package com.n4systems.fieldid.selenium.testcase.columns;
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
 import com.n4systems.fieldid.selenium.pages.SetupPage;
 import com.n4systems.fieldid.selenium.pages.setup.ColumnLayoutPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.ExtendedFeature;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,6 +17,11 @@ import static org.junit.Assert.assertTrue;
 public class AssetColumnsLayoutTest extends PageNavigatingTestCase<ColumnLayoutPage> {
 
     @Override
+    public void setupScenario(Scenario scenario) {
+scenario.primaryOrgFor("test1").setExtendedFeatures(setOf(ExtendedFeature.Integration));
+    }
+
+    @Override
     protected ColumnLayoutPage navigateToPage() {
         return startAsCompany("test1").login().clickSetupLink().clickEditAssetColumnLayout();
     }
@@ -22,13 +29,13 @@ public class AssetColumnsLayoutTest extends PageNavigatingTestCase<ColumnLayoutP
     @Test
     public void test_view_default_layout() {
         List<String> currentColumns = page.getCurrentColumns();
-        List<String> expectedDefaultColumns = Arrays.asList("Serial Number", "Asset Type", "Asset Status", "Customer Name", "Location",  "Date Identified", "Last Event Date", "Next Scheduled Date");
+        List<String> expectedDefaultColumns = Arrays.asList("ID Number", "Asset Type", "Asset Status", "Customer Name", "Location",  "Date Identified", "Last Event Date", "Next Scheduled Date");
         assertEquals(expectedDefaultColumns, currentColumns);
     }
 
     @Test
     public void test_remove_some_columns_from_default_layout_and_save() {
-        page.clickRemoveSelectedColumn("Serial Number");
+        page.clickRemoveSelectedColumn("ID Number");
         page.clickRemoveSelectedColumn("Asset Type");
         page.clickRemoveSelectedColumn("Asset Status");
         page.clickRemoveSelectedColumn("Customer Name");

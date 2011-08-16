@@ -75,7 +75,7 @@ public class SearchEventsWithCustomLayoutTest extends FieldIDTestCase {
         ReportingSearchResultsPage searchResultsPage = reportingPage.clickRunSearchButton();
         searchResultsPage.getColumnNames();
 
-        assertEquals(Arrays.asList("Serial Number", "RFID Number"), searchResultsPage.getColumnNames());
+        assertEquals(Arrays.asList("ID Number", "RFID Number"), searchResultsPage.getColumnNames());
         assertEquals("456789", searchResultsPage.getValueInCell(1, 1));
         assertEquals("456999", searchResultsPage.getValueInCell(2, 1));
 

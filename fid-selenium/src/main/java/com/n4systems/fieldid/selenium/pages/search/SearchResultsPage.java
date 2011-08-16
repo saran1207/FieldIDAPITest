@@ -26,19 +26,19 @@ public class SearchResultsPage extends FieldIDPage {
 
     public List<String> getColumnNames() {
         List<String> columnNames = new ArrayList<String>();
-        int numColumns = selenium.getXpathCount("//table[@id='resultsTable']//th").intValue() - 2;
+        int numColumns = selenium.getXpathCount("//table[@class='list']//th").intValue() - 2;
         for (int i = 2; i <= numColumns + 1; i++) {
-            columnNames.add(selenium.getText("xpath=(//table[@id='resultsTable']//th)["+i+"]"));
+            columnNames.add(selenium.getText("xpath=(//table[@class='list']//th)["+i+"]"));
         }
         return columnNames;
     }
 
     public String getSortColumn() {
-        return selenium.getText("//table[@id='resultsTable']//th[contains(@class, 'sorted')]");
+        return selenium.getText("//table[@class='list']//th[contains(@class, 'sorted')]");
     }
 
     public SortDirection getSortDirection() {
-        String sortedClass = selenium.getAttribute("//table[@id='resultsTable']//th[contains(@class, 'sorted')]/@class");
+        String sortedClass = selenium.getAttribute("//table[@class='list']//th[contains(@class, 'sorted')]/@class");
         // Up arrow class means highest is at the top, so we're descending. down arrow means lowest at top, so ascending
         if (sortedClass.contains("up")) {
             return SortDirection.DESC;
@@ -50,12 +50,12 @@ public class SearchResultsPage extends FieldIDPage {
     }
 
     public void clickSortColumn(String sortColumnName) {
-        selenium.click("//table[@id='resultsTable']//th//a[.='"+sortColumnName+"']");
+        selenium.click("//table[@class='list']//th//a[.='"+sortColumnName+"']");
         waitForPageToLoad();
     }
 
     public String getValueInCell(int rowNumber, int colNumber) {
-        return selenium.getText("//table[@id='resultsTable']//tr["+(rowNumber+1)+"]//td["+(colNumber+1)+"]");
+        return selenium.getText("//table[@class='list']//tbody//tr["+(rowNumber)+"]//td["+(colNumber+1)+"]");
     }
 
 }
