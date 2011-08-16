@@ -47,8 +47,8 @@ public class SearchAssetsWithCustomLayoutTest extends FieldIDTestCase {
 
         AssetsSearchResultsPage searchResultsPage = searchPage.clickRunSearchButton();
 
-        assertEquals(Arrays.asList("Serial Number", "RFID Number"), searchResultsPage.getColumnNames());
-        assertEquals("Serial Number", searchResultsPage.getSortColumn());
+        assertEquals(Arrays.asList("ID Number", "RFID Number"), searchResultsPage.getColumnNames());
+        assertEquals("ID Number", searchResultsPage.getSortColumn());
         assertEquals(SortDirection.ASC, searchResultsPage.getSortDirection());
     }
 
@@ -56,7 +56,7 @@ public class SearchAssetsWithCustomLayoutTest extends FieldIDTestCase {
     public void test_change_sort_column_and_direction() {
         ColumnLayoutPage columnLayoutPage = startAsCompany("test1").login().clickSetupLink().clickEditAssetColumnLayout();
 
-        assertEquals("Serial Number", columnLayoutPage.getSortColumnName());
+        assertEquals("ID Number", columnLayoutPage.getSortColumnName());
         assertEquals(SortDirection.ASC, columnLayoutPage.getSortDirection());
 
         columnLayoutPage.selectSortColumn("RFID Number");
@@ -77,14 +77,14 @@ public class SearchAssetsWithCustomLayoutTest extends FieldIDTestCase {
         AssetsSearchPage searchPage = startAsCompany("test1").login().clickAssetsLink();
         AssetsSearchResultsPage resultsPage = searchPage.clickRunSearchButton();
 
-        assertEquals("Serial Number", resultsPage.getSortColumn());
+        assertEquals("ID Number", resultsPage.getSortColumn());
         assertEquals(SortDirection.ASC, resultsPage.getSortDirection());
         assertEquals("456789", resultsPage.getValueInCell(1, 1));
         assertEquals("456999", resultsPage.getValueInCell(2, 1));
 
-        resultsPage.clickSortColumn("Serial Number");
+        resultsPage.clickSortColumn("ID Number");
         
-        assertEquals("Serial Number", resultsPage.getSortColumn());
+        assertEquals("ID Number", resultsPage.getSortColumn());
         assertEquals(SortDirection.DESC, resultsPage.getSortDirection());
         assertEquals("456999", resultsPage.getValueInCell(1, 1));
         assertEquals("456789", resultsPage.getValueInCell(2, 1));

@@ -23,7 +23,7 @@ public class ReportingWithDefaultLayoutTest extends FieldIDTestCase {
 
         ReportingSearchResultsPage reportingResultsPage = reportingPage.clickRunSearchButton();
 
-        assertEquals(Arrays.asList("Date Performed", "Serial Number", "Customer Name", "Location", "Asset Type", "Asset Status", "Event Type", "Performed By", "Result"), reportingResultsPage.getColumnNames());
+        assertEquals(Arrays.asList("Date Performed", "ID Number", "Customer Name", "Location", "Asset Type", "Asset Status", "Event Type", "Performed By", "Result"), reportingResultsPage.getColumnNames());
     }
 
 }
