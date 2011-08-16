@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.DataLogPage;
+import com.n4systems.fieldid.wicket.pages.setup.IdentifierOverridesPage;
 import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
@@ -45,6 +46,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/widgets", WidgetsPage.class);
         mountBookmarkablePage("setup/dataLog", DataLogPage.class);
         mountBookmarkablePage("setup/systemSettings", SystemSettingsPage.class);
+        mountBookmarkablePage("setup/identifierOverrides", IdentifierOverridesPage.class);
 
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
