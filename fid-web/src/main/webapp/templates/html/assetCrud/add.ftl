@@ -1,7 +1,7 @@
 <#if lineItem?exists>
-	${action.setPageType('asset', 'add_with_order')!}
+	${action.setPageType('newasset', 'add_with_order')!}
 <#else>
-	${action.setPageType('asset', 'add')!}
+	${action.setPageType('newasset', 'add')!}
 </#if>
 
 
