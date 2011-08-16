@@ -27,4 +27,9 @@ public class AdminOrgsListPage extends FieldIDPage {
         waitForPageToLoad();    
         return this;
     }
+
+    public AdminCreateTenantPage clickCreateANewTenant() {
+        selenium.click("//input[@value='Create a new Tenant']");
+        return new AdminCreateTenantPage(selenium);
+    }
 }

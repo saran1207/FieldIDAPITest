@@ -1,7 +1,6 @@
 package com.n4systems.services.tenant;
 
 import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,6 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.uri.ActionURLBuilder;
 
-@Transactional
 public class TenantCreationService extends FieldIdPersistenceService {
 	
 	@Autowired
@@ -33,8 +31,9 @@ public class TenantCreationService extends FieldIdPersistenceService {
 	
 	private OrgSaver orgSaver = new OrgSaver();
 	private UserSaver userSaver = new UserSaver();
-	
-	public void createTenant(Tenant tenant, PrimaryOrg primaryOrg, User adminUser) throws NoSuchProviderException, MessagingException {
+
+    @Transactional(rollbackFor = {MessagingException.class, RuntimeException.class })
+	public void createTenant(Tenant tenant, PrimaryOrg primaryOrg, User adminUser) throws MessagingException {
 		createTenant(tenant);
 		createPrimaryOrg(tenant, primaryOrg, adminUser.getTimeZoneID());
 		createSystemUser(primaryOrg);
@@ -56,6 +55,7 @@ public class TenantCreationService extends FieldIdPersistenceService {
 	private void createPrimaryOrg(Tenant tenant, PrimaryOrg primaryOrg, String timeZone) {
 		primaryOrg.setTenant(tenant);
 		primaryOrg.setUsingSerialNumber(true);
+        primaryOrg.setIdentifierLabel("Serial Number");
 		primaryOrg.setIdentifierFormat("NSA%y-%g");
 		primaryOrg.setDateFormat("MM/dd/yy");
 		primaryOrg.setDefaultTimeZone(timeZone);
@@ -116,7 +116,7 @@ public class TenantCreationService extends FieldIdPersistenceService {
 		persistenceService.save(catalogConnection);
 	}
 
-	public void sendWelcomeMessage(User adminUser) throws NoSuchProviderException, MessagingException {
+	private void sendWelcomeMessage(User adminUser) throws MessagingException {
 		TemplateMailMessage invitationMessage = new TemplateMailMessage("Welcome to Field ID", "welcomeMessageTenantCreated");
 		invitationMessage.getToAddresses().add(adminUser.getEmailAddress());
 		

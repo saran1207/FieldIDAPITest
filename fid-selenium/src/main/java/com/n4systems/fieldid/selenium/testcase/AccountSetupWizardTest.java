@@ -2,6 +2,7 @@ package com.n4systems.fieldid.selenium.testcase;
 
 import static org.junit.Assert.assertEquals;
 
+import com.n4systems.fieldid.selenium.pages.admin.AdminCreateTenantPage;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
@@ -19,21 +20,20 @@ import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
 
 public class AccountSetupWizardTest extends FieldIDTestCase {
 
-    private static final String REFERRING_TENANT = TEST_TENANT_NAMES[0];
     private static final String TENANT_TO_CREATE = TEST_CREATED_TENANT_NAMES[0];
     private static final String TEST_USER_NAME = "testuser";
     private static final String TEST_PASSWORD = "testpass";
 
     @Test
 	public void admin_logs_in_says_no_thanks_to_setup_wizard() {
-		LoginPage loginPage = createNewBasicTenant(REFERRING_TENANT);
+		LoginPage loginPage = createNewBasicTenant();
 		AccountSetupWizardPage wizardPage = loginPage.signInAllTheWayToWizard(TEST_USER_NAME, TEST_PASSWORD);
 		assertNoThanksWorks(wizardPage);
 	}
 
 	@Test
 	public void no_referral_basic_admin_logs_in_accepts_all_defaults_for_setup_wizard() {
-		LoginPage loginPage = createNewBasicTenant(REFERRING_TENANT);
+		LoginPage loginPage = createNewBasicTenant();
 		AccountSetupWizardPage wizardPage = loginPage.signInAllTheWayToWizard(TEST_USER_NAME, TEST_PASSWORD);
 		SystemSettings defaults = acceptDefaultSettingsForSetupWizardWorks(wizardPage, false);
 		verifyDefaultSettingsConfiguredProperly(wizardPage, defaults);
@@ -44,21 +44,21 @@ public class AccountSetupWizardTest extends FieldIDTestCase {
 		wizardPage.clickNoThanks();
 	}
 
-	private LoginPage createNewBasicTenant(String referrer) {
-        SelectPackagePage selectPackagePage = startAsCompany(referrer).clickPlansAndPricingLink();
-        String packageName = "Plus";	// must be unlimited
-        SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink(packageName);
+	private LoginPage createNewBasicTenant() {
+        AdminCreateTenantPage createTenantPage = startAdmin().login().clickCreateANewTenant();
 
-        TenantInfo t = new TenantInfo(TEST_USER_NAME, TEST_PASSWORD, TENANT_TO_CREATE, TENANT_TO_CREATE);
-        t.setNumberOfUsers(2);
-        t.setPhoneSupport(true);
-        t.setPromoCode("");
-        t.setPaymentOptions(TenantInfo.paymentOptionsTwoYear);
-        t.setPaymentType(TenantInfo.payByPurchaseOrder);
-        t.setPurchaseOrderNumber("88888");
+        createTenantPage.enterNumEmployeeUsers(2);
+        createTenantPage.selectPackage("Plus");
 
-        signUpPage.enterCreateAccountForm(t);
-        signUpPage.submitCreateAccountForm();
+        createTenantPage.enterName(TENANT_TO_CREATE);
+        createTenantPage.enterUserId(TEST_USER_NAME);
+        createTenantPage.enterFirstName("John");
+        createTenantPage.enterLastName("Doe");
+        createTenantPage.enterEmailAddress("at@dot.com");
+        createTenantPage.enterPrimaryOrgName("org");
+        createTenantPage.enterPrimaryNetsuiteUser("nsuser");
+        createTenantPage.enterPrimaryNetsuitePassword("nspass");
+        createTenantPage.submitForm();
 
         mailServer.waitForMessages(1);
         MailMessage activationMessage = mailServer.getAndClearMessages().get(0);

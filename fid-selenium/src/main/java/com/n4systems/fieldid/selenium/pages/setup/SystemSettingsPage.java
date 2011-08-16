@@ -14,7 +14,7 @@ public class SystemSettingsPage extends FieldIDPage {
     }
 
     public String getPreferredDateFormat() {
-        return selenium.getSelectedValue("//select[@id='systemSettingsUpdate_dateFormat']");
+        return selenium.getSelectedValue("//select[@name='dateFormat']");
     }
 
 }

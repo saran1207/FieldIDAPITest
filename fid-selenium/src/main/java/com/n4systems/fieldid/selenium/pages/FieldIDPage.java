@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
 import org.apache.log4j.Logger;
 
 import com.n4systems.fieldid.selenium.components.LocationPicker;
@@ -283,4 +284,9 @@ public class FieldIDPage extends WebPage {
 			throw new PageErrorException(formErrors);
 		}
 	}
+
+    public AdminLoginPage signOutAdmin() {
+        selenium.click("//a[.='Sign Out']");
+        return new AdminLoginPage(selenium);
+    }
 }
