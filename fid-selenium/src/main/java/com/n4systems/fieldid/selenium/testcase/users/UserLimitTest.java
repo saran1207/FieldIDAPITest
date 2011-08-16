@@ -43,7 +43,7 @@ public class UserLimitTest extends FieldIDTestCase {
 	@Before
 	public void setUp() throws Exception {
 		AdminOrgPage adminPage = startAdmin().login().filterByCompanyName(COMPANY).clickEditOrganization(COMPANY);
-		adminPage.enterTenantLimits(-1, -1, -1);
+		adminPage.enterTenantLimits(1, 1, 1);
 
 		manageUsersPage = startAsCompany(COMPANY).systemLogin().clickSetupLink().clickManageUsers();
 	}
