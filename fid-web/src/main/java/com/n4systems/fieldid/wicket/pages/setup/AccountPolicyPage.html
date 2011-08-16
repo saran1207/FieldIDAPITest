@@ -8,19 +8,19 @@
 
         <div class="sectionContent">
 			
-			<div class="infoSet">
+			<div class="policy">
 			    <label for="maxAttempts"><wicket:message key="label.max_attempts"/></label>
-			    <span><input type="text" wicket:id="maxAttempts"></input></span>
+			    <input type="text" wicket:id="maxAttempts"></input>
 			</div>
 			
-			<div class="infoSet">
+			<div class="policy">
 			    <label for="lockoutDuration"><wicket:message key="label.lockout_duration"/></label>
-			    <span><input type="text" wicket:id="lockoutDuration"></input></span>
+			    <input type="text" wicket:id="lockoutDuration"></input>
 			</div>
 
         </div>
 
-        <div class="formAction">
+        <div class="formAction policy">
             <input wicket:id="saveButton" type="submit" wicket:message="value:label.save" />
             <wicket:message key="label.or"/>
             <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>            
