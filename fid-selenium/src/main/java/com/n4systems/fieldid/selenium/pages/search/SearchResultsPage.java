@@ -19,8 +19,7 @@ public class SearchResultsPage extends WicketFieldIDPage {
     }
 
     public void selectItemOnRow(int rowNumber) {
-        int tableRow = rowNumber + 1; //adjust for header row
-        checkAndFireClick("//table[@class='list']//tr["+tableRow+"]//td[1]/input");
+        checkAndFireClick("//table[@class='list']//tr["+rowNumber+"]//td[1]/input");
         waitForAjax();
     }
 

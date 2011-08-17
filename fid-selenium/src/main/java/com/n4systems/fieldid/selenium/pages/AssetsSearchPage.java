@@ -51,7 +51,7 @@ public class AssetsSearchPage extends EntitySearchPage<AssetsSearchResultsPage> 
 
     @Override
 	public List<String> getResultIdentifiers() {
-		return collectTableValuesUnderCellForCurrentPage(2, 2, "a");
+		return collectTableValuesUnderCellForCurrentPage(1, 2, "a");
 	}
 
     public boolean isBlankSlate() {

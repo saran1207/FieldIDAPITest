@@ -19,7 +19,7 @@ public class ReportingColumnsLayoutTest extends PageNavigatingTestCase<ColumnLay
     @Test
     public void test_default_reporting_columns() throws Exception {
         List<String> currentColumns = page.getCurrentColumns();
-        List<String> expectedDefaultColumns = Arrays.asList("Date Performed", "Serial Number", "Customer Name", "Location", "Asset Type", "Asset Status", "Event Type", "Performed By", "Result");
+        List<String> expectedDefaultColumns = Arrays.asList("Date Performed", "ID Number", "Customer Name", "Location", "Asset Type", "Asset Status", "Event Type", "Performed By", "Result");
         assertEquals(expectedDefaultColumns, currentColumns);
     }
 

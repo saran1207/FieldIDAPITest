@@ -21,8 +21,7 @@ public class SchedulesSearchResultsPage extends SearchResultsPage {
     }
 
     public String getScheduledDateForResult(int resultNumber) {
-        int rowNumber = resultNumber + 1;
-        return selenium.getText("//table[@id='resultsTable']//tr["+rowNumber+"]/td[contains(@id, 'nextdate')]");
+        return selenium.getText("//table[@id='resultsTable']//tr["+resultNumber+"]/td[contains(@id, 'nextdate')]");
     }
     
     public EventPage clickStartEventLink(){
