@@ -118,11 +118,11 @@ public class FieldIDPage extends WebPage {
 	}
 
     protected List<String> collectTableValuesUnderCellForCurrentPage(int firstRow, int cellNumber, String subXpath) {
-        int numRows = selenium.getXpathCount("//table[@class='list']/tbody/tr").intValue();
+        int numRows = selenium.getXpathCount("//table[@class='list']//tbody/tr").intValue();
         List<String> values = new ArrayList<String>(numRows - firstRow + 1);
 
         for (int i = firstRow; i <= numRows; i++) {
-            String value = selenium.getText("//table[@class='list']/tbody/tr["+i+"]/td["+cellNumber+"]/"+subXpath);
+            String value = selenium.getText("//table[@class='list']//tbody/tr["+i+"]/td["+cellNumber+"]//"+subXpath);
             values.add(value);
         }
 

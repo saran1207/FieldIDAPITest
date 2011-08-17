@@ -94,11 +94,12 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	public void search_results_start_event() {
 		page.clickRunSearchButton();
 		assertTrue(page.hasSearchResults());
-		String identifierToVerify = selenium.getText("//tr[2]/td/a");
+		String identifierToVerify = page.getResultIdentifiers().get(0);
+
 		
 		page.clickStartEventLink();
 		
-		assertEquals("Event - " + identifierToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
+		assertEquals("Perform an Event on " + identifierToVerify, selenium.getText("//div[@id='contentTitle']/h1"));
 	}
 	
 	
@@ -149,7 +150,7 @@ public class ReportingSearchTest extends PageNavigatingTestCase<ReportingPage> {
 	
 	private List<String> getDefaultColumnHeaders() {
 		//Empty string for the empty last table column.
-        return Arrays.asList("Date Performed", "Serial Number", "Customer Name", "Location", "Asset Type", "Asset Status", "Event Type", "Performed By", "Result", "");
+        return Arrays.asList("Date Performed", "ID Number", "Customer Name", "Location", "Asset Type", "Asset Status", "Event Type", "Performed By", "Result", "");
 
 	}
 

@@ -2,6 +2,9 @@ package com.n4systems.fieldid.selenium.pages;
 
 import java.util.List;
 
+import com.n4systems.fieldid.selenium.components.LocationPicker;
+import com.n4systems.fieldid.selenium.components.OrgPicker;
+import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.reporting.ReportingSearchResultsPage;
@@ -46,36 +49,81 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		setCheckBoxValue("//input[@id='chk_event_search_order_number']", displayColumns.isOrderNumber());
 		setCheckBoxValue("//input[@id='chk_event_search_purchaseorder']", displayColumns.isPurchaseOrder());
 	}
-
+	
 	public void setSearchCriteria(ReportSearchCriteria criteria) {
-		super.setSearchCriteria(criteria);
+		if (criteria.getRFIDNumber() != null) {
+			selenium.type("//input[@name='rfidNumber']", criteria.getRFIDNumber());
+		}
+		if (criteria.getIdentifier() != null) {
+			selenium.type("//input[@name='identifier']", criteria.getIdentifier());
+		}
+		if (criteria.getOrderNumber() != null) {
+			selenium.type("//input[@name='orderNumber']", criteria.getOrderNumber());
+		}
+		if (criteria.getPurchaseOrder() != null) {
+			selenium.type("//input[@name='purchaseOrder']", criteria.getPurchaseOrder());
+		}
+		if (criteria.getAssignedTo() != null) {
+			selenium.select("//select[@name='assignedUser']", criteria.getAssignedTo());
+		}
+		if (criteria.getReferenceNumber() != null) {
+			selenium.type("//input[@name='referenceNumber']", criteria.getReferenceNumber());
+		}
+		if (criteria.getAssetStatus() != null) {
+			selenium.select("//select[@name='assetStatus']", criteria.getAssetStatus());
+		}
+		if (criteria.getAssetTypeGroup() != null) {
+			selenium.select("//select[@name='assetTypeGroup']", criteria.getAssetTypeGroup());
+            waitForAjax();
+		}
+		if (criteria.getAssetType() != null) {
+			selenium.select("//select[@name='assetType']", criteria.getAssetType());
+		}
+		if (criteria.getLocation() != null) {
+			LocationPicker locPicker = getLocationPicker();
+			locPicker.clickChooseLocation();
+			locPicker.setFreeFormLocation(criteria.getLocation());
+			locPicker.clickSetLocation();			
+		}
+		if (criteria.getOwner() != null) {
+			OrgPicker orgPicker = getOrgPicker();
+			orgPicker.clickChooseOwner();
+			orgPicker.setOwner(criteria.getOwner());
+			orgPicker.clickSelectOwner();
+		}
+		if (criteria.getFromDate() != null) {
+			selenium.type("//input[@id='reportForm_fromDate']", criteria.getFromDate());
+		}
+		if (criteria.getToDate() != null) {
+			selenium.type("//input[@id='reportForm_toDate']", criteria.getToDate());
+		}
 		if(criteria.getJob() != null) {
-			selenium.select("//select[@id='reportForm_criteria_job']", criteria.getJob());
+			selenium.select("//select[@name='jobContainer:job']", criteria.getJob());
 		}
 		if(criteria.getPerformedBy() != null) {
-			selenium.select("//select[@id='reportForm_criteria_performedBy']", criteria.getPerformedBy());
+			selenium.select("//select[@name='performedBy']", criteria.getPerformedBy());
 		}
 		if(criteria.getEventTypeGroup() != null) {
-			selenium.select("//select[@id='reportForm_criteria_eventTypeGroup']", criteria.getEventTypeGroup());
+			selenium.select("//select[@name='eventTypeGroup']", criteria.getEventTypeGroup());
 		}
 		if(criteria.getEventBook() != null) {
-			selenium.select("//select[@id='reportForm_criteria_eventBook']", criteria.getEventBook());
+			selenium.select("//select[@name='eventBook']", criteria.getEventBook());
 		}
 		if(criteria.getSafetyNetworkResults()) {
-			setCheckBoxValue("//input[@id='reportForm_criteria_includeNetworkResults']", criteria.getSafetyNetworkResults());
+			setCheckBoxValue("//input[@name='includeNetworkResultsContainer:includeSafetyNetwork']", criteria.getSafetyNetworkResults());
 		}
 		if(criteria.getResult() != null) {
-			selenium.select("//select[@id='reportForm_criteria_status']", criteria.getResult());
+			selenium.select("//select[@name='result']", criteria.getResult());
 		}
 	}
 	
 	public void clickViewEvent(String identifier){
-		selenium.click("//table[@class='list']//td//a[.='" +identifier+"']/../..//a[.='View']");
+		selenium.click("//table[@class='list']//td//a[.='" +identifier+"']/../../..//a[.='View']");
 		waitForElementToBePresent("//iframe[@id='lightviewContent']");
 	}
 	
 	public EventPage clickEditEvent(String identifier) {
-		selenium.click("//table[@class='list']//td//a[.='" +identifier+"']/../..//a[.='Edit']");
+		selenium.click("//table[@class='list']//td//a[.='" +identifier+"']/../../..//a[.='Edit']");
 		return new EventPage(selenium);
 	}
 	
@@ -100,8 +148,8 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 	}
 	
 	public EventPage clickStartEventLink(){
-    	selenium.click("//a[@id='moreActions'][1]");
-    	selenium.click("//li/a[contains(.,'Start Event')][1]");
+    	selenium.click("//a[@class='dropDownLink'][1]");
+    	selenium.click("//table[@class='list']//li/a[contains(.,'Start Event')][1]");
     	return new EventPage(selenium);
 	}
 
@@ -117,7 +165,7 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
     
     @Override
 	public List<String> getResultIdentifiers() {
-		return collectTableValuesUnderCellForCurrentPage(2, 3, "a");
+		return collectTableValuesUnderCellForCurrentPage(1, 3, "a");
 	}
     
     @Override

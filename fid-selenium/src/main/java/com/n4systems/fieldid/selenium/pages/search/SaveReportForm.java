@@ -16,7 +16,7 @@ public class SaveReportForm extends FieldIDPage {
 	}
 
 	private boolean checkOnSaveReportForm() {
-		return selenium.isElementPresent("//form[@id='savedReportCreate']");
+		return selenium.isElementPresent("//h2[.='Saved Report Details']");
 	}
 	
 	public void setReportName(String name) {
