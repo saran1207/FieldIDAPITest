@@ -259,13 +259,13 @@ public class RegisterAsset extends AbstractCrud{
 		ownerPicker.setOwnerId(id);
 	}
 
-	public void setSerialNumber(String serialNumber) {
-		identifiers.setIdentifier(serialNumber);
+	public void setIdentifier(String identifier) {
+		identifiers.setIdentifier(identifier);
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.identifierrequired")
 	@StringLengthFieldValidator(type = ValidatorType.FIELD, message = "", key = "error.identifier_length", maxLength = "50")
-	public String getSerialNumber() {
+	public String getIdentifier() {
 		return identifiers.getIdentifier();
 	}
 
