@@ -1,30 +1,139 @@
 package com.n4systems.fieldid.selenium.testcase.reporting;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.TreeSet;
 
-import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
-import com.n4systems.fieldid.selenium.pages.HomePage;
-import com.n4systems.fieldid.selenium.pages.WebEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
+import com.n4systems.fieldid.selenium.pages.ReportingPage;
+import com.n4systems.fieldid.selenium.persistence.Scenario;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetStatus;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventForm;
+import com.n4systems.model.EventGroup;
+import com.n4systems.model.EventType;
+import com.n4systems.model.Status;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.user.User;
+
 @RunWith(Parameterized.class)
-public class FilterByResultTest extends PageNavigatingTestCase<HomePage> {
+public class FilterByResultTest extends PageNavigatingTestCase<ReportingPage> {
 
 	private String resultName;
 
 	public FilterByResultTest(String resultName) {
 		this.resultName = resultName;
 	}
+	
+	private static final String TEST_EVENT_TYPE1 = "TestEventType1";
+	private static final String TEST_TENANT = "test1";
+	private static final String ASSET_IDENTIFIER1 = "12345";
 
+	@Override
+	public void setupScenario(Scenario scenario) {
+		
+		Tenant tenant = scenario.tenant(TEST_TENANT);
+		
+		PrimaryOrg primaryOrg = scenario.primaryOrgFor(TEST_TENANT);
+		
+		User user = scenario.defaultUser();
+		
+		AssetType type = scenario.anAssetType().named("TestAssetType")
+				                               .build();
+
+		AssetStatus assetStatus = scenario.anAssetStatus().named("AssetStatus1").build();
+		
+		Asset asset1 = scenario.anAsset()
+				              .withOwner(primaryOrg)
+				              .withIdentifier(ASSET_IDENTIFIER1)
+				              .havingStatus(assetStatus)
+				              .ofType(type)
+				              .build();
+
+		EventForm eventForm1 = scenario.anEventForm().build();
+
+		EventType eventType1 = scenario.anEventType()
+		                               .withEventForm(eventForm1)
+				                       .named(TEST_EVENT_TYPE1)
+				                       .build();
+		
+		EventForm eventForm2 = scenario.anEventForm().build();
+
+		EventType eventType2 = scenario.anEventType()
+		                               .withEventForm(eventForm2)
+				                       .named(TEST_EVENT_TYPE1)
+				                       .build();
+
+		EventForm eventForm3 = scenario.anEventForm().build();
+
+		EventType eventType3 = scenario.anEventType()
+		                               .withEventForm(eventForm3)
+				                       .named(TEST_EVENT_TYPE1)
+				                       .build();
+
+		EventGroup group = scenario.anEventGroup()
+		                           .forTenant(tenant)
+		                           .build();
+
+		Event event1 = scenario.anEvent()
+		                      .on(asset1)
+		                      .ofType(eventType1)
+		                      .withPerformedBy(user)
+		                      .withOwner(primaryOrg)
+		                      .withTenant(tenant)
+		                      .withGroup(group)		                      
+		                      .withResult(Status.PASS)
+		                      .withAssetStatus(assetStatus)
+		                      .build();
+
+		Event event2 = scenario.anEvent()
+	  				           .on(asset1)
+					           .ofType(eventType2)
+					           .withPerformedBy(user)
+					           .withOwner(primaryOrg)
+					           .withTenant(tenant)
+					           .withGroup(group)		                      
+					           .withResult(Status.FAIL)
+		                       .withAssetStatus(assetStatus)
+					           .build();
+		
+		Event event3 = scenario.anEvent()
+					           .on(asset1)
+					           .ofType(eventType3)
+					           .withPerformedBy(user)
+					           .withOwner(primaryOrg)
+					           .withTenant(tenant)
+					           .withGroup(group)		                      
+					           .withResult(Status.NA)
+		                       .withAssetStatus(assetStatus)
+					           .build();
+		
+		TreeSet<Event> events = new TreeSet<Event>();
+		events.add(event1);
+		events.add(event2);
+		events.add(event3);
+		group.setEvents(events);
+
+		scenario.save(group);
+	}
+
+	
+	
     @Override
-    protected HomePage navigateToPage() {
-        return start().login();
+    protected ReportingPage navigateToPage() {
+        return startAsCompany(TEST_TENANT).login().clickReportingLink();
     }
 
     @Parameters
@@ -38,39 +147,16 @@ public class FilterByResultTest extends PageNavigatingTestCase<HomePage> {
 	
 	@Test
 	public void show_just_events_that_passed_when_pass_selected_in_the_result_filter() throws Exception {
-        page.clickReportingLink();
-
-		selenium.select("css=#reportForm_criteria_status", resultName);
+		page.selectResult(resultName);
 		
-		submitForm();
+		page.clickRunSearchButton();
 
-		verifyEventResultsAreCorrectOnThisPage();
-		goToLastPage();
-		verifyEventResultsAreCorrectOnThisPage();
-	}
-
-	private void submitForm() {
-		selenium.click("css=#reportForm_label_Run");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
-	}
-
-	private void verifyEventResultsAreCorrectOnThisPage() {
-		assertEquals(resultName, selenium.getText("css=#event_search_eventresult_0"));
+		assertTrue(page.hasSearchResults());
+		List<String> eventResults = page.getEventResults();
 		
-		String pageNumber = selenium.getText("css=.currentPage span");
-		String totalResults = selenium.getText("css=.total:contains('Total Events')");
-		
-		int page = Integer.parseInt(pageNumber.trim());
-		int total = Integer.parseInt(totalResults.replaceFirst("Total.*Events", "").trim());
-		
-		int lastResultOnPage = total - (20 * (page - 1));
-		
-		assertEquals(resultName, selenium.getText("css=#event_search_eventresult_" + ((lastResultOnPage > 20) ? 19 : lastResultOnPage - 1)  ));
-	}
-
-	private void goToLastPage() {
-		selenium.click("link=Last");
-		selenium.waitForPageToLoad(WebEntity.DEFAULT_TIMEOUT);
+		for (String eventResult: eventResults) {
+			assertEquals(resultName, eventResult);
+		}
 	}
 
 }

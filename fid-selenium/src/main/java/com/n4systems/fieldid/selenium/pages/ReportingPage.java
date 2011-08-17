@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.n4systems.fieldid.selenium.components.LocationPicker;
 import com.n4systems.fieldid.selenium.components.OrgPicker;
-import com.n4systems.fieldid.selenium.datatypes.AssetSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.ReportSearchCriteria;
 import com.n4systems.fieldid.selenium.datatypes.SearchDisplayColumns;
 import com.n4systems.fieldid.selenium.pages.reporting.ReportingSearchResultsPage;
@@ -168,9 +167,17 @@ public class ReportingPage extends EntitySearchPage<ReportingSearchResultsPage> 
 		return collectTableValuesUnderCellForCurrentPage(1, 3, "a");
 	}
     
+    public List<String> getEventResults() {
+    	return collectTableValuesUnderCellForCurrentPage(1, 10, "span");
+    }
+    
     @Override
     public void enterIdentifier(String identifier) {
         selenium.type("//input[@name='identifier']", identifier);
+    }
+    
+    public void selectResult(String result) {
+    	selenium.select("//select[@name='result']", result);
     }
     
     public boolean isBlankSlate() {
