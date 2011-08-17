@@ -4,7 +4,7 @@
 <#if assets?exists >
 	<#if !assets.isEmpty() >
 		<h2 class="clean">
-			<#if (assets.size > 1)>
+			<#if (assets.size() > 1)>
 				<@s.text name="label.found_multiple_assets"/>
 			<#else>
 				&nbsp;
