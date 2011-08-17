@@ -28,9 +28,9 @@
 	</script>
 </head>
 <#if lineItem?exists>
-	${action.setPageType('asset', 'add_with_order')!}
+	${action.setPageType('newasset', 'add_with_order')!}
 <#else>
-	${action.setPageType('asset', 'multi_add')!}
+	${action.setPageType('newasset', 'multi_add')!}
 </#if>
 
 <div id="steps">

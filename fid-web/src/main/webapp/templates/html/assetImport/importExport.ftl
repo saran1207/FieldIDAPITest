@@ -1,4 +1,4 @@
-${action.setPageType('asset', 'import')!}
+${action.setPageType('newasset', 'import')!}
 <head>
 	<@n4.includeScript src="assetImport"/>
 	<@n4.includeStyle type="page" href="import"/>
