@@ -279,8 +279,13 @@ h2 a {
 	emtpty-cells: show;
 }
 
+/* workaround for IE because it doesn't respect min-width specified in  '.list td' css */
+td[id^="actionsContainer"] {
+	width: 65px;
+}
+
 .list th,.list td {
-	min-width: 55px;
+	min-width: 65px;
 	padding: 9px 5px 9px 10px;
 	empty-cells: show;
 }

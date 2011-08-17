@@ -1,11 +1,35 @@
-
-
-
+/**
+ * TODO : 
+ * 
+ * in order to make this code more portable i should....
+ * prototype the map class and give it an "addMarker()" method. 
+ * .: API would look like this...
+ * 
+ *  var map = googleMap.initialize(id); 
+ *  map.addMarker(latitude, longitude);    etc...
+ *  onload = map.show();
+ *  
+ *  OR 
+ *  
+ *  var map = googleMap.showWithMarker(id, latitude, longitude);   <-- default map for a single point.
+ *  
+ *  as well, each map instance would have its own "locations[]" property and "createMarker()" method. 
+ *  the mapOptions property should be exposed
+ * 
+ * the googleMap interface should only expose...
+ * googleMap.initialize() methods  (prolly be a few).
+ * googleMap.enableGeoCodingForMarkers()
+ * googleMap.getMarkerForStatus();   // fieldId specific code
+ * 
+ * 
+ * the big problem with the code now is that it is sort of a singleton.  displaying multiple maps on same page would break.  
+ * 
+ */
 
 var googleMap = (function() {
 	 
 	var name = "FieldIdGoogleMaps";	
-	var map = '';  /* TODO DD : refactor this.  "map" is a singleton right now.  to handle multiple map instances i need to change this by either making a factory or making map into a collection.  */  
+	var map = '';    
 	var locations = [];
 	var infowindow =  new google.maps.InfoWindow();	
 	
