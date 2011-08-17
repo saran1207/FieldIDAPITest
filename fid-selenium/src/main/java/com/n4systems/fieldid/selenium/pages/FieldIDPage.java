@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.n4systems.fieldid.selenium.pages.admin.AdminLoginPage;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.n4systems.fieldid.selenium.components.LocationPicker;
@@ -121,8 +122,12 @@ public class FieldIDPage extends WebPage {
         int numRows = selenium.getXpathCount("//table[@class='list']//tbody/tr").intValue();
         List<String> values = new ArrayList<String>(numRows - firstRow + 1);
 
+        if (!StringUtils.isBlank(subXpath)) {
+            subXpath = "//" + subXpath;
+        }
+
         for (int i = firstRow; i <= numRows; i++) {
-            String value = selenium.getText("//table[@class='list']//tbody/tr["+i+"]/td["+cellNumber+"]//"+subXpath);
+            String value = selenium.getText("//table[@class='list']//tbody/tr["+i+"]/td["+cellNumber+"]" + subXpath);
             values.add(value);
         }
 

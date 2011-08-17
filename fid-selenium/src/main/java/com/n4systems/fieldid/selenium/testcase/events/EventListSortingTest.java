@@ -23,8 +23,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 
-public class EventListSortingTest extends
-		PageNavigatingTestCase<EventsPerformedPage> {
+public class EventListSortingTest extends PageNavigatingTestCase<EventsPerformedPage> {
 
 	private static final String TEST_EVENT_TYPE3 = "TestEventType3";
 	private static final String TEST_EVENT_TYPE2 = "TestEventType2";
