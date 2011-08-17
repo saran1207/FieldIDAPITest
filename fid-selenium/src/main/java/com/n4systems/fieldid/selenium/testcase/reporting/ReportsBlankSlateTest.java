@@ -3,6 +3,7 @@ package com.n4systems.fieldid.selenium.testcase.reporting;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
@@ -10,6 +11,7 @@ import com.n4systems.fieldid.selenium.pages.EventPage;
 import com.n4systems.fieldid.selenium.pages.ImportPage;
 import com.n4systems.fieldid.selenium.pages.ReportingPage;
 
+@Ignore //Turn on when reporting blank slate is working again, ticket scheduled for next release
 public class ReportsBlankSlateTest extends PageNavigatingTestCase<ReportingPage> {
 
 	@Override

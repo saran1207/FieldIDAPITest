@@ -50,6 +50,33 @@ public class AdminCreateTenantPage extends WicketFieldIDPage {
         selenium.type("//input[@name='primaryOrg.externalPassword']", externalPassword);
     }
 
+    public void enterPrimaryOrgAddress(String address) {
+        selenium.type("//input[@name='addressInfoContainer:streetAddress']", address);
+    }
+
+    public void enterPrimaryOrgCity(String city) {
+        selenium.type("//input[@name='addressInfoContainer:city']", city);
+    }
+
+    public void enterPrimaryOrgState(String state) {
+        selenium.type("//input[@name='addressInfoContainer:state']", state);
+    }
+
+    public void enterPrimaryOrgZip(String zip) {
+        selenium.type("//input[@name='addressInfoContainer:zip']", zip);
+    }
+
+    public void enterPrimaryOrgCountry(String country) {
+        selenium.type("//input[@name='addressInfoContainer:country']", country);
+    }
+
+    public void enterPrimaryOrgPhone(String phone) {
+        selenium.type("//input[@name='addressInfoContainer:phone']", phone);
+    }
+
+    public void enterPrimaryOrgFax(String fax) {
+        selenium.type("//input[@name='addressInfoContainer:fax']", fax);
+    }
 
     public AdminOrgsListPage submitForm() {
         selenium.click("//input[@value='Save']");

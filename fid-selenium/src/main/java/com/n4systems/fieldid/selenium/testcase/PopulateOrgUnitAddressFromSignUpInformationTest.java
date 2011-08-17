@@ -1,20 +1,17 @@
 package com.n4systems.fieldid.selenium.testcase;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.n4systems.fieldid.selenium.FieldIDTestCase;
-import com.n4systems.fieldid.selenium.datatypes.TenantInfo;
 import com.n4systems.fieldid.selenium.mail.MailMessage;
 import com.n4systems.fieldid.selenium.pages.EULAPage;
 import com.n4systems.fieldid.selenium.pages.HomePage;
 import com.n4systems.fieldid.selenium.pages.LoginPage;
-import com.n4systems.fieldid.selenium.pages.SelectPackagePage;
 import com.n4systems.fieldid.selenium.pages.SetPasswordPage;
-import com.n4systems.fieldid.selenium.pages.SignUpPage;
+import com.n4systems.fieldid.selenium.pages.admin.AdminCreateTenantPage;
 import com.n4systems.fieldid.selenium.pages.setup.ManageOrganizationsPage;
 import com.n4systems.fieldid.selenium.util.SignUpEmailLoginNavigator;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTestCase {
 
@@ -54,25 +51,28 @@ public class PopulateOrgUnitAddressFromSignUpInformationTest extends FieldIDTest
 	}
 
 	private void createANewTenant() {
-        SelectPackagePage selectPackagePage = startAsCompany(REFERRING_TENANT_NAME).clickPlansAndPricingLink();
-        SignUpPage signUpPage = selectPackagePage.clickSignUpNowLink("Unlimited");
+        AdminCreateTenantPage createTenantPage = startAdmin().login().clickCreateANewTenant();
 
-		TenantInfo t = new TenantInfo(NEW_USER, NEW_PASSWORD, NEW_TENANT_NAME, NEW_TENANT_NAME);
-		t.setNumberOfUsers(2);
-		t.setPhoneSupport(true);
-		t.setPromoCode("promo");
-		t.setPaymentOptions(TenantInfo.paymentOptionsTwoYear);
-		t.setPaymentType(TenantInfo.payByPurchaseOrder);
-		t.setPurchaseOrderNumber("88888");
-        t.setCompanyCountry(TEST_COUNTRY);
-        t.setCompanyCity(TEST_CITY);
-        t.setCompanyState(TEST_STATE);
-        t.setCompanyAddress(TEST_ADDRESS);
-        t.setCompanyPhoneNumber(TEST_PHONE);
-        t.setCompanyZipCode(TEST_ZIP);
+        createTenantPage.enterName(NEW_TENANT_NAME);
+        createTenantPage.enterUserId(NEW_USER);
+        createTenantPage.enterFirstName("First");
+        createTenantPage.enterLastName("Last");
+        createTenantPage.enterEmailAddress("at@dot.com");
 
-		signUpPage.enterCreateAccountForm(t);
-		signUpPage.submitCreateAccountForm();
+        createTenantPage.selectPackage("Unlimited");
+        createTenantPage.enterNumEmployeeUsers(2);
+        createTenantPage.enterPrimaryOrgName("POrgName");
+        createTenantPage.enterPrimaryNetsuiteUser("nsuser");
+        createTenantPage.enterPrimaryNetsuitePassword("nspassword");
+        createTenantPage.enterPrimaryOrgCountry(TEST_COUNTRY);
+        createTenantPage.enterPrimaryOrgCity(TEST_CITY);
+        createTenantPage.enterPrimaryOrgState(TEST_STATE);
+        createTenantPage.enterPrimaryOrgAddress(TEST_ADDRESS);
+        createTenantPage.enterPrimaryOrgPhone(TEST_PHONE);
+        createTenantPage.enterPrimaryOrgZip(TEST_ZIP);
+
+        createTenantPage.submitForm();
+        createTenantPage.signOutAdmin();
 
         mailServer.waitForMessages(1);
         MailMessage accountActivationMessage = mailServer.getAndClearMessages().get(0);
