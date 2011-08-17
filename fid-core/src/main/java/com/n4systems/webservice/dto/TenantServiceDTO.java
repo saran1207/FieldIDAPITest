@@ -14,6 +14,7 @@ public class TenantServiceDTO extends AbstractBaseServiceDTO {
 	private boolean usingJobs;
 	private boolean usingIntegration;
 	private boolean usingAssignedTo;
+	private boolean gpsCapture;
 	
 	public String getSerialNumberFormat() {
 		return serialNumberFormat;
@@ -63,5 +64,11 @@ public class TenantServiceDTO extends AbstractBaseServiceDTO {
 	}
 	public boolean isUsingAssignedTo() {
 		return usingAssignedTo;
+	}
+	public void setGpsCapture(boolean gpsCapture) {
+		this.gpsCapture = gpsCapture;
+	}
+	public boolean isGpsCapture() {
+		return gpsCapture;
 	}
 }

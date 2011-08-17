@@ -41,9 +41,13 @@ public class WebServiceAuthenticator {
 			catch(LoginException e) {
 				if (e.getLoginFailureInfo().requiresLocking()) { 
 					userManager.lockUser(authenticationRequest.getTenantName(), e.getUserId(), e.getDuration(), e.getMaxAttempts());
-				}
+				} 
 				
-				authenticationResponse.setAuthenticationMessage("We're sorry, this account is locked.");
+				if(e.getLoginFailureInfo().isLocked() || e.getLoginFailureInfo().requiresLocking()) {
+					authenticationResponse.setAuthenticationMessage("We're sorry, this account is locked.");
+				} else {
+					authenticationResponse.setAuthenticationMessage("Authentication failed.");
+				}
 			}
 		} else {
 			authenticationResponse.setAuthenticationMessage("Your mobile version is too old. Please upgrade your mobile.");		
