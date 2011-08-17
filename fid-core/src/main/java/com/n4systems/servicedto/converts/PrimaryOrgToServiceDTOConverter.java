@@ -35,5 +35,6 @@ public class PrimaryOrgToServiceDTOConverter {
 		tenantService.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
 		tenantService.setUsingAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
 		tenantService.setUsingIntegration(primaryOrg.hasExtendedFeature(ExtendedFeature.Integration));
+		tenantService.setUsingAdvancedLocation(primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation));
 	}
 }
