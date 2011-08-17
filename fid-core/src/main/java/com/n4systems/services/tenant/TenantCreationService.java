@@ -2,6 +2,8 @@ package com.n4systems.services.tenant;
 
 import javax.mail.MessagingException;
 
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ public class TenantCreationService extends FieldIdPersistenceService {
 
     @Transactional(rollbackFor = {MessagingException.class, RuntimeException.class })
 	public void createTenant(Tenant tenant, PrimaryOrg primaryOrg, User adminUser) throws MessagingException {
+        checkNameUniqueness(tenant);
 		createTenant(tenant);
 		createPrimaryOrg(tenant, primaryOrg, adminUser.getTimeZoneID());
 		createSystemUser(primaryOrg);
@@ -43,8 +46,16 @@ public class TenantCreationService extends FieldIdPersistenceService {
 		
 		sendWelcomeMessage(adminUser);
 	}
-	
-	private void createTenant(Tenant tenant) {
+
+    private void checkNameUniqueness(Tenant tenant) {
+        QueryBuilder<Tenant> tenantBuilder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
+        tenantBuilder.addSimpleWhere("name", tenant.getName());
+        if (persistenceService.find(tenantBuilder) != null) {
+            throw new RuntimeException("Tenant already exists with name: " + tenant.getName());
+        }
+    }
+
+    private void createTenant(Tenant tenant) {
 		persistenceService.save(tenant);
 		
 		TenantSettings settings = tenant.getSettings();
