@@ -105,7 +105,7 @@ public class PersistenceManager {
 	public static <T extends Saveable> void executeDeleter(Deleter<T> deleter, T entity) throws EntityStillReferencedException {
 		Transaction transaction = startTransaction();
 		try {
-			T reloadedEntity = (T) transaction.getEntityManager().find(entity.getClass(), entity.getIdentifier());
+			T reloadedEntity = (T) transaction.getEntityManager().find(entity.getClass(), entity.getEntityId());
 			
 			deleter.remove(transaction, reloadedEntity);
 			
@@ -116,7 +116,7 @@ public class PersistenceManager {
 			rollbackTransaction(transaction);
 			
 			if (ExceptionHelper.causeContains(e, ConstraintViolationException.class)) {
-				throw new EntityStillReferencedException(entity.getClass(), entity.getIdentifier(), e);
+				throw new EntityStillReferencedException(entity.getClass(), entity.getEntityId(), e);
 			} else {
 				throw e;
 			}

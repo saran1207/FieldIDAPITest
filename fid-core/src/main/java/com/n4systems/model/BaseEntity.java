@@ -96,10 +96,10 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
 		return id;
 	}
 	
-	@AllowSafetyNetworkAccess
-	public Object getIdentifier() {
-		return getId();
-	}
+    @AllowSafetyNetworkAccess
+    public Object getEntityId() {
+        return getId();
+    }
 
 	public void setId(Long id) {
 		this.id = id;

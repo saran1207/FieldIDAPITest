@@ -214,7 +214,6 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		this.rfidNumber = rfidNumber;
 	}
 
-	@Override
 	@AllowSafetyNetworkAccess
 	public String getIdentifier() {
 		return identifier;

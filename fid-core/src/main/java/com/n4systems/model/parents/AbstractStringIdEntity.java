@@ -53,11 +53,12 @@ public class AbstractStringIdEntity implements Serializable, Saveable {
     	return id;
     }
 	
-	public Object getIdentifier() {
-		return getId();
-	}
+    @Override
+    public Object getEntityId() {
+        return getId();
+    }
 
-	public void setId(String id) {
+    public void setId(String id) {
     	this.id = id;
     }
 

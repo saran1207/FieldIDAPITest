@@ -79,12 +79,12 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 		this.sessionId = sessionId;
 	}
 
-	@Override
-	public Long getIdentifier() {
-		return userId;
-	}
+    @Override
+    public Object getEntityId() {
+        return userId;
+    }
 
-	@Override
+    @Override
 	public boolean isNew() {
 		return true;
 	}

@@ -30,10 +30,10 @@ abstract public class LegacyBaseEntity implements Serializable {
 		return uniqueID;
 	}
 	
-	@AllowSafetyNetworkAccess
-	public Object getIdentifier() {
-		return getUniqueID();
-	}
+    @AllowSafetyNetworkAccess
+    public Object getEntityId() {
+        return getUniqueID();
+    }
 
 	public void setUniqueID(Long uniqueID) {
 		this.uniqueID = uniqueID;

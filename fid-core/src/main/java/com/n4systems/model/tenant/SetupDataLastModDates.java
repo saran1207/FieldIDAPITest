@@ -92,8 +92,9 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 		// we'll assume it's not since merge() can handle a new entity
 		return false;
 	}
-	
-	public Object getIdentifier() {
+
+    @Override
+	public Object getEntityId() {
 		return getTenantId();
 	}
 	
