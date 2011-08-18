@@ -147,6 +147,7 @@ ${action.setPageType('asset', 'edit')!}
 					<th><@s.text name="label.customername"/></th>
 					<th><@s.text name="label.assettype"/></th>
 					<th><@s.text name="label.identifieddate"/></th>
+					<th><@s.text name="label.referencenumber"/></th>
 				</tr>
 				<tr>
 					<td><@s.text name="label.loser"/></td>
@@ -155,6 +156,7 @@ ${action.setPageType('asset', 'edit')!}
 					<td>${(losingAsset.owner.name?html)!}</td>
 					<td>${losingAsset.type.name?html}</td>
 					<td>${action.formatDate(losingAsset.identified, false)}</td>
+					<td>&nbsp;</td>   <!-- without this placeholder, top border won't show up on cell -->
 				</tr>
 				<tr id="winningAsset">
 				</tr>
