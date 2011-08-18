@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.selenium.testcase;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class TurnOnPlansAndPricingWithReadOnlyUserTest extends FieldIDTestCase {
 		boolean showPlansAndPricing = false;
 		setTenantFeatures(readOnlyUser, showPlansAndPricing);
 		LoginPage loginPage = startAsCompany("test1");
-		assertTrue(loginPage.isPlansAndPricingAvailable());
+		assertFalse(loginPage.isPlansAndPricingAvailable());
 	}
 	
 	private void setTenantFeatures(boolean readOnlyUser, boolean showPlansAndPricing) {
