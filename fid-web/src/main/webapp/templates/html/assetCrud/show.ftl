@@ -103,7 +103,7 @@ ${action.setPageType('asset', 'show')!}
 	</div>
 	
 	<#if asset.subAssets?exists && !asset.subAssets.isEmpty() >
-		<div id="assetComponents" class="leftViewSection topBorder">
+		<div id="assetComponents" class="leftViewSection topBorder viewAssetComponents">
 			<h3 class="subheading"><@s.text name="label.subassets"/></h3>
 			<#list asset.subAssets as subAsset >
 				<p>
@@ -116,7 +116,7 @@ ${action.setPageType('asset', 'show')!}
 		</div>
 	
 	<#elseif parentAsset?exists>
-		<div id="assetComponents" class="leftViewSection topBorder">
+		<div id="assetComponents" class="leftViewSection topBorder viewAssetComponents">
 			<h3 class="subheading"><@s.text name="label.partof"/></h3>
 			<p>
 				<label>${parentAsset.type.name!}</label> 

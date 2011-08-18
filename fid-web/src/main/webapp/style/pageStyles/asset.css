@@ -161,17 +161,17 @@
 	line-height: 1.6em;
 }
 
-#assetComponents{
+.viewAssetComponents{
 	padding-bottom: 25px;
 }
 
-#assetComponents label, #assetComponents span{
+.viewAssetComponents label, .viewAssetComponents span{
 	display: block;
 	float: left;
 	width: 120px;
 }
 
-#assetComponents p span {
+.viewAssetComponents p span {
 	text-align: right;
 }
 
