@@ -75,8 +75,9 @@ ${action.setPageType('event', 'add')!}
 		<@s.hidden name="cleanToEventsToMatchConfiguration" />
 		<div class="formAction">
 			<@s.url id="cancelUrl" action="eventGroups" uniqueID="${asset.id}"/>
-			<@s.submit key="label.cancel" onclick="return redirect( '${cancelUrl}' );"/>
 			<@s.submit key="label.save" />
+			<@s.text name="label.or"/>
+			<a href="<@s.url action="eventGroups" uniqueID="${asset.id}"/>"><@s.text name="label.cancel"/></a>
 		</div>
 	</@s.form>
 	</div>
