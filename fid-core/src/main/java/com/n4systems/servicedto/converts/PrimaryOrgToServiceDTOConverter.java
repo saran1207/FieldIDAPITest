@@ -26,6 +26,7 @@ public class PrimaryOrgToServiceDTOConverter {
 		tenantService.setName(primaryOrg.getTenant().getName());
 		tenantService.setDisplayName(primaryOrg.getName());
 		tenantService.setSerialNumberFormat(primaryOrg.getIdentifierFormat());
+		tenantService.setSerialNumberLabel(primaryOrg.getIdentifierLabel());
 		tenantService.setUsingSerialNumber(primaryOrg.isUsingSerialNumber());
 		tenantService.setGpsCapture(primaryOrg.getTenant().getSettings().isGpsCapture());
 	}

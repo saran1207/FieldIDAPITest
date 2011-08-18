@@ -9,6 +9,7 @@ public class TenantServiceDTO extends AbstractBaseServiceDTO {
 	private String name;
 	private String displayName;
 	private String serialNumberFormat;
+	private String serialNumberLabel;
 	private boolean gpsCapture;
 	private boolean usingJobSites;
 	private boolean usingSerialNumber;
@@ -95,5 +96,13 @@ public class TenantServiceDTO extends AbstractBaseServiceDTO {
 	
 	public boolean isUsingAdvancedLocation() {
 		return usingAdvancedLocation;
+	}
+
+	public void setSerialNumberLabel(String serialNumberLabel) {
+		this.serialNumberLabel = serialNumberLabel;
+	}
+
+	public String getSerialNumberLabel() {
+		return serialNumberLabel;
 	}
 }
