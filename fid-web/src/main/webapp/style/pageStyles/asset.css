@@ -341,3 +341,17 @@
 	height: 300px;
 }
 
+.previewImageDisplay {
+	max-height: 30px;
+	max-width: 50px;
+}
+
+.previewImageDisplay img{
+	position: absolute;
+	clip: rect(0 50px 40px 0px);
+}
+
+.imageUploadPreview span{ 
+	padding-left : 50px;
+}
+
