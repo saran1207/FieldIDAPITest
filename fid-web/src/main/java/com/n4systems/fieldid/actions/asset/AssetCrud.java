@@ -1231,7 +1231,7 @@ public class AssetCrud extends UploadAttachmentSupport {
     }
     
     public void setMode(String mode) { 
-    	this.mode =mode;
+    	this.mode = mode;
     }
 
     public String getMode() { 
@@ -1251,7 +1251,7 @@ public class AssetCrud extends UploadAttachmentSupport {
     }
 
     public String getEventDescription(Event event) {	
-    	SimpleDateFormat dateFormatter = event.getOwner().getPrimaryOrg().getDateFormatter();
+    	SimpleDateFormat dateFormatter = getPrimaryOrg().getDateFormatter();
     	String date = dateFormatter.format(event.getDate());    	
     	return getText("asset.event_desc", new String[] {date, event.getStatus().toString() });
     }
