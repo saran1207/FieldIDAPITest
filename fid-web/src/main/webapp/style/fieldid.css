@@ -2309,6 +2309,8 @@ div.unitOfMeasureName {
 .crudForm .infoSet label .required {
 	display: inline;
 	float: none;
+    width:auto;
+    padding: 0 2px 0 0;
 }
 
 th.wicket_orderUp {
