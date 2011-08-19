@@ -470,8 +470,9 @@ h2 span.formTitle {
 }
 
 .proofTestUpload {
+    padding-left:23px;
     padding-top:4px;
-    width:800px;
+    width:100%;
 }
 
 .pageContent .fieldHolder select.proofTestType {
