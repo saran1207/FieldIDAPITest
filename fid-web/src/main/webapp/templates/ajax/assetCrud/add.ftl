@@ -8,7 +8,7 @@
 			<label for="identifier" class="label">${identifierLabel} <#include "/templates/html/common/_requiredMarker.ftl"/></label>
 				
 			<span  class="fieldHolder">
-				<span class="identifier">
+				<span>
 					<@s.textfield name="identifier" id="subAssetIdentifier_${assetTypeId}" onchange="checkIdentifier('subAssetIdentifier_${assetTypeId}', -${assetTypeId});" theme="fieldidSimple" />
 				
 					<span class="action">
