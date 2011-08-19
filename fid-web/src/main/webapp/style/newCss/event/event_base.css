@@ -252,6 +252,27 @@ textarea.comments {
 	border-color: #de4545;
 }
 
+.observationsShow {
+	background-color: #fff;
+	padding: 5px 0 5px 10px;
+	overflow: hidden;
+	border: 1px solid;
+	width:380px;
+}
+
+.observationsShow p.observationTextShow span   {
+	display: inline;
+	padding:0;
+}
+
+.observationsShow p.observationTextShow   {
+	border: 2px solid #E8EDFF;
+	padding: 10px 0 10px 40px;
+	width: 320px;
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
 .pageContent input[type="text"] {
 	padding: 4px;
 	border: 1px solid #9C9C9C;
