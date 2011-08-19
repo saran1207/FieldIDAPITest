@@ -2,6 +2,8 @@ ${action.setPageType('asset', 'customer_edit')!}
 <@s.form action="customerInformationUpdate" cssClass="crudForm" theme="fieldid">
 	<#include "/templates/html/common/_formErrors.ftl"/>
 	<#include "/templates/html/common/_columnView.ftl"/>
+	<#include "/templates/html/common/_orgPicker.ftl"/>
+
 	<@s.hidden name="uniqueID"/>
 	<h2>
 		<#if securityGuard.jobSitesEnabled>
