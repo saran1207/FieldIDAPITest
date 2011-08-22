@@ -110,6 +110,7 @@ var googleMap = (function() {
 			return loc.marker;
 		} else {
 			return new google.maps.Marker({
+				draggable : false,
 				position: loc,
 				map: map				
 			});					
