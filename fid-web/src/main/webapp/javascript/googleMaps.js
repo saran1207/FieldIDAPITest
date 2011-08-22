@@ -65,7 +65,7 @@ var googleMap = (function() {
 			var marker = getMarkerForLocation(loc);
 			
 			bounds.extend(loc);					
-			marker.content = loc.content;
+			marker.content = (loc.content) ? loc.content : '';
 			marker.loc = loc;
 			/** TODO DD : refactor this update address feature so it is an option.  note that it can affect performance */
 			google.maps.event.addListener(marker, 'click', function() {
