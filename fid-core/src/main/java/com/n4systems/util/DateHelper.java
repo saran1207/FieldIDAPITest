@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
-
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
@@ -41,6 +40,7 @@ public class DateHelper {
 	 * the longest ones first. Otherwise MMMM could become %m%m rather then %B.
 	 */
 	new TreeMap<String, String>(new Comparator<String>() {
+		@Override
 		public int compare(String a, String b) {
 			// sort by length in descending order
 			return (a.length() > b.length()) ? -1 : 1;
@@ -115,6 +115,16 @@ public class DateHelper {
 		} catch (ParseException parseEx) {
 		}
 
+		/**
+		 * CAUTION DD : this method will not work properly for date strings with 2 digit years. 
+		 *  e.g. 
+		 * sdf.parse("19/08/11") does NOT equal sdf.parse("19/08/2011")    // you might think it would be 2011, but it interprets the first date as 0011
+		 * 
+		 * typically, this method is called with a string that is served up via the date picker so this edge case won't happen.  but if a user typed in that 
+		 * string then the results would be very hard to debug. 
+		 *  
+		*/
+		
 		return date;
 	}
 
