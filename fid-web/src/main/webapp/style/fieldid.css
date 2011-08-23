@@ -1586,12 +1586,15 @@ h3.inline {
 #smartSearch {
 	clear:both;
 	float:right;
+	height: 38px;
 }
 
 
 #smartSearch label {
 	font-size: 1.2em;
 	padding: 5px 0;
+	margin-top: 5px;
+	margin-bottom: 5px;	
 }
 
 #smartSearch input {
@@ -1602,14 +1605,20 @@ h3.inline {
 #smartSearch input[type="text"],#smartSearch input.textbox {
 	width: 230px;
 	border: 1px solid #999;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 #smartSearch input[type="submit"] {
 	padding: 3px;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 input.description {
 	color: #666;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .backToLink {
