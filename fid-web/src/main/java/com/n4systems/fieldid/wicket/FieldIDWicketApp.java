@@ -6,11 +6,14 @@ import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
 import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
+import com.n4systems.fieldid.wicket.pages.setup.AccountPolicyPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.DataLogPage;
 import com.n4systems.fieldid.wicket.pages.setup.IdentifierOverridesPage;
 import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
+import com.n4systems.fieldid.wicket.pages.setup.PasswordPolicyPage;
+import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
 import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
@@ -47,6 +50,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/dataLog", DataLogPage.class);
         mountBookmarkablePage("setup/systemSettings", SystemSettingsPage.class);
         mountBookmarkablePage("setup/identifierOverrides", IdentifierOverridesPage.class);
+        mountBookmarkablePage("setup/passwordPolicy", PasswordPolicyPage.class);
+        mountBookmarkablePage("setup/accountPolicy", AccountPolicyPage.class);
+        mountBookmarkablePage("setup/security", SecurityPage.class);
 
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);
