@@ -280,8 +280,8 @@ h2 a {
 }
 
 /* workaround for IE because it doesn't respect min-width specified in  '.list td' css */
-td[id^="actionsContainer"] {
-	width: 65px;
+td[class="actionsContainer"] {
+	width: 6em;
 }
 
 .list th,.list td {

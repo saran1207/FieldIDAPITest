@@ -2,7 +2,7 @@
 <#assign eventTypeId="${action.getEventTypeIdForEventScheduleId(entityId)}" />
 <#assign eventId="${action.getEventIdForEventScheduleId(entityId)!0}" />
 
-<td id="actionsContainer_${entityId}">
+<td id="actionsContainer_${entityId}" class="actionsContainer">
 	<span class="floatingDropdown floatingDropdownRelative">
 		<a href="javascript:void(0);" class="dropDownLink" id="moreActions" onmouseover="positionDropDown(this, ${entityId});">
 			<span><@s.text name="label.actions"/></span>

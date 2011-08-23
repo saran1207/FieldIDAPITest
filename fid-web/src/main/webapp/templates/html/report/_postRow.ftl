@@ -10,7 +10,7 @@
 		</#if>
 	</td>
 </#if>
-<td id="actionsContainer_${entityId}">
+<td id="actionsContainer_${entityId}" class="actionsContainer">
 	<#include "../eventCrud/_eventViewLightBoxOptions.ftl"/>
 	<@s.url id="printReport" action="printReport.action" namespace="/aHtml" searchId="${searchId}"/>
 	
