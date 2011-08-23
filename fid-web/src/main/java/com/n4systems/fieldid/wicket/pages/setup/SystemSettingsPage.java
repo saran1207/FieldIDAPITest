@@ -68,8 +68,8 @@ public class SystemSettingsPage extends FieldIDLoggedInPage {
             add(new Image("gpsLogo", new ContextRelativeResource("/images/gps-logo.png")));
             add(new CheckBox("gpsCapture"));
             add(new DropDownChoice<String>("dateFormat", getDateFormats(), new DateFormatSampleChoiceRenderer()).setNullValid(false));
+            add(new TextField<String>("identifierLabel").setRequired(true));
             add(new TextField<String>("identifierFormat")); 
-            add(new TextField<String>("identifierLabel"));
 
             add(new BookmarkablePageLink<Void>("overrides", IdentifierOverridesPage.class));
             

@@ -42,7 +42,7 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 	@Column(name="usingserialnumber", nullable=false)
 	private boolean usingSerialNumber = true;
 	
-	@Column(name="identifierFormat", nullable=false)
+	@Column(name="identifierFormat")
 	private String identifierFormat = "NSA%y-%g";
 
 	@Column(name="identifierLabel", nullable=false)
@@ -112,6 +112,7 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 		return null;
 	}
 	
+	@Override
 	public String getFilterPath() {
 		return null;
 	}
@@ -179,6 +180,7 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 		this.externalId = externalId;
 	}
 
+	@Override
 	public String getExternalPassword() {
 		return externalPassword;
 	}
@@ -187,6 +189,7 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 		this.externalPassword = externalPassword;
 	}
 
+	@Override
 	public String getExternalUserName() {
 		return externalUserName;
 	}
@@ -211,6 +214,7 @@ public class PrimaryOrg extends InternalOrg implements ExternalCredentialProvide
 		this.autoAcceptConnections = autoAcceptConnections;
 	}
 
+	@Override
 	public PrimaryOrg enhance(SecurityLevel level) {
 		PrimaryOrg enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
 		return enhanced;
