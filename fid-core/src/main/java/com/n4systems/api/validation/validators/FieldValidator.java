@@ -43,10 +43,10 @@ public interface FieldValidator {
 	public static final String CriteriaValidatorDateFail = "The value '%s' is not a valid date string required by the criteria '%s'";
 	public static final String CriteriaValidatorSignatureFail = "Importing of signatures not supported";
 	public static final String CriteriaValidatorSelectFail = "Can't find option '%s' for select criteria %s. Expecting one of %s.";
-	public static final String CriteriaOneClickFail = "Can't find option '%s' for one click criteria %s. Expecting one of %s.";				
-				
-						
-	
+	public static final String CriteriaOneClickFail = "Can't find option '%s' for one click criteria %s. Expecting one of %s.";
+	public static final String MaxLiteUsersFail = "You can not import more than %d lite users. (Attempted to import %d)";
+	public static final String MaxReadOnlyUsersFail = "You can not import more than %d read only users. (Attempted to import %d)";
+	public static final String MaxEmployeeUersFail = "You can not import more than %d employee (full) users. (Attempted to import %d)";
 	
 	public <V extends ExternalModelView> ValidationResult validate(Object fieldValue, V view, String fieldName, SecurityFilter filter, SerializableField field, Map<String, Object> validationContext);
 }

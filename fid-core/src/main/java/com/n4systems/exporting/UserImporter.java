@@ -14,8 +14,11 @@ import com.n4systems.api.model.ExternalModelView;
 import com.n4systems.api.model.UserView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.api.validation.Validator;
+import com.n4systems.api.validation.validators.FieldValidator;
+import com.n4systems.api.validation.validators.PasswordValidator;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.exporting.io.MapReader;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
@@ -31,13 +34,14 @@ public class UserImporter extends AbstractImporter<UserView> {
 
 	private String timeZoneId;
 
-	public UserImporter(MapReader mapReader, Validator<ExternalModelView> validator, UserLimits userLimits, UserSaver saver, UserToModelConverter converter, WelcomeNotifier emailNotifier, String timeZoneId) {
+	public UserImporter(MapReader mapReader, Validator<ExternalModelView> validator, UserLimits userLimits, UserSaver saver, UserToModelConverter converter, WelcomeNotifier emailNotifier, String timeZoneId, PasswordPolicy passwordPolicy) {
 		super(UserView.class, mapReader, validator);
 		this.userLimits = userLimits;
 		this.saver = saver;
 		this.converter = converter;
 		this.emailNotifier = emailNotifier;
 		this.timeZoneId = timeZoneId;
+		validator.getValidationContext().put(PasswordValidator.PASSWORD_POLICY_KEY, passwordPolicy);		
 	}
 
 	@Override
@@ -92,14 +96,15 @@ public class UserImporter extends AbstractImporter<UserView> {
 				}
 			}
 		}
-		if (userLimits.getMaxLiteUsers() != -1 && userLimits.getMaxLiteUsers() < liteUsers.size()) {
-			results.add(ValidationResult.fail("You can not import more than " + userLimits.getMaxLiteUsers() + " lite users. (Attempted to import " + liteUsers.size() + ")").setRow(-1));
+		// negative limits are considered "unlimited"
+		if (userLimits.getMaxLiteUsers() >= 0 && userLimits.getMaxLiteUsers() < liteUsers.size()) {
+			results.add(ValidationResult.fail(FieldValidator.MaxLiteUsersFail, userLimits.getMaxLiteUsers(), liteUsers.size()).setRow(-1));
 		}
-		if (userLimits.getMaxReadOnlyUsers() != -1 && userLimits.getMaxReadOnlyUsers() < readOnlyUsers.size()) {
-			results.add(ValidationResult.fail("You can not import more than " + userLimits.getMaxReadOnlyUsers() + " read only users. (Attempted to import " + readOnlyUsers.size() + ")").setRow(-1));
+		if (userLimits.getMaxReadOnlyUsers() >= 0 && userLimits.getMaxReadOnlyUsers() < readOnlyUsers.size()) {
+			results.add(ValidationResult.fail(FieldValidator.MaxReadOnlyUsersFail,userLimits.getMaxReadOnlyUsers(),readOnlyUsers.size()).setRow(-1));
 		}
-		if (userLimits.getMaxEmployeeUsers() != -1 && userLimits.getMaxEmployeeUsers() < fullUsers.size()) {
-			results.add(ValidationResult.fail("You can not import more than " + userLimits.getMaxEmployeeUsers() + " employee (full) users. (Attempted to import " + fullUsers.size() + ")").setRow(-1));
+		if (userLimits.getMaxEmployeeUsers() >= 0 && userLimits.getMaxEmployeeUsers() < fullUsers.size()) {
+			results.add(ValidationResult.fail(FieldValidator.MaxEmployeeUersFail, userLimits.getMaxEmployeeUsers(),fullUsers.size()).setRow(-1));
 		}
 		return results;
 	}

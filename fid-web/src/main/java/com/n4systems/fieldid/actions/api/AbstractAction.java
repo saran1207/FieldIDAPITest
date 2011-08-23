@@ -22,6 +22,7 @@ import com.n4systems.fieldid.actions.downloaders.DownloadLinkAction;
 import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitializer;
 import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.utils.CookieFactory;
 import com.n4systems.fieldid.utils.SessionUserInUse;
@@ -87,6 +88,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	
     @Autowired
     protected SecurityContext securityContext;
+    
+    @Autowired
+    protected TenantSettingsService tenantSettingsService;
     
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -636,4 +640,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
         return true;
     }
 
+	public TenantSettingsService getTenantSettingsService() {
+		return tenantSettingsService;
+	}
+    
 }

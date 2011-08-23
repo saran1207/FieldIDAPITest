@@ -19,6 +19,7 @@ import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
@@ -107,8 +108,9 @@ public class ImporterFactory {
 	}
 
 
-	public UserImporter createUserImporter(MapReader reader, WelcomeNotifier emailNotifier, UserLimits userLimits, String timeZoneId) {
-		return new UserImporter(reader, createViewValidator(), userLimits, saverFactory.createUserSaver(), createUserToModelConverter(), emailNotifier, timeZoneId);	
+	public UserImporter createUserImporter(MapReader reader, WelcomeNotifier emailNotifier, UserLimits userLimits, String timeZoneId, PasswordPolicy passwordPolicy) {
+		// UGH DD : too many arguments for this constructor.  refactor.
+		return new UserImporter(reader, createViewValidator(), userLimits, saverFactory.createUserSaver(), createUserToModelConverter(), emailNotifier, timeZoneId, passwordPolicy);	
 	}
 	
 	public AssetImporter createAssetImporter(MapReader reader, User identifiedBy, AssetType type) {

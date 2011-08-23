@@ -1,13 +1,12 @@
 package com.n4systems.exporting;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -21,6 +20,7 @@ import com.n4systems.api.validation.Validator;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.OrgByNameLoader;
+import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserSaver;
@@ -42,17 +42,12 @@ public class UserImporterTest {
 		UserToModelConverter converter = createMock(UserToModelConverter.class);
 
 		final List<UserView> userViews = Lists.newArrayList(new UserViewBuilder().withDefaultValues().withFirstName("joe").build());
+		Map<String, Object> validationContext = new HashMap<String,Object>();
 
 		Transaction transaction = new DummyTransaction();
 		User user = UserBuilder.anEmployee().build();
 
-		UserImporter importer = new UserImporter(reader, validator, null, saver, converter, notifier, TIME_ZONE_ID) {
-			@Override
-			List<UserView> getViews() {
-				return userViews;
-			};
-		};
-
+		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(converter.toModel(userViews.get(0), transaction)).andReturn(user);
 		expect(saver.saveOrUpdate(user)).andReturn(user);
 		reader.close();
@@ -62,6 +57,14 @@ public class UserImporterTest {
 		replay(notifier);
 		replay(validator);
 		replay(converter);
+		
+		UserImporter importer = new UserImporter(reader, validator, null, saver, converter, notifier, TIME_ZONE_ID, new PasswordPolicy()) {
+			@Override
+			List<UserView> getViews() {
+				return userViews;
+			};
+		};
+
 
 		importer.runImport(transaction);
 
@@ -78,19 +81,15 @@ public class UserImporterTest {
 		Validator<ExternalModelView> validator = createMock(Validator.class);
 		UserToModelConverter converter = createMock(UserToModelConverter.class);
 
+		Map<String, Object> validationContext = new HashMap<String,Object>();
+
 		final List<UserView> userViews = Lists.newArrayList(new UserViewBuilder().withDefaultValues().withSendWelcomeEmail("Y")
 				.withFirstName("joe").build());
 
 		Transaction transaction = new DummyTransaction();
 		User user = UserBuilder.anEmployee().build();
 
-		UserImporter importer = new UserImporter(reader, validator, null, saver, converter, notifier, TIME_ZONE_ID) {
-			@Override
-			List<UserView> getViews() {
-				return userViews;
-			};
-		};
-
+		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(converter.toModel(userViews.get(0), transaction)).andReturn(user);
 		expect(saver.saveOrUpdate(user)).andReturn(user);
 		notifier.sendWelcomeNotificationTo(user);
@@ -101,6 +100,13 @@ public class UserImporterTest {
 		replay(notifier);
 		replay(validator);
 		replay(converter);
+		
+		UserImporter importer = new UserImporter(reader, validator, null, saver, converter, notifier, TIME_ZONE_ID, new PasswordPolicy()) {
+			@Override
+			List<UserView> getViews() {
+				return userViews;
+			};
+		};
 
 		importer.runImport(transaction);
 
@@ -118,6 +124,8 @@ public class UserImporterTest {
 		Validator<ExternalModelView> validator = createMock(Validator.class);
 		UserToModelConverter converter = createMock(UserToModelConverter.class);
 
+		Map<String, Object> validationContext = new HashMap<String,Object>();
+
 		// should let bad account pass thru...responsiblity of
 		// accountTypeValidator to catch this.
 		final List<UserView> userViews = Lists.newArrayList(new UserViewBuilder().withDefaultValues().withAccountType("badAccountType")
@@ -126,19 +134,20 @@ public class UserImporterTest {
 		Transaction transaction = new DummyTransaction();
 		User user = UserBuilder.anEmployee().build();
 
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, 50, 50, 50);
-
+		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(converter.toModel(userViews.get(0), transaction)).andReturn(user);
 		expect(saver.saveOrUpdate(user)).andReturn(user);
 		notifier.sendWelcomeNotificationTo(user);
 		reader.close();
-
+		
 		replay(reader);
 		replay(saver);
 		replay(loader);
 		replay(notifier);
 		replay(validator);
 		replay(converter);
+		
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, 50, 50, 50);
 
 		importer.runImport(transaction);
 
@@ -159,21 +168,23 @@ public class UserImporterTest {
 				new UserViewBuilder().withDefaultValues().withUserId("b").withAccountType(UserType.READONLY).build(), new UserViewBuilder()
 						.withDefaultValues().withUserId("c").withAccountType(UserType.LITE).build());
 
+		Map<String, Object> validationContext = new HashMap<String,Object>();
+		expect(validator.getValidationContext()).andReturn(validationContext);
 		User user = UserBuilder.anEmployee().build();
-
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, 0, 0, 0);
-
+		
 		expect(validator.validate(userViews.get(0), 2)).andReturn(new ArrayList<ValidationResult>());
 		expect(validator.validate(userViews.get(1), 3)).andReturn(new ArrayList<ValidationResult>());
 		expect(validator.validate(userViews.get(2), 4)).andReturn(new ArrayList<ValidationResult>());
 		notifier.sendWelcomeNotificationTo(user);
 		reader.close();
-
+		
 		replay(reader);
 		replay(saver);
 		replay(notifier);
 		replay(validator);
 		replay(converter);
+
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, 0, 0, 0);
 
 		List<ValidationResult> results = importer.readAndValidate();
 
@@ -200,21 +211,23 @@ public class UserImporterTest {
 				new UserViewBuilder().withDefaultValues().withUserId("b").withAccountType(UserType.READONLY).build(), new UserViewBuilder()
 						.withDefaultValues().withUserId("c").withAccountType(UserType.LITE).build());
 
+		Map<String, Object> validationContext = new HashMap<String,Object>();
 		User user = UserBuilder.anEmployee().build();
-
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
-
+		
+		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(validator.validate(userViews.get(0), 2)).andReturn(new ArrayList<ValidationResult>());
 		expect(validator.validate(userViews.get(1), 3)).andReturn(new ArrayList<ValidationResult>());
 		expect(validator.validate(userViews.get(2), 4)).andReturn(new ArrayList<ValidationResult>());
 		notifier.sendWelcomeNotificationTo(user);
 		reader.close();
-
+		
 		replay(reader);
 		replay(saver);
 		replay(notifier);
 		replay(validator);
 		replay(converter);
+
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
 
 		List<ValidationResult> results = importer.readAndValidate();
 
@@ -237,19 +250,21 @@ public class UserImporterTest {
 				new UserViewBuilder().withDefaultValues().withUserId("SAMEUSERID").build());
 
 		User user = UserBuilder.anEmployee().build();
+		Map<String, Object> validationContext = new HashMap<String,Object>();
 
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
-
+		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(validator.validate(userViews.get(0), 2)).andReturn(new ArrayList<ValidationResult>());
 		expect(validator.validate(userViews.get(1), 3)).andReturn(new ArrayList<ValidationResult>());
 		notifier.sendWelcomeNotificationTo(user);
 		reader.close();
-
+		
 		replay(reader);
 		replay(saver);
 		replay(notifier);
 		replay(validator);
 		replay(converter);
+		
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
 
 		List<ValidationResult> results = importer.readAndValidate();
 
@@ -271,10 +286,10 @@ public class UserImporterTest {
 
 		final List<UserView> userViews = Lists.newArrayList(new UserViewBuilder().withDefaultValues().withUserId(null).build());
 
+		Map<String, Object> validationContext = new HashMap<String,Object>();
 		User user = UserBuilder.anEmployee().build();
 
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
-
+		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(validator.validate(userViews.get(0), 2)).andReturn(new ArrayList<ValidationResult>());
 		notifier.sendWelcomeNotificationTo(user);
 		reader.close();
@@ -284,6 +299,8 @@ public class UserImporterTest {
 		replay(notifier);
 		replay(validator);
 		replay(converter);
+		
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
 
 		List<ValidationResult> results = importer.readAndValidate();
 
@@ -296,7 +313,7 @@ public class UserImporterTest {
 			final int employeesLimit, final int liteUsersLimit, final int readOnlyUsersLimit) {
 
 		UserLimits settings = new UserLimits(employeesLimit, liteUsersLimit, readOnlyUsersLimit);
-		UserImporter importer = new UserImporter(reader, validator, settings, saver, converter, notifier, TIME_ZONE_ID) {
+		UserImporter importer = new UserImporter(reader, validator, settings, saver, converter, notifier, TIME_ZONE_ID, new PasswordPolicy()) {
 			@Override
 			List<UserView> getViews() {
 				return userViews;
