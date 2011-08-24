@@ -78,7 +78,7 @@ body {
 
 <div class="reportContent">
 	<h1>${setting.name}</h1>
-<div>
+</div>
 
 <#if failedEvents?exists>
 	<div class="reportContent">
@@ -115,7 +115,7 @@ body {
 						<td>${event.asset.identifier}</td>
 						<td>${event.asset.type.name}</td>
 						<td>${event.asset.advancedLocation.freeformLocation}</td>
-						<td>${event.type}</td>
+						<td>${event.type.name}</td>
 						<td>${event.comments}</td>
 					</tr>
 				</#list>
