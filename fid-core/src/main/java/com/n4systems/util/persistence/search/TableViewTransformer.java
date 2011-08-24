@@ -3,10 +3,15 @@ package com.n4systems.util.persistence.search;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.reflection.ReflectionException;
 import com.n4systems.util.reflection.ReflectionFilter;
 import com.n4systems.util.reflection.Reflector;
@@ -97,6 +102,7 @@ public class TableViewTransformer implements ResultTransformer<TableView>{
 	 * Implements the ResultTransformer transform interface.  Converts the List of entity object
 	 * into a TableView using the column expressions defined at instantation.
 	 */
+	@Override
 	public TableView transform(List<?> list) {
 		TableView view = new TableView(list.size(), columnPaths.size());
 		
@@ -178,12 +184,35 @@ public class TableViewTransformer implements ResultTransformer<TableView>{
 			// get out now if this column has no post filter path
 			return object;
 		}
+
 		
-		Object value = EMPTY_STRING;
+		Object value = EMPTY_STRING;	
 		try {
 			value = Reflector.getPathValue(object, postFilterPaths.get(column));
+			// UGGH DD : hack to get around fact the info options aren't typed.  (all just stored as strings) 
+			// in the case when it is a date field, we need to parse the string and turn it into a PlainDate object.  
+			// otherwise, it will just return the MS string (e.g. "131805230000").   
+			// this will need to be refactored when the inevitable remodelling of infooptions is done.
+			value = maybeApplyKludgeToDateInfoOptions(value, object);
 		} catch (ReflectionException e) {
 			logger.warn("Exception thrown while reflecting post filter path value", e);
+		}
+		return value;
+	}
+
+	// DD : as the name applies, this is a temporary kludge. see comment above. 
+	private Object maybeApplyKludgeToDateInfoOptions(Object value, Object object) {
+		if (object instanceof InfoOptionBean && value != null) { 
+			InfoOptionBean infoOptionBean = (InfoOptionBean) object;
+			if (InfoFieldBean.DATEFIELD_FIELD_TYPE.equals(infoOptionBean.getInfoField().getFieldType())) {
+				try {
+					Long timeInMs = Long.parseLong(value.toString());
+					return new PlainDate(new Date(timeInMs));
+				} catch (NumberFormatException e) {
+					logger.warn("can't parse date InfoOption value of '" + value.toString() + "'");
+					return value;  // if it's not a parseable millisecond string then i don't know what to do...just log it and return.
+				}
+			}
 		}
 		return value;
 	}

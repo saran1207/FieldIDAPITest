@@ -11,8 +11,9 @@ import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AutoAttributeCriteria;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.StringUtils;
 
 public class InfoOptionMapConverter {
@@ -27,11 +28,11 @@ public class InfoOptionMapConverter {
 		return optionMap;
 	}
 	
-	public List<InfoOptionBean> convertAutoAttributeInputs(Map<String, String> optionMap, AutoAttributeCriteria criteria) throws MissingInfoOptionException, StaticOptionResolutionException {
+	public List<InfoOptionBean> convertAutoAttributeInputs(Map<String, String> optionMap, AutoAttributeCriteria criteria) throws InfoOptionConversionException {
 		return toList(optionMap, criteria.getInputs(), false, false, false);
 	}
 	
-	public List<InfoOptionBean> convertAutoAttributeOutputs(Map<String, String> optionMap, AutoAttributeCriteria criteria) throws StaticOptionResolutionException {
+	public List<InfoOptionBean> convertAutoAttributeOutputs(Map<String, String> optionMap, AutoAttributeCriteria criteria) throws InfoOptionConversionException {
 		try {
 			return toList(optionMap, criteria.getOutputs(), true, true, false);
 		} catch (MissingInfoOptionException e) {
@@ -40,11 +41,11 @@ public class InfoOptionMapConverter {
 		}
 	}
 	
-	public List<InfoOptionBean> convertAssetAttributes(Map<String, String> optionMap, AssetType type) throws MissingInfoOptionException, StaticOptionResolutionException {
+	public List<InfoOptionBean> convertAssetAttributes(Map<String, String> optionMap, AssetType type) throws  InfoOptionConversionException {
 		return toList(optionMap, type.getInfoFields(), true, true, true);
 	}
 	
-	public List<InfoOptionBean> toList(Map<String, String> optionMap, Collection<InfoFieldBean> fields, boolean allowMissingInfoFields, boolean allowDynamicOptionCreation, boolean checkRequiredFields) throws MissingInfoOptionException, StaticOptionResolutionException {
+	public List<InfoOptionBean> toList(Map<String, String> optionMap, Collection<InfoFieldBean> fields, boolean allowMissingInfoFields, boolean allowDynamicOptionCreation, boolean checkRequiredFields) throws StaticOptionResolutionException, InfoOptionConversionException {
 		String optionValue;
 		InfoOptionBean option;
 		List<InfoOptionBean> optionList = new ArrayList<InfoOptionBean>();
@@ -67,6 +68,9 @@ public class InfoOptionMapConverter {
 				// if we're not allowed to create dynamic options or the field is unable to accept them, then we have to throw
 				if (!allowDynamicOptionCreation || !field.acceptsDyanmicInfoOption()) {
 					throw new StaticOptionResolutionException(field, optionValue);
+				} else if (InfoFieldBean.DATEFIELD_FIELD_TYPE.equals(field.getFieldType()) && !DateHelper.isValidExcelDateString(optionValue)) {  
+					// if valid excel date then it will be sent as a Long in MS.  (e.g. "1318651200000")
+					throw new InfoOptionConversionException("can't convert " + optionValue + " into date.", field, optionValue);
 				} else {
 					option = new InfoOptionBean();
 					option.setInfoField(field);

@@ -5,6 +5,7 @@ import java.util.Map;
 import com.n4systems.api.model.AssetView;
 import com.n4systems.api.validation.ValidationResult;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.infooption.InfoOptionConversionException;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.infooption.MissingInfoOptionException;
 import com.n4systems.model.infooption.StaticOptionResolutionException;
@@ -32,6 +33,8 @@ public class AssetViewAttributesValidator extends AssetViewValidator {
 			return ValidationResult.fail(MissingRequiredAssetAttributeValidatorFail, e.getInfoField().getName());
 		} catch (StaticOptionResolutionException e) {
 			return ValidationResult.fail(StaticOptionNotFoundValidatorFail, e.getInfoOptionName(), e.getInfoField().getName());
+		} catch(InfoOptionConversionException e) { 
+			return ValidationResult.fail(ConversionValidatorFail, e.getValueToConvert(), e.getInfoField().getName());
 		}
 		
 		return ValidationResult.pass();

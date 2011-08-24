@@ -505,4 +505,13 @@ public class DateHelper {
 		cal.add(Calendar.MILLISECOND, toZone.getOffset(date.getTime()));
 		return cal.getTime();
 	}
+	
+	public static boolean isValidExcelDateString(String date) { 
+		try { 
+			Long ms = Long.parseLong(date);
+			return ms > 0;
+		} catch (NumberFormatException e) { 
+			return false;
+		}
+	}
 }
