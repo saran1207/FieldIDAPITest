@@ -229,6 +229,8 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             if (!getModelObject().isReportAlreadyRun()) {
                 ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
                 getModelObject().setColumnGroups(reportConfiguration.getColumnGroups());
+                getModelObject().setSortColumn(reportConfiguration.getSortColumn());
+                getModelObject().setSortDirection(reportConfiguration.getSortDirection());
             }
         }
 
