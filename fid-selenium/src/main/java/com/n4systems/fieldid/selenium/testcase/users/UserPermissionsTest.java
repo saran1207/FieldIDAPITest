@@ -110,7 +110,6 @@ public class UserPermissionsTest extends FieldIDTestCase {
 	public void verify_customers_can_only_edit_four_unrestricted_fields_on_asset(){
 		startAsCompany(COMPANY).login(READ_ONLY_USER, READ_ONLY_USER).clickAssetsLink().clickRunSearchButton().clickAssetLinkForResult(1).clickEditTab();
 		
-		assertEquals(4, selenium.getXpathCount("//div[@class='infoSet']/label"));
 		assertTrue("Coudldn't find owner field", selenium.isElementPresent("//label[contains(.,'Owner')]"));
 		assertTrue("Coudldn't find Location field", selenium.isElementPresent("//label[contains(.,'Location')]"));
 		assertTrue("Coudldn't find Reference Number field", selenium.isElementPresent("//label[contains(.,'Reference Number')]"));
