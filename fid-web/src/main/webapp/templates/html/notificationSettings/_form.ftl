@@ -159,7 +159,5 @@ ${action.setPageType('my_account', 'notification_settings')!}
 
 	document.observe("dom:loaded", function() {
 		updateUpcomingOptions();
-		updateAssetTypes($('assetTypeGroup'));
-		updateEventTypes($('eventTypeGroup'));
 	});
 </script>

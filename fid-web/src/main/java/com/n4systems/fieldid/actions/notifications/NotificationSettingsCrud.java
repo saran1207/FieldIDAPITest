@@ -223,7 +223,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-			eventTypes = getLoaderFactory().createEventTypeListLoader().load();
+			eventTypes = getLoaderFactory().createEventTypesByGroupListLoader().setEventTypeGroupId(view.getEventTypeGroupId()).load();
 		}
     	return eventTypes;
     }
@@ -237,7 +237,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 
 	public List<AssetType> getAssetTypes() {
 		if (assetTypes == null) {
-			assetTypes = getLoaderFactory().createAssetTypesByGroupListLoader().load();
+			assetTypes = getLoaderFactory().createAssetTypesByGroupListLoader().setAssetTypeGroupId(view.getAssetTypeGroupId()).load();
 		}
     	return assetTypes;
     }

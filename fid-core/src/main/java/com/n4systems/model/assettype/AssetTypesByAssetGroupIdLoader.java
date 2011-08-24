@@ -1,13 +1,13 @@
 package com.n4systems.model.assettype;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import com.n4systems.model.AssetType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
-
-import java.util.List;
-
-import javax.persistence.EntityManager;
 
 public class AssetTypesByAssetGroupIdLoader extends ListLoader<AssetType> {
 
@@ -34,7 +34,8 @@ public class AssetTypesByAssetGroupIdLoader extends ListLoader<AssetType> {
         return assetTypeGroupId;
     }
 
-    public void setAssetTypeGroupId(Long assetTypeGroupId) {
+    public AssetTypesByAssetGroupIdLoader setAssetTypeGroupId(Long assetTypeGroupId) {
         this.assetTypeGroupId = assetTypeGroupId;
+        return this;
     }
 }
