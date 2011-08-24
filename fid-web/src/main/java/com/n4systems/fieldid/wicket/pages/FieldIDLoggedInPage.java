@@ -37,7 +37,8 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
     private static String versionString;
     private Label titleLabel;
-    
+    private Label topTitleLabel;
+
     public FieldIDLoggedInPage(PageParameters params) {
         super(params);
 
@@ -65,8 +66,13 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         addSpeedIdentifyLinks();
 
         storePageParameters(params);
+
         add(titleLabel = createTitleLabel("titleLabel"));
         titleLabel.setRenderBodyOnly(true);
+
+        add(topTitleLabel = createTitleLabel("topTitleLabel"));
+        topTitleLabel.setRenderBodyOnly(true);
+
         add(createBackToLink("backToLink", "backToLinkLabel"));
         addNavBar("navBar");
         add(new Label("loggedInUsernameLabel", sessionUser.getUserName()));
