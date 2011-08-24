@@ -27,7 +27,7 @@ public class ApplicationBootstrap extends HttpServlet {
 	
 	private static final Initializer[] initializers = {
 		new TaskSchedulerBootstrapper(),
-		new SignUpPackageSyncTaskInitializer(),		
+		//new SignUpPackageSyncTaskInitializer(),		
 		new RemoteOrderManagerServiceInitializer()
 	};
 	
