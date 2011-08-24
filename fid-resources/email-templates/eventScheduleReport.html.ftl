@@ -26,11 +26,11 @@ table.message td {
 	-moz-border-radius: 0px; 
 } 
 
-table.overdue td { 
+tr.overdue td { 
 	background-color:#FFEBEB;
 } 
 
-table.message th, table.message td, table.overdue td {
+table.message th, table.message td {
 	font-size: 11px;
 	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
 } 
@@ -182,7 +182,7 @@ body {
 				</tr>
 	
 				<#list overdueEvents as isCount>
-					<tr>
+					<tr class="overdue">
 						<td>${dateFormatter.format(isCount.nextEventDate)}</td>
 						<td>${isCount.organizationName}</td>
 						<td>
