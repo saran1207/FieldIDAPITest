@@ -171,7 +171,7 @@ body {
 			<h4>Great news. There are no overdue scheduled events for this period.</h4>
 		<#else>
 			<h4>To view the details about these events login to your Field ID account and click on Schedules</h4>
-			<table class="message overdue" cellpadding=2 cellspacing=2 border>
+			<table class="message" cellpadding=2 cellspacing=2 border>
 				<tr>
 					<th>Scheduled Date</th>
 					<th>Organization</th>
