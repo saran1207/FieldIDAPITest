@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
+import com.n4systems.fieldid.selenium.util.ConditionWaiter;
+import com.n4systems.fieldid.selenium.util.Predicate;
 import org.junit.Test;
 
 import com.n4systems.fieldid.selenium.PageNavigatingTestCase;
@@ -77,13 +79,21 @@ public class MassUpdateSchedulesTest extends PageNavigatingTestCase<SchedulesSea
 
         Date beginningDate = DateUtil.parseDate(resultsPage.getScheduledDateForResult(1));
         SchedulesMassUpdatePage scheduleMassUpdatePage = resultsPage.clickMassUpdate();
-        String nextDate = DateUtil.formatDate(DateUtil.theDayAfter(beginningDate));
+        final String nextDate = DateUtil.formatDate(DateUtil.theDayAfter(beginningDate));
 
         scheduleMassUpdatePage.enterNextEventDate(nextDate);
-        resultsPage = scheduleMassUpdatePage.clickSaveButtonAndConfirm();
+        final SchedulesSearchResultsPage finalResultsPage = scheduleMassUpdatePage.clickSaveButtonAndConfirm();
 
-        assertEquals(nextDate, resultsPage.getScheduledDateForResult(1));
-        assertEquals(nextDate, resultsPage.getScheduledDateForResult(2));
+        new ConditionWaiter(new Predicate() {
+            @Override
+            public boolean evaluate() {
+                finalResultsPage.clickSchedulesLink().clickRunSearchButton();
+                return nextDate.equals(finalResultsPage.getScheduledDateForResult(1));
+            }
+        }).run("Mass schedule update should complete successfully");
+
+        assertEquals(nextDate, finalResultsPage.getScheduledDateForResult(1));
+        assertEquals(nextDate, finalResultsPage.getScheduledDateForResult(2));
     }
 
 }
