@@ -9,12 +9,14 @@
 	<#if eventType.assignedToAvailable>
 		<div class="infoSet">
 			<label class="label"><@s.text name="label.assigned_to"/></label>
-            <@s.select id="assignedToSelectBox" name="assignedToId" headerKey="-1" headerValue="${action.getText('label.keep_the_same')}" >
-                <#include "/templates/html/common/_assignedToDropDown.ftl"/>
-            </@s.select>
-
-			<a href="#" class="assignToMeLink" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
-			<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
+			<span class="fieldHolder">
+	            <@s.select id="assignedToSelectBox" name="assignedToId" list={"0":"Unassigned"} listKey="key" listValue="value" headerKey="-1" headerValue="${action.getText('label.keep_the_same')}">
+	                <#include "/templates/html/common/_assignedToDropDown.ftl"/>
+	            </@s.select>
+				<br/>
+				<a href="#" class="assignToMeLink" onclick="setAssignedToAsCurrentUser(${sessionUser.id}); return false;" ><@s.text name="label.assign_to_me"/></a>
+				<@s.hidden name="assignToSomeone" id="assignToSomeone" value="true"/>
+			</span>
 		</div>
 	</#if>
 	
