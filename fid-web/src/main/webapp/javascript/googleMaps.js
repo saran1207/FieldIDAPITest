@@ -59,7 +59,7 @@ var googleMapFactory = (function() {
 					showInfoWindowImpl(marker,map);
 				});
 			}
-			if (marker.content) {
+			else if (marker.content) {
 				showInfoWindowImpl(marker,map);
 			}			
 		}
