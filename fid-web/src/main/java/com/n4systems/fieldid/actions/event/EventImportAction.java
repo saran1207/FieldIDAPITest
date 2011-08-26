@@ -150,21 +150,22 @@ public class EventImportAction extends AbstractImportAction {
 	private Set<CriteriaResult> createExampleResults() throws InstantiationException, IllegalAccessException {
 		Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 		
-		List<CriteriaSection> availableSections = type.getEventForm().getAvailableSections();
-		for (CriteriaSection section:availableSections) { 
-			for (Criteria criterion:section.getAvailableCriteria()) {
-				if (!criterion.isSignatureCriteria()) {		// skip signature because we don't support import/export of those fields.  
-					Class<? extends CriteriaResult> resultClass = criterion.getCriteriaType().getResultClass();
-					CriteriaResult result = resultClass.newInstance();
-					result.setCriteria(criterion);				
-					result.setDeficiencies(new ArrayList<Deficiency>()); 
-					result.setRecommendations(new ArrayList<Recommendation>());
-					result.setTenant(criterion.getTenant());
-					results.add(result);
+		if(type.getEventForm() != null) {
+			List<CriteriaSection> availableSections = type.getEventForm().getAvailableSections();
+			for (CriteriaSection section:availableSections) { 
+				for (Criteria criterion:section.getAvailableCriteria()) {
+					if (!criterion.isSignatureCriteria()) {		// skip signature because we don't support import/export of those fields.  
+						Class<? extends CriteriaResult> resultClass = criterion.getCriteriaType().getResultClass();
+						CriteriaResult result = resultClass.newInstance();
+						result.setCriteria(criterion);				
+						result.setDeficiencies(new ArrayList<Deficiency>()); 
+						result.setRecommendations(new ArrayList<Recommendation>());
+						result.setTenant(criterion.getTenant());
+						results.add(result);
+					}
 				}
-			}
-		}		
-		
+			}		
+		}
 		return results;
 	}
 
