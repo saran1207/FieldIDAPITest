@@ -1,131 +1,161 @@
 /**
- * TODO : 
- * 
- * in order to make this code more portable i should....
- * prototype the map class and give it an "addMarker()" method. 
- * .: API would look like this...
- * 
- *  var map = googleMap.initialize(id); 
- *  map.addMarker(latitude, longitude);    etc...
- *  onload = map.show();
+ * requires.... 
+ *  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+ *  <@n4.includeScript src="googleMaps.js"/>
  *  
- *  OR 
- *  
- *  var map = googleMap.showWithMarker(id, latitude, longitude);   <-- default map for a single point.
- *  
- *  as well, each map instance would have its own "locations[]" property and "createMarker()" method. 
- *  the mapOptions property should be exposed
+ * e.g. 
  * 
- * the googleMap interface should only expose...
- * googleMap.initialize() methods  (prolly be a few).
- * googleMap.enableGeoCodingForMarkers()
- * googleMap.getMarkerForStatus();   // fieldId specific code
+ * simplest usage for a map with a single marker on it =
+ *  googleMapFactory.createAndShowWithLocation('mapCanvas',44, -79)
+ * ...given <div id='mapCanvas'/> exists and... 
+ * 44/-79 is the latitude/longitude of the marker.   
  * 
+ * to add more markers and/or customize them...
  * 
- * the big problem with the code now is that it is sort of a singleton.  displaying multiple maps on same page would break.  
+ *  var map = googleMapFactory.create('mapCanvas');
+ *	map.makeMarker = googleMapFactory.makeMarkerForStatus;     // factory to create custom markers based on status  (PASS in this case).
+ *  map.addLocation(44,-79, "hello show this in infowindow", "pass");   // content = "hello..." which pops up when user clicks on marker.  PASS = status
+ *  map.show();
  * 
+ * make sure you don't call map.show() unless you know the element ('mapCanvas' in this case) has been parsed into the document.  
+ * if not, delay the show call until onLoad().
  */
 
-var googleMap = (function() {
-	 
-	var name = "FieldIdGoogleMaps";	
-	var map = '';    
-	var locations = [];
-	var infowindow =  new google.maps.InfoWindow();	
+var googleMapFactory = (function() { 
 	
-	var initialize = function(id) {
-		var myOptions = {
-	 		zoom: 15,
-	  	  	mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-		map = new google.maps.Map(document.getElementById(id), myOptions);		
-		addMarkers();
-		return map;		
+	var create = function(id) { 
+		return googleMap(id);
 	};
 	
-	var initializeWithMarker = function(id, latitude, longitude, content, marker) { 
-		addMarker(latitude,longitude,content,marker);		
-		return initialize(id);
+	var createAndShowWithLocation = function(id, latitude,longitude) { 
+		var map = create(id);
+		map.addLocation(latitude,longitude);
+		map.show();
 	};
-	
-	var addMarker = function(latitude,longitude,content,marker) {
-		var location = new google.maps.LatLng(latitude,longitude);
-		location.content = content;
-		location.marker = marker;
-		locations.push(location);
-		
-		/** TODO DD : why not just create marker here and deal with setting of map/image/shadow stuff later? */
-	};
-	
-	function addMarkers() {
-		var bounds = new google.maps.LatLngBounds();				
-		var count = locations.length;
-		for (var i=0; i<count; i++) {
-			var loc = locations[i];
-			var marker = getMarkerForLocation(loc);
 			
-			bounds.extend(loc);					
-			marker.content = (loc.content) ? loc.content : '';
-			marker.loc = loc;
-			/** TODO DD : refactor this update address feature so it is an option.  note that it can affect performance */
-			google.maps.event.addListener(marker, 'click', function() {
-				updateInfoWindowWithAddress(this, map);
-			});		
+	
+	/**
+	 * map object returned by factory 
+	 */	
+	function googleMap(mapId) {
 		
+		/* private methods and properties */
+		var id = mapId;
+		var map = '';
+		var locations = [];		
+		var options = {
+				zoom: 14,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+		var updateContentWithAddress = true; 
+		
+		function showInfoWindow(marker, map) {
+			if (updateContentWithAddress && !marker.address) {
+				new google.maps.Geocoder().geocode( {'latLng': marker.position}, function(results, status) {
+					if (status== google.maps.GeocoderStatus.OK) {
+						marker.address = formatAddressString(results[0]);						
+						marker.content = marker.content ? marker.content+'<br>' + marker.address : marker.address; 
+					}
+					showInfoWindowImpl(marker,map);
+				});
+			}
+			if (marker.content) {
+				showInfoWindowImpl(marker,map);
+			}			
 		}
-		if (count>1) { 
-			map.fitBounds(bounds);
-		} else if (count==1) { 
-			map.setCenter(locations[0]);
-		}			
+
+		function showInfoWindowImpl(marker, map) {			
+			var infowindow =  new google.maps.InfoWindow();					
+			infowindow.setContent(marker.content);	
+			infowindow.open(map,marker);
+		}
+		
+		function formatAddressString(address) {
+			var result = '';
+			if (address.address_components[0]) {
+				result += address.address_components[0].short_name;
+			}
+			if (address.address_components[1]) {
+				result += ' ' + address.address_components[1].short_name;
+			}
+			if (address.address_components[2]) {
+				result += ',' + address.address_components[2].short_name;
+			}
+			return result;   
+		}
+		
+		/* public methods exposed */
+		return { 		
+			
+			makeMarker : function(loc) {
+				return new google.maps.Marker({
+					draggable : false,
+					position: loc,
+					map: map,
+				});
+			},
+			
+			addLocation : function(latitude,longitude) {
+				var loc = new google.maps.LatLng(latitude,longitude);
+				locations.push(loc);  				
+				loc.args =  [].slice.call(arguments, 2); /* attach any additional args possibly passed to location. may be used by makeMarker() */
+				return loc;
+			},
+			
+			show : function() {
+				if (map) {
+					return;
+				}
+				var element = document.getElementById(id);
+				if (!element) { 
+					throw "can't find element " + id + " for google map.";
+				}
+				map = new google.maps.Map(element, options);
+				
+				var bounds = new google.maps.LatLngBounds();				
+				var count = locations.length;
+
+				for (var i=0; i<count; i++) {
+					var loc = locations[i];
+					var marker = this.makeMarker(loc);
+					marker.setMap(map);
+					if (marker.content || updateContentWithAddress) { 
+						google.maps.event.addListener(marker, 'click', function() {
+							showInfoWindow(this, map);
+						});						
+					}
+					bounds.extend(loc);							
+				}
+				if (count>1) { 
+					map.fitBounds(bounds);
+				} else if (count==1) { 
+					map.setCenter(locations[0]);
+				}			
+			},		
+			
+		};
 		
 	};
 	
-	function updateInfoWindowWithAddress(marker, map) {
-		if (marker.address) {
-			infowindow.setContent(marker.content);	
-			infowindow.open(map,marker);	
-			return;
-		}
-		
-		var geocoder = new google.maps.Geocoder();
-		geocoder.geocode( {'latLng': marker.loc}, function(results, status) {
-			if (status== google.maps.GeocoderStatus.OK) {
-				marker.address = formatAddressString(results[0]);
-				marker.content = marker.content+'<br>(' + marker.address+')'; 
-			}
-			infowindow.setContent(marker.content);
-			infowindow.open(map,marker);
-		});		
-	} 
-	
-	function prefixed(prefix, url) { 
+	function prefixed(prefix,url) {
 		return prefix ? prefix+url : url;
 	}
-	
-	function getMarkerForLocation(loc) { 
-		if(loc.marker) {
-			loc.marker.setPosition(loc);
-			loc.marker.setMap(map);
-			return loc.marker;
-		} else {
-			return new google.maps.Marker({
+			
+	/** TODO DD : refactor this.  events status stuff doesn't really belong with google maps stuff */
+	var makeMarkerForStatus = function(loc) {
+		var content = loc.args[0];   // assumes that these *might* be passed to addLocation in this order.  [content,status,prefix]
+		var status = loc.args[1];
+		var prefix = loc.args[2];
+		if (status.toLowerCase()=='fail') {
+			return new google.maps.Marker({     /* note that red is default icon which is what we currently use for fail */
 				draggable : false,
 				position: loc,
-				map: map				
-			});					
-		}
-	} 	
-	
-	/** TODO DD : refactor this.  events status stuff doesn't really belong with google maps stuff */
-	var markerForStatus = function(status, prefix) { 
-		if (!status || status.toLowerCase()=='fail') {
-			return null;  /* note that red is default icon which is what we currently use for fail */
+			});
 		}
 		
 		var icon = '';
 		if (status.toLowerCase()=='pass') {
-			icon = prefixed(prefix, 'images/marker-images/greenMapIcon.png');
+			icon = prefixed(prefix,'images/marker-images/greenMapIcon.png');
 		} else if (status.toLowerCase()=='na') {
 			icon =  prefixed(prefix,'images/marker-images/grayMapIcon.png');
 		}
@@ -148,36 +178,26 @@ var googleMap = (function() {
 				  type: 'poly'
 				};
 		
-		return new google.maps.Marker({
+		var marker =  new google.maps.Marker({
 			  draggable: false,
 			  icon: image,
 			  shadow: shadow,
-			  shape: shape
-			});	
+			  shape: shape,
+			  position: loc,
+			});
 		
-	}
-		
-	function formatAddressString(address) {
-		var result = '';
-		if (address.address_components[0]) {
-			result += address.address_components[0].short_name;
-		}
-		if (address.address_components[1]) {
-			result += ' ' + address.address_components[1].short_name;
-		}
-		if (address.address_components[2]) {
-			result += ',' + address.address_components[2].short_name;
-		}
-		return result;   
-	}
-	
-	return {
-		initialize: initialize, 
-		initializeWithMarker : initializeWithMarker,
-		addMarker: addMarker, 
-		markerForStatus: markerForStatus
+		marker.content = content;
+		return marker;		
 	};
- 
+
+		
+	return { 
+		create : create,
+		createAndShowWithLocation : createAndShowWithLocation,
+		makeMarkerForStatus : makeMarkerForStatus,		
+	};
+
+	
 })();
 
 

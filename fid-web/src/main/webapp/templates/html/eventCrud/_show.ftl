@@ -255,8 +255,11 @@
 		</div>		
 		<div style="height:300px;" id="mapCanvas" class="googleMap eventMap"></div>				
 		<script type="text/javascript">
+			var map = googleMapFactory.create('mapCanvas');
+			map.makeMarker = googleMapFactory.makeMarkerForStatus;		
 			Event.observe(window, 'load', function() { 
-				googleMap.initializeWithMarker('mapCanvas', ${action.latitude}, ${action.longitude}, '', googleMap.markerForStatus("${event.status}", "../../") )
+				map.addLocation(${action.latitude}, ${action.longitude}, '', "${event.status}", "../../");
+				map.show();				
 			});		
 		</script>						
 	</#if>	

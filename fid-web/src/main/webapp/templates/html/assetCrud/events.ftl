@@ -131,9 +131,8 @@
 <#if showMap && !events.isEmpty() && tenant.settings.gpsCapture>
 		
 	<script type="text/javascript">
-		Event.observe(window, 'load', function() { 
-			googleMap.initialize('mapCanvas');			
-		});				
+		var map = googleMapFactory.create('mapCanvas');
+		map.makeMarker = googleMapFactory.makeMarkerForStatus;			
 	</script>
 	
 	<div style="height:18px;">&nbsp;</div> <!-- hack to get around the fact that list view has sometimes hidden 18px pagination toolbar -->
@@ -146,9 +145,14 @@
 			<#include "../eventCrud/_viewEventLink.ftl"/><br>
 		</#assign>
 		<script type="text/javascript">						
-			googleMap.addMarker(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}", googleMap.markerForStatus("${event.status}"));
+			map.addLocation(${event.gpsLocation}, "${url?j_string}"+"${content?j_string}", "${event.status}");
 		</script>
 	</#list>
+	
+	<script type="text/javascript">
+		map.show(); 
+	</script>
+		
 </#if>
 
 

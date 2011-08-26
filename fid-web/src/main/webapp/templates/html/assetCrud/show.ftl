@@ -328,7 +328,7 @@ ${action.setPageType('asset', 'show')!}
 		<div id="mapCanvas" class="googleMap assetMap"></div>
 		<script type="text/javascript">
 			Event.observe(window, 'load', function() { 
-				googleMap.initializeWithMarker('mapCanvas',${action.latitude}, ${action.longitude})
+				googleMapFactory.createAndShowWithLocation('mapCanvas',${action.latitude}, ${action.longitude})
 			});		
 		</script>						
 	
