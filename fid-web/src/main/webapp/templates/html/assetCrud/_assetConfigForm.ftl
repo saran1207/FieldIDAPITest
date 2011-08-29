@@ -105,7 +105,3 @@
 		</div>
 	</#if>
 </div>
-
-<#if isAddForm>
-	<#include "/templates/html/eventCrud/_schedules.ftl" />
-</#if>

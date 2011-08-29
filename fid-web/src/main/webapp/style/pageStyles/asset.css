@@ -257,17 +257,6 @@
 	min-height: 65px;
 }
 
-#schedules, #emptySchedules {
-	padding-left: 10px;
-}
-
-#addNewSchedule {
-	margin-left: 10px;
-	margin-bottom: 10px;
-	font-size: 11px; 
-	
-}
-
 #cancelAction {
 	padding-left: 5px;
 }

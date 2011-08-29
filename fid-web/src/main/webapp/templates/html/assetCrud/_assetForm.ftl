@@ -10,7 +10,7 @@
 	<@n4.includeStyle type="page" href="asset"/>
 	<@n4.includeScript src="safetyNetworkSmartSearch.js" />
 	<@n4.includeStyle href="safetyNetworkSmartSearch.css" type="feature"/>
-	<@n4.includeStyle type="page" href="event"/>
+	<@n4.includeStyle href="newCss/event/event_schedule"/>
 	<script type="text/javascript">
 		autoAttributeUrl = '<@s.url action="autoAttributeCriteria" namespace="/ajax"/>';
 		identifierUrl = '<@s.url action="generateIdentifier" namespace="/aHtml"/>';
@@ -34,4 +34,7 @@
 </div>
 <div class="twoColumnRight">
 	<#include "_fileAttachment.ftl"/>
+	<#if isAddForm>
+		<#include "/templates/html/eventCrud/_schedules.ftl" />
+	</#if>
 </div>

@@ -30,6 +30,7 @@
 		</script>
 
 		<@n4.includeStyle href="newCss/event/event_base" />
+		<@n4.includeStyle href="newCss/event/event_schedule" />
 	</head>
 	<title>${(eventType.name)!} <@s.text name="label.on"/> ${asset.identifier}</title>
     <input type="hidden" name="assetType" id="assetType" value="${asset.type.id}">

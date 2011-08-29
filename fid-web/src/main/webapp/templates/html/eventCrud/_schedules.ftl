@@ -11,13 +11,12 @@
 		</#list>
 	</#if>
 	</div>
-	<div id="emptySchedules">
+	<div id="emptySchedules" class="emptySchedules">
 		<div class="fieldHolder">
 			<@s.text name="label.no_schedules_have_been_created"/>
 		</div>
 	</div>
-	
-	<div class="blockSeparated"><button id="addNewSchedule" onclick="$('newScheduleForm').show(); $('newScheduleForm').absolutize();  return false;" ><@s.text name="label.add_a_schedule"/></button></div>
+	<div class="addNewSchedule"><button class="addNewScheduleButton" onclick="$('newScheduleForm').show(); $('newScheduleForm').absolutize();  return false;" ><@s.text name="label.add_a_schedule"/></button></div>
 	<div class="fluentSets schedulesAdd newScheduleForm" id="newScheduleForm" style="display:none" >
 		<h2><@s.text name="label.add_a_schedule"/></h2>
 		<div class="infoSet">

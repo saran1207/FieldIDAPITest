@@ -1,0 +1,52 @@
+.eventSchedule {
+	padding: 15px 5px;
+	border-bottom: 1px solid #E2E2E2;
+	float: left;
+	width: 100%;
+}
+
+.addScheduleDate {
+	background-color: #E3E3E3;
+	padding: 5px 10px;
+    text-align: center;
+    width: 50px;
+    float: left;
+}
+
+.addScheduleJob p{
+	color: #999999;
+}
+
+.addScheduleLabel {
+	padding: 5px;
+	width: 215px;
+	float: left;
+}
+.addScheduleLabel label {
+	font-weight: bold;
+}
+.fullForm .addNewScheduleButton, .addNewScheduleButton {
+	margin: 10px;
+	font-size: 11px; 
+}
+
+.eventSchedule img {
+	padding-top: 7px;
+}
+
+.emptySchedules{
+	padding: 10px 0;
+	margin-left: 5px;
+	border-bottom: 1px solid #E2E2E2;
+	width: 100%;
+	float: left;
+}
+
+.addNewSchedule {
+	display: block;
+	border-bottom: 1px solid #E2E2E2;
+}
+
+.inline {
+    display: inline;
+}
