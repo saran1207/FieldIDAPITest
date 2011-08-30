@@ -207,9 +207,21 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
         CriteriaSectionCopyUtil copyUtil = new CriteriaSectionCopyUtil();
         List<CriteriaSection> copiedSections = new ArrayList<CriteriaSection>();
         for (CriteriaSection section : criteriaSections) {
-            copiedSections.add(copyUtil.copySection(section));
+            CriteriaSection criteriaSection = copyUtil.copySection(section);
+            filterRetiredCriteria(criteriaSection);
+            copiedSections.add(criteriaSection);
         }
         return copiedSections;
+    }
+
+    private void filterRetiredCriteria(CriteriaSection criteriaSection) {
+        List<Criteria> activeCriteria = new ArrayList<Criteria>();
+        for (Criteria criteria : criteriaSection.getCriteria()) {
+            if (!criteria.isRetired()) {
+                activeCriteria.add(criteria);
+            }
+        }
+        criteriaSection.setCriteria(activeCriteria);
     }
 
 }
