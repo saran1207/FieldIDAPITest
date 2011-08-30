@@ -4,6 +4,7 @@ module MigrationHelpers
     table.timestamp :created, :null => false
     table.timestamp :modified, :null => false
     table.integer :modifiedby
+    table.integer :createdby
   end
   
   def create_entity_with_tenant_fields_on( table )

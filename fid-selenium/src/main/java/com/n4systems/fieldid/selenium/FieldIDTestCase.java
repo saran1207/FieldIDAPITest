@@ -123,10 +123,12 @@ public abstract class FieldIDTestCase extends DBTestCase {
 	}
 
 	protected static void shutDownSelenium(FieldIdSelenium selenium) {
-        try {
-		    selenium.close();
-        } finally {
-            selenium.stop();
+        if (selenium != null) {
+            try {
+                selenium.close();
+            } finally {
+                selenium.stop();
+            }
         }
 	}
 
