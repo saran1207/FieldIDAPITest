@@ -2538,7 +2538,7 @@ inputsWithLegend .legend span {
 	margin-top: 25px; 
 }
 
-.largeLabel label {
+.assetTypeLabel label {
 	display : inline;
 	padding-right : 15px;	
 	padding-left : 5px;
@@ -2549,9 +2549,12 @@ inputsWithLegend .legend span {
 	font-size : 16px;
 	font-weight : bold;	
 	line-height : 22px;
+	height : 22px;
 }
 
-.largeLabel .fieldHolder { 
+.assetTypeLabel .fieldHolder { 
+	height : 28px !important;
 	display: inline !important;
 }
+
 

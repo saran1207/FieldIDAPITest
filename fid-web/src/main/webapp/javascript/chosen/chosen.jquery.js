@@ -69,6 +69,7 @@
       this.form_field_jq.hide().after(container_div);
       this.container = $('#' + this.container_id);
       this.container.addClass("chzn-container-" + (this.is_multiple ? "multi" : "single"));
+      
       this.dropdown = this.container.find('div.chzn-drop').first();
       dd_top = this.container.height();
       dd_width = this.f_width - get_side_border_padding(this.dropdown);
@@ -314,9 +315,19 @@
           this.result_do_highlight(this.result_single_selected);
         }
       }
-      dd_top = this.is_multiple ? this.container.height() : this.container.height() - 1;
+
+      var browserTypeIE = (document.all && !window.opera && window.XMLHttpRequest) ? true : false;
+      if (browserTypeIE) { 
+    	  // YIKES DD : see http://bugs.jquery.com/ticket/6575 for explanation of why this hack is needed. 
+    	  // if nothing done, height will return height of windwow instead of element height in IE.
+    	  dd_top = this.container.css('height');
+      } else {       
+    	  dd_top = this.is_multiple ? this.container.height() : this.container.height() - 1;
+    	  dd_top = dd_top  + "px";
+      }
+      
       this.dropdown.css({
-        "top": dd_top + "px",
+        "top": dd_top,
         "left": 0
       });
       this.results_showing = true;

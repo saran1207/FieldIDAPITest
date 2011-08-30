@@ -1,5 +1,5 @@
 <div class="assetFormGroup assetTypeSelection">
-	<span class="largeLabel">
+	<span class="assetTypeLabel">
 		<label for="assetTypeId"><@s.text name="label.assettype"/></label>
 		<@s.select cssClass="chzn-select" id="assetType" name="assetTypeId" onchange="updateAssetType(this)">
 			<#include "/templates/html/common/_assetTypeOptions.ftl"/>
