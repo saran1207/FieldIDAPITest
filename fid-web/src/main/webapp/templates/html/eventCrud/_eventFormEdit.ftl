@@ -15,14 +15,18 @@
 
 
 <#list section.criteria as criteria >
-	<#if !criteria.retired >				
+	<#if !criteria.retired >
 
 		<div class="infoSet" >
 
 			<label class="label eventFormLabel">${criteria.displayName}</label>
 
             <#if criteriaResults?exists && criteriaResults[criteriaCount]?exists>
-                <#assign criteriaResult = criteriaResults[criteriaCount]>
+                <#list criteriaCount .. criteriaResults?size as idx>
+                    <#assign criteriaResult = criteriaResults[criteriaCount]>
+                    <#if criteriaResult.criteriaId = criteria.id><#break></#if>
+                    <#assign criteriaCount=criteriaCount+1 />
+                </#list>
             </#if>
 
             <#if (criteriaResult.id)?exists >
