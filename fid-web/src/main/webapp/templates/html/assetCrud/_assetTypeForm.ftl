@@ -1,11 +1,11 @@
 <div class="assetFormGroup assetTypeSelection">
-	<div class="infoSet enlarged">
-		<label for="assetTypeId" class="label"><@s.text name="label.assettype"/></label>
-		<@s.select id="assetType" name="assetTypeId" onchange="updateAssetType(this)">
+	<span class="largeLabel">
+		<label for="assetTypeId"><@s.text name="label.assettype"/></label>
+		<@s.select cssClass="chzn-select" id="assetType" name="assetTypeId" onchange="updateAssetType(this)">
 			<#include "/templates/html/common/_assetTypeOptions.ftl"/>
 		</@s.select>
-		<span class="fieldHolder updating" id="assetTypeIndicator">
+		<span class="updating" id="assetTypeIndicator">
 			<img src="<@s.url value="/images/indicator_mozilla_blu.gif" />" alt="<@s.text name="updating"/>" />
 		</span>	
-	</div>
+	</span>	
 </div>

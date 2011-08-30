@@ -1,4 +1,7 @@
 <head>
+	<@n4.includeStyle href="chosen/chosen.css"/>
+	<@n4.includeScript src="jquery-1.4.2.min.js"/>
+	<@n4.includeScript>jQuery.noConflict();</@n4.includeScript>	
 	<@n4.includeScript src="commentTemplates.js" />
 	<@n4.includeScript src="asset.js" />
 	<@n4.includeScript src="event.js" />
@@ -24,6 +27,8 @@
 	</script>
 </head>
 
+
+
 <#include "../common/_formErrors.ftl"/>
 <@s.hidden name="uniqueID" id="uniqueID"/>
 
@@ -38,3 +43,6 @@
 		<#include "/templates/html/eventCrud/_schedules.ftl" />
 	</#if>
 </div>
+
+<script src="javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
+<script type="text/javascript"> jQuery(".chzn-select").chosen(); </script>

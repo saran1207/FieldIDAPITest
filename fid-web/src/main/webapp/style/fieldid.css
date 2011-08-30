@@ -600,7 +600,7 @@ form.oneColumn,.oneColumn {
 	width: 651px;
 }
 
-.wwgrp,.dateSelector,.wwerr,.updating {
+.wwgrp,.dateSelector,.wwerr {
 	float: left;
 	width: 450px;
 	overflow: hidden;
@@ -610,7 +610,11 @@ form.oneColumn,.oneColumn {
 }
 
 .updating {
-	visibility: hidden;
+	visibility : hidden;
+}
+
+.updating img {
+	margin-bottom : 5px; 
 }
 
 .wwerr .errorMessage {
@@ -1132,7 +1136,6 @@ li.buttonGroupLabels {
 }
 
 .crudForm {
-	overflow: hidden;
 	width: 500px;
 }
 
@@ -1157,7 +1160,6 @@ li.buttonGroupLabels {
 }
 
 .crudForm p, .resultContainer {
-	overflow: hidden;
 	padding: 5px 0px;
 	border-bottom: 1px solid #E2E2E2;
 }
@@ -1276,7 +1278,6 @@ li.buttonGroupLabels {
 
 .crudForm .infoSet label,.crudForm .infoSet span {
 	line-height: 18px;
-	overflow: hidden;
 }
 
 .crudForm .infoSet span.unitOfMeasure,.crudForm .infoSet span.date {
@@ -2535,5 +2536,22 @@ inputsWithLegend .legend span {
 
 .assetEvents #resultsTable {
 	margin-top: 25px; 
+}
+
+.largeLabel label {
+	display : inline;
+	padding-right : 15px;	
+	padding-left : 5px;
+	float : left;
+	text-align : right;
+	width : 110px;
+	color : #555;
+	font-size : 16px;
+	font-weight : bold;	
+	line-height : 22px;
+}
+
+.largeLabel .fieldHolder { 
+	display: inline !important;
 }
 
