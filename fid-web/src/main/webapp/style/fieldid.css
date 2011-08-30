@@ -1864,12 +1864,17 @@ input.description {
 }
 
 .decoratedHeaderAlternative{
-	background-color: #EEEEEE;
+background-color: #EEEEEE;
 	padding:5px 15px;
 	border-top:1px solid #CCCCCC;
 	border-bottom:1px solid #CCCCCC;
 	font-size: 1em;
 }
+
+.decoratedHeaderAlternative img {
+	margin-top : 5px;
+}
+
 
 ul.borderLess{
 	border-style: none;
