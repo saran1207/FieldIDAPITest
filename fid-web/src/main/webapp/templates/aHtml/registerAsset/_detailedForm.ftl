@@ -39,18 +39,21 @@
 			</#if>
 		</div>
 	</#if>
-	<div class="formTitle">
-		<h3><@s.text name="label.orderdetails" /></h3>
-	</div>				
-	<div class="infoSet">
-		<label for="purchaseOrder" class="label"><@s.text name="label.purchaseorder"/></label>
-		<@s.textfield  name="purchaseOrder" />	
-	</div>
-	<#if !securityGuard.integrationEnabled>
+	
+	<#if securityGuard.orderDetailsEnabled || securityGuard.integrationEnabled>
+		<div class="formTitle">
+			<h3><@s.text name="label.orderdetails" /></h3>
+		</div>				
 		<div class="infoSet">
-			<label for="nonIntegrationOrderNumber" class="label"><@s.text name="label.ordernumber"/></label>
-			<@s.textfield id="nonIntegrationOrderNumber" name="nonIntegrationOrderNumber" />	
+			<label for="purchaseOrder" class="label"><@s.text name="label.purchaseorder"/></label>
+			<@s.textfield  name="purchaseOrder" />	
 		</div>
+		<#if !securityGuard.integrationEnabled>
+			<div class="infoSet">
+				<label for="nonIntegrationOrderNumber" class="label"><@s.text name="label.ordernumber"/></label>
+				<@s.textfield id="nonIntegrationOrderNumber" name="nonIntegrationOrderNumber" />	
+			</div>
+		</#if>
 	</#if>
 	<div class="formTitle">
 		<h3><@s.text name="label.attributes"/></h3>

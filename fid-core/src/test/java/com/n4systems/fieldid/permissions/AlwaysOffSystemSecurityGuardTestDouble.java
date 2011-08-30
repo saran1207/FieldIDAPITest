@@ -118,4 +118,9 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 		return false;
 	}
 
+	@Override
+	public boolean isOrderDetailsEnabled() {
+		return false;
+	}
+
 }

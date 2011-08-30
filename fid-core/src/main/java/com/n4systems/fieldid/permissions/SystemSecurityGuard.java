@@ -21,4 +21,5 @@ public interface SystemSecurityGuard {
 	public boolean isProofTestIntegrationEnabled();
 	public boolean isPlansAndPricingAvailable();
 	public boolean isManufacturerCertificateEnabled();
+	public boolean isOrderDetailsEnabled();
 }

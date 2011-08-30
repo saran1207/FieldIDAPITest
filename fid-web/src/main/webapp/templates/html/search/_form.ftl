@@ -86,19 +86,8 @@
 				<@n4.orgPicker name="owner"/>
 			</div>
 		</div>		
-		<div class="fieldGroup">
-			<h2><@s.text name="label.orderdetails"/></h2>
-			<div class="infoSet">
-				<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
-				<@s.textfield name="criteria.orderNumber" />
-			</div>
-			<div class="infoSet">
-				<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
-				<@s.textfield name="criteria.purchaseOrder" />
-			</div>	
-		</div>
 		
-		<div class="fieldGroup clearLeft">
+		<div class="fieldGroup">
 			<h2><@s.text name="label.identifieddate"/></h2>
 			<div class="container">
 				<div class="infoSet">
@@ -111,6 +100,22 @@
 				</div>
 			</div>
 		</div>
+		
+		<#if securityGuard.orderDetailsEnabled || securityGuard.integrationEnabled>
+		
+			<div class="fieldGroup clearLeft">
+				<h2><@s.text name="label.orderdetails"/></h2>
+				<div class="infoSet">
+					<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
+					<@s.textfield name="criteria.orderNumber" />
+				</div>
+				<div class="infoSet">
+					<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
+					<@s.textfield name="criteria.purchaseOrder" />
+				</div>	
+			</div>
+		
+		</#if>
 		
 		<#include "../customizableSearch/_selectColumns.ftl"/>
 		

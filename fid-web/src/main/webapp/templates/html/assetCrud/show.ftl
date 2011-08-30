@@ -174,11 +174,11 @@ ${action.setPageType('asset', 'show')!}
 			<label><@s.text name="label.modifiedby"/></label>
 			<span class="fieldValue">${(asset.modifiedBy.displayName)!}</span>
 		</p>
-		<#if !securityGuard.integrationEnabled >
-		<p>
-			<label><@s.text name="label.ordernumber"/></label>
-			<span class="fieldValue">${(asset.nonIntergrationOrderNumber)!}</span>
-		</p>
+		<#if securityGuard.orderDetailsEnabled && !securityGuard.integrationEnabled>
+			<p>
+				<label><@s.text name="label.ordernumber"/></label>
+				<span class="fieldValue">${(asset.nonIntergrationOrderNumber)!}</span>
+			</p>
 		</#if>
 		
 		<#if securityGuard.manufacturerCertificateEnabled>

@@ -10,7 +10,8 @@ public enum ExtendedFeature {
 	JobSites("feature.job_sites"),
 	AssignedTo("feature.assigned_to"),
 	AdvancedLocation("feature.advanced_location"),
-	ProofTestIntegration("feature.proof_test_integration");
+	ProofTestIntegration("feature.proof_test_integration"), 
+	OrderDetails("feature.order_details");
 	
 	private String label;
 	

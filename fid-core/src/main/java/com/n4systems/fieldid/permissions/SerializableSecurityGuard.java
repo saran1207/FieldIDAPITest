@@ -90,5 +90,10 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	public boolean isManufacturerCertificateEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate);
 	}
+
+	@Override
+	public boolean isOrderDetailsEnabled() {
+		return primaryOrg.hasExtendedFeature(ExtendedFeature.OrderDetails);
+	}
 	
 }

@@ -7,6 +7,7 @@ public class SystemSettings implements Serializable {
     public boolean assignedTo;
     public boolean proofTestIntegration;
     public boolean manufacturerCertificate;
+    public boolean orderDetails;
     public String dateFormat;
     public String identifierLabel;
     public String identifierFormat;
@@ -67,4 +68,12 @@ public class SystemSettings implements Serializable {
     public void setIdentifierLabel(String identifierLabel) {
         this.identifierLabel = identifierLabel;
     }
+
+	public boolean isOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(boolean orderDetails) {
+		this.orderDetails = orderDetails;
+	}
 }

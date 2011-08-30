@@ -30,6 +30,7 @@ public class SystemSettingsService extends FieldIdPersistenceService {
         systemSettings.setAssignedTo(primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo));
         systemSettings.setManufacturerCertificate(primaryOrg.hasExtendedFeature(ExtendedFeature.ManufacturerCertificate));
         systemSettings.setProofTestIntegration(primaryOrg.hasExtendedFeature(ExtendedFeature.ProofTestIntegration));
+        systemSettings.setOrderDetails(primaryOrg.hasExtendedFeature(ExtendedFeature.OrderDetails));
         systemSettings.setIdentifierFormat(primaryOrg.getIdentifierFormat());
         systemSettings.setIdentifierLabel(primaryOrg.getIdentifierLabel());
         systemSettings.setDateFormat(primaryOrg.getDateFormat());
@@ -57,6 +58,7 @@ public class SystemSettingsService extends FieldIdPersistenceService {
         extendedFeatureService.setExtendedFeatureEnabled(tenantId, ExtendedFeature.AssignedTo, settings.isAssignedTo());
         extendedFeatureService.setExtendedFeatureEnabled(tenantId, ExtendedFeature.ManufacturerCertificate, settings.isManufacturerCertificate());
         extendedFeatureService.setExtendedFeatureEnabled(tenantId, ExtendedFeature.ProofTestIntegration, settings.isProofTestIntegration());
+        extendedFeatureService.setExtendedFeatureEnabled(tenantId, ExtendedFeature.OrderDetails, settings.isOrderDetails());
 
         persistenceService.update(primaryOrg);
     }

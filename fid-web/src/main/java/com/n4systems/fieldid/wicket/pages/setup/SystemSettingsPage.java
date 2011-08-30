@@ -65,6 +65,7 @@ public class SystemSettingsPage extends FieldIDLoggedInPage {
             add(new CheckBox("assignedTo"));
             add(new CheckBox("proofTestIntegration"));
             add(new CheckBox("manufacturerCertificate"));
+            add(new CheckBox("orderDetails"));
             add(new Image("gpsLogo", new ContextRelativeResource("/images/gps-logo.png")));
             add(new CheckBox("gpsCapture"));
             add(new DropDownChoice<String>("dateFormat", getDateFormats(), new DateFormatSampleChoiceRenderer()).setNullValid(false));

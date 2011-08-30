@@ -99,25 +99,22 @@
 					<@n4.location name="criteria.location" id="location" nodesList=helper.predefinedLocationTree fullName="${helper.getFullNameOfLocation(criteria.location)}"/>
 				</div>	
 				
-				<#include "_ownershipFilters.ftl"/>
-				
-				<div class="infoSet">
-					<label></label>
-				</div>	
+				<#include "_ownershipFilters.ftl"/>				
 			</div>
-			
-			<div class="fieldGroup fieldGroupGap clearLeft">	
-				<h2><@s.text name="label.orderdetails"/></h2>
-				<div class="infoSet">
-					<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
-					<@s.textfield name="criteria.orderNumber" />
+
+			<#if securityGuard.orderDetailsEnabled || securityGuard.integrationEnabled>			
+				<div class="fieldGroup fieldGroupGap clearLeft">	
+					<h2><@s.text name="label.orderdetails"/></h2>
+					<div class="infoSet">
+						<label for="criteria.orderNumber"><@s.text name="label.onumber"/></label>
+						<@s.textfield name="criteria.orderNumber" />
+					</div>
+					<div class="infoSet">
+						<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
+						<@s.textfield name="criteria.purchaseOrder" />
+					</div>
 				</div>
-				<div class="infoSet">
-					<label for="criteria.purchaseorder"><@s.text name="label.purchaseorder"/></label>
-					<@s.textfield name="criteria.purchaseOrder" />
-				</div>
-			</div>
-			
+			</#if>
 			<div class="fieldGroup">
 				<h2><@s.text name="label.asset_details"/></h2>
 

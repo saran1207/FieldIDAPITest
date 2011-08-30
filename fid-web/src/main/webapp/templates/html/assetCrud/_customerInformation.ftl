@@ -29,8 +29,10 @@
 		<label><@s.text name="label.referencenumber"/></label>
 		<span class="fieldValue">${asset.customerRefNumber!}</span>
 	</p>
-	<p>
-		<label><@s.text name="label.purchaseorder"/></label>
-		<span class="fieldValue">${asset.purchaseOrder!}</span>
-	</p>
+	<#if securityGuard.orderDetailsEnabled || securityGuard.integrationEnabled>	
+		<p>
+			<label><@s.text name="label.purchaseorder"/></label>
+			<span class="fieldValue">${asset.purchaseOrder!}</span>
+		</p>
+	</#if>
 </div>

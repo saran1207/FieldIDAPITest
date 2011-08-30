@@ -125,7 +125,6 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
 
             WebMarkupContainer jobContainer = new WebMarkupContainer("jobContainer");
             add(jobContainer.setVisible(securityGuard.isProjectsEnabled()));
-            add(new WebMarkupContainer("assignedToContainer").setVisible(securityGuard.isAssignedToEnabled()));
 
             WebMarkupContainer includeNetworkResultsContainer = new WebMarkupContainer("includeNetworkResultsContainer");
             add(includeNetworkResultsContainer.setVisible(sessionUser.isEmployeeUser() || sessionUser.isSystemUser()));
@@ -198,9 +197,13 @@ public class EventReportCriteriaPanel extends Panel implements IHeaderContributo
             add(new TextField<String>("rfidNumber"));
             add(new TextField<String>("identifier"));
             add(new TextField<String>("referenceNumber"));
-
-            add(new TextField<String>("purchaseOrder"));
-            add(new TextField<String>("orderNumber"));
+            
+            
+            WebMarkupContainer orderDetailsContainer = new WebMarkupContainer("orderDetailsContainer");
+            orderDetailsContainer.add(new TextField<String>("purchaseOrder"));
+            orderDetailsContainer.add(new TextField<String>("orderNumber"));
+            orderDetailsContainer.add(new WebMarkupContainer("assignedToContainer").setVisible(securityGuard.isAssignedToEnabled()));
+            add(orderDetailsContainer.setVisible(securityGuard.isOrderDetailsEnabled() || securityGuard.isIntegrationEnabled()));
 
             add(new IdentifierLabel("identifierLabel"));
 
