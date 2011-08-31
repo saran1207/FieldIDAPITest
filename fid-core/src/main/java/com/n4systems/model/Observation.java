@@ -51,7 +51,7 @@ abstract public class Observation extends EntityWithTenant {
 	@Enumerated(EnumType.STRING)
 	private Type type;
 	
-	@Column(nullable=false, length=1000)
+	@Column(nullable=false, length=2048)
 	private String text;
 
 	@Column(nullable=false, length=31)
