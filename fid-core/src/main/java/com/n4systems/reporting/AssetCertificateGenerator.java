@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.n4systems.model.Asset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -17,11 +16,10 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 
-
 import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.AddressInfo;
-import com.n4systems.model.LineItem;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -61,7 +59,7 @@ public class AssetCertificateGenerator {
 
 		reportMap.putAll(new AssetReportMapProducer(asset, new DateTimeDefiner(user)).produceMap());
 		addAssetTypeParams(reportMap, asset.getType());
-		addOrderParams(reportMap, asset.getShopOrder());
+		addOrderParams(reportMap, asset);
 		addOrganizationParams(reportMap, asset.getOwner().getInternalOrg());
 		
 		addTenantParams(reportMap, asset.getOwner().getPrimaryOrg());
@@ -153,13 +151,15 @@ public class AssetCertificateGenerator {
 		params.put("certificateText", assetType.getManufactureCertificateText());
 	}
 	
-	private void addOrderParams(ReportMap<Object> params, LineItem lineItem) {
+	private void addOrderParams(ReportMap<Object> params, Asset asset) {
 		params.putEmpty("orderNumber", "customerPartDescription", "partNumber", "productName");
 
-		if (lineItem != null) {
-			params.put("orderNumber", lineItem.getOrder().getOrderNumber());
-			params.put("customerPartDescription", lineItem.getDescription());
-			params.put("productName", lineItem.getAssetCode());
+		if (asset.getShopOrder() != null) {
+			params.put("orderNumber", asset.getShopOrder().getOrder().getOrderNumber());
+			params.put("customerPartDescription", asset.getShopOrder().getDescription());
+			params.put("productName", asset.getShopOrder().getAssetCode());
+		}else if(asset.getNonIntergrationOrderNumber()!= null){
+			params.put("orderNumber", asset.getNonIntergrationOrderNumber());			
 		}
 	}
 	
