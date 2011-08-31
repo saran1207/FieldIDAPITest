@@ -1,16 +1,19 @@
 package com.n4systems.ejb.legacy.impl;
 
-import com.n4systems.ejb.legacy.IdentifierCounter;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.orgs.PrimaryOrg;
-import rfid.ejb.entity.IdentifierCounterBean;
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Collection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import org.apache.commons.lang.StringUtils;
+
+import rfid.ejb.entity.IdentifierCounterBean;
+
+import com.n4systems.ejb.legacy.IdentifierCounter;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.orgs.PrimaryOrg;
 
 public class IdentifierCounterManager implements IdentifierCounter {
 
@@ -21,15 +24,18 @@ public class IdentifierCounterManager implements IdentifierCounter {
 		this.em = em;
 	}
 
+	@Override
 	public void updateIdentifierCounter(IdentifierCounterBean identifierCounter) {
 		em.merge(identifierCounter);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<IdentifierCounterBean> getIdentifierCounters() {
-		return (Collection<IdentifierCounterBean>)em.createQuery("from "+IdentifierCounterBean.class.getName()+" snc").getResultList();
+		return em.createQuery("from "+IdentifierCounterBean.class.getName()+" snc").getResultList();
 	}
 	
+	@Override
 	public IdentifierCounterBean getIdentifierCounter(Long tenantId) {
 		Query query = em.createQuery("from "+IdentifierCounterBean.class.getName()+" snc where snc.tenant.id = :tenantId");
 		query.setParameter("tenantId", tenantId);
@@ -42,6 +48,7 @@ public class IdentifierCounterManager implements IdentifierCounter {
 	 * based on their decimal format specified.  This is synchronized to ensure multiple
 	 * users won't get the same counter value.
 	 */
+	@Override
 	public synchronized String getNextCounterValue(Long tenantId) {
 		IdentifierCounterBean identifierCounter = getIdentifierCounter(tenantId);
 		
@@ -56,6 +63,7 @@ public class IdentifierCounterManager implements IdentifierCounter {
 		return counterValueString;
 	}
 	
+	@Override
 	public String generateIdentifier(PrimaryOrg primaryOrg, AssetType assetType) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
@@ -63,10 +71,14 @@ public class IdentifierCounterManager implements IdentifierCounter {
 		DecimalFormat padTwoSpaces = new DecimalFormat("00");
 		DecimalFormat padThreeSpaces = new DecimalFormat("000");
 		
-		String identifier = primaryOrg.getIdentifierFormat();
+		String identifier = primaryOrg.getIdentifierFormat();		
 
         if (assetType != null && assetType.isIdentifierOverridden()) {
             identifier = assetType.getIdentifierFormat();
+        }
+        
+        if (StringUtils.isBlank(identifier)) {
+        	return "";
         }
 
 		// go through and replace the appropriate symbols with their meaning
