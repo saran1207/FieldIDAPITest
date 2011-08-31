@@ -91,7 +91,7 @@ var googleMapFactory = (function() {
 				return new google.maps.Marker({
 					draggable : false,
 					position: loc,
-					map: map,
+					map: map
 				});
 			},
 			
@@ -131,7 +131,7 @@ var googleMapFactory = (function() {
 				} else if (count==1) { 
 					map.setCenter(locations[0]);
 				}			
-			},		
+			}		
 			
 		};
 		
@@ -149,7 +149,7 @@ var googleMapFactory = (function() {
 		if (status.toLowerCase()=='fail') {
 			return new google.maps.Marker({     /* note that red is default icon which is what we currently use for fail */
 				draggable : false,
-				position: loc,
+				position: loc
 			});
 		}
 		
@@ -183,7 +183,7 @@ var googleMapFactory = (function() {
 			  icon: image,
 			  shadow: shadow,
 			  shape: shape,
-			  position: loc,
+			  position: loc
 			});
 		
 		marker.content = content;
@@ -194,7 +194,7 @@ var googleMapFactory = (function() {
 	return { 
 		create : create,
 		createAndShowWithLocation : createAndShowWithLocation,
-		makeMarkerForStatus : makeMarkerForStatus,		
+		makeMarkerForStatus : makeMarkerForStatus	
 	};
 
 	
