@@ -46,7 +46,7 @@ import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @Validations
-public class OrganizationAction extends AbstractCrud implements Preparable/*, HasDuplicateValueValidator*/ {
+public class OrganizationAction extends AbstractCrud implements Preparable, HasDuplicateValueValidator {
 
 	public OrganizationAction(com.n4systems.ejb.PersistenceManager persistenceManager) {
 		super(persistenceManager);
