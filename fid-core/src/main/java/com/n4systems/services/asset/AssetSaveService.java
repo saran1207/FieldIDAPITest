@@ -30,6 +30,7 @@ public class AssetSaveService {
 	private List<AssetAttachment> uploadedAttachments;
 	private boolean newAssetImage;
 	private boolean removeAssetImage;
+	private String newAssetImageName;
 
 	public AssetSaveService(LegacyAsset assetManager, User user) {
 		super();
@@ -95,6 +96,7 @@ public class AssetSaveService {
 		if (asset == null) {
 			throw new InvalidArgumentException("asset must defined.");
 		}
+		saveAssetImageName();
 	}
 
 	private void saveUploadedAttachments() {
@@ -146,19 +148,24 @@ public class AssetSaveService {
 	}
 	
 	private void saveAssetImage() throws SubAssetUniquenessException {
-		AssetImageFileSaver saver = new AssetImageFileSaver(asset);
-		if(newAssetImage) {
-			if(asset.getImageName() != null) {
-				saver.save();
-			} 
-			asset.setImageName(saver.getImageFileName());
-			updateAsset();
+		AssetImageFileSaver saver = new AssetImageFileSaver(asset, newAssetImageName);
+		if(newAssetImage && newAssetImageName != null) {
+			saver.save();
 		}
 		
 		if(removeAssetImage) {
 			saver.remove();
-			asset.setImageName(saver.getImageFileName());
-			updateAsset();
+		}
+	}
+
+	private void saveAssetImageName() {
+		newAssetImageName = asset.getImageName();
+		if(newAssetImage && newAssetImageName != null) {
+			asset.setImageName(newAssetImageName.split("/")[1]);
+		}
+		
+		if(removeAssetImage) {
+			asset.setImageName(null);
 		}
 	}
 

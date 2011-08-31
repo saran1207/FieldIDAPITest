@@ -15,11 +15,13 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 
 	private final static Logger logger = Logger.getLogger(AssetImageFileSaver.class);
 	private Asset asset;
+	private String filePath;
 	private byte[] data;
 	private boolean dataSpecified; //Let's use this, just in case data was null.
 	
-	public AssetImageFileSaver(Asset asset) {
+	public AssetImageFileSaver(Asset asset, String filePath) {
 		this.asset = asset;
+		this.filePath = filePath;
 	}	
 	
 	@Override
@@ -69,7 +71,7 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 		File attachmentDir = PathHandler.getAssetImageDir(asset);
 		File tmpDirectory = PathHandler.getTempRoot();
 
-		File tmpFile = new File(tmpDirectory, asset.getImageName());
+		File tmpFile = new File(tmpDirectory, filePath);
 		
 		if(attachmentDir.exists()) {
 			FileUtils.cleanDirectory(attachmentDir);
@@ -89,7 +91,7 @@ public class AssetImageFileSaver extends FileSaver<Asset> {
 			FileUtils.cleanDirectory(attachmentDir);
 		}
 		
-		File imageFile = new File(attachmentDir, asset.getImageName());
+		File imageFile = new File(attachmentDir, filePath);
 		try {
 			FileUtils.writeByteArrayToFile(imageFile, data);
 		} catch(IOException e) {
