@@ -19,7 +19,7 @@ public class SignatureAction extends DownloadAction {
     private String signatureFileId;
     private Long criteriaId;
     private Long eventId;
-    private Integer criteriaCount;
+    private Integer currentCriteriaIndex;
 
     public SignatureAction(PersistenceManager persistenceManager) {
         super(persistenceManager);
@@ -87,12 +87,12 @@ public class SignatureAction extends DownloadAction {
         this.criteriaId = criteriaId;
     }
 
-    public Integer getCriteriaCount() {
-        return criteriaCount;
+    public Integer getCurrentCriteriaIndex() {
+        return currentCriteriaIndex;
     }
 
-    public void setCriteriaCount(Integer criteriaCount) {
-        this.criteriaCount = criteriaCount;
+    public void setCurrentCriteriaIndex(Integer currentCriteriaIndex) {
+        this.currentCriteriaIndex = currentCriteriaIndex;
     }
 
     public Long getEventId() {

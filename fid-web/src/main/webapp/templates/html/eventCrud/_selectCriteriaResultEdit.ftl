@@ -1,5 +1,5 @@
 <div class="criteriaEditContainer">
-    <select name="criteriaResults[${criteriaCount}].textValue" class="selectCriteria">
+    <select name="criteriaResults[${currentCriteriaIndex}].textValue" class="selectCriteria">
         <option></option>
         <#list criteria.options as option>
             <#if criteriaResult?exists && criteriaResult.textValue?exists && criteriaResult.textValue == option>

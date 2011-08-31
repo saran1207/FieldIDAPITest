@@ -15,7 +15,7 @@
                 </span>
                 <span class="criteriaText" id="criteriaText_${criteria.id}">${current_state.displayText}</span>
 
-                <@s.hidden id="criteriaResultState_${criteria.id}" name="criteriaResults[${criteriaCount}].stateId" value="${current_state.id}" />
+                <@s.hidden id="criteriaResultState_${criteria.id}" name="criteriaResults[${currentCriteriaIndex}].stateId" value="${current_state.id}" />
             </div>
 
 

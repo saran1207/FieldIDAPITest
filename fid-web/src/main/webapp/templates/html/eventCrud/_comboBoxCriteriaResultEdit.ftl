@@ -4,7 +4,7 @@
 
 <div class="criteriaEditContainer">
 		
-    <select name="criteriaResults[${criteriaCount}].textValue" class="comboBoxCriteria" headerKey="-1">
+    <select name="criteriaResults[${currentCriteriaIndex}].textValue" class="comboBoxCriteria" headerKey="-1">
         <option></option>
         <#list criteria.options as option>
             <#if criteriaResult?exists && (criteriaResult.textValue)?exists && criteriaResult.textValue == option>
@@ -20,6 +20,6 @@
         </#if>
     </select>
     <script type="text/javascript">
-		new toCombo('criteriaResults[${criteriaCount}].textValue');
+		new toCombo('criteriaResults[${currentCriteriaIndex}].textValue');
 	</script>
 </div>

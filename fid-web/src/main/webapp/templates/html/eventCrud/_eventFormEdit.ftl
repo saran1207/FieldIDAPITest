@@ -26,15 +26,18 @@
                     <#assign criteriaResult = criteriaResults[criteriaCount]>
                     <#if criteriaResult.criteriaId = criteria.id><#break></#if>
                     <#assign criteriaCount=criteriaCount+1 />
+                    <#assign criteriaSkipped=criteriaSkipped+1/>
                 </#list>
             </#if>
 
+            <#assign currentCriteriaIndex = criteriaCount - criteriaSkipped>
+
             <#if (criteriaResult.id)?exists >
-                <@s.hidden id="criteriaResultId_${criteria.id}" name="criteriaResults[${criteriaCount}].id" value="${criteriaResult.id}" />
+                <@s.hidden id="criteriaResultId_${criteria.id}" name="criteriaResults[${currentCriteriaIndex}].id" value="${criteriaResult.id}" />
             </#if>
 
-            <@s.hidden id="criteriaResultType_${criteria.id}" name="criteriaResults[${criteriaCount}].type" value="${criteria.criteriaType.name()}" />
-            <@s.hidden id="criteriaResultCriteria_${criteria.id}" name="criteriaResults[${criteriaCount}].criteriaId" value="${criteria.id}" />
+            <@s.hidden id="criteriaResultType_${criteria.id}" name="criteriaResults[${currentCriteriaIndex}].type" value="${criteria.criteriaType.name()}" />
+            <@s.hidden id="criteriaResultCriteria_${criteria.id}" name="criteriaResults[${currentCriteriaIndex}].criteriaId" value="${criteria.id}" />
 
             <#if criteria.oneClickCriteria>
                 <#include '_oneClickCriteriaResultEdit.ftl'>
@@ -55,8 +58,8 @@
             </#if>
 
 			<div class="recDefButtons">
-				<#assign recCount=(action.countRecommendations(criteriaCount))!0 />
-				<#assign defCount=(action.countDeficiencies(criteriaCount))!0 />
+				<#assign recCount=(action.countRecommendations(currentCriteriaIndex))!0 />
+				<#assign defCount=(action.countDeficiencies(currentCriteriaIndex))!0 />
 				<a id='recButton_${criteria.id}' href='#rec_${criteria.id}' title='${lightBoxProperties}' class='lightview' ><img id='recImage_${criteria.id}' src="<@s.url value="/images/rec.png"/>" /></a>
 				<a id='defButton_${criteria.id}' href='#def_${criteria.id}' title='${lightBoxProperties}' class='lightview' ><img id='defImage_${criteria.id}' src="<@s.url value="/images/def.png"/>" /></a>
 			</div>

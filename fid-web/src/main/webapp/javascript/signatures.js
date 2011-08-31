@@ -17,7 +17,7 @@ function storeCriteriaId(e) {
         if (attrs[i].name == "criteriaid") {
             currentSignatureCriteriaId = attrs[i].value;
         }
-        if (attrs[i].name == "criteriacount") {
+        if (attrs[i].name == "currentcriteriaindex") {
             currentSignatureCriteriaCount = attrs[i].value;
         }
     }
@@ -27,15 +27,15 @@ function storeSignature(data) {
     var signatureParams = {
         pngData: data,
         criteriaId: currentSignatureCriteriaId,
-        criteriaCount: currentSignatureCriteriaCount
+        currentCriteriaIndex: currentSignatureCriteriaCount
     };
 
     getResponse(submitSignatureUrl, "post", signatureParams);
 }
 
-function clearSignature(criteriaId, criteriaCount) {
+function clearSignature(criteriaId, currentCriteriaIndex) {
     currentSignatureCriteriaId = criteriaId;
-    getResponse(signatureClearUrl, "post", { criteriaId: criteriaId, criteriaCount: criteriaCount });
+    getResponse(signatureClearUrl, "post", { criteriaId: criteriaId, currentCriteriaIndex: currentCriteriaIndex });
 }
 
 function performThumbnailRefresh(newThumbnailSection) {

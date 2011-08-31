@@ -21,6 +21,7 @@
 		</#if>
 		
 		<#assign criteriaCount=0/>
+        <#assign criteriaSkipped=0/>
 		<#list eventFormHelper.getAvailableSections( formEvent ) as section >
 			<div id="section_${identifier}_${section_index}" <#if section_index != 0 >style="display:none"</#if> >
 				<h3>
