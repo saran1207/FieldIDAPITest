@@ -89,7 +89,7 @@ public class SearchService extends FieldIdPersistenceService {
         addWildcardOrStringTerm(searchTerms, "asset.customerRefNumber", criteriaModel.getReferenceNumber());
         addWildcardOrStringTerm(searchTerms, "advancedLocation.freeformLocation", criteriaModel.getLocation().getFreeformLocation());
         addSimpleTerm(searchTerms, "asset.type.id", getId(criteriaModel.getAssetType()));
-        addSimpleTerm(searchTerms, "asset.type.group.id", criteriaModel.getAssetType() == null ? null : getId(criteriaModel.getAssetType().getGroup()));
+        addSimpleTerm(searchTerms, "asset.type.group.id", getId(criteriaModel.getAssetTypeGroup()));
         addSimpleTerm(searchTerms, "assetStatus.id", getId(criteriaModel.getAssetStatus()));
         addSimpleTerm(searchTerms, "type.id", getId(criteriaModel.getEventType()));
         addSimpleTerm(searchTerms, "type.group.id", getId(criteriaModel.getEventTypeGroup()));
