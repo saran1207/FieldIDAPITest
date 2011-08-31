@@ -11,7 +11,7 @@
 		}
 	</style> 
 	
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<@n4.includeScript src="googleMaps.js"/>
 	<@n4.includeScript src="event.js"/>
 	
