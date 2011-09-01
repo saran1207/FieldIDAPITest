@@ -54,7 +54,12 @@ public class AssetReportMapProducer extends ReportMapProducer {
 
 
 	private String getOrderNumber() {
-		return asset.getShopOrder() != null ? asset.getShopOrder().getOrder().getOrderNumber() : "";
+		if(asset.getShopOrder() != null) {
+			return  asset.getShopOrder().getOrder().getOrderNumber();
+		}else if(asset.getNonIntergrationOrderNumber()!=null) {
+			return asset.getNonIntergrationOrderNumber();
+		}else
+			return "";		
 	}
 
 	

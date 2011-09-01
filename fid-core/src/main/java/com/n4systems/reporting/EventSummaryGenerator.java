@@ -23,16 +23,15 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.SearchPerformerWithReadOnlyTransactionManagement;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.LineItem;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Status;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.loaders.LoaderFactory;
@@ -108,8 +107,7 @@ public class EventSummaryGenerator {
 				eventMap.put("assetComments", event.getAsset().getComments());
 				eventMap.put("customer", event.getOwner().getCustomerOrg() != null? event.getOwner().getCustomerOrg().getName() :"");
 				
-				LineItem shopOrder = event.getAsset().getShopOrder();
-				eventMap.put("orderNumber", shopOrder !=null ? shopOrder.getOrder().getOrderNumber() : "");
+				eventMap.put("orderNumber", getOrderNumber(event));
 				eventMap.put("PONumber", event.getAsset().getPurchaseOrder());
 				eventMap.put("attributes", produceInfoOptionLP(event.getAsset().getOrderedInfoOptionList()));
 				eventMap.put("productStatus", event.getAsset().getAssetStatus()!=null ? event.getAsset().getAssetStatus().getName() : "");
@@ -172,6 +170,16 @@ public class EventSummaryGenerator {
 		}
 
 		return jasperPrint;
+	}
+
+	private String getOrderNumber(Event event) {
+		if (event.getAsset().getShopOrder() != null) {
+			return event.getAsset().getShopOrder().getOrder().getOrderNumber();
+		} else if(event.getAsset().getNonIntergrationOrderNumber() != null) {
+			return event.getAsset().getNonIntergrationOrderNumber();
+		} else {
+			return"";
+		}
 	}
 
 	protected PrimaryOrg getTenant(User user, Long tenantId) {
