@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
-import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.TextParseUtil;
@@ -20,16 +20,16 @@ import com.opensymphony.xwork2.util.ValueStack;
 public abstract class ExtendedTextProviderAction extends ActionSupport implements WebAction {
 	private static final long serialVersionUID = 1L;
 
-	private WebSession session;
+	private WebSessionMap session;
 	private Map<String, String> langOverrides;
 	
 	public ActionContext getActionContext() {
 		return ActionContext.getContext();
 	}
 	
-	public WebSession getSession() {
+	public WebSessionMap getSession() {
 		if( session == null ) {
-			session = new WebSession(getServletRequest().getSession(false));
+			session = new WebSessionMap(getServletRequest().getSession(false));
 		}
 		return session;
 	}

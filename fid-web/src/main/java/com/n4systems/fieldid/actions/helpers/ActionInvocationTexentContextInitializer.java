@@ -3,7 +3,7 @@ package com.n4systems.fieldid.actions.helpers;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.utils.ActionInvocationWrapper;
 
 public class ActionInvocationTexentContextInitializer extends TenantContextInitializer {
@@ -24,7 +24,7 @@ public class ActionInvocationTexentContextInitializer extends TenantContextIniti
 	}
  
 	@Override
-	protected WebSession getSession() {
+	protected WebSessionMap getSession() {
 		return actionInvocation.getSession();
 	}
 	

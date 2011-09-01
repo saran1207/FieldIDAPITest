@@ -7,7 +7,7 @@ import org.apache.struts2.StrutsStatics;
 
 import rfid.web.helper.SessionUser;
 
-import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
@@ -35,7 +35,7 @@ public class LoginInterceptor extends AbstractInterceptor implements StrutsStati
 		new UrlArchive("preLoginContext", request, session).storeUrl();
 	}
 
-	private boolean userTenantMatchesSecurityGuard(WebSession session, SessionUser user) {
+	private boolean userTenantMatchesSecurityGuard(WebSessionMap session, SessionUser user) {
 		return user.getTenant().equals(session.getSecurityGuard().getTenant());
 	}
 

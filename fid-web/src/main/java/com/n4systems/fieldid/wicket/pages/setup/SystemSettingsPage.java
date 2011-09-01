@@ -26,11 +26,22 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
 import com.n4systems.model.tenant.SystemSettings;
+import com.n4systems.util.ConfigurationProvider;
 
 public class SystemSettingsPage extends FieldIDLoggedInPage {
 
     @SpringBean
     private SystemSettingsService systemSettingsService;
+
+    public SystemSettingsPage() {
+    	this(null);
+    }
+
+    public SystemSettingsPage(ConfigurationProvider configurationProvider) {
+    	super(null, configurationProvider);
+    	SystemSettings systemSettings = systemSettingsService.getSystemSettings();
+    	add(new SystemSettingsForm("systemSettingsForm", systemSettings));
+	}
 
     @Override
     protected void addNavBar(String navBarId) {
@@ -50,12 +61,7 @@ public class SystemSettingsPage extends FieldIDLoggedInPage {
         return new FlatLabel(labelId, new FIDLabelModel("label.system_settings"));
     }
 
-    public SystemSettingsPage() {
-        SystemSettings systemSettings = systemSettingsService.getSystemSettings();
-        add(new SystemSettingsForm("systemSettingsForm", systemSettings));
-    }
-
-    class SystemSettingsForm extends Form<SystemSettings> {
+	class SystemSettingsForm extends Form<SystemSettings> {
 
         public SystemSettingsForm(String id, SystemSettings data) {
             super(id, new CompoundPropertyModel<SystemSettings>(data));

@@ -10,7 +10,7 @@ import org.apache.struts2.StrutsStatics;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.fieldid.actions.api.AbstractAction;
-import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
@@ -47,8 +47,8 @@ public class ActionInvocationWrapper implements StrutsStatics {
 		return action.getProxy();
 	}
 	
-	public WebSession getSession() {
-		return new WebSession(getRequest().getSession(true));
+	public WebSessionMap getSession() {
+		return new WebSessionMap(getRequest().getSession(true));
 	}
 	
 	public SessionUser getSessionUser() {

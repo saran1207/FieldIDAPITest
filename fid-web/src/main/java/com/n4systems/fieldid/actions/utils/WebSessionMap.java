@@ -29,9 +29,10 @@ import com.n4systems.handlers.creator.signup.model.SignUpRequest;
 import com.n4systems.util.HashCode;
 import com.n4systems.util.selection.MultiIdSelection;
 
-@SuppressWarnings("unchecked")
-public class WebSession extends AbstractMap<String, Object> implements Serializable {
-	private static final long serialVersionUID = 1L;
+@SuppressWarnings({ "unchecked", "serial" })
+public class WebSessionMap extends AbstractMap<String, Object> implements Serializable {
+	private final HttpSession session;
+	
 	public static final String KEY_SESSION_USER = "sessionUser";
 	public static final String KEY_SECURITY_GUARD = "securityGaurd";
 	public static final String KEY_USER_SECURITY_GUARD = "userSecurityGuard";
@@ -44,17 +45,16 @@ public class WebSession extends AbstractMap<String, Object> implements Serializa
 	public static final String KEY_QUICK_SETUP_WIZARD_IMPORTS = "qsw_import";
 	public static final String IMPORT_TASK_ID = "import_task_id";
 	
-	private final HttpSession session;
 	public static final String REPORT_CRITERIA = "reportCriteria";
     public static final String NEW_REPORT_CRITERIA = "newReportCriteria";
 	public static final String SCHEDULE_CRITERIA = "scheduleCriteria";
 	
 	
-	public WebSession() {
+	public WebSessionMap() {
 		this(ServletActionContext.getRequest().getSession(false));
 	}
 	
-	public WebSession(HttpSession session) {
+	public WebSessionMap(HttpSession session) {
 		this.session = session;
 	}
 	

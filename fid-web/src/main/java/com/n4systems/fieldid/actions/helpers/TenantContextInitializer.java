@@ -5,7 +5,7 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.lang.TenantLanguageSessionHelper;
 import com.n4systems.fieldid.permissions.NoValidTenantSelectedException;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
@@ -135,7 +135,7 @@ public abstract class TenantContextInitializer {
 		getSession().clearTenantLanguageOverrides();
 	}
 
-	protected abstract WebSession getSession();
+	protected abstract WebSessionMap getSession();
 
 	protected abstract HttpServletRequest getRequest();
 

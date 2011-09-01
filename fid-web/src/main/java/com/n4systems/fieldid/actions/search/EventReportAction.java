@@ -25,7 +25,7 @@ import com.n4systems.fieldid.service.search.columns.dynamic.AssetManagerBackedCo
 import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.utils.DummyOwnerHolder;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
-import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
 import com.n4systems.fieldid.viewhelpers.SavedReportHelper;
 import com.n4systems.fieldid.viewhelpers.SearchHelper;
@@ -76,7 +76,7 @@ public class EventReportAction extends CustomizableSearchAction<EventSearchConta
 			final UserManager userManager, 
 			final AssetManager assetManager) {
 		//TODO refactor search action so that we don't have to pass in the session key but a way of getting the current criteria.
-		super(EventReportAction.class, WebSession.REPORT_CRITERIA, "Event Report", persistenceManager,
+		super(EventReportAction.class, WebSessionMap.REPORT_CRITERIA, "Event Report", persistenceManager,
 				new InfoFieldDynamicGroupGenerator(new AssetManagerBackedCommonAssetAttributeFinder(assetManager), "event_search", "asset"));
 
 		this.userManager = userManager;

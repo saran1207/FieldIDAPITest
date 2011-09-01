@@ -12,7 +12,7 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -31,7 +31,7 @@ public class TenantLanguageSessionHelper {
 		this.tenant = tenant;
 	}
 	
-	public void populateSession(WebSession session) {
+	public void populateSession(WebSessionMap session) {
 		PrimaryOrg primary = TenantFinder.getInstance().findPrimaryOrg(tenant.getId());
 		
 		Map<String, String> language = new HashMap<String, String>();

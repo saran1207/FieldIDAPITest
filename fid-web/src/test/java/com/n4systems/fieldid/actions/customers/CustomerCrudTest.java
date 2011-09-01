@@ -17,7 +17,7 @@ import org.springframework.mock.web.MockHttpSession;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.actions.utils.WebSession;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -32,14 +32,14 @@ public class CustomerCrudTest {
 	private LoaderFactory loaderFactory;
 	private CustomerOrgPaginatedLoader loader;
 	private CustomerCrud crud;
-	private WebSession session;
+	private WebSessionMap session;
 
 	@Before
 	public void setUp() {
 
 		persistenceManager = createMock(PersistenceManager.class);
 
-		session = new WebSession(new MockHttpSession());
+		session = new WebSessionMap(new MockHttpSession());
 		
 		SessionUser sessionUser = new SessionUser(UserBuilder.aUser().build());
 		session.setSessionUser(sessionUser);
@@ -51,7 +51,7 @@ public class CustomerCrudTest {
 		crud = new CustomerCrud(persistenceManager) {
 
 			@Override
-			public WebSession getSession() {
+			public WebSessionMap getSession() {
 				return session;
 			}
 

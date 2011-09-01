@@ -26,7 +26,7 @@ public class WidgetsPage extends SetupPage {
 	}
 
     protected ActionURLBuilder createActionUrlBuilder() {
-        return new ActionURLBuilder(getBaseURI(), getConfigContext());
+        return new ActionURLBuilder(getBaseURI(), getConfigurationProvider());
     }
 
 	public URI getBaseURI() {

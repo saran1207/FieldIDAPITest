@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.RedirectToUrlException;
@@ -16,7 +17,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -37,10 +37,26 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
 
     private static String versionString;
     private Label titleLabel;
-    private Label topTitleLabel;
+	private Label topTitleLabel;
+    private ConfigurationProvider configurationProvider;
+
+    public FieldIDLoggedInPage() {
+        this(null, null);
+    }
+
+    public FieldIDLoggedInPage(ConfigurationProvider configurationProvider) {
+        this(null, configurationProvider);
+    }
 
     public FieldIDLoggedInPage(PageParameters params) {
+    	this(params,null);
+    }
+    
+    // UGH DD: this passing of configurationProvider is dog's breakfast.  next phase need to refactor this out into spring bean or some 
+    //   non-static reference to ConfigContext that is currently throughout pages. 
+    public FieldIDLoggedInPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
+        setConfigurationProvider(configurationProvider);
 
         SessionUser sessionUser = getSessionUser();
 
@@ -125,10 +141,6 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         add(new NavigationBar(navBarId));
     }
 
-    public FieldIDLoggedInPage() {
-        this(null);
-    }
-
     private String loadVersionNumber(boolean devMode) {
         try {
             InputStream propsStream = FieldIDLoggedInPage.class.getResourceAsStream("/com/package.properties");
@@ -148,15 +160,25 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     private String getVersionString(HttpServletRequest servletRequest) {
         if (versionString == null) {
             String serverName = getServletRequest().getServerName();
-            String systemDomain = getConfigContext().getString(ConfigEntry.SYSTEM_DOMAIN);
-            boolean devMode = !(serverName.toLowerCase().endsWith(systemDomain));
+            String systemDomain = getConfigurationProvider().getString(ConfigEntry.SYSTEM_DOMAIN);
+            boolean devMode =  StringUtils.isNotBlank(systemDomain) && !(serverName.toLowerCase().endsWith(systemDomain));
             versionString = loadVersionNumber(devMode);
         }
         return versionString;
     }
 
-	protected ConfigurationProvider getConfigContext() {
-		return ConfigContext.getCurrentContext();
+    
+    // TODO DD : can we use a springleton to solve this? would make it much more testable an
+	protected ConfigurationProvider getConfigurationProvider() {
+		if (configurationProvider==null) { 
+			configurationProvider = ConfigContext.getCurrentContext(); 
+		}		
+		return configurationProvider; 
+	}
+	
+	@Deprecated // for testing only to get around static implementation of configContext.
+    public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
+		this.configurationProvider = configurationProvider;
 	}
 
     @Override
@@ -164,7 +186,7 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
         super.renderHead(container);
 
         StringBuffer javascriptBuffer = new StringBuffer();
-        Integer timeoutTime = ConfigContext.getCurrentContext().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
+        Integer timeoutTime = getConfigurationProvider().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
         String loginLightboxTitle = getApplication().getResourceSettings().getLocalizer().getString("title.sessionexpired", null);
         javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
         javascriptBuffer.append("tenantName = '").append(getSessionUser().getTenant().getName()).append("';\n");
@@ -183,8 +205,8 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
     }
 
     private void addClickTaleScripts() {
-        add(new Label("clickTaleStart", ConfigContext.getCurrentContext().getString(ConfigEntry.CLICKTALE_START)).setEscapeModelStrings(false));
-        add(new Label("clickTaleEnd", ConfigContext.getCurrentContext().getString(ConfigEntry.CLICKTALE_END)).setEscapeModelStrings(false));
+        add(new Label("clickTaleStart", getConfigurationProvider().getString(ConfigEntry.CLICKTALE_START)).setEscapeModelStrings(false));
+        add(new Label("clickTaleEnd", getConfigurationProvider().getString(ConfigEntry.CLICKTALE_END)).setEscapeModelStrings(false));
     }
 
     static class StaticImage extends WebComponent {
@@ -192,7 +214,8 @@ public class FieldIDLoggedInPage extends FieldIDWicketPage {
             super( id, urlModel );
         }
 
-        protected void onComponentTag(ComponentTag tag) {
+        @Override
+		protected void onComponentTag(ComponentTag tag) {
             super.onComponentTag( tag );
             checkComponentTag( tag, "img" );
             tag.put( "src", getDefaultModelObjectAsString() );

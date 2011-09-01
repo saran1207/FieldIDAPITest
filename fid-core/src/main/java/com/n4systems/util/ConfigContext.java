@@ -94,7 +94,7 @@ public class ConfigContext implements ConfigurationProvider {
 	 * @see #reloadConfigurations()
 	 * @return The master list of configurations
 	 */
-	private CopyOnWriteArrayList<Configuration> getConfigruations() {
+	private CopyOnWriteArrayList<Configuration> getConfigurations() {
 		if(isDirty()) {
 			// if the list is dirty, reload the configs
 			reloadConfigurations();
@@ -110,7 +110,7 @@ public class ConfigContext implements ConfigurationProvider {
 	 * @return		A copy of the contexts master configuration list
 	 */
 	public List<Configuration> getAllConfigs() {
-		return new ArrayList<Configuration>(getConfigruations());
+		return new ArrayList<Configuration>(getConfigurations());
 	}
 	
 	/**
@@ -135,7 +135,7 @@ public class ConfigContext implements ConfigurationProvider {
 		Configuration tenantConfig = null;
 		Configuration globalConfig = null;
 		
-		for(Configuration config: getConfigruations()) {
+		for(Configuration config: getConfigurations()) {
 			if(config.getIdentifier().equals(entry)) {
 				// global configs have a null tenant
 				if(config.getTenantId() == null) {
