@@ -51,8 +51,6 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		add(ReportField.ASSIGNED_USER.getParamKey(), assignedUserName());
 	}
 
-
-
 	private String getOrderNumber() {
 		if(asset.getShopOrder() != null) {
 			return  asset.getShopOrder().getOrder().getOrderNumber();
