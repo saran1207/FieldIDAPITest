@@ -178,7 +178,7 @@ public class EventSummaryGenerator {
 		} else if(event.getAsset().getNonIntergrationOrderNumber() != null) {
 			return event.getAsset().getNonIntergrationOrderNumber();
 		} else {
-			return"";
+			return "";
 		}
 	}
 
