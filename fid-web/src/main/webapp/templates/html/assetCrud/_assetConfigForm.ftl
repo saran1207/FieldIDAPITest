@@ -67,19 +67,6 @@
 </#if>
 
 <div class="assetFormGroup">
-	<h2><@s.text name="label.identifieddate"/></h2>
-	<div class="infoSet increasedWidthFieldHolder">
-		<label for="" class="label"><#include "../common/_requiredMarker.ftl"/><@s.text name="label.identified"/></label>
-        <#if bulkRegister?exists>
-            <div style="display:block;">
-                <input type="checkbox" name="useDatesFromAssets" onchange="$('identified').disabled = this.checked;"/> <@s.text name="label.use_dates_from_assets"/>
-            </div>
-        </#if>
-		<@s.textfield id="identified" name="identified" cssClass="datepicker" onchange="updateIdentified();"/>
-	</div>
-</div>
-
-<div class="assetFormGroup">
 	<h2><@s.text name="label.asset_details"/></h2>
 	<div class="infoSet reducedPaddingInfoSet">
 		<label for="assetStatus" class="label"><@s.text name="label.assetstatus"/></label>
