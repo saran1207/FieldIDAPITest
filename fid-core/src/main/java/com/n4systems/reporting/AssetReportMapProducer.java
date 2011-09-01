@@ -59,7 +59,6 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		}else
 			return "";		
 	}
-
 	
 	private String assignedUserName() {
 		return asset.isAssigned() ? asset.getAssignedUser().getUserLabel() : UNASSIGNED_USER_NAME;
