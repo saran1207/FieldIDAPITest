@@ -1,6 +1,17 @@
 
 <div class="assetFormGroup">
 	<h2><@s.text name="label.identifiers"/></h2>
+
+	<div class="infoSet increasedWidthFieldHolder">
+		<label for="" class="label"><#include "../common/_requiredMarker.ftl"/><@s.text name="label.identified"/></label>
+        <#if bulkRegister?exists>
+            <div style="display:block;">
+                <input type="checkbox" name="useDatesFromAssets" onchange="$('identified').disabled = this.checked;"/> <@s.text name="label.use_dates_from_assets"/>
+            </div>
+        </#if>
+		<@s.textfield id="identified" name="identified" cssClass="datepicker" onchange="updateIdentified();"/>
+	</div>
+	
 	<div id="identifierRow_${uniqueID!}" class="assetFormGroup">
 		<div class="infoSet">
 			<label for="identifier" class="label"> <#include "../common/_requiredMarker.ftl"/><span class="identifierLabel">${identifierLabel}</span></label>
@@ -23,4 +34,10 @@
 		<@s.textfield id="customerRefNumber"name="customerRefNumber" />		
 	</div>
 </div>
+
+
+	
+
+
+
 
