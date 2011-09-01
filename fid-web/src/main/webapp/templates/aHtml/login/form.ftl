@@ -20,7 +20,7 @@
 	
 	<label class='label'><@s.text name="label.password"/></label>
 	<@s.password name="signIn.password" id="password"/>
-	<div class="formAction">
+	<div class="actions">
 		<@s.submit name="hbutton.login" id="loginButton"/>
 		<@s.url action="login" namespace="/" id="cancelUrl"/>
 		<@s.submit key="hbutton.back_to_login" onclick="redirect('${cancelUrl}');"/>

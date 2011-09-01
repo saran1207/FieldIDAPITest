@@ -363,7 +363,7 @@ form.quickLoginForm {
 	font-size: 1.5em;
 }
 
-.quickLoginForm .formAction {
+.quickLoginForm .actions {
     padding: 5px 0 0 0;
     overflow:hidden;
     clear:both;

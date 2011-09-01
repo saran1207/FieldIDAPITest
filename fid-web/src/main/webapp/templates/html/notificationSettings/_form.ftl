@@ -131,7 +131,7 @@ ${action.setPageType('my_account', 'notification_settings')!}
 			</div>
 		</div>
 	</div>
-	<div class="formAction borderLessFormAction" >
+	<div class="formAction" >
 	<@s.submit key="label.save"/>
 		<@s.url id="cancelUrl" action="notificationSettings"/>
 		<@s.text name="label.or"/>

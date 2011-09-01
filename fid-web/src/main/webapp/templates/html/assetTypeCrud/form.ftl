@@ -7,21 +7,9 @@
 </title>
 
 <head>
-	<style>
-		.crudForm p label {
-			width:200px;
-		}
-		
-		.crudForm p input[type="text"] {
-			width:380px;
-		}
-		.crudForm p span {
-			width:auto;
-		}
-		
-		.crudForm p.borderLess{
-			border-bottom: none;
-			padding-bottom: 0;
+	<style>	
+		.crudForm .infoSet textarea, .crudForm .infoSet input[type="text"] {
+    		width: 380px;
 		}
 		
 		#imageUploaded {
@@ -32,8 +20,13 @@
 		}
 		
 		#bestImage{
-			padding: 5px 5px 5px 245px;
+			padding: 5px 5px 5px 185px;
 		}
+		
+		.crudForm .label {
+ 		   font-weight: normal;
+		}
+		
 	</style>
 	
 	<script type="text/javascript">
@@ -63,60 +56,60 @@
 	<@s.hidden name="uniqueID" />
 	<#include "/templates/html/common/_formErrors.ftl" />
 	<h2><@s.text name="label.assetinformation"/></h2>
-	<p>
-		<label><@s.text name="label.group"/></label>
-		<span>
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.group"/></label>
+		<span class="fieldHolder">
 			<@s.select name="group" list="assetTypeGroups" listKey="id" listValue="name" emptyOption="true"/>
 		</span>
-	</p>
-	<p>
-		<label><@s.text name="label.name"/></label>
-		<span>
+	</div>
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.name"/></label>
+		<span class="fieldHolder">
 			<@s.textfield name="name"/>
 				
 		</span>
-	</p>
-	<p>
-		<label><@s.text name="label.warnings"/></label>
-		<span>
+	</div>
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.warnings"/></label>
+		<span class="fieldHolder">
 			<@s.textarea name="warnings"  rows="3" cols="50"/>
 		</span>
-	</p>
-	<p>
-		<label><@s.text name="label.more_information" /></label>
-		<span>	
+	</div>
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.more_information" /></label>
+		<span class="fieldHolder">	
 			<@s.textarea name="instructions"  rows="3" cols="50" />
 		</span>
-	</p>
-	<p>
-		<label><@s.text name="label.cautionsurl" /></label>
-		<span>
+	</div>
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.cautionsurl" /></label>
+		<span class="fieldHolder">
 			<@s.textfield name="cautionsUrl" />
 		</span>
-	</p>
+	</div>
 	<#if securityGuard.manufacturerCertificateEnabled>
-		<p>
-			<label><@s.text name="label.hasmanufacturercertificate" /></label>
-			<span>
+		<div class="infoSet">
+			<label class="label"><@s.text name="label.hasmanufacturercertificate" /></label>
+			<span class="fieldHolder">
 				<@s.checkbox name="hasManufacturerCertificate" />
 			</span>
-		</p>
-		<p>
-			<label><@s.text name="label.manufacturercertificatetext" /></label>
-			<span>
+		</div>
+		<div class="infoSet">
+			<label class="label"><@s.text name="label.manufacturercertificatetext" /></label>
+			<span class="fieldHolder">
 				<@s.textarea  name="manufacturerCertificateText" rows="5" cols="50" />
 			</span>
-		</p>
+		</div>
 	</#if>
-	<p>
-		<label><@s.text name="label.assetdescription" /></label>
-		<span>
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.assetdescription" /></label>
+		<span class="fieldHolder">
 			<@s.textfield name="descriptionTemplate" />
 		</span>
-	</p>
+	</div>
 	
-	<p class="borderLess">
-		<label><@s.text name="label.uploadimage"/></label> 
+	<div class="infoSet">
+		<label class="label"><@s.text name="label.uploadimage"/></label> 
 		<span id="imageUploadField"  >
 			<#if !assetImageDirectory?exists || assetImageDirectory.length() == 0  || removeImage >
 				<iframe id="imageUpload" src="<@s.url action="uploadImageForm" namespace="/aHtml/fileUploads" typeOfUpload="assetTypeImage"/>" scrolling="no" scrollbar="no" scrolling="no" style="overflow:hidden;" frameborder="0" width="500" height="35" ></iframe>
@@ -132,12 +125,12 @@
 		<div id="bestImage">
 			<@s.text name="label.assetimageslookbest"/>
 		</div>
-	</p>
+	</div>
 	
 	<h2><@s.text name="label.attributes"/></h2>
-	<p>
+	<div class="infoSet">
 		<#include "_infoFields.ftl"/>
-	</p>
+	</div>
 	
 	<#include "../common/_attachedFilesForm.ftl"/>
 	<div class="formAction">

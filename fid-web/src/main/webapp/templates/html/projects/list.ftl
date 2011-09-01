@@ -35,6 +35,10 @@
 			background-color: #eeeeee;
 			padding: 10px;
 		}
+		
+		.list th,.list td {
+			min-width: 60px;
+		}
 	</style>
 </head>
 ${action.setPageType('job', 'list')!}

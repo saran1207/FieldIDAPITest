@@ -658,16 +658,6 @@ div.formAction {
 	clear: none;
 }
 
-.formAction a {
-	font-size: 1.2em;
-}
-
-.formAction button,.formAction input {
-	margin-left: 10px;
-	margin-right: 2.5px;
-	padding: 2px 5px;
-}
-
 .formRowHolder {
 	overflow: hidden;
 	width: 100%;
@@ -1222,14 +1212,6 @@ li.buttonGroupLabels {
 .crudForm .actions {
 	clear: both;
 	background-color: #EEE;
-}
-
-.crudForm .formAction {
-	margin: 0px;
-	padding-right: 5px;
-	font-size: 1.1em;	
-	border-top: 1px solid #E2E2E2;
-	text-align: left;
 }
 
 .formAction a, .formAction div{
@@ -1847,10 +1829,6 @@ input.description {
 
 #updatePassword, #updateSecurityCard{
 	padding-top: 10px;
-}
-
-#organizationUpdate .sectionContent, #organizationUpdate .formAction{
-	border-top: none;
 }
 
 .pageInstructions{
@@ -2562,4 +2540,23 @@ inputsWithLegend .legend span {
 	display: inline !important;
 }
 
+.formAction {
+	clear: both;
+	border-top: 1px solid #E2E2E2;
+	margin-top: 5px;
+	background-color: #F8F8F8;
+	padding: 15px 10px;
+	border-bottom: 1px solid #E2E2E2;
+}
+
+.formAction button,.formAction input[type="submit"] {
+	margin-left: 10px;
+	margin-right: 2.5px;
+	padding: 0 2px;
+	font-size: 1.2em;
+}
+
+.formAction a {
+	font-size: 12px;
+}
 

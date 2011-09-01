@@ -2,20 +2,20 @@ ${action.setPageType('my_account', 'change_password')!}
 <@s.form action="updatePassword" theme="fieldid" cssClass="crudForm">
 	
 	<#include "/templates/html/common/_formErrors.ftl"/>
-    <p>
+    <div class="infoSet">
         <label><@s.text name="label.currentpassword"/></label>
         <@s.password name="originalPassword"/>
-    </p>
-	<p>
+    </div>
+	<div class="infoSet">
 		<label><@s.text name="label.newpassword"/></label>
 		<@s.password name="newPassword" />
-	</p>
-	<p>
+	</div>
+	<div class="infoSet">
 		<label><@s.text name="label.confirmpassword"/></label>
 		<@s.password name="confirmPassword" />
-	</p>
+	</div>
 	
-	<div class="formAction borderLessFormAction">
+	<div class="formAction">
 		<@s.submit key="hbutton.save"/>
 		<@s.text name="label.or"/>
 		<@s.url id="cancelUrl" action="myAccount"/>

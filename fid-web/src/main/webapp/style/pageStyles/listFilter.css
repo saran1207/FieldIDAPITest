@@ -45,3 +45,9 @@ div.formAction {
 #nameFilter {
 	width: 250px;
 }
+
+.filterAction {
+	border-top: none;
+	background-color: #EEEEEE;
+	border-bottom: none;
+}

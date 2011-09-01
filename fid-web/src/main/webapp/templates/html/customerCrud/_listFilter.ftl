@@ -12,7 +12,7 @@
 		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
 		<@s.textfield key="label.id" name="idFilter" id="idFilter" labelposition="left" />
 		<@s.select key="label.organization" name="orgFilter" id="orgFilter" list="parentOrgs" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
-		<div class="formAction">
+		<div class="formAction filterAction">
 			<@s.submit key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
 			<a href="javascript:void(0);" onClick="$('nameFilter').value = '';$('idFilter').value = '';$('orgFilter').selectedIndex = 0;$('listFilterForm').submit();"> <@s.text name="hbutton.clear"/></a>

@@ -289,13 +289,6 @@
 	width: 320px
 }
 
-#assetCreate .actions, #assetUpdate .actions{
-	clear: both;
-	background-color: #F8F8F8;
-	padding: 15px 10px;
-	border-bottom: 1px solid #E2E2E2;
-}
-
 #attachments h2 {
 	margin-bottom: 0;
 }

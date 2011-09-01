@@ -4,7 +4,7 @@ ${action.setPageType('event', 'edit')!}
 <@s.form action="eventUpdate" theme="simple" onsubmit="return checkForUploads()" >
 	<#include "_form.ftl"/>
 	<@s.url id="deleteUrl" action="eventDelete" uniqueID="${uniqueID}" assetId="${assetId}" />
-	<div class="actions">
+	<div class="formAction">
 		<@s.submit key="hbutton.save" />
 		<@s.text name="label.or"/>
 		<a href="<@s.url action="event" uniqueID="${uniqueID}" assetId="${assetId}" />"><@s.text name="label.cancel"/></a>

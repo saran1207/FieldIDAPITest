@@ -30,7 +30,7 @@
 		
 		<@s.select key="label.organization" name="orgFilter" id="orgFilter" list="parentOrgs" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
 		
-		<div class="formAction">
+		<div class="formAction filterAction">
 			<@s.submit name="search" key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
 			<a href="javascript:void(0);" onClick="clearForm();"> <@s.text name="hbutton.clear"/></a>

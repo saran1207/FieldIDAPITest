@@ -81,7 +81,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="actions" >
+	<div class="formAction" >
 		<@s.submit  key="label.save"/> 
 		
 		<@s.text name="label.or"/>  

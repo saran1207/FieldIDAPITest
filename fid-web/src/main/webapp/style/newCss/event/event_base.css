@@ -403,25 +403,6 @@ div.textCriteriaContainer span.fieldHolder {
     font-weight:normal;
 }
 
-.formAction {
-    padding:10px 5px 10px 0;
-    margin:0;
-    border-top:1px solid #e2e2e2;
-    text-align:left;
-}
-
-.formAction input[type="submit"], .formAction button {
-    margin-left:10px;
-    margin-right:2.5px;
-    padding:2px 5px;
-}
-
-.formAction a {
-    margin-left:2.5px;
-    margin-right:2.5px;
-    font-size:1.2em;
-}
-
 .attachments h2 {
     clear:left;
 }
@@ -486,4 +467,24 @@ h2 span.formTitle {
 
 span.fieldHolder img {
 	vertical-align:text-bottom;
+}
+
+.formAction {
+	clear: both;
+	border-top: 1px solid #E2E2E2;
+	margin-top: 5px;
+	background-color: #F8F8F8;
+	padding: 15px 10px;
+	border-bottom: 1px solid #E2E2E2;
+}
+
+.formAction button,.formAction input[type="submit"] {
+	margin-left: 10px;
+	margin-right: 2.5px;
+	padding: 0 2px;
+	font-size: 1.2em;
+}
+
+.formAction a {
+	font-size: 12px;
 }

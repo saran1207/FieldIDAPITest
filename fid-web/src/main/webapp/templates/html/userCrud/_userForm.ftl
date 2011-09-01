@@ -187,7 +187,7 @@
 		</div>
 	</div>
 	
-	<div class="actions">
+	<div class="formAction">
 		<@s.submit name="save" key="label.save" />
 		<@s.text name="label.or"/>
 		${backToList}

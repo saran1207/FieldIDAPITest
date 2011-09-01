@@ -78,10 +78,6 @@ em {
 	border-color: #999;
 }
 
-
-.actions {
-	margin-top: 5px;
-}
 .minForm input, .minForm button  {
 	font-size: 1.2em;
 	padding:5px 0;
@@ -108,10 +104,6 @@ em {
 
 .minForm .label {
 	font-weight: bold;
-}
-
-.minForm .actions {
-	padding: 10px 0 0 0;
 }
 
 .sectionTitle {
@@ -151,11 +143,6 @@ em {
 	font-weight: bold;
 }
 
-.fullForm .actions {
-	padding: 10px 0 0 0;
-}
-
-
 .actionInstructions {
 	font-size: 1.3em;
 	margin:5px 0;
@@ -177,10 +164,6 @@ em {
 
 .percentBarUsed, .percentBar {
 	height:18px;
-}
-
-.actions {
-	border-top: 1px solid;
 }
 
 .borderedSets .infoSet {

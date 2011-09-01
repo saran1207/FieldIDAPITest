@@ -28,9 +28,6 @@ body {
 	background: url(../../images/barBackground.png) repeat-x;
 }
 
-.actions {
-	border-color: #E2E2E2;
-}
 .limitWarning {
 	background-color: #FFEBEB;
 	color: #FF0000;

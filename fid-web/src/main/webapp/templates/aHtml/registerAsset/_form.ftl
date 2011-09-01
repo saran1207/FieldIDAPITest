@@ -14,7 +14,7 @@
 		
 		<#include '_detailedForm.ftl' />
 				
-		<div id="actions">
+		<div id="formAction">
 			<p>
 				<@s.submit id="saveButton" key="hbutton.registerthisasset" />
 				<@s.text name="label.or"/>

@@ -38,7 +38,7 @@
 			</#if>
 		</div>
 	</div>
-	<div class="actions">
+	<div class="formAction">
 		<@s.submit key="hbutton.save"/>
 		<@s.text name="label.or"/>
 		<a href="<@s.url action="assetCodeMappingList"/>"><@s.text name="label.cancel" /></a>

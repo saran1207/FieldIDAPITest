@@ -251,10 +251,6 @@ div.userLimitWarning{
 	clear: both;    
 }
 
-div.formAction {
-	float: left;
-}
-
 #nameFilter{
 	width: 450px;
 }
@@ -266,4 +262,4 @@ div.formAction {
 pre {
 	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
 	font-size: 11px;
-}
+}	

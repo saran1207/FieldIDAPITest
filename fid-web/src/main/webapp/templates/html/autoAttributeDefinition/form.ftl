@@ -36,7 +36,7 @@ ${action.setPageType('auto_attribute', 'definitions')!}
 		<#include "/templates/html/assetCrud/_attributes.ftl" />
 	</div>
 	
-	<div class="actions">
+	<div class="formAction">
 		
 		<@s.submit name="save" key="hbutton.save"/>
 		<#if !autoAttributeDefinition.id?exists  >

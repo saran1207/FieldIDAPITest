@@ -6,7 +6,7 @@ ${action.setPageType('asset', 'edit')!}
 	<@s.hidden name="customerOrderId" />
 	<@s.hidden name="tagOptionId" />
 	
-	<div class="actions">
+	<div class="formAction">
 		<@s.submit id="saveButton" key="hbutton.save" onclick=" return false;" cssClass="saveButton save"/>
 		
 		<@s.submit id="saveAndStartEventButton" name="saveAndStartEvent" key="hbutton.saveandstartevent"  cssClass="saveButton save"/>

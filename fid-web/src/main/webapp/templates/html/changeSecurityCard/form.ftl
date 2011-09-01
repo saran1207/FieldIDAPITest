@@ -2,10 +2,10 @@ ${action.setPageType('my_account', 'security_card')!}
 <@s.form action="updateSecurityCard" theme="fieldid" cssClass="crudForm">
 	
 	<#include "/templates/html/common/_formErrors.ftl"/>
-	<p>
+	<div class="infoSet">
 		<label><@s.text name="label.securityrfidnumber"/></label>
 		<@s.textfield name="securityCardNumber" />
-	</p>
+	</div>
 	
 	<div class="formAction borderLessFormAction">
 		<@s.url id="cancelUrl" action="myAccount"/>

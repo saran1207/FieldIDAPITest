@@ -4,7 +4,7 @@ ${action.setPageType('user_registration', 'show')!}
 <div id="request" class="fullForm">
 	<#include "_userRequest.ftl" />
 	
-	<div class="actions">
+	<div class="formAction">
 		<@s.submit theme="fieldid" id="acceptRequest" key="label.accept"/>
 		<@s.text name="label.or"/>
 		<a href="<@s.url action="userRequestDeny" uniqueID="${uniqueID}"/>" ><@s.text name="label.deny"/></a>

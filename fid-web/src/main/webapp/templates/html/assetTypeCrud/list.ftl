@@ -13,7 +13,7 @@ ${action.setPageType('asset_type', 'list')!}
 	<@s.form id="listFilterForm" method="get">
 		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
 		<@s.select key="label.asset_type_group" name="groupFilter" id="groupFilter" list="filteringAssetTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
-		<div class="formAction">
+		<div class="formAction filterAction">
 			<@s.submit key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
 			<a href="javascript:void(0);" onClick="$('nameFilter').value = '';$('groupFilter').selectedIndex = 0;$('listFilterForm').submit();"> <@s.text name="hbutton.clear"/></a>

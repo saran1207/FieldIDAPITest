@@ -39,7 +39,7 @@ ${action.setPageType('event_type', 'button_groups')!}
 <div class="addNewGroup">
 	<button id="addGroup" class="submitButton" onclick="addButtonGroup()" ><@s.text name="label.addbuttongroup"/></button>
 </div>
-<div class="buttonActions">
+<div class="formAction">
 	<button id="save" class="submitButton" onclick="confirmNoChanges();" ><@s.text name="label.save"/></button>
 	<@s.text name="label.or"/>
 	<@s.url id="cancelUrl" action="eventTypes"/>

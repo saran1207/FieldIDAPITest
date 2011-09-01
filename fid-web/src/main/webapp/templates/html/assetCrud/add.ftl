@@ -20,7 +20,7 @@
 	<#assign isAddForm=true>
 	<#include "_assetForm.ftl" />
 	
-	<div class="actions">
+	<div class="formAction">
 		<@s.submit id="saveButton" name="save" cssClass="save" key="hbutton.save" />
 		<#if Session.sessionUser.hasAccess("createevent") >
 			<@s.submit id="saveAndStartEventButton" cssClass="save"  name="saveAndStartEvent" key="hbutton.saveandstartevent" />

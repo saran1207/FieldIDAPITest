@@ -5,14 +5,24 @@
 		addEventAttributeUrl = '<@s.url action="eventAttributeAdd" namespace="/ajax"/>';
 	</script>
 	
+	<style>
+		.crudForm .label {
+ 		   font-weight: normal;
+		}
+		
+		.eventAttribute {
+			padding: 5px 0;
+		}
+	</style>
+	
 </head>
 
 <#include "/templates/html/common/_formErrors.ftl" />
 <@s.hidden name="uniqueID" />
 <h2><@s.text name="label.details"/></h2>
-<p>
-	<@s.label value="${ action.getText( 'label.name' ) }:" />
-	<span>   
+<div class="infoSet">
+	<@s.label cssClass="label" cssClass="label" value="${ action.getText( 'label.name' ) }:" />
+	<span class="fieldHolder">   
 		<@s.textfield name="name" >
 			<#if (action.fieldErrors['name'])?exists> 
 				<@s.param name="cssClass">inputError</@s.param>
@@ -22,34 +32,34 @@
 			</#if>  
 		</@s.textfield>
 	</span>
-</p>
+</div>
 
-<p>
-	<@s.label value="${action.getText('label.group')}:" />
-	<span>
+<div class="infoSet">
+	<@s.label cssClass="label" value="${action.getText('label.group')}:" />
+	<span class="fieldHolder">
 		<@s.select name="group" list="eventTypeGroups" listKey="id" listValue="name" />
 	</span>
-</p>
-<p>
-	<@s.label value="${action.getText('label.printable')}:" />
-	<span>
+</div>
+<div class="infoSet">
+	<@s.label cssClass="label" value="${action.getText('label.printable')}:" />
+	<span class="fieldHolder">
 		<@s.checkbox name="printable"/>
 	</span>
-</p>
-<p>
-	<@s.label value="${action.getText('label.masterevent')}:" />
-	<span>
+</div>
+<div class="infoSet">
+	<@s.label cssClass="label" value="${action.getText('label.masterevent')}:" />
+	<span class="fieldHolder">
 		<@s.checkbox name="master"/>
 	</span>
-</p>
+</div>
 
 <#if securityGuard.assignedToEnabled>
-	<p>
-		<label><@s.text name="label.assigned_to_can_be_updated"/></label>
-		<span>
+	<div class="infoSet">
+		<@s.label cssClass="label" value="${action.getText('label.assigned_to_can_be_updated')}:" />
+		<span class="fieldHolder">
 			<@s.checkbox name="assignedToAvailable"/>
 		</span>
-	</p>
+	</div>
 </#if>
 <#if securityGuard.proofTestIntegrationEnabled>
 	<table class="list">
@@ -76,13 +86,13 @@
 			</#if>
 		</#list>
 	</div>
-	<div class="formAction">
+	<div class="infoSet">
 		<button onclick="addEventAttribute(); return false;" ><@s.text name="label.addattribute"/></button>
 	</div>
 </div>
 
 
-<div class="formAction actions">
+<div class="formAction">
 	<@s.submit key="hbutton.save" name="save"/> 
 
 	<#if !uniqueID?exists >
