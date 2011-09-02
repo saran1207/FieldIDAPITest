@@ -1,6 +1,8 @@
 package com.n4systems.util;
 
-public interface ConfigurationProvider {
+import java.io.Serializable;
+
+public interface ConfigurationProvider extends Serializable {
 
 	/**
 	 * Returns the value of a configuration as a String.  Looks first for a tenant specific entry, then uses the global

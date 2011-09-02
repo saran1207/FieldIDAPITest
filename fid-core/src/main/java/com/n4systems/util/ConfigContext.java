@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.log4j.Logger;
-
 import com.n4systems.model.Configuration;
 
 /**
@@ -18,8 +16,7 @@ import com.n4systems.model.Configuration;
  * @see ConfigContext#getCurrentContext()
  */
 public class ConfigContext implements ConfigurationProvider {
-	private Logger logger = Logger.getLogger(ConfigContext.class);
-	
+
 	private static ConfigContext currentContext;
 	
 	protected final CopyOnWriteArrayList<Configuration> configruations = new CopyOnWriteArrayList<Configuration>();
@@ -67,8 +64,7 @@ public class ConfigContext implements ConfigurationProvider {
 	 * Reloads the master configuration list.
 	 */
 	protected void reloadConfigurations() {
-		logger.debug("Reloading configruations");
-		
+	
 		/*
 		 * Since we're using a CopyOnWriteArrayList, the following operation is thread-safe without a synchronized block.
 		 * Changes to the list (clear, addAll) will be made in a copy of the array and then moved into place.  Thus
@@ -83,7 +79,7 @@ public class ConfigContext implements ConfigurationProvider {
 			configruations.addAll(ServiceLocator.getPersistenceManager().findAll(Configuration.class));
 			markClean();
 		} catch(Exception e) {
-			logger.error("Failed loading configurations", e);
+			e.printStackTrace();
 		}
 	}
 	
