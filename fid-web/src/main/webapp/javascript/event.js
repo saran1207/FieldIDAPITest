@@ -233,7 +233,7 @@ function repositionCertLinks(list, link) {
 
 function positionDropdown( a ) {
 	var list = $(a.id + "_list");
-	translate(list, a, 14, -30);
+	translate(list, a, -240, -410);
 }
 	
 function jumpSelectToSection( event ) {
