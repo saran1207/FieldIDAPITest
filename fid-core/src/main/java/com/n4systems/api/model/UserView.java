@@ -1,13 +1,6 @@
 package com.n4systems.api.model;
 
-import com.n4systems.api.validation.validators.AccountTypeValidator;
-import com.n4systems.api.validation.validators.EmailValidator;
-import com.n4systems.api.validation.validators.ExternalUserGlobalIdValidator;
-import com.n4systems.api.validation.validators.NotNullValidator;
-import com.n4systems.api.validation.validators.OwnerExistsValidator;
-import com.n4systems.api.validation.validators.PasswordValidator;
-import com.n4systems.api.validation.validators.PermissionValidator;
-import com.n4systems.api.validation.validators.YNValidator;
+import com.n4systems.api.validation.validators.*;
 import com.n4systems.api.validation.validators.YNValidator.YNField;
 import com.n4systems.exporting.beanutils.MaskedSerializationHandler;
 import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
@@ -84,7 +77,8 @@ public class UserView extends ExternalModelView {
 	private String position;
 
 	// NOTE : this field is also tested in conjunction with GlobalId.  (ie. if globalId=null, userId must not exist in DB and vice versa).
-	@SerializableField(title=USER_NAME_FIELD, order = 425, validators = {NotNullValidator.class})  
+	//   userId is limited (currently to 15) by schema.rb definition.  if schema changes, alter this meta-data.
+	@SerializableField(title=USER_NAME_FIELD, order = 425, maxLength = 15, validators = {NotNullValidator.class,StringLengthValidator.class})	
 	private String userID;
 
 	@SerializableField(title=ACCOUNT_TYPE_FIELD, order = 450, validators = {NotNullValidator.class, AccountTypeValidator.class})
