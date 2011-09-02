@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.permissions;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.io.Serializable;
 
-import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -18,65 +19,75 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 		this(tenant, TenantFinder.getInstance().findPrimaryOrg(tenant.getId()));
 	}
 	
+	@Deprecated // should only be called directly in tests.  
 	public SerializableSecurityGuard(Tenant tenant, PrimaryOrg primaryOrg) {
-		if (tenant == null) {
-			throw new InvalidArgumentException("Tenant cannot be null");
-		}
-		if (primaryOrg == null) {
-			throw new InvalidArgumentException("Could not find PrimaryOrg for Tenant: " + tenant.toString());
-		}
+		checkNotNull(tenant, "Tenant cannot be null");
+		checkNotNull(primaryOrg, "Could not find PrimaryOrg for Tenant: " + tenant.toString());
 		this.tenant = tenant;
 		this.primaryOrg = primaryOrg;
 	}
 	
+	@Override
 	public boolean isExtendedFeatureEnabled(ExtendedFeature feature) {
 		return primaryOrg.hasExtendedFeature(feature);
 	}
 
+	@Override
 	public boolean isBrandingEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Branding);
 	}
 
+	@Override
 	public boolean isIntegrationEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Integration);
 	}
 
+	@Override
 	public boolean isProjectsEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.Projects);
 	}
 	
+	@Override
 	public boolean isEmailAlertsEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.EmailAlerts);
 	}
 
+	@Override
 	public Tenant getTenant() {
 		return tenant;
 	}
 	
+	@Override
 	public Long getTenantId() {
 		return tenant.getId();
 	}
 
+	@Override
 	public String getTenantName() {
 		return tenant.getName();
 	}
 	
+	@Override
 	public PrimaryOrg getPrimaryOrg() {
 		return primaryOrg;
 	}
 
+	@Override
 	public boolean isJobSitesEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites);
 	}
 	
+	@Override
 	public boolean isAssignedToEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.AssignedTo);
 	}
 
+	@Override
 	public boolean isPlansAndPricingAvailable() {
 		return primaryOrg.isPlansAndPricingAvailable();
 	}
 	
+	@Override
 	public boolean isAdvancedLocationEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation);
 	}

@@ -23,46 +23,59 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.resource.loader.IStringResourceLoader;
 import org.apache.wicket.util.tester.TagTester;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 
+import com.google.common.base.Preconditions;
 
-public abstract class WicketTestCase< T extends WicketHarness> implements IWicketTester {
+
+public abstract class WicketTest<T extends WicketHarness,F extends Component> implements IWicketTester, IFixtureFactory<F> {
 	
 	private static final String CLASS = "class";
 	protected static final String PAGE_CONTEXT = "";
 	protected static final String PANEL_CONTEXT = "panel:";
 	protected static final String COMPONENT_CONTEXT = "panel:";
 		
-	private ComponentTestInjector injector;
-	private WicketTester wicketTester;
+	protected WicketTester wicketTester;
 	private T harness;
-	private String pathContext;
+	private String pathContext;	
+	private ComponentTestInjector injector;
 	
+	protected IApplicationFactory DEFAULT_APPLICATION_FACTORY = new IApplicationFactory() {			
+		@Override public WebApplication createTestApplication(ComponentTestInjector injector) {
+			return new WicketTester.DummyWebApplication();
+		}
+	};
+
+
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception { 
 		injector = ComponentTestInjector.make();
-		
-		wicketTester = new WicketTester(getApplicationFactory().createTestApplication(injector));
-		// TODO DD : hmmm...this doesn't smell right.  need to avoid static implementation 
+	}	
+	
+	public void initializeApplication(IApplicationFactory applicationFactory) {		
+		wicketTester = new WicketTester(applicationFactory.createTestApplication(injector));
 		Application.get().getResourceSettings().addStringResourceLoader(new IStringResourceLoader() {
 			@Override public String loadStringResource(Class<?> clazz, String key, Locale locale, String style) {return key; }			
 			@Override public String loadStringResource(Component component, String key) { return key; }
-		});
+		});				
 	}	
-	
-	protected abstract IApplicationFactory getApplicationFactory();
+		
+	protected F createFixture(IFixtureFactory<F> factory) {
+		return factory.createFixture("id");		
+	}
 	
 	protected abstract T createHarness(String pathContext, IWicketTester wicketTester); 
 	
-	public WicketTestCase<T> wire(Object fieldValue, String fieldName) {
+	public WicketTest<T,F> wire(Object fieldValue, String fieldName) {
 		injector.wire(fieldName, fieldValue);
 		return this;
 	}
 
-	public abstract void renderFixture(IFixtureFactory<?> factory);
+	public abstract void renderFixture(IFixtureFactory<F> factory);
 		
 	protected T getHarness() {
 		if (harness==null) { 
@@ -178,11 +191,12 @@ public abstract class WicketTestCase< T extends WicketHarness> implements IWicke
 	
 	@Override
 	public WicketTester getWicketTester() {
+		Preconditions.checkNotNull(wicketTester, "you must call initializeApplication() in setup method (@Before) in order for test to run.");
 		return wicketTester;
 	}
 
-	public <F> F wire(Class<F> typeToMock, String fieldName) {
-		F mock = createMock(typeToMock);
+	public <M> M wire(Class<M> typeToMock, String fieldName) {
+		M mock = createMock(typeToMock);
 		wire(mock,fieldName);
 		return mock;
 	}	

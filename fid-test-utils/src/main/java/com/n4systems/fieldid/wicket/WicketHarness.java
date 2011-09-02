@@ -46,7 +46,12 @@ public class WicketHarness {
 		return getWicketTester().newFormTester(path);
 	}
 	
+	@Deprecated   // use short form "get" instead...
 	protected Component getComponent(String... ids) {
+		return get(ids);
+	}
+		
+	public Component get(String... ids) {
 		return getWicketTester().getComponentFromLastRenderedPage(getPathFor(ids));
 	}
 	

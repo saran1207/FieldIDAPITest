@@ -5,23 +5,24 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.tester.TestPanelSource;
 import org.junit.Before;
 
-public abstract class WicketPanelTestCase<T extends WicketHarness> extends WicketTestCase<T> {
+@SuppressWarnings("deprecation")
+public abstract class WicketPanelTest<T extends WicketHarness, F extends Panel> extends WicketTest<T,F> {
 
 	
 	@Override
 	@Before
-	public void setUp() throws Exception { 
+	public void setUp() throws Exception {
 		super.setUp();
 		setPathContext(PANEL_CONTEXT);
 	}
-	
+
 	@SuppressWarnings({"serial"})
 	@Override
-	public void renderFixture(final IFixtureFactory<?> factory) {
+	public void renderFixture(final IFixtureFactory<F> factory) {
 		getWicketTester().startPanel( new TestPanelSource() {
 			@Override
 			public Panel getTestPanel(String id) {
-				return (Panel) factory.createFixture(id);
+				return factory.createFixture(id);
 			}
 		});
 	}

@@ -9,14 +9,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
-import com.n4systems.fieldid.wicket.FieldIdPageTestCase;
+import com.n4systems.fieldid.wicket.FieldIdPageTest;
 import com.n4systems.fieldid.wicket.IFixtureFactory;
 import com.n4systems.fieldid.wicket.IWicketTester;
 import com.n4systems.fieldid.wicket.WicketHarness;
 import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPageTest.SystemsSettingsPageHarness;
 import com.n4systems.model.tenant.SystemSettings;
 
-public class SystemSettingsPageTest extends FieldIdPageTestCase<SystemsSettingsPageHarness> implements IFixtureFactory<SystemSettingsPage> {	
+public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageHarness, SystemSettingsPage> implements IFixtureFactory<SystemSettingsPage> {	
 	private SystemSettingsService systemSettingsService;
 
 		
@@ -68,28 +68,28 @@ public class SystemSettingsPageTest extends FieldIdPageTestCase<SystemsSettingsP
 		}
 		
 		public CheckBox getAssetAssignmentCheckbox() { 
-			return (CheckBox) getComponent("systemSettingsForm:assignedTo");
+			return (CheckBox) get("systemSettingsForm:assignedTo");
 		}
 		
 		public CheckBox getProofTestIntegrationCheckbox() { 
-			return (CheckBox) getComponent("systemSettingsForm:proofTestIntegration");
+			return (CheckBox) get("systemSettingsForm:proofTestIntegration");
 		}
 		
 		public CheckBox getManufacturerCertificatesCheckbox() { 
-			return (CheckBox) getComponent("systemSettingsForm:manufacturerCertificate");
+			return (CheckBox) get("systemSettingsForm:manufacturerCertificate");
 		}
 		
 		public CheckBox getOrderDetailsCheckbox() { 
-			return (CheckBox) getComponent("systemSettingsForm:orderDetails");
+			return (CheckBox) get("systemSettingsForm:orderDetails");
 		}
 		
 		public CheckBox getGpsCaptureCheckbox() { 
-			return (CheckBox) getComponent("systemSettingsForm:gpsCapture");
+			return (CheckBox) get("systemSettingsForm:gpsCapture");
 		}
 		
 		@SuppressWarnings("unchecked")
 		public DropDownChoice<String> getDateFormat() { 
-			return (DropDownChoice<String>) getComponent("systemSettingsForm:dateFormat");
+			return (DropDownChoice<String>) get("systemSettingsForm:dateFormat");
 		}		
 		
 	}

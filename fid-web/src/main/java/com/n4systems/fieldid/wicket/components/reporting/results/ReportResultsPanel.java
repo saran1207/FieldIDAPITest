@@ -1,20 +1,7 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
-import com.n4systems.model.search.ColumnMappingConverter;
-import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
-import com.n4systems.fieldid.wicket.data.TableViewAdapterDataProvider;
-import com.n4systems.model.search.EventReportCriteriaModel;
-import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
-import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
-import com.n4systems.model.Event;
-import com.n4systems.model.columns.ColumnMapping;
-import com.n4systems.model.columns.loader.ColumnMappingLoader;
-import com.n4systems.util.persistence.search.SortDirection;
-import com.n4systems.util.selection.MultiIdSelection;
-import com.n4systems.util.views.RowView;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,8 +10,24 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.WebRequest;
 
-import java.util.List;
+import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
+import com.n4systems.fieldid.wicket.data.TableViewAdapterDataProvider;
+import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
+import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
+import com.n4systems.model.Event;
+import com.n4systems.model.columns.ColumnMapping;
+import com.n4systems.model.columns.loader.ColumnMappingLoader;
+import com.n4systems.model.search.ColumnMappingConverter;
+import com.n4systems.model.search.ColumnMappingView;
+import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.selection.MultiIdSelection;
+import com.n4systems.util.views.RowView;
 
+@SuppressWarnings("serial")
 public class ReportResultsPanel extends Panel {
 
     SimpleDataTable<RowView> dataTable;
@@ -41,9 +44,9 @@ public class ReportResultsPanel extends Panel {
         selectedRows = criteriaModel.getObject().getSelection();
 
         final EventReportCriteriaModel reportCriteria = criteriaModel.getObject();
-        ReportFormatConverter converter = new ReportFormatConverter();
+        ReportFormatConverter converter = new ReportFormatConverter(getSecurityGuard());
 
-        List<IColumn> convertedColumns = converter.convertColumns(reportCriteria);
+        List<IColumn<RowView>> convertedColumns = converter.convertColumns(reportCriteria);
 
         SelectUnselectRowColumn selectUnselectRowColumn = new SelectUnselectRowColumn(selectedRows, new PropertyModel<Boolean>(this, "currentPageSelected")) {
             @Override
@@ -99,6 +102,12 @@ public class ReportResultsPanel extends Panel {
         totalResultsLabel.setOutputMarkupId(true);
         numSelectedLabel.setOutputMarkupId(true);
     }
+
+    // package protected method is extract/overriden for testing purposes 
+    SerializableSecurityGuard getSecurityGuard() {
+		// why can't we just use FieldIdSession.get().getSecurityGuard()????
+		return new SerializableSecurityGuard(FieldIDSession.get().getTenant());
+	}
 
     protected void updateSelectionStatus(AjaxRequestTarget target) {
         target.addComponent(numSelectedLabel);

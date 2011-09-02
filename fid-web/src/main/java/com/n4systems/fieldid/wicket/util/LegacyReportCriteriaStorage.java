@@ -1,15 +1,17 @@
 package com.n4systems.fieldid.wicket.util;
 
-import com.n4systems.fieldid.actions.utils.WebSessionMap;
-import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.model.search.EventReportCriteriaModel;
-
 import javax.servlet.http.HttpSession;
+
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.model.search.EventReportCriteriaModel;
 
 public class LegacyReportCriteriaStorage {
 
     public EventSearchContainer storeCriteria(EventReportCriteriaModel criteriaModel, HttpSession httpSession) {
-        EventSearchContainer searchContainer = new ReportFormatConverter().convertCriteria(criteriaModel);
+        EventSearchContainer searchContainer = new ReportFormatConverter(new SerializableSecurityGuard(FieldIDSession.get().getTenant())).convertCriteria(criteriaModel);
         httpSession.setAttribute(WebSessionMap.REPORT_CRITERIA, searchContainer);
         httpSession.setAttribute(WebSessionMap.NEW_REPORT_CRITERIA, criteriaModel);
         httpSession.setAttribute(WebSessionMap.KEY_MULTI_SELECTION, criteriaModel.getSelection());

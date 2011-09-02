@@ -1,20 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
-import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.search.EventReportCriteriaModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
-import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
-import com.n4systems.model.savedreports.SavedReport;
-import com.n4systems.model.security.SecurityFilter;
-import com.n4systems.model.user.User;
-import com.n4systems.persistence.loaders.LoaderFactory;
-import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -23,6 +8,23 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
+import com.n4systems.fieldid.utils.SavedReportSearchCriteriaConverter;
+import com.n4systems.fieldid.viewhelpers.EventSearchContainer;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
+import com.n4systems.model.savedreports.SavedReport;
+import com.n4systems.model.search.ColumnMappingView;
+import com.n4systems.model.search.EventReportCriteriaModel;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.user.User;
+import com.n4systems.persistence.loaders.LoaderFactory;
+import com.n4systems.util.persistence.QueryBuilder;
 
 public class SaveReportPage extends FieldIDLoggedInPage {
 
@@ -89,7 +91,7 @@ public class SaveReportPage extends FieldIDLoggedInPage {
             savedReport = new SavedReport();
         }
 
-        ReportFormatConverter reportFormatConverter = new ReportFormatConverter();
+        ReportFormatConverter reportFormatConverter = new ReportFormatConverter(new SerializableSecurityGuard(FieldIDSession.get().getTenant()));
         EventSearchContainer searchContainer = reportFormatConverter.convertCriteria(criteriaModel);
         SecurityFilter securityFilter = getSecurityFilter();
         SavedReportSearchCriteriaConverter savedReportSearchCriteriaConverter = new SavedReportSearchCriteriaConverter(new LoaderFactory(securityFilter), securityFilter, getSecurityGuard());
