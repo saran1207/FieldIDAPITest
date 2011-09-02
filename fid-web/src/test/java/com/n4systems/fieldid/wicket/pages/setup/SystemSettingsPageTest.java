@@ -1,4 +1,4 @@
-package com.n4systems.wicket.pages.setup;
+package com.n4systems.fieldid.wicket.pages.setup;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -13,9 +13,8 @@ import com.n4systems.fieldid.wicket.FieldIdPageTestCase;
 import com.n4systems.fieldid.wicket.IFixtureFactory;
 import com.n4systems.fieldid.wicket.IWicketTester;
 import com.n4systems.fieldid.wicket.WicketHarness;
-import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPage;
+import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPageTest.SystemsSettingsPageHarness;
 import com.n4systems.model.tenant.SystemSettings;
-import com.n4systems.wicket.pages.setup.SystemSettingsPageTest.SystemsSettingsPageHarness;
 
 public class SystemSettingsPageTest extends FieldIdPageTestCase<SystemsSettingsPageHarness> implements IFixtureFactory<SystemSettingsPage> {	
 	private SystemSettingsService systemSettingsService;
