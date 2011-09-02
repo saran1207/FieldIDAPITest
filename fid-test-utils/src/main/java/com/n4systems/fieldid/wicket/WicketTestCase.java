@@ -12,7 +12,6 @@ import java.util.Locale;
 
 import junit.framework.Assert;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Component.IVisitor;
@@ -31,7 +30,6 @@ import org.junit.Before;
 
 
 public abstract class WicketTestCase< T extends WicketHarness> implements IWicketTester {
-	private static final Logger LOGGER = Logger.getLogger(WicketTestCase.class);
 	
 	private static final String CLASS = "class";
 	protected static final String PAGE_CONTEXT = "";
