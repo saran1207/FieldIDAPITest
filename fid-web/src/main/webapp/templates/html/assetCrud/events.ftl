@@ -204,10 +204,12 @@
 						</div>	
 						
 					</td>
-					<td>
+					<td id="actionsContainer_${eventGroup.id}" class="actionsContainer">
 						<#if Session.sessionUser.hasAccess("createevent") && !inVendorContext>
-							<div id="actionsContainer_${eventGroup.id}" class="eventTypes">
-							<a href="javascript:void(0);" id="${eventGroup.id}_link" onmouseover="positionDropdown(this, ${eventGroup.id});"><@s.text name="label.addevent"/></a><br/>
+							<div class="floatingDropdown floatingDropdownRelative">
+								<a href="javascript:void(0);" id="${eventGroup.id}_link" onmouseover="positionDropdown(this, ${eventGroup.id});">
+									<@s.text name="label.addevent"/>
+								</a>
 								<ul id="${eventGroup.id}_list">
 																		
 									<#list eventTypes as eventType>

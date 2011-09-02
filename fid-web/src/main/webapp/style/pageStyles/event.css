@@ -8,6 +8,10 @@
 	width:200px;
 	z-index: 100;
 }
+
+.actionsContainer .floatingDropdown ul {
+	width : 200px;
+}
 .eventTypesLeft ul{
 	background-position:top left;
 	background-image: url(../../images/dropdownArrow-left.gif);
