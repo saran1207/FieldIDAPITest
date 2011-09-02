@@ -231,9 +231,15 @@ function repositionCertLinks(list, link) {
 	translate(list, $(link), link.getHeight(), (link.getWidth()) - list.getWidth());
 }
 
-function positionDropdown( a ) {
-	var list = $(a.id + "_list");
-	translate(list, a, -240, -410);
+function positionDropdown(a, groupId){
+	var list = $(groupId + "_list");
+	var actionsContainer = $("actionsContainer_"+groupId);
+	var coordinates = findPos(actionsContainer);
+	
+	if(Prototype.Browser.IE){
+		list.setStyle({	'top': coordinates[1] - (a.offsetHeight - actionsContainer.offsetHeight + 250)+ "px"});
+	}
+	list.setStyle({	'left': coordinates[0] - (actionsContainer.offsetWidth + 245) + "px"});
 }
 	
 function jumpSelectToSection( event ) {

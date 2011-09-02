@@ -206,7 +206,8 @@
 					</td>
 					<td>
 						<#if Session.sessionUser.hasAccess("createevent") && !inVendorContext>
-							<div class="eventTypes"><a href="javascript:void(0);" id="${eventGroup.id}" onmouseover="positionDropdown(this);"><@s.text name="label.addevent"/></a><br/>
+							<div id="actionsContainer_${eventGroup.id}" class="eventTypes">
+							<a href="javascript:void(0);" id="${eventGroup.id}_link" onmouseover="positionDropdown(this, ${eventGroup.id});"><@s.text name="label.addevent"/></a><br/>
 								<ul id="${eventGroup.id}_list">
 																		
 									<#list eventTypes as eventType>
