@@ -12,6 +12,20 @@
     		width: 380px;
 		}
 		
+		.crudForm .infoSet .infoFieldCol select{
+		    width: 150px;
+		}
+		
+		.crudForm .infoSet .infoFieldCol input[type="text"] {
+			width: 200px;
+		}
+		
+		.crudForm .infoSet .infoFieldCol label {
+			width: 130px;
+			float: right;
+			padding: 0;
+}
+		}
 		#imageUploaded {
 			padding:0px;
 			height:35px;
