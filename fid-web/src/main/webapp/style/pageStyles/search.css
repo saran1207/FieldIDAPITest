@@ -31,7 +31,8 @@
 }
 
 .pageSection {
-	overflow: hidden;
+	clear: both;
+	overflow: visible;
 	width: 100%;
 }
 .contentSection {
