@@ -16,7 +16,8 @@ public class TenantServiceDTO extends AbstractBaseServiceDTO {
 	private boolean usingJobs;
 	private boolean usingIntegration;
 	private boolean usingAssignedTo;
-	private boolean usingAdvancedLocation;	
+	private boolean usingAdvancedLocation;
+	private boolean usingOrderDetails;
 	
 	public String getSerialNumberFormat() {
 		return serialNumberFormat;
@@ -104,5 +105,13 @@ public class TenantServiceDTO extends AbstractBaseServiceDTO {
 
 	public String getSerialNumberLabel() {
 		return serialNumberLabel;
+	}
+
+	public void setUsingOrderDetails(boolean usingOrderDetails) {
+		this.usingOrderDetails = usingOrderDetails;
+	}
+
+	public boolean isUsingOrderDetails() {
+		return usingOrderDetails;
 	}
 }
