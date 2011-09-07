@@ -495,4 +495,8 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
     	}
 		return maxAssets;
 	}
+    
+    public boolean isMultiAdd() { 
+    	return true;
+    }
 }

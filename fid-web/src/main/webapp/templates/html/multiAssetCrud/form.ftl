@@ -3,6 +3,9 @@
 </#assign>
 <head>
 	<@n4.includeStyle href="steps" />
+	<@n4.includeStyle href="chosen/chosen.css"/>
+	<@n4.includeScript src="jquery-1.4.2.min.js"/>
+	<@n4.includeScript>jQuery.noConflict();</@n4.includeScript>	
 	<script type="text/javascript" src="<@s.url value="/javascript/steps.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/commentTemplates.js" />" ></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/asset.js" />" ></script>
@@ -38,6 +41,8 @@
 		<@s.form id="step1form" theme="fieldid" cssClass="fullForm fluidSets">
 			<#include "_step1.ftl" />
 		</@s.form>
+		<script src="javascript/chosen/chosen.jquery.js" type="text/javascript"></script>
+		<script type="text/javascript"> jQuery(".chzn-select").chosen(); </script>
 	</div>
 	
 	<@s.form action="generateIdentifiers" id="step23Form" namespace="/ajax" theme="fieldidSimple">
@@ -62,5 +67,7 @@
 		<@s.url id="cancelUrl" action="home" />
 		<@s.submit key="label.cancel_multi_add" id="cancel" onclick="return redirect('${cancelUrl}');"/>
 	</div>
-	
+
 </div>
+
+

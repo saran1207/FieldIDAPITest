@@ -19,6 +19,18 @@
 			
 		</div>
 	</#if>
+
+	<#if multiAdd?exists>	
+	<div class="infoSet increasedWidthFieldHolder">
+		<label for="" class="label"><#include "../common/_requiredMarker.ftl"/><@s.text name="label.identified"/></label>
+        <#if bulkRegister?exists>
+            <div>
+                <input type="checkbox" name="useDatesFromAssets" onchange="$('identified').disabled = this.checked;"/> <@s.text name="label.use_dates_from_assets"/>
+            </div>
+        </#if>
+		<@s.textfield id="identified" name="identified" cssClass="datepicker" onchange="updateIdentified();"/>
+	</div>
+	</#if>	
 	
 	<div class="infoSet">
 		<label class="label" for="owner"><#include "../common/_requiredMarker.ftl"/><@s.text name="label.owner"/></label>
