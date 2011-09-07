@@ -1,9 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.reporting;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.components.reporting.BlankSlatePanel;
 import com.n4systems.fieldid.wicket.components.reporting.EventReportCriteriaPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.model.event.EventCountLoader;
+
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -13,7 +16,11 @@ public class ReportingPage extends FieldIDLoggedInPage {
 
     public ReportingPage(PageParameters params) {
         super(params);
-        add(new EventReportCriteriaPanel("reportCriteriaPanel"));
+        if(tenantHasEvents()) {
+        	add(new EventReportCriteriaPanel("reportCriteriaPanel"));
+        }else {
+        	add(new BlankSlatePanel("reportCriteriaPanel"));
+        }
     }
 
     @Override
@@ -27,4 +34,9 @@ public class ReportingPage extends FieldIDLoggedInPage {
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("speed.reporting"));
     }
+    
+	private boolean tenantHasEvents() {
+		return new EventCountLoader().setTenantId(getTenantId()).load() > 0;
+	}
+
 }
