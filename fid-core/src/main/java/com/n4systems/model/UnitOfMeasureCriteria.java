@@ -17,11 +17,6 @@ public class UnitOfMeasureCriteria extends Criteria {
     @JoinColumn(name = "secondary_unit_id")
     private UnitOfMeasure secondaryUnit;
 
-    @Override
-    public boolean isUnitOfMeasureCriteria() {
-        return true;
-    }
-
     public UnitOfMeasure getPrimaryUnit() {
         return primaryUnit;
     }

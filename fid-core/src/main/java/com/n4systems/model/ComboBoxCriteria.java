@@ -32,11 +32,6 @@ public class ComboBoxCriteria extends Criteria {
 	public List<String> getOptions() {
 		return options;
 	}
-	
-    @Override
-    public boolean isComboBoxCriteria() {
-        return true;
-    }
 
     @Override
     public CriteriaType getCriteriaType() {

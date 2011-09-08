@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.CriteriaType;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Predicate;
@@ -146,7 +147,7 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 			}
 
 			@Override public CriteriaResult populate(OneClickCriteriaResult result) {
-				checkArgument(criteria.isOneClickCriteria());
+				checkArgument(criteria.getCriteriaType() == CriteriaType.ONE_CLICK);
 				StateSet states = ((OneClickCriteria)criteria).getStates();
 				State state = states.getState(criteriaResultView.getResultString());
 				checkNotNull(state, "Can't find state " + criteriaResultView.getResultString() + " for criteria " + criteria.getDisplayName() + ".  expected one of " + states.getAvailableStates());

@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.CriteriaType;
 import org.apache.log4j.Logger;
 
 import com.n4systems.api.model.EventView;
@@ -154,7 +155,7 @@ public class EventImportAction extends AbstractImportAction {
 			List<CriteriaSection> availableSections = type.getEventForm().getAvailableSections();
 			for (CriteriaSection section:availableSections) { 
 				for (Criteria criterion:section.getAvailableCriteria()) {
-					if (!criterion.isSignatureCriteria()) {		// skip signature because we don't support import/export of those fields.  
+					if (criterion.getCriteriaType() != CriteriaType.SIGNATURE) {		// skip signature because we don't support import/export of those fields.
 						Class<? extends CriteriaResult> resultClass = criterion.getCriteriaType().getResultClass();
 						CriteriaResult result = resultClass.newInstance();
 						result.setCriteria(criterion);				

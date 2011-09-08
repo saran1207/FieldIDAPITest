@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.wicket.components.eventform.details;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.eventform.details.oneclick.ButtonGroupDisplayPanel;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.stateset.StateSetLoader;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -41,14 +41,11 @@ public class OneClickDetailsPanel extends Panel {
 
             add(stateChoice = new DropDownChoice<StateSet>("stateSetSelect", new PropertyModel<StateSet>(getCriteriaModel(), "states"), stateSetList, createChoiceRenderer()));
             stateChoice.setNullValid(false);
-            stateChoice.add(new AjaxFormSubmitBehavior("onchange") {
+            stateChoice.add(new UpdateComponentOnChange() {
                 @Override
-                protected void onSubmit(AjaxRequestTarget target) {
+                protected void onUpdate(AjaxRequestTarget target) {
                     onStateSetSelected(getCriteriaModel().getObject().getStates());
                     target.addComponent(buttonGroupDisplayPanel);
-                }
-                @Override
-                protected void onError(AjaxRequestTarget target) {
                 }
             });
             add(new AjaxCheckBox("setsResultCheckbox", new PropertyModel<Boolean>(getCriteriaModel(), "principal")) {

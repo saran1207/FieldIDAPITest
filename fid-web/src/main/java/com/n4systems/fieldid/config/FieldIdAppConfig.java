@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.config;
 
+import com.n4systems.fieldid.service.event.ScoreService;
 import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +45,11 @@ import com.n4systems.util.ServiceLocator;
 
 @Configuration
 public class FieldIdAppConfig {
+
+    @Bean
+    public ScoreService scoreService() {
+        return new ScoreService();
+    }
 	
 	@Bean
 	public TenantCreationService tenantCreationService() {

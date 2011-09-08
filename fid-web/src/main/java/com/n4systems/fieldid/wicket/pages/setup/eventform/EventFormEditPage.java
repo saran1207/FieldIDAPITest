@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDLoggedInPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.EventForm;
@@ -33,14 +34,12 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
-public class EventFormEditPage extends FieldIDLoggedInPage {
+public class EventFormEditPage extends EventTypePage {
 
     @SpringBean
     private EventFormService eventFormService;
 
     private List<CriteriaSection> criteriaSections;
-
-    private Long eventTypeId;
 
     private CriteriaSectionsPanel criteriaSectionsPanel;
     private CriteriaPanel criteriaPanel;
@@ -49,29 +48,9 @@ public class EventFormEditPage extends FieldIDLoggedInPage {
     private SavePanel topSavePanel;
     private SavePanel bottomSavePanel;
 
-    private IModel<EventType> eventTypeModel;
-
-    @Override
-    protected void storePageParameters(PageParameters params) {
-        eventTypeId = params.getAsLong("uniqueID");
-        eventTypeModel = new EntityModel<EventType>(EventType.class, eventTypeId);
-    }
-
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("title.manage_event_type_id", eventTypeModel.getObject().getName()));
-    }
-
-    @Override
-    protected void addNavBar(String navBarId) {
-        add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page("eventTypes.action").build(),
-                aNavItem().label("nav.view").page("eventType.action").params(uniqueId(eventTypeId)).build(),
-                aNavItem().label("nav.edit").page("eventTypeEdit.action").params(uniqueId(eventTypeId)).build(),
-                aNavItem().label("nav.event_form").page(EventFormEditPage.class).build(),
-                aNavItem().label("nav.asset_type_associations").page("selectAssetTypes.action").params(param("eventTypeId", eventTypeId)).build(),
-                aNavItem().label("nav.add").page("eventTypeAdd.action").onRight().build(),
-                aNavItem().label("nav.import").page("eventImportExport.action").params(uniqueId(eventTypeId)).onRight().build()));
     }
 
     public EventFormEditPage(PageParameters params) {

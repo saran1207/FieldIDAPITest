@@ -3,7 +3,11 @@ package com.n4systems.model.builders;
 import com.n4systems.model.builders.context.BuilderCallback;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class BaseBuilder<K> implements Builder<K> {
 
@@ -62,6 +66,22 @@ public abstract class BaseBuilder<K> implements Builder<K> {
             return null;
         }
         return id;
+    }
+
+    protected <T> Set<T> setOf(T... items) {
+        Set<T> set = new HashSet<T>();
+        for (T item : items) {
+            set.add(item);
+        }
+        return set;
+    }
+
+    protected <T> List<T> listOf(T... items) {
+        List<T> list = new ArrayList<T>();
+        for (T t : items) {
+            list.add(t);
+        }
+        return list;
     }
 
     public void setAlwaysUseNullId(boolean alwaysUseNullId) {

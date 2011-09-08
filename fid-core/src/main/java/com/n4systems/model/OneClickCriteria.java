@@ -25,11 +25,6 @@ public class OneClickCriteria extends Criteria {
 		this.states = states;
 	}
 
-    @Override
-    public boolean isOneClickCriteria() {
-        return true;
-    }
-
 	public boolean isPrincipal() {
 		return principal;
 	}

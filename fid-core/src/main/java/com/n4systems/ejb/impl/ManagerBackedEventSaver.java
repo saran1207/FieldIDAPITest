@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.CriteriaType;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -101,7 +102,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
     private void writeSignatureImagesFor(SignatureService sigService, Set<CriteriaResult> results) {
 		for (CriteriaResult result : results) {
-			if (result.getCriteria().isSignatureCriteria() && ((SignatureCriteriaResult)result).getImage() != null) {
+			if (result.getCriteria().getCriteriaType() == CriteriaType.SIGNATURE && ((SignatureCriteriaResult)result).getImage() != null) {
 				try {
 					sigService.storeSignatureFileFor((SignatureCriteriaResult)result);
 				} catch (IOException e) {
@@ -170,11 +171,12 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
 	private Status calculateEventResult(Event event) {
-		// determine result of the sections.
-		Status eventResult = Status.NA;
-		eventResult = findEventResult(event);
+        EventResultCalculator resultCalculator = new EventResultCalculator();
+		Status eventResult = resultCalculator.findEventResult(event);
+
 		for (SubEvent subEvent : event.getSubEvents()) {
-			eventResult = adjustStatus(eventResult, findEventResult(subEvent));
+            Status currentResult = resultCalculator.findEventResult(subEvent);
+            eventResult = resultCalculator.adjustStatus(eventResult, currentResult);
 			if (eventResult == Status.FAIL) {
 				break;
 			}
@@ -344,7 +346,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 		return event;
 	}
 
-	
 	/*
 	 * Writes the file data and chart image back onto the file system from a
 	 * fully constructed FileDataContainer
@@ -385,33 +386,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 		return asset;
 	}
 
-	private Status findEventResult(AbstractEvent event) {
-		Status eventResult = Status.NA;
-		for (CriteriaResult result : event.getResults()) {
-            if (result instanceof OneClickCriteriaResult) {
-                OneClickCriteriaResult oneClickResult = (OneClickCriteriaResult) result;
-
-                eventResult = adjustStatus(eventResult, oneClickResult.getResult());
-
-                if (eventResult == Status.FAIL) {
-                    break;
-                }
-            }
-
-		}
-		return eventResult;
-	}
-
-	private Status adjustStatus(Status currentStatus, Status newStatus) {
-		if (newStatus == Status.FAIL) {
-			currentStatus = Status.FAIL;
-
-		} else if (newStatus == Status.PASS) {
-			currentStatus = Status.PASS;
-		}
-		return currentStatus;
-	}
-
 
 	/**
 	 * This must be called AFTER the event and sub-event have been persisted
@@ -421,7 +395,5 @@ public class ManagerBackedEventSaver implements EventSaver {
 		return persistenceManager.update(event);
 	}
 
-	
-	
 
 }

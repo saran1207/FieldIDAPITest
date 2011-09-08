@@ -20,6 +20,9 @@ public class EventFormService extends FieldIdPersistenceService {
 
         if (eventType.getEventForm() != null) {
             eventType.getEventForm().setState(Archivable.EntityState.RETIRED);
+            eventForm.setScoreCalculationType(eventForm.getScoreCalculationType());
+            eventForm.setFailRange(eventForm.getFailRange());
+            eventForm.setPassRange(eventForm.getPassRange());
             persistenceService.update(eventType.getEventForm());
         }
 

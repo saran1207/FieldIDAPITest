@@ -14,9 +14,4 @@ public class SignatureCriteria extends Criteria {
         return CriteriaType.SIGNATURE;
     }
 
-    @Override
-    public boolean isSignatureCriteria() {
-        return true;
-    }
-
 }

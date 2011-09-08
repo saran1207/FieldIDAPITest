@@ -20,6 +20,8 @@ import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
 import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
+import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
+import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -53,6 +55,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("setup/passwordPolicy", PasswordPolicyPage.class);
         mountBookmarkablePage("setup/accountPolicy", AccountPolicyPage.class);
         mountBookmarkablePage("setup/security", SecurityPage.class);
+        mountBookmarkablePage("setup/scoreGroups", ScoreGroupsPage.class);
+        mountBookmarkablePage("setup/scoreResults", ScoreResultConfigurationPage.class);
 
         mountBookmarkablePage("reporting", ReportingPage.class);
         mountBookmarkablePage("returnToReport", ReturnToReportPage.class);

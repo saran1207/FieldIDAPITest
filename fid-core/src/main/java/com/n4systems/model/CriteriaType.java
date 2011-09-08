@@ -1,14 +1,20 @@
 package com.n4systems.model;
 
-public enum CriteriaType {
+import com.n4systems.model.api.Listable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public enum CriteriaType implements Listable {
 
     ONE_CLICK("One-Click Button", "oneclick", OneClickCriteria.class, OneClickCriteriaResult.class),
-    TEXT_FIELD("Text Field", "textfield", TextFieldCriteria.class,TextFieldCriteriaResult.class),
-    COMBO_BOX("Combo Box", "select", ComboBoxCriteria.class,ComboBoxCriteriaResult.class),
-    SELECT("Select Box", "select", SelectCriteria.class,SelectCriteriaResult.class),
-    UNIT_OF_MEASURE("Unit of Measure", "unitofmeasure", UnitOfMeasureCriteria.class,UnitOfMeasureCriteriaResult.class),
-    SIGNATURE("Signature", "signature", SignatureCriteria.class,SignatureCriteriaResult.class),
-    DATE_FIELD("Date Field", "textfield", DateFieldCriteria.class,DateFieldCriteriaResult.class);
+    TEXT_FIELD("Text Field", "textfield", TextFieldCriteria.class, TextFieldCriteriaResult.class),
+    COMBO_BOX("Combo Box", "select", ComboBoxCriteria.class, ComboBoxCriteriaResult.class),
+    SELECT("Select Box", "select", SelectCriteria.class, SelectCriteriaResult.class),
+    UNIT_OF_MEASURE("Unit of Measure", "unitofmeasure", UnitOfMeasureCriteria.class, UnitOfMeasureCriteriaResult.class),
+    SIGNATURE("Signature", "signature", SignatureCriteria.class, SignatureCriteriaResult.class),
+    DATE_FIELD("Date Field", "textfield", DateFieldCriteria.class, DateFieldCriteriaResult.class),
+    SCORE("Score", "score", ScoreCriteria.class, ScoreCriteriaResult.class);
 
     private String description;
     private String reportIdentifier;
@@ -55,5 +61,22 @@ public enum CriteriaType {
 		}
 		return null;
 	}
-    
+
+    public static List<String> choiceLabels() {
+        List<String> labels = new ArrayList<String>(values().length);
+        for (CriteriaType criteriaType : values()) {
+            labels.add(criteriaType.getDescription());
+        }
+        return labels;
+    }
+
+    @Override
+    public Object getId() {
+        return reportIdentifier;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return description;
+    }
 }

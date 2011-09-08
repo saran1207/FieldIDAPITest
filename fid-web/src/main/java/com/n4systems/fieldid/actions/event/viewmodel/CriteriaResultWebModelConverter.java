@@ -2,6 +2,8 @@ package com.n4systems.fieldid.actions.event.viewmodel;
 
 import java.text.ParseException;
 
+import com.n4systems.model.Score;
+import com.n4systems.model.ScoreCriteriaResult;
 import rfid.web.helper.SessionUser;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -44,6 +46,8 @@ public class CriteriaResultWebModelConverter {
         	String dateStr = dateConverter.convertDate(((DateFieldCriteriaResult)result).getValue(), 
         			((DateFieldCriteria)result.getCriteria()).isIncludeTime());
         	webModel.setTextValue(dateStr);
+        } else if (result instanceof ScoreCriteriaResult) {
+            webModel.setTextValue(((ScoreCriteriaResult)result).getScore().getName());
         }
 
         webModel.setType(result.getCriteria().getCriteriaType().name());
@@ -88,8 +92,12 @@ public class CriteriaResultWebModelConverter {
             criteriaResult = result;
         } else if (CriteriaType.DATE_FIELD.equals(type)) {
             criteriaResult =  new DateFieldCriteriaResult();
+        } else if (CriteriaType.SCORE.equals(type)) {
+            ScoreCriteriaResult result =  new ScoreCriteriaResult();
+            result.setScore(pm.find(Score.class, webModel.getStateId(), tenant));
+            criteriaResult = result;
         } else {
-            throw new RuntimeException("Unkown type for web model: " + webModel.getType());
+            throw new RuntimeException("Unknown type for web model: " + webModel.getType());
         }
 
         criteriaResult.setCriteria(pm.find(Criteria.class, webModel.getCriteriaId(), tenant));

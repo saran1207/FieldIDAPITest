@@ -8,6 +8,10 @@ public class PageParametersBuilder {
         return param("uniqueID", uniqueId);
     }
 
+    public static PageParameters id(Long id) {
+        return param("id", id);
+    }
+
     public static PageParameters param(String paramName, Object paramValue) {
         PageParameters simpleParams = new PageParameters();
         simpleParams.add(paramName, paramValue.toString());

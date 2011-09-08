@@ -18,7 +18,7 @@ import org.hibernate.annotations.IndexColumn;
 @Table(name="select_criteria")
 @PrimaryKeyJoinColumn(name="id")
 public class SelectCriteria extends Criteria {
-	
+
 	@Column(name="selectoption", nullable=false)
 	@ElementCollection(fetch=FetchType.EAGER)
 	@JoinTable(name="select_criteria_options", joinColumns = @JoinColumn(name="select_criteria_id"))
@@ -33,11 +33,6 @@ public class SelectCriteria extends Criteria {
 		return options;
 	}
 	
-    @Override
-    public boolean isSelectCriteria() {
-        return true;
-    }
-
     @Override
     public CriteriaType getCriteriaType() {
         return CriteriaType.SELECT;

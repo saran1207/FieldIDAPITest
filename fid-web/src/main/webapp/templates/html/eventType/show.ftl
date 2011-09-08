@@ -88,24 +88,27 @@ ${action.setPageType('event_type', 'show')!}
                                     <tr>
                                         <td class="criteriaName"><label>${criteria.displayName}</label></td>
                                         <td class="buttonGroupIcons">
-                                            <#if criteria.oneClickCriteria>
+                                            <#if criteria.criteriaType.name() == 'ONE_CLICK'>
                                                 <#assign states=criteria.states.states/>
                                                 <#include "../buttonGroupCrud/_buttonGroup.ftl"/>
                                             </#if>
-                                            <#if criteria.selectCriteria>
+                                            <#if criteria.criteriaType.name() == 'SELECT'>
                                                 <@s.text name="label.selectbox"/>
                                             </#if>
-                                            <#if criteria.textFieldCriteria>
+                                            <#if criteria.criteriaType.name() == 'TEXT_FIELD'>
                                                 <@s.text name="label.textfield"/>
                                             </#if>
-                                            <#if criteria.comboBoxCriteria>
+                                            <#if criteria.criteriaType.name() == 'COMBO_BOX'>
                                                 <@s.text name="label.combobox"/>
                                             </#if>
-                                            <#if criteria.unitOfMeasureCriteria>
+                                            <#if criteria.criteriaType.name() == 'UNIT_OF_MEASURE'>
                                                 <#include "_unitOfMeasureCriteria.ftl"/>
                                             </#if>
-                                            <#if criteria.dateFieldCriteria>
+                                            <#if criteria.criteriaType.name() == 'DATE_FIELD'>
                                                 <@s.text name="label.datefield"/>
+                                            </#if>
+                                            <#if criteria.criteriaType.name() == 'SCORE'>
+                                                <@s.text name="label.score"/>
                                             </#if>
                                         </td>
                                         <td>

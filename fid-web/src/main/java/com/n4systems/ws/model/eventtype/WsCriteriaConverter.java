@@ -3,6 +3,7 @@ package com.n4systems.ws.model.eventtype;
 import com.n4systems.exceptions.NotImplementedException;
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaType;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
@@ -26,19 +27,19 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 	@Override
 	public WsCriteria fromModel(Criteria model) {
 		WsCriteria wsModel;
-		if (model.isOneClickCriteria()) {
+		if (model.getCriteriaType() == CriteriaType.ONE_CLICK) {
 			wsModel = convertOneClickCriteria((OneClickCriteria)model);
-		} else if (model.isTextFieldCriteria()) {
+		} else if (model.getCriteriaType() == CriteriaType.TEXT_FIELD) {
 			wsModel = convertTextFieldCriteria((TextFieldCriteria)model);
-		} else if (model.isSelectCriteria()) {
+		} else if (model.getCriteriaType() == CriteriaType.SELECT) {
 			wsModel = convertSelectCriteria((SelectCriteria)model);
-		} else if (model.isUnitOfMeasureCriteria()) {
+		} else if (model.getCriteriaType() == CriteriaType.UNIT_OF_MEASURE) {
 			wsModel = convertUnitOfMeasureCriteria((UnitOfMeasureCriteria)model);
-		} else if (model.isComboBoxCriteria()) {
+		} else if (model.getCriteriaType() == CriteriaType.COMBO_BOX) {
 			wsModel = convertComboBoxCriteria((ComboBoxCriteria)model);
-		} else if (model.isSignatureCriteria()) {
+		} else if (model.getCriteriaType() == CriteriaType.SIGNATURE) {
 			wsModel = convertSignatureCriteria((SignatureCriteria)model);
-		} else if(model.isDateFieldCriteria()) {
+		} else if(model.getCriteriaType() == CriteriaType.DATE_FIELD) {
 			wsModel = convertDateFieldCriteria((DateFieldCriteria)model);
 		} else {
 			throw new NotImplementedException("Conversion not implemented for Criteria type: " + model.getClass().getName());

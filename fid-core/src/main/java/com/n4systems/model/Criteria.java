@@ -89,34 +89,6 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	    return getDisplayText() + " (" + getId() + ")";
     }
 
-    public boolean isOneClickCriteria() {
-        return false;
-    }
-
-    public boolean isTextFieldCriteria() {
-        return false;
-    }
-
-    public boolean isSelectCriteria() {
-        return false;
-    }
-    
-    public boolean isComboBoxCriteria() {
-    	return false;
-    }
-
-    public boolean isUnitOfMeasureCriteria() {
-        return false;
-    }
-
-    public boolean isSignatureCriteria() {
-        return false;
-    }
-    
-    public boolean isDateFieldCriteria() {
-        return false;
-    }
-
     public abstract CriteriaType getCriteriaType();
 
 }

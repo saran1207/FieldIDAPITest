@@ -7,10 +7,12 @@ import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
 import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.CriteriaType;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
@@ -20,8 +22,10 @@ import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.UnitOfMeasureCriteria;
 import com.n4systems.model.UnitOfMeasureListLoader;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.stateset.StateSetLoader;
 import org.apache.wicket.Component;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -135,14 +139,14 @@ public class CriteriaPanel extends SortableListPanel {
     }
 
     class CriteriaAddForm extends Form {
-        private List<String> criteriaTypes = Arrays.asList("One-Click Button", "Text Field", "Select Box", "Combo Box", "Unit of Measure", "Signature", "Date Field");
+        private List<CriteriaType> criteriaTypes = Arrays.asList(CriteriaType.values());
         protected TextField<String> addTextField;
         private String criteriaName;
-        private String criteriaType;
+        private CriteriaType criteriaType;
 
         public CriteriaAddForm(String id) {
             super(id);
-            add(new DropDownChoice<String>("criteriaType", new PropertyModel<String>(this, "criteriaType"), criteriaTypes).setRequired(true));
+            add(new DropDownChoice<CriteriaType>("criteriaType", new PropertyModel<CriteriaType>(this, "criteriaType"), criteriaTypes, new ListableChoiceRenderer<CriteriaType>()).setRequired(true));
             AjaxButton submitButton;
             add(addTextField = new RequiredTextField<String>("criteriaName", new PropertyModel<String>(this, "criteriaName")));
             addTextField.setOutputMarkupId(true);
@@ -150,45 +154,47 @@ public class CriteriaPanel extends SortableListPanel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     Criteria criteria = null;
-                    if ("One-Click Button".equals(criteriaType)) {
-                        OneClickCriteria oneClickCriteria = new OneClickCriteria();
-                        StateSet stateSet = getDefaultStateSet();
-                        if (stateSet == null) {
-                            error("You must configure at least one Button Group to use One-Click criteria");
-                            target.addComponent(feedbackPanel);
+
+                    try {
+                        criteria = criteriaType.getCriteriaClass().newInstance();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    if (CriteriaType.ONE_CLICK.equals(criteriaType)) {
+                        if (!configureDefaultStateSet(target, (OneClickCriteria)criteria)) {
                             return;
                         }
-                        if (previouslySelectedStateSet != null) {
-                            oneClickCriteria.setStates(previouslySelectedStateSet);
-                        } else {
-                            oneClickCriteria.setStates(stateSet);
-                        }
-                        oneClickCriteria.setPrincipal(previousSetsResultValue);
-                        criteria = oneClickCriteria;
-                    } else if ("Text Field".equals(criteriaType)) {
-                        criteria = new TextFieldCriteria();
-                    } else if ("Select Box".equals(criteriaType)) {
-                        criteria = new SelectCriteria();
-                    } else if ("Combo Box".equals(criteriaType)) {
-                        criteria = new ComboBoxCriteria();
-                    } else if ("Unit of Measure".equals(criteriaType)) {
-                        UnitOfMeasureCriteria uomCriteria = new UnitOfMeasureCriteria();
-                        uomCriteria.setPrimaryUnit(getDefaultUnitOfMeasure());
-                        criteria = uomCriteria;
-                    } else if ("Signature".equals(criteriaType)) {
-                        criteria = new SignatureCriteria();
-                    } else if ("Date Field".equals(criteriaType)) {
-                        criteria = new DateFieldCriteria();
-                    }                    
+                    } else if (CriteriaType.UNIT_OF_MEASURE.equals(criteriaType)) {
+                        ((UnitOfMeasureCriteria)criteria).setPrimaryUnit(getDefaultUnitOfMeasure());
+                    }
+
                     if (criteriaName.length()>1000){
                         error("Name length cannot exceed 100 characters.");
                         target.addComponent(feedbackPanel);
                         return;
                     }
+
                     criteria.setDisplayText(criteriaName);
                     criteriaName = null;
                     getCriteriaSection().getCriteria().add(criteria);
                     onCriteriaAdded(target, criteria, getCriteriaSection().getCriteria().size() - 1);
+                }
+
+                private boolean configureDefaultStateSet(AjaxRequestTarget target, OneClickCriteria criteria) {
+                    StateSet stateSet = getDefaultStateSet();
+                    if (stateSet == null) {
+                        error("You must configure at least one Button Group to use One-Click criteria");
+                        target.addComponent(feedbackPanel);
+                        return false;
+                    }
+                    if (previouslySelectedStateSet != null) {
+                        criteria.setStates(previouslySelectedStateSet);
+                    } else {
+                        criteria.setStates(stateSet);
+                    }
+                    criteria.setPrincipal(previousSetsResultValue);
+                    return true;
                 }
 
                 @Override

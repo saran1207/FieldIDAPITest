@@ -98,7 +98,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 	private EventGroup eventGroup;
 	protected Asset asset;
 	protected Event event;
-	
+
 	protected List<CriteriaResultWebModel> criteriaResults;
 	protected String charge;
 	protected ProofTestType proofTestType;
@@ -745,6 +745,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 		return criteriaResults;
 	}
 
+    @CustomValidator(type = "allScoresMustBeEntered", message = "", key = "error.scores.required")
     public void setCriteriaResults(List<CriteriaResultWebModel> results) {
 		criteriaResults = results;
 	}

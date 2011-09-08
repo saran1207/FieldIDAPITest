@@ -14,11 +14,6 @@ public class DateFieldCriteria extends Criteria {
 	private boolean includeTime = false;
 
     @Override
-    public boolean isDateFieldCriteria() {
-        return true;
-    }
-
-    @Override
     public CriteriaType getCriteriaType() {
         return CriteriaType.DATE_FIELD;
     }

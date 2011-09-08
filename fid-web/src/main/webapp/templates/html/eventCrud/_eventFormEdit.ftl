@@ -39,22 +39,24 @@
             <@s.hidden id="criteriaResultType_${criteria.id}" name="criteriaResults[${currentCriteriaIndex}].type" value="${criteria.criteriaType.name()}" />
             <@s.hidden id="criteriaResultCriteria_${criteria.id}" name="criteriaResults[${currentCriteriaIndex}].criteriaId" value="${criteria.id}" />
 
-            <#if criteria.oneClickCriteria>
+            <#if criteria.criteriaType.name() == 'ONE_CLICK'>
                 <#include '_oneClickCriteriaResultEdit.ftl'>
-            <#elseif criteria.textFieldCriteria>
+            <#elseif criteria.criteriaType.name() == 'TEXT_FIELD'>
                 <#include '_textFieldCriteriaResultEdit.ftl'>
-            <#elseif criteria.selectCriteria>
+            <#elseif criteria.criteriaType.name() == 'SELECT'>
                 <#include '_selectCriteriaResultEdit.ftl'>
-            <#elseif criteria.comboBoxCriteria>
+            <#elseif criteria.criteriaType.name() == 'COMBO_BOX'>
                 <#include '_comboBoxCriteriaResultEdit.ftl'>
-            <#elseif criteria.unitOfMeasureCriteria>
+            <#elseif criteria.criteriaType.name() == 'UNIT_OF_MEASURE'>
                 <#include '_unitOfMeasureCriteriaResultEdit.ftl'>
-            <#elseif criteria.signatureCriteria>
+            <#elseif criteria.criteriaType.name() == 'SIGNATURE'>
                 <#assign criteriaId = criteria.id />
                 <#assign signatureFileId = action.getTemporarySignatureFileId(criteriaId)!"" />
                 <#include '_signatureCriteriaResultEdit.ftl'>
-            <#elseif criteria.dateFieldCriteria>
+            <#elseif criteria.criteriaType.name() == 'DATE_FIELD'>
                 <#include '_dateFieldCriteriaResultEdit.ftl'>
+            <#elseif criteria.criteriaType.name() == 'SCORE'>
+                <#include '_scoreCriteriaResultEdit.ftl'>
             </#if>
 
 			<div class="recDefButtons">

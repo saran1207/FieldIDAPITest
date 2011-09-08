@@ -1,0 +1,17 @@
+<wicket:extend>
+
+    <form wicket:id="scoreConfigurationForm">
+
+        <select wicket:id="scoreCalculationType"></select> <input type="checkbox" wicket:id="useScoreForResult"> <wicket:message key="label.use_score_for_result"/>
+
+        <br/>
+
+        Fail: <div wicket:id="failRangePanel"></div>
+
+        Pass: <div wicket:id="passRangePanel"></div>
+
+        <input type="submit" wicket:id="submitButton" wicket:message="value:label.save">
+
+    </form>
+
+</wicket:extend>

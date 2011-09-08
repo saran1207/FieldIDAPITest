@@ -10,11 +10,6 @@ import javax.persistence.Table;
 public class TextFieldCriteria extends Criteria {
 
     @Override
-    public boolean isTextFieldCriteria() {
-        return true;
-    }
-
-    @Override
     public CriteriaType getCriteriaType() {
         return CriteriaType.TEXT_FIELD;
     }

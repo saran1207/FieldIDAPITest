@@ -17,7 +17,8 @@ public class DateFieldDetailsPanel extends Panel {
 
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-
+                // We don't need a callback, we just need the underlying model updated on change
+                // This could be an ajaxformcomponentupdatingbehavior
 			}});
     }
 

@@ -7,6 +7,7 @@ import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.TextFieldCriteria;
@@ -34,9 +35,17 @@ public class CriteriaCopyUtil {
             newCriteria = copySignatureCriteria((SignatureCriteria) criteria);
 	    } else if (criteria instanceof DateFieldCriteria) {
 	        newCriteria = copyDateFieldCriteria((DateFieldCriteria) criteria);
-	    }
+	    } else if (criteria instanceof ScoreCriteria) {
+            newCriteria = copyScoreCriteria((ScoreCriteria) criteria);
+        }
 
         copyCommonFields(criteria, newCriteria, existingCriteria);
+        return newCriteria;
+    }
+
+    private Criteria copyScoreCriteria(ScoreCriteria criteria) {
+        ScoreCriteria newCriteria = new ScoreCriteria();
+        newCriteria.setScoreGroup(criteria.getScoreGroup());
         return newCriteria;
     }
 

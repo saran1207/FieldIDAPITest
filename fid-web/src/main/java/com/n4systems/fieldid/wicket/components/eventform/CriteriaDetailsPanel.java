@@ -1,15 +1,9 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import java.util.List;
-
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-
 import com.n4systems.fieldid.wicket.components.eventform.details.ComboBoxDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.DateFieldDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.OneClickDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.ScoreDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.SelectDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.SignatureDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.TextFieldDetailsPanel;
@@ -18,11 +12,18 @@ import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
 import com.n4systems.model.StateSet;
 import com.n4systems.model.TextFieldCriteria;
 import com.n4systems.model.UnitOfMeasureCriteria;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+
+import java.util.List;
 
 public class CriteriaDetailsPanel extends Panel {
 
@@ -47,6 +48,8 @@ public class CriteriaDetailsPanel extends Panel {
             add(new OneClickDetailsPanel("specificDetailsPanel", new Model<OneClickCriteria>((OneClickCriteria) criteria)) {
                 @Override
                 protected void onStateSetSelected(StateSet stateSet) {
+                    // we need to notify when buttons are selected since new one click criteria need to have the previous choice
+                    // pre selected as they're created. We could generalize this if it became necessary for other criteria types
                     CriteriaDetailsPanel.this.onStateSetSelected(stateSet);
                 }
 
@@ -67,6 +70,8 @@ public class CriteriaDetailsPanel extends Panel {
             add(new SignatureDetailsPanel("specificDetailsPanel", new Model<SignatureCriteria>((SignatureCriteria) criteria)));
         } else if (criteria instanceof DateFieldCriteria) {
             add(new DateFieldDetailsPanel("specificDetailsPanel", new Model<DateFieldCriteria>((DateFieldCriteria) criteria)));
+        } else if (criteria instanceof ScoreCriteria) {
+            add(new ScoreDetailsPanel("specificDetailsPanel", new Model<ScoreCriteria>((ScoreCriteria) criteria)));
         }
     }
 
