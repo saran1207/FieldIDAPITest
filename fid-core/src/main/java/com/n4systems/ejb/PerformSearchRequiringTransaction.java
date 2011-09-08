@@ -3,6 +3,13 @@
  */
 package com.n4systems.ejb;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -17,13 +24,6 @@ import com.n4systems.util.persistence.search.SearchDefiner;
 import com.n4systems.util.persistence.search.SortTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-
 public class PerformSearchRequiringTransaction implements SearchPerformer {
 	
 	private EntityManager em ;
@@ -34,6 +34,7 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 		this.em = em;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public <K> PageHolder<K> search(SearchDefiner<K> definer, SecurityFilter filter) {
 		// create our base query builder (no sort terms yet)
@@ -69,7 +70,7 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 	
 	@SuppressWarnings("unchecked")
 	private <T> List<T> findAll(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException {
-		List<T> resultList = (List<T>) queryBuilder.createQuery(em).setFirstResult(pageSize * page).setMaxResults(pageSize).getResultList();
+		List<T> resultList = queryBuilder.createQuery(em).setFirstResult(pageSize * page).setMaxResults(pageSize).getResultList();
 		return postFetchFields(resultList, queryBuilder.getPostFetchPaths());
 	}
 	
@@ -109,7 +110,7 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 				searchBuilder.addJoin(join.toJoinClause());
 			}
 		}
-		
+
 		// convert all our search terms to where parameters
 		if (definer.getSearchTerms() != null && !definer.getSearchTerms().isEmpty()) {
 			for (SearchTermDefiner term : definer.getSearchTerms()) {
@@ -140,14 +141,16 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 		return PostFetcher.postFetchFields(result, queryBuilder.getPostFetchPaths());
 	}
 	
+	@Override
 	public int countPages(BaseSearchDefiner definer, SecurityFilter filter, long pageSize) {
 		QueryBuilder<Long> countBuilder = createBaseSearchQueryBuilder(definer, filter);
 
 		Long count = find(countBuilder.setCountSelect());
 		
-		return (int)Math.ceil(count.doubleValue() / (double)pageSize);
+		return (int)Math.ceil(count.doubleValue() / pageSize);
 	}
 
+	@Override
 	public List<Long> idSearch(BaseSearchDefiner definer, SecurityFilter filter) {
 		// construct a search QueryBuilder with Long as the select class since we will force simple select to be "id" later
 		QueryBuilder<Long> idBuilder = createBaseSearchQueryBuilder(definer, filter);
@@ -162,7 +165,7 @@ public class PerformSearchRequiringTransaction implements SearchPerformer {
 	@SuppressWarnings("unchecked")
 	public <T> List<T> findAll(QueryBuilder<T> queryBuilder) throws InvalidQueryException {
 		Query createQuery = queryBuilder.createQuery(em);
-		List<T> resultList = (List<T>) createQuery.getResultList();
+		List<T> resultList = createQuery.getResultList();
 		return postFetchFields(resultList, queryBuilder.getPostFetchPaths());
 	}
 
