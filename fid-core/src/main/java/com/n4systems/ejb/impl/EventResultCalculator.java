@@ -15,15 +15,19 @@ public class EventResultCalculator {
     public Status findEventResult(AbstractEvent event) {
         if (event.getEventForm() == null) {
             return Status.NA;
-        } else if (event.getEventForm().isUseScoreForResult()) {
-            return findResultFromScore(event);
+        }
+
+        Double score = calculateScore(event);
+        event.setScore(score);
+
+        if (event.getEventForm().isUseScoreForResult()) {
+            return findResultFromScore(event, score);
         } else {
             return findResultFromOneClicks(event);
         }
 	}
 
-    private Status findResultFromScore(AbstractEvent event) {
-        double score = calculateScore(event);
+    private Status findResultFromScore(AbstractEvent event, Double score) {
         if (insideRange(event.getEventForm().getFailRange(), score)) {
             return Status.FAIL;
         } else if (insideRange(event.getEventForm().getPassRange(), score)) {
@@ -32,11 +36,13 @@ public class EventResultCalculator {
         return Status.NA;
     }
 
-    private double calculateScore(AbstractEvent event) {
+    private Double calculateScore(AbstractEvent event) {
         double total = 0d;
         int count = 0;
+        int countScoreCriteria = 0;
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult.getCriteria().getCriteriaType() == CriteriaType.SCORE) {
+                countScoreCriteria++;
                 ScoreCriteriaResult scoreResult = (ScoreCriteriaResult) criteriaResult;
                 if (scoreResult.getScore() != null && !scoreResult.getScore().isNa()) {
                     total += scoreResult.getScore().getValue();
@@ -47,10 +53,17 @@ public class EventResultCalculator {
         if (event.getEventForm().getScoreCalculationType() == ScoreCalculationType.AVERAGE && count > 0) {
             total /= count;
         }
+        if (countScoreCriteria == 0) {
+            return null;
+        }
         return total;
     }
 
-    private boolean insideRange(ScoreResultRange range, double score) {
+    private boolean insideRange(ScoreResultRange range, Double score) {
+        if (score == null) {
+            return false;
+        }
+
         if (range.getComparator() == ScoreComparator.LE) {
             return score <= range.getValue1();
         } else if (range.getComparator() == ScoreComparator.GE) {

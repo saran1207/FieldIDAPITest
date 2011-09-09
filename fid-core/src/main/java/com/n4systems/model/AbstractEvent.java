@@ -62,6 +62,9 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
     @MapKeyColumn(name = "mapkey")
     @Column(name="element")
     private Map<String, String> infoOptionMap = new HashMap<String, String>();
+
+    @Column(name="score")
+    private Double score;
 	
     @Column(nullable=false)
     private boolean editable = true;
@@ -192,6 +195,14 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 
     public void setEventForm(EventForm eventForm) {
         this.eventForm = eventForm;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 
     public List<FileAttachment> getImageAttachments() {

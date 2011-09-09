@@ -119,7 +119,13 @@
 		<label><@s.text name="label.eventbook"/></label>
 		<span>${(event.book.name)!?html}</span>
 	</p>
-	
+
+    <#if event.score?exists>
+        <p>
+            <label><@s.text name="label.score"/></label>
+            <span>${event.score}</span>
+        </p>
+    </#if>
 	
 	<#list event.infoOptionMap.keySet() as key >
 		<p>	
