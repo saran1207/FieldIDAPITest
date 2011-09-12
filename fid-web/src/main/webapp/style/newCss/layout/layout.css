@@ -570,3 +570,13 @@ table.list tr.multiSelected {
 	padding-top:10px;
 	padding-bottom:10px;
 }
+
+.error {
+	color: #F00;
+}
+
+.error ul {
+	border: 1px solid #FF3030;
+	background-color: #ffebeb;
+	font-weight: bold;
+}
