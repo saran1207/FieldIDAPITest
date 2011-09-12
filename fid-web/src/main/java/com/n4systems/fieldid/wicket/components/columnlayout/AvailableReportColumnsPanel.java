@@ -31,7 +31,7 @@ public class AvailableReportColumnsPanel extends Panel {
             @Override
             protected void populateItem(ListItem<ColumnMappingGroup> item) {
                 final FIDLabelModel titleModel = new FIDLabelModel(new PropertyModel<String>(item.getModel(), "label"));
-                CollapsiblePanel columnsPanel = new CollapsiblePanel("columnGroup", titleModel, "images/columnlayout/arrow-down.png", "images/columnlayout/arrow-over.png") {
+                CollapsiblePanel columnsPanel = new CollapsiblePanel("columnGroup", titleModel, "images/columnlayout/arrow-over.png", "images/columnlayout/arrow-down.png") {
                     @Override
                     protected void onExpandedOrCollapsed(String title, Boolean expanded) {
                         setExpandedStatusForSection(title, expanded);
