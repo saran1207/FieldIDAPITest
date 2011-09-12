@@ -373,3 +373,15 @@ div.unitDescriptor {
 div.verticalEditPanel * {
     zoom: 0;
 }
+
+.numberFieldConfiguration{
+	padding: 10px 0;
+}
+
+.numberFieldLabel{
+    padding-left: 15px;
+}
+
+.numberFieldInput{
+	width: 30px;
+}

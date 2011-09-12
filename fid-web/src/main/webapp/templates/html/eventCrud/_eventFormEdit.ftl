@@ -57,6 +57,8 @@
                 <#include '_dateFieldCriteriaResultEdit.ftl'>
             <#elseif criteria.criteriaType.name() == 'SCORE'>
                 <#include '_scoreCriteriaResultEdit.ftl'>
+            <#elseif criteria.criteriaType.name() == 'NUMBER_FIELD'>
+                <#include '_numberFieldCriteriaResultEdit.ftl'>
             </#if>
 
 			<div class="recDefButtons">

@@ -14,6 +14,7 @@ import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
+import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.ProofTestInfo;
 import com.n4systems.model.Recommendation;
@@ -179,6 +180,10 @@ public class CopyEventFactory {
             ScoreCriteriaResult scoreResult = new ScoreCriteriaResult();
             scoreResult.setScore(((ScoreCriteriaResult) oldResult).getScore());
             return scoreResult;
+        } else if (oldResult instanceof NumberFieldCriteriaResult) {
+        	NumberFieldCriteriaResult numberFieldResult = new NumberFieldCriteriaResult();
+        	numberFieldResult.setValue(((NumberFieldCriteriaResult)oldResult).getValue());
+            return numberFieldResult;
         } else {
             throw new RuntimeException("Don't know how to copy: " + oldResult);
         }

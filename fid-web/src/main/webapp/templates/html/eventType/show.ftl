@@ -110,6 +110,9 @@ ${action.setPageType('event_type', 'show')!}
                                             <#if criteria.criteriaType.name() == 'SCORE'>
                                                 <@s.text name="label.score"/>
                                             </#if>
+                                            <#if criteria.criteriaType.name() == 'NUMBER_FIELD'>
+                                                <@s.text name="label.numberfield"/>
+                                            </#if>
                                         </td>
                                         <td>
                                             <#assign sectionIdx=section_index/>

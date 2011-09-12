@@ -24,6 +24,8 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.Event;
+import com.n4systems.model.NumberFieldCriteria;
+import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
 import com.n4systems.model.Recommendation;
 import com.n4systems.util.DateTimeDefinition;
@@ -199,6 +201,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             if (((SignatureCriteriaResult) result).isSigned()) {
                                 stateView.setStateImage(new SignatureService().getSignatureFileFor(getEvent().getTenant(), getEvent().getId(), result.getCriteria().getId()));
                             }
+                        } else if (result instanceof NumberFieldCriteriaResult) {
+                            stateView.setState(getNumberStringValue(result));
                         }
                         stateView.setType(criteria.getCriteriaType().getReportIdentifier());
                         criteriaViews.add(stateView);
@@ -208,6 +212,11 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         }
 
 		return criteriaViews;
+	}
+
+	private String getNumberStringValue(CriteriaResult result) {
+		int decimalPlaces = ((NumberFieldCriteria) result.getCriteria()).getDecimalPlaces();
+		return String.format("%." + decimalPlaces + "f", ((NumberFieldCriteriaResult) result).getValue());
 	}
 
     private String getUnitOfMeasureStringValue(UnitOfMeasureCriteriaResult result) {

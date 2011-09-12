@@ -24,6 +24,7 @@ import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Event;
+import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
@@ -194,6 +195,9 @@ public class EventHelper {
             } else if(realResult instanceof DateFieldCriteriaResult) {
             	Date dateResult = dateConverter.convertDate(formResult.getTextValue(), ((DateFieldCriteria)realResult.getCriteria()).isIncludeTime());
             	((DateFieldCriteriaResult) realResult).setValue(dateResult);
+            } else if(realResult instanceof NumberFieldCriteriaResult) {
+            	float numberResult = Float.parseFloat(formResult.getTextValue());
+            	((NumberFieldCriteriaResult)realResult).setValue(numberResult);
             }
 
 			// and attach back onto the event

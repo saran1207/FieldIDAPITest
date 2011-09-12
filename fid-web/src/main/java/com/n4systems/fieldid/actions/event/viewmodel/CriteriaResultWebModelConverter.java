@@ -15,6 +15,8 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaType;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.DateFieldCriteriaResult;
+import com.n4systems.model.NumberFieldCriteria;
+import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.SelectCriteriaResult;
 import com.n4systems.model.SignatureCriteriaResult;
@@ -48,6 +50,10 @@ public class CriteriaResultWebModelConverter {
         	webModel.setTextValue(dateStr);
         } else if (result instanceof ScoreCriteriaResult) {
             webModel.setTextValue(((ScoreCriteriaResult)result).getScore().getName());
+        } else if (result instanceof NumberFieldCriteriaResult) {
+        	int decimalPlaces = ((NumberFieldCriteria) result.getCriteria()).getDecimalPlaces();
+        	String numStr = String.format("%." + decimalPlaces + "f", ((NumberFieldCriteriaResult) result).getValue());
+        	webModel.setTextValue(numStr);
         }
 
         webModel.setType(result.getCriteria().getCriteriaType().name());
@@ -96,6 +102,8 @@ public class CriteriaResultWebModelConverter {
             ScoreCriteriaResult result =  new ScoreCriteriaResult();
             result.setScore(pm.find(Score.class, webModel.getStateId(), tenant));
             criteriaResult = result;
+        } else if (CriteriaType.NUMBER_FIELD.equals(type)) {
+            criteriaResult =  new NumberFieldCriteriaResult();
         } else {
             throw new RuntimeException("Unknown type for web model: " + webModel.getType());
         }

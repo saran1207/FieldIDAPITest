@@ -1,20 +1,21 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Listable;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.n4systems.model.api.Listable;
 
 public enum CriteriaType implements Listable {
 
     ONE_CLICK("One-Click Button", "oneclick", OneClickCriteria.class, OneClickCriteriaResult.class),
-    TEXT_FIELD("Text Field", "textfield", TextFieldCriteria.class, TextFieldCriteriaResult.class),
-    COMBO_BOX("Combo Box", "select", ComboBoxCriteria.class, ComboBoxCriteriaResult.class),
-    SELECT("Select Box", "select", SelectCriteria.class, SelectCriteriaResult.class),
-    UNIT_OF_MEASURE("Unit of Measure", "unitofmeasure", UnitOfMeasureCriteria.class, UnitOfMeasureCriteriaResult.class),
-    SIGNATURE("Signature", "signature", SignatureCriteria.class, SignatureCriteriaResult.class),
-    DATE_FIELD("Date Field", "textfield", DateFieldCriteria.class, DateFieldCriteriaResult.class),
-    SCORE("Score", "score", ScoreCriteria.class, ScoreCriteriaResult.class);
+    TEXT_FIELD("Text Field", "textfield", TextFieldCriteria.class,TextFieldCriteriaResult.class),
+    COMBO_BOX("Combo Box", "select", ComboBoxCriteria.class,ComboBoxCriteriaResult.class),
+    SELECT("Select Box", "select", SelectCriteria.class,SelectCriteriaResult.class),
+    UNIT_OF_MEASURE("Unit of Measure", "unitofmeasure", UnitOfMeasureCriteria.class,UnitOfMeasureCriteriaResult.class),
+    SIGNATURE("Signature", "signature", SignatureCriteria.class,SignatureCriteriaResult.class),
+    DATE_FIELD("Date Field", "datefield", DateFieldCriteria.class,DateFieldCriteriaResult.class),
+    SCORE("Score", "score", ScoreCriteria.class, ScoreCriteriaResult.class),
+    NUMBER_FIELD("Number Field", "numberfield", NumberFieldCriteria.class, NumberFieldCriteriaResult.class);
 
     private String description;
     private String reportIdentifier;

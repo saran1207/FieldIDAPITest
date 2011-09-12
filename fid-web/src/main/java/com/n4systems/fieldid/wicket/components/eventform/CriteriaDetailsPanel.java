@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.wicket.components.eventform.details.ComboBoxDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.DateFieldDetailsPanel;
+import com.n4systems.fieldid.wicket.components.eventform.details.NumberFieldDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.OneClickDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.ScoreDetailsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.details.SelectDetailsPanel;
@@ -11,6 +12,7 @@ import com.n4systems.fieldid.wicket.components.eventform.details.UnitOfMeasureDe
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.DateFieldCriteria;
+import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.SelectCriteria;
@@ -72,6 +74,8 @@ public class CriteriaDetailsPanel extends Panel {
             add(new DateFieldDetailsPanel("specificDetailsPanel", new Model<DateFieldCriteria>((DateFieldCriteria) criteria)));
         } else if (criteria instanceof ScoreCriteria) {
             add(new ScoreDetailsPanel("specificDetailsPanel", new Model<ScoreCriteria>((ScoreCriteria) criteria)));
+        } else if (criteria instanceof NumberFieldCriteria) {
+        	add(new NumberFieldDetailsPanel("specificDetailsPanel", new Model<NumberFieldCriteria>((NumberFieldCriteria) criteria)));
         }
     }
 

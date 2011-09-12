@@ -1,31 +1,9 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
-import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
-import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
-import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
-import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
-import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.CriteriaType;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.StateSet;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasure;
-import com.n4systems.model.UnitOfMeasureCriteria;
-import com.n4systems.model.UnitOfMeasureListLoader;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.stateset.StateSetLoader;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.Component;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -40,8 +18,24 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
-import java.util.Arrays;
-import java.util.List;
+import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
+import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
+import com.n4systems.fieldid.wicket.components.eventform.util.CriteriaCopyUtil;
+import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.CriteriaType;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.StateSet;
+import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.UnitOfMeasureCriteria;
+import com.n4systems.model.UnitOfMeasureListLoader;
+import com.n4systems.model.stateset.StateSetLoader;
 
 public class CriteriaPanel extends SortableListPanel {
 

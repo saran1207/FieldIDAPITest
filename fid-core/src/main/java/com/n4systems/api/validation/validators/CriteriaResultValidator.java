@@ -19,6 +19,7 @@ import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.DateFieldCriteria;
 import com.n4systems.model.EventType;
+import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
@@ -64,8 +65,19 @@ public class CriteriaResultValidator extends CollectionValidator<CriteriaResultV
 			return validateTextField((TextFieldCriteria) criteria, section, value);
 		case UNIT_OF_MEASURE:
 			return validateUnitOfMeasure((UnitOfMeasureCriteria) criteria, section, value);
+		case NUMBER_FIELD:
+			return validateNumberField((NumberFieldCriteria) criteria, section, value);
 		}
 		return ValidationResult.pass();
+	}
+
+	private ValidationResult validateNumberField(NumberFieldCriteria criteria, CriteriaSection section, CriteriaResultView value) {
+		try {
+			Float.parseFloat(value.getResultString());
+			return ValidationResult.pass();
+		} catch (Exception e) {
+			return ValidationResult.fail(NotANumberFail, value.getResultString());
+		}
 	}
 
 	private ValidationResult validateUnitOfMeasure(UnitOfMeasureCriteria criteria, CriteriaSection section, CriteriaResultView value) {

@@ -21,6 +21,8 @@
                 <#include '_dateFieldCriteriaResultDisplay.ftl'>
             <#elseif criteriaResult.criteria.criteriaType.name() == 'SCORE'>
                 <#include '_scoreCriteriaResultDisplay.ftl'>
+            <#elseif criteriaResult.criteria.criteriaType.name() == 'NUMBER_FIELD'>
+                <#include '_numberFieldCriteriaResultDisplay.ftl'>
             </#if>
 
             <#include "../observationsCrud/observationsShow.ftl"/>

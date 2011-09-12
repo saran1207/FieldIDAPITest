@@ -1,12 +1,8 @@
 package com.n4systems.fieldid.wicket.model.eventform;
 
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasureCriteria;
 import org.apache.wicket.model.IModel;
+
+import com.n4systems.model.Criteria;
 
 public class CriteriaTypeDescriptionModel implements IModel<String> {
 

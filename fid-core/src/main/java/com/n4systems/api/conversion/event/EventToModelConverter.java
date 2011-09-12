@@ -1,6 +1,8 @@
 package com.n4systems.api.conversion.event;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.CriteriaType;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.base.Predicate;
@@ -23,11 +24,13 @@ import com.n4systems.model.ComboBoxCriteriaResult;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.CriteriaType;
 import com.n4systems.model.DateFieldCriteriaResult;
 import com.n4systems.model.Deficiency;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.EventType;
+import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.Recommendation;
@@ -146,7 +149,8 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 				return criteriaResult;
 			}
 
-			@Override public CriteriaResult populate(OneClickCriteriaResult result) {
+			@Override 
+			public CriteriaResult populate(OneClickCriteriaResult result) {
 				checkArgument(criteria.getCriteriaType() == CriteriaType.ONE_CLICK);
 				StateSet states = ((OneClickCriteria)criteria).getStates();
 				State state = states.getState(criteriaResultView.getResultString());
@@ -155,23 +159,27 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 				return result;
 			}
 
-			@Override public CriteriaResult populate(ComboBoxCriteriaResult result) {
+			@Override 
+			public CriteriaResult populate(ComboBoxCriteriaResult result) {
 				result.setValue(criteriaResultView.getResultString());
 				return result;					
 			}
 
-			@Override public CriteriaResult populate(DateFieldCriteriaResult result) {
+			@Override 
+			public CriteriaResult populate(DateFieldCriteriaResult result) {
 				checkArgument(criteriaResultView.getResult()==null ||  criteriaResultView.getResult() instanceof Date); 
 				result.setValue((Date)criteriaResultView.getResult());						
 				return result;
 			}
 
-			@Override public CriteriaResult populate(SelectCriteriaResult result) {
+			@Override 
+			public CriteriaResult populate(SelectCriteriaResult result) {
 				checkArgument(criteria instanceof SelectCriteria);
 				List<String> options = ((SelectCriteria)criteria).getOptions();
 				final String option = criteriaResultView.getResultString();
 				int index = Iterators.indexOf(options.iterator(), new Predicate<String>() {
-					@Override public boolean apply(String value) {
+					@Override 
+					public boolean apply(String value) {
 						return StringUtils.equalsIgnoreCase(value,option);
 					}			
 				});							
@@ -180,7 +188,8 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 				return result;					
 			}
 
-			@Override public CriteriaResult populate(UnitOfMeasureCriteriaResult result) {
+			@Override 
+			public CriteriaResult populate(UnitOfMeasureCriteriaResult result) {
 				// recall : value in form of "123|456" =    or   "123"  (<--no secondary specified).
 				String[] tokens = criteriaResultView.getResultString().split(UNIT_OF_MEASURE_SEPARATOR_REGEX);					
 				checkState(tokens.length<=2, "can't specify more than 2 values in '|' delimited Unit Of Measure field : '" + criteriaResultView.getResultString()); 
@@ -189,15 +198,22 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 				return result;
 			}
 
-			@Override public CriteriaResult populate(TextFieldCriteriaResult result) {
+			@Override 
+			public CriteriaResult populate(TextFieldCriteriaResult result) {
 				result.setValue(criteriaResultView.getResultString());				
 				return result;
 			}
 
-			@Override public CriteriaResult populate(SignatureCriteriaResult result) {
+			@Override 
+			public CriteriaResult populate(SignatureCriteriaResult result) {
 				throw new UnsupportedOperationException("Importing signatures is not supported.");
 			}
-			
+
+			@Override
+			public CriteriaResult populate(NumberFieldCriteriaResult result) {
+	        	result.setValue(Float.parseFloat(criteriaResultView.getResultString()));
+				return result;
+			}
 		});
 	} 
 	

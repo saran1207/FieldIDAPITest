@@ -6,6 +6,7 @@ import java.util.List;
 import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.DateFieldCriteria;
+import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.SelectCriteria;
@@ -37,18 +38,26 @@ public class CriteriaCopyUtil {
 	        newCriteria = copyDateFieldCriteria((DateFieldCriteria) criteria);
 	    } else if (criteria instanceof ScoreCriteria) {
             newCriteria = copyScoreCriteria((ScoreCriteria) criteria);
-        }
+	    } else if (criteria instanceof NumberFieldCriteria) {
+	    	newCriteria = copyNumberFieldCriteria((NumberFieldCriteria)criteria);
+	    }
 
         copyCommonFields(criteria, newCriteria, existingCriteria);
         return newCriteria;
     }
+
+    private Criteria copyNumberFieldCriteria(NumberFieldCriteria criteria) {
+    	NumberFieldCriteria newCriteria = new NumberFieldCriteria();
+    	newCriteria.setDecimalPlaces(criteria.getDecimalPlaces());
+    	return newCriteria;
+	}
 
     private Criteria copyScoreCriteria(ScoreCriteria criteria) {
         ScoreCriteria newCriteria = new ScoreCriteria();
         newCriteria.setScoreGroup(criteria.getScoreGroup());
         return newCriteria;
     }
-
+    
     private Criteria copyDateFieldCriteria(DateFieldCriteria criteria) {
 		DateFieldCriteria newCriteria = new DateFieldCriteria();
 		newCriteria.setIncludeTime(criteria.isIncludeTime());
