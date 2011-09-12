@@ -295,10 +295,8 @@
         }        
         
         if (high_bottom >= visible_bottom) {
-        	throw('scrolling to '  + high_bottom-maxHeight);
           return this.search_results.scrollTop((high_bottom - maxHeight) > 0 ? high_bottom - maxHeight : 0);
         } else if (high_top < visible_top) {
-        	throw('scrolling to '  + high_top);
           return this.search_results.scrollTop(high_top);
         }
       }
