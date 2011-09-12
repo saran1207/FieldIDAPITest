@@ -79,6 +79,7 @@ import com.n4systems.util.ListingPair;
 import com.n4systems.util.persistence.SimpleListable;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 
 
@@ -744,8 +745,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware {
 
 		return criteriaResults;
 	}
-
-    @CustomValidator(type = "allScoresMustBeEntered", message = "", key = "error.scores.required")
+	@Validations(customValidators = {
+			@CustomValidator(type = "allScoresMustBeEntered", message = "", key = "error.scores.required"),
+			@CustomValidator(type = "numberCriteriaValidator", message = "", key = "error.invalid_number_criteria")})
     public void setCriteriaResults(List<CriteriaResultWebModel> results) {
 		criteriaResults = results;
 	}
