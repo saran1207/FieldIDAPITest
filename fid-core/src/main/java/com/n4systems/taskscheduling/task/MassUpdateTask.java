@@ -25,13 +25,17 @@ public abstract class MassUpdateTask implements Runnable {
 	public void run() {
 		try {
 			setup();
+            logger.info("Starting mass update: " + getClass() + " " + getExecutionDetails());
 			executeMassUpdate();
+            logger.info("Completed mass update: " + getClass() + " " + getExecutionDetails());
 			sendSuccessEmailResponse();
 			transaction.commit();
 		} catch (Exception e) {
 			failure(e);
 		}
 	}
+
+    protected String getExecutionDetails() { return ""; }
 
 	private void setup() {
 		transaction = PersistenceManager.startTransaction();
@@ -44,7 +48,7 @@ public abstract class MassUpdateTask implements Runnable {
 	protected abstract void sendFailureEmailResponse();
 
 	private void failure(Exception e) {
-		logger.error("failed to archive event type", e);
+		logger.error("Failed to perform mass update", e);
 		transaction.rollback();
 
 		PersistenceManager.shutdown();

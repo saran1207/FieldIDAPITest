@@ -30,7 +30,12 @@ public class MassUpdateAssetsTask extends MassUpdateTask {
 		super(massUpdateManager);
 	}
 
-	@Override
+    @Override
+    protected String getExecutionDetails() {
+        return " User: " + modifiedBy;
+    }
+
+    @Override
 	protected void executeMassUpdate() throws UpdateFailureException, UpdateConatraintViolationException {
 		massUpdateManager.updateAssets(ids, asset, values, modifiedBy, orderNumber);
 	}

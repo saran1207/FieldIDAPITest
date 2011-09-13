@@ -7,8 +7,9 @@
 		</#if>
 	</title>
 	<@n4.includeStyle href="user" type="page"/>
+    <script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 </head>
-<@s.form action="customerEdit!save" cssClass="fullForm fluidSets" theme="fieldid">
+<@s.form action="customerEdit!save" cssClass="fullForm fluidSets" theme="fieldid" id="customerForm">
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="currentPage" />
@@ -82,7 +83,7 @@
 		</div>
 	</div>
 	<div class="formAction" >
-		<@s.submit  key="label.save"/> 
+		<@s.submit  key="label.save" id="saveButton"/>
 		
 		<@s.text name="label.or"/>  
 		
@@ -106,3 +107,14 @@
 		</@n4.includeScript>
 	</#if>
 </head>
+
+<script type="text/javascript" >
+	var buttons = new Array( 'saveButton');
+	var buttonLockMessages = new Array( '<@s.text name="hbutton.pleasewait" />');
+
+    $('saveButton').observe('click', function(event) {
+        event.stop();
+        lockSubmitButtons();
+        $('customerForm').submit();
+    });
+</script>
