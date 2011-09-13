@@ -2,7 +2,7 @@
 	<script type="text/javascript" src="<@s.url value="/javascript/asset.js"/>" ></script>
 	<script type='text/javascript' src='<@s.url value="/javascript/assetRfidHandler.js"/>'></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/generateIdentifier.js"/>"></script>
-	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.jsF"/>"></script>
+	<script type="text/javascript" src="<@s.url value="/javascript/lockSubmitButtons.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/unitOfMeasure.js"/>"></script>
 	<script type="text/javascript" src="<@s.url value="/javascript/combobox.js"/>"></script>
 	<script type='text/javascript' src='<@s.url value="/javascript/updateAttributes.js"/>'></script>
