@@ -15,7 +15,7 @@
 	<@s.form action="logIntoSystem" theme="fieldid" cssClass="minForm" id="signInForm">
 		<#include "/templates/html/common/_formErrors.ftl" />
 		<@s.hidden name="signIn.normalLogin" id="normalLogin"/>
-		<div id="normal_container" class="togglable">
+		<div id="normal_container">
 			<label class="label"><@s.text name="label.username"/></label>
 			<@s.textfield name="signIn.userName" id="userName"/>
 			
@@ -23,23 +23,14 @@
 			<@s.password name="signIn.password" id="password"/>
 		</div>
 		
-		<div id="secureRfid_container" class="togglable" style="display:none">
-			<label class="label"><@s.text name="label.securityrfidnumber"/></label>
-			<@s.password name="signIn.secureRfid" id="secureRfidNumber"/>
-		</div>
 		<div class="oneLine">
 			<span class="fieldHolder"><@s.checkbox name="signIn.rememberMe" theme="fieldidSimple" /><@s.text name="label.rememberme"/></span>
-		</div>
+		</div>	
 		
-		
-		<div class="actions togglable" id="normalActions_container" style="display:none" > 
-			<@s.submit key="label.sign_in" id="signInButton"/> <@s.text name="label.or"/> <a href="#" onclick="return showSecurityCardSignIn();"><@s.text name="label.sign_in_with_security_card"/></a>
+		<div class="actions" id="normalActions_container"> 
+			<@s.submit key="label.sign_in" id="signInButton"/>
 		</div>
-		
-		<div class="actions togglable" id="secureRfidActions_container" > 
-			<@s.submit key="label.sign_in" id="signInWithSecurityButton"/> <@s.text name="label.or"/> <a href="#" onclick="return showNormalSignIn();"><@s.text name="label.sign_in_with_user_name"/></a>
-		</div>
-				
+						
 	</@s.form>
 	
 	<ul id="otherActions">
@@ -49,36 +40,3 @@
 </div>
 
 <#include "../common/_secondary_content.ftl"/>
-<@n4.includeScript>
-	function showSecurityCardSignIn() {
-		hideAllTogglable();
-		
-		$('normalLogin').value ='false';
-		$('secureRfid_container').show();
-		$('secureRfidActions_container').show();	
-		$('secureRfidNumber').focus();
-		return false;
-	}
-	
-	function showNormalSignIn() {
-		hideAllTogglable();
-		
-		$('normalLogin').value ='true';
-		$('normal_container').show();
-		$('normalActions_container').show();	
-		$('userName').focus();
-		return false;
-	}
-	
-	function hideAllTogglable() {
-		$$(".togglable").each( function(element) {
-				element.hide();
-			});
-	}
-	
-	<#if normalLogin > 
-		showNormalSignIn();
-	<#else>
-		showSecurityCardSignIn();
-	</#if>
-</@n4.includeScript>
