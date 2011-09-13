@@ -230,7 +230,7 @@ public class SearchService extends FieldIdPersistenceService {
 	}
 
     protected PrimaryOrg getPrimaryOrg() {
-		return orgService.getPrimaryOrgForTenant(securityContext.getUserSecurityFilter().getTenantId());
+		return orgService.getPrimaryOrgForTenant(securityContext.getTenantSecurityFilter().getTenantId());
 	}
 
 }
