@@ -1,8 +1,5 @@
 package com.n4systems.fieldid.config;
 
-import com.n4systems.fieldid.service.event.ScoreService;
-import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
-import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -10,6 +7,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.n4systems.ejb.PersistenceManager;
@@ -27,13 +25,19 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.event.EventFormService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventTypeService;
+import com.n4systems.fieldid.service.event.ScoreService;
+import com.n4systems.fieldid.service.export.ExportService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.search.ReportService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.SearchService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
+import com.n4systems.fieldid.service.task.AsyncService;
+import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
+import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.LoginService;
 import com.n4systems.fieldid.service.user.UserLimitService;
@@ -215,4 +219,22 @@ public class FieldIdAppConfig {
     public PersistenceService persistenceService() {
         return new PersistenceService();
     }
+    
+    @Bean
+    public ExportService exportService() {
+        return new ExportService();
+    }
+
+    @Bean public EventService eventService() { 
+    	return new EventService();
+    }
+    
+    @Bean public SchedulerFactoryBean schedulerFactoryBean() { 
+    	return new SchedulerFactoryBean();
+    }
+
+    @Bean public AsyncService asyncService() { 
+    	return new AsyncService();
+    }
+    
 }

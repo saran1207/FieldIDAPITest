@@ -31,4 +31,10 @@ public class UserService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
     }
 
+	public User getUser(Long userId) {
+		QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
+        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "id", userId));
+        return persistenceService.find(builder);		
+	}
+
 }

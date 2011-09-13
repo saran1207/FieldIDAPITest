@@ -1,30 +1,5 @@
 package com.n4systems.fieldid.wicket;
 
-import com.n4systems.fieldid.wicket.pages.HomePage;
-import com.n4systems.fieldid.wicket.pages.OopsPage;
-import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
-import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
-import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
-import com.n4systems.fieldid.wicket.pages.setup.AccountPolicyPage;
-import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
-import com.n4systems.fieldid.wicket.pages.setup.DataLogPage;
-import com.n4systems.fieldid.wicket.pages.setup.IdentifierOverridesPage;
-import com.n4systems.fieldid.wicket.pages.setup.ImportPage;
-import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
-import com.n4systems.fieldid.wicket.pages.setup.PasswordPolicyPage;
-import com.n4systems.fieldid.wicket.pages.setup.SecurityPage;
-import com.n4systems.fieldid.wicket.pages.setup.SettingsPage;
-import com.n4systems.fieldid.wicket.pages.setup.SystemSettingsPage;
-import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
-import com.n4systems.fieldid.wicket.pages.setup.WidgetsPage;
-import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
-import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
-import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
-import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
-import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
-import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -35,6 +10,21 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.spring.injection.annot.AnnotSpringInjector;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+
+import com.n4systems.fieldid.wicket.pages.HomePage;
+import com.n4systems.fieldid.wicket.pages.OopsPage;
+import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
+import com.n4systems.fieldid.wicket.pages.reporting.ReportingPage;
+import com.n4systems.fieldid.wicket.pages.reporting.ReturnToReportPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunSavedReportPage;
+import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
+import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
+import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
+import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
+import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
+import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
 
 public class FieldIDWicketApp extends WebApplication {
 
@@ -63,6 +53,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountBookmarkablePage("savedReport", RunSavedReportPage.class);
         
         mountBookmarkablePage("admin/addTenant", AddTenantPage.class);
+        
+        mountBookmarkablePage("setup/export", ExcelExportPage.class);        
 
         getMarkupSettings().setStripWicketTags(true);
         getResourceSettings().addStringResourceLoader(0, new CustomerLanguageResourceLoader());

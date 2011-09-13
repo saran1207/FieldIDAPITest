@@ -35,7 +35,6 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 	public ExcelReportExportTask(DownloadLink downloadLink, String downloadUrl) {
 		super(downloadLink, downloadUrl, "excelReportDownload");
 	}
-
 	
 	@Override
 	protected void generateFile(File downloadFile, User user, String downloadName) throws Exception {
@@ -68,31 +67,38 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 		excelBuilder.writeToFile(downloadFile);		
 	}
 
+	@Override
 	public List<SortTerm> getSortTerms() {
 		return searchDefiner.getSortTerms();
 	}
 
+	@Override
 	public ResultTransformer<TableView> getTransformer() {
 		return searchDefiner.getTransformer();
 	}
 
+	@Override
 	public int getPage() {
 		return page;
 	}
 
+	@Override
 	public int getPageSize() {
 		return PAGE_SIZE;
 	}
 
 
+	@Override
 	public Class<?> getSearchClass() {
 		return searchDefiner.getSearchClass();
 	}
 
+	@Override
 	public List<SearchTermDefiner> getSearchTerms() {
 		return searchDefiner.getSearchTerms();
 	}
 	
+	@Override
 	public List<JoinTerm> getJoinTerms() {
 		return searchDefiner.getJoinTerms();
 	}
@@ -113,6 +119,7 @@ public class ExcelReportExportTask extends DownloadTask implements SearchDefiner
 		this.columnTitles = columnTitles;
 	}
 
+	@Override
 	public List<QueryFilter> getSearchFilters() {
 		return searchDefiner.getSearchFilters();
 	}
