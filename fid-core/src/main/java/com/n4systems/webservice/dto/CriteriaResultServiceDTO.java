@@ -12,6 +12,7 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	public static final String TYPE_UNIT_OF_MEASURE = "UNIT_OF_MEASURE";
 	public static final String SIGNATURE = "SIGNATURE";
 	public static final String TYPE_DATE_FIELD = "DATE_FIELD";
+	public static final String TYPE_NUMBER_FIELD = "NUMBER_FIELD";
 	
 	private long criteriaId;
 	private long stateId;
@@ -26,6 +27,7 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 	private String unitOfMeasureSecondaryFieldValue;
 	private byte[] signatureImage;
 	private Date dateFieldValue;
+	private Float numberFieldValue;
 	
 	public long getCriteriaId() {
 		return criteriaId;
@@ -129,6 +131,14 @@ public class CriteriaResultServiceDTO extends AbstractBaseServiceDTO {
 
 	public Date getDateFieldValue() {
 		return dateFieldValue;
+	}
+
+	public void setNumberFieldValue(Float numberFieldValue) {
+		this.numberFieldValue = numberFieldValue;
+	}
+
+	public Float getNumberFieldValue() {
+		return numberFieldValue;
 	}
 	
 }

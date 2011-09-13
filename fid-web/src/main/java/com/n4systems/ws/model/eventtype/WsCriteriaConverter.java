@@ -5,6 +5,7 @@ import com.n4systems.model.ComboBoxCriteria;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaType;
 import com.n4systems.model.DateFieldCriteria;
+import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.SelectCriteria;
 import com.n4systems.model.SignatureCriteria;
@@ -41,12 +42,14 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 			wsModel = convertSignatureCriteria((SignatureCriteria)model);
 		} else if(model.getCriteriaType() == CriteriaType.DATE_FIELD) {
 			wsModel = convertDateFieldCriteria((DateFieldCriteria)model);
+		} else if(model.getCriteriaType() == CriteriaType.NUMBER_FIELD) {
+			wsModel = convertNumberFieldCriteria((NumberFieldCriteria)model);
 		} else {
 			throw new NotImplementedException("Conversion not implemented for Criteria type: " + model.getClass().getName());
 		}
 		convertBaseFields(model, wsModel);
 		return wsModel;
-	}
+	}	
 
 	private void convertBaseFields(Criteria model, WsCriteria wsModel) {
 		wsModel.setId(model.getId());
@@ -95,6 +98,12 @@ public class WsCriteriaConverter extends WsModelConverter<Criteria, WsCriteria> 
 	private WsCriteria convertDateFieldCriteria(DateFieldCriteria model) {
 		WsDateFieldCriteria wsModel = new WsDateFieldCriteria();
 		wsModel.setIncludeTime(model.isIncludeTime());
+		return wsModel;
+	}
+	
+	private WsCriteria convertNumberFieldCriteria(NumberFieldCriteria model) {
+		WsNumberFieldCriteria wsModel = new WsNumberFieldCriteria();
+		wsModel.setDecimalPlaces(model.getDecimalPlaces());
 		return wsModel;
 	}
 }

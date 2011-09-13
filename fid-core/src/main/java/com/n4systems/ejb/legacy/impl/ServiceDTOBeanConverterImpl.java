@@ -49,6 +49,7 @@ import com.n4systems.model.EventSchedule;
 import com.n4systems.model.EventType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.GpsLocation;
+import com.n4systems.model.NumberFieldCriteriaResult;
 import com.n4systems.model.Observation;
 import com.n4systems.model.OneClickCriteriaResult;
 import com.n4systems.model.Project;
@@ -700,6 +701,9 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			} else if (resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_DATE_FIELD)) {
 				result = new DateFieldCriteriaResult();
 				((DateFieldCriteriaResult)result).setValue(resultDTO.getDateFieldValue());
+			} else if(resultDTO.getType().equals(CriteriaResultServiceDTO.TYPE_NUMBER_FIELD)) {
+				result = new NumberFieldCriteriaResult();
+				((NumberFieldCriteriaResult)result).setValue(resultDTO.getNumberFieldValue());
 			} else {
 				throw new NotImplementedException("Conversion of CriteriaResultServiceDTO [" + resultDTO.getType() + "] not implemented");
 			}
@@ -839,8 +843,10 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		} else if(criteriaResult instanceof DateFieldCriteriaResult) {
 			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_DATE_FIELD);
 			criteriaResultServiceDTO.setDateFieldValue(((DateFieldCriteriaResult)criteriaResult).getValue());
-		}
-		else {
+		} else if(criteriaResult instanceof NumberFieldCriteriaResult) {
+			criteriaResultServiceDTO.setType(CriteriaResultServiceDTO.TYPE_NUMBER_FIELD);
+			criteriaResultServiceDTO.setNumberFieldValue(((NumberFieldCriteriaResult)criteriaResult).getValue());
+		} else {
 			throw new NotImplementedException("Conversion of CriteriaResult [" + criteriaResult.getClass() + "] not implemented");
 		}
 
