@@ -9,3 +9,7 @@
 .textContainer h2 {
 	padding: 5px;
 }
+
+.initialMessage {
+	clear: both;
+}

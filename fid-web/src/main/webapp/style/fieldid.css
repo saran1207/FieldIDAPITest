@@ -1947,14 +1947,15 @@ div.unitOfMeasureName {
 
 #newScheduleForm {
 	overflow:hidden;
-	width:500px;
-	border:solid 3px #999;
+	width:600px;
+	border:solid 1px #999;
 	background-color:#fff;
 	z-index: 1;
 }
 
 #newScheduleForm h2{
 	margin: 0;
+	border-top: 0 none;
 }
 
 #newScheduleForm button{
@@ -1964,11 +1965,49 @@ div.unitOfMeasureName {
 #newScheduleForm .blockSeparated{
 	font-size: 1.1em;
 	padding: 5px;
-	border-top:1px solid #CCCCCC;
 }
 
 #newScheduleForm .infoSet .fieldHolder{
 	width: 295px;
+}
+
+#newScheduleForm .infoSet .label{
+	width: 170px;
+	padding-left: 15px;
+	padding-right: 10px;
+	font-weight: normal;
+	text-align: right;
+}
+
+#newScheduleForm .infoSet select{
+	border: 1px solid #9C9C9C;
+    color: #555555;
+    padding: 4px;
+}
+
+#newScheduleForm .infoSet .egColor {
+	display: inline;
+	float: none;
+}
+
+#newSchedule_nextDate {
+	width: 150px;
+}
+
+.crudForm .infoSet .dateQuickLinks{
+	margin-left: 195px;
+	width: 340px;
+}
+
+.infoSet .dateQuickLinks {
+	margin-left: 200px;
+	width: 340px;
+	clear: both;
+	display: block;
+}
+
+#nextDate {
+	width: 150px;
 }
 
 #startEvent{

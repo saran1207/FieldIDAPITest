@@ -12,24 +12,34 @@
 			<h2><@s.text name="label.add_a_schedule"/></h2>
 			<@s.hidden name="assetId"  />
 			<div class="infoSet"> 
-				<label for="type"><@s.text name="label.eventtype"/></label>
+				<label class="label" for="type"><@s.text name="label.what_should_be_scheduled"/></label>
 				<@s.select name="type" list="eventTypes" listKey="id" listValue="name"/>
 			</div>
-			
-			<div class="infoSet">
-				<label for="type"><@s.text name="label.scheduledate"/></label>
-				<@s.textfield name="nextDate" cssClass="datepicker" />
-			</div>	
-			
+					
 			<#if securityGuard.projectsEnabled>
 				<div class="infoSet"> 
-					<label for="job"><@s.text name="label.job"/></label>
+					<label class="label" for="type">
+						<@s.text name="label.assign_to_a_job"/>
+						<span class="egColor">(<@s.text name="label.optional"/>)</span>
+					</label>
 					<@s.select name="project" list="jobs" listKey="id" listValue="name" emptyOption="true"/>
 				</div>
 			</#if>
 			
+			<div class="infoSet">
+				<label class="label" for="type"><@s.text name="label.when_is_it_due"/></label>
+				<@s.textfield id="nextDate" name="nextDate" cssClass="datepicker" />
+				<span class="dateQuickLinks">
+					<a href="#" onclick="$('nextDate').value = formatDate(new Date());">Today</a> |
+					<a href="#" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1));">Tomorrow</a> |
+					<a href="#" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1));">Next Month</a> |
+					<a href="#" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6));">In 6 Months</a> |
+					<a href="#" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1));">Next Year</a>
+				</span>
+			</div>	
+			
 			<div class="formAction">
-				<@s.submit key="label.save" />
+				<@s.submit key="label.addschedule" />
 				<@s.text name="label.or"/>
 				<a href="#" onclick="$('newScheduleForm').hide(); return false;"><@s.text name="label.cancel"/></a>
 			</div>
@@ -46,4 +56,19 @@
 			$('newSchedule').request( getStandardCallbacks() );
 			
 		});
+		
+	function formatDate(date) {
+		return jQuery.datepicker.formatDate('${sessionUser.jqueryDateFormat}', date);
+	}
+	
+	function addDays(date, days) {
+		return new Date( date.setDate(date.getDate() + days) );
+	}
+	function addMonths(date, months) {
+		return new Date( date.setMonth(date.getMonth() + months) );
+	}
+	function addYears(date, years) {
+		return new Date( date.setFullYear(date.getFullYear() + years) );
+	}
+	
 </script>

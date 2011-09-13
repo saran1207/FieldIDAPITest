@@ -20,24 +20,33 @@
 	<div class="fluentSets schedulesAdd newScheduleForm" id="newScheduleForm" style="display:none" >
 		<h2><@s.text name="label.add_a_schedule"/></h2>
 		<div class="infoSet">
-			<label class="label"><@s.text name="label.event_type"/></label>
+			<label class="label"><@s.text name="label.what_should_be_scheduled"/></label>
 			<@s.select name="nextEventTypeSelection" id="nextEventTypeSelection" list="eventTypes" listKey="id" listValue="name" theme="fieldid"/>
 		</div>
 		
-		<div class="infoSet">
-			<label class="label"><@s.text name="label.for_date"/></label>
-			<span class="fieldHolder">
-				<@s.textfield id="nextDate" name="newScheduleDate" cssClass="datepicker"/>
-			</span>
-		</div>
 		<#if securityGuard.projectsEnabled>
 			<div class="infoSet">
-				<label class="label"><@s.text name="label.job"/></label>
+				<label class="label">
+					<@s.text name="label.assign_to_a_job"/>
+					<span class="egColor">(<@s.text name="label.optional"/>)</span>
+				</label>
 				<@s.select name="jobSelection" id="jobSelection" list="jobs" listKey="id" listValue="name" emptyOption="true" theme="fieldid"/>
 			</div>
 		</#if>
+
+		<div class="infoSet">
+			<label class="label"><@s.text name="label.when_is_it_due"/></label>
+			<@s.textfield id="nextDate" name="newScheduleDate" cssClass="datepicker"/>
+			<span class="dateQuickLinks">
+				<a href="#" onclick="$('nextDate').value = formatDate(new Date());">Today</a> |
+				<a href="#" onclick="$('nextDate').value = formatDate(addDays(new Date(), 1));">Tomorrow</a> |
+				<a href="#" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 1));">Next Month</a> |
+				<a href="#" onclick="$('nextDate').value = formatDate(addMonths(new Date(), 6));">In 6 Months</a> |
+				<a href="#" onclick="$('nextDate').value = formatDate(addYears(new Date(), 1));">Next Year</a>
+			</span>
+		</div>
 		<div class="blockSeparated"> 
-			<button onclick="return addSchedule();"><@s.text name="label.add"/></button> <@s.text name="label.or"/> <a href="#" onclick="$('newScheduleForm').hide(); return false;"><@s.text name="label.cancel"/></a>
+			<button onclick="return addSchedule();"><@s.text name="label.addschedule"/></button> <@s.text name="label.or"/> <a href="#" onclick="$('newScheduleForm').hide(); return false;"><@s.text name="label.cancel"/></a>
 		</div>
 	</div>
 </div>
@@ -51,4 +60,18 @@
 	assetId = '${assetId!0}';
 	
 	onDocumentLoad(scheduleListUpdated);
+	
+	function formatDate(date) {
+		return jQuery.datepicker.formatDate('${sessionUser.jqueryDateFormat}', date);
+	}
+	
+	function addDays(date, days) {
+		return new Date( date.setDate(date.getDate() + days) );
+	}
+	function addMonths(date, months) {
+		return new Date( date.setMonth(date.getMonth() + months) );
+	}
+	function addYears(date, years) {
+		return new Date( date.setFullYear(date.getFullYear() + years) );
+	}
 </@n4.includeScript>
