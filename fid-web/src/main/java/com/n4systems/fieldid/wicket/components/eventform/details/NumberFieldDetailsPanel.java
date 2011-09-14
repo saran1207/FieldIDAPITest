@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.eventform.details;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -21,7 +22,7 @@ public class NumberFieldDetailsPanel extends Panel {
 		feedbackPanel.setOutputMarkupId(true);
 		feedbackPanel.setOutputMarkupPlaceholderTag(true);
 
-		add(decimalPlaces = new TextField<Integer>("decimalPlacesInputField", new PropertyModel<Integer>(model, "decimalPlaces")));
+		add(decimalPlaces = new RequiredTextField<Integer>("decimalPlacesInputField", new PropertyModel<Integer>(model, "decimalPlaces")));
 		decimalPlaces.add(new UpdateComponentOnChange() {
 			@Override
 			protected void onError(AjaxRequestTarget target, RuntimeException e) {

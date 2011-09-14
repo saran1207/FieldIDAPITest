@@ -51,9 +51,11 @@ public class CriteriaResultWebModelConverter {
         } else if (result instanceof ScoreCriteriaResult) {
             webModel.setTextValue(((ScoreCriteriaResult)result).getScore().getName());
         } else if (result instanceof NumberFieldCriteriaResult) {
-        	int decimalPlaces = ((NumberFieldCriteria) result.getCriteria()).getDecimalPlaces();
-        	String numStr = String.format("%." + decimalPlaces + "f", ((NumberFieldCriteriaResult) result).getValue());
-        	webModel.setTextValue(numStr);
+        	if(((NumberFieldCriteriaResult) result).getValue() != null) {
+	        	int decimalPlaces = ((NumberFieldCriteria) result.getCriteria()).getDecimalPlaces();
+	        	String numStr = String.format("%." + decimalPlaces + "f", ((NumberFieldCriteriaResult) result).getValue());
+	        	webModel.setTextValue(numStr);
+        	}
         }
 
         webModel.setType(result.getCriteria().getCriteriaType().name());

@@ -196,8 +196,10 @@ public class EventHelper {
             	Date dateResult = dateConverter.convertDate(formResult.getTextValue(), ((DateFieldCriteria)realResult.getCriteria()).isIncludeTime());
             	((DateFieldCriteriaResult) realResult).setValue(dateResult);
             } else if(realResult instanceof NumberFieldCriteriaResult) {
-            	float numberResult = Float.parseFloat(formResult.getTextValue());
-            	((NumberFieldCriteriaResult)realResult).setValue(numberResult);
+            	if(formResult.getTextValue() != null && !formResult.getTextValue().isEmpty()) {
+            		float numberResult = Float.parseFloat(formResult.getTextValue());
+            		((NumberFieldCriteriaResult)realResult).setValue(numberResult);
+            	}
             }
 
 			// and attach back onto the event

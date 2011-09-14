@@ -14,12 +14,14 @@ public class NumberCriteriaValidator extends FieldValidatorSupport {
 	public void validate(Object action) throws ValidationException {
         List<CriteriaResultWebModel> criteriaResults = ((EventCrud) action).getCriteriaResults();
         for (CriteriaResultWebModel criteriaResult : criteriaResults) {
-            if (CriteriaType.NUMBER_FIELD.name().equals(criteriaResult.getType())) {            	
-            	try {
-					Float.parseFloat(criteriaResult.getTextValue());
-				} catch (NumberFormatException e) {
-	                addFieldError(getFieldName(), action);
-	                break;
+            if (CriteriaType.NUMBER_FIELD.name().equals(criteriaResult.getType())) {  
+            	if(criteriaResult.getTextValue() != null && !criteriaResult.getTextValue().isEmpty()) {
+		        	try {
+						Float.parseFloat(criteriaResult.getTextValue());
+					} catch (NumberFormatException e) {
+		                addFieldError(getFieldName(), action);
+		                break;
+					}
 				}
             }
         }
