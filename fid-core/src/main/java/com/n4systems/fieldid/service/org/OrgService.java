@@ -40,11 +40,22 @@ public class OrgService extends FieldIdPersistenceService {
     }
 
     @Transactional(readOnly = true)
-    public PrimaryOrg getPrimaryOrgForTenant(Long tenantId) {
-        QueryBuilder<PrimaryOrg> query = createUserSecurityBuilder(PrimaryOrg.class);
+    public PrimaryOrg getPrimaryOrgForTenant(Long tenantId, Boolean useUserSecurity) {
+        QueryBuilder<PrimaryOrg> query;
+        
+        if (useUserSecurity) {
+        	query = createUserSecurityBuilder(PrimaryOrg.class);
+        } else {
+        	query = createTenantSecurityBuilder(PrimaryOrg.class);
+        }
+        
         query.addSimpleWhere("tenant.id", tenantId);
 
         return persistenceService.find(query);
+    }
+    
+    public PrimaryOrg getPrimaryOrgForTenant(Long tenantId){
+    	return getPrimaryOrgForTenant(tenantId, true);
     }
 
 }
