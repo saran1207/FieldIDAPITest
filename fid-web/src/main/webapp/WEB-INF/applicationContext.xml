@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:task="http://www.springframework.org/schema/task"      
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd        
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
@@ -15,6 +15,18 @@
     <context:annotation-config/>
     <tx:annotation-driven transaction-manager="txManager"/>
 
+
+  	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+      	<property name="scopes">
+          <map>
+              <entry key="thread">
+                  <bean class="org.springframework.context.support.SimpleThreadScope"/>
+              </entry>
+          	</map>
+    	  </property>
+	  </bean>
+
+		
 	<!--  moved to FieldIdAppConfig 
     <bean id="productTypeEJBContainer" class="com.n4systems.ejb.legacy.wrapper.LegacyAssetTypeEJBContainer"/>
 	-->
@@ -24,9 +36,9 @@
     -->    
     
     <!--  spring quartz task related beans -->    
-	<task:executor id="executor" pool-size="7"/>	    
+	<task:executor id="executor" pool-size="5"/>	    
 	<task:annotation-driven executor="executor"/>
-    
+ 	<!-- if we use @Scheduled in future, will need to have this XML .... <task:scheduler id="scheduler" pool-size="20"/> -->
 
     <bean id="optionEJBContainer" class="com.n4systems.ejb.legacy.wrapper.OptionEJBContainer"/>
 

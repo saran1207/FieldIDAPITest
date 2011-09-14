@@ -36,6 +36,7 @@ import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.SearchService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.task.AsyncService;
+import com.n4systems.fieldid.service.task.AsyncTaskFactory;
 import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
@@ -187,7 +188,7 @@ public class FieldIdAppConfig {
     }
     
     @Bean
-    @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @Scope(value="thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UserLimitService userLimitService() {
     	return new UserLimitService();
     }
@@ -203,14 +204,14 @@ public class FieldIdAppConfig {
         factoryBean.setPersistenceUnitName("fieldid");
         return factoryBean;
     }
-
+	
     @Bean
     public PlatformTransactionManager txManager() {
         return new JpaTransactionManager(entityManagerFactory().getObject());
     }
 
     @Bean
-    @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @Scope(value="thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public SecurityContext securityContext() {
     	return new SecurityContext();
     }
@@ -225,16 +226,23 @@ public class FieldIdAppConfig {
         return new ExportService();
     }
 
-    @Bean public EventService eventService() { 
+    @Bean
+    public EventService eventService() { 
     	return new EventService();
     }
     
-    @Bean public SchedulerFactoryBean schedulerFactoryBean() { 
+    @Bean 
+    public SchedulerFactoryBean schedulerFactoryBean() { 
     	return new SchedulerFactoryBean();
     }
 
-    @Bean public AsyncService asyncService() { 
+    @Bean 
+    public AsyncService asyncService() { 
     	return new AsyncService();
     }
     
+    @Bean 
+    public AsyncTaskFactory asyncTaskFactory() {
+    	return new AsyncTaskFactory();
+    }
 }

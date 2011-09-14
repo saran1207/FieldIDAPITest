@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Scope;
 
 import com.n4systems.model.security.SecurityFilter;
 
-@Scope("request")
+@Scope("thread")
 public class SecurityContext {
 	private SecurityFilter userSecurityFilter;
 	private SecurityFilter tenantSecurityFilter;
@@ -31,4 +31,9 @@ public class SecurityContext {
 		this.tenantSecurityFilter = tenantSecurityFilter;
 	}
 
+	public void clear() {
+		userSecurityFilter = null;
+		tenantSecurityFilter = null;
+	}
+	
 }
