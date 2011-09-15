@@ -11,7 +11,7 @@ public class WsScoreConverter extends WsModelConverter<Score, WsScore> {
 		wsModel.setId(model.getId());
 		wsModel.setName(model.getName());
 		wsModel.setValue(model.getValue());
-		wsModel.setNa(model.isNa());		
+		wsModel.setNotApplicable(model.isNa());		
 		return wsModel;
 	}
 

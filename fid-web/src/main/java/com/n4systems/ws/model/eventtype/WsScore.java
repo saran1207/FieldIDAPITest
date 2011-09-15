@@ -10,7 +10,7 @@ public class WsScore extends WsModel {
 	
 	private String name;
 	private Double value;
-	private boolean na = false;
+	private boolean notApplicable = false;
 	
 	public void setName(String name) {
 		this.name = name;
@@ -29,13 +29,13 @@ public class WsScore extends WsModel {
 	public Double getValue() {
 		return value;
 	}
-	
-	public void setNa(boolean na) {
-		this.na = na;
+
+	public void setNotApplicable(boolean notApplicable) {
+		this.notApplicable = notApplicable;
 	}
-	
-	@XmlElement(name="Na")
-	public boolean isNa() {
-		return na;
-	}	
+
+	@XmlElement(name="NotApplicable")
+	public boolean isNotApplicable() {
+		return notApplicable;
+	}
 }
